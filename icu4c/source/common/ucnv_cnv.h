@@ -15,6 +15,40 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv_bld.h"
 
+#include "ucmp8.h"
+#include "ucmp16.h"
+
+/*Table Node Definitions */
+typedef struct
+  {
+    UChar *toUnicode;  /* [256]; */
+    CompactByteArray fromUnicode;
+  }
+UConverterSBCSTable;
+
+typedef struct
+  {
+    CompactShortArray toUnicode;
+    CompactShortArray fromUnicode;
+  }
+UConverterDBCSTable;
+
+typedef struct
+  {
+    bool_t *starters; /* [256]; */
+    CompactShortArray toUnicode;
+    CompactShortArray fromUnicode;
+  }
+UConverterMBCSTable;
+
+union UConverterTable
+  {
+    UConverterSBCSTable sbcs;
+    UConverterDBCSTable dbcs;
+    UConverterMBCSTable mbcs;
+  };
+
+
 U_CDECL_BEGIN
 
 #define missingCharMarker 0xFFFF

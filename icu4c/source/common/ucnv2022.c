@@ -687,11 +687,19 @@ static const UConverterImpl _ISO2022Impl={
     NULL
 };
 
+const UConverterStaticData _ISO2022StaticData={
+  sizeof(UConverterStaticData),
+  "ISO_2022",
+    2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
+    1, { 0x1a, 0, 0, 0 }, 
+  { 0,0,0} /* reserved */
+};
+
+
 const UConverterSharedData _ISO2022Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_ISO2022Impl, "ISO_2022",
-    2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
-    { 0, 1, { 0x1a, 0, 0, 0 } }
+    NULL, NULL, &_ISO2022StaticData, FALSE, &_ISO2022Impl, 
+    0
 };
 
 /* EBCDICStateful ----------------------------------------------------------- */
@@ -723,7 +731,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
   int32_t myMode = _this->mode;
 
 
-  myToUnicode = _this->sharedData->table->dbcs.toUnicode;
+  myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
 
     while (mySourceIndex < sourceLength)
     {
@@ -841,7 +849,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   int32_t* originalOffsets = offsets;
 
 
-  myToUnicode = _this->sharedData->table->dbcs.toUnicode;
+  myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
 
     while (mySourceIndex < sourceLength)
     {
@@ -968,7 +976,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
   UChar mySourceChar = 0x0000;
   bool_t isTargetUCharDBCS = (bool_t)_this->fromUnicodeStatus;
   bool_t oldIsTargetUCharDBCS = isTargetUCharDBCS;
-  myFromUnicode = _this->sharedData->table->dbcs.fromUnicode;
+  myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
   
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -1090,7 +1098,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   bool_t oldIsTargetUCharDBCS = isTargetUCharDBCS;
   int32_t* originalOffsets = offsets;
   
-  myFromUnicode = _this->sharedData->table->dbcs.fromUnicode;
+  myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
   
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -1226,7 +1234,7 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
   if (converter->mode == UCNV_SI)
     {
       /*Not lead byte: we update the source ptr and get the codepoint*/
-      myUChar = ucmp16_getu(converter->sharedData->table->dbcs.toUnicode,
+      myUChar = ucmp16_getu( (&converter->sharedData->table->dbcs.toUnicode),
                             (UChar)(**source));
       (*source)++;
     }
@@ -1240,7 +1248,7 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
           return 0xFFFD;
         }
 
-      myUChar = ucmp16_getu(converter->sharedData->table->dbcs.toUnicode,
+      myUChar = ucmp16_getu( (&converter->sharedData->table->dbcs.toUnicode),
                             ((UChar)((**source)) << 8) |((uint8_t)*((*source)+1)));
 
       (*source) += 2;
@@ -1293,9 +1301,16 @@ static const UConverterImpl _EBCDICStatefulImpl={
     NULL
 };
 
+const UConverterStaticData _EBCDICStatefulStaticData={
+  sizeof(UConverterStaticData),
+ "EBCDICStateful",
+    0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,
+    1, { 0, 0, 0, 0 }, 
+  { 0,0,0} /* reserved */
+};
+
 const UConverterSharedData _EBCDICStatefulData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_EBCDICStatefulImpl, "EBCDICStateful",
-    0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,
-    { 0, 1, 0, 0, 0, 0 }
+    NULL, NULL, &_EBCDICStatefulStaticData, FALSE, &_EBCDICStatefulImpl,
+    0
 };

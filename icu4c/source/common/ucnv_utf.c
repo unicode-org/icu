@@ -690,11 +690,19 @@ static const UConverterImpl _UTF8Impl={
     NULL
 };
 
+
+const UConverterStaticData _UTF8StaticData={
+  sizeof(UConverterStaticData),
+"UTF8",
+    1208, UCNV_IBM, UCNV_UTF8, 1, 4,
+    3, { 0xef, 0xbf, 0xbd, 0 }
+};
+
+
 const UConverterSharedData _UTF8Data={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF8Impl, "UTF8",
-    1208, UCNV_IBM, UCNV_UTF8, 1, 4,
-    { 0, 3, { 0xef, 0xbf, 0xbd, 0 } }
+    NULL, NULL, &_UTF8StaticData, FALSE, &_UTF8Impl, 
+    0
 };
 
 /* UTF-16BE ----------------------------------------------------------------- */
@@ -884,11 +892,18 @@ static const UConverterImpl _UTF16BEImpl={
     NULL
 };
 
+const UConverterStaticData _UTF16BEStaticData={
+  sizeof(UConverterStaticData),
+"UTF16_BigEndian",
+    1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
+    2, { 0xff, 0xfd, 0, 0 }
+};
+
+
 const UConverterSharedData _UTF16BEData={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF16BEImpl, "UTF16_BigEndian",
-    1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
-    { 0, 2, { 0xff, 0xfd, 0, 0 } }
+    NULL, NULL, &_UTF16BEStaticData, FALSE, &_UTF16BEImpl, 
+    0
 };
 
 /* UTF-16LE ----------------------------------------------------------------- */
@@ -1080,9 +1095,17 @@ static const UConverterImpl _UTF16LEImpl={
     NULL
 };
 
+
+const UConverterStaticData _UTF16LEStaticData={
+  sizeof(UConverterStaticData),
+  "UTF16_LittleEndian",
+  1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
+  2, { 0xfd, 0xff, 0, 0 }
+};
+
+
 const UConverterSharedData _UTF16LEData={
     sizeof(UConverterSharedData), ~((uint32_t) 0),
-    NULL, NULL, &_UTF16LEImpl, "UTF16_LittleEndian",
-    1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
-    { 0, 2, { 0xfd, 0xff, 0, 0 } }
+    NULL, NULL, &_UTF16LEStaticData, FALSE, &_UTF16LEImpl, 
+    0
 };

@@ -26,14 +26,6 @@
 #define UCNV_ERROR_BUFFER_LENGTH 20
 #define UCNV_MAX_AMBIGUOUSCCSIDS 5
 
-#ifndef UCMP16_H
-typedef struct _CompactShortArray CompactShortArray;
-#endif
-
-#ifndef UCMP8_H
-typedef struct _CompactByteArray CompactByteArray;
-#endif
-
 #define UCNV_IMPLEMENTED_CONVERSION_TYPES 9
 /*Sentinel Value used to check the integrity of the binary data files */
 
@@ -102,43 +94,13 @@ typedef enum {
     UCNV_IBM = 0
 } UConverterPlatform;
 
-
-/*Table Node Definitions */
-typedef struct
-  {
-    UChar *toUnicode;  /* [256]; */
-    CompactByteArray *fromUnicode;
-  }
-UConverterSBCSTable;
-
-typedef struct
-  {
-    CompactShortArray *toUnicode;
-    CompactShortArray *fromUnicode;
-  }
-UConverterDBCSTable;
-
-typedef struct
-  {
-    bool_t *starters; /* [256]; */
-    CompactShortArray *toUnicode;
-    CompactShortArray *fromUnicode;
-  }
-UConverterMBCSTable;
-
-typedef union
-  {
-    UConverterSBCSTable sbcs;
-    UConverterDBCSTable dbcs;
-    UConverterMBCSTable mbcs;
-  }
-UConverterTable;
-
-
 U_CDECL_BEGIN /* We must declare the following as 'extern "C"' so that if ucnv
                  itself is compiled under C++, the linkage of the funcptrs will
                  work.
               */
+
+union UConverterTable;
+typedef union UConverterTable UConverterTable;
 
 struct UConverterImpl;
 typedef struct UConverterImpl UConverterImpl;
@@ -175,6 +137,27 @@ typedef struct UConverterImpl UConverterImpl;
  * it is in UConverterImpl and hardly used.
  */
 
+typedef struct {
+    uint32_t structSize;            /* Size of this structure */
+    
+    const char name [UCNV_MAX_CONVERTER_NAME_LENGTH];               /* internal name of the converter- invariant chars */
+
+    int32_t codepage;               /* codepage # (now IBM-$codepage) */
+
+    int8_t platform;                /* platform of the converter (only IBM now) */
+    int8_t conversionType;          /* conversion type */
+
+    int8_t minBytesPerChar;         /* Minimum # bytes per char in this codepage */
+    int8_t maxBytesPerChar;         /* Maximum # bytes per char in this codepage */
+
+    int8_t subCharLen;
+  
+    uint8_t reserved[3];  /* to round out the structure */
+
+    uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; 
+
+} UConverterStaticData;
+
 /*
  * Defines the UConverterSharedData struct,
  * the immutable, shared part of UConverter.
@@ -185,23 +168,13 @@ typedef struct {
 
     const void *dataMemory;         /* from udata_openChoice() */
     UConverterTable *table;         /* Pointer to conversion data */
+
+    const UConverterStaticData *staticData; /* pointer to the static (non changing) data. */
+    bool_t                staticDataOwned; /* T if we own the staticData */
     const UConverterImpl *impl;     /* vtable-style struct of mostly function pointers */
-    const char *name;               /* internal name of the converter */
 
-    int32_t codepage;               /* codepage # (now IBM-$codepage) */
-
-    int8_t platform;                /* platform of the converter (only IBM now) */
-    int8_t conversionType;          /* conversion type */
-
-    int8_t minBytesPerChar;         /* Minimum # bytes per char in this codepage */
-    int8_t maxBytesPerChar;         /* Maximum # bytes per char in this codepage */
-
-    /*initial values of some members of the mutable part of object */
-    struct {
-        uint32_t toUnicodeStatus;
-        int8_t subCharLen;
-        uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];
-    } defaultConverterValues;
+  /*initial values of some members of the mutable part of object */
+  uint32_t toUnicodeStatus;
 } UConverterSharedData;
 
 
@@ -286,3 +259,8 @@ UConverterDataLMBCS;
 #define CONVERTER_FILE_EXTENSION ".cnv"
 
 #endif /* _UCNV_BLD */
+
+
+
+
+

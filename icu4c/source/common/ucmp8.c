@@ -31,6 +31,66 @@ int32_t ucmp8_getkUnicodeCount() { return UCMP8_kUnicodeCount;}
 int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
 /* debug flags*/
 /*=======================================================*/
+void  ucmp8_init(CompactByteArray* array, int8_t defaultValue)
+{
+/* set up the index array and the data array.
+ * the index array always points into particular parts of the data array
+ * it is initially set up to point at regular block boundaries
+ * The following example uses blocks of 4 for simplicity
+ * Example: Expanded
+ * INDEX# 0   1   2   3   4
+ * INDEX  0   4   8   12  16 ...
+ * ARRAY  abcdeababcedzyabcdea...
+ *        |   |   |   |   |   |...
+ * whenever you set an element in the array, it unpacks to this state
+ * After compression, the index will point to various places in the data array
+ * wherever there is a runs of the same elements as in the original
+ * Example: Compressed
+ * INDEX# 0   1   2   3   4
+ * INDEX  0   4   1   8   2 ...
+ * ARRAY  abcdeabazyabc...
+ * If you look at the example, index# 2 in the expanded version points
+ * to data position number 8, which has elements "bced". In the compressed
+ * version, index# 2 points to data position 1, which also has "bced"
+ */
+  CompactByteArray* this_obj = array;
+  int32_t i;
+  
+  if (this_obj == NULL) return;
+
+  this_obj->fStructSize = sizeof(CompactByteArray);
+  this_obj->fArray = NULL; 
+  this_obj->fIndex = NULL;
+  this_obj->fCount = UCMP8_kUnicodeCount;
+  this_obj->fCompact = FALSE; 
+  this_obj->fBogus = FALSE;
+  this_obj->fAlias = FALSE;
+  this_obj->fIAmOwned = TRUE;
+
+
+  this_obj->fArray = (int8_t*) uprv_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
+  if (!this_obj->fArray) 
+    {
+      this_obj->fBogus = TRUE;
+      return;
+    }
+  this_obj->fIndex = (uint16_t*) uprv_malloc(sizeof(uint16_t) * UCMP8_kIndexCount);
+  if (!this_obj->fIndex) 
+    {
+      uprv_free(this_obj->fArray);
+      this_obj->fArray = NULL;
+      this_obj->fBogus = TRUE;
+      return;
+    }
+  for (i = 0; i < UCMP8_kUnicodeCount; ++i) 
+    {
+      this_obj->fArray[i] = defaultValue;
+    }
+  for (i = 0; i < UCMP8_kIndexCount; ++i) 
+    {
+      this_obj->fIndex[i] = (uint16_t)(i << UCMP8_kBlockShift);
+    }
+}
 
 CompactByteArray* ucmp8_open(int8_t defaultValue)
 {
@@ -66,6 +126,8 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
   this_obj->fCompact = FALSE; 
   this_obj->fBogus = FALSE;
   this_obj->fAlias = FALSE;
+  this_obj->fIAmOwned = FALSE;
+
 
 
   this_obj->fArray = (int8_t*) uprv_malloc(sizeof(int8_t) * UCMP8_kUnicodeCount);
@@ -111,6 +173,8 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
   this_obj->fIndex = indexArray;
   this_obj->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
   this_obj->fAlias = FALSE;
+  this_obj->fIAmOwned = FALSE;
+
   return this_obj;
 }
 
@@ -131,6 +195,8 @@ CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
   this_obj->fIndex = indexArray;
   this_obj->fCompact = (count < UCMP8_kUnicodeCount) ? TRUE : FALSE;
   this_obj->fAlias = TRUE;
+  this_obj->fIAmOwned = FALSE;
+
   return this_obj;
 }
 
@@ -147,7 +213,10 @@ void ucmp8_close(CompactByteArray* this_obj)
         uprv_free(this_obj->fIndex);
       }
     }
-    uprv_free(this_obj);
+    if(!this_obj->fIAmOwned) /* Called if 'init' was called instead of 'open'. */
+      {
+        uprv_free(this_obj);
+      }
   }
 }
 
@@ -191,6 +260,8 @@ void ucmp8_expand(CompactByteArray* this_obj)
       this_obj->fArray = tempArray;
       this_obj->fCompact = FALSE;
       this_obj->fAlias = FALSE;
+      this_obj->fIAmOwned = FALSE;
+
     }
 }
  
@@ -390,45 +461,41 @@ ucmp8_compact(CompactByteArray* this_obj,
    possible between the ucmpX_ family. 
 */
 
-U_CAPI  CompactByteArray * U_EXPORT2 ucmp8_cloneFromData(const uint8_t **source,  UErrorCode *status)
+U_CAPI  void U_EXPORT2 ucmp8_initFromData(CompactByteArray *this_obj, const uint8_t **source, UErrorCode *status)
 {
-    CompactByteArray *array;
-    const CompactByteArray *oldArray;
-    
-    if(U_FAILURE(*status))
-        return NULL;
-    
-    oldArray= (const CompactByteArray*)*source;
-    
-    if(oldArray->fStructSize != sizeof(*oldArray))
-    {
-        *status = U_INVALID_TABLE_FORMAT; /* ? */
-        return NULL;
-    }
-    array = (CompactByteArray*)malloc(sizeof(*array));
-    
-    uprv_memcpy(array,*source, sizeof(*array));
+  uint32_t i;
+  const uint8_t *oldSource = *source;
 
-    array->fAlias = TRUE;
-    
-    *source += array->fStructSize;
+  if(U_FAILURE(*status))
+    return;
 
-    array->fArray = (int8_t*)*source;
-    *source +=  (sizeof(int8_t)*array->fCount);
+ this_obj->fArray = NULL;
+ this_obj->fIndex = NULL; 
+ this_obj->fBogus = FALSE;
+ this_obj->fStructSize = sizeof(CompactByteArray);
+ this_obj->fCompact = TRUE;
+ this_obj->fAlias = TRUE;
+ this_obj->fIAmOwned = TRUE;
+  
+ i = * ((const uint32_t*) *source);
+ (*source) += 4;
 
-    if(((*source)-((const uint8_t*)oldArray)) & 1 )
-    {
-        (*source)++;
-    }
+ if(i != ICU_UCMP8_VERSION)
+ {
+   *status = U_INVALID_FORMAT_ERROR;
+   return;
+ }
+  
+ this_obj->fCount = * ((const uint32_t*)*source);
+ (*source) += 4;
 
-    array->fIndex = (uint16_t*)*source;
-    *source += (sizeof(uint16_t)*UCMP8_kIndexCount);
+ this_obj->fIndex = (uint16_t*) *source;
+ (*source) += sizeof(this_obj->fIndex[0])*UCMP8_kIndexCount;
 
+ this_obj->fArray = (uint8_t*) *source;
+ (*source) += sizeof(this_obj->fArray[0])*this_obj->fCount;
 
-    /* eat up padding */
-    while((*source-((uint8_t*)oldArray))%4)
-        (*source)++;
-
-
-    return array;
+ /* eat up padding */
+ while((*source-(oldSource))%4)
+    (*source)++;
 }

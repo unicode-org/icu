@@ -29,17 +29,17 @@ _MBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErr
     sharedData->table->mbcs.starters = (bool_t*)raw;
     oldraw = raw += sizeof(bool_t)*256;
 
-    sharedData->table->mbcs.toUnicode   = ucmp16_cloneFromData(&raw, pErrorCode);
+    ucmp16_initFromData(&sharedData->table->mbcs.toUnicode, &raw, pErrorCode);
     if(((raw-oldraw)&3)!=0) {
         raw+=4-((raw-oldraw)&3);    /* pad to 4 */
     }
-    sharedData->table->mbcs.fromUnicode = ucmp16_cloneFromData(&raw, pErrorCode);
+    ucmp16_initFromData(&sharedData->table->mbcs.fromUnicode, &raw, pErrorCode);
 }
 
 static void
 _MBCSUnload(UConverterSharedData *sharedData) {
-    ucmp16_close (sharedData->table->mbcs.fromUnicode);
-    ucmp16_close (sharedData->table->mbcs.toUnicode);
+    ucmp16_close (&sharedData->table->mbcs.fromUnicode);
+    ucmp16_close (&sharedData->table->mbcs.toUnicode);
 	uprv_free (sharedData->table);
 }
 
@@ -66,7 +66,7 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
 
 
 
-  myToUnicode = _this->sharedData->table->mbcs.toUnicode;
+  myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
   myStarters = _this->sharedData->table->mbcs.starters;
 
   while (mySourceIndex < sourceLength)
@@ -184,7 +184,7 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   UChar oldMySourceChar = 0x0000;
   bool_t *myStarters = NULL;
 
-  myToUnicode = _this->sharedData->table->mbcs.toUnicode;
+  myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
   myStarters = _this->sharedData->table->mbcs.starters;
 
   while (mySourceIndex < sourceLength)
@@ -316,7 +316,7 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
-  myFromUnicode = _this->sharedData->table->mbcs.fromUnicode;
+  myFromUnicode = &_this->sharedData->table->mbcs.fromUnicode;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -405,7 +405,7 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
-  myFromUnicode = _this->sharedData->table->mbcs.fromUnicode;
+  myFromUnicode = &_this->sharedData->table->mbcs.fromUnicode;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -499,7 +499,7 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
   if (converter->sharedData->table->mbcs.starters[(uint8_t)**source] == FALSE)
     {
       /*Not lead byte: we update the source ptr and get the codepoint*/
-      myUChar = ucmp16_getu(converter->sharedData->table->mbcs.toUnicode,
+      myUChar = ucmp16_getu((&converter->sharedData->table->mbcs.toUnicode),
                             (UChar)(**source));
       (*source)++;
     }
@@ -513,7 +513,7 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
           return 0xFFFD;
         }
 
-      myUChar = ucmp16_getu(converter->sharedData->table->mbcs.toUnicode,
+      myUChar = ucmp16_getu((&converter->sharedData->table->mbcs.toUnicode),
                             (uint16_t)(((UChar)((**source)) << 8) |((uint8_t)*((*source)+1))));
 
       (*source) += 2;
@@ -572,9 +572,17 @@ static const UConverterImpl _MBCSImpl={
     _MBCSGetStarters
 };
 
+
+const UConverterStaticData _MBCSStaticData={
+  sizeof(UConverterStaticData),
+  "MBCS",
+    0, UCNV_IBM, UCNV_MBCS, 1, 1,
+    1, { 0, 0, 0, 0 }
+};
+
+
 const UConverterSharedData _MBCSData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_MBCSImpl, "MBCS",
-    0, UCNV_IBM, UCNV_MBCS, 1, 1,
-    { 0, 1, { 0, 0, 0, 0 } }
+    NULL, NULL, &_MBCSStaticData, FALSE, &_MBCSImpl, 
+    0
 };
