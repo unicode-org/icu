@@ -10,7 +10,7 @@
 
 #include "unicode/locid.h"
 
-#include "RunArrays.h"
+#include "layout/RunArrays.h"
 
 const char RunArray::fgClassID = 0;
 
