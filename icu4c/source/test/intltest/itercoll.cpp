@@ -60,7 +60,7 @@ void CollationIteratorTest::TestPrevious(char *par)
     UnicodeString source;
     RuleBasedCollator *c1 = NULL;
     c1 = new RuleBasedCollator(
-        "< a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
+        (UnicodeString)"< a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
 
     if (c1 == NULL || U_FAILURE(status))
     {
@@ -77,7 +77,7 @@ void CollationIteratorTest::TestPrevious(char *par)
 
     // Test with an expanding character sequence
     RuleBasedCollator *c2 = NULL;
-    c2 = new RuleBasedCollator("< a < b < c/abd < d", status);
+    c2 = new RuleBasedCollator((UnicodeString)"< a < b < c/abd < d", status);
 
     if (c2 == NULL || U_FAILURE(status))
     {
@@ -94,7 +94,7 @@ void CollationIteratorTest::TestPrevious(char *par)
 
     // Now try both
     RuleBasedCollator *c3 = NULL;
-    c3 = new RuleBasedCollator("< a < b < c/aba < d < z < ch", status);
+    c3 = new RuleBasedCollator((UnicodeString)"< a < b < c/aba < d < z < ch", status);
 
     if (c3 == NULL || U_FAILURE(status))
     {
@@ -234,7 +234,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
-    c = new RuleBasedCollator("< a < b < c & ab = d", status);
+    c = new RuleBasedCollator((UnicodeString)"< a < b < c & ab = d", status);
 
     if (c == NULL || U_FAILURE(status))
     {

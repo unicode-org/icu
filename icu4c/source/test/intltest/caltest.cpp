@@ -1166,7 +1166,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     int32_t times = 20;
     Calendar *cal=Calendar::createInstance(Locale::GERMANY, status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
-    SimpleDateFormat *sdf=new SimpleDateFormat("YYYY'-W'ww-ee", Locale::GERMANY, status);
+    SimpleDateFormat *sdf=new SimpleDateFormat(UnicodeString("YYYY'-W'ww-ee"), Locale::GERMANY, status);
     if (U_FAILURE(status)) { errln("Couldn't create SimpleDateFormat"); return; }
     sdf->applyLocalizedPattern(UnicodeString("JJJJ'-W'ww-ee"), status);
     if (U_FAILURE(status)) { errln("Couldn't apply localized pattern"); return; }
@@ -1220,7 +1220,7 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
     UDate t = cal.getTime(status);
 
     UnicodeString str, str2;
-    SimpleDateFormat fmt("EEE MMM dd yyyy / YYYY'-W'ww-ee", status);
+    SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"), status);
     fmt.setCalendar(cal);
 
     fmt.format(t, str.remove());
@@ -1270,7 +1270,7 @@ static UnicodeString fieldName(Calendar::EDateFields f) {
 
 void CalendarTest::loop_addroll(Calendar *cal, SimpleDateFormat *sdf, int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
     Calendar *calclone;
-    SimpleDateFormat fmt("EEE MMM dd yyyy / YYYY'-W'ww-ee", errorCode);
+    SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"), errorCode);
     fmt.setCalendar(*cal);
     int i;
 
@@ -1448,7 +1448,7 @@ void CalendarTest::TestWOY(void) {
     int32_t i;
 
     GregorianCalendar cal(status);
-    SimpleDateFormat fmt("EEE MMM dd yyyy', WOY' w", status);
+    SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
     CHECK(status, "Fail: Cannot construct calendar/format");
 
     Calendar::EDaysOfWeek fdw;

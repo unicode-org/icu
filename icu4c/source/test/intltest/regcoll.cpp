@@ -550,7 +550,7 @@ void CollationRegressionTest::Test4079231(char *par)
 void CollationRegressionTest::Test4078588(char *par)
 {
     UErrorCode status = U_ZERO_ERROR;
-    RuleBasedCollator *rbc = new RuleBasedCollator("< a < bb", status);
+    RuleBasedCollator *rbc = new RuleBasedCollator((UnicodeString)"< a < bb", status);
 
     if (rbc == NULL || U_FAILURE(status))
     {
@@ -935,7 +935,7 @@ void CollationRegressionTest::Test4141640(char *par)
             UnicodeString msg, localeName;
 
             msg += "Could not create collator for locale ";
-            msg += locales[i].getName(localeName);
+            msg += locales[i].getName();
 
             errln(msg);
         }
