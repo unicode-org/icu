@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -179,6 +179,7 @@ typedef struct {
  * by other converter implementations.
  * It does not use state from the converter, nor error codes.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It does not handle conversion extensions (_extToU()).
  *
  * Return value:
  * U+fffe   unassigned
@@ -193,6 +194,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
 /**
  * This version of _MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ * It does not handle conversion extensions (_extToU()).
  */
 U_CFUNC UChar32
 _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
