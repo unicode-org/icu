@@ -87,7 +87,7 @@ enum {
      URX_CTR_LOOP_NG   = 29,   //   Also in three flavors.
      URX_CTR_LOOP_P    = 30,
 
-     URX_RELOC_OPRND   = 31,   // Operand value in multi-operand ops that refers
+     URX_RELOC_OPRND   = 31    // Operand value in multi-operand ops that refers
                                //   back into compiled pattern code, and thus must
                                //   be relocated when inserting/deleting ops in code.
 };
