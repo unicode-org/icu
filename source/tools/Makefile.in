@@ -194,7 +194,7 @@ $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 
 # build the ICU and test data
 
-build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) $(DATABUILDDIR)/test.dat
+build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) 
 	@$(mkinstalldirs) $(TMPDATADIR)
 	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst   )
 	(cd $(TMPDATADIR); $(PKGDATA) -p testdat1  ./testdata.lst )
