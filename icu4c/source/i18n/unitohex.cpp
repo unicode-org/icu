@@ -63,8 +63,8 @@ UnicodeToHexTransliterator::UnicodeToHexTransliterator(
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter),
-    pattern("\\\\u0000"),
-    prefix("\\u", 2),
+    pattern("\\\\u0000", ""),
+    prefix("\\u", 2, ""),
     suffix(),
     minDigits(4),
     uppercase(TRUE) {
