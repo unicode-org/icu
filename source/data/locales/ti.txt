@@ -8,7 +8,7 @@
 // * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
 
 ti{ 
-    Version{ "x0.2" }
+    Version{ "1.0" }
     DayAbbreviations {
         "\u1230\u1295\u1260\u1275",
         "\u1230\u1291\u12ED",
