@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-1999, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -20,7 +20,6 @@
 /* C API TEST FOR NUMBER FORMAT */
 
 #include <stdlib.h>
-#include <stdio.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/unum.h"
@@ -28,14 +27,12 @@
 #include "cintltst.h"
 #include "cnumtst.h"
 
-/* ### TODO: remove this include after the number format test is fixed with jitterbug 411, applyPattern() */
-#include "cstring.h"
-
 void addNumForTest(TestNode** root)
 {
     addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
     addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
 }
+
 /* test Number Format API */
 static void TestNumberFormat()
 {
@@ -43,7 +40,7 @@ static void TestNumberFormat()
     UChar temp1[512];
 
     UChar temp[5];
-    
+
     UChar prefix[5];
     UChar suffix[5];
     UChar symbol[20];
@@ -61,7 +58,7 @@ static void TestNumberFormat()
 
     UNumberFormatAttribute attr;
     UNumberFormatSymbols symbols1, symbols2;
-    int32_t newvalue;  
+    int32_t newvalue;
     UErrorCode status=U_ZERO_ERROR;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *pattern;
@@ -121,8 +118,8 @@ static void TestNumberFormat()
     {
         log_verbose("unum_clone() successful\n");
     }
-    
-    /*Testing unum_getAvailable() and unum_countAvailable()*/ 
+
+    /*Testing unum_getAvailable() and unum_countAvailable()*/
     log_verbose("\nTesting getAvailableLocales and countAvailable()\n");
     numlocales=unum_countAvailable();
     if(numlocales < 0)
@@ -133,17 +130,17 @@ static void TestNumberFormat()
     }
     for(i=0;i<numlocales;i++)
     {
-        log_verbose("%s\n", unum_getAvailable(i)); 
+        log_verbose("%s\n", unum_getAvailable(i));
         if (unum_getAvailable(i) == 0)
             log_err("No locale for which number formatting patterns are applicable\n");
-        else 
+        else
             log_verbose("A locale %s for which number formatting patterns are applicable\n",unum_getAvailable(i));
     }
 
 
     /*Testing unum_format() and unum_formatdouble()*/
     u_uastrcpy(temp1, "$100,000,000.00");
-    
+
     log_verbose("\nTesting unum_format() \n");
     resultlength=0;
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
@@ -166,8 +163,8 @@ static void TestNumberFormat()
         log_verbose("Pass: Number formatting using unum_format() successful\n");
     else
         log_err("Fail: Error in number Formatting using unum_format()\n");
-    
-free(result);    
+
+free(result);
     result = 0;
 
     log_verbose("\nTesting unum_formatDouble()\n");
@@ -337,12 +334,12 @@ free(result);
     {
         log_err("error in unum_openPattern(): %s\n", myErrorName(status));
     }
-    
+
 free(result);
 
     /*getting the symbols of cur_def */
     unum_getSymbols(cur_def, &symbols1);
-    
+
     /*format to check the result */
     resultlength=0;
     resultlengthneeded=unum_format(cur_def, l, NULL, resultlength, &pos1, &status);
@@ -357,7 +354,7 @@ free(result);
     {
         log_err("Error in formatting using unum_format(.....): %s\n", myErrorName(status));
     }
-    
+
 
     /*set the symbols of cur_frpattern to cur_def */
     unum_setSymbols(cur_frpattern, &symbols1, &status);
@@ -385,7 +382,7 @@ free(result);
         log_err("Fail: error in setting and getting symbols\n");
     else
         log_verbose("Pass: get and set symbols successful\n");
-    
+
     /*format and check with the previous result */
 
     resultlength=0;
@@ -413,9 +410,9 @@ free(result);
         log_err("Formatting failed after setting symbols. result=%s temp1=%s\n", result, temp1);
     }
 
-    
+
     /*----------- */
-    
+
 free(result);
 
     /* Testing unum_get/setSymbol() */
@@ -445,7 +442,7 @@ free(result);
     }
     if(U_FAILURE(status)){
         if(status != U_ILLEGAL_ARGUMENT_ERROR){
-            log_err("Error: Expected U_ILLEGAL_ARGUMENT_ERROR for bogus symbol, Got %s\n", myErrorName(status)); 
+            log_err("Error: Expected U_ILLEGAL_ARGUMENT_ERROR for bogus symbol, Got %s\n", myErrorName(status));
         }
     }
     status=U_ZERO_ERROR;
@@ -475,7 +472,7 @@ free(result);
     /*set it back to normal */
     u_uastrcpy(temp,"$");
     unum_setTextAttribute(cur_def, UNUM_NEGATIVE_SUFFIX, temp, u_strlen(temp), &status);
-    
+
     /*checking some more text setter conditions */
     u_uastrcpy(prefix, "+");
     unum_setTextAttribute(def, UNUM_POSITIVE_PREFIX, prefix, u_strlen(prefix) , &status);
@@ -488,12 +485,12 @@ free(result);
     {
         log_err("error in getting the text attributes : %s\n", myErrorName(status));
     }
-    
+
     if(u_strcmp(prefix, temp)!=0) 
         log_err("ERROR: get and setTextAttributes with positive prefix failed\n");
     else
         log_verbose("Pass: get and setTextAttributes with positive prefix works fine\n");
-    
+
     u_uastrcpy(prefix, "+");
     unum_setTextAttribute(def, UNUM_NEGATIVE_PREFIX, prefix, u_strlen(prefix), &status);
     if(U_FAILURE(status))
@@ -509,14 +506,14 @@ free(result);
         log_err("ERROR: get and setTextAttributes with negative prefix failed\n");
     else
         log_verbose("Pass: get and setTextAttributes with negative prefix works fine\n");
- 
+
     u_uastrcpy(suffix, "+");
     unum_setTextAttribute(def, UNUM_NEGATIVE_SUFFIX, suffix, u_strlen(suffix) , &status);
     if(U_FAILURE(status))
     {
         log_err("error in setting the text attributes: %s\n", myErrorName(status));
     }
-    
+
     unum_getTextAttribute(def, UNUM_NEGATIVE_SUFFIX, temp, resultlength, &status);
     if(U_FAILURE(status))
     {
@@ -533,7 +530,7 @@ free(result);
     {
         log_err("error in setting the text attributes: %s\n", myErrorName(status));
     }
-    
+
     unum_getTextAttribute(def, UNUM_POSITIVE_SUFFIX, temp, resultlength, &status);
     if(U_FAILURE(status))
     {
@@ -543,9 +540,9 @@ free(result);
         log_err("ERROR: get and setTextAttributes with negative suffix failed\n");
     else
         log_verbose("Pass: get and settextAttributes with negative suffix works fine\n");
-    
-    
-    
+
+
+
 
     /*Testing unum_getAttribute and  unum_setAttribute() */
     log_verbose("\nTesting get and set Attributes\n");
@@ -566,7 +563,7 @@ free(result);
         log_err("error in setting and getting attributes for UNUM_MULTIPLIER\n");
     else
         log_verbose("Pass:setting and getting attributes for UNUM_MULTIPLIER works fine\n");
-    
+
     /*testing set and get Attributes extensively */
     log_verbose("\nTesting get and set attributes extensively\n");
     for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_PADDING_POSITION; attr=(UNumberFormatAttribute)((int32_t)attr + 1) )
@@ -579,7 +576,7 @@ free(result);
             log_verbose("Pass: attributes set and retrieved successfully\n");
     }
 
-    
+
     /*closing the NumberFormat() using unum_close(UNumberFormat*)")*/
     unum_close(def);
     unum_close(fr);
@@ -591,7 +588,7 @@ free(result);
     unum_close(pattern);
     unum_close(cur_frpattern);
     unum_close(myclone);
-    
+
 }
 
 static void TestNumberFormatPadding()
