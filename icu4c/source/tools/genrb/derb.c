@@ -29,8 +29,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#ifdef WIN32
-#include <direct.h>
+#if defined(WIN32) || defined(U_CYGWIN)
 #include <io.h>
 #include <fcntl.h>
 #endif
