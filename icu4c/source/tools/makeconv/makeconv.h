@@ -35,6 +35,12 @@ struct NewConverter {
     UBool
     (*startMappings)(NewConverter *cnvData);
 
+    /** is this byte sequence valid? */
+    UBool
+    (*isValid)(NewConverter *cnvData,
+               const uint8_t *bytes, int32_t length,
+               uint32_t b);
+
     UBool
     (*addToUnicode)(NewConverter *cnvData,
                     const uint8_t *bytes, int32_t length,

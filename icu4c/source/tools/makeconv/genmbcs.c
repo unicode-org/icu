@@ -84,6 +84,11 @@ MBCSAddToUnicode(NewConverter *cnvData,
                  int8_t isFallback);
 
 static UBool
+MBCSIsValid(NewConverter *cnvData,
+            const uint8_t *bytes, int32_t length,
+            uint32_t b);
+
+static UBool
 MBCSAddFromUnicode(NewConverter *cnvData,
                    const uint8_t *bytes, int32_t length,
                    UChar32 c, uint32_t b,
@@ -105,6 +110,7 @@ MBCSInit(MBCSData *mbcsData, uint8_t maxCharLength) {
 
     mbcsData->newConverter.close=MBCSClose;
     mbcsData->newConverter.startMappings=MBCSProcessStates;
+    mbcsData->newConverter.isValid=MBCSIsValid;
     mbcsData->newConverter.addToUnicode=MBCSAddToUnicode;
     mbcsData->newConverter.addFromUnicode=MBCSAddFromUnicode;
     mbcsData->newConverter.finishMappings=MBCSPostprocess;
@@ -741,6 +747,71 @@ MBCSAddToUnicode(NewConverter *cnvData,
             }
 
             return TRUE;
+        }
+    }
+}
+
+/* is this byte sequence valid? (this is almost the same as MBCSAddToUnicode()) */
+static UBool
+MBCSIsValid(NewConverter *cnvData,
+            const uint8_t *bytes, int32_t length,
+            uint32_t b) {
+    MBCSData *mbcsData=(MBCSData *)cnvData;
+    uint32_t offset=0;
+    int32_t i=0, entry;
+    uint8_t state=0;
+
+    if(mbcsData->header.countStates==0) {
+        fprintf(stderr, "error: there is no state information!\n");
+        return FALSE;
+    }
+
+    /* for SI/SO (like EBCDIC-stateful), double-byte sequences start in state 1 */
+    if(length==2 && (mbcsData->header.flags&0xff)==MBCS_OUTPUT_2_SISO) {
+        state=1;
+    }
+
+    /*
+     * Walk down the state table like in conversion,
+     * much like getNextUChar().
+     * We assume that c<=0x10ffff.
+     */
+    for(i=0;;) {
+        entry=mbcsData->stateTable[state][bytes[i++]];
+        if(entry>=0) {
+            if(i==length) {
+                fprintf(stderr, "error: byte sequence too short, ends in non-final state %hu: 0x%02lx\n", state, b);
+                return FALSE;
+            }
+            state=(uint8_t)(entry&0x7f);
+            offset+=entry>>7;
+        } else {
+            if(i<length) {
+                fprintf(stderr, "error: byte sequence too long by %d bytes, final state %hu: 0x%02lx\n", (length-i), state, b);
+                return FALSE;
+            }
+            switch((uint32_t)entry>>27U) {
+            case 16|MBCS_STATE_ILLEGAL:
+                fprintf(stderr, "error: byte sequence ends in illegal state: 0x%02lx\n", b);
+                return FALSE;
+            case 16|MBCS_STATE_CHANGE_ONLY:
+                fprintf(stderr, "error: byte sequence ends in state-change-only: 0x%02lx\n", b);
+                return FALSE;
+            case 16|MBCS_STATE_UNASSIGNED:
+                fprintf(stderr, "error: byte sequence ends in unassigned state: 0x%02lx\n", b);
+                return FALSE;
+            case 16|MBCS_STATE_FALLBACK_DIRECT_16:
+            case 16|MBCS_STATE_VALID_DIRECT_16:
+            case 16|MBCS_STATE_FALLBACK_DIRECT_20:
+            case 16|MBCS_STATE_VALID_DIRECT_20:
+            case 16|MBCS_STATE_VALID_16:
+            case 16|MBCS_STATE_VALID_16_PAIR:
+                return TRUE;
+            default:
+                /* reserved, must never occur */
+                fprintf(stderr, "internal error: byte sequence reached reserved action code, entry0x%02lx: 0x%02lx\n", entry, b);
+                return FALSE;
+            }
         }
     }
 }
