@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
+*   Copyright (c) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -231,14 +231,14 @@ private:
     ICU_Utility();
 };
 
+U_NAMESPACE_END
+
 /**
  * Is this character a "white space" in the sense of ICU rule parsers?
  * @internal
  */
 U_CAPI UBool U_EXPORT2
 uprv_isRuleWhiteSpace(UChar32 c);
-
-U_NAMESPACE_END
 
 #endif
 //eof
