@@ -21,16 +21,22 @@
 #include "ustring.h"
 #include "utypes.h"
 #include "cstring.h"
+#include "umutex.h"
 #include "ucnv.h"
 
+/* forward declaractions of definitions for the shared default converter */
 
-static UConverter* _defaultConverter = NULL;
-static UErrorCode gErr = U_ZERO_ERROR;
+static UConverter *fgDefaultConverter = NULL;
+
+static UConverter*
+getDefaultConverter();
+
+static void
+releaseDefaultConverter(UConverter *converter);
+
+/* ANSI string.h - style functions ------------------------------------------ */
 
 #define MAX_STRLEN 0x0FFFFFFF
-
-/*Lazy evaluating macro for the default converter*/
-#define defaultConverter (_defaultConverter==NULL)?_defaultConverter=ucnv_open(NULL, &gErr):_defaultConverter
 
 UChar*
 u_strcat(UChar     *dst, 
@@ -174,18 +180,25 @@ u_strlen(const UChar *s)
   }
 }
 
+/* conversions between char* and UChar* ------------------------------------- */
 
 UChar* u_uastrcpy(UChar *ucs1,
           const char *s2 )
 {
-  UErrorCode err = U_ZERO_ERROR;
-  ucnv_toUChars(defaultConverter,
-                  ucs1,
-                  MAX_STRLEN,
-                  s2,
-                  icu_strlen(s2),
-                  &err);
-  if(U_FAILURE(err)) {
+  UConverter *cnv = getDefaultConverter();
+  if(cnv != NULL) {
+    UErrorCode err = U_ZERO_ERROR;
+    ucnv_toUChars(cnv,
+                    ucs1,
+                    MAX_STRLEN,
+                    s2,
+                    icu_strlen(s2),
+                    &err);
+    releaseDefaultConverter(cnv);
+    if(U_FAILURE(err)) {
+      *ucs1 = 0;
+    }
+  } else {
     *ucs1 = 0;
   }
   return ucs1;
@@ -195,15 +208,20 @@ UChar* u_uastrncpy(UChar *ucs1,
            const char *s2 ,
            int32_t n)
 {
-  UErrorCode err = U_ZERO_ERROR;
-  ucnv_toUChars(defaultConverter,
-                  ucs1,
-                  n,
-                  s2,
-                  icu_strlen(s2),
-                  &err);
-
-  if(U_FAILURE(err)) {
+  UConverter *cnv = getDefaultConverter();
+  if(cnv != NULL) {
+    UErrorCode err = U_ZERO_ERROR;
+    ucnv_toUChars(cnv,
+                    ucs1,
+                    n,
+                    s2,
+                    icu_strlen(s2),
+                    &err);
+    releaseDefaultConverter(cnv);
+    if(U_FAILURE(err)) {
+      *ucs1 = 0;
+    }
+  } else {
     *ucs1 = 0;
   }
   return ucs1;
@@ -212,13 +230,68 @@ UChar* u_uastrncpy(UChar *ucs1,
 char* u_austrcpy(char *s1,
          const UChar *ucs2 )
 {
-  UErrorCode err = U_ZERO_ERROR;
-  int32_t len = ucnv_fromUChars(defaultConverter,
-                s1,
-                MAX_STRLEN,
-                ucs2,
-                &err);
-
-  s1[len] = 0;
+  UConverter *cnv = getDefaultConverter();
+  if(cnv != NULL) {
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t len = ucnv_fromUChars(cnv,
+                  s1,
+                  MAX_STRLEN,
+                  ucs2,
+                  &err);
+    releaseDefaultConverter(cnv);
+    s1[len] = 0;
+  } else {
+    *s1 = 0;
+  }
   return s1;
+}
+
+/* mutexed access to a shared default converter ----------------------------- */
+
+/* this is the same implementation as in unistr.cpp */
+
+static UConverter*
+getDefaultConverter()
+{
+  UConverter *converter = NULL;
+
+  if(fgDefaultConverter != NULL) {
+    umtx_lock(NULL);
+
+    /* need to check to make sure it wasn't taken out from under us */
+    if(fgDefaultConverter != NULL) {
+      converter = fgDefaultConverter;
+      fgDefaultConverter = NULL;
+    }
+    umtx_unlock(NULL);
+  }
+
+  /* if the cache was empty, create a converter */
+  if(converter == NULL) {
+    UErrorCode status = U_ZERO_ERROR;
+    converter = ucnv_open(NULL, &status);
+    if(U_FAILURE(status)) {
+      return NULL;
+    }
+  }
+
+  return converter;
+}
+
+static void
+releaseDefaultConverter(UConverter *converter)
+{
+  if(fgDefaultConverter == NULL) {
+    umtx_lock(NULL);
+
+    if(fgDefaultConverter == NULL) {
+      fgDefaultConverter = converter;
+      converter = NULL;
+    }
+    umtx_unlock(NULL);
+  }
+
+  if(converter != NULL) {
+    ucnv_close(converter);
+  }
 }
