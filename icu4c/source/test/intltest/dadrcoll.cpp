@@ -25,9 +25,11 @@
 
 #include "dadrcoll.h"
 
+U_CDECL_BEGIN
 static void U_CALLCONV deleteSeqElement(void *elem) {
   delete((SeqElement *)elem);
 }
+U_CDECL_END
 
 DataDrivenCollatorTest::DataDrivenCollatorTest() 
 : seq(StringCharacterIterator("")),
