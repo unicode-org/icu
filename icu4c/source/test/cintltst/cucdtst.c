@@ -38,9 +38,11 @@ static void
 TestUnescape();
 
 /* test data ---------------------------------------------------------------- */
+#ifndef MIN
 #define MIN(a,b) (a < b ? a : b)
+#endif
 
-UChar*** dataTable = 0;
+UChar*** dataTable = NULL;
 const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
 const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";
 const int32_t tagValues[] =
@@ -102,7 +104,6 @@ const char dirStrings[][5] = {
 
 void addUnicodeTest(TestNode** root)
 {
-    setUpDataTable();
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
     addTest(root, &TestLetterNumber, "tsutil/cucdtst/TestLetterNumber");
     addTest(root, &TestMisc, "tsutil/cucdtst/TestMisc");
@@ -129,7 +130,7 @@ static void TestUpperLower()
     U_STRING_INIT(upperTest, "abcdefg123hij.?:klmno", 21);
     U_STRING_INIT(lowerTest, "ABCDEFG123HIJ.?:KLMNO", 21);
 
-    
+
     for(i=0; i < u_strlen(upper); i++){
         if(u_tolower(upper[i]) != lower[i]){
             log_err("FAILED u_tolower() for %lx Expected %lx Got %lx\n", upper[i], lower[i], u_tolower(upper[i]));
@@ -607,8 +608,8 @@ static const char* raw[3][4] = {
    /* Concatenated string */
     {   "English_United States", "French_France", "Croatian_Croatia", "English_United States"}
 };
-   
-U_CFUNC void setUpDataTable()
+
+static void setUpDataTable()
 {
     int32_t i,j;
     if(dataTable == NULL) {
@@ -622,10 +623,9 @@ U_CFUNC void setUpDataTable()
                 }
             }
     }
-    
 }
 
-U_CFUNC void cleanUpDataTable()
+static void cleanUpDataTable()
 {
     int32_t i,j;
     if(dataTable != NULL) {
@@ -643,28 +643,31 @@ U_CFUNC void cleanUpDataTable()
 /*Tests  for u_strcat(),u_strcmp(), u_strlen(), u_strcpy(),u_strncat(),u_strncmp(),u_strncpy, u_uastrcpy(),u_austrcpy(), u_uastrncpy(); */
 static void TestStringFunctions()
 {
-   
     int32_t i,j,k;
     UChar temp[40];
     char test[40];
+
+setUpDataTable();
+
     log_verbose("Testing u_strlen()\n");
     if( u_strlen(dataTable[0][0])!= u_strlen(dataTable[0][3]) || u_strlen(dataTable[0][0]) == u_strlen(dataTable[0][2]))
         log_err("There is an error in u_strlen()");
 
     log_verbose("Testing u_strcpy() and u_strcmp)\n");
-      
-    for(i=0;i<3;++i){
+
+    for(i=0;i<3;++i)
+    {
         for(j=0;j<4;++j)
         {
-        log_verbose("Testing  %s  \n", austrdup(dataTable[i][j]));
-        u_uastrcpy(temp, "");
-        u_strcpy(temp,dataTable[i][j]);
+            log_verbose("Testing  %s  \n", austrdup(dataTable[i][j]));
+            u_uastrcpy(temp, "");
+            u_strcpy(temp,dataTable[i][j]);
         
-        if(u_strcmp(temp,dataTable[i][j])!=0)
-        log_err("something threw an error in u_strcpy() or u_strcmp()\n");
+            if(u_strcmp(temp,dataTable[i][j])!=0)
+                log_err("something threw an error in u_strcpy() or u_strcmp()\n");
         }
     }
-    
+
     log_verbose("testing u_strcat()\n");
     i=0;
     for(j=0; j<2;++j)
@@ -674,7 +677,7 @@ static void TestStringFunctions()
         u_strcat(temp,dataTable[i+1][j]);
         if(u_strcmp(temp,dataTable[i+2][j])!=0)
             log_err("something threw an error in u_strcat()\n");
-    
+
     }
     log_verbose("Testing u_strncmp()\n");
     for(i=0,j=0;j<4; ++j)
@@ -683,18 +686,18 @@ static void TestStringFunctions()
         if(u_strncmp(dataTable[i][j],dataTable[i+2][j],k)!=0)
             log_err("Something threw an error in u_strncmp\n");
     }
-    
-    
+
+
     log_verbose("Testing u_strncat \n");
     for(i=0,j=0;j<4; ++j)
-    {    
+    {
         k=u_strlen(dataTable[i][j]);
-        
+
         u_uastrcpy(temp,"");
-        
+
         if(u_strcmp(u_strncat(temp,dataTable[i+2][j],k),dataTable[i][j])!=0)
             log_err("something threw an error in u_strncat or u_uastrcpy()\n");
-        
+
     }
 
     log_verbose("Testing u_strncpy()\n");
@@ -707,9 +710,9 @@ static void TestStringFunctions()
         if(u_strcmp(temp,dataTable[i][j])!=0)
             log_err("something threw an error in u_strncpy()\n");
     }
-    
+
     log_verbose("Testing if u_strchr() works fine\n");
-    
+
     for(i=2,j=0;j<4;j++)
     {
         UChar *findPtr = u_strchr(dataTable[i][j],'_');
@@ -734,74 +737,76 @@ static void TestStringFunctions()
 
     log_verbose("Testing u_uastrncpy() and u_uastrcpy()");
     {
-    UChar *result=0;
-    UChar subString[5];
-    UChar uchars[]={0x61, 0x62, 0x63, 0x00};
-    u_uastrcpy(temp, "abc");
-    if(u_strcmp(temp, uchars) != 0){
-        log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+        UChar *result=0;
+        UChar subString[5];
+        UChar uchars[]={0x61, 0x62, 0x63, 0x00};
+        u_uastrcpy(temp, "abc");
+        if(u_strcmp(temp, uchars) != 0) {
+            log_err("There is an error in u_uastrcpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+        }
+
+        temp[0] = 0xFB; /* load garbage into it */
+        temp[1] = 0xFB;
+        temp[2] = 0xFB;
+        temp[3] = 0xFB;
+
+        u_uastrncpy(temp, "abcabcabc", 3);
+        if(u_strncmp(uchars, temp, 3) != 0){
+            log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+        }
+        if(temp[3] != 0xFB) {
+            log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
+        }
+        /*Testing u_strchr()*/
+        log_verbose("Testing u_strchr\n");
+        temp[0]=0x42;
+        temp[1]=0x62;
+        temp[2]=0x62;
+        temp[3]=0x63;
+        temp[4]=0xd841;
+        temp[5]=0xd841;
+        temp[6]=0xdc02;
+        temp[7]=0;
+        result=u_strchr(temp, (UChar)0x62);
+        if(result != temp+1){
+            log_err("There is an error in u_strchr() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
+        }
+        /*Testing u_strstr()*/
+        log_verbose("Testing u_strstr\n");
+        subString[0]=0x62;
+        subString[1]=0x63;
+        subString[2]=0;
+        result=u_strstr(temp, subString);
+        if(result != temp+2){
+            log_err("There is an error in u_strstr() Expected match at position 2 Got %ld (pointer 0x%lx)\n", result-temp, result);
+        }
+        result=u_strstr(temp, subString+2); /* subString+2 is an empty string */
+        if(result != temp){
+            log_err("There is an error in u_strstr() Expected match at position 0 Got %ld (pointer 0x%lx)\n", result-temp, result);
+        }
+        result=u_strstr(subString, temp);
+        if(result != NULL){
+            log_err("There is an error in u_strstr() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
+        }
+
+        /*Testing u_strchr32*/
+        log_verbose("Testing u_strchr32\n");
+        result=u_strchr32(temp, (UChar32)0x62);
+        if(result != temp+1){
+            log_err("There is an error in u_strchr32() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
+        }
+        result=u_strchr32(temp, (UChar32)0xfb);
+        if(result != NULL){
+            log_err("There is an error in u_strchr32() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
+        }
+        result=u_strchr32(temp, (UChar32)0x20402);
+        if(result != temp+5){
+            log_err("There is an error in u_strchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
+        }
+
     }
 
-    temp[0] = 0xFB; /* load garbage into it */
-    temp[1] = 0xFB;
-    temp[2] = 0xFB;
-    temp[3] = 0xFB;
-
-    u_uastrncpy(temp, "abcabcabc", 3);
-    if(u_strncmp(uchars, temp, 3) != 0){
-        log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
-    }
-    if(temp[3] != 0xFB) {
-      log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
-    }
-    /*Testing u_strchr()*/
-    log_verbose("Testing u_strchr\n");
-    temp[0]=0x42;
-    temp[1]=0x62;
-    temp[2]=0x62;
-    temp[3]=0x63;
-    temp[4]=0xd841;
-    temp[5]=0xd841;
-    temp[6]=0xdc02;
-    temp[7]=0;
-    result=u_strchr(temp, (UChar)0x62);
-    if(result != temp+1){
-        log_err("There is an error in u_strchr() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
-    }
-    /*Testing u_strstr()*/
-    log_verbose("Testing u_strstr\n");
-    subString[0]=0x62;
-    subString[1]=0x63;
-    subString[2]=0;
-    result=u_strstr(temp, subString);
-    if(result != temp+2){
-        log_err("There is an error in u_strstr() Expected match at position 2 Got %ld (pointer 0x%lx)\n", result-temp, result);
-    }
-    result=u_strstr(temp, subString+2); /* subString+2 is an empty string */
-    if(result != temp){
-        log_err("There is an error in u_strstr() Expected match at position 0 Got %ld (pointer 0x%lx)\n", result-temp, result);
-    }
-    result=u_strstr(subString, temp);
-    if(result != NULL){
-        log_err("There is an error in u_strstr() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
-    }
-    
-    /*Testing u_strchr32*/
-    log_verbose("Testing u_strchr32\n");
-    result=u_strchr32(temp, (UChar32)0x62);
-    if(result != temp+1){
-        log_err("There is an error in u_strchr32() Expected match at position 1 Got %ld (pointer 0x%lx)\n", result-temp, result);
-    }
-    result=u_strchr32(temp, (UChar32)0xfb);
-    if(result != NULL){
-        log_err("There is an error in u_strchr32() Expected NULL \"not found\" Got non-NULL \"found\" result\n");
-    }
-    result=u_strchr32(temp, (UChar32)0x20402);
-    if(result != temp+5){
-        log_err("There is an error in u_strchr32() Expected match at position 5 Got %ld (pointer 0x%lx)\n", result-temp, result);
-    }
-   
-  }
+cleanUpDataTable();
 }
 
 /* test u_charName() -------------------------------------------------------- */

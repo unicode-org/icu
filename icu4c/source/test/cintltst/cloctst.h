@@ -59,14 +59,16 @@ static  void TestDisplayNames(void);
  **/
  static void TestVariantParsing(void);
 
- /*
+/**
  * routine to perform subtests, used by TestDisplayNames
- **/
+ */
  static void doTestDisplayNames(const char* inLocale, int32_t compareIndex, int32_t defaultIsFrench);
+
 /**
  * additional intialization for datatables storing expected values
- **/
+ */
 static void setUpDataTable(void);
+static void cleanUpDataTable(void);
 void displayDataTable(void);
 
 #endif

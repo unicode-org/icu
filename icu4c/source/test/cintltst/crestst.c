@@ -97,8 +97,7 @@ static struct
   E_Where where;
   UBool like[e_Where_count];
   UBool inherits[e_Where_count];
-}
-param[] =
+} param[] =
 {
   /* "te" means test */
   /* "IN" means inherits */
@@ -122,14 +121,11 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 void addResourceBundleTest(TestNode** root)
 {
-  setUpDataTable();
-
-  addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
-  addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
-  addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
-  addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
-  addTest(root, &TestAliasConflict, "tsutil/crestst/TestAlias");
-
+    addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
+    addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
+    addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
+    addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
+    addTest(root, &TestAliasConflict, "tsutil/crestst/TestAlias");
 }
 
 
@@ -139,7 +135,7 @@ void TestAliasConflict(void) {
     UResourceBundle *he = NULL;
     UResourceBundle *iw = NULL;
     const UChar *result = NULL;
-    
+
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
     if(U_FAILURE(status)) { 
@@ -156,18 +152,16 @@ void TestAliasConflict(void) {
 
 void TestResourceBundles()
 {
+    testTag("only_in_Root", TRUE, FALSE, FALSE);
+    testTag("in_Root_te", TRUE, TRUE, FALSE);
+    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
+    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
+    testTag("only_in_te", FALSE, TRUE, FALSE);
+    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
+    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
+    testTag("nonexistent", FALSE, FALSE, FALSE);
 
-  testTag("only_in_Root", TRUE, FALSE, FALSE);
-  testTag("in_Root_te", TRUE, TRUE, FALSE);
-  testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-  testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-  testTag("only_in_te", FALSE, TRUE, FALSE);
-  testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-  testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-  testTag("nonexistent", FALSE, FALSE, FALSE);
-
-  log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
-
+    log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 }
 
 

@@ -28,9 +28,10 @@ void PrintDataTable();
 /*---------------------------------------------------
   table of valid data
  --------------------------------------------------- */
+#define LOCALE_SIZE 5
+#define LOCALE_INFO_SIZE 23
 
-
-static const char* rawData2[23][5] = {
+static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* language code */
     {   "en",   "fr",   "hr",   "el",   "no"    },
     /* country code */
@@ -65,22 +66,22 @@ static const char* rawData2[23][5] = {
     {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "croate (Croatie)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
 
     /* display langage (Croatian) */
-    {   "",  "", "hrvatski", "",    "" },
-    /* display country (Croatian)  */
-    {   "",    "",   "Hrvatska",  "",   ""    },
+    {   "", "", "hrvatski",            "",  "" },
+    /* display country (Croatian) */
+    {   "", "", "Hrvatska",            "", "" },
     /* display variant (Croatian) */
-    {   "",     "",     "",     "",     ""    },
+    {   "", "", "",                    "", "" },
     /* display name (Croatian) */
     {   "", "", "hrvatski (Hrvatska)", "", "" },
 
-    /* display langage (Greek) [actual values listed below] */
-    {   "",  "", "", "",    "" },
-    /* display country (Greek) [actual values listed below] */
-    {   "",    "",   "",  "",   ""    },
+    /* display langage (Greek) */
+    {   "", "", "", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac", "" },
+    /* display country (Greek) */
+    {   "", "", "", "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",               "" },
     /* display variant (Greek) */
-    {   "",     "",     "",     "",     ""    },
-    /* display name (Greek) [actual values listed below] */
-    {   "", "", "", "", "" }
+    {   "", "", "", "",                                                         "" },
+    /* display name (Greek) */
+    {   "", "", "", "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)", "" }
 };
 
 static UChar*** dataTable=0;
@@ -122,8 +123,6 @@ enum {
 
 void addLocaleTest(TestNode** root)
 {
-    setUpDataTable();
-    
     addTest(root, &TestBasicGetters,         "tsutil/cloctst/TestBasicGetters");
     addTest(root, &TestSimpleResourceInfo,   "tsutil/cloctst/TestSimpleResourceInfo");
     addTest(root, &TestDisplayNames,         "tsutil/cloctst/TestDisplayNames");
@@ -134,9 +133,8 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestUninstalledISO3Names, "tsutil/cloctst/TestUninstalledISO3Names");
     addTest(root, &TestSimpleDisplayNames,   "tsutil/cloctst/TestSimpleDisplayNames");
     addTest(root, &TestVariantParsing,       "tsutil/cloctst/TestVariantParsing");
-       
 }
-        
+
 
 /* testing uloc(), uloc_getName(), uloc_getLanguage(), uloc_getVariant(), uloc_getCountry() */
 static void TestBasicGetters() {
@@ -189,12 +187,9 @@ static void TestBasicGetters() {
             log_err("ERROR: in uloc_getVariant  %s\n", myErrorName(status));
         }
         if (0 != strcmp(temp, rawData2[VAR][i])) {
-            
             log_err("Variant code mismatch:  %s  versus   %s\n", temp, rawData2[VAR][i]);
-                        
-          }
-        
-           
+        }
+
         cap=uloc_getName(testLocale, NULL, 0, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
@@ -212,14 +207,12 @@ static void TestBasicGetters() {
         free(temp);
         free(name);
 
-    free(testLocale);
+        free(testLocale);
     }
-
 }
 
 /* testing uloc_getISO3Language(), uloc_getISO3Country(),  */
 static void TestSimpleResourceInfo() {
-
     int32_t i;
     char* testLocale = 0;
     UChar* expected = 0;
@@ -229,38 +222,40 @@ static void TestSimpleResourceInfo() {
     testLocale=(char*)malloc(sizeof(char) * 1);
     expected=(UChar*)malloc(sizeof(UChar) * 1);
 
+setUpDataTable();
     log_verbose("Testing getISO3Language and getISO3Country\n");
     for (i = 0; i <= MAX_LOCALES; i++) {
-        
+
         testLocale=(char*)realloc(testLocale, sizeof(char) * (u_strlen(dataTable[NAME][i])+1));
         u_austrcpy(testLocale, dataTable[NAME][i]);
-             
+
         log_verbose("Testing   %s ......\n", testLocale);
-            
+
         temp=uloc_getISO3Language(testLocale);
         expected=(UChar*)realloc(expected, sizeof(UChar) * (strlen(temp) + 1));
         u_uastrcpy(expected,temp);
         if (0 != u_strcmp(expected, dataTable[LANG3][i])) {
              log_err("  ISO-3 language code mismatch:  %s versus  %s\n",  austrdup(expected),
                                                             austrdup(dataTable[LANG3][i]));
-         } 
-        
+        }
+
         temp=uloc_getISO3Country(testLocale);
         expected=(UChar*)realloc(expected, sizeof(UChar) * (strlen(temp) + 1));
         u_uastrcpy(expected,temp);
         if (0 != u_strcmp(expected, dataTable[CTRY3][i])) {
             log_err("  ISO-3 Country code mismatch:  %s versus  %s\n",  austrdup(expected),
                                                             austrdup(dataTable[CTRY3][i]));
-        } 
+        }
         sprintf(temp2, "%x", uloc_getLCID(testLocale));
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
             log_err("LCID mismatch: %ld versus %s\n", (int32_t)uloc_getLCID(testLocale) , rawData2[LCID][i]);
         }
-  
+
     }
-    
+
  free(expected);
  free(testLocale);
+cleanUpDataTable();
 }
 
 static void TestDisplayNames() 
@@ -272,9 +267,9 @@ static void TestDisplayNames()
   */
     const char *saveDefault;
     char *defaultLocale;
-    
+
     UErrorCode err = U_ZERO_ERROR;
-    
+
 
     saveDefault = uloc_getDefault();
     defaultLocale = (char*) malloc(strlen(saveDefault) + 1);
@@ -289,11 +284,11 @@ static void TestDisplayNames()
         log_err("uloc_setDefault returned error code ");
         return;
     }
-    
-    
+
+
     log_verbose("Testing getDisplayName for different locales\n");
     log_verbose("With default = en_US...\n");
-   
+
     log_verbose("  In default locale...\n");
     doTestDisplayNames(" ", DLANG_EN, FALSE);
     log_verbose("  In locale = en_US...\n");
@@ -310,9 +305,9 @@ static void TestDisplayNames()
         log_err("Locale::setDefault returned error code  %s\n", myErrorName(err));
         return;
     }
-    
+
     log_verbose("With default = fr_FR...\n");
-    
+
     log_verbose("  In default locale...\n");
     doTestDisplayNames(" ", DLANG_FR, TRUE);
     log_verbose("  In locale = en_US...\n");
@@ -341,23 +336,22 @@ static void TestGetAvailableLocales()
 
     const char *locList;
     int32_t locCount,i;
-    
+
     log_verbose("Testing the no of avialable locales\n");
     locCount=uloc_countAvailable();
     if (locCount == 0)
         log_err("countAvailable() returned an empty list!\n");
-    
+
     /* use something sensible w/o hardcoding the count */
     else if(locCount < 0){ 
         log_err("countAvailable() returned a wrong value!= %d\n", locCount);
     }
     else{
         log_info("Number of locales returned = %d\n", locCount);
-        
     }
     for(i=0;i<locCount;i++){
         locList=uloc_getAvailable(i);
-        
+
         log_verbose(" %s\n", locList);
     }
 }
@@ -379,7 +373,6 @@ static void TestDataDirectory()
     
     if (0 != strcmp(testValue1,"eng")){
         log_err("Initial check of ISO3 language failed: expected \"eng\", got  %s \n", testValue1);
-        
     }
 
     /*defining the path for DataDirectory */
@@ -389,18 +382,17 @@ static void TestDataDirectory()
         log_verbose("setDataDirectory working fine\n");
     else
         log_err("Error in setDataDirectory. Directory not set correctly - came back as [%s], expected [%s]\n", u_getDataDirectory(), path);
-        
+
     testValue2=uloc_getISO3Language("en_US");
     log_verbose("second fetch of language retrieved  %s \n", testValue2);
-        
+
     u_setDataDirectory(oldDirectory);
     testValue3=uloc_getISO3Language("en_US");
     log_verbose("third fetch of language retrieved  %s \n", testValue3);
-        
+
     if (0 != strcmp(testValue3,"eng")) {
        log_err("get/setDataDirectory() failed: expected \"eng\", got \" %s  \" \n", testValue3);
-       
-       }
+    }
 }
 
 
@@ -414,15 +406,15 @@ static void doTestDisplayNames(const char* inLocale,
     UErrorCode status = U_ZERO_ERROR;
     int32_t i;
     int32_t maxresultsize;
-    
+
     char* testLocale;
-   
-    
+
+
     UChar  *testLang  = 0;
     UChar  *testCtry = 0;
     UChar  *testVar = 0;
     UChar  *testName = 0;
-   
+
 
     UChar*  expectedLang = 0;
     UChar*  expectedCtry = 0;
@@ -430,33 +422,31 @@ static void doTestDisplayNames(const char* inLocale,
     UChar*  expectedName = 0;
     char temp[5];
     const char* defaultDefaultLocale=" ";
-    
-    
-       
+
+setUpDataTable();
+
+
     uloc_getLanguage(uloc_getDefault(), temp, 5, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in getDefault  %s \n", myErrorName(status));
     }
     if (defaultIsFrench && 0 != strcmp(temp, "fr"))    {
         log_err("Default locale should be French, but it's really  %s\n", temp);
-        
     }
     else if (!defaultIsFrench && 0 != strcmp(temp, "en")){  
-    
         log_err("Default locale should be English, but it's really  %s\n", temp);
-        
     }
 
-   testLocale = (char*)malloc(sizeof(char)   * 1);
-  
-   
-   for(i=0;i<MAX_LOCALES; ++i)
-   {
+    testLocale = (char*)malloc(sizeof(char)   * 1);
+
+
+    for(i=0;i<MAX_LOCALES; ++i)
+    {
        testLocale=(char*)realloc(testLocale, sizeof(char) * (u_strlen(dataTable[NAME][i])+1));
        u_austrcpy(testLocale,dataTable[NAME][i]);
-    
+
         log_verbose("Testing.....  %s\n", testLocale);
-                
+
         if (strcmp(inLocale, defaultDefaultLocale)==0) {
             maxresultsize=0;
             maxresultsize=uloc_getDisplayLanguage(testLocale, NULL, NULL, maxresultsize, &status);
@@ -465,12 +455,10 @@ static void doTestDisplayNames(const char* inLocale,
                 status=U_ZERO_ERROR;
                 testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize + 1));
                 uloc_getDisplayLanguage(testLocale, NULL, testLang, maxresultsize, &status);
-
-
             }
+
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
-                    
             }
             maxresultsize=0;
             maxresultsize=uloc_getDisplayCountry(testLocale, NULL, NULL, maxresultsize, &status);
@@ -482,9 +470,8 @@ static void doTestDisplayNames(const char* inLocale,
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
-                    
             }
-            
+
             maxresultsize=0;
             maxresultsize=uloc_getDisplayVariant(testLocale, NULL, NULL, maxresultsize, &status);
             if(status==U_BUFFER_OVERFLOW_ERROR)
@@ -495,7 +482,6 @@ static void doTestDisplayNames(const char* inLocale,
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
-                
             }
             maxresultsize=0;
             maxresultsize=uloc_getDisplayName(testLocale, NULL, NULL, maxresultsize, &status);
@@ -561,53 +547,50 @@ static void doTestDisplayNames(const char* inLocale,
             }
 
         }
-    
+
         expectedLang=dataTable[compareIndex][i];
-        if(u_strlen(expectedLang) == 0 && defaultIsFrench)  
+        if(u_strlen(expectedLang) == 0 && defaultIsFrench)
             expectedLang=dataTable[DLANG_FR][i];
         if(u_strlen(expectedLang)== 0)
             expectedLang=dataTable[DLANG_EN][i];
 
-    
+
         expectedCtry=dataTable[compareIndex + 1][i];
         if(u_strlen(expectedCtry) == 0 && defaultIsFrench)
             expectedCtry=dataTable[DCTRY_FR][i];
         if(u_strlen(expectedCtry)== 0)
-            expectedCtry=dataTable[DCTRY_EN][i];    
-   
+            expectedCtry=dataTable[DCTRY_EN][i];
+
         expectedVar=dataTable[compareIndex + 2][i];
         if(u_strlen(expectedVar) == 0 && defaultIsFrench)
             expectedVar=dataTable[DVAR_FR][i];
         if(u_strlen(expectedCtry)== 0)
             expectedVar=dataTable[DVAR_EN][i];
-        
-        
+
+
         expectedName=dataTable[compareIndex + 3][i];
         if(u_strlen(expectedName) ==0 && defaultIsFrench)
             expectedName=dataTable[DNAME_FR][i];
         if(u_strlen(expectedName) == 0)
             expectedName=dataTable[DNAME_EN][i];
-       
-        
-     if (0 !=u_strcmp(testLang,expectedLang))  {
+
+
+        if (0 !=u_strcmp(testLang,expectedLang))  {
             log_err(" Display Language mismatch: %s  versus  %s\n", austrdup(testLang), austrdup(expectedLang));
-            
-          }
-        
+        }
+
         if (0 != u_strcmp(testCtry,expectedCtry))   {
             log_err(" Display Country mismatch: %s  versus  %s\n", austrdup(testCtry), austrdup(expectedCtry));
-            
-          }
-        
+        }
+
         if (0 != u_strcmp(testVar,expectedVar))    {
             log_err(" Display Variant mismatch: %s  versus  %s\n", austrdup(testVar), austrdup(expectedVar));
-            
-          }
-       
+        }
+
         if(0 != u_strcmp(testName, expectedName))    {    
             log_err(" Display Name mismatch: %s  versus  %s\n", austrdup(testName), austrdup(expectedName));
         }
-       
+
     free(testName);
     free(testLang);
     free(testCtry);
@@ -615,81 +598,76 @@ static void doTestDisplayNames(const char* inLocale,
 
     }
     free(testLocale);
+cleanUpDataTable();
 }
 
 /* test for uloc_getISOLanguages, uloc_getISOCountries */
 static void TestISOFunctions()
 {
-
-
-
-    int32_t count  = 0;
-    
-    UBool done = FALSE;
-    
     const char* const* str=uloc_getISOLanguages();
     const char* const* str1=uloc_getISOCountries();
+    int32_t count  = 0;
+    UBool done = FALSE;
+
     /*  test getISOLanguages*/
-    count = 0;
-    done = FALSE;
     /*str=uloc_getISOLanguages(); */
     log_verbose("Testing ISO Languages: \n");
-    
-    while(!done){
-        
+
+    while(!done)
+    {
         if(*(str+count++) == 0)
-    
+        {
             done = TRUE;
-                
-        
+        }
     }
     count--;
-    if(count!=142)
-        
+    if(count!=142) {
         log_err("There is an error in getISOLanguages %d\n", count);
-    
+    }
+
     log_verbose("Testing ISO Countries");
     count=0;
     done=FALSE;
     while(!done)
     {
         if(*(str1 + count++)==0)
+        {
             done=TRUE;
-            
-    
+        }
     }
     count--;
     if(count!=239)
+    {
         log_err("There is an error in getISOCountries %d \n", count);
-    
-  
+    }
 }
-
-
-static UChar greekDisplayLanguage[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba, 0x03ac, 0 };
-static UChar greekDisplayCountry[] = { 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0 };
-static UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba,
-    0x03ac, 0x20, 0x28, 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0x29, 0 };
-
 
 static void setUpDataTable()
 {
     int32_t i,j;
-    dataTable = (UChar***)(calloc(sizeof(UChar**),23));
+    dataTable = (UChar***)(calloc(sizeof(UChar**),LOCALE_INFO_SIZE));
 
     for (i = 0; i < 23; i++) {
-      dataTable[i] = (UChar**)(calloc(sizeof(UChar*),5));
+        dataTable[i] = (UChar**)(calloc(sizeof(UChar*),LOCALE_SIZE));
         for (j = 0; j < 5; j++){
             dataTable[i][j] = CharsToUChars(rawData2[i][j]);
         }
     }
-    dataTable[DLANG_EL][GREEKS]=(UChar*)realloc(dataTable[DLANG_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayLanguage)+1));
-    u_strncpy(dataTable[DLANG_EL][GREEKS],greekDisplayLanguage,8);
-    dataTable[DCTRY_EL][GREEKS]=(UChar*)realloc(dataTable[DCTRY_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayCountry)+1));
-    u_strncpy(dataTable[DCTRY_EL][GREEKS],greekDisplayCountry,6);
-    dataTable[DNAME_EL][GREEKS]=(UChar*)realloc(dataTable[DNAME_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayName)+1));
-    u_strncpy(dataTable[DNAME_EL][GREEKS],greekDisplayName,17);
+}
 
+static void cleanUpDataTable()
+{
+    int32_t i,j;
+    if(dataTable != NULL) {
+        for (i=0; i<LOCALE_INFO_SIZE; i++) {
+            for(j = 0; j < LOCALE_SIZE; j++) {
+                free(dataTable[i][j]);
+            }
+            free(dataTable[i]);
+        }
+        free(dataTable);
+    }
+    dataTable = NULL;
 }
 
 /**
