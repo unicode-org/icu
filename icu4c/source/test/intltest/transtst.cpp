@@ -419,7 +419,7 @@ void TransliteratorTest::TestCompoundHex(void) {
     }
 
     // Do some basic tests of b
-    expect(*b, "\\u0030\\u0031", "01");
+    expect(*b, UnicodeString("\\u0030\\u0031", ""), "01");
 
     Transliterator* ab = new CompoundTransliterator(transab, 2);
     UnicodeString s("abcde");
@@ -460,7 +460,7 @@ void TransliteratorTest::TestFiltering(void) {
     hex->adoptFilter(new TestFilter());
     UnicodeString s("abcde");
     hex->transliterate(s);
-    UnicodeString exp("\\u0061\\u0062c\\u0064\\u0065");
+    UnicodeString exp("\\u0061\\u0062c\\u0064\\u0065", "");
     if (s == exp) {
         logln(UnicodeString("Ok:   \"") + exp + "\"");
     } else {
@@ -580,12 +580,12 @@ void TransliteratorTest::TestJ243(void) {
     // Test default Hex-Unicode, which should handle
     // \u, \U, u+, and U+
     HexToUnicodeTransliterator hex;
-    expect(hex, "\\u0041+\\U0042,u+0043uu+0044z", "A+B,CuDz");
+    expect(hex, UnicodeString("\\u0041+\\U0042,u+0043uu+0044z", ""), "A+B,CuDz");
     // Try a custom Hex-Unicode
     // \uXXXX and &#xXXXX;
     status = U_ZERO_ERROR;
-    HexToUnicodeTransliterator hex2("\\\\u###0;&\\#x###0\\;", status); 
-    expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
+    HexToUnicodeTransliterator hex2(UnicodeString("\\\\u###0;&\\#x###0\\;", ""), status); 
+    expect(hex2, UnicodeString("\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;", ""),
            "abcd5fx012&#x00033;");
     // Try custom Unicode-Hex (default is tested elsewhere)
     status = U_ZERO_ERROR;
