@@ -38,7 +38,7 @@ void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
 
   infiles = o->filePaths;
 
-  sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n\t@\"$(GENCMN)\" -C \"%s\" -d \"%s\" -n \"$(CNAME)\" 1000000 <<\n", 
+  sprintf(tmp, "\"$(TARGETDIR)\\$(CMNTARGET)\" : $(DATAFILEPATHS)\n\t@\"$(GENCMN)\" -C \"%s\" -d \"%s\" -n \"$(NAME)\" 0 <<\n", 
 	  o->comment, o->targetDir);
     T_FileStream_writeLine(makefile, tmp);
 
@@ -114,7 +114,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
           "!ENDIF\n\n");
 
 
-      uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(CNAME)" UDATA_CMN_INTERMEDIATE_SUFFIX OBJ_SUFFIX);
+      uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(NAME)" UDATA_CMN_INTERMEDIATE_SUFFIX OBJ_SUFFIX);
 
       sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
       T_FileStream_writeLine(makefile, tmp2);
@@ -163,7 +163,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
           "!ENDIF\n\n");
 
 
-      uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(CNAME)" UDATA_CMN_INTERMEDIATE_SUFFIX OBJ_SUFFIX);
+      uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(NAME)" UDATA_CMN_INTERMEDIATE_SUFFIX OBJ_SUFFIX);
 
       sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
       T_FileStream_writeLine(makefile, tmp2);
