@@ -7,6 +7,95 @@
 
 zh {
     Version{ "3.0" }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u4E0A\u5348",
+                "\u4E0B\u5348",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u65E5",
+                        "\u4E00",
+                        "\u4E8C",
+                        "\u4E09",
+                        "\u56DB",
+                        "\u4E94",
+                        "\u516D",
+                    }
+                    narrow{
+                        "\u65e5",
+                        "\u4e00",
+                        "\u4e8c",
+                        "\u4e09",
+                        "\u56db",
+                        "\u4e94",
+                        "\u516d",
+                    }
+                    wide{
+                        "\u661F\u671F\u65E5",
+                        "\u661F\u671F\u4E00",
+                        "\u661F\u671F\u4E8C",
+                        "\u661F\u671F\u4E09",
+                        "\u661F\u671F\u56DB",
+                        "\u661F\u671F\u4E94",
+                        "\u661F\u671F\u516D",
+                    }
+                }
+            }
+            eras { 
+                "\u516C\u5143\u524D",
+                "\u516C\u5143",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u4E00\u6708",
+                        "\u4E8C\u6708",
+                        "\u4E09\u6708",
+                        "\u56DB\u6708",
+                        "\u4E94\u6708",
+                        "\u516D\u6708",
+                        "\u4E03\u6708",
+                        "\u516B\u6708",
+                        "\u4E5D\u6708",
+                        "\u5341\u6708",
+                        "\u5341\u4E00\u6708",
+                        "\u5341\u4E8C\u6708",
+                    }
+                    narrow{
+                        "1\u6708",
+                        "2\u6708",
+                        "3\u6708",
+                        "4\u6708",
+                        "5\u6708",
+                        "6\u6708",
+                        "7\u6708",
+                        "8\u6708",
+                        "9\u6708",
+                        "10\u6708",
+                        "11\u6708",
+                        "12\u6708",
+                    }
+                    wide{
+                        "\u4E00\u6708",
+                        "\u4E8C\u6708",
+                        "\u4E09\u6708",
+                        "\u56DB\u6708",
+                        "\u4E94\u6708",
+                        "\u516D\u6708",
+                        "\u4E03\u6708",
+                        "\u516B\u6708",
+                        "\u4E5D\u6708",
+                        "\u5341\u6708",
+                        "\u5341\u4E00\u6708",
+                        "\u5341\u4E8C\u6708",
+                    }
+                }
+            }
+        }
+    }
     Countries {
         AD { "\u5B89\u9053\u5C14" }
         AE { "\u963F\u62C9\u4F2F\u8054\u5408\u914B\u957F\u56FD" }
@@ -614,8 +703,8 @@ zh {
         XNF { "XNF", "\u6CD5\u56FD\u5B89\u7684\u5217\u65AF CFA \u6CD5\u90CE" }
 
 
-        //XPS { "XPS", "\u78C5" }
-        XSS { "XSS", "\u5148\u4EE4" }
+
+
 
         YDD { "YDD", "\u4E5F\u95E8\u7B2C\u7EB3\u5C14\u5143" }
         YEI { "YEI", "\u4E5F\u95E8\u963F\u9A6C\u8FEA\u91CC\u5C14" }
@@ -1352,7 +1441,7 @@ zh {
         calendar{
             japanese    { "\u65E5\u672C\u65E5\u5386" }
             buddhist    { "\u4F5B\u6559\u65E5\u5386" }
-            islamic	    { "\u4F0A\u65AF\u5170\u65E5\u5386" }
+            islamic     { "\u4F0A\u65AF\u5170\u65E5\u5386" }
             islamic-civil { "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u5386" }
             hebrew      { "\u5E0C\u4F2F\u6765\u65E5\u5386" }
             chinese     { "\u519C\u5386" }
@@ -1365,95 +1454,6 @@ zh {
         REVISED { "\u5df2\u4fee\u8ba2" }
     }
 
-    calendar{
-        gregorian{
-            AmPmMarkers{
-                "\u4E0A\u5348",
-                "\u4E0B\u5348",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "\u65E5",
-                        "\u4E00",
-                        "\u4E8C",
-                        "\u4E09",
-                        "\u56DB",
-                        "\u4E94",
-                        "\u516D",
-                    }
-                    narrow{
-                        "\u65e5",
-                        "\u4e00",
-                        "\u4e8c",
-                        "\u4e09",
-                        "\u56db",
-                        "\u4e94",
-                        "\u516d",
-                    }
-                    wide{
-                        "\u661F\u671F\u65E5",
-                        "\u661F\u671F\u4E00",
-                        "\u661F\u671F\u4E8C",
-                        "\u661F\u671F\u4E09",
-                        "\u661F\u671F\u56DB",
-                        "\u661F\u671F\u4E94",
-                        "\u661F\u671F\u516D",
-                    }
-                }
-            }
-            eras { 
-                "\u516C\u5143\u524D",
-                "\u516C\u5143",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "\u4E00\u6708",
-                        "\u4E8C\u6708",
-                        "\u4E09\u6708",
-                        "\u56DB\u6708",
-                        "\u4E94\u6708",
-                        "\u516D\u6708",
-                        "\u4E03\u6708",
-                        "\u516B\u6708",
-                        "\u4E5D\u6708",
-                        "\u5341\u6708",
-                        "\u5341\u4E00\u6708",
-                        "\u5341\u4E8C\u6708",
-                    }
-                    narrow{
-                        "1\u6708",
-                        "2\u6708",
-                        "3\u6708",
-                        "4\u6708",
-                        "5\u6708",
-                        "6\u6708",
-                        "7\u6708",
-                        "8\u6708",
-                        "9\u6708",
-                        "10\u6708",
-                        "11\u6708",
-                        "12\u6708",
-                    }
-                    wide{
-                        "\u4E00\u6708",
-                        "\u4E8C\u6708",
-                        "\u4E09\u6708",
-                        "\u56DB\u6708",
-                        "\u4E94\u6708",
-                        "\u516D\u6708",
-                        "\u4E03\u6708",
-                        "\u516B\u6708",
-                        "\u4E5D\u6708",
-                        "\u5341\u6708",
-                        "\u5341\u4E00\u6708",
-                        "\u5341\u4E8C\u6708",
-                    }
-                }
-            }
-        }
-    }
     zoneStrings {
          {
             "PST",

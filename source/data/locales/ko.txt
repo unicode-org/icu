@@ -8,6 +8,107 @@
 ko {
     Version { "3.0" }
 
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\uc624\uc804",
+                "\uc624\ud6c4",
+            }
+            DateTimePatterns{
+                "a hh'\uc2dc' mm'\ubd84' ss'\ucd08' z",
+                "a hh'\uc2dc' mm'\ubd84' ss'\ucd08'",
+                "a hh'\uc2dc' mm'\ubd84'",
+                "a hh'\uc2dc' mm'\ubd84'",
+                "yyyy'\ub144' M'\uc6d4' d'\uc77c' EEEE",
+                "yyyy'\ub144' M'\uc6d4' d'\uc77c' EE",
+                "yyyy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\uc77c",
+                        "\uc6d4",
+                        "\ud654",
+                        "\uc218",
+                        "\ubaa9",
+                        "\uae08",
+                        "\ud1a0",
+                    }
+                    narrow{
+                        "\uc77c",
+                        "\uc6d4",
+                        "\ud654",
+                        "\uc218",
+                        "\ubaa9",
+                        "\uae08",
+                        "\ud1a0",
+                    }
+                    wide{
+                        "\uc77c\uc694\uc77c",
+                        "\uc6d4\uc694\uc77c",
+                        "\ud654\uc694\uc77c",
+                        "\uc218\uc694\uc77c",
+                        "\ubaa9\uc694\uc77c",
+                        "\uae08\uc694\uc77c",
+                        "\ud1a0\uc694\uc77c",
+                    }
+                }
+            }
+            eras {
+                "\uae30\uc6d0\uc804",
+                "\uc11c\uae30",
+        //        "\ub2e8\uae30"   // AD + 2333 but ICU doesn't use it.
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1\uc6d4",
+                        "2\uc6d4",
+                        "3\uc6d4",
+                        "4\uc6d4",
+                        "5\uc6d4",
+                        "6\uc6d4",
+                        "7\uc6d4",
+                        "8\uc6d4",
+                        "9\uc6d4",
+                        "10\uc6d4",
+                        "11\uc6d4",
+                        "12\uc6d4",
+                    }
+                    narrow{
+                        "1\uc6d4",
+                        "2\uc6d4",
+                        "3\uc6d4",
+                        "4\uc6d4",
+                        "5\uc6d4",
+                        "6\uc6d4",
+                        "7\uc6d4",
+                        "8\uc6d4",
+                        "9\uc6d4",
+                        "10\uc6d4",
+                        "11\uc6d4",
+                        "12\uc6d4",
+                    }
+                    wide{
+                        "1\uc6d4",
+                        "2\uc6d4",
+                        "3\uc6d4",
+                        "4\uc6d4",
+                        "5\uc6d4",
+                        "6\uc6d4",
+                        "7\uc6d4",
+                        "8\uc6d4",
+                        "9\uc6d4",
+                        "10\uc6d4",
+                        "11\uc6d4",
+                        "12\uc6d4",
+                    }
+                }
+            }
+        }
+    }
     Countries {
         AD { "\uc548\ub3c4\ub77c" }
         AE { "\uc544\ub78d\uc5d0\ubbf8\ub9ac\ud2b8" }
@@ -259,14 +360,14 @@ ko {
         ADP { "ADP", "\uc548\ub3c4\ub77c \ud398\uc138\ud0c0" }
         AED { "AED", "\uc544\ub78d\uc5d0\ubbf8\ub808\uc774\ud2b8 \ub514\ub098\ub974" }
         AFA { "AFA", "\uc544\ud504\uac00\ub2c8 (1927-2002)" }
-        AFN { "AFN",  "\uc544\ud504\uac00\ub2c8" }
+        AFN { "AFN", "\uc544\ud504\uac00\ub2c8" }
         AIF { "AIF", "\uc544\ud30c\ub974\uc640 \uc774\uc0ac\uc2a4\uc758 \ud504\ub791" }
         ALK { "ALK", "\uc54c\ubc14\ub2c8\uc544 \ub808\ud06c (1946-1961)" }
         ALL { "ALL", "\uc54c\ubc14\ub2c8\uc544 \ub808\ud06c" }
         ALV { "ALV", "\uc54c\ubc14\ub2c8\uc544 \ub808\ud06c \ubc1c\ub8e8\ud2b8" }
         ALX { "ALX", "\uc54c\ubc14\ub2c8\uc544 \ub2ec\ub7ec \ud0dc\ud658\uad8c" }
-        AMD { "AMD","\uc544\ub974\uba54\ub2c8\uc544 \ub4dc\ub78c" }
-        ANG { "ANG","\ub124\ub378\ub780\ub4dc \uc548\ud2f8\ub808\uc2a4 \uad74\ub374" }
+        AMD { "AMD", "\uc544\ub974\uba54\ub2c8\uc544 \ub4dc\ub78c" }
+        ANG { "ANG", "\ub124\ub378\ub780\ub4dc \uc548\ud2f8\ub808\uc2a4 \uad74\ub374" }
         AOA { "AOA", "\uc559\uace8\ub77c \ucf74\uc790" }
         AOK { "AOK", "\uc559\uace8\ub77c \ucf74\uc790 (1977-1990)" }
         AON { "AON", "\uc559\uace8\ub77c \uc2e0\uadc4 \ucf74\uc790 (1990-2000)" }
@@ -275,43 +376,43 @@ ko {
         ARA { "ARA", "\uc544\ub974\ud5e8\ud2f0\ub098 \uc624\uc2a4\ud2b8\ub784" }
         ARM { "ARM", "\uc544\ub974\ud5e8\ud2f0\ub098 \ud398\uc18c \ubaa8\ub124\ub2e4 \uad6d\uc601" }
         ARP { "ARP", "\uc544\ub974\ud5e8\ud2f0\ub098 \ud398\uc18c (1983-1985)" }
-        ARS { "ARS","\uc544\ub974\ud5e8\ud2f0\ub098 \ud398\uc18c" }
+        ARS { "ARS", "\uc544\ub974\ud5e8\ud2f0\ub098 \ud398\uc18c" }
         ATS { "ATS", "\ud638\uc8fc \uc2e4\ub9c1" }
-        AUD { "AUD",  "\ud638\uc8fc \ub2ec\ub7ec" }
+        AUD { "AUD", "\ud638\uc8fc \ub2ec\ub7ec" }
         AUP { "AUP", "\ud638\uc8fc \ud30c\uc6b4\ub4dc" }
         AWG { "AWG", "\uc544\ub8e8\ubc14 \uae38\ub354" }
         AZM { "AZM", "\uc544\uc81c\ub974\ubc14\uc774\uc820 \ub9c8\ub098\ud2b8" }
         BAD { "BAD", "\ubcf4\uc2a4\ub2c8\uc544-\ud5e4\ub974\uccb4\uace0\ube44\ub098 \ub514\ub098\ub974" }
-        BAM { "BAM",  "\ubcf4\uc2a4\ub2c8\uc544-\ud5e4\ub974\uccb4\uace0\ube44\ub098 \ud0dc\ud658 \ub9c8\ub974\ud06c" }
+        BAM { "BAM", "\ubcf4\uc2a4\ub2c8\uc544-\ud5e4\ub974\uccb4\uace0\ube44\ub098 \ud0dc\ud658 \ub9c8\ub974\ud06c" }
         BAN { "BAN", "\ubcf4\uc2a4\ub2c8\uc544-\ud5e4\ub974\uccb4\uace0\ube44\ub098 \uc2e0 \ub514\ub098\ub974" }
-        BBD { "BBD","\ubc14\ubca0\uc774\ub3c4\uc2a4 \ub2ec\ub7ec" }
-        BDT { "BDT",  "\ubc29\uae00\ub77c\ub370\uc2dc \ud0c0\uce74" }
+        BBD { "BBD", "\ubc14\ubca0\uc774\ub3c4\uc2a4 \ub2ec\ub7ec" }
+        BDT { "BDT", "\ubc29\uae00\ub77c\ub370\uc2dc \ud0c0\uce74" }
         BEC { "BEC", "\ubca8\uae30\uc5d0 \ud504\ub791 (\ud0dc\ud658)" }
-        BEF { "BEF",  "\ubca8\uae30\uc5d0 \ud504\ub791" }
+        BEF { "BEF", "\ubca8\uae30\uc5d0 \ud504\ub791" }
         BEL { "BEL", "\ubca8\uae30\uc5d0 \ud504\ub791 (\uae08\uc735)" }
         BGL { "BGL", "\ubd88\uac00\ub9ac\uc544 \ub3d9\uc804 \ub81b" }
         BGM { "BGM", "\ubd88\uac00\ub9ac\uc544 \uc0ac\ud68c\uc8fc\uc758 \ub81b" }
         BGN { "BGN", "\ubd88\uac00\ub9ac\uc544 \uc2e0\uad8c \ub81b" }
         BGO { "BGO", "\ubd88\uac00\ub9ac\uc544 \ub81b (1879-1952)" }
         BGX { "BGX", "\ubd88\uac00\ub9ac\uc544 \ub81b \ud0dc\ud658\uad8c" }
-        BHD { "BHD",  "\ubc14\ub808\uc778 \ub514\ub098\ub974" }
+        BHD { "BHD", "\ubc14\ub808\uc778 \ub514\ub098\ub974" }
         BIF { "BIF", "\ubd80\ub8ec\ub514 \ud504\ub791" }
-        BMD { "BMD","\ubc84\ubba4\ub2e4 \ub2ec\ub7ec" }
+        BMD { "BMD", "\ubc84\ubba4\ub2e4 \ub2ec\ub7ec" }
         BMP { "BMP", "\ubc84\ubba4\ub2e4 \ud30c\uc6b4\ub4dc" }
         BND { "BND", "\ubd80\ub8e8\ub098\uc774 \ub2ec\ub7ec" }
-        BOB { "BOB",  "\ubcfc\ub9ac\ube44\uc544\ub178" }
+        BOB { "BOB", "\ubcfc\ub9ac\ube44\uc544\ub178" }
         BOL { "BOL", "\ubcfc\ub9ac\ube44\uc544\ub178 (1863-1962)" }
         BOP { "BOP", "\ubcfc\ub9ac\ube44\uc544\ub178 \ud398\uc18c" }
         BRB { "BRB", "\ubcfc\ub9ac\ube44\uc544\ub178  \ud06c\ub8e8\uc81c\uc774\ub8e8 \ub178\ubcf4 (1967-1986)" }
         BRC { "BRC", "\ube0c\ub77c\uc9c8 \ud06c\ub8e8\uc790\ub450" }
         BRE { "BRE", "\ube0c\ub77c\uc9c8 \ud06c\ub8e8\uc81c\uc774\ub8e8 (1990-1993)" }
-        BRL { "BRL",  "\ube0c\ub77c\uc9c8 \ub808\uc54c" }
+        BRL { "BRL", "\ube0c\ub77c\uc9c8 \ub808\uc54c" }
         BRN { "BRN", "\ube0c\ub77c\uc9c8 \ud06c\ub8e8\uc790\ub450 \ub178\ubcf4" }
         BRR { "BRR", "\ube0c\ub77c\uc9c8 \ud06c\ub8e8\uc81c\uc774\ub8e8" }
         BRZ { "BRZ", "\ube0c\ub77c\uc9c8 \ud06c\ub8e8\uc81c\uc774\ub8e8 (1942-1967)" }
         BSD { "BSD", "\ubc14\ud558\ub9c8 \ub2ec\ub7ec" }
         BSP { "BSP", "\ubc14\ud558\ub9c8 \ub2ec\ub7ec \ud30c\uc6b4\ub4dc" }
-        BTN { "BTN",  "\ubd80\ud0c4 \ub20c\ud22c\ub214" }
+        BTN { "BTN", "\ubd80\ud0c4 \ub20c\ud22c\ub214" }
         BTR { "BTR", "\ubd80\ud0c4 \ub8e8\ud53c" }
         BUK { "BUK", "\ubc84\ub9c8 \ucc28\ud2b8" }
         BUR { "BUR", "\ubc84\ub9c8 \ub8e8\ud53c" }
@@ -321,7 +422,7 @@ ko {
         BYR { "BYR", "\ubca8\ub77c\ub8e8\uc2a4 \ub8e8\ube14" }
         BZD { "BZD", "\ubca8\ub9ac\uc988 \ub2ec\ub7ec" }
         BZH { "BZH", "\uc601\uad6d\ub839 \ud63c\ub450\ub77c\uc2a4 \ub2ec\ub7ec" }
-        CAD { "CAD","\uce90\ub098\ub2e4 \ub2ec\ub7ec" }
+        CAD { "CAD", "\uce90\ub098\ub2e4 \ub2ec\ub7ec" }
         CDF { "CDF", "\ucf69\uace0 \ud504\ub791 \ucf69\uace8\ub77c\uc2a4" }
         CDG { "CDG", "\ucf69\uace0 \uacf5\ud654\uad6d \ud504\ub791" }
         CDL { "CDL", "\ucf69\uace0 \uc790\uc774\ub974" }
@@ -330,11 +431,11 @@ ko {
         CLC { "CLC", "\uce60\ub808 \ucf58\ub3c4\ub974" }
         CLE { "CLE", "\uce60\ub808 \uc5d0\uc2a4\ucfe0\ub3c4" }
         CLP { "CLP", "\uce60\ub808 \ud398\uc18c" }
-        CNY { "CNY",   "\uc911\uad6d \uc704\uc548 \uc778\ubbfc\ud3d0" }
+        CNY { "CNY", "\uc911\uad6d \uc704\uc548 \uc778\ubbfc\ud3d0" }
         COB { "COB", "\ucf5c\ub86c\ube44\uc544 \uc9c0\ud3d0 \ud398\uc18c" }
         COF { "COF", "\ucf69\uace0 CFA \ud504\ub791" }
-        COP { "COP","\ucf5c\ub86c\ube44\uc544 \ud398\uc18c" }
-        CRC { "CRC",   "\ucf54\uc2a4\ud0c0\ub9ac\uce74 \ucf5c\ub860" }
+        COP { "COP", "\ucf5c\ub86c\ube44\uc544 \ud398\uc18c" }
+        CRC { "CRC", "\ucf54\uc2a4\ud0c0\ub9ac\uce74 \ucf5c\ub860" }
         CSC { "CSC", "\uccb4\ucf54\uc2ac\ub85c\ubc14\ud0a4\uc544 \ucf54\ub8e8\ub098" }
         CSK { "CSK", "\uccb4\ucf54\uc2ac\ub85c\ubc14\ud0a4\uc544 \ub3d9\uc804 \ucf54\ub8e8\ub098" }
         CUP { "CUP", "\ucfe0\ubc14 \ud398\uc18c" }
@@ -346,23 +447,23 @@ ko {
         DDM { "DDM", "\ub3d9\ub3c5 \uc624\uc2a4\ud2b8\ub9c8\ub974\ud06c" }
         DEM { "DEM", "\ub3c5\uc77c \ub9c8\ub974\ud06c" }
         DES { "DES", "\ub3c5\uc77c \uc2a4\ud37c\ub9c8\ub974\ud06c" }
-        DJF { "DJF",  "\uc9c0\ubd80\ud2f0 \ud504\ub791" }
+        DJF { "DJF", "\uc9c0\ubd80\ud2f0 \ud504\ub791" }
         DKK { "DKK", "\ub374\ub9c8\ud06c \ud06c\ub85c\ub124" }
         DOP { "DOP", "\ub3c4\ubbf8\ub2c8\uce74 \ud398\uc18c" }
-        DZD { "DZD",  "\uc54c\uc81c\ub9ac \ub514\ub098\ub974" }
+        DZD { "DZD", "\uc54c\uc81c\ub9ac \ub514\ub098\ub974" }
         DZF { "DZF", "\uc54c\uc81c\ub9ac \uc2e0\uad8c \ud504\ub791" }
         DZG { "DZG", "\uc54c\uc81c\ub9ac \ud504\ub791 \uc81c\ub974\ubbf8\ub0a0" }
         ECS { "ECS", "\uc5d0\ucfe0\uc544\ub3c4\ub974 \uc218\ud06c\ub808" }
         EEK { "EEK", "\uc5d0\uc2a4\ud1a0\ub2c8\uc544 \ud06c\ub8ec" }
         EGP { "EGP", "\uc774\uc9d1\ud2b8 \ud30c\uc6b4\ub4dc" }
         ERN { "ERN", "\uc5d0\ub9ac\ud2b8\ub9ac\uc544 \ub098\ud06c\ud30c" }
-        ESP { "ESP","\uc2a4\ud398\uc778 \ud398\uc138\ud0c0" }
-        ETB { "ETB",  "\uc774\ub514\uc624\ud53c\uc544 \ube44\ub974" }
+        ESP { "ESP", "\uc2a4\ud398\uc778 \ud398\uc138\ud0c0" }
+        ETB { "ETB", "\uc774\ub514\uc624\ud53c\uc544 \ube44\ub974" }
         ETD { "ETD", "\uc774\ub514\uc624\ud53c\uc544 \ub2ec\ub7ec" }
         EUR { "\u20ac","\uc720\ub85c\ud654" }
         FIM { "FIM", "\ud540\ub780\ub4dc \ub9c8\ub974\uce74" }
         FIN { "FIN", "\ud540\ub780\ub4dc \ub9c8\ub974\uce74 (1860-1962)" }
-        FJD { "FJD",  "\ud53c\uc9c0 \ub2ec\ub7ec" }
+        FJD { "FJD", "\ud53c\uc9c0 \ub2ec\ub7ec" }
         FJP { "FJP", "\ud53c\uc9c0 \ud30c\uc6b4\ub4dc" }
         FKP { "FKP", "\ud3ec\ud074\ub79c\ub4dc\uc81c\ub3c4 \ud30c\uc6b4\ub4dc" }
         FOK { "FOK", "\ud398\ub85c\uc81c\ub3c4 \ud06c\ub85c\ub108" }
@@ -371,7 +472,7 @@ ko {
         GAF { "GAF", "\uac00\ubd09 CFA \ud504\ub791" }
         GBP { "\u00a3", "\uc601\uad6d\ub839 \ud30c\uc6b4\ub4dc \uc2a4\ud138\ub9c1" }
         GEK { "GEK", "\uadf8\ub8e8\uc9c0\uc57c \uc9c0\ud3d0 \ub77c\ub9ac\ud2b8" }
-        GEL { "GEL","\uadf8\ub8e8\uc9c0\uc57c \ub77c\ub9ac" }
+        GEL { "GEL", "\uadf8\ub8e8\uc9c0\uc57c \ub77c\ub9ac" }
         GHC { "GHC", "\uac00\ub098 \uc2dc\ub514" }
         GHO { "GHO", "\uac00\ub098 \uad6c\uad8c \uc2dc\ub514" }
         GHP { "GHP", "\uac00\ub098 \ud30c\uc6b4\ub4dc" }
@@ -380,7 +481,7 @@ ko {
         GLK { "GLK", "\uadf8\ub9b0\ub780\ub4dc \ud06c\ub85c\ub124" }
         GMD { "GMD", "\uac10\ube44\uc544 \ub2ec\ub77c\uc2dc" }
         GMP { "GMP", "\uac10\ube44\uc544 \ud30c\uc6b4\ub4dc" }
-        GNF { "GNF",  "\uae30\ub2c8 \ud504\ub791" }
+        GNF { "GNF", "\uae30\ub2c8 \ud504\ub791" }
         GNI { "GNI", "\uae30\ub2c8 \ud504\ub791 (1960-1972)" }
         GNS { "GNS", "\uae30\ub2c8 \uc2dc\ub9ac" }
         GPF { "GPF", "\uacfc\ub2ec\ub85c\ud504 \ud504\ub791" }
@@ -388,67 +489,67 @@ ko {
         GQP { "GQP", "\uc801\ub3c4 \uae30\ub2c8 \ud398\uc138\ud0c0 \uae30\ub2c8\uc544\ub098" }
         GRD { "GRD", "\uadf8\ub9ac\uc2a4 \ub4dc\ub77c\ud06c\ub9c8" }
         GRN { "GRN", "\uadf8\ub9ac\uc2a4 \uc2e0\uad8c \ub4dc\ub77c\ud06c\ub9c8" }
-        GTQ { "GTQ",   "\uacfc\ud14c\ub9d0\ub77c \ucf00\ud2b8\uc0b4" }
+        GTQ { "GTQ", "\uacfc\ud14c\ub9d0\ub77c \ucf00\ud2b8\uc0b4" }
         GUF { "GUF", "\ud504\ub791\uc2a4\ub839 \uac00\uc774\uc544\ub098 \ud504\ub791 \uae30\uc544\ub098" }
         GWE { "GWE", "\ud3ec\ub974\ud22c\uac08\ub839 \uae30\ub2c8 \uc5d0\uc2a4\ucfe0\ub3c4" }
         GWM { "GWM", "\ud3ec\ub974\ud22c\uac08\ub839 \uae30\ub2c8 \ubc00 \ub808\uc774\uc2a4" }
         GWP { "GWP", "\uae30\ub124\ube44\uc3d8 \ud398\uc18c" }
-        GYD { "GYD",  "\uac00\uc774\uc544\ub098 \ub2ec\ub7ec" }
+        GYD { "GYD", "\uac00\uc774\uc544\ub098 \ub2ec\ub7ec" }
         HKD { "HKD", "\ud64d\ucf69 \ub2ec\ub7ec" }
-        HNL { "HNL",   "\uc628\ub450\ub77c\uc2a4 \ub818\ud53c\ub77c" }
+        HNL { "HNL", "\uc628\ub450\ub77c\uc2a4 \ub818\ud53c\ub77c" }
         HRD { "HRD", "\ud06c\ub85c\uc544\ud2f0\uc544 \ub514\ub098\ub974" }
         HRK { "HRK", "\ud06c\ub85c\uc544\ud2f0\uc544 \ucfe0\ub098" }
         HTG { "HTG", "\ud558\uc774\ud2f0 \uad6c\ub974\ub4dc" }
-        HUF { "HUF",  "\ud5dd\uac00\ub9ac \ud3ec\ub9b0\ud2b8" }
+        HUF { "HUF", "\ud5dd\uac00\ub9ac \ud3ec\ub9b0\ud2b8" }
         IBP { "IBP", "\ubd81\ubd80 \uc544\uc77c\ub79c\ub4dc \ud30c\uc6b4\ub4dc" }
         IDG { "IDG", "\uc778\ub3c4\ub124\uc2dc\uc544 \ub2c8\uce74 \uae38\ub354" }
         IDJ { "IDJ", "\uc778\ub3c4\ub124\uc2dc\uc544 \uc790\ubc14 \ub8e8\ud53c\uc544" }
         IDN { "IDN", "\uc778\ub3c4\ub124\uc2dc\uc544 \uc2e0\uad8c \ub8e8\ud53c\uc544" }
-        IDR { "IDR",  "\uc778\ub3c4\ub124\uc2dc\uc544 \ub8e8\ud53c\uc544" }
+        IDR { "IDR", "\uc778\ub3c4\ub124\uc2dc\uc544 \ub8e8\ud53c\uc544" }
         IEP { "IR\u00a3","\uc544\uc77c\ub79c\ub4dc \ud30c\uc6b4\ub4dc" }
         ILL { "ILL", "\uc774\uc2a4\ub77c\uc5d8 \uc138\ucf08" }
         ILP { "ILP", "\uc774\uc2a4\ub77c\uc5d8 \ud30c\uc6b4\ub4dc" }
-        ILS { "ILS","\uc774\uc2a4\ub77c\uc5d8 \uc2e0\uad8c \uc138\ucf08" }
+        ILS { "ILS", "\uc774\uc2a4\ub77c\uc5d8 \uc2e0\uad8c \uc138\ucf08" }
         IMP { "IMP", "\ub9e8\ub3c4 \ud30c\uc6b4\ub4dc \uc2a4\ud138\ub9c1" }
         INR { "=0#Rs.|1#Re.|1<Rs.", "\uc778\ub3c4 \ub8e8\ud53c" }
-        IQD { "IQD",  "\uc774\ub77c\ud06c \ub514\ub098\ub974" }
-        IRR { "IRR",  "\uc774\ub780 \ub9ac\uc584" }
+        IQD { "IQD", "\uc774\ub77c\ud06c \ub514\ub098\ub974" }
+        IRR { "IRR", "\uc774\ub780 \ub9ac\uc584" }
         ISK { "ISK", "\uc544\uc774\uc2ac\ub780\ub4dc \ud06c\ub85c\ub098" }
         ITL { "ITL", "\uc774\ud0c8\ub9ac\uc544 \ub9ac\ub77c" }
         JEP { "JEP", "\uc800\uc9c0 \ud30c\uc6b4\ub4dc \uc2a4\ud138\ub9c1" }
-        JMD { "JMD",  "\uc790\uba54\uc774\uce74 \ub2ec\ub7ec" }
+        JMD { "JMD", "\uc790\uba54\uc774\uce74 \ub2ec\ub7ec" }
         JMP { "JMP", "\uc790\uba54\uc774\uce74 \ud30c\uc6b4\ub4dc" }
-        JOD { "JOD",  "\uc694\ub974\ub2e8 \ub514\ub098\ub974" }
+        JOD { "JOD", "\uc694\ub974\ub2e8 \ub514\ub098\ub974" }
         JPY { "\uffe5", "\uc77c\ubcf8 \uc5d4\ud654" }
-        KES { "KES","\ucf00\ub0d0 \uc2e4\ub9c1" }
+        KES { "KES", "\ucf00\ub0d0 \uc2e4\ub9c1" }
         KGS { "KGS", "\ud0a4\ub974\uae30\uc2a4\uc2a4\ud0c4 \uc19c" }
         KHO { "KHO", "\uce84\ubcf4\ub514\uc544 \uad6c\uad8c \ub9ac\uc584" }
-        KHR { "KHR",  "\uce84\ubcf4\ub514\uc544 \ub9ac\uc584" }
+        KHR { "KHR", "\uce84\ubcf4\ub514\uc544 \ub9ac\uc584" }
         KID { "KID", "\ud0a4\ub9ac\ubc14\uc2dc \ub2ec\ub7ec" }
-        KMF { "KMF",  "\ucf54\ubaa8\ub974 \ud504\ub791" }
+        KMF { "KMF", "\ucf54\ubaa8\ub974 \ud504\ub791" }
         KPP { "KPP", "\uc870\uc120 \ubbfc\uc8fc\uc8fc\uc758 \uc778\ubbfc \uacf5\ud654\uad6d \uc6d0" }
         KPW { "KPW", "\uc870\uc120 \ubbfc\uc8fc\uc8fc\uc758 \uc778\ubbfc \uacf5\ud654\uad6d \uc6d0" }
         KRH { "KRH", "\ub300\ud55c\ubbfc\uad6d \ud658" }
         KRO { "KRO", "\ub300\ud55c\ubbfc\uad6d \uad6c\uad8c \uc6d0" }
         KRW { "\uffe6","\ub300\ud55c\ubbfc\uad6d \uc6d0" }
-        KWD { "KWD",  "\ucfe0\uc6e8\uc774\ud2b8 \ub514\ub098\ub974" }
+        KWD { "KWD", "\ucfe0\uc6e8\uc774\ud2b8 \ub514\ub098\ub974" }
         KYD { "KYD", "\ucf00\uc774\ub9e8 \uc81c\ub3c4 \ub2ec\ub7ec" }
         KZR { "KZR", "\uce74\uc790\ud750\uc2a4\ud0c4 \ub8e8\ube14" }
-        KZT { "KZT",   "\uce74\uc790\ud750\uc2a4\ud0c4 \ud150\uac8c" }
-        LAK { "LAK","\ub77c\uc624\uc2a4 \ud0a4\ud504" }
-        LBP { "LBP",  "\ub808\ubc14\ub17c \ud30c\uc6b4\ub4dc" }
+        KZT { "KZT", "\uce74\uc790\ud750\uc2a4\ud0c4 \ud150\uac8c" }
+        LAK { "LAK", "\ub77c\uc624\uc2a4 \ud0a4\ud504" }
+        LBP { "LBP", "\ub808\ubc14\ub17c \ud30c\uc6b4\ub4dc" }
         LIF { "LIF", "\ub9ac\ud788\ud150\uc288\ud0c0\uc778 \ud504\ub791" }
         LKR { "LKR","\uc2a4\ub9ac\ub791\uce74 \ub8e8\ud53c" }
         LNR { "LNR", "\uc2e4\ub860 \ub8e8\ud53c" }
         LRD { "LRD", "\ub77c\uc774\ubca0\ub9ac\uc544 \ub2ec\ub7ec" }
-        LSL { "LSL",   "\ub808\uc18c\ud1a0 \ub85c\ud2f0" }
+        LSL { "LSL", "\ub808\uc18c\ud1a0 \ub85c\ud2f0" }
         LTL { "LTL", "\ub9ac\ud22c\uc544\ub2c8\uc544 \ub9ac\ud0c0" }
         LTT { "LTT", "\ub8e9\uc148\ubd80\ub974\ud06c \ud0c0\ub85c\ub098" }
         LUF { "LUF", "\ub8e9\uc148\ubd80\ub974\ud06c \ud504\ub791" }
         LVL { "LVL", "\ub77c\ud2b8\ube44\uc544 \ub77c\ud2b8" }
         LVR { "LVR", "\ub77c\ud2b8\ube44\uc544 \ub8e8\ube14" }
         LYB { "LYB", "\ub9ac\ube44\uc544 \uc601\uad6d \uad70\uc0ac\ub839 \ub9ac\ub77c" }
-        LYD { "LYD",  "\ub9ac\ube44\uc544 \ub514\ub098\ub974" }
+        LYD { "LYD", "\ub9ac\ube44\uc544 \ub514\ub098\ub974" }
         LYP { "LYP", "\ub9ac\ube44\uc544 \ud30c\uc6b4\ub4dc" }
         MAD { "MAD", "\ubaa8\ub85c\ucf54 \ub514\ub818" }
         MAF { "MAF", "\ubaa8\ub85c\ucf54 \ud504\ub791" }
@@ -460,7 +561,7 @@ ko {
         MGA { "MGA", "\ub9c8\ub2e4\uac00\uc2a4\uce74\ub974 \uc544\ub9ac\uc544\ub9ac" }
         MGF { "MGF", "\ub9c8\ub2e4\uac00\uc2a4\uce74\ub974 \ud504\ub791" }
         MHD { "MHD", "\ub9c8\uc0ec \uad70\ub3c4 \ub2ec\ub7ec" }
-        MKD { "MKD","\ub9c8\ucf00\ub3c4\ub2c8\uc544 \ub514\ub098\ub974" }
+        MKD { "MKD", "\ub9c8\ucf00\ub3c4\ub2c8\uc544 \ub514\ub098\ub974" }
         MKN { "MKN", "\ub9c8\ucf00\ub3c4\ub2c8\uc544 \ub514\ub098\ub974 (1992-1993)" }
         MLF { "MLF", "\ub9d0\ub9ac \ud504\ub791" }
         MMK { "MMK", "\ubbf8\uc580\ub9c8 \ud0a4\uc58f" }
@@ -469,19 +570,19 @@ ko {
         MOP { "MOP", "\ub9c8\uce74\uc624 \ud30c\ud0c0\uce74" }
         MQF { "MQF", "\ub9d0\ud2f0\ub2c8\ud06c \ud504\ub791" }
         MRO { "UM",  "\ubaa8\ub9ac\ud0c0\ub2c8 \uc6b0\uae30\uc57c" }
-        MTL { "MTL",  "\ubab0\ud0c0 \ub9ac\ub77c"         }
+        MTL { "MTL", "\ubab0\ud0c0 \ub9ac\ub77c" }
         MTP { "MTP", "\ubab0\ud0c0 \ud30c\uc6b4\ub4dc" }
         MUR { "MUR", "\ubaa8\ub9ac\uc154\uc2a4 \ub8e8\ud53c" }
         MVP { "MVP", "\ubab0\ub514\ube0c \uc81c\ub3c4 \ub8e8\ud53c" }
         MVR { "MVR", "\ubab0\ub514\ube0c \uc81c\ub3c4 \ub8e8\ud53c\uc544" }
-        MWK { "MWK",  "\ub9d0\ub77c\uc704 \ucf70\uccd0" }
+        MWK { "MWK", "\ub9d0\ub77c\uc704 \ucf70\uccd0" }
         MWP { "MWP", "\ub9d0\ub77c\uc704 \ud30c\uc6b4\ub4dc" }
-        MXN { "MXN","\uba55\uc2dc\ucf54 \ud398\uc18c" }
+        MXN { "MXN", "\uba55\uc2dc\ucf54 \ud398\uc18c" }
         MXP { "MXP", "\uba55\uc2dc\ucf54 \uc2e4\ubc84 \ud398\uc18c (1861-1992)" }
-        MYR { "MYR",  "\ub9d0\ub808\uc774\uc9c0\uc544 \ub9c1\uae30\ud2b8" }
+        MYR { "MYR", "\ub9d0\ub808\uc774\uc9c0\uc544 \ub9c1\uae30\ud2b8" }
         MZE { "MZE", "\ubaa8\uc7a0\ube44\ud06c \uc5d0\uc2a4\ucfe0\ub3c4" }
-        MZM { "MZM",  "\ubaa8\uc7a0\ube44\ud06c \uba54\ud2f0\uce7c" }
-        NAD { "NAD",  "\ub098\ubbf8\ube44\uc544 \ub2ec\ub7ec" }
+        MZM { "MZM", "\ubaa8\uc7a0\ube44\ud06c \uba54\ud2f0\uce7c" }
+        NAD { "NAD", "\ub098\ubbf8\ube44\uc544 \ub2ec\ub7ec" }
         NCF { "NCF", "\ub274 \uce7c\ub808\ub3c4\ub2c8\uc544 \ud504\ub791 \uc81c\ub974\ubbf8\ub0a0" }
         NGN { "NGN", "\ub2c8\uc81c\ub974 \ub098\uc774\ub77c" }
         NGP { "NGP", "\ub2c8\uc81c\ub974 \ud30c\uc6b4\ub4dc" }
@@ -492,7 +593,7 @@ ko {
         NPR { "NPR", "\ub124\ud314 \ub8e8\ud53c" }
         NZD { "NZD", "\ub274\uc9c8\ub79c\ub4dc \ub2ec\ub7ec" }
         NZP { "NZP", "\ub274\uc9c8\ub79c\ub4dc \ud30c\uc6b4\ub4dc" }
-        OMR { "OMR",  "\uc624\ub9cc \ub9ac\uc584" }
+        OMR { "OMR", "\uc624\ub9cc \ub9ac\uc584" }
         OMS { "OMS", "\uc624\ub9cc \ub9ac\uc584 \uc0ac\uc774\ub514" }
         PAB { "PAB", "\ud30c\ub098\ub9c8 \ubc1c\ubcf4\uc544" }
         PEI { "PEI", "\ud398\ub8e8 \uc778\ud2f0" }
@@ -501,13 +602,13 @@ ko {
         PGK { "PGK", "\ud30c\ud478\uc544\ub274\uae30\ub2c8 \ud0a4\ub098" }
         PHP { "PHP", "\ud544\ub9ac\ud540 \ud398\uc18c" }
         PKR { "PKR", "\ud30c\ud0a4\uc2a4\ud0c4 \ub8e8\ud53c" }
-        PLN { "PLN",  "\ud3f4\ub780\ub4dc \uc990\ub85c\ud2f0" }
+        PLN { "PLN", "\ud3f4\ub780\ub4dc \uc990\ub85c\ud2f0" }
         PLZ { "PLZ", "\ud3f4\ub780\ub4dc \uc990\ub85c\ud2f0 (1950-1995)" }
         PSP { "PSP", "\ud314\ub808\uc2a4\ud0c0\uc778 \ud30c\uc6b4\ub4dc" }
         PTC { "PTC", "\ud3ec\ub974\ud22c\uac08 \ucf58\ud1a0" }
         PTE { "PTE", "\ud3ec\ub974\ud22c\uac08 \uc5d0\uc2a4\ucfe0\ub3c4" }
         PYG { "PYG", "\ud30c\ub77c\uacfc\uc774 \uacfc\ub77c\ub2c8" }
-        QAR { "QAR",  "\uce74\ud0c0\ub974 \ub9ac\uc584" }
+        QAR { "QAR", "\uce74\ud0c0\ub974 \ub9ac\uc584" }
         REF { "REF", "\ub9ac\uc720\ub2c8\uc628 \ud504\ub791" }
         ROL { "ROL", "\ub8e8\ub9c8\ub2c8\uc544 \ub808\uc774" }
         RON { "RON", "\ub8e8\ub9c8\ub2c8\uc544 \uc2e0\uad8c \ub808\uc774" }
@@ -517,28 +618,28 @@ ko {
         SAR { "SAR", "\uc0ac\uc6b0\ub514\uc544\ub77c\ube44\uc544 \ub9ac\uc584" }
         SAS { "SAS", "\uc0ac\uc6b0\ub514\uc544\ub77c\ube44\uc544 \uc790\uce58\ub839 \ub9ac\uc584" }
         SBD { "SBD", "\uc194\ub85c\ubaac \uc81c\ub3c4 \ub2ec\ub7ec" }
-        SCR { "SCR",  "\uc138\uc774\uc274 \ub8e8\ud53c" }
+        SCR { "SCR", "\uc138\uc774\uc274 \ub8e8\ud53c" }
         SDD { "SDD", "\uc218\ub2e8 \ub514\ub098\ub974" }
         SDP { "SDP", "\uc218\ub2e8 \ud30c\uc6b4\ub4dc" }
         SEK { "SEK", "\uc2a4\uc6e8\ub374 \ud06c\ub85c\ub098" }
-        SGD { "SGD",  "\uc2f1\uac00\ud3f4 \ub2ec\ub7ec" }
+        SGD { "SGD", "\uc2f1\uac00\ud3f4 \ub2ec\ub7ec" }
         SHP { "SHP", "\uc138\uc778\ud2b8\ud5ec\ub808\ub098 \ud30c\uc6b4\ub4dc" }
         SIB { "SIB", "\uc2ac\ub85c\ubca0\ub2c8\uc544 \ud1a8\ub77c\ub974 \ubcf8\uc2a4" }
         SIT { "SIT", "\uc2ac\ub85c\ubca0\ub2c8\uc544 \ud1a8\ub77c\ub974" }
-        SKK { "SKK",  "\uc2ac\ub85c\ubc14\ud0a4\uc544 \ucf54\ub8e8\ub098" }
+        SKK { "SKK", "\uc2ac\ub85c\ubc14\ud0a4\uc544 \ucf54\ub8e8\ub098" }
         SLL { "SLL", "\uc2dc\uc5d0\ub77c\ub9ac\uc628 \ub9ac\uc628" }
         SML { "SML", "\uc0b0\ub9c8\ub9ac\ub178 \ub9ac\ub77c" }
-        SOS { "SOS","\uc18c\ub9d0\ub9ac\uc544 \uc2e4\ub9c1" }
+        SOS { "SOS", "\uc18c\ub9d0\ub9ac\uc544 \uc2e4\ub9c1" }
         SQS { "SQS", "\uc18c\ub9d0\ub9ac\ub79c\ub4dc \uc2e4\ub9c1" }
-        SRG { "SRG",  "\uc218\ub9ac\ub0a8 \uae38\ub354" }
+        SRG { "SRG", "\uc218\ub9ac\ub0a8 \uae38\ub354" }
         SSP { "SSP", "\uc2a4\ucf54\ud2c0\ub79c\ub4dc \ud30c\uc6b4\ub4dc" }
-        STD { "STD",  "\uc0c1\ud22c\uba54 \ud504\ub9b0\uc2dc\ud398 \ub3c4\ube0c\ub77c" }
+        STD { "STD", "\uc0c1\ud22c\uba54 \ud504\ub9b0\uc2dc\ud398 \ub3c4\ube0c\ub77c" }
         STE { "STE", "\uc0c1\ud22c\uba54 \ud504\ub9b0\uc2dc\ud398 \uc5d0\uc2a4\ucfe0\ub3c4" }
         SUN { "SUN", "\uc18c\ub828 \uc2e0\uad8c \ub8e8\ube14" }
         SUR { "SUR", "\uc18c\ub828 \ub8e8\ube14" }
         SVC { "SVC", "\uc5d8\uc0b4\ubc14\ub3c4\ub974 \ucf5c\ub860" }
-        SYP { "SYP",  "\uc2dc\ub9ac\uc544 \ud30c\uc6b4\ub4dc" }
-        SZL { "SZL",   "\uc2a4\uc640\uc9c8\ub780\ub4dc \ub9b4\ub791\uac8c\ub2c8" }
+        SYP { "SYP", "\uc2dc\ub9ac\uc544 \ud30c\uc6b4\ub4dc" }
+        SZL { "SZL", "\uc2a4\uc640\uc9c8\ub780\ub4dc \ub9b4\ub791\uac8c\ub2c8" }
         TCC { "TCC", "\ud130\ud06c\uc2a4\ucf00\uc774\ucee4\uc2a4 \ud06c\ub77c\uc6b4" }
         THB { "THB", "\ud0dc\uad6d \ubc14\ud2b8" }
         TJR { "TJR", "\ud0c0\uc9c0\ud0a4\uc2a4\ud0c4 \ub8e8\ube14" }
@@ -548,7 +649,7 @@ ko {
         TOS { "TOS", "\ud1b5\uac00 \ud30c\uc6b4\ub4dc \uc2a4\ud138\ub9c1" }
         TPE { "TPE", "\ud2f0\ubaa8\ub974 \uc5d0\uc2a4\ucfe0\ub3c4" }
         TPP { "TPP", "\ud2f0\ubaa8\ub974 \ud30c\ud0c0\uce74" }
-        TRL { "TRL",  "\ud130\uae30 \ub9ac\ub77c" }
+        TRL { "TRL", "\ud130\uae30 \ub9ac\ub77c" }
         TTD { "TTD", "\ud2b8\ub9ac\ub2c8\ub2e4\ub4dc \ud1a0\ubc14\uace0 \ub2ec\ub7ec" }
         TTO { "TTO", "\ud2b8\ub9ac\ub2c8\ub2e4\ub4dc \ud1a0\ubc14\uace0 \uad6c\uad8c \ub2ec\ub7ec" }
         TVD { "TVD", "\ud22c\ubc1c\ub8e8 \ub2ec\ub7ec" }
@@ -557,7 +658,7 @@ ko {
         UAH { "UAH", "\uc6b0\ud06c\ub77c\uc774\ub098 \uadf8\ub9ac\ube0c\ub098" }
         UGS { "UGS", "\uc6b0\uac04\ub2e4 \uc2e4\ub9c1 (1966-1987)" }
         UGX { "UGX", "\uc6b0\uac04\ub2e4 \uc2e4\ub9c1" }
-    USD { "US$", "\ubbf8\uad6d \ub2ec\ub7ec" }
+        USD { "US$", "\ubbf8\uad6d \ub2ec\ub7ec" }
         UYF { "UYF", "\uc6b0\ub8e8\uacfc\uc774 \ud398\uc18c \ud478\uc5d0\ub974\ub5bc" }
         UYP { "UYP", "\uc6b0\ub8e8\uacfc\uc774 \ud398\uc18c (1975-1993)" }
         UYU { "UYU", "\uc6b0\ub8e8\uacfc\uc774 \ud398\uc18c \uc6b0\ub8e8\uacfc\uc694" }
@@ -578,16 +679,16 @@ ko {
         WST { "WST", "\uc11c \uc0ac\ubaa8\uc544 \ud0c8\ub77c" }
         XAD { "XAD", "\uc544\uc2dc\uc544 \ub514\ub098\ub974 \uacc4\uc0b0 \ub2e8\uc704" }
         XAM { "XAM", "\uc544\uc2dc\uc544 \uae30\uae08 \uc5f0\ud569 \ud1b5\ud654 \ub2e8\uc704" }
-        XAU { "XAU", "\uae08"                 }
+        XAU { "XAU", "\uae08" }
         XCD { "XCD", "\ub3d9\uce74\ub9ac\ube0c \ub2ec\ub7ec" }
         XDR { "XDR", "\ud2b9\ubcc4\uc778\ucd9c\uad8c" }
         XEU { "XEU", "\uc720\ub7fd \ud658\uc728 \ub2e8\uc704" }
-        XFO { "XFO", "\ud504\ub791\uc2a4 Gold \ud504\ub791"    }
-        XFU { "XFU", "\ud504\ub791\uc2a4 UIC-\ud504\ub791"     }
-        XID { "XID", "\uc774\uc2ac\ub78c \ub514\ub098\ub974"        }
+        XFO { "XFO", "\ud504\ub791\uc2a4 Gold \ud504\ub791" }
+        XFU { "XFU", "\ud504\ub791\uc2a4 UIC-\ud504\ub791" }
+        XID { "XID", "\uc774\uc2ac\ub78c \ub514\ub098\ub974" }
         XMF { "XMF", "\ud504\ub791\uc2a4 \uba54\ud2b8\ub85c\ud3f4\ub9ac\ud0c4 \ub204\ubcf4 \ud504\ub791" }
         //XPS { "XPS", "\ud30c\uc6b4\ub4dc \uc2a4\ud138\ub9c1" }
-        XSS { "XSS", "\uc2e4\ub9c1 \uc2a4\ud138\ub9c1" }
+        //XSS { "XSS", "\uc2e4\ub9c1 \uc2a4\ud138\ub9c1" }
         YDD { "YDD", "\uc608\uba58 \ub514\ub098\ub974" }
         YER { "YER", "\uc608\uba58 \ub9ac\uc54c" }
         YUD { "YUD", "\uc720\uace0\uc2ac\ub77c\ube44\uc544 \ub3d9\uc804 \ub514\ub098\ub974" }
@@ -597,14 +698,14 @@ ko {
         YUN { "YUN", "\uc720\uace0\uc2ac\ub77c\ube44\uc544 \uc804\ud658 \ub514\ub098\ub974" }
         YUO { "YUO", "\uc720\uace0\uc2ac\ub77c\ube44\uc544 10\uc6d4 \ub514\ub098\ub974" }
         YUR { "YUR", "\uc720\uace0\uc2ac\ub77c\ube44\uc544 \uac1c\ub7c9 \ub514\ub098\ub974" }
-        ZAL { "ZAL", "\ub0a8\uc544\ud504\ub9ac\uce74 \ub79c\ub4dc (\uae08\uc735)"     }
+        ZAL { "ZAL", "\ub0a8\uc544\ud504\ub9ac\uce74 \ub79c\ub4dc (\uae08\uc735)" }
         ZAP { "ZAP", "\ub0a8\uc544\ud504\ub9ac\uce74 \ud30c\uc6b4\ub4dc" }
         ZAR { "ZAR",   "\ub0a8\uc544\ud504\ub9ac\uce74 \ub79c\ub4dc" }
         ZMK { "ZMK", "\uc7d8\ube44\uc544 \ucf70\uccd0" }
         ZMP { "ZMP", "\uc7d8\ube44\uc544 \ud30c\uc6b4\ub4dc" }
         ZRN { "ZRN", "\uc790\uc774\ub974 \uc2e0\uad8c \uc790\uc774\ub974" }
         ZRZ { "ZRZ", "\uc790\uc774\ub974 \uc790\uc774\ub974" }
-        ZWD { "ZWD",  "\uc9d0\ube44\ube0c\uc6e8 \ub2ec\ub7ec" }
+        ZWD { "ZWD", "\uc9d0\ube44\ube0c\uc6e8 \ub2ec\ub7ec" }
     }
 
 
@@ -884,8 +985,8 @@ ko {
             direct      { "\uc21c\uc11c" }
             traditional { "\uc804\ud1b5 \uc5ed\ubc95" }
             phonebook   { "\uc804\ud654\ubc88\ud638\ubd80\uc21c" }
-            pinyin      { "\ubcd1\uc74c\uc21c"    }
-            stroke      { "\uc790\ud68d\uc21c"    }
+            pinyin      { "\ubcd1\uc74c\uc21c" }
+            stroke      { "\uc790\ud68d\uc21c" }
         }
         calendar{
             buddhist      { "\ubd88\uad50\ub825" }
@@ -904,108 +1005,6 @@ ko {
     }
 
 
-    calendar{
-        gregorian{
-            AmPmMarkers{
-                "\uc624\uc804",
-                "\uc624\ud6c4",
-            }
-            DateTimePatterns{
-                "a hh'\uc2dc' mm'\ubd84' ss'\ucd08' z",
-                "a hh'\uc2dc' mm'\ubd84' ss'\ucd08'",
-                "a hh'\uc2dc' mm'\ubd84'",
-                "a hh'\uc2dc' mm'\ubd84'",
-                "yyyy'\ub144' M'\uc6d4' d'\uc77c' EEEE",
-                "yyyy'\ub144' M'\uc6d4' d'\uc77c' EE",
-                "yyyy-MM-dd",
-                "yy-MM-dd",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "\uc77c",
-                        "\uc6d4",
-                        "\ud654",
-                        "\uc218",
-                        "\ubaa9",
-                        "\uae08",
-                        "\ud1a0",
-                    }
-                    narrow{
-                        "\uc77c",
-                        "\uc6d4",
-                        "\ud654",
-                        "\uc218",
-                        "\ubaa9",
-                        "\uae08",
-                        "\ud1a0",
-                    }
-                    wide{
-                        "\uc77c\uc694\uc77c",
-                        "\uc6d4\uc694\uc77c",
-                        "\ud654\uc694\uc77c",
-                        "\uc218\uc694\uc77c",
-                        "\ubaa9\uc694\uc77c",
-                        "\uae08\uc694\uc77c",
-                        "\ud1a0\uc694\uc77c",
-                    }
-                }
-            }
-            eras {
-                "\uae30\uc6d0\uc804",
-                "\uc11c\uae30",
-        //        "\ub2e8\uae30"   // AD + 2333 but ICU doesn't use it.
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "1\uc6d4",
-                        "2\uc6d4",
-                        "3\uc6d4",
-                        "4\uc6d4",
-                        "5\uc6d4",
-                        "6\uc6d4",
-                        "7\uc6d4",
-                        "8\uc6d4",
-                        "9\uc6d4",
-                        "10\uc6d4",
-                        "11\uc6d4",
-                        "12\uc6d4",
-                    }
-                    narrow{
-                        "1\uc6d4",
-                        "2\uc6d4",
-                        "3\uc6d4",
-                        "4\uc6d4",
-                        "5\uc6d4",
-                        "6\uc6d4",
-                        "7\uc6d4",
-                        "8\uc6d4",
-                        "9\uc6d4",
-                        "10\uc6d4",
-                        "11\uc6d4",
-                        "12\uc6d4",
-                    }
-                    wide{
-                        "1\uc6d4",
-                        "2\uc6d4",
-                        "3\uc6d4",
-                        "4\uc6d4",
-                        "5\uc6d4",
-                        "6\uc6d4",
-                        "7\uc6d4",
-                        "8\uc6d4",
-                        "9\uc6d4",
-                        "10\uc6d4",
-                        "11\uc6d4",
-                        "12\uc6d4",
-                    }
-                }
-            }
-        }
-    }
-    
     zoneStrings {
         {
             "PST",
