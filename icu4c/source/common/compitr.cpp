@@ -85,11 +85,29 @@ UChar ComposedCharIter::next()
  */
 void ComposedCharIter::getDecomposition(UnicodeString& result) const
 {
+    // We duplicate most of the implementation of Normalizer::decompose() here
+    // for efficiency.  One thing we don't duplicate is the recursive
+    // decomposition code.  If we detect a need to do recursive decomposition
+    // (which happens for only 16 characters in Unicode 3.0) then we delegate to
+    // Normalizer::decompose().  This gives us optimal performance without
+    // having a complete copy of Normalizer::decompose() here, with its extra
+    // baggage of recursion buffers, etc. - Liu
+
     result.truncate(0);
 
-    UChar pos = ucmp16_getu(DecompData::offsets, curChar);
-    if (pos > minDecomp) {
-        Normalizer::doAppend((const UChar*)(DecompData::contents), pos, result);
+    uint16_t offset = ucmp16_getu(DecompData::offsets, curChar);
+    uint16_t index  = offset & DecompData::DECOMP_MASK;
+    if (index > minDecomp) {
+        if ((offset & DecompData::DECOMP_RECURSE) != 0) {
+            // Let Normalizer::decompose() handle recursive decomp
+            UnicodeString temp(curChar);
+            UErrorCode status = U_ZERO_ERROR;
+            Normalizer::decompose(temp, minDecomp > 0,
+                                  hangul ? Normalizer::IGNORE_HANGUL : 0,
+                                  result, status);
+        } else {
+            Normalizer::doAppend((const UChar*)DecompData::contents, index, result);
+        }
     } 
     else if (hangul && curChar >= Normalizer::HANGUL_BASE && curChar < Normalizer::HANGUL_LIMIT) {
         Normalizer::hangulToJamo(curChar, result, (uint16_t)minDecomp);
