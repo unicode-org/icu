@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFSubstitution.java,v $ 
- * $Date: 2002/07/31 17:37:08 $ 
- * $Revision: 1.8 $
+ * $Date: 2004/03/22 21:53:12 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.8 $ $Date: 2002/07/31 17:37:08 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.9 $ $Date: 2004/03/22 21:53:12 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -1189,7 +1189,7 @@ class FractionalPartSubstitution extends NFSubstitution {
      * The largest number of digits after the decimal point that this
      * object will show in "by digits" mode
      */
-    private static final int MAXDECIMALDIGITS = 8;
+    private static final int MAXDECIMALDIGITS = 18; // 8
 
     //-----------------------------------------------------------------------
     // construction
@@ -1242,24 +1242,53 @@ class FractionalPartSubstitution extends NFSubstitution {
         // (this is slower, but more accurate, than doing it from the
         // other end)
         } else {
-            int numberToFormat = (int)Math.round(transformNumber(number) * Math.pow(
-                            10, MAXDECIMALDIGITS));
+//              int numberToFormat = (int)Math.round(transformNumber(number) * Math.pow(
+//                              10, MAXDECIMALDIGITS));
+//	    long numberToFormat = (long)Math.round(transformNumber(number) * Math.pow(10, MAXDECIMALDIGITS));
+
+	    // just print to string and then use that
+	    DigitList dl = new DigitList();
+	    dl.set(number, 20, true);
+
             // this flag keeps us from formatting trailing zeros.  It starts
             // out false because we're pulling from the right, and switches
             // to true the first time we encounter a non-zero digit
-            boolean doZeros = false;
-            for (int i = 0; i < MAXDECIMALDIGITS; i++) {
-                int digit = numberToFormat % 10;
-                if (digit != 0 || doZeros) {
-                    if (doZeros && useSpaces) {
-                        toInsertInto.insert(pos + this.pos, ' ');
-                    }
-                    doZeros = true;
-                    ruleSet.format(digit, toInsertInto, pos + this.pos);
-                }
-                numberToFormat /= 10;
-            }
-        }
+//              boolean doZeros = false;
+//  	    System.out.println("class: " + getClass().getName());
+//  	    System.out.println("number: " + number + " transformed: " + transformNumber(number));
+//  	    System.out.println("formatting " + numberToFormat);
+//              for (int i = 0; i < MAXDECIMALDIGITS; i++) {
+//                  int digit = (int)(numberToFormat % 10);
+//  		System.out.println("   #: '" + numberToFormat + "'" + " digit '" + digit + "'");
+//                  if (digit != 0 || doZeros) {
+//                      if (doZeros && useSpaces) {
+//                          toInsertInto.insert(pos + this.pos, ' ');
+//                      }
+//                      doZeros = true;
+//                      ruleSet.format(digit, toInsertInto, pos + this.pos);
+//                  }
+//                  numberToFormat /= 10;
+//              }
+
+	    boolean pad = false;
+	    while (dl.count > Math.max(0, dl.decimalAt)) {
+		if (pad && useSpaces) {
+		    toInsertInto.insert(pos + this.pos, ' ');
+		} else {
+		    pad = true;
+		}
+		ruleSet.format(dl.digits[--dl.count] - '0', toInsertInto, pos + this.pos);
+	    }
+	    while (dl.decimalAt < 0) {
+		if (pad && useSpaces) {
+		    toInsertInto.insert(pos + this.pos, ' ');
+		} else {
+		    pad = true;
+		}
+		ruleSet.format(0, toInsertInto, pos + this.pos);
+		++dl.decimalAt;
+	    }
+	}
     }
 
     /**
