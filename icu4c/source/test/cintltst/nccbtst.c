@@ -509,6 +509,94 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
       
     }
 
+    log_verbose("Testing fromUnicode for BOCU-1 with UCNV_TO_U_CALLBACK_SKIP\n");
+    {
+        static const uint8_t sampleText[]={ /* from cintltst/bocu1tst.c/TestBOCU1 text 1 */
+            0xFB, 0xEE, 0x28,       /* from source offset 0 */
+            0x24, 0x1E, 0x52,
+            0xB2,
+            0x20,
+            0xB3,
+            0xB1,
+            0x0D,
+            0x0A,
+
+            0x20,                   /* from 8 */
+            0x00,
+            0xD0, 0x6C,
+            0xB6,
+            0xD8, 0xA5,
+            0x20,
+            0x68,
+            0x59,
+
+            0xF9, 0x28,             /* from 16 */
+            0x6D,
+            0x20,
+            0x73,
+            0xE0, 0x2D,
+            0xDE, 0x43,
+            0xD0, 0x33,
+            0x20,
+
+            0xFA, 0x83,             /* from 24 */
+            0x25, 0x01,
+            0xFB, 0x16, 0x87,
+            0x4B, 0x16,
+            0x20,
+            0xE6, 0xBD,
+            0xEB, 0x5B,
+            0x4B, 0xCC,
+
+            0xF9, 0xA2,             /* from 32 */
+            0xFC, 0x10, 0x3E,
+            0xFE, 0x16, 0x3A, 0x8C,
+            0x20,
+            0xFC, 0x03, 0xAC,
+
+            0x01,                   /* from 41 */
+            0xDE, 0x83,
+            0x20,
+            0x09
+        };
+        static const UChar expected[]={
+            0xFEFF, 0x0061, 0x0062, 0x0020, /* 0 */
+            0x0063, 0x0061, 0x000D, 0x000A,
+
+            0x0020, 0x0000, 0x00DF, 0x00E6, /* 8 */
+            0x0930, 0x0020, 0x0918, 0x0909,
+
+            0x3086, 0x304D, 0x0020, 0x3053, /* 16 */
+            0x4000, 0x4E00, 0x7777, 0x0020,
+
+            0x9FA5, 0x4E00, 0xAC00, 0xBCDE, /* 24 */
+            0x0020, 0xD7A3, 0xDC00, 0xD800,
+
+            0xD800, 0xDC00, 0xD845, 0xDDDD, /* 32 */
+            0xDBBB, 0xDDEE, 0x0020, 0xDBFF,
+
+            0xDFFF, 0x0001, 0x0E40, 0x0020, /* 40 */
+            0x0009
+        };
+        static const int32_t offsets[]={
+            0, 0, 0, 1, 1, 1, 2, 3, 4, 5, 6, 7,
+            8, 9, 10, 10, 11, 12, 12, 13, 14, 15,
+            16, 16, 17, 18, 19, 20, 20, 21, 21, 22, 22, 23,
+            24, 24, 25, 25, 26, 26, 26, 27, 27, 28, 29, 29, 30, 30, 31, 31,
+            32, 32, 34, 34, 34, 36, 36, 36, 36, 38, 39, 39, 39,
+            41, 42, 42, 43, 44
+        };
+
+        /* BOCU-1 fromUnicode never calls callbacks, so this only tests single-byte and offsets behavior */
+        if(!testConvertFromUnicode(expected, ARRAY_LENGTH(expected),
+                                 sampleText, sizeof(sampleText),
+                                 "BOCU-1",
+                                 UCNV_FROM_U_CALLBACK_SKIP, offsets, NULL, 0)
+        ) {
+            log_err("u->BOCU-1 with skip did not match.\n");
+        }
+    }
+
     /*to Unicode*/
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SKIP  \n");
 
@@ -767,7 +855,90 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
                 UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
-            log_err("scsu->u with stop did not match.\n");;
+            log_err("scsu->u with skip did not match.\n");
+    }
+
+    log_verbose("Testing toUnicode for BOCU-1 with UCNV_TO_U_CALLBACK_SKIP\n");
+    {
+        const uint8_t sampleText[]={ /* modified from cintltst/bocu1tst.c/TestBOCU1 text 1 */
+            0xFB, 0xEE, 0x28,       /* single-code point sequence at offset 0 */
+            0x24, 0x1E, 0x52,       /* 3 */
+            0xB2,                   /* 6 */
+            0x20,                   /* 7 */
+            0x40, 0x07,             /* 8 - wrong trail byte */
+            0xB3,                   /* 10 */
+            0xB1,                   /* 11 */
+            0xD0, 0x20,             /* 12 - wrong trail byte */
+            0x0D,                   /* 14 */
+            0x0A,                   /* 15 */
+            0x20,                   /* 16 */
+            0x00,                   /* 17 */
+            0xD0, 0x6C,             /* 18 */
+            0xB6,                   /* 20 */
+            0xD8, 0xA5,             /* 21 */
+            0x20,                   /* 23 */
+            0x68,                   /* 24 */
+            0x59,                   /* 25 */
+            0xF9, 0x28,             /* 26 */
+            0x6D,                   /* 28 */
+            0x20,                   /* 29 */
+            0x73,                   /* 30 */
+            0xE0, 0x2D,             /* 31 */
+            0xDE, 0x43,             /* 33 */
+            0xD0, 0x33,             /* 35 */
+            0x20,                   /* 37 */
+            0xFA, 0x83,             /* 38 */
+            0x25, 0x01,             /* 40 */
+            0xFB, 0x16, 0x87,       /* 42 */
+            0x4B, 0x16,             /* 45 */
+            0x20,                   /* 47 */
+            0xE6, 0xBD,             /* 48 */
+            0xEB, 0x5B,             /* 50 */
+            0x4B, 0xCC,             /* 52 */
+            0xF9, 0xA2,             /* 54 */
+            0xFC, 0x10, 0x3E,       /* 56 */
+            0xFE, 0x16, 0x3A, 0x8C, /* 59 */
+            0x20,                   /* 63 */
+            0xFC, 0x03, 0xAC,       /* 64 */
+            0xFF,                   /* 67 - FF just resets the state without encoding anything */
+            0x01,                   /* 68 */
+            0xDE, 0x83,             /* 69 */
+            0x20,                   /* 71 */
+            0x09                    /* 72 */
+        };
+        UChar expected[]={
+            0xFEFF, 0x0061, 0x0062, 0x0020,
+            0x0063, 0x0061, 0x000D, 0x000A,
+            0x0020, 0x0000, 0x00DF, 0x00E6,
+            0x0930, 0x0020, 0x0918, 0x0909,
+            0x3086, 0x304D, 0x0020, 0x3053,
+            0x4000, 0x4E00, 0x7777, 0x0020,
+            0x9FA5, 0x4E00, 0xAC00, 0xBCDE,
+            0x0020, 0xD7A3, 0xDC00, 0xD800,
+            0xD800, 0xDC00, 0xD845, 0xDDDD,
+            0xDBBB, 0xDDEE, 0x0020, 0xDBFF,
+            0xDFFF, 0x0001, 0x0E40, 0x0020,
+            0x0009
+        };
+        int32_t offsets[]={
+            0, 3, 6, 7, /* skip 8, */
+            10, 11, /* skip 12, */
+            14, 15, 16, 17, 18,
+            20, 21, 23, 24, 25, 26, 28, 29,
+            30, 31, 33, 35, 37, 38,
+            40, 42, 45, 47, 48,
+            50, 52, 54, /* trail */ 54, 56, /* trail */ 56, 59, /* trail */ 59,
+            63, 64, /* trail */ 64, /* reset only 67, */
+            68, 69,
+            71, 72
+        };
+
+        if(!testConvertToUnicode(sampleText, sizeof(sampleText),
+                                 expected, ARRAY_LENGTH(expected), "BOCU-1",
+                                 UCNV_TO_U_CALLBACK_SKIP, offsets, NULL, 0)
+        ) {
+            log_err("BOCU-1->u with skip did not match.\n");
+        }
     }
 }
 
