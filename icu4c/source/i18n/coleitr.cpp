@@ -39,11 +39,11 @@ int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
 // This private method will never be called, but it makes the linker happy
 
 CollationElementIterator::CollationElementIterator()
-: expIndex(0),
-  text(0),
+: text(0),
   bufferAlias(0),
   ownBuffer(new VectorOfInt(2)),
   reorderBuffer(0),
+  expIndex(0),
   orderAlias(0)
 {
 }
@@ -51,11 +51,11 @@ CollationElementIterator::CollationElementIterator()
 // This private method will never be called, but it makes the linker happy
 
 CollationElementIterator::CollationElementIterator(const RuleBasedCollator* order)
-: expIndex(0),
-  text(0),
+: text(0),
   bufferAlias(0),
   ownBuffer(new VectorOfInt(2)),
   reorderBuffer(0),
+  expIndex(0),
   orderAlias(order)
 {
 }
@@ -65,11 +65,11 @@ CollationElementIterator::CollationElementIterator(const RuleBasedCollator* orde
 CollationElementIterator::CollationElementIterator( const UnicodeString& sourceText,
                                                     const RuleBasedCollator* order,
                                                     UErrorCode& status) 
-: expIndex(0), 
-  text(NULL),
+: text(NULL),
   bufferAlias(NULL),
   ownBuffer(new VectorOfInt(2)),
   reorderBuffer(0),
+  expIndex(0), 
   orderAlias(order)
 {
     if (U_FAILURE(status)) {
@@ -102,11 +102,11 @@ CollationElementIterator::CollationElementIterator( const UnicodeString& sourceT
 CollationElementIterator::CollationElementIterator( const CharacterIterator& sourceText,
                                                     const RuleBasedCollator* order,
                                                     UErrorCode& status) 
-: expIndex(0), 
-  text(NULL),
+: text(NULL),
   bufferAlias(NULL),
   ownBuffer(new VectorOfInt(2)),
   reorderBuffer(0),
+  expIndex(0), 
   orderAlias(order)
 {
     if (U_FAILURE(status)) {
@@ -136,9 +136,9 @@ CollationElementIterator::CollationElementIterator( const CharacterIterator& sou
 }
 
 CollationElementIterator::CollationElementIterator(const    CollationElementIterator& other)
-    : expIndex(other.expIndex), text(0),
-      ownBuffer(new VectorOfInt(2)),
-      reorderBuffer(0)
+    : ownBuffer(new VectorOfInt(2)),
+      reorderBuffer(0),
+      expIndex(other.expIndex), text(0)
 {
     *this = other;
 }

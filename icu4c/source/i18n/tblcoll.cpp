@@ -182,9 +182,9 @@ NormalizerIterator::NormalizerIterator() :
     reorderBuffer(0),
     ownBuffer(2),
     text(0),
+    expIndex(0),
     textLen(0),
-    currentOffset(0),
-    expIndex(0)
+    currentOffset(0)
 {
 }
 
@@ -195,9 +195,9 @@ NormalizerIterator::NormalizerIterator(const UChar* source, int32_t length, Norm
     reorderBuffer(0),
     ownBuffer(2),
     text(0),
+    expIndex(0),
     textLen(0),
-    currentOffset(0),
-    expIndex(0)
+    currentOffset(0)
 {
     if (mode == Normalizer::NO_OP) {
         text = (UChar*)source;
@@ -502,8 +502,8 @@ RuleBasedCollator::RuleBasedCollator()
       //targetCursor(0),
       cursor1(0),
       cursor2(0),
-      data(0),
-      dataIsOwned(FALSE)
+      dataIsOwned(FALSE),
+      data(0)
 {
 }
 
@@ -585,8 +585,8 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
       ///      targetCursor(0),
       cursor1(0),
       cursor2(0),
-      data(0),
-      dataIsOwned(FALSE)
+      dataIsOwned(FALSE),
+      data(0)
 {
     if (U_FAILURE(status))
     {
@@ -604,10 +604,10 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     mPattern(0),
     //    sourceCursor(0),
     //    targetCursor(0),
-      cursor1(0),
-      cursor2(0),
-    data(0),
-    dataIsOwned(FALSE)
+    cursor1(0),
+    cursor2(0),
+    dataIsOwned(FALSE),
+    data(0)
 {
     if (U_FAILURE(status))
     {
@@ -624,10 +624,10 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     mPattern(0),
     //    sourceCursor(0),
     //    targetCursor(0),
-      cursor1(0),
-      cursor2(0),
-    data(0),
-    dataIsOwned(FALSE)
+    cursor1(0),
+    cursor2(0),
+    dataIsOwned(FALSE),
+    data(0)
 {
   if (U_FAILURE(status))
     {
@@ -648,8 +648,8 @@ RuleBasedCollator::RuleBasedCollator(const  UnicodeString&  rules,
     //targetCursor(0),
       cursor1(0),
       cursor2(0),
-      data(0),
-      dataIsOwned(FALSE)
+      dataIsOwned(FALSE),
+      data(0)
 {
     if (U_FAILURE(status))
     {
@@ -840,13 +840,13 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
                                 UErrorCode& status)
     : Collator(),
       isOverIgnore(FALSE),
-      dataIsOwned(FALSE),
-      data(0),
       //      sourceCursor(0),
       //targetCursor(0),
       cursor1(0),
       cursor2(0),
-      mPattern(0)
+      mPattern(0),
+      dataIsOwned(FALSE),
+      data(0)
 {
 
 

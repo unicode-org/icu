@@ -85,7 +85,7 @@ class RuleBasedCollator;
  */
 class U_I18N_API CollationElementIterator
 {
-public:     
+public: 
     /**
      * NULLORDER indicates the iterator has consumed the last element.
      */
@@ -147,7 +147,7 @@ public:
      * Gets the tertiary order of a collation order.
      * @param order the collation order
      * @return the tertiary order of a collation order.
-	 * @stable
+     * @stable
      */
     static  int32_t             tertiaryOrder(int32_t order);
     /**
@@ -156,7 +156,7 @@ public:
      *  @param order a collation order returned by previous or next.
      *  @return the maximum length of any expansion sequences ending
      *          with the specified order.
-	 *  @stable
+     *  @stable
      */
         int32_t                    getMaxExpansion(int32_t order) const;
 
@@ -165,14 +165,14 @@ public:
      *  Gets the comparison order in the desired strength.  Ignore the other
      *  differences.
      *  @param order The order value
-	 *  @stable 
+     *  @stable 
      */
            int32_t              strengthOrder(int32_t order) const;
     /**
      * Sets the source string.
      * @param str the source string.
      * @param status the error code status.
-	 * @stable
+     * @stable
      */
             void                setText(const   UnicodeString&  str,
                                                 UErrorCode&      status);
@@ -180,7 +180,7 @@ public:
      * Sets the source string.
      * @param str the source character iterator.
      * @param status the error code status.
-	 * @stable
+     * @stable
      */
             void                setText(CharacterIterator&  str,
                                         UErrorCode&            status);
@@ -188,13 +188,13 @@ public:
      *  Checks if a comparison order is ignorable.
      *  @param order the collation order.
      *  @return TRUE if a character is ignorable, FALSE otherwise.
-	 *  @stable
+     *  @stable
      */
     static    UBool              isIgnorable(int32_t order);
     /**
      *  Gets the offset of the currently processed character in the source string.
      *  @return the offset of the character.
-	 *  @stable
+     *  @stable
      */
             UTextOffset          getOffset(void) const;
     /**
@@ -202,11 +202,11 @@ public:
      *  @param newOffset the new offset.
      *  @param status the error code status.
      *  @return the offset of the character.
-	 *  @stable
+     *  @stable
      */
             void                setOffset(UTextOffset newOffset,
                                           UErrorCode& status);
-	/* CollationElementIterator should not be subclassed. */
+    /* CollationElementIterator should not be subclassed. */
 protected:
     /**
      * CollationElementIterator constructor.  This takes the source string and
@@ -219,7 +219,7 @@ protected:
      * @param endOffset the ending offset of the string where the cursor
      * stops the iterating.
      * @param order the collation object.
-	 * @stable
+     * @stable
      */
                                 CollationElementIterator(   const   UnicodeString&  sourceText,
                                                             const   RuleBasedCollator*  order,
@@ -236,21 +236,21 @@ protected:
      * @param endOffset the ending offset of the string where the cursor
      * stops the iterating.
      * @param order the collation object.
-	 * @stable
+     * @stable
      */
                                 CollationElementIterator(   const    CharacterIterator&  sourceText,
                                                             const   RuleBasedCollator*  order,
                                                             UErrorCode& status);
     /**
      * Assignment operator
-	 * @stable
+     * @stable
      */
     const   CollationElementIterator&
                                 operator=(const CollationElementIterator& other);
 public:
     /**
      * Copy constructor.
-	 * @stable
+     * @stable
      */
                                 CollationElementIterator(const  CollationElementIterator& other);
     //============================================================

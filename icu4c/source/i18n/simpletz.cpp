@@ -39,22 +39,22 @@ const int8_t SimpleTimeZone::staticMonthLength[] = {31,28,31,30,31,30,31,31,30,3
 
 
 SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
-:   rawOffset(rawOffset),
-    startMonth(0),
+:   startMonth(0),
     startDay(0),
     startDayOfWeek(0),
     startTime(0),
     startTimeMode(WALL_TIME),
+    endTimeMode(WALL_TIME),
     endMonth(0),
     endDay(0),
     endDayOfWeek(0),
     endTime(0),
-    endTimeMode(WALL_TIME),
     startYear(0),
-    dstSavings(U_MILLIS_PER_HOUR),
+    rawOffset(rawOffset),
+    useDaylight(FALSE),
     startMode(DOM_MODE),
     endMode(DOM_MODE),
-    useDaylight(FALSE)
+    dstSavings(U_MILLIS_PER_HOUR)
 {
     setID(ID);
 }
@@ -408,12 +408,12 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis, 
                           int32_t monthLength, UErrorCode& status) const {
     // Check the month before indexing into staticMonthLength. This
-	// duplicates a test that occurs in the 9-argument getOffset(),
-	// however, this is unavoidable. We don't mind because this method, in
-	// fact, should not be called; internal code should always call the
-	// 9-argument getOffset(), and outside code should use Calendar.get(int
-	// field) with fields ZONE_OFFSET and DST_OFFSET. We can't get rid of
-	// this method because it's public API. - liu 8/10/98
+    // duplicates a test that occurs in the 9-argument getOffset(),
+    // however, this is unavoidable. We don't mind because this method, in
+    // fact, should not be called; internal code should always call the
+    // 9-argument getOffset(), and outside code should use Calendar.get(int
+    // field) with fields ZONE_OFFSET and DST_OFFSET. We can't get rid of
+    // this method because it's public API. - liu 8/10/98
     if (month < Calendar::JANUARY
         || month > Calendar::DECEMBER) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -421,7 +421,7 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
     }
 
     // TODO FIX We don't handle leap years yet!
-	int32_t prevMonthLength = (month >= 1) ? staticMonthLength[month - 1] : 31;
+    int32_t prevMonthLength = (month >= 1) ? staticMonthLength[month - 1] : 31;
 
     return getOffset(era, year, month, day, dayOfWeek, millis,
                      monthLength, prevMonthLength, status);

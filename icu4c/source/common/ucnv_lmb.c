@@ -409,7 +409,7 @@ do the lookup: */
 
 struct _LocaleLMBCSGrpMap
 {
-   char         *LocaleID;
+   const char    *LocaleID;
    ulmbcs_byte_t OptGroup;
 }  LocaleLMBCSGrpMap[] =
 {
@@ -456,8 +456,8 @@ struct _LocaleLMBCSGrpMap
    "zh", ULMBCS_GRP_CN,
    NULL, ULMBCS_GRP_L1
 };
-        
-        
+
+
 ulmbcs_byte_t 
 FindLMBCSLocale(const char *LocaleID)
 {
@@ -472,9 +472,9 @@ FindLMBCSLocale(const char *LocaleID)
    {
       if (*pTable->LocaleID == *LocaleID) /* Check only first char for speed */
       {
-	 /* First char matches - check whole name, for entry-length */
+         /* First char matches - check whole name, for entry-length */
          if (strncmp(pTable->LocaleID, LocaleID, strlen(pTable->LocaleID)) == 0)
-	    return pTable->OptGroup;
+            return pTable->OptGroup;
       }
       else
       if (*pTable->LocaleID > *LocaleID) /* Sorted alphabetically - exit */

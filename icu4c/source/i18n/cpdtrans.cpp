@@ -28,7 +28,7 @@ CompoundTransliterator::CompoundTransliterator(
                            int32_t count,
                            UnicodeFilter* adoptedFilter) :
     Transliterator(joinIDs(transliterators, count), adoptedFilter),
-    trans(0), count(0), filters(0) {
+    trans(0), filters(0), count(0)  {
     setTransliterators(transliterators, count);
 }
 
@@ -44,14 +44,14 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                               UnicodeFilter* adoptedFilter,
                               UErrorCode& status) :
     Transliterator(ID, 0), // set filter to 0 here!
-    filters(0), trans(0) {
+    trans(0), filters(0) {
     init(ID, direction, adoptedFilter, status);
 }
 
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                               UErrorCode& status) :
     Transliterator(ID, 0), // set filter to 0 here!
-    filters(0), trans(0) {
+    trans(0), filters(0) {
     init(ID, UTRANS_FORWARD, 0, status);
 }
 
