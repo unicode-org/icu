@@ -810,62 +810,6 @@ protected:
      */
     static uint8_t julianDayToDayOfWeek(double julian);
 
-    /**
-     * Divide two long integers, returning the floor of the quotient.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0
-     * but <code>floorDivide(-1,4)</code> => -1.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @return the floor of the quotient.
-     */
-    static double floorDivide(double numerator, double denominator);
-
-    /**
-     * Divide two integers, returning the floor of the quotient.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0
-     * but <code>floorDivide(-1,4)</code> => -1.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @return the floor of the quotient.
-     */
-    static int32_t floorDivide(int32_t numerator, int32_t denominator);
-
-    /**
-     * Divide two integers, returning the floor of the quotient, and
-     * the modulus remainder.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
-     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder</code> => 3.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @param remainder an array of at least one element in which the value
-     * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
-     * % denominator</code>, this will always be non-negative.
-     * @return the floor of the quotient.
-     */
-    static int32_t floorDivide(int32_t numerator, int32_t denominator, int32_t& remainder);
-
-    /**
-     * Divide two integers, returning the floor of the quotient, and
-     * the modulus remainder.
-     * <p>
-     * Unlike the built-in division, this is mathematically well-behaved.
-     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
-     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder</code> => 3.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be > 0
-     * @param remainder an array of at least one element in which the value
-     * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
-     * % denominator</code>, this will always be non-negative.
-     * @return the floor of the quotient.
-     */
-    static int32_t floorDivide(double numerator, int32_t denominator, int32_t& remainder);
-
  public: // internal implementation
 
     /**

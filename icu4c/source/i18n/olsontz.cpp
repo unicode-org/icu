@@ -15,6 +15,7 @@
 #include "unicode/ures.h"
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
+#include "gregoimp.h"
 #include "cmemory.h"
 #include "uassert.h"
 #include <float.h> // DBL_MAX
@@ -26,109 +27,6 @@ U_NAMESPACE_BEGIN
 static const int32_t ZEROS[] = {0,0};
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(OlsonTimeZone)
-
-//----------------------------------------------------------------------
-// Support methods
-
-// TODO clean up; consolidate with GregorianCalendar, TimeZone, StandarTimeZone
-
-static int32_t floorDivide(int32_t numerator, int32_t denominator) {
-    return (numerator >= 0) ?
-        numerator / denominator : ((numerator + 1) / denominator) - 1;
-}
-
-static double floorDivide(double numerator, double denominator,
-                          double& remainder) {
-    double quotient = uprv_floor(numerator / denominator);
-    remainder = numerator - (quotient * denominator);
-    return quotient;
-}
-
-static int32_t floorDivide(double numerator, int32_t denominator,
-                           int32_t& remainder) {
-    double quotient, rem;
-    quotient = floorDivide(numerator, (double)denominator, rem);
-    remainder = (int32_t) rem;
-    return (int32_t) quotient;
-}
-
-static const int32_t JULIAN_1_CE    = 1721426; // January 1, 1 CE Gregorian
-static const int32_t JULIAN_1970_CE = 2440588; // January 1, 1970 CE Gregorian
-
-static const int16_t DAYS_BEFORE[] =
-    {0,31,59,90,120,151,181,212,243,273,304,334,
-     0,31,60,91,121,152,182,213,244,274,305,335};
-
-static const int8_t MONTH_LENGTH[] =
-    {31,28,31,30,31,30,31,31,30,31,30,31,
-     31,29,31,30,31,30,31,31,30,31,30,31};
-
-static UBool isLeapYear(int year) {
-    return (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
-}
-
-/**
- * Convert a year, month, and day-of-month, given in the proleptic Gregorian
- * calendar, to 1970 epoch days.
- * @param year Gregorian year, with 0 == 1 BCE, -1 == 2 BCE, etc.
- * @param month 0-based month, with 0==Jan
- * @param dom 1-based day of month
- */
-static double fieldsToDay(int32_t year, int32_t month, int32_t dom) {
-
-    int32_t y = year - 1;
-
-    double julian = 365 * y + floorDivide(y, 4) + (JULIAN_1_CE - 3) + // Julian cal
-        floorDivide(y, 400) - floorDivide(y, 100) + 2 + // => Gregorian cal
-        DAYS_BEFORE[month + (isLeapYear(year) ? 12 : 0)] + dom; // => month/dom
-
-    return julian - JULIAN_1970_CE; // JD => epoch day
-}
-
-/**
- * Convert a 1970-epoch day number to proleptic Gregorian year, month,
- * day-of-month, and day-of-week.
- * @param day 1970-epoch day (integral value)
- * @param year output parameter to receive year
- * @param month output parameter to receive month (0-based, 0==Jan)
- * @param dom output parameter to receive day-of-month (1-based)
- * @param dow output parameter to receive day-of-week (1-based, 1==Sun)
- */
-static void dayToFields(double day, int32_t& year, int32_t& month,
-                        int32_t& dom, int32_t& dow) {
-    int32_t doy;
-
-    // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
-    day += JULIAN_1970_CE - JULIAN_1_CE;
-
-    int32_t n400 = floorDivide(day, 146097, doy); // 400-year cycle length
-    int32_t n100 = floorDivide(doy, 36524, doy); // 100-year cycle length
-    int32_t n4   = floorDivide(doy, 1461, doy); // 4-year cycle length
-    int32_t n1   = floorDivide(doy, 365, doy);
-    year = 400*n400 + 100*n100 + 4*n4 + n1;
-    if (n100 == 4 || n1 == 4) {
-        doy = 365; // Dec 31 at end of 4- or 400-year cycle
-    } else {
-        ++year;
-    }
-    
-    UBool isLeap = isLeapYear(year);
-    
-    // Gregorian day zero is a Monday.
-    dow = (int32_t) uprv_fmod(day + 1, 7);
-    dow += (dow < 0) ? (UCAL_SUNDAY + 7) : UCAL_SUNDAY;
-
-    // Common Julian/Gregorian calculation
-    int32_t correction = 0;
-    int32_t march1 = isLeap ? 60 : 59; // zero-based DOY for March 1
-    if (doy >= march1) {
-        correction = isLeap ? 1 : 2;
-    }
-    month = (12 * (doy + correction) + 6) / 367; // zero-based month
-    dom = doy - DAYS_BEFORE[month + (isLeap ? 12 : 0)] + 1; // one-based DOM
-}
-
-//----------------------------------------------------------------------
 
 /**
  * Default constructor.  Creates a time zone with an empty ID and
@@ -226,7 +124,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                     finalYear = data[1] - 1;
                     // Also compute the millis for Jan 1, 0:00 GMT of the
                     // finalYear.  This reduces runtime computations.
-                    finalMillis = fieldsToDay(data[1], 0, 1) * U_MILLIS_PER_DAY;
+                    finalMillis = Grego::fieldsToDay(data[1], 0, 1) * U_MILLIS_PER_DAY;
                     char key[64];
                     key[0] = '_';
                     ruleid.extract(0, sizeof(key)-2, key+1, sizeof(key)-1, "");
@@ -341,7 +239,7 @@ int32_t OlsonTimeZone::getOffset(uint8_t era, int32_t year, int32_t month,
         return 0;
     } else {
         return getOffset(era, year, month, dom, dow, millis,
-                         MONTH_LENGTH[month + isLeapYear(year)?12:0],
+                         Grego::monthLength(year, month),
                          ec);
     }
 }
@@ -383,7 +281,7 @@ int32_t OlsonTimeZone::getOffset(uint8_t era, int32_t year, int32_t month,
     }
 
     // Compute local epoch seconds from input fields
-    double time = fieldsToDay(year, month, dom) * SECONDS_PER_DAY +
+    double time = Grego::fieldsToDay(year, month, dom) * SECONDS_PER_DAY +
         uprv_floor(millis / (double) U_MILLIS_PER_SECOND);
 
     return zoneOffset(findTransition(time, TRUE)) * U_MILLIS_PER_SECOND;
@@ -405,7 +303,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
         int32_t year, month, dom, dow;
         double days = uprv_floor(date / U_MILLIS_PER_DAY);
         
-        dayToFields(days, year, month, dom, dow);
+        Grego::dayToFields(days, year, month, dom, dow);
 
         int32_t millis = (int32_t) (date - days * U_MILLIS_PER_DAY);
         rawoff = finalZone->getRawOffset();
@@ -416,7 +314,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
             double days2 = uprv_floor(date / U_MILLIS_PER_DAY);
             millis = (int32_t) (date - days2 * U_MILLIS_PER_DAY);
             if (days2 != days) {
-                dayToFields(days2, year, month, dom, dow);
+                Grego::dayToFields(days2, year, month, dom, dow);
             }
         }
 
@@ -505,11 +403,11 @@ UBool OlsonTimeZone::useDaylightTime() const {
     // DST is in use in the current year (at any point in the year)
     // and returns TRUE if so.
 
-    int32_t days = floorDivide(uprv_getUTCtime(), SECONDS_PER_DAY); // epoch days
+    int32_t days = Math::floorDivide(uprv_getUTCtime(), SECONDS_PER_DAY); // epoch days
 
     int32_t year, month, dom, dow;
     
-    dayToFields(days, year, month, dom, dow);
+    Grego::dayToFields(days, year, month, dom, dow);
 
     if (year > finalYear) { // [sic] >, not >=; see above
         U_ASSERT(finalZone != 0 && finalZone->useDaylightTime());
@@ -517,8 +415,8 @@ UBool OlsonTimeZone::useDaylightTime() const {
     }
 
     // Find start of this year, and start of next year
-    int32_t start = (int32_t) fieldsToDay(year, 0, 1) * SECONDS_PER_DAY;    
-    int32_t limit = (int32_t) fieldsToDay(year+1, 0, 1) * SECONDS_PER_DAY;    
+    int32_t start = (int32_t) Grego::fieldsToDay(year, 0, 1) * SECONDS_PER_DAY;    
+    int32_t limit = (int32_t) Grego::fieldsToDay(year+1, 0, 1) * SECONDS_PER_DAY;    
 
     // Return TRUE if DST is observed at any time during the current
     // year.

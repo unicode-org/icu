@@ -44,6 +44,7 @@
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "unicode/ures.h"
+#include "gregoimp.h"
 #include "uresimp.h" // struct UResourceBundle
 #include "olsontz.h"
 #include "mutex.h"
@@ -357,7 +358,7 @@ TimeZone::createSystemTimeZone(const UnicodeString& id) {
     UResourceBundle *top = openOlsonResource(id, res, ec);
     if (U_SUCCESS(ec)) {
         z = new OlsonTimeZone(top, &res, ec);
-        if (z) z->setID(id);      // Hmm. cleanup? TODO
+        if (z) z->setID(id);
     }
     ures_close(&res);
     ures_close(top);
@@ -518,104 +519,6 @@ TimeZone::setDefault(const TimeZone& zone)
 }
 
 //----------------------------------------------------------------------
-// Support methods for getOffset(millis...)
-
-// TODO clean up; consolidate with GregorianCalendar, TimeZone, StandarTimeZone
-
-/**
- * Return floor(numerator/denominator); handles extreme values correctly.
- */
-static int32_t floorDivide(int32_t numerator, int32_t denominator) {
-    return (numerator >= 0) ?
-        numerator / denominator : ((numerator + 1) / denominator) - 1;
-}
-
-static int32_t floorDivide(int32_t numerator, int32_t denominator,
-                           int32_t& remainder) {
-    int32_t quotient = floorDivide(numerator, denominator);
-    remainder = numerator - (quotient * denominator);
-    return quotient;
-}
-
-static double floorDivide(double numerator, double denominator,
-                          double& remainder) {
-    double quotient = uprv_floor(numerator / denominator);
-    remainder = numerator - (quotient * denominator);
-    return quotient;
-}
-
-static int32_t floorDivide(double numerator, int32_t denominator,
-                           int32_t& remainder) {
-    double quotient, rem;
-    quotient = floorDivide(numerator, (double)denominator, rem);
-    remainder = (int32_t) rem;
-    return (int32_t) quotient;
-}
-
-static const int32_t JULIAN_1_CE    = 1721426; // January 1, 1 CE Gregorian
-static const int32_t JULIAN_1970_CE = 2440588; // January 1, 1970 CE Gregorian
-
-/**
- * The number of days before the given month.  There are two sets of
- * values for Jan..Dec; one set for non-leap years followed by another
- * set for leap years.
- */
-static const int16_t DAYS_BEFORE[] =
-    {0,31,59,90,120,151,181,212,243,273,304,334,
-     0,31,60,91,121,152,182,213,244,274,305,335};
-
-static const int8_t MONTH_LENGTH[] =
-    {31,28,31,30,31,30,31,31,30,31,30,31,
-     31,29,31,30,31,30,31,31,30,31,30,31};
-
-static UBool isLeapYear(int year) {
-    return (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
-}
-
-/**
- * Convert a 1970-epoch day number to proleptic Gregorian year, month,
- * day-of-month, and day-of-week.
- * @param day 1970-epoch day (integral value)
- * @param year output parameter to receive year
- * @param month output parameter to receive month (0-based, 0==Jan)
- * @param dom output parameter to receive day-of-month (1-based)
- * @param dow output parameter to receive day-of-week (1-based, 1==Sun)
- */
-static void dayToFields(double day, int32_t& year, int32_t& month,
-                        int32_t& dom, int32_t& dow) {
-    int32_t doy;
-
-    // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
-    day += JULIAN_1970_CE - JULIAN_1_CE;
-
-    int32_t n400 = floorDivide(day, 146097, doy); // 400-year cycle length
-    int32_t n100 = floorDivide(doy, 36524, doy); // 100-year cycle length
-    int32_t n4   = floorDivide(doy, 1461, doy); // 4-year cycle length
-    int32_t n1   = floorDivide(doy, 365, doy);
-    year = 400*n400 + 100*n100 + 4*n4 + n1;
-    if (n100 == 4 || n1 == 4) {
-        doy = 365; // Dec 31 at end of 4- or 400-year cycle
-    } else {
-        ++year;
-    }
-    
-    UBool isLeap = isLeapYear(year);
-    
-    // Gregorian day zero is a Monday.
-    dow = (int32_t) uprv_fmod(day + 1, 7);
-    dow += (dow < 0) ? (UCAL_SUNDAY + 7) : UCAL_SUNDAY;
-
-    // Common Julian/Gregorian calculation
-    int32_t correction = 0;
-    int32_t march1 = isLeap ? 60 : 59; // zero-based DOY for March 1
-    if (doy >= march1) {
-        correction = isLeap ? 1 : 2;
-    }
-    month = (12 * (doy + correction) + 6) / 367; // zero-based month
-    dom = doy - DAYS_BEFORE[month + (isLeap ? 12 : 0)] + 1; // one-based DOM
-}
-
-//----------------------------------------------------------------------
 
 /**
  * This is the default implementation for subclasses that do not
@@ -644,11 +547,11 @@ void TimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
         double day = uprv_floor(date / U_MILLIS_PER_DAY);
         int32_t millis = (int32_t) (date - day * U_MILLIS_PER_DAY);
         
-        dayToFields(day, year, month, dom, dow);
+        Grego::dayToFields(day, year, month, dom, dow);
         
         dstOffset = getOffset(GregorianCalendar::AD, year, month, dom,
                               (uint8_t) dow, millis,
-                              MONTH_LENGTH[month + isLeapYear(year)?12:0],
+                              Grego::monthLength(year, month),
                               ec) - rawOffset;
 
         // Recompute if local==FALSE, dstOffset!=0, and addition of
