@@ -181,7 +181,7 @@ static uint8_t utf16fixup[32] = {
 #define UCOL_GETNEXTCE(order, coll, collationSource, status) {                        \
     if (U_FAILURE(*(status)) || ((collationSource).pos>=(collationSource).len         \
       && (collationSource).CEpos <= (collationSource).toReturn)) {                    \
-      (order) = UCOL_NULLORDER;                                                       \
+      (order) = UCOL_NO_MORE_CES;                                                       \
     } else if ((collationSource).CEpos > (collationSource).toReturn) {                \
       (order) = *((collationSource).toReturn++);                                      \
       (collationSource).pos--;                                                        \
@@ -264,7 +264,7 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 /** This indicates the last element in a UCollationElements has been consumed. 
  *
  */
-#define UCOL_NULLORDER        0xFFFFFFFF
+#define UCOL_NO_MORE_CES        0x00010101
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
 
