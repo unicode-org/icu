@@ -274,18 +274,18 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     }
     if (text == NULL)
     {
-        bufferSizeNeeded = sizeof(DictionaryBasedBreakIterator);
+        bufferSizeNeeded = (int32_t) sizeof(DictionaryBasedBreakIterator);
         IterIsString = IterIsUChar = FALSE;
     }
     else if (text->getDynamicClassID() == StringCharacterIterator::getStaticClassID()) 
     {
-        bufferSizeNeeded = sizeof(struct bufferCloneStructString);
+        bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructString);
         IterIsString = TRUE;
         IterIsUChar = FALSE;
     } 
     else if (text->getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) 
     {
-        bufferSizeNeeded = sizeof(struct bufferCloneStructUChar);
+        bufferSizeNeeded = (int32_t) sizeof(struct bufferCloneStructUChar);
         IterIsString = FALSE;
         IterIsUChar = TRUE;
     }
