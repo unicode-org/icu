@@ -1919,7 +1919,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int IDEOGRAPHIC = 14;
         /**
-         * @see INSEPARABLE
+         * @see #INSEPARABLE
          * @draft ICU 2.4
          */
         public static final int INSEPERABLE = 15;
