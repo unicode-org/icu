@@ -463,7 +463,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             case janLanguageCode:
             case zhtLanguageCode:
             case zhsLanguageCode:
-                if (gsubTable->coversScriptAndLanguage(scriptTag, languageTag)) {
+                if (gsubTable->coversScriptAndLanguage(scriptTag, languageTag, TRUE)) {
                     result = new HanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
                     break;
                 }
