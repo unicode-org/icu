@@ -158,6 +158,20 @@ utrie_getData(UNewTrie *trie, int32_t *pLength) {
     return trie->data;
 }
 
+static int32_t
+utrie_allocDataBlock(UNewTrie *trie) {
+    int32_t newBlock, newTop;
+
+    newBlock=trie->dataLength;
+    newTop=newBlock+UTRIE_DATA_BLOCK_LENGTH;
+    if(newTop>trie->dataCapacity) {
+        /* out of memory in the data array */
+        return -1;
+    }
+    trie->dataLength=newTop;
+    return newBlock;
+}
+
 /**
  * No error checking for illegal arguments.
  *
@@ -166,7 +180,7 @@ utrie_getData(UNewTrie *trie, int32_t *pLength) {
  */
 static int32_t
 utrie_getDataBlock(UNewTrie *trie, UChar32 c) {
-    int32_t indexValue, newBlock, newTop;
+    int32_t indexValue, newBlock;
 
     c>>=UTRIE_SHIFT;
     indexValue=trie->index[c];
@@ -175,13 +189,11 @@ utrie_getDataBlock(UNewTrie *trie, UChar32 c) {
     }
 
     /* allocate a new data block */
-    newBlock=trie->dataLength;
-    newTop=newBlock+UTRIE_DATA_BLOCK_LENGTH;
-    if(newTop>trie->dataCapacity) {
+    newBlock=utrie_allocDataBlock(trie);
+    if(newBlock<0) {
         /* out of memory in the data array */
         return -1;
     }
-    trie->dataLength=newTop;
     trie->index[c]=newBlock;
 
     /* copy-on-write for a block from a setRange() */
@@ -389,31 +401,30 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
     uprv_memcpy(leadIndexes, index+(0xd800>>UTRIE_SHIFT), 4*UTRIE_SURROGATE_BLOCK_COUNT);
 
     /*
-     * to protect the copied lead surrogate values,
-     * mark all their indexes as repeat blocks
-     * (causes copy-on-write)
-     */
-    for(c=0xd800; c<=0xdbff; ++c) {
-        block=index[c>>UTRIE_SHIFT];
-        if(block>0) {
-            index[c>>UTRIE_SHIFT]=-block;
-        }
-    }
-
-    /*
      * set all values for lead surrogate code *units* to leadUnitValue
-     * so that by default runtime lookups will find no data for associated
+     * so that, by default, runtime lookups will find no data for associated
      * supplementary code points, unless there is data for such code points
      * which will result in a non-zero folding value below that is set for
      * the respective lead units
      *
-     * the above saved the indexes for surrogate code *points* and
-     * write-protected their data values
+     * the above saved the indexes for surrogate code *points*
+     * fill the indexes with simplified code from utrie_setRange32()
      */
-    if(!utrie_setRange32(trie, 0xd800, 0xdc00, trie->leadUnitValue, TRUE)) {
-        /* data table overflow */
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return;
+    if(trie->leadUnitValue==trie->data[0]) {
+        block=0; /* leadUnitValue==initialValue, use all-initial-value block */
+    } else {
+        /* create and fill the repeatBlock */
+        block=utrie_allocDataBlock(trie);
+        if(block<0) {
+            /* data table overflow */
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        utrie_fillBlock(trie->data+block, 0, UTRIE_DATA_BLOCK_LENGTH, trie->leadUnitValue, trie->data[0], TRUE);
+        block=-block; /* negative block number to indicate that it is a repeat block */
+    }
+    for(c=(0xd800>>UTRIE_SHIFT); c<(0xdc00>>UTRIE_SHIFT); ++c) {
+        trie->index[c]=block;
     }
 
     /*
