@@ -21,6 +21,23 @@
 #include "uassert.h"
 
 
+//-----------------------------------------------------------------------------------
+//
+//   Trie access folding function.  Copied as-is from properties code in uchar.c
+//
+//-----------------------------------------------------------------------------------
+U_CDECL_BEGIN
+static int32_t U_CALLCONV
+getFoldingOffset(uint32_t data) {
+    /* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
+    if(data&0x8000) {
+        return (int32_t)(data&0x7fff);
+    } else {
+        return 0;
+    }
+}
+U_CDECL_END
+
 U_NAMESPACE_BEGIN
 
 //-----------------------------------------------------------------------------
@@ -38,25 +55,6 @@ RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
     init(d, status);
     fUDataMem = udm;
 }
-
-
-
-//-----------------------------------------------------------------------------------
-//
-//   Trie access folding function.  Copied as-is from properties code in uchar.c
-//
-//-----------------------------------------------------------------------------------
-U_CDECL_BEGIN
-static int32_t U_CALLCONV
-getFoldingOffset(uint32_t data) {
-    /* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
-    if(data&0x8000) {
-        return (int32_t)(data&0x7fff);
-    } else {
-        return 0;
-    }
-}
-U_CDECL_END
 
 //-----------------------------------------------------------------------------
 //
