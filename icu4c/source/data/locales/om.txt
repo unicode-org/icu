@@ -16,7 +16,7 @@
 // * of the month and day names.
 
 om{
-    Version{ "x0.2" }
+    Version{ "1.0" }
     DayAbbreviations {
         "Dil",
         "Wix",

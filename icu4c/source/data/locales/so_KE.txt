@@ -12,7 +12,7 @@
 
 
 so_KE {
-    Version{ "x0.2" }
+    Version{ "1.0" }
     AmPmMarkers {
         "sn",
         "gn",

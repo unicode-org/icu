@@ -8,7 +8,7 @@
 // * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
 
 ti_ET {
-    Version{ "x0.2" }
+    Version{ "1.0" }
     AmPmMarkers {
         "\u1295\u1309\u1206 \u1230\u12D3\u1270",
         "\u12F5\u1215\u122D \u1230\u12D3\u1275",

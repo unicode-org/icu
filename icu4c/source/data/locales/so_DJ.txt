@@ -11,7 +11,7 @@
 // *    Department of Linguistics and Translation, Universite de Montreal, Montreal
 
 so_DJ {
-    Version{ "x0.2" }
+    Version{ "1.0" }
 
     // CountryISBNNumber { "262" }
     // CountryNumber { "262" }
