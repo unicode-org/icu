@@ -2,6 +2,8 @@
 ## PTX-specific setup
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
+##
+## $Id: mh-ptx,v 1.14 2000/10/16 18:05:34 yves Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
