@@ -211,7 +211,7 @@ public class ICULocaleService extends ICUService {
             if (primaryID == null) {
                 return null;
             }
-            String canonicalPrimaryID = LocaleUtility.canonicalLocaleString(primaryID);
+            String canonicalPrimaryID = ULocale.getName(primaryID);
             return new LocaleKey(primaryID, canonicalPrimaryID, canonicalFallbackID, kind);
         }
             
