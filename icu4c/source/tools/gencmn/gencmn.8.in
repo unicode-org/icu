@@ -58,7 +58,7 @@ bytes. Files that exceed this limit are quietly ignored, even in
 verbose mode.
 .SH OPTIONS
 .TP
-.BR \-h\fP, \fB\-?\fP, \fB\-\-help
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 Print help about usage and exit.
 .TP
 .BR "\-v\fP, \fB\-\-verbose"
