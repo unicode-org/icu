@@ -27,6 +27,10 @@ ALL_MAN_FILES = $(MANX_FILES)
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 
+ifneq ($(PKGDATA_DEFS),)
+DEFS += $(PKGDATA_DEFS)
+endif
+
 ## Target information
 TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
