@@ -102,16 +102,17 @@ ucal_setTimeZone(    UCalendar*      cal,
             int32_t        len,
             UErrorCode *status)
 {
-  if(U_FAILURE(*status)) return;
+  if(U_FAILURE(*status))
+    return;
 
-  TimeZone *zone = 0;
-  if(zone == 0) {
+  TimeZone *zone;
+  if(zoneID == NULL) {
     zone = TimeZone::createDefault();
   }
   else {
     int32_t length = (len == -1 ? u_strlen(zoneID) : len);
     zone = TimeZone::createTimeZone(UnicodeString((UChar*)zoneID, 
-						  length, length));
+                          length, length));
   }
   if(zone == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -122,9 +123,9 @@ ucal_setTimeZone(    UCalendar*      cal,
 }
 
 U_CAPI int32_t
-ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
+ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
                     UCalendarDisplayNameType     type,
-                const      char                     *locale,
+                    const char             *locale,
                     UChar*                  result,
                     int32_t                 resultLength,
                     UErrorCode*             status)
