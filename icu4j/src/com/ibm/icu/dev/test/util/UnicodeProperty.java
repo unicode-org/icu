@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import sun.io.UnknownCharacterException;
 
@@ -145,7 +146,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     }
     
     static public class Factory {
-        static boolean DEBUG = false;
+        static boolean DEBUG = true;
 
         Map canonicalNames = new TreeMap();
         Map skeletonNames = new TreeMap();
@@ -231,43 +232,48 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return getSet(propAndValue, null, null);
         }
         
-        public final SymbolTable getSymbolTable() {
-            return SYMBOL_TABLE;
+        public final SymbolTable getSymbolTable(String prefix) {
+            return new PropertySymbolTable(prefix);
         }
         
-        SymbolTable SYMBOL_TABLE = new SymbolTable() {
-            /*
-            UnicodeProperty.Factory factory;
-            //static Matcher identifier = Pattern.compile("([:letter:] [\\_\\-[:letter:][:number:]]*)").matcher("");
-        
-            PropertySymbolTable (UnicodeProperty.Factory factory) {
-                this.factory = factory;
+        private class PropertySymbolTable implements SymbolTable  {
+            private String prefix;
+            RegexMatcher regexMatcher = new RegexMatcher();
+            
+            PropertySymbolTable (String prefix) {
+                this.prefix = prefix;
             }
-            */
         
             public char[] lookup(String s) {
-                if (DEBUG) System.out.println("\tLooking up " + s);
-                int pos = s.indexOf('=');
-                if (pos < 0) return null; // should never happen
-                UnicodeProperty prop = getProperty(s.substring(0,pos));
+                if (DEBUG) System.out.println("\t(" + prefix + ")Looking up " + s);
+                // ensure, again, that prefix matches
+                int start = prefix.length();
+                if (!s.regionMatches(true, 0, prefix, 0, start)) return null;
+                
+                int pos = s.indexOf(':', start);
+                if (pos < 0) { // should never happen
+                    throw new IllegalArgumentException("Internal Error: missing =: " + s + "\r\n"); 
+                }
+                UnicodeProperty prop = getProperty(s.substring(start,pos));
                 if (prop == null) {
                     throw new IllegalArgumentException("Invalid Property in: " + s + "\r\nUse "
                      + showSet(getAvailableNames())); 
                 }
                 String value = s.substring(pos+1);
-                UnicodeSet set = prop.getSet(value);
+                UnicodeSet set;
+                if (value.startsWith("\u00AB")) {   // regex!
+                    set = prop.getSet(regexMatcher.set(value.substring(1, value.length()-1)));
+                } else {
+                    set = prop.getSet(value);
+                }
                 if (set.size() == 0) {
                     throw new IllegalArgumentException("Empty Property-Value in: " + s + "\r\nUse "
                         + showSet(prop.getAvailableValues()));
                 }
-                if (DEBUG) System.out.println("\tReturning " + set.toPattern(true));
+                if (DEBUG) System.out.println("\t(" + prefix + ")Returning " + set.toPattern(true));
                 return set.toPattern(true).toCharArray(); // really ugly
             }
 
-            /**
-             * @param list
-             * @return
-             */
             private String showSet(List list) {
                 StringBuffer result = new StringBuffer("[");
                 boolean first = true;
@@ -285,23 +291,33 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             }
 
             public String parseReference(String text, ParsePosition pos, int limit) {
-                if (DEBUG) System.out.println("\tParsing <" + text.substring(pos.getIndex(),limit) + ">");
+                if (DEBUG) System.out.println("\t(" + prefix + ")Parsing <" + text.substring(pos.getIndex(),limit) + ">");
                 int start = pos.getIndex();
+                int veryStart = start;
+                // ensure that it starts with 'prefix'
+                if (!text.regionMatches(true, start, prefix, 0, prefix.length())) return null;
+                start += prefix.length();
+                // now see if it is of the form identifier:identifier
                 int i = getIdentifier(text, start, limit);
                 if (i == start) return null;
                 String prop = text.substring(start, i);
                 String value = "true";
                 if (i < limit) {
-                    int cp = text.charAt(i);
-                    if (cp == ':' || cp == '=') {
-                        int j = getIdentifier(text, i+1, limit);
+                    if (text.charAt(i) == ':') {
+                        int j;
+                        if (text.charAt(i+1) == '\u00AB') { // regular expression
+                            j = text.indexOf('\u00BB', i+2) + 1; // include last character
+                            if (j <= 0) return null;
+                        } else {
+                            j = getIdentifier(text, i+1, limit);
+                        }
                         value = text.substring(i+1, j);
                         i = j;
                     }
                 }
                 pos.setIndex(i);
-                if (DEBUG) System.out.println("\tParsed <" + prop + ">=<" + value + ">");
-                return prop + '=' + value;
+                if (DEBUG) System.out.println("\t(" + prefix + ")Parsed <" + prop + ">=<" + value + ">");
+                return prefix + prop + ":" + value;
             }
 
             private int getIdentifier(String text, int start, int limit) {
@@ -471,6 +487,19 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             this.pattern = pattern;
             return this;
         }
+    }
+    
+    public static class RegexMatcher implements UnicodeProperty.Matcher {
+        private java.util.regex.Matcher matcher;
+        
+        public UnicodeProperty.Matcher set(String pattern) {
+            matcher = Pattern.compile(pattern).matcher("");
+            return this;
+        }
+        public boolean matches(String value) {
+            matcher.reset(value);
+            return matcher.matches();
+        }       
     }
     
     public static abstract class SimpleProperty extends UnicodeProperty {
