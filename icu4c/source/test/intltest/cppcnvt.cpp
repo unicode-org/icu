@@ -165,39 +165,62 @@ void ConvertTest::TestConvert()
 
     /* Do some tests w/ UnicodeConverter, some w/ UnicodeConverterCPP */
 
-    someConverters[0] = new UnicodeConverter("ibm-1038",err);
-    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[1] = new UnicodeConverter("ibm-1038",err);
-    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[2] = new UnicodeConverter("ibm-1038",err);
-    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+    someConverters[0] = new UnicodeConverter("ibm-1123",err);
+    if (U_FAILURE(err)) {
+        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        return;
+    }
+    someConverters[1] = new UnicodeConverter("ibm-1123",err);
+    if (U_FAILURE(err)) {
+        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        return;
+    }
+    someConverters[2] = new UnicodeConverter("ibm-1123",err);
+    if (U_FAILURE(err)) {
+        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        return;
+    }
 
     someConverters[3] = new UnicodeConverterCPP("ibm-834", err);
-    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+    if (U_FAILURE(err)) {
+        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        return;
+    }
     someConverters[4] = new UnicodeConverterCPP("ibm-941", err);
-    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+    if (U_FAILURE(err)) {
+        errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        return;
+    }
    
     logln("\n---Testing UnicodeConverter::flushCache...");
-    if (UnicodeConverter::flushCache()==0) logln("Flush cache ok");
-    else errln("Flush Cache failed");
+    if (UnicodeConverter::flushCache()==0)
+        logln("Flush cache ok");
+    else
+        errln("Flush Cache failed");
     
     delete someConverters[0];
     delete someConverters[1];
     delete someConverters[2];
     delete someConverters[3];
-    if (UnicodeConverter::flushCache()==2) logln("Flush cache ok");
-    else errln("Flush Cache failed");
+    if (UnicodeConverter::flushCache()==2)
+        logln("Flush cache ok");
+    else
+        errln("Flush Cache failed");
     
     delete someConverters[4];
-    if (UnicodeConverter::flushCache()==1) logln("Flush cache ok");
-    else errln("Flush Cache failed");
+    if (UnicodeConverter::flushCache()==1)
+        logln("Flush cache ok");
+    else
+        errln("Flush Cache failed");
 
     logln("\n---Testing UnicodeConverter::UnicodeConverter()...");
     someConverters[0] = new UnicodeConverter;
     someConverters[1] = new UnicodeConverter;
     someConverters[2] = new UnicodeConverter("utf8", err);
-    if (U_FAILURE(err))
+    if (U_FAILURE(err)) {
         errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+        return;
+    }
 
     logln("\n---Testing getName...");
 
@@ -232,7 +255,8 @@ void ConvertTest::TestConvert()
     if (((*someConverters[1] != *someConverters[0])==FALSE)&&
     (*someConverters[1] != *someConverters[2])==TRUE)
       logln("Not Equal test ok");
-    else errln("Not Equal test failed");
+    else
+        errln("Not Equal test failed");
     
     logln("\n---Testing UnicodeConverter::operator=...");
     someConverters[3] = new UnicodeConverter;
@@ -292,7 +316,8 @@ void ConvertTest::TestConvert()
         ii=4;
         myConverter->getSubstitutionChars(myptr,ii,err);
 
-        for(x=0;x<ii;x++) rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
+        for(x=0;x<ii;x++) rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x])
+            ;
         if (rest==CodePagesSubstitutionChars[codepage_index])
             logln("Substitution character ok");
         else
@@ -421,9 +446,10 @@ void ConvertTest::TestConvert()
         logln("\n---Testing UnicodeConverter::getCodepage...");
         cp = myConverter->getCodepage(err);
         if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));    
-        if (cp != CodePageNumberToTest[codepage_index]) errln("Codepage number test failed");
-        else logln("Codepage number test OK");
-
+        if (cp != CodePageNumberToTest[codepage_index])
+            errln("Codepage number test failed");
+        else
+            logln("Codepage number test OK");
 
 
         /*getCodepagePlatform*/
