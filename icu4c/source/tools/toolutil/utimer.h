@@ -15,8 +15,6 @@
 #   include <unistd.h> 
 #endif
 
-#include <iostream.h>
-#include <stdio.h>
 /**
  * This API provides functions for performing performance measurement
  * There are 3 main usage scenarios.
