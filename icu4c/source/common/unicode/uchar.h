@@ -664,7 +664,7 @@ typedef enum UBlockCode UBlockCode;
 
 /**
  * Values returned by the u_getCellWidth() function.
- * @draft
+ * @stable
  */
 enum UCellWidth
 {
@@ -689,7 +689,7 @@ typedef enum UCellWidth UCellWidth;
  * Unicode version 1.0, before the Unicode standard merged
  * with ISO-10646.
  *
- * @see u_charName()
+ * @see u_charName
  */
 enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
@@ -706,10 +706,10 @@ typedef enum UCharNameChoice UCharNameChoice;
  * @param ch    the character to be tested
  * @return  true if the character is lowercase; false otherwise.
  * @see UNICODE_VERSION
- * @see u_isupper()
- * @see u_istitle()
- * @see u_islower()
- * @draft
+ * @see u_isupper
+ * @see u_istitle
+ * @see u_islower
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c);
@@ -720,10 +720,10 @@ u_islower(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is uppercase; false otherwise.
- * @see u_islower()
+ * @see u_islower
  * @see u_istitle
- * @see u_tolower()
- * @draft
+ * @see u_tolower
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c);
@@ -734,10 +734,10 @@ u_isupper(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is titlecase; false otherwise.
- * @see u_isupper()
- * @see u_islower()
- * @see u_totitle()
- * @draft
+ * @see u_isupper
+ * @see u_islower
+ * @see u_totitle
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c);
@@ -745,10 +745,9 @@ u_istitle(UChar32 c);
 /**
  * Determines whether the specified character is a digit according to UnicodeData.txt.
  *
- *
  * @param ch    the character to be tested
  * @return  true if the character is a digit; false otherwise.
- * @draft
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c);
@@ -759,7 +758,7 @@ u_isdigit(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is a letter or a digit; false otherwise.
- * @draft
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c);
@@ -771,13 +770,13 @@ u_isalnum(UChar32 c);
  * @param ch    the character to be tested
  * @return  true if the character has a defined Unicode meaning; false otherwise.
  *
- * @see u_isdigit()
- * @see u_isalpha()
- * @see u_isalnum()
- * @see u_isupper()
- * @see u_islower()
- * @see u_istitle()
- * @draft
+ * @see u_isdigit
+ * @see u_isalpha
+ * @see u_isalnum
+ * @see u_isupper
+ * @see u_islower
+ * @see u_istitle
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c);
@@ -789,9 +788,9 @@ u_isdefined(UChar32 c);
  * @param ch    the character to be tested
  * @return  true if the character is a letter; false otherwise.
  *
- * @see u_isdigit()
- * @see u_isalnum()
- * @draft
+ * @see u_isdigit
+ * @see u_isalnum
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c);
@@ -801,7 +800,7 @@ u_isalpha(UChar32 c);
  *
  * @param ch    the character to be tested
  * @return  true if the character is a space character; false otherwise.
- * @draft
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c);
@@ -831,8 +830,8 @@ u_isspace(UChar32 c);
  * @param   ch  the character to be tested.
  * @return  true if the character is an ICU whitespace character;
  *          false otherwise.
- * @see     #isspace
- * @draft
+ * @see     #u_isspace
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c);
@@ -849,8 +848,8 @@ u_isWhitespace(UChar32 c);
  * @param ch    the character to be tested
  * @return  true if the Unicode character is a control character; false otherwise.
  *
- * @see u_isprint()
- * @draft
+ * @see u_isprint
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c);
@@ -863,8 +862,8 @@ u_iscntrl(UChar32 c);
  * @param ch    the character to be tested
  * @return  true if the Unicode character is a printable character; false otherwise.
  *
- * @see u_iscntrl()
- * @draft
+ * @see u_iscntrl
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c);
@@ -876,22 +875,22 @@ u_isprint(UChar32 c);
  * @param ch    the character to be tested
  * @return  true if the Unicode character is of the base form; false otherwise.
  *
- * @see u_isalpha()
- * @see u_isdigit()
- * @draft
+ * @see u_isalpha
+ * @see u_isdigit
+ * @stable
  */
 U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c);
 
 /**
-  * Returns the linguistic direction property of a character.
-  * <P>
-  * Returns the linguistic direction property of a character.
-  * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
-  * property.
-  * @see UCharDirection
-  * @draft
-  */
+ * Returns the linguistic direction property of a character.
+ * <P>
+ * Returns the linguistic direction property of a character.
+ * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
+ * property.
+ * @see UCharDirection
+ * @stable
+ */
 U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c);
 
@@ -1006,7 +1005,7 @@ u_getCombiningClass(UChar32 c);
  * @param c the digit character for which to get the numeric value
  * @return the numeric value of ch in decimal radix.  This method returns
  * -1 if ch is not a valid digit character.
- * @draft
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c);
@@ -1050,7 +1049,7 @@ ublock_getCode(UChar32    ch);
  * @see UCharNameChoice
  * @see u_charFromName
  * @see u_enumCharNames
- * @draft
+ * @stable
  */
 U_CAPI UTextOffset U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
@@ -1135,123 +1134,126 @@ u_enumCharNames(UChar32 start, UChar32 limit,
  * The following functions are java specific.
  */
 /**
-  * A convenience method for determining if a Unicode character 
-  * is allowed to start in a Unicode identifier.
-  * A character may start a Unicode identifier if and only if
-  * it is a letter.
-  *
-  * @param   c  the Unicode character.
-  * @return  TRUE if the character may start a Unicode identifier;
-  *          FALSE otherwise.
-  * @see     u_isalpha
-  * @see     u_isIDPart
-  * @draft
-  */
+ * A convenience method for determining if a Unicode character 
+ * is allowed to start in a Unicode identifier.
+ * A character may start a Unicode identifier if and only if
+ * it is a letter.
+ *
+ * @param   c  the Unicode character.
+ * @return  TRUE if the character may start a Unicode identifier;
+ *          FALSE otherwise.
+ * @see     u_isalpha
+ * @see     u_isIDPart
+ * @stable
+ */
 U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c);
+
 /**
-  * A convenience method for determining if a Unicode character
-  * may be part of a Unicode identifier other than the starting
-  * character.
-  * <P>
-  * A character may be part of a Unicode identifier if and only if
-  * it is one of the following:
-  * <ul>
-  * <li>  a letter
-  * <li>  a connecting punctuation character (such as "_").
-  * <li>  a digit
-  * <li>  a numeric letter (such as a Roman numeral character)
-  * <li>  a combining mark
-  * <li>  a non-spacing mark
-  * <li>  an ignorable control character
-  * </ul>
-  * 
-  * @param   c  the Unicode character.
-  * @return  TRUE if the character may be part of a Unicode identifier;
-  *          FALSE otherwise.
-  * @see     u_isIDIgnorable
-  * @see     u_isIDStart
-  * @draft
-  */
+ * A convenience method for determining if a Unicode character
+ * may be part of a Unicode identifier other than the starting
+ * character.
+ * <P>
+ * A character may be part of a Unicode identifier if and only if
+ * it is one of the following:
+ * <ul>
+ * <li>  a letter
+ * <li>  a connecting punctuation character (such as "_").
+ * <li>  a digit
+ * <li>  a numeric letter (such as a Roman numeral character)
+ * <li>  a combining mark
+ * <li>  a non-spacing mark
+ * <li>  an ignorable control character
+ * </ul>
+ * 
+ * @param   c  the Unicode character.
+ * @return  TRUE if the character may be part of a Unicode identifier;
+ *          FALSE otherwise.
+ * @see     u_isIDIgnorable
+ * @see     u_isIDStart
+ * @stable
+ */
 U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c);
+
 /**
-  * A convenience method for determining if a Unicode character 
-  * should be regarded as an ignorable character 
-  * in a Unicode identifier.
-  * <P>
-  * The following Unicode characters are ignorable in a 
-  * Unicode identifier:
-  * <table>
-  * <tr><td>0x0000 through 0x0008,</td>
-  *                                 <td>ISO control characters that</td></tr>
-  * <tr><td>0x000E through 0x001B,</td> <td>are not whitespace</td></tr>
-  * <tr><td>and 0x007F through 0x009F</td></tr>
-  * <tr><td>0x200C through 0x200F</td>  <td>join controls</td></tr>
-  * <tr><td>0x200A through 0x200E</td>  <td>bidirectional controls</td></tr>
-  * <tr><td>0x206A through 0x206F</td>  <td>format controls</td></tr>
-  * <tr><td>0xFEFF</td>               <td>zero-width no-break space</td></tr>
-  * </table>
-  * 
-  * @param   c  the Unicode character.
-  * @return  TRUE if the character may be part of a Unicode identifier;
-  *          FALSE otherwise.
-  * @see     u_isIDPart
-  * @draft
-  */
+ * A convenience method for determining if a Unicode character 
+ * should be regarded as an ignorable character 
+ * in a Unicode identifier.
+ * <P>
+ * The following Unicode characters are ignorable in a 
+ * Unicode identifier:
+ * <table>
+ * <tr><td>0x0000 through 0x0008,</td>
+ *                                 <td>ISO control characters that</td></tr>
+ * <tr><td>0x000E through 0x001B,</td> <td>are not whitespace</td></tr>
+ * <tr><td>and 0x007F through 0x009F</td></tr>
+ * <tr><td>0x200C through 0x200F</td>  <td>join controls</td></tr>
+ * <tr><td>0x200A through 0x200E</td>  <td>bidirectional controls</td></tr>
+ * <tr><td>0x206A through 0x206F</td>  <td>format controls</td></tr>
+ * <tr><td>0xFEFF</td>               <td>zero-width no-break space</td></tr>
+ * </table>
+ * 
+ * @param   c  the Unicode character.
+ * @return  TRUE if the character may be part of a Unicode identifier;
+ *          FALSE otherwise.
+ * @see     u_isIDPart
+ * @stable
+ */
 U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c);
-    /**
-     * A convenience method for determining if a Unicode character
-     * is allowed as the first character in a Java identifier.
-     * <P>
-     * A character may start a Java identifier if and only if
-     * it is one of the following:
-     * <ul>
-     * <li>  a letter
-     * <li>  a currency symbol (such as "$")
-     * <li>  a connecting punctuation symbol (such as "_").
-     * </ul>
-     *
-     * @param   c  the Unicode character.
-     * @return  TRUE if the character may start a Java identifier;
-     *          FALSE otherwise.
-     * @see     u_isJavaIDPart
-     * @see     u_isalpha
-     * @see     u_isIDStart
-     * @draft
-     */
+
+/**
+ * A convenience method for determining if a Unicode character
+ * is allowed as the first character in a Java identifier.
+ * <P>
+ * A character may start a Java identifier if and only if
+ * it is one of the following:
+ * <ul>
+ * <li>  a letter
+ * <li>  a currency symbol (such as "$")
+ * <li>  a connecting punctuation symbol (such as "_").
+ * </ul>
+ *
+ * @param   c  the Unicode character.
+ * @return  TRUE if the character may start a Java identifier;
+ *          FALSE otherwise.
+ * @see     u_isJavaIDPart
+ * @see     u_isalpha
+ * @see     u_isIDStart
+ * @draft
+ */
 U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c);
-    /**
-     * A convenience method for determining if a Unicode character 
-     * may be part of a Java identifier other than the starting
-     * character.
-     * <P>
-     * A character may be part of a Java identifier if and only if
-     * it is one of the following:
-     * <ul>
-     * <li>  a letter
-     * <li>  a currency symbol (such as "$")
-     * <li>  a connecting punctuation character (such as "_").
-     * <li>  a digit
-     * <li>  a numeric letter (such as a Roman numeral character)
-     * <li>  a combining mark
-     * <li>  a non-spacing mark
-     * <li>  an ignorable control character
-     * </ul>
-     * 
-     * @param   c the Unicode character.
-     * @return  TRUE if the character may be part of a Unicode identifier; 
-     *          FALSE otherwise.
-     * @see     u_isIDIgnorable
-     * @see     u_isJavaIDStart
-     * @see     u_isalpha
-     * @see     u_isdigit
-     * @see     u_isIDPart
-     * @draft
-     */
 
+/**
+ * A convenience method for determining if a Unicode character 
+ * may be part of a Java identifier other than the starting
+ * character.
+ * <P>
+ * A character may be part of a Java identifier if and only if
+ * it is one of the following:
+ * <ul>
+ * <li>  a letter
+ * <li>  a currency symbol (such as "$")
+ * <li>  a connecting punctuation character (such as "_").
+ * <li>  a digit
+ * <li>  a numeric letter (such as a Roman numeral character)
+ * <li>  a combining mark
+ * <li>  a non-spacing mark
+ * <li>  an ignorable control character
+ * </ul>
+ * 
+ * @param   c the Unicode character.
+ * @return  TRUE if the character may be part of a Unicode identifier; 
+ *          FALSE otherwise.
+ * @see     u_isIDIgnorable
+ * @see     u_isJavaIDStart
+ * @see     u_isalpha
+ * @see     u_isdigit
+ * @see     u_isIDPart
+ * @draft
+ */
 U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c);
 
@@ -1275,7 +1277,7 @@ u_isJavaIDPart(UChar32 c);
  * @param ch    the character to be converted
  * @return  the lowercase equivalent of the character, if any;
  *      otherwise the character itself.
- * @draft
+ * @stable
  */
 U_CAPI UChar32 U_EXPORT2
 u_tolower(UChar32 c);
@@ -1293,10 +1295,11 @@ u_tolower(UChar32 c);
  * @param ch    the character to be converted
  * @return  the uppercase equivalent of the character, if any;
  *      otherwise the character itself.
- * @draft
+ * @stable
  */
 U_CAPI UChar32 U_EXPORT2
 u_toupper(UChar32 c);
+
 /**
  * The given character is mapped to its titlecase equivalent according to UnicodeData.txt.
  * There are only four Unicode characters that are truly titlecase forms
@@ -1309,7 +1312,7 @@ u_toupper(UChar32 c);
  * @param ch    the character to be converted
  * @return  the titlecase equivalent of the character, if any;
  *      otherwise the character itself.
- * @draft
+ * @stable
  */
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c);
