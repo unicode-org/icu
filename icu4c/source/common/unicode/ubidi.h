@@ -1063,7 +1063,7 @@ ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset len
  * @param pErrorCode must be a valid pointer to an error code value,
  *        which must not indicate a failure before the function call.
  *
- * @return The number of characters that were written to <code>dest</code>.
+ * @return The length of the output string.
  */
 U_CAPI UTextOffset U_EXPORT2
 ubidi_writeReordered(UBiDi *pBiDi,
@@ -1087,8 +1087,8 @@ ubidi_writeReordered(UBiDi *pBiDi,
  * This function is the implementation for reversing RTL runs as part
  * of <code>ubidi_writeReordered()</code>. For detailed descriptions
  * of the parameters, see there.
- * Since no BiDi controls are inserted here, this function will never
- * write more than <code>srcLength</code> characters to <code>dest</code>.
+ * Since no BiDi controls are inserted here, the output string length
+ * will never exceed <code>srcLength</code>.
  *
  * @see ubidi_writeReordered
  *
@@ -1115,7 +1115,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
  * @param pErrorCode must be a valid pointer to an error code value,
  *        which must not indicate a failure before the function call.
  *
- * @return The number of characters that were written to <code>dest</code>.
+ * @return The length of the output string.
  */
 U_CAPI UTextOffset U_EXPORT2
 ubidi_writeReverse(const UChar *src, int32_t srcLength,
