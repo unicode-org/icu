@@ -1161,7 +1161,11 @@ int32_t  RuleBasedBreakIterator::getRuleStatus() const {
             int32_t pa = current();
             nonConstThis->previous();
             int32_t pb = nonConstThis->next();
-            U_ASSERT(pa == pb);
+            if (pa != pb) {
+                // note: the if (pa != pb) test is here only to eliminate warnings for
+                //       unused local variables on gcc.  Logically, it isn't needed.
+                U_ASSERT(pa == pb);
+            }
         }
     }
     return nonConstThis->fLastBreakTag;
