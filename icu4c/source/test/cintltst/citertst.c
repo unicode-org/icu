@@ -1295,7 +1295,7 @@ static void TestDiscontiguos() {
         
         for (;;) {
             uint32_t  ce;
-            UChar    *e = u_strchr(s, ' ');
+            UChar    *e = u_strchr(s, 0x20);
             if (e == 0) {
                 e = u_strchr(s, 0);
             }
@@ -1348,9 +1348,9 @@ static void TestCEBufferOverflow()
     
     /* 0xE0E0 is a private character hence deemed unsafe by the heuristic
     test. this will cause an overflow in getPrev */
-    str[0] = 'A';
+    str[0] = 0x0041;    /* 'A' */
     uprv_memset(str + 1, 0xE0, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);
-    str[UCOL_EXPAND_CE_BUFFER_SIZE] = 'B';
+    str[UCOL_EXPAND_CE_BUFFER_SIZE] = 0x0042;   /* 'B' */
     iter = ucol_openElements(coll, str, UCOL_EXPAND_CE_BUFFER_SIZE + 1, 
                              &status);
     if (ucol_previous(iter, &status) != UCOL_NULLORDER ||
