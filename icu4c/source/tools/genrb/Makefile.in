@@ -12,9 +12,12 @@ include $(top_builddir)/icudefs.mk
 
 ##
 
+TARGET_STUB_NAME = genrb
+DERB_STUB_NAME = derb
+
 SECTION = 1
 
-MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION) $(DERB:$(EXEEXT)=).$(SECTION)
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION) $(DERB_STUB_NAME).$(SECTION)
 
 ## Build directory information
 subdir = tools/genrb
@@ -23,8 +26,8 @@ subdir = tools/genrb
 CLEANFILES = *~ $(MAN_FILES) $(DEPS) 
 
 ## Target information
-TARGET = genrb$(EXEEXT)
-DERB = derb$(EXEEXT)
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
+DERB = $(BINDIR)/$(DERB_STUB_NAME)$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)

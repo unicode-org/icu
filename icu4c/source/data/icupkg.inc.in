@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 2000, International Business Machines
+#   Copyright (C) 2000-2004, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -77,8 +77,8 @@ subdir = tools/tmp
 
 ##### Add the following to source/config/Makefile.in
 
-GENCCODE=$(top_builddir)/tools/genccode/genccode
-GENCMN=$(top_builddir)/tools/gencmn/gencmn
+GENCCODE=$(BINDIR)/genccode
+GENCMN=$(BINDIR)/gencmn
 
 LPATHS=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil
 

@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2003, International Business Machines
+#   Copyright (C) 1999-2004, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -27,11 +27,11 @@ CLEANFILES = *~ $(DEPS)
 TARGET_STUBNAME=data
 
 ifneq ($(ENABLE_STATIC),)
-TARGET = $(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
+TARGET = $(LIBDIR)/$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 endif
 
 ifneq ($(ENABLE_SHARED),)
-SO_TARGET = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
+SO_TARGET = $(LIBDIR)/$(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(STUB_SUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET) $(BATCH_STUB_TARGET)
 endif
 
