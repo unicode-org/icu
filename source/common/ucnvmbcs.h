@@ -21,6 +21,83 @@
 #include "unicode/ucnv.h"
 #include "ucnv_bld.h"
 
+/**
+ * ICU conversion (.cnv) data file structure, following the usual UDataInfo
+ * header.
+ *
+ * Format version: 6.2
+ *
+ * struct UConverterStaticData -- struct containing the converter name, IBM CCSID,
+ *                                min/max bytes per character, etc.
+ *                                see ucnv_bld.h
+ *
+ * --------------------
+ *
+ * The static data is followed by conversionType-specific data structures.
+ * At the moment, there are only variations of MBCS converters. They all have
+ * the same toUnicode structures, while the fromUnicode structures for SBCS
+ * differ from those for other MBCS-style converters.
+ * 
+ * MBCS-style data structure following the static data.
+ * Offsets are counted in bytes from the beginning of the MBCS header structure.
+ * Details about usage in comments in ucnvmbcs.c.
+ *
+ * struct _MBCSHeader (see the definition in this header file below)
+ * contains 32-bit fields as follows:
+ * 8 values:
+ *  0   uint8_t[4]  MBCS version in UVersionInfo format (currently 4.1.0.0)
+ *  1   uint32_t    countStates
+ *  2   uint32_t    countToUFallbacks
+ *  3   uint32_t    offsetToUCodeUnits
+ *  4   uint32_t    offsetFromUTable
+ *  5   uint32_t    offsetFromUBytes
+ *  6   uint32_t    flags, bits:
+ *                      31.. 8 reserved
+ *                       7.. 0 outputType
+ *  7   uint32_t    fromUBytesLength -- _MBCSHeader.version 4.1 (ICU 2.4) and higher
+ *                  counts bytes in fromUBytes[]
+ *
+ * int32_t stateTable[countStates][256];
+ *
+ * struct _MBCSToUFallback { (fallbacks are sorted by offset)
+ *     uint32_t offset;
+ *     UChar32 codePoint;
+ * } toUFallbacks[countToUFallbacks];
+ *
+ * uint16_t unicodeCodeUnits[(offsetFromUTable-offsetToUCodeUnits)/2];
+ *              (padded to an even number of units)
+ *
+ * -- stage 1 tables
+ * if(staticData.unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+ *     -- stage 1 table for all of Unicode
+ *     uint16_t fromUTable[0x440]; (32-bit-aligned)
+ * } else {
+ *     -- BMP-only tables have a smaller stage 1 table
+ *     uint16_t fromUTable[0x40]; (32-bit-aligned)
+ * }
+ *
+ * -- stage 2 tables
+ *    length determined by top of stage 1 and bottom of stage 3 tables
+ * if(outputType==MBCS_OUTPUT_1) {
+ *     -- SBCS: pure indexes
+ *     uint16_t stage 2 indexes[?];
+ * } else {
+ *     -- DBCS, MBCS, EBCDIC_STATEFUL, ...: roundtrip flags and indexes
+ *     uint32_t stage 2 flags and indexes[?];
+ * }
+ *
+ * -- stage 3 tables with byte results
+ * if(outputType==MBCS_OUTPUT_1) {
+ *     -- SBCS: each 16-bit result contains flags and the result byte, see ucnvmbcs.c
+ *     uint16_t fromUBytes[fromUBytesLength/2];
+ * } else {
+ *     -- DBCS, MBCS, EBCDIC_STATEFUL, ... 2/3/4 bytes result, see ucnvmbcs.c
+ *     uint8_t fromUBytes[fromUBytesLength]; or
+ *     uint16_t fromUBytes[fromUBytesLength/2]; or
+ *     uint32_t fromUBytes[fromUBytesLength/4];
+ * }
+ */
+
 /* MBCS converter data and state -------------------------------------------- */
 
 /**
@@ -136,32 +213,7 @@ typedef struct UConverterMBCSTable {
 } UConverterMBCSTable;
 
 /**
- * MBCS data structure as part of a .cnv file:
- *
- * uint32_t [8]; -- 8 values:
- *  0   MBCS version in UVersionInfo format (1.0.0.0)
- *  1   countStates
- *  2   countToUFallbacks
- *  3   offsetToUCodeUnits (offsets are counted from the beginning of this header structure)
- *  4   offsetFromUTable
- *  5   offsetFromUBytes
- *  6   flags, bits:
- *          31.. 8 reserved
- *           7.. 0 outputType
- *  7   fromUBytesLength -- header.version 4.1 (ICU 2.4) and higher
- *
- * stateTable[countStates][256];
- *
- * struct { (fallbacks are sorted by offset)
- *     uint32_t offset;
- *     UChar32 codePoint;
- * } toUFallbacks[countToUFallbacks];
- *
- * uint16_t unicodeCodeUnits[?]; (even number of units or padded)
- *
- * uint16_t fromUTable[0x440+?]; (32-bit-aligned)
- *
- * uint8_t fromUBytes[?];
+ * MBCS data header. See data format description above.
  */
 typedef struct {
     UVersionInfo version;
