@@ -77,6 +77,41 @@ static void initMsg(const char *pname) {
     }
 }
 
+// Callbacks
+static struct callback_ent {
+    const char *name;
+    UConverterFromUCallback fromu;
+    const void *fromuctxt;
+    UConverterToUCallback tou;
+    const void *touctxt;
+} transcode_callbacks[] = {
+    { "substitute", UCNV_FROM_U_CALLBACK_SUBSTITUTE, 0, UCNV_TO_U_CALLBACK_SUBSTITUTE, 0 },
+    { "skip", UCNV_FROM_U_CALLBACK_SKIP, 0, UCNV_TO_U_CALLBACK_SKIP, 0 },
+    { "stop", UCNV_FROM_U_CALLBACK_STOP, 0, UCNV_TO_U_CALLBACK_STOP, 0 },
+    { "escape", UCNV_FROM_U_CALLBACK_ESCAPE, 0, UCNV_TO_U_CALLBACK_ESCAPE, 0 },
+    { "escape-icu", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_ICU, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_ICU },
+    { "escape-java", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_JAVA, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_JAVA },
+    { "escape-c", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_C },
+    { "escape-xml", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC },
+    { "escape-xml-dec", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC },
+    { "escape-xml-hex", UCNV_FROM_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC, UCNV_TO_U_CALLBACK_ESCAPE, UCNV_ESCAPE_XML_DEC }
+};
+
+static const struct callback_ent *findCallback(const char *name) {
+    int i, count = sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
+
+    /* We'll do a linear search, there aren't many of them and bsearch()
+       may not be that portable. */
+
+    for (i = 0; i < count; ++i) {
+        if (!strcmp(name, transcode_callbacks[i].name)) {
+            return &transcode_callbacks[i];
+        }
+    }
+
+    return 0;
+}
+
 // Print all available codepage converters
 static int printConverters(const char *pname, const char *lookfor, int canon)
 {
@@ -271,8 +306,10 @@ static int printTransliterators(const char *pname, int canon) {
 // Convert a file from one encoding to another
 static UBool convertFile(const char* fromcpage, 
                          UConverterToUCallback toucallback,
+                         const void *touctxt,
                          const char* tocpage,
                          UConverterFromUCallback fromucallback,
+                         const void *fromuctxt,
                          const char *translit,
                          FILE* infile, 
                          FILE* outfile)
@@ -323,7 +360,7 @@ static UBool convertFile(const char* fromcpage,
              u_wmsg_errorName(err));
       goto error_exit;
     }
-    ucnv_setToUCallBack(convfrom, toucallback, 0, &oldtoucallback, &oldcontext, &err);
+    ucnv_setToUCallBack(convfrom, toucallback, touctxt, &oldtoucallback, &oldcontext, &err);
     if (U_FAILURE(err))
     {
       u_wmsg("cantSetCallback", u_wmsg_errorName(err));
@@ -338,7 +375,7 @@ static UBool convertFile(const char* fromcpage,
              u_wmsg_errorName(err));
       goto error_exit;
     }
-    ucnv_setFromUCallBack(convto, fromucallback, 0, &oldfromucallback, &oldcontext, &err);
+    ucnv_setFromUCallBack(convto, fromucallback, fromuctxt, &oldfromucallback, &oldcontext, &err);
     if (U_FAILURE(err))
     {
       u_wmsg("cantSetCallback", u_wmsg_errorName(err));
@@ -465,6 +502,14 @@ static void usage(const char *pname, int ecode)
   if (!ecode) {
     putchar('\n');
     u_wmsg("help");
+
+    /* Now dump callbacks and finish. */
+
+    int i, count = sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
+    for (i = 0; i < count; ++i) {
+        printf(" %s", transcode_callbacks[i].name);
+    }
+    putchar('\n');
   }
 
   exit(ecode);
@@ -482,7 +527,9 @@ int main(int argc, char** argv)
     const char* infilestr = 0;
 
     UConverterFromUCallback fromucallback = UCNV_FROM_U_CALLBACK_SUBSTITUTE;
+    const void *fromuctxt = 0;
     UConverterToUCallback toucallback = UCNV_TO_U_CALLBACK_SUBSTITUTE;
+    const void *touctxt = 0;
 
     char** iter = argv+1;
     char** end = argv+argc;    
@@ -567,6 +614,40 @@ int main(int argc, char** argv)
         else if (!strcmp("-c", *iter)) {
             fromucallback = UCNV_FROM_U_CALLBACK_SKIP;
         }
+        else if (!strcmp("--to-callback", *iter)) {
+            iter++;
+            if (iter!=end) {
+                const struct callback_ent *cbe = findCallback(*iter);
+                if (cbe) {
+                    fromucallback = cbe->fromu;
+                    fromuctxt = cbe->fromuctxt;
+                } else {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("unknownCallback", str.getBuffer());
+                    return 4;
+                }
+            } else {
+                usage(pname, 1);
+            }
+        }
+        else if (!strcmp("--from-callback", *iter)) {
+            iter++;
+            if (iter!=end) {
+                const struct callback_ent *cbe = findCallback(*iter);
+                if (cbe) {
+                    toucallback = cbe->tou;
+                    touctxt = cbe->touctxt;
+                } else {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("unknownCallback", str.getBuffer());
+                    return 4;
+                }
+            } else {
+                usage(pname, 1);
+            }
+        }
         else if (!strcmp("-i", *iter)) {
             toucallback = UCNV_TO_U_CALLBACK_SKIP;
         }
@@ -638,7 +719,7 @@ int main(int argc, char** argv)
 #endif
 
   initMsg(pname);
-    if (!convertFile(fromcpage, toucallback, tocpage, fromucallback, translit, infile, stdout))
+    if (!convertFile(fromcpage, toucallback, touctxt, tocpage, fromucallback, fromuctxt, translit, infile, stdout))
         goto error_exit;
 
     goto normal_exit;
