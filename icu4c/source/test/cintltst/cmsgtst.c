@@ -200,9 +200,12 @@ static void MessageFormatTest( void )
                         austrdup(result), austrdup(testResultStrings[i]) );
                 }
 
- /* ###TODO: Fix this after ICU 2.1. */
 #if !defined(HPUX)
-
+                /* HP/UX and possibly other platforms don't properly check for this case.
+                   We pass in a UDate, but the function expects a UDate *.  When va_arg is used,
+                   most compilers will return NULL, but HP/UX won't do that and will return 2
+                   in this case.  This is a platform dependent test.
+                */
                 umsg_parse(formatter,result,resultLength,&count,&ec,one,two,d2);
                 if(ec!=U_ILLEGAL_ARGUMENT_ERROR){
                     log_err("FAIL: Did not get expected error for umsg_parse(). Expected: U_ILLEGAL_ARGUMENT_ERROR Got: %s \n",u_errorName(ec));
@@ -210,10 +213,6 @@ static void MessageFormatTest( void )
                     ec = U_ZERO_ERROR;
                 }
 
-#else
-#if !((U_ICU_VERSION_MAJOR_NUM == 2) && (U_ICU_VERSION_MINOR_NUM ==1))
-                log_err("FAIL: Fix umsg_parse on HP/UX\n");
-#endif
 #endif            
                 umsg_parse(formatter,result,resultLength,&count,&ec,&one,&two,&d2);
                 if(U_FAILURE(ec)){
