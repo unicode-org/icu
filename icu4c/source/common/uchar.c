@@ -1032,7 +1032,11 @@ u_charCellWidth(UChar32 ch)
 
 void u_getUnicodeVersion(UVersionInfo versionArray) {
     if(versionArray!=NULL) {
-        uprv_memcpy(versionArray, dataVersion, U_MAX_VERSION_LENGTH);
+        if(HAVE_DATA) {
+            uprv_memcpy(versionArray, dataVersion, U_MAX_VERSION_LENGTH);
+        } else {
+            uprv_memset(versionArray, 0, U_MAX_VERSION_LENGTH);
+        }
     }
 }
 
