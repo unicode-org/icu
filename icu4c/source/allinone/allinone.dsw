@@ -39,16 +39,7 @@ Package=<4>
     Project_Dep_Name genrb
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name i18n
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name intltest
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name makeconv
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name toolutil
+    Project_Dep_Name gentest
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name gentz
@@ -57,19 +48,28 @@ Package=<4>
     Project_Dep_Name genprops
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name ustdio
+    Project_Dep_Name i18n
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ieeetest
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name gentest
+    Project_Dep_Name intltest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makedata
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name pkgdata
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name makedata
+    Project_Dep_Name toolutil
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ustdio
     End Project Dependency
 }}}
 
@@ -401,6 +401,9 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
 }}}
 
 ###############################################################################
