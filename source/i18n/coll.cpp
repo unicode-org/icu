@@ -480,16 +480,6 @@ CFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode
         Locale validLoc;
         lkey.currentLocale(validLoc);
 		return _delegate->createCollator(validLoc);
-		/*
-        Locale requestedLoc;
-        lkey.canonicalLocale(requestedLoc);
-
-        Collator* result = _delegate->createCollator(validLoc);
-        if (result) {
-            result->setLocales(requestedLoc, validLoc);
-        }
-        return result;
-		*/
     }
     return NULL;
 }
