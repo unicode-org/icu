@@ -99,12 +99,12 @@ main(int argc, const char *argv[]) {
         if(uniToGB) {
             /* output Unicode:GB 18030 including fallbacks from Unicode to codepage */
             if(dir>=0) {
-                printf("%04lx:%02lx\n", c, b);
+                printf("%04lX:%02lX\n", c, b);
             }
         } else {
             /* output Unicode:GB 18030 including fallbacks from codepage to Unicode */
             if(dir<=0) {
-                printf("%02lx:%04lx\n", b, c);
+                printf("%02lX:%04lX\n", b, c);
             }
         }
     }

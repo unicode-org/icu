@@ -79,13 +79,13 @@ main(int argc, const char *argv[]) {
 
         /* output in .ucm format */
         if(b<=0xff) {
-            printf("<U%04lx> \\x%02x |%u\n", c, b, fallback);
+            printf("<U%04lX> \\x%02X |%u\n", c, b, fallback);
         } else if(b<=0xffff) {
-            printf("<U%04lx> \\x%02x\\x%02x |%u\n", c, b>>8, b&0xff, fallback);
+            printf("<U%04lX> \\x%02X\\x%02X |%u\n", c, b>>8, b&0xff, fallback);
         } else if(b<=0xffffff) {
-            printf("<U%04lx> \\x%02x\\x%02x\\x%02x |%u\n", c, b>>16, (b>>8)&0xff, b&0xff, fallback);
+            printf("<U%04lX> \\x%02X\\x%02X\\x%02X |%u\n", c, b>>16, (b>>8)&0xff, b&0xff, fallback);
         } else {
-            printf("<U%04lx> \\x%02x\\x%02x\\x%02x\\x%02x |%u\n", c, b>>24, (b>>16)&0xff, (b>>8)&0xff, b&0xff, fallback);
+            printf("<U%04lX> \\x%02X\\x%02X\\x%02X\\x%02X |%u\n", c, b>>24, (b>>16)&0xff, (b>>8)&0xff, b&0xff, fallback);
         }
     }
 
