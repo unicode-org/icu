@@ -137,12 +137,12 @@ void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Col
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
     */
   doTestVariant(source, target, result);
-  if(result == Collator::EComparisonResult::LESS) {
-    doTestVariant(target, source, Collator::EComparisonResult::GREATER);
-  } else if (result == Collator::EComparisonResult::GREATER) {
-    doTestVariant(target, source, Collator::EComparisonResult::LESS);
+  if(result == Collator::LESS) {
+    doTestVariant(target, source, Collator::GREATER);
+  } else if (result == Collator::GREATER) {
+    doTestVariant(target, source, Collator::LESS);
   } else {
-    doTestVariant(target, source, Collator::EComparisonResult::EQUAL);
+    doTestVariant(target, source, Collator::EQUAL);
   }
 }
 
