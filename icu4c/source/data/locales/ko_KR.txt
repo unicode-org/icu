@@ -30,19 +30,24 @@ ko_KR {
         CA { "\uCE90\uB098\uB2E4" }
     }
     DateTimePatterns {
-            "x h'\uC2DC' m'\uBD84' s'\uCD08' z",
-            "x h'\uC2DC' m'\uBD84' s'\uCD08'",
-            "x h:mm:ss",
-            "x h'\uC2Dc' m'\uBD84'",
-            "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
-            "yyyy'\uB144' M'\uC6D4' d'\uC77C' (EE)",
-            "yyyy. M. d",
-            "yy. M. d",
+            "a h'\uC2DC' mm'\uBD84' ss'\uCD08' z",
+            "a h'\uC2DC' mm'\uBD84' ss'\uCD08'",
+            "a h:mm:ss",
+            "a h'\uC2Dc' mm'\uBD84'",
+            "yyyy'\uB144' MMMM'\uC6D4' dd'\uC77C' EEEE",
+            "yyyy'\uB144' MMM'\uC6D4' dd'\uC77C' '('EEE')'",
+            "yyyy.MM.dd",
+            "yy.MM.dd",
             "{1} {0}",
     }
     DayAbbreviations {
             "\uAE08\uC694\uC77C",
             "\uD1A0\uC694\uC77C",
+			"\uD654",
+            "\uC218",
+            "\uBAA9",
+            "\uAE08",
+            "\uD1A0",
     }
     Eras {
             "\uae30\uC6D0\uC804",
