@@ -522,11 +522,11 @@ UnicodeStringTest::TestReverse()
     UnicodeString test("backwards words say to used I");
 
     test.reverse();
-    test.reverse(2, 6);
-    test.reverse(7, 9);
-    test.reverse(10, 13);
-    test.reverse(14, 19);
-    test.reverse(20, 29);
+    test.reverse(2, 4);
+    test.reverse(7, 2);
+    test.reverse(10, 3);
+    test.reverse(14, 5);
+    test.reverse(20, 9);
 
     if (test != "I used to say words backwards")
         errln("reverse() failed:  Expected \"I used to say words backwards\",\n got \""
