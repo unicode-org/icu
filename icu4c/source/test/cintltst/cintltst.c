@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -20,10 +20,10 @@
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
-
+#include "cstring.h"
 #include "cintltst.h"
 #include "umutex.h"
-
+#include "uassert.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
@@ -680,4 +680,43 @@ void ctst_freeAll() {
     ctst_allocated = 0;
     _testDataPath=NULL;
 }
+
+#define VERBOSE_ASSERTIONS
+
+U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
+    U_ASSERT(ec!=NULL);
+    if (U_FAILURE(*ec)) {
+        log_err("FAIL: %s (%s)\n", msg, u_errorName(*ec));
+        return FALSE;
+    }
+    return TRUE;
+}
+
+U_CFUNC UBool assertTrue(const char* msg, UBool condition) { 
+    if (!condition) {
+        log_err("FAIL: assertTrue() failed: %s\n", msg);
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        log_verbose("Ok: %s\n", msg);
+    }
+#endif
+    return condition;   
+}
+
+U_CFUNC UBool assertEquals(const char* message, const char* expected,
+                           const char* actual) {
+    if (uprv_strcmp(expected, actual) != 0) {
+        log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
+                message, actual, expected);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        log_verbose("Ok: %s; got \"%s\"\n", message, actual);
+    }
+#endif
+    return TRUE;
+}
+
 #endif
