@@ -65,7 +65,11 @@ typedef enum UScriptCode {
       USCRIPT_TIBETAN      = 39,  /* Tibt */
       USCRIPT_UCAS         = 40,  /* Cans */
       USCRIPT_YI           = 41,  /* Yiii */
-      USCRIPT_CODE_LIMIT   = 42 
+      USCRIPT_TAGALOG      = 42,  /* Tglg */
+      USCRIPT_HANUNOO      = 43,  /* Hano */
+      USCRIPT_BUHID        = 44,  /* Buhd */
+      USCRIPT_TAGBANWA     = 45,  /* Tagb */
+      USCRIPT_CODE_LIMIT
 } UScriptCode;
 
 /**
