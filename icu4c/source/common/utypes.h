@@ -363,6 +363,12 @@ u_errorName(UErrorCode code);
 /* Include header for platform utilies */
 /*===========================================================================*/
 
+
+
+/* Mutex data type.  INTERNAL.*/
+typedef void *UMTX;
+
+
 #include "putil.h"
 
 #endif /* _UTYPES */
