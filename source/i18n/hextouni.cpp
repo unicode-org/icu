@@ -26,8 +26,15 @@ const char* HexToUnicodeTransliterator::_ID = "Hex-Any";
  * The multiple backslashes resolve to a single backslash
  * in the effective prefix.
  */
-const UnicodeString HexToUnicodeTransliterator::DEFAULT_PATTERN =
-    UNICODE_STRING("\\\\u0000;\\\\U0000;u+0000;U+0000", 29);
+static const UChar gDEFAULT_PATTERN[] = {
+    0x5C, 0x5C, 0x75, 0x30, 0x30, 0x30, 0x30, 0x3B,  /* "\\u0000;" */
+    0x5C, 0x5C, 0x55, 0x30, 0x30, 0x30, 0x30, 0x3B,  /* "\\U0000;" */
+    0x75, 0x2B, 0x30, 0x30, 0x30, 0x30, 0x3B,        /* "u+0000;" */
+    0x55, 0x2B, 0x30, 0x30, 0x30, 0x30, 0           /* "U+0000" */
+};  /* "\\u0000;\\U0000;u+0000;U+0000" */
+
+const UChar *HexToUnicodeTransliterator::DEFAULT_PATTERN = gDEFAULT_PATTERN;
+//    UNICODE_STRING("\\\\u0000;\\\\U0000;u+0000;U+0000", 29);
 
 /**
  * Constructs a transliterator.
