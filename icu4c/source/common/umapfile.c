@@ -273,6 +273,70 @@
      *
      */
 
+    static char *strcpy_returnEnd(char *dest, const char *src)
+    {
+        while((*dest=*src)!=0) {
+            ++dest;
+            ++src;
+        }
+        return dest;
+    }
+    
+    /*------------------------------------------------------------------------------
+     *                                                                              
+     *  computeDirPath   given a user-supplied path of an item to be opened,             
+     *                         compute and return 
+     *                            - the full directory path to be used 
+     *                              when opening the file.
+     *                            - Pointer to null at end of above returned path    
+     *
+     *                       Parameters:
+     *                          path:        input path.  Buffer is not altered.
+     *                          pathBuffer:  Output buffer.  Any contents are overwritten.
+     *
+     *                       Returns:
+     *                          Pointer to null termination in returned pathBuffer.
+     *
+     *                    TODO:  This works the way ICU historically has, but the
+     *                           whole data fallback search path is so complicated that
+     *                           proabably almost no one will ever really understand it,
+     *                           the potential for confusion is large.  (It's not just 
+     *                           this one function, but the whole scheme.)
+     *                            
+     *------------------------------------------------------------------------------*/
+    static char *uprv_computeDirPath(const char *path, char *pathBuffer)
+    {
+        char   *finalSlash;       /* Ptr to last dir separator in input path, or null if none. */
+        int32_t pathLen;          /* Length of the returned directory path                     */
+        
+        finalSlash = 0;
+        if (path != 0) {
+            finalSlash = uprv_strrchr(path, U_FILE_SEP_CHAR);
+        }
+        
+        *pathBuffer = 0;
+        if (finalSlash == 0) {
+        /* No user-supplied path.  
+            * Copy the ICU_DATA path to the path buffer and return that*/
+            const char *icuDataDir;
+            icuDataDir=u_getDataDirectory();
+            if(icuDataDir!=NULL && *icuDataDir!=0) {
+                return strcpy_returnEnd(pathBuffer, icuDataDir);
+            } else {
+                /* there is no icuDataDir either.  Just return the empty pathBuffer. */
+                return pathBuffer;
+            }
+        } 
+        
+        /* User supplied path did contain a directory portion.
+        * Copy it to the output path buffer */
+        pathLen = (int32_t)(finalSlash - path + 1);
+        uprv_memcpy(pathBuffer, path, pathLen);
+        *(pathBuffer+pathLen) = 0;
+        return pathBuffer+pathLen;
+    }
+    
+
 #   define DATA_TYPE "dat"
 
     UBool uprv_mapFile(UDataMemory *pData, const char *path) {
