@@ -1076,7 +1076,7 @@ Transliterator::createFromRules(const UnicodeString& ID,
         } else {
             // idBlock and data -- this is a compound
             // RBT
-            UnicodeString id("_", "");
+            UnicodeString id((UChar)0x005F); // '_'
             t = new RuleBasedTransliterator(id, parser.orphanData(), TRUE); // TRUE == adopt data object
             /* test for NULL */
             if (t == 0) {
@@ -1462,7 +1462,7 @@ UBool Transliterator::initializeRegistry() {
         for (row = 0; row < maxRows; row++) {
             colBund = ures_getByIndex(transIDs, row, 0, &status);
             if (U_SUCCESS(status)) {
-                UnicodeString id = ures_getKey(colBund);
+                UnicodeString id(ures_getKey(colBund));
                 UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
                 const char* typeStr = ures_getKey(res);
                 UChar type = (UChar)*typeStr;
@@ -1519,8 +1519,10 @@ UBool Transliterator::initializeRegistry() {
 
     _registerSpecialInverse(NullTransliterator::SHORT_ID,
                             NullTransliterator::SHORT_ID, FALSE);
-    _registerSpecialInverse("Upper", "Lower", TRUE);
-    _registerSpecialInverse("Title", "Lower", FALSE);
+    _registerSpecialInverse(UNICODE_STRING_SIMPLE("Upper"),
+                            UNICODE_STRING_SIMPLE("Lower"), TRUE);
+    _registerSpecialInverse(UNICODE_STRING_SIMPLE("Title"),
+                            UNICODE_STRING_SIMPLE("Lower"), FALSE);
 
     ucln_i18n_registerCleanup(UCLN_I18N_TRANSLITERATOR, transliterator_cleanup);
 
