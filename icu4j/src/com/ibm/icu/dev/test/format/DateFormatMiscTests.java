@@ -140,20 +140,20 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
     
         final String zones[][] = symbols.getZoneStrings();
         //int rowCount = zones.length, colCount = zones[0].length; //The variable is never used
-        logln("Long zone name = " + zones[0][1]);
-        if (!zones[0][1].equals(jstLong)) {
+        logln("Long zone name = " + zones[24][1]);
+        if (!zones[24][1].equals(jstLong)) {
             errln("*** Should have been " + jstLong);
         }
-        logln("Short zone name = " + zones[0][2]);
-        if (!zones[0][2].equals(jstShort)) {
+        logln("Short zone name = " + zones[24][2]);
+        if (!zones[24][2].equals(jstShort)) {
             errln("*** Should have been " + jstShort);
         }
-        logln("Long zone name = " + zones[0][3]);
-        if (!zones[0][3].equals(jstLong)) {
+        logln("Long zone name = " + zones[24][3]);
+        if (!zones[24][3].equals(jstLong)) {
             errln("*** Should have been " + jstLong +" instead of "+zones[0][3]);
         }
-        logln("SHORT zone name = " + zones[0][4]);
-        if (!zones[0][4].equals(jstShort)) {
+        logln("SHORT zone name = " + zones[24][4]);
+        if (!zones[24][4].equals(jstShort)) {
             errln("*** Should have been " + jstShort);
         }
     }

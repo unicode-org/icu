@@ -15,6 +15,7 @@
 package com.ibm.icu.dev.test.timezone;
 
 import com.ibm.icu.dev.test.*;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.*;
 
 import java.util.Date;
@@ -343,32 +344,30 @@ public class TimeZoneTest extends TestFmwk
 
         // Make sure we get the default display format for Locales
         // with no display name data.
-        Locale zh_CN = Locale.SIMPLIFIED_CHINESE;
-        name = zone.getDisplayName(zh_CN);
+        Locale mt_MT = new Locale("mt", "MT");
+        name = zone.getDisplayName(mt_MT);
         //*****************************************************************
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         // THE FOLLOWING LINE MUST BE UPDATED IF THE LOCALE DATA CHANGES
         //*****************************************************************
-        logln("PST(zh_CN)->" + name);
+        logln("PST(mt_MT)->" + name);
 
         // Now be smart -- check to see if zh resource is even present.
         // If not, we expect the en fallback behavior.
 
 		// in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
-		/*
-        ResourceBundle enRB = ICULocaleData.getResourceBundle("DateFormatZoneData", Locale.ENGLISH);
-        ResourceBundle zhRB = ICULocaleData.getResourceBundle("DateFormatZoneData", zh_CN);
-        boolean noZH = enRB == zhRB;
+//	/"DateFormatZoneData", 
+        UResourceBundle enRB = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,Locale.ENGLISH);
+        UResourceBundle mtRB = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, mt_MT);
+        boolean noZH = enRB == mtRB;
 
         if (noZH) {
-            logln("Warning: Not testing the zh_CN behavior because resource is absent");
+            logln("Warning: Not testing the mt_MT behavior because resource is absent");
             if (!name.equals("Pacific Standard Time"))
-                errln("Fail: Expected Pacific Standard Time");
+                errln("Fail: Expected Pacific Standard Time for PST in mt_MT but got ");
         }
-        else 
-		*/
-		if (!name.equals("Pacific Standard Time") &&
+        else if(!name.equals("Pacific Standard Time") &&
 			!name.equals("GMT-08:00") &&
 			!name.equals("GMT-8:00") &&
 			!name.equals("GMT-0800") &&

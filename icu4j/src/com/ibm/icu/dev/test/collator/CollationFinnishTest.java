@@ -43,7 +43,7 @@ public class CollationFinnishTest extends TestFmwk {
         1,
         -1,
         // test primary > 4
-        1,
+        0, //collation rules for finnish have changed!
     };
 
     private Collator myCollation = null;

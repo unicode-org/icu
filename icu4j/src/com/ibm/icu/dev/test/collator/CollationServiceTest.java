@@ -283,8 +283,9 @@ public class CollationServiceTest extends TestFmwk {
         ULocale ulocs[] = Collator.getAvailableULocales();
         if (!assertTrue("getAvailableULocales != null", ulocs!=null)) return -1;
         checkArray(msg, ulocs, null);
-        assertTrue("getAvailableLocales().length == getAvailableULocales().length",
-                   locs.length == ulocs.length);
+        // This is not true because since ULocale objects with script code cannot be 
+        // converted to Locale objects
+        //assertTrue("getAvailableLocales().length == getAvailableULocales().length", locs.length == ulocs.length);
         return locs.length;
     }
     
