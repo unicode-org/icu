@@ -120,7 +120,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
   /* these are also the files to delete */
   T_FileStream_writeLine(makefile, "COPIEDDEST= ");
-  pkg_writeCharListWrap(makefile, copyFilesLeft, " ", " \\\n");
+  pkg_writeCharListWrap(makefile, copyFilesLeft, " ", " \\\n",1);
   T_FileStream_writeLine(makefile, "\n");
 
   
