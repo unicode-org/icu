@@ -19,6 +19,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "unicode/ucnv.h"
 #include "unicode/uiter.h"
 #include "cintltst.h"
 #include "cucdtst.h"
@@ -1345,9 +1346,10 @@ TestUCharIterator() {
     static const UChar text[]={
         0x61, 0x62, 0x63, 0xd801, 0xdffd, 0x78, 0x79, 0x7a, 0
     };
-    char utf8[40];
+    char bytes[40];
 
     UCharIterator iter, iter1, iter2;
+    UConverter *cnv;
     UErrorCode errorCode;
     int32_t length;
 
@@ -1362,17 +1364,42 @@ TestUCharIterator() {
 
     /* compare the same string between UTF-16 and UTF-8 UCharIterators */
     errorCode=U_ZERO_ERROR;
-    u_strToUTF8(utf8, sizeof(utf8), &length, text, -1, &errorCode);
+    u_strToUTF8(bytes, sizeof(bytes), &length, text, -1, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("u_strToUTF8() failed, %s\n", u_errorName(errorCode));
         return;
     }
 
     uiter_setString(&iter1, text, -1);
-    uiter_setUTF8(&iter2, utf8, length);
+    uiter_setUTF8(&iter2, bytes, length);
     compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF8Iterator");
 
     /* try again with length=-1 */
-    uiter_setUTF8(&iter2, utf8, -1);
+    uiter_setUTF8(&iter2, bytes, -1);
     compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF8Iterator_1");
+
+    /* compare the same string between UTF-16 and UTF-16BE UCharIterators */
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("UTF-16BE", &errorCode);
+    length=ucnv_fromUChars(cnv, bytes, sizeof(bytes), text, -1, &errorCode);
+    ucnv_close(cnv);
+    if(U_FAILURE(errorCode)) {
+        log_err("ucnv_fromUChars(UTF-16BE) failed, %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    /* terminate with a _pair_ of 0 bytes - a UChar NUL in UTF-16BE (length is known to be ok) */
+    bytes[length]=bytes[length+1]=0;
+
+    uiter_setUTF16BE(&iter2, bytes, length);
+    compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF16BEIterator");
+
+    /* try again with length=-1 */
+    uiter_setUTF16BE(&iter2, bytes, -1);
+    compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF16BEIterator_1");
+
+    /* try again after moving the bytes up one, and with length=-1 */
+    memmove(bytes+1, bytes, length+2);
+    uiter_setUTF16BE(&iter2, bytes+1, -1);
+    compareIterators(&iter1, "UTF16Iterator", &iter2, "UTF16BEIteratorMoved1");
 }
