@@ -46,7 +46,7 @@
 #define INDIC_RANGE         (INDIC_BLOCK_END - INDIC_BLOCK_BEGIN)
 #define VOCALLIC_RR         0x0931
 #define LF                  0x0A
-#define ASCII_END           0x9f
+#define ASCII_END           0xA0
 #define NO_CHAR_MARKER      0xFFFE
 #define TELUGU_DELTA        DELTA * TELUGU
 #define DEV_ABBR_SIGN       0x0970
@@ -637,7 +637,7 @@ static const uint16_t toUnicodeTable[256]={
     0x009d,/* 0x9d */
     0x009e,/* 0x9e */
     0x009f,/* 0x9f */
-    0x0900,/* 0xa0 */
+    0x00A0,/* 0xa0 */
     0x0901,/* 0xa1 */
     0x0902,/* 0xa2 */
     0x0903,/* 0xa3 */
@@ -1188,8 +1188,19 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     data->currentDeltaToUnicode = data->defDeltaToUnicode;
                     data->currentMaskToUnicode = data->defMaskToUnicode;
                 }else{
-                    /* these are display codes consume and continue */
+                    
+                    if((sourceChar >= 0x21 && sourceChar <= 0x3F)){
+                        /* these are display codes consume and continue */
+                    }else{
+                        *err =U_ILLEGAL_CHAR_FOUND;
+                        /* reset */
+                        *contextCharToUnicode=NO_CHAR_MARKER;
+
+                        goto CALLBACK;
+                    }
+
                 }
+
                 /* reset */
                 *contextCharToUnicode=NO_CHAR_MARKER;              
                 
@@ -1220,6 +1231,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     reason = UCNV_UNASSIGNED;
                 }else{
                     /* only 0xA1 - 0xEE are legal after EXT char */
+                    *contextCharToUnicode= NO_CHAR_MARKER;
                     reason= UCNV_ILLEGAL;
                     *err = U_ILLEGAL_CHAR_FOUND;
                 }
@@ -1381,9 +1393,9 @@ CALLBACK:
     }
     if((args->flush==TRUE)
             && (source == sourceLimit) 
-            && data->contextCharToUnicode !=0){
+            && data->contextCharToUnicode != NO_CHAR_MARKER){
         /* if we have ATR in context it is an error */
-        if(data->contextCharToUnicode==ATR || data->contextCharToUnicode==EXT){
+        if(data->contextCharToUnicode==ATR || data->contextCharToUnicode==EXT || *toUnicodeStatus == missingCharMarker){
             *err = U_TRUNCATED_CHAR_FOUND;
         }else{
             WRITE_TO_TARGET_TO_U(args,source,target,args->offsets,(source - args->source -1),
