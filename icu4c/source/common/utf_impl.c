@@ -70,7 +70,7 @@ utf8_minRegular[4]={ 0, 0x80, 0x800, 0x10000 };
 static UChar32
 utf8_errorValue[7]={
     UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_2, UTF_ERROR_VALUE, 0x10ffff,
-    0x3ffffff, 0x7fffffff, 0xffffffff
+    0x3ffffff, 0x7fffffff, -1 /* 0xffffffff in a signed value! */
 };
 
 U_CAPI UChar32 U_EXPORT2

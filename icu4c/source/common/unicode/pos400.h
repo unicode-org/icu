@@ -75,6 +75,7 @@ typedef unsigned long uint32_t;
 
 #include <limits.h>
 #define T_INT32_MAX (LONG_MAX)
+#define T_INT32_MIN (LONG_MIN)
 
 /*===========================================================================*/
 /* Character data types                                                      */

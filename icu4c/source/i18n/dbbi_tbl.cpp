@@ -24,13 +24,13 @@ DictionaryBasedBreakIteratorTables::DictionaryBasedBreakIteratorTables(
   dictionary(dictionaryFilename, status)
 {
     if (U_FAILURE(status)) return;
-    const void** tablesIdx = (const void**)tablesImage;
-    const void* dbbiImage = (const void*)((const int8_t*)tablesImage + (int32_t)tablesIdx[8]);
+    const int32_t* tablesIdx = (int32_t*) tablesImage;
+    const int8_t* dbbiImage = ((const int8_t*)tablesImage + tablesIdx[8]);
         // we know the offset into the memory image where the DBBI stuff
         // starts is stored in element 8 of the array.  There should be
         // a way for the RBBI constructor to give us this, but there's
         // isn't a good one.
-    const void** dbbiIdx = (const void**)dbbiImage;
+    const int32_t* dbbiIdx = (const int32_t*)dbbiImage;
 
     categoryFlags = (int8_t*)((const int8_t*)dbbiImage + (int32_t)dbbiIdx[0]);
 }

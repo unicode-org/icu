@@ -518,7 +518,7 @@ DigitList::initializeLONG_MIN_REP()
     {
         // THIS ASSUMES A 32-BIT LONG_MIN VALUE
         char buf[LONG_DIGITS];
-        sprintf(buf, "%d", LONG_MIN);
+        sprintf(buf, "%d", T_INT32_MIN);
         LONG_MIN_REP_LENGTH = strlen(buf) - 1;
         // assert(LONG_MIN_REP_LENGTH == LONG_DIGITS);
         for (int32_t i=1; i<=LONG_MIN_REP_LENGTH; ++i) LONG_MIN_REP[i-1] = buf[i];

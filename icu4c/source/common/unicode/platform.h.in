@@ -80,17 +80,32 @@ typedef unsigned short uint16_t;
 #endif
 
 #if ! HAVE_INT32_T
-typedef signed long int32_t;
+#   if defined(_LP64)
+      typedef signed int  int32_t;
+#   else
+      typedef signed long int32_t;
+#   endif
 #endif
 
 #if ! HAVE_UINT32_T
-typedef unsigned long uint32_t;
+#   if defined(_LP64)
+      typedef unsigned int  uint32_t;
+#   else
+      typedef unsigned long uint32_t;
+#   endif
 #endif
 
 #endif
 
 #include <limits.h>
-#define T_INT32_MAX (LONG_MAX)
+
+#if defined(_LP64)
+#   define T_INT32_MAX (INT_MAX)
+#   define T_INT32_MIN (INT_MIN)
+#else
+#   define T_INT32_MAX (LONG_MAX)
+#   define T_INT32_MIN (LONG_MIN)
+#endif
 
 /*===========================================================================*/
 /* Character data types                                                      */

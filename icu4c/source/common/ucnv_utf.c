@@ -713,7 +713,7 @@ static const UConverterImpl _UTF8Impl={
 };
 
 extern const UConverterSharedData _UTF8Data={
-    sizeof(UConverterSharedData), ~0,
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF8Impl, "UTF8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
     { 0, 3, 0xef, 0xbf, 0xbd, 0 }
@@ -887,7 +887,7 @@ static const UConverterImpl _UTF16BEImpl={
 };
 
 extern const UConverterSharedData _UTF16BEData={
-    sizeof(UConverterSharedData), ~0,
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF16BEImpl, "UTF16_BigEndian",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
     { 0, 2, 0xff, 0xfd, 0, 0 }
@@ -1065,7 +1065,7 @@ static const UConverterImpl _UTF16LEImpl={
 };
 
 extern const UConverterSharedData _UTF16LEData={
-    sizeof(UConverterSharedData), ~0,
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_UTF16LEImpl, "UTF16_LittleEndian",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
     { 0, 2, 0xfd, 0xff, 0, 0 }

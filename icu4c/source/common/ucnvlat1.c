@@ -161,7 +161,7 @@ static const UConverterImpl _Latin1Impl={
 };
 
 extern const UConverterSharedData _Latin1Data={
-    sizeof(UConverterSharedData), ~0,
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
     NULL, NULL, &_Latin1Impl, "LATIN_1",
     819, UCNV_IBM, UCNV_LATIN_1, 1, 1,
     { 0, 1, 0x1a, 0, 0, 0 }
