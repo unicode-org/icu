@@ -514,20 +514,20 @@ void TestChoiceFormat::TestClosures(void) {
     const double *limits2 = fmt2.getLimits(count2);
     const UBool *closures2 = fmt2.getClosures(count2);
 
-    if(count2 != 6 || !limits2 || !closures2) {
+    if((count2 != 6) || !limits2 || !closures2) {
         errln("FAIL: couldn't get limits or closures");
     } else {
         for(i=0;i<count2;i++) {
-        logln("#%d: limit %g closed %s\n",
-                i,
+          logln("#%d/%d: limit %g closed %s\n",
+                i, count2,
                 limits2[i],
                 closures2[i] ?"T":"F");
-        }
-        if(limits[i] != limits[i]) {
+          if(limits2[i] != limits[i]) {
             errln("FAIL: limit #%d = %g, should be %g\n", i, limits2[i], limits[i]);
-        }
-        if((closures2[i]!=0) != (closures[i]!=0)) {
+          }
+          if((closures2[i]!=0) != (closures[i]!=0)) {
             errln("FAIL: closure #%d = %s, should be %s\n", i, closures2[i]?"T":"F", closures[i]?"T":"F");
+          }
         }
     }
 
