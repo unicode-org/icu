@@ -332,6 +332,10 @@ SOURCE=.\ustring.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustrtrns.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\utf_impl.c
 # End Source File
 # Begin Source File
