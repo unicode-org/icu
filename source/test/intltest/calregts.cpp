@@ -69,6 +69,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(36,TestJ81);
         CASE(37,TestJ438);
         CASE(38,TestLeapFieldDifference);
+        CASE(39,TestMalaysianInstance);
     default: name = ""; break;
     }
 }
@@ -2060,6 +2061,19 @@ void CalendarRegressionTest::TestLeapFieldDifference() {
     } else {
         logln((UnicodeString)"FAIL: large field difference incorrect " + d + ", " + d2 +
               ", expect +/- 13359");
+    }
+    delete cal;
+}
+
+/**
+ * Test ms_MY "Malay (Malaysia)" locale.  Bug 1543.
+ */
+void CalendarRegressionTest::TestMalaysianInstance() {
+    Locale loc("ms", "MY");  // Malay (Malaysia)
+    UErrorCode ec = U_ZERO_ERROR;
+    Calendar* cal = Calendar::createInstance(loc, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Can't construct calendar for ms_MY");
     }
     delete cal;
 }
