@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/12/10 21:47:31 $ 
-* $Revision: 1.8 $
+* $Date: 2002/12/11 19:41:02 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -363,11 +363,10 @@ public interface UProperty
 
     /** 
      * Enumerated property General_Category, returned as a bit mask. 
-     * When used in u_getIntPropertyValue(c), same as U_MASK(u_charType(c)), 
-     * returns bit masks for UCharCategory values where exactly one bit is set. 
-     * When used with u_getPropertyValueName() and u_getPropertyValueEnum(), 
+     * When used in UCharacter.getIntPropertyValue(c),
+     * returns bit masks for UCharacterCategory values where exactly one bit is set. 
+     * When used with UCharacter.getPropertyValueName() and UCharacter.getPropertyValueEnum(), 
      * a multi-bit mask is used for sets of categories like "Letters". 
-     * Mask values should be cast to uint32_t. 
      * @draft ICU 2.4
      */ 
     public static final int GENERAL_CATEGORY_MASK = 0x2000; 

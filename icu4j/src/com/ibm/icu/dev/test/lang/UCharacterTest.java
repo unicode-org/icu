@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/12/10 21:47:31 $ 
-* $Revision: 1.45 $
+* $Date: 2002/12/11 19:41:02 $ 
+* $Revision: 1.46 $
 *
 *******************************************************************************
 */
@@ -1821,7 +1821,7 @@ public final class UCharacterTest extends TestFmwk
             != 0 
             || UCharacter.getIntPropertyMaxValue(
                                                UProperty.GENERAL_CATEGORY_MASK)
-               != (1 << UCharacterCategory.CHAR_CATEGORY_COUNT) -1) {
+               != -1) {
             errln("error: UCharacter.getIntPropertyMin/MaxValue("
                   + "UProperty.GENERAL_CATEGORY_MASK) is wrong");
         }

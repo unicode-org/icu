@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/12/10 21:47:30 $ 
-* $Revision: 1.56 $
+* $Date: 2002/12/11 19:41:02 $ 
+* $Revision: 1.57 $
 *
 *******************************************************************************
 */
@@ -2963,7 +2963,7 @@ public final class UCharacter
      * are a few exceptions: (1.) UProperty.BLOCK values begin at the
      * non-zero value BASIC_LATIN.getID().  (2.)
      * UProperty.CANONICAL_COMBINING_CLASS values are not contiguous
-     * and range from 0..240.  (3.)  UProperty.GENERAL_CATEGORY values
+     * and range from 0..240.  (3.)  UProperty.GENERAL_CATEGORY_MASK values
      * are mask values produced by left-shifting 1 by
      * UCharacter.getType().  This allows grouped categories such as
      * [:L:] to be represented.  Mask values are non-contiguous.
@@ -3779,8 +3779,7 @@ public final class UCharacter
      * @param which UProperty selector constant, identifies which binary 
      *        property to check. Must be 
      *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
-     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT or
-     *        UProperty.MASK_START &lt;= which &lt; UProperty.MASK_LIMIT.
+     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT.
      * @return Minimum value returned by UCharacter.getIntPropertyValue(int) 
      *         for a Unicode property. 0 if the property 
      *         selector is out of range.
@@ -3816,8 +3815,7 @@ public final class UCharacter
      * @param which UProperty selector constant, identifies which binary 
      *        property to check. Must be 
      *        UProperty.BINARY_START &lt;= which &lt; UProperty.BINARY_LIMIT or 
-     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT or
-     *        UProperty.MASK_START &lt;= which &lt; UProperty.MASK_LIMIT.
+     *        UProperty.INT_START &lt;= which &lt; UProperty.INT_LIMIT.
      * @return Maximum value returned by u_getIntPropertyValue for a Unicode 
      *         property. &lt;= 0 if the property selector is out of range.
      * @see UProperty
@@ -3874,9 +3872,6 @@ public final class UCharacter
                 }
                 return max;
             }
-        } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
-            return UCharacterProperty.getMask(
-                                   UCharacterCategory.CHAR_CATEGORY_COUNT) - 1;
         }
         return -1; // undefined
     }
