@@ -803,7 +803,7 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
   if((myTarget_limit < target) || ( (myTarget_limit == NULL) &&
                                     (target != NULL))) {
-    myTarget_limit = (char *)U_MAX_PTR;
+    myTarget_limit = (char *)U_MAX_PTR(target);
   }
 
   args.converter = &myConverter;
@@ -905,11 +905,11 @@ int32_t ucnv_toUChars (const UConverter * converter,
   args.size = sizeof(args);
   if (targetSize > 0)
   {
-      myTarget_limit = target + targetSize - 1;
+      myTarget_limit = target + targetSize;
 
       /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
       if ((myTarget_limit == NULL) || (myTarget_limit < target)) {
-          myTarget_limit = ((UChar*)U_MAX_PTR) - 1; 
+          myTarget_limit = ((UChar*)U_MAX_PTR(target));
       }
 
       /*Not in pure pre-flight mode */

@@ -176,9 +176,11 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 /**
  * \def U_MAX_PTR
  * Maximum value of a (void*) - use to indicate the limit of an 'infinite' buffer.
+ * @param ptr The beginning of a buffer to find the maximum offset from
+ * @internal
  */
 #ifndef U_MAX_PTR
-#define U_MAX_PTR ((void*)-1)
+#define U_MAX_PTR(ptr) ((void*)-1)
 #endif
 
 /*===========================================================================*/
