@@ -133,7 +133,7 @@ void TimeZone::loadZoneData() {
 bool_t U_CALLCONV
 TimeZone::isDataAcceptable(void *context,
                            const char *type, const char *name,
-                           UDataInfo *pInfo) {
+                           const UDataInfo *pInfo) {
     return
         pInfo->size >= sizeof(UDataInfo) &&
         pInfo->isBigEndian == U_IS_BIG_ENDIAN &&

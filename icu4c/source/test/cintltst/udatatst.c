@@ -102,7 +102,7 @@ void TestUDataOpen(){
 static bool_t
 isAcceptable1(void *context,
              const char *type, const char *name,
-             UDataInfo *pInfo) {
+             const UDataInfo *pInfo) {
 	
     if(
         pInfo->size>=20 &&
@@ -134,7 +134,7 @@ isAcceptable1(void *context,
 static bool_t
 isAcceptable2(void *context, 
 			 const char *type, const char *name,
-			 UDataInfo *pInfo){
+			 const UDataInfo *pInfo){
 	if(	pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -157,7 +157,7 @@ isAcceptable2(void *context,
 static bool_t
 isAcceptable3(void *context, 
 			 const char *type, const char *name,
-			 UDataInfo *pInfo){
+			 const UDataInfo *pInfo){
 	
 	if(	pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
@@ -229,7 +229,7 @@ void TestUDataOpenChoiceDemo1() {
 static bool_t
 isAcceptable(void *context, 
 			 const char *type, const char *name,
-			 UDataInfo *pInfo){
+			 const UDataInfo *pInfo){
 	if(	pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&

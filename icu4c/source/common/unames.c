@@ -55,7 +55,7 @@ static UCharNames *uCharNames=NULL;
 static bool_t
 isAcceptable(void *context,
              const char *type, const char *name,
-             UDataInfo *pInfo);
+             const UDataInfo *pInfo);
 
 static uint16_t
 getName(UCharNames *names, uint32_t code, UCharNameChoice nameChoice,
@@ -149,7 +149,7 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
 static bool_t
 isAcceptable(void *context,
              const char *type, const char *name,
-             UDataInfo *pInfo) {
+             const UDataInfo *pInfo) {
     return
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&

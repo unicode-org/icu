@@ -74,7 +74,7 @@ static const uint16_t *aliasTable=NULL;
 static bool_t
 isAcceptable(void *context,
              const char *type, const char *name,
-             UDataInfo *pInfo) {
+             const UDataInfo *pInfo) {
     return
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
