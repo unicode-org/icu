@@ -28,9 +28,17 @@
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
 #include "udataswp.h"
+#include "uoptions.h"
+
+/* swapping implementations in common */
+
 #include "uresdata.h"
 #include "ucnv_io.h"
-#include "uoptions.h"
+#include "uprops.h"
+
+/* swapping implementations in i18n */
+
+/* definitions */
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -248,6 +256,7 @@ static const struct {
 } swapFns[]={
     { { 0x52, 0x65, 0x73, 0x42 }, ures_swap },          /* dataFormat="ResB" */
     /* insert data formats here, descending by expected frequency of occurrence */
+    { { 0x55, 0x50, 0x72, 0x6f }, uprops_swap },        /* dataFormat="UPro" */
     { { 0x43, 0x76, 0x41, 0x6c }, ucnv_swapAliases }    /* dataFormat="CvAl" */
 };
 
