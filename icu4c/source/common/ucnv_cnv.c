@@ -20,6 +20,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uset.h"
 #include "ucnv_cnv.h"
+#include "ucnv_bld.h"
 #include "cmemory.h"
 
 U_CFUNC void

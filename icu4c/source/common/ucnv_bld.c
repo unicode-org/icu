@@ -226,12 +226,16 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
     /* copy initial values from the static structure for this type */
     uprv_memcpy(data, converterData[type], sizeof(UConverterSharedData));
 
+#if 0 /* made UConverterMBCSTable part of UConverterSharedData -- markus 20031107 */
     /*
      * It would be much more efficient if the table were a direct member, not a pointer.
      * However, that would add to the size of all UConverterSharedData objects
      * even if they do not use this table (especially algorithmic ones).
      * If this changes, then the static templates from converterData[type]
      * need more entries.
+     *
+     * In principle, it would be cleaner if the load() function below
+     * allocated the table.
      */
     data->table = (UConverterTable *)uprv_malloc(sizeof(UConverterTable));
     if(data->table == NULL) {
@@ -240,7 +244,8 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
         return NULL;
     }
     uprv_memset(data->table, 0, sizeof(UConverterTable));
-    
+#endif
+
     data->staticData = source;
     
     data->sharedDataCached = FALSE;
@@ -284,6 +289,13 @@ static UConverterSharedData *createConverterFromFile(const char* pkg, const char
         udata_close(data);
         return NULL;
     }
+
+    /*
+     * TODO Store pkg in a field in the shared data so that delta-only converters
+     * can load base converters from the same package.
+     * If the pkg name is longer than the field, then either do not load the converter
+     * in the first place, or just set the pkg field to "".
+     */
 
     return sharedData;
 }
@@ -464,6 +476,66 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
     return TRUE;
 }
 
+/**
+ * Load a non-algorithmic converter.
+ * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
+ */
+UConverterSharedData *
+ucnv_load(const char *pkg, const char *realName, UErrorCode *err) {
+    UConverterSharedData *mySharedConverterData;
+
+    if(err == NULL || U_FAILURE(*err)) {
+        return NULL;
+    }
+
+    if(pkg != NULL && *pkg != 0) {
+        /* application-provided converters are not currently cached */
+        return createConverterFromFile(pkg, realName, err);
+    }
+
+    mySharedConverterData = ucnv_getSharedConverterData(realName);
+    if (mySharedConverterData == NULL)
+    {
+        /*Not cached, we need to stream it in from file */
+        mySharedConverterData = createConverterFromFile(NULL, realName, err);
+        if (U_FAILURE (*err) || (mySharedConverterData == NULL))
+        {
+            return NULL;
+        }
+        else
+        {
+            /* share it with other library clients */
+            ucnv_shareConverterData(mySharedConverterData);
+        }
+    }
+    else
+    {
+        /* The data for this converter was already in the cache.            */
+        /* Update the reference counter on the shared data: one more client */
+        mySharedConverterData->referenceCounter++;
+    }
+
+    return mySharedConverterData;
+}
+
+/**
+ * Unload a non-algorithmic converter.
+ * It must be sharedData->referenceCounter != ~0
+ * and this function must be called inside umtx_lock(&cnvCacheMutex).
+ */
+void
+ucnv_unload(UConverterSharedData *sharedData) {
+    if(sharedData != NULL) {
+        if (sharedData->referenceCounter > 0) {
+            sharedData->referenceCounter--;
+        }
+    
+        if((sharedData->referenceCounter <= 0)&&(sharedData->sharedDataCached == FALSE)) {
+            ucnv_deleteSharedConverterData(sharedData);
+        }
+    }
+}
+
 void
 ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
 {
@@ -471,15 +543,12 @@ ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
     /*
     Double checking doesn't work on some platforms.
     Don't check referenceCounter outside of a mutex block.
+
+    TODO We should be able to check for ~0 outside of the mutex,
+    improving performance for opening and closing of algorithmic converters.
     */
     if (sharedData->referenceCounter != ~0) {
-        if (sharedData->referenceCounter > 0) {
-            sharedData->referenceCounter--;
-        }
-        
-        if((sharedData->referenceCounter <= 0)&&(sharedData->sharedDataCached == FALSE)) {
-            ucnv_deleteSharedConverterData(sharedData);
-        }
+        ucnv_unload(sharedData);
     }
     umtx_unlock(&cnvCacheMutex);
 }
@@ -635,29 +704,12 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         /*   to prevent other threads from modifying the cache during the   */
         /*   process.                                                       */
         umtx_lock(&cnvCacheMutex);
-        mySharedConverterData = ucnv_getSharedConverterData(realName);
-        if (mySharedConverterData == NULL)
-        {
-            /*Not cached, we need to stream it in from file */
-            mySharedConverterData = createConverterFromFile(NULL, realName, err);
-            if (U_FAILURE (*err) || (mySharedConverterData == NULL))
-            {
-                umtx_unlock(&cnvCacheMutex);
-                return NULL;
-            }
-            else
-            {
-                /* share it with other library clients */
-                ucnv_shareConverterData(mySharedConverterData);
-            }
-        }
-        else
-        {
-            /* The data for this converter was already in the cache.            */
-            /* Update the reference counter on the shared data: one more client */
-            mySharedConverterData->referenceCounter++;
-        }
+        mySharedConverterData = ucnv_load(NULL, realName, err);
         umtx_unlock(&cnvCacheMutex);
+        if (U_FAILURE (*err) || (mySharedConverterData == NULL))
+        {
+            return NULL;
+        }
     }
 
     myUConverter = ucnv_createConverterFromSharedData(myUConverter, mySharedConverterData, realName, locale, options, err);
@@ -798,10 +850,11 @@ U_CAPI int32_t U_EXPORT2
 ucnv_flushCache ()
 {
     UConverterSharedData *mySharedData = NULL;
-    int32_t pos = -1;
+    int32_t pos;
     int32_t tableDeletedNum = 0;
     const UHashElement *e;
     UErrorCode status = U_ILLEGAL_ARGUMENT_ERROR;
+    int32_t i, remaining;
 
     /* Close the default converter without creating a new one so that everything will be flushed. */
     ucnv_close(u_getDefaultConverter(&status));
@@ -824,21 +877,34 @@ ucnv_flushCache ()
     *                   is protected by cnvCacheMutex.
     */
     umtx_lock(&cnvCacheMutex);
-    while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
-    {
-        mySharedData = (UConverterSharedData *) e->value.pointer;
-        /*deletes only if reference counter == 0 */
-        if (mySharedData->referenceCounter == 0)
+    /*
+     * double loop: A delta/extension-only converter has a pointer to its base table's
+     * shared data; the first iteration of the outer loop may see the delta converter
+     * before the base converter, and unloading the delta converter may get the base
+     * converter's reference counter down to 0.
+     */
+    i = 0;
+    do {
+        remaining = 0;
+        pos = -1;
+        while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
         {
-            tableDeletedNum++;
+            mySharedData = (UConverterSharedData *) e->value.pointer;
+            /*deletes only if reference counter == 0 */
+            if (mySharedData->referenceCounter == 0)
+            {
+                tableDeletedNum++;
             
-            UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
+                UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
             
-            uhash_removeElement(SHARED_DATA_HASHTABLE, e);
-            mySharedData->sharedDataCached = FALSE;
-            ucnv_deleteSharedConverterData (mySharedData);
+                uhash_removeElement(SHARED_DATA_HASHTABLE, e);
+                mySharedData->sharedDataCached = FALSE;
+                ucnv_deleteSharedConverterData (mySharedData);
+            } else {
+                ++remaining;
+            }
         }
-    }
+    } while(++i == 1 && remaining > 0);
     umtx_unlock(&cnvCacheMutex);
 
     ucnv_io_flushAvailableConverterCache();

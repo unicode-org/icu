@@ -264,13 +264,15 @@ ucnv_extWriteToU(UConverter *cnv, const int32_t *cx,
 
 /*
  * get the SI/SO toU state (state 0 is for SBCS, 1 for DBCS),
+ * or 1 for DBCS-only,
  * or -1 if the converter is not SI/SO stateful
  *
  * Note: For SI/SO stateful converters getting here,
  * cnv->mode==0 is equivalent to firstLength==1.
  */
 #define UCNV_SISO_STATE(cnv) \
-    ((cnv)->sharedData->table->mbcs.outputType==MBCS_OUTPUT_2_SISO ? (int8_t)(cnv)->mode : -1)
+    ((cnv)->sharedData->mbcs.outputType==MBCS_OUTPUT_2_SISO ? (int8_t)(cnv)->mode : \
+     (cnv)->sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY ? 1 : -1)
 
 /*
  * target<targetLimit; set error code for overflow
@@ -376,7 +378,7 @@ ucnv_extContinueMatchToU(UConverter *cnv,
     uint32_t value;
     int32_t match, length;
 
-    match=ucnv_extMatchToU(cnv->sharedData->table->mbcs.extIndexes, (int8_t)UCNV_SISO_STATE(cnv),
+    match=ucnv_extMatchToU(cnv->sharedData->mbcs.extIndexes, (int8_t)UCNV_SISO_STATE(cnv),
                            cnv->preToU, cnv->preToULength,
                            pArgs->source, (int32_t)(pArgs->sourceLimit-pArgs->source),
                            &value,
@@ -394,7 +396,7 @@ ucnv_extContinueMatchToU(UConverter *cnv,
         }
 
         /* write result */
-        ucnv_extWriteToU(cnv, cnv->sharedData->table->mbcs.extIndexes,
+        ucnv_extWriteToU(cnv, cnv->sharedData->mbcs.extIndexes,
                          value,
                          &pArgs->target, pArgs->targetLimit,
                          &pArgs->offsets, srcIndex,
@@ -674,7 +676,7 @@ ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
     const uint8_t *result;
     int32_t length, prevLength;
 
-    length=(int32_t)UCNV_EXT_FROM_U_GET_LENGTH(value);
+    length=UCNV_EXT_FROM_U_GET_LENGTH(value);
     value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(value);
 
     /* output the result */
@@ -756,7 +758,12 @@ ucnv_extInitialMatchFromU(UConverter *cnv, const int32_t *cx,
                              *src, (int32_t)(srcLimit-*src),
                              &value,
                              cnv->useFallback, flush);
-    if(match>=2) {
+
+    /* reject a match if the result is a single byte for DBCS-only */
+    if( match>=2 &&
+        !(UCNV_EXT_FROM_U_GET_LENGTH(value)==1 &&
+          cnv->sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY)
+    ) {
         /* advance src pointer for the consumed input */
         *src+=match-2; /* remove 2 for the initial code point */
 
@@ -815,7 +822,7 @@ ucnv_extSimpleMatchFromU(const int32_t *cx,
         /* write result for simple, single-character conversion */
         int32_t length;
         
-        length=(int32_t)UCNV_EXT_FROM_U_GET_LENGTH(value);
+        length=UCNV_EXT_FROM_U_GET_LENGTH(value);
         value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(value);
 
         if(length<=UCNV_EXT_FROM_U_MAX_DIRECT_LENGTH) {
@@ -856,7 +863,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
     uint32_t value;
     int32_t match;
 
-    match=ucnv_extMatchFromU(cnv->sharedData->table->mbcs.extIndexes,
+    match=ucnv_extMatchFromU(cnv->sharedData->mbcs.extIndexes,
                              cnv->preFromUFirstCP,
                              cnv->preFromU, cnv->preFromULength,
                              pArgs->source, (int32_t)(pArgs->sourceLimit-pArgs->source),
@@ -880,7 +887,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
         cnv->preFromUFirstCP=U_SENTINEL;
 
         /* write result */
-        ucnv_extWriteFromU(cnv, cnv->sharedData->table->mbcs.extIndexes,
+        ucnv_extWriteFromU(cnv, cnv->sharedData->mbcs.extIndexes,
                            value,
                            &pArgs->target, pArgs->targetLimit,
                            &pArgs->offsets, srcIndex,
@@ -939,6 +946,7 @@ ucnv_extGetUnicodeSetString(const UConverter *cnv,
                             const int32_t *cx,
                             USet *set,
                             UConverterUnicodeSet which,
+                            int32_t minLength,
                             UChar32 c,
                             UChar s[UCNV_EXT_MAX_UCHARS], int32_t length,
                             int32_t sectionIndex,
@@ -958,7 +966,7 @@ ucnv_extGetUnicodeSetString(const UConverter *cnv,
 
     if( value!=0 &&
         UCNV_EXT_FROM_U_IS_ROUNDTRIP(value) &&
-        UCNV_EXT_FROM_U_GET_LENGTH(value)>0
+        UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
     ) {
         if(c>=0) {
             /* add the initial code point */
@@ -978,13 +986,13 @@ ucnv_extGetUnicodeSetString(const UConverter *cnv,
             /* no mapping, do nothing */
         } else if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
             ucnv_extGetUnicodeSetString(
-                cnv, cx, set, which,
+                cnv, cx, set, which, minLength,
                 U_SENTINEL, s, length+1,
                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                 pErrorCode);
         } else if(((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
                            UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
-                  UCNV_EXT_FROM_U_GET_LENGTH(value)>0
+                  UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
         ) {
             uset_addString(set, s, length+1);
         }
@@ -1001,13 +1009,13 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
     const uint32_t *stage3b;
 
     uint32_t value;
-    int32_t st1, stage1Length, st2, st3;
+    int32_t st1, stage1Length, st2, st3, minLength;
 
     UChar s[UCNV_EXT_MAX_UCHARS];
     UChar32 c;
     int32_t length;
 
-    cx=cnv->sharedData->table->mbcs.extIndexes;
+    cx=cnv->sharedData->mbcs.extIndexes;
     if(cx==NULL) {
         return;
     }
@@ -1020,6 +1028,13 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
 
     /* enumerate the from-Unicode trie table */
     c=0; /* keep track of the current code point while enumerating */
+
+    if(cnv->sharedData->mbcs.outputType==MBCS_OUTPUT_DBCS_ONLY) {
+        /* DBCS-only, ignore single-byte results */
+        minLength=2;
+    } else {
+        minLength=1;
+    }
 
     /*
      * the trie enumeration is almost the same as
@@ -1048,13 +1063,13 @@ ucnv_extGetUnicodeSet(const UConverter *cnv,
                             length=0;
                             U16_APPEND_UNSAFE(s, length, c);
                             ucnv_extGetUnicodeSetString(
-                                cnv, cx, set, which,
+                                cnv, cx, set, which, minLength,
                                 c, s, length,
                                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                                 pErrorCode);
                         } else if(((value&(UCNV_EXT_FROM_U_ROUNDTRIP_FLAG|UCNV_EXT_FROM_U_RESERVED_MASK))==
                                            UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
-                                  UCNV_EXT_FROM_U_GET_LENGTH(value)>0
+                                  UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
                         ) {
                             uset_add(set, c);
                         }

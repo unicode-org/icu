@@ -20,6 +20,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "ucnv_cnv.h"
+#include "ucnvmbcs.h"
 #include "ucnv_ext.h"
 #include "udataswp.h"
 
@@ -42,7 +44,10 @@ U_CDECL_BEGIN /* We must declare the following as 'extern "C"' so that if ucnv
                  work.
               */
 
-union UConverterTable;
+union UConverterTable {
+    UConverterMBCSTable mbcs;
+};
+
 typedef union UConverterTable UConverterTable;
 
 struct UConverterImpl;
@@ -86,7 +91,7 @@ struct UConverterSharedData {
     uint32_t referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
 
     const void *dataMemory;         /* from udata_openChoice() - for cleanup */
-    UConverterTable *table;         /* Pointer to conversion data */
+    void *table;                    /* Unused. This used to be a UConverterTable - Pointer to conversion data - see mbcs below */
 
     const UConverterStaticData *staticData; /* pointer to the static (non changing) data. */
 
@@ -97,9 +102,23 @@ struct UConverterSharedData {
 
     /*initial values of some members of the mutable part of object */
     uint32_t toUnicodeStatus;
-};
 
-typedef struct UConverterSharedData UConverterSharedData;
+    /*
+     * Shared data structures currently come in two flavors:
+     * - readonly for built-in algorithmic converters
+     * - allocated for MBCS, with a pointer to an allocated UConverterTable
+     *   which always has a UConverterMBCSTable
+     *
+     * To eliminate one allocation, I am making the UConverterMBCSTable
+     * a member of the shared data. It is the last member so that static
+     * definitions of UConverterSharedData work as before.
+     * The table field above also remains to avoid updating all static
+     * definitions, but is now unused.
+     *
+     * markus 2003-nov-07
+     */
+    UConverterMBCSTable mbcs;
+};
 
 /* Defines a UConverter, the lightweight mutable part the user sees */
 
@@ -207,6 +226,21 @@ typedef struct
 UConverterDataLMBCS;
 
 #define CONVERTER_FILE_EXTENSION ".cnv"
+
+/**
+ * Load a non-algorithmic converter.
+ * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
+ */
+UConverterSharedData *
+ucnv_load(const char *pkg, const char *name, UErrorCode *err);
+
+/**
+ * Unload a non-algorithmic converter.
+ * It must be sharedData->referenceCounter != ~0
+ * and this function must be called inside umtx_lock(&cnvCacheMutex).
+ */
+void
+ucnv_unload(UConverterSharedData *sharedData);
 
 /**
  * Swap ICU .cnv conversion tables. See udataswp.h.

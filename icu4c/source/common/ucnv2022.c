@@ -957,23 +957,23 @@ MBCS_FROM_UCHAR32_ISO2022(UConverterSharedData* sharedData,
                                          int outputType)
 {
 
-    const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
+    const uint16_t *table=sharedData->mbcs.fromUnicodeTable;
     uint32_t stage2Entry;
     uint32_t myValue=0;
     const uint8_t *p;
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
-    if(c<0x10000 || (sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+    if(c<0x10000 || (sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
         stage2Entry=MBCS_STAGE_2_FROM_U(table, c);
         /* get the bytes and the length for the output */
         if(outputType==MBCS_OUTPUT_2){
-            myValue=MBCS_VALUE_2_FROM_STAGE_2(sharedData->table->mbcs.fromUnicodeBytes, stage2Entry, c);
+            myValue=MBCS_VALUE_2_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
             if(myValue<=0xff) {
                 *length=1;
             } else {
                 *length=2;
             }
         }else if(outputType==MBCS_OUTPUT_3){
-            p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->table->mbcs.fromUnicodeBytes, stage2Entry, c);
+            p=MBCS_POINTER_3_FROM_STAGE_2(sharedData->mbcs.fromUnicodeBytes, stage2Entry, c);
             myValue=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
             if(myValue<=0xff) {
                 *length=1;
@@ -1016,13 +1016,13 @@ MBCS_SINGLE_FROM_UCHAR32(UConverterSharedData* sharedData,
     const uint16_t *table; 
     int32_t value;
     /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
-    if(c>=0x10000 && !(sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
+    if(c>=0x10000 && !(sharedData->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
         value= -1;
     }
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
-    table=sharedData->table->mbcs.fromUnicodeTable;
+    table=sharedData->mbcs.fromUnicodeTable;
     /* get the byte for the output */
-    value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->table->mbcs.fromUnicodeBytes, c);
+    value=MBCS_SINGLE_RESULT_FROM_U(table, (uint16_t *)sharedData->mbcs.fromUnicodeBytes, c);
     /* is this code point assigned, or do we use fallbacks? */
     if(useFallback ? value>=0x800 : value>=0xc00) {
         value &=0xff;
