@@ -38,9 +38,9 @@ static const char* copyRight =   "/* \n"
                                  " *   Corporation and others.  All Rights Reserved.\n"
                                  " *\n"
                                  " *******************************************************************************\n"
-                                 " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-                                 " * $Date: 2002/03/22 18:57:09 $ \n"
-                                 " * $Revision: 1.6 $ \n"
+                                 " * $""Source: ""$ \n"
+                                 " * $""Date: ""$ \n"
+                                 " * $""Revision: ""$ \n"
                                  " *******************************************************************************\n"
                                  " */\n\n"
                                  "/*******************************************************************************\n"
@@ -258,12 +258,12 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
     memset(buf,0,length);
   
     retVal = uCharsToChars(buf,length,src,srcLen,status);
-    
+    write_tabs(out);
     if(U_FAILURE(*status)){
         return;
     }
     
-    if(retVal > 80 ){
+    if(retVal+(tabCount*4) > 70  ){
         uint32_t len = 0;
         char* current = buf;
         char* str =NULL;
@@ -271,7 +271,7 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
         uint32_t index;
         while(len < retVal){
             index =0;
-            add = 80;
+            add = 70-(tabCount*4)-5/* for ", +\n */;
             current = buf +len;
             index = strrch(current,add,'\\');
             if(current[index+1]=='u'){
@@ -288,7 +288,7 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
             T_FileStream_write(out,"\"",1);
             if(len+add<retVal){
                 T_FileStream_write(out,current,add);
-                T_FileStream_write(out,"\"+\n",3);
+                T_FileStream_write(out,"\" +\n",4);
                 write_tabs(out);
             }else{
                 T_FileStream_write(out,current,retVal-len);
@@ -342,7 +342,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         }
 
         current = res->u.fArray.fFirst;
-         if(allStrings==FALSE){
+        if(allStrings==FALSE){
             char* object = "new Object[]{\n";
             write_tabs(out);
             T_FileStream_write(out, object,uprv_strlen(object));
@@ -355,9 +355,9 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         }
         first=current;
         while (current != NULL) {
-            if(current->fType==RES_STRING){
+            /*if(current->fType==RES_STRING){
                 write_tabs(out);
-            }
+            }*/
             res_write_java(current, status);
             if(U_FAILURE(*status)){
                 return;
@@ -668,12 +668,10 @@ table_write_java(struct SResource *res, UErrorCode *status) {
 
             T_FileStream_write(out,"\"",1);
             T_FileStream_write(out,srBundle->fKeys+current->fKey,uprv_strlen(srBundle->fKeys+current->fKey));
-            T_FileStream_write(out,"\",",2);
+            T_FileStream_write(out,"\",\n",2);
 
-            if(current->fType!=RES_STRING){
-                T_FileStream_write(out,"\n",1);
-            }
-
+            T_FileStream_write(out,"\n",1);
+           
             res_write_java(current, status);
             if(U_FAILURE(*status)){
                 return;
