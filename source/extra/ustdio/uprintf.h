@@ -50,8 +50,6 @@ typedef struct u_printf_spec_info {
   UBool     fIsLongLong;        /* ll flag  */
 } u_printf_spec_info;
 
-typedef struct u_printf_stream_handler u_printf_stream_handler;
-
 typedef int32_t U_EXPORT2
 u_printf_write_stream(void          *context,
                       const UChar   *str,
