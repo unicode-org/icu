@@ -25,7 +25,9 @@ public class LDMLConstants {
     public static final String SPECIAL         = "special";
     public static final String SOURCE          = "source";
     public static final String PATH            = "path";
+    public static final String REGISTRY        = "registry";
     public static final String ALT             = "alt";
+    public static final String DRAFT           = "draft";
     public static final String ALIAS           = "alias";
     public static final String VERSION         = "version";
     public static final String LANGUAGE        = "language";

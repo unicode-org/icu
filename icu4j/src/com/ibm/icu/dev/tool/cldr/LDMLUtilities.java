@@ -18,7 +18,6 @@ import java.io.BufferedReader;
 
 // DOM imports
 import org.apache.xpath.XPathAPI;
-import org.apache.xpath.objects.XObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,15 +44,6 @@ import org.xml.sax.SAXParseException;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class LDMLUtilities {
-
-    private static final String SOURCE = "source";
-    private static final String PATH = "path";
-    private static final String ALT      = "alt";
-    private static final String KEY      = "key";
-    private static final String REGISTRY = "registry";
-    private static final String DRAFT = "draft";
-    private static String TYPE = "type";
-    private static String IDENTITY = "identity";
     
     /**
      * Creates a fully resolved locale starting with root and 
@@ -65,6 +55,11 @@ public class LDMLUtilities {
     	Document full =null;
         try{
         	full = parse(sourceDir+File.separator+ "root.xml");
+            full = resolveAliases(full, sourceDir, "root");
+            NodeList list = full.getElementsByTagName(LDMLConstants.ALIAS);
+            if(list.getLength()>0){
+                System.err.println("Aliases not resolved!. list.getLength() returned "+ list.getLength());
+            }
         }catch(RuntimeException ex){
         	if(!ignoreRoot){
         		throw ex;
@@ -85,14 +80,19 @@ public class LDMLUtilities {
             }else{
             	loc = loc +"_"+ constituents[i];
             }
-             Document doc = null;
+            Document doc = null;
 
             String fileName = sourceDir+File.separator+loc+".xml";
             File file = new File(fileName);
             if(file.exists()){
                 doc = parse(fileName);
-                StringBuffer xpath = new StringBuffer();
-                mergeLDMLDocuments(full, doc, xpath);
+                doc = resolveAliases(doc, sourceDir, loc);
+                if(full==null){
+                    full = doc;
+                }else{
+                    StringBuffer xpath = new StringBuffer();
+                    mergeLDMLDocuments(full, doc, xpath, loc, sourceDir);
+                }
             }else{
                 if(!ignoreUnavailable){
                     throw new RuntimeException("Could not find: " +fileName);
@@ -106,8 +106,8 @@ public class LDMLUtilities {
         throws TransformerException{
         Node context = alias.getParentNode();
         StringBuffer icu = new StringBuffer();
-        String source = getAttributeValue(alias, SOURCE);
-        String xpath = getAttributeValue(alias, PATH);
+        String source = getAttributeValue(alias, LDMLConstants.SOURCE);
+        String xpath = getAttributeValue(alias, LDMLConstants.PATH);
         
         // make sure that the xpaths are valid
         if(namespaceNode==null){
@@ -320,7 +320,8 @@ public class LDMLUtilities {
      * @param overide
      * @return the merged document
      */
-    public static Node mergeLDMLDocuments(Document source, Node overide, StringBuffer xpath){
+    public static Node mergeLDMLDocuments(Document source, Node overide, StringBuffer xpath, 
+                                          String thisName, String sourceDir){
     	if(source==null){
     		return overide;
         }
@@ -381,11 +382,8 @@ public class LDMLUtilities {
             }else{
                 if(areChildrenElementNodes(child)){
                     //recurse to pickup any children!
-                    mergeLDMLDocuments(source, child, xpath);
+                    mergeLDMLDocuments(source, child, xpath, thisName, sourceDir);
                 }else{
-                    if(childName.equals(LDMLConstants.ALIAS)){
-                        //TODO fix this
-                    }
                 	// we have reached a leaf node now get the 
                     // replace to the source doc
                     Node parentNodeInSource = nodeInSource.getParentNode();
@@ -398,14 +396,74 @@ public class LDMLUtilities {
         }
         return source;
     }
-    
+    /**
+     * 
+     * @param doc
+     * @param sourceDir
+     * @param thisLocale
+     */
+    // TODO guard against circular aliases
+    public static Document resolveAliases(Document doc, String sourceDir, String thisLocale){
+       // this is going to be interesting
+       NodeList list =  doc.getElementsByTagName(LDMLConstants.ALIAS);
+       Node[] array = new Node[list.getLength()];
+       for(int i=0; i<list.getLength(); i++){
+           array[i] = list.item(i);
+       }
+       // resolve all the aliases by iterating over
+       // the list of nodes
+       Node replacement = null;
+       Node parent = null;       
+       for(int i=0; i < array.length ; i++){
+           Node node = array[i];
+           if(node==null){
+               System.err.println("list.item("+i+") returned null!. The list reports it's length as: "+list.getLength());
+               //System.exit(-1);
+               continue;
+           }
+           String source = getAttributeValue(node, LDMLConstants.SOURCE);
+           String path = getAttributeValue(node, LDMLConstants.PATH);
+           parent = node.getParentNode();
+           // if source is defined then path should not be 
+           // relative 
+           if(source!=null && !source.equals(thisLocale)){
+               if(path.indexOf("..")>0){
+                   throw new IllegalArgumentException("Cannot parse relative xpath: " + path + 
+                                                      " in locale: "+ source + 
+                                                      " from source locale: "+thisLocale);
+               }
+               // this is a is an absolute XPath
+               Document newDoc = parse(sourceDir + File.separator + source + ".xml" );
+               replacement = getNode(newDoc, path);
+           }else{
+               // path attribute is referencing another node in this DOM tree
+               replacement = getNode(parent, path);
+           }
+           if(replacement != null){
+               parent.removeChild(node); 
+               for(Node child = replacement.getFirstChild(); child!=null; child=child.getNextSibling()){
+                   // found an element node in the aliased resource
+                   // add to the source
+                   Node childToImport = doc.importNode(child,true);
+                   parent.appendChild(childToImport);
+               }
+              
+           }else{
+               throw new IllegalArgumentException("Could not find node for xpath: " + path + 
+                       " in locale: "+ source + 
+                       " from source locale: "+thisLocale);
+
+           }
+       }
+       return doc;
+    }
     //TODO add funtions for fetching legitimate children
     // for ICU 
     public boolean isParentDraft(Document fullyResolved, String xpath){
         Node node = getNode(fullyResolved, xpath);
         Node parentNode ;
         while((parentNode = node.getParentNode())!=null){
-            String draft = getAttributeValue(parentNode, DRAFT);
+            String draft = getAttributeValue(parentNode, LDMLConstants.DRAFT);
             if(draft!=null ){
                 if(draft.equals("true")){
                     return true;
@@ -418,7 +476,7 @@ public class LDMLUtilities {
         return false;
     }
     public boolean isNodeDraft(Node node){
-        String draft = getAttributeValue(node, DRAFT);
+        String draft = getAttributeValue(node, LDMLConstants.DRAFT);
         if(draft!=null ){
             if(draft.equals("true")){
                 return true;
@@ -428,31 +486,51 @@ public class LDMLUtilities {
         }
         return false;
     }
-
+    public boolean isDraft(Node fullyResolved, StringBuffer xpath){
+        Node current = getNode(fullyResolved, xpath.toString());
+        String draft = null;
+        while(current!=null){
+            draft = getAttributeValue(current, LDMLConstants.DRAFT);
+            if(draft!=null){
+                if(draft.equals("true")){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * Appends the attribute values that make differentiate 2 siblings
+     * in LDML
+     * @param node
+     * @param xpath
+     */
     public static void appendXPathAttribute(Node node, StringBuffer xpath){
         boolean terminate = false;
-    	String val = getAttributeValue(node, TYPE);
+    	String val = getAttributeValue(node, LDMLConstants.TYPE);
         if(val!=null){
         	xpath.append("[@type='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
         }
-        val = getAttributeValue(node, ALT);
+        val = getAttributeValue(node, LDMLConstants.ALT);
         if(val!=null){
             xpath.append("and @alt='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
         }
-        val = getAttributeValue(node, KEY);
+        val = getAttributeValue(node, LDMLConstants.KEY);
         if(val!=null){
             xpath.append("and @key='");
             xpath.append(val);
             xpath.append("'");
             terminate = true;
         }
-        val = getAttributeValue(node, REGISTRY);
+        val = getAttributeValue(node, LDMLConstants.REGISTRY);
         if(val!=null){
             xpath.append("and @registry='");
             xpath.append(val);
@@ -463,6 +541,12 @@ public class LDMLUtilities {
         	xpath.append("]");
         }
     }
+    /**
+     * Ascertains if the children of the given node are element
+     * nodes.
+     * @param node
+     * @return
+     */
     public static boolean areChildrenElementNodes(Node node){
         NodeList list = node.getChildNodes();
         for(int i=0;i<list.getLength();i++){
@@ -472,7 +556,12 @@ public class LDMLUtilities {
         }
         return false;  
     }
-    
+    /**
+     * Fetches the list of nodes that match the given xpath
+     * @param doc
+     * @param xpath
+     * @return
+     */
     public static NodeList getNodeList( Document doc, String xpath){
         try{
             return XPathAPI.selectNodeList(doc, xpath);
@@ -481,7 +570,15 @@ public class LDMLUtilities {
             throw new RuntimeException(ex.getMessage());
         }   
     }
-    
+    /**
+     * Fetches the node from the document that matches the given xpath.
+     * The context namespace node is required if the xpath contains 
+     * namespace elments
+     * @param doc
+     * @param xpath
+     * @param namespaceNode
+     * @return
+     */
     public static Node getNode(Document doc, String xpath, Node namespaceNode){
         try{
             NodeList nl = XPathAPI.selectNodeList(doc, xpath, namespaceNode);
@@ -500,29 +597,11 @@ public class LDMLUtilities {
         }
     }
     /**
-     * 
-     * @param doc
+     * Fetches the node from the document which matches the xpath
+     * @param node
      * @param xpath
      * @return
      */
-    public static Node getNode(Document doc, String xpath){
-        try{
-            NodeList nl = XPathAPI.selectNodeList(doc, xpath);
-            int len = nl.getLength();
-            //TODO watch for attribute "alt"
-            if(len>1){
-              throw new IllegalArgumentException("The XPATH returned more than 1 node!. Check XPATH: "+xpath);   
-            }
-            if(len==0){
-            	return null;
-            }
-            return nl.item(0);
-
-        }catch(TransformerException ex){
-        	throw new RuntimeException(ex.getMessage());
-        }
-    }
-    
     public static Node getNode(Node node, String xpath){
         try{
             NodeList nl = XPathAPI.selectNodeList(node, xpath);
@@ -540,6 +619,14 @@ public class LDMLUtilities {
             throw new RuntimeException(ex.getMessage());
         }
     }
+    /**
+     * 
+     * @param context
+     * @param resToFetch
+     * @param fullyResolved
+     * @param xpath
+     * @return
+     */
     public static Node getNode(Node context, String resToFetch, Document fullyResolved, String xpath){
         String ctx = "./"+ resToFetch;
         Node node = getNode(context, ctx);
@@ -550,14 +637,24 @@ public class LDMLUtilities {
         }
         return node;
     }
-    /** Decide if the node is text, and so must be handled specially */
-    static boolean isTextNode(Node n) {
+    /**
+     * Decide if the node is text, and so must be handled specially 
+     * @param n
+     * @return
+     */
+    private static boolean isTextNode(Node n) {
       if (n == null)
         return false;
       short nodeType = n.getNodeType();
       return nodeType == Node.CDATA_SECTION_NODE || nodeType == Node.TEXT_NODE;
     }   
-    
+    /**
+     * Utility method to fetch the attribute value from the given 
+     * element node
+     * @param sNode
+     * @param attribName
+     * @return
+     */
     public static String getAttributeValue(Node sNode, String attribName){
         String value=null;
         Node node = sNode;
@@ -570,6 +667,11 @@ public class LDMLUtilities {
 
         return value;
     }
+    /**
+     * Utility method to fetch the value of the element node
+     * @param node
+     * @return
+     */
     public static String getNodeValue(Node node){
         for(Node child=node.getFirstChild(); child!=null; child=child.getNextSibling() ){
             if(child.getNodeType()==Node.TEXT_NODE){
@@ -747,8 +849,12 @@ public class LDMLUtilities {
             return "file:///" + tmp;
         }
     }
-
-    /** Prints the specified node, recursively. */
+    /**
+     * Debugging method for printing out the DOM Tree
+     * Prints the specified node, recursively. 
+     * @param node
+     * @param out
+     */
     public static void printDOMTree(Node node, PrintWriter out) 
     {
       int type = node.getNodeType();
