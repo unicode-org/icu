@@ -300,7 +300,7 @@ Transliterator* AnyTransliterator::getTransliterator(UScriptCode source) const {
 /**
  * Return the script code for a given name, or -1 if not found.
  */
-UScriptCode AnyTransliterator::scriptNameToCode(const UnicodeString& name) {
+static UScriptCode scriptNameToCode(const UnicodeString& name) {
     char buf[128];
     UScriptCode code;
     UErrorCode ec = U_ZERO_ERROR;

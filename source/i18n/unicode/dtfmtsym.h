@@ -391,29 +391,7 @@ private:
     char validLocale[ULOC_FULLNAME_CAPACITY];
     char actualLocale[ULOC_FULLNAME_CAPACITY];
 
-
-    /* Sizes for the last resort string arrays */
-    typedef enum LastResortSize {
-        kMonthNum = 13,
-        kMonthLen = 3,
-
-        kDayNum = 8,
-        kDayLen = 2,
-
-        kAmPmNum = 2,
-        kAmPmLen = 3,
-
-        kEraNum = 2,
-        kEraLen = 3,
-
-        kZoneNum = 5,
-        kZoneLen = 4
-    } LastResortSize;
-
     DateFormatSymbols(); // default constructor not implemented
-
-    void initField(UnicodeString **field, int32_t& length, const UResourceBundle *data, UErrorCode &status);
-    void initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status);
 
     /**
      * Called by the constructors to actually load data from the resources
