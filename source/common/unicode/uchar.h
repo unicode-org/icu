@@ -552,6 +552,7 @@ u_isprint(UChar32 c);
  */
 U_CAPI bool_t U_EXPORT2
 u_isbase(UChar32 c);
+
 /**
   * Returns the linguistic direction property of a character.
   * <P>
@@ -563,6 +564,36 @@ u_isbase(UChar32 c);
   */
 U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c);
+
+/**
+ * Determines whether the character has the "mirrored" property.
+ * This property is set for characters that are commonly used in
+ * Right-To-Left contexts and need to be displayed with a "mirrored"
+ * glyph.
+ *
+ * @param c the character (code point, Unicode scalar value) to be tested
+ * @return TRUE if the character has the "mirrored" property
+ */
+U_CAPI bool_t U_EXPORT2
+u_isMirrored(UChar32 c);
+
+/**
+ * Maps the specified character to a "mirror-image" character.
+ * For characters with the "mirrored" property, implementations
+ * sometimes need a "poor man's" mapping to another Unicode
+ * character (code point) such that the default glyph may serve
+ * as the mirror-image of the default glyph of the specified
+ * character. This is useful for text conversion to and from
+ * codepages with visual order, and for displays without glyph
+ * selecetion capabilities.
+ *
+ * @param c the character (code point, Unicode scalar value) to be mapped
+ * @return another Unicode code point that may serve as a mirror-image
+ *         substitute, or c itself if there is no such mapping or c
+ *         does not have the "mirrored" property
+ */
+U_CAPI UChar32 U_EXPORT2
+u_charMirror(UChar32 c);
 
 /**
  * Returns a value indicating the display-cell width of the character
