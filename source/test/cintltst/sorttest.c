@@ -23,16 +23,10 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-/* compare only the top 28 bits of int32_t items (bits 3..0 contain the original index) */
-static int32_t U_CALLCONV
-_int32Top28Comparator(const void *context, const void *left, const void *right) {
-    return (*(const int32_t *)left>>4) - (*(const int32_t *)right>>4);
-}
-
 static void
 SortTest(void) {
     uint16_t small[]={ 8, 1, 2, 5, 4, 3, 7, 6 };
-    int32_t medium[]={ 10, 8, 1, 2, 5, 5, 6, 4, 3, 9, 7, 5 };
+    int32_t medium[]={ 10, 8, 1, 2, 5, 5, -1, 6, 4, 3, 9, 7, 5 };
     uint32_t large[]={ 21, 10, 20, 19, 11, 12, 13, 10, 10, 10, 10,
                        8, 1, 2, 5, 10, 10, 4, 17, 18, 3, 9, 10, 7, 6, 14, 15, 16 };
 
@@ -59,7 +53,7 @@ SortTest(void) {
     }
 
     /* sort medium array (stable) */
-    uprv_sortArray(medium, LENGTHOF(medium), sizeof(medium[0]), _int32Top28Comparator, NULL, TRUE, &errorCode);
+    uprv_sortArray(medium, LENGTHOF(medium), sizeof(medium[0]), uprv_int32Comparator, NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("uprv_sortArray(medium) failed - %s\n", u_errorName(errorCode));
         return;
