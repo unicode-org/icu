@@ -170,27 +170,27 @@ const UConverterSharedData _ISCIIData={
 };
 
 typedef struct{
-    UChar contextCharToUnicode;     /* previous Unicode codepoint for contextual analysis */
-    UChar contextCharFromUnicode;   /* previous Unicode codepoint for contextual analysis */
-    int32_t defDeltaToUnicode;      /* delta for switching to default state when DEF is encountered  */ 
-    int32_t currentDeltaFromUnicode;/* current delta in Indic block */
-    int32_t currentDeltaToUnicode;  /* current delta in Indic block */  
-    MaskEnum currentMaskFromUnicode;/* mask for current state in toUnicode */
-    MaskEnum currentMaskToUnicode;  /* mask for current state in toUnicode */
-    MaskEnum defMaskToUnicode;      /* mask for default state in toUnicode */
+    UChar contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
+    UChar contextCharFromUnicode;    /* previous Unicode codepoint for contextual analysis */
+    uint16_t defDeltaToUnicode;      /* delta for switching to default state when DEF is encountered  */ 
+    uint16_t currentDeltaFromUnicode;/* current delta in Indic block */
+    uint16_t currentDeltaToUnicode;  /* current delta in Indic block */  
+    MaskEnum currentMaskFromUnicode; /* mask for current state in toUnicode */
+    MaskEnum currentMaskToUnicode;   /* mask for current state in toUnicode */
+    MaskEnum defMaskToUnicode;       /* mask for default state in toUnicode */
     UBool isFirstBuffer;            
 }UConverterDataISCII; 
 
 uint16_t lookupInitialData[][3]={
-    DEVANAGARI,DEV_MASK,DEV,
-    BENGALI,BNG_MASK,BNG,
-    GURMUKHI,PNJ_MASK,PNJ,
-    GUJARATI,GJR_MASK,GJR,
-    ORIYA,ORI_MASK,ORI,
-    TAMIL,TML_MASK,TML,
-    TELUGU,TLG_MASK,TLG,
-    KANNADA,TLG_MASK,KND,
-    MALAYALAM,MLM_MASK,MLM,
+    { DEVANAGARI,DEV_MASK,DEV },
+    { BENGALI,BNG_MASK,BNG },
+    { GURMUKHI,PNJ_MASK,PNJ },
+    { GUJARATI,GJR_MASK,GJR },
+    { ORIYA,ORI_MASK,ORI },
+    { TAMIL,TML_MASK,TML },
+    { TELUGU,TLG_MASK,TLG },
+    { KANNADA,TLG_MASK,KND },
+    { MALAYALAM,MLM_MASK,MLM }
 };
     
 static void 
@@ -202,10 +202,11 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
         converterData->contextCharFromUnicode=0x0000;
 
         if((options & UCNV_OPTIONS_VERSION_MASK) < 9){
-            converterData->defDeltaToUnicode=
-                    lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK][0] * DELTA;
+            
             converterData->currentDeltaFromUnicode=converterData->currentDeltaToUnicode=
-                 lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK][0] * DELTA;
+            converterData->defDeltaToUnicode=
+                    (uint16_t)(lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK][0] * DELTA);
+
             converterData->currentMaskFromUnicode = converterData->currentMaskToUnicode = 
             converterData->defMaskToUnicode=lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK][1];
             
@@ -812,8 +813,8 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     UConverterCallbackReason reason;
     UBool useFallback;
     UConverterDataISCII *converterData;
-    int range = 0;
-    int newDelta=0;
+    uint16_t range = 0;
+    uint16_t newDelta=0;
     UBool deltaChanged = FALSE;
     /*Arguments Check*/
     if (U_FAILURE(*err)){ 
@@ -823,7 +824,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-
+    /* initialize data */
     converterData=(UConverterDataISCII*)args->converter->extraInfo;
     useFallback = args->converter->useFallback;
 
@@ -858,6 +859,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
         }
         switch(sourceChar){
         case ZWNJ:
+            /* contextChar has HALANT */
             if(converterData->contextCharFromUnicode){
                 converterData->contextCharFromUnicode = 0x00;
                 targetByteUnit = ISCII_HALANT;
@@ -867,6 +869,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
             }
             break;
         case ZWJ:
+            /* contextChar has HALANT */
             if(converterData->contextCharFromUnicode){
                 targetByteUnit = ISCII_NUKTA;               
             }else{
@@ -878,8 +881,8 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
             /* is the sourceChar in the INDIC_RANGE? */
             if(INDIC_BLOCK_END-sourceChar <= INDIC_RANGE){
                 /* find out to which block the souceChar belongs*/ 
-                range = (sourceChar-INDIC_BLOCK_BEGIN)/DELTA;
-                newDelta =range*DELTA;
+                range =(uint16_t)((sourceChar-INDIC_BLOCK_BEGIN)/DELTA);
+                newDelta =(uint16_t)(range*DELTA);
 
                 /* Now are we in the same block as the previous? */
                 if(newDelta!= converterData->currentDeltaFromUnicode || converterData->isFirstBuffer){
@@ -911,8 +914,8 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                      * previous sourceChar's script block write ATR and language codes 
                      */
                     uint16_t temp=0;              
-                    temp = ATR<<8;
-                    temp += (uint8_t) lookupInitialData[range][2];
+                    temp =(uint16_t)(ATR<<8);
+                    temp += (uint16_t)((uint8_t) lookupInitialData[range][2]);
                     /* reset */
                     deltaChanged=FALSE;
                     /* now append ATR and language code */
@@ -1105,7 +1108,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     uint32_t targetUniChar = 0x0000;
     uint32_t sourceChar = 0x0000;
     UConverterDataISCII* data;
-    int32_t* offsets = args->offsets;
+
     /*Arguments Check*/
     if (U_FAILURE(*err)){ 
         return;
@@ -1142,7 +1145,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
              */
             if(data->contextCharToUnicode==ATR){
                 if(PNJ-sourceChar<=PNJ-DEV){
-                    data->currentDeltaToUnicode = lookupTable[sourceChar & 0x0F][0] * DELTA;
+                    data->currentDeltaToUnicode = (uint16_t)(lookupTable[sourceChar & 0x0F][0] * DELTA);
                     data->currentMaskToUnicode = lookupTable[sourceChar & 0x0F][1] ;
                 }
                 else if( sourceChar==RMN || sourceChar==DEF){
@@ -1170,8 +1173,8 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                        data->contextCharToUnicode != DANDA &&
                        data->contextCharToUnicode != DOUBLE_DANDA
                        ){ 
-                        
-                        data->contextCharToUnicode+= (UChar)data->currentDeltaToUnicode; 
+                        /* add script delta to context char */
+                        data->contextCharToUnicode+= (uint16_t)(data->currentDeltaToUnicode); 
                     }
                     WRITE_TO_TARGET_ToU(args,source,target,args->offsets,(source-args->source -2),
                                 data->contextCharToUnicode,err);
@@ -1180,6 +1183,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 data->contextCharToUnicode = (UChar)sourceChar;
                 continue;
             case ISCII_DANDA:
+                /* handle double danda*/
                 if(data->contextCharToUnicode== DANDA){
                     targetUniChar = DOUBLE_DANDA;
                     data->contextCharToUnicode= NO_CHAR_MARKER;
@@ -1246,7 +1250,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                        data->contextCharToUnicode != DANDA &&
                        data->contextCharToUnicode != DOUBLE_DANDA){ 
                         
-                        data->contextCharToUnicode+=(UChar)data->currentDeltaToUnicode; 
+                        data->contextCharToUnicode+=(uint16_t)(data->currentDeltaToUnicode); 
                 }
                 WRITE_TO_TARGET_ToU(args,source,target,args->offsets,(source-args->source -2),
                                 data->contextCharToUnicode,err);
@@ -1276,6 +1280,9 @@ CALLBACK:
                     if(targetUniChar == missingCharMarker){
                         reason = UCNV_UNASSIGNED;
                         *err = U_INVALID_CHAR_FOUND;
+                    }else{
+                        reason = UCNV_ILLEGAL;
+                        *err = U_ILLEGAL_CHAR_FOUND;
                     }
 
                     if(args->offsets){
@@ -1316,20 +1323,24 @@ CALLBACK:
         }
     }
     if((args->flush==TRUE)
-        && (source == sourceLimit) 
-        && data->contextCharToUnicode !=0){
-        /* add offset to current Indic block */
-        if(data->contextCharToUnicode>0x7f &&
-           data->contextCharToUnicode != ZWNJ &&
-           data->contextCharToUnicode != ZWNJ &&
-           data->contextCharToUnicode != DANDA &&
-           data->contextCharToUnicode != DOUBLE_DANDA){ 
-            
-            data->contextCharToUnicode+= (UChar) data->currentDeltaToUnicode; 
+            && (source == sourceLimit) 
+            && data->contextCharToUnicode !=0){
+        /* if we have ATR in context it is an error */
+        if(data->contextCharToUnicode==ATR){
+            *err = U_TRUNCATED_CHAR_FOUND;
+        }else{
+            /* add offset to current Indic Block */
+            if(data->contextCharToUnicode>0x7f &&
+                   data->contextCharToUnicode != ZWNJ &&
+                   data->contextCharToUnicode != ZWNJ &&
+                   data->contextCharToUnicode != DANDA &&
+                   data->contextCharToUnicode != DOUBLE_DANDA){ 
+                
+                    data->contextCharToUnicode+=(uint16_t)data->currentDeltaToUnicode; 
+            }
+            WRITE_TO_TARGET_ToU(args,source,target,args->offsets,(source-args->source - 1),
+                            data->contextCharToUnicode,err);
         }
-        WRITE_TO_TARGET_ToU(args,source,target,args->offsets,(source-args->source -1),
-                                data->contextCharToUnicode,err);
-
 
     }
     /* Reset the state of converter if we consumed 
