@@ -488,6 +488,7 @@ public:
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
+#if !UCONFIG_NO_SERVICE
     /**
      * Register a new NumberFormatFactory.  The factory will be adopted.
      * @param toAdopt the NumberFormatFactory instance to be adopted
@@ -515,6 +516,7 @@ public:
      * @draft ICU 2.6
      */
     static StringEnumeration* getAvailableLocales(void);
+#endif /* UCONFIG_NO_SERVICE */
 
     /**
      * Returns true if grouping is used in this format. For example,
@@ -753,6 +755,7 @@ private:
     friend class ICUNumberFormatService;
 };
 
+#if !UCONFIG_NO_SERVICE
 /**
  * A NumberFormatFactory is used to register new number formats.  The factory
  * should be able to create any of the predefined formats for each locale it
@@ -838,7 +841,7 @@ public:
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const;
 };
-
+#endif /* #if !UCONFIG_NO_SERVICE */
 
 // -------------------------------------
 

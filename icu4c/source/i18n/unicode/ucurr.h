@@ -12,11 +12,6 @@
 #if !UCONFIG_NO_FORMATTING
 
 /**
- * @internal
- */
-typedef const void* UCurrRegistryKey;
-
-/**
  * The ucurr API encapsulates information about a currency, as defined by
  * ISO 4217.  A currency is represented by a 3-character string
  * containing its ISO 4217 code.  This API can return various data
@@ -76,6 +71,12 @@ typedef enum UCurrNameStyle {
     UCURR_LONG_NAME
 } UCurrNameStyle;
 
+#if !UCONFIG_NO_SERVICE
+/**
+ * @internal
+ */
+typedef const void* UCurrRegistryKey;
+
 /**
  * Register an (existing) ISO 4217 currency code for the given locale.
  * Only the country code and the two variants EURO and PRE_EURO are
@@ -88,7 +89,7 @@ typedef enum UCurrNameStyle {
  * @draft ICU 2.6
  */
 U_DRAFT UCurrRegistryKey U_EXPORT2
-    ucurr_register(const UChar* isoCode, 
+ucurr_register(const UChar* isoCode, 
                    const char* locale,  
                    UErrorCode* status);
 /**
@@ -103,7 +104,8 @@ U_DRAFT UCurrRegistryKey U_EXPORT2
  * @draft ICU 2.6
  */
 U_DRAFT UBool U_EXPORT2
-    ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
+ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
+#endif /* UCONFIG_NO_SERVICE */
 
 /**
  * Returns the display name for the given currency in the
