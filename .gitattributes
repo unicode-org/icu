@@ -130,7 +130,6 @@ icu4c/source/samples/XMLConverter/samples/smalljis.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/test.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/testit.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/utf8-sm_jis.xml svneol=native#text/xml
-icu4c/source/samples/XMLConverter/samples/weekly.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/x.xml svneol=native#text/xml
 icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/uni-text.txt -text
