@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include "unicode/uloc.h"
 #include "unicode/umsg.h"
 #include "unicode/udat.h"
@@ -88,6 +89,16 @@ static void FreeStrings( void )
     strings_initialized = FALSE;
 }
 
+/* Platform dependent test to detect if this type will return NULL when interpreted as a pointer. */
+static UBool returnsNullForType(int firstParam, ...) {
+    UBool isNULL;
+    va_list marker;
+    va_start(marker, firstParam);
+    isNULL = (UBool)(va_arg(marker, void*) == NULL);
+    va_end(marker);
+    return isNULL;
+}
+
 /* Test u_formatMessage() with various test patterns() */
 static void MessageFormatTest( void ) 
 {
@@ -103,7 +114,7 @@ static void MessageFormatTest( void )
     u_uastrncpy(str, "MyDisk", 7);
     resultlength=1;
     result=(UChar*)malloc(sizeof(UChar) * 1);
-    log_verbose("Testing u_formatMessage90\n");
+    log_verbose("Testing u_formatMessage()\n");
     InitStrings();
     for (i = 0; i < cnt_testCases; i++) {
         status=U_ZERO_ERROR;
@@ -209,20 +220,25 @@ static void MessageFormatTest( void )
                         austrdup(result), austrdup(testResultStrings[i]) );
                 }
 
-#if !defined(U_HPUX)
-                /* HP/UX and possibly other platforms don't properly check for this case.
-                   We pass in a UDate, but the function expects a UDate *.  When va_arg is used,
-                   most compilers will return NULL, but HP-UX won't do that and will return 2
-                   in this case.  This is a platform dependent test.
-                */
-                umsg_parse(formatter,result,resultLength,&count,&ec,one,two,d2);
-                if(ec!=U_ILLEGAL_ARGUMENT_ERROR){
-                    log_err("FAIL: Did not get expected error for umsg_parse(). Expected: U_ILLEGAL_ARGUMENT_ERROR Got: %s \n",u_errorName(ec));
-                }else{
-                    ec = U_ZERO_ERROR;
+                if (returnsNullForType(1, (double)2.0)) {
+                    /* HP/UX and possibly other platforms don't properly check for this case.
+                    We pass in a UDate, but the function expects a UDate *.  When va_arg is used,
+                    most compilers will return NULL, but HP-UX won't do that and will return 2
+                    in this case.  This is a platform dependent test.
+
+                    This relies upon "undefined" behavior, as indicated by C99 7.15.1.1 paragraph 2
+                    */
+                    umsg_parse(formatter,result,resultLength,&count,&ec,one,two,d2);
+                    if(ec!=U_ILLEGAL_ARGUMENT_ERROR){
+                        log_err("FAIL: Did not get expected error for umsg_parse(). Expected: U_ILLEGAL_ARGUMENT_ERROR Got: %s \n",u_errorName(ec));
+                    }else{
+                        ec = U_ZERO_ERROR;
+                    }
+                }
+                else {
+                    log_verbose("Warning: Returning NULL for a mismatched va_arg type isn't supported on this platform.\n", i);
                 }
 
-#endif            
                 umsg_parse(formatter,result,resultLength,&count,&ec,&one,&two,&d2);
                 if(U_FAILURE(ec)){
                     log_err("umsg_parse could not parse the pattern. Error: %s.\n",u_errorName(ec));
