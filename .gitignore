@@ -14,12 +14,14 @@ icu4c/data/word.brk
 icu4c/data/word_th.brk
 icu4c/debian
 icu4c/debian/*.debhelper
+icu4c/debian/*.substvars
 icu4c/debian/*files
 icu4c/debian/docs
 icu4c/debian/icu
 icu4c/debian/icu-data
 icu4c/debian/icu-i18ndata
 icu4c/debian/icu-locales
+icu4c/debian/icu.postinst
 icu4c/debian/libicu16
 icu4c/debian/tmp
 icu4c/source/Makefile

@@ -22,14 +22,22 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
-ICU_DATA=@datadir@/@PACKAGE@/@VERSION@
-export ICU_DATA
-
 case "$1" in
     configure)
-	if ! -f $ICU_DATA/cnvalias.dat -o /etc/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
+	prefix=@prefix@
+
+	# Set ICU_DATA for ease of testing files. It is not necessary to
+	# export it as we are guaranteed that the binaries we invoke will
+	# use the right directory. But we're not taking chances with the
+	# future :)
+
+	ICU_DATA=@datadir@/@PACKAGE@/@VERSION@
+	export ICU_DATA
+
+	if test ! -f $ICU_DATADIR/cnvalias.dat -o @sysconfdir@/icu/convrtrs.txt -nt $ICU_DATADIR/cnvalias.dat
 	then
-	    /usr/sbin/gencnval /etc/icu/convrtrs.txt
+	    echo Compiling converters and aliases list from @sysconfdir@/icu/convrtrs.txt
+	    /usr/sbin/gencnval @sysconfdir@/icu/convrtrs.txt
 	fi
     ;;
 
@@ -49,4 +57,5 @@ esac
 #DEBHELPER#
 
 exit 0
+
 
