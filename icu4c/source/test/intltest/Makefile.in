@@ -23,7 +23,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET = intltest
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n  -DU_SRCDATADIR=\"$(top_srcdir)/../data/\"
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/toolutil -DU_SRCDATADIR=\"$(top_srcdir)/../data/\"
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
@@ -32,8 +32,8 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$$$(LDLIBRARYPATH_ENVVAR)
-LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
 OBJECTS = allcoll.o apicoll.o callimts.o calregts.o caltest.o		\
 caltztst.o citrtest.o cppcnvt.o cputilst.o currcoll.o dacoll.o		\
