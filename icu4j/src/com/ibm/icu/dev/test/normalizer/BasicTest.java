@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/04/09 20:03:44 $
- * $Revision: 1.26 $
+ * $Date: 2003/04/09 21:38:17 $
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,6 @@ import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
@@ -2516,8 +2515,7 @@ public class BasicTest extends TestFmwk {
        
        
        /* build NF*Skippable sets from runtime data */
-       UCharacterProperty props = UCharacterProperty.getInstance();
-       props.addPropertyStarts(starts);
+       NormalizerImpl.addPropertyStarts(starts);
        count=starts.getRangeCount();
    
        start=limit=0;

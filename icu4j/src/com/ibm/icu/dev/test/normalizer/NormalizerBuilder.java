@@ -1,8 +1,6 @@
 package com.ibm.icu.dev.test.normalizer;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.BitSet;
 
 import com.ibm.icu.dev.test.TestUtil;
