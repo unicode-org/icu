@@ -102,6 +102,8 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
 static const UDate EARLIEST_SUPPORTED_MILLIS = - 4503599627370495.0;
 static const UDate LATEST_SUPPORTED_MILLIS    =   4503599627370495.0;
 
+static const int32_t kGregorianShift = 10;// days  (TODO: make this handle non-1582 cutover)
+static const int32_t kGregorianWeekShift = 2;// weeks
 /*
  * <pre>
  *                            Greatest       Least 
@@ -372,24 +374,17 @@ void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& statu
     return; 
   }
 
+#if defined (U_DEBUG_CAL)
+    fprintf(stderr, "%s:%d: jd%d- (greg's %d)- [cut=%d]\n", 
+            __FILE__, __LINE__, julianDay, getGregorianDayOfYear(), fCutoverJulianDay);
+#endif
+
+
   if (julianDay >= fCutoverJulianDay) {
     month = getGregorianMonth();
     dayOfMonth = getGregorianDayOfMonth();
     dayOfYear = getGregorianDayOfYear();
     eyear = getGregorianYear();
-
-    // re apply greg shift to doy .. in the cutover year
-    if(eyear == fGregorianCutoverYear) {
-      // from handleComputeMonthStart
-      int32_t y = eyear-1;
-      int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
-#if defined (U_DEBUG_CAL)
-      fprintf(stderr, "%s:%d:  gregorian shift %d :::  doy%d => %d\n",
-              __FILE__, __LINE__,gregShift, dayOfYear, dayOfYear+gregShift);
-#endif
-
-      dayOfYear += gregShift;
-    }
   } else {
     // The Julian epoch day (not the same as Julian Day)
     // is zero on Saturday December 30, 0 (Gregorian).
@@ -423,11 +418,24 @@ void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& statu
 //                   __FILE__, __LINE__,julianDay,
 // 			eyear,month,dayOfMonth,
 // 			getGregorianYear(), getGregorianMonth(), getGregorianDayOfMonth()  );
-    fprintf(stderr, "%s:%d: doy %d (greg's %d)\n", 
-            __FILE__, __LINE__, dayOfYear, getGregorianDayOfYear());
+    fprintf(stderr, "%s:%d: doy %d (greg's %d)- [cut=%d]\n", 
+            __FILE__, __LINE__, dayOfYear, getGregorianDayOfYear(), fCutoverJulianDay);
 #endif
 
   }
+
+  // [j81] if we are after the cutover in its year, shift the day of the year
+  if((eyear == fGregorianCutoverYear) && (julianDay >= fCutoverJulianDay)) {
+    //from handleComputeMonthStart
+    int32_t y = eyear-1;
+    int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+#if defined (U_DEBUG_CAL)
+    fprintf(stderr, "%s:%d:  gregorian shift %d :::  doy%d => %d [cut=%d]\n",
+            __FILE__, __LINE__,gregShift, dayOfYear, dayOfYear+gregShift, fCutoverJulianDay);
+#endif
+    dayOfYear += gregShift;
+  }
+
   internalSet(UCAL_MONTH, month);
   internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
   internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
@@ -470,32 +478,57 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)
 
   int32_t jd = Calendar::handleComputeJulianDay(bestField);
 
+  if((bestField == UCAL_WEEK_OF_YEAR) &&  // if we are doing WOY calculations, we are counting relative to Jan 1 *julian*
+     (internalGet(UCAL_EXTENDED_YEAR)==fGregorianCutoverYear) && 
+     jd >= fCutoverJulianDay) { 
+    fInvertGregorian = TRUE;  // So that the Julian Jan 1 will be used in handleComputeMonthStart
+    return Calendar::handleComputeJulianDay(bestField);
+  }
+
+
   // The following check handles portions of the cutover year BEFORE the
   // cutover itself happens.
+  //if ((fIsGregorian==TRUE) != (jd >= fCutoverJulianDay)) {  /*  cutoverJulianDay)) { */
   if ((fIsGregorian==TRUE) != (jd >= fCutoverJulianDay)) {  /*  cutoverJulianDay)) { */
 #if defined (U_DEBUG_CAL)
-    fprintf(stderr, "%s:%d: jd was %d\n", 
+    fprintf(stderr, "%s:%d: jd [invert] %d\n", 
             __FILE__, __LINE__, jd);
 #endif
     fInvertGregorian = TRUE;
     jd = Calendar::handleComputeJulianDay(bestField);
 #if defined (U_DEBUG_CAL)
-    fprintf(stderr, "%s:%d: jd NOW %d\n", 
-            __FILE__, __LINE__, jd);
+    fprintf(stderr, "%s:%d:  fIsGregorian %s, fInvertGregorian %s - ", 
+            __FILE__, __LINE__,fIsGregorian?"T":"F", fInvertGregorian?"T":"F");
+   fprintf(stderr, " jd NOW %d\n", 
+           jd);
 #endif
-  }
-
-  if(fIsGregorian && (bestField == UCAL_DAY_OF_YEAR || bestField == UCAL_WEEK_OF_YEAR) && (internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear)) {
-    int32_t y = internalGet(UCAL_EXTENDED_YEAR)-1;
-    int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+  } else {
 #if defined (U_DEBUG_CAL)
-    fprintf(stderr, "%s:%d: gregorian shift of %d += %d\n", 
-            __FILE__, __LINE__, jd, gregShift);
+    fprintf(stderr, "%s:%d: jd [==] %d - %sfIsGregorian %sfInvertGregorian, %d\n", 
+            __FILE__, __LINE__, jd, fIsGregorian?"T":"F", fInvertGregorian?"T":"F", bestField);
 #endif
-    jd += gregShift;
   }
   
-  return jd;  
+  if(fIsGregorian && (internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear)) {
+    int32_t y = internalGet(UCAL_EXTENDED_YEAR)-1;
+    int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+    if (bestField == UCAL_DAY_OF_YEAR) {
+#if defined (U_DEBUG_CAL)
+      fprintf(stderr, "%s:%d: [DOY%d] gregorian shift of JD %d += %d\n", 
+              __FILE__, __LINE__, fFields[bestField],jd, gregShift);
+#endif
+      jd -= gregShift;
+    } else if ( bestField == UCAL_WEEK_OF_MONTH ) {
+      int32_t weekShift = 14;
+#if defined (U_DEBUG_CAL)
+      fprintf(stderr, "%s:%d: [WOY/WOM] gregorian week shift of %d += %d\n", 
+              __FILE__, __LINE__, jd, weekShift);
+#endif
+      jd += weekShift; // shift by weeks for week based fields.
+    }
+  }
+  
+  return jd;
 }
 
 int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
@@ -515,6 +548,10 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
     int32_t julianDay = 365*y + Math::floorDivide(y, 4) + (kJan1_1JulianDay - 3);
 
     nonConstThis->fIsGregorian = (eyear >= fGregorianCutoverYear);
+#if defined (U_DEBUG_CAL)
+    fprintf(stderr, "%s:%d: (hcms%d/%d) fIsGregorian %s, fInvertGregorian %s\n", 
+            __FILE__, __LINE__, eyear,month, fIsGregorian?"T":"F", fInvertGregorian?"T":"F");
+#endif
     if (fInvertGregorian) {
         nonConstThis->fIsGregorian = !fIsGregorian;
     }
@@ -524,8 +561,8 @@ int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
         // Julian calendar
         int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
 #if defined (U_DEBUG_CAL)
-        fprintf(stderr, "%s:%d: gregorian shift of %d += %d\n", 
-                __FILE__, __LINE__, julianDay, gregShift);
+        fprintf(stderr, "%s:%d: (hcms%d/%d) gregorian shift of %d += %d\n", 
+                __FILE__, __LINE__, eyear, month, julianDay, gregShift);
 #endif
         julianDay += gregShift;
     }
@@ -584,7 +621,6 @@ GregorianCalendar::yearLength() const
 
 // -------------------------------------
 
-#if 0
 /**
  * Overrides Calendar
  * corrects for Gregorian shift
@@ -598,6 +634,7 @@ GregorianCalendar::computeFields(UErrorCode& ec) {
         return;
     }
     
+#if 0
     /* compensate for gregorian  cutover */
     if((internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear) &&
        fFields[UCAL_JULIAN_DAY] >= fCutoverJulianDay) {
@@ -605,12 +642,11 @@ GregorianCalendar::computeFields(UErrorCode& ec) {
       fprintf(stderr, "%s:%d: cf - gregorian cutover issue!\n", 
               __FILE__, __LINE__);
 #endif
-      
-      //fFields[UCAL_WEEK_OF_YEAR] -= 2;
-      //fFields[UCAL_DAY_OF_YEAR] -= 10;
+      fFields[UCAL_DAY_OF_YEAR] -= kGregorianShift;
+      fFields[UCAL_WEEK_OF_YEAR] -= kGregorianWeekShift;
     }
-}
 #endif
+}
 
 // -------------------------------------
 
@@ -815,6 +851,37 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
   if((amount == 0) || U_FAILURE(status)) {
     return;
   }
+
+  // J81 processing. (gregorian cutover)
+  UBool inCutoverMonth = FALSE;
+  int32_t cMonthLen; // 'c' for cutover; in days
+  int32_t cDayOfMonth; // no discontinuity: [0, cMonthLen)
+  double cMonthStart; // in ms
+
+  // Common code - see if we're in the cutover month of the cutover year
+  if(internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear) {
+    switch (field) {
+    case UCAL_DAY_OF_MONTH:
+    case UCAL_WEEK_OF_MONTH:
+      {
+        int32_t max = monthLength(internalGet(UCAL_MONTH));
+        UDate t = internalGetTime();
+        // We subtract 1 from the DAY_OF_MONTH to make it zero-based, and an
+        // additional 10 if we are after the cutover. Thus the monthStart
+        // value will be correct iff we actually are in the cutover month.
+        cDayOfMonth = internalGet(UCAL_DAY_OF_MONTH) - ((t >= fGregorianCutover) ? 10 : 0);
+        cMonthStart = t - ((cDayOfMonth - 1) * kOneDay);
+        // A month containing the cutover is 10 days shorter.
+        if ((cMonthStart < fGregorianCutover) &&
+            (cMonthStart + (cMonthLen=(max-10))*kOneDay >= fGregorianCutover)) {
+          inCutoverMonth = TRUE;
+        }
+      }
+    default:
+      ;
+    }
+  }
+
   switch (field) {
   case UCAL_WEEK_OF_YEAR: {
     // Unlike WEEK_OF_MONTH, WEEK_OF_YEAR never shifts the day of the
@@ -859,6 +926,138 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
     set(UCAL_YEAR_WOY,isoYear);
     return;
   }
+
+  case UCAL_DAY_OF_MONTH:
+    if( !inCutoverMonth ) { 
+      Calendar::roll(field, amount, status);
+      return;
+    } else {
+      // [j81] 1582 special case for DOM
+      // The default computation works except when the current month
+      // contains the Gregorian cutover.  We handle this special case
+      // here.  [j81 - aliu]
+      double monthLen = cMonthLen * kOneDay;
+      double msIntoMonth = uprv_fmod(internalGetTime() - cMonthStart +
+                                     amount * kOneDay, monthLen);
+      if (msIntoMonth < 0) {
+        msIntoMonth += monthLen;
+      }
+#if defined (U_DEBUG_CAL)
+      fprintf(stderr, "%s:%d: roll DOM %d  -> %.0lf ms  \n", 
+              __FILE__, __LINE__,amount, cMonthLen, cMonthStart+msIntoMonth);
+#endif
+      setTimeInMillis(cMonthStart + msIntoMonth, status);
+      return;
+    }
+
+  case UCAL_WEEK_OF_MONTH:
+    if( !inCutoverMonth ) { 
+      Calendar::roll(field, amount, status);
+      return;
+    } else {
+#if defined (U_DEBUG_CAL)
+      fprintf(stderr, "%s:%d: roll WOM %d ??????????????????? \n", 
+              __FILE__, __LINE__,amount);
+#endif
+      // NOTE: following copied from  the old
+      //     GregorianCalendar::roll( WEEK_OF_MONTH )  code 
+
+      // This is tricky, because during the roll we may have to shift
+      // to a different day of the week.  For example:
+      
+      //    s  m  t  w  r  f  s
+      //          1  2  3  4  5
+      //    6  7  8  9 10 11 12
+      
+      // When rolling from the 6th or 7th back one week, we go to the
+      // 1st (assuming that the first partial week counts).  The same
+      // thing happens at the end of the month.
+      
+      // The other tricky thing is that we have to figure out whether
+      // the first partial week actually counts or not, based on the
+      // minimal first days in the week.  And we have to use the
+      // correct first day of the week to delineate the week
+      // boundaries.
+      
+      // Here's our algorithm.  First, we find the real boundaries of
+      // the month.  Then we discard the first partial week if it
+      // doesn't count in this locale.  Then we fill in the ends with
+      // phantom days, so that the first partial week and the last
+      // partial week are full weeks.  We then have a nice square
+      // block of weeks.  We do the usual rolling within this block,
+      // as is done elsewhere in this method.  If we wind up on one of
+      // the phantom days that we added, we recognize this and pin to
+      // the first or the last day of the month.  Easy, eh?
+      
+      // Another wrinkle: To fix jitterbug 81, we have to make all this
+      // work in the oddball month containing the Gregorian cutover.
+      // This month is 10 days shorter than usual, and also contains
+      // a discontinuity in the days; e.g., the default cutover month
+      // is Oct 1582, and goes from day of month 4 to day of month 15.
+      
+      // Normalize the DAY_OF_WEEK so that 0 is the first day of the week
+      // in this locale.  We have dow in 0..6.
+      int32_t dow = internalGet(UCAL_DAY_OF_WEEK) - getFirstDayOfWeek();
+      if (dow < 0) 
+        dow += 7;
+      
+      // Find the day of month, compensating for cutover discontinuity.
+      int32_t dom = cDayOfMonth;
+      
+      // Find the day of the week (normalized for locale) for the first
+      // of the month.
+      int32_t fdm = (dow - dom + 1) % 7;
+      if (fdm < 0) 
+        fdm += 7;
+      
+      // Get the first day of the first full week of the month,
+      // including phantom days, if any.  Figure out if the first week
+      // counts or not; if it counts, then fill in phantom days.  If
+      // not, advance to the first real full week (skip the partial week).
+      int32_t start;
+      if ((7 - fdm) < getMinimalDaysInFirstWeek())
+        start = 8 - fdm; // Skip the first partial week
+      else
+        start = 1 - fdm; // This may be zero or negative
+      
+      // Get the day of the week (normalized for locale) for the last
+      // day of the month.
+      int32_t monthLen = cMonthLen;
+      int32_t ldm = (monthLen - dom + dow) % 7;
+      // We know monthLen >= DAY_OF_MONTH so we skip the += 7 step here.
+      
+      // Get the limit day for the blocked-off rectangular month; that
+      // is, the day which is one past the last day of the month,
+      // after the month has already been filled in with phantom days
+      // to fill out the last week.  This day has a normalized DOW of 0.
+      int32_t limit = monthLen + 7 - ldm;
+      
+      // Now roll between start and (limit - 1).
+      int32_t gap = limit - start;
+      int32_t newDom = (dom + amount*7 - start) % gap;
+      if (newDom < 0) 
+        newDom += gap;
+      newDom += start;
+      
+      // Finally, pin to the real start and end of the month.
+      if (newDom < 1) 
+        newDom = 1;
+      if (newDom > monthLen) 
+        newDom = monthLen;
+      
+      // Set the DAY_OF_MONTH.  We rely on the fact that this field
+      // takes precedence over everything else (since all other fields
+      // are also set at this point).  If this fact changes (if the
+      // disambiguation algorithm changes) then we will have to unset
+      // the appropriate fields here so that DAY_OF_MONTH is attended
+      // to.
+      
+      // If we are in the cutover month, manipulate ms directly.  Don't do
+      // this in general because it doesn't work across DST boundaries
+      // (details, details).  This takes care of the discontinuity.
+      setTimeInMillis(cMonthStart + (newDom-1)*kOneDay, status);                
+      return;
+    }
     
   default:
     Calendar::roll(field, amount, status);
