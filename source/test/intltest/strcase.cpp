@@ -332,6 +332,7 @@ StringCaseTest::TestTitleCasing() {
 
       if(U_FAILURE(status)) {
           errln("error: TestTitleCasing() ubrk_open(%d) failed for test case  from casing.res: %s", type,  u_errorName(status));
+          status = U_ZERO_ERROR;
       } else {
           result=testcase[0];
           result.toTitle((BreakIterator *)iter, Locale(cLocaleID));
