@@ -21,7 +21,6 @@
 #ifndef UNISTR_H
 #define UNISTR_H
 
-#include "unicode/utypes.h"
 #include "unicode/rep.h"
 #include "unicode/uchar.h"
 
@@ -30,7 +29,6 @@ struct UConverter;          // unicode/ucnv.h
 class Locale;               // unicode/locid.h
 class UCharReference;
 class UnicodeConverter;     // unicode/convert.h
-class UnicodeStreamer;      // unicode/ustream.h
 
 /* The <iostream> include has been moved to unicode/ustream.h */
 
@@ -2628,8 +2626,6 @@ private:
 
   friend class UnicodeConverter;
   friend class Normalizer;
-
-  friend class UnicodeStreamer;
 
   friend class StringCharacterIterator;
   friend class SearchIterator;
