@@ -933,7 +933,7 @@ struct {
 
     /* produce canonical closure for table */
     /* first set up constants for implicit calculation */
-    uprv_uca_initImplicitConstants(consts.UCA_PRIMARY_IMPLICIT_MIN);
+    uprv_uca_initImplicitConstants(consts.UCA_PRIMARY_IMPLICIT_MIN, consts.UCA_PRIMARY_IMPLICIT_MAX, status);
     /* do the closure */
     int32_t noOfClosures = uprv_uca_canonicalClosure(t, status);
     if(noOfClosures != 0) {
@@ -949,6 +949,11 @@ struct {
         fprintf(stdout, "Number of contractions: %i\n", noOfContractions);
         fprintf(stdout, "Contraction image size: %i\n", t->image->contractionSize);
         fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
+    }
+
+    if(U_FAILURE(*status)) {
+        fprintf(stderr, "Error creating table: %s\n", u_errorName(*status));
+        return -1;
     }
 
     /* populate the version info struct with version info*/
