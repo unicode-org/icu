@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -54,7 +54,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:I386 /out:"..\..\..\bin\icuio17.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\"
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:I386 /out:"..\..\..\bin\icuio18.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "ustdio - Win32 Debug"
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\..\bin\icuio17d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\..\bin\icuio18d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
