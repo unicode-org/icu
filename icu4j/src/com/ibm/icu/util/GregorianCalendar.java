@@ -786,54 +786,6 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * Override Calendar to improve performance.  This method tries to use
-     * the EXTENDED_YEAR, MONTH, DATE, fields if they are set, instead of
-     * computing them.  If they are not set, this method defers to the
-     * default implemenation.
-     * @param millis milliseconds of the date fields
-     * @param millisInDay milliseconds of the time fields; may be out
-     * or range.
-     * @stable ICU 2.0
-     */
-    protected int computeZoneOffset(long millis, int millisInDay) {
-
-        // Normalize the millisInDay to 0..ONE_DAY-1.  If the millis is out
-        // of range, then we defer to the base class implementation which
-        // will recompute the correct values.
-        int[] normalizedMillisInDay = new int[1];
-        int days = floorDivide(millis + millisInDay, (int) ONE_DAY, normalizedMillisInDay);
-
-        // We need to have the month, the day, and the day of the week.  If
-        // the fields are not set or if we're lenient (so fields may be out
-        // of range) then we defer to the base class which will normalize
-        // the year, month, and day of month.
-        if (isLenient() || !isSet(MONTH) || !isSet(DAY_OF_MONTH)
-            || millisInDay != normalizedMillisInDay[0]) {
-            return super.computeZoneOffset(millis, millisInDay);
-        }
-
-        int julianDay = millisToJulianDay(days * ONE_DAY);
-
-        // It's tempting to try to use DAY_OF_WEEK here, if it
-        // is set, but we CAN'T.  Even if it's set, it might have
-        // been set wrong by the user.  We should rely only on
-        // the Julian day number, which has been computed correctly
-        // using the disambiguation algorithm above. [LIU]
-        int year = internalGet(EXTENDED_YEAR);
-        int month = internalGet(MONTH);
-	    // TODO: consider calling the getOffset(millis) API when we drop JDK 1.3 support - Alan
-        return getTimeZone().getOffset(AD, year, month,
-                              internalGet(DATE),
-                              julianDayToDayOfWeek(julianDay),
-                              normalizedMillisInDay[0]);
-
-        // Note: Because we pass in wall millisInDay, rather than
-        // standard millisInDay, we interpret "1:00 am" on the day
-        // of cessation of DST as "1:00 am Std" (assuming the time
-        // of cessation is 2:00 am).
-    }
-
-    /**
      * @stable ICU 2.0
      */
     protected int handleComputeJulianDay(int bestField) {
