@@ -1579,14 +1579,16 @@ RuleBasedCollator::compare(const UnicodeString& source,
 	UChar *uTarget = uTstart;
 	uint32_t sourceLen = source.length();
 	uint32_t targetLen = target.length();
-	if(sourceLen > tblcoll_StackBufferLen) {
-		uSource = new UChar[sourceLen];
+	if(sourceLen >= tblcoll_StackBufferLen) {
+		uSource = new UChar[sourceLen+1];
 	}
-	if(targetLen > tblcoll_StackBufferLen) {
-		uTarget = new UChar[targetLen];
+	if(targetLen >= tblcoll_StackBufferLen) {
+		uTarget = new UChar[targetLen+1];
 	}
     source.extract(0, sourceLen, uSource);
+    uSource[sourceLen] = 0;
     target.extract(0, targetLen, uTarget);
+    uTarget[targetLen] = 0;
 	Collator::EComparisonResult result = compare(uSource, sourceLen, uTarget, targetLen);
 
 	if(uSstart != uSource) {
@@ -1639,10 +1641,11 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
 	UChar sStart[tblcoll_StackBufferLen];
 	UChar *uSource = sStart;
 	uint32_t sourceLen = source.length();
-	if(sourceLen > tblcoll_StackBufferLen) {
-		uSource = new UChar[sourceLen];
+	if(sourceLen >= tblcoll_StackBufferLen) {
+		uSource = new UChar[sourceLen+1];
 	}
     source.extract(0, sourceLen, uSource);
+    uSource[sourceLen] = 0;
 	CollationKey& result = RuleBasedCollator::getCollationKey(uSource, sourceLen, sortkey, status);
 	if(sStart != uSource) {
 		delete[] uSource;
@@ -2992,10 +2995,11 @@ int32_t RuleBasedCollator::getSortKey(const   UnicodeString&  source,
 	UChar sStart[tblcoll_StackBufferLen];
 	UChar *uSource = sStart;
 	uint32_t sourceLen = source.length();
-	if(sourceLen > tblcoll_StackBufferLen) {
-		uSource = new UChar[sourceLen];
+	if(sourceLen >= tblcoll_StackBufferLen) {
+		uSource = new UChar[sourceLen+1];
 	}
     source.extract(0, sourceLen, uSource);
+    uSource[sourceLen] = 0;
 	int32_t resLen = ucol_getSortKey((UCollator *)this, uSource, sourceLen, result, resultLength);
 	if(sStart != uSource) {
 		delete[] uSource;

@@ -14,6 +14,8 @@
 #include "unicode/ustring.h"
 #include "unicode/normlzr.h"
 #include "cpputils.h"
+
+
 static uint8_t utf16fixup[32] = {
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -46,7 +48,7 @@ struct collIterate {
 
 #define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     // from coleiterator
 
-#define UCOL_LEVELTERMINATOR 0
+#define UCOL_LEVELTERMINATOR 1
 #define UCOL_IGNORABLE 0x0000
 #define UCOL_CHARINDEX 0x70000000             // need look up in .commit()
 #define UCOL_EXPANDCHARINDEX 0x7E000000       // Expand index follows
@@ -65,7 +67,7 @@ struct collIterate {
 #define UCOL_SECONDARYDIFFERENCEONLY 0xffffff00  // use only the primary and secondary difference
 #define UCOL_PRIMARYORDERSHIFT 16             // primary order shift
 #define UCOL_SECONDARYORDERSHIFT 8            // secondary order shift
-#define UCOL_SORTKEYOFFSET 1                  // minimum sort key offset
+#define UCOL_SORTKEYOFFSET 2                  // minimum sort key offset
 #define UCOL_CONTRACTCHAROVERFLOW 0x7FFFFFFF  // Indicates the char is a contract char
 
 #define UCOL_PRIMARYORDER(order) (((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT)
@@ -82,48 +84,6 @@ struct collIterate {
  * Determine if a character is a Thai base consonant
  */
 #define UCOL_ISTHAIBASECONSONANT(ch) ((uint32_t)(ch) - 0xe01) <= (0xe2e - 0xe01)
-
-U_CAPI int32_t
-u_normalize(const UChar*            source,
-        int32_t                 sourceLength, 
-        UNormalizationMode      mode, 
-        int32_t                 option,
-        UChar*                  result,
-        int32_t                 resultLength,
-        UErrorCode*             status)
-{
-  if(U_FAILURE(*status)) return -1;
-
-  Normalizer::EMode normMode;
-  switch(mode) {
-  case UCOL_NO_NORMALIZATION:
-    normMode = Normalizer::NO_OP;
-    break;
-  case UCOL_DECOMP_CAN:
-    normMode = Normalizer::DECOMP;
-    break;
-  case UCOL_DECOMP_COMPAT:
-    normMode = Normalizer::DECOMP_COMPAT;
-    break;
-  case UCOL_DECOMP_CAN_COMP_COMPAT:
-    normMode = Normalizer::COMPOSE;
-    break;
-  case UCOL_DECOMP_COMPAT_COMP_CAN:
-    normMode = Normalizer::COMPOSE_COMPAT;
-    break;
-  default:
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return -1;
-  }
-
-  int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
-  const UnicodeString src((UChar*)source, len, len);
-  UnicodeString dst(result, 0, resultLength);
-  Normalizer::normalize(src, normMode, option, dst, *status);
-  int32_t actualLen;
-  T_fillOutputParams(&dst, result, resultLength, &actualLen, status);
-  return actualLen;
-}
 
 U_CAPI UCollator*
 ucol_open(    const    char         *loc,
@@ -420,23 +380,24 @@ int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode 
 				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
 				int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
 
-				key[posKey++] = *(source->pos);
+				key[posKey++] = *(source->pos++);
 				// This tries to find the longes common match for the data in contraction table...
 				// and needs to be rewritten, especially the test down there!
 				int32_t i;
                 int32_t listSize = list->size();
 				UBool foundSmaller = TRUE;
 				while(source->pos<source->len && foundSmaller) {
-
-					key[posKey++] = *(++source->pos);
+					key[posKey++] = *source->pos;
 
 					foundSmaller = FALSE;
 					i = 0;
 					while(i<listSize && !foundSmaller) {
 						pair = list->at(i);
-						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
-							order = pair->value;
-							foundSmaller = TRUE;
+                        if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) { 
+                            /* Found a matching contraction sequence */
+                            order = pair->value; /* change the CE value */
+                            source->pos++;       /* consume another char from the source */
+							foundSmaller = TRUE; 
 						}
 						i++;
 
@@ -520,7 +481,7 @@ struct incrementalContext {
 };
 
 
-void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s, UBool isWritable) {
+void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
     s->len = s->pos = s->string ;
     s->CEpos = s->toReturn = s->CEs;
     s->source = source;
@@ -588,9 +549,9 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
                 int32_t listSize = list->size();
 				UBool foundSmaller = TRUE;
                 UBool endOfString = FALSE;
+                *(ctx->len++) = ctx->lastChar;
 				while(!endOfString && foundSmaller) {
                     endOfString = ((ctx->lastChar = ctx->source(ctx->sourceContext)) == 0xFFFF);
-                    *(ctx->len++) = ctx->lastChar;
 					key[posKey++] = ctx->lastChar;
 
 					foundSmaller = FALSE;
@@ -599,13 +560,13 @@ int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UE
 						pair = list->at(i);
 						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
 							order = pair->value;
+                            *(ctx->len++) = ctx->lastChar;
 							foundSmaller = TRUE;
 						}
 						i++;
 
 					}
 				}
-				//*(ctx->CEpos) = order;
 			}
     }
 	// Expansion sequence start...
@@ -654,8 +615,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 
     incrementalContext sColl, tColl;
 
-    init_incrementalContext(source, sourceContext, &sColl, FALSE);
-    init_incrementalContext(target, targetContext, &tColl, FALSE);
+    init_incrementalContext(source, sourceContext, &sColl);
+    init_incrementalContext(target, targetContext, &tColl);
 
     if(cppColl->getDecomposition() != Normalizer::NO_OP) { // run away screaming!!!!
         return alternateIncrementalProcessing(coll, &sColl, &tColl);
@@ -667,7 +628,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     }
 
     UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
-    int32_t sOrder, tOrder;
+    uint32_t sOrder=UCOL_NULLORDER, tOrder=UCOL_NULLORDER;
     uint32_t pSOrder, pTOrder;
     UBool gets = TRUE, gett = TRUE;
     UBool initialCheckSecTer = strength  >= UCOL_SECONDARY;
@@ -881,7 +842,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
                 *(--sFSBEnd) = UCOL_SECONDARYORDER(sOrder);
             }
-
+ 
             gets = TRUE;
 
             if (gett)
@@ -1072,7 +1033,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         }
     }
 
-
+ 
     // For IDENTICAL comparisons, we use a bitwise character comparison
     // as a tiebreaker if all else is equal
     // NOTE: The java code compares result with 0, and 
@@ -1150,7 +1111,7 @@ ucol_strcoll(    const    UCollator    *coll,
     }
 
     UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
-    int32_t sOrder, tOrder;
+    uint32_t sOrder=UCOL_NULLORDER, tOrder=UCOL_NULLORDER;
     uint32_t pSOrder, pTOrder;
     UBool gets = TRUE, gett = TRUE;
     UBool initialCheckSecTer = strength  >= UCOL_SECONDARY;
@@ -1625,16 +1586,6 @@ ucol_getSortKey(const    UCollator    *coll,
         int32_t        resultLength)
 {
 
-    /* 
-    Still problems in:
-    SUMMARY:
-        ******* [Total error count:     213]
-         Errors in
-           [tscoll/capitst/TestSortKey]  // this is normal, since we are changing binary keys
-           [tscoll/cfrtst/TestSecondary] // this is also OK, ICU original implementation was messed up
-           [tscoll/cfrtst/TestTertiary]  // probably the same as above
-    */
-
     uint32_t i = 0; // general purpose counter
 
 	UErrorCode status = U_ZERO_ERROR;
@@ -1646,6 +1597,15 @@ ucol_getSortKey(const    UCollator    *coll,
     UChar normBuffer[2*UCOL_MAX_BUFFER];
     UChar *normSource = normBuffer;
     int32_t normSourceLen = 2048;
+
+    for(i = 0; i<UCOL_MAX_BUFFER; i++) {
+        prim[i]=second[i]=tert[i]='\0';
+    }
+
+    for(i = UCOL_MAX_BUFFER; i<2*UCOL_MAX_BUFFER; i++) {
+        prim[i]=normBuffer[i]='\0';
+    }
+
 
 	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
 
@@ -1667,7 +1627,7 @@ ucol_getSortKey(const    UCollator    *coll,
     uint8_t *secstart = secondaries;
     uint8_t *terstart = tertiaries;
 
-	collIterate s;
+   collIterate s;
    init_collIterate((UChar *)source, len, &s, FALSE);
 
     // If we need to normalize, we'll do it all at once at the beggining!
@@ -1687,7 +1647,7 @@ ucol_getSortKey(const    UCollator    *coll,
 		s.len = normSource+normSourceLen;
 	}
 
-    int32_t order = 0;
+    uint32_t order = 0;
 
     uint16_t primary = 0;
     uint8_t secondary = 0;
@@ -1700,8 +1660,8 @@ ucol_getSortKey(const    UCollator    *coll,
         tertiary = (order & UCOL_TERTIARYORDERMASK);
 
         if(primary != UCOL_IGNORABLE) {
-            *(primaries++) = (primary+UCOL_SORTKEYOFFSET)>>8;
-            *(primaries++) = (primary+UCOL_SORTKEYOFFSET)&0xFF;
+            *(primaries++) = (primary>>8)+UCOL_SORTKEYOFFSET;
+            *(primaries++) = (primary&0xFF)+UCOL_SORTKEYOFFSET;
             if(compareSec) {
                 *(secondaries++) = secondary+UCOL_SORTKEYOFFSET;
             }
@@ -1719,11 +1679,10 @@ ucol_getSortKey(const    UCollator    *coll,
         UCOL_GETNEXTCE(order, coll, s, status);
     }
 
-    *(primaries++) = UCOL_LEVELTERMINATOR;
-    *(primaries++) = UCOL_LEVELTERMINATOR;
 
 
     if(compareSec) {
+    *(primaries++) = UCOL_LEVELTERMINATOR;
       uint32_t secsize = secondaries-secstart;
       if(ucol_getAttribute(coll, UCOL_FRENCH_COLLATION, &status) == UCOL_ON) { // do the reverse copy
           for(i = 0; i<secsize; i++) {
@@ -1734,26 +1693,27 @@ ucol_getSortKey(const    UCollator    *coll,
             primaries += secsize;
         }
 
-        *(primaries++) = UCOL_LEVELTERMINATOR;
     }
 
     if(compareTer) {
+        *(primaries++) = UCOL_LEVELTERMINATOR;
       uint32_t tersize = tertiaries - terstart;
       uprv_memcpy(primaries, terstart, tersize);
       primaries += tersize;
-      *(primaries++) = UCOL_LEVELTERMINATOR;
     }
 
 
     if(compareIdent) {
+      *(primaries++) = UCOL_LEVELTERMINATOR;
 		UChar *ident = s.string;
 		while(ident < s.len) {
           *(primaries++) = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
           *(primaries++) = (*(ident) & 0xFF);
 		  ident++;
       }
-      *(primaries++) = UCOL_LEVELTERMINATOR;
     }
+
+    *(primaries++) = '\0';
 
     uprv_memcpy(result, primstart, uprv_min(resultLength, (primaries-primstart)));
 
