@@ -30,11 +30,17 @@ en_IE {
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd-MMM-yy",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d MMMM yyyy",
         "dd/MM/yy",
         "{1} {0}",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00a4#,##0.00;-\u00a4#,##0.00",
+        "#,##0%",
+        "#E0",
     }
 //    Duplicated in parent
 //    Languages { 
@@ -52,4 +58,5 @@ en_IE {
             "IST",
         }
     }
+
 }
