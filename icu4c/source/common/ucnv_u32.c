@@ -360,7 +360,7 @@ lowsurogate:
                 *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
-        offsetNum++;
+        offsetNum = offsetNum + 1 + (temp[1] != 0);
     }
 
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err)) {
@@ -817,7 +817,7 @@ lowsurogate:
                 *err = U_BUFFER_OVERFLOW_ERROR;
             }
         }
-        offsetNum++;
+        offsetNum = offsetNum + 1 + (temp[2] != 0);
     }
 
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
