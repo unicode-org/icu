@@ -38,7 +38,7 @@ public:
    *  @param key name of the data field.
    *  @return an integer containing the data
    */
-  virtual const int32_t getInt(const char* key, UErrorCode &status) const = 0;
+  virtual int32_t getInt(const char* key, UErrorCode &status) const = 0;
   
   /** get an array of strings from the DataMap. Addressed by name.
    *  The user must dispose of it after usage.
@@ -77,7 +77,7 @@ public:
   void init(UResourceBundle *headers, UResourceBundle *data, UErrorCode &status);
   
   virtual const UnicodeString getString(const char* key, UErrorCode &status) const;
-  virtual const int32_t getInt(const char* key, UErrorCode &status) const;
+  virtual int32_t getInt(const char* key, UErrorCode &status) const;
   
   virtual const UnicodeString* getStringArray(int32_t& count, const char* key, UErrorCode &status) const;
   virtual const int32_t* getIntArray(int32_t& count, const char* key, UErrorCode &status) const;
