@@ -352,9 +352,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
  *      our common data.                                                *
  *                                                                      *
  *----------------------------------------------------------------------*/
-#if defined(UDATA_STATIC_LIB) || defined(UDATA_DLL)
 extern  const DataHeader U_IMPORT U_ICUDATA_ENTRY_POINT;
-#endif
 
 
 /*----------------------------------------------------------------------*
