@@ -780,7 +780,7 @@ const UConverterStaticData _UTF8StaticData={
   sizeof(UConverterStaticData),
 "UTF8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
-    3, { 0xef, 0xbf, 0xbd, 0 }
+    { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 
@@ -959,7 +959,7 @@ const UConverterStaticData _UTF16BEStaticData={
   sizeof(UConverterStaticData),
 "UTF16_BigEndian",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
-    2, { 0xff, 0xfd, 0, 0 }
+    { 0xff, 0xfd, 0, 0 },2,FALSE,FALSE,{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 
@@ -1148,7 +1148,7 @@ const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
     "UTF16_LittleEndian",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
-    2, { 0xfd, 0xff, 0, 0 }
+    { 0xfd, 0xff, 0, 0 },2,0,0,{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
 
