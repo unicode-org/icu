@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.ibm.icu.util.ULocale;
+
 public class ICULocaleService extends ICUService {
     private Locale fallbackLocale;
     private String fallbackLocaleName;
@@ -111,6 +113,7 @@ public class ICULocaleService extends ICUService {
      * Locale list, built from the Set of visible ids.
      */
     public Locale[] getAvailableLocales() {
+        // TODO make this wrap getAvailableULocales later
         Set visIDs = getVisibleIDs();
         Iterator iter = visIDs.iterator();
         Locale[] locales = new Locale[visIDs.size()];
@@ -122,6 +125,21 @@ public class ICULocaleService extends ICUService {
         return locales;
     }
 
+    /**
+     * Convenience method for callers using locales.  This returns the standard
+     * ULocale list, built from the Set of visible ids.
+     */
+    public ULocale[] getAvailableULocales() {
+        Set visIDs = getVisibleIDs();
+        Iterator iter = visIDs.iterator();
+        ULocale[] locales = new ULocale[visIDs.size()];
+        int n = 0;
+        while (iter.hasNext()) {
+            locales[n++] = new ULocale((String)iter.next());
+        }
+        return locales;
+    }
+        
     /**
      * A subclass of Key that implements a locale fallback mechanism.
      * The first locale to search for is the locale provided by the
