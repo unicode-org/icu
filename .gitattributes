@@ -11,6 +11,8 @@ icu4c/source/data/brkitr/line_thLE.brk -text
 icu4c/source/data/brkitr/sentBE.brk -text
 icu4c/source/data/brkitr/sentLE.brk -text
 icu4c/source/data/brkitr/thaidict.brk -text
+icu4c/source/data/brkitr/titleBE.brk -text
+icu4c/source/data/brkitr/titleLE.brk -text
 icu4c/source/data/brkitr/wordBE.brk -text
 icu4c/source/data/brkitr/wordLE.brk -text
 icu4c/source/data/brkitr/word_thBE.brk -text
