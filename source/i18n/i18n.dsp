@@ -183,7 +183,7 @@ SOURCE=.\cpdtrans.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\currency.cpp
+SOURCE=.\ucurr.cpp
 # End Source File
 # Begin Source File
 
@@ -678,14 +678,14 @@ InputPath=.\unicode\cpdtrans.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\currency.h
+SOURCE=.\unicode\ucurr.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\currency.h
+InputPath=.\unicode\ucurr.h
 
-"..\..\include\unicode\currency.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -693,9 +693,9 @@ InputPath=.\unicode\currency.h
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\currency.h
+InputPath=.\unicode\ucurr.h
 
-"..\..\include\unicode\currency.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -703,9 +703,9 @@ InputPath=.\unicode\currency.h
 !ELSEIF  "$(CFG)" == "i18n - Win64 Release"
 
 # Begin Custom Build
-InputPath=.\unicode\currency.h
+InputPath=.\unicode\ucurr.h
 
-"..\..\include\unicode\currency.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -713,9 +713,9 @@ InputPath=.\unicode\currency.h
 !ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
 
 # Begin Custom Build
-InputPath=.\unicode\currency.h
+InputPath=.\unicode\ucurr.h
 
-"..\..\include\unicode\currency.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\ucurr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
