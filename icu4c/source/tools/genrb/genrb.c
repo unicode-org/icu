@@ -117,10 +117,11 @@ main(int argc,
                 "\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
                 "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
                 "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
-                "\t                     followed by path, defaults to %s\n"
-                "\t-j or --write-java   write a Java ListResourceBundle for ICU4J, followed by optional encoding\n",
-                "\t                     defaults to ASCII and \\uXXXX format.\n",
+                "\t                     followed by path, defaults to %s\n",
                 u_getDataDirectory(), u_getDataDirectory(), u_getDataDirectory());
+        fprintf(stderr,
+                "\t-j or --write-java   write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"
+                "\t                     defaults to ASCII and \\uXXXX format.\n");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
