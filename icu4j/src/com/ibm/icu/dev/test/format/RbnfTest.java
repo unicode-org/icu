@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2001/11/07 00:30:01 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/11/12 20:02:46 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -411,6 +411,64 @@ public class RbnfTest extends TestFmwk {
         };
         doLenientParseTest(formatter, lpTestData);
         */
+    }
+
+    public void TestSwedishSpellout()
+    {
+        Locale locale = new Locale("sv", "", "");
+        RuleBasedNumberFormat formatter = new RuleBasedNumberFormat(locale, RuleBasedNumberFormat.SPELLOUT);
+
+        String[][] testDataDefault = {
+            { "101", "etthundra\u00aden" },
+            { "123", "etthundra\u00adtjugotre" },
+            { "1,001", "ettusen en" },
+            { "1,100", "ettusen etthundra" },
+            { "1,101", "ettusen etthundra\u00aden" },
+            { "1,234", "ettusen tv\u00e5hundra\u00adtrettiofyra" },
+            { "10,001", "tio\u00adtusen en" },
+            { "11,000", "elva\u00adtusen" },
+            { "12,000", "tolv\u00adtusen" },
+            { "20,000", "tjugo\u00adtusen" },
+            { "21,000", "tjugoen\u00adtusen" },
+            { "21,001", "tjugoen\u00adtusen en" },
+            { "200,000", "tv\u00e5hundra\u00adtusen" },
+            { "201,000", "tv\u00e5hundra\u00aden\u00adtusen" },
+            { "200,200", "tv\u00e5hundra\u00adtusen tv\u00e5hundra" },
+            { "2,002,000", "tv\u00e5 miljoner tv\u00e5\u00adtusen" },
+            { "12,345,678", "tolv miljoner trehundra\u00adfyrtiofem\u00adtusen sexhundra\u00adsjuttio\u00e5tta" },
+            { "123,456.789", "etthundra\u00adtjugotre\u00adtusen fyrahundra\u00adfemtiosex komma sju \u00e5tta nio" },
+            { "-12,345.678", "minus tolv\u00adtusen trehundra\u00adfyrtiofem komma sex sju \u00e5tta" }
+        };
+
+        logln("testing default rules");
+        doTest(formatter, testDataDefault, true);
+
+        String[][] testDataNeutrum = {
+            { "101", "etthundra\u00adett" },
+            { "1,001", "ettusen ett" },
+            { "1,101", "ettusen etthundra\u00adett" },
+            { "10,001", "tio\u00adtusen ett" },
+            { "21,001", "tjugoen\u00adtusen ett" }
+        };
+
+        formatter.setDefaultRuleSet("%neutrum");
+        logln("testing neutrum rules");
+        doTest(formatter, testDataNeutrum, true);
+
+        String[][] testDataYear = {
+            { "101", "etthundra\u00adett" },
+            { "900", "niohundra" },
+            { "1,001", "tiohundra\u00adett" },
+            { "1,100", "elvahundra" },
+            { "1,101", "elvahundra\u00adett" },
+            { "1,234", "tolvhundra\u00adtrettiofyra" },
+            { "2,001", "tjugohundra\u00adett" },
+            { "10,001", "tio\u00adtusen ett" }
+        };
+
+        formatter.setDefaultRuleSet("%year");
+        logln("testing year rules");
+        doTest(formatter, testDataYear, true);
     }
 
     void doTest(RuleBasedNumberFormat formatter, String[][] testData,
