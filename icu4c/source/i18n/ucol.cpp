@@ -345,6 +345,7 @@ clean:
   return result;
 }
 
+#ifdef U_USE_DEPRECATED_UCOL_API
 U_CAPI UCollator * U_EXPORT2
 ucol_openVersion(const char *loc,
                  UVersionInfo version,
@@ -363,6 +364,7 @@ ucol_openVersion(const char *loc,
   }
   return collator;
 }
+#endif
 
 
 U_CAPI void U_EXPORT2
