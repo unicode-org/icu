@@ -83,13 +83,14 @@ clean-recursive-with-twist:
 
 all-local: $(srcdir)/configure $(srcdir)/icudefs.mk
 
-install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/$(VERSION)/%)
-	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
+install-local: $(top_builddir)/config/Makefile.inc @platform_make_fragment@ README $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/$(VERSION)/%)
+	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/$(VERSION)/config
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
-	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
+	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/$(VERSION)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
+	$(INSTALL_SCRIPT) README $(DESTDIR)$(pkgdatadir)/$(VERSION)/README
 
 $(DESTDIR)$(pkglibdir)/$(VERSION)/%: $(top_srcdir)/../data/%
 	$(INSTALL_DATA) $< $@
@@ -124,6 +125,10 @@ check-local:
 #	cd $(srcdir) && $(AUTOCONF)
 
 icudefs.mk: $(srcdir)/icudefs.mk.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+README: $(srcdir)/README.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
