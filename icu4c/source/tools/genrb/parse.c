@@ -359,7 +359,8 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     {
         return NULL;
     }
-
+    uprv_strcat(filename,"..");
+    uprv_strcat(filename,U_FILE_SEP_STRING);
     uprv_strcat(filename, U_ICU_UNIDATA);
     uprv_strcat(filename, U_FILE_SEP_STRING);
     uprv_strcat(filename, cs);
