@@ -247,12 +247,6 @@ main(int argc, char* argv[]) {
     o.tmpDir    = o.targetDir;
   }
 
-#ifdef OS390BATCH
-  if (uprv_strcmp(o.shortName,"IXMICUDA") == 0 ||
-      uprv_strcmp(o.shortName,"IXMICUD1") == 0)
-        o.targetDir = "\"/"; 
-#endif
-
   if( options[13].doesOccur ) {
     o.install  = options[13].value;
   }
