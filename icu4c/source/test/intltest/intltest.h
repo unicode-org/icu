@@ -45,6 +45,28 @@ UnicodeString operator+(const UnicodeString& left, float num);
 UnicodeString toString(const Formattable& f); // liu
 //-----------------------------------------------------------------------------
 
+// Use the TESTCASE macro in subclasses of IntlTest.  Define the
+// runIndexedTest method in this fashion:
+//
+//| void MyTest::runIndexedTest(int32_t index, UBool exec,
+//|                             const char* &name, char* /*par*/) {
+//|     switch (index) {
+//|         TESTCASE(0,TestSomething);
+//|         TESTCASE(1,TestSomethingElse);
+//|         TESTCASE(2,TestAnotherThing);
+//|         default: name = ""; break;
+//|     }
+//| }
+#define TESTCASE(id,test)             \
+    case id:                          \
+        name = #test;                 \
+        if (exec) {                   \
+            logln(#test "---");       \
+            logln((UnicodeString)""); \
+            test();                   \
+        }                             \
+        break
+
 class IntlTest {
 public:
 
