@@ -95,6 +95,9 @@
 #define U_DISABLE_RENAMING @U_DISABLE_RENAMING@
 #endif
 
+/* Define the library suffix in a C syntax. */
+#define U_ICU_LIBRARY_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@
+
 /*===========================================================================*/
 /* Platform/Language determination                                           */
 /*===========================================================================*/
