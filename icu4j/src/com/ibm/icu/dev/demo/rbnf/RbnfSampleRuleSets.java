@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbnf/RbnfSampleRuleSets.java,v $ 
- * $Date: 2003/05/14 18:35:53 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/23 16:24:43 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import java.util.Locale;
  * please tell us!
  *
  * @author Richard Gillam
- * @version $Version$ $Date: 2003/05/14 18:35:53 $
+ * @version $Version$ $Date: 2003/05/23 16:24:43 $
  */
 public class RbnfSampleRuleSets {
     /**
@@ -557,7 +557,7 @@ public class RbnfSampleRuleSets {
     // in situations where this framework is likely to be used.  Also, is it
     // really true that numbers are run together into compound words all the
     // time?  And again, I'm missing information on negative numbers and
-    // decimas.
+    // decimals.
 
     /**
      * Spellout rules for Italian.  Like German, most Italian numbers are
