@@ -8,9 +8,20 @@ UTF-8-style macros are defined as well as a UCharIterator.
 The macros are incomplete (do not assemble code points from pairs of surrogates)
 but sufficient for the iterator.
 
-         
+If you wish to use the lenient-UTF/CESU-8 UCharIterator in a context outside of
+this sample, then copy the uit_len8.c file,
+as well as either the uit_len8.h header or just the prototype that it contains.
+
+*** Warning: ***
+This UCharIterator reads an arbitrary mix of UTF-8 and CESU-8 text.
+It does not conform to any one Unicode charset specification,
+and its use may lead to security risks.
+
+
 Files:
     uciter8.c        Main source file in C
+    uit_len8.c       Lenient-UTF/CESU-8 UCharIterator implementation
+    uit_len8.h       Header file with the prototoype for the lenient-UTF/CESU-8 UCharIterator
     uciter8.dsw      Windows MSVC workspace.  Double-click this to get started.
     uciter8.dsp      Windows MSVC project file
 
@@ -19,7 +30,7 @@ To Build uciter8 on Windows
     2.  In MSVC, open the workspace file icu\samples\uciter8\uciter8.dsw
     3.  Choose a Debug or Release build.
     4.  Build.
-	
+
 To Run on Windows
     1.  Start a command shell window
     2.  Add ICU's bin directory to the path, e.g.
@@ -38,14 +49,14 @@ To Build on Unixes
            cd <icu directory>/source
            runConfigureICU <platform-name> --prefix <icu install directory> [other options]
            gmake all
-           
+
     2.  Install ICU, 
            gmake install
- 
+
     3.  Compile
            cd <icu directory>/source/samples/uciter8
            gmake ICU_PREFIX=<icu install directory)
-           
+
 To Run on Unixes
            cd <icu directory>/source/samples/uciter8
            
@@ -54,8 +65,8 @@ To Run on Unixes
 
            export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
            uciter8
-           
-           
+
+
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
         If in doubt, run the sample using "gmake check", and note the name of
         the variable that is used there.  LD_LIBRARY_PATH is the correct name
