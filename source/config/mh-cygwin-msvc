@@ -5,7 +5,7 @@
 # We install sbin tools into the same bin directory because
 # pkgdata needs some of the tools in sbin, and we can't always depend on
 # icu-config working on Windows.
-sbindir := $(bindir)
+sbindir=$(bindir)
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -119,15 +119,16 @@ LDFLAGSICULX=	/base:"0x4ac80000"
 LDFLAGSCTESTFW=# Unused for now.
 LDFLAGSICUTOOLUTIL=	/base:"0x4ac00000"# Same as layout. Layout and tools probably won't mix.
 
+# The #M# is used to delete lines for icu-config
 # Current full path directory.
-CURR_FULL_DIR=$(shell cygpath -dma .)
+CURR_FULL_DIR=$(shell cygpath -dma .)#M#
 # Current full path directory for use in source code in a -D compiler option.
-CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))
+CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))#M#
 
 ifeq ($(srcdir),.)
 SOURCE_FILE=$<
 else
-SOURCE_FILE=$(shell cygpath -dma $<)
+SOURCE_FILE=$(shell cygpath -dma $<)#M#
 endif
 
 ## Compilation rules
@@ -178,8 +179,8 @@ MIDDLE_SO_TARGET=$(SO_TARGET)
 
 ## Special pkgdata information that is needed
 PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION_MAJOR)
-ICUPKGDATA_INSTALL_DIR = $(shell cygpath -dma $(DESTDIR)$(ICUPKGDATA_DIR))
-ICUPKGDATA_INSTALL_LIBDIR = $(shell cygpath -dma $(DESTDIR)$(libdir))
+ICUPKGDATA_INSTALL_DIR = $(shell cygpath -dma $(DESTDIR)$(ICUPKGDATA_DIR))#M#
+ICUPKGDATA_INSTALL_LIBDIR = $(shell cygpath -dma $(DESTDIR)$(libdir))#M#
 
 ## Versioned import library names. The library names are versioned,
 ## but the import libraries do not need versioning.
@@ -192,17 +193,6 @@ FINAL_IMPORT_LIB = $(MIDDLE_IMPORT_LIB)
 #	$(RM) $@ && cp ${<F} $@
 %.$(SO): %$(SO_TARGET_VERSION_MAJOR).$(SO)
 	$(RM) $@ && ln -s ${<F} $@
-
-##  Bind internal references
-
-# LDflags that pkgdata will use
-BIR_LDFLAGS= -Wl,-Bsymbolic
-
-# CPPflags for genccode/gencmn
-BIR_CPPFLAGS= -DU_HAVE_BIND_INTERNAL_REFERENCES
-
-# Dependencies [i.e. map files] for the final library
-BIR_DEPS=
 
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = PATH
