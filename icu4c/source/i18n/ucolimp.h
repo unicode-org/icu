@@ -121,7 +121,7 @@ static uint8_t utf16fixup[32] = {
 /* mask off anything but secondary order */
 #define UCOL_SECONDARYORDERMASK 0x0000ff00    
 /* mask off anything but tertiary order */
-#define UCOL_TERTIARYORDERMASK 0x0000003f     
+#define UCOL_TERTIARYORDERMASK 0x000000ff     
 /* primary order shift */
 #define UCOL_PRIMARYORDERSHIFT 16             
 /* long primary order shift */
@@ -266,22 +266,36 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_NULLORDER        0xFFFFFFFF
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
-#define isContinuation(CE) ((CE) & 0XC0) == 0x80
+
+#define isContinuation(CE) ((CE) & 0xC0) == 0x80
+#define isFlagged(CE) ((CE) & 0x80) == 0x80
 #define isLongPrimary(CE) ((CE) & 0xC0) == 0xC0
+
 #define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
 #define isContraction(CE) (isSpecial((CE)) && (getCETag((CE)) == CONTRACTION_TAG))
 #define constructContractCE(CE) (UCOL_SPECIAL_FLAG | (CONTRACTION_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
 #define getContractOffset(CE) ((CE)&0xFFFFFF)
 #define getExpansionOffset(CE) (((CE)&0x00FFFFF0)>>4)
 #define getExpansionCount(CE) ((CE)&0xF)
+
 #define UCA_DATA_TYPE "dat"
 #define UCA_DATA_NAME "UCATable"
 #define UCOL_CASE_BIT_MASK 0x40
+#define UCOL_FLAG_BIT_MASK 0x80
 
-#define UCOL_COMMON_MAX2 0x3
-#define UCOL_COMMON_MAX3 0x3
-#define UCOL_COMMON2 0x3
-#define UCOL_COMMON3 0x3
+#define UCOL_COMMON_TOP2 0x81  
+#define UCOL_COMMON_BOT2 0x03  
+#define UCOL_TOP_COUNT2  0x40 
+#define UCOL_BOT_COUNT2  0x3D
+
+#define UCOL_COMMON_TOP3 0x84 
+#define UCOL_COMMON_BOT3 0x03 
+#define UCOL_TOP_COUNT3  0x40 
+#define UCOL_BOT_COUNT3  0x40
+
+#define UCOL_COMMON2 0x03
+#define UCOL_COMMON3 0x03
+#define UCOL_COMMON4 0xFF
 
 typedef enum {
     NOT_FOUND_TAG = 0,
@@ -326,6 +340,7 @@ struct UCollator {
     const uint32_t *expansion;            
     const UChar *contractionIndex;        
     const uint32_t *contractionCEs;       
+    const uint8_t *scriptOrder;
     uint8_t variableMax;
     UChar variableTopValue;
     UColAttributeValue frenchCollation;
