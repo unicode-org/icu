@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/03/12 17:49:15 $
- * $Revision: 1.1 $
- *  *****************************************************************************************
+ * $Date: 2002/03/12 19:39:41 $
+ * $Revision: 1.2 $
+ *  ****************************************************************************
  */
  
 package com.ibm.icu.impl;
 import java.io.*;
-import com.ibm.icu.text.NewNormalizer;
+//import com.ibm.icu.text.NewNormalizer;
 import com.ibm.icu.text.UTF16;	
 /**
  * @version 	1.0
@@ -101,9 +101,27 @@ public final class NormalizerImpl {
 	static final int INDEX_MIN_NFKD_NO_MAYBE  = 9;     /* first code point with quick check NFKD NO/MAYBE */
 	
 	static final int INDEX_FCD_TRIE_SIZE      = 10;    /* number of bytes in FCD trie */
+    static final int INDEX_AUX_TRIE_SIZE      = 11;    /* number of bytes in the auxiliary trie */
+    static final int INDEX_CANON_SET_COUNT    = 12;    /* number of uint16_t in the array of serialized USet */
 
 	static final int INDEX_TOP                = 32;    /* changing this requires a new formatVersion */
 
+	/* AUX constants */
+	/* value constants for auxTrie */
+	
+	static final int AUX_UNSAFE_SHIFT	= 14;
+	static final int AUX_FNC_SHIFT		= 20;
+	static final int AUX_COMP_EX_SHIFT	= 30;
+	static final int AUX_IS_LEAD_SHIFT	= 31;
+	
+	static final int AUX_MAX_CANON_SET  =   (1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK;
+	static final int AUX_MAX_FNC        =   (1<<(AUX_COMP_EX_SHIFT-AUX_FNC_SHIFT));
+
+	static final int AUX_CANON_SET_MASK =   (AUX_MAX_CANON_SET-1);
+	static final int AUX_UNSAFE_MASK    =   (1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK;
+	static final int AUX_FNC_MASK       =   ((AUX_MAX_FNC-1)<<AUX_FNC_SHIFT) & UNSIGNED_INT_MASK;
+	static final int AUX_COMP_EX_MASK   =   (1<<AUX_COMP_EX_SHIFT) & UNSIGNED_INT_MASK;
+	static final int AUX_IS_LEAD_MASK   =   (1<<AUX_IS_LEAD_SHIFT) & UNSIGNED_INT_MASK;
 	
 	/*******************************/
 	
@@ -139,14 +157,35 @@ public final class NormalizerImpl {
 	    }
 	}
 	
+	static final class AuxTrieImpl implements Trie.DataManipulate{
+		static IntTrie auxTrie = null;
+	   /**
+	    * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
+	    * data the index array offset of the indexes for that lead surrogate.
+	    * @param property data value for a surrogate from the trie, including the
+	    *        folding offset
+	    * @return data offset or 0 if there is no data for the lead surrogate
+	    */
+	    public int getFoldingOffset(int value){
+		    if(value<0) {
+		        return (value & AUX_FNC_MASK)>>(AUX_FNC_SHIFT-5);
+		    } else {
+		        return 0;
+		    }
+	    }
+	}
+		 
 	/****************************************************/
 	
 	
 	static FCDTrieImpl fcdTrieImpl = new FCDTrieImpl();
 	static NormTrieImpl normTrieImpl = new NormTrieImpl();
+	static AuxTrieImpl auxTrieImpl = new AuxTrieImpl();
 	static int[] indexes;
 	static char[] combiningTable;
 	static char[] extraData;
+	static char[] canonStartSets;
+	
 	static boolean isDataLoaded;
 	
 	/**
@@ -305,7 +344,7 @@ public final class NormalizerImpl {
 	        prevCC=(int)(fcd16&0xff);
 	    }
 	}
-	
+	/*
 	public static NewNormalizer.QuickCheckResult quickCheck(char[] src,NewNormalizer.Mode mode) {
 	    
 	    int norm32, ccOrQCMask, qcMask;
@@ -319,7 +358,7 @@ public final class NormalizerImpl {
 	        return NewNormalizer.MAYBE;
 	    }
 	
-	    /* check for a valid mode and set the quick check minimum and mask */
+	    // check for a valid mode and set the quick check minimum and mask  
 
 	   	if(mode.equals(NewNormalizer.NFC)){
 	        minNoMaybe=(char)indexes[INDEX_MIN_NFC_NO_MAYBE];
@@ -339,7 +378,7 @@ public final class NormalizerImpl {
 	        return NewNormalizer.MAYBE;
 	    }
 	
-	    /* initialize */
+	    // initialize 
 	    ccOrQCMask=CC_MASK|qcMask;
 	    result=NewNormalizer.YES;
 	    prevCC=0;
@@ -356,9 +395,9 @@ public final class NormalizerImpl {
             }
             
 	
-	        /* check one above-minimum, relevant code unit */
+	        //* check one above-minimum, relevant code unit 
 	        if(isNorm32LeadSurrogate(norm32)) {
-	            /* c is a lead surrogate, get the real norm32 */
+	            //* c is a lead surrogate, get the real norm32 
 	            if(i!=src.length && UTF16.isTrailSurrogate(c2=src[i])) {
 	                ++i;
 	                norm32=normTrieImpl.normTrie.getRawOffset(norm32, c2);
@@ -367,14 +406,14 @@ public final class NormalizerImpl {
 	            }
 	        }
 	
-	        /* check the combining order */
+	        //* check the combining order 
 	        cc=(char)((norm32>>CC_SHIFT)&0xFF);
 	        if(cc!=0 && cc<prevCC) {
 	            return NewNormalizer.NO;
 	        }
 	        prevCC=cc;
 	
-	        /* check for "no" or "maybe" quick check flags */
+	        //* check for "no" or "maybe" quick check flags 
 	        norm32&=qcMask;
 	        if((norm32& QC_ANY_NO)>=1) {
 	            return NewNormalizer.NO;
@@ -382,7 +421,7 @@ public final class NormalizerImpl {
 	            result=NewNormalizer.MAYBE;
 	        }
 	    }
-	}
+	} */
 	
 	public static int getCombiningClass(int c) {
 	    int norm32;
