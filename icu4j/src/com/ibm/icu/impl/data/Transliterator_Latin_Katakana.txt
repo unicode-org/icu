@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Latin_Katakana.txt,v $
-# $Date: 2001/11/13 02:57:28 $
-# $Revision: 1.10 $
+# $Date: 2001/11/13 20:03:22 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 #:: [\u0020-\u00FF [:Latin:][:Mark:]] ;   # note: a global filter is more efficient, but MUST include all source chars
@@ -62,6 +62,7 @@
 # Variables
 
 $vowel = [aeiou] ;
+$consonant = [bcdfghjklmnpqrstvwxyz] ;
 $macron = \u0304 ;
 
 # Variables used for doubled-consonants with tsu
@@ -387,6 +388,30 @@ $macron <> ー ;
 '~ye' > ェ ;
 '~yo' <> ョ ;
 
+# iteration marks
+# TODO: make more accurate
+
+j $1 < sh (y* $vowel) {ヽ$voice ;
+dj $1 < ch (y* $vowel) {ヽ$voice ;
+dz $1 < ts (y* $vowel) {ヽ$voice ;
+
+g $1 < k (y* $vowel) {ヽ$voice ;
+z $1 < s (y* $vowel) {ヽ$voice ;
+d $1 < t (y* $vowel) {ヽ$voice ;
+h $1 < b (y* $vowel) {ヽ$voice ;
+v $1 < w (y* $vowel) {ヽ$voice ;
+
+sh $1 < sh (y* $vowel) {ヽ$voice ;
+j $1 < j (y* $vowel) {ヽ$voice ;
+ch $1 < ch (y* $vowel) {ヽ$voice ;
+dj $1 < dj(y* $vowel) {ヽ$voice ;
+ts $1 < ts (y* $vowel) {ヽ$voice ;
+dz $1 < dz (y* $vowel) {ヽ$voice ;
+
+$1 < ($consonant y* $vowel) {ヽ$voice? ;
+$1 < (.) {ヽ $voice? ; # otherwise repeat last character
+ < ヽ $voice? ; # delete if no characters found
+
 # h- rule: lengthens vowel if not followed by a vowel
 
 [aeiou] } h > ー ;
@@ -435,6 +460,12 @@ f > フ;
 j  > ジ;
 w > ウ;
 
+ß > | ss ;
+æ > | e ;
+ð > | d ;
+ø > | u ;
+þ > | th ;
+
 # simple substitutions using backup
 
 c > | k ;
@@ -449,7 +480,7 @@ x > | ks ;
 
 '~' > ; # delete stray tildes between letters
 [:Katakana:] { '' } [:Latin:] > ; # delete stray quotes between letters
-[[:Nonspacing Mark:]-[\u3099-\u309C]] > ; # delete any non-spacing marks that we didn't use
+[\u02BE[:Nonspacing Mark:]-[\u3099-\u309C]] > ; # delete any non-spacing marks that we didn't use
 
 :: NFC (NFKD) ;  # use NFKD to get the halfwidth katakana characters
 
