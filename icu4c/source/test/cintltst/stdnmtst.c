@@ -124,7 +124,7 @@ static int dotestconv(const char *name, const char *standard, const char *expect
     } else if (!tag && expected) {
         log_err("FAIL: could not find %s canonical name for %s\n", (standard ? "\"\"" : standard), name);
         res = 0;
-    } else if (expected && (name == tag || uprv_strcmp(expected, tag))) {
+    } else if (expected && (name == tag || uprv_strcmp(expected, tag)) && error == U_ZERO_ERROR) {
         log_err("FAIL: expected %s for %s canonical name for %s, got %s\n", expected, standard, name, tag);
         res = 0;
     }
@@ -149,6 +149,10 @@ static void TestCanonicalName()
         dotestconv("ISO-2022", "MIME", "ISO_2022") &&/* default name */
         dotestconv("Shift_JIS", "MIME", "ibm-943_P14A-2000") &&/* ambiguous alias */
         dotestconv("Shift_JIS", "", "ibm-943_P130-2000") &&/* ambiguous alias */
+        dotestconv("ibm-943", "", "ibm-943_P14A-2000") &&/* ambiguous alias */
+        dotestconv("ibm-943", "IBM", "ibm-943_P130-2000") &&/* ambiguous alias */
+        dotestconv("ibm-1363", "", "ibm-1363_P11B-2000") &&/* ambiguous alias */
+        dotestconv("ibm-1363", "IBM", "ibm-1363_P110-2000") &&/* ambiguous alias */
         dotestconv("crazy", "MIME", NULL) &&
         dotestconv("ASCII", "crazy", NULL))
     {
