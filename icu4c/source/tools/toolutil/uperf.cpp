@@ -275,7 +275,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 return FALSE;
             }
             if (testFunction->getOperationsPerIteration() < 1) {
-                fprintf(stderr, "%s returned an illegal operations/iteration()", name);
+                fprintf(stderr, "%s returned an illegal operations/iteration()\n", name);
                 return FALSE;
             }
             double t=0;

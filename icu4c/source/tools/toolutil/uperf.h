@@ -141,7 +141,7 @@ public:
 };
 
 const char* UPerfTest::gUsageString =
-                "Usage: perfTest [OPTIONS] [FILES]\n"
+                "Usage: %s [OPTIONS] [FILES]\n"
                 "\tReads the input file and prints out time taken in seconds\n"
                 "Options:\n"
                 "\t-h or -? or --help       this usage text\n"
@@ -155,7 +155,7 @@ const char* UPerfTest::gUsageString =
                 "\t-i or --iterations       Number of iterations to be performed. Requires Numeric argument\n"
                 "\t-t or --time             Threshold time for looping until in seconds. Requires Numeric argument.Cannot be used with --iterations\n"
                 "\t-l or --line-mode        The data file should be processed in line mode\n"
-                "\t-l or --bulk-mode        The data file should be processed in file based. Cannot be used with --line-mode\n";
+                "\t-b or --bulk-mode        The data file should be processed in file based. Cannot be used with --line-mode\n";
 
 #endif
 
