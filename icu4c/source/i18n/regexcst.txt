@@ -248,7 +248,6 @@ backslash:
    'X'                   n  expr-quant                              doBackslashX
    'Z'                   n  term                                    doBackslashZ
    'z'                   n  term                                    doBackslashz
-   '0'                   n  expr-quant                              doOctal
    digit_char	         n  expr-quant                              doBackRef         #  Will scan multiple digits
    eof                      errorDeath                              doEscapeError
    default               n  expr-quant		                    doLiteralChar     #  Escaped literal char.		       
