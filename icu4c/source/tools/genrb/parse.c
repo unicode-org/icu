@@ -287,7 +287,6 @@ parseResourceType(UErrorCode *status)
      struct UString        *tokenValue;
      enum   EResourceType  result = RT_UNKNOWN;
      uint32_t                 line=0;
-     uint32_t                 temp=line;
 
      expect(TOK_STRING, &tokenValue, &line, status);
 
@@ -383,6 +382,11 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
           UChar *targetLimit = pTarget + size;
 
           ucbuf = ucbuf_open(file, status);
+
+          if (U_FAILURE(*status)) {
+              error(line, "couldn't open input file %s\n", filename);
+              return NULL;
+          }
 
           /* read the rules into the buffer */
           while (target < targetLimit)
@@ -886,7 +890,6 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
      uint32_t            count;
      uint32_t            i;
      uint32_t            line;
-     UBool                readToken = FALSE;
      /* added by Jing/GCL */
      char              *stopstring;
      uint32_t          len;
@@ -907,38 +910,6 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
      }
 
      count = uprv_strlen(string);
-     /* Commented by Jing/GCL */
-     /*if (count > 0)
-     {
-          value = uprv_malloc(sizeof(uint8_t) * count);
-
-          if (value == NULL)
-          {
-               uprv_free(string);
-               *status = U_MEMORY_ALLOCATION_ERROR;
-               return NULL;
-          }
-
-          for (i = 0; i < count; i += 2)
-          {
-               toConv[0] = string[i];
-               toConv[1] = string[i + 1];
-
-               value[i >> 1] = (uint8_t) uprv_strtoul(toConv, NULL, 16);
-          }
-
-          result = bin_open(bundle, tag, (i >> 1), value, status);
-
-          uprv_free(value);
-     }
-     else {
-          result = bin_open(bundle, tag, 0, NULL, status);
-          warning(startline, "Encountered empty binary tag");
-     }
-
-     uprv_free(string);
-
-     return result;*/
      if (count > 0){
         if((count % 2)==0){
             value = uprv_malloc(sizeof(uint8_t) * count);
