@@ -390,7 +390,7 @@ SOURCE=.\udatamem.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\uenum.cpp
+SOURCE=.\uenum.c
 # End Source File
 # Begin Source File
 
