@@ -1258,7 +1258,7 @@ u_vfscanf_u(    UFILE        *f,
 
     /* skip the argument, if necessary */
     if(spec.fSkipArg)
-      va_arg(ap, int);
+      args.ptrValue = va_arg(ap, int*);
 
     handlerNum = (uint16_t)(spec.fInfo.fSpec - USCANF_BASE_FMT_HANDLERS);
     if (handlerNum < USCANF_NUM_FMT_HANDLERS) {
