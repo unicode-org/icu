@@ -12,6 +12,8 @@
 #include "unicode/schriter.h"
 #include "tstnorm.h"
 
+#if !UCONFIG_NO_NORMALIZATION
+
 static UErrorCode status = U_ZERO_ERROR;
 
 // test APIs that are not otherwise used - improve test coverage
@@ -162,3 +164,4 @@ BasicNormalizerTest::TestNormalizerAPI() {
     }
 }
 
+#endif
