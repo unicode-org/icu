@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-1999}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2003}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File GREGOCAL.H
@@ -556,13 +556,14 @@ public:
 
 protected:
 
-    /***
+    /**
      * Called by computeFields. Converts calendar's year into Gregorian Extended Year (where negative = BC)
+     * @return Current year in Gregorian years,  where  -3  means 4 BC (1-bcyear) 
      * @internal
      */
     virtual int32_t getGregorianYear(UErrorCode &status) const;
 
-    /***
+    /**
      * Called by computeJulianDay.  Returns the default month (0-based) for the year,
      * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
      * @internal
@@ -570,14 +571,12 @@ protected:
     virtual inline int32_t getDefaultMonthInYear() const { return 0; }
 
 
-    /***
+    /**
      * Called by computeJulianDay.  Returns the default day (1-based) for the month,
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
      * @internal
      */
     virtual inline int32_t getDefaultDayInMonth(int32_t /*month*/) const { return 1; }
-
-
 
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
