@@ -219,7 +219,7 @@ typedef enum UNormalizationCheckResult {
  *
  * @param source       string for determining if it is in a normalized format
  * @param sourcelength length of source to test, or -1 if NUL-terminated
- * @paran mode         which normalization form to test for
+ * @param mode         which normalization form to test for
  * @param status       a pointer to a UErrorCode to receive any errors
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
  *
@@ -237,7 +237,7 @@ unorm_quickCheck(const UChar *source, int32_t sourcelength,
  *
  * @param src        String that is to be tested if it is in a normalization format.
  * @param srcLength  Length of source to test, or -1 if NUL-terminated.
- * @paran mode       Which normalization form to test for.
+ * @param mode       Which normalization form to test for.
  * @param options    The normalization options, ORed together (0 for no options).
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
@@ -264,7 +264,7 @@ unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength,
  *
  * @param src        String that is to be tested if it is in a normalization format.
  * @param srcLength  Length of source to test, or -1 if NUL-terminated.
- * @paran mode       Which normalization form to test for.
+ * @param mode       Which normalization form to test for.
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
  * @return Boolean value indicating whether the source string is in the
@@ -284,7 +284,7 @@ unorm_isNormalized(const UChar *src, int32_t srcLength,
  *
  * @param src        String that is to be tested if it is in a normalization format.
  * @param srcLength  Length of source to test, or -1 if NUL-terminated.
- * @paran mode       Which normalization form to test for.
+ * @param mode       Which normalization form to test for.
  * @param options    The normalization options, ORed together (0 for no options).
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
