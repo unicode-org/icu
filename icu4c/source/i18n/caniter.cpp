@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/11 17:48:06 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/12 17:55:21 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@
 #include "hash.h"
 #include "uset.h"
 #include "unormimp.h"
-#include "unicode/caniter.h"
+#include "caniter.h"
 
 /**
  * This class allows one to iterate through all the strings that are canonically equivalent to a given
