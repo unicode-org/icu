@@ -5,16 +5,13 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeValueIterator.java,v $
-* $Date: 2002/02/08 01:12:45 $
-* $Revision: 1.1 $
+* $Date: 2002/02/08 23:44:22 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
 
 package com.ibm.icu.util;
-
-import com.ibm.text.UCharacter;
-import com.ibm.text.UTF16;
 
 /**
  * <p>Interface for enabling iteration over any set of integers, giving
@@ -39,71 +36,64 @@ import com.ibm.text.UTF16;
  * Example of use:<br>
  * <pre>
  * RangeValueIterator iterator = UCharacter.getTypeIterator();
- * while (iterator.next()) {
+ * RangeValueIterator.Element result = new RangeValueIterator.Element();
+ * while (iterator.next(result)) {
  *     System.out.println("Codepoint \\u" + 
- *                        Integer.toHexString(iterator.getStart()) + 
+ *                        Integer.toHexString(result.start) + 
  *                        " to codepoint \\u" +
- *                        Integer.toHexString(iterator.getLimit() - 1) + 
- *                        " has the character type " + 
- *                        iterator.getValue());
+ *                        Integer.toHexString(result.limit - 1) + 
+ *                        " has the character type " + result.value);
  * }
  * </pre>
  * @author synwee
  * @since release 2.1, Jan 17 2002
  */
 public interface RangeValueIterator
-
 {
+    // public inner class ---------------------------------------------
+    
+    /**
+    * Return result wrapper for com.ibm.icu.util.RangeValueIterator.
+    * Stores the start and limit of the continous result range and the
+    * common value all integers between [start, limit - 1] has.
+    */
+    public class Element
+    {
+        /**
+        * Starting integer of the continuous result range that has the same 
+        * value
+        * @draft 2.1
+        */
+        public int start;
+        /**
+        * (End + 1) integer of continuous result range that has the same 
+        * value
+        * @draft 2.1
+        */
+        public int limit;
+        /**
+        * Gets the common value of the continous result range
+        * @draft 2.1
+        */ 
+        public int value;
+    }
+    
     // public methods -------------------------------------------------
     
     /**
-    * <p>Returns true if we are not at the end of the iteration, false 
-    * otherwise.</p>
-    * <p>The next set of integers with the same value will be 
-    * calculated during this call. To retrieve the set of integers and 
-    * their common value, the methods getStart(), getLimit() and getValue()
-    * can be called.</p>
+    * <p>Gets the next maximal result range with a common value and returns 
+    * true if we are not at the end of the iteration, false otherwise.</p>
+    * <p>If the return boolean is a false, the contents of elements will not
+    * be updated.</p>
+    * @param element for storing the result range and value
     * @return true if we are not at the end of the iteration, false otherwise.
-    * @see #getStart()
-    * @see #getLimit()
-    * @see #getValue()
+    * @see Element
     * @draft 2.1
     */
-    public boolean next();
+    public boolean next(Element element);
     
     /**
-    * Gets the starting integer of the result range with the same value, after
-    * the last call to next(). This method will return Integer.MIN_VALUE
-    * if next() has never been called or if reset() was the last call before 
-    * the getter methods.
-    * @return start codepoint of the result range
-    * @draft 2.1
-    */
-    public int getStart();
-    
-    /**
-    * Gets the (end + 1) integer of result range with the same value, after
-    * the last call to next(). This method will return Integer.MIN_VALUE
-    * if next() has never been called or if reset() was the last call before 
-    * the getter methods.
-    * @return (end + 1) codepoint of the result range
-    * @draft 2.1
-    */
-    public int getLimit();
-    
-    /**
-    * Gets the common value of the result range, after
-    * the last call to next(). This method will return Integer.MIN_VALUE
-    * if next() has never been called or if reset() was the last call before 
-    * the getter methods.
-    * @return common value of the codepoints in the result range
-    * @draft 2.1
-    */
-    public int getValue();
-    
-    /**
-    * Resets the iterator to the beginning of the iteration and initializes
-    * start, limit and value to Integer.MIN_VALUE.
+    * Resets the iterator to the beginning of the iteration.
     * @draft 2.1
     */
     public void reset();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2002/02/08 01:08:38 $ 
-* $Revision: 1.20 $
+* $Date: 2002/02/08 23:44:17 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -929,38 +929,38 @@ public final class UCharacterTest extends TestFmwk
   */
   public void TestIteration() 
   {
-      int end       = 0;
+      int limit     = 0;
       int prevtype  = -1;
       RangeValueIterator iterator = UCharacter.getTypeIterator();
-      while (iterator.next()) {
-          int start = iterator.getStart();
-          if (start != end) {
+      RangeValueIterator.Element result = new RangeValueIterator.Element();
+      while (iterator.next(result)) {
+          if (result.start != limit) {
               errln("UCharacterEnumeration failed: Ranges not continuous " + 
-                    "0x" + Integer.toHexString(start));
+                    "0x" + Integer.toHexString(result.start));
           }
           
-          end = iterator.getLimit();
-          int type = iterator.getValue();
-          
-          if (type == prevtype) {
+          limit = result.limit;
+          if (result.value == prevtype) {
               errln("Type of the next set of enumeration should be different");
           }
+          prevtype = result.value;
           /*
           System.out.println("start and end " + Integer.toHexString(start) + 
                              " " + Integer.toHexString(end));
                              */
-		  for (int i = start; i < end; i ++) {
+		  for (int i = result.start; i < limit; i ++) {
               int temptype = UCharacter.getType(i);
-              if (temptype != type) {
+              if (temptype != result.value) {
                   errln("UCharacterEnumeration failed: Codepoint \\u" + 
                         Integer.toHexString(i) + " should be of type " +
-                        UCharacter.getType(i) + " not " + type);
+                        UCharacter.getType(i) + " not " + result.value);
               }
           }
       }
       
       iterator.reset();
-      if (iterator.next() == false || iterator.getStart() != 0) {
+      if (iterator.next(result) == false || result.start != 0) {
+          System.out.println("result " + result.start);
           errln("UCharacterEnumeration reset() failed");
       }
   }
