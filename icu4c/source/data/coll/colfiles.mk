@@ -40,11 +40,11 @@ COLLATION_SOURCE = ar.txt be.txt bg.txt ca.txt\
  fa_AF.txt fi.txt fo.txt fr.txt gu.txt\
  he.txt hi.txt hr.txt hu.txt is.txt\
  it.txt ja.txt kk.txt kl.txt kn.txt\
- ko.txt lt.txt lv.txt mk.txt mr.txt\
- mt.txt nb.txt nn.txt om.txt pa.txt\
- pl.txt ps.txt ro.txt ru.txt sh.txt\
- sk.txt sl.txt sq.txt sr.txt sv.txt\
- ta.txt te.txt th.txt tr.txt uk.txt\
- vi.txt zh.txt zh_HK.txt zh_Hant.txt zh_MO.txt\
- zh_TW.txt
+ ko.txt lt.txt lv.txt mk.txt ml.txt\
+ mr.txt mt.txt nb.txt nn.txt om.txt\
+ or.txt pa.txt pl.txt ps.txt ro.txt\
+ ru.txt sh.txt sk.txt sl.txt sq.txt\
+ sr.txt sv.txt ta.txt te.txt th.txt\
+ tr.txt uk.txt vi.txt zh.txt zh_HK.txt\
+ zh_Hant.txt zh_MO.txt zh_TW.txt
 
