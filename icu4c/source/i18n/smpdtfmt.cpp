@@ -534,12 +534,6 @@ SimpleDateFormat::subFormat(UnicodeString& result,
 
     // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
     case kYearField:
-        if (count >= 4) 
-            zeroPaddingNumber(result, value, 4, maxIntCount);
-        else 
-            zeroPaddingNumber(result, value, 2, 2);
-        break;
-
     case kYearWOYField:
         if (count >= 4) 
             zeroPaddingNumber(result, value, 4, maxIntCount);
