@@ -44,6 +44,7 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /Ob1 /I "..\..\source\common" /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /YX /FD /c
+# SUBTRACT CPP /O<none>
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -166,6 +167,8 @@ SOURCE=.\coleitr.cpp
 SOURCE=.\coll.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -601,6 +604,8 @@ SOURCE=.\translit.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# SUBTRACT CPP /O<none>
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # ADD CPP /Ze
@@ -639,6 +644,8 @@ SOURCE=.\ucal.cpp
 SOURCE=.\ucol.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -734,6 +741,8 @@ SOURCE=.\unum.cpp
 SOURCE=.\utrans.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# SUBTRACT CPP /O<none>
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
