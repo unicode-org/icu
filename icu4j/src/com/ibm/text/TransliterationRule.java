@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.6 $ $Date: 2000/01/11 02:25:03 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.7 $ $Date: 2000/01/11 04:12:06 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.7  2000/01/11 04:12:06  Alan
+ * Cleanup, embellish comments
+ *
  * Revision 1.6  2000/01/11 02:25:03  Alan
  * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
  *
@@ -106,76 +109,55 @@ class TransliterationRule {
         "\u00A9 IBM Corporation 1999. All rights reserved.";
 
     /**
-     * Construct a new rule with the given key, output text, and other
-     * attributes.  Zero, one, or two context strings may be specified.  A
-     * cursor position may be specified for the output text.
-     * @param key the string to match
-     * @param output the string to produce when the <code>key</code> is seen
-     * @param anteContext if not null and not empty, then it must be matched
-     * before the <code>key</code>
-     * @param postContext if not null and not empty, then it must be matched
-     * after the <code>key</code>
-     * @param cursorPos a position for the cursor after the <code>output</code>
-     * is emitted.  If less than zero, then the cursor is placed after the
+     * Construct a new rule with the given input, output text, and other
+     * attributes.  A cursor position may be specified for the output text.
+     * @param input input string, including key and optional ante and
+     * post context
+     * @param anteContextPos offset into input to end of ante context, or -1 if
+     * none.  Must be <= input.length() if not -1.
+     * @param postContextPos offset into input to start of post context, or -1
+     * if none.  Must be <= input.length() if not -1, and must be >=
+     * anteContextPos.
+     * @param output output string
+     * @param cursorPos offset into output at which cursor is located, or -1 if
+     * none.  If less than zero, then the cursor is placed after the
      * <code>output</code>; that is, -1 is equivalent to
      * <code>output.length()</code>.  If greater than
      * <code>output.length()</code> then an exception is thrown.
-     * @exception IllegalArgumentException if the cursor position is out of
-     * range.
-     */
-    public TransliterationRule(String key, String output,
-                               String anteContext, String postContext,
-                               int cursorPos) {
-        keyLength = key.length();
-        anteContextLength = (anteContext != null) ? anteContext.length() : 0;
-        pattern = (anteContextLength > 0 ? (anteContext + key) : key) +
-            (postContext != null ? postContext : "");
-        this.output = output;
-        this.cursorPos = cursorPos < 0 ? output.length() : cursorPos;
-        if (this.cursorPos > output.length()) {
-            throw new IllegalArgumentException("Illegal cursor position");
-        }
-    }
-
-
-
-
-
-
-
-    /**
-     * @param input input string, including key and optional ante and
-     * post context
-     * @param anteContextPos offset into input to end of ante context, or
-     * -1 if none
-     * @param postContextPos offset into input to start of post context,
-     * or -1 if none
-     * @param output output string
-     * @param cursorPos offset into output at which cursor is located,
-     * or -1 if none.
      */
     public TransliterationRule(String input,
                                int anteContextPos, int postContextPos,
                                String output,
                                int cursorPos) {
-        anteContextLength = (anteContextPos < 0) ? 0 : anteContextPos;
-        keyLength = (postContextPos < 0) ? input.length() - anteContextLength :
-            postContextPos - anteContextLength;
+        // Do range checks only when warranted to save time
+        if (anteContextPos < 0) {
+            anteContextLength = 0;
+        } else {
+            if (anteContextPos > input.length()) {
+                throw new IllegalArgumentException("Invalid ante context");
+            }
+            anteContextLength = anteContextPos;
+        }
+        if (postContextPos < 0) {
+            keyLength = input.length() - anteContextLength;
+        } else {
+            if (postContextPos < anteContextLength ||
+                postContextPos > input.length()) {
+                throw new IllegalArgumentException("Invalid post context");
+            }
+            keyLength = postContextPos - anteContextLength;
+        }
+        if (cursorPos < 0) {
+            this.cursorPos = output.length();
+        } else {
+            if (cursorPos > input.length()) {
+                throw new IllegalArgumentException("Invalid cursor position");
+            }
+            this.cursorPos = cursorPos;
+        }
         pattern = input;
         this.output = output;
-        this.cursorPos = cursorPos < 0 ? output.length() : cursorPos;
-        if (anteContextPos > input.length() || postContextPos > input.length() ||
-            cursorPos > output.length()) {
-            throw new IllegalArgumentException();
-        }
     }
-
-
-
-
-
-
-
 
     /**
      * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
