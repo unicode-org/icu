@@ -461,7 +461,7 @@ ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
                         950 { JAVA }
-macos-2566-10_2 { UTR22* }
+macos-2566-10.2 { UTR22* }
                         Big5-HKSCS { IANA* JAVA* }
                         big5hk { JAVA }
                         HKSCS-BIG5  # From http://www.openi18n.org/localenameguide/
