@@ -74,20 +74,23 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	private ICUResourceBundle getBundle() {
 		int type = RES_GET_TYPE(rootResource);
 		if (type == TABLE) {
-			// %%ALIAS is such a hack! I can understand the
-			// ICU4C legacy .. do we need to port it?
 			ResourceTable table = new ResourceTable(null, rootResource, "", true);
-
-			ICUResourceBundle b = table.handleGet(0);
-			String itemKey = b.getKey();
-			if (itemKey.equals("%%ALIAS")) {
-				String locale = b.getString();
-				ICUResourceBundle actual = (ICUResourceBundle) UResourceBundle
-						.getBundleInstance(baseName, locale);
-				return (ResourceTable) actual;
-			} else {
-				return table;
-			}
+			if(table.countItems()>0){
+    			ICUResourceBundle b = table.handleGet(0);
+    			String itemKey = b.getKey();
+    			
+                // %%ALIAS is such a hack! I can understand the
+                // ICU4C legacy .. do we need to port it?
+                if (itemKey.equals("%%ALIAS")) {
+    				String locale = b.getString();
+    				ICUResourceBundle actual = (ICUResourceBundle) UResourceBundle.getBundleInstance(baseName, locale);
+    				return (ResourceTable) actual;
+    			}else{
+    				return table;
+                }
+            }else {
+    			return table;
+            }
 
 		} else if (type == TABLE32) {
 
@@ -200,6 +203,9 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			return handleGet(key, null);
 		}
 		protected ICUResourceBundle handleGet(String key, HashMap table) {
+            if(size<=0){
+            	return null;
+            }
 			int offset = RES_GET_OFFSET(resource);
 			// offset+0 contains number of entries
 			// offset+1 contains the keyOffset  
@@ -280,6 +286,9 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	private class ResourceTable32 extends ICUResourceBundle implements Resource {
 
 		public ICUResourceBundle get(String key) {
+            if(size<=0){
+            	return null;
+            }
 			return get(key, null);
 		}
 		public ICUResourceBundle get(String key, HashMap table) {

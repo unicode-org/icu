@@ -666,7 +666,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // load up the resource bundle containing the description
         // from the specified locale
         //        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
-        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(new ULocale(locale));
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_RBNF_BASE_NAME, new ULocale(locale));
 
         // TODO: determine correct actual/valid locale.  Note ambiguity
         // here -- do actual/valid refer to pattern, DecimalFormatSymbols,

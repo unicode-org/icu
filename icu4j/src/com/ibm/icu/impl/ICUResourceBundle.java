@@ -51,6 +51,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      */
     public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
     
+    public static final String ICU_RBNF_BASE_NAME = ICU_BASE_NAME + "/rbnf";
     /**
      * The class loader constant to be used with getBundleInstance API
      * @draft ICU 3.0
