@@ -23,7 +23,7 @@ const UnicodeString fgTypeList[] = {
 
 // NumberFormat modifier list, default, currency, percent or integer
 const UnicodeString fgModifierList[] = {
-  UnicodeString(), UnicodeString(), UNICODE_STRING("currency", 9), UnicodeString(), UNICODE_STRING("percent", 7), UnicodeString(), UNICODE_STRING("integer", 7), UnicodeString(), UnicodeString()
+  UnicodeString(), UnicodeString(), UNICODE_STRING("currency", 8), UnicodeString(), UNICODE_STRING("percent", 7), UnicodeString(), UNICODE_STRING("integer", 7), UnicodeString(), UnicodeString()
 };
 
 // DateFormat modifier list, default, short, medium, long or full
