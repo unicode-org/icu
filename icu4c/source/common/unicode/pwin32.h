@@ -175,7 +175,11 @@ typedef unsigned short uint16_t;
 /* Symbol import-export control                                              */
 /*===========================================================================*/
 
+#ifdef U_STATIC_IMPLEMENTATION
+#define U_EXPORT
+#else
 #define U_EXPORT __declspec(dllexport)
+#endif
 #define U_EXPORT2 __cdecl
 #define U_IMPORT __declspec(dllimport)
 
