@@ -35,13 +35,11 @@ const char* rawData[27][7] = {
         // display country (English)
         {   "United States",    "France",   "Spain",  "Greece",   "Norway",   "",     "YY" },
         // display variant (English)
-        {   "",     "",     "",     "",     "Nynorsk",   "",     ""},
-        //{   "",     "",     "",     "",     "NY",   "",     ""},
+        {   "",     "",     "",     "",     "NY",   "",     ""},
         // display name (English)
         // Updated no_NO_NY English display name for new pattern-based algorithm
         // (part of Euro support).
-        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)", "Italian", "xx (YY)" },
-        //{   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway,NY)", "Italian", "xx (YY)" },
+        {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, NY)", "Italian", "xx (YY)" },
 
         // display langage (French)
         {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx" },
@@ -1358,7 +1356,7 @@ LocaleTest::Test4147552()
                                                  edn,
                                                  // "Norwegian (Norway,B)",
                                                  //"Norwegian (Norway,NY)"
-                                                 "Norwegian (Norway, Nynorsk)"
+                                                 "Norwegian (Norway, NY)"
     };
     UnicodeString ndn("norsk (Norge, B");
     UnicodeString norwegianDisplayNames [] = {
