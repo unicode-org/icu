@@ -22,9 +22,6 @@
 *   and a 2.1 reader will be able to read 2.0.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ucnv.h" /* ucnv_compareNames() */
@@ -34,6 +31,10 @@
 #include "unewdata.h"
 #include "uoptions.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
 /* TODO: Need to specify the maximum alias name length in a header (see ucnv_io.c::findalias()) */
 
 #define STRING_STORE_SIZE 100000
@@ -41,6 +42,8 @@
 
 #define TAG_STORE_SIZE 20000
 #define MAX_TAG_COUNT 200
+
+#define MAX_LINE_SIZE 32767
 
 #define DATA_NAME "cnvalias"
 #define DATA_TYPE "dat"
@@ -96,10 +99,22 @@ typedef struct {
 static Tag tags[MAX_TAG_COUNT];
 static uint16_t tagCount = 0;
 
+/* Were the standard tags declared before the aliases. */
+UBool standardTagsUsed = FALSE;
+
 /* prototypes --------------------------------------------------------------- */
 
 static void
 parseLine(const char *line);
+
+static void
+parseFile(FileStream *in);
+
+static int32_t
+chomp(char *line);
+
+static void
+addOfficialTaggedStandards(char *line, int32_t lineLen);
 
 static uint16_t
 addAlias(const char *alias, uint16_t converter);
@@ -131,11 +146,10 @@ static UOption options[]={
 
 extern int
 main(int argc, char* argv[]) {
-    char line[512];
+    char pathBuf[512];
     const char *path;
     FileStream *in;
     UNewDataMemory *out;
-    char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
     int i;
     uint16_t tagOffset, stringOffset;
@@ -170,14 +184,13 @@ main(int argc, char* argv[]) {
     } else {
         path=options[4].value;
         if(path!=NULL && *path!=0) {
-            uprv_strcpy(line, path);
-            path=line+uprv_strlen(line);
-            if(*(path-1)!=U_FILE_SEP_CHAR) {
-                *((char *)path)=U_FILE_SEP_CHAR;
-                ++path;
+            char *end = pathBuf+uprv_strlen(pathBuf);
+            uprv_strcpy(pathBuf, path);
+            if(*(end-1)!=U_FILE_SEP_CHAR) {
+                *(end++)=U_FILE_SEP_CHAR;
             }
-            uprv_strcpy((char *)path, "convrtrs.txt");
-            path=line;
+            uprv_strcpy(end, "convrtrs.txt");
+            path=pathBuf;
         } else {
             path = "convrtrs.txt";
         }
@@ -188,21 +201,8 @@ main(int argc, char* argv[]) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    /* read the list of aliases */
-    while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-        /* remove trailing newline characters */
-        s=line;
-        while(*s!=0) {
-            if(*s=='\r' || *s=='\n') {
-                *s=0;
-                break;
-            }
-            ++s;
-        }
 
-        parseLine(line);
-    }
-
+    parseFile(in);
     T_FileStream_close(in);
 
     /* sort the aliases */
@@ -269,6 +269,83 @@ main(int argc, char* argv[]) {
 }
 
 static void
+parseFile(FileStream *in) {
+    char line[MAX_LINE_SIZE];
+    char lastLine[MAX_LINE_SIZE];
+    int32_t lineSize = 0;
+    int32_t lastLineSize;
+    UBool validParse = TRUE;
+    int32_t lineNum = 1;
+
+    /* read the list of aliases */
+    while (validParse) {
+        validParse = FALSE;
+
+        /* Read non-empty lines that don't start with a space character. */
+        while (T_FileStream_readLine(in, lastLine, MAX_LINE_SIZE) != NULL) {
+            lineNum++;
+            lastLineSize = chomp(lastLine);
+            if (lineSize == 0 || (lastLineSize > 0 && isspace(*lastLine))) {
+                uprv_strcpy(line + lineSize, lastLine);
+                lineSize += lastLineSize;
+            } else if (lineSize > 0) {
+                validParse = TRUE;
+                break;
+            }
+        }
+
+        if (validParse) {
+            if (isspace(*line)) {
+                fprintf(stderr, "error: line %d: cannot start an alias with a space\n", lineNum-2);
+                exit(1);
+            } else if (line[0] == '{') {
+                if (!standardTagsUsed && line[lineSize - 1] != '}') {
+                    fprintf(stderr, "error: line %d: alias needs to start with a converter name\n", lineNum);
+                    exit(1);
+                }
+                addOfficialTaggedStandards(line, lineSize);
+                standardTagsUsed = TRUE;
+            } else {
+                parseLine(line);
+            }
+            /* Was the last line consumed */
+            if (lastLineSize > 0) {
+                uprv_strcpy(line, lastLine);
+                lineSize = lastLineSize;
+            }
+            else {
+                lineSize = 0;
+            }
+        }
+    }
+}
+
+/* This works almost like the Perl chomp.
+ It removes the newlines, comments and trailing whitespace (not preceding whitespace).
+*/
+static int32_t
+chomp(char *line) {
+    char *s = line;
+    char *lastNonSpace = line;
+    while(*s!=0) {
+        /* truncate at a newline or a comment */
+        if(*s == '\r' || *s == '\n' || *s == '#') {
+            *s = 0;
+            break;
+        }
+        if (!isspace(*s)) {
+            lastNonSpace = s;
+        }
+        ++s;
+    }
+    if (lastNonSpace++ > line) {
+        *lastNonSpace = 0;
+        s = lastNonSpace;
+    }
+    return (int32_t)(s - line);
+}
+
+static void
 parseLine(const char *line) {
     uint16_t pos=0, start, limit, length, cnv;
     char *converter, *alias;
@@ -278,14 +355,14 @@ parseLine(const char *line) {
         ++pos;
     }
 
-    /* is there only a comment on this line? */
-    if(line[pos]==0 || line[pos]=='#') {
+    /* is there nothing on this line? */
+    if(line[pos]==0) {
         return;
     }
 
     /* get the converter name */
     start=pos;
-    while(line[pos]!=0 && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
+    while(line[pos]!=0 && !isspace((unsigned char)line[pos])) {
         ++pos;
     }
     limit=pos;
@@ -408,10 +485,16 @@ static uint16_t
 getTagNumber(const char *tag, uint16_t tagLen) {
     char *atag;
     uint16_t t;
+    UBool preferredName = (tag[tagLen - 1] == '*');
 
     if (tagCount >= MAX_TAG_COUNT) {
         fprintf(stderr, "gencnval: too many tags\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
+    }
+
+    if (preferredName) {
+/*        puts(tag);*/
+        tagLen--;
     }
 
     for (t = 0; t < tagCount; ++t) {
@@ -421,17 +504,23 @@ getTagNumber(const char *tag, uint16_t tagLen) {
     }
 
     /* we need to add this tag */
-
     if (tagCount >= MAX_TAG_COUNT) {
         fprintf(stderr, "gencnval: too many tags\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
 
     /* allocate a new entry in the tag table */
-
     atag = allocString(&tagBlock, tagLen + 1);
     uprv_memcpy(atag, tag, tagLen);
     atag[tagLen] = 0;
+
+    if (standardTagsUsed) {
+        fprintf(stderr, "error: Tag \"%s\" is not declared at the beginning of the alias table.\n", atag);
+        exit(1);
+    }
+    else {
+        fprintf(stderr, "warning: Tag \"%s\" was added to the list of standards because it was not declared at beginning of the alias table.\n", atag);
+    }
 
     /* add the tag to the tag table */
     tags[tagCount].tag = atag;
@@ -444,6 +533,40 @@ getTagNumber(const char *tag, uint16_t tagLen) {
 static void
 addTaggedAlias(uint16_t tag, const char *alias, uint16_t converter) {
     tags[tag].aliases[converter] = alias;
+}
+
+static void
+addOfficialTaggedStandards(char *line, int32_t lineLen) {
+    char *atag;
+    char *tag = strchr(line, '{') + 1;
+    uint16_t tagSize;
+    static const char WHITESPACE[] = " \t";
+
+    if (tagCount >= MAX_TAG_COUNT) {
+        fprintf(stderr, "gencnval: too many tags\n");
+        exit(U_BUFFER_OVERFLOW_ERROR);
+    }
+    strchr(tag, '}')[0] = 0;
+
+    tag = strtok(tag, WHITESPACE);
+    while (tag != NULL) {
+/*        printf("Adding original tag \"%s\"\n", tag);*/
+
+        tagSize = strlen(tag) + 1;
+        /* allocate a new entry in the tag table */
+
+        atag = allocString(&tagBlock, tagSize);
+        uprv_memcpy(atag, tag, tagSize);
+
+        /* add the tag to the tag table */
+        tags[tagCount].tag = atag;
+        /* Set the array of pointers to NULL */
+        uprv_memset((void *)&tags[tagCount].aliases, 0, sizeof(tags[tagCount].aliases));
+        tagCount++;
+
+        /* Get next tag */
+        tag = strtok(NULL, WHITESPACE);
+    }
 }
 
 static uint16_t
