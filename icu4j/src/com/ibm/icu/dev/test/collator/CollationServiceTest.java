@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationServiceTest.java,v $ 
- * $Date: 2003/06/04 20:24:14 $
- * $Revision: 1.4 $
+ * $Date: 2003/10/09 20:02:23 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -221,7 +221,7 @@ public class CollationServiceTest extends TestFmwk {
 	    TestFactoryWrapper wrapper = new TestFactoryWrapper(factory); // in java, gc lets us easily multiply reference!
 	    Object key = Collator.registerFactory(wrapper);
 	    String name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
-	    System.out.println("***default name: " + name);
+	    logln("*** default name: " + name);
 	    Collator.unregister(key);
 
 	    Collator col = Collator.getInstance(new Locale("bar", "BAR"));
