@@ -206,7 +206,7 @@ struct CReg : public UMemory {
     CReg(const UChar* _iso, const char* _id)
         : next(0)
     {
-        int32_t len = uprv_strlen(_id);
+        int32_t len = (int32_t)uprv_strlen(_id);
         if (len > (int32_t)(sizeof(id)-1)) {
             len = (sizeof(id)-1);
         }
@@ -411,7 +411,7 @@ static UBool fallback(char *loc) {
         return FALSE;
     }
     UErrorCode status = U_ZERO_ERROR;
-    uloc_getParent(loc, loc, uprv_strlen(loc), &status);
+    uloc_getParent(loc, loc, (int32_t)uprv_strlen(loc), &status);
  /*
     char *i = uprv_strrchr(loc, '_');
     if (i == NULL) {
