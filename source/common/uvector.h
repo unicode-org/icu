@@ -87,10 +87,13 @@ private:
     UKeyComparator comparer;
 
 public:
-    UVector(UErrorCode &status, int32_t initialCapacity = 8);
+    UVector(UErrorCode &status);
 
-    UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity = 8);
+    UVector(int32_t initialCapacity, UErrorCode &status);
 
+    UVector(UObjectDeleter d, UKeyComparator c, UErrorCode &status);
+
+    UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status);
     ~UVector();
 
     //------------------------------------------------------------
@@ -194,9 +197,13 @@ private:
  */
 class U_COMMON_API UStack : public UVector {
 public:
-    UStack(UErrorCode &status, int32_t initialCapacity = 8);
+    UStack(UErrorCode &status);
 
-    UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status, int32_t initialCapacity = 8);
+    UStack(int32_t initialCapacity, UErrorCode &status);
+
+    UStack(UObjectDeleter d, UKeyComparator c, UErrorCode &status);
+
+    UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UErrorCode &status);
 
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.

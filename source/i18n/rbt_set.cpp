@@ -293,7 +293,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
     int32_t n = ruleVector->size();
     int32_t j;
     int16_t x;
-    UVector v(status, 2*n); // heuristic; adjust as needed
+    UVector v(2*n, status); // heuristic; adjust as needed
 
     if (U_FAILURE(status)) {
         return;
