@@ -8,6 +8,7 @@
 #include "unicode/unistr.h"
 #include "unicode/unicode.h"
 #include "unicode/locid.h"
+#include "unicode/ustream.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
