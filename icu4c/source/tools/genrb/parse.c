@@ -271,7 +271,7 @@ static char *getInvariantString(uint32_t *line, UErrorCode *status)
 
     if (U_FAILURE(*status))
     {
-	return NULL;
+    return NULL;
     }
 
     count  = u_strlen(tokenValue->fChars) + 1;
@@ -279,8 +279,8 @@ static char *getInvariantString(uint32_t *line, UErrorCode *status)
 
     if (result == NULL)
     {
-	*status = U_MEMORY_ALLOCATION_ERROR;
-	return NULL;
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
     }
 
     u_UCharsToChars(tokenValue->fChars, result, count);
@@ -340,7 +340,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     char              filename[256] = { '\0' };
     char              cs[128]       = { '\0' };
     uint32_t          line;
-
+    int               len=0;
     expect(TOK_STRING, &tokenValue, &line, status);
 
     /* make the filename including the directory */
@@ -372,67 +372,67 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
 
     if (file != NULL)
     {
-	UCHARBUF *ucbuf;
-	UChar32   c    = 0;
-	uint32_t  size = T_FileStream_size(file);
+    UCHARBUF *ucbuf;
+    UChar32   c    = 0;
+    uint32_t  size = T_FileStream_size(file);
 
-	/* We allocate more space than actually required
-	 * since the actual size needed for storing UChars 
-	 * is not known in UTF-8 byte stream
-	 */
-	UChar *pTarget     = (UChar *) uprv_malloc(sizeof(UChar) * size);
-	UChar *target      = pTarget;
-	UChar *targetLimit = pTarget + size;
+    /* We allocate more space than actually required
+     * since the actual size needed for storing UChars 
+     * is not known in UTF-8 byte stream
+     */
+    UChar *pTarget     = (UChar *) uprv_malloc(sizeof(UChar) * size);
+    UChar *target      = pTarget;
+    UChar *targetLimit = pTarget + size;
 
-	ucbuf = ucbuf_open(file, status);
+    ucbuf = ucbuf_open(file, status);
 
-	/* read the rules into the buffer */
-	while (target < targetLimit)
-	{
-	    c = ucbuf_getc(ucbuf, status);
+    /* read the rules into the buffer */
+    while (target < targetLimit)
+    {
+        c = ucbuf_getc(ucbuf, status);
 
-	    if (c == ESCAPE)
-	    {
-		c = unescape(ucbuf, status);
+        if (c == ESCAPE)
+        {
+        c = unescape(ucbuf, status);
 
-		if (c == U_ERR)
-		{
-		    uprv_free(pTarget);
+        if (c == U_ERR)
+        {
+            uprv_free(pTarget);
                     T_FileStream_close(file);
-		    return NULL;
-		}
-	    }
-	    else if (c == SPACE || c == CR || c == LF)
-	    {
-		/* ignore spaces carriage returns 
-		 * and line feed unless in the form \uXXXX
-		 */
-		continue;
-	    }
+            return NULL;
+        }
+        }
+        else if (c == SPACE || c == CR || c == LF)
+        {
+        /* ignore spaces carriage returns 
+         * and line feed unless in the form \uXXXX
+         */
+        continue;
+        }
 
-	    /* Append UChar * after dissembling if c > 0xffff*/
-	    if (c != U_EOF)
-	    {
-		U_APPEND_CHAR32(c, target);
-	    }
-	    else
-	    {
-		break;
-	    }
-	}
+        /* Append UChar * after dissembling if c > 0xffff*/
+        if (c != U_EOF)
+        {
+        U_APPEND_CHAR32(c, target,len);
+        }
+        else
+        {
+        break;
+        }
+    }
 
-	result = string_open(bundle, tag, pTarget, target - pTarget, status);
+    result = string_open(bundle, tag, pTarget, target - pTarget, status);
 
-	uprv_free(pTarget);
-	T_FileStream_close(file);
+    uprv_free(pTarget);
+    T_FileStream_close(file);
 
-	return result;
+    return result;
     }
     else
     {
-	error(line, "couldn't open input file %s\n", filename);
-	*status = U_FILE_ACCESS_ERROR;
-	return NULL;
+    error(line, "couldn't open input file %s\n", filename);
+    *status = U_FILE_ACCESS_ERROR;
+    return NULL;
     }
 }
 
@@ -444,15 +444,15 @@ parseString(char *tag, uint32_t startline, UErrorCode *status)
 
     if (tag != NULL && uprv_strcmp(tag, "%%UCARULES") == 0)
     {
-	return parseUCARules(tag, startline, status);
+    return parseUCARules(tag, startline, status);
     }
 
     expect(TOK_STRING, &tokenValue, NULL, status);
 
     if (U_SUCCESS(*status))
     {
-	/* create the string now - tokenValue doesn't survive a call to getToken (and therefore
-	   doesn't survive expect either) */
+    /* create the string now - tokenValue doesn't survive a call to getToken (and therefore
+       doesn't survive expect either) */
 
         result = string_open(bundle, tag, tokenValue->fChars, tokenValue->fLength, status);
 
@@ -460,7 +460,7 @@ parseString(char *tag, uint32_t startline, UErrorCode *status)
 
         if (U_FAILURE(*status))
         {
-	    string_close(result, status);
+        string_close(result, status);
             return NULL;
         }
     }
@@ -477,7 +477,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
     enum   ETokenType  token;
     char               subtag[1024];
     UVersionInfo       version;
-    UBool      	       override = FALSE;
+    UBool              override = FALSE;
     uint32_t           line;
 
     result = table_open(bundle, tag, status);
@@ -522,88 +522,88 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             return NULL;
         }
 
-	expect(TOK_OPEN_BRACE, NULL,        NULL,  status);
-	expect(TOK_STRING,     &tokenValue, &line, status);
+    expect(TOK_OPEN_BRACE, NULL,        NULL,  status);
+    expect(TOK_STRING,     &tokenValue, &line, status);
 
         if (U_FAILURE(*status))
         {
             table_close(result, status);
             return NULL;
-        }	
+        }   
 
-	if (uprv_strcmp(subtag, "Version") == 0)
-	{
-	    char    ver[40];
-	    int32_t length = u_strlen(tokenValue->fChars);
+    if (uprv_strcmp(subtag, "Version") == 0)
+    {
+        char    ver[40];
+        int32_t length = u_strlen(tokenValue->fChars);
 
-	    if (length >= (int32_t) sizeof(ver))
-	    {
-		length = (int32_t) sizeof(ver) - 1;
-	    }
+        if (length >= (int32_t) sizeof(ver))
+        {
+        length = (int32_t) sizeof(ver) - 1;
+        }
 
-	    u_UCharsToChars(tokenValue->fChars, ver, length);
-	    u_versionFromString(version, ver);
-	}
-	else if (uprv_strcmp(subtag, "Override") == 0)
-	{
-	    override = FALSE;
+        u_UCharsToChars(tokenValue->fChars, ver, length);
+        u_versionFromString(version, ver);
+    }
+    else if (uprv_strcmp(subtag, "Override") == 0)
+    {
+        override = FALSE;
 
-	    if (u_strncmp(tokenValue->fChars, trueValue, u_strlen(trueValue)) == 0)
-	    {
-		override = TRUE;
-	    }
-	}
-	else if (uprv_strcmp(subtag, "Sequence") == 0)
-	{
-	    UErrorCode intStatus = U_ZERO_ERROR;
+        if (u_strncmp(tokenValue->fChars, trueValue, u_strlen(trueValue)) == 0)
+        {
+        override = TRUE;
+        }
+    }
+    else if (uprv_strcmp(subtag, "Sequence") == 0)
+    {
+        UErrorCode intStatus = U_ZERO_ERROR;
 
-	    /* do the collation elements */
-	    int32_t    len   = 0;
-	    uint8_t   *data  = NULL;
-	    UCollator *coll  = NULL;
-	    UChar     *rules = NULL;
+        /* do the collation elements */
+        int32_t    len   = 0;
+        uint8_t   *data  = NULL;
+        UCollator *coll  = NULL;
+        UChar     *rules = NULL;
 
-	    coll = ucol_openRules(tokenValue->fChars, tokenValue->fLength, 
-				  UNORM_NONE, UCOL_DEFAULT_STRENGTH, &intStatus);
+        coll = ucol_openRules(tokenValue->fChars, tokenValue->fLength, 
+                  UNORM_NONE, UCOL_DEFAULT_STRENGTH, &intStatus);
 
-	    if (U_SUCCESS(intStatus) && coll != NULL)
-	    {
-		data = ucol_cloneRuleData(coll, &len, &intStatus);
+        if (U_SUCCESS(intStatus) && coll != NULL)
+        {
+        data = ucol_cloneRuleData(coll, &len, &intStatus);
 
-		/* tailoring rules version */
-		coll->dataInfo.dataVersion[1] = version[0];
+        /* tailoring rules version */
+        coll->dataInfo.dataVersion[1] = version[0];
 
-		if (U_SUCCESS(intStatus) && data != NULL)
-		{
-		    member = bin_open(bundle, "%%CollationNew", len, data, status);
-		    table_add(bundle->fRoot, member, line, status);
-		    uprv_free(data);
-		}
-		else
-		{
-		    warning(line, "could not obtain rules from collator");
-		}
+        if (U_SUCCESS(intStatus) && data != NULL)
+        {
+            member = bin_open(bundle, "%%CollationNew", len, data, status);
+            table_add(bundle->fRoot, member, line, status);
+            uprv_free(data);
+        }
+        else
+        {
+            warning(line, "could not obtain rules from collator");
+        }
 
-		ucol_close(coll);
-	    }
-	    else 
-	    {
-		warning(line, "%%Collation could not be constructed from CollationElements - check context!");
-	    }
+        ucol_close(coll);
+        }
+        else 
+        {
+        warning(line, "%%Collation could not be constructed from CollationElements - check context!");
+        }
 
-	    uprv_free(rules);
-	}
+        uprv_free(rules);
+    }
 
-	member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);
-	table_add(result, member, line, status);
+    member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);
+    table_add(result, member, line, status);
 
-	expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
 
         if (U_FAILURE(*status))
         {
             table_close(result, status);
             return NULL;
-        }	
+        }   
     }
 
     /* not reached */
@@ -686,7 +686,7 @@ parseTable(char *tag, uint32_t startline, UErrorCode *status)
 
     if (tag != NULL && uprv_strcmp(tag, "CollationElements") == 0)
     {
-	return parseCollationElements(tag, startline, status);
+    return parseCollationElements(tag, startline, status);
     }
 
     result = table_open(bundle, tag, status);
@@ -855,15 +855,15 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
 
     if (string == NULL || U_FAILURE(*status))
     {
-	return NULL;
+    return NULL;
     }
 
     expect(TOK_CLOSE_BRACE, NULL, NULL, status);
 
     if (U_FAILURE(*status))
     {
-	uprv_free(string);
-	return NULL;
+    uprv_free(string);
+    return NULL;
     }
 
     count = uprv_strlen(string);
@@ -871,17 +871,17 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
 
     if (value == NULL)
     {
-	uprv_free(string);
-	*status = U_MEMORY_ALLOCATION_ERROR;
-	return NULL;
+    uprv_free(string);
+    *status = U_MEMORY_ALLOCATION_ERROR;
+    return NULL;
     }
 
     for (i = 0; i < count; i += 2)
     {
-	toConv[0] = string[i];
-	toConv[1] = string[i + 1];
+    toConv[0] = string[i];
+    toConv[1] = string[i + 1];
 
-	value[i >> 1] = (uint8_t) uprv_strtoul(toConv, NULL, 16);
+    value[i >> 1] = (uint8_t) uprv_strtoul(toConv, NULL, 16);
     }
 
     result = bin_open(bundle, tag, (i >> 1), value, status);
@@ -903,15 +903,15 @@ parseInteger(char *tag, uint32_t startline, UErrorCode *status)
 
     if (string == NULL || U_FAILURE(*status))
     {
-	return NULL;
+    return NULL;
     }
 
     expect(TOK_CLOSE_BRACE, NULL, NULL, status);
 
     if (U_FAILURE(*status))
     {
-	uprv_free(string);
-	return NULL;
+    uprv_free(string);
+    return NULL;
     }
 
     value  = uprv_strtol(string, NULL, 10);
@@ -936,7 +936,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
 
     if (U_FAILURE(*status))
     {
-	return NULL;
+    return NULL;
     }
 
     expect(TOK_CLOSE_BRACE, NULL, NULL, status);
@@ -950,41 +950,41 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     /* Open the input file for reading */
     if (inputdir == NULL)
     {
-	file = T_FileStream_open(filename, "rb");
+    file = T_FileStream_open(filename, "rb");
     }
     else
     {
-	char    *fullname = NULL;
-	int32_t  count    = uprv_strlen(filename);
+    char    *fullname = NULL;
+    int32_t  count    = uprv_strlen(filename);
 
-	if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
-	{
-	    fullname = (char *) uprv_malloc(inputdirLength + count + 2);
+    if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
+    {
+        fullname = (char *) uprv_malloc(inputdirLength + count + 2);
 
-	    uprv_strcpy(fullname, inputdir);
+        uprv_strcpy(fullname, inputdir);
 
-	    fullname[inputdirLength]     = U_FILE_SEP_CHAR;
-	    fullname[inputdirLength + 1] = '\0';
+        fullname[inputdirLength]     = U_FILE_SEP_CHAR;
+        fullname[inputdirLength + 1] = '\0';
 
-	    uprv_strcat(fullname, filename);
-	}
-	else
-	{
-	    fullname = (char *) uprv_malloc(inputdirLength + count + 1);
+        uprv_strcat(fullname, filename);
+    }
+    else
+    {
+        fullname = (char *) uprv_malloc(inputdirLength + count + 1);
 
-	    uprv_strcpy(fullname, inputdir);
-	    uprv_strcat(fullname, filename);
-	}
+        uprv_strcpy(fullname, inputdir);
+        uprv_strcat(fullname, filename);
+    }
 
-	file = T_FileStream_open(fullname, "rb");
-	uprv_free(fullname);
+    file = T_FileStream_open(fullname, "rb");
+    uprv_free(fullname);
     }
 
     if (file == NULL)
     {
-	error(line, "couldn't open input file %s", filename);
-	*status = U_FILE_ACCESS_ERROR;
-	return NULL;
+    error(line, "couldn't open input file %s", filename);
+    *status = U_FILE_ACCESS_ERROR;
+    return NULL;
     }
 
     len  = T_FileStream_size(file);
@@ -1096,7 +1096,7 @@ parseResource(char *tag, UErrorCode *status)
             return NULL;
         }
 
-	/* printf("Type guessed as %s\n", resourceNames[resType]); */
+    /* printf("Type guessed as %s\n", resourceNames[resType]); */
     }
 
     /* We should now know what we need to parse next, so call the appropriate parser
@@ -1106,9 +1106,9 @@ parseResource(char *tag, UErrorCode *status)
     case RT_STRING:     return parseString    (tag, startline, status);
     case RT_TABLE:      return parseTable     (tag, startline, status);
     case RT_ARRAY:      return parseArray     (tag, startline, status);
-    case RT_BINARY:	return parseBinary    (tag, startline, status);
+    case RT_BINARY: return parseBinary    (tag, startline, status);
     case RT_INTEGER:    return parseInteger   (tag, startline, status);
-    case RT_IMPORT:	return parseImport    (tag, startline, status);
+    case RT_IMPORT: return parseImport    (tag, startline, status);
     case RT_INTVECTOR:  return parseIntVector (tag, startline, status);
 
     default:

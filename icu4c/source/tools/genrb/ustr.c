@@ -72,8 +72,8 @@ ustr_deinit(struct UString *s)
 
 void
 ustr_cpy(struct UString *dst,
-	 const struct UString *src,
-	 UErrorCode *status)
+     const struct UString *src,
+     UErrorCode *status)
 {
   if(U_FAILURE(*status) || dst == src) return;
 
@@ -89,8 +89,8 @@ ustr_cpy(struct UString *dst,
 
 void
 ustr_setlen(struct UString *s,
-	    int32_t len,
-	    UErrorCode *status)
+        int32_t len,
+        UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
 
@@ -105,17 +105,17 @@ ustr_setlen(struct UString *s,
 
 void
 ustr_cat(struct UString *dst,
-	 const struct UString *src,
-	 UErrorCode *status)
+     const struct UString *src,
+     UErrorCode *status)
 {
   ustr_ncat(dst, src, src->fLength, status);
 }
 
 void
 ustr_ncat(struct UString *dst,
-	  const struct UString *src,
-	  int32_t n,
-	  UErrorCode *status)
+      const struct UString *src,
+      int32_t n,
+      UErrorCode *status)
 {
   if(U_FAILURE(*status) || dst == src) return;
 
@@ -125,15 +125,15 @@ ustr_ncat(struct UString *dst,
   }
 
   uprv_memcpy(dst->fChars + dst->fLength, src->fChars,
-	     sizeof(UChar) * n);
+         sizeof(UChar) * n);
   dst->fLength += src->fLength;
   dst->fChars[dst->fLength] = 0x0000;
 }
 
 void
 ustr_ucat(struct UString *dst,
-	  UChar c,
-	  UErrorCode *status)
+      UChar c,
+      UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
 
@@ -143,33 +143,33 @@ ustr_ucat(struct UString *dst,
   }
 
   uprv_memcpy(dst->fChars + dst->fLength, &c,
-	     sizeof(UChar) * 1);
+         sizeof(UChar) * 1);
   dst->fLength += 1;
   dst->fChars[dst->fLength] = 0x0000;
 }
 void
 ustr_uscat(struct UString *dst,
-	  const UChar* src,
-	  UErrorCode *status)
+      const UChar* src,int len,
+      UErrorCode *status)
 {
-  int len =0;
-  if(U_FAILURE(*status)) return;
-  len=u_strlen(src);
+  if(U_FAILURE(*status)) 
+      return;
+
   if(dst->fCapacity < (dst->fLength + len)) {
     ustr_resize(dst, ALLOCATION(dst->fLength + len), status);
     if(U_FAILURE(*status)) return;
   }
 
   uprv_memcpy(dst->fChars + dst->fLength, src,
-	     sizeof(UChar) * len);
+         sizeof(UChar) * len);
   dst->fLength += len;
   dst->fChars[dst->fLength] = 0x0000;
 }
 /* Destroys data in the string */
 static void
 ustr_resize(struct UString *s,
-	    int32_t len,
-	    UErrorCode *status)
+        int32_t len,
+        UErrorCode *status)
 {
   if(U_FAILURE(*status)) return;
 
