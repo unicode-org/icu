@@ -78,7 +78,7 @@ static void TestConvert()
     char                myptr[4];
     char                save[4];
     int32_t             testLong1           =   0;
-    int16_t             rest                =   0;
+    uint16_t            rest                =   0;
     int32_t             len                 =   0;
     int32_t             x                   =   0;
     FILE*               ucs_file_in         =   NULL;
@@ -167,9 +167,9 @@ static void TestConvert()
     
     };
 
-    const int16_t        CodePagesSubstitutionChars[NUM_CODEPAGE]    =
+    const uint16_t        CodePagesSubstitutionChars[NUM_CODEPAGE]    =
     { 
-        (int16_t)0xAFFE
+        0xAFFE
     };
 
     const char* CodePagesTestFiles[NUM_CODEPAGE]    =
@@ -335,7 +335,6 @@ static void TestConvert()
 
     }
       /*Testing ucnv_convert()*/
-    do /* do {} while(0) allows to leave this block with a break */
     {
         int32_t targetLimit=0, sourceLimit=0, i=0, targetCapacity=0;
         const uint8_t source[]={ 0x00, 0x04, 0x05, 0x06, 0xa2, 0xb4, 0x00};
@@ -354,38 +353,39 @@ static void TestConvert()
         }
         if(U_FAILURE(err)){
             log_err("FAILURE! ucnv_convert(ibm-1363->ibm-1364) failed. %s\n", myErrorName(err));
-            break;
         }
-        for(i=0; i<targetCapacity; i++){
-            if(target[i] != expectedTarget[i]){
-                log_err("FAIL: ucnv_convert(ibm-1363->ibm-1364) failed.at index \n i=%d,  Expected: %lx Got: %lx\n", i, (UChar)expectedTarget[i], (uint8_t)target[i]);
+        else {
+            for(i=0; i<targetCapacity; i++){
+                if(target[i] != expectedTarget[i]){
+                    log_err("FAIL: ucnv_convert(ibm-1363->ibm-1364) failed.at index \n i=%d,  Expected: %lx Got: %lx\n", i, (UChar)expectedTarget[i], (uint8_t)target[i]);
+                }
             }
+            /*Test error conditions*/
+            i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, 0, &err);
+            if(i !=0){
+                log_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
+            }
+            ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, -1, &err);
+            if(!(U_FAILURE(err) && err==U_ILLEGAL_ARGUMENT_ERROR)){
+                log_err("FAILURE! ucnv_convert() with sourceLimit=-1 is expected to fail\n");
+            }
+            sourceLimit=sizeof(source)/sizeof(source[0]);
+            i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
+            if(i !=0 ){
+                log_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
+            }
+            err=U_ZERO_ERROR;
+            sourceLimit=sizeof(source)/sizeof(source[0]);
+            targetLimit=0;
+            i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
+            if(!(U_FAILURE(err) && err==U_BUFFER_OVERFLOW_ERROR)){
+                log_err("FAILURE! ucnv_convert() with targetLimit=0 is expected to throw U_BUFFER_OVERFLOW_ERROR\n");
+            }
+            err=U_ZERO_ERROR;
+            free(target);
+            ucnv_flushCache();
         }
-        /*Test error conditions*/
-        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, 0, &err);
-        if(i !=0){
-            log_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
-        }
-        ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, -1, &err);
-        if(!(U_FAILURE(err) && err==U_ILLEGAL_ARGUMENT_ERROR)){
-            log_err("FAILURE! ucnv_convert() with sourceLimit=-1 is expected to fail\n");
-        }
-        sourceLimit=sizeof(source)/sizeof(source[0]);
-        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
-        if(i !=0 ){
-            log_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
-        }
-        err=U_ZERO_ERROR;
-        sourceLimit=sizeof(source)/sizeof(source[0]);
-        targetLimit=0;
-        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
-        if(!(U_FAILURE(err) && err==U_BUFFER_OVERFLOW_ERROR)){
-            log_err("FAILURE! ucnv_convert() with targetLimit=0 is expected to throw U_BUFFER_OVERFLOW_ERROR\n");
-        }
-        err=U_ZERO_ERROR;
-        free(target);
-        ucnv_flushCache();
-    } while(0);
+    }
 
     /*Testing ucnv_open()*/
     /* Note: These converters have been chosen because they do NOT
@@ -573,7 +573,7 @@ static void TestConvert()
         ucnv_getSubstChars(myConverter, myptr, &ii, &err);
 
         for(x=0;x<ii;x++) 
-            rest = (int16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
+            rest = (uint16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
         if (rest==CodePagesSubstitutionChars[codepage_index])  
             log_verbose("Substitution character ok\n");
         else 
@@ -1136,8 +1136,10 @@ static void TestConvertSafeClone()
 
 	char charBuffer [10];
 	char * pCharBuffer;
+	const char *charBufferLimit = charBuffer + sizeof(charBuffer)/sizeof(*charBuffer);
 	UChar uniBuffer [] = {0x0058, 0x0059, 0x005A}; /* "XYZ" */
 	UChar * pUniBuffer;
+	const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
 	int index;
 	
 	UConverter * someConverters [CLONETEST_CONVERTER_COUNT];
@@ -1232,15 +1234,15 @@ static void TestConvertSafeClone()
 
 		ucnv_fromUnicode(someClonedConverters[index], 
 						&pCharBuffer, 
-						charBuffer + sizeof(charBuffer)/sizeof(*charBuffer),
+						charBufferLimit,
 						&pUniBuffer,
-						uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer),
+						uniBufferLimit,
 						NULL,
 						TRUE,
 						&err);
 
 		pCharBuffer = charBuffer;
-		if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pCharBuffer, charBuffer + sizeof(charBuffer)/sizeof(*charBuffer), &err))
+		if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pCharBuffer, charBufferLimit, &err))
 		{
 			log_err("FAIL: Cloned converter failed to do conversion\n");
 		}
