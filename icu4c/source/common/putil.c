@@ -1229,6 +1229,7 @@ UBool putil_cleanup(void)
 /*
  * Set the data directory.
  *    Make a copy of the passed string, and set the global data dir to point to it.
+ *    TODO:  see bug #2849, regarding thread safety.
  */
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
@@ -1254,10 +1255,15 @@ U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     const char *path = NULL;
     char pathBuffer[1024];
+    const char *dataDir;
 
     /* if we have the directory, then return it immediately */
-    if(gDataDirectory) {
-        return gDataDirectory;
+    umtx_lock(NULL);
+    dataDir = gDataDirectory;
+    umtx_unlock(NULL);
+
+    if(dataDir) {
+        return dataDir;
     }
 
     /* we need to look for it */
