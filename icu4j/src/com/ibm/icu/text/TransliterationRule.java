@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/10/03 00:14:23 $
- * $Revision: 1.29 $
+ * $Date: 2001/10/04 22:33:53 $
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.29 $ $Date: 2001/10/03 00:14:23 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.30 $ $Date: 2001/10/04 22:33:53 $
  */
 class TransliterationRule {
 
@@ -493,8 +493,8 @@ class TransliterationRule {
         oText = pos.start;
         keyLimit = 0;
         while (oPattern < (pattern.length() - anteContextLength)) {
-            if (incremental && oText == pos.contextLimit) {
-                // We've reached the context limit without a mismatch and
+            if (incremental && oText == pos.limit) {
+                // We've reached the limit without a mismatch and
                 // without completing our match.
                 return UnicodeMatcher.U_PARTIAL_MATCH;
             }
@@ -905,6 +905,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.30  2001/10/04 22:33:53  alan
+ * jitterbug 69: minor fix to incremental RBT code
+ *
  * Revision 1.29  2001/10/03 00:14:23  alan
  * jitterbug 73: finish quantifier and supplemental char support
  *
