@@ -7,6 +7,79 @@
 
 en {
     Version { "3.0" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
+                "MMM d, yyyy",
+                "M/d/yy", // Changing this will break binary compatibility.
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                    }
+                }
+            }
+            eras{
+                "BC",
+                "AD",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+            }
+        }
+    }
     Countries {
         AD { "Andorra" }
         AE { "United Arab Emirates" }
@@ -238,7 +311,7 @@ en {
         TH { "Thailand" }
         TJ { "Tajikistan" }
         TK { "Tokelau" }
-        TL { "East Timor" }  // changed back to East Timor from Timor-Leste
+        TL { "Timor-Leste" }    // This was called East Timor
         TM { "Turkmenistan" }
         TN { "Tunisia" }
         TO { "Tonga" }
@@ -638,7 +711,7 @@ en {
         XOF { "XOF", "CFA Franc BCEAO"      } // 12/04/1958-
         XPF { "CFPF","CFP Franc"            } // 12/26/1945-
         //XPS { "XPS", "Pound Sterling"       } // 07/27/1694-
-        XSS { "XSS", "Shilling Sterling"    } // 07/27/1694-
+        //XSS { "XSS", "Shilling Sterling"    } // 07/27/1694-
         XTR { "XTR", "COMECON Transferable Ruble" } // 1960-1992
         YDD { "YDD", "Yemeni Dinar"         } // 4/1/1965-05/22/1990
         YEI { "YEI", "Yemeni Imadi Riyal"   } // 1904-02/1964
@@ -1457,6 +1530,8 @@ en {
 
     // Transliterator display names
     // This is the English form of this resource.
+    // This list is currently incomplete, and care should be taken to translate these identifiers.
+    // TODO: Reorganize this data like Country, Currencies and Language tables.
     "%Translit%Hex"         { "Hex Escape" }
     "%Translit%UnicodeName" { "Unicode Name" }
     "%Translit%UnicodeChar" { "Unicode Character" }
@@ -1693,79 +1768,6 @@ en {
             "China Standard Time",
             "CDT",
             "Shanghai",
-        }
-    }
-    calendar{
-        gregorian{
-            DateTimePatterns{
-                "h:mm:ss a z",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, yyyy",
-                "MMMM d, yyyy",
-                "MMM d, yyyy",
-                "M/d/yy", // Changing this will break binary compatibility.
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sun",
-                        "Mon",
-                        "Tue",
-                        "Wed",
-                        "Thu",
-                        "Fri",
-                        "Sat",
-                    }
-                    wide{
-                        "Sunday",
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                    }
-                }
-            }
-            eras{
-                "BC",
-                "AD",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "May",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                    }
-                    wide{
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December",
-                    }
-                }
-            }
         }
     }
 }
