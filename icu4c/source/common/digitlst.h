@@ -43,7 +43,7 @@ typedef enum EDigitListValues {
 U_NAMESPACE_BEGIN
 
 /**
- * Digit List. Private to DecimalFormat.  Handles the transcoding
+ * Digit List utility class. Private to DecimalFormat.  Handles the transcoding
  * between numeric values and strings of characters.  Only handles
  * non-negative numbers.  The division of labor between DigitList and
  * DecimalFormat is that DigitList handles the radix 10 representation
@@ -61,7 +61,7 @@ U_NAMESPACE_BEGIN
  * derived by placing all the digits of the list to the right of the
  * decimal point, by 10^exponent.
  */
-class U_COMMON_API DigitList : public UObject { // Declare external to make compiler happy
+class U_COMMON_API DigitList : public UMemory { // Declare external to make compiler happy
 public:
     DigitList();
     ~DigitList();
@@ -167,20 +167,6 @@ public:
     // This code is unused.
     //UBool isLONG_MIN(void) const;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     * @return a UClassID for the actual class.
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     * @returns a UClassID for this class.
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 public:
     /**
      * These data members are intentionally public and can be set directly.
@@ -227,12 +213,6 @@ private:
     /*static void initializeLONG_MIN_REP(void);*/
 
     UBool shouldRoundUp(int32_t maximumDigits);
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
  
 // -------------------------------------

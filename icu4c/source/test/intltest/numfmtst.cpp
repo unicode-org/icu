@@ -135,23 +135,18 @@ NumberFormatTest::TestDigitListAPI(void)
   /*
     icu_2_4::DigitList::operator== 0 0 2 icuuc24d.dll digitlst.cpp Doug  
     icu_2_4::DigitList::append 0 0 4 icuin24d.dll digitlst.h Doug  
-    icu_2_4::DigitList::getDynamicClassID 0 0 1 icuin24d.dll digitlst.h Doug  
-    icu_2_4::DigitList::getDynamicClassID 0 0 1 icuuc24d.dll digitlst.h Doug  
-    icu_2_4::DigitList::getStaticClassID 0 0 1 icuin24d.dll digitlst.h Doug  
-    icu_2_4::DigitList::getStaticClassID 0 0 1 icuuc24d.dll digitlst.h Doug  
     icu_2_4::DigitList::operator!= 0 0 1 icuuc24d.dll digitlst.h Doug 
   */
   DigitList list1;
-  if (list1.getDynamicClassID() != DigitList::getStaticClassID()) {
-    errln("digitlist rtti failed");
-  }
-
   list1.append('1');
   list1.fDecimalAt = 1;
   DigitList list2;
   list2.set(1);
   if (list1 != list2) {
-    errln("digitlist append or set failed");
+    errln("digitlist append, operator!= or set failed ");
+  }
+  if (!(list1 == list2)) {
+    errln("digitlist append, operator== or set failed ");
   }
 }
 
