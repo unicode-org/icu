@@ -981,10 +981,6 @@ SOURCE=.\testidna.cpp
 
 SOURCE=.\testidna.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\tidnaref.cpp
-# End Source File
 # End Group
 # End Target
 # End Project
