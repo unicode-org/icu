@@ -199,6 +199,7 @@ UBool UPerfTest::run(){
         // Testing all methods
         return runTest();
     }
+    UBool res=FALSE;
     // Test only the specified fucntion
     for (int i = 1; i < _remainingArgc; ++i) {
         if (_argv[i][0] != '-') {
@@ -213,15 +214,14 @@ UBool UPerfTest::run(){
                 parameter += 1;
             }
             execCount = 0;
-            UBool res = runTest( name, parameter );
+            res = runTest( name, parameter );
             if (!res || (execCount <= 0)) {
                 fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
                 return FALSE;
             }
         }
-        return TRUE;
     }
-    return FALSE;
+    return res;
 }
 UBool UPerfTest::runTest(char* name, char* par ){
     UBool rval;
