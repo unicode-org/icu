@@ -224,6 +224,7 @@ typedef unsigned short uint16_t;
 /*===========================================================================*/
 
 #define U_EXPORT
+/* U_CALLCONV is releated to U_EXPORT2 */
 #define U_EXPORT2
 #define U_IMPORT
 
