@@ -1508,6 +1508,13 @@ const UConverterSharedData _MBCSData={
 
 /* ### IMPORTANT: THIS IS ALPHA-VERSION SUPPORT CODE FOR GB 18030 AND MAY CHANGE WITHOUT NOTICE */
 
+/* helper macros for linear values for GB 18030 four-byte sequences */
+#define LINEAR_18030(a, b, c, d) ((((a)*10+(b))*126L+(c))*10L+(d))
+
+#define LINEAR_18030_BASE LINEAR_18030(0x81, 0x30, 0x81, 0x30)
+
+#define LINEAR(x) LINEAR_18030(x>>24, (x>>16)&0xff, (x>>8)&0xff, x&0xff)
+
 /*
  * Some ranges of GB 18030 where both the Unicode code points and the
  * GB four-byte sequences are contiguous and are handled algorithmically by
@@ -1516,22 +1523,20 @@ const UConverterSharedData _MBCSData={
  */
 static const uint32_t
 gb18030Ranges[13][4]={
-    0x10000, 0x10ffff, 0x90308130, 0xe3329a35,
-    0x9fa6, 0xdfff, 0x82358f34, 0x83389837,
-    0x0452, 0x200f, 0x8130d239, 0x8136a530,
-    0xe865, 0xf92b, 0x83389838, 0x8431cc32,
-    0x2643, 0x2e80, 0x8137a838, 0x8138fd37,
-    0xfa2a, 0xfe2f, 0x8431e336, 0x8432cc35,
-    0x3ce1, 0x4055, 0x8231d439, 0x8232af33,
-    0x361b, 0x3917, 0x8230a634, 0x8230f238,
-    0x49b8, 0x4c76, 0x8234a132, 0x8234e734,
-    0x4160, 0x4336, 0x8232c938, 0x8232f838,
-    0x478e, 0x4946, 0x8233e839, 0x82349639,
-    0x44d7, 0x464b, 0x8233a430, 0x8233c932,
-    0xffe6, 0xffff, 0x8432e932, 0x8432eb37
+    0x10000, 0x10ffff, LINEAR(0x90308130), LINEAR(0xe3329a35),
+    0x9fa6, 0xdfff, LINEAR(0x82358f34), LINEAR(0x83389837),
+    0x0452, 0x200f, LINEAR(0x8130d239), LINEAR(0x8136a530),
+    0xe865, 0xf92b, LINEAR(0x83389838), LINEAR(0x8431cc32),
+    0x2643, 0x2e80, LINEAR(0x8137a838), LINEAR(0x8138fd37),
+    0xfa2a, 0xfe2f, LINEAR(0x8431e336), LINEAR(0x8432cc35),
+    0x3ce1, 0x4055, LINEAR(0x8231d439), LINEAR(0x8232af33),
+    0x361b, 0x3917, LINEAR(0x8230a634), LINEAR(0x8230f238),
+    0x49b8, 0x4c76, LINEAR(0x8234a132), LINEAR(0x8234e734),
+    0x4160, 0x4336, LINEAR(0x8232c938), LINEAR(0x8232f838),
+    0x478e, 0x4946, LINEAR(0x8233e839), LINEAR(0x82349639),
+    0x44d7, 0x464b, LINEAR(0x8233a430), LINEAR(0x8233c932),
+    0xffe6, 0xffff, LINEAR(0x8432e932), LINEAR(0x8432eb37)
 };
-
-#define LINEAR_18030(a, b, c, d) ((((a)*10+(b))*126L+(c))*10L+(d))
 
 /* the callback functions handle GB 18030 specially */
 static void
@@ -1544,26 +1549,25 @@ fromUCallback(UConverter *cnv,
         int i;
 
         range=gb18030Ranges[0];
-        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); ++range, ++i) {
+        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); range+=4, ++i) {
             if(range[0]<=(uint32_t)codePoint && (uint32_t)codePoint<=range[1]) {
-                uint32_t b;
+                uint32_t linear;
                 char bytes[4];
 
                 /* found the Unicode code point, output the four-byte sequence for it */
                 *pErrorCode=U_ZERO_ERROR;
 
                 /* get the linear value of the first GB 18030 code in this range */
-                b=range[2];
-                b=LINEAR_18030((uint8_t)(b>>24), (uint8_t)(b>>16), (uint8_t)(b>>8), (uint8_t)b);
+                linear=range[2]-LINEAR_18030_BASE;
 
                 /* add the offset from the beginning of the range */
-                b+=((uint32_t)codePoint-range[0]);
+                linear+=((uint32_t)codePoint-range[0]);
 
-                /* turn this into a four-byte sequence again */
-                bytes[3]=(const char)(0x30+b%10); b/=10;
-                bytes[2]=(const char)(0x81+b%126); b/=126;
-                bytes[1]=(const char)(0x30+b%10); b/=10;
-                bytes[0]=(const char)(0x81+b);
+                /* turn this into a four-byte sequence */
+                bytes[3]=(const char)(0x30+linear%10); linear/=10;
+                bytes[2]=(const char)(0x81+linear%126); linear/=126;
+                bytes[1]=(const char)(0x30+linear%10); linear/=10;
+                bytes[0]=(const char)(0x81+linear);
 
                 /* output this sequence */
                 ucnv_cbFromUWriteBytes(pArgs, bytes, 4, 0, pErrorCode);
@@ -1583,27 +1587,24 @@ toUCallback(UConverter *cnv,
             UConverterCallbackReason reason, UErrorCode *pErrorCode) {
     if(cnv->extraInfo==gb18030Ranges && reason==UCNV_UNASSIGNED && length==4) {
         const uint32_t *range;
-        uint32_t b;
+        uint32_t linear;
         int i;
 
-        b=(uint8_t)codeUnits[0]<<24UL | (uint8_t)codeUnits[1]<<16UL | (uint8_t)codeUnits[2]<<8UL | (uint8_t)codeUnits[3];
+        linear=LINEAR_18030((uint8_t)codeUnits[0], (uint8_t)codeUnits[1], (uint8_t)codeUnits[2], (uint8_t)codeUnits[3]);
         range=gb18030Ranges[0];
-        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); ++range, ++i) {
-            if(range[2]<=b && b<=range[3]) {
+        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); range+=4, ++i) {
+            if(range[2]<=linear && linear<=range[3]) {
                 UChar u[UTF_MAX_CHAR_LENGTH];
 
                 /* found the sequence, output the Unicode code point for it */
                 *pErrorCode=U_ZERO_ERROR;
 
                 /* add the linear difference between the input and start sequences to the start code point */
-                b=range[2];
-                b=  range[0]+
-                    LINEAR_18030((uint8_t)codeUnits[0], (uint8_t)codeUnits[1], (uint8_t)codeUnits[2], (uint8_t)codeUnits[3])-
-                    LINEAR_18030(b>>24, (b>>16)&0xff, (b>>8)&0xff, b&0xff);
+                linear=range[0]+(linear-range[2]);
 
                 /* write the result as UChars and output */
                 i=0;
-                UTF_APPEND_CHAR_UNSAFE(u, i, b);
+                UTF_APPEND_CHAR_UNSAFE(u, i, linear);
                 ucnv_cbToUWriteUChars(pArgs, u, i, 0, pErrorCode);
                 return;
             }
