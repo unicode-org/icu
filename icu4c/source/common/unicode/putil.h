@@ -440,7 +440,7 @@ uprv_isInvariantUString(const UChar *s, int32_t length);
  */
 #    define U_MAX_PTR(base) ((void *)(((char *)base)-((int32_t)(base))+((int32_t)0xffefff)))
 #  else
-#    define U_MAX_PTR(base) ((void *)(((char *)(base)+0x7fffffff) > (char *)(base) ? ((char *)(base)+0x7fffffff) : (char *)-1))
+#    define U_MAX_PTR(base) ((void *)(((char *)(base)+0x7fffffffu) > (char *)(base) ? ((char *)(base)+0x7fffffffu) : (char *)-1))
 #  endif
 #endif
 
