@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ByteArrayWrapper.java,v $ 
- * $Date: 2003/09/23 04:16:45 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/12/01 21:17:31 $ 
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -42,6 +42,15 @@ public class ByteArrayWrapper
      */
     public int size;
     
+    // public constructor ------------------------------------------------
+
+    /** 
+     * Construct a new ByteArrayWrapper with no data.
+     * @draft ICU 2.8
+     */
+    public ByteArrayWrapper() {
+    }
+
     // public methods ----------------------------------------------------
 
     /**
@@ -69,6 +78,7 @@ public class ByteArrayWrapper
      * @param src source byte array to copy from
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
+     * @draft ICU 2.8
      */
     public final void set(byte[] src, int start, int limit) 
     {
@@ -117,7 +127,6 @@ public class ByteArrayWrapper
      * @param tgt target byte array to copy to
      * @param tgtoff start offset of tgt to copy to
      * @param length size of contents to copy
-     * @draft ICU 2.8
      */
     private static final void copyBytes(byte[] src, int srcoff, byte[] tgt, 
                                        int tgtoff, int length) {

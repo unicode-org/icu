@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/EasterHoliday.java,v $ 
- * $Date: 2003/10/02 20:50:26 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/12/01 21:18:22 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -19,7 +19,7 @@ import java.util.Date;
  * A Holiday subclass which represents holidays that occur
  * a fixed number of days before or after Easter.  Supports both the
  * Western and Orthodox methods for calculating Easter.
- * @draft ICU 2.2
+ * @draft ICU 2.8
  */
 public class EasterHoliday extends Holiday
 {
@@ -27,7 +27,7 @@ public class EasterHoliday extends Holiday
      * Construct a holiday that falls on Easter Sunday every year
      *
      * @param name The name of the holiday
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public EasterHoliday(String name)
     {
@@ -40,7 +40,7 @@ public class EasterHoliday extends Holiday
      *
      * @param daysAfter The number of days before (-) or after (+) Easter
      * @param name      The name of the holiday
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public EasterHoliday(int daysAfter, String name)
     {
@@ -55,7 +55,7 @@ public class EasterHoliday extends Holiday
      * @param daysAfter The number of days before (-) or after (+) Easter
      * @param orthodox  Use the Orthodox calendar?
      * @param name      The name of the holiday
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public EasterHoliday(int daysAfter, boolean orthodox, String name)
     {
@@ -64,73 +64,73 @@ public class EasterHoliday extends Holiday
 
     /**
      * Shrove Tuesday, aka Mardi Gras, 48 days before Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday SHROVE_TUESDAY  = new EasterHoliday(-48,    "Shrove Tuesday");
 
     /**
      * Ash Wednesday, start of Lent, 47 days before Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday ASH_WEDNESDAY   = new EasterHoliday(-47,    "Ash Wednesday");
 
     /**
      * Palm Sunday, 7 days before Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday PALM_SUNDAY     = new EasterHoliday( -7,    "Palm Sunday");
 
     /**
      * Maundy Thursday, 3 days before Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday MAUNDY_THURSDAY = new EasterHoliday( -3,    "Maundy Thursday");
 
     /**
      * Good Friday, 2 days before Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday GOOD_FRIDAY     = new EasterHoliday( -2,    "Good Friday");
 
     /**
      * Easter Sunday
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday EASTER_SUNDAY   = new EasterHoliday(  0,    "Easter Sunday");
 
     /**
      * Easter Monday, 1 day after Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday EASTER_MONDAY   = new EasterHoliday(  1,    "Easter Monday");
 
     /**
      * Ascension, 39 days after Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday ASCENSION       = new EasterHoliday( 39,    "Ascension");
 
     /**
      * Pentecost (aka Whit Sunday), 49 days after Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday PENTECOST       = new EasterHoliday( 49,    "Pentecost");
 
     /**
      * Whit Sunday (aka Pentecost), 49 days after Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday WHIT_SUNDAY     = new EasterHoliday( 49,    "Whit Sunday");
 
     /**
      * Whit Monday, 50 days after Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday WHIT_MONDAY     = new EasterHoliday( 50,    "Whit Monday");
 
     /**
      * Corpus Christi, 60 days after Easter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     static public final EasterHoliday CORPUS_CHRISTI  = new EasterHoliday( 60,    "Corpus Christi");
 }
@@ -280,10 +280,10 @@ class EasterRule implements DateRule {
         }
     }
 
-    static GregorianCalendar gregorian = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
-    static GregorianCalendar orthodox = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
+    private static GregorianCalendar gregorian = new GregorianCalendar(/* new SimpleTimeZone(0, "UTC") */);
+    private static GregorianCalendar orthodox = new GregorianCalendar(/* new SimpleTimeZone(0, "UTC") */);
 
-    int               daysAfterEaster;
-    Date              startDate = null;
-    GregorianCalendar calendar = gregorian;
+    private int               daysAfterEaster;
+    private Date              startDate = null;
+    private GregorianCalendar calendar = gregorian;
 }
