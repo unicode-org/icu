@@ -2636,6 +2636,7 @@ getTrail:
                     CONCAT_ESCAPE_EX(args,source, target, targetLimit, offsets, escSeq,len,err);
                     *plane=lPlane;
                     *isEscapeAppended=TRUE;
+					*isShiftAppended=FALSE;
                 }
 
                 /* Append Shift Sequences */
@@ -2647,9 +2648,14 @@ getTrail:
                         *isShiftAppended=TRUE;
                     }
                 }else if(*currentState!=ASCII1){
-                    len =shiftSeqCharsLenCN[*currentState+*plane];
-                    escSeq = shiftSeqCharsCN[*currentState+*plane];
+					int temp =*currentState+*plane-1;
+					if(*plane ==1 && *isShiftAppended){
+						temp=0;
+					}
+                    len =shiftSeqCharsLenCN[temp];
+                    escSeq = shiftSeqCharsCN[temp];
                     CONCAT_ESCAPE_EX(args,source, target, targetLimit, offsets, escSeq,len,err);
+					*isShiftAppended=TRUE;
                 }
 
                 initIterState = *currentState;
@@ -3078,21 +3084,23 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 }
                 *(myTarget++)=(UChar)targetUniChar;
             }
-            else if(targetUniChar > 0xfffe){
-
+            else if(targetUniChar > 0xffff){
+				UChar32 temp=0;
                 /* disassemble the surrogate pair and write to output*/
-                if(args->offsets){
+                targetUniChar-=0x0010000;
+                temp=(UChar)(0xd800+(UChar)(targetUniChar>>10));
+				*(myTarget++) = temp;
+				if(args->offsets){
                     args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);
                 }
-                targetUniChar-=0x0010000;
-                *(myTarget++) =(UChar)(0xd800+(UChar)(targetUniChar>>10));
-                if(myTarget< args->targetLimit){         
+                if(myTarget< args->targetLimit){ 
+					temp=(UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
+					*(myTarget)++ = temp;
                     if(args->offsets){
                         args->offsets[myTarget - args->target]= mySource - args->source - 2 
                                                             +(myData->currentType==ASCII);
                     }
-                    *(myTarget)++ = (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
                 }else{
                     args->converter->UCharErrorBuffer[args->converter->UCharErrorBufferLength++]=
                                     (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
