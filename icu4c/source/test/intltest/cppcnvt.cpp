@@ -193,16 +193,16 @@ void ConvertTest::TestConvert()
 
     /* Do some tests w/ UnicodeConverter, some w/ UnicodeConverterCPP */
 
-    someConverters[0] = new UnicodeConverter("ibm-949",err);
+    someConverters[0] = new UnicodeConverter("ibm-1038",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[1] = new UnicodeConverter("ibm-949",err);
+    someConverters[1] = new UnicodeConverter("ibm-1038",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[2] = new UnicodeConverter("ibm-949",err);
+    someConverters[2] = new UnicodeConverter("ibm-1038",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
 
     someConverters[3] = new UnicodeConverterCPP("ibm-834", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[4] = new UnicodeConverterCPP("ibm-943", err);
+    someConverters[4] = new UnicodeConverterCPP("ibm-941", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
    
     logln("\n---Testing UnicodeConverter::flushCache...");
