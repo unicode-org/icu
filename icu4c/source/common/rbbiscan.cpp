@@ -36,8 +36,6 @@
 #include "uassert.h"
 
 
-U_NAMESPACE_BEGIN
-
 //----------------------------------------------------------------------------------------
 //
 // Unicode Set init strings for each of the character classes needed for parsing a rule file.
@@ -81,6 +79,7 @@ static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
 }
 U_CDECL_END
 
+U_NAMESPACE_BEGIN
 
 //----------------------------------------------------------------------------------------
 //

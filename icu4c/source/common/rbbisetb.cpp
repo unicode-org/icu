@@ -43,6 +43,42 @@
 #include "rbbinode.h"
 
 
+//------------------------------------------------------------------------
+//
+//   getFoldedRBBIValue        Call-back function used during building of Trie table.
+//                             Folding value: just store the offset (16 bits)
+//                             if there is any non-0 entry.
+//                             (It'd really be nice if the Trie builder would provide a
+//                             simple default, so this function could go away from here.)
+//
+//------------------------------------------------------------------------
+/* folding value: just store the offset (16 bits) if there is any non-0 entry */
+U_CDECL_BEGIN
+static uint32_t U_CALLCONV
+getFoldedRBBIValue(UNewTrie *trie, UChar32 start, int32_t offset) {
+    uint32_t value;
+    UChar32 limit;
+    UBool inBlockZero;
+
+    limit=start+0x400;
+    while(start<limit) {
+        value=utrie_get32(trie, start, &inBlockZero);
+        if(inBlockZero) {
+            start+=UTRIE_DATA_BLOCK_LENGTH;
+        } else if(value!=0) {
+            return (uint32_t)(offset|0x8000);
+        } else {
+            ++start;
+        }
+    }
+    return 0;
+}
+
+
+U_CDECL_END
+
+
+
 U_NAMESPACE_BEGIN
 
 //------------------------------------------------------------------------
@@ -80,42 +116,6 @@ RBBISetBuilder::~RBBISetBuilder()
     utrie_close(fTrie);
 }
 
-
-
-
-//------------------------------------------------------------------------
-//
-//   getFoldedRBBIValue        Call-back function used during building of Trie table.
-//                             Folding value: just store the offset (16 bits)
-//                             if there is any non-0 entry.
-//                             (It'd really be nice if the Trie builder would provide a
-//                             simple default, so this function could go away from here.)
-//
-//------------------------------------------------------------------------
-/* folding value: just store the offset (16 bits) if there is any non-0 entry */
-U_CDECL_BEGIN
-static uint32_t U_CALLCONV
-getFoldedRBBIValue(UNewTrie *trie, UChar32 start, int32_t offset) {
-    uint32_t value;
-    UChar32 limit;
-    UBool inBlockZero;
-
-    limit=start+0x400;
-    while(start<limit) {
-        value=utrie_get32(trie, start, &inBlockZero);
-        if(inBlockZero) {
-            start+=UTRIE_DATA_BLOCK_LENGTH;
-        } else if(value!=0) {
-            return (uint32_t)(offset|0x8000);
-        } else {
-            ++start;
-        }
-    }
-    return 0;
-}
-
-
-U_CDECL_END
 
 
 
