@@ -200,6 +200,9 @@
 				RelativePath="GlyphLookupTables.cpp">
 			</File>
 			<File
+				RelativePath=".\GlyphPositionAdjustments.cpp">
+			</File>
+			<File
 				RelativePath=".\GlyphPositioningTables.cpp">
 			</File>
 			<File

@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -11,7 +11,6 @@
 #include "PairPositioningSubtables.h"
 #include "ValueRecords.h"
 #include "GlyphIterator.h"
-#include "GlyphPositionAdjustments.h"
 #include "OpenTypeUtilities.h"
 #include "LESwaps.h"
 
@@ -68,20 +67,13 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
         }
 
         if (valueFormat1 != 0) {
-            GlyphPositionAdjustment adjustment;
-
-            tempIterator.getCurrGlyphPositionAdjustment(adjustment);
-            pairValueRecord->valueRecord1.adjustPosition(SWAPW(valueFormat1), (char *) this, adjustment, fontInstance);
-            tempIterator.setCurrGlyphPositionAdjustment(&adjustment);
+            pairValueRecord->valueRecord1.adjustPosition(SWAPW(valueFormat1), (char *) this, tempIterator, fontInstance);
         }
 
         if (valueFormat2 != 0) {
             const ValueRecord *valueRecord2 = (const ValueRecord *) ((char *) &pairValueRecord->valueRecord1 + valueRecord1Size);
-            GlyphPositionAdjustment adjustment;
 
-            glyphIterator->getCurrGlyphPositionAdjustment(adjustment);
-            valueRecord2->adjustPosition(SWAPW(valueFormat2), (char *) this, adjustment, fontInstance);
-            glyphIterator->setCurrGlyphPositionAdjustment(&adjustment);
+            valueRecord2->adjustPosition(SWAPW(valueFormat2), (char *) this, *glyphIterator, fontInstance);
         }
 
         return 2;
@@ -111,20 +103,13 @@ le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, 
 
 
         if (valueFormat1 != 0) {
-            GlyphPositionAdjustment adjustment;
-
-            tempIterator.getCurrGlyphPositionAdjustment(adjustment);
-            class2Record->valueRecord1.adjustPosition(SWAPW(valueFormat1), (char *) this, adjustment, fontInstance);
-            tempIterator.setCurrGlyphPositionAdjustment(&adjustment);
+            class2Record->valueRecord1.adjustPosition(SWAPW(valueFormat1), (char *) this, tempIterator, fontInstance);
         }
 
         if (valueFormat2 != 0) {
             const ValueRecord *valueRecord2 = (const ValueRecord *) ((char *) &class2Record->valueRecord1 + valueRecord1Size);
-            GlyphPositionAdjustment adjustment;
 
-            glyphIterator->getCurrGlyphPositionAdjustment(adjustment);
-            valueRecord2->adjustPosition(SWAPW(valueFormat2), (const char *) this, adjustment, fontInstance);
-            glyphIterator->setCurrGlyphPositionAdjustment(&adjustment);
+            valueRecord2->adjustPosition(SWAPW(valueFormat2), (const char *) this, *glyphIterator, fontInstance);
         }
 
         return 2;
