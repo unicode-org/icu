@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/06/21 23:56:48 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/06/22 07:46:59 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -174,6 +174,7 @@ public final class StringSearch extends SearchIterator
     {
         super(target, breakiter);
         m_textBeginOffset_ = targetText.getBeginIndex();
+        m_textLimitOffset_ = targetText.getEndIndex();
         m_collator_ = collator;
         m_colEIter_ = m_collator_.getCollationElementIterator(target);
         m_utilColEIter_ = collator.getCollationElementIterator("");
@@ -422,6 +423,7 @@ public final class StringSearch extends SearchIterator
 	{
 		super.setTarget(text);
         m_textBeginOffset_ = targetText.getBeginIndex();
+        m_textLimitOffset_ = targetText.getEndIndex();
         m_colEIter_.setText(targetText);
 	}
     
@@ -558,6 +560,14 @@ public final class StringSearch extends SearchIterator
 	    	if (matchLength != 0) {
 		    	start += matchLength;
 		    }
+            else {
+                // we must have reversed direction after we reached the start
+                // of the target text
+                // see SearchIterator next(), it checks the bounds and returns
+                // if it exceeds the range. It does not allow setting of
+                // m_matchedIndex
+                m_matchedIndex_ = DONE;
+            }
     
 	        // status checked below
 	        if (m_isCanonicalMatch_) {
@@ -568,7 +578,12 @@ public final class StringSearch extends SearchIterator
 	            handleNextExact(start);
 	        }
 	    }
-        targetText.setIndex(m_matchedIndex_);
+        if (m_matchedIndex_ == DONE) {
+            targetText.setIndex(m_textLimitOffset_);
+        }
+        else {
+            targetText.setIndex(m_matchedIndex_);
+        }
     	return m_matchedIndex_;
     }
     
@@ -605,6 +620,14 @@ public final class StringSearch extends SearchIterator
             }            
         }
         else {
+            if (matchLength == 0) {
+                // we must have reversed direction after we reached the end
+                // of the target text
+                // see SearchIterator next(), it checks the bounds and returns
+                // if it exceeds the range. It does not allow setting of
+                // m_matchedIndex
+                m_matchedIndex_ = DONE;
+            }
             if (m_isCanonicalMatch_) {
                 // can't use exact here since extra accents are allowed.
                 handlePreviousCanonical(start);
@@ -614,7 +637,12 @@ public final class StringSearch extends SearchIterator
             }
         }
 
-        targetText.setIndex(m_matchedIndex_);
+        if (m_matchedIndex_ == DONE) {
+            targetText.setIndex(m_textBeginOffset_);
+        }
+        else {
+            targetText.setIndex(m_matchedIndex_);
+        }
         return m_matchedIndex_;
     }
 
@@ -1408,18 +1436,19 @@ public final class StringSearch extends SearchIterator
 	/**
 	 * Checks to see if the match is repeated
 	 * @param start new match start index
-	 * @param end new match end index
+	 * @param limit new match limit index
 	 * @return true if the the match is repeated, false otherwise
 	 */
-	private final boolean checkRepeatedMatch(int start, int end)
+	private final boolean checkRepeatedMatch(int start, int limit)
 	{
 	    if (m_matchedIndex_ == DONE) {
 	        return false;
 	    }
-	    int lastmatchlimit = m_matchedIndex_ + matchLength; 
+        int end = limit - 1; // last character in the match
+	    int lastmatchend = m_matchedIndex_ + matchLength - 1; 
 	    if (!isOverlapping()) {
-            return (start >= m_matchedIndex_ && start <= lastmatchlimit) 
-                    || (end >= m_matchedIndex_ && end <= lastmatchlimit);
+            return (start >= m_matchedIndex_ && start <= lastmatchend) 
+                    || (end >= m_matchedIndex_ && end <= lastmatchend);
                       
 	    }
 	    return start == m_matchedIndex_;
