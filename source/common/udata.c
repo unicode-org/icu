@@ -773,8 +773,7 @@ openCommonData(UDataMemory *pData,
         uprv_strcpy(suffix, LIB_SUFFIX);
 
         /* try path/basename first */
-#       ifdef OS390
-        if (uprv_isOS390BatchMode()) {
+#       ifdef OS390BATCH
             /* ### hack: we still need to get u_getDataDirectory() fixed
                for OS/390 (batch mode - always return "//"? )
                and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
@@ -790,10 +789,9 @@ openCommonData(UDataMemory *pData,
                 /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
                 lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
             }
-        }
-        else
-#       endif
+#       else
             lib=LOAD_LIBRARY(pathBuffer, basename);
+#       endif
         if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
             /* try basename only next */
             lib=LOAD_LIBRARY(basename, basename);
