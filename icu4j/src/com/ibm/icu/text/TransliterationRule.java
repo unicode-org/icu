@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/10/18 23:02:32 $
- * $Revision: 1.31 $
+ * $Date: 2001/10/25 22:42:24 $
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.31 $ $Date: 2001/10/18 23:02:32 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.32 $ $Date: 2001/10/25 22:42:24 $
  */
 class TransliterationRule {
 
@@ -284,7 +284,7 @@ class TransliterationRule {
      * value.  If the rule contains only ante context, as in foo)>bar,
      * then it will match any key.
      */
-    final boolean matchesIndexValue(byte v) {
+    final boolean matchesIndexValue(int v) {
         if (anteContextLength == pattern.length()) {
             // A pattern with just ante context {such as foo)>bar} can
             // match any key.
@@ -915,6 +915,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.32  2001/10/25 22:42:24  alan
+ * jitterbug 73: use int for index values to avoid signedness problems
+ *
  * Revision 1.31  2001/10/18 23:02:32  alan
  * jitterbug 60: fix handling of anchors in toRule
  *
