@@ -407,16 +407,16 @@ ucbuf_getcx32(UCHARBUF* buf,UErrorCode* error) {
      * to c32 or not
      */
     if(c32==0xFFFFFFFF){
-		if(buf->showWarning) {
-			char context[20];
-			int32_t len = 20;
-			if(length  < len) {
-			  len = length; 
-			}
-			context[len]= 0 ; /* null terminate the buffer */
-			u_UCharsToChars( buf->currentPos, context, len);
-			fprintf(stderr,"Bad escape: [%c%s]...\n", c1,context);
-		}
+        if(buf->showWarning) {
+            char context[20];
+            int32_t len = 20;
+            if(length  < len) {
+                len = length; 
+            }
+            context[len]= 0 ; /* null terminate the buffer */
+            u_UCharsToChars( buf->currentPos, context, len);
+            fprintf(stderr,"Bad escape: [%c%s]...\n", c1,context);
+        }
         *error= U_ILLEGAL_ESCAPE_SEQUENCE;
         return c1;
     }else if(c32!=c2 || (c32==0x0075 && c2==0x0075 && c1==0x005C) /* for \u0075 c2=0x0075 and c32==0x0075*/){
