@@ -131,18 +131,21 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
+				RelativePath="LXUtilities.cpp">
+			</File>
+			<File
 				RelativePath=".\ParagraphLayout.cpp">
 			</File>
 			<File
 				RelativePath=".\RunArrays.cpp">
 			</File>
-			<File
-				RelativePath=".\Utilities.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="LXUtilities.h">
+			</File>
 			<File
 				RelativePath=".\layout\ParagraphLayout.h">
 				<FileConfiguration
@@ -180,9 +183,6 @@
 "
 						Outputs="..\..\include\layout\RunArrays.h"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Utilities.h">
 			</File>
 		</Filter>
 		<Filter
