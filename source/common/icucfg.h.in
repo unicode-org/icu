@@ -1,0 +1,37 @@
+/* common/icucfg.h.in.  Generated automatically from configure.in by autoheader.  */
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+
+/* Define to signed char if not in <sys/types.h> */
+#undef int8_t
+
+/* Define to unsigned char if not in <sys/types.h> */
+#undef uint8_t 
+
+/* Define to signed short if not in <sys/types.h> */
+#undef int16_t 
+
+/* Define to unsigned short if not in <sys/types.h> */
+#undef uint16_t 
+
+/* Define to signed long if not in <sys/types.h> */
+#undef int32_t 
+
+/* Define to unsigned long if not in <sys/types.h> */
+#undef uint32_t 
+
+/* Define to signed char if not in <sys/types.h> */
+#undef bool_t 
+
+/* Define if you have the <inttypes.h> header file.  */
+#undef HAVE_INTTYPES_H
+
+/* Define if you have the m library (-lm).  */
+#undef HAVE_LIBM
+
+/* Define if you have the pthread library (-lpthread).  */
+#undef HAVE_LIBPTHREAD
+
+/* Define if you have the pthreads library (-lpthreads).  */
+#undef HAVE_LIBPTHREADS

@@ -1,0 +1,105 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+ca {
+    CollationElements { "@" }
+    Countries { 
+        ES { "Espanya" }
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE, d' / 'MMMM' / 'yyyy",
+            "d' / 'MMMM' / 'yyyy",
+            "dd/MM/yyyy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "dg.",
+            "dl.",
+            "dt.",
+            "dc.",
+            "dj.",
+            "dv.",
+            "ds.",
+    }
+    DayNames { 
+            "diumenge",
+            "dilluns",
+            "dimarts",
+            "dimecres",
+            "dijous",
+            "divendres",
+            "dissabte",
+    }
+    Languages { 
+        ca { "catal\u00E0" }
+    }
+    LocaleID { "0403" }
+    LocaleString { "ca" }
+    MonthAbbreviations { 
+            "gen.",
+            "feb.",
+            "mar\u00E7",
+            "abr.",
+            "maig",
+            "juny",
+            "jul.",
+            "ag.",
+            "set.",
+            "oct.",
+            "nov.",
+            "des.",
+            "",
+    }
+    MonthNames { 
+            "gener",
+            "febrer",
+            "mar\u00E7",
+            "abril",
+            "maig",
+            "juny",
+            "juliol",
+            "agost",
+            "setembre",
+            "octubre",
+            "novembre",
+            "desembre",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "cat" }
+    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

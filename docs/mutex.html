@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>Mutex Documentation</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>IBM's Classes for Unicode Synchronization Issues</h1>
+
+<h3>Introduction</h3>
+
+<p>There are a number of functions in the IBM's Classes for Unicode that need to access or
+allocate global or static data. For example, there is a global cache of Collation rules,
+which ensures that we do not need to load collation data from a file each time that a new
+Collator object is created. The first time a given Collator is loaded it is stored in the
+cache, and subsequent accesses are extremely fast. </p>
+
+<p>In a single-threaded environment, this is all straightforward. However, in a
+multithreaded application there are synchronization issues to deal with. For example, the
+collation caching mechanism needs to be protected from simultaneous access by multiple
+threads; otherwise there could be problems with the data getting out of synch or with
+threads performing unnecessary work. </p>
+
+<h3>Mutexes</h3>
+
+<p>We prevent these problems by using a Mutex object. A Mutex is a &quot;mutually
+exclusive&quot; lock. Before accessing data which might be used by multiple threads,
+functions instantiate a Mutex object, which acquires the exclusive lock. An other thread
+that tries to access the data at the same time will also instantiate a Mutex, but the call
+will block until the first thread has released its lock. </p>
+
+<p>To save space, we use one underlying mutex implementation object for the entire
+application. An individual Mutex object simply acquires and releases the lock on this this
+global object. Since the implemention of a mutex is highly platform-dependent, developers
+who plan to use the International Classes for Unicode in a multithreaded environment are
+required to create their own mutex implementation object and register it with the system. </p>
+
+<h3>Re-Entrancy</h3>
+
+<p>Using a single, global lock object can, of course, cause reentrancy problems. Deadlock
+could occur where the Mutex aquire is attempted twice within the same thread before it is
+released. For example, Win32 critical sections are reentrant, but our testing shows that
+some POSIX mutex implementations are not. POSIX would require additional code, at a
+performance loss. </p>
+
+<p>To avoid these problems, the Mutex is only aquired during a pointer assignment, where
+possible. In the few cases where this is not true, care is taken to not call any other
+functions inside the mutex that could possibly aquire the mutex. </p>
+
+<p>The result of this design principle is that the mutex may be aquired more times than
+necessary, however time spent inside the mutex is then minimized. </p>
+
+<p>Developers implementing the Mutex are not required to provide reentrant-safe
+implementations. </p>
+
+<h3>Implementations</h3>
+
+<p>On Win32 platforms, a reentrant mutex is most naturally implemented on top of a
+Critical Section.<br>
+On POSIX platforms, pthread_mutex provides an implementation. </p>
+
+<p>The International Classes for Unicode are provided with reference implementations for
+Win32 and POSIX. </p>
+
+<p><b>See also:</b> 
+
+<ul>
+  <li><b>mutex.h </b>- Mutex API</li>
+  <li><b>muteximp.h</b> - The API's and instructions for providing your own mutexes.</li>
+  <li><b>mutex.cpp</b> - includes reference implementations for Win32 and POSIX.</li>
+</ul>
+</body>
+</html>

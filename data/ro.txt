@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+ro {
+    CollationElements { "& A < a\u0306 , A\u0306 & D < \u0111, \u0110 & I < i\u0302"
+        " , I\u0302 & S < s\u0327 , S\u0327 & \u00DE < t\u0327 , T\u0327& Z < z\u0307 , "
+        "Z\u0307 " }
+    Countries { 
+        RO { "Rom\u00E2nia" }
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "dd.MM.yyyy",
+            "dd.MM.yyyy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "D",
+            "L",
+            "Ma",
+            "Mi",
+            "J",
+            "V",
+            "S",
+    }
+    DayNames { 
+            "duminic\u0103",
+            "luni",
+            "mar\u0163i",
+            "miercuri",
+            "joi",
+            "vineri",
+            "s\u00EEmb\u0103t\u0103",
+    }
+    Eras { 
+            "d.C.",
+            "\u00EE.d.C.",
+    }
+    Languages { 
+        ro { "rom\u00E2n\u0103" }
+    }
+    LocaleID { "0418" }
+    LocaleString { "ro" }
+    MonthAbbreviations { 
+            "Ian",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Mai",
+            "Iun",
+            "Iul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+            "",
+    }
+    MonthNames { 
+            "ianuarie",
+            "februarie",
+            "martie",
+            "aprilie",
+            "mai",
+            "iunie",
+            "iulie",
+            "august",
+            "septembrie",
+            "octombrie",
+            "noiembrie",
+            "decembrie",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "ron" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+tr {
+    CollationElements { "& A < a\u0308 , A\u0308 & C < c\u0327 , C\u0327 & G < g"
+        "\u0306 , G\u0306 & H < \u0131 , I , i , \u0130 < \u0132 , \u0133 & O < o\u0308 "
+        ", O\u0308 & S < s\u0327 , S\u0327 & U < u\u0308 , U\u0308 " }
+    Countries { 
+        TR { "T\u00FCrkiye" }
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "dd MMMM yyyy EEEE",
+            "dd MMMM yyyy EEEE",
+            "dd.MMM.yyyy",
+            "dd.MM.yyyy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Paz",
+            "Pzt",
+            "Sal",
+            "\u00C7ar",
+            "Per",
+            "Cum",
+            "Cmt",
+    }
+    DayNames { 
+            "Pazar",
+            "Pazartesi",
+            "Sal\u0131",
+            "\u00C7ar\u015Famba",
+            "Per\u015Fembe",
+            "Cuma",
+            "Cumartesi",
+    }
+    Languages { 
+        tr { "T\u00FCrk\u00E7e" }
+    }
+    LocaleID { "041f" }
+    LocaleString { "tr" }
+    MonthAbbreviations { 
+            "Oca",
+            "\u015Eub",
+            "Mar",
+            "Nis",
+            "May",
+            "Haz",
+            "Tem",
+            "A\u011Fu",
+            "Eyl",
+            "Eki",
+            "Kas",
+            "Ara",
+            "",
+    }
+    MonthNames { 
+            "Ocak",
+            "\u015Eubat",
+            "Mart",
+            "Nisan",
+            "May\u0131s",
+            "Haziran",
+            "Temmuz",
+            "A\u011Fustos",
+            "Eyl\u00FCl",
+            "Ekim",
+            "Kas\u0131m",
+            "Aral\u0131k",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "tur" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}
