@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.9 $
+## BEGIN of icu-config-bottom. $Revision: 1.10 $
 ## Copyright (c) 2002-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -289,25 +289,11 @@ do
 	    ;;
 
 	--icudata-install-dir)
-	    case "$PKGDATA_MODE" in
-		
-		common)
-		    echo "$pkgdatadir"
-		    ;;
-
-		dll)
-		    echo "$libdir"
-		    ;;
-
-		*)
-		    echo "## ${ME} Unknown pkgdata mode $PKGDATA_MODE" 1>&2
-		    exit 4
-		    ;;
-	    esac
+            echo $ICUPKGDATA_DIR
 	    ;;
 	    
 	--icudatadir)
-	    echo $pkgdatadir
+	    echo $ICUDATA_DIR
 	    ;;
 
 	--shlib-c)
