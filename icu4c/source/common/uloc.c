@@ -928,7 +928,7 @@ uloc_getDisplayName(const char *locale,
         ++length;
     }
 
-    if(*pErrorCode=U_BUFFER_OVERFLOW_ERROR) {
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
         /* keep preflighting */
         *pErrorCode=U_ZERO_ERROR;
     }
@@ -958,7 +958,7 @@ uloc_getDisplayName(const char *locale,
         ++length;
     }
 
-    if(*pErrorCode=U_BUFFER_OVERFLOW_ERROR) {
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
         /* keep preflighting */
         *pErrorCode=U_ZERO_ERROR;
     }
@@ -994,7 +994,7 @@ uloc_getDisplayName(const char *locale,
         }
     }
 
-    if(*pErrorCode=U_BUFFER_OVERFLOW_ERROR) {
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
         /* keep preflighting */
         *pErrorCode=U_ZERO_ERROR;
     }

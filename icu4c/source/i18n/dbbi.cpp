@@ -560,3 +560,4 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
 U_NAMESPACE_END
 
 /* eof */
+
