@@ -35,6 +35,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
+#include "cstring.h"
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "callcoll.h"
@@ -413,10 +414,10 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
 }
 
-static void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
-    int32_t temp;
+    int temp=0;
     UCollationResult compareResult, keyResult, incResult;
     uint8_t *sortKey1, *sortKey2;
     
@@ -434,8 +435,7 @@ static void doTest(UCollator* myCollation, const UChar source[], const UChar tar
     sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
     
-
-    temp= memcmp(sortKey1, sortKey2, sortklenmin);
+    temp= uprv_strcmp(sortKey1, sortKey2);/*memcmp(sortKey1, sortKey2,sortklenmax);*/
     if(temp < 0) keyResult=UCOL_LESS;
     else if(temp > 0) keyResult= UCOL_GREATER;
     else keyResult = UCOL_EQUAL;

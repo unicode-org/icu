@@ -28,11 +28,7 @@
 #define MAX_TOKEN_LEN 128
 
    
-    /*main test routine, tests comparisons for a set of strings against sets of expected results*/
-    static void doTest(UCollator*, const UChar* source, const UChar* target, UCollationResult result);
-
-
-    /*perform test with strength TERTIARY*/
+     /*perform test with strength TERTIARY*/
 static    void TestTertiary(void);
 
 

@@ -28,7 +28,7 @@
 #define MAX_TOKEN_LEN 128
       
     /* tests comparison of custom collation with different strengths */
-static    void doTest(UCollator*, const UChar* source, const UChar* target, UCollationResult result);
+void doTest(UCollator*, const UChar* source, const UChar* target, UCollationResult result);
 
     /* perform test with strength PRIMARY */
 static    void TestPrimary(void);
