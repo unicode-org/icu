@@ -838,9 +838,10 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
 
     /* produce canonical closure */
     for(u = 0; u < 0x10000; u++) {
-      /*if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
-        || (noOfDec == 1 && *decomp != (UChar)u))*/
-      if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u)) {
+      if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
+        || (noOfDec == 1 && *decomp != (UChar)u))
+      /*if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u))*/
+      {
         compRes = ucol_getDynamicCEs(src, t, (UChar *)&u, 1, compCE, 256, status);
         el.noOfCEs = ucol_getDynamicCEs(src, t, decomp, noOfDec, el.CEs, 128, status);
 

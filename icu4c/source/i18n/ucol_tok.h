@@ -23,6 +23,9 @@
 
 #include "ucol_imp.h"
 
+#define UCOL_TOK_UNSET 0xFFFFFFFF
+#define UCOL_TOK_RESET 0xDEADBEEF
+
 #define UCOL_TOK_POLARITY_NEGATIVE 0
 #define UCOL_TOK_POLARITY_POSITIVE 1
 
