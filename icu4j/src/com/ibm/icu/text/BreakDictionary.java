@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakDictionary.java,v $ 
- * $Date: 2000/09/22 18:51:16 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/09/25 21:33:43 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -71,7 +71,14 @@ public class BreakDictionary {
                 int newState = (at(state, i)) & 0xFFFF;
                 
                 if (newState != 0) {
-                    printWordList(partialWord + reverseColumnMap[i], newState, out);
+                    char newChar = reverseColumnMap[i];
+                    String newPartialWord = partialWord;
+                    
+                    if (newChar != 0) {
+                        newPartialWord += newChar;
+                    }
+                    
+                    printWordList(newPartialWord, newState, out);
                 }
             }
         }
