@@ -1158,18 +1158,20 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     ICU in a Multithreaded Environment</a></h3>
 
     <p>If you are using ICU in a multithreaded application, there may be a
-    chance that the ICU global mutex isn't initialized properly. Normally the
+    chance that the ICU global mutex is not initialized properly. Normally the
     ICU global mutex is initialized during C++ static initialization, but there
     are some compilers and linkers that do not properly perform C++ static
     initialization in a library (this sometimes happens on HP/UX and on MacOS
     X).</p>
 
     <p>Upon the first usage of most ICU APIs, the global mutex will get
-    initialized. For example, uloc_countAvailable() or uloc_getDefault() will
-    initialize the global mutex; however, those functions should be called
-    before any other threads use ICU. Without one of these function calls from
-    a single thread, the data caches inside ICU may get initialized more than
-    once, which may cause memory leaks and other problems.</p>
+    initialized. For example, you could call uloc_countAvailable() or
+    uloc_getDefault() from your main() function before any threads are created.
+    Those functions will initialize the global mutex. Without one of these
+    function calls from a single thread, the data caches inside ICU may get
+    initialized more than once, which may cause memory leaks and other
+    problems. This problem normally does not happen when C++ static
+    initialization works properly.</p>
 
     <p>ICU does not use C++ static initialization for anything else, and
     disabling threads in ICU will disable all C++ static initialization in
