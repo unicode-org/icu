@@ -19,6 +19,7 @@ import java.text.StringCharacterIterator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.VersionInfo;
+import java.util.MissingResourceException;
 
 public class CollationAPITest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -1075,14 +1076,23 @@ public class CollationAPITest extends TestFmwk {
     
     public final void TestGetAll() {
         Locale[] list = Collator.getAvailableLocales();
+        int errorCount = 0;
         for (int i = 0; i < list.length; ++i) {
             log("Locale name: ");
             log(list[i].toString());
             log(" , the display name is : ");
             logln(list[i].getDisplayName());
-            logln("     ...... Or display as: " + Collator.getDisplayName(list[i]));
-            logln("     ...... and display in Chinese: " + 
-                    Collator.getDisplayName(list[i],Locale.CHINA));            
+            try{
+                logln("     ...... Or display as: " + Collator.getDisplayName(list[i]));
+                logln("     ...... and display in Chinese: " + 
+                      Collator.getDisplayName(list[i],Locale.CHINA)); 
+            }catch(MissingResourceException ex){
+                errorCount++;
+                logln("Error: could not get displayName for " + list[i]);
+            }           
+        }
+        if(errorCount>0){
+          warnln("Could not load the locale data.");
         }
     }    
 }

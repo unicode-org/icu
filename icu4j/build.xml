@@ -286,7 +286,7 @@
     <target name ="coreData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
             <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                includes="Transliterator_*.txt,*.icu,*.spp,*.brk"
+                includes="*.icu,*.spp,*.brk"
                 excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
@@ -614,7 +614,22 @@
         </unjar>
         <touch file="${build.dir}/${icu4j.data.path}/uprops.icu"/>
     </target>
-
+    <target name="copyTranslitData" depends="init">
+        <!-- Calendar does not require Collation data, BreakIterator data -->
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+            <patternset>
+                <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
+                <include name="**/unorm.icu"/>
+                <include name="**/uprops.icu"/>
+                <include name="**/unames.icu"/>
+                <include name="**/pnames.icu"/>
+                <include name="**/*.brk"/>
+                <include name="**/translit/*.res"/>
+            </patternset>
+        </unjar>
+        <touch file="${build.dir}/${icu4j.data.path}/uprops.icu"/>
+    </target>
+    
     <target name="copyFormatData" depends="init" if="icu4j.module.resources">
         <!-- Format does not require BreakIterator data -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
@@ -690,8 +705,14 @@
             Targets to build only Character properties API and tests
      -->
 
-    <target name="propertiesBasic" depends="init, copyBasicPropsData" description="modular build of basic character properties">
-        <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
+    <target name="propertiesBasic" depends="init, propertiesClasses, copyBasicPropsData" description="modular build of basic character properties">
+    </target>
+
+    <target name="propertiesFull" depends="init,propertiesClasses,copyFullPropsData" description="modular build of full character properties">
+    </target>
+    
+    <target name="propertiesClasses">
+             <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -699,17 +720,6 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-
-    <target name="propertiesFull" depends="init,copyFullPropsData" description="modular build of full character properties">
-         <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
-            excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
-            srcdir="${src.dir}"
-            destdir="${build.dir}"
-            source="1.4"
-            classpathref="build.classpath"
-            debug="on" deprecation="off"/>
-    </target>
-
     <target name="propertiesBasicTests" depends="propertiesBasic" description="test propertiesBasic modular build target">
         <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/unicode/"/>
@@ -781,7 +791,7 @@
             Targets to build only Transliterator API and  tests
      -->
 
-    <target name="transliterator" depends="init,propertiesFull" description="modular build of unicode transform services">
+    <target name="transliterator" depends="init,propertiesClasses,copyTranslitData" description="modular build of unicode transform services">
         <javac includes="com/ibm/icu/text/*Transliterator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/*Property*.java,com/ibm/icu/impl/*Iterator*.java,com/ibm/icu/impl/data/ResourceReader.java,com/ibm/icu/impl/UtilityExtensions.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/text/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
@@ -789,10 +799,6 @@
             source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-        <copy todir="${build.dir}/com/ibm/icu/impl/data">
-            <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_*.txt"
-                excludes="Transliterator_Han_Latin_*.txt"/>
-        </copy>
     </target>
 
     <target name="transliteratorTests" depends="transliterator" description = "test transliterator modular build target">
