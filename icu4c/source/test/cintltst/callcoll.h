@@ -30,23 +30,6 @@
     /* tests comparison of custom collation with different strengths */
 void doTest(UCollator*, const UChar* source, const UChar* target, UCollationResult result);
 
-    /* perform test with strength PRIMARY */
-static    void TestPrimary(void);
-
-    /* perform test with strength SECONDARY */
-static void TestSecondary(void);
-
-    /* perform test with strength tertiary */
-    static void TestTertiary(void);
-
-    /*perform tests with strength Identical */
-static    void TestIdentical(void);
-
-    /* perform extra tests */
-    static void TestExtra(void);
-
-    /* Test jitterbug 581 */
-    static void TestJB581(void);
    
 
 

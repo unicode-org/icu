@@ -119,37 +119,6 @@ const static int32_t results[TESTLOCALES][TOTALTESTSET] = {
     { 19, 22, 21, 24, 23, 25, 12, 13, 9, 0, 17, 16, 28, 26, 27, 15, 18, 14, 1, 11, 2, 3, 4, 5, 20, 6, 8, 10, 7, 29 }
 };
 
-static UChar* 
-my_strncpy(UChar     *dst, 
-     const UChar     *src, 
-     int32_t     n) 
-{
-  UChar *anchor = dst;     /* save the start of result string */
-  
-  if (!n) return dst;
-  while(n--)
-      *dst++ = *src++;
-  *dst = 0x0000;
-  return anchor;
-}
-
-static UChar* 
-my_strcat(UChar     *dst, 
-     const UChar     *src,
-     int32_t n)
-{
-  UChar *anchor = dst;       /* save a pointer to start of dst */
-  
-  if (!n) return dst;
-
-  dst += n;
-  while (*src != 0x0000) 
-      *dst++ = *src++;
-  *dst = 0x0000;
-  
-  return anchor;
-}
-
 void addRuleBasedCollTest(TestNode** root)
 {
     addTest(root, &TestG7Locales, "tscoll/cg7coll/TestG7Locales");
