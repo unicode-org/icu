@@ -155,14 +155,13 @@ unorm_haveData(UErrorCode *pErrorCode);
 
 /**
  * Internal API for normalizing.
- * Does not check for bad input and uses growBuffer.
+ * Does not check for bad input.
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-unorm_internalNormalize(UChar **pDest, int32_t *pDestCapacity,
+unorm_internalNormalize(UChar *dest, int32_t destCapacity,
                         const UChar *src, int32_t srcLength,
                         UNormalizationMode mode, UBool ignoreHangul,
-                        UGrowBuffer *growBuffer, void *context,
                         UErrorCode *pErrorCode);
 
 /**
@@ -170,10 +169,9 @@ unorm_internalNormalize(UChar **pDest, int32_t *pDestCapacity,
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-unorm_decompose(UChar **pDest, int32_t *pDestCapacity,
+unorm_decompose(UChar *dest, int32_t destCapacity,
                 const UChar *src, int32_t srcLength,
                 UBool compat, UBool ignoreHangul,
-                UGrowBuffer *growBuffer, void *context,
                 UErrorCode *pErrorCode);
 
 /**
@@ -181,10 +179,9 @@ unorm_decompose(UChar **pDest, int32_t *pDestCapacity,
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-unorm_compose(UChar **pDest, int32_t *pDestCapacity,
+unorm_compose(UChar *dest, int32_t destCapacity,
               const UChar *src, int32_t srcLength,
               UBool compat, UBool ignoreHangul,
-              UGrowBuffer *growBuffer, void *context,
               UErrorCode *pErrorCode);
 
 /**
@@ -250,15 +247,103 @@ unorm_getFCD16FromSurrogatePair(const uint16_t *fcdTrieIndex, uint16_t fcd16, UC
         ];
 }
 
+#endif
+
+U_CDECL_BEGIN
+
+struct UCharIterator;
+typedef struct UCharIterator UCharIterator;
+
+enum UCharIteratorOrigin {
+    UITERATOR_START, UITERATOR_CURRENT, UITERATOR_END
+};
+
+typedef enum UCharIteratorOrigin UCharIteratorOrigin;
+
+/**
+ * C API for code unit iteration.
+ * This can be used as a C wrapper around
+ * CharacterIterator, Replaceable, or implemented using simple strings, etc.
+ *
+ * @internal for normalization
+ */
+struct UCharIterator {
+    /**
+     * (protected) Pointer to string or wrapped object or similar.
+     * Not used by caller.
+     */
+    const void *context;
+
+    /**
+     * (protected) Length of string or similar.
+     * Not used by caller.
+     */
+    int32_t length;
+
+    /**
+     * (protected) Current index or similar.
+     * Not used by caller.
+     */
+    int32_t index;
+
+    /**
+     * (public) Moves the current position relative to the start or end of the
+     * iteration range, or relative to the current position itself.
+     * The movement is expressed in numbers of code units forward
+     * or backward by specifying a positive or negative delta.
+     *
+     * @param delta can be positive, zero, or negative
+     * @param origin move relative to the start, end, or current index
+     * @return the new index
+     */
+    int32_t U_CALLCONV
+    (*move)(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin);
+
+    /**
+     * (public) Check if current() and next() can still
+     * return another code unit.
+     */
+    UBool U_CALLCONV
+    (*hasNext)(UCharIterator *iter);
+
+    /**
+     * (public) Check if previous() can still return another code unit.
+     */
+    UBool U_CALLCONV
+    (*hasPrevious)(UCharIterator *iter);
+
+    /**
+     * (public) Return the code unit at the current position,
+     * or 0xffff if there is none (index is at the end).
+     */
+    UChar U_CALLCONV
+    (*current)(UCharIterator *iter);
+
+    /**
+     * (public) Return the code unit at the current index and increment
+     * the index (post-increment, like s[i++]),
+     * or return 0xffff if there is none (index is at the end).
+     */
+    UChar U_CALLCONV
+    (*next)(UCharIterator *iter);
+
+    /**
+     * (public) Decrement the index and return the code unit from there
+     * (pre-decrement, like s[--i]),
+     * or return 0xffff if there is none (index is at the start).
+     */
+    UChar U_CALLCONV
+    (*previous)(UCharIterator *iter);
+};
+
 /**
  * Internal API for iterative normalizing - see Normalizer.
  * @internal
  */
 U_CFUNC int32_t
-unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
-                    U_NAMESPACE_QUALIFIER CharacterIterator &src,
+unorm_nextNormalize(UChar *dest, int32_t destCapacity,
+                    UCharIterator *src,
                     UNormalizationMode mode, UBool ignoreHangul,
-                    UGrowBuffer *growBuffer, void *context,
                     UErrorCode *pErrorCode);
 
 /**
@@ -266,13 +351,12 @@ unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
  * @internal
  */
 U_CFUNC int32_t
-unorm_previousNormalize(UChar *&dest, int32_t &destCapacity,
-                        U_NAMESPACE_QUALIFIER CharacterIterator &src,
+unorm_previousNormalize(UChar *dest, int32_t destCapacity,
+                        UCharIterator *src,
                         UNormalizationMode mode, UBool ignoreHangul,
-                        UGrowBuffer *growBuffer, void *context,
                         UErrorCode *pErrorCode);
 
-#endif
+U_CDECL_END
 
 /**
  * Description of the format of unorm.dat.

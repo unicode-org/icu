@@ -14,6 +14,9 @@
 #include "unicode/chariter.h"
 #include "unicode/unorm.h"
 
+struct UCharIterator;
+typedef struct UCharIterator UCharIterator;
+
 U_NAMESPACE_BEGIN
 /**
  * \file
@@ -881,7 +884,7 @@ private:
   UBool nextNormalize();
   UBool previousNormalize();
 
-  void    checkData();
+  void    init(CharacterIterator *iter);
   void    clearBuffer(void);
 
   // Helper, without UErrorCode, for easier transitional code
@@ -896,7 +899,7 @@ private:
   int32_t             fOptions;
 
   // The input text and our position in it
-  CharacterIterator*  text;
+  UCharIterator       *text;
 
   // The normalization buffer is the result of normalization
   // of the source in [currentIndex..nextIndex[ .

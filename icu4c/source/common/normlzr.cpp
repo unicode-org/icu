@@ -12,7 +12,60 @@
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
 #include "unicode/normlzr.h"
+#include "cmemory.h"
 #include "unormimp.h"
+
+U_CDECL_BEGIN
+
+/*
+ * This is wrapper code around a C++ CharacterIterator to
+ * look like a C UCharIterator for the internal API
+ * for incremental normalization.
+ *
+ * The UCharIterator.context field holds a pointer to the CharacterIterator.
+ */
+
+static int32_t U_CALLCONV
+characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
+    return ((CharacterIterator *)(iter->context))->move(delta, (CharacterIterator::EOrigin)origin);
+}
+
+static UBool U_CALLCONV
+characterIteratorHasNext(UCharIterator *iter) {
+    return ((CharacterIterator *)(iter->context))->hasNext();
+}
+
+static UBool U_CALLCONV
+characterIteratorHasPrevious(UCharIterator *iter) {
+    return ((CharacterIterator *)(iter->context))->hasPrevious();
+}
+
+static UChar U_CALLCONV
+characterIteratorCurrent(UCharIterator *iter) {
+    return ((CharacterIterator *)(iter->context))->current();
+}
+
+static UChar U_CALLCONV
+characterIteratorNext(UCharIterator *iter) {
+    return ((CharacterIterator *)(iter->context))->nextPostInc();
+}
+
+static UChar U_CALLCONV
+characterIteratorPrevious(UCharIterator *iter) {
+    return ((CharacterIterator *)(iter->context))->previous();
+}
+
+static const UCharIterator characterIteratorWrapper={
+    0, 0, 0,
+    characterIteratorMove,
+    characterIteratorHasNext,
+    characterIteratorHasPrevious,
+    characterIteratorCurrent,
+    characterIteratorNext,
+    characterIteratorPrevious
+};
+
+U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
@@ -22,29 +75,26 @@ U_NAMESPACE_BEGIN
 
 Normalizer::Normalizer(const UnicodeString& str, UNormalizationMode mode) :
     fUMode(mode), fOptions(0),
-    text(new StringCharacterIterator(str)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(new StringCharacterIterator(str));
 }
 
 Normalizer::Normalizer(const UChar *str, int32_t length, UNormalizationMode mode) :
     fUMode(mode), fOptions(0),
-    text(new UCharCharacterIterator(str, length)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(new UCharCharacterIterator(str, length));
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
     fUMode(mode), fOptions(0),
-    text(iter.clone()),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(iter.clone());
 }
 
 // deprecated constructors
@@ -52,71 +102,71 @@ Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode) :
     fUMode(getUMode(mode)), fOptions(0),
-    text(new StringCharacterIterator(str)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(new StringCharacterIterator(str));
 }
 
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode, 
                        int32_t options) :
     fUMode(getUMode(mode)), fOptions(options),
-    text(new StringCharacterIterator(str)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(new StringCharacterIterator(str));
 }
 
 Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
     fUMode(getUMode(mode)), fOptions(0),
-    text(new UCharCharacterIterator(str, length)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(new UCharCharacterIterator(str, length));
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode) :
     fUMode(getUMode(mode)), fOptions(0),
-    text(iter.clone()),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(iter.clone());
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode, 
                        int32_t options) :
     fUMode(getUMode(mode)), fOptions(options),
-    text(iter.clone()),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
-    checkData();
+    init(iter.clone());
 }
 
 Normalizer::Normalizer(const Normalizer &copy) :
     fUMode(copy.fUMode), fOptions(copy.fOptions),
-    text(copy.text->clone()),
     currentIndex(copy.nextIndex), nextIndex(copy.nextIndex),
     buffer(copy.buffer), bufferPos(copy.bufferPos)
 {
-    checkData();
+    init(((CharacterIterator *)(copy.text->context))->clone());
 }
 
 static const UChar _NUL=0;
 
 void
-Normalizer::checkData() {
+Normalizer::init(CharacterIterator *iter) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    if(!unorm_haveData(&errorCode)) {
-        delete text;
-        text=new UCharCharacterIterator(&_NUL, 0);
+
+    text=new UCharIterator;
+    uprv_memcpy(text, &characterIteratorWrapper, sizeof(UCharIterator));
+
+    if(unorm_haveData(&errorCode)) {
+        text->context=iter;
+    } else {
+        delete iter;
+        text->context=new UCharCharacterIterator(&_NUL, 0);
     }
 }
 
@@ -140,7 +190,7 @@ Normalizer::clone() const
  */
 int32_t Normalizer::hashCode() const
 {
-    return text->hashCode() + fUMode + fOptions + buffer.hashCode() + bufferPos + currentIndex + nextIndex;
+    return ((CharacterIterator *)(text->context))->hashCode() + fUMode + fOptions + buffer.hashCode() + bufferPos + currentIndex + nextIndex;
 }
     
 UBool Normalizer::operator==(const Normalizer& that) const
@@ -149,7 +199,7 @@ UBool Normalizer::operator==(const Normalizer& that) const
         this==&that ||
         fUMode==that.fUMode &&
         fOptions==that.fOptions &&
-        *text==*(that.text) &&
+        *((CharacterIterator *)(text->context))==*((CharacterIterator *)(that.text->context)) &&
         buffer==that.buffer &&
         bufferPos==that.bufferPos &&
         nextIndex==that.nextIndex;
@@ -167,13 +217,22 @@ Normalizer::normalize(const UnicodeString& source,
     if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
     } else {
-        /* make sure that we do not operate on the same buffer in source and result */
-        result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-        result.fLength=unorm_internalNormalize(&result.fArray, &result.fCapacity,
-                                               source.fArray, source.fLength,
+        UChar *buffer=result.getBuffer(source.length());
+        int32_t length=unorm_internalNormalize(buffer, result.getCapacity(),
+                                               source.getBuffer(), source.length(),
                                                mode, (options&IGNORE_HANGUL)!=0,
-                                               UnicodeString::growBuffer, &result,
                                                &status);
+        result.releaseBuffer(length);
+        if(status==U_BUFFER_OVERFLOW_ERROR) {
+            status=U_ZERO_ERROR;
+            buffer=result.getBuffer(length);
+            length=unorm_internalNormalize(buffer, result.getCapacity(),
+                                           source.getBuffer(), source.length(),
+                                           mode, (options&IGNORE_HANGUL)!=0,
+                                           &status);
+            result.releaseBuffer(length);
+        }
+
         if(U_FAILURE(status)) {
             result.setToBogus();
         }
@@ -188,7 +247,7 @@ Normalizer::quickCheck(const UnicodeString& source,
         return UNORM_MAYBE;
     }
 
-    return unorm_quickCheck(source.fArray, source.length(), 
+    return unorm_quickCheck(source.getBuffer(), source.length(),
                             mode, &status);
 }
 
@@ -200,13 +259,22 @@ Normalizer::compose(const UnicodeString& source,
     if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
     } else {
-        /* make sure that we do not operate on the same buffer in source and result */
-        result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-        result.fLength=unorm_compose(&result.fArray, &result.fCapacity,
-                                     source.fArray, source.fLength,
+        UChar *buffer=result.getBuffer(source.length());
+        int32_t length=unorm_compose(buffer, result.getCapacity(),
+                                     source.getBuffer(), source.length(),
                                      compat, (options&IGNORE_HANGUL)!=0,
-                                     UnicodeString::growBuffer, &result,
                                      &status);
+        result.releaseBuffer(length);
+        if(status==U_BUFFER_OVERFLOW_ERROR) {
+            status=U_ZERO_ERROR;
+            buffer=result.getBuffer(length);
+            length=unorm_compose(buffer, result.getCapacity(),
+                                 source.getBuffer(), source.length(),
+                                 compat, (options&IGNORE_HANGUL)!=0,
+                                 &status);
+            result.releaseBuffer(length);
+        }
+
         if(U_FAILURE(status)) {
             result.setToBogus();
         }
@@ -221,13 +289,22 @@ Normalizer::decompose(const UnicodeString& source,
     if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
     } else {
-        /* make sure that we do not operate on the same buffer in source and result */
-        result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-        result.fLength=unorm_decompose(&result.fArray, &result.fCapacity,
-                                       source.fArray, source.fLength,
-                                       compat, (options&IGNORE_HANGUL)!=0,
-                                       UnicodeString::growBuffer, &result,
-                                       &status);
+        UChar *buffer=result.getBuffer(source.length());
+        int32_t length=unorm_compose(buffer, result.getCapacity(),
+                                     source.getBuffer(), source.length(),
+                                     compat, (options&IGNORE_HANGUL)!=0,
+                                     &status);
+        result.releaseBuffer(length);
+        if(status==U_BUFFER_OVERFLOW_ERROR) {
+            status=U_ZERO_ERROR;
+            buffer=result.getBuffer(length);
+            length=unorm_decompose(buffer, result.getCapacity(),
+                                   source.getBuffer(), source.length(),
+                                   compat, (options&IGNORE_HANGUL)!=0,
+                                   &status);
+            result.releaseBuffer(length);
+        }
+
         if(U_FAILURE(status)) {
             result.setToBogus();
         }
@@ -239,7 +316,7 @@ Normalizer::decompose(const UnicodeString& source,
 //-------------------------------------------------------------------------
 
 /**
- * Return the current character in the normalized text.
+ * Return the current character in the normalized text->
  */
 UChar32 Normalizer::current() {
     if(bufferPos<buffer.length() || nextNormalize()) {
@@ -280,15 +357,13 @@ UChar32 Normalizer::previous() {
 }
 
 void Normalizer::reset() {
-    text->setToStart();
-    currentIndex=nextIndex=text->getIndex();
+    currentIndex=nextIndex=text->move(text, 0, UITERATOR_START);
     clearBuffer();
 }
 
 void
 Normalizer::setIndexOnly(UTextOffset index) {
-    text->setIndex(index);
-    currentIndex=nextIndex=text->getIndex(); // validates index
+    currentIndex=nextIndex=text->move(text, index, UITERATOR_START); // validates index
     clearBuffer();
 }
 
@@ -303,7 +378,7 @@ Normalizer::setIndexOnly(UTextOffset index) {
  * by <tt>next</tt> and <tt>previous</tt> and the indices passed to and
  * returned from <tt>setIndex</tt> and {@link #getIndex}.
  * <p>
- * @param index the desired index in the input text.
+ * @param index the desired index in the input text->
  *
  * @return      the first normalized character that is the result of iterating
  *              forward starting at the given index.
@@ -317,8 +392,8 @@ UChar32 Normalizer::setIndex(UTextOffset index) {
 }
 
 /**
- * Return the first character in the normalized text.  This resets
- * the <tt>Normalizer's</tt> position to the beginning of the text.
+ * Return the first character in the normalized text->  This resets
+ * the <tt>Normalizer's</tt> position to the beginning of the text->
  */
 UChar32 Normalizer::first() {
     reset();
@@ -326,13 +401,12 @@ UChar32 Normalizer::first() {
 }
 
 /**
- * Return the last character in the normalized text.  This resets
+ * Return the last character in the normalized text->  This resets
  * the <tt>Normalizer's</tt> position to be just before the
  * the input text corresponding to that normalized character.
  */
 UChar32 Normalizer::last() {
-    text->setToEnd();
-    currentIndex=nextIndex=text->getIndex();
+    currentIndex=nextIndex=text->move(text, 0, UITERATOR_END);
     clearBuffer();
     return previous();
 }
@@ -360,21 +434,21 @@ UTextOffset Normalizer::getIndex() const {
 }
 
 /**
- * Retrieve the index of the start of the input text.  This is the begin index
+ * Retrieve the index of the start of the input text->  This is the begin index
  * of the <tt>CharacterIterator</tt> or the start (i.e. 0) of the <tt>String</tt>
  * over which this <tt>Normalizer</tt> is iterating
  */
 UTextOffset Normalizer::startIndex() const {
-    return text->startIndex();
+    return text->move(text, 0, UITERATOR_START);
 }
 
 /**
- * Retrieve the index of the end of the input text.  This is the end index
+ * Retrieve the index of the end of the input text->  This is the end index
  * of the <tt>CharacterIterator</tt> or the length of the <tt>String</tt>
  * over which this <tt>Normalizer</tt> is iterating
  */
 UTextOffset Normalizer::endIndex() const {
-    return text->endIndex();
+    return text->move(text, 0, UITERATOR_END);
 }
 
 //-------------------------------------------------------------------------
@@ -412,7 +486,7 @@ Normalizer::getOption(int32_t option) const
 
 /**
  * Set the input text over which this <tt>Normalizer</tt> will iterate.
- * The iteration position is set to the beginning of the input text.
+ * The iteration position is set to the beginning of the input text->
  */
 void
 Normalizer::setText(const UnicodeString& newText, 
@@ -426,8 +500,8 @@ Normalizer::setText(const UnicodeString& newText,
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    delete text;
-    text = newIter;
+    delete (CharacterIterator *)(text->context);
+    text->context = newIter;
     reset();
 }
 
@@ -447,8 +521,8 @@ Normalizer::setText(const CharacterIterator& newText,
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    delete text;
-    text = newIter;
+    delete (CharacterIterator *)(text->context);
+    text->context = newIter;
     reset();
 }
 
@@ -465,8 +539,8 @@ Normalizer::setText(const UChar* newText,
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    delete text;
-    text = newIter;
+    delete (CharacterIterator *)(text->context);
+    text->context = newIter;
     reset();
 }
 
@@ -477,7 +551,7 @@ Normalizer::setText(const UChar* newText,
 void
 Normalizer::getText(UnicodeString&  result) 
 {
-    text->getText(result);
+    ((CharacterIterator *)(text->context))->getText(result);
 }
 
 //-------------------------------------------------------------------------
@@ -491,40 +565,69 @@ void Normalizer::clearBuffer() {
 
 UBool
 Normalizer::nextNormalize() {
-    UErrorCode errorCode=U_ZERO_ERROR;
+    UChar *p;
+    int32_t length;
+    UErrorCode errorCode;
 
     clearBuffer();
     currentIndex=nextIndex;
-    text->setIndex(nextIndex);
-    if(!text->hasNext()) {
+    text->move(text, nextIndex, UITERATOR_START);
+    if(!text->hasNext(text)) {
         return FALSE;
     }
 
-    buffer.fLength=unorm_nextNormalize(buffer.fArray, buffer.fCapacity, *text,
-                                       fUMode, (fOptions&IGNORE_HANGUL)!=0,
-                                       UnicodeString::growBuffer, &buffer,
-                                       &errorCode);
-    nextIndex=text->getIndex();
-    return U_SUCCESS(errorCode) && buffer.length()>0;
+    errorCode=U_ZERO_ERROR;
+    p=buffer.getBuffer(-1);
+    length=unorm_nextNormalize(p, buffer.getCapacity(), text,
+                               fUMode, (fOptions&IGNORE_HANGUL)!=0,
+                               &errorCode);
+    buffer.releaseBuffer(length);
+    if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+        errorCode=U_ZERO_ERROR;
+        text->move(text, nextIndex, UITERATOR_START);
+        p=buffer.getBuffer(length);
+        length=unorm_nextNormalize(p, buffer.getCapacity(), text,
+                                   fUMode, (fOptions&IGNORE_HANGUL)!=0,
+                                   &errorCode);
+        buffer.releaseBuffer(length);
+    }
+
+    nextIndex=text->move(text, 0, UITERATOR_CURRENT);
+    return U_SUCCESS(errorCode) && !buffer.isEmpty();
 }
 
 UBool
 Normalizer::previousNormalize() {
-    UErrorCode errorCode=U_ZERO_ERROR;
+    UChar *p;
+    int32_t length;
+    UErrorCode errorCode;
 
     clearBuffer();
     nextIndex=currentIndex;
-    text->setIndex(currentIndex);
-    if(!text->hasPrevious()) {
+    text->move(text, currentIndex, UITERATOR_START);
+    if(!text->hasPrevious(text)) {
         return FALSE;
     }
 
-    buffer.fLength=unorm_previousNormalize(buffer.fArray, buffer.fCapacity, *text,
-                                           fUMode, (fOptions&IGNORE_HANGUL)!=0,
-                                           UnicodeString::growBuffer, &buffer,
-                                           &errorCode);
+    errorCode=U_ZERO_ERROR;
+    p=buffer.getBuffer(-1);
+    length=unorm_previousNormalize(p, buffer.getCapacity(), text,
+                                   fUMode, (fOptions&IGNORE_HANGUL)!=0,
+                                   &errorCode);
+    buffer.releaseBuffer(length);
+    if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+        errorCode=U_ZERO_ERROR;
+        text->move(text, currentIndex, UITERATOR_START);
+        p=buffer.getBuffer(length);
+        length=unorm_previousNormalize(p, buffer.getCapacity(), text,
+                                       fUMode, (fOptions&IGNORE_HANGUL)!=0,
+                                       &errorCode);
+        buffer.releaseBuffer(length);
+    }
+
     bufferPos=buffer.length();
-    currentIndex=text->getIndex();
-    return U_SUCCESS(errorCode) && buffer.length()>0;
+    currentIndex=text->move(text, 0, UITERATOR_CURRENT);
+    return U_SUCCESS(errorCode) && !buffer.isEmpty();
 }
+
 U_NAMESPACE_END
