@@ -70,7 +70,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t cursorPosition, int32_t cursorOffset,
                                          int32_t* adoptedSegs,
                                          UBool anchorStart, UBool anchorEnd,
-                                         const TransliterationRuleData& theData,
+                                         const TransliterationRuleData* theData,
                                          UErrorCode& status) :
     data(theData) {
 
@@ -199,7 +199,7 @@ int16_t TransliterationRule::getIndexValue() const {
         return -1;
     }
     UChar32 c = pattern.char32At(anteContextLength);
-    return (int16_t)(data.lookup(c) == NULL ? (c & 0xFF) : -1);
+    return (int16_t)(data->lookup(c) == NULL ? (c & 0xFF) : -1);
 }
 
 /**
@@ -219,7 +219,7 @@ UBool TransliterationRule::matchesIndexValue(uint8_t v) const {
         return TRUE;
     }
     UChar32 c = pattern.char32At(anteContextLength);
-    const UnicodeMatcher* matcher = data.lookup(c);
+    const UnicodeMatcher* matcher = data->lookup(c);
     return matcher == NULL ? (uint8_t(c) == v) :
         matcher->matchesIndexValue(v);
 }
@@ -367,7 +367,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
 
     for (i=anteContextLength-1; i>=0; --i) {
         UChar keyChar = pattern.charAt(i);
-        const UnicodeMatcher* matcher = data.lookup(keyChar);
+        const UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
             if (cursor >= pos.contextStart &&
                 keyChar == text.charAt(cursor)) {
@@ -433,7 +433,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
             keyLimit = cursor;
         }
         UChar keyChar = pattern.charAt(anteContextLength + i++);
-        const UnicodeMatcher* matcher = data.lookup(keyChar);
+        const UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
             // Don't need the cursor < pos.contextLimit check if
             // incremental is TRUE (because it's done above); do need
@@ -514,7 +514,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 newStart = dest - (keyLimit - pos.start);
             }
             UChar32 c = output.char32At(i);
-            int32_t b = data.lookupSegmentReference(c);
+            int32_t b = data->lookupSegmentReference(c);
             if (b < 0) {
                 // Accumulate straight (non-segment) text.
                 buf.append(c);
@@ -736,7 +736,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
         }
 
         UChar c = pattern.charAt(i);
-        const UnicodeMatcher *matcher = data.lookup(c);
+        const UnicodeMatcher *matcher = data->lookup(c);
         if (matcher == 0) {
             appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
         } else {
@@ -772,7 +772,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             appendToRule(rule, (UChar) 0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
         }
         UChar c = output.charAt(i);
-        int32_t seg = data.lookupSegmentReference(c);
+        int32_t seg = data->lookupSegmentReference(c);
         if (seg < 0) {
             appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
         } else {

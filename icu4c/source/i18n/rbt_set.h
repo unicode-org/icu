@@ -65,6 +65,12 @@ public:
     virtual ~TransliterationRuleSet();
 
     /**
+     * Change the data object that this rule belongs to.  Used
+     * internally by the TransliterationRuleData copy constructor.
+     */
+    void setData(const TransliterationRuleData* data);
+
+    /**
      * Return the maximum context length.
      * @return the length of the longest preceding context.
      */

@@ -33,6 +33,7 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
     variablesLength(other.variablesLength),
     segmentBase(other.segmentBase)
 {
+    ruleSet.setData(this); // ruleSet must already be frozen
 
     UErrorCode status = U_ZERO_ERROR;
     variableNames = new Hashtable(status);
