@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java,v $
- * $Date: 2002/08/13 22:07:58 $
- * $Revision: 1.11 $
+ * $Date: 2002/11/14 00:05:40 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -27,7 +27,7 @@ import java.text.ParseException;
  */
 public class ReplaceableTest extends TestFmwk {
 	
-	public static final boolean LATER_THAN_2_1 = false;
+	public static final boolean LATER_THAN_2_1 = true;
 	
     public static void main(String[] args) throws Exception {
         new ReplaceableTest().run(args);
