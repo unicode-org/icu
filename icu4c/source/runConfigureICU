@@ -32,6 +32,7 @@ The following names can be supplied as the argument for platform:
     AIX4.3xlC               Use IBM's xlC on AIX 4.3
     AIX4.3xlC_nothreads     Use IBM's xlC on AIX 4.3 with no multithreading
     AIX4.3VA                Use IBM's Visual Age xlC_r compiler on AIX 4.3
+    AIXGCC                  Use GCC on AIX
     ALPHA/LINUXGCC          Use GCC on Alpha/Linux systems
     ALPHA/LINUXCCC          Use Compaq C compiler on Alpha/Linux systems
     BeOS                    Use the GNU C++ compiler on BeOS
@@ -148,6 +149,15 @@ case $platform in
         CXX=`which xlC_r`; export CXX
         RELEASE_CFLAGS="-O2 -qmaxmem=-1"
         RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
+        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+        ;;
+    AIXGCC)
+        THE_OS=AIX
+        THE_COMP="gcc"
+        CC=`which gcc`; export CC
+        CXX=`which g++`; export CXX
+        RELEASE_CFLAGS="-O2"
+        RELEASE_CXXFLAGS="-O2"
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
         ;;
 # Just use --enable-threads=no. Visual Age makes no distinction between xlC and xlC_r or any other _r programs.

@@ -27,7 +27,7 @@ LD_RPATH=	-I
 LD_RPATH_PRE=	
 
 ## enable the shared lib loader
-LDFLAGS += -Wl,-brtl,-bbigtoc
+LDFLAGS += -Wl,-bbigtoc
 
 ## We need to delete things prior to linking, or else we'll get
 ## SEVERE ERROR: output file in use ..  on AIX. 
@@ -53,7 +53,8 @@ SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
 LD_SONAME = 
 
 ## Shared object suffix
-SO=		so
+SO=	a
+A=	a
 
 ## Non-shared intermediate object suffix
 STATIC_O = o
