@@ -3027,6 +3027,10 @@ then
 else
         DATABUILDDIR=`pwd`/data/
         RELATIVEDATADIR=data/
+	cat >> confdefs.h <<\EOF
+#define BUILD_OUT_OF_SOURCE 1
+EOF
+
 fi
 
 
@@ -3139,6 +3143,7 @@ ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
 trap 'rm -fr `echo "Makefile \
+		data/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
@@ -3146,7 +3151,7 @@ trap 'rm -fr `echo "Makefile \
 		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
-		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
 		samples/XMLConverter/Makefile \
@@ -3275,6 +3280,7 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile \
+		data/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
@@ -3282,7 +3288,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile \
 		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
-		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
+		test/Makefile test/testdata/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
 		samples/XMLConverter/Makefile \
@@ -3472,14 +3478,6 @@ then
 else
     echo creating $DATABUILDDIR
     mkdir -p $DATABUILDDIR
-fi
-
-if test -d $DATABUILDDIR/../source/test/testdata
-then
-    :
-else
-    echo creating $DATABUILDDIR/../source/test/testdata
-    mkdir -p $DATABUILDDIR/../source/test/testdata
 fi
 
 if test $ICU_USE_THREADS = 0; then

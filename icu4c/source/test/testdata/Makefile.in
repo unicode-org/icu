@@ -27,7 +27,8 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ## Build directory information
-top_builddir = .
+top_builddir = ../..
+subdir = test/testdata
 
 ## Install program information
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -60,8 +61,8 @@ UNICODE_VERSION = @UNICODE_VERSION@
 ## Files to remove for 'make clean'
 CLEANFILES = *~ 
 
-DOCDIRS = common i18n
-SUBDIRS = data common i18n $(EXTRA) tools $(TEST) $(SAMPLE)
+DOCDIRS = 
+SUBDIRS = 
 
 ## Extra files to install [nothing at present]
 EXTRA_DATA =
@@ -70,7 +71,7 @@ EXTRA_DATA =
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive 
+check check-local check-recursive builddata
 
 ## Clear suffix list
 .SUFFIXES :
@@ -101,16 +102,9 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit; \
 	fi
 
-all-local: $(srcdir)/configure
+all-local: builddata
 
-install-local: $(top_builddir)/config/Makefile.inc $(EXTRA_DATA:%=$(DESTDIR)$(pkgdatadir)/$(VERSION)/%)
-	@$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
-	@$(mkinstalldirs) $(DESTDIR)$(sbindir)
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkgdatadir)/Makefile.inc
-	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir)/mkinstalldirs
-
-$(DESTDIR)$(pkgdatadir)/$(VERSION)/%: $(top_srcdir)/../data/%
-	$(INSTALL_DATA) $< $@
+install-local: 
 
 ## Generate HTML documentation
 doc:
@@ -131,22 +125,23 @@ clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 distclean-local: clean-local
-	$(RMV) Makefile config.cache config.log config.status config/Makefile
-	$(RMV) common/unicode/platform.h common/icucfg.h
+	$(RMV) Makefile
+ifeq ($(patsubst ..%,,@RELATIVEDATADIR@),@RELATIVEDATADIR@)
+	$(RMV) *.goo *.txt *.bin *.uni
+endif
 
 check-local:
-
-#$(srcdir)/configure : $(srcdir)/configure.in $(top_srcdir)/aclocal.m4
-#	cd $(srcdir) && $(AUTOCONF)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_builddir)/config.status
+$(top_builddir)/config/Makefile.inc: $(top_srcdir)/config/Makefile.inc.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-config.status: $(srcdir)/configure
-	$(SHELL) ./config.status --recheck
+builddata: default.goo
+
+default.goo: $(srcdir)/default.goo
+	ln -sf $(srcdir)/*.goo $(srcdir)/*.txt $(srcdir)*.bin $(srcdir)/*.uni .
 
