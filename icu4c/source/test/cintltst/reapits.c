@@ -34,6 +34,29 @@ log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_error
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
 log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
 
+#define TEST_ASSERT_STRING(expected, actual, nulTerm) { \
+     char     buf_inside_macro[120];  \
+     int32_t  len;  \
+     UBool    success; \
+     len   = strlen(expected);  \
+     if (nulTerm) { \
+         u_austrncpy(buf_inside_macro, (actual), len+1); \
+         success = (strcmp((expected), buf_inside_macro) == 0); \
+     } else { \
+         u_austrncpy(buf_inside_macro, (actual), len); \
+         success = (strncmp((expected), buf_inside_macro, len) == 0); \
+     } \
+     if (success == FALSE) { \
+         log_err("Failure at file %s, line %d, expected \"%s\", got \"%s\"\n", \
+             __FILE__, __LINE__, (expected), buf_inside_macro); \
+     } \
+}
+
+             
+
+
+
+
 static void TestRegexCAPI(void);
 
 void addURegexTest(TestNode** root);
@@ -399,8 +422,158 @@ void TestRegexCAPI(void) {
     }
 
 
+    /*
+     *  group()
+     */
+    {
+        UChar    text1[80];
+        UChar    buf[80];
+        UBool    result;
+        int32_t  resultSz;
+        u_uastrncpy(text1, "noise abc interior def, and this is off the end",  sizeof(text1)/2);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC("abc(.*?)def", 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
 
 
+        uregex_setText(re, text1, -1, &status);
+        result = uregex_find(re, 0, &status);
+        TEST_ASSERT(result==TRUE);
+
+        /*  Capture Group 0, the full match.  Should succeed.  */
+        status = U_ZERO_ERROR;
+        resultSz = uregex_group(re, 0, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("abc interior def", buf, TRUE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("abc interior def"));
+
+        /*  Capture group #1.  Should succeed. */
+        status = U_ZERO_ERROR;
+        resultSz = uregex_group(re, 1, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING(" interior ", buf, TRUE);
+        TEST_ASSERT(resultSz == (int32_t)strlen(" interior "));
+
+        /*  Capture group out of range.  Error. */
+        status = U_ZERO_ERROR;
+        uregex_group(re, 2, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+
+        /* NULL buffer, pure pre-flight */
+        status = U_ZERO_ERROR;
+        resultSz = uregex_group(re, 0, NULL, 0, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT(resultSz == (int32_t)strlen("abc interior def"));
+
+        /* Too small buffer, truncated string */
+        status = U_ZERO_ERROR;
+        memset(buf, -1, sizeof(buf));
+        resultSz = uregex_group(re, 0, buf, 5, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT_STRING("abc i", buf, FALSE);
+        TEST_ASSERT(buf[5] == (UChar)0xffff);
+        TEST_ASSERT(resultSz == (int32_t)strlen("abc interior def"));
+
+        /* Output string just fits buffer, no NUL term. */
+        status = U_ZERO_ERROR;
+        resultSz = uregex_group(re, 0, buf, (int32_t)strlen("abc interior def"), &status);
+        TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+        TEST_ASSERT_STRING("abc interior def", buf, FALSE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("abc interior def"));
+        TEST_ASSERT(buf[strlen("abc interior def")] == (UChar)0xffff);
+        
+        uregex_close(re);
+
+    }
+
+    /*
+     *  replaceFirst()
+     */
+    {
+        UChar    text1[80];
+        UChar    text2[80];
+        UChar    replText[80];
+        UChar    buf[80];
+        int32_t  resultSz;
+        u_uastrncpy(text1, "Replace xaax x1x x...x.",  sizeof(text1)/2);
+        u_uastrncpy(text2, "No match here.",  sizeof(text2)/2);
+        u_uastrncpy(replText, "<$1>", sizeof(replText)/2);
+
+        status = U_ZERO_ERROR;
+        re = uregex_openC("x(.*?)x", 0, NULL, &status);
+        TEST_ASSERT_SUCCESS(status);
+
+        /*  Normal case, with match */
+        uregex_setText(re, text1, -1, &status);
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("Replace <aa> x1x x...x.", buf, TRUE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+
+        /* No match.  Text should copy to output with no changes.  */
+        status = U_ZERO_ERROR;
+        uregex_setText(re, text2, -1, &status);
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, sizeof(buf)/2, &status);
+        TEST_ASSERT_SUCCESS(status);
+        TEST_ASSERT_STRING("No match here.", buf, TRUE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("No match here."));
+
+        /*  Match, output just fills buffer, no termination warning. */
+        status = U_ZERO_ERROR;
+        uregex_setText(re, text1, -1, &status);
+        memset(buf, -1, sizeof(buf));
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, strlen("Replace <aa> x1x x...x."), &status);
+        TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+        TEST_ASSERT_STRING("Replace <aa> x1x x...x.", buf, FALSE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+
+        /* Do the replaceFirst again, without first resetting anything.
+         *  Should give the same results.
+         */
+        status = U_ZERO_ERROR;
+        memset(buf, -1, sizeof(buf));
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, strlen("Replace <aa> x1x x...x."), &status);
+        TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
+        TEST_ASSERT_STRING("Replace <aa> x1x x...x.", buf, FALSE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+
+        /* NULL buffer, zero buffer length */
+        status = U_ZERO_ERROR;
+        resultSz = uregex_replaceFirst(re, replText, -1, NULL, 0, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+
+        /* Buffer too small by one */
+        status = U_ZERO_ERROR;
+        memset(buf, -1, sizeof(buf));
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, strlen("Replace <aa> x1x x...x.")-1, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT_STRING("Replace <aa> x1x x...x", buf, FALSE);
+        TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
+        TEST_ASSERT(buf[resultSz] == (UChar)0xffff);
+
+        uregex_close(re);
+    }
+
+
+    /*
+     *  replaceAll()
+     */
+
+    /*
+     *  appendReplacement()
+     */
+
+    /*
+     *  appendTail()
+     */
+
+    /*
+     *  split()
+     */
 }
 
 #endif   /*  !UCONFIG_NO_REGULAR_EXPRESSIONS */

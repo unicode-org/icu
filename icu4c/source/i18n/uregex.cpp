@@ -26,9 +26,12 @@ struct URegularExpression {
     UChar            *fPatString;
     int32_t           fPatStringLen;
     RegexMatcher     *fMatcher;
-    const UChar      *fText;
-    int32_t           fTextLength;
-    UnicodeString     fTextString;
+    const UChar      *fText;         // Text from setText()
+    int32_t           fTextLength;   // Length provided by user with setText(), which
+                                     //  may be -1.
+
+    UnicodeString     fTextString;   // The setText(text) is wrapped into a UnicodeString.
+                                     // TODO: regexp engine should not depend on UnicodeString.
 };
 
 static const int32_t REXP_MAGIC = 'rexp';
@@ -222,9 +225,12 @@ uregex_clone(const URegularExpression *source, UErrorCode *status)  {
         return NULL;
     }
 
-    clone->fPat         = source->fPat;
-    clone->fPatRefCount = source->fPatRefCount; 
+    clone->fPat          = source->fPat;
+    clone->fPatRefCount  = source->fPatRefCount; 
+    clone->fPatString    = source->fPatString;
+    clone->fPatStringLen = source->fPatStringLen;
     umtx_atomic_inc(source->fPatRefCount);
+    // Note:  fText is not cloned.
 
     return clone;
 };
@@ -260,7 +266,7 @@ uregex_pattern(const  URegularExpression *regexp,
 U_CAPI int32_t U_EXPORT2 
 uregex_flags(const URegularExpression *regexp, UErrorCode *status)  {
     if (validateRE(regexp, status) == FALSE) {
-        return NULL;
+        return 0;
     }
     int32_t flags = regexp->fPat->flags();
     return flags;
@@ -513,7 +519,6 @@ uregex_replaceAll(URegularExpression    *regexp,
         return 0;
     }
     if (replacementText == NULL || replacementLength < -1 ||
-        destCapacity == NULL || destBuf == NULL || 
         destBuf == NULL && destCapacity > 0 ||
         destCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -548,7 +553,6 @@ uregex_replaceFirst(URegularExpression  *regexp,
         return 0;
     }
     if (replacementText == NULL || replacementLength < -1 ||
-        destCapacity == NULL || destBuf == NULL || 
         destBuf == NULL && destCapacity > 0 ||
         destCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -556,9 +560,10 @@ uregex_replaceFirst(URegularExpression  *regexp,
     }
 
     int32_t   len = 0;
+    UBool     findSucceeded;
     uregex_reset(regexp, 0, status);
-    uregex_find(regexp, 0, status);
-    if (U_SUCCESS(*status)) {
+    findSucceeded = uregex_find(regexp, 0, status);
+    if (findSucceeded) {
         len = uregex_appendReplacement(regexp, replacementText, replacementLength, 
                                        &destBuf, &destCapacity, status);
     }
@@ -854,7 +859,7 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
     //  A series of appendReplacements, appendTail need to correctly preflight
     //  the buffer size when an overflow happens somewhere in the middle.
     UBool pendingBufferOverflow = FALSE;
-    if (*status == U_BUFFER_OVERFLOW_ERROR && destCapacity == 0) {
+    if (*status == U_BUFFER_OVERFLOW_ERROR && *destCapacity == 0) {
         pendingBufferOverflow = TRUE;
         *status = U_ZERO_ERROR;
     }
@@ -869,9 +874,15 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
         return 0;
     }
     
-    int32_t  srcIdx = 0;
     RegexMatcher *m = regexp->fMatcher;
+
+    int32_t  srcIdx;
     if (m->fMatch) {
+        // The most recent call to find() succeeded.  
+        srcIdx = m->fMatchEnd;
+    } else {
+        // The last call to find() on this matcher failed().
+        //   Look back to the end of the last find() that succeeded for src index.
         srcIdx = m->fLastMatchEnd;
     }
 
@@ -898,6 +909,8 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
                 break;
             }
         }
+        srcIdx++;
+        destIdx++;
     }
 
     //
