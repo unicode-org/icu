@@ -627,7 +627,7 @@ UChar32 _LMBCSGetNextUChar(UConverter*   _this,
             /* check for LMBCS doubled-group-byte case */
             mbChar = (HighCh == group) ? LowCh : (HighCh<<8) | LowCh;
 
-            MyCArray = cnv->sharedData->table->mbcs.toUnicode;
+            MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
             uniChar = (UChar) ucmp16_getu (MyCArray, mbChar);
             
          }
@@ -648,7 +648,7 @@ UChar32 _LMBCSGetNextUChar(UConverter*   _this,
                /* Lookup value must include opt group */
                mbChar =  (UChar)(group << 8) | (UChar) CurByte;
 
-               MyCArray = cnv->sharedData->table->mbcs.toUnicode;
+               MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
                uniChar = (UChar) ucmp16_getu(MyCArray, mbChar);
 
             }
@@ -670,7 +670,7 @@ UChar32 _LMBCSGetNextUChar(UConverter*   _this,
             LowCh = *(*source)++;
 
             mbChar = (HighCh<<8) | LowCh;
-            MyCArray = cnv->sharedData->table->mbcs.toUnicode;
+            MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
             uniChar = (UChar) ucmp16_getu (MyCArray, mbChar);
             (*source) += sizeof(UChar);
          }
@@ -933,11 +933,16 @@ DEFINE_LMBCS_OPEN(19)
     _LMBCSGetNextUChar,\
     NULL\
 };\
+const UConverterStaticData _LMBCSStaticData##n={\
+  sizeof(UConverterStaticData),\
+"LMBCS_" ## #n,\
+    0, UCNV_IBM, UCNV_LMBCS_1, 1, 1,\
+    1, { 0x3f, 0, 0, 0 } \
+};\
 const UConverterSharedData _LMBCSData##n={\
     sizeof(UConverterSharedData), ~0,\
-    NULL, NULL, &_LMBCSImpl##n, "LMBCS_" ## #n,\
-    0, UCNV_IBM, UCNV_LMBCS_1, 1, 1,\
-    { 0, 1, { 0x3f, 0, 0, 0 } }\
+    NULL, NULL, &_LMBCSStaticData##n, FALSE, &_LMBCSImpl##n, \
+    0 \
 };
 
 DECLARE_LMBCS_DATA(1)

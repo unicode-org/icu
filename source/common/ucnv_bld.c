@@ -128,7 +128,7 @@ isCnvAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x76 &&
         pInfo->dataFormat[3]==0x74 &&
-        pInfo->formatVersion[0]==2;
+        pInfo->formatVersion[0]==3;
 }
 
 #define DATA_TYPE "cnv"
@@ -213,7 +213,7 @@ void   shareConverterData (UConverterSharedData * data)
   umtx_lock (NULL);
   /* ### check to see if the element is not already there! */
   uhash_put(SHARED_DATA_HASHTABLE,
-             (void*) data->name, /* Okay to cast away const as long as
+             (void*) data->staticData->name, /* Okay to cast away const as long as
                                     keyDeleter == NULL */
             data,
             &err);
@@ -355,9 +355,9 @@ UConverter *
   myUConverter->mode = UCNV_SI;
   myUConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
   myUConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
-  myUConverter->toUnicodeStatus = myUConverter->sharedData->defaultConverterValues.toUnicodeStatus;
-  myUConverter->subCharLen = myUConverter->sharedData->defaultConverterValues.subCharLen;
-  uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->defaultConverterValues.subChar, myUConverter->subCharLen);
+  myUConverter->toUnicodeStatus = myUConverter->sharedData->toUnicodeStatus;
+  myUConverter->subCharLen = myUConverter->sharedData->staticData->subCharLen;
+  uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);
 
   if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
     myUConverter->sharedData->impl->open(myUConverter, realName, NULL, err);
@@ -374,7 +374,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
 {
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
     /* version 1.0 of .cnv files directly contains a UConverterSharedData_1_4 structure */
-    const UConverterSharedData_1_4 *source = (const UConverterSharedData_1_4 *) raw;
+    const UConverterStaticData *source = (const UConverterStaticData *) raw;
     UConverterSharedData *data;
     UConverterType type = source->conversionType;
 
@@ -383,7 +383,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
 
     if( (uint16_t)type >= UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES ||
         converterData[type]->referenceCounter != 1 ||
-        source->structSize != sizeof(UConverterSharedData_1_4))
+        source->structSize != sizeof(UConverterStaticData))
     {
         *status = U_INVALID_TABLE_FORMAT;
         return NULL;
@@ -405,20 +405,11 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
+    
+    data->staticData = source;
 
     /* fill in fields from the loaded data */
     data->dataMemory = (void*)pData; /* for future use */
-    data->name = source->name; /* ### this could/should come from the caller - should be the same as the canonical name?!! */
-    data->codepage = source->codepage;
-    data->platform = source->platform;
-    data->minBytesPerChar = source->minBytesPerChar;
-    data->maxBytesPerChar = source->maxBytesPerChar;
-
-    /* version 1.0 of .cnv files does not store valid toUnicodeStatus - do not copy the whole defaultConverterValues */
-    data->defaultConverterValues.subCharLen = source->defaultConverterValues.subCharLen;
-    uprv_memcpy(&data->defaultConverterValues.subChar,
-                &source->defaultConverterValues.subChar,
-                data->defaultConverterValues.subCharLen);
 
     if(data->impl->load != NULL) {
         data->impl->load(data, raw + source->structSize, status);
