@@ -468,12 +468,11 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
 
     result = string_open(bundle, tag, pTarget, target - pTarget, status);
 
+    ucbuf_close(ucbuf);
     uprv_free(pTarget);
     T_FileStream_close(file);
 
     return result;
-
-
 }
 
 static struct SResource *
@@ -616,7 +615,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
                 length = (int32_t) sizeof(ver) - 1;
             }
 
-            u_UCharsToChars(tokenValue->fChars, ver, length);
+            u_UCharsToChars(tokenValue->fChars, ver, length + 1); /* +1 for copying NULL */
             u_versionFromString(version, ver);
         }
         else if (uprv_strcmp(subtag, "Override") == 0)
