@@ -197,7 +197,10 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                     CXXFLAGS="${OLD_CXXFLAGS}"
                     LDFLAGS="${OLD_LDFLAGS}"
                 else
-                    ARFLAGS="${ARFLAGS} -X64"
+                    case "${host}" in
+                    *-*-aix*)
+                        ARFLAGS="${ARFLAGS} -X64"
+                    esac
                 fi
             fi
             ;;
