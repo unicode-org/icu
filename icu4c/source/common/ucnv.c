@@ -450,11 +450,13 @@ static void _reset(UConverter *converter, UConverterResetChoice choice) {
     /* now reset the converter itself */
     if(choice<=UCNV_RESET_TO_UNICODE) {
         converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
-        converter->UCharErrorBufferLength = 0;
+        converter->toULength = 0;
+        converter->invalidCharLength = converter->UCharErrorBufferLength = 0;
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         converter->fromUnicodeStatus = 0;
-        converter->charErrorBufferLength = 0;
+        converter->fromUSurrogateLead = 0;
+        converter->invalidUCharLength = converter->charErrorBufferLength = 0;
     }
 
     if (converter->sharedData->impl->reset != NULL) {
@@ -1293,7 +1295,7 @@ ucnv_detectUnicodeSignature( const char* source,
     } else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF') {
         *signatureLength=3;
         return "SCSU";
-    } else if(start[0] == '\xFC' && start[1] == '\xEE' && start[2] == '\x27') {
+    } else if(start[0] == '\xFB' && start[1] == '\xEE' && start[2] == '\x28') {
         *signatureLength=3;
         return "BOCU-1";
     } else {
