@@ -906,6 +906,12 @@ protected:
      */
     UChar filteredCharAt(const Replaceable& text, int32_t i) const;
 
+    /**
+     * Set the ID of this transliterators.  Subclasses shouldn't do
+     * this, unless the underlying script behavior has changed.
+     */
+    void setID(const UnicodeString& id);
+
 private:
     /**
      * Comparison function for UVector.  Compares two UnicodeString
@@ -925,6 +931,10 @@ private:
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
     return maximumContextLength;
+}
+
+inline void Transliterator::setID(const UnicodeString& id) {
+    ID = id;
 }
 
 inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit) :
