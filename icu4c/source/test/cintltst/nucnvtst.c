@@ -3017,7 +3017,7 @@ static void TestJitterbug915(){
     }
 	utargetLimit=utarget;
 	utarget = uTarget;
-	ucnv_fromUnicode(conv,&ctarget,ctargetLimit,&utarget,utargetLimit,NULL,TRUE,&err);
+	ucnv_fromUnicode(conv,&ctarget,ctargetLimit,(const UChar**)&utarget,utargetLimit,NULL,TRUE,&err);
 	if(U_FAILURE(err)) {
         log_err("iso-2022-CN from Unicode conversion failed: %s\n", u_errorName(err));
         return;
