@@ -90,6 +90,12 @@ public:
 
     virtual void logln( void );
 
+    virtual void info( const UnicodeString &message );
+
+    virtual void infoln( const UnicodeString &message );
+
+    virtual void infoln( void );
+
     virtual void err(void);
     
     virtual void err( const UnicodeString &message );
@@ -99,6 +105,8 @@ public:
     // convenience functions: sprintf() + errln() etc.
     void log(const char *fmt, ...);
     void logln(const char *fmt, ...);
+    void info(const char *fmt, ...);
+    void infoln(const char *fmt, ...);
     void err(const char *fmt, ...);
     void errln(const char *fmt, ...);
 
@@ -161,6 +169,9 @@ public:
 void it_log( UnicodeString message );
 void it_logln( UnicodeString message );
 void it_logln( void );
+void it_info( UnicodeString message );
+void it_infoln( UnicodeString message );
+void it_infoln( void );
 void it_err(void);
 void it_err( UnicodeString message );
 void it_errln( UnicodeString message );
