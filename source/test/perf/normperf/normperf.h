@@ -276,7 +276,7 @@ int32_t ICUNormFCD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,
 
 int32_t ICUQuickCheck(const UChar* src,int32_t srcLen, UNormalizationMode mode, int32_t options, UErrorCode* status){
 #if (U_ICU_VERSION_MAJOR_NUM > 2 ) || ((U_ICU_VERSION_MAJOR_NUM == 2 )&&(U_ICU_VERSION_MINOR_NUM >= 6))
-    return unorm_quickCheckTailored(src,srcLen,mode, options, status);
+    return unorm_quickCheckWithOptions(src,srcLen,mode, options, status);
 #else
     return unorm_quickCheck(src,srcLen,mode,status);
 #endif
