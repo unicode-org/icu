@@ -46,6 +46,7 @@ static void TestBreakIteratorCAPI()
     UBreakIterator * someClonedIterators [CLONETEST_ITERATOR_COUNT];
     UBreakIterator * brk;
     UChar text[51];     /* Keep this odd to test for 64-bit memory alignment */
+                        /*  NOTE:  This doesn't reliably force mis-alignment of following items. */ 
     uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
 
@@ -288,6 +289,30 @@ static void TestBreakIteratorCAPI()
         }
         if (brk) ubrk_close(brk);
         status = U_ZERO_ERROR;
+
+        /* Mis-aligned buffer pointer. */
+        {
+            char  stackBuf[U_BRK_SAFECLONE_BUFFERSIZE+sizeof(void *)];
+            void  *p;
+            int    offset;
+
+            brk = ubrk_safeClone(someIterators[i], &stackBuf[1], &bufferSize, &status);
+            if (U_FAILURE(status) || brk == 0) {
+                log_err("FAIL: Cloned Iterator failed with misaligned buffer pointer\n");
+            }
+            if (status == U_SAFECLONE_ALLOCATED_ERROR) {
+                log_err("FAIL: Cloned Iterator allocated when using a mis-aligned buffer.\n");
+            }
+            offset = (char *)&p-(char*)brk;
+            if (offset < 0) {
+                offset = -offset;
+            }
+            if (offset % sizeof(void *) != 0) {
+                log_err("FAIL: Cloned Iterator failed to align correctly with misaligned buffer pointer\n");
+            }
+            if (brk) ubrk_close(brk);
+        }
+
 
         /* Null Iterator - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
         if (0 != ubrk_safeClone(0, buffer[i], &bufferSize, &status) || status != U_ILLEGAL_ARGUMENT_ERROR)

@@ -56,6 +56,40 @@ void RBBIAPITest::TestCloneEquals()
         errln((UnicodeString)"ERROR:2 RBBI's == and != operator  failed.");
 
 
+    // Quick test of RulesBasedBreakIterator assignment - 
+    // Check that
+    //    two different iterators are !=
+    //    they are == after assignment
+    //    source and dest iterator produce the same next() after assignment.
+    //    deleting one doesn't disable the other.
+    logln("Testing assignment");
+    RuleBasedBreakIterator *bix = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::ENGLISH, status);
+    if(U_FAILURE(status)){
+        errln((UnicodeString)"FAIL : in construction");
+        return;
+    }
+
+    UnicodeString   HelloString("Hello Kitty");
+    bix->setText(HelloString);
+    if (*bix == *bi2) {
+        errln(UnicodeString("ERROR: strings should not be equal before assignment."));
+    }
+    *bix = *bi2;
+    if (*bix != *bi2) {
+        errln(UnicodeString("ERROR: strings should be equal before assignment."));
+    }
+
+    int bixnext = bix->next();
+    int bi2next = bi2->next();
+    if (! (bixnext == bi2next && bixnext == 7)) {
+        errln(UnicodeString("ERROR: iterators behaved differently after assignment."));
+    }
+    delete bix;
+    if (bi2->next() != 8) {
+        errln(UnicodeString("ERROR: iterator.next() failed after deleting copy."));
+    }
+
+
 
     logln((UnicodeString)"Testing clone()");
     RuleBasedBreakIterator* bi1clone=(RuleBasedBreakIterator*)bi1->clone();
@@ -171,6 +205,7 @@ void RBBIAPITest::TestGetSetAdoptText()
     CharacterIterator* text1= new StringCharacterIterator(str1);
     CharacterIterator* text1Clone = text1->clone();
     CharacterIterator* text2= new StringCharacterIterator(str2);
+    CharacterIterator* text3= new StringCharacterIterator(str2, 3, 10, 3); //  "ond str"
     
     wordIter1->setText(str1);
     if(wordIter1->getText() != *text1)
@@ -198,6 +233,14 @@ void RBBIAPITest::TestGetSetAdoptText()
     if(rb->getText() != *text2)
         errln((UnicodeString)"ERROR:2 error in adoptText ");
 
+    // Adopt where iterator range is less than the entire orignal source string.
+    rb->adoptText(text3);
+    if(rb->preceding(2) != 3) {
+        errln((UnicodeString)"ERROR:3 error in adoptText ");
+    }
+    if(rb->following(11) != BreakIterator::DONE) {
+        errln((UnicodeString)"ERROR:4 error in adoptText ");
+    }
 
     delete wordIter1;
     delete charIter1;
