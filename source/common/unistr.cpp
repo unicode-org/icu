@@ -28,6 +28,7 @@
 #include "unicode/unicode.h"
 #include "unicode/ucnv.h"
 #include "uhash.h"
+#include "ustr_imp.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
@@ -872,166 +873,84 @@ UnicodeString&
 UnicodeString::toLower()
 { return toLower(Locale::getDefault()); }
 
-/*
- * The following toUpper() and toLower() implementations are designed
- * for UTF-16 and UTF-32, not for UTF-8.
- * In UTF-16 and UTF-32, the number of code units per code point is fixed,
- * and a case mapping is assumed to always stay within the same plane
- * (64k code range) with the original code point. This allows to write
- * the mapping into the same space as the source character without
- * expansions or contractions except in the special cases.
- *
- * For UTF-8, where a source code point may take up a variable number
- * of code units, it is more efficient to get the mapping and write
- * the result only if it is a different code point from the original.
- * Also, a sharp s and the "SS" string typically both take up 2 bytes in UTF-8,
- * while the turkish i's typically result in expansions and contractions.
- * Therefore, for UTF-8, these functions should be reimplemented.
- * One single implementation for all UTF's would be either clumsy
- * or inefficient.
- */
-#if UTF_SIZE==8
-# error reimplement toUpper() and toLower() for UTF-8, see comment above
-#endif
+// static helper function for string case mapping
+// called by u_internalStrToUpper/Lower()
+UBool
+UnicodeString::growBuffer(void *context,
+                          UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
+                          int32_t length) {
+  UnicodeString *me = (UnicodeString *)context;
+  me->fLength = length;
+  if(me->cloneArrayIfNeeded(reqCapacity)) {
+    *buffer = me->fArray;
+    *pCapacity = me->fCapacity;
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
 
 UnicodeString&
 UnicodeString::toUpper(const Locale& locale)
 {
-  if(!cloneArrayIfNeeded()) {
+  if(fLength <= 0) {
+    // nothing to do
     return *this;
   }
 
-  const char *langChars = locale.getLanguage();
-
-  UTextOffset start = 0, next = 0;
-  UTextOffset limit = fLength;
-  UChar32 c;
-
-  // The German sharp S character (U+00DF)'s uppercase equivalent is
-  // "SS", making it the only character that expands to two characters
-  // when its case is changed (we don't automatically convert "SS" to
-  // U+00DF going to lowercase because it can only be determined from
-  // knowing the language whether a particular "SS" should map to
-  // U+00DF or "ss").  So we make a preliminary pass through the
-  // string looking for sharp S characters and then go back and make
-  // room for the extra capital Ses if we find any.  [For performance,
-  // we only do this extra work if the language is actually German]
-  if(uprv_strcmp(langChars, "de") == 0) {
-    static UChar SS [] = { 0x0053, 0x0053 };
-    while(start < limit) {
-      // start == next here by design
-      UTF_NEXT_CHAR(fArray, next, limit, c);
-
-      // A sharp s needs to be replaced with two capital S's.
-      if(c == 0x00DF) {
-        doReplace(start, 1, SS, 0, 2);
-        start += 2;
-        ++next; // the string expanded by one
-        ++limit;
-      } else {
-        // Otherwise, the case conversion can be handled by the Unicode code point.
-        c = Unicode::toUpperCase(c);
-        UTF_APPEND_CHAR(fArray, start, limit, c);
-      }
-    }
-  } else if(uprv_strcmp(langChars, "tr") == 0) {
-    // If the specfied language is Turkish, then we have to special-case
-    // for the Turkish dotted and dotless Is.  The regular lowercase i
-    // maps to the capital I with a dot (U+0130), and the lowercase i
-    // without the dot (U+0131) maps to the regular capital I
-    while(start < limit) {
-      // start == next here by design
-      UTF_NEXT_CHAR(fArray, next, limit, c);
-      if(c == 0x0069/*'i'*/) {
-        fArray[start++] = 0x0130;
-      } else if(c == 0x0131) {
-        fArray[start++] = 0x0049/*'I'*/;
-      } else {
-        c = Unicode::toUpperCase(c);
-        UTF_APPEND_CHAR(fArray, start, limit, c);
-      }
-    }
-  } else {
-    while(start < limit) {
-      // start == next here by design
-      UTF_NEXT_CHAR(fArray, next, limit, c);
-      c = Unicode::toUpperCase(c);
-      UTF_APPEND_CHAR(fArray, start, limit, c);
-    }
+  // We need to allocate a new buffer for the internal string case mapping function.
+  // This is very similar to how doReplace() below keeps the old array pointer
+  // and deletes the old array itself after it is done.
+  // In addition, we are forcing cloneArrayIfNeeded() to always allocate a new array.
+  UChar *oldArray = fArray;
+  int32_t oldLength = fLength;
+  int32_t *bufferToDelete = 0;
+  if(!cloneArrayIfNeeded(fLength + 2, fLength + 2, FALSE, &bufferToDelete, TRUE)) {
+    return *this;
   }
 
+  UErrorCode errorCode = U_ZERO_ERROR;
+  fLength = u_internalStrToUpper(fArray, fCapacity,
+                                 oldArray, oldLength,
+                                 locale.getName(),
+                                 growBuffer, this,
+                                 &errorCode);
+  delete [] bufferToDelete;
+  if(U_FAILURE(errorCode)) {
+    setToBogus();
+  }
   return *this;
 }
 
 UnicodeString&
 UnicodeString::toLower(const Locale& locale)
 {
-  if(!cloneArrayIfNeeded()) {
+  if(fLength <= 0) {
+    // nothing to do
     return *this;
   }
 
-  const char *langChars = locale.getLanguage();
-
-  UTextOffset start = 0, next = 0;
-  UTextOffset limit = fLength;
-  UChar32 c;
-
-  // if the specfied language is Turkish, then we have to special-case
-  // for the Turkish dotted and dotless Is.  The capital I with a dot
-  // (U+0130) maps to the regular lowercase i, and the regular capital
-  // I maps to the lowercase i without the dot (U+0131)
-  if(uprv_strcmp(langChars, "tr") == 0) {
-    while(start < limit) {
-      // start == next here by design
-      UTF_NEXT_CHAR(fArray, next, limit, c);
-      if(c == 0x0049) { // 'I'
-        fArray[start++] = 0x0131;
-      } else if(c == 0x0130) {
-        fArray[start++] = 0x0069; // 'i'
-      } else {
-        c = Unicode::toLowerCase(c);
-        UTF_APPEND_CHAR(fArray, start, limit, c);
-      }
-    }
-  } else if(uprv_strcmp(langChars, "el") == 0) {
-    // if the specfied language is Greek, then we have to special-case
-    // for the capital letter sigma (U+3A3), which has two lower-case
-    // forms.  If the character following the capital sigma is a letter,
-    // we use the medial form (U+3C3); otherwise, we use the final form
-    // (U+3C2).
-    while(start < limit) {
-      // start == next here by design
-      UTF_NEXT_CHAR(fArray, next, limit, c);
-      if(c == 0x3a3) {
-        if(next < limit) {
-          UTextOffset next2 = next;
-          UChar32 c2;
-          UTF_NEXT_CHAR(fArray, next2, limit, c2);
-          if(Unicode::isLetter(c2)) {
-            fArray[start++] = 0x3C3;
-          } else {
-            fArray[start++] = 0x3C2;
-          }
-        } else {
-          fArray[start++] = 0x3C2;
-        }
-      } else {
-        c = Unicode::toLowerCase(c);
-        UTF_APPEND_CHAR(fArray, start, limit, c);
-      }
-    }
-  } else {
-    // if the specified language is anything other than Turkish or
-    // Greek, we rely on the Unicode class to do all our case mapping--
-    // there are no other special cases
-    while(start < limit) {
-      // start == next here by design
-      UTF_NEXT_CHAR(fArray, next, limit, c);
-      c = Unicode::toLowerCase(c);
-      UTF_APPEND_CHAR(fArray, start, limit, c);
-    }
+  // We need to allocate a new buffer for the internal string case mapping function.
+  // This is very similar to how doReplace() below keeps the old array pointer
+  // and deletes the old array itself after it is done.
+  // In addition, we are forcing cloneArrayIfNeeded() to always allocate a new array.
+  UChar *oldArray = fArray;
+  int32_t oldLength = fLength;
+  int32_t *bufferToDelete = 0;
+  if(!cloneArrayIfNeeded(fLength + 2, fLength + 2, FALSE, &bufferToDelete, TRUE)) {
+    return *this;
   }
 
+  UErrorCode errorCode = U_ZERO_ERROR;
+  fLength = u_internalStrToLower(fArray, fCapacity,
+                                 oldArray, oldLength,
+                                 locale.getName(),
+                                 growBuffer, this,
+                                 &errorCode);
+  delete [] bufferToDelete;
+  if(U_FAILURE(errorCode)) {
+    setToBogus();
+  }
   return *this;
 }
 
@@ -1485,7 +1404,8 @@ UBool
 UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
                                   int32_t growCapacity,
                                   UBool doCopyArray,
-                                  int32_t **pBufferToDelete) {
+                                  int32_t **pBufferToDelete,
+                                  UBool forceClone) {
   // default parameters need to be static, therefore
   // the defaults are -1 to have convenience defaults
   if(newCapacity == -1) {
@@ -1499,7 +1419,8 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
    * the buffer is too small.
    * Return FALSE if memory could not be allocated.
    */
-  if(fFlags & kBufferIsReadonly ||
+  if(forceClone ||
+     fFlags & kBufferIsReadonly ||
      fFlags & kRefCounted && refCount() > 1 ||
      newCapacity > fCapacity
   ) {
