@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TestAll.java,v $
- * $Date: 2003/06/03 18:49:31 $
- * $Revision: 1.3 $
+ * $Date: 2004/02/25 01:24:58 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -28,8 +28,6 @@ public class TestAll extends TestGroup {
             "TransliteratorTest",
             "UnicodeSetTest",
             "CompoundTransliteratorTest",
-            "UnicodeToHexTransliteratorTest",
-            "HexToUnicodeTransliteratorTest",
             "JamoTest",
             "ErrorTest",
             "RoundTripTest",
