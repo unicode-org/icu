@@ -233,6 +233,7 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
 
 // Verify that Gregorian works like Gregorian
 void IntlCalendarTest::TestGregorian() { 
+    UDate timeA = Calendar::getNow();
     int32_t data[] = { 
         GregorianCalendar::AD, 1868, 1868, UCAL_SEPTEMBER, 8,
         GregorianCalendar::AD, 1868, 1868, UCAL_SEPTEMBER, 9,
@@ -245,8 +246,23 @@ void IntlCalendarTest::TestGregorian() {
     
     Calendar *cal;
     UErrorCode status = U_ZERO_ERROR;
-    cal = Calendar::createInstance("de_DE", status);
+    cal = Calendar::createInstance(/*"de_DE", */ status);
     CHECK(status, UnicodeString("Creating de_CH calendar"));
+    // Sanity check the calendar 
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+    // end sanity check
+
+    // Note, the following is a good way to test the sanity of the constructed calendars,
+    // using Collation as a delay-loop: 
+    //
+    // $ intltest  format/IntlCalendarTest  collate/G7CollationTest format/IntlCalendarTest
+
     quasiGregorianTest(*cal,Locale("fr_FR"),data);
     delete cal;
 }
@@ -257,6 +273,8 @@ void IntlCalendarTest::TestGregorian() {
  */
 void IntlCalendarTest::TestBuddhist() {
     // BE 2542 == 1999 CE
+    UDate timeA = Calendar::getNow();
+
     int32_t data[] = {
         0,           // B. era
         2542,        // B. year
@@ -282,6 +300,18 @@ void IntlCalendarTest::TestBuddhist() {
     UErrorCode status = U_ZERO_ERROR;
     cal = Calendar::createInstance("th_TH_TRADITIONAL", status);
     CHECK(status, UnicodeString("Creating th_TH_TRADITIONAL calendar"));
+
+    // Sanity check the calendar 
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+    // end sanity check
+
+
     quasiGregorianTest(*cal,Locale("th_TH"),data);
     delete cal;
 }
@@ -291,6 +321,7 @@ void IntlCalendarTest::TestBuddhist() {
  * behaves like GregorianCalendar.
  */
 void IntlCalendarTest::TestJapanese() {
+    UDate timeA = Calendar::getNow();
     
     /* Sorry.. japancal.h is private! */
 #define JapaneseCalendar_MEIJI  232
@@ -321,6 +352,15 @@ void IntlCalendarTest::TestJapanese() {
     UErrorCode status = U_ZERO_ERROR;
     cal = Calendar::createInstance("ja_JP_TRADITIONAL", status);
     CHECK(status, UnicodeString("Creating ja_JP_TRADITIONAL calendar"));
+    // Sanity check the calendar 
+    UDate timeB = Calendar::getNow();
+    UDate timeCal = cal->getTime(status);
+
+    if(!(timeA <= timeCal) || !(timeCal <= timeB)) {
+      errln((UnicodeString)"Error: Calendar time " + timeCal +
+            " is not within sampled times [" + timeA + " to " + timeB + "]!");
+    }
+    // end sanity check
     quasiGregorianTest(*cal,Locale("ja_JP"),data);
     delete cal;
 }

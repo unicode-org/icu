@@ -276,6 +276,8 @@ CalendarTest::TestGenericAPI()
     {
         cal->setFirstDayOfWeek((UCalendarDaysOfWeek)i);
         if (cal->getFirstDayOfWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
+        UErrorCode aStatus = U_ZERO_ERROR;
+        if (cal->getFirstDayOfWeek(aStatus) != i || U_FAILURE(aStatus)) errln("FAIL: getFirstDayOfWeek(status) failed");
     }
 
     for (i=1; i<=7; ++i)

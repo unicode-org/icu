@@ -79,6 +79,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(41,test4092362);
         CASE(42,TestWeekShift);
         CASE(43,TestTimeZoneTransitionAdd);
+        CASE(44,TestDeprecates);
     default: name = ""; break;
     }
 }
@@ -1242,6 +1243,43 @@ void CalendarRegressionTest::test4118384()
         cal->getActualMaximum(UCAL_HOUR,status) != 11)
         errln("Fail: maximum of HOUR field should be 11");
 
+    // test deprecated functions
+    if (cal->getLeastMaximum(Calendar::HOUR) != 11 ||
+        cal->getMaximum(Calendar::HOUR) != 11) {
+        errln("Fail: [deprecated functions] maximum of HOUR field should be 11\n");
+    }
+
+    if (cal->getGreatestMinimum(Calendar::HOUR) != 0 ||
+        cal->getMinimum(Calendar::HOUR) != 0) {
+        errln("Fail: [deprecated functions] minimum of HOUR field should be 1\n");
+    }
+
+    delete cal;
+    cal = Calendar::createInstance(Locale("th_TH_TRADITIONAL"),status);
+    // test deprecated functions
+    if (cal->getLeastMaximum(Calendar::HOUR) != 11 ||
+        cal->getMaximum(Calendar::HOUR) != 11) {
+        errln("Fail: Buddhist:[deprecated functions] maximum of HOUR field should be 11\n");
+    }
+
+    if (cal->getGreatestMinimum(Calendar::HOUR) != 0 ||
+        cal->getMinimum(Calendar::HOUR) != 0) {
+        errln("Fail: Buddhist:[deprecated functions] minimum of HOUR field should be 1\n");
+    }
+
+    delete cal;
+    // test deprecated functions
+    cal = Calendar::createInstance(Locale("ja_JP_TRADITIONAL"),status);
+    if (cal->getLeastMaximum(Calendar::HOUR) != 11 ||
+        cal->getMaximum(Calendar::HOUR) != 11) {
+        errln("Fail: Japanese:[deprecated functions] maximum of HOUR field should be 11\n");
+    }
+
+    if (cal->getGreatestMinimum(Calendar::HOUR) != 0 ||
+        cal->getMinimum(Calendar::HOUR) != 0) {
+        errln("Fail: Japanese:[deprecated functions] minimum of HOUR field should be 1\n");
+    }
+
     delete cal;
 }
 
@@ -2381,5 +2419,91 @@ CalendarRegressionTest::makeDate(int32_t y, int32_t m, int32_t d,
 
     return result;
 }
+
+void CalendarRegressionTest::TestDeprecates(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *c1 = Calendar::createInstance("ja_JP_TRADITIONAL",status);
+    Calendar *c2 = Calendar::createInstance("ja_JP_TRADITIONAL",status);
+
+    if(!c1 || !c2 || U_FAILURE(status)) {
+        errln("Couldn't create calendars for roll of HOUR");
+        return;
+    }
+
+    c2->set(UCAL_HOUR,2);
+    c1->setTime(c2->getTime(status),status);
+    // *c1 = *c2;
+
+    c1->roll(Calendar::HOUR,(int32_t)3,status);
+    c2->roll(UCAL_HOUR,(int32_t)3,status);
+
+    if(U_FAILURE(status)) {
+        errln("Error code when trying to roll");
+    } else if(*c1 != *c2) {
+        errln("roll(EDateField) had different effect than roll(UCalendarField)");
+    }
+
+    delete c1;
+    delete c2;
+
+    status = U_ZERO_ERROR;
+
+    c1 = Calendar::createInstance("th_TH_TRADITIONAL",status);
+    c2 = Calendar::createInstance("th_TH_TRADITIONAL",status);
+
+    if(!c1 || !c2 || U_FAILURE(status)) {
+        errln("Couldn't create calendars for add of HOUR");
+        return;
+    }
+
+    c2->set(UCAL_HOUR,2);
+    c1->setTime(c2->getTime(status),status);
+    //*c1 = *c2;
+
+    c1->add(Calendar::HOUR,(int32_t)1,status);
+
+    if(U_FAILURE(status)) {
+        errln("Error code when trying to add Calendar::HOUR - %s", u_errorName(status));
+    }
+
+    c2->add(UCAL_HOUR,(int32_t)1,status);
+
+    if(U_FAILURE(status)) {
+        errln("Error code when trying to add - UCAL_HOUR %s", u_errorName(status));
+    } else if(*c1 != *c2) {
+        errln("add(EDateField) had different effect than add(UCalendarField)");
+    }
+
+    delete c1;
+    delete c2;
+
+    status = U_ZERO_ERROR;
+
+    c1 = Calendar::createInstance("es_ES",status);
+    c2 = Calendar::createInstance("es_ES",status);
+
+    if(!c1 || !c2 || U_FAILURE(status)) {
+        errln("Couldn't create calendars for add of YEAR");
+        return;
+    }
+
+    c2->set(UCAL_YEAR,1900);
+    c1->setTime(c2->getTime(status),status);
+    //*c1 = *c2;
+
+    c1->add(Calendar::YEAR,(int32_t)9,status);
+    c2->add(UCAL_YEAR,(int32_t)9,status);
+
+    if(U_FAILURE(status)) {
+        errln("Error code when trying to add YEARs");
+    } else if(*c1 != *c2) {
+        errln("add(EDateField YEAR) had different effect than add(UCalendarField YEAR)");
+    }
+
+    delete c1;
+    delete c2;
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
