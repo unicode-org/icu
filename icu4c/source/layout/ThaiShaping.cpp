@@ -302,6 +302,8 @@ le_int32 ThaiShaping::compose(const LEUnicode *input, le_int32 offset, le_int32 
     return outputIndex;
 }
 
+const char ThaiMarkFilter::fgClassID=0;
+
 ThaiMarkFilter::ThaiMarkFilter(le_uint8 glyphSet)
     : rangeList(NULL)
 {

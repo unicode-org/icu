@@ -11,6 +11,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 

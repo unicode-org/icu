@@ -287,31 +287,15 @@ inline int32_t ICULayoutEngine::layoutString(const UnicodeString &str,
                                             float x, float y,
                                             UErrorCode &success)
 {
-    int32_t glyphCount = 0;
-    int32_t max = str.length();
-    UChar *chars = new UChar[max];
-    
-    /* test for NULL */
-	if(chars == 0) {
-		success = U_MEMORY_ALLOCATION_ERROR;
-		return 0;
-	}
-    
-    str.extract(0, max, chars);
-
     // NOTE: call reset() so that clients can safely reuse
     fLayoutEngine->reset();
-    glyphCount = fLayoutEngine->layoutChars(chars,
+    return fLayoutEngine->layoutChars(str.getBuffer(),
                                       startOffset,
                                       endOffset - startOffset,
-                                      max,
+                                      str.length(),
                                       rightToLeft,
                                       x, y,
                                       (LEErrorCode &) success);
-
-    delete[] chars;
-
-    return glyphCount;
 }
 
 inline int32_t ICULayoutEngine::countGlyphs() const
