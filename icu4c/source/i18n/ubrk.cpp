@@ -20,9 +20,9 @@ ubrk_open(UBreakIteratorType type,
       UErrorCode *status)
 {
   if(U_FAILURE(*status)) return 0;
-  
+
   BreakIterator *result = 0;
-  
+
   switch(type) {
 
   case UBRK_CHARACTER:
@@ -43,6 +43,9 @@ ubrk_open(UBreakIteratorType type,
   }
 
   // check for allocation error
+  if (U_FAILURE(*status)) {
+     return 0;
+  }
   if(result == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -87,8 +90,8 @@ ubrk_safeClone(
        *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-	return (UBreakIterator *)(((BreakIterator*)bi)->
-        createBufferClone(stackBuffer, *pBufferSize, *status)); 	
+    return (UBreakIterator *)(((BreakIterator*)bi)->
+        createBufferClone(stackBuffer, *pBufferSize, *status));
 }
 
 U_CAPI void
@@ -107,14 +110,14 @@ ubrk_setText(UBreakIterator* bi,
              UErrorCode*     status)
 {
   if (U_FAILURE(*status)) return;
-    
+
   const CharacterIterator& biText = ((BreakIterator*)bi)->getText();
 
   int32_t textLen = (textLength == -1 ? u_strlen(text) : textLength);
   if (biText.getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) {
       ((UCharCharacterIterator&)biText).setText(text, textLen);
   }
-  else {    
+  else {
       UCharCharacterIterator *iter = 0;
       iter = new UCharCharacterIterator(text, textLen);
       if(iter == 0) {
