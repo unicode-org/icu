@@ -315,11 +315,6 @@ SOURCE=.\ushape.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\ustream.cpp
-# ADD CPP /Ze
-# End Source File
-# Begin Source File
-
 SOURCE=.\ustrfmt.c
 # End Source File
 # Begin Source File
@@ -1257,33 +1252,6 @@ InputPath=.\unicode\ushape.h
 # Begin Source File
 
 SOURCE=.\ustr_imp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\ustream.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ustream.h
-
-"..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ustream.h
-
-"..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
