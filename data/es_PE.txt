@@ -24,6 +24,19 @@ es_PE {
     }
     LocaleID { "280a" }
     LocaleString { "es_PE" }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
     NumberPatterns { 
             "#,##0.###;-#,##0.###",
             "\u00A4#,##0.00;\u00A4-#,##0.00",
