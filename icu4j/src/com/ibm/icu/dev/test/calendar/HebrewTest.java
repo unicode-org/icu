@@ -5,17 +5,25 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2002/02/16 03:05:06 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/08/07 03:10:18 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.util.*;
+//import com.ibm.icu.dev.test.*;
+//import com.ibm.icu.util.*;
+
+import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * Tests for the <code>HebrewCalendar</code> class.
@@ -310,5 +318,48 @@ public class HebrewTest extends CalendarTest {
         HebrewCalendar cal = new HebrewCalendar();
         cal.clear();
         logln("cal.clear() -> " + cal.getTime());
+    }
+    
+    public void TestCoverage() {
+	{
+	    // new HebrewCalendar(TimeZone)
+	    HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
+	}
+
+	{
+	    // new HebrewCalendar(Locale)
+	    HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
+	}
+
+	{
+	    // new HebrewCalendar(Date)
+	    HebrewCalendar cal = new HebrewCalendar(new Date());
+	}
+
+	{
+	    // data
+	    HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
+	    Date time = cal.getTime();
+
+	    String[] calendarLocales = {
+		"iw_IL"
+	    };
+
+	    String[] formatLocales = {
+		"en", "fi", "fr", "hu", "iw", "nl"
+	    };
+	    for (int i = 0; i < calendarLocales.length; ++i) {
+		String calLocName = calendarLocales[i];
+		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+		cal = new HebrewCalendar(calLocale);
+
+		for (int j = 0; j < formatLocales.length; ++j) {
+		    String locName = formatLocales[j];
+		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+		    logln(calLocName + "/" + locName + " --> " + format.format(time));
+		}
+	    }
+	}
     }
 };

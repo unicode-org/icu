@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/08/06 21:48:55 $ 
- * $Revision: 1.34 $
+ * $Date: 2002/08/07 03:10:17 $ 
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -107,7 +107,8 @@ public class TestAll extends TestFmwk {
             new com.ibm.icu.dev.test.calendar.HebrewTest(),
             new com.ibm.icu.dev.test.calendar.IBMCalendarTest(),
             new com.ibm.icu.dev.test.calendar.IslamicTest(),
-            new com.ibm.icu.dev.test.calendar.ChineseTest()
+            new com.ibm.icu.dev.test.calendar.ChineseTest(),
+            new com.ibm.icu.dev.test.calendar.HolidayTest()
                 });
     }
 
