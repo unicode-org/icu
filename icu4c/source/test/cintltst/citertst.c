@@ -29,6 +29,9 @@
 #include "filestrm.h"
 #include "cstring.h"
 #include "ucol_imp.h"
+#include "ucol_tok.h"
+
+extern uint8_t ucol_uprv_getCaseBits(const UChar *, uint32_t, UErrorCode *);
 
 void addCollIterTest(TestNode** root)
 {
@@ -46,6 +49,8 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestCEs, "tscoll/citertst/TestCEs");
     addTest(root, &TestDiscontiguos, "tscoll/citertst/TestDiscontiguos");
     addTest(root, &TestCEBufferOverflow, "tscoll/citertst/TestCEBufferOverflow");
+    addTest(root, &TestCEValidity, "tscoll/citertst/TestCEValidity");
+    addTest(root, &TestSortKeyValidity, "tscoll/citertst/TestSortKeyValidity");
 }
 
 /* The locales we support */
@@ -1113,6 +1118,33 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
     return pStartCP;
 }
 
+/** 
+* Getting the FractionalUCA.txt file stream
+*/
+static FileStream * getFractionalUCA()
+{
+    char  dir[250];
+    char *pDir = dir;
+    
+    uprv_strcpy(pDir, getenv("ICU_DATA"));
+    pDir += uprv_strlen(pDir);
+    if (*(pDir - 1) != U_FILE_SEP_CHAR) {
+        *pDir = U_FILE_SEP_CHAR;
+        pDir ++;
+    }
+
+    /* dirty : because some platforms might not return the full path */
+#ifdef XP_MAC
+    uprv_strcpy(pDir, "..:..:data:unidata:FractionalUCA.txt");
+#elif defined(WIN32) || defined(OS2)
+    uprv_strcpy(pDir, "..\\..\\data\\unidata\\FractionalUCA.txt");
+#else 
+    uprv_strcpy(pDir, "../../data/unidata/FractionalUCA.txt");
+#endif
+    
+    return T_FileStream_open(dir, "r");
+}
+
 /**
 * Testing the CEs returned by the iterator
 */
@@ -1132,23 +1164,7 @@ static void TestCEs() {
         return;
     }
 
-    uprv_strcpy(pDir, getenv("ICU_DATA"));
-    pDir += uprv_strlen(pDir);
-    if (*(pDir - 1) != U_FILE_SEP_CHAR) {
-        *pDir = U_FILE_SEP_CHAR;
-        pDir ++;
-    }
-
-    /* dirty : because some platforms might not return the full path */
-#ifdef XP_MAC
-    uprv_strcpy(pDir, "..:..:data:unidata:FractionalUCA.txt");
-#elif defined(WIN32) || defined(OS2)
-    uprv_strcpy(pDir, "..\\..\\data\\unidata\\FractionalUCA.txt");
-#else 
-    uprv_strcpy(pDir, "../../data/unidata/FractionalUCA.txt");
-#endif
-    
-    file = T_FileStream_open(dir, "r");
+    file = getFractionalUCA();
 
     if (file == NULL) {
         log_err("*** unable to open input FractionalUCA.txt file ***\n");
@@ -1336,4 +1352,410 @@ static void TestCEBufferOverflow()
     }
     ucol_closeElements(iter);
     ucol_close(coll);
+}
+
+/**
+* Byte bounds checks. Checks if each byte in data is between upper and lower
+* inclusive.
+*/
+static UBool checkByteBounds(uint32_t data, char upper, char lower)
+{
+    int count = 4;
+    while (count > 0) {
+        char b = (char)data & 0xFF;
+        if (b > upper || b < lower) {
+            return FALSE;
+        }
+        data = data >> 8;
+        count --;
+    }
+    return TRUE;
+}
+
+/**
+* Determines case of the string of codepoints.
+* If it is a multiple codepoints it has to treated as a contraction.
+*/
+uint8_t getCase(const UChar *s, uint32_t len) {
+          UBool       lower = FALSE;
+          UBool       upper = FALSE;
+          UBool       title = FALSE;
+          UErrorCode  status = U_ZERO_ERROR;
+          /* UChar       str[256]; */
+    const UChar      *ps = s;
+
+    if (len == 0) {
+        return UCOL_LOWER_CASE;
+    }
+
+    while (len > 0) {
+        UChar c = *ps ++;
+        
+        if (u_islower(c)) {
+            lower = TRUE;
+        }
+        if (u_isupper(c)) {
+            upper = TRUE;
+        }
+        if (u_istitle(c)) {
+            title = TRUE;
+        }
+        
+        len --;
+    }
+    if ((lower && !upper && !title) || (!lower && !upper && !title)){
+        return UCOL_LOWER_CASE;
+    }
+    if (upper && !lower && !title) {
+        return UCOL_UPPER_CASE;
+    }
+    /* mix of cases here */
+    /* len = unorm_normalize(s, len, UNORM_NFKD, 0, str, 256, &status);    
+    if (U_FAILURE(status)) {
+        log_err("Error normalizing data string\n");
+        return UCOL_LOWER_CASE;
+    }*/
+
+    if ((title && len >= 2) || (lower && upper)) {
+        return UCOL_MIXED_CASE;
+    }
+    if (u_isupper(s[0])) {
+        return UCOL_UPPER_CASE;
+    }
+    return UCOL_LOWER_CASE;
+}
+
+/**
+* Checking collation element validity given the boundary arguments.
+*/
+static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints, 
+                             int length, uint32_t primarymax, 
+                             uint32_t secondarymax) 
+{
+    UErrorCode          status = U_ZERO_ERROR;
+    UCollationElements *iter   = ucol_openElements(coll, codepoints, length,
+                                                  &status);
+    uint32_t            ce;
+    UBool               first  = TRUE;
+    UBool               upper  = FALSE;
+    UBool               lower  = FALSE;
+
+    if (U_FAILURE(status)) {
+        log_err("Error creating iterator for testing validity\n");
+    }
+
+    ce = ucol_next(iter, &status);
+
+    while (ce != UCOL_NULLORDER) {
+       if (ce != 0) {
+           uint32_t primary   = UCOL_PRIMARYORDER(ce);
+           uint32_t secondary = UCOL_SECONDARYORDER(ce);
+           uint32_t tertiary  = UCOL_TERTIARYORDER(ce);
+           uint32_t scasebits = tertiary & 0xC0;
+                
+           if ((tertiary == 0 && secondary != 0) || 
+               (tertiary < 0xC0 && secondary == 0 && primary != 0)) {
+               /* n-1th level is not zero when the nth level is
+                  except for continuations, this is wrong */
+               log_err("Lower level weight not 0 when high level weight is 0\n");
+               goto fail;
+           }
+           else {
+               /* checks if any byte is illegal ie = 01 02 03. */
+               if (checkByteBounds(ce, 0x3, 0x1)) {
+                   log_err("Byte range in CE lies in illegal bounds 0x1 - 0x3\n");
+                   goto fail;
+               }
+           }
+           if ((primary != 0 && primary < primarymax) || primary >= 0xFF00) {
+               log_err("UCA primary weight out of bounds\n");
+               return FALSE;
+           }
+           /* case matching not done since data generated by ken */
+           if (first) {
+               if (secondary >= 6 && secondary <= secondarymax) {
+                   log_err("Secondary weight out of range\n");
+                   goto fail;
+               }
+               first = FALSE;
+           }
+       }
+       ce   = ucol_next(iter, &status);
+   }
+   ucol_closeElements(iter);
+   return TRUE;
+fail : 
+   ucol_closeElements(iter);
+   return FALSE; 
+}
+
+static void TestCEValidity()
+{
+    /* testing UCA collation elements */
+    UErrorCode  status      = U_ZERO_ERROR;
+    /* en_US has no tailorings */
+    UCollator  *coll        = ucol_open("en_US", &status);
+    /* tailored locales */
+    char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
+    FileStream *file = getFractionalUCA();
+    char        line[300];
+    UChar       codepoints[5];
+    int         count = 0;
+
+    if (U_FAILURE(status)) {
+        log_err("en_US collator creation failed\n");
+        return;
+    }
+    log_verbose("Testing UCA elements\n");
+    if (file == NULL) {
+        log_err("Fractional UCA data can not be opened\n");
+        return;
+    }
+
+    while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
+        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
+            line[0] == '[') {
+            continue;
+        }
+
+        getCodePoints(line, codepoints);
+        checkCEValidity(coll, codepoints, u_strlen(codepoints), 5, 86);
+    }
+
+    log_verbose("Testing UCA elements for the whole range of unicode characters\n");
+    codepoints[0] = 0;
+    while (codepoints[0] < 0xFFFF) {
+        if (u_isdefined((UChar32)codepoints[0])) {
+            checkCEValidity(coll, codepoints, 1, 5, 86);
+        }
+        codepoints[0] ++;
+    }
+    
+    ucol_close(coll);
+
+    /* testing tailored collation elements */
+    log_verbose("Testing tailored elements\n");
+    while (count < 5) {
+        const UChar *rules = NULL, 
+                    *current = NULL;
+        UChar *rulesCopy = NULL;
+        int32_t ruleLen = 0;
+
+        int32_t result = 0;
+        uint32_t chOffset = 0; 
+        uint32_t chLen = 0;
+        uint32_t exOffset = 0; 
+        uint32_t exLen = 0;
+        uint32_t oldOffset = 0;
+        UBool    startOfRules = TRUE;
+        UColOptionSet opts;
+  
+        UColTokenParser src;
+        uint32_t strength = 0;
+        uint8_t specs = 0;
+  
+        coll      = ucol_open(locale[count], &status);
+        if (U_FAILURE(status)) {
+            log_err("%s collator creation failed\n", locale[count]);
+            return;
+        }
+
+        src.opts = &opts;
+        rules = ucol_getRules(coll, &ruleLen);
+
+        if (ruleLen > 0) {
+            rulesCopy = (UChar *)uprv_malloc((ruleLen + 
+                UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
+            uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
+            src.source = src.current = rulesCopy;
+            src.end = rulesCopy + ruleLen;
+            src.extraCurrent = src.end;
+            src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+            while ((current = ucol_tok_parseNextToken(&src, &strength, 
+                                     &chOffset, &chLen, &exOffset, &exLen, 
+                                     &specs, startOfRules, &status)) != NULL) {
+                startOfRules = FALSE;
+                uprv_memcpy(codepoints, rules + chOffset, 
+                                                       chLen * sizeof(UChar));
+                codepoints[chLen] = 0;
+                checkCEValidity(coll, codepoints, u_strlen(codepoints), 4, 85);
+            }
+            uprv_free(rulesCopy);
+        }
+        
+        ucol_close(coll);
+        count ++;
+    }
+}
+
+static void printSortKeyError(const UChar   *codepoints, int length,
+                                    uint8_t *sortkey, int sklen) 
+{
+    int count = 0;
+    log_err("Sortkey not valid for ");
+    while (length > 0) {
+        log_err("0x%04x ", *codepoints);
+        length --;
+        codepoints ++;
+    }
+    log_err("\nSortkey : ");
+    while (count < sklen) {
+        log_err("0x%02x ", sortkey[count]);
+        count ++;
+    }
+    log_err("\n");
+}
+
+/**
+* Checking sort key validity for all levels
+*/
+static UBool checkSortKeyValidity(UCollator *coll, 
+                                  const UChar *codepoints, 
+                                  int length) 
+{
+    UErrorCode status  = U_ZERO_ERROR;
+    UCollationStrength strength[4] = {UCOL_PRIMARY, UCOL_SECONDARY,
+                                      UCOL_TERTIARY, UCOL_IDENTICAL};
+    int        strengthlen = 4;
+    int        index       = 0;
+    int        caselevel   = 0;
+    
+    while (caselevel < 1) {
+        if (caselevel == 0) {
+            ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);    
+        }
+        else {
+            ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_ON, &status);    
+        }
+        
+        while (index < strengthlen) {
+            int        count01 = 0;
+            uint32_t   count   = 0;
+            uint8_t    sortkey[128];
+            uint32_t   sklen;
+
+            ucol_setStrength(coll, strength[index]);
+            sklen = ucol_getSortKey(coll, codepoints, length, sortkey, 128);
+            while (sortkey[count] != 0) {
+                if (sortkey[count] == 2 || (sortkey[count] == 3 && count01 > 0 && index != 3)) {
+                    printSortKeyError(codepoints, length, sortkey, sklen);
+                    return FALSE;
+                }
+                if (sortkey[count] == 1) {
+                    count01 ++;
+                }
+                count ++;
+            }
+
+            if (count + 1 != sklen || (count01 != index + caselevel)) {
+                printSortKeyError(codepoints, length, sortkey, sklen);
+                return FALSE;
+            }
+            index ++;
+        }
+        caselevel ++;
+    }
+    return TRUE; 
+}
+
+static void TestSortKeyValidity()
+{
+    /* testing UCA collation elements */
+    UErrorCode  status      = U_ZERO_ERROR;
+    /* en_US has no tailorings */
+    UCollator  *coll        = ucol_open("en_US", &status);
+    /* tailored locales */
+    char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
+    FileStream *file = getFractionalUCA();
+    char        line[300];
+    UChar       codepoints[5];
+    int         count = 0;
+
+    if (U_FAILURE(status)) {
+        log_err("en_US collator creation failed\n");
+        return;
+    }
+    log_verbose("Testing UCA elements\n");
+    if (file == NULL) {
+        log_err("Fractional UCA data can not be opened\n");
+        return;
+    }
+
+    while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
+        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
+            line[0] == '[') {
+            continue;
+        }
+
+        getCodePoints(line, codepoints);
+        checkSortKeyValidity(coll, codepoints, u_strlen(codepoints));
+    }
+
+    log_verbose("Testing UCA elements for the whole range of unicode characters\n");
+    codepoints[0] = 0;
+    
+    while (codepoints[0] < 0xFFFF) {
+        if (u_isdefined((UChar32)codepoints[0])) {
+            checkSortKeyValidity(coll, codepoints, 1);
+        }
+        codepoints[0] ++;
+    }
+    
+    ucol_close(coll);
+
+    /* testing tailored collation elements */
+    log_verbose("Testing tailored elements\n");
+    while (count < 5) {
+        const UChar *rules = NULL, 
+                    *current = NULL;
+        UChar *rulesCopy = NULL;
+        int32_t ruleLen = 0;
+
+        int32_t result = 0;
+        uint32_t chOffset = 0; 
+        uint32_t chLen = 0;
+        uint32_t exOffset = 0; 
+        uint32_t exLen = 0;
+        uint32_t oldOffset = 0;
+        UBool    startOfRules = TRUE;
+        UColOptionSet opts;
+  
+        UColTokenParser src;
+        uint32_t strength = 0;
+        uint8_t specs = 0;
+  
+        coll      = ucol_open(locale[count], &status);
+        if (U_FAILURE(status)) {
+            log_err("%s collator creation failed\n", locale[count]);
+            return;
+        }
+
+        src.opts = &opts;
+        rules = ucol_getRules(coll, &ruleLen);
+
+        if (ruleLen > 0) {
+            rulesCopy = (UChar *)uprv_malloc((ruleLen + 
+                UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
+            uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
+            src.source = src.current = rulesCopy;
+            src.end = rulesCopy + ruleLen;
+            src.extraCurrent = src.end;
+            src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+            while ((current = ucol_tok_parseNextToken(&src, &strength, 
+                                     &chOffset, &chLen, &exOffset, &exLen, 
+                                     &specs, startOfRules, &status)) != NULL) {
+                startOfRules = FALSE;
+                uprv_memcpy(codepoints, rules + chOffset, 
+                                                       chLen * sizeof(UChar));
+                codepoints[chLen] = 0;
+                checkSortKeyValidity(coll, codepoints, u_strlen(codepoints));
+            }
+            uprv_free(rulesCopy);
+        }
+        
+        ucol_close(coll);
+        count ++;
+    }
 }
