@@ -409,6 +409,12 @@ uhash_hashUChars(const void *key) {
     STRING_HASH(UChar, u_strlen(p), *p);
 }
 
+/* Used by UnicodeString to compute its hashcode - Not public API. */
+U_CAPI int32_t
+uhash_hashUCharsN(const UChar *key, int32_t length) {
+    STRING_HASH(UChar, length, *p);
+}
+
 U_CAPI int32_t
 uhash_hashChars(const void *key) {
     STRING_HASH(uint8_t, uprv_strlen((char*)p), *p);
