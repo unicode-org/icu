@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/HexToUnicodeTransliterator.java,v $ 
- * $Date: 2000/06/28 20:49:54 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/09/21 21:24:39 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.util.*;
  * applyPattern() for details.
  *
  * @author Alan Liu
- * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/06/28 20:49:54 $
+ * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.9 $ $Date: 2001/09/21 21:24:39 $
  */
 public class HexToUnicodeTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -32,7 +32,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
     /**
      * Package accessible ID for this transliterator.
      */
-    static final String _ID = "Hex-Unicode";
+    static final String _ID = "Hex-Any";
 
     /**
      * This pattern encodes the following specs for the default constructor:
