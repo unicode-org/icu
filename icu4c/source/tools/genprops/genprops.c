@@ -555,7 +555,8 @@ unicodeDataLineFn(void *context,
             break;
         }
         if(++i==U_CHAR_CATEGORY_COUNT) {
-            fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n", fields[2][0], p.code);
+            fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n",
+                fields[2][0], (unsigned long)p.code);
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
@@ -564,7 +565,8 @@ unicodeDataLineFn(void *context,
     /* get canonical combining class, field 3 */
     p.canonicalCombining=(uint8_t)uprv_strtoul(fields[3][0], &end, 10);
     if(end<=fields[3][0] || end!=fields[3][1]) {
-        fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n", p.code);
+        fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n",
+            (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -577,7 +579,8 @@ unicodeDataLineFn(void *context,
             break;
         }
         if(++i==U_CHAR_DIRECTION_COUNT) {
-            fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n", fields[4][0], p.code);
+            fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n",
+                fields[4][0], (unsigned long)p.code);
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
@@ -587,7 +590,8 @@ unicodeDataLineFn(void *context,
     if(fields[6][0]<fields[6][1]) {
         value=uprv_strtoul(fields[6][0], &end, 10);
         if(end!=fields[6][1] || value>0x7fff) {
-            fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p.code);
+            fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n",
+                (unsigned long)p.code);
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
@@ -598,7 +602,8 @@ unicodeDataLineFn(void *context,
     if(fields[7][0]<fields[7][1]) {
         value=uprv_strtoul(fields[7][0], &end, 10);
         if(end!=fields[7][1] || value>0x7fff) {
-            fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n", p.code);
+            fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n",
+                (unsigned long)p.code);
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
@@ -623,13 +628,15 @@ unicodeDataLineFn(void *context,
             /* field 8 may contain a fractional value, get the denominator */
             p.denominator=uprv_strtoul(end+1, &end, 10);
             if(p.denominator==0) {
-                fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n", p.code);
+                fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n",
+                    (unsigned long)p.code);
                 *pErrorCode=U_PARSE_ERROR;
                 exit(U_PARSE_ERROR);
             }
         }
         if(end!=fields[8][1] || value>0x7fffffff) {
-            fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n", p.code);
+            fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n",
+                (unsigned long)p.code);
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
@@ -646,7 +653,8 @@ unicodeDataLineFn(void *context,
     if(*fields[9][0]=='Y') {
         p.isMirrored=1;
     } else if(fields[9][1]-fields[9][0]!=1 || *fields[9][0]!='N') {
-        fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n", p.code);
+        fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n",
+            (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -654,7 +662,8 @@ unicodeDataLineFn(void *context,
     /* get uppercase mapping, field 12 */
     value=uprv_strtoul(fields[12][0], &end, 16);
     if(end!=fields[12][1]) {
-        fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n", p.code);
+        fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n",
+            (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -663,7 +672,8 @@ unicodeDataLineFn(void *context,
     /* get lowercase value, field 13 */
     value=uprv_strtoul(fields[13][0], &end, 16);
     if(end!=fields[13][1]) {
-        fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n", p.code);
+        fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n",
+            (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -672,7 +682,8 @@ unicodeDataLineFn(void *context,
     /* get titlecase value, field 14 */
     value=uprv_strtoul(fields[14][0], &end, 16);
     if(end!=fields[14][1]) {
-        fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n", p.code);
+        fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n",
+            (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -743,8 +754,8 @@ unicodeDataLineFn(void *context,
                 unicodeAreas[unicodeAreaIndex].last=p.code;
                 if(beVerbose) {
                     printf("Unicode area U+%04lx..U+%04lx \"%s\"\n",
-                        unicodeAreas[unicodeAreaIndex].first,
-                        unicodeAreas[unicodeAreaIndex].last,
+                        (unsigned long)unicodeAreas[unicodeAreaIndex].first,
+                        (unsigned long)unicodeAreas[unicodeAreaIndex].last,
                         unicodeAreas[unicodeAreaIndex].name);
                 }
                 unicodeAreas[++unicodeAreaIndex].first=0xffffffff;
@@ -820,7 +831,7 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
     if(unicodeAreas[unicodeAreaIndex].first!=0xffffffff) {
         fprintf(stderr, "genprops: error - the last area \"%s\" from U+%04lx is incomplete\n",
             unicodeAreas[unicodeAreaIndex].name,
-            unicodeAreas[unicodeAreaIndex].first);
+            (unsigned long)unicodeAreas[unicodeAreaIndex].first);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
