@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2001/03/08 00:57:44 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/03/08 01:48:36 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -81,7 +81,7 @@ public class TestAll extends TestFmwk {
     }
 
     public void TestArabicShaping() throws Exception {
-        run(new com.ibm.test.text.ArabicShapingRegTest());
+        run(new com.ibm.icu.test.text.ArabicShapingRegTest());
     }
 
     public void TestCalendar() throws Exception {
