@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2001/07/25 20:49:30 $ 
-* $Revision: 1.5 $
+* $Date: 2001/08/23 02:21:07 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -430,7 +430,7 @@ public final class UTF16
       count --;
       result ++;
     }
-    if (result >= size) {
+    if (count != 0) {
       throw new StringIndexOutOfBoundsException(offset32);
     }
     return result;
@@ -457,7 +457,7 @@ public final class UTF16
   */
   public static int findCodePointOffset(String source, int offset16) 
   {
-    if (offset16 < 0 || offset16 >= source.length()) {
+    if (offset16 < 0 || offset16 > source.length()) {
       throw new StringIndexOutOfBoundsException(offset16);
     }
      
@@ -477,9 +477,14 @@ public final class UTF16
         ++ result;                          // count others as 1
       }
     }
-    // end of source being a supplementary character
+    
+    if (offset16 == source.length()) {
+        return result;
+    }
+    
+    // end of source being the less significant surrogate character
     // shift result back to the start of the supplementary character
-    if (hadLeadSurrogate && isTrailSurrogate(source.charAt(offset16))) {
+    if (hadLeadSurrogate && (isTrailSurrogate(source.charAt(offset16)))) {
       result --;
     }
       
@@ -593,7 +598,10 @@ public final class UTF16
   */
   public static int countCodePoint(String s)
   {
-    return findCodePointOffset(s, s.length() - 1) + 1;
+    if (s == null || s.length() == 0) {
+        return 0;
+    }
+    return findCodePointOffset(s, s.length());
   }
   
   /**
@@ -603,7 +611,7 @@ public final class UTF16
   * @param char32 code point
   */
   public static void setCharAtCodePointOffset(StringBuffer str, int offset32, 
-                                       int char32)
+                                              int char32)
   {
     int offset16 = findOffsetFromCodePoint(str.toString(), offset32);
     setCharAt(str, offset16, char32);
