@@ -103,6 +103,14 @@ void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
     Locale tempLocale(Locale::eBOGUS);
+
+    if (id == NULL) 
+    {
+        umtx_lock(NULL);
+        id = uprv_getDefaultLocaleID();
+        umtx_unlock(NULL);
+    }
+
     tempLocale.init(id);   // Note:  we do not want to hold the mutex through init(),
                            //        which is a relatively large, complex function.
                            //        Hence, the use of a temporary locale.
@@ -459,8 +467,14 @@ Locale::getDefault()
     if (needInit) {
         Locale *tLocale = new Locale(Locale::eBOGUS);
         if (tLocale != NULL) {
-            const char *cLocale = uprv_getDefaultLocaleID();
-            tLocale->init(cLocale);  
+            const char *cLocale;
+
+            umtx_lock(NULL);
+            /* uprv_getDefaultLocaleID is not thread safe, so we surround it with a mutex */
+            cLocale = uprv_getDefaultLocaleID();
+            umtx_unlock(NULL);
+
+            tLocale->init(cLocale);
             umtx_lock(NULL);
             if (gDefaultLocale == NULL) {
                 gDefaultLocale = tLocale;
