@@ -274,7 +274,6 @@ CHARMAP
 <U25CA> \xD7 |0
 <U2666> \x13 |1
 <U2713> \x12 |1
-<UF8FF> \x14 |1
 <UF8FF> \xF0 |0
 <UFB01> \xDE |0
 <UFB02> \xDF |0
