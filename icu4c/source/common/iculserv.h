@@ -413,6 +413,7 @@ class U_COMMON_API ICULocaleService : public ICUService
  private:
   Locale fallbackLocale;
   UnicodeString fallbackLocaleName;
+  UMTX llock;
 
  public:
   /**
@@ -428,7 +429,7 @@ class U_COMMON_API ICULocaleService : public ICUService
   /**
    * Destructor.
    */
-  ~ICULocaleService();
+  virtual ~ICULocaleService();
 
 #if 0
   // redeclare because of overload resolution rules?
@@ -494,6 +495,8 @@ class U_COMMON_API ICULocaleService : public ICUService
    */
   virtual StringEnumeration* getAvailableLocales(void) const;
 
+ protected:
+
   /**
    * Return the name of the current fallback locale.  If it has changed since this was
    * last accessed, the service cache is cleared.
@@ -509,12 +512,6 @@ class U_COMMON_API ICULocaleService : public ICUService
    * Additional createKey that takes a kind.
    */
   virtual Key* createKey(const UnicodeString* id, int32_t kind) const;
-
-  /*
-  virtual int32_t getTimestamp() const {
-    return ICUService::getTimestamp();
-  }
-  */
 
   friend class ServiceEnumeration;
 };
