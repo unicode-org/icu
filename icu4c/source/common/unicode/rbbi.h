@@ -328,19 +328,29 @@ public:
 
     /**
      * Return the status tag from the break rule that determined the most recently
-     * returned break position.  The values appear in the rule source
-     * within brackets, {123}, for example.  For rules that do not specify a
-     * status, a default value of 0 is returned.  If more than one rule applies,
-     * the numerically largest of the possible status values is returned.
+     * returned break position.  For break rules that do not specify a
+     * status, a default value of 0 is returned.  If more than one break rule
+     * would cause a boundary to be located at some position in the text,
+     * the numerically largest of the applicable status values is returned.
      * <p>
-     * Of the standard types of ICU break iterators, only the word break
-     * iterator provides status values.  The values are defined in
-     * <code>enum UWordBreak</code>, and allow distinguishing between words
+     * Of the standard types of ICU break iterators, only word break and
+     * line break provide status values.  The values are defined in
+     * the header file ubrk.h.  For Word breaks, the status allows distinguishing between words
      * that contain alphabetic letters, "words" that appear to be numbers,
      * punctuation and spaces, words containing ideographic characters, and
-     * more.  Call <code>getRuleStatus</code> after obtaining a boundary
+     * more.  For Line Break, the status distinguishes between hard (mandatory) breaks
+     * and soft (potential) break positions.
+     * <p>
+     * <code>getRuleStatus()</code> can be called after obtaining a boundary
      * position from <code>next()<code>, <code>previous()</code>, or 
      * any other break iterator functions that returns a boundary position.
+     * <p>
+     * When creating custom break rules, one is free to define whatever
+     * status values may be convenient for the application.
+     * <p>
+     * Note: this function is not thread safe.  It should not have been
+     *       declared const, and the const remains only for compatibility
+     *       reasons.  (The function is logically const, but not bit-wise const).
      * <p>
      * @return the status from the break rule that determined the most recently
      * returned break position.
@@ -352,12 +362,9 @@ public:
 
    /**
     * Get the status (tag) values from the break rule(s) that determined the most 
-    * recently returned break position.  The values appear in the rule source
-    * within brackets, {123}, for example.  The default status value for rules
-    * that do not explicitly provide one is zero.
+    * recently returned break position.  
     * <p>
-    * For word break iterators, the possible values are defined in enum UWordBreak.
-    * <p>
+    * The returned status value(s) are stored into an array provided by the caller.
     * If the capacity of the output array is insufficient to hold the data,
     *  the output will be truncated to the available length, and a
     *  U_BUFFER_OVERFLOW_ERROR will be signaled.
@@ -372,6 +379,7 @@ public:
     *                  In the event of a U_BUFFER_OVERFLOW_ERROR, the return value
     *                  is the total number of status values that were available,
     *                  not the reduced number that were actually returned.
+    * @see getRuleStatus
     * @draft ICU 3.0
     */
     virtual int32_t getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status);
