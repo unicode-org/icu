@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="uconv"
 	SccProjectName=""
 	SccLocalPath="">
@@ -36,7 +36,8 @@
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; ..\..\..\bin"
+				CommandLine="copy &quot;$(TargetPath)&quot; ..\..\..\bin
+"
 				Outputs="$(ProjectDir)..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
@@ -64,7 +65,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -92,7 +99,8 @@
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; ..\..\..\bin"
+				CommandLine="copy &quot;$(TargetPath)&quot; ..\..\..\bin
+"
 				Outputs="$(ProjectDir)..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
@@ -121,9 +129,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -161,14 +177,16 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Release"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Release
+"
 						Outputs="Release/uconvmsg.lib"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Debug"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Debug
+"
 						Outputs="Debug/uconvmsg.lib"/>
 				</FileConfiguration>
 			</File>

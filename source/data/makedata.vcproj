@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="makedata"
 	SccProjectName=""
 	SccLocalPath=""
@@ -38,6 +38,8 @@
 				CleanCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=debug clean"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Resource Files"
