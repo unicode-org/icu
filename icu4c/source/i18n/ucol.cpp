@@ -377,7 +377,7 @@ ucol_open_internal(const char *loc,
 
 
   UCollator *result = NULL;
-  UResourceBundle *b = ures_open(NULL, loc, status);
+  UResourceBundle *b = ures_open(U_ICUDATA_COLL, loc, status);
 
   /* we try to find stuff from keyword */
   UResourceBundle *collations = ures_getByKey(b, "collations", NULL, status);
@@ -407,8 +407,8 @@ ucol_open_internal(const char *loc,
     *status = U_USING_DEFAULT_WARNING;
     result = ucol_initCollator(UCA->image, result, UCA, status);
     // if we use UCA, real locale is root
-    result->rb = ures_open(NULL, "", status);
-    result->elements = ures_open(NULL, "", status);
+    result->rb = ures_open(U_ICUDATA_COLL, "", status);
+    result->elements = ures_open(U_ICUDATA_COLL, "", status);
     if(U_FAILURE(*status)) {
       goto clean;
     }

@@ -1302,6 +1302,31 @@ u_setDataDirectory(const char *directory) {
     umtx_unlock(NULL);
 }
 
+U_CAPI UBool U_EXPORT2
+uprv_pathIsAbsolute(const char *path) 
+{
+  if(!path || !*path) { 
+    return FALSE; 
+  }
+
+  if(*path == U_FILE_SEP_CHAR) {
+    return TRUE;
+  }
+#if defined(WIN32)
+  if(*path == '/') {
+    return TRUE;
+  }
+
+  if( (((path[0] >= 'A') && (path[0] <= 'Z')) ||
+       ((path[0] >= 'a') && (path[0] <= 'z'))) &&
+      path[1] == ':' ) {
+    return TRUE;
+  }
+#endif
+
+  return FALSE;
+}
+
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     const char *path = NULL;
