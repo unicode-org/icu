@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/11/14 23:45:01 $
-* $Revision: 1.35 $
+* $Date: 2003/11/14 23:51:19 $
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -19,6 +19,7 @@ import java.util.Set;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.VersionInfo;
 
 /**
 * <p>Collator performs locale-sensitive string comparison. A concrete
@@ -735,7 +736,22 @@ public abstract class Collator implements Comparator, Cloneable
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
 		return new ULocale("");		
 	}
-    // protected constructor -------------------------------------------------
+
+	/** Get the version of this collator object.
+	 *  @return the version object associated with this collator
+	 */
+	public VersionInfo getVersion() {
+		return VersionInfo.getInstance(0);
+	}
+	
+	/** Get the UCA version of this collator object.
+	 *  @return the version object associated with this collator
+	 */
+	public VersionInfo getUCAVersion() {
+		return VersionInfo.getInstance(0);
+	}
+	
+	// protected constructor -------------------------------------------------
 
     /**
      * Empty default constructor to make javadocs happy
