@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="en"></language>
 		<territory type="AUS">AU</territory>
 	</identity>
@@ -19,18 +19,26 @@
 				<calendar type="gregorian">
 					<dateFormats>
 						<default type="medium"/>
-						<dateFormat type="full">
-							<pattern>EEEE, d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="long">
-							<pattern>d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="medium">
-							<pattern>dd/MM/yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="short">
-							<pattern>dd/MM/yy</pattern>
-						</dateFormat>
+						<dateFormatStyle type="full">
+							<dateFormat >
+								<pattern>EEEE, d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="long">
+							<dateFormat >
+								<pattern>d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="medium">
+							<dateFormat >
+								<pattern>dd/MM/yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="short">
+							<dateFormat >
+								<pattern>dd/MM/yy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
 					</dateFormats>
 					<timeFormats>
 						<default type="medium"/>

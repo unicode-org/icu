@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="am"></language>
 	</identity>
 	<localeDisplayNames>
@@ -79,8 +79,10 @@
 					<firstDay day="mon"/>
 				</week>
 				<eras>
-					<era type="1">ዓ/ዓ</era>
-					<era type="2">ዓ/ም</era>
+					<eraAbbr>
+						<era type="1">ዓ/ዓ</era>
+						<era type="2">ዓ/ም</era>
+					</eraAbbr>
 				</eras>
 			</calendar>
 		</calendars>

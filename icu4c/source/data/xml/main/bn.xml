@@ -2,11 +2,14 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.1">Various notes and changes in version 1.1</version>
+		<generation date="2003-04-08" />
 		<language type="bn"></language>
 	</identity>
 	<localeDisplayNames>
+		<languages>
+			<language type="bn">বাংলা</language>
+		</languages>
 		<keys>
 			<key type="collation">collation</key>
 			<key type="calendar">calendar</key>

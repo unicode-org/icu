@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="mr"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">इटालियन</language>
 			<language type="iu">इनुकिटुट्</language>
 			<language type="ja">जापनीस्</language>
-			<language type="jw">जावनीस्</language>
+			<language type="jv">जावनीस्</language>
 			<language type="ka">जार्जियन्</language>
 			<language type="kk">कज़क</language>
 			<language type="kl">ग्रीनलान्डिक</language>

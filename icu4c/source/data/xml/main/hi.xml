@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.1">Various notes and changes in version 1.1</version>
+		<generation date="2003-04-08" />
 		<language type="hi"></language>
 	</identity>
 	<localeDisplayNames>
@@ -63,7 +63,7 @@
 			<language type="it">ईटालियन्</language>
 			<language type="iu">इनूकीटूत्</language>
 			<language type="ja">जापानी</language>
-			<language type="jw">जावानीस</language>
+			<language type="jv">जावानीस</language>
 			<language type="ka">जॉर्जीयन्</language>
 			<language type="kk">कज़ाख</language>
 			<language type="kl">ग्रीनलैंडिक</language>
@@ -234,8 +234,10 @@
 					<day type="sat">शनि</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">ईसापूर्व</era>
-					<era type="2">सन</era>
+					<eraAbbr>
+						<era type="1">ईसापूर्व</era>
+						<era type="2">सन</era>
+					</eraAbbr>
 				</eras>
 				<am>पूर्वाह्न</am>
 				<pm>अपराह्न</pm>
@@ -244,6 +246,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+			<group>,</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>०</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<settings normalization="on"/>

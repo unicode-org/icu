@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="th"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">อิตาลี</language>
 			<language type="iu">ไอนุกติตัท</language>
 			<language type="ja">ญี่ปุ่น</language>
-			<language type="jw">ชวา</language>
+			<language type="jv">ชวา</language>
 			<language type="ka">จอร์เจียน</language>
 			<language type="kk">คาซัค</language>
 			<language type="kl">กรีนแลนด์ดิค</language>
@@ -412,25 +412,35 @@
 					<day type="sat">ส.</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">ปีก่อนคริสต์กาลที่</era>
-					<era type="2">ค.ศ.</era>
+					<eraAbbr>
+						<era type="1">ปีก่อนคริสต์กาลที่</era>
+						<era type="2">ค.ศ.</era>
+					</eraAbbr>
 				</eras>
 				<am>ก่อนเที่ยง</am>
 				<pm>หลังเที่ยง</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE'ที่ 'd MMMM G yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>d MMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>d/M/yyyy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE'ที่ 'd MMMM G yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>d MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>d/M/yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>

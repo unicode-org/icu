@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-04-08" />
 		<language type="fa"></language>
 	</identity>
 	<localeDisplayNames>
@@ -135,7 +135,7 @@
 			<language type="ja">ژاپنی</language>
 			<language type="jpr">فارسی یهودی</language>
 			<language type="jrb">عربی یهودی</language>
-			<language type="jw">جاوه‌ای</language>
+			<language type="jv">جاوه‌ای</language>
 			<language type="ka">گرجی</language>
 			<language type="kk">قزاقی</language>
 			<language type="km">خمری</language>
@@ -557,25 +557,35 @@
 					<day type="sat">ش.</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">ق.م.</era>
-					<era type="2">م.</era>
+					<eraAbbr>
+						<era type="1">ق.م.</era>
+						<era type="2">م.</era>
+					</eraAbbr>
 				</eras>
 				<am>ق.ظ.</am>
 				<pm>ب.ظ.</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE، d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>yyyy/MM/d</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>yyyy/MM/d</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE، d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>yyyy/MM/d</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>yyyy/MM/d</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>

@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="x0.1">Various notes and changes in version x0.1</version>
+		<generation date="2003-04-08" />
 		<language type="az"></language>
 		<territory type="AZE">AZ</territory>
 	</identity>
@@ -19,18 +19,26 @@
 				<calendar type="gregorian">
 					<dateFormats>
 						<default type="medium"/>
-						<dateFormat type="full">
-							<pattern>d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="long">
-							<pattern>d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="medium">
-							<pattern>dd.MM.yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="short">
-							<pattern>dd.MM.yyyy</pattern>
-						</dateFormat>
+						<dateFormatStyle type="full">
+							<dateFormat >
+								<pattern>d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="long">
+							<dateFormat >
+								<pattern>d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="medium">
+							<dateFormat >
+								<pattern>dd.MM.yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="short">
+							<dateFormat >
+								<pattern>dd.MM.yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
 					</dateFormats>
 					<timeFormats>
 						<default type="medium"/>

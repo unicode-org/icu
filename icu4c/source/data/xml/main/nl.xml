@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="nl"></language>
 	</identity>
 	<localeDisplayNames>
@@ -81,18 +81,26 @@
 				</week>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>d-MMM-yy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>d-M-yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>d-MMM-yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>d-M-yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -117,6 +125,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 	<special owner="http://oss.software.ibm.com/icu/"  >
 		<ruleBasedNumberFormats>
 			<ruleBasedNumberFormat type="spellout">-x: min &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />(zero?); een; twee; drie; vier; vijf; zes; zeven; acht; negen;<cp hex="000A" />tien; elf; twaalf; dertien; veertien; vijftien; zestien;<cp hex="000A" />zeventien; achtien; negentien;<cp hex="000A" />20: [&gt;&gt; en ]twintig;<cp hex="000A" />30: [&gt;&gt; en ]dertig;<cp hex="000A" />40: [&gt;&gt; en ]veertig;<cp hex="000A" />50: [&gt;&gt; en ]vijftig;<cp hex="000A" />60: [&gt;&gt; en ]zestig;<cp hex="000A" />70: [&gt;&gt; en ]zeventig;<cp hex="000A" />80: [&gt;&gt; en ]tachtig;<cp hex="000A" />90: [&gt;&gt; en ]negentig;<cp hex="000A" />100: &lt;&lt; honderd[ &gt;&gt;];<cp hex="000A" />1000: &lt;&lt; duizend[ &gt;&gt;];<cp hex="000A" />1,000,000: &lt;&lt; miljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000: &lt;&lt; biljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: =#,##0=</ruleBasedNumberFormat>

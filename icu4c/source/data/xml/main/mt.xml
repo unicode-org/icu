@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="0.10.5">Various notes and changes in version 0.10.5</version>
+		<generation date="2003-04-08" />
 		<language type="mt"></language>
 	</identity>
 	<localeDisplayNames>
@@ -26,7 +26,7 @@
 			<language type="art">Artifiċjali (Oħra)</language>
 			<language type="ath">Lingwi Atabaskani</language>
 			<language type="aus">Lingwi Awstraljani</language>
-			<language type="ava">Avarik</language>
+			<language type="av">Avarik</language>
 			<language type="awa">Awadħi</language>
 			<language type="ay">Ajmara</language>
 			<language type="az">Ażerbajġani</language>
@@ -65,7 +65,7 @@
 			<language type="cop">Koptiku</language>
 			<language type="cpe">Kreoli u Piġini, Bbażat fuq l-Ingliż (Oħra)</language>
 			<language type="cpf">Kreoli u Piġini, Bbażat fuq il-Franċiż (Oħra)</language>
-			<language type="cre">Krij</language>
+			<language type="cr">Krij</language>
 			<language type="crp">Kreoli u Piġini (Oħra)</language>
 			<language type="cs">Ċek</language>
 			<language type="cu">Slaviku tal-Knisja</language>
@@ -77,13 +77,12 @@
 			<language type="de">Ġermaniż</language>
 			<language type="del">Delawerjan</language>
 			<language type="den">Slav</language>
-			<language type="div">Diveħi</language>
 			<language type="dra">Dravidjan (Oħra)</language>
 			<language type="dua">Dwala</language>
 			<language type="dum">Olandiż, Medjevali (ca. 1050-1350)</language>
+			<language type="dv">Diveħi</language>
 			<language type="dyu">Djula</language>
-			<language type="dz">Vutani</language>
-			<language type="dzo">Dżongka</language>
+			<language type="dz">Dżongka</language>
 			<language type="egy">Eġizzjan (Antik)</language>
 			<language type="el">Grieg</language>
 			<language type="elx">Elamit</language>
@@ -93,6 +92,7 @@
 			<language type="et">Estonjan</language>
 			<language type="eu">Bask</language>
 			<language type="fa">Persjan</language>
+			<language type="ff">Fulaħ</language>
 			<language type="fi">Finlandiż</language>
 			<language type="fiu">Finno - Ugrijan</language>
 			<language type="fj">Fiġi</language>
@@ -100,7 +100,6 @@
 			<language type="fr">Franċiż</language>
 			<language type="frm">Franċiż, Medjevali (ca. 1400-1600)</language>
 			<language type="fro">Franċiż, Antik (842-ca. 1400)</language>
-			<language type="ful">Fulaħ</language>
 			<language type="fur">Frijuljan</language>
 			<language type="fy">Friżjan</language>
 			<language type="ga">Irlandiż</language>
@@ -146,7 +145,7 @@
 			<language type="ja">Ġappuniż</language>
 			<language type="jpr">Lhudi-Persjan</language>
 			<language type="jrb">Lhudi-Għarbi</language>
-			<language type="jw">Ġavaniż</language>
+			<language type="jv">Ġavaniż</language>
 			<language type="ka">Ġorġjan</language>
 			<language type="kab">Kabuljan</language>
 			<language type="kac">Kaċin</language>
@@ -230,7 +229,7 @@
 			<language type="nyo">Njoro</language>
 			<language type="nzi">Nżima</language>
 			<language type="oc">Provenzal (wara 1500)</language>
-			<language type="oji">Oġibwa</language>
+			<language type="oj">Oġibwa</language>
 			<language type="or">Orija</language>
 			<language type="os">Ossettiku</language>
 			<language type="osa">Osaġjan</language>
@@ -559,23 +558,33 @@
 					<day type="sat">Sib</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">QK</era>
-					<era type="2">WK</era>
+					<eraAbbr>
+						<era type="1">QK</era>
+						<era type="2">WK</era>
+					</eraAbbr>
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE, d 'ta''' MMMM, yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d 'ta''' MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd-MMM-yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd/MM/yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE, d 'ta''' MMMM, yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d 'ta''' MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd-MMM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
+<localeData>
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-04-08" />
+		<language type="es"></language>
+		<variant type="TRADITIONAL">{2}</variant>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+			<collations>
+				<collation  >
+					<rules>
+						<reset>N</reset>
+						<p>ñ</p>
+						<t>Ñ</t>
+						<reset>C</reset>
+						<p>ch</p>
+						<tc>ChCH</tc>
+						<reset>l</reset>
+						<p>ll</p>
+						<t>Ll</t>
+					</rules>
+					<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+				</collation  >
+				<collation key="TRADITIONAL" >
+					<rules>
+						<reset>N</reset>
+						<p>ñ</p>
+						<t>Ñ</t>
+						<reset>C</reset>
+						<p>ch</p>
+						<tc>ChCH</tc>
+						<reset>l</reset>
+						<p>ll</p>
+						<t>Ll</t>
+					</rules>
+					<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+				</collation  >
+			</collations>
+</localeData>

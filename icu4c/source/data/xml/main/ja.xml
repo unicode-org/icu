@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="ja"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">イタリア語</language>
 			<language type="iu">イヌクウティトット語</language>
 			<language type="ja">日本語</language>
-			<language type="jw">ジャワ語</language>
+			<language type="jv">ジャワ語</language>
 			<language type="ka">グルジア語</language>
 			<language type="kk">カザフ語</language>
 			<language type="kl">グリーンランド語</language>
@@ -412,25 +412,35 @@
 					<day type="sat">土</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">紀元前</era>
-					<era type="2">西暦</era>
+					<eraAbbr>
+						<era type="1">紀元前</era>
+						<era type="2">西暦</era>
+					</eraAbbr>
 				</eras>
 				<am>午前</am>
 				<pm>午後</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>yyyy'年'M'月'd'日'</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>yyyy/MM/dd</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>yyyy/MM/dd</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>yy/MM/dd</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>yyyy'年'M'月'd'日'</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>yyyy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>yyyy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>yy/MM/dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>

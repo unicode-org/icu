@@ -2,11 +2,14 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="x0.1">Various notes and changes in version x0.1</version>
+		<generation date="2003-04-08" />
 		<language type="ky"></language>
 	</identity>
 	<localeDisplayNames>
+		<languages>
+			<language type="ky">Кыргыз</language>
+		</languages>
 		<keys>
 			<key type="collation">collation</key>
 			<key type="calendar">calendar</key>
@@ -71,6 +74,22 @@
 			</calendar>
 		</calendars>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<settings normalization="on"/>

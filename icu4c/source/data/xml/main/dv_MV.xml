@@ -2,9 +2,9 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
-		<language type="div"></language>
+		<version number="x0.2">Various notes and changes in version x0.2</version>
+		<generation date="2003-04-08" />
+		<language type="dv"></language>
 		<territory type="MDV">MV</territory>
 	</identity>
 	<localeDisplayNames>
@@ -23,18 +23,26 @@
 					</week>
 					<dateFormats>
 						<default type="medium"/>
-						<dateFormat type="full">
-							<pattern>EEEE d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="long">
-							<pattern>d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="medium">
-							<pattern>dd-MM-yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="short">
-							<pattern>d-M-yy</pattern>
-						</dateFormat>
+						<dateFormatStyle type="full">
+							<dateFormat >
+								<pattern>EEEE d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="long">
+							<dateFormat >
+								<pattern>d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="medium">
+							<dateFormat >
+								<pattern>dd-MM-yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="short">
+							<dateFormat >
+								<pattern>d-M-yy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
 					</dateFormats>
 					<timeFormats>
 						<default type="medium"/>

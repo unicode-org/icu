@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="zh"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">意大利文</language>
 			<language type="iu">爱斯基摩文</language>
 			<language type="ja">日文</language>
-			<language type="jw">爪哇文</language>
+			<language type="jv">爪哇文</language>
 			<language type="ka">格鲁吉亚文</language>
 			<language type="kk">哈萨克文</language>
 			<language type="kl">格陵兰文</language>
@@ -412,8 +412,10 @@
 					<day type="sat">星期六</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">公元前</era>
-					<era type="2">公元</era>
+					<eraAbbr>
+						<era type="1">公元前</era>
+						<era type="2">公元</era>
+					</eraAbbr>
 				</eras>
 				<am>上午</am>
 				<pm>下午</pm>

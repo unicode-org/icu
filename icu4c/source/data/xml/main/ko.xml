@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="1.2">Various notes and changes in version 1.2</version>
+		<generation date="2003-04-08" />
 		<language type="ko"></language>
 	</identity>
 	<localeDisplayNames>
@@ -62,7 +62,7 @@
 			<language type="it">이탈리아어</language>
 			<language type="iu">이눅티투트어</language>
 			<language type="ja">일본어</language>
-			<language type="jw">자바어</language>
+			<language type="jv">자바어</language>
 			<language type="ka">그루지야어</language>
 			<language type="kk">카자흐어</language>
 			<language type="kl">그린랜드어</language>
@@ -412,25 +412,35 @@
 					<day type="sat">토</day>
 				</dayAbbr>
 				<eras>
-					<era type="1">기원전</era>
-					<era type="2">서기</era>
+					<eraAbbr>
+						<era type="1">기원전</era>
+						<era type="2">서기</era>
+					</eraAbbr>
 				</eras>
 				<am>오전</am>
 				<pm>오후</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>yyyy'년' M'월' d'일' EEEE</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>yyyy'년' M'월' d'일' EE</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>yyyy-MM-dd</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>yy-MM-dd</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>yyyy'년' M'월' d'일' EEEE</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>yyyy'년' M'월' d'일' EE</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>yyyy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -457,7 +467,7 @@
 	</dates>
 		<collations>
 			<collation  >
-				<optimize>[가-각간갇-갊감-갗같-객갠갤갬-갭갯-갱갸-갹갼걀걋걍걔걘걜거-걱건걷-걸걺검-겁것-겆겉-게겐겔겜-겝겟-겡겨-겪견겯-결겸-겹겻-경곁계곈곌곕곗고-곡곤곧-골곪곬곯-곱곳공-곶과-곽관괄괆괌-괍괏광괘괜괠괩괬-괭괴-괵괸괼굄-굅굇굉교굔굘굡굣구-국군굳-굶굻-굽굿궁-궂궈-궉권궐궜-궝궤궷귀-귁귄귈귐-귑귓규균귤그-극근귿-긁금-급긋긍긔기-긱긴긷-길긺김-깁깃깅-깆깊까-깎깐깔깖깜-깝깟-깡깥깨-깩깬깰깸-깹깻-깽꺄-꺅꺌꺼-꺾껀껄껌-껍껏-껑께-껙껜껨껫껭껴껸껼꼇-꼈꼍꼐꼬-꼭꼰꼲꼴꼼-꼽꼿꽁-꽃꽈-꽉꽐꽜-꽝꽤-꽥꽹꾀꾄꾈꾐-꾑꾕꾜꾸</optimize>
+				<optimize>[AC00-AC01AC04AC07-AC0AAC10-AC17AC19-AC1DAC20AC24AC2C-AC2DAC2F-AC31AC38-AC39AC3CAC40AC4BAC4DAC54AC58AC5CAC70-AC71AC74AC77-AC78AC7AAC80-AC81AC83-AC86AC89-AC8CAC90AC94AC9C-AC9DAC9F-ACA1ACA8-ACAAACACACAF-ACB0ACB8-ACB9ACBB-ACBDACC1ACC4ACC8ACCCACD5ACD7ACE0-ACE1ACE4ACE7-ACE8ACEAACEC</optimize>
 				<rules>
 					<reset>가</reset>
 					<sc>伽佳假價加可呵哥嘉嫁家暇架枷柯歌珂痂稼苛茄街袈訶賈跏軻迦駕仮傢咖哿坷宊斝榎檟珈笳耞舸葭謌</sc>
