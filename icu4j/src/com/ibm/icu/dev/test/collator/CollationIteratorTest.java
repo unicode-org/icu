@@ -485,7 +485,6 @@ public class CollationIteratorTest extends TestFmwk {
                 CollationTest.backAndForth(this, iter);
             }
             */
-            System.out.println("codepoint " + Integer.toHexString(codepoint));
             iter = en_us.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all 
             CollationTest.backAndForth(this, iter);
