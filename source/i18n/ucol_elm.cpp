@@ -581,6 +581,7 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
       }
     }
 
+#if 0
     // These are all fairly small prefixes... We should be fine...
     UChar nfcBuffer[256];
     uint32_t nfcSize = unorm_normalize(element->prefix, element->prefixSize, UNORM_NFC, 0, nfcBuffer, 256, status);
@@ -593,9 +594,11 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     }
 
     element->prefixSize = nfcSize;
-    for(j = 0; j < element->prefixSize; j++) { // prefixes are going to be looked up backwards
+#endif
+
+    for(j = 0; j < /*nfcSize*/element->prefixSize; j++) { // prefixes are going to be looked up backwards
       // therefore, we will promptly reverse the prefix buffer...
-      element->prefix[j] = *(nfcBuffer+element->prefixSize-j-1);
+      element->prefix[j] = *(/*nfcBuffer*/element->prefix+element->prefixSize-j-1);
     }
 
     // the first codepoint is also unsafe, as it forms a 'contraction' with the prefix
@@ -804,6 +807,54 @@ uint32_t uprv_uca_setRange(tempUCATable *t, UChar32 rangeStart, UChar32 rangeEnd
 
   return i; 
 }
+
+uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element, UErrorCode *status) {
+  uint32_t CE = UCOL_NOT_FOUND;
+  if(element->cSize > 1) { /* we're adding a contraction */
+    uint32_t i = 0;
+    UChar32 cp;
+
+    UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
+    CE = ucmpe32_get(t->mapping, cp);
+
+    UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
+    uprv_memcpy(composed, element, sizeof(UCAElements));
+    composed->cPoints = composed->uchars;
+    *composed->cPoints = *element->cPoints;
+    composed->cSize = unorm_normalize(element->cPoints+1, element->cSize-1, UNORM_NFC, 0, composed->cPoints+1, 128, status);
+    composed->cSize++;
+    if(composed->cSize != element->cSize || uprv_memcmp(composed->cPoints+1, element->cPoints+1, element->cSize-1)) {
+      // do it!
+      CE = uprv_uca_addContraction(t, CE, composed, status);
+#ifdef UCOL_DEBUG
+      fprintf(stderr, "Adding composed for %04X\n", *element->cPoints);
+#endif
+    }
+    uprv_free(composed);
+
+    CE = uprv_uca_addContraction(t, CE, element, status);
+  } else { /* easy case, */
+    CE = ucmpe32_get(t->mapping, element->cPoints[0]);
+
+    if( CE != UCOL_NOT_FOUND) {
+      if(isCntTableElement(CE) /*isContraction(CE)*/) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
+            uprv_cnttab_setContraction(t->contractions, CE, 0, 0, element->mapCE, status);
+            /* This loop has to change the CE at the end of contraction REDO!*/
+            uprv_cnttab_changeLastCE(t->contractions, CE, element->mapCE, status);
+        } else {
+          ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
+#ifdef UCOL_DEBUG
+          fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
+          //*status = U_ILLEGAL_ARGUMENT_ERROR;
+#endif
+        }
+    } else {
+      ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
+    }
+  }
+  return CE;
+}
+
 /* This adds a read element, while testing for existence */
 uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
   CompactEIntArray *mapping = t->mapping;
@@ -863,6 +914,15 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     // we need it to be able to distinguish between the simple
     // codepoints and prefix starters. Also, we need to use it
     // for canonical closure.
+
+    UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
+    uprv_memcpy(composed, element, sizeof(UCAElements));
+    composed->cPoints = composed->uchars;
+    composed->prefix = composed->prefixChars;
+
+    composed->prefixSize = unorm_normalize(element->prefix, element->prefixSize, UNORM_NFC, 0, composed->prefix, 128, status);
+
+
     if(t->prefixLookup != NULL) {
       UCAElements *uCE = (UCAElements *)uhash_get(t->prefixLookup, element);
       if(uCE != NULL) { // there is already a set of code points here
@@ -874,53 +934,15 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
         uCE->cPoints = uCE->uchars;
         uhash_put(t->prefixLookup, uCE, uCE, status);
       }
-    }
-  }
-
-
-  if(element->cSize > 1) { /* we're adding a contraction */
-    uint32_t i = 0;
-    UChar32 cp;
-
-    UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
-    CE = ucmpe32_get(mapping, cp);
-
-    UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
-    uprv_memcpy(composed, element, sizeof(UCAElements));
-    composed->cPoints = composed->uchars;
-    *composed->cPoints = *element->cPoints;
-    composed->cSize = unorm_normalize(element->cPoints+1, element->cSize-1, UNORM_NFC, 0, composed->cPoints+1, 128, status);
-    composed->cSize++;
-    if(composed->cSize != element->cSize || uprv_memcmp(composed->cPoints+1, element->cPoints+1, element->cSize-1)) {
-      // do it!
-      CE = uprv_uca_addContraction(t, CE, composed, status);
-#ifdef UCOL_DEBUG
-      fprintf(stderr, "Adding composed for %04X\n", *element->cPoints);
-#endif
+      if(composed->prefixSize != element->prefixSize || uprv_memcmp(composed->prefix, element->prefix, element->prefixSize)) {
+        // do it!
+        composed->mapCE = uprv_uca_addPrefix(t, element->mapCE, composed, status);
+      }
     }
     uprv_free(composed);
-
-    CE = uprv_uca_addContraction(t, CE, element, status);
-  } else { /* easy case, */
-    CE = ucmpe32_get(mapping, element->cPoints[0]);
-
-    if( CE != UCOL_NOT_FOUND) {
-      if(isCntTableElement(CE) /*isContraction(CE)*/) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
-            uprv_cnttab_setContraction(contractions, CE, 0, 0, element->mapCE, status);
-            /* This loop has to change the CE at the end of contraction REDO!*/
-            uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, status);
-        } else {
-          ucmpe32_set(mapping, element->cPoints[0], element->mapCE);
-#ifdef UCOL_DEBUG
-          fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
-          //*status = U_ILLEGAL_ARGUMENT_ERROR;
-#endif
-        }
-    } else {
-      ucmpe32_set(mapping, element->cPoints[0], element->mapCE);
-    }
   }
 
+  CE = uprv_uca_finalizeAddition(t, element, status);
 
   return CE;
 }
