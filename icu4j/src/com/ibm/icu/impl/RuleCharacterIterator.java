@@ -26,16 +26,10 @@ public class RuleCharacterIterator {
     // TODO: Ideas for later.  (Do not implement if not needed, lest the
     // code coverage numbers go down due to unused methods.)
     // 1. Add a copy constructor, equals() method, clone() method.
-    // 2. Add caching of the current code point, so that repeated calls
-    // to current() become fast as long as the options do not change.
-    // The options bitmask must be cached too.
-    // 3. Add caching of the future position, so current() followed by
-    // next() becomes fast, as long as the options do not change.
-    // 4. Rather than return DONE, throw an exception if the end
+    // 2. Rather than return DONE, throw an exception if the end
     // is reached -- this is an alternate usage model, probably not useful.
-    // 5. Return isEscaped from next() and current().  If this happens,
-    // don't keep an isEscaped member variable, and getState() and getPos()
-    // become the same.
+    // 3. Return isEscaped from next().  If this happens,
+    // don't keep an isEscaped member variable.
 
     /**
      * Text being iterated.
@@ -125,7 +119,7 @@ public class RuleCharacterIterator {
 
     /**
      * Returns the next character using the given options, or DONE if there
-     * are no more characters, and advance the internal state to the next
+     * are no more characters, and advance the position to the next
      * character.
      * @param options one or more of the following options, bitwise-OR-ed
      * together: PARSE_VARIABLES, PARSE_ESCAPES, SKIP_WHITESPACE.
@@ -180,26 +174,9 @@ public class RuleCharacterIterator {
     }
 
     /**
-     * Returns the current character using the given options, or DONE if there
-     * are no more characters.  NOTE: This method should be avoided if
-     * possible; next() is preferred for performance reasons.  The
-     * implementation of this method is to save the current position, call
-     * next(), and restore the position.
-     * @param options one or more of the following options, bitwise-OR-ed
-     * together: PARSE_VARIABLES, PARSE_ESCAPES, SKIP_WHITESPACE.
-     * @return the current 32-bit code point, or DONE
-     */
-    public int current(int options) {
-        Object start = getPos();
-        int c = next(options);
-        setPos(start);
-        return c;
-    }
-
-    /**
-     * Returns true if the last character returned by next() or current() was
-     * escaped.  This will only be the case if the option passed in to next()
-     * or current() included PARSE_ESCAPED and the next character was an
+     * Returns true if the last character returned by next() was
+     * escaped.  This will only be the case if the option passed in to
+     * next() included PARSE_ESCAPED and the next character was an
      * escape sequence.
      */
     public boolean isEscaped() {
@@ -214,45 +191,43 @@ public class RuleCharacterIterator {
     }
 
     /**
-     * Returns an object which, when later passed to setState(), will restore
-     * this iterator's state.
-     * @return a state object which may be passed to setState().
+     * Returns an object which, when later passed to setPos(), will
+     * restore this iterator's position.  Usage idiom:
+     *
+     * RuleCharacterIterator iterator = ...;
+     * Object pos = iterator.getPos(null); // allocate position object
+     * for (;;) {
+     *   pos = iterator.getPos(pos); // reuse position object
+     *   int c = iterator.next(...);
+     *   ...
+     * }
+     * iterator.setPos(pos);
+     *
+     * @param p a position object previously returned by getPos(),
+     * or null.  If not null, it will be updated and returned.  If
+     * null, a new position object will be allocated and returned.
+     * @return a position object which may be passed to setPos(),
+     * either `p,' or if `p' == null, a newly-allocated object
      */
-    public Object getState() {
-        return new Object[] { buf, new int[] { pos.getIndex(), bufPos,
-                                               isEscaped?1:0 } };
-    }
-
-    /**
-     * Restores this iterator's state to its value when getState() was
-     * previously called, returning the given object.
-     * @param save a state object previously returned by getState().
-     */
-    public void setState(Object save) {
-        Object[] a = (Object[]) save;
-        buf = (char[]) a[0];
+    public Object getPos(Object p) {
+        if (p == null) {
+            return new Object[] {buf, new int[] {pos.getIndex(), bufPos}};
+        }
+        Object[] a = (Object[]) p;
+        a[0] = buf;
         int[] v = (int[]) a[1];
-        pos.setIndex(v[0]);
-        bufPos = v[1];
-        isEscaped = (v[2] != 0);
+        v[0] = pos.getIndex();
+        v[1] = bufPos;
+        return p;
     }
 
     /**
-     * Returns an object which, when later passed to setPos(), will restore
-     * this iterator's position.
-     * @return a position object which may be passed to setPos().
+     * Restores this iterator to the position it had when getPos()
+     * returned the given object.
+     * @param p a position object previously returned by getPos()
      */
-    private Object getPos() {
-        return new Object[] { buf, new int[] { pos.getIndex(), bufPos } };
-    }
-
-    /**
-     * Restores this iterator's position to its value when getPos() was
-     * previously called, returning the given object.
-     * @param save a position object previously returned by getPos().
-     */
-    private void setPos(Object save) {
-        Object[] a = (Object[]) save;
+    public void setPos(Object p) {
+        Object[] a = (Object[]) p;
         buf = (char[]) a[0];
         int[] v = (int[]) a[1];
         pos.setIndex(v[0]);
@@ -287,7 +262,7 @@ public class RuleCharacterIterator {
      * parse the string returned by lookahead(), then call jumpahead() to
      * resynchronize the iterator.
      * @return a string containing the characters to be returned by future
-     * calls to next() or current()
+     * calls to next()
      */
     public String lookahead() {
         if (buf != null) {
@@ -347,7 +322,7 @@ public class RuleCharacterIterator {
             return (i < text.length()) ? UTF16.charAt(text, i) : DONE;
         }
     }
-
+    
     /**
      * Advances the position by the given amount.
      * @param count the number of 16-bit code units to advance past
