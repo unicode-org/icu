@@ -111,7 +111,7 @@ typedef struct {
   UChar *sourceCurrent;
   UChar *extraCurrent;
   UChar *extraEnd;
-  const InverseTableHeader *invUCA;
+  const InverseUCATableHeader *invUCA;
   const UCollator *UCA;
   UHashtable *tailored;
   UColOptionSet *opts;

@@ -357,7 +357,7 @@ ucol_open(    const    char         *loc,
     result = ucol_initCollator(UCA->image, result, status);
     // if we use UCA, real locale is root
     result->rb = ures_open(NULL, "", status);
-    result->binary = ures_open(NULL, "", status);
+    result->elements = ures_open(NULL, "", status);
     if(U_FAILURE(*status)) {
       goto clean;
     }
@@ -367,6 +367,7 @@ ucol_open(    const    char         *loc,
     binary = ures_getByKey(collElem, "%%CollationBin", NULL, &binaryStatus);
 
     if(binaryStatus == U_MISSING_RESOURCE_ERROR) { /* we didn't find the binary image, we should use the rules */
+      binary = NULL;
       result = tryOpeningFromRules(collElem, status);
       if(U_FAILURE(*status)) {
         goto clean;
@@ -377,6 +378,7 @@ ucol_open(    const    char         *loc,
       UCATableHeader *colData = (UCATableHeader *)inData;
       if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
         uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0) {
+        *status = U_DIFFERENT_UCA_VERSION;
         result = tryOpeningFromRules(collElem, status);
       } else {
         if(U_FAILURE(*status)){
@@ -397,9 +399,9 @@ ucol_open(    const    char         *loc,
           result->hasRealData = FALSE;
         }
       }
-      result->binary = binary;
-      result->rb = b;
     }
+    result->rb = b;
+    result->elements = collElem;
   } else { /* There is another error, and we're just gonna clean up */
 clean:
     ures_close(b);
@@ -422,7 +424,7 @@ clean:
   }
   uprv_strcpy(result->requestedLocale, loc);
 
-  ures_close(collElem);
+  ures_close(binary);
   return result;
 }
 
@@ -492,8 +494,8 @@ ucol_close(UCollator *coll)
     } else if(coll->hasRealData == TRUE) {
       uprv_free((UCATableHeader *)coll->image);
     }
-    if(coll->binary != NULL) {
-      ures_close(coll->binary);
+    if(coll->elements != NULL) {
+      ures_close(coll->elements);
     }
     if(coll->validLocale != NULL) {
       uprv_free(coll->validLocale);
@@ -637,7 +639,7 @@ ucol_openRules( const UChar        *rules,
       result->freeRulesOnClose = TRUE;
     }
     result->rb = NULL;
-    result->binary = NULL;
+    result->elements = NULL;
     result->validLocale = NULL;
     result->requestedLocale = NULL;
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
@@ -1071,9 +1073,12 @@ uprv_uca_initImplicitConstants(uint32_t baseByte)
   IMPLICIT_BASE_4BYTE = ((IMPLICIT_BASE_BYTE + IMPLICIT_3BYTE_COUNT) << 24) + 0x030303;
 }
     
-void ucol_initUCA(UErrorCode *status) {
-    if(U_FAILURE(*status))
-        return;
+/* do not close UCA returned by ucol_initUCA! */
+UCollator *
+ucol_initUCA(UErrorCode *status) {
+    if(U_FAILURE(*status)) {
+        return NULL;
+    }
     
     if(UCA == NULL) {
         UCollator *newUCA = NULL;
@@ -1090,7 +1095,7 @@ void ucol_initUCA(UErrorCode *status) {
             newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
             if(U_SUCCESS(*status)){
                 newUCA->rb = NULL;
-		newUCA->binary = NULL;
+		newUCA->elements = NULL;
 		newUCA->validLocale = NULL;
 		newUCA->requestedLocale = NULL;
 		newUCA->hasRealData = FALSE; // real data lives in .dat file...
@@ -1121,6 +1126,7 @@ void ucol_initUCA(UErrorCode *status) {
             }
         }
     }
+    return UCA;
 }
 
 
@@ -8267,8 +8273,8 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
     // is considered to be the valid locale.
     if (coll->validLocale != NULL) {
       result = coll->validLocale;
-    } else if(coll->binary != NULL) {
-      result = ures_getLocale(coll->binary, status);
+    } else if(coll->elements != NULL) {
+      result = ures_getLocale(coll->elements, status);
     }
     break;
   case ULOC_VALID_LOCALE:
