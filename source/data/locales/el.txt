@@ -120,9 +120,12 @@ el {
     // Rule Based Number Format Support
     //------------------------------------------------------------
 
+/*
+ * omit rules for Greek until we have complete and valid data.
+
 //         * Spellout rules for Greek.  Again in Greek we have to supply the words
 //         * for the multiples of 100 because they can't be derived algorithmically.
-//         * Also, the tens dgit changes form when followed by a ones digit: an
+//         * Also, the tens digit changes form when followed by a ones digit: an
 //         * accent mark disappears from the tens digit and moves to the ones digit.
 //         * Therefore, instead of using the [] notation, we actually have to use
 //         * two separate rules for each multiple of 10 to show the two forms of
@@ -164,6 +167,7 @@ el {
             "1,000,000,000: << \u03b4\u03b9\u03c3\u03b5\u03ba\u03b1\u03c4\u03bf\u03bc\u03bc\u03b9\u03cc\u03c1\u03b9\u03bf[ >>];\n"
             "1,000,000,000,000: =#,##0="
      }           
+*/
 
     TransliterateLATIN {
         "UNGEGN",
