@@ -148,7 +148,7 @@ public abstract class UnicodeProperty implements UCD_Types {
       /**
        * Does it have the propertyValue?
        */
-      abstract boolean hasValue(int cp);
+      abstract public boolean hasValue(int cp);
       
       /**
        * Get the set of characters it contains

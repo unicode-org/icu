@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2002/07/03 02:15:47 $
-* $Revision: 1.8 $
+* $Date: 2002/08/04 21:38:44 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -299,26 +299,14 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             case COMBINING_CLASS>>8: return ucd.getCombiningClassID_fromIndex((byte)propValue, style);
             case BIDI_CLASS>>8: return ucd.getBidiClassID_fromIndex((byte)propValue, style);
             case DECOMPOSITION_TYPE>>8: return ucd.getDecompositionTypeID_fromIndex((byte)propValue, style);
-            case NUMERIC_TYPE>>8: if (propValue >= LIMIT_NUMERIC_TYPE) break;
-                if (style != SHORT) return ucd.getNumericTypeID_fromIndex((byte)propValue);
-                return UCD_Names.SHORT_NT[propValue];
-            case EAST_ASIAN_WIDTH>>8: if (propValue >= LIMIT_EAST_ASIAN_WIDTH) break;
-                if (style != LONG) return ucd.getEastAsianWidthID_fromIndex((byte)propValue);
-                return UCD_Names.SHORT_EA[propValue];
-            case LINE_BREAK>>8:  if (propValue >= LIMIT_LINE_BREAK) break;
-                if (style != LONG) return ucd.getLineBreakID_fromIndex((byte)propValue);
-                return UCD_Names.LONG_LB[propValue];
-            case JOINING_TYPE>>8: if (propValue >= LIMIT_JOINING_TYPE) break;
-                if (style != LONG) return ucd.getJoiningTypeID_fromIndex((byte)propValue);
-                return UCD_Names.LONG_JOINING_TYPE[propValue];
-            case JOINING_GROUP>>8: if (propValue >= LIMIT_JOINING_GROUP) break;
-                return ucd.getJoiningGroupID_fromIndex((byte)propValue);
+            case NUMERIC_TYPE>>8: ucd.getNumericTypeID_fromIndex((byte)propValue, style);
+            case EAST_ASIAN_WIDTH>>8: return ucd.getEastAsianWidthID_fromIndex((byte)propValue);
+            case LINE_BREAK>>8: return ucd.getLineBreakID_fromIndex((byte)propValue, style);
+            case JOINING_TYPE>>8: return ucd.getJoiningTypeID_fromIndex((byte)propValue);
+            case JOINING_GROUP>>8: return ucd.getJoiningGroupID_fromIndex((byte)propValue);
             case BINARY_PROPERTIES>>8: return ucd.getBinaryPropertiesID_fromIndex((byte)propValue, style);
-            case SCRIPT>>8: if (propValue >= LIMIT_SCRIPT) break;
-                if (style != SHORT) return ucd.getScriptID_fromIndex((byte)propValue);
-                return UCD_Names.ABB_SCRIPT[propValue];
-            case AGE>>8: if (propValue >= LIMIT_AGE) break;
-                return ucd.getAgeID_fromIndex((byte)propValue);
+            case SCRIPT>>8: return ucd.getScriptID_fromIndex((byte)propValue);
+            case AGE>>8: return ucd.getAgeID_fromIndex((byte)propValue);
                 /*
             case DERIVED>>8:
                 UnicodeProperty up = DerivedProperty.make(propValue, ucd);

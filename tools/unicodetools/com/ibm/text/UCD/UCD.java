@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/07/30 09:56:40 $
-* $Revision: 1.16 $
+* $Date: 2002/08/04 21:38:45 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -737,12 +737,20 @@ public final class UCD implements UCD_Types {
         return UCD_Names.NT[prop];
     }
 
+    public static String getNumericTypeID_fromIndex(byte prop, byte style) {
+        return style == SHORT ? UCD_Names.SHORT_NT[prop] : UCD_Names.NT[prop];
+    }
+
     public String getEastAsianWidthID(int codePoint) {
         return getEastAsianWidthID_fromIndex(getEastAsianWidth(codePoint));
     }
 
     public static String getEastAsianWidthID_fromIndex(byte prop) {
         return UCD_Names.EA[prop];
+    }
+
+    public static String getEastAsianWidthID_fromIndex(byte prop, byte style) {
+        return style != LONG ? UCD_Names.SHORT_EA[prop] : UCD_Names.EA[prop];
     }
 
     public String getLineBreakID(int codePoint) {
@@ -753,6 +761,10 @@ public final class UCD implements UCD_Types {
         return UCD_Names.LB[prop];
     }
 
+    public static String getLineBreakID_fromIndex(byte prop, byte style) {
+        return style != LONG ? UCD_Names.LB[prop] : UCD_Names.LONG_LB[prop];
+    }
+
     public String getJoiningTypeID(int codePoint) {
         return getJoiningTypeID_fromIndex(getJoiningType(codePoint));
     }
@@ -761,11 +773,20 @@ public final class UCD implements UCD_Types {
         return UCD_Names.JOINING_TYPE[prop];
     }
 
+    public static String getJoiningTypeID_fromIndex(byte prop, byte style) {
+        return style != LONG ? UCD_Names.JOINING_TYPE[prop] : UCD_Names.LONG_JOINING_TYPE[prop];
+    }
+
     public String getJoiningGroupID(int codePoint) {
         return getJoiningGroupID_fromIndex(getJoiningGroup(codePoint));
     }
 
     public static String getJoiningGroupID_fromIndex(byte prop) {
+        return UCD_Names.JOINING_GROUP[prop];
+    }
+
+    public static String getJoiningGroupID_fromIndex(byte prop, byte style) {
+        // no short version
         return UCD_Names.JOINING_GROUP[prop];
     }
 
@@ -787,6 +808,11 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getAgeID_fromIndex(byte prop) {
+        return UCD_Names.AGE[prop];
+    }
+
+    public static String getAgeID_fromIndex(byte prop, byte style) {
+        // no short for
         return UCD_Names.AGE[prop];
     }
 

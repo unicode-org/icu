@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.19 $
+* $Date: 2002/08/04 21:38:45 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -78,7 +78,7 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("TestNormalization")) TestNormalization.main(null);
             
             
-            else if (arg.equalsIgnoreCase("linebreaktest")) GenerateLineBreakTest.main(null);
+            else if (arg.equalsIgnoreCase("breaktest")) GenerateBreakTest.main(null);
 
             else if (arg.equalsIgnoreCase("genSplit")) GenerateData.genSplit();
             else if (arg.equalsIgnoreCase("iana")) IANANames.testSensitivity();
