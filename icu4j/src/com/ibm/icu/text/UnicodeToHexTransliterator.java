@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2003/06/03 18:49:35 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/07/23 19:27:34 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -246,6 +246,9 @@ public class UnicodeToHexTransliterator extends Transliterator {
         return pattern;
     }
 
+    // (The following method is not called but this class is due for removal
+    // so we aren't writing new tests for it.  2003-07-23 ICU 2.8 Alan)
+    ///CLOVER:OFF
     /**
      * Returns the string that precedes the four hex digits.
      * @return prefix string
@@ -254,7 +257,11 @@ public class UnicodeToHexTransliterator extends Transliterator {
     public String getPrefix() {
         return prefix;
     }
+    ///CLOVER:ON
 
+    // (The following method is not called but this class is due for removal
+    // so we aren't writing new tests for it.  2003-07-23 ICU 2.8 Alan)
+    ///CLOVER:OFF
     /**
      * Sets the string that precedes the four hex digits.
      *
@@ -267,6 +274,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
+    ///CLOVER:ON
 
     /**
      * Returns true if this transliterator outputs uppercase hex digits.
