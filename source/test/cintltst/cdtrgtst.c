@@ -273,7 +273,7 @@ void Test4060212()
     log_verbose( "dateString= %s Using yyyy-DDD.hh:mm:ss\n", austrdup(dateString) );
     status = U_ZERO_ERROR;
     
-    formatter = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
+    formatter = udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
     pos=0;
     myDate = udat_parse(formatter, dateString, u_strlen(dateString), &pos, &status);
     
