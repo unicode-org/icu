@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/06/03 22:41:25 $ 
-* $Revision: 1.77 $
+* $Date: 2003/06/04 03:22:53 $ 
+* $Revision: 1.78 $
 *
 *******************************************************************************
 */
@@ -2485,44 +2485,26 @@ public final class UCharacter
     }
 
     /**
-     * <p>
-     * Determines if the specified character should be regarded as an ignorable 
-     * character in a Java identifier or a Unicode identifier.
-     * </p>
-     * <p>
-     * The following Unicode characters are ignorable in a Java identifier or a 
-     * Unicode identifier:<br>
-     * ISO control characters that are not whitespace
-     * <ul>
-     * <li> '\u0000' through '\u0008'
-     * <li> '\u000E' through '\u001B'
-     * <li> '\u007F' through '\u009F' 
-     * <li> all characters that have the FORMAT general category value 
-     * </p>
-     * <p>
-     * Same as java.lang.Character.isIdentifierIgnorable()
-     * </p>
-     * <p>
-     * Note that Unicode just recommends to ignore Cf (format controls).
-     * </p>
-     * @param c the code point to be tested
-     * @return true if the code point is ignorable in identifiers according to 
-     *         Java
-     *
-     * @see #isUnicodeIdentifierStart(int)
-     * @see #isUnicodeIdentifierPart(int)
+     * Determines if the specified code point should be regarded as an 
+     * ignorable character in a Unicode identifier.
+     * A character is ignorable in the Unicode standard if it is of the type 
+     * Cf, Formatting code.<br>
+     * Up-to-date Unicode implementation of 
+     * java.lang.Character.isIdentifierIgnorable().<br>
+     * See <a href=http://www.unicode.org/unicode/reports/tr8/>UTR #8</a>.
+     * @param ch code point to be determined if it can be ignored in a Unicode 
+     *        identifier.
+     * @return true if the code point is ignorable
      * @stable ICU 2.1
      */
     public static boolean isIdentifierIgnorable(int ch)
     {
         // see java.lang.Character.isIdentifierIgnorable() on range of 
         // ignorable characters.
-        if (ch <= 0x9f) {
-            return isISOControl(ch) 
-                   && !((ch >= 0x9 && ch <= 0xd) 
-                        || (ch >= 0x1c && ch <= 0x1f));
-        } 
-        return getType(ch) == UCharacterCategory.FORMAT;
+        return ch <= 8 || (ch >= 0xe && ch <= 0x1b) 
+               || (ch >= 0x7f && ch <= 0x9f) 
+               || (ch >= 0x200a && ch <= 0x200f) 
+               || (ch >= 0x206a && ch <= 0x206f) || ch == 0xfeff;
     }
                       
     /**
