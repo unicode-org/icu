@@ -116,7 +116,7 @@ struct UConverter {
                                      UErrorCode *);
     /*
      * Error function pointer called when conversion issues
-     * occur during a T_UConverter_toUnicode call
+     * occur during a ucnv_toUnicode call
      */
     void (U_EXPORT2 *fromCharErrorBehaviour) (const void *context,
                                     UConverterToUnicodeArgs *args,
