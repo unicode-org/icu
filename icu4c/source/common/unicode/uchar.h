@@ -56,12 +56,12 @@ U_CDECL_BEGIN
  *
  * For more information see
  * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
- * and the ICU User Guide chapter on Properties (http://oss.software.ibm.com/icu/userguide/properties.html).
+ * and the ICU User Guide chapter on Properties (http://icu.sourceforge.net/userguide/properties.html).
  *
  * Many functions are designed to match java.lang.Character functions.
  * See the individual function documentation,
- * and see the JDK 1.4.1 java.lang.Character documentation
- * at http://java.sun.com/j2se/1.4.1/docs/api/java/lang/Character.html
+ * and see the JDK 1.4 java.lang.Character documentation
+ * at http://java.sun.com/j2se/1.4/docs/api/java/lang/Character.html
  *
  * There are also functions that provide easy migration from C/POSIX functions
  * like isblank(). Their use is generally discouraged because the C/POSIX

@@ -29,7 +29,7 @@ h3.doc { background: #CCCCFF }
 Nov 22, 2004<br>
 </p>
 <p>For the most recent release, see the <a
- href="http://oss.software.ibm.com/icu4j/download/index.html"> ICU4J
+ href="http://www.ibm.com/software/globalization/icu/downloads.jsp"> ICU4J
 download site</a>. </p>
 <h3 class="doc">Contents</h3>
 <ul type="disc">
@@ -70,48 +70,48 @@ internationalization API design.</p>
 </p>
 <ul>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/Collate_Intro.html"><b>Collation</b></a>
+ href="http://icu.sourceforge.net/userguide/Collate_Intro.html"><b>Collation</b></a>
 &#8211; rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order<br>
 &nbsp;&nbsp;&nbsp;&nbsp;For fast multilingual string comparison; faster
 and more complete than
 the JDK</li>
-  <li><a href="http://oss.software.ibm.com/icu/userguide/strings.html"><b>Supplementary
+  <li><a href="http://icu.sourceforge.net/userguide/strings.html"><b>Supplementary
 Characters</b></a> &#8211; String manipulation and character properties<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for proper GB 18030 and JIS 213
 repertoire support</li>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/unicodeSet.html"><b>UnicodeSet</b></a>
+ href="http://icu.sourceforge.net/userguide/unicodeSet.html"><b>UnicodeSet</b></a>
 &#8211; standard set operations optimized for sets of Unicode characters<br>
 &nbsp;&nbsp;&nbsp;&nbsp;UnicodeSets can be built from string patterns
 using any Unicode properties.</li>
-  <li><a href="http://oss.software.ibm.com/icu/userguide/Transform.html"><b>Transforms</b></a>
+  <li><a href="http://icu.sourceforge.net/userguide/Transform.html"><b>Transforms</b></a>
 &#8211; a flexible mechanism for Unicode text conversions<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Including Full/Halfwidth conversions,
 Normalization, Case conversions, Hex
 conversions, and transliterations between scripts (50+ pairs)</li>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/normalization.html"><b>Unicode
+ href="http://icu.sourceforge.net/userguide/normalization.html"><b>Unicode
 Normalization</b></a> &#8211; NFC, NFD, NFKD, NFKC<br>
 &nbsp;&nbsp;&nbsp;&nbsp;For canonical text representations, needed for
 XML and the net</li>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/dateCalendar.html"><b>International
+ href="http://icu.sourceforge.net/userguide/dateCalendar.html"><b>International
 Calendars</b></a> &#8211; Arabic, Buddhist, Hebrew, and Japanese calendars<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in
 certain countries</li>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/formatNumbers.html"><b>Number
+ href="http://icu.sourceforge.net/userguide/formatNumbers.html"><b>Number
 Format
 Enhancements</b></a> &#8211; Scientific Notation, Spelled-out, etc.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java number
 formatting. The spell-out format is
 used for checks and similar documents</li>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/boundaryAnalysis.html"><b>Enhanced
+ href="http://icu.sourceforge.net/userguide/boundaryAnalysis.html"><b>Enhanced
 Word-Break Detection</b></a> &#8211; Rule-based, supports Thai<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Required for correct support of Thai</li>
   <li><a
- href="http://oss.software.ibm.com/icu/userguide/compression.html"><b>Unicode
+ href="http://icu.sourceforge.net/userguide/compression.html"><b>Unicode
 Text
 Compression</b></a> &#8211; Standard compression of Unicode text<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields,
@@ -224,22 +224,22 @@ Transliterator data
 now in separate resource trees</a></h4>
 <p>
 More resource data has been moved out of the core resources into
-separate resource trees.&nbsp; This will make it easier for clients to
+separate resource trees. This will make it easier for clients to
 trim the data used by ICU4J.<br>
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
-The ICU projects (ICU4C and ICU4J) use the X license.&nbsp; The X
+The ICU projects (ICU4C and ICU4J) use the X license. The X
 license is a <b>non-viral</b> and recommended free software license
-that is compatible with the GNU GPL license.&nbsp; This became
+that is compatible with the GNU GPL license. This became
 effective with release 1.8.1 of ICU4C and release 1.3.1 of ICU4J in
 mid-2001. All new ICU releases will adopt the X license; previous ICU
-releases continue to utilize the IPL (IBM Public License).&nbsp; Users
+releases continue to utilize the IPL (IBM Public License). Users
 of previous releases of ICU who want to adopt new ICU releases will
 need to accept the terms and conditions of the X license.
 </p>
 <p>
-The main effect of the change is to provide GPL compatibility.&nbsp;
+The main effect of the change is to provide GPL compatibility.
 The X license is listed as GPL compatible, see the GNU page at <a
  href="http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">
 http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.
@@ -248,7 +248,7 @@ mean that projects using ICU become subject to GPL.
 </p>
 <p>
 The text of the X license is available at <a
- href="http://www.x.org/terms.htm">http://www.x.org/terms.htm</a>. The
+ href="http://www.x.org/Downloads_terms.html">http://www.x.org/Downloads_terms.html</a>. The
 IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
  href="license.html">ICU's license</a> is included in the download
@@ -295,12 +295,12 @@ platforms:
   <li><b>Official Release Snapshot:</b><br>
 If you want to use ICU4J (as opposed to developing it), your best bet
 is to download an official, packaged version of the ICU4J source
-code.&nbsp; These versions are tested more thoroughly than day-to-day
+code. These versions are tested more thoroughly than day-to-day
 development builds, and they are packaged in zip files for convenient
-download.&nbsp; These packaged files can be found at <a
- href="http://oss.software.ibm.com/icu4j/download/index.html">http://oss.software.ibm.com/icu4j/download/index.html</a>.&nbsp;
+download. These packaged files can be found at <a
+ href="http://ibm.com/software/globalization/icu/downloads.jsp">http://ibm.com/software/globalization/icu/downloads.jsp</a>.
 If a packaged snapshot is named <b>ICU4JXXXXXX.zip</b>, where XXXXXX
-is the release version number.&nbsp; Please unzip this file.&nbsp; It
+is the release version number. Please unzip this file. It
 will reconstruct the source directory. </li>
 </ul>
 <ul type="disc">
@@ -309,58 +309,15 @@ If you are interested in developing features, patches, or bug fixes for
 ICU4J, you should probably be working with the latest version of the
 ICU4J source code. You will need to check the code out of our CVS
 repository to ensure that you have the most recent version of all of
-the files. There are several ways to do this: <br>
-    <ul type="circle">
-      <li>WebCVS:<br>
-If you want to browse the code and only make occasional downloads, you
-may want to use WebCVS. It provides a convenient, web-based interface
-for browsing and downloading the latest version of the ICU4J source
-code and documentation. You can also view each file's revision history,
-display the differences between individual revisions, determine which
-revisions were part of which official release, and so on. <br>
-      </li>
-      <li>WinCVS:<br>
-If you will be doing serious work on ICU4J, you should probably install
-a CVS client on your own machine so that you can do batch operations
-without going through the WebCVS interface. On Windows, we suggest the
-WinCVS client. To download ICU4J via WinCVS:
-        <ol>
-          <li>Install the WinCVS client, which you can download from
-the <a href="http://www.wincvs.org">http://www.wincvs.org</a>.</li>
-          <li>Select <strong>Preferences</strong> from the <strong>Admin</strong>
-menu.
-            <ol type="a">
-              <li>On the <strong>General</strong> tab panel: Set your <strong>CVSROOT</strong>
-to "<strong>:pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu4j</strong>".<br>
-Leave other options on this page at their default.</li>
-              <li>On the <strong>Ports</strong> tab panel: Check the <strong>pserver</strong>
-checkbox and enter port <strong>2401</strong>.</li>
-            </ol>
-          </li>
-          <li>Click on the Login menu button (<strong>Admin</strong>
-menu). Enter in "<strong>anoncvs</strong>" when requested.</li>
-          <li>To extract the most recent version of ICU4J, select <strong>Checkout
-module</strong> from the <strong>Create</strong> menu. Specify "<strong>icu4j</strong>"
-for the module name. This will create a new copy of the workspace on
-your local hard drive.</li>
-          <li>In the future, you can download updated files from the
-repository to your hard drive using the <strong>Update selection</strong>
-item in the <strong>Modify</strong> menu.<br>
-          </li>
-        </ol>
-      </li>
-      <li>CVS command line:<br>
-You can also check out the repository anonymously on UNIX using the
-following commands, after first setting your CVSROOT to point to the
-ICU4J repository:
-        <pre><code>export CVSROOT=:pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu4j<br>cvs login CVS password: anoncvs<br>cvs checkout icu4j<br>cvs logout</code></pre>
-      </li>
-    </ul>
+the files. There are several ways to do this. Please follow the
+directions that are contained on the <a
+ href="http://ibm.com/software/globalization/icu/repository.jsp">Source
+ Repository page</a> for details.
   </li>
 </ul>
 <p>For more details on how to download ICU4J directly from the web
 site, please also see <a
- href="http://oss.software.ibm.com/icu4j/download/index.html">http://oss.software.ibm.com/icu4j/download/index.html</a>
+ href="http://ibm.com/software/globalization/icu/downloads.jsp">http://ibm.com/software/globalization/icu/downloads.jsp</a>
 </p>
 <h3 class="doc"><a name="WhatContain"></a>The Structure and Contents of
 ICU4J</h3>
@@ -520,53 +477,53 @@ part of ICU4J core, but rather part of a test, sample, or demo.</td>
 </table>
 <br>
 <h3 class="doc"><a name="API"></a>Where to get Documentation</h3>
-<p>The <a href="http://oss.software.ibm.com/icu/userguide/">ICU user's
+<p>The <a href="http://icu.sourceforge.net/userguide/">ICU user's
 guide</a> contains lots of general information about ICU, in its C,
 C++, and Java incarnations.</p>
 <p>The complete API documentation for ICU4J (javadoc) is available on
 the ICU4J web site, and can be built from the sources:
 </p>
 <ul>
-  <li><a href="http://oss.software.ibm.com/icu4j/doc/index.html">Index
+  <li><a href="http://icu.sourceforge.net/apiref/icu4j/">Index
 to all ICU4J API</a></li>
   <li>International Calendars &#8211; <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/IslamicCalendar.html">Islamic</a>,
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/util/IslamicCalendar.html">Islamic</a>,
     <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/BuddhistCalendar.html">Buddhist</a>,
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/util/BuddhistCalendar.html">Buddhist</a>,
     <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/HebrewCalendar.html">Hebrew</a>,
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/util/HebrewCalendar.html">Hebrew</a>,
     <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/util/JapaneseCalendar.html">Japanese</a>.</li>
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/util/JapaneseCalendar.html">Japanese</a>.</li>
   <li><a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/Normalizer.html">Unicode
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/Normalizer.html">Unicode
 Normalization</a> &#8211; Canonical text representation for W3C.</li>
   <li><a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/NumberFormat.html">Number
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/NumberFormat.html">Number
 Format Enhancements</a> &#8211; Scientific Notation, Spelled out.</li>
   <li><a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/BreakIterator.html">Enhanced
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/BreakIterator.html">Enhanced
 word-break detection</a> &#8211; Rule-based, supports Thai</li>
   <li><a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/Transliterator.html">Transliteration</a>
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/Transliterator.html">Transliteration</a>
 &#8211; A general framework for onverting text from one format to another,
 e.g. Cyrillic to Latin, or Hex to Unicode. </li>
   <li>Unicode Text <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/UnicodeCompressor.html">Compression</a>
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/UnicodeCompressor.html">Compression</a>
 &amp; <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/UnicodeDecompressor.html">Decompression</a>
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/UnicodeDecompressor.html">Decompression</a>
 &#8211; 2:1 compression on English Unicode text.</li>
   <li>Collation - <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/RuleBasedCollator.html">Rule-based
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/RuleBasedCollator.html">Rule-based
 sorting</a>, <a
- href="http://oss.software.ibm.com/icu4j/doc/com/ibm/icu/text/StringSearch.html">Efficient
+ href="http://icu.sourceforge.net/apiref/icu4j/com/ibm/icu/text/StringSearch.html">Efficient
 multi-lingual searching</a> </li>
 </ul>
 <h3 class="doc"><a name="HowToInstallJavac"></a>How to Install and Build</h3>
 <p>To install ICU4J, simply place the prebuilt jar file <strong>icu4j.jar</strong>
 on your
-Java CLASSPATH.&nbsp; No other files are needed.</p>
+Java CLASSPATH. No other files are needed.</p>
 <p><b>Eclipse users:</b> See the ICU4J site for information on<a
- href="http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.html">
+ href="http://icu.sourceforge.net/docs/eclipse_howto/eclipse_howto.html">
 how to configure Eclipse</a> to build ICU4J.</p>
 <p>To build ICU4J, you will need a Java2 JDK and the Ant build system.
 We strongly recommend using the Ant build system to build ICU4J.
@@ -749,7 +706,7 @@ listed.
 fully supported.
 <br>
 &#8225; Sizes are of the compressed jar file containing only this module.
-Full size is 3,047&nbsp;K.
+Full size is 3,047&nbsp;KB.
 </font></b></p>
 <p><b>Modules:</b><br>
 <table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
@@ -1367,23 +1324,23 @@ following command. <br>
 </ol>
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More
 Information</h3>
-<p><a href="http://oss.software.ibm.com/icu4j/">http://oss.software.ibm.com/icu4j/</a>
+<p><a href="http://ibm.com/software/globalization/icu/">http://ibm.com/software/globalization/icu/</a>
 is a
 pointer to general information about the International Components for
 Unicode in Java </p>
-<p><a href="http://www.ibm.com/developer/unicode">http://www.ibm.com/developer/unicode</a>
+<p><a href="http://ibm.com/software/globalization/">http://ibm.com/software/globalization/</a>
 is a pointer to
 information on how to make applications global. </p>
 <h3 class="doc"><a name="SubmittingComments"></a>Submitting Comments,
 Requesting Features and
 Reporting Bugs</h3>
-<p>Your comments are important to making ICU4J successful.&nbsp; We are
+<p>Your comments are important to making ICU4J successful. We are
 committed
 to fixing any bugs, and will use your feedback to help plan future
 releases.</p>
 <p>To submit comments, request features and report bugs, contact us
 through the <a
- href="http://oss.software.ibm.com/icu4j/archives/index.html">ICU4J
+ href="http://icu.sourceforge.net/contacts.html">ICU Support
 mailing list</a>.<br>
 While we are not able to respond individually to each comment, we do
 review all comments.</p>
