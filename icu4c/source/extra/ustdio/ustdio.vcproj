@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="ustdio"
 	SccProjectName=""
 	SccLocalPath="">
@@ -22,8 +22,8 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
 				OptimizeForProcessor="2"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\common"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;U_USTDIO_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -71,7 +71,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
@@ -135,9 +141,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -230,14 +244,16 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode
+"
 						Outputs="..\..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode
+"
 						Outputs="..\..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
@@ -247,14 +263,16 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode
+"
 						Outputs="..\..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\..\include\unicode
+"
 						Outputs="..\..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
