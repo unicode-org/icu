@@ -3,6 +3,8 @@ package com.ibm.icu.dev.test.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -24,10 +26,16 @@ public final class UnicodeMap implements Cloneable {
     private int length = 2;
     private int[] transitions = {0,0x110000,0,0,0,0,0,0,0,0};
     private Object[] values = new Object[10];
-    {
-        values[1] = "TERMINAL"; // just for debugging
-    }
+
     private int lastIndex = 0;
+    
+    public UnicodeMap(Equator equator) {
+        this.equator = equator;
+    }
+    
+    public UnicodeMap() {
+        this(SIMPLE_EQUATOR);
+    }
     
     /* Boilerplate */
     public boolean equals(Object other) {
@@ -98,7 +106,9 @@ public final class UnicodeMap implements Cloneable {
     public interface Equator {
         /**
           * Comparator function. If overridden, must handle case of null,
-          * and compare any two objects in the array
+          * and compare any two objects that could be compared.
+          * Must obey normal rules of symmetry: a=b => b=a
+          * and transitivity: a=b & b=c => a=b)
           * @param a
           * @param b
           * @return
@@ -106,13 +116,14 @@ public final class UnicodeMap implements Cloneable {
          public boolean isEqual(Object a, Object b);
 
         /**
+         * Must obey normal rules: a=b => getHashCode(a)=getHashCode(b)
          * @param object
          * @return
          */
         public int getHashCode(Object object);
     }
     
-    public static final class SimpleEquator implements Equator {
+    private static final class SimpleEquator implements Equator {
         public boolean isEqual(Object a, Object b) {
             if (a == b) return true;
             if (a == null || b == null) return false;
@@ -123,8 +134,8 @@ public final class UnicodeMap implements Cloneable {
             return a.hashCode();
         }
     }
-    private static Equator SIMPLE = new SimpleEquator(); 
-    private Equator equator = SIMPLE;
+    public static Equator SIMPLE_EQUATOR = new SimpleEquator(); 
+    private Equator equator = SIMPLE_EQUATOR;
  
     /**
      * Finds an index such that inversionList[i] <= codepoint < inversionList[i+1]
@@ -440,6 +451,56 @@ public final class UnicodeMap implements Cloneable {
             throw new IllegalArgumentException("Codepoint out of range: " + codepoint);
         }
         return values[_findIndex(codepoint)];
+    }
+    
+    /**
+     * Follow the style used by UnicodeSetIterator
+     */
+    public static class MapIterator {
+        public int codepoint;
+        public int codepointEnd;
+        public Object value;
+        
+        private UnicodeMap map;
+        private int index;
+        private int startRange;
+        private int endRange;
+        private Object lastValue;
+        
+        public MapIterator(UnicodeMap map) {
+            reset(map);
+        }
+        // note: length of 2 means {0, 110000}. Only want to index up to 0!
+        public boolean nextRange() {
+            if (index < 0 || index >= map.length - 1) return false;
+            value = map.values[index];
+            codepoint = startRange = map.transitions[index++];
+            codepointEnd = endRange = map.transitions[index] - 1; // -1 to make limit into end
+            return true;
+        }
+        public boolean next() {
+            if (startRange > endRange) {
+                //System.out.println("***" + Utility.hex(startRange) + ".." + Utility.hex(endRange));
+                if (!nextRange()) return false;
+                // index now points AFTER the start of the range
+                lastValue = map.values[index-1];
+                //System.out.println("***" + Utility.hex(codepoint) + ".." + Utility.hex(codepointEnd) + " => " + lastValue);
+            }
+            value = lastValue;
+            codepoint = codepointEnd = startRange++; // set to first, and iterate
+            return true;
+        }
+
+        public MapIterator reset() {
+            index = 0;
+            startRange = 0;
+            endRange = -1;
+            return this;
+        }
+        public MapIterator reset(UnicodeMap map) {
+            this.map = map;
+            return reset();
+        }
     }
     
     public String toString() {

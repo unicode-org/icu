@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/BagFormatter.java,v $
- * $Date: 2004/02/24 21:46:21 $
- * $Revision: 1.9 $
+ * $Date: 2004/03/28 00:23:30 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.text.*;
+import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.*;
 
 import java.io.*;
@@ -21,6 +22,7 @@ import java.util.*;
 import java.text.MessageFormat;
 
 public class BagFormatter {
+    static final boolean DEBUG = false;
     
     public static final Transliterator toHTML = Transliterator.createFromRules(
         "any-html",        
@@ -49,13 +51,16 @@ public class BagFormatter {
     private UnicodeProperty.Factory source;
     private UnicodeLabel nameSource;
     private UnicodeLabel labelSource;
+    private UnicodeLabel rangeBreakSource;
     private UnicodeLabel valueSource;
     private String propName = "";
     private boolean showCount = true;
     private boolean skipNullValues = true;
-    private boolean suppressReserved = true;
+    //private boolean suppressReserved = true;
     private boolean hexValue = false;
     private static final String NULL_VALUE = "_NULL_VALUE_";
+    private int fullTotal = -1;
+    private String lineSeparator = "\r\n";
     
     /**
      * Compare two UnicodeSets, and show the differences
@@ -326,10 +331,10 @@ public class BagFormatter {
             if (result != null)
                 return hcp + result;
             if (control.contains(codePoint)) return "<control-" + Utility.hex(codePoint, 4) + ">";
-            if (private_use.contains(codePoint)) return "<private use-" + Utility.hex(codePoint, 4) + ">";
+            if (private_use.contains(codePoint)) return "<private-use-" + Utility.hex(codePoint, 4) + ">";
             if (noncharacter.contains(codePoint)) return "<noncharacter-" + Utility.hex(codePoint, 4) + ">";
             if (surrogate.contains(codePoint)) return "<surrogate-" + Utility.hex(codePoint, 4) + ">";
-            if (suppressReserved) return "";
+            //if (suppressReserved) return "";
             return hcp + "<reserved-" + Utility.hex(codePoint, 4) + ">";
         }
         
@@ -434,8 +439,6 @@ public class BagFormatter {
         nf.setGroupingUsed(false);
     }
     
-    private String lineSeparator = "\r\n";
-
     private class MyVisitor extends Visitor {
         private PrintWriter output;
         Tabber.MonoTabber myTabber;
@@ -453,12 +456,12 @@ public class BagFormatter {
             if (propName.length() > 0) myTabber.add(propName.length() + 2,Tabber.LEFT);
             
             valueSize = getValueSource().getMaxWidth(shortValue);
-            System.out.println("ValueSize: " + valueSize);
+            if (DEBUG) System.out.println("ValueSize: " + valueSize);
             if (valueSize > 0) myTabber.add(valueSize + 2,Tabber.LEFT); // value
             
             myTabber.add(3,Tabber.LEFT); // comment character
             
-            labelSize = getLabelSource().getMaxWidth(shortLabel);
+            labelSize = getLabelSource(true).getMaxWidth(shortLabel);
             if (labelSize > 0) myTabber.add(labelSize + 1,Tabber.LEFT); // value
 
             if (mergeRanges && showCount) myTabber.add(5,Tabber.RIGHT);
@@ -467,11 +470,12 @@ public class BagFormatter {
             //myTabber.add(7,Tabber.LEFT);
 
             commentSeparator = (showCount || showLiteral != null 
-              || getLabelSource() != UnicodeProperty.NULL || getNameSource() != UnicodeProperty.NULL) 
+              || getLabelSource(true) != UnicodeProperty.NULL
+              || getNameSource() != UnicodeProperty.NULL) 
             ? "\t #" : "";
             
-            System.out.println("Tabber: " + myTabber.toString());
-            System.out.println("Tabber: " + myTabber.process("a\tb\td\td\tf\tg\th"));
+            if (DEBUG) System.out.println("Tabber: " + myTabber.toString());
+            if (DEBUG) System.out.println("Tabber: " + myTabber.process("a\tb\td\td\tf\tg\th"));
             doAt(c);
         }
 
@@ -487,7 +491,7 @@ public class BagFormatter {
 
         protected void doBefore(Object container, Object o) {
             if (showSetAlso && container instanceof UnicodeSet) {
-                output.print("#" + container + lineSeparator);
+                output.print("#" + container +  lineSeparator );
             }
         }
 
@@ -495,7 +499,15 @@ public class BagFormatter {
         }
 
         protected void doAfter(Object container, Object o) {
-            output.print(lineSeparator + "# Total code points: " + nf.format(counter));
+            if (fullTotal != -1 && fullTotal != counter) {
+                output.print(lineSeparator);     
+                output.print("# The above property value applies to " + nf.format(fullTotal-counter) + " code points not listed here." + lineSeparator);
+                output.print("# Total code points: " + nf.format(fullTotal) + lineSeparator);
+                fullTotal = -1;
+            } else {
+                output.print(lineSeparator);     
+                output.print("# Total code points: " + nf.format(counter) + lineSeparator);
+            }
         }
 
         protected void doSimpleAt(Object o) {
@@ -520,7 +532,7 @@ public class BagFormatter {
                             + insertLiteral(thing)
                             + "\t"
                             + getName(thing))
-                    + lineSeparator);
+                    +  lineSeparator );
                 counter++;
             }
         }
@@ -528,19 +540,19 @@ public class BagFormatter {
         protected void doAt(Visitor.CodePointRange usi) {
             if (!mergeRanges) {
                 for (int cp = usi.codepoint; cp <= usi.codepointEnd; ++cp) {
-                    String label = getLabelSource().getValue(cp, shortLabel);
-                    String value = getValue(cp, shortValue);
-                    showLine(cp, cp, label, value);
+                    showLine(cp, cp);
                 }
             } else {
                 rf.reset(usi.codepoint, usi.codepointEnd + 1);
                 while (rf.next()) {
-                    showLine(rf.start, rf.limit - 1, rf.label, rf.value);
+                    showLine(rf.start, rf.limit - 1);
                 }
             }
         }
 
-        private void showLine(int start, int end, String label, String value) {
+        private void showLine(int start, int end) {
+            String label = getLabelSource(true).getValue(start, shortLabel);
+            String value = getValue(start, shortValue);
             if (value == NULL_VALUE) return;
             
             counter += end - start + 1;
@@ -556,7 +568,7 @@ public class BagFormatter {
             if (labelSize > 0) {
                 label = "\t" + label;
             } else if (label.length() > 0) {
-                throw new IllegalArgumentException("maxwidth bogus " + label + ", " + getLabelSource().getMaxWidth(shortLabel));
+                throw new IllegalArgumentException("maxwidth bogus " + label + ", " + getLabelSource(true).getMaxWidth(shortLabel));
             }
             
             String count = "";
@@ -575,7 +587,7 @@ public class BagFormatter {
                         + count
                         + insertLiteral(start, end)
                         + getName("\t ", start, end))
-                + lineSeparator);
+                +  lineSeparator );
         }
 
         private String insertLiteral(String thing) {
@@ -652,7 +664,7 @@ public class BagFormatter {
     private class RangeFinder {
         int start, limit;
         private int veryLimit;
-        String label, value;
+        //String label, value;
         void reset(int start, int limit) {
             this.limit = start;
             this.veryLimit = limit;
@@ -661,13 +673,17 @@ public class BagFormatter {
             if (limit >= veryLimit)
                 return false;
             start = limit; // set to end of last
-            label = getLabelSource().getValue(limit, shortLabel);
-            value = getValue(limit, shortLabel);
+            String label = getLabelSource(false).getValue(limit, true);
+            String value = getValue(limit, true);
+            String breaker = getRangeBreakSource().getValue(limit,true);
+            if (DEBUG && limit < 0x7F) System.out.println("Label: " + label + ", Value: " + value + ", Break: " + breaker);
             limit++;
             for (; limit < veryLimit; limit++) {
-                String s = getLabelSource().getValue(limit, shortLabel);
-                String v = getValue(limit, shortLabel);
-                if (!equalTo(s, label) || !equalTo(v, value)) break;
+                String s = getLabelSource(false).getValue(limit, true);
+                String v = getValue(limit, true);
+                String b = getRangeBreakSource().getValue(limit, true);
+                if (DEBUG && limit < 0x7F) System.out.println("*Label: " + label + ", Value: " + value + ", Break: " + breaker);
+                if (!equalTo(s, label) || !equalTo(v, value) || !equalTo(b, breaker)) break;
             }
             // at this point, limit is the first item that has a different label than source
             // OR, we got to the end, and limit == veryLimit
@@ -711,7 +727,7 @@ public class BagFormatter {
         return this;
     }
 
-    public UnicodeLabel getLabelSource() {
+    public UnicodeLabel getLabelSource(boolean visible) {
         if (labelSource == null) {
             Map labelMap = new HashMap();
             //labelMap.put("Lo","L&");
@@ -820,19 +836,6 @@ public class BagFormatter {
             if (o != null) output.append(o.toString());
         }
     }
-    /**
-     * @return
-     */
-    public String getLineSeparator() {
-        return lineSeparator;
-    }
-
-    /**
-     * @param string
-     */
-    public void setLineSeparator(String string) {
-        lineSeparator = string;
-    }
 
     /**
      * @param label
@@ -933,6 +936,99 @@ public class BagFormatter {
      */
     public BagFormatter setHexValue(boolean b) {
         hexValue = b;
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public int getFullTotal() {
+        return fullTotal;
+    }
+
+    /**
+     * @param i
+     */
+    public BagFormatter setFullTotal(int i) {
+        fullTotal = i;
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public String getLineSeparator() {
+        return lineSeparator;
+    }
+
+    /**
+     * @param string
+     */
+    public BagFormatter setLineSeparator(String string) {
+        lineSeparator = string;
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public UnicodeLabel getRangeBreakSource() {
+        if (rangeBreakSource == null) {
+            Map labelMap = new HashMap();
+            // reflects the code point types on p 25
+            labelMap.put("Lo", "G&");
+            labelMap.put("Lm", "G&");
+            labelMap.put("Lu", "G&");
+            labelMap.put("Lt", "G&");
+            labelMap.put("Ll", "G&");
+            labelMap.put("Mn", "G&");
+            labelMap.put("Me", "G&");
+            labelMap.put("Mc", "G&");
+            labelMap.put("Nd", "G&");
+            labelMap.put("Nl", "G&");
+            labelMap.put("No", "G&");
+            labelMap.put("Zs", "G&");
+            labelMap.put("Pd", "G&");
+            labelMap.put("Ps", "G&");
+            labelMap.put("Pe", "G&");
+            labelMap.put("Pc", "G&");
+            labelMap.put("Po", "G&");
+            labelMap.put("Pi", "G&");
+            labelMap.put("Pf", "G&");
+            labelMap.put("Sm", "G&");
+            labelMap.put("Sc", "G&");
+            labelMap.put("Sk", "G&");
+            labelMap.put("So", "G&");
+
+            labelMap.put("Zl", "Cf");
+            labelMap.put("Zp", "Cf");
+
+            rangeBreakSource =
+                new UnicodeProperty
+                    .FilteredProperty(
+                        getUnicodePropertyFactory().getProperty(
+                            "General_Category"),
+                        new UnicodeProperty.MapFilter(labelMap))
+                    .setAllowValueAliasCollisions(true);
+
+            /*
+            "Cn", // = Other, Not Assigned 0
+            "Cc", // = Other, Control 15
+            "Cf", // = Other, Format 16
+            UnicodeProperty.UNUSED, // missing
+            "Co", // = Other, Private Use 18
+            "Cs", // = Other, Surrogate 19
+            */
+        }
+        return rangeBreakSource;
+    }
+
+    /**
+     * @param label
+     */
+    public BagFormatter setRangeBreakSource(UnicodeLabel label) {
+        if (label == null) label = UnicodeLabel.NULL;
+        rangeBreakSource = label;
         return this;
     }
 

@@ -1,7 +1,11 @@
 package com.ibm.icu.dev.test.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +16,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.ibm.icu.dev.test.AbstractTestLog;
 import com.ibm.icu.dev.test.TestBoilerplate;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
@@ -32,7 +37,7 @@ public class TestUtilities extends TestFmwk {
     UnicodeMap map1 = new UnicodeMap();
     Map map2 = new HashMap();
     Map map3 = new TreeMap();
-    UnicodeMap.Equator equator = new UnicodeMap.SimpleEquator();
+    UnicodeMap.Equator equator = UnicodeMap.SIMPLE_EQUATOR;
     SortedSet log = new TreeSet();
     static String[] TEST_VALUES = {null, "A", "B", "C", "D", "E", "F"};
     static Random random = new Random(12345);
@@ -54,16 +59,21 @@ public class TestUtilities extends TestFmwk {
             map2.put(new Integer(start), value);
             check(counter);
         }
+        checkNext(LIMIT);
+        
         logln("Setting General Category");
         map1 = new UnicodeMap();
-        map2 = new HashMap();
-        for (int cp = 0; cp < SET_LIMIT; ++cp) {
+        map2 = new TreeMap();
+        for (int cp = 0; cp <= SET_LIMIT; ++cp) {
               int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
               //if (enumValue <= 0) continue; // for smaller set
               String value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
               map1.put(cp, value);
               map2.put(new Integer(cp), value);
-        }
+        }       
+        checkNext(Integer.MAX_VALUE);
+
+
         logln("Comparing General Category");
         check(-1);
         logln("Comparing Values");
@@ -82,7 +92,7 @@ public class TestUtilities extends TestFmwk {
             if (!TestBoilerplate.verifySetsIdentical(this, set1, set2)) {
                 throw new IllegalArgumentException("Halting");
             }
-        }           
+        }   
 
         // check boilerplate
         List argList = new ArrayList();
@@ -94,6 +104,34 @@ public class TestUtilities extends TestFmwk {
         new UnicodeMapBoilerplate().run(args);
          // TODO: the following is not being reached
         new UnicodeSetBoilerplate().run(args);       
+    }
+
+    private void checkNext(int limit) {
+        logln("Comparing nextRange");
+        UnicodeMap.MapIterator mi = new UnicodeMap.MapIterator(map1);
+        Map map3 = new TreeMap();
+        while (mi.nextRange()) {
+            //System.out.println(Utility.hex(mi.codepoint) + ".." + Utility.hex(mi.codepointEnd) + " => " + mi.value);
+            for (int i = mi.codepoint; i <= mi.codepointEnd; ++i) {
+                if (i >= limit) continue;
+                map3.put(new Integer(i), mi.value);
+            }
+        }
+        checkMap(map2, map3);
+        
+        logln("Comparing next");
+        mi.reset();
+        map3 = new TreeMap();
+        Object lastValue = new Object();
+        while (mi.next()) {
+            if (!UnicodeMap.SIMPLE_EQUATOR.isEqual(lastValue, mi.value)) {
+                // System.out.println("Change: " + Utility.hex(mi.codepoint) + " => " + mi.value);
+                lastValue = mi.value;
+            }
+            if (mi.codepoint >= limit) continue;
+            map3.put(new Integer(mi.codepoint), mi.value);
+        }
+        checkMap(map2, map3);
     }
     
     public void check(int counter) {
@@ -108,6 +146,48 @@ public class TestUtilities extends TestFmwk {
                 errln("Log: " + TestBoilerplate.show(log));
                 errln("HashMap: " + TestBoilerplate.show(map2));
             }
+        }
+    }
+    
+    void checkMap(Map m1, Map m2) {
+        if (m1.equals(m2)) return;
+        StringBuffer buffer = new StringBuffer();
+        Set m1entries = m1.entrySet();
+        Set m2entries = m2.entrySet();
+        getEntries("\r\nIn First, and not Second", m1entries, m2entries, buffer, 20);
+        getEntries("\r\nIn Second, and not First", m2entries, m1entries, buffer, 20);
+        errln(buffer.toString());
+    }
+    
+    static Comparator ENTRY_COMPARATOR = new Comparator() {
+        public int compare(Object o1, Object o2) {
+            if (o1 == o2) return 0;
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
+            Map.Entry a = (Map.Entry) o1;
+            Map.Entry b = (Map.Entry) o2;
+            int result = compare2(a.getKey(), b.getKey());
+            if (result != 0) return result;
+            return compare2(a.getValue(), b.getValue());
+        }
+        private int compare2(Object o1, Object o2) {
+            if (o1 == o2) return 0;
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
+            return ((Comparable)o1).compareTo(o2);
+        }
+    };
+
+    private void getEntries(String title, Set m1entries, Set m2entries, StringBuffer buffer, int limit) {
+        Set m1_m2 = new TreeSet(ENTRY_COMPARATOR);
+        m1_m2.addAll(m1entries);
+        m1_m2.removeAll(m2entries);
+        buffer.append(title + ": " + m1_m2.size() + "\r\n");
+        for (Iterator it = m1_m2.iterator(); it.hasNext();) {
+            if (limit-- < 0) return;
+            Map.Entry entry = (Map.Entry) it.next();
+            buffer.append(entry.getKey()).append(" => ")
+             .append(entry.getValue()).append("\r\n");
         }
     }
     
@@ -148,7 +228,7 @@ public class TestUtilities extends TestFmwk {
         System.gc();
         double start = System.currentTimeMillis();
         for (int j = 0; j < iterations; ++j)
-          for (int cp = 0; cp < SET_LIMIT; ++cp) {
+          for (int cp = 0; cp <= SET_LIMIT; ++cp) {
             int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
             if (enumValue <= 0) continue; // for smaller set
             String value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
