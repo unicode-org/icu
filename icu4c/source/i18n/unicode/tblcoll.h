@@ -491,6 +491,15 @@ public:
   virtual uint32_t getVariableTop(UErrorCode &status) const;
 
   /**
+   * Get an UnicodeSet that contains all the characters and sequences tailored in 
+   * this collator.
+   * @param status      error code of the operation
+   * @return an UnicodeSet object containing all the tailored code points and sequences
+   * @draft ICU 2.4
+   */
+  virtual UnicodeSet getTailoredSet(UErrorCode &status) const;
+
+  /**
    * Thread safe cloning operation.
    * @return pointer to the new clone, user should remove it.
    * @stable 2.2

@@ -57,6 +57,7 @@
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "unicode/resbund.h"
+#include "unicode/uset.h"
 #include "ucol_imp.h"
 #include "uresimp.h"
 #include "uhash.h"
@@ -319,6 +320,24 @@ void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
         buffer.remove();
     }
 }
+
+UnicodeSet 
+RuleBasedCollator::getTailoredSet(UErrorCode &status) const
+{
+  if(U_FAILURE(status)) {
+    return UnicodeSet();
+  }
+  USet *set = ucol_getTailoredSet(this->ucollator, &status);
+  if(U_SUCCESS(status)) {
+    UnicodeSet result(*(const UnicodeSet *)set);
+    UnicodeString pattern;
+    uset_close(set);
+    return result;
+  } else {
+    return UnicodeSet();
+  }
+}
+
 
 void RuleBasedCollator::getVersion(UVersionInfo versionInfo) const
 {
