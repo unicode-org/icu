@@ -293,6 +293,7 @@ RuleBasedBreakIterator(UDataMemory* image);
      */
     virtual const CharacterIterator& getText(void) const;
 
+#ifdef ICU_ENABLE_DEPRECATED_BREAKITERATOR
     /**
      * Returns a newly-created CharacterIterator that the caller is to take
      * ownership of.
@@ -302,6 +303,18 @@ RuleBasedBreakIterator(UDataMemory* image);
      * FROM *BOTH* CLASSES.  Use getText() instead.
      */
     virtual CharacterIterator* createText(void) const;
+
+    /**
+     * Set the iterator to analyze a new piece of text.  This function resets
+     * the current iteration position to the beginning of the text.
+     * @param newText The text to analyze.
+     * @deprecated
+     * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
+     * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
+     * FROM *BOTH* CLASSES. Use the other setText() instead.
+     */
+    virtual void setText(const UnicodeString* newText);
+#endif
 
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
@@ -317,17 +330,6 @@ RuleBasedBreakIterator(UDataMemory* image);
      * @param newText The text to analyze.
      */
     virtual void setText(const UnicodeString& newText);
-
-    /**
-     * Set the iterator to analyze a new piece of text.  This function resets
-     * the current iteration position to the beginning of the text.
-     * @param newText The text to analyze.
-     * @deprecated
-     * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
-     * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
-     * FROM *BOTH* CLASSES. Use the other setText() instead.
-     */
-    virtual void setText(const UnicodeString* newText);
 
     /**
      * Sets the current iteration position to the beginning of the text.
