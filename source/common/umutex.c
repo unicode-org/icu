@@ -44,7 +44,7 @@
 
 #ifdef WIN32
 # define WIN32_LEAN_AND_MEAN
-# define NOGDI
+# define VC_EXTRALEAN
 # define NOUSER
 # define NOSERVICE
 # define NOIME
@@ -512,7 +512,7 @@ umtx_atomic_inc(int32_t *p)  {
         retVal = (*pIncFn)(gIncDecContext, p);
     } else {
         #if defined (WIN32) && ICU_USE_THREADS == 1
-            retVal = InterlockedIncrement(p);
+            retVal = InterlockedIncrement((LONG*)p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
             umtx_lock(&gIncDecMutex);
             retVal = ++(*p);
@@ -532,7 +532,7 @@ umtx_atomic_dec(int32_t *p) {
         retVal = (*pDecFn)(gIncDecContext, p);
     } else {
         #if defined (WIN32) && ICU_USE_THREADS == 1
-            retVal = InterlockedDecrement(p);
+            retVal = InterlockedDecrement((LONG*)p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
             umtx_lock(&gIncDecMutex);
             retVal = --(*p);
