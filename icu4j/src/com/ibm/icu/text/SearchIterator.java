@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/12/04 23:02:26 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/12/05 02:38:55 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -126,7 +126,7 @@ import java.text.CharacterIterator;
  * </pre>
  * </p>
  * @author Laura Werner, synwee
- * @stable ICU 1.0
+ * @stable ICU 2.0
  * @see BreakIterator
  */
 public abstract class SearchIterator 
@@ -139,7 +139,7 @@ public abstract class SearchIterator
      * been returned, and by first() and last() if there are no matches at all.
      * @see #previous
      * @see #next
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public static final int DONE = -1;
     
@@ -197,7 +197,7 @@ public abstract class SearchIterator
      * 					points at which matches are detected.
      * @see #getBreakIterator
      * @see BreakIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public void setBreakIterator(BreakIterator breakiter) 
     {
@@ -299,7 +299,7 @@ public abstract class SearchIterator
      * @see #previous
      * @see #last
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public int getMatchLength() 
     {
@@ -315,7 +315,7 @@ public abstract class SearchIterator
      * @return the BreakIterator set to restrict logic matches
      * @see #setBreakIterator
      * @see BreakIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public BreakIterator getBreakIterator() 
     {
@@ -326,7 +326,7 @@ public abstract class SearchIterator
      * Return the target text that is being searched.
      * @return target text being searched.
      * @see #setTarget
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public CharacterIterator getTarget() 
     {
@@ -347,7 +347,7 @@ public abstract class SearchIterator
      * @see #last
      * @see #DONE
      * @return the substring in the target text of the most recent match 
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public String getMatchedText() 
     {
@@ -388,7 +388,7 @@ public abstract class SearchIterator
      * @see #first
      * @see #last
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public int next()
     {
@@ -449,7 +449,7 @@ public abstract class SearchIterator
      * @see #first
      * @see #last
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public int previous()
     {
@@ -539,7 +539,7 @@ public abstract class SearchIterator
      * @see #previous
      * @see #last
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public final int first() 
     {
@@ -564,7 +564,7 @@ public abstract class SearchIterator
      * @see #previous
      * @see #last
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public final int following(int position) 
     {
@@ -589,7 +589,7 @@ public abstract class SearchIterator
      * @see #previous
      * @see #following
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public final int last() 
     {
@@ -615,7 +615,7 @@ public abstract class SearchIterator
      * @see #previous
      * @see #last
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     public final int preceding(int position) 
     {
@@ -634,7 +634,7 @@ public abstract class SearchIterator
      * @see #setBreakIterator(BreakIterator)
      * @see #getBreakIterator
      * @see BreakIterator
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     protected BreakIterator breakIterator; 
 
@@ -642,7 +642,7 @@ public abstract class SearchIterator
      * Target text for searching.
      * @see #setTarget(CharacterIterator)
      * @see #getTarget
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     protected CharacterIterator targetText;
     /**
@@ -650,7 +650,7 @@ public abstract class SearchIterator
      * Value 0 is the default value.
      * @see #setMatchLength
      * @see #getMatchLength
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     protected int matchLength;
     
@@ -668,7 +668,7 @@ public abstract class SearchIterator
      * @exception IllegalArgumentException thrown when argument target is null,
      *            or of length 0
      * @see BreakIterator  
-     * @stable ICU 1.0
+     * @stable ICU 2.0
      */
     protected SearchIterator(CharacterIterator target, BreakIterator breaker)
     {
@@ -701,7 +701,7 @@ public abstract class SearchIterator
 	 * @param length new length to set
      * @see #handleNext
      * @see #handlePrevious
-     * @stable ICU 1.0
+     * @stable ICU 2.0
 	 */
     protected void setMatchLength(int length)
     {
@@ -728,7 +728,7 @@ public abstract class SearchIterator
 	 * @see #setMatchLength(int)
      * @see #handlePrevious(int)
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
 	 */
     protected abstract int handleNext(int start);
     
@@ -753,7 +753,7 @@ public abstract class SearchIterator
 	 * @see #setMatchLength(int)
      * @see #handleNext(int)
      * @see #DONE
-     * @stable ICU 1.0
+     * @stable ICU 2.0
 	 */
     protected abstract int handlePrevious(int startAt);
     
