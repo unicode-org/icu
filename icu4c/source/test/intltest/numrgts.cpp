@@ -923,8 +923,9 @@ void NumberFormatRegressionTest::Test4071859 (void)
     String expectedPercent = "-578.998%";
     */
     UnicodeString expectedDefault("-5.789,988");
-    UnicodeString expectedCurrency("-L. 5.790");
+    UnicodeString expectedCurrency("-\\u20A4 5.790");
     UnicodeString expectedPercent("-578.999%");
+    expectedCurrency = expectedCurrency.unescape();
 
     UErrorCode status = U_ZERO_ERROR;
     formatter = NumberFormat::createInstance(Locale("it_IT_PREEURO"), status);

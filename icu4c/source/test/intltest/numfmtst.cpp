@@ -495,7 +495,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("\\u20AC1,234.56")); // Euro
 
     expectCurrency(*fmt, Locale::getJapan(),
-                   1234.56, CharsToUnicodeString("\\uFFE51,235")); // Yen
+                   1234.56, CharsToUnicodeString("\\u00A51,235")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
                    1234.56, "SwF1,234.55"); // 0.05 rounding
@@ -515,13 +515,13 @@ void NumberFormatTest::TestCurrencyObject() {
     expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1 234,56 \\u20AC"));
 
     expectCurrency(*fmt, Locale::getJapan(),
-                   1234.56, CharsToUnicodeString("1 235 \\uFFE5")); // Yen
+                   1234.56, CharsToUnicodeString("1 235 \\u00A5")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
                    1234.56, "1 234,55 sFr."); // 0.05 rounding
 
     expectCurrency(*fmt, Locale::getUS(),
-                   1234.56, "1 234,56 USD");
+                   1234.56, "1 234,56 $");
 
     expectCurrency(*fmt, Locale::getFrance(),
                    1234.56, CharsToUnicodeString("1 234,56 \\u20AC")); // Euro
@@ -657,13 +657,13 @@ void NumberFormatTest::TestComplexCurrency() {
     Locale loc("en", "IN", "");
     NumberFormat* fmt = NumberFormat::createCurrencyInstance(loc, ec);
     if (U_SUCCESS(ec)) {
-        expect2(*fmt, 1.0, "Re1.00");
+        expect2(*fmt, 1.0, "Re. 1.00");
         // Use .00392625 because that's 2^-8.  Any value less than 0.005 is fine.
-        expect(*fmt, 1.00390625, "Re1.00"); // tricky
-        expect2(*fmt, 12345678.0, "Rs1,23,45,678.00");
-        expect2(*fmt, 0.5, "Rs0.50");
-        expect2(*fmt, -1.0, "-Re1.00");
-        expect2(*fmt, -10.0, "-Rs10.00");
+        expect(*fmt, 1.00390625, "Re. 1.00"); // tricky
+        expect2(*fmt, 12345678.0, "Rs. 1,23,45,678.00");
+        expect2(*fmt, 0.5, "Rs. 0.50");
+        expect2(*fmt, -1.0, "-Re. 1.00");
+        expect2(*fmt, -10.0, "-Rs. 10.00");
     } else {
         errln("FAIL: getCurrencyInstance(en_IN)");
     }
