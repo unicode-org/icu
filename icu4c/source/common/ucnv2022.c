@@ -89,6 +89,7 @@ typedef enum {
         
 }Cnv2022Type;
 
+#define UCNV_OPTIONS_VERSION_MASK 0xf
 
 typedef struct{
     UConverter *currentConverter;
@@ -107,6 +108,8 @@ typedef struct{
     UBool isLocaleSpecified;
     uint32_t key;
     uint32_t version;
+    char locale[3];
+    char name[30];
 }UConverterDataISO2022;
 
 /* ISO-2022 ----------------------------------------------------------------- */
@@ -339,7 +342,8 @@ UCNV_TableStates_2022 getKey_2022(char source,
 /*********** ISO 2022 Converter Protos ***********/
 static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t* version, UErrorCode *errorCode);
 static void _ISO2022Close(UConverter *converter);
-static void _ISO2022Reset(UConverter *converter); 
+static void _ISO2022Reset(UConverter *converter);
+static const char* _ISO2022getName(UConverter* cnv);
 
 /************ protos of functions for setting the initial state *********************/
 static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
@@ -348,7 +352,7 @@ static void setInitialStateToUnicodeKR(UConverter* converter,UConverterDataISO20
 static void setInitialStateFromUnicodeKR(UConverter* converter,UConverterDataISO2022 *myConverterData);
   
 /*************** Converter implemenations ******************/
-static UConverterImpl _ISO2022Impl={
+static const UConverterImpl _ISO2022Impl={
     UCNV_ISO_2022,
     
     NULL,
@@ -364,25 +368,135 @@ static UConverterImpl _ISO2022Impl={
     T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC,
     T_UConverter_getNextUChar_ISO_2022,
     
-    NULL
+    NULL,
+    _ISO2022getName
 };
             
 const UConverterStaticData _ISO2022StaticData={
     sizeof(UConverterStaticData),
-        "ISO_2022",
-        2022, UCNV_IBM, UCNV_ISO_2022, 1, 4,
-    { 0x1a, 0, 0, 0 },1, FALSE, FALSE,
+    "ISO_2022",
+    2022, 
+    UCNV_IBM, 
+    UCNV_ISO_2022, 
+    1, 
+    4,
+    { 0x1a, 0, 0, 0 },
+    1, 
+    FALSE, 
+    FALSE,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} /* reserved */
 };
             
             
 const UConverterSharedData _ISO2022Data={
-    sizeof(UConverterSharedData), ~((uint32_t) 0),
-        NULL, NULL, &_ISO2022StaticData, FALSE, &_ISO2022Impl, 
-        0
+    sizeof(UConverterSharedData),
+    ~((uint32_t) 0),
+    NULL, 
+    NULL, 
+    &_ISO2022StaticData, 
+    FALSE, 
+    &_ISO2022Impl, 
+    0
 };
 
-static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t* version, UErrorCode *errorCode){
+/*************JP****************/
+static const UConverterImpl _ISO2022JPImpl={
+
+    UCNV_ISO_2022,
+    
+    NULL,
+    NULL,
+    
+    _ISO2022Open,
+    _ISO2022Close,
+    _ISO2022Reset,
+    
+    UConverter_toUnicode_ISO_2022_JP,
+    UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC,
+    UConverter_fromUnicode_ISO_2022_JP,
+    UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC,
+    UConverter_getNextUChar_ISO_2022_JP,
+    
+    NULL,
+    _ISO2022getName
+};
+const UConverterSharedData _ISO2022JPData={
+    sizeof(UConverterSharedData),
+    ~((uint32_t) 0),
+    NULL, 
+    NULL, 
+    &_ISO2022StaticData, 
+    FALSE, 
+    &_ISO2022JPImpl, 
+    0
+};
+/************* KR ***************/
+static const UConverterImpl _ISO2022KRImpl={
+
+    UCNV_ISO_2022,
+    
+    NULL,
+    NULL,
+    
+    _ISO2022Open,
+    _ISO2022Close,
+    _ISO2022Reset,
+    
+    UConverter_toUnicode_ISO_2022_KR,
+    UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC,
+    UConverter_fromUnicode_ISO_2022_KR,
+    UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC,
+    UConverter_getNextUChar_ISO_2022_KR,
+    
+    NULL,
+    _ISO2022getName
+};
+
+const UConverterSharedData _ISO2022KRData={
+    sizeof(UConverterSharedData),
+    ~((uint32_t) 0),
+    NULL, 
+    NULL, 
+    &_ISO2022StaticData, 
+    FALSE, 
+    &_ISO2022KRImpl, 
+    0
+};
+/*************** CN ***************/
+static const UConverterImpl _ISO2022CNImpl={
+
+    UCNV_ISO_2022,
+    
+    NULL,
+    NULL,
+    
+    _ISO2022Open,
+    _ISO2022Close,
+    _ISO2022Reset,
+    
+    UConverter_toUnicode_ISO_2022_CN,
+    UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC,
+    UConverter_fromUnicode_ISO_2022_CN,
+    UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC,
+    UConverter_getNextUChar_ISO_2022_CN,
+    
+    NULL,
+    _ISO2022getName
+};
+const UConverterSharedData _ISO2022CNData={
+    sizeof(UConverterSharedData),
+    ~((uint32_t) 0),
+    NULL, 
+    NULL, 
+    &_ISO2022StaticData, 
+    FALSE, 
+    &_ISO2022CNImpl, 
+    0
+};
+
+/**********/
+
+static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t* options, UErrorCode *errorCode){
     
     char myLocale[6]={' ',' ',' ',' ',' ',' '};
     
@@ -422,22 +536,21 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             ucnv_setSubstChars(cnv,"\x1b\x28\x42\x1A", 4, errorCode);
             
             /* set the function pointers to appropriate funtions */
-            _ISO2022Impl.toUnicode              = UConverter_toUnicode_ISO_2022_JP;
-            _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC;
-            _ISO2022Impl.fromUnicode            = UConverter_fromUnicode_ISO_2022_JP;
-            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC;
-            _ISO2022Impl.getNextUChar           = UConverter_getNextUChar_ISO_2022_JP;
-            
-            if(version){
-                switch (*version){
-                    case '0':
+            cnv->sharedData=(UConverterSharedData*)(&_ISO2022JPData);
+            uprv_strcpy(myConverterData->locale,"ja");
+            uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja");
+            if(options){
+                switch (*options & UCNV_OPTIONS_VERSION_MASK){
+                    case 0:
                         myConverterData->version = 0;
                         break;
-                    case '1':
+                    case 1:
                         myConverterData->version = 1;
+                        uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=1");
                         break;
-                    case '2':
+                    case 2:
                         myConverterData->version = 2;
+                        uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=2");
                         break;
                     default:
                         myConverterData->version = 0;
@@ -457,11 +570,11 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
             
             /* set the function pointers to appropriate funtions */
-            _ISO2022Impl.toUnicode              = UConverter_toUnicode_ISO_2022_KR;
-            _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC;
-            _ISO2022Impl.fromUnicode            = UConverter_fromUnicode_ISO_2022_KR;
-            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC;
-            _ISO2022Impl.getNextUChar           = UConverter_getNextUChar_ISO_2022_KR;
+            cnv->sharedData=(UConverterSharedData*)&_ISO2022KRData;
+
+            uprv_strcpy(myConverterData->locale,"kr");
+            uprv_strcpy(myConverterData->name,"ISO_2022,locale=kr");
+            myConverterData->version=0;
             
         }
         else if((myLocale[0]=='z'|| myLocale[0]=='c') && (myLocale[1]=='h'|| myLocale[1]=='n') && 
@@ -479,24 +592,26 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             setInitialStateFromUnicodeJPCN(myConverterData);
 
             ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
+
             /* set the function pointers to appropriate funtions */
-            _ISO2022Impl.toUnicode              = UConverter_toUnicode_ISO_2022_CN;
-            _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC;
-            _ISO2022Impl.fromUnicode            = UConverter_fromUnicode_ISO_2022_CN;
-            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC;
-            _ISO2022Impl.getNextUChar           = UConverter_getNextUChar_ISO_2022_CN;
-            if(version){
-                switch (*version){
-                    case '0':
+            cnv->sharedData=(UConverterSharedData*)&_ISO2022CNData;
+            uprv_strcpy(myConverterData->locale,"cn");
+            uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn");
+
+            if(options){
+                switch (*options  & UCNV_OPTIONS_VERSION_MASK){
+                    case 0:
                         myConverterData->version = 0;
                         break;
-                    case '1':
+                    case 1:
                         myConverterData->version = 1;
+                        uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
                         break;
                     default:
                         myConverterData->version = 0;
                 }
             }
+            
             
         }
         else{
@@ -505,9 +620,11 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             cnv->charErrorBuffer[0] = 0x1b;
             cnv->charErrorBuffer[1] = 0x25;
             cnv->charErrorBuffer[2] = 0x42;
-            
+
+            cnv->sharedData=(UConverterSharedData*)&_ISO2022Data;
             /* initialize the state variables */
             myConverterData->isLocaleSpecified=FALSE;
+            uprv_strcpy(myConverterData->name,"ISO_2022");
         }
                     
     } else {
@@ -562,6 +679,13 @@ _ISO2022Reset(UConverter *converter) {
         myConverterData->currentConverter=NULL;
     }
 
+}
+static const char* _ISO2022getName(UConverter* cnv){
+    if(cnv->extraInfo){
+        UConverterDataISO2022* myData= (UConverterDataISO2022*)cnv->extraInfo;
+        return myData->name;
+    }
+    return NULL;
 }
 
 static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData ){
