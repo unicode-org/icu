@@ -34,8 +34,6 @@ int32_t getInt(UnicodeString str)
 //	printf("this is buffer %s and value is %d", buffer, atoi(buffer));
 	return atoi(buffer);
 }
-
-
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
