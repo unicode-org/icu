@@ -28,6 +28,8 @@
 #include "unicode/ucol.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
+#include "unicode/utrans.h"
+#include "unicode/uchar.h"
 #include <string.h>
 #include "cintltst.h"
 #include <stdlib.h>
@@ -37,6 +39,8 @@
 static void TestDeprecatedCollationAPI(void);
 static void TestDeprecatedNumFmtAPI(void);
 static void TestDeprecatedDateFmtAPI(void);
+static void TestDeprecatedUErrorCode(void);
+static void TestDeprecatedUCharScript(void);
 const static char cnt1[][10] = {
   "AA",
   "AC",
@@ -69,6 +73,8 @@ addTestDeprecatedAPI(TestNode** root)
    addTest(root, &TestDeprecatedCollationAPI, "ctstdep/TestDeprecatedCollationAPI");
    addTest(root, &TestDeprecatedNumFmtAPI, "ctstdep/TestDeprecatedNumFmtAPI");
    addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedDateFmtAPI");
+   addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedUErrorCode");
+   addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedUCharScript");
 }
 
 /*
@@ -280,4 +286,224 @@ TestDeprecatedDateFmtAPI(void)
     else
         log_verbose("PASS: creating dateformat using udat_openPattern() succesful\n");
 
+}
+
+static void
+TestDeprecatedUCharScript(void)
+{
+    const UCharScript scriptArray[] = {
+        /* Script names */
+        /** */
+        U_BASIC_LATIN,
+        /** */
+        U_LATIN_1_SUPPLEMENT,
+        /** */
+        U_LATIN_EXTENDED_A,
+        /** */
+        U_LATIN_EXTENDED_B,
+        /** */
+        U_IPA_EXTENSIONS,
+        /** */
+        U_SPACING_MODIFIER_LETTERS,
+        /** */
+        U_COMBINING_DIACRITICAL_MARKS,
+        /** */
+        U_GREEK,
+        /** */
+        U_CYRILLIC,
+        /** */
+        U_ARMENIAN,
+        /** */
+        U_HEBREW,
+        /** */
+        U_ARABIC,
+        /** */
+        U_SYRIAC,
+        /** */
+        U_THAANA,
+        /** */
+        U_DEVANAGARI,
+        /** */
+        U_BENGALI,
+        /** */
+        U_GURMUKHI,
+        /** */
+        U_GUJARATI,
+        /** */
+        U_ORIYA,
+        /** */
+        U_TAMIL,
+        /** */
+        U_TELUGU,
+        /** */
+        U_KANNADA,
+        /** */
+        U_MALAYALAM,
+        /** */
+        U_SINHALA,
+        /** */
+        U_THAI,
+        /** */
+        U_LAO,
+        /** */
+        U_TIBETAN,
+        /** */
+        U_MYANMAR,
+        /** */
+        U_GEORGIAN,
+        /** */
+        U_HANGUL_JAMO,
+        /** */
+        U_ETHIOPIC,
+        /** */
+        U_CHEROKEE,
+        /** */
+        U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
+        /** */
+        U_OGHAM,
+        /** */
+        U_RUNIC,
+        /** */
+        U_KHMER,
+        /** */
+        U_MONGOLIAN,
+        /** */
+        U_LATIN_EXTENDED_ADDITIONAL,
+        /** */
+        U_GREEK_EXTENDED,
+        /** */
+        U_GENERAL_PUNCTUATION,
+        /** */
+        U_SUPERSCRIPTS_AND_SUBSCRIPTS,
+        /** */
+        U_CURRENCY_SYMBOLS,
+        /** */
+        U_COMBINING_MARKS_FOR_SYMBOLS,
+        /** */
+        U_LETTERLIKE_SYMBOLS,
+        /** */
+        U_NUMBER_FORMS,
+        /** */
+        U_ARROWS,
+        /** */
+        U_MATHEMATICAL_OPERATORS,
+        /** */
+        U_MISCELLANEOUS_TECHNICAL,
+        /** */
+        U_CONTROL_PICTURES,
+        /** */
+        U_OPTICAL_CHARACTER_RECOGNITION,
+        /** */
+        U_ENCLOSED_ALPHANUMERICS,
+        /** */
+        U_BOX_DRAWING,
+        /** */
+        U_BLOCK_ELEMENTS,
+        /** */
+        U_GEOMETRIC_SHAPES,
+        /** */
+        U_MISCELLANEOUS_SYMBOLS,
+        /** */
+        U_DINGBATS,
+        /** */
+        U_BRAILLE_PATTERNS,
+        /** */
+        U_CJK_RADICALS_SUPPLEMENT,
+        /** */
+        U_KANGXI_RADICALS,
+        /** */
+        U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS,
+        /** */
+        U_CJK_SYMBOLS_AND_PUNCTUATION,
+        /** */
+        U_HIRAGANA,
+        /** */
+        U_KATAKANA,
+        /** */
+        U_BOPOMOFO,
+        /** */
+        U_HANGUL_COMPATIBILITY_JAMO,
+        /** */
+        U_KANBUN,
+        /** */
+        U_BOPOMOFO_EXTENDED,
+        /** */
+        U_ENCLOSED_CJK_LETTERS_AND_MONTHS,
+        /** */
+        U_CJK_COMPATIBILITY,
+        /** */
+        U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A,
+        /** */
+        U_CJK_UNIFIED_IDEOGRAPHS,
+        /** */
+        U_YI_SYLLABLES,
+        /** */
+        U_YI_RADICALS,
+        /** */
+        U_HANGUL_SYLLABLES,
+        /** */
+        U_HIGH_SURROGATES,
+        /** */
+        U_HIGH_PRIVATE_USE_SURROGATES,
+        /** */
+        U_LOW_SURROGATES,
+        /** */
+        U_PRIVATE_USE_AREA,
+        /** */
+        U_CJK_COMPATIBILITY_IDEOGRAPHS,
+        /** */
+        U_ALPHABETIC_PRESENTATION_FORMS,
+        /** */
+        U_ARABIC_PRESENTATION_FORMS_A,
+        /** */
+        U_COMBINING_HALF_MARKS,
+        /** */
+        U_CJK_COMPATIBILITY_FORMS,
+        /** */
+        U_SMALL_FORM_VARIANTS,
+        /** */
+        U_ARABIC_PRESENTATION_FORMS_B,
+        /** */
+        U_SPECIALS,
+        /** */
+        U_HALFWIDTH_AND_FULLWIDTH_FORMS,
+        /** */
+        U_CHAR_SCRIPT_COUNT,
+        /** */
+        U_NO_SCRIPT
+    };
+
+}
+
+static void
+TestDeprecatedUErrorCode(void){
+    const UErrorCode code[]= {
+        U_ERROR_INFO_START,        
+        U_USING_FALLBACK_ERROR,    
+        U_USING_DEFAULT_ERROR,     
+        U_SAFECLONE_ALLOCATED_ERROR, 
+        U_ERROR_INFO_LIMIT,       
+        U_ZERO_ERROR,              
+        U_ILLEGAL_ARGUMENT_ERROR,  
+        U_MISSING_RESOURCE_ERROR,  
+        U_INVALID_FORMAT_ERROR,    
+        U_FILE_ACCESS_ERROR,       
+        U_INTERNAL_PROGRAM_ERROR,  
+        U_MESSAGE_PARSE_ERROR,     
+        U_MEMORY_ALLOCATION_ERROR, 
+        U_INDEX_OUTOFBOUNDS_ERROR, 
+        U_PARSE_ERROR,             
+        U_INVALID_CHAR_FOUND,      
+        U_TRUNCATED_CHAR_FOUND,    
+        U_ILLEGAL_CHAR_FOUND,      
+        U_INVALID_TABLE_FORMAT,    
+        U_INVALID_TABLE_FILE,      
+        U_BUFFER_OVERFLOW_ERROR,   
+        U_UNSUPPORTED_ERROR,       
+        U_RESOURCE_TYPE_MISMATCH,  
+        U_ILLEGAL_ESCAPE_SEQUENCE, 
+        U_UNSUPPORTED_ESCAPE_SEQUENCE,
+        U_NO_SPACE_AVAILABLE,      
+        U_ERROR_LIMIT,             
+    };
 }
