@@ -2,7 +2,9 @@ dnl -*-m4-*-
 dnl configure.in for ICU
 dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
-dnl Stephen F. Booth
+dnl Stephen F. Booth, heavily modified by Yves and others
+
+dnl $Id: configure.in,v 1.80 2000/10/16 17:43:48 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
