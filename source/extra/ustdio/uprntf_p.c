@@ -58,16 +58,10 @@
 
 /* p */
 #define UFMT_POINTER        {ufmt_pointer, u_printf_pointer_handler}
-/* D */
-#define UFMT_DATE           {ufmt_date, u_printf_date_handler}
-/* T */
-#define UFMT_TIME           {ufmt_date, u_printf_time_handler}
 /* V */
 #define UFMT_SPELLOUT       {ufmt_double, u_printf_spellout_handler}
 /* P */
 #define UFMT_PERCENT        {ufmt_double, u_printf_percent_handler}
-/* M */
-#define UFMT_CURRENCY       {ufmt_double, u_printf_currency_handler}
 /* K */
 #define UFMT_UCHAR          {ufmt_uchar, u_printf_uchar_handler}
 /* U */
@@ -563,58 +557,6 @@ u_printf_scientific_handler(const u_printf_stream_handler  *handler,
 }
 
 static int32_t
-u_printf_date_handler(const u_printf_stream_handler *handler,
-                      void                          *context,
-                      ULocaleBundle                 *formatBundle,
-                      const u_printf_spec_info      *info,
-                      const ufmt_args               *args)
-{
-    UDate            num         = (UDate) (args[0].dateValue);
-    UDateFormat        *format;
-    UChar            result        [UPRINTF_BUFFER_SIZE];
-    UErrorCode        status        = U_ZERO_ERROR;
-
-
-    /* get the formatter */
-    format = u_locbund_getDateFormat(formatBundle);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* format the date */
-    udat_format(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
-
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
-}
-
-static int32_t
-u_printf_time_handler(const u_printf_stream_handler *handler,
-                      void                          *context,
-                      ULocaleBundle                 *formatBundle,
-                      const u_printf_spec_info      *info,
-                      const ufmt_args               *args)
-{
-    UDate            num    = (UDate) (args[0].dateValue);
-    UDateFormat      *format;
-    UChar            result [UPRINTF_BUFFER_SIZE];
-    UErrorCode       status = U_ZERO_ERROR;
-
-
-    /* get the formatter */
-    format = u_locbund_getTimeFormat(formatBundle);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* format the time */
-    udat_format(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
-
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
-}
-
-static int32_t
 u_printf_percent_handler(const u_printf_stream_handler  *handler,
                          void                           *context,
                          ULocaleBundle                  *formatBundle,
@@ -661,68 +603,6 @@ u_printf_percent_handler(const u_printf_stream_handler  *handler,
     else {
         /* # of decimal digits is 6 if precision not specified */
         unum_setAttribute(format, UNUM_FRACTION_DIGITS, 6);
-    }
-
-    /* set whether to show the sign */
-    u_printf_set_sign(format, info, &status);
-
-    /* format the number */
-    unum_formatDouble(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
-
-    /* restore the number format */
-    unum_setAttribute(format, UNUM_MIN_FRACTION_DIGITS, minDecimalDigits);
-    unum_setAttribute(format, UNUM_MAX_FRACTION_DIGITS, maxDecimalDigits);
-
-    return handler->pad_and_justify(context, info, result, u_strlen(result));
-}
-
-static int32_t
-u_printf_currency_handler(const u_printf_stream_handler *handler,
-                          void                          *context,
-                          ULocaleBundle                 *formatBundle,
-                          const u_printf_spec_info      *info,
-                          const ufmt_args               *args)
-{
-    double        num         = (double) (args[0].doubleValue);
-    UNumberFormat        *format;
-    UChar            result        [UPRINTF_BUFFER_SIZE];
-    int32_t        minDecimalDigits;
-    int32_t        maxDecimalDigits;
-    UErrorCode        status        = U_ZERO_ERROR;
-
-
-    /* mask off any necessary bits */
-    /*  if(! info->fIsLongDouble)
-    num &= DBL_MAX;*/
-
-    /* get the formatter */
-    format = u_locbund_getNumberFormat(formatBundle, UNUM_CURRENCY);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* save the formatter's state */
-    minDecimalDigits = unum_getAttribute(format, UNUM_MIN_FRACTION_DIGITS);
-    maxDecimalDigits = unum_getAttribute(format, UNUM_MAX_FRACTION_DIGITS);
-
-    /* set the appropriate flags and number of decimal digits on the formatter */
-    if(info->fPrecision != -1) {
-        /* set the # of decimal digits */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, info->fPrecision);
-    }
-    else if(info->fPrecision == 0 && ! info->fAlt) {
-        /* no decimal point in this case */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 0);
-    }
-    else if(info->fAlt) {
-        /* '#' means always show decimal point */
-        /* copy of printf behavior on Solaris - '#' shows 6 digits */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 2);
-    }
-    else {
-        /* # of decimal digits is 2 if precision not specified, 2 is typical */
-        unum_setAttribute(format, UNUM_FRACTION_DIGITS, 2);
     }
 
     /* set whether to show the sign */
@@ -932,13 +812,13 @@ static const u_printf_info g_u_printf_infos[UPRINTF_NUM_FMT_HANDLERS] = {
 
 /* 0x40 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
-    UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
 /* 0x50 */
     UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
     UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 

@@ -111,10 +111,6 @@ u_locbund_close(ULocaleBundle *bundle)
             unum_close(bundle->fNumberFormat[styleIdx]);
         }
     }
-    if(bundle->fDateFormat != 0)
-        udat_close(bundle->fDateFormat);
-    if(bundle->fTimeFormat != 0)
-        udat_close(bundle->fTimeFormat);
     
     uprv_memset(bundle, 0, sizeof(ULocaleBundle));
 /*    uprv_free(bundle);*/
@@ -136,40 +132,6 @@ u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style)
         return *formatAlias;
     }
     return NULL;
-}
-
-UDateFormat*
-u_locbund_getDateFormat(ULocaleBundle *bundle)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    
-    if(bundle->fDateFormat == 0) {
-        bundle->fDateFormat = udat_open(UDAT_NONE, UDAT_DEFAULT, 
-                            bundle->fLocale, 0, 0,NULL,0, &status);
-        if (U_FAILURE(status)) {
-            udat_close(bundle->fDateFormat);
-            bundle->fDateFormat = NULL;
-        }
-    }
-    
-    return bundle->fDateFormat;
-}
-
-UDateFormat*
-u_locbund_getTimeFormat(ULocaleBundle *bundle)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    
-    if(bundle->fTimeFormat == 0) {
-        bundle->fTimeFormat = udat_open(UDAT_DEFAULT, UDAT_NONE, 
-            bundle->fLocale, 0, 0,NULL,0, &status);
-        if (U_FAILURE(status)) {
-            udat_close(bundle->fTimeFormat);
-            bundle->fTimeFormat = NULL;
-        }
-    }
-    
-    return bundle->fTimeFormat;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
