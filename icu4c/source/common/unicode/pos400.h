@@ -6,7 +6,7 @@
 *
 *******************************************************************************
 *
-*  FILE NAME : platform.h
+*  FILE NAME : pos400.h
 *
 *   Date        Name        Description
 *   05/13/98    nos         Creation (content moved here from ptypes.h).
@@ -24,6 +24,22 @@
 
 /* Define whether inttypes.h is available */
 #define HAVE_INTTYPES_H 0
+
+/*
+ * Define what support for C++ streams is available.
+ *     If U_IOSTREAM_SOURCE is set to 199711, then <iostream> is available
+ * (1997711 is the date the ISO/IEC C++ FDIS was published), and then
+ * one should qualify streams using the std namespace in ICU header
+ * files.
+ *     If U_IOSTREAM_SOURCE is set to 198506, then <iostream.h> is
+ * available instead (198506 is the date when Stroustrup published
+ * "An Extensible I/O Facility for C++" at the summer USENIX conference).
+ *     If U_IOSTREAM_SOURCE is 0, then C++ streams are not available and
+ * support for them will be silently suppressed in ICU.
+ *
+ */
+
+#define U_IOSTREAM_SOURCE 198506
 
 /* Determines whether specific types are available */
 #define HAVE_INT8_T 0
