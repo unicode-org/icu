@@ -49,7 +49,7 @@ import com.ibm.util.Utility;
  * A compact array is composed of a index array and value array.  The index
  * array contains the indicies of Unicode characters to the value array.
  * @see                CompactByteArray
- * @version            $Revision: 1.3 $
+ * @version            $Revision: 1.4 $
  * @author             Helena Shih
  */
 public final class CompactCharArray implements Cloneable {
@@ -291,7 +291,7 @@ public final class CompactCharArray implements Cloneable {
     /** For internal use only.  Do not modify the result, the behavior of
       * modified results are undefined.
       */
-    public char getIndexArray()[]
+    public char[] getIndexArray()
     {
         return indices;
     }
@@ -300,7 +300,7 @@ public final class CompactCharArray implements Cloneable {
      * For internal use only.  Do not modify the result, the behavior of
      * modified results are undefined.
      */
-    public char getValueArray()[]
+    public char[] getValueArray()
     {
         return values;
     }
