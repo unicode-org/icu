@@ -616,7 +616,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
     if (map != NULL) {
       ICUServiceKey* fallbackKey = createKey(matchID, status);
 
-      for (int32_t pos = 0;;) {
+      for (int32_t pos = -1;;) {
         const UHashElement* e = map->nextElement(pos);
         if (e == NULL) {
           break;

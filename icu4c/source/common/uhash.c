@@ -71,12 +71,15 @@
  * to 2.18; the inverse ratio ranges from 0.459 to 0.552.)  If this
  * ratio is changed, the low and high water ratios should also be
  * adjusted to suit.
+ *
+ * These prime numbers were also chosen so that they are the largest
+ * prime number while being less than a power of two.
  */
 static const int32_t PRIMES[] = {
-    17, 37, 67, 131, 257, 521, 1031, 2053, 4099, 8209, 16411, 32771,
-    65537, 131101, 262147, 524309, 1048583, 2097169, 4194319, 8388617,
-    16777259, 33554467, 67108879, 134217757, 268435459, 536870923,
-    1073741827, 2147483647
+    13, 31, 61, 127, 251, 509, 1021, 2039, 4093, 8191, 16381, 32749,
+    65521, 131071, 262139, 524287, 1048573, 2097143, 4194301, 8388593,
+    16777213, 33554393, 67108859, 134217689, 268435399, 536870909,
+    1073741789, 2147483647 /*, 4294967291 */
 };
 
 #define PRIMES_LENGTH (sizeof(PRIMES) / sizeof(PRIMES[0]))
@@ -457,7 +460,7 @@ uhash_tokp(void* p) {
     int32_t hash = 0;                         \
     const TYPE *p = (const TYPE*) STR;        \
     if (p != NULL) {                          \
-        int32_t len = (int32_t)(STRLEN);                 \
+        int32_t len = (int32_t)(STRLEN);      \
         int32_t inc = ((len - 32) / 32) + 1;  \
         const TYPE *limit = p + len;          \
         while (p<limit) {                     \
