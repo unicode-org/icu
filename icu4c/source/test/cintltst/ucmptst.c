@@ -94,7 +94,7 @@ static void TestUCMP8API(){
         log_err("Error in ucmp8_getkBlockCount()\n");
     } 
     values=(int8_t*)ucmp8_getArray(&ucmp8Array1);
-    if(values[0] !=TEST_DEFAULT_VALUE){
+    if((uint8_t)values[0] != (uint8_t)TEST_DEFAULT_VALUE){
         log_err("Error: getArray() or init failed\n");
     }
     
