@@ -1493,7 +1493,7 @@ TestCharNames() {
         }
 
         /* find the Unicode 1.0 name if it is stored (length>0 means that we could read it) */
-        if(names[i].oldName[0]!=0 && length>0) {
+        if(names[i].oldName[0]!=0 /* && length>0 */) {
             c=u_charFromName(U_UNICODE_10_CHAR_NAME, names[i].oldName, &errorCode);
             if(U_FAILURE(errorCode)) {
                 log_err("u_charFromName(%s - 1.0) error %s\n", names[i].oldName, u_errorName(errorCode));
