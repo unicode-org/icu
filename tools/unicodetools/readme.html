@@ -1,0 +1,216 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>New Page 18</title>
+</head>
+
+<body>
+
+<p>/**<br>
+*******************************************************************************<br>
+* Copyright (C) 1996-2001, International Business Machines Corporation and *<br>
+* others. All Rights Reserved. *<br>
+*******************************************************************************<br>
+*<br>
+* $Source: /xsrl/Nsvn/icu/unicodetools/readme.html,v $<br>
+* $Date: 2004/11/13 23:28:39 $<br>
+* $Revision: 1.1 $<br>
+*<br>
+*******************************************************************************<br>
+*/</p>
+<h1>UnicodeTools</h1>
+<p>This file provides instructions for building and running the UnicodeTools, which<br>
+can be used to:</p>
+<ul>
+  <li>build the Derived Unicode files in the UCD (Unicode Character Database),</li>
+  <li>build the transformed UCA (Unicode Collation Algorithm) files needed by ICU.</li>
+  <li>run consistency checks on beta releases of the UCD and the UCA.</li>
+  <li>build 4 chart folders on the unicode site</li>
+</ul>
+<p><font color="#FF0000"><b>WARNING!!</b></font></p>
+<ul>
+  <li>This is NOT production level code, and should never be used in programs.</li>
+  <li>The API is subject to change without notice, and will not be maintained.</li>
+  <li>The source is uncommented, and has many warts; since it is not production code, it has not 
+  been worth the time to clean it up.</li>
+  <li>It will probably not work on Unix or Mac without changing the file separator.</li>
+  <li>Currently it uses hard-coded directory names.</li>
+  <li>The contents of multiple versions of the UCD must be copied to a local directory, as described 
+  below.</li>
+</ul>
+<h2>Instructions:</h2>
+<h3>0. You will need to get ICU4J on your system, using CVS.</h3>
+<p>The rest of this will assume that you have set up CVS so that you load the ICU4J project into 
+C:\ICU4J<br>
+<br>
+You need both the main icu4j and a subproject called unicodetools. See:
+<a href="http://oss.software.ibm.com/icu/develop/cvs.html">
+http://oss.software.ibm.com/icu/develop/cvs.html</a>. Inside unicodetools, look at com/ibm/text. The 
+main directories of interest are UCD, UCA and utility.</p>
+<h4>0a. If you are using Eclipse for your IDE, look at the instructions on
+<a href="http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.htm">
+http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.htm</a> </h4>
+<p>Set up Eclipse to build two projects: ICU4J and UnicodeTools:<br>
+<br>
+Project Name: ICU4J<br>
+Directory: C:\ICU4J\icu4j<br>
+Default output folder = ICU4J/classes<br>
+<br>
+Project Name: UnicodeTools<br>
+Directory: C:\ICU4J\unicodetools<br>
+Default Output Folder: UnicodeTools/classes<br>
+<br>
+After Eclipse is set up with these, exclude certain files from UnicodeTools:<br>
+<br>
+Right-Click UnicodeTools &gt; Properties &gt; Java Build Path &gt; Exclusions<br>
+com/ibm/rbm/<br>
+com/ibm/text/utility/UnicodeMapInt.java<br>
+com/ibm/text/utility/TestUtility.java<br>
+com/ibm/text/UCD/GenerateThaiBreaks-old.java/<br>
+com/ibm/text/UCD/ProcessUnihan.java/<br>
+com/ibm/text/UCA/WriteHTMLCollation.java/<br>
+<br>
+UnicodeTools must also include the ICU4J project, with<br>
+<br>
+Right-Click UnicodeTools &gt; Properties &gt; Java Build Path &gt; Projects</p>
+<h3>1. In UCD, you must edit UCD_Types.java at the top, to set the directories for the build:</h3>
+<p>public static final String DATA_DIR = &quot;C:\\DATA\\&quot;;<br>
+public static final String UCD_DIR = BASE_DIR + &quot;UCD\\&quot;;<br>
+public static final String BIN_DIR = DATA_DIR + &quot;BIN\\&quot;;<br>
+public static final String GEN_DIR = DATA_DIR + &quot;GEN\\&quot;;<br>
+<br>
+Make sure that each of these directories exist. Also make sure that the following<br>
+exist:<br>
+<br>
+&lt;GEN_DIR&gt;/DerivedData<br>
+&lt;GEN_DIR&gt;/DerivedData/ExtractedProperties<br>
+&lt;UCD_DIR&gt;/EXTRAS-Update</p>
+<h3>2. Download all of the UnicodeData files for each version into UCD_DIR.</h3>
+<p>The folder names must be of the form: &quot;3.2.0-Update&quot;, so rename the folders on the<br>
+Unicode site to this format.</p>
+<h4>2a Ensure Complete Release</h4>
+<p>If you are downloading any &quot;incomplete&quot; release (one that does not contain a complete set of data 
+files for that release, you need to also download the previous complete release). Most of the N.M-Update 
+directoriess are complete, *except*:</p>
+<p>4.0-Update, which does not contain a copy of Unihan.txt and some other files<br>
+3.1-Update, which does not contain a copy of BidiMirroring.txt</p>
+<p>Also, make the following changes to UnicodeData for 1.1.5:</p>
+<p><b>Delete</b></p>
+<pre>3400;HANGUL SYLLABLE KIYEOK A;Lo;0;L;1100 1161;;;;N;;;;;
+4DFF;HANGUL SYLLABLE MIEUM WEO RIEUL-THIEUTH;Lo;0;L;1106 116F 11B4;;;;N;;;;;
+4E00;<cjk IDEOGRAPH REPRESENTATIVE>;Lo;0;L;;;;;N;;;;;</pre>
+<p><b>Add:</b></p>
+<pre>4E00;<cjk Ideograph, First>;Lo;0;L;;;;;N;;;;;
+9FA5;<cjk Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+E000;<private Use, First>;Co;0;L;;;;;N;;;;;
+F8FF;<private Use, Last>;Co;0;L;;;;;N;;;;;</pre>
+<p><b>And from a late version of Unicode, add:</b></p>
+<pre>F900;CJK COMPATIBILITY IDEOGRAPH-F900;Lo;0;L;8C48;;;;N;;;;;
+...
+FA2D;CJK COMPATIBILITY IDEOGRAPH-FA2D;Lo;0;L;9DB4;;;;N;;;;;</pre>
+<h4>2b. UCA data</h4>
+<p>If you are building any of the UCA tools, you need to get a copy of the UCA data file<br>
+from http://www.unicode.org/reports/tr10/#AllKeys. The default location for this is:<br>
+<br>
+BASE_DIR + &quot;Collation\allkeys&quot; + VERSION + &quot;.txt&quot;.<br>
+<br>
+If you have it in a different location, change that value for KEYS in UCA.java, and <br>
+the value for BASE_DIR</p>
+<h4>2c. Here is an example of the default directory structure with files:</h4>
+<pre>C://DATA/
+
+        BIN/
+    
+        Collation/
+            allkeys-3.1.1.txt
+        
+        GEN/
+            DerivedData/
+                ExtractedProperties
+        UCD/
+            3.0.0-Update/
+                Unihan-3.2.0.txt
+                ...
+            3.0.1-Update/
+                ...
+            3.1.0-Update/
+                ...
+            3.1.1-Update/
+                ...
+            3.2.0-Update/
+                ...
+            4.0.0-Update/
+                ArabicShaping-4.0.0d14b.txt
+                BidiMirroring-4.0.0d1b.txt
+                ...
+            EXTRAS-Update/</pre>
+<h3>3. Versions</h3>
+<p>All of the following have &quot;version X&quot; in the options you give to Java (either on the&nbsp; 
+command line, or in the Eclipse 'run' options. If you want a specific version like 3.1.0, then you 
+would write &quot;version 3.1.1&quot;. If you want the latest version (4.1.0), you can omit the &quot;version X&quot;.</p>
+<h3>4. Running UCD, you will use com.ibm.text.UCD.Main as your main class.</h3>
+<p>The Working directory has to be C:\ICU4J\unicodetools\com\ibm\text\UCD<br>
+(In Eclipse you can also use ${workspace_loc:UnicodeTools/com/ibm/text/UCD}, which abstracts away 
+the location.)<br>
+<br>
+The same for UCA:</p>
+<p>main: com.ibm.text.UCD.Main<br>
+directory: <a href="file:///C:/ICU4J/unicodetools/com/ibm/text/UCA">
+C:\ICU4J\unicodetools\com\ibm\text\UCA</a></p>
+<h4>4a. BIN</h4>
+<p>For each version, the tools build a set of binary data in BIN that contain the information for 
+that release. This is done automatically, or you can manually do it with the options<br>
+<br>
+version X build<br>
+<br>
+This builds an compressed format of all the UCD data (except blocks and Unihan) into the BIN 
+directory. Don't worry about the voluminous console messages, unless one says &quot;FAIL&quot;.<br>
+<br>
+<font color="#FF0000"><i>You have to manually do this if you change any of the data files in that 
+version!!</i></font></p>
+<p>Note: if for any reason you modify the binary format of the BIN files, you also have to bump the 
+value in that file:<br>
+<br>
+static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes</p>
+<h4>4b. To build the Unicode files for a particular version X, run the Main with the following 
+argument:</h4>
+<p>MakeUnicodeFiles.generateFile</p>
+<p>This will execute the commands in the file MakeUnicodeFiles.txt.</p>
+<p>You will edit that file if you want a different 'd' version for the files, OR if you want to 
+change which files are built. At the top of the file you will see the following text:</p>
+<pre>Generate: </pre>
+<pre>DeltaVersion: 7</pre>
+<h4>4c. To change which files are built, put any number of regular expressions separated by spaces 
+after Generate. Eg,</h4>
+<pre>Generate: .*line.* prop.*</pre>
+<p>The matching is case-insensitive.</p>
+<h4>4d. To change the 'd' number that is appended to the generated files names, change the 
+DeltaVersion.</h4>
+<h4>4e. To run basic consistency checking, run:</h4>
+<p>version X verify<br>
+<br>
+Don't worry about any console messages except those that say FAIL.</p>
+<h4>4f. Output</h4>
+<p>The files will be generated in the GEN directories.</p>
+<ul>
+  <li>If they are the same as previous files (except for the first line and Date), they will be 
+  renamed to UNCHANGED... </li>
+  <li>If they are not, then a bat file will be generated in the DIFF directory. Double-clicking on 
+  this file will launch CompareIt, which is a nice diff program. Get compareIt from
+  <a class="xurl" href="http://www.grigsoft.com/files.htm">http://www.grigsoft.com/files.htm</a> (be 
+  sure to get the Unicode version),then you can also set it as the diff program in CVS with 
+  Admin/Preferences/WinCVS, External Diff = C:\Program Files\Compare It!\wincmp3.exe (or equiv).</li>
+</ul>
+<h3>5. Running UCA, you will use com.ibm.text.UCA.Main as your main class.</h3>
+<h4>5a. To build all the UCA files used by ICU, use the option:</h4>
+<p>java &lt;UCA&gt;Main ICU</p>
+<h4>6. To build all the charts, use the UCA project, with options: normalizationChart caseChart 
+scriptChart indexChart</h4>
+
+</body>
+
+</html>

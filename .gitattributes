@@ -363,3 +363,4 @@ tools/unicodetools/com/ibm/text/data/CheckCollationValidity.html svneol=native#t
 tools/unicodetools/com/ibm/text/data/UCA_Rules.xml svneol=native#text/xml
 tools/unicodetools/com/ibm/text/data/UCA_Rules_SHORT.xml svneol=native#text/xml
 tools/unicodetools/license.html svneol=native#text/html
+tools/unicodetools/readme.html svneol=native#text/html
