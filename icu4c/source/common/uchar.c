@@ -804,6 +804,55 @@ u_getUnicodeProperties(UChar32 c, int32_t column) {
  * Each helper function gets the index
  * - after the current code point if it looks at following text
  * - before the current code point if it looks at preceding text
+ *
+ * Unicode 3.2 UAX 21 "Case Mappings" defines the conditions as follows:
+ *
+ * Final_Sigma
+ *   C is preceded by a sequence consisting of
+ *     a cased letter and a case-ignorable sequence,
+ *   and C is not followed by a sequence consisting of
+ *     an ignorable sequence and then a cased letter.
+ *
+ * More_Above
+ *   C is followed by one or more characters of combining class 230 (ABOVE)
+ *   in the combining character sequence.
+ *
+ * After_Soft_Dotted
+ *   The last preceding character with combining class of zero before C
+ *   was Soft_Dotted,
+ *   and there is no intervening combining character class 230 (ABOVE).
+ *
+ * Before_Dot
+ *   C is followed by combining dot above (U+0307).
+ *   Any sequence of characters with a combining class that is neither 0 nor 230
+ *   may intervene between the current character and the combining dot above.
+ *
+ * Helper definitions in Unicode 3.2 UAX 21:
+ *
+ * D1. A character C is defined to be cased
+ *     if it meets any of the following criteria:
+ *
+ *   - The general category of C is Titlecase Letter (Lt)
+ *   - In [CoreProps], C has one of the properties Uppercase, or Lowercase
+ *   - Given D = NFD(C), then it is not the case that:
+ *     D = UCD_lower(D) = UCD_upper(D) = UCD_title(D)
+ *     (This third criterium does not add any characters to the list
+ *      for Unicode 3.2. Ignored.)
+ *
+ * D2. A character C is defined to be case-ignorable
+ *     if it meets either of the following criteria:
+ *
+ *   - The general category of C is
+ *     Nonspacing Mark (Mn), or Enclosing Mark (Me), or Format Control (Cf), or
+ *     Letter Modifier (Lm), or Symbol Modifier (Sk)
+ *   - C is one of the following characters 
+ *     U+0027 APOSTROPHE
+ *     U+00AD SOFT HYPHEN (SHY)
+ *     U+2019 RIGHT SINGLE QUOTATION MARK
+ *            (the preferred character for apostrophe)
+ *
+ * D3. A case-ignorable sequence is a sequence of
+ *     zero or more case-ignorable characters.
  */
 
 enum {
@@ -835,13 +884,28 @@ getCaseLocale(const char *locale) {
     }
 }
 
-/* Is case-ignorable? In Unicode 3.1.1, is {HYPHEN, SOFT HYPHEN, {Mn}} ? (Expected to change!) */
+/* Is case-ignorable? */
 static U_INLINE UBool
 isCaseIgnorable(UChar32 c, uint32_t category) {
-    return (UBool)(category==U_NON_SPACING_MARK || c==0x2010 || c==0xad);
+    return (FLAG(category)&(_Mn|_Me|_Cf|_Lm|_Sk))!=0 ||
+            c==0x27 || c==0xad || c==0x2019;
 }
 
-/* Is followed by {case-ignorable}* {Ll, Lu, Lt}  ? */
+/* Is this a "cased" character? */
+static U_INLINE UBool
+isCased(UChar32 c, uint32_t category) {
+    /* Lt+Uppercase+Lowercase = Lt+Lu+Ll+Other_Uppercase+Other_Lowercase */
+    return (FLAG(category)&(_Lt|_Lu|_Ll))!=0 ||
+            (u_getUnicodeProperties(c, 1)&(FLAG(UPROPS_OTHER_UPPERCASE)|FLAG(UPROPS_OTHER_LOWERCASE)))!=0;
+}
+
+/* Is Soft_Dotted? */
+static U_INLINE UBool
+isSoftDotted(UChar32 c) {
+    return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_SOFT_DOTTED))!=0;
+}
+
+/* Is followed by {case-ignorable}* cased  ? */
 static UBool
 isFollowedByCasedLetter(UCharIterator *iter, int32_t index) {
     /* This is volatile because AIX 5.1 Visual Age 5.0 in 32-bit mode can't
@@ -863,7 +927,7 @@ isFollowedByCasedLetter(UCharIterator *iter, int32_t index) {
         }
         GET_PROPS_UNSAFE(c, props);
         category=GET_CATEGORY(props);
-        if((1UL<<category)&(1UL<<U_LOWERCASE_LETTER|1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+        if(isCased(c, category)) {
             return TRUE; /* followed by cased letter */
         }
         if(!isCaseIgnorable(c, category)) {
@@ -874,7 +938,7 @@ isFollowedByCasedLetter(UCharIterator *iter, int32_t index) {
     return FALSE; /* not followed by cased letter */
 }
 
-/* Is preceded by {Ll, Lu, Lt} {case-ignorable}*  ? */
+/* Is preceded by cased {case-ignorable}*  ? */
 static UBool
 isPrecededByCasedLetter(UCharIterator *iter, int32_t index) {
     /* This is volatile because AIX 5.1 Visual Age 5.0 in 32-bit mode can't
@@ -896,7 +960,7 @@ isPrecededByCasedLetter(UCharIterator *iter, int32_t index) {
         }
         GET_PROPS_UNSAFE(c, props);
         category=GET_CATEGORY(props);
-        if((1UL<<category)&(1UL<<U_LOWERCASE_LETTER|1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+        if(isCased(c, category)) {
             return TRUE; /* preceded by cased letter */
         }
         if(!isCaseIgnorable(c, category)) {
@@ -907,9 +971,9 @@ isPrecededByCasedLetter(UCharIterator *iter, int32_t index) {
     return FALSE; /* not followed by cased letter */
 }
 
-/* Is preceded by base character { 'i', 'j', U+012f, U+1e2d, U+1ecb } with no intervening cc=230 ? */
+/* Is preceded by Soft_Dotted character with no intervening cc=230 ? */
 static UBool
-isAfter_i(UCharIterator *iter, int32_t index) {
+isPrecededBySoftDotted(UCharIterator *iter, int32_t index) {
     int32_t c;
     uint8_t cc;
 
@@ -923,7 +987,7 @@ isAfter_i(UCharIterator *iter, int32_t index) {
         if(c<0) {
             break;
         }
-        if(c==0x69 || c==0x6a || c==0x12f || c==0x1e2d || c==0x1ecb) {
+        if(isSoftDotted(c)) {
             return TRUE; /* preceded by TYPE_i */
         }
 
@@ -935,6 +999,30 @@ isAfter_i(UCharIterator *iter, int32_t index) {
 
     return FALSE; /* not preceded by TYPE_i */
 }
+
+#if 0
+/*
+ * ### TODO write a bug doc for the UTC and re-enable this with a newer version
+ * of Unicode.
+ *
+ * ICU 2.0/2.1 used to check for After_I for the Turkic-conditional removal
+ * of U+0307 instead of checking for After_i (now After_Soft_Dotted).
+ *
+ * I believe that After_Soft_Dotted is a mistake because it results in different
+ * lowercase mappings for the canonically equivalent I-dot and I+dot
+ * (should both map to i).
+ * The comment in SpecialCasing.txt appears to agree.
+
+# When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
+# This matches the behavior of the canonically equivalent I-dot_above
+
+0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
+0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
+
+ * For ICU 2.2 I am withdrawing this "fix" to make ICU conform to Unicode 3.2.
+ *
+ * Markus W. Scherer 2002-jun-07
+ */
 
 /* Is preceded by base character 'I' with no intervening cc=230 ? */
 static UBool
@@ -964,6 +1052,7 @@ isAfter_I(UCharIterator *iter, int32_t index) {
 
     return FALSE; /* not preceded by I */
 }
+#endif
 
 /* Is followed by one or more cc==230 ? */
 static UBool
@@ -1056,6 +1145,12 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
                 int32_t loc=getCaseLocale(locale),
                         srcIndex= iter!=NULL ? iter->getIndex(iter, UITER_CURRENT) : 0;
 
+                /*
+                 * Test for conditional mappings first
+                 *   (otherwise the unconditional default mappings are always taken),
+                 * then test for characters that have unconditional mappings in SpecialCasing.txt,
+                 * then get the UnicodeData.txt mappings.
+                 */
                 if( loc==LOC_LITHUANIAN &&
                         /* base characters, find accents above */
                         (((c==0x49 || c==0x4a || c==0x12e) &&
@@ -1063,7 +1158,22 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
                         /* precomposed with accent above, no need to find one */
                         (c==0xcc || c==0xcd || c==0x128))
                 ) {
-                    /* lithuanian: add a dot above if there are more accents above (to always have the dot) */
+                    /*
+                        # Lithuanian
+
+                        # Lithuanian retains the dot in a lowercase i when followed by accents.
+
+                        # Introduce an explicit dot above when lowercasing capital I's and J's
+                        # whenever there are more accents above.
+                        # (of the accents used in Lithuanian: grave, acute, tilde above, and ogonek)
+
+                        0049; 0069 0307; 0049; 0049; lt More_Above; # LATIN CAPITAL LETTER I
+                        004A; 006A 0307; 004A; 004A; lt More_Above; # LATIN CAPITAL LETTER J
+                        012E; 012F 0307; 012E; 012E; lt More_Above; # LATIN CAPITAL LETTER I WITH OGONEK
+                        00CC; 0069 0307 0300; 00CC; 00CC; lt; # LATIN CAPITAL LETTER I WITH GRAVE
+                        00CD; 0069 0307 0301; 00CD; 00CD; lt; # LATIN CAPITAL LETTER I WITH ACUTE
+                        0128; 0069 0307 0303; 0128; 0128; lt; # LATIN CAPITAL LETTER I WITH TILDE
+                     */
                     u=buffer;
                     buffer[1]=0x307;
                     switch(c) {
@@ -1097,24 +1207,55 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
                     default:
                         return 0; /* will not occur */
                     }
-                /*
-                 * Note: This handling of I and of dot above differs from Unicode 3.1.1's SpecialCasing-5.txt
-                 * because the AFTER_i condition there does not work for decomposed I+dot above.
-                 * This fix is being proposed to the UTC.
-                 */
+                /* # Turkish and Azeri */
+                } else if(loc==LOC_TURKISH && c==0x130) {
+                    /*
+                        # I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
+                        # The following rules handle those cases.
+
+                        0130; 0069; 0130; 0130; tr # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                        0130; 0069; 0130; 0130; az # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                     */
+                    result=0x69;
+                    goto single;
+                } else if(loc==LOC_TURKISH && c==0x307 && isPrecededBySoftDotted(iter, srcIndex-1)) {
+                    /* ### TODO see comment above about isAfter_I() */
+                    /*
+                        # When lowercasing, remove dot_above in the sequence I + dot_above, which will turn into i.
+                        # This matches the behavior of the canonically equivalent I-dot_above
+
+                        0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
+                        0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
+                     */
+                    return 0; /* remove the dot (continue without output) */
                 } else if(loc==LOC_TURKISH && c==0x49 && !isFollowedByDotAbove(iter, srcIndex)) {
-                    /* turkish: I maps to dotless i */
+                    /*
+                        # When lowercasing, unless an I is before a dot_above, it turns into a dotless i.
+
+                        0049; 0131; 0049; 0049; tr Not_Before_Dot; # LATIN CAPITAL LETTER I
+                        0049; 0131; 0049; 0049; az Not_Before_Dot; # LATIN CAPITAL LETTER I
+                     */
                     result=0x131;
                     goto single;
-                    /* other languages (or turkish with decomposed I+dot above): I maps to i */
-                } else if(c==0x307 && isAfter_I(iter, srcIndex-1) && !isFollowedByMoreAbove(iter, srcIndex)) {
-                    /* decomposed I+dot above becomes i (see handling of U+0049 for turkish) and removes the dot above */
-                    return 0; /* remove the dot (continue without output) */
+                } else if(c==0x130) {
+                    /*
+                        # Preserve canonical equivalence for I with dot. Turkic is handled below.
+
+                        0130; 0069 0307; 0130; 0130; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                     */
+                    static const UChar iWithDot[2]={ 0x69, 0x307 };
+                    u=iWithDot;
+                    length=2;
                 } else if(  c==0x3a3 &&
                             !isFollowedByCasedLetter(iter, srcIndex) &&
                             isPrecededByCasedLetter(iter, srcIndex-1)
                 ) {
-                    /* greek capital sigma maps depending on surrounding cased letters (see SpecialCasing-5.txt) */
+                    /* greek capital sigma maps depending on surrounding cased letters (see SpecialCasing.txt) */
+                    /*
+                        # Special case for final form of sigma
+
+                        03A3; 03C2; 03A3; 03A3; Final_Sigma; # GREEK CAPITAL LETTER SIGMA
+                     */
                     result=0x3c2; /* greek small final sigma */
                     goto single;
                 } else {
@@ -1272,11 +1413,29 @@ u_internalToUpperOrTitle(UChar32 c, UCharIterator *iter,
                         srcIndex= iter!=NULL ? iter->getIndex(iter, UITER_CURRENT) : 0;
 
                 if(loc==LOC_TURKISH && c==0x69) {
-                    /* turkish: i maps to dotted I */
+                    /*
+                        # Turkish and Azeri
+
+                        # I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
+                        # The following rules handle those cases.
+
+                        # When uppercasing, i turns into a dotted capital I
+
+                        0069; 0069; 0130; 0130; tr; # LATIN SMALL LETTER I
+                        0069; 0069; 0130; 0130; az; # LATIN SMALL LETTER I
+                    */
                     result=0x130;
                     goto single;
-                } else if(loc==LOC_LITHUANIAN && c==0x307 && isAfter_i(iter, srcIndex-1)) {
-                    /* lithuanian: remove DOT ABOVE after U+0069 "i" with upper or titlecase */
+                } else if(loc==LOC_LITHUANIAN && c==0x307 && isPrecededBySoftDotted(iter, srcIndex-1)) {
+                    /*
+                        # Lithuanian
+
+                        # Lithuanian retains the dot in a lowercase i when followed by accents.
+
+                        # Remove DOT ABOVE after "i" with upper or titlecase
+
+                        0307; 0307; ; ; lt After_Soft_Dotted; # COMBINING DOT ABOVE
+                     */
                     return 0; /* remove the dot (continue without output) */
                 } else {
                     /* no known conditional special case mapping, use a normal mapping */
