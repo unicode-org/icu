@@ -662,7 +662,7 @@ es {
         // ? Cans { "Unified Canadian Aboriginal Symbols" }
         // ? Cher { "Cherokee" }
         Cprt { "chipriota" } // grecochipriota?
-        Cyrl { "cir\u00ED"lico" }
+        Cyrl { "cir\u00EDlico" }
         // ? Deva { "Devanagari" }
         // ? Dsrt { "Deseret" }
         // ? Ethi { "et\u00EDopico" }
