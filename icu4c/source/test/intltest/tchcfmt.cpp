@@ -38,8 +38,9 @@ TestChoiceFormat::TestSimpleExample( void )
     UErrorCode status;
     FieldPosition fpos(0);
     Formattable f;
+    int32_t ix;
     //for (double i = 0.0; i <= 8.0; ++i) {
-    for (int32_t ix = 0; ix <= 8; ++ix) {
+    for (ix = 0; ix <= 8; ++ix) {
         double i = ix; //nos
         status = U_ZERO_ERROR;
         fpos = 0;
