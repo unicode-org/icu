@@ -601,7 +601,9 @@ Normalizer::decompose(const UnicodeString& source,
     
     
     if (offset > limit) {
-      doAppend(DecompData::contents, offset, result);
+    /* HSYS: Be sure to check this for later.  UChar may not always be
+       uint16_t*/
+      doAppend((const UChar*)(DecompData::contents), offset, result);
     } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
       hangulToJamo(ch, result, limit);
     } else {
@@ -638,9 +640,11 @@ UChar Normalizer::nextDecomp()
       initBuffer();
       
       if (offset > minDecomp) {
-    doAppend(DecompData::contents, offset, buffer);
+        /* HSYS: Be sure to check this for later.  UChar may not always be
+           uint16_t*/
+        doAppend((const UChar*)(DecompData::contents), offset, buffer);
       } else {
-    buffer += ch;
+        buffer += ch;
       }
       UBool needToReorder = FALSE;
       
@@ -718,7 +722,9 @@ UChar Normalizer::prevDecomp() {
         // Now decompose this base character
         offset = ucmp16_getu(DecompData::offsets, ch);
         if (offset > minDecomp) {
-            doInsert(DecompData::contents, offset, buffer, 0);
+            /* HSYS: Be sure to check this for later.  UChar may not always be
+               uint16_t*/
+            doInsert((const UChar *)(DecompData::contents), offset, buffer, 0);
         } else {
             // This is a base character that doesn't decompose
             // and isn't involved in reordering, so throw it back
@@ -1143,7 +1149,9 @@ void Normalizer::hangulToJamo(UChar ch, UnicodeString& result, uint16_t decompLi
 void Normalizer::jamoAppend(UChar ch, uint16_t decompLimit, UnicodeString& dest) {
   uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
     if (offset > decompLimit) {
-        doAppend(DecompData::contents, offset, dest);
+        /* HSYS: Be sure to check this for later.  UChar may not always be
+           uint16_t*/
+        doAppend((const UChar*)(DecompData::contents), offset, dest);
     } else {
         dest += ch;
     }

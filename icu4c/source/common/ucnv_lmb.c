@@ -1275,7 +1275,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
       args->converter->invalidCharLength = savebytes;
       uprv_memcpy(args->converter->invalidCharBuffer, saveSource, savebytes);
       args->source = args->sourceLimit;
-      *err = 0;
+      *err = U_ZERO_ERROR;
    }
 }
 
