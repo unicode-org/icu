@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2003/06/03 18:49:34 $
- * $Revision: 1.26 $
+ * $Date: 2004/01/26 23:04:48 $
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -230,7 +230,7 @@ import java.io.*;
  *
  * @author Richard Gillam
  * @stable ICU 2.0
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.26 $ $Date: 2003/06/03 18:49:34 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.27 $ $Date: 2004/01/26 23:04:48 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -361,12 +361,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             if (!description.equals(other.description)) {
                 return false;
             }
-            if (text == null) {
-                return other.text == null;
-            }
-            else {
-                return text.equals(other.text);
-            }
+            return getText().equals(other.getText());
         }
         catch(ClassCastException e) {
             return false;
