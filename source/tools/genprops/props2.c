@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -76,6 +76,31 @@ static void U_CALLCONV
 ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
           UErrorCode *pErrorCode);
+
+static void
+parseMultiFieldFile(char *filename, char *basename,
+                    const char *ucdFile, const char *suffix,
+                    int32_t fieldCount,
+                    UParseLineFn *lineFn,
+                    UErrorCode *pErrorCode) {
+    char *fields[20][2];
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    writeUCDFilename(basename, ucdFile, suffix);
+
+    u_parseDelimitedFile(filename, ';', fields, fieldCount, lineFn, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
+    }
+}
+
+static void U_CALLCONV
+numericLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
+              UErrorCode *pErrorCode);
 
 /* parse files with single enumerated properties ---------------------------- */
 
@@ -367,6 +392,10 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     basename=filename+uprv_strlen(filename);
 
     /* process various UCD .txt files */
+
+    /* add Han numeric types & values */
+    parseMultiFieldFile(filename, basename, "DerivedNumericValues", suffix, 3, numericLineFn, pErrorCode);
+
     parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
     /*
@@ -488,6 +517,112 @@ ageLineFn(void *context,
     if(!upvec_setValue(pv, start, limit, 0, version<<UPROPS_AGE_SHIFT, UPROPS_AGE_MASK, pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set character age: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
+    }
+}
+
+/* DerivedNumericValues.txt ------------------------------------------------- */
+
+static void U_CALLCONV
+numericLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
+              UErrorCode *pErrorCode) {
+    Props newProps;
+    char *s, *end;
+    uint32_t start, limit, value, oldProps32;
+    int32_t type, oldType;
+    char c;
+    UBool isFraction;
+
+    /* get the code point range */
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in DerivedNumericValues.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* check if the numeric value is a fraction (this code does not handle any) */
+    isFraction=FALSE;
+    s=uprv_strchr(fields[1][0], '.');
+    if(s!=NULL) {
+        end=s+1;
+        while('0'<=(c=*end++) && c<='9') {
+            if(c!='0') {
+                isFraction=TRUE;
+                break;
+            }
+        }
+    }
+
+    if(isFraction) {
+        value=0;
+    } else {
+        /* parse numeric value */
+        s=(char *)u_skipWhitespace(fields[1][0]);
+
+        /* try large powers of 10 first, may otherwise overflow strtoul() */
+        if(0==uprv_strncmp(s, "10000000000", 11)) {
+            /* large powers of 10 are encoded in a special way, see store.c */
+            value=0x7fffff00;
+            end=s;
+            while(*(++end)=='0') {
+                ++value;
+            }
+        } else {
+            /* normal number parsing */
+            value=(uint32_t)uprv_strtoul(s, &end, 10);
+        }
+        if(end<=s || (*end!='.' && u_skipWhitespace(end)!=fields[1][1]) || value>=0x80000000) {
+            fprintf(stderr, "genprops: syntax error in DerivedNumericValues.txt field 1 at %s\n", fields[0][0]);
+            exit(U_PARSE_ERROR);
+        }
+    }
+
+    /* parse numeric type */
+    s=trimTerminateField(fields[2][0], fields[2][1]);
+    type=u_getPropertyValueEnum(UCHAR_NUMERIC_TYPE, s);
+    if(type<=0) {
+        fprintf(stderr, "genprops error: unknown numeric type in DerivedNumericValues.txt field 1 at %s\n", s);
+        exit(U_PARSE_ERROR);
+    }
+
+    for(; start<limit; ++start) {
+        oldProps32=getProps(start);
+        oldType=(int32_t)GET_NUMERIC_TYPE(oldProps32);
+        if(oldType==type) {
+            /* this code point was already listed with its numeric value in UnicodeData.txt */
+            continue;
+        }
+        if(oldType!=0) {
+            /* the numeric type differs from what we got from UnicodeData.txt */
+            fprintf(stderr, "genprops error: new numeric value for an already numeric character in DerivedNumericValues.txt at %s\n", fields[0][0]);
+            exit(U_PARSE_ERROR);
+        }
+
+        if(GET_UNSIGNED_VALUE(oldProps32)!=0) {
+            /* the code below is not prepared to maintain values and exceptions */
+            fprintf(stderr, "genprops error: new numeric value for a character with some other value in DerivedNumericValues.txt at %s\n", fields[0][0]);
+            exit(U_PARSE_ERROR);
+        }
+
+        if(isFraction) {
+            fprintf(stderr, "genprops: not prepared for new fractions in DerivedNumericValues.txt field 1 at %s\n", fields[1][0]);
+            exit(U_PARSE_ERROR);
+        }
+
+        if(beVerbose) {
+            printf("adding U+%04x numeric type %d value %lu\n", start, type, value);
+        }
+
+        /* reconstruct the properties and set the new numeric type and value */
+        uprv_memset(&newProps, 0, sizeof(newProps));
+        newProps.code=start;
+        newProps.generalCategory=(uint8_t)GET_CATEGORY(oldProps32);
+        newProps.bidi=(uint8_t)((oldProps32>>UPROPS_BIDI_SHIFT)&0x1f);
+        newProps.isMirrored=(uint8_t)(oldProps32&(1UL<<UPROPS_MIRROR_SHIFT) ? TRUE : FALSE);
+        newProps.numericType=(uint8_t)type;     /* newly parsed numeric type */
+        newProps.numericValue=(int32_t)value;   /* newly parsed numeric value */
+        addProps(start, makeProps(&newProps));
     }
 }
 

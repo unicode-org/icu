@@ -457,10 +457,10 @@ makeProps(Props *p) {
                 printf("*** code 0x%06x needs an exception because it is irregular\n", p->code);
                 */
             } else if(value<UPROPS_MIN_VALUE || UPROPS_MAX_VALUE<value) {
-                printf("*** code 0x%06x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n",
+                printf("*** U+%04x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n",
                     p->code, (long)value, (long)UPROPS_MIN_VALUE, (long)UPROPS_MAX_VALUE);
             } else {
-                printf("*** code 0x%06x needs an exception because it has %u values\n", p->code, count);
+                printf("*** U+%04x needs an exception because it has %u values\n", p->code, count);
             }
         }
 
@@ -623,6 +623,11 @@ addCaseSensitive(UChar32 first, UChar32 last) {
         }
         ++first;
     }
+}
+
+extern uint32_t
+getProps(uint32_t c) {
+    return utrie_get32(pTrie, (UChar32)c, NULL);
 }
 
 /* areas of same properties ------------------------------------------------- */
