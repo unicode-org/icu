@@ -863,17 +863,20 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
     CE = ucmpe32_get(t->mapping, element->cPoints[0]);
 
     if( CE != UCOL_NOT_FOUND) {
-      if(/*isCntTableElement(CE)*/ isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
+      if(isCntTableElement(CE) /*isContraction(CE)*/) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
+        if(!isPrefix(element->mapCE)) { // we cannot reenter prefix elements - as we are going to create a dead loop
+          // Only expansions and regular CEs can go here... Contractions will never happen in this place
             uprv_cnttab_setContraction(t->contractions, CE, 0, 0, element->mapCE, status);
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(t->contractions, CE, element->mapCE, status);
-        } else {
-          ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
-#ifdef UCOL_DEBUG
-          fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
-          //*status = U_ILLEGAL_ARGUMENT_ERROR;
-#endif
         }
+      } else {
+        ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
+#ifdef UCOL_DEBUG
+        fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
+        //*status = U_ILLEGAL_ARGUMENT_ERROR;
+#endif
+      }
     } else {
       ucmpe32_set(t->mapping, element->cPoints[0], element->mapCE);
     }
