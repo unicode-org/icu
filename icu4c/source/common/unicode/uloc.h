@@ -867,8 +867,9 @@ uloc_setKeywordValue(const char* keywordName,
  * @draft ICU 3.2
  */
 typedef enum {
-  ULOC_ACCEPT_VALID    = 0,  /* An exact match was found. */
-  ULOC_ACCEPT_FALLBACK = 1   /* A fallback was found, for example, 
+  ULOC_ACCEPT_FAILED   = 0,  /* No exact match was found. */
+  ULOC_ACCEPT_VALID    = 1,  /* An exact match was found. */
+  ULOC_ACCEPT_FALLBACK = 2   /* A fallback was found, for example, 
                                 Accept list contained 'ja_JP'
                                 which matched available locale 'ja'. */
 } UAcceptResult;
@@ -884,13 +885,15 @@ typedef enum {
  * @draft ICU 3.2
  */
 U_DRAFT int32_t U_EXPORT2
-uloc_acceptLanguageFromHTTP(char *result, int32_t *resultAvailable, UAcceptResult *outResult,
-			const char *httpAcceptLanguage,
-                          UEnumeration* availableLocales,
-                          UErrorCode *status);
+uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
+                            UAcceptResult *outResult,
+                            const char *httpAcceptLanguage,
+                            UEnumeration* availableLocales,
+                            UErrorCode *status);
 
 /**
- * @param acceptList -list of accceptable languages
+ * @param acceptList -list of acceptable languages
+ * @param acceptListCount - count of acceptList items
  * @param result - buffer to accept the result locale
  * @param resultAvailable the size of the result buffer.
  * @param availableLocales - list of available locales to match
@@ -901,6 +904,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t *resultAvailable, UAcceptResul
 U_DRAFT int32_t U_EXPORT2
 uloc_acceptLanguage(char *result, int32_t resultAvailable, 
                     UAcceptResult *outResult, const char *acceptList[],
+                    int32_t acceptListCount,
                     UEnumeration* availableLocales,
                     UErrorCode *status);
 
