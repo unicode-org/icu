@@ -20,7 +20,7 @@ CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB)
 ## Target information
 
 ifneq ($(ENABLE_STATIC),)
-TARGET = $(LIBSICU)ctestfw$(ICULIBSUFFIX).a
+TARGET = $(LIBSICU)$(CTESTFW_STUBNAME)$(ICULIBSUFFIX).a
 endif
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)
@@ -28,7 +28,7 @@ DEFS += -DT_CTEST_IMPLEMENTATION
 
 
 ifneq ($(ENABLE_SHARED),)
-SO_TARGET = $(LIBICU)ctestfw$(ICULIBSUFFIX).$(SO)
+SO_TARGET = $(LIBICU)$(CTESTFW_STUBNAME)$(ICULIBSUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
 endif
 
