@@ -19,6 +19,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/uloc.h"
 #include "unicode/ustring.h"
 #include "unicode/ubrk.h"
 #include "cmemory.h"
@@ -394,6 +395,11 @@ caseMap(UChar *dest, int32_t destCapacity,
         csc.p=(void *)src;
         csc.limit=srcLength;
         locCache=0;
+
+        /* the internal functions require locale!=NULL */
+        if(locale==NULL) {
+            locale=uloc_getDefault();
+        }
 
         if(toWhichCase==TO_LOWER) {
             destLength=_caseMap(csp, ucase_toFullLower,

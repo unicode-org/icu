@@ -19,7 +19,6 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
-#include "unicode/uloc.h"
 #include "unicode/udata.h" /* UDataInfo */
 #include "ucmndata.h" /* DataHeader */
 #include "udatamem.h"
@@ -615,39 +614,80 @@ enum {
     LOC_LITHUANIAN
 };
 
+#define is_a(c) ((c)=='a' || (c)=='A')
+#define is_e(c) ((c)=='e' || (c)=='E')
+#define is_i(c) ((c)=='i' || (c)=='I')
+#define is_l(c) ((c)=='l' || (c)=='L')
+#define is_r(c) ((c)=='r' || (c)=='R')
+#define is_t(c) ((c)=='t' || (c)=='T')
+#define is_u(c) ((c)=='u' || (c)=='U')
+#define is_z(c) ((c)=='z' || (c)=='Z')
+
+/* separator? */
+#define is_sep(c) ((c)=='_' || (c)=='-' || (c)==0)
+
 /*
- * TODO: Consider simpler implementation.
- * For example, directly check for all case versions of the known strings
- * instead of calling uloc_getLanguage().
- * Check for NUL - _ at locale[2].
- * Would not support other things uloc_getLanguage() and uloc_getName()
- * do to a language code, but they should be irrelevant here.
- * Would still have to call uloc_getDefault() if locale==NULL.
- * (Or push this one item out to the caller to cut the dependency on uloc.)
+ * Requires non-NULL locale ID but otherwise does the equivalent of
+ * checking for language codes as if uloc_getLanguage() were called:
+ * Accepts both 2- and 3-letter codes and accepts case variants.
  */
 static int32_t
 getCaseLocale(const char *locale, int32_t *locCache) {
-    char lang[32];
-    UErrorCode errorCode;
-    int32_t length, result;
+    int32_t result;
+    char c;
 
     if(locCache!=NULL && (result=*locCache)!=LOC_UNKNOWN) {
         return result;
     }
 
-    errorCode=U_ZERO_ERROR;
-    length=uloc_getLanguage(locale, lang, sizeof(lang), &errorCode);
-    if(U_FAILURE(errorCode) || length!=2) {
-        result=LOC_ROOT;
-    } else if(
-        (lang[0]=='t' && lang[1]=='r') ||
-        (lang[0]=='a' && lang[1]=='z')
-    ) {
-        result=LOC_TURKISH;
-    } else if(lang[0]=='l' && lang[1]=='t') {
-        result=LOC_LITHUANIAN;
-    } else {
-        result=LOC_ROOT;
+    result=LOC_ROOT;
+
+    /*
+     * This function used to use uloc_getLanguage(), but the current code
+     * removes the dependency of this low-level code on uloc implementation code
+     * and is faster because not the whole locale ID has to be
+     * examined and copied/transformed.
+     *
+     * Because this code does not want to depend on uloc, the caller must
+     * pass in a non-NULL locale, i.e., may need to call uloc_getDefault().
+     */
+    c=*locale++;
+    if(is_t(c)) {
+        /* tr or tur? */
+        c=*locale++;
+        if(is_u(c)) {
+            c=*locale++;
+        }
+        if(is_r(c)) {
+            c=*locale;
+            if(is_sep(c)) {
+                result=LOC_TURKISH;
+            }
+        }
+    } else if(is_a(c)) {
+        /* az or aze? */
+        c=*locale++;
+        if(is_z(c)) {
+            c=*locale++;
+            if(is_e(c)) {
+                c=*locale;
+            }
+            if(is_sep(c)) {
+                result=LOC_TURKISH;
+            }
+        }
+    } else if(is_l(c)) {
+        /* lt or lit? */
+        c=*locale++;
+        if(is_i(c)) {
+            c=*locale++;
+        }
+        if(is_t(c)) {
+            c=*locale;
+            if(is_sep(c)) {
+                result=LOC_LITHUANIAN;
+            }
+        }
     }
 
     if(locCache!=NULL) {
