@@ -793,6 +793,23 @@ void UnicodeSetTest::TestPropertySet() {
         "[:xdigit:]",
         "09afAF",
         "gG!",
+
+        // Regex compatibility test
+        "[-b]", // leading '-' is literal
+        "-b",
+        "ac",
+
+        "[^-b]", // leading '-' is literal
+        "ac",
+        "-b",
+
+        "[b-]", // trailing '-' is literal
+        "-b",
+        "ac",
+
+        "[^b-]", // trailing '-' is literal
+        "ac",
+        "-b"
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);

@@ -1963,6 +1963,12 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 isLiteral = TRUE; // Treat leading '-' as a literal
                 break; // Fall through
             }
+            break;
+        case 2:
+            if (c == HYPHEN && invert) {
+                isLiteral = TRUE; // [^-...] starts with literal '-'
+            }
+            break;
             // else fall through and parse this character normally
         }
 
