@@ -50,7 +50,6 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
-#include "uhash.h"
 #include <wchar.h>
 
 
@@ -62,7 +61,7 @@ typedef struct _FileStream FileStream;
 class Locale;
 class RuleBasedCollator;
 class ResourceBundle;
-//struct UHashtable;
+struct UHashtable;
 
 
 /**
