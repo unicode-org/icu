@@ -1,10 +1,11 @@
 //---------------------------------------------------------
-// Copyright (C) 2003, International Business Machines
+// Copyright (C) 2003-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Thu Sep  4 13:58:40 2003
+// Build date: Mon May 24 14:57:11 2004
 // Olson source: ftp://elsie.nci.nih.gov/pub/
+// Olson version: 2003e
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
@@ -36,7 +37,6 @@ public final class ZoneMetaData {
     { "America/Manaus", "Brazil/West" },
     { "America/Mazatlan", "Mexico/BajaSur" },
     { "America/Mexico_City", "Mexico/General" },
-    { "America/Montreal", "Canada/Eastern" },
     { "America/New_York", "EST5EDT", "SystemV/EST5EDT", "US/Eastern" },
     { "America/Noronha", "Brazil/DeNoronha" },
     { "America/Phoenix", "MST", "PNT", "SystemV/MST7", "US/Arizona" },
@@ -48,6 +48,7 @@ public final class ZoneMetaData {
     { "America/St_Johns", "CNT", "Canada/Newfoundland" },
     { "America/St_Thomas", "America/Virgin" },
     { "America/Ensenada", "America/Tijuana", "Mexico/BajaNorte" },
+    { "America/Toronto", "Canada/Eastern" },
     { "America/Vancouver", "Canada/Pacific" },
     { "America/Whitehorse", "Canada/Yukon" },
     { "America/Winnipeg", "Canada/Central" },
@@ -141,13 +142,13 @@ public final class ZoneMetaData {
     { "BM", "Atlantic/Bermuda" },
     { "BN", "Asia/Brunei" },
     { "BO", "America/La_Paz" },
-    { "BR", "America/Araguaina", "America/Belem", "America/Boa_Vista", "America/Cuiaba", "America/Eirunepe", "America/Fortaleza", "America/Maceio", "America/Manaus", "America/Noronha", "America/Porto_Acre", "America/Porto_Velho", "America/Recife", "America/Rio_Branco", "America/Sao_Paulo", "BET", "Brazil/Acre", "Brazil/DeNoronha", "Brazil/East", "Brazil/West" },
+    { "BR", "America/Araguaina", "America/Bahia", "America/Belem", "America/Boa_Vista", "America/Campo_Grande", "America/Cuiaba", "America/Eirunepe", "America/Fortaleza", "America/Maceio", "America/Manaus", "America/Noronha", "America/Porto_Acre", "America/Porto_Velho", "America/Recife", "America/Rio_Branco", "America/Sao_Paulo", "BET", "Brazil/Acre", "Brazil/DeNoronha", "Brazil/East", "Brazil/West" },
     { "BS", "America/Nassau" },
     { "BT", "Asia/Thimbu", "Asia/Thimphu" },
     { "BW", "Africa/Gaborone" },
     { "BY", "Europe/Minsk" },
     { "BZ", "America/Belize" },
-    { "CA", "America/Cambridge_Bay", "America/Dawson", "America/Dawson_Creek", "America/Edmonton", "America/Glace_Bay", "America/Goose_Bay", "America/Halifax", "America/Inuvik", "America/Iqaluit", "America/Montreal", "America/Nipigon", "America/Pangnirtung", "America/Rainy_River", "America/Rankin_Inlet", "America/Regina", "America/St_Johns", "America/Swift_Current", "America/Thunder_Bay", "America/Vancouver", "America/Whitehorse", "America/Winnipeg", "America/Yellowknife", "CNT", "Canada/Atlantic", "Canada/Central", "Canada/East-Saskatchewan", "Canada/Eastern", "Canada/Mountain", "Canada/Newfoundland", "Canada/Pacific", "Canada/Saskatchewan", "Canada/Yukon", "SystemV/AST4ADT", "SystemV/CST6" },
+    { "CA", "America/Cambridge_Bay", "America/Dawson", "America/Dawson_Creek", "America/Edmonton", "America/Glace_Bay", "America/Goose_Bay", "America/Halifax", "America/Inuvik", "America/Iqaluit", "America/Montreal", "America/Nipigon", "America/Pangnirtung", "America/Rainy_River", "America/Rankin_Inlet", "America/Regina", "America/St_Johns", "America/Swift_Current", "America/Thunder_Bay", "America/Toronto", "America/Vancouver", "America/Whitehorse", "America/Winnipeg", "America/Yellowknife", "CNT", "Canada/Atlantic", "Canada/Central", "Canada/East-Saskatchewan", "Canada/Eastern", "Canada/Mountain", "Canada/Newfoundland", "Canada/Pacific", "Canada/Saskatchewan", "Canada/Yukon", "SystemV/AST4ADT", "SystemV/CST6" },
     { "CC", "Indian/Cocos" },
     { "CD", "Africa/Kinshasa", "Africa/Lubumbashi" },
     { "CF", "Africa/Bangui" },
@@ -160,11 +161,12 @@ public final class ZoneMetaData {
     { "CN", "Asia/Chongqing", "Asia/Chungking", "Asia/Harbin", "Asia/Kashgar", "Asia/Shanghai", "Asia/Urumqi", "CTT", "PRC" },
     { "CO", "America/Bogota" },
     { "CR", "America/Costa_Rica" },
+    { "CS", "Europe/Belgrade" },
     { "CU", "America/Havana", "Cuba" },
     { "CV", "Atlantic/Cape_Verde" },
     { "CX", "Indian/Christmas" },
     { "CY", "Asia/Nicosia", "Europe/Nicosia" },
-    { "CZ", "Europe/Bratislava", "Europe/Prague" },
+    { "CZ", "Europe/Prague" },
     { "DE", "Europe/Berlin" },
     { "DJ", "Africa/Djibouti" },
     { "DK", "Europe/Copenhagen" },
@@ -215,7 +217,7 @@ public final class ZoneMetaData {
     { "IQ", "Asia/Baghdad" },
     { "IR", "Asia/Tehran", "Iran" },
     { "IS", "Atlantic/Reykjavik", "Iceland" },
-    { "IT", "Europe/Rome", "Europe/San_Marino", "Europe/Vatican" },
+    { "IT", "Europe/Rome" },
     { "JM", "America/Jamaica", "Jamaica" },
     { "JO", "Asia/Amman" },
     { "JP", "Asia/Tokyo", "JST", "Japan" },
@@ -269,7 +271,7 @@ public final class ZoneMetaData {
     { "NG", "Africa/Lagos" },
     { "NI", "America/Managua" },
     { "NL", "Europe/Amsterdam" },
-    { "NO", "Arctic/Longyearbyen", "Atlantic/Jan_Mayen", "Europe/Oslo" },
+    { "NO", "Europe/Oslo" },
     { "NP", "Asia/Katmandu" },
     { "NR", "Pacific/Nauru" },
     { "NU", "Pacific/Niue" },
@@ -346,7 +348,6 @@ public final class ZoneMetaData {
     { "WS", "MIT", "Pacific/Apia" },
     { "YE", "Asia/Aden" },
     { "YT", "Indian/Mayotte" },
-    { "YU", "Europe/Belgrade", "Europe/Ljubljana", "Europe/Sarajevo", "Europe/Skopje", "Europe/Zagreb" },
     { "ZA", "Africa/Johannesburg" },
     { "ZM", "Africa/Lusaka" },
     { "ZW", "Africa/Harare", "CAT" }
