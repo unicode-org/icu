@@ -918,7 +918,6 @@ void collIterNormalize(collIterate *collationSource)
             status = U_ZERO_ERROR;
             unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
                             collationSource->writableBufSize, &status);
-            normLen = 0;
         }
         else {
             return;
