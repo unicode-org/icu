@@ -767,9 +767,9 @@ void UnicodeSetTest::TestPropertySet() {
         "\\u03D6", // 1.1
         "\\u03D8\\u03D9", // 3.2
         
-        "[:Age=3.2:]",
-        "\\u03D8\\u03D9",
-        "\\u03D6", // 1.1
+        "[:Age=3.1:]",
+        "\\u1800\\u3400\\U0002f800",
+        "\\u0220\\u034f\\u30ff\\u33ff\\ufe73\\U00010000\\U00050000",
 
         // JB#2350: Case_Sensitive
         "[:Case Sensitive:]",
@@ -1231,11 +1231,11 @@ UnicodeSetTest::expectContainment(const UnicodeSet& set,
                                   const UnicodeString& charsIn,
                                   const UnicodeString& charsOut) {
     UnicodeString bad;
+    UChar32 c;
     int32_t i;
-    for (i=0; i<charsIn.length(); ++i) {
-        UChar32 c = charsIn.char32At(i);
-        if(c>0xFFFF) i++;
 
+    for (i=0; i<charsIn.length(); i+=U16_LENGTH(c)) {
+        c = charsIn.char32At(i);
         if (!set.contains(c)) {
             bad.append(c);
         }
@@ -1248,14 +1248,14 @@ UnicodeSetTest::expectContainment(const UnicodeSet& set,
     }
 
     bad.truncate(0);
-    for (i=0; i<charsOut.length(); ++i) {
-        UChar c = charsOut.charAt(i);
+    for (i=0; i<charsOut.length(); i+=U16_LENGTH(c)) {
+        c = charsOut.char32At(i);
         if (set.contains(c)) {
             bad.append(c);
         }
     }
     if (bad.length() > 0) {
-        logln((UnicodeString)"Fail: set " + setName + " contains " + prettify(bad) +
+        errln((UnicodeString)"Fail: set " + setName + " contains " + prettify(bad) +
               ", expected non-containment of " + prettify(charsOut));
     } else {
         logln((UnicodeString)"Ok: set " + setName + " does not contain " + prettify(charsOut));
