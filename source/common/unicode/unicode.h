@@ -31,6 +31,12 @@
 #include "unicode/uchar.h"
 
 /**
+ * This class is deprecated and will be removed.
+ * Use the C API, see uchar.h and utf.h.
+ * The Unicode class is a pure 1:1 wrapper for the functions and macros there.
+ *
+ * Old documentation:
+ *
  * The Unicode class allows you to query the properties associated with
  * individual Unicode character values.  
  * <p>
@@ -41,7 +47,9 @@
  * as well as semantic information such as whether a character is a digit or 
  * uppercase, lowercase, or uncased.
  * <P>
+ *
  * @subclassing Do not subclass.
+ * @deprecated To be removed after 2002-sep-30; use the C API, see uchar.h and utf.h.
  */
 class U_COMMON_API Unicode
 {
@@ -50,6 +58,8 @@ public:
      * In C++, static const members actually take up memory and need to be accessed.
      * enum values are more like C #define's.
      * The following is a collection of constants, not an enumeration type.
+     *
+     * @deprecated See the Unicode class description.
      */
     enum {
         /** The lowest Unicode code point value. Code points are non-negative. */
@@ -98,6 +108,8 @@ public:
 
     /**
      * Public data for enumerated Unicode general category types
+     *
+     * @deprecated See the Unicode class description.
      */
 
     enum EUnicodeGeneralTypes
@@ -138,6 +150,8 @@ public:
     /* Please keep these values in sync with UCharScript */
     /**
      * These are the same values as uchar.h::UCharScript
+     *
+     * @deprecated See the Unicode class description.
      */
     enum EUnicodeScript 
     {
@@ -233,6 +247,8 @@ public:
 
     /**
      * This specifies the language directional property of a character set.
+     *
+     * @deprecated See the Unicode class description.
      */
     enum EDirectionProperty { 
         LEFT_TO_RIGHT               = 0, 
@@ -259,6 +275,8 @@ public:
     /**
      * Values returned by the getCellWidth() function.
      * @see Unicode#getCellWidth
+     *
+     * @deprecated See the Unicode class description.
      */
     enum ECellWidths
     {
@@ -276,6 +294,8 @@ public:
      *
      * @param c The code unit to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isSingle(UChar c);
 
@@ -285,6 +305,8 @@ public:
      *
      * @param c The code unit to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isLead(UChar c);
 
@@ -294,6 +316,8 @@ public:
      *
      * @param c The code unit to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isTrail(UChar c);
 
@@ -305,6 +329,8 @@ public:
      *
      * @param c The code point to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isSurrogate(UChar32 c);
 
@@ -318,6 +344,8 @@ public:
      *
      * @param c The code point to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isUnicodeChar(UChar32 c);
 
@@ -330,6 +358,8 @@ public:
      *
      * @param c The code point to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isError(UChar32 c);
 
@@ -340,6 +370,8 @@ public:
      *
      * @param c The code point to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isValid(UChar32 c);
 
@@ -352,6 +384,8 @@ public:
      *
      * @param c The code point to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool needMultipleUChar(UChar32 c);
 
@@ -361,6 +395,8 @@ public:
      *
      * @param c The code point to be tested.
      * @return Boolean value.
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline int32_t charLength(UChar32 c);
 
@@ -375,6 +411,8 @@ public:
      * @return An average size necessary for the UTF that ICU was compiled for.
      *         (Only UTF-16 is supported right now, therefore,
      *         this will always be <code>size</code> itself. This may change in the future.)
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline int32_t arraySize(int32_t size);
 
@@ -388,7 +426,8 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isTitleCase
      * @see Unicode#toLowerCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isLowerCase(UChar32 ch);
 
@@ -401,7 +440,8 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
      * @see Unicode#toUpperCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isUpperCase(UChar32 ch);
 
@@ -414,7 +454,8 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isLowerCase
      * @see Unicode#toTitleCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isTitleCase(UChar32 ch);
 
@@ -427,7 +468,8 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#forDigit
      * @see     Unicode#digitValue
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isDigit(UChar32 ch);
 
@@ -444,7 +486,8 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isDefined(UChar32 ch);
 
@@ -456,7 +499,8 @@ public:
      * @return  true if the Unicode character is a control character; false otherwise.
      *
      * @see Unicode#isPrintable
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isControl(UChar32 ch);
 
@@ -468,7 +512,8 @@ public:
      * @return  true if the Unicode character is a printable character; false otherwise.
      *
      * @see Unicode#isControl
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isPrintable(UChar32 ch);
 
@@ -481,7 +526,8 @@ public:
      *
      * @see Unicode#isLetter
      * @see Unicode#isDigit
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
      static inline UBool isBaseForm(UChar32 ch);
 
@@ -498,7 +544,8 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#isLowerCase
      * @see Unicode#isTitleCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isLetter(UChar32 ch);
 
@@ -520,7 +567,8 @@ public:
      * @see     isJavaIdentifierPart
      * @see     isLetter
      * @see     isUnicodeIdentifierStart
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isJavaIdentifierStart(UChar32 ch);
 
@@ -550,7 +598,8 @@ public:
      * @see     isLetter
      * @see     isDigit
      * @see     isUnicodeIdentifierPart
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isJavaIdentifierPart(UChar32 ch);
 
@@ -566,7 +615,8 @@ public:
      * @see     isJavaIdentifierStart
      * @see     isLetter
      * @see     isUnicodeIdentifierPart
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isUnicodeIdentifierStart(UChar32 ch);
 
@@ -594,7 +644,8 @@ public:
      * @see     isJavaIdentifierPart
      * @see     isLetterOrDigit
      * @see     isUnicodeIdentifierStart
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isUnicodeIdentifierPart(UChar32 ch);
 
@@ -621,7 +672,8 @@ public:
      *          FALSE otherwise.
      * @see     isJavaIdentifierPart
      * @see     isUnicodeIdentifierPart
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isIdentifierIgnorable(UChar32 ch);
 
@@ -647,7 +699,8 @@ public:
      * @see Unicode#isUpperCase
      * @see Unicode#toUpperCase
      * @see Unicode#toTitleCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
    static inline UChar32 toLowerCase(UChar32 ch); 
 
@@ -670,7 +723,8 @@ public:
      * @see Unicode#isLowerCase
      * @see Unicode#toLowerCase
      * @see Unicode#toTitleCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UChar32 toUpperCase(UChar32 ch);
 
@@ -689,7 +743,8 @@ public:
      * @see Unicode#isTitleCase
      * @see Unicode#toUpperCase
      * @see Unicode#toLowerCase
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UChar32 toTitleCase(UChar32 ch);
 
@@ -704,7 +759,8 @@ public:
      * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
      * @return      the case folding equivalent of the character, if any;
      *              otherwise the character itself.
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UChar32
     foldCase(UChar32 c, uint32_t options);
@@ -715,7 +771,8 @@ public:
      *
      * @param ch    the character to be tested
      * @return  true if the character is a space character; false otherwise.
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isSpaceChar(UChar32 ch);
 
@@ -745,7 +802,8 @@ public:
      * @return  true if the character is an ICU whitespace character;
      *          false otherwise.
      * @see     #isSpaceChar
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isWhitespace(UChar32 ch);
 
@@ -781,7 +839,8 @@ public:
      * @see Unicode#CURRENCY_SYMBOL
      * @see Unicode#MODIFIER_SYMBOL
      * @see Unicode#OTHER_SYMBOL
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline int8_t getType(UChar32 ch);
 
@@ -790,7 +849,8 @@ public:
      *
      * @param c the code point of the character
      * @return the combining class of the character
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline uint8_t getCombiningClass(UChar32 c);
 
@@ -801,7 +861,8 @@ public:
      * For example, 0x0041 (letter A) has the LEFT_TO_RIGHT directional 
      * property.
      * @see #EDirectionProperty
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline EDirectionProperty characterDirection(UChar32 ch);
 
@@ -813,6 +874,8 @@ public:
      *
      * @param c the character (code point, Unicode scalar value) to be tested
      * @return TRUE if the character has the "mirrored" property
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UBool isMirrored(UChar32 c);
 
@@ -830,6 +893,8 @@ public:
      * @return another Unicode code point that may serve as a mirror-image
      *         substitute, or c itself if there is no such mapping or c
      *         does not have the "mirrored" property
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UChar32 charMirror(UChar32 c);
 
@@ -889,7 +954,8 @@ public:
      * choseong filler character at the beginning of syllables that don't have an initial
      * consonant.  The results may be slightly off with Korean text following different
      * conventions.
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline uint16_t getCellWidth(UChar32 ch);
 
@@ -918,7 +984,8 @@ public:
      * &#32;   // use invariant-character conversion to Unicode
      * &#32;   UnicodeString name(buffer, length, "");
      * </pre>
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UTextOffset
     getCharName(uint32_t code,
@@ -933,7 +1000,8 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#forDigit
      * @see     Unicode#isDigit
-     * @deprecated HSYS: use Unicode::digit instead. Remove after 2000-dec-31
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline int32_t digitValue(UChar32 ch);     
 
@@ -972,7 +1040,8 @@ public:
      * @see     Unicode#forDigit
      * @see     Unicode#digitValue
      * @see     Unicode#isDigit
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline int8_t digit(UChar32 ch, int8_t radix);
 
@@ -1001,14 +1070,16 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#digitValue
      * @see     Unicode#isDigit
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static inline UChar32 forDigit(int32_t digit, int8_t radix);
 
     /**
      * Retrieves the Unicode Standard Version number that is used
      * @param info the version # information, the result will be filled in
-     * @draft
+     *
+     * @deprecated See the Unicode class description.
      */
     static void getUnicodeVersion(UVersionInfo info);
 
@@ -1255,35 +1326,12 @@ Unicode::digitValue(UChar32 ch) {
 
 inline int8_t
 Unicode::digit(UChar32 ch, int8_t radix) {
-    // ### TODO this should probably move to a C u_charDigitValueEx(ch, radix) and be called here
-    int8_t value;
-    if ((uint8_t)(radix-MIN_RADIX) <= (MAX_RADIX-MIN_RADIX)) {
-        value=(int8_t)u_charDigitValue(ch);
-        if (value < 0) {
-            // ch is not a decimal digit, try latin letters
-            if (ch >= 0x61 && ch <= 0x7A) {
-                value = (int8_t)(ch - 0x57);  // ch - 'a' + 10
-            }
-            else if (ch >= 0x41 && ch <= 0x5A) {
-                value = (int8_t)(ch - 0x37);  // ch - 'A' + 10
-            }
-        }
-    } else {
-        value = -1; // invalid radix
-    }
-    return (int8_t)((value < radix) ? value : -1);
+    return u_digit(ch, radix);
 }
 
 inline UChar32
 Unicode::forDigit(int32_t digit, int8_t radix) {
-    // ### TODO this should probably move to a C u_forDigit(digit, radix) and be called here
-    if((uint8_t)(radix-MIN_RADIX)>(MAX_RADIX-MIN_RADIX) || (uint32_t)digit>=(uint32_t)radix) {
-        return 0;
-    } else if(digit<10) {
-        return (UChar32)(0x30+digit);
-    } else {
-        return (UChar32)((0x61-10)+digit);
-    }
+    return u_forDigit(digit, radix);
 }
 
 inline void
