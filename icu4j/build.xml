@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/03/16 07:11:30 $ 
-* $Revision: 1.48 $
+* $Date: 2002/03/18 21:27:45 $ 
+* $Revision: 1.49 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -34,6 +34,7 @@
         <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
 
+        <mkdir dir="${build.dir}"/>
 		<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
 		    <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
 			<srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
@@ -55,7 +56,6 @@
 	</target>
 
     <target name="core" depends="init,coreData,_resources">
-        <mkdir dir="${build.dir}"/>
         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
         <javac includes="com/ibm/icu/dev/tool/**/*.java,com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
