@@ -113,10 +113,13 @@
 
 /** A number formatter.
  *  For usage in C programs.
+ *  @stable ICU 2.0
  */
 typedef void* UNumberFormat;
 
-/** The possible number format styles. */
+/** The possible number format styles. 
+ *  @stable ICU 2.0
+ */
 typedef enum UNumberFormatStyle {
     /** Ignore style specification and open the pattern */
     UNUM_IGNORE=0,
@@ -134,6 +137,9 @@ typedef enum UNumberFormatStyle {
     UNUM_DEFAULT = UNUM_DECIMAL
 } UNumberFormatStyle;
 
+/** The possible number format rounding modes. 
+ *  @stable ICU 2.0
+ */
 typedef enum UNumberFormatRoundingMode {
     UNUM_ROUND_CEILING,
     UNUM_ROUND_FLOOR,
@@ -144,6 +150,9 @@ typedef enum UNumberFormatRoundingMode {
     UNUM_ROUND_HALFUP
 } UNumberFormatRoundingMode;
 
+/** The possible number format pad positions. 
+ *  @stable ICU 2.0
+ */
 typedef enum UNumberFormatPadPosition {
     UNUM_PAD_BEFORE_PREFIX,
     UNUM_PAD_AFTER_PREFIX,
@@ -342,7 +351,7 @@ unum_getAvailable(int32_t index);
 U_CAPI int32_t U_EXPORT2 
 unum_countAvailable(void);
 
-/** The possible UNumberFormat numeric attributes */
+/** The possible UNumberFormat numeric attributes @draft ICU 2.0 */
 typedef enum UNumberFormatAttribute {
   /** Parse integers only */
   UNUM_PARSE_INT_ONLY,
@@ -455,7 +464,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             double                 newValue);
 
-/** The possible UNumberFormat text attributes */
+/** The possible UNumberFormat text attributes @stable ICU 2.0*/
 typedef enum UNumberFormatTextAttribute {
   /** Positive prefix */
   UNUM_POSITIVE_PREFIX,
@@ -532,7 +541,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         int32_t                 resultLength,
         UErrorCode*             status);
 
-/** The maximum size for a textual number format symbol. */
+/** The maximum size for a textual number format symbol. @internal*/
 #define UNFSYMBOLSMAXSIZE 10
 
 /**
