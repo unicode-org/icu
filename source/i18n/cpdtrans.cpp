@@ -11,6 +11,8 @@
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 
+#define ID_DELIM ((UChar)0x003B) /*;*/
+
 /**
  * Constructs a new compound transliterator given an array of
  * transliterators.  The array of transliterators may be of any
@@ -44,7 +46,7 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                               UnicodeFilter* adoptedFilter) :
     Transliterator(ID, 0), // set filter to 0 here!
     filters(0) {
-    UnicodeString* list = split(ID, ';', count);
+    UnicodeString* list = split(ID, ID_DELIM, count);
     trans = new Transliterator*[count];
     for (int32_t i = 0; i < count; ++i) {
         trans[i] = createInstance(list[direction==FORWARD ? i : (count-1-i)],
@@ -57,15 +59,15 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
 
 /**
  * Return the IDs of the given list of transliterators, concatenated
- * with ';' delimiting them.  Equivalent to the perlish expression
- * join(';', map($_.getID(), transliterators).
+ * with ID_DELIM delimiting them.  Equivalent to the perlish expression
+ * join(ID_DELIM, map($_.getID(), transliterators).
  */
 UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterators[],
                                               int32_t count) {
     UnicodeString id;
     for (int32_t i=0; i<count; ++i) {
         if (i > 0) {
-            id.append((UChar)';');
+            id.append(ID_DELIM);
         }
         id.append(transliterators[i]->getID());
     }
