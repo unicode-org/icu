@@ -256,7 +256,9 @@ void ConvertTest::TestConvert()
         ucs_file_in = fopen(ucs_file_name, "rb");
         if (!ucs_file_in) 
         {
-            errln("Couldn't open the Unicode file...");
+    	    char  errmsg[UCS_FILE_NAME_SIZE + 128];
+            sprintf(errmsg, "Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
+            errln(errmsg);
             return;
         }
 

@@ -71,10 +71,10 @@ TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
 RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=@DATABUILDDIR@/%.res)
 #TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
 #TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=@DATABUILDDIR@/translit/%.res)
-TEST_FILES = @DATABUILDDIR@/../source/test/testdata/root.res \
-@DATABUILDDIR@/../source/test/testdata/te.res \
-@DATABUILDDIR@/../source/test/testdata/te_IN.res \
-@DATABUILDDIR@/../source/test/testdata/testtypes.res
+TEST_FILES = $(top_builddir)/test/testdata/root.res \
+$(top_builddir)/test/testdata/te.res \
+$(top_builddir)/test/testdata/te_IN.res \
+$(top_builddir)/test/testdata/testtypes.res
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -119,13 +119,9 @@ $(TARGET) : $(OBJECTS)
 ## Rule to build a compiled res file.
 ## Note the order of the next three rules here is important!
 
-@DATABUILDDIR@/../source/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
+$(top_builddir)/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
-	ICU_DATA=@DATABUILDDIR@ ./genrb -s $(top_srcdir)/test/testdata/ -d @DATABUILDDIR@../source/test/testdata/ $(<F)
-
-#@DATABUILDDIR@/translit/%.res : $(top_srcdir)/../data/translit/%.txt
-#	@echo "Creating translit resource file for $<"
-#	@ICU_DATA=@DATABUILDDIR@ ./genrb -d @DATABUILDDIR@/translit/ $<
+	ICU_DATA=@DATABUILDDIR@ ./genrb -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
 
 @DATABUILDDIR@/%.res : $(top_srcdir)/../data/%.txt
 	@echo "Creating compiled resource file for $<"
