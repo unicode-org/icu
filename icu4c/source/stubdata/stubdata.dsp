@@ -57,11 +57,11 @@ LINK32=link.exe
 # SUBTRACT LINK32 /pdb:none
 # Begin Custom Build
 ProjDir=.
-InputPath=\icu\bin\icudt19.dll
+InputPath=..\..\bin\icudt19.dll
 SOURCE="$(InputPath)"
 
-"$(ProjDir)/stubdatabuilt.txt" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	echo "File with stubdata build time, used as a dependency to trigger fresh data build, since stubdata dll will overwrite the real one." > $(ProjDir)/stubdatabuilt.txt
+"$(ProjDir)\stubdatabuilt.txt" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	echo "File with stubdata build time, used as a dependency to trigger fresh data build, since stubdata dll will overwrite the real one." > $(ProjDir)\stubdatabuilt.txt
 
 # End Custom Build
 
@@ -93,11 +93,11 @@ LINK32=link.exe
 # SUBTRACT LINK32 /pdb:none
 # Begin Custom Build
 ProjDir=.
-InputPath=\icu\bin\icudt19.dll
+InputPath=..\..\bin\icudt19.dll
 SOURCE="$(InputPath)"
 
-"$(ProjDir)/stubdatabuilt.txt" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	echo "File with stubdata build time, used as a dependency to trigger fresh data build, since stubdata dll will overwrite the real one." > $(ProjDir)/stubdatabuilt.txt
+"$(ProjDir)\stubdatabuilt.txt" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	echo "File with stubdata build time, used as a dependency to trigger fresh data build, since stubdata dll will overwrite the real one." > $(ProjDir)\stubdatabuilt.txt
 
 # End Custom Build
 
