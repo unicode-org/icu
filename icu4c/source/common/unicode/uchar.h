@@ -834,11 +834,10 @@ u_totitle(UChar c);
  * Gets the Unicode version information.  The version array stores the version information
  * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
  * is then represented as 0x01031F02.
- * @param versionArray the version # 
- * @return the size of the version array 
+ * @param info the version # information
  */
-U_CAPI int32_t U_EXPORT2
-u_getUnicodeVersion(uint8_t* versionArray);
+U_CAPI void U_EXPORT2
+u_getUnicodeVersion(UVersionInfo *info);
 
 #endif /*_UCHAR*/
 /*eof*/

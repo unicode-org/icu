@@ -345,7 +345,7 @@ void TestUnicodeData()
     char newPath[256];
     const char *expectVersion = "3.0.0";  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
     uint8_t expectVersionArray[] = {0x03, 0x00, 0x00, 0x00};
-    uint8_t versionArray[U_MAX_VERSION_LEN];
+    UVersionInfo versionArray;
     char expectString[256];
 
     strcpy(newPath, u_getDataDirectory());
@@ -355,12 +355,12 @@ void TestUnicodeData()
 
     strcpy(expectString, "Unicode Version ");
     strcat(expectString, expectVersion);
-    u_getUnicodeVersion(versionArray);
+    u_getUnicodeVersion(&versionArray);
 
-    if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LEN) != 0)
+    if(memcmp(versionArray.versions, expectVersionArray, U_MAX_VERSION_LEN) != 0)
       {
 	log_err("Testing u_getUnicodeVersion() - expected %s got %d.%d.%d.%d\n", expectString, 
-        versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+        versionArray.versions[0], versionArray.versions[1], versionArray.versions[2], versionArray.versions[3]);
       }
 
 #if defined(ICU_UNICODE_VERSION)
