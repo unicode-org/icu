@@ -30,6 +30,8 @@
 const UChar Transliterator::ID_SEP   = 0x002D; /*-*/
 const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
 
+static Hashtable _cache;
+
 /**
  * Dictionary of known transliterators.  Keys are <code>String</code>
  * names, values are one of the following:
@@ -48,7 +50,7 @@ const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
  * RuleBasedTransliterator constructor.
  * </ul>
  */
-Hashtable* Transliterator::cache = 0;
+Hashtable* Transliterator::cache = &_cache;
 
 /**
  * The mutex controlling access to the cache.
@@ -824,7 +826,7 @@ void Transliterator::initializeCache(void) {
     // Before looking for the resource, construct our cache.
     // That way if the resource is absent, we will at least
     // have a valid cache object.
-    cache = new Hashtable(status); // TODO: What if this call fails?
+//    cache = new Hashtable(status); // TODO: What if this call fails?
     cacheIDs.setComparer(compareIDs);
 
     /* The following code parses the index table located in
