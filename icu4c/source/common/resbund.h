@@ -43,6 +43,7 @@
 *                           Reworked to use new binary format.
 *                           Cleaned up.
 * 06/14/99      stephen     Removed methods taking a filename suffix.
+* 11/09/99		weiv		Added getLocale(), fRealLocale, removed fRealLocaleID
 *******************************************************************************
 */
 
@@ -423,6 +424,13 @@ public:
      */
     const char*         getVersionNumber(void) const;
 
+	/**
+	 * Return the Locale associated with this ResourceBundle. 
+	 *
+	 * @return a Locale object
+	 */
+	const Locale &getLocale(void) const ;
+
 private:
     class U_COMMON_API PathInfo {
     public:
@@ -621,7 +629,7 @@ private:
     bool_t                  fLoaded[kDataCount];
     UErrorCode              fDataStatus[kDataCount]; // Returns the appropriate error code for each data table.
     bool_t                  fIsDataOwned;
-    UnicodeString           fRealLocaleID;
+	Locale					fRealLocale;
     LocaleFallbackIterator* fLocaleIterator;
     char*                   fVersionID;
 };

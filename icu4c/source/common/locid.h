@@ -22,8 +22,9 @@
 *   04/02/97    aliu        Made operator!= inline; fixed return value of getName().
 *   04/15/97    aliu        Cleanup for AIX/Win32.
 *   04/24/97    aliu        Numerous changes per code review.
-*    08/18/98    stephen        Added tokenizeString(),changed getDisplayName()
-*    09/08/98    stephen        Moved definition of kEmptyString for Mac Port
+*   08/18/98    stephen     Added tokenizeString(),changed getDisplayName()
+*   09/08/98    stephen     Moved definition of kEmptyString for Mac Port
+*	11/09/99	weiv		Added const char * getName() const;
 *****************************************************************************************
 */
 
@@ -32,6 +33,13 @@
 
 
 #include "unistr.h"
+
+typedef struct ULocale ULocale;
+typedef struct UHashtable UHashtable;
+
+#define ULOC_LANG_CAPACITY 3
+#define ULOC_COUNTRY_CAPACITY 3
+#define ULOC_FULLNAME_CAPACITY 50
 
 /**    
  *
@@ -170,13 +178,6 @@
  * </pre>
  * </blockquote>
  */
-typedef struct ULocale ULocale;
-typedef struct UHashtable UHashtable;
-
-#define ULOC_LANG_CAPACITY 3
-#define ULOC_COUNTRY_CAPACITY 3
-#define ULOC_FULLNAME_CAPACITY 50
-
 class U_COMMON_API Locale 
 {
 public:
@@ -323,6 +324,15 @@ public:
      * @return      A reference to "name".
      */
                 UnicodeString&  getName(        UnicodeString&  name) const;
+
+	/**
+     * Returns the programmatic name of the entire locale, with the language,
+     * country and variant separated by underbars. If a field is missing, at
+     * most one underbar will occur. Example: "en", "de_DE", "en_US_WIN",
+     * "de_POSIX", "fr_MAC"
+     * @return      A pointer to "name".
+     */
+				const char * getName() const;
 
     /**
      * Fills in "name" with the locale's three-letter language code, as specified
