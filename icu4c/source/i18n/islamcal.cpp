@@ -21,6 +21,7 @@
 #include "gregoimp.h" // Math
 #include "astro.h" // CalendarAstronomer
 #include "uhash.h"
+#include "ucln_in.h"
 
 static const UDate HIJRA_MILLIS = -42521587200000.0;    // 7/16/622 AD 00:00
 
@@ -56,6 +57,7 @@ static void createCache(UErrorCode &success) {
   if(monthCache == NULL) {
     monthCache = uhash_openSize(uhash_hashLong, uhash_compareLong, 32, &success);
   }
+  ucln_i18n_registerCleanup();
 }
 
 /**
@@ -78,7 +80,7 @@ static void putCache(int32_t month, int32_t start, UErrorCode &status) {
   umtx_unlock(&astroLock);
 }
 
-int32_t getCache(int32_t month, UBool& found, UErrorCode &success) {
+static int32_t getCache(int32_t month, UBool& found, UErrorCode &success) {
   int32_t res = 0;
 
   umtx_lock(&astroLock);
