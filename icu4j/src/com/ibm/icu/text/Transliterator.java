@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/02/03 00:46:21 $ 
- * $Revision: 1.23 $
+ * $Date: 2001/02/08 19:29:48 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -199,9 +199,36 @@ import com.ibm.text.resources.ResourceReader;
  * transliterator subclass without instantiating it (until it is
  * needed), users may call <code>registerClass()</code>.
  *
+ * <p><b>Composed transliterators</b>
+ *
+ * <p>In addition to built-in system transliterators like
+ * "Latin-Greek", there are also built-in <em>composed</em>
+ * transliterators.  These are implemented by composing two or more
+ * component transliterators.  For example, if we have scripts "A",
+ * "B", "C", and "D", and we want to transliterate between all pairs
+ * of them, then we need to write 12 transliterators: "A-B", "A-C",
+ * "A-D", "B-A",..., "D-A", "D-B", "D-C".  If it is possible to
+ * convert all scripts to an intermediate script "M", then instead of
+ * writing 12 rule sets, we only need to write 8: "A~M", "B~M", "C~M",
+ * "D~M", "M~A", "M~B", "M~C", "M~D".  (This might not seem like a big
+ * win, but it's really 2<em>n</em> vs. <em>n</em><sup>2</sup> -
+ * <em>n</em>, so as <em>n</em> gets larger the gain becomes
+ * significant.  With 9 scripts, it's 18 vs. 72 rule sets, a big
+ * difference.)  Note the use of "~" rather than "-" for the script
+ * separator here; this indicates that the given transliterator is
+ * intended to be composed with others, rather than be used as is.
+ *
+ * <p>Composed transliterators can be instantiated as usual.  For
+ * example, the system transliterator "Devanagari-Gujarati" is a
+ * composed transliterator built internally as
+ * "Devanagari~InterIndic;InterIndic~Gujarati".  When this
+ * transliterator is instantiated, it appears externally to be a
+ * standard transliterator (e.g., getID() returns
+ * "Devanagari-Gujarati").
+ *
  * <p><b>Subclassing</b>
  *
- * Subclasses must implement the abstract method
+ * <p>Subclasses must implement the abstract method
  * <code>handleTransliterate()</code>.  <p>Subclasses should override
  * the <code>transliterate()</code> method taking a
  * <code>Replaceable</code> and the <code>transliterate()</code>
@@ -212,7 +239,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.23 $ $Date: 2001/02/03 00:46:21 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.24 $ $Date: 2001/02/08 19:29:48 $
  */
 public abstract class Transliterator {
     /**
@@ -341,7 +368,31 @@ public abstract class Transliterator {
      */
     private static Hashtable cache;
 
+    /**
+     * Identical to 'cache', but only contains components for composed
+     * transliterators.  All keys are of the form "Foo~Bar" (vs.
+     * "Foo-Bar" and "Foo" for 'cache').  The factory method for
+     * transliterators refers to 'cache' first, then to
+     * 'composedCache'.
+     */
     private static Hashtable composedCache;
+
+    /**
+     * The graph of links for components for composed transliterators.
+     * composedGraph.get(x) returns a String[] array, each of which is
+     * a node that x is connected to.  For example, if we had the
+     * component transliterators "Foo~Bar", "Foo~Baz", "Bar~Zee",
+     * "Bar~Cue", and "Baz~Ark", the graph would look like:
+     *
+     * composedGraph.get("Foo") => { "Bar", "Baz" }
+     * composedGraph.get("Bar") => { "Zee", "Cue" }
+     * composedGraph.get("Baz") => { "Ark" }
+     *
+     * From this we could construct "Foo-Zee", "Foo-Cue", and
+     * "Foo-Ark".  Each of these would be a compound transliterator,
+     * e.g., "Foo-Zee" == "Foo~Bar;Bar~Zee".
+     */
+    private static Hashtable composedGraph;
 
     private static Hashtable displayNameCache;
 
@@ -870,8 +921,12 @@ public abstract class Transliterator {
      * this method returns null if it cannot make use of the given ID.
      */
     private static Transliterator internalGetInstance(String ID) {
-        Object obj = cache.get(ID);
         RuleBasedTransliterator.Data data = null;
+
+        Object obj = cache.get(ID);
+        if (obj == null) {
+            obj = composedCache.get(ID);
+        }
 
         if (obj != null) {
             if (obj instanceof RuleBasedTransliterator.Data) {
@@ -885,8 +940,15 @@ public abstract class Transliterator {
             } else {
                 synchronized (cache) {
                     boolean isReverse = (obj == REVERSE_RULE_BASED_PLACEHOLDER);
+                    boolean isComposed = false;
                     String resourceName = ID;
                     int i = ID.indexOf('-');
+                    if (i < 0) {
+                        i = ID.indexOf('~');
+                        if (i > 0) {
+                            isComposed = true;
+                        }
+                    }
                     if (i > 0) {
                         String IDLeft  = ID.substring(0, i);
                         String IDRight = ID.substring(i+1);
@@ -910,7 +972,11 @@ public abstract class Transliterator {
                                                              ? RuleBasedTransliterator.REVERSE
                                                              : RuleBasedTransliterator.FORWARD);
                         
-                        cache.put(ID, data);
+                        if (isComposed) {
+                            composedCache.put(ID, data);
+                        } else {
+                            cache.put(ID, data);
+                        }
                         // Fall through to construct transliterator from Data object.
                     } else {
                         // Unable to load the UTF8 file; try the resource
@@ -935,7 +1001,11 @@ public abstract class Transliterator {
                                                                  ? RuleBasedTransliterator.REVERSE
                                                                  : RuleBasedTransliterator.FORWARD);
                             
-                            cache.put(ID, data);
+                            if (isComposed) {
+                                composedCache.put(ID, data);
+                            } else {
+                                cache.put(ID, data);
+                            }
                             // Fall through to construct transliterator from Data object.
                         } catch (MissingResourceException e) {}
                     }
@@ -955,17 +1025,21 @@ public abstract class Transliterator {
                 String left  = ID.substring(0, i);
                 String right = ID.substring(i+1);
                 Vector path = new Vector();
-                if (findComposedPath(left, right, path)) {
+                // Exclude composed paths of length 2; these result when we
+                // try to directly instantiate a composed transliterator component.
+                if (findComposedPath(left, right, path) && path.size() > 2) {
                     Transliterator[] components = new Transliterator[path.size()-1];
                     for (int j=0; j<path.size()-1; ++j) {
-                        String id = (String) path.elementAt(j) + "-" +
+                        String id = (String) path.elementAt(j) + "~" +
                             path.elementAt(j+1);
                         components[j] = internalGetInstance(id);
                         if (components[j] == null) {
                             return null;
                         }
                     }
-                    return new CompoundTransliterator(components);
+                    Transliterator t = new CompoundTransliterator(components);
+                    t.ID = ID; // Make getID() return correct ID
+                    return t;
                 }
             }            
         }
@@ -978,8 +1052,8 @@ public abstract class Transliterator {
      * will not necessarily be the only path, or the shortest path.
      * This is a simple recursive algorithm.
      * 
-     * <p><code>composedCache</code> is the links table.
-     * composedCache.get(x) should return a String[] array, each of
+     * <p><code>composedGraph</code> is the links table.
+     * composedGraph.get(x) should return a String[] array, each of
      * which is a node that x is connected to.
      * @param start the starting node
      * @param end the ending node
@@ -992,8 +1066,8 @@ public abstract class Transliterator {
     private static boolean findComposedPath(String start, String end,
                                             Vector path) {
         path.addElement(start);
-        // composedCache lists all links emanating from a node
-        String[] links = (String[]) composedCache.get(start);
+        // composedGraph lists all links emanating from a node
+        String[] links = (String[]) composedGraph.get(start);
         if (links != null) {
             for (int i=0; i<links.length; ++i) {
                 if (links[i].equals(end)) {
@@ -1083,6 +1157,7 @@ public abstract class Transliterator {
             
             cache = new Hashtable();
             composedCache = new Hashtable();
+            composedGraph = new Hashtable();
             displayNameCache = new Hashtable();
             
             for (int i=0; i<ruleBasedIDs.length; ++i) {
@@ -1091,7 +1166,7 @@ public abstract class Transliterator {
                 if (composedMark > 0) {
                     String left = ID.substring(0, composedMark);
                     String right = ID.substring(composedMark+1);
-                    String[] links = (String[]) composedCache.get(left);
+                    String[] links = (String[]) composedGraph.get(left);
                     if (links == null) {
                         links = new String[] { right };
                     } else {
@@ -1103,11 +1178,9 @@ public abstract class Transliterator {
                         s[links.length] = right;
                         links = s;
                     }
-                    composedCache.put(left, links);
-                    // We must ALSO add this to the main RBT lookup cache
-                    // so we can instantiate the component RBTs.  The ID
-                    // must be fixed; i.e., "a~b" -> "a-b".
-                    cache.put(left + "-" + right, RULE_BASED_PLACEHOLDER);
+                    composedGraph.put(left, links);
+                    composedCache.put(ID, RULE_BASED_PLACEHOLDER);
+
                 } else {
                     boolean isReverse = (ID.charAt(0) == '*');
                     if (isReverse) {
