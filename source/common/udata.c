@@ -1313,11 +1313,10 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
     if(pInfo!=NULL) {
         if(pData!=NULL && pData->pHeader!=NULL) {
             const UDataInfo *info=&pData->pHeader->info;
-            uint16_t size=pInfo->size;
-            if(size>info->size) {
+            if(pInfo->size>info->size) {
                 pInfo->size=info->size;
             }
-            uprv_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, size-2);
+            uprv_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, pInfo->size-2);
         } else {
             pInfo->size=0;
         }
