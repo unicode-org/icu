@@ -575,7 +575,7 @@ setFallback(MBCSData *mbcsData, uint32_t offset, UChar32 c) {
         /* if there is no fallback for this offset, then add one */
         i=mbcsData->header.countToUFallbacks;
         if(i>=MBCS_MAX_FALLBACK_COUNT) {
-            fprintf(stderr, "error: too many toUnicode fallbacks, currently at: U+%lx\n", c);
+            fprintf(stderr, "error: too many toUnicode fallbacks, currently at: U+%x\n", c);
             return FALSE;
         } else {
             mbcsData->toUFallbacks[i].offset=offset;
@@ -643,7 +643,7 @@ MBCSAddToUnicode(NewConverter *cnvData,
         entry=mbcsData->stateTable[state][bytes[i++]];
         if(MBCS_ENTRY_IS_TRANSITION(entry)) {
             if(i==length) {
-                fprintf(stderr, "error: byte sequence too short, ends in non-final state %hu: 0x%02lx (U+%lx)\n",
+                fprintf(stderr, "error: byte sequence too short, ends in non-final state %hu: 0x%02lx (U+%x)\n",
                     state, (unsigned long)b, c);
                 return FALSE;
             }
@@ -651,21 +651,21 @@ MBCSAddToUnicode(NewConverter *cnvData,
             offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
         } else {
             if(i<length) {
-                fprintf(stderr, "error: byte sequence too long by %d bytes, final state %hu: 0x%02lx (U+%lx)\n",
+                fprintf(stderr, "error: byte sequence too long by %d bytes, final state %hu: 0x%02lx (U+%x)\n",
                     (length-i), state, (unsigned long)b, c);
                 return FALSE;
             }
             switch(MBCS_ENTRY_FINAL_ACTION(entry)) {
             case MBCS_STATE_ILLEGAL:
-                fprintf(stderr, "error: byte sequence ends in illegal state at U+%04lx<->0x%02lx\n",
+                fprintf(stderr, "error: byte sequence ends in illegal state at U+%04x<->0x%02lx\n",
                     c, (unsigned long)b);
                 return FALSE;
             case MBCS_STATE_CHANGE_ONLY:
-                fprintf(stderr, "error: byte sequence ends in state-change-only at U+%04lx<->0x%02lx\n",
+                fprintf(stderr, "error: byte sequence ends in state-change-only at U+%04x<->0x%02lx\n",
                     c, (unsigned long)b);
                 return FALSE;
             case MBCS_STATE_UNASSIGNED:
-                fprintf(stderr, "error: byte sequence ends in unassigned state at U+%04lx<->0x%02lx\n",
+                fprintf(stderr, "error: byte sequence ends in unassigned state at U+%04x<->0x%02lx\n",
                     c, (unsigned long)b);
                 return FALSE;
             case MBCS_STATE_FALLBACK_DIRECT_16:
@@ -680,11 +680,11 @@ MBCSAddToUnicode(NewConverter *cnvData,
                         old=0x10000+MBCS_ENTRY_FINAL_VALUE(entry);
                     }
                     if(isFallback>=0) {
-                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n",
+                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04x<->0x%02lx see U+%04lx\n",
                             c, (unsigned long)b, (long)old);
                         return FALSE;
                     } else if(VERBOSE) {
-                        fprintf(stderr, "duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n",
+                        fprintf(stderr, "duplicate codepage byte sequence at U+%04x<->0x%02lx see U+%04lx\n",
                             c, (unsigned long)b, (long)old);
                     }
                     /*
@@ -710,16 +710,16 @@ MBCSAddToUnicode(NewConverter *cnvData,
                 /* check that this byte sequence is still unassigned */
                 if((old=mbcsData->unicodeCodeUnits[offset])!=0xfffe || (old=removeFallback(mbcsData, offset))!=-1) {
                     if(isFallback>=0) {
-                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n",
+                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04x<->0x%02lx see U+%04lx\n",
                             c, (unsigned long)b, (long)old);
                         return FALSE;
                     } else if(VERBOSE) {
-                        fprintf(stderr, "duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n",
+                        fprintf(stderr, "duplicate codepage byte sequence at U+%04x<->0x%02lx see U+%04lx\n",
                             c, (unsigned long)b, (long)old);
                     }
                 }
                 if(c>=0x10000) {
-                    fprintf(stderr, "error: code point does not fit into valid-16-bit state at U+%04lx<->0x%02lx\n",
+                    fprintf(stderr, "error: code point does not fit into valid-16-bit state at U+%04x<->0x%02lx\n",
                         c, (unsigned long)b);
                     return FALSE;
                 }
@@ -748,11 +748,11 @@ MBCSAddToUnicode(NewConverter *cnvData,
                         real=mbcsData->unicodeCodeUnits[offset+1];
                     }
                     if(isFallback>=0) {
-                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n",
+                        fprintf(stderr, "error: duplicate codepage byte sequence at U+%04x<->0x%02lx see U+%04lx\n",
                             c, (unsigned long)b, (long)real);
                         return FALSE;
                     } else if(VERBOSE) {
-                        fprintf(stderr, "duplicate codepage byte sequence at U+%04lx<->0x%02lx see U+%04lx\n",
+                        fprintf(stderr, "duplicate codepage byte sequence at U+%04x<->0x%02lx see U+%04lx\n",
                             c, (unsigned long)b, (long)real);
                     }
                 }
@@ -786,7 +786,7 @@ MBCSAddToUnicode(NewConverter *cnvData,
                 break;
             default:
                 /* reserved, must never occur */
-                fprintf(stderr, "internal error: byte sequence reached reserved action code, entry0x%02lx: 0x%02lx (U+%lx)\n",
+                fprintf(stderr, "internal error: byte sequence reached reserved action code, entry0x%02lx: 0x%02lx (U+%x)\n",
                     (unsigned long)entry, (unsigned long)b, c);
                 return FALSE;
             }
@@ -889,7 +889,7 @@ MBCSSingleAddFromUnicode(NewConverter *cnvData,
     if(mbcsData->stage1[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
         /* allocate another block in stage 2 */
         if(mbcsData->stage2Top>=MBCS_MAX_STAGE_2_TOP) {
-            fprintf(stderr, "error: too many stage 2 entries at U+%04lx<->0x%02lx\n",
+            fprintf(stderr, "error: too many stage 2 entries at U+%04x<->0x%02lx\n",
                 c, (unsigned long)b);
             return FALSE;
         }
@@ -907,7 +907,7 @@ MBCSSingleAddFromUnicode(NewConverter *cnvData,
     if(mbcsData->stage2Single[index]==0) {
         /* allocate another block in stage 3 */
         if(mbcsData->stage3Top>=0x10000) {
-            fprintf(stderr, "error: too many code points at U+%04lx<->0x%02lx\n",
+            fprintf(stderr, "error: too many code points at U+%04x<->0x%02lx\n",
                 c, (unsigned long)b);
             return FALSE;
         }
@@ -931,11 +931,11 @@ MBCSSingleAddFromUnicode(NewConverter *cnvData,
     /* check that this Unicode code point was still unassigned */
     if(old>=0xf00) {
         if(isFallback>=0) {
-            fprintf(stderr, "error: duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02x\n",
+            fprintf(stderr, "error: duplicate Unicode code point at U+%04x<->0x%02lx see 0x%02x\n",
                 c, (unsigned long)b, old);
             return FALSE;
         } else if(VERBOSE) {
-            fprintf(stderr, "duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02x\n",
+            fprintf(stderr, "duplicate Unicode code point at U+%04x<->0x%02lx see 0x%02x\n",
                 c, (unsigned long)b, old);
         }
         /* continue after the above warning if the precision of the mapping is unspecified */
@@ -956,7 +956,7 @@ MBCSAddFromUnicode(NewConverter *cnvData,
     if( (mbcsData->header.flags&0xff)==MBCS_OUTPUT_2_SISO &&
         (*bytes==0xe || *bytes==0xf)
     ) {
-        fprintf(stderr, "error: illegal mapping to SI or SO for SI/SO codepage: U+%04lx<->0x%02lx\n",
+        fprintf(stderr, "error: illegal mapping to SI or SO for SI/SO codepage: U+%04x<->0x%02lx\n",
             c, (unsigned long)b);
         return FALSE;
     }
@@ -973,7 +973,7 @@ MBCSAddFromUnicode(NewConverter *cnvData,
     if(mbcsData->stage1[index]==MBCS_STAGE_2_ALL_UNASSIGNED_INDEX) {
         /* allocate another block in stage 2 */
         if(mbcsData->stage2Top>=MBCS_MAX_STAGE_2_TOP) {
-            fprintf(stderr, "error: too many stage 2 entries at U+%04lx<->0x%02lx\n",
+            fprintf(stderr, "error: too many stage 2 entries at U+%04x<->0x%02lx\n",
                 c, (unsigned long)b);
             return FALSE;
         }
@@ -991,7 +991,7 @@ MBCSAddFromUnicode(NewConverter *cnvData,
     if(mbcsData->stage2[index]==0) {
         /* allocate another block in stage 3 */
         if(mbcsData->stage3Top>=0x100000*mbcsData->maxCharLength) {
-            fprintf(stderr, "error: too many code points at U+%04lx<->0x%02lx\n",
+            fprintf(stderr, "error: too many code points at U+%04x<->0x%02lx\n",
                 c, (unsigned long)b);
             return FALSE;
         }
@@ -1029,11 +1029,11 @@ MBCSAddFromUnicode(NewConverter *cnvData,
     /* check that this Unicode code point was still unassigned */
     if((mbcsData->stage2[index]&(1UL<<(16+(c&0xf))))!=0 || old!=0) {
         if(isFallback>=0) {
-            fprintf(stderr, "error: duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02lx\n",
+            fprintf(stderr, "error: duplicate Unicode code point at U+%04x<->0x%02lx see 0x%02lx\n",
                 c, (unsigned long)b, (unsigned long)old);
             return FALSE;
         } else if(VERBOSE) {
-            fprintf(stderr, "duplicate Unicode code point at U+%04lx<->0x%02lx see 0x%02lx\n",
+            fprintf(stderr, "duplicate Unicode code point at U+%04x<->0x%02lx see 0x%02lx\n",
                 c, (unsigned long)b, (unsigned long)old);
         }
         /* continue after the above warning if the precision of the mapping is

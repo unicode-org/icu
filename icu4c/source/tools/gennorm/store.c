@@ -1052,7 +1052,7 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
         } else {
             uset_add(otherNorm->canonStart, code);
             if(!uset_contains(otherNorm->canonStart, code)) {
-                fprintf(stderr, "gennorm error: uset_add(setOf(U+%4lx), U+%4x)\n", c, code);
+                fprintf(stderr, "gennorm error: uset_add(setOf(U+%4x), U+%4x)\n", c, code);
                 exit(U_INTERNAL_PROGRAM_ERROR);
             }
         }
@@ -1384,8 +1384,8 @@ doesComposeConsume(const uint32_t *s, int32_t length, uint32_t c, uint8_t cc) {
     for(i=1; i<length; ++i) {
         starter=combine((uint32_t)starter, s[i]);
         if(starter<0) {
-            fprintf(stderr, "error: unable to consume normal decomposition in doesComposeConsume(<%04lx, %04lx, ...>[%ld], U+%04lx, %u)\n",
-                s[0], s[1], length, c, cc);
+            fprintf(stderr, "error: unable to consume normal decomposition in doesComposeConsume(<%04x, %04x, ...>[%ld], U+%04lx, %u)\n",
+                s[0], s[1], (long)length, (long)c, cc);
             exit(U_INTERNAL_PROGRAM_ERROR);
         }
     }
