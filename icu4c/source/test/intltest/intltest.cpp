@@ -20,6 +20,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
+#include "unicode/ures.h"
 #include "unicode/coll.h"
 #include "unicode/smpdtfmt.h"
 
@@ -918,6 +919,29 @@ main(int argc, char* argv[])
         ucnv_close(cnv);
     } else {
         cout << "*** Failure! The default converter cannot be opened." << endl <<
+                "*** Check the ICU_DATA environment variable and " << endl <<
+                "*** check that the data files are present." << endl;
+        return 1;
+    }
+
+    // try more data
+    cnv = ucnv_open("iso-8859-7", &errorCode);
+    if(cnv != 0) {
+        // ok
+        ucnv_close(cnv);
+    } else {
+        cout << "*** Failure! The converter for iso-8859-7 cannot be opened." << endl <<
+                "*** Check the ICU_DATA environment variable and " << endl <<
+                "*** check that the data files are present." << endl;
+        return 1;
+    }
+
+    UResourceBundle *rb = ures_open(0, "en", &errorCode);
+    if(U_SUCCESS(errorCode)) {
+        // ok
+        ures_close(rb);
+    } else {
+        cout << "*** Failure! The \"en\" locale resource bundle cannot be opened." << endl <<
                 "*** Check the ICU_DATA environment variable and " << endl <<
                 "*** check that the data files are present." << endl;
         return 1;
