@@ -147,7 +147,7 @@ UTF32_OppositeEndian
 UTF-7 { IANA* MIME* }           cp65000
 
 SCSU { IANA* }
-BOCU-1
+BOCU-1 { IANA* } csBOCU-1 { IANA }
 
 # See http://www.unicode.org/unicode/reports/tr26 for this Compatibility Encoding Scheme for UTF-16
 # The Unicode Consortium does not encourage the use of CESU-8
@@ -482,32 +482,32 @@ ibm-1162 { IBM* }       TIS-620 { IANA* } cp874 windows-874 ms874 cp9066 874 # T
 ibm-874 { IBM* }        ibm-1161 # Same as 1162 (w/o euro update)
 
 # Platform codepages
-ibm-437 { IBM* }        cp437 csPC8CodePage437 437  # PC US
-ibm-850 { IBM* }        IBM850 { IANA* } cp850 { MIME* } 850 csPC850Multilingual    # PC latin1
-ibm-851 { IBM* }        IBM851 { IANA* } cp851 { MIME* } 851 csPC851            # PC DOS Greek (w/o euro)
-ibm-858 { IBM* }        cp858  { MIME* } IBM00858 { IANA* }       # PC latin1 with Euro cp850 removed
-ibm-9044 { IBM* }       852 csPCp852 cp852  # PC latin2 (w/ euro update) cp852 is a MIME name for IBM-852
-ibm-852 { IBM* }        IBM852 { IANA* }    # PC latin2 (w/o euro update)
-ibm-872 { IBM* }        855 csIBM855 cp855 csPCp855 # PC cyrillic (w/ euro update) cp855 is a MIME name for IBM-855
-ibm-855 { IBM* }        IBM855 { IANA* }            # PC cyrillic (w/o euro update)
+ibm-437 { IBM* }        IBM437 { IANA* } cp437 { IANA } 437 { IANA } csPC8CodePage437 { IANA }  # PC US
+ibm-850 { IBM* }        IBM850 { IANA* } cp850 { IANA MIME* } 850 { IANA } csPC850Multilingual { IANA } # PC latin1
+ibm-851 { IBM* }        IBM851 { IANA* } cp851 { IANA MIME* } 851 { IANA } csPC851 { IANA }             # PC DOS Greek (w/o euro)
+ibm-858 { IBM* }        IBM00858 { IANA* } CCSID00858 { IANA } CP00858 { IANA } PC-Multilingual-850+euro { IANA } cp858 { MIME* }  # PC latin1 with Euro
+ibm-9044 { IBM* }       # PC latin2 (w/ euro update) Updated version of ibm-852. cp852 is a MIME name for IBM-852
+ibm-852 { IBM* }        IBM852 { IANA* } cp852 { IANA } 852 { IANA } csPCp852 { IANA } # PC latin2 (w/o euro update)
+ibm-872 { IBM* }        # PC cyrillic (w/ euro update) Updated version of ibm-855.  cp855 is a MIME name for IBM-855
+ibm-855 { IBM* }        IBM855 { IANA* } cp855 { IANA } 855 { IANA } csIBM855 { IANA } csPCp855 # PC cyrillic (w/o euro update)
 ibm-856 { IBM* }        cp856 { MIME* }  856 # PC Hebrew (old)
-ibm-9049 { IBM* }       857 csIBM857 cp857 { MIME* } # PC Latin 5 (Turkish) (w/ euro update)
-ibm-857 { IBM* }        IBM857 { IANA* }    # PC Latin 5 (w/o euro update)
-ibm-859 { IBM* }        cp859 { MIME* }     # PC Latin     9 (w/ euro update)
-ibm-860 { IBM* }        IBM860 { IANA* } cp860 { MIME* } 860 csIBM860         # PC Portugal
-ibm-861 { IBM* }        IBM861 { IANA* } cp861 { MIME* } 861 cp-is csIBM861   # PC Iceland
-ibm-867 { IBM* }        cp867  862 cp862 { MIME* } cspc862latinhebrew    # PC Hebrew (w/ euro update)
-ibm-862 { IBM* }        IBM862 { IANA* }                                 # PC Hebrew (w/o euro update)
-ibm-863 { IBM* }        IBM863 { IANA* } cp863 { MIME* } 863 csIBM863         # PC Canadian French
-ibm-17248 { IBM* }      cp864 { MIME* } csIBM864 # PC Arabic (w/ euro update)
-ibm-864 { IBM* }        IBM864 { IANA* }         # PC Arabic (w/o euro update)
-ibm-865 { IBM* }        IBM865 { IANA* } cp865 { MIME* } 865 csIBM865         # PC Nordic
-ibm-808 { IBM* }        cp866 { MIME* } 866 csIBM866 # PC Russian (w/ euro update)
-ibm-866 { IBM* }                                    # PC Russian (w/o euro update)
-ibm-868 { IBM* }        IBM868 { IANA* } cp868 { MIME* } cp-ar csIBM868 868   # PC Urdu
-ibm-9061 { IBM* }       cp869 { MIME* } 869 cp-gr csIBM869   # PC Greek (w/ euro update)
-ibm-869 { IBM* }        IBM869 { IANA* }                     # PC Greek (w/o euro update)
-ibm-878 { IBM* }        KOI8-R { IANA* MIME* } cp878 koi8 cskoi8r  # Russian internet
+ibm-9049 { IBM* }       # PC Latin 5 (Turkish) (w/ euro update) Updated version of ibm-857
+ibm-857 { IBM* }        IBM857 { IANA* } 857 { IANA } csIBM857 { IANA } cp857 { IANA MIME* }    # PC Latin 5 (w/o euro update)
+ibm-859 { IBM* }        cp859 { MIME* }     # PC Latin 9 (w/ euro update)
+ibm-860 { IBM* }        IBM860 { IANA* } cp860 { IANA MIME* } 860 { IANA } csIBM860 { IANA }    # PC Portugal
+ibm-861 { IBM* }        IBM861 { IANA* } cp861 { IANA MIME* } 861 { IANA } cp-is { IANA } csIBM861 { IANA } # PC Iceland
+ibm-867 { IBM* }        cp867   # PC Hebrew (w/ euro update) Updated version of ibm-862
+ibm-862 { IBM* }        IBM862 { IANA* } cp862 { IANA MIME* } 862 { IANA } csPC862LatinHebrew { IANA }  # PC Hebrew (w/o euro update)
+ibm-863 { IBM* }        IBM863 { IANA* } cp863 { IANA MIME* } 863 { IANA } csIBM863 { IANA } # PC Canadian French
+ibm-17248 { IBM* }      # PC Arabic (w/ euro update) Updated version of ibm-864
+ibm-864 { IBM* }        IBM864 { IANA* } cp864 { IANA MIME* } csIBM864 { IANA } # PC Arabic (w/o euro update)
+ibm-865 { IBM* }        IBM865 { IANA* } cp865 { IANA MIME* } 865 { IANA } csIBM865 { IANA }    # PC Nordic
+ibm-808 { IBM* }        # PC Russian (w/ euro update) Updated version of ibm-866
+ibm-866 { IBM* }        IBM866 { IANA* } cp866 { IANA MIME* } 866 { IANA } csIBM866 { IANA } # PC Russian (w/o euro update)
+ibm-868 { IBM* }        IBM868 { IANA* } CP868 { IANA MIME* } cp-ar { IANA } csIBM868 { IANA } 868  # PC Urdu
+ibm-9061 { IBM* }       # PC Greek (w/ euro update) Updated version of ibm-869
+ibm-869 { IBM* }        IBM869 { IANA* } cp869 { IANA MIME* } 869 { IANA } cp-gr { IANA } csIBM869 { IANA } # PC Greek (w/o euro update)
+ibm-878 { IBM* }        KOI8-R { IANA* MIME* } cp878 koi8 csKOI8R { IANA }  # Russian internet
 ibm-902 { IBM* }        cp922 { MIME* } 922 # PC Estonian (w/ euro update)
 ibm-922 { IBM* }                            # PC Estonian (w/o euro update)
 # ibm-941                 jis-208 jisx-208    # Pure DBCS jisx-208 # ibm-941 is not JISX 208 code page
