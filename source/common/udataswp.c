@@ -276,16 +276,16 @@ udata_openSwapper(UBool inIsBigEndian, uint8_t inCharset,
     swapper->readUInt16= inIsBigEndian==U_IS_BIG_ENDIAN ? uprv_readDirectUInt16 : uprv_readSwapUInt16;
     swapper->readUInt32= inIsBigEndian==U_IS_BIG_ENDIAN ? uprv_readDirectUInt32 : uprv_readSwapUInt32;
 
-    if(inCharset==U_ASCII_FAMILY) {
-        swapper->compareInvChars=uprv_compareInvAscii;
-        swapper->swapInvChars= outCharset==U_ASCII_FAMILY ? uprv_copyAscii : uprv_ebcdicFromAscii;
-    } else /* U_EBCDIC_FAMILY */ {
-        swapper->compareInvChars=uprv_compareInvEbcdic;
-        swapper->swapInvChars= outCharset==U_EBCDIC_FAMILY ? uprv_copyEbcdic : uprv_asciiFromEbcdic;
-    }
+    swapper->compareInvChars= outCharset==U_ASCII_FAMILY ? uprv_compareInvAscii : uprv_compareInvEbcdic;
 
     swapper->swapArray16= inIsBigEndian==outIsBigEndian ? uprv_copyArray16 : uprv_swapArray16;
     swapper->swapArray32= inIsBigEndian==outIsBigEndian ? uprv_copyArray32 : uprv_swapArray32;
+
+    if(inCharset==U_ASCII_FAMILY) {
+        swapper->swapInvChars= outCharset==U_ASCII_FAMILY ? uprv_copyAscii : uprv_ebcdicFromAscii;
+    } else /* U_EBCDIC_FAMILY */ {
+        swapper->swapInvChars= outCharset==U_EBCDIC_FAMILY ? uprv_copyEbcdic : uprv_asciiFromEbcdic;
+    }
 
     return swapper;
 }

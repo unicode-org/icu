@@ -85,15 +85,18 @@ typedef uint32_t U_CALLCONV
 UDataReadUInt32(uint32_t x);
 
 /**
- * Compare invariant-character strings, one in the input data and the
+ * Compare invariant-character strings, one in the output data and the
  * other one caller-provided in Unicode.
+ * An output data string is compared because strings are usually swapped
+ * before the rest of the data, to allow for sorting of string tables
+ * according to the output charset.
  * You can use -1 for the length parameters of NUL-terminated strings as usual.
  * Returns Unicode code point order for invariant characters.
  * @draft ICU 2.8
  */
 typedef int32_t U_CALLCONV
 UDataCompareInvChars(const UDataSwapper *ds,
-                     const char *inString, int32_t inLength,
+                     const char *outString, int32_t outLength,
                      const UChar *localString, int32_t localLength);
 
 /**
@@ -126,7 +129,7 @@ struct UDataSwapper {
     UDataReadUInt16 *readUInt16;
     /** Convert one uint32_t from input to platform endianness. @draft ICU 2.8 */
     UDataReadUInt32 *readUInt32;
-    /** Compare invariant-character strings. @draft ICU 2.8 */
+    /** Compare an invariant-character output string with a local one. @draft ICU 2.8 */
     UDataCompareInvChars *compareInvChars;
 
     /* basic functions for data transformations */
@@ -241,7 +244,7 @@ uprv_copyEbcdic(const UDataSwapper *ds,
  */
 U_CFUNC int32_t
 uprv_compareInvAscii(const UDataSwapper *ds,
-                     const char *inString, int32_t inLength,
+                     const char *outString, int32_t outLength,
                      const UChar *localString, int32_t localLength);
 
 /**
@@ -250,7 +253,7 @@ uprv_compareInvAscii(const UDataSwapper *ds,
  */
 U_CFUNC int32_t
 uprv_compareInvEbcdic(const UDataSwapper *ds,
-                      const char *inString, int32_t inLength,
+                      const char *outString, int32_t outLength,
                       const UChar *localString, int32_t localLength);
 
 /* material... -------------------------------------------------------------- */
