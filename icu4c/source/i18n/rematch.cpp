@@ -40,6 +40,10 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(fDeferredStatus); 
     fData              = fSmallData;
+    if (pat==NULL) {
+        fDeferredStatus = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     if (pat->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
         fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t)); 
     }
@@ -61,11 +65,14 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
         fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
     }
     if (fStack == NULL || fData == NULL) {
-        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
     }
     reset(input);
 }
@@ -74,17 +81,21 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
 RegexMatcher::RegexMatcher(const UnicodeString &regexp, 
                            uint32_t flags, UErrorCode &status) {
     UParseError    pe;
-    fPattern           = RegexPattern::compile(regexp, flags, pe, status);
     fPatternOwned      = TRUE;
     fTraceDebug        = FALSE;
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
+    fPattern           = RegexPattern::compile(regexp, flags, pe, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
         fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
     }
     if (fStack == NULL || fData == NULL) {
-        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+        status = U_MEMORY_ALLOCATION_ERROR;
     }
     reset();
 }
@@ -287,9 +298,7 @@ UBool RegexMatcher::find() {
     // Start at the position of the last match end.  (Will be zero if the
     //   matcher has been reset.
     //
-    UErrorCode status = U_ZERO_ERROR;
-
-    if (fPattern->fBadState) {
+    if (U_FAILURE(fDeferredStatus)) {
         return FALSE;
     }
 
@@ -309,8 +318,8 @@ UBool RegexMatcher::find() {
         // No optimization was found. 
         //  Try a match at each input position.
         for (;;) {
-            MatchAt(startPos, status);
-            if (U_FAILURE(status)) {
+            MatchAt(startPos, fDeferredStatus);
+            if (U_FAILURE(fDeferredStatus)) {
                 return FALSE;
             }
             if (fMatch) {
@@ -332,8 +341,8 @@ UBool RegexMatcher::find() {
         if (startPos > 0) {
             return FALSE;
         }
-        MatchAt(startPos, status);
-        if (U_FAILURE(status)) {
+        MatchAt(startPos, fDeferredStatus);
+        if (U_FAILURE(fDeferredStatus)) {
             return FALSE;
         }
         return fMatch;
@@ -347,8 +356,8 @@ UBool RegexMatcher::find() {
                 int32_t pos = startPos;
                 U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
                 if (fPattern->fInitialChars->contains(c)) {
-                    MatchAt(pos, status);
-                    if (U_FAILURE(status)) {
+                    MatchAt(pos, fDeferredStatus);
+                    if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
                     }
                     if (fMatch) {
@@ -372,8 +381,8 @@ UBool RegexMatcher::find() {
                 int32_t pos = startPos;
                 U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
                 if (c == theChar) {
-                    MatchAt(pos, status);
-                    if (U_FAILURE(status)) {
+                    MatchAt(pos, fDeferredStatus);
+                    if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
                     }
                     if (fMatch) {
@@ -391,8 +400,8 @@ UBool RegexMatcher::find() {
         {
             UChar32  c;
             if (startPos == 0) {
-                MatchAt(startPos, status);
-                if (U_FAILURE(status)) {
+                MatchAt(startPos, fDeferredStatus);
+                if (U_FAILURE(fDeferredStatus)) {
                     return FALSE;
                 }
                 if (fMatch) {
@@ -406,8 +415,8 @@ UBool RegexMatcher::find() {
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
                     (c == 0x0a ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 || 
                     c == 0x0d && startPos+1 < inputLen && inputBuf[startPos+1] != 0x0a)) {
-                    MatchAt(startPos, status);
-                    if (U_FAILURE(status)) {
+                    MatchAt(startPos, fDeferredStatus);
+                    if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
                     }
                     if (fMatch) {
