@@ -239,7 +239,9 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
  finish:
 
-  ucbuf_close(ucbuf);
+  if(ucbuf) {
+     ucbuf_close(ucbuf);
+  }
   /* Clean up */
   T_FileStream_close(in);
 
