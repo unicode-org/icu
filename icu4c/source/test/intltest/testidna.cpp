@@ -1376,14 +1376,16 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
         source.append(unicodeIn[i]);
         source.append(com);
         source.append((UChar)0x0000);
-        // a) compare it with itself
+        
         const UChar* src = source.getBuffer();
         int32_t srcLen = u_strlen(src); //subtract null
-
-        testCompare(src,srcLen,src,srcLen,testName, func,TRUE);
         
         // b) compare it with asciiIn equivalent
         testCompare(src,srcLen,buf,u_strlen(buf),testName, func,TRUE);
+        
+        // a) compare it with itself
+        testCompare(src,srcLen,src,srcLen,testName, func,TRUE);
+        
         
         // IDNToASCII comparison
         testAPI(src,buf,IDNToASCIIName,FALSE,U_ZERO_ERROR,TRUE, TRUE, IDNToASCII);
