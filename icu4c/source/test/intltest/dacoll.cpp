@@ -4,25 +4,11 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _DACOLL
 #include "dacoll.h"
-#endif
 
 #include "sfwdchit.h"
 
@@ -45,7 +31,8 @@ CollationDanishTest::~CollationDanishTest()
     delete myCollation;
 }
 
-const UChar CollationDanishTest::testSourceCases[][MAX_TOKEN_LEN] = {
+const UChar CollationDanishTest::testSourceCases[][CollationDanishTest::MAX_TOKEN_LEN] 
+= {
     {(UChar)0x004C /* 'L' */, (UChar)0x0075 /* 'u' */, (UChar)0x0063 /* 'c' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x006C /* 'l' */, (UChar)0x0075 /* 'u' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x004C /* 'L' */, 0x00FC, (UChar)0x0062 /* 'b' */, (UChar)0x0065 /* 'e' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */},
@@ -56,7 +43,8 @@ const UChar CollationDanishTest::testSourceCases[][MAX_TOKEN_LEN] = {
     {(UChar)0x004C /* 'L' */, 0x00FC, (UChar)0x0062 /* 'b' */, (UChar)0x0065 /* 'e' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */}
 };
 
-const UChar CollationDanishTest::testTargetCases[][MAX_TOKEN_LEN] = {
+const UChar CollationDanishTest::testTargetCases[][CollationDanishTest::MAX_TOKEN_LEN] 
+= {
     {(UChar)0x006C /* 'l' */, (UChar)0x0075 /* 'u' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x004C /* 'L' */, 0x00FC, (UChar)0x0062 /* 'b' */, (UChar)0x0065 /* 'e' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x006C /* 'l' */, (UChar)0x0079 /* 'y' */, (UChar)0x0062 /* 'b' */, (UChar)0x0065 /* 'e' */, (UChar)0x0063 /* 'c' */, (UChar)0x006B /* 'k' */, (UChar)0x0000 /* '\0' */},
@@ -79,7 +67,7 @@ const Collator::EComparisonResult CollationDanishTest::results[] = {
     Collator::EQUAL
 };
 
-const UChar CollationDanishTest::testBugs[][MAX_TOKEN_LEN] = {
+const UChar CollationDanishTest::testBugs[][CollationDanishTest::MAX_TOKEN_LEN] = {
     {(UChar)0x0041 /* 'A' */, (UChar)0x002F /* '/' */, (UChar)0x0053 /* 'S' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0041 /* 'A' */, (UChar)0x004E /* 'N' */, (UChar)0x0044 /* 'D' */, (UChar)0x0052 /* 'R' */, (UChar)0x0045 /* 'E' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0041 /* 'A' */, (UChar)0x004E /* 'N' */, (UChar)0x0044 /* 'D' */, (UChar)0x0052 /* 'R' */, 0x00C9, (UChar)0x0000 /* '\0' */},
@@ -136,7 +124,7 @@ const UChar CollationDanishTest::testBugs[][MAX_TOKEN_LEN] = {
     {0x00D6, (UChar)0x0042 /* 'B' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0000 /* '\0' */}
 };
 
-const UChar CollationDanishTest::testNTList[][MAX_TOKEN_LEN] = {
+const UChar CollationDanishTest::testNTList[][CollationDanishTest::MAX_TOKEN_LEN] = {
     {(UChar)0x0061 /* 'a' */, (UChar)0x006E /* 'n' */, (UChar)0x0064 /* 'd' */, (UChar)0x0065 /* 'e' */, (UChar)0x0072 /* 'r' */, (UChar)0x0065 /* 'e' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0063 /* 'c' */, (UChar)0x0068 /* 'h' */, (UChar)0x0061 /* 'a' */, (UChar)0x0071 /* 'q' */, (UChar)0x0075 /* 'u' */, (UChar)0x0065 /* 'e' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0063 /* 'c' */, (UChar)0x0068 /* 'h' */, (UChar)0x0065 /* 'e' */, (UChar)0x006D /* 'm' */, (UChar)0x0069 /* 'i' */, (UChar)0x006E /* 'n' */, (UChar)0x0000 /* '\0' */},
