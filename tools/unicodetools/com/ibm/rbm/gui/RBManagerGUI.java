@@ -12,7 +12,6 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.*;
 import javax.swing.tree.*;
 
 import com.ibm.rbm.*;
@@ -75,14 +74,14 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 	RBGroupPanel             jPanelGroups = new RBGroupPanel(this);
 	RBSearchPanel            jPanelSearch = new RBSearchPanel(this);
 	JScrollPane  jScrollPaneTree = new JScrollPane(jTreeDisplay,
-																 		   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-																		   JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+													ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+													ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	// ** PROJECT VIEW SPLIT PANE COMPONENTS
 	JTabbedPane              treeTabbedPane = new JTabbedPane();
 	JTree                    projectTree = new JTree();
 	JScrollPane              projectScrollPane = new JScrollPane(projectTree, 
-																 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-																 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+																ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+																ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	RBProjectItemPanel       projectPanel = new RBProjectItemPanel(this);
 	RBProject                project = null;
 	
@@ -1289,8 +1288,9 @@ class RBTreeCellRenderer extends DefaultTreeCellRenderer {
 	}
 }
 
-// Table model for resource bundle projects
-
+/**
+ * Table model for resource bundle projects
+ */
 class RBProject {
 	java.util.List bundleNames;
 	java.util.List bundleFileNames;
@@ -1388,213 +1388,6 @@ class RBProject {
 		}
 	}
 }
-
-// The table model for bundle groups
-
-class GroupItemsTableModel extends AbstractTableModel {
-	BundleGroup group;
-	
-	public GroupItemsTableModel(BundleGroup group) {
-		this.group = group;
-	}
-	
-	public int getColumnCount() { return 3; }
-		    
-	public int getRowCount() {
-		return group.getItemCount();
-	}
-	
-	public void setGroup(BundleGroup bg) {
-		group = bg;
-		fireTableChanged(new TableModelEvent(this));
-	}
-			
-	public Object getValueAt(int row, int col) {
-		BundleItem item = group.getBundleItem(row);
-				
-		String retStr = null;
-				
-		switch(col) {
-		case 0:
-			retStr = item.getKey();
-			break;
-		case 1:
-			retStr = item.getTranslation();
-			break;
-		case 2:
-			retStr = (item.getComment() == null ? "" : item.getComment());
-			break;
-		default:
-			retStr = Resources.getTranslation("table_cell_error");
-		}
-				
-		return retStr;
-	}
-	
-	public String getColumnName(int col) {
-		if (col == 0) return Resources.getTranslation("languagegroup_column_key");
-		else if (col == 1) return Resources.getTranslation("languagegroup_column_translation");
-		else if (col == 2) return Resources.getTranslation("languagegroup_column_comment");
-		else return Resources.getTranslation("table_column_error");
-	}
-	
-	public BundleItem getBundleItem(int row) {
-		if (row >= group.getItemCount())
-		    return null;
-		return group.getBundleItem(row);
-	}
-	
-	public void update() {
-		fireTableDataChanged();
-	}
-}
-
-// The table model for untranslated Items
-
-class UntranslatedItemsTableModel extends AbstractTableModel {
-	Bundle bundle;
-	
-	public UntranslatedItemsTableModel(Bundle bundle) {
-		this.bundle = bundle;
-	}
-	
-	public void setBundle(Bundle bundle) {
-		this.bundle = bundle;
-		update();
-	}
-	
-	public int getColumnCount() { return 3; }
-		    
-	public int getRowCount() {
-		return bundle.getUntranslatedItemsSize();
-	}
-	
-	public Object getValueAt(int row, int col) {
-		BundleItem item = bundle.getUntranslatedItem(row);
-		String retStr = null;
-				
-		switch(col) {
-		case 0:
-			retStr = item.getKey();
-			break;
-		case 1:
-			retStr = item.getTranslation();
-			break;
-		case 2:
-			retStr = (item.getParentGroup() == null ? "" : item.getParentGroup().getName());
-			break;
-		default:
-			retStr = Resources.getTranslation("table_cell_error");
-		}
-				
-		return retStr;
-	}
-			
-	public String getColumnName(int col) {
-		if (col == 0) return Resources.getTranslation("languageuntrans_column_key");
-		else if (col == 1) return Resources.getTranslation("languageuntrans_column_translation");
-		else if (col == 2) return Resources.getTranslation("languageuntrans_column_group");
-		else return Resources.getTranslation("table_column_error");
-	}
-	
-	public BundleItem getBundleItem(int row) {
-		return bundle.getUntranslatedItem(row);
-	}
-	
-	public void update() {
-		fireTableDataChanged();
-	}
-}
-
-// The table model for search and replace Items
-
-class SearchItemsTableModel extends AbstractTableModel {
-	Vector items;
-	
-	public SearchItemsTableModel(Vector items) {
-		this.items = items;
-	}
-	
-	public void setItems(Vector items) {
-		this.items = items;
-	}
-	
-	public int getColumnCount() { return 3; }
-		    
-	public int getRowCount() {
-		return items.size();
-	}
-	
-	public Object getValueAt(int row, int col) {
-		BundleItem item = (BundleItem)items.elementAt(row);
-		String retStr = null;
-				
-		switch(col) {
-		case 0:
-			retStr = item.getKey();
-			break;
-		case 1:
-			retStr = item.getTranslation();
-			break;
-		case 2:
-			retStr = (item.getParentGroup() == null ? "" : item.getParentGroup().getName());
-			break;
-		default:
-			retStr = Resources.getTranslation("table_cell_error");
-		}
-				
-		return retStr;
-	}
-			
-	public String getColumnName(int col) {
-		if (col == 0) return Resources.getTranslation("languageuntrans_column_key");
-		else if (col == 1) return Resources.getTranslation("languageuntrans_column_translation");
-		else if (col == 2) return Resources.getTranslation("languageuntrans_column_group");
-		else return Resources.getTranslation("table_column_error");
-	}
-	
-	public BundleItem getBundleItem(int row) {
-		return (BundleItem)items.elementAt(row);
-	}
-	
-	public Vector getBundleItems() {
-		return items;
-	}
-	
-	public void update() {
-		fireTableDataChanged();
-	}
-}
-
-// Combo box model for display all groups of a bundle
-
-class GroupComboBoxModel extends DefaultComboBoxModel {
-	Bundle bundle;
-	
-	public GroupComboBoxModel (Bundle bundle) {
-		this.bundle = bundle;
-		setSelectedItem(bundle.getBundleGroup(0));
-	}
-	
-	public int getSize() {
-		return bundle.getGroupCount();
-	}
-	
-	public Object getElementAt(int index) {
-		return bundle.getBundleGroup(index);
-	}
-	
-	public Object getSelectedItem() {
-		return super.getSelectedItem();
-		//return getElementAt(0);
-	}
-	
-	public void update() {
-		fireContentsChanged(this, 0, getSize()-1);
-	}
-}
-
-// The main menu bar for the main frame
 
 class RBManagerMenuBar extends JMenuBar {
 	RBManagerGUI             listener;

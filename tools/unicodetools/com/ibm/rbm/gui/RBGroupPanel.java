@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.table.*;
+import javax.swing.event.*;
 
 import com.ibm.rbm.*;
 
@@ -29,14 +31,6 @@ class RBGroupPanel extends JPanel {
 	JComboBox   jComboBoxGroup;
 	JTable      jTableGroupTable;
 	JScrollPane jScrollPaneGroupTable;
-	Box         boxGroupInfo;
-	Box         box1;
-	Box         box2;
-	Box         box3;
-	Box         box4;
-	Dimension   topDim = new Dimension();
-	Dimension   leftDim = new Dimension();
-	Dimension   rightDim = new Dimension();
 	
 	// Components - Manager
 	JList       jListGroup;
@@ -125,11 +119,6 @@ class RBGroupPanel extends JPanel {
 			jLabelGroupCommentTitle   = new JLabel(Resources.getTranslation("basegroup_group_comment"));
 			jLabelGroupComment        = new JLabel(((BundleGroup)jComboBoxGroup.getSelectedItem()).getComment());
 			
-			boxGroupInfo              = new Box(BoxLayout.Y_AXIS);
-			box1                      = new Box(BoxLayout.X_AXIS);
-			box2                      = new Box(BoxLayout.X_AXIS);
-			box3                      = new Box(BoxLayout.X_AXIS);
-			
 			// Lower panel components
 			JPanel  lowerPanel = new JPanel();
 			JButton deleteButton = new JButton(Resources.getTranslation("button_delete_resource"));
@@ -140,21 +129,12 @@ class RBGroupPanel extends JPanel {
 			lowerPanel.setBorder(BorderFactory.createTitledBorder(Resources.getTranslation("languageuntrans_selected_resources_options")));
 			lowerPanel.setLayout(new GridLayout(1,2));
 			
-			topDim   = new Dimension(getSize().width, 35);
-			leftDim  = new Dimension(150,25);
-			rightDim = new Dimension(getSize().width - leftDim.width, leftDim.height);
-			
-			jLabelGroupNameTitle.setPreferredSize(leftDim);
 			jLabelGroupNameTitle.setHorizontalAlignment(SwingConstants.LEFT);
-			jLabelGroupCommentTitle.setPreferredSize(leftDim);
-			jComboBoxGroup.setPreferredSize(rightDim);
-			jLabelGroupTitle.setPreferredSize(topDim);
-			jLabelGroupComment.setPreferredSize(rightDim);
 			
 			jTableGroupTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			jTableGroupTable.addMouseListener(listener);
 			
-			jComboBoxGroup.addActionListener(new GroupComboActionListener(jListGroup));
+			jComboBoxGroup.addActionListener(new GroupComboActionListener(this));
 			
 			jLabelGroupTitle.setFont(new Font("SansSerif",Font.PLAIN,18));
 			
@@ -172,24 +152,35 @@ class RBGroupPanel extends JPanel {
 			});
 			
 			// Update the display
-			setLayout(new BorderLayout());
+			setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
 			removeAll();
 			lowerPanel.add(deleteButton);
 			lowerPanel.add(translateButton);
-			box1.add(Box.createHorizontalGlue());
-			box1.add(jLabelGroupTitle);
-			box2.add(Box.createHorizontalGlue());
-			box2.add(jLabelGroupNameTitle);
-			box2.add(jComboBoxGroup);
-			box3.add(Box.createHorizontalGlue());
-			box3.add(jLabelGroupCommentTitle);
-			box3.add(jLabelGroupComment);
-			boxGroupInfo.add(box1);
-			boxGroupInfo.add(box2);
-			boxGroupInfo.add(box3);
-			boxGroupInfo.add(jScrollPaneGroupTable);
-			add(boxGroupInfo, BorderLayout.CENTER);
-			add(lowerPanel, BorderLayout.SOUTH);
+
+			gbc.weightx = 1.0;
+			gbc.weighty = 0.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			add(jLabelGroupTitle, gbc);
+			gbc.weightx = 0.0;
+			gbc.gridwidth = 1;
+			add(jLabelGroupNameTitle, gbc);
+			gbc.weightx = 1.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			add(jComboBoxGroup, gbc);
+			gbc.weightx = 0.0;
+			gbc.gridwidth = 1;
+			add(jLabelGroupCommentTitle, gbc);
+			gbc.weightx = 1.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			add(jLabelGroupComment, gbc);
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.weighty = 1.0;
+			add(jScrollPaneGroupTable, gbc);
+			gbc.weighty = 0.0;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			add(lowerPanel, gbc);
 		} else if (rbm != null) {
 			Bundle mainBundle = (Bundle)rbm.getBundles().firstElement();
 			jLabelGroupTitle          = new JLabel(rbm.getBaseClass() + " - " + Resources.getTranslation("groups"));
@@ -204,12 +195,6 @@ class RBGroupPanel extends JPanel {
 			} catch (NullPointerException npe) {
 				jLabelGroupComment    = new JLabel("");
 			}
-			
-			boxGroupInfo              = new Box(BoxLayout.Y_AXIS);
-			box1                      = new Box(BoxLayout.X_AXIS);
-			box2                      = new Box(BoxLayout.X_AXIS);
-			box3                      = new Box(BoxLayout.X_AXIS);
-			box4                      = new Box(BoxLayout.Y_AXIS);
 			
 			createItemButton          = new JButton(Resources.getTranslation("button_create_resource"));
 			createGroupButton         = new JButton(Resources.getTranslation("button_create_group"));
@@ -230,24 +215,14 @@ class RBGroupPanel extends JPanel {
 			itemPanel.setMaximumSize(new Dimension(20000,50));
 			groupPanel.setMaximumSize(new Dimension(20000,50));
 			
-			topDim   = new Dimension(getSize().width, 35);
-			leftDim  = new Dimension(150,25);
-			rightDim = new Dimension(getSize().width - leftDim.width, leftDim.height);
-			
 			createItemButton.setMnemonic(RBManagerMenuBar.getKeyEventKey(Resources.getTranslation("button_create_resource_trigger")));
 			editItemButton.setMnemonic(RBManagerMenuBar.getKeyEventKey(Resources.getTranslation("button_edit_resource_trigger")));
 			deleteItemButton.setMnemonic(RBManagerMenuBar.getKeyEventKey(Resources.getTranslation("button_delete_resource_trigger")));
 			createGroupButton.setMnemonic(RBManagerMenuBar.getKeyEventKey(Resources.getTranslation("button_create_group_trigger")));
 			
-			jLabelGroupNameTitle.setPreferredSize(leftDim);
-			jLabelGroupCommentTitle.setPreferredSize(leftDim);
-			jComboBoxGroup.setPreferredSize(rightDim);
-			jLabelGroupTitle.setPreferredSize(topDim);
-			jLabelGroupComment.setPreferredSize(rightDim);
-			
 			jListGroup.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
-			jComboBoxGroup.addActionListener(new GroupComboActionListener(jListGroup));
+			jComboBoxGroup.addActionListener(new GroupComboActionListener(this));
 			
 			jLabelGroupTitle.setFont(new Font("SansSerif",Font.PLAIN,18));
 
@@ -256,88 +231,80 @@ class RBGroupPanel extends JPanel {
 				public void mouseClicked(MouseEvent ev) { 
 					if(ev.getClickCount() == 2 && ev.getSource() instanceof JList) {
 						// A double click means they want to edit a bundle item
-						RBGroupPanel panel = (RBGroupPanel)
-							((JList)ev.getSource()).getParent().getParent().getParent().getParent();
-						
 						if (((JList)ev.getSource()).getSelectedValue() != null)
 							new BundleItemCreationDialog((BundleItem)((JList)ev.getSource()).getSelectedValue(),
-								panel.listener.rbm, panel.listener, Resources.getTranslation("dialog_title_edit_item"), true);
+								listener.rbm, listener, Resources.getTranslation("dialog_title_edit_item"), true);
 					}
 				}
 			});
 			
 			createItemButton.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent ev) {
-					RBGroupPanel panel = (RBGroupPanel)
-						((JButton)ev.getSource()).getParent().getParent().getParent().getParent();
-					new BundleItemCreationDialog(((BundleGroup)panel.jComboBoxGroup.getSelectedItem()).getName(),
-												 panel.listener.rbm, panel.listener,
+					new BundleItemCreationDialog(((BundleGroup)jComboBoxGroup.getSelectedItem()).getName(),
+												 listener.rbm, listener,
 												 Resources.getTranslation("dialog_title_new_item"), true);
-					panel.updateComponents();
+					updateComponents();
 				}
 			});
 			createGroupButton.addActionListener(listener);
 			editItemButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					RBGroupPanel panel = (RBGroupPanel)
-						((JButton)ev.getSource()).getParent().getParent().getParent().getParent();
-					if (panel.jListGroup.getSelectedValue() != null)
-						new BundleItemCreationDialog((BundleItem)panel.jListGroup.getSelectedValue(),
-							panel.listener.rbm, panel.listener, Resources.getTranslation("dialog_title_edit_item"), true);
-					panel.updateComponents();
+					if (jListGroup.getSelectedValue() != null)
+						new BundleItemCreationDialog((BundleItem)jListGroup.getSelectedValue(),
+							listener.rbm, listener, Resources.getTranslation("dialog_title_edit_item"), true);
+					updateComponents();
 				}
 			});
 			editGroupButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					RBGroupPanel panel = (RBGroupPanel)
-						((JButton)ev.getSource()).getParent().getParent().getParent().getParent();
-					new BundleGroupEditDialog((BundleGroup)panel.jComboBoxGroup.getSelectedItem(),
-											  panel.listener, Resources.getTranslation("dialog_title_edit_group"), true);
-				panel.updateComponents();
+					new BundleGroupEditDialog((BundleGroup)jComboBoxGroup.getSelectedItem(),
+											  listener, Resources.getTranslation("dialog_title_edit_group"), true);
+					updateComponents();
 				}
 			});
 			deleteGroupButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					RBGroupPanel panel = (RBGroupPanel)
-						((JButton)ev.getSource()).getParent().getParent().getParent().getParent();
-					int response = JOptionPane.showConfirmDialog(panel.listener,
+					int response = JOptionPane.showConfirmDialog(listener,
 						Resources.getTranslation("dialog_warning_delete_group"),
 						Resources.getTranslation("dialog_title_delete_group"), JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 					if (response == JOptionPane.OK_OPTION) {
 						// Delete the group 
-						int index = panel.jComboBoxGroup.getSelectedIndex();
-						BundleGroup group = (BundleGroup)panel.jComboBoxGroup.getSelectedItem();
-						if (group.getName().equals("Ungrouped Items")) return;
-						if (index < panel.jComboBoxGroup.getItemCount()-1) panel.jComboBoxGroup.setSelectedIndex(index+1);
-						else panel.jComboBoxGroup.setSelectedIndex(index-1);
-						panel.rbm.deleteGroup(group.getName());
+						int index = jComboBoxGroup.getSelectedIndex();
+						BundleGroup group = (BundleGroup)jComboBoxGroup.getSelectedItem();
+						if (group.getName().equals("Ungrouped Items"))
+							return;
+						if (index < jComboBoxGroup.getItemCount()-1)
+							jComboBoxGroup.setSelectedIndex(index+1);
+						else
+							jComboBoxGroup.setSelectedIndex(index-1);
+						rbm.deleteGroup(group.getName());
 					}
-					panel.updateComponents();
+					updateComponents();
 				}
 			});
 			
 			deleteItemButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent ev) {
-					RBGroupPanel panel = (RBGroupPanel)((JButton)ev.getSource()).getParent().getParent().getParent().getParent();
-					int response = JOptionPane.showConfirmDialog(panel.listener,
+					int response = JOptionPane.showConfirmDialog(listener,
 						Resources.getTranslation("dialog_warning_delete_item"),
 						Resources.getTranslation("dialog_title_delete_item"), JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.WARNING_MESSAGE);
 					if (response == JOptionPane.OK_OPTION) {
-						Object o = panel.jListGroup.getSelectedValue();
+						Object o = jListGroup.getSelectedValue();
 						if (o != null) {
 							BundleItem item = (BundleItem) o;
 							handleDeleteItem(item.getKey());
 							//panel.rbm.deleteItem(item.getKey());
 						}
 					}
-					panel.updateComponents();
+					updateComponents();
 				}
 			});
 			
 			// Update the display
-			setLayout(new BorderLayout());
+			setLayout(new GridBagLayout());
+			GridBagConstraints gbc = new GridBagConstraints();
 			removeAll();
 			itemPanel.add(createItemButton, BorderLayout.WEST);
 			itemPanel.add(editItemButton, BorderLayout.CENTER);
@@ -345,25 +312,32 @@ class RBGroupPanel extends JPanel {
 			groupPanel.add(createGroupButton, BorderLayout.WEST);
 			groupPanel.add(editGroupButton, BorderLayout.CENTER);
 			groupPanel.add(deleteGroupButton, BorderLayout.EAST);
-			box1.add(Box.createHorizontalGlue());
-			box1.add(jLabelGroupTitle);
-			box2.add(Box.createHorizontalGlue());
-			box2.add(jLabelGroupNameTitle);
-			box2.add(jComboBoxGroup);
-			box3.add(Box.createHorizontalGlue());
-			box3.add(jLabelGroupCommentTitle);
-			box3.add(jLabelGroupComment);
-			box4.add(Box.createVerticalStrut(5));
-			box4.add(groupPanel);
-			box4.add(Box.createVerticalStrut(10));
-			box4.add(itemPanel);
-			box4.add(Box.createVerticalStrut(5));
-			boxGroupInfo.add(box1);
-			boxGroupInfo.add(box2);
-			boxGroupInfo.add(box3);
-			boxGroupInfo.add(jScrollPaneGroupTable);
-			boxGroupInfo.add(box4);
-			add(boxGroupInfo, BorderLayout.CENTER);
+
+			
+			gbc.weightx = 1.0;
+			gbc.weighty = 0.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			add(jLabelGroupTitle, gbc);
+			gbc.weightx = 0.0;
+			gbc.gridwidth = 1;
+			add(jLabelGroupNameTitle, gbc);
+			gbc.weightx = 1.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			add(jComboBoxGroup, gbc);
+			gbc.weightx = 0.0;
+			gbc.gridwidth = 1;
+			add(jLabelGroupCommentTitle, gbc);
+			gbc.weightx = 1.0;
+			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			add(jLabelGroupComment, gbc);
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.weighty = 1.0;
+			add(jScrollPaneGroupTable, gbc);
+			gbc.weighty = 0.0;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			add(groupPanel, gbc);
+			add(itemPanel, gbc);
 		} else {
 			removeAll();
 		}
@@ -374,74 +348,40 @@ class RBGroupPanel extends JPanel {
 		if (bundle != null) {
 			jLabelGroupTitle.setText(bundle.name);
 			
-			topDim.width = getSize().width;
-			rightDim.width = getSize().width - leftDim.width;
-			
-			box2.removeAll();
-			box3.removeAll();
-			boxGroupInfo.remove(jScrollPaneGroupTable);
-			
-			String selName = null;
-			try {
-				selName = ((BundleGroup)jComboBoxGroup.getSelectedItem()).getName();
-			} catch (Exception e) {}
-			jComboBoxGroup = new JComboBox(new GroupComboBoxModel(bundle));//bundle.getGroupsAsVector());
-			for (int i = 0; i < jComboBoxGroup.getItemCount(); i++) {
-				BundleGroup bg = (BundleGroup)jComboBoxGroup.getItemAt(i);
-				if (bg.getName().equals(selName)) jComboBoxGroup.setSelectedIndex(i);
-			}
-			
 			((GroupItemsTableModel)jTableGroupTable.getModel()).setGroup((BundleGroup)jComboBoxGroup.getSelectedItem());
-			jScrollPaneGroupTable = new JScrollPane(jTableGroupTable);
 			jLabelGroupComment.setText(((BundleGroup)jComboBoxGroup.getSelectedItem()).getComment());
 			
 			jTableGroupTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			jComboBoxGroup.addActionListener(new GroupComboActionListener(jTableGroupTable));
 			
 			// Update the group comment
 			jLabelGroupComment.setText(((BundleGroup)jComboBoxGroup.getSelectedItem()).getComment());
-			
-			// Update the display
-			jComboBoxGroup.setPreferredSize(rightDim);
-			box2.add(Box.createHorizontalGlue());
-			box2.add(jLabelGroupNameTitle);
-			box2.add(jComboBoxGroup);
-			box3.add(Box.createHorizontalGlue());
-			box3.add(jLabelGroupCommentTitle);
-			box3.add(jLabelGroupComment);
-			boxGroupInfo.add(jScrollPaneGroupTable);
 			
 		} else if (rbm != null) {
 			
 			// Update the list of groups
-			try {((GroupComboBoxModel)jComboBoxGroup.getModel()).update();}
-			catch (Exception e) {}
+//			try {
+				((GroupComboBoxModel)jComboBoxGroup.getModel()).update();
+//			}
+//			catch (Exception e) {}
 			// Update the group comment
 			if ((BundleGroup)jComboBoxGroup.getSelectedItem() != null)
 				jLabelGroupComment.setText(((BundleGroup)jComboBoxGroup.getSelectedItem()).getComment());
-			else jLabelGroupComment.setText("");
+			else
+				jLabelGroupComment.setText("");
 			// Update the list of resources
 			ListModel lmodel = jListGroup.getModel();
-			if (lmodel instanceof GroupItemsListModel)
-				((GroupItemsListModel)lmodel).update();
+			if (lmodel instanceof GroupItemsListModel) {
+				//((GroupItemsListModel)lmodel).update();
+				((GroupItemsListModel)lmodel).setGroup((BundleGroup)jComboBoxGroup.getSelectedItem());
+			}
 			else {
 				GroupItemsListModel newModel = new GroupItemsListModel((BundleGroup)jComboBoxGroup.getSelectedItem());
 				RBManagerGUI.debugMsg("List Model not as anticipated: " + lmodel.getClass().getName());
 				jListGroup.setModel(newModel);
 				newModel.update();
 			}
-			/*
-			try {GroupItemsListModel mod = (GroupItemsListModel) lmodel; }
-			catch (Exception e) {
-				e.printStackTrace(System.err);
-			}
-			*/
-			if (lmodel instanceof AbstractListModel) {
-				RBManagerGUI.debugMsg("List Model is an AbstractListModel");
-			}  else {
-				RBManagerGUI.debugMsg("List Model is not an AbstractListModel");
-			}
 		} else {
+			RBManagerGUI.debugMsg("Update, but no active components");
 			removeAll();
 		}
 		//validate();
@@ -456,38 +396,14 @@ class RBGroupPanel extends JPanel {
  * The action listener which monitors changes in the group to display
  */
 class GroupComboActionListener implements ActionListener {
-	JTable table;
-	JList list;
+	RBGroupPanel panel;
 	
-	protected GroupComboActionListener(JTable table) {
-		list = null;
-		this.table = table;
-	}
-	
-	protected GroupComboActionListener(JList list) {
-		table = null;
-		this.list = list;
+	protected GroupComboActionListener(RBGroupPanel panel) {
+		this.panel = panel;
 	}
 	
 	public void actionPerformed(ActionEvent ev) {
-		JComboBox cbox = (JComboBox)ev.getSource();
-		
-		if (table != null) {
-			BundleGroup bg = (BundleGroup)cbox.getSelectedItem();
-			((GroupItemsTableModel)table.getModel()).setGroup((BundleGroup)cbox.getSelectedItem());
-			//table.validate();
-			Container c = table.getParent();
-			while (!(c instanceof RBGroupPanel)) {
-			    c = c.getParent();
-			} 
-			((RBGroupPanel)c).updateComponents();
-		} else if (list != null) {
-			list.setListData(((BundleGroup)cbox.getSelectedItem()).getItemsAsVector());
-			//list.validate();
-			Container c = list.getParent();
-			while (!(c instanceof RBGroupPanel)) { c = c.getParent(); } 
-			((RBGroupPanel)c).updateComponents();
-		} else RBManagerGUI.debugMsg("Selection changed, but no active components");
+		panel.updateComponents();
 	}
 }
 
@@ -499,6 +415,7 @@ class GroupItemsListModel extends AbstractListModel {
 	
 	public void setGroup(BundleGroup group) {
 		this.group = group;
+		update();
 	}
 	
 	public GroupItemsListModel(BundleGroup group) {
@@ -506,8 +423,10 @@ class GroupItemsListModel extends AbstractListModel {
 	}
 	
 	public int getSize() {
-		if (group == null) return 0;
-		return group.getItemCount();
+		if (group == null)
+			return 0;
+		int result = group.getItemCount();
+		return result;
 	}
 	
 	public Object getElementAt(int index) {
@@ -516,6 +435,96 @@ class GroupItemsListModel extends AbstractListModel {
 	
 	public void update() {
 		fireContentsChanged(this, 0, getSize()-1);
+	}
+}
+
+/**
+ * The table model for searched Items
+ */
+class GroupComboBoxModel extends DefaultComboBoxModel {
+	Bundle bundle;
+	
+	public GroupComboBoxModel (Bundle bundle) {
+		this.bundle = bundle;
+		setSelectedItem(bundle.getBundleGroup(0));
+	}
+	
+	public int getSize() {
+		return bundle.getGroupCount();
+	}
+	
+	public Object getElementAt(int index) {
+		return bundle.getBundleGroup(index);
+	}
+	
+	public Object getSelectedItem() {
+		return super.getSelectedItem();
+		//return getElementAt(0);
+	}
+	
+	public void update() {
+		fireContentsChanged(this, 0, getSize()-1);
+	}
+}
+
+/**
+ * The table model for bundle groups
+ */
+class GroupItemsTableModel extends AbstractTableModel {
+	BundleGroup group;
+	
+	public GroupItemsTableModel(BundleGroup group) {
+		this.group = group;
+	}
+	
+	public int getColumnCount() { return 3; }
+		    
+	public int getRowCount() {
+		return group.getItemCount();
+	}
+	
+	public void setGroup(BundleGroup bg) {
+		group = bg;
+		fireTableChanged(new TableModelEvent(this));
+	}
+			
+	public Object getValueAt(int row, int col) {
+		BundleItem item = group.getBundleItem(row);
+				
+		String retStr = null;
+				
+		switch(col) {
+		case 0:
+			retStr = item.getKey();
+			break;
+		case 1:
+			retStr = item.getTranslation();
+			break;
+		case 2:
+			retStr = (item.getComment() == null ? "" : item.getComment());
+			break;
+		default:
+			retStr = Resources.getTranslation("table_cell_error");
+		}
+				
+		return retStr;
+	}
+	
+	public String getColumnName(int col) {
+		if (col == 0) return Resources.getTranslation("languagegroup_column_key");
+		else if (col == 1) return Resources.getTranslation("languagegroup_column_translation");
+		else if (col == 2) return Resources.getTranslation("languagegroup_column_comment");
+		else return Resources.getTranslation("table_column_error");
+	}
+	
+	public BundleItem getBundleItem(int row) {
+		if (row >= group.getItemCount())
+		    return null;
+		return group.getBundleItem(row);
+	}
+	
+	public void update() {
+		fireTableDataChanged();
 	}
 }
 
