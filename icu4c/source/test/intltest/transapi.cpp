@@ -54,7 +54,7 @@ void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, char* &na
 		case 10: name = "TestGetAdoptFilter"; if (exec) TestGetAdoptFilter(); break;
 		case 11: name = "TestClone"; if (exec) TestClone(); break;
         case 12: name = "TestNullTransliterator"; if (exec) TestNullTransliterator(); break;
-                
+        case 13: name = "TestRegisterUnregister"; if(exec) TestRegisterUnregister(); break;        
         default: name = ""; break; /*needed to end loop*/
     }
 }
@@ -560,6 +560,61 @@ void TransliteratorAPITest::TestNullTransliterator(){
 
     
 }
+void TransliteratorAPITest::TestRegisterUnregister(){
+   
+   UErrorCode status=U_ZERO_ERROR;
+
+    /* Make sure it doesn't exist */
+   if (Transliterator::createInstance("TestA-TestB") != NULL) {
+      errln("FAIL: TestA-TestB already registered\n");
+      return;
+   }
+   /* Check inverse too 
+   if (Transliterator::createInstance("TestA-TestB",
+                                      (UTransDirection)UTRANS_REVERSE) != NULL) {
+      errln("FAIL: TestA-TestB inverse already registered\n");
+      return;
+   }
+   */
+
+   /* Create it */
+   Transliterator *t = new RuleBasedTransliterator("TestA-TestB",
+                                                   "a<>b",
+                                                   status);
+   /* Register it */
+   Transliterator::registerInstance(t, status);
+
+   /* Now check again -- should exist now*/
+   Transliterator *s = Transliterator::createInstance("TestA-TestB");
+   if (s == NULL) {
+      errln("FAIL: TestA-TestB not registered\n");
+      return;
+   }
+   delete s;
+   
+   /* Check inverse too
+   s = Transliterator::createInstance("TestA-TestB",
+                                      (UTransDirection)UTRANS_REVERSE);
+   if (s == NULL) {
+      errln("FAIL: TestA-TestB inverse not registered\n");
+      return;
+   }
+   delete s;
+   */
+   
+   /*unregister the instance*/
+   Transliterator::unregister("TestA-TestB");
+   /* now Make sure it doesn't exist */
+   if (Transliterator::createInstance("TestA-TestB") != NULL) {
+      errln("FAIL: TestA-TestB isn't unregistered\n");
+      return;
+   }
+
+  
+}
+
+
+
 /**
  * Used by TestFiltering().
  */
