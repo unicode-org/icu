@@ -65,7 +65,7 @@ ucat.o locmap.o uloc.o locid.o \
 uhash.o uhash_us.o \
 ucnv.o ucnv_set.o ucnv_bld.o ucnv_cb.o ucnv_cnv.o ucnv_err.o ucnv_ext.o ucnv_io.o ucnvlat1.o \
 ucnv_u7.o ucnv_u8.o ucnv_u16.o ucnv_u32.o ucnvscsu.o ucnvbocu.o \
-ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o \
+ucnvmbcs.o ucnv2022.o ucnvhz.o ucnv_lmb.o ucnvisci.o ucnvdisp.o \
 unistr.o unistr_case.o unistr_cnv.o unistr_props.o \
 utf_impl.o ustring.o ustr_cnv.o ustrcase.o cstring.o ustrfmt.o ustrtrns.o ustr_wcs.o \
 normlzr.o unorm.o unorm_it.o chariter.o schriter.o uchriter.o uiter.o \
