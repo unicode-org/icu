@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.11 $ $Date: 2001/11/25 23:12:22 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.12 $ $Date: 2001/11/28 22:30:48 $
  */
 final class NormalizationTransliterator extends Transliterator {
 
@@ -44,10 +44,14 @@ final class NormalizationTransliterator extends Transliterator {
     
     // TODO: Set to exact values for different NFs for more accuracy
     static {
-        UNSAFE_STARTS[D] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
-        UNSAFE_STARTS[C] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
-        UNSAFE_STARTS[KD] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
-        UNSAFE_STARTS[KC] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
+        UNSAFE_STARTS[D] = new UnicodeSet("[\u0F73\u0F75\u0F81]", false);
+        UNSAFE_STARTS[C] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56-\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6"
+            + "\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2]", false);
+        UNSAFE_STARTS[KD] = new UnicodeSet("[\u0F73\u0F75\u0F81\uFF9E-\uFF9F]", false);
+        UNSAFE_STARTS[KC] = new UnicodeSet("[\u09BE\u09D7\u0B3E\u0B56-\u0B57\u0BBE\u0BD7\u0CC2\u0CD5-\u0CD6"
+            + "\u0D3E\u0D57\u0DCF\u0DDF\u0F73\u0F75\u0F81\u102E\u1161-\u1175\u11A8-\u11C2\u3133\u3135-\u3136"
+            + "\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF"
+            + "\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
     }
     
     // Instance data, simply pointer to one of the above
