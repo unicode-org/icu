@@ -19,6 +19,18 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 100
 
+/* default codepage name, keep synchronized with ccapitst.c */
+#ifdef WIN32
+    /* this assumes a Western European Windows */
+#   define DEFAULT_CODEPAGE "IBM-1252"
+#elif defined(OS390)
+#   define DEFAULT_CODEPAGE "ibm-37-s390"
+#elif defined(OS400)
+#   define DEFAULT_CODEPAGE "ibm-37"
+#else
+#   define DEFAULT_CODEPAGE "LATIN_1"
+#endif
+
 /*writes and entire UnicodeString along with a BOM to a file*/
 void WriteToFile(const UnicodeString *a, FILE *myfile); 
 /*Case insensitive compare*/
@@ -218,19 +230,13 @@ void ConvertTest::TestConvert()
     someConverters[1] = new UnicodeConverterCPP;
     someConverters[2] = new UnicodeConverterCPP("utf8", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + err);
-#ifdef WIN32   
-	if ((strcmp(someConverters[1]->getName(err),"IBM-1252")==0)&&
-    (strcmp(someConverters[0]->getName(err),"IBM-1252")==0))
+
+    if ((stricmp(someConverters[1]->getName(err),DEFAULT_CODEPAGE)==0)&&
+    (stricmp(someConverters[0]->getName(err),DEFAULT_CODEPAGE)==0))
       logln("getName ok");
     else errln("getName failed");
     logln(someConverters[1]->getName(err));
-#else
-    if ((strcmp(someConverters[1]->getName(err),"LATIN_1")==0)&&
-    (strcmp(someConverters[0]->getName(err),"LATIN_1")==0))
-      logln("getName ok");
-    else errln("getName failed");
-    logln(someConverters[1]->getName(err));
-#endif
+
     logln("\n---Testing UnicodeConverterCPP::operator==...");
     if (((*someConverters[1] == *someConverters[0])==TRUE)&&
     (*someConverters[1] == *someConverters[2])==FALSE)
@@ -562,7 +568,15 @@ void ConvertTest::TestAmbiguous()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeConverterCPP *ascii_cnv = 0, *sjis_cnv = 0;
-    const char *target = "\\usr\\local\\share\\data\\icutest.txt";
+    const char target[] = {
+        /* "\\usr\\local\\share\\data\\icutest.txt" */
+        0x5c, 0x75, 0x73, 0x72,
+        0x5c, 0x6c, 0x6f, 0x63, 0x61, 0x6c,
+        0x5c, 0x73, 0x68, 0x61, 0x72, 0x65,
+        0x5c, 0x64, 0x61, 0x74, 0x61,
+        0x5c, 0x69, 0x63, 0x75, 0x74, 0x65, 0x73, 0x74, 0x2e, 0x74, 0x78, 0x74,
+        0
+    };
     UnicodeString asciiResult, sjisResult;
     
     sjis_cnv = new UnicodeConverterCPP("SJIS", status);

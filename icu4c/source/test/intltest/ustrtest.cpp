@@ -92,8 +92,8 @@ UnicodeStringTest::TestCompare()
     UnicodeString   test5((UChar)0x5000);
     UnicodeString   test6((UChar)0x5100);
 
-    UChar         uniChars[] = { 't', 'h', 'i', 's', ' ', 'i', 's', 
-                 ' ', 'a', ' ', 't', 'e', 's', 't', 0 };
+    UChar         uniChars[] = { 0x74, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 
+                 0x20, 0x61, 0x20, 0x74, 0x65, 0x73, 0x74, 0 };
     char            chars[] = "this is a test";
 
     // test operator== and operator!=
@@ -194,7 +194,7 @@ UnicodeStringTest::TestRemoveReplace()
 {
     UnicodeString   test1("The rain in Spain stays mainly on the plain");
     UnicodeString   test2("eat SPAMburgers!");
-    UChar         test3[] = { 'S', 'P', 'A', 'M', 'M', 0 };
+    UChar         test3[] = { 0x53, 0x50, 0x41, 0x4d, 0x4d, 0 };
     char            test4[] = "SPAM";
     UnicodeString&  test5 = test1;
 
@@ -219,8 +219,8 @@ UnicodeStringTest::TestRemoveReplace()
               "  got \"" + test1 + "\"");
 
     for (UTextOffset i = 0; i < test1.length(); i++)
-        if (test5[i] != 'S' && test5[i] != 'P' && test5[i] != 'A' && test5[i] != 'M' && test5[i] != ' ')
-            test1[i] = 'x';
+        if (test5[i] != 0x53 && test5[i] != 0x50 && test5[i] != 0x41 && test5[i] != 0x4d && test5[i] != 0x20)
+            test1[i] = 0x78;
 
     if (test1 != "xxx SPAM xx SPAM SPAM SPAM xx xxx SPAM")
         errln("One of the remove methods failed:\n"
@@ -236,22 +236,22 @@ void
 UnicodeStringTest::TestCaseConversion()
 {
     UChar uppercaseGreek[] =
-        { 0x399, 0x395, 0x3a3, 0x3a5, 0x3a3, ' ', 0x03a7, 0x3a1, 0x399, 0x3a3, 0x3a4,
+        { 0x399, 0x395, 0x3a3, 0x3a5, 0x3a3, 0x20, 0x03a7, 0x3a1, 0x399, 0x3a3, 0x3a4,
         0x39f, 0x3a3, 0 };
         // "IESUS CHRISTOS"
 
     UChar lowercaseGreek[] = 
-        { 0x3b9, 0x3b5, 0x3c3, 0x3c5, 0x3c2, ' ', 0x03c7, 0x3c1, 0x3b9, 0x3c3, 0x3c4,
+        { 0x3b9, 0x3b5, 0x3c3, 0x3c5, 0x3c2, 0x20, 0x03c7, 0x3c1, 0x3b9, 0x3c3, 0x3c4,
         0x3bf, 0x3c2, 0 };
         // "iesus christos"
 
     UChar lowercaseTurkish[] = 
-        { 'i', 's', 't', 'a', 'n', 'b', 'u', 'l', ',', ' ', 'n', 'o', 't', ' ', 'c', 'o', 
-        'n', 's', 't', 'a', 'n', 't', 0x0131, 'n', 'o', 'p', 'l', 'e', '!', 0 };
+        { 0x69, 0x73, 0x74, 0x61, 0x6e, 0x62, 0x75, 0x6c, 0x2c, 0x20, 0x6e, 0x6f, 0x74, 0x20, 0x63, 0x6f, 
+        0x6e, 0x73, 0x74, 0x61, 0x6e, 0x74, 0x0131, 0x6e, 0x6f, 0x70, 0x6c, 0x65, 0x21, 0 };
 
     UChar uppercaseTurkish[] = 
-        { 'T', 'O', 'P', 'K', 'A', 'P', 'I', ' ', 'P', 'A', 'L', 'A', 'C', 'E', ',', ' ',
-        0x0130, 'S', 'T', 'A', 'N', 'B', 'U', 'L', 0 };
+        { 0x54, 0x4f, 0x50, 0x4b, 0x41, 0x50, 0x49, 0x20, 0x50, 0x41, 0x4c, 0x41, 0x43, 0x45, 0x2c, 0x20,
+        0x0130, 0x53, 0x54, 0x41, 0x4e, 0x42, 0x55, 0x4c, 0 };
     
     UnicodeString expectedResult;
     UnicodeString   test3;
@@ -287,10 +287,10 @@ UnicodeStringTest::TestCaseConversion()
     if (test4 != expectedResult)
         errln("toUpper failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
 
-    test3 = "Süßmayrstraße";
+    test3 = CharsToUnicodeString("S\\u00FC\\u00DFmayrstra\\u00DFe");
 
     test3.toUpper(Locale("de", "DE"));
-    expectedResult = "SÜSSMAYRSTRASSE";
+    expectedResult = CharsToUnicodeString("S\\u00DCSSMAYRSTRASSE");
     if (test3 != expectedResult)
         errln("toUpper failed: expected \"" + expectedResult + "\", got \"" + test3 + "\".");
     
@@ -314,7 +314,7 @@ UnicodeStringTest::TestSearching()
 {
     UnicodeString test1("test test ttest tetest testesteststt");
     UnicodeString test2("test");
-    UChar testChar = 't';
+    UChar testChar = 0x74;
 
     uint16_t occurrences = 0;
     UTextOffset startPos = 0;
@@ -486,10 +486,10 @@ UnicodeStringTest::TestFindAndReplace()
 void
 UnicodeStringTest::TestCellWidth()
 {
-    UChar     testData2[] = { 'M', 'o', 0x308, 't', 'l', 'e', 'y', ' ', 'C', 'r', 'u', 0x308, 'e', 0x0000 };
-    UChar     testData3[] = { '1', '9', '9', '7', 0x5e74, ' ', 0x516d, 0x6708, ' ', '0', '3', 0x65e5, 0x5e73, 0x6210, 0x0000 };
-    UChar     testData4[] = { '9', '7', 0xb144, '6', 0xc6d4, '0', '3', 0xc77c, 0x0000 };
-    UChar     testData5[] = { '9', '7', 0x1103, 0x1167, 0x11ab, '6', 0x110b, 0x117b, 0x11af, '0', '3', 0x110b, 0x1175, 0x11af, 0x0000 };
+    UChar     testData2[] = { 0x4d, 0x6f, 0x308, 0x74, 0x6c, 0x65, 0x79, 0x20, 0x43, 0x72, 0x75, 0x308, 0x65, 0x0000 };
+    UChar     testData3[] = { 0x31, 0x39, 0x39, 0x37, 0x5e74, 0x20, 0x516d, 0x6708, 0x20, 0x30, 0x33, 0x65e5, 0x5e73, 0x6210, 0x0000 };
+    UChar     testData4[] = { 0x39, 0x37, 0xb144, 0x36, 0xc6d4, 0x30, 0x33, 0xc77c, 0x0000 };
+    UChar     testData5[] = { 0x39, 0x37, 0x1103, 0x1167, 0x11ab, 0x36, 0x110b, 0x117b, 0x11af, 0x30, 0x33, 0x110b, 0x1175, 0x11af, 0x0000 };
     
     UnicodeString   test1("The rain in Spain stays mainly on the plain.");
     UnicodeString   test2(testData2);
@@ -566,7 +566,7 @@ void
 UnicodeStringTest::TestStackAllocation()
 {
      UChar            testString[] ={ 
-        'T', 'h', 'i', 's', ' ', 'i', 's', ' ', 'a', ' ', 'c', 'r', 'a', 'z', 'y', ' ', 't', 'e', 's', 't', '.', 0 };
+        0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x63, 0x72, 0x61, 0x7a, 0x79, 0x20, 0x74, 0x65, 0x73, 0x74, 0x2e, 0 };
     UChar           guardWord = 0x4DED;
     UnicodeString*  test = 0;
 
@@ -588,9 +588,9 @@ UnicodeStringTest::TestStackAllocation()
     delete test;
 
     UChar workingBuffer[] = {
-        'N', 'o', 'w', ' ', 'i', 's', ' ', 't', 'h', 'e', ' ', 't', 'i', 'm', 'e', ' ',
-        'f', 'o', 'r', ' ', 'a', 'l', 'l', ' ', 'm', 'e', 'n', ' ', 't', 'o', ' ',
-        'c', 'o', 'm', 'e', 0xffff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0x4e, 0x6f, 0x77, 0x20, 0x69, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x69, 0x6d, 0x65, 0x20,
+        0x66, 0x6f, 0x72, 0x20, 0x61, 0x6c, 0x6c, 0x20, 0x6d, 0x65, 0x6e, 0x20, 0x74, 0x6f, 0x20,
+        0x63, 0x6f, 0x6d, 0x65, 0xffff, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     UChar guardWord2 = 0x4DED;
@@ -610,7 +610,7 @@ UnicodeStringTest::TestStackAllocation()
     // the current implementation will always reallocate the memory
     // after it was aliased in case it was read-only;
     // therefore, this test must fail and we don't perform it
-    if (workingBuffer[24] != 'g')
+    if (workingBuffer[24] != 0x67)
         errln("insert() on stack-allocated UnicodeString didn't affect backing store");
 #endif
 
@@ -623,7 +623,7 @@ UnicodeStringTest::TestStackAllocation()
     *test = "ha!";
     if (*test != "ha!")
         errln("Assignment to stack-allocated UnicodeString didn't work");
-    if (workingBuffer[0] != 'N')
+    if (workingBuffer[0] != 0x4e)
         errln("Change to UnicodeString after overflow are stil affecting original buffer");
     if (guardWord2 != 0x4DED)
         errln("Change to UnicodeString after overflow overwrote guard word!");

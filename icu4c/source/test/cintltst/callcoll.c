@@ -12,11 +12,24 @@
 *     Madhu Katragadda              Ported for C API
 *********************************************************************************
 */
+
+/*
+ * Important: This file is included into intltest/allcoll.cpp so that the
+ * test data is shared. This makes it easier to maintain the test data,
+ * especially since the Unicode data must be portable and quoted character
+ * literals will not work.
+ * If it is included, then there will be a #define INCLUDE_CALLCOLL_C
+ * that must prevent the actual code in here from being part of the
+ * allcoll.cpp compilation.
+ */
+
 /**
  * CollationDummyTest is a third level test class.  This tests creation of 
  * a customized collator object.  For example, number 1 to be sorted 
  * equlivalent to word 'one'.
  */
+#ifndef INCLUDE_CALLCOLL_C
+
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -27,6 +40,9 @@
 #include <string.h>
 
 static UCollator *myCollation;
+
+#endif
+
 static const UChar DEFAULTRULEARRAY[] =
 {
           0x3d, 0x27, (UChar)0x200B, 0x27, 0x3d, (UChar)0x200C, 0x3d, (UChar)0x200D, 0x3d, (UChar)0x200E, 0x3d, (UChar)0x200F
@@ -237,7 +253,7 @@ static const UChar DEFAULTRULEARRAY[] =
         , (UChar)0x0000
 };
 
-const UChar testSourceCases[][MAX_TOKEN_LEN] = {
+const UChar testSourceCases[][16] = {
     {0x61, 0x62, 0x27, 0x63, 0},
     {0x63, 0x6f, 0x2d, 0x6f, 0x70, 0},
     {0x61, 0x62, 0},
@@ -277,7 +293,7 @@ const UChar testSourceCases[][MAX_TOKEN_LEN] = {
     {0x70, 0x00EA,0x30}                                    /* 37     */
 };
 
-const UChar testTargetCases[][MAX_TOKEN_LEN] = {
+const UChar testTargetCases[][16] = {
     {0x61, 0x62, 0x63, 0x27, 0},
     {0x43, 0x4f, 0x4f, 0x50, 0},
     {0x61, 0x62, 0x63, 0},
@@ -316,6 +332,8 @@ const UChar testTargetCases[][MAX_TOKEN_LEN] = {
     {0x31, 0x30},
     {0x70, (UChar)0x00EB,0x30}                                    /* 37 */
 };
+
+#ifndef INCLUDE_CALLCOLL_C
 
 const UCollationResult results[] = {
     UCOL_LESS,
@@ -359,10 +377,14 @@ const UCollationResult results[] = {
     UCOL_LESS                                        /* 37 */
 };
 
-const UChar testCases[][MAX_TOKEN_LEN] =
+#endif
+
+const UChar testCases[][4] =
 {
     {0x61, 0},
     {0x41, 0},
+    {0x00e4, 0},
+    {0x00c4, 0},
     {0x61, 0x65, 0},
     {0x61, 0x45, 0},
     {0x41, 0x65, 0},
@@ -374,6 +396,9 @@ const UChar testCases[][MAX_TOKEN_LEN] =
     {0x7a, 0}
 };
 
+#define COUNT_TEST_CASES 13
+
+#ifndef INCLUDE_CALLCOLL_C
 
 void addAllCollTest(TestNode** root)
 {
@@ -554,9 +579,9 @@ void TestExtra()
     }
     ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION); 
     ucol_setStrength(myCollation, UCOL_TERTIARY);
-    for (i = 0; i < 10 ; i++)
+    for (i = 0; i < COUNT_TEST_CASES-1 ; i++)
     {
-        for (j = i + 1; j < 11; j += 1)
+        for (j = i + 1; j < COUNT_TEST_CASES; j += 1)
         {
         
             doTest(myCollation, testCases[i], testCases[j], UCOL_LESS);
@@ -567,3 +592,5 @@ void TestExtra()
     ucol_close(myCollation);
     myCollation = 0;
 }
+
+#endif

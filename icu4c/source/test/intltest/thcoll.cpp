@@ -94,7 +94,7 @@ void CollationThaiTest::TestDictionary(void) {
         UnicodeString word(buffer, TEST_FILE_ENCODING);
         line++;
 
-        if (word.charAt(0) == '#') {
+        if (word.charAt(0) == 0x23) {
             // Skip comments
             continue;
         }
@@ -289,32 +289,5 @@ int8_t CollationThaiTest::sign(int32_t i) {
  */
 UnicodeString& CollationThaiTest::parseChars(UnicodeString& result,
                                              const char* chars) {
-    result.remove();
-    int32_t len = uprv_strlen(chars);
-    for (int32_t i=0; i<len; ) {
-        if ((i+5)<len && chars[i] == '\\' &&
-            (chars[i+1] == 'u' || chars[i+1] == 'U')) {
-            UChar c = 0;
-            i += 2;
-            for (int32_t d=0; d<4; ++d) {
-                int8_t digit = chars[i++];
-                if (digit >= '0' && digit <= '9') {
-                    digit -= '0';
-                } else if (digit >= 'A' && digit <= 'F') {
-                    digit -= 'A' - 10;
-                } else if (digit >= 'a' && digit <= 'f') {
-                    digit -= 'a' - 10;
-                } else {
-                    digit = 0; // illegal hex digit
-                }
-                c = (c << 4) | digit;
-            }
-            result += c;
-        } else {
-            char buf[] = { chars[i], 0 };
-            result += buf;
-            ++i;
-        }
-    }
-    return result;
+    return result = CharsToUnicodeString(chars);
 }

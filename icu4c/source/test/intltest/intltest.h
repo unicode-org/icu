@@ -167,5 +167,11 @@ IntlTest& operator<<(IntlTest& test, const int32_t num);
 IntlTest& endl( IntlTest& test );
 IntlTest& operator<<(IntlTest& test,  IntlTest& ( * _f)(IntlTest&));
 
+/**
+ * This is a variant of cintltst/ccolltst.c:CharsToUChars().
+ * It converts a character string into a UnicodeString, with
+ * unescaping \u sequences.
+ */
+extern UnicodeString CharsToUnicodeString(const char* chars);
 
 #endif // _INTLTEST

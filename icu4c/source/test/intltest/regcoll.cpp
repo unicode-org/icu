@@ -30,7 +30,7 @@ static UErrorCode status = U_ZERO_ERROR;
 
 const UnicodeString CollationRegressionTest::test1 = "XFILE What subset of all possible test cases has the highest probability of detecting the most errors?";
 const UnicodeString CollationRegressionTest::test2 = "Xf ile What subset of all possible test cases has the lowest probability of detecting the least errors?";
-const UChar chars3[] = {'a', 0x00FC, 'b', 'e', 'c', 'k', ' ', 'G', 'r', 0x00F6, 0x00DF, 'e', ' ', 'L', 0x00FC, 'b', 'c', 'k', 0};
+const UChar chars3[] = {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b, 0x20, 0x47, 0x72, 0x00F6, 0x00DF, 0x65, 0x20, 0x4c, 0x00FC, 0x62, 0x63, 0x6b, 0};
 const UnicodeString CollationRegressionTest::test3(chars3);
 
 CollationRegressionTest::CollationRegressionTest()
@@ -189,15 +189,15 @@ void CollationRegressionTest::Test4054734(char *par)
 
     static const UChar decomp[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x0001, 0},      {'<', 0}, {0x0002, 0},
-        {0x0001, 0},      {'=', 0}, {0x0001, 0},
-        {'A', 0x0001, 0}, {'>', 0}, {'~', 0x0002, 0},
-        {0x00c0, 0},      {'=', 0}, {'A', 0x0300, 0}
+        {0x0001, 0},      {0x3c, 0}, {0x0002, 0},
+        {0x0001, 0},      {0x3d, 0}, {0x0001, 0},
+        {0x41, 0x0001, 0}, {0x3e, 0}, {0x7e, 0x0002, 0},
+        {0x00c0, 0},      {0x3d, 0}, {0x41, 0x0300, 0}
     };
 
     static const UChar nodecomp[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x00C0, 0},      {'>', 0}, {'A', 0x0300, 0}
+        {0x00C0, 0},      {0x3e, 0}, {0x41, 0x0300, 0}
     };
 
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
@@ -225,7 +225,7 @@ void CollationRegressionTest::Test4054736(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0xFB4F, 0}, {'=', 0}, {0x05D0, 0x05DC}  // Alef-Lamed vs. Alef, Lamed
+        {0xFB4F, 0}, {0x3d, 0}, {0x05D0, 0x05DC}  // Alef-Lamed vs. Alef, Lamed
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -348,12 +348,12 @@ void CollationRegressionTest::Test4060154(char *par)
 
     static const UChar tertiary[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'A', 0},    {'<', 0}, {'B', 0},
-        {'H', 0},    {'<', 0}, {0x0131, 0},
-        {'H', 0},    {'<', 0}, {'I', 0},
-        {0x0131, 0}, {'<', 0}, {0x0130, 0},
-        {0x0130, 0}, {'<', 0}, {'i', 0},
-        {0x0130, 0}, {'>', 0}, {'H', 0}
+        {0x41, 0},    {0x3c, 0}, {0x42, 0},
+        {0x48, 0},    {0x3c, 0}, {0x0131, 0},
+        {0x48, 0},    {0x3c, 0}, {0x49, 0},
+        {0x0131, 0}, {0x3c, 0}, {0x0130, 0},
+        {0x0130, 0}, {0x3c, 0}, {0x69, 0},
+        {0x0130, 0}, {0x3e, 0}, {0x48, 0}
     };
 
     c->setStrength(Collator::TERTIARY);
@@ -367,8 +367,8 @@ void CollationRegressionTest::Test4060154(char *par)
 */
     static const UChar secondary[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'H', 0},    {'<', 0}, {'I', 0},
-        {0x0131, 0}, {'=', 0}, {0x0130, 0}
+        {0x48, 0},    {0x3c, 0}, {0x49, 0},
+        {0x0131, 0}, {0x3d, 0}, {0x0130, 0}
     };
 
     c->setStrength(Collator::PRIMARY);
@@ -405,7 +405,7 @@ void CollationRegressionTest::Test4062418(char *par)
 */
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'p', 0x00EA, 'c', 'h', 'e', 0}, {'<', 0}, {'p', 0x00E9, 'c', 'h', 0x00E9, 0}
+        {0x70, 0x00EA, 0x63, 0x68, 0x65, 0}, {0x3c, 0}, {0x70, 0x00E9, 0x63, 0x68, 0x00E9, 0}
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -434,7 +434,7 @@ void CollationRegressionTest::Test4065540(char *par)
 void CollationRegressionTest::Test4066189(char *par)
 {
     static const UChar chars1[] = {0x1EB1, 0};
-    static const UChar chars2[] = {'a', 0x0306, 0x0300, 0};
+    static const UChar chars2[] = {0x61, 0x0306, 0x0300, 0};
     const UnicodeString test1(chars1);
     const UnicodeString test2(chars2);
 
@@ -485,7 +485,7 @@ void CollationRegressionTest::Test4066696(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x00E0, 0}, {'<', 0}, {0x01FA, 0}
+        {0x00E0, 0}, {0x3c, 0}, {0x01FA, 0}
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -501,8 +501,8 @@ void CollationRegressionTest::Test4076676(char *par)
 {
     // These combining characters are all in the same class, so they should not
     // be reordered, and they should compare as unequal.
-    static const UChar s1[] = {'A', 0x0301, 0x0302, 0x0300, 0};
-    static const UChar s2[] = {'A', 0x0302, 0x0300, 0x0301, 0};
+    static const UChar s1[] = {0x41, 0x0301, 0x0302, 0x0300, 0};
+    static const UChar s2[] = {0x41, 0x0302, 0x0300, 0x0301, 0};
 
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
@@ -582,8 +582,8 @@ void CollationRegressionTest::Test4081866(char *par)
 {
     // These combining characters are all in different classes,
     // so they should be reordered and the strings should compare as equal.
-    static const UChar s1[] = {'A', 0x0300, 0x0316, 0x0327, 0x0315, 0};
-    static const UChar s2[] = {'A', 0x0327, 0x0316, 0x0315, 0x0300, 0};
+    static const UChar s1[] = {0x41, 0x0300, 0x0316, 0x0327, 0x0315, 0};
+    static const UChar s2[] = {0x41, 0x0327, 0x0316, 0x0315, 0x0300, 0};
 
     RuleBasedCollator *c = (RuleBasedCollator *) en_us->clone();
     c->setStrength(Collator::TERTIARY);
@@ -624,9 +624,9 @@ void CollationRegressionTest::Test4087241(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'z', 0},          {'<', 0}, {0x00E6, 0},            // z        < ae
-        {'a', 0x0308, 0}, {'<', 0}, {'a', 0x030A, 0},      // a-unlaut < a-ring
-        {'Y', 0},          {'<', 0}, {'u', 0x0308, 0},      // Y        < u-umlaut
+        {0x7a, 0},          {0x3c, 0}, {0x00E6, 0},            // z        < ae
+        {0x61, 0x0308, 0}, {0x3c, 0}, {0x61, 0x030A, 0},      // a-unlaut < a-ring
+        {0x59, 0},          {0x3c, 0}, {0x75, 0x0308, 0},      // Y        < u-umlaut
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -645,7 +645,7 @@ void CollationRegressionTest::Test4087243(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'1', '2', '3', 0}, {'=', 0}, {'1', '2', '3', 0x0001, 0}    // 1 2 3  =  1 2 3 ctrl-A
+        {0x31, 0x32, 0x33, 0}, {0x3d, 0}, {0x31, 0x32, 0x33, 0x0001, 0}    // 1 2 3  =  1 2 3 ctrl-A
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -675,7 +675,7 @@ void CollationRegressionTest::Test4092260(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x00B5, 0}, {'=', 0}, {0x03BC, 0}
+        {0x00B5, 0}, {0x3d, 0}, {0x03BC, 0}
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -702,7 +702,7 @@ void CollationRegressionTest::Test4095316(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x03D4, 0}, {'=', 0}, {0x03AB, 0}
+        {0x03D4, 0}, {0x3d, 0}, {0x03AB, 0}
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -751,8 +751,8 @@ void CollationRegressionTest::Test4103436(char *par)
 
     static const UChar tests[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'f', 'i', 'l', 'e', 0}, {'<', 0}, {'f', 'i', 'l', 'e', ' ', 'a', 'c', 'c', 'e', 's', 's', 0},
-        {'f', 'i', 'l', 'e', 0}, {'<', 0}, {'f', 'i', 'l', 'e', 'a', 'c', 'c', 'e', 's', 's', 0}
+        {0x66, 0x69, 0x6c, 0x65, 0}, {0x3c, 0}, {0x66, 0x69, 0x6c, 0x65, 0x20, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0},
+        {0x66, 0x69, 0x6c, 0x65, 0}, {0x3c, 0}, {0x66, 0x69, 0x6c, 0x65, 0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0}
     };
 
     compareArray(*c, tests, ARRAY_LENGTH(tests));
@@ -776,7 +776,7 @@ void CollationRegressionTest::Test4114076(char *par)
     //
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0xd4db, 0}, {'=', 0}, {0x1111, 0x1171, 0x11b6, 0}
+        {0xd4db, 0}, {0x3d, 0}, {0x1111, 0x1171, 0x11b6, 0}
     };
 
     c->setDecomposition(Normalizer::DECOMP);
@@ -788,7 +788,7 @@ void CollationRegressionTest::Test4114076(char *par)
     //
     static const UChar test2[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0xd4db, 0}, {'=', 0}, {0x1111, 0x116e, 0x1175, 0x11af, 0x11c2, 0}
+        {0xd4db, 0}, {0x3d, 0}, {0x1111, 0x116e, 0x1175, 0x11af, 0x11c2, 0}
     };
 
     c->setDecomposition(Normalizer::DECOMP_COMPAT);
@@ -815,7 +815,7 @@ void CollationRegressionTest::Test4124632(char *par)
         delete coll;
     }
 
-    static const UChar test[] = {'A', 0x0308, 'b', 'c', 0};
+    static const UChar test[] = {0x41, 0x0308, 0x62, 0x63, 0};
     CollationKey key;
     
     coll->getCollationKey(test, key, status);
@@ -848,8 +848,8 @@ void CollationRegressionTest::Test4132736(char *par)
 
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'e', 0x0300, 'e', 0x0301, 0}, {'<', 0}, {'e', 0x0301, 'e', 0x0300, 0},
-        {'e', 0x0300, 0x0301, 0},       {'>', 0}, {'e', 0x0301, 0x0300, 0}
+        {0x65, 0x0300, 0x65, 0x0301, 0}, {0x3c, 0}, {0x65, 0x0301, 0x65, 0x0300, 0},
+        {0x65, 0x0300, 0x0301, 0},       {0x3e, 0}, {0x65, 0x0301, 0x0300, 0}
     };
 
     compareArray(*c, test1, ARRAY_LENGTH(test1));
@@ -865,9 +865,9 @@ void CollationRegressionTest::Test4133509(char *par)
 {
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'E', 'x', 'c', 'e', 'p', 't', 'i', 'o', 'n', 0}, {'<', 0}, {'E', 'x', 'c', 'e', 'p', 't', 'i', 'o', 'n', 'I', 'n', 'I', 'n', 'i', 't', 'i', 'a', 'l', 'i', 'z', 'e', 'r', 'E', 'r', 'r', 'o', 'r', 0},
-        {'G', 'r', 'a', 'p', 'h', 'i', 'c', 's', 0},      {'<', 0}, {'G', 'r', 'a', 'p', 'h', 'i', 'c', 's', 'E', 'n', 'v', 'i', 'r', 'o', 'n', 'm', 'e', 'n', 't', 0},
-        {'S', 't', 'r', 'i', 'n', 'g', 0},                  {'<', 0}, {'S', 't', 'r', 'i', 'n', 'g', 'B', 'u', 'f', 'f', 'e', 'r', 0}
+        {0x45, 0x78, 0x63, 0x65, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0}, {0x3c, 0}, {0x45, 0x78, 0x63, 0x65, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x6e, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x72, 0x45, 0x72, 0x72, 0x6f, 0x72, 0},
+        {0x47, 0x72, 0x61, 0x70, 0x68, 0x69, 0x63, 0x73, 0},      {0x3c, 0}, {0x47, 0x72, 0x61, 0x70, 0x68, 0x69, 0x63, 0x73, 0x45, 0x6e, 0x76, 0x69, 0x72, 0x6f, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0},
+        {0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0},                  {0x3c, 0}, {0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x42, 0x75, 0x66, 0x66, 0x65, 0x72, 0}
     };
 
     compareArray(*en_us, test1, ARRAY_LENGTH(test1));
@@ -887,12 +887,12 @@ void CollationRegressionTest::Test4114077(char *par)
     
     static const UChar test1[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {0x00C0, 0},                     {'=', 0}, {'A', 0x0300, 0},            // Should be equivalent
-        {'p', 0x00ea, 'c', 'h', 'e', 0}, {'>', 0}, {'p', 0x00e9, 'c', 'h', 0x00e9, 0},
-        {0x0204, 0},                     {'=', 0}, {'E', 0x030F, 0},
-        {0x01fa, 0},                     {'=', 0}, {'A', 0x030a, 0x0301, 0},    // a-ring-acute -> a-ring, acute
+        {0x00C0, 0},                     {0x3d, 0}, {0x41, 0x0300, 0},            // Should be equivalent
+        {0x70, 0x00ea, 0x63, 0x68, 0x65, 0}, {0x3e, 0}, {0x70, 0x00e9, 0x63, 0x68, 0x00e9, 0},
+        {0x0204, 0},                     {0x3d, 0}, {0x45, 0x030F, 0},
+        {0x01fa, 0},                     {0x3d, 0}, {0x41, 0x030a, 0x0301, 0},    // a-ring-acute -> a-ring, acute
                                                 //   -> a, ring, acute
-        {'A', 0x0300, 0x0316, 0},         {'<', 0}, {'A', 0x0316, 0x0300, 0}        // No reordering --> unequal
+        {0x41, 0x0300, 0x0316, 0},         {0x3c, 0}, {0x41, 0x0316, 0x0300, 0}        // No reordering --> unequal
     };
 
     c->setDecomposition(Normalizer::NO_OP);
@@ -900,7 +900,7 @@ void CollationRegressionTest::Test4114077(char *par)
 
     static const UChar test2[][CollationRegressionTest::MAX_TOKEN_LEN] =
     {
-        {'A', 0x0300, 0x0316, 0}, {'=', 0}, {'A', 0x0316, 0x0300, 0}      // Reordering --> equal
+        {0x41, 0x0300, 0x0316, 0}, {0x3d, 0}, {0x41, 0x0316, 0x0300, 0}      // Reordering --> equal
     };
 
     c->setDecomposition(Normalizer::DECOMP);
