@@ -632,7 +632,9 @@ struct UCollator {
     UColOptionSet *options;
     SortKeyGenerator *sortKeyGen;
     UBool freeOnClose;
+    char* requestedLocale;
     UResourceBundle *rb;
+    UResourceBundle *binary;
     const UCATableHeader *image;
     /*CompactEIntArray *mapping;*/
     UTrie *mapping;

@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unorm.h"
 #include "unicode/parseerr.h"
+#include "unicode/uloc.h"
 
 /**
  * \file
@@ -748,13 +749,16 @@ ucol_setNormalization(  UCollator        *coll,
  * is instantiated from the rules, then this function returns
  * NULL.
  * @param coll The UCollator for which the locale is needed
+ * @param type You can choose between requested, valid and actual
+ *             locale. For description see the definition of
+ *             ULocDataLocaleType in uloc.h
  * @param status error code of the operation
  * @return real locale name from which the collation data comes. 
  *         If the collator was instantiated from rules, returns
  *         NULL.
  */
 U_CAPI const char * U_EXPORT2
-ucol_getLocale(const UCollator *coll, UErrorCode *status);
+ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
 
 /**
  *@deprecated Remove after Aug 2002

@@ -492,11 +492,11 @@ int32_t RuleBasedCollator::hashCode() const
 /**
 * return the locale of this collator
 */
-const Locale RuleBasedCollator::getLocale(UErrorCode &status) const {
-  const char *result = ucol_getLocale(ucollator, &status);
+const Locale RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode &status) const {
+  const char *result = ucol_getLocale(ucollator, type, &status);
   if(result == NULL) {
     Locale res("");
-    res.setBogus(TRUE);
+    res.setToBogus();
     return res;
   } else {
     return Locale(result);
