@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/11/29 22:31:18 $
- * $Revision: 1.37 $
+ * $Date: 2001/11/30 22:27:29 $
+ * $Revision: 1.38 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.37 $ $Date: 2001/11/29 22:31:18 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.38 $ $Date: 2001/11/30 22:27:29 $
  */
 class TransliterationRule {
 
@@ -856,7 +856,7 @@ class TransliterationRule {
      */
     UnicodeSet getSourceSet(UnicodeSet toUnionTo) {
         int limit = anteContextLength + keyLength;
-        for (int i=anteContextLength; i<limit; ++i) {
+        for (int i=anteContextLength; i<limit; ) {
             int ch = UTF16.charAt(pattern, i);
             i += UTF16.getCharCount(ch);
             UnicodeMatcher matcher = data.lookup(ch);
@@ -872,6 +872,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.38  2001/11/30 22:27:29  alan
+ * jitterbug 1560: fix double increment bug in getSourceSet
+ *
  * Revision 1.37  2001/11/29 22:31:18  alan
  * jitterbug 1560: add source-set methods and TransliteratorUtility class
  *
