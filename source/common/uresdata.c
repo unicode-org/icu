@@ -115,7 +115,7 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key) {
 }
 
 static Resource
-_res_findTableItemN(const Resource *pRoot, const Resource res, const char *key, int32_t keyLen) {
+_res_findTableItemN(const Resource *pRoot, const Resource res, const char *key, int32_t keyLen, const char **realKey) {
     uint16_t *p=(uint16_t *)RES_GET_POINTER(pRoot, res);
     uint16_t i, start, limit;
 
@@ -138,9 +138,11 @@ _res_findTableItemN(const Resource *pRoot, const Resource res, const char *key, 
 
     /* did we really find it? */
     if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[start]), keyLen)==0) {
+        *realKey = RES_GET_KEY(pRoot, p[start]);
         limit=*(p-1);   /* itemCount */
         return ((Resource *)(p+limit+(~limit&1)))[start];
     } else {
+        *realKey = NULL;
         return RES_BOGUS;   /* not found */
     }
 }
@@ -317,7 +319,7 @@ res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t ind
 }
 
 U_CFUNC Resource
-res_findResource(const ResourceData *pResData, Resource r, const char** path) {
+res_findResource(const ResourceData *pResData, Resource r, const char** path, const char** key) {
   /* we pass in a path. CollationElements/Sequence or zoneStrings/3/2 etc. 
    * iterates over a path and stops when a scalar resource is found. This  
    * CAN be an alias. Path gets set to the part that has not yet been processed. 
@@ -349,17 +351,18 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path) {
     /* if the resource is a table */
     /* try the key based access */
     if(type == RES_TABLE) {
-      t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen);
+      t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen, key);
       if(t2 == RES_BOGUS) { 
         /* if we fail to get the resource by key, maybe we got an index */
         indexR = uprv_strtol(pathP, &closeIndex, 10);
         if(closeIndex != pathP) {
           /* if we indeed have an index, try to get the item by index */
-          t2 = _res_getTableItem(pResData->pRoot, t1, (uint16_t)indexR);
+          t2 = res_getTableItemByIndex(pResData, t1, indexR, key);
         }
       }
     } else if(type == RES_ARRAY) {
       t2 = _res_getArrayItem(pResData->pRoot, t1, indexR);
+      *key = NULL;
     } else { /* can't do much here, except setting t2 to bogus */
       t2 = RES_BOGUS;
     }
