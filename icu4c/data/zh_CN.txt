@@ -6,6 +6,7 @@
 // *******************************************************************************
 
 zh_CN {
+    Version{ "1.0"}
     CurrencyElements { 
             "\uFFE5",
             "CNY",
@@ -24,5 +25,17 @@ zh_CN {
         HK { "\u9999\u6E2F" }
     }
     LocaleID { "0804" }
+
+    DateTimePatterns { 
+            "HH'\u65F6'mm'\u5206'ss'\u79D2' z",
+            "ahh'\u65F6'mm'\u5206'ss'\u79D2'",
+            "H:mm:ss",
+            "ah:mm",
+            "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+            "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+            "yyyy-M-d",
+            "yy-M-d",
+            "{1} {0}",
+    }
 }
 
