@@ -25,6 +25,7 @@
 #include "GnomeGUISupport.h"
 #include "GnomeFontMap.h"
 #include "UnicodeReader.h"
+#include "ScriptCompositeFontInstance.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
@@ -38,6 +39,7 @@ struct Context
 static TT_Engine engine;
 static GnomeGUISupport *guiSupport;
 static GnomeFontMap *fontMap;
+static ScriptCompositeFontInstance *font;
 
 static GSList *appList = NULL;
 
@@ -85,7 +87,7 @@ void openOK(GtkObject *object, gpointer data)
 
   gtk_widget_destroy(GTK_WIDGET(fileselection));
 
-  newPara = Paragraph::paragraphFactory(fileName, fontMap, guiSupport);
+  newPara = Paragraph::paragraphFactory(fileName, font, guiSupport);
 
   if (newPara != NULL) {
     gchar *title = prettyTitle(fileName);
@@ -230,7 +232,7 @@ GtkWidget *newSample(const gchar *fileName)
 
   context->width  = 600;
   context->height = 400;
-  context->paragraph = Paragraph::paragraphFactory(fileName, fontMap, guiSupport);
+  context->paragraph = Paragraph::paragraphFactory(fileName, font, guiSupport);
 
   if (context->paragraph != NULL) {
     GtkStyle *style;
@@ -310,16 +312,13 @@ int main (int argc, char *argv[])
 
     guiSupport = new GnomeGUISupport();
     fontMap    = new GnomeFontMap(engine, "FontMap.Gnome", 24, guiSupport, fontStatus);
+    font       = new ScriptCompositeFontInstance(fontMap);
 
     if (LE_FAILURE(fontStatus)) {
         TT_Done_FreeType(engine);
         return 1;
     }
 
-#if 0
-    app = newSample("Sample.txt");
-    gtk_widget_show_all(app);
-#else
     if (argc <= 1) {
       app = newSample("Sample.txt");
       gtk_widget_show_all(app);
@@ -329,11 +328,10 @@ int main (int argc, char *argv[])
 	gtk_widget_show_all(app);
       }
     }
-#endif
 
     gtk_main();
 
-    delete fontMap;
+    delete font;
     delete guiSupport;
 
     TT_Done_FreeType(engine);

@@ -20,7 +20,7 @@
 
 #include "GUISupport.h"
 #include "RenderingSurface.h"
-#include "FontMap.h"
+//#include "FontMap.h"
 
 U_NAMESPACE_USE
 
@@ -43,7 +43,7 @@ public:
     void breakLines(le_int32 width, le_int32 height);
     void draw(RenderingSurface *surface, le_int32 firstLine, le_int32 lastLine);
 
-    static Paragraph *paragraphFactory(const char *fileName, FontMap *fontMap, GUISupport *guiSupport);
+    static Paragraph *paragraphFactory(const char *fileName, const LEFontInstance *font, GUISupport *guiSupport);
 
 private:
     ParagraphLayout *fParagraphLayout;
@@ -53,6 +53,7 @@ private:
     le_int32         fLinesGrow;
 
     const ParagraphLayout::Line **fLines;
+          LEUnicode *fChars;
 
     le_int32         fLineHeight;
     le_int32         fAscent;
@@ -74,7 +75,6 @@ inline le_int32 Paragraph::getAscent()
 {
     return fAscent;
 }
-
 
 #endif
 

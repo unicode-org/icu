@@ -28,10 +28,13 @@
 #define LINE_GROW 32
 
 Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns *fontRuns)
-  : fParagraphLayout(NULL), fLineCount(0), fLinesMax(0), fLinesGrow(LINE_GROW), fLines(NULL),
+  : fParagraphLayout(NULL), fLineCount(0), fLinesMax(0), fLinesGrow(LINE_GROW), fLines(NULL), fChars(NULL),
     fLineHeight(-1), fAscent(-1), fWidth(-1), fHeight(-1)
 {
-    fParagraphLayout = new ParagraphLayout(chars, charCount, fontRuns, NULL, NULL, NULL, UBIDI_LTR, false);
+    fChars = LE_NEW_ARRAY(LEUnicode, charCount);
+    LE_ARRAY_COPY(fChars, chars, charCount);
+
+    fParagraphLayout = new ParagraphLayout(fChars, charCount, fontRuns, NULL, NULL, NULL, UBIDI_LTR, false);
 
     le_int32 ascent  = fParagraphLayout->getAscent();
     le_int32 descent = fParagraphLayout->getDescent();
@@ -39,8 +42,6 @@ Paragraph::Paragraph(const LEUnicode chars[], int32_t charCount, const FontRuns 
 
     fLineHeight = ascent + descent + leading;
     fAscent     = ascent;
-
-    delete fontRuns;
 }
 
 Paragraph::~Paragraph()
@@ -50,6 +51,8 @@ Paragraph::~Paragraph()
     }
 
     LE_DELETE_ARRAY(fLines);
+    delete fParagraphLayout;
+    LE_DELETE_ARRAY(fChars);
 }
 
 void Paragraph::breakLines(le_int32 width, le_int32 height)
@@ -113,20 +116,26 @@ void Paragraph::draw(RenderingSurface *surface, le_int32 firstLine, le_int32 las
     }
 }
 
-Paragraph *Paragraph::paragraphFactory(const char *fileName, FontMap *fontMap, GUISupport *guiSupport)
+Paragraph *Paragraph::paragraphFactory(const char *fileName, const LEFontInstance *font, GUISupport *guiSupport)
 {
     LEErrorCode fontStatus  = LE_NO_ERROR;
     UErrorCode scriptStatus = U_ZERO_ERROR;
     le_int32 charCount;
     const UChar *text = UnicodeReader::readFile(fileName, guiSupport, charCount);
+    Paragraph *result = NULL;
 
     if (text == NULL) {
         return NULL;
     }
 
-    ScriptCompositeFontInstance *font = new ScriptCompositeFontInstance(fontMap);
-    FontRuns  *fontRuns = new FontRuns((const LEFontInstance **) &font, &charCount, 1);
+    FontRuns  fontRuns(0);
 
-    return new Paragraph(text, charCount, fontRuns);
+    fontRuns.add(font, charCount);
+
+    result = new Paragraph(text, charCount, &fontRuns);
+
+    LE_DELETE_ARRAY(text);
+
+    return result;    
 }
 
