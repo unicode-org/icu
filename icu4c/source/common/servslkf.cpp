@@ -75,11 +75,11 @@ SimpleLocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* servi
     return NULL;
 }
 
-UBool
-SimpleLocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& /* status */) const
-{
-    return id == _id;
-}
+//UBool
+//SimpleLocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& /* status */) const
+//{
+//    return id == _id;
+//}
 
 void
 SimpleLocaleKeyFactory::updateVisibleIDs(Hashtable& result, UErrorCode& status) const

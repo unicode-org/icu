@@ -111,11 +111,11 @@ LocaleKeyFactory::handleCreate(const Locale& /* loc */,
     return NULL;
 }
 
-UBool
-LocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& status) const {
-    const Hashtable* ids = getSupportedIDs(status);
-    return ids && ids->get(id);
-}
+//UBool
+//LocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& status) const {
+//    const Hashtable* ids = getSupportedIDs(status);
+//    return ids && ids->get(id);
+//}
 
 const Hashtable*
 LocaleKeyFactory::getSupportedIDs(UErrorCode& /* status */) const {

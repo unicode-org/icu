@@ -197,14 +197,14 @@ public:
   virtual ~BasicCalendarFactory() {}
 
 protected:
-  virtual UBool isSupportedID( const UnicodeString& id, UErrorCode& status) const { 
-    if(U_FAILURE(status)) {
-      return FALSE;
-    }
-    char keyword[ULOC_FULLNAME_CAPACITY];
-    getCalendarKeyword(id, keyword, (int32_t)sizeof(keyword));
-    return isStandardSupportedKeyword(keyword, status);
-  }
+  //virtual UBool isSupportedID( const UnicodeString& id, UErrorCode& status) const { 
+  //  if(U_FAILURE(status)) {
+  //    return FALSE;
+  //  }
+  //  char keyword[ULOC_FULLNAME_CAPACITY];
+  //  getCalendarKeyword(id, keyword, (int32_t)sizeof(keyword));
+  //  return isStandardSupportedKeyword(keyword, status);
+  //}
 
   virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const
   {
