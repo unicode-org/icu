@@ -117,9 +117,9 @@ class TransliteratorRegistry {
             }
 
             // Canonicalize script name -or- do locale->script mapping
-            int s = UScript.getCode(top);
-            if (s != UScript.INVALID_CODE) {
-                scriptName = UScript.getName(s);
+            int[] s = UScript.getCode(top);
+            if (s[0] != UScript.INVALID_CODE) {
+                scriptName = UScript.getName(s[0]);
             }
 
             // assert(spec != top);
