@@ -128,9 +128,9 @@ main(int argc, char* argv[]) {
 
     /* process Mirror.txt */
     if(suffix==NULL) {
-        uprv_strcpy(basename, "Mirror.txt");
+        uprv_strcpy(basename, "BidiMirroring.txt");
     } else {
-        uprv_strcpy(basename, "Mirror");
+        uprv_strcpy(basename, "BidiMirroring");
         basename[6]='-';
         uprv_strcpy(basename+7, suffix);
         uprv_strcat(basename+7, ".txt");
