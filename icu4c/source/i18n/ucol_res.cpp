@@ -757,6 +757,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     return localCollator;
 }
 
+#if 0
 static
 inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
   uint32_t len = (uint32_t)uprv_strlen(dst);
@@ -812,5 +813,6 @@ U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t
 
   return buffer;
 }
+#endif /* #if 0 debugging code. */
 
 #endif /* #if !UCONFIG_NO_COLLATION */
