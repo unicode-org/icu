@@ -32,15 +32,15 @@ The following names can be supplied as the argument for platform:
     AIX4.3xlC               Use IBM's xlC on AIX 4.3
     AIX4.3xlC_nothreads     Use IBM's xlC on AIX 4.3 with no multithreading
     AIX4.3VA                Use IBM's Visual Age xlC_r compiler on AIX 4.3
-    AIX4.3VA_nothreads      Use IBM's Visual Age xlC_r compiler on AIX 4.3 with no multithreading
     ALPHA/LINUXGCC          Use GCC on Alpha/Linux systems
     ALPHA/LINUXCCC          Use Compaq C compiler on Alpha/Linux systems
-    FreeBSD                 Use the GNU C++ compiler on Free BSD
-    HP/UX11CC               Use HP's C++ compiler on HP-UX 11
-    HP/UX11ACC              Use the Advanced C++ compiler on HP-UX 11
-    LinuxRedHat             Use the GNU C++ compiler on Linux
     CygWin                  Use the GNU C++ compiler on CygWin
+    FreeBSD                 Use the GNU C++ compiler on Free BSD
+    HP-UX11CC               Use HP's C++ compiler on HP-UX 11
+    HP-UX11ACC              Use the Advanced C++ compiler on HP-UX 11
+    LinuxRedHat             Use the GNU C++ compiler on Linux
     MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
+    QNX                     Use QNX's QCC compiler on QNX/Neutrino
     SOLARISCC               Use Sun's CC compiler on Solaris
     SOLARISCC/W4.2          Use Sun's Workshop 4.2 CC compiler on Solaris
     SOLARISGCC              Use the GNU C++ compiler on Solaris
@@ -145,17 +145,18 @@ case $platform in
         RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
         ;;
-    AIX4.3VA_nothreads)
-        THE_OS=AIX
-        THE_COMP="xlC"
-        # Only in Visual Age, there is no different between xlc and xlc_r.
-        CC=`which xlc`; export CC
-        CXX=`which xlC`; export CXX
-        OPTS="$OPTS --enable-threads=no"
-        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
-        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
-        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-        ;;
+# Just use --enable-threads=no. Visual Age makes no distinction between xlC and xlC_r or any other _r programs.
+#    AIX4.3VA_nothreads)
+#        THE_OS=AIX
+#        THE_COMP="xlC"
+#        # Only in Visual Age, there is no different between xlc and xlc_r.
+#        CC=`which xlc`; export CC
+#        CXX=`which xlC`; export CXX
+#        OPTS="$OPTS --enable-threads=no"
+#        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
+#        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
+#        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+#        ;;
     SOLARISX86)
         THE_OS="SOLARIS X86"
         THE_COMP="Sun's CC"
@@ -189,7 +190,7 @@ case $platform in
         CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
         LDFLAGS=-R/usr/local/lib; export LDFLAGS
         ;;
-    HP/UX11CC)
+    HP-UX11CC)
         THE_OS="HP-UX 11"
         THE_COMP="HP's CC"
         CC=cc; export CC
@@ -197,13 +198,19 @@ case $platform in
         RELEASE_CFLAGS='+O2 +Ofltacc'
         RELEASE_CXXFLAGS='+O2 +Ofltacc'
         ;;
-    HP/UX11ACC)
+    HP-UX11ACC)
         THE_OS="HP-UX 11"
         THE_COMP="aCC"
         CC=cc; export CC
         CXX=aCC; export CXX
         RELEASE_CFLAGS='+O2 +Ofltacc'
         RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    TRU64V5.1/CXX)
+        THE_OS="OSF1"
+        THE_COMP="Compaq cxx"
+        CC=ccc; export CC
+        CXX=cxx; export CXX
         ;;
     ALPHA/LINUXCCC)
         THE_OS="Linux"
@@ -212,12 +219,6 @@ case $platform in
         CXX=cxx; export CXX
         RELEASE_CFLAGS='-O4'
         RELEASE_CXXFLAGS='-O4'
-        ;;
-    TRU64V5.1/CXX)
-        THE_OS="OSF1"
-        THE_COMP="Compaq cxx"
-        CC=ccc; export CC
-        CXX=cxx; export CXX
         ;;
     ALPHA/LINUXGCC)
         THE_OS="Linux"
@@ -247,6 +248,12 @@ case $platform in
         CC=gcc; export CC
         CXX=g++; export CXX
         ;;
+    QNX)
+        THE_OS="QNX"
+        THE_COMP="QNX cc"
+        CC=qcc; export CC
+        CXX=QCC; export CXX
+         ;;
     zOS/cxx)
         THE_OS="z/OS (OS/390)"
         THE_COMP="z/OS 1.2 (through OS/390 v2r10) C/C++"
