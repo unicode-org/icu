@@ -33,15 +33,15 @@ public abstract class Measure {
     
     private Number number;
 
-    private Unit unit;
+    private MeasureUnit unit;
 
     /**
      * Constructs a new object given a number and a unit.
      * @param number the number
-     * @param currency the currency
+     * @param unit the unit
      * @draft ICU 3.0
      */
-    protected Measure(Number number, Unit unit) {
+    protected Measure(Number number, MeasureUnit unit) {
         if (number == null || unit == null) {
             throw new NullPointerException();
         }
@@ -98,7 +98,7 @@ public abstract class Measure {
      * @return this object's Unit
      * @draft ICU 3.0
      */
-    public Unit getUnit() {
+    public MeasureUnit getUnit() {
         return unit;
     }
 }

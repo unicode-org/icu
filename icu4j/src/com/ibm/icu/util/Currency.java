@@ -36,7 +36,7 @@ import com.ibm.icu.impl.LocaleUtility;
  * @author Alan Liu
  * @stable ICU 2.2
  */
-public class Currency extends Unit implements Serializable {
+public class Currency extends MeasureUnit implements Serializable {
 
     /**
      * ISO 4217 3-letter code.
