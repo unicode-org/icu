@@ -758,6 +758,34 @@ public:
     static inline EDirectionProperty characterDirection(UChar32 ch);
 
     /**
+     * Determines whether the character has the "mirrored" property.
+     * This property is set for characters that are commonly used in
+     * Right-To-Left contexts and need to be displayed with a "mirrored"
+     * glyph.
+     *
+     * @param c the character (code point, Unicode scalar value) to be tested
+     * @return TRUE if the character has the "mirrored" property
+     */
+    static inline bool_t isMirrored(UChar32 c);
+
+    /**
+     * Maps the specified character to a "mirror-image" character.
+     * For characters with the "mirrored" property, implementations
+     * sometimes need a "poor man's" mapping to another Unicode
+     * character (code point) such that the default glyph may serve
+     * as the mirror-image of the default glyph of the specified
+     * character. This is useful for text conversion to and from
+     * codepages with visual order, and for displays without glyph
+     * selecetion capabilities.
+     *
+     * @param c the character (code point, Unicode scalar value) to be mapped
+     * @return another Unicode code point that may serve as a mirror-image
+     *         substitute, or c itself if there is no such mapping or c
+     *         does not have the "mirrored" property
+     */
+    static inline UChar32 charMirror(UChar32 c);
+
+    /**
      * Returns the script associated with a character.
      * @see #EUnicodeScript
      * @draft
@@ -1165,6 +1193,18 @@ Unicode::getType(UChar32 ch) {
 inline Unicode::EDirectionProperty
 Unicode::characterDirection(UChar32 ch) {
     return (EDirectionProperty)u_charDirection(ch);
+}
+
+// Determines if the character has the "mirrored" property.
+inline bool_t
+Unicode::isMirrored(UChar32 ch) {
+    return u_isMirrored(ch);
+}
+
+// Maps the character to a "mirror-image" character, or to itself.
+inline UChar32
+Unicode::charMirror(UChar32 ch) {
+    return u_charMirror(ch);
 }
 
 // Get the script associated with the character

@@ -28,7 +28,6 @@
 #include "unewdata.h"
 #include "genprops.h"
 
-/* ### */
 #define DO_DEBUG_OUT 0
 
 /* Unicode character properties file format ------------------------------------
@@ -226,30 +225,6 @@ Its exception values would be stored as 3 uint32_t words:
 
 ----------------------------------------------------------------------------- */
 
-/* ### finding an exception value */
-#define HAVE_EXCEPTION_VALUE(flags, index) ((flags)&(1<<(index)))
-
-/* number of bits in an integer value 0..31 */
-static uint8_t flagsOffset[32]={
-    0, 1, 1, 2, 1, 2, 2, 3,
-    1, 2, 2, 3, 2, 3, 3, 4,
-    1, 2, 2, 3, 2, 3, 3, 4,
-    2, 3, 3, 4, 3, 4, 4, 5
-};
-
-#define GET_EXCEPTION_OFFSET(flags, index, offset) { \
-    if((index)>=5) { \
-        (offset)+=flagsOffset[(flags)&0x1f]; \
-        (flags)>>=5; \
-        (index)-=5; \
-    } \
-    (offset)+=flagsOffset[(flags)&((1<<(index))-1)]; \
-}
-
-
-
-
-
 /* UDataInfo cf. udata.h */
 static UDataInfo dataInfo={
     sizeof(UDataInfo),
@@ -295,11 +270,11 @@ enum {
     VALUE_SHIFT=20,
 
     EXCEPTION_BIT=1UL<<EXCEPTION_SHIFT,
-    VALUE_BITS=32-VALUE_SHIFT,
+    VALUE_BITS=32-VALUE_SHIFT
 };
 
-static const int32_t     MAX_VALUE=(1UL<<(VALUE_BITS-1))-1;
-static const int32_t     MIN_VALUE=-((1UL<<(VALUE_BITS-1)));
+static const int32_t MAX_VALUE=(1L<<(VALUE_BITS-1))-1;
+static const int32_t MIN_VALUE=-(1L<<(VALUE_BITS-1));
 
 static uint16_t stage1[STAGE_1_BLOCK], stage2[MAX_STAGE_2_COUNT],
                 stage3[MAX_PROPS_COUNT], map[MAX_PROPS_COUNT];
@@ -512,7 +487,7 @@ addProps(Props *p) {
     /* handle exceptions */
     if(count>1 || x!=0 || value<MIN_VALUE || MAX_VALUE<value) {
         /* this code point needs exception values */
-        if(DO_DEBUG_OUT /* ### beVerbose */) {
+        if(beVerbose) {
             if(x!=0) {
                 printf("*** code 0x%06x needs an exception because it is irregular\n", p->code);
             } else if(count==1) {
@@ -580,6 +555,21 @@ addProps(Props *p) {
         (uint32_t)value<<VALUE_SHIFT;
 
     setProps(p->code, x, &count, &count, &count);
+
+    if(beVerbose && p->code<=0x9f) {
+        if(p->code==0) {
+            printf("static uint32_t staticProps32Table[0xa0]={\n");
+        }
+        if(x&EXCEPTION_BIT) {
+            /* do something more intelligent if there is an exception */
+            printf("    /* 0x%02lx */ 0x%lx, /* has exception */\n", p->code, x&~EXCEPTION_BIT);
+        } else {
+            printf("    /* 0x%02lx */ 0x%lx,\n", p->code, x);
+        }
+        if(p->code==0x9f) {
+            printf("};\n");
+        }
+    }
 
     /*
      * "Higher-hanging fruit" (not implemented):
@@ -818,7 +808,7 @@ compactStage2(void) {
     stage2Top=newTop;
 
     if(DO_DEBUG_OUT) {
-        /* ### debug output */
+        /* debug output */
         uint16_t i1, i2, i3, i4;
         uint32_t c;
         for(c=0; c<0xffff; c+=307) {
@@ -838,7 +828,7 @@ compactStage3(void) {
     stage3Top=newTop;
 
     if(DO_DEBUG_OUT) {
-        /* ### debug output */
+        /* debug output */
         uint16_t i1, i2, i3, i4;
         uint32_t c;
         for(c=0; c<0xffff; c+=307) {
@@ -925,7 +915,7 @@ compactProps(void) {
     uint16_t i, oldIndex, newIndex;
     uint32_t x;
     if(DO_DEBUG_OUT) {
-        /* ### debug output */
+        /* debug output */
         uint16_t i1, i2, i3;
         uint32_t c;
         for(c=0; c<0xffff; c+=307) {
@@ -969,7 +959,7 @@ compactProps(void) {
         printf("compactProps() reduced propsTop from %u to %u\n", stage3Top, propsTop);
     }
     if(DO_DEBUG_OUT) {
-        /* ### debug output */
+        /* debug output */
         uint16_t i1, i2, i3, i4;
         uint32_t c;
         for(c=0; c<0xffff; c+=307) {
