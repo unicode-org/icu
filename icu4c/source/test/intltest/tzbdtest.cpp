@@ -5,7 +5,6 @@
  ********************************************************************/
 
 #include "tzbdtest.h"
-#include <math.h>
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"

@@ -4,7 +4,6 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include <math.h>
 #include "tztest.h"
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
