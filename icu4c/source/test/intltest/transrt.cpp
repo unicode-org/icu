@@ -426,7 +426,7 @@ UBool RTTest::isCamel(const UnicodeString& a) {
 
 void RTTest::test(const UnicodeString& sourceRangeVal,
                   const UnicodeString& targetRangeVal,
-                  const char* roundtripExclusions,
+                  const char* newRoundtripExclusions,
                   IntlTest* logVal,
                   Legal* adoptedLegal) {
 
@@ -460,9 +460,9 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
         }
     }
     this->roundtripExclusions.clear();
-    if (roundtripExclusions != NULL) {
+    if (newRoundtripExclusions != NULL) {
         UErrorCode ec = U_ZERO_ERROR;
-        this->roundtripExclusions.applyPattern(roundtripExclusions, ec);
+        this->roundtripExclusions.applyPattern(newRoundtripExclusions, ec);
     }
     if (badCharacters.isEmpty()) {
         UErrorCode ec = U_ZERO_ERROR;
