@@ -63,7 +63,10 @@ typedef enum UScriptCode {
       USCRIPT_THAANA       = 37,  /* Thaa */
       USCRIPT_THAI         = 38,  /* Thai */
       USCRIPT_TIBETAN      = 39,  /* Tibt */
-      USCRIPT_UCAS         = 40,  /* Cans */
+      /** Canadian_Aboriginal script. @draft ICU 2.6 */
+      USCRIPT_CANADIAN_ABORIGINAL = 40,  /* Cans */
+      /** Canadian_Aboriginal script (alias). @draft ICU 2.2 */
+      USCRIPT_UCAS         = USCRIPT_CANADIAN_ABORIGINAL,  /* Cans */
       USCRIPT_YI           = 41,  /* Yiii */
       USCRIPT_TAGALOG      = 42,  /* Tglg */
       USCRIPT_HANUNOO      = 43,  /* Hano */
