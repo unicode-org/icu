@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DBBIDemo.java,v $ $Revision: 1.2 $ $Date: 2000/03/02 00:39:49 $
+ * $RCSfile: DBBIDemo.java,v $ $Revision: 1.3 $ $Date: 2000/03/07 23:23:38 $
  *
  * (C) Copyright Taligent, Inc. 1996 - 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
@@ -42,7 +42,7 @@ import com.ibm.text.BreakIterator;
 public class DBBIDemo extends DemoApplet
 {
     public static void main(String argv[]) {
-        Locale.setDefault(new Locale("en", "US", "TEST"));
+        Locale.setDefault(new Locale("en", "US", "DEMO"));
 		new DBBIDemo().showDemo();
     }
 
