@@ -518,6 +518,7 @@ private:
      * loading failed, or non-zero if it succeeded.
      */
     static UBool              DATA_LOADED;
+    static UDataMemory*       UDATA_POINTER;
 
     /**
      * The mutex object used to control write access to DATA,
