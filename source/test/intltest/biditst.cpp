@@ -15,7 +15,6 @@
 #include "biditst.h"
 #include "cmemory.h"    
 
-BiDiTestData    tests[];
 static const char *dirPropNames[dirPropCount]={
     "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S", "WS", "ON",
     "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
