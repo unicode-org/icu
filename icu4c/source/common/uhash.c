@@ -14,6 +14,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "uassert.h"
 
 /* This hashtable is implemented as a double hash.  All elements are
  * stored in a single array with no secondary storage for collision
@@ -131,25 +132,6 @@ static const float RESIZE_POLICY_RATIO_TABLE[6] = {
  * Debugging
  ********************************************************************/
 
-/* Enable this section to compile in runtime assertion checking. */
-
-/* #define HASH_DEBUG */
-#ifdef HASH_DEBUG
-
-  #include <stdio.h>
-
-  #define assert(exp) (void)( (exp) || (_assert(#exp, __FILE__, __LINE__), 0) )
-
-  static void _assert(const char* exp, const char* file, int line) {
-      printf("ERROR: assert(%s) failed: %s, line %d\n",
-             exp, file, line);
-  }
-
-#else
-
-  #define assert(exp)
-
-#endif
 
 /********************************************************************
  * PRIVATE Prototypes
@@ -211,7 +193,7 @@ uhash_openSize(UHashFunction *keyHash, UKeyComparator *keyComp,
 
 U_CAPI void U_EXPORT2
 uhash_close(UHashtable *hash) {
-    assert(hash != NULL);
+    U_ASSERT(hash != NULL);
     if (hash->elements != NULL) {
         if (hash->keyDeleter != NULL || hash->valueDeleter != NULL) {
             int32_t pos=-1;
@@ -358,13 +340,13 @@ U_CAPI void U_EXPORT2
 uhash_removeAll(UHashtable *hash) {
     int32_t pos = -1;
     const UHashElement *e;
-    assert(hash != NULL);
+    U_ASSERT(hash != NULL);
     if (hash->count != 0) {
         while ((e = uhash_nextElement(hash, &pos)) != NULL) {
             uhash_removeElement(hash, e);
         }
     }
-    assert(hash->count == 0);
+    U_ASSERT(hash->count == 0);
 }
 
 U_CAPI const UHashElement* U_EXPORT2
@@ -382,7 +364,7 @@ uhash_nextElement(const UHashtable *hash, int32_t *pos) {
      * EMPTY and not DELETED.
      */
     int32_t i;
-    assert(hash != NULL);
+    U_ASSERT(hash != NULL);
     for (i = *pos + 1; i < hash->length; ++i) {
         if (!IS_EMPTY_OR_DELETED(hash->elements[i].hashcode)) {
             *pos = i;
@@ -396,8 +378,8 @@ uhash_nextElement(const UHashtable *hash, int32_t *pos) {
 
 U_CAPI void* U_EXPORT2
 uhash_removeElement(UHashtable *hash, const UHashElement* e) {
-    assert(hash != NULL);
-    assert(e != NULL);
+    U_ASSERT(hash != NULL);
+    U_ASSERT(e != NULL);
     if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
         return _uhash_internalRemoveElement(hash, (UHashElement*) e).pointer;
     }
@@ -565,8 +547,8 @@ _uhash_create(UHashFunction *keyHash, UKeyComparator *keyComp,
     UHashtable *result;
 
     if (U_FAILURE(*status)) return NULL;
-    assert(keyHash != NULL);
-    assert(keyComp != NULL);
+    U_ASSERT(keyHash != NULL);
+    U_ASSERT(keyComp != NULL);
 
     result = (UHashtable*) uprv_malloc(sizeof(UHashtable));
     if (result == NULL) {
@@ -609,7 +591,7 @@ _uhash_allocate(UHashtable *hash,
 
     if (U_FAILURE(*status)) return;
 
-    assert(primeIndex >= 0 && primeIndex < PRIMES_LENGTH);
+    U_ASSERT(primeIndex >= 0 && primeIndex < PRIMES_LENGTH);
 
     hash->primeIndex = primeIndex;
     hash->length = PRIMES[primeIndex];
@@ -679,8 +661,8 @@ _uhash_rehash(UHashtable *hash) {
     for (i = oldLength - 1; i >= 0; --i) {
         if (!IS_EMPTY_OR_DELETED(old[i].hashcode)) {
             UHashElement *e = _uhash_find(hash, old[i].key, old[i].hashcode);
-            assert(e != NULL);
-            assert(e->hashcode == HASH_EMPTY);
+            U_ASSERT(e != NULL);
+            U_ASSERT(e->hashcode == HASH_EMPTY);
             e->key = old[i].key;
             e->value = old[i].value;
             e->hashcode = old[i].hashcode;
@@ -765,7 +747,7 @@ _uhash_find(const UHashtable *hash, UHashTok key,
          * WILL NEVER HAPPEN as long as uhash_put() makes sure that
          * count is always < length.
          */
-        assert(FALSE);
+        U_ASSERT(FALSE);
         return NULL; /* Never happens if uhash_put() behaves */
     }
     return &(hash->elements[theIndex]);
@@ -790,7 +772,7 @@ _uhash_put(UHashtable *hash,
     if (U_FAILURE(*status)) {
         goto err;
     }
-    assert(hash != NULL);
+    U_ASSERT(hash != NULL);
     /* Cannot always check pointer here or iSeries sees NULL every time. */
     if ((hint & HINT_VALUE_POINTER) && value.pointer == NULL) {
         /* Disallow storage of NULL values, since NULL is returned by
@@ -804,7 +786,7 @@ _uhash_put(UHashtable *hash,
 
     hashcode = (*hash->keyHasher)(key);
     e = _uhash_find(hash, key, hashcode);
-    assert(e != NULL);
+    U_ASSERT(e != NULL);
 
     if (IS_EMPTY_OR_DELETED(e->hashcode)) {
         /* Important: We must never actually fill the table up.  If we
@@ -851,7 +833,7 @@ _uhash_remove(UHashtable *hash,
      */
     UHashTok result;
     UHashElement* e = _uhash_find(hash, key, hash->keyHasher(key));
-    assert(e != NULL);
+    U_ASSERT(e != NULL);
     result.pointer = NULL; result.integer = 0;
     if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
         result = _uhash_internalRemoveElement(hash, e);
@@ -905,7 +887,7 @@ _uhash_setElement(UHashtable *hash, UHashElement* e,
 static UHashTok
 _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e) {
     UHashTok empty;
-    assert(!IS_EMPTY_OR_DELETED(e->hashcode));
+    U_ASSERT(!IS_EMPTY_OR_DELETED(e->hashcode));
     --hash->count;
     empty.pointer = NULL; empty.integer = 0;
     return _uhash_setElement(hash, e, HASH_DELETED, empty, empty, 0);
@@ -913,9 +895,9 @@ _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e) {
 
 static void
 _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePolicy policy) {
-    assert(hash == 0);
-    assert(((int32_t)policy) >= 0);
-    assert(((int32_t)policy) < 3);
+    U_ASSERT(hash == 0);
+    U_ASSERT(((int32_t)policy) >= 0);
+    U_ASSERT(((int32_t)policy) < 3);
     hash->lowWaterRatio  = RESIZE_POLICY_RATIO_TABLE[policy * 2];
     hash->highWaterRatio = RESIZE_POLICY_RATIO_TABLE[policy * 2 + 1];
 }

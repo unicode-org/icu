@@ -11,7 +11,7 @@
 #include "udatamem.h"
 #include "cmemory.h"
 
-#include <assert.h>
+#include "uassert.h"
 #include <stdio.h>
 
 
@@ -105,7 +105,7 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
 //
 //-----------------------------------------------------------------------------
 RBBIDataWrapper::~RBBIDataWrapper() {
-    assert(fRefCount == 0);
+    U_ASSERT(fRefCount == 0);
     if (fUDataMem) {
         udata_close(fUDataMem);
     } else {
