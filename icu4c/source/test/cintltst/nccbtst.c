@@ -834,7 +834,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
        from last source char crosses TargetLimit. As of 2000-07-11, this happens only 
        for escape procesing. */
         UChar errChars [UCNV_MAX_SUBCHAR_LEN];
-        int8_t len = sizeof(errChars);
+        int8_t len = UCNV_MAX_SUBCHAR_LEN;
         UErrorCode localStatus = U_ZERO_ERROR;
         ucnv_getInvalidUChars (conv, errChars, &len, &localStatus);
         if (U_FAILURE(localStatus))
