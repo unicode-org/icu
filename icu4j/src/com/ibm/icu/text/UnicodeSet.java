@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/06/03 18:49:35 $
- * $Revision: 1.96 $
+ * $Date: 2003/06/11 19:59:52 $
+ * $Revision: 1.97 $
  *
  *****************************************************************************************
  */
@@ -403,30 +403,31 @@ public class UnicodeSet extends UnicodeFilter {
         applyPattern(pattern, pos, symbols, IGNORE_SPACE);
     }
 
-    // Delete the following when the category constructor is removed
-    private static final String CATEGORY_NAMES =
-        //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
-        //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6   8 9 0 1 2 3 4 5 6 7 8
-        "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCf--CoCsPdPsPePcPoSmScSkSo";
-    /**
-     * DEPRECATED - Constructs a set from the given Unicode character
-     * category.
-     * @param category an integer indicating the character category as
-     * returned by <code>java.lang.Character.getType()</code>.  Note
-     * that this is <em>different</em> from the UCharacterCategory
-     * codes.
-     * @exception java.lang.IllegalArgumentException if the given
-     * category is invalid.
-     * @deprecated ICU 0.0 this will be removed Dec-31-2002
-     */
-    public UnicodeSet(int category) {
-        if (category < 0 || category > java.lang.Character.OTHER_SYMBOL ||
-            category == 17) {
-            throw new IllegalArgumentException("Invalid category");
-        }
-        String pat = "[:" + CATEGORY_NAMES.substring(2*category, 2*category+2) + ":]";
-        applyPattern(pat, false);
-    }
+// Removed ICU 2.6
+//    // Delete the following when the category constructor is removed
+//    private static final String CATEGORY_NAMES =
+//        //                    1 1 1 1 1 1 1   1 1 2 2 2 2 2 2 2 2 2
+//        //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6   8 9 0 1 2 3 4 5 6 7 8
+//        "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCf--CoCsPdPsPePcPoSmScSkSo";
+//    /**
+//     * DEPRECATED - Constructs a set from the given Unicode character
+//     * category.
+//     * @param category an integer indicating the character category as
+//     * returned by <code>java.lang.Character.getType()</code>.  Note
+//     * that this is <em>different</em> from the UCharacterCategory
+//     * codes.
+//     * @exception java.lang.IllegalArgumentException if the given
+//     * category is invalid.
+//     * @deprecated ICU 0.0 this will be removed Dec-31-2002
+//     */
+//    public UnicodeSet(int category) {
+//        if (category < 0 || category > java.lang.Character.OTHER_SYMBOL ||
+//            category == 17) {
+//            throw new IllegalArgumentException("Invalid category");
+//        }
+//        String pat = "[:" + CATEGORY_NAMES.substring(2*category, 2*category+2) + ":]";
+//        applyPattern(pat, false);
+//    }
 
     /**
      * Return a new set that is equivalent to this one.
@@ -1242,6 +1243,10 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Retain the specified character from this set if it is present.
+     * Upon return this set will be empty if it did not contain c, or
+     * will only contain c if it did contain c.
+     * @param s the character to be retained
+     * @return this object, for chaining
      * @stable ICU 2.0
      */
     public final UnicodeSet retain(int c) {
@@ -1250,17 +1255,20 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Retain the specified string in this set if it is present.
-     * The set will not contain the specified character once the call
-     * returns.
-     * @param s the source string
+     * Upon return this set will be empty if it did not contain s, or
+     * will only contain s if it did contain s.
+     * @param s the string to be retained
      * @return this object, for chaining
      * @stable ICU 2.0
      */
     public final UnicodeSet retain(String s) {
         int cp = getSingleCP(s);
         if (cp < 0) {
-            if (strings.size() == 1 && strings.contains(s)) return this;
-            strings.clear();
+            boolean isIn = strings.contains(s);
+            if (isIn && size() == 1) {
+                return this;
+            }
+            clear();
             strings.add(s);
             pat = null;
         } else {
@@ -1298,6 +1306,8 @@ public class UnicodeSet extends UnicodeFilter {
      * Removes the specified character from this set if it is present.
      * The set will not contain the specified character once the call
      * returns.
+     * @param c the character to be removed
+     * @return this object, for chaining
      * @stable ICU 2.0
      */
     public final UnicodeSet remove(int c) {
@@ -1306,9 +1316,9 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Removes the specified string from this set if it is present.
-     * The set will not contain the specified character once the call
+     * The set will not contain the specified string once the call
      * returns.
-     * @param s the source string
+     * @param s the string to be removed
      * @return this object, for chaining
      * @stable ICU 2.0
      */
