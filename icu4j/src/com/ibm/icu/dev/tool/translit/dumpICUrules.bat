@@ -46,33 +46,48 @@ sub usage {
     die;
 }
 
-# Mapping from Java IDs to ICU file names
-# Copied from icu/data/translit_index.txt, with long lines folded into 1 line
-$NAME_MAP = <<'END';
-        { "Fullwidth-Halfwidth", "Halfwidth-Fullwidth", "fullhalf" }
-        { "Latin-Arabic",        "Arabic-Latin",        "larabic"  }
-        { "Latin-Cyrillic",      "Cyrillic-Latin",      "lcyril"   }
-        { "Latin-Devanagari",    "Devanagari-Latin",    "ldevan"   }
-        { "Latin-Greek",         "Greek-Latin",         "lgreek"   }
-        { "Latin-Hebrew",        "Hebrew-Latin",        "lhebrew"  }
-        { "Latin-Jamo",          "Jamo-Latin",          "ljamo"    }
-        { "Latin-Kana",          "Kana-Latin",          "lkana"    }
-        { "Hiragana-Katakana",   "Katakana-Hiragana",   "kana"     }
+$JAVA_ONLY = '-';
 
-        // Other miscellaneous rules
-        { "StraightQuotes-CurlyQuotes", "CurlyQuotes-StraightQuotes", "quotes" }
-        { "KeyboardEscape-Latin1", "", "kbdescl1" }
-        { "UnicodeName-UnicodeChar", "", "ucname" }
-END
-
-foreach (split(/\n/, $NAME_MAP)) {
-    s|//.+||;
-    if (m|\"(.+)\".+\"(.*)\".+\"(.+)\".+|) {
-        $NAME_MAP{$1} = $3;
-    } elsif (/\S/) {
-        print STDERR "Ignoring $_\n";
-    }
-}
+# Mapping from Java file names to ICU file names
+%NAME_MAP = (
+             "Fullwidth_Halfwidth" =>        "fullhalf",
+             "Hiragana_Katakana" =>          "kana",
+             "KeyboardEscape_Latin1" =>      "kbdescl1",
+             "Latin_Arabic" =>               "larabic",
+             "Latin_Cyrillic" =>             "lcyril",
+             "Latin_Devanagari" =>           "ldevan",
+             "Latin_Greek" =>                "lgreek",
+             "Latin_Hebrew" =>               "lhebrew",
+             "Latin_Jamo" =>                 "ljamo",
+             "Latin_Kana" =>                 "lkana",
+             "StraightQuotes_CurlyQuotes" => "quotes",
+             "UnicodeName_UnicodeChar" =>    "ucname",
+             
+             # An ICU name of "" means the ICU name == the ID
+             "Bengali_InterIndic" =>         "",
+             "Devanagari_InterIndic" =>      "",
+             "Gujarati_InterIndic" =>        "",
+             "Gurmukhi_InterIndic" =>        "",
+             "Kannada_InterIndic" =>         "",
+             "Malayalam_InterIndic" =>       "",
+             "Oriya_InterIndic" =>           "",
+             "Tamil_InterIndic" =>           "",
+             "Telugu_InterIndic" =>          "",
+             "InterIndic_Bengali" =>         "",
+             "InterIndic_Devanagari" =>      "",
+             "InterIndic_Gujarati" =>        "",
+             "InterIndic_Gurmukhi" =>        "",
+             "InterIndic_Kannada" =>         "",
+             "InterIndic_Malayalam" =>       "",
+             "InterIndic_Oriya" =>           "",
+             "InterIndic_Tamil" =>           "",
+             "InterIndic_Telugu" =>          "",
+             
+             # These files are large, so ICU doesn't want them
+             "Han_Pinyin" => $JAVA_ONLY,
+             "Kanji_English" => $JAVA_ONLY,
+             "Kanji_OnRomaji" => $JAVA_ONLY,
+             );
 
 # Header blocks of text written at start of ICU output files
 $HEADER1 = <<END;
@@ -88,22 +103,130 @@ END
 
 $TOOL = $0;
 
-# Iterate over all Java RBT resource files.  Process those with a mapping to
-# an ICU name.
+# Iterate over all Java RBT rule files
 foreach (<$DIR/Transliterator_*.utf8.txt>) {
     next if (/~$/);
+    my ($out, $id) = convertFileName($_);
+    if ($out) {
+        if ($out eq $JAVA_ONLY) {
+            print STDERR "$id: Java only\n";
+            next;
+        }
+        file($id, $_, $out);
+    }
+}
+
+convertIndex();
+
+######################################################################
+# Convert a Java file name to C
+# Param: Java file name of the form m|Transliterator_(.+)\.utf8\.txt$|
+# Return: A C file name (e.g., ldevan.txt) or the empty string,
+#  if there is no mapping, or $JAVA_ONLY if the given file isn't
+#  intended to be incorporated into C.
+sub convertFileName {
+    local $_ = shift;
     my $id;
     if (m|Transliterator_(.+)\.utf8\.txt$|) {
         $id = $1;
-    } else { die; }
-    $id =~ s/_/-/g;
+    } else { die "Can't parse Java file name $_"; }
     if (!exists $NAME_MAP{$id}) {
-        print STDERR "$id: skipping, no ICU file name\n";
-        next;
+        print STDERR "ERROR: $id not in map; please update $0\n";
+        return '';
     }
-    file($id, $_, $NAME_MAP{$id});
+    my $out = $NAME_MAP{$id};
+    if ($out eq '') {
+        $out = $id;
+    }
+    return ($out, $id);
 }
 
+######################################################################
+# Convert the index file from Java to C format
+sub convertIndex {
+    $JAVA_INDEX = "Transliterator_index.txt";
+    $C_INDEX = "translit_index.txt";
+    open(JAVA_INDEX, "$DIR/$JAVA_INDEX") or die;
+    open(C_INDEX, ">$C_INDEX") or die;
+    
+    header(\*C_INDEX, $JAVA_INDEX);
+    
+    print C_INDEX <<END;
+//--------------------------------------------------------------------
+// N.B.: This file has been generated mechanically from the
+// corresponding ICU4J file, which is the master file that receives
+// primary updates.  The colon-delimited fields have been split into
+// separate strings.  For 'file' and 'internal' lines, the encoding
+// field has been deleted, since the encoding is processed at build
+// time in ICU4C.  Certain large rule sets not intended for general
+// use have been commented out with the notation "Java only".
+//--------------------------------------------------------------------
+
+translit_index {
+  RuleBasedTransliteratorIDs {
+END
+                
+    while (<JAVA_INDEX>) {
+        # Comments; change # to //
+        if (s|^(\s*)\#|$1//|) {
+            print C_INDEX;
+            next;
+        }
+        # Blank lines
+        if (!/\S/) {
+            print C_INDEX;
+            next;
+        }
+        # Content lines
+        chomp;
+        my $prefix = '';
+        my @a = split(':', $_);
+        if ($a[1] eq 'file' || $a[1] eq 'internal') {
+            # Convert the file name
+            my $id;
+            ($a[2], $id) = convertFileName($a[2]);
+            if ($a[2] eq $JAVA_ONLY) {
+                $prefix = '// Java only: ';
+            }
+            # Delete the encoding field
+            splice(@a, 3, 1);
+        } elsif ($a[1] eq 'alias') {
+            # Pad out with extra blank fields to make the
+            # 2-d array square
+            push @a, "";
+        } else {
+            die "Can't parse $_";
+        }
+        print C_INDEX
+            $prefix, "{ ",
+            join(", ", map("\"$_\"", @a)),
+            " },\n";
+    }
+
+    print C_INDEX <<END;
+  }
+}
+END
+
+    close(C_INDEX);
+    close(JAVA_INDEX);
+    print STDERR "$JAVA_INDEX -> $C_INDEX\n";
+}
+
+######################################################################
+# Output a header
+# Param: Filehandle
+sub header {
+    my $out = shift;
+    my $in = shift;
+    print $out $HEADER1;
+    print $out "// Tool: $TOOL\n// Source: $in\n";
+    print $out "// Date: ", scalar localtime, "\n";
+    print $out $HEADER2;
+    print $out "\n";
+}
+
+######################################################################
 # Process one file
 # Param: ID, e.g. Fullwidth-Halfwidth
 # Param: Java input file name, e.g.
@@ -127,11 +250,7 @@ sub file {
     print OUT pack("C3", 0xEF, 0xBB, 0xBF);
     print OUT " // -*- Coding: utf-8; -*-\n";
 
-    print OUT $HEADER1;
-    print OUT "// Tool: $TOOL\n// Source: $IN\n";
-    print OUT "// Date: ", scalar localtime, "\n";
-    print OUT $HEADER2;
-    print OUT "\n";
+    header(\*OUT, $IN);
     print OUT "// $id\n";
     print OUT "\n";
     print OUT "$out {\n";
@@ -187,6 +306,7 @@ sub file {
     print -s $OUT, ")\n";
 }
 
+######################################################################
 sub hideEscapes {
     # Transform escaped characters
     s|\\u([a-zA-Z0-9]{4})|<<u$1>>|g; # Transform Unicode escapes
@@ -194,6 +314,7 @@ sub hideEscapes {
     s|\\(.)|<<q$1>>|; # Transform backslash escapes
 }
 
+######################################################################
 sub restoreEscapes {
     # Restore escaped characters
     s|<<dq>>|\\\"|g;
