@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/14 00:20:03 $ 
-* $Revision: 1.7 $
+* $Date: 2000/04/14 01:15:08 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -40,7 +40,6 @@
   </target>
   
   <target name="tests" depends="core">
-    <mkdir dir="${build.dir}"/>
     <javac includes="com/ibm/test/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
@@ -50,7 +49,6 @@
   </target>
   
   <target name="demos" depends="core">
-    <mkdir dir="${build.dir}"/>
     <javac includes="com/ibm/demo/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
@@ -62,7 +60,6 @@
   </target>
   
   <target name="tools" depends="core">
-    <mkdir dir="${build.dir}"/>
     <javac includes="com/ibm/tools/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
@@ -81,8 +78,7 @@
 			  doctitle="ICU4J"
 			  encoding="iso-8859-1"
 			  docencoding="iso-8859-1"
-			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation.&lt;/font>"
-	    	  
+			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation and others.&lt;/font>"
     		  />    		  
   </target>
 
@@ -99,4 +95,3 @@
   </target>
 
 </project>
-
