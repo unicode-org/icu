@@ -908,7 +908,7 @@ Locale::initLocaleCache(void)
         Locale("fr", "CA"),
         Locale()    // This can use a mutex
     };
-    Locale *localeCache = reinterpret_cast<Locale *>(gByteLocaleCache);
+    Locale *localeCache = (Locale *)(gByteLocaleCache);
 
     {
         Mutex lock;
