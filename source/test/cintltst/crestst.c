@@ -517,7 +517,6 @@ TestOpenDirect(void) {
         log_err("translit_index.getByKey(root key) succeeded!\n");
         ures_close(item);
     }
-
     ures_close(translit_index);
 
     /* now make sure that "translit_index" will not work with ures_open() */
@@ -528,8 +527,8 @@ TestOpenDirect(void) {
         errorCode=U_ZERO_ERROR;
     } else {
         log_err("ures_open(\"translit_index\") succeeded, should fail!\n");
-        ures_close(translit_index);
     }
+    ures_close(translit_index);
 
     /* ures_openDirect("translit_index_WronG") must fail */
     translit_index=ures_openDirect(NULL, "translit_index_WronG", &errorCode);
@@ -537,6 +536,6 @@ TestOpenDirect(void) {
         errorCode=U_ZERO_ERROR;
     } else {
         log_err("ures_openDirect(\"translit_index_WronG\") succeeded, should fail!\n");
-        ures_close(translit_index);
     }
+    ures_close(translit_index);
 }
