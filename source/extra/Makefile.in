@@ -51,7 +51,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	@dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
+	  echo "$(MAKE)[$(MAKELEVEL)]: Making \`$$target' in \`$$subdir'"; \
 	  if test "$$subdir" = "."; then \
 	    dot_seen=yes; \
 	    local_target="$$target-local"; \

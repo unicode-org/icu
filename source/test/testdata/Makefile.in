@@ -60,7 +60,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	@dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
+	  echo "$(MAKE)[$(MAKELEVEL)]: Making \`$$target' in \`$$subdir'"; \
 	  if test "$$subdir" = "."; then \
 	    dot_seen=yes; \
 	    local_target="$$target-local"; \
@@ -86,7 +86,7 @@ doc:
 	  (cd $$subdir && \
 		$(MAKE) includedir=$$tmpdir/include install-headers); \
 	done; \
-	echo "Generating html documentation..."; \
+	echo "generating HTML documentation"; \
 	doc++ -H -d $$tmpdir/html $$tmpdir/include/*.h > /dev/null 2>&1; \
 	$(RMV) $$tmpdir
 

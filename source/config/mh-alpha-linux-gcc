@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-linux-gcc,v 1.4 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-alpha-linux-gcc,v 1.5 2002/01/04 23:48:42 yves-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -54,13 +54,13 @@ STATIC_O = ao
 
 ## Dependency rules
 %.d: $(srcdir)/%.c
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
 		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
 		[ -s $@ ] || rm -f $@'
 
 %.d: $(srcdir)/%.cpp
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
 		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
 		[ -s $@ ] || rm -f $@'

@@ -179,7 +179,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\tcat $(LISTFILES) > $(CMNLIST)\n\n");
   } else {
     T_FileStream_writeLine(makefile, "$(CMNLIST): \n"
-                                   "\t@echo Generating $@ list of data files\n"
+                                   "\t@echo \"generating $@ (list of data files)\"\n"
                                    "\t@-$(RMV) $@\n"
                                    "\t@for file in $(DATAFILEPATHS); do \\\n"
                                    "\t  echo $$file >> $@; \\\n"
