@@ -186,6 +186,11 @@ Calendar::createInstance(UErrorCode& success)
     if (U_FAILURE(success)) return 0;
     // right now, createInstance will always return an instance of GregorianCalendar
     Calendar* c = new GregorianCalendar(success);
+    //test for NULL
+    if (c == 0) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
@@ -198,6 +203,11 @@ Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
     if (U_FAILURE(success)) return 0;
     // since the Locale isn't specified, use the default locale
     Calendar* c = new GregorianCalendar(zone, Locale::getDefault(), success);
+    //test for NULL
+    if (c == 0) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
@@ -210,6 +220,11 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
     if (U_FAILURE(success)) return 0;
     // since the TimeZone isn't specfied, use the default time zone
     Calendar* c = new GregorianCalendar(TimeZone::createDefault(), aLocale, success);
+    //test for NULL
+    if (c == 0) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
@@ -241,6 +256,11 @@ Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode
 {
     if (U_FAILURE(success)) return 0;
     Calendar* c = new GregorianCalendar(zone, aLocale, success);
+    //test for NULL
+    if (c == 0) {
+        success = U_MEMORY_ALLOCATION_ERROR;
+        return 0;
+    }
     if (U_FAILURE(success)) { delete c; c = 0; }
     return c;
 }
@@ -582,10 +602,10 @@ void
 Calendar::adoptTimeZone(TimeZone* zone)
 {
     // Do nothing if passed-in zone is NULL
-    if (zone == NULL) return;
+    if (zone == 0) return;
 
     // fZone should always be non-null
-    if (fZone != NULL) delete fZone;
+    if (fZone != 0) delete fZone;
     fZone = zone;
 
     // if the zone changes, we need to recompute the time fields
@@ -767,7 +787,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     fFirstDayOfWeek = Calendar::SUNDAY;
     fMinimalDaysInFirstWeek = 1;
 
-    UResourceBundle *resource = ures_open(NULL, desiredLocale.getName(), &status);
+    UResourceBundle *resource = ures_open(0, desiredLocale.getName(), &status);
 
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
@@ -779,7 +799,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     }
 
     //dateTimeElements = resource.getStringArray(kDateTimeElements, count, status);
-    UResourceBundle *dateTimeElements = ures_getByKey(resource, kDateTimeElements, NULL, &status);
+    UResourceBundle *dateTimeElements = ures_getByKey(resource, kDateTimeElements, 0, &status);
     if (U_SUCCESS(status)) {
         int32_t arrLen;
         const int32_t *dateTimeElementsArr = ures_getIntVector(dateTimeElements, &arrLen, &status);

@@ -81,10 +81,15 @@ Collator* Collator::createInstance(const Locale&  desiredLocale,
 
   RuleBasedCollator* collation = new RuleBasedCollator(desiredLocale, 
                                                              status);
+  //test for NULL
+  if (collation == 0) {
+      status = U_MEMORY_ALLOCATION_ERROR;
+      return 0;
+  }
   if (U_FAILURE(status))
   {
     delete collation;
-    collation = NULL;
+    collation = 0;
   }
   return collation;
 }
@@ -97,12 +102,18 @@ Collator::createInstance(const Locale &loc,
   UVersionInfo info;
 
   collator=new RuleBasedCollator(loc, status);
+  //test for NULL
+  if (collator == 0) {
+      status = U_MEMORY_ALLOCATION_ERROR;
+      return 0;
+  }
+
   if(U_SUCCESS(status)) {
     collator->getVersion(info);
     if(0!=uprv_memcmp(version, info, sizeof(UVersionInfo))) {
       delete collator;
       status=U_MISSING_RESOURCE_ERROR;
-      return NULL;
+      return 0;
     }
   }
   return collator;

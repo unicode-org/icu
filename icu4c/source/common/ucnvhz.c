@@ -75,9 +75,13 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
         ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
     }
-
-
+    //test for NULL
+    else {
+        *errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 }
+
 static void 
 _HZClose(UConverter *cnv){
     if((cnv->extraInfo != NULL) && !cnv->isCopyLocal){

@@ -171,10 +171,20 @@ void CollationElementIterator::setText(const UnicodeString& source,
   m_data_->isWritable = TRUE;
   if (length > 0) {
     string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+    //Test for NULL
+    if (string == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     u_memcpy(string, source.getBuffer(), length);
   }
   else {
     string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+    //Test for NULL
+    if (string == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     *string = 0;
   }
   init_collIterate(m_data_->iteratordata_.coll, string, length, 
@@ -195,10 +205,20 @@ void CollationElementIterator::setText(CharacterIterator& source,
 
   if (length == 0) {
     buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+    //Test for NULL
+    if (buffer == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     *buffer = 0;
   }
   else {
       buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+      //Test for NULL
+      if (buffer == 0) {
+          status = U_MEMORY_ALLOCATION_ERROR;
+          return;
+      }
       /* 
       Using this constructor will prevent buffer from being removed when
       string gets removed
@@ -249,6 +269,11 @@ CollationElementIterator::CollationElementIterator(
   
   if (length > 0) {
       string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+      //Test for NULL
+      if (string == 0) {
+          status = U_MEMORY_ALLOCATION_ERROR;
+          return;
+      }
       /* 
       Using this constructor will prevent buffer from being removed when
       string gets removed
@@ -257,6 +282,11 @@ CollationElementIterator::CollationElementIterator(
   }
   else {
       string = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+      //test for NULL
+      if (string == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+      }
       *string = 0;
   }
   m_data_ = ucol_openElements(order->ucollator, string, length, &status);
@@ -299,6 +329,11 @@ CollationElementIterator::CollationElementIterator(
   UChar *buffer;
   if (length > 0) {
       buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR * length);
+      //test for NULL
+      if (buffer == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+      }
       /* 
       Using this constructor will prevent buffer from being removed when
       string gets removed
@@ -310,6 +345,11 @@ CollationElementIterator::CollationElementIterator(
   }
   else {
       buffer = (UChar *)uprv_malloc(U_SIZEOF_UCHAR);
+      //test for NULL
+      if (buffer == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+      }
       *buffer = 0;
   }
   m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);

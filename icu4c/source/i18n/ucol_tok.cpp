@@ -148,10 +148,20 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   uprv_memset(src, 0, sizeof(UColTokenParser));
   
   src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
+  //Test for NULL
+  if (src->source == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+  }
   nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
   if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
     src->source = (UChar *)uprv_realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    //test for NULL
+    if (src->source == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
   }
   src->current = src->source;
@@ -183,12 +193,22 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   uhash_setValueDeleter(src->tailored, uhash_freeBlock);
 
   src->opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
+  //Test for NULL
+  if (src->opts == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+  }
 
   uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
 
   // rulesToParse = src->source;
   src->lh = 0;
   src->lh = (UColTokListHeader *)uprv_malloc(512*sizeof(UColTokListHeader));
+  //Test for NULL
+  if (src->lh == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+  }
   src->resultLen = 0;
 
   UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
@@ -946,6 +966,11 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
                                       UParseError *parseError, UErrorCode *status) {
   /* do the reset thing */
   UColToken *sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
+  //test for NULL
+  if (sourceToken == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
+  }
   sourceToken->rulesToParse = src->source;
   sourceToken->source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
   sourceToken->expansion = src->parsedToken.extensionLen << 24 | src->parsedToken.extensionOffset;
@@ -1139,6 +1164,11 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
         if(sourceToken == NULL) {
           /* If sourceToken is null, create new one, */
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
+          //test for NULL
+          if (sourceToken == NULL) {
+              *status = U_MEMORY_ALLOCATION_ERROR;
+              return 0;
+          }
           sourceToken->rulesToParse = src->source;
           sourceToken->source = src->parsedToken.charsLen << 24 | src->parsedToken.charsOffset;
 

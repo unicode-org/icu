@@ -61,9 +61,19 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
         if(!uprv_strcmp(filename, "word_th")) {
             filename = "thaidict.brk";
             result = new DictionaryBasedBreakIterator(file, filename, status);
+            //test for NULL
+			if(result == NULL) {
+				status = U_MEMORY_ALLOCATION_ERROR;
+				return NULL;
+			}
         }
         else {
             result = new RuleBasedBreakIterator(file, status);
+            //test for NULL
+			if(result == NULL) {
+				status = U_MEMORY_ALLOCATION_ERROR;
+				return NULL;
+			}
         }
     }
 
@@ -95,9 +105,19 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
         if (!uprv_strcmp(key.getLanguage(), "th")) {
             filename = "thaidict.brk";
             result = new DictionaryBasedBreakIterator(file, filename, status);
+            //test for NULL
+			if(result == NULL) {
+				status = U_MEMORY_ALLOCATION_ERROR;
+				return NULL;
+			}
         }
         else {
             result = new RuleBasedBreakIterator(file, status);
+            //test for NULL
+			if(result == NULL) {
+				status = U_MEMORY_ALLOCATION_ERROR;
+				return NULL;
+			}
         }
     }
 
@@ -122,6 +142,11 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
 
     if (!U_FAILURE(status)) {
         result = new RuleBasedBreakIterator(file, status);
+        //test for NULL
+		if(result == NULL) {
+			status = U_MEMORY_ALLOCATION_ERROR;
+			return NULL;
+		}
     }
 
     return result;
@@ -145,6 +170,11 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
 
     if (!U_FAILURE(status)) {
         result = new RuleBasedBreakIterator(file, status);
+        //test for NULL
+			if(result == NULL) {
+				status = U_MEMORY_ALLOCATION_ERROR;
+				return NULL;
+			}
     }
 
     return result;
@@ -168,6 +198,11 @@ BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
 
     if (!U_FAILURE(status)) {
         result = new RuleBasedBreakIterator(file, status);
+        //test for NULL
+		if(result == NULL) {
+			status = U_MEMORY_ALLOCATION_ERROR;
+			return NULL;
+		}
     }
 
     return result;

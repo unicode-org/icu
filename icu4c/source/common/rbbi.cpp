@@ -48,6 +48,11 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 {
     init();
     fData = new RBBIDataWrapper(data, status);
+    //test for NULL
+    if(fData == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 }
 
 //-------------------------------------------------------------------------------
@@ -60,6 +65,11 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
 {
     init();
     fData = new RBBIDataWrapper(udm, status);
+    //test for NULL
+    if(fData == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
 }
 
 

@@ -319,6 +319,10 @@ void gentz::fixupNameToEquiv() {
 
     // First make a list that maps indices to offsets
     uint32_t *offsets = (uint32_t*) uprv_malloc(sizeof(uint32_t) * equivCount);
+	//test for NULL
+	if(offsets == 0) {
+		die("Out of memory");
+	}
     offsets[0] = header.equivTableDelta;
     if (offsets[0] % 4 != 0) {
         die("Header size is not 4-aligned");

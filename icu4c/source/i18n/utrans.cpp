@@ -327,6 +327,11 @@ utrans_setFilter(UTransliterator* trans,
         // Create read only alias of filterPattern:
         UnicodeString pat(filterPatternLen < 0, filterPattern, filterPatternLen);
         filter = new UnicodeSet(pat, *status);
+        //test for NULL
+        if (filter == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
         if (U_FAILURE(*status)) {
             delete filter;
             filter = NULL;

@@ -39,6 +39,12 @@ DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* rbbiData
 {
     init();
     fTables = new DictionaryBasedBreakIteratorTables(dictionaryFilename, status);
+    //test for NULL
+    if(fTables == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    
     if (U_FAILURE(status)) {
         fTables->removeReference();
         fTables = NULL;
@@ -561,6 +567,11 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         uprv_free(cachedBreakPositions);
     }
     cachedBreakPositions = (int32_t *)uprv_malloc((currentBreakPositions.size() + 1) * sizeof(int32_t));
+    //Test for NULL
+	if(cachedBreakPositions == NULL) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+		return;
+	}
     numCachedBreakPositions = currentBreakPositions.size() + 1;
     cachedBreakPositions[0] = startPos;
 

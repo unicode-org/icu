@@ -24,6 +24,11 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
         return;
     }
     variableNames = new Hashtable(status);
+    //test for NULL
+    if (variableNames == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     if (U_SUCCESS(status)) {
         variableNames->setValueDeleter(uhash_deleteUnicodeString);
     }
@@ -52,6 +57,11 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
     variables = 0;
     if (other.variables != 0) {
         variables = new UnicodeFunctor*[variablesLength];
+        //test for NULL
+        if (variables == 0) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
         for (int32_t i=0; i<variablesLength; ++i) {
             variables[i] = other.variables[i]->clone();
         }

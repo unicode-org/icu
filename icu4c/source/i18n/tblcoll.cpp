@@ -161,6 +161,11 @@ RuleBasedCollator::construct(const UnicodeString& rules,
     else {
         urulestring = new UnicodeString();
     }
+    //test for NULL
+    if (urulestring == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     dataIsOwned = TRUE;
   }
 }
@@ -584,7 +589,7 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
 
     setUCollator(kRootLocaleName, status);
     if (status == U_ZERO_ERROR) {
-		status = U_USING_DEFAULT_ERROR;
+        status = U_USING_DEFAULT_ERROR;
     }
   }
 
@@ -598,6 +603,11 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     }
     else {
         urulestring = new UnicodeString();
+    }
+    //test for NULL
+    if (urulestring == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
     }
     dataIsOwned = TRUE;
   }
