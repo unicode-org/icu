@@ -52,14 +52,15 @@ DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil -DUDATA_SO_SUFFIX=\".$(SO)\" 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o
 
 DEPS = $(OBJECTS:.o=.d)
-
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\

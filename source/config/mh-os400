@@ -41,7 +41,9 @@ SO=		o
 
 ## Platform command to remove or move executable target
 RMV = del
-INSTALL-S = cp -fph
+## Platform commands to remove or move executable and library targets
+INSTALL-S =  cp -fph
+INSTALL-L = $(INSTALL-S)
 
 ## Link commands to link to ICU service programs
 LIBICU-UC = $(top_srcdir)/common/libicuuc.o

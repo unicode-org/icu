@@ -67,8 +67,9 @@ SO=		dll
 
 ## Force removal [for make clean]
 RMV = rm -rf
-## Platform command to move executable target
-INSTALL-S = $(INSTALL)
+## Platform commands to remove or move executable and library targets
+INSTALL-S = $(INSTALL_PROGRAM)
+INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
 LIBICU-UC= 	$(top_builddir)/common/libicu-uc.x
