@@ -1,9 +1,19 @@
+/*
+**********************************************************************
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.
+**********************************************************************
+*   Date        Name        Description
+*   10/20/99    alan        Creation.
+**********************************************************************
+*/
+
 #ifndef UNICODESET_H
 #define UNICODESET_H
 
 #include "utypes.h"
 #include "unistr.h"
-#include "parsepos.h"
+
+class ParsePosition;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
@@ -21,7 +31,7 @@
  *
  * <p>The second API is the
  * <code>applyPattern()</code>/<code>toPattern()</code> API from the
- * <code>java.text.Format</code>-derived classes.  Unlike the
+ * <code>Format</code>-derived classes.  Unlike the
  * methods that add characters, add categories, and control the logic
  * of the set, the method <code>applyPattern()</code> sets all
  * attributes of a <code>UnicodeSet</code> at once, based on a
@@ -122,9 +132,8 @@
  * '[:Lu:]'.  The complement of a category is specified by inserting
  * '^' after the opening '[:'.  The following category names are
  * recognized.  Actual determination of category data uses
- * <code>Character.getType()</code>, so it reflects the underlying
- * implmementation used by <code>Character</code>.  As of Java 2 and
- * JDK 1.1.8, this is Unicode <b>2.x.x - fill in version here</b>.
+ * <code>Unicode::getType()</code>, so it reflects the underlying
+ * data used by <code>Unicode</code>.
  *
  * <pre>
  * Normative
@@ -157,8 +166,8 @@
  *     Pd = Punctuation, Dash
  *     Ps = Punctuation, Open
  *     Pe = Punctuation, Close
- *    *Pi = Punctuation, Initial quote
- *    *Pf = Punctuation, Final quote
+ *     Pi = Punctuation, Initial quote
+ *     Pf = Punctuation, Final quote
  *     Po = Punctuation, Other
  * 
  *     Sm = Symbol, Math
@@ -166,15 +175,13 @@
  *     Sk = Symbol, Modifier
  *     So = Symbol, Other
  * </pre>
- * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: uniset.h,v $ $Revision: 1.1 $ $Date: 1999/10/20 22:06:52 $
  */
 class U_I18N_API UnicodeSet {
 
     /**
-     * The internal representation is a StringBuffer of even length.
+     * The internal representation is a UnicodeString of even length.
      * Each pair of characters represents a range that is included in
      * the set.  A single character c is represented as cc.  Thus, the
      * ranges in the set are (a,b), a and b inclusive, where a =
@@ -191,8 +198,8 @@ class U_I18N_API UnicodeSet {
 
     /**
      * A cache mapping character category integers, as returned by
-     * Character.getType(), to pairs strings.  Entries are initially
-     * null and are created on demand.
+     * Unicode::getType(), to pairs strings.  Entries are initially
+     * zero length and are filled in on demand.
      */
     static UnicodeString* CATEGORY_PAIRS_CACHE;
 
@@ -210,7 +217,7 @@ public:
     const UnicodeString& getPairs() const;
 
     //----------------------------------------------------------------
-    // Public API
+    // Constructors &c
     //----------------------------------------------------------------
 
 public:
@@ -255,6 +262,51 @@ public:
     UnicodeSet(int8_t category, UErrorCode& status);
 
     /**
+     * Constructs a set that is identical to the given UnicodeSet.
+     */
+    UnicodeSet(const UnicodeSet& o);
+
+    /**
+     * Destructs the set.
+     */
+    virtual ~UnicodeSet();
+
+    /**
+     * Assigns this object to be a copy of another.
+     */
+    UnicodeSet& operator=(const UnicodeSet& o);
+
+    /**
+     * Compares the specified object with this set for equality.  Returns
+     * <tt>true</tt> if the two sets
+     * have the same size, and every member of the specified set is
+     * contained in this set (or equivalently, every member of this set is
+     * contained in the specified set).
+     *
+     * @param o set to be compared for equality with this set.
+     * @return <tt>true</tt> if the specified set is equal to this set.
+     */
+    virtual bool_t operator==(const UnicodeSet& o) const;
+
+    /**
+     * Compares the specified object with this set for equality.  Returns
+     * <tt>true</tt> if the specified set is not equal to this set.
+     */
+    bool_t operator!=(const UnicodeSet& o) const;
+
+    /**
+     * Returns the hash code value for this set.
+     *
+     * @return the hash code value for this set.
+     * @see Object#hashCode()
+     */
+    virtual int32_t hashCode() const;
+
+    //----------------------------------------------------------------
+    // Public API
+    //----------------------------------------------------------------
+
+    /**
      * Modifies this set to represent the set specified by the given
      * pattern, optionally ignoring white space.  See the class
      * description for the syntax of the pattern language.
@@ -291,9 +343,8 @@ public:
     virtual UnicodeString& toPattern(UnicodeString& result) const;
 
     /**
-     * Returns the number of elements in this set (its cardinality).  If this
-     * set contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
-     * <tt>Integer.MAX_VALUE</tt>.
+     * Returns the number of elements in this set (its cardinality),
+     * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 65536</code>.
      *
      * @return the number of elements in this set (its cardinality).
      */
@@ -418,28 +469,6 @@ public:
      * empty after this call returns.
      */
     virtual void clear();
-
-    /**
-     * Compares the specified object with this set for equality.  Returns
-     * <tt>true</tt> if the specified object is also a set, the two sets
-     * have the same size, and every member of the specified set is
-     * contained in this set (or equivalently, every member of this set is
-     * contained in the specified set).
-     *
-     * @param o Object to be compared for equality with this set.
-     * @return <tt>true</tt> if the specified Object is equal to this set.
-     */
-    virtual bool_t operator==(const UnicodeSet& o) const;
-
-    bool_t operator!=(const UnicodeSet& o) const;
-
-    /**
-     * Returns the hash code value for this set.
-     *
-     * @return the hash code value for this set.
-     * @see Object#hashCode()
-     */
-    virtual int32_t hashCode() const;
 
     //----------------------------------------------------------------
     // Implementation: Pattern parsing
