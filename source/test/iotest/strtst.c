@@ -21,16 +21,11 @@
 static void TestString(void) {
     int32_t n[1];
     float myFloat = -1234.0;
-    UDate myDate = 0.0;
-    UDate dec_31_1969 = -57600000.000000; /* TODO: These are not correct */
-    UDate midnight = 86400000.000000; /* TODO: These are not correct */
-    UDate myNewDate = -1.0;
     int32_t newValuePtr[1];
     double newDoubleValuePtr[1];
     UChar myUString[512];
     UChar uStringBuf[512];
     char myString[512] = "";
-    char testBuf[512] = "";
     int32_t retVal;
     void *origPtr, *ptr;
     U_STRING_DECL(myStringOrig, "My-String", 9);
@@ -485,21 +480,21 @@ static void TestStringCompatibility(void) {
 
     /* Compare against C API compatibility */
     for (num = -STANDARD_TEST_NUM_RANGE; num < STANDARD_TEST_NUM_RANGE; num++) {
-        sprintf(testBuf, "%x", num);
+        sprintf(testBuf, "%x", (int)num);
         u_sprintf(uStringBuf, "%x", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%x Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
-        sprintf(testBuf, "%X", num);
+        sprintf(testBuf, "%X", (int)num);
         u_sprintf(uStringBuf, "%X", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%X Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
-        sprintf(testBuf, "%o", num);
+        sprintf(testBuf, "%o", (int)num);
         u_sprintf(uStringBuf, "%o", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
@@ -507,14 +502,14 @@ static void TestStringCompatibility(void) {
         }
 
         /* sprintf is not compatible on all platforms e.g. the iSeries*/
-        sprintf(testBuf, "%d", num);
+        sprintf(testBuf, "%d", (int)num);
         u_sprintf(uStringBuf, "%d", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
             log_err("%%d Got: \"%s\", Expected: \"%s\"\n", myString, testBuf);
         }
 
-        sprintf(testBuf, "%i", num);
+        sprintf(testBuf, "%i", (int)num);
         u_sprintf(uStringBuf, "%i", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (strcmp(myString, testBuf) != 0) {
@@ -560,7 +555,7 @@ static void TestStringCompatibility(void) {
     for (num = 0; num < 0x80; num++) {
         testBuf[0] = (char)0xFF;
         uStringBuf[0] = (UChar)0xfffe;
-        sprintf(testBuf, "%c", num);
+        sprintf(testBuf, "%c", (char)num);
         u_sprintf(uStringBuf, "%c", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
         if (testBuf[0] != myString[0] || myString[0] != num) {
