@@ -124,7 +124,7 @@ const char UnicodeSet::fgClassID = 0;
 //   DEBUG UnicodeSet: ct 0x00A39B20; 397 [\u0A81-\u0A83\u0A85-
 //   DEBUG UnicodeSet: dt 0x00A39B20; 396 [\u0A81-\u0A83\u0A85-
 // Each line lists a construction (ct) or destruction (dt) event, the
-// object address, the number of outstanding objects after the even,
+// object address, the number of outstanding objects after the event,
 // and the pattern of the object in question.
 
 // #define DEBUG_MEM
