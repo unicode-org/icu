@@ -1,11 +1,11 @@
 # DerivedNumericValues-4.0.0.txt
-# Date: 2003-03-12, 23:52:49 GMT [MD]
+# Date: 2003-03-19, 01:18:09 GMT [MD]
 #
 # Unicode Character Database: Derived Property Data
 # Generated algorithmically from the Unicode Character Database
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints are omitted,
-#       except when listing Noncharacter or Cn.
+# Note: Unassigned and Noncharacter codepoints may be omitted
+#       if they have default property values.
 # ================================================
 
 

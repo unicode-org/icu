@@ -2269,7 +2269,8 @@ TestAdditionalProperties() {
         { 0x1D198, UCHAR_EAST_ASIAN_WIDTH, U_EA_NEUTRAL },
         { 0x20000, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
         { 0x2F8C7, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE },
-        { 0x3a5bd, UCHAR_EAST_ASIAN_WIDTH, U_EA_NEUTRAL },
+        { 0x3a5bd, UCHAR_EAST_ASIAN_WIDTH, U_EA_WIDE }, /* plane 3 got default W values in Unicode 4 */
+        { 0x5a5bd, UCHAR_EAST_ASIAN_WIDTH, U_EA_NEUTRAL },
         { 0xFEEEE, UCHAR_EAST_ASIAN_WIDTH, U_EA_AMBIGUOUS },
         { 0x10EEEE, UCHAR_EAST_ASIAN_WIDTH, U_EA_AMBIGUOUS },
 

@@ -1,10 +1,10 @@
 # PropList-4.0.0.txt
-# Date: 2003-03-14, 23:37:56 GMT [MD]
+# Date: 2003-03-20, 20:07:40 GMT [MD]
 #
 # Unicode Character Database: Extended Properties
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints are omitted,
-#       except when listing Noncharacter or Cn.
+# Note: Unassigned and Noncharacter codepoints may be omitted
+#       if they have default property values.
 # ================================================
 
 # ================================================

@@ -1,11 +1,11 @@
-# DerivedNormalizationProperties-4.0.0.txt
-# Date: 2003-02-26,02:57:10 GMT [MD]
+# DerivedNormalizationProps-4.0.0.txt
+# Date: 2003-03-20, 20:07:31 GMT [MD]
 #
 # Unicode Character Database: Derived Property Data
 # Generated algorithmically from the Unicode Character Database
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints are omitted,
-#       except when listing Noncharacter or Cn.
+# Note: Unassigned and Noncharacter codepoints may be omitted
+#       if they have default property values.
 # ================================================
 
 # ================================================
@@ -14,6 +14,7 @@
 #  Generated from computing: b = NFKC(Fold(a)); c = NFKC(Fold(b));
 #  Then if (c != b) add the mapping from a to c to the set of
 #  mappings that constitute the FC_NFKC_Closure list
+#  Uses the full case folding from CaseFolding.txt, without the T option.
 
 037A  ; FNC; 0020 03B9
 03D2  ; FNC; 03C5
