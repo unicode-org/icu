@@ -15,7 +15,7 @@
 /* C API TEST For Unicode */
 
 #ifndef _CUCDTST
-#define _CUNDTST
+#define _CUCDTST
 
 
 static void setUpDataTable(void);
@@ -30,6 +30,10 @@ static void TestUnicodeData(void);
 static void TestStringCopy(void);
 static void TestStringFunctions(void);
 static void TestStringSearching(void);
+static void TestCharNames(void);
+static void TestMirroring(void);
+static void TestUnescape(void);
+static void TestCaseMapping(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
