@@ -25,7 +25,9 @@ extern "C" {
 }
 #include "convert.h"
 
-
+/* list of converter and alias names */
+const char **UnicodeConverterCPP::availableConverterNames=NULL;
+int32_t UnicodeConverterCPP::availableConverterNamesCount=0;
 
 UnicodeConverterCPP::UnicodeConverterCPP()
 {
@@ -397,9 +399,21 @@ void UnicodeConverterCPP::getStarters(bool_t starters[256],
 const char* const*
 UnicodeConverterCPP::getAvailableNames(int32_t& num, UErrorCode& err)
 {
-  num = ucnv_countAvailable();
-  return AVAILABLE_CONVERTERS_NAMES;
-
+  if (availableConverterNames==NULL) {
+    availableConverterNamesCount = ucnv_io_countAvailableAliases(&err);
+    if (availableConverterNamesCount > 0) {
+      availableConverterNames = new const char *[availableConverterNamesCount];
+      if (availableConverterNames != NULL) {
+        ucnv_io_fillAvailableAliases(availableConverterNames, &err);
+      } else {
+        num = 0;
+        err = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+      }
+    }
+  }
+  num = availableConverterNamesCount;
+  return availableConverterNames;
 }
 
 int32_t  UnicodeConverterCPP::flushCache()
