@@ -50,7 +50,7 @@ typedef struct CCSIDStateTable {
 } CCSIDStateTable;
 
 /*Year when the ucm files were produced using this tool*/
-#define YEAR "2000"
+#define YEAR "2002"
 /**/
 #define japanesePCDBCSStates  "<icu:state>                   0-ff:2, 81-9f:1, a0-fc:1\n"\
                               "<icu:state>                   40-7e, 80-fc\n"\
@@ -154,7 +154,7 @@ knownStateTables[]={
            "<icu:state>                   40-7e, 80-fe\n"
            "<icu:state>\n",
 
-    1386,  "<icu:state>                   0-7f, 81-fe:1\n"
+    1386,  "<icu:state>                   0-80, 81-fe:1\n" /* Was 0-7f, 81-fe:1 */
            "<icu:state>                   40-7e, 80-fe\n",
 
     5039,   "<icu:state>                   0-80, 81-9f:1, a0-df, e0-fc:1, fd-ff\n"
