@@ -76,14 +76,14 @@ public:
      * for ICU4C C++ classes
      * @stable ICU 2.4
      */
-    static void *operator new(size_t size);
+    static void * U_EXPORT2 operator new(size_t size);
 
     /**
      * Override for ICU4C C++ memory management.
      * See new().
      * @stable ICU 2.4
      */
-    static void *operator new[](size_t size);
+    static void * U_EXPORT2 operator new[](size_t size);
 
     /**
      * Override for ICU4C C++ memory management.
@@ -93,14 +93,14 @@ public:
      * for ICU4C C++ classes
      * @stable ICU 2.4
      */
-    static void operator delete(void *p);
+    static void U_EXPORT2 operator delete(void *p);
 
     /**
      * Override for ICU4C C++ memory management.
      * See delete().
      * @stable ICU 2.4
      */
-    static void operator delete[](void *p);
+    static void U_EXPORT2 operator delete[](void *p);
 
 #if U_HAVE_PLACEMENT_NEW
     /**
@@ -108,14 +108,14 @@ public:
      * See new().
      * @draft ICU 2.6
      */
-    static inline void * operator new(size_t, void *ptr) { return ptr; }
+    static inline void * U_EXPORT2 operator new(size_t, void *ptr) { return ptr; }
 
     /**
      * Override for ICU4C C++ memory management for STL.
      * See delete().
      * @draft ICU 2.6
      */
-    static inline void operator delete(void *, void *) {}
+    static inline void U_EXPORT2 operator delete(void *, void *) {}
 #endif /* U_HAVE_PLACEMENT_NEW */
 #endif /* U_OVERRIDE_CXX_ALLOCATION */
 
