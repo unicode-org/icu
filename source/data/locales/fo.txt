@@ -10,6 +10,9 @@ fo {
     Languages {
         fo { "føroyskt" }
     }
+    Countries {
+        FO { "Føroyar" }
+    }
     DayAbbreviations { 
         "sun",
         "mán",

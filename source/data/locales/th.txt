@@ -450,7 +450,8 @@ th {
         ga { "\u0e44\u0e2d\u0e23\u0e34\u0e0a" }
         it { "\u0e2d\u0e34\u0e15\u0e32\u0e25\u0e35" }
         ja { "\u0e0d\u0e35\u0e48\u0e1b\u0e38\u0e48\u0e19" }
-        jw { "\u0e0a\u0e27\u0e32" }
+        jv { "\u0e0a\u0e27\u0e32" }
+        //jw { "\u0e0a\u0e27\u0e32" } // Use jv instead
         kn { "\u0e01\u0e32\u0e19\u0e32\u0e14\u0e32" }
         ks { "\u0e04\u0e31\u0e0a\u0e21\u0e35\u0e23\u0e35" }
         kk { "\u0e04\u0e32\u0e0b\u0e31\u0e04" }

@@ -372,7 +372,8 @@ de {
         ga { "Irisch" }
         it { "Italienisch" }
         ja { "Japanisch" }
-        jw { "Javanesisch" } // ?
+        jv { "Javanesisch" } // ?
+        //jw { "Javanesisch" } // Use jv instead
         // ? kn { "Kannada" }
         ks { "Kaschmirisch" } // ?
         kk { "Kasachisch" }
@@ -449,7 +450,7 @@ de {
         // ? ur { "Urdu" }
         uz { "Usbekisch" }
         vi { "Vietnamesisch" }
-        vo { "Volap\u00fck" }
+        //vo { "Volap\u00fck" }
         cy { "Walisisch" }
         // ? wo { "Wolof" }
         // ? xh { "Xhosa" }

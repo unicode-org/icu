@@ -203,7 +203,8 @@ fr {
         ga { "irlandais" }
         it { "italien" }
         ja { "japonais" }
-        jw { "javanais" }
+        jv { "javanais" }
+        //jw { "javanais" } // Use jv instead
         kn { "kannada" }
         ks { "kashmiri" }
         kk { "kazakh" }

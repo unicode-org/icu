@@ -11,6 +11,9 @@ uz{
     Languages {
         uz { "\u040E\u0437\u0431\u0435\u043A" }
     }
+    Countries {
+        UZ { "\u040E\u0437\u0431\u0435\u043A\u0438\u0441\u0442\u043E\u043D" }
+    }
 //    ShortLanguage{
 //        "UZB"
 //    }
