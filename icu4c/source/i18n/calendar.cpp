@@ -42,6 +42,7 @@
 #include "ucln_in.h"
 #include "cstring.h"
 #include "locbased.h"
+#include "uresimp.h"
 
 U_NAMESPACE_BEGIN
 

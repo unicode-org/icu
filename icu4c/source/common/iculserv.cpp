@@ -11,6 +11,7 @@
 #if !UCONFIG_NO_SERVICE
 
 #include "unicode/resbund.h"
+#include "uresimp.h"
 #include "cmemory.h"
 #include "iculserv.h"
 #include "ustrfmt.h"
