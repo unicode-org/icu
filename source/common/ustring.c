@@ -27,7 +27,7 @@
 static UConverter* _defaultConverter = NULL;
 static UErrorCode gErr = U_ZERO_ERROR;
 
-#define MAX_STRLEN 0x00FFFFFF
+#define MAX_STRLEN 0x0FFFFFFF
 
 /*Lazy evaluating macro for the default converter*/
 #define defaultConverter (_defaultConverter==NULL)?_defaultConverter=ucnv_open(NULL, &gErr):_defaultConverter

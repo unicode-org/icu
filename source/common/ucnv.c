@@ -711,6 +711,7 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   int32_t mySourceLength = 0;
   UConverter myConverter;
   char *myTarget = target;
+  char *myTarget_limit;
   int32_t targetCapacity = 0;
 
   if (U_FAILURE (*err))
@@ -741,6 +742,10 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
     }
 
   mySource_limit = mySource + mySourceLength;
+  myTarget_limit = target + targetSize;
+
+  if(myTarget_limit < target)
+    myTarget_limit = U_MAX_PTR; /* ptr wrapped */
 
   if (targetSize > 0)
     {
@@ -770,6 +775,10 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
       char target2[CHUNK_SIZE];
       char *target2_alias = target2;
       const char *target2_limit = target2 + CHUNK_SIZE;
+
+
+      if(target2_limit < target2)
+	target2_limit = U_MAX_PTR; /* wrapped around */
 
       /*We use a stack allocated buffer around which we loop
        *(in case the output is greater than CHUNK_SIZE)
@@ -812,6 +821,7 @@ int32_t ucnv_toUChars (const UConverter * converter,
   const char *mySource_limit = source + sourceSize;
   UConverter myConverter;
   UChar *myTarget = target;
+  UChar *myTarget_limit;
   int32_t targetCapacity;
 
   if (U_FAILURE (*err))
@@ -844,6 +854,11 @@ int32_t ucnv_toUChars (const UConverter * converter,
   /*Removes all state info on the UConverter */
   ucnv_reset (&myConverter);
 
+  myTarget_limit = target + targetSize - 1;
+
+  if(myTarget_limit < target) /* wrapped */
+    myTarget_limit = U_MAX_PTR;
+
 
   /*Not in pure pre-flight mode */
   if (targetSize > 0)
@@ -851,7 +866,7 @@ int32_t ucnv_toUChars (const UConverter * converter,
 
       ucnv_toUnicode (&myConverter,
 		      &myTarget,
-		      target + targetSize - 1,	  /*Save a spot for the Null terminator */
+		      myTarget_limit,	  /*Save a spot for the Null terminator */
 		      &mySource,
 		      mySource_limit,
 		      NULL,

@@ -135,6 +135,9 @@ typedef uint16_t UChar;
 #endif
 #endif
 
+/* Maximum value of a (void*) - use to indicate the limit of
+   an 'infinite' buffer.  */
+#define U_MAX_PTR ((void*)-1)
 
 /*===========================================================================*/
 /* Calendar/TimeZone data types                                              */
