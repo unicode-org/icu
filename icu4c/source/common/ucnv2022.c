@@ -1169,7 +1169,6 @@ static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, 
 *	    break and return a U_INVALID_CHARACTER error
 *      No  ->  Continue and find the character in next code page
 *
-* Offsets Logic is handled by utility functions concatChar(), concatEscape() and concatString()
 *
 * TODO: Implement a priority technique where the users are allowed to set the priority of code pages 
 */
@@ -2127,11 +2126,12 @@ DONE:
             myUConverter =myData2022->currentConverter;
         }
         else{
+            StateEnum tempState=nextStateToUnicodeJP[myData2022->version][offset];
             _this->mode = UCNV_SI;
             myData2022->currentConverter = myUConverter = 
-                myData2022->myConverterArray[nextStateToUnicodeJP[myData2022->version][offset]]; 
-            myData2022->toUnicodeCurrentState = nextStateToUnicodeJP[myData2022->version][offset];   
-               
+                (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL; 
+            myData2022->toUnicodeCurrentState = tempState;  
+            *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
             
         }
         if (U_SUCCESS(*err)){
@@ -4169,7 +4169,37 @@ CALLBACK:
     myConverterData->sourceIndex = 0;
     myConverterData->targetIndex = 0;
 }
+
 /*************** to unicode *******************/
+static StateEnum nextStateToUnicodeCN[2][MAX_STATES_2022]= {
+
+    {
+/*      0		                1		             2	                    3		            4		        5		                    6		                   7		            8		            9	 */
+            
+         INVALID_STATE		    ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE		    ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE		,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE	        ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,GB2312_1   	        ,INVALID_STATE		    ,INVALID_STATE          ,CNS_11643  	        ,CNS_11643     
+        ,INVALID_STATE	        ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE
+        ,INVALID_STATE          ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE
+    },
+    
+    {
+/*      0		                1		             2	                    3		            4		        5		                    6		                   7		            8		            9	 */
+         INVALID_STATE		    ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE		    ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE		,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE	        ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,GB2312_1   	        ,INVALID_STATE		    ,ISO_IR_165             ,CNS_11643  	        ,CNS_11643     
+        ,CNS_11643	            ,CNS_11643          ,CNS_11643          ,CNS_11643      ,   CNS_11643           ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE
+        ,INVALID_STATE          ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE
+    
+        
+    }
+};
 
 static void changeState_2022_CN(UConverter* _this,
                                 const char** source, 
@@ -4334,22 +4364,12 @@ DONE:
             myUConverter =myData2022->currentConverter;
         }
         else{
+             StateEnumCN tempState=nextStateToUnicodeCN[myData2022->version][offset];
             _this->mode = UCNV_SI;
-           /* ucnv_close(myData2022->currentConverter);
-              myData2022->currentConverter = myUConverter = ucnv_open(cnvName, err);*/
-            if( cnvName[0] == 'l' ){
-                myData2022->currentConverter = myUConverter = myData2022->myConverterArray[0];
-            }
-            else if( cnvName[0] == 'g' ){
-                myData2022->currentConverter = myUConverter = myData2022->myConverterArray[1];
-            }
-            else if(cnvName[0] == 'I' ){
-              myData2022->currentConverter = myUConverter = myData2022->myConverterArray[2];
-            }  
-            else if(  cnvName[0] == 'C'){
-                myData2022->currentConverter = myUConverter = myData2022->myConverterArray[3];
-            }
-
+            myData2022->currentConverter = myUConverter = 
+                (tempState!=INVALID_STATE)? myData2022->myConverterArray[tempState]:NULL; 
+            myData2022->toUnicodeCurrentState = tempState;
+            *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
             
         }
         if (U_SUCCESS(*err)){
@@ -4535,6 +4555,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                 
                 case LATIN1:
                     break;
+                
+                case INVALID_STATE:
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    goto SAVE_STATE;
             }
             if(targetUniChar < 0xfffe){
                 *(myTarget++)=(UChar)targetUniChar;
@@ -4763,6 +4787,10 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 
             case LATIN1:
                 break;
+            
+            case INVALID_STATE:
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    goto SAVE_STATE;
             }
             if(targetUniChar < 0xfffe){
                 if(myData->toUnicodeCurrentState == SBCS){
