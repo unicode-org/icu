@@ -48,15 +48,15 @@ public class CollationAPITest extends TestFmwk {
         }
         col.setStrength(Collator.TERTIARY);
     
-        CollationKey sortk1, sortk2;
         String test1 = "Abcda";
         String test2 = "abcda";
     
         logln("Testing weird arguments");
-        sortk1 = col.getCollationKey("");
+        CollationKey sortk1 = col.getCollationKey("");
         // key gets reset here
         byte[] bytes = sortk1.toByteArray();
-        doAssert(bytes.length == 3 && bytes[0] == 1 && bytes[1] == 1 && bytes[2] == 0, 
+        doAssert(bytes.length == 3 && bytes[0] == 1 && bytes[1] == 1 
+                 && bytes[2] == 0, 
                  "Empty string should return an empty collation key");
         // bogus key returned here
         sortk1 = col.getCollationKey(null);
@@ -64,7 +64,7 @@ public class CollationAPITest extends TestFmwk {
 
         logln("Use tertiary comparison level testing ....");
         sortk1 = col.getCollationKey(test1);
-        sortk2 = col.getCollationKey(test2);
+        CollationKey sortk2 = col.getCollationKey(test2);
         Object sortk3 = sortk2;
         doAssert((sortk1.compareTo(sortk2)) > 0 
                  && (sortk1.compareTo(sortk3)) > 0, "Result should be \"Abcda\" >>> \"abcda\"");
@@ -77,9 +77,6 @@ public class CollationAPITest extends TestFmwk {
         doAssert((sortk1.equals(sortkNew)), "The sort keys assignment failed");
         doAssert((sortk1.hashCode() == sortkNew.hashCode()), "sort key hashCode() failed");
 
-        col.setStrength(Collator.SECONDARY);
-        doAssert(col.getCollationKey(test1).compareTo(col.getCollationKey(test2)) == 0, 
-                                      "Result should be \"Abcda\" == \"abcda\"");
         // check invaliad comparisons
         Object fake = "fake";
         try {
@@ -91,6 +88,89 @@ public class CollationAPITest extends TestFmwk {
         if (sortk1.equals(fake)) {
             errln("Non-CollationKey comparison");
         }
+        
+        // port from apicoll
+        try {
+            col = Collator.getInstance();
+        } catch (Exception e) {
+    
+        }
+        if (col.getStrength() != Collator.TERTIARY){
+            errln("Default collation did not have tertiary strength");
+        }
+
+        // Need to use identical strength
+        col.setStrength(Collator.IDENTICAL);
+
+        byte key2compat[] = { // 2.6.1 key
+            (byte)0x26, (byte)0x28, (byte)0x2A, (byte)0x2C, (byte)0x26, 
+            (byte)0x01, 
+            (byte)0x09, 
+            (byte)0x01, 
+            (byte)0x09, 
+            (byte)0x01, 
+            (byte)0x25, 
+            (byte)0x01, 
+            (byte)0x92, (byte)0x93, (byte)0x94, (byte)0x95, (byte)0x92, 
+            (byte)0x00 
+
+            // 2.2 key
+            /*
+            0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
+            0x09, 0x01, 0x09, 0x01, 0x1C, 0x01,
+            0x92, 0x93, 0x94, 0x95, 0x92, 0x00
+            */
+            // 2.0 key
+            /*
+            0x19, 0x1B, 0x1D, 0x1F, 0x19,
+            0x01, 0x09, 0x01, 0x09, 0x01,
+            0x18, 0x01,
+            0x92, 0x93, 0x94, 0x95, 0x92,
+            0x00
+            */
+            // 1.8.1 key.
+            /*
+            0x19, 0x1B, 0x1D, 0x1F, 0x19,
+            0x01, 0x0A, 0x01, 0x0A, 0x01,
+            0x92, 0x93, 0x94, 0x95, 0x92,
+            0x00 
+            */
+        };
+
+        CollationKey key1 = col.getCollationKey(test1);
+        CollationKey key2 = col.getCollationKey(test2);
+        CollationKey key3 = col.getCollationKey(test2);
+    
+        doAssert(key1.compareTo(key2) > 0, 
+                 "Result should be \"Abcda\" > \"abcda\"");
+        doAssert(key2.compareTo(key1) < 0,
+                "Result should be \"abcda\" < \"Abcda\"");
+        doAssert(key2.compareTo(key3) == 0,
+                "Result should be \"abcda\" ==  \"abcda\"");
+     
+        doAssert(Arrays.equals(key2.toByteArray(), key2compat),
+                 "Binary format for 'abcda' sortkey different for identical strength!");
+    
+        logln("Use secondary comparision level testing ...\n");
+        col.setStrength(Collator.SECONDARY);
+    
+        key1 = col.getCollationKey(test1);
+        key2 = col.getCollationKey(test2);
+        key3 = col.getCollationKey(test2);
+    
+        doAssert(key1.compareTo(key2) == 0, 
+                "Result should be \"Abcda\" == \"abcda\"");
+        doAssert(key2.compareTo(key3) == 0,
+                "Result should be \"abcda\" ==  \"abcda\"");
+    
+        byte tempkey[] = key2.toByteArray();
+        byte subkey2compat[] = new byte[tempkey.length];
+        System.arraycopy(key2compat, 0, subkey2compat, 0, tempkey.length);
+        subkey2compat[subkey2compat.length - 1] = 0;
+        doAssert(Arrays.equals(tempkey, subkey2compat),
+                 "Binary format for 'abcda' sortkey different for secondary strength!");
+    
+        logln("testing sortkey ends...");
     }
     
     void doAssert(boolean conditions, String message) {
