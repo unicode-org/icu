@@ -148,7 +148,7 @@ ucol_openNew(    const    char         *loc,
   /* Do we need a name or other stuff?                                  */
   UCollatorNew *result = NULL;
   UResourceBundle *b = ures_open(NULL, loc, status);
-  UResourceBundle *binary = ures_getByKey(b, "%%Collation", NULL, status);
+  UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
 
   if(*status = U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     result = UCA;
@@ -409,6 +409,20 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
   return newStart;
 }
 
+
+#define MIN_VALUE 0x02
+#define UNMARKED 0x03
+#define UCOL_VARIABLE_MAX 0x20
+
+void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
+  uint8_t temp;
+  while(start<end) {
+    temp = *start;
+    *start++ = *end;
+    *end-- = temp;
+  }
+}
+
 int32_t
 ucol_calcSortKeyNew(const    UCollatorNew    *coll,
         const    UChar        *source,
@@ -453,7 +467,14 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (ucol_getAttributeNew(coll, UCOL_CASE_LEVEL, status) == UCOL_ON);
-    UBool  lowerFirst = (ucol_getAttributeNew(coll, UCOL_CASE_FIRST, status) == UCOL_LOWER_FIRST);
+    UBool  upperFirst = (ucol_getAttributeNew(coll, UCOL_CASE_FIRST, status) == UCOL_UPPER_FIRST);
+    UBool  shifted = (ucol_getAttributeNew(coll, UCOL_ALTERNATE_HANDLING, status) == UCOL_SHIFTED);
+    UBool  isFrenchSec = (ucol_getAttributeNew(coll, UCOL_FRENCH_COLLATION, status) == UCOL_ON);
+
+    /* support for special features like caselevel and funky secondaries */
+    uint8_t *frenchStartPtr = NULL;
+    uint8_t *frenchEndPtr = NULL;
+    uint32_t caseShift = 0;
 
     sortKeySize += ((compareSec?1:0) + (compareTer?1:0) + (doCase?1:0) + (compareQuad?1:0) + (compareIdent?1:0));
 
@@ -490,8 +511,12 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     uint8_t *quadStart = quads;
 
     uint32_t order = 0;
+    uint32_t ce = 0;
 
     uint16_t primary = 0;
+    uint8_t primary1 = 0;
+    uint8_t primary2 = 0;
+    uint8_t primary3 = 0;
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
 
@@ -510,10 +535,119 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                 break;
             }
 
-            primary = ((order & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT);
-            secondary = ((order & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT);
-            tertiary = (order & UCOL_TERTIARYORDERMASK);
+            /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
+            ce = order;
 
+
+            tertiary = (order & UCOL_TERTIARYORDERMASK);
+            secondary = (order >>= 8) & 0xFF;
+            primary3 = 0; /* the third primary */
+            primary2 = (order >>= 8) & 0xFF;;
+            primary1 = order >>= 8;
+
+            if((tertiary & 0xF0) == 0xF0) { /* This indicates a long primary (11110000) */
+              /* Note: long primary can appear both as a normal CE or as a continuation CE (not that it matters much) */
+              primary3 = secondary;
+              secondary = (tertiary & 0x0F) + MIN_VALUE;
+              tertiary = UNMARKED;
+            }
+
+            if(upperFirst && !(isContinuation(ce))) { 
+              /* Upper cases have this bit turned on, so that they always come after the lower cases */
+              /* if we want to reverse this situation, we'll flip this bit */
+              tertiary ^= 0x80;
+            }
+
+            /* In the code below, every increase in any of buffers is followed by the increase to  */
+            /* sortKeySize - this might look tedious, but it is needed so that we can find out if  */
+            /* we're using too much space and need to reallocate the primary buffer or easily bail */
+            /* out to ucol_getSortKeySizeNew.                                                      */
+
+            if(shifted && primary1 < UCOL_VARIABLE_MAX && primary1 > 0) { 
+              /* We are dealing with a variable and we're treating them as shifted */
+              /* This is a shifted ignorable */
+              *quads++ = primary1;
+              sortKeySize++;
+              if(primary2 != 0) {
+                *quads++ = primary2;
+                sortKeySize++;
+              }
+            } else {
+              /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
+              /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
+              /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
+              if(primary1 != 0) {
+                *primaries++ = primary1; /* scriptOrder[primary1]; */ /* This is the script ordering thingie */
+                sortKeySize++;
+              }               
+              if(primary2 != 0) {
+                *primaries++ = primary2; /* second part */
+                sortKeySize++;
+              }
+              if(primary3 != 0) {
+                *primaries++ = primary2; /* third part */
+                sortKeySize++;
+              }
+
+              if(compareSec && secondary != 0) { /* I think that != 0 test should be != IGNORABLE */
+                /* This thing should also contain the compression logic, as in: */
+                /*
+                  if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
+                      ++secondary[-1]; // simply increment!!
+                  else *secondary++ = ws;
+                */
+
+                *secondaries++ = secondary;
+                sortKeySize++;
+                if(isFrenchSec) {
+                  /* Do the special handling for French secondaries */
+                  /* We need to get continuation elements and do intermediate restore */
+                  /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
+                  if(isContinuation(ce)) {
+                    if (frenchStartPtr == NULL) {
+                      frenchStartPtr = secondaries - 2;
+                    }
+                    frenchEndPtr = secondaries-1;
+                  } else if (frenchStartPtr != NULL) {
+                      /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                    uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
+                    frenchStartPtr = NULL;
+                  }
+                }
+              }
+
+              if(doCase) {
+                if (caseShift  == 0) {
+                  *cases++ = 0x80;
+                  sortKeySize++;
+                  caseShift = 7;
+                }
+                *(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);
+              }
+
+              if(compareTer && tertiary != 0) { /* I think that != 0 test should be != IGNORABLE */
+                /* This thing should also contain the compression logic, as in: */
+                /*
+                  if (ws  == COMMON2 && COMMON2  <= secondary[-1] && secondary[-1] < COMMON_MAX2)
+                      ++secondary[-1]; // simply increment!!
+                  else *secondary++ = ws;
+                */
+
+                *tertiaries++ = tertiary;
+                sortKeySize++;
+              }
+
+              if(compareQuad && shifted && primary1 > 0) {
+                *quads++ = 0xFF;
+                sortKeySize++;
+              }
+
+            }
+
+/* This is an old peace of code... I'm leaving it here just for discussion regarding */
+/* ignorables and situations with primary ignorable vs. variable top and ignorables  */            
+#if 0
+/*
             if(primary != UCOL_PRIMIGNORABLE) {
                 *(primaries++) = (primary>>8);
                 *(primaries++) = (primary&0xFF);
@@ -541,26 +675,27 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                     sortKeySize++;
                 }
             }
-            if(sortKeySize>resultLength) {
-                if(allocatePrimary == FALSE) {
-                    resultOverflow = TRUE;
-                    sortKeySize = ucol_getSortKeySizeNew(coll, &s, sortKeySize, strength, len);
-                    *status = U_MEMORY_ALLOCATION_ERROR;
-                    finished = TRUE;
-                    break;
-                    /*goto cleanup;*/
-                } else {
-                    uint8_t *newStart;
-                    newStart = (uint8_t *)uprv_realloc(primStart, 2*sortKeySize);
-                    if(primStart == NULL) {
-                        *status = U_MEMORY_ALLOCATION_ERROR;
-                        finished = TRUE;
-                        break;
-                    }
-                    primaries=newStart+(primaries-primStart);
-                    resultLength = 2*sortKeySize;
-                    primStart = *result = newStart;
+*/
+#endif
+            if(sortKeySize>resultLength) { /* We have stepped over the primary buffer */
+              if(allocatePrimary == FALSE) { /* need to save our butts if we cannot reallocate */
+                resultOverflow = TRUE;
+                sortKeySize = ucol_getSortKeySizeNew(coll, &s, sortKeySize, strength, len);
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                finished = TRUE;
+                break;
+              } else { /* It's much nicer if we can actually reallocate */
+                uint8_t *newStart;
+                newStart = (uint8_t *)uprv_realloc(primStart, 2*sortKeySize);
+                if(primStart == NULL) {
+                  *status = U_MEMORY_ALLOCATION_ERROR;
+                  finished = TRUE;
+                  break;
                 }
+                primaries=newStart+(primaries-primStart);
+                resultLength = 2*sortKeySize;
+                primStart = *result = newStart;
+              }
             }
         }
         if(finished) {
@@ -580,14 +715,18 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
       if(compareSec) {
         *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t secsize = secondaries-secStart;
-        if(ucol_getAttributeNew(coll, UCOL_FRENCH_COLLATION, status) == UCOL_ON) { // do the reverse copy
-            for(i = 0; i<secsize; i++) {
-                *(primaries++) = *(secondaries-i-1);
-            }
-          } else { 
-              uprv_memcpy(primaries, secStart, secsize); 
-              primaries += secsize;
+        if(isFrenchSec) { /* do the reverse copy */
+          /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
+          if(frenchStartPtr != NULL) { 
+            uprv_ucol_reverse_buffer(frenchStartPtr, frenchEndPtr);
+          }           
+          for(i = 0; i<secsize; i++) {
+              *(primaries++) = *(secondaries-i-1);
           }
+        } else { 
+          uprv_memcpy(primaries, secStart, secsize); 
+          primaries += secsize;
+        }
 
       }
 
