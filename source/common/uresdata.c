@@ -83,8 +83,6 @@ _res_getTableKey(const Resource *pRoot, const Resource res, int32_t indexS) {
 
 static const char *
 _res_getTable32Key(const Resource *pRoot, const Resource res, int32_t indexS) {
-    const int32_t offset = RES_GET_OFFSET(res);
-    const Resource *temp = pRoot+res;
     const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
     if((uint32_t)indexS<(uint32_t)*p) {
         return RES_GET_KEY(pRoot, p[indexS+1]);
@@ -143,11 +141,10 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key,
 
     /* did we really find it? */
     if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
-        Resource res = RES_BOGUS;
         *index=start;
         *realKey=RES_GET_KEY(pRoot, p[start]);
         limit=*(p-1);   /* itemCount */
-        res =  ((const Resource *)(p+limit+(~limit&1)))[start];
+        return ((const Resource *)(p+limit+(~limit&1)))[start];
     } else {
         *index=URESDATA_ITEM_NOT_FOUND;
         return RES_BOGUS;   /* not found */
@@ -248,7 +245,6 @@ res_unload(ResourceData *pResData) {
 U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
     if(res!=RES_BOGUS && RES_GET_TYPE(res)==URES_STRING) {
-        int32_t offset = RES_GET_OFFSET(res);
         const int32_t *p=(const int32_t *)RES_GET_POINTER(pResData->pRoot, res);
         if (pLength) {
             *pLength=*p;
