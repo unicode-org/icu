@@ -30,6 +30,17 @@ class DictionaryBasedBreakIteratorTables;
  * repeatedly compared against a list of known words (i.e., the dictionary)
  * to divide them up into words.
  *
+ * <p>Applications do not normally need to include this header.</p>
+ *
+ * <p>This class will probably be deprecated in a future release of ICU, and replaced
+ *  with a more flexible and capable dictionary based break iterator.  This change
+ *  should be invisible to applications, because creation and use of instances of
+ *  DictionaryBasedBreakIterator is through the factories and abstract
+ *  API on class BreakIterator, which will remain stable.</p>
+ *
+ * <p>This class is not intended to be subclassed.</p>
+ *
+ *
  * DictionaryBasedBreakIterator uses the same rule language as RuleBasedBreakIterator,
  * but adds one more special substitution name: &lt;dictionary&gt;.  This substitution
  * name is used to identify characters in words in the dictionary.  The idea is that
@@ -100,6 +111,7 @@ public:
 
     /**
      * Destructor
+     * @stable
      */
     virtual ~DictionaryBasedBreakIterator();
 
@@ -107,6 +119,7 @@ public:
      * Default constructor.  Creates an "empty" break iterator.
      * Such an iterator can subsequently be assigned to.
      * @return the newly created DictionaryBaseBreakIterator.
+     * @stable
      */
      DictionaryBasedBreakIterator();
 
@@ -114,6 +127,7 @@ public:
       * Copy constructor.
       * @param other The DictionaryBasedBreakIterator to be copied.
       * @return the newly created DictionaryBasedBreakIterator.
+      * @stable
       */
      DictionaryBasedBreakIterator(const DictionaryBasedBreakIterator &other);
 
@@ -121,6 +135,7 @@ public:
      * Assignment operator. 
      * @param that The object to be copied.
      * @return the newly set DictionaryBasedBreakIterator.
+     * @stable
      */
     DictionaryBasedBreakIterator& operator=(const DictionaryBasedBreakIterator& that);
 
@@ -128,6 +143,7 @@ public:
      * Returns a newly-constructed RuleBasedBreakIterator with the same
      * behavior, and iterating over the same text, as this one.
      * @return Returns a newly-constructed RuleBasedBreakIterator.
+     * @stable
      */
     virtual BreakIterator* clone(void) const;
 
@@ -137,6 +153,7 @@ public:
     /**
      * Advances the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
+     * @stable
      */
     virtual int32_t previous(void);
 
@@ -145,6 +162,7 @@ public:
      * the specified position.
      * @offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
+     * @stable
      */
     virtual int32_t following(int32_t offset);
 
@@ -153,6 +171,7 @@ public:
      * specified position.
      * @offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
+     * @stable
      */
     virtual int32_t preceding(int32_t offset);
 
@@ -165,6 +184,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const;
 
@@ -177,6 +197,7 @@ public:
      *          Derived::getStaticClassID()) ...
      *
      * @return          The class ID for all objects of this class.
+     * @stable
      */
     static UClassID getStaticClassID(void);
 
@@ -190,18 +211,21 @@ protected:
      * and advances through the text character by character until we reach the end
      * of the text or the state machine transitions to state 0.  We update our return
      * value every time the state machine passes through a possible end state.
+     * @internal
      */
     virtual int32_t handleNext(void);
 
     /**
      * removes the cache of break positions (usually in response to a change in
      * position of some sort)
+     * @internal
      */
     virtual void reset(void);
 
-    //
-    //  init    Initialize a dbbi.  Common routine for use by constructors.
-    //
+    /**
+     *  init    Initialize a dbbi.  Common routine for use by constructors.
+     *  @internal
+     */
     void init();
 
     /**
@@ -216,6 +240,7 @@ protected:
      *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were 
      *  necessary.
      * @return pointer to the new clone
+     * @internal
      */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,

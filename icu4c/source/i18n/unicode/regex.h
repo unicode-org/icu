@@ -274,9 +274,10 @@ public:
     
     
     
-    //
-    //   dump   Debug function, displays the compiled form of a pattern.
-    //
+    /**
+     *   dump   Debug function, displays the compiled form of a pattern.
+     *   @internal
+     */
     void dump() const;
 
     /**

@@ -36,8 +36,15 @@ class  RBBIDataWrapper;
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
  * <p>Instances of this class are most commonly created by the factory methods of
- *  BreakIterator::createWordInstance(), BreakIterator::createLineInstance(), etc. </p>
+ *  BreakIterator::createWordInstance(), BreakIterator::createLineInstance(), etc.,
+ *  and then used via the abstract API in class BreakIterator</p>
+ *
  * <p>See the ICU User Guide for information on Break Iterator Rules.</p>
+ *
+ * <p>This class is not intended to be subclassed.  (Class DictionaryBasedBreakIterator
+ *    is a subclass, but that relationship is effectively internal to the ICU 
+ *    implementation.  The subclassing interface to RulesBasedBreakIterator is
+ *    not part of the ICU API, and may not remain stable.</p>
  *
  */
 class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
@@ -45,22 +52,27 @@ class U_COMMON_API RuleBasedBreakIterator : public BreakIterator {
 protected:
     /**
      * The character iterator through which this BreakIterator accesses the text
+     * @internal
      */
     CharacterIterator*  fText;
 
     /**
      * The rule data for this BreakIterator instance
+     * @internal
      */
     RBBIDataWrapper    *fData;
     UTrie              *fCharMappings;
 
-    /** Rule {tag} value for the most recent match. */
+    /** Rule {tag} value for the most recent match. 
+     *  @internal
+    */
     int32_t             fLastBreakTag;
 
     /**
      * Rule tag value valid flag.
      * Some iterator operations don't intrinsically set the correct tag value.
      * This flag lets us lazily compute the value if we are ever asked for it.
+     * @internal
      */
     UBool               fLastBreakTagValid;
 
@@ -69,12 +81,14 @@ protected:
      *   flag set.  Normal RBBI iterators don't use it, although the code
      *   for updating it is live.  Dictionary Based break iterators (a subclass
      *   of us) access this field directly.
+     * @internal
      */
     uint32_t           fDictionaryCharCount;
 
-    //
-    // Debugging flag.  Trace operation of state machine when true.
-    //
+    /**
+     * Debugging flag.  Trace operation of state machine when true.
+     * @internal
+     */
     static UBool        fTrace;
 
 
@@ -94,6 +108,7 @@ protected:
      * This constructor uses the udata interface to create a BreakIterator
      * whose internal tables live in a memory-mapped file.  "image" is a pointer
      * to the beginning of that file.
+     * @internal
      */
     RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
 
@@ -105,6 +120,7 @@ protected:
      *
      *             The break iterator adopts the memory, and will
      *             free it when done.
+     * @internal
      */
     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
 
@@ -125,6 +141,7 @@ public:
      * Copy constructor.  Will produce a break iterator with the same behavior,
      * and which iterates over the same text, as the one passed in.
      * @param that The RuleBasedBreakIterator passed to be copied
+     * @stable
      */
     RuleBasedBreakIterator(const RuleBasedBreakIterator& that);
 
@@ -328,6 +345,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
+     * @stable
      */
     inline virtual UClassID getDynamicClassID(void) const;
 
@@ -340,6 +358,7 @@ public:
      *          Derived::getStaticClassID()) ...
      *
      * @return          The class ID for all objects of this class.
+     * @stable
      */
     inline static UClassID getStaticClassID(void);
 
@@ -402,6 +421,7 @@ protected:
      * and advances through the text character by character until we reach the end
      * of the text or the state machine transitions to state 0.  We update our return
      * value every time the state machine passes through a possible end state.
+     * @internal
      */
     virtual int32_t handleNext(void);
 
@@ -411,6 +431,7 @@ protected:
      * The various calling methods then iterate forward from this safe position to
      * the appropriate position to return.  (For more information, see the description
      * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
+     * @internal
      */
     virtual int32_t handlePrevious(void);
 
@@ -418,6 +439,7 @@ protected:
      * Dumps caches and performs other actions associated with a complete change
      * in text or iteration position.  This function is a no-op in RuleBasedBreakIterator,
      * but subclasses can and do override it.
+     * @internal
      */
     virtual void reset(void);
 
@@ -427,12 +449,14 @@ protected:
       * This function is intended for use by dictionary based break iterators.
       * @return true if the category lookup for this char
       * indicates that it is in the set of dictionary lookup chars.
+      * @internal
       */
     virtual UBool isDictionaryChar(UChar32);
 
     /**
       * Common initialization function, used by constructors and bufferClone.
       *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
+      * @internal
       */
     void init();
 
