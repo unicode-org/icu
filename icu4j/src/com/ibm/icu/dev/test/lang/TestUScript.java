@@ -20,6 +20,9 @@ public class TestUScript extends TestFmwk{
     {
     }
     
+    public static void main(String[] args) throws Exception {
+        new TestUScript().run(args);
+    }
     public void TestLocaleGetCode(){
         final Locale[] testNames={
         /* test locale */
@@ -85,7 +88,7 @@ public class TestUScript extends TestFmwk{
                 
             /* test names */
             "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
-            "GOTHIC",  "GREEK",  "GUJARATI", 
+            "GOTHIC",  "GREEK",  "GUJARATI", "COMMON", "INHERITED", 
             /* test lower case names */
             "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
             "oriya",     "runic",     "sinhala", "syriac","tamil",     
@@ -106,7 +109,7 @@ public class TestUScript extends TestFmwk{
             UScript.MALAYALAM, UScript.MONGOLIAN,
             /* names should return */
             UScript.CYRILLIC, UScript.DESERET, UScript.DEVANAGARI, UScript.ETHIOPIC, UScript.GEORGIAN,
-            UScript.GOTHIC, UScript.GREEK, UScript.GUJARATI,
+            UScript.GOTHIC, UScript.GREEK, UScript.GUJARATI, UScript.COMMON, UScript.INHERITED,
             /* lower case names should return */    
             UScript.MALAYALAM, UScript.MONGOLIAN, UScript.MYANMAR, UScript.OGHAM, UScript.OLD_ITALIC,
             UScript.ORIYA, UScript.RUNIC, UScript.SINHALA, UScript.SYRIAC, UScript.TAMIL,
