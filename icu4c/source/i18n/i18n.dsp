@@ -933,6 +933,14 @@ InputPath=.\unicode\decimfmt.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\digitlst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\digitlst.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\dtfmtsym.cpp
 # End Source File
 # Begin Source File

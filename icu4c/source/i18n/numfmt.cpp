@@ -154,11 +154,25 @@ NumberFormat::format(const Formattable& obj,
     else if (obj.getType() == Formattable::kLong) {
         return format(obj.getLong(), appendTo, pos);
     }
+    else if (obj.getType() == Formattable::kInt64) {
+       return format(obj.getInt64(), appendTo, pos);
+    }
     // can't try to format a non-numeric object
     else {
         status = U_INVALID_FORMAT_ERROR;
         return appendTo;
     }
+}
+
+// -------------------------------------
+
+UnicodeString& 
+NumberFormat::format(int64_t number,
+                     UnicodeString& appendTo,
+                     FieldPosition& pos) const
+{
+	// default so we don't introduce a new abstract method
+	return format((int32_t)number, appendTo, pos);
 }
 
 // -------------------------------------
@@ -188,6 +202,16 @@ NumberFormat::format(double number, UnicodeString& appendTo) const
 
 UnicodeString&
 NumberFormat::format(int32_t number, UnicodeString& appendTo) const
+{
+    FieldPosition pos(0);
+    return format(number, appendTo, pos);
+}
+
+// -------------------------------------
+// Formats a long number and save the result in a string.
+
+UnicodeString&
+NumberFormat::format(int64_t number, UnicodeString& appendTo) const
 {
     FieldPosition pos(0);
     return format(number, appendTo, pos);

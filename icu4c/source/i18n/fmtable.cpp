@@ -35,7 +35,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
 Formattable::Formattable()
     :   UObject(), fType(kLong)
 {
-    fValue.fLong = 0;
+    fValue.fInt64 = 0;
 }
 
 // -------------------------------------
@@ -62,7 +62,16 @@ Formattable::Formattable(double value)
 Formattable::Formattable(int32_t value)
     :   UObject(), fType(kLong)
 {
-    fValue.fLong = value;
+    fValue.fInt64 = value;
+}
+
+// -------------------------------------
+// Creates a formattable object with a long value.
+
+Formattable::Formattable(int64_t value)
+    :   UObject(), fType(kInt64)
+{
+    fValue.fInt64 = value;
 }
 
 // -------------------------------------
@@ -141,8 +150,9 @@ Formattable::operator=(const Formattable& source)
             fValue.fDouble = source.fValue.fDouble;
             break;
         case kLong:
+		case kInt64:
             // Sets the long value.
-            fValue.fLong = source.fValue.fLong;
+            fValue.fInt64 = source.fValue.fInt64;
             break;
         case kDate:
             // Sets the Date value.
@@ -171,7 +181,8 @@ Formattable::operator==(const Formattable& that) const
     case kDouble:
         return fValue.fDouble == that.fValue.fDouble;
     case kLong:
-        return fValue.fLong == that.fValue.fLong;
+	case kInt64:
+        return fValue.fInt64 == that.fValue.fInt64;
     case kString:
         return *(fValue.fString) == *(that.fValue.fString);
     case kArray:
@@ -239,7 +250,18 @@ Formattable::setLong(int32_t l)
 {
     dispose();
     fType = kLong;
-    fValue.fLong = l;
+    fValue.fInt64 = l;
+}
+
+// -------------------------------------
+// Sets the value to an int64 value ll.
+
+void
+Formattable::setInt64(int64_t ll)
+{
+    dispose();
+    fType = kInt64;
+    fValue.fInt64 = ll;
 }
 
 // -------------------------------------

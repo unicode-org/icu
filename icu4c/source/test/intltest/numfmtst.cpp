@@ -63,6 +63,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
 		CASE(22,TestScientific2);
 		CASE(23,TestScientificGrouping);
+		CASE(24,TestInt64);
 
         default: name = ""; break;
     }
@@ -99,9 +100,6 @@ NumberFormatTest::TestAPI(void)
 
     delete test;  
   }
-
-
-
 }
 
 // Test various patterns
@@ -357,7 +355,7 @@ void
 NumberFormatTest::TestScientificGrouping() {
 	// jb 2552
     UErrorCode status = U_ZERO_ERROR;
-	DecimalFormat fmt("###.##E0",status);
+	DecimalFormat fmt("##0.00E0",status);
 	if (U_SUCCESS(status)) {
 		expect(fmt, .01234, "12.3E-3");
 		expect(fmt, .1234, "123E-3");
@@ -365,6 +363,107 @@ NumberFormatTest::TestScientificGrouping() {
 		expect(fmt, 12.34, "12.3E0");
 		expect(fmt, 123.4, "123E0");
 		expect(fmt, 1234., "1.23E3");
+	}
+}
+
+static void setFromString(DigitList& dl, const char* str) {
+	char c;
+	UBool decimalSet = FALSE;
+	dl.clear();
+	while (c = *str++) {
+		if (c == '-') {
+			dl.fIsPositive = FALSE;
+		} else if (c == '+') {
+			dl.fIsPositive = TRUE;
+		} else if (c == '.') {
+			dl.fDecimalAt = dl.fCount;
+			decimalSet = TRUE;
+		} else {
+			dl.append(c);
+		}
+	}
+	if (!decimalSet) {
+		dl.fDecimalAt = dl.fCount;
+	}
+}
+
+void
+NumberFormatTest::TestInt64() {
+    UErrorCode status = U_ZERO_ERROR;
+	DecimalFormat fmt("#.#E0",status);
+	fmt.setMaximumFractionDigits(20);
+	if (U_SUCCESS(status)) {
+		expect(fmt, (int64_t)0, "0E0");
+		expect(fmt, (int64_t)-1, "-1E0");
+		expect(fmt, (int64_t)1, "1E0");
+		expect(fmt, (int64_t)2147483647, "2.147483647E9");
+		expect(fmt, (int64_t)-2147483647-1, "-2.147483648E9");
+		expect(fmt, (int64_t)9223372036854775807, "9.223372036854775807E18");
+		expect(fmt, (int64_t)-9223372036854775807-1, "-9.223372036854775808E18");
+	}
+
+	// also test digitlist
+	int64_t int64max = 9223372036854775807;
+	int64_t int64min = -9223372036854775807 - 1;
+	const char* int64maxstr = "9223372036854775807";
+	const char* int64minstr = "-9223372036854775808";
+	UnicodeString fail("fail: ");
+
+	// test max int64 value
+	DigitList dl;
+	setFromString(dl, int64maxstr);
+	{
+		if (!dl.fitsIntoInt64(FALSE)) {
+			errln(fail + int64maxstr + " didn't fit");
+		}
+		int64_t int64Value = dl.getInt64();
+		if (int64Value != int64max) {
+			errln(fail + int64maxstr);
+		}
+		dl.set(int64Value);
+		int64Value = dl.getInt64();
+		if (int64Value != int64max) {
+			errln(fail + int64maxstr);
+		}
+	}
+	// test negative of max int64 value (1 shy of min int64 value)
+	dl.fIsPositive = FALSE;
+	{
+		if (!dl.fitsIntoInt64(FALSE)) {
+			errln(fail + "-" + int64maxstr + " didn't fit");
+		}
+		int64_t int64Value = dl.getInt64();
+		if (int64Value != -int64max) {
+			errln(fail + "-" + int64maxstr);
+		}
+		dl.set(int64Value);
+		int64Value = dl.getInt64();
+		if (int64Value != -int64max) {
+			errln(fail + "-" + int64maxstr);
+		}
+	}
+	// test min int64 value
+	setFromString(dl, int64minstr);
+	{
+		if (!dl.fitsIntoInt64(FALSE)) {
+			errln(fail + "-" + int64minstr + " didn't fit");
+		}
+		int64_t int64Value = dl.getInt64();
+		if (int64Value != int64min) {
+			errln(fail + int64minstr);
+		}
+		dl.set(int64Value);
+		int64Value = dl.getInt64();
+		if (int64Value != -int64max) {
+			errln(fail + "-" + int64maxstr);
+		}
+	}
+	// test negative of min int 64 value (1 more than max int64 value)
+	dl.fIsPositive = TRUE; // won't fit
+	{
+		if (dl.fitsIntoInt64(FALSE)) {
+			errln(fail + "-(" + int64minstr + ") didn't fit");
+		}
 	}
 }
 
