@@ -99,7 +99,7 @@ void umtx_lock( UMTX *mutex )
 #elif defined(POSIX)
 
 #  ifdef POSIX_DEBUG_REENTRANCY
-    if(gInMutex == TRUE) // in the mutex -- possible deadlock
+    if(gInMutex == TRUE) /* in the mutex -- possible deadlock*/
       if(pthread_equal(gLastThread,pthread_self()))
         WeAreDeadlocked();
 #  endif
