@@ -773,8 +773,9 @@
       <li>Use Microsoft Visual C++ 6.0 to open the
       "$Root\source\allinone\allinone.dsw" workspace (This workspace includes
       all the International Components for Unicode libraries, necessary ICU
-      building tools, and the intltest and cintltest test suite
-      projects).</li>
+      building tools, and the intltest and cintltest test suite projects).
+      Please see the note below if you want to build from the command line
+      instead.</li>
 
       <li>Set the active Project to the "all" project. To do this: Choose
       "Project" menu, and select "Set active project". In the submenu, select
@@ -806,6 +807,12 @@
 
       <li>You are now able to develop applications with ICU.</li>
     </ol>
+
+    <p><a name="HowToBuildWindowsCommandLine"><strong>Using MSDEV At The
+    Command Line Note:</strong></a> You can build ICU from the command line.
+    Assuming that you have properly installed Microsoft Visual C++ to support
+    command line execution, you can run the following command, 'msdev
+    <i>$Root</i>\icu\source\allinone\allinone.dsw /MAKE "ALL"'.</p>
 
     <p><a name="HowToBuildWindowsConfig"><strong>Setting Active Configuration
     Note:</strong></a> To set the active configuration, two different
