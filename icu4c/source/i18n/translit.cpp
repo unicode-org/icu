@@ -91,6 +91,10 @@ static UMTX registryMutex = 0;
  */
 static TransliteratorRegistry* registry = 0;
 
+// Macro to check/initialize the registry. ONLY USE WITHIN
+// MUTEX. Avoids function call when registry is initialized.
+#define HAVE_REGISTRY (registry!=0 || initializeRegistry())
+
 // Empty string
 static const UChar EMPTY[] = {0}; //""
 
@@ -948,7 +952,7 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
     Transliterator* t = 0;
     
     umtx_lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         t = registry->get(id, alias, pe, ec);
     }
     umtx_unlock(&registryMutex);
@@ -1114,7 +1118,7 @@ void Transliterator::registerFactory(const UnicodeString& id,
                                      Transliterator::Factory factory,
                                      Transliterator::Token context) {
     Mutex lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         _registerFactory(id, factory, context);
     }
 }
@@ -1150,7 +1154,7 @@ void Transliterator::_registerSpecialInverse(const UnicodeString& target,
  */
 void Transliterator::registerInstance(Transliterator* adoptedPrototype) {
     Mutex lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         _registerInstance(adoptedPrototype);
     }
 }
@@ -1169,7 +1173,7 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype) {
  */
 void Transliterator::unregister(const UnicodeString& ID) {
     Mutex lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         registry->remove(ID);
     }
 }
@@ -1181,7 +1185,7 @@ void Transliterator::unregister(const UnicodeString& ID) {
  */
 int32_t Transliterator::countAvailableIDs(void) {
     Mutex lock(&registryMutex);
-    return initializeRegistry() ? registry->countAvailableIDs() : 0;
+    return HAVE_REGISTRY ? registry->countAvailableIDs() : 0;
 }
 
 /**
@@ -1192,7 +1196,7 @@ int32_t Transliterator::countAvailableIDs(void) {
 const UnicodeString& Transliterator::getAvailableID(int32_t index) {
     const UnicodeString* result = NULL;
     umtx_lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         result = &registry->getAvailableID(index);
     }
     umtx_unlock(&registryMutex);
@@ -1202,13 +1206,13 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
 
 int32_t Transliterator::countAvailableSources(void) {
     Mutex lock(&registryMutex);
-    return initializeRegistry() ? _countAvailableSources() : 0;
+    return HAVE_REGISTRY ? _countAvailableSources() : 0;
 }
 
 UnicodeString& Transliterator::getAvailableSource(int32_t index,
                                                   UnicodeString& result) {
     Mutex lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         _getAvailableSource(index, result);
     }
     return result;
@@ -1216,14 +1220,14 @@ UnicodeString& Transliterator::getAvailableSource(int32_t index,
 
 int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
     Mutex lock(&registryMutex);
-    return initializeRegistry() ? _countAvailableTargets(source) : 0;
+    return HAVE_REGISTRY ? _countAvailableTargets(source) : 0;
 }
 
 UnicodeString& Transliterator::getAvailableTarget(int32_t index,
                                                   const UnicodeString& source,
                                                   UnicodeString& result) {
     Mutex lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         _getAvailableTarget(index, source, result);
     }
     return result;
@@ -1232,7 +1236,7 @@ UnicodeString& Transliterator::getAvailableTarget(int32_t index,
 int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
                                                const UnicodeString& target) {
     Mutex lock(&registryMutex);
-    return initializeRegistry() ? _countAvailableVariants(source, target) : 0;
+    return HAVE_REGISTRY ? _countAvailableVariants(source, target) : 0;
 }
 
 UnicodeString& Transliterator::getAvailableVariant(int32_t index,
@@ -1240,7 +1244,7 @@ UnicodeString& Transliterator::getAvailableVariant(int32_t index,
                                                    const UnicodeString& target,
                                                    UnicodeString& result) {
     Mutex lock(&registryMutex);
-    if (initializeRegistry()) {
+    if (HAVE_REGISTRY) {
         _getAvailableVariant(index, source, target, result);
     }
     return result;
