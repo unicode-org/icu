@@ -1,5 +1,5 @@
-Generate: 
-DeltaVersion: 8
+Generate: Derived.*
+DeltaVersion: 9
 CopyrightYear: 2005
 
 File: uax29/GraphemeBreakProperty

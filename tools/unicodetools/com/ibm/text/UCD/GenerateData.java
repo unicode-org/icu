@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2004/03/11 19:03:17 $
-* $Revision: 1.35 $
+* $Date: 2004/12/15 02:39:25 $
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -793,7 +793,7 @@ public class GenerateData implements UCD_Types {
         log.println("@Part1 # Character by character test");
         log.println("# All characters not explicitly occurring in c1 of Part 1 have identical NFC, D, KC, KD forms.");
         log.println("#");
-
+        
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
             Utility.dot(ch);
             if (!Default.ucd().isAssigned(ch)) continue;
@@ -846,6 +846,42 @@ public class GenerateData implements UCD_Types {
             writeLine("a" + sample + UTF32.valueOf32(ch) + "b", log, false);
             writeLine("a" + UTF32.valueOf32(ch) + sample + "b", log, false);
         }
+        
+        System.out.println("Writing Part 3");
+        log.println("#");
+        log.println("@Part3 # PRI #29 Test");
+        log.println("#");
+        
+        Set prilist = new TreeSet();
+        
+        for (int ch = 0; ch < 0x10FFFF; ++ch) {
+            Utility.dot(ch);
+            if (!Default.ucd().isAssigned(ch)) continue;
+            if (Default.ucd().isPUA(ch)) continue;
+            if (0xAC00 <= ch && ch <= 0xD7FF) { // skip most
+            	if (((ch - 0xAC00) % 91) != 0) continue;
+            }
+           // also gather data for pri29 test
+            if (ch == 0x09CB) {
+            	System.out.println("debug");
+            }
+            if (Default.ucd().getDecompositionType(ch) != CANONICAL) continue;
+            //if (!Default.nfc().isNormalized(ch)) continue;
+            String s = Default.ucd().getDecompositionMapping(ch);
+            if (UTF16.hasMoreCodePointsThan(s, 2)) continue;
+            if (!UTF16.hasMoreCodePointsThan(s, 1)) continue;
+            int c1 = UTF16.charAt(s, 0);
+            int c2 = UTF16.charAt(s, UTF16.getCharCount(c1));
+            if (Default.ucd().getCombiningClass(c1) != 0) continue;
+            if (Default.ucd().getCombiningClass(c2) != 0) continue;
+            prilist.add(UTF16.valueOf(c1) + '\u0334' + UTF16.valueOf(c2));
+        }
+        Utility.fixDot();
+        
+        for (Iterator it = prilist.iterator(); it.hasNext();) {
+            writeLine((String)it.next(),log, false);
+        }
+
         Utility.fixDot();
         log.println("#");
         log.println("# END OF FILE");
