@@ -14,13 +14,6 @@ et {
             " W\u0302< u\u0308 <<< U\u0308& Y < \u01B6 <<< \u01B5"
         }
     }
-
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     Countries {
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -388,9 +381,9 @@ et {
             "GMT",
         }
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00f5 \u00e4 \u00f6 \u00fc \u0161 \u017e]" }
 
     // Currency display names

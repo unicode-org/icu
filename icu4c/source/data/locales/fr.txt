@@ -10,13 +10,13 @@ fr {
     CollationElements { 
         Version { "1.0" }
         Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
-    }
-    Variants{
-         Fallback{ "en"}
-    }  
-    Keys{
-        Fallback{ "en"}
     }    
+    Variants{
+	Fallback{ "en"}
+    }
+    Types{
+	Fallback{ "en" }
+    }
     Countries { 
         Fallback{ "en"}
         AD { "Andorre" }
@@ -445,9 +445,9 @@ fr {
             "GMT",
         }
     }
-//    LocaleScript{  
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00e9 \u00e8 \u00f9 \u00e7 \u00e0 \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00e6 \u0153 \u00eb \u00ef \u00ff]" }
 
 // http://www.elections.ca/gen_info/backgrounders/ec90815_f.html

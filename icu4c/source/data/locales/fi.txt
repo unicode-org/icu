@@ -14,13 +14,6 @@ fi {
             " << u\u0308 <<< U\u0308"
         }
     }
-
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     Countries { 
         Fallback{ "en"}
         AE { "Arabiemiirikunnat" }
@@ -306,9 +299,9 @@ fi {
         }
     }
     ExemplarCharacters { "[a-z \u00e4 \u00f6]" }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
 
     // Currency display names
     Currencies {

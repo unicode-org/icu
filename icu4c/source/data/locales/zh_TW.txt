@@ -7,7 +7,7 @@
 
 zh_TW {
     Version{ "2.0" }
-    Variants{
+    Types{
         STROKE { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
     }
     CollationElements { 

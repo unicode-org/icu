@@ -168,7 +168,7 @@ am {
         sa { "\u1233\u1295\u1235\u12AD\u122A\u1275\u129B" }
         sd { "\u1232\u1295\u12F5\u1202\u129B" }
         sg { "\u1233\u1295\u130E\u129B" }
-        sh { "\u0073\u0068"}
+        // sh { "\u0073\u0068"} // this is an error.. we need translation for this
         si { "\u1235\u1295\u1203\u120D\u129B" }
         sk { "\u1235\u120E\u126B\u12AD\u129B" }
         sl { "\u1235\u120E\u126A\u129B" }
