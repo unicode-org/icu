@@ -34,6 +34,7 @@ The following names can be supplied as the argument for platform:
     HP/UX11CC               Use HP's C++ compiler on HP-UX 11
     HP/UX11ACC              Use the Advanced C++ compiler on HP-UX 11
     LinuxRedHat             Use the GNU C++ compiler on Linux
+    CygWin                  Use the GNU C++ compiler on CygWin
     SOLARISCC               Use Sun's CC compiler on Solaris 
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
@@ -191,6 +192,8 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX 
+        ;;
+    CygWin)
         ;;
     *BSD)
         THE_OS="BSD"
