@@ -57,6 +57,8 @@ public:
     void expectCurrency(NumberFormat& nf, const Locale& locale,
                         double value, const UnicodeString& string);
 
+    void TestCurrencyPatterns(void);
+
     /**
      * Do rudimentary testing of parsing.
      */
