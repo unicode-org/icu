@@ -26,42 +26,42 @@
 class U_COMMON_API UCharCharacterIterator : public CharacterIterator {
 public:
   /**
-   * Create an iterator over the UChar array referred to by "text".
-   * The iteration range is 0 to <code>len-1</code>.
+   * Create an iterator over the UChar array referred to by "textPtr".
+   * The iteration range is 0 to <code>length-1</code>.
    * text is only aliased, not adopted (the
    * destructor will not delete it).
    * @stable
    */
-  UCharCharacterIterator(const UChar* text, int32_t len);
+  UCharCharacterIterator(const UChar* textPtr, int32_t length);
 
   /**
-   * Create an iterator over the UChar array referred to by "text".
-   * The iteration range is 0 to <code>len-1</code>.
+   * Create an iterator over the UChar array referred to by "textPtr".
+   * The iteration range is 0 to <code>length-1</code>.
    * text is only aliased, not adopted (the
    * destructor will not delete it).
    * The starting
-   * position is specified by "pos". If "pos" is outside the valid
+   * position is specified by "position". If "position" is outside the valid
    * iteration range, the behavior of this object is undefined.
    * @stable
    */
-  UCharCharacterIterator(const UChar* text, int32_t len,
-                         UTextOffset pos);
+  UCharCharacterIterator(const UChar* textPtr, int32_t length,
+                         UTextOffset position);
 
   /**
-   * Create an iterator over the UChar array referred to by "text".
+   * Create an iterator over the UChar array referred to by "textPtr".
    * The iteration range is 0 to <code>end-1</code>.
    * text is only aliased, not adopted (the
    * destructor will not delete it).
    * The starting
-   * position is specified by "pos". If begin and end do not
-   * form a valid iteration range or "pos" is outside the valid
+   * position is specified by "position". If begin and end do not
+   * form a valid iteration range or "position" is outside the valid
    * iteration range, the behavior of this object is undefined.
    * @stable
    */
-  UCharCharacterIterator(const UChar* text, int32_t len,
-                         UTextOffset begin,
-                         UTextOffset end,
-                         UTextOffset pos);
+  UCharCharacterIterator(const UChar* textPtr, int32_t length,
+                         UTextOffset textBegin,
+                         UTextOffset textEnd,
+                         UTextOffset position);
 
   /**
    * Copy constructor.  The new iterator iterates over the same range
