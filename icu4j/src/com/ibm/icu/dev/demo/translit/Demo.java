@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/07/15 23:26:27 $ 
- * $Revision: 1.22 $
+ * $Date: 2002/07/21 08:21:40 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.22 $ $Date: 2002/07/15 23:26:27 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.23 $ $Date: 2002/07/21 08:21:40 $
  */
 public class Demo extends Frame {
 
@@ -367,7 +367,9 @@ public class Demo extends Frame {
                     Menu variantMenu = new Menu(target);
                     while(variants.hasNext()) {
                         String variant = (String) variants.next();
-                        mitem = new MenuItem(variant == "" ? "<default>" : variant);
+                        String menuName = variant.length() == 0 ? "<default>" : variant;
+                        //System.out.println("<" + source + "-" + target + "/" + variant + ">, <" + menuName + ">");
+                        mitem = new MenuItem(menuName);
                         mitem.addActionListener(new TransliterationListener(source + "-" + target + "/" + variant));
                         variantMenu.add(mitem);
                     }
@@ -392,7 +394,16 @@ public class Demo extends Frame {
         }
         
         public void actionPerformed(ActionEvent e) {
+            String id = frame.translit.getID();
+            int slashPos = id.indexOf('/');
+            String variant = "";
+            if (slashPos >= 0) {
+                variant = "_" + id.substring(slashPos+1);
+                id = id.substring(0, slashPos);
+            }
+            
             FileDialog fileDialog = new FileDialog(frame, "Input File");
+            fileDialog.setFile("Test_" + id + ".txt");
             fileDialog.show();
             String fileName = fileDialog.getFile();
             String fileDirectory = fileDialog.getDirectory();
@@ -400,6 +411,9 @@ public class Demo extends Frame {
                 try {
                     File f = new File(fileDirectory, fileName);
                     if (choice == RULE_FILE) {
+                        
+                        // read stuff into buffer
+                        
                         StringBuffer buffer = new StringBuffer();
                         FileInputStream fis = new FileInputStream(f);
                         InputStreamReader isr = new InputStreamReader(fis, "UTF8");
@@ -412,12 +426,31 @@ public class Demo extends Frame {
                             buffer.append(line);
                         }
                         br.close();
-                        String id = fileName;
-                        int pos = id.lastIndexOf('.');
+                        
+                        // Transform file name into id
+                        if (fileName.startsWith("Transliterator_")) {
+                            fileName = fileName.substring("Transliterator_".length());
+                        }
+                        int pos = fileName.indexOf('_');
+                        if (pos < 0) {
+                            id = fileName;
+                        } else {
+                            id = fileName.substring(0, pos) + "-";
+                            int pos2 = fileName.indexOf('_', pos+1);
+                            if (pos2 < 0) {
+                                id += fileName.substring(pos+1);
+                            } else {
+                                id += fileName.substring(pos+1, pos2) + "/" + fileName.substring(pos2 + 1);
+                            }
+                        }                        
+                        pos = id.lastIndexOf('.');
                         if (pos >= 0) id = id.substring(0, pos);
+                        
+                        // Now set
+                        
                         frame.setTransliterator(buffer.toString(), id);
                     } else if (choice == TEST_FILE) {
-                        genTestFile(f, frame.translit);
+                        genTestFile(f, frame.translit, variant);
                     }
                 } catch (Exception e2) {
                     e2.printStackTrace();
@@ -502,7 +535,7 @@ public class Demo extends Frame {
         System.out.println("missing from [:latin:][:thai:]: " + all.removeAll(rem).toPattern(true));
     }
     
-    static void genTestFile(File sourceFile, Transliterator translit) {
+    static void genTestFile(File sourceFile, Transliterator translit, String variant) {
         try {
             
             System.out.println("Reading: " + sourceFile.getCanonicalPath());
@@ -512,6 +545,7 @@ public class Demo extends Frame {
             String targetFile = sourceFile.getCanonicalPath();
             int dotPos = targetFile.lastIndexOf('.');
             if (dotPos >= 0) targetFile = targetFile.substring(0,dotPos);
+            targetFile += variant;
             
             File outFile = new File(targetFile + ".html");
             System.out.println("Writing: " + outFile.getCanonicalPath());
@@ -520,10 +554,17 @@ public class Demo extends Frame {
                 new BufferedWriter(
                     new OutputStreamWriter(
                         new FileOutputStream(outFile), "UTF-8")));
+                        
             String direction = "";
             String id = translit.getID();
             if (id.indexOf("Arabic") >= 0 || id.indexOf("Hebrew") >= 0) {
                 direction = " direction: rtl;";
+            }
+            boolean testRoundTrip = true;
+            boolean generateSets = true;
+            if (id.startsWith("Han-") || id.startsWith("ja-")) {
+                testRoundTrip = false;
+                generateSets = false;
             }
             out.println("<head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
             out.println("<style><!--");
@@ -534,7 +575,9 @@ public class Demo extends Frame {
             out.println("body         { font-family: 'Arial Unicode MS', 'Lucida Sans Unicode', Arial, sans-serif; margin: 5 }");
             out.println("--></style>");
             out.println("<title>" + id + " Transliteration Check</title></head>");
-            out.println("<body bgcolor='#FFFFFF'><table>");
+            out.println("<body bgcolor='#FFFFFF'><p>See <a href='Test_Instructions.html'>Test_Instructions.html</a> for details.</p>");
+            out.println("<table>");
+            
             //out.println("<tr><th width='33%'>Thai</th><th width='33%'>Latin</th><th width='33%'>Thai</th></tr>");
   
             Transliterator tl = translit;
@@ -566,14 +609,11 @@ public class Demo extends Frame {
                 
                 if (line.equals("@TITLECASE@")) {
                     titleSetting = TITLEWORD;
+                    out.println("<tr><td rowSpan='2'><b>Names</b></td></tr>");
                     continue;
                 } else if (line.equals("@UPPERFILTER@")) {
                     upperfilter = true;
                     continue;
-                }
-                
-                if (upperfilter) {
-                    line = upper.transliterate(line);
                 }
                 
                 sentenceBreak.setText(line);
@@ -581,91 +621,134 @@ public class Demo extends Frame {
                 while (true) {
                     int end = sentenceBreak.next();
                     if (end == sentenceBreak.DONE) break;
-                    String sentence = line.substring(start, end);
+                    String coreSentence = line.substring(start, end);
+                    //System.out.println("Core: " + hex.transliterate(coreSentence));
                     end = start;
                     
-                    String latin;
-                    if (upperfilter) {
-                        latin = tlFilter.transliterate(sentence);
-                    } else {
-                        latin = tl.transliterate(sentence);
-                    }                       
-                    String latinShow = latin;
-                    if (titleSetting == TITLEWORD) {
-                        latinShow = title.transliterate(latin);
-                    } else {
-                        latinShow = titlecaseFirstWord(latinShow);
-                    }
-                    String reverse;
-                    if (upperfilter) {
-                        reverse = ltFilter.transliterate(latin);
-                    } else {
-                        reverse = lt.transliterate(latin);
-                    }
+                    int oldPos = 0;
+                    while (oldPos < coreSentence.length()) {
+                        // hack, because sentence doesn't seem to be working right
+                        int pos = coreSentence.indexOf(". ", oldPos);
+                        if (pos < 0) pos = coreSentence.length(); else pos = pos+2;
+                        int pos2 = coreSentence.indexOf('\u3002', oldPos);
+                        if (pos2 < 0) pos2 = coreSentence.length(); else pos2 = pos2 + 1;
+                        if (pos > pos2) pos = pos2;
+                        String sentence = coreSentence.substring(oldPos, pos).trim();
+                        //System.out.println("Sentence: " + hex.transliterate(coreSentence));
+                        oldPos = pos;
+                        if (sentence.length() == 0) continue; // skip empty lines
                     
-                    String NFCsentence = Normalizer.normalize(sentence, Normalizer.NFC);
-                    
-                    if (!reverse.equals(NFCsentence)) {
-                        int minLen = reverse.length();
-                        if (minLen > sentence.length()) minLen = sentence.length();
-                        int i;
-                        for (i = 0; i < minLen; ++i) {
-                            if (reverse.charAt(i) != sentence.charAt(i)) break;
+                        String latin;
+                        latin = tl.transliterate(saveAscii.transliterate(sentence));
+
+                        String latinShow = latin;
+                        if (titleSetting == TITLEWORD) {
+                            latinShow = title.transliterate(latin);
+                        } else {
+                            latinShow = titlecaseFirstWord(latinShow);
                         }
-                        reverse = reverse.substring(0,i) + "<span class='d'>" + reverse.substring(i) + "</span>";
-                        sentence = sentence.substring(0,i) + "<span class='d'>" + sentence.substring(i) + "</span>";
-                        out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + sentence 
-                            + "</td><td rowSpan='2'>" + latinShow
-                            + "</td></tr><tr><td class='r'>" + reverse
-                            + "</td></tr><tr><td></td></tr>");
-                    } else {
-                        out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + sentence 
-                            + "</td><td>" + latinShow
-                            + "</td></tr><tr><td></td></tr>");
+                        latinShow = restoreAscii.transliterate(latinShow);
+                        
+                        String reverse;
+                        reverse = restoreAscii.transliterate(lt.transliterate(latin));
+                        
+                        String NFCsentence = Normalizer.normalize(sentence, Normalizer.NFC);
+                        
+                        if (testRoundTrip && !reverse.equals(NFCsentence)) {
+                            int minLen = reverse.length();
+                            if (minLen > sentence.length()) minLen = sentence.length();
+                            int i;
+                            for (i = 0; i < minLen; ++i) {
+                                if (reverse.charAt(i) != sentence.charAt(i)) break;
+                            }
+                            reverse = reverse.substring(0,i) + "<span class='d'>" + reverse.substring(i) + "</span>";
+                            sentence = sentence.substring(0,i) + "<span class='d'>" + sentence.substring(i) + "</span>";
+                            out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + sentence 
+                                + "</td><td rowSpan='2'>" + latinShow
+                                + "</td></tr><tr><td class='r'>" + reverse
+                                + "</td></tr><tr><td></td></tr>");
+                        } else {
+                            out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + sentence 
+                                + "</td><td>" + latinShow
+                                + "</td></tr><tr><td></td></tr>");
+                        }
+                        first = false;
                     }
-                    first = false;
                 }
             }
-            int dashPos = id.indexOf('-');
-            int slashPos = id.indexOf('/');
-            if (slashPos < 0) slashPos = id.length();
-            UnicodeSet sourceSuper = null;
-            try {
-                sourceSuper = new UnicodeSet("[:" + id.substring(0,dashPos) + ":]");
-            } catch (Exception e) {}
-            
-            UnicodeSet targetSuper = null;
-            try {
-                targetSuper = new UnicodeSet("[:" + id.substring(dashPos+1, slashPos) + ":]");
-            } catch (Exception e) {}
-            
-            out.println("</table><ul>");
-            out.println("<p><b>NFD</b></p>");
-            out.println("<li>Source Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getSourceSet(), Normalizer.NFD, true), sourceSuper) + "</li></ul></li>");
-            out.println("<li>Reverse Target Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getTargetSet(), Normalizer.NFD, true), sourceSuper) + "</li></ul></li>");
-            out.println("<li>Target Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getTargetSet(), Normalizer.NFD, true), targetSuper) + "</li></ul></li>");
-            out.println("<li>Reverse Source Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getSourceSet(), Normalizer.NFD, true), targetSuper) + "</li></ul></li>");
-            out.println("<p><b>NFKD</b></p>");
-            out.println("<li>Source Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getSourceSet(), Normalizer.NFKD, true), sourceSuper) + "</li></ul></li>");
-            out.println("<li>Reverse Target Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getTargetSet(), Normalizer.NFKD, true), sourceSuper) + "</li></ul></li>");
-            out.println("<li>Target Set:<ul><li>" + toPattern(closeUnicodeSet(translit.getTargetSet(), Normalizer.NFKD, true), targetSuper) + "</li></ul></li>");
-            out.println("<li>Reverse Source Set:<ul><li>" + toPattern(closeUnicodeSet(lt.getSourceSet(), Normalizer.NFKD, true), targetSuper) + "</li></ul></li>");
-            out.println("</ul></body>");
+            out.println("</table></body>");
             out.close();
+            
+            // Now write the source/target sets
+            if (generateSets) {
+                outFile = new File(targetFile + "_Sets.html");
+                System.out.println("Writing: " + outFile.getCanonicalPath());
+                
+                out = new PrintWriter(
+                    new BufferedWriter(
+                        new OutputStreamWriter(
+                            new FileOutputStream(outFile), "UTF-8")));
+                out.println("<head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+                out.println("<style><!--");
+                out.println("body         { font-family: 'Arial Unicode MS', 'Lucida Sans Unicode', Arial, sans-serif; margin: 5 }");
+                out.println("--></style>");
+                out.println("<title>" + id + " Transliteration Sets</title></head>");
+                out.println("<body bgcolor='#FFFFFF'>");
+                
+                int dashPos = id.indexOf('-');
+                int slashPos = id.indexOf('/');
+                if (slashPos < 0) slashPos = id.length();
+                UnicodeSet sourceSuper = null;
+                try {
+                    String temp = id.substring(0,dashPos);
+                    if (temp.equals("ja")) sourceSuper = new UnicodeSet("[[:Han:][:hiragana:][:katakana:]]");
+                    else sourceSuper = new UnicodeSet("[:" + temp + ":]");
+                } catch (Exception e) {}
+                
+                UnicodeSet targetSuper = null;
+                try {
+                    targetSuper = new UnicodeSet("[:" + id.substring(dashPos+1, slashPos) + ":]");
+                } catch (Exception e) {}
+                
+                int nfdStyle = CLOSE_CASE | CLOSE_FLATTEN | CLOSE_CANONICAL;
+                int nfkdStyle = nfdStyle | CLOSE_COMPATIBILITY;
+                out.println("<ul>");
+                out.println("<p><b>None</b></p>");
+                showSets(out, translit, lt, null, null, 0);
+                out.println("<p><b>NFD</b></p>");
+                showSets(out, translit, lt, sourceSuper, targetSuper, nfdStyle);
+                out.println("<p><b>NFKD</b></p>");
+                showSets(out, translit, lt, sourceSuper, targetSuper, nfkdStyle);
+                out.println("</ul></body>");
+                out.close();
+            }
             System.out.println("Done Writing");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
+    static void showSets(PrintWriter out, Transliterator translit, Transliterator inverse,
+      UnicodeSet sourceSuper, UnicodeSet targetSuper, int options) {
+        out.println("<li>Source Set:<ul><li>" +         toPattern(closeUnicodeSet(translit.getSourceSet(), options), sourceSuper) + "</li></ul></li>");
+        out.println("<li>Reverse Target Set:<ul><li>" + toPattern(closeUnicodeSet(inverse.getTargetSet(),  options), sourceSuper) + "</li></ul></li>");
+        out.println("<li>Target Set:<ul><li>" +         toPattern(closeUnicodeSet(translit.getTargetSet(), options), targetSuper) + "</li></ul></li>");
+        out.println("<li>Reverse Source Set:<ul><li>" + toPattern(closeUnicodeSet(inverse.getSourceSet(),  options), targetSuper) + "</li></ul></li>");
+    }
+        
+    static final int CLOSE_CASE = 1, CLOSE_FLATTEN = 2, CLOSE_CANONICAL = 4, CLOSE_COMPATIBILITY = 8;
     
-    static UnicodeSet closeUnicodeSet(UnicodeSet source, Normalizer.Mode mode, boolean caseToo) {
+    static UnicodeSet closeUnicodeSet(UnicodeSet source, int options) {
+        if (options == 0) return source;
+        
         UnicodeSetIterator it = new UnicodeSetIterator(source);
         UnicodeSet additions = new UnicodeSet(); // to avoid messing up iterator
+        UnicodeSet removals = new UnicodeSet(); // to avoid messing up iterator
+        String base;
         int cp;
         
-        // First add all case equivalents
-        if (caseToo) {
+        // Add all case equivalents
+        if ((options & CLOSE_CASE) != 0) {
             while (it.next()) {
                 cp = it.codepoint;
                 if (cp == it.IS_STRING) continue;
@@ -676,33 +759,68 @@ public class Demo extends Frame {
                 }
             }
             source.addAll(additions);
-            additions.clear();
         }
        
-        // Now add all decompositions of characters in source
-        it.reset(source);
-        while (it.next()) {
-            cp = it.codepoint;
-            if (cp == it.IS_STRING) continue;
-            if (Normalizer.isNormalized(cp, mode)) continue;
-            String decomp = Normalizer.normalize(cp, mode);
-            additions.add(decomp);
+        // Add the canonical closure of all strings and characters in source
+        if ((options & CLOSE_CANONICAL) != 0) {
+            it.reset();
+            additions.clear();
+            CanonicalIterator ci = new CanonicalIterator(".");
+            while (it.next()) {
+                if (it.codepoint == it.IS_STRING) base = it.string;
+                else base = UTF16.valueOf(it.codepoint);
+                ci.setSource(base);
+                while (true) {
+                    String trial = ci.next();
+                    if (trial == null) break;
+                    if (trial.equals(base)) continue;
+                    additions.add(trial);
+                }
+            }
+            source.addAll(additions);
         }
-        source.addAll(additions);
-        
-        // Now add any other character that decomposes to a character in source
-        for (cp = 0; cp < 0x10FFFF; ++cp) {
-            if (!UCharacter.isDefined(cp)) continue;
-            if (Normalizer.isNormalized(cp, mode)) continue;
-            if (source.contains(cp)) continue;
+
+        // flatten strings
+        if ((options & CLOSE_FLATTEN) != 0) {
+            it.reset();
+            additions.clear();
+            while (it.next()) {
+                if (it.codepoint != it.IS_STRING) continue;
+                additions.addAll(it.string);
+                removals.add(it.string);
+                //System.out.println("flattening '" + hex.transliterate(it.string) + "'");
+            }
+            source.addAll(additions);
+            source.removeAll(removals);
+        }
+       
+        // Now add decompositions of characters in source
+        if ((options & CLOSE_COMPATIBILITY) != 0) {
+            it.reset(source);
+            additions.clear();
+            while (it.next()) {
+                if (it.codepoint == it.IS_STRING) base = it.string;
+                else base = UTF16.valueOf(it.codepoint);
+                if (Normalizer.isNormalized(base, Normalizer.NFKD)) continue;
+                String decomp = Normalizer.normalize(base, Normalizer.NFKD);
+                additions.add(decomp);
+            }
+            source.addAll(additions);
             
-            String decomp = Normalizer.normalize(cp, mode);
-            if (source.containsAll(decomp)) {
-                // System.out.println("Adding: " + Integer.toString(cp,16) + " " + UCharacter.getName(cp));
-                source.add(cp);
+            // Now add any other character that decomposes to a character in source
+            for (cp = 0; cp < 0x10FFFF; ++cp) {
+                if (!UCharacter.isDefined(cp)) continue;
+                if (Normalizer.isNormalized(cp, Normalizer.NFKD)) continue;
+                if (source.contains(cp)) continue;
+                
+                String decomp = Normalizer.normalize(cp, Normalizer.NFKD);
+                if (source.containsAll(decomp)) {
+                    // System.out.println("Adding: " + Integer.toString(cp,16) + " " + UCharacter.getName(cp));
+                    source.add(cp);
+                }
             }
         }
-        // For completeness, later we should add the canonical closure of all strings in source
+        
         return source;
     }
     
@@ -794,12 +912,26 @@ public class Demo extends Frame {
         }
     }
     
+    static Transliterator hex = Transliterator.getInstance("[^\\u0020-\\u007E] hex");
+    static final String saveRules = 
+          "A <> \uEA41; B <> \uEA42; C <> \uEA43; D <> \uEA44; E <> \uEA45; F <> \uEA46; G <> \uEA47; H <> \uEA48; I <> \uEA49; "
+        + "J <> \uEA4A; K <> \uEA4B; L <> \uEA4C; M <> \uEA4D; N <> \uEA4E; O <> \uEA4F; P <> \uEA50; Q <> \uEA51; R <> \uEA52; "
+        + "S <> \uEA53; T <> \uEA54; U <> \uEA55; V <> \uEA56; W <> \uEA57; X <> \uEA58; Y <> \uEA59; Z <> \uEA5A; "
+        + "a <> \uEA61; b <> \uEA62; c <> \uEA63; d <> \uEA64; e <> \uEA65; f <> \uEA66; g <> \uEA67; h <> \uEA68; i <> \uEA69; "
+        + "j <> \uEA6A; k <> \uEA6B; l <> \uEA6C; m <> \uEA6D; n <> \uEA6E; o <> \uEA6F; p <> \uEA70; q <> \uEA71; r <> \uEA72; "
+        + "s <> \uEA73; t <> \uEA74; u <> \uEA75; v <> \uEA76; w <> \uEA77; x <> \uEA78; y <> \uEA79; z <> \uEA7A;";
+        
+    static Transliterator saveAscii = Transliterator.createFromRules("ascii-saved", saveRules, Transliterator.FORWARD);
+    static Transliterator restoreAscii = Transliterator.createFromRules("ascii-saved", saveRules, Transliterator.REVERSE);
     
     static {
-
-        if (false) {
-        Transliterator hex = Transliterator.getInstance("[^\\u0020-\\u007E] hex");
         
+        if (false) {
+        
+        for (char i = 'A'; i <= 'z'; ++i) {
+            System.out.print(i + " <> " + hex.transliterate(String.valueOf((char)(0xEA00 + i))) + "; ");
+        }
+
         UnicodeSet x = new UnicodeSet("[[:^ccc=0:]&[:^ccc=230:]]");
         x = x.complement();
         x = x.complement();
@@ -875,13 +1007,18 @@ public class Demo extends Frame {
         if (id == null) {
         	translit = Transliterator.getInstance(name);
         } else {
-            int pos = id.indexOf('-');
             String reverseId = "";
+            int pos = id.indexOf('-');
             if (pos < 0) {
             	reverseId = id + "-Any";
             	id = "Any-" + id;
             } else {
-            	reverseId = id.substring(pos+1) + "-" + id.substring(0,pos);
+                int pos2 = id.indexOf("/", pos);
+                if (pos2 < 0) {
+            	    reverseId = id.substring(pos+1) + "-" + id.substring(0,pos);
+            	} else {
+            	    reverseId = id.substring(pos+1, pos2) + "-" + id.substring(0,pos) + id.substring(pos2);
+            	}
             }
             
         	
@@ -931,6 +1068,8 @@ public class Demo extends Frame {
         } else {
             swapSelectionItem.setEnabled(false);
         }
+        System.out.println("Set transliterator: " + translit.getID()
+            + (inv == null ? " and " + inv.getID() : ""));
     }
     
     void addHistory(Transliterator translit) {
