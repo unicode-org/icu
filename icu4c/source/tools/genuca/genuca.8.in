@@ -28,17 +28,21 @@
 [
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 ]
+[
 .IR file
+]
 .SH DESCRIPTION
 .B genuca
-create the UCA data table source files passed on
-the command line into their binary form.
-The resulting files have a
-.B .dat
-extension while UCA source files typically have a 
-.B .txt
-extension.
-.PP
+compiles the Unicode Collation Algorithm (UCA) data from
+.I file
+(or from
+.B FractionalUCA.txt
+if
+.I file
+is omitted) into its binary form, the files
+.B ucadata.dat
+and
+.BR invuca.dat .
 These binary files can then be read directly by ICU, or used by
 .BR pkgdata (8)
 for incorporation into a larger archive or library.
@@ -78,6 +82,10 @@ Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
 is set.
+.SH FILES
+.TP 15
+.B FractionalUCA.txt
+Machine-readable file containing data for the Unicode collation algorithm.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
