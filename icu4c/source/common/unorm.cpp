@@ -130,7 +130,7 @@ static UVersionInfo dataVersion={ 3, 1, 0, 0 };
 
 U_CDECL_BEGIN
 
-U_CFUNC UBool U_CALLCONV
+UBool
 unorm_cleanup() {
     if(normData!=NULL) {
         udata_close(normData);
