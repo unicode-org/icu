@@ -1,13 +1,14 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2001, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1997-2002, International Business Machines Corporation and others.
+* All Rights Reserved.
 *******************************************************************************
 */
 
 #ifndef RBNF_H
 #define RBNF_H
 
-#if 0 //U_INT64_T_UNAVAILABLE -- fix once George defines this
+#ifdef U_INT64_T_UNAVAILABLE
 #define U_HAVE_RBNF 0
 #else
 #define U_HAVE_RBNF 1
