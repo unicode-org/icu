@@ -113,5 +113,5 @@ CollationElements {
 	"laurdag",
     }
     /* Discarding duplicate data for tag: Languages */
-    LocaleID { "0814" }
+    LocaleID { "14" }
 }
