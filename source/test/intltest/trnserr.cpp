@@ -234,7 +234,6 @@ void TransliteratorErrorTest::TestRBTErrors() {
         delete t1;
         errln("FAIL: construction of unregistered ID failed.");
     } 
-    delete set;
 }
 
 void TransliteratorErrorTest::TestHexToUniErrors() {
