@@ -107,9 +107,9 @@ no {
         {
                 "Europe/Oslo",
                 "Central European Time",
-                "CET",
+                "MET",
                 "Central European Time (DST)",
-                "CET",
+                "MET",
                 "Oslo"
         }
     }
