@@ -311,8 +311,11 @@ void LocaleTest::TestBasicGetters() {
         errln("Country code mismatch: " + temp + "  versus \"ZX\"");
 
     temp = test8.getVariant();
-    if (temp != UnicodeString("SPECIAL") )
-        errln("Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
+    //if (temp != UnicodeString("SPECIAL") )
+    //    errln("Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
+    // As of 3.0, the "@special" will *not* be parsed by uloc_getName()
+    if (temp != UnicodeString("") )
+        errln("Variant code mismatch: " + temp + "  versus \"\"");
 
     if (Locale::getDefault() != Locale::createFromName(NULL))
         errln("Locale::getDefault() == Locale::createFromName(NULL)");
@@ -528,7 +531,7 @@ void LocaleTest::TestSimpleObjectStuff() {
     Locale  test5("aa", "AA", "");
     Locale  test6("aa", "AA", "ANTARES");
     Locale  test7("aa", "AA", "JUPITER");
-    Locale  test8 = Locale::createFromName("aa-aa.utf8@jupiter");
+    Locale  test8 = Locale::createFromName("aa-aa-jupiTER"); // was "aa-aa.utf8@jupiter" but in 3.0 getName won't normalize that
 
     // now list them all for debugging usage.
     test_dumpLocale(test1);
@@ -1547,19 +1550,30 @@ LocaleTest::TestKeywordVariants(void) {
     struct {
         const char *localeID;
         const char *expectedLocaleID;
+        //const char *expectedLocaleIDNoKeywords;
+        //const char *expectedCanonicalID;
         const char *expectedKeywords[10];
         int32_t numKeywords;
         UErrorCode expectedStatus;
     } testCases[] = {
-        { "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = budhist   ",
-          "de_DE@c alen dar=budhist;c o ll a t i o n=Phonebook;currency=euro",
-        { "c alen dar", "c o ll a t i o n", "currency"},
-        3,
-        U_ZERO_ERROR
+        {
+            "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = buddhist   ", 
+            "de_DE@calendar=buddhist;collation=Phonebook;currency=euro", 
+            //"de_DE",
+            //"de_DE@calendar=buddhist;collation=Phonebook;currency=euro", 
+            {"calendar", "collation", "currency"},
+            3,
+            U_ZERO_ERROR
         },
-        { "de_DE@euro", "de_DE_EURO", {""}, 0, U_ZERO_ERROR}, // In C++, locale name gets canonicalized first.
-        // therefore, getKeywords will not encounter the POSIX variant
-        /*{ "de_DE@euro;collation=phonebook", "", "", U_INVALID_FORMAT_ERROR}*/
+        {
+            "de_DE@euro",
+            "de_DE@euro",
+            //"de_DE",
+            //"de_DE@currency=EUR",
+            {"","","","","","",""},
+            0,
+            U_INVALID_FORMAT_ERROR /* must have '=' after '@' */
+        }
     };
     UErrorCode status = U_ZERO_ERROR;
 
@@ -1635,10 +1649,10 @@ LocaleTest::TestKeywordVariantParsing(void) {
         const char *keyword;
         const char *expectedValue;
     } testCases[] = {
-        { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", "Phonebook" },
+        { "de_DE@  C o ll A t i o n   = Phonebook   ", "collation", "Phonebook" },
         { "de_DE", "collation", ""},
         { "de_DE@collation= PHONEBOOK", "collation", "PHONEBOOK" },
-        { "de_DE@ currency = euro   ; CoLLaTion   = PHONEBOOk   ", "collatiON", "PHONEBOOk" },
+        { "de_DE@ currency = euro   ; CoLLaTion   = PHONEBOOk   ", "collation", "PHONEBOOk" },
     };
 
     UErrorCode status = U_ZERO_ERROR;
