@@ -458,7 +458,7 @@ public:
      * @param status  An UErrorCode to receive the status.
      * @return true if the given date is in Daylight Savings Time;
      * false otherwise.
-     * @deprecated since ICU 2.4. Use Calendar::inDaylightTime() instead.
+     * @deprecated ICU 2.4. Use Calendar::inDaylightTime() instead.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& status) const;
 

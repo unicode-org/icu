@@ -617,9 +617,9 @@ unum_setSymbol(UNumberFormat *fmt,
                UErrorCode *status);
 
 
-/******************* Deprecated API ***************************/
+/******************* Obsolete API ***************************/
 /**
- *@deprecated Remove after Aug 2002
+ * TODO: Remove after Aug 2002
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
 

@@ -301,7 +301,7 @@ ucal_openTimeZoneEnumeration(int32_t rawOffset,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The requested TimeZone ID, or 0 if not found
 * @see ucal_countAvailableTZIDs
-* @deprecated To be removed after 2003-Nov-8.  Use ucal_openTimeZoneEnumeration instead.
+* @obsolete ICU 2.8. Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
 */
 U_CAPI const UChar* U_EXPORT2 
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
@@ -315,7 +315,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 * @param rawOffset The desired GMT offset.
 * @return The number of TimeZones with rawOffset.
 * @see ucal_getAvailableTZIDs
-* @deprecated To be removed after 2003-Nov-8.  Use ucal_openTimeZoneEnumeration instead.
+* @obsolete ICU 2.8.  Use ucal_openTimeZoneEnumeration instead since this API will be removed in that release.
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_countAvailableTZIDs(int32_t rawOffset);

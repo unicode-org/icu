@@ -562,7 +562,7 @@ public:
   virtual void setStrength(ECollationStrength newStrength);
 
 #ifdef ICU_NORMALIZER_USE_DEPRECATES
-  // deprecated functions ---------------------------------------------------
+  // obsolete functions ---------------------------------------------------
 
   /**
    * RuleBasedCollator constructor. This takes the table rules and builds a
@@ -572,7 +572,7 @@ public:
    * @param decompositionMode the normalisation mode
    * @param status reporting a success or an error.
    * @see Locale
-   * @deprecated To be removed after 2002-sep-30, specify the decomposition mode with a UColAttributeValue.
+   * @obsolete ICU 2.4. Specify the decomposition mode with a UColAttributeValue instead since this API will be removed in that release.
    */
   RuleBasedCollator(const UnicodeString& rules,
                     Normalizer::EMode decompositionMode,
@@ -587,7 +587,7 @@ public:
    * @param decompositionMode the normalisation mode
    * @param status reporting a success or an error.
    * @see Locale
-   * @deprecated To be removed after 2002-sep-30, specify the decomposition mode with a UColAttributeValue.
+   * @obsolete ICU 2.4. Specify the decomposition mode with a UColAttributeValue instead since this API will be removed in that release.
    */
   RuleBasedCollator(const UnicodeString& rules,
                     ECollationStrength collationStrength,
@@ -599,7 +599,7 @@ public:
   * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
   * @param the new decomposition mode
   * @see Collator#getDecomposition
-  * @deprecated To be removed after 2002-sep-30; use setAttribute().
+  * @obsolete ICU 2.4. Use setAttribute() instead since this API will be removed in that release.
   */
   virtual void setDecomposition(Normalizer::EMode  mode);
 
@@ -607,7 +607,7 @@ public:
   * Get the decomposition mode of the Collator object.
   * @return the decomposition mode
   * @see Collator#setDecomposition
-  * @deprecated To be removed after 2002-sep-30; use getAttribute().
+  * @obsolete ICU 2.4. Use getAttribute() instead since this API will be removed in that release.
   */
   virtual Normalizer::EMode getDecomposition(void) const;
 #endif /* ICU_NORMALIZER_USE_DEPRECATES */
