@@ -180,7 +180,7 @@ public class CheckTags {
 
     static final String[] tagKinds = {
         "@internal", "@draft", "@stable", "@since", "@deprecated", "@author", "@see", "@version",
-        "@param", "@return", "@throws", "@obsolete", "@exception"
+        "@param", "@return", "@throws", "@obsolete", "@exception", "@serial"
     };
 
     static final int UNKNOWN = -1;
@@ -197,6 +197,7 @@ public class CheckTags {
     static final int THROWS = 10;
     static final int OBSOLETE = 11;
     static final int EXCEPTION = 12;
+    static final int SERIAL = 13;
 
     static int tagKindIndex(String kind) {
         for (int i = 0; i < tagKinds.length; ++i) {
@@ -324,6 +325,7 @@ public class CheckTags {
             case PARAM:
             case RETURN:
             case THROWS:
+            case SERIAL:
                 break;
 
             case VERSION:
