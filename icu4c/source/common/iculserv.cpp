@@ -427,6 +427,18 @@ SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt,
 {
 }
 
+SimpleLocaleKeyFactory::SimpleLocaleKeyFactory(UObject* objToAdopt,
+                                               const Locale& locale,
+                                               int32_t kind,
+                                               int32_t coverage)
+  : LocaleKeyFactory(coverage)
+  , _obj(objToAdopt)
+  , _id()
+  , _kind(kind)
+{
+	LocaleUtility::initNameFromLocale(locale, _id);
+}
+
 SimpleLocaleKeyFactory::~SimpleLocaleKeyFactory()
 {
   delete _obj;
@@ -611,11 +623,15 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
     return result;
 }
 
+
 URegistryKey
-ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString
-& locale, UBool visible, UErrorCode& status)
+ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& locale, 
+	UBool visible, UErrorCode& status)
 {
-    return ICUService::registerInstance(objToAdopt, locale, visible, status);
+	Locale loc;
+	LocaleUtility::initLocaleFromName(locale, loc);
+    return registerInstance(objToAdopt, loc, LocaleKey::KIND_ANY, 
+		visible ? LocaleKeyFactory::VISIBLE : LocaleKeyFactory::INVISIBLE, status);
 }
 
 URegistryKey
@@ -633,7 +649,7 @@ ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, in
 URegistryKey
 ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, int32_t kind, int32_t coverage, UErrorCode& status)
 {
-    ICUServiceFactory * factory = new SimpleLocaleKeyFactory(objToAdopt, locale.getName(), kind, coverage);
+    ICUServiceFactory * factory = new SimpleLocaleKeyFactory(objToAdopt, locale, kind, coverage);
     if (factory != NULL) {
         return registerFactory(factory, status);
     }

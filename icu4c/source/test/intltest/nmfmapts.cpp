@@ -241,18 +241,18 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
 #define SRC_LOC Locale::getFrance()
 #define SWAP_LOC Locale::getUS()
 
-class TestFactory : public SimpleNumberFormatFactory {
+class NFTestFactory : public SimpleNumberFormatFactory {
 	NumberFormat* currencyStyle;
 
 public:
-	TestFactory() 
+	NFTestFactory() 
 		: SimpleNumberFormatFactory(SRC_LOC, TRUE)
 	{
 		UErrorCode status = U_ZERO_ERROR;
 		currencyStyle = NumberFormat::createInstance(SWAP_LOC, status);
 	}
 
-	virtual ~TestFactory()
+	virtual ~NFTestFactory()
 	{
 		delete currencyStyle;
 	}
@@ -279,7 +279,7 @@ private:
    static char gID;
 };
 
-char TestFactory::gID = 0;
+char NFTestFactory::gID = 0;
 
 void
 IntlTestNumberFormatAPI::testRegistration() 
@@ -290,7 +290,7 @@ IntlTestNumberFormatAPI::testRegistration()
 	NumberFormat* f0 = NumberFormat::createInstance(SWAP_LOC, status);
 	NumberFormat* f1 = NumberFormat::createInstance(SRC_LOC, status);
 	NumberFormat* f2 = NumberFormat::createCurrencyInstance(SRC_LOC, status);
-	URegistryKey key = NumberFormat::registerFactory(new TestFactory(), status);
+	URegistryKey key = NumberFormat::registerFactory(new NFTestFactory(), status);
 	NumberFormat* f3 = NumberFormat::createCurrencyInstance(SRC_LOC, status);
 	NumberFormat* f3a = NumberFormat::createCurrencyInstance(SRC_LOC, status);
 	NumberFormat* f4 = NumberFormat::createInstance(SRC_LOC, status);

@@ -600,7 +600,7 @@ ICUService::get(const UnicodeString& descriptor, UnicodeString* actualReturn, UE
   UObject* result = NULL;
     ICUServiceKey* key = createKey(&descriptor, status);
     if (key) {
-      result = getKey(*key, actualReturn, NULL, status);
+      result = getKey(*key, actualReturn, status);
       delete key;
     }
   return result;
@@ -609,8 +609,11 @@ ICUService::get(const UnicodeString& descriptor, UnicodeString* actualReturn, UE
 UObject* 
 ICUService::getKey(ICUServiceKey& key, UErrorCode& status) const 
 {
-  return getKey(key, NULL, NULL, status);
+  return getKey(key, NULL, status);
 }
+
+// this is a vector that subclasses of ICUService can override to further customize the result object
+// before returning it.  All other public get functions should call this one.
 
 UObject* 
 ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, UErrorCode& status) const 
@@ -643,7 +646,8 @@ struct UVectorDeleter {
   UVectorDeleter() : _obj(NULL) {}
   ~UVectorDeleter() { delete _obj; }
 };
-  
+
+// called only by factories, treat as private
 UObject* 
 ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUServiceFactory* factory, UErrorCode& status) const 
 {
