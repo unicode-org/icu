@@ -131,11 +131,11 @@ de {
     localPatternChars { "GuMtkHmsSEDFwWahKzJd" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+                "Europe/Berlin",
+                "CET",
+                "CET",
+                "CET",
+                "CET",
         }
     }
 }
