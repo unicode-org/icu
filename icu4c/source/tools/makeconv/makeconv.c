@@ -614,7 +614,7 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   myUConverterTable->sbcs.toUnicode = (UChar*)malloc(sizeof(UChar)*256);
   myUConverterTable->sbcs.toUnicodeFallback = (UChar*)malloc(sizeof(UChar)*256);
   /*fills in the toUnicode array with the Unicode Replacement Char*/
-  for (i=0;i<255;i++) 
+  for (i=0;i<=0xFF;i++) 
   {
       myUConverterTable->sbcs.toUnicode[i] = unicodeValue;
       myUConverterTable->sbcs.toUnicodeFallback[i] = unicodeValue;
@@ -724,7 +724,7 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
 
   /*Initializes the mbcs.starters to FALSE*/
 
-  for (i=0; i<=255; i++) 
+  for (i=0; i<=0xFF; i++) 
     {
       myUConverterTable->mbcs.starters[i] = FALSE;
     } 
