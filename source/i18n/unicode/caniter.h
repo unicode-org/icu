@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/caniter.h,v $ 
- * $Date: 2002/02/13 19:24:02 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/27 21:47:05 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,6 @@
 #include "unicode/uniset.h"
 #include "unicode/normlzr.h"
 #include "unicode/unicode.h"
-#include "hash.h"
 
 /**
  * This class allows one to iterate through all the strings that are canonically equivalent to a given
@@ -54,6 +53,8 @@ Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMB
  *@draft
  */
 U_NAMESPACE_BEGIN
+
+class Hashtable;
 
 class U_I18N_API CanonicalIterator {
 public:
@@ -95,7 +96,7 @@ public:
      * @param source the string to find permutations for
      * @return the results in a set.
      */
-    static Hashtable *permute(UnicodeString &source);     
+    static Hashtable *permute(UnicodeString &source, UErrorCode status);     
     
 private:
     // ===================== PRIVATES ==============================
