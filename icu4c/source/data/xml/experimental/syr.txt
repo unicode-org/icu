@@ -1,13 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 syr{
     Version{ "x0.2" }
-    LocaleID:int { 0x5A }
     Languages {
         syr { "\u0723\u0718\u072A\u071D\u071D\u0710" }
     }
@@ -85,5 +84,8 @@ syr{
         Sequence { 
             "[normalization on]"
         }
+    }
+    Currencies {
+        SYP { "\u0644.\u0633.\u200F", "SYP" }
     }
 }

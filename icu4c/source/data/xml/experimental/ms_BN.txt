@@ -1,18 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 ms_BN{
-    Version{ "x0.2" }
-    LocaleID:int { 0x083e }
-    CurrencyElements{
-        "$",
-        "BND",
-        ","
-    }
+    Version{ "x0.3" }
     NumberElements { 
         ",",
         ".",
@@ -20,15 +14,14 @@ ms_BN{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ","
     }
-// ShortCountry{
-//  "BRN"
-// }
     DateTimePatterns{
         "h:mm:ss aa",
         "H:mm:ss",
@@ -39,5 +32,9 @@ ms_BN{
         "dd/MM/yyyy",
         "dd/MM/yyyy",
         "{1} {0}",
+    }
+    Currencies {
+        BND { "$", "BND" }
+        USD { "US$", "USD" }
     }
 }

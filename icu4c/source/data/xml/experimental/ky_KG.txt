@@ -1,23 +1,14 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 ky_KG{
-    Version{ "x0.2" }
-    LocaleID:int { 0x0440 }
-    CurrencyElements{
-        "\u0441\u043E\u043C",
-        "KGS",
-        "-"
-    }
-//    ShortCountry{
-//        "KGZ"
-//    }
+    Version{ "x0.3" }
     DateTimePatterns{
-        "h:mm:ss aa",
+        "H:mm:ss",
         "H:mm:ss",
         "H:mm:ss",
         "H:mm:ss",

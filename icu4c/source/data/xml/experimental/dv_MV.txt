@@ -1,18 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 dv_MV{
-    Version { "x0.2" }
-    LocaleID:int { 0x0465 }
-    CurrencyElements{
-        "\u0783.",
-        "MVR",
-        "."
-    }
+    Version { "x0.3" }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",
