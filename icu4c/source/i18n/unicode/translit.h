@@ -671,10 +671,18 @@ public:
                                          UnicodeString& result);
 
     /**
-     * Returns the filter used by this transliterator, or <tt>null</tt>
+     * Returns the filter used by this transliterator, or <tt>NULL</tt>
      * if this transliterator uses no filter.
      */
     virtual const UnicodeFilter* getFilter(void) const;
+
+    /**
+     * Returns the filter used by this transliterator, or <tt>NULL</tt> if this
+     * transliterator uses no filter.  The caller must eventually delete the
+     * result.  After this call, this transliterator's filter is set to
+     * <tt>NULL</tt>.  Calls adoptFilter().
+     */
+    UnicodeFilter* orphanFilter(void);
 
     /**
      * Changes the filter used by this transliterator.  If the filter
