@@ -1,7 +1,7 @@
 ## -*-makefile-*-
-## Aix-specific setup (for gcc)
-##  
 ## Copyright (c) IBM, Ken Foskey, and others. All rights reserved.
+##
+## Aix-specific setup (for gcc)
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
