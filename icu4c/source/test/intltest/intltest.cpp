@@ -102,7 +102,11 @@ operator+(const UnicodeString& left,
     char buffer[64];   // was 32, made it arbitrarily bigger (rtg)
     char danger = 'p'; // guard against overrunning the buffer (rtg)
 
-    sprintf(buffer, "%.30g", num); // nos changed from 99 to 30
+    // IEEE floating point has 52 bits of mantissa, plus one assumed bit
+    //  53*log(2)/log(10) = 15.95
+    // so there is no need to show more than 16 digits. [alan]
+
+    sprintf(buffer, "%.16g", num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -116,6 +120,12 @@ operator+(const UnicodeString& left,
  */
 UnicodeString toString(const Formattable& f) {
     UnicodeString s;
+    UnicodeString close;
+    const UChar* currency = f.getCurrency();
+    if (currency != NULL) {
+        close.append((UChar)0x2f/*/*/).append(currency);
+    }
+    close.append((UChar)0x5d/*]*/);
     switch (f.getType()) {
     case Formattable::kDate:
         {
@@ -125,27 +135,27 @@ UnicodeString toString(const Formattable& f) {
                 FieldPosition pos;
                 fmt.format(f.getDate(), s, pos);
                 s.insert(0, "[Date:");
-                s.insert(s.length(), (UChar)0x005d);
+                s.append(close);
             } else {
                 s = UnicodeString("[Error creating date format]");
             }
         }
         break;
     case Formattable::kDouble:
-        s = UnicodeString("[Double:") + f.getDouble() + "]";
+        s = UnicodeString("[double:") + f.getDouble() + close;
         break;
     case Formattable::kLong:
-        s = UnicodeString("[Long:") + f.getLong() + "]";
+        s = UnicodeString("[long:") + f.getLong() + close;
         break;
 
     case Formattable::kInt64:
-        s = UnicodeString("[Int64:") + Int64ToUnicodeString(f.getInt64()) + "]";
+        s = UnicodeString("[int64:") + Int64ToUnicodeString(f.getInt64()) + close;
         break;
 
     case Formattable::kString:
         f.getString(s);
         s.insert(0, "[String:");
-        s.insert(s.length(), (UChar)0x005d);
+        s.append(close);
         break;
     case Formattable::kArray:
         {
@@ -159,7 +169,7 @@ UnicodeString toString(const Formattable& f) {
                 }
                 s = s + toString(array[i]);
             }
-            s.append(UChar(0x005d));
+            s.append(close);
         }
         break;
     }
@@ -1327,6 +1337,27 @@ float IntlTest::random() {
     return random(&RAND_SEED);
 }
 
+static inline UChar toHex(int32_t i) {
+    return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10)));
+}
+
+static UnicodeString& escape(const UnicodeString& s, UnicodeString& result) {
+    for (int32_t i=0; i<s.length(); ++i) {
+        UChar c = s[i];
+        if (c <= (UChar)0x7F) {
+            result += c;
+        } else {
+            result += (UChar)0x5c;
+            result += (UChar)0x75;
+            result += toHex((c >> 12) & 0xF);
+            result += toHex((c >>  8) & 0xF);
+            result += toHex((c >>  4) & 0xF);
+            result += toHex( c        & 0xF);
+        }
+    }
+    return result;
+}
+
 #define VERBOSE_ASSERTIONS
 
 UBool IntlTest::assertTrue(const char* message, UBool condition) {
@@ -1398,7 +1429,9 @@ UBool IntlTest::assertEquals(const char* message,
 static char ASSERT_BUF[256];
 
 static const char* extractToAssertBuf(const UnicodeString& message) {
-    message.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF)-1, 0);
+    UnicodeString buf;
+    escape(message, buf);
+    buf.extract(0, 0x7FFFFFFF, ASSERT_BUF, sizeof(ASSERT_BUF)-1, 0);
     ASSERT_BUF[sizeof(ASSERT_BUF)-1] = 0;
     return ASSERT_BUF;
 }
