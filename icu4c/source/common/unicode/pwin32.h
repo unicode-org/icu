@@ -100,6 +100,16 @@ typedef unsigned short uint16_t;
 #   endif
 #endif
 
+#if ! U_HAVE_INT64_T
+    /* Could use _MSC_VER to detect Microsoft compiler. */
+    typedef __int64   int64_t;
+#endif
+
+#if ! U_HAVE_UINT64_T
+    /* Could use _MSC_VER to detect Microsoft compiler. */
+    typedef unsigned __int64   uint64_t;
+#endif
+
 #endif
 
 /*===========================================================================*/

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2002, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  strtest.cpp
@@ -35,6 +35,15 @@ void StringTest::TestSizeofWCharT(void) {
     }
 }
 
+void StringTest::TestSizeofInt64(void) {
+    if(8!=sizeof(int64_t)) {
+        errln("TestSizeofInt64: 8!=sizeof(int64_t) - int64_t needs to be fixed in platform.h");
+    }
+    if(8!=sizeof(uint64_t)) {
+        errln("TestSizeofInt64: 8!=sizeof(uint64_t) - uint64_t needs to be fixed in platform.h");
+    }
+}
+
 void StringTest::TestCharsetFamily(void) {
     unsigned char c='A';
     if( U_CHARSET_FAMILY==U_ASCII_FAMILY && c!=0x41 ||
@@ -64,12 +73,18 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
         }
         break;
     case 2:
+        name="TestSizeofInt64";
+        if(exec) {
+            TestSizeofInt64();
+        }
+        break;
+    case 3:
         name="TestCharsetFamily";
         if(exec) {
             TestCharsetFamily();
         }
         break;
-    case 3:
+    case 4:
         name="Test_U_STRING";
         if(exec) {
             U_STRING_INIT(ustringVar, "aZ0 -", 5);
@@ -86,7 +101,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
             }
         }
         break;
-    case 4:
+    case 5:
         name="Test_UNICODE_STRING";
         if(exec) {
             UnicodeString ustringVar=UNICODE_STRING("aZ0 -", 5);
