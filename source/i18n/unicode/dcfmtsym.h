@@ -47,7 +47,7 @@
  * .         X      any other characters can be used in the prefix or suffix
  * .         '      used to quote special characters in a prefix or suffix.
  *  </pre>
- * [Notes] 
+ * [Notes]
  * <P>
  * If there is no explicit negative subpattern, - is prefixed to the
  * positive form. That is, "0.00" alone is equivalent to "0.00;-0.00".
@@ -63,7 +63,7 @@
  * contiguous in Unicode, from 0 to 9. Other digits sets (such as
  * superscripts) would need a different subclass.
  */
-       
+
 class U_I18N_API DecimalFormatSymbols {
 public:
     /**
@@ -294,9 +294,16 @@ public:
      * @deprecated remove after 2000-dec-31
      */
     void setInfinity(const UnicodeString& infinity);
+    /**
+     * Checks to see if text at offset represents the inifinity string.
+     * @return the number of characters used to represent infinity when 
+     *      text starts with the inifinity string, otherwise it returns 0.
+     * @deprecated remove after 2000-dec-31
+     */
+    int32_t compareInfinity(const UnicodeString& text, UTextOffset offset) const;
 
     /**
-     * character used to represent NaN. Almost always left
+     * character used to represent NaN (Not A Number). Almost always left
      * unchanged.
      * @deprecated remove after 2000-dec-31
      */
@@ -307,6 +314,13 @@ public:
      * @deprecated remove after 2000-dec-31
      */
     void setNaN(const UnicodeString& NaN);
+    /**
+     * Checks to see if text at offset represents the NaN string.
+     * @return the number of characters used to represent NaN when 
+     *      text starts with the NaN string, otherwise it returns 0.
+     * @deprecated remove after 2000-dec-31
+     */
+    int32_t compareNaN(const UnicodeString& text, UTextOffset offset) const;
 
     /**
      * character used to represent plus sign
@@ -369,6 +383,14 @@ public:
      * @deprecated remove after 2000-dec-31
      */
     void setCurrencySymbol(const UnicodeString& currency);
+    /**
+     * Checks to see if text at offset represents the Currency Symbol string.
+     * @return the number of characters used to represent Currency Symbol when
+     *      text starts with the Currency Symbol string, otherwise it returns
+     *      0.
+     * @deprecated remove after 2000-dec-31
+     */
+    int32_t compareCurrencySymbol(const UnicodeString& text, UTextOffset offset) const;
 
     /**
      * The international string denoting the local currency.
@@ -380,6 +402,15 @@ public:
      * @deprecated remove after 2000-dec-31
      */
     void setInternationalCurrencySymbol(const UnicodeString& currency);
+    /**
+     * Checks to see if text at offset represents the International Currency
+     * Symbol string.
+     * @return the number of characters used to represent International
+     *      Currency Symbol when text starts with the International Currency
+     *      Symbol string, otherwise it returns 0.
+     * @deprecated remove after 2000-dec-31
+     */
+    int32_t compareInternationalCurrencySymbol(const UnicodeString& text, UTextOffset offset) const;
 
     /**
      * The monetary decimal separator.
@@ -448,10 +479,10 @@ private:
 
     UnicodeString fSymbols[kFormatSymbolCount];
 };
- 
+
 
 // -------------------------------------
- 
+
 inline UnicodeString
 DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
     if(symbol<kFormatSymbolCount) {
@@ -460,9 +491,9 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
         return UnicodeString();
     }
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value) {
     if(symbol<kFormatSymbolCount) {
@@ -471,13 +502,13 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value)
 }
 
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getZeroDigit() const
 {
     return fSymbols[kZeroDigitSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
  
 inline void
@@ -485,231 +516,286 @@ DecimalFormatSymbols::setZeroDigit(UChar zeroDigit)
 {
     fSymbols[kZeroDigitSymbol] = zeroDigit;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getGroupingSeparator() const
 {
     return fSymbols[kGroupingSeparatorSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setGroupingSeparator(UChar groupingSeparator)
 {
     fSymbols[kGroupingSeparatorSymbol] = groupingSeparator;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getDecimalSeparator() const
 {
     return fSymbols[kDecimalSeparatorSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setDecimalSeparator(UChar decimalSeparator)
 {
     fSymbols[kDecimalSeparatorSymbol] = decimalSeparator;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getPerMill() const
 {
     return fSymbols[kPermillSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setPerMill(UChar permill)
 {
     fSymbols[kPermillSymbol] = permill;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getPercent() const
 {
     return fSymbols[kPercentSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setPercent(UChar percent)
 {
     fSymbols[kPercentSymbol] = percent;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getDigit() const
 {
     return fSymbols[kDigitSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setDigit(UChar digit)
 {
     fSymbols[kDigitSymbol] = digit;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getPatternSeparator() const
 {
     return fSymbols[kPatternSeparatorSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setPatternSeparator(UChar patternSeparator)
 {
     fSymbols[kPatternSeparatorSymbol] = patternSeparator;
 }
- 
+
 // -------------------------------------
- 
+
 inline UnicodeString&
 DecimalFormatSymbols::getInfinity(UnicodeString& result) const
 {
     return result = fSymbols[kInfinitySymbol];
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setInfinity(const UnicodeString& infinity)
 {
     fSymbols[kInfinitySymbol] = infinity;
 }
- 
+
 // -------------------------------------
- 
+
+inline int32_t
+DecimalFormatSymbols::compareInfinity(const UnicodeString& text,
+                                      UTextOffset offset) const
+{
+    return text.compare(offset,
+                        fSymbols[kInfinitySymbol].length(),
+                        fSymbols[kInfinitySymbol],
+                        0,
+                        fSymbols[kInfinitySymbol].length())
+           ? 0 : fSymbols[kInfinitySymbol].length();
+}
+
+// -------------------------------------
+
 inline UnicodeString&
 DecimalFormatSymbols::getNaN(UnicodeString& result) const
 {
     return result = fSymbols[kNaNSymbol];
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setNaN(const UnicodeString& NaN)
 {
     fSymbols[kNaNSymbol] = NaN;
 }
- 
+
 // -------------------------------------
- 
+
+inline int32_t
+DecimalFormatSymbols::compareNaN(const UnicodeString& text, UTextOffset offset) const
+{
+    return text.compare(offset,
+                        fSymbols[kNaNSymbol].length(),
+                        fSymbols[kNaNSymbol],
+                        0,
+                        fSymbols[kNaNSymbol].length())
+           ? 0 : fSymbols[kNaNSymbol].length();
+}
+
+// -------------------------------------
+
 inline UChar
 DecimalFormatSymbols::getPlusSign() const
 {
     return fSymbols[kPlusSignSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setPlusSign(UChar plusSign)
 {
     fSymbols[kPlusSignSymbol] = plusSign;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getMinusSign() const
 {
     return fSymbols[kMinusSignSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setMinusSign(UChar minusSign)
 {
     fSymbols[kMinusSignSymbol] = minusSign;
 }
- 
+
 // -------------------------------------
- 
+
 inline UChar
 DecimalFormatSymbols::getExponentialSymbol(void) const
 {
     return fSymbols[kExponentialSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setExponentialSymbol(UChar exponential)
 {
     fSymbols[kExponentialSymbol] = exponential;
 }
- 
+
 // -------------------------------------
- 
+
 inline UnicodeString&
 DecimalFormatSymbols::getCurrencySymbol(UnicodeString& result) const
 {
     return result = fSymbols[kCurrencySymbol];
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setCurrencySymbol(const UnicodeString& str)
 {
     fSymbols[kCurrencySymbol] = str;
 }
- 
+
 // -------------------------------------
- 
+
+inline int32_t
+DecimalFormatSymbols::compareCurrencySymbol(const UnicodeString& text,
+                                            UTextOffset offset) const
+{
+    return text.compare(offset,
+                        fSymbols[kCurrencySymbol].length(),
+                        fSymbols[kCurrencySymbol],
+                        0,
+                        fSymbols[kCurrencySymbol].length())
+           ? 0 : fSymbols[kCurrencySymbol].length();
+}
+
+// -------------------------------------
+
 inline UnicodeString&
 DecimalFormatSymbols::getInternationalCurrencySymbol(UnicodeString& result) const
 {
     return result = fSymbols[kIntlCurrencySymbol];
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setInternationalCurrencySymbol(const UnicodeString& str)
 {
     fSymbols[kIntlCurrencySymbol] = str;
 }
- 
+
 // -------------------------------------
- 
+
+inline int32_t
+DecimalFormatSymbols::compareInternationalCurrencySymbol(const UnicodeString& text,
+                                                         UTextOffset offset) const
+{
+    return text.compare(offset,
+                        fSymbols[kIntlCurrencySymbol].length(),
+                        fSymbols[kIntlCurrencySymbol],
+                        0,
+                        fSymbols[kIntlCurrencySymbol].length())
+           ? 0 : fSymbols[kIntlCurrencySymbol].length();
+}
+
+// -------------------------------------
+
 inline UChar
 DecimalFormatSymbols::getMonetaryDecimalSeparator(void) const
 {
     return fSymbols[kMonetarySeparatorSymbol].charAt(0);
 }
- 
+
 // -------------------------------------
- 
+
 inline void
 DecimalFormatSymbols::setMonetaryDecimalSeparator(UChar sep)
 {
     fSymbols[kMonetarySeparatorSymbol] = sep;
 }
- 
+
 inline UChar DecimalFormatSymbols::getPadEscape(void) const {
     return fSymbols[kPadEscapeSymbol].charAt(0);
 }
