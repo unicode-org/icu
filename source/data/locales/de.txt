@@ -578,7 +578,7 @@ de {
     // See for example "W\u00e4hrungscodes" at
     // http://www-cik.uni-paderborn.de/vddk/Dokumentationen/Dokumentation_IDM_1_3/ISO-Tabellen/Wahrungscodes/body_wahrungscodes.html
     // (On the page it says "Quelle: gem\u00e4\u00df ISO 4217 3-alpha-code (Stand: Juli 2000)"
-    // and "Verzeichnis der ISO-Codes für W\u00e4hrung mit Land".)
+    // and "Verzeichnis der ISO-Codes f\u00FCr W\u00e4hrung mit Land".)
 
     // See also http://umrechnen.de/
     Currencies {
