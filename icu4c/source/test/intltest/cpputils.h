@@ -1,3 +1,8 @@
+/********************************************************************
+ * COPYRIGHT: 
+ * Copyright (c) 1997-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ********************************************************************/
 /* Wraps C++ internal utilities  needed in C
 Bertrand A. D.*/
 

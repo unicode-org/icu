@@ -25,7 +25,10 @@ Currently the following encodings are supported:
  ascii, utf8, utf-16be, utf-16le, ebcdic-cp-us
 
 ---
-(c) Copyright 1997-1999 IBM Corporation 
+**********************************************************************
+* Copyright (C) 1998-2000, International Business Machines Corporation 
+* and others.  All Rights Reserved.
+**********************************************************************
 IBM Center for Java Technology Silicon Valley,
 10275 N De Anza Blvd., Cupertino, CA 95014 
 All rights reserved. 

@@ -1,4 +1,7 @@
-# Copyright (c) 1999 IBM Corporation and others
+#**********************************************************************
+#* Copyright (C) 1999-2000, International Business Machines Corporation 
+#* and others.  All Rights Reserved.
+#**********************************************************************
 # nmake file for creating data files on win32
 # invoke with
 # nmake /f makedata.mak icup=<path_to_icu_instalation> [Debug|Release]

@@ -1,3 +1,6 @@
+Copyright (C) 1999-2000, International Business Machines Corporation 
+and others.  All Rights Reserved.
+
 Readme file for ICU time zone data (source/tools/gentz)
 
 
