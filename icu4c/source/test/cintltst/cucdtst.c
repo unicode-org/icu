@@ -49,6 +49,7 @@ static void TestUScriptCodeAPI(void);
 static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
 static void TestNumericProperties(void);
+static void TestPropertyNames(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -133,6 +134,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
     addTest(root, &TestUScriptRunAPI, "tsutil/cucdtst/TestUScriptRunAPI");
+    addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
 }
 
 /*==================================================== */
@@ -1374,7 +1376,7 @@ static void TestUScriptCodeAPI(){
         "oriya",     "runic",     "sinhala", "syriac","tamil",     
         "telugu",    "thaana",    "thai",    "tibetan", 
         /* test the bounds*/
-        "ucas", "arabic",
+        "tagb", "arabic",
         /* test bogus */
         "asfdasd", "5464", "12235",
         /* test the last index */
@@ -1398,7 +1400,7 @@ static void TestUScriptCodeAPI(){
             USCRIPT_ORIYA, USCRIPT_RUNIC, USCRIPT_SINHALA, USCRIPT_SYRIAC, USCRIPT_TAMIL,
             USCRIPT_TELUGU, USCRIPT_THAANA, USCRIPT_THAI, USCRIPT_TIBETAN,
             /* bounds */
-            USCRIPT_UCAS, USCRIPT_ARABIC,
+            USCRIPT_TAGBANWA, USCRIPT_ARABIC,
             /* bogus names should return invalid code */
             USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE, USCRIPT_INVALID_CODE,
             USCRIPT_COMMON, USCRIPT_YI,
@@ -1453,8 +1455,8 @@ static void TestUScriptCodeAPI(){
         const char* expectedNames[]={
               
             /* test names */
-            "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
-            "GOTHIC",  "GREEK",  "GUJARATI", 
+            "Cyrillic","Deseret","Devanagari","Ethiopic","Georgian", 
+            "Gothic",  "Greek",  "Gujarati", 
              '\0'
         };
         i=0;
@@ -1486,7 +1488,7 @@ static void TestUScriptCodeAPI(){
         const char* expectedAbbr[]={
               /* test abbr */
             "Hani", "Hang","Hebr","Hira",
-            "Knda","Kana","Khmr","Lao",
+            "Knda","Kana","Khmr","Laoo",
             "Latn",
             "Mlym", "Mong",
              '\0'
@@ -2230,6 +2232,84 @@ TestNumericProperties(void) {
         }
         if(0.000001 <= fabs(nv - values[i].numValue)) {
             log_err("u_getNumericValue(U+%04lx)=%g should be %g\n", c, nv, values[i].numValue);
+        }
+    }
+}
+
+/**
+ * Test the property names and property value names API.
+ */
+static void
+TestPropertyNames(void) {
+    int32_t p, v, choice, rev;
+
+    for (p=0; ; ++p) {
+        UBool sawProp = FALSE;
+        for (choice=0; ; ++choice) {
+            const char* name = u_getPropertyName(p, choice);
+            if (name) {
+                if (!sawProp) log_verbose("prop %d:", p);
+                log_verbose("%d=\"%s\"", choice, name);
+                sawProp = TRUE;
+
+                /* test reverse mapping */
+                rev = u_getPropertyEnum(name);
+                if (rev != p) {
+                    log_err("Property round-trip failure: %d -> %s -> %d\n",
+                            p, name, rev);
+                }
+            }
+            if (!name && choice>0) break;
+        }
+        if (sawProp) {
+            /* looks like a valid property; check the values */
+            const char* pname = u_getPropertyName(p, U_LONG_PROPERTY_NAME);
+            int32_t max = 0;
+            if (p == UCHAR_CANONICAL_COMBINING_CLASS) {
+                max = 255;
+            } else if (p == UCHAR_GENERAL_CATEGORY) {
+                /* it's far too slow to iterate all the way up to
+                   the real max, U_GC_P_MASK */
+                max = U_GC_NL_MASK;
+            } else if (p == UCHAR_BLOCK) {
+                /* UBlockCodes, unlike other values, start at 1 */
+                max = 1;
+            }
+            log_verbose("\n");
+            for (v=-1; ; ++v) {
+                UBool sawValue = FALSE;
+                for (choice=0; ; ++choice) {
+                    const char* vname = u_getPropertyValueName(p, v, choice);
+                    if (vname) {
+                        if (!sawValue) log_verbose(" %s, value %d:", pname, v);
+                        log_verbose("%d=\"%s\"", choice, vname);
+                        sawValue = TRUE;
+
+                        /* test reverse mapping */
+                        rev = u_getPropertyValueEnum(p, vname);
+                        if (rev != v) {
+                            log_err("Value round-trip failure (%s): %d -> %s -> %d\n",
+                                    pname, v, vname, rev);
+                        }
+                    }
+                    if (!vname && choice>0) break;
+                }
+                if (sawValue) {
+                    log_verbose("\n");
+                }
+                if (!sawValue && v>=max) break;
+            }
+        }
+        if (!sawProp) {
+            if (p>=UCHAR_STRING_LIMIT) {
+                break;
+            } else if (p>=UCHAR_DOUBLE_LIMIT) {
+                p = UCHAR_STRING_START - 1;
+            } else if (p>=UCHAR_INT_LIMIT) {
+                p = UCHAR_DOUBLE_START - 1;
+            } else if (p>=UCHAR_BINARY_LIMIT) {
+                p = UCHAR_INT_START - 1;
+            }
         }
     }
 }
