@@ -65,7 +65,7 @@ void NormalizerConformanceTest::compare(const UnicodeString& s1, const UnicodeSt
 
 FileStream *
 NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
-    char path[2000];
+    char unidataPath[2000];
     const char *folder;
     FileStream *input;
     UErrorCode errorCode;
@@ -73,10 +73,10 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     // look inside ICU_DATA first
     folder=u_getDataDirectory();
     if(folder!=NULL) {
-        strcpy(path, folder);
-        strcat(path, "unidata" U_FILE_SEP_STRING);
-        strcat(path, filename);
-        input=T_FileStream_open(path, "rb");
+        strcpy(unidataPath, folder);
+        strcat(unidataPath, "unidata" U_FILE_SEP_STRING);
+        strcat(unidataPath, filename);
+        input=T_FileStream_open(unidataPath, "rb");
         if(input!=NULL) {
             return input;
         }
@@ -86,12 +86,12 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     errorCode=U_ZERO_ERROR;
     folder=loadTestData(errorCode);
     if(U_SUCCESS(errorCode)) {
-        strcpy(path, folder);
-        strcat(path, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".."
+        strcpy(unidataPath, folder);
+        strcat(unidataPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".."
                      U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".."
                      U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING);
-        strcat(path, filename);
-        input=T_FileStream_open(path, "rb");
+        strcat(unidataPath, filename);
+        input=T_FileStream_open(unidataPath, "rb");
         if(input!=NULL) {
             return input;
         }
@@ -101,10 +101,10 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     errorCode=U_ZERO_ERROR;
     folder=loadTestData(errorCode);
     if(U_SUCCESS(errorCode)) {
-        strcpy(path, folder);
-        strcat(path, U_FILE_SEP_STRING);
-        strcat(path, filename);
-        input=T_FileStream_open(path, "rb");
+        strcpy(unidataPath, folder);
+        strcat(unidataPath, U_FILE_SEP_STRING);
+        strcat(unidataPath, filename);
+        input=T_FileStream_open(unidataPath, "rb");
         if(input!=NULL) {
             return input;
         }
@@ -114,10 +114,10 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
     errorCode=U_ZERO_ERROR;
     folder=loadTestData(errorCode);
     if(U_SUCCESS(errorCode)) {
-        strcpy(path, folder);
-        strcat(path, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING);
-        strcat(path, filename);
-        input=T_FileStream_open(path, "rb");
+        strcpy(unidataPath, folder);
+        strcat(unidataPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING);
+        strcat(unidataPath, filename);
+        input=T_FileStream_open(unidataPath, "rb");
         if(input!=NULL) {
             return input;
         }
@@ -125,16 +125,16 @@ NormalizerConformanceTest::openNormalizationTestFile(const char *filename) {
 
     // find icu/source/data/unidata relative to U_TOPSRCDIR
 #if defined(U_TOPSRCDIR)
-    strcpy(path, U_TOPSRCDIR U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING);
-    strcat(path, filename);
-    input=T_FileStream_open(path, "rb");
+    strcpy(unidataPath, U_TOPSRCDIR U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING);
+    strcat(unidataPath, filename);
+    input=T_FileStream_open(unidataPath, "rb");
     if(input!=NULL) {
         return input;
     }
 
-    strcpy(path, U_TOPSRCDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING);
-    strcat(path, filename);
-    input=T_FileStream_open(path, "rb");
+    strcpy(unidataPath, U_TOPSRCDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING);
+    strcat(unidataPath, filename);
+    input=T_FileStream_open(unidataPath, "rb");
     if(input!=NULL) {
         return input;
     }
