@@ -69,8 +69,7 @@
       </li>
 
       <li>
-        <a href="#MakeICUSmaller">
-        How to Make ICU Smaller</a>
+        <a href="#MakeICUSmaller">How to Make ICU Smaller</a>
       </li>
 
       <li>
@@ -89,9 +88,6 @@
 
           <li><a href="#ImportantNotesDefaultCP">Using the Default
           Codepage</a></li>
-
-          <li><a href="#ImportantNotesDeprecatedAPI">Methods For Enabling
-          Deprecated APIs</a></li>
         </ul>
       </li>
 
@@ -1470,53 +1466,6 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     operating system is using a non-standard name for a default codepage, or
     the converter was not packaged with ICU. The feature allows ICU to run in
     unusual computing environments without completely failing.</p>
-
-    <h3><a name="ImportantNotesDeprecatedAPI" href=
-    "#ImportantNotesDeprecatedAPI">Methods for enabling deprecated
-    APIs</a></h3>
-
-    <h4>C</h4>
-
-    <p>Some deprecated C APIs can be enabled without recompiling the ICU
-    libraries. This can be achieved by defining certain symbols before
-    including the ICU header files. For example, to enable deprecated C APIs
-    for formatting.</p>
-<pre>
-<samp>#ifndef U_USE_DEPRECATED_FORMAT_API
-#  define U_USE_DEPRECATED_FORMAT_API 1
-#endif
-
-#include &quot;unicode/udat.h&quot;
-
-int main(){
-    UDateFormat *def, *fr, *fr_pat ;
-    UErrorCode status = U_ZERO_ERROR;
-    UChar temp[30];
-
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, &quot;fr_FR&quot;, NULL,0, &amp;status);
-    if(U_FAILURE(status)){
-        printf(&quot;Error creating the french dateformat using full time style\n %s\n&quot;,
-            myErrorName(status) );
-    }
-    /* This is supposed to open default date format,
-       but later on it treats it like it is &quot;en_US&quot;.
-       This is very bad when you try to run the tests
-       on a machine where the default locale is NOT &quot;en_US&quot;
-    */
-    def = udat_open(UDAT_SHORT, UDAT_SHORT, &quot;en_US&quot;, NULL, 0, &amp;status);
-    if(U_FAILURE(status)){
-        .... /* handle the error */
-    }
-}</samp>
-</pre>
-
-    <h4>C++</h4>
-
-    <p>Deprecated C++ APIs cannot be enabled without recompiling ICU libraries.
-    Every service has a specific symbol that should be defined to enable the
-    deprecated API of that service. For example: To enable deprecated APIs in
-    transliteration service, the U_USE_DEPRECATED_TRANSLITERATOR_API symbol
-    should be defined before compiling ICU.</p>
 
     <h2><a name="PlatformDependencies" href="#PlatformDependencies">Platform
     Dependencies</a></h2>
