@@ -270,7 +270,7 @@ public:
      * boundaries have been returned.
      * @stable ICU 2.0
      */
-    static const int32_t DONE;
+    U_COMMON_API static const int32_t DONE;
 
     /**
      * Return the index of the first character in the text being scanned.
