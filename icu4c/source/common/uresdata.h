@@ -95,6 +95,9 @@ res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength
 U_CFUNC const uint8_t *
 res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength);
 
+U_CFUNC const int32_t *
+res_getIntVector(const ResourceData *pResData, const Resource res, int32_t *pLength);
+
 U_CFUNC Resource
 res_getResource(const ResourceData *pResData, const char *key);
 

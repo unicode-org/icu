@@ -347,6 +347,21 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resourceBu
                UErrorCode*               status);
 
 /**
+ * returns a 32 bit integer array from a resource. 
+ *
+ * @param resourceBundle: an int vector resource
+ * @param len:    fills in the length of resulting byte chunk
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
+ * @draft
+ */
+U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resourceBundle, int32_t* len, 
+               UErrorCode*               status);
+
+/**
  * returns an integer from a resource. 
  *
  * @param resourceBundle: a string resource

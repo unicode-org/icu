@@ -507,6 +507,30 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
   return NULL;
 }
 
+U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resB, int32_t* len, 
+                                                   UErrorCode*               status) {
+  if (status==NULL || U_FAILURE(*status)) {
+    return NULL;
+  }
+  if(resB == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
+  }
+  switch(RES_GET_TYPE(resB->fRes)) {
+  case RES_INT_VECTOR:
+    return res_getIntVector(&(resB->fResData), resB->fRes, len);
+  case RES_INT:
+  case RES_STRING:
+  case RES_ARRAY:
+  case RES_BINARY:
+  case RES_TABLE:
+  default:
+    *status = U_RESOURCE_TYPE_MISMATCH;
+  }
+
+  return NULL;
+}
+
 U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *status) {
   
   if (status==NULL || U_FAILURE(*status)) {
