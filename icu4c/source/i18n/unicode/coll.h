@@ -303,7 +303,7 @@ public:
   *               locale.
   * @see Locale
   * @see ResourceLoader
-  * @stable ICU 2.0
+  * @stable ICU 2.2
   */
   static Collator* createInstance(const Locale& loc, UErrorCode& err);
 
@@ -316,6 +316,9 @@ public:
    * locale even when ICU is updated.
    * The same locale and version guarantees the same sort keys and
    * comparison results.
+   * <p>
+   * Note: this API will be removed in a future release.  Use
+   * <tt>createInstance(const Locale&, UErrorCode&) instead.</tt></p>
    *
    * @param loc The locale ID for which to open a collator.
    * @param version The requested collator version.
@@ -325,7 +328,7 @@ public:
    *         or a collator with the requested version is not available.
    *
    * @see getVersion
-   * @stable ICU 2.2
+   * @obsolete ICU 2.6
    */
   static Collator *createInstance(const Locale &loc, UVersionInfo version, UErrorCode &err);
 
@@ -582,13 +585,25 @@ public:
   /**
   * Get the set of Locales for which Collations are installed.
   *
-  * <p>Note this does not include locales supported by registered collators.</p>
+  * <p>Note this does not include locales supported by registered collators.
+  * If collators might have been registered, use the overload of getAvailableLocales
+  * that returns a StringEnumeration.</p>
   *
   * @param count the output parameter of number of elements in the locale list
   * @return the list of available locales for which collations are installed
   * @stable ICU 2.0
   */
   static const Locale* getAvailableLocales(int32_t& count);
+
+  /**
+   * Return a StringEnumeration over the locales available at the time of the call, 
+   * including registered locales.  If a severe error occurs (such as out of memory
+   * condition) this will return null. If there is no locale data, an empty enumeration
+   * will be returned.
+   * @return a StringEnumeration over the locales available at the time of the call
+   * @draft ICU 2.6
+   */
+  static StringEnumeration* getAvailableLocales(void);
 
   /**
    * Register a new Collator.  The collator will be adopted.
@@ -620,14 +635,6 @@ public:
    * @draft ICU 2.6 
    */
   static UBool unregister(URegistryKey key, UErrorCode& status);
-
-  /**
-   * Return a StringEnumeration over the locales available at the time of the call, 
-   * including registered locales.
-   * @return a StringEnumeration over the locales available at the time of the call
-   * @draft ICU 2.6
-   */
-  static StringEnumeration* getAvailableLocales(void);
 
   /**
   * Gets the version information for a Collator. 
@@ -894,9 +901,18 @@ private:
 };
 
 /**
- * A factory used with registerFactory to register multiple collators and provide
- * display names for them.  If standard locale display names are sufficient, 
- * Collator instances may be registered instead.
+ * A factory, used with registerFactory, the creates multiple collators and provides
+ * display names for them.  A factory supports some number of locales-- these are the
+ * locales for which it can create collators.  The factory can be visible, in which
+ * case the supported locales will be enumerated by getAvailableLocales, or invisible, 
+ * in which they are not.  Invisible locales are still supported, they are just not
+ * listed by getAvailableLocales.
+ * <p>
+ * If standard locale display names are sufficient, Collator instances can
+ * be registered using registerInstance instead.</p>
+ * <p>
+ * Note: if the collators are to be used from C APIs, they must be instances
+ * of RuleBasedCollator.</p>
  *
  * @draft ICU 2.6
  */
@@ -904,25 +920,28 @@ class U_I18N_API CollatorFactory : public UObject {
 public:
 
     /**
-     * Return true if this factory will be visible.  Default is true.
+     * Return true if this factory is visible.  Default is true.
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
+	 * @return true if the factory is visible.
      */
     virtual UBool visible(void) const;
 
     /**
-     * Return a collator of the appropriate type.  If the locale
-     * is not supported, return null.
+     * Return a collator for the provided locale.  If the locale
+     * is not supported, return NULL.
+	 * @param loc the locale identifying the collator to be created.
+	 * @return a new collator if the locale is supported, otherwise NULL.
      */
     virtual Collator* createCollator(const Locale& loc) = 0;
 
     /**
      * Return the name of the collator for the objectLocale, localized for the displayLocale.
-     * If objectLocale is not visible or not defined by the factory, set the result string
+     * If objectLocale is not supported, or the factory is not visible, set the result string
      * to bogus.
      * @param objectLocale the locale identifying the collator
      * @param displayLocale the locale for which the display name of the collator should be localized
-     * @param result an output parameter for the display name, set to bogus if none supported.
+     * @param result an output parameter for the display name, set to bogus if not supported.
      * @return the display name
      * @draft ICU 2.6
      */
@@ -931,8 +950,12 @@ public:
                                            UnicodeString& result);
     
     /**
-     * Return the locale names directly supported by this factory.  The number of names
-     * is returned in count;
+     * Return an array of all the locale names directly supported by this factory.  
+	 * The number of names is returned in count.  This array is owned by the factory.  
+	 * Its contents must never change.
+	 * @param count output parameter for the number of locales supported by the factory
+	 * @param status the in/out error code
+	 * @param return a pointer to an array of count UnicodeStrings.
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };
