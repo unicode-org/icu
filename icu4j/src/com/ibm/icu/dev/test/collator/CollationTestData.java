@@ -51,19 +51,18 @@ public class CollationTestData extends ICUListResourceBundle {
                                         new Object[]{
                                             new String[] { 
                                                 "njiva=n\uD834\uDD65ji" +
-                                                "va=n\uD834\uDD79jiva"/*=" +
+                                                "va=n\uD834\uDD79jiva=" +
                                                 "n\u0000\u0000\u0000ji" +
                                                 "va=n\u0000jiva=n\uD800" +
                                                 "jiva=n\uFFFEjiva",
                                                 "ljubav=l\u0000jubav=l" +
                                                 "\uD834\uDD79jubav=l\u0000" +
                                                 "\u0000\u0000jubav=l\uD800" +
-                                                "jubav=l\uFFFEjubav",
+                                                "jubav=l\uFFFEjubav=",
                                                 "Ljubav=L\u0000jubav=L" +
                                                 "\uD834\uDD79jubav=L\u0000" +
                                                 "\u0000\u0000jubav=L\uD800" +
                                                 "jubav=L\uFFFEjubav",
-                                                */
                                             },
 
                                         },
