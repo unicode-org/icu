@@ -899,7 +899,13 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
         return;
     }
     parseData->data = data;
-    determineVariableRange(rules);
+
+    // By default, rules use part of the private use area
+    // E000..F8FF for variables and other stand-ins.  Currently
+    // the range F000..F8FF is typically sufficient.  The 'use
+    // variable range' pragma allows rule sets to modify this.
+    setVariableRange(0xF000, 0xF8FF);
+    
     dotStandIn = (UChar) -1;
 
     UnicodeString str; // scratch
@@ -982,6 +988,12 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
                 }
                 pos = p;
             }
+        } else if (resemblesPragma(rules, pos, limit)) {
+            int32_t ppp = parsePragma(rules, pos, limit);
+            if (ppp < 0) {
+                syntaxError(U_MALFORMED_PRAGMA, rules, pos);
+            }
+            pos = ppp;
         } else {
             // Parse a rule
             pos = parseRule(rules, pos, limit);
@@ -1034,6 +1046,110 @@ void TransliteratorParser::parseRules(const UnicodeString& rules,
             data = NULL;
         }
     }
+}
+
+/**
+ * Set the variable range to [start, end] (inclusive).
+ */
+void TransliteratorParser::setVariableRange(int32_t start, int32_t end) {
+    if (start > end || start < 0 || end > 0xFFFF) {
+        status = U_MALFORMED_PRAGMA;
+        return;
+    }
+    
+    // Segment references work down; variables work up.  We don't
+    // know how many of each we will need.
+    data->segmentBase = (UChar) end;
+    data->segmentCount = 0;
+    data->variablesBase = variableNext = (UChar) start; // first private use
+    variableLimit = (UChar) (end + 1);
+}
+
+/**
+ * Set the maximum backup to 'backup', in response to a pragma
+ * statement.
+ */
+void TransliteratorParser::pragmaMaximumBackup(int32_t backup) {
+    //TODO Finish
+}
+
+/**
+ * Begin normalizing all rules using the given mode, in response
+ * to a pragma statement.
+ */
+void TransliteratorParser::pragmaNormalizeRules(UNormalizationMode mode) {
+    //TODO Finish
+}
+
+static const UChar PRAGMA_USE[] = {0x75,0x73,0x65,0x20}; // "use "
+
+static const UChar PRAGMA_VARIABLE_RANGE[] = {0x7E,0x76,0x61,0x72,0x69,0x61,0x62,0x6C,0x65,0x20,0x72,0x61,0x6E,0x67,0x65,0x20,0x23,0x20,0x23,0x7E,0x3B}; // "~variable range # #~;"
+
+static const UChar PRAGMA_MAXIMUM_BACKUP[] = {0x7E,0x6D,0x61,0x78,0x69,0x6D,0x75,0x6D,0x20,0x62,0x61,0x63,0x6B,0x75,0x70,0x20,0x23,0x7E,0x3B}; // "~maximum backup #~;"
+
+static const UChar PRAGMA_NFD_RULES[] = {0x7E,0x6E,0x66,0x64,0x20,0x72,0x75,0x6C,0x65,0x73,0x7E,0x3B}; // "~nfd rules~;"
+
+static const UChar PRAGMA_NFC_RULES[] = {0x7E,0x6E,0x66,0x63,0x20,0x72,0x75,0x6C,0x65,0x73,0x7E,0x3B}; // "~nfc rules~;"
+
+/**
+ * Return true if the given rule looks like a pragma.
+ * @param pos offset to the first non-whitespace character
+ * of the rule.
+ * @param limit pointer past the last character of the rule.
+ */
+UBool TransliteratorParser::resemblesPragma(const UnicodeString& rule, int32_t pos, int32_t limit) {
+    // Must start with /use\s/i
+    return parsePattern(rule, pos, limit, PRAGMA_USE, NULL) >= 0;
+}
+
+/**
+ * Parse a pragma.  This method assumes resemblesPragma() has
+ * already returned true.
+ * @param pos offset to the first non-whitespace character
+ * of the rule.
+ * @param limit pointer past the last character of the rule.
+ * @return the position index after the final ';' of the pragma,
+ * or -1 on failure.
+ */
+int32_t TransliteratorParser::parsePragma(const UnicodeString& rule, int32_t pos, int32_t limit) {
+    int32_t array[2];
+    
+    // resemblesPragma() has already returned true, so we
+    // know that pos points to /use\s/i; we can skip 4 characters
+    // immediately
+    pos += 4;
+    
+    // Here are the pragmas we recognize:
+    // use variable range 0xE000 0xEFFF;
+    // use maximum backup 16;
+    // use nfd rules;
+    // use nfc rules;
+    int p = parsePattern(rule, pos, limit, PRAGMA_VARIABLE_RANGE, array);
+    if (p >= 0) {
+        setVariableRange(array[0], array[1]);
+        return p;
+    }
+    
+    p = parsePattern(rule, pos, limit, PRAGMA_MAXIMUM_BACKUP, array);
+    if (p >= 0) {
+        pragmaMaximumBackup(array[0]);
+        return p;
+    }
+    
+    p = parsePattern(rule, pos, limit, PRAGMA_NFD_RULES, NULL);
+    if (p >= 0) {
+        pragmaNormalizeRules(UNORM_NFD);
+        return p;
+    }
+    
+    p = parsePattern(rule, pos, limit, PRAGMA_NFC_RULES, NULL);
+    if (p >= 0) {
+        pragmaNormalizeRules(UNORM_NFC);
+        return p;
+    }
+    
+    // Syntax error: unable to parse pragma
+    return -1;
 }
 
 /**
@@ -1321,36 +1437,6 @@ UChar TransliteratorParser::getSegmentStandin(int32_t r) {
 }
 
 /**
- * Determines what part of the private use region of Unicode we can use for
- * variable stand-ins.  The correct way to do this is as follows: Parse each
- * rule, and for forward and reverse rules, take the FROM expression, and
- * make a hash of all characters used.  The TO expression should be ignored.
- * When done, everything not in the hash is available for use.  In practice,
- * this method may employ some other algorithm for improved speed.
- */
-void TransliteratorParser::determineVariableRange(const UnicodeString& rules) {
-    UnicodeRange privateUse(0xE000, 0x1900); // Private use area
-
-    UnicodeRange* r = privateUse.largestUnusedSubrange(rules, status);
-
-    data->variablesBase = variableNext = variableLimit = (UChar) 0;
-    
-    if (r != 0) {
-        // Segment references work down; variables work up.  We don't
-        // know how many of each we will need.
-        data->segmentBase = (UChar) (r->start + r->length - 1);
-        data->segmentCount = 0;
-        data->variablesBase = variableNext = (UChar) r->start;
-        variableLimit = (UChar) (r->start + r->length);
-        delete r;
-    }
-
-    if (variableNext >= variableLimit) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-}
-
-/**
  * Returns the index of a character, ignoring quoted text.
  * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
  * found by a search for 'h'.
@@ -1370,6 +1456,139 @@ int32_t TransliteratorParser::quotedIndexOf(const UnicodeString& text,
         }
     }
     return -1;
+}
+
+//----------------------------------------------------------------------
+// Utility methods
+//
+// These should be moved to a separate module later:  common/utility.*
+//----------------------------------------------------------------------
+
+/**
+ * Skip over a sequence of zero or more white space characters
+ * at pos.  Return the index of the first non-white-space character
+ * at or after pos, or str.length(), if there is none.
+ */
+int32_t TransliteratorParser::skipWhitespace(const UnicodeString& str, int32_t pos) {
+    while (pos < str.length()) {
+        UChar32 c = str.char32At(pos);
+        if (!u_isWhitespace(c)) {
+            break;
+        }
+        pos += UTF_CHAR_LENGTH(c);
+    }
+    return pos;
+}
+
+/**
+ * Parse a pattern string starting at offset pos.  Keywords are
+ * matched case-insensitively.  Spaces may be skipped and may be
+ * optional or required.  Integer values may be parsed, and if
+ * they are, they will be returned in the given array.  If
+ * successful, the offset of the next non-space character is
+ * returned.  On failure, -1 is returned.
+ * @param pattern must only contain lowercase characters, which
+ * will match their uppercase equivalents as well.  A space
+ * character matches one or more required spaces.  A '~' character
+ * matches zero or more optional spaces.  A '#' character matches
+ * an integer and stores it in parsedInts, which the caller must
+ * ensure has enough capacity.
+ * @param parsedInts array to receive parsed integers.  Caller
+ * must ensure that parsedInts.length is >= the number of '#'
+ * signs in 'pattern'.
+ * @return the position after the last character parsed, or -1 if
+ * the parse failed
+ */
+int32_t TransliteratorParser::parsePattern(const UnicodeString& rule, int32_t pos, int32_t limit,
+                                           const UnicodeString& pattern, int32_t* parsedInts) {
+    // TODO Update this to handle surrogates
+    int32_t p;
+    int32_t intCount = 0; // number of integers parsed
+    for (int32_t i=0; i<pattern.length(); ++i) {
+        UChar cpat = pattern.charAt(i);
+        UChar c;
+        switch (cpat) {
+        case 32 /*' '*/:
+            if (pos >= limit) {
+                return -1;
+            }
+            c = rule.charAt(pos++);
+            if (!u_isWhitespace(c)) {
+                return -1;
+            }
+            // FALL THROUGH to skipWhitespace
+        case 126 /*'~'*/:
+            pos = skipWhitespace(rule, pos);
+            break;
+        case 35 /*'#'*/:
+            p = pos;
+            parsedInts[intCount++] = parseInteger(rule, p, limit);
+            if (p == pos) {
+                // Syntax error; failed to parse integer
+                return -1;
+            }
+            pos = p;
+            break;
+        default:
+            if (pos >= limit) {
+                return -1;
+            }
+            c = (UChar) u_tolower(rule.charAt(pos++));
+            if (c != cpat) {
+                return -1;
+            }
+            break;
+        }
+    }
+    return pos;
+}
+
+static const UChar ZERO_X[] = {48, 120, 0}; // "0x"
+
+/**
+ * Parse an integer at pos, either of the form \d+ or of the form
+ * 0x[0-9A-Fa-f]+ or 0[0-7]+, that is, in standard decimal, hex,
+ * or octal format.
+ * @param pos INPUT-OUTPUT parameter.  On input, the first
+ * character to parse.  On output, the character after the last
+ * parsed character.
+ */
+int32_t TransliteratorParser::parseInteger(const UnicodeString& rule, int32_t& pos, int32_t limit) {
+    int32_t count = 0;
+    int32_t value = 0;
+    int32_t p = pos;
+    int8_t radix = 10;
+
+    if (0 == rule.caseCompare(p, 2, ZERO_X, U_FOLD_CASE_DEFAULT)) {
+        p += 2;
+        radix = 16;
+    } else if (p < limit && rule.charAt(p) == 48 /*0*/) {
+        p++;
+        count = 1;
+        radix = 8;
+    }
+
+    while (p < limit) {
+        int8_t d = u_digit(rule.charAt(p++), radix);
+        if (d < 0) {
+            --p;
+            break;
+        }
+        ++count;
+        int32_t v = (value * radix) + d;
+        if (v <= value) {
+            // If there are too many input digits, at some point
+            // the value will go negative, e.g., if we have seen
+            // "0x8000000" already and there is another '0', when
+            // we parse the next 0 the value will go negative.
+            return 0;
+        }
+        value = v;
+    }
+    if (count > 0) {
+        pos = p;
+    }
+    return value;
 }
 
 U_NAMESPACE_END
