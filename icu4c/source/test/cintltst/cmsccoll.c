@@ -3632,7 +3632,7 @@ static void TestUnicodeSetRules(void) {
     const uint32_t len;
   } tests[] = {  
     /* - all befores here amount to zero */
-    { "[copy [\\uAC00-\\uD7FF]]&a = a", 
+    { "[optimize [\\uAC00-\\uD7FF]]&a = a", 
     { "a", "b"}, 2} /* you cannot go before first tertiary ignorable */
   };
   uint32_t i;
