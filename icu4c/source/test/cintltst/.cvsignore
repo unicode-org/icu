@@ -3,3 +3,4 @@ cintltst
 Debug
 Release
 Makefile
+*.plg
