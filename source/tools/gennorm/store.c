@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -35,6 +36,8 @@
 #endif
 
 #define DO_DEBUG_OUT 0
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /*
  * The new implementation of the normalization code loads its data from
@@ -74,7 +77,7 @@ static UDataInfo dataInfo={
     0,
 
     { 0x4e, 0x6f, 0x72, 0x6d },   /* dataFormat="Norm" */
-    { 2, 2, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 2, 3, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
     { 3, 2, 0, 0 }                /* dataVersion (Unicode version) */
 };
 
@@ -140,7 +143,8 @@ static uint16_t combiningTable[0x8000];
 static uint16_t combiningTableTop=0;
 
 #define _NORM_MAX_SET_SEARCH_TABLE_LENGTH 0x4000
-static uint16_t canonStartSets[_NORM_MAX_CANON_SETS+2*_NORM_MAX_SET_SEARCH_TABLE_LENGTH];
+static uint16_t canonStartSets[_NORM_MAX_CANON_SETS+2*_NORM_MAX_SET_SEARCH_TABLE_LENGTH
+                               +10000]; /* +10000 for exclusion sets */
 static int32_t canonStartSetsTop=_NORM_SET_INDEX_TOP;
 static int32_t canonSetsCount=0;
 
@@ -1722,6 +1726,9 @@ generateData(const char *dataDir) {
 
 #else
 
+    U_STRING_DECL(nxCJKCompatPattern, "[[:Ideographic:]&[:NFD_QC=No:]]", 31);
+    U_STRING_DECL(nxUnicode32Pattern, "[:^Age=3.2:]", 12);
+    USet *set;
     int32_t normTrieSize, fcdTrieSize, auxTrieSize;
 
     normTrieSize=utrie_serialize(norm32Trie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
@@ -1757,6 +1764,38 @@ generateData(const char *dataDir) {
     }
     canonStartSetsTop+=canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH];
 
+    /* create the normalization exclusion sets */
+    U_STRING_INIT(nxCJKCompatPattern, "[[:Ideographic:]&[:NFD_QC=No:]]", 31);
+    U_STRING_INIT(nxUnicode32Pattern, "[:^Age=3.2:]", 12);
+
+    canonStartSets[_NORM_SET_INDEX_NX_CJK_COMPAT_OFFSET]=canonStartSetsTop;
+    set=uset_openPattern(nxCJKCompatPattern, -1, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: uset_openPattern([:Ideographic:]&[:NFD_QC=No:]) failed, %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+    canonStartSetsTop+=uset_serialize(set, canonStartSets+canonStartSetsTop, LENGTHOF(canonStartSets)-canonStartSetsTop, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: uset_serialize([:Ideographic:]&[:NFD_QC=No:]) failed, %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+    uset_close(set);
+
+    canonStartSets[_NORM_SET_INDEX_NX_UNICODE32_OFFSET]=canonStartSetsTop;
+    set=uset_openPattern(nxUnicode32Pattern, -1, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: uset_openPattern([:^Age=3.2:]) failed, %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+    canonStartSetsTop+=uset_serialize(set, canonStartSets+canonStartSetsTop, LENGTHOF(canonStartSets)-canonStartSetsTop, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: uset_serialize([:^Age=3.2:]) failed, %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+    uset_close(set);
+
+    canonStartSets[_NORM_SET_INDEX_NX_RESERVED_OFFSET]=canonStartSetsTop;
+
     /* make sure that the FCD trie is 4-aligned */
     if((utm_countItems(extraMem)+combiningTableTop)&1) {
         combiningTable[combiningTableTop++]=0x1234; /* add one 16-bit word for an even number */
@@ -1789,6 +1828,7 @@ generateData(const char *dataDir) {
         printf("  number of sets                        %5d\n", (int)canonSetsCount);
         printf("  size of BMP search table              %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]);
         printf("  size of supplementary search table    %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]);
+        printf("  length of exclusion sets              %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_NX_RESERVED_OFFSET]-canonStartSets[_NORM_SET_INDEX_NX_CJK_COMPAT_OFFSET]);
         printf("size of " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
     }
 

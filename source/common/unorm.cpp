@@ -74,7 +74,7 @@
  *   except that this is not implemented for Jamo
  * - c is treated as having a combining class of 0
  */
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 /*
  * This new implementation of the normalization code loads its data from
@@ -470,23 +470,47 @@ internalGetNXHangul(UErrorCode &errorCode) {
     return nxCache[UNORM_NX_HANGUL];
 }
 
-/* get and set an exclusion set from a UnicodeSet pattern */
+/* unorm.cpp 1.116 had and used
 static const UnicodeSet *
 internalGetNXFromPattern(int32_t options, const char *pattern, UErrorCode &errorCode) {
+    ...
+}
+*/
+
+/* get and set an exclusion set from a serialized UnicodeSet */
+static const UnicodeSet *
+internalGetSerializedNX(int32_t options, int32_t nxIndex, UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
     UBool isCached;
 
     UMTX_CHECK(NULL, (UBool)(nxCache[options]!=NULL), isCached);
 
-    if(!isCached) {
-        UnicodeSet *set=new UnicodeSet(UnicodeString(pattern, -1, US_INV), errorCode);
+    if( !isCached &&
+        canonStartSets!=NULL &&
+        canonStartSets[nxIndex]!=0 && canonStartSets[nxIndex+1]>canonStartSets[nxIndex]
+    ) {
+        USerializedSet sset;
+        UnicodeSet *set;
+        UChar32 start, end;
+        int32_t i;
+
+        if( !uset_getSerializedSet(
+                    &sset,
+                    canonStartSets+canonStartSets[nxIndex],
+                    canonStartSets[nxIndex+1]-canonStartSets[nxIndex])
+        ) {
+            errorCode=U_INVALID_FORMAT_ERROR;
+            return NULL;
+        }
+
+        /* turn the serialized set into a UnicodeSet */
+        set=new UnicodeSet();
         if(set==NULL) {
             errorCode=U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
-        if(U_FAILURE(errorCode)) {
-            delete set;
-            return NULL;
+        for(i=0; uset_getSerializedRange(&sset, i, &start, &end); ++i) {
+            set->add(start, end);
         }
 
         umtx_lock(NULL);
@@ -504,24 +528,25 @@ internalGetNXFromPattern(int32_t options, const char *pattern, UErrorCode &error
 
 static const UnicodeSet *
 internalGetNXCJKCompat(UErrorCode &errorCode) {
-    /* build a set from [CJK Ideographs]&[has canonical decomposition] */
-    return internalGetNXFromPattern(
+    /* build a set from [[:Ideographic:]&[:NFD_QC=No:]]=[CJK Ideographs]&[has canonical decomposition] */
+    return internalGetSerializedNX(
                 UNORM_NX_CJK_COMPAT,
-                "[:Ideographic:]&[:NFD_QC=No:]",
+                _NORM_SET_INDEX_NX_CJK_COMPAT_OFFSET,
                 errorCode);
 }
 
 static const UnicodeSet *
 internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
     /* internal function, does not check for incoming U_FAILURE */
-    const char *pattern;
+    int32_t nxIndex;
 
     options&=_NORM_OPTIONS_UNICODE_MASK;
     switch(options) {
     case 0:
         return NULL;
     case UNORM_UNICODE_3_2:
-        pattern="[:^Age=3.2:]";
+        /* [:^Age=3.2:] */
+        nxIndex=_NORM_SET_INDEX_NX_UNICODE32_OFFSET;
         break;
     default:
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -529,7 +554,7 @@ internalGetNXUnicode(uint32_t options, UErrorCode &errorCode) {
     }
 
     /* build a set with all code points that were not designated by the specified Unicode version */
-    return internalGetNXFromPattern(options, pattern, errorCode);
+    return internalGetSerializedNX(options, nxIndex, errorCode);
 }
 
 /* Get a decomposition exclusion set. The data must be loaded. */
