@@ -102,19 +102,19 @@ protected:
      * Characters to check for target back to source mapping.
      * Typically the same as the target script, plus punctuation
      */
-    UBool isReceivingSource(UChar c);
+    inline UBool isReceivingSource(UChar c);
 
     /*
      * Characters to filter for target-source mapping
      * Typically is base alphabet, minus extended characters
      */
-    UBool isTarget(UChar c);
+    inline UBool isTarget(UChar c);
 
     /*
      * Characters to check for target-source mapping
      * Typically the same as the source script, plus punctuation
      */
-    UBool isReceivingTarget(UChar c);
+    inline UBool isReceivingTarget(UChar c);
 
     UBool isSource(const UnicodeString& s);
     UBool isTarget(const UnicodeString& s);
@@ -219,6 +219,7 @@ void RTTest::test2() {
 
     UChar c;
     UnicodeString cs, targ, reverse;
+    int8_t type[0xFFFF];
 
     Transliterator* sourceToTarget = Transliterator::createInstance(transliteratorID);
     if (sourceToTarget == NULL) {
@@ -234,10 +235,16 @@ void RTTest::test2() {
         return;
     }
 
+    log->logln("Initializing type array");
+
+    for (c = 0; c < 0xFFFF; ++c) {
+        type[c] = Unicode::getType(c);
+    }
+
     log->logln("Checking that all source characters convert to target - Singles");
 
     for (c = 0; c < 0xFFFF; ++c) {
-        if (Unicode::getType(c) == Unicode::UNASSIGNED || !isSource(c))
+        if (type[c] == Unicode::UNASSIGNED || !isSource(c))
             continue;
         cs.remove(); cs.append(c);
         targ = cs;
@@ -252,10 +259,10 @@ void RTTest::test2() {
     log->logln("Checking that all source characters convert to target - Doubles");
 
     for (c = 0; c < 0xFFFF; ++c) {
-        if (Unicode::getType(c) == Unicode::UNASSIGNED ||
+        if (type[c] == Unicode::UNASSIGNED ||
             !isSource(c)) continue;
         for (UChar d = 0; d < 0xFFFF; ++d) {
-            if (Unicode::getType(d) == Unicode::UNASSIGNED || !isSource(d))
+            if (type[d] == Unicode::UNASSIGNED || !isSource(d))
                 continue;
             cs.remove(); cs.append(c).append(d);
             targ = cs;
@@ -271,8 +278,8 @@ void RTTest::test2() {
     log->logln("Checking that target characters convert to source and back - Singles");
 
     for (c = 0; c < 0xFFFF; ++c) {
-        if (Unicode::getType(c) == Unicode::UNASSIGNED ||
-            !isTarget(c)) continue;
+        if (type[c] == Unicode::UNASSIGNED || !isTarget(c))
+            continue;
         cs.remove(); cs.append(c);
         targ = cs;
         targetToSource->transliterate(targ);
@@ -293,8 +300,8 @@ void RTTest::test2() {
     int32_t count = 0;
     cs = UNICODE_STRING("aa", 2);
     for (c = 0; c < 0xFFFF; ++c) {
-        if (Unicode::getType(c) == Unicode::UNASSIGNED ||
-            !isTarget(c)) continue;
+        if (type[c] == Unicode::UNASSIGNED || !isTarget(c))
+            continue;
         if (++count > pairLimit) {
             //throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
             log->logln("");
@@ -302,11 +309,10 @@ void RTTest::test2() {
             return;
         }
         cs.setCharAt(0, c);
-        log->log(TestUtility::hex(c));
-        log->log(" ");
+        log->logln(TestUtility::hex(c));
         for (UChar d = 0; d < 0xFFFF; ++d) {
-            if (Unicode::getType(d) == Unicode::UNASSIGNED ||
-                !isTarget(d)) continue;
+            if (type[d] == Unicode::UNASSIGNED || !isTarget(d))
+                continue;
             cs.setCharAt(1, d);
             targ = cs;
             targetToSource->transliterate(targ);
@@ -370,8 +376,7 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
  * Default is ASCII letters for Latin
  */
 UBool RTTest::isSource(UChar c) {
-    int8_t script = TestUtility::getScript(c);
-    return (script == sourceScript && Unicode::isLetter(c)
+    return (TestUtility::getScript(c) == sourceScript && Unicode::isLetter(c)
         && sourceRange.contains(c));
 }
 
@@ -379,7 +384,8 @@ UBool RTTest::isSource(UChar c) {
  * Characters to check for target back to source mapping.
  * Typically the same as the target script, plus punctuation
  */
-UBool RTTest::isReceivingSource(UChar c) {
+inline UBool
+RTTest::isReceivingSource(UChar c) {
     int8_t script = TestUtility::getScript(c);
     return (script == sourceScript || script == TestUtility::COMMON_SCRIPT);
 }
@@ -388,9 +394,9 @@ UBool RTTest::isReceivingSource(UChar c) {
  * Characters to filter for target-source mapping
  * Typically is base alphabet, minus extended characters
  */
-UBool RTTest::isTarget(UChar c) {
-    int8_t script = TestUtility::getScript(c);
-    return (script == targetScript && Unicode::isLetter(c)
+inline UBool
+RTTest::isTarget(UChar c) {
+    return (TestUtility::getScript(c) == targetScript && Unicode::isLetter(c)
         && (targetRange.isEmpty() || targetRange.contains(c)));
 }
 
@@ -398,13 +404,15 @@ UBool RTTest::isTarget(UChar c) {
  * Characters to check for target-source mapping
  * Typically the same as the source script, plus punctuation
  */
-UBool RTTest::isReceivingTarget(UChar c) {
+inline UBool
+RTTest::isReceivingTarget(UChar c) {
     int8_t script = TestUtility::getScript(c);
     return (script == targetScript || script == TestUtility::COMMON_SCRIPT);
 }
 
 UBool RTTest::isSource(const UnicodeString& s) {
-    for (int32_t i = 0; i < s.length(); ++i) {
+    int32_t length = s.length();
+    for (int32_t i = 0; i < length; ++i) {
         if (!isSource(s.charAt(i)))
             return FALSE;
     }
@@ -412,7 +420,8 @@ UBool RTTest::isSource(const UnicodeString& s) {
 }
 
 UBool RTTest::isTarget(const UnicodeString& s) {
-    for (int32_t i = 0; i < s.length(); ++i) {
+    int32_t length = s.length();
+    for (int32_t i = 0; i < length; ++i) {
         if (!isTarget(s.charAt(i)))
             return FALSE;
     }
@@ -420,7 +429,8 @@ UBool RTTest::isTarget(const UnicodeString& s) {
 }
 
 UBool RTTest::isReceivingSource(const UnicodeString& s) {
-    for (int32_t i = 0; i < s.length(); ++i) {
+    int32_t length = s.length();
+    for (int32_t i = 0; i < length; ++i) {
         if (!isReceivingSource(s.charAt(i)))
             return FALSE;
     }
@@ -428,7 +438,8 @@ UBool RTTest::isReceivingSource(const UnicodeString& s) {
 }
 
 UBool RTTest::isReceivingTarget(const UnicodeString& s) {
-    for (int32_t i = 0; i < s.length(); ++i) {
+    int32_t length = s.length();
+    for (int32_t i = 0; i < length; ++i) {
         if (!isReceivingTarget(s.charAt(i)))
             return FALSE;
     }
@@ -450,7 +461,8 @@ RTHangulTest::RTHangulTest() : RTTest("Jamo-Hangul",
                                   TestUtility::JAMO_SCRIPT,
                                   TestUtility::HANGUL_SCRIPT) {}
 
-UBool RTHangulTest::isSource(UChar c) {
+UBool RTHangulTest::isSource(UChar c)
+{
     if (0x1113 <= c && c <= 0x1160) return FALSE;
     if (0x1176 <= c && c <= 0x11F9) return FALSE;
     if (0x3131 <= c && c <= 0x318E) return FALSE;
