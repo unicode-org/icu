@@ -184,5 +184,15 @@
  *     <td>utmscale.h</td>
  *     <td>utmscale.h C API</td>
  *   </tr>
+ *   <tr>
+ *     <td>Basic Layout Engine Types and Constants</td>
+ *     <td>(no C API)</td>
+ *     <td>LETypes.h</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Complex Text Layout</td>
+ *     <td>(no C API)</td>
+ *     <td>LayoutEngine, ParagraphLayout</td>
+ *   </tr>
  * </table>
  */
