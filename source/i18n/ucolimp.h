@@ -483,8 +483,10 @@ typedef struct {
   uint32_t byteSize; uint32_t start; uint32_t limit;
   int32_t count;
   uint32_t current;
-
+  uint32_t fLow; /*forbidden Low */
+  uint32_t fHigh; /*forbidden High */
 } ucolCEGenerator;
+
 typedef struct {
       int32_t size;
       /* all the offsets are in bytes */
@@ -557,7 +559,8 @@ struct UCollator {
     UBool hasRealData;                /* some collators have only options, like French, no rules */
                                       /* to speed up things, we use the UCA image, but we don't want it */
                                       /* to run around */
-    UChar *rules;
+    const UChar *rules;
+    UBool freeRulesOnClose;
     UChar zero;
     UDataInfo dataInfo;               /* Data info of UCA table */
 
