@@ -122,7 +122,6 @@ static UBool convertFile(const char* fromcpage,
       UnicodeString str(fromcpage,"");
       u_wmsg("cantOpenFromCodeset",str.getBuffer(),
              u_wmsg_errorName(err));
-      str.releaseBuffer();
       goto error_exit;
     }
 
@@ -133,7 +132,6 @@ static UBool convertFile(const char* fromcpage,
       UnicodeString str(tocpage,"");
       u_wmsg("cantOpenToCodeset",str.getBuffer(),
              u_wmsg_errorName(err));
-      str.releaseBuffer();
       goto error_exit;
     }
 
@@ -151,7 +149,6 @@ static UBool convertFile(const char* fromcpage,
         {
             UnicodeString str(strerror(errno), "");
             u_wmsg("cantRead",str.getBuffer());
-            str.releaseBuffer();
             goto error_exit;
         }
             
@@ -228,7 +225,6 @@ static UBool convertFile(const char* fromcpage,
         {
           UnicodeString str(strerror(errno),"");
           u_wmsg("cantWrite", str.getBuffer());
-          str.releaseBuffer();  
             goto error_exit;
         }
         
@@ -251,6 +247,8 @@ static UBool convertFile(const char* fromcpage,
     return ret;
 }
 
+static UResourceBundle *gBundle = 0;
+
 static void initMsg(const char *pname) {
     static int ps = 0;
 
@@ -265,7 +263,7 @@ static void initMsg(const char *pname) {
 	strcpy(dataPath, u_getDataDirectory());
 	strcat(dataPath, "uconvmsg");
 	
-	u_wmsg_setPath(dataPath, &err);
+	gBundle = u_wmsg_setPath(dataPath, &err);
 	if(U_FAILURE(err))
 	    {
 		fprintf(stderr, "%s: warning: couldn't open resource bundle %s: %s\n", 
@@ -276,10 +274,24 @@ static void initMsg(const char *pname) {
     }
 }
 
-static void printUsage(const char *pname)
+static void usage(const char *pname, int ecode)
 {
+  const UChar *msg;
+  int32_t      msgLen;
+  UErrorCode  err = U_ZERO_ERROR;
+   
   initMsg(pname);
-  u_wmsg("usage");
+  msg = ures_getStringByKey(gBundle, ecode ? "lcUsageWord" : "ucUsageWord", &msgLen, &err);
+  UnicodeString upname(pname);
+  UnicodeString mname(msg, msgLen);
+
+  u_wmsg("usage", mname.getBuffer(), upname.getBuffer());
+  if (!ecode) {
+    putchar('\n');
+    u_wmsg("help");
+  }
+
+  exit(ecode);
 }
 
 int main(int argc, char** argv)
@@ -301,39 +313,39 @@ int main(int argc, char** argv)
     for (; iter!=end; iter++)
     {
         // Check for from charset
-        if (strcmp("-f", *iter) == 0)
+        if (strcmp("-f", *iter) == 0 || !strcmp("--from-code", *iter))
         {
             iter++;
             if (iter!=end)
                 fromcpage = *iter;
         }
-        else if (strcmp("-t", *iter) == 0)
+        else if (strcmp("-t", *iter) == 0 || !strcmp("--to-code", *iter))
         {
             iter++;
             if (iter!=end)
                 tocpage = *iter;
         }
-        else if (strcmp("-l", *iter) == 0)
+        else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
             printAllConverters();
             goto normal_exit;
         }
-        else if (strcmp("-h", *iter) == 0)
+        else if (strcmp("-h", *iter) == 0 || !strcmp("--help", *iter))
         {
-            printUsage(pname);
-            goto normal_exit;
+            usage(pname, 0);
         }
-        else
-        {
+        else if (**iter == '-' && (*iter)[1]) {
+	    usage(pname, 1);
+	} else if (!infilestr) {
             infilestr = *iter;
-        }
-        
+        } else {
+	    usage(pname, 1);
+	}
     }
 
     if (fromcpage==0 && tocpage==0)
     {
-        printUsage(pname);
-        goto normal_exit;
+        usage(pname, 1);
     }
 
     if (fromcpage==0)
@@ -352,7 +364,7 @@ int main(int argc, char** argv)
     }
 
     // Open the correct input file or connect to stdin for reading input
-    if (infilestr!=0)
+    if (infilestr!=0 && strcmp(infilestr, "-"))
     {
         file = fopen(infilestr, "rb");
         if (file==0)
@@ -363,8 +375,6 @@ int main(int argc, char** argv)
           u_wmsg("cantOpenInputF", 
                  str1.getBuffer(),
                  str2.getBuffer());
-          str1.releaseBuffer();
-          str2.releaseBuffer();
           return 1;
         }
         infile = file;
