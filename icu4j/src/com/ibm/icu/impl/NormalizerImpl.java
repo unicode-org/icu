@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/04/09 20:03:44 $
- * $Revision: 1.17 $
+ * $Date: 2003/04/09 21:36:26 $
+ * $Revision: 1.18 $
  *******************************************************************************
  */
  
@@ -2744,7 +2744,43 @@ public final class NormalizerImpl {
     
         /* } else { FCC, test fcd<=1 instead of the above } */
     }
-    	/**
+    
+    /*
+        private static final boolean
+    _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+        // add the start code point to the USet 
+        uset_add((USet *)context, start);
+        return TRUE;
+    }
+    */
+
+    public static UnicodeSet addPropertyStarts(UnicodeSet set) {
+        int c;
+       
+        /* add the start code point of each same-value range of each trie */
+        //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
+        TrieIterator normIter = new TrieIterator(normTrieImpl.normTrie);
+        RangeValueIterator.Element result = new RangeValueIterator.Element();
+        
+        while(normIter.next(result)){
+            set.add(result.start);
+        }
+        
+        TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
+        //utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
+        while(normIter.next(result)){
+            set.add(result.start);
+        }
+    
+        /* add Hangul LV syllables and LV+1 because of skippables */
+        for(c=HANGUL_BASE; c<HANGUL_BASE+HANGUL_COUNT; c+=JAMO_T_COUNT) {
+            set.add(c);
+            set.add(c+1);
+        }
+        set.add(HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
+        return set; // for chaining
+    }
+    /**
 	 * Internal API, used by collation code.
 	 * Get access to the internal FCD trie table to be able to perform
 	 * incremental, per-code unit, FCD checks in collation.
