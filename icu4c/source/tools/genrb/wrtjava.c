@@ -21,6 +21,7 @@
 #include "unicode/ures.h"
 #include "error.h"
 #include "filestrm.h"
+#include "cstring.h"
 #include "unicode/ucnv.h"
 #include "genrb.h"
 #include "rle.h"
@@ -38,8 +39,8 @@ static const char* copyRight =   "/* \n"
                                  " *\n"
                                  " *******************************************************************************\n"
                                  " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-                                 " * $Date: 2002/03/19 17:49:17 $ \n"
-                                 " * $Revision: 1.3 $ \n"
+                                 " * $Date: 2002/03/20 23:56:22 $ \n"
+                                 " * $Revision: 1.4 $ \n"
                                  " *******************************************************************************\n"
                                  " */\n\n"
                                  "/*******************************************************************************\n"
@@ -145,24 +146,24 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
     while(i<sourceLen){
         if(source[i]==0x0A){
             if(j+2<targetLen){
-                strcat(target,"\\r");
+                uprv_strcat(target,"\\r");
             }
             j+=2;
         }else if(source[i]==0x0D){
             if(j+2<targetLen){
-                strcat(target,"\\f");
+                uprv_strcat(target,"\\f");
             }
             j+=2;
         }else if(source[i] == '"'){
             if(source[i-1]=='\''){
                 if(j+2<targetLen){
-                    strcat(target,"\\");
+                    uprv_strcat(target,"\\");
                     target[j+1]= (char)source[i];
                 }
                 j+=2;
             }else if(source[i-1]!='\\'){
                 if(j+2<targetLen){
-                    strcat(target,"\\");
+                    uprv_strcat(target,"\\");
                     target[j+1]= (char)source[i];
                 }
                 j+=2;
@@ -180,14 +181,14 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
                 case ':':
                 case ';':
                     if(j+2<targetLen){
-                       strcat(target,"\\\\");
+                       uprv_strcat(target,"\\\\");
                     }
                     j+=2;
                     break;
                 case '"':
                 case '\'':
                     if(j+3<targetLen){
-                       strcat(target,"\\\\\\");
+                       uprv_strcat(target,"\\\\\\");
                     }
                     j+=3;
                     break;
@@ -200,7 +201,7 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
                 }
             }else{
                 if(j<targetLen){
-                    strcat(target,"\\\\");
+                    uprv_strcat(target,"\\\\");
                 }
                 j+=2;
             }
@@ -211,10 +212,10 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
             j++;            
         }else{
             if(enc =="" || source[i]==0x0000){
-                strcpy(str,"\\u");
+                uprv_strcpy(str,"\\u");
                 itostr(str+2,source[i],16,4);
                 if(j+6<targetLen){
-                    strcat(target,str);
+                    uprv_strcat(target,str);
                 }
                 j+=6;
             }else{
@@ -224,7 +225,7 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
                     return 0;
                 }
                 if(j+retVal<targetLen){
-                    strcat(target,dest);
+                    uprv_strcat(target,dest);
                 }
                 j+=retVal;
             }
@@ -306,7 +307,7 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
 static void 
 string_write_java(struct SResource *res,UErrorCode *status) {       
     str_write_java(res->u.fString.fChars,res->u.fString.fLength,status);
-     if(strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
+     if(uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
         UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
         int32_t bufLen =0;
         uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);      
@@ -344,12 +345,12 @@ array_write_java( struct SResource *res, UErrorCode *status) {
          if(allStrings==FALSE){
             char* object = "new Object[]{\n";
             write_tabs(out);
-            T_FileStream_write(out, object,strlen(object));
+            T_FileStream_write(out, object,uprv_strlen(object));
             tabCount++;
             decrementTabs = TRUE;
         }else{
             write_tabs(out);
-            T_FileStream_write(out,arr,strlen(arr));
+            T_FileStream_write(out,arr,uprv_strlen(arr));
             tabCount++;
         }
         first=current;
@@ -387,8 +388,8 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
     buf[0]=0;
     write_tabs(out);
 
-    if(strcmp(srBundle->fKeys+res->fKey,"DateTimeElements")==0){
-        T_FileStream_write(out,stringArr,strlen(stringArr));
+    if(uprv_strcmp(srBundle->fKeys+res->fKey,"DateTimeElements")==0){
+        T_FileStream_write(out,stringArr,uprv_strlen(stringArr));
         tabCount++;
         for(i = 0; i<res->u.fIntVector.fCount; i++) {
             write_tabs(out);
@@ -399,11 +400,11 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
             T_FileStream_write(out,"\n",1);
         }
     }else{
-        T_FileStream_write(out,intArr,strlen(intArr));
+        T_FileStream_write(out,intArr,uprv_strlen(intArr));
         tabCount++;
         for(i = 0; i<res->u.fIntVector.fCount; i++) {
             write_tabs(out);
-            T_FileStream_write(out,intC,strlen(intC));
+            T_FileStream_write(out,intC,uprv_strlen(intC));
             len=itostr(buf,res->u.fIntVector.fArray[i],10,0);
             T_FileStream_write(out,buf,len);
             T_FileStream_write(out,"),",2);
@@ -425,7 +426,7 @@ int_write_java(struct SResource *res,UErrorCode *status) {
 
     /* write the binary data */
     write_tabs(out);
-    T_FileStream_write(out,intC,strlen(intC));
+    T_FileStream_write(out,intC,uprv_strlen(intC));
     len=itostr(buf,res->u.fIntValue.fValue,10,0);
     T_FileStream_write(out,buf,len);
     T_FileStream_write(out,"),\n",3 );
@@ -446,40 +447,40 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
         uint16_t* target=NULL;
         uint16_t* saveTarget = NULL;
         int32_t tgtLen = 0;
-        if(strcmp(srBundle->fKeys+res->fKey,"%%CollationBin")==0 || strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
+        if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%CollationBin")==0 || uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
             char fileName[1024] ={0};
             char fn[1024] =  {0};
             FileStream* datFile = NULL;
-            if(strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
-                strcat(fileName,"BreakDictionaryData");
+            if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
+                uprv_strcat(fileName,"BreakDictionaryData");
                 ext = ".ucs";
             }else{
-                strcat(fileName,"CollationElements");
+                uprv_strcat(fileName,"CollationElements");
                 ext=".res";
             }
-            if(strcmp(srBundle->fLocale,"root")!=0){
-                strcat(fileName,"_");
-                strcat(fileName,srBundle->fLocale);
+            if(uprv_strcmp(srBundle->fLocale,"root")!=0){
+                uprv_strcat(fileName,"_");
+                uprv_strcat(fileName,srBundle->fLocale);
             }
             
-            strcat(fileName,ext);
+            uprv_strcat(fileName,ext);
 
-            strcat(fn,outDir);
-            if(outDir[strlen(outDir)-1]!=U_FILE_SEP_CHAR){
-                strcat(fn,U_FILE_SEP_STRING);
+            uprv_strcat(fn,outDir);
+            if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
+                uprv_strcat(fn,U_FILE_SEP_STRING);
             }
-            strcat(fn,fileName);
+            uprv_strcat(fn,fileName);
             type = "RESOURCE_BINARY,";
             write_tabs(out);
-            T_FileStream_write(out,arr,strlen(arr));
+            T_FileStream_write(out,arr,uprv_strlen(arr));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,openBrace,strlen(openBrace));
+            T_FileStream_write(out,openBrace,uprv_strlen(openBrace));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,type,strlen(type));
+            T_FileStream_write(out,type,uprv_strlen(type));
             T_FileStream_write(out,"\"",1);
-            T_FileStream_write(out,fileName,strlen(fileName));
+            T_FileStream_write(out,fileName,uprv_strlen(fileName));
             T_FileStream_write(out,"\"\n",2);
             tabCount--;
             write_tabs(out);
@@ -492,7 +493,7 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             T_FileStream_close(datFile);
 
         }else{
-            if(strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
+            if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
                 srcLen = res->u.fBinaryValue.fLength/2;
                 target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
                 if(target){
@@ -578,13 +579,13 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
         
 
             write_tabs(out);
-            T_FileStream_write(out,arr,strlen(arr));
+            T_FileStream_write(out,arr,uprv_strlen(arr));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,openBrace,strlen(openBrace));
+            T_FileStream_write(out,openBrace,uprv_strlen(openBrace));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,type,strlen(type));
+            T_FileStream_write(out,type,uprv_strlen(type));
             str_write_java(target,tgtLen,status);
             tabCount--;
             write_tabs(out);
@@ -597,11 +598,11 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             free(target);
         }
    }
-   /* strcpy(buffer,"(byte) 0x");
+   /* uprv_strcpy(buffer,"(byte) 0x");
 
     if(res->u.fBinaryValue.fLength>0 ){
         write_tabs(out);
-        T_FileStream_write(out,byte,strlen(byte));
+        T_FileStream_write(out,byte,uprv_strlen(byte));
         tabCount++;
         write_tabs(out);
         while(i<res->u.fBinaryValue.fLength){
@@ -645,7 +646,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
     if (res->u.fTable.fCount > 0) {
         if(start==FALSE){
             write_tabs(out);
-            T_FileStream_write(out,obj,strlen(obj));
+            T_FileStream_write(out,obj,uprv_strlen(obj));
             tabCount++;
         }
         start = FALSE;
@@ -666,7 +667,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
             write_tabs(out);
 
             T_FileStream_write(out,"\"",1);
-            T_FileStream_write(out,srBundle->fKeys+current->fKey,strlen(srBundle->fKeys+current->fKey));
+            T_FileStream_write(out,srBundle->fKeys+current->fKey,uprv_strlen(srBundle->fKeys+current->fKey));
             T_FileStream_write(out,"\",",2);
 
             if(current->fType!=RES_STRING){
@@ -742,22 +743,22 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
     char constructor[1000] = { 0 };    
     UBool j1 =FALSE;
     outDir = outputDir;
-    strcpy(className, "LocaleElements");
+    uprv_strcpy(className, "LocaleElements");
     srBundle = bundle;
-    if(strcmp(srBundle->fLocale,"root")!=0){
-        strcat(className,"_");
-        strcat(className,srBundle->fLocale);
+    if(uprv_strcmp(srBundle->fLocale,"root")!=0){
+        uprv_strcat(className,"_");
+        uprv_strcat(className,srBundle->fLocale);
     }
     if(outputDir){
-        strcpy(fileName, outputDir);
-        if(outputDir[strlen(outputDir)-1] !=U_FILE_SEP_CHAR){
-            strcat(fileName,U_FILE_SEP_STRING);
+        uprv_strcpy(fileName, outputDir);
+        if(outputDir[uprv_strlen(outputDir)-1] !=U_FILE_SEP_CHAR){
+            uprv_strcat(fileName,U_FILE_SEP_STRING);
         }
-        strcat(fileName,className);
-        strcat(fileName,".java");
+        uprv_strcat(fileName,className);
+        uprv_strcat(fileName,".java");
     }else{
-        strcat(fileName,className);
-        strcat(fileName,".java");
+        uprv_strcat(fileName,className);
+        uprv_strcat(fileName,".java");
     }
 
     if (writtenFilename) {
@@ -775,14 +776,14 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         return;
     }
 
-    T_FileStream_write(out,copyRight,strlen(copyRight));
-    T_FileStream_write(out,javaClass,strlen(javaClass));
-    T_FileStream_write(out,className,strlen(className));
+    T_FileStream_write(out,copyRight,uprv_strlen(copyRight));
+    T_FileStream_write(out,javaClass,uprv_strlen(javaClass));
+    T_FileStream_write(out,className,uprv_strlen(className));
     if(j1){
-        T_FileStream_write(out,javaClass1,strlen(javaClass1));
+        T_FileStream_write(out,javaClass1,uprv_strlen(javaClass1));
     }else{
         sprintf(constructor,javaClassICU,className);
-        T_FileStream_write(out,constructor,strlen(constructor));
+        T_FileStream_write(out,constructor,uprv_strlen(constructor));
     }
 
     if(outputEnc && outputEnc!=""){
@@ -795,15 +796,15 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
     }
     res_write_java(bundle->fRoot, status);
     if(j1){
-        T_FileStream_write(out,closeClass, strlen(closeClass));
+        T_FileStream_write(out,closeClass, uprv_strlen(closeClass));
     }else{
         tabCount--;
         write_tabs(out);
         T_FileStream_write(out,"};\n",3);
         tabCount--;
         write_tabs(out);
-        T_FileStream_write(out,closeBrace,strlen(closeBrace));
-        T_FileStream_write(out,closeBrace,strlen(closeBrace));
+        T_FileStream_write(out,closeBrace,uprv_strlen(closeBrace));
+        T_FileStream_write(out,closeBrace,uprv_strlen(closeBrace));
     }
 
 

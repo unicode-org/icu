@@ -23,6 +23,7 @@
 #include "error.h"
 #include "uhash.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "read.h"
 #include "ustr.h"
 #include "reslist.h"
@@ -847,7 +848,7 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
         value = uprv_strtoul(string, &stopstring, 0);/* make intvector support decimal,hexdigit,octal digit ranging from -2^31-2^32-1*/
         len=stopstring-string;
 
-        if(len==strlen(string))
+        if(len==uprv_strlen(string))
         {
             intvector_add(result, value, status);
             uprv_free(string);
@@ -930,7 +931,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
                 value[i >> 1] = (uint8_t) uprv_strtoul(toConv, &stopstring, 16);
                 len=stopstring-toConv;
 
-                if(len!=strlen(toConv))
+                if(len!=uprv_strlen(toConv))
                 {
                     uprv_free(string);
                     *status=U_INVALID_CHAR_FOUND;
@@ -998,7 +999,7 @@ parseInteger(char *tag, uint32_t startline, UErrorCode *status)
     /* to handle illegal char in the integer*/
     value = uprv_strtoul(string, &stopstring, 0);
     len=stopstring-string;
-    if(len==strlen(string))
+    if(len==uprv_strlen(string))
     {
         result = int_open(bundle, tag, value, status);
     }
