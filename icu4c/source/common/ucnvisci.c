@@ -159,6 +159,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
             converterData->name[len+1]=0;
         }else{
             uprv_free(cnv->extraInfo);
+            cnv->extraInfo = NULL;
             *errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         }
 
