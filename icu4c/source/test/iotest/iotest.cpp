@@ -209,6 +209,10 @@ static void DataDrivenPrintf(void) {
     double dbl;
     int32_t uBufferLenReturned;
 
+    const char *fileLocale = "en_US_POSIX";
+    int32_t uFileBufferLenReturned;
+    UFILE *testFile;
+
     errorCode=U_ZERO_ERROR;
     dataModule=TestDataModule::getTestDataModule("icuio", logger, errorCode);
     if(U_SUCCESS(errorCode)) {
@@ -220,6 +224,11 @@ static void DataDrivenPrintf(void) {
                             i, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
                     continue;
+                }
+                testFile = u_fopen(STANDARD_TEST_FILE, "w", fileLocale, "UTF-8");
+                if (!testFile) {
+                    log_err("Can't open test file - %s\n",
+                            STANDARD_TEST_FILE);
                 }
                 u_memset(uBuffer, 0x2A, sizeof(uBuffer)/sizeof(uBuffer[0]));
                 uBuffer[sizeof(uBuffer)/sizeof(uBuffer[0])-1] = 0;
@@ -241,29 +250,36 @@ static void DataDrivenPrintf(void) {
                 case 0x64:  // 'd' double
                     dbl = atof(u_austrcpy(cBuffer, argument));
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, dbl);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, dbl);
                     break;
                 case 0x31:  // '1' int8_t
                     i8 = (int8_t)uto64(argument);
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, i8);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, i8);
                     break;
                 case 0x32:  // '2' int16_t
                     i16 = (int16_t)uto64(argument);
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, i16);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, i16);
                     break;
                 case 0x34:  // '4' int32_t
                     i32 = (int32_t)uto64(argument);
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, i32);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, i32);
                     break;
                 case 0x38:  // '8' int64_t
                     i64 = uto64(argument);
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, i64);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, i64);
                     break;
                 case 0x73:  // 's' char *
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, cBuffer);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, cBuffer);
                     break;
                 case 0x53:  // 'S' UChar *
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, argument);
+                    uFileBufferLenReturned = u_fprintf_u(testFile, format, argument);
                     break;
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
@@ -271,7 +287,7 @@ static void DataDrivenPrintf(void) {
                     u_austrncpy(cFormat, format, sizeof(cFormat));
                     u_austrncpy(cExpected, expectedResult, sizeof(cExpected));
                     cBuffer[sizeof(cBuffer)-1] = 0;
-                    log_err("FAILURE test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
+                    log_err("FAILURE string test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
                             i, cFormat, cBuffer, cExpected);
                 }
                 if (uBuffer[uBufferLenReturned-1] == 0
@@ -284,12 +300,37 @@ static void DataDrivenPrintf(void) {
                     log_err("FAILURE test case %d - \"%s\" wrong amount of characters was written. Got %d.\n",
                             i, cBuffer, uBufferLenReturned);
                 }
+                u_fclose(testFile);
+                testFile = u_fopen(STANDARD_TEST_FILE, "r", fileLocale, "UTF-8");
+                if (!testFile) {
+                    log_err("Can't open test file - %s\n",
+                            STANDARD_TEST_FILE);
+                }
+                uBuffer[0];
+                u_fgets(uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]), testFile);
+                if (u_strcmp(uBuffer, expectedResult) != 0) {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    u_austrncpy(cFormat, format, sizeof(cFormat));
+                    u_austrncpy(cExpected, expectedResult, sizeof(cExpected));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE file test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
+                            i, cFormat, cBuffer, cExpected);
+                }
+                if (uFileBufferLenReturned != uBufferLenReturned)
+                {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE uFileBufferLenReturned(%d) != uBufferLenReturned(%d)\n",
+                            uFileBufferLenReturned, uBufferLenReturned);
+                }
+
                 if(U_FAILURE(errorCode)) {
                     log_err("error running icuio/printf test case %d - %s\n",
                             i, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
                     continue;
                 }
+                u_fclose(testFile);
             }
             delete testData;
         }
