@@ -549,6 +549,19 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
 
 //----------------------------------------------------------------------
 
+/**
+ * Append symbols[value] to dst.  Make sure the array index is not out
+ * of bounds.
+ */
+inline void
+_appendSymbol(UnicodeString& dst,
+              int32_t value,
+              const UnicodeString* symbols,
+              int32_t symbolsCount) {
+    U_ASSERT(value >= 0 && value < symbolsCount);
+    dst += symbols[value];
+}
+
 void
 SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             UChar ch,
@@ -582,16 +595,12 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     if (U_FAILURE(status)) {
         return;
     }
-    // assert values are in range before using them to index arrays
-    U_ASSERT(field == UCAL_YEAR || field == UCAL_YEAR_WOY ||
-             (value >= cal.getMinimum(field) &&
-              value <= cal.getMaximum(field)));
 
     switch (patternCharIndex) {
     
     // for any "G" symbol, write out the appropriate era string
     case UDAT_ERA_FIELD:
-        appendTo += fSymbols->fEras[value];
+        _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
         break;
 
     // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
@@ -610,9 +619,11 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // appropriate number of digits
     case UDAT_MONTH_FIELD:
         if (count >= 4) 
-            appendTo += fSymbols->fMonths[value];
+            _appendSymbol(appendTo, value, fSymbols->fMonths,
+                          fSymbols->fMonthsCount);
         else if (count == 3) 
-            appendTo += fSymbols->fShortMonths[value];
+            _appendSymbol(appendTo, value, fSymbols->fShortMonths,
+                          fSymbols->fShortMonthsCount);
         else 
             zeroPaddingNumber(appendTo, value + 1, count, maxIntCount);
         break;
@@ -647,14 +658,17 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "EEEE", write out the day-of-the-week name; otherwise, use the abbreviation
     case UDAT_DAY_OF_WEEK_FIELD:
         if (count >= 4) 
-            appendTo += fSymbols->fWeekdays[value];
+            _appendSymbol(appendTo, value, fSymbols->fWeekdays,
+                          fSymbols->fWeekdaysCount);
         else 
-            appendTo += fSymbols->fShortWeekdays[value];
+            _appendSymbol(appendTo, value, fSymbols->fShortWeekdays,
+                          fSymbols->fShortWeekdaysCount);
         break;
 
     // for and "a" symbol, write out the whole AM/PM string
     case UDAT_AM_PM_FIELD:
-        appendTo += fSymbols->fAmPms[value];
+        _appendSymbol(appendTo, value, fSymbols->fAmPms,
+                      fSymbols->fAmPmsCount);
         break;
 
     // for "h" and "hh", write out the hour, adjusting noon and midnight to show up
