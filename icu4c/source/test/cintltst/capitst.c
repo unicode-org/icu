@@ -968,35 +968,85 @@ void TestGetLocale() {
   UChar rlz[256] = {0};
   uint32_t rlzLen = u_unescape(rules, rlz, 256);
 
-  /* opening from a nonexistent locale should get root */
-  UCollator *coll = ucol_open("blahehe", &status);
-  const char *locale = ucol_getLocale(coll, &status);
-  doAssert((strcmp(locale, "root") == 0), "Bad locale\n");
-  ucol_close(coll);
+  UCollator *coll = NULL;
+  const char *locale = NULL;
 
-  /* opening from down the tree should get a first locale with data */
-  coll = ucol_open("sr_YU", &status);
-  locale = ucol_getLocale(coll, &status);
-  doAssert((strcmp(locale, "root") == 0), "Bad locale\n");
-  ucol_close(coll);
+  int32_t i = 0;
 
-  /* opening from down the tree should get a first locale with data */
-  coll = ucol_open("ar_KW", &status);
-  locale = ucol_getLocale(coll, &status);
-  doAssert((strcmp(locale, "ar") == 0), "Bad locale\n");
-  ucol_close(coll);
+  struct {
+    char* requestedLocale;
+    char* validLocale;
+    char* actualLocale;
+  } testStruct[] = {
+    { "sr_YU", "sr_YU", "root" },
+    { "sh_YU", "sh_YU", "sh" },
+    { "en_US_CALIFORNIA", "en_US", "root" },
+    { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
+  };
 
-  /* opening from down the tree should get a first locale with data */
-  coll = ucol_open("fr_FR_nonexistent", &status);
-  locale = ucol_getLocale(coll, &status);
-  doAssert((strcmp(locale, "fr") == 0), "Bad locale\n");
-  ucol_close(coll);
+  /* test opening collators for different locales */
+  for(i = 0; i<sizeof(testStruct)/sizeof(testStruct[0]); i++) {
+    status = U_ZERO_ERROR;
+    coll = ucol_open(testStruct[i].requestedLocale, &status);
+    if(U_FAILURE(status)) {
+      log_err("Failed to open collator for %s with %s\n", testStruct[i].requestedLocale, u_errorName(status));
+      ucol_close(coll);
+      continue;
+    }
+    locale = ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status);
+    if(strcmp(locale, testStruct[i].requestedLocale) != 0) {
+      log_err("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale);
+    }
+    locale = ucol_getLocale(coll, ULOC_VALID_LOCALE, &status);
+    if(strcmp(locale, testStruct[i].validLocale) != 0) {
+      log_err("[Coll %s]: Error in valid locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].validLocale, locale);
+    }
+    locale = ucol_getLocale(coll, ULOC_ACTUAL_LOCALE, &status);
+    if(strcmp(locale, testStruct[i].actualLocale) != 0) {
+      log_err("[Coll %s]: Error in actual locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].actualLocale, locale);
+    }
+    ucol_close(coll);
+  }
 
-  /* opening from rules should get us NULL locale */
+  /* completely non-existant locale for collator should get a default collator */
+  {
+    UCollator *defaultColl = ucol_open(NULL, &status);
+    coll = ucol_open("blahaha", &status);
+    if(strcmp(ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status), "blahaha")) {
+      log_err("Nonexisting locale didn't preserve the requested locale\n");
+    }
+    if(strcmp(ucol_getLocale(coll, ULOC_VALID_LOCALE, &status), 
+      ucol_getLocale(defaultColl, ULOC_VALID_LOCALE, &status))) {
+      log_err("Valid locale for nonexisting locale locale collator differs "
+        "from valid locale for default collator\n");
+    }
+    if(strcmp(ucol_getLocale(coll, ULOC_ACTUAL_LOCALE, &status), 
+      ucol_getLocale(defaultColl, ULOC_ACTUAL_LOCALE, &status))) {
+      log_err("Actual locale for nonexisting locale locale collator differs "
+        "from actual locale for default collator\n");
+    }
+    ucol_close(coll);
+    ucol_close(defaultColl);
+  }
+
+    
+
+  /* collator instantiated from rules should have all three locales NULL */
   coll = ucol_openRules(rlz, rlzLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
-  locale = ucol_getLocale(coll, &status);
-  doAssert((locale == NULL), "Bad locale\n");
+  locale = ucol_getLocale(coll, ULOC_REQUESTED_LOCALE, &status);
+  if(locale != NULL) {
+    log_err("For collator instantiated from rules, requested locale returned %s instead of NULL\n", locale);
+  }
+  locale = ucol_getLocale(coll, ULOC_VALID_LOCALE, &status);
+  if(locale != NULL) {
+    log_err("For collator instantiated from rules,  valid locale returned %s instead of NULL\n", locale);
+  }
+  locale = ucol_getLocale(coll, ULOC_ACTUAL_LOCALE, &status);
+  if(locale != NULL) {
+    log_err("For collator instantiated from rules, actual locale returned %s instead of NULL\n", locale);
+  }
   ucol_close(coll);
+
 }
 
 
