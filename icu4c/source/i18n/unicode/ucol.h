@@ -670,8 +670,8 @@ ucol_safeClone(const UCollator *coll,
                int32_t         *pBufferSize,
                UErrorCode      *status);
 
-/** default memory size for the new clone */
-#define U_COL_SAFECLONE_BUFFERSIZE 384
+/** default memory size for the new clone. It needs to be this large for os/400 large pointers */
+#define U_COL_SAFECLONE_BUFFERSIZE 512
 
 /**
  * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
