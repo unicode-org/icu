@@ -175,18 +175,28 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         return;
     }
 
-    if (fGPOSTable != NULL) {
-        GlyphPositionAdjustment *adjustments = new GlyphPositionAdjustment[glyphCount];
+    if (glyphCount > 0 && fGPOSTable != NULL) {
+        GlyphPositionAdjustment *adjustments = LE_NEW_ARRAY(GlyphPositionAdjustment, glyphCount);
+        le_int32 i;
 
         if (adjustments == NULL) {
             success = LE_MEMORY_ALLOCATION_ERROR;
             return;
         }
 
+        for (i = 0; i < glyphCount; i += 1) {
+            adjustments[i].setXPlacement(0);
+            adjustments[i].setYPlacement(0);
+
+            adjustments[i].setXAdvance(0);
+            adjustments[i].setYAdvance(0);
+
+            adjustments[i].setBaseOffset(-1);
+        }
+
         fGPOSTable->process(glyphs, adjustments, fFeatureTags, glyphCount, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance, fFeatureOrder);
 
         float xAdjust = 0, yAdjust = 0;
-        le_int32 i;
 
         for (i = 0; i < glyphCount; i += 1) {
             float xAdvance   = adjustments[i].getXAdvance();
@@ -217,7 +227,7 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         positions[glyphCount*2]   += xAdjust;
         positions[glyphCount*2+1] -= yAdjust;
 
-        delete[] adjustments;
+        LE_DELETE_ARRAY(adjustments);
     }
 
     LE_DELETE_ARRAY(fFeatureTags);
