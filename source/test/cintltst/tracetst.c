@@ -17,6 +17,7 @@
 #include "unicode/ucnv.h"
 #include "cintltst.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "utracimp.h"
 
@@ -95,22 +96,77 @@ static void test_format(const char *format, int32_t bufCap, int32_t indent,
 /*
  *  define trace functions for use in this test.
  */
-static int gTraceEntryCount;
-static int gTraceExitCount;
-static int gTraceDataCount;
+static int    gTraceEntryCount;
+static int    gTraceExitCount;
+static int    gTraceDataCount;
+static UBool  gFnNameError   = FALSE;
+static UBool  gFnFormatError = FALSE;
 
 static void testTraceEntry(const void *context, int32_t fnNumber) {
+    const char *fnName;
+    const char *bogusFnName;
+
     gTraceEntryCount++;
+
+    /* Verify that a name is available for the fnNumber passed to us */
+    bogusFnName = utrace_functionName(-1);
+    fnName = utrace_functionName(fnNumber);
+    if (strcmp(fnName, bogusFnName) == 0) {
+        gFnNameError = TRUE;
+    }
+    /* printf("%s() Enter\n", fnName); */
+
 }
 
 static void testTraceExit(const void *context, int32_t fnNumber,
                    const char *fmt, va_list args) {
+    char        buf[1000];
+    const char *fnName;
+    const char *bogusFnName;
+
     gTraceExitCount++;
+   
+    /* Verify that a name is available for the fnNumber passed to us */
+    bogusFnName = utrace_functionName(-1);
+    fnName = utrace_functionName(fnNumber);
+    if (strcmp(fnName, bogusFnName) == 0) {
+        gFnNameError = TRUE;
+    }
+
+    /* Verify that the format can be used.  */
+    buf[0] = 0;
+    utrace_vformat(buf, sizeof(buf), 0, fmt, args);
+    if (strlen(buf) == 0) {
+        gFnFormatError = TRUE;
+    }
+
+    /* printf("%s() %s\n", fnName, buf); */
+
 }
 
 static void testTraceData(const void *context, int32_t fnNumber, int32_t level,
                    const char *fmt, va_list args) {
+    char        buf[1000];
+    const char *fnName;
+    const char *bogusFnName;
+
     gTraceDataCount++;
+
+    /* Verify that a name is available for the fnNumber passed to us */
+    bogusFnName = utrace_functionName(-1);
+    fnName = utrace_functionName(fnNumber);
+    if (strcmp(fnName, bogusFnName) == 0) {
+        gFnNameError = TRUE;
+    }
+
+    /* Verify that the format can be used.  */
+    buf[0] = 0;
+    utrace_vformat(buf, sizeof(buf), 0, fmt, args);
+    if (strlen(buf) == 0) {
+        gFnFormatError = TRUE;
+    }
+
+    /* printf("  %s()   %s\n", fnName, buf); */
 }
 
 
@@ -184,6 +240,8 @@ static void TestTraceAPI() {
         gTraceEntryCount = 0;
         gTraceExitCount  = 0;
         gTraceDataCount  = 0;
+        gFnNameError     = FALSE;
+        gFnFormatError   = FALSE;
         utrace_setLevel(UTRACE_OPEN_CLOSE);
         cnv = ucnv_open(NULL, &status);
         TEST_ASSERT(U_SUCCESS(status));
@@ -192,6 +250,8 @@ static void TestTraceAPI() {
         TEST_ASSERT(gTraceEntryCount > 0);
         TEST_ASSERT(gTraceExitCount  > 0);
         TEST_ASSERT(gTraceDataCount  > 0);
+        TEST_ASSERT(gFnNameError   == FALSE);
+        TEST_ASSERT(gFnFormatError == FALSE);
 #else
         log_info("Tracing has been disabled. Testing of this feature has been skipped.\n");
 #endif
