@@ -58,28 +58,6 @@ else
   $1_FALSE=
 fi])
 
-dnl FreeBSD -pthread check - Jonathan McDowell <noodles@earth.li>
-AC_DEFUN(AC_PTHREAD_FREEBSD,
-[AC_MSG_CHECKING([if we need -pthread for threads])
-AC_CACHE_VAL(ac_ldflag_pthread,
-[ac_save_LDFLAGS="$LDFLAGS"
-LDFLAGS="-pthread $LDFLAGS"
-AC_TRY_LINK(
-[
-char pthread_create();
-],
-pthread_create();,
-eval "ac_ldflag_pthread=yes",
-eval "ac_ldflag_pthread=no"),
-LDFLAGS="$ac_save_LDFLAGS"
-])
-if eval "test \"`echo $ac_ldflag_pthread`\" = yes"; then
-	AC_MSG_RESULT(yes)
-        ICU_USE_THREADS=1
-else
-	AC_MSG_RESULT(no)
-fi])
-
 dnl Strict compilation options.
 AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [

@@ -165,9 +165,9 @@ if test $threads = true; then
  dnl special pthread handling 
  dnl AIX uses pthreads instead of pthread, and HP/UX uses cma
  dnl FreeBSD users -pthread
- AC_CHECK_LIB(pthread, pthread_create)
+ AC_SEARCH_LIBS(pthread_create, pthread pthreads c_r cma)
 
- if test $ac_cv_lib_pthread_pthread_create = yes; then
+ if test "$ac_cv_search_pthread_create" != no; then
   ICU_USE_THREADS=1
  else
    dnl For HP 11
@@ -175,26 +175,6 @@ if test $threads = true; then
    if test $ac_cv_lib_pthread_pthread_mutex_init = yes; then
      ICU_USE_THREADS=1
    fi
- fi
-
-
- if test $ICU_USE_THREADS = 0; then
-  AC_CHECK_LIB(pthreads, pthread_create)
-  if test $ac_cv_lib_pthreads_pthread_create = yes; then
-   ICU_USE_THREADS=1
-  fi
- fi
-
- if test $ICU_USE_THREADS = 0; then
- AC_CHECK_LIB(cma, pthread_create)
-  if test $ac_cv_lib_cma_pthread_create = yes; then
-   ICU_USE_THREADS=1
-  fi
- fi
-
- dnl If all other thread tests fail, try BSD's -pthread
- if test $ICU_USE_THREADS = 0; then
-  AC_PTHREAD_FREEBSD
  fi
 
  AC_CHECK_FUNC(pthread_mutex_lock)
