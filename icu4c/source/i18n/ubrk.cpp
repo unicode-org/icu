@@ -94,7 +94,7 @@ ubrk_safeClone(
 U_CAPI void
 ubrk_close(UBreakIterator *bi)
 {
-    if (!((BreakIterator*) bi)->isBufferClone())
+    if (bi && !((BreakIterator*) bi)->isBufferClone())
     {
         delete (BreakIterator*) bi;
     }
