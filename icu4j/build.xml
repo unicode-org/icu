@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/11/21 21:25:27 $
-* $Revision: 1.82 $
+* $Date: 2003/11/24 22:27:54 $
+* $Revision: 1.83 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -612,14 +612,14 @@
     </target>
 	<!-- Taget for builing XLIFF2ICUConverter Jar -->
 	<target name="xliff" depends="init">
-	    <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java"
+	    <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
          <jar jarfile="xliff.jar"
             compress="true"
-            includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class"
+            includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter*.class,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.class,com/ibm/icu/dev/tool/UOption.class,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator*.class"
             basedir="${build.dir}"
             manifest="${icu4j.module.manifest}"/>
      </target>
