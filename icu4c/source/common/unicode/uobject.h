@@ -27,20 +27,20 @@ U_NAMESPACE_BEGIN
  */
 
 /**  U_OVERRIDE_CXX_ALLOCATION - Define this to override operator new and
- *                              delete in UObject.  Enabled by default for ICU.
+ *                               delete in UMemory. Enabled by default for ICU.
  *
  *         Enabling forces all allocation of ICU object types to use ICU's
- *         memory allocation.  On Windows, this allows the ICU DLL to be used by
+ *         memory allocation. On Windows, this allows the ICU DLL to be used by
  *         applications that statically link the C Runtime library, meaning that
- *         the app and ICU sill be using different heaps.
+ *         the app and ICU will be using different heaps.
  */                              
 #ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION 1
 #endif
 
 /**
- * UObject is the common ICU base class.
- * All other ICU C++ classes are derived from UObject (starting with ICU 2.2).
+ * UMemory is the common ICU base class.
+ * All other ICU C++ classes are derived from UMemory (starting with ICU 2.4).
  *
  * This is primarily to make it possible and simple to override the
  * C++ memory management by adding new/delete operators to this base class.
@@ -48,15 +48,60 @@ U_NAMESPACE_BEGIN
  * To override ALL ICU memory management, including that from plain C code,
  * replace the allocation functions declared in cmemory.h
  *
- * UObject does not contain default implementations of virtual methods
+ * UMemory does not contain any virtual functions.
+ * Common "boilerplate" functions are defined in UObject.
+ *
+ * @draft ICU 2.4
+ */
+class U_COMMON_API UMemory {
+public:
+
+#if U_OVERRIDE_CXX_ALLOCATION
+    /**
+     * Override for ICU4C C++ memory management.
+     * simple, non-class types are allocated using the macros in common/cmemory.h
+     * (uprv_malloc(), uprv_free(), uprv_realloc());
+     * they or something else could be used here to implement C++ new/delete
+     * for ICU4C C++ classes
+     * @draft ICU 2.4
+     */
+    void *operator new(size_t size);
+
+    /**
+     * Override for ICU4C C++ memory management.
+     * See new().
+     * @draft ICU 2.4
+     */
+    void *operator new[](size_t size);
+
+    /**
+     * Override for ICU4C C++ memory management.
+     * simple, non-class types are allocated using the macros in common/cmemory.h
+     * (uprv_malloc(), uprv_free(), uprv_realloc());
+     * they or something else could be used here to implement C++ new/delete
+     * for ICU4C C++ classes
+     * @draft ICU 2.4
+     */
+    void operator delete(void *p);
+
+    /**
+     * Override for ICU4C C++ memory management.
+     * See delete().
+     * @draft ICU 2.4
+     */
+    void operator delete[](void *p);
+#endif
+};
+
+/**
+ * UObject is the common ICU "boilerplate" class.
+ * UObject inherits UMemory, and all other public ICU C++ classes
+ * are derived from UObject (starting with ICU 2.2).
+ *
+ * UObject contains common virtual functions like for ICU's "poor man's RTTI".
+ * It does not contain default implementations of virtual methods
  * like getDynamicClassID to allow derived classes such as Format
  * to declare these as pure virtual.
- *
- * It is likely that a future ICU release will split UObject to
- * separate out a new "more base" class for only the
- * memory management customization, with UObject subclassing that new
- * class and adding virtual methods for "boilerplate" functions.
- * This will simplify the maintenance of ICU.
  *
  * @draft ICU 2.2
  */
@@ -68,31 +113,6 @@ public:
      * @draft ICU 2.2
      */
     virtual inline ~UObject() {}
-
-
-#if U_OVERRIDE_CXX_ALLOCATION
-    /**
-     * Overrides for ICU4C C++ memory management.
-     * simple, non-class types are allocated using the macros in common/cmemory.h
-     * (uprv_malloc(), uprv_free(), uprv_realloc());
-     * they or something else could be used here to implement C++ new/delete
-     * for ICU4C C++ classes
-     * @draft ICU 2.2
-     */
-    void *operator new(size_t size);
-    void *operator new[](size_t size);
-
-    /**
-     * Overrides for ICU4C C++ memory management.
-     * simple, non-class types are allocated using the macros in common/cmemory.h
-     * (uprv_malloc(), uprv_free(), uprv_realloc());
-     * they or something else could be used here to implement C++ new/delete
-     * for ICU4C C++ classes
-     * @draft ICU 2.2
-     */
-    void operator delete(void *p);
-    void operator delete[](void *p);
-#endif
 
     /**
      * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
