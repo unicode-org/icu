@@ -3642,7 +3642,12 @@ static void TestRuleOptions(void) {
 }
 
 
-static void TestUnicodeSetRules(void) {
+static void TestOptimize(void) {
+  /* this is not really a test - just trying out 
+   * whether copying of UCA contents will fail 
+   * Cannot really test, since the functionality 
+   * remains the same.
+   */
   static struct {
     const char *rules;
     const char *data[50];
@@ -3653,7 +3658,6 @@ static void TestUnicodeSetRules(void) {
     { "a", "b"}, 2} 
   };
   uint32_t i;
-
 
   for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
     genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
@@ -3706,7 +3710,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
-    TEST(TestUnicodeSetRules);
+    TEST(TestOptimize);
     TEST(TestSuppressContractions);
 }
 
