@@ -1468,6 +1468,51 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
     free(uBuf);
     free(cBuf);
 }
+/* Test for Jitterbug 778 */
+static void TestToAndFromUChars(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, const char* cnvName){
+    const UChar* uSource;
+    const UChar* uSourceLimit;
+    const char* cSource;
+    UChar *uTargetLimit =NULL;
+    UChar *uTarget;
+    char *cTarget;
+    const char *cTargetLimit;
+    char *cBuf; 
+    UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    int numCharsInTarget=0;
+    UErrorCode errorCode=U_ZERO_ERROR;
+    uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+    cBuf =(char*)malloc(uBufSize * sizeof(char) * 5);
+    uSource = source;
+    uSourceLimit=sourceLimit;
+    cTarget = cBuf;
+    cTargetLimit = cBuf +uBufSize*5;
+    uTarget = uBuf;
+    uTargetLimit = uBuf+ uBufSize*5;
+    ucnv_reset(cnv);
+    numCharsInTarget=ucnv_fromUChars( cnv , cTarget, (cTargetLimit-cTarget),uSource,(uSourceLimit-uSource), &errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_fromUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    cSource = cBuf;
+    test =uBuf;
+    ucnv_toUChars(cnv,uTarget,(uTargetLimit-uTarget),cSource,numCharsInTarget,&errorCode);
+    if(U_FAILURE(errorCode)){
+        log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+        return;
+    }
+    uSource = source;
+    while(uSource<uSourceLimit){
+        if(*test!=*uSource){
+  
+            log_err("Expected : \\u%04X \t Got: \\u%04X\n",*uSource,(int)*test) ;
+        }
+        uSource++;
+        test++;
+    }
+}
 
 static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, const char* cnvName){
     const UChar* uSource;
@@ -1539,7 +1584,6 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
     free(uBuf);
     free(cBuf);
 }
-
 static void 
 TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit, 
                      const uint16_t results[], const char* message){     
@@ -1634,6 +1678,7 @@ TestHZ() {
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "HZ encoding");
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"HZ");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"HZ");
+    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"HZ");
     ucnv_close(cnv);
     free(offsets);
     free(uBuf);
@@ -1716,6 +1761,7 @@ TestISO_2022_JP() {
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-JP encoding");   
+    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
 
     ucnv_close(cnv);
     free(uBuf);
@@ -1884,6 +1930,7 @@ TestISO_2022_JP_2() {
     }
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
+    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp,version=2");    
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -1954,6 +2001,7 @@ TestISO_2022_KR() {
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-KR encoding");
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
+    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
@@ -2127,6 +2175,7 @@ TestISO_2022_CN() {
     TestGetNextUChar2022(cnv, cBuf, cTarget, in, "ISO-2022-CN encoding");
     TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh");
     TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh"); 
+    TestToAndFromUChars(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=cn");
     ucnv_close(cnv);
     free(uBuf);
     free(cBuf);
