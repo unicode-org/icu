@@ -945,7 +945,7 @@ UnicodeString::foldCase(uint32_t options) {
 
 // static helper function for string case mapping
 // called by u_internalStrToUpper/Lower()
-UBool
+UBool U_CALLCONV
 UnicodeString::growBuffer(void *context,
                           UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
                           int32_t length) {

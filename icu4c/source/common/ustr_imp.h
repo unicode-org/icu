@@ -31,7 +31,7 @@ uprv_haveProperties();
  * for growing the destination buffer.
  * @internal
  */
-typedef UBool
+typedef UBool U_CALLCONV
 GrowBuffer(void *context,       /* opaque pointer for this function */
            UChar **buffer,      /* in/out destination buffer pointer */
            int32_t *pCapacity,  /* in/out buffer capacity in numbers of UChars */
