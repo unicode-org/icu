@@ -35,6 +35,7 @@
 U_NAMESPACE_BEGIN
 
 class DigitList;
+class ChoiceFormat;
 
 /**
  * Concrete class for formatting decimal numbers, allowing a variety
@@ -1189,9 +1190,26 @@ private:
 
     int32_t skipPadding(const UnicodeString& text, int32_t position) const;
 
-    static int32_t compareAffix(const UnicodeString& affix,
+    int32_t compareAffix(const UnicodeString& input,
+                         int32_t pos,
+                         UBool isNegative,
+                         UBool isPrefix) const;
+    
+    static int32_t compareSimpleAffix(const UnicodeString& affix,
+                                      const UnicodeString& input,
+                                      int32_t pos);
+    
+    static int32_t skipRuleWhiteSpace(const UnicodeString& text, int32_t pos);
+    
+    static int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos);
+    
+    int32_t compareComplexAffix(const UnicodeString& affixPat,
                                 const UnicodeString& input,
-                                int32_t pos);
+                                int32_t pos) const;
+
+    static int32_t match(const UnicodeString& text, int32_t pos, UChar32 ch);
+
+    static int32_t match(const UnicodeString& text, int32_t pos, const UnicodeString& str);
 
     /**
      * Get a decimal format symbol.
@@ -1200,29 +1218,33 @@ private:
      */
     inline const UnicodeString &getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const;
 
+    int32_t appendAffix(UnicodeString& buf, double number,
+                        UBool isNegative, UBool isPrefix) const;
+
     /**
      * Append an affix to the given UnicodeString, using quotes if
      * there are special characters.  Single quotes themselves must be
      * escaped in either case.
      */
-    void appendAffix(UnicodeString& appendTo, const UnicodeString& affix, 
-                     UBool localized) const;
+    void appendAffixPattern(UnicodeString& appendTo, const UnicodeString& affix, 
+                            UBool localized) const;
 
-    void appendAffix(UnicodeString& appendTo,
-                     const UnicodeString* affixPattern,
-                     const UnicodeString& expAffix, UBool localized) const;
+    void appendAffixPattern(UnicodeString& appendTo,
+                            const UnicodeString* affixPattern,
+                            const UnicodeString& expAffix, UBool localized) const;
 
     void expandAffix(const UnicodeString& pattern,
-                     UnicodeString& affix) const;
+                     UnicodeString& affix,
+                     double number,
+                     UBool doFormat) const;
 
-    void expandAffixes(void);
+    void expandAffixes();
     
     static double round(double a, ERoundingMode mode, UBool isNegative);
 
     void addPadding(UnicodeString& appendTo,
                     FieldPosition& fieldPosition,
-                    UBool hasAffixes,
-                    UBool isNegative) const;
+                    int32_t prefixLen, int32_t suffixLen) const;
 
     UBool isGroupingPosition(int32_t pos) const;
 
@@ -1245,6 +1267,14 @@ private:
     UnicodeString*          fPosSuffixPattern;
     UnicodeString*          fNegPrefixPattern;
     UnicodeString*          fNegSuffixPattern;
+
+    /**
+     * Formatter for ChoiceFormat-based currency names.  If this field
+     * is not null, then delegate to it to format currency symbols.
+     * @since ICU 2.6
+     */
+    ChoiceFormat*           fCurrencyChoice;
+
     int32_t                 fMultiplier;
     int32_t                 fGroupingSize;
     int32_t                 fGroupingSize2;
@@ -1264,7 +1294,7 @@ private:
     /*transient*/ double    fRoundingDouble;
     ERoundingMode           fRoundingMode;
 
-    UnicodeString           fPad;
+    UChar32                 fPad;
     int32_t                 fFormatWidth;
     EPadPosition            fPadPosition;
 
