@@ -79,25 +79,26 @@ u_printf_parse_spec (const UChar     *fmt,
 {
   const UChar *s = fmt;
   const UChar *backup;
+  u_printf_spec_info *info = &(spec->fInfo);
 
   /* initialize spec to default values */  
-  spec->fWidthPos        = -1;
-  spec->fPrecisionPos        = -1;
-  spec->fArgPos            = -1;
+  spec->fWidthPos     = -1;
+  spec->fPrecisionPos = -1;
+  spec->fArgPos       = -1;
 
-  spec->fInfo.fPrecision    = -1;
-  spec->fInfo.fWidth         = -1;
-  spec->fInfo.fSpec         = 0x0000;
-  spec->fInfo.fPadChar         = 0x0020;
-  spec->fInfo.fAlt         = FALSE;
-  spec->fInfo.fSpace         = FALSE;
-  spec->fInfo.fLeft         = FALSE;
-  spec->fInfo.fShowSign     = FALSE;
-  spec->fInfo.fZero        = FALSE;
-  spec->fInfo.fIsLongDouble     = FALSE;
-  spec->fInfo.fIsShort         = FALSE;
-  spec->fInfo.fIsLong         = FALSE;
-  spec->fInfo.fIsLongLong    = FALSE;
+  info->fPrecision    = -1;
+  info->fWidth        = -1;
+  info->fSpec         = 0x0000;
+  info->fPadChar      = 0x0020;
+  info->fAlt          = FALSE;
+  info->fSpace        = FALSE;
+  info->fLeft         = FALSE;
+  info->fShowSign     = FALSE;
+  info->fZero         = FALSE;
+  info->fIsLongDouble = FALSE;
+  info->fIsShort      = FALSE;
+  info->fIsLong       = FALSE;
+  info->fIsLongLong   = FALSE;
 
   /* skip over the initial '%' */
   *s++;
@@ -113,8 +114,8 @@ u_printf_parse_spec (const UChar     *fmt,
       spec->fArgPos = (int) (*s++ - DIGIT_ZERO);
       
       while(ISDIGIT(*s)) {
-    spec->fArgPos *= 10;
-    spec->fArgPos += (int) (*s++ - DIGIT_ZERO);
+        spec->fArgPos *= 10;
+        spec->fArgPos += (int) (*s++ - DIGIT_ZERO);
       }
     }
     
@@ -134,41 +135,38 @@ u_printf_parse_spec (const UChar     *fmt,
       
       /* left justify */
     case FLAG_MINUS:
-      spec->fInfo.fLeft = TRUE;
+      info->fLeft = TRUE;
       break;
       
       /* always show sign */
     case FLAG_PLUS:
-      spec->fInfo.fShowSign = TRUE;
+      info->fShowSign = TRUE;
       break;
 
       /* use space if no sign present */
     case FLAG_SPACE:
-      spec->fInfo.fSpace = TRUE;
+      info->fSpace = TRUE;
       break;
 
       /* use alternate form */
     case FLAG_POUND:
-      spec->fInfo.fAlt = TRUE;
+      info->fAlt = TRUE;
       break;
 
       /* pad with leading zeroes */
     case FLAG_ZERO:
-      spec->fInfo.fZero = TRUE;
-      spec->fInfo.fPadChar = 0x0030;
+      info->fZero = TRUE;
+      info->fPadChar = 0x0030;
       break;
 
       /* pad character specified */
     case FLAG_PAREN:
 
       /* first four characters are hex values for pad char */
-      spec->fInfo.fPadChar = ufmt_digitvalue(*s++);
-      spec->fInfo.fPadChar *= 16;
-      spec->fInfo.fPadChar += ufmt_digitvalue(*s++);
-      spec->fInfo.fPadChar *= 16;
-      spec->fInfo.fPadChar += ufmt_digitvalue(*s++);
-      spec->fInfo.fPadChar *= 16;
-      spec->fInfo.fPadChar += ufmt_digitvalue(*s++);
+      info->fPadChar = (UChar)ufmt_digitvalue(*s++);
+      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
+      info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
       
       /* final character is ignored */
       *s++;
@@ -182,7 +180,7 @@ u_printf_parse_spec (const UChar     *fmt,
   /* width is specified out of line */
   if(*s == SPEC_ASTERISK) {
 
-    spec->fInfo.fWidth = -2;
+    info->fWidth = -2;
 
     /* Skip the '*' */
     *s++;
@@ -211,11 +209,11 @@ u_printf_parse_spec (const UChar     *fmt,
   }
   /* read the width, if present */
   else if(ISDIGIT(*s)){
-    spec->fInfo.fWidth = (int) (*s++ - DIGIT_ZERO);
+    info->fWidth = (int) (*s++ - DIGIT_ZERO);
     
     while(ISDIGIT(*s)) {
-      spec->fInfo.fWidth *= 10;
-      spec->fInfo.fWidth += (int) (*s++ - DIGIT_ZERO);
+      info->fWidth *= 10;
+      info->fWidth += (int) (*s++ - DIGIT_ZERO);
     }
   }
   
@@ -229,7 +227,7 @@ u_printf_parse_spec (const UChar     *fmt,
     /* precision is specified out of line */
     if(*s == SPEC_ASTERISK) {
 
-      spec->fInfo.fPrecision = -2;
+      info->fPrecision = -2;
 
       /* Skip the '*' */
       *s++;
@@ -239,31 +237,31 @@ u_printf_parse_spec (const UChar     *fmt,
       
       /* handle positional parameters */
       if(ISDIGIT(*s)) {
-    spec->fPrecisionPos = (int) (*s++ - DIGIT_ZERO);
+        spec->fPrecisionPos = (int) (*s++ - DIGIT_ZERO);
 
-    while(ISDIGIT(*s)) {
-      spec->fPrecisionPos *= 10;
-      spec->fPrecisionPos += (int) (*s++ - DIGIT_ZERO);
-    }
+        while(ISDIGIT(*s)) {
+          spec->fPrecisionPos *= 10;
+          spec->fPrecisionPos += (int) (*s++ - DIGIT_ZERO);
+        }
     
-    /* if there is no '$', don't read anything */
-    if(*s != SPEC_DOLLARSIGN) {
-      spec->fPrecisionPos = -1;
-      s = backup;
-    }
-    else {
-      /* munge the '$' */
-      *s++; 
-    }
+        /* if there is no '$', don't read anything */
+        if(*s != SPEC_DOLLARSIGN) {
+          spec->fPrecisionPos = -1;
+          s = backup;
+        }
+        else {
+          /* munge the '$' */
+          *s++; 
+        }
       }
     }
     /* read the precision */
     else if(ISDIGIT(*s)){
-      spec->fInfo.fPrecision = (int) (*s++ - DIGIT_ZERO);
+      info->fPrecision = (int) (*s++ - DIGIT_ZERO);
       
       while(ISDIGIT(*s)) {
-    spec->fInfo.fPrecision *= 10;
-    spec->fInfo.fPrecision += (int) (*s++ - DIGIT_ZERO);
+        info->fPrecision *= 10;
+        info->fPrecision += (int) (*s++ - DIGIT_ZERO);
       }
     }
   }
@@ -274,29 +272,29 @@ u_printf_parse_spec (const UChar     *fmt,
 
       /* short */
     case MOD_H:
-      spec->fInfo.fIsShort = TRUE;
+      info->fIsShort = TRUE;
       break;
 
       /* long or long long */
     case MOD_LOWERL:
       if(*s == MOD_LOWERL) {
-    spec->fInfo.fIsLongLong = TRUE;
-    /* skip over the next 'l' */
-    *s++;
+        info->fIsLongLong = TRUE;
+        /* skip over the next 'l' */
+        *s++;
       }
       else
-    spec->fInfo.fIsLong = TRUE;
+        info->fIsLong = TRUE;
       break;
       
       /* long double */
     case MOD_L:
-      spec->fInfo.fIsLongDouble = TRUE;
+      info->fIsLongDouble = TRUE;
       break;
     }
   }
 
   /* finally, get the specifier letter */
-  spec->fInfo.fSpec = *s++;
+  info->fSpec = *s++;
 
   /* return # of characters in this specifier */
   return (s - fmt);
