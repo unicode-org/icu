@@ -116,9 +116,12 @@ typedef unsigned short uint16_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
-#define U_TZSET     _tzset
-#define U_TIMEZONE  _timezone
-#define U_TZNAME    _tzname
+#define U_TZSET         _tzset
+#define U_HAVE_TIMEZONE 1
+#if U_HAVE_TIMEZONE
+#   define U_TIMEZONE   _timezone
+#endif
+#define U_TZNAME        _tzname
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
