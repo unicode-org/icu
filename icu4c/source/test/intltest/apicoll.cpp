@@ -63,6 +63,8 @@ CollationAPITest::TestProperty( char* par )
 {
     UErrorCode success = U_ZERO_ERROR;
     Collator *col = 0;
+    UVersionInfo expectVersionArray = {0x01, 0x00, 0x00, 0x00};
+    UVersionInfo versionArray;
 
     logln("The property tests begin : ");
     logln("Test ctors : ");
@@ -72,6 +74,12 @@ CollationAPITest::TestProperty( char* par )
     {
         errln("Default Collator creation failed.");
         return;
+    }
+    col->getVersion(versionArray);
+
+    if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
+    {
+	    errln("Testing Collator::getVersion() - unexpected result received");
     }
 
     doAssert((col->compare("ab", "abc") == Collator::LESS), "ab < abc comparison failed");
