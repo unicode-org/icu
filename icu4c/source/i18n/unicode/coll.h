@@ -182,10 +182,11 @@ public:
   */
   enum ECollationStrength 
   {
-    PRIMARY = 0,
-    SECONDARY = 1, 
-    TERTIARY = 2,
-    IDENTICAL = 3
+    PRIMARY    = 0,
+    SECONDARY  = 1, 
+    TERTIARY   = 2,
+    QUATERNARY = 3,
+    IDENTICAL  = 15
   };
   
   /**
