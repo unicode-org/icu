@@ -100,6 +100,7 @@ U_NAMESPACE_BEGIN
    due to how AIX works with multiple definitions of virtual functions.
 */
 Replaceable::~Replaceable() {}
+Replaceable::Replaceable() {}
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
 UnicodeString U_EXPORT2

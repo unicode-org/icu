@@ -10,6 +10,12 @@
 U_NAMESPACE_BEGIN
 
 ForwardCharacterIterator::~ForwardCharacterIterator() {}
+ForwardCharacterIterator::ForwardCharacterIterator()
+: UObject()
+{}
+ForwardCharacterIterator::ForwardCharacterIterator(const ForwardCharacterIterator &other)
+: UObject(other)
+{}
 
 
 CharacterIterator::CharacterIterator()
