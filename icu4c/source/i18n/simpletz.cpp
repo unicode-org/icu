@@ -37,7 +37,7 @@ const char SimpleTimeZone::fgClassID = 0; // Value is irrelevant
 // since we don't handle leap years. Could handle assuming always
 // Gregorian, since we know they didn't have daylight time when
 // Gregorian calendar started.
-const int8_t SimpleTimeZone::staticMonthLength[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+const int8_t SimpleTimeZone::staticMonthLength[] = {31,29,31,30,31,30,31,31,30,31,30,31};
 
 // *****************************************************************************
 // class SimpleTimeZone
