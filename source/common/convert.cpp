@@ -398,12 +398,30 @@ void UnicodeConverterCPP::getStarters(bool_t starters[256],
 const char* const*
 UnicodeConverterCPP::getAvailableNames(int32_t& num, UErrorCode& err)
 {
+  if(U_FAILURE(err)) {
+    num = 0;
+    return NULL;
+  }
   if (availableConverterNames==NULL) {
-    availableConverterNamesCount = ucnv_io_countAvailableAliases(&err);
-    if (availableConverterNamesCount > 0) {
-      availableConverterNames = new const char *[availableConverterNamesCount];
-      if (availableConverterNames != NULL) {
-        ucnv_io_fillAvailableAliases(availableConverterNames, &err);
+    int32_t count = ucnv_io_countAvailableAliases(&err);
+    if (count > 0) {
+      const char **names = new const char *[count];
+      if (names != NULL) {
+        ucnv_io_fillAvailableAliases(names, &err);
+
+        /* in the mutex block, set the data for this process */
+        umtx_lock(0);
+        if (availableConverterNames == NULL) {
+          availableConverterNamesCount = count;
+          availableConverterNames = names;
+          names = 0;
+        }
+        umtx_unlock(0);
+
+        /* if a different thread set it first, then delete the extra data */
+        if (names != 0) {
+          delete [] names;
+        }
       } else {
         num = 0;
         err = U_MEMORY_ALLOCATION_ERROR;
