@@ -15,8 +15,8 @@ CLASSLIST= classes.list
 # {$(SRCDIR)/$(PKGPATH)}.java{$(CLASSDIR)/$(PKGPATH)}.class:
 #	@echo $(?) >> $(CLASSLIST)
 
-{$(SRCDIR)/$(PKGPATH)}.class : {$(SRCDIR)/$(PKGPATH)}%.class :{$(CLASSDIR)/$(PKGPATH)}%.java:
-	@echo $(?) >> $(CLASSLIST)
+$(SRCDIR)/$(PKGPATH)%.class : $(CLASSDIR)/$(PKGPATH)%.java:
+	@echo $? >> $(CLASSLIST)
 
 
 ifdef FILES_dict
@@ -26,9 +26,9 @@ SRC_FILES_dict= $(FILES_dict:classes=src)
 endif
 
 classes: delete.classlist $(FILES_class) $(FILES_dics)
-	echo Compiling {
-	cat $(CLASSLIST)
-	$(JAVAC) @$(CLASSLIST)
+	if [ -s $(CLASSLIST) ] ; echo Compiling { ; fi
+	if [ -s $(CLASSLIST) ] ; cat $(CLASSLIST) ; fi
+	if [ -s $(CLASSLIST) ] ; $(JAVAC) @$(CLASSLIST) ; fi
 	rm -f $(CLASSLIST)
 ifdef FILES_dict
 	cp $(SRC_FILES_dict) $(TARGDIR)
