@@ -30,7 +30,7 @@ int main()
 
    int i, j;
    int pos = 0; 
-   StringSearch *searchIter = new StringSearch(easyPatterns[0], target, status);
+   ::StringSearch *searchIter = new ::StringSearch(easyPatterns[0], target, status);
    fprintf(stdout, "\n");
    if (U_FAILURE(status))
    {
