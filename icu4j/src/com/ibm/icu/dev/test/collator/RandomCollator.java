@@ -145,32 +145,17 @@ public class RandomCollator extends TestFmwk {
     
     static String collationBNF =
         "$s = ' '? 50%;\r\n" +
-        "$relationList = (" +
-        "   '<'" +
-        " | '  <<'" +
-        " | '  ;'" +
-        " | '    <<<'" +
-        " | '    ,'" +
-        " | '      ='" +
-        ");\r\n" +
+        "$relationList = (" +        "   '<'" +        " | '  <<'" +        " | '  ;'" +
+        " | '    <<<'" +        " | '    ,'" +
+        " | '      ='" +        ");\r\n" +
         "$alternateOptions = non'-'ignorable | shifted;\r\n" +
         "$caseFirstOptions = off | upper | lower;\r\n" +
         "$strengthOptions = '1' | '2' | '3' | '4' | 'I';\r\n" +
-        "$commandList = '['" +
-        " ( alternate ' ' $alternateOptions" +
-        " | backwards' 2'" +
-        " | normalization ' ' $onoff " +
-        " | caseLevel ' ' $onoff " +
-        " | hiraganaQ ' ' $onoff" +
-        " | caseFirst ' ' $caseFirstOptions" +
-        " | strength ' ' $strengthOptions" +
-        " ) ']';\r\n" +
+        "$commandList = '['" +        " ( alternate ' ' $alternateOptions" +        " | backwards' 2'" +        " | normalization ' ' $onoff " +        " | caseLevel ' ' $onoff " +        " | hiraganaQ ' ' $onoff" +        " | caseFirst ' ' $caseFirstOptions" +        " | strength ' ' $strengthOptions" +        " ) ']';\r\n" +
         "$ignorableTypes = (tertiary | secondary | primary) ' ' ignorable;\r\n" +
         "$allTypes = variable | regular | implicit | trailing | $ignorableTypes;\r\n" +
         "$onoff = on | off;\r\n" +
-        "$positionList = '[' (first | last) ' ' $allTypes ']';\r\n" +
-        "$beforeList = '[before ' ('1' | '2' | '3') ']';\r\n" +
-        "$string = $chars{1,5}~@;\r\n" +
+        "$positionList = '[' (first | last) ' ' $allTypes ']';\r\n" +        "$beforeList = '[before ' ('1' | '2' | '3') ']';\r\n" +        "$string = $chars{1,5}~@;\r\n" +
         "$crlf = '\r\n';\r\n" +
         "$rel1 = '[variable top]' $s ;\r\n" +
         "$p1 = ($string $s '|' $s)? 25%;\r\n" +
@@ -263,8 +248,7 @@ public class RandomCollator extends TestFmwk {
    static final String[] relationList = {" <", "  <<", "    <<<", "     =", "  ;", "   ,"};
     
     static final String[] commandList = {
-        "[alternate non-ignorable]",
-        "[alternate shifted]",
+        "[alternate non-ignorable]",        "[alternate shifted]",
         "[backwards 2]",
         "[normalization off]",
         "[normalization on]",
