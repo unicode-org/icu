@@ -206,7 +206,7 @@ void TransliteratorTest::TestInstantiation() {
     for (int32_t i=0; i<n; ++i) {
         const UnicodeString& id = *avail->snext(ec);
         assertSuccess("snext()", ec);
-        assertTrue("snext()!=NULL", (&id)!=NULL);
+        assertTrue("snext()!=NULL", (&id)!=NULL, TRUE);
         UnicodeString id2 = Transliterator::getAvailableID(i);
         if (id.length() < 1) {
             errln(UnicodeString("FAIL: getAvailableID(") +
