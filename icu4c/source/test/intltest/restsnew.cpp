@@ -26,7 +26,7 @@
 
 static const UnicodeString kERROR = UNICODE_STRING("ERROR", 5);
 static const UChar kErrorUChars[] = { 0x45, 0x52, 0x52, 0x4f, 0x52, 0 };
-static const kErrorLength = 5;
+static const int32_t kErrorLength = 5;
 static const int32_t kERROR_COUNT = -1234567;
 
 //***************************************************************************************
