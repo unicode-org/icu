@@ -162,7 +162,7 @@ enum {
 //   Used for debug printing only.
 #define URX_OPCODE_NAMES       \
         "               ",     \
-        "URX_BACKTRACK",       \
+        "BACKTRACK",           \
         "END",                 \
         "ONECHAR",             \
         "STRING",              \
@@ -176,22 +176,22 @@ enum {
         "DOTANY",              \
         "JMP",                 \
         "FAIL",                \
-        "URX_JMP_SAV",         \
-        "URX_BACKSLASH_B",     \
-        "URX_BACKSLASH_G",     \
-        "URX_JMP_SAV_X",       \
-        "URX_BACKSLASH_X",     \
-        "URX_BACKSLASH_Z",     \
-        "URX_DOTANY_ALL",      \
-        "URX_BACKSLASH_D",     \
-        "URX_CARET",           \
-        "URX_DOLLAR",          \
+        "JMP_SAV",             \
+        "BACKSLASH_B",         \
+        "BACKSLASH_G",         \
+        "JMP_SAV_X",           \
+        "BACKSLASH_X",         \
+        "BACKSLASH_Z",         \
+        "DOTANY_ALL",          \
+        "BACKSLASH_D",         \
+        "CARET",               \
+        "DOLLAR",              \
         "CTR_INIT",            \
         "CTR_INIT_NG",         \
-        "CTR_UNUSED_2",        \
+        "DOTANY_PL",           \
         "CTR_LOOP",            \
         "CTR_LOOP_NG",         \
-        "CTR_UNUSED_3",        \
+        "DOTANY_ALL_PL",       \
         "RELOC_OPRND",         \
         "STO_SP",              \
         "LD_SP",               \

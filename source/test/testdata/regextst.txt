@@ -281,6 +281,27 @@
 "$"                              "abc<0></0>"
 
 #
+#  Optimizations of .* at end of patterns
+#
+"abc.*"                          "<0>abcdef</0>"
+"abc.*$"                         "<0>abcdef</0>"
+"abc(.*)"                        "<0>abc<1>def</1></0>"
+"abc(.*)"                        "<0>abc<1></1></0>"
+"abc.*"                          "<0>abc</0>\ndef"     
+"abc.*"                     s    "<0>abc\ndef</0>"     
+"abc.*$"                    s    "<0>abc\ndef</0>"
+"abc.*$"                         "abc\ndef"
+"abc.*$"                    m    "<0>abc</0>\ndef"
+"abc.*\Z"                   m    "abc\ndef"
+"abc.*\Z"                   sm   "<0>abc\ndef</0>"
+
+"abc*"                           "<0>abccc</0>d"
+"abc*$"                          "<0>abccc</0>"
+"ab(?:ab[xyz]\s)*"               "<0>ababy abx </0>abc"
+
+"(?:abc|a)(?:bc)+"               "<0>abc</0>"
+
+#
 #  Random debugging, Temporary
 #
 #"^(?:a?b?)*$"	        d         "a--"	
