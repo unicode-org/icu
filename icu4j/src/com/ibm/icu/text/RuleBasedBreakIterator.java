@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/08/10 00:32:30 $
- * $Revision: 1.21 $
+ * $Date: 2002/12/04 01:45:51 $
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -229,17 +229,20 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.21 $ $Date: 2002/08/10 00:32:30 $
+ * @stable
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.22 $ $Date: 2002/12/04 01:45:51 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * A token used as a character-category value to identify ignore characters
+     * @stable
      */
     protected static final byte IGNORE = -1;
 
     /**
      * Special variable used to define ignore characters
+     * @stable
      */
     private static final String IGNORE_VAR = "_ignore_";
 
@@ -309,6 +312,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * on BreakIterator to create one indirectly from a description
      * in the framework's resource files.  You'd use this when you want
      * special behavior not provided by the built-in iterators.
+     * @stable
      */
     public RuleBasedBreakIterator(String description) {
 //System.out.println(">>>RBBI constructor");
@@ -322,6 +326,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * Creates a Builder.
+     * @stable
      */
     protected Builder makeBuilder() {
         return new Builder();
@@ -334,6 +339,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * Clones this iterator.
      * @return A newly-constructed RuleBasedBreakIterator with the same
      * behavior as this one.
+     * @stable
      */
     public Object clone()
     {
@@ -347,6 +353,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /**
      * Returns true if both BreakIterators are of the same class, have the same
      * rules, and iterate over the same text.
+     * @stable
      */
     public boolean equals(Object that) {
         try {
@@ -368,6 +375,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     /**
      * Returns the description used to create this iterator
+     * @stable
      */
     public String toString() {
         return description;
@@ -376,6 +384,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /**
      * Compute a hashcode for this BreakIterator
      * @return A hash code
+     * @stable
      */
     public int hashCode()
     {
@@ -625,6 +634,7 @@ throws IOException {
      * Sets the current iteration position to the beginning of the text.
      * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
+     * @stable
      */
     public int first() {
         CharacterIterator t = getText();
@@ -637,6 +647,7 @@ throws IOException {
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
+     * @stable
      */
     public int last() {
         CharacterIterator t = getText();
@@ -655,6 +666,7 @@ throws IOException {
      * (negative is backwards, and positive is forwards).
      * @return The character offset of the boundary position n boundaries away from
      * the current one.
+     * @stable
      */
     public int next(int n) {
         int result = current();
@@ -672,6 +684,7 @@ throws IOException {
     /**
      * Advances the iterator to the next boundary position.
      * @return The position of the first boundary after this one.
+     * @stable
      */
     public int next() {
         return handleNext();
@@ -680,6 +693,7 @@ throws IOException {
     /**
      * Advances the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
+     * @stable
      */
     public int previous() {
         // if we're already sitting at the beginning of the text, return DONE
@@ -714,6 +728,7 @@ throws IOException {
 
     /**
      * Throw IllegalArgumentException unless begin <= offset < end.
+     * @stable
      */
     protected static final void checkOffset(int offset, CharacterIterator text) {
         if (offset < text.getBeginIndex() || offset > text.getEndIndex()) {
@@ -726,6 +741,7 @@ throws IOException {
      * the specified position.
      * @param offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
+     * @stable
      */
     public int following(int offset) {
         // if the offset passed in is already past the end of the text,
@@ -763,6 +779,7 @@ throws IOException {
      * specified position.
      * @param offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
+     * @stable
      */
     public int preceding(int offset) {
         // if we start by updating the current iteration position to the
@@ -780,6 +797,7 @@ throws IOException {
      * or after "offset".
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
+     * @stable
      */
     public boolean isBoundary(int offset) {
         CharacterIterator text = getText();
@@ -799,6 +817,7 @@ throws IOException {
     /**
      * Returns the current iteration position.
      * @return The current iteration position.
+     * @stable
      */
     public int current() {
         return getText().getIndex();
@@ -810,6 +829,7 @@ throws IOException {
      * Changing the state of this iterator can have undefined consequences.  If
      * you need to change it, clone it first.
      * @return An iterator over the text being analyzed.
+     * @stable
      */
     public CharacterIterator getText() {
         // The iterator is initialized pointing to no text at all, so if this
@@ -825,6 +845,7 @@ throws IOException {
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
      * @param newText An iterator over the text to analyze.
+     * @stable
      */
     public void setText(CharacterIterator newText) {
         // Test text to see if we need to wrap it in a SafeCharIterator:
@@ -851,6 +872,7 @@ throws IOException {
      * and advances through the text character by character until we reach the end
      * of the text or the state machine transitions to state 0.  We update our return
      * value every time the state machine passes through a possible end state.
+     * @stable
      */
     protected int handleNext() {
         // if we're already at the end of the text, return DONE.
@@ -958,6 +980,7 @@ throws IOException {
      * The various calling methods then iterate forward from this safe position to
      * the appropriate position to return.  (For more information, see the description
      * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
+     * @stable
      */
     protected int handlePrevious() {
         CharacterIterator text = getText();
@@ -1074,27 +1097,32 @@ visitedChars = 0;
      * to RuleBasedBreakIterator's private members, which saves us from having to
      * provide some kind of "back door" to the Builder class that could then also be
      * used by other classes.
+     * @internal
      */
     protected class Builder {
         /**
          * A temporary holding place used for calculating the character categories.
          * This object contains UnicodeSet objects.
+         * @internal
          */
         protected Vector categories = null;
 
         /**
          * A table used to map parts of regexp text to lists of character categories,
          * rather than having to figure them out from scratch each time
+         * @internal
          */
         protected Hashtable expressions = null;
 
         /**
          * A temporary holding place for the list of ignore characters
+         * @internal
          */
         protected UnicodeSet ignoreChars = null;
 
         /**
          * A temporary holding place where the forward state table is built
+         * @internal
          */
         protected Vector tempStateTable = null;
 
@@ -1102,17 +1130,20 @@ visitedChars = 0;
          * A list of all the states that have to be filled in with transitions to the
          * next state that is created.  Used when building the state table from the
          * regular expressions.
+         * @internal
          */
         protected Vector decisionPointList = null;
 
         /**
          * A stack for holding decision point lists.  This is used to handle nested
          * parentheses and braces in regexps.
+         * @internal
          */
         protected Stack decisionPointStack = null;
 
         /**
          * A list of states that loop back on themselves.  Used to handle .*?
+         * @internal
          */
         protected Vector loopingStates = null;
 
@@ -1120,6 +1151,7 @@ visitedChars = 0;
          * Looping states actually have to be backfilled later in the process
          * than everything else.  This is where a the list of states to backfill
          * is accumulated.  This is also used to handle .*?
+         * @internal
          */
         protected Vector statesToBackfill = null;
 
@@ -1128,42 +1160,49 @@ visitedChars = 0;
          * to the state number of the state representing their combination.  Used
          * in the process of making the state table deterministic to prevent
          * infinite recursion.
+         * @internal
          */
         protected Vector mergeList = null;
 
         /**
          * A flag that is used to indicate when the list of looping states can
          * be reset.
+         * @internal
          */
         protected boolean clearLoopingStates = false;
 
         /**
          * A bit mask used to indicate a bit in the table's flags column that marks a
          * state as an accepting state.
+         * @internal
          */
         protected static final int END_STATE_FLAG = 0x8000;
 
         /**
          * A bit mask used to indicate a bit in the table's flags column that marks a
          * state as one the builder shouldn't loop to any looping states
+         * @internal
          */
         protected static final int DONT_LOOP_FLAG = 0x4000;
 
         /**
          * A bit mask used to indicate a bit in the table's flags column that marks a
          * state as a lookahead state.
+         * @internal
          */
         protected static final int LOOKAHEAD_STATE_FLAG = 0x2000;
 
         /**
          * A bit mask representing the union of the mask values listed above.
          * Used for clearing or masking off the flag bits.
+         * @internal
          */
         protected static final int ALL_FLAGS = END_STATE_FLAG | LOOKAHEAD_STATE_FLAG
                 | DONT_LOOP_FLAG;
 
         /**
          * No special construction is required for the Builder.
+         * @internal
          */
         public Builder() {
         }
@@ -1171,6 +1210,7 @@ visitedChars = 0;
         /**
          * This is the main function for setting up the BreakIterator's tables.  It
          * just vectors different parts of the job off to other functions.
+         * @internal
          */
         public void buildBreakIterator() {
             Vector tempRuleList = buildRuleList(description);
@@ -1434,6 +1474,7 @@ visitedChars = 0;
          * then goes through the remainder of the description and does a simple
          * find-and-replace of the variable name with its text.  (The variable text
          * must be enclosed in either [] or () for this to work.)
+         * @internal
          */
         protected String processSubstitution(String substitutionRule, String description,
                         int startPos) {
@@ -1498,6 +1539,7 @@ visitedChars = 0;
          * function to add more.  Any special processing that has to go on beyond
          * that which is done by the normal substitution-processing code is done
          * here.
+         * @internal
          */
         protected void handleSpecialSubstitution(String replace, String replaceWith,
                     int startPos, String description) {
@@ -1520,6 +1562,7 @@ visitedChars = 0;
          * character category table, and tempRuleList's rules have been munged to contain
          * character category numbers everywhere a literal character or a [] expression
          * originally occurred.
+         * @internal
          */
         protected void buildCharCategories(Vector tempRuleList) {
             int bracketLevel = 0;
@@ -1699,12 +1742,12 @@ visitedChars = 0;
                 // go through the character ranges in the category one by one...
                 for (int j = 0; j < n; ++j) {
                     int rangeStart = chars.getRangeStart(j);
-                    
+
                     // (ignore anything above the BMP for now...)
                     if (rangeStart >= 0x10000) {
                         break;
                     }
-                    
+
                     // and set the corresponding elements in the CompactArray accordingly
                     if (i != 0) {
                         charCategoryTable.setElementAt((char)rangeStart,
@@ -1729,6 +1772,7 @@ visitedChars = 0;
             numCategories = categories.size();
         }
 
+        /**   @internal */
         protected void mungeExpressionList(Hashtable expressions) {
             // empty in the parent class.  This function provides a hook for subclasses
             // to mess with the character category table.
@@ -2973,6 +3017,7 @@ System.out.println();
          * @param position The position in the description where the problem was
          * discovered
          * @param context The string containing the error
+         * @internal
          */
         protected void error(String message, int position, String context) {
             throw new IllegalArgumentException("Parse error: " + message + "\n" +
