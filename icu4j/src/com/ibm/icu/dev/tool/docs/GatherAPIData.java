@@ -31,6 +31,7 @@
  *   -name "ICU4J 3.0"
  *   -output icu4j30.api
  *   -gzip
+ *   -source 1.4
  *   com.ibm.icu.lang com.ibm.icu.math com.ibm.icu.text com.ibm.icu.util
  *
  * todo: separate generation of data files (which requires taglet) from 
