@@ -3111,7 +3111,7 @@ int32_t RuleBasedCollator::getSortKey(const   UChar *source,
 	return resLen;
 }
 
-inline void * RuleBasedCollator::getSomeMemory(int32_t size) {
+void * RuleBasedCollator::getSomeMemory(int32_t size) {
     int32_t sizeOfStuff = 5;
     if(fSomeMemory == NULL) {
         fSomeMemory = (void **)uprv_malloc(sizeOfStuff*sizeof(void*));
