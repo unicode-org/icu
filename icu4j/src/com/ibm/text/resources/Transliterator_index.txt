@@ -61,8 +61,8 @@ Katakana-Latin:file:Transliterator_Latin_Katakana.txt:UTF8:REVERSE
 Latin-Hiragana:file:Transliterator_Hiragana_Latin.txt:UTF8:REVERSE
 Hiragana-Latin:file:Transliterator_Hiragana_Latin.txt:UTF8:FORWARD
 
-Hiragana-Katakana:file:Transliterator_Hiragana_Katakana.utf8.txt:UTF8:FORWARD
-Katakana-Hiragana:file:Transliterator_Hiragana_Katakana.utf8.txt:UTF8:REVERSE
+Hiragana-Katakana:file:Transliterator_Hiragana_Katakana.txt:UTF8:FORWARD
+Katakana-Hiragana:file:Transliterator_Hiragana_Katakana.txt:UTF8:REVERSE
 
 Any-Accents:file:Transliterator_Any_Accents.txt:UTF8:FORWARD
 Accents-Any:file:Transliterator_Any_Accents.txt:UTF8:REVERSE
