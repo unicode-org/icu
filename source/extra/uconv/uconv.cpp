@@ -19,7 +19,7 @@
 // To compile: c++ -o uconv -I${ICUHOME}/include -Wall -g uconv.cpp -L${ICUHOME}/lib -licuuc -licui18n
 //
 // Original contributor was Jonas Utterström <jonas.utterstrom@vittran.norrnod.se> in 1999
-// Converted to the C conversion API by Yves Arrouye <yves@realnames.com>. 
+// Converted to the C conversion API and many improvements by Yves Arrouye <yves@realnames.com>. 
 //
 // Permission is granted to use, copy, modify, and distribute this software
 //
