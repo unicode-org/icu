@@ -132,16 +132,16 @@ void IntlTestDecimalFormatSymbols::testSymbols(char *par)
     }
 
     // test get/setSymbol()
-    if(UNUM_FORMAT_SYMBOL_COUNT != DecimalFormatSymbols::ENumberFormatSymbol::kCount) {
+    if(UNUM_FORMAT_SYMBOL_COUNT != DecimalFormatSymbols::kFormatSymbolCount) {
         errln("unum.h and decimfmt.h have inconsistent numbers of format symbols!");
         return;
     }
 
     int i;
-    for(i = 0; i < (int)DecimalFormatSymbols::ENumberFormatSymbol::kCount; ++i) {
+    for(i = 0; i < (int)DecimalFormatSymbols::kFormatSymbolCount; ++i) {
         foo.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)i, UnicodeString((UChar32)(0x10330 + i)));
     }
-    for(i = 0; i < (int)DecimalFormatSymbols::ENumberFormatSymbol::kCount; ++i) {
+    for(i = 0; i < (int)DecimalFormatSymbols::kFormatSymbolCount; ++i) {
         if(foo.getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)i) != UnicodeString((UChar32)(0x10330 + i))) {
             errln("get/setSymbol did not roundtrip, got " +
                   foo.getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)i) +
