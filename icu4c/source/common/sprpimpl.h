@@ -26,8 +26,6 @@
 
 #if !UCONFIG_NO_IDNA
 
-typedef enum UStringPrepType UStringPrepType;
-
 #define _SPREP_DATA_TYPE "spp"
 
 enum UStringPrepType{
@@ -38,6 +36,8 @@ enum UStringPrepType{
     USPREP_DELETE               = 0x0004 ,
     USPREP_TYPE_LIMIT           = 0x0005 , 
 };
+
+typedef enum UStringPrepType UStringPrepType;
 
 static const char* usprepTypeNames[] ={
     "UNASSIGNED" ,          
