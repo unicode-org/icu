@@ -185,7 +185,7 @@ Normalizer::quickCheckWithOption(const UnicodeString& source,
   if (U_FAILURE(status))
     return UQUICK_CHECK_MAYBE;
 
-  int length = source.length();
+  uint32_t length = source.length();
   UChar s[StackBufferLen];
 	UChar *ps = s;
 	
@@ -197,7 +197,7 @@ Normalizer::quickCheckWithOption(const UnicodeString& source,
   UQUICK_CHECK_VALUES result;
   if ((options & IGNORE_HANGUL) != 0)
     result = u_quickCheckWithOption(ps, length, getUNormalizationMode(mode, 
-                                    status), UCOL_IGNORE_HANGUL, &status);
+                                    status), UNORM_IGNORE_HANGUL, &status);
   else
     result = u_quickCheck(ps, length, getUNormalizationMode(mode, status),
                           &status);
