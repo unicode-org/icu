@@ -243,7 +243,7 @@ public:
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return an unsigned integer value
-     * @draft ICU 2.0
+     * @stable
      */
     uint32_t 
       getUInt(UErrorCode& status) const;
@@ -257,7 +257,7 @@ public:
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
      * @return a signed integer value
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t 
       getInt(UErrorCode& status) const;
