@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.23 2003/06/03 20:52:55 alan Exp $
+## $Id: mh-os400,v 1.24 2003/06/04 18:03:59 grhoten-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
@@ -34,15 +34,11 @@ LD_RPATH_PRE=	-I
 FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 
 
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ##  object suffix
 TO=		o
 
 ## Shared object suffix
-SO=		o
+SO=	so
 ## Non-shared intermediate object suffix
 STATIC_O = o
 
@@ -53,14 +49,14 @@ INSTALL-S =  cp -fph
 INSTALL-L = $(INSTALL-S)
 
 ## Link commands to link to ICU service programs
-LIBICUDT = $(top_builddir)/stubdata/libicudata.o
-LIBICUUC = $(top_builddir)/common/libicuuc.o
-LIBICUI18N = $(top_builddir)/i18n/libicui18n.o
-LIBICULE = $(top_builddir)/layout/libicule.o
-LIBICULX = $(top_builddir)/layoutex/libiculx.o
-LIBCTESTFW = $(top_builddir)/tools/ctestfw/libicuctestfw.o
-LIBICUTOOLUTIL = $(top_builddir)/tools/toolutil/libicutoolutil.o
-LIBUSTDIO=      $(top_builddir)/extra/ustdio/libicuio.o
+LIBICUDT = $(top_builddir)/stubdata/$(LIBICU)data$(ICULIBSUFFIX).$(SO)
+LIBICUUC = $(top_builddir)/common/$(LIBICU)uc$(ICULIBSUFFIX).$(SO)
+LIBICUI18N = $(top_builddir)/i18n/$(LIBICU)i18n$(ICULIBSUFFIX).$(SO)
+LIBICULE = $(top_builddir)/layout/$(LIBICU)le$(ICULIBSUFFIX).$(SO)
+LIBICULX = $(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX).$(SO)
+LIBCTESTFW = $(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX).$(SO)
+LIBICUTOOLUTIL = $(top_builddir)/tools/toolutil/$(LIBICU)toolutil$(ICULIBSUFFIX).$(SO)
+LIBUSTDIO=      $(top_builddir)/extra/ustdio/$(LIBICU)io$(ICULIBSUFFIX).$(SO)
 
 ## Special OS400 rules
 
