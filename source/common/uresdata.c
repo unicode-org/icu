@@ -27,7 +27,7 @@
 
 /* get a const char* pointer to the key with the keyOffset byte offset from pRoot */
 #define RES_GET_KEY(pRoot, keyOffset) ((const char *)(pRoot)+(keyOffset))
-#define ITEM_NOT_FOUND 0xFFFF
+#define URESDATA_ITEM_NOT_FOUND 0xFFFF
 
 /*
  * All the type-access functions assume that
@@ -160,7 +160,7 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
         limit=*(p-1);   /* itemCount */
         return start;
     } else {
-        return ITEM_NOT_FOUND;   /* not found */
+        return URESDATA_ITEM_NOT_FOUND;   /* not found */
     }
 }
 
@@ -360,7 +360,7 @@ U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resou
   uint16_t tempIndex = 0;
     if(key != NULL) {
         tempIndex  = _res_findTableIndex(pResData->pRoot, table, *key);
-	if(tempIndex != ITEM_NOT_FOUND) {
+	if(tempIndex != URESDATA_ITEM_NOT_FOUND) {
 	  *key = _res_getTableKey(pResData->pRoot, table, tempIndex);
 	  return _res_getTableItem(pResData->pRoot, table, tempIndex);
           *indexR = tempIndex;
