@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2001/03/31 01:31:13 $ 
- * $Revision: 1.30 $
+ * $Date: 2001/04/04 18:06:25 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.30 $ $Date: 2001/03/31 01:31:13 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.31 $ $Date: 2001/04/04 18:06:25 $
  */
 public abstract class Transliterator {
     /**
@@ -794,7 +794,8 @@ public abstract class Transliterator {
             if (direction == REVERSE) {
                 int i = id.indexOf('-');
                 if (i < 0) {
-                    if (!id.equals(NullTransliterator._ID)) {
+                    if (!id.equals(NullTransliterator._ID) &&
+                        !id.equals(RemoveTransliterator._ID)) {
                         throw new IllegalArgumentException("No inverse for: "
                                                            + id);
                     }
@@ -1083,5 +1084,7 @@ public abstract class Transliterator {
                       UnicodeToHexTransliterator.class, null);
         registerClass(NullTransliterator._ID,
                       NullTransliterator.class, null);
+        registerClass(RemoveTransliterator._ID,
+                      RemoveTransliterator.class, null);
     }
 }
