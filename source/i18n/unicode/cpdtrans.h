@@ -37,8 +37,8 @@ class TransliteratorRegistry;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.22 $ $Date: 2001/11/14 00:21:56 $
- * @stable
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.23 $ $Date: 2001/11/16 23:50:17 $
+ * @deprecated To be removed after 2002-sep-30.
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -69,19 +69,18 @@ public:
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
      */
     CompoundTransliterator(Transliterator* const transliterators[],
                            int32_t transliteratorCount,
                            UnicodeFilter* adoptedFilter = 0);
-
+private:
     /**
      * Constructs a new compound transliterator.
      * @param filter the filter.  Any character for which
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @draft ICU 2.0
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -92,12 +91,11 @@ public:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
-     * @draft ICU 2.0
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
                            UErrorCode& status);
-
+public:
     /**
      * Destructor.
      * @stable
@@ -106,26 +104,26 @@ public:
 
     /**
      * Copy constructor.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
      */
     CompoundTransliterator(const CompoundTransliterator&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     CompoundTransliterator& operator=(const CompoundTransliterator&);
 
     /**
      * Transliterator API.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     Transliterator* clone(void) const;
 
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual int32_t getCount(void) const;
 
@@ -133,18 +131,20 @@ public:
      * Returns the transliterator at the given index in this chain.
      * @param index index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual const Transliterator& getTransliterator(int32_t index) const;
 
     /**
-     * @stable
+     * Sets the transliterators.
+     * @deprecated To be removed after 2002-sep-30.
      */
     void setTransliterators(Transliterator* const transliterators[],
                             int32_t count);
 
     /**
-     * @stable
+     * Adopts the transliterators.
+     * @deprecated To be removed after 2002-sep-30.
      */
     void adoptTransliterators(Transliterator* adoptedTransliterators[],
                               int32_t count);
@@ -159,13 +159,14 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @stable
+     * @deprecated To be removed after 2002-sep-30.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
@@ -226,6 +227,7 @@ public:
 
     /**
      * Constructs a new compound transliterator.
+     * Use Transliterator::createInstance factory method.
      * @param filter the filter.  Any character for which
      * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
@@ -241,6 +243,7 @@ public:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
+     * Use Transliterator::createInstance factory method.
      * @deprecated Remove after Aug 2002. Use the constructor that takes
      * UParseError as one of the parmeters.
      */
