@@ -162,15 +162,26 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             fi
             ;;
         *-*-hpux*)
+            dnl First we try the newer +DD64, if that doesn't work,
+            dnl try other options.
+
             OLD_CFLAGS="${CFLAGS}"
             OLD_CXXFLAGS="${CXXFLAGS}"
-            CFLAGS="${CFLAGS} +DA2.0W"
-            CXXFLAGS="${CXXFLAGS} +DA2.0W"
+            CFLAGS="${CFLAGS} +DD64"
+            CXXFLAGS="${CXXFLAGS} +DD64"
             AC_TRY_RUN(int main(void) {return 0;},
                 ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
             if test "$ENABLE_64BIT_LIBS" = no; then
                 CFLAGS="${OLD_CFLAGS}"
                 CXXFLAGS="${OLD_CXXFLAGS}"
+                CFLAGS="${CFLAGS} +DA2.0W"
+                CXXFLAGS="${CXXFLAGS} +DA2.0W"
+                AC_TRY_RUN(int main(void) {return 0;},
+                    ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
+                if test "$ENABLE_64BIT_LIBS" = no; then
+                    CFLAGS="${OLD_CFLAGS}"
+                    CXXFLAGS="${OLD_CXXFLAGS}"
+                fi
             fi
             ;;
         *)

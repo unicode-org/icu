@@ -333,6 +333,12 @@ if test x$streams != xnone
 then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
+    OLD_CXXFLAGS="${CXXFLAGS}"
+    case "${host}" in
+        *-*-hpux*) 	
+            CXXFLAGS="${CXXFLAGS} -AA"
+        ;;
+    esac
     AC_MSG_CHECKING([iostream usability])
     AC_TRY_COMPILE([#include <iostream>],[],
         [ac_cv_header_iostream=yes],[ac_cv_header_iostream=no])
@@ -341,6 +347,7 @@ then
     then
         U_IOSTREAM_SOURCE=199711
     else
+        CXXFLAGS="${OLD_CXXFLAGS}"
         AC_CHECK_HEADER(iostream.h)
         if test $ac_cv_header_iostream_h = yes; then
             AC_MSG_CHECKING([whether ostream is really defined])
@@ -358,6 +365,13 @@ then
         if test $U_IOSTREAM_SOURCE -ge $streams
         then
             U_IOSTREAM_SOURCE=$streams
+            case "${host}" in
+                *-*-hpux*)
+                    if test $U_IOSTREAM_SOURCE -lt 199711; then
+                        CXXFLAGS=${OLD_CXXFLAGS}
+                    fi
+                ;;
+            esac
         else
             AC_MSG_ERROR(${withval} iostream is not available)
         fi
