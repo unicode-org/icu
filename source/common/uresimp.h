@@ -80,7 +80,7 @@ struct UResourceBundle {
     /*Resource fParent; */
 };
 
-U_CFUNC void ures_initStackObject(UResourceBundle* resB);
+U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
 U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state);
 U_CFUNC UBool ures_isStackObject( UResourceBundle* resB);
 
