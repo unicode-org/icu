@@ -81,8 +81,11 @@ print HEADER <<"EndOfHeaderComment";
 #ifndef $HEADERDEF
 #define $HEADERDEF
 
-#if !U_DISABLE_RENAMING
+/* Uncomment the following line to disable renaming on platforms
+   that do not use Autoconf. */
+/* #define U_DISABLE_RENAMING 1 /**/
 
+#if !U_DISABLE_RENAMING
 EndOfHeaderComment
 
 for(;@ARGV; shift(@ARGV)) {
@@ -130,7 +133,7 @@ foreach(sort keys(%CFuncs)) {
     print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
 
-print HEADER "\n/* C++ class names renaming defines */\n\n";
+print HEADER "/* C++ class names renaming defines */\n\n";
 print HEADER "#ifdef XP_CPLUSPLUS\n";
 print HEADER "#if !U_HAVE_NAMESPACE\n\n";
 foreach(sort keys(%CppClasses)) {
