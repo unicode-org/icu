@@ -347,18 +347,21 @@ UnicodeSet* UnicodePropertySet::createFromPattern(const UnicodeString& pattern,
             UnicodeString shortName = munge(pattern, pos, close);
 
             // Do not propagate error codes from just not finding the name.
-            UErrorCode localErrorCode = U_ZERO_ERROR;
+            UErrorCode localErrorCode;
 
             // First try general category
+            localErrorCode = U_ZERO_ERROR;
             set = createCategorySet(shortName, localErrorCode);
 
             // If this fails, try script
             if (set == NULL) {
+                localErrorCode = U_ZERO_ERROR;
                 set = createScriptSet(shortName, localErrorCode);
             }
 
             // If this fails, try binary property
             if (set == NULL) {
+                localErrorCode = U_ZERO_ERROR;
                 set = createBinaryPropertySet(shortName, localErrorCode);
             }
         }
