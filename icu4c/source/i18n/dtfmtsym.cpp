@@ -507,7 +507,7 @@ DateFormatSymbols::setLocalPatternChars(const UnicodeString& newLocalPatternChar
 //------------------------------------------------------
 
 void
-DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const ResourceBundle data, UErrorCode &status) {
+DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const ResourceBundle &data, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         length = data.getSize();
         *field = newUnicodeStringArray(length);
@@ -546,35 +546,35 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar
 ResourceBundle
 DateFormatSymbols::getData(ResourceBundle &rb, const char *tag, const char *type, UErrorCode& status )
 {
-    char tmp[100];
-    char *fullTag = tmp;
+    if(type && *type && (uprv_strcmp(type, "gregorian") != 0)) {
+        char tmp[100];
+        char *fullTag = tmp;
+        int32_t len = uprv_strlen(tag) + 1 + uprv_strlen(type);  // tag + _ + type  (i.e. Eras_Japanese )
 
-    if(type && uprv_strcmp(type, "gregorian") && *type) {
-      int32_t len = uprv_strlen(tag) + 1 + uprv_strlen(type);  // tag + _ + type  (i.e. Eras_Japanese )
-      if(len >= (int32_t)sizeof(tmp)) {
-        fullTag = (char*)uprv_malloc(len+1);
-      }
-    
-      uprv_strcpy(fullTag, tag);
-      uprv_strcat(fullTag, "_");
-      uprv_strcat(fullTag, type);
-      
-      ResourceBundle resource = rb.get(fullTag, status);
+        if(len >= (int32_t)sizeof(tmp)) {
+            fullTag = (char*)uprv_malloc(len+1);
+        }
 
-      if(fullTag != tmp) {  
-        uprv_free(fullTag);  // not stack allocated
-      }
+        uprv_strcpy(fullTag, tag);
+        uprv_strcat(fullTag, "_");
+        uprv_strcat(fullTag, type);
 
-      // fallback if not found
-      if(status == U_MISSING_RESOURCE_ERROR) {
-        status = U_ZERO_ERROR;
-        resource = rb.get(tag, status);
-      }
+        ResourceBundle resource(rb.get(fullTag, status));
 
-      return resource;
+        if(fullTag != tmp) {  
+            uprv_free(fullTag);  // not stack allocated
+        }
+
+        // fallback if not found
+        if(status == U_MISSING_RESOURCE_ERROR) {
+            status = U_ZERO_ERROR;
+            resource = rb.get(tag, status);
+        }
+
+        return resource;
     } else {
-      // Gregorian case
-      return rb.get(tag, status);
+        // Gregorian case
+        return rb.get(tag, status);
     }
 }
 
@@ -651,9 +651,9 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     // fastCopyFrom() - see assignArray comments
     fLocalPatternChars.fastCopyFrom(resource.getStringEx(fgLocalPatternCharsTag, status));
 
-    ResourceBundle zoneArray = resource.get(fgZoneStringsTag, status);
+    ResourceBundle zoneArray(resource.get(fgZoneStringsTag, status));
     fZoneStringsRowCount = zoneArray.getSize();
-    ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
+    ResourceBundle zoneRow(zoneArray.get((int32_t)0, status));
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
     fZoneStringsColCount = zoneRow.getSize();
     fZoneStrings = (UnicodeString **)uprv_malloc(fZoneStringsRowCount * sizeof(UnicodeString *));
@@ -677,7 +677,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     }
 
     // {sfb} fixed to handle 1-based weekdays
-    ResourceBundle weekdaysData = getData(resource, fgDayNamesTag, type, status);
+    ResourceBundle weekdaysData(getData(resource, fgDayNamesTag, type, status));
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
     /* test for NULL */
@@ -691,7 +691,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
         fWeekdays[i+1].fastCopyFrom(weekdaysData.getStringEx(i, status));
     }
 
-    ResourceBundle lsweekdaysData = getData(resource, fgDayAbbreviationsTag, type, status);
+    ResourceBundle lsweekdaysData(getData(resource, fgDayAbbreviationsTag, type, status));
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     /* test for NULL */
