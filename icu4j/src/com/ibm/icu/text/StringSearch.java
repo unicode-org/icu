@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/12/03 20:45:20 $ 
- * $Revision: 1.16 $
+ * $Date: 2002/12/05 02:37:28 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -265,7 +265,8 @@ public final class StringSearch extends SearchIterator
      * @see RuleBasedCollator
      * @see #setStrength
      * @see #getCollator
-     * @deprecated ICU 2.2. [Use this.getCollator().getStrength() instead.]
+     * @obsolete ICU 2.2. Use this.getCollator().getStrength() instead since it
+     *           will be removed in that release.
      */
     public int getStrength() {
         return m_collator_.getStrength();
@@ -340,7 +341,8 @@ public final class StringSearch extends SearchIterator
      * Sets the strength property of the RuleBasedCollator used for searching.
      * See the Collator documentation for a description of the strengths.
      * </p>
-     * @deprecated ICU 2.2. [Use this.getCollator().setStrength(int) instead.
+     * @obsolete ICU 2.2. Use this.getCollator().setStrength(int) instead since
+     *           it will be removed in that release.
      *             After which StringSearch.reset() 
      *             or StringSearch.setCollator(this.getCollator()) should be
      *             called to update StringSearch.]
