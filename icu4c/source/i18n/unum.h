@@ -22,6 +22,8 @@
 #include "umisc.h"
 
 /**
+ * @name Number Format C API
+ *
  * Number Format C API  Provides functions for
  * formatting and parsing a number.  Also provides methods for
  * determining which locales have number formats, and what their names
@@ -103,7 +105,10 @@
  * locale like the currency symbol, the grouping seperator , monetary seperator 
  * etc by making use of functions unum_setSymbols() and unum_getSymbols().
  */
-/** A number formatter */
+
+/** A number formatter. 
+ *  For usage in C programs.
+ */
 typedef void* UNumberFormat;
 
 /** The possible number format styles. */
@@ -493,7 +498,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         int32_t                 resultLength,
         UErrorCode*             status);
 
-/** The maximum size for a textual number format symbol */
+/* The maximum size for a textual number format symbol. */
 #define UNFSYMBOLSMAXSIZE 10
 
 /** The UNumberFormatSymbols struct */

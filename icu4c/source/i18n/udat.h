@@ -18,6 +18,7 @@
 #include "ucal.h"
 #include "unum.h"
 /**
+ * @name Date Format C API
  * Date Format C API  consists of functions that convert dates and
  * times from their internal representations to textual form and back again in a
  * language-independent manner. Converting from the internal representation (milliseconds
@@ -96,7 +97,10 @@
  *          on the screen.
  * </ul>
  */
-/** A date formatter */
+
+/** A date formatter.
+ *  For usage in C programs.
+ */
 typedef void* UDateFormat;
 
 /** The possible date/time format styles */
@@ -388,7 +392,9 @@ enum UDateFormatSymbolType {
 };
 typedef enum UDateFormatSymbolType UDateFormatSymbolType;
 
-/** Date format symbols */
+/** Date format symbols. 
+ *  For usage in C programs.
+ */
 struct UDateFormatSymbols;
 typedef struct UDateFormatSymbols UDateFormatSymbols;
 

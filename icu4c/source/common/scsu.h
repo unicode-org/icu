@@ -31,7 +31,7 @@
 /* Maximum value for a window's index */
 #define USCSU_MAX_INDEX 0xFF
 
-/** The size of the internal buffer for a UnicodeCompressor */
+/* The size of the internal buffer for a UnicodeCompressor. */
 #define USCSU_BUFSIZE 3
 
 /** The UnicodeCompressor struct */

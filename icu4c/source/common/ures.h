@@ -33,6 +33,8 @@
 #include "uloc.h"
 
 /**
+ * @name ResourceBundle C API
+ *
  * C API representing a collection of resource information pertaining to a given
  * locale. A resource bundle provides a way of accessing locale- specific information in
  * a data file. You create a resource bundle that manages the resources for a given
@@ -116,7 +118,9 @@
  * </pre>
  */
 
-/** A UResourceBundle */
+/** A UResourceBundle.
+ *  For usage in C programs.
+ */
 typedef void* UResourceBundle;
 
  
@@ -177,62 +181,64 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path,
                   UErrorCode* status);
 
 /**
-*
-* returns a resource string, given a resource bundle and a key
-*@param resourceBundle: resourceBundle containing the desired string
-*@param resourceTag: key tagging the desired string
-*@param status: fills in the outgoing error code
-*                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
-*                could be a non-failing error 
-*                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-*@return: a library-owned zero-terminated unicode string (its lifetime
-* is that of the resource bundle.)
-*@see ures_getArrayItem
-*@see ures_get2dArrayItem
-*@see ures_getTaggedItem
-*/
+ * returns a resource string, given a resource bundle and a key.
+ *
+ * @param resourceBundle: resourceBundle containing the desired string
+ * @param resourceTag: key tagging the desired string
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return: a library-owned zero-terminated unicode string (its lifetime
+ * is that of the resource bundle.)
+ * @see ures_getArrayItem
+ * @see ures_get2dArrayItem
+ * @see ures_getTaggedItem
+ */
 U_CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
                const char*              resourceTag,
                UErrorCode*               status);
 
 /**
-* returns a resource string which is part of an array, given a resource bundle
-* a key to the array and the index of the desired string
-*@param resourceBundle: resourceBundle containing the desired string
-*@param resourceTag: key tagging the desired array
-*@param resourceIndex: index of the desired string
-*@param status: fills in the outgoing error code
-*                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
-*                could be a non-failing error 
-*                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-*@return: a library-owned zero-terminated unicode string (its lifetime
-* is that of the resource bundle.)
-*@see ures_get
-*@see ures_get2dArrayItem
-*@see ures_getTaggedItem
-*/
+ * Returns a resource string which is part of an array, given a resource bundle
+ * a key to the array and the index of the desired string.
+ *
+ * @param resourceBundle: resourceBundle containing the desired string
+ * @param resourceTag: key tagging the desired array
+ * @param resourceIndex: index of the desired string
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return: a library-owned zero-terminated unicode string (its lifetime
+ * is that of the resource bundle.)
+ * @see ures_get
+ * @see ures_get2dArrayItem
+ * @see ures_getTaggedItem
+ */
 U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resourceBundle,
                     const char*               resourceTag,
                     int32_t                   resourceIndex,
                     UErrorCode*                status);
 
 /**
-* returns a resource string which is part of a 2D array, given a resource bundle
-* a key to the array and the index pair of the desired string
-*@param resourceBundle: resourceBundle containing the desired string
-*@param resourceTag: key tagging the desired array
-*@param resourceIndex: x index of the desired string
-*@param resourceIndex: y index of the desired string
-*@param status: fills in the outgoing error code
-*                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
-*                could be a non-failing error 
-*                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-*@return: a library-owned zero-terminated unicode string (its lifetime
-* is that of the resource bundle.)
-*@see ures_get
-*@see ures_getArrayItem
-*@see ures_getTaggedItem
-*/
+ * Returns a resource string which is part of a 2D array, given a resource bundle
+ * a key to the array and the index pair of the desired string.
+ *
+ * @param resourceBundle: resourceBundle containing the desired string
+ * @param resourceTag: key tagging the desired array
+ * @param resourceIndex: x index of the desired string
+ * @param resourceIndex: y index of the desired string
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return: a library-owned zero-terminated unicode string (its lifetime
+ * is that of the resource bundle.)
+ * @see ures_get
+ * @see ures_getArrayItem
+ * @see ures_getTaggedItem
+ */
 
 U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
@@ -241,21 +247,22 @@ U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resou
                       UErrorCode*              status);
 
 /**
-* returns a resource string which is part of a tagged array, given a resource bundle
-* a key to the array and the key of the desired string.
-*@param resourceBundle: resource bundle containing the desired string
-*@param resourceTag: key tagging the desired array
-*@param resourceIndex: key tagging the desired string
-*@param status: fills in the outgoing error code
-*                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
-*                could be a non-failing error 
-*                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-*@return: a library-owned zero-terminated unicode string (its lifetime
-* is that of the resource bundle.)
-*@see ures_get
-*@see ures_getArrayItem
-*@see ures_get2dItem
-*/
+ * Returns a resource string which is part of a tagged array, given a resource bundle
+ * a key to the array and the key of the desired string.
+ *
+ * @param resourceBundle: resource bundle containing the desired string
+ * @param resourceTag: key tagging the desired array
+ * @param resourceIndex: key tagging the desired string
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return: a library-owned zero-terminated unicode string (its lifetime
+ * is that of the resource bundle.)
+ * @see ures_get
+ * @see ures_getArrayItem
+ * @see ures_get2dItem
+ */
 
 U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
@@ -265,57 +272,57 @@ U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   r
 
 
 /**
-*
-*
-*@param resourceBundle: resource bundle containing the desired strings
-*@param resourceKey: key tagging the resource
-*@param err: fills in the outgoing error code
-*                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
-*                could be a non-failing error 
-*                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-*@return: for    <STRONG>Arrays</STRONG>: returns the number of strings in the array
-*                <STRONG>2d Arrays</STRONG>: returns the number of 1d arrays
-*                <STRONG>taggedArrays</STRONG>: returns the number of strings in the array
-*                <STRONG>single string</STRONG>: returns 1
-*@see ures_get
-*@see ures_getArrayItem
-*@see ures_getTaggedArrayItem
-*@see ures_get2dArrayItem
-*/
+ * Returns the number of strings/arrays in resource bundles.
+ *
+ *@param resourceBundle: resource bundle containing the desired strings
+ *@param resourceKey: key tagging the resource
+ *@param err: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ *@return: for    <STRONG>Arrays</STRONG>: returns the number of strings in the array
+ *                <STRONG>2d Arrays</STRONG>: returns the number of 1d arrays
+ *                <STRONG>taggedArrays</STRONG>: returns the number of strings in the array
+ *                <STRONG>single string</STRONG>: returns 1
+ *@see ures_get
+ *@see ures_getArrayItem
+ *@see ures_getTaggedArrayItem
+ *@see ures_get2dArrayItem
+ */
 
 U_CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBundle,
                   const char* resourceKey,
                   UErrorCode* err);
 /**
-* close a resource bundle, all pointers returned from the various ures_getXXX calls
-* on this particular bundle are INVALID henceforth.
-* @param resourceBundle: a succesfully opened resourceBundle.
-* @param status: fills in the outgoing error code
-*                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
-*                could be a non-failing error 
-*                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
-* @see ures_open
-* @see ures_openW
-*/
+ * close a resource bundle, all pointers returned from the various ures_getXXX calls
+ * on this particular bundle are INVALID henceforth.
+ *
+ * @param resourceBundle: a succesfully opened resourceBundle.
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @see ures_open
+ * @see ures_openW
+ */
 U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
 /**
-     * Return the version number associated with this ResourceBundle. This version
-     * number is a string of the form MAJOR.MINOR, where MAJOR is the version number of
-     * the current analytic code package, and MINOR is the version number contained in
-     * the resource file as the value of the tag "Version". A change in the MINOR
-     * version indicated an updated data file. A change in the MAJOR version indicates a
-     * new version of the code which is not binary-compatible with the previous version.
-     * If no "Version" tag is present in a resource file, the MINOR version "0" is assigned.
-     *
-     * For example, if the Collation sort key algorithm changes, the MAJOR version
-     * increments. If the collation data in a resource file changes, the MINOR version
-     * for that file increments.
-     * @param resourceBundle: resource bundle in question
-     * @return  A string of the form N.n, where N is the major version number,
-     *          representing the code version, and n is the minor version number,
-     *          representing the resource data file. The caller does not own this
-     *          string.
-     */
+ * Return the version number associated with this ResourceBundle. This version
+ * number is a string of the form MAJOR.MINOR, where MAJOR is the version number of
+ * the current analytic code package, and MINOR is the version number contained in
+ * the resource file as the value of the tag "Version". A change in the MINOR
+ * version indicated an updated data file. A change in the MAJOR version indicates a
+ * new version of the code which is not binary-compatible with the previous version.
+ * If no "Version" tag is present in a resource file, the MINOR version "0" is assigned.
+ * For example, if the Collation sort key algorithm changes, the MAJOR version
+ * increments. If the collation data in a resource file changes, the MINOR version
+ * for that file increments.
+ * @param resourceBundle: resource bundle in question
+ * @return  A string of the form N.n, where N is the major version number,
+ *          representing the code version, and n is the minor version number,
+ *          representing the resource data file. The caller does not own this
+ *          string.
+ */
 U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
 #endif /*_URES*/
 /*eof*/
