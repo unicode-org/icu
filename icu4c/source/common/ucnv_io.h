@@ -16,7 +16,7 @@
 #include "unicode/utypes.h"
 
 #define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
-#define UCNV_CONVERTER_INDEX_MASK 0x7FF
+#define UCNV_CONVERTER_INDEX_MASK 0xFFF
 
 /**
  * Map a converter alias name to a canonical converter name.
