@@ -868,7 +868,7 @@ public final class ULocale implements Serializable {
     
     /**
      * Returns the country/region code for this locale, which will either be the empty string
-     * or an upercase ISO 3166 2-letter code.
+     * or an uppercase ISO 3166 2-letter code.
      * @see #getDisplayCountry
      * @draft ICU 3.0
      */
@@ -878,7 +878,7 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns the country/region code for this locale, which will either be the empty string
-     * or an upercase ISO 3166 2-letter code.
+     * or an uppercase ISO 3166 2-letter code.
      * @param localeID
      * @see #getDisplayCountry
      * @draft ICU 3.0
