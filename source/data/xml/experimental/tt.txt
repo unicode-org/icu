@@ -1,19 +1,15 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 tt{
     Version{ "x0.3" }
-    LocaleID:int { 0x44 }
     Languages {
         tt { "\u0422\u0430\u0442\u0430\u0440" }
     }
-//    ShortLanguage{
-//        "TTT"
-//    }
     DayNames{
         "\u042F\u043A\u0448\u04D9\u043C\u0431\u0435",
         "\u0414\u04AF\u0448\u04D9\u043C\u0431\u0435",
@@ -70,16 +66,21 @@ tt{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        ","
+    }
+    Currencies {
+        RUR { "\u0440.", "RUR" }
     }
     LocaleScript:array { "Cyrl" }
 
     ExemplarCharacters { "[\u0430-\u044f \u0451 \u0456 \u0463 \u0473 \u0475]" }
-    CollationElements {	    
+    CollationElements {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

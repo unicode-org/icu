@@ -1,22 +1,18 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 uz{
     Version{ "x0.2" }
-    LocaleID:int { 0x43 }
     Languages {
         uz { "\u040E\u0437\u0431\u0435\u043A" }
     }
     Countries {
         UZ { "\u040E\u0437\u0431\u0435\u043A\u0438\u0441\u0442\u043E\u043D" }
     }
-//    ShortLanguage{
-//        "UZB"
-//    }
     DayNames{
         "\u044F\u043A\u0448\u0430\u043D\u0431\u0430",
         "\u0434\u0443\u0448\u0430\u043D\u0431\u0430",
@@ -74,18 +70,23 @@ uz{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        ",",
     }
     LocaleScript:array { "Cyrl" }
     ExemplarCharacters { "[\u0430-\u044f \u0451 \u0456 \u0463 \u0473 \u0475]" }
-    CollationElements {	    
+    CollationElements {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+    }
+    Currencies {
+        UZS { "\u0441\u045E\u043C", "UZS" }
     }
 }

@@ -1,20 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 uz_UZ{
-    Version{ "x0.1" }
-    LocaleID:int { 0x0843 }
-
-    CurrencyElements{
-        "\u0441\u045E\u043C",
-        "UZS",
-        ","
-    }
-
+    Version{ "x0.2" }
     DateTimePatterns{
         "hh:mm:ss aa",
         "H:mm:ss",

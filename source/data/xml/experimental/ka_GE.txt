@@ -1,21 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 ka_GE{
-    Version{ "x0.2" }
-// ShortCountry{
-//  "GEO"
-// }
-    LocaleID:int { 0x0437 }
-    CurrencyElements{
-        "Lari",
-        "GEL",
-        ","
-    }
+    Version{ "x0.3" }
     DateTimePatterns{
         "hh:mm:ss aa",
         "H:mm:ss",

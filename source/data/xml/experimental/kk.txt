@@ -1,13 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 kk{
     Version{ "x0.2" }
-    LocaleID:int { 0x3f }
     Languages {
         kk { "\u049A\u0430\u0437\u0430\u049B" }
     }
@@ -79,18 +78,23 @@ kk{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
+    }
+    Currencies {
+        KZT { "\u0442\u04A3\u0433.", "KZT" }
     }
     LocaleScript:array { "Cyrl" }
-    ExemplarCharacters { "[\u0430-\u0448 \u044b \u044d \u0451]" }
-    CollationElements {	    
-    	Version { "1.0" }
-    	Sequence { 
-              "[normalization on]"
-    	}
+    ExemplarCharacters { "[\u0430-\u044f \u044b \u044d \u0451]" }
+    CollationElements {
+        Version { "1.0" }
+        Sequence { 
+            "[normalization on]"
+        }
     }
 }

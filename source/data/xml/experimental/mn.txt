@@ -7,13 +7,9 @@
 
 mn{
     Version{ "x0.3" }
-    LocaleID:int { 0x50 }
     Languages {
         mn { "\u041C\u043E\u043D\u0433\u043E\u043B \u0445\u044D\u043B" }
     }
-// ShortLanguage{
-//  "MON"
-// }
     DayNames{
         "\u041D\u044F\u043C",
         "\u0414\u0430\u0432\u0430\u0430",
@@ -71,16 +67,18 @@ mn{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        ","
     }
 
-    ExemplarCharacters { "[\u0430-\u0448 \u0456 \u0454 \u0457 \u0491]" }   
+    ExemplarCharacters { "[\u0430-\u044f \u0456 \u0454 \u0457 \u0491]" }
     LocaleScript:array{ "Cyrl" }
-    CollationElements {     
+    CollationElements {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

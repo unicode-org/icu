@@ -1,22 +1,18 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 ka{
     Version{ "x0.2" }
-    LocaleID:int { 0x37 }
     Languages {
         ka { "\u10E5\u10D0\u10E0\u10D7\u10E3\u10DA\u10D8" }
     }
     Countries {
         GE { "\u10E1\u10D0\u10E5\u10D0\u10E0\u10D7\u10D5\u10D4\u10DA\u10DD" }
     }
-//    ShortLanguage{
-//        "KAT"
-//    }
     DayNames{
         "\u10D9\u10D5\u10D8\u10E0\u10D0",
         "\u10DD\u10E0\u10E8\u10D0\u10D1\u10D0\u10D7\u10D8",
@@ -74,15 +70,20 @@ ka{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        ",",
+    }
+    Currencies {
+        GEL { "Lari", "GEL" }
     }
     LocaleScript:array { "Geor" }
     ExemplarCharacters { "[:Geor:]" }
-    CollationElements {	    
+    CollationElements {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
