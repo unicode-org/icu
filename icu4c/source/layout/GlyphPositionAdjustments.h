@@ -133,92 +133,6 @@ public:
     void applyCursiveAdjustments(LEGlyphStorage &glyphStorage, le_bool rightToLeft, const LEFontInstance *fontInstance);
 };
 
-inline le_bool GlyphPositionAdjustments::isCursiveGlyph(le_int32 index) const
-{
-    return fEntryExitPoints != NULL && fEntryExitPoints[index].isCursiveGlyph();
-}
-
-inline le_bool GlyphPositionAdjustments::baselineIsLogicalEnd(le_int32 index) const
-{
-    return fEntryExitPoints != NULL && fEntryExitPoints[index].baselineIsLogicalEnd();
-}
-
-inline float GlyphPositionAdjustments::getXPlacement(le_int32 index) const
-{
-    return fAdjustments[index].getXPlacement();
-}
-
-inline float GlyphPositionAdjustments::getYPlacement(le_int32 index) const
-{
-    return fAdjustments[index].getYPlacement();
-}
-
-inline float GlyphPositionAdjustments::getXAdvance(le_int32 index) const
-{
-    return fAdjustments[index].getXAdvance();
-}
-
-inline float GlyphPositionAdjustments::getYAdvance(le_int32 index) const
-{
-    return fAdjustments[index].getYAdvance();
-}
-
-
-inline le_int32 GlyphPositionAdjustments::getBaseOffset(le_int32 index) const
-{
-    return fAdjustments[index].getBaseOffset();
-}
-
-inline void GlyphPositionAdjustments::setXPlacement(le_int32 index, float newXPlacement)
-{
-    fAdjustments[index].setXPlacement(newXPlacement);
-}
-
-inline void GlyphPositionAdjustments::setYPlacement(le_int32 index, float newYPlacement)
-{
-    fAdjustments[index].setYPlacement(newYPlacement);
-}
-
-inline void GlyphPositionAdjustments::setXAdvance(le_int32 index, float newXAdvance)
-{
-    fAdjustments[index].setXAdvance(newXAdvance);
-}
-
-inline void GlyphPositionAdjustments::setYAdvance(le_int32 index, float newYAdvance)
-{
-    fAdjustments[index].setYAdvance(newYAdvance);
-}
-
-inline void GlyphPositionAdjustments::setBaseOffset(le_int32 index, le_int32 newBaseOffset)
-{
-    fAdjustments[index].setBaseOffset(newBaseOffset);
-}
-
-inline void GlyphPositionAdjustments::adjustXPlacement(le_int32 index, float xAdjustment)
-{
-    fAdjustments[index].adjustXPlacement(xAdjustment);
-}
-
-inline void GlyphPositionAdjustments::adjustYPlacement(le_int32 index, float yAdjustment)
-{
-    fAdjustments[index].adjustYPlacement(yAdjustment);
-}
-
-inline void GlyphPositionAdjustments::adjustXAdvance(le_int32 index, float xAdjustment)
-{
-    fAdjustments[index].adjustXAdvance(xAdjustment);
-}
-
-inline void GlyphPositionAdjustments::adjustYAdvance(le_int32 index, float yAdjustment)
-{
-    fAdjustments[index].adjustYAdvance(yAdjustment);
-}
-
-inline le_bool GlyphPositionAdjustments::hasCursiveGlyphs() const
-{
-    return fEntryExitPoints != NULL;
-}
-
 inline GlyphPositionAdjustments::Adjustment::Adjustment()
   : xPlacement(0), yPlacement(0), xAdvance(0), yAdvance(0), baseOffset(-1)
 {
@@ -356,6 +270,92 @@ inline void GlyphPositionAdjustments::EntryExitPoint::setCursiveGlyph(le_bool ba
     } else {
         fFlags |= EEF_IS_CURSIVE_GLYPH;
     }
+}
+
+inline le_bool GlyphPositionAdjustments::isCursiveGlyph(le_int32 index) const
+{
+    return fEntryExitPoints != NULL && fEntryExitPoints[index].isCursiveGlyph();
+}
+
+inline le_bool GlyphPositionAdjustments::baselineIsLogicalEnd(le_int32 index) const
+{
+    return fEntryExitPoints != NULL && fEntryExitPoints[index].baselineIsLogicalEnd();
+}
+
+inline float GlyphPositionAdjustments::getXPlacement(le_int32 index) const
+{
+    return fAdjustments[index].getXPlacement();
+}
+
+inline float GlyphPositionAdjustments::getYPlacement(le_int32 index) const
+{
+    return fAdjustments[index].getYPlacement();
+}
+
+inline float GlyphPositionAdjustments::getXAdvance(le_int32 index) const
+{
+    return fAdjustments[index].getXAdvance();
+}
+
+inline float GlyphPositionAdjustments::getYAdvance(le_int32 index) const
+{
+    return fAdjustments[index].getYAdvance();
+}
+
+
+inline le_int32 GlyphPositionAdjustments::getBaseOffset(le_int32 index) const
+{
+    return fAdjustments[index].getBaseOffset();
+}
+
+inline void GlyphPositionAdjustments::setXPlacement(le_int32 index, float newXPlacement)
+{
+    fAdjustments[index].setXPlacement(newXPlacement);
+}
+
+inline void GlyphPositionAdjustments::setYPlacement(le_int32 index, float newYPlacement)
+{
+    fAdjustments[index].setYPlacement(newYPlacement);
+}
+
+inline void GlyphPositionAdjustments::setXAdvance(le_int32 index, float newXAdvance)
+{
+    fAdjustments[index].setXAdvance(newXAdvance);
+}
+
+inline void GlyphPositionAdjustments::setYAdvance(le_int32 index, float newYAdvance)
+{
+    fAdjustments[index].setYAdvance(newYAdvance);
+}
+
+inline void GlyphPositionAdjustments::setBaseOffset(le_int32 index, le_int32 newBaseOffset)
+{
+    fAdjustments[index].setBaseOffset(newBaseOffset);
+}
+
+inline void GlyphPositionAdjustments::adjustXPlacement(le_int32 index, float xAdjustment)
+{
+    fAdjustments[index].adjustXPlacement(xAdjustment);
+}
+
+inline void GlyphPositionAdjustments::adjustYPlacement(le_int32 index, float yAdjustment)
+{
+    fAdjustments[index].adjustYPlacement(yAdjustment);
+}
+
+inline void GlyphPositionAdjustments::adjustXAdvance(le_int32 index, float xAdjustment)
+{
+    fAdjustments[index].adjustXAdvance(xAdjustment);
+}
+
+inline void GlyphPositionAdjustments::adjustYAdvance(le_int32 index, float yAdjustment)
+{
+    fAdjustments[index].adjustYAdvance(yAdjustment);
+}
+
+inline le_bool GlyphPositionAdjustments::hasCursiveGlyphs() const
+{
+    return fEntryExitPoints != NULL;
 }
 
 U_NAMESPACE_END
