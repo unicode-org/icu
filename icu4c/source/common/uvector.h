@@ -13,6 +13,7 @@
 #define UVECTOR_H
 
 #include "unicode/utypes.h"
+#include "uhash.h"
 
 /**
  * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector
@@ -65,27 +66,30 @@
  * @author Alan Liu
  */
 class U_COMMON_API UVector {
-public:
-    typedef void (* U_CALLCONV Deleter)(void*);
-    typedef UBool (* U_CALLCONV Comparer)(const void*, const void*);
+    // NOTE: UVector uses the UHashKey (union of void* and int32_t) as
+    // its basic storage type.  It uses UKeyComparator as its
+    // comparison function.  It uses UObjectDeleter as its deleter
+    // function.  These are named for hashtables, but used here as-is
+    // rather than duplicating the type.  This allows sharing of
+    // support functions.
 
 private:
     int32_t count;
 
     int32_t capacity;
 
-    void** elements;
+    UHashKey* elements;
 
-    Deleter deleter;
+    UObjectDeleter deleter;
 
-    Comparer comparer;
+    UKeyComparator comparer;
 
     static UBool outOfMemory;
 
 public:
     UVector(int32_t initialCapacity = 8);
 
-    UVector(Deleter d, Comparer c, int32_t initialCapacity = 8);
+    UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity = 8);
 
     ~UVector();
 
@@ -95,11 +99,17 @@ public:
 
     void addElement(void* obj);
 
+    void addElement(int32_t elem);
+
     void setElementAt(void* obj, int32_t index);
+
+    void setElementAt(int32_t elem, int32_t index);
 
     void insertElementAt(void* obj, int32_t index);
 
     void* elementAt(int32_t index) const;
+
+    int32_t elementAti(int32_t index) const;
 
     void* firstElement(void) const;
 
@@ -125,9 +135,9 @@ public:
     // New API
     //------------------------------------------------------------
 
-    Deleter setDeleter(Deleter d);
+    UObjectDeleter setDeleter(UObjectDeleter d);
 
-    Comparer setComparer(Comparer c);
+    UKeyComparator setComparer(UKeyComparator c);
 
     static UBool isOutOfMemory(void);
 
@@ -175,7 +185,7 @@ class U_COMMON_API UStack : public UVector {
 public:
     UStack(int32_t initialCapacity = 8);
 
-    UStack(Deleter d, Comparer c, int32_t initialCapacity = 8);
+    UStack(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity = 8);
 
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.
@@ -186,7 +196,11 @@ public:
     
     void* pop(void);
     
+    int32_t popi(void);
+    
     void* push(void* obj);
+
+    int32_t push(int32_t i);
 
     int32_t search(void* obj) const;
 
@@ -238,6 +252,11 @@ inline void* UStack::peek(void) const {
 inline void* UStack::push(void* obj) {
     addElement(obj);
     return obj;
+}
+
+inline int32_t UStack::push(int32_t i) {
+    addElement(i);
+    return i;
 }
 
 #endif
