@@ -573,6 +573,41 @@ unicodeDataLineFn(void *context,
     }
 }
 
+static UBool U_CALLCONV
+enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
+    static UChar32 test[][2]={
+        0x41, U_UPPERCASE_LETTER,
+        0x308, U_NON_SPACING_MARK,
+        0xfffe, U_GENERAL_OTHER_TYPES,
+        0xe0041, U_FORMAT_CHAR,
+        0xeffff, U_UNASSIGNED
+    };
+    int i, count;
+
+    if(0!=uprv_strcmp((const char *)context, "a1")) {
+        log_err("error: u_enumCharTypes() passes on an incorrect context pointer\n");
+    }
+
+    count=sizeof(test)/sizeof(test[0]);
+    for(i=0; i<count; ++i) {
+        if(start<=test[i][0] && test[i][0]<limit) {
+            if(type!=(UCharCategory)test[i][1]) {
+                log_err("error: u_enumCharTypes() has range [U+%04lx, U+%04lx[ with %ld instead of U+%04lx with %ld\n",
+                        start, limit, (long)type, test[i][0], test[i][1]);
+            }
+            /* stop at the range that includes the last test code point */
+            return i==(count-1) ? FALSE : TRUE;
+        }
+    }
+
+    if(start>test[count-1][0]) {
+        log_err("error: u_enumCharTypes() has range [U+%04lx, U+%04lx[ with %ld after it should have stopped\n",
+                start, limit, (long)type);
+        return FALSE;
+    }
+    return TRUE;
+}
+
 /* tests for several properties */
 static void TestUnicodeData()
 {
@@ -658,6 +693,9 @@ static void TestUnicodeData()
             ++c;
         }
     }
+
+    /* test u_enumCharTypes() */
+    u_enumCharTypes(enumTypeRange, "a1");
 }
 
 /*internal functions ----*/
