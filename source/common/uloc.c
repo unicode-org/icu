@@ -86,10 +86,10 @@ static const char * const _languages[] = {
     "bai", "bal", "bam", "ban", "bas", "bat", "be",  "bej",
     "bem", "ber", "bg",  "bh",  "bho", "bi",  "bik", "bin",
     "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",
-    "btk", "bua", "bug", "ca",  "cad", "cai", "car", "cau",
+    "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",
     "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",
     "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",
-    "cpe", "cpf", "cpp", "cr",  "crp", "cs",  "csb", "cu",  "cus",
+    "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",
     "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",
     "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",
     "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
@@ -159,14 +159,14 @@ static const char * const _languages3[] = {
     "bem", "ber", "bul", "bih", "bho", "bis", "bik", "bin",
 /*  "bla", "bm",  "bn",  "bnt", "bo",  "br",  "bra", "bs",     */
     "bla", "bm",  "ben", "bnt", "bod", "bre", "bra", "bos",
-/*  "btk", "bua", "bug", "ca",  "cad", "cai", "car", "cau",    */
-    "btk", "bua", "bug", "cat", "cad", "cai", "car", "cau",
+/*  "btk", "bua", "bug", "byn", "ca",  "cad", "cai", "car", "cau",    */
+    "btk", "bua", "bug", "byn", "cat", "cad", "cai", "car", "cau",
 /*  "ce",  "ceb", "cel", "ch",  "chb", "chg", "chk", "chm",    */
     "che", "ceb", "cel", "cha", "chb", "chg", "chk", "chm",
 /*  "chn", "cho", "chp", "chr", "chy", "cmc", "co",  "cop",    */
     "chn", "cho", "chp", "chr", "chy", "cmc", "cos", "cop",
-/*  "cpe", "cpf", "cpp", "cr",  "crp", "cs",  "csb", "cu",  "cus",    */
-    "cpe", "cpf", "cpp", "cre", "crp", "ces", "csb", "chu", "cus",
+/*  "cpe", "cpf", "cpp", "cr",  "crh", "crp", "cs",  "csb", "cu",  "cus",    */
+    "cpe", "cpf", "cpp", "cre", "crh", "crp", "ces", "csb", "chu", "cus",
 /*  "cv",  "cy",  "da",  "dak", "dar", "day", "de",  "del", "den",    */
     "chv", "cym", "dan", "dak", "dar", "day", "deu", "del", "den",
 /*  "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",    */
