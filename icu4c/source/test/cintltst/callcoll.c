@@ -40,6 +40,7 @@
 #include "unicode/uloc.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
+#include "unicode/uclean.h"
 
 #include "cintltst.h"
 #include "ccolltst.h"
@@ -79,6 +80,8 @@ static void TestSurrogates(void);
 static void TestInvalidRules(void);
 
 static void TestJitterbug1098(void);
+
+static void TestFCDCrash(void);
 
 const UCollationResult results[] = {
     UCOL_LESS,
@@ -137,7 +140,8 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");
     addTest(root, &TestInvalidRules, "tscoll/callcoll/TestInvalidRules");
     addTest(root, &TestJB1401, "tscoll/callcoll/TestJB1401");      
-    addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");      
+    addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");     
+    addTest(root, &TestFCDCrash, "tscoll/callcoll/TestFCDCrash");
 
    }
 
@@ -1145,5 +1149,31 @@ TestJitterbug1098(){
     }
 }
 
+static void
+TestFCDCrash(void) {
+    static char *test[] = {
+    "Gr\\u00F6\\u00DFe",
+    "Grossist"
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll = ucol_open("es", &status);
+    if(U_FAILURE(status)) {
+        log_err("Couldn't open collator\n");
+        return;
+    }
+    ucol_close(coll);
+    coll = NULL;
+    u_cleanup();
+    coll = ucol_open("de_DE", &status);
+    if(U_FAILURE(status)) {
+        log_err("Couldn't open collator\n");
+        return;
+    }
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    genericOrderingTest(coll, test, 2);
+    ucol_close(coll);
+
+}
 
 #endif /* #if !UCONFIG_NO_COLLATION */
