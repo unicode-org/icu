@@ -67,6 +67,8 @@ public:
     void displayOutput(const UnicodeString&, const UnicodeString&, UnicodeString&,
                        UTransPosition&);
 
+    void callEverything(const Transliterator *t, int line);
+
 };
 
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
