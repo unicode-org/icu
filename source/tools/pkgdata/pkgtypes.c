@@ -43,6 +43,7 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
       }
       l = l->next;
     }
+  return NULL;
 }
 
 const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
@@ -60,6 +61,7 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
       }
       l = l->next;
     }
+  return NULL;
 }
 
 /*
@@ -143,8 +145,7 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
  */
 void pkg_deleteList(CharList *l)
 {
-  CharList *next;
-
+  
   while(l != NULL)
   {
     uprv_free((void*)l->str);
