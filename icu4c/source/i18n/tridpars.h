@@ -1,12 +1,12 @@
 /*
-**********************************************************************
-*   Copyright (c) 2002, International Business Machines Corporation
-*   and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   01/28/2002  aliu        Creation.
-**********************************************************************
-*/
+ **************************************************************************
+ *   Copyright (c) 2002-2004, International Business Machines Corporation *
+ *   and others.  All Rights Reserved.                                    *
+ **************************************************************************
+ *   Date        Name        Description                                  *
+ *   01/28/2002  aliu        Creation.                                    *
+ **************************************************************************
+ */
 #ifndef TRIDPARS_H
 #define TRIDPARS_H
 

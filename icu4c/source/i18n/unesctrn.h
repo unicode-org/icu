@@ -1,12 +1,12 @@
 /*
-**********************************************************************
-*   Copyright (c) 2001-2003, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-**********************************************************************
-*   Date        Name        Description
-*   11/20/2001  aliu        Creation.
-**********************************************************************
-*/
+ **********************************************************************
+ *   Copyright (c) 2001-2004, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *   Date        Name        Description
+ *   11/20/2001  aliu        Creation.
+ **********************************************************************
+ */
 #ifndef UNESCTRN_H
 #define UNESCTRN_H
 
