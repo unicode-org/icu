@@ -629,7 +629,7 @@ de {
         EGP { "EGP", "\u00C4gyptisches Pfund" }
         ERN { "ERN", "Nakfa" }
         ETB { "ETB", "Birr" }
-        EUR { "EUR", "Euro" }
+        EUR { "\u20AC", "Euro" }
         FJD { "FJD", "Fidschi Dollar" }
         FKP { "FKP", "Falkland Pfund" }
         GBP { "GBP", "Pfund Sterling" }
