@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/10/16 23:42:48 $
- * $Revision: 1.13 $
+ * $Date: 2003/11/20 00:35:13 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -161,7 +161,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         int count = 0;
         int pos = 0;
         final int MAXLENGTH = 0x8000; // max buffer size - 32K
-        int length = 0x80; // start with small buffers and work up
+        int length = 0x100; // start with small buffers and work up
         do {
             pos = 0;
             length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
@@ -176,6 +176,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
                 } while (pos < length);
             }
             catch (IOException e) {
+                e.printStackTrace();
             }
             vec.add(buffer);
             count += pos;
