@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2001/11/02 23:49:39 $
- * $Revision: 1.3 $
+ * $Date: 2001/11/03 05:44:32 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -22,6 +22,7 @@ import java.io.*;
 public class WriteCharts {
     public static void main(String[] args) throws IOException {
         String testSet = "";
+        if (args.length == 0) args = all;
         for (int i = 0; i < args.length; ++i) {
     // Enumeration enum = Transliterator.getAvailableIDs();
             if (args[i].startsWith("[")) {
@@ -32,6 +33,13 @@ public class WriteCharts {
             }
         }
     }
+    
+    static final String[] all = {
+        "Cyrillic-Latin", "Greek-Latin", 
+        "el-Latin",
+        "Devanagari-Tamil", "Devanagari-Latin", 
+        "Katakana-Latin", "Hiragana-Latin", "Hangul-Latin"
+    };
     
     public static void print(String testSet, String rawId) throws IOException {
         Transliterator t = Transliterator.getInstance(rawId);
@@ -70,12 +78,14 @@ public class WriteCharts {
         Transliterator inverse = t.getInverse();
         
         Transliterator hex = Transliterator.getInstance("Any-Hex");
+        
                 
         // iterate through script
         System.out.println("Transliterating " + sourceSet.toPattern(true) 
             + " with " + Transliterator.getDisplayName(id));
                 
         UnicodeSet leftOverSet = new UnicodeSet(targetSet);
+        UnicodeSet privateUse = new UnicodeSet("[:private use:]");
             
         Map map = new TreeMap();
                 
@@ -99,11 +109,15 @@ public class WriteCharts {
                 } else if (!ss.equals(rt)) {
                     group |= 4;
                 }
-                    
-                if ((group & 0x7F) != 0) flag = "</td><td>" + hex.transliterate(ss) + "; " + hex.transliterate(ts) + "; " + hex.transliterate(rt);
+                
+                if (containsSome(privateUse, ts) || containsSome(privateUse, rt)) {
+                    group |= 16;
+                }
                     
                 map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.DECOMP_COMPAT, 0)) + ss, 
-                    "<tr><td>" + ss + "</td><td>" + ts + "</td><td>" + rt + "</td><td>" + flag + "</td></tr>" );
+                    "<tr><td>" + ss + "<br><tt>" + hex.transliterate(ss) + "</tt></td><td>"
+                    + ts + "<br><tt>" + hex.transliterate(ts) + "</tt></td><td>"
+                    + rt + "<br><tt>" + hex.transliterate(rt) + "</tt></td></tr>" );
             }
         }
         
@@ -124,10 +138,13 @@ public class WriteCharts {
                 if (!isIn(rt, sourceSet)) {
                     group |= 8;
                 }
-                if ((group & 0x7F) != 0) flag = "</td><td>" + hex.transliterate(ts) + "; " + hex.transliterate(rt);
-                
+                if (containsSome(privateUse, rt)) {
+                    group |= 16;
+                }
+                    
                 map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0)) + ts, 
-                    "<tr><td>-</td><td>" + ts + "</td><td>" + rt + flag + "</td></tr>");
+                    "<tr><td>-</td><td>" + ts + "<br><tt>" + hex.transliterate(ts) + "</tt></td><td>"
+                    + rt + "<br><tt>" + hex.transliterate(rt) + "</tt></td></tr>");
             }
         }
 
@@ -145,10 +162,12 @@ public class WriteCharts {
             out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
             out.println("<HTML><HEAD>");
             out.println("<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
+            out.println("<link rel='stylesheet' href='http://www.unicode.org/charts/uca/charts.css' type='text/css'>");
+            
             out.println("<BODY>");
             String tableHeader = "<p><table border='1'><tr><th>Source</th><th>Target</th><th>Return</th></tr>";
             String tableFooter = "</table></p>";
-            out.println("<h1>Testing Round Trip</h1>");
+            out.println("<h1>Round Trip</h1>");
             out.println(tableHeader);
             
             Iterator it = map.keySet().iterator();
@@ -165,6 +184,7 @@ public class WriteCharts {
                     String title = "";
                     if ((group & 0x80) != 0) out.println("<hr><h1>Completeness</h1>");
                     else out.println("<hr><h1>Round Trip</h1>");
+                    if ((group & 16) != 0) out.println("<h2>Errors: Contains Private Use Characters</h2>");
                     if ((group & 8) != 0) out.println("<h2>Possible Errors: Return not in Source Set</h2>");
                     if ((group & 4) != 0) out.println("<h2>Errors: Return not equal to Source</h2>");
                     if ((group & 2) != 0) out.println("<h2>Errors: Return not in Source Set</h2>");
@@ -195,6 +215,17 @@ public class WriteCharts {
         }
         return true;
     }
+    
+    // tests whether a string is in a set. Also checks for Common and Inherited
+    public static boolean containsSome(UnicodeSet set, String s) {
+        int cp;
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
+            cp = UTF16.charAt(s, i);
+            if (set.contains(cp)) return true;
+        }
+        return false;
+    }
+    
     
 }
   
