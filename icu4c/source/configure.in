@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.88 2000/10/24 19:50:05 yves Exp $
+dnl $Id: configure.in,v 1.89 2000/10/25 22:26:17 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -34,6 +34,8 @@ AC_SUBST(UNICODE_VERSION)
 
 thedatadir=`eval echo $datadir`
 AC_SUBST(thedatadir)
+thelibdir=`test "x$exec_prefix" = xNONE && exec_prefix="$prefix"; eval echo $libdir`
+AC_SUBST(thelibdir)
 
 dnl Shouldn't need the AC_SUBST
 CPPFLAGS="${CPPFLAGS} -I."
@@ -697,7 +699,8 @@ if test "$ac_cv_func_dllload" = "yes"; then
 fi
 
 dnl output the Makefiles
-AC_OUTPUT([icudefs.mk Makefile \
+AC_OUTPUT([README icudefs.mk \
+		Makefile \
 		data/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \

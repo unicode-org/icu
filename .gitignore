@@ -26,6 +26,7 @@ icu4c/debian/icu.prerm
 icu4c/debian/libicu16
 icu4c/debian/tmp
 icu4c/source/Makefile
+icu4c/source/README
 icu4c/source/common/*.ao
 icu4c/source/common/*.d
 icu4c/source/common/Debug
