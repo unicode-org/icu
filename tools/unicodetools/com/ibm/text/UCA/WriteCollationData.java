@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/04/23 22:45:40 $ 
-* $Revision: 1.10 $
+* $Date: 2002/05/29 02:00:59 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -73,6 +73,8 @@ public class WriteCollationData implements UCD_Types {
             else if (arg.equalsIgnoreCase("collationChart")) WriteCharts.collationChart(collator);
             else if (arg.equalsIgnoreCase("normalizationChart")) WriteCharts.normalizationChart();
             else if (arg.equalsIgnoreCase("caseChart")) WriteCharts.caseChart();
+            else if (arg.equalsIgnoreCase("indexChart")) WriteCharts.indexChart();
+            else if (arg.equalsIgnoreCase("special")) WriteCharts.special();
             
             
             else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(collator);

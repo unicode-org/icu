@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2002/04/24 02:38:52 $ 
-* $Revision: 1.7 $
+* $Date: 2002/05/29 02:01:00 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,15 @@ import java.text.SimpleDateFormat;
 public class WriteCharts implements UCD_Types {
     
     static boolean HACK_KANA = false;
+    
+    static public void special() {
+    	Default.setUCD();
+    	for (int i = 0xE000; i < 0x10000; ++i) {
+    		if (!Default.ucd.isRepresented(i)) continue;
+    		if (Default.nfkc.normalizationDiffers(i)) continue;
+    		System.out.println(Default.ucd.getCodeAndName(i));
+    	}
+    }
     
     static public void collationChart(UCA uca) throws IOException {
     	Default.setUCD(uca.getUCDVersion());
@@ -408,6 +417,131 @@ public class WriteCharts implements UCD_Types {
         closeIndexFile(indexFile, "", CASE);
     }
     
+    static public void addMapChar(Map m, Set stoplist, String key, String ch) {
+    	if (stoplist.contains(key)) return;
+    	for (int i = 0; i < key.length(); ++i) {
+    		char c = key.charAt(i);
+    		if ('0' <= c && c <= '9') return;
+    	}
+    	Set result = (Set)m.get(key);
+    	if (result == null) {
+    		result = new TreeSet();
+    		m.put(key, result);
+    	}
+    	result.add(ch);
+    }
+        
+    static public void indexChart() throws IOException {
+        Default.setUCD();
+    	HACK_KANA = false;
+        
+        Map map = new TreeMap();
+        Set stoplist = new TreeSet();
+        
+        String[] stops = {"LETTER", "CHARACTER", "AND", "CAPITAL", "SMALL", "COMPATIBILITY", "WITH"};
+        stoplist.addAll(Arrays.asList(stops));
+        System.out.println("Stop-list: " + stoplist);
+        
+        for (int i = 0; i < LIMIT_SCRIPT; ++i) {
+        	stoplist.add(Default.ucd.getScriptID_fromIndex((byte)i));
+        }
+        System.out.println("Stop-list: " + stoplist);
+        
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+        	if (!Default.ucd.isRepresented(i)) continue;
+        	if (0xAC00 <= i && i <= 0xD7A3) continue;
+        	if (Default.ucd.hasComputableName(i)) continue;
+
+        	String s = Default.ucd.getName(i);
+        	if (s == null) continue;
+        	
+        	if (s.startsWith("<")) {
+        		System.out.println("Wierd character at " + Default.ucd.getCodeAndName(i));
+        	}
+        	String ch = UTF16.valueOf(i);
+        	int last = -1;
+        	int j;
+        	for (j = 0; j < s.length(); ++j) {
+        		char c = s.charAt(j);
+        		if ('A' <= c && c <= 'Z' || '0' <= c && c <= '9') {
+        			if (last == -1) last = j;
+        		} else {
+        			if (last != -1) {
+        				String word = s.substring(last, j);
+        				addMapChar(map, stoplist, word, ch);
+        				last = -1;
+        			}
+        		}
+        	}
+        	if (last != -1) {
+        				String word = s.substring(last, j);
+        				addMapChar(map, stoplist, word, ch);
+        	}
+        }
+          
+        PrintWriter output = null;
+        
+        Iterator it = map.keySet().iterator();
+        
+        int oldScript = -127;
+        
+        int counter = 0;
+        String[] replacement = new String[] {"%%%", "Name Charts"};
+        String folder = "charts\\name\\";
+        
+        Utility.copyTextFile("index.html", true, folder + "index.html", replacement);
+        Utility.copyTextFile("charts.css", false, folder + "charts.css");
+        Utility.copyTextFile("name_help.html", true, folder + "help.html");
+        
+        indexFile = Utility.openPrintWriter(folder + "index_list.html", false, false);
+        Utility.appendFile("index_header.html", true, indexFile, replacement);
+        
+        int columnCount = 0;
+        char lastInitial = 0;
+        
+        while (it.hasNext()) {
+            Utility.dot(counter);
+            
+            String key = (String) it.next();
+            
+            Set chars = (Set) map.get(key);
+            
+            char initial = key.charAt(0);
+            
+            if (initial != lastInitial) {
+                closeFile(output);
+                output = null;
+                lastInitial = initial;
+            }
+            
+            if (output == null) {
+                output = openFile2(0, folder, String.valueOf(initial));
+            }
+            
+            output.println("<tr><td class='h'>" + key + "</td>");
+            columnCount = 1;
+            
+            Iterator sublist = chars.iterator();
+            while (sublist.hasNext()) {
+            	 
+            	String ch = (String) sublist.next();
+            	if (columnCount > 10) {
+            		output.println("</tr><tr><td></td>");
+            		columnCount = 1;
+            	}
+            	showCell(output, ch, "<td ", "", true);
+            	++columnCount;
+            	continue;
+            }
+            
+            output.println("</tr>");
+            
+        }
+        
+        closeFile(output);
+        closeIndexFile(indexFile, "", CASE);
+    }
+    
     static void showCell(PrintWriter output, String s, String prefix, String extra, boolean skipName) {
         String name = Default.ucd.getName(s);
         String comp = Default.nfc.normalize(s);
@@ -477,6 +611,21 @@ public class WriteCharts implements UCD_Types {
         output.println("<title>" + title + "</title>");
         output.println("<link rel='stylesheet' href='charts.css' type='text/css'>");
         output.println("</head><body><h2>" + scriptName + "</h2>");
+        output.println("<table>");
+        return output;
+    }
+    
+    static PrintWriter openFile2(int count, String directory, String name) throws IOException {
+        String fileName = "chart_" + name + (count > 1 ? count + "" : "") + ".html";
+        PrintWriter output = Utility.openPrintWriter(directory + fileName, false, false);
+        Utility.fixDot();
+        System.out.println("Writing: " + name);
+        indexFile.println(" <a href = '" + fileName + "'>" + name + "</a>");
+        String title = name;
+        output.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+        output.println("<title>" + title + "</title>");
+        output.println("<link rel='stylesheet' href='charts.css' type='text/css'>");
+        output.println("</head><body>");
         output.println("<table>");
         return output;
     }
