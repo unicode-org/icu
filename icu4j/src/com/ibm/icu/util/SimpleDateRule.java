@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/SimpleDateRule.java,v $ 
- * $Date: 2003/10/02 20:50:27 $ 
- * $Revision: 1.10 $
+ * $Date: 2003/12/01 21:33:37 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.Date;
 
 /**
  * Simple implementation of DateRule.
- * @draft ICU 2.2
+ * @draft ICU 2.8
  */
 public class SimpleDateRule implements DateRule
 {
@@ -26,13 +26,22 @@ public class SimpleDateRule implements DateRule
      *
      * @param month         The month in which this rule occurs (0-based).
      * @param dayOfMonth    The date in that month (1-based).
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public SimpleDateRule(int month, int dayOfMonth)
     {
         this.month      = month;
         this.dayOfMonth = dayOfMonth;
         this.dayOfWeek  = 0;
+    }
+
+    // temporary
+    /* package */SimpleDateRule(int month, int dayOfMonth, Calendar cal)
+    {
+        this.month      = month;
+        this.dayOfMonth = dayOfMonth;
+        this.dayOfWeek  = 0;
+        this.calendar   = cal;
     }
 
     /**
@@ -44,7 +53,7 @@ public class SimpleDateRule implements DateRule
      * @param after         If true, this rule selects the first dayOfWeek
      *                      on or after dayOfMonth.  If false, the rule selects
      *                      the first dayOfWeek on or before dayOfMonth.
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public SimpleDateRule(int month, int dayOfMonth, int dayOfWeek, boolean after)
     {
@@ -63,7 +72,7 @@ public class SimpleDateRule implements DateRule
      *              does not occur on or after the start date.
      *
      * @see #firstBetween
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public Date firstAfter(Date start)
     {
@@ -85,7 +94,7 @@ public class SimpleDateRule implements DateRule
      *              does not occur between the start and end dates.
      *
      * @see #firstAfter
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public Date firstBetween(Date start, Date end)
     {
@@ -108,7 +117,7 @@ public class SimpleDateRule implements DateRule
      *
      * @param date  The date to check.
      * @return      true if this event occurs on the given date.
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      *
      */
     public boolean isOn(Date date)
@@ -129,8 +138,8 @@ public class SimpleDateRule implements DateRule
 
             c.setTime(computeInYear(c.get(Calendar.YEAR), c));
 
-            //System.out.println("  isOn: dayOfYear = " + dayOfYear);
-            //System.out.println("        holiday   = " + c.get(Calendar.DAY_OF_YEAR));
+//              System.out.println("  isOn: dayOfYear = " + dayOfYear);
+//              System.out.println("        holiday   = " + c.get(Calendar.DAY_OF_YEAR));
 
             return c.get(Calendar.DAY_OF_YEAR) == dayOfYear;
         }
@@ -139,7 +148,7 @@ public class SimpleDateRule implements DateRule
     /**
      * Check whether this event occurs at least once between the two
      * dates given.
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public boolean isBetween(Date start, Date end)
     {
@@ -218,15 +227,15 @@ public class SimpleDateRule implements DateRule
     }
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public void setCalendar(Calendar c) {
         calendar = c;
     }
 
-    static GregorianCalendar gCalendar = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
+    private static GregorianCalendar gCalendar = new GregorianCalendar();
 
-    Calendar calendar = gCalendar;
+    private Calendar calendar = gCalendar;
 
     private int     month;
     private int     dayOfMonth;

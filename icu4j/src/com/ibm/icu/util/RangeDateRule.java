@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeDateRule.java,v $ 
- * $Date: 2002/12/18 21:20:52 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/12/01 21:29:33 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -18,12 +18,12 @@ import java.util.Vector;
 
 /**
  * Implementation of DateRule that takes a range.
- * @draft ICU 2.2
+ * @draft ICU 2.8
  */
 public class RangeDateRule implements DateRule
 {
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public RangeDateRule()
     {
@@ -41,7 +41,7 @@ public class RangeDateRule implements DateRule
     }
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public void add(DateRule rule)
     {
@@ -49,7 +49,7 @@ public class RangeDateRule implements DateRule
     }
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public void add(Date start, DateRule rule)
     {
@@ -61,12 +61,15 @@ public class RangeDateRule implements DateRule
     //-----------------------------------------------------------------------
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public Date firstAfter(Date start)
     {
         // Find the range that I should look at
         int index = startIndex(start);
+        if (index == ranges.size()) {
+            index = 0;
+        }
         Date result = null;
 
         Range r = rangeAt(index);
@@ -84,7 +87,7 @@ public class RangeDateRule implements DateRule
     }
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public Date firstBetween(Date start, Date end)
     {
@@ -109,17 +112,18 @@ public class RangeDateRule implements DateRule
     }
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public boolean isOn(Date date)
     {
-        return false;
+        Range r = rangeAt(startIndex(date));
+        return r != null && r.rule != null && r.rule.isOn(date);
     }
 
     /**
      * Check whether this event occurs at least once between the two
      * dates given.
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public boolean isBetween(Date start, Date end)
     {
