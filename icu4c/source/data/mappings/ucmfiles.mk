@@ -69,13 +69,8 @@ ibm-1255_P100-1995.ucm\
 ibm-1256_P110-1997.ucm\
 ibm-1257_P100-1995.ucm\
 ibm-1258_P100-1997.ucm\
-ibm-1275_P100-1995.ucm\
 ibm-1276_P100-1995.ucm\
 ibm-1277_P100-1995.ucm\
-ibm-1280_P100-1996.ucm\
-ibm-1281_P100-1996.ucm\
-ibm-1282_P100-1996.ucm\
-ibm-1283_P100-1996.ucm\
 ibm-5351_P100-1998.ucm\
 ibm-5353_P100-1998.ucm\
 ibm-942_P12A-1999.ucm\
@@ -88,6 +83,11 @@ ibm-971_P100-1995.ucm\
 ibm-1363_P110-1997.ucm\
 ibm-1381_P110-1999.ucm\
 ibm-33722_P120-1999.ucm\
+macos-0_2-10.2.ucm\
+macos-6-10.2.ucm\
+macos-7_3-10.2.ucm\
+macos-29-10.2.ucm\
+macos-35-10.2.ucm\
 macos-2566-10.2.ucm\
 windows-874-2000.ucm\
 windows-936-2000.ucm\

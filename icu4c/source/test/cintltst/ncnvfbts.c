@@ -519,6 +519,8 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
     static const char* nativeCodePage[]={
         /*NLCS Mapping*/
         "ibm-367",
+        "ibm-437",
+        "ibm-850",
         "ibm-1051",
         "ibm-1089",
         "ibm-1250",
@@ -529,8 +531,8 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
         "ibm-1256",
         "ibm-1257",
         "ibm-1258",
-        "ibm-1275",
-        "ibm-1276"
+        "ibm-1276",
+        "ibm-1277"
     };
 
     int32_t i=0;

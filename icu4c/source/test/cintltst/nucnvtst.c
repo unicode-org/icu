@@ -2385,12 +2385,12 @@ TestSBCS() {
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
-    UConverter *cnv=ucnv_open("ibm-1281", &errorCode);
+    UConverter *cnv=ucnv_open("x-mac-turkish", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_data_err("Unable to open a SBCS(ibm-1281) converter: %s\n", u_errorName(errorCode));
+        log_data_err("Unable to open a SBCS(x-mac-turkish) converter: %s\n", u_errorName(errorCode));
         return;
     }
-    TestNextUChar(cnv, source, limit, results, "SBCS(ibm-1281)");
+    TestNextUChar(cnv, source, limit, results, "SBCS(x-mac-turkish)");
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for Illegal character */ /*

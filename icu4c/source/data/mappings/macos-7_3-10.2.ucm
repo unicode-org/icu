@@ -1,23 +1,42 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2002, International Business Machines
+# *   Copyright (C) 2001-2003, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
 #
-# File created by rptp2ucm (compiled on Dec  3 2002)
-# from source files 34B00503.RPMAP100 and 050334B0.TPMAP100
+# File created on Feb 21 13:52 PST 2003
 #
-<code_set_name>               "ibm-1283_P100-1996"
-<char_name_mask>              "AXXXX"
+# File created by genmucm tool.
+# from macos 10.2 using TECCreateConverter
+#
+# Table Version : 1.0
+# The 1st column is the Unicode scalar value.
+# The 2nd column is the codepage byte sequence.
+# The 3rd column is the fallback indicator.
+# The fallback indicator can have one of the following values:
+#   |0 for exact 1-1 roundtrip mapping
+#   |1 for the best fallback codepage byte sequence.
+#   |2 for the substitution character
+#   |3 for the best reverse fallback Unicode scaler value
+#
+# Encoding description: 
+# Encoding name: X-MAC-CYRILLIC
+#
+<code_set_name>               "macos-7_3-10.2"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
-<subchar>                     \x1A
+<subchar>                     \x3F
 <icu:charsetFamily>           "ASCII"
-<icu:alias>                   "ibm-1283_STD"
+# Suggested ICU specific alias information
+#<icu:alias>                  "macos-7_3_VPUA"
 
+#
 CHARMAP
+#
+#UNICODE 7_3
+#_______ _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
@@ -147,9 +166,7 @@ CHARMAP
 <U007E> \x7E |0
 <U007F> \x7F |0
 <U00A0> \xCA |0
-<U00A2> \xA2 |0
 <U00A3> \xA3 |0
-<U00A4> \xFF |0
 <U00A7> \xA4 |0
 <U00A9> \xA9 |0
 <U00AB> \xC7 |0
@@ -162,6 +179,11 @@ CHARMAP
 <U00BB> \xC8 |0
 <U00F7> \xD6 |0
 <U0192> \xC4 |0
+<U02BB> \xD4 |1
+<U02BC> \xD5 |1
+<U02CB> \x60 |1
+<U0300> \x60 |1
+<U0338> \x2F |1
 <U0401> \xDD |0
 <U0402> \xAB |0
 <U0403> \xAE |0
@@ -254,8 +276,24 @@ CHARMAP
 <U045C> \xCE |0
 <U045E> \xD9 |0
 <U045F> \xDB |0
+<U0490> \xA2 |0
+<U0491> \xB6 |0
+<U2000> \x20 |1
+<U2001> \x20 |1
+<U2002> \x20 |1
+<U2003> \x20 |1
+<U2004> \x20 |1
+<U2005> \x20 |1
+<U2006> \x20 |1
+<U2007> \x20 |1
+<U2008> \x20 |1
+<U2009> \x20 |1
+<U2010> \x2D |1
+<U2011> \x2D |1
+<U2012> \xD0 |1
 <U2013> \xD0 |0
 <U2014> \xD1 |0
+<U2015> \xD1 |1
 <U2018> \xD4 |0
 <U2019> \xD5 |0
 <U201C> \xD2 |0
@@ -264,108 +302,22 @@ CHARMAP
 <U2020> \xA0 |0
 <U2022> \xA5 |0
 <U2026> \xC9 |0
+<U2028> \x0D |1
+<U2029> \x0D |1
+<U20AC> \xFF |0
 <U2116> \xDC |0
 <U2122> \xAA |0
-<U2202> \xB6 |0
 <U2206> \xC6 |0
+<U2215> \x2F |1
+<U2217> \x2A |1
 <U221A> \xC3 |0
 <U221E> \xB0 |0
+<U2236> \x3A |1
+<U223C> \x7E |1
 <U2248> \xC5 |0
 <U2260> \xAD |0
 <U2264> \xB2 |0
 <U2265> \xB3 |0
-<UFF01> \x21 |1
-<UFF02> \x22 |1
-<UFF03> \x23 |1
-<UFF04> \x24 |1
-<UFF05> \x25 |1
-<UFF06> \x26 |1
-<UFF07> \x27 |1
-<UFF08> \x28 |1
-<UFF09> \x29 |1
-<UFF0A> \x2A |1
-<UFF0B> \x2B |1
-<UFF0C> \x2C |1
-<UFF0D> \x2D |1
-<UFF0E> \x2E |1
-<UFF0F> \x2F |1
-<UFF10> \x30 |1
-<UFF11> \x31 |1
-<UFF12> \x32 |1
-<UFF13> \x33 |1
-<UFF14> \x34 |1
-<UFF15> \x35 |1
-<UFF16> \x36 |1
-<UFF17> \x37 |1
-<UFF18> \x38 |1
-<UFF19> \x39 |1
-<UFF1A> \x3A |1
-<UFF1B> \x3B |1
-<UFF1C> \x3C |1
-<UFF1D> \x3D |1
-<UFF1E> \x3E |1
-<UFF1F> \x3F |1
-<UFF20> \x40 |1
-<UFF21> \x41 |1
-<UFF22> \x42 |1
-<UFF23> \x43 |1
-<UFF24> \x44 |1
-<UFF25> \x45 |1
-<UFF26> \x46 |1
-<UFF27> \x47 |1
-<UFF28> \x48 |1
-<UFF29> \x49 |1
-<UFF2A> \x4A |1
-<UFF2B> \x4B |1
-<UFF2C> \x4C |1
-<UFF2D> \x4D |1
-<UFF2E> \x4E |1
-<UFF2F> \x4F |1
-<UFF30> \x50 |1
-<UFF31> \x51 |1
-<UFF32> \x52 |1
-<UFF33> \x53 |1
-<UFF34> \x54 |1
-<UFF35> \x55 |1
-<UFF36> \x56 |1
-<UFF37> \x57 |1
-<UFF38> \x58 |1
-<UFF39> \x59 |1
-<UFF3A> \x5A |1
-<UFF3B> \x5B |1
-<UFF3C> \x5C |1
-<UFF3D> \x5D |1
-<UFF3E> \x5E |1
-<UFF3F> \x5F |1
-<UFF40> \x60 |1
-<UFF41> \x61 |1
-<UFF42> \x62 |1
-<UFF43> \x63 |1
-<UFF44> \x64 |1
-<UFF45> \x65 |1
-<UFF46> \x66 |1
-<UFF47> \x67 |1
-<UFF48> \x68 |1
-<UFF49> \x69 |1
-<UFF4A> \x6A |1
-<UFF4B> \x6B |1
-<UFF4C> \x6C |1
-<UFF4D> \x6D |1
-<UFF4E> \x6E |1
-<UFF4F> \x6F |1
-<UFF50> \x70 |1
-<UFF51> \x71 |1
-<UFF52> \x72 |1
-<UFF53> \x73 |1
-<UFF54> \x74 |1
-<UFF55> \x75 |1
-<UFF56> \x76 |1
-<UFF57> \x77 |1
-<UFF58> \x78 |1
-<UFF59> \x79 |1
-<UFF5A> \x7A |1
-<UFF5B> \x7B |1
-<UFF5C> \x7C |1
-<UFF5D> \x7D |1
-<UFF5E> \x7E |1
+#
 END CHARMAP
+#
