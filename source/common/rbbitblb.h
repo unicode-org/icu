@@ -64,11 +64,11 @@ private:
 
 #ifdef RBBI_DEBUG
     void     printSet(UVector *s);
-    void     printPosSets(RBBINode *n = NULL);
+    void     printPosSets(RBBINode *n /* = NULL*/);
     void     printStates();
 #else
     #define  printSet(s)
-    #define  printPosSets
+    #define  printPosSets(n)
     #define  printStates()
 #endif
 
