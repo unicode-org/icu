@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ExhaustiveTest.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:49 $
+ * $RCSfile: ExhaustiveTest.java,v $ $Revision: 1.2 $ $Date: 2000/02/26 23:30:48 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -41,7 +41,7 @@ public class ExhaustiveTest extends TestFmwk
 
 
         if (info == null) {
-            info = new UInfo();
+            info = new UInfo("../src/data/unicode/UnicodeData.txt");
         }
 
         new ExhaustiveTest().run(args);
