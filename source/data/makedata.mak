@@ -334,6 +334,7 @@ CLEAN : GODATA
 	-@erase "*.mak"
 	-@erase "*.res"
 	-@erase "*.spp"
+	-@erase "*.txt"
 	@cd "$(TESTDATAOUT)"
 	-@erase "*.dat"
 	-@erase "*.typ"
