@@ -116,7 +116,11 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
     (s)->coll = (collator);
     (s)->fcdPosition = 0;
     if(collator->normalizationMode == UCOL_ON) {
-        (s)->flags |= UCOL_ITER_NORM; }
+        (s)->flags |= UCOL_ITER_NORM; 
+    }
+    if(collator->hiraganaQ == UCOL_ON) {
+      (s)->flags |= UCOL_HIRAGANA_Q;
+    }
 }
 
 U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString,
@@ -900,7 +904,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
     {                                  /*   to or from the side buffer / original string, and we  */
                                        /*   need to start again to get the next character.        */
 
-        if ((collationSource->flags & (UCOL_ITER_HASLEN | UCOL_ITER_INNORMBUF | UCOL_ITER_NORM )) == 0)
+        if ((collationSource->flags & (UCOL_ITER_HASLEN | UCOL_ITER_INNORMBUF | UCOL_ITER_NORM | UCOL_HIRAGANA_Q)) == 0)
         {
             // The source string is null terminated and we're not working from the side buffer,
             //   and we're not normalizing.  This is the fast path.
@@ -952,6 +956,14 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
                     continue;
                 }
             }
+        }
+
+        if(collationSource->flags&UCOL_HIRAGANA_Q) {
+          if(ch>=0x3040 && ch<=0x309f) {
+            collationSource->flags |= UCOL_WAS_HIRAGANA;
+          } else {
+            collationSource->flags &= ~UCOL_WAS_HIRAGANA;
+          }
         }
 
         // We've got a character.  See if there's any fcd and/or normalization stuff to do.
@@ -1244,6 +1256,14 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     data->flags = data->origFlags;
                     continue;
                 }
+            }
+
+            if(data->flags&UCOL_HIRAGANA_Q) {
+              if(ch>=0x3040 && ch<=0x309f) {
+                data->flags |= UCOL_WAS_HIRAGANA;
+              } else {
+                data->flags &= ~UCOL_WAS_HIRAGANA;
+              }
             }
             
             /*
@@ -3090,7 +3110,15 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             }
 
             if(/*qShifted*/(compareQuad==0)  && notIsContinuation) {
-              c4++;
+              if(s->flags & UCOL_WAS_HIRAGANA) { // This was Hiragana and we need to note it
+                if(c4>0) { // Close this part
+                  currentSize += (c4/UCOL_BOT_COUNT4)+1;
+                  c4 = 0;
+                }
+                currentSize++; // Add the Hiragana
+              } else { // This wasn't Hiragana, so we can continue adding stuff
+                c4++;
+              }
             }
 
           }
@@ -3249,10 +3277,13 @@ ucol_calcSortKey(const    UCollator    *coll,
     const uint8_t *scriptOrder = coll->scriptOrder;
 
     uint32_t variableTopValue = coll->variableTopValue;
+    // TODO: UCOL_COMMON_BOT4 should be a function of qShifted. If we have no
+    // qShifted, we don't need to set UCOL_COMMON_BOT4 so high.
     uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
+    uint8_t UCOL_HIRAGANA_QUAD = 0;
     if(doHiragana) {
-      UCOL_COMMON_BOT4++;
-      /* allocate one more space for hiragana */
+      UCOL_HIRAGANA_QUAD=UCOL_COMMON_BOT4++;
+      /* allocate one more space for hiragana, value for hiragana */
     }
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
@@ -3524,8 +3555,20 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
               }
 
-              if(/*qShifted*/(compareQuad==0) && notIsContinuation) {
-                count4++;
+              if(/*qShifted*/(compareQuad==0)  && notIsContinuation) {
+                if(s.flags & UCOL_WAS_HIRAGANA) { // This was Hiragana and we need to note it
+                  if(count4>0) { // Close this part
+                    while (count4 > UCOL_BOT_COUNT4) {
+                      *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
+                      count4 -= UCOL_BOT_COUNT4;
+                    }
+                    *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + (count4-1));
+                    count4 = 0;
+                  }
+                  *quads++ = UCOL_HIRAGANA_QUAD; // Add the Hiragana
+                } else { // This wasn't Hiragana, so we can continue adding stuff
+                  count4++;
+                }
               }
             }
 
@@ -4805,6 +4848,7 @@ ucol_strcoll( const UCollator    *coll,
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
     UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool qShifted = shifted && checkQuad;
+    UBool doHiragana = coll->hiraganaQ && checkQuad;
 
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
@@ -4813,6 +4857,7 @@ ucol_strcoll( const UCollator    *coll,
     uint32_t LVT = (shifted)?(coll->variableTopValue<<16):0;
 
     UCollationResult result = UCOL_EQUAL;
+    UCollationResult hirResult = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
 
     // Preparing the context objects for iterating over strings
@@ -4853,6 +4898,12 @@ ucol_strcoll( const UCollator    *coll,
 
         // if both primaries are the same
         if(sOrder == tOrder) {
+            if(doHiragana && hirResult == UCOL_EQUAL) {
+              if((sColl.flags & UCOL_WAS_HIRAGANA) != (tColl.flags & UCOL_WAS_HIRAGANA)) {
+                hirResult = ((sColl.flags & UCOL_WAS_HIRAGANA) > (tColl.flags & UCOL_WAS_HIRAGANA)) 
+                  ? UCOL_LESS:UCOL_GREATER;
+              }
+            }
             // and there are no more CEs, we advance to the next level
             if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
               break;
@@ -4962,6 +5013,12 @@ ucol_strcoll( const UCollator    *coll,
         tInShifted = FALSE;
 
         if(sOrder == tOrder) {
+            if(doHiragana && hirResult == UCOL_EQUAL) {
+              if((sColl.flags & UCOL_WAS_HIRAGANA) != (tColl.flags & UCOL_WAS_HIRAGANA)) {
+                hirResult = ((sColl.flags & UCOL_WAS_HIRAGANA) > (tColl.flags & UCOL_WAS_HIRAGANA)) 
+                  ? UCOL_LESS:UCOL_GREATER;
+              }
+            }
             if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
               break;
             } else {
@@ -5148,7 +5205,7 @@ ucol_strcoll( const UCollator    *coll,
     }
 
 
-    if(qShifted) {
+    if(qShifted /*checkQuad*/) {
       UBool sInShifted = TRUE;
       UBool tInShifted = TRUE;
       secS = 0;
@@ -5199,6 +5256,11 @@ ucol_strcoll( const UCollator    *coll,
             goto commonReturn;
         }
       }
+    } else if(doHiragana && hirResult != UCOL_EQUAL) {
+      // If we're fine on quaternaries, we might be different
+      // on Hiragana. This, however, might fail us in shifted.
+      result = hirResult;
+      goto commonReturn;
     }
 
     /*  For IDENTICAL comparisons, we use a bitwise character comparison */
