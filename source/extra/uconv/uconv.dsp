@@ -43,8 +43,9 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC"  /FD /c
+MTL=midl.exe
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -60,8 +61,8 @@ InputPath=.\Release\uconv.exe
 InputName=uconv
 SOURCE="$(InputPath)"
 
-"$(ProjDir)\..\..\..\..\icu\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\..\icu\bin
+"$(ProjDir)\..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -78,8 +79,9 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC"  /FD /GZ /c
+MTL=midl.exe
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -95,8 +97,8 @@ InputPath=.\Debug\uconv.exe
 InputName=uconv
 SOURCE="$(InputPath)"
 
-"$(ProjDir)\..\..\..\..\icu\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\..\icu\bin
+"$(ProjDir)\..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -113,16 +115,17 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo /W3   /I "..\..\..\include" /I "..\..\common" /D"WIN64" /D"NDEBUG" /D"_CONSOLE" /D"_MBCS" /D"UCONVMSG_STATIC"  /FD /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+MTL=midl.exe
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo /W3 /GX /Zi /O2 /Op /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:IA64
-# ADD LINK32 icuuc.lib icuin.lib uconvmsg.lib /nologo /subsystem:console /machine:IA64 /libpath:"..\..\..\lib" /libpath:"Release" /incremental:no
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:IX86 /machine:IA64
+# ADD LINK32 icuuc.lib icuin.lib uconvmsg.lib /nologo /subsystem:console /machine:IX86 /libpath:"..\..\..\lib" /libpath:"Release" /machine:IA64
 # Begin Custom Build
 ProjDir=.
 TargetPath=.\Release\uconv.exe
@@ -130,8 +133,8 @@ InputPath=.\Release\uconv.exe
 InputName=uconv
 SOURCE="$(InputPath)"
 
-"$(ProjDir)\..\..\..\..\icu\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\..\icu\bin
+"$(ProjDir)\..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -148,16 +151,17 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm    /I "..\..\..\include" /I "..\..\common" /D"WIN64" /D"_DEBUG" /D"_CONSOLE" /D"_MBCS" /D"UCONVMSG_STATIC"  /FD /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+MTL=midl.exe
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /Op /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "UCONVMSG_STATIC" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:IA64 /pdbtype:sept
-# ADD LINK32 icuucd.lib icuind.lib uconvmsg.lib /nologo /subsystem:console /debug /machine:IA64 /pdbtype:sept /libpath:"..\..\..\lib" /libpath:"Debug" /incremental:no
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:IX86 /pdbtype:sept /machine:IA64
+# ADD LINK32 icuucd.lib icuind.lib uconvmsg.lib /nologo /subsystem:console /incremental:no /debug /machine:IX86 /pdbtype:sept /libpath:"..\..\..\lib" /libpath:"Debug" /machine:IA64
 # Begin Custom Build
 ProjDir=.
 TargetPath=.\Debug\uconv.exe
@@ -165,8 +169,8 @@ InputPath=.\Debug\uconv.exe
 InputName=uconv
 SOURCE="$(InputPath)"
 
-"$(ProjDir)\..\..\..\..\icu\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\..\icu\bin
+"$(ProjDir)\..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -225,7 +229,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Release/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\..\icu CFG=Release
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Release
 
 # End Custom Build
 
@@ -237,7 +241,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Debug/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\..\icu CFG=Debug
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Debug
 
 # End Custom Build
 
@@ -249,7 +253,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Release/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\..\icu CFG=Release
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Release
 
 # End Custom Build
 
@@ -261,7 +265,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Debug/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\..\icu CFG=Debug
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Debug
 
 # End Custom Build
 
