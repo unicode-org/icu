@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/21 22:23:40 $ 
- * $Revision: 1.23 $
+ * $Date: 2000/04/22 00:03:54 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -274,7 +274,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.23 $ $Date: 2000/04/21 22:23:40 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.24 $ $Date: 2000/04/22 00:03:54 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -652,36 +652,52 @@ public class RuleBasedTransliterator extends Transliterator {
             parseData = new ParseData();
 
             StringBuffer errors = null;
+            int errorCount = 0;
 
-            try {
-                for (int i=0; i<ruleArray.length; ++i) {
-                    String rule = ruleArray[i];
-                    int pos = 0;
-                    int limit = rule.length();
-                    while (pos < limit) {
-                        char c = rule.charAt(pos++);
-                        if (Character.isWhitespace(c)) {
-                            // Ignore leading whitespace.  Note that this is not
-                            // Unicode spaces, but Java spaces -- a subset,
-                            // representing whitespace likely to be seen in code.
-                            continue;
+        main:
+            for (int i=0; i<ruleArray.length; ++i) {
+                String rule = ruleArray[i];
+                int pos = 0;
+                int limit = rule.length();
+                while (pos < limit) {
+                    char c = rule.charAt(pos++);
+                    if (Character.isWhitespace(c)) {
+                        // Ignore leading whitespace.  Note that this is not
+                        // Unicode spaces, but Java spaces -- a subset,
+                        // representing whitespace likely to be seen in code.
+                        continue;
+                    }
+                    // Skip lines starting with the comment character
+                    if (c == RULE_COMMENT_CHAR) {
+                        pos = rule.indexOf("\n", pos) + 1;
+                        if (pos == 0) {
+                            break; // No "\n" found; rest of rule is a commnet
                         }
-                        // Skip lines starting with the comment character
-                        if (c == RULE_COMMENT_CHAR) {
-                            pos = rule.indexOf("\n", pos) + 1;
-                            if (pos == 0) {
-                                break; // No "\n" found; rest of rule is a commnet
-                            }
-                            continue; // Either fall out or restart with next line
-                        }
+                        continue; // Either fall out or restart with next line
+                    }
+                    // Often a rule file contains multiple errors.  It's
+                    // convenient to the rule author if these are all reported
+                    // at once.  We keep parsing rules even after a failure, up
+                    // to a specified limit, and report all errors at once.
+                    try {
                         // We've found the start of a rule.  c is its first
                         // character, and pos points past c.  Lexically parse the
                         // rule into component pieces.
                         pos = parseRule(rule, --pos, limit);                    
+                    } catch (IllegalArgumentException e) {
+                        if (errorCount == 30) {
+                            errors.append("\nMore than 30 errors; further messages squelched");
+                            break main;
+                        }
+                        if (errors == null) {
+                            errors = new StringBuffer(e.getMessage());
+                        } else {
+                            errors.append("\n" + e.getMessage());
+                        }
+                        ++errorCount;
+                        pos = ruleEnd(rule, pos, limit) + 1; // +1 advances past ';'
                     }
                 }
-            } catch (IllegalArgumentException e) {
-                errors = new StringBuffer(e.getMessage());
             }
 
             // Convert the set vector to an array
@@ -858,8 +874,8 @@ public class RuleBasedTransliterator extends Transliterator {
                         buf.append(parser.registerSet(new UnicodeSet(rule, pp, parser.parseData)));
                         pos = pp.getIndex();
                         break;
-                    case SET_CLOSE:
-                        syntaxError("Unquoted " + c, rule, start);
+                    // case SET_CLOSE:
+                    //    syntaxError("Unquoted " + c, rule, start);
                     case CURSOR_POS:
                         if (cursor >= 0) {
                             syntaxError("Multiple cursors", rule, start);
@@ -867,6 +883,15 @@ public class RuleBasedTransliterator extends Transliterator {
                         cursor = buf.length();
                         break;
                     default:
+                        // Disallow unquoted characters other than [0-9A-Za-z] in
+                        // the ASCII range.  These characters are reserved for
+                        // possible future use.
+                        if (c <= 0x007E &&
+                            !((c >= '0' && c <= '9') ||
+                              (c >= 'A' && c <= 'Z') ||
+                              (c >= 'a' && c <= 'z'))) {
+                            syntaxError("Unquoted " + c, rule, start);
+                        }
                         buf.append(c);
                         break;
                     }
@@ -1044,14 +1069,19 @@ public class RuleBasedTransliterator extends Transliterator {
          * @param start position of first character of current rule
          */
         static final void syntaxError(String msg, String rule, int start) {
-            int end = quotedIndexOf(rule, start, rule.length(), ";");
-            if (end < 0) {
-                end = rule.length();
-            }
+            int end = ruleEnd(rule, start, rule.length());
             throw new IllegalArgumentException(msg + " in \"" +
                                                Utility.escape(rule.substring(start, end)) + '"');
         }
-        
+
+        static final int ruleEnd(String rule, int start, int limit) {
+            int end = quotedIndexOf(rule, start, limit, ";");
+            if (end < 0) {
+                end = limit;
+            }
+            return end;
+        }
+
         /**
          * Allocate a private-use substitution character for the given set,
          * register it in the setVariables hash, and return the substitution
@@ -1255,6 +1285,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.24  2000/04/22 00:03:54  alan
+ * Disallow unquoted special chars. Report multiple errors at once.
+ *
  * Revision 1.23  2000/04/21 22:23:40  alan
  * Clean up parseReference. Previous log should read 'delegate', not 'delete'.
  *
