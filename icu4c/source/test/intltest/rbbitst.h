@@ -35,19 +35,7 @@ public:
     virtual ~RBBITest();
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
-    /**
-     * Tests Hindi(Devanagiri) character iteration
-     **/  
-    void TestHindiCharacterBreak(void);
-    /**
-     * Tests Hindi(Devanagiri) word iteration
-     **/  
-    void TestHindiWordBreak(void);
-    /**
-     * Tests Title Case break iteration
-     **/  
-    void TestTitleBreak(void);
-
+ 
     /**
      * Tests rule status return values
      **/  
@@ -65,7 +53,6 @@ public:
     void TestSentenceInvariants();
     void TestCharacterInvariants();
     void TestWordInvariants();
-    void TestLineInvariants();
     void TestEmptyString();
     void TestGetAvailableLocales();
     void TestGetDisplayName();
