@@ -977,7 +977,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
         }
 
         if(collationSource->flags&UCOL_HIRAGANA_Q) {
-          if(ch>=0x3040 && ch<=0x309f) {
+          if((ch>=0x3040 && ch<=0x3094) || ch == 0x309d || ch == 0x309e) {
             collationSource->flags |= UCOL_WAS_HIRAGANA;
           } else {
             collationSource->flags &= ~UCOL_WAS_HIRAGANA;
@@ -1949,8 +1949,11 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
               break;
           }
         }
-
-      loadState(source, &prefixState, TRUE);
+        if(CE != UCOL_NOT_FOUND) { // we found something and we can merilly continue
+          loadState(source, &prefixState, TRUE);
+        } else { // prefix search was a failure, we have to backup all the way to the start
+          loadState(source, &entryState, TRUE);
+        }
       break;
       }
     case CONTRACTION_TAG:
@@ -5082,15 +5085,15 @@ ucol_strcoll( const UCollator    *coll,
 
         // if both primaries are the same
         if(sOrder == tOrder) {
+            // and there are no more CEs, we advance to the next level
+            if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
+              break;
+            }
             if(doHiragana && hirResult == UCOL_EQUAL) {
               if((sColl.flags & UCOL_WAS_HIRAGANA) != (tColl.flags & UCOL_WAS_HIRAGANA)) {
                 hirResult = ((sColl.flags & UCOL_WAS_HIRAGANA) > (tColl.flags & UCOL_WAS_HIRAGANA)) 
                   ? UCOL_LESS:UCOL_GREATER;
               }
-            }
-            // and there are no more CEs, we advance to the next level
-            if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
-              break;
             }
         } else {
             // if two primaries are different, we are done
@@ -5455,7 +5458,8 @@ ucol_strcoll( const UCollator    *coll,
     /*     that is checked first, but compared == through all other checks.  */
     if(checkIdent)
     {
-        result = ucol_checkIdent(&sColl, &tColl, coll->normalizationMode == UCOL_ON);
+        //result = ucol_checkIdent(&sColl, &tColl, coll->normalizationMode == UCOL_ON);
+        result = ucol_checkIdent(&sColl, &tColl, TRUE);
     }
 
 commonReturn:
