@@ -20,8 +20,6 @@ U_NAMESPACE_BEGIN
  * or a pointer.  If a hint bit is zero, then the associated
  * token is assumed to be an integer. This is needed for iSeries
  */
-#define HINT_KEY_POINTER   (1)
-#define HINT_KEY_INTEGER   (0)
  
 const char UVector32::fgClassID=0;
 
