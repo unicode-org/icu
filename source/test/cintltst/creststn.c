@@ -197,7 +197,7 @@ static void TestNewTypes() {
     UResourceBundle* theBundle = NULL;
     char action[256];
     char testdatapath[256];
-    const char*    directory =  ctest_getTestDirectory();
+    const char *directory= u_getDataDirectory();
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* res = NULL;
     uint8_t *binResult = NULL;
@@ -277,7 +277,7 @@ static void TestBinaryCollationData(){
     int32_t len=0;
     char* action="testing the binary collaton data";
 
-    directory= ctest_getTestDirectory();
+    directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
 
@@ -328,7 +328,7 @@ static void TestAPI() {
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
     UResourceBundle *teFillin2=NULL;
-    directory= ctest_getTestDirectory();
+    directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
     u_charsToUChars(testdatapath, utestdatapath, strlen(testdatapath)+1);
@@ -426,7 +426,7 @@ static void TestErrorConditions(){
     UResourceBundle *teFillin2=NULL;
     uint8_t *binResult = NULL;
 
-    directory= ctest_getTestDirectory();
+    directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
     u_uastrcpy(utestdatapath, testdatapath);
@@ -658,7 +658,7 @@ static void TestConstruction1()
     U_STRING_INIT(te_inVal, "TE_IN", 5);
 
 
-    directory= ctest_getTestDirectory();
+    directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
     log_verbose("Testing ures_open()......\n");
@@ -716,7 +716,7 @@ static void TestConstruction2()
     char testdatapath[256];
     int32_t len=0;
 
-    directory= ctest_getTestDirectory();
+    directory= u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
     mbstowcs(widedirectory, testdatapath, 256);
@@ -794,7 +794,7 @@ static UBool testTag(const char* frag,
     UResourceBundle* tags=NULL;
     UResourceBundle* arrayItem1=NULL;
 
-    const char*    directory =  ctest_getTestDirectory();
+    const char*    directory =  u_getDataDirectory();
 
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
