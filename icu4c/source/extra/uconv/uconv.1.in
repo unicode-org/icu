@@ -57,6 +57,9 @@
 |
 .BI "\-\-no\-fallback"
 ]
+[
+.BI "\-b\fP, \fB\-\-block\-size" " size"
+]
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 [
@@ -183,6 +186,12 @@ Unicode to the destination encoding.
 Do not use the fallback mapping when transcoding from Unicode to the
 destination encoding.
 This is the default.
+.TP
+.BI "\-b\fP, \fB\-\-block\-size" " size"
+Read input in blocks of
+.I size
+bytes at a time. The default block size is
+4096.
 .TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
