@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatRegressionTestJ.java,v $ 
- * $Date: 2001/10/19 10:51:33 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/22 02:02:33 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
     static SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     
     public static void main(String[] args) throws Exception {
-        new DateFormatBugFixingTest().run(args);
+        new DateFormatRegressionTestJ().run(args);
     }
     
     //Return value of getAmPmStrings
@@ -235,17 +235,17 @@ public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
     //Class used by Test4407042
     class DateParseThread extends Thread {
         public void run() {
-            SimpleDateFormat sdf = (SimpleDateFormat) DateFormatBugFixingTest.sdf_.clone();
+            SimpleDateFormat sdf = (SimpleDateFormat) sdf_.clone();
             TimeZone defaultTZ = TimeZone.getDefault();
             TimeZone PST = TimeZone.getTimeZone("PST");
             int defaultOffset = defaultTZ.getRawOffset();
             int PSTOffset = PST.getRawOffset();
             int offset = defaultOffset - PSTOffset;
-            long ms = DateFormatBugFixingTest.UTC_LONG - offset;
+            long ms = UTC_LONG - offset;
             try {
                 int i = 0;
                 while (i < 10000) {
-                    Date date = sdf.parse(DateFormatBugFixingTest.TIME_STRING);
+                    Date date = sdf.parse(TIME_STRING);
                     long t = date.getTime();
                     i++;
                     if (t != ms) {
@@ -262,16 +262,16 @@ public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
     //Class used by Test4407042
     class DateFormatThread extends Thread {
         public void run() {            
-            SimpleDateFormat sdf = (SimpleDateFormat) DateFormatBugFixingTest.sdf_.clone();
+            SimpleDateFormat sdf = (SimpleDateFormat) sdf_.clone();
             TimeZone tz = TimeZone.getTimeZone("PST");
             sdf.setTimeZone(tz);
             int i = 0;
             while (i < 10000) {
                 i++;
-                String s = sdf.format(new Date(DateFormatBugFixingTest.UTC_LONG));
-                if (!s.equals(DateFormatBugFixingTest.TIME_STRING)) {
+                String s = sdf.format(new Date(UTC_LONG));
+                if (!s.equals(TIME_STRING)) {
                     errln("Format Error: " + i + " " + s + " != " 
-                                    + DateFormatBugFixingTest.TIME_STRING);
+                                    + TIME_STRING);
                 }
             }
         }
