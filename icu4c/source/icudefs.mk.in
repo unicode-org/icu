@@ -122,7 +122,7 @@ INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
 # Link commands to link to ICU libs
-LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUDATA_NAME)$(ICULIBSUFFIX)
+LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data$(ICULIBSUFFIX)
 LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX) $(LIBICUDT)
 LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)
 LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSSUFFIX)
