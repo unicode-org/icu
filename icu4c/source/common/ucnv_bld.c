@@ -240,6 +240,62 @@ UBool   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     return TRUE;
 }
 
+static void
+parseConverterOptions(const char *inName,
+                      char *cnvName, char *locale, uint32_t *pFlags) {
+    char c;
+
+    /* copy the converter name itself to cnvName */
+    while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
+        *cnvName++=c;
+        ++inName;
+    }
+    *cnvName=0;
+
+    /* parse options */
+    if(c==UCNV_OPTION_SEP_CHAR) {
+        ++inName;
+        for(;;) {
+            /* inName is behind an option separator */
+            if(uprv_strncmp(inName, "locale=", 7)==0) {
+                /* do not modify locale itself in case we have multiple locale options */
+                char *dest=locale;
+
+                /* copy the locale option value */
+                inName+=7;
+                for(;;) {
+                    c=*inName;
+                    if(c!=0) {
+                        ++inName;
+                        if(c!=UCNV_OPTION_SEP_CHAR) {
+                            *dest++=c;
+                        } else {
+                            *dest=0;
+                            break;
+                        }
+                    } else {
+                        *dest=0;
+                        return;
+                    }
+                }
+            } else {
+                /* ignore any other options until we define some */
+                for(;;) {
+                    c=*inName;
+                    if(c!=0) {
+                        ++inName;
+                        if(c==UCNV_OPTION_SEP_CHAR) {
+                            break;
+                        }
+                    } else {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
 /*Logic determines if the converter is Algorithmic AND/OR cached
  *depending on that:
  * -we either go to get data from disk and cache it (Data=TRUE, Cached=False)
@@ -250,6 +306,7 @@ UBool   deleteSharedConverterData (UConverterSharedData * deadSharedData)
 UConverter *
   createConverter (const char *converterName, UErrorCode * err)
 {
+  char cnvName[100], locale[20];
   const char *realName;
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
@@ -257,6 +314,8 @@ UConverter *
 
   if (U_FAILURE (*err))
     return NULL;
+
+  locale[0] = 0;
 
   /* In case "name" is NULL we want to open the default converter. */
   if (converterName == NULL) {
@@ -267,15 +326,24 @@ UConverter *
     }
     /* the default converter name is already canonical */
   } else {
+    /* separate the converter name from the options */
+    parseConverterOptions(converterName, cnvName, locale, NULL);
+
     /* get the canonical converter name */
-    realName = ucnv_io_getConverterName(converterName, &internalErrorCode);
+    realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
     if (U_FAILURE(internalErrorCode) || realName == NULL) {
       /*
        * set the input name in case the converter was added
        * without updating the alias table, or when there is no alias table
        */
-      realName = converterName;
+      realName = cnvName;
     }
+  }
+
+  /* separate the converter name from the options */
+  if(realName != cnvName) {
+    parseConverterOptions(realName, cnvName, locale, NULL);
+    realName = cnvName;
   }
 
   /* get the shared data for an algorithmic converter, if it is one */
@@ -332,7 +400,7 @@ UConverter *
   uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);
 
   if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
-    myUConverter->sharedData->impl->open(myUConverter, realName, NULL, err);
+    myUConverter->sharedData->impl->open(myUConverter, realName, locale, err);
     if(U_FAILURE(*err)) {
       ucnv_close(myUConverter);
       return NULL;
