@@ -169,7 +169,7 @@ main(int argc, char *argv[]) {
     out=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
                      haveCopyright ? DATA_COPYRIGHT : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencnval: unable to open output file - error %s\n", errorName(errorCode));
+        fprintf(stderr, "gencnval: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 
@@ -198,7 +198,7 @@ main(int argc, char *argv[]) {
     /* finish */
     udata_finish(out, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencnval: error finishing output file - %s\n", errorName(errorCode));
+        fprintf(stderr, "gencnval: error finishing output file - %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 

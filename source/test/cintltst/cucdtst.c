@@ -601,7 +601,7 @@ TestCharNames() {
     for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
         length=u_charName(names[i].code, U_UNICODE_CHAR_NAME, name, sizeof(name), &errorCode);
         if(U_FAILURE(errorCode)) {
-            log_err("u_charName(0x%lx) error %s\n", names[i].code, errorName(errorCode));
+            log_err("u_charName(0x%lx) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
         if(length<=0 || 0!=icu_strcmp(name, names[i].name)) {

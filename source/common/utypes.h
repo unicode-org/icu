@@ -342,71 +342,17 @@ inline bool_t U_FAILURE(UErrorCode code) { return (bool_t)(code>U_ZERO_ERROR); }
 #define U_FAILURE(x) ((x)>U_ZERO_ERROR)
 #endif
 
+/**
+ * Return a string for a UErrorCode value.
+ * The string will be the same as the name of the error code constant
+ * in the enum above.
+ */
+U_CAPI const char * U_EXPORT2
+u_errorName(UErrorCode code);
 
 /* Casting function for int32_t (backward compatibility version, here until
    T_INT32 is replaced) */
 #define T_INT32(i) ((int32_t)i)
-
-
-/*===========================================================================*/
-/* Debugging */
-/*===========================================================================*/
-
-/* remove this */
-
-/* This function is useful for debugging; it returns the text name */
-/* of an UErrorCode result.  This is not the most efficient way of */
-/* doing this but it's just for Debug builds anyway. */
-
-/* Do not use these arrays directly: they will move to a .c file! */
-static const char *
-_uErrorInfoName[U_ERROR_INFO_LIMIT-U_ERROR_INFO_START]={
-    "U_USING_FALLBACK_ERROR",
-    "U_USING_DEFAULT_ERROR"
-};
-
-static const char *
-_uErrorName[U_ERROR_LIMIT]={
-    "U_ZERO_ERROR",
-
-    "U_ILLEGAL_ARGUMENT_ERROR",
-    "U_MISSING_RESOURCE_ERROR",
-    "U_INVALID_FORMAT_ERROR",
-    "U_FILE_ACCESS_ERROR",
-    "U_INTERNAL_PROGRAM_ERROR",
-    "U_MESSAGE_PARSE_ERROR",
-    "U_MEMORY_ALLOCATION_ERROR",
-    "U_INDEX_OUTOFBOUNDS_ERROR",
-    "U_PARSE_ERROR",
-    "U_INVALID_CHAR_FOUND",
-    "U_TRUNCATED_CHAR_FOUND",
-    "U_ILLEGAL_CHAR_FOUND",
-    "U_INVALID_TABLE_FORMAT",
-    "U_INVALID_TABLE_FILE",
-    "U_BUFFER_OVERFLOW_ERROR",
-    "U_UNSUPPORTED_ERROR"
-};
-
-#ifdef XP_CPLUSPLUS
-inline const char *
-errorName(UErrorCode code)
-{
-    if(code>=0 && code<U_ERROR_LIMIT) {
-        return _uErrorName[code];
-    } else if(code>=U_ERROR_INFO_START && code<U_ERROR_INFO_LIMIT) {
-        return _uErrorInfoName[code-U_ERROR_INFO_START];
-    } else {
-        return "[BOGUS UErrorCode]";
-    }
-}
-#else
-#   define errorName(code) \
-        ((code)>=0 && (code)<U_ERROR_LIMIT) ? \
-            _uErrorName[code] : \
-            ((code)>=U_ERROR_INFO_START && (code)<U_ERROR_INFO_LIMIT) ? \
-                _uErrorInfoName[code-U_ERROR_INFO_START] : \
-                "[BOGUS UErrorCode]"
-#endif
 
 #define U_COPYRIGHT_STRING \
   " Copyright (C) 1999, International Business Machines Corporation and others.  All Rights Reserved. "

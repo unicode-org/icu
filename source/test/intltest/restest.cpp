@@ -50,11 +50,8 @@ enum E_Where
 #define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x >= " << (expected) << endl; pass=FALSE; }
 #define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x != " << (expected) << endl; pass=FALSE; }
 
-#ifdef _DEBUG
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << errorName(actual) << " instead of " << errorName(expected) << endl; pass=FALSE; }
-#else
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << actual << " instead of " << expected << endl; pass=FALSE; }
-#endif
+#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << u_errorName(actual) << " instead of " << u_errorName(expected) << endl; pass=FALSE; }
+
 //***************************************************************************************
 
 /**

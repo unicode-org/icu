@@ -23,7 +23,7 @@ int32_t strCaseIcmp(const char* a1,const char * a2);
 UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 /*Asciifies the UErrorCodes*/
-#define myErrorName(errorCode) errorName(errorCode)
+#define myErrorName(errorCode) u_errorName(errorCode)
 
 void ConvertTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {

@@ -501,7 +501,7 @@ RuleBasedCollator::constructFromFile(const char* fileName,
     }
 
 #ifdef COLLDEBUG
-    fprintf(stderr, "binary read %s size %d, %s\n", fileName, T_FileStream_size(ifs), errorName(status));
+    fprintf(stderr, "binary read %s size %d, %s\n", fileName, T_FileStream_size(ifs), u_errorName(status));
 #endif
 
     // We constructed the data when streaming it in, so we own it
@@ -707,7 +707,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     // Try to load up the collation from a binary file first
     constructFromFile(binaryFilePath, status);
 #ifdef COLLDEBUG
-    cerr << localeFileName  << kFilenameSuffix << " binary load " << errorName(status) << endl;
+    cerr << localeFileName  << kFilenameSuffix << " binary load " << u_errorName(status) << endl;
 #endif
     if(U_SUCCESS(status) || status == U_MEMORY_ALLOCATION_ERROR) 
       {
@@ -729,7 +729,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   }
 
 #ifdef COLLDEBUG
-  cerr << localeFileName << " ascii load " << errorName(status) << endl;
+  cerr << localeFileName << " ascii load " << u_errorName(status) << endl;
 #endif
 
   // check and see if this resource bundle contains collation data
@@ -921,7 +921,7 @@ RuleBasedCollator::getRules() const
 //                  << " at "
 //                  << data->realLocaleName
 //                  << endl;
-//              cerr << "Status " << errorName(status) << ", mPattern " << temp.mPattern << endl;
+//              cerr << "Status " << u_errorName(status) << ", mPattern " << temp.mPattern << endl;
 #endif
 	    /* SRL have to add this because we now have the situation where
 	       DEFAULT is loaded from a binary file w/ no rules. */
