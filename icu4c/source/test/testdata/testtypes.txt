@@ -30,7 +30,8 @@ testtypes
     {
     }
     testescape{ "tab:\t cr:\r ff:\f newline:\n backslash:\\ quote=\' doubleQuote=\" singlequoutes=''" }
-
+    string{ }
+    stringTable{{}}
     
 }
 
