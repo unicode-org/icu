@@ -676,13 +676,16 @@ bidiClassLineFn(void *context,
     for(; start<limit; ++start) {
         props32=getProps(start);
 
+        /* ignore if this bidi class is already set */
+        if(value==GET_BIDI_CLASS(props32)) {
+            continue;
+        }
+
         /* ignore old bidi class, set only for unassigned code points (Cn) */
         if(GET_CATEGORY(props32)!=0) {
-            if(value!=GET_BIDI_CLASS(props32)) {
-                fprintf(stderr, "genprops error: different bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
-                exit(U_PARSE_ERROR);
-            }
-            continue;
+            /* error if this one contradicts what we parsed from UnicodeData.txt */
+            fprintf(stderr, "genprops error: different bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
+            exit(U_PARSE_ERROR);
         }
 
         /* remove whatever bidi class was set before */
