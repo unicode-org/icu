@@ -384,8 +384,7 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
 /*resets the internal states of a converter
  *goal : have the same behaviour than a freshly created converter
  */
-void  ucnv_reset (UConverter * converter)
-{
+static void _reset(UConverter *converter, UConverterResetChoice choice) {
   /* first, notify the callback functions that the converter is reset */
   UConverterToUnicodeArgs toUArgs = {
     sizeof(UConverterToUnicodeArgs),
@@ -412,87 +411,45 @@ void  ucnv_reset (UConverter * converter)
   if(converter == NULL) {
     return;
   }
+
   toUArgs.converter = fromUArgs.converter = converter;
-  errorCode = U_ZERO_ERROR;
-  converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
-  errorCode = U_ZERO_ERROR;
-  converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
+  if(choice<=UCNV_RESET_TO_UNICODE) {
+    errorCode = U_ZERO_ERROR;
+    converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
+  }
+  if(choice!=UCNV_RESET_TO_UNICODE) {
+    errorCode = U_ZERO_ERROR;
+    converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
+  }
 
   /* now reset the converter itself */
-  converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
-  converter->fromUnicodeStatus = 0;
-  converter->UCharErrorBufferLength = 0;
-  converter->charErrorBufferLength = 0;
+  if(choice<=UCNV_RESET_TO_UNICODE) {
+    converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
+    converter->UCharErrorBufferLength = 0;
+  }
+  if(choice!=UCNV_RESET_TO_UNICODE) {
+    converter->fromUnicodeStatus = 0;
+    converter->charErrorBufferLength = 0;
+  }
+
   if (converter->sharedData->impl->reset != NULL) {
     /* call the custom reset function */
-    converter->sharedData->impl->reset(converter);
-  } else {
+    converter->sharedData->impl->reset(converter, choice);
+  } else if(choice<=UCNV_RESET_TO_UNICODE) {
     converter->mode = UCNV_SI;
   }
 }
 
-void ucnv_resetToUnicode(UConverter *converter)
-{
-#if 0
-  UConverterToUnicodeArgs toUArgs = {
-    sizeof(UConverterToUnicodeArgs),
-    TRUE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-  };
-  UErrorCode errorCode = U_ZERO_ERROR;
-
-  if(converter == NULL) {
-    return;
-  }
-
-  toUArgs.converter = converter;
-  converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
-
-  /* now reset the converter itself */
-  converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
-  converter->fromUnicodeStatus = 0;
-  converter->UCharErrorBufferLength = 0;
-  converter->charErrorBufferLength = 0;
-
-  /* Todo: Needs rest of implementation */
-#endif
+void ucnv_reset(UConverter *converter) {
+  _reset(converter, UCNV_RESET_BOTH);
 }
 
-void ucnv_resetFromUnicode(UConverter *converter)
-{
-#if 0
-  UConverterFromUnicodeArgs fromUArgs = {
-    sizeof(UConverterFromUnicodeArgs),
-    TRUE,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-  };
-  UErrorCode errorCode = U_ZERO_ERROR;
+void ucnv_resetToUnicode(UConverter *converter) {
+  _reset(converter, UCNV_RESET_TO_UNICODE);
+}
 
-  if(converter == NULL) {
-    return;
-  }
-
-  fromUArgs.converter = converter;
-  converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
-
-  /* now reset the converter itself */
-  converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
-  converter->fromUnicodeStatus = 0;
-  converter->UCharErrorBufferLength = 0;
-  converter->charErrorBufferLength = 0;
-
-  /* Todo: Needs rest of implementation */
-#endif
+void ucnv_resetFromUnicode(UConverter *converter) {
+  _reset(converter, UCNV_RESET_FROM_UNICODE);
 }
 
 int8_t  ucnv_getMaxCharSize (const UConverter * converter)

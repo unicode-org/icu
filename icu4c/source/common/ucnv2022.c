@@ -334,7 +334,7 @@ UCNV_TableStates_2022 getKey_2022(char source,
 /*********** ISO 2022 Converter Protos ***********/
 static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *errorCode);
 static void _ISO2022Close(UConverter *converter);
-static void _ISO2022Reset(UConverter *converter);
+static void _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
 static const char* _ISO2022getName(const UConverter* cnv);
 
 /************ protos of functions for setting the initial state *********************/
@@ -650,34 +650,44 @@ _ISO2022Close(UConverter *converter) {
 }
 
 static void
-_ISO2022Reset(UConverter *converter) {
+_ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) (converter->extraInfo);
     if(! myConverterData->isLocaleSpecified){
-        
-        /* re-append UTF-8 escape sequence */
-        converter->charErrorBufferLength = 3;
-        converter->charErrorBuffer[0] = 0x1b;
-        converter->charErrorBuffer[1] = 0x28;
-        converter->charErrorBuffer[2] = 0x42;
-        if (converter->mode == UCNV_SO){
-            ucnv_close (myConverterData->currentConverter);
-            myConverterData->currentConverter=NULL;
+        if(choice<=UCNV_RESET_TO_UNICODE) {
+            if (converter->mode == UCNV_SO){
+                ucnv_close (myConverterData->currentConverter);
+                myConverterData->currentConverter=NULL;
+            }
+        }
+        if(choice!=UCNV_RESET_TO_UNICODE) {
+            /* re-append UTF-8 escape sequence */
+            converter->charErrorBufferLength = 3;
+            converter->charErrorBuffer[0] = 0x1b;
+            converter->charErrorBuffer[1] = 0x28;
+            converter->charErrorBuffer[2] = 0x42;
         }
     }
     else {
         /* reset the state variables */
         if(myConverterData->locale[0] == 'j' || myConverterData->locale[0] == 'c'){
-            setInitialStateToUnicodeJPCN(converter, myConverterData);
-            setInitialStateFromUnicodeJPCN(myConverterData);
+            if(choice<=UCNV_RESET_TO_UNICODE) {
+                setInitialStateToUnicodeJPCN(converter, myConverterData);
+            }
+            if(choice!=UCNV_RESET_TO_UNICODE) {
+                setInitialStateFromUnicodeJPCN(myConverterData);
+            }
         }
         else if(myConverterData->locale[0] ='k'){
-            setInitialStateToUnicodeKR(converter, myConverterData);
-            setInitialStateFromUnicodeKR(converter, myConverterData);
+            if(choice<=UCNV_RESET_TO_UNICODE) {
+                setInitialStateToUnicodeKR(converter, myConverterData);
+            }
+            if(choice!=UCNV_RESET_TO_UNICODE) {
+                setInitialStateFromUnicodeKR(converter, myConverterData);
+            }
         }
     }
-
-
 }
+
 static const char* _ISO2022getName(const UConverter* cnv){
     if(cnv->extraInfo){
         UConverterDataISO2022* myData= (UConverterDataISO2022*)cnv->extraInfo;
