@@ -165,6 +165,16 @@ typedef unsigned short uint16_t;
 #define U_HAVE_WCHAR_H		@U_HAVE_WCHAR_H@
 #define U_SIZEOF_WCHAR_T	@U_SIZEOF_WCHAR_T@
 
+#define U_HAVE_WCSCPY		@U_HAVE_WCSCPY@
+
+/*===========================================================================*/
+/* Information about POSIX support                                           */
+/*===========================================================================*/
+
+#define U_HAVE_NL_LANGINFO	@U_HAVE_NL_LANGINFO@
+#define U_HAVE_CODESET		@U_HAVE_CODESET@
+#define U_HAVE_TZSET		@U_HAVE_TZSET@
+
 /*===========================================================================*/
 /* Symbol import-export control                                              */
 /*===========================================================================*/

@@ -317,11 +317,32 @@ AC_CHECK_HEADER(wchar.h)
 if test "$ac_cv_header_wchar_h" = no
 then
     U_HAVE_WCHAR_H=0
+    U_HAVE_WCSCPY=0
 else
     AC_DEFINE(HAVE_WCHAR_H)
     U_HAVE_WCHAR_H=1
+    dnl Some broken systems have wchar.h but not some of its functions...
+    AC_CHECK_FUNC(wcscpy,[U_HAVE_WCSCPY=1],[U_HAVE_WCSCPY=0])
 fi
 AC_SUBST(U_HAVE_WCHAR_H)
+AC_SUBST(U_HAVE_WCSCPY)
+
+dnl Do various POSIX related checks
+AC_CHECK_FUNC(nl_langinfo,[U_HAVE_NL_LANGINFO=1],[U_HAVE_NL_LANGINFO=0])
+AC_SUBST(U_HAVE_NL_LANGINFO)
+U_HAVE_CODESET=0
+if test $U_HAVE_NL_LANGINFO -eq 1; then
+  AC_MSG_CHECKING([if nl_langinfo(CODESET) works])
+  AC_CACHE_VAL(ac_cv_have_codeset,AC_TRY_LINK([#include <langinfo.h>],[nl_langinfo(CODESET);],[ac_cv_have_codeset=yes],[ac_cv_have_codeset=no]))
+  AC_MSG_RESULT($ac_cv_have_codeset)
+  if test x$ac_cv_have_codeset = xyes
+  then
+      U_HAVE_CODESET=1
+  fi
+fi
+AC_SUBST(U_HAVE_CODESET)
+AC_CHECK_FUNC(tzset,[U_HAVE_TZSET=1],[U_HAVE_TZSET=0])
+AC_SUBST(U_HAVE_TZSET)
 
 ac_default_sizeof_wchar_t=4
 AC_DO_CHECK_SIZEOF(wchar_t,$ac_default_sizeof_wchar_t,[
