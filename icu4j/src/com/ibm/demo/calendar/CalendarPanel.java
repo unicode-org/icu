@@ -1,5 +1,5 @@
 /**
- * $RCSfile: CalendarPanel.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:48 $
+ * $RCSfile: CalendarPanel.java,v $ $Revision: 1.2 $ $Date: 2000/03/01 17:25:22 $
  *
  * (C) Copyright IBM Corp. 1998.  All Rights Reserved.
  *
@@ -20,13 +20,11 @@ import com.ibm.demo.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+//import java.util.*;
 import java.net.*;
 import java.io.*;
 
 import java.text.DateFormat;
-//import java.text.SimpleDateFormat;
-//import java.text.DateFormatSymbols;
 import java.util.SimpleTimeZone;
 import java.util.*;
 

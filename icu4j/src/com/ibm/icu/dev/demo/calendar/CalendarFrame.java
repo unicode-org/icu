@@ -1,5 +1,5 @@
 /**
- * $RCSfile: CalendarFrame.java,v $ $Revision: 1.2 $ $Date: 2000/02/28 04:09:23 $
+ * $RCSfile: CalendarFrame.java,v $ $Revision: 1.3 $ $Date: 2000/03/01 17:25:22 $
  *
  * (C) Copyright IBM Corp. 1998.  All Rights Reserved.
  *
@@ -16,22 +16,27 @@
 package com.ibm.demo.calendar;
 
 import com.ibm.demo.*;
-import com.ibm.text.*;
-import com.ibm.util.*;
-
+import com.ibm.util.IBMCalendar;
+import com.ibm.util.HebrewCalendar;
+import com.ibm.util.BuddhistCalendar;
+import com.ibm.util.JapaneseCalendar;
+import com.ibm.util.IslamicCalendar;
+import com.ibm.text.SimpleDateFormat;
+import java.util.SimpleTimeZone;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
-//import java.util.*;
 import java.net.*;
 import java.io.*;
-
 import java.text.DateFormat;
-import java.util.SimpleTimeZone;
-import java.util.Locale;
+import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 /**
  * A Frame is a top-level window with a title. The default layout for a frame
@@ -227,18 +232,30 @@ class CalendarFrame extends Frame
 
     private void updateMonthName()
     {
-        for (int i = 0; i < 2; i++) {
-            if (monthFormat[i] == null) {     // TODO: optimize
-                SimpleDateFormat f = (SimpleDateFormat) IBMCalendar.getDateTimeFormat(
-                                        calendars[i], DateFormat.MEDIUM, -1,
-                                        locales[displayMenu.getSelectedIndex()]);
-                f.applyPattern("MMMM, yyyy G");
-                f.setTimeZone(new SimpleTimeZone(0, "UTC"));
-                monthFormat[i] = f;
-            }
+            for (int i = 0; i < 2; i++) {
+                try {
+                    if (monthFormat[i] == null) {     // TODO: optimize
+                        DateFormat f = IBMCalendar.getDateTimeFormat(
+                                                calendars[i], DateFormat.MEDIUM, -1,
+                                                locales[displayMenu.getSelectedIndex()]);
+                        if (f instanceof com.ibm.text.SimpleDateFormat) {
+                            com.ibm.text.SimpleDateFormat f1 = (com.ibm.text.SimpleDateFormat) f;
+                            f1.applyPattern("MMMM, yyyy G");
+                            f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
+                        } else if (f instanceof java.text.SimpleDateFormat) {
+                            java.text.SimpleDateFormat f1 = (java.text.SimpleDateFormat) f;
+                            f1.applyPattern("MMMM, yyyy G");
+                            f1.setTimeZone(new SimpleTimeZone(0, "UTC"));
+                        }
+                        monthFormat[i] = f;
+                    }
+                } catch (ClassCastException e) {
+                    //hey {lw} - there's something wrong in this routine that cuases exceptions.
+                    System.out.println(e);
+                }
 
-            monthLabel[i].setText( monthFormat[i].format( calendarPanel.firstOfMonth() ));
-        }
+                monthLabel[i].setText( monthFormat[i].format( calendarPanel.firstOfMonth() ));
+            }
     }
 
     /**

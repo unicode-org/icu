@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CalendarCalc.java,v $ $Revision: 1.2 $ $Date: 2000/02/25 23:57:09 $
+ * $RCSfile: CalendarCalc.java,v $ $Revision: 1.3 $ $Date: 2000/03/01 17:25:21 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -24,9 +24,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.text.ParsePosition;
-import java.text.DateFormatSymbols;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -34,6 +32,7 @@ import java.util.TimeZone;
 import java.util.Locale;
 
 import com.ibm.util.*;
+import com.ibm.text.*;
 
 import javax.swing.*;
 
@@ -109,7 +108,7 @@ class CalendarCalcFrame extends Frame
     {
         buildGUI();
 
-        patternText.setText( calendars[0].format.toPattern() );
+        patternText.setText( calendars[0].toPattern() );
 
         // Force an update of the display
         cityChanged();
@@ -498,26 +497,39 @@ class CalendarCalcFrame extends Frame
             text = new JTextField("",FIELD_COLUMNS);
             text.setFont(DemoUtility.editFont);
 
-            format = (SimpleDateFormat) IBMCalendar.getDateFormat(cal, DateFormat.FULL,
+            format = IBMCalendar.getDateFormat(cal, DateFormat.FULL,
                                                 Locale.getDefault());
             //format.applyPattern(DEFAULT_FORMAT);
         }
 
         public void setLocale(Locale loc) {
-            String pattern = format.toPattern();
+            String pattern = toPattern();
 
-            format = (SimpleDateFormat) IBMCalendar.getDateFormat(calendar, DateFormat.FULL,
+            format = IBMCalendar.getDateFormat(calendar, DateFormat.FULL,
                                                                     loc);
-
-            format.applyPattern(pattern);
+            applyPattern(pattern);
         }
 
         public void applyPattern(String pattern) {
-            format.applyPattern(pattern);
+            if (format instanceof SimpleDateFormat) {
+                ((SimpleDateFormat)format).applyPattern(pattern);
+            } else if (format instanceof java.text.SimpleDateFormat) {
+                ((java.text.SimpleDateFormat)format).applyPattern(pattern);
+            }
+        }
+        
+        private String toPattern() {
+            if (format instanceof SimpleDateFormat) {
+                return ((SimpleDateFormat)format).toPattern();
+            } else if (format instanceof java.text.SimpleDateFormat) {
+                return ((java.text.SimpleDateFormat)format).toPattern();
+            } else {
+                return "";
+            }
         }
 
         java.util.Calendar  calendar;
-        SimpleDateFormat    format;
+        DateFormat          format;
         String              name;
         JTextField           text;
         Checkbox            rollAdd;
