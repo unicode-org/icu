@@ -92,6 +92,9 @@ res_unload(ResourceData *pResData);
 U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength);
 
+U_CFUNC const UChar *
+res_getAlias(const ResourceData *pResData, const Resource res, int32_t *pLength);
+
 U_CFUNC const uint8_t *
 res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength);
 
