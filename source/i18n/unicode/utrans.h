@@ -275,7 +275,8 @@ utrans_register(UTransliterator* adoptedTrans,
  * system will no longer recognize the given ID when passed to
  * utrans_open(). If the ID is invalid then nothing is done.
  *
- * @param id a NUL-terminated ID
+ * @param id an ID to unregister
+ * @param idLength the length of id, or -1 if id is zero-terminated
  * @draft ICU 2.8
  */
 U_CAPI void U_EXPORT2

@@ -528,35 +528,17 @@ udat_setSymbols(    UDateFormat             *format,
                     int32_t                 valueLength,
                     UErrorCode              *status);
 
-/** Get the locale for this date format object. You can choose between valid and actual locale.
- *  @param cal The calendar object
- *  @param type type of the locale we're looking for (valid or actual) 
- *  @param status error code for the operation
- *  @return the locale name
+/** Get the locale for this date format object.
+ * You can choose between valid and actual locale.
+ * @param fmt The formatter to get the locale from
+ * @param type type of the locale we're looking for (valid or actual) 
+ * @param status error code for the operation
+ * @return the locale name
  */
 U_CAPI const char* U_EXPORT2
 udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
-
-/********************* Obsolete API ************************************/
-/**
- * TODO: Remove after Aug 2002
- */
-#ifdef U_USE_DEPRECATED_FORMAT_API
-#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM != 2))
-#   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
-#else 
-    static UDateFormat*
-    udat_openPattern(const UChar* pattern,int32_t patternLength,const char* locale,UErrorCode *status)
-    {
-        return udat_open(UDAT_IGNORE,UDAT_IGNORE,locale,NULL,0,pattern,patternLength,status);
-    }
-
-#   define udat_open_2_2(timeStyle,dateStyle,locale,tzId,tzIdLength,status) udat_open(timeStyle,dateStyle,locale,tzId,tzIdLength,NULL,0,status)
-#endif
-#endif
-/********************* End **********************************************/
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

@@ -349,7 +349,7 @@ public:
      * @stable ICU 2.0
      */
     static  void    setDefault(const    Locale&     newLocale,
-                                                    UErrorCode&  success);
+                               UErrorCode&  success);
 
     
     /**
@@ -420,6 +420,7 @@ public:
      * Gets the list of keywords for the specified locale. 
      *
      * @return pointer to StringEnumeration class. Client must dispose of it by calling delete.
+     * @param status Returns any error information while performing this operation.
      * @draft ICU 2.8
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
@@ -428,6 +429,7 @@ public:
      * Get the value for a keyword. 
      * 
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
+     * @param status Returns any error information while performing this operation.
      * @return pointer to the keyword value owned by the Locale object or NULL if there is 
      *         no such a keyword.
      *

@@ -329,6 +329,8 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @param options bitmask for options to apply to the pattern.
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
+     * @param symbols a symbol table mapping variable names to values
+     * and stand-in characters to UnicodeSets; may be NULL
      * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
      * contains a syntax error.
      * @internal
@@ -503,6 +505,8 @@ public:
      * Valid options are USET_IGNORE_SPACE and USET_CASE_INSENSITIVE.
      * @param symbols a symbol table mapping variable names to
      * values and stand-ins to UnicodeSets; may be NULL
+     * @param status returns <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the pattern
+     * contains a syntax error.
      * @return a reference to this
      * @draft ICU 2.8
      */
