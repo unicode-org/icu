@@ -100,12 +100,12 @@
  * </tr>
  * <tr>
  * <td>Message Formatting</td>
- * <td>unum.h</td>
+ * <td>umsg.h</td>
  * <td>MessageFormat</td>
  * </tr>
  * <tr>
  * <td>Number Formatting</td>
- * <td>umsg.h</td>
+ * <td>unum.h</td>
  * <td>NumberFormat</td>
  * </tr>
  * <tr>
