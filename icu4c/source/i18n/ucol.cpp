@@ -691,13 +691,24 @@ void collIterNormalize(collIterate *collationSource)
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             freeHeapWritableBuffer(collationSource);
             collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
+            collationSource->flags |= UCOL_ITER_ALLOCATED;
             /* to enable null termination */
             collationSource->writableBufSize = normLen + 1;
             status = U_ZERO_ERROR;
             unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                            collationSource->writableBufSize, &status);
+                collationSource->writableBufSize, &status);
+            if (status != U_ZERO_ERROR) {
+#ifdef UCOL_DEBUG
+                fprintf(stderr, "collIterNormalize(), normalize #2 failed, status = %d\n", status);
+#endif
+                return;
+            }
+            collationSource->writableBuffer[normLen] = 0;
         }
         else {
+#ifdef UCOL_DEBUG
+            fprintf(stderr, "collIterNormalize(), normalize #1 failed, status = %d\n", status);
+#endif
             return;
         }
     }
@@ -2514,6 +2525,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                 there's no guarantee of the right character position after 
                 this bail*/
                 *status = U_BUFFER_OVERFLOW_ERROR;
+                source->CEpos = source->CEs;
                 return UCOL_NULLORDER;
             }
             CE = ucol_IGetNextCE(coll, &temp, status);
@@ -2572,7 +2584,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
 /* However, it is used only when stack buffers are not sufficiently big, and then we're messed up performance wise */
 /* anyway */
 uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, uint32_t newSize, UErrorCode *status) {
-#ifdef UCOLL_DEBUG
+#ifdef UCOL_DEBUG
   fprintf(stderr, ".");
 #endif
   uint8_t *newStart = NULL;
@@ -3621,8 +3633,13 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
 
     if(resultLength == 0 || primaries == NULL) {
-        return ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
+        int32_t t = ucol_getSortKeySize(coll, &s, sortKeySize, coll->strength, len);
+        if(normSource != normBuffer) {
+            uprv_free(normSource);
     }
+        return t;
+    }
+
     uint8_t *primarySafeEnd = primaries + resultLength - 2;
 
     uint32_t minBufferSize = UCOL_MAX_BUFFER;
@@ -4437,10 +4454,10 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
     }
 
     if (sAlloc) {
-        delete sBuf;
+        uprv_free(sBuf);
     }
     if (tAlloc) {
-        delete tBuf;
+        uprv_free(tBuf);
     }
 
     return result;
@@ -4474,18 +4491,17 @@ void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
     newBuf = (uint32_t *)uprv_malloc(newSize * sizeof(uint32_t));
     uprv_memcpy(newBuf, b->buf, oldSize * sizeof(uint32_t));
     if (b->buf != b->localArray) {
-        delete b->buf;
+        uprv_free(b->buf);
     }
     b->buf = newBuf;
     b->endp = b->buf + newSize;
     b->pos  = b->buf + oldSize;
 }
 
-inline void UCOL_CEBUF_CHECK(ucol_CEBuf *b, collIterate *ci) {
-    if ((b)->pos == (b)->endp) ucol_CEBuf_Expand(b, ci);
+inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
+    if (b->pos == b->endp) {
+        ucol_CEBuf_Expand(b, ci);
 }
-
-inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce) {
     *(b)->pos++ = ce;
 };
 
@@ -4638,20 +4654,11 @@ ucol_strcoll( const UCollator    *coll,
     uint32_t sOrder=0, tOrder=0;
     if(!shifted) {
       for(;;) {
-          // TODO:  Verify that at most one CE an be added per buf per time through here.
-        UCOL_CEBUF_CHECK(&sCEs , &sColl);
-        UCOL_CEBUF_CHECK(&sCEs , &sColl);
-
         /* Get the next collation element in each of the strings, unless */
         /* we've been requested to skip it. */
         while(sOrder == 0) {
-          // UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
           sOrder = ucol_IGetNextCE(coll, &sColl, &status);
-          //if(!isContinuation(sOrder)) {
-          //  sOrder ^= caseSwitch;
-          //}
-          // *(sCEs++) = sOrder;
-          UCOL_CEBUF_PUT(&sCEs, sOrder);
+          UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
           sOrder &= 0xFFFF0000;
         }
 
@@ -4661,7 +4668,7 @@ ucol_strcoll( const UCollator    *coll,
           //if(!isContinuation(tOrder)) {
           //  tOrder ^= caseSwitch;
           //}
-          UCOL_CEBUF_PUT(&tCEs, tOrder);
+          UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
           // *(tCEs++) = tOrder;
           tOrder &= 0xFFFF0000;
         }
@@ -4689,7 +4696,7 @@ ucol_strcoll( const UCollator    *coll,
           // UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
           sOrder = ucol_IGetNextCE(coll, &sColl, &status);
           if(sOrder == UCOL_NO_MORE_CES) {
-            UCOL_CEBUF_PUT(&sCEs, sOrder);
+            UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
             break;
           } else if((sOrder & 0xFFFFFFBF) == 0) {
             continue;
@@ -4697,13 +4704,13 @@ ucol_strcoll( const UCollator    *coll,
             if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
               if(sInShifted) {
                 sOrder &= 0xFFFF0000;
-                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 //  *(sCEs++) = sOrder;
                 continue;
               } else {
                 //sOrder ^= caseSwitch;
                 // *(sCEs++) = sOrder;
-                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 break;
               }
             } else { /* Just lower level values */
@@ -4711,26 +4718,26 @@ ucol_strcoll( const UCollator    *coll,
                 continue;
               } else {
                 //sOrder ^= caseSwitch;
-                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 // *(sCEs++) = sOrder;
                 continue;
               }
             }
           } else { /* regular */
             if(sOrder > LVT) {
-              UCOL_CEBUF_PUT(&sCEs, sOrder);
+              UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
               // *(sCEs++) = sOrder;
               break;
             } else {
               if((sOrder & 0xFFFF0000) > 0) {
                 sInShifted = TRUE;
                 sOrder &= 0xFFFF0000;
-                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 // *(sCEs++) = sOrder;
                 continue;
               } else {
                 //sOrder ^= caseSwitch;
-                UCOL_CEBUF_PUT(&sCEs, sOrder);
+                UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 sInShifted = FALSE;
                 // *(sCEs++) = sOrder;
                 continue;
@@ -4745,7 +4752,7 @@ ucol_strcoll( const UCollator    *coll,
           // UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
           tOrder = ucol_IGetNextCE(coll, &tColl, &status);
           if(tOrder == UCOL_NO_MORE_CES) {
-            UCOL_CEBUF_PUT(&tCEs, tOrder);
+            UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
             // *(tCEs++) = tOrder;
             break;
           } else if((tOrder & 0xFFFFFFBF) == 0) {
@@ -4754,12 +4761,12 @@ ucol_strcoll( const UCollator    *coll,
             if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
               if(tInShifted) {
                 tOrder &= 0xFFFF0000;
-                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 // *(tCEs++) = tOrder;
                 continue;
               } else {
                 //tOrder ^= caseSwitch;
-                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 // *(tCEs++) = tOrder;
                 break;
               }
@@ -4768,14 +4775,14 @@ ucol_strcoll( const UCollator    *coll,
                 continue;
               } else {
                 //tOrder ^= caseSwitch;
-                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 // *(tCEs++) = tOrder;
                 continue;
               }
             }
           } else { /* regular */
             if(tOrder > LVT) {
-              UCOL_CEBUF_PUT(&tCEs, tOrder);
+              UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
               // *(tCEs++) = tOrder;
               break;
             } else {
@@ -4783,11 +4790,11 @@ ucol_strcoll( const UCollator    *coll,
                 tInShifted = TRUE;
                 tOrder &= 0xFFFF0000;
                 // *(tCEs++) = tOrder;
-                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 continue;
               } else {
                 //tOrder ^= caseSwitch;
-                UCOL_CEBUF_PUT(&tCEs, tOrder);
+                UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 tInShifted = FALSE;
                 // *(tCEs++) = tOrder;
                 continue;

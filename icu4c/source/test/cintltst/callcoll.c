@@ -235,27 +235,43 @@ void doTestVariant(UCollator* myCollation, const UChar source[], const UChar tar
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int temp=0, gSortklen1=0,gSortklen2=0;
-    UCollationResult compareResult, keyResult, incResult = result;
-    uint8_t *sortKey1, *sortKey2;
+    UCollationResult compareResult, compareResulta, keyResult, incResult = result;
+    uint8_t *sortKey1, *sortKey2, *sortKey1a, *sortKey2a;
     uint32_t sLen = u_strlen(source);
     uint32_t tLen = u_strlen(target);
     char buffer[256];
     uint32_t len;
 
     
-    compareResult = ucol_strcoll(myCollation, source, sLen, target, tLen);
+    compareResult  = ucol_strcoll(myCollation, source, sLen, target, tLen);
+    compareResulta = ucol_strcoll(myCollation, source, -1,   target, -1); 
+    if (compareResult != compareResulta) {
+        log_err("ucol_strcoll result from null terminated and explicit length strings differs.\n");
+    }
+
     sortklen1=ucol_getSortKey(myCollation, source, sLen,  NULL, 0);
     sortklen2=ucol_getSortKey(myCollation, target, tLen,  NULL, 0);
 
     sortklenmax = (sortklen1>sortklen2?sortklen1:sortklen2);
     sortklenmin = (sortklen1<sortklen2?sortklen1:sortklen2);
 
-    sortKey1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
-    ucol_getSortKey(myCollation, source, sLen, sortKey1, sortklen1+1);
+    sortKey1 =(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
+    sortKey1a=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
+    ucol_getSortKey(myCollation, source, sLen, sortKey1,  sortklen1+1);
+    ucol_getSortKey(myCollation, source, -1,   sortKey1a, sortklen1+1);
     
-    sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
-    ucol_getSortKey(myCollation, target, tLen, sortKey2, sortklen2+1);
-    
+    sortKey2 =(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
+    sortKey2a=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
+    ucol_getSortKey(myCollation, target, tLen, sortKey2,  sortklen2+1);
+    ucol_getSortKey(myCollation, target, -1,   sortKey2a, sortklen2+1);
+
+    /* Check that sort key generated with null terminated string is identical  */
+    /*  to that generted with a length specified.                              */
+    if (uprv_strcmp((const char *)sortKey1, (const char *)sortKey1a) != 0 ||
+        uprv_strcmp((const char *)sortKey2, (const char *)sortKey2a) != 0 ) {
+        log_err("Sort Keys from null terminated and explicit length strings differ.\n");
+    }
+
     /*memcmp(sortKey1, sortKey2,sortklenmax);*/
     temp= uprv_strcmp((const char *)sortKey1, (const char *)sortKey2);
     gSortklen1 = uprv_strlen((const char *)sortKey1)+1;
@@ -281,6 +297,9 @@ void doTestVariant(UCollator* myCollation, const UChar source[], const UChar tar
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
     free(sortKey1);
     free(sortKey2);
+    free(sortKey1a);
+    free(sortKey2a);
+
 }
 
 void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
