@@ -372,6 +372,17 @@ int main(int argc, const char *argv[])
         }
       else
         {
+          /* Make the static data name equal to the file name */
+          if( /*VERBOSE &&  */ uprv_stricmp(cnvName,mySharedData->staticData->name))
+          {
+            fprintf(stderr, "Warning: %s%s claims to be '%s'\n", 
+                    cnvName,
+                    CONVERTER_FILE_EXTENSION,
+                    mySharedData->staticData->name);
+          }
+
+          uprv_strcpy((char*)mySharedData->staticData->name, cnvName);
+
           writeConverterData(mySharedData, cnvName, destdir, &err);
           makeconv_deleteSharedConverterData(mySharedData);
 
@@ -1125,6 +1136,7 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   myStaticData->structSize = sizeof(UConverterStaticData);
   mySharedData->staticDataOwned = TRUE;
 
+  uprv_strcpy(myStaticData->name, converterName);
 
   mySharedData->dataMemory = NULL; /* for init */
 
