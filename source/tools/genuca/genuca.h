@@ -35,9 +35,7 @@
 #include "unewdata.h"
 
 /* This is the version of FractionalUCA.txt tailoring rules*/
-#define UCA_TAILORING_RULES_VERSION 1
-/* Version of genuca */
-#define UCA_BUILDER_VERSION 1
+#define UCA_TAILORING_RULES_VERSION 200
 
 /* UDataInfo for UCA mapping table */
 static const UDataInfo dataInfo={

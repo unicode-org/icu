@@ -646,7 +646,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
                     ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
-                    coll->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION; /* builder version */
                     coll->dataInfo.dataVersion[1] = version[0]; /*tailoring rules version*/
                     if(U_SUCCESS(*status) && data != NULL) {
                         temp1 = bin_open(bundle, "%%CollationNew", len, binColData, status);
