@@ -508,7 +508,7 @@ _findSameDataBlock(const uint32_t *data, int32_t dataLength,
     /* ensure that we do not even partially get past dataLength */
     dataLength-=UTRIE_DATA_BLOCK_LENGTH;
 
-    for(block=UTRIE_DATA_BLOCK_LENGTH; block<=dataLength; block+=step) {
+    for(block=0; block<=dataLength; block+=step) {
         for(i=0; i<UTRIE_DATA_BLOCK_LENGTH; ++i) {
             if(data[block+i]!=data[otherBlock+i]) {
                 break;
