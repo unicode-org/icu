@@ -754,9 +754,9 @@ Data set name type  : PDS
 
     <h3><a name="ImportantNotesOS400">OS/400 Platform</a></h3>
 
-    <p>ICU Reference Release 1.4.0 contains partial support for the 400
+    <p>ICU Reference Release 1.8.1 contains partial support for the 400
     platform, but additional work by the user is currently needed to get it
-    to build completely. A future release of ICU should work
+    to build properly. A future release of ICU should work
     out-of-the-box under OS/400.</p>
 
     <ul>
@@ -767,9 +767,10 @@ Data set name type  : PDS
           <li>QSHELL interpreter installed (install base option 30, operating
           system)</li>
 
-          <li>QShell Utilities, PRPQ 5799-XEH</li>
+          <li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li>
 
-          <li>ILE C++ for AS/400, PRPQ 5799-GDW</li>
+          <li>ILE C++ for AS/400, PRPQ 5799-GDW (the latest cum package and
+          PTF SF62241 must be installed)</li>
 
           <li>GNU facilities (You can get the GNU facilities for OS/400 from <a href=
           "http://www.as400.ibm.com/developer/porting/gnu_utilities.html">http://www.as400.ibm.com/developer/porting/gnu_utilities.html</a>).</li>
@@ -807,8 +808,8 @@ Data set name type  : PDS
           <li>Add QCXXN, to your build process library list. This results in
           the resolution of CRTCPPMOD used by the icc compiler</li>
 
-          <li>For timezones to work correctly, the QUTCOFFSET
-          needs to be set to the proper UTC(Coordinated univeral time) offset.<br>
+          <li>In order to get the tests to run correctly, the QUTCOFFSET
+          needs to be set to the Pacific Time Zone offset.<br>
           <br>
           To check your QUTCOFFSET:
           <div style="margin-left: 2em">
@@ -817,19 +818,24 @@ Data set name type  : PDS
           <br>
           To change your QUTCOFFSET:<br>
             <div style="margin-left: 2em">
-              CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('<i>+/-hh:mm</i>')
+              CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0700')
             </div>
-            <br>
-            <i>The +/- represents either + or - from UTC. The "hh" represents
-            the number of hours from UTC, and "mm" represents the minutes
-            from UTC.</i><br>
             <br>
           </li>
 
+          <li>Run 'CHGJOB CCSID(37)'</li>
+
           <li>Run 'QSH'</li>
 
+          <li>Run gunzip on the ICU source code compressed tar archive
+          (icu-<i>X</i>-<i>Y</i>.tar.gz or icu-<i>X</i>-<i>Y</i>.tgz).</li>
+
+          <li>Run unpax-icu.sh on the tar file from the ICU download page.</li>
+
+          <li>Change your current directory to icu/source.</li>
+
           <li>
-            Configure the Makefiles (see configure below)
+            Configure the Makefiles with the as/400 configure script from the ICU download page.
             <strong>Note:</strong> Verify that the mh-os400 configure file is
             used.
 
