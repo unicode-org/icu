@@ -82,7 +82,7 @@ static void TestUDataOpen(){
         {"tz", "icu"},
         {"cnvalias", "icu"},
         {"unames",   "icu"},
-        {"ibm-1047-s390", "cnv"}
+        {"ibm-37",   "cnv"}
     };
     const char* name           = "test";
     const char* type           = "icu";
