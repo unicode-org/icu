@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/02/22 03:43:32 $ 
-* $Revision: 1.26 $
+* $Date: 2002/02/22 17:40:06 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -438,14 +438,14 @@ public final class UCharacterTest extends TestFmwk
       "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
       
     // default unicode data file name
-    final String UNICODE_DATA_FILE = "src//com//ibm//icu//dev//data//unicode//UnicodeData.txt";
-    
+    String UNICODE_DATA_FILE = "/src/com/ibm/icu/dev/data/unicode/UnicodeData.txt";
+	UNICODE_DATA_FILE.replace('/', File.pathSeparatorChar);    
     // unicode data file path system name
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
     String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
     if (s == null) {
     // assuming runtime directory is on the same level as the source
-      s = System.getProperty("user.dir") + "//..//" + UNICODE_DATA_FILE;
+      s = System.getProperty("user.dir") + UNICODE_DATA_FILE;
     }
     else {
       StringBuffer tempfilename = new StringBuffer(s);
@@ -533,8 +533,8 @@ public final class UCharacterTest extends TestFmwk
     }
     catch (FileNotFoundException e)
     {
-      errln("FAIL UnicodeData.txt not found\n" +
-            "Configure the system setting UnicodeData to the right path\n" +
+      errln("FAIL UnicodeData.txt not found. File name with path: " + s +
+            "\nConfigure the system setting UnicodeData to the right path\n" +
             "e.g. java -DUnicodeData=\"data_dir_path\" " +
             "com.ibm.icu.dev.test.text.UCharacterTest");
     }
@@ -802,14 +802,14 @@ public final class UCharacterTest extends TestFmwk
   public void TestSpecialCasing()
   {
     // default unicode data file name
-    final String SPECIALCASING_FILE = "src//com//ibm//icu//dev//data//unicode//SpecialCasing.txt";
-    
+    String SPECIALCASING_FILE = "/src/com/ibm/icu/dev/data/unicode/SpecialCasing.txt";
+    SPECIALCASING_FILE.replace('/',File.pathSeparatorChar);
     // unicode data file path system name
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
     String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
     if (s == null) {
     // assuming runtime directory is on the same level as the source
-      s = System.getProperty("user.dir") + "//" + SPECIALCASING_FILE;
+      s = System.getProperty("user.dir") + SPECIALCASING_FILE;
     }
     else {
       StringBuffer tempfilename = new StringBuffer(s);
