@@ -32,7 +32,6 @@
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestNullDefault(void);
-static void TestLocaleNameConversion(void);
 static void VerifyTranslation(void);
 void PrintDataTable();
 
@@ -368,9 +367,9 @@ static void TestPrefixes() {
         {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US"},
         {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
         {"no", "", "NO", "NY", "no-no-ny.utf32@B", "no_NO_NY"}, /* @ ignored unless variant is empty */
-        {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO_B" },
+        {"no", "", "NO", "",  "no-no.utf32@B", "no_NO_B" },
         {"no", "", "",   "NY", "no__ny", "no__NY" },
-        {"no", "", "",   "NY", "no@ny", "no__NY" },
+        {"no", "", "",   "", "no@ny", "no__NY" },
         {"el", "Latn", "", "", "el-latn", "el_Latn" },
         {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU" },
         {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE" },
@@ -1581,8 +1580,6 @@ testLCID(UResourceBundle *currentBundle,
     uint32_t lcid;
     uint32_t expectedLCID;
     char lcidStringC[64] = {0};
-    int32_t lcidStringLen = 0;
-    const UChar *lcidString = NULL;
 
     expectedLCID = uloc_getLCID(localeName);
     lcid = uprv_convertToLCID(localeName, &status);
@@ -1930,7 +1927,6 @@ findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen,
     UChar uPattern[256] = {0};
     UErrorCode status = U_ZERO_ERROR;
     int32_t i;
-    UBool testFailed = FALSE;
 
     /* create the sets with script codes */
     for(i = 0; i<scriptsLen; i++){
@@ -2154,19 +2150,17 @@ static void VerifyTranslation(void) {
            }
             /* test that the MeasurementSystem works API works */
            {
-               UMeasurementSystem system = ulocdata_getMeasurementSystem(currLoc, &errorCode);
+               UMeasurementSystem measurementSystem = ulocdata_getMeasurementSystem(currLoc, &errorCode);
                if(U_FAILURE(errorCode)){
                    log_err("ulocdata_getMeasurementSystem failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
                }
-               if(strstr(currLoc, "_US")!=NULL  ){
-                   if(system != UMS_US ){
+               if(strstr(currLoc, "_US")!=NULL){
+                   if(measurementSystem != UMS_US){
                         log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                    }
-               }else if( system != UMS_SI ){
+               }else if(measurementSystem != UMS_SI){
                    log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                }
-               
-
            }
         }
         ures_close(currentLocale);
@@ -2177,125 +2171,126 @@ static void VerifyTranslation(void) {
 
 static void MoreVariants(void) 
 {
-  struct {
-    const char *localeID;
-    const char *keyword;
-    const char *expectedValue;
-  } testCases[] = {
-    { "de_DE_EURO@collation=PHONEBOOK", "collation", "PHONEBOOK" },
-    { "es_ES.utf8@euro", "collation", ""},
-    { "es_ES.hello.utf8@euro", "", "" },
-    { " s pa c e d  _  more spaces _ spaced variant ", "", ""}
-  };
-
-  UErrorCode status = U_ZERO_ERROR;
-
-  int32_t i = 0;
-  int32_t resultLen = 0;
-  char buffer[256];
-
-  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
-    *buffer = 0;
-    resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
-    if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
-      log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
-        testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+    struct {
+        const char *localeID;
+        const char *keyword;
+        const char *expectedValue;
+    } testCases[] = {
+        { "de_DE_EURO@collation=PHONEBOOK", "collation", "PHONEBOOK" },
+        { "es_ES.utf8@euro", "collation", ""},
+        { "es_ES.hello.utf8@euro", "", "" },
+        { " s pa c e d  _  more spaces _ spaced variant ", "", ""}
+    };
+    
+    UErrorCode status = U_ZERO_ERROR;
+    
+    int32_t i = 0;
+    int32_t resultLen = 0;
+    char buffer[256];
+    
+    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        *buffer = 0;
+        resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+        if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+            log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
+                testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+        }
     }
-  }
 }
 
 static void TestKeywordVariants(void) 
 {
-  struct {
-    const char *localeID;
-    const char *expectedLocaleID;
-    const char *expectedLocaleIDNoKeywords;
-    const char *expectedKeywords[10];
-    int32_t numKeywords;
-    UErrorCode expectedStatus;
-  } testCases[] = {
-    { "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = budhist   ", 
-      "de_DE@c alen dar=budhist;c o ll a t i o n=Phonebook;currency=euro", 
-      "de_DE",
-    { "c alen dar", "c o ll a t i o n", "currency"},
-      3,
-      U_ZERO_ERROR
-    },
-    { "de_DE@euro", "de_DE_EURO", "de_DE", {""}, 0, U_INVALID_FORMAT_ERROR},
-    /*{ "de_DE@euro;collation=phonebook", "", "", U_INVALID_FORMAT_ERROR}*/
-  };
-  UErrorCode status = U_ZERO_ERROR;
-
-  int32_t i = 0, j = 0;
-  int32_t resultLen = 0;
-  char buffer[256];
-  UEnumeration *keywords;
-  int32_t keyCount = 0;
-  const char *keyword = NULL;
-  int32_t keywordLen = 0;
-
-  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
-    status = U_ZERO_ERROR;
-    *buffer = 0;
-    keywords = uloc_openKeywords(testCases[i].localeID, &status);
-
-    if(status != testCases[i].expectedStatus) {
-      log_err("Expected to get status %s. Got %s instead\n", 
-        u_errorName(testCases[i].expectedStatus), u_errorName(status));
-    }
-    status = U_ZERO_ERROR;
-    if(keywords) {
-      if((keyCount = uenum_count(keywords, &status)) != testCases[i].numKeywords) {
-        log_err("Expected to get %i keywords, got %i\n", testCases[i].numKeywords, keyCount);
-      }
-      if(keyCount) {
-        j = 0;
-        while(keyword = uenum_next(keywords, &keywordLen, &status)) {
-          if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
-            log_err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
-          }
-          j++;
+    struct {
+        const char *localeID;
+        const char *expectedLocaleID;
+        const char *expectedLocaleIDNoKeywords;
+        const char *expectedKeywords[10];
+        int32_t numKeywords;
+        UErrorCode expectedStatus;
+    } testCases[] = {
+        {
+            "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = budhist   ", 
+            "de_DE@c alen dar=budhist;c o ll a t i o n=Phonebook;currency=euro", 
+            "de_DE",
+            {"c alen dar", "c o ll a t i o n", "currency"},
+            3,
+            U_ZERO_ERROR
+        },
+        { "de_DE@euro", "de_DE_EURO", "de_DE", {""}, 0, U_INVALID_FORMAT_ERROR},
+        /*{ "de_DE@euro;collation=phonebook", "", "", U_INVALID_FORMAT_ERROR}*/
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    
+    int32_t i = 0, j = 0;
+    int32_t resultLen = 0;
+    char buffer[256];
+    UEnumeration *keywords;
+    int32_t keyCount = 0;
+    const char *keyword = NULL;
+    int32_t keywordLen = 0;
+    
+    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        status = U_ZERO_ERROR;
+        *buffer = 0;
+        keywords = uloc_openKeywords(testCases[i].localeID, &status);
+        
+        if(status != testCases[i].expectedStatus) {
+            log_err("Expected to get status %s. Got %s instead\n", 
+                u_errorName(testCases[i].expectedStatus), u_errorName(status));
         }
-      }
-      uenum_close(keywords);
+        status = U_ZERO_ERROR;
+        if(keywords) {
+            if((keyCount = uenum_count(keywords, &status)) != testCases[i].numKeywords) {
+                log_err("Expected to get %i keywords, got %i\n", testCases[i].numKeywords, keyCount);
+            }
+            if(keyCount) {
+                j = 0;
+                while((keyword = uenum_next(keywords, &keywordLen, &status))) {
+                    if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
+                        log_err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+                    }
+                    j++;
+                }
+            }
+            uenum_close(keywords);
+        }
+        resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+        if(uprv_strcmp(testCases[i].expectedLocaleID, buffer) != 0) {
+            log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
+                testCases[i].expectedLocaleID, testCases[i].localeID, buffer);
+        }
+        
     }
-    resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
-    if(uprv_strcmp(testCases[i].expectedLocaleID, buffer) != 0) {
-      log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
-        testCases[i].expectedLocaleID, testCases[i].localeID, buffer);
-    }
-
-  }
-
+    
 }
 
 static void TestKeywordVariantParsing(void) 
 {
-  struct {
-    const char *localeID;
-    const char *keyword;
-    const char *expectedValue;
-  } testCases[] = {
-    { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", "Phonebook" },
-    { "de_DE", "collation", ""},
-    { "de_DE@collation=PHONEBOOK", "collation", "PHONEBOOK" },
-    { "de_DE@currency = euro; CoLLaTion   = PHONEBOOk", "collatiON", "PHONEBOOk" },
-  };
-
-  UErrorCode status = U_ZERO_ERROR;
-
-  int32_t i = 0;
-  int32_t resultLen = 0;
-  char buffer[256];
-
-  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
-    *buffer = 0;
-    resultLen = uloc_getKeywordValue(testCases[i].localeID, testCases[i].keyword, buffer, 256, &status);
-    if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
-      log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
-        testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+    struct {
+        const char *localeID;
+        const char *keyword;
+        const char *expectedValue;
+    } testCases[] = {
+        { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", "Phonebook" },
+        { "de_DE", "collation", ""},
+        { "de_DE@collation=PHONEBOOK", "collation", "PHONEBOOK" },
+        { "de_DE@currency = euro; CoLLaTion   = PHONEBOOk", "collatiON", "PHONEBOOk" },
+    };
+    
+    UErrorCode status = U_ZERO_ERROR;
+    
+    int32_t i = 0;
+    int32_t resultLen = 0;
+    char buffer[256];
+    
+    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        *buffer = 0;
+        resultLen = uloc_getKeywordValue(testCases[i].localeID, testCases[i].keyword, buffer, 256, &status);
+        if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+            log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
+                testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+        }
     }
-  }
 }
 
 static void TestCanonicalization(void)
@@ -2303,51 +2298,55 @@ static void TestCanonicalization(void)
     struct {
         const char *localeID;
         const char *expectedValue;
-        const char *expectedValueNoKeywords;
     } testCases[] = {
         { "ca_ES_PREEURO-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
-            "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
             "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
-        { "ca_ES_PREEURO", "ca_ES@currency=ESP", "ca_ES"},
-        { "de_AT_PREEURO", "de_AT@currency=ATS", "de_AT" },
-        { "de_DE_PREEURO", "de_DE@currency=DEM", "de_DE" },
-        { "de_LU_PREEURO", "de_LU@currency=EUR", "de_LU" },
-        { "el_GR_PREEURO", "el_GR@currency=GRD", "el_GR" },
-        { "en_BE_PREEURO", "en_BE@currency=BEF", "en_BE" },
-        { "en_IE_PREEURO", "en_IE@currency=IEP", "en_IE" },
-        { "es_ES_PREEURO", "es_ES@currency=ESP", "es_ES" },
-        { "eu_ES_PREEURO", "eu_ES@currency=ESP", "eu_ES" },
-        { "fi_FI_PREEURO", "fi_FI@currency=FIM", "fi_FI" },
-        { "fr_BE_PREEURO", "fr_BE@currency=BEF", "fr_BE" },
-        { "fr_FR_PREEURO", "fr_FR@currency=FRF", "fr_FR" },
-        { "fr_LU_PREEURO", "fr_LU@currency=LUF", "fr_LU" },
-        { "ga_IE_PREEURO", "ga_IE@currency=IEP", "ga_IE" },
-        { "gl_ES_PREEURO", "gl_ES@currency=ESP", "gl_ES" },
-        { "it_IT_PREEURO", "it_IT@currency=ITL", "it_IT" },
-        { "nl_BE_PREEURO", "nl_BE@currency=BEF", "nl_BE" },
-        { "nl_NL_PREEURO", "nl_NL@currency=NLG", "nl_NL" },
-        { "pt_PT_PREEURO", "pt_PT@currency=PTE", "pt_PT" },
-        { "de__PHONEBOOK", "de@collation=phonebook", "de" },
-        { "en_GB_EURO", "en_GB@currency=EUR", "en_GB" },
-        { "es__TRADITIONAL", "es@collation=traditional", "es" },
-        { "hi__DIRECT", "hi@collation=direct", "hi" },
-        { "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese", "ja_JP" },
-        { "th_TH_TRADITIONAL", "th_TH@calendar=buddhist", "th_TH" },
-        { "zh_TW_STROKE", "zh_TW@collation=stroke", "zh_TW" },
-        { "zh__PINYIN", "zh@collation=pinyin", "zh" },
-        { "en_US_POSIX", "en_US_POSIX", "en_US_POSIX" }, 
-        { "hy_AM_REVISED", "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY", "no_NO_NY", "no_NO_NY" },
-        { "qz-qz@Euro", "qz_QZ@currency=EUR", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
-        { "en-BOONT",  "en__BOONT",  "en__BOONT" }, /* registered name */
-        { "de-1901",   "de__1901",   "de__1901" }, /* registered name */
-        { "de-1906",   "de__1906",   "de__1906" }, /* registered name */
-        { "sr-SP-Cyrl",     "sr_Cyrl_SP",     "sr_Cyrl_SP" }, /* .NET name */
-        { "sr-SP-Latn",     "sr_Latn_SP",     "sr_Latn_SP" }, /* .NET name */
-        { "uz-UZ-Cyrl",     "uz_Cyrl_UZ",     "uz_Cyrl_UZ" }, /* .NET name */
-        { "uz-UZ-Latn",     "uz_Latn_UZ",     "uz_Latn_UZ" }, /* .NET name */
-        { "zh-CHS",         "zh_Hans",        "zh_Hans" }, /* .NET name */
-        { "zh-CHT",         "zh_TW",          "zh_TW" }, /* .NET name This may change back to zh_Hant */
+        { "ca_ES_PREEURO", "ca_ES@currency=ESP" },
+        { "de_AT_PREEURO", "de_AT@currency=ATS" },
+        { "de_DE_PREEURO", "de_DE@currency=DEM" },
+        { "de_LU_PREEURO", "de_LU@currency=EUR" },
+        { "el_GR_PREEURO", "el_GR@currency=GRD" },
+        { "en_BE_PREEURO", "en_BE@currency=BEF" },
+        { "en_IE_PREEURO", "en_IE@currency=IEP" },
+        { "es_ES_PREEURO", "es_ES@currency=ESP" },
+        { "eu_ES_PREEURO", "eu_ES@currency=ESP" },
+        { "fi_FI_PREEURO", "fi_FI@currency=FIM" },
+        { "fr_BE_PREEURO", "fr_BE@currency=BEF" },
+        { "fr_FR_PREEURO", "fr_FR@currency=FRF" },
+        { "fr_LU_PREEURO", "fr_LU@currency=LUF" },
+        { "ga_IE_PREEURO", "ga_IE@currency=IEP" },
+        { "gl_ES_PREEURO", "gl_ES@currency=ESP" },
+        { "it_IT_PREEURO", "it_IT@currency=ITL" },
+        { "nl_BE_PREEURO", "nl_BE@currency=BEF" },
+        { "nl_NL_PREEURO", "nl_NL@currency=NLG" },
+        { "pt_PT_PREEURO", "pt_PT@currency=PTE" },
+        { "de__PHONEBOOK", "de@collation=phonebook" },
+        { "en_GB_EURO",    "en_GB@currency=EUR" },
+        { "en_GB@EURO",    "en_GB@currency=EUR" },
+        { "es__TRADITIONAL", "es@collation=traditional" },
+        { "hi__DIRECT", "hi@collation=direct" },
+        { "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
+        { "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
+        { "zh_TW_STROKE", "zh_TW@collation=stroke" },
+        { "zh__PINYIN", "zh@collation=pinyin" },
+        { "zh@collation=pinyin", "zh@collation=pinyin" },
+        { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
+        { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
+        { "en_US_POSIX", "en_US_POSIX" }, 
+        { "hy_AM_REVISED", "hy_AM_REVISED" }, 
+        { "no_NO_NY",   "no_NO_NY" },
+        { "no@ny",      "no__NY" },
+        { "no-no.utf32@B", "no_NO_B" },
+        { "qz-qz@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
+        { "en-BOONT",   "en__BOONT" }, /* registered name */
+        { "de-1901",    "de__1901" }, /* registered name */
+        { "de-1906",    "de__1906" }, /* registered name */
+        { "sr-SP-Cyrl",     "sr_Cyrl_SP" }, /* .NET name */
+        { "sr-SP-Latn",     "sr_Latn_SP" }, /* .NET name */
+        { "uz-UZ-Cyrl",     "uz_Cyrl_UZ" }, /* .NET name */
+        { "uz-UZ-Latn",     "uz_Latn_UZ" }, /* .NET name */
+        { "zh-CHS",         "zh_Hans" }, /* .NET name */
+        { "zh-CHT",         "zh_TW" }, /* .NET name This may change back to zh_Hant */
     };
     
     UErrorCode status = U_ZERO_ERROR;
@@ -2360,6 +2359,7 @@ static void TestCanonicalization(void)
     for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
         *buffer = 0;
         status = U_ZERO_ERROR;
+        log_verbose("testing %s -> %s\n", testCases[i], testCases[i].expectedValue);
         origResultLen = uloc_canonicalize(testCases[i].localeID, NULL, 0, &status);
         if (status != U_BUFFER_OVERFLOW_ERROR) {
             log_err("%s status == %s instead of U_BUFFER_OVERFLOW_ERROR\n", testCases[i].localeID, u_errorName(status));
@@ -2393,10 +2393,10 @@ static void TestDisplayKeywords(void)
 {
     int32_t i;
 
-    struct {
+    static const struct {
         const char *localeID;
         const char *displayLocale;
-        UChar displayKeyword[500];
+        UChar displayKeyword[200];
     } testCases[] = {
         {   "ca_ES@currency=ESP",         "de_AT", 
             {0x0057, 0x00e4, 0x0068, 0x0072, 0x0075, 0x006e, 0x0067, 0x0000}, 
@@ -2575,3 +2575,12 @@ static void TestDisplayKeywordValues(void){
     
     }
 }
+													
+
+
+
+
+
+
+
+
