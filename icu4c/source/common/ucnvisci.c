@@ -1069,7 +1069,6 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     uint32_t targetUniChar = 0x0000;
     uint8_t sourceChar = 0x0000;
     UConverterDataISCII* data;
-    UConverterCallbackReason reason;
     UChar32* toUnicodeStatus=NULL;
     UChar* contextCharToUnicode = NULL;
 
@@ -1108,17 +1107,14 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     data->currentDeltaToUnicode = data->defDeltaToUnicode;
                     data->currentMaskToUnicode = data->defMaskToUnicode;
                 }else{
-                    
                     if((sourceChar >= 0x21 && sourceChar <= 0x3F)){
                         /* these are display codes consume and continue */
                     }else{
                         *err =U_ILLEGAL_CHAR_FOUND;
                         /* reset */
                         *contextCharToUnicode=NO_CHAR_MARKER;
-                        reason = UCNV_ILLEGAL;
                         goto CALLBACK;
                     }
-
                 }
 
                 /* reset */
@@ -1148,11 +1144,9 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     /* byte unit is unassigned */
                     targetUniChar = missingCharMarker;
                     *err= U_INVALID_CHAR_FOUND;
-                    reason = UCNV_UNASSIGNED;
                 }else{
                     /* only 0xA1 - 0xEE are legal after EXT char */
                     *contextCharToUnicode= NO_CHAR_MARKER;
-                    reason= UCNV_ILLEGAL;
                     *err = U_ILLEGAL_CHAR_FOUND;
                 }
                 goto CALLBACK;
@@ -1260,49 +1254,11 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 /* we reach here only if targetUniChar == missingCharMarker 
                  * so assign codes to reason and err
                  */
-                reason = UCNV_UNASSIGNED;
                 *err = U_INVALID_CHAR_FOUND;
 CALLBACK:
-                 {
-                    const char *saveSource = args->source;
-                    UChar *saveTarget = args->target;
-                    int32_t *saveOffsets = NULL;
-                    int32_t currentOffset = (int32_t)(source - args->source -1);
-                    int32_t saveIndex = (int32_t)(target - args->target);
-
-                    args->converter->invalidCharLength=0;
-
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =
-                        (char) sourceChar;
-
-                    if(args->offsets){
-                        saveOffsets=args->offsets;
-                        args->offsets = args->offsets+(target - args->target);
-                    }
-
-                    args->target =target;
-                    target =saveTarget;
-                    args->source = source;
-
-                    args->converter->fromCharErrorBehaviour ( 
-                         args->converter->toUContext, 
-                         args, 
-                         args->converter->invalidCharBuffer, 
-                         args->converter->invalidCharLength, 
-                         reason, 
-                         err);
-
-                    if(args->offsets){
-                        args->offsets = saveOffsets;
-
-                        for (;saveIndex < (args->target - target);saveIndex++) {
-                          *(args->offsets)++ = currentOffset;
-                        }
-                    }
-                    target=args->target;
-                    args->source  = saveSource;
-                    args->target  = saveTarget;
-                }
+                args->converter->toUBytes[0] = (uint8_t) sourceChar;
+                args->converter->toULength = 1;
+                break;
             }
 
         }
@@ -1312,7 +1268,7 @@ CALLBACK:
         }
     }
 
-    if(args->flush && source == sourceLimit) {
+    if(U_SUCCESS(*err) && args->flush && source == sourceLimit) {
         /* end of the input stream */
         UConverter *cnv = args->converter;
 

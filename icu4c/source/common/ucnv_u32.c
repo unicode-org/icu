@@ -35,62 +35,6 @@
 /* -SURROGATE_LOW_START + HALF_BASE */
 #define SURROGATE_LOW_BASE      9216
 
-/**
- * Calls invalid char callback when an invalid character sequence is encountered.
- * It presumes that the converter has a callback to call.
- *
- * @returns true when callback fails
- */
-static UBool
-T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
-                                            UConverterCallbackReason reason,
-                                            UErrorCode *err)
-{
-    UConverter *converter = args->converter;
-
-    if (U_SUCCESS(*err))
-    {
-        if (reason == UCNV_ILLEGAL) {
-            *err = U_ILLEGAL_CHAR_FOUND;
-        } else {
-            *err = U_INVALID_CHAR_FOUND;
-        }
-    }
-
-    /* copy the toUBytes to the invalidCharBuffer */
-    uprv_memcpy(converter->invalidCharBuffer,
-                converter->toUBytes,
-                converter->invalidCharLength);
-
-    /* Call the ErrorFunction */
-    args->converter->fromCharErrorBehaviour(converter->toUContext,
-                                            args,
-                                            converter->invalidCharBuffer,
-                                            converter->invalidCharLength,
-                                            reason,
-                                            err);
-
-    return (UBool)U_FAILURE(*err);
-}
-
-static UBool
-T_UConverter_toUnicode_InvalidChar_OffsetCallback(UConverterToUnicodeArgs * args,
-                                                  int32_t currentOffset,
-                                                  UConverterCallbackReason reason,
-                                                  UErrorCode *err)
-{
-    int32_t *saveOffsets = args->offsets;
-    UBool result;
-    
-    result = T_UConverter_toUnicode_InvalidChar_Callback(args, reason, err);
-
-    while (saveOffsets < args->offsets)
-    {
-        *(saveOffsets++) = currentOffset;
-    }
-    return result;
-}
-
 /* UTF-32BE ----------------------------------------------------------------- */
 
 static void
@@ -166,17 +110,9 @@ morebytes:
         }
         else
         {
-            args->source = (const char *) mySource;
-            args->target = myTarget;
-            args->converter->invalidCharLength = (int8_t)i;
-            if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
-            {
-                /* Stop if the error wasn't handled */
-                break;
-            }
-            args->converter->invalidCharLength = 0;
-            mySource = (unsigned char *) args->source;
-            myTarget = args->target;
+            args->converter->toULength = (int8_t)i;
+            *err = U_ILLEGAL_CHAR_FOUND;
+            break;
         }
     }
 
@@ -268,19 +204,9 @@ morebytes:
         }
         else
         {
-            args->source = (const char *) mySource;
-            args->target = myTarget;
-            args->converter->invalidCharLength = (int8_t)i;
-            args->offsets = myOffsets;
-            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, UCNV_ILLEGAL, err))
-            {
-                /* Stop if the error wasn't handled */
-                break;
-            }
-            args->converter->invalidCharLength = 0;
-            mySource = (unsigned char *) args->source;
-            myTarget = args->target;
-            myOffsets = args->offsets;
+            args->converter->toULength = (int8_t)i;
+            *err = U_ILLEGAL_CHAR_FOUND;
+            break;
         }
         offsetNum += i;
     }
@@ -464,65 +390,44 @@ static UChar32
 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                    UErrorCode* err)
 {
-    UChar myUCharBuf[2];
-    UChar *myUCharPtr;
-    const unsigned char *mySource;
+    const uint8_t *mySource;
     UChar32 myUChar;
     int32_t length;
 
-    while (args->source < args->sourceLimit)
+    mySource = (const uint8_t *)args->source;
+    if (mySource >= (const uint8_t *)args->sourceLimit)
     {
-        if (args->source + 4 > args->sourceLimit) 
-        {
-            /* got a partial character */
-            *err = U_TRUNCATED_CHAR_FOUND;
-            return 0xffff;
-        }
-
-        /* Don't even try to do a direct cast because the value may be on an odd address. */
-        mySource = (unsigned char *) args->source;
-        myUChar = (mySource[0] << 24)
-                | (mySource[1] << 16)
-                | (mySource[2] << 8)
-                | (mySource[3]);
-
-        args->source = (const char *)(mySource + 4);
-        if (myUChar <= MAXIMUM_UTF && myUChar >= 0) {
-            return myUChar;
-        }
-
-        uprv_memcpy(args->converter->invalidCharBuffer, mySource, 4);
-        args->converter->invalidCharLength = 4;
-
-        myUCharPtr = myUCharBuf;
-        *err = U_ILLEGAL_CHAR_FOUND;
-        args->target = myUCharPtr;
-        args->targetLimit = myUCharBuf + 2;
-        args->converter->fromCharErrorBehaviour(args->converter->toUContext,
-                                        args,
-                                        (const char *)mySource,
-                                        4,
-                                        UCNV_ILLEGAL,
-                                        err);
-
-        if(U_SUCCESS(*err)) {
-            length = (uint16_t)(args->target - myUCharBuf);
-            if(length > 0) {
-                return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, length);
-            }
-            /* else (callback did not write anything) continue */
-        } else if(*err == U_BUFFER_OVERFLOW_ERROR) {
-            *err = U_ZERO_ERROR;
-            return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, 2);
-        } else {
-            /* break on error */
-            /* ### what if a callback set an error but _also_ generated output?! */
-            return 0xffff;
-        }
+        /* no input */
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0xffff;
     }
 
-    /* no input or only skipping callbacks */
-    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    length = (int32_t)((const uint8_t *)args->sourceLimit - mySource);
+    if (length < 4) 
+    {
+        /* got a partial character */
+        uprv_memcpy(args->converter->toUBytes, mySource, length);
+        args->converter->toULength = (int8_t)length;
+        args->source = (const char *)(mySource + length);
+        *err = U_TRUNCATED_CHAR_FOUND;
+        return 0xffff;
+    }
+
+    /* Don't even try to do a direct cast because the value may be on an odd address. */
+    myUChar = ((UChar32)mySource[0] << 24)
+            | ((UChar32)mySource[1] << 16)
+            | ((UChar32)mySource[2] << 8)
+            | ((UChar32)mySource[3]);
+
+    args->source = (const char *)(mySource + 4);
+    if ((uint32_t)myUChar <= MAXIMUM_UTF) {
+        return myUChar;
+    }
+
+    uprv_memcpy(args->converter->toUBytes, mySource, 4);
+    args->converter->toULength = 4;
+
+    *err = U_ILLEGAL_CHAR_FOUND;
     return 0xffff;
 }
 
@@ -643,17 +548,9 @@ morebytes:
         }
         else
         {
-            args->source = (const char *) mySource;
-            args->target = myTarget;
-            args->converter->invalidCharLength = (int8_t)i;
-            if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
-            {
-                /* Stop if the error wasn't handled */
-                break;
-            }
-            args->converter->invalidCharLength = 0;
-            mySource = (unsigned char *) args->source;
-            myTarget = args->target;
+            args->converter->toULength = (int8_t)i;
+            *err = U_ILLEGAL_CHAR_FOUND;
+            break;
         }
     }
 
@@ -747,19 +644,9 @@ morebytes:
         }
         else
         {
-            args->source = (const char *) mySource;
-            args->target = myTarget;
-            args->converter->invalidCharLength = (int8_t)i;
-            args->offsets = myOffsets;
-            if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args, offsetNum, UCNV_ILLEGAL, err))
-            {
-                /* Stop if the error wasn't handled */
-                break;
-            }
-            args->converter->invalidCharLength = 0;
-            mySource = (unsigned char *) args->source;
-            myTarget = args->target;
-            myOffsets = args->offsets;
+            args->converter->toULength = (int8_t)i;
+            *err = U_ILLEGAL_CHAR_FOUND;
+            break;
         }
         offsetNum += i;
     }
@@ -935,65 +822,44 @@ static UChar32
 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                    UErrorCode* err)
 {
-    UChar myUCharBuf[2];
-    UChar *myUCharPtr;
-    const unsigned char *mySource;
+    const uint8_t *mySource;
     UChar32 myUChar;
     int32_t length;
 
-    while (args->source < args->sourceLimit)
+    mySource = (const uint8_t *)args->source;
+    if (mySource >= (const uint8_t *)args->sourceLimit)
     {
-        if (args->source + 4 > args->sourceLimit) 
-        {
-            /* got a partial character */
-            *err = U_TRUNCATED_CHAR_FOUND;
-            return 0xffff;
-        }
-
-        /* Don't even try to do a direct cast because the value may be on an odd address. */
-        mySource = (unsigned char *) args->source;
-        myUChar = (mySource[0])
-                | (mySource[1] << 8)
-                | (mySource[2] << 16)
-                | (mySource[3] << 24);
-
-        args->source = (const char *)(mySource + 4);
-        if (myUChar <= MAXIMUM_UTF && myUChar >= 0) {
-            return myUChar;
-        }
-
-        uprv_memcpy(args->converter->invalidCharBuffer, mySource, 4);
-        args->converter->invalidCharLength = 4;
-
-        myUCharPtr = myUCharBuf;
-        *err = U_ILLEGAL_CHAR_FOUND;
-        args->target = myUCharPtr;
-        args->targetLimit = myUCharBuf + 2;
-        args->converter->fromCharErrorBehaviour(args->converter->toUContext,
-                                        args,
-                                        (const char *)mySource,
-                                        4,
-                                        UCNV_ILLEGAL,
-                                        err);
-
-        if(U_SUCCESS(*err)) {
-            length = (uint16_t)(args->target - myUCharBuf);
-            if(length > 0) {
-                return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, length);
-            }
-            /* else (callback did not write anything) continue */
-        } else if(*err == U_BUFFER_OVERFLOW_ERROR) {
-            *err = U_ZERO_ERROR;
-            return ucnv_getUChar32KeepOverflow(args->converter, myUCharBuf, 2);
-        } else {
-            /* break on error */
-            /* ### what if a callback set an error but _also_ generated output?! */
-            return 0xffff;
-        }
+        /* no input */
+        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0xffff;
     }
 
-    /* no input or only skipping callbacks */
-    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    length = (int32_t)((const uint8_t *)args->sourceLimit - mySource);
+    if (length < 4) 
+    {
+        /* got a partial character */
+        uprv_memcpy(args->converter->toUBytes, mySource, length);
+        args->converter->toULength = (int8_t)length;
+        args->source = (const char *)(mySource + length);
+        *err = U_TRUNCATED_CHAR_FOUND;
+        return 0xffff;
+    }
+
+    /* Don't even try to do a direct cast because the value may be on an odd address. */
+    myUChar = ((UChar32)mySource[3] << 24)
+            | ((UChar32)mySource[2] << 16)
+            | ((UChar32)mySource[1] << 8)
+            | ((UChar32)mySource[0]);
+
+    args->source = (const char *)(mySource + 4);
+    if ((uint32_t)myUChar <= MAXIMUM_UTF) {
+        return myUChar;
+    }
+
+    uprv_memcpy(args->converter->toUBytes, mySource, 4);
+    args->converter->toULength = 4;
+
+    *err = U_ILLEGAL_CHAR_FOUND;
     return 0xffff;
 }
 
