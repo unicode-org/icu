@@ -98,6 +98,15 @@ void CompoundTransliteratorTest::TestConstruction(){
        delete cpdtrans2;
 
    }
+   {
+    /*Test Jitterbug 914 */
+    UErrorCode err = U_ZERO_ERROR;
+    CompoundTransliterator  cpdTrans(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,NULL,err);
+    UnicodeString newID =cpdTrans.getID();
+    if(newID!=UnicodeString("Hangul-Latin")){
+        errln(UnicodeString("Test for Jitterbug 914 for cpdTrans(UnicodeString(\"Latin-Hangul\"),UTRANS_REVERSE,NULL,err) failed"));
+    }
+   }
    delete t1;
    delete t2;
    delete t3;
@@ -267,6 +276,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     delete transarray;
  
 }
+
 /**
  * Splits a UnicodeString
  */
