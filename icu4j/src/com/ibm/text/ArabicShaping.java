@@ -227,8 +227,9 @@ public final class ArabicShaping {
      * Letter shaping option: replace normative letter characters in the U+0600 (Arabic) block,
      * except for the TASHKEEL characters at U+064B...U+0652, by shaped ones in the U+Fe70
      * (Presentation Forms B) block.
+     * !!! Currently unsupported and ignored.  Will be treated as LETTERS_SHAPE.
      */
-    public static final int LETTERS_SHAPE_EXCEPT_TASHKEEL = 0x18;
+    private static final int LETTERS_SHAPE_EXCEPT_TASHKEEL = 0x18;
 
     /** 
      * Bit mask for letter shaping options. 
@@ -322,8 +323,8 @@ public final class ArabicShaping {
         switch (options & LETTERS_MASK) {
         case LETTERS_NOOP: buf.append(", no letter shaping"); break;
         case LETTERS_SHAPE: buf.append(", shape letters"); break;
+        case LETTERS_SHAPE_EXCEPT_TASHKEEL:
         case LETTERS_UNSHAPE: buf.append(", unshape letters"); break;
-        case LETTERS_SHAPE_EXCEPT_TASHKEEL: buf.append(", shape letters except TASHKEEL"); break;
         }
         switch (options & DIGITS_MASK) {
         case DIGITS_NOOP: buf.append(", no digit shaping"); break;
@@ -1093,12 +1094,9 @@ public final class ArabicShaping {
         int outputSize = sourceLength;
 
         switch (options & LETTERS_MASK) {
+        case LETTERS_SHAPE_EXCEPT_TASHKEEL:
         case LETTERS_SHAPE:
             outputSize = shapeUnicode(temp, 0, sourceLength, destSize, true);
-            break;
-
-        case LETTERS_SHAPE_EXCEPT_TASHKEEL:
-            outputSize = shapeUnicode(temp, 0, sourceLength, destSize, false);
             break;
 
         case LETTERS_UNSHAPE:

@@ -69,8 +69,10 @@ public class ArabicShapingTest {
                         options |= ArabicShaping.LETTERS_SHAPE;
                     } else if (val.equalsIgnoreCase("un")) {
                         options |= ArabicShaping.LETTERS_UNSHAPE;
+                        /* TASHKEEL unsupported
                     } else if (val.equalsIgnoreCase("ta")) {
                         options |= ArabicShaping.LETTERS_SHAPE_EXCEPT_TASHKEEL;
+                        */
                     } else {
                         throwValError(opt, val);
                     }
@@ -227,7 +229,8 @@ public class ArabicShapingTest {
         "  options are:\n" +
         "    -len:[gs|sn|se|sb]    (length: grow/shrink, spaces near, spaces end, spaces beginning)\n" +
         "    -dir:[log|vis]        (direction: logical, visual)\n" +
-        "    -let:[no|sh|un|ta]    (letters: noop, shape, unshape, tashkeel)\n" +
+        //        "    -let:[no|sh|un|ta]    (letters: noop, shape, unshape, tashkeel)\n" +
+        "    -let:[no|sh|un]       (letters: noop, shape, unshape)\n" +
         "    -dig:[no|ea|ae|lr|al] (digits: noop, en2an, an2en, en2an_lr, en2an_al)\n" +
         "    -typ:[an|ex]          (digit type: arabic, arabic extended)\n" +
         "    -dst:#                (dest start: [integer])\n" +
