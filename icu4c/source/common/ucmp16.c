@@ -196,7 +196,9 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
 {
   CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
 
-  return ucmp16_initAdopt(this_obj, indexArray, newValues, count, defaultValue);
+  ucmp16_initAdopt(this_obj, indexArray, newValues, count, defaultValue);
+  this_obj->fIAmOwned = FALSE;
+  return this_obj;
 }
 
 CompactShortArray* ucmp16_openAdoptWithBlockShift(uint16_t *indexArray,
@@ -224,7 +226,9 @@ CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
 {
   CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
 
-  return ucmp16_initAlias(this_obj, indexArray, newValues, count, defaultValue);
+  ucmp16_initAlias(this_obj, indexArray, newValues, count, defaultValue);
+  this_obj->fIAmOwned = FALSE;
+  return this_obj;
 }
 
 /*=======================================================*/
@@ -247,7 +251,7 @@ CompactShortArray* ucmp16_initAdopt(CompactShortArray *this_obj,
     this_obj->kBlockShift = UCMP16_kBlockShift;
     this_obj->kBlockMask = UCMP16_kBlockMask;
     this_obj->fAlias = FALSE;
-    this_obj->fIAmOwned = FALSE;
+    this_obj->fIAmOwned = TRUE;
   }
 
   return this_obj;
@@ -289,7 +293,7 @@ CompactShortArray* ucmp16_initAlias(CompactShortArray *this_obj,
     this_obj->kBlockShift = UCMP16_kBlockShift;
     this_obj->kBlockMask = UCMP16_kBlockMask;
     this_obj->fAlias = TRUE;
-    this_obj->fIAmOwned = FALSE;
+    this_obj->fIAmOwned = TRUE;
   }
 
   return this_obj;
