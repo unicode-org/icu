@@ -1,0 +1,35 @@
+﻿
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+af_ZA {
+    Version { "x0.1" }
+
+    CurrencyElements { 
+            "R",
+            "ZAR",
+            ",",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "HH:mm:ss",
+            "EEE dd MMM yyyy z",
+            "EEE dd MMM yyyy z",
+            "dd/MM/yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "¤#,##0.00;-¤#,##0.00",
+            "#,##0%",
+    }
+    LocaleID {"0436"}
+    LocaleString { "af_ZA" }
+}

@@ -1,0 +1,22 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+ko_KR {
+    CurrencyElements { 
+            "\u20A9",
+            "KRW",
+            ".",
+    }
+    LocaleString { "ko_KR" }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "\u00A4#,##0;-\u00A4#,##0",
+            "#,##0%",
+    }
+    ShortCountry { "KOR" }
+    LocaleID { "0412" }
+}

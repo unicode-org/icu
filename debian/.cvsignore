@@ -1,0 +1,14 @@
+*.debhelper
+docs
+*files
+*.substvars
+libicu-dev
+libicu16
+icu
+icu-locales
+icu-data
+icu-i18ndata
+tmp
+icu.postinst
+icu.prerm
+libicu16.prerm

@@ -1,0 +1,152 @@
+## Makefile.in for ICU - tools/genrb
+## Copyright (c) 1999, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+## Platform-specific setup
+
+include @platform_make_fragment@
+
+##
+
+SECTION = 8
+
+MAN_FILES = $(TARGET).$(SECTION)
+
+## Build directory information
+subdir = tools/genrb
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(TARGET).$(SECTION) $(DEPS) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+
+## Target information
+TARGET = genrb
+
+ENABLE_STATIC = @ENABLE_STATIC@
+
+ifneq ($(ENABLE_STATIC),)
+LINK = $(LINK.cc)
+else
+LINK = $(LINK.c)
+endif
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/extra/ustdio -I$(srcdir)/../toolutil
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$$$(LDLIBRARYPATH_ENVVAR)
+LIBS = $(LIBUSTDIO) $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
+
+##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
+##rblist.o  util.o
+OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+include $(srcdir)/genrbfiles.mk
+
+DATABUILDDIR=@DATABUILDDIR@
+
+-include $(srcdir)/reslocal.mk
+
+## List of resource bundles to build
+TXT_SOURCE = $(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL) $(TRANSLIT_SOURCE)
+
+TXT_FILES = $(TXT_SOURCE:%=$(top_srcdir)/../data/%)
+RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=$(top_builddir)/data/%.res)
+#TRANSLIT_FILES = $(TRANSLIT_SOURCE:%=$(top_srcdir)/../data/translit/%)
+#TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=$(top_builddir)/data/translit/%.res)
+TEST_FILES = $(top_builddir)/test/testdata/root.res \
+$(top_builddir)/test/testdata/te.res \
+$(top_builddir)/test/testdata/te_IN.res \
+$(top_builddir)/test/testdata/testtypes.res
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local		\
+distclean distclean-local dist dist-local check	\
+check-local install-man
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(TARGET) $(MAN_FILES) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+
+install-local: all-local install-man
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+
+<dist-local:
+
+clean-local: 
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK) -o $@ $^ $(LIBS) 
+
+## Rule to build a compiled res file.
+## Note the order of the next three rules here is important!
+
+$(top_builddir)/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
+	@echo "Creating testdata resource file for $<"
+	ICU_DATA=$(top_builddir)/data $(INVOKE) ./$(TARGET) -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
+
+$(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt $(TARGET)
+	@echo "Creating compiled resource file for $<"
+	@ICU_DATA=$(top_builddir)/data $(INVOKE) ./$(TARGET) -s $(top_srcdir)/../data/ -d $(top_builddir)/data/ $(<F)
+
+
+# the 'mv' will always fail if you are building in the source dir
+
+# man page
+install-man: $(MAN_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+
+$(TARGET).$(SECTION): $(srcdir)/$(TARGET).$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# only on linux probably ?
+$(TARGET).ps: $(TARGET).$(SECTION)
+	groff -man < $< > $@
+
+$(TARGET).pdf: $(TARGET).ps
+	ps2pdf $< $@
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+endif
+endif
