@@ -31,6 +31,30 @@
 # only use the 19 initials, 21 medials, and 27 finals possessing a
 # jamo short name as defined in section 4.4 of the Unicode book.
 
+# Rules of thumb.  These guidelines provide the basic framework
+# for the rules.  They are phrased in terms of Latin-Jamo transliteration.
+# The Jamo-Latin rules derive from these, since the Jamo-Latin rules are
+# just context-free transliteration of jamo to corresponding short names,
+# with the addition of apostrophes to maintain round-trip integrity
+# in the context of the Latin-Jamo rules.
+
+# A sequence of vowels:
+# - Take the longest sequence you can. If there are too many, or you don't
+#   have a starting consonant, introduce a 110B necessary.
+
+# A sequence of consonants.
+# - First join the double consonants: G + G -> GG
+# - In the remaining list,
+# -- If there is no preceding vowel, take the first consonant, and insert EU
+#    after it. Continue with the rest of the consonants.
+# -- If there is one consonant, attach to the following vowel
+# -- If there are two consonants and a following vowel, attach one to the
+#    preceeding vowel, and one to the following vowel.
+# -- If there are more than two consonants, join the first two together if you
+#    can: L + G => LG
+# -- If you still end up with more than 2 consonants, insert EU after the
+#    first one, and continue with the rest of the consonants.
+
 #----------------------------------------------------------------------
 # Variables
 
@@ -115,6 +139,8 @@
 
   $jamoMedial = [\u1161-\u1175];
 
+  $latinInitial = [bcdghjkmnprst];
+
   # Any character in the latin transliteration of a medial
   $latinMedial = [aeiouwy];
 
@@ -124,7 +150,7 @@
 #----------------------------------------------------------------------
 # Jamo-Latin
 
-# Jamo to latin is very simple, since it is the latin that is
+# Jamo to latin is relatively simple, since it is the latin that is
 # ambiguous.  Most rules are straightforward, and we encode them below
 # as simple add-on back rule, e.g.:
 
@@ -138,34 +164,100 @@
 # we are going from single characters, so we can very easily piggyback
 # on the Latin-Jamo.
 
-# Apostrophe insertion.  We insert apostrophes only for triple
-# consonants; double consonants between vowels are always split so
-# that "axye" yields A Xf Yi E if possible.  For three (or more)
-# consonants "axyz" we insert an apostrophe between "x" and "y" if
-# XYf, Xf, and YZi all exist, and we have A Xf YZi.  This prevents the
-# reverse transliteration to A XYf.
+# The main issue with Jamo-Latin is when to insert apostrophes.
+# Apostrophes are inserted to obtain correct round trip behavior.  For
+# example, the sequence Ki A Gf Gi E, if transliterated to "kagge",
+# would then round trip to Ki A GGi E.  To prevent this, we insert an
+# apostrophe: "kag'ge".  IMPORTANT: The need for apostrophes depends
+# very specifically on the behavior of the Latin-Jamo rules.  A change
+# in the Latin-Jamo behavior can completely change the way the
+# apostrophe insertion must be done.
 
-# For vowels the rule is similar.  (We shouldn't really see long
-# strings of medials, but if we do, we need to disambiguate them.)  If
-# there is a vowel "ae" such that "a" by itself and "e" by itself are
-# vowels, then the rule "'' < a {} [ E ];" must be used to introduce
-# and apostrophe between single "a" and single "e".  For vowels of the
-# form "aei", in theory both "ae" + "i" and "a" + "ei" must be tested,
-# but in practice only the former occurs.
+# Triple consonants.  For three consonants "axxx" we insert an
+# apostrophe between the first and second "x" if XXf, Xf, and Xi all
+# exist, and we have A Xf XXi.  This prevents the reverse
+# transliteration to A XXf Xi.
 
-# These rules are generated programmatically.  These rules must occur
-# before all other Jamo-Latin rules.
+  '' < $latinMedialEnd g {} $GGi;
+  '' < $latinMedialEnd s {} $SSi;
 
-  '' < $latinMedialEnd b {} [$SSi];
-  '' < $latinMedialEnd g {} [$GGi $SSi];
-  '' < $latinMedialEnd l {} [$BB $GGi $SSi];
-  '' < $latinMedialEnd n {} [$GGi $JJ];
-  '' < $latinMedialEnd s {} [$SSi];
-  '' < e {} [$O $U];
-  '' < [o a] {} $E;
+# For vowels the rule is similar.  If there is a vowel "ae" such that
+# "a" by itself and "e" by itself are vowels, then we want to map
+# A E to "a'e" so as not to round trip to AE.  However, in the text
+# Ki EO IEUNG E we don't need to map to "keo'e".  "keoe" suffices.
 
-# The other complication is handling of IEUNG, which we do below,
-# together with the deletion of apostrophes.
+# the rule "'' < a {}
+# [ E ];" must be used to introduce and apostrophe between single "a"
+# and single "e".  For vowels of the form "aei", in theory both "ae" +
+# "i" and "a" + "ei" must be tested, but in practice only the former
+# occurs.
+
+  '' < $latinInitial [ye we] {} $O;
+  '' < $latinInitial e {} [$O $U];
+  '' < $latinInitial [o a wa ya] {} $E;
+
+# Single finals followed by IEUNG.  The jamo sequence A Xf IEUNG E,
+# where Xi also exists, must be transliterated as "ax'e" to prevent
+# the round trip conversion to A Xi E.
+
+  '' < $latinMedialEnd b {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd c {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd d {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd g {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd h {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd j {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd k {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd m {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd n {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd p {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd s {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd t {} $IEUNG $jamoMedial;
+
+# Double finals followed by IEUNG.  Similar to the single finals
+# followed by IEUNG.  Any latin consonant pair X Y, between medials,
+# that we would split by Latin-Jamo, we must handle when it occurs as
+# part of A XYf IEUNG E, to prevent round trip conversion to A Xf Yi
+# E.
+
+  '' < $latinMedialEnd b s {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd g g {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd g s {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l b {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l g {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l h {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l m {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l p {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l s {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd l t {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd n g {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd n h {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd n j {} $IEUNG $jamoMedial;
+  '' < $latinMedialEnd s s {} $IEUNG $jamoMedial;
+
+# Split doubles.  Text of the form A Xi Xf E, where XXi also occurs,
+# we transliterate as "ax'xe" to prevent round trip transliteration as
+# A XXi E.
+
+  '' < $latinMedialEnd b {} $Bi $jamoMedial;
+  '' < $latinMedialEnd d {} $Di $jamoMedial;
+  '' < $latinMedialEnd j {} $Ji $jamoMedial;
+  '' < $latinMedialEnd g {} $Gi $jamoMedial;
+  '' < $latinMedialEnd s {} $Si $jamoMedial;
+
+# XYY.  This corresponds to the XYY rule in Latin-Jamo.  By default
+# Latin-Jamo maps "xyy" to Xf YYi, to keep YY together.  As a result,
+# "xyy" forms that correspond to XYf Yi must be transliterated as
+# "xy'y".
+
+  '' < $latinMedialEnd b s {} $Si;
+  '' < $latinMedialEnd g s {} $Si;
+  '' < $latinMedialEnd l b {} $Bi;
+  '' < $latinMedialEnd l g {} $Gi;
+  '' < $latinMedialEnd l s {} $Si;
+  '' < $latinMedialEnd n g {} $Gi;
+  '' < $latinMedialEnd n j {} $Ji;
+
+# Deletion of IEUNG is handled below.
 
 #----------------------------------------------------------------------
 # Latin-Jamo
@@ -176,11 +268,11 @@
 # Split digraphs: Text of the form 'axye', where 'xy' is a final
 # digraph, 'x' is a final (by itself), 'y' is an initial, and 'a' and
 # 'e' are medials, we want to transliterate this as A Xf Yi E rather
-# than A XYf IEUNG E.  These rules are generated programmatically from
-# the jamo data.
+# than A XYf IEUNG E.  We do NOT include text of the form "axxe",
+# since that is handled differently below.  These rules are generated
+# programmatically from the jamo data.
 
   $jamoMedial {b s} $latinMedial > $Bf $Si;
-  $jamoMedial {g g} $latinMedial > $Gf $Gi;
   $jamoMedial {g s} $latinMedial > $Gf $Si;
   $jamoMedial {l b} $latinMedial > $L $Bi;
   $jamoMedial {l g} $latinMedial > $L $Gi;
@@ -192,7 +284,6 @@
   $jamoMedial {n g} $latinMedial > $Nf $Gi;
   $jamoMedial {n h} $latinMedial > $Nf $Hi;
   $jamoMedial {n j} $latinMedial > $Nf $Ji;
-  $jamoMedial {s s} $latinMedial > $Sf $Si;
 
 # Single consonants are initials: Text of the form 'axe', where 'x'
 # can be an initial or a final, and 'a' and 'e' are medials, we want
@@ -210,6 +301,29 @@
   $jamoMedial {p} $latinMedial > $Pi;
   $jamoMedial {s} $latinMedial > $Si;
   $jamoMedial {t} $latinMedial > $Ti;
+
+# Doubled initials.  The sequence "axxe", where XX exists as an initial
+# (XXi), and also Xi and Xf exist (true of all digraphs XX), we want
+# to transliterate as A XXi E, rather than split to A Xf Xi E.
+
+  $jamoMedial {b b} $latinMedial > $BB;
+  $jamoMedial {d d} $latinMedial > $DD;
+  $jamoMedial {j j} $latinMedial > $JJ;
+  $jamoMedial {g g} $latinMedial > $GGi;
+  $jamoMedial {s s} $latinMedial > $SSi;
+
+# XYY.  Because doubled consonants bind more strongly than XY
+# consonants, we must handle the sequence "axyy" specially.  Here XYf
+# and YYi must exist.  In these cases, we map to Xf YYi rather than
+# XYf.
+
+  $jamoMedial {b} s s > $Bf;
+  $jamoMedial {g} s s > $Gf;
+  $jamoMedial {l} b b > $L;
+  $jamoMedial {l} g g > $L;
+  $jamoMedial {l} s s > $L;
+  $jamoMedial {n} g g > $Nf;
+  $jamoMedial {n} j j > $Nf;
 
 # Finals: Attach consonant with preceding medial to preceding medial.
 # Do this BEFORE mapping consonants to initials.  Longer keys must
@@ -229,8 +343,7 @@
   $jamoMedial {h} <> $Hf;
   $jamoMedial {j} <> $Jf;
   $jamoMedial {k} <> $Kf;
-  $jamoMedial {lb} <> $LB;
-  $jamoMedial {lg} <> $LG;
+  $jamoMedial {lb} <> $LB;  $jamoMedial {lg} <> $LG;
   $jamoMedial {lh} <> $LH;
   $jamoMedial {lm} <> $LM;
   $jamoMedial {lp} <> $LP;
