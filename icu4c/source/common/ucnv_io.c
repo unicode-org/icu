@@ -387,22 +387,27 @@ ucnv_compareNames(const char *name1, const char *name2) {
 static uint32_t
 findConverter(const char *alias, UErrorCode *pErrorCode) {
     uint32_t mid, start, limit;
+	uint32_t lastMid;
     int result;
 
     /* do a binary search for the alias */
     start = 0;
-    limit = gUntaggedConvArraySize - 1;
+    limit = gUntaggedConvArraySize;
     mid = limit;
+	lastMid = UINT32_MAX;
 
-    /* Once mid == 0 we've already checked the 0'th element and we can stop */
-    while (start <= limit && mid != 0) {
-        mid = (uint32_t)((start + limit + 1) / 2);    /* +1 is to round properly */
+    for (;;) {
+        mid = (uint32_t)((start + limit) / 2);
+		if (lastMid == mid) {	/* Have we moved? */
+			break;	/* We haven't moved, and it wasn't found. */
+		}
+		lastMid = mid;
         result = ucnv_compareNames(alias, GET_STRING(gAliasList[mid]));
 
         if (result < 0) {
-            limit = mid-1;
+            limit = mid;
         } else if (result > 0) {
-            start = mid+1;
+            start = mid;
         } else {
             /* Since the gencnval tool folds duplicates into one entry,
              * this alias in gAliasList is unique, but different standards
