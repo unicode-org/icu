@@ -407,7 +407,7 @@ dnl static constructors in C++ libs.  Hack around that here
 dnl by renaming some .c files to .cpp
 case "${host}" in
 	*-*-hpux*) 	
-		for file in tools/gencol/gencol samples/date/date \
+		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
@@ -463,7 +463,7 @@ AC_OUTPUT([Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
-		tools/genrb/Makefile tools/gencol/Makefile \
+		tools/genrb/Makefile  \
 		tools/pkgdata/Makefile tools/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
