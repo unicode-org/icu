@@ -15,19 +15,20 @@
 *******************************************************************************
 */
 
+#include "cstring.h"
 #include "error.h"
 
 /* This is incredibly non thread-safe, but it doesn't matter for this util */
-static const char *gErrorText = 0;
+static char gErrorText[200] = { "" };
 
 void 
 setErrorText(const char *s)
-{ 
-  gErrorText = s; 
+{
+  uprv_strcpy(gErrorText, s);
 }
 
 const char* 
 getErrorText()
 {
-  return gErrorText;
+  return gErrorText[0] != 0 ? gErrorText : NULL;
 }
