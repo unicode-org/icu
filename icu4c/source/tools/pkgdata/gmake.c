@@ -1,7 +1,3 @@
-/* TODO:
-  TOOL: setup libpaths/etc for running tools
-*/
-
 /**************************************************************************
 *
 *   Copyright (C) 2000, International Business Machines
