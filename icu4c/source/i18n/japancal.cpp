@@ -327,11 +327,6 @@ int32_t JapaneseCalendar::getDefaultMonthInYear()
     return kEraInfo[era].month-1;
   }
 
-  if(era < kCurrentEra) { 
-    // if we're not in the current era, 
-    //    fail_here;
-  }
-
   return month;
 }
 
@@ -355,8 +350,7 @@ int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t month)
 
 int32_t JapaneseCalendar::internalGetEra() const
 {
-  // OLD
-  internalGet(UCAL_ERA, kCurrentEra);
+  return internalGet(UCAL_ERA, kCurrentEra);
 }
 
 int32_t JapaneseCalendar::handleGetExtendedYear()
@@ -494,7 +488,7 @@ int32_t JapaneseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType l
       if(needCalc) {
         int32_t min = kEraInfo[1].year - kEraInfo[0].year;
         int32_t max = min;
-        for (int32_t i=2; i<kEraCount; i++) { // counting by year, not field (3's)
+        for (uint32_t i=2; i<kEraCount; i++) { // counting by year, not field (3's)
           int32_t d = kEraInfo[i].year - kEraInfo[i-1].year;
           if (d < min) {
             min = d;

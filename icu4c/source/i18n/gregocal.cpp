@@ -153,8 +153,7 @@ static const UDate kPapalCutoverJulian = (2299161.0 - kEpochStartAsJulianDay);
 GregorianCalendar::GregorianCalendar(UErrorCode& status)
     :   Calendar(TimeZone::createDefault(), Locale::getDefault(), status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     setTimeInMillis(getNow(), status);
@@ -165,8 +164,7 @@ GregorianCalendar::GregorianCalendar(UErrorCode& status)
 GregorianCalendar::GregorianCalendar(TimeZone* zone, UErrorCode& status)
     :   Calendar(zone, Locale::getDefault(), status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     setTimeInMillis(getNow(), status);
@@ -177,8 +175,7 @@ GregorianCalendar::GregorianCalendar(TimeZone* zone, UErrorCode& status)
 GregorianCalendar::GregorianCalendar(const TimeZone& zone, UErrorCode& status)
     :   Calendar(zone, Locale::getDefault(), status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     setTimeInMillis(getNow(), status);
@@ -189,8 +186,7 @@ GregorianCalendar::GregorianCalendar(const TimeZone& zone, UErrorCode& status)
 GregorianCalendar::GregorianCalendar(const Locale& aLocale, UErrorCode& status)
     :   Calendar(TimeZone::createDefault(), aLocale, status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     setTimeInMillis(getNow(), status);
@@ -202,8 +198,7 @@ GregorianCalendar::GregorianCalendar(TimeZone* zone, const Locale& aLocale,
                                      UErrorCode& status)
     :   Calendar(zone, aLocale, status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     setTimeInMillis(getNow(), status);
@@ -215,8 +210,7 @@ GregorianCalendar::GregorianCalendar(const TimeZone& zone, const Locale& aLocale
                                      UErrorCode& status)
     :   Calendar(zone, aLocale, status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     setTimeInMillis(getNow(), status);
@@ -228,8 +222,7 @@ GregorianCalendar::GregorianCalendar(int32_t year, int32_t month, int32_t date,
                                      UErrorCode& status)
     :   Calendar(TimeZone::createDefault(), Locale::getDefault(), status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     set(UCAL_ERA, AD);
@@ -244,8 +237,7 @@ GregorianCalendar::GregorianCalendar(int32_t year, int32_t month, int32_t date,
                                      int32_t hour, int32_t minute, UErrorCode& status)
     :   Calendar(TimeZone::createDefault(), Locale::getDefault(), status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     set(UCAL_ERA, AD);
@@ -263,8 +255,7 @@ GregorianCalendar::GregorianCalendar(int32_t year, int32_t month, int32_t date,
                                      UErrorCode& status)
     :   Calendar(TimeZone::createDefault(), Locale::getDefault(), status),
         fGregorianCutover(kPapalCutover),
-        fNormalizedGregorianCutover(fGregorianCutover),
-        fGregorianCutoverYear(1582), fCutoverJulianDay(kCutoverJulianDay),
+	fCutoverJulianDay(kCutoverJulianDay), fNormalizedGregorianCutover(fGregorianCutover), fGregorianCutoverYear(1582),
         fIsGregorian(TRUE), fInvertGregorian(FALSE)
 {
     set(UCAL_ERA, AD);
@@ -287,8 +278,7 @@ GregorianCalendar::~GregorianCalendar()
 GregorianCalendar::GregorianCalendar(const GregorianCalendar &source)
     :   Calendar(source),
         fGregorianCutover(source.fGregorianCutover),
-        fNormalizedGregorianCutover(source.fNormalizedGregorianCutover),
-        fGregorianCutoverYear(source.fGregorianCutoverYear), fCutoverJulianDay(source.fCutoverJulianDay),
+        fCutoverJulianDay(source.fCutoverJulianDay), fNormalizedGregorianCutover(source.fNormalizedGregorianCutover), fGregorianCutoverYear(source.fGregorianCutoverYear),
         fIsGregorian(source.fIsGregorian), fInvertGregorian(source.fInvertGregorian)
 {
 }
@@ -482,7 +472,7 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)
 
   // The following check handles portions of the cutover year BEFORE the
   // cutover itself happens.
-  if (fIsGregorian != (jd >= fCutoverJulianDay)) {  /*  cutoverJulianDay)) { */
+  if ((fIsGregorian==TRUE) != (jd >= fCutoverJulianDay)) {  /*  cutoverJulianDay)) { */
 #if defined (U_DEBUG_CAL)
     fprintf(stderr, "%s:%d: jd was %d\n", 
             __FILE__, __LINE__, jd);
@@ -1036,6 +1026,9 @@ int32_t GregorianCalendar::handleGetExtendedYear() {
       //}
 #endif
     break;
+
+    default:	
+        year = kEpochYear;	
   }
   return year;
 }
