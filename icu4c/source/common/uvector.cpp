@@ -465,8 +465,6 @@ void UVector::sortedInsert(UHashTok tok, USortComparator *compare, UErrorCode& e
     }
 }
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UStack)
-
 UStack::UStack(UErrorCode &status) :
     UVector(status)
 {
