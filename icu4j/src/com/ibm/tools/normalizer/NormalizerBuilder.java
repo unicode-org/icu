@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/07/18 18:19:28 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/07/18 19:20:16 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -648,6 +648,7 @@ public final class NormalizerBuilder
 
         BitSet usedIndices = new BitSet();
         CharSet explodingBases = new CharSet();
+        NonComposingCombiningMap nccMap = new NonComposingCombiningMap();
 
         // Find all characters that are both bases *and* have compatibility
         // decompositions.  These are weird
@@ -742,6 +743,8 @@ public final class NormalizerBuilder
                 // we'll never see it, only the results of its explosion.
                 //
 
+                // ZERO INDEX BUG:
+                // 
                 // Normalizer is showing two bugs.  These are:
                 //        0041 0316 0300  =>  0041 0316 0300  ;  expect 00C0 0316
                 //   class:  0  220  230
@@ -757,17 +760,19 @@ public final class NormalizerBuilder
                 // correct data.  This should be revisited by a normalization
                 // expert at some point. - Liu
 
-                // ORIGINAL CODE =>
-                // addChar(lookup, ch, COMBINING, 0);
-                // nccCount++;
-                // <= ORIGINAL CODE
+                // addChar(lookup, ch, COMBINING, 0); // ORIGINAL CODE
+                // nccCount++;                        // ORIGINAL CODE
 
-                // EXPERIMENTAL =>
+                // As our index, use combineCount and up.  Reuse values by
+                // mapping them through nccMap, which keeps track of previously
+                // used values and allocates new ones only as needed, starting
+                // with zero. - Liu
                 classMap[cclass] = 1;       // Mark this combining class as being used
-                addChar(lookup, ch, COMBINING, combineCount++);
-                // <= EXPERIMENTAL
+                addChar(lookup, ch, COMBINING, combineCount + nccMap.getIndexFor(cclass));
             }
         }
+
+        nccCount = (short) nccMap.getIndexCount(); // Liu
 
         // Now run through the combining classes again and assign bitmasks
         // in the same ascending order as the canonical classes
@@ -1076,3 +1081,39 @@ class CharSet extends HashSet {
     MutableChar probe = new MutableChar(' ');
 }
 
+/**
+ * An int->int map.  Each time a non-existent key is looked up,
+ * create a new mapping to the next available integer value.
+ */
+class NonComposingCombiningMap {
+    int index;
+    Hashtable hash;
+
+    public NonComposingCombiningMap() {
+        index = 0;
+        hash = new Hashtable();
+    }
+
+    /**
+     * Return the existing mapping of class.  If no such mapping
+     * exists, create one and return it.  New mappings map to
+     * zero, then one, etc.
+     */
+    public int getIndexFor(int cclass) {
+        Integer cl = new Integer(cclass);
+        Integer ind = (Integer) hash.get(cl);
+        if (ind != null) {
+            return ind.intValue();
+        }
+        hash.put(cl, new Integer(index));
+        return index++;
+    }
+
+    /**
+     * Return the number of mappings made so far.  That is, getIndexFor()
+     * has returned integers 0..getIndexCount()-1.
+     */
+    public int getIndexCount() {
+        return index;
+    }
+}
