@@ -1420,16 +1420,13 @@ del common/libicuuc.so
     <h4><a name="ImportantNotesHPUX" href="#ImportantNotesHPUX">Using ICU in a
     Multithreaded Environment on HP-UX</a></h4>
 
-    <p>If you are building ICU with a newer aCC compiler, or you are planning
-    on using any RogueWave libraries, you will need to set special flags before
-    building ICU. These flags are needed in order to make ICU thread safe and
-    to allow iostream to work properly. More information about the <a href=
-    "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#option-mt">-mt</a>
-    and <a href=
+    <p>If you are building ICU with a newer aCC compiler and you are planning
+    on using any RogueWave libraries, you will need to set a special flag before
+    building ICU. The <a href=
     "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
-    -AA</a> options can be found in the HP aCC documentation.</p>
+    -AA</a> flag is needed in order to make ICU thread safe with RogueWave.</p>
 <pre>
-<samp>CFLAGS="-mt" CXXFLAGS="-mt -AA" LDFLAGS="-mt" ./runConfigureICU HP-UX11ACC</samp>
+<samp>CXXFLAGS="-AA" ./runConfigureICU HP-UX11ACC</samp>
 </pre>
 
     <h3><a name="CharStrings" href="#CharStrings">char * strings in
@@ -1438,9 +1435,9 @@ del common/libicuuc.so
     <p>The C/C++ languages do not provide a portable way to specify Unicode
     code point or string literals other than with arrays of numeric constants.
     For convenience, ICU4C tends to use char * strings in places where only
-    "invariant characters" are used &mdash; a portable subset of the 7-bit
-    ASCII repertoire &mdash; so that locale IDs, charset names, resource bundle
-    item keys and similar can be easily specified as string literals in the
+    "invariant characters" (a portable subset of the 7-bit ASCII
+    repertoire) are used. This allows locale IDs, charset names, resource bundle
+    item keys and similar items to be easily specified as string literals in the
     source code. The same types of strings are also stored as "invariant
     character" char * strings in the ICU data files.</p>
 
