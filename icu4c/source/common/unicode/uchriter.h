@@ -165,7 +165,7 @@ public:
    * returns that code unit.  
    * @draft
    */
-  virtual UChar         setIndex(UTextOffset pos);
+  virtual UChar         setIndex(UTextOffset position);
 
   /**
    * Sets the iterator to refer to the beginning of the code point
@@ -176,7 +176,7 @@ public:
    * (its first code unit).
    * @draft
    */
-  virtual UChar32       setIndex32(UTextOffset pos);
+  virtual UChar32       setIndex32(UTextOffset position);
 
   /**
    * Returns the code unit the iterator currently refers to.  
