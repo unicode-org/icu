@@ -323,16 +323,16 @@
         }
 
 #       ifdef OS390BATCH
-        /* ### hack: we still need to get u_getDataDirectory() fixed
-        for OS/390 (batch mode - always return "//"? )
-        and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
-        This is probably due to the strange file system on OS/390.  It's more like
-        a database with short entry names than a typical file system. */
+            /* ### hack: we still need to get u_getDataDirectory() fixed
+            for OS/390 (batch mode - always return "//"? )
+            and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
+            This is probably due to the strange file system on OS/390.  It's more like
+            a database with short entry names than a typical file system. */
             /* U_ICUDATA_NAME should always have the correct name */
-            /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
-            /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
-            /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
-            uprv_strcpy(pathBuffer, "//IXMI" U_ICU_VERSION_SHORT "DA");
+            /* BUT FOR BATCH MODE IT IS AN EXCEPTION BECAUSE */
+            /* THE FIRST THREE LETTERS ARE PREASSIGNED TO THE */
+            /* PROJECT!!!!! */
+            uprv_strcpy(pathBuffer, "IXMI" U_ICU_VERSION_SHORT "DA");
 #       else
             /* set up the library name */
             uprv_strcpy(basename, LIB_PREFIX U_LIBICUDATA_NAME U_ICU_VERSION_SHORT LIB_SUFFIX);
