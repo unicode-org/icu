@@ -49,6 +49,7 @@ icu4c/source/extra/ustdio/Debug
 icu4c/source/extra/ustdio/Makefile
 icu4c/source/extra/ustdio/Release
 icu4c/source/extra/ustdio/libustdio.*
+icu4c/source/i18n/*.ao
 icu4c/source/i18n/*.d
 icu4c/source/i18n/Debug
 icu4c/source/i18n/Makefile

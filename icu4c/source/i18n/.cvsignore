@@ -3,3 +3,5 @@ libicu*.*
 Debug
 Release
 Makefile
+*.ao
+
