@@ -698,7 +698,7 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
 
         labelStart = delimiter;
         if(remainingLen >0 ){
-            remainingLen = srcLength - (delimiter - src);
+            remainingLen = (int32_t)(srcLength - (delimiter - src));
         }
 
     }
@@ -784,7 +784,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
 
         labelStart = delimiter;
         if(remainingLen >0 ){
-            remainingLen = srcLength - (delimiter - src);
+            remainingLen = (int32_t)(srcLength - (delimiter - src));
         }
 
     }

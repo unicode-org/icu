@@ -427,7 +427,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
         version = options & UCNV_OPTIONS_VERSION_MASK;
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
-            int len=0;
+            size_t len=0;
             /* open the required converters and cache them */
             if(jpCharsetMasks[version]&CSM(ISO8859_7)) {
                 myConverterData->myConverterArray[ISO8859_7]= ucnv_loadSharedData("ISO8859_7", NULL, errorCode);
@@ -1535,7 +1535,7 @@ getTrail:
             if(outLen == 1) {
                 *target++ = buffer[0];
                 if(offsets) {
-                    *offsets++ = source - args->source - 1; /* -1: known to be ASCII */
+                    *offsets++ = (int32_t)(source - args->source - 1); /* -1: known to be ASCII */
                 }
             } else if(outLen == 2 && (target + 2) <= targetLimit) {
                 *target++ = buffer[0];
@@ -1781,7 +1781,7 @@ getTrailByte:
             }
             if(targetUniChar < (missingCharMarker-1/*0xfffe*/)){
                 if(args->offsets){
-                    args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                    args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                 }
                 *(myTarget++)=(UChar)targetUniChar;
             }
@@ -1790,13 +1790,13 @@ getTrailByte:
                 targetUniChar-=0x0010000;
                 *myTarget = (UChar)(0xd800+(UChar)(targetUniChar>>10));
                 if(args->offsets){
-                    args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                    args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                 }
                 ++myTarget;
                 if(myTarget< args->targetLimit){ 
                     *myTarget = (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
                     if(args->offsets){
-                        args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                        args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                     }
                     ++myTarget;
                 }else{
@@ -1917,14 +1917,14 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                     else 
                         *target++ = UCNV_SI;
                     if(offsets)
-                        *(offsets++)=   source - args->source-1;
+                        *(offsets++) = (int32_t)(source - args->source-1);
                 }
                 /* write the targetUniChar  to target */
                 if(targetByteUnit <= 0x00FF){
                     if( target < targetLimit){
                         *(target++) = (unsigned char) targetByteUnit;
                         if(offsets){
-                            *(offsets++) = source - args->source-1;
+                            *(offsets++) = (int32_t)(source - args->source-1);
                         }
 
                     }else{
@@ -1935,12 +1935,12 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                     if(target < targetLimit){
                         *(target++) =(unsigned char) ((targetByteUnit>>8) -0x80);
                         if(offsets){
-                            *(offsets++) = source - args->source-1;
+                            *(offsets++) = (int32_t)(source - args->source-1);
                         }
                         if(target < targetLimit){
                             *(target++) =(unsigned char) (targetByteUnit -0x80);
                             if(offsets){
-                                *(offsets++) = source - args->source-1;
+                                *(offsets++) = (int32_t)(source - args->source-1);
                             }
                         }else{
                             args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetByteUnit -0x80);
@@ -2242,7 +2242,7 @@ getTrailByte:
             }
             if(targetUniChar < 0xfffe){
                 if(args->offsets) {
-                    args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                    args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                 }
                 *(myTarget++)=(UChar)targetUniChar;
             }
@@ -2591,7 +2591,7 @@ getTrail:
             if(len == 1) {
                 *target++ = buffer[0];
                 if(offsets) {
-                    *offsets++ = source - args->source - 1; /* -1: known to be ASCII */
+                    *offsets++ = (int32_t)(source - args->source - 1); /* -1: known to be ASCII */
                 }
             } else if(len == 2 && (target + 2) <= targetLimit) {
                 *target++ = buffer[0];
@@ -2786,7 +2786,7 @@ getTrailByte:
             }
             if(targetUniChar < (missingCharMarker-1/*0xfffe*/)){
                 if(args->offsets){
-                    args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                    args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                 }
                 *(myTarget++)=(UChar)targetUniChar;
             }
@@ -2795,13 +2795,13 @@ getTrailByte:
                 targetUniChar-=0x0010000;
                 *myTarget = (UChar)(0xd800+(UChar)(targetUniChar>>10));
                 if(args->offsets){
-                    args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                    args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                 }
                 ++myTarget;
                 if(myTarget< args->targetLimit){ 
                     *myTarget = (UChar)(0xdc00+(UChar)(targetUniChar&0x3ff));
                     if(args->offsets){
-                        args->offsets[myTarget - args->target]= mySource - args->source - (mySourceChar <= 0xff ? 1 : 2);
+                        args->offsets[myTarget - args->target] = (int32_t)(mySource - args->source - (mySourceChar <= 0xff ? 1 : 2));
                     }
                     ++myTarget;
                 }else{

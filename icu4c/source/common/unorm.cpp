@@ -2153,7 +2153,7 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
 
     /* decompose [prevStarter..src[ */
     length=_decompose(buffer, bufferCapacity,
-                      prevStarter, src-prevStarter,
+                      prevStarter, (int32_t)(src-prevStarter),
                       compat, nx,
                       trailCC);
     if(length>bufferCapacity) {
@@ -2162,7 +2162,7 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
             return NULL;
         }
         length=_decompose(buffer, bufferCapacity,
-                          prevStarter, src-prevStarter,
+                          prevStarter, (int32_t)(src-prevStarter),
                           compat, nx,
                           trailCC);
     }
@@ -2174,7 +2174,7 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     }
 
     /* return with a pointer to the recomposition and its length */
-    length=recomposeLimit-buffer;
+    length=(int32_t)(recomposeLimit-buffer);
     return buffer;
 }
 

@@ -1019,14 +1019,14 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 ++source;
                 if(state==4) {
                     state=8; /* detect UTF-32BE */
-                    offsetDelta=source-pArgs->source;
+                    offsetDelta=(int32_t)(source-pArgs->source);
                 } else if(state==8) {
                     state=9; /* detect UTF-32LE */
-                    offsetDelta=source-pArgs->source;
+                    offsetDelta=(int32_t)(source-pArgs->source);
                 }
             } else {
                 /* switch to UTF-32BE and pass the previous bytes */
-                int32_t count=source-pArgs->source; /* number of bytes from this buffer */
+                int32_t count=(int32_t)(source-pArgs->source); /* number of bytes from this buffer */
 
                 /* reset the source */
                 source=pArgs->source;
