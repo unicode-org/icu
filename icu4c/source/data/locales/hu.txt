@@ -64,6 +64,7 @@ hu {
         CN { "K\u00EDna" }
         CO { "Kolumbia" }
         //CR { "Costa Rica" }
+        CU { "Kuba" }
         CV { "Z\u00F6ld-foki K\u00F6zt\u00E1rsas\u00E1g" }
         CX { "Kar\u00E1csony-szigetek" }
         CY { "Ciprus" }
@@ -116,6 +117,8 @@ hu {
         IL { "Izrael" }
         //IN { "India" }
         IO { "Brit Indiai Oce\u00E1n" }
+        IQ { "Irak" }
+        IR { "Ir\u00E1n" }
         IS { "Izland" }
         IT { "Olaszorsz\u00E1g" }
         //JM { "Jamaica" }
@@ -127,7 +130,8 @@ hu {
         //KI { "Kiribati" }
         KM { "Comore-szigetek" }
         KN { "Saint Kitts \u00E9s Nevis" }
-        KR { "Koreai K\u00F6zt\u00E1rsas\u00E1g" }
+        KP { "Korea, \u00C9szak" }    // alternate name { "Korea, N\u00E9pi Demokratikus K\u00F6zt\u00E1rsas\u00E1g" }
+        KR { "Korea, D\u00E9l" }    // alternate name { "Koreai K\u00F6zt\u00E1rsas\u00E1g" }
         //KW { "Kuwait" }
         KY { "Kajm\u00E1n-szigetek" }
         KZ { "Kazahszt\u00E1n" }
@@ -141,6 +145,7 @@ hu {
         LT { "Litv\u00E1nia" }
         LU { "Luxemburg" }
         LV { "Lettorsz\u00E1g" }
+        LY { "L\u00EDbiai Arab Jamahiriya" }
         MA { "Marokk\u00F3" }
         //MC { "Monaco" }
         MD { "Mold\u00E1v K\u00F6zt\u00E1rsas\u00E1g" }
@@ -197,6 +202,7 @@ hu {
         SA { "Szaud-Ar\u00E1bia" }
         SB { "Salamon-szigetek" }
         //SC { "Seychelles" }
+        SD { "Szud\u00E1n" }
         SE { "Sv\u00E9dorsz\u00E1g" }
         SG { "Szingap\u00FAr" }
         //SH { "Saint Helena" }
@@ -210,6 +216,7 @@ hu {
         //SR { "Suriname" }
         ST { "Saint Tome \u00E9s Principe" }
         //SV { "El Salvador" }
+        SY { "Sz\u00EDriai Arab K\u00F6zt\u00E1rsas\u00E1g" }    // alternate name { "Sz\u00EDria" }
         SZ { "Szv\u00E1zif\u00F6ld" }
         TC { "T\u00F6r\u00F6k \u00E9s Caicos Szigetek" }
         TD { "Cs\u00E1d" }
