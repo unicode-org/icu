@@ -568,7 +568,9 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
             return NULL;
           }
 
-
+          if(ch == 0x0000 && src->current+1 == src->end) {
+            break;
+          }
 
           if (inChars) {
             if(newCharsLen == 0) {
