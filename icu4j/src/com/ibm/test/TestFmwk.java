@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TestFmwk.java,v $ $Revision: 1.6 $ $Date: 2000/03/07 22:09:03 $
+ * $RCSfile: TestFmwk.java,v $ $Revision: 1.7 $ $Date: 2000/03/07 22:11:51 $
  *
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
@@ -154,8 +154,8 @@ public class TestFmwk {
     }
 
 	protected void run(TestFmwk childTest) throws Exception {
-		test.setParent(this);
-		test.run(new String[0]);
+		childTest.setParent(this);
+		childTest.run(new String[0]);
 	}
 
     private void setParent(TestFmwk parent) {
