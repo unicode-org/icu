@@ -21,8 +21,9 @@
 #include "unicode/utypes.h"
 #include "filestrm.h"
 #include "rblist.h"
+#include "ucbuf.h"
 
 /* Parse a ResourceBundle text file */
-struct SRBRoot* parse(FileStream *f, const char *cp, const char* inputDir, UErrorCode *status);
+struct SRBRoot* parse(UCHARBUF* buf, const char *cp, const char* inputDir, UErrorCode *status);
 
 #endif
