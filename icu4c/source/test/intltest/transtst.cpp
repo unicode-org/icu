@@ -371,21 +371,13 @@ void TransliteratorTest::TestArabic(void) {
  * some strings that should come out unchanged.
  */
 void TransliteratorTest::TestCompoundKana(void) {
-    Transliterator* kana = Transliterator::createInstance("Latin-Kana");
-    Transliterator* rkana = Transliterator::createInstance("Kana-Latin");
-    Transliterator* trans[] = { kana, rkana };
-    if (kana == 0 || rkana == 0) {
-        errln("FAIL: construction failed");
-        delete kana;
-        delete rkana;
-        return;
+    Transliterator* t = Transliterator::createInstance("Latin-Kana;Kana-Latin");
+    if (t == 0) {
+        errln("FAIL: construction of Latin-Kana;Kana-Latin failed");
+    } else {
+        expect(*t, "aaaaa", "aaaaa");
+        delete t;
     }
-    Transliterator* t = new CompoundTransliterator("<ID>", trans, 2);
-
-    expect(*t, "aaaaa", "aaaaa");
-    delete t;
-    delete kana;
-    delete rkana;
 }
 
 /**
@@ -406,13 +398,13 @@ void TransliteratorTest::TestCompoundHex(void) {
     // Do some basic tests of b
     expect(*b, "\\u0030\\u0031", "01");
 
-    Transliterator* ab = new CompoundTransliterator("ab", transab, 2);
+    Transliterator* ab = new CompoundTransliterator(transab, 2);
     UnicodeString s("abcde");
     expect(*ab, s, s);
 
     UnicodeString str(s);
     a->transliterate(str);
-    Transliterator* ba = new CompoundTransliterator("ba", transba, 2);
+    Transliterator* ba = new CompoundTransliterator(transba, 2);
     expect(*ba, str, str);
 
     delete ab;
