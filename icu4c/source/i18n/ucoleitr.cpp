@@ -184,7 +184,8 @@ ucol_setText(      UCollationElements *elems,
   }
 
   elems->isWritable = FALSE;
-  init_collIterate(elems->iteratordata_.coll, text, textLength, &elems->iteratordata_);
+  init_collIterate(elems->iteratordata_.coll, text, textLength, 
+                   &elems->iteratordata_);
 
   elems->reset_   = TRUE;
 }
@@ -218,26 +219,17 @@ ucol_setOffset(UCollationElements    *elems,
     return;
   }
 
-  /* this methods will clean up any use of the writable buffer and points to the
-     original string */
+  // this methods will clean up any use of the writable buffer and points to 
+  // the original string
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
   ci->CEpos       = ci->toReturn = ci->CEs;
   if (ci->flags & UCOL_ITER_INNORMBUF) {
-    ci->flags       = ci->origFlags;
+    ci->flags = ci->origFlags;
   }
   if ((ci->flags & UCOL_ITER_HASLEN) == 0) {
-      ci->endp = ci->string + u_strlen(ci->string);
-  }
-  ci->flags       = UCOL_ITER_HASLEN;
-  if (ci->coll->normalizationMode == UCOL_ON) {
-    ci->flags |= UCOL_ITER_NORM;
-  }
-  if (ci->stackWritableBuffer != ci->writableBuffer)
-  {
-    uprv_free(ci->writableBuffer);
-    /* reseting UCOL_ITER_INNORMBUF */
-    ci->writableBuffer = ci->stackWritableBuffer;
+      ci->endp  = ci->string + u_strlen(ci->string);
+      ci->flags |= UCOL_ITER_HASLEN;
   }
   ci->fcdPosition = NULL;
 }
