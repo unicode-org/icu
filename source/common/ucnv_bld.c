@@ -47,8 +47,8 @@ extern void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l);
 static const UConverterSharedData *
 converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_SBCSData, &_DBCSData, &_MBCSData, &_Latin1Data,
-    &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_EBCDICStatefulData,
-    &_ISO2022Data, 
+    &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_UTF32BEData, &_UTF32LEData,
+    &_EBCDICStatefulData, &_ISO2022Data, 
     &_LMBCSData1,&_LMBCSData2, &_LMBCSData3, &_LMBCSData4, &_LMBCSData5, &_LMBCSData6,
     &_LMBCSData8,&_LMBCSData11,&_LMBCSData16,&_LMBCSData17,&_LMBCSData18,&_LMBCSData19,
     &_HZData,
@@ -68,6 +68,15 @@ static struct {
 #else
   { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
+#endif
+  { "UTF32_BigEndian", UCNV_UTF32_BigEndian },
+  { "UTF32_LittleEndian", UCNV_UTF32_LittleEndian },
+#if U_IS_BIG_ENDIAN
+  { "UTF32_PlatformEndian", UCNV_UTF32_BigEndian },
+  { "UTF32_OppositeEndian", UCNV_UTF32_LittleEndian },
+#else
+  { "UTF32_PlatformEndian", UCNV_UTF32_LittleEndian },
+  { "UTF32_OppositeEndian", UCNV_UTF32_BigEndian},
 #endif
   { "ISO_2022", UCNV_ISO_2022 },
   { "LMBCS-1", UCNV_LMBCS_1 },
