@@ -3359,13 +3359,13 @@ static void TestMergeSortKeys() {
       ucol_mergeSortkeys(prefixKey, prefixKeyLen, sortkeys[i], sortKeysLen[i], mergedPrefixkeys[i], 256);
       ucol_mergeSortkeys(sortkeys[i], sortKeysLen[i], suffixKey, suffixKeyLen, mergedSuffixkeys[i], 256);
       if(i>0) {
-        if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) != -1) {
+        if(tMemCmp(mergedPrefixkeys[i-1], mergedPrefixkeys[i]) >= 0) {
           log_err("Error while comparing prefixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
           log_err("%s\n%s\n", 
                       ucol_sortKeyToString(coll, mergedPrefixkeys[i-1], outBuff1, &l1),
                       ucol_sortKeyToString(coll, mergedPrefixkeys[i], outBuff2, &l2));
         }
-        if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) != -1) {
+        if(tMemCmp(mergedSuffixkeys[i-1], mergedSuffixkeys[i]) >= 0) {
           log_err("Error while comparing suffixed keys @ strength %s:\n", strengthsC[strength<=UCOL_QUATERNARY?strength:4]);
           log_err("%s\n%s\n", 
                       ucol_sortKeyToString(coll, mergedSuffixkeys[i-1], outBuff1, &l1),
