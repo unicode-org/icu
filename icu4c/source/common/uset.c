@@ -339,7 +339,7 @@ uset_serialize(const USet *set, uint16_t *dest, int32_t destCapacity, UErrorCode
 }
 
 U_CAPI UBool U_EXPORT2
-uset_getSerializedSet(USerializedSet *fillSet, uint16_t *src, int32_t srcCapacity) {
+uset_getSerializedSet(USerializedSet *fillSet, const uint16_t *src, int32_t srcCapacity) {
     int32_t length;
 
     if(fillSet==NULL) {
@@ -411,7 +411,7 @@ uset_countSerializedRanges(const USerializedSet *set) {
 U_CAPI UBool U_EXPORT2
 uset_getSerializedRange(const USerializedSet *set, int32_t rangeIndex,
                         UChar32 *pStart, UChar32 *pLimit) {
-    uint16_t *array;
+    const uint16_t *array;
     int32_t bmpLength, length;
 
     if(set==NULL || rangeIndex<0 || pStart==NULL || pLimit==NULL) {
