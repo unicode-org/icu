@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java,v $ 
- * $Date: 2000/06/01 01:21:52 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/10/26 18:56:14 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,7 @@ import com.ibm.text.*;
 import java.text.ParseException;
 import java.util.*;
 import java.math.BigInteger;
+import com.ibm.util.Utility;
 
 /**
  * @test
@@ -326,12 +327,12 @@ public class BigNumberFormatTest extends TestFmwk {
         String pat = ((DecimalFormat) fmt).toPattern();
         if (saw.equals(exp)) {
             logln("Ok   " + showNumber(n) + " x " +
-                  pat + " = \"" +
-                  saw + '"');
+                  pat + " = " +
+                  Utility.escape(saw));
         } else {
             errln("FAIL " + showNumber(n) + " x " +
                   pat + " = \"" +
-                  saw + "\", expected \"" + exp + '"');
+                  Utility.escape(saw) + ", expected " + Utility.escape(exp));
         }
     }
 
