@@ -135,7 +135,18 @@ typedef UChar LEUnicode;
  */
 struct LEPoint
 {
+    /**
+     * The x coordinate of the point.
+     *
+     * @stable ICU 2.4
+     */
     float fX;
+
+    /**
+     * The y coordinate of the point.
+     *
+     * @stable ICU 2.4
+     */
     float fY;
 };
 
