@@ -1,5 +1,5 @@
 # DerivedCoreProperties-4.0.0.txt
-# Date: 2003-02-25,23:11:51 GMT [MD]
+# Date: 2003-03-12, 23:52:06 GMT [MD]
 #
 # Unicode Character Database: Derived Property Data
 # Generated algorithmically from the Unicode Character Database
@@ -1521,7 +1521,7 @@ FF21..FF3A    ; Uppercase # L&  [26] FULLWIDTH LATIN CAPITAL LETTER A..FULLWIDTH
 
 # Derived Property: ID_Start
 #  Characters that can start an identifier.
-#  Generated from Lu+Ll+Lt+Lm+Lo+Nl+ID_Start_Exceptions
+#  Generated from Lu+Ll+Lt+Lm+Lo+Nl+Other_ID_Start
 
 0041..005A    ; ID_Start # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
 0061..007A    ; ID_Start # L&  [26] LATIN SMALL LETTER A..LATIN SMALL LETTER Z
@@ -3396,8 +3396,7 @@ E0100..E01EF  ; XID_Continue # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTO
 # ================================================
 
 # Derived Property: Default_Ignorable_Code_Point
-#  Generated from <2060..206F, FFF0..FFFB, E0000..E0FFF>
-#    + Other_Default_Ignorable_Code_Point + (Cf + Cc + Cs - White_Space)
+#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space
 
 0000..0008    ; Default_Ignorable_Code_Point # Cc   [9] <control>..<control>
 000E..001F    ; Default_Ignorable_Code_Point # Cc  [18] <control>..<control>
@@ -3566,7 +3565,6 @@ E01F0..E0FFF  ; Default_Ignorable_Code_Point # Cn [3600]
 FB1E          ; Grapheme_Extend # Mn       HEBREW POINT JUDEO-SPANISH VARIKA
 FE00..FE0F    ; Grapheme_Extend # Mn  [16] VARIATION SELECTOR-1..VARIATION SELECTOR-16
 FE20..FE23    ; Grapheme_Extend # Mn   [4] COMBINING LIGATURE LEFT HALF..COMBINING DOUBLE TILDE RIGHT HALF
-FF9E..FF9F    ; Grapheme_Extend # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK..HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
 1D165         ; Grapheme_Extend # Mc       MUSICAL SYMBOL COMBINING STEM
 1D167..1D169  ; Grapheme_Extend # Mn   [3] MUSICAL SYMBOL COMBINING TREMOLO-1..MUSICAL SYMBOL COMBINING TREMOLO-3
 1D16E..1D16F  ; Grapheme_Extend # Mc   [2] MUSICAL SYMBOL COMBINING FLAG-1..MUSICAL SYMBOL COMBINING FLAG-2
@@ -3575,7 +3573,7 @@ FF9E..FF9F    ; Grapheme_Extend # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK.
 1D1AA..1D1AD  ; Grapheme_Extend # Mn   [4] MUSICAL SYMBOL COMBINING DOWN BOW..MUSICAL SYMBOL COMBINING SNAP PIZZICATO
 E0100..E01EF  ; Grapheme_Extend # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 
-# Total code points: 820
+# Total code points: 818
 
 # ================================================
 
@@ -4384,6 +4382,7 @@ FF65          ; Grapheme_Base # Pc       HALFWIDTH KATAKANA MIDDLE DOT
 FF66..FF6F    ; Grapheme_Base # Lo  [10] HALFWIDTH KATAKANA LETTER WO..HALFWIDTH KATAKANA LETTER SMALL TU
 FF70          ; Grapheme_Base # Lm       HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
 FF71..FF9D    ; Grapheme_Base # Lo  [45] HALFWIDTH KATAKANA LETTER A..HALFWIDTH KATAKANA LETTER N
+FF9E..FF9F    ; Grapheme_Base # Lm   [2] HALFWIDTH KATAKANA VOICED SOUND MARK..HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
 FFA0..FFBE    ; Grapheme_Base # Lo  [31] HALFWIDTH HANGUL FILLER..HALFWIDTH HANGUL LETTER HIEUH
 FFC2..FFC7    ; Grapheme_Base # Lo   [6] HALFWIDTH HANGUL LETTER A..HALFWIDTH HANGUL LETTER E
 FFCA..FFCF    ; Grapheme_Base # Lo   [6] HALFWIDTH HANGUL LETTER YEO..HALFWIDTH HANGUL LETTER OE
@@ -4479,5 +4478,5 @@ FFFC..FFFD    ; Grapheme_Base # So   [2] OBJECT REPLACEMENT CHARACTER..REPLACEME
 20000..2A6D6  ; Grapheme_Base # Lo [42711] CJK UNIFIED IDEOGRAPH-20000..CJK UNIFIED IDEOGRAPH-2A6D6
 2F800..2FA1D  ; Grapheme_Base # Lo [542] CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
 
-# Total code points: 95423
+# Total code points: 95425
 
