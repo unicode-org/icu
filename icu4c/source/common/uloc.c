@@ -2772,6 +2772,46 @@ uloc_getISOCountries()
     return COUNTRIES;
 }
 
+
+/* this function to be moved into cstring.c later */
+static char gDecimal = 0;
+
+static /* U_CAPI */
+double
+/* U_EXPORT2 */
+_uloc_strtod(const char *start, char **end) {
+  char *decimal;
+  char *myEnd;
+  char buf[30];
+  double rv;
+  if (!gDecimal) {
+    char rep[5];
+    /* For machines that decide to change the decimal on you,
+       and try to be too smart with localization.
+       This normally should be just a '.'. */
+    sprintf(rep, "%+1.1f", 1.0);
+    gDecimal = rep[2];
+  }
+
+  if(gDecimal == '.') {
+    return uprv_strtod(start, end); /* fall through to OS */
+  } else {
+    uprv_strncpy(buf, start, 29);
+    buf[29]=0;
+    decimal = uprv_strchr(buf, '.');
+    if(decimal) {
+      *decimal = gDecimal;
+    } else {
+      return uprv_strtod(start, end); /* no decimal point */
+    }
+    rv = uprv_strtod(buf, &myEnd);
+    if(end) {
+      *end = (char*)(start+(myEnd-buf)); /* cast away const (to follow uprv_strtod API.) */
+    }
+    return rv;
+  }
+}
+
 typedef struct { 
     double q;
     char *locale;
@@ -2858,7 +2898,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
             while(isspace(*t)) {
                 t++;
             }
-            j[n].q = uprv_strtod(t,NULL);
+            j[n].q = _uloc_strtod(t,NULL);
         } else {
             /* no semicolon - it's 1.0 */
             j[n].q = 1.0;
