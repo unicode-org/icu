@@ -117,6 +117,7 @@ haveAliasData(UErrorCode *pErrorCode) {
         }
 
         table=(const uint16_t *)udata_getMemory(data);
+        info.size=sizeof(UDataInfo);
         udata_getInfo(data, &info);
 
         /* in the mutex block, set the data for this process */
