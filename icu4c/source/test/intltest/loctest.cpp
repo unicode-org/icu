@@ -504,6 +504,11 @@ LocaleTest::TestDisplayNames()
     if(s.isEmpty()) {
         errln("unable to get any default-locale display string for the country of fr_FR\n");
     }
+    s.remove();
+    Locale("zh", "Hant").getDisplayScript(s);
+    if(s.isEmpty()) {
+        errln("unable to get any default-locale display string for the country of zh_Hant\n");
+    }
 }
 
 /*
