@@ -59,7 +59,6 @@
 #include "unicode/coleitr.h"
 #include "uhash.h"
 #include "unicode/resbund.h"
-#include "cmemory.h"
 
 #ifdef _DEBUG
   #include "unistrm.h"
@@ -140,13 +139,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   
   if (U_SUCCESS(status))
   {
-    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
-                     + 1;     
-    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-    rules[length - 1] = 0;
-    
-    urulestring = new UnicodeString(TRUE, rules, length);
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     
     dataIsOwned = TRUE;
   }
@@ -179,14 +173,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   if (U_SUCCESS(status))
   {
-    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
-                     + 1;     
-    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-    rules[length - 1] = 0;
-    
-    urulestring = new UnicodeString(TRUE, rules, length);
-
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
   }
   
@@ -220,14 +208,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   if (U_SUCCESS(status))
   {
-    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
-                     + 1;     
-    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-    rules[length - 1] = 0;
-    
-    urulestring = new UnicodeString(TRUE, rules, length);
-
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
   }
   
@@ -260,14 +242,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   ucollator = ucol_openRules(pucharrules, length, mode, strength, &status);
   if (U_SUCCESS(status))
   {
-    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
-                     + 1;     
-    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-    rules[length - 1] = 0;
-    
-    urulestring = new UnicodeString(TRUE, rules, length);
-
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
   }
 
@@ -561,22 +537,14 @@ Collator* RuleBasedCollator::safeClone(void)
 {
   UErrorCode intStatus = U_ZERO_ERROR;
   UCollator *ucol = ucol_safeClone(ucollator, NULL, 0, &intStatus);
-
-  if (U_FAILURE(intStatus)) {
+  if (U_FAILURE(intStatus))
     return NULL;
-  }
-  else {
-    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
-                     + 1;     
-    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-    rules[length - 1] = 0;
-
-    RuleBasedCollator *result = new RuleBasedCollator(ucol, 
-                                               new UnicodeString(TRUE, rules, length));
-    result->dataIsOwned = TRUE;
-    return result;
-  }
+  int32_t length = 0;
+  UnicodeString *r = new UnicodeString(ucol_getRules(ucollator, &length), 
+                                       length);
+  RuleBasedCollator *result = new RuleBasedCollator(ucol, r);
+  result->dataIsOwned = TRUE;
+  return result;
 }
 
 Collator::EComparisonResult RuleBasedCollator::compare(
@@ -636,8 +604,9 @@ void RuleBasedCollator::setStrength(ECollationStrength newStrength)
 */
 int32_t RuleBasedCollator::hashCode() const
 {
-  UnicodeString rules = getRules();
-  return uhash_hashUCharsN(rules.getUChars(), rules.length());
+  int32_t length;
+  const UChar *rules = ucol_getRules(ucollator, &length);
+  return uhash_hashUCharsN(rules, length);
 }
 
 /**
@@ -730,14 +699,9 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
 
   if (U_SUCCESS(status))
   {
-    int32_t length = ucol_getRulesEx(ucollator, UCOL_FULL_RULES, NULL, StackBufferLen)
-                     + 1;     
-    UChar * rules = (UChar *)uprv_malloc(length * sizeof(UChar));
-    ucol_getRulesEx(ucollator, UCOL_FULL_RULES, rules, length);
-    rules[length - 1] = 0;
-    
-    urulestring = new UnicodeString(TRUE, rules, length);
-    
+    int32_t length;
+    const UChar *r = ucol_getRules(ucollator, &length);
+    urulestring = new UnicodeString(r, length);
     dataIsOwned = TRUE;
   }
   
