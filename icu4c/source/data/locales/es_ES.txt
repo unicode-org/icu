@@ -23,7 +23,7 @@ es_ES {
         ",",
     }
     DateTimePatterns { 
-        "HH'H'mm'' z",
+        "HH'H'mm'ss' z",
         "HH:mm:ss z",
         "H:mm:ss",
         "H:mm",
