@@ -376,8 +376,15 @@ void TransliteratorAPITest::TestSimpleKeyboardTransliterator(){
     UErrorCode status=U_ZERO_ERROR;
     UParseError parseError;
     Transliterator* t=Transliterator::createInstance("Any-Hex", UTRANS_FORWARD, parseError, status);
-    if(t == 0)
-        errln("FAIL : construction");
+    if(t == 0) {
+        errln((UnicodeString)"FAIL: can't create Any-Hex, " +
+              u_errorName(status) +
+              (parseError.preContext[0] ?
+               ((UnicodeString)" at " + parseError.preContext +
+                (parseError.postContext[0] ?
+                 ((UnicodeString)" | " + parseError.postContext) : "")) : ""));
+        return;
+    }
     UTransPosition index={19,20,20,20};
     UnicodeString rs= "Transliterate this-''";
     UnicodeString insertion="abc";
