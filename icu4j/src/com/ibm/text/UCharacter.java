@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacter.java,v $ 
-* $Date: 2001/12/04 20:09:07 $ 
-* $Revision: 1.20 $
+* $Date: 2002/02/08 01:08:38 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.text;
 
 import java.util.Locale;
 import com.ibm.util.Utility;
+import com.ibm.icu.util.RangeValueIterator;
 
 /**
 * <p>
@@ -94,10 +95,10 @@ import com.ibm.util.Utility;
 
 public final class UCharacter
 { 
-    // public variables ==============================================
+    // public data members -----------------------------------------------
   
     /** 
-    * The lowest Unicode code point value. Code points are non-ne N_VALUE
+    * The lowest Unicode code point value.
     */
     public static final int MIN_VALUE = 0;
 
@@ -121,16 +122,7 @@ public final class UCharacter
 	public static final int REPLACEMENT_CHAR = '\uFFFD';
     	
 	
-    // constructor ====================================================
-      
-    /**
-    * Private constructor to prevent instantiation
-    */
-    private UCharacter()
-    {
-    }
-      
-    // public methods ===================================================
+    // public methods ----------------------------------------------------
       
     /**
     * Retrieves the numeric value of a decimal digit code point.
@@ -159,11 +151,11 @@ public final class UCharacter
         int props = getProps(ch);
         int result = -1;
         // if props == 0, it will just fall through and return -1
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
             // not contained in exception data
-            if (UCharacterPropertyDB.getPropType(props) == 
+            if (UCharacterProperty.getPropType(props) == 
                 UCharacterCategory.DECIMAL_DIGIT_NUMBER) {
-                result = UCharacterPropertyDB.getSignedValue(props);
+                result = UCharacterProperty.getSignedValue(props);
             }
         }
         
@@ -177,28 +169,6 @@ public final class UCharacter
         return result;
     }
     
-    private static boolean isEuropeanDigit(int ch) {
-        return (ch <= 0x7a && ((ch >= 0x41 && ch <= 0x5a) || ch >= 0x61)) ||
-            (ch >= 0xff21 && (ch <= 0xff3a || (ch >= 0xff41 && ch <= 0xff5a)));
-    }
-
-    private static int getEuropeanDigit(int ch) {
-        if (ch <= 0x7a) {
-            if (ch >= 0x41 && ch <= 0x5a) {
-                return ch + 10 - 0x41;
-            } else if (ch >= 0x61) {
-                return ch + 10 - 0x61;
-            }
-        } else if (ch >= 0xff21) {
-            if (ch <= 0xff3a) {
-                return ch + 10 - 0xff21;
-            } else if (ch >= 0xff41 && ch <= 0xff5a) {
-                return ch + 10 - 0xff41;
-            }
-        }
-        return -1;
-    }
-
     /**
     * Retrieves the numeric value of a decimal digit code point.
     * <br>This is a convenience overload of <code>digit(int, int)</code> 
@@ -256,50 +226,7 @@ public final class UCharacter
     {
         return getNumericValueInternal(ch, false);
     }
-
-    private static int getNumericValueInternal(int ch, boolean useEuropean)
-    {
-        int props = getProps(ch);
-        int type = UCharacterPropertyDB.getPropType(props);
-        
-        // if props == 0, it will just fall through and return -1
-        if (type != UCharacterCategory.DECIMAL_DIGIT_NUMBER &&
-            type != UCharacterCategory.LETTER_NUMBER &&
-            type != UCharacterCategory.OTHER_NUMBER) {
-
-            return useEuropean ? getEuropeanDigit(ch) : -1;
-        }
-          
-        int result = -1;
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            // not contained in exception data
-            result = UCharacterPropertyDB.getSignedValue(props);
-        }
-        else {
-            // contained in exception data
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                       UCharacterPropertyDB.EXC_DIGIT_VALUE_)) {
-                result  = PROPERTY_DB_.getException(index, 
-                                        UCharacterPropertyDB.EXC_DIGIT_VALUE_) &
-                    LAST_CHAR_MASK_; 
-            }
-            else {
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                               UCharacterPropertyDB.EXC_DENOMINATOR_VALUE_)) {
-                    return -2;
-                }
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                                   UCharacterPropertyDB.EXC_NUMERIC_VALUE_)) {
-                    result = PROPERTY_DB_.getException(index, 
-                                      UCharacterPropertyDB.EXC_NUMERIC_VALUE_); 
-                }
-            }
-        }
-        
-        return result;
-    }
-      
+  
     /**
     * Returns a value indicating a code point's Unicode category.<br>
     * Up-to-date Unicode implementation of java.lang.Character.getType() except 
@@ -311,7 +238,7 @@ public final class UCharacter
     */
     public static int getType(int ch)
     {
-        return UCharacterPropertyDB.getPropType(getProps(ch));
+        return UCharacterProperty.getPropType(getProps(ch));
     }
        
     /**
@@ -610,20 +537,20 @@ public final class UCharacter
     {
         int props = getProps(ch);
         // if props == 0, it will just fall through and return itself
-        if(!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            int cat = UCharacterPropertyDB.getPropType(props);
+        if(!UCharacterProperty.isExceptionIndicator(props)) {
+            int cat = UCharacterProperty.getPropType(props);
             if (cat == UCharacterCategory.UPPERCASE_LETTER || 
                 cat == UCharacterCategory.TITLECASE_LETTER) {
-                return ch + UCharacterPropertyDB.getSignedValue(props);
+                return ch + UCharacterProperty.getSignedValue(props);
             }
         } 
         else 
         {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                       UCharacterPropertyDB.EXC_LOWERCASE_)) {
-                return PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_LOWERCASE_); 
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_LOWERCASE_)) {
+                return PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_); 
             }
         }
         return ch;
@@ -677,26 +604,26 @@ public final class UCharacter
     {
         int props = getProps(ch);
         // if props == 0, it will just fall through and return itself
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            if (UCharacterPropertyDB.getPropType(props) == 
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            if (UCharacterProperty.getPropType(props) == 
                 UCharacterCategory.LOWERCASE_LETTER) {
                 // here, titlecase is same as uppercase
-                return ch - UCharacterPropertyDB.getSignedValue(props);
+                return ch - UCharacterProperty.getSignedValue(props);
             }
         } 
         else {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                         UCharacterPropertyDB.EXC_TITLECASE_)) {
-                return PROPERTY_DB_.getException(index,
-                                         UCharacterPropertyDB.EXC_TITLECASE_);
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                         UCharacterProperty.EXC_TITLECASE_)) {
+                return PROPERTY_.getException(index,
+                                         UCharacterProperty.EXC_TITLECASE_);
             }
             else {
                 // here, titlecase is same as uppercase
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                                       UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                    return PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_UPPERCASE_); 
+                if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_UPPERCASE_)) {
+                    return PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_UPPERCASE_); 
                 }
             }
         }
@@ -720,26 +647,26 @@ public final class UCharacter
     {
         int props = getProps(ch);
         // if props == 0, it will just fall through and return itself
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            if (UCharacterPropertyDB.getPropType(props) == 
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            if (UCharacterProperty.getPropType(props) == 
                 UCharacterCategory.LOWERCASE_LETTER) {
                 // here, titlecase is same as uppercase */
-                return ch - UCharacterPropertyDB.getSignedValue(props);
+                return ch - UCharacterProperty.getSignedValue(props);
             }
         }
         else 
         {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                         UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                return PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_UPPERCASE_); 
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                         UCharacterProperty.EXC_UPPERCASE_)) {
+                return PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_UPPERCASE_); 
             }
         }
         return ch; // no mapping - return c itself
     }
        
-    // extra methods not in java.lang.Character ===========================
+    // extra methods not in java.lang.Character --------------------------
        
     /**
     * Determines if the code point is a supplementary character.<br>
@@ -825,7 +752,7 @@ public final class UCharacter
     {
         int props = getProps(ch);
         if (props != 0) {
-            return UCharacterPropertyDB.getDirection(props);
+            return UCharacterProperty.getDirection(props);
         }
         return UCharacterDirection.LEFT_TO_RIGHT;
     }
@@ -842,7 +769,7 @@ public final class UCharacter
     {
         int props = getProps(ch);
         // if props == 0, it will just fall through and return false
-        return UCharacterPropertyDB.isMirrored(props);
+        return UCharacterProperty.isMirrored(props);
     }
 
     /**
@@ -863,17 +790,17 @@ public final class UCharacter
         int props = getProps(ch);
         // mirrored - the value is a mirror offset
         // if props == 0, it will just fall through and return false
-        if (UCharacterPropertyDB.isMirrored(props)) {
-            if(!UCharacterPropertyDB.isExceptionIndicator(props)) {
-                return ch + UCharacterPropertyDB.getSignedValue(props);
+        if (UCharacterProperty.isMirrored(props)) {
+            if(!UCharacterProperty.isExceptionIndicator(props)) {
+                return ch + UCharacterProperty.getSignedValue(props);
             }
             else 
             {
-                int index = UCharacterPropertyDB.getExceptionIndex(props);
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                                    UCharacterPropertyDB.EXC_MIRROR_MAPPING_)) 
-                return PROPERTY_DB_.getException(index, 
-                                     UCharacterPropertyDB.EXC_MIRROR_MAPPING_);   
+                int index = UCharacterProperty.getExceptionIndex(props);
+                if (PROPERTY_.hasExceptionValue(index, 
+                                    UCharacterProperty.EXC_MIRROR_MAPPING_)) 
+                return PROPERTY_.getException(index, 
+                                     UCharacterProperty.EXC_MIRROR_MAPPING_);   
             }
         }
         return ch;
@@ -887,10 +814,10 @@ public final class UCharacter
     public static int getCombiningClass(int ch)
     {
         int props = getProps(ch);
-        if(!UCharacterPropertyDB.isExceptionIndicator(props)) {
-        if (UCharacterPropertyDB.getPropType(props) == 
+        if(!UCharacterProperty.isExceptionIndicator(props)) {
+        if (UCharacterProperty.getPropType(props) == 
                                         UCharacterCategory.NON_SPACING_MARK) {
-            return PROPERTY_DB_.getUnsignedValue(props);
+            return PROPERTY_.getUnsignedValue(props);
         }
         else {
             return 0;
@@ -898,9 +825,9 @@ public final class UCharacter
         }
         else {
         // the combining class is in bits 23..16 of the first exception value
-        return (PROPERTY_DB_.getException(
-                                    PROPERTY_DB_.getExceptionIndex(props), 
-                                    UCharacterPropertyDB.EXC_COMBINING_CLASS_)
+        return (PROPERTY_.getException(
+                                    PROPERTY_.getExceptionIndex(props), 
+                                    UCharacterProperty.EXC_COMBINING_CLASS_)
                                     >> SHIFT_16_) & LAST_BYTE_MASK_;
         }
     }
@@ -968,13 +895,14 @@ public final class UCharacter
     */
     public static String getUnicodeVersion()
     {
-        return PROPERTY_DB_.m_unicodeversion_;
+        return PROPERTY_.m_unicodeVersion_;
     }
       
     /**
     * Retrieve the most current Unicode name of the argument code point, or 
     * null if the character is unassigned or outside the range 
-    * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE.<br>
+    * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
+    * <br>
     * Note calling any methods related to code point names, e.g. get*Name*() 
     * incurs a one-time initialisation cost to construct the name tables.
     * @param ch the code point for which to get the name
@@ -982,14 +910,14 @@ public final class UCharacter
     */
     public static String getName(int ch)
     {
-        return UCharacterName.getName(ch, 
+        return NAME_.getName(ch, 
                                     UCharacterNameChoice.U_UNICODE_CHAR_NAME);
     }
       
     /**
     * Retrieve the earlier version 1.0 Unicode name of the argument code point,
     * or null if the character is unassigned or outside the range 
-    * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE.<br>
+    * UCharacter.MIN_VALUE and UCharacter.MAX_VALUE or does not have a name.
     * <br>
     * Note calling any methods related to code point names, e.g. get*Name*() 
     * incurs a one-time initialisation cost to construct the name tables.
@@ -998,8 +926,8 @@ public final class UCharacter
     */
     public static String getName1_0(int ch)
     {
-        return UCharacterName.getName(ch, 
-                                UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
+        return NAME_.getName(ch, 
+                             UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
     }
       
     /**
@@ -1013,7 +941,7 @@ public final class UCharacter
     */
     public static int getCharFromName(String name)
     {
-        return UCharacterName.getCharFromName(
+        return NAME_.getCharFromName(
                             UCharacterNameChoice.U_UNICODE_CHAR_NAME, name);
     }
       
@@ -1028,8 +956,8 @@ public final class UCharacter
     */
     public static int getCharFromName1_0(String name)
     {
-        return UCharacterName.getCharFromName(
-                            UCharacterNameChoice.U_UNICODE_10_CHAR_NAME, name);
+        return NAME_.getCharFromName(
+                         UCharacterNameChoice.U_UNICODE_10_CHAR_NAME, name);
     }
       
     /**
@@ -1106,28 +1034,28 @@ public final class UCharacter
         {
             int ch     = UTF16.charAt(str, offset);
             int chsize = UTF16.getCharCount(ch);
-            int props = PROPERTY_DB_.getProperty(ch);
-            if (!UCharacterPropertyDB.isExceptionIndicator(props)) 
+            int props = PROPERTY_.getProperty(ch);
+            if (!UCharacterProperty.isExceptionIndicator(props)) 
             {
-                if (UCharacterPropertyDB.getPropType(props) == 
+                if (UCharacterProperty.getPropType(props) == 
                     UCharacterCategory.LOWERCASE_LETTER) {
-                    ch -= UCharacterPropertyDB.getSignedValue(props);
+                    ch -= UCharacterProperty.getSignedValue(props);
                 }
                 UTF16.append(result, ch);
             }
             else 
             {
-                int index = UCharacterPropertyDB.getExceptionIndex(props);
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                                  UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
+                int index = UCharacterProperty.getExceptionIndex(props);
+                if (PROPERTY_.hasExceptionValue(index, 
+                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
                     getSpecialUpperCase(ch, index, result, str, offset, 
                                         locale);          
                 }
                 else {
-                    if (PROPERTY_DB_.hasExceptionValue(index, 
-                                         UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                        ch = PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_UPPERCASE_);
+                    if (PROPERTY_.hasExceptionValue(index, 
+                                         UCharacterProperty.EXC_UPPERCASE_)) {
+                        ch = PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_UPPERCASE_);
                     }
                     UTF16.append(result, ch);
                 }
@@ -1153,27 +1081,27 @@ public final class UCharacter
         while (offset < length) {
             int ch = UTF16.charAt(str, offset);
             int chsize = UTF16.getCharCount(ch);
-            int props = PROPERTY_DB_.getProperty(ch);
-            if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-                int type = UCharacterPropertyDB.getPropType(props);
+            int props = PROPERTY_.getProperty(ch);
+            if (!UCharacterProperty.isExceptionIndicator(props)) {
+                int type = UCharacterProperty.getPropType(props);
                 if (type == UCharacterCategory.UPPERCASE_LETTER ||
                     type == UCharacterCategory.TITLECASE_LETTER) {
-                    ch += UCharacterPropertyDB.getSignedValue(props);
+                    ch += UCharacterProperty.getSignedValue(props);
                 }
                 UTF16.append(result, ch);
             }
             else {
-                int index = UCharacterPropertyDB.getExceptionIndex(props);
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                                  UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
+                int index = UCharacterProperty.getExceptionIndex(props);
+                if (PROPERTY_.hasExceptionValue(index, 
+                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
                     getSpecialLowerCase(ch, index, result, str, offset, 
                                         locale);          
                 }
                 else {
-                    if (PROPERTY_DB_.hasExceptionValue(index, 
-                                       UCharacterPropertyDB.EXC_LOWERCASE_)) {
-                        ch = PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_LOWERCASE_);
+                    if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_LOWERCASE_)) {
+                        ch = PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_);
                     }
                     UTF16.append(result, ch);
                 }
@@ -1181,148 +1109,6 @@ public final class UCharacter
             offset += chsize;
         }
         return result.toString();
-    }
-    
-    // TODO: Make public API
-    /**
-     * returns the maximum amount that a single character will expand in
-     * upper, lower, title, or fold case operations
-     */
-    static int getMaxCaseExpansion() {
-        return 10;
-    }
-    
-    // TODO: Make public API?
-    /**
-     * produces the result of converting a single (possibly surrogate)
-     * character in a string.
-     * @param result 
-     * @return length of returned value IF there is a change. -1 otherwise.
-     */
-    static int toLowerCase(Locale locale, String str, int offset, char[] result) {
-
-    // NOTE: we have to keep the original string around, because it is used
-    // for the context
-        
-        int ch = UTF16.charAt(str, offset);
-        int props = PROPERTY_DB_.getProperty(ch);
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            int type = UCharacterPropertyDB.getPropType(props);
-            if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                int chDelta = UCharacterPropertyDB.getSignedValue(props);
-                if (chDelta == 0) return -1;
-                int len = str.length();
-                return UTF16.append(result, 0, ch + chDelta);
-            }
-        } else {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
-                // TODO: avoid StringBuffer, put directly into array?
-                StringBuffer buf = new StringBuffer();
-                getSpecialLowerCase(ch, index, buf, str, offset, 
-                                    locale);
-                Utility.getChars(buf, 0, buf.length(), result, 0);
-                return buf.length();
-            } else if (PROPERTY_DB_.hasExceptionValue(index, 
-                                    UCharacterPropertyDB.EXC_LOWERCASE_)) {
-                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
-                                    UCharacterPropertyDB.EXC_LOWERCASE_));
-            }
-        }
-        return -1;
-    }
-    
-    // TODO: Make public API?
-    /**
-     * produces the result of converting a single (possibly surrogate)
-     * character in a string.
-     * @param result 
-     * @return length of returned value IF there is a change. -1 otherwise.
-     */
-    static int toUpperCase(Locale locale, String str, int offset, char[] result) {
-
-    // NOTE: we have to keep the original string around, because it is used
-    // for the context
-        
-        int ch = UTF16.charAt(str, offset);
-        int props = PROPERTY_DB_.getProperty(ch);
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            int type = UCharacterPropertyDB.getPropType(props);
-            if (type == UCharacterCategory.LOWERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                int chDelta = UCharacterPropertyDB.getSignedValue(props);
-                if (chDelta == 0) return -1;
-                int len = str.length();
-                return UTF16.append(result, 0, ch - chDelta);
-            }
-        } else {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
-                // TODO: avoid StringBuffer, put directly into array?
-                StringBuffer buf = new StringBuffer();
-                getSpecialUpperCase(ch, index, buf, str, offset, 
-                                    locale);
-                Utility.getChars(buf, 0, buf.length(), result, 0);
-                return buf.length();
-            } else if (PROPERTY_DB_.hasExceptionValue(index, 
-                                    UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
-                                    UCharacterPropertyDB.EXC_UPPERCASE_));
-            }
-        }
-        return -1;
-    }
-  
-    // TODO: Make public API?
-    /**
-     * produces the result of converting a single (possibly surrogate)
-     * character in a string.
-     * @param result 
-     * @return length of returned value IF there is a change. -1 otherwise.
-     */
-    static int toTitleCase(Locale locale, String str, int offset, char[] result) {
-
-    // NOTE: we have to keep the original string around, because it is used
-    // for the context
-    
-    // TODO: simplify code by checking for the few special titlecases,
-    // and just jump to uppercase for the rest.
-        
-        int ch = UTF16.charAt(str, offset);
-        int props = PROPERTY_DB_.getProperty(ch);
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            int type = UCharacterPropertyDB.getPropType(props);
-            if (type == UCharacterCategory.LOWERCASE_LETTER) {
-                // here, titlecase is same as uppercase
-                int chDelta = UCharacterPropertyDB.getSignedValue(props);
-                if (chDelta == 0) return -1;
-                int len = str.length();
-                return UTF16.append(result, 0, ch - chDelta);
-            }
-        } else {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                UCharacterPropertyDB.EXC_TITLECASE_)) {
-                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
-                                    UCharacterPropertyDB.EXC_TITLECASE_));
-            } else if (PROPERTY_DB_.hasExceptionValue(index, 
-                                UCharacterPropertyDB.EXC_SPECIAL_CASING_)) {
-                // TODO: avoid StringBuffer, put directly into array?
-                StringBuffer buf = new StringBuffer();
-                getSpecialUpperCase(ch, index, buf, str, offset, 
-                                    locale);
-                Utility.getChars(buf, 0, buf.length(), result, 0);
-                return buf.length();
-            } else if (PROPERTY_DB_.hasExceptionValue(index, 
-                                    UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                return UTF16.append(result, 0, PROPERTY_DB_.getException(index, 
-                                    UCharacterPropertyDB.EXC_UPPERCASE_));
-            }
-        }
-        return -1;
     }
     
     /**
@@ -1343,23 +1129,23 @@ public final class UCharacter
     */
     public static int foldCase(int ch, boolean defaultmapping)
     {
-        int props = PROPERTY_DB_.getProperty(ch);
-        if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-            int type = UCharacterPropertyDB.getPropType(props);
+        int props = PROPERTY_.getProperty(ch);
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            int type = UCharacterProperty.getPropType(props);
             if (type == UCharacterCategory.UPPERCASE_LETTER ||
                 type == UCharacterCategory.TITLECASE_LETTER) {
-                return ch + UCharacterPropertyDB.getSignedValue(props);
+                return ch + UCharacterProperty.getSignedValue(props);
             }
         } 
         else {
-            int index = UCharacterPropertyDB.getExceptionIndex(props);
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                      UCharacterPropertyDB.EXC_CASE_FOLDING_)) {
-                int exception = PROPERTY_DB_.getException(index, 
-                                      UCharacterPropertyDB.EXC_CASE_FOLDING_);
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                      UCharacterProperty.EXC_CASE_FOLDING_)) {
+                int exception = PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_CASE_FOLDING_);
                 if (exception != 0) {
                     int foldedcasech = 
-                         PROPERTY_DB_.getFoldCase(exception & LAST_CHAR_MASK_);
+                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
                     if (foldedcasech != 0){
                         return foldedcasech;
                     }
@@ -1376,11 +1162,11 @@ public final class UCharacter
                     return ch;
                 }                                  
             }
-            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                       UCharacterPropertyDB.EXC_LOWERCASE_)) {  
+            if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_LOWERCASE_)) {  
                 // not else! - allow to fall through from above
-                return PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_LOWERCASE_);
+                return PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_);
             }
         }
             
@@ -1414,22 +1200,22 @@ public final class UCharacter
         while (offset < size) {
             ch = UTF16.charAt(str, offset);
             offset += UTF16.getCharCount(ch);
-            int props = PROPERTY_DB_.getProperty(ch);
-            if (!UCharacterPropertyDB.isExceptionIndicator(props)) {
-                int type = UCharacterPropertyDB.getPropType(props);
+            int props = PROPERTY_.getProperty(ch);
+            if (!UCharacterProperty.isExceptionIndicator(props)) {
+                int type = UCharacterProperty.getPropType(props);
                 if (type == UCharacterCategory.UPPERCASE_LETTER ||
                     type == UCharacterCategory.TITLECASE_LETTER) {
-                    ch += UCharacterPropertyDB.getSignedValue(props);
+                    ch += UCharacterProperty.getSignedValue(props);
                 }
             }  
             else {
-                int index = UCharacterPropertyDB.getExceptionIndex(props);
-                if (PROPERTY_DB_.hasExceptionValue(index, 
-                                    UCharacterPropertyDB.EXC_CASE_FOLDING_)) {
-                    int exception = PROPERTY_DB_.getException(index, 
-                                      UCharacterPropertyDB.EXC_CASE_FOLDING_);                             
+                int index = UCharacterProperty.getExceptionIndex(props);
+                if (PROPERTY_.hasExceptionValue(index, 
+                                    UCharacterProperty.EXC_CASE_FOLDING_)) {
+                    int exception = PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_CASE_FOLDING_);                             
                     if (exception != 0) {
-                        PROPERTY_DB_.getFoldCase(exception & LAST_CHAR_MASK_, 
+                        PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
                                              exception >> SHIFT_24_, result);
                     } 
                     else {
@@ -1450,10 +1236,10 @@ public final class UCharacter
                     continue;
                 } 
                 else {
-                    if (PROPERTY_DB_.hasExceptionValue(index, 
-                                         UCharacterPropertyDB.EXC_LOWERCASE_)) {
-                        ch = PROPERTY_DB_.getException(index, 
-                                          UCharacterPropertyDB.EXC_LOWERCASE_);
+                    if (PROPERTY_.hasExceptionValue(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_)) {
+                        ch = PROPERTY_.getException(index, 
+                                          UCharacterProperty.EXC_LOWERCASE_);
                     }
                 }
             }
@@ -1528,15 +1314,58 @@ public final class UCharacter
         return -1; // no value
     }
     
-    // protected variables ===================================
-    	
+    /**
+    * <p>Gets an iterator for character types, iterating over codepoints.</p>
+    * Example of use:<br>
+    * <pre>
+    * RangeValueIterator iterator = UCharacter.getTypeIterator();
+    * while (iterator.next()) {
+    *     System.out.println("Codepoint \\u" + 
+    *                        Integer.toHexString(iterator.getStart()) + 
+    *                        " to codepoint \\u" +
+    *                        Integer.toHexString(iterator.getLimit() - 1) + 
+    *                        " has the character type " + 
+    *                        iterator.getValue());
+    * }
+    * </pre>
+    * @return an iterator 
+    * @draft 2.1
+    */
+    public static RangeValueIterator getTypeIterator()
+    {
+        return new UCharacterTypeIterator();
+    }
+    
+    // protected data members --------------------------------------------
+    
+    /**
+    * Database storing the sets of character property
+    */
+    protected static final UCharacterProperty PROPERTY_;
+    
+    /**
+    * Initialization of the UCharacterProperty instance. 
+    * RuntimeException thrown when data is missing or data has been corrupted.
+    */
+    static
+    {
+        try
+        {
+            PROPERTY_ = new UCharacterProperty();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    
 	/**
     * Shift and mask value for surrogates
     */
 	protected static final int LEAD_SURROGATE_SHIFT_ = 10;
 	protected static final int TRAIL_SURROGATE_MASK_ = 0x3FF;
                               
-    // protected methods ====================================================
+    // protected methods -------------------------------------------------
       
     /**
     * Forms a supplementary code point from the argument character<br>
@@ -1551,22 +1380,157 @@ public final class UCharacter
         return (lead << LEAD_SURROGATE_SHIFT_) + trail + SURROGATE_OFFSET_;
     }
     
-    // private variables =====================================
-    	
+    // TODO: Make public API
     /**
-    * Database storing the sets of character property
-    */
-    private static final UCharacterPropertyDB PROPERTY_DB_;
+     * returns the maximum amount that a single character will expand in
+     * upper, lower, title, or fold case operations
+     */
+    static int getMaxCaseExpansion() {
+        return 10;
+    }
     
+    // TODO: Make public API?
     /**
-    * Initialization of the UCharacterPropertyDB instance. 
-    * RuntimeException thrown when data is missing or data has been corrupted.
+     * produces the result of converting a single (possibly surrogate)
+     * character in a string.
+     * @param result 
+     * @return length of returned value IF there is a change. -1 otherwise.
+     */
+    static int toLowerCase(Locale locale, String str, int offset, 
+                           char[] result) {
+        // NOTE: we have to keep the original string around, because it is 
+        // used for the context
+        
+        int ch = UTF16.charAt(str, offset);
+        int props = PROPERTY_.getProperty(ch);
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            int type = UCharacterProperty.getPropType(props);
+            if (type == UCharacterCategory.UPPERCASE_LETTER ||
+                type == UCharacterCategory.TITLECASE_LETTER) {
+                int chDelta = UCharacterProperty.getSignedValue(props);
+                if (chDelta == 0) return -1;
+                return UTF16.append(result, 0, ch + chDelta);
+            }
+        } else {
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
+                // TODO: avoid StringBuffer, put directly into array?
+                StringBuffer buf = new StringBuffer();
+                getSpecialLowerCase(ch, index, buf, str, offset, 
+                                    locale);
+                Utility.getChars(buf, 0, buf.length(), result, 0);
+                return buf.length();
+            } else if (PROPERTY_.hasExceptionValue(index, 
+                                    UCharacterProperty.EXC_LOWERCASE_)) {
+                return UTF16.append(result, 0, PROPERTY_.getException(index, 
+                                    UCharacterProperty.EXC_LOWERCASE_));
+            }
+        }
+        return -1;
+    }
+    
+    // TODO: Make public API?
+    /**
+     * produces the result of converting a single (possibly surrogate)
+     * character in a string.
+     * @param result 
+     * @return length of returned value IF there is a change. -1 otherwise.
+     */
+    static int toUpperCase(Locale locale, String str, int offset, 
+                           char[] result) {
+        // NOTE: we have to keep the original string around, because it is 
+        // used for the context
+        
+        int ch = UTF16.charAt(str, offset);
+        int props = PROPERTY_.getProperty(ch);
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            int type = UCharacterProperty.getPropType(props);
+            if (type == UCharacterCategory.LOWERCASE_LETTER ||
+                type == UCharacterCategory.TITLECASE_LETTER) {
+                int chDelta = UCharacterProperty.getSignedValue(props);
+                if (chDelta == 0) return -1;
+                return UTF16.append(result, 0, ch - chDelta);
+            }
+        } else {
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
+                // TODO: avoid StringBuffer, put directly into array?
+                StringBuffer buf = new StringBuffer();
+                getSpecialUpperCase(ch, index, buf, str, offset, 
+                                    locale);
+                Utility.getChars(buf, 0, buf.length(), result, 0);
+                return buf.length();
+            } else if (PROPERTY_.hasExceptionValue(index, 
+                                    UCharacterProperty.EXC_UPPERCASE_)) {
+                return UTF16.append(result, 0, PROPERTY_.getException(index, 
+                                    UCharacterProperty.EXC_UPPERCASE_));
+            }
+        }
+        return -1;
+    }
+  
+    // TODO: Make public API?
+    /**
+     * produces the result of converting a single (possibly surrogate)
+     * character in a string.
+     * @param result 
+     * @return length of returned value IF there is a change. -1 otherwise.
+     */
+    static int toTitleCase(Locale locale, String str, int offset, 
+                           char[] result) {
+        // NOTE: we have to keep the original string around, because it is 
+        // used for the context
+        // TODO: simplify code by checking for the few special titlecases,
+        // and just jump to uppercase for the rest. 
+        
+        int ch = UTF16.charAt(str, offset);
+        int props = PROPERTY_.getProperty(ch);
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            int type = UCharacterProperty.getPropType(props);
+            if (type == UCharacterCategory.LOWERCASE_LETTER) {
+                // here, titlecase is same as uppercase
+                int chDelta = UCharacterProperty.getSignedValue(props);
+                if (chDelta == 0) return -1;
+                return UTF16.append(result, 0, ch - chDelta);
+            }
+        } else {
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                UCharacterProperty.EXC_TITLECASE_)) {
+                return UTF16.append(result, 0, PROPERTY_.getException(index, 
+                                    UCharacterProperty.EXC_TITLECASE_));
+            } else if (PROPERTY_.hasExceptionValue(index, 
+                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
+                // TODO: avoid StringBuffer, put directly into array?
+                StringBuffer buf = new StringBuffer();
+                getSpecialUpperCase(ch, index, buf, str, offset, 
+                                    locale);
+                Utility.getChars(buf, 0, buf.length(), result, 0);
+                return buf.length();
+            } else if (PROPERTY_.hasExceptionValue(index, 
+                                    UCharacterProperty.EXC_UPPERCASE_)) {
+                return UTF16.append(result, 0, PROPERTY_.getException(index, 
+                                    UCharacterProperty.EXC_UPPERCASE_));
+            }
+        }
+        return -1;
+    }
+    
+    // private variables -------------------------------------------------
+
+    /**
+    * Database storing the sets of character name
     */
+    private static final UCharacterName NAME_;
+      
+    // block to initialise name database and unicode 1.0 data indicator
     static
     {
         try
         {
-            PROPERTY_DB_ = new UCharacterPropertyDB();
+            NAME_ = new UCharacterName();
         }
         catch (Exception e)
         {
@@ -1860,18 +1824,27 @@ public final class UCharacter
     * COMBINING TILDE
     */
     private static final int COMBINING_TILDE_ = 0x303;
-      
-    // private methods ==============================================
+    
+    // private constructor -----------------------------------------------
       
     /**
-    * Gets the correct property information from UCharacterPropertyDB
+    * Private constructor to prevent instantiation
+    */
+    private UCharacter()
+    {
+    }
+      
+    // private methods ---------------------------------------------------
+      
+    /**
+    * Gets the correct property information from UCharacterProperty
     * @param ch character whose information is to be retrieved
     * @return a 32 bit information, returns 0 if no data is found.
     */
     private static int getProps(int ch)
     {
         if (ch >= UCharacter.MIN_VALUE & ch <= UCharacter.MAX_VALUE) {
-            return PROPERTY_DB_.getProperty(ch);
+            return PROPERTY_.getProperty(ch);
         }
         return 0;
     }
@@ -2105,8 +2078,8 @@ public final class UCharacter
                                             StringBuffer buffer, String str, 
                                             int offset, Locale locale)
     {
-        int exception = PROPERTY_DB_.getException(index, 
-                                    UCharacterPropertyDB.EXC_SPECIAL_CASING_);
+        int exception = PROPERTY_.getException(index, 
+                                    UCharacterProperty.EXC_SPECIAL_CASING_);
         if (exception < 0) {
             String language = locale.getLanguage();
             // use hardcoded conditions and mappings
@@ -2125,10 +2098,10 @@ public final class UCharacter
                 else {
                     // no known conditional special case mapping, use a normal 
                     // mapping
-                    if (PROPERTY_DB_.hasExceptionValue(index, 
-                        UCharacterPropertyDB.EXC_UPPERCASE_)) {
-                        UTF16.append(buffer, PROPERTY_DB_.getException(index, 
-                                        UCharacterPropertyDB.EXC_UPPERCASE_)); 
+                    if (PROPERTY_.hasExceptionValue(index, 
+                        UCharacterProperty.EXC_UPPERCASE_)) {
+                        UTF16.append(buffer, PROPERTY_.getException(index, 
+                                        UCharacterProperty.EXC_UPPERCASE_)); 
                     }
                     else {
                         UTF16.append(buffer, ch);
@@ -2139,7 +2112,7 @@ public final class UCharacter
         else {
             // get the special case mapping string from the data file
             index = exception & LAST_CHAR_MASK_;
-            PROPERTY_DB_.getUpperCase(index, buffer);
+            PROPERTY_.getUpperCase(index, buffer);
         }
     }
       
@@ -2156,8 +2129,8 @@ public final class UCharacter
                                             StringBuffer buffer, String str, 
                                             int offset, Locale locale)
     {
-        int exception = PROPERTY_DB_.getException(index, 
-                                    UCharacterPropertyDB.EXC_SPECIAL_CASING_);
+        int exception = PROPERTY_.getException(index, 
+                                    UCharacterProperty.EXC_SPECIAL_CASING_);
         if (exception < 0) {
             // fill u and i with the case mapping result string
             // use hardcoded conditions and mappings
@@ -2239,11 +2212,11 @@ public final class UCharacter
                         else {
                             // no known conditional special case mapping, use 
                             // a normal mapping
-                            if (PROPERTY_DB_.hasExceptionValue(index, 
-                                       UCharacterPropertyDB.EXC_LOWERCASE_)) {
+                            if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_LOWERCASE_)) {
                                 UTF16.append(buffer, 
-                                             PROPERTY_DB_.getException(index, 
-                                         UCharacterPropertyDB.EXC_LOWERCASE_)); 
+                                             PROPERTY_.getException(index, 
+                                         UCharacterProperty.EXC_LOWERCASE_)); 
                             }
                             else {
                                 UTF16.append(buffer, ch);
@@ -2256,7 +2229,7 @@ public final class UCharacter
         else {
             // get the special case mapping string from the data file
             index = exception & LAST_CHAR_MASK_;
-            PROPERTY_DB_.getLowerCase(index, buffer);
+            PROPERTY_.getLowerCase(index, buffer);
         }
     }
       
@@ -2273,6 +2246,71 @@ public final class UCharacter
         
         int difference = ch - NON_CHARACTER_MIN_3_1_;
         return difference >= 0 && difference <=  NON_CHARACTER_RANGE_3_1_;
+    }
+    
+    private static boolean isEuropeanDigit(int ch) {
+        return (ch <= 0x7a && ((ch >= 0x41 && ch <= 0x5a) || ch >= 0x61)) ||
+            (ch >= 0xff21 && (ch <= 0xff3a || (ch >= 0xff41 && ch <= 0xff5a)));
+    }
+
+    private static int getEuropeanDigit(int ch) {
+        if (ch <= 0x7a) {
+            if (ch >= 0x41 && ch <= 0x5a) {
+                return ch + 10 - 0x41;
+            } else if (ch >= 0x61) {
+                return ch + 10 - 0x61;
+            }
+        } else if (ch >= 0xff21) {
+            if (ch <= 0xff3a) {
+                return ch + 10 - 0xff21;
+            } else if (ch >= 0xff41 && ch <= 0xff5a) {
+                return ch + 10 - 0xff41;
+            }
+        }
+        return -1;
+    }
+    
+    private static int getNumericValueInternal(int ch, boolean useEuropean)
+    {
+        int props = getProps(ch);
+        int type = UCharacterProperty.getPropType(props);
+        
+        // if props == 0, it will just fall through and return -1
+        if (type != UCharacterCategory.DECIMAL_DIGIT_NUMBER &&
+            type != UCharacterCategory.LETTER_NUMBER &&
+            type != UCharacterCategory.OTHER_NUMBER) {
+
+            return useEuropean ? getEuropeanDigit(ch) : -1;
+        }
+          
+        int result = -1;
+        if (!UCharacterProperty.isExceptionIndicator(props)) {
+            // not contained in exception data
+            result = UCharacterProperty.getSignedValue(props);
+        }
+        else {
+            // contained in exception data
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                                       UCharacterProperty.EXC_DIGIT_VALUE_)) {
+                result  = PROPERTY_.getException(index, 
+                                        UCharacterProperty.EXC_DIGIT_VALUE_) &
+                    LAST_CHAR_MASK_; 
+            }
+            else {
+                if (PROPERTY_.hasExceptionValue(index, 
+                               UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
+                    return -2;
+                }
+                if (PROPERTY_.hasExceptionValue(index, 
+                                   UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+                    result = PROPERTY_.getException(index, 
+                                      UCharacterProperty.EXC_NUMERIC_VALUE_); 
+                }
+            }
+        }
+        
+        return result;
     }
 }
 

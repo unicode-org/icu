@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/12/03 20:58:59 $ 
-* $Revision: 1.19 $
+* $Date: 2002/02/08 01:08:38 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,7 @@ import com.ibm.test.TestFmwk;
 import com.ibm.text.UCharacter;
 import com.ibm.text.UCharacterCategory;
 import com.ibm.text.UCharacterDirection;
+import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.text.UTF16;
 import com.ibm.util.Utility;
 
@@ -281,7 +282,7 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Tests for control characters
   */
-  /*
+  /* isControl is deprecated
   public void TestControl()
   {
     int control[] = {0x001b, 0x0097, 0x0082};
@@ -425,7 +426,6 @@ public final class UCharacterTest extends TestFmwk
   * e.g. java -DUnicodeData="data_directory_path" 
   * com.ibm.test.text.UCharacterTest
   */
-  /*
   public void TestUnicodeData()
   {
     // this is the 2 char category types used in the UnicodeData file
@@ -549,10 +549,10 @@ public final class UCharacterTest extends TestFmwk
       UCharacterDirection.toString(UCharacterDirection.LEFT_TO_RIGHT));
   }
   
+  
   /**
   * Test for the character names
   */
-  /*
   public void TestNames()
   {
     int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5,
@@ -924,6 +924,48 @@ public final class UCharacterTest extends TestFmwk
   }
   
   /**
+  * This method is alittle different from the type test in icu4c.
+  * But combined with testUnicodeData, they basically do the same thing.
+  */
+  public void TestIteration() 
+  {
+      int end       = 0;
+      int prevtype  = -1;
+      RangeValueIterator iterator = UCharacter.getTypeIterator();
+      while (iterator.next()) {
+          int start = iterator.getStart();
+          if (start != end) {
+              errln("UCharacterEnumeration failed: Ranges not continuous " + 
+                    "0x" + Integer.toHexString(start));
+          }
+          
+          end = iterator.getLimit();
+          int type = iterator.getValue();
+          
+          if (type == prevtype) {
+              errln("Type of the next set of enumeration should be different");
+          }
+          /*
+          System.out.println("start and end " + Integer.toHexString(start) + 
+                             " " + Integer.toHexString(end));
+                             */
+		  for (int i = start; i < end; i ++) {
+              int temptype = UCharacter.getType(i);
+              if (temptype != type) {
+                  errln("UCharacterEnumeration failed: Codepoint \\u" + 
+                        Integer.toHexString(i) + " should be of type " +
+                        UCharacter.getType(i) + " not " + type);
+              }
+          }
+      }
+      
+      iterator.reset();
+      if (iterator.next() == false || iterator.getStart() != 0) {
+          errln("UCharacterEnumeration reset() failed");
+      }
+  }
+  
+  /**
   * Converting the hex numbers represented betwee                             n ';' to Unicode strings
   * @param str string to break up into Unicode strings
   * @return array of Unicode strings ending with a null
@@ -972,6 +1014,7 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
+      //test.TestEnumeration();
       test.run(arg);
     }
     catch (Exception e)
