@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/19 06:01:15 $ 
- * $Revision: 1.25 $
+ * $Date: 2003/04/19 06:32:17 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -418,7 +418,7 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     public DecimalFormat(String pattern) {
-    // Always applyPattern after the symbols are set
+        // Always applyPattern after the symbols are set
         Locale def = Locale.getDefault();
         this.symbols = new DecimalFormatSymbols(def);
         currency = Currency.getInstance(def);
@@ -491,7 +491,6 @@ public class DecimalFormat extends NumberFormat {
          */
         boolean isNegative = (number < 0.0) || (number == 0.0 && 1/number < 0.0);
         if (isNegative) number = -number;
-        Number num = new Double(number);
 
         // Do this BEFORE checking to see if value is infinite!
         if (multiplier != 1) number *= multiplier;
@@ -505,7 +504,7 @@ public class DecimalFormat extends NumberFormat {
 
         if (Double.isInfinite(number))
         {
-            int prefixLen = appendAffix(result, num, isNegative, true);
+            int prefixLen = appendAffix(result, isNegative, true);
 
             if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
                 fieldPosition.setBeginIndex(result.length());
@@ -517,7 +516,7 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setEndIndex(result.length());
             }
 
-            int suffixLen = appendAffix(result, num, isNegative, false);
+            int suffixLen = appendAffix(result, isNegative, false);
 
             addPadding(result, prefixLen, suffixLen);
             return result;
@@ -531,7 +530,7 @@ public class DecimalFormat extends NumberFormat {
                       getMaximumFractionDigits(),
                       !useExponentialNotation);
 
-            return subformat(result, fieldPosition, num, isNegative, false);
+            return subformat(result, fieldPosition, isNegative, false);
         }
     }
     
@@ -653,7 +652,7 @@ public class DecimalFormat extends NumberFormat {
             digitList.set(number, useExponentialNotation ?
                           getMinimumIntegerDigits() + getMaximumFractionDigits() : 0);
 
-            return subformat(result, fieldPosition, new Long(number), isNegative, true);
+            return subformat(result, fieldPosition, isNegative, true);
         }
     }
 
@@ -680,7 +679,7 @@ public class DecimalFormat extends NumberFormat {
             digitList.set(number, useExponentialNotation ?
                           getMinimumIntegerDigits() + getMaximumFractionDigits() : 0);
 
-            return subformat(result, fieldPosition, number, number.signum() < 0, false);
+            return subformat(result, fieldPosition, number.signum() < 0, false);
         }
     }
 
@@ -707,7 +706,7 @@ public class DecimalFormat extends NumberFormat {
                       getMinimumIntegerDigits() + getMaximumFractionDigits() :
                       getMaximumFractionDigits(),
                       !useExponentialNotation);
-            return subformat(result, fieldPosition, number, number.signum() < 0, false);
+            return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
 
@@ -742,7 +741,7 @@ public class DecimalFormat extends NumberFormat {
                       getMinimumIntegerDigits() + getMaximumFractionDigits() :
                       getMaximumFractionDigits(),
                       !useExponentialNotation);
-            return subformat(result, fieldPosition, number, number.signum() < 0, false);
+            return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
 
@@ -773,7 +772,7 @@ public class DecimalFormat extends NumberFormat {
      * be filled in with the correct digits.
      */
     private StringBuffer subformat(StringBuffer result, FieldPosition fieldPosition,
-                                   Number number, boolean isNegative, boolean isInteger)
+                                   boolean isNegative, boolean isInteger)
     {
         // NOTE: This isn't required anymore because DigitList takes care of this.
         //
@@ -810,7 +809,7 @@ public class DecimalFormat extends NumberFormat {
             digitList.decimalAt = 0; // Normalize
         }
 
-        int prefixLen = appendAffix(result, number, isNegative, true);
+        int prefixLen = appendAffix(result, isNegative, true);
 
         if (useExponentialNotation)
         {
@@ -1035,7 +1034,7 @@ public class DecimalFormat extends NumberFormat {
             }
         }
 
-        int suffixLen = appendAffix(result, number, isNegative, false);
+        int suffixLen = appendAffix(result, isNegative, false);
 
         // [NEW]
         addPadding(result, prefixLen, suffixLen);
@@ -2280,19 +2279,19 @@ public class DecimalFormat extends NumberFormat {
         // Reuse one StringBuffer for better performance
         StringBuffer buffer = new StringBuffer();
         if (posPrefixPattern != null) {
-            expandAffix(posPrefixPattern, buffer, null);
+            expandAffix(posPrefixPattern, buffer, false);
             positivePrefix = buffer.toString();
         }
         if (posSuffixPattern != null) {
-            expandAffix(posSuffixPattern, buffer, null);
+            expandAffix(posSuffixPattern, buffer, false);
             positiveSuffix = buffer.toString();
         }
         if (negPrefixPattern != null) {
-            expandAffix(negPrefixPattern, buffer, null);
+            expandAffix(negPrefixPattern, buffer, false);
             negativePrefix = buffer.toString();
         }
         if (negSuffixPattern != null) {
-            expandAffix(negSuffixPattern, buffer, null);
+            expandAffix(negSuffixPattern, buffer, false);
             negativeSuffix = buffer.toString();
         }
     }
@@ -2308,11 +2307,11 @@ public class DecimalFormat extends NumberFormat {
      * itself at the end of the pattern.
      *
      * This method is used in two distinct ways.  First, it is used to expand
-     * the stored affix patterns into actual affixes.  For this usage, number
-     * must be null.  Second, it is used to expand the stored affix patterns
-     * given a specific number (which must not be null), for those rare cases in
+     * the stored affix patterns into actual affixes.  For this usage, doFormat
+     * must be false.  Second, it is used to expand the stored affix patterns
+     * given a specific number (doFormat == true), for those rare cases in
      * which a currency format references a ChoiceFormat (e.g., en_IN display
-     * name for INR).
+     * name for INR).  The number itself is taken from digitList.
      *
      * When used in the first way, this method has a side effect: It sets
      * currencyChoice to a ChoiceFormat object, if the currency's display name
@@ -2321,16 +2320,16 @@ public class DecimalFormat extends NumberFormat {
      *
      * @param pattern the non-null, possibly empty pattern
      * @param buffer a scratch StringBuffer; its contents will be lost
-     * @param number if null, then the pattern will be expanded, and if a
+     * @param doFormat if false, then the pattern will be expanded, and if a
      * currency symbol is encountered that expands to a ChoiceFormat, the
      * currencyChoice member variable will be initialized if it is null.  If
-     * number is not null, then it is assumed that the currencyChoice has been
-     * created, and it will be used to format the given number.
+     * doFormat is true, then it is assumed that the currencyChoice has been
+     * created, and it will be used to format the value in digitList.
      * @return the expanded equivalent of pattern
      */
     //Bug 4212072 [Richard/GCL]
     private void expandAffix(String pattern, StringBuffer buffer,
-                             Number number) {
+                             boolean doFormat) {
         buffer.setLength(0);
         for (int i=0; i<pattern.length(); ) {
             char c = pattern.charAt(i++);
@@ -2381,11 +2380,11 @@ public class DecimalFormat extends NumberFormat {
                                              Currency.SYMBOL_NAME,
                                              isChoiceFormat);
                         if (isChoiceFormat[0]) {
-                            // Two modes here: In mode 1, number is null, and we
-                            // set up currencyChoice.  In mode 2, number is
-                            // non-null, and we use the previously created
-                            // currencyChoice.
-                            if (number == null) {
+                            // Two modes here: If doFormat is fale, we set up
+                            // currencyChoice.  If doFormat is true, we use the
+                            // previously created currencyChoice to format the
+                            // value in digitList.
+                            if (!doFormat) {
                                 // If the currency is handled by a ChoiceFormat,
                                 // then we're not going to use the expanded
                                 // patterns.  Instantiate the ChoiceFormat and
@@ -2403,7 +2402,7 @@ public class DecimalFormat extends NumberFormat {
                                 s = String.valueOf(CURRENCY_SIGN);
                             } else {
                                 FieldPosition pos = new FieldPosition(0); // ignored
-                                currencyChoice.format(number, buffer, pos);
+                                currencyChoice.format(digitList.getDouble(), buffer, pos);
                                 continue;
                             }
                         }
@@ -2436,7 +2435,7 @@ public class DecimalFormat extends NumberFormat {
      * @param isNegative
      * @param isPrefix
      */
-    private int appendAffix(StringBuffer buf, Number number,
+    private int appendAffix(StringBuffer buf,
                             boolean isNegative, boolean isPrefix) {
         if (currencyChoice != null) {
             String affixPat = null;
@@ -2446,7 +2445,7 @@ public class DecimalFormat extends NumberFormat {
                 affixPat = isNegative ? negSuffixPattern : posSuffixPattern;
             }
             StringBuffer affixBuf = new StringBuffer();
-            expandAffix(affixPat, affixBuf, number);
+            expandAffix(affixPat, affixBuf, true);
             buf.append(affixBuf);
             return affixBuf.length();
         }
