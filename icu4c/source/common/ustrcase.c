@@ -32,7 +32,7 @@
  *
  * Must get titleIter!=NULL.
  */
-static int32_t
+U_CFUNC int32_t
 u_internalStrToTitle(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      UBreakIterator *titleIter,
@@ -41,31 +41,39 @@ u_internalStrToTitle(UChar *dest, int32_t destCapacity,
     UCharIterator iter;
     UChar32 c;
     int32_t prev, index, destIndex, length;
+    UBool isFirstIndex;
 
     /* set up local variables */
     uiter_setString(&iter, src, srcLength);
     destIndex=0;
     prev=0;
+    isFirstIndex=TRUE;
 
     /* titlecasing loop */
     while(prev<srcLength) {
         /* find next index where to titlecase */
-        index=ubrk_next(titleIter);
-        if(index==UBRK_DONE) {
+        if(isFirstIndex) {
+            isFirstIndex=FALSE;
+            index=ubrk_first(titleIter);
+        } else {
+            index=ubrk_next(titleIter);
+        }
+        if(index==UBRK_DONE || index>srcLength) {
             index=srcLength;
         }
 
         /* lowercase [prev..index[ */
-        /* ### TODO this really needs to pass the full UCharIterator into the internal strToXXX functions so that they see the full context! */
         if(prev<index) {
             if(destIndex<destCapacity) {
                 length=u_internalStrToLower(dest+destIndex, destCapacity-destIndex,
-                                            src+prev, index-prev,
+                                            src, srcLength,
+                                            prev, index,
                                             locale,
                                             pErrorCode);
             } else {
                 length=u_internalStrToLower(NULL, 0,
-                                            src+prev, index-prev,
+                                            src, srcLength,
+                                            prev, index,
                                             locale,
                                             pErrorCode);
             }
@@ -163,7 +171,9 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
     ownTitleIter=FALSE;
 
     if(toWhichCase==TO_LOWER) {
-        destLength=u_internalStrToLower(temp, destCapacity, src, srcLength,
+        destLength=u_internalStrToLower(temp, destCapacity,
+                                        src, srcLength,
+                                        0, srcLength,
                                         locale, pErrorCode);
     } else if(toWhichCase==TO_UPPER) {
         destLength=u_internalStrToUpper(temp, destCapacity, src, srcLength,
