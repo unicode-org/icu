@@ -31,11 +31,6 @@
 #   include <stdio.h>
 #endif
 
-#if defined(UCOL_DEBUG) && defined(WIN32)
-    /* turn off "unreferenced formal parameter" */
-#   pragma warning(disable: 4100)
-#endif
-
 /* collation element weight allocation -------------------------------------- */
 
 /* helper functions for CE weights */

@@ -31,9 +31,6 @@
 #include "unewdata.h"
 #include "unormimp.h"
 #include "gennorm.h"
-#ifdef WIN32
-#   pragma warning(disable: 4100)
-#endif
 
 #define DO_DEBUG_OUT 0
 

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -14,7 +14,7 @@
 
 //  Stubs for Windows API functions when building on UNIXes.
 //
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(U_WINDOWS)
 // do nothing
 #else
 #define _UNICODE
@@ -313,7 +313,7 @@ int32_t ICUIsNormalized(const UChar* src,int32_t srcLen, UNormalizationMode mode
 }
 #endif
 
-#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#if defined(U_WINDOWS)
 
 int32_t WinNormNFD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, int32_t options, UErrorCode* status) {
     return FoldStringW(MAP_COMPOSITE,src,srcLen,dest,dstLen);

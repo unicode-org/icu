@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2005 IBM, Inc.   All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -69,7 +69,7 @@ const char gUsageString[] =
 #include <unicode/brkiter.h>
 
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 #include <windows.h>
 #else
 //
