@@ -13,19 +13,15 @@
 
 #include "math.h"
 
-#include "unicode/utypes.h"
-#include "unicode/uscript.h"
-#include "unicode/locid.h"
-
-#include "unicode/loengine.h"
-
+#include "LETypes.h"
+#include "LayoutEngine.h"
 #include "PortableFontInstance.h"
 
 #include "letest.h"
 
 U_NAMESPACE_USE
 
-UBool compareResults(int32_t testNumber, TestResult *expected, TestResult *actual)
+le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *actual)
 {
     /* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */
     if (actual->glyphCount != expected->glyphCount) {
@@ -33,7 +29,7 @@ UBool compareResults(int32_t testNumber, TestResult *expected, TestResult *actua
         return false;
     }
 
-    int32_t i;
+    le_int32 i;
 
     for (i = 0; i < actual->glyphCount; i += 1) {
         if (actual->glyphs[i] != expected->glyphs[i]) {
@@ -74,10 +70,9 @@ UBool compareResults(int32_t testNumber, TestResult *expected, TestResult *actua
 
 int main(int argc, char *argv[])
 {
-    Locale dummyLocale;
-    int failures = 0;
+    le_int32 failures = 0;
 
-    for (int test = 0; test < testCount; test += 1) {
+    for (le_int32 test = 0; test < testCount; test += 1) {
         PFIErrorCode fontStatus = PFI_NO_ERROR;
 
         printf("Test %d, font = %s... ", test, testInputs[test].fontName);
@@ -89,25 +84,24 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        UErrorCode success = U_ZERO_ERROR;
-        ICULayoutEngine *engine = ICULayoutEngine::createInstance(&fontInstance, testInputs[test].scriptCode, dummyLocale, success);
-        int32_t textLength = testInputs[test].textLength;
-        UBool result;
+        LEErrorCode success = LE_NO_ERROR;
+        LayoutEngine *engine = LayoutEngine::layoutEngineFactory(&fontInstance, testInputs[test].scriptCode, -1, success);
+        le_int32 textLength = testInputs[test].textLength;
+        le_bool result;
         TestResult actual;
 
         if (LE_FAILURE(success)) {
             // would be nice to print the script name here, but
-            // don't know if it's worth the trouble to maintian
-            // the table; better to wait for that fuctionality
-            // to appear in ICU...
+            // don't want to maintain a table, and don't want to
+            // require ICU just for the script name...
             printf("could not create a LayoutEngine.\n");
             continue;
         }
 
         actual.glyphCount = engine->layoutChars(testInputs[test].text, 0, textLength, textLength, testInputs[test].rightToLeft, 0, 0, success);
 
-        actual.glyphs = new uint16_t[actual.glyphCount];
-        actual.indices = new int32_t[actual.glyphCount];
+        actual.glyphs    = new LEGlyphID[actual.glyphCount];
+        actual.indices   = new le_int32[actual.glyphCount];
         actual.positions = new float[actual.glyphCount * 2 + 2];
 
         engine->getGlyphs(actual.glyphs, success);
@@ -126,7 +120,7 @@ int main(int argc, char *argv[])
         delete[] actual.positions;
         delete[] actual.indices;
         delete[] actual.glyphs;
-        delete engine;
+        delete   engine;
     }
 
     return failures;
