@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: ICU for Java
+Specification-Version: 2.8
+Specification-Vendor: ICU
+Implementation-Title: ICU for Java
+Implementation-Version: 2.8.0
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+
+Name: com/ibm/icu
