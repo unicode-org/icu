@@ -109,7 +109,7 @@ StringCharacterIterator::setText(const UnicodeString& newText) {
 }
 
 void
-StringCharacterIterator::getText(UnicodeString& result) const {
+StringCharacterIterator::getText(UnicodeString& result) {
     result = text;
 }
 U_NAMESPACE_END
