@@ -674,6 +674,15 @@ free(result);
     else
         log_verbose("Pass:setting and getting attributes for UNUM_MULTIPLIER works fine\n");
 
+    attr=UNUM_SECONDARY_GROUPING_SIZE;
+    newvalue=unum_getAttribute(def, attr);
+    newvalue=2;
+    unum_setAttribute(def, attr, newvalue);
+    if(unum_getAttribute(def,attr) != 2)
+        log_err("error in setting and getting attributes for UNUM_SECONDARY_GROUPING_SIZE\n");
+    else
+        log_verbose("Pass:setting and getting attributes for UNUM_SECONDARY_GROUPING_SIZE works fine\n");
+
     /*testing set and get Attributes extensively */
     log_verbose("\nTesting get and set attributes extensively\n");
     for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_PADDING_POSITION; attr=(UNumberFormatAttribute)((int32_t)attr + 1) )
