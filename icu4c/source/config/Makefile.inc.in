@@ -116,6 +116,10 @@ ICULIBS = $(ICULIBS_BASE) $(ICULIBS_I18N) $(ICULIBS_COMMON) $(ICULIBS_DATA)
 #   (Overridden when necessary in -mh files)
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
+# Versioned target for a shared library
+FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+
 # Access to important ICU tools.
 # Use as follows:  $(INVOKE) $(GENRB) arguments .. 
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
