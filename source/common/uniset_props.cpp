@@ -23,6 +23,8 @@
 #include "unicode/uscript.h"
 #include "unicode/symtable.h"
 #include "unicode/uset.h"
+#include "unicode/locid.h"
+#include "unicode/brkiter.h"
 #include "uset_imp.h"
 #include "ruleiter.h"
 #include "cmemory.h"
@@ -806,6 +808,9 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
     if ((options & USET_CASE_INSENSITIVE) != 0) {
         closeOver(USET_CASE);
     }
+    else if ((options & USET_ADD_CASE_MAPPINGS) != 0) {
+        closeOver(USET_ADD_CASE_MAPPINGS);
+    }
     if (invert) {
         complement();
     }
@@ -1403,6 +1408,42 @@ UnicodeSet& UnicodeSet::closeOver(int32_t attribute) {
             }
         }
         *this = foldSet;
+    }
+    else if ((attribute & USET_ADD_CASE_MAPPINGS)) {
+        UnicodeSet foldSet;
+        UnicodeString str;
+        UErrorCode status = U_ZERO_ERROR;
+        Locale root("");
+        BreakIterator *bi = BreakIterator::createWordInstance(root, status);
+        if (U_SUCCESS(status)) {
+            int32_t n = getRangeCount();
+            for (int32_t i=0; i<n; ++i) {
+                UChar32 start = getRangeStart(i);
+                UChar32 end   = getRangeEnd(i);
+                for (UChar32 cp=start; cp<=end; ++cp) {
+                    str.setTo(cp);
+                    str.toLower(root);
+                    foldSet.add(str);
+                    str.toTitle(bi, root);
+                    foldSet.add(str);
+                    str.toUpper(root);
+                    foldSet.add(str);
+                }
+            }
+            if (strings != NULL && strings->size() > 0) {
+                for (int32_t j=0; j<strings->size(); ++j) {
+                    str = * (const UnicodeString*) strings->elementAt(j);
+                    str.toLower(root);
+                    foldSet.add(str);
+                    str.toTitle(bi, root);
+                    foldSet.add(str);
+                    str.toUpper(root);
+                    foldSet.add(str);
+                }
+            }
+            delete bi;
+            *this = foldSet;
+        }
     }
     return *this;
 }
