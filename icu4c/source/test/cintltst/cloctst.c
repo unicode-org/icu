@@ -1900,7 +1900,9 @@ TestConsistentCountryInfo(void) {
 }
 
 static int32_t
-findStringSetMismatch(const UChar *string, int32_t langSize, const UChar *exemplarCharacters, int32_t exemplarLen) {
+findStringSetMismatch(const UChar *string, int32_t langSize,
+                      const UChar *exemplarCharacters, int32_t exemplarLen,
+                      UBool ignoreNumbers) {
     UErrorCode errorCode = U_ZERO_ERROR;
     USet *exemplarSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
     int32_t strIdx;
@@ -1911,8 +1913,10 @@ findStringSetMismatch(const UChar *string, int32_t langSize, const UChar *exempl
 
     for (strIdx = 0; strIdx < langSize; strIdx++) {
         if (!uset_contains(exemplarSet, string[strIdx])
-            && string[strIdx] != 0x0020 && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d) {
-            return strIdx;
+            && string[strIdx] != 0x0020 && string[strIdx] != 0x200c && string[strIdx] != 0x002e && string[strIdx] != 0x002c && string[strIdx] != 0x002d) {
+            if (!ignoreNumbers || (ignoreNumbers && (string[strIdx] < 0x30 || string[strIdx] > 0x39))) {
+                return strIdx;
+            }
         }
     }
     uset_close(exemplarSet);
@@ -1929,6 +1933,9 @@ static void VerifyTranslation(void) {
     const char *currLoc;
     UScriptCode scripts[USCRIPT_CODE_LIMIT];
     int32_t numScripts;
+    int32_t idx;
+    int32_t end;
+    UResourceBundle *resArray;
 
     if (locCount <= 1) {
         log_data_err("At least root needs to be installed\n");
@@ -1973,7 +1980,7 @@ static void VerifyTranslation(void) {
                 log_err("error uloc_getDisplayLanguage returned %s\n", u_errorName(errorCode));
             }
             else {
-                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen);
+                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
                 if (strIdx >= 0) {
                     log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters.\n",
                         currLoc, strIdx);
@@ -1984,12 +1991,65 @@ static void VerifyTranslation(void) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
             else {
-                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen);
+                strIdx = findStringSetMismatch(langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters.\n",
                         currLoc, strIdx);
                 }
             }
+
+            resArray = ures_getByKey(currentLocale, "DayNames", NULL, &errorCode);
+            if (U_FAILURE(errorCode)) {
+                log_err("error ures_getByKey returned %s\n", u_errorName(errorCode));
+            }
+            if (QUICK) {
+                end = 1;
+            }
+            else {
+                end = ures_getSize(resArray);
+            }
+
+
+            for (idx = 0; idx < end; idx++) {
+                const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
+                if (U_FAILURE(errorCode)) {
+                    log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
+                    continue;
+                }
+                strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                if (strIdx >= 0) {
+                    log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
+                        currLoc, idx, strIdx);
+                }
+            }
+            ures_close(resArray);
+
+            resArray = ures_getByKey(currentLocale, "MonthNames", NULL, &errorCode);
+            if (U_FAILURE(errorCode)) {
+                log_err("error ures_getByKey returned %s\n", u_errorName(errorCode));
+            }
+            if (QUICK) {
+                end = 1;
+            }
+            else {
+                end = ures_getSize(resArray);
+            }
+
+            for (idx = 0; idx < end; idx++) {
+                const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
+                if (U_FAILURE(errorCode)) {
+                    log_err("error ures_getStringByIndex(%d) returned %s\n", idx, u_errorName(errorCode));
+                    continue;
+                }
+                strIdx = findStringSetMismatch(fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE);
+                if (strIdx >= 0) {
+                    log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters.\n",
+                        currLoc, idx, strIdx);
+                }
+            }
+            ures_close(resArray);
+
+            errorCode = U_ZERO_ERROR;
             numScripts = uscript_getCode(currLoc, scripts, sizeof(scripts)/sizeof(scripts[0]), &errorCode);
             if (numScripts == 0) {
                 log_err("uscript_getCode(%s) doesn't work.\n", currLoc);
