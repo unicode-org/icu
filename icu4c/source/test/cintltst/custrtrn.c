@@ -19,8 +19,10 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "unicode/ures.h"
 #include "ustr_imp.h"
 #include "cintltst.h"
+#include "cwchar.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -29,6 +31,8 @@ void addUCharTransformTest(TestNode** root);
 static void Test_UChar_UTF32_API(void);
 static void Test_UChar_UTF8_API(void);
 static void Test_UChar_WCHART_API(void);
+static void Test_widestrs(void);
+static void Test_WCHART_LongString(void);
 
 void 
 addUCharTransformTest(TestNode** root)
@@ -36,6 +40,8 @@ addUCharTransformTest(TestNode** root)
    addTest(root, &Test_UChar_UTF32_API, "custrtrn/Test_UChar_UTF32_API");
    addTest(root, &Test_UChar_UTF8_API, "custrtrn/Test_UChar_UTF8_API");
    addTest(root, &Test_UChar_WCHART_API,  "custrtrn/Test_UChar_WCHART_API");
+   addTest(root, &Test_widestrs,  "custrtrn/Test_widestrs");
+   addTest(root, &Test_WCHART_LongString, "custrtrn/Test_WCHART_LongString");
 }
 
 static const UChar32 src32[]={
@@ -432,16 +438,7 @@ static const uint16_t src16j[] = {
     0x0053, 0x0054, 0x0055, 0x0056, 0x0057, 0x0058, 0x0059, 0x005A, 0x000D, 0x000A,
     0x0000,
     /* Test only ASCII */
-    /*
-    0x00A8, 0x00A9, 0x00AA, 0x00AB, 0x00AC, 0x00AD,
-    0x00AE, 0x00AF, 0x00B0, 0x00B1, 0x00B2, 0x00B3, 0x00B4, 0x00B5, 0x00B6, 0x00B7,
-    0x00B8, 0x00B9, 0x00BA, 0x00BB, 0x00BC, 0x00BD, 0x00BE, 0x00BF, 0x00C0, 0x00C1,
-    0x00C2, 0x00C3, 0x00C4, 0x00C5, 0x00C6, 0x00C7, 0x00C8, 0x00C9, 0x00CA, 0x00CB,
-    0x00CC, 0x00CD, 0x00CE, 0x00CF, 0x00D0, 0x00D1, 0x00D2, 0x00D3, 0x00D4, 0x00D5, 
-    0x00D6, 0x00D7, 0x00D8, 0x00D9, 0x00DA, 0x00DB, 0x00DC, 0x00DD, 0x00DE, 0x00DF, 
-    0x00E0, 0x00E1, 0x00E2, 0x00E3, 0x00E4, 0x00E5, 0x00E6, 0x00E7, 0x00E8, 0x00E9,
-    0x0054, 0x0000
-    */
+
 };
 static const uint16_t src16WithNulls[] = {
     0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0000,
@@ -652,3 +649,101 @@ static void Test_UChar_WCHART_API(void){
         }
     }
 } 
+
+void Test_widestrs()
+{
+        wchar_t ws[100];
+        UChar rts[100];
+        int32_t wcap = sizeof(ws) / sizeof(*ws);
+        int32_t wl;
+        int32_t rtcap = sizeof(rts) / sizeof(*rts);
+        int32_t rtl;
+        wchar_t *wcs;
+        UChar *cp;
+        const char *errname;
+        UChar ustr[] = {'h', 'e', 'l', 'l', 'o', 0};
+        int32_t ul = sizeof(ustr)/sizeof(*ustr) -1;
+        char astr[100];
+
+        UErrorCode err;
+
+        err = U_ZERO_ERROR;
+        wcs = u_strToWCS(ws, wcap, &wl, ustr, ul, &err);
+        if (U_FAILURE(err)) {
+                errname = u_errorName(err);
+                log_err("test_widestrs: u_strToWCS error: %s!\n",errname);
+        }
+        if(ul!=wl){
+            log_err("u_strToWCS: ustr = %s, ul = %d, ws = %S, wl = %d!\n", u_austrcpy(astr, ustr), ul, ws, wl);
+        }
+        err = U_ZERO_ERROR;
+        wl = uprv_wcslen(wcs);
+        cp = u_strFromWCS(rts, rtcap, &rtl, wcs, wl, &err);
+        if (U_FAILURE(err)) {
+                errname = u_errorName(err);
+                fprintf(stderr, "test_widestrs: ucnv_wcstombs error: %s!\n",errname);
+        }
+        if(wl != rtl){
+            log_err("u_strFromWCS: wcs = %S, wl = %d,rts = %s, rtl = %d!\n", wcs, wl, u_austrcpy(astr, rts), rtl);
+        }
+}
+void
+Test_WCHART_LongString(){
+    UErrorCode status = U_ZERO_ERROR;
+    const char* testdatapath=loadTestData(&status);
+    UResourceBundle *theBundle = ures_open(testdatapath, "testtypes", &status);
+    int32_t strLen =0;
+    const UChar* str = ures_getStringByKey(theBundle, "testinclude",&strLen,&status);
+    const UChar* uSrc = str;
+    int32_t uSrcLen = strLen;
+    int32_t wDestLen =0, reqLen=0, i=0;
+    int32_t uDestLen =0;
+    wchar_t* wDest = NULL;
+    UChar* uDest = NULL;
+    UBool failed = FALSE;
+
+    if(U_FAILURE(status)){
+        log_err("Could not get testinclude resource from testtypes bundle. Error: %s\n",u_errorName(status));
+        return;
+    }
+
+
+    /* pre-flight*/
+    u_strToWCS(wDest,wDestLen,&reqLen,uSrc,-1,&status);
+
+    if(status == U_BUFFER_OVERFLOW_ERROR){
+        status=U_ZERO_ERROR;
+        wDest =(wchar_t*) malloc(sizeof(wchar_t) * (reqLen+1));
+        wDestLen = reqLen+1;
+        u_strToWCS(wDest,wDestLen,&reqLen,uSrc,-1,&status);
+    }
+    uDestLen = 0;
+    /* pre-flight */
+    u_strFromWCS(uDest, uDestLen,&reqLen,wDest,-1,&status);
+
+    if(status == U_BUFFER_OVERFLOW_ERROR){
+        status =U_ZERO_ERROR;
+        uDest = (UChar*) malloc(sizeof(UChar) * (reqLen+1));
+        uDestLen = reqLen + 1;
+        u_strFromWCS(uDest, uDestLen,&reqLen,wDest,-1,&status);
+    }
+
+
+    for(i=0; i< uSrcLen; i++){
+        if(uDest[i] != str[i]){
+            log_verbose("u_str*WCS() failed for null terminated string expected: \\u%04X got: \\u%04X at index: %i \n", src16j[i] ,uDest[i],i);
+            failed =TRUE;
+        }
+    }
+
+    if(U_FAILURE(status)){
+        failed = TRUE;
+    }
+    if(failed){
+        log_err("u_strToWCS() failed \n");
+    }
+    free(wDest);
+    free(uDest);
+    
+    
+}
