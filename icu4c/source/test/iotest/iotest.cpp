@@ -439,6 +439,58 @@ static void TestfgetsBuffers() {
 }
 
 
+static void TestfgetsLineCount() {
+    UChar buffer[2048];
+    UChar expectedBuffer[2048];
+    char charBuffer[2048];
+    static const char testStr[] = "This is a test string that tests u_fgets. It makes sure that we don't try to read too much!";
+    UFILE *myFile = NULL;
+    FILE *stdFile = fopen(STANDARD_TEST_FILE, "w");
+    int32_t expectedSize = strlen(testStr);
+    int32_t repetitions;
+    int32_t nlRepetitions;
+
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
+
+    for (repetitions = 0; repetitions < 16; repetitions++) {
+        fwrite(testStr, sizeof(testStr[0]), expectedSize, stdFile);
+        for (nlRepetitions = 0; nlRepetitions < repetitions; nlRepetitions++) {
+            fwrite("\n", sizeof(testStr[0]), 1, stdFile);
+        }
+    }
+    fclose(stdFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
+    stdFile = fopen(STANDARD_TEST_FILE, "r");
+
+    u_uastrncpy(buffer, charBuffer, expectedSize+1);
+
+    for (;;) {
+        char *returnedCharBuffer = fgets(charBuffer, sizeof(charBuffer)/sizeof(charBuffer[0]), stdFile);
+        UChar *returnedUCharBuffer = u_fgets(myFile, sizeof(buffer)/sizeof(buffer[0]), buffer);
+
+        if (!returnedCharBuffer && !returnedUCharBuffer) {
+            /* Both returned NULL. stop. */
+            break;
+        }
+        if (returnedCharBuffer != charBuffer) {
+            log_err("Didn't get the charBuffer back\n");
+            continue;
+        }
+        u_uastrncpy(expectedBuffer, charBuffer, strlen(charBuffer)+1);
+        if (returnedUCharBuffer != buffer) {
+            log_err("Didn't get the buffer back\n");
+            continue;
+        }
+        if (u_strcmp(buffer, expectedBuffer) != 0) {
+            log_err("buffers are different\n");
+        }
+    }
+    fclose(stdFile);
+    u_fclose(myFile);
+}
+
 static void TestFilePrintCompatibility() {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "wb", "en_US_POSIX", NULL);
     FILE *myCFile;
@@ -1371,6 +1423,7 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestFile, "file/TestFile");
     addTest(root, &TestCodepage, "file/TestCodepage");
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
+    addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
 

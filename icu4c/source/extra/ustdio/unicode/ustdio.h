@@ -85,6 +85,7 @@
  * u_fsettransliterator does not support U_READ side of transliteration.
  * The format specifier should limit the size of a format or honor it in
    order to prevent buffer overruns.  (e.g. %1000.1000d).
+ * u_fgets is different from stdio. The UChar and UFile arguments are swapped.
  * More testing is needed.
 */
 
