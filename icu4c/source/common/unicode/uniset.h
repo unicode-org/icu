@@ -1309,7 +1309,7 @@ private:
      * Return a cached copy of the inclusions list that
      * uprv_getInclusions() produces.
      */
-    static const UnicodeSet* getInclusions();
+    static const UnicodeSet* getInclusions(UErrorCode &errorCode);
 
     friend class UnicodeSetIterator;
 

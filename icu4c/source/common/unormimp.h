@@ -349,7 +349,7 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode);
  * @internal
  */
 U_CAPI void U_EXPORT2
-unorm_addPropertyStarts(USet *set);
+unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
 
 /**
  * Description of the format of unorm.dat version 2.2.
