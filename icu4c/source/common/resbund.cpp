@@ -239,9 +239,16 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
         constructForLocale(path, locale, err);
 }
 
-ResourceBundle::ResourceBundle(const ResourceBundle &original) {
+ResourceBundle::ResourceBundle(const ResourceBundle &other) {
     UErrorCode status = U_ZERO_ERROR;
-    constructForLocale(ures_getPath(original.resource), Locale(ures_getName(original.resource)), status);
+
+        if(other.resource->fIsTopLevel == TRUE) {
+        constructForLocale(ures_getPath(other.resource), Locale(ures_getName(other.resource)), status);
+	    } else {
+	      resource = 0;
+	      fItemCache = 0;
+	        resource = copyResb(0, other.resource);
+	    }
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res) {
