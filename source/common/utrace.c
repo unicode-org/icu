@@ -14,6 +14,7 @@
 #include "utracimp.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "ucln_cmn.h"
 
 
 static UTraceEntry     *pTraceEntryFunc = NULL;
@@ -96,8 +97,8 @@ static void outputChar(char c, char *outBuf, int32_t *outIx, int32_t capacity, i
      *       buffer size needed.  No harm done.
      */
     if (*outIx==0 ||   /* case 1. */
-        c!='\n' && c!=0 && *outIx < capacity && outBuf[(*outIx)-1]=='\n' ||  /* case 2. */
-        c=='\n' && *outIx>=capacity)    /* case 3 */
+        (c!='\n' && c!=0 && *outIx < capacity && outBuf[(*outIx)-1]=='\n') ||  /* case 2. */
+        (c=='\n' && *outIx>=capacity))    /* case 3 */
     {
         /* At the start of a line.  Indent. */
         for(i=0; i<indent; i++) {
@@ -187,11 +188,10 @@ U_CAPI int32_t U_EXPORT2
 utrace_vformat(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, va_list args) {
     int32_t   outIx  = 0;
     int32_t   fmtIx  = 0;
-    int32_t   tbufIx = 0;
     char      fmtC;
     char      c;
     int32_t   intArg;
-    int64_t   longArg;
+    int64_t   longArg = 0;
     char      *ptrArg;
 
     /*   Loop runs once for each character in the format string.
@@ -283,7 +283,7 @@ utrace_vformat(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, 
                 int32_t  *i32Ptr;
                 int64_t  *i64Ptr;
                 void     **ptrPtr;
-                int32_t   charsToOutput;
+                int32_t   charsToOutput = 0;
                 int32_t   i;
                 
                 vectorType = fmt[fmtIx];    /* b, h, d, l, p, etc. */

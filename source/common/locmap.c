@@ -165,25 +165,6 @@ typedef struct ILcidPosixMap
     const struct ILcidPosixElement* const regionMaps;
 } ILcidPosixMap;
 
-static const char* posixID(const ILcidPosixMap *this_0, uint32_t fromHostID);
-
-/**
- * Searches for a Windows LCID
- *
- * @param posixid the Posix style locale id.
- * @param status gets set to U_ILLEGAL_ARGUMENT_ERROR when the Posix ID has
- *               no equivalent Windows LCID.
- * @return the LCID
- */
-static uint32_t hostID(const ILcidPosixMap *this_0, const char* fromPosixID, UErrorCode* status);
-
-/**
- * Do not call this function. It is called by hostID.
- * The function is not private because this struct must stay as a C struct,
- * and this is an internal class.
- */
-static int32_t idCmp(const char* id1, const char* id2);
-
 
 /*
 /////////////////////////////////////////////////
@@ -592,6 +573,11 @@ static const ILcidPosixMap gPosixIDmap[] = {
 
 static const uint32_t gLocaleCount = sizeof(gPosixIDmap)/sizeof(ILcidPosixMap);
 
+/**
+ * Do not call this function. It is called by hostID.
+ * The function is not private because this struct must stay as a C struct,
+ * and this is an internal class.
+ */
 static int32_t
 idCmp(const char* id1, const char* id2)
 {
@@ -613,7 +599,7 @@ idCmp(const char* id1, const char* id2)
  * @return the LCID
  */
 static uint32_t
-hostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
+getHostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
 {
     int32_t bestIdx = 0;
     int32_t bestIdxDiff = 0;
@@ -642,7 +628,7 @@ hostID(const ILcidPosixMap *this_0, const char* posixID, UErrorCode* status)
 }
 
 static const char*
-posixID(const ILcidPosixMap *this_0, uint32_t hostID)
+getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
 {
     uint32_t i;
     for (i = 0; i <= this_0->numRegions; i++)
@@ -676,7 +662,7 @@ uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
     {
         if (langID == gPosixIDmap[index].regionMaps->hostID)
         {
-            return posixID(&gPosixIDmap[index], hostid);
+            return getPosixID(&gPosixIDmap[index], hostid);
         }
     }
 
@@ -700,7 +686,7 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
     uint32_t   low    = 0;
     uint32_t   high   = gLocaleCount;
     uint32_t   mid    = high;
-    uint32_t   oldmid =0;
+    uint32_t   oldmid = 0;
     int32_t    compVal;
     char       langID[ULOC_FULLNAME_CAPACITY];
 
@@ -736,7 +722,7 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
             low = mid;
         }
         else /*we found it*/{
-            return hostID(&gPosixIDmap[mid], posixID, status);
+            return getHostID(&gPosixIDmap[mid], posixID, status);
         }
         oldmid = mid;
     }
@@ -747,7 +733,7 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
      */
     for (idx = 0; idx < gLocaleCount; idx++ ) {
         myStatus = U_ZERO_ERROR;
-        value = hostID(&gPosixIDmap[idx], posixID, &myStatus);
+        value = getHostID(&gPosixIDmap[idx], posixID, &myStatus);
         if (myStatus == U_ZERO_ERROR) {
             return value;
         }
