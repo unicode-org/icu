@@ -283,7 +283,8 @@ typedef enum UProperty {
     /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
     UCHAR_INT_LIMIT,
 
-    /** Enumerated property General_Category, returned as a bit mask.
+    /** Bitmask property General_Category_Mask.
+        This is the General_Category property returned as a bit mask.
         When used in u_getIntPropertyValue(c), same as U_MASK(u_charType(c)),
         returns bit masks for UCharCategory values where exactly one bit is set.
         When used with u_getPropertyValueName() and u_getPropertyValueEnum(),
