@@ -277,7 +277,14 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     //    (Requires special casing in implementation, which is why it gets a test.)
     ADD_DATACHUNK(chardata, "\\uffff", 0, status);
     ADD_DATACHUNK(chardata, "\\uffff", 0, status);
+    ADD_DATACHUNK(chardata, " ", 0, status);
+    ADD_DATACHUNK(chardata, "a", 0, status);
 
+    // Regression test for bug 1889
+    ADD_DATACHUNK(chardata, "\\u0f40\\u0f7d", 0, status);
+    ADD_DATACHUNK(chardata, "\\u0000", 0, status);
+    ADD_DATACHUNK(chardata, "\\u0f7e", 0, status);
+    // \u0f7d\u0000\u0f7e
 
     if(U_FAILURE(status)){
         errln("FAIL : in BITestData construction");
