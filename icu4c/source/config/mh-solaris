@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.36 2004/03/26 18:07:36 grhoten-oss Exp $
+## $Id: mh-solaris,v 1.37 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -69,9 +69,9 @@ STATIC_O = o
 ## Versioned libraries rules
 
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && ln -s ${<F} $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
 # 
 ifeq (strip $(GENCCODE_ASSEMBLY),)

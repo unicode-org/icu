@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.35 2003/12/18 23:14:11 emader-oss Exp $
+## $Id: mh-aix,v 1.36 2004/03/26 22:33:12 grhoten-oss Exp $
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
@@ -102,9 +102,9 @@ STATIC_O = o
 
 ## Versioned libraries rules
 %$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
 %.$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
 
 
 ## BIR  - bind with internal references [so app data and icu data doesn't collide]

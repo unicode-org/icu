@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-bsd-gcc,v 1.9 2004/03/26 18:07:35 grhoten-oss Exp $
+## $Id: mh-bsd-gcc,v 1.10 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -54,9 +54,9 @@ STATIC_O = ao
 ## Versioned libraries rules
 
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && ln -s ${<F} $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End FreeBSD-specific setup
 
