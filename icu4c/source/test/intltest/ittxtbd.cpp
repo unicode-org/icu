@@ -635,7 +635,7 @@ void IntlTestTextBoundary::TestLineIteration()
 }
 void IntlTestTextBoundary::TestLineInvariants()
 {
-    BreakIterator *e = BreakIterator::createLineInstance();
+    BreakIterator *e = BreakIterator::createLineInstance(Locale::US);
     UnicodeString s = CharsToUnicodeString2(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
     UnicodeString testChars = *cannedTestChars + s;
     doBreakInvariantTest(*e, testChars);

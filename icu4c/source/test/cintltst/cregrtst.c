@@ -1069,6 +1069,10 @@ AllocateTextBoundary();
                     u_charType(c) == U_NON_SPACING_MARK ||
                     u_charType(c) == U_ENCLOSING_MARK ||
                     u_charType(c) == U_CURRENCY_SYMBOL ||
+                    u_charType(c) == U_SPACE_SEPARATOR ||
+                    u_charType(c) == U_DASH_PUNCTUATION ||
+                    u_charType(c) == U_CONTROL_CHAR ||
+                    u_charType(c) == U_FORMAT_CHAR ||
                     c == '\n' || c == '\r' || c == 0x2028 || c == 0x2029 ||
                     c == 0x0003 || c == 0x00a0 || c == 0x2007 || c == 0x2011 ||
                     c == 0xfeff)
