@@ -4,6 +4,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#ifndef UNICODESTRINGTEST_H
+#define UNICODESTRINGTEST_H
+
 #include "intltest.h"
 
 /**
@@ -74,3 +77,4 @@ public:
     void TestUnescape(void);
 };
 
+#endif

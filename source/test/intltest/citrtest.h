@@ -4,6 +4,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#ifndef CHARITERTEST_H
+#define CHARITERTEST_H
+
 #include "intltest.h"
 
 /**
@@ -33,5 +36,5 @@ public:
     void TestIterationUChar32(void);
 };
 
-
+#endif
 

@@ -10,8 +10,7 @@
 #ifndef TESTUTIL_H
 #define TESTUTIL_H
 
-#include "unicode/utypes.h"
-class UnicodeString;
+#include "unicode/unistr.h"
 
 /**
  * Utility methods.  Everything in this class is static -- do not

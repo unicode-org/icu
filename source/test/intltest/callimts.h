@@ -7,7 +7,6 @@
 #ifndef __CalendarLimitTest__
 #define __CalendarLimitTest__
  
-#include "unicode/utypes.h"
 #include "caltztst.h"
 class Calendar;
 class DateFormat;

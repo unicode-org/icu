@@ -299,3 +299,122 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
     }
 }
 
+// used for collation result reporting, defined here for convenience
+// (maybe moved later)
+void
+IntlTestCollator::reportCResult( UnicodeString &source, UnicodeString &target,
+             CollationKey &sourceKey, CollationKey &targetKey,
+             Collator::EComparisonResult compareResult,
+             Collator::EComparisonResult keyResult,
+                                Collator::EComparisonResult incResult,
+                         Collator::EComparisonResult expectedResult )
+{
+    if (expectedResult < -1 || expectedResult > 1)
+    {
+        errln("***** invalid call to reportCResult ****");
+        return;
+    }
+
+    UBool ok1 = (compareResult == expectedResult);
+    UBool ok2 = (keyResult == expectedResult);
+    UBool ok3 = (incResult == expectedResult);
+
+
+    if (ok1 && ok2 && ok3 && !verbose) {
+        // Keep non-verbose, passing tests fast
+        return;
+    } else {
+        UnicodeString msg1(ok1 ? "Ok: compare(" : "FAIL: compare(");
+        UnicodeString msg2(", "), msg3(") returned "), msg4("; expected ");
+        UnicodeString prettySource, prettyTarget, sExpect, sResult;
+
+        IntlTest::prettify(source, prettySource);
+        IntlTest::prettify(target, prettyTarget);
+        appendCompareResult(compareResult, sResult);
+        appendCompareResult(expectedResult, sExpect);
+
+        if (ok1) {
+            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
+        } else {
+            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
+        }
+
+        msg1 = UnicodeString(ok2 ? "Ok: key(" : "FAIL: key(");
+        msg2 = ").compareTo(key(";
+        msg3 = ")) returned ";
+
+        appendCompareResult(keyResult, sResult);
+
+        if (ok2) {
+            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
+        } else {
+            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
+
+            msg1 = "  ";
+            msg2 = " vs. ";
+
+            prettify(sourceKey, prettySource);
+            prettify(targetKey, prettyTarget);
+
+            errln(msg1 + prettySource + msg2 + prettyTarget);
+        }
+        msg1 = UnicodeString (ok3 ? "Ok: incCompare(" : "FAIL: incCompare(");
+        msg2 = ", ";
+        msg3 = ") returned ";
+
+        appendCompareResult(incResult, sResult);
+
+        if (ok3) {
+            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
+        } else {
+            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
+        }
+    }
+}
+
+UnicodeString&
+IntlTestCollator::appendCompareResult(Collator::EComparisonResult result,
+                  UnicodeString& target)
+{
+    if (result == Collator::LESS)
+    {
+        target += "LESS";
+    }
+    else if (result == Collator::EQUAL)
+    {
+        target += "EQUAL";
+    }
+    else if (result == Collator::GREATER)
+    {
+        target += "GREATER";
+    }
+    else
+    {
+        UnicodeString huh = "?";
+
+        target += (huh + (int32_t)result);
+    }
+
+    return target;
+}
+
+// Produce a printable representation of a CollationKey
+UnicodeString &IntlTestCollator::prettify(const CollationKey &source, UnicodeString &target)
+{
+    int32_t i, byteCount;
+    const uint8_t *bytes = source.getByteArray(byteCount);
+
+    target.remove();
+    target += "[";
+
+    for (i = 0; i < byteCount; i += 1)
+    {
+        appendHex(bytes[i], 2, target);
+        target += " ";
+    }
+
+    target += "]";
+
+    return target;
+}
+

@@ -7,7 +7,6 @@
 #ifndef _NUMBERFORMATTEST_
 #define _NUMBERFORMATTEST_
  
-#include "unicode/utypes.h"
 #include "caltztst.h"
 class NumberFormat;
 class DecimalFormat;

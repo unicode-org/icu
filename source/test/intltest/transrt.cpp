@@ -215,125 +215,6 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
     }
 }
 
-void RTTest::test2() {
-
-    UChar c;
-    UnicodeString cs, targ, reverse;
-    int8_t *type = new int8_t[0xFFFF];
-    UParseError parseError;
-    UErrorCode status = U_ZERO_ERROR;
-    Transliterator* sourceToTarget = Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError, status);
-    if (sourceToTarget == NULL) {
-        log->errln("Fail: createInstance(" + transliteratorID +
-                   ") returned NULL");
-        return;
-    }
-    Transliterator* targetToSource = sourceToTarget->createInverse(status);
-    if (targetToSource == NULL) {
-        log->errln("Fail: " + transliteratorID +
-                   ".createInverse() returned NULL");
-        delete sourceToTarget;
-        return;
-    }
-
-    log->logln("Initializing type array");
-
-    for (c = 0; c < 0xFFFF; ++c) {
-        type[c] = Unicode::getType(c);
-    }
-
-    log->logln("Checking that all source characters convert to target - Singles");
-
-    for (c = 0; c < 0xFFFF; ++c) {
-        if (type[c] == Unicode::UNASSIGNED || !isSource(c))
-            continue;
-        cs.remove(); cs.append(c);
-        targ = cs;
-        sourceToTarget->transliterate(targ);
-        if (!isReceivingTarget(targ)) {
-            logWrongScript("Source-Target", cs, targ);
-            if (errorCount >= errorLimit)
-                return;
-        }
-    }
-
-    log->logln("Checking that all source characters convert to target - Doubles");
-
-    for (c = 0; c < 0xFFFF; ++c) {
-        if (type[c] == Unicode::UNASSIGNED ||
-            !isSource(c)) continue;
-        for (UChar d = 0; d < 0xFFFF; ++d) {
-            if (type[d] == Unicode::UNASSIGNED || !isSource(d))
-                continue;
-            cs.remove(); cs.append(c).append(d);
-            targ = cs;
-            sourceToTarget->transliterate(targ);
-            if (!isReceivingTarget(targ)) {
-                logWrongScript("Source-Target", cs, targ);
-                if (errorCount >= errorLimit)
-                    return;
-            }
-        }
-    }
-
-    log->logln("Checking that target characters convert to source and back - Singles");
-
-    for (c = 0; c < 0xFFFF; ++c) {
-        if (type[c] == Unicode::UNASSIGNED || !isTarget(c))
-            continue;
-        cs.remove(); cs.append(c);
-        targ = cs;
-        targetToSource->transliterate(targ);
-        reverse = targ;
-        sourceToTarget->transliterate(reverse);
-        if (!isReceivingSource(targ)) {
-            logWrongScript("Target-Source", cs, targ);
-            if (errorCount >= errorLimit)
-                return;
-        } else if (cs != reverse) {
-            logRoundTripFailure(cs, targ, reverse);
-            if (errorCount >= errorLimit)
-                return;
-        }
-    }
-
-    log->logln("Checking that target characters convert to source and back - Doubles");
-    int32_t count = 0;
-    cs = UNICODE_STRING("aa", 2);
-    for (c = 0; c < 0xFFFF; ++c) {
-        if (type[c] == Unicode::UNASSIGNED || !isTarget(c))
-            continue;
-        if (++count > pairLimit) {
-            //throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
-            log->logln("");
-            log->logln((UnicodeString)"Test truncated at " + pairLimit + " x 64k pairs");
-            return;
-        }
-        cs.setCharAt(0, c);
-        log->logln(TestUtility::hex(c));
-        for (UChar d = 0; d < 0xFFFF; ++d) {
-            if (type[d] == Unicode::UNASSIGNED || !isTarget(d))
-                continue;
-            cs.setCharAt(1, d);
-            targ = cs;
-            targetToSource->transliterate(targ);
-            reverse = targ;
-            sourceToTarget->transliterate(reverse);
-            if (!isReceivingSource(targ)) {
-                logWrongScript("Target-Source", cs, targ);
-                if (errorCount >= errorLimit)
-                    return;
-            } else if (cs != reverse) {
-                logRoundTripFailure(cs, targ, reverse);
-                if (errorCount >= errorLimit)
-                    return;
-            }
-        }
-    }
-    log->logln("");
-    delete []type;
-}
-
 void RTTest::logWrongScript(const UnicodeString& label,
                             const UnicodeString& from,
                             const UnicodeString& to) {
@@ -378,7 +259,7 @@ void RTTest::logRoundTripFailure(const UnicodeString& from,
  * Default is ASCII letters for Latin
  */
 UBool RTTest::isSource(UChar c) {
-    return (TestUtility::getScript(c) == sourceScript && Unicode::isLetter(c)
+    return (TestUtility::getScript(c) == sourceScript && u_isalpha(c)
         && sourceRange.contains(c));
 }
 
@@ -398,7 +279,7 @@ RTTest::isReceivingSource(UChar c) {
  */
 inline UBool
 RTTest::isTarget(UChar c) {
-    return (TestUtility::getScript(c) == targetScript && Unicode::isLetter(c)
+    return (TestUtility::getScript(c) == targetScript && u_isalpha(c)
         && (targetRange.isEmpty() || targetRange.contains(c)));
 }
 
@@ -465,9 +346,11 @@ RTHangulTest::RTHangulTest() : RTTest("Jamo-Hangul",
 
 UBool RTHangulTest::isSource(UChar c)
 {
-    if (0x1113 <= c && c <= 0x1160) return FALSE;
-    if (0x1176 <= c && c <= 0x11F9) return FALSE;
-    if (0x3131 <= c && c <= 0x318E) return FALSE;
+    if ((0x1113 <= c && c <= 0x1160)
+     || (0x1176 <= c && c <= 0x11F9)
+     || (0x3131 <= c && c <= 0x318E)) {
+       return FALSE;
+    }
     return RTTest::isSource(c);
 }
 
@@ -530,3 +413,126 @@ void TransliteratorRoundTripTest::TestCyrillic() {
                 TestUtility::LATIN_SCRIPT, TestUtility::CYRILLIC_SCRIPT);
     test.test("", UnicodeString("[\\u0401\\u0410-\\u044F\\u0451]", ""), this);
 }
+
+void RTTest::test2() {
+
+    UChar c;
+    UnicodeString cs, targ, reverse;
+    int8_t *type = new int8_t[0xFFFF];
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator* sourceToTarget = Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError, status);
+    if (sourceToTarget == NULL) {
+        log->errln("Fail: createInstance(" + transliteratorID +
+                   ") returned NULL");
+        return;
+    }
+    Transliterator* targetToSource = sourceToTarget->createInverse(status);
+    if (targetToSource == NULL) {
+        log->errln("Fail: " + transliteratorID +
+                   ".createInverse() returned NULL");
+        delete sourceToTarget;
+        return;
+    }
+
+    log->logln("Initializing type array");
+
+    for (c = 0; c < 0xFFFF; ++c) {
+        type[c] = u_charType(c);
+    }
+
+    log->logln("Checking that all source characters convert to target - Singles");
+
+    for (c = 0; c < 0xFFFF; ++c) {
+        if (type[c] == U_UNASSIGNED || !isSource(c))
+            continue;
+        cs.remove();
+        cs.append(c);
+        targ = cs;
+        sourceToTarget->transliterate(targ);
+        if (!isReceivingTarget(targ)) {
+            logWrongScript("Source-Target", cs, targ);
+            if (errorCount >= errorLimit)
+                return;
+        }
+    }
+
+    log->logln("Checking that all source characters convert to target - Doubles");
+
+    for (c = 0; c < 0xFFFF; ++c) {
+        if (type[c] == U_UNASSIGNED ||
+            !isSource(c)) continue;
+        for (UChar d = 0; d < 0xFFFF; ++d) {
+            if (type[d] == U_UNASSIGNED || !isSource(d))
+                continue;
+            cs.remove();
+            cs.append(c).append(d);
+            targ = cs;
+            sourceToTarget->transliterate(targ);
+            if (!isReceivingTarget(targ)) {
+                logWrongScript("Source-Target", cs, targ);
+                if (errorCount >= errorLimit)
+                    return;
+            }
+        }
+    }
+
+    log->logln("Checking that target characters convert to source and back - Singles");
+
+    for (c = 0; c < 0xFFFF; ++c) {
+        if (type[c] == U_UNASSIGNED || !isTarget(c))
+            continue;
+        cs.remove();
+        cs.append(c);
+        targ = cs;
+        targetToSource->transliterate(targ);
+        reverse = targ;
+        sourceToTarget->transliterate(reverse);
+        if (!isReceivingSource(targ)) {
+            logWrongScript("Target-Source", cs, targ);
+            if (errorCount >= errorLimit)
+                return;
+        } else if (cs != reverse) {
+            logRoundTripFailure(cs, targ, reverse);
+            if (errorCount >= errorLimit)
+                return;
+        }
+    }
+
+    log->logln("Checking that target characters convert to source and back - Doubles");
+    int32_t count = 0;
+    cs = UNICODE_STRING("aa", 2);
+    for (c = 0; c < 0xFFFF; ++c) {
+        if (type[c] == U_UNASSIGNED || !isTarget(c))
+            continue;
+        if (++count > pairLimit) {
+            //throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
+            log->logln("");
+            log->logln((UnicodeString)"Test truncated at " + pairLimit + " x 64k pairs");
+            return;
+        }
+        cs.setCharAt(0, c);
+        log->logln(TestUtility::hex(c));
+        for (UChar d = 0; d < 0xFFFF; ++d) {
+            if (type[d] == U_UNASSIGNED || !isTarget(d))
+                continue;
+            cs.setCharAt(1, d);
+            targ = cs;
+            targetToSource->transliterate(targ);
+            reverse = targ;
+            sourceToTarget->transliterate(reverse);
+            if (!isReceivingSource(targ)) {
+                logWrongScript("Target-Source", cs, targ);
+                if (errorCount >= errorLimit)
+                    return;
+            } else if (cs != reverse) {
+                logRoundTripFailure(cs, targ, reverse);
+                if (errorCount >= errorLimit)
+                    return;
+            }
+        }
+    }
+    log->logln("");
+    delete []type;
+}
+

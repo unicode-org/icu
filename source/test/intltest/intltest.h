@@ -12,13 +12,11 @@
 #define _INTLTEST
 
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
-#include "unicode/coll.h"
-#include "unicode/sortkey.h"
-#include "unicode/fmtable.h" // liu
+
+class Formattable;
 
 #ifdef OS390
 // avoid collision with math.h/log()
@@ -137,18 +135,10 @@ protected:
     virtual void LL_message( UnicodeString message, UBool newline );
 
     // used for collation result reporting, defined here for convenience
-    virtual void reportCResult( UnicodeString &source, UnicodeString &target,
-                                CollationKey &sourceKey, CollationKey &targetKey,
-                                Collator::EComparisonResult compareResult,
-                                Collator::EComparisonResult keyResult,
-                                Collator::EComparisonResult incResult,
-                                Collator::EComparisonResult expectedResult );
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);
     static UnicodeString prettify(const UnicodeString &source, UBool parseBackslash=FALSE);
-    static UnicodeString &prettify(const CollationKey &source, UnicodeString &target);
     static UnicodeString &appendHex(uint32_t number, int8_t digits, UnicodeString &target);
-    static UnicodeString &appendCompareResult(Collator::EComparisonResult result, UnicodeString &target);
 
     /* complete a relative path to a full pathname, and convert to platform-specific syntax. */
     /* The character seperating directories for the relative path is '|'.                    */

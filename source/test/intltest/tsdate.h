@@ -8,7 +8,6 @@
 #define _INTLTESTDATEFORMAT
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 

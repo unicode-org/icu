@@ -5,6 +5,9 @@
  ********************************************************************/
 
 
+#ifndef MULTITHREADTEST_H
+#define MULTITHREADTEST_H
+
 #include "intltest.h"
 #include "mutex.h"
 
@@ -54,5 +57,5 @@ public:
     void TestThreadedIntl(void);
 };
 
-
+#endif
 

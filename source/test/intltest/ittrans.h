@@ -15,7 +15,6 @@
 #define INTLTRANSLIT_H
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 

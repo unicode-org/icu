@@ -9,9 +9,7 @@
  
 #include <stdlib.h>
 
-#include "unicode/utypes.h"
 #include "intltest.h"
-#include "locale.h"
 #include "unicode/unistr.h"
 
 class DateFormat;

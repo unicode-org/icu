@@ -11,7 +11,6 @@
 #ifndef UNIFLTLOGICTST_H
 #define UNIFLTLOGICTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/unifltlg.h"
 #include "intltest.h"

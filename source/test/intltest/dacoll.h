@@ -14,19 +14,9 @@
 #ifndef _DACOLL
 #define _DACOLL
 
-#ifndef _UTYPES
-#include "unicode/utypes.h"
-#endif
+#include "tscoll.h"
 
-#ifndef _COLL
-#include "unicode/coll.h"
-#endif
-
-#ifndef _INTLTEST
-#include "intltest.h"
-#endif
-
-class CollationDanishTest: public IntlTest {
+class CollationDanishTest: public IntlTestCollator {
 public:
     // If this is too small for the test data, just increase it.
     // Just don't make it too large, otherwise the executable will get too big

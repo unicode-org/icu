@@ -7,7 +7,6 @@
 #ifndef SFDWCHIT_H
 #define SFDWCHIT_H
 
-#include "unicode/utypes.h"
 #include "unicode/chariter.h"
 
 class SimpleFwdCharIterator : public ForwardCharacterIterator {

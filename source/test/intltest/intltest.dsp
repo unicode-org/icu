@@ -133,10 +133,6 @@ SOURCE=.\cppcnvt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\cputilst.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\currcoll.cpp
 # End Source File
 # Begin Source File
@@ -466,10 +462,6 @@ SOURCE=.\cpdtrtst.h
 # Begin Source File
 
 SOURCE=.\cppcnvt.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\cputilst.h
 # End Source File
 # Begin Source File
 

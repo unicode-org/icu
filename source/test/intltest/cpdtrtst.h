@@ -13,7 +13,6 @@
 #ifndef CPDTRTST_H
 #define CPDTRTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/cpdtrans.h"
 #include "intltest.h"

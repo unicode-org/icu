@@ -8,7 +8,6 @@
 #ifndef _TESTMESSAGEFORMAT
 #define _TESTMESSAGEFORMAT
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 class Formattable;

@@ -14,7 +14,6 @@
 #define RBBITEST_H
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 #include "unicode/brkiter.h"
 

@@ -12,23 +12,10 @@
 #ifndef _APICOLL
 #define _APICOLL
 
-#ifndef _UTYPES
-#include "unicode/utypes.h"
-#endif
-
-#ifndef _COLL
-#include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
+#include "tscoll.h"
 
-#ifndef _INTLTEST
-#include "intltest.h"
-#endif
-
-class CollationAPITest: public IntlTest {
+class CollationAPITest: public IntlTestCollator {
 public:
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par = NULL */);
     void doAssert(UBool condition, const char *message);

@@ -65,7 +65,7 @@ int8_t TestUtility::getBlock(UChar c) {
   while (block < 0) { // take care of exceptions, blocks split across 128 boundaries
       const Split *tuple = &gTestUtilitySplit[-block-1];
       if (c < tuple->ch)
-          block = tuple->i1;
+          return tuple->i1; // Always positive or == 0
       else
           block = tuple->i2;
   }

@@ -7,7 +7,6 @@
 #ifndef _TIMEZONEREGRESSIONTEST_
 #define _TIMEZONEREGRESSIONTEST_
  
-#include "unicode/utypes.h"
 #include "unicode/timezone.h"
 
 #include "intltest.h"
