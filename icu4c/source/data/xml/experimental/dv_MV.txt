@@ -7,12 +7,12 @@
 
 dv_MV{
     Version { "x0.3" }
-    DateTimeElements:intvector {
-        6,
-        1
-    }
     calendar{
         gregorian{
+            DateTimeElements:intvector {
+                6,
+                1
+            }
             DateTimePatterns{
                 "hh:mm:ss a z",
                 "hh:mm:ss a z",

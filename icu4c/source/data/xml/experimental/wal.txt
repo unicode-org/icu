@@ -14,10 +14,6 @@ wal{
     Currencies {
         ETB { "$", "ETB" }
     }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
     Languages {
 	wal { "\u12C8\u120B\u12ED\u1273\u1271" }
     }
@@ -30,6 +26,10 @@ wal{
             AmPmMarkers{
         	"\u121B\u1208\u12F6", // also \u130B\u120B\u1233
         	"\u1243\u121B"        // also \u12A1\u1218\u122D\u1232
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
             }
             dayNames{
                 format{

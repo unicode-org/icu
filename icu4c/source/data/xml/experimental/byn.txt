@@ -16,10 +16,6 @@ byn{
     Currencies {
         ERN { "$", "ERN" }
     }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
     Languages:alias { "am" }
     LocaleScript{ "Ethi", }
     ExemplarCharacters{"[:Ethi:]"}
@@ -29,6 +25,10 @@ byn{
             AmPmMarkers{
                 "\u134B\u12F1\u1235\u0020\u1303\u1265",
                 "\u134B\u12F1\u1235\u0020\u12F0\u121D\u1262",
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
             }
             dayNames{
                 format{

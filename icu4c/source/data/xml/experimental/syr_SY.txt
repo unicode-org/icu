@@ -7,16 +7,24 @@
 
 syr_SY{
     Version{ "x0.3" }
-    DateTimePatterns{
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss",
-        "h:mm",
-        "dd MMMM, yyyy",
-        "dd MMMM, yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yyyy",
-        "{1} {0}",
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                5,
+                1
+            }
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss",
+                "h:mm",
+                "dd MMMM, yyyy",
+                "dd MMMM, yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
     }
     NumberPatterns { 
         "#,##0.###;#,##0.###-",
@@ -24,8 +32,5 @@ syr_SY{
         "#,##0%",
         "#E0",
     }
-    DateTimeElements:intvector {
-        5,
-        1
-    }
+
 }
