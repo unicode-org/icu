@@ -1591,6 +1591,30 @@ root {
     MonthAbbreviations_islamic-civil:alias {
         "root/MonthAbbreviations_islamic"
     }
+    
+    MonthNames_hebrew {
+       "Tishri",
+       "Heshvan",
+       "Kislev",
+       "Tevet",
+       "Shevat",
+       "Adar I",       // Leap years only
+       "Adar",
+       "Nisan",
+       "Iyar",
+       "Sivan",
+       "Tamuz",
+       "Av",
+       "Elul"
+    }
+
+    Eras_hebrew:array {
+       "AM" // Anno Mundi
+    }
+    
+    MonthAbbreviations_hebrew:alias {
+       "root/MonthNames_hebrew" // no data
+    }
 
     Keys{
         collation { "COLLATION" }

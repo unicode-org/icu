@@ -833,6 +833,24 @@ fr {
     MonthAbbreviations_islamic-civil:alias {
         "fr/MonthAbbreviations_islamic"
     }
+    MonthNames_hebrew {
+                "Tisseri",      // Tishri
+                "Hesvan",       // Heshvan
+                "Kislev",       // Kislev
+                "T\u00e9beth",  // Tevet
+                "Sch\u00e9bat", // Shevat
+                "Adar",         // Adar I
+                "Adar II",      // Adar
+                "Nissan",       // Nisan
+                "Iyar",         // Iyar
+                "Sivan",        // Sivan
+                "Tamouz",       // Tamuz
+                "Ab",           // Av
+                "Elloul",       // Elul
+    }
+    MonthAbbreviations_hebrew:alias {
+       "fr/MonthNames_hebrew" // no data
+    }
 
 
 }
