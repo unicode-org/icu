@@ -116,17 +116,17 @@ lmb-excp                # Special exceptions list for LMBCS algorithm
 # Platform codepages
 ibm-437                 cp437 csPC8CodePage437 437         # PC US
 # HSYS:
-ibm-850                 IBM850 { IANA } cp850 850 csPC850Multilingual    # PC latin1
-ibm-851                 IBM851 { IANA } cp851 851 csPC851           # PC DOS Greek (w/o euro)
+ibm-850                 IBM850 { IANA } cp850 { MIME } 850 csPC850Multilingual    # PC latin1
+ibm-851                 IBM851 { IANA } cp851 { MIME } 851 csPC851           # PC DOS Greek (w/o euro)
 ibm-858                 cp858  { MIME } # PC latin1 with Euro cp850 removed
-ibm-9044                852 csPCp852 cp852 # PC latin2 (w/ euro update)
+ibm-9044                852 csPCp852 cp852 { MIME } # PC latin2 (w/ euro update)
 ibm-852                 IBM852 { IANA } # PC latin2 (w/o euro update)
-ibm-872                 855 csIBM855 cp855 # PC cyrillic (w/ euro update)
+ibm-872                 855 csIBM855 cp855 { MIME } # PC cyrillic (w/ euro update)
 ibm-855                 IBM855 { IANA } # PC cyrillic (w/o euro update)
 ibm-856                 cp856 { MIME }           # PC Hebrew (old)
 ibm-9049                857 csIBM857 cp857 { MIME } # PC Latin 5 (Turkish) (w/ euro update)
 ibm-857                 IBM857 { IANA } # PC Latin 5 (w/o euro update)
-ibm-859                 cp859            # PC Latin 9 (w/ euro update)
+ibm-859                 cp859 { MIME }           # PC Latin 9 (w/ euro update)
 ibm-860                 IBM860 { IANA } cp860 { MIME } 860 csIBM860            # PC Portugal
 ibm-861                 IBM861 { IANA } cp861 { MIME } 861 cp-is csIBM861           # PC Iceland
 ibm-867                 cp867  862 cp862 { MIME } cspc862latinhebrew # PC Hebrew (w/ euro update)
@@ -141,9 +141,9 @@ ibm-868                 IBM868 { IANA } cp868 { MIME } cp-ar csIBM868           
 ibm-9061                cp869 { MIME } 869 cp-gr csIBM869 # PC Greek (w/ euro update)
 ibm-869                 IBM869 { IANA } # PC Greek (w/o euro update)
 ibm-878                 KOI8-R { IANA MIME } cp878 koi8 cskoi8r  # Russian internet
-ibm-901                 cp921 # PC Baltic (w/ euro update)
+ibm-901                 cp921 { MIME } # PC Baltic (w/ euro update)
 ibm-921                 # PC Baltic (w/o euro update)
-ibm-902                 cp922 # PC Estonian (w/ euro update)
+ibm-902                 cp922 { MIME } # PC Estonian (w/ euro update)
 ibm-922                 # PC Estonian (w/o euro update)
 ibm-942                 shift_jis78 sjis78 ibm-932   # Old s_jis ibm-932 added!
 ibm-941                 jis-208 jisx-208 # Pure DBCS jisx-208
