@@ -40,6 +40,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestGetAll,        "tscoll/capitst/TestGetAll");
     /*addTest(root, &TestGetDefaultRules, "tscoll/capitst/TestGetDefaultRules");*/
     addTest(root, &TestDecomposition, "tscoll/capitst/TestDecomposition");
+    addTest(root, &TestSafeClone, "tscoll/capitst/TestSafeClone");
     
 }
 
@@ -396,6 +397,115 @@ void TestDecomposition() {
     ucol_close(vi_VN);
 
 }
+
+#define CLONETEST_COLLATOR_COUNT 3
+
+void TestSafeClone() {
+    UChar* test1;
+    UChar* test2;
+    UCollator * someCollators [CLONETEST_COLLATOR_COUNT];
+	UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
+	UCollator * col;
+    UErrorCode err = U_ZERO_ERROR;
+	uint8_t buffer [CLONETEST_COLLATOR_COUNT] [U_COL_SAFECLONE_BUFFERSIZE];
+	int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
+    int index;
+    
+    test1=(UChar*)malloc(sizeof(UChar) * 6);
+    test2=(UChar*)malloc(sizeof(UChar) * 6);
+    u_uastrcpy(test1, "abCda");
+    u_uastrcpy(test2, "abcda");
+    
+    /* one default collator & two complex ones */
+	someCollators[0] = ucol_open(NULL, &err);
+	someCollators[1] = ucol_open("ko", &err);
+	someCollators[2] = ucol_open("ja_JP", &err);
+
+	/* Check the various error & informational states: */
+
+	/* Null status - just returns NULL */
+	if (0 != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, 0))
+	{
+		log_err("FAIL: Cloned Collator failed to deal correctly with null status\n");
+	}
+	/* error status - should return 0 & keep error the same */
+	err = U_MEMORY_ALLOCATION_ERROR;
+	if (0 != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err) || err != U_MEMORY_ALLOCATION_ERROR)
+	{
+		log_err("FAIL: Cloned Collator failed to deal correctly with incoming error status\n");
+	}
+	err = U_ZERO_ERROR;
+
+	/* Null buffer size pointer - just returns NULL & set error to U_ILLEGAL_ARGUMENT_ERROR*/
+	if (0 != ucol_safeClone(someCollators[0], buffer[0], 0, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+	{
+		log_err("FAIL: Cloned Collator failed to deal correctly with null bufferSize pointer\n");
+	}
+	err = U_ZERO_ERROR;
+	
+	/* buffer size pointer is 0 - fill in pbufferSize with a size */
+	bufferSize = 0;
+	if (0 != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err) || U_FAILURE(err) || bufferSize <= 0)
+	{
+		log_err("FAIL: Cloned Collator failed a sizing request ('preflighting')\n");
+	}
+	/* Verify our define is large enough  */
+	if (U_COL_SAFECLONE_BUFFERSIZE < bufferSize)
+	{
+		log_err("FAIL: Pre-calculated buffer size is too small\n");
+	}
+	/* Verify we can use this run-time calculated size */
+	if (0 == (col = ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err)) || U_FAILURE(err))
+	{
+		log_err("FAIL: Collator can't be cloned with run-time size\n");
+	}
+	if (col) ucol_close(col);
+	/* size one byte too small - should allocate & let us know */
+	--bufferSize;
+	if (0 == (col = ucol_safeClone(someCollators[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_ERROR)
+	{
+		log_err("FAIL: Cloned Collator failed to deal correctly with too-small buffer size\n");
+	}
+	if (col) ucol_close(col);
+	err = U_ZERO_ERROR;
+	bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
+
+
+	/* Null buffer pointer - return Collator & set error to U_SAFECLONE_ALLOCATED_ERROR */
+	if (0 == (col = ucol_safeClone(someCollators[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_ERROR)
+	{
+		log_err("FAIL: Cloned Collator failed to deal correctly with null buffer pointer\n");
+	}
+	if (col) ucol_close(col);
+	err = U_ZERO_ERROR;
+
+	/* Null Collator - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
+	if (0 != ucol_safeClone(0, buffer[0], &bufferSize, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+	{
+		log_err("FAIL: Cloned Collator failed to deal correctly with null Collator pointer\n");
+	}
+
+	err = U_ZERO_ERROR;
+	
+
+	/* change orig & clone & make sure they are independent */
+
+	for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
+	{
+		bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
+		someClonedCollators[index] = ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err);
+
+        ucol_setStrength(someClonedCollators[index], UCOL_TERTIARY);
+        ucol_setStrength(someCollators[index], UCOL_PRIMARY);
+        
+        doAssert( (ucol_greater(someClonedCollators[index], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abCda\" >>> \"abcda\" ");
+        doAssert( (ucol_equal(someCollators[index], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abcda\" == \"abCda\"");
+        
+        ucol_close(someClonedCollators[index]);
+		ucol_close(someCollators[index]);
+	}
+}
+
 /*
 ----------------------------------------------------------------------------
  ctor -- Tests the getSortKey

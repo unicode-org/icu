@@ -63,8 +63,9 @@
     void TestGetDefaultRules(void);
 
     void TestDecomposition(void);
-    
- 
-    
+    /**
+     * Test ucol_safeClone ()
+     **/    
+    void TestSafeClone(void);
 
 #endif
