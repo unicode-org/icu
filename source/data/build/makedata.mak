@@ -148,7 +148,7 @@ BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$
 #  pkgdata will drop all output files (.dat, .dll, .lib) into the target (ICUDBLD) directory.
 #  move the .dll and .lib files to their final destination afterwards.
 #
-"$(ICUDBLD)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
+"$(ICUDBLD)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res $(ICUP)\source\stubdata\stubdatabuilt.txt
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(ICUDBLD)" -s . <<pkgdatain.txt
