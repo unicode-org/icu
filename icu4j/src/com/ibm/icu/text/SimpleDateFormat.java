@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/12/05 01:22:28 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/03/07 01:05:50 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -246,6 +246,11 @@ public class SimpleDateFormat extends DateFormat {
     private static final String GMT_MINUS = "GMT-";
     private static final String GMT = "GMT";
 
+    // This prefix is designed to NEVER MATCH real text, in order to
+    // suppress the parsing of negative numbers.  Adjust as needed (if
+    // this becomes valid Unicode).
+    private static final String SUPPRESS_NEGATIVE_PREFIX = "\uAB00";
+
     /**
      * Cache to hold the DateTimePatterns of a Locale.
      */
@@ -455,7 +460,8 @@ public class SimpleDateFormat extends DateFormat {
         Calendar.SECOND, Calendar.MILLISECOND, Calendar.DAY_OF_WEEK,
         Calendar.DAY_OF_YEAR, Calendar.DAY_OF_WEEK_IN_MONTH,
         Calendar.WEEK_OF_YEAR, Calendar.WEEK_OF_MONTH,
-        Calendar.AM_PM, Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET
+        Calendar.AM_PM, Calendar.HOUR, Calendar.HOUR, Calendar.ZONE_OFFSET,
+        Calendar.EXTENDED_YEAR
     };
 
     // Map index into pattern character string to DateFormat field number
@@ -492,15 +498,10 @@ public class SimpleDateFormat extends DateFormat {
         int     maxIntCount = Integer.MAX_VALUE;
         String  current = "";
 
-        // TEMPORARY HACK TODO fix this
-        if (ch == 'u') { // 'u' - EXTENDED_YEAR
-            return zeroPaddingNumber(cal.get(Calendar.EXTENDED_YEAR),
-                                     1, maxIntCount);
-        }
-
-        if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1)
+        if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1) {
             throw new IllegalArgumentException("Illegal pattern character " +
                                                "'" + ch + "'");
+        }
 
         int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
         int value = cal.get(field);
@@ -609,6 +610,7 @@ public class SimpleDateFormat extends DateFormat {
             // case 12: // 'w' - WEEK_OF_YEAR
             // case 13: // 'W' - WEEK_OF_MONTH
             // case 16: // 'K' - HOUR: 0-based.  eg, 11PM + 1 hour =>> 0 AM
+            // case 18: // 'u' - EXTENDED_YEAR
             current = zeroPaddingNumber(value, count, maxIntCount);
             break;
         } // switch (patternCharIndex)
@@ -651,6 +653,7 @@ public class SimpleDateFormat extends DateFormat {
         char prevCh = 0;
         int count = 0;
         int interQuoteCount = 1; // Number of chars between quotes
+        boolean allowNegative = true;
 
         for (int i=0; i<pattern.length(); ++i)
         {
@@ -701,7 +704,8 @@ public class SimpleDateFormat extends DateFormat {
                     {
                         int startOffset = start;
                         start=subParse(text, start, prevCh, count,
-                                       false, ambiguousYear, cal);
+                                       false, allowNegative, ambiguousYear, cal);
+                        allowNegative = true;
                         if ( start<0 ) {
                             pos.setErrorIndex(startOffset);
                             pos.setIndex(oldStart);
@@ -736,8 +740,12 @@ public class SimpleDateFormat extends DateFormat {
                         // obeyCount.  That's because the next field directly
                         // abuts this one, so we have to use the count to know when
                         // to stop parsing. [LIU]
+                        // Don't allow negatives in this field or in the next.
+                        // This prevents anomalies like HHmmss matching 12-34
+                        // as 12:-3:4, or 11:57:04.
                         start = subParse(text, start, prevCh, count, true,
-                                         ambiguousYear, cal);
+                                         allowNegative, ambiguousYear, cal);
+                        allowNegative = false;
                         if (start < 0) {
                             pos.setErrorIndex(startOffset);
                             pos.setIndex(oldStart);
@@ -759,7 +767,8 @@ public class SimpleDateFormat extends DateFormat {
                     // where ch = '-', ':', or ' ', repectively.
                     int startOffset = start;
                     start=subParse(text, start, prevCh, count,
-                                   false, ambiguousYear, cal);
+                                   false, allowNegative, ambiguousYear, cal);
+                    allowNegative = true;
                     if ( start < 0 ) {
                         pos.setErrorIndex(startOffset);
                         pos.setIndex(oldStart);
@@ -797,7 +806,7 @@ public class SimpleDateFormat extends DateFormat {
         {
             int startOffset = start;
             start=subParse(text, start, prevCh, count,
-                           false, ambiguousYear, cal);
+                           false, allowNegative, ambiguousYear, cal);
             if ( start < 0 ) {
                 pos.setIndex(oldStart);
                 pos.setErrorIndex(startOffset);
@@ -983,7 +992,8 @@ public class SimpleDateFormat extends DateFormat {
      * @stable ICU 2.0
      */
     protected int subParse(String text, int start, char ch, int count,
-                           boolean obeyCount, boolean[] ambiguousYear, Calendar cal)
+                           boolean obeyCount, boolean allowNegative,
+                           boolean[] ambiguousYear, Calendar cal)
     {
         Number number = null;
         int value = 0;
@@ -991,33 +1001,9 @@ public class SimpleDateFormat extends DateFormat {
         ParsePosition pos = new ParsePosition(0);
         int patternCharIndex = -1;
 
-        // TEMPORARY HACK TODO fix this
-        if (ch == 'u') { // 'u' - EXTENDED_YEAR
-            pos.setIndex(start);
-            for (;;) {
-                if (pos.getIndex() >= text.length()) return -start;
-                char c = text.charAt(pos.getIndex());
-                if (c != ' ' && c != '\t') break;
-                pos.setIndex(pos.getIndex()+1);
-            }
-            if (obeyCount) {
-                if ((start+count) > text.length()) {
-                    return -start;
-                }
-                number = numberFormat.parse(text.substring(0, start+count), pos);
-            } else {
-                number = numberFormat.parse(text, pos);
-            }
-            if (number == null) {
-                return -start;
-            }
-            value = number.intValue();
-            cal.set(Calendar.EXTENDED_YEAR, value);
-            return pos.getIndex();
-        }
-
-        if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1)
+        if ((patternCharIndex=formatData.patternChars.indexOf(ch)) == -1) {
             return -start;
+        }
 
         int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
 
@@ -1049,9 +1035,9 @@ public class SimpleDateFormat extends DateFormat {
             if (obeyCount)
             {
                 if ((start+count) > text.length()) return -start;
-                number = numberFormat.parse(text.substring(0, start+count), pos);
+                number = parseInt(text.substring(0, start+count), pos, allowNegative);
             }
-            else number = numberFormat.parse(text, pos);
+            else number = parseInt(text, pos, allowNegative);
             if (number == null)
                 return -start;
             value = number.intValue();
@@ -1257,14 +1243,15 @@ public class SimpleDateFormat extends DateFormat {
             // case 12: // 'w' - WEEK_OF_YEAR
             // case 13: // 'W' - WEEK_OF_MONTH
             // case 16: // 'K' - HOUR: 0-based.  eg, 11PM + 1 hour =>> 0 AM
+            // case 18: // 'u' - EXTENDED_YEAR
 
             // Handle "generic" fields
             if (obeyCount)
             {
                 if ((start+count) > text.length()) return -start;
-                number = numberFormat.parse(text.substring(0, start+count), pos);
+                number = parseInt(text.substring(0, start+count), pos, allowNegative);
             }
-            else number = numberFormat.parse(text, pos);
+            else number = parseInt(text, pos, allowNegative);
             if (number != null) {
                 cal.set(field, number.intValue());
                 return pos.getIndex();
@@ -1273,6 +1260,28 @@ public class SimpleDateFormat extends DateFormat {
         }
     }
 
+    /**
+     * Parse an integer using fNumberFormat.  This method is semantically
+     * const, but actually may modify fNumberFormat.
+     */
+    private Number parseInt(String text,
+                            ParsePosition pos,
+                            boolean allowNegative) {
+        String oldPrefix = null;
+        DecimalFormat df = null;
+        if (!allowNegative) {
+            try {
+                df = (DecimalFormat)numberFormat;
+                oldPrefix = df.getNegativePrefix();
+                df.setNegativePrefix(SUPPRESS_NEGATIVE_PREFIX);
+            } catch (ClassCastException e1) {}
+        }
+        Number number = numberFormat.parse(text, pos);
+        if (!allowNegative) {
+            df.setNegativePrefix(oldPrefix);
+        }
+        return number;
+    }
 
     /**
      * Translate a pattern, mapping each character in the from string to the

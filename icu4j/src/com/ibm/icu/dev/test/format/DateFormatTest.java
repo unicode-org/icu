@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/01/24 19:56:07 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/03/07 01:05:51 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -841,42 +841,38 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestSpaceParsing() {
 
-        String PARSE_FAILURE = "parse failure";
         String DATA[] = {
+            "yyyy MM dd",
+
             // pattern, input, expexted output (in quotes)
-            "MMMM d yy", " 04 05 06", PARSE_FAILURE, // MMMM wants Apr/April
-            "MMMM d yy", "04 05 06", PARSE_FAILURE,
-            "MM d yy", " 04 05 06", "\"2006 04 05\"",
-            "MM d yy", "04 05 06", "\"2006 04 05\"",
-            "MMMM d yy", " Apr 05 06", "\"2006 04 05\"",
-            "MMMM d yy", "Apr 05 06", "\"2006 04 05\"",
+            "MMMM d yy", " 04 05 06",  null, // MMMM wants Apr/April
+            null,        "04 05 06",   null,
+            "MM d yy",   " 04 05 06",  "2006 04 05",
+            null,        "04 05 06",   "2006 04 05",
+            "MMMM d yy", " Apr 05 06", "2006 04 05",
+            null,        "Apr 05 06",  "2006 04 05",
         };
 
-        Locale en = new Locale("en", "", "");
-        SimpleDateFormat sdfObj = new SimpleDateFormat("", en);
+        expectParse(DATA, new Locale("en"));
+    }
 
-        int i;
-        for (i=0; i<DATA.length; i+=3) {
-            sdfObj.applyPattern(DATA[i]);
-            ParsePosition pp = new ParsePosition(0);
-            Date udDate = sdfObj.parse(DATA[i+1], pp);
-            String output;
-            if (pp.getErrorIndex() == -1) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd", en);
-                output = "\"" + formatter.format(udDate) + "\"";
-            } else {
-                output = PARSE_FAILURE;
-            }
-            String exp = DATA[i+2];
-            if (output.equals(exp)) {
-                logln("Ok: Parse of \"" + DATA[i+1] + "\" with \"" +
-                      DATA[i] + "\" => " + output);
-            } else {
-                errln("FAIL: Parse of \"" + DATA[i+1] + "\" with \"" +
-                      DATA[i] + "\" => " +
-                      output + ", expected " + exp);
-            }
-        }
+    /**
+     * Test handling of "HHmmss" pattern.
+     */
+    public void TestExactCountFormat() {
+        String DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            // pattern, input, expected parse or null if expect parse failure
+            "HHmmss", "123456", "1970 01 01 12:34:56",
+            null, "12345", "1970 01 01 12:34:05",
+            null, "1234",  null,
+            null, "00-05", null,
+            null, "12-34", null,
+            null, "00+05", null,
+        };
+
+        expectParse(DATA, new Locale("en"));
     }
 
     public void TestCoverage() {
@@ -902,5 +898,69 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!sym.equals(sym2)) {
             errln("fail, date format symbols not equal");
         }
+    }
+
+    /**
+     * Test parsing.  Input is an array that starts with the following
+     * header:
+     *
+     * [0]   = pattern string to parse [i+2] with
+     *
+     * followed by test cases, each of which is 3 array elements:
+     *
+     * [i]   = pattern, or null to reuse prior pattern
+     * [i+1] = input string
+     * [i+2] = expected parse result (parsed with pattern [0])
+     *
+     * If expect parse failure, then [i+2] should be null.
+     */
+    void expectParse(String[] data, Locale loc) {
+        Date FAIL = null;
+        String FAIL_STR = "parse failure";
+        int i = 0;
+
+        SimpleDateFormat fmt = new SimpleDateFormat("", loc);
+        SimpleDateFormat ref = new SimpleDateFormat(data[i++], loc);
+        SimpleDateFormat gotfmt = new SimpleDateFormat("G yyyy MM dd HH:mm:ss z", loc);
+
+        String currentPat = null;
+        while (i<data.length) {
+            String pattern  = data[i++];
+            String input    = data[i++];
+            String expected = data[i++];
+
+            if (pattern != null) {
+                fmt.applyPattern(pattern);
+                currentPat = pattern;
+            }
+            String gotstr = FAIL_STR;
+            Date got;
+            try {
+                got = fmt.parse(input);
+                gotstr = gotfmt.format(got);
+            } catch (ParseException e1) {
+                got = FAIL;
+            }
+
+            Date exp = FAIL;
+            String expstr = FAIL_STR;
+            if (expected != null) {
+                expstr = expected;
+                try {
+                    exp = ref.parse(expstr);
+                } catch (ParseException e2) {
+                    errln("FAIL: Internal test error");
+                }
+            }
+
+            if (got == exp || (got != null && got.equals(exp))) {
+                logln("Ok: " + input + " x " +
+                      currentPat + " => " + gotstr);                
+            } else {
+                errln("FAIL: " + input + " x " +
+                      currentPat + " => " + gotstr + ", expected " +
+                      expstr);
+            }
+        }    
     }
 }
