@@ -673,30 +673,21 @@ uprv_digitsAfterDecimal(double x)
 void 
 uprv_tzset()
 {
-#ifdef U_POSIX
-  tzset();
-#endif
-
-#if defined(OS400) || defined(XP_MAC)
+#if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
   /* no initialization*/
-#endif
 
-#if defined(WIN32) || defined(OS2)
+#elif defined(WIN32) || defined(OS2)
   _tzset();
+
+#elif defined(U_POSIX)
+  tzset();
+
 #endif
 }
 
 int32_t 
 uprv_timezone()
 {
-#if defined(U_POSIX)
-#if defined(OS390)
-  return _timezone;
-#else
-  return timezone;
-#endif
-#endif
-
 #if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
   time_t t, t1, t2;
   struct tm tmrec;
@@ -712,28 +703,31 @@ uprv_timezone()
   tdiff = t2 - t1;
   /* imitate NT behaviour, which returns same timezone offset to GMT for 
      winter and summer*/
-  if (dst_checked) tdiff += 3600;
+  if (dst_checked)
+    tdiff += 3600;
   return tdiff;
-#endif
 
-#if defined(WIN32) || defined(OS2)
+#elif defined(WIN32) || defined(OS2) || defined(OS390)
   return _timezone;
+
+#elif defined(U_POSIX)
+  return timezone;
+
 #endif
 }
 
 char* 
 uprv_tzname(int n)
 {
-#if defined(U_POSIX)
-  return tzname[n];
-#endif
-
 #if defined(OS400) || defined(XP_MAC) || defined(U_DARWIN)
   return "";
-#endif
 
-#if defined(WIN32) || defined(OS2)
+#elif defined(WIN32) || defined(OS2)
   return _tzname[n];
+
+#elif defined(U_POSIX)
+  return tzname[n];
+
 #endif
 }
 
