@@ -25,7 +25,9 @@
 
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
+#if !UCONFIG_NO_COLLATION
 static void TestJitterbug981(void);
+#endif
 static void TestJitterbug1293(void);
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
@@ -238,7 +240,9 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestJitterbug792, "tsconv/nucnvtst/TestJitterbug792");
    addTest(root, &TestEBCDICUS4XML, "tsconv/nucnvtst/TestEBCDICUS4XML");
    addTest(root, &TestISCII, "tsconv/nucnvtst/TestISCII");
+#if !UCONFIG_NO_COLLATION
    addTest(root, &TestJitterbug981, "tsconv/nucnvtst/TestJitterbug981");
+#endif
    addTest(root, &TestJitterbug1293, "tsconv/nucnvtst/TestJitterbug1293");
    addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
    addTest(root, &TestRoundTrippingAllUTF, "tsconv/nucnvtst/TestRoundTrippingAllUTF");
@@ -5012,6 +5016,8 @@ static void TestEBCDICUS4XML()
     ucnv_close(cnv);
 }
 
+#if !UCONFIG_NO_COLLATION
+
 static void TestJitterbug981(){
   const UChar* rules;
   int32_t rules_length, target_cap, bytes_needed;
@@ -5046,6 +5052,8 @@ static void TestJitterbug981(){
   ucol_close(myCollator);
   ucnv_close(utf8cnv);
 }
+
+#endif
 
 static void TestJitterbug1293(){
     UChar src[] = {0x30DE, 0x30A4, 0x5E83, 0x544A, 0x30BF, 0x30A4, 0x30D7,0x000};

@@ -16,6 +16,10 @@
 #ifndef _CDTFRRGSTST
 #define _CDTFRRGSTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "cintltst.h"
 
     /**
@@ -40,5 +44,7 @@
      * test subroutine used by the testing functions
      **/
     UChar* myFormatit(UDateFormat* datdef, UDate d1);
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

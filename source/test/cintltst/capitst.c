@@ -12,7 +12,11 @@
 *     Madhu Katragadda             Ported for C API
 *********************************************************************************
 *//* C API TEST For COLLATOR */
+
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "ucol_imp.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
@@ -1539,3 +1543,5 @@ void TestGetTailoredSet() {
     ucol_close(coll);
   }
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */

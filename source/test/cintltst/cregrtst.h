@@ -18,6 +18,9 @@
 #ifndef _CBRKITREGTEST
 #define _CBRKITREGTEST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "cintltst.h"
 
@@ -214,5 +217,6 @@ UChar* testCharacterText;
 
 static UChar *cannedTestChars;
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif

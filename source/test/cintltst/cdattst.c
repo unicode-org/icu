@@ -15,8 +15,11 @@
 
 /* C API TEST FOR DATE FORMAT */
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
@@ -779,3 +782,5 @@ static UChar* myNumformat(const UNumberFormat* numfor, double d)
     
     return result2;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -13,6 +13,11 @@
 *********************************************************************************
 */
 #include <stdio.h>
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "unicode/ucol.h"
@@ -152,16 +157,6 @@ UChar* appendCompareResult(UCollationResult result, UChar* target)
     return target;
 }
 
-UChar* CharsToUChars(const char* str) {
-    /* Might be faster to just use uprv_strlen() as the preflight len - liu */
-    int32_t len = u_unescape(str, 0, 0); /* preflight */
-    /* Do NOT use malloc() - we are supposed to be acting like user code! */
-    UChar *buf = (UChar*) malloc(sizeof(UChar) * (len + 1));
-    u_unescape(str, buf, len + 1);
-    return buf;
-}
-
-
 /* Support for testing incremental strcoll */
 typedef struct {
     const UChar *start;
@@ -177,4 +172,4 @@ UChar U_CALLCONV testInc(void *context) {
     }
 }
 
-
+#endif /* #if !UCONFIG_NO_COLLATION */

@@ -18,6 +18,9 @@
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
 #include "unicode/uchar.h"
@@ -1979,3 +1982,5 @@ static void TestSortKeyValidity(void)
     }
     T_FileStream_close(file);
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */

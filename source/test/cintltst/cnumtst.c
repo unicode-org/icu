@@ -19,8 +19,11 @@
 
 /* C API TEST FOR NUMBER FORMAT */
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
@@ -783,3 +786,4 @@ free(result);
     unum_close(pattern);
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

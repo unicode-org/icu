@@ -16,6 +16,10 @@
 #ifndef _CDATFRMTST
 #define _CDATFRMTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "cintltst.h"
 
     /**
@@ -44,5 +48,7 @@
      * test subroutine used by the testing functions
      **/
     static UChar* myNumformat(const UNumberFormat* numfor, double d);
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

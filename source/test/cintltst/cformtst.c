@@ -15,6 +15,10 @@
 
 /* FormatTest is a medium top level test for everything in the  C FORMAT API */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "cintltst.h"
 #include "cformtst.h"
 
@@ -65,3 +69,5 @@ UChar* myDateFormat(UDateFormat* dat, UDate d1)
     return result1;
 
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
