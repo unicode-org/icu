@@ -50,6 +50,8 @@
 U_CFUNC char uconvmsg_dat[];
 #endif
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #define DEFAULT_BUFSZ   4096
 #define UCONVMSG "uconvmsg"
 
@@ -270,7 +272,7 @@ static int printConverters(const char *pname, const char *lookfor,
         if (U_FAILURE(err)) {
             printf("%s", name);
 
-            UnicodeString str(name, (int32_t)(uprv_strlen(name) + 1));
+            UnicodeString str(name, "");
             putchar('\t');
             u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer(),
                 u_wmsg_errorName(err));
@@ -284,7 +286,7 @@ static int printConverters(const char *pname, const char *lookfor,
                 const char *alias = ucnv_getAlias(name, a, &err);
 
                 if (U_FAILURE(err)) {
-                    UnicodeString str(name, (int32_t)(uprv_strlen(name) + 1));
+                    UnicodeString str(name, "");
                     putchar('\t');
                     u_wmsg(stderr, "cantGetAliases", str.getTerminatedBuffer(),
                         u_wmsg_errorName(err));
@@ -419,6 +421,15 @@ enum {
     CNV_ADDS_FEFF   // automatically adds/detects the U+FEFF signature character
 };
 
+inline UChar
+nibbleToHex(uint8_t n) {
+    n &= 0xf;
+    return
+        n <= 9 ?
+            (UChar)(0x30 + n) :
+            (UChar)((0x61 - 10) + n);
+}
+
 // check the converter's Unicode signature properties;
 // the fromUnicode side of the converter must be in its initial state
 // and will be reset again if it was used
@@ -465,26 +476,10 @@ cnvSigType(UConverter *cnv) {
     return result;
 }
 
-/* Return the offset of a byte in its source, given the from and to offsets
-   vectors and the byte offset itself. */
-
-static inline int32_t dataOffset(int32_t whereto,
-    const int32_t *fromoffsets, int32_t fromsz,
-    const int32_t *tooffsets, int32_t tosz) {
-    if (whereto >= 0 && whereto < tosz) {
-        whereto = tooffsets[whereto];
-        if (whereto >= 0 && whereto < fromsz) {
-            return fromoffsets[whereto];
-        }
-    }
-
-    return 0;
-}
-
 class ConvertFile {
 public:
     ConvertFile() :
-        buf(NULL), fromoffsets(NULL), tooffsets(NULL),
+        buf(NULL), fromoffsets(NULL),
         bufsz(0), signature(0) {}
 
     void
@@ -493,9 +488,8 @@ public:
 
         buf = new char[bufsz];
 
-        // allocate one memory block for both offsets arrays
-        fromoffsets = new int32_t[2 * bufsz];
-        tooffsets = fromoffsets + bufsz;
+        // +1 for an added U+FEFF in the intermediate Unicode buffer
+        fromoffsets = new int32_t[bufsz + 1];
     }
 
     ~ConvertFile() {
@@ -518,7 +512,7 @@ private:
     friend extern int main(int argc, char **argv);
 
     char *buf;
-    int32_t *fromoffsets, *tooffsets;
+    int32_t *fromoffsets;
 
     size_t bufsz;
     int8_t signature; // add (1) or remove (-1) a U+FEFF Unicode signature character
@@ -544,7 +538,7 @@ ConvertFile::convertFile(const char *pname,
     UConverter *convto = 0;
     UErrorCode err = U_ZERO_ERROR;
     UBool flush;
-    const char *cbufp;
+    const char *cbufp, *prevbufp;
     char *bufp;
 
     uint32_t infoffset = 0, outfoffset = 0;   /* Where we are in the file, for error reporting. */
@@ -636,7 +630,7 @@ ConvertFile::convertFile(const char *pname,
 
     convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err)) {
-        UnicodeString str(fromcpage, (int32_t)(uprv_strlen(fromcpage) + 1));
+        UnicodeString str(fromcpage, "");
         initMsg(pname);
         u_wmsg(stderr, "cantOpenFromCodeset", str.getTerminatedBuffer(),
             u_wmsg_errorName(err));
@@ -651,7 +645,7 @@ ConvertFile::convertFile(const char *pname,
 
     convto = ucnv_open(tocpage, &err);
     if (U_FAILURE(err)) {
-        UnicodeString str(tocpage, (int32_t)(uprv_strlen(tocpage) + 1));
+        UnicodeString str(tocpage, "");
         initMsg(pname);
         u_wmsg(stderr, "cantOpenToCodeset", str.getTerminatedBuffer(),
             u_wmsg_errorName(err));
@@ -670,9 +664,13 @@ ConvertFile::convertFile(const char *pname,
 
     // OK, we can convert now.
     sig = signature;
+    rd = 0;
 
     do {
         willexit = FALSE;
+
+        // input file offset at the beginning of the next buffer
+        infoffset += rd;
 
         rd = fread(buf, 1, bufsz, infile);
         if (ferror(infile) != 0) {
@@ -698,17 +696,18 @@ ConvertFile::convertFile(const char *pname,
 
         // convert until the input is consumed
         do {
+            // remember the start of the current byte-to-Unicode conversion
+            prevbufp = cbufp;
+
             unibuf = unibufp = u.getBuffer((int32_t)bufsz);
 
             // Use bufsz instead of u.getCapacity() for the targetLimit
             // so that we don't overflow fromoffsets[].
             ucnv_toUnicode(convfrom, &unibufp, unibuf + bufsz, &cbufp,
-                cbufp + rd, fromoffsets, flush, &err);
+                buf + rd, fromoffsets, flush, &err);
 
             ulen = (int32_t)(unibufp - unibuf);
             u.releaseBuffer(ulen);
-
-            infoffset += (uint32_t)(cbufp - buf);
 
             // fromSawEndOfBytes indicates that ucnv_toUnicode() is done
             // converting all of the input bytes.
@@ -724,11 +723,40 @@ ConvertFile::convertFile(const char *pname,
             if (err == U_BUFFER_OVERFLOW_ERROR) {
                 err = U_ZERO_ERROR;
             } else if (U_FAILURE(err)) {
-                char pos[32];
-                sprintf(pos, "%u", infoffset - 1);
-                UnicodeString str(pos, (int32_t)(uprv_strlen(pos) + 1));
+                char pos[32], errorBytes[32];
+                int8_t i, length, errorLength;
+
+                UErrorCode localError = U_ZERO_ERROR;
+                errorLength = (int8_t)sizeof(errorBytes);
+                ucnv_getInvalidChars(convfrom, errorBytes, &errorLength, &localError);
+                if (U_FAILURE(localError) || errorLength == 0) {
+                    errorLength = 1;
+                }
+
+                // print the input file offset of the start of the error bytes:
+                // input file offset of the current byte buffer +
+                // length of the just consumed bytes -
+                // length of the error bytes
+                length =
+                    (int8_t)sprintf(pos, "%d",
+                        (int)(infoffset + (cbufp - buf) - errorLength));
+
+                // output the bytes that caused the error
+                UnicodeString str;
+                for (i = 0; i < errorLength; ++i) {
+                    if (i > 0) {
+                        str.append((UChar)0x20);
+                    }
+                    str.append(nibbleToHex((uint8_t)errorBytes[i] >> 4));
+                    str.append(nibbleToHex((uint8_t)errorBytes[i]));
+                }
+
                 initMsg(pname);
-                u_wmsg(stderr, "problemCvtToU", str.getTerminatedBuffer(), u_wmsg_errorName(err));
+                u_wmsg(stderr, "problemCvtToU",
+                        UnicodeString(pos, length, "").getTerminatedBuffer(),
+                        str.getTerminatedBuffer(),
+                        u_wmsg_errorName(err));
+
                 willexit = TRUE;
                 err = U_ZERO_ERROR; /* reset the error for the rest of the conversion. */
             }
@@ -744,7 +772,14 @@ ConvertFile::convertFile(const char *pname,
             if (sig < 0) {
                 if (u.charAt(0) == 0xfeff) {
                     u.remove(0, 1);
+
+                    // account for the removed UChar and offset
                     --ulen;
+
+                    // remove an offset from fromoffsets[] as well
+                    // to keep the array parallel with the UChars
+                    memmove(fromoffsets, fromoffsets + 1, ulen * 4);
+
                 }
                 sig = 0;
             }
@@ -770,6 +805,13 @@ ConvertFile::convertFile(const char *pname,
             if (sig > 0) {
                 if (u.charAt(0) != 0xfeff && cnvSigType(convto) == CNV_WITH_FEFF) {
                     u.insert(0, (UChar)0xfeff);
+
+                    // insert a pseudo-offset into fromoffsets[] as well
+                    // to keep the array parallel with the UChars
+                    memmove(fromoffsets + 1, fromoffsets, ulen * 4);
+                    fromoffsets[0] = -1;
+
+                    // account for the additional UChar and offset
                     ++ulen;
                 }
                 sig = 0;
@@ -792,7 +834,7 @@ ConvertFile::convertFile(const char *pname,
                 ucnv_fromUnicode(convto, &bufp, buf + bufsz,
                                  &unibufbp,
                                  unibuf + ulen,
-                                 tooffsets, (UBool)(flush && fromSawEndOfBytes), &err);
+                                 NULL, (UBool)(flush && fromSawEndOfBytes), &err);
 
                 // toSawEndOfUnicode indicates that ucnv_fromUnicode() is done
                 // converting all of the intermediate UChars.
@@ -802,27 +844,82 @@ ConvertFile::convertFile(const char *pname,
                 if (err == U_BUFFER_OVERFLOW_ERROR) {
                     err = U_ZERO_ERROR;
                 } else if (U_FAILURE(err)) {
+                    UChar errorUChars[4];
                     const char *errtag;
                     char pos[32];
+                    UChar32 c;
+                    int8_t i, length, errorLength;
 
-                    // TODO Do not use fromoffsets if (t != NULL) because the Unicode text may
-                    // be different from what the offsets refer to.
-                    uint32_t erroffset =
-                        dataOffset((int32_t)(bufp - buf - 1), fromoffsets, (int32_t)(bufsz), tooffsets, (int32_t)(bufsz));
-                    int32_t ferroffset = (int32_t)(infoffset - ulen + erroffset);
+                    UErrorCode localError = U_ZERO_ERROR;
+                    errorLength = (int8_t)LENGTHOF(errorUChars);
+                    ucnv_getInvalidUChars(convto, errorUChars, &errorLength, &localError);
+                    if (U_FAILURE(localError) || errorLength == 0) {
+                        // need at least 1 so that we don't access beyond the length of fromoffsets[]
+                        errorLength = 1;
+                    }
 
-                    if ((int32_t) ferroffset < 0) {
+                    int32_t ferroffset;
+
+                    if (t == NULL) {
+                        // Unicode buffer offset of the start of the error UChars
+                        ferroffset = (int32_t)((unibufbp - unibuf) - errorLength);
+                        if (ferroffset < 0) {
+                            // approximation - the character started in the previous Unicode buffer
+                            ferroffset = 0;
+                        }
+
+                        // get the corresponding byte offset out of fromoffsets[]
+                        // go back if the offset is not known for some of the UChars
+                        int32_t fromoffset;
+                        do {
+                            fromoffset = fromoffsets[ferroffset];
+                        } while (fromoffset < 0 && --ferroffset >= 0);
+
+                        // total input file offset =
+                        // input file offset of the current byte buffer +
+                        // byte buffer offset of where the current Unicode buffer is converted from +
+                        // fromoffsets[Unicode offset]
+                        ferroffset = infoffset + (prevbufp - buf) + fromoffset;
+                        errtag = "problemCvtFromU";
+                    } else {
+                        // Do not use fromoffsets if (t != NULL) because the Unicode text may
+                        // be different from what the offsets refer to.
+
+                        // output file offset
                         ferroffset = (int32_t)(outfoffset + (bufp - buf));
                         errtag = "problemCvtFromUOut";
-                    } else {
-                        errtag = "problemCvtFromU";
                     }
-                    sprintf(pos, "%u", ferroffset);
-                    UnicodeString str(pos, (int32_t)(uprv_strlen(pos) + 1));
+
+                    length = (int8_t)sprintf(pos, "%u", ferroffset);
+
+                    // output the code points that caused the error
+                    UnicodeString str;
+                    for (i = 0; i < errorLength;) {
+                        if (i > 0) {
+                            str.append((UChar)0x20);
+                        }
+                        U16_NEXT(errorUChars, i, errorLength, c);
+                        if (c >= 0x100000) {
+                            str.append(nibbleToHex((uint8_t)(c >> 20)));
+                        }
+                        if (c >= 0x10000) {
+                            str.append(nibbleToHex((uint8_t)(c >> 16)));
+                        }
+                        str.append(nibbleToHex((uint8_t)(c >> 12)));
+                        str.append(nibbleToHex((uint8_t)(c >> 8)));
+                        str.append(nibbleToHex((uint8_t)(c >> 4)));
+                        str.append(nibbleToHex((uint8_t)c));
+                    }
+
                     initMsg(pname);
-                    u_wmsg(stderr, errtag, str.getTerminatedBuffer(),
+                    u_wmsg(stderr, errtag,
+                            UnicodeString(pos, length, "").getTerminatedBuffer(),
+                            str.getTerminatedBuffer(),
                            u_wmsg_errorName(err));
+                    u_wmsg(stderr, "errorUnicode", str.getTerminatedBuffer());
+
                     willexit = TRUE;
+                    err = U_ZERO_ERROR; /* reset the error for the rest of the conversion. */
                 }
 
                 // Replaced a check for whether the intermediate Unicode characters were all consumed by
@@ -832,7 +929,7 @@ ConvertFile::convertFile(const char *pname,
                 size_t outlen = (size_t) (bufp - buf);
                 outfoffset += (int32_t)(wr = fwrite(buf, 1, outlen, outfile));
                 if (wr != outlen) {
-                    UnicodeString str(strerror(errno), "");
+                    UnicodeString str(strerror(errno));
                     initMsg(pname);
                     u_wmsg(stderr, "cantWrite", str.getTerminatedBuffer());
                     willexit = TRUE;
