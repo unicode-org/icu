@@ -85,11 +85,11 @@ U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t 
         if(len + MS->fReadPos > MS->fPos) {
             len = MS->fPos - MS->fReadPos;
             MS->fError = TRUE;
-	    MS->fEof = TRUE;
+            MS->fEof = TRUE;
         }
 
         uprv_memcpy(addr, MS->fStart+MS->fReadPos, len);
-	MS->fReadPos+=len;
+        MS->fReadPos+=len;
 
         return len;
     } else {

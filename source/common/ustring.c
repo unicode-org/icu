@@ -110,8 +110,8 @@ u_strstr(const UChar *s, const UChar *substring) {
     /* Only one string iterator needs checking for null terminator */
     while ((*strItr != 0) && (*strItr == *subItr)) {
       strItr++;
-	  subItr++;
-	}
+      subItr++;
+    }
 
     if (*subItr == 0) {             /* Was the end of the substring reached? */
       return (UChar *)s;
