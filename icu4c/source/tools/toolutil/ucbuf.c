@@ -59,7 +59,7 @@ static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
         *cp ="SCSU";
         signatureLength=3;
     }else if(start[0] == '\x00' && start[1] == '\x00' && 
-            start[2] == '\xFF' && start[3]=='\xFE'){
+            start[2] == '\xFE' && start[3]=='\xFF'){
         *cp = "UTF-32BE";
         signatureLength=4;
     }else{
