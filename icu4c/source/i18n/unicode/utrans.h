@@ -98,8 +98,9 @@ typedef struct _UTransPosition {
     /**
      * Beginning index, inclusive, of the context to be considered for
      * a transliteration operation.  The transliterator will ignore
-     * anything before this index.  INPUT parameter: This parameter is
-     * not changed by a transliteration operation.
+     * anything before this index.  INPUT/OUTPUT parameter: This parameter
+     * is updated by a transliteration operation to reflect the maximum
+     * amount of antecontext needed by a transliterator.
      */
     int32_t contextStart;
     
