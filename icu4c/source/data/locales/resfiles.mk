@@ -29,7 +29,9 @@
 GENRB_ALIAS_SOURCE = \
 iw.txt iw_IL.txt\
 no.txt no_NO.txt no_NO_NY.txt \
-ja_JP_TRADITIONAL.txt th_TH_TRADITIONAL.txt
+ja_JP_TRADITIONAL.txt th_TH_TRADITIONAL.txt \
+zh_Hans.txt zh_Hans_SG.txt \
+zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt
 
 
 # Please try to keep this list in alphabetical order
