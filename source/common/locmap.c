@@ -355,11 +355,11 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
 /* This LCID is really three different locales.*/
 static const ILcidPosixElement hr[] = {
     {0x1a,   "hr"},
-/*        {0x1a,   "sh"},     // You could put this in, but we only map from LCID*/
-/*        {0x1a,   "sr"},     // You could put this in, but we only map from LCID*/
     {0x041a, "hr_HR"},  /* Croatian*/
     {0x081a, "sh_YU"},  /* Serbo-Croatian*/
+    {0x081a, "sh"},     /* It's 0x1a or 0x081a, pick one to make the test program happy. */
     {0x0c1a, "sr_YU"},  /* Serbian*/
+    {0x0c1a, "sr"},     /* It's 0x1a or 0x0c1a, pick one to make the test program happy. */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
