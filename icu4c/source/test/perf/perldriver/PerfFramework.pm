@@ -1,9 +1,9 @@
 #!/usr/local/bin/perl
-#  ********************************************************************
+#  ***********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2002, International Business Machines Corporation and
-#  * others. All Rights Reserved.
-#  ********************************************************************
+#  * Copyright (c) 2002-2004, International Business Machines Corporation
+#  * and others. All Rights Reserved.
+#  ***********************************************************************
 
 use strict;
 
