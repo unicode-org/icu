@@ -84,7 +84,12 @@ typedef void (*UConverterReset) (UConverter *cnv, UConverterResetChoice choice);
  */
 typedef void (*UConverterToUnicode) (UConverterToUnicodeArgs *, UErrorCode *);
 
-/* same rules as for UConverterToUnicode */
+/*
+ * Same rules as for UConverterToUnicode.
+ * A lead surrogate is kept in fromUChar32 across buffers, and if an error
+ * occurs, then the offending input code point must be put into fromUChar32
+ * as well.
+ */
 typedef void (*UConverterFromUnicode) (UConverterFromUnicodeArgs *, UErrorCode *);
 
 /*
