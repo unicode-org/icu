@@ -60,7 +60,12 @@
         </condition>
 
         <condition property="doc.params"
-            value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.stringprep*' -group 'ICU Tools' 'com.ibm.icu.dev*' -group 'Rich Text Editing' 'com.ibm.richtext*'">
+            value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'ICU Core' 'com.ibm.icu.lang*:com.ibm.icu.math*:com.ibm.icu.text*:com.ibm.icu.util*:com.ibm.icu.stringprep*' -group 'ICU Tests' 'com.ibm.icu.dev.test*' -group 'Demos' 'com.ibm.icu.dev.demo*' -group 'ICU Tools' 'com.ibm.icu.dev*'">
+                <equals arg1="${version.1.4}" arg2="true"/>
+        </condition>
+
+	<condition property="richeditdoc.params"
+            value="-breakiterator -use -tagletpath ./classes -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -group 'Rich Text Editing' 'com.ibm.richtext*'">
                 <equals arg1="${version.1.4}" arg2="true"/>
         </condition>
     </target>
@@ -117,6 +122,7 @@
             <!-- note must not have '/' before 'com' in srcfiles includes arg! -->
             <srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
         </uptodate>
+
         <uptodate property="icu4j.module.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/icudata.jar" >
             <srcfiles dir="${build.dir}" includes="${icu4j.data.path}/*.icu"/>
         </uptodate>
@@ -124,7 +130,7 @@
     </target>
 
     <!-- build everything but dist-related stuff -->
-    <target name="all" depends="core,tests,tools,richedit,demos,jar,docs"/>
+    <target name="all" depends="core,tests,tools,richedit,demos,jar,docs" description="build all primary targets"/>
 
     <target name="resources" depends="init">
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
@@ -154,7 +160,7 @@
  -->
 
     <!-- core does not build richedit or tests -->
-    <target name="core" depends="init,coreData,icudata">
+    <target name="core" depends="init,coreData,icudata" description="build core classes and data">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -165,7 +171,7 @@
             encoding="ascii"/>
     </target>
 
-    <target name="tests" depends="core,testData">
+    <target name="tests" depends="core,testData" description="build tests">
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -175,7 +181,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="demos" depends="core,testData">
+    <target name="demos" depends="core,testData" description="build demos">
         <javac includes="com/ibm/icu/dev/demo/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -193,7 +199,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="tools" depends="core,one4tools">
+    <target name="tools" depends="core,one4tools" description="build tools">
         <javac includes="com/ibm/icu/dev/tool/**/*.java"
             excludes="com/ibm/icu/dev/tool/xmlcomparator/*,com/ibm/icu/dev/tool/localeconverter/*,com/ibm/icu/dev/tool/docs/*,**/CVS/**/*"
             srcdir="${src.dir}"
@@ -204,11 +210,29 @@
 
 <!-- use excludefiles below when we move to ant 1.5 -->
 
-    <target name="docs" depends="anthack1,anthack2,tools">
+    <target name="docs" depends="anthack1,anthack2,tools" description="build user javadoc">
         <echo message="doc params: ${doc.params}"/>
         <mkdir dir="${doc.dir}"/>
         <javadoc
-            packagenames="com.ibm.icu.lang,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.math,com.ibm.icu.stringprep,com.ibm.richtext.demo,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.awtui,com.ibm.richtext.print,com.ibm.richtext.styledtext,com.ibm.richtext.swingui,com.ibm.richtext.textformat,com.ibm.richtext.textpanel"
+            packagenames="com.ibm.icu.lang,com.ibm.icu.text,com.ibm.icu.util,com.ibm.icu.math,com.ibm.icu.stringprep,com.ibm.icu.dev"
+            sourcepath="${src.dir}"
+            destdir="${doc.dir}"
+            nodeprecatedlist="true"
+            windowtitle="icu4j"
+            doctitle="icu4j"
+            encoding="iso-8859-1"
+            docencoding="iso-8859-1"
+            bottom="&lt;font size=-1>Copyright (c) 2004 IBM Corporation and others.&lt;/font>"
+            additionalparam="${doc.params}"
+            link="http://java.sun.com/j2se/1.4/docs/api"
+            source="1.4"/>
+    </target>
+
+    <target name="fulldocs" depends="anthack1,anthack2,tools" description="build all javadoc">
+        <echo message="doc params: ${doc.params}"/>
+        <mkdir dir="${doc.dir}"/>
+        <javadoc
+            packagenames="com.ibm.icu.*"
             sourcepath="${src.dir}"
             destdir="${doc.dir}"
             nodeprecatedlist="true"
@@ -252,7 +276,7 @@
     </target>
 
     <!-- builds richedit and richedit tests -->
-    <target name="richedit" depends="init">
+    <target name="richedit" depends="init" description="build richedit classes and tests">
         <javac includes="com/ibm/richtext/**/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -267,7 +291,7 @@
     <!-- Creates the 3 release jar archives for distribution -->
     <target name="jarRelease" depends="jar,jarSrc,jarDocs"/>
 
-    <target name="jar" depends="core">
+    <target name="jar" depends="core" description="build full 'icu4j.jar' jar file">
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
@@ -275,7 +299,7 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="testJar" depends="tests,jar">
+    <target name="testJar" depends="tests,jar" description="build runtime 'icu4jtests.jar' jar file">
         <jar jarfile="${testjar.file}" compress="true" manifest="${icu4j.tests.manifest}">
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/test/**/*"/>
             <fileset dir="${build.dir}" includes="com/ibm/icu/dev/data/TestDataElements*.class"/>
@@ -283,7 +307,7 @@
         </jar>
     </target>
 
-    <target name="jarSrc" depends="init">
+    <target name="jarSrc" depends="init" description="build source 'icu4jsrc.jar' jar file">
         <!--Create a jar archive of just the source for distribution.  The
         jar file will be created in the directory above the root ICU4J
         directory. The exclude pattern ${src.dir}/com/ibm/icu/dev/data/unicode/UnicodeData-*.txt
@@ -297,14 +321,14 @@
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="jarDocs" depends="docs">
+    <target name="jarDocs" depends="docs" description="build documentation 'icu4jdocs.jar' jar file">
         <jar jarfile="${jarDocs.file}"
             compress="true"
             basedir="${doc.dir}"
             manifest="${icu4j.manifest}"/>
     </target>
 
-    <target name="translitIMEJar" depends="collator, transliterator">
+    <target name="translitIMEJar" depends="collator, transliterator" description="build transliterator IME 'icutransime.jar' jar file">
         <javac includes="com/ibm/icu/dev/tool/ime/translit/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -322,7 +346,7 @@
         </jar>
     </target>
 
-    <target name="indicIMEJar" depends="init">
+    <target name="indicIMEJar" depends="init" description="build indic IME 'icuindicime.jar' jar file">
         <javac includes="com/ibm/icu/dev/tool/ime/indic/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -362,7 +386,7 @@
 -->
 
     <!-- jars up richedit but without tests -->
-    <target name="richeditJar" depends="richedit">
+    <target name="richeditJar" depends="richedit" description="build richedit runtime 'richedit.jar' jar file">
         <mkdir dir="${richedit.dir}"/>
         <jar jarfile="${richedit.jar.file}"
             compress="true"
@@ -379,7 +403,7 @@
     -->
 
     <!-- the 'public' docs for richedit -->
-    <target name="richeditDocs" depends="init">
+    <target name="richeditDocs" depends="init" description="build richedit javadoc">
         <mkdir dir="${richedit.doc.dir}"/>
         <javadoc  packagenames="com.ibm.richtext.demo,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.richtext.textlayout.attributes,com.ibm.richtext.print"
             sourcepath="${src.dir}"
@@ -389,11 +413,11 @@
             doctitle="RichEdit Control"
             encoding="iso-8859-1"
             docencoding="iso-8859-1"
-            bottom="&lt;font size=-1>Copyright (c) 1998-2002 IBM Corporation and others.&lt;/font>"/>
+            bottom="&lt;font size=-1>Copyright (c) 1998-2004 IBM Corporation and others.&lt;/font>"/>
     </target>
 
     <!-- richedit alphaworks distribution - jar and docs, but no source -->
-    <target name="richeditZip" depends="richeditJar,richeditDocs">
+    <target name="richeditZip" depends="richeditJar,richeditDocs" description="build richedit zip file">
         <!--Create a zip archive of the richedit jar and readme -->
         <copy file="license.html" todir="${richedit.dir}"/>
         <zip zipfile="${richedit.zip.file}"
@@ -401,7 +425,7 @@
             includes="doc/**/*,richedit.jar,license.html"/>
     </target>
 
-    <target name="check" depends="tests">
+    <target name="check" depends="tests" description="run standard icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <jvmarg value="-ea"/>  <!-- enable assertion checks -->
         <arg value="-w"/>
@@ -414,7 +438,7 @@
     </java>
     </target>
 
-    <target name="secureCheck" depends="testJar">
+    <target name="secureCheck" depends="testJar" description="run secure (applet-like) icu4j test suite">
     <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <!-- (use for debugging, LOTS of output) jvmarg value="-Djava.security.debug=access" -->
         <jvmarg value="-Djava.security.manager"/>
@@ -447,7 +471,7 @@
 
     <target name="checktags" depends="anthack1,anthack2,_requires14,_checktags"/>
 
-    <target name="gatherapi" depends="tools" if="version.1.4">
+    <target name="gatherapi" depends="tools" if="version.1.4" description="run API database generator tool">
         <javadoc classpath="${build.dir}"
             sourcepath="${src.dir}"
             packagenames="com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util"
@@ -461,7 +485,7 @@
         </javadoc>
     </target>
 
-    <target name="apireport" depends="tools" if="version.1.4">
+    <target name="apireport" depends="tools" if="version.1.4" description="run API report generator tool">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}">
             <arg value="-old:"/>
             <arg value="${api.dir}/icu4j28.api.gz"/>
@@ -473,7 +497,7 @@
         </java>
     </target>
 
-    <target name="clean" depends="init">
+    <target name="clean" depends="init" description="remove all build targets">
         <delete dir="${build.dir}"/>
         <delete dir="${doc.dir}"/>
         <delete file="${jar.file}"/>
@@ -569,7 +593,7 @@
          <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
     </target>
 
-    <target name="moduleJar" depends="init">
+    <target name="moduleJar" depends="init" description="modular build of 'icu4j.jar' jar file">
         <jar jarfile="${jar.file}"
             compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
@@ -581,7 +605,7 @@
          Targets to build only Normalization API and Normalization tests
      -->
 
-    <target name="normalizer" depends="init,normalizerData">
+    <target name="normalizer" depends="init,normalizerData" description="modular build of normalizer services">
         <javac includes="com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/CanonicalIterator.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/UCharacterIterator.java,com/ibm/icu/text/UForwardCharacterIterator.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/lang/**/*"
             excludes="**/CVS/**/*,com/ibm/icu/lang/UScriptRun.java, com/ibm/icu/impl/ICUListResourceBundle.java, com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
             srcdir="${src.dir}"
@@ -605,7 +629,7 @@
             Targets to build only Collation API and Collation tests
      -->
 
-    <target name="collator" depends="init,copyCollatorData">
+    <target name="collator" depends="init,copyCollatorData" description="modular build of collator services">
          <javac includes="com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/*Collation*.java,com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java, com/ibm/icu/impl/data/*Break*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
             srcdir="${src.dir}"
@@ -628,7 +652,7 @@
             Targets to build only Character properties API and tests
      -->
 
-    <target name="propertiesBasic" depends="init, copyBasicPropsData">
+    <target name="propertiesBasic" depends="init, copyBasicPropsData" description="modular build of basic character properties">
         <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
@@ -638,7 +662,7 @@
             debug="on" deprecation="off"/>
     </target>
 
-    <target name="propertiesFull" depends="init,copyFullPropsData">
+    <target name="propertiesFull" depends="init,copyFullPropsData" description="modular build of full character properties">
          <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
             srcdir="${src.dir}"
@@ -673,7 +697,7 @@
     <!--
             Targets to build only Compression API API and tests
      -->
-    <target name="compression" depends="init">
+    <target name="compression" depends="init" description="modular build of compression services">
          <javac includes="com/ibm/icu/text/SCSU.java, com/ibm/icu/text/UnicodeCompressor.java, com/ibm/icu/text/UnicodeDecompressor.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -696,7 +720,7 @@
     <!--
             Targets to build only Calendar API and Calendar tests
      -->
-    <target name="calendar" depends="init,copyCalendarData">
+    <target name="calendar" depends="init,copyCalendarData" description="modular build of calendar services">
         <javac includes="com/ibm/icu/util/*Calendar*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/text/NumberFormat*Shim.java,com/ibm/icu/impl/data/*Calendar*.java,com/ibm/icu/impl/data/*Holiday*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
@@ -719,7 +743,7 @@
             Targets to build only Transliterator API and  tests
      -->
 
-    <target name="transliterator" depends="init,propertiesFull">
+    <target name="transliterator" depends="init,propertiesFull" description="modular build of unicode transform services">
         <javac includes="com/ibm/icu/text/*Transliterator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/*Property*.java,com/ibm/icu/impl/*Iterator*.java,com/ibm/icu/impl/data/ResourceReader.java,com/ibm/icu/impl/UtilityExtensions.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/text/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
@@ -746,7 +770,7 @@
             Targets to build only Format API
      -->
 
-    <target name="format" depends="init,copyFormatData">
+    <target name="format" depends="init,copyFormatData" description="modular build of formatting services">
         <javac includes="com/ibm/icu/text/*Format*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/data/CalendarData*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
@@ -771,7 +795,7 @@
             Targets to build only BreakIterator API
      -->
 
-    <target name="breakIterator" depends="init,copyFullPropsData">
+    <target name="breakIterator" depends="init,copyFullPropsData" description="modular build of break iterator services">
          <javac includes="com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/lang/**/*,com/ibm/icu/impl/UCharacterName.java,com/ibm/icu/text/UnicodeSetIterator.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
@@ -803,7 +827,7 @@
       </unjar>
     </target>
 
-    <target name="stringPrep" depends="init,normalizer,copyStringPrepData">
+    <target name="stringPrep" depends="init,normalizer,copyStringPrepData" description="modular build of stringprep services">
          <javac includes="com/ibm/icu/text/*StringPrep*.java,com/ibm/icu/text/*IDNA*.java,com/ibm/icu/impl/*StringPrep*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
             srcdir="${src.dir}"
@@ -829,7 +853,7 @@
     </target>
 
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
-    <target name="extraTransliteratorData" depends="init">
+    <target name="extraTransliteratorData" depends="init" description="build han-to-latin transliterator data (normally omitted)">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
               <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
         </copy>
@@ -837,7 +861,7 @@
 
     <!-- Target for builing XLIFF2ICUConverter Jar -->
 
-    <target name="xliff" depends="init">
+    <target name="xliff" depends="init" description="build xliff converter tool">
         <javac includes="com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,com/ibm/icu/dev/tool/UOption.java,com/ibm/icu/dev/tool/xmlcomparator/XMLValidator.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
