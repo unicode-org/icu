@@ -28,9 +28,10 @@
 #include "umutex.h"
 
 static UCollator* UCA = NULL;
+static const InverseTableHeader* invUCA = NULL;
 
 static UBool
-isAcceptable(void *context, 
+isAcceptableUCA(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
 
@@ -50,6 +51,108 @@ isAcceptable(void *context,
     } else {
         return FALSE;
     }
+}
+
+static UBool
+isAcceptableInvUCA(void *context, 
+             const char *type, const char *name,
+             const UDataInfo *pInfo){
+
+    if( pInfo->size>=20 &&
+        pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
+        pInfo->charsetFamily==U_CHARSET_FAMILY &&
+        pInfo->dataFormat[0]==0x49 &&   /* dataFormat="InvC" */
+        pInfo->dataFormat[1]==0x6e &&
+        pInfo->dataFormat[2]==0x76 &&
+        pInfo->dataFormat[3]==0x43 &&
+        pInfo->formatVersion[0]==1 &&
+        pInfo->dataVersion[0]==3 &&
+        pInfo->dataVersion[1]==0 &&
+        pInfo->dataVersion[2]==0 &&
+        pInfo->dataVersion[3]==0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+uint32_t ucol_inv_findCE(uint32_t CE, uint32_t SecondCE, UErrorCode *status) {
+  uint32_t bottom = 0, top = invUCA->tableSize;
+  uint32_t i = (top-bottom)/2;
+  uint32_t first = 0;
+  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+
+  while(first != CE && top != bottom) {
+    first = *(CETable+3*i);
+    if(first > CE) {
+      top = i;
+    } else if(first < CE) {
+      bottom = i;
+    } else {
+      break;
+    }
+    i = (top-bottom)/2 + bottom;
+  }
+
+  if(first == CE) {
+    return i;
+  } else {
+    *status = U_INDEX_OUTOFBOUNDS_ERROR;
+    return 0;
+  }
+}
+
+static uint32_t strengthMask[3] = {
+  0xFFFF0000,
+  0xFFFFFF00,
+  0xFFFFFFFF
+};
+
+uint32_t ucol_inv_getPrevious(uint32_t CE, uint32_t SecondCE, UColAttributeValue strength, UErrorCode *status) {
+
+  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t previousCE;
+  uint32_t iCE;
+
+  iCE = ucol_inv_findCE(CE, SecondCE, status);
+
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+
+  CE &= strengthMask[strength];
+
+  previousCE = CE;
+
+  while(previousCE == CE) {
+    previousCE = (*(CETable+3*(--iCE))) & strengthMask[strength];
+  }
+  return previousCE;
+}
+
+uint32_t ucol_inv_getNext(uint32_t CE, uint32_t SecondCE, UColAttributeValue strength, UErrorCode *status) {
+  uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
+  uint32_t nextCE;
+  uint32_t iCE;
+
+  iCE = ucol_inv_findCE(CE, SecondCE, status);
+
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+
+  CE &= strengthMask[strength];
+
+  nextCE = CE;
+
+  while(nextCE == CE) {
+    nextCE = (*(CETable+3*(--iCE))) & strengthMask[strength];
+  }
+  return nextCE;
 }
 
 /****************************************************************************/
@@ -102,7 +205,8 @@ ucol_close(UCollator *coll)
   }
 }
 
-UCATableHeader *ucol_assembleTailoringTable(ListHeader *lh, int32_t resLen, UErrorCode *status) {
+UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, int32_t resLen, UErrorCode *status) {
+  *status = U_UNSUPPORTED_ERROR;
   return NULL;
 }
 
@@ -116,6 +220,7 @@ ucol_openRules(    const    UChar                  *rules,
   int32_t resLen = 0;
 
   ucol_initUCA(status);
+  ucol_initInverseUCA(status);
 
   if(U_FAILURE(*status)) return 0;
 
@@ -143,18 +248,35 @@ ucol_openRules(    const    UChar                  *rules,
 
   /* do we need to normalize the string beforehand? */
 
-  ListHeader *lh = ucol_tok_assembleTokenList(rules, rulesLength, &resLen, status);
-  if(U_FAILURE(*status) || lh == NULL) {
+  UColTokenParser src;
+  src.source = rules;
+  src.current = rules;
+  src.end = rules+rulesLength;
+  src.invUCA = invUCA;
+  src.UCA = UCA;
+  src.resultLen = 0;
+  src.lh = 0;
+
+  ucol_tok_assembleTokenList(&src, status);
+  if(U_FAILURE(*status) || src.lh == NULL) {
     return NULL;
   }
 
-  UCATableHeader *table = ucol_assembleTailoringTable(lh, resLen, status);
+  UCATableHeader *table = ucol_assembleTailoringTable(&src, resLen, status);
   UCollator *result = ucol_initCollator(table,0,status);
 
-  result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
-  u_strcpy(result->rules, rules);
-
-  result->rb = 0;
+  if(U_SUCCESS(*status)) {
+    result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
+    u_strcpy(result->rules, rules);
+    
+    result->rb = 0;
+  } else {
+    if(table != NULL) {
+      uprv_free(table);
+      ucol_close(result);
+    }
+    return NULL;
+  }
 
   return result;
 }
@@ -234,15 +356,16 @@ void ucol_initUCA(UErrorCode *status) {
 
   if(UCA == NULL) {
     UCollator *newUCA = (UCollator *)uprv_malloc(sizeof(UCollator));
-    UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptable, NULL, status);
+    UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
+
+    if(U_FAILURE(*status)) {
+        udata_close(result);
+        uprv_free(newUCA);
+    }
+
     if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
       newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
       newUCA->rb = NULL;
-
-      if(U_FAILURE(*status)) {
-          udata_close(result);
-          uprv_free(newUCA);
-      }
 
       umtx_lock(NULL);
       if(UCA == NULL) {
@@ -260,6 +383,36 @@ void ucol_initUCA(UErrorCode *status) {
   }
 }
 
+void ucol_initInverseUCA(UErrorCode *status) {
+  if(U_FAILURE(*status)) return;
+
+  if(invUCA == NULL) {
+    InverseTableHeader *newInvUCA = (InverseTableHeader *)uprv_malloc(sizeof(InverseTableHeader ));
+    UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
+
+    if(U_FAILURE(*status)) {
+        udata_close(result);
+        uprv_free(newInvUCA);
+    }
+
+    if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
+      newInvUCA = (InverseTableHeader *)udata_getMemory(result);
+
+      umtx_lock(NULL);
+      if(invUCA == NULL) {
+          invUCA = newInvUCA;
+          newInvUCA = NULL;
+      }
+      umtx_unlock(NULL);
+
+      if(newInvUCA != NULL) {
+          udata_close(result);
+          uprv_free(newInvUCA);
+      }
+    }
+
+  }
+}
 
 
 /****************************************************************************/
