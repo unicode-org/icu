@@ -593,18 +593,18 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     UChar temp[bufSize];
 
     int32_t inputLen = 0, decompLen;
-    UChar buffer[4];
+    UChar stackBuffer[4];
     const UChar *decomp;
 
     U16_APPEND_UNSAFE(temp, inputLen, comp);
-    decomp = unorm_getCanonicalDecomposition(comp, buffer, &decompLen);
+    decomp = unorm_getCanonicalDecomposition(comp, stackBuffer, &decompLen);
     if(decomp == NULL) {
         /* copy temp */
-        buffer[0] = temp[0];
+        stackBuffer[0] = temp[0];
         if(inputLen > 1) {
-            buffer[1] = temp[1];
+            stackBuffer[1] = temp[1];
         }
-        decomp = buffer;
+        decomp = stackBuffer;
         decompLen = inputLen;
     }
 
