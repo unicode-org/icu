@@ -10,12 +10,12 @@ and print it to stderr
 
 #ifndef _UWMSG
 #define _UWMSG
-#include "unicode/utypes.h"
+#include "unicode/ures.h"
 
 /* Set the path to wmsg's bundle.
    Caller owns storage.
 */
-U_CAPI void u_wmsg_setPath(const char *path, UErrorCode *err);
+U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err);
 
 /* Format a message and print it's output to stderr */
 U_CAPI void u_wmsg(const char *tag, ... );
