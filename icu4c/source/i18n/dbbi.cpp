@@ -1,9 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2000 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
+*   01/13/2000 helena      Added UErrorCode to ctors.
 **********************************************************************
 */
 
@@ -19,14 +20,19 @@ char DictionaryBasedBreakIterator::fgClassID = 0;
 //=======================================================================
 
 DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(const void* tablesImage,
-                                                           char* dictionaryFilename)
+                                                           char* dictionaryFilename, 
+                                                           UErrorCode& status)
 : RuleBasedBreakIterator((const void*)NULL),
   dictionaryCharCount(0),
   cachedBreakPositions(NULL),
   numCachedBreakPositions(0),
   positionInCache(0)
 {
-    tables = new DictionaryBasedBreakIteratorTables(tablesImage, dictionaryFilename);
+    tables = new DictionaryBasedBreakIteratorTables(tablesImage, dictionaryFilename, status);
+    if (U_FAILURE(status)) {
+        delete tables;
+        return;
+    }
     tables->addReference();
 }
 

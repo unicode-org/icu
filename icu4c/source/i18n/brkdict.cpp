@@ -1,9 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 IBM and others. All rights reserved.
+*   Copyright (C) 1999-2000 IBM and others. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99     rtg         Ported from Java
+*   01/13/2000  helena      Added UErrorCode to ctors.
 **********************************************************************
 */
 
@@ -13,9 +14,14 @@
 // deserialization
 //=================================================================================
 
-BreakDictionary::BreakDictionary(char* dictionaryFilename)
+BreakDictionary::BreakDictionary(char* dictionaryFilename, UErrorCode& status)
 {
+    if (U_FAILURE(status)) return;
     FileStream* dictionaryStream = T_FileStream_open(dictionaryFilename, "rb");
+    if (dictionaryStream == 0) {
+        status = U_FILE_ACCESS_ERROR;
+        return;
+    }
     readDictionaryFile(dictionaryStream);
     T_FileStream_close(dictionaryStream);
 }

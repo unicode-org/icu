@@ -1,9 +1,10 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2000 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
+*   01/13/2000 helena      Added UErrorCode to ctors.
 **********************************************************************
 */
 
@@ -42,7 +43,8 @@ private:
     //=======================================================================
 
     DictionaryBasedBreakIteratorTables(const void* tablesImage,
-                                       char* dictionaryFilename);
+                                       char* dictionaryFilename,
+                                       UErrorCode& status);
                                  
     /**
      * The copy constructor is declared private and not implemented.
