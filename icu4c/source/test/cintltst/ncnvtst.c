@@ -327,9 +327,9 @@ void TestToUnicodeErrorBehaviour()
         int32_t offsets[] = {   0x0000, 0x0001};
 
         const char sampleText2[] = { (char)0x31, (char)0xff, (char)0xe4, (char)0xba, (char)0x8c, 
-            (char)0xe0, (char)0x80, (char)0x61};
+            (char)0xe0, (char)0x80, (char)0x61,};
         UChar    expected2UTF8[] = {  0x0031, 0xfffd, 0x4e8c, 0xfffd, 0x0061};
-        int32_t offsets2[] = {   0x0000, 0x0001, 0x0002, 0x0003, 0x0005};
+        int32_t offsets2[] = {   0x0000, 0x0001, 0x0002, 0x0005, 0x0007};
 
         const char sampleText3[] = { (char)0x31, (char)0xfb, (char)0xbf, (char)0xbf, (char)0xbf, (char)0xbf, 
             (char)0x61,};
@@ -365,7 +365,7 @@ void TestToUnicodeErrorBehaviour()
         if(!convertToU(sampleText3, sizeof(sampleText3), 
                 expected3UTF8, sizeof(expected3UTF8)/sizeof(expected3UTF8[0]), "utf-8", offsets3, TRUE, U_ZERO_ERROR ))
             log_err("utf-8->Unicode  did not match.\n");
-        if(!convertToU(sampleText2, sizeof(sampleText3), 
+        if(!convertToU(sampleText3, sizeof(sampleText3), 
                 expected3UTF8, sizeof(expected3UTF8)/sizeof(expected3UTF8[0]), "utf-8", offsets3, FALSE, U_ZERO_ERROR ))
             log_err("utf-8->Unicode  did not match with flush false.\n");
 
