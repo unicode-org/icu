@@ -5,7 +5,7 @@
 .\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
-.\" Modified by Steven R. Loomis <srl@jtcsv.com>
+.\" Modified by Steven R. Loomis <srl@jtcsv.com>.
 .\"
 .TH PKGDATA 8 "1 March 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
@@ -67,7 +67,12 @@
 takes a set of data files and packages them for use by ICU or
 applications that use ICU. The typical reason to package files using
 .B pkgdata
-is to make their distribution easier.
+is to make their distribution easier and their loading by ICU faster
+and less consuming of limited system resources such as file
+descriptors.
+Packaged data also allow applications to be distributed with fewer
+resource files, or even with none at all if they link against the
+packaged data directly.
 .PP
 .B pkgdata
 supports a few different methods of packaging data that serve
@@ -102,20 +107,33 @@ the ICU data directory.
 .PP
 The
 .BR static
-packaging mode is similar to dll or library, however it produces a
-static library.  Note that many platforms are not able to dynamically load 
-symbols from static object files, so for this reason 
+packaging mode is similar to the shared library one except that it
+produces a static library.  Note that many platforms are not able to
+dynamically load symbols from static object files, so for this reason
 .BR udata_setAppData() 
 must be called
-to install this data.  As a convenience, pkgdata will build a C source file
-and a header file. Given a data package named "\fIname\fP", in the output 
-directory will be created \fIname\fR.c and \fIname\fR.h with the single
-function \fBudata_install_\fIname\fB(UErrorCode *err)\fR. Call this function
-once early in the program. The error code returned is that of \fBudata_setAppData()\fP.
-Subsequently, the application can access this data by passing "\fIname\fP" for the "path"
-argument to functions such as \fBures_open()\fP.
-
-
+to install this data. As a convenience, pkgdata will build a C source file
+and a header file. Given a data package named
+.IR name, in the output 
+directory will be created
+.IR name .c
+and
+.IR name .h with the single
+function
+.BR "udata_install_\fcIname\fB(UErrorCode *err)" ,
+where
+.I cname
+is
+.I name
+turned into a valid C identifier.
+The application need to call this function once. The error code returned
+is that of
+.BR udata_setAppData() .
+Subsequently, the application can access this data by passing
+"\fIname\fP" for the
+.I path 
+rgument to functions such as
+.BR Bures_open() .
 .PP
 Finally,
 .B pkgdata
@@ -191,7 +209,9 @@ option.
 .TP
 .BI "\-r\fP, \fB\-\-revision" " version"
 Enable versioning of the shared library produced in
-.I dll
+.BR dll ,
+or
+.BR library ,
 mode. The version number has the format
 .I major\fP.\fIminor\fP.\fIpatchlevel
 and all parts except for
@@ -243,8 +263,12 @@ directory
 as set by the
 .BI "\-d\fP, \fB\-\-destdir"
 option.
+.SH AUTHORS
+Steven Loomis
+.br
+Yves Arrouye
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2001 IBM, Inc. and others.
+Copyright (C) 2000-2002 IBM, Inc. and others.
 
