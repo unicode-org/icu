@@ -108,7 +108,6 @@ NumberFormatRoundTripTest::start()
 void 
 NumberFormatRoundTripTest::test(NumberFormat *fmt)
 {
-#if 1
 #if IEEE_754
     test(fmt, uprv_getNaN());
     test(fmt, uprv_getInfinity());
@@ -146,22 +145,20 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         // the double will stay in range.
         //if(fmt->getMultipler() == 1)
         if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
+        {
 #ifndef OS390
             test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
-#else
-#   if IEEE_754
+#elif IEEE_754
             test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
-#   else
+#else
             test(fmt, randomDouble(1e65) / ((DecimalFormat*)fmt)->getMultiplier());   /*OS390*/
-#   endif
-#endif /* OS390 */
+#endif
+        }
 
-#ifdef XP_MAC
-// PowerPC doesn't support denormalized doubles, so the low-end range
-// doesn't match NT
-        test(fmt, randomDouble(1e-290));
-#elif defined __alpha__
-	test(fmt, randomDouble(1e-290));
+#if defined XP_MAC || defined __alpha__ || defined OS400
+// These machines don't support denormalized doubles,
+// so the low-end range doesn't match Windows
+        test(fmt, randomDouble(1e-292));
 #elif defined(OS390)
 #   if IEEE_754
         test(fmt, randomDouble(1e-78));  /*OS390*/
@@ -175,7 +172,6 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         test(fmt, randomDouble(1e-78));  /*OS390*/
 #endif /* OS390 */
     }
-#endif /* enable/disable */
 }
 
 /**
