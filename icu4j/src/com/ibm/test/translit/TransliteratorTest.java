@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2001/03/30 23:33:20 $ 
- * $Revision: 1.30 $
+ * $Date: 2001/03/30 23:39:18 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -683,18 +683,6 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     /**
-     * Test filter syntax in IDs. (J23)
-     */
-    public void TestFilterIDs() {
-        String ID = "Unicode-Hex[aeiou]";
-        expect(Transliterator.getInstance(ID), "quizzical",
-               "q\\u0075\\u0069zz\\u0069c\\u0061l");
-        ID = "Unicode-Hex[aeiou];Hex-Unicode[^5]";
-        expect(Transliterator.getInstance(ID), "quizzical",
-               "q\\u0075izzical");
-    }
-
-    /**
      * Test IDs of inverses of compound transliterators. (J20)
      */
     public void TestCompoundInverseID() {
@@ -718,6 +706,33 @@ public class TransliteratorTest extends TestFmwk {
         if (!u.getID().equals("Null")) {
             errln("FAIL: Inverse of Null should be Null");
         }
+    }
+
+    /**
+     * Check ID of inverse of alias. (J22)
+     */
+    public void TestAliasInverseID() {
+        String ID = "Latin-Hangul"; // This should be any alias ID with an inverse
+        Transliterator t = Transliterator.getInstance(ID);
+        Transliterator u = t.getInverse();
+        String exp = "Hangul-Latin";
+        String got = u.getID();
+        if (!got.equals(exp)) {
+            errln("FAIL: Inverse of " + ID + " is " + got +
+                  ", expected " + exp);
+        }        
+    }
+
+    /**
+     * Test filter syntax in IDs. (J23)
+     */
+    public void TestFilterIDs() {
+        String ID = "Unicode-Hex[aeiou]";
+        expect(Transliterator.getInstance(ID), "quizzical",
+               "q\\u0075\\u0069zz\\u0069c\\u0061l");
+        ID = "Unicode-Hex[aeiou];Hex-Unicode[^5]";
+        expect(Transliterator.getInstance(ID), "quizzical",
+               "q\\u0075izzical");
     }
 
     //======================================================================
