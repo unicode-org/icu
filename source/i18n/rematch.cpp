@@ -34,6 +34,7 @@ U_NAMESPACE_BEGIN
 //-----------------------------------------------------------------------------
 RegexMatcher::RegexMatcher(const RegexPattern *pat)  { 
     fPattern           = pat;
+    fPatternOwned      = FALSE;
     fInput             = NULL;
     UErrorCode  status = U_ZERO_ERROR;
     fStack             = new UVector32(status);   // TODO:  do something with status.
@@ -47,10 +48,43 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
 
 
 
+RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
+                           uint32_t flags, UErrorCode &status) {
+    UParseError    pe;
+    fPattern       = RegexPattern::compile(regexp, flags, pe, status);
+    fPatternOwned  = TRUE;
+    fStack             = new UVector32(status); 
+    fData              = fSmallData;
+    if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
+        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t));      // TODO:  null check
+    }
+    reset(input);
+}
+
+
+RegexMatcher::RegexMatcher(const UnicodeString &regexp, 
+                           uint32_t flags, UErrorCode &status) {
+    UParseError    pe;
+    fPattern           = RegexPattern::compile(regexp, flags, pe, status);
+    fPatternOwned      = TRUE;
+    fStack             = new UVector32(status); 
+    fData              = fSmallData;
+    if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
+        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t));      // TODO:  null check
+    }
+    reset();
+}
+
+
+
 RegexMatcher::~RegexMatcher() {
     delete fStack;
     if (fData != fSmallData) {
         delete fData;
+    }
+    if (fPatternOwned) {
+        delete fPattern;
+        fPattern = NULL;
     }
 }
 
