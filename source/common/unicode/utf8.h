@@ -43,7 +43,7 @@
 U_CAPI const uint8_t 
 utf8_countTrailBytes[256];
 #else
-U_CFUNC U_DATA_IMPORT const uint8_t /* U_IMPORT2? */ /*U_IMPORT*/ 
+U_CFUNC U_IMPORT const uint8_t /* U_IMPORT2? */ /*U_IMPORT*/ 
 utf8_countTrailBytes[256];
 #endif
 

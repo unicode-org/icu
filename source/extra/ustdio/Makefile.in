@@ -40,6 +40,7 @@ DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n $(LIBCPPFLAGS)
+DEFS += -DU_USTDIO_IMPLEMENTATION
 LIBS = $(LIBICUUC) $(LIBICUI18N) $(DEFAULT_LIBS)
 
 OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o \
