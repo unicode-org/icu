@@ -66,7 +66,7 @@ fr {
     }
     Eras { 
             "av. J.-C.",
-            "AD",
+            "ap. J.-C.",
     }
     Languages { 
         fr { "fran\u00E7ais" }
