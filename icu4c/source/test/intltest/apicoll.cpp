@@ -1669,8 +1669,8 @@ void CollationAPITest::TestBounds(void) {
 void CollationAPITest::TestGetTailoredSet() 
 {
   struct {
-    char *rules;
-    char *tests[20];
+    const char *rules;
+    const char *tests[20];
     int32_t testsize;
   } setTest[] = {
     { "&a < \\u212b", { "\\u212b", "A\\u030a", "\\u00c5" }, 3},

@@ -129,7 +129,7 @@ static void TestGetChar()
     };
     static UChar32 result[]={
      /*codepoint-unsafe,  codepoint-safe(not strict)  codepoint-safe(strict)*/
-        0xfca10000,       0xdc00,                     UTF_ERROR_VALUE,   
+        (UChar32)0xfca10000, 0xdc00,                  UTF_ERROR_VALUE,   
         0x20ac,           0x20ac,                     0x20ac,
         0x12861,          0xd841,                     UTF_ERROR_VALUE,
         0x61,             0x61,                       0x61, 
