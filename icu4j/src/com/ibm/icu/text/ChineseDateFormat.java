@@ -57,7 +57,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * Construct a ChineseDateFormat from a date format pattern and locale
      * @param pattern the pattern
      * @param locale the locale
-     * @stable ICU 2.0
+     * @draft ICU 3.2
      */
    public ChineseDateFormat(String pattern, ULocale locale) {
        // TODO: convert CDFS to use ULocale

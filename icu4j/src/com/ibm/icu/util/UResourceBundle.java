@@ -396,6 +396,9 @@ public abstract class UResourceBundle extends ResourceBundle{
         return b;
     }
     
+    /**
+     * @internal
+     */
     protected abstract void setLoadingStatus(int newStatus);
     
     /**

@@ -633,6 +633,11 @@ public abstract class NumberFormat extends UFormat {
      * should be able to create any of the predefined formats for each locale it
      * supports.  When registered, the locales it supports extend or override the
      * locales already supported by ICU.
+     * <p><b>Note:</b> as of ICU4J 3.2, the default API for NumberFormatFactory uses
+     * ULocale instead of Locale.  Instead of overriding createFormat(Locale, int),
+     * new implementations should override createFactory(ULocale, int).  Note that
+     * one of these two methods <b>MUST</b> be overridden or else an infinite
+     * loop will occur.
      *
      * @stable ICU 2.6
      */
@@ -693,12 +698,33 @@ public abstract class NumberFormat extends UFormat {
          * is not supported, return null.  If the locale is supported, but
          * the type is not provided by this service, return null.  Otherwise
          * return an appropriate instance of NumberFormat.
+         * <b>Note:</b> as of ICU4J 3.2, implementations should override
+         * this method instead of createFormat(Locale, int).
+         * @param loc the locale for which to create the format
+         * @param formatType the type of format
+         * @return the NumberFormat, or null.
+         * @draft ICU 3.2
+         */
+        public NumberFormat createFormat(ULocale loc, int formatType) {
+            return createFormat(loc.toLocale(), formatType);
+        }
+
+        /**
+         * Returns a number format of the appropriate type.  If the locale
+         * is not supported, return null.  If the locale is supported, but
+         * the type is not provided by this service, return null.  Otherwise
+         * return an appropriate instance of NumberFormat.
+         * <b>Note:</b> as of ICU4J 3.2, createFormat(ULocale, int) should be
+         * overridden instead of this method.  This method is no longer 
+         * abstract and delegates to that method.
          * @param loc the locale for which to create the format
          * @param formatType the type of format
          * @return the NumberFormat, or null.
          * @stable ICU 2.6
          */
-        public abstract NumberFormat createFormat(ULocale loc, int formatType);
+        public NumberFormat createFormat(Locale loc, int formatType) {
+            return createFormat(ULocale.forLocale(loc), formatType);
+        }
 
         /**
          * @stable ICU 2.6
@@ -718,12 +744,27 @@ public abstract class NumberFormat extends UFormat {
         /**
          * @stable ICU 2.6
          */
-        public SimpleNumberFormatFactory(ULocale locale) {
+        public SimpleNumberFormatFactory(Locale locale) {
             this(locale, true);
         }
         
         /**
          * @stable ICU 2.6
+         */
+        public SimpleNumberFormatFactory(Locale locale, boolean visible) {
+            localeNames = Collections.singleton(ULocale.forLocale(locale).getBaseName());
+            this.visible = visible;
+        }
+
+        /**
+         * @draft ICU 3.2
+         */
+        public SimpleNumberFormatFactory(ULocale locale) {
+            this(locale, true);
+        }
+        
+        /**
+         * @draft ICU 3.2
          */
         public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
             localeNames = Collections.singleton(locale.getBaseName());

@@ -759,7 +759,7 @@ public abstract class DateFormat extends UFormat {
     /**
      * Gets the set of locales for which DateFormats are installed.
      * @return the set of locales for which DateFormats are installed.
-     * @stable ICU 2.0
+     * @draft ICU 3.2
      */
     public static ULocale[] getAvailableULocales()
     {

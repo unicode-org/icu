@@ -11,6 +11,14 @@
  * 
  * Sample invocation:
  * java -old: icu4j28.api.zip -new: icu4j30.api -html -out: icu4j_compare_28_30.html
+ *
+ * TODO:
+ * - add a separate section for obsoleted APIs
+ * - make 'changed apis' smarter - detect method parameter or return type change
+ *   for this, the sequential search through methods ordered by signature won't do.
+ *     We need to gather all added and removed overloads for a method, and then
+ *     compare all added against all removed in order to identify this kind of
+ *     change.
  */
 
 package com.ibm.icu.dev.tool.docs;
@@ -28,6 +36,7 @@ public class ReportAPI {
     TreeSet added;
     TreeSet removed;
     TreeSet promoted;
+    TreeSet obsoleted;
     ArrayList changed;
 
     static final class APIData {
@@ -172,6 +181,7 @@ public class ReportAPI {
         changedRemoved.addAll(tempRemoved);
 
         promoted = new TreeSet(APIInfo.defaultComparator());
+        obsoleted = new TreeSet(APIInfo.defaultComparator());
         ai = changedAdded.iterator();
         ri = changedRemoved.iterator();
         a = r = null;
@@ -184,8 +194,11 @@ public class ReportAPI {
             } else if (result > 0) {
                 r = null;
             } else {
-                if (equalButForStatus(a, r)) {
+                int change = statusChange(a, r);
+                if (change > 0) {
                     promoted.add(a);
+                } else if (change < 0) {
+                    obsoleted.add(a);
                 }
                 a = null;
                 r = null;
@@ -195,15 +208,20 @@ public class ReportAPI {
         added = stripAndResort(added);
         removed = stripAndResort(removed);
         promoted = stripAndResort(promoted);
+        obsoleted = stripAndResort(obsoleted);
     }
 
-    private boolean equalButForStatus(APIInfo lhs, APIInfo rhs) {
+    private int statusChange(APIInfo lhs, APIInfo rhs) { // new. old
         for (int i = 0; i < APIInfo.NUM_TYPES; ++i) {
             if (lhs.get(i, true).equals(rhs.get(i, true)) == (i == APIInfo.STA)) {
-                return false;
+                return 0;
             }
         }
-        return true;
+        int lstatus = lhs.getVal(APIInfo.STA);
+        if (lstatus == APIInfo.STA_OBSOLETE || lstatus == APIInfo.STA_DEPRECATED) {
+            return -1;
+        }
+        return 1;
     }
 
     private boolean writeReport(String outFile, boolean html) {
@@ -253,6 +271,15 @@ public class ReportAPI {
 
             pw.println();
             pw.println("<hr/>");
+            pw.println("<h2>Obsoleted in " + newData.name + "</h2>");
+            if (obsoleted.size() > 0) {
+                printResults(obsoleted, pw, true, false);
+            } else {
+                pw.println("<p>(no API obsoleted)</p>");
+            }
+
+            pw.println();
+            pw.println("<hr/>");
             pw.println("<h2>Changed in " + newData.name + " (old, new)</h2>");
             if (changed.size() > 0) {
                 printResults(changed, pw, true, true);
@@ -263,7 +290,7 @@ public class ReportAPI {
             pw.println();
             pw.println("<hr/>");
             pw.println("<h2>Promoted to stable in " + newData.name + "</h2>");
-            if (added.size() > 0) {
+            if (promoted.size() > 0) {
                 printResults(promoted, pw, true, false);
             } else {
                 pw.println("<p>(no API promoted)</p>");
@@ -296,6 +323,15 @@ public class ReportAPI {
 
             pw.println();
             pw.println();
+            pw.println("=== Obsoleted in " + newData.name + " ===");
+            if (obsoleted.size() > 0) {
+                printResults(obsoleted, pw, false, false);
+            } else {
+                pw.println("(no API obsoleted)");
+            }
+
+            pw.println();
+            pw.println();
             pw.println("=== Changed in " + newData.name + " (old, new) ===");
             if (changed.size() > 0) {
                 printResults(changed, pw, false, true);
@@ -306,7 +342,7 @@ public class ReportAPI {
             pw.println();
             pw.println();
             pw.println("=== Promoted to stable in " + newData.name + " ===");
-            if (added.size() > 0) {
+            if (promoted.size() > 0) {
                 printResults(promoted, pw, false, false);
             } else {
                 pw.println("(no API promoted)");
