@@ -1498,7 +1498,7 @@ void CollationAPITest::TestGetLocale() {
 
   /* completely non-existant locale for collator should get a default collator */
   {
-    Collator *defaultColl = Collator::createInstance(NULL, status);
+    Collator *defaultColl = Collator::createInstance((const Locale)NULL, status);
     coll = Collator::createInstance("blahaha", status);
     if(U_FAILURE(status)) {
       log("Failed to open collator with %s\n", u_errorName(status));

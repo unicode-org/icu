@@ -175,7 +175,11 @@ TimeZoneBoundaryTest::showDate(UDate d)
 UnicodeString
 TimeZoneBoundaryTest::showNN(int32_t n)
 {
-    return ((n < 10) ? UnicodeString("0"): UnicodeString("")) + n;
+    UnicodeString nStr;
+    if (n < 10) {
+        nStr += UnicodeString("0", "");
+    }
+    return nStr + n;
 }
  
 // -------------------------------------
