@@ -19,21 +19,31 @@ use warnings;
 use File::Path;
 use File::Copy;
 
-usage() unless (@ARGV >= 3);
+my $isMSWin32 = ($^O eq 'MSWin32');
+usage() unless (@ARGV >= ($isMSWin32 ? 3:2));
 my $ICU_ROOT = shift;
 my $ICU4J_ROOT = shift;
-my $ldVar = shift;
+my $prefix = ''; # e.g. "LD_LIBRARY_PATH=..."
+my $flavor = ''; # e.g. "Debug/"
+if ($isMSWin32) {
+    $flavor = shift() . '/';
+} else {
+    my $isDarwin = ($^O eq 'darwin');
+    my $ldVar = ($isDarwin ? 'DYLD_LIBRARY_PATH' : 'LD_LIBRARY_PATH');
+    $prefix = ($isMSWin32 ? '' : "$ldVar=$ICU_ROOT/source/common:$ICU_ROOT/source/i18n:$ICU_ROOT/source/tools/toolutil:$ICU_ROOT/source/data/out:$ICU_ROOT/source/data: ");
+}
+checkPlatform();
 
 # Step 1.  Run genrb.
 print "\n[Step 1: Run genrb]\n";
-my $genrb = "$ICU_ROOT/source/tools/genrb/genrb";
+my $genrb = "$ICU_ROOT/source/tools/genrb/${flavor}genrb";
 my $dataDir = "$ICU_ROOT/source/data/locales";
 my $javaRootDir = "$dataDir/java";
 my $pkg = "com/ibm/icu/impl/data";
 my $javaDir = "$javaRootDir/$pkg";
 chdir($dataDir);
 mkpath($javaDir);
-my $op = "$ldVar=$ICU_ROOT/source/common:$ICU_ROOT/source/i18n:$ICU_ROOT/source/tools/toolutil:$ICU_ROOT/source/data/out:$ICU_ROOT/source/data: $genrb -s. -d$javaDir -j -p com.ibm.icu.impl.data -b LocaleElements ";
+my $op = "$prefix$genrb -s. -d$javaDir -j -p com.ibm.icu.impl.data -b LocaleElements ";
 print "{Command: $op*.txt}\n";
 print "Directory: $dataDir\n";
 my @list;
@@ -160,6 +170,7 @@ print " $jarFile updated\n";
 
 # Done!
 print "\n[All done]\n";
+checkPlatform();
 exit(0);
 
 #-----------------------------------------------------------------------
@@ -299,9 +310,24 @@ sub patchIndex {
 }
 
 #-----------------------------------------------------------------------
+sub checkPlatform {
+    my $is_big_endian = unpack("h*", pack("s", 1)) =~ /01/;
+    if (!$is_big_endian) {
+        print "*******\n";
+        print "WARNING: You are running on a LITTLE ENDIAN machine.\n";
+        print "WARNING: You cannot use the resulting ICULocaleData.jar\n";
+        print "WARNING: *.col files will have incorrect byte order.\n";
+        print "*******\n";
+    }
+}
+
+#-----------------------------------------------------------------------
 sub usage {
     print << "END";
-Usage: genrbjar.pl <icu_root_dir> <icu4j_root_dir> <ld_path_variable_name> [<locale>+]
+Usage: genrbjar.pl <icu_root_dir> <icu4j_root_dir> [<locale>+]
+       genrbjar.pl <icu_root_dir> <icu4j_root_dir> ('Debug' | 'Release') [<locale>+]
+
+'Debug' or 'Release' is required on MSWin32, and absent on UNIX.
 
 genrbjar creates the ICULocaleData.jar file in the icu4j project.  It
 uses locale data files in the icu4c directory and processes them with
@@ -316,9 +342,14 @@ are listed, all locales are processed.
 
 Before running this tool, a JDK must be installed and the javac and
 jar binaries for that JDK must be on the system path.
-e.g: 
-	i)  on MacOSX: ./genrbjar.pl /Users/build/ICU_MACOSX/icu /Users/build/icu4j DYLD_LIBRARY_PATH
-	ii) on Linux: ./genrbjar.pl /Users/build/ICU_MACOSX/icu /Users/build/icu4j LD_LIBRARY_PATH
+Examples:
+ i) on Linux:  ./genrbjar.pl ~/icu ~/icu4j
+ ii) on Win32: perl genrbjar.pl C:\\icu C:\\icu4j Debug
+
+NOTE: You CANNOT use the ICULocaleData.jar created on little endian
+machines (e.g. Win32) because the *.col files will have the wrong byte
+order.  However, you can use the *.class files and look at the *.java
+files.
 END
   exit(0);
 }
