@@ -504,6 +504,30 @@ ucol_getSortKey(const    UCollator    *coll,
         uint8_t        *result,
         int32_t        resultLength);
 
+
+/** Gets the next count bytes of a sort key. Caller needs
+ *  to preserve state array between calls and to provide
+ *  the same type of UCharIterator set with the same string.
+ *  The destination buffer provided must be big enough to store
+ *  the number of requested bytes. 
+ *  @param coll The UCollator containing the collation rules.
+ *  @param iter UCharIterator containing the string we need 
+ *              the sort key to be calculated for.
+ *  @param state Opaque state of sortkey iteration.
+ *  @param dest Buffer to hold the resulting sortkey part
+ *  @param count number of sort key bytes required.
+ *  @param status error code indicator.
+ *  @return the actual number of bytes of a sortkey. It can be
+ *          smaller than count if we have reached the end of 
+ *          the sort key.
+ */
+U_CAPI int32_t U_EXPORT2 
+ucol_nextSortKeyPart(UCollator *coll,
+                     UCharIterator *iter,
+                     uint32_t state[2],
+                     uint8_t *dest, int32_t count,
+                     UErrorCode *status);
+
 /** enum that is taken by ucol_getBound API 
  * See below for explanation                
  * do not change the values assigned to the 
