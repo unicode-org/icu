@@ -31,6 +31,7 @@ static void TestNextPrevChar(void);
 static void TestFwdBack(void);
 static void TestSetChar(void);
 static void TestAppendChar(void);
+static void TestSurrogate(void);
 
 void addUTF16Test(TestNode** root);
 
@@ -44,6 +45,7 @@ addUTF16Test(TestNode** root)
   addTest(root, &TestFwdBack,           "utf16tst/TestFwdBack"       );
   addTest(root, &TestSetChar,           "utf16tst/TestSetChar"       );
   addTest(root, &TestAppendChar,        "utf16tst/TestAppendChar"    );
+  addTest(root, &TestSurrogate,         "utf16tst/TestSurrogate"     );
 }
 
 static void TestCodeUnitValues()
@@ -483,6 +485,28 @@ static void TestAppendChar(){
     }  
     free(str);
 
+}
+
+static void TestSurrogate(){
+    static UChar32 s[] = {0x10000, 0x10ffff, 0x50000, 0x100000, 0x1abcd};
+    int i = 0;
+    while (i < 5) {
+        UChar first  = UTF_FIRST_SURROGATE(s[i]);
+        UChar second = UTF_SECOND_SURROGATE(s[i]);
+        /* algorithm from the Unicode consortium */
+        UChar firstresult  = (UChar)(((s[i] - 0x10000) / 0x400) + 0xD800);
+        UChar secondresult = (UChar)(((s[i] - 0x10000) % 0x400) + 0xDC00);
+
+        if (first != UTF16_LEAD(s[i]) || first != firstresult) {
+            log_err("Failure in first surrogate in 0x%x expected to be 0x%x\n",
+                    s[i], firstresult);
+        }
+        if (second != UTF16_TRAIL(s[i]) || second != secondresult) {
+            log_err("Failure in second surrogate in 0x%x expected to be 0x%x\n",
+                    s[i], secondresult);
+        }
+        i ++;
+    }
 }
 
 static void printUChars(const UChar *uchars){
