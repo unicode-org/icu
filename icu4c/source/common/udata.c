@@ -1024,7 +1024,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* #1 look in ind. files ================================== */
     /* init path iterator for individual files */
-    udata_pathiter_init(&iter, u_getDataDirectory(), path, tocEntrySuffix, FALSE);
+    udata_pathiter_init(&iter, dataPath, path, tocEntrySuffix, FALSE);
     
     while((pathBuffer = udata_pathiter_next(&iter, &pathLen)))
     {
