@@ -2139,7 +2139,12 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
                 ++pos;
                 continue;
             }
-            result.append((i<getMinimumFractionDigits() ? zero : digit));
+            if (i<getMinimumFractionDigits()) {
+                result.append(zero);
+            }
+            else {
+                result.append(digit);
+            }
         }
         if (fUseExponentialNotation) {
             if (localized) {
