@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.20 2004/03/29 22:58:46 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.21 2004/03/31 22:33:46 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -79,6 +79,10 @@ LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TA
 LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBUSTDIO=	$(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 
+# Current full path directory.
+CURR_FULL_DIR=$(shell cygpath -wma .)
+# Current full path directory for use in source code in a -D compiler option.
+CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -wa .))
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
@@ -125,6 +129,7 @@ LIBUSTDIO=	$(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 ## Versioned target for a shared library.
 FINAL_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 MIDDLE_SO_TARGET=$(SO_TARGET)
+PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION_MAJOR)
 
 ## Versioned import library names.
 IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)

@@ -57,7 +57,7 @@ UCONVMSG_LIB=dummy
 ## Static mode
 ifeq ($(UCONVMSG_MODE),static)
 DEFS += -DUCONVMSG_LINK=$(MSGNAME)
-UCONVMSG_LIB = $(RESDIR)/lib$(MSGNAME).a
+UCONVMSG_LIB = $(RESDIR)/lib$(MSGNAME).$(A)
 LIBS += $(UCONVMSG_LIB)
 PKGMODE=static
 INSTALLTO=$(libdir)
@@ -143,7 +143,7 @@ $(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
 	@-$(RMV) $@
 	@for file in $(RESFILES); do \
-	  echo `pwd`/$$file >> $@; \
+	  echo $(CURR_FULL_DIR)/$$file >> $@; \
 	done;
 
 # no install for static mode

@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/cintltst
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -29,8 +29,9 @@ else
 LINK = $(LINK.c)
 endif
 
-BUILDDIR := $(shell pwd)/../../
+BUILDDIR := $(CURR_SRCCODE_FULL_DIR)/../../
 BUILDDIR := $(BUILDDIR:test/cintltst/../../=)
+BUILDDIR := $(BUILDDIR:test\\\\cintltst/../../=)
 
 # we define ICU_UNICODE_VERSION so we can test it
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
