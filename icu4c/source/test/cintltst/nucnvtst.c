@@ -26,6 +26,7 @@
 static void printSeq(const unsigned char* a, int len);
 static void printUSeq(const UChar* a, int len);
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
+static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
 
 void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 void TestConverterTypesAndStarters(void);
@@ -103,7 +104,21 @@ TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint
         r+=2;
     }
 }
-   
+void 
+TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message)
+{
+     char* s=(char*)source;
+     UErrorCode errorCode=U_ZERO_ERROR;
+     uint32_t c;
+     c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
+     if(errorCode != expected){
+        log_err("FAIL: Expected:%s when %s-----Got:%s\n", myErrorName(expected), message, myErrorName(errorCode));
+     }
+     if(c != 0xFFFD){
+        log_err("FAIL: Expected return value of 0xFFFD when %s-----Got %lx\n", message, c);
+     }
+     
+}   
 void TestInBufSizes(void)
 {
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,1);
@@ -856,6 +871,8 @@ TestUTF8() {
         log_err("Unable to open a UTF-8 converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "UTF-8");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
     ucnv_close(cnv);
 }
 void
@@ -888,6 +905,18 @@ TestUTF16BE() {
         log_err("Unable to open a UTF16-BE converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "UTF-16BE");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for the condition where there is an invalid character*/
+    {
+        static const uint8_t source2[]={0x61};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character");
+    }
+    /*Test for the condition where there is a surrogate pair*/
+    {
+    //    static const uint8_t source2[]={};
+    //    TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character");
+    }
     ucnv_close(cnv);
 }
 void
@@ -916,6 +945,14 @@ TestUTF16LE() {
         log_err("Unable to open a UTF16-LE converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "UTF-16LE");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for the condition where there is an invalid character*/
+    {
+        static const uint8_t source2[]={0x61};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an invalid character");
+    }
+   
     ucnv_close(cnv);
 }
 void
@@ -950,6 +987,8 @@ TestLATIN1() {
         log_err("Unable to open a LATIN_1 converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "LATIN_1");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
     ucnv_close(cnv);
 }
 
@@ -957,7 +996,6 @@ void
 TestSBCS() {
     /* test input */
     static const uint8_t in[]={ 0x61, 0xc0, 0x80, 0xe0, 0xf0, 0xf4};
-
     /* expected test results */
     static const uint32_t results[]={
         /* number of bytes read, code point */
@@ -976,8 +1014,18 @@ TestSBCS() {
         log_err("Unable to open a SBCS(ibm-1281) converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "SBCS(ibm-1281)");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for Illegal character*//*
+    {
+    static const uint8_t input1[]={ 0xA1 };
+    const char* illegalsource=(const char*)input1;
+    TestNextUCharError(cnv, illegalsource, illegalsource+sizeof(illegalsource), U_INVALID_CHAR_FOUND, "source has a illegal characte");
     ucnv_close(cnv);
+    }
+   */
 }
+
 void
 TestDBCS() {
     /* test input */
@@ -1008,6 +1056,18 @@ TestDBCS() {
         log_err("Unable to open a DBCS(ibm-9027) converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "DBCS(ibm-9027)");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for the condition where we have a truncated char*/
+    {
+        static const uint8_t source1[]={0xc4};
+        TestNextUCharError(cnv, (const char*)source1, (const char*)source1+sizeof(source1), U_TRUNCATED_CHAR_FOUND, "a character is truncated");
+    }
+    /*Test for the condition where there is an invalid character*/
+    {
+        static const uint8_t source2[]={0x1a, 0x1b};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character");
+    }
     ucnv_close(cnv);
 }
 void
@@ -1043,6 +1103,18 @@ TestMBCS() {
         log_err("Unable to open a MBCS(ibm-1363) converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "MBCS(ibm-1363)");
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for the condition where we have a truncated char*/
+    {
+        static const uint8_t source1[]={0xc4};
+        TestNextUCharError(cnv, (const char*)source1, (const char*)source1+sizeof(source1), U_TRUNCATED_CHAR_FOUND, "a character is truncated");
+    }
+    /*Test for the condition where there is an invalid character*/
+    {
+        static const uint8_t source2[]={0xa1, 0x01};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character");
+    }
     ucnv_close(cnv);
 }
 void
@@ -1077,6 +1149,20 @@ TestISO_2022() {
         log_err("Unable to open a iso-2022 converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "iso-2022");
+
+    /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source-1, U_ILLEGAL_ARGUMENT_ERROR, "sourceLimit < source");
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for the condition where we have a truncated char*/
+    {
+        static const uint8_t source1[]={0xc4};
+        TestNextUCharError(cnv, (const char*)source1, (const char*)source1+sizeof(source1), U_TRUNCATED_CHAR_FOUND, "a character is truncated");
+    }
+    /*Test for the condition where there is an invalid character*/
+    {
+        static const uint8_t source2[]={0xa1, 0x01};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character");
+    }
     ucnv_close(cnv);
 }
 void
@@ -1110,6 +1196,18 @@ TestEBCDIC_STATEFUL() {
         log_err("Unable to open a EBCDIC_STATEFUL(ibm-930) converter: %s\n", u_errorName(errorCode));
     }
     TestNextUChar(cnv, source, limit, results, "EBCDIC_STATEFUL(ibm-930)");
+     /*Test the condition when source > sourceLimit*/
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
+    /*Test for the condition where source > sourcelimit after consuming the shift chracter */
+    {
+        static const uint8_t source1[]={0x0f};
+        TestNextUCharError(cnv, (const char*)source1, (const char*)source1+sizeof(source1), U_INDEX_OUTOFBOUNDS_ERROR, "a character is truncated");
+    }
+    /*Test for the condition where there is an invalid character*/
+    {
+        static const uint8_t source2[]={0x0f, 0xa1, 0x01};
+        TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character");
+    }
     ucnv_close(cnv);
 }
 void
