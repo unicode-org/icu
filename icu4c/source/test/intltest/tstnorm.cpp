@@ -85,9 +85,9 @@ BasicNormalizerTest::BasicNormalizerTest()
 
     canonTests[13][0] = str("\\u00c5");      canonTests[13][1] = str("A\\u030a");  canonTests[13][2] = str("\\u00c5");            // A-ring
   
-    canonTests[14][0] = str("Äffin");  canonTests[14][1] = str("A\\u0308ffin");  canonTests[14][2] = str("Äffin");
+    canonTests[14][0] = str("\\u00C4ffin");  canonTests[14][1] = str("A\\u0308ffin");  canonTests[14][2] = str("\\u00C4ffin");
 
-    canonTests[15][0] = str("Ä\\uFB03n"); canonTests[15][1] = str("A\\u0308\\uFB03n"); canonTests[15][2] = str("Ä\\uFB03n");
+    canonTests[15][0] = str("\\u00C4\\uFB03n"); canonTests[15][1] = str("A\\u0308\\uFB03n"); canonTests[15][2] = str("\\u00C4\\uFB03n");
   
     canonTests[16][0] = str("Henry IV"); canonTests[16][1] = str("Henry IV"); canonTests[16][2] = str("Henry IV");
 
@@ -109,9 +109,9 @@ BasicNormalizerTest::BasicNormalizerTest()
   
   compatTests[1][0] = str("\\uFB4f");  compatTests[1][1] = str("\\u05D0\\u05DC"); compatTests[1][2] = str("\\u05D0\\u05DC");  // Alef-Lamed vs. Alef, Lamed
   
-  compatTests[2][0] = str("Äffin"); compatTests[2][1] = str("A\\u0308ffin"); compatTests[2][2] = str("Äffin") ;
+  compatTests[2][0] = str("\\u00C4ffin"); compatTests[2][1] = str("A\\u0308ffin"); compatTests[2][2] = str("\\u00C4ffin") ;
 
-  compatTests[3][0] = str("Ä\\uFB03n"); compatTests[3][1] = str("A\\u0308ffin"); compatTests[3][2] = str("Äffin") ; // ffi ligature -> f + f + i
+  compatTests[3][0] = str("\\u00C4\\uFB03n"); compatTests[3][1] = str("A\\u0308ffin"); compatTests[3][2] = str("\\u00C4ffin") ; // ffi ligature -> f + f + i
   
   compatTests[4][0] = str("Henry IV"); compatTests[4][1] = str("Henry IV"); compatTests[4][2] = str("Henry IV") ;
 
