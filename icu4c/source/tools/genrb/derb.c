@@ -328,7 +328,7 @@ main(int argc, char* argv[]) {
             if (locale) {
                 printCString(out, converter, locale, -1);
             } else {
-                printCString(out, converter, filename, ext - filename);
+                printCString(out, converter, filename, (int32_t)(ext - filename));
                 printString(out, converter, sp, (int32_t)(sizeof(sp)/sizeof(*sp)));
             }
             printOutBundle(out, converter, bundle, 0, pname, &status);
@@ -422,7 +422,7 @@ static void printCString(FILE *out, UConverter *converter, const char *str, int3
         ucnv_toUnicode(defaultConverter, &bufp, bufend, &str, strEnd, 0, 0, &err);
         *bufp = 0;
 
-        printString(out, converter, buf, bufp - buf);
+        printString(out, converter, buf, (int32_t)(bufp - buf));
     } while (str < strEnd);
 }
 

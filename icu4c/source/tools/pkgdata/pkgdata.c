@@ -251,8 +251,8 @@ main(int argc, char* argv[]) {
     }
 
     o.shortName = options[0].value;
-    /**/ {
-        int len = uprv_strlen(o.shortName);
+    {
+        int32_t len = (int32_t)uprv_strlen(o.shortName);
         char *csname, *cp;
         const char *sp;
 
@@ -479,7 +479,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     
     strcpy(pkgPrefix, o->shortName);
     strcat(pkgPrefix, "_");
-    pkgPrefixLen=uprv_strlen(pkgPrefix);
+    pkgPrefixLen=(int32_t)uprv_strlen(pkgPrefix);
     for(l = o->fileListFiles; l; l = l->next) {
         if(o->verbose) {
             fprintf(stdout, "# Reading %s..\n", l->str);

@@ -98,7 +98,7 @@ pkg_mak_writeStanza(FileStream *f, const UPKGOptions *o,
                     CharList* parents,
                     CharList* commands )
 {
-    T_FileStream_write(f, target, uprv_strlen(target));
+    T_FileStream_write(f, target, (int32_t)uprv_strlen(target));
     T_FileStream_write(f, " : ", 3);
     pkg_writeCharList(f, parents, " ",1);
     T_FileStream_write(f, "\n", 1);
@@ -117,7 +117,7 @@ pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o)
 {
     char buf[256];
     sprintf(buf, "\n\n# End of makefile for %s [%s mode]\n\n", o->shortName, o->mode);
-    T_FileStream_write(f, buf, uprv_strlen(buf));
+    T_FileStream_write(f, buf, (int32_t)uprv_strlen(buf));
 }
 
 #else   /* #ifdef WIN32 */

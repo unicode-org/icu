@@ -51,10 +51,10 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
                     uprv_strcat(buffer, "\"");
                 }
             }
-            T_FileStream_write(s, buffer, uprv_strlen(buffer));
+            T_FileStream_write(s, buffer, (int32_t)uprv_strlen(buffer));
         }
 
-        ln  += uprv_strlen(l->str);
+        ln += (int32_t)uprv_strlen(l->str);
 
 		ol = l;
 
@@ -62,9 +62,9 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
         {
             if(ln > 60 && brk) {
                 ln  = 0;
-                T_FileStream_write(s, brk, uprv_strlen(brk));
+                T_FileStream_write(s, brk, (int32_t)uprv_strlen(brk));
             }
-            T_FileStream_write(s, delim, uprv_strlen(delim));
+            T_FileStream_write(s, delim, (int32_t)uprv_strlen(delim));
         }
         l = l->next;
     }
@@ -103,12 +103,12 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int
                     uprv_strcat(buffer, "\"");
                 }
             }
-            T_FileStream_write(s, buffer, uprv_strlen(buffer));
+            T_FileStream_write(s, buffer, (int32_t)uprv_strlen(buffer));
         }
         
         if(l->next && delim)
         {
-            T_FileStream_write(s, delim, uprv_strlen(delim));
+            T_FileStream_write(s, delim, (int32_t)uprv_strlen(delim));
         }
         l = l->next;
     }
