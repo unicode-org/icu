@@ -72,10 +72,12 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //  Copy the pattern.  It's just values, nothing deep to copy.
     int        i;
     UErrorCode status = U_ZERO_ERROR;
-
     for (i=0; i<other.fCompiledPat->size(); i++) {
         fCompiledPat->addElement(other.fCompiledPat->elementAti(i), status);
     }
+
+    // Note:  do not copy fMatcher.  It'll be created on first use if the
+    //        destination needs one. 
 
     //  Copy the Unicode Sets.  
     //    Could be made more efficient if the sets were reference counted and shared,
@@ -106,6 +108,7 @@ void RegexPattern::init() {
     fFlags            = 0;
     fBadState         = FALSE;
     fNumCaptureGroups = 0;
+    fMatcher          = NULL;
     
     UErrorCode status=U_ZERO_ERROR;
     // Init of a completely new RegexPattern.
@@ -127,6 +130,8 @@ void RegexPattern::init() {
 //
 //--------------------------------------------------------------------------
 void RegexPattern::zap() {
+    delete fMatcher;
+    fMatcher = NULL;
     delete fCompiledPat;
     fCompiledPat = NULL;
     int i;
@@ -300,14 +305,77 @@ UnicodeString RegexPattern::pattern() const {
 //---------------------------------------------------------------------
 int32_t  RegexPattern::split(const UnicodeString &input,
         UnicodeString    dest[],
-        int32_t         destCapacity,
-        UErrorCode       &err) const
+        int32_t          destCapacity,
+        UErrorCode       &status) const
 {
-    if (U_FAILURE(err)) {
+    //
+    // Check arguements for validity
+    //
+    if (U_FAILURE(status)) {
         return 0;
     };
-    // TODO:  
-    return 0;
+
+    if (destCapacity < 1) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    //
+    // If we don't already have a cached matcher object from a previous call
+    //   to split(), create one now.
+    //
+    if (fMatcher == NULL) {
+        RegexMatcher *m = matcher(input, status);
+        if (U_FAILURE(status)) {
+            return 0;
+        }
+        // Need to cast off const to cache the matcher
+        RegexPattern *nonConstThis = (RegexPattern *)this;
+        nonConstThis->fMatcher = m;
+    }
+
+    //
+    // Set our input text into the matcher
+    //
+    fMatcher->reset(input);
+    int32_t   inputLen = input.length();
+    int32_t   nextOutputStringStart = 0;
+    if (inputLen == 0) {
+        return 0;
+    }
+
+
+    //
+    // Loop through the input text, searching for the delimiter pattern
+    //
+    int i;
+    for (i=0; ; i++) {
+        if (i==destCapacity-1) {
+            // There is only one output string left.
+            // Fill it with whatever is left from the input, then exit the loop.
+            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
+            break;
+        }
+        if (fMatcher->find()) {
+            // We found another delimiter.  Move everything from where we started looking
+            //  up until the start of the delimiter into the next output string.
+            int32_t fieldLen = fMatcher->fLastMatchStart - nextOutputStringStart;
+            dest[i].setTo(input, nextOutputStringStart, fieldLen);
+            nextOutputStringStart = fMatcher->fLastMatchEnd;
+            if (nextOutputStringStart == inputLen) {
+                // The delimiter was at the end of the string.  We're done.
+                break;
+            }
+        }
+        else
+        {
+            // We ran off the end of the input while looking for the next delimiter.
+            // All the remaining text goes into the current output string.
+            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
+            break;
+        }
+    }
+    return i+1;
 }
 
 
