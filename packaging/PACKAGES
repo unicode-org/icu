@@ -31,8 +31,10 @@ ICU-specific directories or information:
   VERSION       ICU's dotted version number, e.g. 1.6.0.1 as of this
 		writing.
 
-  ICUDATADIR	The directory where ICU data are. This is defined as
-		$(datadir)/icu/$(VERSION).
+  ICUDATADIR	The directory where portable ICU data are. This is
+	        defined as $(datadir)/icu/$(VERSION).
+  ICULIBDIR	The directory where platform-specific ICU data
+		are. This is defined as $(libdir)/icu/$(VERSION).
   ICUSYSCONFDIR	The directory where ICU configuration files are. This
 		is defined as $(sysconfdir)/icu.
 
@@ -64,7 +66,9 @@ set, as in:
 The files packaging mode is chosen because it offers the maximum
 flexibility. Packages can be split easily, and system administrators
 can add converters, aliases, and other resources with little
-effort.
+effort. Ideally, the ICU build will be modified to allow for distributing a
+libicudata.so with all the converters and locales, but indexes and aliases
+as separate files. But for now, this is the easiest way to get started.
 
 + The ICU libraries package
 
@@ -80,7 +84,8 @@ This package contains:
 
 - All the shared libraries, and their major number symbolic link, but
 not the .so symbolic link that is only used at link time (this one is
-part of the development package).
+part of the development package). These are $(libdir)/libicu*.so.* and
+$(libdir)/libustdio.so.* at the time of this writing.
 
 + The ICU package
 
@@ -100,12 +105,50 @@ This package contains:
 The ICU locales package is named `icu-locales'. It provides data used by
 internationalization support in ICU.
 
-- This package contains:
+This package contains:
 
 - All the data for locales in ICU (.dat files).
 - All the break data for specific locales (.brk files).
 
-+ More to be written...
++ The ICU development package
+
+The ICU developpment package is named `libicu-dev'. It provides all
+the files necessary to write applications that use ICU, along with
+examples and some documentation.
+
+This package contains:
+
+- The /usr/include/unicode directory which contains all the ICU
+headers.
+- The .so symbolic links used by the linker to link against the
+latest version of the libraries.
+- A sample Makefile fragment that can be included by applications
+using ICU, to faciliate their building, along with a platform-specific
+configuration file included by this fragment.
+- The sample applications from the ICU source tree, in an appropriate
+location for the system that the package is installed on (for example,
+on Debian, in /usr/share/doc/libicu-dev/examples).
+
+This package depends on the ICU libraries package with the exact same
+version, since it provides .so symbolic links to the latest libraries.
+
++ The ICU docs package
+
+The ICU docs package is named `libicu-doc'. It contains the contents
+of the icuhtml CVS module, in a location appropriate for the system
+that the package is installed on.
+
++ The ICU data package
+
+The ICU data package is named `icu-data'. It contains source files for
+the data found in the ICU package. These files are installed in
+$(ICUDATADIR).
+
++ The ICU international data package
+
+The ICU data package is named `icu-i18ndata'. It contains source files for
+the dat founf in the ICU locales package. These files are installed in
+$(ICUDATADIR).
 
 ----
 Yves Arrouye <yves@realnames.com>
