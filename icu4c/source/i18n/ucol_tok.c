@@ -309,9 +309,6 @@ UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, 
   }
 }
 
-#define UCOL_TOK_UNSET 0xFFFFFFFF
-#define UCOL_TOK_RESET 0xDEADBEEF
-
 const UChar *ucol_tok_parseNextToken(UColTokenParser *src, 
                         uint32_t *strength, 
                         uint32_t *chOffset, uint32_t *chLen, 
