@@ -19,6 +19,7 @@
 
 #include "cintltst.h"
 #include "utypes.h"
+#include "cmemory.h"
 #include "uchar.h"
 #include "ubidi.h"
 #include "cbiditst.h"
