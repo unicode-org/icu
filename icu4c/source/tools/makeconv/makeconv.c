@@ -167,7 +167,7 @@ void writeConverterData(UConverterSharedData *mySharedData, const char *cName, U
   const char *cnvName;
 
   uint32_t sz ;
-  uint32_t sz2, sz3;
+  uint32_t sz2;
 
   cnvName = icu_strrchr(cName, '/');
   if(cnvName)
@@ -182,7 +182,8 @@ void writeConverterData(UConverterSharedData *mySharedData, const char *cName, U
   
   WriteConverterSharedData(mem, mySharedData);
 
-  udata_writeBlock(mem, data, sz);
+  // Temporarily disabled -- sz and data are uninitialized! -aliu
+  //udata_writeBlock(mem, data, sz);
 
   sz2 = udata_finish(mem, status);
   
