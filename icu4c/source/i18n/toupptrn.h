@@ -16,6 +16,7 @@
 
 #include "unicode/translit.h"
 #include "unicode/locid.h"
+#include "casetrn.h"
 
 U_NAMESPACE_BEGIN
 
@@ -24,7 +25,7 @@ U_NAMESPACE_BEGIN
  * case mapping.
  * @author Alan Liu
  */
-class U_I18N_API UppercaseTransliterator : public Transliterator {
+class U_I18N_API UppercaseTransliterator : public CaseMapTransliterator {
 
  public:
 
@@ -68,28 +69,6 @@ class U_I18N_API UppercaseTransliterator : public Transliterator {
      * @draft ICU 2.2
      */
     static UClassID U_EXPORT2 getStaticClassID();
-
- protected:
-
-
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     * @param text        the buffer holding transliterated and
-     *                    untransliterated text
-     * @param offset      the start and limit of the text, the position
-     *                    of the cursor, and the start and limit of transliteration.
-     * @param incremental if true, assume more text may be coming after
-     *                    pos.contextLimit.  Otherwise, assume the text is complete.
-     */
-    virtual void handleTransliterate(Replaceable& text,
-                                     UTransPosition& offsets, 
-                                     UBool isIncremental) const;
-
-private:
-
-    Locale loc;
-    UChar* buffer;
-
 };
 
 U_NAMESPACE_END

@@ -22,6 +22,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
+#include "ucase.h"
 #include "udataswp.h"
 
 /* indexes[] entries */
@@ -207,6 +208,13 @@ u_getUnicodeProperties(UChar32 c, int32_t column);
  */
 U_CFUNC int32_t
 uprv_getMaxValues(int32_t column);
+
+/**
+ * Get internal UCaseProps pointer from uchar.c for uprops.c.
+ * Other code should use ucase_getSingleton().
+ */
+U_CFUNC UCaseProps *
+uchar_getCaseProps(UErrorCode *pErrorCode);
 
 /**
  * \var uprv_comparePropertyNames

@@ -87,6 +87,7 @@ u_cleanup(void)
     uset_cleanup();
     unames_cleanup();
     pname_cleanup();
+    ucase_cleanup();
     uchar_cleanup();
 #if !UCONFIG_NO_CONVERSION
     ucnv_cleanup();
