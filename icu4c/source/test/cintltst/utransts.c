@@ -61,25 +61,25 @@ static void FreeXReplaceable(XReplaceable* rep) {
     }
 }
 
-// UReplaceableCallbacks callback
+/* UReplaceableCallbacks callback */
 static int32_t Xlength(const UReplaceable* rep) {
     const XReplaceable* x = (const XReplaceable*)rep;
     return u_strlen(x->text);
 }
 
-// UReplaceableCallbacks callback
+/* UReplaceableCallbacks callback */
 static UChar XcharAt(const UReplaceable* rep, int32_t offset) {
     const XReplaceable* x = (const XReplaceable*)rep;
     return x->text[offset];
 }
 
-// UReplaceableCallbacks callback
+/* UReplaceableCallbacks callback */
 static UChar32 Xchar32At(const UReplaceable* rep, int32_t offset) {
     const XReplaceable* x = (const XReplaceable*)rep;
     return x->text[offset];
 }
 
-// UReplaceableCallbacks callback
+/* UReplaceableCallbacks callback */
 static void Xreplace(UReplaceable* rep, int32_t start, int32_t limit,
               const UChar* text, int32_t textLength) {
     XReplaceable* x = (XReplaceable*)rep;
@@ -92,7 +92,7 @@ static void Xreplace(UReplaceable* rep, int32_t start, int32_t limit,
     x->text = newText;
 }
 
-// UReplaceableCallbacks callback
+/* UReplaceableCallbacks callback */
 static void Xcopy(UReplaceable* rep, int32_t start, int32_t limit, int32_t dest) {
     XReplaceable* x = (XReplaceable*)rep;
     int32_t newLen = Xlength(rep) + limit - start;
