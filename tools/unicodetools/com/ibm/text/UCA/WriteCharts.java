@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2003/04/25 01:39:15 $
-* $Revision: 1.16 $
+* $Date: 2003/08/22 16:51:21 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -117,7 +117,7 @@ public class WriteCharts implements UCD_Types {
 
             if (sortKey.length() < 4) script = NULL_ORDER;
             else if (primary == 0) script = IGNORABLE_ORDER;
-            else if (primary < variable) script = VARIABLE_ORDER;
+            else if (primary <= variable) script = VARIABLE_ORDER;
             else if (primary < high) script = COMMON_SCRIPT;
             else if (UCA.isImplicitLeadPrimary(primary)) {
                 if (primary < UCA_Types.UNSUPPORTED_CJK_AB_BASE) script = CJK;

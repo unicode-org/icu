@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Types.java,v $ 
-* $Date: 2003/08/21 23:29:22 $ 
-* $Revision: 1.4 $
+* $Date: 2003/08/22 16:51:21 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -20,7 +20,7 @@ public interface UCA_Types {
      * Version of the UCA tables to use
      */
     //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
-    public static final String UCA_BASE = "4.0.0d4";  // "3.1.1"; //      ; // ""; // "-2.1.9d7"; 
+    public static final String UCA_BASE = "4.0.0d5";  // "3.1.1"; //      ; // ""; // "-2.1.9d7"; 
     public static final String VERSION = "-" + UCA_BASE; //  + "d6" ""; // "-2.1.9d7"; 
     public static final String ALLFILES = "allkeys"; // null if not there
 

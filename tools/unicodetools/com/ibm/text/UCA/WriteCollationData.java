@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2003/08/21 07:32:51 $ 
-* $Revision: 1.34 $
+* $Date: 2003/08/22 16:51:21 $ 
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -2538,8 +2538,13 @@ F900..FAFF; CJK Compatibility Ideographs
                         quoteOperandBuffer.append('\'');
                         inQuote = true;
                     }
-                    if (cp <= 0x20 || cp > 0x7E) quoteOperandBuffer.append("\\u").append(Utility.hex(cp));
-                    else quoteOperandBuffer.append(UTF16.valueOf(cp));
+                    if (cp > 0xFFFF) {
+                        quoteOperandBuffer.append("\\U").append(Utility.hex(cp,8));
+                    } else if (cp <= 0x20 || cp > 0x7E) {
+                        quoteOperandBuffer.append("\\u").append(Utility.hex(cp));
+                    } else {
+                        quoteOperandBuffer.append(UTF16.valueOf(cp));
+                    }
                 }
             }
             /*
@@ -2874,7 +2879,7 @@ F900..FAFF; CJK Compatibility Ideographs
         log.println("#  - Differs from previous version in that MAX value was introduced at 1F.");
         log.println("#    All tertiary values are shifted down by 1, filling the gap at 7!");
         log.println();
-        log.println("[UCA version =" + collator.getDataVersion() + "]");
+        log.println("[UCA version = " + collator.getDataVersion() + "]");
 
         
         String lastChr = "";
@@ -2900,13 +2905,16 @@ F900..FAFF; CJK Compatibility Ideographs
         FCE firstVariable = new FCE(false, "variable");
         FCE lastVariable = new FCE(true, "variable");
                     
-        FCE firstNonIgnorable = new FCE(false, "non-ignorable");
-        FCE lastNonIgnorable = new FCE(true, "non-ignorable");
+        FCE firstNonIgnorable = new FCE(false, "regular");
+        FCE lastNonIgnorable = new FCE(true, "regular");
                     
+        FCE firstImplicitFCE = new FCE(false, "implicit");
+        FCE lastImplicitFCE = new FCE(true, "implicit");
+
         FCE firstTrailing = new FCE(false, "trailing");
         FCE lastTrailing = new FCE(true, "trailing");
         
-        Map backMap = new TreeMap();
+        Map fractBackMap = new TreeMap();
                             
         while (it.hasNext()) {
             Object sortKey = it.next();
@@ -3002,11 +3010,14 @@ F900..FAFF; CJK Compatibility Ideographs
                 }
                 
                 if ((pri & MARK_CODE_POINT) == 0 && pri == 0) {
+                    if (chr.equals("\u01C6")) {
+                        System.out.println("At dz-caron");
+                    }
                     Integer key = new Integer(ces[q]);
-                    Pair value = (Pair) backMap.get(key);
+                    Pair value = (Pair) fractBackMap.get(key);
                     if (value == null
                     || (len < ((Integer)(value.first)).intValue())) {
-                        backMap.put(key, new Pair(new Integer(len), chr));
+                        fractBackMap.put(key, new Pair(new Integer(len), chr));
                     }
                 }
                 
@@ -3024,7 +3035,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 }
                 if (isFirst) {
                     if (!sameTopByte(np, lastNp)) {
-                        summary.println("Last:  " + Utility.hex(lastNp & INT_MASK) + " " + ucd.getName(UTF16.charAt(lastChr,0)));
+                        summary.println("Last:  " + Utility.hex(lastNp & INT_MASK) + " " + ucd.getCodeAndName(UTF16.charAt(lastChr,0)));
                         summary.println();
                         if (doVariable) {
                             doVariable = false;
@@ -3084,15 +3095,16 @@ F900..FAFF; CJK Compatibility Ideographs
             log.println();
             lastChr = chr;
         }
+
         
         // ADD HOMELESS COLLATION ELEMENTS
         log.println();
         log.println("# HOMELESS COLLATION ELEMENTS");
         char fakeTrail = 'a';
-        Iterator it3 = backMap.keySet().iterator();
+        Iterator it3 = fractBackMap.keySet().iterator();
         while (it3.hasNext()) {
             Integer key = (Integer) it3.next();
-            Pair pair = (Pair) backMap.get(key);
+            Pair pair = (Pair) fractBackMap.get(key);
             if (((Integer)pair.first).intValue() < 2) continue;
             String sample = (String)pair.second;
             
@@ -3116,6 +3128,22 @@ F900..FAFF; CJK Compatibility Ideographs
             log.println();
         }
 
+        // Since the UCA doesn't have secondary ignorables, fake them.
+        int fakeTertiary = 0x3F03;
+        if (firstSecondaryIgnorable.isUnset()) {
+            System.out.println("No first/last secondary ignorable: resetting to HARD CODED, adding homeless");
+            //long bound = lastTertiaryInSecondaryNonIgnorable.getValue(2);
+            firstSecondaryIgnorable.setValue(0,0,fakeTertiary,"");
+            lastSecondaryIgnorable.setValue(0,0,fakeTertiary,"");
+            System.out.println(firstSecondaryIgnorable.formatFCE());
+            // also add homeless
+            newTertiary.setLength(0);
+            hexBytes(fakeTertiary, newTertiary);
+            log.println(Utility.hex('\uFDD0' + "" + (char)(fakeTrail++)) + "; " 
+                + "[,, " + newTertiary 
+                + "]\t# CONSTRUCTED FAKE SECONDARY-IGNORABLE");
+        }
+        
         int firstImplicit = getImplicitPrimary(CJK_BASE);
         int lastImplicit = getImplicitPrimary(0x10FFFF);
         
@@ -3130,17 +3158,6 @@ F900..FAFF; CJK Compatibility Ideographs
 
         log.println(firstTertiaryIgnorable);
         log.println(lastTertiaryIgnorable);
-        
-        // Since the UCA doesn't have secondary ignorables, fake them.
-        
-        if (firstSecondaryIgnorable.isUnset()) {
-            int bound = 0x3F03;
-            System.out.println("No first/last secondary ignorable: resetting to HARD CODED");
-            //long bound = lastTertiaryInSecondaryNonIgnorable.getValue(2);
-            firstSecondaryIgnorable.setValue(0,0,bound,"");
-            lastSecondaryIgnorable.setValue(0,0,bound,"");
-            System.out.println(firstSecondaryIgnorable.formatFCE());
-        }
         
         log.println("# Warning: Case bits are masked in the following");
         
@@ -3170,8 +3187,6 @@ F900..FAFF; CJK Compatibility Ideographs
         log.println(firstNonIgnorable);
         log.println(lastNonIgnorable);
         
-        FCE firstImplicitFCE = new FCE(false, "first implicit");
-        FCE lastImplicitFCE = new FCE(false, "last implicit");
         firstImplicitFCE.setValue(firstImplicit, COMMON, COMMON, "");
         lastImplicitFCE.setValue(lastImplicit, COMMON, COMMON, "");
         
