@@ -181,7 +181,7 @@ enum {
 
                 
 //
-//  Access to Unicode Sets for Perl-like composite character properties
+//  Access to Unicode Sets composite character properties
 //     The sets are accessed by the match engine for things like \w (word boundary)
 //     
 enum {
@@ -189,7 +189,17 @@ enum {
      URX_ISALNUM_SET = 2,
      URX_ISALPHA_SET = 3,
      URX_ISSPACE_SET = 4,
-     URX_LAST_SET    = 5,
+
+     URX_GC_NORMAL,          // Sets for finding grapheme cluster boundaries.
+     URX_GC_EXTEND,
+     URX_GC_CONTROL,
+     URX_GC_L,
+     URX_GC_LV,
+     URX_GC_LVT,
+     URX_GC_V,
+     URX_GC_T,
+
+     URX_LAST_SET,
 
      URX_NEG_SET     = 0x800000          // Flag bit to reverse sense of set
                                          //   membership test.

@@ -904,46 +904,82 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             break;
 
 
-        case URX_BACKSLASH_X:          // Match combining character sequence
-            {                          //  Closer to Grapheme cluster than to Perl \X
+        case URX_BACKSLASH_X:     
+            //  Match a Grapheme, as defined by Unicode TR 29.
+            //  Differs slightly from Perl, which consumes combining marks independently
+            //    of context.
+            {                  
+
                 // Fail if at end of input
                 if (fp->fInputIdx >= inputLen) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
 
-                // Always consume one char
-                UChar32 c = fInput->char32At(fp->fInputIdx);   
-                fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
+                // Examine (and consume) the current char.
+                //   Dispatch into a little state machine, based on the char.
+                UChar32  c;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                UnicodeSet **sets = fPattern->fStaticSets;
+                if (sets[URX_GC_NORMAL]->contains(c))  goto GC_Extend;
+                if (sets[URX_GC_CONTROL]->contains(c)) goto GC_Control;
+                if (sets[URX_GC_L]->contains(c))       goto GC_L;
+                if (sets[URX_GC_LV]->contains(c))      goto GC_V;
+                if (sets[URX_GC_LVT]->contains(c))     goto GC_T;
+                goto GC_Extend;
 
-                // Consume CR/LF as a pair
-                if (c == 0x0d)  { 
-                    UChar32 c = fInput->char32At(fp->fInputIdx);   
-                    if (c == 0x0a) {
-                         fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
-                         break;
+
+
+GC_L:
+                if (fp->fInputIdx >= inputLen)         goto GC_Done;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (sets[URX_GC_L]->contains(c))       goto GC_L;
+                if (sets[URX_GC_LV]->contains(c))      goto GC_V;
+                if (sets[URX_GC_LVT]->contains(c))     goto GC_T;
+                if (sets[URX_GC_V]->contains(c))       goto GC_V;
+                U16_PREV(inputBuf, 0, fp->fInputIdx, c);
+                goto GC_Extend;
+
+GC_V:
+                if (fp->fInputIdx >= inputLen)         goto GC_Done;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (sets[URX_GC_V]->contains(c))       goto GC_V;
+                if (sets[URX_GC_T]->contains(c))       goto GC_T;
+                U16_PREV(inputBuf, 0, fp->fInputIdx, c);
+                goto GC_Extend;
+
+GC_T:
+                if (fp->fInputIdx >= inputLen)         goto GC_Done;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (sets[URX_GC_T]->contains(c))       goto GC_T;
+                U16_PREV(inputBuf, 0, fp->fInputIdx, c);
+                goto GC_Extend;
+
+GC_Extend:
+                // Combining characters are consumed here
+                for (;;) {
+                    if (fp->fInputIdx >= inputLen) {
+                        break;
                     }
+                    U16_GET(inputBuf, 0, fp->fInputIdx, inputLen, c);
+                    if (sets[URX_GC_EXTEND]->contains(c) == FALSE) {
+                        break;
+                    }
+                    U16_FWD_1(inputBuf, fp->fInputIdx, inputLen);
+                }
+                goto GC_Done;
+
+GC_Control:
+                // Most control chars stand alone (don't combine with combining chars),  
+                //   except for that CR/LF sequence is a single grapheme cluster.
+                if (c == 0x0d && fp->fInputIdx < inputLen && inputBuf[fp->fInputIdx] == 0x0a) {
+                    fp->fInputIdx++;
                 }
 
-                // Consume any combining marks following a non-control char
-                int8_t ctype = u_charType(c);
-                if (ctype != U_CONTROL_CHAR) {
-                    for(;;) {   
-                        c = fInput->char32At(fp->fInputIdx);   
-                        ctype = u_charType(c);
-                        // TODO:  make a set and add the "other grapheme extend" chars
-                        //        to the list of stuff to be skipped over.
-                        if (!(ctype == U_NON_SPACING_MARK || ctype == U_ENCLOSING_MARK)) {
-                            break;
-                        }
-                        fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
-                        if (fp->fInputIdx >= inputLen) {
-                            break; 
-                        }
-                    }
-                }
+GC_Done:
+                break;
             }
-            break;
+            
 
 
 
