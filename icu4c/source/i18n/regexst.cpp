@@ -199,6 +199,8 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
     fRuleDigits                         = new UnicodeSet(gRuleSet_digit_char_pattern, *status);
     fUnescapeCharSet                    = new UnicodeSet(gUnescapeCharPattern,        *status);
 
+    // Empty UnicodeString, for use by matchers with NULL input.
+    fEmptyString = new UnicodeString;
 };
 
 
@@ -217,6 +219,8 @@ RegexStaticSets::~RegexStaticSets() {
     fUnescapeCharSet = NULL;
     delete fRuleDigits;
     fRuleDigits = NULL;
+    delete fEmptyString;
+    fEmptyString = NULL;
 };
 
 

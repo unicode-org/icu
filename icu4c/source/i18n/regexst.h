@@ -32,15 +32,18 @@ class RegexStaticSets {
 public:
     RegexStaticSets(UErrorCode *status);         
     ~RegexStaticSets();
-    static void   initGlobals(RegexStaticSets **p, UErrorCode *status);
+    static void    initGlobals(RegexStaticSets **p, UErrorCode *status);
 
-    UnicodeSet   *fPropSets[URX_LAST_SET];      // The sets for common regex items, e.g. \s
-    Regex8BitSet  fPropSets8[URX_LAST_SET];     // Fast bitmap sets for latin-1 range for above.
+    UnicodeSet    *fPropSets[URX_LAST_SET];     // The sets for common regex items, e.g. \s
+    Regex8BitSet   fPropSets8[URX_LAST_SET];    // Fast bitmap sets for latin-1 range for above.
 
-    UnicodeSet   *fRuleSets[10];                // Sets used while parsing regexp patterns.
-    UnicodeSet   *fUnescapeCharSet;             // Set of chars handled by unescape when
+    UnicodeSet    *fRuleSets[10];               // Sets used while parsing regexp patterns.
+    UnicodeSet    *fUnescapeCharSet;            // Set of chars handled by unescape when
                                                 //   encountered with a \ in a pattern.
-    UnicodeSet   *fRuleDigits;
+    UnicodeSet    *fRuleDigits;
+    UnicodeString *fEmptyString;                // An empty string, to be used when a matcher
+                                                //   is created with no input.
+
 };
 
 
