@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.9 $
+// $Revision: 1.10 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -30,11 +30,12 @@ root
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
-  usage { "{0}: {1} [ -h, -?, --help ] [ -l, --list ] [ -c ] [ -L, --list-transliterators ] [ -x transliterator ] -f, --from-code code -t, --to-code code [ file ]\n" }
+  usage { "{0}: {1} [ -h, -?, --help ] [ -l, --list | --default-code ] [ --canon ] [ -L, --list-transliterators ] [ -x transliterator ] -f, --from-code code -t, --to-code code [ file ]\n" }
 
-  help { "Options:  -h, --help                     print this message\n"
+  help {  "Options:  -h, --help                    print this message\n"
 	  "          -l, --list                    list all available encodings\n"
-          "          -c                            print list compatible with cnvrtrs.txt(5)\n"
+	  "          --default-code                print name of default encoding"
+          "          --canon                       print list compatible with cnvrtrs.txt(5)\n"
 	  "          -L, --list-transliterators    list all available transliterators\n"
 	  "          -x transliterator             run everything through transliterator\n" 
 	  "          -f, --from-code code          set the original encoding\n"

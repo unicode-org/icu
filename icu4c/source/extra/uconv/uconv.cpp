@@ -80,19 +80,41 @@ static void initMsg(const char *pname) {
 }
 
 // Print all available codepage converters
-static int printAllConverters(const char *pname, int canon)
+static int printConverters(const char *pname, int defonly, int canon)
 {
     UErrorCode err = U_ZERO_ERROR;
-    int32_t num = ucnv_countAvailable();
-    uint16_t num_stds = ucnv_countStandards();
-    const char ** stds = (const char **) uprv_malloc(num_stds * sizeof(*stds));
+    const char *lookfor = 0;
 
+    int32_t num;
+    uint16_t num_stds;
+    const char **stds;
+
+    if (defonly) {
+        lookfor = ucnv_getDefaultName();
+        if (!canon) {
+            printf("%s\n", lookfor);
+            return 0;
+        } else {
+            const char *truename = ucnv_getAlias(lookfor, 0, &err);
+            if (U_SUCCESS(err)) {
+                lookfor = truename;
+            } else {
+                err = U_ZERO_ERROR;
+            }
+        }
+    }
+
+
+    num = ucnv_countAvailable();
+    num_stds = ucnv_countStandards();
+    stds = (const char **) uprv_malloc(num_stds * sizeof(*stds));
+    
     if (!stds) {
-      u_wmsg("cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
-      return -1;
+        u_wmsg("cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
+        return -1;
     } else {
         uint16_t s;
-
+            
         for (s = 0; s < num_stds; ++s) {
             stds[s] = ucnv_getStandard(s, &err);
             if (U_FAILURE(err)) {
@@ -101,94 +123,98 @@ static int printAllConverters(const char *pname, int canon)
             }
         }
     }
-
+        
 #if 0
     size_t numprint = 0;
     static const size_t maxline = 70;
 #endif
-
+        
     if (num <= 0)
-    {
-      initMsg(pname);   
-      u_wmsg("cantGetNames");
-      return -1;
-    }
-
-    for (int32_t i = 0; i<num; i++)
-    {
-        // ucnv_getAvailableName gets the codepage name at a specific
-        // index
-
-        const char *name = ucnv_getAvailableName(i);
-        uint16_t num_aliases;
-
-#if 0
-        numprint += printf("%-20s", name);
-        if (numprint>maxline)
         {
-            putchar('\n');
-            numprint = 0;
-        }
-#else
-        err = U_ZERO_ERROR;
-        num_aliases = ucnv_countAliases(name, &err);
-        if (U_FAILURE(err)) {
-            printf("%s", name);
-
-            UnicodeString str(name);
-            putchar('\t');
-            u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+            initMsg(pname);   
+            u_wmsg("cantGetNames");
             return -1;
-        } else {
-            uint16_t a, s, t;
-            
-            for (a = 0; a < num_aliases; ++a) {
-                const char *alias = ucnv_getAlias(name, a, &err);
+        }
+        
+    for (int32_t i = 0; i<num; i++)
+        {
+            // ucnv_getAvailableName gets the codepage name at a specific
+            // index
                 
-                if (U_FAILURE(err)) {
-                    UnicodeString str(name);
-                    putchar('\t');
-                    u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
-                    return -1;
-                }
-                
-                printf("%s", alias);
-         
-                /* Look (slowly) for a tag. */
+            const char *name = ucnv_getAvailableName(i);
+            uint16_t num_aliases;
 
-                if (canon) {
-                    for (s = t = 0; s < num_stds; ++s) {
-                        const char *standard = ucnv_getStandardName(name, stds[s], &err);
-                        if (U_SUCCESS(err) && standard) {
-                            if (!strcmp(standard, alias)) {
-                                if (!t) {
-                                    printf(" {");
-                                    t = 1;
+            if (lookfor && ucnv_compareNames(lookfor, name)) {
+                continue;
+            }
+                
+#if 0
+            numprint += printf("%-20s", name);
+            if (numprint>maxline)
+                {
+                    putchar('\n');
+                    numprint = 0;
+                }
+#else
+            err = U_ZERO_ERROR;
+            num_aliases = ucnv_countAliases(name, &err);
+            if (U_FAILURE(err)) {
+                printf("%s", name);
+                    
+                UnicodeString str(name);
+                putchar('\t');
+                u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+                return -1;
+            } else {
+                uint16_t a, s, t;
+                    
+                for (a = 0; a < num_aliases; ++a) {
+                    const char *alias = ucnv_getAlias(name, a, &err);
+                        
+                    if (U_FAILURE(err)) {
+                        UnicodeString str(name);
+                        putchar('\t');
+                        u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+                        return -1;
+                    }
+                        
+                    printf("%s", alias);
+                        
+                    /* Look (slowly) for a tag. */
+                        
+                    if (canon) {
+                        for (s = t = 0; s < num_stds; ++s) {
+                            const char *standard = ucnv_getStandardName(name, stds[s], &err);
+                            if (U_SUCCESS(err) && standard) {
+                                if (!strcmp(standard, alias)) {
+                                    if (!t) {
+                                        printf(" {");
+                                        t = 1;
+                                    }
+                                    printf(" %s", stds[s]);
                                 }
-                                printf(" %s", stds[s]);
                             }
                         }
+                        if (t) {
+                            printf(" }");
+                        }
                     }
-                    if (t) {
-                        printf(" }");
+                        
+                    /* Move on. */
+                        
+                    if (a < num_aliases - 1) {
+                        putchar(a || !canon ? ' ' : '\t');
                     }
-                }
-
-                /* Move on. */
-
-                if (a < num_aliases - 1) {
-                    putchar(a || !canon ? ' ' : '\t');
                 }
             }
-        }
-        if (canon) {
-            putchar('\n');
-        } else if (i < num - 1) {
-            putchar(' ');
-        } 
-
+            if (canon) {
+                putchar('\n');
+            } else if (i < num - 1) {
+                putchar(' ');
+            } 
+                
 #endif
-    }
+        }
 
     return 0;
 }
@@ -392,7 +418,7 @@ int main(int argc, char** argv)
 
     const char *pname = *argv;
 
-    int printConvs = 0, printCanon = 0;
+    int printConvs = 0, printDef = 0, printCanon = 0;
 
     // First, get the arguments from command-line
     // to know the codepages to convert between
@@ -415,7 +441,10 @@ int main(int argc, char** argv)
         {
             printConvs = 1;
         }
-        else if (strcmp("-c", *iter) == 0) {
+        else if (strcmp("--default-code", *iter) == 0) {
+            printDef = 1;
+        }
+        else if (strcmp("--canon", *iter) == 0) {
             printCanon = 1;
         }
         else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)|| !strcmp("--help", *iter))
@@ -431,8 +460,8 @@ int main(int argc, char** argv)
         }
     }
 
-    if (printConvs) {
-        return printAllConverters(pname, printCanon) ? 2 : 0;
+    if (printConvs || printDef) {
+        return printConverters(pname, printDef, printCanon) ? 2 : 0;
     }
 
     if (fromcpage==0 && tocpage==0)

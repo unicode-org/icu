@@ -17,9 +17,11 @@
 ]
 [
 .BI "\-l\fP, \fB\-\-list"
+|
+.BI "\-\-default-code"
 ]
 [
-.BI "\-c"
+.BI "\-\-canon"
 ]
 [
 .BI "\-L\fP, \fB\-\-list\-transliterators"
@@ -45,9 +47,11 @@ Print help about usage and exit.
 .TP
 .BI "\-l\fP, \fB\-\-list"
 List all the available encodings and exit.
-.BI "\-c"
+.BI "\--canon"
 If used with
 .BI "\-l\fP, \fB\-\-list"
+or
+.BR "\-\-default-code" ,
 the list of encodings is produced in a format compatible with
 .BR convrtrs.txt (5).
 .TP
