@@ -25,6 +25,8 @@ static const UChar BACKSLASH  = 0x005C; // \
 // Otherwise, we allocate heap space.
 #define MAX_STATIC_SEGS 20
 
+// Macros for accessing the array of integers encoding the position of
+// the segments.  See rbt_pars.cpp::Segments for more details.
 #define FIRST_SEG_POS_INDEX 2
 #define SEGMENTS_COUNT segments[0]
 #define SEGMENTS_LEN (SEGMENTS_COUNT*2+4)
