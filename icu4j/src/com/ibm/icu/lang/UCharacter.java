@@ -1305,7 +1305,22 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return UnicodeBlock.getInstance((PROPERTY_.getAdditional(ch, 0)
                                             & BLOCK_MASK_) >> BLOCK_SHIFT_);
         }
-        
+
+        /**
+         * Internal function returning of(ch).getID().
+         *
+         * @param ch
+         * @return numeric block value
+         * @internal
+         */
+        static int idOf(int ch) {
+            if (ch < 0 || ch > MAX_VALUE) {
+                return -1;
+            }
+
+            return (PROPERTY_.getAdditional(ch, 0) & BLOCK_MASK_) >> BLOCK_SHIFT_;
+        }
+
         /**
          * Cover the JDK 1.5 API.  Return the Unicode block with the
          * given name.  <br/><b>Note</b>: Unlike JDK 1.5, this only matches
@@ -1414,8 +1429,19 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 SUPPLEMENTAL_MATHEMATICAL_OPERATORS, 
                 KATAKANA_PHONETIC_EXTENSIONS,
                 VARIATION_SELECTORS, SUPPLEMENTARY_PRIVATE_USE_AREA_A,
-                SUPPLEMENTARY_PRIVATE_USE_AREA_B
-        };    
+                SUPPLEMENTARY_PRIVATE_USE_AREA_B,
+                LIMBU, TAI_LE, KHMER_SYMBOLS, PHONETIC_EXTENSIONS,
+                MISCELLANEOUS_SYMBOLS_AND_ARROWS, YIJING_HEXAGRAM_SYMBOLS,
+                LINEAR_B_SYLLABARY, LINEAR_B_IDEOGRAMS, AEGEAN_NUMBERS,
+                UGARITIC, SHAVIAN, OSMANYA, CYPRIOT_SYLLABARY,
+                TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT                                      
+        };
+
+        static {
+            if(COUNT!=BLOCKS_.length) {
+                throw new java.lang.InternalError("UnicodeBlock fields are inconsistent!");
+            }
+        }
         /**
          * Identification code for this UnicodeBlock
          */
@@ -4237,7 +4263,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.BIDI_CLASS:
                 return getDirection(ch);
             case UProperty.BLOCK:
-                return UnicodeBlock.of(ch).getID();
+                return UnicodeBlock.idOf(ch);
             case UProperty.CANONICAL_COMBINING_CLASS:
                 return getCombiningClass(ch);
             case UProperty.DECOMPOSITION_TYPE:
