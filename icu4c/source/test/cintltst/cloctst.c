@@ -703,7 +703,7 @@ void TestISO3Fallback()
 
     result = uloc_getISO3Language(test);
 
-    // Conform to C API usage 
+    /* Conform to C API usage  */
 
     if (!result || (result[0] != 0))
        log_err("getISO3Language() on xx_YY returned %s instead of \"\"");
@@ -719,10 +719,12 @@ void TestISO3Fallback()
  */
 void TestSimpleDisplayNames() 
 {
-    // This test is different from TestDisplayNames because TestDisplayNames checks
-    // fallback behavior, combination of language and country names to form locale
-    // names, and other stuff like that.  This test just checks specific language
-    // and country codes to make sure we have the correct names for them.
+  /*
+     This test is different from TestDisplayNames because TestDisplayNames checks
+     fallback behavior, combination of language and country names to form locale
+     names, and other stuff like that.  This test just checks specific language
+     and country codes to make sure we have the correct names for them.
+  */
     char languageCodes[] [4] = { "he", "id", "iu", "ug", "yi", "za" };
     const char* languageNames [] = { "Hebrew", "Indonesian", "Inukitut", "Uighur", "Yiddish",
                                "Zhuang" };
@@ -755,8 +757,8 @@ void TestSimpleDisplayNames()
  */
 void TestUninstalledISO3Names() 
 {
-    // This test checks to make sure getISO3Language and getISO3Country work right
-    // even for locales that are not installed.
+  /* This test checks to make sure getISO3Language and getISO3Country work right
+     even for locales that are not installed. */
     const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn", 
                                         "ss", "tw", "zu" };
     const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run", 

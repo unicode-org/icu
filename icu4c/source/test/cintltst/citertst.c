@@ -314,8 +314,8 @@ void backAndForth(UCollationElements *iter)
  */
 void TestMaxExpansion()
 {
-    // Try a simple one first:
-    // The only expansion ends with 'e' and has length 2
+  /* Try a simple one first: */
+  /* The only expansion ends with 'e' and has length 2 */
     UChar rule1[50];
     UChar temp[20];
     UChar singleUChar[2]={0x00e4};
@@ -341,10 +341,10 @@ void TestMaxExpansion()
     u_strcat(rule1, temp);
     verifyExpansion(rule1, test1, ARRAY_LENGTH(test1));
     
-    // Now a more complicated one:
-    //   "a1" --> "ae"
-    //   "z" --> "aeef"
-    //
+    /* Now a more complicated one:
+        "a1" --> "ae"
+        "z" --> "aeef" */
+    
     u_uastrcpy(rule1, "");
     u_uastrcpy(rule1, "< a & ae = a1 & aeef = z < b < e < f");
     verifyExpansion(rule1, test2, ARRAY_LENGTH(test2));
@@ -382,8 +382,10 @@ void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCou
     for (i = 0; i < testCount; i += 2)
     {
         int32_t expansion, expect, order;
-        // First get the collation key that the test string expands to
-        UChar test[]={expansionTests[i+0]};
+        /* First get the collation key that the test string expands to */
+        UChar test[2] = { 0, 0} ;
+
+	test[0] = expansionTests[i+0];
         
         ucol_setText(iter, test, u_strlen(test), &status);
         if (U_FAILURE(status)) {
