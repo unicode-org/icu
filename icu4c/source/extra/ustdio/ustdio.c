@@ -150,8 +150,8 @@ ufile_fill_uchar_buffer(UFILE *f)
              f->fUCBuffer + bufferSize,
              &mySource,
              mySourceEnd,
-	     NULL,
-             (feof(f->fFile) != 0),
+             NULL,
+             (UBool)(feof(f->fFile) != 0),
              &status);
 
   } else { /*weiv: do the invariant conversion */
@@ -244,11 +244,11 @@ u_fgets(UFILE        *f,
 
       /* refill the buffer */
       ufile_fill_uchar_buffer(f);
-      
+
       /* skip over any remaining delimiters */
       while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
-	    (f->fUCPos)++;
-      
+        (f->fUCPos)++;
+
       /* break out */
       break;
     }
