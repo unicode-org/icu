@@ -2619,7 +2619,7 @@ static void TestBocsuCoverage() {
 static void TestVariableTopSetting() {
   UErrorCode status = U_ZERO_ERROR;
   const UChar *current = NULL;
-  uint32_t varTopOriginal = -1, varTop1, varTop2;
+  uint32_t varTopOriginal = 0, varTop1, varTop2;
   UCollator *coll = ucol_open("", &status);
 
   uint32_t strength = 0;
