@@ -913,7 +913,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * </pre>
  * @stable ICU 2.0
  */
-#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
 #   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
     /**@stable ICU 2.0 */
 #   define U_STRING_INIT(var, cs, length)
