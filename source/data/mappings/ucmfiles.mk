@@ -66,7 +66,7 @@ ibm-1162.ucm\
 jisx-201.ucm jisx-208.ucm jisx-212.ucm gb_2312_80-1.ucm\
 ksc_5601_1.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm ibm-1252.ucm ibm-861.ucm\
-lmb-excp.ucm ibm-964.ucm icu-internal-25546.ucm\
+lmb-excp.ucm ibm-964_P110-2000.ucm icu-internal-25546.ucm\
 ibm-1006_P100-2000.ucm ibm-1006_X100-2000.ucm\
 ibm-1098_P100-2000.ucm ibm-1098_X100-2000.ucm\
 ibm-1124_P100-2000.ucm ibm-1125_P100-2000.ucm\
