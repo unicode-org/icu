@@ -2680,9 +2680,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  qShifted = shifted  && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
 
-    uint8_t variableMax1 = coll->variableMax1;
-    uint8_t variableMax2 = coll->variableMax2;
-    uint8_t UCOL_COMMON_BOT4 = (uint8_t)(variableMax1+1);
+    //uint8_t variableMax1 = coll->variableMax1;
+    //uint8_t variableMax2 = coll->variableMax2;
+    uint32_t variableMax = (coll->variableMax1<<8) | coll->variableMax2;
+    uint8_t UCOL_COMMON_BOT4 = (uint8_t)(coll->variableMax1+1);
     uint8_t UCOL_BOT_COUNT4 = (uint8_t)(0xFF - UCOL_COMMON_BOT4);
 
     uint32_t order = UCOL_NO_MORE_CES;
@@ -2721,13 +2722,14 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           } else {
             tertiary = (uint8_t)((order & UCOL_REMOVE_CONTINUATION));
           }
-          secondary = (uint8_t)((order >>= 8) & 0xFF);
-          primary2 = (uint8_t)((order >>= 8) & 0xFF);
+          secondary = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
+          primary2 = (uint8_t)((order >>= 8) & UCOL_BYTE_SIZE_MASK);
           primary1 = (uint8_t)(order >> 8);
 
 
-          if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0
-            && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2))
+          //if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0
+          //  && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2))
+          if(shifted && ((notIsContinuation && order <= variableMax && primary1 > 0)
             || (!notIsContinuation && wasShifted))) {
             if(compareQuad == 0) {
               if(c4 > 0) {
@@ -3029,7 +3031,7 @@ ucol_calcSortKey(const    UCollator    *coll,
               }
             }
 
-            if(shifted && ((notIsContinuation && order < variableMax && primary1 > 0)
+            if(shifted && ((notIsContinuation && order <= variableMax && primary1 > 0)
               || (!notIsContinuation && wasShifted))) {
               if(count4 > 0) {
                 while (count4 >= UCOL_BOT_COUNT4) {
@@ -3826,6 +3828,29 @@ void ucol_updateInternalState(UCollator *coll) {
 
 }
 
+U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, UChar *varTop, uint32_t len, UErrorCode *status) {
+  if(U_FAILURE(*status)) {
+    return 0;
+  }
+  if(len == -1) {
+    len = u_strlen(varTop);
+  }
+  if(len == 0) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+
+  collIterate s;
+  IInit_collIterate(coll, varTop, len, &s);
+
+  ucol_IGetNextCE(coll, &s, status);
+
+  *status = U_UNSUPPORTED_ERROR;
+  return 0;
+
+}
+
+
 /* Attribute setter API */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
     switch(attr) {
@@ -4551,7 +4576,7 @@ ucol_strcoll( const UCollator    *coll,
               }
             }
           } else { /* regular */
-            if(sOrder > LVT) {
+            if((sOrder & UCOL_PRIMARYMASK) > LVT) {
               UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
               break;
             } else {
@@ -4597,7 +4622,7 @@ ucol_strcoll( const UCollator    *coll,
               }
             }
           } else { /* regular */
-            if(tOrder > LVT) {
+            if((tOrder & UCOL_PRIMARYMASK) > LVT) {
               UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
               break;
             } else {

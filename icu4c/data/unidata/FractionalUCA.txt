@@ -3897,7 +3897,7 @@ FFFD; [13 AF, 05, 05]
 
 137C; [13 CF, 05, 05]
 
-[variable top = 1620] # END OF VARIABLE SECTION!!!
+[variable top = 13CF] # END OF VARIABLE SECTION!!!
 
 02D0; [16 20, 05, 05]
 
