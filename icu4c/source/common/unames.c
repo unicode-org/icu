@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -23,6 +23,7 @@
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
 #include "unicode/uset.h"
+#include "uset_imp.h"
 #include "ustr_imp.h"
 #include "umutex.h"
 #include "cmemory.h"
@@ -1723,7 +1724,7 @@ uprv_getMaxISOCommentLength() {
  * @param uset USet to receive characters. Existing contents are deleted.
  */
 static void
-charSetToUSet(uint32_t cset[8], USet* uset) {
+charSetToUSet(uint32_t cset[8], USetAdder *sa) {
     UChar us[256];
     char cs[256];
 
@@ -1731,7 +1732,6 @@ charSetToUSet(uint32_t cset[8], USet* uset) {
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    uset_clear(uset);
 
     if(!calcNameSetsLengths(&errorCode)) {
         return;
@@ -1751,18 +1751,18 @@ charSetToUSet(uint32_t cset[8], USet* uset) {
     /* add each UChar to the USet */
     for(i=0; i<length; ++i) {
         if(us[i]!=0 || cs[i]==0) { /* non-invariant chars become (UChar)0 */
-            uset_add(uset, us[i]);
+            sa->add(sa->set, us[i]);
         }
     }
 }
 
 /**
  * Fills set with characters that are used in Unicode character names.
- * @param set USet to receive characters. Existing contents are deleted.
+ * @param set USet to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getCharNameCharacters(USet* set) {
-    charSetToUSet(gNameSet, set);
+uprv_getCharNameCharacters(USetAdder *sa) {
+    charSetToUSet(gNameSet, sa);
 }
 
 #if 0
@@ -1772,11 +1772,11 @@ urename.h and uprops.h changed accordingly.
 */
 /**
  * Fills set with characters that are used in Unicode character names.
- * @param set USet to receive characters. Existing contents are deleted.
+ * @param set USetAdder to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getISOCommentCharacters(USet* set) {
-    charSetToUSet(gISOCommentSet, set);
+uprv_getISOCommentCharacters(USetAdder *sa) {
+    charSetToUSet(gISOCommentSet, sa);
 }
 #endif
 

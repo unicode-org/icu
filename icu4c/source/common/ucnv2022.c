@@ -2985,7 +2985,7 @@ _ISO_2022_SafeClone(
 
 static void
 _ISO_2022_GetUnicodeSet(const UConverter *cnv,
-                    USet *set,
+                    USetAdder *sa,
                     UConverterUnicodeSet which,
                     UErrorCode *pErrorCode)
 {
@@ -2998,8 +2998,8 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
 #ifdef U_ENABLE_GENERIC_ISO_2022
     if (cnv->sharedData == &_ISO2022Data) {
         /* We use UTF-8 in this case */
-        uset_addRange(set, 0, 0xd7FF);
-        uset_addRange(set, 0xE000, 0x10FFFF);
+        sa->addRange(sa->set, 0, 0xd7FF);
+        sa->addRange(sa->set, 0xE000, 0x10FFFF);
         return;
     }
 #endif
@@ -3011,24 +3011,25 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
     case 'j':
         if(jpCharsetMasks[cnvData->version]&CSM(ISO8859_1)) {
             /* include Latin-1 for some variants of JP */
-            uset_addRange(set, 0, 0xff);
+            sa->addRange(sa->set, 0, 0xff);
         } else {
             /* include ASCII for JP */
-            uset_addRange(set, 0, 0x7f);
+            sa->addRange(sa->set, 0, 0x7f);
         }
         if(jpCharsetMasks[cnvData->version]&CSM(HWKANA_7BIT)) {
             /* include half-width Katakana for JP */
-            uset_addRange(set, 0xff61, 0xff9f);
+            sa->addRange(sa->set, 0xff61, 0xff9f);
         }
         break;
     case 'c':
     case 'z':
         /* include ASCII for CN */
-        uset_addRange(set, 0, 0x7f);
+        sa->addRange(sa->set, 0, 0x7f);
         break;
     case 'k':
         /* there is only one converter for KR, and it is not in the myConverterArray[] */
-        ucnv_getUnicodeSet(cnvData->currentConverter, set, which, pErrorCode);
+        cnvData->currentConverter->sharedData->impl->getUnicodeSet(
+                cnvData->currentConverter, sa, which, pErrorCode);
         return;
     default:
         break;
@@ -3049,11 +3050,11 @@ _ISO_2022_GetUnicodeSet(const UConverter *cnv,
                 /* special handling for non-EXT ISO-2022-CN: add only code points for CNS planes 1 and 2 */
                 _MBCSGetUnicodeSetForBytes(
                         cnvData->myConverterArray[i],
-                        set, UCNV_ROUNDTRIP_SET,
+                        sa, UCNV_ROUNDTRIP_SET,
                         0, 0x81, 0x82,
                         pErrorCode);
             } else {
-                _MBCSGetUnicodeSetForUnicode(cnvData->myConverterArray[i], set, which, pErrorCode);
+                _MBCSGetUnicodeSetForUnicode(cnvData->myConverterArray[i], sa, which, pErrorCode);
             }
         }
     }

@@ -1332,7 +1332,7 @@ _ISCII_SafeClone(const UConverter *cnv,
 
 static void
 _ISCIIGetUnicodeSet(const UConverter *cnv,
-                    USet *set,
+                    USetAdder *sa,
                     UConverterUnicodeSet which,
                     UErrorCode *pErrorCode)
 {
@@ -1341,19 +1341,19 @@ _ISCIIGetUnicodeSet(const UConverter *cnv,
 
     /* Since all ISCII versions allow switching to other ISCII
     scripts, we add all roundtrippable characters to this set. */
-    uset_addRange(set, 0, ASCII_END);
+    sa->addRange(sa->set, 0, ASCII_END);
     for (script = DEVANAGARI; script <= MALAYALAM; script++) {
         mask = (uint8_t)(lookupInitialData[script][1]);
         for (idx = 0; idx < DELTA; idx++) {
             if (validityTable[idx] & mask) {
-                uset_add(set, idx + (script * DELTA) + INDIC_BLOCK_BEGIN);
+                sa->add(sa->set, idx + (script * DELTA) + INDIC_BLOCK_BEGIN);
             }
         }
     }
-    uset_add(set, DANDA);
-    uset_add(set, DOUBLE_DANDA);
-    uset_add(set, ZWNJ);
-    uset_add(set, ZWJ);
+    sa->add(sa->set, DANDA);
+    sa->add(sa->set, DOUBLE_DANDA);
+    sa->add(sa->set, ZWNJ);
+    sa->add(sa->set, ZWJ);
 }
 
 static const UConverterImpl _ISCIIImpl={

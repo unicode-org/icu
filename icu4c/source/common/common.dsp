@@ -1516,6 +1516,10 @@ SOURCE=.\ucnv_lmb.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnv_set.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnv_u16.c
 # End Source File
 # Begin Source File
@@ -2911,6 +2915,10 @@ InputPath=.\unicode\uset.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\uset_imp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\uset_props.cpp
 # End Source File
 # Begin Source File
@@ -3455,6 +3463,10 @@ SOURCE=.\ustr_cnv.h
 # Begin Source File
 
 SOURCE=.\ustr_imp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ustr_wcs.c
 # End Source File
 # Begin Source File
 

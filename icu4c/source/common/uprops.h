@@ -22,6 +22,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
+#include "uset_imp.h"
 #include "ucase.h"
 #include "udataswp.h"
 
@@ -348,10 +349,10 @@ uprv_getMaxISOCommentLength();
  * Fills set with characters that are used in Unicode character names.
  * Includes all characters that are used in regular/Unicode 1.0/extended names.
  * Just empties the set if no character names are available.
- * @param set USet to receive characters. Existing contents are deleted.
+ * @param sa USetAdder to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getCharNameCharacters(USet* set);
+uprv_getCharNameCharacters(USetAdder *sa);
 
 #if 0
 /* 
@@ -361,10 +362,10 @@ urename.h and unames.c changed accordingly.
 /**
  * Fills set with characters that are used in Unicode character names.
  * Just empties the set if no ISO comments are available.
- * @param set USet to receive characters. Existing contents are deleted.
+ * @param sa USetAdder to receive characters.
  */
 U_CAPI void U_EXPORT2
-uprv_getISOCommentCharacters(USet* set);
+uprv_getISOCommentCharacters(USetAdder *sa);
 */
 #endif
 
@@ -374,18 +375,18 @@ uprv_getISOCommentCharacters(USet* set);
  * @internal
  */
 U_CAPI void U_EXPORT2
-uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
+uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Return a set of characters for property enumeration.
  * For each two consecutive characters (start, limit) in the set,
  * all of the properties for start..limit-1 are all the same.
  *
- * @param set USet to receive result. Existing contents are lost.
+ * @param sa USetAdder to receive result. Existing contents are lost.
  * @internal
  */
 U_CAPI void U_EXPORT2
-uprv_getInclusions(USet* set, UErrorCode *pErrorCode);
+uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Swap the ICU Unicode properties file. See uchar.c.

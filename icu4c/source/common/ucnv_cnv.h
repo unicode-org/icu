@@ -24,6 +24,8 @@
 
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/uset.h"
+#include "uset_imp.h"
 
 U_CDECL_BEGIN
 
@@ -169,7 +171,7 @@ typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv,
  * For more documentation, see ucnv_getUnicodeSet() in ucnv.h.
  */
 typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
-                                         USet *set,
+                                         USetAdder *sa,
                                          UConverterUnicodeSet which,
                                          UErrorCode *pErrorCode);
 
@@ -244,13 +246,13 @@ U_CDECL_END
 
 U_CFUNC void
 ucnv_getCompleteUnicodeSet(const UConverter *cnv,
-                   USet *set,
+                   USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode);
 
 U_CFUNC void
 ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
-                               USet *set,
+                               USetAdder *sa,
                                UConverterUnicodeSet which,
                                UErrorCode *pErrorCode);
 

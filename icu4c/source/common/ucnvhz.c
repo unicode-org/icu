@@ -510,17 +510,17 @@ _HZ_SafeClone(const UConverter *cnv,
 
 static void
 _HZ_GetUnicodeSet(const UConverter *cnv,
-                  USet *set,
+                  USetAdder *sa,
                   UConverterUnicodeSet which,
                   UErrorCode *pErrorCode) {
     /* the tilde '~' is hardcoded in the converter */
-    uset_add(set, 0x7e);
+    sa->add(sa->set, 0x7e);
 
     /* add all of the code points that the sub-converter handles */
     ((UConverterDataHZ*)cnv->extraInfo)->
         gbConverter->sharedData->impl->
             getUnicodeSet(((UConverterDataHZ*)cnv->extraInfo)->gbConverter,
-                          set, which, pErrorCode);
+                          sa, which, pErrorCode);
 }
 
 static const UConverterImpl _HZImpl={

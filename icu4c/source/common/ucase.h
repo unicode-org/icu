@@ -21,6 +21,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uset.h"
+#include "uset_imp.h"
 #include "udataswp.h"
 
 U_CDECL_BEGIN
@@ -53,7 +54,7 @@ ucase_swap(const UDataSwapper *ds,
            UErrorCode *pErrorCode);
 
 U_CAPI void U_EXPORT2
-ucase_addPropertyStarts(const UCaseProps *csp, USet *set, UErrorCode *pErrorCode);
+ucase_addPropertyStarts(const UCaseProps *csp, USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Bit mask for getting just the options from a string compare options word
