@@ -14,6 +14,7 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 /**
  * A class to reflect UTR #24: Script Names
@@ -274,49 +275,49 @@ public final class UScript {
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */ 
-   	public static final int BRAILLE 	 = 46;  /* Brai */
-   	/**
+    public static final int BRAILLE      = 46;  /* Brai */
+    /**
      * Cypriot
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */  
-   	public static final int CYPRIOT		 = 47;  /* Cprt */ 
+    public static final int CYPRIOT              = 47;  /* Cprt */ 
     /**
      * Limbu
      * New script in Unicode 4 
      * @draft ICU 2.6 
-     * */    	
-   	public static final int LIMBU		 = 48;  /* Limb */ 
+     * */       
+    public static final int LIMBU                = 48;  /* Limb */ 
     /**
      * Linear B
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */ 
-   	public static final int LINEAR_B	 = 49;  /* Linb */ 
+    public static final int LINEAR_B     = 49;  /* Linb */ 
     /**
      * Osmanya
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */ 
-   	public static final int OSMANYA		 = 50;  /* Osma */ 
+    public static final int OSMANYA              = 50;  /* Osma */ 
     /**
      * Shavian
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */ 
-   	public static final int SHAVIAN		 = 51;  /* Shaw */ 
+    public static final int SHAVIAN              = 51;  /* Shaw */ 
     /**
      * Tai Le
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */ 
-   	public static final int TAI_LE		 = 52;  /* Tale */ 
+    public static final int TAI_LE               = 52;  /* Tale */ 
     /**
      * Ugaritic
      * New script in Unicode 4 
      * @draft ICU 2.6 
      * */ 
-   	public static final int UGARITIC	 = 53;  /* Ugar */ 
+    public static final int UGARITIC     = 53;  /* Ugar */ 
     /**
      * New script code in Unicode 4.0.1
      * @draft ICU 3.0
@@ -338,10 +339,16 @@ public final class UScript {
      * @param Locale the locale.
      */
     private static int[] findCodeFromLocale(ULocale locale) {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle rb;
+        try {
+            rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+        }
+        catch (MissingResourceException e) {
+            return null;
+        }
 
         // if rb is not a strict fallback of the requested locale, return null
-        if(rb==null || !LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){
+        if(!LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){
             return null;
         }
         ICUResourceBundle sub = rb.get("LocaleScript");
@@ -349,9 +356,9 @@ public final class UScript {
         int[] result = new int[sub.getSize()];
         int w = 0;
         for (int i = 0; i < result.length; ++i) {
-              int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
-                                                           sub.getString(i));
-              result[w++] = code;
+            int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
+                                                       sub.getString(i));
+            result[w++] = code;
 
         }
 

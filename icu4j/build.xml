@@ -602,6 +602,10 @@
     <target name="propertiesTests" depends="propertiesBasic">
         <copy file="${src.dir}/com/ibm/icu/dev/data/unicode/SpecialCasing.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/unicode/"/>
+        <!-- TODO this assumes no other target has extracted these files already, revisit -->
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+            <patternset includes="**/icudt30b/*.brk,**/icudt30b/unames.icu" excludes="**/CVS/**/*"/>
+       </unjar>
         <javac includes="com/ibm/icu/dev/test/TestFmwk.java,com/ibm/icu/dev/test/TestLog.java,com/ibm/icu/dev/test/TestUtil.java,com/ibm/icu/dev/test/UTF16Util.java,com/ibm/icu/dev/test/TestAll.java,com/ibm/icu/dev/test/lang/**/*.java"
             excludes="**/CVS/**/*,com/ibm/icu/dev/test/lang/TestUScriptRun.java"
             srcdir="${src.dir}"
