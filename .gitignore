@@ -208,12 +208,7 @@ icu4c/source/test/testmap/testmap
 icu4c/source/test/testmap/testmap.plg
 icu4c/source/test/thaitest/Makefile
 icu4c/source/test/threadtest/Makefile
-icu4c/source/tools/*.d
-icu4c/source/tools/*.pdb
-icu4c/source/tools/*.plg
-icu4c/source/tools/Debug
 icu4c/source/tools/Makefile
-icu4c/source/tools/Release
 icu4c/source/tools/ctestfw/*.d
 icu4c/source/tools/ctestfw/*.pdb
 icu4c/source/tools/ctestfw/Debug
@@ -362,7 +357,6 @@ icu4c/source/tools/genuca/Release
 icu4c/source/tools/genuca/genuca
 icu4c/source/tools/genuca/genuca.8
 icu4c/source/tools/genuca/tmp
-icu4c/source/tools/icupkg.inc
 icu4c/source/tools/icuswap/*.d
 icu4c/source/tools/icuswap/*.ncb
 icu4c/source/tools/icuswap/*.opt
@@ -401,7 +395,6 @@ icu4c/source/tools/rbdump/Makefile
 icu4c/source/tools/rbdump/Release
 icu4c/source/tools/rbdump/pkgdata
 icu4c/source/tools/rbdump/tmp
-icu4c/source/tools/tmp*
 icu4c/source/tools/toolutil/*.d
 icu4c/source/tools/toolutil/*.pdb
 icu4c/source/tools/toolutil/Debug
