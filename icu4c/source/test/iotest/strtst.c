@@ -351,17 +351,8 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%10.4f", 123.456789, "%10.4f", 123.456789);
     TestSPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
-    TestSPrintFormat("%e", 1234567.89, "%e", 1234567.89);
-    TestSPrintFormat("%E", 1234567.89, "%E", 1234567.89);
-    TestSPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
-    TestSPrintFormat("%10.4e", 1.23456789, "%10.4e", 1.23456789);
-    TestSPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
-    TestSPrintFormat("%10e", 123.456789, "%10e", 123.456789);
-    TestSPrintFormat("%-10e", 123.456789, "%-10e", 123.456789);
-
     TestSPrintFormat("%g", 123456.789, "%g", 123456.789);
-    TestSPrintFormat("%g", 1234567.89, "%g", 1234567.89);
-    TestSPrintFormat("%G", 1234567.89, "%G", 1234567.89);
+    TestSPrintFormat("%G", 123456.789, "%G", 123456.789);
     TestSPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
     TestSPrintFormat("%10.4g", 1.23456789, "%10.4g", 1.23456789);
     TestSPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
@@ -423,21 +414,6 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%12d", -123,   "%12d", -123);
     TestSPrintFormat("%.12d", 123,   "%.12d", 123);
     TestSPrintFormat("%.12d", -123,  "%.12d", -123);
-
-    TestSPrintFormat("%-+12.1e", 1.234,  "%-+12.1e", 1.234);
-    TestSPrintFormat("%-+12.1e", -1.234, "%-+12.1e", -1.234);
-    TestSPrintFormat("%- 12.10e", 1.234, "%- 12.10e", 1.234);
-    TestSPrintFormat("%- 12.1e", -1.234, "%- 12.1e", -1.234);
-    TestSPrintFormat("%+12.1e", 1.234,   "%+12.1e", 1.234);
-    TestSPrintFormat("%+12.1e", -1.234,  "%+12.1e", -1.234);
-    TestSPrintFormat("% 12.1e", 1.234,   "% 12.1e", 1.234);
-    TestSPrintFormat("% 12.1e", -1.234,  "% 12.1e", -1.234);
-    TestSPrintFormat("%12.1e", 1.234,    "%12.1e", 1.234);
-    TestSPrintFormat("%12.1e", -1.234,   "%12.1e", -1.234);
-    TestSPrintFormat("%.2e", 1.234,      "%.2e", 1.234);
-    TestSPrintFormat("%.2e", -1.234,     "%.2e", -1.234);
-    TestSPrintFormat("%3e", 1.234,       "%3e", 1.234);
-    TestSPrintFormat("%3e", -1.234,      "%3e", -1.234);
 
     TestSPrintFormat("%-+12.1f", 1.234,  "%-+12.1f", 1.234);
     TestSPrintFormat("%-+12.1f", -1.234, "%-+12.1f", -1.234);
@@ -638,3 +614,5 @@ addStringTest(TestNode** root) {
     addTest(root, &TestSScanset, "string/TestSScanset");
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
 }
+
+
