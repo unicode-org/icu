@@ -46,7 +46,7 @@ class DictionaryBasedBreakIteratorTables;
  * <b> NOTE </b>  The DictionaryBasedIterator class is still under development.  The
  * APIs are not in stable condition yet.  
  */
-class U_I18N_API DictionaryBasedBreakIterator : public RuleBasedBreakIterator {
+class U_COMMON_API DictionaryBasedBreakIterator : public RuleBasedBreakIterator {
 
 private:
     /**
