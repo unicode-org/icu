@@ -144,6 +144,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
                 TestWOY();
             }
             break;
+        case 18:
+            name = "TestRog";
+            if (exec) {
+                logln("TestRog---"); logln("");
+                TestRog();
+            }
+            break;
         default: name = ""; break;
     }
 }
