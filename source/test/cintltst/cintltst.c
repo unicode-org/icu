@@ -95,9 +95,6 @@ int main(int argc, const char* const argv[])
     int i, j;
     TestNode *root;
     const char *warnOrErr = "Failure"; 
-#if !UCONFIG_NO_FORMATTING
-    const char *zone = "America/Los_Angeles";
-#endif
     const char** argv2;
 
     /* initial check for the default converter */
@@ -139,30 +136,6 @@ int main(int argc, const char* const argv[])
         else if (strcmp( argv[i], "-t_verbose") == 0) {
             ICU_TRACE = UTRACE_VERBOSE;
         }
-#if !UCONFIG_NO_FORMATTING
-        else if (strcmp( argv[i], "-tz") == 0) {
-            zone = 0;
-            if ((i+1) < argc) {
-                switch (argv[i+1][0]) {
-                case 0:
-                    ++i; /* consume empty string in {-tz ""} */
-                    break;
-                case '-':
-                case '/':
-                    break; /* don't process next arg if it is -x or /x */
-                default:
-                    zone = argv[++i]; /* next arg is zone */
-                    break;
-                }
-            }
-            /* Consume args so processArgs doesn't see them (below).
-             * This is ugly but it will get fixed when we do the reorg
-             * of arg processing...later.  We can't do all this in
-             * processArgs because that library (ctestfw) doesn't link
-             * common nor i18n, by design. */
-            --j;
-        }
-#endif
     }
     argc = j;
 
@@ -249,25 +222,6 @@ int main(int argc, const char* const argv[])
         }
 
         fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
-
-#if !UCONFIG_NO_FORMATTING
-        /* Set the default time zone */
-        if (zone != 0) {
-            UErrorCode ec = U_ZERO_ERROR;
-            UChar zoneID[256];
-            u_uastrncpy(zoneID, zone, 255);
-            zoneID[255] = 0;
-            ucal_setDefaultTimeZone(zoneID, &ec);
-            if (U_FAILURE(ec)) {
-                printf("*** Error: Failed to set default time zone to \"%s\": %s\n",
-                       zone, u_errorName(ec));
-                u_cleanup();
-                return 1;
-            }
-        }
-        fprintf(stdout, "Default time zone for this run is %s\n",
-                (zone!=0) ? zone : "UNSET");
-#endif
 
         /* Build a tree of all tests.   
          *   Subsequently will be used to find / iterate the tests to run */
@@ -612,6 +566,59 @@ const char* loadTestData(UErrorCode* err){
         return _testDataPath;
     }
     return _testDataPath;
+}
+
+#define CTEST_MAX_TIMEZONE_SIZE 256
+static UChar gOriginalTimeZone[CTEST_MAX_TIMEZONE_SIZE] = {0};
+
+/**
+ * Call this once to get a consistent timezone. Use ctest_resetTimeZone to set it back to the original value.
+ * @param optionalTimeZone Set this to a requested timezone.
+ *      Set to NULL to use the standard test timezone (Pacific Time)
+ */
+U_CFUNC void ctest_setTimeZone(const char *optionalTimeZone, UErrorCode *status) {
+#if !UCONFIG_NO_FORMATTING
+    UChar zoneID[CTEST_MAX_TIMEZONE_SIZE];
+
+    if (optionalTimeZone == NULL) {
+        optionalTimeZone = "America/Los_Angeles";
+    }
+    if (gOriginalTimeZone[0]) {
+        log_err("*** Error: time zone saved twice. New value will be %s\n",
+               optionalTimeZone);
+    }
+    ucal_getDefaultTimeZone(gOriginalTimeZone, CTEST_MAX_TIMEZONE_SIZE, status);
+    if (U_FAILURE(*status)) {
+        log_err("*** Error: Failed to save default time zone: %s\n",
+               u_errorName(*status));
+        *status = U_ZERO_ERROR;
+    }
+
+    u_uastrncpy(zoneID, optionalTimeZone, CTEST_MAX_TIMEZONE_SIZE-1);
+    zoneID[CTEST_MAX_TIMEZONE_SIZE-1] = 0;
+    ucal_setDefaultTimeZone(zoneID, status);
+    if (U_FAILURE(*status)) {
+        log_err("*** Error: Failed to set default time zone to \"%s\": %s\n",
+               optionalTimeZone, u_errorName(*status));
+    }
+#endif
+}
+
+/**
+ * Call this once get back the original timezone
+ */
+U_CFUNC void ctest_resetTimeZone(void) {
+#if !UCONFIG_NO_FORMATTING
+    UErrorCode status = U_ZERO_ERROR;
+
+    ucal_setDefaultTimeZone(gOriginalTimeZone, &status);
+    if (U_FAILURE(status)) {
+        log_err("*** Error: Failed to reset default time zone: %s\n",
+               u_errorName(status));
+    }
+    /* Set to an empty state */
+    gOriginalTimeZone[0] = 0;
+#endif
 }
 
 #define CTST_MAX_ALLOC 10000
