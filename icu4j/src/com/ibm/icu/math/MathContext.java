@@ -73,8 +73,8 @@ package com.ibm.icu.math;
  * <code>BigDecimal</code>.
  *
  * @see     BigDecimal
- * @version 1.08 2000.06.18
  * @author  Mike Cowlishaw
+ * @stable
  */
 
 public final class MathContext implements java.io.Serializable{
@@ -91,6 +91,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @see #ENGINEERING
   * @see #SCIENTIFIC
+  * @stable
   */
  public static final int PLAIN=0; // [no exponent]
  
@@ -104,6 +105,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @see #ENGINEERING
   * @see #PLAIN
+  * @stable
   */
  public static final int SCIENTIFIC=1; // 1 digit before .
  
@@ -117,6 +119,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @see #PLAIN
   * @see #SCIENTIFIC
+  * @stable
   */
  public static final int ENGINEERING=2; // 1-3 digits before .
  
@@ -128,6 +131,7 @@ public final class MathContext implements java.io.Serializable{
   * <p>
   * If any of the discarded digits are non-zero then the result
   * should be rounded towards the next more positive digit.
+  * @stable
   */
  public static final int ROUND_CEILING=2;
  
@@ -138,6 +142,7 @@ public final class MathContext implements java.io.Serializable{
   * <p>
   * All discarded digits are ignored (truncated).  The result is
   * neither incremented nor decremented.
+  * @stable
   */
  public static final int ROUND_DOWN=1;
  
@@ -148,6 +153,7 @@ public final class MathContext implements java.io.Serializable{
   * <p>
   * If any of the discarded digits are non-zero then the result
   * should be rounded towards the next more negative digit.
+  * @stable
   */
  public static final int ROUND_FLOOR=3;
  
@@ -161,6 +167,7 @@ public final class MathContext implements java.io.Serializable{
   * the value of a one in the next position then the result should be
   * rounded up (away from zero).  Otherwise the discarded digits are
   * ignored.
+  * @stable
   */
  public static final int ROUND_HALF_DOWN=5;
  
@@ -178,6 +185,7 @@ public final class MathContext implements java.io.Serializable{
   * Otherwise (they represent exactly half) the result is rounded
   * down if its rightmost digit is even, or rounded up if its
   * rightmost digit is odd (to make an even digit).
+  * @stable
   */
  public static final int ROUND_HALF_EVEN=6;
  
@@ -191,6 +199,7 @@ public final class MathContext implements java.io.Serializable{
   * (0.5 times) the value of a one in the next position then the result
   * should be rounded up (away from zero).  Otherwise the discarded
   * digits are ignored.
+  * @stable
   */
  public static final int ROUND_HALF_UP=4;
  
@@ -202,6 +211,7 @@ public final class MathContext implements java.io.Serializable{
   * Rounding (potential loss of information) is not permitted.
   * If any of the discarded digits are non-zero then an
   * <code>ArithmeticException</code> should be thrown.
+  * @stable
   */
  public static final int ROUND_UNNECESSARY=7;
  
@@ -212,6 +222,7 @@ public final class MathContext implements java.io.Serializable{
   * <p>
   * If any of the discarded digits are non-zero then the result will
   * be rounded up (away from zero).
+  * @stable
   */
  public static final int ROUND_UP=0;
  
@@ -319,6 +330,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @see #SCIENTIFIC
   * @see #ROUND_HALF_UP
+  * @stable
   */
  public static final com.ibm.icu.math.MathContext DEFAULT=new com.ibm.icu.math.MathContext(DEFAULT_DIGITS,DEFAULT_FORM,DEFAULT_LOSTDIGITS,DEFAULT_ROUNDINGMODE);
 
@@ -340,6 +352,7 @@ public final class MathContext implements java.io.Serializable{
   * @param setdigits     The <code>int</code> digits setting
   *                      for this <code>MathContext</code>.
   * @throws IllegalArgumentException parameter out of range.
+  * @stable
   */
  
  public MathContext(int setdigits){
@@ -364,6 +377,7 @@ public final class MathContext implements java.io.Serializable{
   * @param setform       The <code>int</code> form setting
   *                      for this <code>MathContext</code>.
   * @throws IllegalArgumentException parameter out of range.
+  * @stable
   */
  
  public MathContext(int setdigits,int setform){
@@ -389,6 +403,7 @@ public final class MathContext implements java.io.Serializable{
   * @param setlostdigits The <code>boolean</code> lostDigits
   *                      setting for this <code>MathContext</code>.
   * @throws IllegalArgumentException parameter out of range.
+  * @stable
   */
  
  public MathContext(int setdigits,int setform,boolean setlostdigits){
@@ -414,6 +429,7 @@ public final class MathContext implements java.io.Serializable{
   * @param setroundingmode The <code>int</code> roundingMode setting
   *                        for this <code>MathContext</code>.
   * @throws IllegalArgumentException parameter out of range.
+  * @stable
   */
  
  public MathContext(int setdigits,int setform,boolean setlostdigits,int setroundingmode){super();
@@ -452,6 +468,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @return an <code>int</code> which is the value of the digits
   *         setting
+  * @stable
   */
  
  public int getDigits(){
@@ -466,6 +483,7 @@ public final class MathContext implements java.io.Serializable{
   * {@link #SCIENTIFIC}.
   *
   * @return an <code>int</code> which is the value of the form setting
+  * @stable
   */
  
  public int getForm(){
@@ -479,6 +497,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @return a <code>boolean</code> which is the value of the lostDigits
   *           setting
+  * @stable
   */
  
  public boolean getLostDigits(){
@@ -499,6 +518,7 @@ public final class MathContext implements java.io.Serializable{
   *
   * @return an <code>int</code> which is the value of the roundingMode
   *         setting
+  * @stable
   */
  
  public int getRoundingMode(){
@@ -540,6 +560,7 @@ public final class MathContext implements java.io.Serializable{
   * to the class.
   *
   * @return a <code>String</code> representing the context settings.
+  * @stable
   */
  
  public java.lang.String toString(){
