@@ -663,11 +663,33 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(m1->matches(4, status) == TRUE);
         REGEX_ASSERT(m1->matches(-1, status) == FALSE);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+
+        // Match() at end of string should fail, but should not
+        //  be an error.
         status = U_ZERO_ERROR;
         len = m1->input().length();
         REGEX_ASSERT(m1->matches(len, status) == FALSE);
+        REGEX_CHECK_STATUS;
+
+        // Match beyond end of string should fail with an error.
+        status = U_ZERO_ERROR;
+        REGEX_ASSERT(m1->matches(len+1, status) == FALSE);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
-       
+
+        // Successful match at end of string.
+        {
+            status = U_ZERO_ERROR;
+            RegexMatcher m("A?", 0, status);  // will match zero length string.
+            REGEX_CHECK_STATUS;
+            m.reset(inStr1);
+            len = inStr1.length();
+            REGEX_ASSERT(m.matches(len, status) == TRUE);
+            REGEX_CHECK_STATUS;
+            m.reset(empty);
+            REGEX_ASSERT(m.matches(0, status) == TRUE);
+            REGEX_CHECK_STATUS;
+        }
+
 
         //
         // lookingAt(pos, status)
@@ -683,6 +705,8 @@ void RegexTest::API_Match() {
         status = U_ZERO_ERROR;
         len = m1->input().length();
         REGEX_ASSERT(m1->lookingAt(len, status) == FALSE);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(m1->lookingAt(len+1, status) == FALSE);
         REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
         
         delete m1;
@@ -791,11 +815,13 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(matcher->start(status) == 12);
         REGEX_ASSERT(matcher->find(13, status) == FALSE);
         REGEX_ASSERT(matcher->find(16, status) == FALSE);
+        REGEX_ASSERT(matcher->find(17, status) == FALSE);
         REGEX_ASSERT_FAIL(matcher->start(status), U_REGEX_INVALID_STATE);
-        REGEX_CHECK_STATUS;
 
+        status = U_ZERO_ERROR;
         REGEX_ASSERT_FAIL(matcher->find(-1, status), U_INDEX_OUTOFBOUNDS_ERROR);
-        REGEX_ASSERT_FAIL(matcher->find(17, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
+        REGEX_ASSERT_FAIL(matcher->find(18, status), U_INDEX_OUTOFBOUNDS_ERROR);
 
         REGEX_ASSERT(matcher->groupCount() == 0);
 
