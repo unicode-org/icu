@@ -4,6 +4,23 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#if defined(hpux)
+# ifndef _INCLUDE_POSIX_SOURCE
+#  define _INCLUDE_POSIX_SOURCE
+# endif
+# ifndef _INCLUDE_XOPEN_SOURCE
+#  define _INCLUDE_XOPEN_SOURCE
+# endif
+# ifndef _INCLUDE_XOPEN_SOURCE_EXTENDED
+#  define _INCLUDE_XOPEN_SOURCE_EXTENDED
+# endif
+# ifndef _XPG4_EXTENDED
+#  define _XPG4_EXTENDED
+# endif
+# include <sys/newsig.h>
+# include <sys/types.h>
+#endif
+
 #include <unicode/umachine.h>
 
 #if !defined(WIN32) && !defined(XP_MAC)
@@ -12,12 +29,6 @@
 
 #if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
 #define HAVE_IMP
-
-#if defined(__hpux) && defined(HPUX_CMA)
-# ifndef _INCLUDE_POSIX_SOURCE
-#  define _INCLUDE_POSIX_SOURCE
-# endif
-#endif
 
 #include <pthread.h>
 

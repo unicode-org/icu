@@ -58,7 +58,12 @@ void CompoundTransliteratorTest::TestConstruction(){
    Transliterator* transarray3[]={t4, t1, t2};
    Transliterator* transarray4[]={t1, t2, t3, t4};
 
-   Transliterator** transarray[]={transarray1, transarray2, transarray3, transarray4};
+   Transliterator** transarray[4]; 
+   transarray[0] = transarray1;
+   transarray[1] = transarray2;
+   transarray[2] = transarray3;
+   transarray[3] = transarray4;
+
    const UnicodeString IDs[]={
 	   names[0], 
 	   names[0]+";"+names[3], 
