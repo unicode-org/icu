@@ -284,7 +284,8 @@ UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
 
 /**
  * Returns the number of elements in this set (its cardinality),
- * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 0x110000/code>.
+ * Note than the elements of a set may include both individual
+ * codepoints and strings.
  *
  * @return the number of elements in this set (its cardinality).
  */
@@ -350,7 +351,7 @@ int32_t UnicodeSet::findCodePoint(UChar32 c) const {
     // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
     if (c < list[0]) return 0;
     // High runner test.  c is often after the last range, so an
-    // initial check for this condition pays off. 
+    // initial check for this condition pays off.
     if (len >= 2 && c >= list[len-2]) return len-1;
     int32_t lo = 0;
     int32_t hi = len - 1;
@@ -419,7 +420,7 @@ UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
     if (!strings->containsAll(*c.strings)) return FALSE;
     return TRUE;
 }
-    
+
 /**
  * Returns true if this set contains all the characters
  * of the given string.
@@ -434,7 +435,7 @@ UBool UnicodeSet::containsAll(const UnicodeString& s) const {
     }
     return TRUE;
 }
-    
+
 /**
  * Returns true if this set contains none of the characters
  * of the given range.
@@ -470,7 +471,7 @@ UBool UnicodeSet::containsNone(const UnicodeSet& c) const {
     if (!strings->containsNone(*c.strings)) return FALSE;
     return TRUE;
 }
-    
+
 /**
  * Returns true if this set contains none of the characters
  * of the given string.
@@ -530,8 +531,8 @@ UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
 }
 
 /**
- * Implementation of UnicodeMatcher::matches().  Always matches the 
- * longest possible multichar string. 
+ * Implementation of UnicodeMatcher::matches().  Always matches the
+ * longest possible multichar string.
  */
 UMatchDegree UnicodeSet::matches(const Replaceable& text,
                                  int32_t& offset,
@@ -548,7 +549,7 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
         }
     } else {
         if (strings->size() != 0) { // try strings first
-            
+
             // might separate forward and backward loops later
             // for now they are combined
 
@@ -582,7 +583,7 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
                 // forward direction.
                 if (forward && c > firstChar) break;
                 if (c != firstChar) continue;
-                        
+
                 int32_t matchLen = matchRest(text, offset, limit, trial);
 
                 if (incremental) {
@@ -776,13 +777,13 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
 
     // already in set?
     if ((i & 1) != 0) return *this;
-    
+
     // HIGH is 0x110000
     // assert(list[len-1] == HIGH);
-    
+
     // empty = [HIGH]
     // [start_0, limit_0, start_1, limit_1, HIGH]
-    
+
     // [..., start_k-1, limit_k-1, start_k, limit_k, ..., HIGH]
     //                             ^
     //                             list[i]
@@ -858,7 +859,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
         list[i+1] = c+1;
         len += 2;
     }
-     
+
 #ifdef DEBUG_US_ADD
     dump(list, len);
     printf("\n");
@@ -869,9 +870,9 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
             printf("ERROR: list has been corrupted\n");
             exit(1);
         }
-    } 
+    }
 #endif
-  
+
     pat.truncate(0);
     return *this;
 }
@@ -1037,7 +1038,7 @@ UnicodeSet& UnicodeSet::retain(UChar32 c) {
  * The set will not contain the specified range once the call
  * returns.  If <code>end > start</code> then an empty range is
  * removed, leaving the set unchanged.
- * 
+ *
  * @param start first character, inclusive, of range to be removed
  * from this set.
  * @param end last character, inclusive, of range to be removed
@@ -1108,7 +1109,7 @@ UnicodeSet& UnicodeSet::complement(UChar32 c) {
  * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
  */
 UnicodeSet& UnicodeSet::complement(void) {
-    if (list[0] == UNICODESET_LOW) { 
+    if (list[0] == UNICODESET_LOW) {
         ensureBufferCapacity(len-1);
         uprv_memcpy(buffer, list + 1, (len-1)*sizeof(UChar32));
         --len;
@@ -1145,7 +1146,7 @@ UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
         complement((UChar32)cp, (UChar32)cp);
     }
     return *this;
-}    
+}
 
 /**
  * Adds all of the elements in the specified set to this set if
@@ -1160,7 +1161,7 @@ UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
 UnicodeSet& UnicodeSet::addAll(const UnicodeSet& c) {
     add(c.list, c.len, 0);
 
-    // Add strings in order 
+    // Add strings in order
     for (int32_t i=0; i<c.strings->size(); ++i) {
         const UnicodeString* s = (const UnicodeString*)c.strings->elementAt(i);
         if (!strings->contains((void*) s)) {
@@ -1746,7 +1747,7 @@ UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
         }
         return result;
     }
-    
+
     return _generatePattern(result, escapeUnprintable);
 }
 
@@ -1819,7 +1820,7 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
             }
         }
     }
-    
+
     for (int32_t i = 0; i<strings->size(); ++i) {
         result.append(OPEN_BRACE);
         _appendToPat(result,
