@@ -385,7 +385,7 @@ u_parseUTF8(const char *source, int32_t sLen, char *dest, int32_t destCapacity, 
     int32_t i = 0;
     unsigned int value = 0;
     if(sLen == -1) {
-        sLen = strlen(source);
+        sLen = (int32_t)strlen(source);
     }
     
     while(read < source+sLen) {
