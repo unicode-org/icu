@@ -63,10 +63,10 @@ static double randDouble()
     // that the system rand() function is very poor, which it always is.
     double d;
     int32_t i;
+    char* poke = (char*)&d;
     for (i=0; i < sizeof(double); ++i)
     {
-        char* poke = (char*)&d;
-        poke[i] = (rand() & 0xFF);
+        poke[i] = (char)(rand() & 0xFF);
     }
     return d;
 }
@@ -80,10 +80,10 @@ static uint32_t randLong()
     // that the system rand() function is very poor, which it always is.
     uint32_t d;
     int32_t i;
+    char* poke = (char*)&d;
     for (i=0; i < sizeof(uint32_t); ++i)
     {
-        char* poke = (char*)&d;
-        poke[i] = (rand() & 0xFF);
+        poke[i] = (char)(rand() & 0xFF);
     }
     return d;
 }

@@ -17,13 +17,13 @@
 // class NumberFormatRoundTripTest
 // *****************************************************************************
 
-UBool NumberFormatRoundTripTest::verbose                    = FALSE;
-UBool NumberFormatRoundTripTest::STRING_COMPARE            = TRUE;
-UBool NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE        = FALSE;
-UBool NumberFormatRoundTripTest::DEBUG                        = FALSE;
-double NumberFormatRoundTripTest::MAX_ERROR                    = 1e-14;
-double NumberFormatRoundTripTest::max_numeric_error            = 0.0;
-double NumberFormatRoundTripTest::min_numeric_error            = 1.0;
+UBool NumberFormatRoundTripTest::verbose                  = FALSE;
+UBool NumberFormatRoundTripTest::STRING_COMPARE           = TRUE;
+UBool NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE    = FALSE;
+UBool NumberFormatRoundTripTest::DEBUG                    = FALSE;
+double NumberFormatRoundTripTest::MAX_ERROR               = 1e-14;
+double NumberFormatRoundTripTest::max_numeric_error       = 0.0;
+double NumberFormatRoundTripTest::min_numeric_error       = 1.0;
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
@@ -46,12 +46,12 @@ NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 
     return FALSE;
 }
- 
+
 void 
 NumberFormatRoundTripTest::start()
 {
 // test(NumberFormat.getInstance(new Locale("sr", "", "")));
-    
+
     UErrorCode status = U_ZERO_ERROR;
 
     NumberFormat *fmt = NULL;
@@ -62,12 +62,12 @@ NumberFormatRoundTripTest::start()
     failure(status, "NumberFormat::createInstance");
     test(fmt);
     delete fmt;
-    
+
     fmt = NumberFormat::createCurrencyInstance(status);
     failure(status, "NumberFormat::createCurrencyInstance");
     test(fmt);
     delete fmt;
-    
+
     fmt = NumberFormat::createPercentInstance(status);
     failure(status, "NumberFormat::createPercentInstance");
     test(fmt);
@@ -108,73 +108,72 @@ NumberFormatRoundTripTest::start()
 void 
 NumberFormatRoundTripTest::test(NumberFormat *fmt)
 {
-    if (TRUE)
-    {
+#if 1
 #if IEEE_754
-        test(fmt, uprv_getNaN());
-        test(fmt, uprv_getInfinity());
-        test(fmt, -uprv_getInfinity());
+    test(fmt, uprv_getNaN());
+    test(fmt, uprv_getInfinity());
+    test(fmt, -uprv_getInfinity());
 #endif
 
-        test(fmt, (int32_t)500);
-        test(fmt, (int32_t)0);
-        test(fmt, (int32_t)-0);
-        test(fmt, 0.0);
-        double negZero = 0.0; negZero /= -1.0;
-        test(fmt, negZero);
-        test(fmt, 9223372036854775808.0);
-        test(fmt, -9223372036854775809.0);
+    test(fmt, (int32_t)500);
+    test(fmt, (int32_t)0);
+    test(fmt, (int32_t)-0);
+    test(fmt, 0.0);
+    double negZero = 0.0; negZero /= -1.0;
+    test(fmt, negZero);
+    test(fmt, 9223372036854775808.0);
+    test(fmt, -9223372036854775809.0);
 
-        for(int i = 0; i < 10; ++i) {
-            test(fmt, randomDouble(1));
-            test(fmt, randomDouble(10000));
-            test(fmt, uprv_floor((randomDouble(10000))));
-            test(fmt, randomDouble(1e50));
-            test(fmt, randomDouble(1e-50));
+    for(int i = 0; i < 10; ++i) {
+        test(fmt, randomDouble(1));
+        test(fmt, randomDouble(10000));
+        test(fmt, uprv_floor((randomDouble(10000))));
+        test(fmt, randomDouble(1e50));
+        test(fmt, randomDouble(1e-50));
 #ifndef OS390
-            test(fmt, randomDouble(1e100));
+        test(fmt, randomDouble(1e100));
 #elif IEEE_754
-            test(fmt, randomDouble(1e75));    /*OS390*/
-#endif
-            // {sfb} When formatting with a percent instance, numbers very close to
-            // DBL_MAX will fail the round trip.  This is because:
-            // 1) Format the double into a string --> INF% (since 100 * double > DBL_MAX)
-            // 2) Parse the string into a double --> INF
-            // 3) Re-format the double --> INF%
-            // 4) The strings are equal, so that works.
-            // 5) Calculate the proportional error --> INF, so the test will fail
-            // I'll get around this by dividing by the multiplier to make sure
-            // the double will stay in range.
-            //if(fmt->getMultipler() == 1)
-            if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
+        test(fmt, randomDouble(1e75));    /*OS390*/
+#endif /* OS390 */
+        // {sfb} When formatting with a percent instance, numbers very close to
+        // DBL_MAX will fail the round trip.  This is because:
+        // 1) Format the double into a string --> INF% (since 100 * double > DBL_MAX)
+        // 2) Parse the string into a double --> INF
+        // 3) Re-format the double --> INF%
+        // 4) The strings are equal, so that works.
+        // 5) Calculate the proportional error --> INF, so the test will fail
+        // I'll get around this by dividing by the multiplier to make sure
+        // the double will stay in range.
+        //if(fmt->getMultipler() == 1)
+        if(fmt->getDynamicClassID() == DecimalFormat::getStaticClassID())
 #ifndef OS390
-                test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
+            test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
 #else
 #   if IEEE_754
-                test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
+            test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
 #   else
-                test(fmt, randomDouble(1e65) / ((DecimalFormat*)fmt)->getMultiplier());   /*OS390*/
+            test(fmt, randomDouble(1e65) / ((DecimalFormat*)fmt)->getMultiplier());   /*OS390*/
 #   endif
-#endif
+#endif /* OS390 */
 
 #ifdef XP_MAC
 // PowerPC doesn't support denormalized doubles, so the low-end range
 // doesn't match NT
-            test(fmt, randomDouble(1e-290));
+        test(fmt, randomDouble(1e-290));
 #elif defined(OS390)
 #   if IEEE_754
-            test(fmt, randomDouble(1e-78));  /*OS390*/
+        test(fmt, randomDouble(1e-78));  /*OS390*/
 #   endif
 #else
-            test(fmt, randomDouble(1e-323));
-#endif
+        test(fmt, randomDouble(1e-323));
+#endif /* OS390 */
 #ifndef OS390
-            test(fmt, randomDouble(1e-100));
+        test(fmt, randomDouble(1e-100));
 #elif IEEE_754
-            test(fmt, randomDouble(1e-78));  /*OS390*/
-#endif
-        }
+        test(fmt, randomDouble(1e-78));  /*OS390*/
+#endif /* OS390 */
     }
+#endif /* enable/disable */
 }
 
 /**
