@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.39 2002/05/24 17:53:42 grhoten-oss Exp $
+## $Id: mh-os390,v 1.40 2002/06/24 19:49:13 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -34,14 +34,15 @@ ICU_IEEE          = -DIEEE_754=0
 endif
 
 # TODO: Consider using  -Wc,roc,rent for making the data readonly
-CFLAGS390=      -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS)  $(ICU_IEEE) -Wc,dll,expo
+CFLAGS          += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE
+ARFLAGS         = -cr
+
 ## OS390BATCH
 ifeq (${OS390BATCH},1)
-DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE -DOS390BATCH
-else
-DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE
+DEFS            += -DOS390BATCH
 endif
-ARFLAGS=        -cr
 
 # Uncomment this line or do "gmake OS390_STUBDATA=1" to enable dual common library support
 #OS390_STUBDATA=1
@@ -52,16 +53,18 @@ GEN_DEPS.c=	makedep
 GEN_DEPS.cc=	makedep
 
 ## Commands to compile
-COMPILE.c=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
-COMPILE.cc=	_CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(CFLAGS390) $(DEFS390) -c
+COMPILE.c       = _CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc      = _CXX_CXXSUFFIX="cpp" _CXX_STEPS="-1" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+
+LDFLAGS += -Wl,dll
 
 # Commands to link
-LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
+LINK.c=		$(CC) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands for shared library (dll)
-SHLIB.c=	$(LINK.c) -Wl,dll
-SHLIB.cc=	$(LINK.cc) -Wl,dll
+SHLIB.c=	$(LINK.c) $(LDFLAGS)
+SHLIB.cc=	$(LINK.cc) $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
