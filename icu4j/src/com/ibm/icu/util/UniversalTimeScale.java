@@ -10,10 +10,7 @@ package com.ibm.icu.util;
 
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.MessageFormat;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.SimpleTimeZone;
 import java.lang.IllegalArgumentException;
-import java.util.Locale;
 
 /** 
  * There are quite a few different conventions for binary datetime, depending on different
@@ -199,7 +196,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int JAVA_TIME = 0;
+    public static final int JAVA_TIME = 0;
 
     /**
      * Used in Unix systems. Data is an <code>int> or a <code>long</code>. Value
@@ -207,7 +204,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int UNIX_TIME = 1;
+    public static final int UNIX_TIME = 1;
 
     /**
      * Used in the ICU4C. Data is a <code>double</code>. Value
@@ -215,7 +212,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int ICU4C_TIME = 2;
+    public static final int ICU4C_TIME = 2;
 
     /**
      * Used in Windows for file times. Data is a <code>long</code>. Value
@@ -223,7 +220,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int WINDOWS_FILE_TIME = 3;
+    public static final int WINDOWS_FILE_TIME = 3;
 
     /**
      * Used in Windows for date time (?). Data is a <code>long</code>. Value
@@ -231,7 +228,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int WINDOWS_DATE_TIME = 4;
+    public static final int WINDOWS_DATE_TIME = 4;
 
     /**
      * Used in older Macintosh systems. Data is an <code>int</code>. Value
@@ -239,7 +236,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int MAC_OLD_TIME = 5;
+    public static final int MAC_OLD_TIME = 5;
 
     /**
      * Used in the JDK. Data is a <code>double</code>. Value
@@ -247,7 +244,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int MAC_TIME = 6;
+    public static final int MAC_TIME = 6;
 
     /**
      * Used in Excel. Data is a <code>?unknown?</code>. Value
@@ -255,7 +252,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int EXCEL_TIME = 7;
+    public static final int EXCEL_TIME = 7;
 
     /**
      * Used in DB2. Data is a <code>?unknown?</code>. Value
@@ -263,14 +260,156 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static final public int DB2_TIME = 8;
+    public static final int DB2_TIME = 8;
     
     /**
      * This is the first unused time scale value.
      *
      * @draft ICU 3.2
      */
-    static final public int MAX_SCALE = 9;
+    public static final int MAX_SCALE = 9;
+    
+    /**
+     * The constant used to select the units vale
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    
+    /**
+     * The constant used to select the units vale
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int UNITS_VALUE = 0;
+    
+    /**
+     * The constant used to select the epoch offset value
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int EPOCH_OFFSET_VALUE = 1;
+    
+    /**
+     * The constant used to select the minimum from value
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int FROM_MIN_VALUE = 2;
+    
+    /**
+     * The constant used to select the maximum from value
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int FROM_MAX_VALUE = 3;
+    
+    /**
+     * The constant used to select the minimum to value
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int TO_MIN_VALUE = 4;
+    
+    /**
+     * The constant used to select the maximum to value
+     * for a time scale.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int TO_MAX_VALUE = 5;
+    
+    /**
+     * The constant used to select the epoch plus one value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT. May not
+     * actually be equal to the epoch offset value plus one.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @draft ICU 3.2
+     */
+    public static final int EPOCH_OFFSET_PLUS_1_VALUE = 6;
+    
+    /**
+     * The constant used to select the epoch offset minus one value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT. May not
+     * actually be equal to the epoch offset value minus one.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @internal
+     */
+    public static final int EPOCH_OFFSET_MINUS_1_VALUE = 7;
+    
+    /**
+     * The constant used to select the units round value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @internal
+     */
+    public static final int UNITS_ROUND_VALUE = 8;
+    
+    /**
+     * The constant used to select the minimum safe rounding value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @internal
+     */
+    public static final int MIN_ROUND_VALUE = 9;
+    
+    /**
+     * The constant used to select the maximum safe rounding value
+     * for a time scale.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @internal
+     */
+    public static final int MAX_ROUND_VALUE = 10;
+    
+    /**
+     * The number of time scale values.
+     * 
+     * NOTE: This is an internal value. DO NOT USE IT.
+     * 
+     * @see getTimeScaleValue
+     *
+     * @internal
+     */
+    public static final int MAX_SCALE_VALUE = 11;
     
     private static final long ticks        = 1;
     private static final long microseconds = ticks * 10;
@@ -286,7 +425,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    public static final class TimeScaleData
+    private static final class TimeScaleData
     {
         TimeScaleData(long theUnits, long theEpochOffset,
                        long theToMin, long theToMax,
@@ -390,7 +529,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public long from(double otherTime, int timeScale)
+    public static long from(double otherTime, int timeScale)
     {
         TimeScaleData data = fromRangeCheck(otherTime, timeScale);
         
@@ -407,7 +546,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public long from(long otherTime, int timeScale)
+    public static long from(long otherTime, int timeScale)
     {
         TimeScaleData data = fromRangeCheck(otherTime, timeScale);
                 
@@ -426,7 +565,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public BigDecimal bigDecimalFrom(double otherTime, int timeScale)
+    public static BigDecimal bigDecimalFrom(double otherTime, int timeScale)
     {
         TimeScaleData data     = getTimeScaleData(timeScale);
         BigDecimal other       = new BigDecimal(otherTime);
@@ -448,7 +587,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public BigDecimal bigDecimalFrom(long otherTime, int timeScale)
+    public static BigDecimal bigDecimalFrom(long otherTime, int timeScale)
     {
         TimeScaleData data     = getTimeScaleData(timeScale);
         BigDecimal other       = new BigDecimal(otherTime);
@@ -470,7 +609,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public BigDecimal bigDecimalFrom(BigDecimal otherTime, int timeScale)
+    public static BigDecimal bigDecimalFrom(BigDecimal otherTime, int timeScale)
     {
         TimeScaleData data = getTimeScaleData(timeScale);
         
@@ -520,7 +659,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public double toDouble(long universalTime, int timeScale)
+    public static double toDouble(long universalTime, int timeScale)
     {
         TimeScaleData data = toRangeCheck(universalTime, timeScale);
         
@@ -539,26 +678,6 @@ public final class UniversalTimeScale
         return (universalTime + data.unitsRound) / data.units - data.epochOffset;
     }
     
-    /**
-     * Convert a datetime from the universal time scale stored as a <code>BigDecimal</code> to a
-     * <code>double</code> in the given time scale.
-     *
-     * @param universal The datetime in the universal time scale
-     * @param timeScale The time scale to convert to
-     * 
-     * @return The datetime converted to the given time scale
-     *
-     * @draft ICU 3.2
-     */
-    static private double toDouble(BigDecimal universalTime, int timeScale)
-    {
-        TimeScaleData data = getTimeScaleData(timeScale);
-        BigDecimal units = new BigDecimal(data.units);
-        BigDecimal epochOffset = new BigDecimal(data.epochOffset);
-        
-        return universalTime.divide(units, BigDecimal.ROUND_HALF_UP).subtract(epochOffset).doubleValue();
-    }
-
     /**
      * Convert a datetime from the universal time scale stored as a <code>BigDecimal</code> to a
      * <code>long</code> in the given time scale.
@@ -599,7 +718,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public long toLong(long universalTime, int timeScale)
+    public static long toLong(long universalTime, int timeScale)
     {
         TimeScaleData data = toRangeCheck(universalTime, timeScale);
         
@@ -619,25 +738,6 @@ public final class UniversalTimeScale
     }
     
     /**
-     * Convert a datetime from the universal time scale to a <code>long</code> in the given time scale.
-     *
-     * @param universal The datetime in the universal time scale
-     * @param timeScale The time scale to convert to
-     * 
-     * @return The datetime converted to the given time scale
-     *
-     * @draft ICU 3.2
-     */
-    static private long toLong(BigDecimal universalTime, int timeScale)
-    {
-        TimeScaleData data     = getTimeScaleData(timeScale);
-        BigDecimal units       = new BigDecimal(data.units);
-        BigDecimal epochOffset = new BigDecimal(data.epochOffset);
-        
-        return universalTime.divide(units, BigDecimal.ROUND_HALF_UP).subtract(epochOffset).longValue();
-    }
-    
-    /**
      * Convert a datetime from the universal time scale to a <code>BigDecimal</code> in the given time scale.
      *
      * @param universal The datetime in the universal time scale
@@ -647,7 +747,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public BigDecimal toBigDecimal(long universalTime, int timeScale)
+    public static BigDecimal toBigDecimal(long universalTime, int timeScale)
     {
         TimeScaleData data     = getTimeScaleData(timeScale);
         BigDecimal universal   = new BigDecimal(universalTime);
@@ -667,7 +767,7 @@ public final class UniversalTimeScale
      *
      * @draft ICU 3.2
      */
-    static public BigDecimal toBigDecimal(BigDecimal universalTime, int timeScale)
+    public static BigDecimal toBigDecimal(BigDecimal universalTime, int timeScale)
     {
         TimeScaleData data     = getTimeScaleData(timeScale);
         BigDecimal units       = new BigDecimal(data.units);
@@ -684,15 +784,69 @@ public final class UniversalTimeScale
      * 
      * @return the <code>TimeScaleData</code> object for the given time scale
      * 
-     * @draft ICU 3.2
+     * @internal
      */
-    static public TimeScaleData getTimeScaleData(int scale)
+    private static TimeScaleData getTimeScaleData(int scale)
     {
         if (scale < 0 || scale >= MAX_SCALE) {
             throw new IllegalArgumentException("scale out of range: " + scale);
         }
         
         return timeScaleTable[scale];
+    }
+    
+    /**
+     * Get a value associated with a particular time scale.
+     * 
+     * @param scale - the time scale
+     * @param value - a constant representing the value to get
+     * 
+     * @return - the value.
+     * 
+     * @draft ICU 3.2
+     */
+    public static long getTimeScaleValue(int scale, int value)
+    {
+        TimeScaleData data = getTimeScaleData(scale);
+        
+        switch (value)
+        {
+        case UNITS_VALUE:
+            return data.units;
+            
+        case EPOCH_OFFSET_VALUE:
+            return data.epochOffset;
+        
+        case FROM_MIN_VALUE:
+            return data.fromMin;
+            
+        case FROM_MAX_VALUE:
+            return data.fromMax;
+            
+        case TO_MIN_VALUE:
+            return data.toMin;
+            
+        case TO_MAX_VALUE:
+            return data.toMax;
+            
+        case EPOCH_OFFSET_PLUS_1_VALUE:
+            return data.epochOffsetP1;
+            
+        case EPOCH_OFFSET_MINUS_1_VALUE:
+            return data.epochOffsetM1;
+            
+        case UNITS_ROUND_VALUE:
+            return data.unitsRound;
+        
+        case MIN_ROUND_VALUE:
+            return data.minRound;
+            
+        case MAX_ROUND_VALUE:
+            return data.maxRound;
+            
+        default:
+            throw new IllegalArgumentException("value out of range: " + value);
+        }
     }
     
     private static TimeScaleData toRangeCheck(long universalTime, int scale)
@@ -728,183 +882,25 @@ public final class UniversalTimeScale
         throw new IllegalArgumentException("otherTime out of range:" + otherTime);
     }
     
-    private static BigDecimal toBigDecimalTrunc(BigDecimal universalTime, int timeScale)
+    /**
+     * Convert a time in the Universal Time Scale into another time
+     * scale. The division used to do the conversion rounds down.
+     * 
+     * NOTE: This is an internal routine used by the tool that
+     * generates the to and from limits. Use it at your own risk.
+     * 
+     * @param universalTime the time in the Universal Time scale
+     * @param timeScale the time scale to convert to
+     * @return the time in the given time scale
+     * 
+     * @internal
+     */
+    public static BigDecimal toBigDecimalTrunc(BigDecimal universalTime, int timeScale)
     {
         TimeScaleData data = getTimeScaleData(timeScale);
         BigDecimal units = new BigDecimal(data.units);
         BigDecimal epochOffset = new BigDecimal(data.epochOffset);
         
         return universalTime.divide(units, BigDecimal.ROUND_DOWN).subtract(epochOffset);
-    }
-    
-    private static String minMaxFilter(long value)
-    {
-        if (value == Long.MIN_VALUE) {
-            return "U_INT64_MIN";
-        } else if (value == Long.MAX_VALUE) {
-            return "U_INT64_MAX";
-        }
-        
-        return "INT64_C(" + Long.toString(value) + ")";
-    }
-    
-    private static int[][] epochDates = {
-            {   1, Calendar.JANUARY,   1},
-            {1970, Calendar.JANUARY,   1},
-            {1601, Calendar.JANUARY,   1},
-            {1904, Calendar.JANUARY,   1},
-            {2001, Calendar.JANUARY,   1},
-            {1899, Calendar.DECEMBER, 31},
-            {1900, Calendar.MARCH,     1}
-    };
-    
-    public static void main(String[] args)
-    {
-        TimeZone utc = new SimpleTimeZone(0, "UTC");
-        Calendar cal = Calendar.getInstance(utc, Locale.ENGLISH);
-        MessageFormat fmt = new MessageFormat("{0, date, full} {0, time, full} = {1}");
-        Object arguments[] = {cal, null};
-        
-        System.out.println("Epoch offsets:");
-        
-        // January 1, 0001 00:00:00 is the universal epoch date...
-        cal.set(1, Calendar.JANUARY, 1, 0, 0, 0);
-        
-        long universalEpoch = cal.getTimeInMillis();
-        
-        for (int i = 0; i < epochDates.length; i += 1) {
-            int[] date = epochDates[i];
-            
-            cal.set(date[0], date[1], date[2]);
-            
-            long millis = cal.getTimeInMillis();
-            
-            arguments[1] = Long.toString((millis - universalEpoch) * milliseconds);
-            
-            System.out.println(fmt.format(arguments));
-         }
-
-        BigDecimal universalMin = new BigDecimal(Long.MIN_VALUE);
-        BigDecimal universalMax = new BigDecimal(Long.MAX_VALUE);
-        Object limitArgs[] = {null, null, null, null};
-        
-        fmt = new MessageFormat("{0}L, {1}L, {2}L, {3}L");
-        
-        System.out.println("\nTo, From limits:");
-        
-        // from limits
-        for(int scale = 0; scale < MAX_SCALE; scale += 1) {
-            BigDecimal min = toBigDecimalTrunc(universalMin, scale).max(universalMin);
-            BigDecimal max = toBigDecimalTrunc(universalMax, scale).min(universalMax);
-            long minLong   = min.longValue();
-            long maxLong   = max.longValue();
-            
-            limitArgs[2] = min.toString();
-            limitArgs[3] = max.toString();
-
-            // to limits
-            BigDecimal minTrunc   = bigDecimalFrom(min, scale);
-            BigDecimal maxTrunc   = bigDecimalFrom(max, scale);
-            BigDecimal minResidue = minTrunc.subtract(universalMin);
-            BigDecimal maxResidue = universalMax.subtract(maxTrunc);
-            TimeScaleData data    = getTimeScaleData(scale);
-            long units            = data.units;
-            BigDecimal half       = new BigDecimal(units == 1? 0: units / 2 - 1);
-            
-            min = minTrunc.subtract(minResidue.min(half));
-            max = maxTrunc.add(maxResidue.min(half));
-            limitArgs[0] = min.toString();
-            limitArgs[1] = max.toString();
-            
-            System.out.println(fmt.format(limitArgs));
-            
-            // round-trip test the from limits
-            if(toLong(from(minLong, scale), scale) != minLong) {
-                System.out.println("OOPS: min didn't round trip!");
-            }
-            
-            if(toLong(from(maxLong, scale), scale) != maxLong) {
-                System.out.println("OOPS: max didn't round trip!");
-            }
-            
-            // make sure that the to limits convert to the from limits
-            if(toLong(min.longValue(), scale) != minLong) {
-                System.out.println("OOPS: toLong(toMin) != fromMin");
-            }
-            
-            if(toLong(max.longValue(), scale) != maxLong) {
-                System.out.println("OOPS: toLong(toMax) != fromMax");
-            }
-        }
-        
-        arguments[0] = cal;
-        fmt = new MessageFormat("{1} = {0, date, full} {0, time, full}");
-        
-        System.out.println("\nJava test:");
-        cal.setTimeInMillis(toLong(from(0, JAVA_TIME), ICU4C_TIME));
-        arguments[1] = " 000000000000000";
-        System.out.println(fmt.format(arguments));
-        
-        cal.setTimeInMillis(toLong(from(-62164684800000L, JAVA_TIME), ICU4C_TIME));
-        arguments[1] = "-62164684800000L";
-        System.out.println(fmt.format(arguments));
-        
-        cal.setTimeInMillis(toLong(from(-62135769600000L, JAVA_TIME), ICU4C_TIME));
-        arguments[1] = "-62135769600000L";
-        System.out.println(fmt.format(arguments));
-        
-        System.out.println("\nUnix test:");
-        
-        cal.setTimeInMillis(toLong(from(0x80000000, UNIX_TIME), ICU4C_TIME));
-        arguments[1] = "0x80000000";
-        System.out.println(fmt.format(arguments));
-        
-        cal.setTimeInMillis(toLong(from(0, UNIX_TIME), ICU4C_TIME));
-        arguments[1] = "0x00000000";
-        System.out.println(fmt.format(arguments));
-        
-        cal.setTimeInMillis(toLong(from(0x7FFFFFFF, UNIX_TIME), ICU4C_TIME));
-        arguments[1] = "0x7FFFFFFF";
-        System.out.println(fmt.format(arguments));
-        
-        System.out.println("\nC data:");
-        fmt = new MessageFormat("'{'{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}},");
-        
-        Object cargs[] = {null, null, null, null, null, null, null, null, null, null, null};
-        
-        for (int scale = 0; scale < MAX_SCALE; scale += 1) {
-            TimeScaleData data = getTimeScaleData(scale);
-            
-            if (data.units == ticks) {
-                cargs[0] = "ticks";
-            } else if (data.units == microseconds) {
-                cargs[0] = "microseconds";
-            } else if (data.units == milliseconds) {
-                cargs[0] = "milliseconds";
-            } else if (data.units == seconds) {
-                cargs[0] = "seconds";
-            } else if (data.units == minutes) {
-                cargs[0] = "minutes";
-            } else if (data.units == hours) {
-                cargs[0] = "hours";
-            } else if (data.units == days) {
-                cargs[0] = "days";
-            } else {
-                cargs[0] = "INT64_C(" + Long.toString(data.units) + ")";
-            }
-            
-            cargs[1]  = minMaxFilter(data.epochOffset);
-            cargs[2]  = minMaxFilter(data.fromMin);
-            cargs[3]  = minMaxFilter(data.fromMax);
-            cargs[4]  = minMaxFilter(data.toMin);
-            cargs[5]  = minMaxFilter(data.toMax);
-            cargs[6]  = minMaxFilter(data.epochOffsetP1);
-            cargs[7]  = minMaxFilter(data.epochOffsetM1);
-            cargs[8]  = minMaxFilter(data.unitsRound);
-            cargs[9]  = minMaxFilter(data.minRound);
-            cargs[10] = minMaxFilter(data.maxRound);
-            
-            System.out.println(fmt.format(cargs));
-        }
     }
 }

@@ -17,7 +17,8 @@ import com.ibm.icu.dev.test.TestFmwk;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class TimeScaleDataTest extends TestFmwk {
+public class TimeScaleDataTest extends TestFmwk
+{
 
     /**
      * Default contstructor.
@@ -78,29 +79,34 @@ public class TimeScaleDataTest extends TestFmwk {
     public void TestEpochOffsets()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long units       = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.UNITS_VALUE);
+            long epochOffset = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.EPOCH_OFFSET_VALUE);
             
-            epochOffsetTest(data.epochOffset, data.units, scale);
+            epochOffsetTest(epochOffset, units, scale);
         }
     }
 
     public void TestFromLimits()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
             
-            roundTripTest(data.fromMin, scale);
-            roundTripTest(data.fromMax, scale);
+            roundTripTest(fromMin, scale);
+            roundTripTest(fromMax, scale);
         }
     }
     
     public void TestToLimits()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
-            UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            long fromMin = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MIN_VALUE);
+            long fromMax = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.FROM_MAX_VALUE);
+            long toMin   = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MIN_VALUE);
+            long toMax   = UniversalTimeScale.getTimeScaleValue(scale, UniversalTimeScale.TO_MAX_VALUE);
             
-            toLimitTest(data.toMin, data.fromMin, scale);
-            toLimitTest(data.toMax, data.fromMax, scale);
+            toLimitTest(toMin, fromMin, scale);
+            toLimitTest(toMax, fromMax, scale);
        }
     }
 
