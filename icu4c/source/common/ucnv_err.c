@@ -126,17 +126,14 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
                   UConverterCallbackReason reason,
                   UErrorCode * err)
 {
-    char togo[5];
-    int32_t togoLen;
-
-    if (reason > UCNV_IRREGULAR)
-    {
-        return;
-    }
-
-    *err = U_ZERO_ERROR;
-
-    ucnv_cbFromUWriteSub(fromArgs, 0, err);
+  if (reason > UCNV_IRREGULAR)
+  {
+    return;
+  }
+  
+  *err = U_ZERO_ERROR;
+  
+  ucnv_cbFromUWriteSub(fromArgs, 0, err);
 }
 
 /*uses itou to get a unicode escape sequence of the offensive sequence,
@@ -156,7 +153,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
   UChar valueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
-  uint32_t i = 0;
+  int32_t i = 0;
 
   const UChar *myValueSource = NULL;
   UErrorCode err2 = U_ZERO_ERROR;
@@ -178,11 +175,11 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
              &originalContext,
              &err2);
   if (U_FAILURE (err2))
-    {
-      *err = err2;
-      return;
-    }
-
+  {
+    *err = err2;
+    return;
+  }
+  
   /*
    * ### TODO:
    * This should actually really work with the codePoint, not with the codeUnits;
@@ -190,19 +187,19 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
    * two for a surrogate pair!
    */
   while (i < length)
-    {
-      valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-      valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
-      itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
-      valueStringLength += 4;
-    }
+  {
+    valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
+    valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
+    itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+    valueStringLength += 4;
+  }
 
   myValueSource = valueString;
 
   /* reset the error */
   *err = U_ZERO_ERROR;
 
-  ucnv_cbFromUWriteUChars(fromArgs, myValueSource, valueStringLength, 0, err);
+  ucnv_cbFromUWriteUChars(fromArgs, &myValueSource, myValueSource+valueStringLength, 0, err);
 
   ucnv_setFromUCallBack (fromArgs->converter,
                          original,
@@ -268,7 +265,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
   UChar uniValueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
   int32_t i = 0;
-
+  
   if (reason > UCNV_IRREGULAR)
   {
     return;
@@ -288,41 +285,11 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
       valueStringLength += 2;
     }
 
-  if ((toArgs->targetLimit - toArgs->target) >= valueStringLength)
-    {
-      /*if we have enough space on the output buffer we just copy
-       * the subchar there and update the pointer
-       */
-      uprv_memcpy (toArgs->target, uniValueString, (sizeof (UChar)) * (valueStringLength));
-      if (toArgs->offsets) 
-        {
-          for (i = 0; i < valueStringLength; i++)  toArgs->offsets[i] = 0;
-        }
-      toArgs->target += valueStringLength;
-      
-      *err = U_ZERO_ERROR;
-    }
-  else
-    {
-      /*if we don't have enough space on the output buffer
-       *we copy as much as we can to it, update that pointer.
-       *copy the rest in the internal buffer, and increase the
-       *length marker
-       */
-      uprv_memcpy (toArgs->target, uniValueString, (sizeof (UChar)) * (toArgs->targetLimit - toArgs->target));
-      if (toArgs->offsets) 
-        {
-          for (i = 0; i < (toArgs->targetLimit - toArgs->target); i++)  toArgs->offsets[i] = 0;
-        }
-      
-      
-      uprv_memcpy (toArgs->converter->UCharErrorBuffer,
-          uniValueString + (toArgs->targetLimit - toArgs->target),
-          (sizeof (UChar)) * (valueStringLength - (toArgs->targetLimit - toArgs->target)));
-      toArgs->converter->UCharErrorBufferLength += valueStringLength - (toArgs->targetLimit - toArgs->target);
-      toArgs->target += (toArgs->targetLimit - toArgs->target);
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-    }
+
+  /* reset the error */
+  *err = U_ZERO_ERROR;
+  
+  ucnv_cbToUWriteUChars(toArgs, uniValueString, valueStringLength, 0, err);
 
   return;
 }
