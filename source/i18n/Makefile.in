@@ -66,12 +66,7 @@ dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o
 DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
-HEADERS= ucal.h unum.h udat.h umsg.h calendar.h choicfmt.h datefmt.h	\
-dcfmtsym.h decimfmt.h dtfmtsym.h fieldpos.h fmtable.h format.h		\
-gregocal.h msgfmt.h numfmt.h parsepos.h simpletz.h smpdtfmt.h		\
-timezone.h ucol.h coll.h tblcoll.h sortkey.h coleitr.h ubrk.h		\
-brkiter.h uniset.h \
-cpdtrans.h hextouni.h rbt.h translit.h unifilt.h unifltlg.h unitohex.h
+HEADERS= unicode/*.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
