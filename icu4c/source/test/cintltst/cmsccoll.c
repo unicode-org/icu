@@ -43,7 +43,6 @@ typedef int tst_strcoll(void *collator, const int object,
                         const UChar *source, const int sLen, 
                         const UChar *target, const int tLen);
 
-static UCollator *myCollation;
 const static UChar gRules[MAX_TOKEN_LEN] =
 /*" & 0 < 1,\u2461<a,A"*/
 { 0x0026, 0x0030, 0x003C, 0x0031, 0x002C, 0x2460, 0x003C, 0x0061, 0x002C, 0x0041, 0x0000 };
@@ -78,6 +77,7 @@ static void TestCase( )
 {
     int32_t i,j,k;
     UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -436,6 +436,7 @@ static void FunkyATest( )
     
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
+    UCollator  *myCollation;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
@@ -773,12 +774,13 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   }
 }
 
-int ucaTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
+static int ucaTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
   UCollator *UCA = (UCollator *)collator;
   return ucol_strcoll(UCA, source, sLen, target, tLen);
 }
 
-int winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
+/*
+static int winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
 #ifdef WIN32
   LCID lcid = (LCID)collator;
   return CompareString(lcid, 0, source, sLen, target, tLen);
@@ -786,6 +788,7 @@ int winTest(void *collator, const int object, const UChar *source, const int sLe
   return 0;
 #endif
 }
+*/
 
 static UCollationResult swampEarlier(tst_strcoll* func, void *collator, int opts, 
                                      UChar s1, UChar s2, 
@@ -945,7 +948,7 @@ static void logFailure (const char *platform, const char *test,
 
 }
 
-static printOutRules(const UChar *rules) {
+static void printOutRules(const UChar *rules) {
   uint32_t len = u_strlen(rules);
   uint32_t i = 0;
   char toPrint;
@@ -1523,7 +1526,7 @@ static void TestImplicitTailoring(void) {
   UChar t1[256] = {0};
   UChar t2[256] = {0};
 
-  char *rule = "&\\u4e00 < a <<< A < b <<< B";
+  const char *rule = "&\\u4e00 < a <<< A < b <<< B";
 
   uint32_t i = 0, j = 0;
   uint32_t size = 0;
@@ -1550,8 +1553,8 @@ static void TestFCDProblem(void) {
   UChar t1[256] = {0};
   UChar t2[256] = {0};
 
-  char *s1 = "\\u0430\\u0306\\u0325";
-  char *s2 = "\\u04D1\\u0325";
+  const char *s1 = "\\u0430\\u0306\\u0325";
+  const char *s2 = "\\u04D1\\u0325";
 
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open("", &status);
@@ -1584,8 +1587,10 @@ static void TestComposeDecompose(void) {
   const char *locName = NULL;
 
   UChar u = 0;
+/*
   UChar NFC[256] = {0};
   UChar NFD[256] = {0};
+*/
   uint32_t nfcSize;
   uint32_t nfdSize;
   struct tester *t[0xFFFF];
@@ -1628,7 +1633,7 @@ static void TestComposeDecompose(void) {
   }
 }
 
-static TestUnmappedSpaces(void) {
+static void TestUnmappedSpaces(void) {
   UChar u;
   UErrorCode status = U_ZERO_ERROR;
   UCollator *uca = ucol_open("", &status);
