@@ -294,6 +294,27 @@ Package=<4>
 
 ###############################################################################
 
+Project: "genuca"=..\TOOLS\genuca\genuca.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "i18n"=..\i18n\i18n.dsp - Package Owner=<4>
 
 Package=<5>
@@ -445,6 +466,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ustdio
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genuca
     End Project Dependency
 }}}
 
