@@ -396,7 +396,7 @@ struct ToCEntry {
 };
 
 U_CDECL_BEGIN
-static int32_t
+static int32_t U_CALLCONV
 compareToCEntries(const void *context, const void *left, const void *right) {
     const char *chars=(const char *)context;
     return (int32_t)uprv_strcmp(chars+((const ToCEntry *)left)->nameOffset,
