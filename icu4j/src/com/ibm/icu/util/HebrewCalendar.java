@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2003/01/21 18:42:11 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/02/14 22:27:00 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -57,8 +57,8 @@ import java.util.Locale;
  *      http://www.geocities.com/Athens/1584/</a>
  *
  * <li>The Calendar FAQ,
- *      <a href="http://www.pip.dknet.dk/~pip10160/calendar.html">
- *      http://www.pip.dknet.dk/~pip10160/calendar.html</a>
+ *      <a href="http://www.faqs.org/faqs/calendars/faq/">
+ *      http://www.faqs.org/faqs/calendars/faq/</a>
  * </ul>
  * <p>
  * @see com.ibm.icu.util.GregorianCalendar
@@ -563,8 +563,8 @@ public class HebrewCalendar extends Calendar {
      *     http://www.geocities.com/Athens/1584/</a>
      *
      * <li>The Calendar FAQ,
-     *      <a href="http://www.pip.dknet.dk/~pip10160/calendar.faq2.txt">
-     *      http://www.pip.dknet.dk/~pip10160/calendar.html</a>
+     *      <a href="http://www.faqs.org/faqs/calendars/faq/">
+     *      http://www.faqs.org/faqs/calendars/faq/</a>
      * </ul>
      */
     private static long startOfYear(int year)

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/EasterHoliday.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/02/14 22:27:00 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -239,8 +239,7 @@ class EasterRule implements DateRule {
      * the right date.
      * <p>
      * The algorithm here is taken from the
-     * <a href=http://www.pip.dknet.dk/~pip10160/calendar.html>Calendar FAQ,
-     * version 1.7</a>
+     * <a href="http://www.faqs.org/faqs/calendars/faq/">Calendar FAQ</a>.
      */
     private Date computeInYear(Date date, GregorianCalendar cal)
     {

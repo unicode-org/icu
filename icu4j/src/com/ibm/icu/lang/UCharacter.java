@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/02/14 18:21:32 $ 
-* $Revision: 1.66 $
+* $Date: 2003/02/14 22:27:00 $ 
+* $Revision: 1.67 $
 *
 *******************************************************************************
 */
@@ -3437,7 +3437,6 @@ public final class UCharacter
      *
      * @param cp the code point to test
      * @return true if cp's case fold closure contains only itself.
-     * @see com.ibm.icu.text.UnicodeSet.closeOver
      * @draft ICU 2.6
      */
     public static boolean isCaseUnique(int cp) {
