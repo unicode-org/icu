@@ -17,6 +17,8 @@
 
 #include "unicode/unistr.h"
 
+U_NAMESPACE_USE
+
 // for unistrm.h
 /**
  * Write the contents of a UnicodeString to an ostream. This functions writes
