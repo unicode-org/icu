@@ -49,7 +49,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(21,Test4162071)
         CASE(22,Test4182066)
         CASE(23,Test4210209)
-
+        CASE(24,Test714)
         default: name = ""; break;
     }
 }
@@ -1139,6 +1139,36 @@ DateFormatRegressionTest::Test4210209(void) {
     if (U_FAILURE(status)) {
         errln("FAIL: Unable to set Calendar to Feb 29 2000");
     }
+}
+
+void DateFormatRegressionTest::Test714(void)
+{
+    //try {
+     UDate d(978103543000.);
+    DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::NONE,
+                                                         DateFormat::MEDIUM,
+                                                         Locale::US);
+    UnicodeString s;
+        UnicodeString tests = 
+          (UnicodeString) "7:25:43 AM" ;
+        UErrorCode status = U_ZERO_ERROR;
+        fmt->format (d,s);
+        if(U_FAILURE(status))
+          {
+            errln((UnicodeString) "Fail, errmsg " + u_errorName(status));
+            return;
+          }
+        
+        if(s != tests)
+        {
+          errln((UnicodeString) "Fail: " + s + " != " + tests);
+        }
+        else
+        {
+          logln("OK: " + s + " == " + tests);
+        }
+
+   delete fmt;
 }
 
 //eof
