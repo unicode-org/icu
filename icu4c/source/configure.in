@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.111 2001/06/22 16:50:43 yves Exp $
+dnl $Id: configure.in,v 1.112 2001/06/22 17:04:37 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -19,7 +19,7 @@ changequote(<<, >>)dnl
 
 dnl Get the ICU version from uversion.h or other headers
 geticuversion() {
-    sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p,q' "$@"
+    sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' "$@"
 }
 VERSION=`geticuversion $srcdir/common/unicode/uversion.h`
 if test x"$VERSION" = x; then
