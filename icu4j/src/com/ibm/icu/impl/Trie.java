@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2003/06/03 18:49:32 $
-* $Revision: 1.11 $
+* $Date: 2003/06/11 19:55:18 $
+* $Revision: 1.12 $
 *
 ******************************************************************************
 */
@@ -93,6 +93,7 @@ public abstract class Trie
      * @return true if the argument Trie has the same data as this Trie, false
      *         otherwise
      */
+    ///CLOVER:OFF
     public boolean equals(Object other) 
     {
         if (other == this) {
@@ -107,6 +108,7 @@ public abstract class Trie
                && m_dataLength_ == othertrie.m_dataLength_
                && Arrays.equals(m_index_, othertrie.m_index_);
     }
+    ///CLOVER:ON
 
     // protected constructor -------------------------------------------
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.16 $
+* $Date: 2003/06/11 19:55:18 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -127,7 +127,9 @@ public final class CollationKey implements Comparable
         /**
          * Private Constructor
          */
+        ///CLOVER:OFF
         private BoundMode(){};
+        ///CLOVER:ON
     };
     
     // public constructor ---------------------------------------------------
