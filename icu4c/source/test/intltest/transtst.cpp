@@ -16,6 +16,8 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/hextouni.h"
 #include "unicode/unitohex.h"
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
 
 // Define character constants thusly to be EBCDIC-friendly
 
@@ -76,7 +78,7 @@ void TransliteratorTest::TestInstantiation() {
                   ", parse error " + parseError.code +
                   ", line " + parseError.line +
                   ", offset " + parseError.offset +
-                  ", context \"" + parseError.context + "\"");
+                  ", context " + prettify(parseError.context));
             // When createInstance fails, it deletes the failing
             // entry from the available ID list.  We detect this
             // here by looking for a change in countAvailableIDs.
@@ -476,7 +478,7 @@ void TransliteratorTest::TestPatternQuoting(void) {
     };
 
     for (int i=0; i<3; i+=3) {
-        logln(UnicodeString("Pattern: ") + escape(DATA[i]));
+        logln(UnicodeString("Pattern: ") + prettify(DATA[i]));
         UErrorCode status = U_ZERO_ERROR;
         RuleBasedTransliterator t("<ID>", DATA[i], status);
         if (U_FAILURE(status)) {
@@ -551,9 +553,9 @@ void TransliteratorTest::TestJ277(void) {
             }
         }
         if (ok) {
-            logln(escape(data[i] + " -> " + out));
+            logln(prettify(data[i] + " -> " + out));
         } else {
-            errln(UnicodeString("FAIL: ") + escape(data[i] + " -> " + out));
+            errln(UnicodeString("FAIL: ") + prettify(data[i] + " -> " + out));
         }
     }
 
@@ -701,32 +703,12 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
                                    const UnicodeString& summary, bool_t pass,
                                    const UnicodeString& expectedResult) {
     if (pass) {
-        logln(UnicodeString("(")+tag+") " + escape(summary));
+        logln(UnicodeString("(")+tag+") " + prettify(summary));
     } else {
         errln(UnicodeString("FAIL: (")+tag+") "
-              + escape(summary)
-              + ", expected " + escape(expectedResult));
+              + prettify(summary)
+              + ", expected " + prettify(expectedResult));
     }
 }
 
 static UChar toHexString(int32_t i) { return i + (i < 10 ? ZERO : (UPPER_A - 10)); }
-
-UnicodeString
-TransliteratorTest::escape(const UnicodeString& s) {
-    // Hmm...this only works for ASCII, I think...
-    UnicodeString buf;
-    for (int32_t i=0; i<s.length(); ++i)
-    {
-        UChar c = s[(UTextOffset)i];
-        if (' ' <= c && c <= (UChar)0x7F) {
-            buf += c;
-        } else {
-            buf += '\\'; buf += 'u';
-            buf += toHexString((c & 0xF000) >> 12);
-            buf += toHexString((c & 0x0F00) >> 8);
-            buf += toHexString((c & 0x00F0) >> 4);
-            buf += toHexString(c & 0x000F);
-        }
-    }
-    return buf;
-}
