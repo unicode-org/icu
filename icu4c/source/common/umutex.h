@@ -75,6 +75,12 @@ U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
    umtx_destroy( &aMutex ); */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 
+/* Is a mutex initialized? This function isn't normally needed
+   because umtx_lock will initialize the mutex for you.
+   Use it this way:
+   umtx_isInitialized( &aMutex ); */
+U_CAPI UBool U_EXPORT2 umtx_isInitialized( UMTX *mutex );
+
 /*
  * Atomic Increment and Decrement of an int32_t value.
  *

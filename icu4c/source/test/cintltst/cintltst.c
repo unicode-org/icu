@@ -57,6 +57,14 @@ int main(int argc, const char* const argv[])
     UResourceBundle *rb;
     UConverter *cnv;
 
+    /* This must be tested before using anything! */
+    if (!umtx_isInitialized(NULL)) {
+        fprintf(stderr,
+                "*** Failure! The global mutex was not initialized.\n"
+                "*** Make sure the right linker was used.\n");
+        return 1;
+    }
+
     while (REPEAT_TESTS > 0) {
 
 #ifdef CTST_LEAK_CHECK
