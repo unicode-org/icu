@@ -88,6 +88,73 @@ else :
   $4
 fi])
 
+dnl Check if we can build and use 64-bit libraries
+AC_DEFUN(AC_CHECK_64BIT_LIBS,
+[
+    AC_ARG_ENABLE(64bit-libs,
+        [  --enable-64bit-libs     build 64-bit libraries [default=yes]],
+        [ENABLE_64BIT_LIBS=${enableval}],
+        [ENABLE_64BIT_LIBS=yes]
+    )
+    dnl These results can't be cached because is sets compiler flags.
+    AC_MSG_CHECKING([for 64-bit executable support])
+    if test "$ENABLE_64BIT_LIBS" = no; then
+        case "${host}" in
+        *-*-hpux*)
+            case "${CXX}" in
+            *CC)
+                CPPFLAGS="${CPPFLAGS} +DAportable"
+                ;;
+            esac;;
+        esac
+    else
+        case "${host}" in
+        *-*-solaris*)
+            if test "$ac_cv_prog_gcc" = no; then
+                SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
+                SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
+                if test -z "$SOL64" && test -n "$SPARCV9"; then
+                    CFLAGS="${CFLAGS} -xtarget=ultra -xarch=v9"
+                    CXXFLAGS="${CXXFLAGS} -xtarget=ultra -xarch=v9"
+                    LDFLAGS="${LDFLAGS} -xtarget=ultra -xarch=v9"
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
+            else
+                ENABLE_64BIT_LIBS=no
+            fi
+            ;;
+        *-*-aix*)
+            OLD_CFLAGS="${CFLAGS}"
+            OLD_CXXFLAGS="${CXXFLAGS}"
+            OLD_LDFLAGS="${LDFLAGS}"
+            CFLAGS="${CFLAGS} -q64"
+            CXXFLAGS="${CXXFLAGS} -q64"
+            LDFLAGS="${LDFLAGS} -q64"
+            AC_TRY_RUN(int main(void) {return 0;},
+                ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
+            if test "$ENABLE_64BIT_LIBS" = no; then
+                CFLAGS="${OLD_CFLAGS}"
+                CXXFLAGS="${OLD_CXXFLAGS}"
+                LDFLAGS="${OLD_LDFLAGS}"
+            else
+                ARFLAGS="${ARFLAGS} -X64"
+            fi
+            ;;
+        *-*-hpux*)
+            ENABLE_64BIT_LIBS=unknown
+            ;;
+        *)
+            ENABLE_64BIT_LIBS=no
+            ;;
+        esac
+    fi
+    dnl Individual tests that fail should reset their own flags.
+    AC_MSG_RESULT($ENABLE_64BIT_LIBS)
+    undefine([ENABLE_64BIT_LIBS])
+])
+
 dnl Strict compilation options.
 AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [
