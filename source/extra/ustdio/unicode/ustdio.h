@@ -64,6 +64,8 @@
  * %C and %S are aliases of %lc and %ls, which are used for wchar_t.
     We should consider using this for UChar and replace %K and %U,
     or we should make them use wchar_t.
+ * u_fflush() and u_fclose should return an int32_t like C99 functions.
+   0 is returned if the operation was successful and EOF otherwise.
 */
 
 
