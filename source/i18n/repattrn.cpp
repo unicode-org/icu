@@ -73,9 +73,8 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fStartType        = other.fStartType;
     fInitialStringIdx = other.fInitialStringIdx;
     fInitialStringLen = other.fInitialStringLen;
-    fInitialChars     = new UnicodeSet(*other.fInitialChars);
-    fInitialChars8    = new Regex8BitSet;
-    uprv_memcpy(fInitialChars8, other.fInitialChars8, sizeof(Regex8BitSet));
+    *fInitialChars    = *other.fInitialChars;
+    *fInitialChars8   = *other.fInitialChars8;
     fInitialChar      = other.fInitialChar;
 
     //  Copy the pattern.  It's just values, nothing deep to copy.
@@ -87,7 +86,9 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //    but I doubt that pattern copying will be particularly common. 
     //    Note:  init() already added an empty element zero to fSets
     int32_t i;
-    for (i=1; i<other.fSets->size(); i++) {
+    int32_t  numSets = other.fSets->size();
+    fSets8 = new Regex8BitSet[numSets];
+    for (i=1; i<numSets; i++) {
         if (U_FAILURE(fDeferredStatus)) {
             return *this;
         }
@@ -98,11 +99,9 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
             break;
         }
         fSets->addElement(newSet, fDeferredStatus);
+        fSets8[i] = other.fSets8[i];
     }
 
-    int32_t numSets = other.fSets->size();
-    fSets8 = new Regex8BitSet[numSets];
-    uprv_memcpy(fSets8, other.fSets8, numSets*sizeof(Regex8BitSet));  // TODO: give Regex8BitSet some constructors
     return *this;
 }
 
@@ -459,6 +458,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_LB_END:
     case URX_LBN_CONT:
     case URX_LBN_END:
+    case URX_LOOP_C:
         // types with an integer operand field.
         REGEX_DUMP_DEBUG_PRINTF("%d", val);
         break;
@@ -484,6 +484,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
         break;
 
     case URX_SETREF:
+    case URX_LOOP_SR_I:
         {
             UnicodeString s;
             UnicodeSet *set = (UnicodeSet *)fSets->elementAt(val);
