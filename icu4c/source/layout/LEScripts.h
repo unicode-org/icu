@@ -5,7 +5,9 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/LEScripts.h,v $ $Date: 2003/04/12 00:37:12 $ $Revision: 1.6 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/LEScripts.h,v $
+ * $Date: 2003/04/15 20:43:27 $
+ * $Revision: 1.7 $
  */
 
 #ifndef __LESCRIPTS_H

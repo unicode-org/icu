@@ -5,7 +5,9 @@
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/LELanguages.h,v $ $Date: 2003/04/12 00:37:12 $ $Revision: 1.1 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/LELanguages.h,v $
+ * $Date: 2003/04/15 20:43:27 $
+ * $Revision: 1.2 $
  */
 
 #ifndef __LELANGUAGES_H
@@ -22,37 +24,38 @@ U_NAMESPACE_BEGIN
  */
 
 enum LanguageCodes {
-    araLanguageCode =  0,
-    asmLanguageCode =  1,
-    benLanguageCode =  2,
-    farLanguageCode =  3,
-    gujLanguageCode =  4,
-    hinLanguageCode =  5,
-    iwrLanguageCode =  6,
-    jiiLanguageCode =  7,
-    janLanguageCode =  8,
-    kanLanguageCode =  9,
-    kokLanguageCode = 10,
-    korLanguageCode = 11,
-    kshLanguageCode = 12,
-    malLanguageCode = 13,
-    marLanguageCode = 14,
-    mlrLanguageCode = 15,
-    mniLanguageCode = 16,
-    oriLanguageCode = 17,
-    sanLanguageCode = 18,
-    sndLanguageCode = 19,
-    snhLanguageCode = 20,
-    syrLanguageCode = 21,
-    tamLanguageCode = 22,
-    telLanguageCode = 23,
-    thaLanguageCode = 24,
-    urdLanguageCode = 25,
-    zhpLanguageCode = 26,
-    zhsLanguageCode = 27,
-    zhtLanguageCode = 28,
+    nullLanguageCode =  0,
+    araLanguageCode =  1,
+    asmLanguageCode =  2,
+    benLanguageCode =  3,
+    farLanguageCode =  4,
+    gujLanguageCode =  5,
+    hinLanguageCode =  6,
+    iwrLanguageCode =  7,
+    jiiLanguageCode =  8,
+    janLanguageCode =  9,
+    kanLanguageCode = 10,
+    kokLanguageCode = 11,
+    korLanguageCode = 12,
+    kshLanguageCode = 13,
+    malLanguageCode = 14,
+    marLanguageCode = 15,
+    mlrLanguageCode = 16,
+    mniLanguageCode = 17,
+    oriLanguageCode = 18,
+    sanLanguageCode = 19,
+    sndLanguageCode = 20,
+    snhLanguageCode = 21,
+    syrLanguageCode = 22,
+    tamLanguageCode = 23,
+    telLanguageCode = 24,
+    thaLanguageCode = 25,
+    urdLanguageCode = 26,
+    zhpLanguageCode = 27,
+    zhsLanguageCode = 28,
+    zhtLanguageCode = 29,
 
-    languageCodeCount = 29
+    languageCodeCount = 30
 };
 
 U_NAMESPACE_END

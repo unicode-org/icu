@@ -287,7 +287,7 @@ GDIFontInstance::~GDIFontInstance()
 
 LEErrorCode GDIFontInstance::initMapper()
 {
-    LETag cmapTag = 0x636D6170; // 'cmap'
+    LETag cmapTag = LE_MAKE_TAG('c', 'm', 'a', 'p');
     const CMAPTable *cmap = (const CMAPTable *) readFontTable(cmapTag);
 
     if (cmap == NULL) {

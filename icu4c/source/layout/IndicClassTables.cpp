@@ -280,7 +280,15 @@ static const IndicClassTable *indicClassTables[] = {
     NULL,            /* 'tglg' (TAGALOG) */
     NULL,            /* 'hano' (HANUNOO) */
     NULL,            /* 'buhd' (BUHID) */
-    NULL             /* 'tagb' (TAGBANWA) */
+    NULL,            /* 'tagb' (TAGBANWA) */
+    NULL,            /* 'brai' (BRAILLE) */
+    NULL,            /* 'cprt' (CYPRIOT) */
+    NULL,            /* 'limb' (LIMBU) */
+    NULL,            /* 'linb' (LINEAR_B) */
+    NULL,            /* 'osma' (OSMANYA) */
+    NULL,            /* 'shaw' (SHAVIAN) */
+    NULL,            /* 'tale' (TAI_LE) */
+    NULL             /* 'ugar' (UGARITIC) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
