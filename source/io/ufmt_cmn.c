@@ -190,37 +190,4 @@ ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
     return target;
 }
 
-char*
-ufmt_unicodeToDefaultCP(const UChar *s,
-                        int32_t len)
-{
-    int32_t size;
-    char *target, *alias;
-    UErrorCode status = U_ZERO_ERROR;
-    UConverter *defConverter = u_getDefaultConverter(&status);
-    
-    if(U_FAILURE(status) || defConverter == 0)
-        return 0;
-    
-    /* perform the conversion in one swoop */
-    target = (char*) 
-        uprv_malloc((len + 1) * ucnv_getMaxCharSize(defConverter) * sizeof(char));
-    size = (len) * ucnv_getMaxCharSize(defConverter) * sizeof(char);
-    if(target != 0) {
-        
-        alias = target;
-        ucnv_fromUnicode(defConverter, &alias, alias + size, &s, s + len, 
-            NULL, TRUE, &status);
-        
-        
-        /* add the null terminator */
-        *alias = 0x00;
-    }
-    
-    u_releaseDefaultConverter(defConverter);
-    
-    return target;
-}
-
-
 

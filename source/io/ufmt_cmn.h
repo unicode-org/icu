@@ -142,16 +142,6 @@ ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
                         UChar *target, int32_t tSize);
 
 
-/**
- * Convert a string from the Unicode to the default codepage.
- * @param s The string to convert.
- * @param len The number of characters in s.
- * @return A pointer to a newly allocated converted version of s, or 0 
- * on error.
- */
-char*
-ufmt_unicodeToDefaultCP(const UChar *s,
-            int32_t len);
 
 #endif
 
