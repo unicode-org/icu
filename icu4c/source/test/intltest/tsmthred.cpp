@@ -42,6 +42,11 @@
 #define __USE_XOPEN_EXTENDED 
 #endif
 
+/* Define _INCLUDE_XOPEN_SOURCE_EXTENDED for HP/UX (11?). */
+#ifndef _INCLUDE_XOPEN_SOURCE_EXTENDED
+#define _INCLUDE_XOPEN_SOURCE_EXTENDED
+#endif
+
 #include <unistd.h>
 
 #endif
@@ -231,26 +236,22 @@ void SimpleThread::start()
 void SimpleThread::sleep(int32_t millis)
 {
 #ifdef U_SOLARIS
-   sigignore(SIGALRM);
+    sigignore(SIGALRM);
 #endif
 
 #ifdef HPUX_CMA
-   cma_sleep(millis/100);
-#elif defined(HPUX)
-   useconds_t m = millis * 1000;
-   if (m > 1000000) m = 1000000;
-   usleep(m); 
-#elif defined(OS390)
-   millis *= 1000;
-   while(millis >= 1000000) {
-       usleep(999999);
-       millis -= 1000000;
-   }
-   if(millis > 0) {
-       usleep(millis);
-   }
+    cma_sleep(millis/100);
+#elif defined(HPUX) || defined(OS390)
+    millis *= 1000;
+    while(millis >= 1000000) {
+        usleep(999999);
+        millis -= 1000000;
+    }
+    if(millis > 0) {
+        usleep(millis);
+    }
 #else
-   usleep(millis * 1000);
+    usleep(millis * 1000);
 #endif
 }
 
@@ -269,14 +270,29 @@ void SimpleThread::sleep(int32_t millis)
 /* now begins the real test. */
 void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
                 const char* &name, char* /*par*/ ) {
-  if (exec) logln("TestSuite MultithreadTest: ");
-  switch (index) {
-  case 0: name = "TestThreads"; if (exec) TestThreads(); break;
-  case 1: name = "TestMutex"; if (exec) TestMutex(); break;
-  case 2: name = "TestThreadedIntl"; if (exec) TestThreadedIntl(); break;
-    
-  default: name = ""; break; //needed to end loop
-  }
+    if (exec)
+        logln("TestSuite MultithreadTest: ");
+    switch (index) {
+    case 0:
+        name = "TestThreads";
+        if (exec)
+            TestThreads();
+        break;
+    case 1:
+        name = "TestMutex";
+        if (exec)
+            TestMutex();
+        break;
+    case 2:
+        name = "TestThreadedIntl";
+        if (exec)
+            TestThreadedIntl();
+        break;
+
+    default:
+        name = "";
+        break; //needed to end loop
+    }
 }
 
 
@@ -404,44 +420,44 @@ private:
 
 void MultithreadTest::TestMutex()
 {
-  /* this test uses printf so that we don't hang by calling UnicodeString inside of a mutex. */
-  //logln("Bye.");
-  //  printf("Warning: MultiThreadTest::Testmutex() disabled.\n");
-  //  return; 
-  
-  if(verbose)
-    printf("Before mutex.");
-  {
-    Mutex m;
+    /* this test uses printf so that we don't hang by calling UnicodeString inside of a mutex. */
+    //logln("Bye.");
+    //  printf("Warning: MultiThreadTest::Testmutex() disabled.\n");
+    //  return; 
+
     if(verbose)
-      printf(" Exitted 2nd mutex");
-  }
-  if(verbose)
-    printf("exitted 1st mutex. Now testing with threads:");
-  
-  TestMutexThread1  thread1;
-  TestMutexThread2  thread2(thread1);
-  thread2.start();
-  thread1.start();
-  
-  for(int32_t patience = 12; patience > 0;patience--)
+        printf("Before mutex.");
     {
-      if(thread1.fDone && verbose)
-    printf("Thread1 done");
-      
-      if(thread1.fDone && thread2.fDone)
-        {
-      char tmp[999];
-      sprintf(tmp,"%lu",thread2.fElapsed);
-      if(thread2.fErr)
-        errln("Thread 2 says: thread1 didn't run before I aquired the mutex.");
-      logln("took " + UnicodeString(tmp) + " seconds for thread2 to aquire the mutex.");
-      return;
-        }
-      SimpleThread::sleep(1000);
+        Mutex m;
+        if(verbose)
+            printf(" Exited 2nd mutex");
     }
-  if(verbose)
-    printf("patience exceeded. [WARNING mutex may still be acquired.] ");
+    if(verbose)
+        printf("exitted 1st mutex. Now testing with threads:");
+
+    TestMutexThread1  thread1;
+    TestMutexThread2  thread2(thread1);
+    thread2.start();
+    thread1.start();
+
+    for(int32_t patience = 12; patience > 0;patience--)
+    {
+        if(thread1.fDone && verbose)
+            printf("Thread1 done");
+
+        if(thread1.fDone && thread2.fDone)
+        {
+            char tmp[999];
+            sprintf(tmp,"%lu",thread2.fElapsed);
+            if(thread2.fErr)
+                errln("Thread 2 says: thread1 didn't run before I aquired the mutex.");
+            logln("took " + UnicodeString(tmp) + " seconds for thread2 to aquire the mutex.");
+            return;
+        }
+        SimpleThread::sleep(1000);
+    }
+    if(verbose)
+        printf("patience exceeded. [WARNING mutex may still be acquired.] ");
 }
 
 // ***********
@@ -559,26 +575,26 @@ struct FormatThreadTestData
 // 
 FormatThreadTestData kNumberFormatTestData[] = 
 {
-   FormatThreadTestData((double)5., UnicodeString("5")),
-   FormatThreadTestData( 6., "6" ),
-   FormatThreadTestData( 20., "20" ),
-   FormatThreadTestData( 8., "8" ),
-   FormatThreadTestData( 8.3, "8.3" ),
-   FormatThreadTestData( 12345, "12,345" ),
-   FormatThreadTestData( 81890.23, "81,890.23" ),
+    FormatThreadTestData((double)5., UnicodeString("5")),
+    FormatThreadTestData( 6., "6" ),
+    FormatThreadTestData( 20., "20" ),
+    FormatThreadTestData( 8., "8" ),
+    FormatThreadTestData( 8.3, "8.3" ),
+    FormatThreadTestData( 12345, "12,345" ),
+    FormatThreadTestData( 81890.23, "81,890.23" ),
 };
-int32_t kNumberFormatTestDataLength = sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]);
+int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]));
 
 // 
 FormatThreadTestData kPercentFormatTestData[] = 
 {
-   FormatThreadTestData((double)5., UnicodeString("500%")),
-   FormatThreadTestData( 1, "100%" ),
-   FormatThreadTestData( 0.26, "26%" ),
-   FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
-   FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
+    FormatThreadTestData((double)5., UnicodeString("500%")),
+    FormatThreadTestData( 1, "100%" ),
+    FormatThreadTestData( 0.26, "26%" ),
+    FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
+    FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
 };
-int32_t kPercentFormatTestDataLength = sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]);
+int32_t kPercentFormatTestDataLength = (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
 
 
 void errorToString(UErrorCode theStatus, UnicodeString &string)
