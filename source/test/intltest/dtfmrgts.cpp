@@ -3,6 +3,7 @@
 ********************************************************************
 * COPYRIGHT: 
 * (C) Copyright International Business Machines Corporation, 1998
+* Copyright (C) 1999 Alan Liu and others. All rights reserved. 
 * Licensed Material - Program-Property of IBM - All Rights Reserved. 
 * US Government Users Restricted Rights - Use, duplication, or disclosure 
 * restricted by GSA ADP Schedule Contract with IBM Corp. 
@@ -52,6 +53,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &nam
         CASE(19,Test4151631)
         CASE(20,Test4151706)
         CASE(21,Test4162071)
+        CASE(22,Test4182066)
 
         default: name = ""; break;
     }
@@ -1003,5 +1005,86 @@ DateFormatRegressionTest::Test4162071()
     //    errln("Parse format \"" + format + "\" failed.");
     //}
 }
+
+/**
+ * DateFormat shouldn't parse year "-1" as a two-digit year (e.g., "-1" -> 1999).
+ */
+void DateFormatRegressionTest::Test4182066() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleDateFormat fmt("MM/dd/yy", Locale::US, status);
+    SimpleDateFormat dispFmt("MMM dd yyyy GG", Locale::US, status);
+    if (FAILURE(status)) {
+        errln("Couldn't create SimpleDateFormat");
+        return;
+    }
+
+    /* We expect 2-digit year formats to put 2-digit years in the right
+     * window.  Out of range years, that is, anything less than "00" or
+     * greater than "99", are treated as literal years.  So "1/2/3456"
+     * becomes 3456 AD.  Likewise, "1/2/-3" becomes -3 AD == 2 BC.
+     */
+    const char* STRINGS[] = {
+        "02/29/00",
+        "01/23/01",
+        "04/05/-1",
+        "01/23/-9",
+        "11/12/1314",
+        "10/31/1",
+        "09/12/+1",
+        "09/12/001",
+    };
+    int32_t STRINGS_COUNT = sizeof(STRINGS) / sizeof(STRINGS[0]);
+    UDate FAIL_DATE = (UDate) 0;
+    UDate DATES[] = {
+        date(2000-1900, Calendar::FEBRUARY, 29),
+        date(2001-1900, Calendar::JANUARY,  23),
+        date(  -1-1900, Calendar::APRIL,     5),
+        date(  -9-1900, Calendar::JANUARY,  23),
+        date(1314-1900, Calendar::NOVEMBER, 12),
+        date(   1-1900, Calendar::OCTOBER,  31),
+        FAIL_DATE, // "+1" isn't recognized by US NumberFormat
+        date(   1-1900, Calendar::SEPTEMBER,12),
+    };
+
+    UnicodeString out;
+    bool_t pass = TRUE;
+    for (int32_t i=0; i<STRINGS_COUNT; ++i) {
+        UnicodeString str(STRINGS[i]);
+        UDate expected = DATES[i];
+        status = U_ZERO_ERROR;
+        UDate actual = fmt.parse(str, status);
+        if (FAILURE(status)) {
+            actual = FAIL_DATE;
+        }
+        UnicodeString actStr;
+        if (actual == FAIL_DATE) {
+            actStr.append("null");
+        } else {
+            // Yuck: See j25
+            ((DateFormat*)&dispFmt)->format(actual, actStr);
+        }
+
+        if (expected == actual) {
+            out.append(str + " => " + actStr + "\n");
+        } else {
+            UnicodeString expStr;
+            if (expected == FAIL_DATE) {
+                expStr.append("null");
+            } else {
+                // Yuck: See j25
+                ((DateFormat*)&dispFmt)->format(expected, expStr);
+            }
+            out.append("FAIL: " + str + " => " + actStr
+                       + ", expected " + expStr + "\n");
+            pass = FALSE;
+        }
+    }
+    if (pass) {
+        log(out);
+    } else {
+        err(out);
+    }
+}
+
 
 //eof
