@@ -129,7 +129,7 @@ protected:
 
     // clone() commented out from the base class:
     // some compilers do not support co-variant return types
-    // (i.e., subclasses would have to return UObject& as well, instead of SubClass&)
+    // (i.e., subclasses would have to return UObject * as well, instead of SubClass *)
     // virtual UObject *clone() const;
 #endif
 };
