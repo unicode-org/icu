@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.125 2001/10/19 22:18:43 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.126 2001/10/20 00:30:31 schererm Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -39,7 +39,7 @@ AC_SUBST(LIB_VERSION)
 AC_SUBST(LIB_VERSION_MAJOR)
 AC_MSG_RESULT([release $VERSION, library $LIB_VERSION])
 
-UNICODE_VERSION="3.0.0"
+UNICODE_VERSION="3.1.1"
 AC_SUBST(UNICODE_VERSION)
 
 thedatadir=`eval echo $datadir`

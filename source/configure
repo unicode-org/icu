@@ -578,7 +578,7 @@ LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
 
 echo "$ac_t""release $VERSION, library $LIB_VERSION" 1>&6
 
-UNICODE_VERSION="3.0.0"
+UNICODE_VERSION="3.1.1"
 
 
 thedatadir=`eval echo $datadir`
