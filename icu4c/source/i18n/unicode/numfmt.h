@@ -652,6 +652,20 @@ protected:
      */
     NumberFormat& operator=(const NumberFormat&);
 
+    /**
+     * Sets the minimum integer digits count directly, with no range
+     * pinning. For use by subclasses.
+     * @internal
+     */
+    inline void internalSetMinimumIntegerDigits(int32_t n);
+
+    /**
+     * Sets the maximum integer digits count directly, with no range
+     * pinning. For use by subclasses.
+     * @internal
+     */
+    inline void internalSetMaximumIntegerDigits(int32_t n);
+
 private:
     static const int32_t fgMaxIntegerDigits;
     static const int32_t fgMinIntegerDigits;
@@ -801,6 +815,14 @@ NumberFormat::format(const Formattable& obj,
                      UnicodeString& appendTo,
                      UErrorCode& status) const {
     return Format::format(obj, appendTo, status);
+}
+
+inline void NumberFormat::internalSetMinimumIntegerDigits(int32_t n) {
+    fMinIntegerDigits = n;
+}
+
+inline void NumberFormat::internalSetMaximumIntegerDigits(int32_t n) {
+    fMaxIntegerDigits = n;
 }
 
 U_NAMESPACE_END
