@@ -953,11 +953,10 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
             UBool sawDelim;
             UnicodeString regenID;
             Transliterator::parseID(rules, regenID, p, sawDelim, direction,parseError, FALSE,status);
-            //if (p == pos || !sawDelim) {
+            if (p == pos || !sawDelim) {
                 // Invalid ::id
-                //status = U_ILLEGAL_ARGUMENT_ERROR;
-            //else {
-            if(p != pos || sawDelim) {
+                syntaxError(U_ILLEGAL_ARGUMENT_ERROR, rules, pos);
+            } else {
                 if (mode == 1) {
                     mode = 2;
                     idSplitPointResult = idBlockResult.length();
