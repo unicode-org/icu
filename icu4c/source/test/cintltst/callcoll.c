@@ -414,7 +414,7 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
 }
 
-void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int temp=0, gSortklen1=0,gSortklen2=0;
@@ -458,6 +458,20 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
     free(sortKey1);
     free(sortKey2);
+}
+
+void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+{
+  doTestVariant(myCollation, source, target, result);
+  if(result == UCOL_LESS) {
+    doTestVariant(myCollation, target, source, UCOL_GREATER);
+  } else if(result == UCOL_GREATER) {
+    doTestVariant(myCollation, target, source, UCOL_LESS);
+  } else {
+    doTestVariant(myCollation, target, source, UCOL_EQUAL);
+  }
+
+
 }
 
 static void TestTertiary()
