@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateLineBreakTest.java,v $
-* $Date: 2004/02/06 18:30:21 $
-* $Revision: 1.3 $
+* $Date: 2004/02/07 01:01:15 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -27,11 +27,11 @@ public class GenerateLineBreakTest implements UCD_Types {
     static final String[] hNames = {"L", "V", "T", "LV", "LVT"};
     
     static byte getHangulType(int cp) {
-        if (Default.ucd.isLeadingJamo(cp)) return hL;
-        if (Default.ucd.isVowelJamo(cp)) return hV;
-        if (Default.ucd.isTrailingJamo(cp)) return hT;
-        if (Default.ucd.isHangulSyllable(cp)) {
-            if (Default.ucd.isDoubleHangul(cp)) return hLV;
+        if (Default.ucd().isLeadingJamo(cp)) return hL;
+        if (Default.ucd().isVowelJamo(cp)) return hV;
+        if (Default.ucd().isTrailingJamo(cp)) return hT;
+        if (Default.ucd().isHangulSyllable(cp)) {
+            if (Default.ucd().isDoubleHangul(cp)) return hLV;
             return hLVT;
         }
         return hNot;
@@ -62,7 +62,7 @@ public class GenerateLineBreakTest implements UCD_Types {
     };
     
     public static void main(String[] args) throws IOException {
-        Default.setUCD();
+        
         new GenerateLineBreakTest().run();
         
         new GenerateWordBreakTest().run();
@@ -166,7 +166,7 @@ public class GenerateLineBreakTest implements UCD_Types {
         byte result = getType(cp);
         if (result == LB_SUP) return "SUP";
         if (result >= LB_LIMIT) return hNames[result - LB_LIMIT];
-        return Default.ucd.getLineBreakID_fromIndex(result);
+        return Default.ucd().getLineBreakID_fromIndex(result);
     }
     
     // stuff that subclasses need to override
@@ -174,7 +174,7 @@ public class GenerateLineBreakTest implements UCD_Types {
         if (cp > 0xFFFF) return LB_SUP;
         byte result = getHangulType(cp);
         if (result != hNot) return (byte)(result + LB_LIMIT);
-        return Default.ucd.getLineBreak(cp);
+        return Default.ucd().getLineBreak(cp);
     }
     
     public int getLimit() {
@@ -277,7 +277,7 @@ public class GenerateLineBreakTest implements UCD_Types {
             }
             
             string.append(Utility.hex(cp));
-            comment.append(Default.ucd.getName(cp) + " (" + getTypeID(cp) + ")");
+            comment.append(Default.ucd().getName(cp) + " (" + getTypeID(cp) + ")");
             
             status = isBreak(source, offset + UTF16.getCharCount(cp), recommended) ? BREAK : NOBREAK;
             string.append(' ').append(status);
@@ -290,7 +290,7 @@ public class GenerateLineBreakTest implements UCD_Types {
     
     public void findSamples() {
         for (int i = 1; i <= 0x10FFFF; ++i) {
-            if (!Default.ucd.isAllocated(i)) continue;
+            if (!Default.ucd().isAllocated(i)) continue;
             if (0xD800 <= i && i <= 0xDFFF) continue;
             if(i == 0x1100) {
                 System.out.print("here");
@@ -302,7 +302,7 @@ public class GenerateLineBreakTest implements UCD_Types {
         }
         for (int i = 0; i < TypeOrder.length; ++i) {
             String sample = samples[i];
-            System.out.println(getTypeID(sample) + ":\t" + Default.ucd.getCodeAndName(sample));
+            System.out.println(getTypeID(sample) + ":\t" + Default.ucd().getCodeAndName(sample));
         }
     }
        
@@ -684,7 +684,7 @@ public class GenerateLineBreakTest implements UCD_Types {
             
             // other properties
             // category based
-            byte cat = Default.ucd.getCategory(cp);
+            byte cat = Default.ucd().getCategory(cp);
             if (cat == Cc) return Control;
             if (cat == Cf) return Extend;
             if (((1<<cat) & LETTER_MASK) != 0) return LetterBase;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2004/02/06 18:30:22 $
-* $Revision: 1.14 $
+* $Date: 2004/02/07 01:01:15 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -40,7 +40,6 @@ public class GenerateCaseFolding implements UCD_Types {
     public static void makeCaseFold(boolean normalized) throws java.io.IOException {
         PICK_SHORT = NF_CLOSURE = normalized;
         
-        Default.setUCD();
         log = Utility.openPrintWriter("CaseFoldingLog" + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
         System.out.println("Writing Log: " + "CaseFoldingLog" + GenerateData.getFileSuffix(true));
         
@@ -142,15 +141,15 @@ public class GenerateCaseFolding implements UCD_Types {
     static void drawLine(PrintWriter out, int ch, String type, String result) {
         String comment = "";
         if (COMMENT_DIFFS) {
-            String lower = Default.ucd.getCase(UTF16.valueOf(ch), FULL, LOWER);
+            String lower = Default.ucd().getCase(UTF16.valueOf(ch), FULL, LOWER);
             if (!lower.equals(result)) {
-                String upper = Default.ucd.getCase(UTF16.valueOf(ch), FULL, UPPER);
-                String lower2 = Default.ucd.getCase(UTF16.valueOf(ch), FULL, LOWER);
+                String upper = Default.ucd().getCase(UTF16.valueOf(ch), FULL, UPPER);
+                String lower2 = Default.ucd().getCase(UTF16.valueOf(ch), FULL, LOWER);
                 if (lower.equals(lower2)) {
                     comment = "[Diff " + Utility.hex(lower, " ") + "] ";
                 } else {
                     Utility.fixDot();
-                    System.out.println("PROBLEM WITH: " + Default.ucd.getCodeAndName(ch));
+                    System.out.println("PROBLEM WITH: " + Default.ucd().getCodeAndName(ch));
                     comment = "[DIFF " + Utility.hex(lower, " ") + ", " + Utility.hex(lower2, " ") + "] ";
                 }
             }
@@ -159,7 +158,7 @@ public class GenerateCaseFolding implements UCD_Types {
         out.println(Utility.hex(ch)
             + "; " + type
             + "; " + Utility.hex(result, " ")
-            + "; # " + comment + Default.ucd.getName(ch));
+            + "; # " + comment + Default.ucd().getName(ch));
     }
 
     static int probeCh = 0x01f0;
@@ -175,7 +174,7 @@ public class GenerateCaseFolding implements UCD_Types {
         for (int ch = 0; ch <= 0x10FFFF; ++ch) {
             Utility.dot(ch);
             //if ((ch & 0x3FF) == 0) System.out.println(Utility.hex(ch));
-            if (!Default.ucd.isRepresented(ch)) continue;
+            if (!Default.ucd().isRepresented(ch)) continue;
             getClosure(ch, data, full, nfClose, condition);
         }
 
@@ -221,13 +220,13 @@ public class GenerateCaseFolding implements UCD_Types {
                 }
                 Utility.fixDot();
                 log.println("Non-Optimal Representative " + message);
-                log.println(" Rep:\t" + Default.ucd.getCodeAndName(rep));
+                log.println(" Rep:\t" + Default.ucd().getCodeAndName(rep));
                 log.println(" Set:\t" + toString(set,true, true));
             }
             
             log.println();
             log.println();
-            log.println(rep + "\t#" + Default.ucd.getName(rep));
+            log.println(rep + "\t#" + Default.ucd().getName(rep));
  
         // Add it for all the elements of the set
         
@@ -236,7 +235,7 @@ public class GenerateCaseFolding implements UCD_Types {
                 String s2 = (String)it2.next();
                 if (s2.equals(rep)) continue;
                 
-                log.println(s2 + "\t#" + Default.ucd.getName(s2));
+                log.println(s2 + "\t#" + Default.ucd().getName(s2));
                 
                 if (UTF16.countCodePoint(s2) == 1) {
                     repChar.put(UTF32.getCodePointSubstring(s2,0), rep);
@@ -261,13 +260,13 @@ public class GenerateCaseFolding implements UCD_Types {
         if (!full) result <<= 8;
         String low = lower(upper(s, full, condition), full, condition);
         if (s.equals(low)) result |= ISLOWER;
-        else if (PICK_SHORT && Default.nfd.normalize(s).equals(Default.nfd.normalize(low))) result |= ISLOWER;
+        else if (PICK_SHORT && Default.nfd().normalize(s).equals(Default.nfd().normalize(low))) result |= ISLOWER;
         
-        if (s.equals(Default.nfc.normalize(s))) result |= NFC_FORMAT;
+        if (s.equals(Default.nfc().normalize(s))) result |= NFC_FORMAT;
         
         if (show) {
             Utility.fixDot();
-            System.out.println(Utility.hex(result) + ", " + Default.ucd.getCodeAndName(s));
+            System.out.println(Utility.hex(result) + ", " + Default.ucd().getCodeAndName(s));
         }
         return result;
     }
@@ -349,10 +348,10 @@ public class GenerateCaseFolding implements UCD_Types {
                 // do funny stuff since we can't modify set while iterating
                 // We don't do this because if the source is not normalized, we don't want to normalize
                 if (nfClose) {
-                    if (add(set, Default.nfd.normalize(s), data)) continue main;
-                    if (add(set, Default.nfc.normalize(s), data)) continue main;
-                    if (add(set, Default.nfkd.normalize(s), data)) continue main;
-                    if (add(set, Default.nfkc.normalize(s), data)) continue main;
+                    if (add(set, Default.nfd().normalize(s), data)) continue main;
+                    if (add(set, Default.nfc().normalize(s), data)) continue main;
+                    if (add(set, Default.nfkd().normalize(s), data)) continue main;
+                    if (add(set, Default.nfkc().normalize(s), data)) continue main;
                 }
                 if (add(set, lower(s, full, condition), data)) continue main;
                 if (add(set, title(s, full, condition), data)) continue main;
@@ -376,7 +375,7 @@ public class GenerateCaseFolding implements UCD_Types {
             return Default.ucd.getCase(UTF32.char32At(s,0), SIMPLE, LOWER);
         }
         */
-        return Default.ucd.getCase(s, full ? FULL : SIMPLE, LOWER, condition);
+        return Default.ucd().getCase(s, full ? FULL : SIMPLE, LOWER, condition);
     }
 
     static String upper(String s, boolean full, String condition) {
@@ -385,7 +384,7 @@ public class GenerateCaseFolding implements UCD_Types {
             return Default.ucd.getCase(UTF32.char32At(s,0), FULL, UPPER);
         }
         */
-        return Default.ucd.getCase(s, full ? FULL : SIMPLE, UPPER, condition);
+        return Default.ucd().getCase(s, full ? FULL : SIMPLE, UPPER, condition);
     }
 
     static String title(String s, boolean full, String condition) {
@@ -394,7 +393,7 @@ public class GenerateCaseFolding implements UCD_Types {
             return Default.ucd.getCase(UTF32.char32At(s,0), FULL, TITLE);
         }
         */
-        return Default.ucd.getCase(s, full ? FULL : SIMPLE, TITLE, condition);
+        return Default.ucd().getCase(s, full ? FULL : SIMPLE, TITLE, condition);
     }
 
     static boolean add(Set set, String s, Map data) {
@@ -433,7 +432,7 @@ public class GenerateCaseFolding implements UCD_Types {
             }
             first = false;
             if (name) {
-                result += Default.ucd.getCodeAndName(s2);
+                result += Default.ucd().getCodeAndName(s2);
             } else {
                 result += Utility.hex(s2, " ");
             }
@@ -443,12 +442,12 @@ public class GenerateCaseFolding implements UCD_Types {
     
     static boolean specialNormalizationDiffers(int ch) {
         if (ch == 0x00DF) return true;                  // es-zed
-        return !Default.nfkd.isNormalized(ch);
+        return !Default.nfkd().isNormalized(ch);
     }
     
     static String specialNormalization(String s) {
         if (s.equals("\u00DF")) return "ss";
-        return Default.nfkd.normalize(s);
+        return Default.nfkd().normalize(s);
     }
     
     static boolean isExcluded(int ch) {
@@ -458,14 +457,13 @@ public class GenerateCaseFolding implements UCD_Types {
         if (0x249C <= ch && ch <= 0x24B5) return true; // skip PARENTHESIZED LATIN SMALL LETTER A..
         if (0x20A8 <= ch && ch <= 0x217B) return true; // skip Rupee..
         
-        byte type = Default.ucd.getDecompositionType(ch);  
+        byte type = Default.ucd().getDecompositionType(ch);  
         if (type == COMPAT_SQUARE) return true;
         //if (type == COMPAT_UNSPECIFIED) return true;
         return false;
     }
     
     static void generateSpecialCasing(boolean normalize) throws IOException {
-        Default.setUCD();
         Map sorted = new TreeMap();
         
         String suffix2 = "";
@@ -476,19 +474,19 @@ public class GenerateCaseFolding implements UCD_Types {
         
         for (int ch = 0; ch <= 0x10FFFF; ++ch) {
             Utility.dot(ch);
-            if (!Default.ucd.isRepresented(ch)) continue;
+            if (!Default.ucd().isRepresented(ch)) continue;
             if (!specialNormalizationDiffers(ch)) continue;
 
-            String lower = Default.nfc.normalize(Default.ucd.getCase(ch, SIMPLE, LOWER));
-            String upper = Default.nfc.normalize(Default.ucd.getCase(ch, SIMPLE, UPPER));
-            String title = Default.nfc.normalize(Default.ucd.getCase(ch, SIMPLE, TITLE));
+            String lower = Default.nfc().normalize(Default.ucd().getCase(ch, SIMPLE, LOWER));
+            String upper = Default.nfc().normalize(Default.ucd().getCase(ch, SIMPLE, UPPER));
+            String title = Default.nfc().normalize(Default.ucd().getCase(ch, SIMPLE, TITLE));
             
             String chstr = UTF16.valueOf(ch);
             
             String decomp = specialNormalization(chstr);
-            String flower = Default.nfc.normalize(Default.ucd.getCase(decomp, SIMPLE, LOWER));
-            String fupper = Default.nfc.normalize(Default.ucd.getCase(decomp, SIMPLE, UPPER));
-            String ftitle = Default.nfc.normalize(Default.ucd.getCase(decomp, SIMPLE, TITLE));
+            String flower = Default.nfc().normalize(Default.ucd().getCase(decomp, SIMPLE, LOWER));
+            String fupper = Default.nfc().normalize(Default.ucd().getCase(decomp, SIMPLE, UPPER));
+            String ftitle = Default.nfc().normalize(Default.ucd().getCase(decomp, SIMPLE, TITLE));
             
             String base = decomp;
             String blower = specialNormalization(lower);
@@ -496,42 +494,42 @@ public class GenerateCaseFolding implements UCD_Types {
             String btitle = specialNormalization(title);
 
             if (true) {
-                flower = Default.nfc.normalize(flower);
-                fupper = Default.nfc.normalize(fupper);
-                ftitle = Default.nfc.normalize(ftitle);
-                base = Default.nfc.normalize(base);
-                blower = Default.nfc.normalize(blower);
-                bupper = Default.nfc.normalize(bupper);
-                btitle = Default.nfc.normalize(btitle);
+                flower = Default.nfc().normalize(flower);
+                fupper = Default.nfc().normalize(fupper);
+                ftitle = Default.nfc().normalize(ftitle);
+                base = Default.nfc().normalize(base);
+                blower = Default.nfc().normalize(blower);
+                bupper = Default.nfc().normalize(bupper);
+                btitle = Default.nfc().normalize(btitle);
             }
             
             if (ch == CHECK_CHAR) {
-                System.out.println("Code: " + Default.ucd.getCodeAndName(ch));
-                System.out.println("Decomp: " + Default.ucd.getCodeAndName(decomp));
-                System.out.println("Base: " + Default.ucd.getCodeAndName(base));
-                System.out.println("SLower: " + Default.ucd.getCodeAndName(lower));
-                System.out.println("FLower: " + Default.ucd.getCodeAndName(flower));
-                System.out.println("BLower: " + Default.ucd.getCodeAndName(blower));
-                System.out.println("STitle: " + Default.ucd.getCodeAndName(title));
-                System.out.println("FTitle: " + Default.ucd.getCodeAndName(ftitle));
-                System.out.println("BTitle: " + Default.ucd.getCodeAndName(btitle));
-                System.out.println("SUpper: " + Default.ucd.getCodeAndName(upper));
-                System.out.println("FUpper: " + Default.ucd.getCodeAndName(fupper));
-                System.out.println("BUpper: " + Default.ucd.getCodeAndName(bupper));
+                System.out.println("Code: " + Default.ucd().getCodeAndName(ch));
+                System.out.println("Decomp: " + Default.ucd().getCodeAndName(decomp));
+                System.out.println("Base: " + Default.ucd().getCodeAndName(base));
+                System.out.println("SLower: " + Default.ucd().getCodeAndName(lower));
+                System.out.println("FLower: " + Default.ucd().getCodeAndName(flower));
+                System.out.println("BLower: " + Default.ucd().getCodeAndName(blower));
+                System.out.println("STitle: " + Default.ucd().getCodeAndName(title));
+                System.out.println("FTitle: " + Default.ucd().getCodeAndName(ftitle));
+                System.out.println("BTitle: " + Default.ucd().getCodeAndName(btitle));
+                System.out.println("SUpper: " + Default.ucd().getCodeAndName(upper));
+                System.out.println("FUpper: " + Default.ucd().getCodeAndName(fupper));
+                System.out.println("BUpper: " + Default.ucd().getCodeAndName(bupper));
             }
             
             // presumably if there is a single code point, it would already be in the simple mappings
             
             if (UTF16.countCodePoint(flower) == 1 && UTF16.countCodePoint(fupper) == 1 
                 	&& UTF16.countCodePoint(title) == 1) {
-            	if (ch == CHECK_CHAR) System.out.println("Skipping single code point: " + Default.ucd.getCodeAndName(ch));
+            	if (ch == CHECK_CHAR) System.out.println("Skipping single code point: " + Default.ucd().getCodeAndName(ch));
             	continue;
             }
             
             // if there is no change from the base, skip
             
             if (flower.equals(base) && fupper.equals(base) && ftitle.equals(base)) {
-            	if (ch == CHECK_CHAR) System.out.println("Skipping equals base: " + Default.ucd.getCodeAndName(ch));
+            	if (ch == CHECK_CHAR) System.out.println("Skipping equals base: " + Default.ucd().getCodeAndName(ch));
             	continue;
             }
             
@@ -544,11 +542,11 @@ public class GenerateCaseFolding implements UCD_Types {
             // if there are no changes from the original, or the expanded original, skip
             
             if (flower.equals(lower) && fupper.equals(upper) && ftitle.equals(title)) {
-            	if (ch == CHECK_CHAR) System.out.println("Skipping unchanged: " + Default.ucd.getCodeAndName(ch));
+            	if (ch == CHECK_CHAR) System.out.println("Skipping unchanged: " + Default.ucd().getCodeAndName(ch));
             	continue;
             }
             
-            String name = Default.ucd.getName(ch);
+            String name = Default.ucd().getName(ch);
             
             int order = name.equals("LATIN SMALL LETTER SHARP S") ? 1
                 : ch == 0x130 ? 2
@@ -559,16 +557,16 @@ public class GenerateCaseFolding implements UCD_Types {
                 : UTF16.countCodePoint(fupper) == 2 ? 7
                 : 8;
             
-            if (ch == CHECK_CHAR) System.out.println("Order: " + order + " for " + Default.ucd.getCodeAndName(ch));
+            if (ch == CHECK_CHAR) System.out.println("Order: " + order + " for " + Default.ucd().getCodeAndName(ch));
             
             // HACK
             boolean denormalize = !normalize && order != 6 && order != 7;
             
             String mapping = Utility.hex(ch)
-                + "; " + Utility.hex(flower.equals(base) ? chstr : denormalize ? Default.nfd.normalize(flower) : flower)
-                + "; " + Utility.hex(ftitle.equals(base) ? chstr : denormalize ? Default.nfd.normalize(ftitle) : ftitle)
-                + "; " + Utility.hex(fupper.equals(base) ? chstr : denormalize ? Default.nfd.normalize(fupper) : fupper)
-                + "; # " + Default.ucd.getName(ch);
+                + "; " + Utility.hex(flower.equals(base) ? chstr : denormalize ? Default.nfd().normalize(flower) : flower)
+                + "; " + Utility.hex(ftitle.equals(base) ? chstr : denormalize ? Default.nfd().normalize(ftitle) : ftitle)
+                + "; " + Utility.hex(fupper.equals(base) ? chstr : denormalize ? Default.nfd().normalize(fupper) : fupper)
+                + "; # " + Default.ucd().getName(ch);
             
             // special exclusions 
             if (isExcluded(ch)) {

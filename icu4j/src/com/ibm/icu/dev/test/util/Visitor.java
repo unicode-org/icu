@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Visitor.java,v $
- * $Date: 2003/12/20 03:06:54 $
- * $Revision: 1.3 $
+ * $Date: 2004/02/07 00:59:24 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -134,22 +134,4 @@ public abstract class Visitor {
     abstract protected void doAfter(Object container, Object item);   
     abstract protected void doSimpleAt(Object o);
     
-    // ===== CONVENIENCES =====
-    static class Join extends Visitor {
-        StringBuffer output = new StringBuffer();
-        String join (Object o) {
-            output.setLength(0);
-            doAt(o);
-            return output.toString();
-        }
-        protected void doBefore(Object container, Object item) {}
-        protected void doAfter(Object container, Object item) {}
-        protected void doBetween(Object container, Object lastItem, Object nextItem) {
-            output.append(",");
-        }
-        protected void doSimpleAt(Object o) {
-            output.append(o.toString());
-        }
-    }
-
 }

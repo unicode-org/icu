@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2003/08/20 03:48:47 $ 
-* $Revision: 1.11 $
+* $Date: 2004/02/07 01:01:12 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -63,7 +63,7 @@ public class GenOverlap implements UCD_Types, UCA_Types {
         CEList.main(null);
             
         System.out.println("# Overlap");
-        System.out.println("# Generated " + new Date());
+        System.out.println("# Generated " + Default.getDate());
             
         ucd = UCD.make();
 
@@ -335,7 +335,7 @@ public class GenOverlap implements UCD_Types, UCA_Types {
         CEList.main(null);
             
         System.out.println("# Generate");
-        System.out.println("# Generated " + new Date());
+        System.out.println("# Generated " + Default.getDate());
             
         ucd = UCD.make();
 
@@ -533,7 +533,7 @@ public class GenOverlap implements UCD_Types, UCA_Types {
         collator = collatorIn;
             
         System.out.println("# Check Hash");
-        System.out.println("# Generated " + new Date());
+        System.out.println("# Generated " + Default.getDate());
             
         ucd = UCD.make();
 

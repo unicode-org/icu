@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2003/07/21 15:50:05 $
-* $Revision: 1.9 $
+* $Date: 2004/02/07 01:01:13 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -186,7 +186,7 @@ class UData implements UCD_Types {
     static final byte ABBREVIATED = 0, FULL = 1;
 
     public String toString() {
-        return toString(Default.ucd, FULL);
+        return toString(Default.ucd(), FULL);
     }
 
     public String toString(UCD ucd, byte style) {

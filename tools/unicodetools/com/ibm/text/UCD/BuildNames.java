@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.7 $
+* $Date: 2004/02/07 01:01:17 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -29,8 +29,6 @@ public class BuildNames implements UCD_Types {
     static final boolean DEBUG = true;
 
     public static void main(String[] args) throws IOException {
-
-        Default.setUCD();
         collectWords();
     }
 
@@ -153,13 +151,13 @@ public class BuildNames implements UCD_Types {
         int longSum = 0;
         
         for (int cp = 0; cp < 0x10FFFF; ++cp) {
-            if (!Default.ucd.isAllocated(cp)) continue;
-            if (Default.ucd.hasComputableName(cp)) continue;
+            if (!Default.ucd().isAllocated(cp)) continue;
+            if (Default.ucd().hasComputableName(cp)) continue;
             Utility.dot(cp);
             String name;
             
-            if (Default.ucd.isRepresented(cp)) {
-                name = Default.ucd.getName(cp, SHORT);
+            if (Default.ucd().isRepresented(cp)) {
+                name = Default.ucd().getName(cp, SHORT);
                 log.println(Utility.hex(cp) + " " + name);
                 String backName = Utility.replace(name, UCD_Names.NAME_ABBREVIATIONS, false);
                 if (!name.equals(backName)) {
@@ -170,19 +168,19 @@ public class BuildNames implements UCD_Types {
             // check the string, and its decomposition. This is just to get a good count.
             
             String str = UTF16.valueOf(cp);
-            if (false && !Default.nfkd.isNormalized(cp)) {
-                str += Default.nfkd.normalize(cp);
+            if (false && !Default.nfkd().isNormalized(cp)) {
+                str += Default.nfkd().normalize(cp);
             }
                 
             int cp2;
             for (int i = 0; i < str.length(); i += UTF16.getCharCount(cp2)) {
                 cp2 = UTF16.charAt(str, i);
-                name = Default.ucd.getName(cp2, SHORT);
+                name = Default.ucd().getName(cp2, SHORT);
                 if (name == null) continue;
                 //name = transform(name);
 
                 sum += name.length();
-                longSum += Default.ucd.getName(cp2).length();
+                longSum += Default.ucd().getName(cp2).length();
                 used++;
 
                 // replace numbers & letters

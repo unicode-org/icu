@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/02/06 18:29:39 $
-* $Revision: 1.37 $
+* $Date: 2004/02/07 01:01:17 $
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -590,7 +590,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     
     public static String getDisplay(int cp) {
         String result = UTF16.valueOf(cp);
-        byte cat = Default.ucd.getCategory(cp);
+        byte cat = Default.ucd().getCategory(cp);
         if (cat == Mn || cat == Me) {
             result = String.valueOf(DOTTED_CIRCLE) + result;
         } else if (cat == Cf || cat == Cc || cp == 0x034F || cp == 0x00AD || cp == 0x1806) {

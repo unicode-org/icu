@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateStandardizedVariants.java,v $
-* $Date: 2004/02/06 18:30:21 $
-* $Revision: 1.3 $
+* $Date: 2004/02/07 01:01:14 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -43,7 +43,7 @@ public final class GenerateStandardizedVariants implements UCD_Types {
 #	If more than one is present, there are spaces between them.
 */
     static public void generate() throws IOException {
-        Default.setUCD();
+        
         
         // read the data and compose the table
         
@@ -53,7 +53,7 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         String[] codes = new String[2];
         String[] shapes = new String[4];
         
-        BufferedReader in = Utility.openUnicodeFile("StandardizedVariants", Default.getUcdVersion(), true, Utility.LATIN1);
+        BufferedReader in = Utility.openUnicodeFile("StandardizedVariants", Default.ucdVersion(), true, Utility.LATIN1);
         while (true) {
             String line = Utility.readDataLine(in);
             if (line == null) break;
@@ -88,7 +88,7 @@ public final class GenerateStandardizedVariants implements UCD_Types {
             }
             table += "</td>\n";
             
-            table += "<td>" + Default.ucd.getName(code) + " " + splits[1] + "</td>\n";
+            table += "<td>" + Default.ucd().getName(code) + " " + splits[1] + "</td>\n";
             table += "</tr>";
         }
         in.close();            
@@ -102,7 +102,7 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         String[] batName = {""};
         String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true), batName);
         
-        String version = Default.ucd.getVersion();
+        String version = Default.ucd().getVersion();
         int lastDot = version.lastIndexOf('.');
         String updateDirectory = version.substring(0,lastDot) + "-Update";
         int updateV = version.charAt(version.length()-1) - '0';
@@ -110,7 +110,7 @@ public final class GenerateStandardizedVariants implements UCD_Types {
         if (DEBUG) System.out.println("updateDirectory: " + updateDirectory);
         
         String[] replacementList = {
-            "@revision@", Default.ucd.getVersion(),
+            "@revision@", Default.ucd().getVersion(),
             "@updateDirectory@", updateDirectory,
             "@date@", Default.getDate(),
             "@table@", table};

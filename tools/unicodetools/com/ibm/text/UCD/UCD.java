@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/02/06 18:30:20 $
-* $Revision: 1.29 $
+* $Date: 2004/02/07 01:01:13 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.io.FileInputStream;
 import java.io.BufferedReader;
 
 import com.ibm.text.utility.*;
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.UnicodeSet;
 
 public final class UCD implements UCD_Types {
@@ -1503,10 +1506,6 @@ to guarantee identifier closure.
                 UData uData = new UData();
                 uData.readBytes(dataIn);
 
-                if (uData.codePoint == SPOT_CHECK) {
-                    System.out.println("SPOT-CHECK: " + uData);
-                }
-
                 //T = Mc + (Cf - ZWNJ - ZWJ)
                 int cp = uData.codePoint;
                     byte old = uData.joiningType;
@@ -1570,6 +1569,18 @@ to guarantee identifier closure.
             if (codePoint >= data.start && codePoint <= data.end) return data.name;
         }
         return NOBLOCK;
+    }
+        
+    public Collection getBlockNames(Collection result) {
+        if (result == null) result = new ArrayList();
+        if (blocks == null) loadBlocks();
+        Iterator it = blocks.iterator();
+        while (it.hasNext()) {
+            BlockData data = (BlockData) it.next();
+            UnicodeProperty.addUnique(data.name, result);
+        }
+        UnicodeProperty.addUnique(NOBLOCK, result);
+        return result;
     }
     
     public boolean getBlockData(int blockId, BlockData output) {

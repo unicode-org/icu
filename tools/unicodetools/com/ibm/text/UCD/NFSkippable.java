@@ -191,21 +191,21 @@ public final class NFSkippable extends UCDProperty {
     static int limit = 0x10FFFF; // full version = 10ffff, for testing may use smaller
     
     public static void main (String[] args) throws java.io.IOException {
-        Default.setUCD();
+        
         
         PrintWriter out = Utility.openPrintWriter("NFSafeSets.txt", Utility.UTF8_WINDOWS);
         out.println("NFSafeSets");
-        out.println("Version: " + Default.ucd.getVersion());
+        out.println("Version: " + Default.ucd().getVersion());
         out.println("Date: " + Default.getDate());
         out.println();
         
         for (int mode = NFD_UnsafeStart; mode <= NFKC_UnsafeStart; ++mode) {
-            UCDProperty up = DerivedProperty.make(mode, Default.ucd);
+            UCDProperty up = DerivedProperty.make(mode, Default.ucd());
             generateSet(out, "UNSAFE[" + Normalizer.getName((byte)(mode-NFD_UnsafeStart)) + "]", up);
         }
         
         for (byte mode = NFD; mode <= NFKC; ++mode) {
-            NFSkippable skipper = new NFSkippable(mode, Default.ucd);
+            NFSkippable skipper = new NFSkippable(mode, Default.ucd());
             generateSet(out, "SKIPPABLE[" + Normalizer.getName(mode) + "]", skipper);
         }
         
