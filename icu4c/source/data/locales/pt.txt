@@ -260,7 +260,6 @@ pt {
         BYR { "BYR", "Rublo Bielorusso" }
         BZD { "BZD", "D\u00F3lar do Belize" }
         CAD { "CAD", "D\u00F3lar Canadiano" }
-        CDP { "CDP", "Domiongo Santo" }
         CHF { "CHF", "Franco Sui\u00E7o" }
         CLP { "CLP", "Peso Chileno" }
         COP { "COP", "Peso Colombiano" }
@@ -333,7 +332,6 @@ pt {
         MAD { "MAD", "Dirham Marroquino" }
         MDL { "MDL", "Lei Moldavo" }
         MGF { "MGF", "Franco de Madagascar" }
-        MNC { "MNC", "M\u00F3naco" }
         MNT { "MNT", "Tugrik Mong\u00F3l" }
         MOP { "MOP", "Pataca Macaense" }
         MRO { "MRO", "Ouguiya da Maurit\u00E2nia" }
@@ -346,7 +344,7 @@ pt {
         MYR { "MYR", "Ringgit da Mal\u00E1sia" }
         MZM { "MZM", "Metical Mo\u00E7ambicano" }
         NGN { "\u20A6", "Naira Nigeriana" }
-        NIC { "NIC", "Nicar\u00E1gua" }
+        //NIC { "NIC", "Cordoba de Nicar\u00E1gua" }
         NIO { "NIO", "Cordoba de Nicar\u00E1gua" }
         NIS { "NIS", "Novo Shekel Israelita" }
         NLG { "NLG", "Guilda Holandesa" }
@@ -379,7 +377,6 @@ pt {
         SIT { "SIT", "Tolar Esloveno" }
         SKK { "SKK", "Coroa Eslovaca" }
         SLL { "SLL", "Le\u00E3o" }
-        SOL { "SOL", "Per\u00FA" }
         SOS { "SOS", "Shilling Somal\u00ED" }
         SRG { "SRG", "Guilda do Suriname" }
         STD { "STD", "Dobra de S\u00E3o Tom\u00E9 e Pr\u00EDncepe" }
