@@ -31,6 +31,7 @@
 #include "unicode/resbund.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
+#include "uhash.h"
 #include "iculserv.h"
 #include <float.h>
 
@@ -323,47 +324,62 @@ protected:
 
 class NFFactory : public LocaleKeyFactory {
 private:
-	NumberFormatFactory* _delegate;
+  NumberFormatFactory* _delegate;
+  Hashtable* _ids;
 
 public:
-    NFFactory(NumberFormatFactory* delegate) 
-		: LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
-	    , _delegate(delegate)
-	{
+  NFFactory(NumberFormatFactory* delegate) 
+    : LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
+    , _delegate(delegate)
+	, _ids(NULL)
+  {
+  }
+
+  virtual ~NFFactory()
+  {
+    delete _delegate;
+  }
+
+  virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
+  {
+    if (handlesKey(key, status)) {
+      const LocaleKey& lkey = (const LocaleKey&)key;
+      Locale loc;
+      lkey.canonicalLocale(loc);
+      int32_t kind = lkey.kind();
+
+      UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)(kind+1));
+      if (result == NULL) {
+        result = service->getKey((ICUServiceKey&)key /* cast away const */, NULL, this, status);
+      }
+      return result;
     }
-
-	virtual ~NFFactory()
-	{
-		delete _delegate;
-	}
-
-    virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const
-	{
-        if (handlesKey(key, status)) {
-            const LocaleKey& lkey = (const LocaleKey&)key;
-            Locale loc;
-			lkey.canonicalLocale(loc);
-            int32_t kind = lkey.kind();
-
-            UObject* result = _delegate->createFormat(loc, (UNumberFormatStyle)(kind+1));
-            if (result == NULL) {
-                result = service->getKey((ICUServiceKey&)key /* cast away const */, NULL, this, status);
-            }
-            return result;
-        }
-        return NULL;
-    }
+    return NULL;
+  }
 
 protected:
-    /**
-     * Return the set of ids that this factory supports (visible or 
-     * otherwise).  This can be called often and might need to be
-     * cached if it is expensive to create.
-     */
-    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const
-	{
-        return _delegate->getSupportedIDs(status);
+  /**
+   * Return the set of ids that this factory supports (visible or 
+   * otherwise).  This can be called often and might need to be
+   * cached if it is expensive to create.
+   */
+  virtual const Hashtable* getSupportedIDs(UErrorCode& status) const
+  {
+    if (U_SUCCESS(status)) {
+      if (!_ids) {
+        int32_t count = 0;
+        const UnicodeString * const idlist = _delegate->getSupportedIDs(count, status);
+        ((NFFactory*)this)->_ids = new Hashtable(status); /* cast away const */
+        if (_ids) {
+          for (int i = 0; i < count; ++i) {
+            _ids->put(idlist[i], (void*)this, status);
+          }
+        }
+      }
+      return _ids;
     }
+    return NULL;
+  }
 };
 
 class ICUNumberFormatService : public ICULocaleService {
