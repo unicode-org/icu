@@ -308,7 +308,7 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 
 
     if(patlen > 0) {
-        path.extract(0, patlen, name, "");
+        path.extract(0, patlen, name);
         name[patlen] = '\0';
         resource = ures_open(name, locale.getName(), &error);
     } else {
