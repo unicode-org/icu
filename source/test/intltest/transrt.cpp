@@ -151,7 +151,7 @@ class Legal {
 public:
     Legal() {}
     virtual ~Legal() {}
-    virtual UBool is(const UnicodeString& sourceString) const {return TRUE;}
+    virtual UBool is(const UnicodeString& /*sourceString*/) const {return TRUE;}
 };
 
 class LegalGreek : public Legal {
