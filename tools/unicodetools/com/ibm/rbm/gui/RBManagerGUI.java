@@ -262,6 +262,7 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 	public void createBundleItem() {
 		new BundleItemCreationDialog(rbm, this, Resources.getTranslation("dialog_title_new_item"), true);
 		updateDisplayPanels();
+		updateProjectTree();
 	}
 	
 	/**
@@ -1285,33 +1286,6 @@ class RBTreeCellRenderer extends DefaultTreeCellRenderer {
 			cellRend = new RBTreeCellRenderer();
 		}
 		return cellRend;
-	}
-}
-
-// The list model for groups
-
-class GroupItemsListModel extends AbstractListModel {
-	BundleGroup group;
-	
-	public void setGroup(BundleGroup group) {
-		this.group = group;
-	}
-	
-	public GroupItemsListModel(BundleGroup group) {
-		this.group = group;
-	}
-	
-	public int getSize() {
-		if (group == null) return 0;
-		return group.getItemCount();
-	}
-	
-	public Object getElementAt(int index) {
-		return group.getBundleItem(index);
-	}
-	
-	public void update() {
-		fireContentsChanged(this, 0, getSize()-1);
 	}
 }
 
