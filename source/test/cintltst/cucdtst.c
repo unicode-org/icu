@@ -90,10 +90,10 @@ const char dirStrings[][5] = {
 };
 
 static void
-TestCaseFolding();
+TestCaseFolding(void);
 
 static void
-TestCaseCompare();
+TestCaseCompare(void);
 
 void addUnicodeTest(TestNode** root)
 {
@@ -455,7 +455,8 @@ static void TestIdentifier()
 static void
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
-                  UErrorCode *pErrorCode) {
+                  UErrorCode *pErrorCode)
+{
     char *end;
     uint32_t value;
     UChar32 c;
