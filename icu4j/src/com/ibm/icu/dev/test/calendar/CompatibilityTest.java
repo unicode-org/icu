@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
- * $Date: 2003/10/02 20:50:58 $
- * $Revision: 1.13 $
+ * $Date: 2003/10/09 02:49:40 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -36,12 +36,15 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test the behavior of the GregorianCalendar around the changeover.
      */
     public void TestGregorianChangeover() {
-        java.util.Calendar tempcal = java.util.Calendar.getInstance();
-        tempcal.clear();
-        tempcal.set(1582, Calendar.OCTOBER, 15);
-        Date co = tempcal.getTime();
+        java.util.TimeZone jdkGMT = java.util.TimeZone.getTimeZone("GMT");
+        java.util.Calendar jdkCal = java.util.Calendar.getInstance(jdkGMT);
+        jdkCal.clear();
+        jdkCal.set(1582, Calendar.OCTOBER, 15);
+        Date co = jdkCal.getTime();
+        logln("Change over (Oct 15 1582) = " + co + " (" + co.getTime() + ")");
         final int ONE_DAY = 24*60*60*1000;
-        GregorianCalendar cal = new GregorianCalendar();
+        TimeZone gmt = TimeZone.getTimeZone("GMT");
+        GregorianCalendar cal = new GregorianCalendar(gmt);
         /*
           Changeover -7 days: 1582/9/28 dow=6
           Changeover -6 days: 1582/9/29 dow=7
