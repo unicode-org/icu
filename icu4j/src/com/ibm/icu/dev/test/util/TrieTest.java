@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TrieTest.java,v $ 
-* $Date: 2002/02/16 03:05:25 $ 
-* $Revision: 1.2 $
+* $Date: 2002/02/28 23:30:27 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -624,16 +624,18 @@ public final class TrieTest extends TestFmwk
                 value = trie.getBMPValue(c);
             }
             if (value != values[valueindex]) {
-                errln("Error: Expected value should be " + values[valueindex] + 
-                      " not " + value);
+                errln("Error: Expected value for 0x" + Integer.toHexString(c) +
+                      " and 0x" + Integer.toHexString(c2) + " should be " + 
+                      values[valueindex] + " not " + value);
             }
             value = trie.getLeadValue(c);
             if (c2 != 0) {
                 value = trie.getTrailValue(value, c2);
             }
             if (value != values[valueindex]) {
-                errln("Error: Expected value should be " + values[valueindex] + 
-                      " not " + value);
+                errln("Error: Expected value for 0x" + Integer.toHexString(c) +
+                      " and 0x" + Integer.toHexString(c2) + " should be " + 
+                      values[valueindex] + " not " + value);
             }
             if (c2!=0) {
                 int codepoint = UCharacter.getCodePoint(c, c2);
@@ -643,8 +645,9 @@ public final class TrieTest extends TestFmwk
                 value = trie.getBMPValue(c);
             }
             if (value != values[valueindex]) {
-                errln("Error: Expected value should be " + values[valueindex] + 
-                      " not " + value);
+                errln("Error: Expected value for 0x" + Integer.toHexString(c) +
+                      " and 0x" + Integer.toHexString(c2) + " should be " + 
+                      values[valueindex] + " not " + value);
             }
             valueindex ++;
         }
