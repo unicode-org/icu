@@ -163,16 +163,6 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
                      uint32_t options);
 
 /**
- * Internal, somewhat faster version of u_getCombiningClass()
- * for use by normalization quick check etc.
- * First make sure that data is loaded by u_getCombiningClass(0x300)!=0
- * or uprv_haveProperties() is true.
- * @internal
- */
-U_CFUNC uint8_t
-u_internalGetCombiningClass(UChar32 c);
-
-/**
  * Get the default converter. This is a commonly used converter
  * that is used for the ustring and UnicodeString API.
  * Remember to use the u_releaseDefaultConverter when you are done.
