@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UTF16Test.java,v $ 
-* $Date: 2001/09/01 00:59:03 $ 
-* $Revision: 1.7 $
+* $Date: 2001/09/06 16:32:54 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -215,10 +215,20 @@ public final class UTF16Test extends TestFmwk
   */
   public void TestCountCodePoint()
   {
-    StringBuffer strbuff = new StringBuffer("this is a string ");
+    StringBuffer strbuff = new StringBuffer("");
+    if (UTF16.countCodePoint(strbuff) != 0 ||
+        UTF16.countCodePoint("") != 0) {
+        errln("FAIL Counting code points for empty strings");
+    }
+    
+    strbuff = new StringBuffer("this is a string ");
     String str = strbuff.toString();
     char array[] = str.toCharArray();
     int size = str.length();
+    
+    if (UTF16.countCodePoint(array, 0, 0) != 0) {
+        errln("FAIL Counting code points for 0 offset array");
+    }
     
     if (UTF16.countCodePoint(str) != size ||
         UTF16.countCodePoint(strbuff) != size ||
