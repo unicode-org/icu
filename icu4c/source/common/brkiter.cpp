@@ -335,7 +335,7 @@ public:
 
   // not currently called because ICUBreakIteratorFactory is always registered and always handles the local
   // eventually
-  virtual UObject* handleDefault(const Key& key, UnicodeString* actualID, UErrorCode& status) const {
+  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
 	LocaleKey& lkey = (LocaleKey&)key;
 	int32_t kind = lkey.kind();
 	Locale loc;
@@ -381,7 +381,7 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
 URegistryKey
 BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
 {
-  return (URegistryKey)getService()->registerObject(toAdopt, locale, kind, status);
+  return getService()->registerInstance(toAdopt, locale, kind, status);
 }
 
 // -------------------------------------
@@ -391,7 +391,7 @@ BreakIterator::unregister(URegistryKey key, UErrorCode& status)
 {
   if (U_SUCCESS(status)) {
     if (gService != NULL) {
-      return gService->unregisterFactory((Factory*)key, status);
+      return gService->unregister(key, status);
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
   }
