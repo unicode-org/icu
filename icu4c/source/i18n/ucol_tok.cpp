@@ -222,7 +222,7 @@ typedef struct {
 /* they can be used to assure that the CEs will be always positioned in  */
 /* the same place relative to a point with known properties (e.g. first  */
 /* primary ignorable). */
-static indirectBoundaries ucolIndirectBoundaries[] = {
+static const indirectBoundaries ucolIndirectBoundaries[] = {
   { UCOL_RESET_TOP_VALUE,               0, 
     UCOL_NEXT_TOP_VALUE,                0 },
   { UCOL_FIRST_PRIMARY_IGNORABLE,       0, 
@@ -589,7 +589,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
   src->parsedToken.indirectIndex = 0;
 
   while (src->current < src->end) {
-      UChar ch = *(src->current);
+    UChar ch = *(src->current);
 
     if (inQuote) {
       if (ch == 0x0027/*'\''*/) {
@@ -597,12 +597,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
       } else {
         if ((newCharsLen == 0) || inChars) {
           if(newCharsLen == 0) {
-            charsOffset = src->extraCurrent - src->source;
+            charsOffset = (uint32_t)(src->extraCurrent - src->source);
           }
           newCharsLen++;
         } else {
           if(newExtensionLen == 0) {
-            extensionOffset = src->extraCurrent - src->source;
+            extensionOffset = (uint32_t)(src->extraCurrent - src->source);
           }
           newExtensionLen++;
         }
@@ -611,18 +611,18 @@ ucol_tok_parseNextToken(UColTokenParser *src,
       isEscaped =FALSE;
       if (newStrength == UCOL_TOK_UNSET) {
         *status = U_INVALID_FORMAT_ERROR;
-        syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+        syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
         return NULL;
       }
       if(ch != 0x0000  && src->current != src->end) {
           if (inChars) {
             if(newCharsLen == 0) {
-              charsOffset = src->current - src->source;
+              charsOffset = (uint32_t)(src->current - src->source);
             }
             newCharsLen++;
           } else {
             if(newExtensionLen == 0) {
-              extensionOffset = src->current - src->source;
+              extensionOffset = (uint32_t)(src->current - src->source);
             }
             newExtensionLen++;
           }
@@ -716,7 +716,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
               if(result & UCOL_TOK_TOP) {
                 if(newStrength == UCOL_TOK_RESET) { 
                   top = TRUE;
-                  charsOffset = src->extraCurrent - src->source;
+                  charsOffset = (uint32_t)(src->extraCurrent - src->source);
                   *src->extraCurrent++ = 0xFFFE;
                   *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
                   *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
@@ -725,31 +725,31 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                   goto EndOfLoop;
                 } else {
                   *status = U_INVALID_FORMAT_ERROR;
-                  syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+                  syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
                 }
               } else if(result & UCOL_TOK_VARIABLE_TOP) {
                 if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
                   variableTop = TRUE;
-                  charsOffset = src->extraCurrent - src->source;
+                  charsOffset = (uint32_t)(src->extraCurrent - src->source);
                   newCharsLen = 1;
                   *src->extraCurrent++ = 0xFFFF;
                   src->current++;
                   goto EndOfLoop;
                 } else {
                   *status = U_INVALID_FORMAT_ERROR;
-                  syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+                  syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
                 }
               } else if (result & UCOL_TOK_BEFORE){
                 if(newStrength == UCOL_TOK_RESET) {
                   before = result & UCOL_TOK_BEFORE;
                 } else {
                   *status = U_INVALID_FORMAT_ERROR;
-                  syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+                  syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
 
                 }
               } 
             } else {
-              syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+              syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
               return NULL;
             }
           }
@@ -772,7 +772,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         case 0x0027/*'\''*/:
           if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
             *status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
             return NULL;
           }
 
@@ -780,7 +780,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
           if(inChars) { /* we're doing characters */
             if(wasInQuote == FALSE) {
-              charsOffset = src->extraCurrent - src->source;
+              charsOffset = (uint32_t)(src->extraCurrent - src->source);
             }
             if (newCharsLen != 0) {
                 uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
@@ -789,7 +789,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             newCharsLen++;
           } else { /* we're doing an expansion */
             if(wasInQuote == FALSE) {
-              extensionOffset = src->extraCurrent - src->source;
+              extensionOffset = (uint32_t)(src->extraCurrent - src->source);
             }
             if (newExtensionLen != 0) {
               uprv_memcpy(src->extraCurrent, src->current - newExtensionLen, newExtensionLen*sizeof(UChar));
@@ -826,7 +826,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
           if(inChars) { /* we're doing characters */
             if(wasInQuote == FALSE) {
-              charsOffset = src->extraCurrent - src->source;
+              charsOffset = (uint32_t)(src->extraCurrent - src->source);
             }
             if (newCharsLen != 0) {
                 uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
@@ -847,13 +847,13 @@ ucol_tok_parseNextToken(UColTokenParser *src,
         default:
           if (newStrength == UCOL_TOK_UNSET) {
             *status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
             return NULL;
           }
 
           if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
             *status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError);
+            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
             return NULL;
           }
 
@@ -863,12 +863,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
           if (inChars) {
             if(newCharsLen == 0) {
-              charsOffset = src->current - src->source;
+              charsOffset = (uint32_t)(src->current - src->source);
             }
             newCharsLen++;
           } else {
             if(newExtensionLen == 0) {
-              extensionOffset = src->current - src->source;
+              extensionOffset = (uint32_t)(src->current - src->source);
             }
             newExtensionLen++;
           }
@@ -908,7 +908,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
   }
 
   if (newCharsLen == 0 && top == FALSE) {
-    syntaxError(src->source,(src->current-src->source),(src->end-src->source),parseError); 
+    syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError); 
     *status = U_INVALID_FORMAT_ERROR;
     return NULL;
   }
@@ -980,7 +980,7 @@ static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint3
     /* check to see if there is an expansion */
     if(src->parsedToken.charsLen > 1) {
       uint32_t resetCharsOffset;
-      resetCharsOffset = expand - src->source;
+      resetCharsOffset = (uint32_t)(expand - src->source);
       sourceToken->source = ((resetCharsOffset - src->parsedToken.charsOffset ) << 24) | src->parsedToken.charsOffset;
       *expandNext = ((src->parsedToken.charsLen + src->parsedToken.charsOffset - resetCharsOffset)<<24) | (resetCharsOffset);
     } else {
@@ -1026,8 +1026,8 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
     uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
     ch = conts[offset];
   }      
-  *src->extraCurrent++ = (UChar)ch;        
-  src->parsedToken.charsOffset = src->extraCurrent - src->source - 1;
+  *src->extraCurrent++ = (UChar)ch;
+  src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source - 1);
   src->parsedToken.charsLen = 1;
 
   // We got an UCA before. However, this might have been tailored.
@@ -1122,7 +1122,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
       if(src->parsedToken.strength != UCOL_TOK_RESET) {
         if(lastToken == NULL) { /* this means that rules haven't started properly */
           *status = U_INVALID_FORMAT_ERROR;
-          syntaxError(src->source,0,(src->end-src->source),parseError);
+          syntaxError(src->source,0,(int32_t)(src->end-src->source),parseError);
           return 0;
         }
       /*  6 Otherwise (when relation != reset) */
@@ -1263,7 +1263,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           } else { /* there is both explicit and implicit expansion. We need to make a combination */
             memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
             memcpy(src->extraCurrent+(expandNext >> 24), src->source + src->parsedToken.extensionOffset, src->parsedToken.extensionLen*sizeof(UChar));
-            sourceToken->expansion = ((expandNext >> 24) + src->parsedToken.extensionLen)<<24 | (src->extraCurrent - src->source);
+            sourceToken->expansion = (uint32_t)(((expandNext >> 24) + src->parsedToken.extensionLen)<<24 | (src->extraCurrent - src->source));
             src->extraCurrent += (expandNext >> 24) + src->parsedToken.extensionLen;
           }
         }
