@@ -74,7 +74,7 @@ converts, or transcodes, each given
 is specified) from one
 .I encoding
 to another. The transcoding is done using Unicode as a pivot encoding
-(e.g. the data are first transcoded from their original encoding to
+(i.e. the data are first transcoded from their original encoding to
 Unicode, and then from Unicode to the destination encoding).
 .PP
 When calling
