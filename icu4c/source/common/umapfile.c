@@ -72,7 +72,7 @@
 #       define MAP_IMPLEMENTATION MAP_390DLL
 
 /* This is inconvienient until we figure out what to do with U_ICUDATA_NAME in utypes.h */
-#       define U_ICUDATA_ENTRY_NAME "icudt" U_ICU_VERSION_SHORT "_dat"
+#       define U_ICUDATA_ENTRY_NAME "icudt" U_ICU_VERSION_SHORT U_ICU_LIB_SUFFIX_C_NAME_STRING "_dat"
 #   else
 #       define MAP_IMPLEMENTATION MAP_POSIX
 #   endif
