@@ -343,13 +343,13 @@ UnicodeString &IntlTest::prettify(const CollationKey &source, UnicodeString &tar
 void
 IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) //nosmac
 {
-    char* mainDir;
+    const char* mainDir;
     char  sepChar;
     const char inpSepChar = '|';
-    
+
+    mainDir = u_getDataDirectory();
     #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
         char mainDirBuffer[200];
-        mainDir = getenv("ICU_DATA");
         if(mainDir!=NULL) {
             strcpy(mainDirBuffer, mainDir);
             strcat(mainDirBuffer, "..\\..");
