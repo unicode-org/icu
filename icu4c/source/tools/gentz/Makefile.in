@@ -14,6 +14,12 @@ include $(top_builddir)/icudefs.mk
 ## Platform-specific setup
 include @platform_make_fragment@
 
+##
+
+SECTION = 8
+
+MAN_FILES = $(TARGET).$(SECTION)
+
 ## Build directory information
 subdir = tools/gentz
 
@@ -23,7 +29,7 @@ TZFILE=$(srcdir)/tz.txt
 TZALIAS=$(srcdir)/tz.alias
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MANUAL_FILES)
 
 ## Target information
 TARGET = gentz
@@ -46,7 +52,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local build-data
+check-local build-data install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -59,11 +65,27 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) 
+all-local: $(TARGET) $(MANUAL_FILES)
 
 install-local: all-local 
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+
+# man page
+install-man: $(MAN_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+
+$(TARGET).$(SECTION): $(srcdir)/$(TARGET).$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# build postscript and pdf formats
+$(TARGET).ps: $(TARGET).$(SECTION)
+	groff -man < $< > $@
+
+$(TARGET).pdf: $(TARGET).ps
+	ps2pdf $< $@
 
 dist-local:
 
