@@ -266,7 +266,7 @@ void Test4060212()
     UErrorCode status = U_ZERO_ERROR;
     UDate myDate;
     UChar *myString;
-    UChar dateString[20], pattern[20], tzID[3];
+    UChar dateString[20], pattern[20], tzID[4];
     u_uastrcpy(dateString, "1995-040.05:01:29");
     u_uastrcpy(pattern, "yyyy-DDD.hh:mm:ss");
 
@@ -481,18 +481,17 @@ UChar* myFormatit(UDateFormat* datdef, UDate d1)
 {
     UChar *result1=NULL;
     int32_t resultlength, resultlengthneeded;
-    UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;
     
     resultlength=0;
-    resultlengthneeded=udat_format(datdef, d1, NULL, resultlength, &pos, &status);
+    resultlengthneeded=udat_format(datdef, d1, NULL, resultlength, NULL, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         /*result1=(UChar*)malloc(sizeof(UChar) * resultlength);*/ /*this leaks*/
         result1=(UChar*)ctst_malloc(sizeof(UChar) * resultlength); /*this won't*/
-        udat_format(datdef, d1, result1, resultlength, &pos, &status);
+        udat_format(datdef, d1, result1, resultlength, NULL, &status);
     }
     if(U_FAILURE(status))
     {

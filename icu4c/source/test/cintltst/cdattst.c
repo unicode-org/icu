@@ -49,7 +49,6 @@ static void TestDateFormat()
     int32_t resultlength;
     int32_t resultlengthneeded;
     int32_t parsepos;
-    UFieldPosition pos;
     UDate d = 837039928046.0;
     double num = -10456.37;
     /*const char* str="yyyy.MM.dd G 'at' hh:mm:ss z";
@@ -116,7 +115,7 @@ static void TestDateFormat()
     u_uastrcpy(temp, "7/10/96 4:05 PM");
     /*format using def */
     resultlength=0;
-    resultlengthneeded=udat_format(def, d, NULL, resultlength, &pos, &status);
+    resultlengthneeded=udat_format(def, d, NULL, resultlength, NULL, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
@@ -126,7 +125,7 @@ static void TestDateFormat()
             result = NULL;
         }
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
-        udat_format(def, d, result, resultlength, &pos, &status);
+        udat_format(def, d, result, resultlength, NULL, &status);
     }
     if(U_FAILURE(status))
     {
@@ -270,6 +269,7 @@ static void TestDateFormat()
         log_err("FAIL: error in setNumberFormat or getNumberFormat()\n");
     else
         log_verbose("PASS:setNumberFormat and getNumberFormat succesful\n");
+
     /*try setting the number format to another format */
     numformat1=udat_getNumberFormat(def);
     udat_setNumberFormat(def1, numformat1);
@@ -658,18 +658,17 @@ static UChar* myNumformat(const UNumberFormat* numfor, double d)
 {
     UChar *result2=NULL;
     int32_t resultlength, resultlengthneeded;
-    UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;
     
     resultlength=0;
-    resultlengthneeded=unum_formatDouble(numfor, d, NULL, resultlength, &pos, &status);
+    resultlengthneeded=unum_formatDouble(numfor, d, NULL, resultlength, NULL, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         /*result2=(UChar*)malloc(sizeof(UChar) * resultlength);*/ /* this leaks */
         result2=(UChar*)ctst_malloc(sizeof(UChar) * resultlength); /*this won't*/
-        unum_formatDouble(numfor, d, result2, resultlength, &pos, &status);
+        unum_formatDouble(numfor, d, result2, resultlength, NULL, &status);
     }
     if(U_FAILURE(status))
     {
