@@ -1630,10 +1630,10 @@ root {
         "h:mm:ss a z",
         "h:mm:ss a",
         "h:mm a",
-        "EEEE, MMMM d, y G",
-        "MMMM d, y G",
-        "MMM d, y G",
-        "M/d/y",
+        "EEEE, MMMM d, yyyy G",
+        "MMMM d, yyyy G",
+        "MMM d, yyyy G",
+        "M/d/yyyy",
         "{1} {0}",
     }
 
