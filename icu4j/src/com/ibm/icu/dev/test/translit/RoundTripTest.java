@@ -160,16 +160,21 @@ public class RoundTripTest extends TestFmwk {
 
     String getGreekSet() {
         // Time bomb
-        return isICU28() ?
-            "[[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]&[:Age=3.2:]]" :
-            "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]";
+        return 
+        // isICU28() ? "[[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]&[:Age=3.2:]]" :
+            "[\u003B\u00B7[[:Greek:]&[:Letter:]]-[" +
+            "\u1D26-\u1D2A" + // L&   [5] GREEK LETTER SMALL CAPITAL GAMMA..GREEK LETTER SMALL CAPITAL PSI
+            "\u1D5D-\u1D61" + // Lm   [5] MODIFIER LETTER SMALL BETA..MODIFIER LETTER SMALL CHI
+            "\u1D66-\u1D6A" + // L&   [5] GREEK SUBSCRIPT SMALL LETTER BETA..GREEK SUBSCRIPT SMALL LETTER CHI
+            "\u03D7-\u03EF" + // \N{GREEK KAI SYMBOL}..\N{COPTIC SMALL LETTER DEI}
+            "]]";
     }
-
+    
     public void TestGreek() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek", 50)
         .test("[a-zA-Z]", getGreekSet(),
-            "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
+            "[\u00B5\u037A\u03D0-\u03F5\u03F9]", /* roundtrip exclusions */
             this, new LegalGreek(true));
         showElapsed(start, "TestGreek");
     }
