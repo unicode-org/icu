@@ -86,7 +86,7 @@ typedef enum {
 /*Table Node Definitions */
 typedef struct
   {
-    UChar toUnicode[256];
+    UChar *toUnicode;  /* [256]; */
     CompactByteArray *fromUnicode;
   }
 UConverterSBCSTable;
@@ -100,7 +100,7 @@ UConverterDBCSTable;
 
 typedef struct
   {
-    bool_t starters[256];
+    bool_t *starters; /* [256]; */
     CompactShortArray *toUnicode;
     CompactShortArray *fromUnicode;
   }
@@ -120,6 +120,8 @@ UConverterTable;
  */
 typedef struct
   {
+    uint32_t structSize;        /* Size of this structure */
+    void *dataMemory;
     uint32_t referenceCounter;	/*used to count number of clients */
     char name[UCNV_MAX_CONVERTER_NAME_LENGTH];	/*internal name of the converter */
     UConverterPlatform platform;	/*platform of the converter (only IBM now) */

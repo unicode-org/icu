@@ -25,6 +25,10 @@
 #include "filestrm.h"
 #include "udata.h"
 
+#if !defined(HAVE_DLOPEN)
+# define HAVE_DLOPEN 0
+#endif
+ 
 #if !defined(UDATA_DLL) && !defined(UDATA_MAP)
 #   define UDATA_DLL
 #endif
@@ -225,7 +229,7 @@ typedef struct {
 #endif
 
 /* add more to this list as more platform's dll support is written */  
-#   if defined(UDATA_DLL) && (defined(LINUX)||defined(SOLARIS)) /* POSIX dll implementation ----------------------- */
+#   if defined(UDATA_DLL) && (HAVE_DLOPEN)
 
 struct UDataMemory {
     void *lib;
@@ -255,10 +259,17 @@ getChoice(Library lib, const char *entry,
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
-#define LOAD_LIBRARY(path, basename, isCommon) dlopen(path, RTLD_LAZY|RTLD_GLOBAL)
+#define LOAD_LIBRARY(path, basename, isCommon) dlopen(path, RTLD_LAZY|RTLD_GLOBAL);
 #define UNLOAD_LIBRARY(lib) dlclose(lib)
 
 #   else /* POSIX memory map implementation --------------------------------- */
+#ifdef UDATA_DLL
+#undef UDATA_DLL
+#endif
+
+#ifndef UDATA_MAP
+#define UDATA_MAP
+#endif
 
 #include <unistd.h>
 #include <sys/mman.h>

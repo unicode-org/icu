@@ -29,7 +29,7 @@
 #include "utypes.h"
 #include "ustring.h"
 
-static void printSeq(const char* a, int len);
+static void printSeq(const unsigned char* a, int len);
 static void printUSeq(const UChar* a, int len);
 
 void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
@@ -43,7 +43,7 @@ static char     gNuConvTestName[1024];
 
 #define nct_min(x,y)  ((x<y) ? x : y)
 
-void printSeq(const char* a, int len)
+void printSeq(const unsigned char* a, int len)
 {
 	int i=0;
 	log_verbose("\n{");
@@ -58,7 +58,7 @@ void printUSeq(const UChar* a, int len)
 	log_verbose("}\n");
 }
 
-void printSeqErr(const char* a, int len)
+void printSeqErr(const unsigned char* a, int len)
 {
 	int i=0;
 	fprintf(stderr, "\n{");
@@ -473,7 +473,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
 	/* Sahha [health],  slashed h's */
 	const UChar malteseUChars[] = { 0x0053, 0x0061, 0x0127, 0x0127, 0x0061 };
-	const char  maltesechars[]  = { '\0' };
+	const char expectedMaltese913[] = { 0x53, 0x61, 0xB1, 0xB1, 0x61 };
 	/*********************************** START OF CODE finally *************/
 
   gInBufferSize = insize;
@@ -509,6 +509,8 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
 /****/
 #endif
+
+#if 0
 	if(!testConvertToU(expectedUTF8, sizeof(expectedUTF8),
 			   sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf8", fmUTF8Offs ))
 	  log_err("utf8 -> u did not match\n");
@@ -517,6 +519,8 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 			   sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "iso-2022", fmISO2022Offs ))
 	
 		log_err("iso-2022  -> u  did not match");
+
+#endif
 
 #if 0
 	if(!testConvertToU(expectedIBM930, sizeof(expectedIBM930),
@@ -531,6 +535,15 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 			   sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "utf-16le", fmUTF16LEOffs ))
 	  log_err("utf-16le -> u  did not match");
 #endif
+
+	if(!testConvertToU(expectedMaltese913, sizeof(expectedMaltese913),
+			   malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]), "latin3", NULL))
+	  log_err("latin3[813] -> u did not match\n");
+
+	if(!testConvertFromU(malteseUChars, sizeof(malteseUChars)/sizeof(malteseUChars[0]),
+			expectedMaltese913, sizeof(expectedMaltese913), "iso-8859-3", NULL ))
+		log_err("u-> latin3[813] did not match.\n");
+
 }
 
 void TestConverterTypesAndStarters()
@@ -572,25 +585,41 @@ void TestConverterTypesAndStarters()
   log_verbose("Testing KSC, ibm-930, ibm-878  for starters and their conversion types.");
 
 	myConverter[0] = ucnv_open("ksc", &err);
-	if (U_FAILURE(err)) log_err("Failed to create an ibm-949 converter\n");
-	myConverter[1] = ucnv_open("ibm-930", &err);
-	if (U_FAILURE(err)) log_err("Failed to create an ibm-930 converter\n");
-	myConverter[2] = ucnv_open("ibm-878", &err);
-	if (U_FAILURE(err)) log_err("Failed to create an ibm-815 converter\n");
-
-	if (ucnv_getType(myConverter[0])!=UCNV_MBCS) log_err("ucnv_getType Failed for ibm-949\n");
-	else log_verbose("ucnv_getType ibm-949 ok\n");
-	if (ucnv_getType(myConverter[1])!=UCNV_EBCDIC_STATEFUL) log_err("ucnv_getType Failed for ibm-930\n");
-	else log_verbose("ucnv_getType ibm-930 ok\n");
-	if (ucnv_getType(myConverter[2])!=UCNV_SBCS) log_err("ucnv_getType Failed for ibm-815\n");
-	else log_verbose("ucnv_getType ibm-815 ok\n");
-
-
-	ucnv_getStarters(myConverter[0], mystarters, &err);
-	/*if (memcmp(expectedKSCstarters, mystarters, sizeof(expectedKSCstarters)))
-		log_err("Failed ucnv_getStarters for ksc\n");
+	if (U_FAILURE(err))
+	  log_err("Failed to create an ibm-949 converter\n");
 	else
-		log_verbose("ucnv_getStarters ok\n");*/
+	  {
+	    if (ucnv_getType(myConverter[0])!=UCNV_MBCS) log_err("ucnv_getType Failed for ibm-949\n");
+	    else log_verbose("ucnv_getType ibm-949 ok\n");
+
+	    if(myConverter[0]!=NULL)
+	      ucnv_getStarters(myConverter[0], mystarters, &err);
+
+	    /*if (memcmp(expectedKSCstarters, mystarters, sizeof(expectedKSCstarters)))
+	      log_err("Failed ucnv_getStarters for ksc\n");
+	      else
+	      log_verbose("ucnv_getStarters ok\n");*/
+	    
+	  }
+
+	myConverter[1] = ucnv_open("ibm-930", &err);
+	if (U_FAILURE(err))
+	  log_err("Failed to create an ibm-930 converter\n");
+	else
+	  {
+	    if (ucnv_getType(myConverter[1])!=UCNV_EBCDIC_STATEFUL) log_err("ucnv_getType Failed for ibm-930\n");
+	    else log_verbose("ucnv_getType ibm-930 ok\n");
+	  }
+
+	myConverter[2] = ucnv_open("ibm-878", &err);
+	if (U_FAILURE(err))
+	  log_err("Failed to create an ibm-815 converter\n");
+	else
+	  {
+	    if (ucnv_getType(myConverter[2])!=UCNV_SBCS) log_err("ucnv_getType Failed for ibm-815\n");
+	    else log_verbose("ucnv_getType ibm-815 ok\n");
+	  }
+
 	
 	ucnv_close(myConverter[0]);
 	ucnv_close(myConverter[1]);

@@ -61,7 +61,7 @@ static CompactShortArray *ulTables;
 static CompactByteArray *dirTables;
 
 
-static const uint16_t indicies[] = {
+static const uint16_t indices[] = {
 
     (uint16_t)0, (uint16_t)127, (uint16_t)255, (uint16_t)382, 
     (uint16_t)502, (uint16_t)584, (uint16_t)712, 
@@ -5185,7 +5185,7 @@ createTables()
 {
     CompactByteArray* newTables;
     if (tables == 0) {
-        newTables = ucmp8_openAdopt((uint16_t*)indicies, (int8_t*)values, offsetCount);    
+        newTables = ucmp8_openAlias((uint16_t*)indices, (int8_t*)values, offsetCount);    
         if (newTables != 0) {
             umtx_lock(NULL);
             if (tables == 0) {
@@ -5210,7 +5210,7 @@ createUlTables()
     CompactShortArray* newTables;
     if (ulTables == 0) 
     {
-        newTables = ucmp16_openAdopt((uint16_t*)caseIndex,
+        newTables = ucmp16_openAlias((uint16_t*)caseIndex,
                                      (int16_t*)caseValues,
                                      caseCount,
                                      0);
@@ -5239,7 +5239,7 @@ createDirTables()
     CompactByteArray* newTables;
     if (dirTables == 0)
     {
-        newTables = ucmp8_openAdopt((uint16_t*)fCharDirIndices,
+        newTables = ucmp8_openAlias((uint16_t*)fCharDirIndices,
                                     (int8_t*)fCharDirValues,
                                     fCharDirCount);
         if (newTables != 0) {
