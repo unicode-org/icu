@@ -145,7 +145,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
             gUnescapeCharSet = NULL;
             int i;
             for (i=0; i<URX_LAST_SET; i++) {
-                delete gPropSets[i];
+                delete (UnicodeSet *)gPropSets[i];
                 gPropSets[i] = NULL;
             }
             return;
