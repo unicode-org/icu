@@ -6,13 +6,13 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterNameChoiceEnum.java $ 
-* $Date: 2002/02/16 03:05:57 $ 
-* $Revision: 1.4 $
+* $Date: 2002/09/19 21:19:04 $ 
+* $Revision: 1.1 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.lang;
+package com.ibm.icu.impl;
 
 /**
 * Internal class containing selector constants for the unicode character names.
@@ -24,12 +24,13 @@ package com.ibm.icu.lang;
 * @since oct0600
 */
 
-interface UCharacterNameChoice
+public interface UCharacterNameChoice
 {
   // public variables =============================================
   
-  static final int U_UNICODE_CHAR_NAME = 0;
-  static final int U_UNICODE_10_CHAR_NAME = 1;
-  static final int U_EXTENDED_CHAR_NAME = 2;
-  static final int U_CHAR_NAME_CHOICE_COUNT = 3;
+  static final int UNICODE_CHAR_NAME = 0;
+  static final int UNICODE_10_CHAR_NAME = 1;
+  static final int EXTENDED_CHAR_NAME = 2;
+  static final int CHAR_NAME_CHOICE_COUNT = 3;
+  static final int ISO_COMMENT_ = CHAR_NAME_CHOICE_COUNT;
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/09/11 00:12:39 $ 
-* $Revision: 1.46 $
+* $Date: 2002/09/19 21:18:14 $ 
+* $Revision: 1.47 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,9 @@ import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.NormalizerImpl;
+import com.ibm.icu.impl.UCharacterUtility;
+import com.ibm.icu.impl.UCharacterName;
+import com.ibm.icu.impl.UCharacterNameChoice;
 
 /**
 * <p>
@@ -842,7 +845,7 @@ public final class UCharacter
         if (ch <= UTF16.SURROGATE_MAX_VALUE) {
             return false;
         }
-        if (isNonCharacter(ch)) {
+        if (UCharacterUtility.isNonCharacter(ch)) {
             return false;
         }
         return (ch <= MAX_VALUE);
@@ -898,7 +901,7 @@ public final class UCharacter
     */
     public static String getName(int ch)
     {
-        return NAME_.getName(ch, UCharacterNameChoice.U_UNICODE_CHAR_NAME);
+        return NAME_.getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
       
     /**
@@ -914,7 +917,7 @@ public final class UCharacter
     public static String getName1_0(int ch)
     {
         return NAME_.getName(ch, 
-                             UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
+                             UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
     
     /**
@@ -937,7 +940,22 @@ public final class UCharacter
     */
     public static String getExtendedName(int ch) 
     {
-        return NAME_.getName(ch, UCharacterNameChoice.U_EXTENDED_CHAR_NAME);
+        return NAME_.getName(ch, UCharacterNameChoice.EXTENDED_CHAR_NAME);
+    }
+    
+    /**
+     * Get the ISO 10646 comment for a character.
+     * The ISO 10646 comment is an informative field in the Unicode Character
+     * Database (UnicodeData.txt field 11) and is from the ISO 10646 names list.
+     * @param ch The code point for which to get the ISO comment.
+     *           It must be <code>0<=c<=0x10ffff</code>.
+     * @return The ISO comment, or null if there is no comment for this 
+     *         character.
+     * @draft ICU 2.4
+     */
+    public static String getISOComment(int ch)
+    {
+        return NAME_.getName(ch, UCharacterNameChoice.ISO_COMMENT_);
     }
       
     /**
@@ -952,7 +970,7 @@ public final class UCharacter
     public static int getCharFromName(String name)
     {
         return NAME_.getCharFromName(
-                            UCharacterNameChoice.U_UNICODE_CHAR_NAME, name);
+                            UCharacterNameChoice.UNICODE_CHAR_NAME, name);
     }
       
     /**
@@ -967,7 +985,7 @@ public final class UCharacter
     public static int getCharFromName1_0(String name)
     {
         return NAME_.getCharFromName(
-                         UCharacterNameChoice.U_UNICODE_10_CHAR_NAME, name);
+                         UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
     }
     
     /**
@@ -992,7 +1010,7 @@ public final class UCharacter
     public static int getCharFromExtendedName(String name)
     {
         return NAME_.getCharFromName(
-                            UCharacterNameChoice.U_EXTENDED_CHAR_NAME, name);
+                            UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
     }
       
     /**
@@ -1462,7 +1480,7 @@ public final class UCharacter
     public static ValueIterator getNameIterator()
     {
         return new UCharacterNameIterator(NAME_,
-                                   UCharacterNameChoice.U_UNICODE_CHAR_NAME);
+                                   UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
     
     /**
@@ -1487,7 +1505,7 @@ public final class UCharacter
     public static ValueIterator getName1_0Iterator()
     {
         return new UCharacterNameIterator(NAME_,
-                                 UCharacterNameChoice.U_UNICODE_10_CHAR_NAME);
+                                 UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
     
     /**
@@ -1512,7 +1530,7 @@ public final class UCharacter
     public static ValueIterator getExtendedNameIterator()
     {
         return new UCharacterNameIterator(NAME_,
-                                 UCharacterNameChoice.U_EXTENDED_CHAR_NAME);
+                                 UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
     
     /**
@@ -1616,7 +1634,7 @@ public final class UCharacter
 	{
 		return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
 	}
-
+    
     // protected data members --------------------------------------------
     
     /**
@@ -1629,29 +1647,12 @@ public final class UCharacter
     {
         try
         {
-            NAME_ = new UCharacterName();
+            NAME_ = UCharacterName.getInstance();
         }
         catch (Exception e)
         {
             throw new RuntimeException(e.getMessage());
         }
-    }
-    
-    // protected methods -------------------------------------------------
-      
-    /**
-    * Determines if codepoint is a non character
-    * @param ch codepoint
-    * @return true if codepoint is a non character false otherwise
-    */
-    static boolean isNonCharacter(int ch) 
-    {
-        if ((ch & NON_CHARACTER_SUFFIX_MIN_3_0_) == 
-                                            NON_CHARACTER_SUFFIX_MIN_3_0_) {
-            return true;
-        }
-        
-        return ch >= NON_CHARACTER_MIN_3_1_ && ch <=  NON_CHARACTER_MAX_3_1_;
     }
         
     // private variables -------------------------------------------------
@@ -1692,24 +1693,8 @@ public final class UCharacter
     /**
     * Shift 24 bits
     */
-    private static final int SHIFT_24_ = 24;
-      
-    /**
-    * Minimum suffix value that indicates if a character is non character.
-    * Unicode 3.0 non characters
-    */
-    private static final int NON_CHARACTER_SUFFIX_MIN_3_0_ = 0xFFFE;
+    private static final int SHIFT_24_ = 24;  
     
-    /**
-    * New minimum non character in Unicode 3.1
-    */
-    private static final int NON_CHARACTER_MIN_3_1_ = 0xFDD0;
-    
-    /**
-    * New non character range in Unicode 3.1
-    */
-    private static final int NON_CHARACTER_MAX_3_1_ = 0xFDEF;
-      
     /**
     * Decimal radix
     */
