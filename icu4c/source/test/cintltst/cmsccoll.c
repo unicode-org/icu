@@ -3285,14 +3285,17 @@ static void TestNewJapanese(void) {
     "\\u30b7\\u30e3\\u30fc\\u30ec",
   };
   */
-  static const UColAttribute att[] = { UCOL_ALTERNATE_HANDLING};
-  static const UColAttributeValue valShifted[] = { UCOL_SHIFTED };
+  static const UColAttribute att[] = { UCOL_STRENGTH };
+  static const UColAttributeValue val[] = { UCOL_QUATERNARY };
 
-  genericLocaleStarter("ja", test1, sizeof(test1)/sizeof(test1[0]));
-  genericLocaleStarter("ja", test2, sizeof(test2)/sizeof(test2[0]));
+  static const UColAttribute attShifted[] = { UCOL_STRENGTH, UCOL_ALTERNATE_HANDLING};
+  static const UColAttributeValue valShifted[] = { UCOL_QUATERNARY, UCOL_SHIFTED };
+
+  genericLocaleStarterWithOptions("ja", test1, sizeof(test1)/sizeof(test1[0]), att, val, 1);
+  genericLocaleStarterWithOptions("ja", test2, sizeof(test2)/sizeof(test2[0]), att, val, 1);
   /*genericLocaleStarter("ja", test3, sizeof(test3)/sizeof(test3[0]));*/
-  genericLocaleStarterWithOptions("ja", test1, sizeof(test1)/sizeof(test1[0]), att, valShifted, 1);
-  genericLocaleStarterWithOptions("ja", test2, sizeof(test2)/sizeof(test2[0]), att, valShifted, 1);
+  genericLocaleStarterWithOptions("ja", test1, sizeof(test1)/sizeof(test1[0]), attShifted, valShifted, 2);
+  genericLocaleStarterWithOptions("ja", test2, sizeof(test2)/sizeof(test2[0]), attShifted, valShifted, 2);
 }
 
 static void TestStrCollIdenticalPrefix(void) {
