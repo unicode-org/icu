@@ -100,7 +100,7 @@ public:
     /**
      * Return the current index in the text being searched.
      * If the iteration has gone past the end of the text
-     * (or past the beginning for a backwards search), {@link #USEARCH_DONE} 
+     * (or past the beginning for a backwards search), USEARCH_DONE
      * is returned.
      * @return current index in the text being searched.
      * @draft ICU 2.0
@@ -263,7 +263,7 @@ public:
     /**
      * Returns the first index at which the string text matches the search 
      * pattern. The iterator is adjusted so that its current index (as 
-     * returned by {@link #usearch_getOffset}) is the match position if one 
+     * returned by {@link #getOffset}) is the match position if one 
      * was found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the iterator will be adjusted to the index USEARCH_DONE
@@ -328,7 +328,7 @@ public:
      * Returns the index of the next point at which the text matches the
      * search pattern, starting from the current position
      * The iterator is adjusted so that its current index (as returned by 
-     * {@link #getIndex}) is the match position if one was found.
+     * {@link #getOffset}) is the match position if one was found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the iterator will be adjusted to a position after the end of the text 
      * string.
