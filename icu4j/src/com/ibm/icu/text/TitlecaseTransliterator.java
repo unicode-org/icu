@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/10/17 17:43:03 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/31 20:56:04 $ 
+ * $Revision: 1.4 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -19,6 +19,18 @@ import java.util.*;
 public class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
+
+    /**
+     * The set of characters we skip.  These are neither cased nor
+     * non-cased, to us; we copy them verbatim.
+     */
+    static final UnicodeSet SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:]]");
+
+    /**
+     * The set of characters that cause the next non-SKIP character
+     * to be lowercased.
+     */
+    static final UnicodeSet CASED = new UnicodeSet("[[:Lu:] [:Ll:] [:Lt:]]");
 
     /**
      * System registration hook.
@@ -60,83 +72,41 @@ public class TitlecaseTransliterator extends Transliterator {
         // context_.  We are a little inconsistent about this -- we
         // don't filter characters in the range contextStart..start-1
         // (the left context).
-        
-        // NOTE: This method contains some special case code to handle
-        // apostrophes between alpha characters.  We want to have
-        // "can't" => "Can't" (not "Can'T").  This may be incorrect
-        // for some locales, e.g., "l'arbre" => "L'Arbre" (?).
-        // TODO: Revisit this.
 
-        // Determine if there is a preceding letter character in the
-        // left context (if there is any left context).
-        boolean wasLastCharALetter = false;
-        if (offsets.start > offsets.contextStart) {
-            char c = text.charAt(offsets.start - 1);
-            // Handle the case "Can'|t", where the | marks the context
-            // boundary.  We only handle a single apostrophe.
-            if (c == '\'' && (offsets.start-2) >= offsets.contextStart) {
-                c = text.charAt(offsets.start - 2);
+        // Our mode; we are either converting letter toTitle or
+        // toLower.
+        boolean doTitle = true;
+
+        // Determine if there is a preceding context of CASED SKIP*,
+        // in which case we want to start in toLower mode.  If the
+        // prior context is anything else (including empty) then start
+        // in toTitle mode.
+        int start = offsets.start;
+        while (start > offsets.contextStart) {
+            char c = text.charAt(--start);
+            if (SKIP.contains(c)) {
+                continue;
             }
-            wasLastCharALetter = UCharacter.isLetter(c);            
+            doTitle = !CASED.contains(c);
+            break;
         }
 
-        // The buffer used to batch up changes to be made
-        StringBuffer buffer = new StringBuffer();
-        int bufStart = 0;
-        int bufLimit = -1;
-
-        int start;
-        for (start = offsets.start; start < offsets.limit; ++start) {
-            // For each character, if the preceding character was a
-            // non-letter, and this character is a letter, then apply
-            // the titlecase transformation.  Otherwise apply the
-            // lowercase transformation.
+        // Convert things after a CASED character toLower; things
+        // after a non-CASED, non-SKIP character toTitle.  SKIP
+        // characters are copied directly and do not change the mode.
+        for (start=offsets.start; start<offsets.limit; ++start) {
             char c = text.charAt(start);
-            if (UCharacter.isLetter(c)) {
-                int newChar;
-                if (wasLastCharALetter) {
-                    newChar = UCharacter.toLowerCase(c);
-                } else {
-                    newChar = UCharacter.toTitleCase(c);
-                }
-                if (c != newChar) {
-                    // This is the simple way of doing this:
-                    //text.replace(start, start+1,
-                    //             String.valueOf((char) newChar));
-
-                    // Instead, we do something more complicated that
-                    // minimizes the number of calls to
-                    // Replaceable.replace().  We batch up the changes
-                    // we want to make in a StringBuffer, recording
-                    // our position and dumping the buffer out when a
-                    // non-contiguous change arrives.
-                    if (bufLimit == start) {
-                        ++bufLimit;
-                        // Fall through and append newChar below
-                    } else {
-                        if (buffer.length() > 0) {
-                            text.replace(bufStart, bufLimit, buffer.toString());
-                            buffer.setLength(0);
-                        }
-                        bufStart = start;
-                        bufLimit = start+1;
-                        // Fall through and append newChar below
-                    }
-                    buffer.append((char) newChar);
-                }
-                wasLastCharALetter = true;
-            } else if (c == '\'' && wasLastCharALetter) {
-                // Ignore a single embedded apostrophe, so that "can't" =>
-                // "Can't", not "Can'T".
-            } else {
-                wasLastCharALetter = false;
+            if (SKIP.contains(c)) {
+                continue;
             }
+            char d = (char) (doTitle ? UCharacter.toTitleCase(c)
+                                     : UCharacter.toLowerCase(c));
+            if (c != d) {
+                text.replace(start, start+1, String.valueOf(d));
+            }
+            doTitle = !CASED.contains(c);
         }
-        // assert(start == offsets.limit);
-        offsets.start = start;
 
-        if (buffer.length() > 0) {
-            text.replace(bufStart, bufLimit, buffer.toString());
-        }
+        offsets.start = start;
     }
 }
