@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.188 2003/06/03 06:44:39 weiv-oss Exp $
+dnl $Id: configure.in,v 1.189 2003/06/03 16:57:07 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -894,7 +894,7 @@ AC_SUBST(AIX_SHLIB)
 
 dnl SPECIAL handling for HPUX 10 and also '11 & --enable-hpuxcma=true'
 if test $hpuxcma = true; then
-	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT_4 -DHPUX_CMA"
+	CPPFLAGS="${CPPFLAGS} -D_PTHREADS_DRAFT4 -DHPUX_CMA"
 fi
 dnl END special 
 
