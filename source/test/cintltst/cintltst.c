@@ -198,6 +198,25 @@ char *austrdup(const UChar* unichars)
     return newString;
 }
 
+char *aescstrdup(const UChar* unichars){
+    int length;
+    char *newString,*targetLimit,*target;
+    UConverterFromUCallback cb;
+    void *p;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter* conv = ucnv_open(ucnv_getDefaultName(),&errorCode);
+    length = u_strlen( unichars);
+    newString = (char*)ctst_malloc ( sizeof(char) * 4 * (length +1));
+    target = newString;
+    targetLimit = newString+sizeof(char) * 4 * (length +1);
+    ucnv_setFromUCallBack(conv, UCNV_FROM_U_CALLBACK_ESCAPE, &UCNV_ESCAPE_JAVA, &cb, &p, &errorCode);
+    ucnv_fromUnicode(conv,&target,targetLimit, &unichars, (UChar*)(unichars+length),NULL,TRUE,&errorCode);
+    *target = '\0';
+    return newString;
+}
+
+
+
 #define CTST_MAX_ALLOC 10000
 static void * ctst_allocated_stuff[CTST_MAX_ALLOC];
 static int ctst_allocated = 0;
