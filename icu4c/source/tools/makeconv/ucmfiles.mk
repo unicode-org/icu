@@ -22,6 +22,7 @@
 #
 
 UCM_SOURCE = ebcdic-xml-us.ucm ibm-1253.ucm ibm-37.ucm ibm-862.ucm\
+ibm-367.ucm\
 ibm-1038.ucm ibm-1254.ucm ibm-420.ucm ibm-863.ucm\
 ibm-1047-s390.ucm ibm-1255.ucm ibm-424.ucm ibm-864.ucm\
 ibm-1047.ucm ibm-1256.ucm ibm-437.ucm ibm-865.ucm\
