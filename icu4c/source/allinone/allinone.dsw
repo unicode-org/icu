@@ -111,7 +111,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "collperf"=..\TEST\COLLPERF\collperf\collperf.dsp - Package Owner=<4>
+Project: "collperf"=..\test\collperf\collperf.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -119,6 +119,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -376,9 +382,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name collperf
     End Project Dependency
 }}}
 
