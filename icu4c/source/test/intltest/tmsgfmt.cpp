@@ -51,7 +51,8 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(15,testAdopt);
         TESTCASE(16,testCopyConstructor2);
         TESTCASE(17,TestUnlimitedArgsAndSubformats);
-    TESTCASE(18,TestRBNF);
+        TESTCASE(18,TestRBNF);
+        TESTCASE(19,TestTurkishCasing);
         default: name = ""; break;
     }
 }
@@ -402,6 +403,41 @@ void TestMessageFormat::testStaticFormat()
     }
 }
 
+/* When the default locale is tr, make sure that the pattern can still be parsed. */
+void TestMessageFormat::TestTurkishCasing()
+{
+    UErrorCode err = U_ZERO_ERROR;
+    Locale  saveDefaultLocale;
+    Locale::setDefault( Locale("tr"), err );
+
+    Formattable arguments[] = {
+        (int32_t)7,
+        Formattable(UDate(8.71068e+011), Formattable::kIsDate),
+        "a disturbance in the Force"
+        };
+
+    UnicodeString result;
+    result = MessageFormat::format(
+        "At {1,TIME} on {1,DATE,SHORT}, there was {2} on planet {0,NUMBER,INTEGER}.",
+        arguments,
+        3,
+        result,
+        err);
+
+    if (U_FAILURE(err)) {
+        errln("TestTurkishCasing #1 with error code %s", u_errorName(err));
+        return;
+    }
+
+    const UnicodeString expected(
+            "At 12:20:00 on 08.08.1997, there was a disturbance in the Force on planet 7.", "");
+    if (result != expected) {
+        errln("TestTurkishCasing failed on test");
+        errln( UnicodeString("     Result: ") + result );
+        errln( UnicodeString("   Expected: ") + expected );
+    }
+    Locale::setDefault( saveDefaultLocale, err );
+}
 
 void TestMessageFormat::testSimpleFormat(/* char* par */)
 {
