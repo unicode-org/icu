@@ -22,6 +22,7 @@
 #ifndef GREGOCAL_H
 #define GREGOCAL_H
 
+#include <stdio.h>
 
 #include "unicode/calendar.h"
 
@@ -436,7 +437,11 @@ protected:
     virtual void computeTime(UErrorCode& status);
 
 private: 
-
+    /**
+     * Calculate day of year and year if we have only DOW_LOCAL, WEEK_OF_YEAR and 
+     * YEAR_WOY
+     */
+    void calculateFromYear_Woy(void);
     /**
      * Return the year that corresponds to the <code>WEEK_OF_YEAR</code> field.
      * This may be one year before or after the calendar year stored
@@ -591,7 +596,6 @@ private:
      * @return   Day number from 1..7 (SUN..SAT).
      */
     static uint8_t julianDayToDayOfWeek(double julian);
-
     /**
      * Divide two long integers, returning the floor of the quotient.
      * <p>
