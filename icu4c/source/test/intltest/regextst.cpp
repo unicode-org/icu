@@ -600,6 +600,31 @@ void RegexTest::API_Match() {
         REGEX_ASSERT(m1->lookingAt(status) == FALSE);
         REGEX_ASSERT(m1->input() == empty);
         REGEX_ASSERT(&m1->pattern() == pat2);
+
+        m1->reset(inStr1);
+        m1->reset(4, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(m1->input() == inStr1);
+        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+
+        m1->reset(-1, status);
+        REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
+
+        m1->reset(0, status);
+        REGEX_CHECK_STATUS;
+        status = U_ZERO_ERROR;
+
+        int32_t len = m1->input().length();
+        m1->reset(len-1, status);
+        REGEX_CHECK_STATUS;
+        status = U_ZERO_ERROR;
+
+        m1->reset(len, status);
+        REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+        status = U_ZERO_ERROR;
+
+        
         delete m1;
         delete pat2;
     }

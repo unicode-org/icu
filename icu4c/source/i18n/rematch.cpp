@@ -669,7 +669,6 @@ RegexMatcher &RegexMatcher::reset() {
     fMatchEnd     = 0;
     fLastMatchEnd = 0;
     fMatch        = FALSE;
-    fTouchedEnd   = FALSE;
     resetStack();
     return *this;
 }
@@ -844,17 +843,6 @@ int32_t RegexMatcher::start(int group, UErrorCode &status) const {
     }
     return s;
 }
-
-
-//--------------------------------------------------------------------------------
-//
-//     touchedEnd
-//
-//--------------------------------------------------------------------------------
-UBool RegexMatcher::touchedEnd() {
-    return fTouchedEnd;
-}
-
 
 
 
@@ -1037,7 +1025,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-    fTouchedEnd = FALSE;
 
     //  Cache frequently referenced items from the compiled pattern
     //  in local variables.
@@ -1105,8 +1092,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 if (c == opValue) {           
                     break;
                 }
-            } else {
-                fTouchedEnd = TRUE;
             }
             fp = (REStackFrame *)fStack->popFrame(frameSize);
             break;
@@ -1129,7 +1114,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
                 if (fp->fInputIdx + stringLen > inputLen) {
                     // No match.  String is longer than the remaining input text.
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1325,7 +1309,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
                 // Fail if at end of input
                 if (fp->fInputIdx >= inputLen) {
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1415,7 +1398,6 @@ GC_Done:
                 //    0:   success if input char is in set.
                 //    1:   success if input char is not in set.
                 if (fp->fInputIdx >= inputLen) {
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1448,7 +1430,6 @@ GC_Done:
                 // Test input character for NOT being a member of  one of 
                 //    the predefined sets (Word Characters, for example)
                 if (fp->fInputIdx >= inputLen) {
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1492,9 +1473,7 @@ GC_Done:
                         break;
                     }
                 }
-            } else {
-                fTouchedEnd = TRUE;
-            }
+            } 
             // Either at end of input, or the character wasn't in the set.
             // Either way, we need to back track out.
             fp = (REStackFrame *)fStack->popFrame(frameSize);
@@ -1506,7 +1485,6 @@ GC_Done:
                 // . matches anything, but stops at end-of-line.
                 if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1528,7 +1506,6 @@ GC_Done:
                 // ., in dot-matches-all (including new lines) mode
                 if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1551,7 +1528,6 @@ GC_Done:
             {
                 //  Fail if input already exhausted.
                 if (fp->fInputIdx >= inputLen) {
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -1584,7 +1560,6 @@ GC_Done:
             {
                 // Match up to end of input.  Fail if already at end of input.
                 if (fp->fInputIdx >= inputLen) {
-                    fTouchedEnd = TRUE;
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                 } else {
                     fp->fInputIdx = inputLen;
@@ -1798,8 +1773,6 @@ GC_Done:
                             haveMatch = TRUE;
                         }
                     }
-                } else {
-                    fTouchedEnd = TRUE;
                 }
                 if (haveMatch) {
                     fp->fInputIdx += len;     // Match.  Advance current input position.
@@ -1870,10 +1843,7 @@ GC_Done:
                 if (u_foldCase(c, U_FOLD_CASE_DEFAULT) == opValue) {           
                     break;
                 }
-            } else {
-                fTouchedEnd = TRUE;
-            }
-
+            } 
             fp = (REStackFrame *)fStack->popFrame(frameSize);
             break;
 
@@ -1900,10 +1870,7 @@ GC_Done:
                         fp->fInputIdx = stringEndIndex;
                         break;
                     }
-                } else {
-                    fTouchedEnd = TRUE;
-                }
-                
+                }                 
                 // No match.  Back up matching to a saved state
                 fp = (REStackFrame *)fStack->popFrame(frameSize);
             }
@@ -2101,7 +2068,6 @@ GC_Done:
                 int32_t ix = fp->fInputIdx;
                 for (;;) {
                     if (ix >= inputLen) {
-                        fTouchedEnd = TRUE;
                         break;
                     }
                     UChar32   c;
@@ -2156,7 +2122,6 @@ GC_Done:
                 if (opValue == 1) {
                     // Multi-line mode.
                     ix = inputLen;
-                    fTouchedEnd = TRUE;
                 } else {
                     // NOT multi-line mode.  Line endings do not match '.'
                     // Scan forward until a line ending or end of input.
@@ -2164,7 +2129,6 @@ GC_Done:
                     for (;;) {
                         if (ix >= inputLen) {
                             ix = inputLen;
-                            fTouchedEnd = TRUE;
                             break;
                         }
                         UChar32   c;
