@@ -302,8 +302,12 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     umtx_lock(&resbMutex);
     r = init_entry(localeID, path, &initstatus);
     uprv_strcpy(name, r->fName);
-    hasRealData = (r->fBogus == U_ZERO_ERROR);
     isDefault = (uprv_strcmp(name, uloc_getDefault()) == 0);
+    hasRealData = (r->fBogus == U_ZERO_ERROR);
+    if(isDefault == TRUE && r->fBogus != U_ZERO_ERROR) { /*there is a case when default locale is invalid - we have to be graceful about it*/
+        r->fBogus = U_USING_DEFAULT_ERROR;
+    }
+
 	isRoot = (uprv_strcmp(name, kRootLocaleName) == 0);
 
     /*Fallback data stuff*/
