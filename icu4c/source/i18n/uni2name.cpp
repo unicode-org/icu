@@ -98,7 +98,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
         status = U_ZERO_ERROR;
         if ((len = u_charName(c, U_EXTENDED_CHAR_NAME, buf, maxLen, &status)) >0 && !U_FAILURE(status)) {
             str.truncate(OPEN_DELIM_LEN);
-            str.append(UnicodeString(buf, len, "")).append(CLOSE_DELIM);
+            str.append(UnicodeString(buf, len, US_INV)).append(CLOSE_DELIM);
             text.handleReplaceBetween(cursor, cursor+clen, str);
             len += OPEN_DELIM_LEN + 1; // adjust for delimiters
             cursor += len; // advance cursor and adjust for new text
