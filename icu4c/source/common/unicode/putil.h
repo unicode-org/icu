@@ -141,13 +141,40 @@ U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
 U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
 
 /**
- * Return the data directory for this platform. 
+ * Return the ICU data directory. 
+ * The data directory is where common format ICU data files (.dat files)
+ *   are loaded from.  Note that normal use of the built-in ICU
+ *   facilities does not require loading of an external data file;
+ *   unless you are adding custom data to ICU, the data directory
+ *   does not need to be set.
+ *
+ * The data directory is determined as follows:
+ *    If u_setDataDirectory() has been called, that is it, otherwise
+ *    if the ICU_DATA environment variable is set, use that, otherwise
+ *    On Windows, if the SOFTWARE\ICU\Unicode\Data registry entry exists, use that
+ *           (use of the registry in this way is not recommended.)  otherwise
+ *    If a data directory was specifed at ICU build time, use that
+ *    otherwise no data directory is available.
+ *
+ *@return the data directory, or an empty string ("") if no data directory has
+ *         been specified.
+ *   
  * @draft
  */
 U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
 
 /** 
- * Set the data directory. 
+ * Set the ICU data directory. 
+ * The data directory is where common format ICU data files (.dat files)
+ *   are loaded from.  Note that normal use of the built-in ICU
+ *   facilities does not require loading of an external data file;
+ *   unless you are adding custom data to ICU, the data directory
+ *   does not need to be set.
+ *
+ * This function should be called at most once in a process, before the
+ * first ICU operation that will require the loading of an ICU data file.
+ *
+
  * @draft
  */
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
