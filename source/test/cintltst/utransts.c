@@ -20,12 +20,16 @@
 
 void TestAPI();
 void TestSimpleRules();
+void TestFilter();
+
 static void _expectRules(const char*, const char*, const char*);
+static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
 
 void
 addUTransTest(TestNode** root) {
     TEST(TestAPI);
     TEST(TestSimpleRules);
+    TEST(TestFilter);
 }
 
 void TestAPI() {
@@ -114,6 +118,66 @@ void TestSimpleRules() {
                  "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
 }
 
+void TestFilter() {
+    UErrorCode status = U_ZERO_ERROR;
+    UChar filt[128];
+    UChar buf[128];
+    UChar exp[128];
+    char cbuf[128];
+    int32_t limit;
+    const char* DATA[] = {
+        "[^c]", /* Filter out 'c' */
+        "abcde",
+        "\\u0061\\u0062c\\u0064\\u0065",
+
+        "", /* No filter */
+        "abcde",
+        "\\u0061\\u0062\\u0063\\u0064\\u0065"
+    };
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t i;
+
+    UTransliterator* hex = utrans_open("Unicode-Hex", UTRANS_FORWARD, &status);
+
+    if (hex == 0 || U_FAILURE(status)) {
+        log_err("FAIL: utrans_open(Unicode-Hex) failed, error=%s\n",
+                u_errorName(status)); 
+        goto exit;
+    }
+
+    for (i=0; i<DATA_length; i+=3) {
+        u_uastrcpy(filt, DATA[i]);
+        utrans_setFilter(hex, filt, -1, &status);
+
+        if (U_FAILURE(status)) {
+            log_err("FAIL: utrans_setFilter() failed, error=%s\n",
+                    u_errorName(status));
+            goto exit;
+        }
+        
+        u_uastrcpy(buf, DATA[i+1]);
+        limit = 5;
+        utrans_transUChars(hex, buf, NULL, 128, 0, &limit, &status);
+        
+        if (U_FAILURE(status)) {
+            log_err("FAIL: utrans_transUChars() failed, error=%s\n",
+                    u_errorName(status));
+            goto exit;
+        }
+        
+        u_austrcpy(cbuf, buf);
+        u_uastrcpy(exp, DATA[i+2]);
+        if (0 == u_strcmp(buf, exp)) {
+            log_verbose("Ok: %s | %s -> %s\n", DATA[i+1], DATA[i], cbuf);
+        } else {
+            log_err("FAIL: %s | %s -> %s, expected %s\n", DATA[i+1], DATA[i], cbuf, DATA[i+2]);
+        }
+    }
+
+ exit:
+    utrans_close(hex);
+}
+
 void _expectRules(const char* crules,
                   const char* cfrom,
                   const char* cto) {
@@ -121,20 +185,13 @@ void _expectRules(const char* crules,
      * make all buffers way too big */
     enum { CAP = 256 };
     UChar rules[CAP];
-    UChar from[CAP];
-    UChar to[CAP];
-    UChar buf[CAP];
     UTransliterator *trans;
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseErr;
-    int32_t limit;
-    UTransPosition pos;
 
     u_uastrcpy(rules, crules);
-    u_uastrcpy(from, cfrom);
-    u_uastrcpy(to, cto);
 
-    trans = utrans_openRules("ID", rules, -1, UTRANS_FORWARD,
+    trans = utrans_openRules(crules /*use rules as ID*/, rules, -1, UTRANS_FORWARD,
                              &parseErr, &status);
     if (U_FAILURE(status)) {
         utrans_close(trans);
@@ -143,12 +200,35 @@ void _expectRules(const char* crules,
         return;
     }
 
+    _expect(trans, cfrom, cto);
+
+    utrans_close(trans);
+}
+
+void _expect(const UTransliterator* trans,
+             const char* cfrom,
+             const char* cto) {
+    /* u_uastrcpy has no capacity param for the buffer -- so just
+     * make all buffers way too big */
+    enum { CAP = 256 };
+    UChar from[CAP];
+    UChar to[CAP];
+    UChar buf[CAP];
+    char id[CAP];
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t limit;
+    UTransPosition pos;
+
+    u_uastrcpy(from, cfrom);
+    u_uastrcpy(to, cto);
+
+    utrans_getID(trans, id, CAP);
+
     /* utrans_transUChars() */
     u_strcpy(buf, from);
     limit = u_strlen(buf);
     utrans_transUChars(trans, buf, NULL, CAP, 0, &limit, &status);
     if (U_FAILURE(status)) {
-        utrans_close(trans);
         log_err("FAIL: utrans_transUChars() failed, error=%s\n",
                 u_errorName(status));
         return;
@@ -156,12 +236,12 @@ void _expectRules(const char* crules,
 
     if (0 == u_strcmp(buf, to)) {
         log_verbose("Ok: utrans_transUChars(%s) x %s -> %s\n",
-                    crules, cfrom, cto);
+                    id, cfrom, cto);
     } else {
         char actual[CAP];
         u_austrcpy(actual, buf);
         log_err("FAIL: utrans_transUChars(%s) x %s -> %s, expected %s\n",
-                crules, cfrom, actual, cto);
+                id, cfrom, actual, cto);
     }
 
     /* utrans_transIncrementalUChars() */
@@ -171,7 +251,6 @@ void _expectRules(const char* crules,
     utrans_transIncrementalUChars(trans, buf, NULL, CAP, &pos, &status);
     utrans_transUChars(trans, buf, NULL, CAP, pos.start, &pos.limit, &status);
     if (U_FAILURE(status)) {
-        utrans_close(trans);
         log_err("FAIL: utrans_transIncrementalUChars() failed, error=%s\n",
                 u_errorName(status));
         return;
@@ -179,13 +258,11 @@ void _expectRules(const char* crules,
 
     if (0 == u_strcmp(buf, to)) {
         log_verbose("Ok: utrans_transIncrementalUChars(%s) x %s -> %s\n",
-                    crules, cfrom, cto);
+                    id, cfrom, cto);
     } else {
         char actual[CAP];
         u_austrcpy(actual, buf);
         log_err("FAIL: utrans_transIncrementalUChars(%s) x %s -> %s, expected %s\n",
-                crules, cfrom, actual, cto);
+                id, cfrom, actual, cto);
     }
-
-    utrans_close(trans);
 }
