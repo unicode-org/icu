@@ -178,6 +178,7 @@ void LayoutEngine::getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
     
     if (fGlyphs == NULL) {
       success = LE_NO_LAYOUT_ERROR;
+	  return;
     }
     
     LE_ARRAY_COPY(glyphs, fGlyphs, fGlyphCount);
