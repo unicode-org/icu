@@ -42,6 +42,8 @@ class UnicodeString;
  * When a parser encounters this character, it calls parseReference()
  * with the position immediately following the SYMBOL_REF.  The symbol
  * table parses the name, if there is one, and returns it.
+ *
+ * @draft ICU 2.8
  */
 class U_COMMON_API SymbolTable /* not : public UObject because this is an interface/mixin class */ {
 public:
@@ -95,6 +97,5 @@ public:
                                          ParsePosition& pos, int32_t limit) const = 0;
 };
 U_NAMESPACE_END
- 
 
 #endif
