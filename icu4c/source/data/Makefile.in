@@ -238,10 +238,10 @@ $(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEE
 all-RES:  $(RES_FILES)
 
 $(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unorm.icu
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -q -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -k -q -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) 
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -q -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
+$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -k -q -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 	@echo "generating $@ (list of installed locales)"; \
@@ -256,7 +256,7 @@ $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 $(BUILDDIR)/$(ICUDT)%.res: $(INDEX_FILES) $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -d $(BUILDDIR) $(INDEX_FILES)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -k -p $(ICUDATA_PLATFORM_NAME) -d $(BUILDDIR) $(INDEX_FILES)
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -328,11 +328,11 @@ $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/make
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
 
 $(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) $(<F)
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -k -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -d $(TESTBUILDDIR) $(<F)
 
 
 $(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -q -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
+	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -k -q -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
 
 ################################################################### TYP
 # TYP FILES
