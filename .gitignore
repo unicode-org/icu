@@ -41,6 +41,8 @@ icu4c/include
 icu4c/lib
 icu4c/source/Makefile
 icu4c/source/README
+icu4c/source/allinone/*.ncb
+icu4c/source/allinone/*.opt
 icu4c/source/common/*.ao
 icu4c/source/common/*.d
 icu4c/source/common/*.plg
