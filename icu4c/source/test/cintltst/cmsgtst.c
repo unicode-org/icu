@@ -49,12 +49,13 @@ static UChar* testCasePatterns[5];
 static UChar* testResultStrings[5];
 
 static UBool strings_initialized = FALSE;
+
 /* function used to create the test patterns for testing Message formatting */
 static void InitStrings( void )
 {
     int32_t i;
-    if (strings_initialized) return;
-    strings_initialized = TRUE;
+    if (strings_initialized)
+        return;
 
     for (i=0; i < cnt_testCases; i++ ) {
         testCasePatterns[i]=(UChar*)malloc(sizeof(UChar) * (strlen(txt_testCasePatterns[i]) + 1));
@@ -64,12 +65,28 @@ static void InitStrings( void )
         testResultStrings[i] = (UChar*)malloc(sizeof(UChar) * (strlen(txt_testResultStrings[i]) + 1));
         u_uastrcpy(testResultStrings[i], txt_testResultStrings[i] );
     }
+
+    strings_initialized = TRUE;
+}
+
+static void FreeStrings( void )
+{
+    int32_t i;
+    if (!strings_initialized)
+        return;
+
+    for (i=0; i < cnt_testCases; i++ ) {
+        free(testCasePatterns[i]);
+    }
+    for (i=0; i < cnt_testCases; i++ ) {
+        free(testResultStrings[i]);
+    }
+    strings_initialized = FALSE;
 }
 
 /* Test u_formatMessage() with various test patterns() */
 static void MessageFormatTest( void ) 
 {
-
     UChar *str;
     UChar* result;
     int32_t resultLengthOut,resultlength,i, patternlength;
@@ -88,123 +105,122 @@ static void MessageFormatTest( void )
             &status, 1, 3456.00, d1);
         if(status== U_BUFFER_OVERFLOW_ERROR)
         {
-        status=U_ZERO_ERROR;
-        resultlength=resultLengthOut+1;
-        result=(UChar*)realloc(result,sizeof(UChar) * resultlength);
-        u_formatMessage( "en_US",testCasePatterns[i], patternlength, result, resultlength, 
-            &status, 1, 3456.00, d1);
-    }
-    if(U_FAILURE(status)){
-        log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
-    }
-    if(u_strcmp(result, testResultStrings[i])==0){
-        log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
-    }
-    else{
-        log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
-            austrdup(result), austrdup(testResultStrings[i]) );
-    }
+            status=U_ZERO_ERROR;
+            resultlength=resultLengthOut+1;
+            result=(UChar*)realloc(result,sizeof(UChar) * resultlength);
+            u_formatMessage( "en_US",testCasePatterns[i], patternlength, result, resultlength, 
+                &status, 1, 3456.00, d1);
+        }
+        if(U_FAILURE(status)){
+            log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
+        }
+        if(u_strcmp(result, testResultStrings[i])==0){
+            log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
+        }
+        else{
+            log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
+                austrdup(result), austrdup(testResultStrings[i]) );
+        }
     }
     free(result);
     free(str);
+    FreeStrings();
 }
 
 
 /*test u_formatMessage() with sample patterns */
 static void TestSampleMessageFormat()
 {
-  UChar *str;
-  UChar *result;
-  UChar pattern[100], expected[100];
-  int32_t resultLengthOut, resultlength;
-  UDate d = 837039928046.0;
-  UErrorCode status = U_ZERO_ERROR;
-  str=(UChar*)malloc(sizeof(UChar) * 15);
-  u_uastrcpy(str, "abc");    
+    UChar *str;
+    UChar *result;
+    UChar pattern[100], expected[100];
+    int32_t resultLengthOut, resultlength;
+    UDate d = 837039928046.0;
+    UErrorCode status = U_ZERO_ERROR;
+    str=(UChar*)malloc(sizeof(UChar) * 15);
+    u_uastrcpy(str, "abc");    
     
-  u_uastrcpy(pattern, "There are {0} files on {1,date}");
-  u_uastrcpy(expected, "There are abc files on Jul 10, 1996");
-  result=(UChar*)malloc(sizeof(UChar) * 1);
-  log_verbose("\nTesting a sample for Message format test#1\n");
-  resultlength=1;
-  resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, d);
-  if(status==U_BUFFER_OVERFLOW_ERROR)
+    u_uastrcpy(pattern, "There are {0} files on {1,date}");
+    u_uastrcpy(expected, "There are abc files on Jul 10, 1996");
+    result=(UChar*)malloc(sizeof(UChar) * 1);
+    log_verbose("\nTesting a sample for Message format test#1\n");
+    resultlength=1;
+    resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, d);
+    if(status==U_BUFFER_OVERFLOW_ERROR)
     {
-      status=U_ZERO_ERROR;
-      resultlength=resultLengthOut+1;
-      result=(UChar*)realloc(result, sizeof(UChar) * resultlength);
-      u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, d);
+        status=U_ZERO_ERROR;
+        resultlength=resultLengthOut+1;
+        result=(UChar*)realloc(result, sizeof(UChar) * resultlength);
+        u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, d);
     }
-  if(U_FAILURE(status)){
-    log_err("Error: failure in message format on test#1: %s\n", myErrorName(status));
-  }
-  if(u_strcmp(result, expected)==0)
-    log_verbose("PASS: MessagFormat successful on test#1\n");
-  else{
-    log_err("FAIL: Error in MessageFormat on test#1 \n GOT: %s EXPECTED: %s\n", 
-        austrdup(result), austrdup(expected) );
-  }
+    if(U_FAILURE(status)){
+        log_err("Error: failure in message format on test#1: %s\n", myErrorName(status));
+    }
+    if(u_strcmp(result, expected)==0)
+        log_verbose("PASS: MessagFormat successful on test#1\n");
+    else{
+        log_err("FAIL: Error in MessageFormat on test#1 \n GOT: %s EXPECTED: %s\n", 
+            austrdup(result), austrdup(expected) );
+    }
 
-       
-  log_verbose("\nTesting message format with another pattern test#2\n");
-  u_uastrcpy(pattern, "The disk \"{0}\" contains {1,number,integer} file(s)");
-  u_uastrcpy(expected, "The disk \"MyDisk\" contains 23 file(s)");
-  u_uastrcpy(str, "MyDisk");
+
+    log_verbose("\nTesting message format with another pattern test#2\n");
+    u_uastrcpy(pattern, "The disk \"{0}\" contains {1,number,integer} file(s)");
+    u_uastrcpy(expected, "The disk \"MyDisk\" contains 23 file(s)");
+    u_uastrcpy(str, "MyDisk");
+
+    resultLengthOut=u_formatMessage( "en_US", 
+        pattern, 
+        u_strlen(pattern),
+        result,
+        resultlength,
+        &status, 
+        str,
+        235);
+    if(status==U_BUFFER_OVERFLOW_ERROR)
+    {
+        status=U_ZERO_ERROR;
+        resultlength=resultLengthOut+1;
+        result=(UChar*)realloc(result, sizeof(UChar) * (resultlength+1));
+        u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 23);
+    }
+    if(U_FAILURE(status)){
+        log_err("Error: failure in message format on test#2 : %s\n", myErrorName(status));
+    }
+    if(u_strcmp(result, expected)==0)
+        log_verbose("PASS: MessagFormat successful on test#2\n");
+    else{
+        log_err("FAIL: Error in MessageFormat on test#2\n GOT: %s EXPECTED: %s\n", 
+            austrdup(result), austrdup(expected) );
+    }
+
+
+
+    log_verbose("\nTesting message format with another pattern test#3\n");
+    u_uastrcpy(pattern, "You made a {0} of {1,number,currency}");
+    u_uastrcpy(expected, "You made a deposit of $500.00");
+    u_uastrcpy(str, "deposit");
+    resultlength=0;
+    resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), NULL, resultlength, &status, str, 500.00);
+    if(status==U_BUFFER_OVERFLOW_ERROR)
+    {
+        status=U_ZERO_ERROR;
+        resultlength=resultLengthOut+1;
+        result=(UChar*)realloc(result, sizeof(UChar) * resultlength);
+        u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 500.00);
+    }
+    if(U_FAILURE(status)){
+        log_err("Error: failure in message format on test#3 : %s\n", myErrorName(status));
+    }
+    if(u_strcmp(result, expected)==0)
+        log_verbose("PASS: MessagFormat successful on test#3\n");
+    else{
+        log_err("FAIL: Error in MessageFormat on test#3\n GOT: %s EXPECTED %s\n", austrdup(result), 
+            austrdup(expected) );
+    }
     
-  resultLengthOut=u_formatMessage( "en_US", 
-                   pattern, 
-                   u_strlen(pattern),
-                   result,
-                   resultlength,
-                   &status, 
-                   str,
-                   235);
-  if(status==U_BUFFER_OVERFLOW_ERROR)
-    {
-      status=U_ZERO_ERROR;
-      resultlength=resultLengthOut+1;
-      result=(UChar*)realloc(result, sizeof(UChar) * (resultlength+1));
-      u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 23);
-    }
-  if(U_FAILURE(status)){
-    log_err("Error: failure in message format on test#2 : %s\n", myErrorName(status));
-  }
-  if(u_strcmp(result, expected)==0)
-    log_verbose("PASS: MessagFormat successful on test#2\n");
-  else{
-    log_err("FAIL: Error in MessageFormat on test#2\n GOT: %s EXPECTED: %s\n", 
-        austrdup(result), austrdup(expected) );
-  }
-
-   
-
-  log_verbose("\nTesting message format with another pattern test#3\n");
-  u_uastrcpy(pattern, "You made a {0} of {1,number,currency}");
-  u_uastrcpy(expected, "You made a deposit of $500.00");
-  u_uastrcpy(str, "deposit");
-  resultlength=0;
-  resultLengthOut=u_formatMessage( "en_US", pattern, u_strlen(pattern), NULL, resultlength, &status, str, 500.00);
-  if(status==U_BUFFER_OVERFLOW_ERROR)
-    {
-      status=U_ZERO_ERROR;
-      resultlength=resultLengthOut+1;
-      result=(UChar*)realloc(result, sizeof(UChar) * resultlength);
-      u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 500.00);
-    }
-  if(U_FAILURE(status)){
-    log_err("Error: failure in message format on test#3 : %s\n", myErrorName(status));
-  }
-  if(u_strcmp(result, expected)==0)
-    log_verbose("PASS: MessagFormat successful on test#3\n");
-  else{
-    log_err("FAIL: Error in MessageFormat on test#3\n GOT: %s EXPECTED %s\n", austrdup(result), 
-        austrdup(expected) );
-  }
-
-  free(result);
-  free(str);
-    
-
+    free(result);
+    free(str);
 }
 
 /* Test u_formatMessage() and u_parseMessage() , format and parse sequence and round trip */
@@ -481,6 +497,7 @@ static void TestMessageFormatWithValist( void )
     }
     free(result);
     free(str);
+    FreeStrings();
 }
 
 static void CallParseMessage(const char* locale, UChar* pattern, int32_t patternLength, 
