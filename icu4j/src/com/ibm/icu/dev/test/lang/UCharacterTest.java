@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/07/16 00:34:29 $ 
-* $Revision: 1.39 $
+* $Date: 2002/07/26 22:05:06 $ 
+* $Revision: 1.40 $
 *
 *******************************************************************************
 */
@@ -594,7 +594,7 @@ public final class UCharacterTest extends TestFmwk
     	String str;
     	int uc;
     
-    	for (int i = 0; i < size; i ++) 
+        for (int i = 0; i < size; i ++) 
     	{
       		// modern Unicode character name
       		str = UCharacter.getName(c[i]);
@@ -659,17 +659,19 @@ public final class UCharacterTest extends TestFmwk
         	      + "U+0061"); 
     	} 
 	    
-    	// extra testing different from icu
-    	for (int i = UCharacter.MIN_VALUE; i < UCharacter.MAX_VALUE; i ++)
-    	{
-      		str = UCharacter.getName(i);
-      		if (str != null && UCharacter.getCharFromName(str) != i)
-      		{	
-        		errln("FAIL \\u" + hex(i) + " " + str  + 
-              						" retrieval of name and vice versa" );
-        		break;
-      		}
-    	}
+        if (getInclusion() >= 5) {
+            // extra testing different from icu
+        	for (int i = UCharacter.MIN_VALUE; i < UCharacter.MAX_VALUE; i ++)
+        	{
+          		str = UCharacter.getName(i);
+          		if (str != null && UCharacter.getCharFromName(str) != i)
+          		{	
+            		errln("FAIL \\u" + hex(i) + " " + str  + 
+                  						" retrieval of name and vice versa" );
+            		break;
+          		}
+        	}
+        }
   	}
   
   	/**
