@@ -160,6 +160,7 @@ public class LDMLComparator {
     private boolean m_Vetting = false;
     
     private int m_totalCount = 0;
+    private String m_Messages = "";
     
     private class CompareElement
     {
@@ -732,6 +733,7 @@ public class LDMLComparator {
           if ((m_iOptions & OPT_DIFF_REF_COMMON) != 0)
               writer.print("<p>   Common data shown for reference purposes only</p>\n");
 
+        if(!m_Vetting) {
         writer.print("<html>\n"+
                            "    <head>\n"+
                            "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+
@@ -753,7 +755,27 @@ public class LDMLComparator {
                                     "<a href=\"../collation/"+localeStr+".html\">Collation</a> "+
                                     "</b></p>\n"+
                            "        <table>\n");
-        
+        } else {
+        writer.print("<html>\n"+
+                           "    <head>\n"+
+                           "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+
+                           "        <title>Draft/Alt: "+localeStr+"</title>\n"+
+                           "    </head>\n"+
+                           "    <style>\n"+
+                           "         <!--\n" +
+                           "         table        { border-spacing: 0; border-collapse: collapse;  \n" +
+                           "                        border: 1px solid black }\n" +
+                           "         td, th       { border-spacing: 0; border-collapse: collapse;  color: black; \n" +
+                           "                        vertical-align: top; border: 1px solid black }\n" +
+                           "         -->\n" +
+                           "     </style>"+
+                           "     <body bgcolor=\"#FFFFFF\">\n"+
+                           "        <p><b>"+displayName+
+                                    "<a href=\"http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_="+localeStr+"\">Demo</a>, "+
+                                    "<a href=\"./index.html\">Main and About</a>, "+
+                                    "</b></p>\n");                                    
+                  writer.print(         "        <table>\n");
+        }
 
         //PN added
         if (((m_iOptions & OPT_DIFF) !=0)
@@ -798,6 +820,14 @@ public class LDMLComparator {
 
         }
         writer.print( "        </table>\n");
+        
+        if(m_Vetting) { 
+              if(m_Messages.length()>0) {
+                writer.print("<table bgcolor=\"#FFBBBB\" border=3><tr><th>Warnings (please see source LDML)</th></tr>" +
+                    "<tr><td>" + m_Messages + "</td></tr></table><p/><p/>\n");
+              }
+            writer.print("<i>Interim page - subject to change</i> (<a href=\"./index.html\">Help</a>)<br/>");
+        }
 
         writer.print( "        <p>Created on: " + cal.getTime() +"</p>\n"+
                       "    </body>\n"+
@@ -981,25 +1011,13 @@ public class LDMLComparator {
     
     private boolean extractMergeData(Node node,String key, boolean parentDraft){
         Node childOfSource;
-        String altText = null;
         for(childOfSource = node.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
              if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
                  continue;
              }
+             String altText = null;
              Node altForChild = null;
              boolean subDraft = parentDraft;
-             if(m_Vetting && LDMLUtilities.isNodeDraft(childOfSource)) {
-                String alt = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.ALT);
-                if((alt!=null)&&alt.equals(LDMLConstants.PROPOSED)) {
-                    altForChild = LDMLUtilities.getNonAltNodeLike(node, childOfSource);
-                    if(altForChild == null) {
-                        throw new IllegalArgumentException("ERR: can't find a node like this one: " + childOfSource.toString());
-                    }
-                }
-                if(!subDraft) {
-                    subDraft = true;
-                }
-             }
              String childOfSourceName = childOfSource.getNodeName();
              //Ignore collation and special tags
              if(childOfSourceName.equals("collations")|| childOfSource.equals("special")
@@ -1007,6 +1025,36 @@ public class LDMLComparator {
                  continue;
              }
              
+             if(m_Vetting && LDMLUtilities.isNodeDraft(childOfSource)) {
+                if(!subDraft) {
+                    subDraft = true;
+                }
+            }
+            
+            if(m_Vetting) { /* Should this be always checked? */
+                String alt = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.ALT);
+                if(alt!=null) {
+                    if(alt.equals(LDMLConstants.PROPOSED)) {
+                        if(subDraft == false) {
+                            System.err.println("***** ERROR Proposed but not draft? " + childOfSource.toString());
+                        }
+                        altForChild = LDMLUtilities.getNonAltNodeLike(node, childOfSource);
+                        if(altForChild == null) {
+                            throw new IllegalArgumentException("ERR: can't find a node like this one: " + childOfSource.toString());
+                        }
+                    } else if(subDraft) { /* don't care about nondraft */
+                        String type = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.TYPE);
+                        if(type==null) {
+                            type = "";
+                        }
+                        m_Messages = m_Messages + " <br> UNKNOWN alt type '" + alt + "' for " + 
+                                node.getNodeName() + "/" + childOfSourceName + "/" + type;
+                        System.err.println("Warning: unknown alt type '" + alt + "'  - *IGNORING*. " + childOfSource.toString());
+                        continue;
+                    }
+                }
+             }
+
              if(childrenAreElements(childOfSource)==false){
                  NamedNodeMap attr = childOfSource.getAttributes();
                  Node typeNode = attr.getNamedItem("type");
@@ -1358,7 +1406,7 @@ public class LDMLComparator {
     private void printHTMLStart(PrintWriter writer)
     {
         System.out.println("INFO: Creating the comparison chart ");
-        
+
         writer.print("<html>\n"+
         "    <head>\n"+
         "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+
