@@ -372,7 +372,7 @@ void ucmp32_setRange(CompactIntArray* this_obj, UChar start, UChar end, int32_t 
  *      inputHash[i] = XOR of values from i-count+1 to i
  */
  
-int32_t ucmp32_findOverlappingPosition(CompactIntArray* this_obj, 
+static int32_t ucmp32_findOverlappingPosition(CompactIntArray* this_obj, 
                     uint32_t  start,
                     const UChar* tempIndex,
                     int32_t  tempIndexCount,

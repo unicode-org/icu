@@ -91,14 +91,14 @@ void TestCharLength()
     
     int16_t i;
     UBool multiple;
-    for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=i+2){
+    for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         if(UTF8_CHAR_LENGTH(c) != (uint16_t)codepoint[i]){
               log_err("The no: of code units for %lx:- Expected: %d Got: %d\n", c, codepoint[i], UTF8_CHAR_LENGTH(c));
         }else{
               log_verbose("The no: of code units for %lx is %d\n",c, UTF8_CHAR_LENGTH(c) ); 
         }
-        multiple=codepoint[i] == 1 ? FALSE : TRUE;
+        multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF8_NEED_MULTIPLE_UCHAR(c) != multiple){
               log_err("ERROR: UTF8_NEED_MULTIPLE_UCHAR failed for %lx\n", c);
         }
@@ -164,7 +164,7 @@ void TestGetChar()
             log_err("ERROR: UTF8_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
          
-         i=i+3;
+         i=(uint16_t)(i+3);
     }
 
 }
@@ -213,8 +213,8 @@ void TestNextPrevChar(){
 
 
     };
-      
-   
+
+
     UChar32 c=0x0000;
     uint32_t i=0;
     uint32_t offset=0, setOffset=0;
@@ -539,9 +539,9 @@ void TestAppendChar(){
     uint16_t i, count=0;
     uint8_t str[12];
     uint32_t offset;
-    UChar32 c=0;
+/*    UChar32 c=0;*/
     uint16_t size=sizeof(s)/sizeof(s[0]);
-    for(i=0; i<sizeof(test)/sizeof(test[0]); i=i+2){
+    for(i=0; i<sizeof(test)/sizeof(test[0]); i=(uint16_t)(i+2)){
         uprv_memcpy(str, s, size);
         offset=test[i];  
         if(count<13){
