@@ -42,27 +42,97 @@
  * functions may have to be re-implemented.
  */
 
-/* Floating point utilities 
+/**
+ * Floating point utility to determine if a double is Not a Number (NaN).
+ * @internal
  */
-U_CAPI UBool   U_EXPORT2 uprv_isNaN(double);
-U_CAPI UBool   U_EXPORT2 uprv_isInfinite(double);
-U_CAPI UBool   U_EXPORT2 uprv_isPositiveInfinity(double);
-U_CAPI UBool   U_EXPORT2 uprv_isNegativeInfinity(double);
+U_CAPI UBool   U_EXPORT2 uprv_isNaN(double d);
+/**
+ * Floating point utility to determine if a double has an infinite value.
+ * @internal
+ */
+U_CAPI UBool   U_EXPORT2 uprv_isInfinite(double d);
+/**
+ * Floating point utility to determine if a double has a positive infinite value.
+ * @internal
+ */
+U_CAPI UBool   U_EXPORT2 uprv_isPositiveInfinity(double d);
+/**
+ * Floating point utility to determine if a double has a negative infinite value.
+ * @internal
+ */
+U_CAPI UBool   U_EXPORT2 uprv_isNegativeInfinity(double d);
+/**
+ * Floating point utility that returns a Not a Number (NaN) value.
+ * @internal
+ */
 U_CAPI double  U_EXPORT2 uprv_getNaN(void);
+/**
+ * Floating point utility that returns an infinite value.
+ * @internal
+ */
 U_CAPI double  U_EXPORT2 uprv_getInfinity(void);
 
+/**
+ * Floating point utility to truncate a double.
+ * @internal
+ */
 U_CAPI double  U_EXPORT2 uprv_trunc(double d);
-U_CAPI double  U_EXPORT2 uprv_floor(double x);
-U_CAPI double  U_EXPORT2 uprv_ceil(double x);
-U_CAPI double  U_EXPORT2 uprv_fabs(double x);
-U_CAPI double  U_EXPORT2 uprv_modf(double x, double* y);
-U_CAPI double  U_EXPORT2 uprv_fmod(double x, double y);
-U_CAPI double  U_EXPORT2 uprv_pow(double x, double y);
-U_CAPI double  U_EXPORT2 uprv_pow10(int32_t x);
-U_CAPI double  U_EXPORT2 uprv_fmax(double x, double y);
-U_CAPI double  U_EXPORT2 uprv_fmin(double x, double y);
-U_CAPI int32_t U_EXPORT2 uprv_max(int32_t x, int32_t y);
-U_CAPI int32_t U_EXPORT2 uprv_min(int32_t x, int32_t y);
+/**
+ * Floating point utility to calculate the floor of a double.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_floor(double d);
+/**
+ * Floating point utility to calculate the ceiling of a double.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_ceil(double d);
+/**
+ * Floating point utility to calculate the absolute value of a double.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_fabs(double d);
+/**
+ * Floating point utility to calculate the fractional and integer parts of a double.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_modf(double d, double* pinteger);
+/**
+ * Floating point utility to calculate the remainder of a double divided by another double.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_fmod(double d, double y);
+/**
+ * Floating point utility to calculate d to the power of exp (d^exp).
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_pow(double d, double exp);
+/**
+ * Floating point utility to calculate 10 to the power of exp (10^exp).
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_pow10(int32_t exp);
+/**
+ * Floating point utility to calculate the maximum value of two doubles.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_fmax(double d, double y);
+/**
+ * Floating point utility to calculate the minimum value of two doubles.
+ * @internal
+ */
+U_CAPI double  U_EXPORT2 uprv_fmin(double d, double y);
+/**
+ * Private utility to calculate the maximum value of two integers.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2 uprv_max(int32_t d, int32_t y);
+/**
+ * Private utility to calculate the minimum value of two integers.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2 uprv_min(int32_t d, int32_t y);
 
 #if U_IS_BIG_ENDIAN
 #   define uprv_isNegative(number) (*((signed char *)&(number))<0)
@@ -73,6 +143,7 @@ U_CAPI int32_t U_EXPORT2 uprv_min(int32_t x, int32_t y);
 /**
  * Return the largest positive number that can be represented by an integer
  * type of arbitrary bit length.
+ * @internal
  */
 U_CAPI double  U_EXPORT2 uprv_maxMantissa(void);
 
@@ -85,14 +156,20 @@ U_CAPI double  U_EXPORT2 uprv_maxMantissa(void);
  *
  * @param d the double value to apply the common log function for.
  * @return the log of value d.
+ * @internal
  */
 U_CAPI int16_t  U_EXPORT2 uprv_log10(double d);
 
+/**
+ * Floating point utility to calculate the logarithm of a double.
+ * @internal
+ */
 U_CAPI double  U_EXPORT2 uprv_log(double d);
 
 /** Does common notion of rounding e.g. uprv_floor(x + 0.5); */
 /* @param x the double number
  * @return the rounded double
+ * @internal
  */
 U_CAPI double  U_EXPORT2 uprv_round(double x);
 
@@ -101,6 +178,7 @@ U_CAPI double  U_EXPORT2 uprv_round(double x);
  *
  * @param x the double number
  * @return the number of digits after the decimal point in a double number x.
+ * @internal
  */
 U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
 
@@ -134,7 +212,7 @@ U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
  * information specified by the operating system. Under Windows NT
  * and Windows 95, this information is specified in the Control Panel’s
  * Date/Time application.
- * @stable ICU 2.0
+ * @internal
  */
 U_CAPI void     U_EXPORT2 uprv_tzset(void);
 
@@ -142,6 +220,7 @@ U_CAPI void     U_EXPORT2 uprv_tzset(void);
  * Difference in seconds between coordinated universal
  * time and local time. E.g., -28,800 for PST (GMT-8hrs)
  * @return the difference in seconds between coordinated universal time and local time.
+ * @internal
  */
 U_CAPI int32_t  U_EXPORT2 uprv_timezone(void);
 
@@ -151,6 +230,7 @@ U_CAPI int32_t  U_EXPORT2 uprv_timezone(void);
  *   tzname(1)  Three-letter DST zone name derived from TZ environment
  *              variable.  E.g., "PDT". If DST zone is omitted from TZ,
  *              tzname(1) is an empty string.
+ * @internal
  */
 U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
 
@@ -158,6 +238,7 @@ U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
  * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.
  * @return the UTC time measured in seconds 
  * @stable ICU 2.0
+ * @internal
  */
 U_CAPI int32_t  U_EXPORT2 uprv_getUTCtime(void);
 
@@ -204,7 +285,7 @@ U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
  * This function can call setlocale() on Unix platforms. Please read the
  * platform documentation on setlocale() before calling this function.
  * @return the default codepage for this platform 
- * @stable ICU 2.0
+ * @internal Please use ucnv_getDefaultName() instead.
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
 
@@ -214,7 +295,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
  * This function can call setlocale() on Unix platforms. Please read the
  * platform documentation on setlocale() before calling this function.
  * @return the default locale ID string
- * @stable ICU 2.0
+ * @internal Please use uloc_getDefault() instead.
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
