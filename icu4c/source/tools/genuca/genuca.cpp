@@ -23,7 +23,6 @@
 *   05/09/2001  weiv                    Case bits are now in the CEs, not in front
 */
 
-#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/udata.h"
@@ -35,6 +34,8 @@
 #include "unewdata.h"
 #include "cstring.h"
 #include "cmemory.h"
+
+#include <stdio.h>
 
 /*
  * Global - verbosity

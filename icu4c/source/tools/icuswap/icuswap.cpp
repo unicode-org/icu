@@ -22,9 +22,6 @@
 *   Will not work with data DLLs (shared libraries).
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/udata.h"
@@ -49,6 +46,10 @@
 #include "sprpimpl.h"
 #include "propname.h"
 #include "rbbidata.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* swapping implementations in i18n */
 

@@ -26,7 +26,6 @@
 //
 //--------------------------------------------------------------------
 
-#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
