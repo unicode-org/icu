@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2001/11/21 22:22:10 $
- * $Revision: 1.13 $
+ * $Date: 2001/11/27 21:48:50 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,10 @@ import com.ibm.text.UCharacter;
 import com.ibm.text.UTF16;
 
 public final class Utility {
+
+    // Other special characters
+    private static final char QUOTE               = '\'';
+    private static final char ESCAPE_CHAR         = '\\';
 
     /**
      * Convenience utility to compare two Object[]s.
@@ -1134,5 +1138,37 @@ public final class Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns the index of the first character in a set, ignoring quoted text.
+     * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
+     * found by a search for "h".  Unlike String.indexOf(), this method searches
+     * not for a single character, but for any character of the string
+     * <code>setOfChars</code>.
+     * @param text text to be searched
+     * @param start the beginning index, inclusive; <code>0 <= start
+     * <= limit</code>.
+     * @param limit the ending index, exclusive; <code>start <= limit
+     * <= text.length()</code>.
+     * @param setOfChars string with one or more distinct characters
+     * @return Offset of the first character in <code>setOfChars</code>
+     * found, or -1 if not found.
+     * @see #indexOf
+     */
+    public static int quotedIndexOf(String text, int start, int limit,
+                                    String setOfChars) {
+        for (int i=start; i<limit; ++i) {
+            char c = text.charAt(i);
+            if (c == ESCAPE_CHAR) {
+                ++i;
+            } else if (c == QUOTE) {
+                while (++i < limit
+                       && text.charAt(i) != QUOTE) {}
+            } else if (setOfChars.indexOf(c) >= 0) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
