@@ -615,6 +615,8 @@ uprv_log(double d)
     return log(d);
 }
 
+#if 0
+/* This isn't used. If it's readded, readd putiltst.c tests */
 U_CAPI int32_t U_EXPORT2
 uprv_digitsAfterDecimal(double x)
 {
@@ -657,6 +659,7 @@ uprv_digitsAfterDecimal(double x)
     }
     return numDigits;
 }
+#endif
 
 /*---------------------------------------------------------------------------
   Platform-specific Implementations
