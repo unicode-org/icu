@@ -49,6 +49,8 @@ static void TestSecondaryGrouping(void);
 /*Internal functions used*/
 static void roundingTest(UNumberFormat*, double,  int32_t, const char*);
 
+static void TestCurrencyKeywords(void);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

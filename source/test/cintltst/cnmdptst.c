@@ -21,6 +21,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/ucurr.h"
 #include "unicode/uloc.h"
 #include "unicode/unum.h"
 #include "unicode/ustring.h"
@@ -47,7 +48,7 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestRounding487, "tsformat/cnmdptst/TestRounding487");
   addTest(root, &TestDoubleAttribute, "tsformat/cnmdptst/TestDoubleAttribute");
   addTest(root, &TestSecondaryGrouping, "tsformat/cnmdptst/TestSecondaryGrouping");
-
+  addTest(root, &TestCurrencyKeywords, "tsformat/cnmdptst/TestCurrencyKeywords");
 }
 
 /*Test Various format patterns*/
@@ -757,6 +758,72 @@ static void TestSecondaryGrouping(void) {
     } 
     unum_close(f);
     unum_close(us);
+}
+
+static void TestCurrencyKeywords(void)
+{
+  static char *currencies[] = { 
+    "ADD", "ADP", "AED", "AFA", "AFN", "AIF", "ALK", "ALL", "ALV", "ALX", "AMD",
+    "ANG", "AOA", "AOK", "AON", "AOR", "AOS", "ARA", "ARM", "ARP", "ARS", "ATS",
+    "AUD", "AUP", "AWG", "AZM", "BAD", "BAM", "BAN", "BBD", "BDT", "BEC", "BEF",
+    "BEL", "BGL", "BGM", "BGN", "BGO", "BGX", "BHD", "BIF", "BMD", "BMP", "BND",
+    "BOB", "BOL", "BOP", "BOV", "BRB", "BRC", "BRE", "BRL", "BRN", "BRR", "BRZ",
+    "BSD", "BSP", "BTN", "BTR", "BUK", "BUR", "BWP", "BYB", "BYL", "BYR", "BZD",
+    "BZH", "CAD", "CDF", "CDG", "CDL", "CFF", "CHF", "CKD", "CLC", "CLE", "CLF",
+    "CLP", "CMF", "CNP", "CNX", "CNY", "COB", "COF", "COP", "CRC", "CSC", "CSK",
+    "CUP", "CUX", "CVE", "CWG", "CYP", "CZK", "DDM", "DEM", "DES", "DJF", "DKK", 
+    "DOP", "DZD", "DZF", "DZG", "ECS", "ECV", "EEK", "EGP", "ERN", "ESP", "ETB", 
+    "ETD", "EUR", "FIM", "FIN", "FJD", "FJP", "FKP", "FOK", "FRF", "FRG", "GAF", 
+    "GBP", "GEK", "GEL", "GHC", "GHO", "GHP", "GHR", "GIP", "GLK", "GMD", "GMP", 
+    "GNF", "GNI", "GNS", "GPF", "GQE", "GQF", "GQP", "GRD", "GRN", "GTQ", "GUF", 
+    "GWE", "GWM", "GWP", "GYD", "HKD", "HNL", "HRD", "HRK", "HTG", "HUF", "IBP", 
+    "IDG", "IDJ", "IDN", "IDR", "IEP", "ILL", "ILP", "ILS", "IMP", "INR", "IQD", 
+    "IRR", "ISK", "ITL", "JEP", "JMD", "JMP", "JOD", "JPY", "KES", "KGS", "KHO", 
+    "KHR", "KID", "KMF", "KPP", "KPW", "KRH", "KRO", "KRW", "KWD", "KYD", "KZR", 
+    "KZT", "LAK", "LBP", "LIF", "LKR", "LNR", "LRD", "LSL", "LTL", "LTT", "LUF", 
+    "LVL", "LVR", "LYB", "LYD", "LYP", "MAD", "MAF", "MCF", "MCG", "MDC", "MDL", 
+    "MDR", "MGA", "MGF", "MHD", "MKD", "MKN", "MLF", "MMK", "MMX", "MNT", "MOP", 
+    "MQF", "MRO", "MTL", "MTP", "MUR", "MVP", "MVR", "MWK", "MWP", "MXN", "MXP", 
+    "MXV", "MYR", "MZE", "MZM", "NAD", "NCF", "NGN", "NGP", "NHF", "NIC", "NIG", 
+    "NIO", "NLG", "NOK", "NPR", "NZD", "NZP", "OMR", "OMS", "PAB", "PDK", "PDN", 
+    "PDR", "PEI", "PEN", "PES", "PGK", "PHP", "PKR", "PLN", "PLX", "PLZ", "PSP", 
+    "PTC", "PTE", "PYG", "QAR", "REF", "ROL", "RON", "RUB", "RUR", "RWF", "SAR", 
+    "SAS", "SBD", "SCR", "SDD", "SDP", "SEK", "SGD", "SHP", "SIB", "SIT", "SKK", 
+    "SLL", "SML", "SOS", "SQS", "SRG", "SSP", "STD", "STE", "SUN", "SUR", "SVC", 
+    "SYP", "SZL", "TCC", "TDF", "THB", "TJR", "TJS", "TMM", "TND", "TOP", "TOS", 
+    "TPE", "TPP", "TRL", "TTD", "TTO", "TVD", "TWD", "TZS", "UAH", "UAK", "UGS", 
+    "UGX", "USD", "USN", "USS", "UYF", "UYP", "UYU", "UZC", "UZS", "VAL", "VDD", 
+    "VDN", "VDP", "VEB", "VGD", "VND", "VNN", "VNR", "VNS", "VUV", "WSP", "WST", 
+    "XAD", "XAF", "XAM", "XAU", "XBA", "XBB", "XBC", "XBD", "XCD", "XCF", "XDR", 
+    "XEF", "XEU", "XFO", "XFU", "XID", "XMF", "XNF", "XOF", "XPF", "XPS", "XSS", 
+    "XTR", "YDD", "YEI", "YER", "YUD", "YUF", "YUG", "YUM", "YUN", "YUO", "YUR", 
+    "ZAL", "ZAP", "ZAR", "ZMK", "ZMP", "ZRN", "ZRZ", "ZWD"
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t i = 0, j = 0;
+  int32_t noLocales = uloc_countAvailable();
+  char locale[256];
+  char currLoc[256];
+  const UChar *result = NULL;
+  UChar currBuffer[256];
+
+   
+  for(i = 0; i < noLocales; i++) {
+    strcpy(currLoc, uloc_getAvailable(i));
+    for(j = 0; j < sizeof(currencies)/sizeof(currencies[0]); j++) {
+      strcpy(locale, currLoc);
+      strcat(locale, "@currency=");
+      strcat(locale, currencies[j]);
+      result = ucurr_forLocale(locale, &status);
+      u_charsToUChars(currencies[j], currBuffer, 3);
+      currBuffer[3] = 0;
+      if(u_strcmp(currBuffer, result) != 0) {
+        log_err("Didn't get the right currency for %s\n", locale);
+      }
+    }
+
+  }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
