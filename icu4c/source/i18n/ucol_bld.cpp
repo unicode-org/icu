@@ -573,6 +573,14 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       el.isThai = FALSE;
     }
 
+    if(src->UCA != NULL) {
+      for(i = 0; i<el.cSize; i++) {
+        if(UCOL_ISJAMO(el.cPoints[i])) {
+          t->image->jamoSpecial = TRUE;
+        }
+      }
+    }
+
     /* we also need a case bit here, and we'll fish it out from the UCA for the first codepoint */
     uint32_t caseCE = ucol_getFirstCE(src->UCA, el.cPoints[0], status);
     if((caseCE & 0x40) != 0) {
@@ -769,6 +777,9 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
   
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
+  if(U_FAILURE(*status)) {
+    return NULL;
+  }
 /*
 2.  Eliminate the negative lists by doing the following for each non-null negative list: 
     o   if previousCE(baseCE, strongestN) != some ListHeader X's baseCE, 
@@ -814,7 +825,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* now we need to generate the CEs */ 
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
-    ucol_initBuffers(&src->lh[i], tailored, status);
+    if(U_SUCCESS(*status)) {
+      ucol_initBuffers(&src->lh[i], tailored, status);
+    }
   }
 
   tempUCATable *t = uprv_uca_initTempTable(src->image, src->UCA, status);
@@ -827,7 +840,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* now we need to generate the CEs */ 
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
-    ucol_createElements(src, t, &src->lh[i], tailored, status);
+    if(U_SUCCESS(*status)) {
+      ucol_createElements(src, t, &src->lh[i], tailored, status);
+    }
   }
 
   UCATableHeader *myData = NULL;
@@ -842,21 +857,23 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     uint32_t compCE[256];
     uint32_t compRes = 0;
 
-    /* produce canonical closure */
-    for(u = 0; u < 0xFFFF; u++) {
-      if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
-        || (noOfDec == 1 && *decomp != (UChar)u))
-      /*if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u))*/
-      {
-        compRes = ucol_getDynamicCEs(src, t, (UChar *)&u, 1, compCE, 256, status);
-        el.noOfCEs = ucol_getDynamicCEs(src, t, decomp, noOfDec, el.CEs, 128, status);
+    if(U_SUCCESS(*status)) {
+      /* produce canonical closure */
+      for(u = 0; u < 0xFFFF; u++) {
+        if((noOfDec = unorm_normalize(&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
+          || (noOfDec == 1 && *decomp != (UChar)u))
+        /*if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u))*/
+        {
+          compRes = ucol_getDynamicCEs(src, t, (UChar *)&u, 1, compCE, 256, status);
+          el.noOfCEs = ucol_getDynamicCEs(src, t, decomp, noOfDec, el.CEs, 128, status);
 
-        if((compRes != el.noOfCEs) || (uprv_memcmp(compCE, el.CEs, compRes*sizeof(uint32_t)) != 0)) {
-            el.uchars[0] = (UChar)u;
-            el.cPoints = el.uchars;
-            el.cSize = 1;
+          if((compRes != el.noOfCEs) || (uprv_memcmp(compCE, el.CEs, compRes*sizeof(uint32_t)) != 0)) {
+              el.uchars[0] = (UChar)u;
+              el.cPoints = el.uchars;
+              el.cSize = 1;
 
-            uprv_uca_addAnElement(t, &el, status);
+              uprv_uca_addAnElement(t, &el, status);
+          }
         }
       }
     }
@@ -864,27 +881,29 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* still need to produce compatibility closure */
 
   /* add latin-1 stuff */
-    for(u = 0; u<0x100; u++) {
-      if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND /*) {*/
-        /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
-        /* the table, even if it results in more false closure elements */
-        || ((isContraction(CE)) &&
-        (uprv_cnttab_getCE(t->contractions, CE, 0, TRUE, status) == UCOL_NOT_FOUND))
-        ) {
-        decomp[0] = (UChar)u;
-        el.uchars[0] = (UChar)u;
-        el.cPoints = el.uchars;
-        el.cSize = 1;
-        el.noOfCEs = 0;
-        init_collIterate(src->UCA, decomp, 1, &colIt, TRUE);
-        while(CE != UCOL_NO_MORE_CES) {
-          CE = ucol_getNextCE(src->UCA, &colIt, status);
-          /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
-          if(CE != UCOL_NO_MORE_CES) {
-            el.CEs[el.noOfCEs++] = CE;
+    if(U_SUCCESS(*status)) {
+      for(u = 0; u<0x100; u++) {
+        if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND /*) {*/
+          /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
+          /* the table, even if it results in more false closure elements */
+          || ((isContraction(CE)) &&
+          (uprv_cnttab_getCE(t->contractions, CE, 0, TRUE, status) == UCOL_NOT_FOUND))
+          ) {
+          decomp[0] = (UChar)u;
+          el.uchars[0] = (UChar)u;
+          el.cPoints = el.uchars;
+          el.cSize = 1;
+          el.noOfCEs = 0;
+          init_collIterate(src->UCA, decomp, 1, &colIt, TRUE);
+          while(CE != UCOL_NO_MORE_CES) {
+            CE = ucol_getNextCE(src->UCA, &colIt, status);
+            /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
+            if(CE != UCOL_NO_MORE_CES) {
+              el.CEs[el.noOfCEs++] = CE;
+            }
           }
+          uprv_uca_addAnElement(t, &el, status);
         }
-        uprv_uca_addAnElement(t, &el, status);
       }
     }
   }

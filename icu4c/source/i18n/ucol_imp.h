@@ -550,6 +550,7 @@ int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, increme
 void ucol_updateInternalState(UCollator *coll);
 uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
 U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
+U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
 #endif
 

@@ -245,8 +245,8 @@ ucol_openRules(    const    UChar                  *rules,
     ucol_setOptionsFromHeader(result, src.image, status);
     result->hasRealData = FALSE;
   }
-  result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
   if(U_SUCCESS(*status)) {
+    result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
     result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
     u_strcpy((UChar *)result->rules, rules);
     result->freeRulesOnClose = TRUE;
@@ -489,6 +489,8 @@ uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
   return order;
 }
 
+#if 0
+/* bogus code, based on the wrong assumption */
 void getSpecialJamo(const UCollator *coll, uint32_t CE, uint32_t **buffer) {
       for(;;) {
         uint32_t tag = getCETag(CE);
@@ -534,6 +536,8 @@ void ucol_getJamoCEs(const UCollator *coll, UChar ch, uint32_t **buffer) {
   } 
   *(*buffer++) = order;
 }
+
+#endif
 
 /* This function tries to get a CE from UCA, which should be always around  */
 /* UChar is passed in in order to speed things up                           */
@@ -592,12 +596,39 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
             return ucmp32_get(UCA->mapping, L); // return first one
 
           } else { // Jamo is Special
+            collIterate jamos;
+            UChar jamoString[3];
+            uint32_t CE = UCOL_NOT_FOUND;
+            const UCollator *collator = collationSource->coll;
+            jamoString[0] = L;
+            jamoString[1] = V;
+            if (T != TBase) {
+              jamoString[2] = T;
+              init_collIterate(collator, jamoString, 3, &jamos, TRUE);
+            } else {
+              init_collIterate(collator, jamoString, 2, &jamos, TRUE);
+            }
+
+            CE = ucol_getNextCE(collator, &jamos, status);
+
+            while(CE != UCOL_NO_MORE_CES) {
+              *(collationSource->CEpos++) = CE;
+              CE = ucol_getNextCE(collator, &jamos, status);
+            }
+            return *(collationSource->toReturn++);
+              
+            /* Code and pseudocode below is bogus - we didn't take into  */
+            /* account that any combo of L,V,T could be */
+            /* in fact a contraction - we cannot look at them separately */
+
+/*
             ucol_getJamoCEs(collationSource->coll, L, &collationSource->CEpos);
             ucol_getJamoCEs(collationSource->coll, V, &collationSource->CEpos);
             if (T != TBase) {
               ucol_getJamoCEs(collationSource->coll, T, &collationSource->CEpos);
             }
             return *(collationSource->toReturn++);
+*/
 /*
             // do recursive processing of L, V, and T with fetchCE (but T only if not equal to TBase!!)
             // Since fetchCE returns a CE, and (potentially) stuffs items into the ce buffer,
@@ -718,6 +749,30 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         collationSource->toReturn = collationSource->CEpos - 1;
         return *(collationSource->toReturn);
       } else { 
+        collIterate jamos;
+        UChar jamoString[3];
+        uint32_t CE = UCOL_NOT_FOUND;
+        const UCollator *collator = collationSource->coll;
+        jamoString[0] = L;
+        jamoString[1] = V;
+        if (T != TBase) {
+          jamoString[2] = T;
+          init_collIterate(collator, jamoString, 3, &jamos, TRUE);
+        } else {
+          init_collIterate(collator, jamoString, 2, &jamos, TRUE);
+        }
+
+        CE = ucol_getNextCE(collator, &jamos, status);
+
+        while(CE != UCOL_NO_MORE_CES) {
+          *(collationSource->CEpos++) = CE;
+          CE = ucol_getNextCE(collator, &jamos, status);
+        }
+        collationSource->toReturn = collationSource->CEpos - 1;
+        return *(collationSource->toReturn);
+
+        /*return *(collationSource->toReturn++);*/
+/*
         ucol_getJamoCEs(collationSource->coll, L, &collationSource->CEpos);
         ucol_getJamoCEs(collationSource->coll, V, &collationSource->CEpos);
         if (T != TBase) {
@@ -725,6 +780,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         }
         collationSource->toReturn = collationSource->CEpos - 1;
         return *(collationSource->toReturn);
+*/
         /* 
         Jamo is Special
         do recursive processing of L, V, and T with fetchCE (but T only if not 
@@ -2687,6 +2743,37 @@ static UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     return ((htbyte >> (hash & 7)) & 1) == 1;
 }
 
+/* This internal API checks whether a character is tailored or not */
+U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
+  uint32_t CE = UCOL_NOT_FOUND;
+  const UChar *ContractionStart = NULL;
+  if(U_SUCCESS(*status) && coll != NULL) {
+    if(coll == UCA) {
+      return FALSE;
+    } else if(u < 0x100) { /* latin-1 */
+      CE = coll->latinOneMapping[u];
+      if(CE == UCA->latinOneMapping[u]) {
+        return FALSE;
+      } 
+    } else { /* regular */
+      CE = ucmp32_get(coll->mapping, u);
+    }
+
+    if(isContraction(CE)) {
+      ContractionStart = (UChar *)coll->image+getContractOffset(CE);
+      CE = *(coll->contractionCEs + (ContractionStart- coll->contractionIndex));
+    }
+
+    if(CE == UCOL_NOT_FOUND) {
+      return FALSE;
+    } else {
+      return TRUE;
+    }
+  } else {
+    return FALSE;
+  }
+}
+
 
 /****************************************************************************/
 /* Following are the string compare functions                               */
@@ -4029,12 +4116,35 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
             return ucmp32_get(UCA->mapping, L); // return first one
 
           } else { // Jamo is Special
+            collIterate jamos;
+            UChar jamoString[3];
+            uint32_t CE = UCOL_NOT_FOUND;
+            const UCollator *collator = collationSource->coll;
+            jamoString[0] = L;
+            jamoString[1] = V;
+            if (T != TBase) {
+              jamoString[2] = T;
+              init_collIterate(collator, jamoString, 3, &jamos, TRUE);
+            } else {
+              init_collIterate(collator, jamoString, 2, &jamos, TRUE);
+            }
+
+            CE = ucol_getNextCE(collator, &jamos, status);
+
+            while(CE != UCOL_NO_MORE_CES) {
+              *(collationSource->CEpos++) = CE;
+              CE = ucol_getNextCE(collator, &jamos, status);
+            }
+            return *(collationSource->toReturn++);
+
+/*
             ucol_getJamoCEs(collationSource->coll, L, &collationSource->CEpos);
             ucol_getJamoCEs(collationSource->coll, V, &collationSource->CEpos);
             if (T != TBase) {
               ucol_getJamoCEs(collationSource->coll, T, &collationSource->CEpos);
             }
             return *(collationSource->toReturn++);
+*/
 
 /*
             // do recursive processing of L, V, and T with fetchCE (but T only if not equal to TBase!!)
