@@ -1122,7 +1122,18 @@ public class LDMLComparator {
                  Node typeNode = attr.getNamedItem("type");
                  String index="";
                  if(typeNode!=null){
+
+                     if(childOfSource.getNodeName().equals("era")&&!key.equals("common")){
+                         //remap type for comparison purpose
+                         // TODO remove this hack
+                         int j = Integer.parseInt(typeNode.getNodeValue());
+                         if(j>0){
+                             j--;
+                         }
+                         typeNode.setNodeValue(Integer.toString(j));
+                     }
                      String temp =typeNode.getNodeValue();
+
                      if(!temp.equals("standard")){
                          index = temp;
                      }

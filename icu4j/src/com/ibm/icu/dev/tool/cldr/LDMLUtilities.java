@@ -152,6 +152,15 @@ public class LDMLUtilities {
            return null ;
        }
        
+       try {
+            OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream("./" + File.separator + locale
+                            + "_debug.xml"), "UTF-8");
+            LDMLUtilities.printDOMTree(full, new PrintWriter(writer));
+            writer.flush();
+        } catch (IOException e) {
+            //throw the exceptionaway .. this is for debugging
+        }
        return full;
     }
 
@@ -724,7 +733,8 @@ public class LDMLUtilities {
     	String val = getAttributeValue(node, LDMLConstants.TYPE);
         String and =  "and";
         boolean isStart = true;
-        if(val!=null){
+        String name = node.getNodeName();
+        if(val!=null && !name.equals(LDMLConstants.DEFAULT)&& !name.equals(LDMLConstants.MS)){
             if(isStart){
                 xpath.append("[");
                 isStart=false;
