@@ -51,9 +51,6 @@ public:
      * Run tests from external test data file.
      */
 
-    void TestSentenceInvariants();
-    void TestCharacterInvariants();
-    void TestWordInvariants();
     void TestEmptyString();
     void TestGetAvailableLocales();
     void TestGetDisplayName();
@@ -117,9 +114,6 @@ private:
      * on different kinds of iterators (word, sentence, line and character)
      **/
     void doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestData &td);
-
-    void doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars);
-    void doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars);
 
     void RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name, uint32_t  seed, int32_t loopCount);
 
