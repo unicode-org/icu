@@ -565,15 +565,17 @@ protected:
     /***
      * Called by computeJulianDay.  Returns the default month (0-based) for the year,
      * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
+     * @internal
      */
-    virtual int32_t getDefaultMonthInYear() const { return 0; }
+    virtual inline int32_t getDefaultMonthInYear() const { return 0; }
 
 
     /***
      * Called by computeJulianDay.  Returns the default day (1-based) for the month,
      * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
+     * @internal
      */
-    virtual int32_t getDefaultDayInMonth(int32_t month) const { return 1; }
+    virtual inline int32_t getDefaultDayInMonth(int32_t /*month*/) const { return 1; }
 
 
 
