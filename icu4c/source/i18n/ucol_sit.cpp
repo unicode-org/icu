@@ -867,45 +867,28 @@ struct contContext {
 
 static void
 addContraction(const UCollator *coll, USet *contractions, UChar *buffer, int32_t bufLen, 
-               uint32_t CE, int32_t leftIndex, int32_t rightIndex, UErrorCode *status) 
+               uint32_t CE, int32_t rightIndex, UErrorCode *status) 
 {
-    int32_t lI = leftIndex, rI = rightIndex;
+    if(rightIndex == bufLen-1) {
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
     const UChar *UCharOffset = (UChar *)coll->image+getContractOffset(CE);
     uint32_t newCE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
     // we might have a contraction that ends from previous level
-    if(newCE != UCOL_NOT_FOUND) {
-        if(isSpecial(newCE) && getCETag(newCE) == SPEC_PROC_TAG) {
-            addContraction(coll, contractions, buffer, bufLen, newCE, leftIndex, rightIndex, status);
-        } else if(rightIndex > leftIndex) {
-            uset_addString(contractions, buffer+leftIndex, rightIndex - leftIndex + 1);
-        }
+    if(newCE != UCOL_NOT_FOUND && rightIndex > 1) {
+            uset_addString(contractions, buffer, rightIndex + 1);
     }
 
     UCharOffset++;
     while(*UCharOffset != 0xFFFF) {
-        // depending on how we got here, we want to put chars in
-        // either from left or from right (Japanese tends to start with a contraction,
-        // only to throw you a prefix, just for a spin ;)
         newCE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-        if(getCETag(CE) == CONTRACTION_TAG) {
-            if(rI == internalBufferSize-1) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                return;
-            }
-            buffer[++rI] = *UCharOffset;
+        buffer[rightIndex] = *UCharOffset;
+        if(isSpecial(newCE) && getCETag(newCE) == CONTRACTION_TAG) {
+            addContraction(coll, contractions, buffer, bufLen, newCE, rightIndex + 1, status);
         } else {
-            if(lI == 0) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                return;
-            }
-            buffer[--lI] = *UCharOffset;
+            uset_addString(contractions, buffer, rightIndex + 1);
         }
-        if(isSpecial(newCE) && (getCETag(newCE) == CONTRACTION_TAG || getCETag(newCE) == SPEC_PROC_TAG)) {
-            addContraction(coll, contractions, buffer, bufLen, newCE, lI, rI, status);
-        } else {
-            uset_addString(contractions, buffer+lI, rI - lI + 1);
-        }
-        lI = leftIndex; rI = rightIndex;
         UCharOffset++;
     }
 }
@@ -919,7 +902,7 @@ _processContractions(const void *context, UChar32 start, UChar32 limit, uint32_t
     USet *removed = ((contContext *)context)->removedContractions;
     const UCollator *coll = ((contContext *)context)->coll;
     UChar contraction[internalBufferSize];
-    if(isSpecial(CE) && (getCETag(CE) == CONTRACTION_TAG || getCETag(CE) == SPEC_PROC_TAG)) {
+    if(isSpecial(CE) && getCETag(CE) == CONTRACTION_TAG) {
         while(start < limit && U_SUCCESS(*status)) {
             // if there are suppressed contractions, we don't 
             // want to add them.
@@ -929,9 +912,8 @@ _processContractions(const void *context, UChar32 start, UChar32 limit, uint32_t
             }
             // we start our contraction from middle, since we don't know if it
             // will grow toward right or left
-            int32_t middle = internalBufferSize/2;
-            contraction[middle] = (UChar)start;
-            addContraction(coll, unsafe, contraction, internalBufferSize, CE, middle, middle, status);
+            contraction[0] = (UChar)start;
+            addContraction(coll, unsafe, contraction, internalBufferSize, CE, 1, status);
             start++;
         }
     }
