@@ -98,4 +98,11 @@ U_CFUNC UBool assertTrue(const char* msg, int condition);
 U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
                            const char* actualString);
 
+/**
+ * Time bomb - allows temporary behavior that expires at a given
+ *             release
+ *
+ */
+U_CFUNC UBool isICUVersionAtLeast(const UVersionInfo x);
+
 #endif

@@ -24,6 +24,7 @@
 #include "cintltst.h"
 #include "umutex.h"
 #include "uassert.h"
+#include "cmemory.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
@@ -690,5 +691,15 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
 #endif
     return TRUE;
 }
+/*--------------------------------------------------------------------
+ * Time bomb - allows temporary behavior that expires at a given
+ *             release
+ *--------------------------------------------------------------------
+ */
 
+U_CFUNC UBool isICUVersionAtLeast(const UVersionInfo x) {
+    UVersionInfo v;
+    u_getVersion(v);
+    return (uprv_memcmp(v, x, U_MAX_VERSION_LENGTH) >= 0);
+}
 #endif
