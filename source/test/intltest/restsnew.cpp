@@ -180,6 +180,7 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, char* &na
     case 0: name = "TestResourceBundles"; if (exec) TestResourceBundles(); break;
     case 1: name = "TestConstruction"; if (exec) TestConstruction(); break;
     case 2: name = "TestIteration"; if (exec) TestIteration(); break;
+    case 3: name = "TestOtherAPI";  if(exec) TestOtherAPI(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -435,7 +436,49 @@ NewResourceBundleTest::TestIteration()
     delete locale;
 }
              
-		    
+void
+NewResourceBundleTest::TestOtherAPI(){
+    UErrorCode   err = U_ZERO_ERROR;
+    const char   *directory;
+    char testdatapath[256];
+    Locale       *locale=new Locale("te_IN");
+   
+    directory=IntlTest::getTestDirectory();
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
+
+    ResourceBundle  test1(testdatapath, *locale, err);
+	if(U_FAILURE(err)){
+		errln("Construction failed");
+	}
+
+    logln("Testing getLocale()\n");
+    if(strcmp(test1.getLocale().getName(), locale->getName()) !=0 ){
+        errln("FAIL: ResourceBundle::getLocale() failed\n");
+    }
+
+    delete locale;
+
+    logln("Testing ResourceBundle(UErrorCode)\n");
+    ResourceBundle defaultresource(err);
+    if(U_FAILURE(err)){
+		errln("Construction of default resourcebundle failed");
+	}
+    if(strcmp(defaultresource.getLocale().getName(), Locale::getDefault().getName()) != 0){
+        errln("Construction of default resourcebundle didn't take the defaultlocale\n");
+    }
+    
+
+    ResourceBundle copyRes(defaultresource);
+    if(strcmp(copyRes.getName(), defaultresource.getName() ) !=0  ||
+        strcmp(test1.getName(), defaultresource.getName() ) ==0 ||
+        strcmp(copyRes.getLocale().getName(), defaultresource.getLocale().getName() ) !=0  ||
+        strcmp(test1.getLocale().getName(), defaultresource.getLocale().getName() ) ==0 ){
+        errln("copy construction failed\n");
+    }
+
+   
+}
 		
            
 
