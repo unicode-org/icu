@@ -98,12 +98,12 @@ pt_PT {
         "{1} {0}",
     }
     Languages {
-        ar { "\u00C1rabe" }
-        cs { "Checo" }
-        et { "Est\u00F3nio" }
-        lv { "Let\u00E3o" }
-        pl { "Polaco" }
-        sl { "Esloveno" }
+        ar { "\u00E1rabe" }
+        cs { "checo" }
+        et { "est\u00F3nio" }
+        lv { "let\u00E3o" }
+        pl { "polaco" }
+        sl { "esloveno" }
     }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
