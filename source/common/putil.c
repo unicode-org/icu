@@ -1107,9 +1107,6 @@ The leftmost codepage (.xxx) wins.
     ll [ _CC ] [ . MM ] [ @ VV]
 
       l = lang, C = ctry, M = charmap, V = variant
-
-
-
     */
 
     if((p = uprv_strchr(posixID, '.')) != NULL)
@@ -1122,7 +1119,7 @@ The leftmost codepage (.xxx) wins.
         /* do not copy after the @ */
         if((p = uprv_strchr(correctedPOSIXLocale, '@')) != NULL)
         {
-          correctedPOSIXLocale[p-correctedPOSIXLocale] = 0;
+            correctedPOSIXLocale[p-correctedPOSIXLocale] = 0;
         }
     }
 
@@ -1149,16 +1146,20 @@ The leftmost codepage (.xxx) wins.
         }
 
         if(uprv_strchr(correctedPOSIXLocale,'_') == NULL)
-            uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
-        else
-            uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
-
-        if(q = uprv_strchr(p, '.'))
         {
-          /* How big will the resulting string be? */
-          len = uprv_strlen(correctedPOSIXLocale) + (q-p);
-          uprv_strncat(correctedPOSIXLocale, p, q-p);
-          correctedPOSIXLocale[len] = 0;
+            uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
+        }
+        else
+        {
+            uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
+        }
+
+        if((q = uprv_strchr(p, '.')) != NULL)
+        {
+            /* How big will the resulting string be? */
+            len = uprv_strlen(correctedPOSIXLocale) + (q-p);
+            uprv_strncat(correctedPOSIXLocale, p, q-p);
+            correctedPOSIXLocale[len] = 0;
         }
         else
         {
@@ -1173,7 +1174,7 @@ The leftmost codepage (.xxx) wins.
     /* Was a correction made? */
     if(correctedPOSIXLocale != NULL) 
     {
-      posixID = correctedPOSIXLocale;
+        posixID = correctedPOSIXLocale;
     }
 
     return posixID;
