@@ -79,7 +79,14 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int
     {
         if(l->str)
         {
-            uprv_strcpy(buffer, l->str);
+            uprv_strncpy(buffer, l->str, 1023);
+            buffer[1023]=0;
+            if(uprv_strlen(l->str) >= 1023)
+            {
+                fprintf(stderr, "%s:%d: Internal error, line too long (greater than 1023 chars)\n",
+                        __FILE__, __LINE__);
+                exit(0);
+            }
             if(quote < 0) { /* remove quotes */
                 if(buffer[uprv_strlen(buffer)-1] == '"') {
                     buffer[uprv_strlen(buffer)-1] = '\0';
