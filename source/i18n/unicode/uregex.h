@@ -40,7 +40,7 @@ typedef struct URegularExpression URegularExpression;
  * @stable ICU 2.4
  */
 typedef enum URegexpFlag{
-    /** Forces normalization of pattern and strings.  @draft ICU 3.0 */
+    /** Forces normalization of pattern and strings.  @draft ICU 2.4 */
     UREGEX_CANON_EQ         = 128,
 
     /**  Enable case insensitive matching.  @stable ICU 2.4 */
@@ -87,9 +87,10 @@ typedef enum URegexpFlag{
   *                       error within the source regular expression string.  If this
   *                       information is not wanted, pass NULL for this parameter.
   * @param status         Receives error detected by this function.
+  * @draft ICU 3.0
   *
   */
-U_STABLE URegularExpression * U_EXPORT2
+U_DRAFT URegularExpression * U_EXPORT2
 uregex_open( const  UChar          *pattern,
                     int32_t         patternLength,
                     uint32_t        flags,
@@ -117,8 +118,9 @@ uregex_open( const  UChar          *pattern,
   * @return               The URegularExpression object representing the compiled
   *                       pattern.
   *
+  * @draft ICU 3.0
   */
-U_STABLE URegularExpression * U_EXPORT2
+U_DRAFT URegularExpression * U_EXPORT2
 uregex_openC( const char           *pattern,
                     uint32_t        flags,
                     UParseError    *pe,
@@ -132,8 +134,9 @@ uregex_openC( const char           *pattern,
   *   was holding.
   *
   * @param regexp   The regular expression to be closed.
+  * @draft ICU 3.0
   */
-U_STABLE void U_EXPORT2 
+U_DRAFT void U_EXPORT2 
 uregex_close(URegularExpression *regexp);
 
 /**
@@ -152,8 +155,9 @@ uregex_close(URegularExpression *regexp);
  * @param regexp   The compiled regular expression to be cloned.
  * @param status   Receives indication of any errors encountered
  * @return the cloned copy of the compiled regular expression.
+ * @draft ICU 3.0
  */
-U_STABLE URegularExpression * U_EXPORT2 
+U_DRAFT URegularExpression * U_EXPORT2 
 uregex_clone(const URegularExpression *regexp, UErrorCode *status);
 
 /**
@@ -170,8 +174,9 @@ uregex_clone(const URegularExpression *regexp, UErrorCode *status);
  *                   owned by the regular expression object, and must not be
  *                   altered or deleted by the application.  The returned string
  *                   will remain valid until the regular expression is closed.
+ * @draft ICU 3.0
  */
-U_STABLE const UChar * U_EXPORT2 
+U_DRAFT const UChar * U_EXPORT2 
 uregex_pattern(const  URegularExpression   *regexp,
                          int32_t           *patLength,
                          UErrorCode        *status);
@@ -183,8 +188,9 @@ uregex_pattern(const  URegularExpression   *regexp,
   * @param regexp     The compiled regular expression.
   * @param return     The match mode flags
   * @see URegexpFlag
+  * @draft ICU 3.0
   */
-U_STABLE int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_flags(const  URegularExpression   *regexp,
                     UErrorCode           *status);
 
@@ -207,8 +213,9 @@ uregex_flags(const  URegularExpression   *regexp,
   * @param textLength The length of the subject text, or -1 if the string
   *                   is NUL terminated.
   * @param status     Receives errors detected by this function.
+  * @draft ICU 3.0
   */
-U_STABLE void U_EXPORT2 
+U_DRAFT void U_EXPORT2 
 uregex_setText(URegularExpression *regexp,
                const UChar        *text,
                int32_t             textLength,
@@ -228,6 +235,7 @@ uregex_setText(URegularExpression *regexp,
   * @param status      Receives errors detected by this function.
   * @return            Poiner to the subject text string currently associated with
   *                    this regular expression.
+  * @draft ICU 3.0
   */
 U_DRAFT const UChar * U_EXPORT2 
 uregex_getText(URegularExpression *regexp,
