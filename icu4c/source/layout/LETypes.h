@@ -2,7 +2,7 @@
 /*
  * @(#)LETypes.h	1.2 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2002 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  */
 
@@ -11,6 +11,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -165,6 +166,22 @@ typedef struct LEPoint LEPoint;
  * @stable ICU 2.4
  */
 #define LE_ARRAY_COPY(dst, src, count) memcpy(dst, src, (count) * sizeof (src)[0])
+
+/**
+ * Allocate an array of basic types. This is used to isolate the rest of
+ * the LayoutEngine code from cmemory.h.
+ *
+ * @draft ICU 2.6
+ */
+#define LE_NEW_ARRAY(type, count) (type *) uprv_malloc((count) * sizeof(type))
+
+/**
+ * Free an array of basic types. This is used to isolate the rest of
+ * the LayoutEngine code from cmemory.h.
+ *
+ * @draft ICU 2.6
+ */
+#define LE_DELETE_ARRAY(array) uprv_free(array)
 
 /**
  * Error codes returned by the LayoutEngine.
