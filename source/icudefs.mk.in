@@ -3,7 +3,7 @@
 #
 # Yves Arrouye.
 #
-# Copyright (C) 2000-2003, International Business Machines Corporation and others.
+# Copyright (C) 2000-2004, International Business Machines Corporation and others.
 # All Rights Reserved.
 
 #
@@ -166,18 +166,24 @@ RMV = rm -rf
 INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
+# Location of the libraries before "make install" is used
+LIBDIR=$(top_builddir)/lib
+
+# Location of the executables before "make install" is used
+BINDIR=$(top_builddir)/bin
+
 # Link commands to link to ICU libs
-LIBICUDT=       -L$(top_builddir)/data/out -L$(top_builddir)/stubdata -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
-LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX) $(LIBICUDT)
-LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
-LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
-LIBICULX=       -L$(top_builddir)/layoutex -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICUDT=       -L$(LIBDIR) -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICUUC=       -L$(LIBDIR) -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX) $(LIBICUDT)
+LIBICUI18N=     -L$(LIBDIR) -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICULE=       -L$(LIBDIR) -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICULX=       -L$(LIBDIR) -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
 LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
-LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -licuio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBICUTOOLUTIL= -L$(LIBDIR) -l$(ICUPREFIX)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
+LIBUSTDIO=      -L$(LIBDIR) -licuio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
 
 # Invoke, set library path for all ICU libraries.
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/layout:$(top_builddir)/layoutex:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data/out:$(top_builddir)/data:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/data/out:$(LIBDIR):$(top_builddir)/tools/ctestfw:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 
 # Platform-specific setup
 include @platform_make_fragment@

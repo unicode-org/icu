@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## Cygwin-specific setup
-## Copyright (c) 2001-2003, International Business Machines Corporation and
+## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.16 2003/10/17 07:22:14 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.17 2004/03/26 01:22:25 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -65,14 +65,14 @@ LIBICU = $(ICUPREFIX)
 DEFAULT_LIBS = advapi32.lib
 
 ## Link commands to link to ICU libs
-LIBICUDT=	$(top_builddir)/stubdata/$(LIBICU)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBICUUC=	$(top_builddir)/common/$(LIBICU)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBICUI18N=	$(top_builddir)/i18n/$(LIBICU)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBICULE=	$(top_builddir)/layout/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBICULX=	$(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUDT=	$(LIBDIR)/$(LIBICU)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUUC=	$(LIBDIR)/$(LIBICU)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUI18N=	$(LIBDIR)/$(LIBICU)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICULE=	$(LIBDIR)/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICULX=	$(LIBDIR)/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
-LIBUSTDIO=	$(top_builddir)/extra/ustdio/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBUSTDIO=	$(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 
 
 ## Compilation rules

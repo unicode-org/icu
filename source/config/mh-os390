@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## 390-specific setup 
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.58 2004/01/16 23:12:11 grhoten-oss Exp $
+## $Id: mh-os390,v 1.59 2004/03/26 01:22:25 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -139,14 +139,14 @@ BATCH_LIBICULX=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}LX)'"
 endif
 
 ## Link commands to link to ICU libs
-LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUPREFIX)data$(ICULIBSUFFIX)$(STUB_SUFFIX)$(SO_TARGET_VERSION).x
-LIBICUUC=	$(top_builddir)/common/lib$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBICUI18N=	$(top_builddir)/i18n/lib$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBICULE=	$(top_builddir)/layout/lib$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBICULX=	$(top_builddir)/layoutex/lib$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBCTESTFW=	$(top_builddir)/tools/ctestfw/lib$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/lib$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBUSTDIO=	$(top_builddir)/extra/ustdio/libicuio$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUDT=	$(LIBDIR)/$(LIBICU)data$(ICULIBSUFFIX)$(STUB_SUFFIX)$(SO_TARGET_VERSION).x
+LIBICUUC=	$(LIBDIR)/$(LIBICU)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUI18N=	$(LIBDIR)/$(LIBICU)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICULE=	$(LIBDIR)/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICULX=	$(LIBDIR)/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUTOOLUTIL=	$(LIBDIR)/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBUSTDIO=	$(LIBDIR)/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 
 ## Special 390 rules
 

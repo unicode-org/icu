@@ -1,9 +1,9 @@
 ## -*-makefile-*-
 ## Cygwin-specific setup
-## Copyright (c) 2001-2003, International Business Machines Corporation and
+## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.15 2004/03/10 18:31:04 grhoten-oss Exp $
+## $Id: mh-cygwin,v 1.16 2004/03/26 01:22:25 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -36,14 +36,14 @@ STATIC_O = o
 #LIBICU = $(ICUPREFIX)
 
 ## Link commands to link to ICU libs
-LIBICUDT=	-L$(top_builddir)/stubdata/ -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBICUUC=	-L$(top_builddir)/common/ -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBICUI18N=	-L$(top_builddir)/i18n/ -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBICULE=	-L$(top_builddir)/layout/ -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBICULX=	-L$(top_builddir)/layoutex/ -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUDT=	-L$(LIBDIR) -l$(ICUPREFIX)data$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUUC=	-L$(LIBDIR) -l$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUI18N=	-L$(LIBDIR) -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICULE=	-L$(LIBDIR) -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICULX=	-L$(LIBDIR) -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
 LIBCTESTFW=	-L$(top_builddir)/tools/ctestfw/ -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBICUTOOLUTIL=	-L$(top_builddir)/tools/toolutil/ -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBUSTDIO=	-L$(top_builddir)/extra/ustdio/ -l$(ICUPREFIX)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBICUTOOLUTIL=	-L$(LIBDIR) -l$(ICUPREFIX)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBUSTDIO=	-L$(LIBDIR) -l$(ICUPREFIX)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
 
 
 ## Compilation rules
