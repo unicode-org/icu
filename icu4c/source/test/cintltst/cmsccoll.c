@@ -3999,8 +3999,6 @@ static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCo
     /* currently, safeClone is implemented through getRules/openRules
      * so it is the same as the test below - I will comment that test out.
      */
-    /* preflight */
-    target = ucol_safeClone(source, NULL, &cloneSize, &status);
     /* real thing */
     target = ucol_safeClone(source, NULL, &cloneSize, &status);
     if(U_FAILURE(status)) {
@@ -4093,8 +4091,7 @@ static void TestEquals(void) {
   ucol_close(target);
 
   source = ucol_open("root", &status);
-  target = ucol_safeClone(source, NULL, &cloneSize, &status);
-  target = ucol_safeClone(source, NULL, &cloneSize, &status);
+  target = ucol_open("root", &status);
   log_verbose("Testing root\n");
   if(!ucol_equals(source, source)) {
     log_err("Same collator not equal\n");
