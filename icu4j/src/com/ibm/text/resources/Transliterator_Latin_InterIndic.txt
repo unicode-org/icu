@@ -149,7 +149,6 @@
     '-'\u0303>$chandrabindu$anusvara;
     '-'m\u0310>$chandrabindu;
     '-'h\u0323>$visarga;
-    u{$consonants > $u;
     mm>$anusvara;
     x>$visarga;
     aa>$waa;
