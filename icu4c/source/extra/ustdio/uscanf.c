@@ -17,6 +17,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uchar.h"
 
 #include "uscanf.h"
@@ -1334,3 +1337,4 @@ u_vfscanf_u(UFILE        *f,
   return converted;
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

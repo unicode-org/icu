@@ -41,6 +41,7 @@ static const uint32_t DELIMITERS_LEN = 1;
 #define IS_STRING_DELIMITER(s)    (UBool)(    (s) == DELIM_CR || \
 (s) == DELIM_LF    )
 
+#if !UCONFIG_NO_TRANSLITERATION
 
 U_CAPI UTransliterator* U_EXPORT2
 u_fsettransliterator(UFILE *file, UFileDirection direction,
@@ -104,7 +105,6 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
 
     return old;
 }
-
 
 static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool flush)
 {
@@ -217,12 +217,15 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
     }
 }
 
+#endif
 
 void
 ufile_flush_translit(UFILE *f)
 {
+#if !UCONFIG_NO_TRANSLITERATION
     if((!f)||(!f->fTranslit))
         return;
+#endif
 
     u_file_write_flush(NULL, 0, f, TRUE);
 }
@@ -231,11 +234,14 @@ ufile_flush_translit(UFILE *f)
 void
 ufile_close_translit(UFILE *f)
 {
+#if !UCONFIG_NO_TRANSLITERATION
     if((!f)||(!f->fTranslit))
         return;
+#endif
 
     ufile_flush_translit(f);
 
+#if !UCONFIG_NO_TRANSLITERATION
     if(f->fTranslit->translit)
         utrans_close(f->fTranslit->translit);
 
@@ -246,6 +252,7 @@ ufile_close_translit(UFILE *f)
 
     uprv_free(f->fTranslit);
     f->fTranslit = NULL;
+#endif
 }
 
 
@@ -284,6 +291,7 @@ u_file_write_flush(    const UChar     *chars,
     int32_t        written        = 0;
     int32_t        numConverted   = 0;
 
+#if !UCONFIG_NO_TRANSLITERATION
     if((f->fTranslit) && (f->fTranslit->translit))
     {
         /* Do the transliteration */
@@ -291,6 +299,7 @@ u_file_write_flush(    const UChar     *chars,
         sourceAlias = mySource;
         mySourceEnd = mySource + count;
     }
+#endif
 
     /* Perform the conversion in a loop */
     do {

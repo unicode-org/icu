@@ -20,6 +20,9 @@
 #define UPRINTF_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
 
@@ -62,6 +65,6 @@ typedef int32_t (*u_printf_handler) (UFILE             *stream,
                      const u_printf_spec_info     *info,
                      const ufmt_args            *args);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
-

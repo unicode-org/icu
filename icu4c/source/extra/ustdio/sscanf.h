@@ -18,6 +18,10 @@
 #ifndef _USSCANF_H
 #define _USSCANF_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
 #include "locbund.h"
@@ -70,6 +74,6 @@ typedef int32_t (*u_sscanf_handler) (u_localized_string    *input,
                    const UChar            *fmt,
                    int32_t            *consumed);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
-

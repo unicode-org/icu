@@ -21,6 +21,21 @@
  
 #include "unicode/utypes.h"
 
+/*
+ * Dummy code:
+ * If all modules in the I18N library are switched off, then there are no
+ * library exports and MSVC 6 writes a .dll but not a .lib file.
+ * Unless we export _something_ in that case...
+ */
+#if UCONFIG_NO_COLLATION && UCONFIG_NO_FORMATTING && UCONFIG_NO_TRANSLITERATION
+U_CAPI int32_t U_EXPORT2
+uprv_icuin_lib_dummy(int32_t i) {
+    return -i;
+}
+#endif
+
+/* Format class implementation ---------------------------------------------- */
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/format.h"

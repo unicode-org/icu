@@ -331,6 +331,10 @@ static int printConverters(const char *pname, const char *lookfor,
 
 static int printTransliterators(int canon)
 {
+#if UCONFIG_NO_TRANSLITERATION
+    printf("no transliterators available because of UCONFIG_NO_TRANSLITERATION, see uconfig.h\n");
+    return 1;
+#else
     int32_t numtrans = utrans_countAvailableIDs(), i;
     int buflen = 512;
     char *buf = (char *) uprv_malloc(buflen);
@@ -384,6 +388,7 @@ static int printTransliterators(int canon)
     /* Success. */
 
     return 0;
+#endif
 }
 
 /* Return the offset of a byte in its source, given the from and to offsets
@@ -435,7 +440,9 @@ static UBool convertFile(const char *pname,
 
     size_t rd, wr, tobufsz;
 
+#if !UCONFIG_NO_TRANSLITERATION
     Transliterator *t = 0;      // Transliterator acting on Unicode data.
+#endif
     UnicodeString u;            // String to do the transliteration.
 
     // Open the correct input file or connect to stdin for reading input
@@ -467,6 +474,7 @@ static UBool convertFile(const char *pname,
         fprintf(stderr, "%s:\n", infilestr);
     }
 
+#if !UCONFIG_NO_TRANSLITERATION
     // Create transliterator as needed.
 
     if (translit != NULL && *translit) {
@@ -505,6 +513,7 @@ static UBool convertFile(const char *pname,
             goto error_exit;
         }
     }
+#endif
 
     // Create codepage converter. If the codepage or its aliases weren't
     // available, it returns NULL and a failure code. We also set the
@@ -607,18 +616,16 @@ static UBool convertFile(const char *pname,
             willexit = 1;
         }
 
-        // Prepare to transliterate and convert.
+        // Prepare to transliterate and convert. Transliterate if needed.
 
+#if !UCONFIG_NO_TRANSLITERATION
         if (t) {
             u.setTo(unibuf, (int32_t)(unibufp - unibuf)); // Copy into string.
-        } else {
-            u.setTo(unibuf, (int32_t)(unibufp - unibuf), (int32_t)(bufsz)); // Share the buffer.
-        }
-
-        // Transliterate if needed.
-
-        if (t) {
             t->transliterate(u);
+        } else
+#endif
+        {
+            u.setTo(unibuf, (int32_t)(unibufp - unibuf), (int32_t)(bufsz)); // Share the buffer.
         }
 
         int32_t ulen = u.length();
@@ -706,7 +713,9 @@ normal_exit:
     if (convfrom) ucnv_close(convfrom);
     if (convto) ucnv_close(convto);
 
+#if !UCONFIG_NO_TRANSLITERATION
     if (t) delete t;
+#endif
 
     if (buf) delete[] buf;
     if (unibuf) delete[] unibuf;

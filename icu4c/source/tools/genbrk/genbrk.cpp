@@ -26,6 +26,19 @@
 //
 //--------------------------------------------------------------------
 
+#include <stdio.h>
+#include "unicode/utypes.h"
+
+#if UCONFIG_NO_BREAK_ITERATION
+
+extern int
+main(int argc, const char *argv[]) {
+    fprintf(stderr, "genbrk performs no-op because of UCONFIG_NO_BREAK_ITERATION, see uconfig.h\n");
+    return 0;
+}
+
+#else
+
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 #include "unicode/rbbi.h"
@@ -253,3 +266,5 @@ int  main(int argc, char **argv) {
     printf("genbrk: tool completed successfully.\n");
     return 0;
 }
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */

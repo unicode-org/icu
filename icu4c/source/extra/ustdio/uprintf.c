@@ -18,6 +18,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "uprintf.h"
 #include "uprntf_p.h"
 #include "unicode/ustdio.h"
@@ -1314,3 +1317,4 @@ u_vfprintf_u(    UFILE        *f,
     return written;
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

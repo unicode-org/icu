@@ -87,21 +87,18 @@ u_finit(FILE        *f,
         return 0;
     }
 
+    uprv_memset(result, 0, sizeof(UFILE));
 
 #ifdef WIN32
     result->fFile = &_iob[_fileno(f)];
 #else
     result->fFile = f;
 #endif
-    result->fTranslit = NULL;
-    result->fOwnFile = FALSE;
-    result->fOwnBundle     = FALSE;
     result->fUCPos     = result->fUCBuffer;
     result->fUCLimit     = result->fUCBuffer;
-    result->fConverter = NULL;
-    result->fBundle = NULL;
 
     if(hasICUData(codepage)) {
+#if !UCONFIG_NO_FORMATTING
         /* if locale is 0, use the default */
         if(locale == 0) {
             locale = uloc_getDefault();
@@ -113,6 +110,7 @@ u_finit(FILE        *f,
             uprv_free(result);
             return 0;
         }
+#endif
     } else {
         /* bootstrap mode */
         return result;
@@ -160,8 +158,10 @@ u_fclose(UFILE *file)
     if(file->fOwnFile)
         fclose(file->fFile);
 
+#if !UCONFIG_NO_FORMATTING
     if(file->fOwnBundle)
         u_locbund_delete(file->fBundle);
+#endif
 
     ucnv_close(file->fConverter);
     uprv_free(file);
@@ -172,6 +172,8 @@ u_fgetfile(    UFILE         *f)
 {
     return f->fFile;
 }
+
+#if !UCONFIG_NO_FORMATTING
 
 U_CAPI const char*  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetlocale(    UFILE        *file)
@@ -191,6 +193,8 @@ u_fsetlocale(const char        *locale,
 
     return file->fBundle == 0 ? -1 : 0;
 }
+
+#endif
 
 U_CAPI const char* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetcodepage(UFILE        *file)
@@ -212,12 +216,14 @@ u_fsetcodepage(    const char    *codepage,
 {
     UErrorCode status = U_ZERO_ERROR;
 
+#if !UCONFIG_NO_FORMATTING
     /* if the codepage is 0, use the default for the locale */
     if(codepage == 0) {
         codepage = uprv_defaultCodePageForLocale(file->fBundle->fLocale);
 
         /* if the codepage is still 0, fall back on the default codepage */
     }
+#endif
 
     ucnv_close(file->fConverter);
     file->fConverter = ucnv_open(codepage, &status);

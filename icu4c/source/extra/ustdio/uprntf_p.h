@@ -19,6 +19,10 @@
 #ifndef UPRNTF_P_H
 #define UPRNTF_P_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "uprintf.h"
 
 /**
@@ -43,5 +47,6 @@ int32_t
 u_printf_parse_spec (const UChar     *fmt,
              u_printf_spec    *spec);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

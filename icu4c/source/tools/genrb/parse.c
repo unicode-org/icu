@@ -579,7 +579,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             }
             else
             {
-                error(line, "enexpected token %s", tokenNames[token]);
+                error(line, "Unexpected token %s", tokenNames[token]);
             }
 
             return NULL;
@@ -626,13 +626,15 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
         }
         else if (uprv_strcmp(subtag, "Sequence") == 0)
         {
+#if UCONFIG_NO_COLLATION
+            warning(line, "Not building collation elements because of UCONFIG_NO_COLLATION, see uconfig.h");
+#else
             UErrorCode intStatus = U_ZERO_ERROR;
 
             /* do the collation elements */
             int32_t     len   = 0;
             uint8_t   *data  = NULL;
             UCollator *coll  = NULL;
-            UChar      *rules = NULL;
             UParseError parseError;
             coll = ucol_openRules(tokenValue->fChars, tokenValue->fLength,
                 UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
@@ -662,8 +664,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             {
                 warning(line, "%%Collation could not be constructed from CollationElements - check context!");
             }
-
-            uprv_free(rules);
+#endif
         }
 
         member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);

@@ -23,6 +23,19 @@
 *   05/09/2001  weiv                    Case bits are now in the CEs, not in front
 */
 
+#include <stdio.h>
+#include "unicode/utypes.h"
+
+#if UCONFIG_NO_COLLATION
+
+extern int
+main(int argc, const char *argv[]) {
+    fprintf(stderr, "genuca performs no-op because of UCONFIG_NO_COLLATION, see uconfig.h\n");
+    return 0;
+}
+
+#else
+
 #include "genuca.h"
 #include "uoptions.h"
 #include "toolutil.h"
@@ -990,6 +1003,8 @@ int main(int argc, char* argv[]) {
 #endif 
     return write_uca_table(filename, destdir, copyright, &status);
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 /*
  * Hey, Emacs, please set the following:

@@ -16,6 +16,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uchar.h"
 
 #include "sscanf.h"
@@ -1321,3 +1324,4 @@ u_vsscanf_u(const UChar    *buffer,
     return converted;
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

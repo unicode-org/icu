@@ -15,6 +15,9 @@
 #define RBBI_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/parseerr.h"
@@ -459,5 +462,7 @@ inline UClassID RuleBasedBreakIterator::getStaticClassID(void) {
 
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif

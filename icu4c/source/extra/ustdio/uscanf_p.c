@@ -16,6 +16,10 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "uscanf_p.h"
 #include "ufmt_cmn.h"
 
@@ -180,3 +184,5 @@ u_scanf_parse_spec (const UChar     *fmt,
     /* return # of characters in this specifier */
     return (int32_t)(s - fmt);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
