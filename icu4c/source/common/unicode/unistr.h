@@ -30,7 +30,7 @@
 class Locale;
 class UCharReference;
 class UnicodeStringStreamer;
-class UnicodeConverterCPP;
+class UnicodeConverter;
 
 // for unistrm.h
 /**
@@ -2022,7 +2022,8 @@ private:
   static UConverter *fgDefaultConverter;
 
   friend class UnicodeStringStreamer;
-  friend class UnicodeConverterCPP;
+  friend class UnicodeConverter;
+
 #if U_IOSTREAM_SOURCE >= 199711
   friend U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
 #elif U_IOSTREAM_SOURCE >= 198506

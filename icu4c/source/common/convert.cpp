@@ -23,20 +23,20 @@ extern "C" {
 #include "unicode/convert.h"
 
 /* list of converter and alias names */
-const char **UnicodeConverterCPP::availableConverterNames=NULL;
-int32_t UnicodeConverterCPP::availableConverterNamesCount=0;
+const char **UnicodeConverter::availableConverterNames=NULL;
+int32_t UnicodeConverter::availableConverterNamesCount=0;
 
-UnicodeConverterCPP::UnicodeConverterCPP()
+UnicodeConverter::UnicodeConverter()
 {
     UErrorCode err = U_ZERO_ERROR;
     myUnicodeConverter = ucnv_open(NULL, &err);
 }
-UnicodeConverterCPP::UnicodeConverterCPP(const char* name, UErrorCode& err)
+UnicodeConverter::UnicodeConverter(const char* name, UErrorCode& err)
 {
     myUnicodeConverter = ucnv_open(name, &err);
 }
 
-UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeString& name, UErrorCode& err)
+UnicodeConverter::UnicodeConverter(const UnicodeString& name, UErrorCode& err)
 {
   char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
   int i;
@@ -46,7 +46,7 @@ UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeString& name, UErrorCode& 
 }
 
 
-UnicodeConverterCPP::UnicodeConverterCPP(int32_t codepageNumber,
+UnicodeConverter::UnicodeConverter(int32_t codepageNumber,
                                          UConverterPlatform platform,
                                          UErrorCode& err)
 {
@@ -55,7 +55,7 @@ UnicodeConverterCPP::UnicodeConverterCPP(int32_t codepageNumber,
                                    &err);
 }
 
-UnicodeConverterCPP&   UnicodeConverterCPP::operator=(const UnicodeConverterCPP&  that)
+UnicodeConverter&   UnicodeConverter::operator=(const UnicodeConverter&  that)
 {
     {
         /*Decrements the overwritten converter's ref count
@@ -74,7 +74,7 @@ UnicodeConverterCPP&   UnicodeConverterCPP::operator=(const UnicodeConverterCPP&
     return *this;
 }
 
-UBool UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
+UBool UnicodeConverter::operator==(const UnicodeConverter& that) const
 {
   return
       (myUnicodeConverter->sharedData == that.myUnicodeConverter->sharedData) &&
@@ -91,12 +91,12 @@ UBool UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
       (myUnicodeConverter->fromUContext == that.myUnicodeConverter->fromUContext);
 }
 
-UBool UnicodeConverterCPP::operator!=(const UnicodeConverterCPP& that) const
+UBool UnicodeConverter::operator!=(const UnicodeConverter& that) const
 {
   return !(*this == that);
 }
 
-UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeConverterCPP&  that)
+UnicodeConverter::UnicodeConverter(const UnicodeConverter&  that)
 {
   /*increments the referenceCounter to let the static table know
    *it has one more client
@@ -112,13 +112,13 @@ UnicodeConverterCPP::UnicodeConverterCPP(const UnicodeConverterCPP&  that)
 }
 
 
-UnicodeConverterCPP::~UnicodeConverterCPP()
+UnicodeConverter::~UnicodeConverter()
 {
     ucnv_close(myUnicodeConverter);
 }
 
  void
-UnicodeConverterCPP::fromUnicodeString(char*                    target,
+UnicodeConverter::fromUnicodeString(char*                    target,
                                        int32_t&                 targetSize,
                                        const UnicodeString&     source,
                                        UErrorCode&               err) const
@@ -160,7 +160,7 @@ UnicodeConverterCPP::fromUnicodeString(char*                    target,
 }
 
  void
-UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
+UnicodeConverter::toUnicodeString(UnicodeString&         target,
                                      const char*            source,
                                      int32_t                sourceSize,
                                      UErrorCode&             err) const
@@ -232,7 +232,7 @@ UnicodeConverterCPP::toUnicodeString(UnicodeString&         target,
 
 
 void
-UnicodeConverterCPP::fromUnicode(char*&                 target,
+UnicodeConverter::fromUnicode(char*&                 target,
                                  const char*            targetLimit,
                                  const UChar*&        source,
                                  const UChar*         sourceLimit,
@@ -253,7 +253,7 @@ UnicodeConverterCPP::fromUnicode(char*&                 target,
 
 
 void
-UnicodeConverterCPP::toUnicode(UChar*&           target,
+UnicodeConverter::toUnicode(UChar*&           target,
                    const UChar*      targetLimit,
                    const char*&        source,
                    const char*         sourceLimit,
@@ -272,25 +272,25 @@ UnicodeConverterCPP::toUnicode(UChar*&           target,
 }
 
 const char*
-UnicodeConverterCPP::getName(UErrorCode&  err) const
+UnicodeConverter::getName(UErrorCode&  err) const
 {
   return ucnv_getName(myUnicodeConverter, &err);
 }
 
  int8_t
-UnicodeConverterCPP::getMaxBytesPerChar() const
+UnicodeConverter::getMaxBytesPerChar() const
 {
     return ucnv_getMaxCharSize(myUnicodeConverter);
 }
 
 int8_t
-UnicodeConverterCPP::getMinBytesPerChar() const
+UnicodeConverter::getMinBytesPerChar() const
 {
     return ucnv_getMinCharSize(myUnicodeConverter);
 }
 
 void
-UnicodeConverterCPP::getSubstitutionChars(char*             subChars,
+UnicodeConverter::getSubstitutionChars(char*             subChars,
                                           int8_t&           len,
                                           UErrorCode&        err) const
 {
@@ -301,7 +301,7 @@ UnicodeConverterCPP::getSubstitutionChars(char*             subChars,
 }
 
 void
-UnicodeConverterCPP::setSubstitutionChars(const char*       subChars,
+UnicodeConverter::setSubstitutionChars(const char*       subChars,
                                           int8_t            len,
                                           UErrorCode&        err)
 {
@@ -313,27 +313,27 @@ UnicodeConverterCPP::setSubstitutionChars(const char*       subChars,
 
 
 void
-UnicodeConverterCPP::resetState()
+UnicodeConverter::resetState()
 {
     ucnv_reset(myUnicodeConverter);
 }
 
 
 int32_t
-UnicodeConverterCPP::getCodepage(UErrorCode& err) const
+UnicodeConverter::getCodepage(UErrorCode& err) const
 {
     return ucnv_getCCSID(myUnicodeConverter, &err);
 }
 
 void
-UnicodeConverterCPP::getMissingCharAction(UConverterToUCallback *action,
+UnicodeConverter::getMissingCharAction(UConverterToUCallback *action,
                                           void **context) const
 {
     ucnv_getToUCallBack(myUnicodeConverter, action, context);
 }
 
 void
-UnicodeConverterCPP::getMissingUnicodeAction(UConverterFromUCallback *action,
+UnicodeConverter::getMissingUnicodeAction(UConverterFromUCallback *action,
                                              void **context) const
 {
     ucnv_getFromUCallBack(myUnicodeConverter, action, context);
@@ -341,7 +341,7 @@ UnicodeConverterCPP::getMissingUnicodeAction(UConverterFromUCallback *action,
 
 
 void
-UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  newAction,
+UnicodeConverter::setMissingCharAction(UConverterToUCallback  newAction,
                                           void *newContext,
                                           UConverterToUCallback *oldAction,
                                           void **oldContext,
@@ -351,7 +351,7 @@ UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  newAction,
 }
 
 void
-UnicodeConverterCPP::setMissingUnicodeAction(UConverterFromUCallback   newAction,
+UnicodeConverter::setMissingUnicodeAction(UConverterFromUCallback   newAction,
                                              void* newContext,
                                              UConverterFromUCallback   *oldAction,
                                              void** oldContext,
@@ -362,7 +362,7 @@ UnicodeConverterCPP::setMissingUnicodeAction(UConverterFromUCallback   newAction
 
 
 void
-UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
+UnicodeConverter::getDisplayName(const Locale&   displayLocale,
                                     UnicodeString&  displayName) const
 {
 
@@ -388,17 +388,17 @@ UnicodeConverterCPP::getDisplayName(const Locale&   displayLocale,
 
 
 UConverterPlatform
-UnicodeConverterCPP::getCodepagePlatform(UErrorCode &err) const
+UnicodeConverter::getCodepagePlatform(UErrorCode &err) const
 {
     return ucnv_getPlatform(myUnicodeConverter, &err);
 }
 
-UConverterType UnicodeConverterCPP::getType() const
+UConverterType UnicodeConverter::getType() const
 {
   return ucnv_getType(myUnicodeConverter);
 }
 
-void UnicodeConverterCPP::getStarters(UBool starters[256],
+void UnicodeConverter::getStarters(UBool starters[256],
 				 UErrorCode& err) const
 {
   ucnv_getStarters(myUnicodeConverter,
@@ -408,7 +408,7 @@ void UnicodeConverterCPP::getStarters(UBool starters[256],
 }
 
 const char* const*
-UnicodeConverterCPP::getAvailableNames(int32_t& num, UErrorCode& err)
+UnicodeConverter::getAvailableNames(int32_t& num, UErrorCode& err)
 {
   if(U_FAILURE(err)) {
     num = 0;
@@ -445,14 +445,14 @@ UnicodeConverterCPP::getAvailableNames(int32_t& num, UErrorCode& err)
   return availableConverterNames;
 }
 
-int32_t  UnicodeConverterCPP::flushCache()
+int32_t  UnicodeConverter::flushCache()
 {
   return ucnv_flushCache();
 }
 
 /* HSYS: To be cleaned up.  The usage of UChar* and UnicodeString in
 the C++ APIs need to be revisited. */
-void UnicodeConverterCPP::fixFileSeparator(UnicodeString& source) const
+void UnicodeConverter::fixFileSeparator(UnicodeString& source) const
 {
     int32_t i = 0;
     int32_t index = 0;
@@ -486,7 +486,7 @@ void UnicodeConverterCPP::fixFileSeparator(UnicodeString& source) const
     }
 }
 
-UBool UnicodeConverterCPP::isAmbiguous(void) const
+UBool UnicodeConverter::isAmbiguous(void) const
 {
     return ucnv_isAmbiguous(myUnicodeConverter);
 }
