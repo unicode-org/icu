@@ -320,6 +320,10 @@ public:
 
     int32_t push(int32_t i, UErrorCode &status);
 
+    /*
+    If the object o occurs as an item in this stack,
+    this method returns the 1-based distance from the top of the stack.
+    */
     int32_t search(void* obj) const;
 
     /**
