@@ -66,6 +66,16 @@ static uint32_t string_write(UNewDataMemory *mem, struct SResource *res,
     return usedOffset;
 }
 
+/* Writing Functions */
+static uint32_t alias_write(UNewDataMemory *mem, struct SResource *res,
+                             uint32_t usedOffset, UErrorCode *status) {
+    udata_write32(mem, res->u.fString.fLength);
+    udata_writeUString(mem, res->u.fString.fChars, res->u.fString.fLength + 1);
+    udata_writePadding(mem, calcPadding(res->fSize));
+
+    return usedOffset;
+}
+
 static uint32_t array_write(UNewDataMemory *mem, struct SResource *res,
                             uint32_t usedOffset, UErrorCode *status) {
     uint32_t *resources = NULL;
@@ -242,6 +252,8 @@ uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
         switch (res->fType) {
         case RES_STRING:
             return string_write    (mem, res, usedOffset, status);
+        case RES_ALIAS:
+            return alias_write    (mem, res, usedOffset, status);
         case RES_INT_VECTOR:
             return intvector_write (mem, res, usedOffset, status);
         case RES_BINARY:
@@ -432,6 +444,47 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, i
     return res;
 }
 
+/* TODO: make alias_open and string_open use the same code */
+struct SResource *alias_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status) {
+    struct SResource *res;
+
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    res = (struct SResource *) uprv_malloc(sizeof(struct SResource));
+
+    if (res == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    res->fType = RES_ALIAS;
+    res->fKey  = bundle_addtag(bundle, tag, status);
+
+    if (U_FAILURE(*status)) {
+        uprv_free(res);
+        return NULL;
+    }
+
+    res->fNext = NULL;
+
+    res->u.fString.fLength = len;
+    res->u.fString.fChars  = (UChar *) uprv_malloc(sizeof(UChar) * (len + 1));
+
+    if (res->u.fString.fChars == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(res);
+        return NULL;
+    }
+
+    uprv_memcpy(res->u.fString.fChars, value, sizeof(UChar) * (len + 1));
+    res->fSize = sizeof(int32_t) + sizeof(UChar) * (len + 1);
+
+    return res;
+}
+
+
 struct SResource* intvector_open(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
     struct SResource *res;
 
@@ -617,6 +670,12 @@ void string_close(struct SResource *string, UErrorCode *status) {
     }
 }
 
+void alias_close(struct SResource *alias, UErrorCode *status) {
+    if (alias->u.fString.fChars != NULL) {
+        uprv_free(alias->u.fString.fChars);
+    }
+}
+
 void intvector_close(struct SResource *intvector, UErrorCode *status) {
     if (intvector->u.fIntVector.fArray != NULL) {
         uprv_free(intvector->u.fIntVector.fArray);
@@ -638,6 +697,9 @@ void res_close(struct SResource *res, UErrorCode *status) {
         switch(res->fType) {
         case RES_STRING:
             string_close(res, status);
+            break;
+        case RES_ALIAS:
+            alias_close(res, status);
             break;
         case RES_INT_VECTOR:
             intvector_close(res, status);
