@@ -1049,6 +1049,16 @@ main(int argc, char* argv[])
             }
         }
     }
+
+    /* Call it twice to make sure that the defaults were reset */
+    u_cleanup();
+    u_cleanup();
+
+    /* delete these just to see how delete reacts to u_cleanup().
+       This is done in the wrong order on purpose.
+       Normally this should happen first */
+    CalendarTimeZoneTest::cleanup();
+
     fprintf(stdout, "\n--------------------------------------\n");
     if (major.getErrors() == 0) {
         fprintf(stdout, "OK: All tests passed without error.\n");
@@ -1062,15 +1072,6 @@ main(int argc, char* argv[])
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
-    /* Call it twice to make sure that the defaults were reset */
-    u_cleanup();
-    u_cleanup();
-
-    /* delete these just to see how delete reacts to u_cleanup().
-       This is done in the wrong order on purpose.
-       Normally this should happen first */
-    CalendarTimeZoneTest::cleanup();
-
     return major.getErrors();
 }
 
