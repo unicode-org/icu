@@ -563,7 +563,7 @@ switch (categoryFlags.length % 4) {
                     error("Dictionary group can't be enclosed in (", startPos, description);
                 }
                 dictionaryExpression = replaceWith;
-                dictionaryChars = new UnicodeSet(replaceWith);
+                dictionaryChars = new UnicodeSet(replaceWith, false);
             }
         }
 
