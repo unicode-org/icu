@@ -194,7 +194,7 @@ public class UnicodeSetIterator {
      * Resets this iterator to the start of the set.
      * @stable ICU 2.0
      */
-    public void reset() {
+    public UnicodeSetIterator reset() {
         endRange = set.getRangeCount() - 1;
         range = 0;
         endElement = -1;
@@ -207,6 +207,7 @@ public class UnicodeSetIterator {
             stringIterator = set.strings.iterator();
             if (!stringIterator.hasNext()) stringIterator = null;
         }
+        return this;
     }
     
     /**
