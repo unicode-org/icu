@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/02/08 01:12:44 $
-* $Revision: 1.1 $
+* $Date: 2002/02/08 23:44:22 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -63,9 +63,8 @@ public class TrieIterator implements RangeValueIterator
     * <p>Returns true if we are not at the end of the iteration, false 
     * otherwise.</p>
     * <p>The next set of codepoints with the same value type will be 
-    * calculated during this call. To retrieve the set of codepoints and 
-    * their common value, the methods getStart(), getLimit() and getValue()
-    * can be called.</p>
+    * calculated during this call and returned in the arguement element.</p>
+    * @param element return result 
     * @return true if we are not at the end of the iteration, false otherwise.
     * @exception NoSuchElementException - if no more elements exist.
     * @see #getStart()
@@ -73,55 +72,19 @@ public class TrieIterator implements RangeValueIterator
     * @see #getValue()
     * @draft 2.1
     */
-    public final boolean next()
+    public final boolean next(Element element)
     {
         if (m_nextCodepoint_ > UCharacter.MAX_VALUE) {
             return false;
         }
         if (m_nextCodepoint_ < UCharacter.SUPPLEMENTARY_MIN_VALUE &&
-            calculateNextBMPElement()) {
+            calculateNextBMPElement(element)) {
                 return true;
         }    
-        calculateNextSupplementaryElement();
+        calculateNextSupplementaryElement(element);
         return true;
     }
-    
-    /**
-    * Gets the start codepoint of the result range with the same value, after
-    * the last call to next(). This method will not return a valid result if
-    * next() was never called.
-    * @return start codepoint of the result range
-    * @draft 2.1
-    */
-    public final int getStart()
-    {
-        return m_start_;
-    }
-    
-    /**
-    * Gets the (end + 1) codepoint of result range with the same value, after
-    * the last call to next(). This method will not return a valid result if
-    * next() was never called.
-    * @return (end + 1) codepoint of the result range
-    * @draft 2.1
-    */
-    public final int getLimit()
-    {
-        return m_limit_;
-    }
-    
-    /**
-    * Gets the common value of the codepoints in the result range, after
-    * the last call to next(). This method will not return a valid result if
-    * next() was never called.
-    * @return common value of the codepoints in the result range
-    * @draft 2.1
-    */
-    public final int getValue()
-    {
-        return m_value_;
-    }
-    
+     
     /**
     * Resets the iterator to the beginning of the iteration
     * @draft 2.1
@@ -140,7 +103,6 @@ public class TrieIterator implements RangeValueIterator
         }
         m_nextBlockIndex_ = 0;
         m_nextTrailIndexOffset_ = TRAIL_SURROGATE_INDEX_BLOCK_LENGTH_;
-        setResult(0, 0, m_nextValue_);
     }
     
     // protected methods ----------------------------------------------
@@ -164,15 +126,17 @@ public class TrieIterator implements RangeValueIterator
     
     /**
     * Set the result values
+    * @param element return result object
     * @param start codepoint of range 
     * @param limit (end + 1) codepoint of range
     * @param value common value of range
     */
-    private final void setResult(int start, int limit, int value)
+    private final void setResult(Element element, int start, int limit, 
+                                 int value)
     {
-        m_start_ = start;
-        m_limit_ = limit;
-        m_value_ = value;
+        element.start = start;
+        element.limit = limit;
+        element.value = value;
     }
     
     /**
@@ -182,10 +146,11 @@ public class TrieIterator implements RangeValueIterator
     * We always store the next element before it is requested.
     * In the case that we have to continue calculations into the 
     * supplementary planes, a false will be returned.
+    * @param element return result object
     * @return true if the next range is found, false if we have to proceed to
     *         the supplementary range.
     */
-    private final boolean calculateNextBMPElement()
+    private final boolean calculateNextBMPElement(Element element)
     {
         int currentBlock    = m_nextBlock_;
         int currentValue    = m_nextValue_;
@@ -193,7 +158,8 @@ public class TrieIterator implements RangeValueIterator
         m_nextCodepoint_ ++;
         m_nextBlockIndex_ ++;
         if (!checkBlockDetail(currentValue)) {
-            setResult(m_currentCodepoint_, m_nextCodepoint_, currentValue);
+            setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+                      currentValue);
             return true;
         }
         // enumerate BMP - the main loop enumerates data blocks
@@ -214,7 +180,7 @@ public class TrieIterator implements RangeValueIterator
             
             m_nextBlockIndex_ = 0;
             if (!checkBlock(currentBlock, currentValue)) {
-                setResult(m_currentCodepoint_, m_nextCodepoint_, 
+                setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                           currentValue);
                 return true;
             }
@@ -239,9 +205,10 @@ public class TrieIterator implements RangeValueIterator
     * the end before resetting it to the new value.
     * Note, if there are no more iterations, it will never get to here. 
     * Blocked out by next().
+    * @param element return result object
     * @draft 2.1
     */
-    private final void calculateNextSupplementaryElement()
+    private final void calculateNextSupplementaryElement(Element element)
     {
         int currentValue = m_nextValue_;
         int currentBlock = m_nextBlock_;
@@ -249,7 +216,8 @@ public class TrieIterator implements RangeValueIterator
         m_nextBlockIndex_ ++;
         
         if (!checkNullNextTrailIndex() && !checkBlockDetail(currentValue)) {
-            setResult(m_currentCodepoint_, m_nextCodepoint_, currentValue);
+            setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+                      currentValue);
             m_currentCodepoint_ = m_nextCodepoint_;
             return;
         }
@@ -257,7 +225,8 @@ public class TrieIterator implements RangeValueIterator
 		m_nextIndex_ ++;
 		m_nextTrailIndexOffset_ ++;
 		if (!checkTrailBlock(currentBlock, currentValue)) {
-			setResult(m_currentCodepoint_, m_nextCodepoint_, currentValue);
+			setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+			          currentValue);
             m_currentCodepoint_ = m_nextCodepoint_;
             return;
 		}
@@ -291,7 +260,7 @@ public class TrieIterator implements RangeValueIterator
                     m_nextValue_      = m_initialValue_;
                     m_nextBlock_      = 0;
                     m_nextBlockIndex_ = 0;
-                    setResult(m_currentCodepoint_, m_nextCodepoint_, 
+                    setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                               currentValue);
                     m_currentCodepoint_ = m_nextCodepoint_;
                     return;
@@ -300,7 +269,7 @@ public class TrieIterator implements RangeValueIterator
             } else {
                 m_nextTrailIndexOffset_ = 0;
                 if (!checkTrailBlock(currentBlock, currentValue)) {
-                    setResult(m_currentCodepoint_, m_nextCodepoint_, 
+                    setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
                               currentValue);
                     m_currentCodepoint_ = m_nextCodepoint_;
                     return;
@@ -310,7 +279,7 @@ public class TrieIterator implements RangeValueIterator
          }
 
          // deliver last range
-         setResult(m_currentCodepoint_, UCharacter.MAX_VALUE + 1, 
+         setResult(element, m_currentCodepoint_, UCharacter.MAX_VALUE + 1, 
                    currentValue);
     }    
     
