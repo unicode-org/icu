@@ -68,6 +68,13 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
+/**
+ * Make sure every system transliterator can be instantiated.
+ * 
+ * ALSO test that the result of toRules() for each rule is a valid
+ * rule.  Do this here so we don't have to have another test that
+ * instantiates everything as well.
+ */
 void TransliteratorTest::TestInstantiation() {
     int32_t n = Transliterator::countAvailableIDs();
     UnicodeString name;
@@ -99,8 +106,25 @@ void TransliteratorTest::TestInstantiation() {
             }
         } else {
             logln(UnicodeString("OK: ") + name + " (" + id + ")");
+
+            // Now test toRules
+            UnicodeString rules;
+            t->toRules(rules, TRUE);
+            Transliterator *u = Transliterator::createFromRules("x",
+                                    rules, UTRANS_FORWARD, &parseError);
+            if (u == 0) {
+                errln(UnicodeString("FAIL: ") + id +
+                      ".toRules() => bad rules" +
+                      ", parse error " + parseError.code +
+                      ", line " + parseError.line +
+                      ", offset " + parseError.offset +
+                      ", context " + prettify(parseError.preContext) +
+                      ", rules: " + rules);
+            } else {
+                delete u;
+            }
+            delete t;
         }
-        delete t;
     }
 
     // Now test the failure path
