@@ -25,13 +25,14 @@ class Hashtable {
     UHashtable* hash;
 
 public:
-    Hashtable(UErrorCode& status);
+    Hashtable(UBool ignoreKeyCase, UErrorCode& status);
 
     /**
      * Construct a hashtable, _disregarding any error_.  Use this constructor
      * with caution.
+     * @param ignoreKeyCase if TRUE, keys are case insensitive
      */
-    Hashtable();
+    Hashtable(UBool ignoreKeyCase = FALSE);
 
     /**
      * Non-virtual destructor; make this virtual if Hashtable is subclassed
@@ -56,21 +57,28 @@ public:
  * Implementation
  ********************************************************************/
 
-inline Hashtable::Hashtable(UErrorCode& status) : hash(0) {
+inline Hashtable::Hashtable(UBool ignoreKeyCase, UErrorCode& status) :
+    hash(0) {
     if (U_FAILURE(status)) {
         return;
     }
-    hash = uhash_open(uhash_hashUnicodeString,
-                      uhash_compareUnicodeString, &status);
+    hash = uhash_open(ignoreKeyCase ? uhash_hashCaselessUnicodeString
+                                    : uhash_hashUnicodeString,
+                      ignoreKeyCase ? uhash_compareCaselessUnicodeString
+                                    : uhash_compareUnicodeString,
+                      &status);
     if (U_SUCCESS(status)) {
         uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
     }
 }
 
-inline Hashtable::Hashtable() : hash(0) {
+inline Hashtable::Hashtable(UBool ignoreKeyCase) : hash(0) {
     UErrorCode status = U_ZERO_ERROR;
-    hash = uhash_open(uhash_hashUnicodeString,
-                      uhash_compareUnicodeString, &status);
+    hash = uhash_open(ignoreKeyCase ? uhash_hashCaselessUnicodeString
+                                    : uhash_hashUnicodeString,
+                      ignoreKeyCase ? uhash_compareCaselessUnicodeString
+                                    : uhash_compareUnicodeString,
+                      &status);
     if (U_SUCCESS(status)) {
         uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
     }
