@@ -149,7 +149,7 @@ ConversionTest::TestToUnicode() {
                             i, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
                 } else {
-                    infoln("TestToUnicode[%d] %s", i, charset);
+                    logln("TestToUnicode[%d] %s", i, charset);
                     ToUnicodeCase(cc, callback, option);
                 }
             }
@@ -288,7 +288,7 @@ ConversionTest::TestFromUnicode() {
                             i, u_errorName(errorCode));
                     errorCode=U_ZERO_ERROR;
                 } else {
-                    infoln("TestFromUnicode[%d] %s", i, charset);
+                    logln("TestFromUnicode[%d] %s", i, charset);
                     FromUnicodeCase(cc, callback, option);
                 }
             }
@@ -370,7 +370,7 @@ ConversionTest::TestGetUnicodeSet() {
                     continue;
                 }
 
-                infoln("TestGetUnicodeSet[%d] %s", i, charset);
+                logln("TestGetUnicodeSet[%d] %s", i, charset);
 
                 cnv=cnv_open(charset, errorCode);
                 if(U_FAILURE(errorCode)) {
@@ -422,8 +422,8 @@ ConversionTest::TestGetUnicodeSet() {
 UConverter *
 ConversionTest::cnv_open(const char *name, UErrorCode &errorCode) {
     if(name!=NULL && *name=='*') {
-        loadTestData(errorCode); /* set the data directory */
-        return ucnv_openPackage("testdata", name+1, &errorCode);
+        /* loadTestData(): set the data directory */
+        return ucnv_openPackage(loadTestData(errorCode), name+1, &errorCode);
     } else {
         return ucnv_open(name, &errorCode);
     }
