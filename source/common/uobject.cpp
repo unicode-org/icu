@@ -23,9 +23,10 @@
 U_NAMESPACE_BEGIN
 
 /*
- * Test implementation of UObject::new/delete
+ * Default implementation of UMemory::new/delete
  * using uprv_malloc() and uprv_free().
- * This is used together with a list of imported symbols to verify
+ *
+ * For testing, this is used together with a list of imported symbols to verify
  * that ICU is not using the global ::new and ::delete operators.
  *
  * These operators can be implemented like this or any other appropriate way
@@ -33,6 +34,9 @@ U_NAMESPACE_BEGIN
  * Whenever ICU is customized in binary incompatible ways please be sure
  * to use library name suffixes to distinguish such libraries from
  * the standard build.
+ *
+ * Instead of just modifying these C++ new/delete operators, it is usually best
+ * to modify the uprv_malloc()/uprv_free()/uprv_realloc() functions in cmemory.c.
  *
  * Memory test on Windows/MSVC 6:
  * The global operators new and delete look as follows:
@@ -45,7 +49,7 @@ U_NAMESPACE_BEGIN
  * ??2@YAPAXI@Z and ??3@YAXPAX@Z are the linker symbols in the .obj
  * files and are imported from msvcrtd.dll (in a debug build).
  *
- * Make sure that with the UObject operators new and delete defined these two symbols
+ * Make sure that with the UMemory operators new and delete defined these two symbols
  * do not appear in the dumpbin /symbols output for the ICU libraries!
  *
  * If such a symbol appears in the output then look in the preceding lines in the output
@@ -53,21 +57,21 @@ U_NAMESPACE_BEGIN
  * and replace with uprv_malloc/uprv_free.
  */
 
-void *UObject::operator new(size_t size) {
+void *UMemory::operator new(size_t size) {
     return uprv_malloc(size);
 }
 
-void UObject::operator delete(void *p) {
+void UMemory::operator delete(void *p) {
     if(p!=NULL) {
         uprv_free(p);
     }
 }
 
-void *UObject::operator new[](size_t size) {
+void *UMemory::operator new[](size_t size) {
     return uprv_malloc(size);
 }
 
-void UObject::operator delete[](void *p) {
+void UMemory::operator delete[](void *p) {
     if(p!=NULL) {
         uprv_free(p);
     }
