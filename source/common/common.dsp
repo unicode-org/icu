@@ -258,7 +258,7 @@ SOURCE=.\ucnvscsu.c
 # Begin Source File
 
 SOURCE=.\udata.c
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
