@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2004/03/09 22:25:05 $ 
- * $Revision: 1.29 $
+ * $Date: 2004/03/11 07:04:09 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -67,7 +67,7 @@ import java.util.ResourceBundle;
  * H        hour in day (0~23)      (Number)            0
  * m        minute in hour          (Number)            30
  * s        second in minute        (Number)            55
- * S        millisecond             (Number)            978
+ * S        fractional second       (Number)            978
  * E        day of week             (Text)              Tuesday
  * e        day of week (local 1~7) (Number)            2
  * D        day in year             (Number)            189
@@ -93,6 +93,8 @@ import java.util.ResourceBundle;
  * <strong>(Number)</strong>: the minimum number of digits. Shorter
  * numbers are zero-padded to this amount. Year is handled specially;
  * that is, if the count of 'y' is 2, the Year will be truncated to 2 digits.
+ * (e.g., if "yyyy" produces "1997", "yy" produces "97".)
+ * Unlike other fields, fractional seconds are padded on the right with zero.
  * <p>
  * <strong>(Text & Number)</strong>: 3 or over, use text, otherwise use number.
  * <p>
@@ -494,7 +496,7 @@ public class SimpleDateFormat extends DateFormat {
     private static final int[] PATTERN_INDEX_TO_DATE_FORMAT_FIELD = {
         /*GyM*/ DateFormat.ERA_FIELD, DateFormat.YEAR_FIELD, DateFormat.MONTH_FIELD,
         /*dkH*/ DateFormat.DATE_FIELD, DateFormat.HOUR_OF_DAY1_FIELD, DateFormat.HOUR_OF_DAY0_FIELD,
-        /*msS*/ DateFormat.MINUTE_FIELD, DateFormat.SECOND_FIELD, DateFormat.MILLISECOND_FIELD,
+        /*msS*/ DateFormat.MINUTE_FIELD, DateFormat.SECOND_FIELD, DateFormat.FRACTIONAL_SECOND_FIELD,
         /*EDF*/ DateFormat.DAY_OF_WEEK_FIELD, DateFormat.DAY_OF_YEAR_FIELD, DateFormat.DAY_OF_WEEK_IN_MONTH_FIELD,
         /*wWa*/ DateFormat.WEEK_OF_YEAR_FIELD, DateFormat.WEEK_OF_MONTH_FIELD, DateFormat.AM_PM_FIELD,
         /*hKz*/ DateFormat.HOUR1_FIELD, DateFormat.HOUR0_FIELD, DateFormat.TIMEZONE_FIELD,
@@ -562,6 +564,26 @@ public class SimpleDateFormat extends DateFormat {
                                             count, maxIntCount);
             else
                 current = zeroPaddingNumber(value, count, maxIntCount);
+            break;
+        case 8: // 'S' - FRACTIONAL_SECOND
+            // Fractional seconds left-justify
+            {
+                StringBuffer buf = new StringBuffer();
+                numberFormat.setMinimumIntegerDigits(Math.min(3, count));
+                numberFormat.setMaximumIntegerDigits(maxIntCount);
+                if (count == 1) {
+                    value = (value + 50) / 100;
+                } else if (count == 2) {
+                    value = (value + 5) / 10;
+                }
+                FieldPosition p = new FieldPosition(0);
+                numberFormat.format((long) value, buf, p);
+                if (count > 3) {
+                    numberFormat.setMinimumIntegerDigits(count - 3);
+                    numberFormat.format(0L, buf, p);
+                }
+                current = buf.toString();
+            }
             break;
         case 9: // 'E' - DAY_OF_WEEK
             if (count >= 4)
@@ -644,7 +666,6 @@ public class SimpleDateFormat extends DateFormat {
             // case 5: // 'H' - HOUR_OF_DAY (0..23)
             // case 6: // 'm' - MINUTE
             // case 7: // 's' - SECOND
-            // case 8: // 'S' - MILLISECOND
             // case 10: // 'D' - DAY_OF_YEAR
             // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
             // case 12: // 'w' - WEEK_OF_YEAR
@@ -1095,7 +1116,8 @@ public class SimpleDateFormat extends DateFormat {
         if (patternCharIndex == 4 /*HOUR_OF_DAY1_FIELD*/ ||
             patternCharIndex == 15 /*HOUR1_FIELD*/ ||
             (patternCharIndex == 2 /*MONTH_FIELD*/ && count <= 2) ||
-            patternCharIndex == 1)
+            patternCharIndex == 1 ||
+            patternCharIndex == 8)
         {
             // It would be good to unify this with the obeyCount logic below,
             // but that's going to be difficult.
@@ -1168,6 +1190,24 @@ public class SimpleDateFormat extends DateFormat {
             // [We computed 'value' above.]
             if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) value = 0;
             cal.set(Calendar.HOUR_OF_DAY, value);
+            return pos.getIndex();
+        case 8: // 'S' - FRACTIONAL_SECOND
+            // Fractional seconds left-justify
+            i = pos.getIndex() - start;
+            if (i < 3) {
+                while (i < 3) {
+                    value *= 10;
+                    i++;
+                }
+            } else {
+                int a = 1;
+                while (i > 3) {
+                    a *= 10;
+                    i--;
+                }
+                value = (value + (a>>1)) / a;
+            }
+            cal.set(Calendar.MILLISECOND, value);
             return pos.getIndex();
         case 9: { // 'E' - DAY_OF_WEEK
             // Want to be able to parse both short and long forms.
@@ -1312,7 +1352,6 @@ public class SimpleDateFormat extends DateFormat {
             // case 5: // 'H' - HOUR_OF_DAY (0..23)
             // case 6: // 'm' - MINUTE
             // case 7: // 's' - SECOND
-            // case 8: // 'S' - MILLISECOND
             // case 10: // 'D' - DAY_OF_YEAR
             // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
             // case 12: // 'w' - WEEK_OF_YEAR
