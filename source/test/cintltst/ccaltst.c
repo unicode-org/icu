@@ -254,7 +254,10 @@ void TestGetSetDateAPI()
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     caldef2=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     /*open the dateformat */
-    datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL,fgGMTID,-1, &status);
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+       - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+    /*datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL,fgGMTID,-1, &status);*/
+    datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US",fgGMTID,-1, &status);
     if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat : %s\n", myErrorName(status));

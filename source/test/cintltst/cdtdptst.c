@@ -106,7 +106,10 @@ void TestPartialParse994()
     UDate d, null;
     null=0;
 
-    f = udat_open(UDAT_DEFAULT, UDAT_SHORT, NULL, NULL, 0, &status);
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+       - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+    /* f = udat_open(UDAT_DEFAULT, UDAT_SHORT, NULL, NULL, 0, &status); */
+    f = udat_open(UDAT_DEFAULT, UDAT_SHORT, "en_US", NULL, 0, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: ErrorCode received during test: %s\n", myErrorName(status));
     }
@@ -263,11 +266,17 @@ void TestQuotePattern161()
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("MM/dd/yyyy 'at' hh:mm:ss a zzz")+1) );
     u_uastrcpy(pattern, "MM/dd/yyyy 'at' hh:mm:ss a zzz");
     
-    format= udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+       - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+    /* format= udat_openPattern(pattern, u_strlen(pattern), NULL, &status); */
+    format= udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
     if(U_FAILURE(status)){ log_err("error in udat_openPattern  : %s\n", myErrorName(status));    }
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
-    cal=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status);
+    /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
+       - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+    /* cal=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status); */
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if(U_FAILURE(status)){ log_err("error in ucal_open cal : %s\n", myErrorName(status));    }
     
     ucal_setDateTime(cal, 1999, UCAL_APRIL, 13, 10, 42, 28, &status);
