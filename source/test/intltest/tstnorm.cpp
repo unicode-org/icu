@@ -49,10 +49,6 @@ static UnicodeString str(const char *input)
 }
 
 
-UnicodeString BasicNormalizerTest::canonTests[24][3];
-
-UnicodeString BasicNormalizerTest::compatTests[11][3];
-
 BasicNormalizerTest::BasicNormalizerTest()
 {
   // canonTest
@@ -207,8 +203,6 @@ void BasicNormalizerTest::TestCompatCompose()
 
 
 //-------------------------------------------------------------------------------
-
-UnicodeString BasicNormalizerTest::hangulCanon[2][3];
 
 void BasicNormalizerTest::TestHangulCompose() 
 {
