@@ -255,8 +255,16 @@ void ReplaceableTest::TestReplaceableClass(void) {
     // UMemory/UObject/Replaceable assignment operators
     NoopReplaceable noop2;
     noop2=noop;
-    if((p=noop.clone())!=NULL) {
+    if((p=noop2.clone())!=NULL) {
         errln("noop2.Replaceable::clone() does not return NULL");
+        delete p;
+    }
+
+    // try to call the compiler-provided
+    // UMemory/UObject/Replaceable copy constructors
+    NoopReplaceable noop3(noop);
+    if((p=noop3.clone())!=NULL) {
+        errln("noop3.Replaceable::clone() does not return NULL");
         delete p;
     }
 }
