@@ -361,7 +361,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
 
     if(adjustedLen == 1){
         /* calculate the delta */
-        int16_t delta = (int32_t)codepoint - (int16_t) mapping[0];
+        int16_t delta = (int16_t)((int32_t)codepoint - (int16_t) mapping[0]);
         if(delta >= SPREP_DELTA_RANGE_NEGATIVE_LIMIT && delta <= SPREP_DELTA_RANGE_POSITIVE_LIMIT){
 
             trieWord = delta << 2;
