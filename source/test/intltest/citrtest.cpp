@@ -751,4 +751,38 @@ void CharIterTest::TestUCharIterator() {
     ) {
         errln("error: UCharIterator(character iterator).move sets/returns wrong index");
     }
+
+
+    if(cIter.getIndex(&cIter, (enum UCharIteratorOrigin)-1) != -1)
+    {
+      errln("error: UCharIterator(char iter).getIndex did not return error value");
+    }
+
+    if(cIter.move(&cIter, 0, (enum UCharIteratorOrigin)-1) != -1)
+    {
+      errln("error: UCharIterator(char iter).move did not return error value");
+    }
+
+
+    if(rIter.getIndex(&rIter, (enum UCharIteratorOrigin)-1) != -1)
+    {
+      errln("error: UCharIterator(repl iter).getIndex did not return error value");
+    }
+
+    if(rIter.move(&rIter, 0, (enum UCharIteratorOrigin)-1) != -1)
+    {
+      errln("error: UCharIterator(repl iter).move did not return error value");
+    }
+
+
+    if(sIter.getIndex(&sIter, (enum UCharIteratorOrigin)-1) != -1)
+    {
+      errln("error: UCharIterator(string iter).getIndex did not return error value");
+    }
+
+    if(sIter.move(&sIter, 0, (enum UCharIteratorOrigin)-1) != -1)
+    {
+      errln("error: UCharIterator(string iter).move did not return error value");
+    }
+
 }
