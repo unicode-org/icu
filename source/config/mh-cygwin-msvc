@@ -3,7 +3,7 @@
 ## Copyright (c) 2001-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.19 2004/03/29 22:48:08 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.20 2004/03/29 22:58:46 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -133,9 +133,9 @@ FINAL_IMPORT_LIB := $(MIDDLE_IMPORT_LIB)
 
 ## Versioned libraries rules
 #%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
-#	$(RM) $@ && cp $< $@
+#	$(RM) $@ && cp ${<F} $@
 %.$(SO): %$(SO_TARGET_VERSION_MAJOR).$(SO)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && ln -s ${<F} $@
 
 ##  Bind internal references
 
