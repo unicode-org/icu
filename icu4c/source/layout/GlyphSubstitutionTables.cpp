@@ -39,7 +39,7 @@ le_bool GlyphSubstitutionTableHeader::coversScriptAndLanguage(LETag scriptTag, L
 {
     const ScriptListTable *scriptListTable = (const ScriptListTable *) ((char *)this + SWAPW(scriptListOffset));
 
-    return scriptListTable->findLanguage(scriptTag, languageTag, true) != NULL;
+    return scriptListTable->findLanguage(scriptTag, languageTag, TRUE) != NULL;
 }
 
 U_NAMESPACE_END

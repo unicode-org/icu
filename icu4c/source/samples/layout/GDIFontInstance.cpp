@@ -367,7 +367,7 @@ le_bool GDIFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LE
 
     return result;
 #else
-    return false;
+    return FALSE;
 #endif
 }
 

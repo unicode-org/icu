@@ -4,7 +4,7 @@
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/11/26 00:19:39 $ $Revision: 1.4 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.h,v $ $Date: 2003/12/08 22:41:38 $ $Revision: 1.5 $
  */
 
 #ifndef __HANLAYOUTENGINE_H
@@ -82,7 +82,7 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - true if the characters are in a right to left directional run
+     * @param rightToLeft - TRUE if the characters are in a right to left directional run
      *
      * Output parameters:
      * @param outChars - the output character arrayt

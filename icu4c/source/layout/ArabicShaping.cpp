@@ -150,7 +150,7 @@ void ArabicShaping::shape(const LEUnicode *chars, le_int32 offset, le_int32 char
 
     // erout is effective right logical index
     le_int32 erout = -1;
-    le_bool rightShapes = false;
+    le_bool rightShapes = FALSE;
     le_bool rightCauses = (rightType & MASK_SHAPE_LEFT) != 0;
     le_int32 in, e, out = 0, dir = 1;
 

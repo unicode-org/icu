@@ -83,7 +83,7 @@ le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offse
     }
 
     glyphCount = ThaiShaping::compose(chars, offset, count, fGlyphSet, fErrorChar, outChars, charIndices);
-    mapCharsToGlyphs(outChars, 0, glyphCount, false, false, glyphs, charIndices, success);
+    mapCharsToGlyphs(outChars, 0, glyphCount, FALSE, FALSE, glyphs, charIndices, success);
 
     LE_DELETE_ARRAY(outChars);
 

@@ -39,7 +39,7 @@ le_int32 GXLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset,
         return 0;
     }
 
-    mapCharsToGlyphs(chars, offset, count, false, rightToLeft, glyphs, charIndices, success);
+    mapCharsToGlyphs(chars, offset, count, FALSE, rightToLeft, glyphs, charIndices, success);
 
     if (LE_FAILURE(success)) {
         return 0;

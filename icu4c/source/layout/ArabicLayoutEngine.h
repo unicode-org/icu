@@ -99,7 +99,7 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - true if the characters are in a right to left directional run
+     * @param rightToLeft - TRUE if the characters are in a right to left directional run
      *
      * Output parameters:
      * @param outChars - the output character arrayt
@@ -123,7 +123,7 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
-     * @param reverse - true if the glyphs in the glyph array have been reordered
+     * @param reverse - TRUE if the glyphs in the glyph array have been reordered
      * @param glyphs - the input glyph array
      * @param glyphCount - the number of glyphs
      * @param positions - the position array, will be updated as needed
@@ -210,8 +210,8 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to be mapped
      * @param count - the number of characters to be mapped
-     * @param reverse - if true, the output will be in reverse order
-     * @param mirror - if true, do character mirroring
+     * @param reverse - if TRUE, the output will be in reverse order
+     * @param mirror - if TRUE, do character mirroring
      *
      * Output parameters:
      * @param glyphs - the glyph array
@@ -231,7 +231,7 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
-     * @param reverse - true if the glyphs in the glyph array have been reordered
+     * @param reverse - TRUE if the glyphs in the glyph array have been reordered
      * @param glyphs - the input glyph array
      * @param glyphCount - the number of glyphs
      * @param positions - the position array, will be updated as needed

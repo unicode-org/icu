@@ -70,7 +70,7 @@ typedef uint8_t le_uint8;
  *
  * @stable ICU 2.4
  */
-typedef bool le_bool;
+typedef UBool le_bool;
 
 #ifndef NULL
 /**
