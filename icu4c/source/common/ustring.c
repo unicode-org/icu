@@ -514,7 +514,7 @@ u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
     if(c1>=0xd800 && c2>=0xd800) {
         /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
         if(
-            (c1<=0xdbff && (++s1)!=limit1 && UTF_IS_TRAIL(*s1)) ||
+            (c1<=0xdbff && (s1+1)!=limit1 && UTF_IS_TRAIL(*(s1+1))) ||
             (UTF_IS_TRAIL(c1) && start1!=s1 && UTF_IS_LEAD(*(s1-1)))
         ) {
             /* part of a surrogate pair, leave >=d800 */
@@ -524,7 +524,7 @@ u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
         }
 
         if(
-            (c2<=0xdbff && (++s2)!=limit2 && UTF_IS_TRAIL(*s2)) ||
+            (c2<=0xdbff && (s2+1)!=limit2 && UTF_IS_TRAIL(*(s2+1))) ||
             (UTF_IS_TRAIL(c2) && start2!=s2 && UTF_IS_LEAD(*(s2-1)))
         ) {
             /* part of a surrogate pair, leave >=d800 */
