@@ -22,6 +22,7 @@
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 #include "unicode/ucnv_cb.h"
+#include "cstring.h"
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
 #define NUKTA               0x093c
@@ -50,9 +51,6 @@
 #define EXT_RANGE_BEGIN     0xA1
 #define EXT_RANGE_END       0xEE
 
-/* TODO: 
- * Add getName() function.
- */
 
 typedef enum  {
     DEVANAGARI =0,
@@ -114,7 +112,8 @@ typedef struct{
     MaskEnum currentMaskFromUnicode; /* mask for current state in toUnicode */
     MaskEnum currentMaskToUnicode;   /* mask for current state in toUnicode */
     MaskEnum defMaskToUnicode;       /* mask for default state in toUnicode */
-    UBool isFirstBuffer;            
+    UBool isFirstBuffer;
+    char name[30];
 }UConverterDataISCII; 
 
 static const uint16_t lookupInitialData[][3]={
@@ -134,6 +133,7 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISCII));
 
     if(cnv->extraInfo != NULL) {
+        int len=0;
         UConverterDataISCII *converterData=(UConverterDataISCII *) cnv->extraInfo;
         converterData->contextCharToUnicode=NO_CHAR_MARKER;
         converterData->contextCharFromUnicode=0x0000;
@@ -148,6 +148,10 @@ _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options
             converterData->defMaskToUnicode=lookupInitialData[options & UCNV_OPTIONS_VERSION_MASK][1];
             
             converterData->isFirstBuffer=TRUE;
+            uprv_strcpy(converterData->name,"ISCII,version=");
+            len = uprv_strlen(converterData->name);
+            converterData->name[len]= (char)((options & UCNV_OPTIONS_VERSION_MASK) + 0x30);
+            converterData->name[len+1]=0;
         }else{
             uprv_free(cnv->extraInfo);
             *errorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -162,6 +166,15 @@ _ISCIIClose(UConverter *cnv){
     if(cnv->extraInfo && !cnv->isCopyLocal){
         uprv_free(cnv->extraInfo);
     }
+}
+
+static const char* 
+_ISCIIgetName(const UConverter* cnv){
+    if(cnv->extraInfo){
+        UConverterDataISCII* myData= (UConverterDataISCII*)cnv->extraInfo;
+        return myData->name;
+    }
+    return NULL;
 }
 
 static void 
@@ -939,7 +952,9 @@ getTrail:
                 int32_t* saveOffsets =NULL;
                 int currentOffset =0;
                 int saveIndex =0;
-                
+
+                args->converter->invalidUCharLength = 0;
+
                 if(sourceChar>0xffff){
                     /* we have got a surrogate pair... dissable and populate the invalidUCharBuffer */
                     args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] 
@@ -984,7 +999,6 @@ getTrail:
                 args->source=saveSource;
                 args->target=saveTarget;
                 args->offsets=saveOffsets;
-                args->converter->invalidUCharLength = 0;
                 args->converter->fromUSurrogateLead=0x00;
 
                 if (U_FAILURE (*err)){
@@ -1266,6 +1280,8 @@ CALLBACK:
                     int32_t currentOffset;
                     int32_t saveIndex = target - args->target;
 
+                    args->converter->invalidCharLength=0;
+
                     currentOffset= source - args->source -1;
                     
                     if(data->contextCharToUnicode < NO_CHAR_MARKER){
@@ -1301,7 +1317,6 @@ CALLBACK:
                           *(args->offsets)++ = currentOffset;
                         }
                     }
-                    args->converter->invalidCharLength=0;
                     target=args->target;
                     args->source  = saveSource;
                     args->target  = saveTarget;
@@ -1400,7 +1415,7 @@ static const UConverterImpl _ISCIIImpl={
     NULL,
     
     NULL,
-    NULL,
+    _ISCIIgetName,
     NULL,
     _ISCII_SafeClone
 };
