@@ -487,7 +487,7 @@ void TestFieldGetSet()
     ucal_set(cal, UCAL_WEEK_OF_MONTH, 0);
     verify1("1997 Tuesday in week 0 of June = ", cal, datdef , 1997, UCAL_MAY, 27);
     ucal_clear(cal);
-    ucal_set(cal, UCAL_YEAR, 1997);
+    ucal_set(cal, UCAL_YEAR_WOY, 1997);
     ucal_set(cal, UCAL_DAY_OF_WEEK, UCAL_TUESDAY);
     ucal_set(cal, UCAL_WEEK_OF_YEAR, 1);
     verify1("1997 Tuesday in week 1 of year = ", cal, datdef,1996, UCAL_DECEMBER, 31);
