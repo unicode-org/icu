@@ -721,7 +721,7 @@ HebrewCalendar::initializeSystemDefaultCentury()
   }
 }
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HebrewCalendar);
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HebrewCalendar)
 
 U_NAMESPACE_END
 

@@ -72,7 +72,7 @@ BITestData::BITestData(UErrorCode &status)
 : fExpectedBreakPositions(status), fExpectedTags(status),  fLineNum(status), fActualBreakPositions(status),
   fActualTags(status)
 {
-};
+}
 
 //
 // addDataChunk.   Add a section (non-breaking) piece if data to the test data.
@@ -92,7 +92,7 @@ void BITestData::addDataChunk(const char *data, int32_t tag, int32_t lineNum, UE
     fExpectedBreakPositions.addElement(fDataToBreak.length(), status);
     fExpectedTags.addElement(tag, status);
     fLineNum.addElement(lineNum, status);
-};
+}
 
 
 //
@@ -1987,7 +1987,7 @@ RBBICharMonkey::RBBICharMonkey() {
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
-};
+}
 
 
 void RBBICharMonkey::setText(const UnicodeString &s) {
@@ -2111,7 +2111,7 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
-};
+}
 
 void RBBIWordMonkey::setText(const UnicodeString &s) {
     fText       = &s;
@@ -2440,7 +2440,7 @@ RBBILineMonkey::RBBILineMonkey()
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
-};
+}
 
 
 void RBBILineMonkey::setText(const UnicodeString &s) {

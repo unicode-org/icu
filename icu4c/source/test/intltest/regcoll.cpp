@@ -359,7 +359,7 @@ void CollationRegressionTest::Test4060154(/* char* par */)
     compareArray(*c, secondary, ARRAY_LENGTH(secondary));
 
     delete c;
-};
+}
 
 // @bug 4062418
 //

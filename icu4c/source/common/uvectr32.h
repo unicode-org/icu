@@ -264,7 +264,7 @@ inline UBool UVector32::operator!=(const UVector32& other) {
 
 inline int32_t *UVector32::getBuffer() const {
     return elements;
-};
+}
 
 
 // UStack inlines

@@ -224,6 +224,6 @@ LookupProcessor::~LookupProcessor()
 {
     LE_DELETE_ARRAY(lookupOrderArray);
     LE_DELETE_ARRAY(lookupSelectArray);
-};
+}
 
 U_NAMESPACE_END

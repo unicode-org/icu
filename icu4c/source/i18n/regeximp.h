@@ -318,11 +318,11 @@ inline Regex8BitSet::Regex8BitSet() {
 inline UBool Regex8BitSet::contains(UChar32 c) {
     // No bounds checking!  This is deliberate.
     return ((d[c>>3] & 1 <<(c&7)) != 0);
-};
+}
 
 inline void  Regex8BitSet::add(UChar32 c) {
     d[c>>3] |= 1 << (c&7);
-};
+}
 
 inline void Regex8BitSet::init(const UnicodeSet *s) {
     if (s != NULL) {
