@@ -273,7 +273,7 @@ main(int argc, char* argv[]) {
 
             if (tostdout) {
                 out = stdout;
-#ifdef WIN32
+#if defined(WIN32) || defined(U_CYGWIN)
                 if (_setmode(_fileno(out), _O_BINARY) == -1) {
                     fprintf(stderr, "%s: couldn't set standard output to binary mode\n, pname");
                     return 4;
