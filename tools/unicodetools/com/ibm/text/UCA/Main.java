@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2005/04/06 08:48:16 $ 
-* $Revision: 1.19 $
+* $Date: 2005/04/06 15:15:43 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -33,7 +33,6 @@ public class Main {
     };
 	
 	public static void main(String args[]) throws Exception {
-		//checkCanonicalIterator();
 		// NOTE: so far, we don't need to build the UCA with anything but the latest versions.
 		// A few changes would need to be made to the code to do older versions.
         try {
@@ -101,6 +100,9 @@ public class Main {
                 else if (arg.equalsIgnoreCase("short")) shortPrint = !shortPrint;
                 else if (arg.equalsIgnoreCase("noCE")) noCE = !noCE;
                 
+                else if (arg.equalsIgnoreCase("checkCanonicalIterator")) checkCanonicalIterator();
+
+                
     			else if (arg.equalsIgnoreCase("writeAllocation")) WriteCharts.writeAllocation();
     			// else if (arg.equalsIgnoreCase("probe")) Probe.test(); 
                 
@@ -148,16 +150,16 @@ public class Main {
 		System.out.println("first implicit: " + Utility.hex((long)(firstImplicit & 0xFFFFFFFFL)));
 		
 		CanonicalIterator it = new CanonicalIterator("");
-		String[] tests = new String[] {"\uF900"};
+		String[] tests = new String[] {"\uF900", "\u00C5d\u0307\u0327"};
 		for (int j = 0; j < tests.length; ++j) {
-			System.out.println(tests[j]);
+			System.out.println(Default.ucd().getCodeAndName(tests[j]));
 			it.setSource(tests[j]);
 			String ss;
 			for (int i = 0; (ss = it.next()) != null; ++i) {
-				System.out.println(i + "\t" + Utility.hex(ss));
+				System.out.println(i + "\t" + Default.ucd().getCodeAndName(ss));
 			}
 		}
-		if (true) throw new IllegalArgumentException();
+		// verify that nothing breaks
 		for (int i = 0; i < 0x10FFFF; ++i) {
 			int cat = UCharacter.getType(i);
 			if (cat == UCharacter.UNASSIGNED || cat == UCharacter.PRIVATE_USE || cat == UCharacter.SURROGATE) continue;
