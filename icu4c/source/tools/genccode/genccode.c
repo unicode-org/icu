@@ -106,6 +106,8 @@ main(int argc, char* argv[]) {
             "\toptions:\n"
             "\t\t-h or -? or --help  this usage text\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-n or --name        symbol prefix, followed by the prefix\n"
+            "\t\t-e or --entrypoint  entry point name, followed by the name\n"
 #ifdef CAN_GENERATE_OBJECTS
             "\t\t-o or --object      write a .obj file instead of .c\n"
 #endif
