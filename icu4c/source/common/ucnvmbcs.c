@@ -1239,7 +1239,14 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
 
     /* use optimized function if possible */
     cnv=pArgs->converter;
-    if(cnv->sharedData->table->mbcs.countStates==1) {
+    if(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SURROGATES) {
+        /*
+         * Calling the inefficient, generic getNextUChar() lets us deal correctly
+         * with the rare case of a codepage that maps single surrogates
+         * without adding the complexity to this already complicated function here.
+         */
+        return ucnv_getNextUCharFromToUImpl(pArgs, _MBCSToUnicodeWithOffsets, TRUE, pErrorCode);
+    } else if(cnv->sharedData->table->mbcs.countStates==1) {
         return _MBCSSingleGetNextUChar(pArgs, pErrorCode);
     }
 
@@ -1829,14 +1836,14 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     uint32_t i;
     uint32_t value;
     int32_t length, prevLength;
-    UBool hasSupplementary;
+    uint8_t unicodeMask;
 
     /* use optimized function if possible */
     cnv=pArgs->converter;
     outputType=cnv->sharedData->table->mbcs.outputType;
-    hasSupplementary=cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY;
-    if(outputType==MBCS_OUTPUT_1) {
-        if(!hasSupplementary) {
+    unicodeMask=cnv->sharedData->table->mbcs.unicodeMask;
+    if(outputType==MBCS_OUTPUT_1 && !(unicodeMask&UCNV_HAS_SURROGATES)) {
+        if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
             _MBCSSingleFromBMPWithOffsets(pArgs, pErrorCode);
         } else {
             _MBCSSingleFromUnicodeWithOffsets(pArgs, pErrorCode);
@@ -1897,7 +1904,12 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
              */
             c=*source++;
             ++nextSourceIndex;
-            if(UTF_IS_SURROGATE(c)) {
+            /*
+             * This also tests if the codepage maps single surrogates.
+             * If it does, then surrogates are not paired but mapped separately.
+             * Note that in this case unmatched surrogates are not detected.
+             */
+            if(UTF_IS_SURROGATE(c) && !(unicodeMask&UCNV_HAS_SURROGATES)) {
                 if(UTF_IS_SURROGATE_FIRST(c)) {
 getTrail:
                     if(source<sourceLimit) {
@@ -1907,7 +1919,7 @@ getTrail:
                             ++source;
                             ++nextSourceIndex;
                             c=UTF16_GET_PAIR_VALUE(c, trail);
-                            if(!hasSupplementary) {
+                            if(!(unicodeMask&UCNV_HAS_SUPPLEMENTARY)) {
                                 /* BMP-only codepages are stored without stage 1 entries for supplementary code points */
                                 /* callback(unassigned) */
                                 reason=UCNV_UNASSIGNED;
