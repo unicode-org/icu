@@ -7,9 +7,9 @@
 
 es_EC {
     CurrencyElements { 
-            "S/",
+            "S/.",
             "ECS",
-            ".",
+            ",",
     }
     DateTimePatterns { 
             "hh:mm:ss a z",
@@ -25,8 +25,8 @@ es_EC {
     LocaleID { "300a" }
     LocaleString { "es_EC" }
     NumberElements { 
-            ".",
             ",",
+            ".",
             ";",
             "%",
             "0",

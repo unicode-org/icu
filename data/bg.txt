@@ -47,12 +47,12 @@ bg {
     DateTimePatterns { 
             "HH:mm:ss z",
             "HH:mm:ss z",
-            "H:mm:ss",
+            "HH:mm:ss",
             "H:mm",
-            "EEEE, yyyy, MMMM d",
-            "EEEE, yyyy, MMMM d",
-            "yyyy-M-d",
-            "yy-M-d",
+            "dd MMMM yyyy, EEEE",
+            "dd MMMM yyyy",
+            "dd.MM.yy",
+            "dd.MM.yy",
             "{1} {0}",
     }
     DayAbbreviations { 
@@ -87,19 +87,19 @@ bg {
     LocaleID { "02" }
     LocaleString { "bg" }
     MonthAbbreviations { 
-            "I",
-            "II",
-            "III",
-            "IV",
-            "V",
-            "VI",
-            "VII",
-            "VIII",
-            "IX",
-            "X",
-            "XI",
-            "XII",
-            "",
+            "\u044f\u043d.",           
+            "\u0444\u0435\u0432.",     
+            "\u043c\u0430\u0440\u0442.",
+            "\u0430\u043f\u0440.",     
+            "\u043c\u0430\u0439.",      
+            "\u044e\u043d\u0438.",      
+            "\u044e\u043b\u0438.",      
+            "\u0430\u0432\u0433.",     
+            "\u0441\u0435\u043f.",     
+            "\u043e\u043a\u0442.",     
+            "\u043d\u043e\u0435\u043c.",
+            "\u0434\u0435\u043a.",     
+            ""
     }
     MonthNames { 
             "\u042F\u043D\u0443\u0430\u0440\u0438",

@@ -7,7 +7,7 @@
 
 es_CL {
     CurrencyElements { 
-            "Ch$",
+            "$",
             "CLP",
             ",",
     }

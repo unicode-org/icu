@@ -7,7 +7,7 @@
 
 es_NI {
     CurrencyElements { 
-            "$C",
+            "C$",
             "NIO",
             ".",
     }
@@ -18,8 +18,8 @@ es_NI {
             "hh:mm a",
             "EEEE dd' de 'MMMM' de 'yyyy",
             "dd' de 'MMMM' de 'yyyy",
-            "MM-dd-yyyy",
-            "MM-dd-yy",
+            "MM/dd/yyyy",
+            "MM/dd/yy",
             "{1} {0}",
     }
     LocaleID { "4c0a" }

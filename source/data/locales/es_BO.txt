@@ -7,7 +7,7 @@
 
 es_BO {
     CurrencyElements { 
-            "B$",
+            "$b",
             "BOB",
             ",",
     }
@@ -18,8 +18,8 @@ es_BO {
             "hh:mm a",
             "EEEE d' de 'MMMM' de 'yyyy",
             "d' de 'MMMM' de 'yyyy",
-            "dd-MM-yyyy",
-            "dd-MM-yy",
+            "dd/MM/yyyy",
+            "dd/MM/yy",
             "{1} {0}",
     }
     LocaleID { "400a" }

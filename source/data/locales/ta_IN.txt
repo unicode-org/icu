@@ -8,7 +8,7 @@ ta_IN {
     ShortCountry { IND }
 
     CurrencyElements {
-        "\u0bb0\u0bc2.",
+        "\u0bb0\u0bc2",
         "INR",  // Rs. ? No.
         "."
     }
@@ -20,8 +20,8 @@ ta_IN {
         "hh:mm a",
         "EEEE d MMMM yyyy",
         "d MMMM yyyy",
-        "dd mm yyyy",
-        "d m yy",
+        "dd-mm-yyyy",
+        "d-m-yy",
         "{1} {0}"
     }
     DateTimeElements {

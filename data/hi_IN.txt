@@ -11,7 +11,7 @@ hi_IN {
         "#,##0%"
     }
     CurrencyElements {
-        "\u0930\u0942",
+        "\u0930\u0941",
         "INR",  
         "."
     }
@@ -22,8 +22,8 @@ hi_IN {
         "hh:mm a",
         "EEEE d MMMM yyyy",
         "d MMMM yyyy",
-        "dd mm yyyy",
-        "d m yy",
+        "dd-mm-yyyy",
+        "d-m-yy",
         "{1} {0}"
     }
     DateTimeElements {

@@ -9,7 +9,7 @@ fa_IR {
     Version { "1.0" }
 
     CurrencyElements { 
-            "\u00a4",
+            "\ufeff\u0631\u064a\u0627\u0644",
             "IRR",
             "\u066b",
     }
@@ -18,10 +18,10 @@ fa_IR {
             "ss:mm:HH",
             "ss:mm:HH",
             "ss:mm:HH",
-            "dd/MM/yyyy",
-            "dd/MM/yyyy",
-            "dd/MM/yyyy",
-            "dd/MM/yyyy",
+            "yyyy/MM/dd",
+            "yyyy/MM/dd",
+            "yyyy/MM/dd",
+            "yyyy/MM/dd",
             "{1} {0}",
     }
     NumberPatterns { 
