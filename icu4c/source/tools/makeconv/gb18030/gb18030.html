@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<title>GB 18030</title>
+</head>
+
+<!-- Copyright (C) 2000, International Business Machines Corporation and others.  All Rights Reserved. -->
+
+<body>
+<h1>GB 18030</h1>
+<p align="right">Markus Scherer, 2000-oct-21</p>
+
+<p>GB 18030 is a new Chinese codepage standard, published 2000-mar-17, that is designed for 
+<ul>
+    <li>Upwards compatibility with the GB 2312-1980 standard</li>
+    <li>Compatibility with the GBK specification, updated for Unicode 3.0</li>
+    <li>Full coverage of all Unicode code points similar to a UTF</li>
+</ul></p>
+
+<p>Byte sequence structure: 
+<ul>
+    <li>Single-byte: 00-80</li>
+    <li>Two-byte: 81-fe | 40-7e, 80-fe</li>
+    <li>Four-byte: 81-fe | 30-39 | 81-fe | 30-39</li>
+</ul></p>
+
+<p>Special properties of GB 18030: 
+<ul>
+    <li>Huge: 1.6 million codepage code points &mdash; probably the largest codepage</li>
+    <li>Similar to UTF: All 1.1 million Unicode code points U+0000-U+10ffff map to GB 18030 codes.
+        All but 79 Unicode code points can be mapped from GB 18030.
+        (I.e., there are 79 Unicode code points with only fallback mappings to GB 18030.)</li>
+    <li>Most of these mappings, except for parts of the BMP, can be done algorithmically.
+        This makes it an unusual mix of a Unicode encoding with a traditional codepage.</li>
+    <li>It is not possible for all codepage byte sequences to determine the length of
+        the sequence from the first byte. This is unusual.</li>
+</ul></p>
+
+<h2>Generating a GB 18030 mapping table</h2>
+
+<p>GB 18030 is derived from existing standards and specifications,
+and a mapping table can be generated from existing data.
+<em>Note: </em>Following this description does not guarantee compatibility with
+the standard or any particular implementation.
+This section is most useful for understanding the genesis and structure of GB 18030.</p>
+<ol>
+    <li>GBK is a specification (not a standard) that is an extension of GB 2312-1980
+        to cover the ideographs in Unicode 2.0. Microsoft co-authored GBK.
+        Get a GBK table, e.g. the one for Microsoft Windows 2000 codepage 936 from ICU sample charsets.</li>
+    <li>From the Microsoft codepage table, remove all fallback mappings and the one for GB+ff.
+        Note that the Windows 2000 version contains the Euro sign at GB+80=U+20ac.
+        Leave it in there for GB 18030.</li>
+    <li>Get a copy of appendix E of the GB 18030 standard.
+        There are 79 characters with "temporary" and "new" Unicode mappings.
+        The temporary ones map to private-use code points because the characters were not assigned in Unicode 2.0.
+        In the data, change them from roundtrip mappings to fallbacks.
+        The new mappings are to Unicode 3.0 code points.
+        Add them as roundtrip mappings to your data.</li>
+    <li>U+0080 is not currently mapped by the standard.
+        Also, there is a small number of known errors, typos, and ambiguities in the original standard publication.
+        See <a href="ftp://ftp.oreilly.com/pub/examples/nutshell/cjkv/pdf/GB18030_Summary.pdf">this summary</a>.
+        I have added U+0080=GB+8432eb38 to my data.
+        This is not official at this point!</li>
+    <li>You should arrive at data like <a href="gbkuni30.txt">gbkuni30.txt</a>.
+        This file has the following simplified format on each line:<br>
+        <code>unicode (':' | '>') gb ['*']</code><br>
+        The left column contains the Unicode code point, the right column the byte sequence in GB 18030.
+        The delimiter is either a colon for roundtrip mappings or a greater-than sign
+        for fallbacks from Unicode to the codepage.
+        I have marked mappings of the appendix E characters with a star.</li>
+    <li>Now compile <a href="gbmake4.c">gbmake4</a> and run it with the above file as stdin input.
+        You will get as output all the four-byte mappings for all
+        BMP code points that do not have a one-byte or two-byte mapping.</li>
+    <li>All Unicode code points on the supplementary planes, U+10000-U+10ffff, are mapped as well.
+        Their GB 18030 codes are four-byte sequences starting at GB+90308130.
+        You can enumerate them lexically by keeping the second and fourth bytes
+        between 0x30 and 0x39 and the third byte between 0x81 and 0xfe. For example:</li>
+        <pre>
+        U+10000=GB+90308130
+        U+10001=GB+90308131
+        U+10002=GB+90308132
+        ...
+        U+1000a=GB+90308230
+        U+1000b=GB+90308231
+        ...
+        U+10ffff=GB+e3329a35
+        </pre>
+        You can calculate linear values and differences between GB 18030 four-byte sequences
+        with <a href="lineargb.c">lineargb</a>.
+    <li>Done! The result is a set of 0x110000 mappings!</li>
+    <li>Of course, an economic implementation would handle the mappings for the
+        supplementary planes algorithmically.
+        Also, large parts of the BMP mappings are contiguous and can be
+        handled similarly. For an ICU MBCS converter, U+fffe and U+ffff should
+        in any case be special-cased because these values have special meaning in .cnv files.</li>
+    <li>You can have gbmake4 generate a list of contiguous four-byte ranges in the BMP.
+        Run it with the same input but specify "r" as an argument.
+        Sort the output descending.
+        Select the ranges that you deem useful, add the one including U+fffe and U+ffff.
+        For example, see <a href="ranges.txt">ranges.txt</a>.</li>
+    <li>If you concatenate gbkuni30.txt and your selected ranges including the
+        "ranges" line in between, you can run this through gbmake4 again and
+        get a mapping table without the code points in the ranges.</li>
+    <li>For an ICU converter, turn your data into a .ucm file and
+        add the header information.
+        Keep the roundtrip/fallback information:
+        roundtrip mappings (':') need a trailing "|0", fallback mappings ('>') a trailing "|1".
+        You can use <a href="gbtoucm.c">gbtoucm</a>.</li>
+    <li>Also for an ICU MBCS converter, you need to specify a state table for the codepage
+        that describes its structure. For example, with the supplementary planes and the
+        <a href="ranges.txt">suggested ranges</a> handled algorithmically and therefore
+        declared as "unassigned", see this <a href="gbstates.txt">sample state table</a>.</li>
+    <li>All valid four-byte codepage code points that do not map to
+        any Unicode code point are of course unassigned.
+        This includes 9012 sequences with a 0x84 lead byte and 9824 with a 0xe3 lead byte,
+        as well as about 0.5 million with lead bytes 0x85..0x8f and 0xe4..0xfe.</li>
+</ol></p>
+
+</body>
+</html>
