@@ -1498,6 +1498,144 @@ void CollationAPITest::TestGetLocale() {
   delete coll;
 }
 
+  struct teststruct {
+      const char *original;
+      uint8_t key[256];
+    } ;
+
+
+static int compare_teststruct(const void *string1, const void *string2) {
+  return(strcmp((const char *)((struct teststruct *)string1)->key, (const char *)((struct teststruct *)string2)->key));
+}
+
+
+void CollationAPITest::TestBounds(void) {
+  UErrorCode status = U_ZERO_ERROR;
+
+  Collator *coll = Collator::createInstance(Locale("sh"), status);
+  
+  uint8_t sortkey[512], lower[512], upper[512];
+  UChar buffer[512];
+
+  const char *test[] = {
+    "John Smith",
+      "JOHN SMITH",
+      "john SMITH",
+      "j\\u00F6hn sm\\u00EFth",
+      "J\\u00F6hn Sm\\u00EFth",
+      "J\\u00D6HN SM\\u00CFTH",
+      "john smithsonian",
+      "John Smithsonian",
+  };
+
+  static struct teststruct tests[] = {  
+ {"\\u010CAKI MIHALJ" } ,
+ {"\\u010CAKI MIHALJ" } ,
+ {"\\u010CAKI PIRO\\u0160KA" },
+{ "\\u010CABAI ANDRIJA" } ,
+ {"\\u010CABAI LAJO\\u0160" } ,
+ {"\\u010CABAI MARIJA" } ,
+ {"\\u010CABAI STEVAN" } ,
+ {"\\u010CABAI STEVAN" } ,
+ {"\\u010CABARKAPA BRANKO" } ,
+ {"\\u010CABARKAPA MILENKO" } ,
+ {"\\u010CABARKAPA MIROSLAV" } ,
+ {"\\u010CABARKAPA SIMO" } ,
+ {"\\u010CABARKAPA STANKO" } ,
+ {"\\u010CABARKAPA TAMARA" } ,
+ {"\\u010CABARKAPA TOMA\\u0160" } ,
+ {"\\u010CABDARI\\u0106 NIKOLA" } ,
+ {"\\u010CABDARI\\u0106 ZORICA" } ,
+ {"\\u010CABI NANDOR" } ,
+ {"\\u010CABOVI\\u0106 MILAN" } ,
+ {"\\u010CABRADI AGNEZIJA" } ,
+ {"\\u010CABRADI IVAN" } ,
+ {"\\u010CABRADI JELENA" } ,
+ {"\\u010CABRADI LJUBICA" } ,
+ {"\\u010CABRADI STEVAN" } ,
+ {"\\u010CABRDA MARTIN" } ,
+ {"\\u010CABRILO BOGDAN" } ,
+ {"\\u010CABRILO BRANISLAV" } ,
+ {"\\u010CABRILO LAZAR" } ,
+ {"\\u010CABRILO LJUBICA" } ,
+ {"\\u010CABRILO SPASOJA" } ,
+ {"\\u010CADE\\u0160 ZDENKA" } ,
+ {"\\u010CADESKI BLAGOJE" } ,
+ {"\\u010CADOVSKI VLADIMIR" } ,
+ {"\\u010CAGLJEVI\\u0106 TOMA" } ,
+ {"\\u010CAGOROVI\\u0106 VLADIMIR" } ,
+ {"\\u010CAJA VANKA" } ,
+ {"\\u010CAJI\\u0106 BOGOLJUB" } ,
+ {"\\u010CAJI\\u0106 BORISLAV" } ,
+ {"\\u010CAJI\\u0106 RADOSLAV" } ,
+ {"\\u010CAK\\u0160IRAN MILADIN" } ,
+ {"\\u010CAKAN EUGEN" } ,
+ {"\\u010CAKAN EVGENIJE" } ,
+ {"\\u010CAKAN IVAN" } ,
+ {"\\u010CAKAN JULIJAN" } ,
+ {"\\u010CAKAN MIHAJLO" } ,
+ {"\\u010CAKAN STEVAN" } ,
+ {"\\u010CAKAN VLADIMIR" } ,
+ {"\\u010CAKAN VLADIMIR" } ,
+ {"\\u010CAKAN VLADIMIR" } ,
+ {"\\u010CAKARA ANA" } ,
+ {"\\u010CAKAREVI\\u0106 MOMIR" } ,
+ {"\\u010CAKAREVI\\u0106 NEDELJKO" } ,
+ {"\\u010CAKI \\u0160ANDOR" } ,
+ {"\\u010CAKI AMALIJA" } ,
+ {"\\u010CAKI ANDRA\\u0160" } ,
+ {"\\u010CAKI LADISLAV" } ,
+ {"\\u010CAKI LAJO\\u0160" } ,
+ {"\\u010CAKI LASLO" } ,
+  };
+
+
+
+  int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
+  int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
+
+  for(i = 0; i<arraySize; i++) {
+    buffSize = u_unescape(tests[i].original, buffer, 512);
+    skSize = coll->getSortKey(buffer, buffSize, tests[i].key, 512);
+  }
+
+  qsort(tests, arraySize, sizeof(struct teststruct), compare_teststruct);
+
+  for(i = 0; i < arraySize-1; i++) {
+    for(j = i+1; j < arraySize; j++) {
+      lowerSize = coll->getBound(tests[i].key, -1, UCOL_BOUND_LOWER, 1, lower, 512, status);
+      upperSize = coll->getBound(tests[j].key, -1, UCOL_BOUND_UPPER, 1, upper, 512, status);
+      for(k = i; k <= j; k++) {
+        if(strcmp((const char *)lower, (const char *)tests[k].key) > 0) {
+          errln("Problem with lower! j = %i (%s vs %s)", k, tests[k].original, tests[i].original);
+        }
+        if(strcmp((const char *)upper, (const char *)tests[k].key) <= 0) {
+          errln("Problem with upper! j = %i (%s vs %s)", k, tests[k].original, tests[j].original);
+        }
+      }
+    }
+  }
+
+
+  for(i = 0; i<sizeof(test)/sizeof(test[0]); i++) {
+    buffSize = u_unescape(test[i], buffer, 512);
+    skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
+    lowerSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_LOWER, 1, lower, 512, &status);
+    upperSize = ucol_getBound(sortkey, skSize, UCOL_BOUND_UPPER_LONG, 1, upper, 512, &status);
+    for(j = i+1; j<sizeof(test)/sizeof(test[0]); j++) {
+      buffSize = u_unescape(test[j], buffer, 512);
+      skSize = coll->getSortKey(buffer, buffSize, sortkey, 512);
+      if(strcmp((const char *)lower, (const char *)sortkey) > 0) {
+        errln("Problem with lower! i = %i, j = %i (%s vs %s)", i, j, test[i], test[j]);
+      }
+      if(strcmp((const char *)upper, (const char *)sortkey) <= 0) {
+        errln("Problem with upper! i = %i, j = %i (%s vs %s)", i, j, test[i], test[j]);
+      }
+    }
+  }
+  delete coll;
+}
+
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -1520,6 +1658,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
         case 16: name = "TestRules"; if (exec) TestRules(); break;
         case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
+        case 18: name = "TestBounds"; if (exec) TestBounds(); break;
         default: name = ""; break;
     }
 }
