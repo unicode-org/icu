@@ -68,13 +68,13 @@ typedef struct u_printf_stream_handler {
 #define UP_PERCENT 0x0025
 
 /**
- * Parse a single u_printf format specifier.
+ * Parse a single u_printf format string.
  * @param fmt A pointer to a '%' character in a u_printf format specification.
  * @param spec A pointer to a <TT>u_printf_spec</TT> to receive the parsed
  * format specifier.
  * @return The number of characters contained in this specifier.
  */
-int32_t
+U_CFUNC int32_t
 u_printf_print_spec(const u_printf_stream_handler *streamHandler,
                     const UChar     *fmt,
                     void            *context,
