@@ -1,5 +1,5 @@
 # DerivedNormalizationProps-4.1.0.txt
-# Date: 2004-12-11, 05:42:12 GMT [MD]
+# Date: 2005-02-26, 02:37:43 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -41,7 +41,6 @@
 1D40  ; FC_NFKC; 0074
 1D41  ; FC_NFKC; 0075
 1D42  ; FC_NFKC; 0077
-1D78  ; FC_NFKC; 043D
 20A8  ; FC_NFKC; 0072 0073
 2102  ; FC_NFKC; 0063
 2103  ; FC_NFKC; 00B0 0063
@@ -580,7 +579,7 @@
 1D7A8 ; FC_NFKC; 03C9
 1D7BB ; FC_NFKC; 03C3
 
-# Total code points: 565
+# Total code points: 564
 
 # ================================================
 

@@ -2205,7 +2205,7 @@ TestAdditionalProperties() {
         /* UCHAR_BIDI_CLASS tested for assigned characters in TestUnicodeData() */
         /* test default Bidi classes for unassigned code points */
         { 0x0590, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
-        { 0x05c7, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
+        { 0x05cf, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x05ed, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x07f2, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },
         { 0x08ba, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT },

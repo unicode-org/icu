@@ -102,6 +102,16 @@ my %UNSUPPORTED = (Composition_Exclusion => 1,
 # missing.
 my %MISSING_FROM_UCHAR;
 
+# Additional property aliases beyond short and long names,
+# like space in addition to WSpace and White_Space in Unicode 4.1.
+# Hashtable, maps long name to alias.
+# For example, maps White_Space->space.
+#
+# If multiple additional aliases are defined,
+# then they are separated in the value string with '|'.
+# For example, White_Space->space|outer_space
+my %additional_property_aliases;
+
 #----------------------------------------------------------------------
 
 # Emitted class names
@@ -574,14 +584,20 @@ sub merge_PropertyAliases {
 
     for my $subh (map { $h->{$_} } @TOP) {
         for my $enum (keys %$subh) {
-            my $name = $subh->{$enum};
-            die "Error: Property $name not found (or used more than once)"
-                unless (exists $pa->{$name});
+            my $long_name = $subh->{$enum};
+            if (!exists $pa->{$long_name}) {
+                die "Error: Property $long_name not found (or used more than once)";
+            }
 
-            $subh->{$enum} = $pa->{$name} . "|" . $name;
-            delete $pa->{$name};
+            my $value = $pa->{$long_name} . "|" . $long_name;
+            if (exists $additional_property_aliases{$long_name}) {
+                $value .= "|" . $additional_property_aliases{$long_name};
+            }
+            $subh->{$enum} = $value;
+            delete $pa->{$long_name};
         }
     }
+
     my @err;
     for my $name (keys %$pa) {
         $MISSING_FROM_UCHAR{$pa->{$name}} = 1;
@@ -750,6 +766,8 @@ sub read_PropertyAliases {
     my $in = new FileHandle($filename, 'r');
     die "Error: Cannot open $filename" if (!defined $in);
 
+    my $sym = 0; # Used to make "n/a" strings unique
+
     while (<$in>) {
 
         # Read version (embedded in a comment)
@@ -768,14 +786,39 @@ sub read_PropertyAliases {
         s/\#.*//;
         next unless (/\S/);
 
-        if (/^\s*(.+?)\s*;\s*(.+?)\s*$/i) {
-            die "Error: Duplicate property $1 in $filename"
-                if (exists $hash->{$2});
-            $hash->{$2} = $1;
-            $fam->{$2} = $family;
-        }
+        if (/^\s*(.+?)\s*;/) {
+            my $short = $1;
+            my @fields = /;\s*([^\s;]+)/g;
+            if (@fields < 1 || @fields > 2) {
+                my $number = @fields;
+                die "Error: Wrong number of fields ($number) in $filename at $_";
+            }
 
-        else {
+            # Make "n/a" strings unique
+            my $long = $fields[0];
+            if ($long eq 'n/a') {
+                $long .= sprintf("%03d", $sym++);
+            }
+
+            # Add long name->short name to the hash=pa hash table
+            if (exists $hash->{$long}) {
+                die "Error: Duplicate property $long in $filename"
+            }
+            $hash->{$long} = $short;
+            $fam->{$long} = $family;
+
+            # Add the list of further aliases to the additional_property_aliases hash table,
+            # using the long property name as the key.
+            # For example:
+            #   White_Space->space|outer_space
+            if (@fields > 1) {
+                my $value = pop @fields;
+                while (@fields > 1) {
+                    $value .= "|" . pop @fields;
+                }
+                $additional_property_aliases{$long} = $value;
+            }
+        } else {
             die "Error: Can't parse $_ in $filename";
         }
     }
@@ -822,7 +865,7 @@ sub read_PropertyValueAliases {
         if (/^\s*(.+?)\s*;/i) {
             my $prop = $1;
             my @fields = /;\s*([^\s;]+)/g;
-            die "Error: Wrong number of fields"
+            die "Error: Wrong number of fields in $filename"
                 if (@fields < 2 || @fields > 3);
             # Make "n/a" strings unique
             $fields[0] .= sprintf("%03d", $sym++) if ($fields[0] eq 'n/a');

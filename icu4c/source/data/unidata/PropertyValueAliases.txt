@@ -1,5 +1,5 @@
 # PropertyValueAliases-4.1.0.txt
-# Date: 2004-12-11, 05:46:23 GMT [MD]
+# Date: 2005-02-26, 11:13:54 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -111,12 +111,12 @@ blk; n/a       ; Buginese
 blk; n/a       ; Buhid
 blk; n/a       ; Byzantine_Musical_Symbols
 blk; n/a       ; Cherokee
-blk; n/a       ; CJK_Basic_Strokes
 blk; n/a       ; CJK_Compatibility
 blk; n/a       ; CJK_Compatibility_Forms
 blk; n/a       ; CJK_Compatibility_Ideographs
 blk; n/a       ; CJK_Compatibility_Ideographs_Supplement
 blk; n/a       ; CJK_Radicals_Supplement
+blk; n/a       ; CJK_Strokes
 blk; n/a       ; CJK_Symbols_and_Punctuation
 blk; n/a       ; CJK_Unified_Ideographs
 blk; n/a       ; CJK_Unified_Ideographs_Extension_A
@@ -292,7 +292,7 @@ ea ; W         ; Wide
 # General_Category (gc)
 
 gc ; C         ; Other                            # Cc | Cf | Cn | Co | Cs
-gc ; Cc        ; Control
+gc ; Cc        ; Control                          ; cntrl
 gc ; Cf        ; Format
 gc ; Cn        ; Unassigned
 gc ; Co        ; Private_Use
@@ -309,10 +309,10 @@ gc ; Mc        ; Spacing_Mark
 gc ; Me        ; Enclosing_Mark
 gc ; Mn        ; Nonspacing_Mark
 gc ; N         ; Number                           # Nd | Nl | No
-gc ; Nd        ; Decimal_Number
+gc ; Nd        ; Decimal_Number                   ; digit
 gc ; Nl        ; Letter_Number
 gc ; No        ; Other_Number
-gc ; P         ; Punctuation                      # Pc | Pd | Pe | Pf | Pi | Po | Ps
+gc ; P         ; Punctuation                      ; punct                            # Pc | Pd | Pe | Pf | Pi | Po | Ps
 gc ; Pc        ; Connector_Punctuation
 gc ; Pd        ; Dash_Punctuation
 gc ; Pe        ; Close_Punctuation
@@ -497,7 +497,7 @@ sc ; Bugi      ; Buginese
 sc ; Buhd      ; Buhid
 sc ; Cans      ; Canadian_Aboriginal
 sc ; Cher      ; Cherokee
-sc ; Copt      ; Coptic
+sc ; Copt      ; Coptic                           ; Qaac
 sc ; Cprt      ; Cypriot
 sc ; Cyrl      ; Cyrillic
 sc ; Deva      ; Devanagari

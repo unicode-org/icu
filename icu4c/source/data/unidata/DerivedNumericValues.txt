@@ -1,5 +1,5 @@
 # DerivedNumericValues-4.1.0.txt
-# Date: 2004-12-11, 05:44:37 GMT [MD]
+# Date: 2005-03-10, 03:07:57 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -201,22 +201,24 @@ FF10          ; 0.0 # Nd       FULLWIDTH DIGIT ZERO
 4E00          ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-4E00
 58F1          ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-58F1
 58F9          ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-58F9
+5E7A          ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-5E7A
 5F0C          ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-5F0C
 FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 10107         ; 1.0 # No       AEGEAN NUMBER ONE
 10142         ; 1.0 # Nl       GREEK ACROPHONIC ATTIC ONE DRACHMA
-10158..1015A  ; 1.0 # Nl   [3] GREEK ACROPHONIC HERAEUM ONE PLETHRON..GREEK ACROPHONIC HERMIONE ONE
+10158..1015A  ; 1.0 # Nl   [3] GREEK ACROPHONIC HERAEUM ONE PLETHRON..GREEK ACROPHONIC HERMIONIAN ONE
 10320         ; 1.0 # No       OLD ITALIC NUMERAL ONE
 103D1         ; 1.0 # Nl       OLD PERSIAN NUMBER ONE
 104A1         ; 1.0 # Nd       OSMANYA DIGIT ONE
-10A40         ; 1.0 # Nd       KHAROSHTHI DIGIT ONE
+10A40         ; 1.0 # No       KHAROSHTHI DIGIT ONE
 1D7CF         ; 1.0 # Nd       MATHEMATICAL BOLD DIGIT ONE
 1D7D9         ; 1.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT ONE
 1D7E3         ; 1.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT ONE
 1D7ED         ; 1.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT ONE
 1D7F7         ; 1.0 # Nd       MATHEMATICAL MONOSPACE DIGIT ONE
+2092A         ; 1.0 # Lo       CJK UNIFIED IDEOGRAPH-2092A
 
-# Total code points: 58
+# Total code points: 60
 
 # ================================================
 
@@ -264,25 +266,28 @@ FF11          ; 1.0 # Nd       FULLWIDTH DIGIT ONE
 3193          ; 2.0 # No       IDEOGRAPHIC ANNOTATION TWO MARK
 3221          ; 2.0 # No       PARENTHESIZED IDEOGRAPH TWO
 3281          ; 2.0 # No       CIRCLED IDEOGRAPH TWO
+3483          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-3483
 4E8C          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-4E8C
 5169          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-5169
 5F0D          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-5F0D
 5F10          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-5F10
 8CAE          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-8CAE
+8CB3          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-8CB3
 8D30          ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-8D30
 FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 10108         ; 2.0 # No       AEGEAN NUMBER TWO
 1015B..1015E  ; 2.0 # Nl   [4] GREEK ACROPHONIC EPIDAUREAN TWO..GREEK ACROPHONIC EPIDAUREAN TWO DRACHMAS
 103D2         ; 2.0 # Nl       OLD PERSIAN NUMBER TWO
 104A2         ; 2.0 # Nd       OSMANYA DIGIT TWO
-10A41         ; 2.0 # Nd       KHAROSHTHI DIGIT TWO
+10A41         ; 2.0 # No       KHAROSHTHI DIGIT TWO
 1D7D0         ; 2.0 # Nd       MATHEMATICAL BOLD DIGIT TWO
 1D7DA         ; 2.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT TWO
 1D7E4         ; 2.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT TWO
 1D7EE         ; 2.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT TWO
 1D7F8         ; 2.0 # Nd       MATHEMATICAL MONOSPACE DIGIT TWO
+22390         ; 2.0 # Lo       CJK UNIFIED IDEOGRAPH-22390
 
-# Total code points: 58
+# Total code points: 61
 
 # ================================================
 
@@ -331,19 +336,24 @@ FF12          ; 2.0 # Nd       FULLWIDTH DIGIT TWO
 3222          ; 3.0 # No       PARENTHESIZED IDEOGRAPH THREE
 3282          ; 3.0 # No       CIRCLED IDEOGRAPH THREE
 4E09          ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-4E09
-53C1..53C3    ; 3.0 # Lo   [3] CJK UNIFIED IDEOGRAPH-53C1..CJK UNIFIED IDEOGRAPH-53C3
+4EE8          ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-4EE8
+53C1..53C4    ; 3.0 # Lo   [4] CJK UNIFIED IDEOGRAPH-53C1..CJK UNIFIED IDEOGRAPH-53C4
 5F0E          ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-5F0E
 FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 10109         ; 3.0 # No       AEGEAN NUMBER THREE
 104A3         ; 3.0 # Nd       OSMANYA DIGIT THREE
-10A42         ; 3.0 # Nd       KHAROSHTHI DIGIT THREE
+10A42         ; 3.0 # No       KHAROSHTHI DIGIT THREE
 1D7D1         ; 3.0 # Nd       MATHEMATICAL BOLD DIGIT THREE
 1D7DB         ; 3.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT THREE
 1D7E5         ; 3.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT THREE
 1D7EF         ; 3.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT THREE
 1D7F9         ; 3.0 # Nd       MATHEMATICAL MONOSPACE DIGIT THREE
+20AFD         ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-20AFD
+20B19         ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-20B19
+22998         ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-22998
+23B1B         ; 3.0 # Lo       CJK UNIFIED IDEOGRAPH-23B1B
 
-# Total code points: 52
+# Total code points: 58
 
 # ================================================
 
@@ -391,19 +401,23 @@ FF13          ; 3.0 # Nd       FULLWIDTH DIGIT THREE
 3195          ; 4.0 # No       IDEOGRAPHIC ANNOTATION FOUR MARK
 3223          ; 4.0 # No       PARENTHESIZED IDEOGRAPH FOUR
 3283          ; 4.0 # No       CIRCLED IDEOGRAPH FOUR
+4E96          ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-4E96
 56DB          ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-56DB
 8086          ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-8086
 FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 1010A         ; 4.0 # No       AEGEAN NUMBER FOUR
 104A4         ; 4.0 # Nd       OSMANYA DIGIT FOUR
-10A43         ; 4.0 # Nd       KHAROSHTHI DIGIT FOUR
+10A43         ; 4.0 # No       KHAROSHTHI DIGIT FOUR
 1D7D2         ; 4.0 # Nd       MATHEMATICAL BOLD DIGIT FOUR
 1D7DC         ; 4.0 # Nd       MATHEMATICAL DOUBLE-STRUCK DIGIT FOUR
 1D7E6         ; 4.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT FOUR
 1D7F0         ; 4.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT FOUR
 1D7FA         ; 4.0 # Nd       MATHEMATICAL MONOSPACE DIGIT FOUR
+20064         ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-20064
+200E2         ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-200E2
+2626D         ; 4.0 # Lo       CJK UNIFIED IDEOGRAPH-2626D
 
-# Total code points: 49
+# Total code points: 53
 
 # ================================================
 
@@ -449,6 +463,8 @@ FF14          ; 4.0 # Nd       FULLWIDTH DIGIT FOUR
 3025          ; 5.0 # Nl       HANGZHOU NUMERAL FIVE
 3224          ; 5.0 # No       PARENTHESIZED IDEOGRAPH FIVE
 3284          ; 5.0 # No       CIRCLED IDEOGRAPH FIVE
+3405          ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-3405
+382A          ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-382A
 4E94          ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-4E94
 4F0D          ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-4F0D
 FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
@@ -465,8 +481,9 @@ FF15          ; 5.0 # Nd       FULLWIDTH DIGIT FIVE
 1D7E7         ; 5.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT FIVE
 1D7F1         ; 5.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT FIVE
 1D7FB         ; 5.0 # Nd       MATHEMATICAL MONOSPACE DIGIT FIVE
+20121         ; 5.0 # Lo       CJK UNIFIED IDEOGRAPH-20121
 
-# Total code points: 52
+# Total code points: 55
 
 # ================================================
 
@@ -523,8 +540,9 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 1D7E8         ; 6.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT SIX
 1D7F2         ; 6.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT SIX
 1D7FC         ; 6.0 # Nd       MATHEMATICAL MONOSPACE DIGIT SIX
+20AEA         ; 6.0 # Lo       CJK UNIFIED IDEOGRAPH-20AEA
 
-# Total code points: 47
+# Total code points: 48
 
 # ================================================
 
@@ -570,6 +588,7 @@ FF16          ; 6.0 # Nd       FULLWIDTH DIGIT SIX
 3027          ; 7.0 # Nl       HANGZHOU NUMERAL SEVEN
 3226          ; 7.0 # No       PARENTHESIZED IDEOGRAPH SEVEN
 3286          ; 7.0 # No       CIRCLED IDEOGRAPH SEVEN
+3B4D          ; 7.0 # Lo       CJK UNIFIED IDEOGRAPH-3B4D
 4E03          ; 7.0 # Lo       CJK UNIFIED IDEOGRAPH-4E03
 67D2          ; 7.0 # Lo       CJK UNIFIED IDEOGRAPH-67D2
 FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
@@ -580,8 +599,9 @@ FF17          ; 7.0 # Nd       FULLWIDTH DIGIT SEVEN
 1D7E9         ; 7.0 # Nd       MATHEMATICAL SANS-SERIF DIGIT SEVEN
 1D7F3         ; 7.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT SEVEN
 1D7FD         ; 7.0 # Nd       MATHEMATICAL MONOSPACE DIGIT SEVEN
+20001         ; 7.0 # Lo       CJK UNIFIED IDEOGRAPH-20001
 
-# Total code points: 46
+# Total code points: 48
 
 # ================================================
 
@@ -685,6 +705,7 @@ FF18          ; 8.0 # Nd       FULLWIDTH DIGIT EIGHT
 3228          ; 9.0 # No       PARENTHESIZED IDEOGRAPH NINE
 3288          ; 9.0 # No       CIRCLED IDEOGRAPH NINE
 4E5D          ; 9.0 # Lo       CJK UNIFIED IDEOGRAPH-4E5D
+5EFE          ; 9.0 # Lo       CJK UNIFIED IDEOGRAPH-5EFE
 7396          ; 9.0 # Lo       CJK UNIFIED IDEOGRAPH-7396
 FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 1010F         ; 9.0 # No       AEGEAN NUMBER NINE
@@ -695,7 +716,7 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 1D7F5         ; 9.0 # Nd       MATHEMATICAL SANS-SERIF BOLD DIGIT NINE
 1D7FF         ; 9.0 # Nd       MATHEMATICAL MONOSPACE DIGIT NINE
 
-# Total code points: 46
+# Total code points: 47
 
 # ================================================
 
@@ -713,6 +734,7 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 3038          ; 10.0 # Nl       HANGZHOU NUMERAL TEN
 3229          ; 10.0 # No       PARENTHESIZED IDEOGRAPH TEN
 3289          ; 10.0 # No       CIRCLED IDEOGRAPH TEN
+4EC0          ; 10.0 # Lo       CJK UNIFIED IDEOGRAPH-4EC0
 5341          ; 10.0 # Lo       CJK UNIFIED IDEOGRAPH-5341
 62FE          ; 10.0 # Lo       CJK UNIFIED IDEOGRAPH-62FE
 10110         ; 10.0 # No       AEGEAN NUMBER TEN
@@ -724,7 +746,7 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 103D3         ; 10.0 # Nl       OLD PERSIAN NUMBER TEN
 10A44         ; 10.0 # No       KHAROSHTHI NUMBER TEN
 
-# Total code points: 28
+# Total code points: 29
 
 # ================================================
 
@@ -823,12 +845,13 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 249B          ; 20.0 # No       NUMBER TWENTY FULL STOP
 24F4          ; 20.0 # No       NEGATIVE CIRCLED NUMBER TWENTY
 3039          ; 20.0 # Nl       HANGZHOU NUMERAL TWENTY
+5344          ; 20.0 # Lo       CJK UNIFIED IDEOGRAPH-5344
 5EFF          ; 20.0 # Lo       CJK UNIFIED IDEOGRAPH-5EFF
 10111         ; 20.0 # No       AEGEAN NUMBER TWENTY
 103D4         ; 20.0 # Nl       OLD PERSIAN NUMBER TWENTY
 10A45         ; 20.0 # No       KHAROSHTHI NUMBER TWENTY
 
-# Total code points: 10
+# Total code points: 11
 
 # ================================================
 
@@ -892,8 +915,9 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 5345          ; 30.0 # Lo       CJK UNIFIED IDEOGRAPH-5345
 10112         ; 30.0 # No       AEGEAN NUMBER THIRTY
 10165         ; 30.0 # Nl       GREEK ACROPHONIC THESPIAN THIRTY
+20983         ; 30.0 # Lo       CJK UNIFIED IDEOGRAPH-20983
 
-# Total code points: 6
+# Total code points: 7
 
 # ================================================
 
@@ -953,9 +977,12 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 
 1375          ; 40.0 # No       ETHIOPIC NUMBER FORTY
 32B5          ; 40.0 # No       CIRCLED NUMBER FORTY
+534C          ; 40.0 # Lo       CJK UNIFIED IDEOGRAPH-534C
 10113         ; 40.0 # No       AEGEAN NUMBER FORTY
+2098C         ; 40.0 # Lo       CJK UNIFIED IDEOGRAPH-2098C
+2099C         ; 40.0 # Lo       CJK UNIFIED IDEOGRAPH-2099C
 
-# Total code points: 3
+# Total code points: 6
 
 # ================================================
 
@@ -1125,8 +1152,9 @@ FF19          ; 9.0 # Nd       FULLWIDTH DIGIT NINE
 # ================================================
 
 10121         ; 900.0 # No       AEGEAN NUMBER NINE HUNDRED
+1034A         ; 900.0 # Nl       GOTHIC LETTER NINE HUNDRED
 
-# Total code points: 1
+# Total code points: 2
 
 # ================================================
 
