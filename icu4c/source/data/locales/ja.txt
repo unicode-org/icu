@@ -260,18 +260,6 @@ ja {
         ZM { "\u30B6\u30F3\u30D3\u30A2" }
         ZW { "\u30B8\u30F3\u30D0\u30D6\u30A8" }
     }
-    DateTimePatterns_japanese {
-        "H'\u6642'mm'\u5206'ss'\u79D2'z",
-        "H:mm:ss:z",
-        "H:mm:ss",
-        "H:mm",
-        "Gy'\u5E74'M'\u6708'd'\u65E5'EEEE",
-        "Gy'\u5E74'M'\u6708'd'\u65E5'",
-        "G yy/MM/dd",
-        "G yy/MM/dd",
-        "{1} {0}",
-    }
-
     Languages { 
         aa  { "\u30a2\u30d5\u30a1\u30fc\u30eb\u8a9e" }
         ab  { "\u30a2\u30d6\u30cf\u30ba\u8a9e" }
@@ -1199,6 +1187,17 @@ ja {
                 "\u5927\u6B63",             // 1912 Taisho
                 "\u662D\u548C",             // 1926 Showa
                 "\u5E73\u6210"             // 1989 Heisei
+            }
+            DateTimePatterns {
+                "H'\u6642'mm'\u5206'ss'\u79D2'z",
+                "H:mm:ss:z",
+                "H:mm:ss",
+                "H:mm",
+                "Gy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+                "Gy'\u5E74'M'\u6708'd'\u65E5'",
+                "G yy/MM/dd",
+                "G yy/MM/dd",
+                "{1} {0}",
             }
         }
     }

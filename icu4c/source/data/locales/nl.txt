@@ -397,7 +397,7 @@ nl {
             }
             monthNames{
                 format{
-                    abrreviated:alias{
+                    abbreviated:alias{
                         "nl/calendar/islamic/monthNames/format/wide"
                     }
                     wide:array {

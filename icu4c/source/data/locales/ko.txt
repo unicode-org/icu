@@ -624,11 +624,7 @@ ko {
         ZWD { "Z$",  "\uC9D0\uBE44\uBE0C\uC6E8 \uB2EC\uB7EC" }
     }
 
-    Eras {
-        "\uae30\uC6D0\uC804",
-        "\uC11C\uAE30",
-//        "\uB2E8\uAE30"   // AD + 2333 but ICU doesn't use it.
-    }
+
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     LocaleScript{ "Hang", "Hani" }
     ExemplarCharacters{
@@ -969,6 +965,11 @@ ko {
                         "\uD1A0\uC694\uC77C",
                     }
                 }
+            }
+            eras {
+                "\uae30\uC6D0\uC804",
+                "\uC11C\uAE30",
+        //        "\uB2E8\uAE30"   // AD + 2333 but ICU doesn't use it.
             }
             monthNames{
                 format{

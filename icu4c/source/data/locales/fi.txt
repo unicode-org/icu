@@ -873,18 +873,18 @@ fi {
                         "joulu",
                     }
                     narrow{
-		                "T"
-		                "H"
-		                "M"
-		                "H"
-		                "T"
-		                "K"
-		                "H"
-		                "E"
-		                "S"
-		                "L"
-		                "M"
-		                "J"
+		                "T",
+		                "H",
+		                "M",
+		                "H",
+		                "T",
+		                "K",
+		                "H",
+		                "E",
+		                "S",
+		                "L",
+		                "M",
+		                "J",
                     }
                     wide{
                         "tammikuu",
