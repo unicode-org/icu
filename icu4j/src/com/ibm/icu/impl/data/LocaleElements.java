@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements.java,v $ 
- * $Date: 2000/03/10 04:07:27 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/06/30 00:00:09 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -63,6 +63,9 @@ public class LocaleElements extends ListResourceBundle {
 
                   "Latin-Kana",
                   "*Kana-Latin",
+
+                  "Hiragana-Katakana",
+                  "*Katakana-Hiragana",
 
                   "StraightQuotes-CurlyQuotes",
                   "*CurlyQuotes-StraightQuotes",

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2000/06/29 21:59:36 $ 
- * $Revision: 1.23 $
+ * $Date: 2000/06/30 00:00:21 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -602,6 +602,42 @@ public class TransliteratorTest extends TestFmwk {
                       result.equals(exp),
                       exp);
         }
+    }
+
+    /**
+     * Test the Hiragana-Katakana transliterator.
+     */
+    public void TestHiraganaKatakana() {
+        Transliterator hk = Transliterator.getInstance("Hiragana-Katakana");
+        Transliterator kh = Transliterator.getInstance("Katakana-Hiragana");
+
+        // Array of 3n items
+        // Each item is "hk"|"kh"|"both", <Hiragana>, <Katakana>
+        String[] DATA = {
+            "both",
+            "\u3042\u3090\u3099\u3092\u3050",
+            "\u30A2\u30F8\u30F2\u30B0",
+
+            "kh",
+            "\u307C\u3051\u3060\u3042\u3093\u30FC",
+            "\u30DC\u30F6\u30C0\u30FC\u30F3\u30FC",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            switch (DATA[i].charAt(0)) {
+            case 'h': // Hiragana-Katakana
+                expect(hk, DATA[i+1], DATA[i+2]);
+                break;
+            case 'k': // Katakana-Hiragana
+                expect(kh, DATA[i+2], DATA[i+1]);
+                break;
+            case 'b': // both
+                expect(hk, DATA[i+1], DATA[i+2]);
+                expect(kh, DATA[i+2], DATA[i+1]);
+                break;
+            }
+        }
+
     }
 
     //======================================================================
