@@ -500,7 +500,7 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
     result = (uint8_t *)uprv_malloc(*length);
     uprv_memcpy(result, coll->image, *length);
   } else {
-    *length = (uint8_t)paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet));
+    *length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
     result = (uint8_t *)uprv_malloc(*length);
     uprv_memcpy(result, UCA->image, sizeof(UCATableHeader));
     uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
@@ -2111,7 +2111,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         *(source->CEpos++) = ((CE & 0xFF)<<24)|UCOL_CONTINUATION_MARKER;
         CE = ((CE & 0xFFFF00) << 8) | (UCOL_BYTE_COMMON << 8) | UCOL_BYTE_COMMON;
         return CE;
-        break;
       }
     case EXPANSION_TAG:
       {
@@ -2692,7 +2691,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         *(source->CEpos++) = ((CE & 0xFF)<<24)|UCOL_CONTINUATION_MARKER;
         source->toReturn = source->CEpos - 1;
         return *(source->toReturn);
-        break;
       }
     case EXPANSION_TAG: /* this tag always returns */
       /*

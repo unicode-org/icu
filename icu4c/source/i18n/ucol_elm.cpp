@@ -1086,7 +1086,6 @@ getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset)
   uint32_t tag;
   UChar32 limit;
   UBool inBlockZero;
-  static int32_t count = 1;
 
   limit=start+0x400;
   while(start<limit) {
@@ -1096,6 +1095,7 @@ getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset)
           start+=UTRIE_DATA_BLOCK_LENGTH;
       } else if(value!=0 && tag != IMPLICIT_TAG && tag != NOT_FOUND_TAG) {
 #ifdef UCOL_DEBUG
+        static int32_t count = 1;
         fprintf(stdout, "%i, Folded %08X, value %08X\n", count++, start, value);
 #endif
           return (uint32_t)(UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24) | offset);
