@@ -411,7 +411,7 @@ static char *opNames[] = {
         "NOP",
         "START_CAPTURE",
         "END_CAPTURE",
-        "UNUSED10",
+        "URX_STATIC_SETREF",
         "SETREF",
         "DOTANY",
         "JMP",
@@ -466,6 +466,7 @@ void   RegexPattern::dump() {
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
         case URX_SETREF:
+        case URX_STATIC_SETREF:
         case URX_STATE_SAVE:
         case URX_JMP:
         case URX_BACKSLASH_B:
