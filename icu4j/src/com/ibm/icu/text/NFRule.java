@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRule.java,v $ 
- * $Date: 2002/07/26 22:51:50 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/07/31 00:54:58 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.5 $ $Date: 2002/07/26 22:51:50 $
+ * $RCSfile: NFRule.java,v $ $Revision: 1.6 $ $Date: 2002/07/31 00:54:58 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------
@@ -538,10 +538,10 @@ final class NFRule {
     /**
      * Tests two rules for equality.
      * @param that The rule to compare this one against
-     * @return True is the two rules are functionally equivalent
+     * @return True if the two rules are functionally equivalent
      */
     public boolean equals(Object that) {
-        if (that instanceof NFRule) {
+	if (that instanceof NFRule) {
             NFRule that2 = (NFRule)that;
 
             return baseValue == that2.baseValue
@@ -550,9 +550,8 @@ final class NFRule {
                    && ruleText.equals(that2.ruleText)
                    && sub1.equals(that2.sub1)
                    && sub2.equals(that2.sub2);
-        } else {
-            return false;
-        }
+	}
+	return false;
     }
 
     /**

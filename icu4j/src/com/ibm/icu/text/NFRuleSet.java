@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2002/07/30 21:37:07 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/07/31 00:54:58 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.Utility;
 
 import java.text.*;
 import java.util.Vector;
@@ -23,7 +24,7 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.5 $ $Date: 2002/07/30 21:37:07 $
+ * $RCSfile: NFRuleSet.java,v $ $Revision: 1.6 $ $Date: 2002/07/31 00:54:58 $
  */
 final class NFRuleSet {
     //-----------------------------------------------------------------------
@@ -289,12 +290,13 @@ final class NFRuleSet {
             NFRuleSet that2 = (NFRuleSet)that;
 
             if (!name.equals(that2.name)
-                || !negativeNumberRule.equals(that2.negativeNumberRule)
-                || !fractionRules[0].equals(that2.fractionRules[0])
-                || !fractionRules[1].equals(that2.fractionRules[1])
-                || !fractionRules[2].equals(that2.fractionRules[2])
-                || rules.length != that2.rules.length
+		|| !Utility.objectEquals(negativeNumberRule, that2.negativeNumberRule)
+		|| !Utility.objectEquals(fractionRules[0], that2.fractionRules[0])
+		|| !Utility.objectEquals(fractionRules[2], that2.fractionRules[1])
+		|| !Utility.objectEquals(fractionRules[2], that2.fractionRules[2])
+		|| rules.length != that2.rules.length
                 || isFractionRuleSet != that2.isFractionRuleSet) {
+
                 return false;
             }
 
@@ -309,6 +311,7 @@ final class NFRuleSet {
             return true;
         }
     }
+
 
     /**
      * Builds a textual representation of a rule set.

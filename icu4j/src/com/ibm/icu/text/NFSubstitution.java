@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFSubstitution.java,v $ 
- * $Date: 2002/02/16 03:06:09 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/07/31 00:55:02 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.6 $ $Date: 2002/02/16 03:06:09 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.7 $ $Date: 2002/07/31 00:55:02 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -253,12 +253,11 @@ abstract class NFSubstitution {
         if (this.getClass() == that.getClass()) {
             NFSubstitution that2 = (NFSubstitution)that;
 
-            return pos == that2.pos
-                   && ruleSet == that2.ruleSet
-                   && numberFormat.equals(that2.numberFormat);
-        } else {
-            return false;
+             return pos == that2.pos
+		 && (ruleSet == null ? that2.ruleSet == null : true) // can't compare tree structure, no .equals or recurse
+		 && (numberFormat == null ? (that2.numberFormat == null) : numberFormat.equals(that2.numberFormat));
         }
+	return false;
     }
 
     /**
