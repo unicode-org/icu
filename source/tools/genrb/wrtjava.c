@@ -40,8 +40,8 @@ static const char copyRight[] =
     " *\n"
     " *******************************************************************************\n"
     " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-    " * $Date: 2002/04/23 22:25:43 $ \n"
-    " * $Revision: 1.10 $ \n"
+    " * $Date: 2002/04/30 19:07:18 $ \n"
+    " * $Revision: 1.11 $ \n"
     " *******************************************************************************\n"
     " */\n\n";
 static const char warningMsg[] = 
@@ -243,11 +243,11 @@ strrch(const char* source,uint32_t sourceLen,char find){
     const char* tSourceEnd =source + (sourceLen-1);
     while(tSourceEnd>= source){
         if(*tSourceEnd==find){
-            return (tSourceEnd-source);
+            return (uint32_t)(tSourceEnd-source);
         }
         tSourceEnd--;
     }
-    return (tSourceEnd-source);
+    return (uint32_t)(tSourceEnd-source);
 }
 
 static void
@@ -344,12 +344,12 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         if(allStrings==FALSE){
             const char* object = "new Object[]{\n";
             write_tabs(out);
-            T_FileStream_write(out, object,uprv_strlen(object));
+            T_FileStream_write(out, object, (int32_t)uprv_strlen(object));
             tabCount++;
             decrementTabs = TRUE;
         }else{
             write_tabs(out);
-            T_FileStream_write(out,arr,uprv_strlen(arr));
+            T_FileStream_write(out, arr, (int32_t)uprv_strlen(arr));
             tabCount++;
         }
         first=current;
@@ -388,7 +388,7 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
     write_tabs(out);
 
     if(uprv_strcmp(srBundle->fKeys+res->fKey,"DateTimeElements")==0){
-        T_FileStream_write(out,stringArr,uprv_strlen(stringArr));
+        T_FileStream_write(out, stringArr, (int32_t)uprv_strlen(stringArr));
         tabCount++;
         for(i = 0; i<res->u.fIntVector.fCount; i++) {
             write_tabs(out);
@@ -399,11 +399,11 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
             T_FileStream_write(out,"\n",1);
         }
     }else{
-        T_FileStream_write(out,intArr,uprv_strlen(intArr));
+        T_FileStream_write(out, intArr, (int32_t)uprv_strlen(intArr));
         tabCount++;
         for(i = 0; i<res->u.fIntVector.fCount; i++) {
             write_tabs(out);
-            T_FileStream_write(out,intC,uprv_strlen(intC));
+            T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC));
             len=itostr(buf,res->u.fIntVector.fArray[i],10,0);
             T_FileStream_write(out,buf,len);
             T_FileStream_write(out,"),",2);
@@ -424,8 +424,8 @@ int_write_java(struct SResource *res,UErrorCode *status) {
 
     /* write the binary data */
     write_tabs(out);
-    T_FileStream_write(out,intC,uprv_strlen(intC));
-    len=itostr(buf,res->u.fIntValue.fValue,10,0);
+    T_FileStream_write(out, intC, (int32_t)uprv_strlen(intC));
+    len=itostr(buf, res->u.fIntValue.fValue, 10, 0);
     T_FileStream_write(out,buf,len);
     T_FileStream_write(out,"),\n",3 );
 
@@ -467,35 +467,35 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             uprv_strcat(fn,fileName);
             type = "RESOURCE_BINARY,";
             write_tabs(out);
-            T_FileStream_write(out,arr,uprv_strlen(arr));
+            T_FileStream_write(out, arr, (int32_t)uprv_strlen(arr));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,openBrace,uprv_strlen(openBrace));
+            T_FileStream_write(out, openBrace, (int32_t)uprv_strlen(openBrace));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,type,uprv_strlen(type));
-            T_FileStream_write(out,"\"",1);
-            T_FileStream_write(out,fileName,uprv_strlen(fileName));
-            T_FileStream_write(out,"\"\n",2);
+            T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
+            T_FileStream_write(out, "\"", 1);
+            T_FileStream_write(out, fileName, (int32_t)uprv_strlen(fileName));
+            T_FileStream_write(out, "\"\n", 2);
             tabCount--;
             write_tabs(out);
-            T_FileStream_write(out,"},\n",3);
+            T_FileStream_write(out, "},\n", 3);
             tabCount--;
             write_tabs(out);
-            T_FileStream_write(out,"},\n",3);
+            T_FileStream_write(out, "},\n", 3);
             datFile=T_FileStream_open(fn,"w");
-            T_FileStream_write(datFile,res->u.fBinaryValue.fData,res->u.fBinaryValue.fLength);
+            T_FileStream_write(datFile, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
             T_FileStream_close(datFile);
 
         }else{
-            if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
+            if(uprv_strcmp(srBundle->fKeys+res->fKey, "BreakDictionaryData")==0){
                 srcLen = res->u.fBinaryValue.fLength/2;
                 target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
                 if(target){
                     saveTarget  = target;
                     type = "COMPRESSED_STRING, ";
                     tgtLen = usArrayToRLEString((uint16_t*)res->u.fBinaryValue.fData,
-                                                 srcLen,target, srcLen,status);
+                                                 srcLen,target, srcLen, status);
                     if(U_FAILURE(*status)){
                          printf("Could not encode got error : %s \n", u_errorName(*status));
                          return;
@@ -574,20 +574,20 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
         
 
             write_tabs(out);
-            T_FileStream_write(out,arr,uprv_strlen(arr));
+            T_FileStream_write(out, arr, (int32_t)uprv_strlen(arr));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,openBrace,uprv_strlen(openBrace));
+            T_FileStream_write(out, openBrace, (int32_t)uprv_strlen(openBrace));
             tabCount++;
             write_tabs(out);
-            T_FileStream_write(out,type,uprv_strlen(type));
-            str_write_java(target,tgtLen,status);
+            T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
+            str_write_java(target, tgtLen, status);
             tabCount--;
             write_tabs(out);
-            T_FileStream_write(out,"},\n",3);
+            T_FileStream_write(out, "},\n", 3);
             tabCount--;
             write_tabs(out);
-            T_FileStream_write(out,"},\n",3);
+            T_FileStream_write(out, "},\n", 3);
 
 
             free(target);
@@ -639,7 +639,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
     if (res->u.fTable.fCount > 0) {
         if(start==FALSE){
             write_tabs(out);
-            T_FileStream_write(out,obj,uprv_strlen(obj));
+            T_FileStream_write(out, obj, (int32_t)uprv_strlen(obj));
             tabCount++;
         }
         start = FALSE;
@@ -651,7 +651,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
             assert(i < res->u.fTable.fCount);
             write_tabs(out);
             
-            T_FileStream_write(out,"{\n",2);
+            T_FileStream_write(out, "{\n", 2);
 
 
             tabCount++;
@@ -659,11 +659,12 @@ table_write_java(struct SResource *res, UErrorCode *status) {
 
             write_tabs(out);
 
-            T_FileStream_write(out,"\"",1);
-            T_FileStream_write(out,srBundle->fKeys+current->fKey,uprv_strlen(srBundle->fKeys+current->fKey));
-            T_FileStream_write(out,"\",\n",2);
+            T_FileStream_write(out, "\"", 1);
+            T_FileStream_write(out, srBundle->fKeys+current->fKey,
+                               (int32_t)uprv_strlen(srBundle->fKeys+current->fKey));
+            T_FileStream_write(out, "\",\n", 2);
 
-            T_FileStream_write(out,"\n",1);
+            T_FileStream_write(out, "\n", 1);
            
             res_write_java(current, status);
             if(U_FAILURE(*status)){
@@ -673,12 +674,12 @@ table_write_java(struct SResource *res, UErrorCode *status) {
             current = current->fNext;
             tabCount--;
             write_tabs(out);
-            T_FileStream_write(out,"},\n",3);
+            T_FileStream_write(out, "},\n", 3);
         }
         if(tabCount>4){
             tabCount--;
             write_tabs(out);
-            T_FileStream_write(out,"},\n",3);
+            T_FileStream_write(out, "},\n", 3);
         }
 
     } else {
@@ -765,16 +766,16 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         return;
     }
     if(getIncludeCopyright()){
-        T_FileStream_write(out,copyRight,uprv_strlen(copyRight));
-        T_FileStream_write(out,warningMsg,uprv_strlen(warningMsg));
+        T_FileStream_write(out, copyRight, (int32_t)uprv_strlen(copyRight));
+        T_FileStream_write(out, warningMsg, (int32_t)uprv_strlen(warningMsg));
     }
-    T_FileStream_write(out,javaClass,uprv_strlen(javaClass));
-    T_FileStream_write(out,className,uprv_strlen(className));
+    T_FileStream_write(out, javaClass, (int32_t)uprv_strlen(javaClass));
+    T_FileStream_write(out, className, (int32_t)uprv_strlen(className));
     if(j1){
-        T_FileStream_write(out,javaClass1,uprv_strlen(javaClass1));
+        T_FileStream_write(out, javaClass1, (int32_t)uprv_strlen(javaClass1));
     }else{
         sprintf(constructor,javaClassICU,className);
-        T_FileStream_write(out,constructor,uprv_strlen(constructor));
+        T_FileStream_write(out, constructor, (int32_t)uprv_strlen(constructor));
     }
 
     if(outputEnc && *outputEnc!='\0'){
@@ -787,20 +788,21 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
     }
     res_write_java(bundle->fRoot, status);
     if(j1){
-        T_FileStream_write(out,closeClass, uprv_strlen(closeClass));
+        T_FileStream_write(out, closeClass, (int32_t)uprv_strlen(closeClass));
     }else{
         tabCount--;
         write_tabs(out);
         T_FileStream_write(out,"};\n",3);
         tabCount--;
         write_tabs(out);
-        T_FileStream_write(out,closeBrace,uprv_strlen(closeBrace));
-        T_FileStream_write(out,closeBrace,uprv_strlen(closeBrace));
+        T_FileStream_write(out, closeBrace, (int32_t)uprv_strlen(closeBrace));
+        T_FileStream_write(out, closeBrace, (int32_t)uprv_strlen(closeBrace));
     }
 
 
 
     T_FileStream_close(out);
-    
+
     ucnv_close(conv);
 }
+
