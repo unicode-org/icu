@@ -27,6 +27,8 @@
 #include "rle.h"
 #include "ucol_tok.h"
 #include "uhash.h"
+#include "uresimp.h"
+#include "unicode/ustring.h"
 
 void res_write_java(struct SResource *res,UErrorCode *status);
 
@@ -39,9 +41,9 @@ static const char copyRight[] =
     " *   Corporation and others.  All Rights Reserved.\n"
     " *\n"
     " *******************************************************************************\n"
-    " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-    " * $Date: 2002/07/01 18:04:24 $ \n"
-    " * $Revision: 1.14 $ \n"
+    " * $" "Source:  $ \n"
+    " * $" "Date:  $ \n"
+    " * $" "Revision:  $ \n"
     " *******************************************************************************\n"
     " */\n\n";
 static const char warningMsg[] = 
@@ -60,8 +62,7 @@ static const char* closeBrace="}\n";
 static const char* closeClass="    };\n"
                               "}\n";
 
-static const char* javaClass =  "package com.ibm.icu.impl.data;\n\n"
-                                "import java.util.ListResourceBundle;\n"
+static const char* javaClass =  "import java.util.ListResourceBundle;\n"
                                 "import com.ibm.icu.impl.ICUListResourceBundle;\n\n"
                                 "public class ";
  
@@ -75,12 +76,17 @@ static const char* javaClass1=  " extends ICUListResourceBundle {\n\n"
                                 "    private static Object[][] contents = {\n";
 static const char* javaClassICU= " extends ICUListResourceBundle {\n\n"
                                  "    public %s  () {\n"
-                                 "          contents = new Object[][] { \n";
+                                 "          super.contents = data;\n"
+                                 "    }\n"
+                                 "    private static Object[][] data = new Object[][] { \n";
 static int tabCount = 3;
 
 static FileStream* out=NULL;
 static struct SRBRoot* srBundle ;
 static const char* outDir = NULL;
+
+static const char* bName=NULL;
+static const char* pName=NULL;
 
 static void write_tabs(FileStream* os){
     int i=0;
@@ -164,11 +170,14 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
                 }
                 j+=2;
             }else if(source[i-1]!='\\'){
+                     
                 if(j+2<targetLen){
                     uprv_strcat(target,"\\");
                     target[j+1]= (char)source[i];
                 }
                 j+=2;
+            }else if(source[i-1]=='\\'){
+                target[j++]= (char)source[i];
             }
         }else if(source[i]=='\\'){
             if(i+1<sourceLen){
@@ -251,7 +260,7 @@ strrch(const char* source,uint32_t sourceLen,char find){
 }
 
 static void
-str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
+str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *status){
 
     uint32_t length = srcLen*8;
     uint32_t bufLen = 0;
@@ -266,7 +275,9 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
     memset(buf,0,length);
   
     bufLen = uCharsToChars(buf,length,src,srcLen,status);
-    write_tabs(out);
+
+    if(printEndLine) write_tabs(out);
+
     if(U_FAILURE(*status)){
         return;
     }
@@ -315,26 +326,96 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
         T_FileStream_write(out,"\"",1);
         T_FileStream_write(out, buf,bufLen);
     }
-    T_FileStream_write(out,"\",\n",3);
-
+    if(printEndLine){
+        T_FileStream_write(out,"\",\n",3);
+    }else{
+        T_FileStream_write(out,"\"",1);
+    }
 }
 
 /* Writing Functions */
 static void 
 string_write_java(struct SResource *res,UErrorCode *status) {       
-    str_write_java(res->u.fString.fChars,res->u.fString.fLength,status);
-     if(uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
-        UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
+    if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%UCARULES")==0 ){
+        char fileName[1024] ={0};
+        const char* file = "UCARules.utf8";
+        FileStream* datFile = NULL;
+        const char* type = "new ICUListResourceBundle.ResourceString(";
+        char* dest  = (char*) uprv_malloc( 8 * res->u.fString.fLength);
+        int32_t len = 0;
+        const UChar* src = res->u.fString.fChars;
+        uprv_strcat(fileName,outDir);
+        if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
+            uprv_strcat(fileName,U_FILE_SEP_STRING);
+        }
+        uprv_strcat(fileName,file);/* UCARULES.utf8 UTF-8 file */
+        
+        write_tabs(out);
 
-        /* test for NULL */
-        if(buf == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
+        T_FileStream_write(out, openBrace, (int32_t)uprv_strlen(openBrace));
+        tabCount++;
+        write_tabs(out);
+        T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
+        T_FileStream_write(out, "\"", 1);
+        T_FileStream_write(out, file, (int32_t)uprv_strlen(file));
+        T_FileStream_write(out, "\")\n", 3);
+        tabCount--;
+        write_tabs(out);
+        T_FileStream_write(out, "},\n", 3);
+        datFile=T_FileStream_open(fileName,"w");
+        
+        if(!dest){
+            *status=U_MEMORY_ALLOCATION_ERROR;
+        }
+        
+        u_strToUTF8(dest,8*res->u.fString.fLength,&len,res->u.fString.fChars,res->u.fString.fLength,status);
+        if(U_FAILURE(*status)){
+            T_FileStream_close(datFile);
+            uprv_free(dest);
             return;
         }
+        T_FileStream_write(datFile,dest,len);
+        T_FileStream_close(datFile);
+        uprv_free(dest);
 
-        uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);      
-        uprv_free(buf);
-     }
+    }else{
+        str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
+
+        if(uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
+            UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
+            uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);      
+            uprv_free(buf);
+        }
+    }
+
+}
+
+static void 
+alias_write_java(struct SResource *res,UErrorCode *status) {
+    char* str = "new ICUListResourceBundle.Alias(";
+    write_tabs(out);
+    T_FileStream_write(out,str,uprv_strlen(str));
+    
+    /*str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);*/
+    /*if(*res->u.fString.fChars == RES_PATH_SEPARATOR) {
+        /* there is a path included 
+        locale = u_strchr(res->u.fString.fChars +1, RES_PATH_SEPARATOR);
+        *locale = 0;
+        locale++;
+        
+        T_FileStream_write(out,"\"/",2);
+        T_FileStream_write(out,apName,(int32_t)uprv_strlen(apName));
+        T_FileStream_write(out,"/",1);
+        T_FileStream_write(out,abName,(int32_t)uprv_strlen(abName));
+        T_FileStream_write(out,"/\"+",3);
+        str_write_java(locale,res->u.fString.fLength-(locale-res->u.fString.fChars),FALSE,status);
+    } else {
+        str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);
+    }*/
+    
+    str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);
+    
+    T_FileStream_write(out,"),\n",3);
 }
 
 static void 
@@ -346,7 +427,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
     struct SResource *first =NULL;
     UBool decrementTabs = FALSE;
     UBool allStrings    = TRUE;
-    
+
     if (U_FAILURE(*status)) {
         return;
     }
@@ -394,8 +475,10 @@ array_write_java( struct SResource *res, UErrorCode *status) {
         T_FileStream_write(out,"},\n",3);
 
     } else {
-        /* array is empty */
-
+        write_tabs(out);
+        T_FileStream_write(out,arr,uprv_strlen(arr));
+        write_tabs(out);
+        T_FileStream_write(out,"},\n",3);
     }
 }
 
@@ -456,22 +539,23 @@ int_write_java(struct SResource *res,UErrorCode *status) {
 
 static void 
 bin_write_java( struct SResource *res, UErrorCode *status) {
-    const char* arr ="new Object[][]{\n";
-    const char* type = "COMPRESSED_BINARY, ";
+    const char* type = "new ICUListResourceBundle.CompressedBinary(";
     const char* ext;
     int32_t srcLen=res->u.fBinaryValue.fLength;
- 
+
     if(srcLen>0 ){
         uint16_t* target=NULL;
         uint16_t* saveTarget = NULL;
         int32_t tgtLen = 0;
+        char* dest = NULL;
+
         if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%CollationBin")==0 || uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
             char fileName[1024] ={0};
             char fn[1024] =  {0};
             FileStream* datFile = NULL;
             if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
                 uprv_strcat(fileName,"BreakDictionaryData");
-                ext = ".ucs";
+                ext = ".bin";
             }else{
                 uprv_strcat(fileName,"CollationElements");
                 ext=".res";
@@ -488,35 +572,24 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
                 uprv_strcat(fn,U_FILE_SEP_STRING);
             }
             uprv_strcat(fn,fileName);
-            type = "RESOURCE_BINARY,";
-            write_tabs(out);
-            T_FileStream_write(out, arr, (int32_t)uprv_strlen(arr));
-            tabCount++;
-            write_tabs(out);
-            T_FileStream_write(out, openBrace, (int32_t)uprv_strlen(openBrace));
-            tabCount++;
+            type = "new ICUListResourceBundle.ResourceBinary(";
             write_tabs(out);
             T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
             T_FileStream_write(out, "\"", 1);
             T_FileStream_write(out, fileName, (int32_t)uprv_strlen(fileName));
-            T_FileStream_write(out, "\"\n", 2);
-            tabCount--;
-            write_tabs(out);
-            T_FileStream_write(out, "},\n", 3);
-            tabCount--;
-            write_tabs(out);
-            T_FileStream_write(out, "},\n", 3);
+            T_FileStream_write(out, "\"),\n", 4);
+
             datFile=T_FileStream_open(fn,"w");
             T_FileStream_write(datFile, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
             T_FileStream_close(datFile);
 
         }else{
-            if(uprv_strcmp(srBundle->fKeys+res->fKey, "BreakDictionaryData")==0){
+            if(uprv_strcmp(srBundle->fKeys+res->fKey, "%%")==0){
                 srcLen = res->u.fBinaryValue.fLength/2;
                 target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
                 if(target){
                     saveTarget  = target;
-                    type = "COMPRESSED_STRING, ";
+                    type = "new ICUListResourceBundle.CompressedString(\n";
                     tgtLen = usArrayToRLEString((uint16_t*)res->u.fBinaryValue.fData,
                                                  srcLen,target, srcLen, status);
                     if(U_FAILURE(*status)){
@@ -611,51 +684,22 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
         
 
             write_tabs(out);
-            T_FileStream_write(out, arr, (int32_t)uprv_strlen(arr));
-            tabCount++;
-            write_tabs(out);
-            T_FileStream_write(out, openBrace, (int32_t)uprv_strlen(openBrace));
-            tabCount++;
-            write_tabs(out);
             T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
-            str_write_java(target, tgtLen, status);
-            tabCount--;
+            T_FileStream_write(out, "\n", 1);
+            tabCount++;
             write_tabs(out);
-            T_FileStream_write(out, "},\n", 3);
+            str_write_java(target, tgtLen,FALSE, status);
             tabCount--;
-            write_tabs(out);
-            T_FileStream_write(out, "},\n", 3);
-
+            T_FileStream_write(out, "),\n", 3);
 
             free(target);
         }
+   }else{
+        write_tabs(out);
+        T_FileStream_write(out,type,uprv_strlen(type));
+        T_FileStream_write(out,"null),\n",7);
    }
-   /* uprv_strcpy(buffer,"(byte) 0x");
 
-    if(res->u.fBinaryValue.fLength>0 ){
-        write_tabs(out);
-        T_FileStream_write(out,byte,uprv_strlen(byte));
-        tabCount++;
-        write_tabs(out);
-        while(i<res->u.fBinaryValue.fLength){
-            uint8_t data= res->u.fBinaryValue.fData[i];
-            buffer[9] =0;
-            len=itostr(&buffer[9],data,16,2);
-            T_FileStream_write(out,buffer,len+9);
-            T_FileStream_write(out,", ",2);
-            if(count==10){
-                count=0;
-                T_FileStream_write(out,"\n",1);
-                write_tabs(out);
-            }
-            count++;
-            i++;
-        }
-        T_FileStream_write(out,"\n",1);
-        tabCount--;
-        write_tabs(out);
-        T_FileStream_write(out,"},\n",3);
-    }*/
 }
 
 
@@ -720,7 +764,11 @@ table_write_java(struct SResource *res, UErrorCode *status) {
         }
 
     } else {
-        /* table is empty */
+        write_tabs(out);
+        T_FileStream_write(out,obj,uprv_strlen(obj));
+
+        write_tabs(out);
+        T_FileStream_write(out,"},\n",3);
 
     }
 
@@ -737,6 +785,9 @@ res_write_java(struct SResource *res,UErrorCode *status) {
         switch (res->fType) {
         case RES_STRING:
              string_write_java    (res, status);
+             return;
+        case RES_ALIAS:
+             alias_write_java     (res, status);
              return;
         case RES_INT_VECTOR:
              intvector_write_java (res, status);
@@ -763,14 +814,21 @@ res_write_java(struct SResource *res,UErrorCode *status) {
 }
 
 void 
-bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, char *writtenFilename, int writtenFilenameLen, UErrorCode *status) {
+bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, 
+                  char *writtenFilename, int writtenFilenameLen, 
+                  const char* packageName, const char* bundleName,
+                  UErrorCode *status) {
 
     char fileName[256] = {'\0'};
     char className[256]={'\0'};
     char constructor[1000] = { 0 };    
     UBool j1 =FALSE;
     outDir = outputDir;
-    uprv_strcpy(className, "LocaleElements");
+
+    bName = (bundleName==NULL) ? "LocaleElements" : bundleName;
+    pName = (packageName==NULL)? "com.ibm.icu.impl.data" : packageName;
+    
+    uprv_strcpy(className, bName);
     srBundle = bundle;
     if(uprv_strcmp(srBundle->fLocale,"root")!=0){
         uprv_strcat(className,"_");
@@ -806,6 +864,9 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         T_FileStream_write(out, copyRight, (int32_t)uprv_strlen(copyRight));
         T_FileStream_write(out, warningMsg, (int32_t)uprv_strlen(warningMsg));
     }
+    T_FileStream_write(out,"package ",(int32_t)uprv_strlen("package "));
+    T_FileStream_write(out,pName,(int32_t)uprv_strlen(pName));
+    T_FileStream_write(out,";\n\n",3);
     T_FileStream_write(out, javaClass, (int32_t)uprv_strlen(javaClass));
     T_FileStream_write(out, className, (int32_t)uprv_strlen(className));
     if(j1){
@@ -824,19 +885,8 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         }
     }
     res_write_java(bundle->fRoot, status);
-    if(j1){
-        T_FileStream_write(out, closeClass, (int32_t)uprv_strlen(closeClass));
-    }else{
-        tabCount--;
-        write_tabs(out);
-        T_FileStream_write(out,"};\n",3);
-        tabCount--;
-        write_tabs(out);
-        T_FileStream_write(out, closeBrace, (int32_t)uprv_strlen(closeBrace));
-        T_FileStream_write(out, closeBrace, (int32_t)uprv_strlen(closeBrace));
-    }
 
-
+    T_FileStream_write(out, closeClass, (int32_t)uprv_strlen(closeClass));
 
     T_FileStream_close(out);
 

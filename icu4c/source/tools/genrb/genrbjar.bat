@@ -35,7 +35,7 @@ my $pkg = "com\\ibm\\icu\\impl\\data";
 my $javaDir = "$javaRootDir\\$pkg";
 chdir($dataDir);
 mkpath($javaDir);
-my $op = "$genrb -s. -d$javaDir -j";
+my $op = "$genrb -s. -d$javaDir -j -p com.ibm.icu.impl.data -b LocaleElements ";
 print "Command: $op*.txt\n";
 print "Directory: $dataDir\n";
 my @list;
@@ -115,6 +115,7 @@ foreach my $loc (sort keys %aliases) {
 }
 
 # Step 5.  Patch transliteration resources.
+# ICU resources have TransliterateLATIN but ICU4J resources expect Transliterate_LATIN
 foreach my $file (sort @list) {
     my $hasTrans = 0;
     open(IN, $file) or die;

@@ -37,7 +37,7 @@
 #include "unicode/uloc.h"
 
 /* The version of genrb */
-#define GENRB_VERSION "3.2"
+#define GENRB_VERSION "3.3"
 
 #endif
 

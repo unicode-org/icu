@@ -73,8 +73,9 @@ struct UOption {
 #define UOPTION_SOURCEDIR           UOPTION_DEF("sourcedir", 's', UOPT_REQUIRES_ARG)
 #define UOPTION_ENCODING            UOPTION_DEF("encoding", 'e', UOPT_REQUIRES_ARG)
 #define UOPTION_ICUDATADIR          UOPTION_DEF("icudatadir", 'i', UOPT_REQUIRES_ARG)
-#define UOPTION_WRITE_JAVA          UOPTION_DEF("write-java", 'j', UOPT_NO_ARG)
-
+#define UOPTION_WRITE_JAVA          UOPTION_DEF("write-java", 'j', UOPT_OPTIONAL_ARG)
+#define UOPTION_PACKAGE_NAME        UOPTION_DEF("package-name", 'p', UOPT_REQUIRES_ARG)
+#define UOPTION_BUNDLE_NAME         UOPTION_DEF("bundle-name", 'b', UOPT_REQUIRES_ARG)
 
 /**
  * C Command line argument parser.

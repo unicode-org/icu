@@ -44,6 +44,8 @@ enum
     ENCODING,
     ICUDATADIR,
     WRITE_JAVA,
+    PACKAGE_NAME,
+    BUNDLE_NAME,
     COPYRIGHT
 };
 
@@ -58,12 +60,17 @@ UOption options[]={
                       UOPTION_ENCODING,
                       UOPTION_ICUDATADIR,
                       UOPTION_WRITE_JAVA,
+                      UOPTION_PACKAGE_NAME,
+                      UOPTION_BUNDLE_NAME,
                       UOPTION_COPYRIGHT
                   };
 
 static     UBool       verbose = FALSE;
 static     UBool       write_java = FALSE;
 static     const char* outputEnc ="";
+static     const char* packageName=NULL;
+static     const char* bundleName=NULL;
+
 int
 main(int argc,
      char* argv[])
@@ -106,22 +113,27 @@ main(int argc,
                 argv[0]);
         fprintf(stderr,
                 "Options:\n"
-                "\t-h or -? or --help   this usage text\n"
-                "\t-q or --quiet        do not display warnings\n"
-                "\t-v or --verbose      prints out extra information about processing the files\n"
-                "\t-V or --version      prints out version number and exits\n"
-                "\t-c or --copyright    include copyright notice\n");
+                "\t-h or -? or --help           this usage text\n"
+                "\t-q or --quiet                do not display warnings\n"
+                "\t-v or --verbose              prints out extra information about processing the files\n"
+                "\t-V or --version              prints out version number and exits\n"
+                "\t-c or --copyright            include copyright notice\n");
         fprintf(stderr,
-                "\t-e or --encoding     encoding of source files, leave empty for system default encoding\n"
-                "\t                     NOTE: ICU must be completely built to use this option\n"
-                "\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
-                "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
-                "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
-                "\t                     followed by path, defaults to %s\n",
+                "\t-e or --encoding             encoding of source files, leave empty for system default encoding\n"
+                "\t                             NOTE: ICU must be completely built to use this option\n"
+                "\t-d of --destdir              destination directory, followed by the path, defaults to %s\n"
+                "\t-s or --sourcedir            source directory for files followed by path, defaults to %s\n"
+                "\t-i or --icudatadir           directory for locating any needed intermediate data files,\n"
+                "\t                             followed by path, defaults to %s\n",
                 u_getDataDirectory(), u_getDataDirectory(), u_getDataDirectory());
         fprintf(stderr,
-                "\t-j or --write-java   write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"
-                "\t                     defaults to ASCII and \\uXXXX format.\n");
+                "\t-j or --write-java           write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"
+                "\t                             defaults to ASCII and \\uXXXX format.\n"
+                "\t-p or --package-name         package name for writing the ListResourceBundle for ICU4J, defaults to\n"
+                "\t                             com.ibm.icu.impl.data\n"
+                "\t-b or --bundle-name          bundle name for writing the ListResourceBundle for ICU4J, defaults to\n"
+                "\t                             LocaleElements");
+
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
@@ -156,6 +168,13 @@ main(int argc,
         write_java = TRUE;
         outputEnc = options[WRITE_JAVA].value;
     }
+    if(options[PACKAGE_NAME].doesOccur) {
+        packageName = options[PACKAGE_NAME].value;
+    }
+    if(options[BUNDLE_NAME].doesOccur) {
+        bundleName = options[BUNDLE_NAME].value;
+    }
+
 
     initParser();
 
@@ -303,7 +322,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         /* Write the data to the file */
         bundle_write(data, outputDir, outputFileName, sizeof(outputFileName), status);
     }else{
-        bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName), status);
+        bundle_write_java(data,outputDir,outputEnc, outputFileName, sizeof(outputFileName),packageName,bundleName,status);
     }
     if (U_FAILURE(*status)) {
         fprintf(stderr, "couldn't write bundle %s. Error:%s\n", outputFileName,u_errorName(*status));
