@@ -43,7 +43,7 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         return;
     }
 
-    if(filename==NULL || *filename==0 || *filename=='-' && filename[1]==0) {
+    if(filename==NULL || *filename==0 || (*filename=='-' && filename[1]==0)) {
         filename=NULL;
         file=T_FileStream_stdin();
     } else {

@@ -85,7 +85,7 @@ static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t',
 
 /* Remove all characters followed by '#'
  */
-char *
+static char *
   removeComments (char *line)
 {
   char *pound = uprv_strchr (line, '#');
@@ -105,7 +105,7 @@ char *
 }
 
 /*Returns uppercased string */
-char *
+static char *
   strtoupper (char *name)
 {
   char *oldPtr = name;
@@ -120,7 +120,7 @@ char *
 
 /* Returns true in c is a in set 'setOfChars', false otherwise
  */
-UBool 
+static UBool 
   isInSet (char c, const char *setOfChars)
 {
   uint8_t i = 0;
@@ -136,7 +136,7 @@ UBool
 
 /* Returns pointer to the next non-whitespace (or non-separator)
  */
-int32_t 
+static int32_t 
   nextTokenOffset (const char *line, const char *separators)
 {
   int32_t i = 0;
@@ -149,7 +149,7 @@ int32_t
 
 /* Returns pointer to the next token based on the set of separators
  */
-char *
+static char *
   getToken (char *token, char *line, const char *separators)
 {
   int32_t i = nextTokenOffset (line, separators);
@@ -173,9 +173,9 @@ static UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x63, 0x6e, 0x76, 0x74,     /* dataFormat="cnvt" */
-    6, 1, 0, 0,                 /* formatVersion */
-    0, 0, 0, 0                  /* dataVersion (calculated at runtime) */
+    {0x63, 0x6e, 0x76, 0x74},     /* dataFormat="cnvt" */
+    {6, 1, 0, 0},                 /* formatVersion */
+    {0, 0, 0, 0}                  /* dataVersion (calculated at runtime) */
 };
 
 void writeConverterData(UConverterSharedData *mySharedData, 
