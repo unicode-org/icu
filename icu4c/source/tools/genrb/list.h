@@ -65,9 +65,9 @@ struct STaggedList {
 struct SList* taglist_open(UErrorCode *status);
 void taglist_close(struct SList *list, UErrorCode *status);
 void taglist_add(struct SList *list, const UChar *tag,
-		 const UChar *data, UErrorCode *status);
+                 const UChar *data, UErrorCode *status);
 const UChar* taglist_get(const struct SList *list, const char *tag,
-			 UErrorCode *status);
+                         UErrorCode *status);
 
 /* Types of lists */
 enum EListType {
