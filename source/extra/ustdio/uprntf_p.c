@@ -103,23 +103,6 @@ typedef struct u_printf_spec {
   int32_t        fArgPos;    /* Position of data in arg list */
 } u_printf_spec;
 
-/**
- * A u_printf handler function.  
- * A u_printf handler is responsible for handling a single u_printf 
- * format specification, for example 'd' or 's'.
- * @param stream The UFILE to which to write output.
- * @param info A pointer to a <TT>u_printf_spec_info</TT> struct containing
- * information on the format specification.
- * @param args A pointer to the argument data
- * @return The number of Unicode characters written to <TT>stream</TT>.
- */
-typedef int32_t U_EXPORT2
-u_printf_handler(const u_printf_stream_handler  *handler,
-                 void                           *context,
-                 ULocaleBundle                  *formatBundle,
-                 const u_printf_spec_info       *info,
-                 const ufmt_args                *args);
-
 #define UPRINTF_NUM_FMT_HANDLERS 108
 
 /* We do not use handlers for 0-0x1f */
