@@ -138,6 +138,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(56,TestOutputSet);
         TESTCASE(57,TestVariableRange);
         TESTCASE(58,TestInvalidPostContext);
+        TESTCASE(59,TestIDForms);
         default: name = ""; break;
     }
 }
@@ -1040,18 +1041,18 @@ void TransliteratorTest::TestFilterIDs(void) {
     // Array of 3n strings:
     // <id>, <inverse id>, <input>, <expected output>
     const char* DATA[] = {
-        "Any[aeiou]-Hex",
-        "Hex[aeiou]-Any",
-        "quizzical",
-        "q\\u0075\\u0069zz\\u0069c\\u0061l",
+        "Any[aeiou]-Hex", // ID
+        "[aeiou]Hex-Any", // expected inverse ID
+        "quizzical",      // src
+        "q\\u0075\\u0069zz\\u0069c\\u0061l", // expected ID.translit(src)
         
         "Any[aeiou]-Hex;Hex[^5]-Any",
-        "Any[^5]-Hex;Hex[aeiou]-Any",
+        "[^5]Any-Hex;[aeiou]Hex-Any",
         "quizzical",
         "q\\u0075izzical",
-
+        
         "Null[abc]",
-        "Null[abc]",
+        "[abc]Null",
         "xyz",
         "xyz",
     };
@@ -2692,6 +2693,51 @@ void TransliteratorTest::TestInvalidPostContext() {
         return;
     }
     errln("FAIL: No syntax error");
+}
+
+/**
+ * Test ID form variants
+ */
+void TransliteratorTest::TestIDForms() {
+    char* DATA[] = {
+        "NFC", "NFD",
+        "nfd", "NFC", // make sure case is ignored
+        "Any-NFKD", "Any-NFKC",
+        "Null", "Null",
+        "Latin-Greek/UNGEGN", "Greek-Latin/UNGEGN",
+        "Greek/UNGEGN-Latin", "Latin-Greek/UNGEGN",
+        "Bengali-Devanagari/", "Devanagari-Bengali",
+    };
+    const int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
+    
+    for (int32_t i=0; i<DATA_length; i+=2) {
+        UParseError pe;
+        UErrorCode ec = U_ZERO_ERROR;
+        Transliterator *t =
+            Transliterator::createInstance(DATA[i], UTRANS_FORWARD, pe, ec);
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: Couldn't create " + DATA[i]);
+            delete t;
+            continue;
+        }
+        Transliterator *u = t->createInverse(ec);
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: Couldn't create inverse of " + DATA[i]);
+            delete t;
+            delete u;
+            continue;
+        }
+        if (t->getID() == DATA[i] &&
+            u->getID() == DATA[i+1]) {
+            logln((UnicodeString)"Ok: " + DATA[i] + ".getInverse() => " + DATA[i+1]);
+        } else {
+            errln((UnicodeString)"FAIL: getInstance(" + DATA[i] + ") => " +
+                  t->getID() + " x getInverse() => " + u->getID() +
+                  ", expected " + DATA[i+1]);
+        }
+        delete t;
+        delete u;
+    }
 }
 
 //======================================================================

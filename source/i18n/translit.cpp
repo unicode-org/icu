@@ -46,6 +46,8 @@ static const UChar VARIANT_SEP = 0x002F; // '/'
 static const UChar OPEN_PAREN  = 40;
 static const UChar CLOSE_PAREN = 41;
 
+static const UChar ANY[] = { 65, 110, 121, 0 }; // Any
+
 /**
  * Prefix for resource bundle key for the display name for a
  * transliterator.  The ID is appended to this to form the key.
@@ -77,7 +79,7 @@ static const char RB_DISPLAY_NAME_PATTERN[] = "TransliteratorNamePattern";
 static const char RB_RULE_BASED_IDS[] = "RuleBasedTransliteratorIDs";
 
 /**
- * The mutex controlling access to registry object.
+ * The mutex controlling access to registry object and specialInverses.
  */
 static UMTX registryMutex = 0;
 
@@ -88,6 +90,8 @@ static TransliteratorRegistry* registry = 0;
 
 // Empty string
 static const UChar EMPTY[] = {0}; //""
+
+static Hashtable *specialInverses = 0;
 
 U_NAMESPACE_BEGIN
 
@@ -1104,7 +1108,6 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     }
 
     Transliterator* t = NULL;
-    int32_t sep = 0; // index of the separator ('-') in id
 
     // If id is empty, then we have either an empty specifier,
     // which is illegal, or a compound filter, which is legal
@@ -1124,39 +1127,67 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     }
     
     else {
-        // Fix the id, if necessary, by reversing it (A-B => B-A).  This
-        // is only done if the id is NOT of the form Foo(Bar).  Record the
-        // position of the separator.
-        // 
-        // For both A-B and Foo(Bar) ids, detect the special case of Null,
-        // whose inverse is itself.  Given an ID with no separator "Foo",
-        // an abbreviation for "Any-Foo", consider the inverse to be
-        // "Foo-Any".
-        sep = id.indexOf(ID_SEP);
-        if (sep < 0 && id.caseCompare(NullTransliterator::SHORT_ID,
-                                      U_FOLD_CASE_DEFAULT) == 0) {
-            // Handle "Null"
-            sep = id.length();
-        } else if (dir == UTRANS_REVERSE &&
-                   id.caseCompare(NullTransliterator::ID,
-                                  U_FOLD_CASE_DEFAULT) == 0) {
-            // Reverse of "Any-Null" => "Null"
-            id.removeBetween(0, sep+1);
-            sep = id.length();
-        } else if (dir == UTRANS_REVERSE && revStart < 0) {
-            if (sep >= 0) {
-                id.extractBetween(0, sep, str);
-                id.removeBetween(0, sep+1);
-            } else {
-                str = UnicodeString("Any", "");
+
+        // Normalize the ID.  Take IDs of the form T, T/V, S-T, S-T/V, or S/V-T
+        // and produce S-T/V.  If the ID needs to be reversed, do so.  This
+        // produces T-S/V, with a default S of "Any".  If the ID has a special
+        // non-canonical inverse, look it up (e.g., NFC -> NFD, Null -> Null).
+        if (id.length() > 0) { // We handle empty IDs below
+            UnicodeString source(ANY);
+            UnicodeString target;
+            UnicodeString variant; // Variant INCLUDING "/"
+
+            int32_t sep = id.indexOf(ID_SEP);
+            int32_t var = id.indexOf(VARIANT_SEP);
+            if (var < 0) {
+                var = id.length();
             }
-            sep = id.length();
-            id.append(ID_SEP).append(str);
-        } else if (sep < 0 && id.length() > 0) {
-            // Don't do anything for empty IDs -- we handle these specially below
-            str = UnicodeString("Any-", "");
-            sep = str.length() - 1;
-            id.insert(0, str);
+
+            if (sep < 0) {
+                // Form: T/V or T (or /V)
+                id.extractBetween(0, var, target);
+                id.extractBetween(var, 0x7FFFFFFF, variant);
+            } else if (sep < var) {
+                // Form: S-T/V or S-T
+                id.extractBetween(0, sep++, source);
+                id.extractBetween(sep, var, target);
+                id.extractBetween(var, 0x7FFFFFFF, variant);
+            } else {
+                // Form: S/V-T
+                id.extractBetween(0, var, source);
+                id.extractBetween(var, sep++, variant);
+                id.extractBetween(sep, 0x7FFFFFFF, target);
+            }
+            id.truncate(0);
+            // For forward IDs *or IDs that were part of a Foo(Bar) ID*,
+            // normalize them to canonical form.
+            if (dir == UTRANS_FORWARD || revStart >= 0) {
+                id.append(source).append(ID_SEP).append(target);
+            } else {
+                // Handle special, non-canonical inverse mappings,
+                // e.g. inverse(Any-NFC) = Any-NFD and vice versa.
+                if (source == ANY) {
+                    UnicodeString* inverseTarget = (UnicodeString*) specialInverses->get(target);
+                    if (inverseTarget != NULL) {
+                        // If the original ID contained "Any-" then make the
+                        // special inverse "Any-Foo"; otherwise make it "Foo".
+                        // So "Any-NFC" => "Any-NFD" but "NFC" => "NFD".
+                        if (sep < 0) {
+                            id.append(*inverseTarget);
+                        } else {
+                            source = *inverseTarget;
+                            target = ANY;
+                        }
+                    }
+                }
+                if (id.length() == 0) {
+                    id.append(target).append(ID_SEP).append(source);
+                }
+            }
+            // If the variant is empty ("/") then don't append it
+            if (variant.length() > 1) {
+                id.append(variant);
+            }
         }
 
         // If we have a reverse part of the ID, e.g., Foo(Bar), then we
@@ -1230,7 +1261,7 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
             ID.extractBetween(revStart+1, revLimit, id);
         }
     } else if (revStart < 0) {
-        id.insert(sep, ID, setStart, setLimit-setStart);
+        id.insert(0, ID, setStart, setLimit-setStart);
     } else {
         // Change Foo(Bar) to Bar(Foo)
         ID.extractBetween(pos, revStart, str);
@@ -1373,6 +1404,27 @@ void Transliterator::_registerFactory(const UnicodeString& id,
                                       Transliterator::Factory factory,
                                       Transliterator::Token context) {
     registry->put(id, factory, context, TRUE);
+}
+
+// For public consumption
+void Transliterator::registerSpecialInverses(const UnicodeString& target1,
+                                             const UnicodeString& target2) {
+    if (registry == 0) {
+        initializeRegistry();
+    }
+    Mutex lock(&registryMutex);
+    _registerSpecialInverses(target1, target2);
+}
+
+// To be called only by Transliterator subclasses that are called
+// to register themselves by initializeRegistry().
+void Transliterator::_registerSpecialInverses(const UnicodeString& target1,
+                                              const UnicodeString& target2) {
+    UErrorCode ec = U_ZERO_ERROR;
+    specialInverses->put(target1, new UnicodeString(target2), ec);
+    if (0 != target1.caseCompare(target2, U_FOLD_CASE_DEFAULT)) {
+        specialInverses->put(target2, new UnicodeString(target1), ec);
+    }
 }
 
 /**
@@ -1595,6 +1647,11 @@ void Transliterator::initializeRegistry(void) {
 
     ures_close(transIDs);
     ures_close(bundle);
+
+    specialInverses = new Hashtable(TRUE);
+    specialInverses->setValueDeleter(uhash_deleteUnicodeString);
+    _registerSpecialInverses(NullTransliterator::SHORT_ID,
+                             NullTransliterator::SHORT_ID);
 
     // Manually add prototypes that the system knows about to the
     // cache.  This is how new non-rule-based transliterators are

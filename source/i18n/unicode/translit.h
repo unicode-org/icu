@@ -816,6 +816,35 @@ public:
      */
     static void registerInstance(Transliterator* adoptedObj);
 
+    /**
+     * Register two targets as being inverses of one another.  For
+     * example, calling registerSpecialInverses("NFC", "NFD") causes
+     * Transliterator to form the following inverse relationships:
+     *
+     * <pre>NFC => NFD
+     * Any-NFC => Any-NFD
+     * NFD => NFC
+     * Any-NFD => Any-NFC</pre>
+     *
+     * (Without the special inverse registration, the inverse of NFC
+     * would be NFC-Any.)  Note that NFD is shorthand for Any-NFD, but
+     * that the presence or absence of "Any-" is preserved.
+     *
+     * <p>The relationship is symmetrical; registering (a, b) is
+     * equivalent to registering (b, a).
+     *
+     * <p>The relevant IDs must still be registered separately as
+     * factories or classes.
+     *
+     * <p>Only the targets are specified.  Special inverses always
+     * have the form Any-Target1 <=> Any-Target2.  The target should
+     * have canonical casing (the casing desired to be produced when
+     * an inverse is formed) and should contain no whitespace or other
+     * extraneous characters.
+     */
+    static void registerSpecialInverses(const UnicodeString& target1,
+                                        const UnicodeString& target2);
+
 private:
 
     friend class NormalizationTransliterator;
@@ -823,6 +852,9 @@ private:
     static void _registerFactory(const UnicodeString& id,
                                  Factory factory,
                                  Token context);
+
+    static void _registerSpecialInverses(const UnicodeString& target1,
+                                         const UnicodeString& target2);
 
 public:
 
