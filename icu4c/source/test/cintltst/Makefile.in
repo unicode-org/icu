@@ -30,9 +30,12 @@ LINK = $(LINK.c)
 endif
 
 BUILDDIR := $(CURR_SRCCODE_FULL_DIR)/../../
-BUILDDIR := $(BUILDDIR:test/cintltst/../../=)       # For Unix
-BUILDDIR := $(BUILDDIR:test\\\\cintltst/../../=)    # For Windows
-BUILDDIR := $(BUILDDIR:TEST\\\\CINTLTST/../../=)    # For Windows 98
+# Simplify the path for Unix
+BUILDDIR := $(BUILDDIR:test/cintltst/../../=)
+# Simplify the path for Windows
+BUILDDIR := $(BUILDDIR:test\\\\cintltst/../../=)
+# Simplify the path for Windows 98
+BUILDDIR := $(BUILDDIR:TEST\\\\CINTLTST/../../=)
 
 # we define ICU_UNICODE_VERSION so we can test it
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
