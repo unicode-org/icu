@@ -569,8 +569,10 @@ ucnv_getCCSID(const UConverter * converter,
         which doesn't have an IBM cannonical name, but does have an IBM alias. */
         const char *standardName = ucnv_getStandardName(ucnv_getName(converter, err), "IBM", err);
         if (U_SUCCESS(*err) && standardName) {
-            const char *ccsidStr = uprv_strchr(standardName, '-') + 1;
-            ccsid = (int32_t)atol(ccsidStr);
+            const char *ccsidStr = uprv_strchr(standardName, '-');
+            if (ccsidStr) {
+                ccsid = (int32_t)atol(ccsidStr+1);  /* +1 to skip '-' */
+            }
         }
     }
     return ccsid;
