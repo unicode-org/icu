@@ -1957,7 +1957,7 @@ uint32_t TestCollator::getVariableTop(UErrorCode &status) const
     if (U_SUCCESS(status)) {
         return 0;
     }
-	return -1;
+	return UINT32_MAX;
 }
 
 Collator* TestCollator::safeClone(void)
