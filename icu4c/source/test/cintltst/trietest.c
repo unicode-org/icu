@@ -847,16 +847,11 @@ DummyTrieTest(void) {
     dummyTest(FALSE);
 }
 
-#if 1
+void
+addTrieTest(TestNode** root);
+
 void
 addTrieTest(TestNode** root) {
     addTest(root, &TrieTest, "tsutil/trietest/TrieTest");
     addTest(root, &DummyTrieTest, "tsutil/trietest/DummyTrieTest");
 }
-#else
-/* standalone utrie development */
-int main(int argc, const char *argv[]) {
-    TrieTest();
-    return 0;
-}
-#endif
