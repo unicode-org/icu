@@ -1,4 +1,4 @@
-# Copyright (c) 1999-2004, International Business Machines Corporation and
+# Copyright (c) 1999-2005, International Business Machines Corporation and
 # others. All Rights Reserved.
 # A list of UCM's to build
 # Note: 
@@ -83,7 +83,6 @@ ibm-964_P110-1999.ucm\
 ibm-971_P100-1995.ucm\
 ibm-1363_P110-1997.ucm\
 ibm-1375_P100-2003.ucm\
-ibm-1381_P110-1999.ucm\
 ibm-33722_P120-1999.ucm\
 macos-0_2-10.2.ucm\
 macos-6-10.2.ucm\
