@@ -86,14 +86,6 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\cmnmode.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\dllmode.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\gmake.c
 # End Source File
 # Begin Source File
@@ -103,6 +95,10 @@ SOURCE=.\pkgdata.c
 # Begin Source File
 
 SOURCE=.\pkgtypes.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\winmode.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -28,10 +28,14 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
+#ifdef WIN32
+extern void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status);
+#else /*#ifdef WIN32*/
 #ifdef UDATA_SO_SUFFIX
 extern void pkg_mode_dll(UPKGOptions* o, FileStream *stream, UErrorCode *status);
-#endif 
+#endif /*#ifdef UDATA_SO_SUFFIX*/
 extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *status);
+#endif /*#ifdef WIN32*/
 
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
@@ -43,10 +47,14 @@ static struct
   const char *desc;
 } modes[] = 
 {
+#ifdef WIN32
+  { "win",    pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
+#else /*#ifdef WIN32*/
 #ifdef UDATA_SO_SUFFIX
   { "dll",    pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },
 #endif
   { "common", pkg_mode_common, "Generates one common data file, <package>.dat" }
+#endif /*#ifdef WIN32*/
 };
 
 static UOption options[]={
@@ -263,9 +271,6 @@ main(int argc, const char *argv[]) {
     return 0; /* nothing to do. */
   }
   
-#ifdef WIN32
-# error how do you execute things on windows?
-#else
   /* POSIX - execute makefile */
   {
     char cmd[1024];
@@ -299,7 +304,6 @@ main(int argc, const char *argv[]) {
     }
     return rc;
   }
-#endif
 
   return 0;
 }
