@@ -774,7 +774,7 @@ int main(int argc, char* argv[]) {
             "\t-v or --verbose     turn on verbose output\n"
             "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
             "\t                    followed by path, defaults to %s\n",
-            argv[0]);
+            argv[0], u_getDataDirectory());
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
