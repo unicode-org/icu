@@ -2,8 +2,8 @@ default: classes
 
 include $(TOPDIR)/src/build/CancelImplicits.gmk
 
-JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
-#JAVAC=      javac -classpath $(CLASSPATH) -d $(CLASSDIR) $(JAVACFLAGS)
+#JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
+#MAKE=		gmake -f makefile.gmk
 
 .SUFFIXES: .java .class 
 
@@ -16,9 +16,6 @@ FILES_class= $(FILES_java:.java=.class)
 
 CLASSLIST= classes.list
 CLASS_DEST_DIR= $(CLASSDIR)/$(PKGPATH)
-
-# {$(SRCDIR)/$(PKGPATH)}.java{$(CLASS_DEST_DIR)}.class:
-#	@echo $(?) >> .classes.list
 
 $(CLASS_DEST_DIR) :
 	@mkdir -p $@
@@ -34,7 +31,6 @@ $(FILES_class) : $(CLASS_DEST_DIR)%.class: $(SRCDIR)/$(PKGPATH)%.java
 	@rm -f .classes.list
 
 ifdef FILES_dict
-#SRC_FILES_dict= $(subst classes,src,$(FILES_dict))
 SRC_FILES_dict= $(FILES_dict:classes=src)
 endif
 
@@ -43,7 +39,7 @@ ifdef FILES_dict
 	@cp $(SRC_FILES_dict) $(CLASS_DEST_DIR)/$(notdir $(SRC_FILES_dict))
 endif
 ifdef SUBDIRS
-	@for D in $(SUBDIRS) ; do cd $$D ; gnumake -f makefile.gmk classes ; cd .. ; done
+	@for D in $(SUBDIRS) ; do cd $$D ; $(MAKE) classes ; cd .. ; done
 endif
 
 dict: $(SRC_FILES_dict) $(CLASS_DEST_DIR)

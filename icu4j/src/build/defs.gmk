@@ -8,3 +8,7 @@ TARGDIR=	$(CLASSDIR)/$(PKGPATH)
 
 #JAVACFLAGS=	-target 1.1
 JAVACFLAGS=
+
+JAVAC=      javac -classpath $(CLASSPATH) -sourcepath $(SRCDIR) -d $(CLASSDIR) $(JAVACFLAGS)
+MAKE=		gmake -f makefile.gmk
+
