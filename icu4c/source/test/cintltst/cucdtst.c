@@ -307,22 +307,28 @@ void TestControlPrint()
     const UChar sampleControl[] = {0x001b, 0x0097, 0x0082};
     const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
     const UChar samplePrintable[] = {0x0042, 0x005f, 0x2014};
-    const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001c};
+    const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
     int i;
     for (i = 0; i < 3; i++) {
         log_verbose("Testing for iscontrol\n");
-        if (!(u_iscntrl(sampleControl[i])) ||
-                (u_iscntrl(sampleNonControl[i])))
+        if (!u_iscntrl(sampleControl[i]))
         {
-            log_err("Control char test error : %d   or  %d\n", (int32_t)sampleControl[i], (int32_t)sampleNonControl[i]);
+            log_err("Control char test error : %d should be control but is not\n", (int32_t)sampleControl[i]);
+        }
+        if (u_iscntrl(sampleNonControl[i]))
+        {
+            log_err("Control char test error : %d should not be control but is\n", (int32_t)sampleNonControl[i]);
         }
     }
     for (i = 0; i < 3; i++) {
         log_verbose("testing for isprintable\n");
-        if ((u_isprint(sampleNonPrintable[i])) ||
-                !(u_isprint(samplePrintable[i])))
+        if (!u_isprint(samplePrintable[i]))
         {
-            log_err("Printable char test error : %d  or  %d\n", (int32_t)samplePrintable[i], (int32_t)sampleNonPrintable[i]);
+            log_err("Printable char test error : %d should be printable but is not\n", (int32_t)samplePrintable[i]);
+        }
+        if (u_isprint(sampleNonPrintable[i]))
+        {
+            log_err("Printable char test error : %d should not be printable but is\n", (int32_t)sampleNonPrintable[i]);
         }
     }
 }
@@ -369,13 +375,14 @@ void TestIdentifier()
     }
 }
 
-/* tests for u_CharType(), u_isTitle(), and u_toTitle(),u_charDirection and u_charScript()*/
+/* tests for u_charType(), u_isTitle(), and u_toTitle(),u_charDirection and u_charScript()*/
 void TestUnicodeData()
 {
     FILE*   input = 0;
     char    buffer[1000];
     char*   bufferPtr = 0, *dirPtr = 0;
     int32_t unicode;
+    int8_t  type;
     char newPath[256];
     const char *expectVersion = U_UNICODE_VERSION;  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
     /* expectVersionArray must be filled from u_versionFromString(expectVersionArray, U_UNICODE_VERSION)
@@ -449,11 +456,34 @@ void TestUnicodeData()
             }
             bufferPtr++;
             bufferPtr[2] = 0;
-            
-            if (u_charType((UChar)unicode) != tagValues[MakeProp(bufferPtr)])
+
+            /* we override the general category of some control characters */
+            switch(unicode) {
+            case 9:
+            case 0xb:
+            case 0x1f:
+                type = U_SPACE_SEPARATOR;
+                break;
+            case 0xc:
+                type = U_LINE_SEPARATOR;
+                break;
+            case 0xa:
+            case 0xd:
+            case 0x1c:
+            case 0x1d:
+            case 0x1e:
+            case 0x85:
+                type = U_PARAGRAPH_SEPARATOR;
+                break;
+            default:
+                type = (int8_t)tagValues[MakeProp(bufferPtr)];
+                break;
+            }
+            if (u_charType((UChar)unicode) != type)
             {
                 log_err("Unicode character type failed at %d\n",unicode);
             }
+
             /* test title case */
             if ((u_totitle((UChar)unicode) != u_toupper((UChar)unicode)) &&
                 !(u_istitle(u_totitle((UChar)unicode))))

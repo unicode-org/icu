@@ -223,7 +223,7 @@ void UnicodeTest::TestControlPrint()
     const UChar sampleControl[] = {0x001b, 0x0097, 0x0082};
     const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
     const UChar samplePrintable[] = {0x0042, 0x005f, 0x2014};
-    const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001c};
+    const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
     int32_t i;
     for (i = 0; i < 3; i++) {
 //      logln((UnicodeString)"testing " + (int32_t)i + "...");
@@ -314,6 +314,7 @@ void UnicodeTest::TestUnicodeData()
     }
 
     int32_t unicode;
+    int8_t type;
     for(;;) {
         bufferPtr = fgets(buffer, 999, input);
         if (bufferPtr == NULL) break;
@@ -334,7 +335,30 @@ void UnicodeTest::TestUnicodeData()
         bufferPtr++;
         bufferPtr[2] = 0;
 //      logln((UnicodeString)"testing " + (int32_t)unicode + "...");
-        if (Unicode::getType((UChar)unicode) != tagValues[MakeProp(bufferPtr)])
+
+        /* we override the general category of some control characters */
+        switch(unicode) {
+        case 9:
+        case 0xb:
+        case 0x1f:
+            type = U_SPACE_SEPARATOR;
+            break;
+        case 0xc:
+            type = U_LINE_SEPARATOR;
+            break;
+        case 0xa:
+        case 0xd:
+        case 0x1c:
+        case 0x1d:
+        case 0x1e:
+        case 0x85:
+            type = U_PARAGRAPH_SEPARATOR;
+            break;
+        default:
+            type = (int8_t)tagValues[MakeProp(bufferPtr)];
+            break;
+        }
+        if (Unicode::getType((UChar)unicode) != type)
             errln("Unicode character type failed at " + unicode);
         // test title case
         if ((Unicode::toTitleCase((UChar)unicode) != Unicode::toUpperCase((UChar)unicode)) &&
