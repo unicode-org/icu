@@ -105,15 +105,15 @@ InterIndic-Kannada:internal:Transliterator_InterIndic_Kannada.txt:UTF8:FORWARD
 InterIndic-Malayalam:internal:Transliterator_InterIndic_Malayalam.txt:UTF8:FORWARD
 
 #Latin-Indic transliterators
-Latin-Devanagari:alias:NFD;Latin-InterIndic;InterIndic-Devanagari;NFC
-Latin-Bengali:alias:NFD;Latin-InterIndic;InterIndic-Bengali;NFC
-Latin-Gurmukhi:alias:NFD;Latin-InterIndic;InterIndic-Gurmukhi;NFC
-Latin-Gujarati:alias:NFD;Latin-InterIndic;InterIndic-Gujarati;NFC
-Latin-Oriya:alias:NFD;Latin-InterIndic;InterIndic-Oriya;NFC
-Latin-Tamil:alias:NFD;Latin-InterIndic;InterIndic-Tamil;NFC
-Latin-Telugu:alias:NFD;Latin-InterIndic;InterIndic-Telugu;NFC
-Latin-Kannada:alias:NFD;Latin-InterIndic;InterIndic-Kannada;NFC
-Latin-Malayalam:alias:NFD;Latin-InterIndic;InterIndic-Malayalam;NFC
+Latin-Devanagari:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Devanagari;NFC
+Latin-Bengali:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Bengali;NFC
+Latin-Gurmukhi:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Gurmukhi;NFC
+Latin-Gujarati:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Gujarati;NFC
+Latin-Oriya:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Oriya;NFC
+Latin-Tamil:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Tamil;NFC
+Latin-Telugu:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Telugu;NFC
+Latin-Kannada:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Kannada;NFC
+Latin-Malayalam:alias:NFD;[:Latin:]Lower;Latin-InterIndic;InterIndic-Malayalam;NFC
 
 #Indic-Latin transliterators
 Devanagari-Latin:alias:NFD;Devanagari-InterIndic;InterIndic-Latin;NFC
