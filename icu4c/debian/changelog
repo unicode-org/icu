@@ -1,8 +1,10 @@
 icu (2.1-1) unstable; urgency=low
 
   * ICU 2.1 release.
+  * Changed the icu package description. Closes: 142886
+  * Use -O1 for CXXFLAGS for OS/390. Closes: 143021
 
- -- Yves Arrouye <yves@debian.org>  Wed, 10 Apr 2002 12:59:16 -0700
+ -- Yves Arrouye <yves@debian.org>  Mon, 15 Apr 2002 14:03:12 -0700
 
 icu (2.0.2-1) unstable; urgency=low
 
