@@ -58,7 +58,6 @@ struct REStackFrame;
 
 /**
  * Constants for Regular Expression Match Modes.
- * <p>Note that non-default match modes will not be supported until ICU 2.6</p>
  * @draft ICU 2.4
  */
 enum {
@@ -209,6 +208,29 @@ public:
 
 
    /**
+    *     Compiles the regular expression in string form into a RegexPattern
+    *     object using the specified match mode flags.  These compile methods,
+    *     rather than the constructors, are the usual way that RegexPattern objects
+    *     are created.
+    *
+    *     <p>Note that RegexPattern objects must not be deleted while RegexMatcher
+    *     objects created from the pattern are active.  RegexMatchers keep a pointer
+    *     back to their pattern, so premature deletion of the pattern is a
+    *     catastrophic error.</p>
+    *
+    *    @param regex The regular expression to be compiled.
+    *    @param flags The match mode flags to be used.
+    *    @param status   A reference to a UErrorCode to receive any errors.
+    *    @return      A regexPattern object for the compiled pattern.
+    *
+    *    @draft ICU 2.6
+    */
+    static RegexPattern *compile( const UnicodeString &regex,
+        uint32_t             flags,
+        UErrorCode           &status);
+
+
+   /**
     *     Get the match mode flags that were used when compiling this pattern.
     *     @return  the match mode flags
     *     @draft ICU 2.4
@@ -229,6 +251,20 @@ public:
     */
     virtual RegexMatcher *matcher(const UnicodeString &input,
         UErrorCode          &status) const;
+
+
+   /**
+    *  Creates a RegexMatcher that will match against this pattern.  The
+    *   RegexMatcher can be used to perform match, find or replace operations.
+    *   Note that a RegexPattern object must not be deleted while
+    *   RegexMatchers created from it still exist and might possibly be used again.
+    *
+    *   @param status   A reference to a UErrorCode to receive any errors.
+    *   @return      A RegexMatcher object for this pattern and input.
+    *
+    *   @draft ICU 2.6
+    */
+    virtual RegexMatcher *matcher(UErrorCode  &status) const;
 
 
    /**
@@ -259,7 +295,14 @@ public:
 
 
     /**
-     * Split a string around matches of the pattern.  Somewhat like split() from Perl.
+     * Split a string into fields.  Somewhat like split() from Perl.
+     * The pattern matches identify delimiters that separate the input
+     *  into fields.  The input data between the matches becomes the
+     *  fields themselves.
+     * <p>
+     *  For the best performance on split() operations,
+     *  RegexMatcher::split</code> is perferrable to this function
+     * 
      * @param input   The string to be split into fields.  The field delimiters
      *                match the pattern (in the "this" object)
      * @param dest    An array of UnicodeStrings to receive the results of the split.
@@ -323,17 +366,6 @@ private:
                                    //   >= this value.  For some patterns, this calculated
                                    //   value may be less than the true shortest
                                    //   possible match.
-
-    int32_t         fMaxMatchLen;  // Maximum Match Length.  All matches will have length
-                                   //   <= this value.  For some patterns, this calculated
-                                   //   value may be greater than the true longest
-                                   //   possible match.  For patterns with unbounded
-                                   //   match length, value = -1.
-
-    RegexMatcher    *fMatcher;     // A cached matcher for this pattern, used for
-                                   //  split(), to avoid having to
-                                   //  make new ones on each call.
-                                   //  TODO:  fix thread safety problems.
 
     int32_t         fFrameSize;    // Size of a state stack frame in the
                                    //   execution engine.
@@ -402,6 +434,12 @@ public:
       * created for the same expression, it will be more efficient to
       * separately create and cache a RegexPattern object, and use
       * its matcher() method to create the RegexMatcher objects.
+      *
+      *  @param regexp The Regular Expression to be compiled.
+      *  @param flags  Regular expression options, such as case insensitive matching.
+      *                @see UREGEX_CASE_INSENSITIVE
+      *  @param status Any errors are reported by setting this UErrorCode variable.
+      *  @draft ICU 2.6
       */
     RegexMatcher(const UnicodeString &regexp, uint32_t flags, UErrorCode &status);
 
@@ -412,6 +450,12 @@ public:
       * created for the same expression, it will be more efficient to
       * separately create and cache a RegexPattern object, and use
       * its matcher() method to create the RegexMatcher objects.
+      *
+      *  @param regexp The Regular Expression to be compiled.
+      *  @param flags  Regular expression options, such as case insensitive matching.
+      *                @see UREGEX_CASE_INSENSITIVE
+      *  @param status Any errors are reported by setting this UErrorCode variable.
+      *  @draft ICU 2.6
       */
     RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
         uint32_t flags, UErrorCode &status);
@@ -687,6 +731,37 @@ public:
     *  @draft ICU 2.4
     */
     virtual UnicodeString &appendTail(UnicodeString &dest);
+
+
+
+    /**
+     * Split a string into fields.  Somewhat like split() from Perl.
+     * The pattern matches identify delimiters that separate the input
+     *  into fields.  The input data between the matches becomes the
+     *  fields themselves.
+     * <p>
+     * 
+     * @param input   The string to be split into fields.  The field delimiters
+     *                match the pattern (in the "this" object).  This matcher
+     *                will be reset to this input string.
+     * @param dest    An array of UnicodeStrings to receive the results of the split.
+     *                This is an array of actual UnicodeString objects, not an
+     *                array of pointers to strings.  Local (stack based) arrays can
+     *                work well here.
+     * @param destCapacity  The number of elements in the destination array.
+     *                If the number of fields found is less than destCapacity, the
+     *                extra strings in the destination array are not altered.
+     *                If the number of destination strings is less than the number
+     *                of fields, the trailing part of the input string, including any
+     *                field delimiters, is placed in the last destination string.
+     * @param status  A reference to a UErrorCode to receive any errors.
+     * @return        The number of fields into which the input string was split.
+     * @draft ICU 2.4
+     */
+    virtual int32_t  split(const UnicodeString &input,
+        UnicodeString    dest[],
+        int32_t          destCapacity,
+        UErrorCode       &status);
 
 
 

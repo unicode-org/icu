@@ -67,7 +67,6 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fLiteralText      = other.fLiteralText;
     fDeferredStatus   = other.fDeferredStatus;
     fMinMatchLen      = other.fMinMatchLen;
-    fMaxMatchLen      = other.fMaxMatchLen;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
     fStaticSets       = other.fStaticSets; 
     
@@ -80,10 +79,6 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //  Copy the pattern.  It's just values, nothing deep to copy.
     fCompiledPat->assign(*other.fCompiledPat, fDeferredStatus);
     fGroupMap->assign(*other.fGroupMap, fDeferredStatus);
-
-    // Note:  do not copy fMatcher.  It'll be created on first use if the
-    //        destination needs one. 
-    //    TODO:  thread safety
 
     //  Copy the Unicode Sets.  
     //    Could be made more efficient if the sets were reference counted and shared,
@@ -116,10 +111,8 @@ void RegexPattern::init() {
     fFlags            = 0;
     fDeferredStatus   = U_ZERO_ERROR;
     fMinMatchLen      = 0;
-    fMaxMatchLen      = -1;
     fMaxCaptureDigits = 1;  
     fStaticSets       = NULL;
-    fMatcher          = NULL;
     fFrameSize        = 0;
     fDataSize         = 0;
     fStartType        = START_NO_INFO;
@@ -151,8 +144,6 @@ void RegexPattern::init() {
 //
 //--------------------------------------------------------------------------
 void RegexPattern::zap() {
-    delete fMatcher;
-    fMatcher = NULL;
     delete fCompiledPat;
     fCompiledPat = NULL;
     int i;
@@ -263,6 +254,19 @@ RegexPattern *RegexPattern::compile( const UnicodeString &regex,
 
 
 
+//
+//   compile with no UParseErr parameter.
+//
+RegexPattern *RegexPattern::compile( const UnicodeString &regex,
+        uint32_t             flags,
+        UErrorCode           &err) 
+{
+    UParseError pe;
+    return compile(regex, flags, pe, err); 
+}
+
+
+
 //---------------------------------------------------------------------
 //
 //   flags
@@ -280,6 +284,21 @@ uint32_t RegexPattern::flags() const {
 //---------------------------------------------------------------------
 RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
                                     UErrorCode          &status)  const {
+    RegexMatcher    *retMatcher = matcher(status);
+    if (retMatcher != NULL) {
+        retMatcher->reset(input);
+    }
+    return retMatcher;
+};
+
+
+
+//---------------------------------------------------------------------
+//
+//   matcher(status)
+//
+//---------------------------------------------------------------------
+RegexMatcher *RegexPattern::matcher(UErrorCode &status)  const {
     RegexMatcher    *retMatcher = NULL;
 
     if (U_FAILURE(status)) {
@@ -295,7 +314,6 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    retMatcher->reset(input);
     return retMatcher;
 };
 
@@ -352,96 +370,14 @@ int32_t  RegexPattern::split(const UnicodeString &input,
         int32_t          destCapacity,
         UErrorCode       &status) const
 {
-    //
-    // Check arguements for validity
-    //
     if (U_FAILURE(status)) {
         return 0;
     };
 
-    if (destCapacity < 1) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    //
-    // If we don't already have a cached matcher object from a previous call
-    //   to split(), create one now.
-    //  TODO:  NOT THREAD SAFE.   FIX.
-    //
-    if (fMatcher == NULL) {
-        RegexMatcher *m = matcher(input, status);
-        if (U_FAILURE(status)) {
-            return 0;
-        }
-        // Need to cast off const to cache the matcher
-        RegexPattern *nonConstThis = (RegexPattern *)this;
-        nonConstThis->fMatcher = m;
-    }
-
-    //
-    // Set our input text into the matcher
-    //
-    fMatcher->reset(input);
-    int32_t   inputLen = input.length();
-    int32_t   nextOutputStringStart = 0;
-    if (inputLen == 0) {
-        return 0;
-    }
-
-
-    //
-    // Loop through the input text, searching for the delimiter pattern
-    //
-    int i;
-    int32_t numCaptureGroups = fGroupMap->size();
-    for (i=0; ; i++) {
-        if (i==destCapacity-1) {
-            // There is only one output string left.
-            // Fill it with whatever is left from the input, then exit the loop.
-            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
-            break;
-        }
-        if (fMatcher->find()) {
-            // We found another delimiter.  Move everything from where we started looking
-            //  up until the start of the delimiter into the next output string.
-            int32_t fieldLen = fMatcher->fMatchStart - nextOutputStringStart;
-            dest[i].setTo(input, nextOutputStringStart, fieldLen);
-            nextOutputStringStart = fMatcher->fMatchEnd;
-
-            // If the delimiter pattern has capturing parentheses, the captured
-            //  text goes out into the next n destination strings.
-            int32_t groupNum;
-            for (groupNum=1; groupNum<=numCaptureGroups; groupNum++) {
-                if (i==destCapacity-1) {
-                    break;
-                }
-                i++;
-                dest[i] = fMatcher->group(groupNum, status);
-            }
-
-            if (nextOutputStringStart == inputLen) {
-                // The delimiter was at the end of the string.  We're done.
-                break;
-            }
-
-            if (i==destCapacity-1) {
-                // We've filled up the last output string with capture group data.
-                //  Give back the last string, to be used for the remainder of the input.
-                i--;
-            }
-        }
-        else
-        {
-            // We ran off the end of the input while looking for the next delimiter.
-            // All the remaining text goes into the current output string.
-            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
-            break;
-        }
-    }
-    return i+1;
+    RegexMatcher  m(this);
+    int32_t r = m.split(input, dest, destCapacity, status);
+    return r;
 }
-
 
 
 
@@ -489,10 +425,8 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_STRING_LEN:
     case URX_CTR_INIT:
     case URX_CTR_INIT_NG:
-    case URX_CTR_INIT_P:
     case URX_CTR_LOOP:
     case URX_CTR_LOOP_NG:
-    case URX_CTR_LOOP_P:
     case URX_RELOC_OPRND:
     case URX_STO_SP:
     case URX_LD_SP:
@@ -567,9 +501,6 @@ void   RegexPattern::dumpOp(int32_t index) const {
 
 
 
-// TODO:  get rid of max match length
-
-
 void   RegexPattern::dump() const {
     int      index;
     int      i;
@@ -580,7 +511,6 @@ void   RegexPattern::dump() const {
     }
     REGEX_DUMP_DEBUG_PRINTF("\n");
     REGEX_DUMP_DEBUG_PRINTF("   Min Match Length:  %d\n", fMinMatchLen);
-    REGEX_DUMP_DEBUG_PRINTF("   Max Match Length:  %d\n", fMaxMatchLen);
     REGEX_DUMP_DEBUG_PRINTF("   Match Start Type:  %s\n", START_OF_MATCH_STR(fStartType));   
     if (fStartType == START_STRING) {
         REGEX_DUMP_DEBUG_PRINTF("    Initial match sting: \"");
