@@ -2355,7 +2355,7 @@ TestPropertyNames(void) {
             int32_t max = 0;
             if (p == UCHAR_CANONICAL_COMBINING_CLASS) {
                 max = 255;
-            } else if (p == UCHAR_GENERAL_CATEGORY) {
+            } else if (p == UCHAR_GENERAL_CATEGORY_MASK) {
                 /* it's far too slow to iterate all the way up to
                    the real max, U_GC_P_MASK */
                 max = U_GC_NL_MASK;
@@ -2396,8 +2396,6 @@ TestPropertyNames(void) {
             } else if (p>=UCHAR_MASK_LIMIT) {
                 p = UCHAR_DOUBLE_START - 1;
             } else if (p>=UCHAR_INT_LIMIT) {
-                /* ### TODO remove this next line */
-                return;
                 p = UCHAR_MASK_START - 1;
             } else if (p>=UCHAR_BINARY_LIMIT) {
                 p = UCHAR_INT_START - 1;
@@ -2433,8 +2431,7 @@ TestPropertyValues(void) {
     }
 
     if( u_getIntPropertyMinValue(UCHAR_GENERAL_CATEGORY_MASK)!=0 ||
-        u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY_MASK)!=(int32_t)(U_MASK(U_CHAR_CATEGORY_COUNT)-1)
-    ) {
+        u_getIntPropertyMaxValue(UCHAR_GENERAL_CATEGORY_MASK)!=-1) {
         log_err("error: u_getIntPropertyMin/MaxValue(UCHAR_GENERAL_CATEGORY_MASK) is wrong\n");
     }
 
