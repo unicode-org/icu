@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.7 $
+## BEGIN of icu-config-bottom. $Revision: 1.8 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -231,7 +231,7 @@ do
 	    ;;
 
 	--ldflags-layout)
-	    echo $ICULIBS_LAYOUT
+	    echo $ICULIBS_LAYOUT $ICULIBS_LAYOUTEX
 	    ;;
 
 	--ldflags-searchpath)
