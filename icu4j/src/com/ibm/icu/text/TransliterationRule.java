@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2000/04/28 01:22:01 $ 
- * $Revision: 1.21 $
+ * $Date: 2000/05/18 21:37:19 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -38,13 +38,13 @@ import com.ibm.util.Utility;
  * copied to the output string.  The range of special characters that represent
  * segment references is defined by RuleBasedTransliterator.Data.
  *
- * <p>Example: The rule "$([a-z]$) . $([0-9]$) > $2 . $1" will change the input
+ * <p>Example: The rule "([a-z]) . ([0-9]) > $2 . $1" will change the input
  * string "abc.123" to "ab1.c23".
  *
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.21 $ $Date: 2000/04/28 01:22:01 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.22 $ $Date: 2000/05/18 21:37:19 $
  */
 class TransliterationRule {
     /**
@@ -142,11 +142,15 @@ class TransliterationRule {
      * <code>output</code>; that is, -1 is equivalent to
      * <code>output.length()</code>.  If greater than
      * <code>output.length()</code> then an exception is thrown.
+     * @param cursorOffset an offset to be added to cursorPos to position the
+     * cursor either in the ante context, if < 0, or in the post context, if >
+     * 0.
      * @param segs array of 2n integers.  Each of n pairs consists of offset,
      * limit for a segment of the input string.  Characters in the output string
      * refer to these segments if they are in a special range determined by the
      * associated RuleBasedTransliterator.Data object.  May be null if there are
-     * no segments.
+     * no segments.  The caller is responsible for validating that segments
+     * are well-formed.
      */
     public TransliterationRule(String input,
                                int anteContextPos, int postContextPos,
@@ -517,6 +521,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.22  2000/05/18 21:37:19  alan
+ * Update docs
+ *
  * Revision 1.21  2000/04/28 01:22:01  alan
  * Update syntax displayed by toString
  *
