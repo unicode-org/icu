@@ -184,6 +184,9 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestLocaleStructure,      "tsutil/cloctst/TestLocaleStructure");
     addTest(root, &TestConsistentCountryInfo,"tsutil/cloctst/TestConsistentCountryInfo");
     addTest(root, &VerifyTranslation,        "tsutil/cloctst/VerifyTranslation");
+    /*addTest(root, &MoreVariants,             "tsutil/cloctst/MoreVariants");*/
+    addTest(root, &TestKeywordVariants,      "tsutil/cloctst/TestKeywordVariants");
+    addTest(root, &TestKeywordVariantParsing,"tsutil/cloctst/TestKeywordVariantParsing");
 }
 
 
@@ -2078,4 +2081,127 @@ static void VerifyTranslation(void) {
     }
 
     ures_close(root);
+}
+
+static void MoreVariants(void) 
+{
+  struct {
+    const char *localeID;
+    const char *keyword;
+    const char *expectedValue;
+  } testCases[] = {
+    { "de_DE_EURO@collation=PHONEBOOK", "collation", "PHONEBOOK" },
+    { "es_ES.utf8@euro", "collation", ""},
+    { "es_ES.hello.utf8@euro", "", "" },
+    { " s pa c e d  _  more spaces _ spaced variant ", "", ""}
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0;
+  int32_t resultLen = 0;
+  char buffer[256];
+
+  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    *buffer = 0;
+    resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+    if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+      log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+    }
+  }
+}
+
+static void TestKeywordVariants(void) 
+{
+  struct {
+    const char *localeID;
+    const char *expectedLocaleID;
+    const char *expectedKeywords[10];
+    int32_t numKeywords;
+    UErrorCode expectedStatus;
+  } testCases[] = {
+    { "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = budhist   ", 
+      "de_DE@c alen dar=budhist;c o ll a t i o n=Phonebook;currency=euro", 
+    { "c alen dar", "c o ll a t i o n", "currency"},
+      3,
+      U_ZERO_ERROR
+    },
+    { "de_DE@euro", "de_DE_EURO", {""}, 0, U_INVALID_FORMAT_ERROR},
+    /*{ "de_DE@euro;collation=phonebook", "", "", U_INVALID_FORMAT_ERROR}*/
+  };
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0, j = 0;
+  int32_t resultLen = 0;
+  char buffer[256];
+  UEnumeration *keywords;
+  int32_t keyCount = 0;
+  const char *keyword = NULL;
+  int32_t keywordLen = 0;
+
+  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    status = U_ZERO_ERROR;
+    *buffer = 0;
+    keywords = uloc_getKeywords(testCases[i].localeID, &status);
+
+    if(status != testCases[i].expectedStatus) {
+      log_err("Expected to get status %s. Got %s instead\n", 
+        u_errorName(testCases[i].expectedStatus), u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    if(keywords) {
+      if((keyCount = uenum_count(keywords, &status)) != testCases[i].numKeywords) {
+        log_err("Expected to get %i keywords, got %i\n", testCases[i].numKeywords, keyCount);
+      }
+      if(keyCount) {
+        j = 0;
+        while(keyword = uenum_next(keywords, &keywordLen, &status)) {
+          if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
+            log_err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+          }
+          j++;
+        }
+      }
+      uenum_close(keywords);
+    }
+    resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+    if(uprv_strcmp(testCases[i].expectedLocaleID, buffer) != 0) {
+      log_err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedLocaleID, testCases[i].localeID, buffer);
+    }
+
+  }
+
+}
+
+static void TestKeywordVariantParsing(void) 
+{
+  struct {
+    const char *localeID;
+    const char *keyword;
+    const char *expectedValue;
+  } testCases[] = {
+    { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", "Phonebook" },
+    { "de_DE", "collation", ""},
+    { "de_DE@collation=PHONEBOOK", "collation", "PHONEBOOK" },
+    { "de_DE@currency = euro; CoLLaTion   = PHONEBOOk", "collatiON", "PHONEBOOk" },
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0;
+  int32_t resultLen = 0;
+  char buffer[256];
+
+  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    *buffer = 0;
+    resultLen = uloc_getKeywordValue(testCases[i].localeID, testCases[i].keyword, buffer, 256, &status);
+    if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+      log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+    }
+  }
+
+
 }
