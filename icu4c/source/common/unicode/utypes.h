@@ -391,11 +391,6 @@ typedef enum UErrorCode UErrorCode;
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
-#define U_COPYRIGHT_STRING \
-  " Copyright (C) 2001, International Business Machines Corporation and others. All Rights Reserved. "
-
-#define U_COPYRIGHT_STRING_LENGTH  128
-
 /**
  * Mutex data type.
  * @internal

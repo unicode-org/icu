@@ -21,7 +21,7 @@
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
 
-#include "unicode\utypes.h"
+#include "unicode\uversion.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //
