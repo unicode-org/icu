@@ -4,22 +4,22 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_Katakana.txt
-// Date: Mon Dec  3 11:44:30 2001
+// Date: Mon Jan 21 10:41:16 2002
 //--------------------------------------------------------------------
 
 // Latin_Katakana
 
-translit_Latin_Katakana {
+Latin_Katakana {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Latn_Kana.txt,v $
-// $Date: 2001/12/03 20:51:19 $
-// $Revision: 1.8 $
+// $Date: 2002/01/24 17:24:32 $
+// $Revision: 1.9 $
 //--------------------------------------------------------------------
 
 // note: a global filter is more efficient, but MUST include all source chars

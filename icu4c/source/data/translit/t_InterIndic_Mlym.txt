@@ -4,14 +4,14 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Malayalam.txt
-// Date: Mon Dec  3 11:44:30 2001
+// Date: Mon Jan 21 10:41:16 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Malayalam
 
-translit_InterIndic_Malayalam {
+InterIndic_Malayalam {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
