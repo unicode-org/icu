@@ -85,9 +85,9 @@ check: check-local
 all-local: $(TARGET) $(CNV_FILES)
 
 
-#install-local: all-local
-#	$(mkinstalldirs) $(sbindir)
-#	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
+install-local: all-local
+	$(mkinstalldirs) $(sbindir)
+	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 #	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
 #	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
 #		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
