@@ -14,6 +14,7 @@ LDFLAGS =$(shell icu-config --ldflags)
 LDFLAGS_USTDIO =$(shell icu-config --ldflags-ustdio)
 INVOKE=$(shell icu-config --invoke)
 GENRB=$(shell icu-config --invoke=genrb)
+GENRBOPT=--pkgname $(RESNAME)
 PKGDATA=$(shell icu-config --invoke=pkgdata)
 SO=$(shell icu-config --so)
 PKGDATAOPTS=-v -d .
