@@ -60,7 +60,7 @@ distclean clean: subdirs
 
 
 
-$(TARGET): $(OBJECTS) -lfortune_resources
+$(TARGET): $(OBJECTS)
 	$(LINK.c) -o $@ $(OBJECTS) $(ICULIBS) -L. -lfortune_resources$(ICULIBSUFFIX)
 
 
