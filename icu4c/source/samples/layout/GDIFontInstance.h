@@ -31,7 +31,7 @@ public:
         const le_int32 *dx, le_int32 x, le_int32 y, le_int32 width, le_int32 height);
 
     void setFont(const RenderingFontInstance *font);
-    HDC  getHDC();
+    HDC  getHDC() const;
     void setHDC(HDC theHDC);
 
 private:
@@ -39,7 +39,7 @@ private:
     const LEFontInstance *fCurrentFont;
 };
 
-inline HDC GDISurface::getHDC()
+inline HDC GDISurface::getHDC() const
 {
     return fHdc;
 }
