@@ -24,6 +24,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/decimfmt.h"
+#include "unicode/ucurr.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols
@@ -34,7 +35,6 @@ U_NAMESPACE_BEGIN
 const char DecimalFormatSymbols::fgClassID=0;
 
 const char DecimalFormatSymbols::fgNumberElements[] = "NumberElements";
-const char DecimalFormatSymbols::fgCurrencyElements[] = "CurrencyElements";
 
 // -------------------------------------
 // Initializes this with the decimal format symbols in the default locale.
@@ -144,41 +144,44 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         numberElements[i].fastCopyFrom(numberElementsRes.getStringEx(i, status));
     }
 
-    // Gets the currency element array.
-    ResourceBundle currencyElementsRes = resource.get(fgCurrencyElements, status);
-    int32_t currencyElementsLength = currencyElementsRes.getSize();
-    UnicodeString* currencyElements = new UnicodeString[currencyElementsLength];
-    /* test for NULL */
-    if (currencyElements == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        delete[] numberElements;
-        return;
-    }
-    for(i = 0; i<currencyElementsLength; i++) {
-        currencyElements[i].fastCopyFrom(currencyElementsRes.getStringEx(i, status));
-    }
-
     if (U_FAILURE(status)) return;
 
     // If the array size is too small, something is wrong with the resource
     // bundle, returns the failure error code.
-    if (numberElementsLength < 11 ||
-        currencyElementsLength < 3) {
+    if (numberElementsLength < 11) {
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
 
-    initialize(numberElements, currencyElements);
+    initialize(numberElements, numberElementsLength);
 
     delete[] numberElements;
-    delete[] currencyElements;
+
+    // Obtain currency data from the currency API.  This is strictly
+    // for backward compatibility; we don't use DecimalFormatSymbols
+    // for currency data anymore.
+    UErrorCode ec = U_ZERO_ERROR; // don't propagate failures out
+    const char* l = loc.getName();
+    const UChar* curriso = ucurr_forLocale(l, &ec);
+    UBool isChoiceFormat;
+    int32_t len;
+    const UChar* currname = ucurr_getName(curriso, l, UCURR_SYMBOL_NAME,
+                                          &isChoiceFormat, &len, &ec);
+    if (U_SUCCESS(ec)) {
+        fSymbols[kIntlCurrencySymbol] = curriso;
+        fSymbols[kCurrencySymbol] = isChoiceFormat ? curriso
+            : UnicodeString(currname, len);
+    } else {
+        fSymbols[kCurrencySymbol] = (UChar)0xa4; // 'OX' currency symbol
+        (fSymbols[kIntlCurrencySymbol] = (UChar)0x58).append((UChar)0x58).append((UChar)0x58); // "XXX"
+    }
 }
 
 // Initializes the DecimalFormatSymbol instance with the data obtained
 // from ResourceBundle in the desired locale.
 
 void
-DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements)
+DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t numberElementsLength)
 {
     fSymbols[kDecimalSeparatorSymbol].fastCopyFrom(numberElements[0]);
     fSymbols[kGroupingSeparatorSymbol].fastCopyFrom(numberElements[1]);
@@ -188,16 +191,9 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const Unic
     fSymbols[kDigitSymbol].fastCopyFrom(numberElements[5]);
     fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
     fSymbols[kPlusSignSymbol] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
-    fSymbols[kCurrencySymbol].fastCopyFrom(currencyElements[0]);
-    fSymbols[kIntlCurrencySymbol].fastCopyFrom(currencyElements[1]);
 
-    // if the resource data specified the empty string as the monetary decimal
-    // separator, that means we should just use the regular separator as the
-    // monetary separator
-    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(
-        currencyElements[2].length() > 0 ?
-            currencyElements[2] :
-            fSymbols[kDecimalSeparatorSymbol]);
+    // If there is a currency decimal, use it.
+    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 12 ? 11 : 0]);
 
     fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
     fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
