@@ -45,7 +45,7 @@ UTF16_BigEndian         utf-16be
 UTF16_LittleEndian      utf-16le
 UTF16_PlatformEndian    iso-10646-ucs-2 csUnicode utf16 utf-16 ibm-1200 ibm1200 cp1200 ucs-2
 UTF16_OppositeEndian
-LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1 ascii ascii-7 us-ascii 8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 #!!!!! There's whole lot of names for this - cp367 csASCII etc.
+LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1 ascii ascii-7 us-ascii 8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us cp367 csASCII ibm367 iso-8859-1:1987 l1 iso_8859_1 ansi_x3.110-1983 iso8859-1   #!!!!! There's whole lot of names for this - cp367 csASCII etc.
 ISO_2022                iso-2022 2022 cp2022 iso2022 iso_2022
 LMBCS-1                 lmbcs 
 LMBCS-2
@@ -67,22 +67,22 @@ LMBCS-19
 ebcdic-xml-us
 
 # Interchange codepages
-ibm-912                 iso-8859-2 iso_8859-2 ibm912 cp912 latin2 8859-2 csisolatin2 iso-ir-101 iso_8859-2:1987 12 # Central Europe
-ibm-913                 iso-8859-3 iso_8859-3 latin3 cp913 ibm913 8859-3 csisolatin3 iso-ir-109 iso_8859-3:1988 13 # Maltese Esperanto
-ibm-914                 iso-8859-4 iso_8859-4 latin4 cp914 ibm914 8859-4 csisolatin4 iso-ir-110 iso_8859-4:1988 14 # Baltic
-ibm-915                 iso-8859-5 iso_8859-5 cyrillic cp915 ibm915 8859-5 csisolatincyrillic iso-ir-144 iso_8859-5:1988  # Cyrillic
-ibm-1089                iso-8859-6 iso_8859-6 arabic cp1089 ibm1089 8859-6 csisolatinarabic iso-ir-127 iso_8859-6:1987 ecma-114 asmo-708   # Arabic
-ibm-4909                cp813 iso-8859-7 iso_8859-7 ibm813 cp813 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # ISO Greek (w/ euro update)
+ibm-912                 iso-8859-2 iso_8859-2 iso8859-2 ibm912 cp912 latin2 8859-2 csisolatin2 iso-ir-101 iso_8859-2:1987 l2 # Central Europe
+ibm-913                 iso-8859-3 iso_8859-3 iso8859-3 latin3 cp913 ibm913 8859-3 csisolatin3 iso-ir-109 iso_8859-3:1988 l3 # Maltese Esperanto
+ibm-914                 iso-8859-4 iso_8859-4 iso8859-4 latin4 cp914 ibm914 8859-4 csisolatin4 iso-ir-110 iso_8859-4:1988 l4 # Baltic
+ibm-915                 iso-8859-5 iso_8859-5 iso8859-5 cyrillic cp915 ibm915 8859-5 csisolatincyrillic iso-ir-144 iso_8859-5:1988 # Cyrillic
+ibm-1089                iso-8859-6 iso_8859-6 iso8859-6 arabic cp1089 ibm1089 8859-6 csisolatinarabic iso-ir-127 iso_8859-6:1987 ecma-114 asmo-708   # Arabic
+ibm-4909                cp813 iso-8859-7 iso_8859-7 iso8859-7 ibm813 cp813 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # ISO Greek (w/ euro update)
 ibm-813                 # same as 4909 (w/o euro update)
-ibm-916                 iso-8859-8 iso_8859-8 hebrew cp916 ibm916 8859-8 csisolatinhebrew iso-ir-138 iso_8859-8:1988   # hebrew iso-8859-8i - typo?
-ibm-920                 iso-8859-9 iso_8859-9 ECMA-128 latin5 cp920 ibm920 8859-9 csisolatin5 iso-ir-148  # Turkish
-ibm-923                 iso-8859-15 iso_8859-15 latin9 cp923 ibm923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
+ibm-916                 iso-8859-8 iso_8859-8 iso8859-8 hebrew cp916 ibm916 8859-8 csisolatinhebrew iso-ir-138 iso_8859-8:1988   # hebrew iso-8859-8i - typo?
+ibm-920                 iso-8859-9 iso_8859-9 iso8859-9 ECMA-128 latin5 cp920 ibm920 8859-9 csisolatin5 iso-ir-148 l5 # Turkish
+ibm-923                 iso-8859-15 iso_8859-15 iso8859-15 latin9 cp923 ibm923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
 ibm-1252                windows-1252  cp1252  ibm-1004 cp1004        # Windows Latin 1 We don't have an ibm-5348, so this is a best possible match
 ibm-943                 shift_jis csWindows31J sjis shiftjis shift-jis ibm943 cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
 ibm-949                 KS_C_5601-1987 iso-ir-149 KS_C_5601-1989 csKSC56011987 korean ibm949 ksc-5601 ksc_5601 johab ks_x_1001:1992       # KSC-5601-1992, korean
 ibm-1370                Big5 csBig5 big-5 x-big5 cp950                # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 
-ibm-1386                gb_2312-80 iso-ir-58 csISO58GB231280 gb2312-80 gbk chinese gb ibm1386 gb2312  gb2312-1980  # Chinese GBK cp936 removed
+ibm-1386                gb_2312-80 iso-ir-58 csISO58GB231280 gb2312-80 gbk chinese gb ibm1386 gb2312  gb2312-1980 cp936 zh_cn # Chinese GBK removed
 #ibm-954                euc-jp eucJP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese x-euc-jp x-eucjp  # Japan EUC Why is this one commented!!!
 ibm-970                 euc-kr euckr ibm-eucKR csEUCKR                       # Korean EUC
 #ibm-964                euc-tw euctw ibm-eucTW cns11643              # Taiwan EUC
@@ -188,7 +188,7 @@ ibm-933                ibm933 cp933 cpibm933           # Korea EBCDIC MIXED
 ibm-935                ibm935 cp935 cpibm935           # China EBCDIC MIXED 
 ibm-937                cp937 cpibm937 # Taiwan EBCDIC MIXED
 ibm-939                cp939 # Host MBCS (Latin-Kanji)
-
+#ibm-1046              # PC Arabic without EURO
 # with Euro
 ibm-1390               cpibm1390 # Japan EBCDIC MIXED
 ibm-1371               cpibm1371 # Taiwan EBCDIC MIXED
