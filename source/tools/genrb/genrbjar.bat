@@ -35,7 +35,7 @@ my $pkg = "com\\ibm\\icu\\impl\\data";
 my $javaDir = "$javaRootDir\\$pkg";
 chdir($dataDir);
 mkpath($javaDir);
-my $op = "$genrb -s. -d$javaDir -j ";
+my $op = "$genrb -s. -d$javaDir -j";
 print "Command: $op*.txt\n";
 print "Directory: $dataDir\n";
 my @list;
@@ -48,28 +48,22 @@ if (@ARGV) {
 my $count = 0;
 my $errCount = 0;
 foreach (sort @list) {
-    my $cmd = "$op $_";
-    print " $_...";
-    system($cmd);
-    my $exit_value  = $? >> 8;
-    #my $signal_num  = $? & 127;
-    #my $dumped_core = $? & 128;
-    if ($exit_value == 0) {
-        print "ok\n";
-    } else {
-        ++$errCount;
-        print "ERROR $exit_value\n";
-    }
+    cmd("$op $_", " $_...");
     ++$count;
 }
 
-print "Processed $count files, $errCount errors\n";
-if ($errCount) {
-    print "Please correct errors and retry.\n";
-    exit(1);
-}
+print "Processed $count locale file(s)\n";
 
-# Step 2.  Find %%ALIAS tags.
+# Step 2.  Create LocaleElements_index.java.
+chdir("$ICU_ROOT\\source\\data\\out\\build");
+cmd("$op res_index.txt");
+chdir($javaDir);
+my $f = "LocaleElements_index.java";
+unlink $f if (-e $f);
+rename "LocaleElements_res_index.java", $f;
+patchIndex("LocaleElements_index.java");
+
+# Step 3.  Find %%ALIAS tags.
 # Assume that it looks like this:
 #    public LocaleElements_no_NO_NY  () {
 #          contents = new Object[][] { 
@@ -106,7 +100,7 @@ foreach my $file (sort @list) {
     }
 }
 
-# Step 3.  Fix %%ALIAS tags.
+# Step 4.  Fix %%ALIAS tags.
 my %patched; # Record any locales that we patch
 foreach my $loc (sort keys %aliases) {
     # $loc is an alias of $aliases{$loc}
@@ -120,12 +114,13 @@ foreach my $loc (sort keys %aliases) {
     patchAlias($loc, $aliasee);
 }
 
-# Step 4.  Patch transliteration resources.
+# Step 5.  Patch transliteration resources.
 foreach my $file (sort @list) {
     my $hasTrans = 0;
     open(IN, $file) or die;
     while (<IN>) {
-        if (/^\s*\"Transliterate.+\"/) {
+        # Ignore files that are already patched
+        if (/^\s*\"Transliterate[^_].*\"/) {
             $hasTrans = 1;
             last;
         }
@@ -135,41 +130,51 @@ foreach my $file (sort @list) {
     patchTrans($file) if ($hasTrans);
 }
 
-# Step 5.  Compile .java files
+# Step 6.  Compile .java files
 my $cmd = "javac -classpath $ICU4J_ROOT\\classes;$javaRootDir;%CLASSPATH% $pkg\\*.java";
 chdir($javaRootDir);
-print "Command: $cmd\n";
-print "Directory: $javaRootDir\n";
 print "Compiling .java files..";
-system($cmd);
-my $exit_value  = $? >> 8;
-#my $signal_num  = $? & 127;
-#my $dumped_core = $? & 128;
-if ($exit_value == 0) {
-    print "ok\n";
-} else {
-    ++$errCount;
-    print "ERROR $exit_value\n";
-    print "Please correct problem and retry.\n";
-    exit(1);
-}
+print "Directory: $javaRootDir\n";
+cmd($cmd);
 
-# Step 6.  Create .jar file.  Since we don't yet generate correct
-# CollationElement_*.res files, leave those as they are.
+# Step 7.  Create .jar file.  Since we don't yet generate correct
+# CollationElement_*.res files, leave those as they are.  Do a
+# "jar u" -- update the existing file.
 my $jarFile = "$ICU4J_ROOT\\src\\$pkg\\ICULocaleData.jar";
-my $cmd = "jar cvf $jarFile $pkg\\*.class $pkg\\*.ucs";
+my $cmd = "jar uf $jarFile $pkg\\*.class $pkg\\*.ucs";
 # Do jar command
-print "Command: $cmd\n";
 print "Directory: $javaRootDir\n";
 chdir($javaRootDir);
 if (! -e "$jarFile.orig") {
-    system('copy', $jarFile, "$jarFile.orig");
+    cmd("copy $jarFile $jarFile.orig");
 }
-system($cmd);
+cmd($cmd);
 
 # Done!
 print "All done.\n";
 exit(0);
+
+#-----------------------------------------------------------------------
+# Execute a command
+# Param: Command
+# Param: Display line, or '' to display command
+sub cmd {
+    my $cmd = shift;
+    my $prompt = shift;
+    $prompt = "Command: $cmd.." unless ($prompt);
+    print $prompt;
+    system($cmd);
+    my $exit_value  = $? >> 8;
+    #my $signal_num  = $? & 127;
+    #my $dumped_core = $? & 128;
+    if ($exit_value == 0) {
+        print "ok\n";
+    } else {
+        ++$errCount;
+        print "ERROR ($exit_value)\n";
+        exit(1);
+    }
+}
 
 #-----------------------------------------------------------------------
 # Patch the file that an %%ALIAS tag points to
@@ -240,7 +245,9 @@ sub patchTrans {
     open(IN, $file) or die;
     open(OUT, ">$file.new") or die;
     while (<IN>) {
-        s/^(\s*\"Transliterate)(.+?\")/$1_$2/;
+        # This should look like "TransliterateFOO" but if underscores
+        # have crept in, ignore them.
+        s/^(\s*\"Transliterate)_*(.+?\")/$1_$2/;
         print OUT;
     }
     close(IN);
@@ -248,6 +255,23 @@ sub patchTrans {
     unlink($file);
     rename("$file.new", $file);
     print " $file patched (trans)\n";
+}
+
+#-----------------------------------------------------------------------
+# Patch the index file, renaming res_index to index
+sub patchIndex {
+    my $file = shift;
+    open(IN, $file) or die;
+    open(OUT, ">$file.new") or die;
+    while (<IN>) {
+        s/res_(index)/$1/;
+        print OUT;
+    }
+    close(IN);
+    close(OUT);
+    unlink($file);
+    rename("$file.new", $file);
+    print " $file patched (index)\n";
 }
 
 #-----------------------------------------------------------------------
