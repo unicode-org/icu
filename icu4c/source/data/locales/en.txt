@@ -10,7 +10,7 @@ en {
     collations {
         standard { 
             Version { "1.0" }
-            Sequence { "&A<<<\u00c6/E &a<<<\u00e6/e" }
+            Sequence { "&A<<\u00c6/E &a<<\u00e6/e" }
         }
     }
     Countries {
