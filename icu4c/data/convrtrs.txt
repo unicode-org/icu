@@ -63,6 +63,9 @@ LMBCS-19
 
 # Table-based
 
+# Special mapping for S/390 new line characters
+ebcdic-xml-us
+
 # Interchange codepages
 ibm-912                 iso-8859-2 iso_8859-2 ibm912 cp912 latin2 8859-2 csisolatin2 iso-ir-101 iso_8859-2:1987 12 # Central Europe
 ibm-913                 iso-8859-3 iso_8859-3 latin3 cp913 ibm913 8859-3 csisolatin3 iso-ir-109 iso_8859-3:1988 13 # Maltese Esperanto
