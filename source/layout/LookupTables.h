@@ -36,14 +36,14 @@ struct LookupTable
 
 struct LookupSegment
 {
-    le_int16 lastGlyph;
-    le_int16 firstGlyph;
+    TTGlyphID   lastGlyph;
+    TTGlyphID   firstGlyph;
     LookupValue value;
 };
 
 struct LookupSingle
 {
-    le_int16 glyph;
+    TTGlyphID   glyph;
     LookupValue value;
 };
 
@@ -55,9 +55,9 @@ struct BinarySearchLookupTable : LookupTable
     le_int16 entrySelector;
     le_int16 rangeShift;
 
-    const LookupSegment *lookupSegment(const LookupSegment *segments, le_uint32 glyph) const;
+    const LookupSegment *lookupSegment(const LookupSegment *segments, LEGlyphID glyph) const;
 
-    const LookupSingle *lookupSingle(const LookupSingle *entries, le_uint32 glyph) const;
+    const LookupSingle *lookupSingle(const LookupSingle *entries, LEGlyphID glyph) const;
 };
 
 struct SimpleArrayLookupTable : LookupTable
@@ -82,8 +82,8 @@ struct SingleTableLookupTable : BinarySearchLookupTable
 
 struct TrimmedArrayLookupTable : LookupTable
 {
-    le_int16 firstGlyph;
-    le_int16 glyphCount;
+    TTGlyphID   firstGlyph;
+    TTGlyphID   glyphCount;
     LookupValue valueArray[ANY_NUMBER];
 };
 

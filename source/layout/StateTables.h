@@ -40,7 +40,7 @@ typedef le_uint8 ClassCode;
 
 struct ClassTable
 {
-    LEGlyphID firstGlyph;
+    TTGlyphID firstGlyph;
     le_uint16 nGlyphs;
     ClassCode classArray[ANY_NUMBER];
 };

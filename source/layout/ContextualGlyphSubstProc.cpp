@@ -46,16 +46,16 @@ ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *gl
 
     if (markOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + markOffset * 2);
-        le_int16 newGlyph = table[glyphs[markGlyph]];
+        TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(glyphs[markGlyph])]);
 
-         glyphs[markGlyph] = SWAPW(newGlyph);
+         glyphs[markGlyph] = LE_SET_GLYPH(glyphs[markGlyph], newGlyph);
     }
 
     if (currOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + currOffset * 2);
-        le_int16 newGlyph = table[glyphs[currGlyph]];
+        le_int16 newGlyph = SWAPW(table[LE_GET_GLYPH(glyphs[currGlyph])]);
 
-        glyphs[currGlyph] = SWAPW(newGlyph);
+        glyphs[currGlyph] = LE_SET_GLYPH(glyphs[currGlyph], newGlyph);
     }
 
     if (flags & cgsSetMark) {

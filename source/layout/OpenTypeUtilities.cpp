@@ -18,39 +18,33 @@ U_NAMESPACE_BEGIN
 //
 le_int8 OpenTypeUtilities::highBit(le_int32 value)
 {
-    if (value <= 0)
-    {
+    if (value <= 0) {
         return -32;
     }
 
     le_uint8 bit = 0;
 
-    if (value >= 1 << 16)
-    {
+    if (value >= 1 << 16) {
         value >>= 16;
         bit += 16;
     }
 
-    if (value >= 1 << 8)
-    {
+    if (value >= 1 << 8) {
         value >>= 8;
         bit += 8;
     }
 
-    if (value >= 1 << 4)
-    {
+    if (value >= 1 << 4) {
         value >>= 4;
         bit += 4;
     }
 
-    if (value >= 1 << 2)
-    {
+    if (value >= 1 << 2) {
         value >>= 2;
         bit += 2;
     }
 
-    if (value >= 1 << 1)
-    {
+    if (value >= 1 << 1) {
         value >>= 1;
         bit += 1;
     }
@@ -66,30 +60,26 @@ Offset OpenTypeUtilities::getTagOffset(LETag tag, const TagAndOffsetRecord *reco
     le_int32 probe = power;
     le_int32 index = 0;
 
-    if (SWAPT(records[extra].tag) <= tag)
-    {
+    if (SWAPT(records[extra].tag) <= tag) {
         index = extra;
     }
 
-    while (probe > (1 << 0))
-    {
+    while (probe > (1 << 0)) {
         probe >>= 1;
 
-        if (SWAPT(records[index + probe].tag) <= tag)
-        {
+        if (SWAPT(records[index + probe].tag) <= tag) {
             index += probe;
         }
     }
 
-    if (SWAPT(records[index].tag) == tag)
-    {
+    if (SWAPT(records[index].tag) == tag) {
         return SWAPW(records[index].offset);
     }
 
     return 0;
 }
 
-le_int32 OpenTypeUtilities::getGlyphRangeIndex(LEGlyphID glyphID, const GlyphRangeRecord *records, le_int32 recordCount)
+le_int32 OpenTypeUtilities::getGlyphRangeIndex(TTGlyphID glyphID, const GlyphRangeRecord *records, le_int32 recordCount)
 {
     le_uint8 bit = highBit(recordCount);
     le_int32 power = 1 << bit;
@@ -97,23 +87,19 @@ le_int32 OpenTypeUtilities::getGlyphRangeIndex(LEGlyphID glyphID, const GlyphRan
     le_int32 probe = power;
     le_int32 range = 0;
 
-    if (SWAPW(records[extra].firstGlyph) <= glyphID)
-    {
+    if (SWAPW(records[extra].firstGlyph) <= glyphID) {
         range = extra;
     }
 
-    while (probe > (1 << 0))
-    {
+    while (probe > (1 << 0)) {
         probe >>= 1;
 
-        if (SWAPW(records[range + probe].firstGlyph) <= glyphID)
-        {
+        if (SWAPW(records[range + probe].firstGlyph) <= glyphID) {
             range += probe;
         }
     }
 
-    if (SWAPW(records[range].firstGlyph) <= glyphID && SWAPW(records[range].lastGlyph) >= glyphID)
-    {
+    if (SWAPW(records[range].firstGlyph) <= glyphID && SWAPW(records[range].lastGlyph) >= glyphID) {
         return range;
     }
 

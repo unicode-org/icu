@@ -29,15 +29,15 @@ struct LigatureSetTable
 
 struct LigatureTable
 {
-    LEGlyphID ligGlyph;
+    TTGlyphID ligGlyph;
     le_uint16 compCount;
-    LEGlyphID componentArray[ANY_NUMBER];
+    TTGlyphID componentArray[ANY_NUMBER];
 };
 
 struct LigatureSubstitutionSubtable : GlyphSubstitutionSubtable
 {
-    le_uint16  ligSetCount;
-    Offset  ligSetTableOffsetArray[ANY_NUMBER];
+    le_uint16 ligSetCount;
+    Offset    ligSetTableOffsetArray[ANY_NUMBER];
 
     le_uint32  process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
 };

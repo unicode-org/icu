@@ -100,13 +100,127 @@ typedef UBool le_bool;
 typedef le_uint32 LETag;
 
 /**
- * Used for glyph indices.
+ * Ued for 16-bit glyph indices as they're represented
+ * in TrueType font tables.
  *
- * (NOTE: this will likely change to le_uint32)
- *
- * @draft ICU 2.4
+ * @draft ICU 2.6
  */
-typedef le_uint16 LEGlyphID;
+typedef le_uint16 TTGlyphID;
+
+/**
+ * Used for glyph indices. The low-order 16 bits are
+ * the glyph ID within the font. The next 8 bits are
+ * the sub-font ID within a compound font. The high-
+ * order 8 bits are client defined. The LayoutEngine
+ * will never change or look at these bits.
+ *
+ * @draft ICU 2.6
+ */
+typedef le_uint32 LEGlyphID;
+
+/**
+ * Used to mask off the glyph ID part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_GLYPH_MASK     0x0000FFFF
+
+/**
+ * Used to shift the glyph ID part of an LEGlyphID
+ * intto the low-order bits.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_GLYPH_SHIFT    0
+
+
+/**
+ * Used to mask off the sub-font ID part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_SUB_FONT_MASK  0x00FF0000
+
+/**
+ * Used to shift the sub-font ID part of an LEGlyphID
+ * intto the low-order bits.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_SUB_FONT_SHIFT 16
+
+
+/**
+ * Used to mask off the client-defined part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_CLIENT_MASK    0xFF000000
+
+/**
+ * Used to shift the sub-font ID part of an LEGlyphID
+ * intto the low-order bits.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_CLIENT_SHIFT   24
+
+
+/**
+ * A convenience macro to get the Glyph ID part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_GET_GLYPH(gid) ((gid & LE_GLYPH_MASK) >> LE_GLYPH_SHIFT)
+
+/**
+ * A convenience macro to get the sub-font ID part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_GET_SUB_FONT(gid) ((gid & LE_SUB_FONT_MASK) >> LE_SUB_FONT_SHIFT)
+
+/**
+ * A convenience macro to get the client-defined part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_GET_CLIENT(gid) ((gid & LE_CLIENT_MASK) >> LE_CLIENT_SHIFT)
+
+
+/**
+ * A convenience macro to set the Glyph ID part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_SET_GLYPH(gid, glyph) ((gid & ~LE_GLYPH_MASK) | ((glyph << LE_GLYPH_SHIFT) & LE_GLYPH_MASK))
+
+/**
+ * A convenience macro to set the sub-font ID part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_SET_SUB_FONT(gid, font) ((gid & ~LE_SUB_FONT_MASK) | ((font << LE_SUB_FONT_SHIFT) & LE_SUB_FONT_MASK))
+
+/**
+ * A convenience macro to set the client-defined part of an LEGlyphID.
+ *
+ * @see LEGlyphID
+ * @draft ICU 2.6
+ */
+#define LE_SET_CLIENT(gid, client) ((gid & ~LE_CLIENT_MASK) | ((client << LE_CLIENT_SHIFT) & LE_CLIENT_MASK))
+
 
 /**
  * Used to represent 16-bit Unicode code points.

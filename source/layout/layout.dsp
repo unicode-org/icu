@@ -827,8 +827,8 @@ SOURCE=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\unicode
 
 # End Custom Build
 
@@ -837,8 +837,8 @@ InputPath=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\unicode
 
 # End Custom Build
 
@@ -847,8 +847,8 @@ InputPath=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\unicode
 
 # End Custom Build
 
@@ -857,8 +857,8 @@ InputPath=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\unicode
 
 # End Custom Build
 

@@ -227,7 +227,7 @@ TT_Raster_Map *GnomeFontInstance::rasterizeGlyphs(const LEGlyphID *glyphs, le_in
     TT_Error error;
 
     for (i = 0; i < glyphCount; i += 1) {
-        error = TT_Load_Glyph(fInstance, fGlyph, glyphs[i], TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH);
+        error = TT_Load_Glyph(fInstance, fGlyph, (TT_Glyph) LE_GET_GLYPH(glyphs[i]), TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH);
         if (error == 0) {
             TT_Get_Glyph_Metrics(fGlyph, &metrics);
 
@@ -282,7 +282,7 @@ TT_Raster_Map *GnomeFontInstance::rasterizeGlyphs(const LEGlyphID *glyphs, le_in
 
     for (i = 0; i < glyphCount; i += 1) {
         if (glyphs[i] < 0xFFFE) {
-            error = TT_Load_Glyph(fInstance, fGlyph, glyphs[i], TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH);
+            error = TT_Load_Glyph(fInstance, fGlyph, (TT_Glyph) LE_GET_GLYPH(glyphs[i]), TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH);
         
             if (error == 0) {
                 TT_Get_Glyph_Bitmap(fGlyph, raster, xx, yy);
