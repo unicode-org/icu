@@ -61,6 +61,7 @@ public:
     void TestIDNAMonkeyTest();
     void TestConformance();
 
+    static NamePrepTransform* getInstance(UErrorCode& status);
     static NamePrepTransform* prep;
 private:
     void testToASCII(const char* testName, TestFunc func);

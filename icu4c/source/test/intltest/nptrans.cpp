@@ -28,16 +28,12 @@
 
 const char NamePrepTransform::fgClassID=0;
 
-NamePrepTransform* NamePrepTransform::transform = NULL;
-
 //Factory method
 NamePrepTransform* NamePrepTransform::createInstance(UParseError& parseError, UErrorCode& status){
-    if(transform==NULL){
-        transform = new NamePrepTransform(parseError, status);
-        if(U_FAILURE(status)){
-            delete transform;
-            return NULL;
-        }
+    NamePrepTransform* transform = new NamePrepTransform(parseError, status);
+    if(U_FAILURE(status)){
+        delete transform;
+        return NULL;
     }
     return transform;
 }
