@@ -1,4 +1,4 @@
-#!perl
+#!/bin/perl -w
 #  ********************************************************************
 #  * COPYRIGHT:
 #  * Copyright (c) 2002, International Business Machines Corporation and
@@ -25,23 +25,33 @@
 # appear in a future version of Unicode, modify this script to support
 # that.
 #
+# NOTE: As of ICU 2.6, this script has been modified to know about the
+# pseudo-property gcm/General_Category_Mask, which corresponds to the
+# uchar.h property UCHAR_GENERAL_CATEGORY_MASK.  This property
+# corresponds to General_Category but is a bitmask value.  It does not
+# exist in the UCD.  Therefore, I special case it in several places
+# (search for General_Category_Mask and gcm).
+#
 # Author: Alan Liu
 # Created: October 14 2002
 # Since: ICU 2.4
 
 use FileHandle;
 use strict;
+use Dumpvalue;
 
 my $DEBUG = 0;
+my $DUMPER = new Dumpvalue;
 
 my $count = @ARGV;
-my $ICU_DIR = shift();
-my $OUT_FILE = shift();
+my $ICU_DIR = shift() || '';
+my $OUT_FILE = shift() || 'data.h';
 my $HEADER_DIR = "$ICU_DIR/source/common/unicode";
 my $UNIDATA_DIR = "$ICU_DIR/source/data/unidata";
 
+#----------------------------------------------------------------------
 # Top level property keys for binary, enumerated, string, and double props
-my @TOP     = qw( _bp _ep _sp _dp );
+my @TOP     = qw( _bp _ep _sp _dp _mp );
 
 # This hash governs how top level properties are grouped into output arrays.
 #my %TOP_PROPS = ( "VALUED"   => [ '_bp', '_ep' ],
@@ -50,17 +60,19 @@ my @TOP     = qw( _bp _ep _sp _dp );
 #                  "ENUMERATED" => [ '_ep' ],
 #                  "STRING" => [ '_sp' ],
 #                  "DOUBLE" => [ '_dp' ] );
-my %TOP_PROPS = ( ""   => [ '_bp', '_ep', '_sp', '_dp' ] );
+my %TOP_PROPS = ( ""   => [ '_bp', '_ep', '_sp', '_dp', '_mp' ] );
 
-my %PROPTYPE = (Binary => "_bp",
-                String => "_sp",
-                Double => "_dp",
-                Enumerated => "_ep");
+my %PROP_TYPE = (Binary => "_bp",
+                 String => "_sp",
+                 Double => "_dp",
+                 Enumerated => "_ep",
+                 Bitmask => "_mp");
+#----------------------------------------------------------------------
 
 # Emitted class names
 my ($STRING_CLASS, $ALIAS_CLASS, $PROPERTY_CLASS) = qw(AliasName Alias Property);
 
-if ($count != 2 ||
+if ($count < 1 || $count > 2 ||
     !-d $HEADER_DIR ||
     !-d $UNIDATA_DIR) {
     my $me = $0;
@@ -73,7 +85,7 @@ $lm  a C header file that is included by genpname.  The header
 $lm  file matches constants defined in the ICU4C headers with
 $lm  property|value aliases in the Unicode data files.
 
-Usage: $me <icu_dir> <out_file>
+Usage: $me <icu_dir> [<out_file>]
 
 <icu_dir>   ICU4C root directory, containing
                source/common/unicode/uchar.h
@@ -81,7 +93,8 @@ Usage: $me <icu_dir> <out_file>
                source/data/unidata/Blocks.txt
                source/data/unidata/PropertyAliases.txt
                source/data/unidata/PropertyValueAliases.txt
-<out_file>  File name of header to be written
+<out_file>  File name of header to be written;
+            default is 'data.h'.
 
 The Unicode versions of all input files must match.
 END
@@ -230,14 +243,23 @@ END
     # Build name group list and replace string refs with nameGroup indices
     my @nameGroups;
     
+    # Check for duplicate name groups, and reuse them if possible
+    my %groupToInt; # Map group strings to ints
     for my $prop (sort keys %$h) {
         my $hh = $h->{$prop};
         for my $enum (sort keys %$hh) {
-            my @names = split(/\|/, $hh->{$enum});
-            die "Error: Wrong number of names in " . $hh->{$enum} if (@names != 2);
-            my $i = @nameGroups; # index of group we are making 
-            push @nameGroups, map { $stringToID{$_} } @names;
-            $nameGroups[$#nameGroups] = -$nameGroups[$#nameGroups]; # mark end
+            my $groupString = $hh->{$enum};
+            my $i;
+            if (exists $groupToInt{$groupString}) {
+                $i = $groupToInt{$groupString};
+            } else {
+                my @names = split(/\|/, $groupString);
+                die "Error: Wrong number of names in " . $groupString if (@names != 2);
+                $i = @nameGroups; # index of group we are making 
+                $groupToInt{$groupString} = $i; # Cache for reuse
+                push @nameGroups, map { $stringToID{$_} } @names;
+                $nameGroups[$#nameGroups] = -$nameGroups[$#nameGroups]; # mark end
+            }
             # now, replace string list with ref to name group
             $hh->{$enum} = $i;
         }
@@ -495,7 +517,7 @@ sub merge_PropertyAliases {
     for my $subh (map { $h->{$_} } @TOP) {
         for my $enum (keys %$subh) {
             my $name = $subh->{$enum};
-            die "Error: Property $name not found"
+            die "Error: Property $name not found (or used more than once)"
                 unless (exists $pa->{$name});
 
             $subh->{$enum} = $pa->{$name} . "|" . $name;
@@ -522,15 +544,19 @@ sub merge_PropertyAliases {
 sub merge_PropertyValueAliases {
     my ($h, $va) = @_;
 
+    my %gcCount;
     for my $prop (keys %$h) {
         # blk handled in merge_Blocks
         # _bp, _ep handled in merge_PropertyAliases
         next if ($prop eq 'blk' || $prop =~ /^_/);
 
+        # Special case: gcm
+        my $prop2 = ($prop eq 'gcm') ? 'gc' : $prop;
+
         # find corresponding PropertyValueAliases data
         die "Error: Can't find $prop in PropertyValueAliases.txt"
-            unless (exists $va->{$prop});
-        my $pva = $va->{$prop};
+            unless (exists $va->{$prop2});
+        my $pva = $va->{$prop2};
 
         # match up data
         my $hh = $h->{$prop};
@@ -564,7 +590,13 @@ sub merge_PropertyValueAliases {
             $r = '' if ($r =~ m|^n/a\d+$|);
 
             $hh->{$enum} = "$l|$r";
-            delete $pva->{$n};
+            # Don't delete the 'gc' properties because we need to share
+            # them between 'gc' and 'gcm'.  Count each use instead.
+            if ($prop2 eq 'gc') {
+                ++$gcCount{$n};
+            } else {
+                delete $pva->{$n};
+            }
         }
     }
 
@@ -590,6 +622,12 @@ sub merge_PropertyValueAliases {
     for my $prop (sort keys %$va) {
         my $hh = $va->{$prop};
         for my $subkey (sort keys %$hh) {
+            # 'gc' props are shared with 'gcm'; make sure they were used
+            # once or twice.
+            if ($prop eq 'gc') {
+                my $n = $gcCount{$subkey};
+                next if ($n >= 1 && $n <= 2);
+            }
             $err .= "Warning: Enum for value $prop:$subkey not found in uchar.h\n";
         }
     }
@@ -650,8 +688,11 @@ sub read_PropertyAliases {
 
     $in->close();
 
-    $hash->{'_family'} = $fam;
+    # Special case: gcm
+    $hash->{'General_Category_Mask'} = 'gcm';
+    $fam->{'General_Category_Mask'} = 'Bitmask';
 
+    $hash->{'_family'} = $fam;
     $hash;
 }
 
@@ -858,7 +899,8 @@ sub read_uscript {
 # @param a filename for uchar.h
 #
 # @return a ref to a hash.  The keys of the hash are '_bp' for binary
-# properties, '_ep' for enumerated properties, and 'gc', 'bc', 'blk',
+# properties, '_ep' for enumerated properties, '_dp'/'_sp'/'_mp' for
+# double/string/mask properties, and 'gc', 'gcm', 'bc', 'blk',
 # 'ea', 'dt', 'jt', 'jg', 'lb', or 'nt' for corresponding property
 # value aliases.  The values of the hash are subhashes.  The subhashes
 # have a key of the uchar.h enum symbol, and a value of the alias
@@ -916,14 +958,26 @@ sub read_uchar {
             elsif (m|^\s*/\*\*\s*(\w+)\s+property\s+(\w+)|i) {
                 die "Error: Unmatched tag $submode" if ($submode);
                 die "Error: Unrecognized UProperty comment: $_"
-                    unless (exists $PROPTYPE{$1});
-                $key = $PROPTYPE{$1};
+                    unless (exists $PROP_TYPE{$1});
+                $key = $PROP_TYPE{$1};
                 $submode = $2;
             }
         }
 
         elsif ($mode eq 'UCharCategory') {
-            # We don't use these; we use the U_GC_\w+?_MASK #defines
+            if (/^\s*(U_\w+)\s*=/) {
+                if ($submode) {
+                    addDatum($hash, 'gc', $1, $submode);
+                    $submode = '';
+                } else {
+                    #print "Warning: Ignoring $1\n";
+                }
+            }
+
+            elsif (m|^\s*/\*\*\s*([A-Z][a-z])\s|) {
+                die "Error: Unmatched tag $submode" if ($submode);
+                $submode = $1;
+            }
         }
 
         elsif ($mode eq 'UCharDirection') {
@@ -1009,7 +1063,7 @@ sub read_uchar {
                 }
 
                 elsif ($left =~ /U_GC_(\w+?)_MASK/) {
-                    addDatum($hash, 'gc', $left, $1);
+                    addDatum($hash, 'gcm', $left, $1);
                 }
             }
 
