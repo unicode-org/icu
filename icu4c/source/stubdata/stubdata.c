@@ -28,15 +28,17 @@ typedef struct {
     UDataInfo info;
     char padding[8];
     uint32_t count, reserved;
-//    const struct {
-//      const char *const name; 
-//      const void *const data;
-//    } toc[1];
-   int   fakeNameAndData[4];       // TODO:  Change this header type from
-                                   //        pointerTOC to OffsetTOC.
-} ICU_Data_Heaser;;
+	/*
+    const struct {
+    const char *const name; 
+    const void *const data;
+    } toc[1];
+	*/
+   int   fakeNameAndData[4];       /* TODO:  Change this header type from */
+                                   /*        pointerTOC to OffsetTOC.     */
+} ICU_Data_Header;
 
-U_EXPORT const ICU_Data_Heaser U_EXPORT2 U_ICUDATA_ENTRY_POINT = {
+U_EXPORT const ICU_Data_Header U_EXPORT2 U_ICUDATA_ENTRY_POINT = {
     32,          /* headerSize */
     0xda,        /* magic1,  (see struct MappedData in udata.c)  */
     0x27,        /* magic2     */

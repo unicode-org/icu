@@ -38,7 +38,7 @@ LIB_ICUDATA_NAME=lib$(ICUDATA_NAME)
 SPECIALTESTDATA=test1.cnv test3.cnv test4.cnv
 TESTDATAOBJDIR=../test/testdata
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$(top_builddir_from_tmp)/stubdata:$$$(LDLIBRARYPATH_ENVVAR)
 CURDIR=$(shell pwd)
 PKGDATA = $(top_builddir_from_tmp)/tools/pkgdata/pkgdata -O $(top_builddir_from_tmp)/tools/pkgdata/icupkg.inc -d $(CURDIR) -m $(PKGDATA_MODE) 
 
@@ -104,7 +104,10 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 packagedata: build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
-	( cd build ; $(INVOKE) $(PKGDATA) -e $(ICUDATA_NAME) -s . -T . -p $(ICUDATA_NAME) icudata.lst )
+	( cd build ; \
+	$(INVOKE) $(PKGDATA) -e $(ICUDATA_NAME) -s . -T . -p $(ICUDATA_NAME) icudata.lst ; \
+	)
+	$(RM) libicudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) libicudata.$(SO) ; \
 
 packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata testdata.lst )

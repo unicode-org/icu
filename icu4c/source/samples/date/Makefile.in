@@ -39,7 +39,7 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_bilddir)/source/data:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
 
 OBJECTS = uprint.o date.o

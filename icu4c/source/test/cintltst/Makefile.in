@@ -46,7 +46,7 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/ctestfw:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/ctestfw:$(top_builddir)/tools/toolutil:$(top_builddir)/data:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
 
 OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o		\
@@ -58,7 +58,7 @@ cnmdptst.o cnormtst.o cnumtst.o cregrtst.o crestst.o creststn.o cturtst.o		\
 cucdtst.o cutiltst.o encoll.o nucnvtst.o susctest.o nccbtst.o \
 cbiditst.o cbididat.o eurocreg.o udatatst.o utf16tst.o utransts.o \
 ncnvfbts.o ncnvtst.o putiltst.o cstrtest.o mstrmtst.o utf8tst.o ucmptst.o \
-ucmpetst.o stdnmtst.o
+stdnmtst.o ucmpetst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -93,7 +93,7 @@ distclean-local: clean-local
 -include Makefile.local
 
 check-local: all-local
-	ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT $(INVOKE) ./$(TARGET) $(CINTLTEST_OPTS)
+	TZ=PST8PDT $(INVOKE) ./$(TARGET) $(CINTLTEST_OPTS)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
