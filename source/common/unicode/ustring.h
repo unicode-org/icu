@@ -657,4 +657,159 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
               uint32_t options,
               UErrorCode *pErrorCode);
 
+/**
+ * Converts a sequence of UChars to wchar_t units.
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Must be a valid pointer to an error code value,
+ *                      which must not indicate a failure before the function call.
+ * @retrun The pointer to destination buffer.
+ */
+
+U_CAPI wchar_t* U_EXPORT2
+u_strToWCS(wchar_t *dest, 
+           int32_t destCapacity,
+           int32_t *pDestLength,
+           const UChar *src, 
+           int32_t srcLength,
+           UErrorCode *pErrorCode);
+/**
+ * Converts a sequence of wchar_t units to UChars
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Must be a valid pointer to an error code value,
+ *                      which must not indicate a failure before the function call.
+ * @retrun The pointer to destination buffer.
+ */
+U_CAPI UChar* U_EXPORT2
+u_strFromWCS(UChar   *dest,
+             int32_t destCapacity, 
+             int32_t *pDestLength,
+             const wchar_t *src,
+             int32_t srcLength,
+             UErrorCode *pErrorCode);
+/**
+ * Converts a sequence of UChars (UTF-16) to UTF-8 bytes
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Must be a valid pointer to an error code value,
+ *                      which must not indicate a failure before the function call.
+ * @retrun The pointer to destination buffer.
+ */
+U_CAPI uint8_t* U_EXPORT2 
+u_strToUTF8(uint8_t *dest,           
+            int32_t destCapacity,
+            int32_t *pDestLength,
+            const UChar *src, 
+            int32_t srcLength,
+            UErrorCode *pErrorCode);
+
+/**
+ * Converts a sequence of UTF-8 bytes to UChars (UTF-16).
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Must be a valid pointer to an error code value,
+ *                      which must not indicate a failure before the function call.
+ * @retrun The pointer to destination buffer.
+ */
+U_CAPI UChar* U_EXPORT2
+u_strFromUTF8(UChar *dest,             
+              int32_t destCapacity,
+              int32_t *pDestLength,
+              const uint8_t *src, 
+              int32_t srcLength,
+              UErrorCode *pErrorCode);
+
+/**
+ * Converts a sequence of UTF32 units to UChars
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Must be a valid pointer to an error code value,
+ *                      which must not indicate a failure before the function call.
+ * @retrun The pointer to destination buffer.
+ */
+U_CAPI uint32_t* U_EXPORT2 
+u_strToUTF32(uint32_t *dest, 
+             int32_t  destCapacity,
+             int32_t  *pDestLength,
+             const UChar *src, 
+             int32_t  srcLength,
+             UErrorCode *pErrorCode);
+
+/**
+ * Converts a sequence of UChars to UTF32 units.
+ *
+ * @param dest          A buffer for the result string. The result will be zero-terminated if
+ *                      the buffer is large enough.
+ * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ *                      dest may be NULL and the function will only return the length of the 
+ *                      result without writing any of the result string (pre-flighting).
+ * @param pDestLength   A pointer to receive the number of units written to the destination. If 
+ *                      pDestLength!=NULL then *pDestLength is always set to the 
+ *                      number of output units corresponding to the transformation of 
+ *                      all the input units, even in case of a buffer overflow.
+ * @param src           The original source string
+ * @param srcLength     The length of the original string. If -1, then src must be zero-terminated.
+ * @param pErrorCode    Must be a valid pointer to an error code value,
+ *                      which must not indicate a failure before the function call.
+ * @retrun The pointer to destination buffer.
+ */
+U_CAPI UChar* U_EXPORT2 
+u_strFromUTF32(UChar   *dest,
+               int32_t destCapacity, 
+               int32_t *pDestLength,
+               const uint32_t *src,
+               int32_t srcLength,
+               UErrorCode *pErrorCode);
+
 #endif
