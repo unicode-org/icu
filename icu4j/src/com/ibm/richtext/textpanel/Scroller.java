@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: Scroller.java,v $ $Revision: 1.2 $ $Date: 2000/05/10 21:54:57 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -140,7 +140,8 @@ final class Scroller implements AdjustmentListener
             scrollbar.setMinimum(minimum);
             scrollbar.setMaximum(maximum);
             scrollbar.setVisibleAmount(visible);
-            scrollbar.setBlockIncrement(visible-DEFAULT_UNIT_INC);
+	    // workaround setBlockIncrement warnings for negative increments
+	    scrollbar.setBlockIncrement(Math.max(0, visible - DEFAULT_UNIT_INC));
         }
     }
 
@@ -185,8 +186,8 @@ final class Scroller implements AdjustmentListener
     public void setHorizPageOverlap(int newOverlap)
     {
         if (fHorizScrollBar != null) {
-            fHorizScrollBar.setBlockIncrement(
-                    fHorizScrollBar.getVisibleAmount()-newOverlap);
+            fHorizScrollBar.setBlockIncrement( // workaround warnings for negative values on linux
+                    Math.max(0, fHorizScrollBar.getVisibleAmount()-newOverlap));
         }
     }
 
@@ -200,8 +201,8 @@ final class Scroller implements AdjustmentListener
     public void setVertPageOverlap(int newOverlap)
     {
         if (fVertScrollBar != null) {
-            fVertScrollBar.setBlockIncrement(
-                    fVertScrollBar.getVisibleAmount()-newOverlap);
+            fVertScrollBar.setBlockIncrement( // workaround warnings for negative values on linux
+                    Math.max(0, fVertScrollBar.getVisibleAmount()-newOverlap));
         }
     }
 }
