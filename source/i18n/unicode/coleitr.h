@@ -277,14 +277,14 @@ public:
    *
    * @draft ICU 2.2
    */
-  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+  virtual inline UClassID getDynamicClassID() const;
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    *
    * @draft ICU 2.2
    */
-  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+  static inline UClassID getStaticClassID();
 
 protected:
   
@@ -353,6 +353,14 @@ private:
 };
 
 // CollationElementIterator inline method defination --------------------------
+
+inline UClassID
+CollationElementIterator::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+CollationElementIterator::getDynamicClassID() const
+{ return CollationElementIterator::getStaticClassID(); }
 
 /**
 * Get the primary order of a collation order.

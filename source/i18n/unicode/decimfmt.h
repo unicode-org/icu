@@ -1101,7 +1101,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -1114,7 +1114,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID(void) const;
 
 private:
     static const char fgClassID;
@@ -1298,6 +1298,14 @@ protected:
    */  
     static const int32_t  kDoubleFractionDigits;
 };
+
+inline UClassID
+DecimalFormat::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+DecimalFormat::getDynamicClassID(void) const
+{ return DecimalFormat::getStaticClassID(); }
 
 inline UnicodeString&
 DecimalFormat::format(const Formattable& obj,

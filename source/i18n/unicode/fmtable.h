@@ -264,14 +264,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
 private:
     /**
@@ -312,6 +312,12 @@ private:
      */
     static const char fgClassID;
 };
+
+inline UClassID Formattable::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+        
+inline UClassID Formattable::getDynamicClassID() const
+{ return Formattable::getStaticClassID(); }
 
 inline Formattable*
 Formattable::createArrayCopy(const Formattable* array, int32_t count)

@@ -206,14 +206,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
 private:
     /**
@@ -294,6 +294,13 @@ private:
     static const char fgClassID;
 };
 
+inline UClassID
+DecimalFormatSymbols::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+DecimalFormatSymbols::getDynamicClassID() const
+{ return DecimalFormatSymbols::getStaticClassID(); }
 
 // -------------------------------------
 

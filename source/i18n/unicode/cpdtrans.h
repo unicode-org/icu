@@ -197,14 +197,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
 private:
 
@@ -288,6 +288,14 @@ public:
 
 #endif
 };
+
+inline UClassID
+CompoundTransliterator::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+CompoundTransliterator::getDynamicClassID() const
+{ return CompoundTransliterator::getStaticClassID(); }
 
 /**
  * Definitions for obsolete API
