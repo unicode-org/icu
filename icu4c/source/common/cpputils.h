@@ -16,6 +16,7 @@
 
 #include "unicode/utypes.h"
 #include "cmemory.h"
+#include "unicode/unistr.h"
 
 /*==========================================================================*/
 /* Array copy utility functions */
