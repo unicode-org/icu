@@ -167,18 +167,11 @@ public:
         SPECIALS = 86,
         HALFWIDTH_AND_FULLWIDTH_FORMS = 87
     };
-        
+
 private:
 
     static const int8_t blockToScript[];
-        
-    struct Split {
-        UChar ch;
-        int8_t i1;
-        int8_t i2;
-    };
-    static const Split split[];
-        
+
     static const int8_t charToBlock[];
 
     TestUtility() {} // Prevent instantiation
