@@ -44,7 +44,7 @@ testLCID(const char *localeName,
     UnicodeString lcidString(posixLocale.getStringEx("LocaleID", status));
 
     if (U_FAILURE(status)) {
-        printf("ERROR: %s does not have a LocaleID (%s)\n", localeName, u_errorName(status));
+        printf("ERROR:   %s does not have a LocaleID (%s)\n", localeName, u_errorName(status));
         (*errors)++;
         return;
     }
@@ -55,20 +55,25 @@ testLCID(const char *localeName,
 
     lcid = IGlobalLocales::convertToLCID(localeName, &status);
     if (U_FAILURE(status)) {
-        printf("WARNING: %-5s does not have an LCID mapping\n", localeName);
-        (*warnings)++;
+        if (expectedLCID == 0) {
+            printf("INFO:    %-5s does not have any LCID mapping\n", localeName);
+        }
+        else {
+            printf("ERROR:   %-5s does not have an LCID mapping to 0x%.4X\n", localeName, expectedLCID);
+            (*errors)++;
+        }
         return;
     }
 
     status = U_ZERO_ERROR;
     uprv_strcpy(lcidStringC, IGlobalLocales::convertToPosix(expectedLCID, &status));
     if (U_FAILURE(status)) {
-        printf("ERROR: %.4x does not have a POSIX mapping due to %s\n", expectedLCID, u_errorName(status));
+        printf("ERROR:   %.4x does not have a POSIX mapping due to %s\n", expectedLCID, u_errorName(status));
         (*errors)++;
     }
 
     if(lcid != expectedLCID) {
-        printf("ERROR: Locale %-5s wrongfully has 0x%.4x instead of 0x%.4x for LCID\n", localeName, expectedLCID, lcid);
+        printf("ERROR:   %-5s wrongfully has 0x%.4x instead of 0x%.4x for LCID\n", localeName, expectedLCID, lcid);
         (*errors)++;
     }
     if(strcmp(localeName, lcidStringC) != 0) {
@@ -82,11 +87,11 @@ testLCID(const char *localeName,
             (*warnings)++;
         }
         else if (expectedLCID == lcid) {
-            printf("ERROR: 0x%.4x is from %-5s and the number resolves wrongfully to %s\n", expectedLCID, localeName, lcidStringC);
+            printf("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s\n", localeName, expectedLCID, lcidStringC);
             (*errors)++;
         }
         else {
-            printf("ERROR: 0x%.4x is from %-5s and the number resolves wrongfully to %s. It should be 0x%x.\n", expectedLCID, localeName, lcidStringC, lcid);
+            printf("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s. It should be 0x%x.\n", localeName, expectedLCID, lcidStringC, lcid);
             (*errors)++;
         }
     } else {
@@ -114,6 +119,14 @@ int main() {
                 testLCID(localeName, posixName, &errors, &warnings);
             }
         }
+        else {
+            puts("Error getting the InstalledLocales\n");
+            errors++;
+        }
+    }
+    else {
+        puts("Error getting the index\n");
+        errors++;
     }
     if(errors > 0) {
         printf("There were %d error(s)\n", errors);
@@ -125,8 +138,8 @@ int main() {
         printf("There were %d warning(s)\n", warnings);
     }
 
-    char temp;
-    scanf("%c", &temp);
+//    char temp;
+//    scanf("%c", &temp);
 
     return 0;
 }
