@@ -125,9 +125,24 @@ public:
      * return the calendar type, "buddhist".
      *
      * @return calendar type
-     * @draft ICU 2.6
+     * @internal
      */
     virtual const char * getType() const;
+
+    /**
+     * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
+     * of time to the given time field, based on the calendar's rules.  For more
+     * information, see the documentation for Calendar::add().
+     *
+     * @param field   The time field.
+     * @param amount  The amount of date or time to be added to the field.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
+     * @draft ICU 2.6.
+     */
+    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
+
 
 private:
     BuddhistCalendar(); // default constructor not implemented
@@ -143,6 +158,51 @@ private:
     virtual int32_t internalGetEra() const;
     virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
     virtual UBool haveDefaultCentury() const;
+    virtual UDate defaultCenturyStart() const;
+    virtual int32_t defaultCenturyStartYear() const;
+
+ private: // default century stuff.
+    /**
+     * The system maintains a static default century start date.  This is initialized
+     * the first time it is used.  Before then, it is set to SYSTEM_DEFAULT_CENTURY to
+     * indicate an uninitialized state.  Once the system default century date and year
+     * are set, they do not change.
+     */
+    static UDate         fgSystemDefaultCenturyStart;
+
+    /**
+     * See documentation for systemDefaultCenturyStart.
+     */
+    static int32_t          fgSystemDefaultCenturyStartYear;
+
+    /**
+     * Default value that indicates the defaultCenturyStartYear is unitialized
+     */
+    static const int32_t    fgSystemDefaultCenturyYear;
+
+    static const UDate        fgSystemDefaultCentury;
+
+    /**
+     * Returns the beginning date of the 100-year window that dates with 2-digit years
+     * are considered to fall within.
+     * @return    the beginning date of the 100-year window that dates with 2-digit years
+     *            are considered to fall within.
+     */
+    UDate         internalGetDefaultCenturyStart(void) const;
+
+    /**
+     * Returns the first year of the 100-year window that dates with 2-digit years
+     * are considered to fall within.
+     * @return    the first year of the 100-year window that dates with 2-digit years
+     *            are considered to fall within.
+     */
+    int32_t          internalGetDefaultCenturyStartYear(void) const;
+
+    /**
+     * Initializes the 100-year window that dates with 2-digit years are considered
+     * to fall within so that its start date is 80 years before the current time.
+     */
+    static void  initializeSystemDefaultCentury(void);
 };
 
 inline UClassID
