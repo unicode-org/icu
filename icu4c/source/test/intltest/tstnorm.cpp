@@ -807,6 +807,29 @@ BasicNormalizerTest::TestNormalizerAPI() {
     if(out!=s) {
         errln("error in Normalizer::normalize(UNORM_NONE)");
     }
+
+    // test that the same string can be used as source and destination
+    s.setTo((UChar)0xe4);
+    Normalizer::normalize(s, UNORM_NFD, 0, s, status);
+    if(s.charAt(1)!=0x308) {
+        errln("error in Normalizer::normalize(UNORM_NFD, self)");
+    }
+    Normalizer::normalize(s, UNORM_NFC, 0, s, status);
+    if(s.charAt(0)!=0xe4) {
+        errln("error in Normalizer::normalize(UNORM_NFC, self)");
+    }
+    Normalizer::decompose(s, FALSE, 0, s, status);
+    if(s.charAt(1)!=0x308) {
+        errln("error in Normalizer::decompose(self)");
+    }
+    Normalizer::compose(s, FALSE, 0, s, status);
+    if(s.charAt(0)!=0xe4) {
+        errln("error in Normalizer::compose(self)");
+    }
+    Normalizer::concatenate(s, s, s, UNORM_NFC, 0, status);
+    if(s.charAt(1)!=0xe4) {
+        errln("error in Normalizer::decompose(self)");
+    }
 }
 
 void BasicNormalizerTest::TestConcatenate() {
