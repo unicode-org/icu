@@ -20,6 +20,7 @@
 */
 #include <stdio.h>
 #include "unicode/putil.h"
+#include "cstring.h"
 
 static void
 incKey(char *key, char *limit) {
@@ -36,7 +37,7 @@ incKey(char *key, char *limit) {
     }
 }
 
-extern int
+U_CAPI int
 genres32(const char *prog, const char *path) {
     /*
      * key string, gets incremented binary numbers
@@ -51,21 +52,22 @@ genres32(const char *prog, const char *path) {
     char file[512];
     FILE *out;
 
-    strcpy(file,path);
+    uprv_strcpy(file,path);
     if(file[strlen(file)-1]!=U_FILE_SEP_CHAR) {
-      strcat(file,U_FILE_SEP_STRING);
+        uprv_strcat(file,U_FILE_SEP_STRING);
     }
-    strcat(file,"testtable32.txt");
+    uprv_strcat(file,"testtable32.txt");
     out = fopen(file, "w");
     puts(file);
     if(out == NULL) {
-      fprintf(stderr, "%s: Couldn't create resource test file %s\n",
-              prog, file);
-      return 1;
+        fprintf(stderr, "%s: Couldn't create resource test file %s\n",
+                prog, file);
+        return 1;
     }
     
     /* find the limit of the key string */
-    for(limit=key; *limit!=0; ++limit) {}
+    for(limit=key; *limit!=0; ++limit) {
+    }
 
     /* output the beginning of the bundle */
     fputs(
