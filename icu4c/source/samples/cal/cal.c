@@ -129,12 +129,12 @@ main(int argc,
         
         /* Month and year specified */
         if(argc - optind == 2) {
-            sscanf(argv[optind], "%d", &month);
-            sscanf(argv[optind + 1], "%d", &year);
+            sscanf(argv[optind], "%d", (int*)&month);
+            sscanf(argv[optind + 1], "%d", (int*)&year);
             
             /* Make sure the month value is legal */
             if(month < 0 || month > 12) {
-                printf("icucal: Bad value for month -- %d\n", month);
+                printf("icucal: Bad value for month -- %d\n", (int)month);
                 
                 /* Display usage */
                 printUsage = 1;
@@ -145,7 +145,7 @@ main(int argc,
         }
         /* Only year specified */
         else {
-            sscanf(argv[optind], "%d", &year);
+            sscanf(argv[optind], "%d", (int*)&year);
         }
     }
     
