@@ -907,15 +907,15 @@ static const UChar cellWidthValues[] =
 #define NUM_CELL_WIDTH_VALUES (sizeof(cellWidthValues)/sizeof(cellWidthValues[0]))
 
 /* Get the script associated with the character*/
-UCharBlock
-u_charScript(UChar32 ch)
+UBlockCode
+ublock_getCode(UChar32 ch)
 {
     int32_t i, j;
-    UCharBlock returnValue = U_NO_SCRIPT;
+    UBlockCode returnValue = UBLOCK_NO_SCRIPT;
 
     /* surrogate support is still incomplete */
     if((uint32_t)ch>0xffff) {
-        return U_NO_SCRIPT;
+        return UBLOCK_NO_SCRIPT;
     }
 
     /* ### a binary search would be faster; maybe this should go into a data file, too */
@@ -923,14 +923,14 @@ u_charScript(UChar32 ch)
     for( j = 0; i == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
         if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
             i = j;
-            if(j == U_SCRIPT_BLOCK_COUNT) /* "U_SPECIALS 2" */
-                i = U_SPECIALS_BLOCK;
+            if(j == UBLOCK_COUNT) /* "U_SPECIALS 2" */
+                i = UBLOCK_SPECIALS;
         }
-    if(i >= U_SCRIPT_BLOCK_COUNT) {
-        returnValue = U_NO_SCRIPT;
+    if(i >= UBLOCK_COUNT) {
+        returnValue = UBLOCK_NO_SCRIPT;
     }
     else if( i != -1 ) {
-        returnValue = (UCharBlock)i;
+        returnValue = (UBlockCode)i;
     } 
 
     return returnValue;
