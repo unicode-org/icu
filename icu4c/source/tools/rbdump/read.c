@@ -17,11 +17,16 @@
 
 #include <stdio.h>
 
+
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
+
+/* because the file runs under C++ on HPUX */
+U_CDECL_BEGIN
 #include "filestrm.h"
 #include "parse.h"
+U_CDECL_END
 
 
 /* Protos */
