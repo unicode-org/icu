@@ -73,6 +73,9 @@ static  void TestDisplayNames(void);
  /* Test getting keyword enumeratin */
  static void TestKeywordVariants(void);
 
+ static void TestKeywordSet(void);
+ static void TestKeywordSetError(void);
+
  /* Test getting keyword values */
  static void TestKeywordVariantParsing(void);
 

@@ -218,6 +218,8 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestKeywordVariants);
     TESTCASE(TestKeywordVariantParsing);
     TESTCASE(TestCanonicalization);
+    TESTCASE(TestKeywordSet);
+    TESTCASE(TestKeywordSetError);
     TESTCASE(TestDisplayKeywords);
     TESTCASE(TestDisplayKeywordValues);
     TESTCASE(TestGetBaseName);
@@ -2533,6 +2535,134 @@ static void TestKeywordVariantParsing(void)
                 testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
         }
     }
+}
+
+static struct {
+  const char *l; /* locale */
+  const char *k; /* kw */
+  const char *v; /* value */
+  const char *x; /* expected */
+} kwSetTestCases[] = {
+  { "en_US", "calendar", "japanese", "en_US@calendar=japanese" },
+  { "en_US@", "calendar", "japanese", "en_US@calendar=japanese" },
+  { "en_US@calendar=islamic", "calendar", "japanese", "en_US@calendar=japanese" },
+  { "en_US@calendar=slovakian", "calendar", "gregorian", "en_US@calendar=gregorian" }, /* don't know what this means, but it has the same # of chars as gregorian */
+  { "en_US@calendar=gregorian", "calendar", "japanese", "en_US@calendar=japanese" },
+  { "de", "Currency", "CHF", "de@currency=CHF" },
+  { "de", "Currency", "CHF", "de@currency=CHF" },
+
+  { "en_US@collation=phonebook", "calendar", "japanese", "en_US@collation=phonebook;calendar=japanese" },
+  { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" },
+  { "en_US@calendar=gregorian;collation=phonebook", "calendar", "japanese", "en_US@calendar=japanese;collation=phonebook" },
+  { "en_US@calendar=slovakian;collation=phonebook", "calendar", "gregorian", "en_US@calendar=gregorian;collation=phonebook" }, /* don't know what this means, but it has the same # of chars as gregorian */
+  { "en_US@collation=phonebook;calendar=slovakian", "calendar", "gregorian", "en_US@collation=phonebook;calendar=gregorian" }, /* don't know what this means, but it has the same # of chars as gregorian */
+  { "en_US@calendar=islamic;collation=phonebook", "calendar", "japanese", "en_US@calendar=japanese;collation=phonebook" },
+  { "de@collation=phonebook", "Currency", "CHF", "de@collation=phonebook;currency=CHF" }
+};
+
+static void TestKeywordSet(void)
+{
+    int32_t i = 0;
+    int32_t resultLen = 0;
+    char buffer[1024];
+
+    for(i = 0; i < sizeof(kwSetTestCases)/sizeof(kwSetTestCases[0]); i++) {
+      UErrorCode status = U_ZERO_ERROR;
+      memset(buffer,'%',1023);
+      strcpy(buffer, kwSetTestCases[i].l);
+      resultLen = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, 1023, &status);
+      if(U_FAILURE(status)) {
+        log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
+        continue;
+      }
+      if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=resultLen)) {
+        log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
+                kwSetTestCases[i].v, buffer, resultLen, kwSetTestCases[i].x, strlen(buffer));
+      } else {
+        log_info("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
+                 buffer);
+      }
+    }
+}
+
+static void TestKeywordSetError(void)
+{
+  char buffer[1024];
+  UErrorCode status;
+  int32_t res;
+  int32_t i;
+  int32_t blen;
+
+  /* 0-test whether an error condition modifies the buffer at all */
+  blen=0;
+  i=0;
+  memset(buffer,'%',1023);
+  status = U_ZERO_ERROR;
+  res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
+  if(status != U_ILLEGAL_ARGUMENT_ERROR) {
+    log_err("expected illegal err got %s\n", u_errorName(status));
+    return;
+  }
+/*  if(res!=strlen(kwSetTestCases[i].x)) {
+    log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
+    return;
+  } */
+  if(buffer[blen]!='%') {
+    log_err("Buffer byte %d was modified: now %c\n", blen, buffer[blen]);
+    return;
+  }
+  log_info("0-buffer modify OK\n");
+
+  for(i=0;i<=2;i++) {
+    /* 1- test a short buffer with growing text */
+    blen=strlen(kwSetTestCases[i].l)+1;
+    memset(buffer,'%',1023);
+    strcpy(buffer,kwSetTestCases[i].l);
+    status = U_ZERO_ERROR;
+    res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
+    if(status != U_BUFFER_OVERFLOW_ERROR) {
+      log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
+      return;
+    }
+    if(res!=strlen(kwSetTestCases[i].x)) {
+      log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
+      return;
+    }
+    if(buffer[blen]!='%') {
+      log_err("Buffer byte %d was modified: now %c\n", blen, buffer[blen]);
+      return;
+    }
+    log_info("1/%d-buffer modify OK\n",i);
+  }
+
+  for(i=3;i<=4;i++) {
+    /* 2- test a short buffer - text the same size or shrinking   */
+    blen=strlen(kwSetTestCases[i].l)+1;
+    memset(buffer,'%',1023);
+    strcpy(buffer,kwSetTestCases[i].l);
+    status = U_ZERO_ERROR;
+    res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
+    if(status != U_ZERO_ERROR) {
+      log_err("expected zero error got %s\n", u_errorName(status));
+      return;
+    }
+    if(buffer[blen+1]!='%') {
+      log_err("Buffer byte %d was modified: now %c\n", blen+1, buffer[blen+1]);
+      return;
+    }
+    if(res!=strlen(kwSetTestCases[i].x)) {
+      log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
+      return;
+    }
+    if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=res)) {
+      log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
+              kwSetTestCases[i].v, buffer, res, kwSetTestCases[i].x, strlen(buffer));
+    } else {
+        log_info("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
+                 buffer);
+    }
+    log_info("2/%d-buffer modify OK\n",i);
+  }
 }
 
 static int32_t _canonicalize(int32_t selector, /* 0==getName, 1==canonicalize */
