@@ -11,8 +11,6 @@
  *   created by: Eric R. Mader
  */
 
-#include "loengine.h"
-
 #include "RenderingFontInstance.h"
 
 #include "unicode/utypes.h"
