@@ -45,6 +45,10 @@ private:
 
     void TestAPI(void);
 
+    void TestStrings(void);
+
+    void TestStringPatterns(void);
+
     void TestScriptSet(void);
 
     /**
@@ -86,7 +90,7 @@ private:
     /**
      * Convert a bitmask to a UnicodeSet.
      */
-    static void bitsToSet(int32_t a, UnicodeSet&);
+    static UnicodeSet& bitsToSet(int32_t a, UnicodeSet&);
 
     /**
      * Convert a UnicodeSet to a bitmask.  Only the characters
@@ -101,6 +105,17 @@ private:
      */
     static UnicodeString getPairs(const UnicodeSet& set);
 
+    /**
+     * Basic consistency check for a few items.
+     * That the iterator works, and that we can create a pattern and
+     * get the same thing back
+     */
+    void checkRoundTrip(const UnicodeSet& s);
+    
+    void copyWithIterator(UnicodeSet& t, const UnicodeSet& s, UBool withRange);
+    
+    UBool checkEqual(const UnicodeSet& s, const UnicodeSet& t, const char* message);
+
     void expectContainment(const UnicodeSet& set,
                            const UnicodeString& charsIn,
                            const UnicodeString& charsOut);
@@ -113,6 +128,9 @@ private:
                        const UnicodeString& expectedPairs);
     void expectPairs(const UnicodeSet& set,
                      const UnicodeString& expectedPairs);
+    void expectToPattern(const UnicodeSet& set,
+                         const UnicodeString& expPat,
+                         char** expStrings);
     void doAssert(UBool, const char*);
 public:
     static UnicodeString escape(const UnicodeString& s);
