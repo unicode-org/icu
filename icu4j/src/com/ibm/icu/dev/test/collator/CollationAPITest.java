@@ -646,4 +646,56 @@ public class CollationAPITest extends TestFmwk {
         }
     }
 
+    /** 
+     * Simple test to see if Collator is subclassable
+     */
+    public void TestSubClass() 
+    {
+        class TestCollator extends Collator
+        {
+            public boolean equals(Object that) {
+                return this == that;
+            }
+    
+            public int hashCode() {
+                return 0;
+            }
+            
+            public int compare(String source, String target) {
+                return source.compareTo(target);
+            }
+            
+            public CollationKey getCollationKey(String source)
+            {   byte temp1[] = source.getBytes();
+                byte temp2[] = new byte[temp1.length + 1];
+                System.arraycopy(temp1, 0, temp2, 0, temp1.length);
+                temp2[temp1.length] = 0;
+                return new CollationKey(source, temp2);
+            }
+        }
+ 
+        Collator col1 = new TestCollator();
+        Collator col2 = new TestCollator();
+        if (col1.equals(col2)) {
+            errln("2 different instance of TestCollator should fail");
+        }
+        if (col1.hashCode() != col2.hashCode()) {
+            errln("Every TestCollator has the same hashcode");
+        }
+        String abc = "abc";
+        String bcd = "bcd";
+        if (col1.compare(abc, bcd) != abc.compareTo(bcd)) {
+            errln("TestCollator compare should be the same as the default " +
+                  "string comparison");
+        }
+        CollationKey key = col1.getCollationKey(abc);
+        byte temp1[] = abc.getBytes();
+        byte temp2[] = new byte[temp1.length + 1];
+        System.arraycopy(temp1, 0, temp2, 0, temp1.length);
+        temp2[temp1.length] = 0;
+        if (!java.util.Arrays.equals(key.toByteArray(), temp2) 
+            || !key.getSourceString().equals(abc)) {
+            errln("TestCollator collationkey API is returning wrong values");
+        }
+    }
 }

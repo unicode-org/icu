@@ -1795,4 +1795,84 @@ public class SearchTest extends TestFmwk {
         m_en_us_.setAlternateHandlingShifted(false);
     }
     
+    public void TestSubClass()
+    {
+        class TestSearch extends SearchIterator
+        {
+            String pattern;
+            String text;
+            
+            TestSearch(StringCharacterIterator target, BreakIterator breaker,
+                       String pattern)
+            {
+                super(target, breaker);
+                this.pattern = pattern;
+                StringBuffer buffer = new StringBuffer();
+                while (targetText.getIndex() != targetText.getEndIndex()) {
+                    buffer.append(targetText.current());
+                    targetText.next();
+                }
+                text = buffer.toString();
+                targetText.setIndex(targetText.getBeginIndex());
+            }
+            protected int handleNext(int start)
+            {
+                int match = text.indexOf(pattern, start);
+                if (match < 0) {
+                    targetText.last();
+                    return DONE;
+                }
+                targetText.setIndex(match);
+                setMatchLength(pattern.length());
+                return match;
+            }
+            protected int handlePrevious(int start)
+            {
+                int match = text.lastIndexOf(pattern, start - 1);
+                if (match < 0) {
+                    targetText.setIndex(0);
+                    return DONE;
+                }
+                targetText.setIndex(match);
+                setMatchLength(pattern.length());
+                return match;
+            }
+            
+            public int getIndex()
+            {
+                int result = targetText.getIndex();
+                if (result < 0 || result >= text.length()) {
+                    return DONE;
+                }
+                return result;
+            }
+        }
+        
+        TestSearch search = new TestSearch(
+                            new StringCharacterIterator("abc abcd abc"),
+                            null, "abc");
+        int expected[] = {0, 4, 9};
+        for (int i = 0; i < expected.length; i ++) {
+            if (search.next() != expected[i]) {
+                errln("Error getting next match");
+            }
+            if (search.getMatchLength() != search.pattern.length()) {
+                errln("Error getting next match length");
+            }
+        }
+        if (search.next() != SearchIterator.DONE) {
+            errln("Error should have reached the end of the iteration");
+        }
+        for (int i = expected.length - 1; i >= 0; i --) {
+            if (search.previous() != expected[i]) {
+                errln("Error getting next match");
+            }
+            if (search.getMatchLength() != search.pattern.length()) {
+                errln("Error getting next match length");
+            }
+        }
+        if (search.previous() != SearchIterator.DONE) {
+            errln("Error should have reached the start of the iteration");
+        }
+    }
 }
