@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2002/08/31 04:55:10 $
- * $Revision: 1.5 $
+ * $Date: 2002/09/04 01:37:26 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
@@ -21,12 +21,8 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.LocaleUtility;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Vector;
+import java.util.Locale;
 
 public class CollationTest extends ModuleTest 
 {
@@ -186,16 +182,24 @@ public class CollationTest extends ModuleTest
         m_nextRelation_ = -1;
         m_target_.delete(0, m_target_.length());
         Vector vector = new Vector();
-    
+        int lastsmallerthanindex = 0;
         while (getNextInSequence()) {    
             String target = m_target_.toString();
             doTest(col, m_source_, target, m_relation_);
             int vsize = vector.size();
-            for (int i = 0; i < vsize; i ++) {
-                String source = (String)vector.elementAt(i);   
-                doTest(col, source, target, m_relation_);
+            for (int i = vsize - 1; i >= 0; i --) {
+                String source = (String)vector.elementAt(i); 
+                if (i > lastsmallerthanindex) {  
+                    doTest(col, source, target, m_relation_);
+                }
+                else {
+                    doTest(col, source, target, -1);
+                }
             }
             vector.addElement(target);
+            if (m_relation_ < 0) {
+                lastsmallerthanindex = vsize - 1;
+            }
         }
     }
     
