@@ -7,6 +7,7 @@ icu4c/data/line_thBE.brk -text
 icu4c/data/line_thLE.brk -text
 icu4c/data/sentBE.brk -text
 icu4c/data/sentLE.brk -text
+icu4c/data/thaidict.brk -text
 icu4c/data/wordBE.brk -text
 icu4c/data/wordLE.brk -text
 icu4c/data/word_thBE.brk -text
@@ -41,6 +42,7 @@ icu4c/source/data/brkitr/line_thBE.brk -text
 icu4c/source/data/brkitr/line_thLE.brk -text
 icu4c/source/data/brkitr/sentBE.brk -text
 icu4c/source/data/brkitr/sentLE.brk -text
+icu4c/source/data/brkitr/thaidict.brk -text
 icu4c/source/data/brkitr/wordBE.brk -text
 icu4c/source/data/brkitr/wordLE.brk -text
 icu4c/source/data/brkitr/word_thBE.brk -text
