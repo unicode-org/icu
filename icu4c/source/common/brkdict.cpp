@@ -23,7 +23,12 @@ U_NAMESPACE_BEGIN
 //=================================================================================
 
 BreakDictionary::BreakDictionary(const char* /*dictionaryFilename*/, UErrorCode& status)
-  : rowIndex(NULL), table(NULL), columnMap(NULL), rowIndexFlags(NULL), rowIndexFlagsIndex(NULL), rowIndexShifts(NULL)
+ :  columnMap(NULL),
+    table(NULL),
+    rowIndex(NULL),
+    rowIndexFlags(NULL),
+    rowIndexFlagsIndex(NULL),
+    rowIndexShifts(NULL)
 {
     if (U_FAILURE(status)) return;
     
