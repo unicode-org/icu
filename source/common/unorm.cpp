@@ -3801,14 +3801,18 @@ unorm_compare(const UChar *s1, int32_t length1,
         return 0;
     }
 
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
+    if(!uprv_haveProperties()) {
+        *pErrorCode=U_FILE_ACCESS_ERROR;
+        return 0;
+    }
+
     f1=f2=d1=d2=0;
     options|=_COMPARE_EQUIV;
     result=0;
     
-    if(!_haveData(*pErrorCode) || !uprv_haveProperties()) {
-        return 0;
-    }
-
     if(!(options&UNORM_INPUT_IS_FCD)) {
         int32_t _len1, _len2;
         UBool isFCD1, isFCD2;
