@@ -112,6 +112,7 @@ U_NAMESPACE_BEGIN
  * </code></pre>
  * @see SearchIterator
  * @see RuleBasedCollator
+ * @since ICU 2.0
  */
 
 class U_I18N_API StringSearch : public SearchIterator
@@ -139,6 +140,7 @@ public:
      * @param status  for errors if any. If pattern or text is NULL, or if
      *               either the length of pattern or text is 0 then an 
      *               U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     StringSearch(const UnicodeString &pattern, const UnicodeString &text,
                  const Locale        &locale,       
@@ -164,6 +166,7 @@ public:
      *                <tt>NULL</tt> can be passed in instead.
      * @param status for errors if any. If either the length of pattern or 
      *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     StringSearch(const UnicodeString     &pattern, 
                  const UnicodeString     &text,
@@ -194,6 +197,7 @@ public:
      *                <tt>NULL</tt> can be passed in instead.
      * @param status for errors if any. If either the length of pattern or 
      *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     StringSearch(const UnicodeString &pattern, CharacterIterator &text,
                  const Locale        &locale, 
@@ -223,6 +227,7 @@ public:
      *                <tt>NULL</tt> can be passed in instead.
      * @param status for errors if any. If either the length of pattern or 
      *               text is 0 then an U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     StringSearch(const UnicodeString     &pattern, CharacterIterator &text,
                        RuleBasedCollator *coll, 
@@ -233,12 +238,14 @@ public:
      * Copy constructor that creates a StringSearch instance with the same 
      * behavior, and iterating over the same text.
      * @param that StringSearch instance to be copied.
+     * @draft ICU 2.0
      */
     StringSearch(const StringSearch &that);
 
     /**
     * Destructor. Cleans up the search iterator data struct.
     * If a collator is created in the constructor, it will be destroyed here.
+    * @draft ICU 2.0
     */
     virtual ~StringSearch(void);
 
@@ -248,6 +255,7 @@ public:
      * Assignment operator. Sets this iterator to have the same behavior,
      * and iterate over the same text, as the one passed in.
      * @param that instance to be copied.
+     * @draft ICU 2.0
      */
     StringSearch & operator=(const StringSearch &that);
 
@@ -257,6 +265,7 @@ public:
      * @return TRUE if both instances have the same attributes, 
      *         breakiterators, collators and iterate over the same text 
      *         while looking for the same pattern.
+     * @draft ICU 2.0
      */
     virtual UBool operator==(const SearchIterator &that) const;
 
@@ -271,6 +280,7 @@ public:
      * valid starting point to begin searching. 
      * @param position within the text to be set
      * @param status for errors if it occurs
+     * @draft ICU 2.0
      */
     virtual void setOffset(UTextOffset position, UErrorCode &status);
 
@@ -280,6 +290,7 @@ public:
      * (or past the beginning for a backwards search), {@link #USEARCH_DONE} 
      * is returned.
      * @return current index in the text being searched.
+     * @draft ICU 2.0
      */
     virtual UTextOffset getOffset(void) const;
 
@@ -292,6 +303,7 @@ public:
      * @param text text string to be searched
      * @param status for errors if any. If the text length is 0 then an 
      *        U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     virtual void setText(const UnicodeString &text, UErrorCode &status);
     
@@ -307,6 +319,7 @@ public:
      * @param text text string to be searched
      * @param status for errors if any. If the text length is 0 then an 
      *        U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     virtual void setText(CharacterIterator &text, UErrorCode &status);
 
@@ -317,6 +330,7 @@ public:
      * the destructor would cause the string search to fail.
      * The destructor will delete the collator if this instance owns it
      * @return collator used for string search
+     * @draft ICU 2.0
      */
     RuleBasedCollator * getCollator() const;
     
@@ -328,6 +342,7 @@ public:
      * unchanged.
      * @param coll    collator 
      * @param status  for errors if any
+     * @draft ICU 2.0
      */
     void setCollator(RuleBasedCollator *coll, UErrorCode &status);
     
@@ -338,12 +353,14 @@ public:
      * @param pattern search pattern to be found
      * @param status for errors if any. If the pattern length is 0 then an 
      *               U_ILLEGAL_ARGUMENT_ERROR is returned.
+     * @draft ICU 2.0
      */
     void setPattern(const UnicodeString &pattern, UErrorCode &status);
     
     /**
      * Gets the search pattern.
      * @return pattern used for matching
+     * @draft ICU 2.0
      */
     const UnicodeString & getPattern() const;
 
@@ -355,6 +372,7 @@ public:
      * iteration is initiated before a backwards iteration. Otherwise if 
      * a backwards iteration is initiated before a forwards iteration, the 
      * search will begin at the end of the text string.
+     * @draft ICU 2.0
      */
     virtual void reset();
 
@@ -364,6 +382,7 @@ public:
      * replicated, except for the user-specified collator and the
      * breakiterator.
      * @return cloned object
+     * @draft ICU 2.0
      */
     virtual SearchIterator * safeClone(void) const;
     

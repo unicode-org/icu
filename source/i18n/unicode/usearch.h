@@ -114,6 +114,7 @@
  *     }
  * }
  * </code></pre>
+ * @since ICU 2.0
  */
 
 /**
@@ -171,6 +172,7 @@ typedef enum {
 *               patternlength or textlength is 0 then an 
 *               U_ILLEGAL_ARGUMENT_ERROR is returned.
 * @return search iterator data structure, or NULL if there is an error.
+* @draft ICU 2.0
 */
 U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar          *pattern, 
                                               int32_t         patternlength, 
@@ -200,6 +202,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar          *pattern,
 *               or if patternlength or textlength is 0 then an 
 *               U_ILLEGAL_ARGUMENT_ERROR is returned.
 * @return search iterator data structure, or NULL if there is an error.
+* @draft ICU 2.0
 */
 U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
                                          const UChar *pattern, 
@@ -214,6 +217,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 * Destroying and cleaning up the search iterator data struct.
 * If a collator is created in usearch_open, it will be destroyed here.
 * @param searchiter data struct to clean up
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch);
 
@@ -230,6 +234,7 @@ U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch);
 * @param strsrch search iterator data struct
 * @param position position to start next search from.
 * @param status error status if any.
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_setOffset(UStringSearch *strsrch, 
                                         UTextOffset    position,
@@ -240,6 +245,7 @@ U_CAPI void U_EXPORT2 usearch_setOffset(UStringSearch *strsrch,
 * If the iteration has gone past the end of the text (or past the beginning 
 * for a backwards search), {@link #USEARCH_DONE} is returned.
 * @param strsrch search iterator data struct
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_getOffset(const UStringSearch *strsrch);
     
@@ -252,6 +258,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_getOffset(const UStringSearch *strsrch);
 * @param value text attribute value
 * @param status for errors if it occurs
 * @see #usearch_getAttribute
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_setAttribute(UStringSearch         *strsrch, 
                                            USearchAttribute       attribute,
@@ -264,6 +271,7 @@ U_CAPI void U_EXPORT2 usearch_setAttribute(UStringSearch         *strsrch,
 * @param attribute text attribute to be retrieve
 * @return text attribute value
 * @see #usearch_setAttribute
+* @draft ICU 2.0
 */
 U_CAPI USearchAttributeValue U_EXPORT2 usearch_getAttribute(
                                          const UStringSearch    *strsrch,
@@ -281,6 +289,7 @@ U_CAPI USearchAttributeValue U_EXPORT2 usearch_getAttribute(
 * @param strsrch search iterator data struct
 * @return index to a substring within the text string that is being 
 *         searched.
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_getMatchedStart(
                                                const UStringSearch *strsrch);
@@ -295,6 +304,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_getMatchedStart(
 * @param strsrch search iterator data struct
 * @return The length of the match in the string text, or 0 if there is no 
 *         match currently.
+* @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
                                                const UStringSearch *strsrch);
@@ -317,6 +327,7 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
 * @param resultCapacity length of the result buffer
 * @param status error returned if result is not large enough
 * @return exact length of the matched text, not counting the null-termination
+* @draft ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedText(const UStringSearch *strsrch, 
                                             UChar         *result, 
@@ -336,6 +347,7 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedText(const UStringSearch *strsrch,
 *                  attempted.
 * @param status for errors if it occurs
 * @see #usearch_getBreakIterator
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch, 
                                                UBreakIterator *breakiter,
@@ -350,6 +362,7 @@ U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch,
 * @param strsrch search iterator data struct
 * @return break iterator used
 * @see #usearch_setBreakIterator
+* @draft ICU 2.0
 */
 U_CAPI const UBreakIterator * U_EXPORT2 usearch_getBreakIterator(
                                               const UStringSearch *strsrch);
@@ -365,6 +378,7 @@ U_CAPI const UBreakIterator * U_EXPORT2 usearch_getBreakIterator(
 *               then an U_ILLEGAL_ARGUMENT_ERROR is returned with no change
 *               done to strsrch.
 * @see #usearch_getText
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch, 
                                       const UChar         *text,
@@ -377,6 +391,7 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
 * @param length returned string text length
 * @return string text 
 * @see #usearch_setText
+* @draft ICU 2.0
 */
 U_CAPI const UChar * U_EXPORT2 usearch_getText(const UStringSearch *strsrch, 
                                                int32_t       *length);
@@ -389,6 +404,7 @@ U_CAPI const UChar * U_EXPORT2 usearch_getText(const UStringSearch *strsrch,
 * <tt>usearch_close</tt> will delete the collator if this search owns it.
 * @param strsrch search iterator data struct
 * @return collator
+* @draft ICU 2.0
 */
 U_CAPI UCollator * U_EXPORT2 usearch_getCollator(
                                                const UStringSearch *strsrch);
@@ -401,6 +417,7 @@ U_CAPI UCollator * U_EXPORT2 usearch_getCollator(
 * @param strsrch search iterator data struct
 * @param collator to be used
 * @param status for errors if it occurs
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch, 
                                           const UCollator     *collator,
@@ -416,6 +433,7 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
 * @param status for errors if it occurs. If text is NULL, or textlength is 0 
 *               then an U_ILLEGAL_ARGUMENT_ERROR is returned with no change
 *               done to strsrch.
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch, 
                                          const UChar         *pattern,
@@ -428,6 +446,7 @@ U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch,
 * @param length return length of the pattern, -1 indicates that the pattern 
 *               is null-terminated
 * @return pattern string
+* @draft ICU 2.0
 */
 U_CAPI const UChar * U_EXPORT2 usearch_getPattern(
                                                const UStringSearch *strsrch, 
@@ -446,6 +465,7 @@ U_CAPI const UChar * U_EXPORT2 usearch_getPattern(
 * @param status for errors if it occurs
 * @return The character index of the first match, or 
 * <tt>USEARCH_DONE</tt> if there are no matches.
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_first(UStringSearch *strsrch, 
                                            UErrorCode    *status);
@@ -466,6 +486,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_first(UStringSearch *strsrch,
 * @param status for errors if it occurs
 * @return The character index of the first match following <tt>pos</tt>,
 *         or <tt>USEARCH_DONE</tt> if there are no matches.
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_following(UStringSearch *strsrch, 
                                                UTextOffset    position, 
@@ -482,6 +503,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_following(UStringSearch *strsrch,
 * @param status for errors if it occurs
 * @return The index of the first match, or <tt>USEARCH_DONE</tt> if there 
 *         are no matches.
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_last(UStringSearch *strsrch, 
                                           UErrorCode    *status);
@@ -501,6 +523,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_last(UStringSearch *strsrch,
 * @param status for errors if it occurs
 * @return The character index of the first match preceding <tt>pos</tt>,
 *         or <tt>USEARCH_DONE</tt> if there are no matches.
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_preceding(UStringSearch *strsrch, 
                                                UTextOffset    position, 
@@ -519,6 +542,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_preceding(UStringSearch *strsrch,
 * @return The index of the next match after the current position, or 
 *         <tt>USEARCH_DONE</tt> if there are no more matches.
 * @see #usearch_first
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_next(UStringSearch *strsrch, 
                                           UErrorCode    *status);
@@ -535,6 +559,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_next(UStringSearch *strsrch,
 * @param status for errors if it occurs
 * @return The index of the previous match before the current position,
 *         or <tt>USEARCH_DONE</tt> if there are no more matches.
+* @draft ICU 2.0
 */
 U_CAPI UTextOffset U_EXPORT2 usearch_previous(UStringSearch *strsrch, 
                                               UErrorCode    *status);
@@ -546,6 +571,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_previous(UStringSearch *strsrch,
 * iteration is initiated before a forwards iteration, the search will begin
 * at the end of the text string.
 * @param strsrch search iterator data struct
+* @draft ICU 2.0
 */
 U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch);
 
