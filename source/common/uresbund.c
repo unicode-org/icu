@@ -777,7 +777,9 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         if(ures_isStackObject(resB) != FALSE) {
             ures_initStackObject(resB);
         }
-        ures_freeResPath(resB);
+        if(parent != resB) {
+            ures_freeResPath(resB);
+        }
     }
     resB->fData = realData;
     entryIncrease(resB->fData);
@@ -787,7 +789,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fKey = key;
     resB->fParentRes = parent;
     resB->fTopLevelData = parent->fTopLevelData;
-    if(parent->fResPath) {
+    if(parent->fResPath && parent != resB) {
       ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
     }
     if(key != NULL) {

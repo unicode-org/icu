@@ -58,6 +58,8 @@ static void TestResourceLevelAliasing(void);
 
 static void TestErrorCodes(void);
 
+static void TestJB3763(void);
+
 /**
 * extensive subtests called by TestResourceBundles
 **/
