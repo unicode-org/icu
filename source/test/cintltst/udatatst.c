@@ -22,6 +22,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
+#include "udatamem.h"
 #include "cintltst.h"
 
 #include <sys/types.h>
@@ -1014,13 +1015,6 @@ static void TestICUDataName()
 }
 
 /* test data swapping ------------------------------------------------------- */
-
-/* secret exports from udatamem.c */
-U_CAPI int32_t U_EXPORT2
-udata_getLength(UDataMemory *pData);
-
-U_CAPI const void * U_EXPORT2
-udata_getRawMemory(UDataMemory *pData);
 
 /* test cases for maximum data swapping code coverage */
 static const struct {
