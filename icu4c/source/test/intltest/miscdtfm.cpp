@@ -48,8 +48,6 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.15 $ $Date: 2001/12/04 17:27:12 $
- *
  * @bug 4097450
  */
 void
@@ -140,11 +138,8 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.15 $ $Date: 2001/12/04 17:27:12 $
- *
  * @bug 4099975
  */
-
 void
 DateFormatMiscTests::test4099975()
 {

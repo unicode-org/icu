@@ -1,5 +1,7 @@
 /*
-* Copyright (C) {1999}, International Business Machines Corporation and others. All Rights Reserved.
+**********************************************************************
+*   Copyright (C) 1999-2002, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -24,7 +26,6 @@ U_NAMESPACE_BEGIN
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.13 $ $Date: 2001/11/16 23:50:17 $
  * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
