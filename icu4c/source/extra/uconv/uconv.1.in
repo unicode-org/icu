@@ -74,6 +74,9 @@ or
 .BR "\-\-default-code" ,
 the list of encodings is produced in a format compatible with
 .BR convrtrs.txt (5).
+If used with
+.BR "\-L\fP, \fB\-\-list\-transliterators" ,
+print only one transliterator name per line.
 .TP
 .BI "\-x" " transliterator"
 Run the transcoded Unicode data through the given
