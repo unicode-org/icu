@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -42,7 +42,7 @@ package com.ibm.icu.text;
  * 
  * <p>More information about the composition of the bit sequence can
  * be found in the 
- * <a href="http://oss.software.ibm.com/icu/userguide/Collate_ServiceArchitecture.html">
+ * <a href="http://icu.sourceforge.net/userguide/Collate_ServiceArchitecture.html">
  * user guide</a>.</p>
  *
  * <p>The following example shows how <code>CollationKey</code>s can be used

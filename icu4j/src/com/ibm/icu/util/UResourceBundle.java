@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -33,7 +33,7 @@ import com.ibm.icu.util.ULocale;
  * Resource bundles in ICU are currently defined using text files which conform to the following
  * <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/bnf_rb.txt">BNF definition</a>.
  * More on resource bundle concepts and syntax can be found in the 
- * <a href="http://oss.software.ibm.com/icu/userguide/ResourceManagement.html">Users Guide</a>.
+ * <a href="http://icu.sourceforge.net/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
  * 
  * The packaging of ICU *.res files can be of two types

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -12,7 +12,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * <p>Binary Ordered Compression for Unicode</p>
  * 
  * <p>Users are strongly encouraged to read the ICU paper on 
- * <a href=http://oss.software.ibm.com/icu/docs/papers/binary_ordered_compression_for_unicode.html>
+ * <a href="http://icu.sourceforge.net/docs/papers/binary_ordered_compression_for_unicode.html">
  * BOCU</a> before attempting to use this class.</p>
  * 
  * <p>BOCU is used to compress unicode text into a stream of unsigned
