@@ -24,4 +24,9 @@
      **/
     static void TestNumberFormat(void);
 
+    /**
+     * The function used to test the Number format API with padding
+     **/
+    static void TestNumberFormatPadding(void);
+
 #endif
