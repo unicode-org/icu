@@ -207,8 +207,8 @@ static int16_t getTagNumber(const char *tagname) {
  * lexically precedes name2, or a positive value if the name1
  * lexically follows name2.
  */
-U_CFUNC int
-charsetNameCmp(const char *name1, const char *name2) {
+U_CAPI int U_EXPORT2
+ucnv_aliasNameCmp(const char *name1, const char *name2) {
     int rc;
     unsigned char c1, c2;
 
@@ -261,7 +261,7 @@ findAlias(const char *alias) {
     start=0;
     while(start<limit-1) {
         i=(uint16_t)((start+limit)/2);
-        if(charsetNameCmp(name, (const char *)aliasTable+p[i])<0) {
+        if(ucnv_aliasNameCmp(name, (const char *)aliasTable+p[i])<0) {
             limit=i;
         } else {
             start=i;
@@ -269,7 +269,7 @@ findAlias(const char *alias) {
     }
 
     /* did we really find it? */
-    if(charsetNameCmp(name, (const char *)aliasTable+p[start])==0) {
+    if(ucnv_aliasNameCmp(name, (const char *)aliasTable+p[start])==0) {
         limit=*(p-1);       /* aliasCount */
         p+=limit;           /* advance to the second column of the alias table */
         i=p[start];         /* converter index */

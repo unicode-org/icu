@@ -124,6 +124,22 @@ U_CDECL_END
 #define UCNV_LOCALE_OPTION_STRING ",locale="
 
 /**
+ * Do a fuzzy compare of a two converter/alias names.  The comparison
+ * is case-insensitive.  It also ignores the characters '-', '_', and
+ * ' ' (dash, underscore, and space).  Thus the strings "UTF-8",
+ * "utf_8", and "Utf 8" are exactly equivalent.
+ * 
+ * @param name1 a converter name or alias, zero-terminated
+ * @param name2 a converter name or alias, zero-terminated
+ * @return 0 if the names match, or a negative value if the name1
+ * lexically precedes name2, or a positive value if the name1
+ * lexically follows name2.
+ */
+U_CAPI int U_EXPORT2
+ucnv_aliasNameCmp(const char *name1, const char *name2);
+
+
+/**
  * Creates a UConverter object with the names specified as a C string.
  * The actual name will be resolved with the alias file
  * using a case-insensitive string comparison that ignores
