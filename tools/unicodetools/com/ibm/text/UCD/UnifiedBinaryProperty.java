@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.3 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.*;
 
 import com.ibm.text.utility.*;
+import com.ibm.text.UnicodeSet;
 
 final class UnifiedBinaryProperty extends UnicodeProperty {
     int majorProp;
@@ -28,6 +29,54 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
         }
         if (!isDefined(propMask, ucd)) return null;
         return getCached(propMask, ucd);
+    }
+    
+    public static UnicodeProperty make(String propAndValue, UCD ucd) {
+        return make(getPropmask(propAndValue, ucd), ucd);
+    }
+    
+    public static UnicodeSet getSet(int propMask, UCD ucd) {
+        UnicodeProperty up = make(propMask, ucd);
+        return up.getSet();
+    }
+    
+    public static UnicodeSet getSet(String propAndValue, UCD ucd) {
+        return getSet(getPropmask(propAndValue, ucd), ucd);
+    }
+    
+    private static Map propNameCache = null;
+    
+    public static int getPropmask(String propAndValue, UCD ucd) {
+        
+        // cache the names
+        if (propNameCache == null) {
+            System.out.println("Caching Property Names");
+            propNameCache = new HashMap();
+        
+            for (int i = 0; i < LIMIT_ENUM; ++i) {
+                UnicodeProperty up = UnifiedBinaryProperty.make(i, ucd);
+                if (up == null) continue;
+                if (!up.isStandard()) continue;
+                if (up.getValueType() != BINARY) continue;
+                String shortValue = Utility.getSkeleton(up.getValue(SHORT));
+                String shortName = Utility.getSkeleton(up.getProperty(SHORT));
+                String longValue = Utility.getSkeleton(up.getValue(LONG));
+                String longName = Utility.getSkeleton(up.getProperty(LONG));
+                Integer result = new Integer(i);
+                propNameCache.put(longName + "=" + longValue, result);
+                propNameCache.put(longName + "=" + shortValue, result);
+                propNameCache.put(shortName + "=" + longValue, result);
+                propNameCache.put(shortName + "=" + shortValue, result);
+            }
+            System.out.println("Done Caching");
+        }
+        
+        propAndValue = Utility.getSkeleton(propAndValue);
+        Integer indexObj = (Integer) propNameCache.get(propAndValue);
+        if (indexObj == null) {
+            throw new IllegalArgumentException("No property found for " + propAndValue);
+        }
+        return indexObj.intValue();
     }
     
     static Map cache = new HashMap();
@@ -76,7 +125,16 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
         shortValueName = _getValue(SHORT);
         numberValueName = _getValue(NUMBER);
         defaultValueStyle = _getDefaultStyle();
-        System.out.println("Value = " + getValue(defaultValueStyle));
+        
+        if (majorProp == (BINARY_PROPERTIES>>8)) {
+            name = valueName;
+            shortName = shortValueName;
+            defaultPropertyStyle = defaultValueStyle;
+            valueName = "YES";
+            shortValueName = "Y";
+        }
+        
+        // System.out.println("Value = " + getValue(defaultValueStyle));
         // System.out.println(majorProp + ", " + propValue + ", " + name);
         // dp = new DerivedProperty(ucd);
     }
@@ -247,9 +305,7 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
                 return UCD_Names.LONG_JOINING_TYPE[propValue];
             case JOINING_GROUP>>8: if (propValue >= LIMIT_JOINING_GROUP) break;
                 return ucd.getJoiningGroupID_fromIndex((byte)propValue);
-            case BINARY_PROPERTIES>>8: if (propValue >= LIMIT_BINARY_PROPERTIES) break;
-                if (style != SHORT) return ucd.getBinaryPropertiesID_fromIndex((byte)propValue);
-                return UCD_Names.SHORT_BP[propValue];
+            case BINARY_PROPERTIES>>8: return ucd.getBinaryPropertiesID_fromIndex((byte)propValue, style);
             case SCRIPT>>8: if (propValue >= LIMIT_SCRIPT) break;
                 if (style != SHORT) return ucd.getScriptID_fromIndex((byte)propValue);
                 return UCD_Names.ABB_SCRIPT[propValue];
@@ -263,7 +319,7 @@ final class UnifiedBinaryProperty extends UnicodeProperty {
                 */
             }
         } catch (RuntimeException e) {
-            throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+            throw new ChainException("Illegal property Number* {0}, {1}", new Object[]{
                  new Integer(majorProp), new Integer(propValue)}, e);
         }
         throw new ChainException("Illegal property Number {0}, {1}", new Object[]{

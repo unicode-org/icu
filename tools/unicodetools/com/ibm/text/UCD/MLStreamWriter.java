@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MLStreamWriter.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -245,7 +245,7 @@ public class MLStreamWriter extends Writer {
     boolean isHTML;
     ArrayList stack = new ArrayList();
     boolean inElement = false;
-    Normalizer formC = new Normalizer(Normalizer.NFC);
+    Normalizer formC = new Normalizer(Normalizer.NFC, "");
     int len;
     int maxLineLength = 60;
     // later, add better line end management, indenting

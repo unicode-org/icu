@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.8 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -48,6 +48,7 @@ public final class UCD implements UCD_Types {
         if (version.indexOf('.') < 0) throw new IllegalArgumentException("Version must be of form 3.1.1");
         UCD result = (UCD)versionCache.get(version);
         if (result == null) {
+            //System.out.println(Utility.getStack());
             result = new UCD();
             result.fillFromFile(version);
             versionCache.put(version, result);
@@ -569,7 +570,8 @@ public final class UCD implements UCD_Types {
     }
 
     static String getCombiningClassID_fromIndex (short index, byte style) {
-        if (style == NORMAL || style == NUMBER) return String.valueOf(index & 0xFF);
+        index &= 0xFF;
+        if (style == NORMAL || style == NUMBER) return String.valueOf(index);
         String s = "Fixed";
         switch (index) {
             case 0: s = style < LONG ? "NR" : "NotReordered"; break;
@@ -619,7 +621,7 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getDecompositionTypeID_fromIndex(byte prop) {
-        return getDecompositionTypeID_fromIndex(NORMAL);
+        return getDecompositionTypeID_fromIndex(prop, NORMAL);
     }
     public static String getDecompositionTypeID_fromIndex(byte prop, byte style) {
         return style == SHORT ? UCD_Names.SHORT_DT[prop] : UCD_Names.DT[prop];
@@ -1069,7 +1071,7 @@ to guarantee identifier closure.
                     uData.joiningType = JT_T;
                 }
                 if (!didJoiningHack && uData.joiningType != old) {
-                    System.out.println("HACK: Setting "
+                    System.out.println("HACK " + foundVersion + ": Setting "
                         + UCD_Names.LONG_JOINING_TYPE[uData.joiningType]
                         + ": " + Utility.hex(cp) + " " + uData.name);
                     didJoiningHack = true;

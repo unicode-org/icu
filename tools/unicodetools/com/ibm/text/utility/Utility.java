@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/12/06 00:05:52 $
-* $Revision: 1.9 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,8 @@ package com.ibm.text.utility;
 import java.util.*;
 import java.text.*;
 import java.io.*;
+import com.ibm.text.UnicodeSet;
+import com.ibm.text.UCD.*;
 
 public final class Utility {    // COMMON UTILITIES
 
@@ -85,7 +87,65 @@ public final class Utility {    // COMMON UTILITIES
         }
         return -1;
     }
-
+    
+    /**
+     * These routines use the Java functions, because they only need to act on ASCII.
+     * Removes space, _, and lowercases.
+     */
+    
+    public static String getSkeleton(String source) {
+        StringBuffer result = new StringBuffer();
+        boolean gotOne = false;
+        // remove spaces, '_'
+        // we can do this with char, since no surrogates are involved
+        for (int i = 0; i < source.length(); ++i) {
+            char ch = source.charAt(i);
+            if (ch == '_' || ch == ' ') {
+                gotOne = true;
+            } else {
+                char ch2 = Character.toLowerCase(ch);
+                if (ch2 != ch) {
+                    gotOne = true;
+                    result.append(ch2);
+                } else {
+                    result.append(ch);
+                }
+            }
+        }
+        if (!gotOne) return source; // avoid string creation
+        return result.toString();
+    }
+    
+    /**
+     * These routines use the Java functions, because they only need to act on ASCII
+     * Changes space, - into _, inserts _ between lower and UPPER.
+     */
+    
+    public static String getUnskeleton(String source, boolean titlecaseStart) {
+        StringBuffer result = new StringBuffer();
+        int lastCat = -1;
+        boolean haveFirstCased = true;
+        for (int i = 0; i < source.length(); ++i) {
+            char c = source.charAt(i);
+            if (c == ' ' || c == '-') c = '_';
+            int cat = Character.getType(c);
+            if (lastCat == Character.LOWERCASE_LETTER && cat == Character.UPPERCASE_LETTER) {
+                result.append('_');
+            }
+            if (haveFirstCased && (cat == Character.LOWERCASE_LETTER 
+                    || cat == Character.TITLECASE_LETTER || cat == Character.UPPERCASE_LETTER)) {
+                if (titlecaseStart) {
+                    c = Character.toUpperCase(c);
+                }
+                haveFirstCased = false;
+            }
+            result.append(c);
+            lastCat = cat;
+        }
+        return result.toString();
+    }
+    
+    
     public static String findSubstring(String source, Set target, boolean invert) {
         Iterator it = target.iterator();
         while (it.hasNext()) {
@@ -178,6 +238,10 @@ public final class Utility {    // COMMON UTILITIES
 	    return result.toString();
 	}
 
+    /**
+     * Returns a string containing count copies of s.
+     * If count <= 0, returns "".
+     */
 	public static String repeat(String s, int count) {
 	    if (count <= 0) return "";
 	    if (count == 1) return s;
@@ -260,6 +324,10 @@ public final class Utility {    // COMMON UTILITIES
         return output.toString();
     }
 
+    /**
+     * Splits a string containing divider into pieces, storing in output
+     * and returns the number of pieces.
+     */
 	public static int split(String s, char divider, String[] output) {
 	    int last = 0;
 	    int current = 0;
@@ -407,19 +475,22 @@ public final class Utility {    // COMMON UTILITIES
         return (aEnd - aStart) - (bEnd - bStart);
     }
 
-    public static String join(int[] array, String sep) {
+    /**
+     * Joins an array together, using divider between the pieces
+     */
+    public static String join(int[] array, String divider) {
         String result = "{";
         for (int i = 0; i < array.length; ++i) {
-            if (i != 0) result += sep;
+            if (i != 0) result += divider;
             result += array[i];
         }
         return result + "}";
     }
 
-    public static String join(long[] array, String sep) {
+    public static String join(long[] array, String divider) {
         String result = "{";
         for (int i = 0; i < array.length; ++i) {
-            if (i != 0) result += sep;
+            if (i != 0) result += divider;
             result += array[i];
         }
         return result + "}";
@@ -506,16 +577,18 @@ public final class Utility {    // COMMON UTILITIES
     }
 
     public static BufferedReader openUnicodeFile(String filename, String version, boolean show) throws IOException {
-        String name = getMostRecentUnicodeDataFile(filename, version, show);
+        String name = getMostRecentUnicodeDataFile(filename, version, true, show);
         if (name == null) return null;
         return new BufferedReader(new FileReader(name),32*1024);
     }
 
-    public static String getMostRecentUnicodeDataFile(String filename, String version, boolean show) throws IOException {
+    public static String getMostRecentUnicodeDataFile(String filename, String version, 
+      boolean acceptLatest, boolean show) throws IOException {
         // get all the files in the directory
 
+        int compValue = acceptLatest ? 0 : 1;
         for (int i = 0; i < searchPath.length; ++i) {
-            if (version.length() != 0 && version.compareTo(searchPath[i]) < 0) continue;
+            if (version.length() != 0 && version.compareTo(searchPath[i]) < compValue) continue;
 
             String directoryName = DATA_DIR + File.separator + searchPath[i] + "-Update" + File.separator;
             if (show) System.out.println("Trying: '" + directoryName + "', '" + filename + "'");
@@ -549,11 +622,40 @@ public final class Utility {    // COMMON UTILITIES
         log.println("</head><body>");
     }
     
+    /**
+     * Replaces all occurances of piece with replacement, and returns new String
+     */
     public static String replace(String source, String piece, String replacement) {
         while (true) {
             int pos = source.indexOf(piece);
             if (pos < 0) return source;
             source = source.substring(0,pos) + source.substring(pos + piece.length());
+        }
+    }
+    
+    public static String getStack() {
+        Exception e = new Exception();
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        pw.flush();
+        return "Showing Stack with fake " + sw.getBuffer().toString();
+    }
+    
+    public static void showSetNames(String prefix, UnicodeSet set, boolean all, UCD ucd) {
+        int count = set.getRangeCount();
+        for (int i = 0; i < count; ++i) {
+            int start = set.getRangeStart(i);
+            int end = set.getRangeEnd(i);
+            if (all) {
+                for (int cp = start; cp <= end; ++cp) {
+                    if (!set.contains(cp)) continue;
+                    System.out.println(prefix + ucd.getCodeAndName(cp));
+                }
+            } else {
+                System.out.println(prefix + ucd.getCodeAndName(start) + 
+                    ((start != end) ? (".." + ucd.getCodeAndName(end)) : ""));
+            }
         }
     }
 }

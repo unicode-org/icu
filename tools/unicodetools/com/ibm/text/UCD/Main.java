@@ -5,17 +5,59 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.7 $
+* $Date: 2001/12/13 23:35:56 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
+import java.util.Date;
 
-public final class Main {
-    static String ucdVersion = "";
+public final class Main implements UCD_Types {
+    
+    static String ucdVersion = UCD.latestVersion;
+    static UCD ucd;
+    static Normalizer nfc;
+    static Normalizer nfd;
+    static Normalizer nfkc;
+    static Normalizer nfkd;
+    static Normalizer[] nf = new Normalizer[4];
+    
+    static void setUCD() {
+        ucd = UCD.make(Main.ucdVersion);
+        nfd = nf[NFD] = new Normalizer(Normalizer.NFD, Main.ucdVersion);
+        nfc = nf[NFC] = new Normalizer(Normalizer.NFC, Main.ucdVersion);
+        nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, Main.ucdVersion);
+        nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, Main.ucdVersion);
+        System.out.println("Loaded UCD" + ucd.getVersion() + " " + (new Date(Main.ucd.getDate())));
+    }
+
+    static final String[] ALL_FILES = {
+        "CaseFolding",
+        "CompositionExclusions",
+        "DerivedBidiClass",
+        "DerivedBinaryProperties",
+        "DerivedCombiningClass",
+        "DerivedCoreProperties",
+        "DerivedDecompositionType",
+        "DerivedEastAsianWidth",
+        "DerivedGeneralCategory",
+        "DerivedJoiningGroup",
+        "DerivedJoiningType",
+        "DerivedLineBreak",
+        "DerivedNormalizationProperties",
+        "DerivedNumericType",
+        "DerivedNumericValues",
+        "NormalizationTest",
+        "PropertyAliases",
+        "PropList",
+        "Scripts",
+        "SpecialCasing",
+        "DerivedAge",
+        //"OtherDerivedProperties",
+    };
 
     public static void main (String[] args) throws Exception {
 
@@ -26,19 +68,19 @@ public final class Main {
             Utility.fixDot();
             System.out.println("Argument: " + args[i]);
 
-            if (arg.equalsIgnoreCase("all")) {
-                //checkCase();
+            if (arg.equalsIgnoreCase("verify")) {
+                VerifyUCD.verify();
                 VerifyUCD.checkCanonicalProperties();
                 VerifyUCD.CheckCaseFold();
                 VerifyUCD.checkAgainstUInfo();
 
-            } else if (arg.equalsIgnoreCase("build")) {
-                ConvertUCD.main(new String[]{ucdVersion});
-            } else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
+            } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{ucdVersion});
+            else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
             else if (arg.equalsIgnoreCase("testskippable")) NFSkippable.main(null);
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
             else if (arg.equalsIgnoreCase("generateHanTransliterator")) GenerateHanTransliterator.main();
+            else if (arg.equalsIgnoreCase("compareBlueberry")) VerifyUCD.compareBlueberry();
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
             else if (arg.equalsIgnoreCase("checkCase")) VerifyUCD.checkCase();
@@ -52,19 +94,180 @@ public final class Main {
             //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
             else if (arg.equalsIgnoreCase("checkScripts")) VerifyUCD.checkScripts();
             else if (arg.equalsIgnoreCase("IdentifierTest")) VerifyUCD.IdentifierTest();
-            else if (arg.equalsIgnoreCase("Generate")) GenerateData.main(ucdVersion, Utility.split(args[++i],','));
             else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
             /*else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
                 */
-            else {
-                System.out.println("Unknown option -- must be one of the following (case-insensitive)");
-                System.out.println("generateXML, checkCase, checkCanonicalProperties, CheckCaseFold,");
-                System.out.println("VerifyIDN, NFTest, test1, ");
-                // System.out.println(checkAgainstUInfo,");
-                System.out.println("checkScripts, IdentifierTest, writeNormalizerTestSuite");
-            }
+            else extras(new String[] {arg});
         }
     }
+    
+    public static void extras (String[] args) throws Exception {
+        //ubp = new UnifiedBinaryProperty(ucd);
+        
+        boolean expanding = false;
+        
+        for (int i = 0; i < args.length; ++i) {
+            String arg = args[i];
+            if (arg.charAt(0) == '#') return; // skip rest of line
+            long mask = 0;
+
+            Utility.fixDot();
+            if (expanding) System.out.println("Argument: " + args[i]);
+
+            if (arg.equalsIgnoreCase("All")) {
+                // Append all args at end
+                String[] temp = new String[args.length + ALL_FILES.length];
+                System.arraycopy(args, 0, temp, 0, args.length);
+                System.arraycopy(ALL_FILES, 0, temp, args.length, ALL_FILES.length);
+                args = temp;
+                expanding = true;
+
+            // EXTRACTED PROPERTIES
+            
+            } else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
+                GenerateData.generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedBidiClass");
+                    
+            } else if (arg.equalsIgnoreCase("DerivedBinaryProperties")) {
+                GenerateData.generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES+1, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedBinaryProperties" );
+                    
+            } else if (arg.equalsIgnoreCase("DerivedCombiningClass")) {
+                GenerateData.generateVerticalSlice(COMBINING_CLASS, COMBINING_CLASS+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedCombiningClass" );
+                    
+            } else if (arg.equalsIgnoreCase("DerivedDecompositionType")) {
+                GenerateData.generateVerticalSlice(DECOMPOSITION_TYPE, DECOMPOSITION_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedDecompositionType" );
+
+            } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
+                GenerateData.generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedEastAsianWidth" );
+                    
+            } else if (arg.equalsIgnoreCase("DerivedGeneralCategory")) {
+                GenerateData.generateVerticalSlice(CATEGORY, CATEGORY+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedGeneralCategory" );
+                    
+            } else if (arg.equalsIgnoreCase("DerivedJoiningGroup")) {
+                GenerateData.generateVerticalSlice(JOINING_GROUP, JOINING_GROUP+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedJoiningGroup" );
+                    
+            } else if (arg.equalsIgnoreCase("DerivedJoiningType")) {
+                GenerateData.generateVerticalSlice(JOINING_TYPE, JOINING_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedJoiningType" );
+                    
+            } else if (arg.equalsIgnoreCase("DerivedLineBreak")) {
+                GenerateData.generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedLineBreak" );
+
+            } else if (arg.equalsIgnoreCase("DerivedNumericType")) {
+                GenerateData.generateVerticalSlice(NUMERIC_TYPE, NUMERIC_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedNumericType" );
+
+            } else if (arg.equalsIgnoreCase("DerivedNumericValues")) {
+                GenerateData.generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, GenerateData.HEADER_DERIVED,
+                    "DerivedData/DerivedExtractedProperties/", "DerivedNumericValues" );
+            
+    // OTHER STANDARD PROPERTIES
+    
+            } else if (arg.equalsIgnoreCase("CaseFolding")) {
+                GenerateCaseFolding.makeCaseFold(true);
+                GenerateCaseFolding.makeCaseFold(false);
+                    
+            } else if (arg.equalsIgnoreCase("SpecialCasing")) {
+                GenerateCaseFolding.generateSpecialCasing();
+                    
+            } else if (arg.equalsIgnoreCase("CompositionExclusions")) {
+                GenerateData.generateCompExclusions();
+
+            } else if (arg.equalsIgnoreCase("DerivedAge")) {
+                GenerateData.generateAge("DerivedData/", "DerivedAge");
+                
+            } else if (arg.equalsIgnoreCase("DerivedCoreProperties")) {
+                GenerateData.generateDerived(DERIVED_CORE, true, GenerateData.HEADER_DERIVED, "DerivedData/", "DerivedCoreProperties");
+                
+            } else if (arg.equalsIgnoreCase("DerivedNormalizationProperties")) {
+                GenerateData.generateDerived(DERIVED_NORMALIZATION, true, GenerateData.HEADER_DERIVED, "DerivedData/", 
+                    "DerivedNormalizationProperties" );
+                    
+            } else if (arg.equalsIgnoreCase("NormalizationTest")) {
+                GenerateData.writeNormalizerTestSuite("DerivedData/", "NormalizationTest");
+                
+            } else if (arg.equalsIgnoreCase("PropertyAliases")) {
+                GenerateData.generatePropertyAliases();                
+
+            } else if (arg.equalsIgnoreCase("PropList")) {
+                GenerateData.generateVerticalSlice(BINARY_PROPERTIES + White_space, BINARY_PROPERTIES + NEXT_ENUM,
+                        GenerateData.HEADER_EXTEND, "DerivedData/", "PropList");
+
+            } else if (arg.equalsIgnoreCase("Scripts")) {
+                GenerateData.generateVerticalSlice(SCRIPT+1, SCRIPT + NEXT_ENUM, 
+                        GenerateData.HEADER_SCRIPTS, "DerivedData/", "Scripts");
+    // OTHER TESTING
+            
+            } else if (arg.equalsIgnoreCase("OtherDerivedProperties")) {
+                //mask = Utility.setBits(0, NFC_Leading, NFC_Resulting);
+                GenerateData.generateDerived(ALL, false, GenerateData.HEADER_DERIVED, "OtherData/", "OtherDerivedProperties");
+
+            } else if (arg.equalsIgnoreCase("AllBinary")) {
+                GenerateData.generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES + NEXT_ENUM,
+                        GenerateData.HEADER_EXTEND, "OtherDerived/", "AllBinary");
+                        
+            } else if (arg.equalsIgnoreCase("DerivedGeneralCategoryTEST")) {
+                GenerateData.generateVerticalSlice(CATEGORY+29, CATEGORY+32, GenerateData.HEADER_DERIVED,
+                    "DerivedData/", "DerivedGeneralCategory" );
+                    
+            } else if (arg.equalsIgnoreCase("differences")) {
+                GenerateData.listDifferences();
+                
+            } else if (arg.equalsIgnoreCase("partition")) {
+                GenerateData.partitionProperties();
+                
+            } else if (arg.equalsIgnoreCase("listAccents")) {
+                GenerateData.listCombiningAccents();
+                
+            } else if (arg.equalsIgnoreCase("listGreekVowels")) {
+                GenerateData.listGreekVowels();
+                
+            } else if (arg.equalsIgnoreCase("listKatakana")) {
+                GenerateData.listKatakana();
+                
+            /* 
+            } else if (arg.equalsIgnoreCase("DerivedFullNormalization")) {
+                mask = Utility.setBits(0, DerivedProperty.GenNFD, DerivedProperty.GenNFKC);
+                GenerateData.generateDerived(mask, GenerateData.HEADER_DERIVED, "DerivedData/", "DerivedFullNormalization" );
+            } else if (arg.equalsIgnoreCase("caseignorable")) {
+                mask = Utility.setBits(0, DerivedProperty.Other_Case_Ignorable, DerivedProperty.Type_i);
+                GenerateData.generateDerived(mask, GenerateData.HEADER_DERIVED, "OtherData/", "CaseIgnorable" );
+            } else if (arg.equalsIgnoreCase("nfunsafestart")) {
+                mask = Utility.setBits(0, NFD_UnsafeStart, NFKC_UnsafeStart);
+                GenerateData.generateDerived(mask, GenerateData.HEADER_DERIVED, "OtherData/", "NFUnsafeStart");
+            */
+            
+            } else {
+                throw new IllegalArgumentException(" ! Unknown option -- see Main.java for options");
+            }
+
+
+            //checkHoffman("\u05B8\u05B9\u05B1\u0591\u05C3\u05B0\u05AC\u059F");
+            //checkHoffman("\u0592\u05B7\u05BC\u05A5\u05B0\u05C0\u05C4\u05AD");
+
+
+                //GenerateData.generateDerived(Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf),
+                //    GenerateData.HEADER_DERIVED, "DerivedData/", "DerivedPropData2" );
+            //GenerateData.generateVerticalSlice(SCRIPT, SCRIPT+1, "ScriptCommon" );
+            //listStrings("LowerCase" , 0,0);
+            //GenerateData.generateVerticalSlice(0, LIMIT_ENUM, SKIP_SPECIAL, PROPLIST1, "DerivedData/", "DerivedPropData1" );
+
+            // AGE stuff
+            //UCD ucd = UCD.make();
+            //System.out.println(ucd.getAgeID(0x61));
+            //System.out.println(ucd.getAgeID(0x2FA1D));
+
+            //
+        }
+    }
+
 }

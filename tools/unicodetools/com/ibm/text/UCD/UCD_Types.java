@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.7 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -28,6 +28,11 @@ public interface UCD_Types {
         DERIVED_NORMALIZATION = 4, 
         DERIVED_ALL = 6, 
         ALL = (byte)-1;
+        
+     static final byte
+        NON_ENUMERATED = -1,
+        ENUMERATED = 0,
+        BINARY = 1;
     
     /*
   0	Code value in 4-digit hexadecimal format.
@@ -180,7 +185,9 @@ public interface UCD_Types {
         UnifiedIdeograph = 26,
         Reserved_Cf_Code_Point = 27,
         Deprecated = 28,
-	    LIMIT_BINARY_PROPERTIES = 29;
+        Soft_Dotted = 29,
+        Logical_Order_Exception = 30,
+	    LIMIT_BINARY_PROPERTIES = 31;
 
 	/*
     static final int

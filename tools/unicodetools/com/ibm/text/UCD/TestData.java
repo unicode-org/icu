@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.7 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import com.ibm.text.utility.*;
 
 public class TestData implements UCD_Types {
+    /*
 
     public static void main (String[] args) throws IOException {
         System.out.println("START");
@@ -200,7 +201,6 @@ public class TestData implements UCD_Types {
         }
         output.close();
     }
-    */
 
     public static void generateCompExclusions() throws IOException {
         PrintWriter output = Utility.openPrintWriter("CompositionExclusionsDelta.txt");
@@ -246,7 +246,7 @@ public class TestData implements UCD_Types {
         System.out.println(ucd.getData(0x100000-3));
         if (true) return;
         String test2 = ucd.getName(0x2A6D6);
-        //*/
+        //* /
 
 
         PrintWriter output = Utility.openPrintWriter(file);
@@ -485,5 +485,5 @@ public class TestData implements UCD_Types {
         "E\u0304\u0300",
         "E\u0300\u0304",
     };
-
+//*/
 }

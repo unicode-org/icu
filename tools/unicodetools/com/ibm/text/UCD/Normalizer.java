@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2001/12/03 19:29:35 $
-* $Revision: 1.5 $
+* $Date: 2001/12/13 23:35:57 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -49,9 +49,9 @@ public final class Normalizer implements UCD_Types {
     /**
      * Create a normalizer for a given form.
      */
-    public Normalizer(byte form) {
-        this(form,"");
-    }
+    // public Normalizer(byte form) {
+    //    this(form,"");
+    //}
 
     /**
      * Return string name
