@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UTF16Test.java,v $ 
-* $Date: 2001/03/23 19:52:03 $ 
-* $Revision: 1.5 $
+* $Date: 2001/08/23 02:20:59 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -208,6 +208,59 @@ public final class UTF16Test extends TestFmwk
        UTF16.charAtCodePointOffset(str.toString(), 6) != 0xD800)
       errln("FAIL Setting non-supplementary characters at a surrogate " +
             "position");
+  }
+  
+  /**
+  * Testing countCodePoint, findOffsetFromCodePoint and findCodePointOffset
+  */
+  public void TestUTF16CodePointOffset()
+  {
+    // jitterbug 47
+    String str = "a\uD800\uDC00b";
+    if (UTF16.findCodePointOffset(str, 0) != 0 ||
+        UTF16.findOffsetFromCodePoint(str, 0) != 0) {
+        errln("FAIL Getting the first codepoint offset to a string with " +
+              "supplementary characters");
+    }
+    if (UTF16.findCodePointOffset(str, 1) != 1 ||
+        UTF16.findOffsetFromCodePoint(str, 1) != 1) {
+        errln("FAIL Getting the second codepoint offset to a string with " +
+              "supplementary characters");
+    }
+    if (UTF16.findCodePointOffset(str, 2) != 1 ||
+        UTF16.findOffsetFromCodePoint(str, 2) != 3) {
+        errln("FAIL Getting the third codepoint offset to a string with " +
+              "supplementary characters");
+    }
+    if (UTF16.findCodePointOffset(str, 3) != 2 ||
+        UTF16.findOffsetFromCodePoint(str, 3) != 4) {
+        errln("FAIL Getting the last codepoint offset to a string with " +
+              "supplementary characters");
+    }
+    if (UTF16.findCodePointOffset(str, 4) != 3) {
+        errln("FAIL Getting the length offset to a string with " +
+              "supplementary characters");
+    }
+    try {
+        UTF16.findCodePointOffset(str, 5);
+        errln("FAIL Getting the a non-existence codepoint to a string with " +
+              "supplementary characters");
+    } catch (Exception e) {
+        // this is a success
+        logln("Passed out of bounds codepoint offset");
+    }
+    try {
+        UTF16.findOffsetFromCodePoint(str, 4);
+        errln("FAIL Getting the a non-existence codepoint to a string with " +
+              "supplementary characters");
+    } catch (Exception e) {
+        // this is a success
+        logln("Passed out of bounds codepoint offset");
+    }
+    if (UTF16.countCodePoint(str) != 3) {
+        errln("FAIL Counting the number of codepoints in a string with " +
+              "supplementary characters");
+    }
   }
  
   public static void main(String[] arg)
