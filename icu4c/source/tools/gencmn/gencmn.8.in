@@ -20,8 +20,7 @@
 ]
 [
 .BR "\-c\fP, \fB\-\-copyright"
-]
-[
+|
 .BI "\-C\fP, \fB\-\-comment" " comment"
 ]
 [
@@ -66,12 +65,12 @@ Print help about usage and exit.
 Display extra informative messages during execution.
 .TP
 .BR \-c\fP, \fB\-\-copyright
-Include a copyright notice in the resulting data.
+Include the ICU copyright notice in the resulting data.
 .TP
 .BI "\-C\fP, \fB\-\-comment" " comment"
 Include the specified
 .I comment
-in the resulting data. 
+in the resulting data instead of the ICU copyright notice. 
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 Set the destination directory to
