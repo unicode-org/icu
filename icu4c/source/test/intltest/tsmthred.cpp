@@ -1395,9 +1395,9 @@ void MultithreadTest::TestCollators()
 //
 //-------------------------------------------------------------------------------------------
 
-const int kStringThreadIterations = 20;  // # of iterations per thread
+const int kStringThreadIterations = 2500;// # of iterations per thread
 const int kStringThreadThreads    = 10;  // # of threads to spawn
-const int kStringThreadPatience   = 60;  // time in seconds to wait for all threads
+const int kStringThreadPatience   = 120; // time in seconds to wait for all threads
 
 
 class StringThreadTest2 : public ThreadWithStatus
@@ -1421,7 +1421,7 @@ public:
         fTraceInfo    = 1;
         int loopCount = 0;
 
-        for (loopCount = 0; loopCount < 5000; loopCount++) {
+        for (loopCount = 0; loopCount < kStringThreadIterations; loopCount++) {
             if (*fSharedString != "This is the original test string.") {
                 error("Original string is corrupt.");
                 break;
