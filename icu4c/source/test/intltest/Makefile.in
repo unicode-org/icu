@@ -38,7 +38,7 @@ tsmthred.o tsmutex.o tsnmfmt.o tsputil.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o strcase.o transtst.o strtest.o thcoll.o \
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o unhxtrts.o hxuntrts.o \
 ufltlgts.o testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
-jamotest.o srchtest.o reptest.o biditst.o regextst.o \
+jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o tstdtmod.o testdata.o datamap.o ucaconf.o icusvtst.o \
 uobjtest.o
 
