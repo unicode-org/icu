@@ -1413,12 +1413,12 @@ echo "configure:1413: checking for 64-bit executable support" >&5
     if test "$ENABLE_64BIT_LIBS" = no; then
         case "${host}" in
         *-*-hpux*)
-            case "${CXX}" in
-            *CC)
-                CFLAGS="${CFLAGS} +DAportable"
-                CXXFLAGS="${CXXFLAGS} +DAportable"
-                ;;
-            esac;;
+#            case "${CXX}" in
+#            *CC)
+#                CFLAGS="${CFLAGS} +DAportable"
+#                CXXFLAGS="${CXXFLAGS} +DAportable"
+#                ;;
+#            esac;;
         esac
     else
         case "${host}" in
