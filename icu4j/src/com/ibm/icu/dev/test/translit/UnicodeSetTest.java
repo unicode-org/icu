@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/03/18 01:08:46 $ 
- * $Revision: 1.27 $
+ * $Date: 2002/04/26 21:30:48 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -1079,7 +1079,16 @@ public class UnicodeSetTest extends TestFmwk {
                 in = false;
                 continue;
             }
-            // TODO
+            boolean contained = set.contains(expStrings[i]);
+            if (contained == in) {
+                logln("Ok: " + expPat + 
+                      (contained ? " contains {" : " does not contain {") +
+                      Utility.escape(expStrings[i]) + "}");
+            } else {
+                errln("FAIL: " + expPat + 
+                      (contained ? " contains {" : " does not contain {") +
+                      Utility.escape(expStrings[i]) + "}");
+            }
         }
     }
 
