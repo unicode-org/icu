@@ -841,6 +841,14 @@ InputPath=.\unicode\normlzr.h
 
 !ELSEIF  "$(CFG)" == "common - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\normlzr.h
+
+"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
 
 !ENDIF 
@@ -933,37 +941,6 @@ InputPath=.\unicode\parsepos.h
 InputPath=.\unicode\parsepos.h
 
 "..\..\include\unicode\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\putil.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\putil.h
-
-"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "common - Win64 Release"
-
-!ELSEIF  "$(CFG)" == "common - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\putil.h
-
-"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
