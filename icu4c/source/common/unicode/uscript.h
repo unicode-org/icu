@@ -78,7 +78,8 @@ typedef enum UScriptCode {
  * Fills in USCRIPT_LATIN given "en" OR "en_US" 
  * If required capacity is greater than capacity of the destination buffer then the error code
  * is set to U_BUFFER_OVERFLOW_ERROR and the required capacity is returned
- * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
+ * @param nameOrAbbrOrLocale name of the script, as given in
+ * PropertyValueAliases.txt, or ISO 15924 code or locale
  * @param fillIn the UScriptCode buffer to fill in the script code
  * @param capacity the capacity (size) fo UScriptCode buffer passed in.
  * @param err the error status code.
@@ -92,7 +93,8 @@ uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capac
  * Gets a script name associated with the given script code. 
  * Returns  "Malayam" given USCRIPT_MALAYALAM
  * @param scriptCode UScriptCode enum
- * @return script name as a string in full as given in TR#24
+ * @return script long name as given in
+ * PropertyValueAliases.txt, or NULL if scriptCode is invalid
  * @draft ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 
@@ -102,7 +104,8 @@ uscript_getName(UScriptCode scriptCode);
  * Gets a script name associated with the given script code. 
  * Returns  "Mlym" given USCRIPT_MALAYALAM
  * @param scriptCode UScriptCode enum
- * @return script abbreviated name as a string  as given in TR#24
+ * @return script abbreviated name as given in
+ * PropertyValueAliases.txt, or NULL if scriptCode is invalid
  * @draft ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 
