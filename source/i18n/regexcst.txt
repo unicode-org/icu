@@ -237,7 +237,7 @@ backslash:
    'd'                   n  expr-quant                              doBackslashd
    'D'                   n  expr-quant                              doBackslashD
    'G'                   n  term                                    doBackslashG
-   'N'                   n  expr-quant                              doNamedChar      #   \N{NAME}  named char
+   'N'                      expr-quant                              doProperty       #   \N{NAME}  named char
    'p'                      expr-quant                              doProperty       #   \p{Lu}  style property
    'P'                      expr-quant                              doProperty
    'Q'                   n  term                                    doEnterQuoteMode
@@ -253,9 +253,6 @@ backslash:
    digit_char	         n  expr-quant                              doBackRef         #  Will scan multiple digits
    eof                      errorDeath                              doEscapeError
    default               n  expr-quant		                    doLiteralChar     #  Escaped literal char.		       
-
-    
-    
 
     
 #
