@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DictionaryBasedBreakIterator.java,v $ 
- * $Date: 2000/03/10 04:07:20 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/09 22:49:12 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -375,14 +375,14 @@ switch (categoryFlags.length % 4) {
             }
 
             // look up the new state to transition to in the dictionary
-            state = dictionary.at(state, c);
+            state = (dictionary.at(state, c)) & 0xFFFF;
 //System.out.print(", state = " + state);
 
             // if the character we're sitting on causes us to transition to
             // the "end of word" state, then it was a non-dictionary character
             // and we've successfully traversed the whole range.  Drop out
             // of the loop.
-            if (state == -1) {
+            if (state == /*-1*/ 0xFFFF) {
                 currentBreakPositions.push(new Integer(text.getIndex()));
                 break;
             }
