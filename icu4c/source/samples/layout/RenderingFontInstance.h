@@ -17,9 +17,12 @@
 
 #include "LETypes.h"
 #include "LEFontInstance.h"
+#include "FontTableCache.h"
 #include "cmaps.h"
 
+#if 0
 struct TableCacheEntry;
+#endif
 
 class RenderingFontInstance;
 
@@ -33,6 +36,7 @@ public:
                     const le_int32 *dx, le_int32 x, le_int32 y, le_int32 width, le_int32 height) = 0;
 };
 
+#if 0
 enum RFIErrorCode {
     RFI_NO_ERROR = 0,
 
@@ -41,8 +45,9 @@ enum RFIErrorCode {
     RFI_MISSING_FONT_TABLE_ERROR  = 3,
     RFI_OUT_OF_MEMORY_ERROR       = 4
 };
+#endif
 
-class RenderingFontInstance : public LEFontInstance
+class RenderingFontInstance : public LEFontInstance, protected FontTableCache
 {
 protected:
     RenderingSurface *fSurface;
@@ -56,15 +61,21 @@ protected:
     float fDeviceScaleX;
     float fDeviceScaleY;
 
+#if 0
     TableCacheEntry *fTableCache;
     le_int32 fTableCacheCurr;
     le_int32 fTableCacheSize;
+#endif
 
     CMAPMapper *fMapper;
 
-    virtual RFIErrorCode initMapper();
-    virtual RFIErrorCode initFontTableCache();
+    virtual LEErrorCode initMapper();
+
+#if 0
+    virtual LEErrorCode initFontTableCache();
     virtual void flushFontTableCache();
+#endif
+
     virtual const void *readFontTable(LETag tableTag) const = 0;
 
 public:
@@ -74,11 +85,15 @@ public:
 
     virtual const void *getFontTable(LETag tableTag) const;
 
+#if 0
     virtual le_bool canDisplay(LEUnicode32 ch) const;
+#endif
 
     virtual le_int32 getUnitsPerEM() const;
 
+#if 0
     virtual le_int32 getLineHeight() const;
+#endif
 
     virtual le_int32 getAscent() const;
 
@@ -86,9 +101,16 @@ public:
 
     virtual le_int32 getLeading() const;
 
+#if 0
     virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const;
 
     virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
+#endif
+
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const
+    {
+        return fMapper->unicodeToGlyph(ch);
+    };
 
     virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const;
 
@@ -100,6 +122,7 @@ public:
 
     float getYPixelsPerEm() const;
 
+#if 0
     float xUnitsToPoints(float xUnits) const;
 
     float yUnitsToPoints(float yUnits) const;
@@ -113,22 +136,37 @@ public:
     void pixelsToUnits(LEPoint &pixels, LEPoint &units) const;
 
     void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const;
+#endif
+
+    float getScaleFactorX() const
+    {
+        return fDeviceScaleX;
+    };
+
+    float getScaleFactorY() const
+    {
+        return fDeviceScaleY;
+    };
 };
 
+#if 0
 inline le_bool RenderingFontInstance::canDisplay(LEUnicode32 ch) const
 {
     return fMapper->unicodeToGlyph(ch) != 0;
 }
+#endif
 
 inline le_int32 RenderingFontInstance::getUnitsPerEM() const
 {
     return fUnitsPerEM;
 }
 
+#if 0
 inline le_int32 RenderingFontInstance::getLineHeight() const
 {
     return getAscent() + getDescent() + getLeading();
 }
+#endif
 
 inline le_int32 RenderingFontInstance::getAscent() const
 {
@@ -166,6 +204,7 @@ inline float RenderingFontInstance::getYPixelsPerEm() const
     return  (float) fPointSize;
 }
 
+#if 0
 inline float RenderingFontInstance::xUnitsToPoints(float xUnits) const
 {
     return (xUnits * fPointSize) / (float) fUnitsPerEM;
@@ -203,5 +242,6 @@ inline void RenderingFontInstance::transformFunits(float xFunits, float yFunits,
     pixels.fX = xUnitsToPoints(xFunits) * fDeviceScaleX;
     pixels.fY = yUnitsToPoints(yFunits) * fDeviceScaleY;
 }
+#endif
 
 #endif
