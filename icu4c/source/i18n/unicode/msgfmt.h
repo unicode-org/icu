@@ -227,7 +227,7 @@ class DateFormat;
  * the string patterns), then be careful not to produce a format that
  * recurses on itself, which will cause an infinite loop.
  * <P>
- * <EM>Note:<EM>Subformats are numbered by their order in the pattern.
+ * <EM>Note:</EM> Subformats are numbered by their order in the pattern.
  * This is <EM>not</EM> the same as the argumentIndex.
  * <pre>
  * \code
@@ -238,6 +238,10 @@ class DateFormat;
  *    format2 affects the second variable {0}
  * \endcode
  * </pre>
+ *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  */
 class U_I18N_API MessageFormat : public Format {
 public:

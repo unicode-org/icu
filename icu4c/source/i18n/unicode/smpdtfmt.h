@@ -191,6 +191,10 @@ class DateFormat;
  * year, whether hours are zero based or not (0 vs 12 or 24), and the timezone.
  * There is one common number format to handle all the numbers; the digit count
  * is handled programmatically according to the pattern.
+ *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  */
 class U_I18N_API SimpleDateFormat: public DateFormat {
 public:

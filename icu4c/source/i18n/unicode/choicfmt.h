@@ -246,6 +246,10 @@ class MessageFormat;
  *       return 0;
  *   }
  * \endcode
+ *
+ * <p><em>User subclasses are not supported.</em> While clients may write
+ * subclasses, such code will not necessarily work and will not be
+ * guaranteed to work stably from release to release.
  */
 class U_I18N_API ChoiceFormat: public NumberFormat {
 public:
