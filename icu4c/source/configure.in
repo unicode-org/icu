@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.83 2000/10/17 16:31:36 yves Exp $
+dnl $Id: configure.in,v 1.84 2000/10/18 20:35:21 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -181,10 +181,14 @@ if test $hpuxcma = true; then
 else 
 if test $threads = true; then
 
- dnl special pthread handling 
- dnl AIX uses pthreads instead of pthread, and HP/UX uses cma
- dnl FreeBSD users -pthread
- AC_SEARCH_LIBS(pthread_create, pthread pthreads c_r cma)
+ dnl Locate the right library for POSIX threads. We look for the
+ dnl symbols in the libraries first, because on Solaris libc provides
+ dnl pthread_create but libpthread has the real code :(
+ dnl AIX uses libpthreads instead of libpthread, and HP/UX uses libcma
+ dnl (but that was checked above).
+ dnl FreeBSD users may need libpthread if they do not have libc_r.
+
+ AC_SEARCH_LIBS_FIRST(pthread_create, pthread pthreads c_r cma)
 
  if test "$ac_cv_search_pthread_create" != no; then
   ICU_USE_THREADS=1
