@@ -75,44 +75,44 @@
 /*===========================================================================*/
 
 #ifndef INT8_MIN
-#   define INT8_MIN        (-128)
+#   define INT8_MIN        ((int8_t)(-128))
 #endif
 #ifndef INT16_MIN
-#   define INT16_MIN       (-32767-1)
+#   define INT16_MIN       ((int16_t)(-32767-1))
 #endif
 #ifndef INT32_MIN
-#   define INT32_MIN       (-2147483647-1)
+#   define INT32_MIN       ((int32_t)(-2147483647-1))
 #endif
 
 #ifndef INT8_MAX
-#   define INT8_MAX        (127)
+#   define INT8_MAX        ((int8_t)(127))
 #endif
 #ifndef INT16_MAX
-#   define INT16_MAX       (32767)
+#   define INT16_MAX       ((int16_t)(32767))
 #endif
 #ifndef INT32_MAX
-#   define INT32_MAX       (2147483647)
+#   define INT32_MAX       ((int32_t)(2147483647))
 #endif
 
 #ifndef UINT8_MAX
-#   define UINT8_MAX       (255U)
+#   define UINT8_MAX       ((uint8_t)(255U))
 #endif
 #ifndef UINT16_MAX
-#   define UINT16_MAX      (65535U)
+#   define UINT16_MAX      ((uint16_t)(65535U))
 #endif
 #ifndef UINT32_MAX
-#   define UINT32_MAX      (4294967295U)...
+#   define UINT32_MAX      ((uint32_t)(4294967295U))
 #endif
 
 #if defined(__64BIT__) || defined(_LONG_LONG) || defined(_LP64) || defined(WIN64) || defined(_WIN64)
 #   ifndef INT64_MIN
-#       define INT64_MIN       (-9223372036854775807-1)
+#       define INT64_MIN       ((int64_t)(-9223372036854775807-1))
 #   endif
 #   ifndef INT64_MAX
-#       define INT64_MAX       (9223372036854775807)
+#       define INT64_MAX       ((int64_t)(9223372036854775807))
 #   endif
 #   ifndef UINT64_MAX
-#       define UINT64_MAX      (18446744073709551615)
+#       define UINT64_MAX      ((uint64_t)(18446744073709551615))
 #   endif
 #   ifndef INTMAX_MIN
 #       define INTMAX_MIN      INT64_MIN
