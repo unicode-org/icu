@@ -1930,6 +1930,11 @@ uchar_swapNames(const UDataSwapper *ds,
 
         uint8_t map[256], trailMap[256];
 
+        /* copy the data for inaccessible bytes */
+        if(inBytes!=outBytes) {
+            uprv_memcpy(outBytes, inBytes, length);
+        }
+
         /* the initial 4 offsets first */
         tokenStringOffset=ds->readUInt32(((const uint32_t *)inBytes)[0]);
         groupsOffset=ds->readUInt32(((const uint32_t *)inBytes)[1]);
@@ -1993,17 +1998,12 @@ uchar_swapNames(const UDataSwapper *ds,
         uprv_memcpy(q, temp, tokenCount*2);
         uprv_free(temp);
 
-        /* swap the token strings */
-        count=groupsOffset-tokenStringOffset;
-        if(count>0 && inBytes[groupsOffset-1]!=0) {
-            /*
-             * do not swap a possible padding byte after
-             * the terminating NUL of the last string
-             */
-            --count;
-        }
-        ds->swapInvChars(ds, inBytes+tokenStringOffset, (int32_t)count,
-                            outBytes+tokenStringOffset, pErrorCode);
+        /*
+         * swap the token strings but not a possible padding byte after
+         * the terminating NUL of the last string
+         */
+        udata_swapInvStringBlock(ds, inBytes+tokenStringOffset, (int32_t)(groupsOffset-tokenStringOffset),
+                                    outBytes+tokenStringOffset, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "uchar_swapNames(token strings) failed - %s\n",
                              u_errorName(*pErrorCode));
