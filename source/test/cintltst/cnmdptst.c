@@ -567,8 +567,8 @@ void TestSecondaryGrouping(void) {
 
     unum_format(g, l, resultBuffer, 512, &pos, &status);
     unum_close(g);
-    // expect "1,87,65,43,210", but with Hindi digits
-    //         01234567890123
+    /* expect "1,87,65,43,210", but with Hindi digits */
+    /*         01234567890123                         */
     if (u_strlen(resultBuffer) != 14) {
         ok = FALSE;
     } else {
@@ -582,8 +582,8 @@ void TestSecondaryGrouping(void) {
                 expectGroup = TRUE;
                 break;
             }
-            // Later -- fix this to get the actual grouping
-            // character from the resource bundle.
+            /* Later -- fix this to get the actual grouping */
+            /* character from the resource bundle.          */
             isGroup = (resultBuffer[i] == 0x002C);
             if (isGroup != expectGroup) {
                 ok = FALSE;
