@@ -48,13 +48,17 @@ le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, Glyp
     return 1;
 }
 
-void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
+le_int32 LookupProcessor::process(LEGlyphID *&glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
                               le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                               const LEFontInstance *fontInstance) const
 {
     if (lookupSelectArray == NULL) {
-        return;
+        return glyphCount;
     }
+
+	GlyphIterator glyphIterator(glyphs, glyphPositionAdjustments, charIndices, glyphCount,
+								rightToLeft, 0, 0, glyphTags, glyphDefinitionTableHeader);
+	le_int32 newGlyphCount = glyphCount;
 
     for (le_uint16 order = 0; order < lookupOrderCount; order += 1) {
         le_uint16 lookup = lookupOrderArray[order];
@@ -63,9 +67,8 @@ void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphP
         if (selectTag != notSelected) {
             const LookupTable *lookupTable = lookupListTable->getLookupTable(lookup);
             le_uint16 lookupFlags = SWAPW(lookupTable->lookupFlags);
-            GlyphIterator glyphIterator(glyphs, glyphPositionAdjustments, glyphCount,
-                                  rightToLeft, lookupFlags, selectTag, glyphTags,
-                                  glyphDefinitionTableHeader);
+            
+			glyphIterator.reset(lookupFlags, selectTag);
 
             while (glyphIterator.findFeatureTag()) {
                 le_uint32 delta = 1;
@@ -74,8 +77,12 @@ void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphP
                     delta = applyLookupTable(lookupTable, &glyphIterator, fontInstance);
                 }
             }
+
+			newGlyphCount = glyphIterator.applyInsertions();
         }
     }
+
+	return newGlyphCount;
 }
 
 le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator,

@@ -29,7 +29,7 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
         if (glyphCount == 0) {
             glyphIterator->setCurrGlyphID(0xFFFF);
             return 1;
-        } else if (glyphCount >= 1) {
+        } else if (glyphCount == 1) {
             TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[0]);
 
             if (filter == NULL || filter->accept(LE_SET_GLYPH(glyph, substitute))) {
@@ -38,8 +38,21 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
 
             return 1;
         } else {
-            // Can't do this 'till there's a way to
-            // grow the glyph array...
+			LEGlyphID *newGlyphs = glyphIterator->insertGlyphs(glyphCount);
+			le_int32 insert = 0, direction = 1;
+
+			if (glyphIterator->isRightToLeft()) {
+				insert = glyphCount - 1;
+				direction = -1;
+			}
+
+			for (le_int32 i = 0; i < glyphCount; i += 1) {
+				TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[i]);
+
+				newGlyphs[insert] = LE_SET_GLYPH(glyph, substitute);
+				insert += direction;
+			}
+
             return 1;
         }
     }
