@@ -39,7 +39,7 @@
  */
 
 #ifndef U_IOSTREAM_SOURCE
-#define U_IOSTREAM_SOURCE 0
+#define U_IOSTREAM_SOURCE 199711
 #endif
 
 /* Determines whether specific types are available */
@@ -53,10 +53,6 @@
 
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 0
-#pragma warning(disable : 4514)
-#pragma warning(disable : 4127)
-#pragma warning(disable : 4100)
-#pragma warning(disable : 4710)
 
 /*===========================================================================*/
 /* Generic data types                                                        */
