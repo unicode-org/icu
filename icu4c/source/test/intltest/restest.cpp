@@ -248,7 +248,7 @@ ResourceBundleTest::TestConstruction()
         char testdatapath[256];
         Locale       locale("te", "IN");
 
-        directory=IntlTest::getTestDirectory();
+        directory=u_getDataDirectory();
         uprv_strcpy(testdatapath, directory);
         uprv_strcat(testdatapath, "testdata");
 
@@ -302,7 +302,7 @@ ResourceBundleTest::TestConstruction()
         char testdatapath[256];
         Locale       locale("te", "IN");
 
-        directory=IntlTest::getTestDirectory();
+        directory=u_getDataDirectory();
         uprv_strcpy(testdatapath, directory);
         uprv_strcat(testdatapath, "testdata");
 
@@ -357,7 +357,7 @@ ResourceBundleTest::testTag(const char* frag,
     const char *directory;
     char testdatapath[256];
 
-    directory=IntlTest::getTestDirectory();
+    directory=u_getDataDirectory();
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
 

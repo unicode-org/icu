@@ -50,19 +50,37 @@ void NormalizerConformanceTest::TestConformance(void) {
     UnicodeString buf;
     int32_t passCount = 0;
     int32_t failCount = 0;
-    char testPath[256];
+    char newPath[256];
+    char backupPath[256];
+    FileStream *input = NULL;
 
-    // Construct the path to the test suite file
-    uprv_strcpy(testPath, u_getDataDirectory());
-    uprv_strcat(testPath, TEST_SUITE_DIR);
-    uprv_strcat(testPath, U_FILE_SEP_STRING);
-    uprv_strcat(testPath, TEST_SUITE_FILE);
+    /* Look inside ICU_DATA first */
+    strcpy(newPath, u_getDataDirectory());
+    strcat(newPath, "unidata" U_FILE_SEP_STRING );
+    strcat(newPath, TEST_SUITE_FILE);
 
-    FileStream *input = T_FileStream_open(testPath, "r");
-    if (input == NULL) {
-        errln((UnicodeString)"Can't open " TEST_SUITE_FILE);
+#if defined (U_SRCDATADIR) /* points to the icu/data directory */
+    /* If defined, we'll try an alternate directory second */
+    strcpy(backupPath, U_SRCDATADIR);
+#else
+    strcpy(backupPath, u_getDataDirectory());
+    strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    strcat(backupPath, U_FILE_SEP_STRING);
+#endif
+    strcat(backupPath, "unidata" U_FILE_SEP_STRING );
+    strcat(backupPath, TEST_SUITE_FILE);
+
+      
+    input = T_FileStream_open(newPath, "r");
+
+    if (input == 0) {
+      input = T_FileStream_open(backupPath, "r");
+      if (input == 0) {
+        errln("Failed to open either " + UnicodeString(newPath) + " or " + UnicodeString(backupPath) );
         return;
+      }
     }
+
 
     for (int32_t count = 0;;++count) {
         if (T_FileStream_eof(input)) {
