@@ -72,6 +72,7 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "locmap.h"
+#include "ucln_cmn.h"
 
 /* include system headers */
 #ifdef WIN32
@@ -860,22 +861,25 @@ uprv_tzname(int n)
 
 /* Get and set the ICU data directory --------------------------------------- */
 
-static UBool
-gHaveDataDirectory=FALSE;
+static char *gDataDirectory = NULL;
 
-static const char *gDataDirectory = "";
+UBool putil_cleanup(void)
+{
+    if (gDataDirectory) {
+        uprv_free(gDataDirectory);
+    }
+    return TRUE;
+}
 
 /*
  * Set the data directory.
  *    Make a copy of the passed string, and set the global data dir to point to it.
- *    Deliberately leak any previously set string, on the chance that some code
- *      may have called getDataDirectory() and still be using the old string.
  */
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
     char *newDataDir;
 
-    if(directory!=NULL && *directory != 0) {
+    if(directory!=NULL) {
         int length=uprv_strlen(directory);
         newDataDir = (char *)uprv_malloc(length + 2);
         uprv_strcpy(newDataDir, directory);
@@ -884,15 +888,14 @@ u_setDataDirectory(const char *directory) {
             newDataDir[length] = 0;
         }
 
+        umtx_lock(NULL);
+        if (gDataDirectory) {
+            uprv_free(gDataDirectory);
+        }
         gDataDirectory = newDataDir;
-        gHaveDataDirectory=TRUE;
+        umtx_unlock(NULL);
     }
 }
-
-
-
-/* #include <stdio.h> */
-/* #include <unistd.h> */
 
 #if HAVE_DLOPEN
 #define LIB_PREFIX "lib"
@@ -906,7 +909,7 @@ u_getDataDirectory(void) {
     char pathBuffer[1024];
 
     /* if we have the directory, then return it immediately */
-    if(gHaveDataDirectory) {
+    if(gDataDirectory) {
         return gDataDirectory;
     }
 
@@ -996,6 +999,11 @@ u_getDataDirectory(void) {
         path=ICU_DATA_DIR;
     }
 #   endif
+
+    if(path==NULL) {
+        /* It looks really bad, set it to something. */
+        path = "";
+    }
 
     u_setDataDirectory(path);
     return gDataDirectory;

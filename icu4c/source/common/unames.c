@@ -286,6 +286,19 @@ u_enumCharNames(UChar32 start, UChar32 limit,
 
 /* implementation ----------------------------------------------------------- */
 
+UBool
+unames_cleanup()
+{
+    if(uCharNamesData) {
+        udata_close(uCharNamesData);
+        uCharNamesData = NULL;
+    }
+    if(uCharNames) {
+        uCharNames = NULL;
+    }
+    return TRUE;
+}
+
 static UBool
 isDataLoaded(UErrorCode *pErrorCode) {
     /* load UCharNames from file if necessary */

@@ -17,12 +17,15 @@
 #include "ucln.h"
 #include "ucln_in.h"
 
-UBool i18n_cleanup(void)
+static UBool i18n_cleanup(void)
 {
+    ucol_bld_cleanup();
     ucol_cleanup();
+    timeZone_cleanup();
+    return TRUE;
 }
 
-void i18n_registerCleanup()
+void ucln_i18n_registerCleanup()
 {
     ucln_registerCleanup(UCLN_I18N, i18n_cleanup);
 }
