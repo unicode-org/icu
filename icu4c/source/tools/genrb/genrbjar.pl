@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-#line 14
 #  ********************************************************************
 #  * COPYRIGHT:
 #  * Copyright (c) 2002, International Business Machines Corporation and
@@ -11,10 +10,12 @@
 # locale data in the icu4c project.  See usage() notes (below)
 # for more information.
 
-# This script requires perl.  For Unixes, I recommend www.activestate.com.
+# This script requires perl.  For Win32, I recommend www.activestate.com.
 
 # Alan Liu
 
+use strict;
+use warnings;
 use File::Path;
 use File::Copy;
 
@@ -24,6 +25,7 @@ my $ICU4J_ROOT = shift;
 my $ldVar = shift;
 
 # Step 1.  Run genrb.
+print "\n[Step 1: Run genrb]\n";
 my $genrb = "$ICU_ROOT/source/tools/genrb/genrb";
 my $dataDir = "$ICU_ROOT/source/data/locales";
 my $javaRootDir = "$dataDir/java";
@@ -32,7 +34,7 @@ my $javaDir = "$javaRootDir/$pkg";
 chdir($dataDir);
 mkpath($javaDir);
 my $op = "$ldVar=$ICU_ROOT/source/common:$ICU_ROOT/source/i18n:$ICU_ROOT/source/tools/toolutil:$ICU_ROOT/source/data/out:$ICU_ROOT/source/data: $genrb -s. -d$javaDir -j -p com.ibm.icu.impl.data -b LocaleElements ";
-print "Command: $op*.txt\n";
+print "{Command: $op*.txt}\n";
 print "Directory: $dataDir\n";
 my @list;
 if (@ARGV) {
@@ -44,13 +46,14 @@ if (@ARGV) {
 my $count = 0;
 my $errCount = 0;
 foreach (sort @list) {
-    cmd("$op $_", " $_...");
+    cmd("$op $_", " $_ ");
     ++$count;
 }
 
-print "Processed $count locale file(s)\n";
+print "\nProcessed $count locale file(s)\n";
 
 # Step 2.  Create LocaleElements_index.java.
+print "\n[Step 2: Create LocaleElements_index.java]\n";
 chdir("$ICU_ROOT/source/data/out/build");
 cmd("$op res_index.txt");
 chdir($javaDir);
@@ -69,7 +72,7 @@ patchIndex("LocaleElements_index.java");
 #                },
 #            };
 #        }
-print "Scanning for %%ALIAS tags\n";
+print "\n[Step 3: Scan for %%ALIAS tags]\n";
 print "Directory: $javaDir\n";
 chdir($javaDir);
 @list = glob("LocaleElements*.java");
@@ -97,12 +100,13 @@ foreach my $file (sort @list) {
 }
 
 # Step 4.  Fix %%ALIAS tags.
+print "\n[Step 4: Fix %%ALIAS tags]\n";
 my %patched; # Record any locales that we patch
 foreach my $loc (sort keys %aliases) {
     # $loc is an alias of $aliases{$loc}
     # Make $loc point to package private static _contents of $aliases{$loc}
     my $aliasee = $aliases{$loc};
-    if (!exists($patched{$alias})) {
+    if (!exists($patched{$aliasee})) {
         # Patch the alias
         #patchAliasee($aliasee);
         $patched{$aliasee} = 1;
@@ -112,6 +116,7 @@ foreach my $loc (sort keys %aliases) {
 
 # Step 5.  Patch transliteration resources.
 # ICU resources have TransliterateLATIN but ICU4J resources expect Transliterate_LATIN
+print "\n[Step 5: Patch transliteration resources]\n";
 foreach my $file (sort @list) {
     my $hasTrans = 0;
     open(IN, $file) or die;
@@ -128,18 +133,19 @@ foreach my $file (sort @list) {
 }
 
 # Step 6.  Compile .java files
+print "\n[Step 6: Compile .java files]\n";
 my $cmd = "javac -classpath $ICU4J_ROOT/classes:$javaRootDir:%CLASSPATH% $pkg/*.java";
 chdir($javaRootDir);
-print "Compiling .java files..";
 print "Directory: $javaRootDir\n";
 cmd($cmd);
 
-# Step 7.  Create .jar file.  Since we don't yet generate correct
+# Step 7.  Update .jar file.  Since we don't yet generate correct
 # CollationElement_*.res files, leave those as they are.  Do a
 # "jar u" -- update the existing file.
+print "\n[Step 7: Update .jar file]\n";
 my $jarFile = "$ICU4J_ROOT/src/$pkg/ICULocaleData.jar";
 my $filesToBePackaged= "$pkg/*.class $pkg/*.col $pkg/*.brk $pkg/*.utf8";
-my $cmd = "jar uf $jarFile $fileToBePackaged";
+$cmd = "jar uf $jarFile $filesToBePackaged";
 # Do jar command
 print "Directory: $javaRootDir\n";
 chdir($javaRootDir);
@@ -151,10 +157,11 @@ if(-e "$jarFile"){
    $jarFile ="$ICU_ROOT/source/data/locales/java/ICULocaleData.jar";
    $cmd = "jar cvf $jarFile $filesToBePackaged";
 }
-cmd($cmd); 
+cmd($cmd);
+print " $jarFile updated\n";
 
 # Done!
-print "All done.\n";
+print "\n[All done]\n";
 exit(0);
 
 #-----------------------------------------------------------------------
@@ -164,18 +171,33 @@ exit(0);
 sub cmd {
     my $cmd = shift;
     my $prompt = shift;
-    $prompt = "Command: $cmd.." unless ($prompt);
-    print $prompt;
-    system($cmd);
+    if ($prompt) {
+        print $prompt;
+    } else {
+        print "{Command: $cmd}..";
+    }
+    my_system($cmd);
     my $exit_value  = $? >> 8;
     #my $signal_num  = $? & 127;
     #my $dumped_core = $? & 128;
     if ($exit_value == 0) {
-        print "ok\n";
+        print "ok\n" unless ($prompt);
     } else {
         ++$errCount;
         print "ERROR ($exit_value)\n";
         exit(1);
+    }
+}
+
+# A system()-like sub that does NOT ignore SIGINT
+sub my_system {
+    my $pid = fork;
+    if (! defined $pid) {
+        return -1;
+    } elsif ($pid) {
+        return waitpid($pid, 0);
+    } else {
+        exec(@_) or exit $!;
     }
 }
 
