@@ -459,6 +459,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_LBN_CONT:
     case URX_LBN_END:
     case URX_LOOP_C:
+    case URX_LOOP_DOT_I:
         // types with an integer operand field.
         REGEX_DUMP_DEBUG_PRINTF("%d", val);
         break;

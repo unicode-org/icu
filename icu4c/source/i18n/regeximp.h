@@ -76,9 +76,9 @@ enum {
      URX_JMP_SAV       = 15,   // Operand:  JMP destination location
      URX_BACKSLASH_B   = 16,   // Value field:  0:  \b    1:  \B
      URX_BACKSLASH_G   = 17, 
-     URX_JMP_SAV_X     = 18,   // JMP + Conditional Save
-                               //    First Operand:  Jmp location
-                               //    Second Operand: Data loc.  Save if data != 0.
+     URX_JMP_SAV_X     = 18,   // Conditional JMP_SAV,
+                               //    Used in (x)+, breaks loop on zero length match.
+                               //    Operand:  Jmp destination.
      URX_BACKSLASH_X   = 19,
      URX_BACKSLASH_Z   = 20,   // \z   Unconditional end of line.
 
@@ -115,7 +115,7 @@ enum {
      URX_BACKREF       = 34,   // Back Reference.  Parameter is the index of the
                                //   capture group variables in the state stack frame.
      URX_STO_INP_LOC   = 35,   // Store the input location.  Operand is location
-                               //   within the matcher data (not stack).
+                               //   within the matcher stack frame.
      URX_JMPX          = 36,  // Conditional JMP.
                                //   First Operand:  JMP target location.
                                //   Second Operand:  Data location containing an 
@@ -161,9 +161,13 @@ enum {
                                //   Operand is index of set in array of sets.
      URX_LOOP_SR_I     = 50,   // Init a [set]* loop.
                                //   Operand is the sets index in array of user sets.
-     URX_LOOP_C        = 51    // Continue a [set]* or OneChar* loop.
+     URX_LOOP_C        = 51,   // Continue a [set]* or OneChar* loop.
                                //   Operand is a matcher static data location.
                                //   Must always immediately follow  LOOP_x_I instruction.
+     URX_LOOP_DOT_I    = 52    // .*, initialization of the optimized loop.
+                               //   Operand value:
+                               //      0:  Normal (. doesn't match new-line) mode.
+                               //      1:  . matches new-line mode.
 
 };           
 
@@ -221,7 +225,8 @@ enum {
         "LBN_END",             \
         "STAT_SETREF_N",       \
         "LOOP_SR_I",           \
-        "LOOP_C"
+        "LOOP_C",              \
+        "LOOP_DOT_I"
 
 
 //

@@ -537,7 +537,6 @@ void    RegexCompile::compile(
     matchStartType();  
     OptDotStar();
     stripNOPs();
-    OptEndingLoop();
 
     //
     // Set up fast latin-1 range sets
@@ -956,14 +955,75 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //     2.   jmp-sav 1
         //     3.   ...
         //
+        //  Or, if the item to be repeated can match a zero length string,
+        //     1.   STO_INP_LOC  data-loc
+        //     2.      body of stuff to be repeated
+        //     3.   JMP_SAV_X    2
+        //     4.   ...
+
+        //
         //  Or, if the item to be repeated is simple
         //     1.   Item to be repeated.
         //     2.   LOOP_SR_I    set number  (assuming repeated item is a set ref)
         //     3.   LOOP_C       stack location
         {
             int32_t  topLoc = blockTopLoc(FALSE);        // location of item #1
-            int32_t  jmpOp  = URX_BUILD(URX_JMP_SAV, topLoc);
-            fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
+            int32_t  frameLoc;
+
+            // Check for simple constructs, which may get special optimized code.
+            if (topLoc == fRXPat->fCompiledPat->size() - 1) {
+                int32_t repeatedOp = fRXPat->fCompiledPat->elementAti(topLoc);
+
+                if (URX_TYPE(repeatedOp) == URX_SETREF) {
+                    // Emit optimized code for [char set]+
+                    int32_t loopOpI = URX_BUILD(URX_LOOP_SR_I, URX_VAL(repeatedOp));
+                    fRXPat->fCompiledPat->addElement(loopOpI, *fStatus);
+                    frameLoc = fRXPat->fFrameSize;
+                    fRXPat->fFrameSize++;
+                    int32_t loopOpC = URX_BUILD(URX_LOOP_C, frameLoc);
+                    fRXPat->fCompiledPat->addElement(loopOpC, *fStatus);
+                    break;
+                }
+
+                if (URX_TYPE(repeatedOp) == URX_DOTANY ||
+                    URX_TYPE(repeatedOp) == URX_DOTANY_ALL) {
+                    // Emit Optimized code for .+ operations.
+                    int32_t loopOpI = URX_BUILD(URX_LOOP_DOT_I, 0);
+                    if (URX_TYPE(repeatedOp) == URX_DOTANY_ALL) {
+                        // URX_LOOP_DOT_I operand is a flag indicating . matches any mode.
+                        loopOpI |= 1;
+                    }
+                    fRXPat->fCompiledPat->addElement(loopOpI, *fStatus);
+                    frameLoc = fRXPat->fFrameSize;
+                    fRXPat->fFrameSize++;
+                    int32_t loopOpC = URX_BUILD(URX_LOOP_C, frameLoc);
+                    fRXPat->fCompiledPat->addElement(loopOpC, *fStatus);
+                    break;
+                }
+
+            }
+
+            // General case.
+
+            // Check for minimum match length of zero, which requires
+            //    extra loop-breaking code.
+            if (minMatchLength(topLoc, fRXPat->fCompiledPat->size()-1) == 0) {
+                // Zero length match is possible.
+                // Emit the code sequence that can handle it.
+                insertOp(topLoc);
+                frameLoc =  fRXPat->fFrameSize;
+                fRXPat->fFrameSize++;
+
+                int32_t op = URX_BUILD(URX_STO_INP_LOC, frameLoc);
+                fRXPat->fCompiledPat->setElementAt(op, topLoc);
+
+                op = URX_BUILD(URX_JMP_SAV_X, topLoc+1);
+                fRXPat->fCompiledPat->addElement(op, *fStatus);
+            } else {
+                // Simpler code when the repeated body must match something non-empty
+                int32_t  jmpOp  = URX_BUILD(URX_JMP_SAV, topLoc);
+                fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
+            }
         }
         break;
 
@@ -1028,28 +1088,50 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //       3.   JMP_SAV      2
         //       4.   ...
         //
-        // Or, if the body is a simple [Set] or single char literal,
+        // Or, if the body is a simple [Set],
         //       1.   LOOP_SR_I    set number
         //       2.   LOOP_C       stack location
         //       ...
         //
+        // Or if this is a .* 
+        //       1.   LOOP_DOT_I    (. matches all mode flag)
+        //       2.   LOOP_C        stack location
+        //
         // Or, if the body can match a zero-length string, to inhibit infinite loops,
-        //       1.   STATE_SAVE   6
+        //       1.   STATE_SAVE   5
         //       2.   STO_INP_LOC  data-loc
         //       3.      body of stuff
-        //       4.   JMPX    1
-        //       5            data-loc   (extra operand of JMPX)
-        //       6.   ...
+        //       4.   JMP_SAV_X    2
+        //       5.   ...
         {
             // location of item #1, the STATE_SAVE
             int32_t   topLoc = blockTopLoc(FALSE);
             int32_t   dataLoc = -1;
 
-            // Check for simple [set]*, which get special optimized code.
+            // Check for simple *, where the construct being repeated
+            //   compiled to single opcode, and might be optimizable.
             if (topLoc == fRXPat->fCompiledPat->size() - 1) {
                 int32_t repeatedOp = fRXPat->fCompiledPat->elementAti(topLoc);
+
                 if (URX_TYPE(repeatedOp) == URX_SETREF) {
+                    // Emit optimized code for a [char set]* 
                     int32_t loopOpI = URX_BUILD(URX_LOOP_SR_I, URX_VAL(repeatedOp));
+                    fRXPat->fCompiledPat->setElementAt(loopOpI, topLoc);
+                    dataLoc = fRXPat->fFrameSize;
+                    fRXPat->fFrameSize++;
+                    int32_t loopOpC = URX_BUILD(URX_LOOP_C, dataLoc);
+                    fRXPat->fCompiledPat->addElement(loopOpC, *fStatus);
+                    break;
+                }
+
+                if (URX_TYPE(repeatedOp) == URX_DOTANY ||
+                    URX_TYPE(repeatedOp) == URX_DOTANY_ALL) {
+                    // Emit Optimized code for .* operations.
+                    int32_t loopOpI = URX_BUILD(URX_LOOP_DOT_I, 0);
+                    if (URX_TYPE(repeatedOp) == URX_DOTANY_ALL) {
+                        // URX_LOOP_DOT_I operand is a flag indicating . matches any mode.
+                        loopOpI |= 1;
+                    }
                     fRXPat->fCompiledPat->setElementAt(loopOpI, topLoc);
                     dataLoc = fRXPat->fFrameSize;
                     fRXPat->fFrameSize++;
@@ -1059,9 +1141,14 @@ UBool RegexCompile::doParseActions(EParseAction action)
                 }
             }
 
-            // Check for minimum match lenght of zero, which requires
-            //    extra loop-breaking code.
+            // Emit general case code for this *
+            // The optimizations did not apply.
+
             int32_t   saveStateLoc = blockTopLoc(TRUE);
+            int32_t   jmpOp        = URX_BUILD(URX_JMP_SAV, saveStateLoc+1);
+
+            // Check for minimum match length of zero, which requires
+            //    extra loop-breaking code.
             if (minMatchLength(saveStateLoc, fRXPat->fCompiledPat->size()-1) == 0) {
                 insertOp(saveStateLoc);
                 dataLoc =  fRXPat->fFrameSize;
@@ -1069,29 +1156,19 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
                 int32_t op = URX_BUILD(URX_STO_INP_LOC, dataLoc);
                 fRXPat->fCompiledPat->setElementAt(op, saveStateLoc+1);
+                jmpOp      = URX_BUILD(URX_JMP_SAV_X, saveStateLoc+2);
             }
                 
             // Locate the position in the compiled pattern where the match will continue
-            //   after completing the *.   (4 or 6 in the comment above)
+            //   after completing the *.   (4 or 5 in the comment above)
             int32_t continueLoc = fRXPat->fCompiledPat->size()+1;
-            if (dataLoc != -1) {
-                continueLoc++;  // second code sequence.
-            }
 
             // Put together the save state op store it into the compiled code.
             int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, continueLoc);
             fRXPat->fCompiledPat->setElementAt(saveStateOp, saveStateLoc);
 
             // Append the URX_JMP_SAV or URX_JMPX operation to the compiled pattern.
-            if (dataLoc == -1) {
-                int32_t jmpOp = URX_BUILD(URX_JMP_SAV, saveStateLoc+1);
-                fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
-            } else {
-                int32_t op = URX_BUILD(URX_JMPX, saveStateLoc);
-                fRXPat->fCompiledPat->addElement(op, *fStatus);
-                op = URX_BUILD(URX_RESERVED_OP, dataLoc);
-                fRXPat->fCompiledPat->addElement(op, *fStatus);
-            }
+            fRXPat->fCompiledPat->addElement(jmpOp, *fStatus);
         }
         break;
 
@@ -2305,7 +2382,7 @@ void   RegexCompile::matchStartType() {
             break;
             
 
-        case URX_SETREF:       
+        case URX_SETREF:      
             if (currentLen == 0) {
                 int32_t  sn = URX_VAL(op);
                 U_ASSERT(sn > 0 && sn < fRXPat->fSets->size());
@@ -2316,6 +2393,31 @@ void   RegexCompile::matchStartType() {
             currentLen++;
             atStart = FALSE;
             break;
+
+        case URX_LOOP_SR_I:
+            // [Set]*, like a SETREF, above, in what it can match,
+            //  but may not match at all, so currentLen is not incremented.
+            if (currentLen == 0) {
+                int32_t  sn = URX_VAL(op);
+                U_ASSERT(sn > 0 && sn < fRXPat->fSets->size());
+                const UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(sn);
+                fRXPat->fInitialChars->addAll(*s);
+                numInitialStrings += 2;
+            }
+            atStart = FALSE;
+            break;
+
+        case URX_LOOP_DOT_I:
+            if (currentLen == 0) {
+                // .* at the start of a pattern.
+                //    Any character can begin the match.
+                fRXPat->fInitialChars->clear();
+                fRXPat->fInitialChars->complement();
+                numInitialStrings += 2;
+            }
+            atStart = FALSE;
+            break;
+
 
         case URX_STATIC_SETREF:    
             if (currentLen == 0) {
@@ -2535,7 +2637,6 @@ void   RegexCompile::matchStartType() {
             atStart = FALSE;
             break;
             
-        case URX_LOOP_SR_I:
         case URX_LOOP_C:
             // More loop ops.  These state-save to themselves.
             //   don't change the minimum match
@@ -2826,9 +2927,10 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
             
         case URX_LOOP_SR_I:
+        case URX_LOOP_DOT_I:
         case URX_LOOP_C:
             // More loop ops.  These state-save to themselves.
-            //   don't change the minimum match
+            //   don't change the minimum match - could match nothing at all.
             break;
             
 
@@ -3062,6 +3164,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
         case URX_LOOP_SR_I:
+        case URX_LOOP_DOT_I:
         case URX_LOOP_C:
             // For anything to do with loops, make the match length unbounded.
             //   Note:  INIT instructions are multi-word.  Can ignore because
@@ -3226,6 +3329,7 @@ void RegexCompile::stripNOPs() {
         case URX_LBN_CONT:
         case URX_LBN_END:
         case URX_LOOP_SR_I:
+        case URX_LOOP_DOT_I:
         case URX_LOOP_C:
             // These instructions are unaltered by the relocation.
             fRXPat->fCompiledPat->setElementAt(op, dst);
@@ -3243,89 +3347,6 @@ void RegexCompile::stripNOPs() {
 }
 
 
-
-//----------------------------------------------------------------------------------------
-//
-//   OptEndingLoop    Optimize patterns that end with a '*' or a '+' to not
-//                    save state on each iteration, when possible.
-//                    These patterns end with a JMP_SAV op.  Replace it with
-//                    a JMP_SAV_X if the body of the loop is simple
-//                          (does not itself do any state saves.)
-//
-//----------------------------------------------------------------------------------------
-void RegexCompile::OptEndingLoop() {
-    // Scan backwards in the pattern, looking for a JMP_SAV near the end.
-    int32_t  jmp_loc;
-    int32_t  op;
-    int32_t  opType;
-    for (jmp_loc=fRXPat->fCompiledPat->size(); jmp_loc--;) {
-        U_ASSERT(jmp_loc>0);
-        op     = fRXPat->fCompiledPat->elementAti(jmp_loc);
-        opType = URX_TYPE(op);
-        switch(opType) { 
-
-            
-        case URX_END:
-        case URX_NOP:
-        case URX_END_CAPTURE:
-            // These ops may follow the JMP_SAV without preventing us from
-            //   doing this optimization.
-            continue;
-
-        case URX_JMP_SAV:
-            // Got a trailing JMP_SAV that's a candidate for optimization.
-            break;
-
-        default:
-            // This optimization not possible.
-            return;
-        }
-        break;   // from the for loop.
-    }
-
-    // We found in URX_JMP_SAV near the end that is a candidate for optimizing.
-    // Scan the body of the loop for anything that prevents the optimization,
-    //   which is anything that does a state save, or anything that 
-    //   alters the current stack frame (like a capture start/end)
-    int32_t  loopTopLoc = URX_VAL(op);
-    U_ASSERT(loopTopLoc > 1 && loopTopLoc < jmp_loc);
-    int32_t  loc;
-    for (loc=loopTopLoc; loc<jmp_loc; loc++) {
-        op     = fRXPat->fCompiledPat->elementAti(loc);
-        opType = URX_TYPE(op);
-        switch(opType) { 
-
-        case URX_STATE_SAVE:
-        case URX_JMP_SAV:
-        case URX_JMP_SAV_X:
-        case URX_CTR_INIT:
-        case URX_CTR_INIT_NG:
-        case URX_CTR_LOOP:
-        case URX_CTR_LOOP_NG:
-        case URX_LD_SP:
-        case URX_END_CAPTURE:
-        case URX_START_CAPTURE:
-        case URX_LOOP_SR_I:
-        case URX_LOOP_C:
-            // These ops do a state save.
-            // Can not do the optimization.
-            return;
-
-        default:
-            // Other ops within the loop are OK.
-            ;//    keep looking.
-        }
-    }
-
-    // Everything checks out.  We can do the optimization.
-    insertOp(jmp_loc);   // Make space for the extra operand word 0f URX_JMP_SAV_X
-    op = URX_BUILD(URX_JMP_SAV_X, loopTopLoc);
-    fRXPat->fCompiledPat->setElementAt(op, jmp_loc);
-
-    int32_t dataLoc = fRXPat->fDataSize;
-    fRXPat->fDataSize += 1; 
-    fRXPat->fCompiledPat->setElementAt(dataLoc, jmp_loc+1);
-}
 
 
 //----------------------------------------------------------------------------------------

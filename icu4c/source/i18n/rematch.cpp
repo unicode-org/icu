@@ -1448,24 +1448,26 @@ GC_Done:
             break;
 
         case URX_JMP_SAV_X:
-            // This opcode is used when a pattern ends with (something)*
-            // There is no need to save state with each loop for the '*', because
-            //  there is no following pattern that could use that saved state.
-            //  Use a flag to only save state the first time through.
+            // This opcode is used with (x)+, when x can match a zero length string.
+            // Same as JMP_SAV, except conditional on the match having made forward progress.
+            // Destination of the JMP must be a URX_STO_INP_LOC, from which we get the
+            //   data address of the input position at the start of the loop.
             {
-                U_ASSERT(opValue < fPattern->fCompiledPat->size());
-                int32_t  dataLoc = URX_VAL(pat[fp->fPatIdx]);
-                U_ASSERT(dataLoc >= 0 && dataLoc < frameSize);
-                int32_t flag = fData[dataLoc];
-                U_ASSERT(flag==0 || flag==1);
-                if (flag == 0) {
-                     fp = StateSave(fp, (fp->fPatIdx)+1, frameSize, status); 
-                     fData[dataLoc] = 1;
-                } else {
-                    REStackFrame *prevFrame = (REStackFrame *)((int32_t *)fp-frameSize);
-                    prevFrame->fInputIdx = fp->fInputIdx;
-                }
-                fp->fPatIdx = opValue;
+                U_ASSERT(opValue > 0 && opValue < fPattern->fCompiledPat->size());
+                int32_t  stoOp = pat[opValue-1];
+                U_ASSERT(URX_TYPE(stoOp) == URX_STO_INP_LOC);
+                int32_t  frameLoc = URX_VAL(stoOp);
+                U_ASSERT(frameLoc >= 0 && frameLoc < frameSize);
+                int32_t prevInputIdx = fp->fExtra[frameLoc];
+                U_ASSERT(prevInputIdx <= fp->fInputIdx);
+                if (prevInputIdx < fp->fInputIdx) {
+                    // The match did make progress.  Repeat the loop.
+                    fp = StateSave(fp, fp->fPatIdx, frameSize, status);  // State save to loc following current
+                    fp->fPatIdx = opValue;
+                    fp->fExtra[frameLoc] = fp->fInputIdx;
+                } 
+                // If the input position did not advance, we do nothing here,
+                //   execution will fall out of the loop.
             }
             break;
 
@@ -1980,6 +1982,60 @@ GC_Done:
             break;
 
 
+        case URX_LOOP_DOT_I:
+            // Loop Initialization for the optimized implementation of .*
+            //   This op scans through all remaining input.
+            //   The following LOOP_C op emulates stack unwinding if the following pattern fails.
+            {
+                // Loop through input until the input is exhausted (we reach an end-of-line)
+                // In multi-line mode, we can just go straight to the end of the input.
+                int32_t ix = inputLen;
+                if (opValue == 0) {
+                    // NOT multi-line mode.  Line endings do not match '.'
+                    // Scan forward until a line ending or end of input.
+                    ix = fp->fInputIdx;
+                    for (;;) {
+                        if (ix >= inputLen) {
+                            break;
+                        }
+                        UChar32   c;
+                        U16_NEXT(inputBuf, ix, inputLen, c);   // c = inputBuf[ix++]
+                        if (((c & 0x7f) <= 0x29) &&     
+                            (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
+                            //  char is a line ending.  Put the input pos back to the  
+                            //    line ending char, and exit the scanning loop.
+                            U16_BACK_1(inputBuf, 0, ix);
+                            break;
+                        }
+                    }
+                }
+                
+                // If there were no matching characters, skip over the loop altogether.
+                //   The loop doesn't run at all, a * op always succeeds.
+                if (ix == fp->fInputIdx) {
+                    fp->fPatIdx++;   // skip the URX_LOOP_C op.
+                    break;
+                }
+
+                // Peek ahead in the compiled pattern, to the URX_LOOP_C that
+                //   must follow.  It's operand is the stack location
+                //   that holds the starting input index for the match of this [set]*
+                int32_t loopcOp = pat[fp->fPatIdx];
+                U_ASSERT(URX_TYPE(loopcOp) == URX_LOOP_C);
+                int32_t stackLoc = URX_VAL(loopcOp);
+                U_ASSERT(stackLoc >= 0 && stackLoc < frameSize);
+                fp->fExtra[stackLoc] = fp->fInputIdx;
+                fp->fInputIdx = ix;
+
+                // Save State to the URX_LOOP_C op that follows this one,
+                //   so that match failures in the following code will return to there.
+                //   Then bump the pattern idx so the LOOP_C is skipped on the way out of here.
+                fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                fp->fPatIdx++;
+            }
+            break;
+
+
         case URX_LOOP_C:
             {
                 U_ASSERT(opValue>=0 && opValue<frameSize);
@@ -1998,6 +2054,17 @@ GC_Done:
                 //    the initial scan forward.)
                 U_ASSERT(fp->fInputIdx > 0);
                 U16_BACK_1(inputBuf, 0, fp->fInputIdx);
+                if (inputBuf[fp->fInputIdx] == 0x0a && 
+                    fp->fInputIdx > terminalIdx &&
+                    inputBuf[fp->fInputIdx-1] == 0x0d) {
+                    int32_t prevOp = pat[fp->fPatIdx-2];
+                    if (URX_TYPE(prevOp) == URX_LOOP_DOT_I) {
+                        // .*, stepping back over CRLF pair.
+                        fp->fInputIdx--;
+                    }
+                }
+
+
                 fp = StateSave(fp, fp->fPatIdx-1, frameSize, status);
             }
             break;
