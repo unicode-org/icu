@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Replaceable.java,v $ 
- * $Date: 2000/04/25 17:17:37 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/21 21:15:02 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -20,10 +20,23 @@ package com.ibm.text;
  * "the <b>bold</b> font" has range (4, 8) replaced with "strong",
  * then it becomes "the <b>strong</b> font".
  *
+ * <p>If a subclass supports styles, then typically the behavior is the following:
+ * <ul>
+ *   <li>Set the styles to the style of the first character replaced</li>
+ *   <li>If no characters are replaced, use the style of the previous
+ * character</li>
+ *   <li>If there is no previous character (i.e. start == 0), use the following
+ *     character</li>
+ *   <li>If there is no following character (i.e. the replaceable was empty), a
+ *     default style.<br>
+ *   </li>
+ * </ul>
+ * If this is not the behavior, the subclass should document any differences.
+ * 
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Replaceable.java,v $ $Revision: 1.3 $ $Date: 2000/04/25 17:17:37 $
+ * @version $RCSfile: Replaceable.java,v $ $Revision: 1.4 $ $Date: 2001/11/21 21:15:02 $
  */
 public interface Replaceable {
     /**
@@ -61,6 +74,14 @@ public interface Replaceable {
 
     /**
      * Replace a substring of this object with the given text.
+     *
+     * <p>Subclasses must ensure that if the text between start and
+     * limit is equal to the replacement text, that replace has no
+     * effect. That is, any out-of-band information such as styles
+     * should be unaffected. In addition, subclasses are encourage to
+     * check for initial and trailing identical characters, and make a
+     * smaller replacement if possible. This will preserve as much
+     * style information as possible.
      * @param start the beginning index, inclusive; <code>0 <= start
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
@@ -72,6 +93,14 @@ public interface Replaceable {
 
     /**
      * Replace a substring of this object with the given text.
+     *
+     * <p>Subclasses must ensure that if the text between start and
+     * limit is equal to the replacement text, that replace has no
+     * effect. That is, any out-of-band information such as styles
+     * should be unaffected. In addition, subclasses are encourage to
+     * check for initial and trailing identical characters, and make a
+     * smaller replacement if possible. This will preserve as much
+     * style information as possible.
      * @param start the beginning index, inclusive; <code>0 <= start
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
@@ -92,7 +121,8 @@ public interface Replaceable {
      * information.  This method is used to duplicate or reorder substrings.
      * The destination index must not overlap the source range.
      * Implementations that do not care about maintaining out-of-band
-     * information during copying may use the naive implementation:
+     * information or performance during copying may use the naive
+     * implementation:
      *
      * <pre> char[] text = new char[limit - start];
      * getChars(start, limit, text, 0);
