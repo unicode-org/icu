@@ -1,27 +1,28 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
-import java.util.Locale;
-import java.util.Arrays;
 import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
+import java.text.ParseException;
+import java.util.Arrays;
+
+import com.ibm.icu.impl.BOCU;
+import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.ImplicitCEGenerator;
+import com.ibm.icu.impl.IntTrie;
+import com.ibm.icu.impl.StringUCharacterIterator;
+import com.ibm.icu.impl.Trie;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.ImplicitCEGenerator;
-import com.ibm.icu.impl.IntTrie;
-import com.ibm.icu.impl.Trie;
-import com.ibm.icu.impl.BOCU;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.ICUDebug;
-import com.ibm.icu.impl.StringUCharacterIterator;
 
 /**
  * <p>RuleBasedCollator is a concrete subclass of Collator. It allows
@@ -1609,7 +1610,7 @@ public final class RuleBasedCollator extends Collator
      * instead.
      * @param locale
      */
-    RuleBasedCollator(Locale locale)
+    RuleBasedCollator(ULocale locale)
     {
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME, locale);
         initUtility();
