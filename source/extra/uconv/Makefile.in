@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2004, International Business Machines
+## *   Copyright (C) 1999-2005, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -26,7 +26,7 @@ FILESEPCHAR=/
 include $(srcdir)/resfiles.mk
 
 RESDIR=$(MSGNAME)
-RESFILES=$(RESSRC:$(RESOURCESDIR)$(FILESEPCHAR)%.txt=$(RESDIR)/$(RESOURCESDIR)$(FILESEPCHAR)$(MSGNAME)_%.res)
+RESFILES=$(RESSRC:$(RESOURCESDIR)$(FILESEPCHAR)%.txt=$(RESDIR)/%.res)
 
 ##
 
@@ -106,7 +106,7 @@ clean-local: resclean
 	$(RMV) $(OBJECTS) $(TARGET)
 
 resclean:
-	#-$(INVOKE) $(BINDIR)/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	@#-$(INVOKE) $(BINDIR)/pkgdata --clean -p $(RESDIR) -O pkgdata.inc -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 	$(RMV) pkgdata.inc $(RESDIR)
 
 distclean-local: clean-local
@@ -137,13 +137,13 @@ endif
 
 
 package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
-	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(BINDIR)/pkgdata -p $(RESDIR) $(PKGDATA_OPTS) -m $(PKGMODE) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(PKGDATA_INVOKE_OPTS) $(BINDIR)/pkgdata -p $(MSGNAME) $(PKGDATA_OPTS) -m $(PKGMODE) -s $(RESDIR) -d $(RESDIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
 	@-$(RMV) $@
-	@for file in $(RESFILES); do \
-	  echo $(CURR_FULL_DIR)/$$file >> $@; \
+	@for file in $(RESFILES:$(RESDIR)/%.res=%.res); do \
+	  echo $$file >> $@; \
 	done;
 
 # no install for static mode
@@ -156,9 +156,9 @@ endif
 ##
 $(UCONVMSG_LIB): resfiles
 
-$(RESDIR)/$(RESOURCESDIR)/$(MSGNAME)_%.res: $(srcdir)/$(RESOURCESDIR)/%.txt
+$(MSGNAME)/%.res: $(srcdir)/$(RESOURCESDIR)/%.txt
 	$(MKINSTALLDIRS) $(@D)
-	$(INVOKE) $(BINDIR)/genrb -p $(MSGNAME) -e UTF-8 -s $(^D) -d $(@D) $(^F)
+	$(INVOKE) $(BINDIR)/genrb -e UTF-8 -s $(^D) -d $(@D) $(^F)
 
 install-man: $(ALL_MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
