@@ -233,56 +233,8 @@ US-ASCII { MIME* IANA JAVA WINDOWS }
     windows-20127 { WINDOWS* }
     # IBM367 { IANA WINDOWS } # This isn't the default ibm-367.
 
-# Partially algorithmic converters
-
-# [U_ENABLE_GENERIC_ISO_2022]
-# The _generic_ ISO-2022 converter is disabled starting 2003-dec-03 (ICU 2.8).
-# For details see the icu mailing list from 2003-dec-01 and the ucnv2022.c file.
-# Language-specific variants of ISO-2022 continue to be available as listed below.
-# ISO_2022                         ISO-2022 { MIME* } 2022 cp2022
-
-ISO_2022,locale=ja,version=0    ISO-2022-JP { IANA* MIME* JAVA* } csISO2022JP { JAVA } 
-ISO_2022,locale=ja,version=1    ISO-2022-JP-1 JIS JIS_Encoding { IANA* }
-ISO_2022,locale=ja,version=2    ISO-2022-JP-2 { IANA* MIME* } csISO2022JP2
-ISO_2022,locale=ja,version=3    JIS7 csJISEncoding
-ISO_2022,locale=ja,version=4    JIS8
-ISO_2022,locale=ko,version=0    ISO-2022-KR { IANA* MIME* } csISO2022KR # This uses ibm-949
-ISO_2022,locale=ko,version=1    ibm-25546
-ISO_2022,locale=zh,version=0    ISO-2022-CN { IANA* MIME* } # csISO2022CN
-ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* MIME* }
-HZ                              HZ-GB-2312 { IANA* MIME* }
-
-# Part of iso-2022
-ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
-
-
-ISCII,version=0         x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev
-ISCII,version=1         x-iscii-be { WINDOWS } windows-57003 { WINDOWS* } iscii-bng windows-57006 { WINDOWS } x-iscii-as { WINDOWS } # be is different from as on Windows.
-ISCII,version=2         x-iscii-pa { WINDOWS } windows-57011 { WINDOWS* } iscii-gur
-ISCII,version=3         x-iscii-gu { WINDOWS } windows-57010 { WINDOWS* } iscii-guj
-ISCII,version=4         x-iscii-or { WINDOWS } windows-57007 { WINDOWS* } iscii-ori
-ISCII,version=5         x-iscii-ta { WINDOWS } windows-57004 { WINDOWS* } iscii-tml
-ISCII,version=6         x-iscii-te { WINDOWS } windows-57005 { WINDOWS* } iscii-tlg
-ISCII,version=7         x-iscii-ka { WINDOWS } windows-57008 { WINDOWS* } iscii-knd
-ISCII,version=8         x-iscii-ma { WINDOWS } windows-57009 { WINDOWS* } iscii-mlm
-
 # GB 18030 is partly algorithmic, using the MBCS converter
 gb18030 { IANA* }       ibm-1392 { IBM* } windows-54936 { WINDOWS* }
-
-# Lotus specific
-LMBCS-1                 lmbcs
-LMBCS-2
-LMBCS-3
-LMBCS-4
-LMBCS-5
-LMBCS-6
-LMBCS-8
-LMBCS-11
-LMBCS-16
-LMBCS-17
-LMBCS-18
-LMBCS-19
-
 
 # Table-based interchange codepages
 
@@ -736,6 +688,53 @@ ibm-1131_P100-1997 { UTR22* }   ibm-1131 { IBM* JAVA } cp1131 { JAVA* }         
 ibm-1133_P100-1997 { UTR22* }   ibm-1133 { IBM* }                                       # ISO Lao
 ibm-1381_P110-1999 { UTR22* }   ibm-1381 { IBM* JAVA } cp1381 { JAVA* } 1381 { JAVA }   # S-Ch PC Data mixed (IBM GB) 
 
+
+# Partially algorithmic converters
+
+# [U_ENABLE_GENERIC_ISO_2022]
+# The _generic_ ISO-2022 converter is disabled starting 2003-dec-03 (ICU 2.8).
+# For details see the icu mailing list from 2003-dec-01 and the ucnv2022.c file.
+# Language-specific variants of ISO-2022 continue to be available as listed below.
+# ISO_2022                         ISO-2022 { MIME* } 2022 cp2022
+
+ISO_2022,locale=ja,version=0    ISO-2022-JP { IANA* MIME* JAVA* } csISO2022JP { JAVA } 
+ISO_2022,locale=ja,version=1    ISO-2022-JP-1 JIS JIS_Encoding { IANA* }
+ISO_2022,locale=ja,version=2    ISO-2022-JP-2 { IANA* MIME* } csISO2022JP2
+ISO_2022,locale=ja,version=3    JIS7 csJISEncoding
+ISO_2022,locale=ja,version=4    JIS8
+ISO_2022,locale=ko,version=0    ISO-2022-KR { IANA* MIME* } csISO2022KR # This uses ibm-949
+ISO_2022,locale=ko,version=1    ibm-25546
+ISO_2022,locale=zh,version=0    ISO-2022-CN { IANA* MIME* } # csISO2022CN
+ISO_2022,locale=zh,version=1    ISO-2022-CN-EXT { IANA* MIME* }
+HZ                              HZ-GB-2312 { IANA* MIME* }
+
+# Part of iso-2022
+ibm-897_P100-1995 { UTR22* }    ibm-897 { IBM* } JIS_X0201 { IANA* } X0201 { IANA } csHalfWidthKatakana { IANA }
+
+
+ISCII,version=0         x-iscii-de { WINDOWS } windows-57002 { WINDOWS* } iscii-dev
+ISCII,version=1         x-iscii-be { WINDOWS } windows-57003 { WINDOWS* } iscii-bng windows-57006 { WINDOWS } x-iscii-as { WINDOWS } # be is different from as on Windows.
+ISCII,version=2         x-iscii-pa { WINDOWS } windows-57011 { WINDOWS* } iscii-gur
+ISCII,version=3         x-iscii-gu { WINDOWS } windows-57010 { WINDOWS* } iscii-guj
+ISCII,version=4         x-iscii-or { WINDOWS } windows-57007 { WINDOWS* } iscii-ori
+ISCII,version=5         x-iscii-ta { WINDOWS } windows-57004 { WINDOWS* } iscii-tml
+ISCII,version=6         x-iscii-te { WINDOWS } windows-57005 { WINDOWS* } iscii-tlg
+ISCII,version=7         x-iscii-ka { WINDOWS } windows-57008 { WINDOWS* } iscii-knd
+ISCII,version=8         x-iscii-ma { WINDOWS } windows-57009 { WINDOWS* } iscii-mlm
+
+# Lotus specific
+LMBCS-1                 lmbcs
+LMBCS-2
+LMBCS-3
+LMBCS-4
+LMBCS-5
+LMBCS-6
+LMBCS-8
+LMBCS-11
+LMBCS-16
+LMBCS-17
+LMBCS-18
+LMBCS-19
 
 # EBCDIC codepages according to the CDRA
 
