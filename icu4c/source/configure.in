@@ -100,7 +100,7 @@ fi
 
 dnl Check whether to build shared libraries
 AC_ARG_ENABLE(shared,
-    [  --enable-shared=[PKGS]  build shared libraries [default=no]],
+    [  --enable-shared=[PKGS]  build shared libraries [default=yes]],
     [ case "${enableval}" in
 	     yes|"") ENABLE_SHARED=YES ;;
 	     no) ;;
@@ -122,6 +122,18 @@ AC_ARG_ENABLE(static,
 AC_SUBST(ENABLE_STATIC)
 
 AC_PROG_RANLIB
+
+dnl Check whether to use the evil rpath or not
+AC_ARG_ENABLE(rpath,
+    [  --enable-rpath          use rpath when linking [default is only if necessary]],
+    [ case "${enableval}" in
+	     yes|"") ENABLE_RPATH=YES ;;
+	     no) ;;
+	     *) ;;
+    esac],
+    [ENABLE_RPATH=NO]
+)
+AC_SUBST(ENABLE_RPATH)
 
 threads=true
 
@@ -549,11 +561,16 @@ dnl END special
 
 dnl Now that we're done using CPPFLAGS etc. for tests, we can change it
 dnl for build.
+
 if test x$ENABLE_SHARED = xYES
 then
-    CPPFLAGS="$CPPFLAGS \$(PICCPPFLAGS)"
-    CFLAGS="$CFLAGS \$(PICFLAGS)"
-    CXXFLAGS="$CXXFLAGS \$(PICFLAGS)"
+    CPPFLAGS="$CPPFLAGS \$(SHAREDLIBCPPFLAGS)"
+    CFLAGS="$CFLAGS \$(SHAREDLIBCFLAGS)"
+    CXXFLAGS="$CXXFLAGS \$(SHAREDLIBCXXFLAGS)"
+fi
+if test $ICU_USE_THREADS -ne 0
+then
+    CFLAGS="$CFLAGS \$(THREADSCPPFLAGS)"
 fi
 
 if test "$ac_cv_lib_dld_shl_load" = "yes"; then
