@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.173 2002/07/30 22:07:31 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.174 2002/08/09 17:20:56 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -206,28 +206,25 @@ ICU_CONDITIONAL(THREADS, test "$threads" = true)
 
 ICU_USE_THREADS=0
 
-dnl Test for HPUX cma threads first.. 
-if test $hpuxcma = true; then
- dnl HPUX cma case
- if test $threads = true; then
+if test $threads = true; then
+ dnl Test for HPUX cma threads first.. 
+ if test $hpuxcma = true; then
+  dnl HPUX cma case
   AC_CHECK_LIB(cma, pthread_create)
   if test $ac_cv_lib_cma_pthread_create = yes; then
    ICU_USE_THREADS=1
   fi
- fi
-else 
- dnl For Compaq Tru64 (OSF1), we must look for pthread_attr_init
- dnl and must do this before seaching for pthread_mutex_destroy, or
- dnl we will pick up libpthreads.so not libpthread.so
- dnl If this fails, then we must test for HPUX specials, before
- dnl moving on to a more generic test
-
- AC_CHECK_LIB(pthread, pthread_attr_init)
- if test $ac_cv_lib_pthread_pthread_attr_init = yes; then
-  ICU_USE_THREADS=1
- else
-  if test $threads = true; then
-
+ else 
+  dnl For Compaq Tru64 (OSF1), we must look for pthread_attr_init
+  dnl and must do this before seaching for pthread_mutex_destroy, or
+  dnl we will pick up libpthreads.so not libpthread.so
+  dnl If this fails, then we must test for HPUX specials, before
+  dnl moving on to a more generic test
+ 
+  AC_CHECK_LIB(pthread, pthread_attr_init)
+  if test $ac_cv_lib_pthread_pthread_attr_init = yes; then
+   ICU_USE_THREADS=1
+  else
    dnl Locate the right library for POSIX threads. We look for the
    dnl symbols in the libraries first, because on Solaris libc provides
    dnl pthread_create but libpthread has the real code :(
