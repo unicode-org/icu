@@ -574,19 +574,13 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
 
 
 U_CFUNC const char *
-ucnv_io_getConverterName(const char *alias, int32_t *convNumPtr, UErrorCode *pErrorCode) {
+ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t convNum = findConverter(alias, pErrorCode);
         if (convNum < gConverterListSize) {
-            if (convNumPtr) {
-                *convNumPtr = (int32_t)convNum;
-            }
             return GET_STRING(gConverterList[convNum]);
         }
         /* else converter not found */
-    }
-    if (convNumPtr) {
-        *convNumPtr = -1;
     }
     return NULL;
 }
@@ -1024,7 +1018,7 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
         gDefaultConverterName=NULL;
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
-        const char *name=ucnv_io_getConverterName(converterName, NULL, &errorCode);
+        const char *name=ucnv_io_getConverterName(converterName, &errorCode);
         if(U_SUCCESS(errorCode) && name!=NULL) {
             gDefaultConverterName=name;
         } else {

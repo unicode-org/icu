@@ -36,12 +36,11 @@ ucnv_io_stripForCompare(char *dst, const char *name);
  * is returned in mixed-case.
  * Returns NULL if the alias is not found.
  * @param alias The alias name to be searched.
- * @param convNumPtr aAn out param for the index of the converter name in the alias table.
  * @param pErrorCode The error code
  * @return the converter name in mixed-case, return NULL if the alias is not found.
  */
 U_CFUNC const char *
-ucnv_io_getConverterName(const char *alias, int32_t *convNumPtr, UErrorCode *pErrorCode);
+ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
 
 /**
  * The count for ucnv_io_getAliases and ucnv_io_getAlias
