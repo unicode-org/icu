@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2001/11/28 19:27:09 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/11/28 22:02:44 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.8 $ $Date: 2001/11/28 19:27:09 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.9 $ $Date: 2001/11/28 22:02:44 $
  */
 public class Demo extends Frame {
 
@@ -380,14 +380,14 @@ public class Demo extends Frame {
         String name = translit.getID();
         MenuItem cmi = (MenuItem) historyMap.get(name);
         if (cmi == null) {
-            cmi = new CheckboxMenuItem(translit.getDisplayName(name));
+            cmi = new MenuItem(translit.getDisplayName(name));
             cmi.addActionListener(new TransliterationListener(name));
             historyMap.put(name, cmi);
             historySet.add(cmi);
             historyMenu.removeAll();
             Iterator it = historySet.iterator();
             while (it.hasNext()) {
-                historyMenu.add((CheckboxMenuItem)it.next());
+                historyMenu.add((MenuItem)it.next());
             }
         }
     }
