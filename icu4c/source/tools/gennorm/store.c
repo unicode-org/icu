@@ -181,8 +181,10 @@ typedef struct CombiningTriple {
 static uint16_t combiningTable[0x8000];
 static uint16_t combiningTableTop=0;
 
-static uint16_t canonStartSets[_NORM_AUX_MAX_CANON_SET]={ 0 };
-static int32_t canonStartSetsTop=1;
+#define _NORM_MAX_SET_SEARCH_TABLE_LENGTH 0x4000
+static uint16_t canonStartSets[_NORM_MAX_CANON_SETS+2*_NORM_MAX_SET_SEARCH_TABLE_LENGTH];
+static int32_t canonStartSetsTop=_NORM_SET_INDEX_TOP;
+static int32_t canonSetsCount=0;
 
 extern void
 init() {
@@ -218,6 +220,9 @@ init() {
     indexes[_NORM_INDEX_MIN_NFKC_NO_MAYBE]=0xffff;
     indexes[_NORM_INDEX_MIN_NFD_NO_MAYBE]=0xffff;
     indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE]=0xffff;
+
+    /* preset the indexes portion of canonStartSets */
+    uprv_memset(canonStartSets, 0, _NORM_SET_INDEX_TOP*2);
 }
 
 /*
@@ -1197,6 +1202,70 @@ makeFCD() {
 }
 
 static void
+makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
+    if(!uset_isEmpty(norm->canonStart)) {
+        uint16_t *table;
+        int32_t c, tableLength;
+        UErrorCode errorCode=U_ZERO_ERROR;
+
+        /* does the set contain exactly one code point? */
+        c=uset_containsOne(norm->canonStart);
+
+        /* add an entry to the BMP or supplementary search table */
+        if(code<=0xffff) {
+            table=canonStartSets+_NORM_MAX_CANON_SETS;
+            tableLength=canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH];
+
+            table[tableLength++]=(uint16_t)code;
+
+            if(c>=0 && c<=0xffff && (c&_NORM_CANON_SET_BMP_MASK)!=_NORM_CANON_SET_BMP_IS_INDEX) {
+                /* single-code point BMP result for BMP code point */
+                table[tableLength++]=(uint16_t)c;
+            } else {
+                table[tableLength++]=(uint16_t)(_NORM_CANON_SET_BMP_IS_INDEX|canonStartSetsTop);
+                c=-1;
+            }
+            canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]=(uint16_t)tableLength;
+        } else {
+            table=canonStartSets+_NORM_MAX_CANON_SETS+_NORM_MAX_SET_SEARCH_TABLE_LENGTH;
+            tableLength=canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH];
+
+            table[tableLength++]=(uint16_t)(code>>16);
+            table[tableLength++]=(uint16_t)code;
+
+            if(c>=0) {
+                /* single-code point result for supplementary code point */
+                table[tableLength-2]|=(uint16_t)(0x8000|((c>>8)&0x1f00));
+                table[tableLength++]=(uint16_t)c;
+            } else {
+                table[tableLength++]=(uint16_t)canonStartSetsTop;
+            }
+            canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]=(uint16_t)tableLength;
+        }
+
+        if(c<0) {
+            /* write a USerializedSet */
+            ++canonSetsCount;
+            canonStartSetsTop+=
+                    uset_serialize(norm->canonStart,
+                            canonStartSets+canonStartSetsTop,
+                            _NORM_MAX_CANON_SETS-canonStartSetsTop,
+                            &errorCode);
+        }
+        canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]=(uint16_t)canonStartSetsTop;
+
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gennorm error: uset_serialize()->%s (canonStartSetsTop=%d)\n", u_errorName(errorCode), canonStartSetsTop);
+            exit(errorCode);
+        }
+        if(tableLength>_NORM_MAX_SET_SEARCH_TABLE_LENGTH) {
+            fprintf(stderr, "gennorm error: search table for canonical starter sets too long\n");
+            exit(U_INDEX_OUTOFBOUNDS_ERROR);
+        }
+    }
+}
+
+static void
 makeAux() {
     Norm *norm;
     uint32_t *pData;
@@ -1208,28 +1277,15 @@ makeAux() {
     for(i=0; i<length; ++i) {
         norm=norms+pData[i];
         /*
-         * 32-bit auxiliary normalization properties
+         * 16-bit auxiliary normalization properties
          * see unormimp.h
          */
         pData[i]=
             ((uint32_t)(norm->combiningFlags&0x80)<<(_NORM_AUX_COMP_EX_SHIFT-7))|
-            (uint32_t)(norm->fncIndex<<_NORM_AUX_FNC_SHIFT);
+            (uint32_t)norm->fncIndex;
 
         if(norm->unsafeStart || norm->udataCC!=0) {
             pData[i]|=_NORM_AUX_UNSAFE_MASK;
-        }
-
-        if(!uset_isEmpty(norm->canonStart)) {
-            pData[i]|=(uint32_t)canonStartSetsTop;
-            canonStartSetsTop+=
-                    uset_serialize(norm->canonStart,
-                            canonStartSets+canonStartSetsTop,
-                            _NORM_AUX_MAX_CANON_SET-canonStartSetsTop,
-                            &errorCode);
-            if(U_FAILURE(errorCode)) {
-                fprintf(stderr, "gennorm error: uset_serialize()->%s (canonStartSetsTop=%d)\n", u_errorName(errorCode), canonStartSetsTop);
-                exit(errorCode);
-            }
         }
     }
 }
@@ -1299,9 +1355,9 @@ getFoldedFCDValue(UNewTrie *trie, UChar32 start, int32_t offset) {
 
 /*
  * folding value for auxiliary data:
- * set bit 31 and store the offset in bits 29..20
- * if there is any non-0 entry
- * or together data bits 30 and 19..0 of all of the 1024 supplementary code points
+ * store the non-zero offset in bits 9..0 (FNC bits)
+ * if there is any non-0 entry;
+ * "or" [verb!] together data bits 15..10 of all of the 1024 supplementary code points
  */
 static uint32_t U_CALLCONV
 getFoldedAuxValue(UNewTrie *trie, UChar32 start, int32_t offset) {
@@ -1322,18 +1378,13 @@ getFoldedAuxValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     }
 
     if(oredValues!=0) {
-        /* reduce variation of oredValues */
-        if(oredValues&_NORM_AUX_CANON_SET_MASK) {
-            oredValues|=_NORM_AUX_CANON_SET_MASK;
-        }
-
-        /* move the 10 significant offset bits into bits 29..20 */
-        offset=offset<<(_NORM_AUX_FNC_SHIFT-UTRIE_SURROGATE_BLOCK_BITS);
+        /* move the 10 significant offset bits into bits 9..0 */
+        offset>>=UTRIE_SURROGATE_BLOCK_BITS;
         if(offset>_NORM_AUX_FNC_MASK) {
             fprintf(stderr, "gennorm error: folding offset too large (auxTrie)\n");
             exit(U_INDEX_OUTOFBOUNDS_ERROR);
         }
-        return (uint32_t)offset|_NORM_AUX_IS_LEAD_MASK|(oredValues&~_NORM_AUX_FNC_MASK);
+        return (uint32_t)offset|(oredValues&~_NORM_AUX_FNC_MASK);
     } else {
         return 0;
     }
@@ -1360,6 +1411,9 @@ processData() {
 
     /* add hangul/jamo specials */
     setHangulJamoSpecials();
+
+    /* store search tables and USerializedSets for canonical starters (after Hangul/Jamo specials!) */
+    enumTrie(makeCanonSetFn, NULL);
 
     /* clone the normalization trie to make the FCD trie */
     if( NULL==utrie_clone(&fcdTrie, &normTrie, NULL, 0) ||
@@ -1412,11 +1466,26 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
 
-    auxTrieSize=utrie_serialize(&auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, FALSE, &errorCode);
+    auxTrieSize=utrie_serialize(&auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(auxiliary data) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
+
+    /* move the parts of canonStartSets[] together into a contiguous block */
+    if(canonStartSetsTop<_NORM_MAX_CANON_SETS) {
+        uprv_memmove(canonStartSets+canonStartSetsTop,
+                     canonStartSets+_NORM_MAX_CANON_SETS,
+                     canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]*2);
+    }
+    canonStartSetsTop+=canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH];
+
+    if(canonStartSetsTop<(_NORM_MAX_CANON_SETS+_NORM_MAX_SET_SEARCH_TABLE_LENGTH)) {
+        uprv_memmove(canonStartSets+canonStartSetsTop,
+                     canonStartSets+_NORM_MAX_CANON_SETS+_NORM_MAX_SET_SEARCH_TABLE_LENGTH,
+                     canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]*2);
+    }
+    canonStartSetsTop+=canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH];
 
     /* make sure that the FCD trie is 4-aligned */
     if((extraMem->index+combiningTableTop)&1) {
@@ -1444,7 +1513,12 @@ generateData(const char *dataDir) {
         printf("size of combining table                 %5lu uint16_t\n", combiningTableTop);
         printf("size of FCD trie                        %5lu bytes\n", fcdTrieSize);
         printf("size of auxiliary trie                  %5lu bytes\n", auxTrieSize);
-        printf("size of canonStartSets                  %5lu uint16_t\n", canonStartSetsTop);
+        printf("size of canonStartSets[]                %5u uint16_t\n", canonStartSetsTop);
+        printf("  number of indexes                     %5u uint16_t\n", _NORM_SET_INDEX_TOP);
+        printf("  size of sets                          %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]-_NORM_SET_INDEX_TOP);
+        printf("  number of sets                        %5ld\n", canonSetsCount);
+        printf("  size of BMP search table              %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]);
+        printf("  size of supplementary search table    %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]);
         printf("size of " DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
     }
 
