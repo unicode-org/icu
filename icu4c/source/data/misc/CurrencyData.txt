@@ -233,7 +233,7 @@ CurrencyData{
         QA { "QAR" } // QATAR: Qatari Rial
         RE { "EUR" } // REUNION: Euro
         RO { "ROL" } // ROMANIA: Leu
-        RU { "RUR" } // RUSSIAN FEDERATION: Russian Ruble
+        RU { "RUB" } // RUSSIAN FEDERATION: Russian Ruble
         RW { "RWF" } // RWANDA: Rwanda Franc
         SA { "SAR" } // SAUDI ARABIA: Saudi Riyal
         SB { "SBD" } // SOLOMON ISLANDS: Solomon Islands Dollar
