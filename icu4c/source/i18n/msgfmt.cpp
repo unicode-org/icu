@@ -176,6 +176,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL),
   formatAliases(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
@@ -196,6 +198,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL),
   formatAliases(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
@@ -217,6 +221,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL),
   formatAliases(NULL)
 {
     if (!allocateSubformats(DEFAULT_INITIAL_CAPACITY) ||
@@ -235,6 +241,8 @@ MessageFormat::MessageFormat(const MessageFormat& that)
   argTypes(NULL),
   argTypeCount(0),
   argTypeCapacity(0),
+  defaultNumberFormat(NULL),
+  defaultDateFormat(NULL),
   formatAliases(NULL)
 {
     *this = that;
@@ -251,6 +259,9 @@ MessageFormat::~MessageFormat()
     argTypeCount = argTypeCapacity = 0;
 
     uprv_free(formatAliases);
+
+    delete defaultNumberFormat;
+    delete defaultDateFormat;
 }
 
 //--------------------------------------------------------------------
@@ -339,7 +350,7 @@ MessageFormat::operator=(const MessageFormat& that)
         Format::operator=(that);
 
         fPattern = that.fPattern;
-        fLocale = that.fLocale;
+        setLocale(that.fLocale);
         
         int32_t j;
         for (j=0; j<subformatCount; ++j) {
@@ -401,6 +412,12 @@ MessageFormat::clone() const
 void
 MessageFormat::setLocale(const Locale& theLocale)
 {
+    if (fLocale != theLocale) {
+        delete defaultNumberFormat;
+        defaultNumberFormat = NULL;
+        delete defaultDateFormat;
+        defaultDateFormat = NULL;
+    }
     fLocale = theLocale;
 }
  
@@ -862,7 +879,6 @@ MessageFormat::format(  const UnicodeString& pattern,
                         UnicodeString& appendTo, 
                         UErrorCode& success)
 {
-    // {sfb} why does this use a local when so many other places use a static?
     MessageFormat temp(pattern, success);
     FieldPosition ignore(0);
     temp.format(arguments, cnt, appendTo, ignore, success);
@@ -952,30 +968,23 @@ MessageFormat::format(const Formattable* arguments,
         }
         // If the obj data type is a number, use a NumberFormat instance.
         else if ((type == Formattable::kDouble) || (type == Formattable::kLong)) {
-            NumberFormat *numTemplate = NULL;
-            numTemplate = NumberFormat::createInstance(fLocale, success);
-            if (numTemplate == NULL || U_FAILURE(success)) { 
-                delete numTemplate; 
+            const NumberFormat* nf = getDefaultNumberFormat();
+            if (nf == NULL) { 
                 return appendTo; 
             }
             if (type == Formattable::kDouble) {
-                numTemplate->format(obj->getDouble(), appendTo);
+                nf->format(obj->getDouble(), appendTo);
             } else {
-                numTemplate->format(obj->getLong(), appendTo);
+                nf->format(obj->getLong(), appendTo);
             }
-            delete numTemplate;
-            if (U_FAILURE(success)) 
-                return appendTo;
         }
         // If the obj data type is a Date instance, use a DateFormat instance.
         else if (type == Formattable::kDate) {
-            DateFormat *dateTemplate = NULL;
-            dateTemplate = DateFormat::createDateTimeInstance(DateFormat::kShort, DateFormat::kShort, fLocale);
-            if (dateTemplate == NULL) { 
+            const DateFormat* df = getDefaultDateFormat();
+            if (df == NULL) { 
                 return appendTo; 
             }
-            dateTemplate->format(obj->getDate(), appendTo);
-            delete dateTemplate;
+            df->format(obj->getDate(), appendTo);
         }
         else if (type == Formattable::kString) {
             appendTo += obj->getString();
@@ -1329,6 +1338,41 @@ MessageFormat::createIntegerFormat(const Locale& locale, UErrorCode& status) con
     }
 
     return temp;
+}
+
+/**
+ * Return the default number format.  Used to format a numeric
+ * argument when subformats[i].format is NULL.  Returns NULL
+ * on failure.
+ *
+ * Semantically const but may modify *this.
+ */
+const NumberFormat* MessageFormat::getDefaultNumberFormat() const {
+    if (defaultNumberFormat == NULL) {
+        MessageFormat* t = (MessageFormat*) this;
+        UErrorCode ec = U_ZERO_ERROR;
+        t->defaultNumberFormat = NumberFormat::createInstance(fLocale, ec);
+        if (U_FAILURE(ec)) { 
+            delete t->defaultNumberFormat;
+            t->defaultNumberFormat = NULL;
+        }
+    }
+    return defaultNumberFormat;
+}
+
+/**
+ * Return the default date format.  Used to format a date
+ * argument when subformats[i].format is NULL.  Returns NULL
+ * on failure.
+ *
+ * Semantically const but may modify *this.
+ */
+const DateFormat* MessageFormat::getDefaultDateFormat() const {
+    if (defaultDateFormat == NULL) {
+        MessageFormat* t = (MessageFormat*) this;
+        t->defaultDateFormat = DateFormat::createDateTimeInstance(DateFormat::kShort, DateFormat::kShort, fLocale);
+    }
+    return defaultDateFormat;
 }
 
 U_NAMESPACE_END
