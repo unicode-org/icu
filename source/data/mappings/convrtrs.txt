@@ -478,8 +478,8 @@ ibm-420                 IBM420 { IANA* } ebcdic-cp-ar1 csIBM420 cp420 420
 ibm-424                 IBM424 { IANA* } ebcdic-cp-he csIBM424 cp424 424
 ibm-500                 IBM500 { IANA* } cpibm500 csIBM500 cp500 ebcdic-cp-be ebcdic-cp-ch 500 # EBCDIC International Latin1
 ibm-803                 cp803                # Old EBCDIC Hebrew
-ibm-834                 cp834                # Korean DBCS Host
-ibm-835                 cp835                # DBCS T-Ch Host
+#ibm-834                 cp834                # Korean DBCS Host (ibm-933 is the mixed host version of this codepage)
+#ibm-835                 cp835                # DBCS T-Ch Host (ibm-9027 is the Euro update of this codepage)
 ibm-870_P100-2000       IBM870 { IANA* } ibm-870 CP870 ibm-870_STD ebcdic-cp-roece ebcdic-cp-yu csIBM870
 ibm-871                 IBM871 { IANA* } ebcdic-cp-is csIBM871 cpibm871 cp871 871 # EBCDIC Iceland
 ibm-875_P100-2000       ibm-875 cp875 875 ibm-875_STD 
@@ -532,7 +532,7 @@ ibm-4899                cpibm4899            # Old EBCDIC Hebrew
 ibm-4971                cpibm4971            # EBCDIC Greek
 ibm-5123                cp1027               # Host Roman Jis
 ibm-8482                                     # host SBCS (Katakana)
-ibm-9027                                     # DBCS T-Ch Host
+ibm-9027                                     # DBCS T-Ch Host (simlar to ibm-835)
 ibm-12712               cpibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)
 ibm-16684               cp300                # DBCS Jis + Roman Jis Host
 ibm-16804               cpibm16804 ebcdic-ar # EBCDIC Arabic

@@ -372,7 +372,7 @@ static void TestConvert()
         log_err("FAILURE! %s\n", myErrorName(err));
     }
 
-    someConverters[3] = ucnv_open("ibm-834", &err);
+    someConverters[3] = ucnv_open("gb18030", &err);
     if (U_FAILURE(err)) {
         log_err("FAILURE! %s\n", myErrorName(err));
     }

@@ -20,4 +20,4 @@ ibm-1164.ucm ibm-12712.ucm ibm-16804.ucm ibm-273.ucm ibm-277.ucm\
 ibm-278.ucm ibm-280.ucm ibm-284.ucm ibm-285.ucm ibm-290.ucm\
 ibm-297.ucm ibm-420.ucm ibm-424.ucm ibm-4899.ucm ibm-4971.ucm\
 ibm-500.ucm ibm-5123.ucm ibm-803.ucm ibm-8482.ucm ibm-871.ucm\
-ibm-933.ucm ibm-834.ucm ibm-835.ucm ibm-9027.ucm ibm-16684.ucm
+ibm-933.ucm ibm-9027.ucm ibm-16684.ucm
