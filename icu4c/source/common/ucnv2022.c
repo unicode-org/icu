@@ -2509,7 +2509,8 @@ static const char* const escSeqCharsCN[10] ={
         CNS_11643_1992_Plane_4_STR,
         CNS_11643_1992_Plane_5_STR,
         CNS_11643_1992_Plane_6_STR,
-        CNS_11643_1992_Plane_7_STR
+        CNS_11643_1992_Plane_7_STR,
+        INVALID_STATE=-1
 };
 static const int escSeqCharsLenCN[10] = {
     1,      /* length of escSeq for ASCII */
