@@ -14,6 +14,7 @@
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "unicode/uchar.h"
+#include "unicode/ucnv.h"
 #include "intltest.h"
 #include "regextst.h"
 #include "uvector.h"
@@ -59,6 +60,10 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 5: name = "Errors";
             if (exec) Errors(); 
             break;
+        case 6: name = "PerlTests";
+            // if (exec) PerlTests();
+            break;
+
 
         default: name = ""; 
             break; //needed to end loop
@@ -368,7 +373,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_TESTLM("(abc)*+a", "abcabcabc", FALSE, FALSE);
+    REGEX_TESTLM("\\ba\\b", "-a", FALSE, TRUE);
     // REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
     // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
@@ -1109,6 +1114,8 @@ void RegexTest::Extended() {
 
     // \b \B
     REGEX_FIND( ".*?\\b(.).*", "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>");
+    REGEX_FIND( "\\ba\\b", "-<0>a</0>");
+    REGEX_FIND("\\by\\b",  "xy");
 
                  // Finds first chars of up to 5 words
     REGEX_FIND( "(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?",
@@ -1318,6 +1325,298 @@ void RegexTest::Errors() {
     REGEX_ERR("abc{222222222222222222222}",1,14, U_REGEX_NUMBER_TOO_BIG);
 
 }
+
+
+//---------------------------------------------------------------------------
+//
+//      PerlTests     Run Perl's regexp tests.
+//
+//---------------------------------------------------------------------------
+static UBool ReplaceFirst(UnicodeString &target, const UnicodeString &pattern,
+                         const UnicodeString &replacement, UErrorCode &status)
+{
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    UParseError pe;
+    RegexPattern *pat = NULL;
+    RegexMatcher *mat = NULL;
+
+    pat = RegexPattern::compile(pattern, 0, pe, status);
+    if (pat != NULL) {
+        mat = pat->matcher(target, status);
+    }
+    if (mat != NULL) {
+        target = mat->replaceFirst(replacement, status);
+    }
+    UBool retVal = (mat->start(0, status) != -1);
+    delete mat;
+    delete pat;
+    return retVal;
+}
+
+static char *cstar(const UnicodeString &s) {
+    UErrorCode status=U_ZERO_ERROR;
+    static char buf[1000];
+    s.extract(buf, 1000, NULL, status);
+    buf[999] = 0;
+    return buf;
+}
+
+//-------------------------------------------------------------------------------
+//
+//  Read a text data file, convert it to UChars, and return the data
+//    in one big UChar * buffer, which the caller must delete.
+//
+//--------------------------------------------------------------------------------
+UChar *RegexTest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode &status) {
+    UChar       *retPtr  = NULL;
+    char        *fileBuf = NULL;
+    UConverter* conv     = NULL;
+    FILE        *f       = NULL;
+ 
+    ulen = 0;
+    {
+        if (U_FAILURE(status)) {
+            return retPtr;
+        }
+        
+        //
+        //  Open the file.
+        //
+        f = fopen(fileName, "rb");
+        if (f == 0) {
+            errln("Error opening test data file %s\n", fileName);
+            goto cleanUpAndReturn;
+        }
+        //
+        //  Read it in
+        //
+        fseek( f, 0, SEEK_END);
+        int fileSize = ftell(f);
+        fileBuf = new char[fileSize];
+        fseek(f, 0, SEEK_SET);
+        int amt_read = fread(fileBuf, 1, fileSize, f);
+        if (amt_read != fileSize || fileSize <= 0) {
+            errln("Error reading test data file.");
+            goto cleanUpAndReturn;
+        }
+        
+        //
+        // Look for a Unicode Signature (BOM) on the data just read
+        //
+        int32_t        signatureLength;
+        const char *   fileBufC = fileBuf;
+        const char*    encoding = ucnv_detectUnicodeSignature(
+            fileBuf, fileSize, &signatureLength, &status);
+        if(encoding!=NULL ){
+            fileBufC  += signatureLength;
+            fileSize  -= signatureLength;
+        }
+        
+        //
+        // Open a converter to take the rule file to UTF-16
+        //
+        conv = ucnv_open(encoding, &status);
+        if (U_FAILURE(status)) {
+            goto cleanUpAndReturn;
+        }
+        
+        //
+        // Convert the rules to UChar.
+        //  Preflight first to determine required buffer size.
+        //
+        ulen = ucnv_toUChars(conv,
+            NULL,           //  dest,
+            0,              //  destCapacity,
+            fileBufC,
+            fileSize,
+            &status);
+        if (status == U_BUFFER_OVERFLOW_ERROR) {
+            // Buffer Overflow is expected from the preflight operation.
+            status = U_ZERO_ERROR;
+        }
+        
+        retPtr = new UChar[ulen+1];
+        ucnv_toUChars(conv,
+            retPtr,       //  dest,
+            ulen+1,
+            fileBufC,
+            fileSize,
+            &status);
+    }
+
+cleanUpAndReturn:
+    fclose(f);
+    delete fileBuf;
+    ucnv_close(conv);
+    if (U_FAILURE(status)) {
+        errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
+        delete retPtr;
+        retPtr = 0;
+        ulen   = 0;
+    };
+    return retPtr;
+}
+
+
+//-------------------------------------------------------------------------------
+//
+//   PerlTests  - Run Perl's regular expression tests
+//
+//-------------------------------------------------------------------------------
+void RegexTest::PerlTests() {
+    UErrorCode  status = U_ZERO_ERROR;
+    UParseError pe;
+
+    //
+    //  Open and read the test data file.
+    //
+    const char *testDataDirectory = loadTestData(status);
+    UnicodeString tdd(testDataDirectory);
+    ReplaceFirst(tdd, "([/\\\\])out[/\\\\]testdata", "$1re_tests.txt", status);
+
+    int    len;
+    UChar *testData = ReadAndConvertFile(cstar(tdd), len, status);
+
+    //
+    //  Put the test data into a UnicodeString
+    //
+    UnicodeString ruleSourceS(FALSE, testData, len);
+
+    //
+    //  Regex to break the input file into lines, and strip the new lines.
+    //     One line per match, capture group one is the desired data.
+    //
+    RegexPattern* linePat = RegexPattern::compile("(.+?)[\\r\\n]+", 0, pe, status);
+    RegexMatcher* lineMat = linePat->matcher(ruleSourceS, status);
+
+    //
+    //  Regex to split a test file line into fields.
+    //    There are six fields, separated by tabs.
+    //
+    RegexPattern* fieldPat = RegexPattern::compile("\\t", 0, pe, status);
+
+    //
+    //  Regex to identify test patterns with flag settings, and to separate them.
+    //    Test patterns with flags look like 'pattern'i
+    //    Test patterns without flags are not quoted:   paterrn
+    //   Coming out, capture group 2 is the pattern, capture group 3 is the flags.
+    //
+    RegexPattern *flagPat = RegexPattern::compile("('?)(.*)\\1(.*)", 0, pe, status);
+    RegexMatcher* flagMat = flagPat->matcher("", status);
+
+    //
+    // Regex to find ${bang}.  Perl doesn't put literal '!'s into patterns.
+    //
+    RegexPattern *bangPat = RegexPattern::compile("\\$\\{bang\\}", 0, pe, status);
+    RegexMatcher *bangMat = bangPat->matcher("", status);
+    
+
+    int32_t  lineNum = 0;
+    int32_t  skippedUnimplementedCount = 0;
+    while (lineMat->find()) {
+        lineNum++;
+        UnicodeString line = lineMat->group(1, status);
+        UnicodeString fields[7];
+        fieldPat->split(line, fields, 7, status);
+
+        flagMat->reset(fields[0]);
+        flagMat->matches(status);
+        UnicodeString pattern  = flagMat->group(2, status);
+        bangMat->reset(pattern);
+        pattern = bangMat->replaceAll("\\u0021", status);
+        UnicodeString flagStr = flagMat->group(3, status);
+        // printf("pattern = %s\n", cstar(pattern));
+        // printf("   flags = %s\n", cstar(flags));
+        if (U_FAILURE(status)) {
+            errln("ucnv_toUChars: ICU Error \"%s\"\n", u_errorName(status));
+            return;
+        }
+
+        int32_t flags = 0;
+        const UChar UChar_c = 0x63;  // Damn the lack of Unicode support in C
+        const UChar UChar_i = 0x69;
+        const UChar UChar_m = 0x6d;
+        const UChar UChar_x = 0x78;
+        const UChar UChar_y = 0x79;
+        if (flagStr.indexOf(UChar_i) != -1) {
+            flags |= UREGEX_CASE_INSENSITIVE;
+        }
+        if (flagStr.indexOf(UChar_m) != -1) {
+            flags |= UREGEX_MULTILINE;
+        }
+        if (flagStr.indexOf(UChar_x) != -1) {
+            flags |= UREGEX_COMMENTS;
+        }
+
+        //
+        // Compile the test pattern.
+        //
+        status = U_ZERO_ERROR;
+        RegexPattern *testPat = RegexPattern::compile(pattern, flags, pe, status);
+        if (status == U_REGEX_UNIMPLEMENTED) {
+            skippedUnimplementedCount++;
+            delete testPat;
+            status = U_ZERO_ERROR;
+            continue;
+        }
+
+        if (U_FAILURE(status)) {
+            // Some tests are supposed to generate errors.
+            //   Only report an error for tests that are supposed to succeed.
+            if (fields[2].indexOf(UChar_c) == -1  &&  // Compilation is not supposed to fail AND
+                fields[2].indexOf(UChar_i) == -1)     //   it's not an accepted ICU incompatibility
+            {
+                errln("line %d: ICU Error \"%s\"\n", lineNum, u_errorName(status));
+            }
+            status = U_ZERO_ERROR;
+            delete testPat;
+            continue;
+        }
+
+        if (fields[2].indexOf(UChar_i) >= 0) {
+            // ICU should skip this test.
+            delete testPat;
+            continue;
+        }
+
+        if (fields[2].indexOf(UChar_c) >= 0) {
+            // This pattern should have caused a compilation error, but didn't/
+            errln("line %d: Expected a pattern compile error, got success.", lineNum);
+            delete testPat;
+            continue;
+        }
+
+
+        //
+        // Run the test
+        //
+        RegexMatcher *testMat = testPat->matcher(fields[1], status);
+        UBool found = testMat->find();
+        UBool expected = FALSE;
+        if (fields[2].indexOf(UChar_y) >=0) {
+            expected = TRUE;
+        }
+        if (expected != found) {
+            errln("line %d: Expected %smatch, got %smatch", 
+                lineNum, expected?"":"no ", found?"":"no " );
+        }
+
+        
+
+        delete testMat;
+        delete testPat;
+    }
+
+    logln("%d tests skipped because of unimplemented regexp features.", skippedUnimplementedCount);
+
+
+
+
+}
+
+
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
 

@@ -24,8 +24,6 @@
 #include "uvectr32.h"
 #include "regeximp.h"
 
-//#include "stdio.h"
-//#include "malloc.h"
 
 U_NAMESPACE_BEGIN
 
@@ -222,9 +220,14 @@ int32_t RegexMatcher::end(int group, UErrorCode &err) const {
 UBool RegexMatcher::find() {
     // Start at the position of the last match end.  (Will be zero if the
     //   matcher has been reset.
+    //
+    // TODO:  Needs optimization
     UErrorCode status = U_ZERO_ERROR;
 
     int32_t  startPos;
+    // TODO:  needs to go up to the very end, so a pattern that can match a zero lenght
+    //        string can match at the end of a string.  Can't do until loop-breaking
+    //        is added to the engine, though, otherwise it triggers too many bugs.
     for (startPos=fMatchEnd; startPos < fInputLength; startPos = fInput->moveIndex32(startPos, 1)) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
@@ -477,22 +480,27 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
 //                            We are at a boundary if the this char and the original chars are
 //                               opposite in membership in \w set
 //
+//          parameters:   pos   - the current position in the input buffer
+//                        start - the position where the match operation started.
+//                                don't backup before this position when looking back
+//                                for a preceding base char.
+//
 //--------------------------------------------------------------------------------
 UBool RegexMatcher::isWordBoundary(int32_t pos) {
     UBool isBoundary = FALSE;
-    if (pos >=  fInputLength) {
-        // off end of string.  Not a boundary.
-        return FALSE;
-    }
+    UBool cIsWord    = FALSE;
     
-    // Determine whether char c at Pos is a member of the word set of chars.
-    UChar32  c = fInput->char32At(pos);
-    int8_t ctype = u_charType(c);
-    if (ctype==U_NON_SPACING_MARK || ctype==U_ENCLOSING_MARK) {
-        // Current char is a combining one.  Not a boundary.
-        return FALSE;
+    // Determine whether char c at current position is a member of the word set of chars.
+    // If we're off the end of the string, behave as though we're not at a word char.
+    if (pos < fInputLength) {
+        UChar32  c = fInput->char32At(pos);
+        int8_t ctype = u_charType(c);
+        if (ctype==U_NON_SPACING_MARK || ctype==U_ENCLOSING_MARK) {
+            // Current char is a combining one.  Not a boundary.
+            return FALSE;
+        }
+        cIsWord = fPattern->fStaticSets[URX_ISWORD_SET]->contains(c);
     }
-    UBool cIsWord = fPattern->fStaticSets[URX_ISWORD_SET]->contains(c);
     
     // Back up until we come to a non-combining char, determine whether
     //  that char is a word char.
