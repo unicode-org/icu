@@ -129,8 +129,9 @@ main(int argc,
         fprintf(stderr,
                 "Options:\n"
                 "\t-h or -? or --help   this usage text\n"
-                "\t-V or --version      prints out version number and exits\n"
                 "\t-q or --quiet        do not display warnings\n"
+                "\t-v or --verbose      prints out extra information about processing the files\n"
+                "\t-V or --version      prints out version number and exits\n"
                 "\t-c or --copyright    include copyright notice\n");
         fprintf(stderr,
                 "\t-e or --encoding     encoding of source files, leave empty for system default encoding\n"
@@ -178,9 +179,9 @@ main(int argc,
         status = U_ZERO_ERROR;
         arg    = getLongPathname(argv[i]);
 
-	if (verbose) {
-            printf("%s: processing file \"%s\"\n", argv[0], arg);
-	}
+    if (verbose) {
+        printf("processing file \"%s\"\n",  arg);
+    }
         processFile(arg, encoding, inputDir, outputDir, &status);
     }
 
@@ -258,11 +259,11 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     } else {
         /* auto detect popular encodings */
         if (*cp=='\0' && ucbuf_autodetect(in, &cp) && verbose) {
-            printf("%s: autodetected encoding %s\n", cp);
+            printf("autodetected encoding %s\n", cp);
         }
     }
 
-    ucbuf = ucbuf_open(in, cp,getShowWarning(), status);
+    ucbuf = ucbuf_open(in, cp, verbose, status);
 
     if (ucbuf == NULL || U_FAILURE(*status)) {
         goto finish;
