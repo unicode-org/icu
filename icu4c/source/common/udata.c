@@ -471,7 +471,7 @@ typedef struct {
 static const DataHeader *
 normalizeDataPointer(const DataHeader *p) {
     /* allow the data to be optionally prepended with an alignment-forcing double value */
-    if(p==NULL || p->dataHeader.magic1==0xda && p->dataHeader.magic2==0x27) {
+    if(p==NULL || (p->dataHeader.magic1==0xda && p->dataHeader.magic2==0x27)) {
         return p;
     } else {
         return (const DataHeader *)((const double *)p+1);
@@ -685,7 +685,7 @@ openCommonData(UDataMemory *pData,
         /* try path/basename first */
 #       ifdef OS390BATCH
             /* ### hack: we still need to get u_getDataDirectory() fixed
-               for OS/390 (batch mode - always return "//"??)
+               for OS/390 (batch mode - always return "//"? )
                and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!) */
             lib=LOAD_LIBRARY("//icudata", "//icudata");
 #       else
@@ -768,7 +768,7 @@ openCommonData(UDataMemory *pData,
 
     /* try path/basename first, then basename only */
     if( uprv_mapFile(pData, pathBuffer, basename) ||
-        basename!=pathBuffer && uprv_mapFile(pData, basename, basename)
+        (basename!=pathBuffer && uprv_mapFile(pData, basename, basename))
     ) {
         const DataHeader *pHeader;
         *basename=0;
@@ -950,7 +950,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 uprv_memset(pEntryData, 0, sizeof(UDataMemory));
                 pEntryData->parent=pCommonData;
                 pEntryData->pHeader=pHeader;
-                pEntryData->flags=pCommonData->flags&DATA_MEMORY_TYPE_MASK|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
+                pEntryData->flags=(pCommonData->flags&DATA_MEMORY_TYPE_MASK)|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
                 return pEntryData;
             } else {
                 /* the data is not acceptable, look further */
@@ -979,7 +979,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         uprv_strcpy(suffix, tocEntryName);
 
         if( uprv_mapFile(&dataMemory, pathBuffer, basename) ||
-            basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename)
+            (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename))
         ) {
             pHeader=dataMemory.pHeader;
             if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
@@ -1007,7 +1007,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* try path+entryName next */
     uprv_strcpy(basename, tocEntryName);
     if( uprv_mapFile(&dataMemory, pathBuffer, basename) ||
-        basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename)
+        (basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename))
     ) {
         pHeader=dataMemory.pHeader;
         if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
