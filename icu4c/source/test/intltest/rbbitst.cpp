@@ -47,7 +47,7 @@ public:
     UVector          fActualTags;
 
     BITestData(UErrorCode &status);
-    void             addDataChunk(char *data, int32_t tag, int32_t lineNum, UErrorCode status);
+    void             addDataChunk(const char *data, int32_t tag, int32_t lineNum, UErrorCode status);
     void             checkResults(char *heading, RBBITest *test);
     void             err(char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx);
     void             clearResults();
@@ -72,7 +72,7 @@ BITestData::BITestData(UErrorCode &status)
 //                  each non-null item is its ending position.
 //
 #define ADD_DATACHUNK(td, data, tag, status)   td.addDataChunk(data, tag, __LINE__, status);
-void BITestData::addDataChunk(char *data, int32_t tag, int32_t lineNum, UErrorCode status) {
+void BITestData::addDataChunk(const char *data, int32_t tag, int32_t lineNum, UErrorCode status) {
     if (U_FAILURE(status)) {return;}
     if (data != NULL) {
         fDataToBreak.append(CharsToUnicodeString(data));
