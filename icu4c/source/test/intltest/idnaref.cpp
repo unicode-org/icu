@@ -43,21 +43,6 @@ static const UChar ACE_PREFIX[] ={ 0x0058,0x004E,0x002d,0x002d } ;
 #define FULL_STOP        0x002E
 
 
-NamePrepTransform* TestIDNA::prep = NULL;
-
-NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
-    if(TestIDNA::prep == NULL){
-        UParseError parseError;
-        TestIDNA::prep = NamePrepTransform::createInstance(parseError, status);
-        if(TestIDNA::prep ==NULL){
-           //status = U_MEMORY_ALLOCATION_ERROR;
-           return NULL;
-        }
-    }
-    return TestIDNA::prep;
-
-}
-
 inline static UBool 
 startsWithPrefix(const UChar* src , int32_t srcLength){
     UBool startsWithPrefix = TRUE;
