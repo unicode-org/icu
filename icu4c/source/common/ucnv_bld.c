@@ -49,7 +49,7 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     NULL, &_ISO2022Data, 
     &_LMBCSData1,&_LMBCSData2, &_LMBCSData3, &_LMBCSData4, &_LMBCSData5, &_LMBCSData6,
     &_LMBCSData8,&_LMBCSData11,&_LMBCSData16,&_LMBCSData17,&_LMBCSData18,&_LMBCSData19,
-    &_HZData, &_SCSUData, &_ASCIIData
+    &_HZData, &_SCSUData, &_ASCIIData, &_UTF7Data
 };
 
 static struct {
@@ -91,7 +91,8 @@ static struct {
   { "LMBCS-19",UCNV_LMBCS_19 },
   { "HZ",UCNV_HZ },
   { "SCSU", UCNV_SCSU },
-  { "US-ASCII", UCNV_US_ASCII }
+  { "US-ASCII", UCNV_US_ASCII },
+  { "UTF-7", UCNV_UTF7 }
 };
 
 
@@ -320,28 +321,26 @@ parseConverterOptions(const char *inName,
                         return;
                     }
                 }
+            } else if(uprv_strncmp(inName, "version=", 8)==0) {
+                /* copy the version option value into bits 3..0 of *pFlags */
+                inName+=8;
+                c=*inName;
+                *pFlags=0;
+                if(c==0) {
+                    return;
+                } else if((uint8_t)(c-'0')<10) {
+                    *pFlags=c-'0';
+                    ++inName;
+                }
+            /* add processing for new options here with another } else if(uprv_strncmp(inName, "option-name=", XX)==0) { */
             } else {
                 /* ignore any other options until we define some */
-                for(;;) {
-                    if(uprv_strncmp(inName, "version=", 8)==0) {
-                        /*copy the version option value*/
-                        inName+=8;
-                        c=*inName;
-                        if(c!=0){
-                            ++inName;
-                            if(c!=UCNV_OPTION_SEP_CHAR){
-                                *pFlags = c;
-                            }
-                            else{
-                                break;
-                            }
-                        }
-                       
-                    }
-                    else {
+                do {
+                    c=*inName++;
+                    if(c==0) {
                         return;
                     }
-                }
+                } while(c!=UCNV_OPTION_SEP_CHAR);
             }
         }
     }
