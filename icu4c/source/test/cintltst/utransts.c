@@ -12,12 +12,11 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
+#include <malloc.h>
+#include <string.h>
 #include "unicode/utrans.h"
-#include "cmemory.h"
-#include "cstring.h"
-#include "filestrm.h"
-#include "cintltst.h"
 #include "unicode/ustring.h"
+#include "cintltst.h"
 
 #define TEST(x) addTest(root, &x, "utrans/" # x)
 
@@ -58,7 +57,7 @@ typedef struct XReplaceable {
 } XReplaceable;
 
 static void InitXReplaceable(XReplaceable* rep, const char* cstring) {
-    rep->text = malloc(sizeof(UChar) * (uprv_strlen(cstring)+1));
+    rep->text = malloc(sizeof(UChar) * (strlen(cstring)+1));
     u_uastrcpy(rep->text, cstring);
 }
 
@@ -165,7 +164,7 @@ static void TestAPI() {
     
     /* Test getID */
     utrans_getID(trans, buf2, BUF_CAP);
-    if (0 != uprv_strcmp(buf, buf2)) {
+    if (0 != strcmp(buf, buf2)) {
         log_err("FAIL: utrans_getID(%s) returned %s\n",
                 buf, buf2);
     }
@@ -212,7 +211,7 @@ static void TestOpenInverse(){
             continue;
         }
         utrans_getID(inverse1, buf1, BUF_CAP);
-        if(uprv_strcmp(buf1, TransID[i+1]) != 0){
+        if(strcmp(buf1, TransID[i+1]) != 0){
             log_err("FAIL :openInverse() for %s returned %s instead of %s\n", TransID[i], buf1, TransID[i+1]);
         }
         utrans_close(t1);
@@ -248,15 +247,15 @@ static void TestClone(){
     utrans_getID(t2, buf2, BUF_CAP);
     utrans_getID(t3, buf3, BUF_CAP);
 
-    if(uprv_strcmp(buf1, buf3) != 0 ||
-        uprv_strcmp(buf1, buf2) == 0) {
+    if(strcmp(buf1, buf3) != 0 ||
+        strcmp(buf1, buf2) == 0) {
         log_err("FAIL: utrans_clone() failed\n");
     }
 
     utrans_getID(t4, buf3, BUF_CAP);
 
-    if(uprv_strcmp(buf2, buf3) != 0 ||
-        uprv_strcmp(buf1, buf3) == 0) {
+    if(strcmp(buf2, buf3) != 0 ||
+        strcmp(buf1, buf3) == 0) {
         log_err("FAIL: utrans_clone() failed\n");
     }
 
@@ -399,7 +398,7 @@ static void TestFilter() {
 
     for (i=0; i<DATA_length; i+=3) {
         /*u_uastrcpy(filt, DATA[i]);*/
-        u_charsToUChars(DATA[i], filt, uprv_strlen(DATA[i])+1);
+        u_charsToUChars(DATA[i], filt, strlen(DATA[i])+1);
         utrans_setFilter(hex, filt, -1, &status);
 
         if (U_FAILURE(status)) {
@@ -409,7 +408,7 @@ static void TestFilter() {
         }
         
         /*u_uastrcpy(buf, DATA[i+1]);*/
-        u_charsToUChars(DATA[i+1], buf, uprv_strlen(DATA[i+1])+1);
+        u_charsToUChars(DATA[i+1], buf, strlen(DATA[i+1])+1);
         limit = 5;
         utrans_transUChars(hex, buf, NULL, 128, 0, &limit, &status);
         
@@ -422,7 +421,7 @@ static void TestFilter() {
         /*u_austrcpy(cbuf, buf);*/
         u_UCharsToChars(buf, cbuf, u_strlen(buf)+1);
         /*u_uastrcpy(exp, DATA[i+2]);*/
-        u_charsToUChars(DATA[i+2], exp, uprv_strlen(DATA[i+2])+1);
+        u_charsToUChars(DATA[i+2], exp, strlen(DATA[i+2])+1);
         if (0 == u_strcmp(buf, exp)) {
             log_verbose("Ok: %s | %s -> %s\n", DATA[i+1], DATA[i], cbuf);
         } else {
