@@ -1,12 +1,12 @@
 .\" Hey, Emacs! This is -*-nroff-*- you know...
 .\"
-.\" makeconv.8: manual page for the makeconv utility
+.\" makeconv.1: manual page for the makeconv utility
 .\"
 .\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH MAKECONV 8 "14 February 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH MAKECONV 1 "16 April 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B makeconv
 \- compile a converter table
@@ -39,7 +39,7 @@ extension of the
 .I convertertable
 file).
 This binary file can then be read directly by ICU, or used by
-.BR pkgdata (8)
+.BR pkgdata (1)
 for incorporation into a larger archive or library.
 .PP
 The
@@ -88,7 +88,7 @@ If an existing converter table is changed and recompiled using
 the resulting binary file must be packaged in the same way that it was
 packaged initially. For example, if converters were grouped together in
 an archive or a library with
-.BR pkgdata (8),
+.BR pkgdata (1),
 then the archive or library must be rebuilt with the new binary file.
 A standalone binary converter file will not take precedence over a
 packaged one.
@@ -108,5 +108,5 @@ Copyright (C) 2000 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5) 
 .br
-.BR pkgdata (8)
+.BR pkgdata (1)
 

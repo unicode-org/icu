@@ -16,7 +16,7 @@ include @platform_make_fragment@
 
 ##
 
-SECTION = 8
+SECTION = 1
 
 MANX_FILES = $(TARGET).$(SECTION)
 
@@ -77,8 +77,8 @@ check: all check-local
 all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
-	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
 #	$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 #	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
 #		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$$file; \
