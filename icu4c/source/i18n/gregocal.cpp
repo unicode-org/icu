@@ -66,17 +66,18 @@ static const int32_t kMonthLength[]
 static const int32_t kLeapMonthLength[]
     = {31,29,31,30,31,30,31,31,30,31,30,31}; // 0-based
 
-// actual limits, imposed by setTimeInMillis(), are approximately:
-// ms=+183882168921600000  jd=7f000000  Tuesday, December 20, 5828963 12:00:00 AM GMT
-// ms=-184303902528000000  jd=81000000  Sunday, September 20, 5838270 12:00:00 AM GMT
-
-#define MAX_YEAR 5838300
+// setTimeInMillis() limits the Julian day range to +/-7F000000.
+// This would seem to limit the year range to:
+//  ms=+183882168921600000  jd=7f000000  December 20, 5828963 AD
+//  ms=-184303902528000000  jd=81000000  September 20, 5838270 BC
+// HOWEVER, CalendarRegressionTest/Test4167060 shows that the actual
+// range limit on the year field is smaller (~ +/-140000). [alan 3.0]
 
 static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     // Minimum  Greatest    Least  Maximum
     //           Minimum  Maximum
     {        0,        0,       1,       1 }, // ERA
-    {        1,        1, MAX_YEAR, MAX_YEAR }, // YEAR
+    {        1,        1,  140742,  144683 }, // YEAR
     {        0,        0,      11,      11 }, // MONTH
     {        1,        1,      52,      53 }, // WEEK_OF_YEAR
     {        0,        0,       4,       6 }, // WEEK_OF_MONTH
@@ -92,9 +93,9 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// MILLISECOND
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// ZONE_OFFSET
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DST_OFFSET
-    { -MAX_YEAR, -MAX_YEAR, MAX_YEAR, MAX_YEAR }, // YEAR_WOY
+    { -140742, -140742, 140742, 144683 }, // YEAR_WOY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DOW_LOCAL
-    { -MAX_YEAR, -MAX_YEAR, MAX_YEAR, MAX_YEAR }, // EXTENDED_YEAR
+    { -140742, -140742, 140742, 144683 }, // EXTENDED_YEAR
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// JULIAN_DAY
     {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1} // MILLISECONDS_IN_DAY
 };
