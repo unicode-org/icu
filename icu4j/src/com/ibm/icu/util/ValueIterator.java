@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/04/05 00:09:16 $
-* $Revision: 1.5 $
+* $Date: 2002/04/05 00:12:09 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -87,7 +87,7 @@ public interface ValueIterator
     /**
      * <p>Restricts the range of integers to iterate.</p>
      * <p>If setRange() is not performed before next() is called, the 
-     * iteration will start from a minimum integer index and ends at a 
+     * iteration will start from the integer.Integer.MIN_VALUE and ends at a 
      * maximum integer index that is determined by the specific implementation
      * of ValueIterator.</p>
      * <p>For instance the Unicode character name iterator provided by
