@@ -369,7 +369,8 @@ public:
      *
      * @param language Lowercase two-letter ISO-639 code.  This parameter can
      *  instead be an ICU style C locale (e.g. "en_US"), but the other
-     *  parameters must not be used.
+     *  parameters must not be used.  This parameter can be null, if so
+     *  the locale is initialized to match the current default locale.
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
