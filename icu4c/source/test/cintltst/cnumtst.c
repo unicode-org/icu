@@ -38,6 +38,7 @@ void addNumForTest(TestNode** root)
 {
     addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
     addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
+    addTest(root, &TestInt64Format, "tsformat/cnumtst/TestInt64Format");
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -593,9 +594,6 @@ free(result);
     else
         log_verbose("Pass: get and settextAttributes with negative suffix works fine\n");
 
-
-
-
     /*Testing unum_getAttribute and  unum_setAttribute() */
     log_verbose("\nTesting get and set Attributes\n");
     attr=UNUM_GROUPING_SIZE;
@@ -784,6 +782,131 @@ free(result);
     }
 
     unum_close(pattern);
+}
+
+static UBool
+withinErr(double a, double b, double err) {
+    return uprv_fabs(a - b) < uprv_fabs(a * err); 
+}
+
+static void TestInt64Format() {
+  UChar temp1[512];
+  UChar result[512];
+  UNumberFormat *fmt;
+  UErrorCode status = U_ZERO_ERROR;
+  const double doubleInt64Max = (double)INT64_MAX;
+  const double doubleInt64Min = (double)INT64_MIN;
+  const double doubleBig = 10.0 * (double)INT64_MAX;      
+  int32_t val32;
+  int64_t val64;
+  double  valDouble;
+  int32_t parsepos;
+
+  /* create a number format using unum_openPattern(....) */
+  log_verbose("\nTesting Int64Format\n");
+  u_uastrcpy(temp1, "#.#E0");
+  fmt = unum_open(UNUM_IGNORE, temp1, u_strlen(temp1), NULL, NULL, &status);
+  if(U_FAILURE(status)) {
+    log_err("error in unum_openPattern(): %s\n", myErrorName(status));
+  } else {
+    unum_setAttribute(fmt, UNUM_MAX_FRACTION_DIGITS, 20);
+    unum_formatInt64(fmt, INT64_MAX, result, 512, NULL, &status);
+    if (U_FAILURE(status)) {
+      log_err("error in unum_format(): %s\n", myErrorName(status));
+    } else {
+      log_verbose("format int64max: '%s'\n", result);
+      parsepos = 0;
+      val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
+      if (status != U_INVALID_FORMAT_ERROR) {
+        log_err("parse didn't report error: %s\n", myErrorName(status));
+      } else if (val32 != INT32_MAX) {
+        log_err("parse didn't pin return value, got: %d\n", val32);
+      }
+
+      status = U_ZERO_ERROR;
+      parsepos = 0;
+      val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
+      if (U_FAILURE(status)) {
+        log_err("parseInt64 returned error: %s\n", myErrorName(status));
+      } else if (val64 != INT64_MAX) {
+        log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
+      }
+
+      status = U_ZERO_ERROR;
+      parsepos = 0;
+      valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+      if (U_FAILURE(status)) {
+        log_err("parseDouble returned error: %s\n", myErrorName(status));
+      } else if (valDouble != doubleInt64Max) {
+        log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
+      }
+    }
+
+    unum_formatInt64(fmt, INT64_MIN, result, 512, NULL, &status);
+    if (U_FAILURE(status)) {
+      log_err("error in unum_format(): %s\n", myErrorName(status));
+    } else {
+      log_verbose("format int64min: '%s'\n", result);
+      parsepos = 0;
+      val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
+      if (status != U_INVALID_FORMAT_ERROR) {
+        log_err("parse didn't report error: %s\n", myErrorName(status));
+      } else if (val32 != INT32_MIN) {
+        log_err("parse didn't pin return value, got: %d\n", val32);
+      }
+
+      status = U_ZERO_ERROR;
+      parsepos = 0;
+      val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
+      if (U_FAILURE(status)) {
+        log_err("parseInt64 returned error: %s\n", myErrorName(status));
+      } else if (val64 != INT64_MIN) {
+        log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
+      }
+
+      status = U_ZERO_ERROR;
+      parsepos = 0;
+      valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+      if (U_FAILURE(status)) {
+        log_err("parseDouble returned error: %s\n", myErrorName(status));
+      } else if (valDouble != doubleInt64Min) {
+        log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
+      }
+    }
+
+    unum_formatDouble(fmt, doubleBig, result, 512, NULL, &status);
+    if (U_FAILURE(status)) {
+      log_err("error in unum_format(): %s\n", myErrorName(status));
+    } else {
+      log_verbose("format doubleBig: '%s'\n", result);
+      parsepos = 0;
+      val32 = unum_parse(fmt, result, u_strlen(result), &parsepos, &status);
+      if (status != U_INVALID_FORMAT_ERROR) {
+        log_err("parse didn't report error: %s\n", myErrorName(status));
+      } else if (val32 != INT32_MAX) {
+        log_err("parse didn't pin return value, got: %d\n", val32);
+      }
+
+      status = U_ZERO_ERROR;
+      parsepos = 0;
+      val64 = unum_parseInt64(fmt, result, u_strlen(result), &parsepos, &status);
+      if (status != U_INVALID_FORMAT_ERROR) {
+        log_err("parseInt64 didn't report error error: %s\n", myErrorName(status));
+      } else if (val64 != INT64_MAX) {
+        log_err("parseInt64 returned incorrect value, got: %ld\n", val64);
+      }
+
+      status = U_ZERO_ERROR;
+      parsepos = 0;
+      valDouble = unum_parseDouble(fmt, result, u_strlen(result), &parsepos, &status);
+      if (U_FAILURE(status)) {
+        log_err("parseDouble returned error: %s\n", myErrorName(status));
+      } else if (!withinErr(valDouble, doubleBig, 1e-15)) {
+        log_err("parseDouble returned incorrect value, got: %g\n", valDouble);
+      }
+    }
+  }
+  delete fmt;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

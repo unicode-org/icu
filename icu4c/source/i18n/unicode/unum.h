@@ -227,8 +227,10 @@ unum_clone(const UNumberFormat *fmt,
 * a field exists.  This parameter may be NULL, in which case no field
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
+* @see unum_formatInt64
 * @see unum_formatDouble
 * @see unum_parse
+* @see unum_parseInt64
 * @see unum_parseDouble
 * @see UFieldPosition
 * @stable ICU 2.0
@@ -240,6 +242,35 @@ unum_format(    const    UNumberFormat*    fmt,
         int32_t            resultLength,
         UFieldPosition    *pos,
         UErrorCode*        status);
+
+/**
+* Format an int64 using a UNumberFormat.
+* The int64 will be formatted according to the UNumberFormat's locale.
+* @param fmt The formatter to use.
+* @param number The number to format.
+* @param result A pointer to a buffer to receive the formatted number.
+* @param resultLength The maximum size of result.
+* @param pos    A pointer to a UFieldPosition.  On input, position->field
+* is read.  On output, position->beginIndex and position->endIndex indicate
+* the beginning and ending indices of field number position->field, if such
+* a field exists.  This parameter may be NULL, in which case no field
+* @param status A pointer to an UErrorCode to receive any errors
+* @return The total buffer size needed; if greater than resultLength, the output was truncated.
+* @see unum_format
+* @see unum_formatDouble
+* @see unum_parse
+* @see unum_parseInt64
+* @see unum_parseDouble
+* @see UFieldPosition
+* @stable ICU 2.0
+*/
+U_CAPI int32_t U_EXPORT2 
+unum_formatInt64(const UNumberFormat *fmt,
+        int64_t         number,
+        UChar*          result,
+        int32_t         resultLength,
+        UFieldPosition *pos,
+        UErrorCode*     status);
 
 /**
 * Format a double using a UNumberFormat.
@@ -255,7 +286,9 @@ unum_format(    const    UNumberFormat*    fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see unum_format
+* @see unum_formatInt64
 * @see unum_parse
+* @see unum_parseInt64
 * @see unum_parseDouble
 * @see UFieldPosition
 * @stable ICU 2.0
@@ -278,8 +311,10 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 * to begin parsing.  If not 0, on output the offset at which parsing ended.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed integer
+* @see unum_parseInt64
 * @see unum_parseDouble
 * @see unum_format
+* @see unum_formatInt64
 * @see unum_formatDouble
 * @stable ICU 2.0
 */
@@ -289,6 +324,30 @@ unum_parse(    const   UNumberFormat*  fmt,
         int32_t         textLength,
         int32_t         *parsePos /* 0 = start */,
         UErrorCode      *status);
+
+/**
+* Parse a string into an int64 using a UNumberFormat.
+* The string will be parsed according to the UNumberFormat's locale.
+* @param fmt The formatter to use.
+* @param text The text to parse.
+* @param textLength The length of text, or -1 if null-terminated.
+* @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
+* to begin parsing.  If not 0, on output the offset at which parsing ended.
+* @param status A pointer to an UErrorCode to receive any errors
+* @return The value of the parsed integer
+* @see unum_parse
+* @see unum_parseDouble
+* @see unum_format
+* @see unum_formatInt64
+* @see unum_formatDouble
+* @draft ICU 2.8
+*/
+U_CAPI int64_t U_EXPORT2 
+unum_parseInt64(const UNumberFormat*  fmt,
+        const UChar*  text,
+        int32_t       textLength,
+        int32_t       *parsePos /* 0 = start */,
+        UErrorCode    *status);
 
 /**
 * Parse a string into a double using a UNumberFormat.
@@ -301,7 +360,9 @@ unum_parse(    const   UNumberFormat*  fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed double
 * @see unum_parse
+* @see unum_parseInt64
 * @see unum_format
+* @see unum_formatInt64
 * @see unum_formatDouble
 * @stable ICU 2.0
 */

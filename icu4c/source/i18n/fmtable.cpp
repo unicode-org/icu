@@ -28,6 +28,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
 
+UnicodeString* Formattable::gBogus = NULL;
+
 // -------------------------------------
 // default constructor.
 // Creates a formattable object with a long value 0.
@@ -150,7 +152,7 @@ Formattable::operator=(const Formattable& source)
             fValue.fDouble = source.fValue.fDouble;
             break;
         case kLong:
-		case kInt64:
+        case kInt64:
             // Sets the long value.
             fValue.fInt64 = source.fValue.fInt64;
             break;
@@ -181,7 +183,7 @@ Formattable::operator==(const Formattable& that) const
     case kDouble:
         return fValue.fDouble == that.fValue.fDouble;
     case kLong:
-	case kInt64:
+        case kInt64:
         return fValue.fInt64 == that.fValue.fInt64;
     case kString:
         return *(fValue.fString) == *(that.fValue.fString);
@@ -229,6 +231,88 @@ Formattable::Type
 Formattable::getType() const
 {
     return fType;
+}
+
+// -------------------------------------
+int32_t
+Formattable::getLong(UErrorCode* status) const
+{
+    if(U_FAILURE(*status))
+        return 0;
+        
+    switch (fType) {
+    case Formattable::kLong: 
+        return (int32_t)fValue.fInt64;
+    case Formattable::kInt64: 
+        if (fValue.fInt64 > INT32_MAX) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return INT32_MAX;
+        } else if (fValue.fInt64 < INT32_MIN) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return INT32_MIN;
+        } else {
+            return (int32_t)fValue.fInt64;
+        }
+    case Formattable::kDouble:
+        if (fValue.fDouble > INT32_MAX) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return INT32_MAX;
+        } else if (fValue.fDouble < INT32_MIN) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return INT32_MIN;
+        } else {
+            return (int32_t)fValue.fDouble;
+        }
+    default: 
+        *status = U_INVALID_FORMAT_ERROR;
+        return 0;
+    }
+}
+
+// -------------------------------------
+int64_t
+Formattable::getInt64(UErrorCode* status) const
+{
+    if(U_FAILURE(*status))
+        return 0;
+        
+    switch (fType) {
+    case Formattable::kLong: 
+    case Formattable::kInt64: 
+        return fValue.fInt64;
+    case Formattable::kDouble:
+        if (fValue.fDouble > INT64_MAX) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return INT64_MAX;
+        } else if (fValue.fDouble < INT64_MIN) {
+            *status = U_INVALID_FORMAT_ERROR;
+            return INT64_MIN;
+        } else {
+            return (int64_t)fValue.fDouble;
+        }
+    default: 
+        *status = U_INVALID_FORMAT_ERROR;
+        return 0;
+    }
+}
+
+// -------------------------------------
+double
+Formattable::getDouble(UErrorCode* status) const
+{
+    if(U_FAILURE(*status))
+        return 0;
+        
+    switch (fType) {
+    case Formattable::kLong: 
+    case Formattable::kInt64: // loses precision
+        return (double)fValue.fInt64;
+    case Formattable::kDouble:
+        return fValue.fDouble;
+    default: 
+        *status = U_INVALID_FORMAT_ERROR;
+        return 0;
+    }
 }
 
 // -------------------------------------
@@ -319,6 +403,67 @@ Formattable::adoptArray(Formattable* array, int32_t count)
     fType = kArray;
     fValue.fArrayAndCount.fArray = array;
     fValue.fArrayAndCount.fCount = count;
+}
+
+// -------------------------------------
+UnicodeString& 
+Formattable::getString(UnicodeString& result, UErrorCode* status) const 
+{
+    if (status && U_SUCCESS(*status) && fType != kString) {
+        *status = U_INVALID_FORMAT_ERROR;
+        result.setToBogus();
+    } else {
+        result = *fValue.fString;
+    }
+    return result;
+}
+
+// -------------------------------------
+const UnicodeString& 
+Formattable::getString(UErrorCode* status) const 
+{
+    if (status && U_SUCCESS(*status) && fType != kString) {
+        *status = U_INVALID_FORMAT_ERROR;
+        return *getBogus();
+    }
+    return *fValue.fString;
+}
+
+// -------------------------------------
+UnicodeString& 
+Formattable::getString(UErrorCode* status) 
+{
+    if (status && U_SUCCESS(*status) && fType != kString) {
+        *status = U_INVALID_FORMAT_ERROR;
+        return *getBogus();
+    }
+    return *fValue.fString;
+}
+
+// -------------------------------------
+const Formattable* 
+Formattable::getArray(int32_t& count, UErrorCode* status) const 
+{
+    if (status && U_SUCCESS(*status) && fType != kArray) {
+        count = 0;
+        *status = U_INVALID_FORMAT_ERROR;
+        return NULL;
+    }
+    count = fValue.fArrayAndCount.fCount; 
+    return fValue.fArrayAndCount.fArray;
+}
+
+// -------------------------------------
+// Gets the bogus string, ensures mondo bogosity.
+
+UnicodeString*
+Formattable::getBogus() 
+{
+  if (gBogus == NULL) {
+    gBogus = new UnicodeString();
+  }
+  gBogus->setToBogus();
+  return gBogus;
 }
 
 #if 0
