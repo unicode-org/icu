@@ -748,7 +748,6 @@ void Transliterator::_unregister(const UnicodeString& ID) {
 	//int32_t hc = hash(ID);
     CacheEntry* entry = (CacheEntry*) cache->get(ID);
 	if (entry != 0) {
-		UErrorCode status = U_ZERO_ERROR;
 		cache->remove(ID);
 		delete entry;
 	}

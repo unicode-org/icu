@@ -466,7 +466,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             if (fgLastResortZoneStringsH == 0)
             {
                 // Initialize this -- the compiler doesn't like to do so at static init time
-                UnicodeString **tempH = fgLastResortZoneStringsH = new UnicodeString*[1];
+                fgLastResortZoneStringsH = new UnicodeString*[1];
 
                 Mutex lock; // This could be optimized but it's not worth it -- exceptional case
                 *fgLastResortZoneStringsH = (UnicodeString*)fgLastResortZoneStrings;

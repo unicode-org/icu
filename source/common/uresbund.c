@@ -77,7 +77,6 @@ void entryIncrease(UResourceDataEntry *entry) {
  *  Bundle, as well as in its parents
  */
 const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, UResourceDataEntry* *realData, Resource *res, UErrorCode *status) {
-    const ResourceData *result = NULL;
     UResourceDataEntry *resB = resBundle->fData;
     int32_t indexR = -1;
     int32_t i = 0;
@@ -241,7 +240,6 @@ UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCod
             /* handle the alias by trying to get out the %%Alias tag.*/
             char aliasName[100];
             int32_t aliasLen;
-            UErrorCode internal = U_ZERO_ERROR;
             /* We'll try to get alias string from the bundle */
             Resource aliasres = res_getResource(&(r->fData), "%%ALIAS");
             const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
@@ -374,7 +372,6 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
  *  for initing Collation data at this point.
  */
 U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* localeID, UErrorCode* status) {
-    int32_t en_US = uprv_strcmp(localeID, "en_US");
     UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
     if(r == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -1201,8 +1198,6 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
                   const char* resourceKey,
                   UErrorCode* status)
 {
-    Resource res = RES_BOGUS;
-
     UResourceBundle resData;
     ures_setIsStackObject(&resData, TRUE);
         if (status==NULL || U_FAILURE(*status)) {
