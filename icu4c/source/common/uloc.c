@@ -59,6 +59,7 @@ static const char _kVariants[]        = "Variants";
 static const char _kKeys[]            = "Keys";
 static const char _kTypes[]           = "Types";
 static const char _kIndexLocaleName[] = "res_index";
+static const char _kRootName[]        = "root";
 static const char _kIndexTag[]        = "InstalledLocales";
 static const char _kCurrency[]        = "currency";
 static const char _kCurrencies[]      = "Currencies";
@@ -745,17 +746,17 @@ _getVariant(const char *localeID,
 #define ULOC_MAX_NO_KEYWORDS 25
 
 typedef struct {
-  char keyword[ULOC_KEYWORD_BUFFER_LEN];
-  int32_t keywordLen;
-  const char *valueStart;
-  int32_t valueLen;
+    char keyword[ULOC_KEYWORD_BUFFER_LEN];
+    int32_t keywordLen;
+    const char *valueStart;
+    int32_t valueLen;
 } keywordStruct;
 
 static int32_t U_CALLCONV
 compareKeywordStructs(const void *context, const void *left, const void *right) {
-  const char* leftString = ((const keywordStruct *)left)->keyword;
-  const char* rightString = ((const keywordStruct *)right)->keyword;
-  return uprv_strcmp(leftString, rightString);
+    const char* leftString = ((const keywordStruct *)left)->keyword;
+    const char* rightString = ((const keywordStruct *)right)->keyword;
+    return uprv_strcmp(leftString, rightString);
 }
 
 U_CFUNC int32_t
@@ -764,131 +765,131 @@ locale_getKeywords(const char *localeID,
             char *keywords, int32_t keywordCapacity,
             char *values, int32_t valuesCapacity, int32_t *valLen,
             UBool valuesToo,
-            UErrorCode *status) {
-
-  keywordStruct keywordList[ULOC_MAX_NO_KEYWORDS];
-
-  int32_t maxKeywords = ULOC_MAX_NO_KEYWORDS;
-  int32_t numKeywords = 0;
-  const char* startSearchHere = localeID;
-  const char* nextSeparator = NULL;
-  int32_t i = 0;
-  int32_t keywordsLen = 0;
-  int32_t valuesLen = 0;
-
-  if(prev == '@') { /* start of keyword definition */
-    /* we will grab pairs, trim spaces, lowercase keywords, sort and return */
-    do {
-      if(numKeywords == maxKeywords) {
-        *status = U_INTERNAL_PROGRAM_ERROR;
+            UErrorCode *status)
+{
+    keywordStruct keywordList[ULOC_MAX_NO_KEYWORDS];
+    
+    int32_t maxKeywords = ULOC_MAX_NO_KEYWORDS;
+    int32_t numKeywords = 0;
+    const char* startSearchHere = localeID;
+    const char* nextSeparator = NULL;
+    int32_t i = 0;
+    int32_t keywordsLen = 0;
+    int32_t valuesLen = 0;
+    
+    if(prev == '@') { /* start of keyword definition */
+        /* we will grab pairs, trim spaces, lowercase keywords, sort and return */
+        do {
+            if(numKeywords == maxKeywords) {
+                *status = U_INTERNAL_PROGRAM_ERROR;
+                return 0;
+            }
+            /* skip leading spaces (allowed?) */
+            while(*startSearchHere == ' ') {
+                startSearchHere++;
+            }
+            nextSeparator = uprv_strchr(startSearchHere, ULOC_KEYWORD_ASSIGN);
+            /* need to normalize both keyword and keyword name */
+            if(!nextSeparator) {
+                *status = U_INVALID_FORMAT_ERROR;
+                return 0;
+            }
+            if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
+                /* keyword name too long for internal buffer */
+                *status = U_INTERNAL_PROGRAM_ERROR;
+                return 0;
+            }
+            for(i = 0; i < nextSeparator - startSearchHere; i++) {
+                keywordList[numKeywords].keyword[i] = uprv_tolower(startSearchHere[i]);
+            }
+            /* trim trailing spaces */
+            while(keywordList[numKeywords].keyword[i-1] == ' ') {
+                i--;
+            }
+            keywordList[numKeywords].keyword[i] = 0;
+            keywordList[numKeywords].keywordLen = i;
+            /* now grab the value part. First we skip the '=' */
+            nextSeparator++;
+            /* then we leading spaces */
+            while(*nextSeparator == ' ') {
+                nextSeparator++;
+            }
+            keywordList[numKeywords].valueStart = nextSeparator;
+            
+            startSearchHere = uprv_strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
+            i = 0;
+            if(startSearchHere) {
+                while(*(startSearchHere - i - 1) == ' ') {
+                    i++;
+                }
+                keywordList[numKeywords].valueLen = startSearchHere - nextSeparator - i;
+                startSearchHere++;
+            } else {
+                i = uprv_strlen(nextSeparator);
+                while(nextSeparator[i-1] == ' ') {
+                    i--;
+                }
+                keywordList[numKeywords].valueLen = i;
+            }
+            numKeywords++;
+        } while(startSearchHere);
+        /* now we have a list of keywords */
+        /* we need to sort it */
+        uprv_sortArray(keywordList, numKeywords, sizeof(keywordStruct), compareKeywordStructs, NULL, FALSE, status);
+        
+        /* Now construct the keyword part */
+        for(i = 0; i < numKeywords; i++) {
+            if(keywordsLen + keywordList[i].keywordLen + 1< keywordCapacity) {
+                uprv_strcpy(keywords+keywordsLen, keywordList[i].keyword);
+                if(valuesToo) {
+                    keywords[keywordsLen + keywordList[i].keywordLen] = '=';
+                } else {
+                    keywords[keywordsLen + keywordList[i].keywordLen] = 0;
+                }
+            }
+            keywordsLen += keywordList[i].keywordLen + 1;
+            if(valuesToo) {
+                if(keywordsLen + keywordList[i].valueLen < keywordCapacity) {
+                    uprv_strncpy(keywords+keywordsLen, keywordList[i].valueStart, keywordList[i].valueLen);
+                }
+                keywordsLen += keywordList[i].valueLen;
+                
+                if(i < numKeywords - 1) {
+                    if(keywordsLen < keywordCapacity) {       
+                        keywords[keywordsLen] = ';';
+                    }
+                    keywordsLen++;
+                }
+            }
+            if(values) {
+                if(valuesLen + keywordList[i].valueLen + 1< valuesCapacity) {
+                    uprv_strcpy(values+valuesLen, keywordList[i].valueStart);
+                    values[valuesLen + keywordList[i].valueLen] = 0;
+                }
+                valuesLen += keywordList[i].valueLen + 1;
+            }
+        }
+        if(values) {
+            values[valuesLen] = 0;
+            if(valLen) {
+                *valLen = valuesLen;
+            }
+        }
+        return u_terminateChars(keywords, keywordCapacity, keywordsLen, status);   
+    } else {
         return 0;
-      }
-      /* skip leading spaces (allowed?) */
-      while(*startSearchHere == ' ') {
-        startSearchHere++;
-      }
-      nextSeparator = uprv_strchr(startSearchHere, ULOC_KEYWORD_ASSIGN);
-      /* need to normalize both keyword and keyword name */
-      if(!nextSeparator) {
-        *status = U_INVALID_FORMAT_ERROR;
-        return 0;
-      }
-      if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
-        /* keyword name too long for internal buffer */
-        *status = U_INTERNAL_PROGRAM_ERROR;
-        return 0;
-      }
-      for(i = 0; i < nextSeparator - startSearchHere; i++) {
-        keywordList[numKeywords].keyword[i] = uprv_tolower(startSearchHere[i]);
-      }
-      /* trim trailing spaces */
-      while(keywordList[numKeywords].keyword[i-1] == ' ') {
-        i--;
-      }
-      keywordList[numKeywords].keyword[i] = 0;
-      keywordList[numKeywords].keywordLen = i;
-      /* now grab the value part. First we skip the '=' */
-      nextSeparator++;
-      /* then we leading spaces */
-      while(*nextSeparator == ' ') {
-        nextSeparator++;
-      }
-      keywordList[numKeywords].valueStart = nextSeparator;
-
-      startSearchHere = uprv_strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
-      i = 0;
-      if(startSearchHere) {
-        while(*(startSearchHere - i - 1) == ' ') {
-          i++;
-        }
-        keywordList[numKeywords].valueLen = startSearchHere - nextSeparator - i;
-        startSearchHere++;
-      } else {
-        i = uprv_strlen(nextSeparator);
-        while(nextSeparator[i-1] == ' ') {
-          i--;
-        }
-        keywordList[numKeywords].valueLen = i;
-      }
-      numKeywords++;
-    } while(startSearchHere);
-    /* now we have a list of keywords */
-    /* we need to sort it */
-    uprv_sortArray(keywordList, numKeywords, sizeof(keywordStruct), compareKeywordStructs, NULL, FALSE, status);
-
-    /* Now construct the keyword part */
-    for(i = 0; i < numKeywords; i++) {
-      if(keywordsLen + keywordList[i].keywordLen + 1< keywordCapacity) {
-        uprv_strcpy(keywords+keywordsLen, keywordList[i].keyword);
-        if(valuesToo) {
-          keywords[keywordsLen + keywordList[i].keywordLen] = '=';
-        } else {
-          keywords[keywordsLen + keywordList[i].keywordLen] = 0;
-        }
-      }
-      keywordsLen += keywordList[i].keywordLen + 1;
-      if(valuesToo) {
-        if(keywordsLen + keywordList[i].valueLen < keywordCapacity) {
-          uprv_strncpy(keywords+keywordsLen, keywordList[i].valueStart, keywordList[i].valueLen);
-        }
-        keywordsLen += keywordList[i].valueLen;
-
-        if(i < numKeywords - 1) {
-          if(keywordsLen < keywordCapacity) {       
-            keywords[keywordsLen] = ';';
-          }
-          keywordsLen++;
-        }
-      }
-      if(values) {
-        if(valuesLen + keywordList[i].valueLen + 1< valuesCapacity) {
-          uprv_strcpy(values+valuesLen, keywordList[i].valueStart);
-          values[valuesLen + keywordList[i].valueLen] = 0;
-        }
-        valuesLen += keywordList[i].valueLen + 1;
-      }
     }
-    if(values) {
-      values[valuesLen] = 0;
-      if(valLen) {
-        *valLen = valuesLen;
-      }
-    }
-    return u_terminateChars(keywords, keywordCapacity, keywordsLen, status);   
-  } else {
-    return 0;
-  }
 }
 
 U_CAPI int32_t  U_EXPORT2
 uloc_getVariant(const char* localeID,
-                        char* variant,
-                        int32_t variantCapacity,
-                        UErrorCode* err) 
+                char* variant,
+                int32_t variantCapacity,
+                UErrorCode* err) 
 {
     int32_t i=0;
     UBool haveVariant=FALSE;
-
+    
     if(err==NULL || U_FAILURE(*err)) {
         return 0;
     }
@@ -896,7 +897,7 @@ uloc_getVariant(const char* localeID,
     if(localeID==NULL) {
         localeID=uloc_getDefault();
     }
-
+    
     /* Skip the language */
     _getLanguage(localeID, NULL, 0, &localeID);
     if(_isIDSeparator(*localeID)) {
@@ -916,7 +917,7 @@ uloc_getVariant(const char* localeID,
             }
         }
     }
-
+    
     /* if we do not have a variant tag yet then try a POSIX variant after '@' */
     if(!haveVariant && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
         i=_getVariant(localeID+1, '@', variant, variantCapacity);
@@ -931,41 +932,41 @@ typedef struct UKeywordsContext {
 
 static void U_CALLCONV
 uloc_kw_closeKeywords(UEnumeration *enumerator) {
-  uprv_free(((UKeywordsContext *)enumerator->context)->keywords);
-  uprv_free(enumerator->context);
-  uprv_free(enumerator);
+    uprv_free(((UKeywordsContext *)enumerator->context)->keywords);
+    uprv_free(enumerator->context);
+    uprv_free(enumerator);
 }
 
 static int32_t U_CALLCONV
 uloc_kw_countKeywords(UEnumeration *en, UErrorCode *status) {
-  char *kw = ((UKeywordsContext *)en->context)->keywords;
-  int32_t result = 0;
-  while(*kw) {
-    result++;
-    kw += uprv_strlen(kw)+1;
-  }
-  return result;
+    char *kw = ((UKeywordsContext *)en->context)->keywords;
+    int32_t result = 0;
+    while(*kw) {
+        result++;
+        kw += uprv_strlen(kw)+1;
+    }
+    return result;
 }
 
 static const char* U_CALLCONV 
 uloc_kw_nextKeyword(UEnumeration* en,
-           int32_t* resultLength,
-           UErrorCode* status) {
-  const char* result = ((UKeywordsContext *)en->context)->current;
-  if(*result) {
-    *resultLength = uprv_strlen(((UKeywordsContext *)en->context)->current);
-    ((UKeywordsContext *)en->context)->current += *resultLength+1;
-  } else {
-    *resultLength = 0;
-    result = NULL;
-  }
-  return result;
+                    int32_t* resultLength,
+                    UErrorCode* status) {
+    const char* result = ((UKeywordsContext *)en->context)->current;
+    if(*result) {
+        *resultLength = uprv_strlen(((UKeywordsContext *)en->context)->current);
+        ((UKeywordsContext *)en->context)->current += *resultLength+1;
+    } else {
+        *resultLength = 0;
+        result = NULL;
+    }
+    return result;
 }
 
 static void U_CALLCONV 
 uloc_kw_resetKeywords(UEnumeration* en, 
                       UErrorCode* status) {
-  ((UKeywordsContext *)en->context)->current = ((UKeywordsContext *)en->context)->keywords;
+    ((UKeywordsContext *)en->context)->current = ((UKeywordsContext *)en->context)->keywords;
 }
 
 
@@ -1341,13 +1342,12 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
                               int32_t *pLength,
                               UErrorCode *pErrorCode)
 {
-    char localeBuffer[80];
+    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];
     UResourceBundle *rb, table;
     const UChar *item;
     UErrorCode errorCode;
-    char explicitFallbackName[80] = {0};
+    char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
     int32_t efnLen =0;
-    const char* rootName = "root";
     const UChar* ef = NULL;
     UBool overrideExplicitFallback = FALSE;
     for(;;) {
@@ -1410,6 +1410,7 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
             ures_initStackObject(&subTable);
             ures_getByKey(&table, subTableKey, &subTable, &errorCode);
             item = ures_getStringByKey(&subTable, itemKey, pLength, &errorCode);
+            ures_close(&subTable);
         }
         if(U_SUCCESS(errorCode)) {
             /* if the item for the key is empty ... override the explicit fall back set */
@@ -1454,7 +1455,7 @@ _res_getTableStringWithFallback(const char *path, const char *locale,
             return NULL;
         }
 
-        if(*locale==0 || 0==uprv_strcmp(locale, "root") || 0==uprv_strcmp(locale,explicitFallbackName)) {
+        if(*locale==0 || 0==uprv_strcmp(locale, _kRootName) || 0==uprv_strcmp(locale,explicitFallbackName)) {
             /* end of fallback; even root does not have the requested item either */
             ures_close(&table);
             ures_close(rb);
