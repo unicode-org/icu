@@ -32,8 +32,8 @@ en_IE {
         "HH:mm",
         "EEEE d MMMM yyyy",
         "d MMMM yyyy",
-        "d MMMM yyyy",
-        "dd/MM/yy",
+        "d MMM yyyy",
+        "dd/MM/yyyy",
         "{1} {0}",
     }
     NumberPatterns { 
