@@ -97,14 +97,15 @@ packagetest: icupkg.inc $(TESTBUILDDIR)/testdata.lst
 cleanpackage:
 	$(RMV)  $(OUTDIR)
 	$(RMV)  $(TESTOUTDIR)
-## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
+## Install ICU data.
 install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
 	$(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -e $(ICUDATA_ENTRY_POINT) -T $(BUILDDIR) -s $(BUILDDIR) -p $(ICUDATA_NAME) $(BUILDDIR)/icudata.lst -I $(DESTDIR)$(ICUPKGDATA_DIR)
 
-install-convrtrstxt: $(UCMSRCDIR)/convrtrs.txt
+install-convrtrstxt: $(DESTDIR)$(pkgsysconfdir)/convrtrs.txt
+$(DESTDIR)$(pkgsysconfdir)/convrtrs.txt: $(UCMSRCDIR)/convrtrs.txt
 	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
-	$(INSTALL_DATA) $< $(DESTDIR)$(pkgsysconfdir)
+	$(INSTALL_DATA) $< $@
 
 # specials
 testdata: $(SPECIALTESTDATA)
