@@ -362,17 +362,16 @@ void TestMessageFormat::sample()
     UnicodeString def("def");
     Formattable testArgs1[] = { abc, def };
     FieldPosition fieldpos(0);
-    logln(form->toPattern(buffer1) + "; " + form->format(testArgs1, 2, buffer2, fieldpos, success));
+    assertEquals("format",
+                 "There are abc files on def",
+                 form->format(testArgs1, 2, buffer2, fieldpos, success));
+    assertSuccess("format", success);
     delete form;
 }
 
-/* Who knows what kind of static format we are talking about. */
-void TestMessageFormat::testStaticFormat(/* char* par */)
+void TestMessageFormat::testStaticFormat()
 {
-    logln("running TestMessageFormat::testStaticFormat");
-
     UErrorCode err = U_ZERO_ERROR;
-    GregorianCalendar cal(err);   
     Formattable arguments[] = {
         (int32_t)7,
         Formattable(UDate(8.71068e+011), Formattable::kIsDate),
@@ -489,7 +488,6 @@ void TestMessageFormat::testMsgFormatChoice(/* char* par */)
 
 void TestMessageFormat::testCopyConstructor() 
 {
-    logln("TestMessageFormat::testCopyConstructor");
     UErrorCode success = U_ZERO_ERROR;
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
@@ -520,7 +518,6 @@ void TestMessageFormat::testCopyConstructor()
 
 void TestMessageFormat::testAssignment() 
 {
-    logln("TestMessageFormat::testAssignment");
     UErrorCode success = U_ZERO_ERROR;
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
@@ -550,7 +547,6 @@ void TestMessageFormat::testAssignment()
 
 void TestMessageFormat::testClone() 
 {
-    logln("TestMessageFormat::testClone");
     UErrorCode success = U_ZERO_ERROR;
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
@@ -580,7 +576,6 @@ void TestMessageFormat::testClone()
 
 void TestMessageFormat::testEquals() 
 {
-    logln("TestMessageFormat::testClone");
     UErrorCode success = U_ZERO_ERROR;
     MessageFormat x("There are {0} files on {1}", success);
     MessageFormat y("There are {0} files on {1}", success);
@@ -605,7 +600,7 @@ void TestMessageFormat::testNotEquals()
     y.applyPattern("There are {0} files on {1} the disk", success);
     if (!(x != y)) {
         errln( "TestMessageFormat::testEquals failed #1");
-        logln("First test (operator !=): Failed!");
+        logln("Second test (operator !=): Failed!");
     }
 }
 
@@ -881,7 +876,7 @@ void TestMessageFormat::testAdopt()
         b = formatsCmp[i];
         if ((a != NULL) && (b != NULL)) {
             if (*a == *b) {
-                logln("formatsChg != formatsCmp at index %d", i);
+                logln("formatsChg == formatsCmp at index %d", i);
                 diff = FALSE;
             }
         }
@@ -901,12 +896,8 @@ void TestMessageFormat::testAdopt()
         return;
     }
 
-#if 1
-    msgCmp.toPattern( patCmp );
-    logln("MSG patCmp: " + patCmp);
-    msg.toPattern( patAct );
-    logln("MSG patAct: " + patAct);
-#endif
+    assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern(patCmp.remove()));
+    assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
 
     for (i = 0; i < countAct; i++) {
         a = formatsAct[i];
@@ -923,7 +914,6 @@ void TestMessageFormat::testAdopt()
         }
     }
     logln("MSG setFormats tested.");
-
 
     //----
 
@@ -949,12 +939,8 @@ void TestMessageFormat::testAdopt()
     msg.adoptFormats( formatsToAdopt, countCmp ); // function to test
     delete[] formatsToAdopt;
 
-#if 1
-    msgCmp.toPattern( patCmp );
-    logln("MSG patCmp: " + patCmp);
-    msg.toPattern( patAct );
-    logln("MSG patAct: " + patAct);
-#endif
+    assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern(patCmp.remove()));
+    assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
 
     formatsAct = msg.getFormats(countAct);
     if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
@@ -1004,12 +990,8 @@ void TestMessageFormat::testAdopt()
     }
     delete[] formatsToAdopt; // array itself not needed in this case;
 
-#if 1
-    msgCmp.toPattern( patCmp );
-    logln("MSG patCmp: " + patCmp);
-    msg.toPattern( patAct );
-    logln("MSG patAct: " + patAct);
-#endif
+    assertEquals("msgCmp.toPattern()", formatStr, msgCmp.toPattern(patCmp.remove()));
+    assertEquals("msg.toPattern()", formatStr, msg.toPattern(patAct.remove()));
 
     formatsAct = msg.getFormats(countAct);
     if (!formatsAct || (countAct <=0) || (countAct != countCmp)) {
