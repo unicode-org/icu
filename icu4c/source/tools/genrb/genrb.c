@@ -133,8 +133,9 @@ main(int argc,
         fprintf(stderr,
                 "\t-j or --write-java           write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"
                 "\t                             defaults to ASCII and \\uXXXX format.\n"
-                "\t-p or --package-name         package name for writing the ListResourceBundle for ICU4J, defaults to\n"
+                "\t-p or --package-name         For ICU4J: package name for writing the ListResourceBundle for ICU4J, defaults to\n"
                 "\t                             com.ibm.icu.impl.data\n"
+                "\t                             For ICU4C: Package name on output.  Using 'ICUDATA' defaults to the current ICU4C data name.\n"
                 "\t-b or --bundle-name          bundle name for writing the ListResourceBundle for ICU4J, defaults to\n"
                 "\t                             LocaleElements");
 
