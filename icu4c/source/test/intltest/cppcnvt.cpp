@@ -600,6 +600,38 @@ void ConvertTest::TestConvert()
 //#endif
 
     }
+    /******* testing for Bug 778 *******************/
+    {
+        logln("\n---Testing Jitterbug 778 ...");
+        UErrorCode err = U_ZERO_ERROR;
+        UBool passed = TRUE;
+        UnicodeString unicode_string((UChar)0x592a);
+        UErrorCode error = U_ZERO_ERROR;
+        UnicodeConverterCPP cnv( "iso-2022-jp-2", error );
+        if( U_FAILURE(err) ) { 
+            errln(UnicodeString("Error Creating iso-2022-jp-2 converter. Reason: ") + myErrorName(error));
+        }
+        char dest[256];
+        long dest_bytes_used = 256;
+        cnv.fromUnicodeString( dest, dest_bytes_used, unicode_string, error );
+        if( U_FAILURE(err) ) { 
+            errln( UnicodeString("Error converting to iso-2022-jp-2 stream:" )+ myErrorName(error) );
+        }
+        char* expected ="\x1b\x24\x42\x42\x40";
+        char* got = &dest[0];
+        while(*expected!='\0'){
+            if(*got!=*expected){
+                errln(UnicodeString("Error while testing jitterbug 778 exprected: ") + (char) *expected + " got: " + (char) *got);
+                passed =FALSE;
+            }
+            got++;
+            expected++;
+        }
+        if(passed){
+            logln("jitterbug 778 test ok");
+        }
+    }
+
 }
 
 void WriteToFile(const UnicodeString *a, FILE *myfile)
