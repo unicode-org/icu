@@ -195,7 +195,7 @@ ChoiceFormat::stod(const UnicodeString& string)
     char source[256];
     char* end;
 
-    string.extract(0, string.length(), source, sizeof(source), "");    /* invariant codepage */
+    string.extract(0, string.length(), source, sizeof(source), US_INV);    /* invariant codepage */
     return uprv_strtod(source,&end);
 }
 
@@ -211,7 +211,7 @@ ChoiceFormat::dtos(double value,
     char temp[256];
 
     uprv_dtostr(value, temp, 3, TRUE);
-    string = UnicodeString(temp, "");    /* invariant codepage */
+    string = UnicodeString(temp, -1, US_INV);    /* invariant codepage */
     return string;
 }
 

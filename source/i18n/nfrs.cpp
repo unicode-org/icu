@@ -154,7 +154,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
             description.remove(0, pos);
         }
     } else {
-        name.setTo("%default");
+        name.setTo(UNICODE_STRING_SIMPLE("%default"));
     }
 
     if (description.length() == 0) {
