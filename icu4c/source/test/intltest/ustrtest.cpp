@@ -1305,7 +1305,9 @@ UnicodeStringTest::TestBogus() {
         errln("A string returned TRUE for isBogus()!");
     }
 
-    test3.setTo(FALSE, (const UChar *)0, -1);
+    // NULL pointers are treated like empty strings
+    // use other illegal arguments to make a bogus string
+    test3.setTo(FALSE, test1.getBuffer(), -2);
     if(!test3.isBogus()) {
         errln("A bogus string returned FALSE for isBogus()!");
     }
@@ -1449,5 +1451,39 @@ UnicodeStringTest::TestBogus() {
     test3.setToBogus();
     if(test1.isBogus() || !(test1=test3).isBogus()) {
         errln("normal=bogus failed to make the left string bogus");
+    }
+
+    // test that NULL primitive input string values are treated like
+    // empty strings, not errors (bogus)
+    test2.setTo((UChar32)0x10005);
+    if(test2.insert(1, NULL, 1).length()!=2) {
+        errln("UniStr.insert(...NULL...) should not modify the string but does");
+    }
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UnicodeString
+        test4((const UChar *)NULL),
+        test5(TRUE, (const UChar *)NULL, 1),
+        test6((UChar *)NULL, 5, 5),
+        test7((const char *)NULL, 3, NULL, errorCode);
+    if(test4.isBogus() || test5.isBogus() || test6.isBogus() || test7.isBogus()) {
+        errln("a constructor set to bogus for a NULL input string, should be empty");
+    }
+
+    test4.setTo(NULL, 3);
+    test5.setTo(TRUE, (const UChar *)NULL, 1);
+    test6.setTo((UChar *)NULL, 5, 5);
+    if(test4.isBogus() || test5.isBogus() || test6.isBogus()) {
+        errln("a setTo() set to bogus for a NULL input string, should be empty");
+    }
+
+    // test that bogus==bogus<any
+    if(test1!=test3 || test1.compare(test3)!=0) {
+        errln("bogus==bogus failed");
+    }
+
+    test2.remove();
+    if(test1>=test2 || !(test2>test1) || test1.compare(test2)>=0 || !(test2.compare(test1)>0)) {
+        errln("bogus<empty failed");
     }
 }
