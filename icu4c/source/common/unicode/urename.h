@@ -162,6 +162,7 @@
 #define u_enumCharTypes u_enumCharTypes_2_8
 #define u_errorName u_errorName_2_8
 #define u_fclose u_fclose_2_8
+#define u_feof u_feof_2_8
 #define u_fflush u_fflush_2_8
 #define u_fgetConverter u_fgetConverter_2_8
 #define u_fgetc u_fgetc_2_8
@@ -264,8 +265,6 @@
 #define u_printf_print_spec u_printf_print_spec_2_8
 #define u_releaseDefaultConverter u_releaseDefaultConverter_2_8
 #define u_scanf_parse_spec u_scanf_parse_spec_2_8
-#define u_scanf_scanset_in u_scanf_scanset_in_2_8
-#define u_scanf_scanset_init u_scanf_scanset_init_2_8
 #define u_setAtomicIncDecFunctions u_setAtomicIncDecFunctions_2_8
 #define u_setDataDirectory u_setDataDirectory_2_8
 #define u_setMemoryFunctions u_setMemoryFunctions_2_8
@@ -382,6 +381,7 @@
 #define ubrk_getAvailable ubrk_getAvailable_2_8
 #define ubrk_getLocaleByType ubrk_getLocaleByType_2_8
 #define ubrk_getRuleStatus ubrk_getRuleStatus_2_8
+#define ubrk_getRuleStatusVec ubrk_getRuleStatusVec_2_8
 #define ubrk_isBoundary ubrk_isBoundary_2_8
 #define ubrk_last ubrk_last_2_8
 #define ubrk_next ubrk_next_2_8
@@ -566,6 +566,7 @@
 #define ucol_getCEGenerator ucol_getCEGenerator_2_8
 #define ucol_getDisplayName ucol_getDisplayName_2_8
 #define ucol_getFirstCE ucol_getFirstCE_2_8
+#define ucol_getKeywordValues ucol_getKeywordValues_2_8
 #define ucol_getLocale ucol_getLocale_2_8
 #define ucol_getLocaleByType ucol_getLocaleByType_2_8
 #define ucol_getMaxExpansion ucol_getMaxExpansion_2_8
@@ -600,6 +601,7 @@
 #define ucol_nextSortKeyPart ucol_nextSortKeyPart_2_8
 #define ucol_nextWeight ucol_nextWeight_2_8
 #define ucol_open ucol_open_2_8
+#define ucol_openAvailableLocales ucol_openAvailableLocales_2_8
 #define ucol_openElements ucol_openElements_2_8
 #define ucol_openRules ucol_openRules_2_8
 #define ucol_open_internal ucol_open_internal_2_8
@@ -691,12 +693,12 @@
 #define ufile_close_translit ufile_close_translit_2_8
 #define ufile_fill_uchar_buffer ufile_fill_uchar_buffer_2_8
 #define ufile_flush_translit ufile_flush_translit_2_8
+#define ufmt_64tou ufmt_64tou_2_8
 #define ufmt_defaultCPToUnicode ufmt_defaultCPToUnicode_2_8
 #define ufmt_digitvalue ufmt_digitvalue_2_8
 #define ufmt_isdigit ufmt_isdigit_2_8
-#define ufmt_ltou ufmt_ltou_2_8
 #define ufmt_unicodeToDefaultCP ufmt_unicodeToDefaultCP_2_8
-#define ufmt_utol ufmt_utol_2_8
+#define ufmt_uto64 ufmt_uto64_2_8
 #define uhash_close uhash_close_2_8
 #define uhash_compareCaselessUnicodeString uhash_compareCaselessUnicodeString_2_8
 #define uhash_compareChars uhash_compareChars_2_8
@@ -780,6 +782,7 @@
 #define uloc_getParent uloc_getParent_2_8
 #define uloc_getScript uloc_getScript_2_8
 #define uloc_getVariant uloc_getVariant_2_8
+#define uloc_openKeywordList uloc_openKeywordList_2_8
 #define uloc_openKeywords uloc_openKeywords_2_8
 #define uloc_setDefault uloc_setDefault_2_8
 #define ulocdata_getExemplarSet ulocdata_getExemplarSet_2_8
@@ -815,7 +818,10 @@
 #define unorm_decompose unorm_decompose_2_8
 #define unorm_getCanonStartSet unorm_getCanonStartSet_2_8
 #define unorm_getDecomposition unorm_getDecomposition_2_8
+#define unorm_getFCD16FromCodePoint unorm_getFCD16FromCodePoint_2_8
 #define unorm_getFCDTrie unorm_getFCDTrie_2_8
+#define unorm_getQuickCheck unorm_getQuickCheck_2_8
+#define unorm_getUnicodeVersion unorm_getUnicodeVersion_2_8
 #define unorm_haveData unorm_haveData_2_8
 #define unorm_internalIsFullCompositionExclusion unorm_internalIsFullCompositionExclusion_2_8
 #define unorm_internalNormalize unorm_internalNormalize_2_8
@@ -837,6 +843,7 @@
 #define unum_countAvailable unum_countAvailable_2_8
 #define unum_format unum_format_2_8
 #define unum_formatDouble unum_formatDouble_2_8
+#define unum_formatDoubleCurrency unum_formatDoubleCurrency_2_8
 #define unum_formatInt64 unum_formatInt64_2_8
 #define unum_getAttribute unum_getAttribute_2_8
 #define unum_getAvailable unum_getAvailable_2_8
@@ -847,6 +854,7 @@
 #define unum_open unum_open_2_8
 #define unum_parse unum_parse_2_8
 #define unum_parseDouble unum_parseDouble_2_8
+#define unum_parseDoubleCurrency unum_parseDoubleCurrency_2_8
 #define unum_parseInt64 unum_parseInt64_2_8
 #define unum_setAttribute unum_setAttribute_2_8
 #define unum_setDoubleAttribute unum_setDoubleAttribute_2_8
@@ -940,6 +948,7 @@
 #define uprv_mstrm_writeString uprv_mstrm_writeString_2_8
 #define uprv_mstrm_writeUString uprv_mstrm_writeUString_2_8
 #define uprv_openRuleWhiteSpaceSet uprv_openRuleWhiteSpaceSet_2_8
+#define uprv_pathIsAbsolute uprv_pathIsAbsolute_2_8
 #define uprv_pow uprv_pow_2_8
 #define uprv_pow10 uprv_pow10_2_8
 #define uprv_realloc uprv_realloc_2_8
@@ -969,6 +978,28 @@
 #define uprv_uint16Comparator uprv_uint16Comparator_2_8
 #define uprv_uint32Comparator uprv_uint32Comparator_2_8
 #define uprv_unmapFile uprv_unmapFile_2_8
+#define uregex_appendReplacement uregex_appendReplacement_2_8
+#define uregex_appendTail uregex_appendTail_2_8
+#define uregex_clone uregex_clone_2_8
+#define uregex_close uregex_close_2_8
+#define uregex_end uregex_end_2_8
+#define uregex_find uregex_find_2_8
+#define uregex_findNext uregex_findNext_2_8
+#define uregex_flags uregex_flags_2_8
+#define uregex_getText uregex_getText_2_8
+#define uregex_group uregex_group_2_8
+#define uregex_groupCount uregex_groupCount_2_8
+#define uregex_lookingAt uregex_lookingAt_2_8
+#define uregex_matches uregex_matches_2_8
+#define uregex_open uregex_open_2_8
+#define uregex_openC uregex_openC_2_8
+#define uregex_pattern uregex_pattern_2_8
+#define uregex_replaceAll uregex_replaceAll_2_8
+#define uregex_replaceFirst uregex_replaceFirst_2_8
+#define uregex_reset uregex_reset_2_8
+#define uregex_setText uregex_setText_2_8
+#define uregex_split uregex_split_2_8
+#define uregex_start uregex_start_2_8
 #define ures_appendResPath ures_appendResPath_2_8
 #define ures_cleanup ures_cleanup_2_8
 #define ures_close ures_close_2_8
@@ -981,9 +1012,11 @@
 #define ures_getByIndex ures_getByIndex_2_8
 #define ures_getByKey ures_getByKey_2_8
 #define ures_getByKeyWithFallback ures_getByKeyWithFallback_2_8
+#define ures_getFunctionalEquivalent ures_getFunctionalEquivalent_2_8
 #define ures_getInt ures_getInt_2_8
 #define ures_getIntVector ures_getIntVector_2_8
 #define ures_getKey ures_getKey_2_8
+#define ures_getKeywordValues ures_getKeywordValues_2_8
 #define ures_getLocale ures_getLocale_2_8
 #define ures_getLocaleByType ures_getLocaleByType_2_8
 #define ures_getName ures_getName_2_8
@@ -1003,6 +1036,7 @@
 #define ures_initStackObject ures_initStackObject_2_8
 #define ures_isStackObject ures_isStackObject_2_8
 #define ures_open ures_open_2_8
+#define ures_openAvailableLocales ures_openAvailableLocales_2_8
 #define ures_openDirect ures_openDirect_2_8
 #define ures_openFillIn ures_openFillIn_2_8
 #define ures_openU ures_openU_2_8
@@ -1155,7 +1189,6 @@
 #define ChainingContextualSubstitutionFormat2Subtable ChainingContextualSubstitutionFormat2Subtable_2_8
 #define ChainingContextualSubstitutionFormat3Subtable ChainingContextualSubstitutionFormat3Subtable_2_8
 #define ChainingContextualSubstitutionSubtable ChainingContextualSubstitutionSubtable_2_8
-#define CharShaper CharShaper_2_8
 #define CharSubstitutionFilter CharSubstitutionFilter_2_8
 #define CharacterIterator CharacterIterator_2_8
 #define ChoiceFormat ChoiceFormat_2_8
@@ -1176,6 +1209,7 @@
 #define CoverageFormat1Table CoverageFormat1Table_2_8
 #define CoverageFormat2Table CoverageFormat2Table_2_8
 #define CoverageTable CoverageTable_2_8
+#define CurrencyFormat CurrencyFormat_2_8
 #define CursiveAttachmentSubtable CursiveAttachmentSubtable_2_8
 #define DateFormat DateFormat_2_8
 #define DateFormatSymbols DateFormatSymbols_2_8
@@ -1207,9 +1241,9 @@
 #define GXLayoutEngine GXLayoutEngine_2_8
 #define GlyphDefinitionTableHeader GlyphDefinitionTableHeader_2_8
 #define GlyphIterator GlyphIterator_2_8
+#define GlyphLookupTableHeader GlyphLookupTableHeader_2_8
 #define GlyphPositioningLookupProcessor GlyphPositioningLookupProcessor_2_8
 #define GlyphPositioningTableHeader GlyphPositioningTableHeader_2_8
-#define GlyphShaper GlyphShaper_2_8
 #define GlyphSubstitutionLookupProcessor GlyphSubstitutionLookupProcessor_2_8
 #define GlyphSubstitutionTableHeader GlyphSubstitutionTableHeader_2_8
 #define Grego Grego_2_8
@@ -1217,7 +1251,6 @@
 #define HanOpenTypeLayoutEngine HanOpenTypeLayoutEngine_2_8
 #define HebrewCalendar HebrewCalendar_2_8
 #define HebrewShaping HebrewShaping_2_8
-#define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_8
 #define ICUBreakIteratorFactory ICUBreakIteratorFactory_2_8
 #define ICUBreakIteratorService ICUBreakIteratorService_2_8
 #define ICUCollatorFactory ICUCollatorFactory_2_8
@@ -1236,8 +1269,6 @@
 #define IndicOpenTypeLayoutEngine IndicOpenTypeLayoutEngine_2_8
 #define IndicRearrangementProcessor IndicRearrangementProcessor_2_8
 #define IndicReordering IndicReordering_2_8
-#define InsertionCallback InsertionCallback_2_8
-#define InsertionList InsertionList_2_8
 #define IntegralPartSubstitution IntegralPartSubstitution_2_8
 #define IslamicCalendar IslamicCalendar_2_8
 #define JapaneseCalendar JapaneseCalendar_2_8
@@ -1245,6 +1276,9 @@
 #define LECharMapper LECharMapper_2_8
 #define LEFontInstance LEFontInstance_2_8
 #define LEGlyphFilter LEGlyphFilter_2_8
+#define LEGlyphStorage LEGlyphStorage_2_8
+#define LEInsertionCallback LEInsertionCallback_2_8
+#define LEInsertionList LEInsertionList_2_8
 #define LXUtilities LXUtilities_2_8
 #define LayoutEngine LayoutEngine_2_8
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_2_8
@@ -1266,6 +1300,7 @@
 #define MarkToLigaturePositioningSubtable MarkToLigaturePositioningSubtable_2_8
 #define MarkToMarkPositioningSubtable MarkToMarkPositioningSubtable_2_8
 #define Math Math_2_8
+#define MeasureFormat MeasureFormat_2_8
 #define MessageFormat MessageFormat_2_8
 #define MessageFormatAdapter MessageFormatAdapter_2_8
 #define ModulusSubstitution ModulusSubstitution_2_8
@@ -1288,6 +1323,7 @@
 #define NullSubstitution NullSubstitution_2_8
 #define NullTransliterator NullTransliterator_2_8
 #define NumberFormat NumberFormat_2_8
+#define NumberFormatFactory NumberFormatFactory_2_8
 #define NumeratorSubstitution NumeratorSubstitution_2_8
 #define OlsonTimeZone OlsonTimeZone_2_8
 #define OpenTypeLayoutEngine OpenTypeLayoutEngine_2_8
@@ -1335,11 +1371,11 @@
 #define SegmentSingleProcessor SegmentSingleProcessor_2_8
 #define ServiceEnumeration ServiceEnumeration_2_8
 #define ServiceListener ServiceListener_2_8
-#define Shaper Shaper_2_8
 #define SimpleArrayProcessor SimpleArrayProcessor_2_8
 #define SimpleDateFormat SimpleDateFormat_2_8
 #define SimpleFactory SimpleFactory_2_8
 #define SimpleLocaleKeyFactory SimpleLocaleKeyFactory_2_8
+#define SimpleNumberFormatFactory SimpleNumberFormatFactory_2_8
 #define SimpleTimeZone SimpleTimeZone_2_8
 #define SinglePositioningFormat1Subtable SinglePositioningFormat1Subtable_2_8
 #define SinglePositioningFormat2Subtable SinglePositioningFormat2Subtable_2_8
@@ -1391,7 +1427,6 @@
 #define UnicodeSet UnicodeSet_2_8
 #define UnicodeSetIterator UnicodeSetIterator_2_8
 #define UnicodeString UnicodeString_2_8
-#define UnicodeToHexTransliterator UnicodeToHexTransliterator_2_8
 #define UppercaseTransliterator UppercaseTransliterator_2_8
 #define ValueRecord ValueRecord_2_8
 #define ValueRuns ValueRuns_2_8
