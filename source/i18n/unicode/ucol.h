@@ -16,9 +16,12 @@
  * <h2> Collator C API </h2>
  *
  * The C API for Collator performs locale-sensitive
- * <code>String</code> comparison. You use this class to build
+ * string comparison. You use this class to build
  * searching and sorting routines for natural language text.
- *
+ * <em>Important: </em>The ICU collation implementation is being reworked.
+ * This means that collation results and especially sort keys will change
+ * from ICU 1.6 to 1.7 and again to 1.8.
+ * For details, see the <a href="http://oss.software.ibm.com/icu/develop/ICU_collation_design.htm">collation design document</a>.
  *  
  * <p>
  * Like other locale-sensitive classes, you can use the function
@@ -77,13 +80,19 @@
  * </pre>
  * </blockquote>
  * <p>
- * For comparing <code>String</code>s exactly once, the <code>u_strcoll</code>
+ * For comparing strings exactly once, the <code>u_strcoll</code>
  * method provides the best performance. When sorting a list of
- * <code>String</code>s however, it is generally necessary to compare each
- * <code>String</code> multiple times. In this case, <code>sortKey</code>s
- * provide better performance. The <code>ucol_getsortKey</code> method converts
- * a <code>String</code> to a series of bits that can be compared bitwise
- * against other <code>sortKey</code>s using <code>memcmp()</code> 
+ * strings however, it is generally necessary to compare each
+ * string multiple times. In this case, sort keys
+ * provide better performance. The <code>ucol_getSortKey</code> method converts
+ * a string to a series of bytes that can be compared bitwise
+ * against other sort keys using <code>strcmp()</code>.
+ * Sort keys are written as zero-terminated byte strings.
+ * They consist of several substrings, one for each collation strength level,
+ * that are delimited by 0x01 bytes.
+ * If the string code points are appended for UCOL_IDENTICAL, then they are processed
+ * for correct code point order comparison and may contain 0x01 bytes
+ * but not zero bytes.</p>
  * <p>
  * <strong>Note:</strong> <code>UCollator</code>s with different Locale,
  * Collation Strength and Decomposition Mode settings will return different
@@ -472,7 +481,7 @@ ucol_getRules(    const    UCollator    *coll,
 
 /**
  * Get a sort key for a string from a UCollator.
- * Sort keys may be compared using <TT>memcmp</TT>.
+ * Sort keys may be compared using <TT>strcmp</TT>.
  * @param coll The UCollator containing the collation rules.
  * @param source The string to transform.
  * @param sourecLength The length of source, or -1 if null-terminated.
