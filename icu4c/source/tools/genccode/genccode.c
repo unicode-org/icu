@@ -29,6 +29,14 @@
 #   define NOMCX
 #include <windows.h>
 #include <time.h>
+
+/* _M_IA64 should be defined in windows.h */
+#ifdef _M_IA64
+#   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_IA64
+#else
+#   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_I386
+#endif
+
 #endif
 
 #include <stdio.h>
@@ -276,7 +284,7 @@ writeObjectCode(const char *filename, const char *destdir) {
     length+=6;
 
     /* set the file header */
-    objHeader.fileHeader.Machine=IMAGE_FILE_MACHINE_I386;
+    objHeader.fileHeader.Machine=ICU_OBJECT_MACHINE_TYPE;
     objHeader.fileHeader.NumberOfSections=2;
     objHeader.fileHeader.TimeDateStamp=time(NULL);
     objHeader.fileHeader.PointerToSymbolTable=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER+length+size; /* start of symbol table */
