@@ -11,7 +11,7 @@
 
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "intltest.h"
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"

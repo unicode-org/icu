@@ -12,7 +12,7 @@
 #include "unicode/utypes.h"
 #include "usettest.h"
 #include "unicode/uniset.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/usetiter.h"
 
 

@@ -4,13 +4,16 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "unicode/unicode.h"
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/uniset.h"
 #include "cstring.h"
 #include "uparse.h"
 #include "ucdtest.h"
+
+#ifdef ICU_UNICODE_CLASS_USE_DEPRECATES
+#include "unicode/unicode.h"
+#endif
 
 #define LENGTHOF(array) (sizeof(array)/sizeof(array[0]))
 
