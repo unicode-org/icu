@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $ 
- * $Date: 2001/10/30 02:42:49 $ 
- * $Revision: 1.12 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
+ * $Date: 2001/11/05 23:27:47 $
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -49,9 +49,9 @@ import java.io.*;
  * and <i>regular expressions.</i></p>
  *
  * <p>A substitution rule defines a name that can be used in place of an expression. It
- * consists of a name, an equals sign, and an expression. (There can be no whitespace on 
- * either side of the equals sign.)  To keep its syntactic meaning intact, the expression 
- * must be enclosed in parentheses or square brackets. A substitution is visible after its 
+ * consists of a name, an equals sign, and an expression. (There can be no whitespace on
+ * either side of the equals sign.)  To keep its syntactic meaning intact, the expression
+ * must be enclosed in parentheses or square brackets. A substitution is visible after its
  * definition, and is filled in using simple textual substitution (when a substitution is
  * used, its name is enclosed in curly braces.  The curly braces are optional in the
  * substition's definition). Substitution definitions can contain other substitutions, as
@@ -67,8 +67,8 @@ import java.io.*;
  * positions never occur before ignore characters, except when the character before the
  * ignore characters is a line or paragraph terminator.</p>
  *
- * <p>A regular expression uses a syntax similar to the normal Unix regular-expression 
- * syntax, and defines a sequence of characters to be kept together. With one significant 
+ * <p>A regular expression uses a syntax similar to the normal Unix regular-expression
+ * syntax, and defines a sequence of characters to be kept together. With one significant
  * exception, the iterator uses a longest-possible-match algorithm when matching text to regular
  * expressions. The iterator also treats descriptions containing multiple regular expressions
  * as if they were ORed together (i.e., as if they were separated by |).</p>
@@ -94,9 +94,9 @@ import java.io.*;
  *     </tr>
  *     <tr>
  *       <td width="6%">()</td>
- *       <td width="94%">Encloses a sequence of characters.  If followed by * or +, the 
- *       sequence repeats.  If followed by ?, the sequence is optional.  Otherwise, the 
- *       parentheses are just a grouping device and a way to delimit the ends of expressions 
+ *       <td width="94%">Encloses a sequence of characters.  If followed by * or +, the
+ *       sequence repeats.  If followed by ?, the sequence is optional.  Otherwise, the
+ *       parentheses are just a grouping device and a way to delimit the ends of expressions
  *       containing |.</td>
  *     </tr>
  *     <tr>
@@ -200,15 +200,15 @@ import java.io.*;
  *   <table border="1" width="100%">
  *     <tr>
  *       <td width="6%">::</td>
- *       <td width="94%">Within a nested [] expression, a pair of colons containing a one- or 
- *       two-letter code matches all characters in the corresponding Unicode category.&nbsp; 
- *       The :: expression has to be the only thing inside the [] expression. The two-letter codes 
- *       are the same as the two-letter codes in the Unicode database (for example, 
- *       &quot;[[:Sc:][:Sm:]]&quot; matches all currency symbols and all math symbols).&nbsp; 
- *       Specifying a one-letter code is the same as specifying all two-letter codes that begin 
- *       with that letter (for example, &quot;[[:L:]]&quot; matches all letters, and is equivalent 
- *       to &quot;[[:Lu:][:Ll:][:Lo:][:Lm:][:Lt:]]&quot;).&nbsp; Anything other than a valid 
- *       two-letter Unicode category code or a single letter that begins a valide Unicode category 
+ *       <td width="94%">Within a nested [] expression, a pair of colons containing a one- or
+ *       two-letter code matches all characters in the corresponding Unicode category.&nbsp;
+ *       The :: expression has to be the only thing inside the [] expression. The two-letter codes
+ *       are the same as the two-letter codes in the Unicode database (for example,
+ *       &quot;[[:Sc:][:Sm:]]&quot; matches all currency symbols and all math symbols).&nbsp;
+ *       Specifying a one-letter code is the same as specifying all two-letter codes that begin
+ *       with that letter (for example, &quot;[[:L:]]&quot; matches all letters, and is equivalent
+ *       to &quot;[[:Lu:][:Ll:][:Lo:][:Lm:][:Lt:]]&quot;).&nbsp; Anything other than a valid
+ *       two-letter Unicode category code or a single letter that begins a valide Unicode category
  *       code is illegal within the colons.</td>
  *     </tr>
  *     <tr>
@@ -216,14 +216,14 @@ import java.io.*;
  *       <td width="94%">Two nested [] expressions juxtaposed or separated only by a | character
  *       are merged together into a single [] expression matching all the characters in either
  *       of the original [] expressions.  (e.g., "[[ab][bc]]" is equivalent to "[abc]", and so
- *       is "[[ab]|[bc]]". <b>NOTE:</b>  "[ab][bc]" is NOT the same thing as "[[ab][bc]]".  
- *       The first expression will match two characters: an a or b followed by either another 
+ *       is "[[ab]|[bc]]". <b>NOTE:</b>  "[ab][bc]" is NOT the same thing as "[[ab][bc]]".
+ *       The first expression will match two characters: an a or b followed by either another
  *       b or a c.  The second expression will match a single character, which may be a, b, or c.
  *       The nesting is <em>required</em> for the expressions to merge together.</td>
  *     </tr>
  *     <tr>
  *       <td width="6%">&</td>
- *       <td width="94%">Two nested [] expressions with only & between them will match any 
+ *       <td width="94%">Two nested [] expressions with only & between them will match any
  *       character that appears in both nested [] expressions (this is a set intersection).
  *       (e.g., "[[ab]&[bc]]" will only match the letter b.)</td>
  *     </tr>
@@ -237,11 +237,11 @@ import java.io.*;
  *     </tr>
  *
  * <p>For a more complete explanation, see <a
- * href="http://www.ibm.com/java/education/boundaries/boundaries.html">http://www.ibm.com/java/education/boundaries/boundaries.html</a>.
+ * href="http://www-106.ibm.com/developerworks/unicode/library/boundaries/boundaries.html">http://www-106.ibm.com/developerworks/unicode/library/boundaries/boundaries.html</a>.
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.12 $ $Date: 2001/10/30 02:42:49 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.13 $ $Date: 2001/11/05 23:27:47 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -399,7 +399,7 @@ public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throw
     // NOTE: The format being written here is designed to be compatible with
     // the ICU udata interfaces and may not be useful for much else
     DataOutputStream out = new DataOutputStream(file);
-    
+
 // --- write the file header ---
 byte[] comment = "Copyright (C) 1999, International Business Machines Corp. and others. All Rights Reserved.".getBytes("US-ASCII");
 // write the size of the header (rounded up to the next 16-byte boundary)
@@ -526,7 +526,7 @@ switch (lookaheadStates.length % 4) {
     default: break;
 }
 }
-    
+
 protected void writeSwappedShort(short x, DataOutputStream out, boolean littleEndian)
 throws IOException{
     if (littleEndian) {
@@ -554,7 +554,7 @@ throws IOException {
         out.write((byte)(x & 0xff));
     }
 }
-    
+
     //=======================================================================
     // BreakIterator overrides
     //=======================================================================
@@ -815,13 +815,13 @@ throws IOException {
         if (lookupCategory(c) == IGNORE) {
             while (lookupCategory(c) == IGNORE)
                 c = text.next();
-            
+
             if (Character.getType(c) == Character.NON_SPACING_MARK || Character.getType(c)
                     == Character.ENCLOSING_MARK) {
                 return text.getIndex();
             }
         }
-        
+
         // loop until we reach the end of the text or transition to state 0
         while (c != CharacterIterator.DONE && state != STOP_STATE) {
 
@@ -860,7 +860,7 @@ throws IOException {
                     result = text.getIndex() + 1;
                 }
             }
-            
+
             // keep track of the last "real" character we saw.  If this character isn't an
             // ignore character, take note of it and its position in the text
             if (category != IGNORE && state != STOP_STATE) {
@@ -877,7 +877,7 @@ throws IOException {
         if (c == CharacterIterator.DONE && lookaheadResult == text.getEndIndex()) {
             result = lookaheadResult;
         }
-        
+
         // if the last character we saw before the one that took us into the stop state
         // was a mandatory breaking character, then the break position goes right after it
         // (this is here so that breaks come before, rather than after, a string of
@@ -982,9 +982,9 @@ visitedChars = 0;
     private static UnicodeSet intersection(UnicodeSet a, UnicodeSet b)
     {
         UnicodeSet result = new UnicodeSet(a);
-            
+
         result.retainAll(b);
-            
+
         return result;
     }
 
@@ -1116,7 +1116,7 @@ visitedChars = 0;
             buildStateTable(tempRuleList);
             buildBackwardsStateTable(tempRuleList);
         }
-        
+
         /**
          * Thus function has three main purposes:
          * <ul><li>Perform general syntax checking on the description, so the rest of the
@@ -1300,7 +1300,7 @@ visitedChars = 0;
                         if (sawIllegalChar) {
                             error("Illegal character", illegalCharPos, description);
                         }
-                    
+
                         // make sure the rule contains something and that there are no
                         // unbalanced parentheses or brackets
                         if (lastC == ';' || lastC == '\u0000') {
@@ -1559,7 +1559,7 @@ visitedChars = 0;
                     // and the current category...
                     UnicodeSet cat = (UnicodeSet)(categories.elementAt(j));
                     UnicodeSet overlap = intersection(work, cat);
-                    
+
                     if (!overlap.isEmpty()) {
                         // if the current category is not a subset of the current
                         // working set of characters, then remove the overlapping
@@ -1569,7 +1569,7 @@ visitedChars = 0;
                             cat.removeAll(overlap);
                             categories.addElement(overlap);
                         }
-                        
+
                         // and always remove the overlapping characters from the current
                         // working set of characters
                         work.removeAll(overlap);
@@ -1606,7 +1606,7 @@ visitedChars = 0;
                 // for each category...
                 for (int j = 1; j < categories.size(); j++) {
                     UnicodeSet cat = new UnicodeSet((UnicodeSet) categories.elementAt(j));
-                    
+
                     // if the current expression contains characters in that category...
                     if (cs.containsAll(cat)) {
 
@@ -1957,7 +1957,7 @@ System.out.println();
                             temp.addElement(new Integer(i));
                             updateStateTable(temp, pendingChars, (short)(lastState + 1));
                         }
-                        
+
                         // If we just added any new states, add them to the decison point list
                         // Note: it might be a good idea to avoid adding new states to the
                         // decision point list in more than one place...
