@@ -3,7 +3,7 @@
 <html lang="en-US">
   <head>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2003 IBM Corporation and others. All Rights Reserved.">
+    "Copyright (c) 1997-2004 IBM Corporation and others. All Rights Reserved.">
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; what's new; readme; read me; introduction; downloads; downloading; building; installation;">
     <meta name="DESCRIPTION" content=
@@ -30,8 +30,8 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.8
     ReadMe</h1>
 
-    <p>Version: 2003-Nov-04<br>
-     Copyright &copy; 1997-2003 International Business Machines Corporation and
+    <p>Version: 2004-Jan-08<br>
+     Copyright &copy; 1997-2004 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr>
@@ -230,7 +230,40 @@
     "http://oss.software.ibm.com/icu/download/2.8/index.html">ICU 2.8 download
     page</a>.</p>
 
-    <h3>Library Initialization</h3>
+    <h3><a name="News_Library_Names">Static Library Names and AIX
+    linking</a></h3>
+
+    <p>Previously static and shared library names had the same naming scheme,
+    except the file extension was different between the filenames. For example,
+    the shared common library was called libicuuc.so, and the static common
+    library was called libicuuc.a on many Unix type machines. It has come to
+    our attention, that Windows import library names and static library names
+    can have the same name, and when the -brtl linker option is removed the
+    static and shared libraries have the same filename extension, which is
+    ".a". The -brtl linker option on AIX has been removed at several people's
+    request.</p>
+
+    <p>In order to differentiate between the two library names on all
+    platforms, static libraries now use an "s" as a prefix to differentiate
+    between the shared and static libraries. For example, "libicuuc.a" is now
+    "lib<strong>s</strong>icuuc.a". This means that if you used "-licuuc" to
+    link the common library into your application, you now need to use
+    "-lsicuuc".</p>
+
+    <h3><a name="News_ICUIO">ICUIO Library Changes</a></h3>
+
+    <p>The ICUIO library is still unsupported (this was previously called the
+    ustdio library), and some breaking fixes have been made to the library. %S
+    should be used for UTF-16 strings, and %C should be used for UChar for the
+    format strings. The %K and %U format specifiers are deprecated and will be
+    removed in a future version of ICU. Also u_fgets now uses the same argument
+    ordering as stdio fgets, which will make it easier for people to migrate
+    their existing stdio implementations to use ICUIO. Fortunately, u_fgets now
+    follows the Unicode algorithm for detecting hard line breaks, and some
+    performance enhancements to this library have been implemented so that most
+    of the formatting and parsing functions will run faster.</p>
+
+    <h3><a name="News_Library_Init">Library Initialization</a></h3>
 
     <p>ICU4C 2.6 introduces a library initialization function. It is required
     to call it before using any ICU services in a multi-threaded environment.
@@ -1421,8 +1454,8 @@ del common/libicuuc.so
     Multithreaded Environment on HP-UX</a></h4>
 
     <p>If you are building ICU with a newer aCC compiler and you are planning
-    on using any RogueWave libraries, you will need to set a special flag before
-    building ICU. The <a href=
+    on using any RogueWave libraries, you will need to set a special flag
+    before building ICU. The <a href=
     "http://docs.hp.com/hpux/onlinedocs/dev/aCC/a_03_30/options.htm#optioncap-AA">
     -AA</a> flag is needed in order to make ICU thread safe with RogueWave.</p>
 <pre>
@@ -1435,11 +1468,11 @@ del common/libicuuc.so
     <p>The C/C++ languages do not provide a portable way to specify Unicode
     code point or string literals other than with arrays of numeric constants.
     For convenience, ICU4C tends to use char * strings in places where only
-    "invariant characters" (a portable subset of the 7-bit ASCII
-    repertoire) are used. This allows locale IDs, charset names, resource bundle
-    item keys and similar items to be easily specified as string literals in the
-    source code. The same types of strings are also stored as "invariant
-    character" char * strings in the ICU data files.</p>
+    "invariant characters" (a portable subset of the 7-bit ASCII repertoire)
+    are used. This allows locale IDs, charset names, resource bundle item keys
+    and similar items to be easily specified as string literals in the source
+    code. The same types of strings are also stored as "invariant character"
+    char * strings in the ICU data files.</p>
 
     <p>ICU has hard coded mapping tables in <code>source/common/putil.c</code>
     to convert invariant characters to and from Unicode without using a full
@@ -1806,29 +1839,30 @@ del common/libicuuc.so
 
     <p>If you are using ICU's Makefiles to build ICU on a new platform, there
     are a few places where you will need to add or modify some files. If you
-    need more help, you can always ask the
-    <a href="http://oss.software.ibm.com/icu/archives/">icu4c-support mailing list</a>.
-    Once you
-    have finished porting ICU to a new platform, it is recommended that you
-    contribute your changes back to ICU via the icu4c-support mailing list.
-    This will make it easier for everyone to benefit from your work.</p>
+    need more help, you can always ask the <a href=
+    "http://oss.software.ibm.com/icu/archives/">icu4c-support mailing list</a>.
+    Once you have finished porting ICU to a new platform, it is recommended
+    that you contribute your changes back to ICU via the icu4c-support mailing
+    list. This will make it easier for everyone to benefit from your work.</p>
 
     <h4>Data For a New Platform</h4>
 
-    <p>It may not be necessary for your use of ICU to make a full ICU build work.
-    Most of the makefiles and build targets are for tools that are used for building
-    ICU's data &mdash; and an application's data if the application uses ICU
-    resource bundles and similar for its data.</p>
+    <p>It may not be necessary for your use of ICU to make a full ICU build
+    work. Most of the makefiles and build targets are for tools that are used
+    for building ICU's data &mdash; and an application's data if the
+    application uses ICU resource bundles and similar for its data.</p>
 
-    <p>Data files can be built on a different platform if both platforms share the
-    same endianness and the same charset family, and if memory-mappable, binary
-    data files are used instead of DLLs/shared libraries.
-    For details see the User Guide <a href="http://oss.software.ibm.com/icu/userguide/icudata.html">ICU Data</a> chapter.</p>
+    <p>Data files can be built on a different platform if both platforms share
+    the same endianness and the same charset family, and if memory-mappable,
+    binary data files are used instead of DLLs/shared libraries. For details
+    see the User Guide <a href=
+    "http://oss.software.ibm.com/icu/userguide/icudata.html">ICU Data</a>
+    chapter.</p>
 
-    <p>ICU 2.8 eliminates the first condition:
-    It adds the icuswap tool which can be run on any platform to turn binary ICU data files
-    from any one of the three formats into any one of the other.
-    This allows to use ICU data built anywhere to be used for any target platform.</p>
+    <p>ICU 2.8 eliminates the first condition: It adds the icuswap tool which
+    can be run on any platform to turn binary ICU data files from any one of
+    the three formats into any one of the other. This allows to use ICU data
+    built anywhere to be used for any target platform.</p>
 
     <h4>Adapting Makefiles For a New Platform</h4>
 
@@ -1999,7 +2033,7 @@ del common/libicuuc.so
     </ol>
     <hr>
 
-    <p>Copyright &copy; 1997-2003 International Business Machines Corporation
+    <p>Copyright &copy; 1997-2004 International Business Machines Corporation
     and others. All Rights Reserved.<br>
      IBM Globalization Center of Competency - San Jos&eacute;<br>
      5600 Cottle Road<br>
