@@ -89,6 +89,11 @@ public class XPathTokenizer{
      * @return
      */
     public static StringBuffer relativeToAbsolute(String xpath, StringBuffer fullPath){
+        if(!xpath.startsWith("..")){
+            fullPath.setLength(0);
+            fullPath.append(xpath);
+            return fullPath;
+        }
         XPathTokenizer tokenizer = new XPathTokenizer(xpath);
         String token=tokenizer.nextToken();
         StringBuffer retVal = new StringBuffer();

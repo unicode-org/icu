@@ -39,19 +39,22 @@ public class LDML2ICUConverter {
     private static final int SOURCEDIR = 2;
     private static final int DESTDIR = 3;
     private static final int SPECIALSDIR = 4;
-       
+    private static final int WRITE_DEPRECATED = 5;
+    
     private static final UOption[] options = new UOption[] {
         UOption.HELP_H(),
         UOption.HELP_QUESTION_MARK(),
         UOption.SOURCEDIR(),
         UOption.DESTDIR(),
-        UOption.create("specialsdir", 'p', UOption.OPTIONAL_ARG),
+        UOption.create("specialsdir", 'p', UOption.REQUIRES_ARG),
+        UOption.create("supplemental", 'l', UOption.OPTIONAL_ARG),
+        UOption.create("write-deprecated", 'w', UOption.NO_ARG)
     };
-    private String    sourceDir      = null;
-    private String    fileName       = null;
-    private String    destDir        = null;
-    private String    specialsDir    = null;
-    
+    private String    sourceDir        = null;
+    private String    fileName         = null;
+    private String    destDir          = null;
+    private String    specialsDir      = null;
+    private boolean   writeDeprecated  = false;
     private static final String LINESEP         = System.getProperty("line.separator");
     private static final String BOM             = "\uFEFF";
     private static final String CHARSET         = "UTF-8";
@@ -76,6 +79,7 @@ public class LDML2ICUConverter {
             "-s or --sourcedir          source directory for files followed by path, default is current directory.\n" +
             "-d or --destdir            destination directory, followed by the path, default is current directory.\n" +
             "-p or --specialsdir        source directory for files containing special data followed by the path. None if not spcified\n"+
+            "-w or --write-deprecated   write data for deprecated localed.\n"+
             "-h or -? or --help         this usage text.\n"+
             "example: org.unicode.ldml.LDML2ICUConverter -s xxx -d yyy en.xml");
         System.exit(-1);
@@ -108,6 +112,9 @@ public class LDML2ICUConverter {
         }
         if(options[SPECIALSDIR].doesOccur) {
             specialsDir = options[SPECIALSDIR].value;
+        }
+        if(options[WRITE_DEPRECATED].doesOccur) {
+            writeDeprecated = true;
         }
         if(destDir==null){
             destDir = ".";
@@ -215,9 +222,9 @@ public class LDML2ICUConverter {
          }        
     }
     private void writeAliasedResource(){
-        if(locName==null){
+        if(locName==null || writeDeprecated==false){
             return;
-        }
+        }  
         String lang = (String) deprecatedMap.get(ULocale.getLanguage(locName));
         //System.out.println("In aliased resource");
         if(lang!=null){
@@ -271,7 +278,7 @@ public class LDML2ICUConverter {
         deprecatedMap.put("id", "in");
         deprecatedMap.put("jv", "jw");
         deprecatedMap.put("nn", "no_NO_NY");
-        deprecatedMap.put("sr", "sh");
+        //deprecatedMap.put("sr_Latn", "sh");// not sure how to handle this!
         deprecatedMap.put("yi", "ji");
         
         //TODO: "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
@@ -327,7 +334,15 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.NUMBERS)){
                 res = parseNumbers(node, xpath);
             }else if(name.equals(LDMLConstants.COLLATIONS)){
-                res = parseCollations(node, xpath);
+                if(locName.equals("root")){
+                    ICUResourceWriter.ResourceInclude include = new ICUResourceWriter.ResourceInclude();
+                    include.name="\"%%UCARULES\"";
+                    include.val = "../unidata/UCARules.txt";
+                    res = include;
+                    include.next = parseCollations(node, xpath);
+                }else{
+                    res = parseCollations(node, xpath);
+                }
             }else if(name.equals(LDMLConstants.POSIX)){
                 res = parsePosix(node, xpath);
             }else if(name.indexOf("icu:")>-1|| name.indexOf("openOffice:")>-1){
@@ -411,7 +426,7 @@ public class LDML2ICUConverter {
         ICUResourceWriter.Resource current = null;
         int savedLength = xpath.length();
         getXPath(root,xpath);
-        int oldLength = xpath.length();
+        //int oldLength = xpath.length();
         
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
@@ -456,13 +471,13 @@ public class LDML2ICUConverter {
                 }
                 res = null;
             }
-           // xpath.delete(savedLength, xpath.length());  
+           // xpath.delete(oldLength, xpath.length());  
         }
         if(localeID.length()==0){
         	localeID="root";
         }
         table.name = localeID;
-        xpath.delete(oldLength, xpath.length());
+        xpath.delete(savedLength, xpath.length());
         return table;
     }
 
@@ -1994,7 +2009,7 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        
+     
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -2093,8 +2108,7 @@ public class LDML2ICUConverter {
             }
             xpath.delete(oldLength, xpath.length());
         }
-        xpath.delete(savedLength, xpath.length());
-        if(rules.length()>0){
+        if(rules!=null){
             ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
             str.name = LDMLConstants.SEQUENCE;
             str.val = rules.toString();
@@ -2106,10 +2120,16 @@ public class LDML2ICUConverter {
             }
             str = new ICUResourceWriter.ResourceString();
             str.name = "Version";
-            str.val = "1.1.1";
+            Node version = LDMLUtilities.getNode(fullyResolvedSpecials, xpath.append("/special").toString());
+            if(version!=null){
+                str.val = LDMLUtilities.getAttributeValue(version, "icu:version");
+            }
             current.next = str;
             
         }
+
+        xpath.delete(savedLength, xpath.length());
+        
         if(table.first!=null){
             return table;
         }
@@ -2223,7 +2243,6 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.RESET)){
                 rules.append(parseReset(node));
             }else{
-            
                 System.err.println("Encountered unknown element: "+name);
                 System.exit(-1);
             }
@@ -2516,6 +2535,9 @@ public class LDML2ICUConverter {
                 continue;
             }else if(name.equals(LDMLConstants.CHARACTERS)){
                 res = parseCharacters(node, xpath);
+            }else if(name.equals(LDMLConstants.COLLATIONS)){
+                //collations are resolved in parseCollation
+                continue;
             }else if(name.indexOf("icu:")>-1|| name.indexOf("openOffice:")>-1){
                 //TODO: these are specials .. ignore for now ... figure out
                 // what to do later
@@ -2595,7 +2617,7 @@ public class LDML2ICUConverter {
         buffer.append("// * Copyright (C) "+c.get(Calendar.YEAR) +" International Business Machines" + LINESEP);
         buffer.append("// * Corporation and others.  All Rights Reserved."+LINESEP);
         buffer.append("// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java" + LINESEP);
-        buffer.append("// * Date & Time: " + c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH)+1) + "/" + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.HOUR_OF_DAY) + COLON + c.get(Calendar.MINUTE)+ LINESEP);
+       // buffer.append("// * Date & Time: " + c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH)+1) + "/" + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.HOUR_OF_DAY) + COLON + c.get(Calendar.MINUTE)+ LINESEP);
         buffer.append("// * Source File: " + fileName + LINESEP);
         buffer.append("// *" + LINESEP);                    
         buffer.append("// ***************************************************************************" + LINESEP);
