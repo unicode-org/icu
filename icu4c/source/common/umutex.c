@@ -74,7 +74,7 @@
 /* the global mutex. Use it proudly and wash it often. */
 static UMTX    gGlobalMutex = NULL;
 # ifdef _DEBUG
-static int32_t gRecursionCount;       /* Detect Recursive entries.  For debugging only. */
+static int32_t gRecursionCount = 0;       /* Detect Recursive entries.  For debugging only. */
 # endif
 
 #if defined(WIN32)
@@ -85,15 +85,23 @@ static pthread_mutex_t gPlatformMutex;
 
 #endif
 #endif /* ICU_USE_THREADS==1 */
+
+
+
 U_CAPI UBool U_EXPORT2
 umtx_isInitialized(UMTX *mutex)
 {
 #if (ICU_USE_THREADS == 1)
     if (mutex == NULL)
     {
-        mutex = &gGlobalMutex;
+        return (UBool)(gGlobalMutex != NULL);
+    } else {
+        UBool isInited;
+        umtx_lock(NULL);
+        isInited = (*mutex != NULL);
+        umtx_unlock(NULL);
+        return isInited;
     }
-    return (UBool)(*mutex != NULL);
 #else
     return TRUE;    /* Since we don't use threads, it's considered initialized. */
 #endif /* ICU_USE_THREADS==1 */
@@ -110,11 +118,12 @@ umtx_lock(UMTX *mutex)
 
     if (*mutex == NULL)
     {
-        if (mutex != &gGlobalMutex) {umtx_lock(NULL);};
-        if (*mutex == NULL) {
+        /* Lazy init of a non-global mutexes on first lock is NOT safe on processors
+         *  that reorder memory operations.  */
+        /* U_ASSERT(FALSE);    TODO:  Turn this back on */
+        if (mutex != &gGlobalMutex) {
             umtx_init(mutex);
         }
-        if (mutex != &gGlobalMutex) {umtx_unlock(NULL);};
     }
 
 #if defined(WIN32)
@@ -182,6 +191,35 @@ umtx_unlock(UMTX* mutex)
 #endif /* ICU_USE_THREADS == 1 */
 }
 
+
+
+/*
+ *   umtx_raw_init    Do the platform specific mutex allocation and initialization
+ */
+#if (ICU_USE_THREADS == 1)
+static UMTX umtx_raw_init(void  *mem) {
+    #if defined (WIN32)
+        if (mem == NULL) {
+            mem = uprv_malloc(sizeof(CRITICAL_SECTION));
+            if (mem == NULL) {return NULL;}
+        }
+        InitializeCriticalSection((CRITICAL_SECTION*)mem);
+    #elif defined( POSIX )
+        if (mem == NULL) {
+            mem = uprv_malloc(sizeof(pthread_mutex_t));
+            if (mem == NULL) {return NULL;}
+        }
+        # if defined (HPUX_CMA)
+            pthread_mutex_init((pthread_mutex_t*)mem, pthread_mutexattr_default);
+        # else
+            pthread_mutex_init((pthread_mutex_t*)mem, NULL);
+        # endif
+    #endif
+    return (UMTX *)mem;
+}
+#endif  /* ICU_USE_THREADS */
+
+
 U_CAPI void  U_EXPORT2
 umtx_init(UMTX *mutex)
 {
@@ -189,47 +227,51 @@ umtx_init(UMTX *mutex)
 
     if (mutex == NULL) /* initialize the global mutex */
     {
-        mutex = &gGlobalMutex;
+        /* Note:  The initialization of the global mutex is NOT thread safe.   */
+        if (gGlobalMutex != NULL) {
+            return;
+        }
+        gGlobalMutex = umtx_raw_init(&gPlatformMutex);
+
+       # ifdef POSIX_DEBUG_REENTRANCY
+           gInMutex = FALSE;
+       # endif
+       #ifdef _DEBUG
+           gRecursionCount = 0;
+       #endif
+
+    } else {
+        /* Not the global mutex.
+         *  Thread safe initialization, using the global mutex.
+         */  
+        UBool isInitialized; 
+        UMTX tMutex = NULL;
+
+        umtx_lock(NULL);
+        isInitialized = (*mutex != NULL);
+        umtx_unlock(NULL);
+        if (isInitialized) {  
+            return;
+        }
+
+        tMutex = umtx_raw_init(NULL);
+
+        umtx_lock(NULL);
+        if (*mutex == NULL) {
+            *mutex = tMutex;
+            tMutex = NULL;
+        }
+        umtx_unlock(NULL);
+        
+        umtx_destroy(&tMutex);  /* NOP if (tmutex == NULL)  */
     }
-
-    if (*mutex != NULL) /* someone already did it. */
-        return;
-
-    if (*mutex == gGlobalMutex)
-    {
-        *mutex = &gPlatformMutex;
-    }
-    else
-    {
-#if defined (WIN32)
-        *mutex = uprv_malloc(sizeof(CRITICAL_SECTION));
-#elif defined( POSIX )
-        *mutex = uprv_malloc(sizeof(pthread_mutex_t));
-#endif
-    }
-
-#if defined (WIN32)
-    InitializeCriticalSection((CRITICAL_SECTION*)*mutex);
-
-#elif defined (POSIX)
-# if defined (HPUX_CMA)
-    pthread_mutex_init((pthread_mutex_t*)*mutex, pthread_mutexattr_default);
-# else
-    pthread_mutex_init((pthread_mutex_t*)*mutex, NULL);
-# endif
-
-# ifdef POSIX_DEBUG_REENTRANCY
-    gInMutex = FALSE;
-# endif
-
-#endif
 #endif /* ICU_USE_THREADS==1 */
 }
 
 U_CAPI void  U_EXPORT2
 umtx_destroy(UMTX *mutex) {
 #if (ICU_USE_THREADS == 1)
-    if (mutex == NULL) /* initialize the global mutex */
+    if (mutex == NULL) /* destroy the global mutex */
     {
         mutex = &gGlobalMutex;
     }
@@ -283,34 +325,16 @@ umtx_atomic_dec(int32_t *p)
 /*
  * POSIX platforms without specific atomic operations.  Use a posix mutex
  *   to protect the increment and decrement.
- *   Put the mutex in static storage so we don't have to come back and delete it
- *   when the process exits.
  */
-static pthread_mutex_t gIncDecMutex;
-static UBool           gIncDecMutexInitialized = FALSE;
 
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_inc(int32_t *p)
 {
     int32_t    retVal;
 
-    if (gIncDecMutexInitialized == FALSE) {
-        umtx_lock(NULL);
-        if (gIncDecMutexInitialized == FALSE) {
-# if defined (HPUX_CMA)
-            pthread_mutex_init((pthread_mutex_t*)&gIncDecMutex, pthread_mutexattr_default);
-# else
-            pthread_mutex_init((pthread_mutex_t*)&gIncDecMutex, NULL);
-# endif
-            gIncDecMutexInitialized = TRUE;
-        }
-        umtx_unlock(NULL);
-    }
-   
-
-    pthread_mutex_lock(&gIncDecMutex);
+    pthread_mutex_lock(&gPlatformMutex);
     retVal = ++(*p);
-    pthread_mutex_unlock(&gIncDecMutex);
+    pthread_mutex_unlock(&gPlatformMutex);
     return retVal;
 }
 
@@ -320,13 +344,12 @@ umtx_atomic_dec(int32_t *p)
 {
     int32_t    retVal;
 
-    pthread_mutex_lock(&gIncDecMutex);
+    pthread_mutex_lock(&gPlatformMutex);
     retVal = --(*p);
-    pthread_mutex_unlock(&gIncDecMutex);
+    pthread_mutex_unlock(&gPlatformMutex);
     return retVal;
 }
 
-/* TODO:  pthread_mutex_destroy() when the time comes. */
 
 #else 
    

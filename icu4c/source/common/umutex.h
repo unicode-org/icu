@@ -72,6 +72,8 @@ U_CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
 
 /* Initialize a mutex. Use it this way:
    umtx_init( &aMutex ); 
+ * ICU Mutexes, aside from the global mutex, must be explicitly initialized
+ * before use.
  * @param mutex The given mutex to be initialized
  */
 U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
@@ -83,10 +85,13 @@ U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
  */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
 
-/* Is a mutex initialized? This function isn't normally needed
-   because umtx_lock will initialize the mutex for you.
+/* Is a mutex initialized? 
    Use it this way:
-   umtx_isInitialized( &aMutex ); */
+      umtx_isInitialized( &aMutex ); 
+   This function is not normally needed.  It is more efficient to 
+   unconditionally call umtx_init(&aMutex) than it is to check first. 
+ * @param mutex The given mutex to be tested
+*/
 U_CAPI UBool U_EXPORT2 umtx_isInitialized( UMTX *mutex );
 
 /*
