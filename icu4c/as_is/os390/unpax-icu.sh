@@ -15,7 +15,7 @@
 
 #binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
 #ICU specific binary files
-binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU'
+binary_suffixes='brk BRK bin BIN res RES cnv CNV dat DAT icu ICU spp SPP'
 
 usage()
 {
