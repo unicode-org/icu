@@ -22,6 +22,7 @@ enum { base = 36, tmin = 1, tmax = 26, skew = 38, damp = 700,
 /* delim(cp) tests whether cp is a delimiter: */
 #define delim(cp) ((cp) == delimiter)
 
+U_CDECL_BEGIN
 /* decode_digit(cp) returns the numeric value of a basic code */
 /* point (for use in representing integers) in the range 0 to */
 /* base-1, or base if cp is does not represent a value.       */
@@ -262,3 +263,7 @@ enum punycode_status punycode_decode(
   *output_length = out;
   return punycode_success;
 }
+
+U_CDECL_END
+
+
