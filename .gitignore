@@ -425,3 +425,4 @@ icu4j/.externalToolBuilders
 icu4j/.project
 icu4j/classes
 icu4j/doc
+tools/unicodetools/com/ibm/rbm/lib
