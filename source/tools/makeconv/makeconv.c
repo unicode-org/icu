@@ -22,6 +22,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "filestrm.h"
+#include "toolutil.h"
 
 #include "udata.h"
 #include "unewdata.h"
@@ -194,7 +195,7 @@ int main(int argc, char** argv)
   UConverterSharedData* mySharedData = NULL; 
   UErrorCode err = U_ZERO_ERROR;
   char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  char* dot = NULL;
+  char* dot = NULL, *arg;
   char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
   
   if (argc == 1)
@@ -204,8 +205,10 @@ int main(int argc, char** argv)
     }
   while (--argc)
     {
+      arg = getLongPathname(argv[argc]);
+
       /*removes the extension if any is found*/
-      icu_strcpy(outFileName, argv[argc]);
+      icu_strcpy(outFileName, arg);
       if (dot = icu_strchr(outFileName +   icu_strlen(outFileName) - 4, '.')) 
 	{
 	  *dot = '\0';
@@ -215,12 +218,12 @@ int main(int argc, char** argv)
       
       icu_strcat(outFileName, CONVERTER_FILE_EXTENSION);
       
-      mySharedData = createConverterFromTableFile(argv[argc], &err);
+      mySharedData = createConverterFromTableFile(arg, &err);
 
       if (U_FAILURE(err) || (mySharedData == NULL))
 	{
 	  /* in an error is found, print out a error msg and keep going*/
-	  printf("Error creating \"%s\" file for \"%s\" (error code %d)\n", outFileName, argv[argc], err);
+	  printf("Error creating \"%s\" file for \"%s\" (error code %d)\n", outFileName, arg, err);
 	  err = U_ZERO_ERROR;
 	}
       else
