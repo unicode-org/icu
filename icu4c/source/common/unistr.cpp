@@ -1514,20 +1514,6 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   return TRUE;
 }
 
-// private function for C API
-U_CFUNC int32_t
-T_UnicodeString_length(const UnicodeString *s)
-{
-  return s->length();
-}
-
-// private function for C API
-U_CFUNC int32_t
-T_UnicodeString_extract(const UnicodeString *s, char *dst)
-{
-  return s->extract(0, s->length(), dst, "");
-}
-
 
 //========================================
 // Default converter caching
