@@ -400,6 +400,12 @@ public:
   virtual int32_t hashCode(void) const = 0;
 
   /**
+  * Gets the locale of the Collator
+  * @draft ICU 2.1
+  */
+  virtual const Locale getLocale(UErrorCode& status) const = 0;
+
+  /**
   * Convenience method for comparing two strings based on the collation rules.
   * @param source the source string to be compared with.
   * @param target the target string to be compared with.

@@ -336,6 +336,14 @@ public:
   virtual int32_t hashCode(void) const;
 
   /**
+  * Gets the locale of the Collator
+  * @return locale where the collation data lives. If the collator
+  *         was instantiated from rules, locale is empty.
+  * @draft ICU 2.1
+  */
+  virtual const Locale getLocale(UErrorCode& status) const;
+
+  /**
    * Gets the table-based rules for the collation object.
    * @return returns the collation rules that the table collation object was
    *         created from.
