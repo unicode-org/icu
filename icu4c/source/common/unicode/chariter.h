@@ -88,7 +88,7 @@ public:
   /**
    * Value returned by most of CharacterIterator's functions
    * when the iterator has reached the limits of its iteration.  */
-  static const UChar    DONE;
+  enum { DONE = 0xffff };
 
   /**
    * Destructor.  
@@ -128,48 +128,119 @@ public:
   virtual int32_t         hashCode(void) const = 0;
         
   /**
-   * Sets the iterator to refer to the first character in its
-   * iteration range, and returns that character, 
+   * Sets the iterator to refer to the first code unit in its
+   * iteration range, and returns that code unit,
    * @draft
    */
   virtual UChar         first(void) = 0;
         
   /**
-   * Sets the iterator to refer to the last character in its
-   * iteration range, and returns that character.  
+   * Sets the iterator to refer to the first code point in its
+   * iteration range, and returns that code unit,
+   * @draft
+   */
+  virtual UChar32       first32(void) = 0;
+
+  virtual UTextOffset   setToStart() = 0;
+
+  /**
+   * Sets the iterator to refer to the last code unit in its
+   * iteration range, and returns that code unit.
    * @draft
    */
   virtual UChar         last(void) = 0;
         
   /**
-   * Sets the iterator to refer to the "position"-th character
+   * Sets the iterator to refer to the last code point in its
+   * iteration range, and returns that code unit.
+   * @draft
+   */
+  virtual UChar32       last32(void) = 0;
+
+  virtual UTextOffset   setToEnd() = 0;
+
+  /**
+   * Sets the iterator to refer to the "position"-th code unit
    * in the text-storage object the iterator refers to, and
-   * returns that character.  
+   * returns that code unit.  
    * @draft
    */
   virtual UChar         setIndex(UTextOffset position) = 0;
 
   /**
-   * Returns the character the iterator currently refers to.  
+   * Sets the iterator to refer to the beginning of the code point
+   * that contains the "position"-th code unit
+   * in the text-storage object the iterator refers to, and
+   * returns that code point.  
+   * @draft
+   */
+  virtual UChar32       setIndex32(UTextOffset position) = 0;
+
+  /**
+   * Returns the code unit the iterator currently refers to.  
    * @draft
    */
   virtual UChar         current(void) const = 0;
         
   /**
-   * Advances to the next character in the iteration range
-   * (toward last()), and returns that character.  If there are
-   * no more characters to return, returns DONE.  
+   * Returns the code point the iterator currently refers to.  
+   * @draft
+   */
+  virtual UChar32       current32(void) const = 0;
+        
+  /**
+   * Advances to the next code unit in the iteration range
+   * (toward last()), and returns that code unit.  If there are
+   * no more code units to return, returns DONE.  
    * @draft
    */
   virtual UChar         next(void) = 0;
         
   /**
-   * Advances to the previous character in the iteration rance
-   * (toward first()), and returns that character.  If there are
-   * no more characters to return, returns DONE.  
+   * Gets the current code unit for returning and advances to the next code unit
+   * in the iteration range
+   * (toward last()).  If there are
+   * no more code units to return, returns DONE.
+   * @draft
+   */
+  virtual UChar         nextPostInc(void) = 0;
+        
+  /**
+   * Advances to the next code point in the iteration range
+   * (toward last()), and returns that code point.  If there are
+   * no more code points to return, returns DONE.  
+   * @draft
+   */
+  virtual UChar32       next32(void) = 0;
+        
+  /**
+   * Gets the current code point for returning and advances to the next code point
+   * in the iteration range
+   * (toward last()).  If there are
+   * no more code points to return, returns DONE.
+   * @draft
+   */
+  virtual UChar32       next32PostInc(void) = 0;
+        
+  virtual bool_t        hasNext() = 0;
+
+  /**
+   * Advances to the previous code unit in the iteration rance
+   * (toward first()), and returns that code unit.  If there are
+   * no more code units to return, returns DONE.  
    * @draft
    */
   virtual UChar         previous(void) = 0;
+
+  /**
+   * Advances to the previous code point in the iteration rance
+   * (toward first()), and returns that code point.  If there are
+   * no more code points to return, returns DONE.  
+   * @draft
+   */
+  virtual UChar32       previous32(void) = 0;
+
+  virtual bool_t        hasPrevious() = 0;
 
   /**
    * Returns the numeric index in the underlying text-storage
@@ -221,6 +292,3 @@ protected:
 };
 
 #endif
-
-
-

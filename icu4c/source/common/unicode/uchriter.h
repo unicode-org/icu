@@ -14,20 +14,52 @@
 
 /**
  * A concrete subclass of CharacterIterator that iterates over the
- * characters in a UnicodeString.  It's possible not only to create an
- * iterator that iterates over an entire UnicodeString, but also to
- * create only that iterates over only a subrange of a UnicodeString
- * (iterators over different subranges of the same UnicodeString don't
- * compare equal).  */
+ * characters (code units or code points) in a UChar array.
+ * It's possible not only to create an
+ * iterator that iterates over an entire UChar array, but also to
+ * create one that iterates over only a subrange of a UChar array
+ * (iterators over different subranges of the same UChar array don't
+ * compare equal).
+ */
 class U_COMMON_API UCharCharacterIterator : public CharacterIterator {
 public:
   /**
-   * Create an iterator over the UnicodeString referred to by "text".
-   * The iteration range is the whole string, and the starting
-   * position is 0.  
+   * Create an iterator over the UChar array referred to by "text".
+   * The iteration range is 0 to <code>len-1</code>.
+   * text is only aliased, not adopted (the
+   * destructor will not delete it).
    * @stable
    */
   UCharCharacterIterator(const UChar* text, int32_t len);
+
+  /**
+   * Create an iterator over the UChar array referred to by "text".
+   * The iteration range is 0 to <code>len-1</code>.
+   * text is only aliased, not adopted (the
+   * destructor will not delete it).
+   * The starting
+   * position is specified by "pos". If "pos" is outside the valid
+   * iteration range, the behavior of this object is undefined.
+   * @stable
+   */
+  UCharCharacterIterator(const UChar* text, int32_t len,
+                         UTextOffset pos);
+
+  /**
+   * Create an iterator over the UChar array referred to by "text".
+   * The iteration range is 0 to <code>end-1</code>.
+   * text is only aliased, not adopted (the
+   * destructor will not delete it).
+   * The starting
+   * position is specified by "pos". If begin and end do not
+   * form a valid iteration range or "pos" is outside the valid
+   * iteration range, the behavior of this object is undefined.
+   * @stable
+   */
+  UCharCharacterIterator(const UChar* text, int32_t len,
+                         UTextOffset begin,
+                         UTextOffset end,
+                         UTextOffset pos);
 
   /**
    * Copy constructor.  The new iterator iterates over the same range
@@ -66,7 +98,7 @@ public:
   virtual int32_t         hashCode(void) const;
 
   /**
-   * Returns a new StringCharacterIterator referring to the same
+   * Returns a new UCharCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.  
    * @stable
@@ -74,22 +106,40 @@ public:
   virtual CharacterIterator* clone(void) const;
                                 
   /**
-   * Sets the iterator to refer to the first character in its
-   * iteration range, and returns that character, 
+   * Sets the iterator to refer to the first code unit in its
+   * iteration range, and returns that code unit, 
    * @draft
    */
   virtual UChar         first(void);
 
   /**
-   * Sets the iterator to refer to the last character in its iteration
-   * range, and returns that character.  
+   * Sets the iterator to refer to the first code point in its
+   * iteration range, and returns that code point, 
+   * @draft
+   */
+  virtual UChar32       first32(void);
+
+  virtual UTextOffset   setToStart();
+
+  /**
+   * Sets the iterator to refer to the last code unit in its iteration
+   * range, and returns that code unit.  
    * @draft
    */
   virtual UChar         last(void);
 
   /**
-   * Sets the iterator to refer to the "position"-th character in the
-   * UnicodeString the iterator refers to, and returns that character.
+   * Sets the iterator to refer to the last code point in its iteration
+   * range, and returns that code point.  
+   * @draft
+   */
+  virtual UChar32       last32(void);
+
+  virtual UTextOffset   setToEnd();
+
+  /**
+   * Sets the iterator to refer to the "position"-th code unit in the
+   * UChar array the iterator refers to, and returns that code unit.
    * If the index is outside the iterator's iteration range, the
    * behavior of the iterator is undefined.  
    * @draft
@@ -97,44 +147,83 @@ public:
   virtual UChar         setIndex(UTextOffset pos);
 
   /**
-   * Returns the character the iterator currently refers to.  
+   * Sets the iterator to refer to the "position"-th code point in the
+   * UChar array the iterator refers to, and returns that code point.
+   * If the index is outside the iterator's iteration range, the
+   * behavior of the iterator is undefined.  
+   * @draft
+   */
+  virtual UChar32       setIndex32(UTextOffset pos);
+
+  /**
+   * Returns the code unit the iterator currently refers to.  
    * @draft
    */
   virtual UChar         current(void) const;
 
   /**
-   * Advances to the next character in the iteration range (toward
-   * last()), and returns that character.  If there are no more
-   * characters to return, returns DONE.  
+   * Returns the code point the iterator currently refers to.  
+   * @draft
+   */
+  virtual UChar32       current32(void) const;
+
+  /**
+   * Advances to the next code unit in the iteration range (toward
+   * last()), and returns that code unit.  If there are no more
+   * code units to return, returns DONE.  
    * @draft
    */
   virtual UChar         next(void);
 
+  virtual UChar         nextPostInc(void);
+        
   /**
-   * Advances to the previous character in the iteration rance (toward
-   * first()), and returns that character.  If there are no more
-   * characters to return, returns DONE.  
+   * Advances to the next code point in the iteration range (toward
+   * last()), and returns that code point.  If there are no more
+   * code points to return, returns DONE.  
+   * @draft
+   */
+  virtual UChar32       next32(void);
+
+  virtual UChar32       next32PostInc(void);
+        
+  virtual bool_t        hasNext();
+
+  /**
+   * Advances to the previous code unit in the iteration rance (toward
+   * first()), and returns that code unit.  If there are no more
+   * code units to return, returns DONE.  
    * @draft
    */
   virtual UChar         previous(void);
 
   /**
-   * Returns the numeric index of the first character in this
+   * Advances to the previous code point in the iteration rance (toward
+   * first()), and returns that code point.  If there are no more
+   * code points to return, returns DONE.  
+   * @draft
+   */
+  virtual UChar32       previous32(void);
+
+  virtual bool_t        hasPrevious();
+
+  /**
+   * Returns the numeric index of the first code unit in this
    * iterator's iteration range.  
    * @stable
    */
   virtual UTextOffset      startIndex(void) const;
 
   /**
-   * Returns the numeric index of the character immediately BEYOND the
-   * last character in this iterator's iteration range.  
+   * Returns the numeric index of the code unit immediately BEYOND the
+   * last code unit in this iterator's iteration range.  
    * @stable
    */
   virtual UTextOffset      endIndex(void) const;
 
   /**
-   * Returns the numeric index in the underlying UnicodeString of the
-   * character the iterator currently refers to (i.e., the character
+   * Returns the numeric index in the underlying UChar array of the
+   * code unit the iterator currently refers to (i.e., the code unit
    * returned by current()).  
    * @stable
    */
@@ -144,11 +233,10 @@ public:
    * Sets the iterator to iterate over a new range of text
    * @draft
    */
-  virtual void             setText(const UChar* newText,
-                                   int32_t newTextLength);
+  void setText(const UChar* newText, int32_t newTextLength);
   
   /**
-   * Copies the UnicodeString under iteration into the UnicodeString
+   * Copies the UChar array under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.  @param
    * result Receives a copy of the text under iteration.  
@@ -170,10 +258,11 @@ public:
   static UClassID          getStaticClassID(void) 
     { return (UClassID)(&fgClassID); }
 
-private:
+protected:
   UCharCharacterIterator();
         
   const UChar*            text;
+  int32_t                  textLength; // need this for correct getText() and hashCode()
   UTextOffset              pos;
   UTextOffset              begin;
   UTextOffset              end;
@@ -182,6 +271,3 @@ private:
 };
 
 #endif
-
-
-

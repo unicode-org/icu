@@ -20,18 +20,22 @@
 
 #include "unicode/utypes.h"
 #include "unicode/chariter.h"
+#include "unicode/uchriter.h"
 
 /**
  * A concrete subclass of CharacterIterator that iterates over the
- * characters in a UnicodeString.  It's possible not only to create an
+ * characters (code units or code points) in a UnicodeString.
+ * It's possible not only to create an
  * iterator that iterates over an entire UnicodeString, but also to
- * create only that iterates over only a subrange of a UnicodeString
+ * create one that iterates over only a subrange of a UnicodeString
  * (iterators over different subranges of the same UnicodeString don't
- * compare equal).  */
-class U_COMMON_API StringCharacterIterator : public CharacterIterator {
+ * compare equal).
+ */
+class U_COMMON_API StringCharacterIterator : public UCharCharacterIterator {
 public:
   /**
    * Create an iterator over the UnicodeString referred to by "text".
+   * The UnicodeString object is copied.
    * The iteration range is the whole string, and the starting position is 0.
    * @stable
    */
@@ -49,8 +53,9 @@ public:
 
   /**
    * Create an iterator over the UnicodeString referred to by "text".
-   * The iteration range begins with the character specified by
-   * "begin" and ends with the character BEFORE the character specfied
+   * The UnicodeString object is copied.
+   * The iteration range begins with the code unit specified by
+   * "begin" and ends with the code unit BEFORE the code unit specfied
    * by "end".  The starting position is specified by "pos".  If
    * "begin" and "end" don't form a valid range on "text" (i.e., begin
    * >= end or either is negative or greater than text.size()), or
@@ -67,6 +72,7 @@ public:
    * Copy constructor.  The new iterator iterates over the same range
    * of the same string as "that", and its initial position is the
    * same as "that"'s current position.  
+   * The UnicodeString object in "that" is copied.
    * @stable
    */
   StringCharacterIterator(const StringCharacterIterator&  that);
@@ -78,7 +84,7 @@ public:
   virtual ~StringCharacterIterator();
 
   /**
-   * Assignment operator.  *this is altered to iterate over the sane
+   * Assignment operator.  *this is altered to iterate over the same
    * range of the same string as "that", and refers to the same
    * character within that string as "that" does.  
    * @stable
@@ -94,12 +100,6 @@ public:
   virtual bool_t          operator==(const CharacterIterator& that) const;
 
   /**
-   * Generates a hash code for this iterator.  
-   * @stable
-   */
-  virtual int32_t         hashCode(void) const;
-
-  /**
    * Returns a new StringCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.  
@@ -108,78 +108,11 @@ public:
   virtual CharacterIterator* clone(void) const;
                                 
   /**
-   * Sets the iterator to refer to the first character in its
-   * iteration range, and returns that character, 
-   * @draft
-   */
-  virtual UChar         first(void);
-
-  /**
-   * Sets the iterator to refer to the last character in its iteration
-   * range, and returns that character.  
-   * @draft
-   */
-  virtual UChar         last(void);
-
-  /**
-   * Sets the iterator to refer to the "position"-th character in the
-   * UnicodeString the iterator refers to, and returns that character.
-   * If the index is outside the iterator's iteration range, the
-   * behavior of the iterator is undefined.  
-   * @draft
-   */
-  virtual UChar         setIndex(UTextOffset pos);
-
-  /**
-   * Returns the character the iterator currently refers to.  
-   * @draft
-   */
-  virtual UChar         current(void) const;
-
-  /**
-   * Advances to the next character in the iteration range (toward
-   * last()), and returns that character.  If there are no more
-   * characters to return, returns DONE.  
-   * @draft
-   */
-  virtual UChar         next(void);
-
-  /**
-   * Advances to the previous character in the iteration rance (toward
-   * first()), and returns that character.  If there are no more
-   * characters to return, returns DONE.  
-   * @draft
-   */
-  virtual UChar         previous(void);
-
-  /**
-   * Returns the numeric index of the first character in this
-   * iterator's iteration range.  
-   * @stable
-   */
-  virtual UTextOffset      startIndex(void) const;
-
-  /**
-   * Returns the numeric index of the character immediately BEYOND the
-   * last character in this iterator's iteration range.  
-   * @stable
-   */
-  virtual UTextOffset      endIndex(void) const;
-
-  /**
-   * Returns the numeric index in the underlying UnicodeString of the
-   * character the iterator currently refers to (i.e., the character
-   * returned by current()).  
-   * @stable
-   */
-  virtual UTextOffset      getIndex(void) const;
-
-  /**
    * Sets the iterator to iterate over the provided string.
    * @draft
    */
-  virtual void             setText(const UnicodeString& newText);
-  
+  void setText(const UnicodeString& newText);
+
   /**
    * Copies the UnicodeString under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
@@ -203,19 +136,13 @@ public:
   static UClassID          getStaticClassID(void) 
     { return (UClassID)(&fgClassID); }
 
-private:
+protected:
   StringCharacterIterator();
+  void setText(const UChar* newText, int32_t newTextLength);
         
   UnicodeString            text;
-  UTextOffset              pos;
-  UTextOffset              begin;
-  UTextOffset              end;
 
   static UClassID           fgClassID;
 };
 
 #endif
-
-
-
-
