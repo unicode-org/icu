@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/12 01:00:56 $
- * $Revision: 1.88 $
+ * $Date: 2003/02/14 18:23:37 $
+ * $Revision: 1.89 $
  *
  *****************************************************************************************
  */
@@ -372,8 +372,22 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet(String pattern, boolean ignoreWhitespace) {
+        this(pattern, IGNORE_SPACE);
+    }
+
+    /**
+     * Constructs a set from the given pattern.  See the class description
+     * for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param options a bitmask indicating which options to apply.
+     * Valid options are IGNORE_SPACE and CASE.
+     * @exception java.lang.IllegalArgumentException if the pattern contains
+     * a syntax error.
+     * @internal
+     */
+    public UnicodeSet(String pattern, int options) {
         this();
-        applyPattern(pattern, ignoreWhitespace);
+        applyPattern(pattern, options);
     }
 
     /**
@@ -390,7 +404,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols) {
         this();
-        applyPattern(pattern, pos, symbols, true);
+        applyPattern(pattern, pos, symbols, IGNORE_SPACE);
     }
 
     // Delete the following when the category constructor is removed
@@ -480,13 +494,28 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet applyPattern(String pattern, boolean ignoreWhitespace) {
+        return applyPattern(pattern, IGNORE_SPACE);
+    }
+
+    /**
+     * Modifies this set to represent the set specified by the given pattern,
+     * optionally ignoring whitespace.
+     * See the class description for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param options a bitmask indicating which options to apply.
+     * Valid options are IGNORE_SPACE and CASE.
+     * @exception java.lang.IllegalArgumentException if the pattern
+     * contains a syntax error.
+     * @internal
+     */
+    public UnicodeSet applyPattern(String pattern, int options) {
         ParsePosition pos = new ParsePosition(0);
-        applyPattern(pattern, pos, null, ignoreWhitespace);
+        applyPattern(pattern, pos, null, options);
 
         int i = pos.getIndex();
 
         // Skip over trailing whitespace
-        if (ignoreWhitespace) {
+        if ((options & IGNORE_SPACE) != 0) {
             i = Utility.skipWhitespace(pattern, i);
         }
 
@@ -1933,18 +1962,18 @@ public class UnicodeSet extends UnicodeFilter {
     void applyPattern(String pattern,
                       ParsePosition pos,
                       SymbolTable symbols,
-                      boolean ignoreWhitespace) {
+                      int options) {
 
         // Need to build the pattern in a temporary string because
         // _applyPattern calls add() etc., which set pat to empty.
         StringBuffer rebuiltPat = new StringBuffer();
-        _applyPattern(pattern, pos, symbols, rebuiltPat, ignoreWhitespace);
+        _applyPattern(pattern, pos, symbols, rebuiltPat, options);
         pat = rebuiltPat.toString();
     }
 
     void _applyPattern(String pattern, ParsePosition pos,
                        SymbolTable symbols, StringBuffer rebuiltPat,
-                       boolean ignoreWhitespace) {
+                       int options) {
 
         // If the pattern contains any of the following, we save a
         // rebuilt (variable-substituted) copy of the source pattern:
@@ -2030,7 +2059,7 @@ public class UnicodeSet extends UnicodeFilter {
                 i += UTF16.getCharCount(c);
             }
 
-            if (ignoreWhitespace && UCharacterProperty.isRuleWhiteSpace(c)) {
+            if ((options & IGNORE_SPACE) != 0 && UCharacterProperty.isRuleWhiteSpace(c)) {
                 continue;
             }
 
@@ -2175,7 +2204,7 @@ public class UnicodeSet extends UnicodeFilter {
                         break;
                     }
                     nestedSet = new UnicodeSet();
-                    nestedSet._applyPattern(pattern, pos, symbols, newPat, ignoreWhitespace);
+                    nestedSet._applyPattern(pattern, pos, symbols, newPat, options);
                     nestedPatDone = true;
                     i = pos.getIndex();
                 } else if (!isLiteral && c == '{') {
@@ -2341,6 +2370,15 @@ public class UnicodeSet extends UnicodeFilter {
 
         if (mode == 4) {
             newPat.append(']');
+        }
+
+        /**
+         * If this pattern should be compiled case-insensitive, then
+         * we need to close over case BEFORE complementing.  This
+         * makes patterns like /[^abc]/i work.
+         */
+        if ((options & CASE) != 0) {
+            closeOver(CASE);
         }
 
         /**
@@ -3040,12 +3078,26 @@ public class UnicodeSet extends UnicodeFilter {
     // Case folding API
     //----------------------------------------------------------------
 
+    // NOTE: The closeOver API, originally slated for 2.6, was
+    // withdrawn to allow for modifications under discussion.
+
     /**
-     * Bitmask for closeOver() indicating letter case.  This may be
-     * ORed together with other selectors.
-     * @draft ICU 2.6
+     * Bitmask for constructor and applyPattern() indicating that
+     * white space should be ignored.  If set, ignore characters for
+     * which UCharacterProperty.isRuleWhiteSpace() returns true,
+     * unless they are quoted or escaped.  This may be ORed together
+     * with other selectors.
+     * @internal
      */
-    public static final int CASE = 1;
+    public static final int IGNORE_SPACE = 1;
+
+    /**
+     * Bitmask for constructor, applyPattern(), and closeOver()
+     * indicating letter case.  This may be ORed together with other
+     * selectors.
+     * @internal
+     */
+    public static final int CASE = 2;
 
     /**
      * Close this set over the given attribute.  For the attribute
@@ -3069,7 +3121,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Currently only the CASE bit is supported.  Any undefined bits
      * are ignored.
      * @return a reference to this set.
-     * @draft ICU 2.6
+     * @internal
      */
     public UnicodeSet closeOver(int attribute) {
         if ((attribute & CASE) != 0) {
