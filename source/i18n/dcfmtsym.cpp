@@ -26,6 +26,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/choicfmt.h"
+#include "ucurrimp.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols
@@ -163,26 +164,12 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     UErrorCode ec = U_ZERO_ERROR; // don't propagate failures out
     const char* l = loc.getName();
     const UChar* curriso = ucurr_forLocale(l, &ec);
-    UBool isChoiceFormat;
-    int32_t len;
-    const UChar* currname = ucurr_getName(curriso, l, UCURR_SYMBOL_NAME,
-                                          &isChoiceFormat, &len, &ec);
+    UnicodeString currname;
+
+    uprv_getStaticCurrencyName(curriso, l, currname, ec);
     if (U_SUCCESS(ec)) {
         fSymbols[kIntlCurrencySymbol] = curriso;
-
-        // If this is a ChoiceFormat currency, then format an
-        // arbitrary value; pick something != 1; more common.
-        fSymbols[kCurrencySymbol].truncate(0);
-        if (isChoiceFormat) {
-            ChoiceFormat f(currname, ec);
-            if (U_SUCCESS(ec)) {
-                f.format(2.0, fSymbols[kCurrencySymbol]);
-            } else {
-                fSymbols[kCurrencySymbol] = fSymbols[kIntlCurrencySymbol];
-            }
-        } else {
-            fSymbols[kCurrencySymbol] = UnicodeString(currname);
-        }
+        fSymbols[kCurrencySymbol] = currname;
     }
     /* else use the default values. */
 }

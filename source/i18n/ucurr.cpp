@@ -13,6 +13,7 @@
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
 #include "unicode/ustring.h"
+#include "unicode/choicfmt.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
@@ -450,23 +451,40 @@ ucurr_getName(const UChar* currency,
     return currency;
 }
 
-//!// This API is now redundant.  It predates ucurr_getName, which
-//!// replaces and extends it.
-//!U_CAPI const UChar* U_EXPORT2
-//!ucurr_getSymbol(const UChar* currency,
-//!                const char* locale,
-//!    int32_t* len, // fillin
-//!                UErrorCode* ec) {
-//!    UBool isChoiceFormat;
-//!    const UChar* s = ucurr_getName(currency, locale, UCURR_SYMBOL_NAME,
-//!                                   &isChoiceFormat, len, ec);
-//!    if (isChoiceFormat) {
-//!        // Don't let ChoiceFormat patterns out through this API
-//!        *len = u_strlen(currency); // Should == 3, but maybe not...?
-//!        return currency;
-//!    }
-//!    return s;
-//!}
+/**
+ * Internal method.  Given a currency ISO code and a locale, return
+ * the "static" currency name.  This is usually the same as the
+ * UCURR_SYMBOL_NAME, but if the latter is a choice format, then the
+ * format is applied to the number 2.0 (to yield the more common
+ * plural) to return a static name.
+ *
+ * This is used for backward compatibility with old currency logic in
+ * DecimalFormat and DecimalFormatSymbols.
+ */
+U_CAPI void
+uprv_getStaticCurrencyName(const UChar* iso, const char* loc,
+                           UnicodeString& result, UErrorCode& ec)
+{
+    UBool isChoiceFormat;
+    int32_t len;
+    const UChar* currname = ucurr_getName(iso, loc, UCURR_SYMBOL_NAME,
+                                          &isChoiceFormat, &len, &ec);
+    if (U_SUCCESS(ec)) {
+        // If this is a ChoiceFormat currency, then format an
+        // arbitrary value; pick something != 1; more common.
+        result.truncate(0);
+        if (isChoiceFormat) {
+            ChoiceFormat f(currname, ec);
+            if (U_SUCCESS(ec)) {
+                f.format(2.0, result);
+            } else {
+                result = iso;
+            }
+        } else {
+            result = currname;
+        }
+    }
+}
 
 U_CAPI int32_t U_EXPORT2
 ucurr_getDefaultFractionDigits(const UChar* currency) {

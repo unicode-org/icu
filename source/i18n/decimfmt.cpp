@@ -48,6 +48,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/uchar.h"
+#include "ucurrimp.h"
 #include "uprops.h"
 #include "digitlst.h"
 #include "cmemory.h"
@@ -1720,11 +1721,24 @@ DecimalFormat::getDecimalFormatSymbols() const
 void
 DecimalFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt)
 {
-    if (fSymbols != NULL)
+    if (symbolsToAdopt == NULL) {
+        return; // do not allow caller to set fSymbols to NULL
+    }
+
+    UBool sameSymbols = FALSE;
+    if (fSymbols != NULL) {
+        sameSymbols = (UBool)(getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) ==
+            symbolsToAdopt->getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
+            getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
+            symbolsToAdopt->getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol));
         delete fSymbols;
+    }
 
     fSymbols = symbolsToAdopt;
-    setCurrencyForSymbols();
+    if (!sameSymbols) {
+        // If the currency symbols are the same, there is no need to recalculate.
+        setCurrencyForSymbols();
+    }
     expandAffixes();
 }
 //------------------------------------------------------------------------------
@@ -1757,17 +1771,21 @@ DecimalFormat::setCurrencyForSymbols() {
     // currency object to one for that locale.  If it is custom,
     // we set the currency to null.
     UErrorCode ec = U_ZERO_ERROR;
-    DecimalFormatSymbols def(fSymbols->getLocale(), ec);
+    const UChar* c = NULL;
+    const char* loc = fSymbols->getLocale().getName();
+    const UChar* intlCurrencySymbol = ucurr_forLocale(loc, &ec);
+    UnicodeString currencySymbol;
 
-    if (getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) ==
-        def.getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
-        getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
-        def.getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
-    ) {
-        setCurrencyForLocale(fSymbols->getLocale().getName(), ec);
-    } else {
-        setCurrency(NULL); // Use DFS currency info
+    uprv_getStaticCurrencyName(intlCurrencySymbol, loc, currencySymbol, ec);
+    if (U_SUCCESS(ec)
+        && getConstSymbol(DecimalFormatSymbols::kCurrencySymbol) == currencySymbol
+        && getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) == intlCurrencySymbol)
+    {
+        // Trap an error in mapping locale to currency.  If we can't
+        // map, then don't fail and set the currency to "".
+        c = intlCurrencySymbol;
     }
+    setCurrency(c);
 }
 
 
