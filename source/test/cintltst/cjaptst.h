@@ -28,9 +28,9 @@
 #include "cintltst.h"
 
 
-#define MAX_TOKEN_LEN 128
+#define MAX_TOKEN_LEN 16
 
-   
+
      /*perform test with strength TERTIARY*/
 static    void TestTertiary(void);
 

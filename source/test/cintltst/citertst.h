@@ -24,8 +24,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 
-#define MAX_TOKEN_LEN 128
-   
+#define MAX_TOKEN_LEN 16
+
     /**
     * Test for CollationElementIterator previous and next for the whole set of
     * unicode characters.
@@ -39,7 +39,7 @@
      * 
      */
     static void TestPrevious(void);
-    
+
     /**
      * Test for getOffset() and setOffset()
      */

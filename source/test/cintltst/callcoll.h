@@ -24,13 +24,8 @@
 
 
 
-    /* static constants */
-#define MAX_TOKEN_LEN 128
-      
     /* tests comparison of custom collation with different strengths */
 void doTest(UCollator*, const UChar* source, const UChar* target, UCollationResult result);
-
-   
 
 
 

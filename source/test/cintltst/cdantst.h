@@ -24,18 +24,15 @@
 
 #include "cintltst.h"
 
-#define  MAX_TOKEN_LEN  128
+#define MAX_TOKEN_LEN 24
 
 
     /* performs test with strength PRIMARY */
- static   void TestPrimary(void);
+static  void TestPrimary(void);
 
     /* perform test with strength TERTIARY*/
- static  void TestTertiary(void);
+static  void TestTertiary(void);
 
 
-    
-
-    
 
 #endif

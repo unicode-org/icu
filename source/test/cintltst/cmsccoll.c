@@ -28,6 +28,9 @@
 #include "ucol_tok.h"
 #include "cmemory.h"
 
+#define MAX_TOKEN_LEN 16
+
+
 static UCollator *myCollation;
 const static UChar gRules[MAX_TOKEN_LEN] =
 /*" & 0 < 1,\u2461<a,A"*/
@@ -35,26 +38,26 @@ const static UChar gRules[MAX_TOKEN_LEN] =
 
 const static UChar testCase[][MAX_TOKEN_LEN] =
 {
-    /*0*/ {0x0031 /*'1'*/, 0x0061/*'a'*/, 0x0000},     
-    /*1*/ {0x0031 /*'1'*/, 0x0041/*'A'*/, 0x0000},     
-    /*2*/ {0x2460 /*circ'1'*/, 0x0061/*'a'*/, 0x0000},     
+    /*0*/ {0x0031 /*'1'*/, 0x0061/*'a'*/, 0x0000},
+    /*1*/ {0x0031 /*'1'*/, 0x0041/*'A'*/, 0x0000},
+    /*2*/ {0x2460 /*circ'1'*/, 0x0061/*'a'*/, 0x0000},
     /*3*/ {0x2460 /*circ'1'*/, 0x0041/*'A'*/, 0x0000}
 };
 
 const static UCollationResult caseTestResults[][9] =
 {
-        { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_LESS },        
+        { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_LESS },
         { UCOL_GREATER, UCOL_LESS, UCOL_LESS, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER },
-        { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_GREATER, UCOL_LESS, 0, 0, UCOL_LESS },        
+        { UCOL_LESS, UCOL_LESS, UCOL_LESS, 0, UCOL_GREATER, UCOL_LESS, 0, 0, UCOL_LESS },
         { UCOL_GREATER, UCOL_LESS, UCOL_GREATER, 0, UCOL_LESS, UCOL_LESS, 0, 0, UCOL_GREATER }
 
 };
 
 const static UColAttributeValue caseTestAttributes[][2] =
 {
-        { UCOL_LOWER_FIRST, UCOL_OFF},        
-        { UCOL_UPPER_FIRST, UCOL_OFF},        
-        { UCOL_LOWER_FIRST, UCOL_ON},        
+        { UCOL_LOWER_FIRST, UCOL_OFF},
+        { UCOL_UPPER_FIRST, UCOL_OFF},
+        { UCOL_LOWER_FIRST, UCOL_ON},
         { UCOL_UPPER_FIRST, UCOL_ON}
 
 };
@@ -92,7 +95,7 @@ static void TestCase( )
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing different case settings\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
@@ -111,7 +114,7 @@ static void TestCase( )
     myCollation = ucol_openRules(gRules, u_strlen(gRules), UNORM_NONE, UCOL_TERTIARY, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing different case settings with custom rules\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
@@ -424,7 +427,7 @@ static void FunkyATest( )
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing some A letters, for some reason\n");
     ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
