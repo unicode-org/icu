@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2001/11/14 02:49:15 $
-* $Revision: 1.6 $
+* $Date: 2001/11/21 21:29:37 $
+* $Revision: 1.7 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -52,7 +52,7 @@ import com.ibm.util.Utility;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.6 $ $Date: 2001/11/14 02:49:15 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.7 $ $Date: 2001/11/21 21:29:37 $
  */
 class UnicodePropertySet {
 
@@ -108,8 +108,13 @@ class UnicodePropertySet {
     // 2FA1E..E0000  ; Cn # [722403]
     // E0080..EFFFF  ; Cn # [65408]
 
+    // TODO: The Inclusion List should be generated from the UCD for each
+    // version, and thus should be accessed from the properties data file
+    // (Even better: move the logic into UCharacter for building these
+    // properties, since that is where it belongs!)
+
     /**
-     * A set of all characters _except_ the first characters of
+     * A set of all characters _except_ the second through last characters of
      * certain ranges.  These ranges are ranges of characters whose
      * properties are all exactly alike, e.g. CJK Ideographs from
      * U+4E00 to U+9FA5.

@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/20 03:37:00 $
-* $Revision: 1.8 $
+* $Date: 2001/11/21 21:29:23 $
+* $Revision: 1.9 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -72,7 +72,7 @@ static const int32_t ANY = -1; // general category: all code points
 // E0080..EFFFF  ; Cn # [65408]
 
 /**
- * A set of all characters _except_ the first characters of
+ * A set of all characters _except_ the second through last characters of
  * certain ranges.  These ranges are ranges of characters whose
  * properties are all exactly alike, e.g. CJK Ideographs from
  * U+4E00 to U+9FA5.
@@ -93,6 +93,11 @@ static const UChar HAT        = 0x005E; /*^*/
 static const UChar UPPER_P    = 0x0050; /*P*/
 static const UChar LEFT_BRACE = 0x007B; /*{*/
 static const UChar EQUALS     = 0x003D; /*=*/
+
+// TODO: The Inclusion List should be generated from the UCD for each
+// version, and thus should be accessed from the properties data file
+// (Even better: move the logic into UCharacter for building these
+// properties, since that is where it belongs!)
 
 // See INCLUSIONS above
 static const UChar INCLUSIONS_PATTERN[] =
