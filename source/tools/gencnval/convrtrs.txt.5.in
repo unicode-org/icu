@@ -1,0 +1,116 @@
+.\" Hey, Emacs! This is -*-nroff-*- you know...
+.\"
+.\" convrtrs.txt.5: manual page for the convrtrs.txt file
+.\"
+.\" Copyright (C) 2000 IBM, Inc. and others.
+.\"
+.TH CONVRTRS.TXT 5 "29 September 2000" "ICU @VERSION@"
+.SH NAME
+.B convrtrs.txt
+\- ICU converters aliases file
+.br
+.B cnvalias.dat
+\- binary ICU converters aliases file
+.SH DESCRIPTION
+The file
+.B convrtrs.txt
+lists the names of the converters that ICU can handle, along with
+their known aliases. ICU can open a converter given either its real name or
+any of its aliases.
+.B convrtrs.txt
+is read by
+.BR gencnval (8)
+in order to generate the binary data that ICU uses to represent the converters
+aliases information.
+.PP
+Each converter and its aliases are described on a separate lines; fields
+on each line are separated by white space. The order of records in
+.B convrtrs.txt
+is important: if a given name appears multiple times, the last one prevails.
+Names of converters and aliases are compared without considering case; the
+dash, underscore, and space characters are also ignored during comparison
+(even though spaces cannot be used in
+.B convrtrs.txt
+since white space is significant as a field delimiter).
+Thus the names
+.BR UTF-8 ,
+.BR utf_8 ,
+and
+.BR "Utf 8"
+are equivalent converters names.
+.PP
+The format of
+.B convrtrs.txt
+can be described by the following BNF grammar:
+.PP
+.RS
+.nf
+converters ::= { converter | comment }
+converter ::= name [ tags ] { alias } [ comment ]
+alias ::= name [ tags ]
+tags ::= '{' { name } '}'
+comment ::= '#' \fIanything\fP
+.fi
+.RE
+.PP
+A
+.I name
+can use any character other than white space and the '{' and '#' delimiters.
+In practice, names are usually restricted to the set of uppercase and
+lowercase latin letters plus arabic digits, the dash, the underscore,
+and the colon characters. It is recommended to follow this convention
+when naming new converters or their aliases.
+.PP
+A
+.I comment
+starts with the pound character '#' and ends with the current
+line. Comments are ignored.
+.PP
+The
+.I name
+of a given
+.I converter
+must match its algorithmic name if the converter is algorithmic, or
+its file name if the converter is table-driven. The table for the
+converter
+.B ibm-912
+for example, is expected to be in the
+.B ibm-912.cnv
+file.
+An
+.I alias
+has no such restriction, as aliases are just arbitrary names
+associated to a given converter.
+.PP
+The presence of a
+.I tag
+after a converter or alias name means that this name is associated to
+a given standard set of names. Two well-known such standards are the
+.B MIME
+and
+.B IANA
+registries of names. The default ICU
+.B convrtrs.txt
+file already uses these tags.
+Note that tags do not need to be declared, they are collected as they
+appear.
+Names appropriate for a given standard can be retrieved
+programmatically by using the
+.BR ucnv_getStandardName (3)
+function.
+.SH CAVEATS
+The
+.B convrtrs.txt
+file is not directly read by ICU. It must be transformed into a binary
+file by
+.BR gencnval (5)
+first. Also, depending on the way ICU was packaged, even the resulting
+.B cnvalias.dat
+file may not be read by ICU. Please refer to the ICU manual for more
+information on which files are effectively read by ICU at runtime, and
+how to produce them.
+.SH COPYRIGHT
+Copyright (C) 2000 IBM, Inc. and others.
+.SH SEE ALSO
+.BR gencnval (8),
+.BR pkgdata (8)
