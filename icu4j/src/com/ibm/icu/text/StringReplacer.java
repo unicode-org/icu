@@ -136,11 +136,31 @@ class StringReplacer implements UnicodeReplacer {
              * the integrity of indices into the key and surrounding context while
              * generating the output text.
              */
-            int destStart = text.length(); // copy new text to here
-            int destLimit = destStart;
             StringBuffer buf = new StringBuffer();
             int oOutput; // offset into 'output'
             isComplex = false;
+
+            // The temporary buffer starts at tempStart, and extends
+            // to destLimit.  The start of the buffer has a single
+            // character from before the key.  This provides style
+            // data when addition characters are filled into the
+            // temporary buffer.  If there is nothing to the left, use
+            // the non-character U+FFFF, which Replaceable subclasses
+            // should treat specially as a "no-style character."
+            // destStart points to the point after the style context
+            // character, so it is tempStart+1 or tempStart+2.
+            int tempStart = text.length(); // start of temp buffer
+            int destStart = tempStart; // copy new text to here
+            if (start > 0) {
+                int len = UTF16.getCharCount(text.char32At(start-1));
+                text.copy(start-len, start, tempStart);
+                destStart += len;
+            } else {
+                text.replace(tempStart, tempStart, "\uFFFF");
+                destStart++;
+            }
+            int destLimit = destStart;
+
             for (oOutput=0; oOutput<output.length(); ) {
                 if (oOutput == cursorPos) {
                     // Record the position of the cursor
@@ -181,7 +201,7 @@ class StringReplacer implements UnicodeReplacer {
 
             // Copy new text to start, and delete it
             text.copy(destStart, destLimit, start);
-            text.replace(destStart + outLen, destLimit + outLen, "");
+            text.replace(tempStart + outLen, destLimit + outLen, "");
 
             // Delete the old text (the key)
             text.replace(start + outLen, limit + outLen, "");
