@@ -132,6 +132,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(50,TestCompoundLatinRT);
         TESTCASE(51,TestSanskritLatinRT);
         TESTCASE(52,TestLocaleInstantiation);
+        TESTCASE(53,TestTitleAccents);
         default: name = ""; break;
     }
 }
@@ -2541,6 +2542,7 @@ void TransliteratorTest::TestLocaleInstantiation(void) {
         return;
     }
     expect(*t, CharsToUnicodeString("\\u0430"), "a");
+    delete t;
     
     t = Transliterator::createInstance("en-el", UTRANS_FORWARD, pe, ec);
     if (U_FAILURE(ec)) {
@@ -2549,8 +2551,25 @@ void TransliteratorTest::TestLocaleInstantiation(void) {
         return;
     }
     expect(*t, "a", CharsToUnicodeString("\\u1F00"));
+    delete t;
 }
         
+/**
+ * Test title case handling of accent (should ignore accents)
+ */
+void TransliteratorTest::TestTitleAccents(void) {
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance("Title", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: createInstance(Title)");
+        delete t;
+        return;
+    }
+    expect(*t, CharsToUnicodeString("a\\u0300b can't abe"), CharsToUnicodeString("A\\u0300b Can't Abe"));
+    delete t;
+}
+
 //======================================================================
 // icu4c ONLY
 // These tests are not mirrored (yet) in icu4j at
