@@ -21,7 +21,8 @@ import org.w3c.dom.*;
 /**
  * This class is a plug-in to RBManager that allows the user to export Resource Bundles
  * along with some of the meta-data associated by RBManager to the XLIFF specification.
- * For more information on XLIFF visit the web site <a href="http://www.lisa.org/xliff/">http://www.lisa.org/xliff/</a>
+ * For more information on XLIFF visit the web site
+ * <a href="http://www.lisa.org/xliff/">http://www.lisa.org/xliff/</a>
  * 
  * @author George Rhoten
  * @see com.ibm.rbm.RBManager
@@ -83,13 +84,6 @@ public class RBxliffExporter extends RBExporter {
         return "";
     }
 
-/*    private String getLocale(BundleItem item) {
-        if (item != null && item.getParentGroup() != null && item.getParentGroup().getParentBundle() != null) {
-        	return getLocale(item.getParentGroup().getParentBundle());
-        }
-        return "";
-    }*/
-    
     private String getParentLocale(String locale) {
     	
     	int truncIndex = locale.lastIndexOf('-');
@@ -104,9 +98,6 @@ public class RBxliffExporter extends RBExporter {
 	
     private void addTransUnit(Document xml, Element groupElem, BundleItem item, BundleItem parent_item) {
         Element transUnit = xml.createElement("trans-unit");
-        //tuv.setAttribute("lang", convertEncoding(item));
-        //tuv.setAttribute("creationdate",convertToISO(item.getCreatedDate()));
-        //tuv.setAttribute("creationid",item.getCreator());
         transUnit.setAttribute("date",convertToISO(item.getModifiedDate()));
         transUnit.setAttribute("id",item.getKey());
 		
@@ -177,9 +168,9 @@ public class RBxliffExporter extends RBExporter {
         if (ret_val != JFileChooser.APPROVE_OPTION)
         	return;
         // Retrieve basic file information
-        File file = chooser.getSelectedFile();                  // The file(s) we will be working with
-        File directory = new File(file.getParent());            // The directory we will be writing to
-        String base_name = file.getName();                      // The base name of the files we will write
+        File file = chooser.getSelectedFile();              // The file(s) we will be working with
+        File directory = new File(file.getParent());        // The directory we will be writing to
+        String base_name = file.getName();                  // The base name of the files we will write
         if (base_name == null || base_name.equals(""))
         	base_name = rbm.getBaseClass();
         if (base_name.endsWith(".xlf"))
@@ -191,6 +182,64 @@ public class RBxliffExporter extends RBExporter {
         Enumeration bundleIter = bundle_v.elements();
         while (bundleIter.hasMoreElements()) {
         	exportFile(rbm, directory, base_name, (Bundle)bundleIter.nextElement());
+        }
+    }
+    
+    private void addHeaderProperties(Document xml, Element header, Bundle main_bundle) {
+        if (main_bundle.comment != null && main_bundle.comment.length() > 0) {
+            Element note = xml.createElement("note");
+        	header.appendChild(note);
+            note.appendChild(xml.createTextNode(main_bundle.comment));
+            note.setAttribute("xml:space","preserve");
+        }
+        if ((main_bundle.name != null && main_bundle.name.length() > 0)
+    		|| (main_bundle.manager != null && main_bundle.manager.length() > 0)
+        	|| (main_bundle.language != null && main_bundle.language.length() > 0)
+			|| (main_bundle.country != null && main_bundle.country.length() > 0)
+			|| (main_bundle.variant != null && main_bundle.variant.length() > 0))
+        {
+            Element prop_group = xml.createElement("prop-group");
+        	header.appendChild(prop_group);
+            if (main_bundle.name != null && main_bundle.name.length() > 0) {
+                Element prop = xml.createElement("prop");
+            	header.appendChild(prop);
+            	prop.setAttribute("xml:space","preserve");
+            	prop.setAttribute("prop-type","name");
+            	prop.appendChild(xml.createTextNode(main_bundle.name));
+            	prop_group.appendChild(prop);
+            }
+            if (main_bundle.manager != null && main_bundle.manager.length() > 0) {
+                Element prop = xml.createElement("prop");
+            	header.appendChild(prop);
+            	prop.setAttribute("xml:space","preserve");
+            	prop.setAttribute("prop-type","manager");
+            	prop.appendChild(xml.createTextNode(main_bundle.manager));
+            	prop_group.appendChild(prop);
+            }
+            if (main_bundle.language != null && main_bundle.language.length() > 0) {
+                Element prop = xml.createElement("prop");
+            	header.appendChild(prop);
+            	prop.setAttribute("xml:space","preserve");
+            	prop.setAttribute("prop-type","language");
+            	prop.appendChild(xml.createTextNode(main_bundle.language));
+            	prop_group.appendChild(prop);
+            }
+            if (main_bundle.country != null && main_bundle.country.length() > 0) {
+                Element prop = xml.createElement("prop");
+            	header.appendChild(prop);
+            	prop.setAttribute("xml:space","preserve");
+            	prop.setAttribute("prop-type","country");
+            	prop.appendChild(xml.createTextNode(main_bundle.country));
+            	prop_group.appendChild(prop);
+            }
+            if (main_bundle.variant != null && main_bundle.variant.length() > 0) {
+                Element prop = xml.createElement("prop");
+            	header.appendChild(prop);
+            	prop.setAttribute("xml:space","preserve");
+            	prop.setAttribute("prop-type","variant");
+            	prop.appendChild(xml.createTextNode(main_bundle.variant));
+            	prop_group.appendChild(prop);
+            }
         }
     }
     
@@ -251,12 +300,7 @@ public class RBxliffExporter extends RBExporter {
         // TODO Add file attribute
         //header.setAttribute("file", "");
         header.appendChild(tool);
-        if (main_bundle.comment != null && main_bundle.comment.length() > 0) {
-            Element note = xml.createElement("note");
-        	header.appendChild(note);
-            note.appendChild(xml.createTextNode(main_bundle.comment));
-            note.setAttribute("xml:space","preserve");
-        }
+        addHeaderProperties(xml, header, main_bundle);
         file_elem.appendChild(header);
 		
         Element body = xml.createElement("body");
@@ -323,7 +367,8 @@ public class RBxliffExporter extends RBExporter {
         suffix = String.valueOf(array);
         
         // serialize document
-        OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(new File(directory,base_name + suffix + ".xlf")), "UTF-8");
+        OutputStreamWriter osw = new OutputStreamWriter(
+        		new FileOutputStream(new File(directory, base_name + suffix + ".xlf")), "UTF-8");
         try {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");

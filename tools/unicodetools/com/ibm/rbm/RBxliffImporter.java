@@ -8,19 +8,18 @@ package com.ibm.rbm;
 
 
 import java.io.*;
-
-import com.ibm.rbm.gui.RBManagerGUI;
-
 import java.util.*;
 
-import org.apache.xerces.dom.ElementImpl;
-import org.apache.xerces.parsers.DOMParser;
-import org.w3c.dom.*;
+import javax.xml.parsers.*;
+
+import com.ibm.rbm.gui.RBManagerGUI;
 import org.xml.sax.*;
+import org.w3c.dom.*;
 
 /**
  * This imports XLIFF files into RBManager.
- * For more information see <a href="http://www.oasis-open.org/committees/xliff/documents/xliff-specification.htm">
+ * For more information see
+ * <a href="http://www.oasis-open.org/committees/xliff/documents/xliff-specification.htm">
  * http://www.oasis-open.org/committees/xliff/documents/xliff-specification.htm</a>
  * 
  * @author George Rhoten
@@ -57,17 +56,21 @@ public class RBxliffImporter extends RBImporter {
         try {
         	fis = new FileInputStream(xlf_file);
             InputSource is = new InputSource(fis);
-            //is.setEncoding("UTF-8");
-            DOMParser parser = new DOMParser();
-            parser.parse(is);
-            xlf_xml = parser.getDocument();
+            DocumentBuilder builder;
+        	builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            xlf_xml = builder.parse(is);
             fis.close();
-        } catch (SAXException e) {
-            RBManagerGUI.debugMsg(e.getMessage());
-            e.printStackTrace(System.err);
-            return;
         }
-        if (xlf_xml == null) return;
+        catch (SAXException e) {
+            e.printStackTrace(System.err);
+        	throw new IOException(e.getMessage());
+        }
+        catch (ParserConfigurationException pce) {
+            pce.printStackTrace(System.err);
+        	throw new IOException(pce.getMessage());
+        }
+        if (xlf_xml == null)
+        	return;
         
         importDoc();
         fis.close();
@@ -78,12 +81,18 @@ public class RBxliffImporter extends RBImporter {
         if (xlf_xml == null)
             return;
         String language = "";
-        String bundleNote = null;
+        String bundle_note = null;
+    	String bundle_name = null;
+    	String manager_name = null;
+    	String language_name = null;
+    	String country_name = null;
+    	String variant_name = null;
+        
         Element root = xlf_xml.getDocumentElement();
         Node fileNode = root.getFirstChild();
         Node header = null;
         Node node = null;
-        while (fileNode != null && !(fileNode.getNodeType() == Node.ELEMENT_NODE && fileNode.getNodeName().equalsIgnoreCase("file"))) {
+        while (fileNode != null && !(fileNode instanceof Element && fileNode.getNodeName().equalsIgnoreCase("file"))) {
             fileNode = fileNode.getNextSibling();
         }
         header = fileNode.getFirstChild();
@@ -101,13 +110,44 @@ public class RBxliffImporter extends RBImporter {
 	            if (text_elem != null) {
 		            String value = text_elem.getNodeValue();
 		            if (value != null && value.length() > 0) {
-		            	bundleNote = value;
+		            	bundle_note = value;
 		            }
 	            }
             }
+            Node prop_group_list = ((Element)header).getElementsByTagName("prop-group").item(0);
+            NodeList prop_list = prop_group_list.getChildNodes();
+        	int propertyNum = prop_list.getLength();
+            if (propertyNum > 0) {
+                for (int prop = 0; prop < propertyNum; prop++) {
+                	if (prop_list.item(prop) instanceof Element) {
+    	            	Element property_elem = (Element)prop_list.item(prop);
+    	            	String propertyType = property_elem.getAttribute("prop-type");
+    	            	if (propertyType != null) {
+    			            String value = property_elem.getChildNodes().item(0).getNodeValue();
+    			            if (value != null && value.length() > 0) {
+    			            	if (propertyType.equals("name")) {
+    				            	bundle_name = value;
+    			            	}
+    			            	else if (propertyType.equals("manager")) {
+    				            	manager_name = value;
+    			            	}
+    			            	else if (propertyType.equals("language")) {
+    				            	language_name = value;
+    			            	}
+    			            	else if (propertyType.equals("country")) {
+    			            		country_name = value;
+    			            	}
+    			            	else if (propertyType.equals("variant")) {
+    			            		variant_name = value;
+    			            	}
+    			            }
+    	            	}
+                	}
+                }
+            }
         }
         node = header.getNextSibling();
-        while (node != null && !(node.getNodeType() == Node.ELEMENT_NODE && node.getNodeName().equalsIgnoreCase("body"))) {
+        while (node != null && !(node instanceof Element && node.getNodeName().equalsIgnoreCase("body"))) {
             node = node.getNextSibling();
         }
         
@@ -164,7 +204,13 @@ public class RBxliffImporter extends RBImporter {
         language = String.valueOf(array);
         localeNames.add(language);
         resolveEncodings(localeNames);
-        rbm.getBundle(language).comment = bundleNote;
+        Bundle main_bundle = rbm.getBundle(language);
+		main_bundle.name = bundle_name;
+		main_bundle.comment = bundle_note;
+		main_bundle.manager = manager_name;
+		main_bundle.language = language_name;
+		main_bundle.country = country_name;
+		main_bundle.variant = variant_name;
 
         for (int i=0; i < tu_list.getLength(); i++) {
             if (!(tu_list.item(i) instanceof Element)) {
@@ -208,12 +254,13 @@ public class RBxliffImporter extends RBImporter {
 
     private void parseTranslationUnit(String language, String group, Element trans_unit_elem) {
         // Get the translation value
-    	ElementImpl target_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("target").item(0);
+    	Node target_elem = trans_unit_elem.getElementsByTagName("target").item(0);
         if (target_elem == null) {
             // This is a template, or a skeleton
-            target_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("source").item(0);
+            target_elem = trans_unit_elem.getElementsByTagName("source").item(0);
         }
-        if (target_elem.getLength() < 1)
+        // If there is a source or target, even if empty, it must be parsed.
+        if (target_elem == null)
             return;
         target_elem.normalize();
         NodeList text_list = target_elem.getChildNodes();
@@ -283,65 +330,8 @@ public class RBxliffImporter extends RBImporter {
             }
         }
 
-        /*item.setCreatedDate(tuv_elem.getAttribute("creationdate"));
-        item.setModifiedDate(tuv_elem.getAttribute("changedate"));
-        if (tuv_elem.getAttribute("changeid") != null) item.setModifier(tuv_elem.getAttribute("changeid"));
-        if (tuv_elem.getAttribute("creationid") != null) item.setCreator(tuv_elem.getAttribute("creationid"));*/
-        // Get properties specified
-/*                NodeList prop_list = tuv_elem.getElementsByTagName("prop");
-        Hashtable lookups = null;
-        for (int k=0; k < prop_list.getLength(); k++) {
-            ElementImpl prop_elem = (ElementImpl)prop_list.item(k);
-            String type = prop_elem.getAttribute("type");
-            } else if (type != null && type.equals("x-Lookup")) {
-                // Get a lookup value
-                prop_elem.normalize();
-                text_list = prop_elem.getChildNodes();
-                if (text_list.getLength() < 1) continue;
-                text_elem = (TextImpl)text_list.item(0);
-                if (text_elem.getNodeValue() != null) {
-                    String text = text_elem.getNodeValue();
-                    if (text.indexOf("=") > 0) {
-                        try {
-                            if (lookups == null)
-                                lookups = new Hashtable();
-                            String lkey = text.substring(0,text.indexOf("="));
-                            String lvalue = text.substring(text.indexOf("=")+1,text.length());
-                            lookups.put(lkey, lvalue);
-                        } catch (Exception ex) {
-                         	//String out of bounds - Ignore and go on
-                        }
-                    }
-                } else item.setTranslated(getDefaultTranslated());
-            }
-        }*/
 //        if (lookups != null)
 //            item.setLookups(lookups);
         importResource(item, language, group);
     }
-/*    private Vector getEncodingsVector(ElementImpl body) {
-        String empty = "";
-        if (body == null) return null;
-        Hashtable hash = new Hashtable();
-        NodeList tu_list = body.getElementsByTagName("tu");
-        for (int i=0; i < tu_list.getLength(); i++) {
-            ElementImpl tu_elem = (ElementImpl)tu_list.item(i);
-            NodeList tuv_list = tu_elem.getElementsByTagName("tuv");
-            for (int j=0; j < tuv_list.getLength(); j++) {
-                ElementImpl tuv_elem = (ElementImpl)tuv_list.item(j);
-                String encoding = tuv_elem.getAttribute("lang");
-                if (encoding == null) continue;
-                char array[] = encoding.toCharArray();
-                for (int k=0; k < array.length; k++) {
-                    if (array[k] == '-') array[k] = '_';
-                }
-                encoding = String.valueOf(array);
-                if (!(hash.containsKey(encoding))) hash.put(encoding,empty);
-            }
-        }
-        Vector v = new Vector();
-        Enumeration enum = hash.keys();
-        while (enum.hasMoreElements()) { v.addElement(enum.nextElement()); }
-        return v;
-    }*/
 }
