@@ -31,6 +31,7 @@
 #include "filestrm.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
+#include "uoptions.h"
 #include "tzdat.h"
 
 #define INPUT_FILE "tz.txt"
@@ -101,7 +102,7 @@ class gentz {
     bool_t useCopyright;
 
 public:
-    int     main(int argc, char *argv[]);
+    int     main(int argc, const char *argv[]);
 private:
     int32_t  writeTzDatFile(const char *destdir);
     void     parseTzTextFile(FileStream* in);
@@ -130,10 +131,9 @@ private:
 
     // Error handling
     void    die(const char* msg);
-    void    usage(const char* argv0);
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, const char *argv[]) {
     gentz x;
     return x.main(argc, argv);
 }
@@ -150,57 +150,48 @@ const char    gentz::SEP            = ',';
 const char    gentz::NUL            = '\0';
 const char*   gentz::END_KEYWORD    = "end";
 
-void gentz::usage(const char* argv0) {
-    fprintf(stderr,
-            "Usage: %s [-c[+|-]] infile\n"
-            " -c[+|-] [do|do not] include copyright (default=+)\n"
-            " infile  text file produced by tz.pl\n",
-            argv0);
-    exit(1);
-}
+static UOption options[]={
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_COPYRIGHT,
+    UOPTION_DESTDIR
+};
 
-int gentz::main(int argc, char *argv[]) {
-    ////////////////////////////////////////////////////////////
-    // Parse arguments
-    ////////////////////////////////////////////////////////////
-    useCopyright = TRUE;
-    const char* infile = 0;
-    const char* destdir = 0;
-    for (int i=1; i<argc; ++i) {
-        const char* arg = argv[i];
-        if (arg[0] == '-') {
-            if (arg[1] != 'c') {
-                usage(argv[0]);
-            }
-            switch (arg[2]) {
-            case '+':
-                useCopyright = TRUE;
-                break;
-            case '-':
-                useCopyright = FALSE;
-                break;
-            default:
-                usage(argv[0]);
-            }
-        } else if (infile == 0) {
-            infile = arg;
-        } else {
-            usage(argv[0]);
-        }
+int gentz::main(int argc, const char *argv[]) {
+    /* preset then read command line options */
+    options[3].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    } else if(argc<2) {
+        argc=-1;
     }
-    if (infile == 0) {
-        usage(argv[0]);
+    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options] timezone-file\n"
+            "\tread the timezone file produced by tz.pl and create " TZ_DATA_NAME "." TZ_DATA_TYPE "\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-c or --copyright   include a copyright notice\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n",
+            argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
-    if (destdir == 0) {
-        destdir = u_getDataDirectory();
-    }
+
+    /* get the options values */
+    useCopyright=options[2].doesOccur;
+
     ////////////////////////////////////////////////////////////
     // Read the input file
     ////////////////////////////////////////////////////////////
     *buffer = NUL;
     lineNumber = 0;
-    fprintf(stdout, "Input file: %s\n", infile);
-    FileStream* in = T_FileStream_open(infile, "r");
+    fprintf(stdout, "Input file: %s\n", argv[1]);
+    FileStream* in = T_FileStream_open(argv[1], "r");
     if (in == 0) {
         die("Cannot open input file");
     }
@@ -211,7 +202,7 @@ int gentz::main(int argc, char *argv[]) {
     ////////////////////////////////////////////////////////////
     // Write the output file
     ////////////////////////////////////////////////////////////
-    int32_t wlen = writeTzDatFile(destdir);
+    int32_t wlen = writeTzDatFile(options[3].value);
     fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
             TZ_DATA_NAME, TZ_DATA_TYPE, wlen);
 
