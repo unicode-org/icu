@@ -60,6 +60,13 @@ toASCIILower(UChar ch){
     return ch;
 }
 
+inline static void 
+toASCIILower(UChar* src, int32_t srcLen){
+    for(int32_t i=0; i<srcLen; i++){
+        src[i] = toASCIILower(src[i]);
+    }
+}
+
 inline static int32_t
 compareCaseInsensitiveASCII(const UChar* s1, int32_t s1Len, 
                             const UChar* s2, int32_t s2Len){
@@ -253,6 +260,8 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
             if(U_FAILURE(*status)){
                 goto CLEANUP;
             }
+			// convert all codepoints to lower case ASCII
+            toASCIILower(b2,b2Len);
             reqLength = b2Len+ACE_PREFIX_LENGTH;
 
             if(reqLength > destCapacity){
