@@ -28,7 +28,6 @@
 #include "GDIGUISupport.h"
 #include "GDIFontMap.h"
 #include "UnicodeReader.h"
-#include "scrptrun.h"
 
 #include "resource.h"
 
