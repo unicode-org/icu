@@ -575,33 +575,33 @@ static void TestDisplayNames()
     }
 
     {
-      int32_t i,j;
-      const char *aLocale = "es@collation=traditional;calendar=japanese";
-      const char *testL[] = { "en_US", 
-			      "fr_FR", 
-			      "ca_ES",
-			      "el_GR" };
-      const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Collation=Traditional)", /* note sorted order of keywords */
-			       "espagnol (Calendrier=Calendrier japonais, Ordonnancement=Ordre traditionnel)",
-			       "espanyol (CALENDAR=JAPANESE, COLLATION=TRADITIONAL)",
-			       "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (CALENDAR=JAPANESE, COLLATION=TRADITIONAL)" };
-      UChar *expectBuffer;
-      
-      for(i=0;i<LENGTHOF(testL);i++) {
-	errorCode = U_ZERO_ERROR;
-	uloc_getDisplayName(aLocale, testL[i], buffer, LENGTHOF(buffer), &errorCode);
-	if(U_FAILURE(errorCode)) {
-	  log_err("FAIL in uloc_getDisplayName(%s,%s,..) -> %s\n", aLocale, testL[i], u_errorName(errorCode));
-	} else {
-	  expectBuffer = CharsToUChars(expect[i]);
-	  if(u_strcmp(buffer,expectBuffer)) {
-	    log_err("FAIL in uloc_getDisplayName(%s,%s,..) expected '%s' got '%s'\n", aLocale, testL[i], expect[i], austrdup(buffer));
-	  } else {
-	    log_verbose("pass in uloc_getDisplayName(%s,%s,..) got '%s'\n", aLocale, testL[i], expect[i]);
-	  }
-	  free(expectBuffer);
-	}
-      }
+        int32_t i;
+        const char *aLocale = "es@collation=traditional;calendar=japanese";
+        const char *testL[] = { "en_US", 
+            "fr_FR", 
+            "ca_ES",
+            "el_GR" };
+        const char *expect[] = { "Spanish (Calendar=Japanese Calendar, Collation=Traditional)", /* note sorted order of keywords */
+            "espagnol (Calendrier=Calendrier japonais, Ordonnancement=Ordre traditionnel)",
+            "espanyol (CALENDAR=JAPANESE, COLLATION=TRADITIONAL)",
+            "\\u0399\\u03C3\\u03C0\\u03B1\\u03BD\\u03B9\\u03BA\\u03AC (CALENDAR=JAPANESE, COLLATION=TRADITIONAL)" };
+        UChar *expectBuffer;
+
+        for(i=0;i<LENGTHOF(testL);i++) {
+            errorCode = U_ZERO_ERROR;
+            uloc_getDisplayName(aLocale, testL[i], buffer, LENGTHOF(buffer), &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("FAIL in uloc_getDisplayName(%s,%s,..) -> %s\n", aLocale, testL[i], u_errorName(errorCode));
+            } else {
+                expectBuffer = CharsToUChars(expect[i]);
+                if(u_strcmp(buffer,expectBuffer)) {
+                    log_err("FAIL in uloc_getDisplayName(%s,%s,..) expected '%s' got '%s'\n", aLocale, testL[i], expect[i], austrdup(buffer));
+                } else {
+                    log_verbose("pass in uloc_getDisplayName(%s,%s,..) got '%s'\n", aLocale, testL[i], expect[i]);
+                }
+                free(expectBuffer);
+            }
+        }
     }
 }
 
