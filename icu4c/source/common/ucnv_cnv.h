@@ -143,7 +143,13 @@ typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
 typedef void (*UConverterOpen) (UConverter *cnv, const char *name, const char *locale,uint32_t options, UErrorCode *pErrorCode);
 typedef void (*UConverterClose) (UConverter *cnv);
 
-typedef void (*UConverterReset) (UConverter *cnv);
+typedef enum UConverterResetChoice {
+    UCNV_RESET_BOTH,
+    UCNV_RESET_TO_UNICODE,
+    UCNV_RESET_FROM_UNICODE
+} UConverterResetChoice;
+
+typedef void (*UConverterReset) (UConverter *cnv, UConverterResetChoice choice);
 
 typedef void (*T_ToUnicodeFunction) (UConverterToUnicodeArgs *, UErrorCode *);
 

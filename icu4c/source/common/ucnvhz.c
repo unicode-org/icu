@@ -45,7 +45,7 @@
 /*********** HZ Converter Protos ***********/
 static void _HZOpen(UConverter *cnv, const char *name, const char *locale, uint32_t options,UErrorCode *errorCode);
 static void _HZClose(UConverter *converter);
-static void _HZReset(UConverter *converter);
+static void _HZReset(UConverter *converter, UConverterResetChoice choice);
 
 U_CFUNC void UConverter_toUnicode_HZ(UConverterToUnicodeArgs *args,
                                              UErrorCode *err);
@@ -130,17 +130,23 @@ static void _HZClose(UConverter *cnv){
      uprv_free(cnv->extraInfo);
 
 }
-static void _HZReset(UConverter *cnv){
-    cnv->toUnicodeStatus = 0;
-    cnv->fromUnicodeStatus= 0;
-    cnv->mode=0;
-    cnv->fromUSurrogateLead=0x0000; 
-    if(cnv->extraInfo != NULL){
-        ((UConverterDataHZ*)cnv->extraInfo)->isStateDBCS = FALSE;
-        ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = FALSE;
-        ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
-        ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
-        ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
+static void _HZReset(UConverter *cnv, UConverterResetChoice choice){
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        cnv->toUnicodeStatus = 0;
+        cnv->mode=0;
+        if(cnv->extraInfo != NULL){
+            ((UConverterDataHZ*)cnv->extraInfo)->isStateDBCS = FALSE;
+        }
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        cnv->fromUnicodeStatus= 0;
+        cnv->fromUSurrogateLead=0x0000; 
+        if(cnv->extraInfo != NULL){
+            ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = FALSE;
+            ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
+            ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
+            ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
+        }
     }
 }
 
@@ -351,7 +357,7 @@ SAVE_STATE:
      * the source and flush is true
      */
     if( (mySource == mySourceLimit) && args->flush){
-        _HZReset(args->converter);
+        _HZReset(args->converter, UCNV_RESET_TO_UNICODE);
     }
 
     args->target = myTarget;
@@ -559,7 +565,7 @@ SAVE_STATE:
      * the source and flush is true
      */
     if( (mySource == mySourceLimit) && args->flush){
-         _HZReset(args->converter);
+         _HZReset(args->converter, UCNV_RESET_TO_UNICODE);
     }
 
     args->target = myTarget;
@@ -806,7 +812,7 @@ CALLBACK:
      * the source and flush is true
      */
     if( (mySourceIndex == sourceLength) && args->flush){
-        _HZReset(args->converter);
+        _HZReset(args->converter, UCNV_RESET_FROM_UNICODE);
     }
 
     args->target += myTargetIndex;
@@ -986,7 +992,7 @@ CALLBACK:
      * the source and flush is true
      */
     if( (mySourceIndex == sourceLength) && args->flush){
-        _HZReset(args->converter);
+        _HZReset(args->converter, UCNV_RESET_FROM_UNICODE);
     }
 
     args->target += myTargetIndex;

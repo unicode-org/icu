@@ -150,10 +150,10 @@ enum {
 /* MBCS setup functions ----------------------------------------------------- */
 
 U_CFUNC void
-_SCSUReset(UConverter *cnv, uint8_t which) {
+_SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
     SCSUData *scsu=(SCSUData *)cnv->extraInfo;
 
-    if(which<2) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode */
         uprv_memcpy(scsu->toUDynamicOffsets, initialDynamicOffsets, 32);
 
@@ -164,7 +164,7 @@ _SCSUReset(UConverter *cnv, uint8_t which) {
 
         cnv->toULength=0;
     }
-    if(which!=1) {
+    if(choice!=UCNV_RESET_TO_UNICODE) {
         /* reset fromUnicode */
         uprv_memcpy(scsu->fromUDynamicOffsets, initialDynamicOffsets, 32);
 
@@ -186,11 +186,6 @@ _SCSUReset(UConverter *cnv, uint8_t which) {
 }
 
 U_CFUNC void
-_SCSUOldfashionedReset(UConverter *cnv) {
-    _SCSUReset(cnv, 0);
-}
-
-U_CFUNC void
 _SCSUOpen(UConverter *cnv,
           const char *name,
           const char *locale,
@@ -203,7 +198,7 @@ _SCSUOpen(UConverter *cnv,
         } else {
             ((SCSUData *)cnv->extraInfo)->locale=lGeneric;
         }
-        _SCSUReset(cnv, 0);
+        _SCSUReset(cnv, UCNV_RESET_BOTH);
     } else {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
     }
@@ -536,7 +531,7 @@ endloop:
             /* a character byte sequence remains incomplete */
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
         }
-        _SCSUReset(cnv, 1);
+        _SCSUReset(cnv, UCNV_RESET_TO_UNICODE);
     } else {
         /* set the converter state back into UConverter */
         scsu->toUIsSingleByteMode=isSingleByteMode;
@@ -600,7 +595,7 @@ callback:
         goto endloop;
     } else if(U_FAILURE(*pErrorCode)) {
         /* break on error */
-        _SCSUReset(cnv, 1);
+        _SCSUReset(cnv, UCNV_RESET_TO_UNICODE);
         goto finish;
     } else {
         goto loop;
@@ -1125,7 +1120,7 @@ endloop:
             /* a character byte sequence remains incomplete */
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
         }
-        _SCSUReset(cnv, 2);
+        _SCSUReset(cnv, UCNV_RESET_FROM_UNICODE);
     } else {
         /* set the converter state back into UConverter */
         scsu->fromUIsSingleByteMode=isSingleByteMode;
@@ -1291,7 +1286,7 @@ callback:
         goto endloop;
     } else if(U_FAILURE(*pErrorCode)) {
         /* break on error */
-        _SCSUReset(cnv, 2);
+        _SCSUReset(cnv, UCNV_RESET_FROM_UNICODE);
         goto finish;
     } else {
         goto loop;
@@ -1308,7 +1303,7 @@ static const UConverterImpl _SCSUImpl={
 
     _SCSUOpen,
     _SCSUClose,
-    _SCSUOldfashionedReset,
+    _SCSUReset,
 
     _SCSUToUnicodeWithOffsets,
     _SCSUToUnicodeWithOffsets,
