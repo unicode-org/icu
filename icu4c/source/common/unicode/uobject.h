@@ -95,7 +95,8 @@ public:
 
 /**
  * UObject is the common ICU "boilerplate" class.
- * UObject inherits UMemory, and all other public ICU C++ classes
+ * UObject inherits UMemory (starting with ICU 2.4),
+ * and all other public ICU C++ classes
  * are derived from UObject (starting with ICU 2.2).
  *
  * UObject contains common virtual functions like for ICU's "poor man's RTTI".
@@ -105,7 +106,7 @@ public:
  *
  * @draft ICU 2.2
  */
-class U_COMMON_API UObject {
+class U_COMMON_API UObject : public UMemory {
 public:
     /**
      * Destructor.
