@@ -345,8 +345,8 @@ Locale& Locale::init(const char* localeID)
             }
             else if(varLength <= 0)
             {   /* bail  - point at the null*/
-                // this->variant = this->fullName + j;
-                this->variant = "Len<=0";
+                this->variant = this->fullName + j;
+                // this->variant = "Len<=0";
             }
             else
             {
