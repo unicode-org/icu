@@ -634,8 +634,7 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
         }
         else 
         {       /* regular dir path */
-            if(iter->pathBuffer[pathLen-1] != U_FILE_SEP_CHAR)  /* trailing sep */
-            {
+            if(iter->pathBuffer[pathLen-1] != U_FILE_SEP_CHAR) {
                 if((pathLen>=4) &&
                    uprv_strncmp(iter->pathBuffer+(pathLen-4), ".dat", 4) == 0)
                 {
@@ -1067,6 +1066,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     TinyString          pkgName;
     TinyString          treeName;
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+    TinyString          altSepPath;
+#endif
 
     const char         *dataPath;
 
@@ -1084,6 +1086,25 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char         *treeChar;
    
     isICUData= (UBool)(path==NULL ? TRUE : (!uprv_strncmp(path,U_ICUDATA_NAME U_TREE_SEPARATOR_STRING, uprv_strlen(U_ICUDATA_NAME U_TREE_SEPARATOR_STRING))));
+
+
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+    /* remap from alternate path char to the main one */
+    TinyString_init(&altSepPath);
+    if(path) {
+        char *p;
+        if((p=uprv_strchr(path,U_FILE_ALT_SEP_CHAR))) {
+            TinyString_append(&altSepPath, path);
+            while((p=uprv_strchr(altSepPath.s,U_FILE_ALT_SEP_CHAR))) {
+                *p = U_FILE_SEP_CHAR;
+            }
+#if defined (UDATA_DEBUG)
+            fprintf(stderr, "Changed path from [%s] to [%s]\n", path, altSepPath.s);
+#endif
+            path = altSepPath.s;
+        }
+    }
+#endif
 
     TinyString_init(&oldIndFileName);
     TinyString_init(&tocEntryName);
@@ -1384,6 +1405,9 @@ commonReturn:
     TinyString_dt(&oldStylePathBasename);
     TinyString_dt(&pkgName);
     TinyString_dt(&treeName);
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+    TinyString_dt(&altSepPath);
+#endif
     return retVal;
 }
 

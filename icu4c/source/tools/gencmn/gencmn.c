@@ -242,7 +242,14 @@ main(int argc, char* argv[]) {
         }
 
         /* add the file */
-
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR)
+        {
+          char *t;
+          while((t = uprv_strchr(line,U_FILE_ALT_SEP_CHAR))) {
+            *t = U_FILE_SEP_CHAR;
+          }
+        }
+#endif
         addFile(getLongPathname(line), sourceTOC, verbose);
     }
 
@@ -385,8 +392,8 @@ main(int argc, char* argv[]) {
           
           /* test for NULL */
           if (symPrefix == NULL) {
-	    sprintf(buffer, "U_MEMORY_ALLOCATION_ERROR");
-	    exit(U_MEMORY_ALLOCATION_ERROR);
+            sprintf(buffer, "U_MEMORY_ALLOCATION_ERROR");
+            exit(U_MEMORY_ALLOCATION_ERROR);
           }
           
           uprv_strcpy(symPrefix, entrypointName);
