@@ -6,11 +6,11 @@
 * $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
 **********************************************************************
 */
-#include <malloc.h>
-#include <string.h>
 #include "unicode/uset.h"
 #include "unicode/ustring.h"
 #include "cintltst.h"
+#include <stdlib.h>
+#include <string.h>
 
 #define TEST(x) addTest(root, &x, "uset/" # x)
 

@@ -18,7 +18,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/umsg.h"
