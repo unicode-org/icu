@@ -318,7 +318,7 @@ static void TestNormalizedUnicodeChar()
             ucol_close(th_th);
           return;
       }
-        
+
       backAndForth(iter);
       ucol_closeElements(iter);
 
@@ -343,7 +343,7 @@ static void TestNormalizedUnicodeChar()
 static void TestNormalization()
 {
           UErrorCode          status = U_ZERO_ERROR;
-    const char               *str    = 
+    const char               *str    =
                             "&a < \\u0300\\u0315 < A\\u0300\\u0315 < \\u0316\\u0315B < \\u0316\\u0300\\u0315";
           UCollator          *coll;
           UChar               rule[50];
@@ -373,12 +373,12 @@ static void TestNormalization()
     iter = ucol_openElements(coll, source, srclen - 1, &status);
     backAndForth(iter);
     ucol_closeElements(iter);
-    
+
     srclen = u_unescape(testdata[1], source, 10);
     iter = ucol_openElements(coll, source, srclen - 1, &status);
     backAndForth(iter);
     ucol_closeElements(iter);
-    
+
     while (count < 12) {
         srclen = u_unescape(testdata[count], source, 10);
         iter = ucol_openElements(coll, source, srclen - 1, &status);
@@ -444,7 +444,7 @@ static void TestPrevious()
     c1 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
 
     log_verbose("Contraction rule testing back and forth with no normalization\n");
-    
+
     if (c1 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n",
@@ -462,7 +462,7 @@ static void TestPrevious()
     backAndForth(iter);
     ucol_closeElements(iter);
     ucol_close(c1);
-    
+
     /* Test with an expanding character sequence */
     u_uastrcpy(rule, "&a < b < c/abd < d");
     c2 = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL, &status);
@@ -665,7 +665,7 @@ static void TestOffset()
         }
         count ++;
     }
-    
+
     if(U_FAILURE(status)){
         log_err("ERROR: in iterating collation elements %s\n",
             myErrorName(status));
@@ -879,7 +879,7 @@ static void TestMaxExpansion()
         ch ++;
     }
 
-    ch = 0x63; 
+    ch = 0x63;
     ucol_setText(iter, &ch, 1, &status);
     temporder = ucol_previous(iter, &status);
 
@@ -888,7 +888,7 @@ static void TestMaxExpansion()
                 ch, 3);
     }
 
-    ch = 0x64; 
+    ch = 0x64;
     ucol_setText(iter, &ch, 1, &status);
     temporder = ucol_previous(iter, &status);
 
@@ -929,7 +929,7 @@ static void TestMaxExpansion()
     rule[7] = 0x71;
     rule[8] = 0x71;
     rule[9] = 0;
-    
+
     coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT,
         UCOL_DEFAULT_STRENGTH,NULL, &status);
     iter = ucol_openElements(coll, &ch, 1, &status);
@@ -1080,7 +1080,7 @@ static void TestSmallBuffer()
 
     ucol_reset(testiter);
     /* ensures that the writable buffer was cleared */
-    if (testiter->iteratordata_.writableBuffer != 
+    if (testiter->iteratordata_.writableBuffer !=
         testiter->iteratordata_.stackWritableBuffer) {
         log_err("Error Writable buffer in collation element iterator not reset\n");
     }
@@ -1108,9 +1108,9 @@ static int32_t hex2num(char hex) {
     }
 }
 
-/** 
-* Getting codepoints from a string 
-* @param str character string contain codepoints seperated by space and ended 
+/**
+* Getting codepoints from a string
+* @param str character string contain codepoints seperated by space and ended
 *        by a semicolon
 * @param codepoints array for storage, assuming size > 5
 * @return position at the end of the codepoint section
@@ -1119,16 +1119,16 @@ static char * getCodePoints(char *str, UChar *codepoints) {
     char *pStartCP = str;
     char *pEndCP   = str + 4;
 
-    *codepoints = (UChar)((hex2num(*pStartCP) << 12) | 
-                          (hex2num(*(pStartCP + 1)) << 8) | 
-                          (hex2num(*(pStartCP + 2)) << 4) | 
+    *codepoints = (UChar)((hex2num(*pStartCP) << 12) |
+                          (hex2num(*(pStartCP + 1)) << 8) |
+                          (hex2num(*(pStartCP + 2)) << 4) |
                           (hex2num(*(pStartCP + 3))));
     codepoints ++;
     while (*pEndCP != ';') {
         pStartCP = pEndCP + 1;
-        *codepoints = (UChar)((hex2num(*pStartCP) << 12) | 
-                          (hex2num(*(pStartCP + 1)) << 8) | 
-                          (hex2num(*(pStartCP + 2)) << 4) | 
+        *codepoints = (UChar)((hex2num(*pStartCP) << 12) |
+                          (hex2num(*(pStartCP + 1)) << 8) |
+                          (hex2num(*(pStartCP + 2)) << 4) |
                           (hex2num(*(pStartCP + 3))));
         codepoints ++;
         pEndCP = pStartCP + 4;
@@ -1155,9 +1155,9 @@ readElement(char **from, char *to, char separator, UErrorCode *status)
         (*from)++;
         *(buffer + i) = 0;
         strcpy(to, buffer);
-        return i/2;            
+        return i/2;
     }
-    
+
     return 0;
 }
 
@@ -1165,7 +1165,7 @@ readElement(char **from, char *to, char separator, UErrorCode *status)
 * Sniplets of code from genuca
 */
 static uint32_t
-getSingleCEValue(char *primary, char *secondary, char *tertiary, 
+getSingleCEValue(char *primary, char *secondary, char *tertiary,
                           UErrorCode *status)
 {
     if (U_SUCCESS(*status)) {
@@ -1184,12 +1184,12 @@ getSingleCEValue(char *primary, char *secondary, char *tertiary,
             primsave = *primend;
             *primend = '\0';
         }
-        
+
         if (uprv_strlen(secondary) > 2) {
             secsave = *secend;
             *secend = '\0';
         }
-        
+
         if (uprv_strlen(tertiary) > 2) {
             tersave = *terend;
             *terend = '\0';
@@ -1202,8 +1202,8 @@ getSingleCEValue(char *primary, char *secondary, char *tertiary,
           primvalue <<= 8;
         }
 
-        value = ((primvalue << UCOL_PRIMARYORDERSHIFT) & UCOL_PRIMARYORDERMASK) 
-           | ((secvalue << UCOL_SECONDARYORDERSHIFT) & UCOL_SECONDARYORDERMASK) 
+        value = ((primvalue << UCOL_PRIMARYORDERSHIFT) & UCOL_PRIMARYORDERMASK)
+           | ((secvalue << UCOL_SECONDARYORDERSHIFT) & UCOL_SECONDARYORDERMASK)
            | (tervalue & UCOL_TERTIARYORDERMASK);
 
         if(primsave!='\0') {
@@ -1220,9 +1220,9 @@ getSingleCEValue(char *primary, char *secondary, char *tertiary,
     return 0;
 }
 
-/** 
-* Getting collation elements generated from a string 
-* @param str character string contain collation elements contained in [] and 
+/**
+* Getting collation elements generated from a string
+* @param str character string contain collation elements contained in [] and
 *        seperated by space
 * @param ce array for storage, assuming size > 20
 * @param status error status
@@ -1235,7 +1235,7 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
     char        primary[100];
     char        secondary[100];
     char        tertiary[100];
-    
+
     while (*pStartCP == '[') {
         uint32_t primarycount   = 0;
         uint32_t secondarycount = 0;
@@ -1257,7 +1257,7 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
             break;
         }
 
-        while (2 * CEi < primarycount || CEi < secondarycount || 
+        while (2 * CEi < primarycount || CEi < secondarycount ||
                CEi < tertiarycount) {
             uint32_t value = UCOL_CONTINUATION_MARKER; /* Continuation marker */
             if (2 * CEi < primarycount) {
@@ -1290,7 +1290,7 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
     return pStartCP;
 }
 
-/** 
+/**
 * Getting the FractionalUCA.txt file stream
 */
 static FileStream * getFractionalUCA(void)
@@ -1304,12 +1304,17 @@ static FileStream * getFractionalUCA(void)
     uprv_strcat(newPath, "unidata" U_FILE_SEP_STRING );
     uprv_strcat(newPath, "FractionalUCA.txt");
 
-    uprv_strcpy(backupPath, u_getDataDirectory());
-    uprv_strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
-    uprv_strcat(backupPath, U_FILE_SEP_STRING);
-    uprv_strcat(backupPath, "unidata" U_FILE_SEP_STRING );
-    uprv_strcat(backupPath, "FractionalUCA.txt");
-      
+    /* As a fallback, try to guess where the source data was located
+     *   at the time ICU was built, and look there.
+     */
+    #if defined (U_TOPSRCDIR)
+        strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    #else
+        strcpy(backupPath, u_getDataDirectory());
+        strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    #endif
+    strcat(backupPath, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING "FractionalUCA.txt");
+
     result = T_FileStream_open(newPath, "rb");
 
     if (result == NULL) {
@@ -1348,9 +1353,9 @@ static void TestCEs() {
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
         int                 count = 0;
         UCollationElements *iter;
-        /* skip this line if it is empty or a comment or is a return value 
+        /* skip this line if it is empty or a comment or is a return value
         or start of some variable section */
-        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
+        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' ||
             line[0] == 0x000D || line[0] == '[') {
             continue;
         }
@@ -1361,11 +1366,11 @@ static void TestCEs() {
             log_err("Error in parsing collation elements in FractionalUCA.txt\n");
             break;
         }
-        iter = ucol_openElements(coll, codepoints, -1, &status);      
+        iter = ucol_openElements(coll, codepoints, -1, &status);
         if (U_FAILURE(status)) {
             log_err("Error in opening collation elements\n");
             break;
-        }     
+        }
         for (;;) {
             uint32_t ce = (uint32_t)ucol_next(iter, &status);
             if (ce == 0xFFFFFFFF) {
@@ -1391,48 +1396,48 @@ static void TestCEs() {
 * Testing the discontigous contractions
 */
 static void TestDiscontiguos() {
-    const char               *rulestr    = 
+    const char               *rulestr    =
                             "&z < AB < X\\u0300 < ABC < X\\u0300\\u0315";
           UChar               rule[50];
           int                 rulelen = u_unescape(rulestr, rule, 50);
     const char               *src[] = {
-     "ADB", "ADBC", "A\\u0315B", "A\\u0315BC", 
+     "ADB", "ADBC", "A\\u0315B", "A\\u0315BC",
     /* base character blocked */
-     "XD\\u0300", "XD\\u0300\\u0315", 
+     "XD\\u0300", "XD\\u0300\\u0315",
     /* non blocking combining character */
-     "X\\u0319\\u0300", "X\\u0319\\u0300\\u0315", 
+     "X\\u0319\\u0300", "X\\u0319\\u0300\\u0315",
      /* blocking combining character */
-     "X\\u0314\\u0300", "X\\u0314\\u0300\\u0315", 
+     "X\\u0314\\u0300", "X\\u0314\\u0300\\u0315",
      /* contraction prefix */
      "ABDC", "AB\\u0315C","X\\u0300D\\u0315", "X\\u0300\\u0319\\u0315",
-     "X\\u0300\\u031A\\u0315", 
+     "X\\u0300\\u031A\\u0315",
      /* ends not with a contraction character */
-     "X\\u0319\\u0300D", "X\\u0319\\u0300\\u0315D", "X\\u0300D\\u0315D", 
+     "X\\u0319\\u0300D", "X\\u0319\\u0300\\u0315D", "X\\u0300D\\u0315D",
      "X\\u0300\\u0319\\u0315D", "X\\u0300\\u031A\\u0315D"
-    };                              
+    };
     const char               *tgt[] = {
      /* non blocking combining character */
-     "A D B", "A D BC", "A \\u0315 B", "A \\u0315 BC", 
+     "A D B", "A D BC", "A \\u0315 B", "A \\u0315 BC",
     /* base character blocked */
-     "X D \\u0300", "X D \\u0300\\u0315", 
+     "X D \\u0300", "X D \\u0300\\u0315",
     /* non blocking combining character */
-     "X\\u0300 \\u0319", "X\\u0300\\u0315 \\u0319", 
+     "X\\u0300 \\u0319", "X\\u0300\\u0315 \\u0319",
      /* blocking combining character */
-     "X \\u0314 \\u0300", "X \\u0314 \\u0300\\u0315", 
+     "X \\u0314 \\u0300", "X \\u0314 \\u0300\\u0315",
      /* contraction prefix */
      "AB DC", "AB \\u0315 C","X\\u0300 D \\u0315", "X\\u0300\\u0315 \\u0319",
      "X\\u0300 \\u031A \\u0315",
      /* ends not with a contraction character */
-     "X\\u0300 \\u0319D", "X\\u0300\\u0315 \\u0319D", "X\\u0300 D\\u0315D", 
+     "X\\u0300 \\u0319D", "X\\u0300\\u0315 \\u0319D", "X\\u0300 D\\u0315D",
      "X\\u0300\\u0315 \\u0319D", "X\\u0300 \\u031A\\u0315D"
     };
           int                 size   = 20;
           UCollator          *coll;
           UErrorCode          status    = U_ZERO_ERROR;
           int                 count     = 0;
-          UCollationElements *iter;      
-          UCollationElements *resultiter;      
-    
+          UCollationElements *iter;
+          UCollationElements *resultiter;
+
     coll       = ucol_openRules(rule, rulelen, UCOL_OFF, UCOL_DEFAULT_STRENGTH,NULL, &status);
     iter       = ucol_openElements(coll, rule, 1, &status);
     resultiter = ucol_openElements(coll, rule, 1, &status);
@@ -1448,7 +1453,7 @@ static void TestDiscontiguos() {
         int    strLen = u_unescape(src[count], str, 20);
         UChar *s;
 
-        ucol_setText(iter, str, strLen, &status);        
+        ucol_setText(iter, str, strLen, &status);
         if (U_FAILURE(status)) {
             log_err("Error opening collation iterator\n");
             return;
@@ -1458,21 +1463,21 @@ static void TestDiscontiguos() {
         s = tstr;
 
         log_verbose("count %d\n", count);
-        
+
         for (;;) {
             uint32_t  ce;
             UChar    *e = u_strchr(s, 0x20);
             if (e == 0) {
                 e = u_strchr(s, 0);
             }
-            ucol_setText(resultiter, s, e - s, &status);      
+            ucol_setText(resultiter, s, e - s, &status);
             ce = ucol_next(resultiter, &status);
             if (U_FAILURE(status)) {
                 log_err("Error manipulating collation iterator\n");
                 return;
             }
             while (ce != UCOL_NULLORDER) {
-                if (ce != (uint32_t)ucol_next(iter, &status) || 
+                if (ce != (uint32_t)ucol_next(iter, &status) ||
                     U_FAILURE(status)) {
                     log_err("Discontiguos contraction test mismatch\n");
                     return;
@@ -1497,27 +1502,27 @@ static void TestDiscontiguos() {
     ucol_close(coll);
 }
 
-static void TestCEBufferOverflow() 
+static void TestCEBufferOverflow()
 {
     UChar               str[UCOL_EXPAND_CE_BUFFER_SIZE + 1];
     UErrorCode          status = U_ZERO_ERROR;
     UChar               rule[10];
     UCollator          *coll;
     UCollationElements *iter;
-    
+
     u_uastrcpy(rule, "&z < AB");
     coll = ucol_openRules(rule, u_strlen(rule), UCOL_OFF, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
         log_err("Rule based collator not created for testing ce buffer overflow\n");
     }
-    
+
     /* 0xDCDC is a trail surrogate hence deemed unsafe by the heuristic
     test. this will cause an overflow in getPrev */
     str[0] = 0x0041;    /* 'A' */
     /*uprv_memset(str + 1, 0xE0, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);*/
     uprv_memset(str + 1, 0xDC, sizeof(UChar) * UCOL_EXPAND_CE_BUFFER_SIZE);
     str[UCOL_EXPAND_CE_BUFFER_SIZE] = 0x0042;   /* 'B' */
-    iter = ucol_openElements(coll, str, UCOL_EXPAND_CE_BUFFER_SIZE + 1, 
+    iter = ucol_openElements(coll, str, UCOL_EXPAND_CE_BUFFER_SIZE + 1,
                              &status);
     if (ucol_previous(iter, &status) != UCOL_NULLORDER ||
         status != U_BUFFER_OVERFLOW_ERROR) {
@@ -1564,7 +1569,7 @@ static uint8_t getCase(const UChar *s, uint32_t len) {
 
     while (len > 0) {
         UChar c = *ps ++;
-        
+
         if (u_islower(c)) {
             lower = TRUE;
         }
@@ -1574,7 +1579,7 @@ static uint8_t getCase(const UChar *s, uint32_t len) {
         if (u_istitle(c)) {
             title = TRUE;
         }
-        
+
         len --;
     }
     if ((lower && !upper && !title) || (!lower && !upper && !title)){
@@ -1584,7 +1589,7 @@ static uint8_t getCase(const UChar *s, uint32_t len) {
         return UCOL_UPPER_CASE;
     }
     /* mix of cases here */
-    /* len = unorm_normalize(s, len, UNORM_NFKD, 0, str, 256, &status);    
+    /* len = unorm_normalize(s, len, UNORM_NFKD, 0, str, 256, &status);
     if (U_FAILURE(status)) {
         log_err("Error normalizing data string\n");
         return UCOL_LOWER_CASE;
@@ -1603,9 +1608,9 @@ static uint8_t getCase(const UChar *s, uint32_t len) {
 /**
 * Checking collation element validity given the boundary arguments.
 */
-static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints, 
-                             int length, uint32_t primarymax, 
-                             uint32_t secondarymax) 
+static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
+                             int length, uint32_t primarymax,
+                             uint32_t secondarymax)
 {
     UErrorCode          status = U_ZERO_ERROR;
     UCollationElements *iter   = ucol_openElements(coll, codepoints, length,
@@ -1629,8 +1634,8 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
            uint32_t secondary = UCOL_SECONDARYORDER(ce);
            uint32_t tertiary  = UCOL_TERTIARYORDER(ce);
 /*           uint32_t scasebits = tertiary & 0xC0;*/
-                
-           if ((tertiary == 0 && secondary != 0) || 
+
+           if ((tertiary == 0 && secondary != 0) ||
                (tertiary < 0xC0 && secondary == 0 && primary != 0)) {
                /* n-1th level is not zero when the nth level is
                   except for continuations, this is wrong */
@@ -1661,9 +1666,9 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
    }
    ucol_closeElements(iter);
    return TRUE;
-fail : 
+fail :
    ucol_closeElements(iter);
-   return FALSE; 
+   return FALSE;
 }
 
 static void TestCEValidity()
@@ -1690,7 +1695,7 @@ static void TestCEValidity()
     }
 
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
-        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
+        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' ||
             line[0] == 0x000D || line[0] == '[') {
             continue;
         }
@@ -1707,30 +1712,30 @@ static void TestCEValidity()
         }
         codepoints[0] ++;
     }
-    
+
     ucol_close(coll);
 
     /* testing tailored collation elements */
     log_verbose("Testing tailored elements\n");
     while (count < 5) {
-        const UChar *rules = NULL, 
+        const UChar *rules = NULL,
                     *current = NULL;
         UChar *rulesCopy = NULL;
         int32_t ruleLen = 0;
 
-        uint32_t chOffset = 0; 
+        uint32_t chOffset = 0;
         uint32_t chLen = 0;
-        uint32_t exOffset = 0; 
+        uint32_t exOffset = 0;
         uint32_t exLen = 0;
         uint32_t prefixOffset = 0;
         uint32_t prefixLen = 0;
         UBool    startOfRules = TRUE;
         UColOptionSet opts;
-  
+
         UColTokenParser src;
         uint32_t strength = 0;
         uint8_t specs = 0;
-  
+
         coll      = ucol_open(locale[count], &status);
         if (U_FAILURE(status)) {
             log_err("%s collator creation failed\n", locale[count]);
@@ -1741,7 +1746,7 @@ static void TestCEValidity()
         rules = ucol_getRules(coll, &ruleLen);
 
         if (ruleLen > 0) {
-            rulesCopy = (UChar *)uprv_malloc((ruleLen + 
+            rulesCopy = (UChar *)uprv_malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
             src.source = src.current = rulesCopy;
@@ -1749,26 +1754,26 @@ static void TestCEValidity()
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
-            while ((current = ucol_tok_parseNextToken(&src, &strength, 
-                                     &chOffset, &chLen, &exOffset, &exLen, 
+            while ((current = ucol_tok_parseNextToken(&src, &strength,
+                                     &chOffset, &chLen, &exOffset, &exLen,
                                      &prefixOffset, &prefixLen,
                                      &specs, startOfRules, &parseError,&status)) != NULL) {
                 startOfRules = FALSE;
-                uprv_memcpy(codepoints, rules + chOffset, 
+                uprv_memcpy(codepoints, rules + chOffset,
                                                        chLen * sizeof(UChar));
                 codepoints[chLen] = 0;
                 checkCEValidity(coll, codepoints, u_strlen(codepoints), 4, 85);
             }
             uprv_free(rulesCopy);
         }
-        
+
         ucol_close(coll);
         count ++;
     }
 }
 
 static void printSortKeyError(const UChar   *codepoints, int length,
-                                    uint8_t *sortkey, int sklen) 
+                                    uint8_t *sortkey, int sklen)
 {
     int count = 0;
     log_err("Sortkey not valid for ");
@@ -1788,26 +1793,26 @@ static void printSortKeyError(const UChar   *codepoints, int length,
 /**
 * Checking sort key validity for all levels
 */
-static UBool checkSortKeyValidity(UCollator *coll, 
-                                  const UChar *codepoints, 
-                                  int length) 
+static UBool checkSortKeyValidity(UCollator *coll,
+                                  const UChar *codepoints,
+                                  int length)
 {
     UErrorCode status  = U_ZERO_ERROR;
     UCollationStrength strength[5] = {UCOL_PRIMARY, UCOL_SECONDARY,
-                                      UCOL_TERTIARY, UCOL_QUATERNARY, 
+                                      UCOL_TERTIARY, UCOL_QUATERNARY,
                                       UCOL_IDENTICAL};
     int        strengthlen = 5;
     int        index       = 0;
     int        caselevel   = 0;
-    
+
     while (caselevel < 1) {
         if (caselevel == 0) {
-            ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);    
+            ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);
         }
         else {
-            ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_ON, &status);    
+            ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_ON, &status);
         }
-        
+
         while (index < strengthlen) {
             int        count01 = 0;
             uint32_t   count   = 0;
@@ -1835,7 +1840,7 @@ static UBool checkSortKeyValidity(UCollator *coll,
         }
         caselevel ++;
     }
-    return TRUE; 
+    return TRUE;
 }
 
 static void TestSortKeyValidity(void)
@@ -1862,7 +1867,7 @@ static void TestSortKeyValidity(void)
     }
 
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
-        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' || 
+        if(line[0] == 0 || line[0] == '#' || line[0] == '\n' ||
             line[0] == 0x000D || line[0] == '[') {
             continue;
         }
@@ -1873,37 +1878,37 @@ static void TestSortKeyValidity(void)
 
     log_verbose("Testing UCA elements for the whole range of unicode characters\n");
     codepoints[0] = 0;
-    
+
     while (codepoints[0] < 0xFFFF) {
         if (u_isdefined((UChar32)codepoints[0])) {
             checkSortKeyValidity(coll, codepoints, 1);
         }
         codepoints[0] ++;
     }
-    
+
     ucol_close(coll);
 
     /* testing tailored collation elements */
     log_verbose("Testing tailored elements\n");
     while (count < 5) {
-        const UChar *rules = NULL, 
+        const UChar *rules = NULL,
                     *current = NULL;
         UChar *rulesCopy = NULL;
         int32_t ruleLen = 0;
 
-        uint32_t chOffset = 0; 
+        uint32_t chOffset = 0;
         uint32_t chLen = 0;
-        uint32_t exOffset = 0; 
+        uint32_t exOffset = 0;
         uint32_t exLen = 0;
         uint32_t prefixOffset = 0;
         uint32_t prefixLen = 0;
         UBool    startOfRules = TRUE;
         UColOptionSet opts;
-  
+
         UColTokenParser src;
         uint32_t strength = 0;
         uint8_t specs = 0;
-  
+
         coll      = ucol_open(locale[count], &status);
         if (U_FAILURE(status)) {
             log_err("%s collator creation failed\n", locale[count]);
@@ -1914,7 +1919,7 @@ static void TestSortKeyValidity(void)
         rules = ucol_getRules(coll, &ruleLen);
 
         if (ruleLen > 0) {
-            rulesCopy = (UChar *)uprv_malloc((ruleLen + 
+            rulesCopy = (UChar *)uprv_malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
             src.source = src.current = rulesCopy;
@@ -1922,19 +1927,19 @@ static void TestSortKeyValidity(void)
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
-            while ((current = ucol_tok_parseNextToken(&src, &strength, 
-                                     &chOffset, &chLen, &exOffset, &exLen, 
+            while ((current = ucol_tok_parseNextToken(&src, &strength,
+                                     &chOffset, &chLen, &exOffset, &exLen,
                                      &prefixOffset, &prefixLen,
                                      &specs, startOfRules,&parseError, &status)) != NULL) {
                 startOfRules = FALSE;
-                uprv_memcpy(codepoints, rules + chOffset, 
+                uprv_memcpy(codepoints, rules + chOffset,
                                                        chLen * sizeof(UChar));
                 codepoints[chLen] = 0;
                 checkSortKeyValidity(coll, codepoints, u_strlen(codepoints));
             }
             uprv_free(rulesCopy);
         }
-        
+
         ucol_close(coll);
         count ++;
     }

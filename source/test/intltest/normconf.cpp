@@ -58,13 +58,16 @@ void NormalizerConformanceTest::TestConformance(void) {
     strcat(newPath, "unidata" U_FILE_SEP_STRING );
     strcat(newPath, TEST_SUITE_FILE);
 
-    strcpy(backupPath, u_getDataDirectory());
-    strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
-    strcat(backupPath, U_FILE_SEP_STRING);
-    strcat(backupPath, "unidata" U_FILE_SEP_STRING );
-    strcat(backupPath, TEST_SUITE_FILE);
+    // As a fallback, try to guess where the source data was located
+    //   at the time ICU was built, and look there.
+    #if defined (U_TOPSRCDIR)
+        strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    #else
+        strcpy(backupPath, u_getDataDirectory());
+        strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    #endif
+    strcat(backupPath, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING TEST_SUITE_FILE);
 
-      
     input = T_FileStream_open(newPath, "rb");
 
     if (input == 0) {
