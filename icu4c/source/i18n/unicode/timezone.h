@@ -81,11 +81,12 @@ class StringEnumeration;
  * three basic pieces of information:<ul>
  *    <li>A time zone offset; that, is the number of milliseconds to add or subtract
  *      from a time expressed in terms of GMT to convert it to the same time in that
- *      time zone (without taking daylight savings time into account).
+ *      time zone (without taking daylight savings time into account).</li>
  *    <li>Logic necessary to take daylight savings time into account if daylight savings
  *      time is observed in that time zone (e.g., the days and hours on which daylight
- *      savings time begins and ends).
- *    <li>An ID.  This is a text string that uniquely identifies the time zone.</ul>
+ *      savings time begins and ends).</li>
+ *    <li>An ID.  This is a text string that uniquely identifies the time zone.</li>
+ * </ul>
  *
  * (Only the ID is actually implemented in TimeZone; subclasses of TimeZone may handle
  * daylight savings time and GMT offset in different ways.  Currently we only have one
