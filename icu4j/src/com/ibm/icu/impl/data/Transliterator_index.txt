@@ -80,8 +80,10 @@ UnicodeName-UnicodeChar:file:Transliterator_UnicodeName_UnicodeChar.utf8.txt:UTF
 
 # Compound rules
 
-Latin-Hangul:alias:Latin-Jamo;Jamo-Hangul
-Hangul-Latin:alias:Hangul-Jamo;Jamo-Latin
+Latin-Hangul:alias:Latin-Jamo;[\u1100-\u11FF]NFC
+### TODO
+### Change this to be a compound filter
+Hangul-Latin:alias:[\uAC00-\uD7AF]NFD;Jamo-Latin
 
 # Inter-Indic composed rules
 
