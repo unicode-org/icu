@@ -557,7 +557,14 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 16: name = "TestBug4153072";
             if(exec) TestBug4153072();                         break;
         case 17: name = "TestMonkey";
-             if(exec) TestMonkey(params);                      break;
+             if(exec) {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+               TestMonkey(params);
+#else 
+               logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
+#endif
+             }
+             break;
 
 
         case 18: name = "TestThaiLineBreak";
@@ -1944,6 +1951,8 @@ void RBBITest::TestLineBreakData() {
             
 }
 
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
 //---------------------------------------------------------------------------------------
 //
 //   classs RBBIMonkeyKind
@@ -2101,8 +2110,11 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
     U_ASSERT(U_SUCCESS(status));
     return val;
 }
+#endif
     
 void RBBITest::TestMonkey(char *params) {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
     UErrorCode     status    = U_ZERO_ERROR;
     int32_t        loopCount = 100;
     int32_t        seed      = 1;
@@ -2144,11 +2156,13 @@ void RBBITest::TestMonkey(char *params) {
         delete bi;
     }
 
-
+#endif
 }
 
 
 void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, int32_t numIterations) {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
     const int32_t    TESTSTRINGLEN = 500;
     UnicodeString    testText;
     int32_t          numCharClasses;
@@ -2299,7 +2313,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, 
         loopCount++;
         seed = rand();
     }
-    
+#endif    
 }
 
 
