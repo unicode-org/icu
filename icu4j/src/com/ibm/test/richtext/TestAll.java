@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestAll.java,v $ $Revision: 1.1 $ $Date: 2000/04/24 20:38:00 $
+ * @(#)$RCSfile: TestAll.java,v $ $Revision: 1.2 $ $Date: 2000/04/24 21:11:30 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -12,7 +12,7 @@
  * IBM has been advised of the possibility of their occurrence. IBM
  * will not be liable for any third party claims against you.
  */
-package com.ibm.richtext.tests;
+package com.ibm.test.richtext;
 
 import com.ibm.test.TestFmwk;
 
@@ -50,6 +50,6 @@ public class TestAll extends TestFmwk {
     }
     
     public void TestTextPanel() throws Exception {
-        run(new TestTextPanel());
+        run(new FmwkTestTextPanel());
     }
 }
