@@ -52,12 +52,12 @@ ar {
         1,
     }
     DateTimePatterns { 
-        "z hh:mm:ss a",
-        "z hh:mm:ss a",
-        "hh:mm:ss a",
-        "hh:mm a",
-        "dd MMMM, yyyy",
-        "dd MMMM, yyyy",
+        "z h:mm:ss a",
+        "z h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, d MMMM, yyyy",
+        "d MMMM, yyyy",
         "dd/MM/yyyy",
         "dd/MM/yy",
         "{1} {0}",

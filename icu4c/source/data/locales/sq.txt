@@ -23,9 +23,9 @@ sq {
         "h.mm.ss.a z",
         "h:mm:ss.a",
         "h.mm.a",
+        "EEEE, dd MMMM yyyy",
+        "dd MMMM yyyy",
         "yyyy-MM-dd",
-        "yyyy-MM-dd",
-        "yy-MM-dd",
         "yy-MM-dd",
         "{1} {0}",
     }

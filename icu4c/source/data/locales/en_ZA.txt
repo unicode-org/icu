@@ -27,8 +27,8 @@ en_ZA {
         "h:mm a",
         "EEEE dd MMMM yyyy",
         "dd MMMM yyyy",
+        "dd MMM yyyy",
         "yyyy/MM/dd",
-        "yy/MM/dd",
         "{1} {0}",
     }
 //    Duplicated in parent
@@ -39,7 +39,7 @@ en_ZA {
 //    LocaleString { "en_ZA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
-        "\u00A4#,##0.00;\u00A4-#,##0.00",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
     }

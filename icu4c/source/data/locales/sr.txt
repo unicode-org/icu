@@ -234,10 +234,10 @@ sr {
     DateTimePatterns {
         "HH.mm.ss z",
         "HH.mm.ss z",
-        "H.mm.ss",
-        "H.mm",
+        "HH.mm.ss",
+        "HH.mm",
         "EEEE, dd.MMMM.yyyy.",
-        "EEEE, d.MM.yyyy.",
+        "dd.MM.yyyy.",
         "dd.MM.yyyy.",
         "d.M.yy.",
         "{1} {0}",

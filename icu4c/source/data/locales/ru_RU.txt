@@ -12,6 +12,19 @@ ru_RU {
         "RUR",
         ",",
     }
+    NumberElements { 
+        ",",
+        "\u00A0",  // &nbsp;
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
 //    LocaleString { "ru_RU" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

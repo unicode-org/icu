@@ -9,7 +9,7 @@ es_MX {
     Version { "1.1" }
     CurrencyElements { 
         "$",
-        "MXP",
+        "MXN",
         ".",
     }
     DateTimePatterns { 
@@ -19,8 +19,8 @@ es_MX {
         "hh:mm a",
         "EEEE d' de 'MMMM' de 'yyyy",
         "d' de 'MMMM' de 'yyyy",
-        "d/MM/yyyy",
-        "d/MM/yy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
         "{1} {0}",
     }
     LocaleID:int { 0x080a }

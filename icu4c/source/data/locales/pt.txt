@@ -87,12 +87,12 @@ pt {
     }
     DateTimePatterns { 
         "HH'H'mm'm' z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
         "EEEE, d' de 'MMMM' de 'yyyy",
         "d' de 'MMMM' de 'yyyy",
-        "d/MMM/yy",
+        "d/MMM/yyyy",
         "dd-MM-yyyy",
         "{1} {0}",
     }

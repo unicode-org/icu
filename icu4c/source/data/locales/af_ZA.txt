@@ -20,8 +20,8 @@ af_ZA {
         "h:mm a",
         "EEEE dd MMMM yyyy",
         "dd MMMM yyyy",
-        "MMM dd,yy",
-        "dd/MM/yy",
+        "dd MMM yyyy",
+        "yyyy/MM/dd",
         "{1} {0}",
     }
     NumberPatterns { 

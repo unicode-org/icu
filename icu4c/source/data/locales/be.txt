@@ -19,12 +19,12 @@ be {
         BY { "\u0411\u0435\u043B\u0430\u0440\u0443\u0441\u044C" }
     }
     DateTimePatterns { 
-        "H.mm.ss z",
-        "H.mm.ss z",
-        "H.mm.ss",
-        "H.mm",
-        "EEEE, d, MMMM yyyy",
-        "EEEE, d, MMMM yyyy",
+        "HH.mm.ss z",
+        "HH.mm.ss z",
+        "HH.mm.ss",
+        "HH.mm",
+        "EEEE, d MMMM yyyy",
+        "d MMMM yyyy",
         "d.M.yyyy",
         "d.M.yy",
         "{1} {0}",

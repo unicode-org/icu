@@ -4,7 +4,7 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
-// $Revision: 1.10 $
+// $Revision: 1.11 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -24,19 +24,19 @@ te_IN {
         "h:mm:ss a z",
         "h:mm:ss a",
         "h:mm a",
-        "EEEE dd MMM yyyy",
-        "EEEE dd MMM yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yy",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
         "{1} {0}",
     }
 
     // LanguageLibraryUse { "Te" }
     // Measurement { "Metric" }
     NumberPatterns {
-        "#,##,##0.###;-#,##,##0.###",
-        "\u00A4#,##,##0.00;-\u00A4#,##,##0.00",
-        "#,##,##0%",
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4##,##,##0.00;-\u00A4##,##,##0.00",
+        "##,##,##0%",
         "#E0",
     }
 //    ShortLanguage { "tel" }

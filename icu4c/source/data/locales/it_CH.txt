@@ -13,7 +13,7 @@ it_CH {
         ".",
     }
     DateTimePatterns { 
-        "H.mm' h' z",
+        "HH.mm' h' z",
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",

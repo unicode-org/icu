@@ -49,7 +49,7 @@ mk {
     DateTimePatterns { 
         "HH:mm:ss z",
         "HH:mm:ss z",
-        "HH:mm:",
+        "HH:mm:ss",
         "HH:mm",
         "EEEE, d, MMMM yyyy",
         "d, MMMM yyyy",
