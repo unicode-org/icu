@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.3 $
+## BEGIN of icu-config-bottom. $Revision: 1.4 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -252,7 +252,7 @@ do
 	    ;;
 
         --incfile)
-	    echo $libdir/icu/$VERSION/Makefile.inc
+	    echo $pkglibdir/Makefile.inc
 	    ;;
 
 	--icudata)
