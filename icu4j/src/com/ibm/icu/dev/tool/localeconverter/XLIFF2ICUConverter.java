@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.9 $
+* $Revision: 1.10 $
 *
 ******************************************************************************
 */
@@ -513,6 +513,20 @@ public final class XLIFF2ICUConverter {
         String comment;
         String name;
         Resource next;
+        public String escapeSyntaxChars(String val){
+            // escape the embedded quotes
+            char[] str = val.toCharArray();
+            StringBuffer result = new StringBuffer();
+            for(int i=0; i<str.length; i++){
+                switch (str[i]){
+                    case '\u0022':
+                        result.append('\\'); //append backslash
+                    default:
+                        result.append(str[i]);
+                }      
+            }
+            return result.toString();
+        }
         public void write(OutputStream writer, int numIndent, boolean bare){
             while(next!=null){
                 next.write(writer, numIndent+1, false);
@@ -579,9 +593,10 @@ public final class XLIFF2ICUConverter {
                 if(name!=null){
                     throw new RuntimeException("Bare option is set to true but the resource has a name!");
                 }
-                write(writer,QUOTE+val+QUOTE); 
+                
+                write(writer,QUOTE+escapeSyntaxChars(val)+QUOTE); 
             }else{
-                write(writer, name+COLON+STRINGS+ OPENBRACE + QUOTE + val + QUOTE+ CLOSEBRACE + LINESEP);
+                write(writer, name+COLON+STRINGS+ OPENBRACE + QUOTE + escapeSyntaxChars(val) + QUOTE+ CLOSEBRACE + LINESEP);
             }
         }
     }
@@ -590,7 +605,7 @@ public final class XLIFF2ICUConverter {
         public void write(OutputStream writer, int numIndent, boolean bare){
             writeComments(writer, numIndent);
             writeIndent(writer, numIndent);
-            String line =  ((name==null)? EMPTY: name)+COLON+ALIAS+ OPENBRACE+QUOTE+val+QUOTE+CLOSEBRACE;
+            String line =  ((name==null)? EMPTY: name)+COLON+ALIAS+ OPENBRACE+QUOTE+escapeSyntaxChars(val)+QUOTE+CLOSEBRACE;
             if(bare==true){
                 if(name!=null){
                     throw new RuntimeException("Bare option is set to true but the resource has a name!");
