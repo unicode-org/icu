@@ -802,7 +802,7 @@ static const UConverterImpl _UTF8Impl={
 /* Todo: verify that UTF-8 == (ccsid (ibm-codepage) 1208) for unicode version 2.0 and 3.0 */
 static const UConverterStaticData _UTF8StaticData={
     sizeof(UConverterStaticData),
-    "UTF8",
+    "UTF-8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
     { 0xef, 0xbf, 0xbd, 0 },3,FALSE,FALSE,
     0,
@@ -1232,7 +1232,7 @@ static const UConverterImpl _UTF16BEImpl={
 /* Todo: verify that UTF-16BE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
 static const UConverterStaticData _UTF16BEStaticData={
     sizeof(UConverterStaticData),
-    "UTF16_BigEndian",
+    "UTF-16BE",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
     { 0xff, 0xfd, 0, 0 },2,FALSE,FALSE,
     0,
@@ -1333,7 +1333,7 @@ static const UConverterImpl _UTF16LEImpl={
 /* Todo: verify that UTF-16LE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
 static const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
-    "UTF16_LittleEndian",
+    "UTF-16LE",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
     { 0xfd, 0xff, 0, 0 },2,FALSE,FALSE,
     0,
@@ -1811,8 +1811,8 @@ static const UConverterImpl _UTF32BEImpl = {
 
 static const UConverterStaticData _UTF32BEStaticData = {
     sizeof(UConverterStaticData),
-    "UTF32_BigEndian",
-    0,  /* TODO: Change this number to the UTF-32 CCSID which currently does not exist */
+    "UTF-32BE",
+    1232,
     UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0, 0, 0xff, 0xfd }, 4, FALSE, FALSE,
     0,
@@ -2291,8 +2291,8 @@ static const UConverterImpl _UTF32LEImpl = {
 
 static const UConverterStaticData _UTF32LEStaticData = {
     sizeof(UConverterStaticData),
-    "UTF32_LittleEndian",
-    0,    /* TODO: Change this number to the UTF-32 CCSID which currently does not exist */
+    "UTF-32LE",
+    1232,
     UCNV_IBM, UCNV_UTF32_BigEndian, 4, 4,
     { 0xfd, 0xff, 0, 0 }, 4, FALSE, FALSE,
     0,
@@ -3086,7 +3086,7 @@ static const UConverterImpl _UTF7Impl={
 static const UConverterStaticData _UTF7StaticData={
     sizeof(UConverterStaticData),
     "UTF-7",
-    0, /* CCSID for UTF-7 */
+    0, /* TODO CCSID for UTF-7 */
     UCNV_IBM, UCNV_UTF7,
     1, 4,
     { 0x3f, 0, 0, 0 }, 1, /* the subchar is not used */

@@ -26,47 +26,50 @@
 #define MAX_U_BUF 1500
 
 static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
-  
-  char start[4]={'\0'};
-  int cap =T_FileStream_size(in);
-  UBool autodetect =FALSE;
-  int i=4;
-  *numRead=4;
-  *cp="";
-  if(cap>0){
-       T_FileStream_read(in, start, 4);
-       if(start[0] == '\xFE' && start[1] == '\xFF') {
-           *cp = "UTF16_BigEndian";
-           autodetect = TRUE;
-       } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-           *cp = "UTF16_LittleEndian";
-           *numRead-=2;
-           if(start[2] == '\x00' && start[3] =='\x00'){
-               *cp="UTF32_LittleEndian";
-               *numRead+=2;
-           }
-           autodetect = TRUE;
-       } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-           *cp = "UTF8";
-           *numRead-=1;
-           autodetect = TRUE;
-       }else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF'){
-           *cp ="SCSU";
-           *numRead-=1;
-           autodetect = TRUE;
-       }else if(start[0] == '\x00' && start[1] == '\x00' && 
-                start[2] == '\xFF' && start[3]=='\xFE'){
-            *cp = "UTF32_BigEndian";
-            autodetect =TRUE;
-       }else{
-           *numRead =0;
-       }
-  }
-  while(i> *numRead){
-    T_FileStream_ungetc(start[i-1],in);
-    i--;
-  }
-  return autodetect;
+    /* initial 0xa5 bytes: make sure that if we read <4 bytes we don't misdetect something */
+    char start[4]={ '\xa5', '\xa5', '\xa5', '\xa5' };
+    int cap =T_FileStream_size(in);
+    UBool autodetect;
+    int signatureLength;
+
+    *numRead=0;
+    *cp="";
+
+    if(cap<=0) {
+        return FALSE;
+    }
+
+    autodetect = TRUE;
+    *numRead=T_FileStream_read(in, start, 4); /* *numRead might be <4 */
+    if(start[0] == '\xFE' && start[1] == '\xFF') {
+        *cp = "UTF-16BE";
+        signatureLength=2;
+    } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+        if(start[2] == '\x00' && start[3] =='\x00'){
+            *cp="UTF-32LE";
+            signatureLength=4;
+        } else {
+            *cp = "UTF-16LE";
+            signatureLength=2;
+        }
+    } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+        *cp = "UTF-8";
+        signatureLength=3;
+    }else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF'){
+        *cp ="SCSU";
+        signatureLength=3;
+    }else if(start[0] == '\x00' && start[1] == '\x00' && 
+            start[2] == '\xFF' && start[3]=='\xFE'){
+        *cp = "UTF-32BE";
+        signatureLength=4;
+    }else{
+        signatureLength=0;
+        autodetect=FALSE;
+    }
+    while(signatureLength<*numRead) {
+        T_FileStream_ungetc(start[--*numRead], in);
+    }
+    return autodetect;
 }
 
 /* Autodetects UTF8, UTF-16-BigEndian and UTF-16-LittleEndian BOMs*/
