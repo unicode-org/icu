@@ -276,6 +276,28 @@ public:
   static Collator* createInstance(const Locale& loc, UErrorCode& err);
 
   /**
+   * Create a Collator with a specific version.
+   * This is the same as createInstance(loc, err) except that getVersion() of
+   * the returned object is guaranteed to be the same as the version
+   * parameter.
+   * This is designed to be used to open the same collator for a given
+   * locale even when ICU is updated.
+   * The same locale and version guarantees the same sort keys and
+   * comparison results.
+   *
+   * @param loc The locale ID for which to open a collator.
+   * @param version The requested collator version.
+   * @param err A reference to a UErrorCode,
+   *            must not indicate a failure before calling this function.
+   * @return A pointer to a Collator, or 0 if an error occurred
+   *         or a collator with the requested version is not available.
+   *
+   * @see getVersion
+   * @draft ICU 1.8
+   */
+  static Collator *createInstance(const Locale &loc, UVersionInfo version, UErrorCode &err);
+
+  /**
   * The comparison function compares the character data stored in two
   * different strings. Returns information about whether a string is less 
   * than, greater than or equal to another string.
