@@ -66,11 +66,7 @@ U_CAPI void     U_EXPORT2 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_
 #endif
 
 /* Conversion from a digit to the character with radix base from 2-19 */
-#ifndef OS390
-#define T_CString_itosOffset(a) a<=9?(0x30+a):(0x30+a+7)
-#else
-#define T_CString_itosOffset(a) a<=9?(0xF0+a):(0xC1+a-10)  /* C1 is EBCDIC 'A' */
-#endif
+#define T_CString_itosOffset(a) ((a)<=9?('0'+(a)):('A'+(a)-10))
 
 /*
  * Return the floor of the log base 10 of a given double.
