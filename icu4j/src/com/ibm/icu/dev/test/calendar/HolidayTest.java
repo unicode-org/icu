@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HolidayTest.java,v $ 
- * $Date: 2003/12/13 00:30:57 $ 
- * $Revision: 1.7 $
+ * $Date: 2004/02/09 17:06:40 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -127,6 +127,12 @@ public class HolidayTest extends TestFmwk {
         //        h.setRule(h.getRule());
     }
     
+    private static Date getDate(int y, int m, int d) {
+    	final Calendar cal = new GregorianCalendar();
+    	cal.set(y, m, d);
+    	return cal.getTime();
+    }
+    
     public void TestCoverage(){
         Holiday[] h = { new EasterHoliday("Ram's Easter"),
                         new SimpleHoliday(2, 29, 0, "Leap year", 1900, 2100)};
@@ -134,12 +140,12 @@ public class HolidayTest extends TestFmwk {
 
         RangeDateRule rdr = new RangeDateRule();
         rdr.add(new SimpleDateRule(7, 10));
-        Date mbd = new Date(1953, Calendar.JULY, 10);
-        Date dbd = new Date(1958, Calendar.AUGUST, 15);
-        Date nbd = new Date(1990, Calendar.DECEMBER, 17);
-        Date abd = new Date(1992, Calendar.SEPTEMBER, 16);
-        Date xbd = new Date(1976, Calendar.JULY, 4);
-		Date ybd = new Date(2003, Calendar.DECEMBER, 8);
+        Date mbd = getDate(1953, Calendar.JULY, 10);
+        Date dbd = getDate(1958, Calendar.AUGUST, 15);
+        Date nbd = getDate(1990, Calendar.DECEMBER, 17);
+        Date abd = getDate(1992, Calendar.SEPTEMBER, 16);
+        Date xbd = getDate(1976, Calendar.JULY, 4);
+		Date ybd = getDate(2003, Calendar.DECEMBER, 8);
         rdr.add(new SimpleDateRule(Calendar.JULY, 10, Calendar.MONDAY, false));
         rdr.add(dbd, new SimpleDateRule(Calendar.AUGUST, 15, Calendar.WEDNESDAY, true));
         rdr.add(xbd, null);
