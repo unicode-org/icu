@@ -78,7 +78,8 @@ class StringEnumeration;
  *
  * TimeZone is an abstract class representing a time zone.  A TimeZone is needed for
  * Calendar to produce local time for a particular time zone.  A TimeZone comprises
- * three basic pieces of information:<ul>
+ * three basic pieces of information:
+ * <ul>
  *    <li>A time zone offset; that, is the number of milliseconds to add or subtract
  *      from a time expressed in terms of GMT to convert it to the same time in that
  *      time zone (without taking daylight savings time into account).</li>

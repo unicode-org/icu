@@ -134,7 +134,7 @@ class Collator;
  *
  * <table border="0" width="100%">
  *   <tr>
- *     <td>&lt;&lt; thousand &gt;&gt;</strong></td>
+ *     <td><strong>&lt;&lt; thousand &gt;&gt;</strong></td>
  *     <td>[the rule whose base value is 1,000 is applicable to 25,340]</td>
  *   </tr>
  *   <tr>
@@ -435,7 +435,8 @@ class Collator;
  *   <tr>
  *     <td>nothing</td>
  *     <td>Perform the mathematical operation on the number, and format the result using the rule
- *     set containing the current rule, except:<ul>
+ *     set containing the current rule, except:
+ *     <ul>
  *       <li>You can't have an empty substitution descriptor with a == substitution.</li>
  *       <li>If you omit the substitution descriptor in a &gt;&gt; substitution in a fraction rule,
  *         format the result one digit at a time using the rule set containing the current rule.</li>
