@@ -658,7 +658,9 @@ ures_swapResource(const UDataSwapper *ds,
 
         /* swap known formats */
         if(specialType==URES_COLLATION_BINARY) {
+#if !UCONFIG_NO_COLLATION
             ucol_swapBinary(ds, p+1, count, q+1, pErrorCode);
+#endif
         }
         break;
     case URES_TABLE:
