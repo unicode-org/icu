@@ -22,7 +22,7 @@ enum{
     UIDNA_UNASSIGNED        = 0x0001 , 
     UIDNA_PROHIBITED        = 0x0002 , 
     UIDNA_MAP_NFKC          = 0x0003 , 
-    UIDNA_LABEL_SEPARATOR   = 0x0004 ,
+    UIDNA_LABEL_SEPARATOR   = 0x0004 
 };
 enum{
     _IDNA_LENGTH_IN_MAPPING_TABLE = 0x0003 /*11*/
