@@ -90,8 +90,7 @@ static void TestGetSetAttr(void) {
     log_err("ucol_setAttribute for UCOL_ATTRIBUTE_COUNT didn't return an error\n");
   }
   status = U_ZERO_ERROR;
-
-
+  ucol_close(coll);
 }
 
 
@@ -660,10 +659,11 @@ void TestSortKey()
       /*0x00, 0x53, 0x00, 0x54, 0x00, 0x55, 0x00, 0x56, 0x00, 0x53, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00*/
     };
 
-    int32_t sortklen, osortklen;
+    int32_t sortklen, osortklen, toStringLen=0;
     UCollator *col;
     UChar *test1, *test2, *test3;
     UErrorCode status = U_ZERO_ERROR;
+    char toStringBuffer[256], *resultP;
 
 
     uint8_t s1[] = { 0x9f, 0x00 };
@@ -735,6 +735,9 @@ void TestSortKey()
     doAssert( (memcmp(sortk2, sortk3, sortklen) == 0), "Result should be \"abcda\" ==  \"abcda\"");
 
     doAssert( (memcmp(sortk2, sortk2_compat, sortklen) == 0), "Binary format for 'abcda' sortkey different!");
+
+    resultP = ucol_sortKeyToString(col, sortk2_compat, toStringBuffer, &toStringLen);
+    doAssert( (resultP != 0), "sortKeyToString failed!");
 
 #if 1 /* verobse log of sortkeys */
     {
