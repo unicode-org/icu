@@ -780,13 +780,18 @@ void TestStringFunctions()
 
 /* test u_charName() -------------------------------------------------------- */
 
-static struct { uint32_t code; const char *name; } names[]={
-    0x0061, "LATIN SMALL LETTER A",
-    0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
-    0x3401, "CJK UNIFIED IDEOGRAPH-3401",
-    0x7fed, "CJK UNIFIED IDEOGRAPH-7FED",
-    0xac00, "HANGUL SYLLABLE GA",
-    0xd7a3, "HANGUL SYLLABLE HIH"
+static struct {
+    uint32_t code;
+    const char *name, *oldName;
+} names[]={
+    0x0061, "LATIN SMALL LETTER A", "",
+    0x0284, "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", "LATIN SMALL LETTER DOTLESS J BAR HOOK",
+    0x3401, "CJK UNIFIED IDEOGRAPH-3401", "",
+    0x7fed, "CJK UNIFIED IDEOGRAPH-7FED", "",
+    0xac00, "HANGUL SYLLABLE GA", "",
+    0xd7a3, "HANGUL SYLLABLE HIH", "",
+    0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS",
+    0xffe5, "FULLWIDTH YEN SIGN", ""
 };
 
 static void
@@ -798,6 +803,7 @@ TestCharNames() {
 
     log_verbose("Testing u_charName()\n");
     for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
+        /* modern Unicode character name */
         length=u_charName(names[i].code, U_UNICODE_CHAR_NAME, name, sizeof(name), &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("u_charName(0x%lx) error %s\n", names[i].code, u_errorName(errorCode));
@@ -805,6 +811,16 @@ TestCharNames() {
         }
         if(length<=0 || 0!=uprv_strcmp(name, names[i].name)) {
             log_err("u_charName(0x%lx) gets %s instead of %s\n", names[i].code, name, names[i].name);
+        }
+
+        /* Unicode 1.0 character name */
+        length=u_charName(names[i].code, U_UNICODE_10_CHAR_NAME, name, sizeof(name), &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("u_charName(0x%lx - 1.0) error %s\n", names[i].code, u_errorName(errorCode));
+            return;
+        }
+        if(length<0 || length>0 && 0!=uprv_strcmp(name, names[i].oldName)) {
+            log_err("u_charName(0x%lx - 1.0) gets %s instead of nothing or %s\n", names[i].code, name, names[i].oldName);
         }
     }
 }
