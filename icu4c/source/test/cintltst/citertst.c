@@ -30,6 +30,7 @@
 #include "cstring.h"
 #include "ucol_imp.h"
 #include "ucol_tok.h"
+#include <stdio.h>
 
 extern uint8_t ucol_uprv_getCaseBits(const UChar *, uint32_t, UErrorCode *);
 
@@ -750,7 +751,10 @@ static void TestMaxExpansion()
     UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
     UChar               ch     = 0;
+    UChar               supplementary[2] = {0xD800, 0xDC00};
+    uint32_t            sorder = 0;
     UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
+    uint32_t            temporder = 0;
 
     UChar rule[256];
     u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
@@ -761,7 +765,10 @@ static void TestMaxExpansion()
     while (ch < 0xFFFF && U_SUCCESS(status)) {
         int      count = 1;
         uint32_t order;
-        ch++;
+        int32_t  size = 0;
+
+        ch ++;
+
         ucol_setText(iter, &ch, 1, &status);
         order = ucol_previous(iter, &status);
 
@@ -774,14 +781,92 @@ static void TestMaxExpansion()
             count ++;
         }
 
-        if (U_FAILURE(status) && ucol_getMaxExpansion(iter, order) < count) {
+        size = ucol_getMaxExpansion(iter, order);
+        if (U_FAILURE(status) || size < count) {
             log_err("Failure at codepoint %d, maximum expansion count < %d\n",
                 ch, count);
         }
     }
 
+    /* testing for exact max expansion */
+    ch = 0;
+    while (ch < 0x61) {
+        uint32_t order;
+        int32_t  size;
+        ucol_setText(iter, &ch, 1, &status);
+        order = ucol_previous(iter, &status);
+        size  = ucol_getMaxExpansion(iter, order);
+        if (U_FAILURE(status) || size != 1) {
+            log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                ch, 1);
+        }
+        ch ++;
+    }
+
+    ch = 0x63; 
+    ucol_setText(iter, &ch, 1, &status);
+    temporder = ucol_previous(iter, &status);
+
+    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 3) {
+        log_err("Failure at codepoint %d, maximum expansion count != %d\n",
+                ch, 3);
+    }
+
+    ch = 0x64; 
+    ucol_setText(iter, &ch, 1, &status);
+    temporder = ucol_previous(iter, &status);
+
+    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 1) {
+        log_err("Failure at codepoint %d, maximum expansion count != %d\n",
+                ch, 3);
+    }
+
+    ucol_setText(iter, supplementary, 2, &status);
+    sorder = ucol_previous(iter, &status);
+
+    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, sorder) != 2) {
+        log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                ch, 2);
+    }
+
+    /* testing jamo */
+    ch = 0x1165;
+
+    ucol_setText(iter, &ch, 1, &status);
+    temporder = ucol_previous(iter, &status);
+    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) > 3) {
+        log_err("Failure at codepoint %d, maximum expansion count > %d\n",
+                ch, 3);
+    }
+
     ucol_closeElements(iter);
     ucol_close(coll);
+
+    /* testing special jamo &a<\u1160 */
+    rule[0] = 0x26;
+    rule[1] = 0x61;
+    rule[2] = 0x3c;
+    rule[3] = 0x1165;
+    rule[4] = 0x2f;
+    rule[5] = 0x71;
+    rule[6] = 0x71;
+    rule[5] = 0x71;
+    rule[7] = 0x71;
+    rule[8] = 0;
+    
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,
+        UCOL_DEFAULT_STRENGTH, &status);
+    iter = ucol_openElements(coll, &ch, 1, &status);
+
+    temporder = ucol_previous(iter, &status);
+    if (U_FAILURE(status) || ucol_getMaxExpansion(iter, temporder) != 5) {
+        log_err("Failure at codepoint %d, maximum expansion count > %d\n",
+                ch, 5);
+    }
+
+    ucol_closeElements(iter);
+    ucol_close(coll);
+
 }
 
 /**
