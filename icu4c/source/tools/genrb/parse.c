@@ -371,6 +371,11 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     if(isVerbose()){
         printf(" %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
+    
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
     /* make the filename including the directory */
     if (inputdir != NULL)
     {
