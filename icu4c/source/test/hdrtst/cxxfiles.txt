@@ -27,6 +27,7 @@ parsepos.h
 rbbi.h
 rbnf.h
 rbt.h
+regex.h
 rep.h
 resbund.h
 schriter.h
