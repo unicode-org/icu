@@ -24,10 +24,26 @@
 #include "unicode/ucnv.h"
 #include "ustr_imp.h"
 
+#define DIGIT_0     0x0030
+#define DIGIT_9     0x0039
+#define LOWERCASE_A 0x0061
+#define UPPERCASE_A 0x0041
+#define LOWERCASE_Z 0x007A
+#define UPPERCASE_Z 0x005A
+
 int
 ufmt_digitvalue(UChar c)
 {
-    return c - 0x0030 - (c >= 0x0041 ? (c >= 0x0061 ? 39 : 7) : 0);
+    if( (c>=DIGIT_0)&&(c<=DIGIT_9) ||
+        (c>=LOWERCASE_A)&&(c<=LOWERCASE_Z) ||
+        (c>=UPPERCASE_A)&&(c<=UPPERCASE_Z)  )
+    {
+      return c - 0x0030 - (c >= 0x0041 ? (c >= 0x0061 ? 39 : 7) : 0);
+    }
+    else
+    {
+      return -1;
+    }
 }
 
 UBool
@@ -35,7 +51,7 @@ ufmt_isdigit(UChar     c,
              int32_t     radix)
 {
     int digitVal = ufmt_digitvalue(c);
-    
+
     return (UBool)(digitVal < radix && digitVal >= 0);
 }
 
