@@ -321,21 +321,13 @@ void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
     }
 }
 
-UnicodeSet 
+UnicodeSet *
 RuleBasedCollator::getTailoredSet(UErrorCode &status) const
 {
   if(U_FAILURE(status)) {
-    return UnicodeSet();
+    return NULL;
   }
-  USet *set = ucol_getTailoredSet(this->ucollator, &status);
-  if(U_SUCCESS(status)) {
-    UnicodeSet result(*(const UnicodeSet *)set);
-    UnicodeString pattern;
-    uset_close(set);
-    return result;
-  } else {
-    return UnicodeSet();
-  }
+  return (UnicodeSet *)ucol_getTailoredSet(this->ucollator, &status);
 }
 
 

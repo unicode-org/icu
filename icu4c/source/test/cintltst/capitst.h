@@ -86,5 +86,9 @@
      * Test getting and setting of attributes
      */
     void TestGetSetAttr(void);
+    /**
+     * Test getTailoredSet
+     */
+    void TestGetTailoredSet(void);
 
 #endif
