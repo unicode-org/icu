@@ -9,14 +9,16 @@
 #ifndef __LETYPES_H
 #define __LETYPES_H
 
-typedef long le_int32;
-typedef unsigned long le_uint32;
-typedef short le_int16;
-typedef unsigned short le_uint16;
-typedef signed char le_int8;
-typedef unsigned char le_uint8;
+#include "unicode/utypes.h"
 
-typedef char le_bool;
+typedef int32_t le_int32;
+typedef uint32_t le_uint32;
+typedef int16_t le_int16;
+typedef uint16_t le_uint16;
+typedef int8_t le_int8;
+typedef uint8_t le_uint8;
+
+typedef bool_t le_bool;
 
 #ifndef true
 #define true 1
@@ -34,15 +36,43 @@ typedef le_uint32 LETag;
 
 typedef le_uint16 LEGlyphID;
 
-typedef le_uint16 LEUnicode16;
-typedef le_uint32 LEUnicode32;
-typedef le_uint16 LEUnicode;	// FIXME: we should depricate this type in favor of LEUnicode16...
+typedef UChar LEUnicode16;
+typedef UChar32 LEUnicode32;
+typedef UChar LEUnicode;	// FIXME: we should depricate this type in favor of LEUnicode16...
 
 struct LEPoint
 {
     float fX;
     float fY;
 };
+
+#ifndef XP_CPLUSPLUS
+typedef struct LEPoint LEPoint;
+#endif
+
+#define LE_ARRAY_COPY(dst, src, count) memcpy(dst, src, (count) * sizeof (src)[0])
+
+enum LEErrorCode {
+	/* informational */
+	// none right now...
+
+	/* success */
+	LE_NO_ERROR						= U_ZERO_ERROR,
+
+	/* failures */
+	LE_ILLEGAL_ARGUMENT_ERROR		= U_ILLEGAL_ARGUMENT_ERROR,
+	LE_MEMORY_ALLOCATION_ERROR		= U_MEMORY_ALLOCATION_ERROR,
+	LE_INDEX_OUT_OF_BOUNDS_ERROR	= U_INDEX_OUTOFBOUNDS_ERROR,
+	LE_NO_LAYOUT_ERROR				= U_UNSUPPORTED_ERROR,
+	LE_INTERNAL_ERROR				= U_INTERNAL_PROGRAM_ERROR
+};
+
+#ifndef XP_CPLUSPLUS
+typedef enum LEErrorCode LEErrorCode;
+#endif
+
+#define LE_SUCCESS(code) (U_SUCCESS((UErrorCode)code))
+#define LE_FAILURE(code) (U_FAILURE((UErrorCode)code))
 
 #endif
 

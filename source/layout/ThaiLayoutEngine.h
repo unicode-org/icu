@@ -36,7 +36,7 @@ public:
 	 * @see LEFontInstance
 	 * @see ScriptAndLanguageTags.h for script and language codes
 	 */
-    ThaiLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
 	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -77,13 +77,14 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the glyph index array
 	 * @param charIndices - the character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the glyph index array
 	 *
 	 * @see ThaiShaping
 	 */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEGlyphID *&glyphs, le_int32 *&charIndices);
+        LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 };
 
 #endif

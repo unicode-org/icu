@@ -17,7 +17,7 @@
 
 struct MarkToMarkPositioningSubtable : AttachmentPositioningSubtable
 {
-    le_int32   process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_int32   process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
     LEGlyphID  findMark2Glyph(GlyphIterator *glyphIterator);
 };
 

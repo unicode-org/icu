@@ -23,7 +23,7 @@ struct MarkArray
     le_uint16 markCount;
     MarkRecord markRecordArray[ANY_NUMBER];
 
-    le_int32 getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, LEFontInstance *fontInstance,
+    le_int32 getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, const LEFontInstance *fontInstance,
         LEPoint &anchor);
 };
 

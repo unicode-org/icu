@@ -42,7 +42,7 @@ public:
 	 * @see LayoutEngine::layoutEngineFactory
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    GXLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, MorphTableHeader *morphTable);
+    GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, MorphTableHeader *morphTable);
 
 	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -71,11 +71,12 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the glyph index array
 	 * @param charIndices - the character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the glyph index array
 	 */
     virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEGlyphID *&glyphs, le_int32 *&charIndices);
+        LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
     /**
 	 * This method adjusts the glyph positions using the font's
@@ -89,9 +90,10 @@ protected:
 	 *
 	 * Output parameters:
 	 * @param positions - the output X and Y positions (two entries per glyph)
+	 * @param success - set to an error code if the operation fails
 	 */
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[],
-        le_int32 glyphCount, float positions[]);
+        le_int32 glyphCount, float positions[], LEErrorCode &success);
 };
 
 #endif

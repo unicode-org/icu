@@ -26,7 +26,7 @@ void SubstitutionLookup::applySubstitutionLookups(
         SubstitutionLookupRecord *substLookupRecordArray,
         le_uint16 substCount,
         GlyphIterator *glyphIterator,
-        LEFontInstance *fontInstance,
+        const LEFontInstance *fontInstance,
         le_int32 position)
 {
     GlyphIterator tempIterator(*glyphIterator);

@@ -58,7 +58,7 @@ public:
 	 * @see LayoutEngine::layoutEngineFactory
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    OpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+    OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                             GlyphSubstitutionTableHeader *gsubTable);
 
 	/**
@@ -69,7 +69,7 @@ public:
 	 * @param scriptCode - the script
 	 * @param langaugeCode - the language
 	 */
-    OpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
 	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -164,12 +164,22 @@ protected:
 	 * @param outChars - the output character array, if different from the input
 	 * @param charIndices - the output character index array
 	 * @param featureTags - the output feature tag array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the output character count (input character count if no change)
 	 */
     virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags) /*= 0;*/
+            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success) /*= 0;*/
 	{
+		if (LE_FAILURE(success)) {
+			return 0;
+		}
+
+		if (offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+			success = LE_ILLEGAL_ARGUMENT_ERROR;
+			return 0;
+		}
+
 		return count;
 	};
 
@@ -193,6 +203,7 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the output glyph index array
 	 * @param charIndices - the output character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the output glyph index array
 	 *
@@ -200,7 +211,7 @@ protected:
 	 * method, this method won't change it.
 	 */
     virtual le_int32 glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices);
+            const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
 	/**
 	 * This method does any processing necessary to convert "fake"
@@ -221,12 +232,17 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the output glyph index array
 	 * @param charIndices - the output character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyph indices in the output glyph index array
 	 */
     virtual le_int32 glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                    LEGlyphID *&glyphs, le_int32 *&charIndices)
+                    LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
     {
+		if (LE_FAILURE(success)) {
+			return 0;
+		}
+
         glyphs = tempGlyphs;
         charIndices = tempCharIndices;
 
@@ -247,12 +263,13 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the glyph index array
 	 * @param charIndices - the character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the glyph index array
 	 *
 	 * @see LayoutEngine::computeGlyphs
 	 */
-    virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices);
+    virtual le_int32 computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 
 	/**
 	 * This method uses the GPOS table, if there is one, to adjust the glyph positions.
@@ -265,8 +282,9 @@ protected:
 	 *
 	 * Output parameters:
 	 * @param positions - the output X and Y positions (two entries per glyph)
+	 * @param success - set to an error code if the operation fails
 	 */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[]);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
 
 	/**
 	 * This method frees the feature tag array so that the

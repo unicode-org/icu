@@ -49,7 +49,7 @@ GlyphPositioningLookupProcessor::GlyphPositioningLookupProcessor()
 
 le_uint32 GlyphPositioningLookupProcessor::applySubtable(LookupSubtable *lookupSubtable, le_uint16 lookupType,
                                                        GlyphIterator *glyphIterator,
-                                                       LEFontInstance *fontInstance)
+                                                       const LEFontInstance *fontInstance)
 {
     le_uint32 delta = 0;
 

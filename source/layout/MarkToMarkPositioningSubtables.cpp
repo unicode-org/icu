@@ -25,7 +25,7 @@ LEGlyphID MarkToMarkPositioningSubtable::findMark2Glyph(GlyphIterator *glyphIter
     return 0xFFFF;
 }
 
-le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     LEGlyphID markGlyph = glyphIterator->getCurrGlyphID();
     le_int32 markCoverage = getGlyphCoverage((LEGlyphID) markGlyph);

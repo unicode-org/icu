@@ -11,7 +11,7 @@
 #include "AnchorTables.h"
 #include "LESwaps.h"
 
-void AnchorTable::getAnchor(LEGlyphID glyphID, LEFontInstance *fontInstance,
+void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance,
                             LEPoint &anchor)
 {
     switch(SWAPW(anchorFormat)) {
@@ -44,7 +44,7 @@ void AnchorTable::getAnchor(LEGlyphID glyphID, LEFontInstance *fontInstance,
     }
 }
 
-void Format1AnchorTable::getAnchor(LEFontInstance *fontInstance, LEPoint &anchor)
+void Format1AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor)
 {
     le_int16 x = SWAPW(xCoordinate);
     le_int16 y = SWAPW(yCoordinate);
@@ -55,7 +55,7 @@ void Format1AnchorTable::getAnchor(LEFontInstance *fontInstance, LEPoint &anchor
     fontInstance->pixelsToUnits(pixels, anchor);
 }
 
-void Format2AnchorTable::getAnchor(LEGlyphID glyphID, LEFontInstance *fontInstance, LEPoint &anchor)
+void Format2AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstance, LEPoint &anchor)
 {
     LEPoint point;
 
@@ -70,7 +70,7 @@ void Format2AnchorTable::getAnchor(LEGlyphID glyphID, LEFontInstance *fontInstan
     fontInstance->pixelsToUnits(point, anchor);
 }
 
-void Format3AnchorTable::getAnchor(LEFontInstance *fontInstance, LEPoint &anchor)
+void Format3AnchorTable::getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor)
 {
     le_int16 x = SWAPW(xCoordinate);
     le_int16 y = SWAPW(yCoordinate);
