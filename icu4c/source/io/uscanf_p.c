@@ -256,7 +256,7 @@ u_scanf_parse_spec (const UChar     *fmt,
 /* n */
 #define UFMT_COUNT          {ufmt_count, u_scanf_count_handler}
 /* [ */
-#define UFMT_SCANSET        {ufmt_string, u_scanf_scanset_handler} /* TODO: Is this also suppose to be ufmt_ustring */
+#define UFMT_SCANSET        {ufmt_string, u_scanf_scanset_handler}
 
 /* non-ANSI extensions */
 /* Use US-ASCII characters only for formatting */
@@ -1041,11 +1041,11 @@ u_scanf_scanset_handler(UFILE       *input,
                         int32_t     *consumed)
 {
     USet        *scanset;
-    int32_t     len;
     UErrorCode  status = U_ZERO_ERROR;
     UChar32     c;
     UChar       *s     = (UChar*) (args[0].ptrValue);
-    UChar       *alias, *limit;
+    UChar       *alias = NULL;
+    UChar       *limit = NULL;
     UBool       isNotEOF = FALSE;
     UBool       readCharacter = FALSE;
 
@@ -1059,16 +1059,16 @@ u_scanf_scanset_handler(UFILE       *input,
     /* Back up one to get the [ */
     fmt--;
 
-    /* determine the size of the input's buffer */
-    len = input->str.fLimit - input->str.fPos;
-
-    /* truncate to the width, if specified */
-    if(info->fWidth != -1)
-        len = ufmt_min(len, info->fWidth);
-
-    /* alias the target */
-    alias = s;
-    limit = alias + len;
+    if (!info->fSkipArg) {
+        /* truncate to the width, if specified and alias the target */
+        alias = s;
+        if(info->fWidth != -1) {
+            limit = alias + info->fWidth;
+        }
+        else {
+            limit = U_MAX_PTR(alias);
+        }
+    }
 
     /* parse the scanset from the fmt string */
     *consumed = uset_applyPattern(scanset, fmt, u_strlen(fmt), 0, &status);
@@ -1078,7 +1078,7 @@ u_scanf_scanset_handler(UFILE       *input,
         c=0;
 
         /* grab characters one at a time and make sure they are in the scanset */
-        while(alias < limit) {
+        while(info->fSkipArg || alias < limit) {
             if ((isNotEOF = ufile_getch32(input, &c)) && uset_contains(scanset, c)) {
                 readCharacter = TRUE;
                 if (!info->fSkipArg) {
