@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/11/28 19:27:08 $ 
-* $Revision: 1.41 $
+* $Date: 2001/11/28 23:00:06 $ 
+* $Revision: 1.42 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -34,13 +34,17 @@
         <property name="richedit.zip.file" value="${richedit.dist.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
 
-        <!-- Used for Javadoc generation -->   
-            <condition property="isWin98JDKVersion1.2">
-                <and>
-                    <equals arg1="${ant.java.version}" arg2="1.2"/>    
+        <!-- Used for Javadoc generation, strangely for sun jdk1.2, the os 
+        name for Windows 98 is Windows 95-->   
+        <condition property="isWin98JDKVersion1.2">
+            <and>
+                <equals arg1="${ant.java.version}" arg2="1.2"/>    
+                <or>
                     <equals arg1="${os.name}" arg2="Windows 98"/>
-                </and>
-            </condition>    
+                    <equals arg1="${os.name}" arg2="Windows 95"/>
+                </or>
+            </and>
+        </condition>  
       </target>
 
     <target name="all" depends="core,tests,tools,demos,jar,docs"/>
