@@ -1,93 +1,116 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:23 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="003F">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">қаңтар</month>
-				<month id="2">ақпан</month>
-				<month id="3">наурыз</month>
-				<month id="4">сәуір</month>
-				<month id="5">мамыр</month>
-				<month id="6">маусым</month>
-				<month id="7">шілде</month>
-				<month id="8">тамыз</month>
-				<month id="9">қыркүйек</month>
-				<month id="10">қазан</month>
-				<month id="11">қараша</month>
-				<month id="12">желтоқсан</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">қаң.</month>
-				<month id="2">ақп.</month>
-				<month id="3">нау.</month>
-				<month id="4">сәу.</month>
-				<month id="5">мам.</month>
-				<month id="6">мау.</month>
-				<month id="7">шіл.</month>
-				<month id="8">там.</month>
-				<month id="9">қыр.</month>
-				<month id="10">қаз.</month>
-				<month id="11">қар.</month>
-				<month id="12">желт.</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">жексені </day>
-				<day id="2">дуйсенбі </day>
-				<day id="3">сейсенбі </day>
-				<day id="4">сәренбі </day>
-				<day id="5">бейсенбі </day>
-				<day id="6">жұма </day>
-				<day id="7">сенбі </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">жс. </day>
-				<day id="2">дс. </day>
-				<day id="3">сс. </day>
-				<day id="4">ср. </day>
-				<day id="5">бс. </day>
-				<day id="6">жм. </day>
-				<day id="7">сһ. </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE, d MMMM yyyy 'ж.'</full>
-					<long>d MMMM yyyy 'ж.'</long>
-					<medium>dd.MM.yyyy</medium>
-					<short>dd.MM.yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="kk"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="kk">Қазақ</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[а-ш ы э ё]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">қаңтар</month>
+					<month type="2">ақпан</month>
+					<month type="3">наурыз</month>
+					<month type="4">сәуір</month>
+					<month type="5">мамыр</month>
+					<month type="6">маусым</month>
+					<month type="7">шілде</month>
+					<month type="8">тамыз</month>
+					<month type="9">қыркүйек</month>
+					<month type="10">қазан</month>
+					<month type="11">қараша</month>
+					<month type="12">желтоқсан</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">қаң.</month>
+					<month type="2">ақп.</month>
+					<month type="3">нау.</month>
+					<month type="4">сәу.</month>
+					<month type="5">мам.</month>
+					<month type="6">мау.</month>
+					<month type="7">шіл.</month>
+					<month type="8">там.</month>
+					<month type="9">қыр.</month>
+					<month type="10">қаз.</month>
+					<month type="11">қар.</month>
+					<month type="12">желт.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">жексені</day>
+					<day type="mon">дуйсенбі</day>
+					<day type="tue">сейсенбі</day>
+					<day type="wed">сәренбі</day>
+					<day type="thu">бейсенбі</day>
+					<day type="fri">жұма</day>
+					<day type="sat">сенбі</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">жс.</day>
+					<day type="mon">дс.</day>
+					<day type="tue">сс.</day>
+					<day type="wed">ср.</day>
+					<day type="thu">бс.</day>
+					<day type="fri">жм.</day>
+					<day type="sat">сһ.</day>
+				</dayAbbr>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, d MMMM yyyy 'ж.'</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d MMMM yyyy 'ж.'</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd.MM.yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd.MM.yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+	</dates>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

@@ -1,95 +1,97 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:33 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0041">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="sw" >Kiswahili</language>
-		</languages >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Nairobi" default="true">
-			<long>
-				<generic>Saa za Africa Mashariki</generic>
-				<standard>Saa za Africa Mashariki</standard>
-				<daylight>Nairobi</daylight>
-			</long>
-			<short>
-				<generic>Africa/Nairobi</generic>
-				<standard>EAT</standard>
-				<daylight>EAT</daylight>
-			</short>
-			<city>Nairobi</city>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Januari</month>
-				<month id="2">Februari</month>
-				<month id="3">Machi</month>
-				<month id="4">Aprili</month>
-				<month id="5">Mei</month>
-				<month id="6">Juni</month>
-				<month id="7">Julai</month>
-				<month id="8">Agosti</month>
-				<month id="9">Septemba</month>
-				<month id="10">Oktoba</month>
-				<month id="11">Novemba</month>
-				<month id="12">Desemba</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Feb</month>
-				<month id="3">Mar</month>
-				<month id="4">Apr</month>
-				<month id="5">Mei</month>
-				<month id="6">Jun</month>
-				<month id="7">Jul</month>
-				<month id="8">Ago</month>
-				<month id="9">Sep</month>
-				<month id="10">Okt</month>
-				<month id="11">Nov</month>
-				<month id="12">Des</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Jumapili </day>
-				<day id="2">Jumatatu </day>
-				<day id="3">Jumanne </day>
-				<day id="4">Jumatano </day>
-				<day id="5">Alhamisi </day>
-				<day id="6">Ijumaa </day>
-				<day id="7">Jumamosi </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Jpi </day>
-				<day id="2">Jtt </day>
-				<day id="3">Jnn </day>
-				<day id="4">Jtn </day>
-				<day id="5">Alh </day>
-				<day id="6">Iju </day>
-				<day id="7">Jmo </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">KK</era>
-				<era id="1">BK</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="sw"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="sw">Kiswahili</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<monthNames>
+						<month type="1">Januari</month>
+						<month type="2">Februari</month>
+						<month type="3">Machi</month>
+						<month type="4">Aprili</month>
+						<month type="5">Mei</month>
+						<month type="6">Juni</month>
+						<month type="7">Julai</month>
+						<month type="8">Agosti</month>
+						<month type="9">Septemba</month>
+						<month type="10">Oktoba</month>
+						<month type="11">Novemba</month>
+						<month type="12">Desemba</month>
+					</monthNames>
+					<monthAbbr>
+						<month type="1">Jan</month>
+						<month type="2">Feb</month>
+						<month type="3">Mar</month>
+						<month type="4">Apr</month>
+						<month type="5">Mei</month>
+						<month type="6">Jun</month>
+						<month type="7">Jul</month>
+						<month type="8">Ago</month>
+						<month type="9">Sep</month>
+						<month type="10">Okt</month>
+						<month type="11">Nov</month>
+						<month type="12">Des</month>
+					</monthAbbr>
+					<dayNames>
+						<day type="sun">Jumapili</day>
+						<day type="mon">Jumatatu</day>
+						<day type="tue">Jumanne</day>
+						<day type="wed">Jumatano</day>
+						<day type="thu">Alhamisi</day>
+						<day type="fri">Ijumaa</day>
+						<day type="sat">Jumamosi</day>
+					</dayNames>
+					<dayAbbr>
+						<day type="sun">Jpi</day>
+						<day type="mon">Jtt</day>
+						<day type="tue">Jnn</day>
+						<day type="wed">Jtn</day>
+						<day type="thu">Alh</day>
+						<day type="fri">Iju</day>
+						<day type="sat">Jmo</day>
+					</dayAbbr>
+					<week>
+						<minDays count="7"/>
+						<firstDay day="mon"/>
+					</week>
+					<eras>
+						<era type="1">KK</era>
+						<era type="2">BK</era>
+					</eras>
+				</calendar>
+			</calendars>
+			<timeZoneNames>
+				<zone type="Nairobi">
+					<long>
+						<generic>Saa za Africa Mashariki</generic>
+						<standard>Saa za Africa Mashariki</standard>
+						<daylight>Saa za Africa Mashariki</daylight>
+					</long>
+					<short>
+						<generic>Africa/Nairobi</generic>
+						<standard>EAT</standard>
+						<daylight>EAT</daylight>
+					</short>
+					<exemplarCity>Nairobi</exemplarCity>
+				</zone>
+			</timeZoneNames>
+		</dates>
 </localeData>

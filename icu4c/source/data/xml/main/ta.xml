@@ -1,248 +1,253 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:34 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0049">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="aa" >அபார்</language>
-			<language id="ab" >அப்காஸின்</language>
-			<language id="af" >ஆப்ரிகன்ஸ்</language>
-			<language id="am" >அம்ஹாரிக்</language>
-			<language id="ar" >அரபிக்</language>
-			<language id="as" >அஸாமீஸ்</language>
-			<language id="ay" >அயமரா</language>
-			<language id="az" >அசர்பாய்ஜானி</language>
-			<language id="ba" >பாஷ்கிர்0</language>
-			<language id="be" >பைலோருஷ்ன்</language>
-			<language id="bg" >பல்கெரியன்</language>
-			<language id="bh" >பிஹாரி</language>
-			<language id="bi" >பிஸ்லாமா</language>
-			<language id="bn" >பெங்காலி</language>
-			<language id="bo" >திபெத்தியன்</language>
-			<language id="br" >பிரிடன்</language>
-			<language id="ca" >காடலான்</language>
-			<language id="co" >கார்சியன்</language>
-			<language id="cs" >செக்</language>
-			<language id="cy" >வெல்ஷ்</language>
-			<language id="da" >டானிஷ்</language>
-			<language id="de" >ஜெர்மன்</language>
-			<language id="dz" >புடானி</language>
-			<language id="el" >கிரிக்</language>
-			<language id="en" >ஆங்கிலம்</language>
-			<language id="eo" >எஸ்பரேன்டோ</language>
-			<language id="es" >ஸ்பேனிஷ்</language>
-			<language id="et" >எஸ்டோனியன்</language>
-			<language id="eu" >பஸ்க்</language>
-			<language id="fa" >பர்ஸியன்</language>
-			<language id="fi" >பின்ஷ்</language>
-			<language id="fj" >பிஜி</language>
-			<language id="fo" >பைரோஸி</language>
-			<language id="fr" >பிரன்ச்</language>
-			<language id="fy" >பிரிஷியன்</language>
-			<language id="ga" >ஐரிஷ்</language>
-			<language id="gd" >ஸ்காட்ஸ் காலெக்</language>
-			<language id="gl" >கெலிஸியன்</language>
-			<language id="gn" >குரானி</language>
-			<language id="gu" >குஜராத்தி</language>
-			<language id="ha" >ஹொஸா</language>
-			<language id="he" >ஹுப்ரு</language>
-			<language id="hi" >இந்தி</language>
-			<language id="hr" >கரோஷியன்</language>
-			<language id="hu" >ஹங்கேரியன்</language>
-			<language id="hy" >ஆர்மேனியன்</language>
-			<language id="ia" >இன்டர்லிங்குவா</language>
-			<language id="id" >இந்தோனேஷியன்</language>
-			<language id="ie" >இன்டர்லிங்குவா</language>
-			<language id="ik" >இனுபெக்</language>
-			<language id="is" >ஐஸ்லென்டிக்</language>
-			<language id="it" >இத்தாலியன்</language>
-			<language id="iu" >இனுகிடட்</language>
-			<language id="ja" >ஜாபனீஸ்</language>
-			<language id="jw" >ஜாவானீஸ்</language>
-			<language id="ka" >ஜார்ஜியன்</language>
-			<language id="kk" >கசாக்</language>
-			<language id="kl" >கிரின்லென்டிக்</language>
-			<language id="km" >கம்போடியன்</language>
-			<language id="kn" >கன்னடா</language>
-			<language id="ko" >கொரியன்</language>
-			<language id="kok" >கோங்க்கனி</language>
-			<language id="ks" >காஷ்மிரி</language>
-			<language id="ku" >குர்திஷ்</language>
-			<language id="ky" >கிர்கிஷ்</language>
-			<language id="la" >லாதின்</language>
-			<language id="ln" >லிங்காலா</language>
-			<language id="lo" >லோத்தியன்</language>
-			<language id="lt" >லுத்தேனியன்</language>
-			<language id="lv" >லேட்வியன் (லேட்டிஷ்)</language>
-			<language id="mg" >மலகெஸி</language>
-			<language id="mi" >மோரி</language>
-			<language id="mk" >மெக்கடோனியன்</language>
-			<language id="ml" >மலயாழம்</language>
-			<language id="mn" >மங்கோலியன்</language>
-			<language id="mo" >மோல்டேவியன்</language>
-			<language id="mr" >மராத்தி</language>
-			<language id="ms" >மலாய்</language>
-			<language id="mt" >மால்டிஸ்</language>
-			<language id="my" >பர்மிஸ்</language>
-			<language id="na" >நாரூ</language>
-			<language id="ne" >நேப்பாலி</language>
-			<language id="nl" >டச்</language>
-			<language id="no" >நார்வேகியன்</language>
-			<language id="oc" >ஆகிடியன்</language>
-			<language id="om" >ஒரோம (அபன்)</language>
-			<language id="or" >ஒரியா</language>
-			<language id="pa" >பஞ்சாபி</language>
-			<language id="pl" >போலிஷ்</language>
-			<language id="ps" >பேஷ்டோ (புஷ்டோ)</language>
-			<language id="pt" >போர்ச்சிகீஸ்</language>
-			<language id="qu" >கியுசாQuechua</language>
-			<language id="rm" >ரைட்டோ-ரோமென்ஸ்</language>
-			<language id="rn" >கிருந்தி</language>
-			<language id="ro" >ரோமேனியன்</language>
-			<language id="root" >தமிழ்</language>
-			<language id="ru" >ரஷியன்</language>
-			<language id="rw" >கின்யர்வென்டா</language>
-			<language id="sa" >சமஸ்கிரிதம்</language>
-			<language id="sd" >சிந்தி</language>
-			<language id="sg" >சென்க்ரோ</language>
-			<language id="sh" >செர்போ-க்ரோஷியன்</language>
-			<language id="si" >சிங்களிஸ்</language>
-			<language id="sk" >ஸ்லோவெக்</language>
-			<language id="sl" >ஸ்லோவினேயின்</language>
-			<language id="sm" >ஸெமோன்</language>
-			<language id="sn" >ஷோனா</language>
-			<language id="so" >சோமாலி</language>
-			<language id="sq" >அல்பெனியன்</language>
-			<language id="sr" >சர்பியன்</language>
-			<language id="ss" >ஷிஸ்வாதி</language>
-			<language id="st" >ஷெஸ்ஸோதோ</language>
-			<language id="su" >சுடானீஸ்</language>
-			<language id="sv" >ஷீவிடிஸ்</language>
-			<language id="sw" >ஸ்வெஹிலி</language>
-			<language id="ta" >தமிழ்</language>
-			<language id="te" >தெலுங்கு</language>
-			<language id="tg" >தாஜிக்</language>
-			<language id="th" >தாய்</language>
-			<language id="ti" >டிக்ரின்யா</language>
-			<language id="tk" >டர்க்மென்</language>
-			<language id="tl" >டாகாலோக்</language>
-			<language id="tn" >ஸெட்ஸ்வானா</language>
-			<language id="to" >டோங்கா</language>
-			<language id="tr" >டர்கிஷ்</language>
-			<language id="ts" >ஸோங்கா</language>
-			<language id="tt" >டாடர்</language>
-			<language id="tw" >த்திவி</language>
-			<language id="ug" >யுகுர்</language>
-			<language id="uk" >உக்ரேனியன்</language>
-			<language id="ur" >உருது</language>
-			<language id="uz" >உஸ்பெக்</language>
-			<language id="vi" >வியட்நாமிஸ்</language>
-			<language id="vo" >ஒலபுக்Volapuk</language>
-			<language id="wo" >ஒலோப்Wolof</language>
-			<language id="xh" >ஹோஷாXhosa</language>
-			<language id="yi" >ஈத்திஷ</language>
-			<language id="yo" >யோருப்பா</language>
-			<language id="za" >ஜுவாங்</language>
-			<language id="zh" >சயனீஸ்</language>
-			<language id="zu" >ஜூலூ</language>
-		</languages >
-		<countries  >
-			<country id="IN">இந்தியா</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Asia/Calcutta" default="true">
-			<long>
-				<generic>இந்திய நேரப்படி</generic>
-				<standard>இந்திய நேரப்படி</standard>
-			</long>
-			<short>
-				<generic>Asia/Calcutta</generic>
-				<standard>IST</standard>
-				<daylight>IST</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">ஜனவரி</month>
-				<month id="2">பெப்ரவரி</month>
-				<month id="3">மார்ச்</month>
-				<month id="4">ஏப்ரல்</month>
-				<month id="5">மே</month>
-				<month id="6">ஜூன்</month>
-				<month id="7">ஜூலை</month>
-				<month id="8">ஆகஸ்ட்</month>
-				<month id="9">செப்டம்பர்</month>
-				<month id="10">அக்டோபர்</month>
-				<month id="11">நவம்பர்</month>
-				<month id="12">டிசம்பர்</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">ஜன.</month>
-				<month id="2">பெப்.</month>
-				<month id="3">மார்.</month>
-				<month id="4">ஏப்.</month>
-				<month id="5">மே</month>
-				<month id="6">ஜூன்</month>
-				<month id="7">ஜூலை</month>
-				<month id="8">ஆக.</month>
-				<month id="9">செப்.</month>
-				<month id="10">அக்.</month>
-				<month id="11">நவ.</month>
-				<month id="12">டிச.</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">ஞாயிறு </day>
-				<day id="2">திங்கள் </day>
-				<day id="3">செவ்வாய் </day>
-				<day id="4">புதன் </day>
-				<day id="5">வியாழன் </day>
-				<day id="6">வெள்ளி </day>
-				<day id="7">சனி </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">ஞா </day>
-				<day id="2">தி </day>
-				<day id="3">செ </day>
-				<day id="4">பு </day>
-				<day id="5">வி </day>
-				<day id="6">வெ </day>
-				<day id="7">ச </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">கிமு</era>
-				<era id="1">கிபி</era>
-			</eras>
-			<am>காலை</am><pm>மாலை</pm>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##,##0.###;-#,##,##0.###</decimal>
-			<percent>#,##,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ta"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="aa">அபார்</language>
+			<language type="ab">அப்காஸின்</language>
+			<language type="af">ஆப்ரிகன்ஸ்</language>
+			<language type="am">அம்ஹாரிக்</language>
+			<language type="ar">அரபிக்</language>
+			<language type="as">அஸாமீஸ்</language>
+			<language type="ay">அயமரா</language>
+			<language type="az">அசர்பாய்ஜானி</language>
+			<language type="ba">பாஷ்கிர்0</language>
+			<language type="be">பைலோருஷ்ன்</language>
+			<language type="bg">பல்கெரியன்</language>
+			<language type="bh">பிஹாரி</language>
+			<language type="bi">பிஸ்லாமா</language>
+			<language type="bn">பெங்காலி</language>
+			<language type="bo">திபெத்தியன்</language>
+			<language type="br">பிரிடன்</language>
+			<language type="ca">காடலான்</language>
+			<language type="co">கார்சியன்</language>
+			<language type="cs">செக்</language>
+			<language type="cy">வெல்ஷ்</language>
+			<language type="da">டானிஷ்</language>
+			<language type="de">ஜெர்மன்</language>
+			<language type="dz">புடானி</language>
+			<language type="el">கிரிக்</language>
+			<language type="en">ஆங்கிலம்</language>
+			<language type="eo">எஸ்பரேன்டோ</language>
+			<language type="es">ஸ்பேனிஷ்</language>
+			<language type="et">எஸ்டோனியன்</language>
+			<language type="eu">பஸ்க்</language>
+			<language type="fa">பர்ஸியன்</language>
+			<language type="fi">பின்ஷ்</language>
+			<language type="fj">பிஜி</language>
+			<language type="fo">பைரோஸி</language>
+			<language type="fr">பிரன்ச்</language>
+			<language type="fy">பிரிஷியன்</language>
+			<language type="ga">ஐரிஷ்</language>
+			<language type="gd">ஸ்காட்ஸ் காலெக்</language>
+			<language type="gl">கெலிஸியன்</language>
+			<language type="gn">குரானி</language>
+			<language type="gu">குஜராத்தி</language>
+			<language type="ha">ஹொஸா</language>
+			<language type="he">ஹுப்ரு</language>
+			<language type="hi">இந்தி</language>
+			<language type="hr">கரோஷியன்</language>
+			<language type="hu">ஹங்கேரியன்</language>
+			<language type="hy">ஆர்மேனியன்</language>
+			<language type="ia">இன்டர்லிங்குவா</language>
+			<language type="id">இந்தோனேஷியன்</language>
+			<language type="ie">இன்டர்லிங்குவா</language>
+			<language type="ik">இனுபெக்</language>
+			<language type="is">ஐஸ்லென்டிக்</language>
+			<language type="it">இத்தாலியன்</language>
+			<language type="iu">இனுகிடட்</language>
+			<language type="ja">ஜாபனீஸ்</language>
+			<language type="jw">ஜாவானீஸ்</language>
+			<language type="ka">ஜார்ஜியன்</language>
+			<language type="kk">கசாக்</language>
+			<language type="kl">கிரின்லென்டிக்</language>
+			<language type="km">கம்போடியன்</language>
+			<language type="kn">கன்னடா</language>
+			<language type="ko">கொரியன்</language>
+			<language type="kok">கோங்க்கனி</language>
+			<language type="ks">காஷ்மிரி</language>
+			<language type="ku">குர்திஷ்</language>
+			<language type="ky">கிர்கிஷ்</language>
+			<language type="la">லாதின்</language>
+			<language type="ln">லிங்காலா</language>
+			<language type="lo">லோத்தியன்</language>
+			<language type="lt">லுத்தேனியன்</language>
+			<language type="lv">லேட்வியன் (லேட்டிஷ்)</language>
+			<language type="mg">மலகெஸி</language>
+			<language type="mi">மோரி</language>
+			<language type="mk">மெக்கடோனியன்</language>
+			<language type="ml">மலயாழம்</language>
+			<language type="mn">மங்கோலியன்</language>
+			<language type="mo">மோல்டேவியன்</language>
+			<language type="mr">மராத்தி</language>
+			<language type="ms">மலாய்</language>
+			<language type="mt">மால்டிஸ்</language>
+			<language type="my">பர்மிஸ்</language>
+			<language type="na">நாரூ</language>
+			<language type="ne">நேப்பாலி</language>
+			<language type="nl">டச்</language>
+			<language type="no">நார்வேகியன்</language>
+			<language type="oc">ஆகிடியன்</language>
+			<language type="om">ஒரோம (அபன்)</language>
+			<language type="or">ஒரியா</language>
+			<language type="pa">பஞ்சாபி</language>
+			<language type="pl">போலிஷ்</language>
+			<language type="ps">பேஷ்டோ (புஷ்டோ)</language>
+			<language type="pt">போர்ச்சிகீஸ்</language>
+			<language type="qu">கியுசாQuechua</language>
+			<language type="rm">ரைட்டோ-ரோமென்ஸ்</language>
+			<language type="rn">கிருந்தி</language>
+			<language type="ro">ரோமேனியன்</language>
+			<language type="root">தமிழ்</language>
+			<language type="ru">ரஷியன்</language>
+			<language type="rw">கின்யர்வென்டா</language>
+			<language type="sa">சமஸ்கிரிதம்</language>
+			<language type="sd">சிந்தி</language>
+			<language type="sg">சென்க்ரோ</language>
+			<language type="sh">செர்போ-க்ரோஷியன்</language>
+			<language type="si">சிங்களிஸ்</language>
+			<language type="sk">ஸ்லோவெக்</language>
+			<language type="sl">ஸ்லோவினேயின்</language>
+			<language type="sm">ஸெமோன்</language>
+			<language type="sn">ஷோனா</language>
+			<language type="so">சோமாலி</language>
+			<language type="sq">அல்பெனியன்</language>
+			<language type="sr">சர்பியன்</language>
+			<language type="ss">ஷிஸ்வாதி</language>
+			<language type="st">ஷெஸ்ஸோதோ</language>
+			<language type="su">சுடானீஸ்</language>
+			<language type="sv">ஷீவிடிஸ்</language>
+			<language type="sw">ஸ்வெஹிலி</language>
+			<language type="ta">தமிழ்</language>
+			<language type="te">தெலுங்கு</language>
+			<language type="tg">தாஜிக்</language>
+			<language type="th">தாய்</language>
+			<language type="ti">டிக்ரின்யா</language>
+			<language type="tk">டர்க்மென்</language>
+			<language type="tl">டாகாலோக்</language>
+			<language type="tn">ஸெட்ஸ்வானா</language>
+			<language type="to">டோங்கா</language>
+			<language type="tr">டர்கிஷ்</language>
+			<language type="ts">ஸோங்கா</language>
+			<language type="tt">டாடர்</language>
+			<language type="tw">த்திவி</language>
+			<language type="ug">யுகுர்</language>
+			<language type="uk">உக்ரேனியன்</language>
+			<language type="ur">உருது</language>
+			<language type="uz">உஸ்பெக்</language>
+			<language type="vi">வியட்நாமிஸ்</language>
+			<language type="vo">ஒலபுக்Volapuk</language>
+			<language type="wo">ஒலோப்Wolof</language>
+			<language type="xh">ஹோஷாXhosa</language>
+			<language type="yi">ஈத்திஷ</language>
+			<language type="yo">யோருப்பா</language>
+			<language type="za">ஜுவாங்</language>
+			<language type="zh">சயனீஸ்</language>
+			<language type="zu">ஜூலூ</language>
+		</languages>
+		<territories>
+			<territory type="IN">இந்தியா</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[:Taml:]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ஜனவரி</month>
+					<month type="2">பெப்ரவரி</month>
+					<month type="3">மார்ச்</month>
+					<month type="4">ஏப்ரல்</month>
+					<month type="5">மே</month>
+					<month type="6">ஜூன்</month>
+					<month type="7">ஜூலை</month>
+					<month type="8">ஆகஸ்ட்</month>
+					<month type="9">செப்டம்பர்</month>
+					<month type="10">அக்டோபர்</month>
+					<month type="11">நவம்பர்</month>
+					<month type="12">டிசம்பர்</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ஜன.</month>
+					<month type="2">பெப்.</month>
+					<month type="3">மார்.</month>
+					<month type="4">ஏப்.</month>
+					<month type="5">மே</month>
+					<month type="6">ஜூன்</month>
+					<month type="7">ஜூலை</month>
+					<month type="8">ஆக.</month>
+					<month type="9">செப்.</month>
+					<month type="10">அக்.</month>
+					<month type="11">நவ.</month>
+					<month type="12">டிச.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">ஞாயிறு</day>
+					<day type="mon">திங்கள்</day>
+					<day type="tue">செவ்வாய்</day>
+					<day type="wed">புதன்</day>
+					<day type="thu">வியாழன்</day>
+					<day type="fri">வெள்ளி</day>
+					<day type="sat">சனி</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ஞா</day>
+					<day type="mon">தி</day>
+					<day type="tue">செ</day>
+					<day type="wed">பு</day>
+					<day type="thu">வி</day>
+					<day type="fri">வெ</day>
+					<day type="sat">ச</day>
+				</dayAbbr>
+				<eras>
+					<era type="1">கிமு</era>
+					<era type="2">கிபி</era>
+				</eras>
+				<am>காலை</am>
+				<pm>மாலை</pm>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<numberFormats>
+			<default type="decimal"/>
+			<numberFormat type="decimal">
+				<pattern>#,##,##0.###</pattern>
+				<pattern>-#,##,##0.###</pattern>
+			</numberFormat>
+			<numberFormat type="currency">
+				<pattern>¤ #,##,##0.00</pattern>
+				<pattern>-¤ #,##,##0.00</pattern>
+			</numberFormat>
+			<numberFormat type="percent">
+				<pattern>#,##,##0%</pattern>
+			</numberFormat>
+			<numberFormat type="scientific">
+				<pattern>#E0</pattern>
+			</numberFormat>
+		</numberFormats>
+	</numbers>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

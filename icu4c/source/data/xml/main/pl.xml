@@ -1,141 +1,155 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:29 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0015">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="pl" >polski</language>
-		</languages >
-		<countries  >
-			<country id="PL">Polska</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">styczeń</month>
-				<month id="2">luty</month>
-				<month id="3">marzec</month>
-				<month id="4">kwiecień</month>
-				<month id="5">maj</month>
-				<month id="6">czerwiec</month>
-				<month id="7">lipiec</month>
-				<month id="8">sierpień</month>
-				<month id="9">wrzesień</month>
-				<month id="10">październik</month>
-				<month id="11">listopad</month>
-				<month id="12">grudzień</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">sty</month>
-				<month id="2">lut</month>
-				<month id="3">mar</month>
-				<month id="4">kwi</month>
-				<month id="5">maj</month>
-				<month id="6">cze</month>
-				<month id="7">lip</month>
-				<month id="8">sie</month>
-				<month id="9">wrz</month>
-				<month id="10">paź</month>
-				<month id="11">lis</month>
-				<month id="12">gru</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">niedziela </day>
-				<day id="2">poniedziałek </day>
-				<day id="3">wtorek </day>
-				<day id="4">środa </day>
-				<day id="5">czwartek </day>
-				<day id="6">piątek </day>
-				<day id="7">sobota </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">N </day>
-				<day id="2">Pn </day>
-				<day id="3">Wt </day>
-				<day id="4">Śr </day>
-				<day id="5">Cz </day>
-				<day id="6">Pt </day>
-				<day id="7">So </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">p.n.e.</era>
-				<era id="1">n.e.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE, d MMMM yyyy</full>
-					<long>d MMMM yyyy</long>
-					<medium>yyyy-MM-dd</medium>
-					<short>yy-MM-dd</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="2" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>A</after>
-		<gt1>ą</gt1>
-		<gt3>Ą</gt3>
-		<after>C</after>
-		<gt1>ć</gt1>
-		<gt3>Ć</gt3>
-		<after>E</after>
-		<gt1>ę</gt1>
-		<gt3>Ę</gt3>
-		<after>L</after>
-		<gt1>ł</gt1>
-		<gt3>Ł</gt3>
-		<after>N</after>
-		<gt1>ń</gt1>
-		<gt3>Ń</gt3>
-		<after>O</after>
-		<gt1>ó</gt1>
-		<gt3>Ó</gt3>
-		<after>S</after>
-		<gt1>ś</gt1>
-		<gt3>Ś</gt3>
-		<after>Z</after>
-		<gt1>ź</gt1>
-		<gt3>Ź</gt3>
-		<gt1>ż</gt1>
-		<gt3>Ż</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="pl"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="pl">polski</language>
+		</languages>
+		<territories>
+			<territory type="PL">Polska</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z ó ą ę ć ń ś ź ł ż]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">styczeń</month>
+					<month type="2">luty</month>
+					<month type="3">marzec</month>
+					<month type="4">kwiecień</month>
+					<month type="5">maj</month>
+					<month type="6">czerwiec</month>
+					<month type="7">lipiec</month>
+					<month type="8">sierpień</month>
+					<month type="9">wrzesień</month>
+					<month type="10">październik</month>
+					<month type="11">listopad</month>
+					<month type="12">grudzień</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">sty</month>
+					<month type="2">lut</month>
+					<month type="3">mar</month>
+					<month type="4">kwi</month>
+					<month type="5">maj</month>
+					<month type="6">cze</month>
+					<month type="7">lip</month>
+					<month type="8">sie</month>
+					<month type="9">wrz</month>
+					<month type="10">paź</month>
+					<month type="11">lis</month>
+					<month type="12">gru</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">niedziela</day>
+					<day type="mon">poniedziałek</day>
+					<day type="tue">wtorek</day>
+					<day type="wed">środa</day>
+					<day type="thu">czwartek</day>
+					<day type="fri">piątek</day>
+					<day type="sat">sobota</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">N</day>
+					<day type="mon">Pn</day>
+					<day type="tue">Wt</day>
+					<day type="wed">Śr</day>
+					<day type="thu">Cz</day>
+					<day type="fri">Pt</day>
+					<day type="sat">So</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<era type="1">p.n.e.</era>
+					<era type="2">n.e.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, d MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>yyyy-MM-dd</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>yy-MM-dd</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<rules>
+					<reset>A</reset>
+					<p>ą</p>
+					<t>Ą</t>
+					<reset>C</reset>
+					<p>ć</p>
+					<t>Ć</t>
+					<reset>E</reset>
+					<p>ę</p>
+					<t>Ę</t>
+					<reset>L</reset>
+					<p>ł</p>
+					<t>Ł</t>
+					<reset>N</reset>
+					<p>ń</p>
+					<t>Ń</t>
+					<reset>O</reset>
+					<p>ó</p>
+					<t>Ó</t>
+					<reset>S</reset>
+					<p>ś</p>
+					<t>Ś</t>
+					<reset>Z</reset>
+					<p>ź</p>
+					<t>Ź</t>
+					<p>ż</p>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="2" />
+			</collation  >
+		</collations>
 </localeData>

@@ -1,89 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:11 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="MP" />
-		<correspondsTo vendor="0409">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">January</month>
-				<month id="2">February</month>
-				<month id="3">March</month>
-				<month id="4">April</month>
-				<month id="5">May</month>
-				<month id="6">June</month>
-				<month id="7">July</month>
-				<month id="8">August</month>
-				<month id="9">September</month>
-				<month id="10">October</month>
-				<month id="11">November</month>
-				<month id="12">December</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Feb</month>
-				<month id="3">Mar</month>
-				<month id="4">Apr</month>
-				<month id="5">May</month>
-				<month id="6">Jun</month>
-				<month id="7">Jul</month>
-				<month id="8">Aug</month>
-				<month id="9">Sep</month>
-				<month id="10">Oct</month>
-				<month id="11">Nov</month>
-				<month id="12">Dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Sunday </day>
-				<day id="2">Monday </day>
-				<day id="3">Tuesday </day>
-				<day id="4">Wednesday </day>
-				<day id="5">Thursday </day>
-				<day id="6">Friday </day>
-				<day id="7">Saturday </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Sun </day>
-				<day id="2">Mon </day>
-				<day id="3">Tue </day>
-				<day id="4">Wed </day>
-				<day id="5">Thu </day>
-				<day id="6">Fri </day>
-				<day id="7">Sat </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="USD" default="true">
-			<symbol>$</symbol>
-			<name>USD</name>
-			<decimal>.</decimal>
-			<pattern>¤#,##0.00;(¤#,##0.00)</pattern>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="en"></language>
+		<territory type="MNP">MP</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>¤#,##0.00</pattern>
+					<pattern>(¤#,##0.00)</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+			<currencies>
+				<default type="USD"/>
+				<currency type="USD">
+					<symbol>$</symbol>
+					<displayName>USD</displayName>
+					<decimal>.</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

@@ -1,112 +1,125 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:28 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0013">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="nl" >Nederlands</language>
-		</languages >
-		<countries  >
-			<country id="BE">België</country>
-			<country id="NL">Nederland</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">januari</month>
-				<month id="2">februari</month>
-				<month id="3">maart</month>
-				<month id="4">april</month>
-				<month id="5">mei</month>
-				<month id="6">juni</month>
-				<month id="7">juli</month>
-				<month id="8">augustus</month>
-				<month id="9">september</month>
-				<month id="10">oktober</month>
-				<month id="11">november</month>
-				<month id="12">december</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">jan</month>
-				<month id="2">feb</month>
-				<month id="3">mrt</month>
-				<month id="4">apr</month>
-				<month id="5">mei</month>
-				<month id="6">jun</month>
-				<month id="7">jul</month>
-				<month id="8">aug</month>
-				<month id="9">sep</month>
-				<month id="10">okt</month>
-				<month id="11">nov</month>
-				<month id="12">dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">zondag </day>
-				<day id="2">maandag </day>
-				<day id="3">dinsdag </day>
-				<day id="4">woensdag </day>
-				<day id="5">donderdag </day>
-				<day id="6">vrijdag </day>
-				<day id="7">zaterdag </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">zo </day>
-				<day id="2">ma </day>
-				<day id="3">di </day>
-				<day id="4">wo </day>
-				<day id="5">do </day>
-				<day id="6">vr </day>
-				<day id="7">za </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>H:mm:ss' uur' z</full>
-					<long>H:mm:ss z</long>
-					<medium>H:mm:ss</medium>
-					<short>H:mm</short>
-				</time>
-				<date>
-					<full>EEEE d MMMM yyyy</full>
-					<long>d MMMM yyyy</long>
-					<medium>d-MMM-yy</medium>
-					<short>d-M-yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="nl"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="nl">Nederlands</language>
+		</languages>
+		<territories>
+			<territory type="BE">België</territory>
+			<territory type="NL">Nederland</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z á é í ó ú ä ë ï ö ü ĳ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januari</month>
+					<month type="2">februari</month>
+					<month type="3">maart</month>
+					<month type="4">april</month>
+					<month type="5">mei</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">augustus</month>
+					<month type="9">september</month>
+					<month type="10">oktober</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mrt</month>
+					<month type="4">apr</month>
+					<month type="5">mei</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">zondag</day>
+					<day type="mon">maandag</day>
+					<day type="tue">dinsdag</day>
+					<day type="wed">woensdag</day>
+					<day type="thu">donderdag</day>
+					<day type="fri">vrijdag</day>
+					<day type="sat">zaterdag</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">zo</day>
+					<day type="mon">ma</day>
+					<day type="tue">di</day>
+					<day type="wed">wo</day>
+					<day type="thu">do</day>
+					<day type="fri">vr</day>
+					<day type="sat">za</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="thu"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE d MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>d-MMM-yy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>d-M-yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>H:mm:ss' uur' z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>H:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>H:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>H:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+	<special owner="http://oss.software.ibm.com/icu/"  >
+		<ruleBasedNumberFormats>
+			<ruleBasedNumberFormat type="spellout">-x: min &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />(zero?); een; twee; drie; vier; vijf; zes; zeven; acht; negen;<cp hex="000A" />tien; elf; twaalf; dertien; veertien; vijftien; zestien;<cp hex="000A" />zeventien; achtien; negentien;<cp hex="000A" />20: [&gt;&gt; en ]twintig;<cp hex="000A" />30: [&gt;&gt; en ]dertig;<cp hex="000A" />40: [&gt;&gt; en ]veertig;<cp hex="000A" />50: [&gt;&gt; en ]vijftig;<cp hex="000A" />60: [&gt;&gt; en ]zestig;<cp hex="000A" />70: [&gt;&gt; en ]zeventig;<cp hex="000A" />80: [&gt;&gt; en ]tachtig;<cp hex="000A" />90: [&gt;&gt; en ]negentig;<cp hex="000A" />100: &lt;&lt; honderd[ &gt;&gt;];<cp hex="000A" />1000: &lt;&lt; duizend[ &gt;&gt;];<cp hex="000A" />1,000,000: &lt;&lt; miljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000: &lt;&lt; biljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: =#,##0=</ruleBasedNumberFormat>
+		</ruleBasedNumberFormats>
+	</special>
 </localeData>

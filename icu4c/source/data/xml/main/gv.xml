@@ -1,73 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:19 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0000">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Jerrey-geuree</month>
-				<month id="2">Toshiaght-arree</month>
-				<month id="3">Mayrnt</month>
-				<month id="4">Averil</month>
-				<month id="5">Boaldyn</month>
-				<month id="6">Mean-souree</month>
-				<month id="7">Jerrey-souree</month>
-				<month id="8">Luanistyn</month>
-				<month id="9">Mean-fouyir</month>
-				<month id="10">Jerrey-fouyir</month>
-				<month id="11">Mee Houney</month>
-				<month id="12">Mee ny Nollick</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">J-guer</month>
-				<month id="2">T-arree</month>
-				<month id="3">Mayrnt</month>
-				<month id="4">Avrril</month>
-				<month id="5">Boaldyn</month>
-				<month id="6">M-souree</month>
-				<month id="7">J-souree</month>
-				<month id="8">Luanistyn</month>
-				<month id="9">M-fouyir</month>
-				<month id="10">J-fouyir</month>
-				<month id="11">M.Houney</month>
-				<month id="12">M.Nollick</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Jedoonee </day>
-				<day id="2">Jelhein </day>
-				<day id="3">Jemayrt </day>
-				<day id="4">Jercean </day>
-				<day id="5">Jerdein </day>
-				<day id="6">Jeheiney </day>
-				<day id="7">Jesarn </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Jed </day>
-				<day id="2">Jel </day>
-				<day id="3">Jem </day>
-				<day id="4">Jerc </day>
-				<day id="5">Jerd </day>
-				<day id="6">Jeh </day>
-				<day id="7">Jes </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="gv"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<monthNames>
+						<month type="1">Jerrey-geuree</month>
+						<month type="2">Toshiaght-arree</month>
+						<month type="3">Mayrnt</month>
+						<month type="4">Averil</month>
+						<month type="5">Boaldyn</month>
+						<month type="6">Mean-souree</month>
+						<month type="7">Jerrey-souree</month>
+						<month type="8">Luanistyn</month>
+						<month type="9">Mean-fouyir</month>
+						<month type="10">Jerrey-fouyir</month>
+						<month type="11">Mee Houney</month>
+						<month type="12">Mee ny Nollick</month>
+					</monthNames>
+					<monthAbbr>
+						<month type="1">J-guer</month>
+						<month type="2">T-arree</month>
+						<month type="3">Mayrnt</month>
+						<month type="4">Avrril</month>
+						<month type="5">Boaldyn</month>
+						<month type="6">M-souree</month>
+						<month type="7">J-souree</month>
+						<month type="8">Luanistyn</month>
+						<month type="9">M-fouyir</month>
+						<month type="10">J-fouyir</month>
+						<month type="11">M.Houney</month>
+						<month type="12">M.Nollick</month>
+					</monthAbbr>
+					<dayNames>
+						<day type="sun">Jedoonee</day>
+						<day type="mon">Jelhein</day>
+						<day type="tue">Jemayrt</day>
+						<day type="wed">Jercean</day>
+						<day type="thu">Jerdein</day>
+						<day type="fri">Jeheiney</day>
+						<day type="sat">Jesarn</day>
+					</dayNames>
+					<dayAbbr>
+						<day type="sun">Jed</day>
+						<day type="mon">Jel</day>
+						<day type="tue">Jem</day>
+						<day type="wed">Jerc</day>
+						<day type="thu">Jerd</day>
+						<day type="fri">Jeh</day>
+						<day type="sat">Jes</day>
+					</dayAbbr>
+				</calendar>
+			</calendars>
+		</dates>
 </localeData>

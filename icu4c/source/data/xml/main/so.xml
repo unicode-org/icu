@@ -1,101 +1,123 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:32 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0000">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="so" >Soomaali</language>
-		</languages >
-		<countries  >
-			<country id="DJ">Jabuuti</country>
-			<country id="ET">Itoobiya</country>
-			<country id="KE">Kiiniya</country>
-			<country id="SO">Soomaaliya</country>
-		</countries  >
-
-	</displayNames >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Bisha Koobaad</month>
-				<month id="2">Bisha Labaad</month>
-				<month id="3">Bisha Saddexaad</month>
-				<month id="4">Bisha Afraad</month>
-				<month id="5">Bisha Shanaad</month>
-				<month id="6">Bisha Lixaad</month>
-				<month id="7">Bisha Todobaad</month>
-				<month id="8">Bisha Sideedaad</month>
-				<month id="9">Bisha Sagaalaad</month>
-				<month id="10">Bisha Tobnaad</month>
-				<month id="11">Bisha Kow iyo Tobnaad</month>
-				<month id="12">Bisha Laba iyo Tobnaad</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Kob</month>
-				<month id="2">Lab</month>
-				<month id="3">Sad</month>
-				<month id="4">Afr</month>
-				<month id="5">Sha</month>
-				<month id="6">Lix</month>
-				<month id="7">Tod</month>
-				<month id="8">Sid</month>
-				<month id="9">Sag</month>
-				<month id="10">Tob</month>
-				<month id="11">KIT</month>
-				<month id="12">LIT</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Axad </day>
-				<day id="2">Isniin </day>
-				<day id="3">Salaaso </day>
-				<day id="4">Arbaco </day>
-				<day id="5">Khamiis </day>
-				<day id="6">Jimco </day>
-				<day id="7">Sabti </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Axa </day>
-				<day id="2">Isn </day>
-				<day id="3">Sal </day>
-				<day id="4">Arb </day>
-				<day id="5">Kha </day>
-				<day id="6">Jim </day>
-				<day id="7">Sab </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">Ciise ka hor</era>
-				<era id="1">Ciise ka dib</era>
-			</eras>
-			<am>sn</am><pm>gn</pm>
-			<patterns> 
-				<time>
-					<full>h:mm:ss a</full>
-					<long>h:mm:ss a</long>
-					<medium>h:mm:ss a</medium>
-					<short>h:mm a</short>
-				</time>
-				<date>
-					<full>EEEE, MMMM dd, yyyy</full>
-					<long>dd MMMM yyyy</long>
-					<medium>dd-MMM-yy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="so"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="so">Soomaali</language>
+		</languages>
+		<territories>
+			<territory type="DJ">Jabuuti</territory>
+			<territory type="ET">Itoobiya</territory>
+			<territory type="KE">Kiiniya</territory>
+			<territory type="SO">Soomaaliya</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<monthNames>
+						<month type="1">Bisha Koobaad</month>
+						<month type="2">Bisha Labaad</month>
+						<month type="3">Bisha Saddexaad</month>
+						<month type="4">Bisha Afraad</month>
+						<month type="5">Bisha Shanaad</month>
+						<month type="6">Bisha Lixaad</month>
+						<month type="7">Bisha Todobaad</month>
+						<month type="8">Bisha Sideedaad</month>
+						<month type="9">Bisha Sagaalaad</month>
+						<month type="10">Bisha Tobnaad</month>
+						<month type="11">Bisha Kow iyo Tobnaad</month>
+						<month type="12">Bisha Laba iyo Tobnaad</month>
+					</monthNames>
+					<monthAbbr>
+						<month type="1">Kob</month>
+						<month type="2">Lab</month>
+						<month type="3">Sad</month>
+						<month type="4">Afr</month>
+						<month type="5">Sha</month>
+						<month type="6">Lix</month>
+						<month type="7">Tod</month>
+						<month type="8">Sid</month>
+						<month type="9">Sag</month>
+						<month type="10">Tob</month>
+						<month type="11">KIT</month>
+						<month type="12">LIT</month>
+					</monthAbbr>
+					<dayNames>
+						<day type="sun">Axad</day>
+						<day type="mon">Isniin</day>
+						<day type="tue">Salaaso</day>
+						<day type="wed">Arbaco</day>
+						<day type="thu">Khamiis</day>
+						<day type="fri">Jimco</day>
+						<day type="sat">Sabti</day>
+					</dayNames>
+					<dayAbbr>
+						<day type="sun">Axa</day>
+						<day type="mon">Isn</day>
+						<day type="tue">Sal</day>
+						<day type="wed">Arb</day>
+						<day type="thu">Kha</day>
+						<day type="fri">Jim</day>
+						<day type="sat">Sab</day>
+					</dayAbbr>
+					<week>
+						<minDays count="7"/>
+						<firstDay day="mon"/>
+					</week>
+					<eras>
+						<era type="1">Ciise ka hor</era>
+						<era type="2">Ciise ka dib</era>
+					</eras>
+					<am>sn</am>
+					<pm>gn</pm>
+					<dateFormats>
+						<default type="medium"/>
+						<dateFormat type="full">
+							<pattern>EEEE, MMMM dd, yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="long">
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="medium">
+							<pattern>dd-MMM-yy</pattern>
+						</dateFormat>
+						<dateFormat type="short">
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormats>
+					<timeFormats>
+						<default type="medium"/>
+						<timeFormat type="full">
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="long">
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="medium">
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="short">
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormats>
+					<dateTimeFormat>
+						<pattern>{1} {0}</pattern>
+					</dateTimeFormat>
+				</calendar>
+			</calendars>
+		</dates>
 </localeData>

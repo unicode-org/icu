@@ -1,78 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:27 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0050">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">1 дүгээр сар</month>
-				<month id="2">2 дугаар сар</month>
-				<month id="3">3 дугаар сар</month>
-				<month id="4">4 дүгээр сар</month>
-				<month id="5">5 дугаар сар</month>
-				<month id="6">6 дугаар сар</month>
-				<month id="7">7 дугаар сар</month>
-				<month id="8">8 дугаар сар</month>
-				<month id="9">9 дүгээр сар</month>
-				<month id="10">10 дугаар сар</month>
-				<month id="11">11 дүгээр сар</month>
-				<month id="12">12 дугаар сар</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">I</month>
-				<month id="2">II</month>
-				<month id="3">III</month>
-				<month id="4">IV</month>
-				<month id="5">V</month>
-				<month id="6">VI</month>
-				<month id="7">VII</month>
-				<month id="8">VШ</month>
-				<month id="9">IX</month>
-				<month id="10">X</month>
-				<month id="11">XI</month>
-				<month id="12">XII</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Ням </day>
-				<day id="2">Даваа </day>
-				<day id="3">Мягмар </day>
-				<day id="4">Лхагва </day>
-				<day id="5">Пүрэв </day>
-				<day id="6">Баасан </day>
-				<day id="7">Бямба </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Ня </day>
-				<day id="2">Да </day>
-				<day id="3">Мя </day>
-				<day id="4">Лх </day>
-				<day id="5">Пү </day>
-				<day id="6">Ба </day>
-				<day id="7">Бя </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="mn"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="mn">Монгол хэл</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[а-ш і є ї ґ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">1 дүгээр сар</month>
+					<month type="2">2 дугаар сар</month>
+					<month type="3">3 дугаар сар</month>
+					<month type="4">4 дүгээр сар</month>
+					<month type="5">5 дугаар сар</month>
+					<month type="6">6 дугаар сар</month>
+					<month type="7">7 дугаар сар</month>
+					<month type="8">8 дугаар сар</month>
+					<month type="9">9 дүгээр сар</month>
+					<month type="10">10 дугаар сар</month>
+					<month type="11">11 дүгээр сар</month>
+					<month type="12">12 дугаар сар</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">I</month>
+					<month type="2">II</month>
+					<month type="3">III</month>
+					<month type="4">IV</month>
+					<month type="5">V</month>
+					<month type="6">VI</month>
+					<month type="7">VII</month>
+					<month type="8">VШ</month>
+					<month type="9">IX</month>
+					<month type="10">X</month>
+					<month type="11">XI</month>
+					<month type="12">XII</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Ням</day>
+					<day type="mon">Даваа</day>
+					<day type="tue">Мягмар</day>
+					<day type="wed">Лхагва</day>
+					<day type="thu">Пүрэв</day>
+					<day type="fri">Баасан</day>
+					<day type="sat">Бямба</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Ня</day>
+					<day type="mon">Да</day>
+					<day type="tue">Мя</day>
+					<day type="wed">Лх</day>
+					<day type="thu">Пү</day>
+					<day type="fri">Ба</day>
+					<day type="sat">Бя</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

@@ -1,119 +1,133 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:35 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0022">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="uk" >українська</language>
-		</languages >
-		<countries  >
-			<country id="UA">Україна</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Січня</month>
-				<month id="2">Лютого</month>
-				<month id="3">Бережня</month>
-				<month id="4">Квітня</month>
-				<month id="5">Травня</month>
-				<month id="6">Червня</month>
-				<month id="7">Липня</month>
-				<month id="8">Серпня</month>
-				<month id="9">Вересня</month>
-				<month id="10">Жовтня</month>
-				<month id="11">Листопада</month>
-				<month id="12">Грудня</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Січ</month>
-				<month id="2">Лют</month>
-				<month id="3">Бер</month>
-				<month id="4">Квіт</month>
-				<month id="5">Трав</month>
-				<month id="6">Черв</month>
-				<month id="7">Лип</month>
-				<month id="8">Серп</month>
-				<month id="9">Вер</month>
-				<month id="10">Жовт</month>
-				<month id="11">Лист</month>
-				<month id="12">Груд</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Неділя </day>
-				<day id="2">Понеділок </day>
-				<day id="3">Вівторок </day>
-				<day id="4">Середа </day>
-				<day id="5">Четвер </day>
-				<day id="6">Пятниця </day>
-				<day id="7">Субота </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Нд </day>
-				<day id="2">Пн </day>
-				<day id="3">Вт </day>
-				<day id="4">Ср </day>
-				<day id="5">Чт </day>
-				<day id="6">Пт </day>
-				<day id="7">Сб </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">до н.е.</era>
-				<era id="1">після н.е.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<chars>GanjkHmsSEDFwWxhKzAe</chars>
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE, d, MMMM yyyy</full>
-					<long>EEEE, d, MMMM yyyy</long>
-					<medium>d/M/yyyy</medium>
-					<short>d/M/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>Г</after>
-		<gt1>ґ</gt1>
-		<gt3>Ґ</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="uk"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="uk">українська</language>
+		</languages>
+		<territories>
+			<territory type="UA">Україна</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[а-щ ю я є і ї ґ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Січня</month>
+					<month type="2">Лютого</month>
+					<month type="3">Бережня</month>
+					<month type="4">Квітня</month>
+					<month type="5">Травня</month>
+					<month type="6">Червня</month>
+					<month type="7">Липня</month>
+					<month type="8">Серпня</month>
+					<month type="9">Вересня</month>
+					<month type="10">Жовтня</month>
+					<month type="11">Листопада</month>
+					<month type="12">Грудня</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Січ</month>
+					<month type="2">Лют</month>
+					<month type="3">Бер</month>
+					<month type="4">Квіт</month>
+					<month type="5">Трав</month>
+					<month type="6">Черв</month>
+					<month type="7">Лип</month>
+					<month type="8">Серп</month>
+					<month type="9">Вер</month>
+					<month type="10">Жовт</month>
+					<month type="11">Лист</month>
+					<month type="12">Груд</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Неділя</day>
+					<day type="mon">Понеділок</day>
+					<day type="tue">Вівторок</day>
+					<day type="wed">Середа</day>
+					<day type="thu">Четвер</day>
+					<day type="fri">Пятниця</day>
+					<day type="sat">Субота</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Нд</day>
+					<day type="mon">Пн</day>
+					<day type="tue">Вт</day>
+					<day type="wed">Ср</day>
+					<day type="thu">Чт</day>
+					<day type="fri">Пт</day>
+					<day type="sat">Сб</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<era type="1">до н.е.</era>
+					<era type="2">після н.е.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, d, MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>EEEE, d, MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>d/M/yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>d/M/yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<rules>
+					<reset>Г</reset>
+					<p>ґ</p>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

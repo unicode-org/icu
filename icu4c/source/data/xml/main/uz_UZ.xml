@@ -1,50 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:36 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="UZ" />
-		<correspondsTo vendor="0843">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>hh:mm:ss aa</full>
-					<long>H:mm:ss</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm:ss</short>
-				</time>
-				<date>
-					<full>yyyy 'йил' d-MMMM</full>
-					<long>yyyy 'йил' d-MMMM</long>
-					<medium>dd.MM.yyyy</medium>
-					<short>dd.MM.yyyy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<currencies>
-		<currency id="UZS" default="true">
-			<symbol>сўм</symbol>
-			<name>UZS</name>
-			<decimal>,</decimal>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="uz"></language>
+		<territory type="UZB">UZ</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<dateFormats>
+						<default type="medium"/>
+						<dateFormat type="full">
+							<pattern>yyyy 'йил' d-MMMM</pattern>
+						</dateFormat>
+						<dateFormat type="long">
+							<pattern>yyyy 'йил' d-MMMM</pattern>
+						</dateFormat>
+						<dateFormat type="medium">
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="short">
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormats>
+					<timeFormats>
+						<default type="medium"/>
+						<timeFormat type="full">
+							<pattern>hh:mm:ss aa</pattern>
+						</timeFormat>
+						<timeFormat type="long">
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+						<timeFormat type="medium">
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+						<timeFormat type="short">
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormats>
+					<dateTimeFormat>
+						<pattern>{1} {0}</pattern>
+					</dateTimeFormat>
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<currencies>
+				<default type="UZS"/>
+				<currency type="UZS">
+					<symbol>сўм</symbol>
+					<displayName>UZS</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

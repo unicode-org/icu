@@ -1,234 +1,242 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:30 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0016">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="ar" >Árabe</language>
-			<language id="az" >Azerbaijão</language>
-			<language id="ba" >Basco</language>
-			<language id="be" >Bielo-russo</language>
-			<language id="bg" >Búlgaro</language>
-			<language id="bn" >Bengala</language>
-			<language id="ca" >Catalão</language>
-			<language id="cs" >Tcheco</language>
-			<language id="da" >Dinamarquês</language>
-			<language id="de" >Alemão</language>
-			<language id="el" >Grego</language>
-			<language id="en" >Inglês</language>
-			<language id="es" >Espanhol</language>
-			<language id="et" >Estônio</language>
-			<language id="fa" >Farsi</language>
-			<language id="fi" >Finlandês</language>
-			<language id="fr" >Francês</language>
-			<language id="gu" >Guzarate</language>
-			<language id="he" >Hebreu</language>
-			<language id="hr" >Croata</language>
-			<language id="hu" >Húngaro</language>
-			<language id="id" >Indonésio</language>
-			<language id="it" >Italiano</language>
-			<language id="ja" >Japonês</language>
-			<language id="ka" >Georgiano</language>
-			<language id="km" >Cmer</language>
-			<language id="kn" >Canadá</language>
-			<language id="ko" >Coreano</language>
-			<language id="ku" >Curdo</language>
-			<language id="la" >Latino</language>
-			<language id="lt" >Lituano</language>
-			<language id="lv" >Letão</language>
-			<language id="mk" >Macedônio</language>
-			<language id="mr" >Marati</language>
-			<language id="my" >Birmanês</language>
-			<language id="nl" >Holandês</language>
-			<language id="no" >Norueguês</language>
-			<language id="pl" >Polonês</language>
-			<language id="pt" >Português</language>
-			<language id="ro" >Romeno</language>
-			<language id="ru" >Russo</language>
-			<language id="sk" >Eslovaco</language>
-			<language id="sl" >Esloveno</language>
-			<language id="sq" >Albanês</language>
-			<language id="sr" >Sérvio</language>
-			<language id="sv" >Suéco</language>
-			<language id="te" >Télugu</language>
-			<language id="th" >Tailandês</language>
-			<language id="tk" >Tagalo</language>
-			<language id="tr" >Turco</language>
-			<language id="uk" >Ucraniano</language>
-			<language id="uz" >Usbeque</language>
-			<language id="zh" >Chinês</language>
-		</languages >
-		<countries  >
-			<country id="AE">República Árabe Unida</country>
-			<country id="AL">Albânia</country>
-			<country id="AS">Ásia</country>
-			<country id="AT">Áustria</country>
-			<country id="AU">Austrália</country>
-			<country id="BA">Bósnia</country>
-			<country id="BE">Bélgica</country>
-			<country id="BG">Bulgária</country>
-			<country id="BH">Baráin</country>
-			<country id="BO">Bolívia</country>
-			<country id="BR">Brasil</country>
-			<country id="CA">Canadá</country>
-			<country id="CH">Suíça</country>
-			<country id="CN">China (PRC)</country>
-			<country id="CO">Colômbia</country>
-			<country id="CZ">República Tcheca</country>
-			<country id="DE">Alemanha</country>
-			<country id="DK">Dinamarca</country>
-			<country id="DO">República Dominicana</country>
-			<country id="DZ">Argélia</country>
-			<country id="EC">Equador</country>
-			<country id="EE">Estônia</country>
-			<country id="EG">Egito</country>
-			<country id="ES">Espanha</country>
-			<country id="FI">Finlândia</country>
-			<country id="FR">França</country>
-			<country id="GB">Reino Unido</country>
-			<country id="GR">Grécia</country>
-			<country id="HR">Croácia</country>
-			<country id="HU">Hungria</country>
-			<country id="ID">Indonésia</country>
-			<country id="IE">Irlanda</country>
-			<country id="IN">Índia</country>
-			<country id="IS">Islândia</country>
-			<country id="IT">Itália</country>
-			<country id="JO">Jordânia</country>
-			<country id="JP">Japão</country>
-			<country id="KR">Coréia</country>
-			<country id="LA">América Latina</country>
-			<country id="LB">Líbano</country>
-			<country id="LT">Lituânia</country>
-			<country id="LU">Luxemburgo</country>
-			<country id="LV">Letônia</country>
-			<country id="MA">Marrocos</country>
-			<country id="MK">Macedônia FYR</country>
-			<country id="MX">México</country>
-			<country id="NI">Nicarágua</country>
-			<country id="NL">Países Baixos</country>
-			<country id="NO">Noruega</country>
-			<country id="NZ">Nova Zelândia</country>
-			<country id="OM">Omã</country>
-			<country id="PA">Panamá</country>
-			<country id="PK">Paquistão</country>
-			<country id="PL">Polônia</country>
-			<country id="PY">Paraguai</country>
-			<country id="QA">Catar</country>
-			<country id="RO">Romênia</country>
-			<country id="RU">Rússia</country>
-			<country id="SA">Arábia Saudita</country>
-			<country id="SE">Suécia</country>
-			<country id="SG">Cingapura</country>
-			<country id="SI">Eslovênia</country>
-			<country id="SK">Eslováquia</country>
-			<country id="SP">Sérvia</country>
-			<country id="SY">Síria</country>
-			<country id="TH">Tailândia</country>
-			<country id="TN">Tunísia</country>
-			<country id="TR">Turquia</country>
-			<country id="UA">Ucrânia</country>
-			<country id="US">Estados Unidos</country>
-			<country id="UY">Uruguai</country>
-			<country id="ZA">África do Sul</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Janeiro</month>
-				<month id="2">Fevereiro</month>
-				<month id="3">Março</month>
-				<month id="4">Abril</month>
-				<month id="5">Maio</month>
-				<month id="6">Junho</month>
-				<month id="7">Julho</month>
-				<month id="8">Agosto</month>
-				<month id="9">Setembro</month>
-				<month id="10">Outubro</month>
-				<month id="11">Novembro</month>
-				<month id="12">Dezembro</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Fev</month>
-				<month id="3">Mar</month>
-				<month id="4">Abr</month>
-				<month id="5">Mai</month>
-				<month id="6">Jun</month>
-				<month id="7">Jul</month>
-				<month id="8">Ago</month>
-				<month id="9">Set</month>
-				<month id="10">Out</month>
-				<month id="11">Nov</month>
-				<month id="12">Dez</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Domingo </day>
-				<day id="2">Segunda-feira </day>
-				<day id="3">Terça-feira </day>
-				<day id="4">Quarta-feira </day>
-				<day id="5">Quinta-feira </day>
-				<day id="6">Sexta-feira </day>
-				<day id="7">Sábado </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Dom </day>
-				<day id="2">Seg </day>
-				<day id="3">Ter </day>
-				<day id="4">Qua </day>
-				<day id="5">Qui </day>
-				<day id="6">Sex </day>
-				<day id="7">Sáb </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>HH'H'mm'm' z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE, d' de 'MMMM' de 'yyyy</full>
-					<long>d' de 'MMMM' de 'yyyy</long>
-					<medium>d/MMM/yyyy</medium>
-					<short>dd-MM-yyyy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="pt"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ar">Árabe</language>
+			<language type="az">Azerbaijão</language>
+			<language type="ba">Basco</language>
+			<language type="be">Bielo-russo</language>
+			<language type="bg">Búlgaro</language>
+			<language type="bn">Bengala</language>
+			<language type="ca">Catalão</language>
+			<language type="cs">Tcheco</language>
+			<language type="da">Dinamarquês</language>
+			<language type="de">Alemão</language>
+			<language type="el">Grego</language>
+			<language type="en">Inglês</language>
+			<language type="es">Espanhol</language>
+			<language type="et">Estônio</language>
+			<language type="fa">Farsi</language>
+			<language type="fi">Finlandês</language>
+			<language type="fr">Francês</language>
+			<language type="gu">Guzarate</language>
+			<language type="he">Hebreu</language>
+			<language type="hr">Croata</language>
+			<language type="hu">Húngaro</language>
+			<language type="id">Indonésio</language>
+			<language type="it">Italiano</language>
+			<language type="ja">Japonês</language>
+			<language type="ka">Georgiano</language>
+			<language type="km">Cmer</language>
+			<language type="kn">Canadá</language>
+			<language type="ko">Coreano</language>
+			<language type="ku">Curdo</language>
+			<language type="la">Latino</language>
+			<language type="lt">Lituano</language>
+			<language type="lv">Letão</language>
+			<language type="mk">Macedônio</language>
+			<language type="mr">Marati</language>
+			<language type="my">Birmanês</language>
+			<language type="nl">Holandês</language>
+			<language type="no">Norueguês</language>
+			<language type="pl">Polonês</language>
+			<language type="pt">Português</language>
+			<language type="ro">Romeno</language>
+			<language type="ru">Russo</language>
+			<language type="sk">Eslovaco</language>
+			<language type="sl">Esloveno</language>
+			<language type="sq">Albanês</language>
+			<language type="sr">Sérvio</language>
+			<language type="sv">Suéco</language>
+			<language type="te">Télugu</language>
+			<language type="th">Tailandês</language>
+			<language type="tk">Tagalo</language>
+			<language type="tr">Turco</language>
+			<language type="uk">Ucraniano</language>
+			<language type="uz">Usbeque</language>
+			<language type="zh">Chinês</language>
+		</languages>
+		<territories>
+			<territory type="AE">República Árabe Unida</territory>
+			<territory type="AL">Albânia</territory>
+			<territory type="AS">Ásia</territory>
+			<territory type="AT">Áustria</territory>
+			<territory type="AU">Austrália</territory>
+			<territory type="BA">Bósnia</territory>
+			<territory type="BE">Bélgica</territory>
+			<territory type="BG">Bulgária</territory>
+			<territory type="BH">Baráin</territory>
+			<territory type="BO">Bolívia</territory>
+			<territory type="BR">Brasil</territory>
+			<territory type="CA">Canadá</territory>
+			<territory type="CH">Suíça</territory>
+			<territory type="CN">China (PRC)</territory>
+			<territory type="CO">Colômbia</territory>
+			<territory type="CZ">República Tcheca</territory>
+			<territory type="DE">Alemanha</territory>
+			<territory type="DK">Dinamarca</territory>
+			<territory type="DO">República Dominicana</territory>
+			<territory type="DZ">Argélia</territory>
+			<territory type="EC">Equador</territory>
+			<territory type="EE">Estônia</territory>
+			<territory type="EG">Egito</territory>
+			<territory type="ES">Espanha</territory>
+			<territory type="FI">Finlândia</territory>
+			<territory type="FR">França</territory>
+			<territory type="GB">Reino Unido</territory>
+			<territory type="GR">Grécia</territory>
+			<territory type="HR">Croácia</territory>
+			<territory type="HU">Hungria</territory>
+			<territory type="ID">Indonésia</territory>
+			<territory type="IE">Irlanda</territory>
+			<territory type="IN">Índia</territory>
+			<territory type="IS">Islândia</territory>
+			<territory type="IT">Itália</territory>
+			<territory type="JO">Jordânia</territory>
+			<territory type="JP">Japão</territory>
+			<territory type="KR">Coréia</territory>
+			<territory type="LA">América Latina</territory>
+			<territory type="LB">Líbano</territory>
+			<territory type="LT">Lituânia</territory>
+			<territory type="LU">Luxemburgo</territory>
+			<territory type="LV">Letônia</territory>
+			<territory type="MA">Marrocos</territory>
+			<territory type="MK">Macedônia FYR</territory>
+			<territory type="MX">México</territory>
+			<territory type="NI">Nicarágua</territory>
+			<territory type="NL">Países Baixos</territory>
+			<territory type="NO">Noruega</territory>
+			<territory type="NZ">Nova Zelândia</territory>
+			<territory type="OM">Omã</territory>
+			<territory type="PA">Panamá</territory>
+			<territory type="PK">Paquistão</territory>
+			<territory type="PL">Polônia</territory>
+			<territory type="PY">Paraguai</territory>
+			<territory type="QA">Catar</territory>
+			<territory type="RO">Romênia</territory>
+			<territory type="RU">Rússia</territory>
+			<territory type="SA">Arábia Saudita</territory>
+			<territory type="SE">Suécia</territory>
+			<territory type="SG">Cingapura</territory>
+			<territory type="SI">Eslovênia</territory>
+			<territory type="SK">Eslováquia</territory>
+			<territory type="SP">Sérvia</territory>
+			<territory type="SY">Síria</territory>
+			<territory type="TH">Tailândia</territory>
+			<territory type="TN">Tunísia</territory>
+			<territory type="TR">Turquia</territory>
+			<territory type="UA">Ucrânia</territory>
+			<territory type="US">Estados Unidos</territory>
+			<territory type="UY">Uruguai</territory>
+			<territory type="ZA">África do Sul</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z ã õ ç á é í ó ú à â ê ô ü ò]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Janeiro</month>
+					<month type="2">Fevereiro</month>
+					<month type="3">Março</month>
+					<month type="4">Abril</month>
+					<month type="5">Maio</month>
+					<month type="6">Junho</month>
+					<month type="7">Julho</month>
+					<month type="8">Agosto</month>
+					<month type="9">Setembro</month>
+					<month type="10">Outubro</month>
+					<month type="11">Novembro</month>
+					<month type="12">Dezembro</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jan</month>
+					<month type="2">Fev</month>
+					<month type="3">Mar</month>
+					<month type="4">Abr</month>
+					<month type="5">Mai</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Ago</month>
+					<month type="9">Set</month>
+					<month type="10">Out</month>
+					<month type="11">Nov</month>
+					<month type="12">Dez</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Domingo</day>
+					<day type="mon">Segunda-feira</day>
+					<day type="tue">Terça-feira</day>
+					<day type="wed">Quarta-feira</day>
+					<day type="thu">Quinta-feira</day>
+					<day type="fri">Sexta-feira</day>
+					<day type="sat">Sábado</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Dom</day>
+					<day type="mon">Seg</day>
+					<day type="tue">Ter</day>
+					<day type="wed">Qua</day>
+					<day type="thu">Qui</day>
+					<day type="fri">Sex</day>
+					<day type="sat">Sáb</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, d' de 'MMMM' de 'yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d' de 'MMMM' de 'yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>d/MMM/yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd-MM-yyyy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH'H'mm'm' z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
 </localeData>

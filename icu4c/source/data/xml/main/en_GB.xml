@@ -1,117 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:10 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="GB" />
-		<correspondsTo vendor="0809">Windows</correspondsTo>
-	</identity  >
-	<timeZoneNames>
-		<zone id="Europe/London" default="true">
-			<long>
-				<generic>Greenwich Mean Time</generic>
-				<standard>British Summer Time</standard>
-			</long>
-			<short>
-				<generic>Europe/London</generic>
-				<standard>GMT</standard>
-				<daylight>BST</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">January</month>
-				<month id="2">February</month>
-				<month id="3">March</month>
-				<month id="4">April</month>
-				<month id="5">May</month>
-				<month id="6">June</month>
-				<month id="7">July</month>
-				<month id="8">August</month>
-				<month id="9">September</month>
-				<month id="10">October</month>
-				<month id="11">November</month>
-				<month id="12">December</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Feb</month>
-				<month id="3">Mar</month>
-				<month id="4">Apr</month>
-				<month id="5">May</month>
-				<month id="6">Jun</month>
-				<month id="7">Jul</month>
-				<month id="8">Aug</month>
-				<month id="9">Sep</month>
-				<month id="10">Oct</month>
-				<month id="11">Nov</month>
-				<month id="12">Dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Sunday </day>
-				<day id="2">Monday </day>
-				<day id="3">Tuesday </day>
-				<day id="4">Wednesday </day>
-				<day id="5">Thursday </day>
-				<day id="6">Friday </day>
-				<day id="7">Saturday </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Sun </day>
-				<day id="2">Mon </day>
-				<day id="3">Tue </day>
-				<day id="4">Wed </day>
-				<day id="5">Thu </day>
-				<day id="6">Fri </day>
-				<day id="7">Sat </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>dd MMMM yyyy</full>
-					<long>dd MMMM yyyy</long>
-					<medium>dd-MMM-yyyy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="GBP" default="true">
-			<symbol>£</symbol>
-			<name>GBP</name>
-			<decimal>.</decimal>
-			<pattern>¤#,##0.00;-¤#,##0.00</pattern>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="en"></language>
+		<territory type="GBR">GB</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<week>
+						<minDays count="2"/>
+						<firstDay day="mon"/>
+					</week>
+					<dateFormats>
+						<default type="medium"/>
+						<dateFormat type="full">
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="long">
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="medium">
+							<pattern>dd-MMM-yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="short">
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormats>
+					<timeFormats>
+						<default type="medium"/>
+						<timeFormat type="full">
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+						<timeFormat type="long">
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+						<timeFormat type="medium">
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+						<timeFormat type="short">
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormats>
+					<dateTimeFormat>
+						<pattern>{1} {0}</pattern>
+					</dateTimeFormat>
+				</calendar>
+			</calendars>
+			<timeZoneNames>
+			</timeZoneNames>
+		</dates>
+		<numbers>
+			<currencies>
+				<default type="GBP"/>
+				<currency type="GBP">
+					<symbol>£</symbol>
+					<displayName>GBP</displayName>
+					<decimal>.</decimal>
+				</currency>
+			</currencies>
+		</numbers>
+	<special owner="http://oss.software.ibm.com/icu/"  >
+		<ruleBasedNumberFormats>
+			<ruleBasedNumberFormat type="spellout">%simplified:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; point &gt;&gt;;<cp hex="000A" />    zero; one; two; three; four; five; six; seven; eight; nine;<cp hex="000A" />    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;<cp hex="000A" />        seventeen; eighteen; nineteen;<cp hex="000A" />    20: twenty[-&gt;&gt;];<cp hex="000A" />    30: thirty[-&gt;&gt;];<cp hex="000A" />    40: forty[-&gt;&gt;];<cp hex="000A" />    50: fifty[-&gt;&gt;];<cp hex="000A" />    60: sixty[-&gt;&gt;];<cp hex="000A" />    70: seventy[-&gt;&gt;];<cp hex="000A" />    80: eighty[-&gt;&gt;];<cp hex="000A" />    90: ninety[-&gt;&gt;];<cp hex="000A" />    100: &lt;&lt; hundred[ &gt;&gt;];<cp hex="000A" />    1000: &lt;&lt; thousand[ &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; point &gt;&gt;;<cp hex="000A" />    =%simplified=;<cp hex="000A" />    100: &lt;&lt; hundred[ &gt;%%and&gt;];<cp hex="000A" />    1000: &lt;&lt; thousand[ &gt;%%and&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%and:<cp hex="000A" />    and =%default=;<cp hex="000A" />    100: =%default=;<cp hex="000A" />%%commas:<cp hex="000A" />    ' and =%default=;<cp hex="000A" />    100: , =%default=;<cp hex="000A" />    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;<cp hex="000A" />    1,000,000: , =%default=;%%lenient-parse:<cp hex="000A" />    &amp; ' ' , ',' ;<cp hex="000A" /></ruleBasedNumberFormat>
+		</ruleBasedNumberFormats>
+	</special>
 </localeData>

@@ -1,57 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:19 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="ES" />
-		<correspondsTo vendor="0456">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>HH:mm:ss z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>EEEE dd MMMM yyyy</full>
-					<long>dd MMMM yyyy</long>
-					<medium>MMM dd,yy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="EUR" default="true">
-			<symbol>€</symbol>
-			<name>EUR</name>
-			<decimal>,</decimal>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="gl"></language>
+		<territory type="ESP">ES</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<week>
+						<minDays count="2"/>
+						<firstDay day="mon"/>
+					</week>
+					<dateFormats>
+						<default type="medium"/>
+						<dateFormat type="full">
+							<pattern>EEEE dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="long">
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="medium">
+							<pattern>MMM dd,yy</pattern>
+						</dateFormat>
+						<dateFormat type="short">
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormats>
+					<timeFormats>
+						<default type="medium"/>
+						<timeFormat type="full">
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+						<timeFormat type="long">
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+						<timeFormat type="medium">
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+						<timeFormat type="short">
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormats>
+					<dateTimeFormat>
+						<pattern>{1} {0}</pattern>
+					</dateTimeFormat>
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>#,##0.00 ¤</pattern>
+					<pattern>-#,##0.00 ¤</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+			<currencies>
+				<default type="EUR"/>
+				<currency type="EUR">
+					<symbol>€</symbol>
+					<displayName>EUR</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>
