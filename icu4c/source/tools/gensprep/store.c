@@ -301,7 +301,7 @@ storeMappingData(){
                          * the codepoint has value something other than prohibited
                          * and a mapping .. error! 
                          */
-                        fprintf(stderr,"Type for codepoint \\U%08X already set!.\n", codepoint);
+                        fprintf(stderr,"Type for codepoint \\U%08X already set!.\n", (int)codepoint);
                         exit(U_ILLEGAL_ARGUMENT_ERROR); 
                     } 
                 } 
@@ -398,7 +398,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
              * the codepoint has value something other than prohibited
              * and a mapping .. error! 
              */
-            fprintf(stderr,"Type for codepoint \\U%08X already set!.\n", codepoint);
+            fprintf(stderr,"Type for codepoint \\U%08X already set!.\n", (int)codepoint);
             exit(U_ILLEGAL_ARGUMENT_ERROR); 
         } 
     }
@@ -535,13 +535,13 @@ storeRange(uint32_t start, uint32_t end, UStringPrepType type,UErrorCode* status
                 }
  
             }else if(savedTrieWord != trieWord){
-                fprintf(stderr,"Value for codepoint \\U%08X already set!.\n", start);
+                fprintf(stderr,"Value for codepoint \\U%08X already set!.\n", (int)start);
                 exit(U_ILLEGAL_ARGUMENT_ERROR);
             }
             /* if savedTrieWord == trieWord .. fall through and set the value */
         }
         if(!utrie_set32(sprepTrie,start,trieWord)){
-            fprintf(stderr,"Could not set the value for code point \\U%08X.\n", start);
+            fprintf(stderr,"Could not set the value for code point \\U%08X.\n", (int)start);
             exit(U_ILLEGAL_ARGUMENT_ERROR);   
         }
     }else{
@@ -607,11 +607,11 @@ generateData(const char *dataDir, const char *packageName, const char* bundleNam
     
     size = sprepTrieSize + mappingDataCapacity*U_SIZEOF_UCHAR + sizeof(indexes);
     if(beVerbose) {
-        printf("size of sprep trie              %5u bytes\n", sprepTrieSize);
+        printf("size of sprep trie              %5u bytes\n", (int)sprepTrieSize);
         printf("size of " U_ICUDATA_NAME "_%s." DATA_TYPE " contents: %ld bytes\n", bundleName,(long)size);
-        printf("size of mapping data array %5u bytes\n",mappingDataCapacity * U_SIZEOF_UCHAR);
+        printf("size of mapping data array %5u bytes\n",(int)mappingDataCapacity * U_SIZEOF_UCHAR);
         printf("Number of code units in mappingData (currentIndex) are: %i \n", currentIndex);
-        printf("Maximum length of the mapping string is : %i \n", maxLength);
+        printf("Maximum length of the mapping string is : %i \n", (int)maxLength);
     }
 
 #endif
