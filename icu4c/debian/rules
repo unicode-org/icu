@@ -73,7 +73,8 @@ clean:
 
 	# Add here commands to clean up after the build process.
 	-$(MAKE) -C $(builddir) distclean
-	-$(RM) `find $(builddir)/samples $(builddir)/test -name Makefile`
+	#-$(RM) `find $(builddir)/samples $(builddir)/test -name Makefile -print`
+	-$(RM) `find $(builddir) -name Makefile -print`
 	$(RM) $(addprefix debian/,$(DEBIAN_FILES))
 	dh_clean
 
