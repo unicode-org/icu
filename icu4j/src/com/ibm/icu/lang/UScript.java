@@ -356,9 +356,13 @@ public final class UScript {
         catch (MissingResourceException e) {
             return null;
         }
-
+        
         // if rb is not a strict fallback of the requested locale, return null
-        if(!LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){
+        //if(!LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){
+        //    return null;
+        //}
+        //non existent locale check
+        if(rb.getLoadingStatus()==ICUResourceBundle.FROM_DEFAULT){
             return null;
         }
         ICUResourceBundle sub = rb.get("LocaleScript");

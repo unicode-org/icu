@@ -9,8 +9,14 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.test.util;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @test
@@ -108,5 +114,18 @@ public class UtilityTest extends TestFmwk {
             return 1;
         }
         return 0;
+    }
+    public void TestUnicodeSet(){
+        String[] array = new String[]{"a", "b", "c", "{de}"};
+        List list = Arrays.asList(array);
+        Set aset = new HashSet(list);
+        logln(" *** The source set's size is: " + aset.size());
+    //The size reads 4
+        UnicodeSet set = new UnicodeSet();
+        set.clear();
+        set.addAll(aset);
+        logln(" *** After addAll, the UnicodeSet size is: " + set.size());
+    //The size should also read 4, but 0 is seen instead
+
     }
 }

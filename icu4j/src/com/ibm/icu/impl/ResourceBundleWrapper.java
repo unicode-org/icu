@@ -35,6 +35,10 @@ public class ResourceBundleWrapper extends UResourceBundle {
             }
         }
     }
+    private int loadingStatus = -1;
+    protected void setLoadingStatus(int newStatus){
+        loadingStatus = newStatus;
+    }
     protected Object handleGetObject(String key){
        return bundle.getObject(key);   
     }
