@@ -279,6 +279,18 @@ void TestSkip(int32_t inputsize, int32_t outputsize)
 		    log_err("LMBCS->u with skip did not match.\n");
 
     }
+      log_verbose("Testing to Unicode for UTF-8 with UCNV_TO_U_CALLBACK_SKIP \n");
+    {
+        const char sampleText1[] = { (char)0x31, (char)0xe4, (char)0xba, (char)0x8c, 
+            (char)0xe0, (char)0x80,  (char)0x61,};
+        UChar    expected1[] = {  0x0031, 0x4e8c, 0x0061};
+        int32_t offsets1[] = {   0x0000, 0x0001, 0x0006};
+
+        if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
+			     expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, offsets1 ))
+		    log_err("utf8->u with skip did not match.\n");;
+    }
 
 }
 void TestStop(int32_t inputsize, int32_t outputsize)
@@ -357,6 +369,21 @@ void TestStop(int32_t inputsize, int32_t outputsize)
 		    log_err("u-> euc-tw with stop did not match.\n");  
       
     }
+    log_verbose("Testing fromUnicode for UTF-8 with UCNV_FROM_U_CALLBACK_STOP \n");
+    {
+        const UChar testinput[]={ 0x20ac, 0xd801, 0xdc01, 0xdc01, 0xd801, 0xffff, 0x0061,};
+        const char expectedUTF8[]= { (char)0xe2, (char)0x82, (char)0xac, 
+                           (char)0xf0, (char)0x90, (char)0x90, (char)0x81, 
+                           (char)0xed, (char)0xb0, (char)0x81, (char)0xed, (char)0xa0, (char)0x81,
+                           (char)0xef, (char)0xbf, (char)0xbf, (char)0x61,
+                           
+        };
+        int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6 };
+        if(!testConvertFromUnicode(testinput, sizeof(testinput)/sizeof(testinput[0]),
+			    expectedUTF8, sizeof(expectedUTF8), "utf8",
+	            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, offsets ))
+		    log_err("u-> utf8 with stop did not match.\n");
+    }
 
 	/*to Unicode*/
 	if(!testConvertToUnicode(expstopIBM_949, sizeof(expstopIBM_949),
@@ -414,6 +441,18 @@ void TestStop(int32_t inputsize, int32_t outputsize)
 			     euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
 	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs ))
 		    log_err("euc-tw->u with stop did not match.\n");
+    }
+    log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_STOP \n");
+    {
+        const char sampleText1[] = { (char)0x31, (char)0xe4, (char)0xba, (char)0x8c, 
+            (char)0xe0, (char)0x80,  (char)0x61,};
+        UChar    expected1[] = {  0x0031, 0x4e8c,};
+        int32_t offsets1[] = {   0x0000, 0x0001};
+
+        if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
+			     expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, offsets1 ))
+		    log_err("utf8->u with stop did not match.\n");;
     }
 
 }
@@ -564,7 +603,18 @@ void TestSub(int32_t inputsize, int32_t outputsize)
         
 
     }
+     log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
+    {
+        const char sampleText1[] = { (char)0x31, (char)0xe4, (char)0xba, (char)0x8c, 
+            (char)0xe0, (char)0x80,  (char)0x61,};
+        UChar    expected1[] = {  0x0031, 0x4e8c, 0xfffd, 0x0061};
+        int32_t offsets1[] = {   0x0000, 0x0001, 0x0004, 0x0006};
 
+        if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
+			     expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
+	            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1 ))
+		    log_err("utf8->u with substitute did not match.\n");;
+    }
 
 }
 
@@ -895,7 +945,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 			      &status);
 
       /*check for an INVALID character for testing the call back function STOP*/
-	 if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND  )
+	 if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND )
      {
 		junk[0] = 0;
 		offset_str[0] = 0;
@@ -921,7 +971,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 		}
 		
 	} 
-	} while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (sourceLimit < realSourceEnd) );
+	} while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (sourceLimit < realSourceEnd)) );
 	
 	if(U_FAILURE(status))
 	{
@@ -1092,7 +1142,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 			    &status);
         
          /*check for an INVALID character for testing the call back function STOP*/
-	if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND )
+	if(status == U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND || status == U_TRUNCATED_CHAR_FOUND )
 	{
 		junk[0] = 0;
 		offset_str[0] = 0;
