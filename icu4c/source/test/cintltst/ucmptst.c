@@ -60,10 +60,7 @@ void TestUCMP16API(){
     };
        
     uint16_t *values;
-    int16_t *index;
-    uint16_t *valuesCompact;
-    int16_t *indexCompact;
-
+   
     CompactShortArray* ucmp16Array=NULL;
     CompactShortArray* ucmp16Array1=NULL;
     CompactShortArray* ucmp16Array2=NULL;
@@ -126,30 +123,31 @@ void TestUCMP16API(){
     if(ucmp16Array->fCompact == TRUE){
         log_err("Error: ucmp16_open failed Got compact for expanded data\n");
     } 
-    values=(int16_t*)ucmp16_getArray(ucmp16Array);
-    index=(uint16_t*)ucmp16_getIndex(ucmp16Array);
-   
+     
     ucmp16_compact(ucmp16Array);
     if(ucmp16Array->fCompact != TRUE){
         log_err("Error: ucmp16_compact failed\n");
     }
-    valuesCompact=(int16_t*)ucmp16_getArray(ucmp16Array);
-    indexCompact=(uint16_t*)ucmp16_getIndex(ucmp16Array);
-
+   
     /* ucmp16_set*/
     ucmp16_set(ucmp16Array, 0,  TEST_DEFAULT_VALUE);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     if(values[0] != TEST_DEFAULT_VALUE){
         log_err("ERROR: ucmp16_set() failed\n");
     }
+    if(ucmp16Array->fCompact == TRUE){
+        log_err("Error: ucmp16_set didn't expand the compact data\n");
+    } 
     /*ucmp16_set where the value != defaultValue*/
-    /*ucmp16_set(ucmp16Array, 0,  0xfe);
+    /*ucmp16_compact(ucmp16Array);
+    ucmp16_set(ucmp16Array, 0,  0xfe);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     if(values[0] != 0xfe){
         log_err("ERROR: ucmp16_set() failed\n");
     }*/
 
     /*ucmp16_setRange*/
+    /*ucmp16_compact(ucmp16Array);*/
     ucmp16_setRange(ucmp16Array, 0,  10, 0xff);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     for(i=0; i<10; i++){
@@ -159,7 +157,8 @@ void TestUCMP16API(){
         }
     }
     /*ucmp16_setRange where the value != defaultValue*/
-    /*ucmp16_setRange(ucmp16Array, 0,  10, 0xfe);
+    /*ucmp16_compact(ucmp16Array);
+    ucmp16_setRange(ucmp16Array, 0,  10, 0xfe);
     values=(int16_t*)ucmp16_getArray(ucmp16Array);
     for(i=0; i<10; i++){
         if(values[0] != 0xfe){
@@ -252,15 +251,22 @@ void TestUCMP8API(){
     if(valuesSet[0] != (char)0xFE ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
+    if(ucmp8Array1->fCompact == TRUE){
+        log_err("Error: ucmp8_set didn't expand the compact data \n");
+    } 
 
     /*ucmp8_set*/
+    ucmp8_compact(ucmp8Array1, 1);
     ucmp8_set(ucmp8Array1, 0,  (char)0xFD);
     valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
     if(valuesSet[0] != (char)0xFD ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
-   
+    if(ucmp8Array1->fCompact == TRUE){
+        log_err("Error: ucmp8_set didn't expand the compact data \n");
+    }
     /*ucmp8_setRange*/
+    ucmp8_compact(ucmp8Array1, 1);
     ucmp8_setRange(ucmp8Array1, 0,  10, (char)0xFD);
     valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
     for(i =0 ; i< 10; i++ ){
@@ -316,14 +322,20 @@ void TestUCMP32API(){
     if(values[0] != TEST_DEFAULT_VALUE){
         log_err("ERROR: ucmp32_set() failed\n");
     }
+    if(ucmp32Array->fCompact == TRUE){
+        log_err("Error: ucmp32_set didn't expand\n");
+    } 
+   
     /*ucmp32_set where the value != defaultValue*/
-    /*ucmp32_set(ucmp32Array, 0,  0xFFFE);
+    ucmp32_compact(ucmp32Array, 1);
+    ucmp32_set(ucmp32Array, 0,  0xFFFE);
     values=(int32_t*)ucmp32_getArray(ucmp32Array);
     if(values[0] != 0xFFFE){
         log_err("ERROR: ucmp32_set() failed\n");
-    }*/
+    }
 
     /*ucmp32_setRange*/
+    ucmp32_compact(ucmp32Array, 1);
     ucmp32_setRange(ucmp32Array, 0,  10, 0xFFFF);
     values=(int32_t*)ucmp32_getArray(ucmp32Array);
     for(i=0; i<10; i++){
@@ -332,8 +344,12 @@ void TestUCMP32API(){
             break;
         }
     }
+    if(ucmp32Array->fCompact == TRUE){
+        log_err("Error: ucmp32_setRange didn't expand\n");
+    } 
     /*ucmp32_setRange where the value != defaultValue*/
-    /*ucmp32_setRange(ucmp32Array, 0,  10, 0xFFFE);
+    ucmp32_compact(ucmp32Array, 1);
+    ucmp32_setRange(ucmp32Array, 0,  10, 0xFFFE);
     values=(int32_t*)ucmp32_getArray(ucmp32Array);
     for(i=0; i<10; i++){
         if(values[0] != 0xFFFE){
@@ -341,10 +357,6 @@ void TestUCMP32API(){
             break;
         }
     }
-    */
+    
     ucmp32_close(ucmp32Array);
-    
-
-   
-    
 }
