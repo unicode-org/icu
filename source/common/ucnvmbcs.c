@@ -797,7 +797,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     offsets=pArgs->offsets;
 
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
-        stateTable=cnv->sharedData->table->mbcs.swapLFNLStateTable;
+        stateTable=(const int32_t (*)[256])cnv->sharedData->table->mbcs.swapLFNLStateTable;
     } else {
         stateTable=cnv->sharedData->table->mbcs.stateTable;
     }
@@ -1091,7 +1091,7 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     offsets=pArgs->offsets;
 
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
-        stateTable=cnv->sharedData->table->mbcs.swapLFNLStateTable;
+        stateTable=(const int32_t (*)[256])cnv->sharedData->table->mbcs.swapLFNLStateTable;
     } else {
         stateTable=cnv->sharedData->table->mbcs.stateTable;
     }
@@ -1272,7 +1272,7 @@ _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
     offsets=pArgs->offsets;
 
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
-        stateTable=cnv->sharedData->table->mbcs.swapLFNLStateTable;
+        stateTable=(const int32_t (*)[256])cnv->sharedData->table->mbcs.swapLFNLStateTable;
     } else {
         stateTable=cnv->sharedData->table->mbcs.stateTable;
     }
@@ -1522,7 +1522,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
 
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
-        stateTable=cnv->sharedData->table->mbcs.swapLFNLStateTable;
+        stateTable=(const int32_t (*)[256])cnv->sharedData->table->mbcs.swapLFNLStateTable;
     } else {
         stateTable=cnv->sharedData->table->mbcs.stateTable;
     }
@@ -1735,7 +1735,7 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
     source=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
     if((cnv->options&UCNV_OPTION_SWAP_LFNL)!=0) {
-        stateTable=cnv->sharedData->table->mbcs.swapLFNLStateTable;
+        stateTable=(const int32_t (*)[256])cnv->sharedData->table->mbcs.swapLFNLStateTable;
     } else {
         stateTable=cnv->sharedData->table->mbcs.stateTable;
     }
