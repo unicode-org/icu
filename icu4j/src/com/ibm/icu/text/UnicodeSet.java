@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/10/10 21:07:53 $
- * $Revision: 1.74 $
+ * $Date: 2002/11/08 01:19:58 $
+ * $Revision: 1.75 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import java.text.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.impl.UPropertyAliases;
 import java.util.TreeSet;
 import java.util.SortedSet;
 import java.util.Iterator;
@@ -210,7 +211,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.74 $ $Date: 2002/10/10 21:07:53 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.75 $ $Date: 2002/11/08 01:19:58 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -250,6 +251,21 @@ public class UnicodeSet extends UnicodeFilter {
 
     private static final int START_EXTRA = 16;         // initial storage. Must be >= 0
     private static final int GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
+
+    // Special property set IDs
+    private static final String ANY_ID   = "ANY";   // [\u0000-\U0010FFFF]
+    private static final String ASCII_ID = "ASCII"; // [\u0000-\u007F]
+
+    /**
+     * A set of all characters _except_ the second through last characters of
+     * certain ranges.  These ranges are ranges of characters whose
+     * properties are all exactly alike, e.g. CJK Ideographs from
+     * U+4E00 to U+9FA5.
+     *
+     * TODO: Replace this with an API call when such API is implemented.
+     */
+    private static final UnicodeSet INCLUSIONS =
+        new UnicodeSet("[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]");
 
     //----------------------------------------------------------------
     // Public API
@@ -429,7 +445,7 @@ public class UnicodeSet extends UnicodeFilter {
     public static boolean resemblesPattern(String pattern, int pos) {
         return ((pos+1) < pattern.length() &&
                 pattern.charAt(pos) == '[') ||
-            UnicodePropertySet.resemblesPattern(pattern, pos);
+            resemblesPropertyPattern(pattern, pos);
     }
 
     /**
@@ -1906,7 +1922,7 @@ public class UnicodeSet extends UnicodeFilter {
             // Parse the opening '[' and optional following '^'
             switch (mode) {
             case 0:
-                if (UnicodePropertySet.resemblesPattern(pattern, i-1)) {
+                if (resemblesPropertyPattern(pattern, i-1)) {
                     mode = 3;
                     break; // Fall through
                 } else if (c == '[') {
@@ -1941,14 +1957,10 @@ public class UnicodeSet extends UnicodeFilter {
                 /**
                  * Handle property set patterns.
                  */
-                if (UnicodePropertySet.resemblesPattern(pattern, i-1)) {
+                if (resemblesPropertyPattern(pattern, i-1)) {
                     ParsePosition pp = new ParsePosition(i-1);
-                    nestedSet = UnicodePropertySet.createFromPattern(pattern, pp);
-                    if (nestedSet == null) {
-                        // assert(pp.getIndex() == i-1);
-                        throw new IllegalArgumentException("Invalid property pattern " +
-                                                           pattern.substring(i-1));
-                    }
+                    nestedSet = new UnicodeSet();
+                    nestedSet.applyPropertyPattern(pattern, pp);
                     nestedPatStart = newPat.length();
                     nestedPatDone = true; // we're going to do it just below
 
@@ -2648,4 +2660,397 @@ public class UnicodeSet extends UnicodeFilter {
                 throw new IllegalArgumentException("Relation " + relation + " out of range");
         }
     }    
+
+    //----------------------------------------------------------------
+    // Generic filter-based scanning code
+    //----------------------------------------------------------------
+
+    private static interface Filter {
+        boolean contains(int codePoint);
+    }
+
+    private static class NumericValueFilter implements Filter {
+        double value;
+        NumericValueFilter(double value) { this.value = value; }
+        public boolean contains(int ch) {
+            return UCharacter.getUnicodeNumericValue(ch) == value;
+        }
+    }
+
+    private static class GeneralCategoryFilter implements Filter {
+        int mask;
+        GeneralCategoryFilter(int mask) { this.mask = mask; }
+        public boolean contains(int ch) {
+            return ((1 << UCharacter.getType(ch)) & mask) != 0;
+        }
+    }
+
+    private static class IntPropertyFilter implements Filter {
+        int prop;
+        int value;
+        IntPropertyFilter(int prop, int value) {
+            this.prop = prop;
+            this.value = value;
+        }
+        public boolean contains(int ch) {
+            return UCharacter.getIntPropertyValue(ch, prop) == value;
+        }
+    }
+
+    /**
+     * Generic filter-based scanning code for UCD property UnicodeSets.
+     */
+    private UnicodeSet applyFilter(Filter filter) {
+        // Walk through all Unicode characters, noting the start
+        // and end of each range for which filter.contain(c) is
+        // true.  Add each range to a set.
+        //
+        // To improve performance, use the INCLUSIONS set, which
+        // encodes information about character ranges that are known
+        // to have identical properties, such as the CJK Ideographs
+        // from U+4E00 to U+9FA5.  INCLUSIONS contains all characters
+        // except the first characters of such ranges.
+        //
+        // TODO Where possible, instead of scanning over code points,
+        // use internal property data to initialize UnicodeSets for
+        // those properties.  Scanning code points is slow.
+
+        clear();
+
+        int startHasProperty = -1;
+        int limitRange = INCLUSIONS.getRangeCount();
+
+        for (int j=0; j<limitRange; ++j) {
+            // get current range
+            int start = INCLUSIONS.getRangeStart(j);
+            int end = INCLUSIONS.getRangeEnd(j);
+
+            // for all the code points in the range, process
+            for (int ch = start; ch <= end; ++ch) {
+                // only add to the unicodeset on inflection points --
+                // where the hasProperty value changes to false
+                if (filter.contains(ch)) {
+                    if (startHasProperty < 0) {
+                        startHasProperty = ch;
+                    }
+                } else if (startHasProperty >= 0) {
+                    add(startHasProperty, ch-1);
+                    startHasProperty = -1;
+                }
+            }
+        }
+        if (startHasProperty >= 0) {
+            add(startHasProperty, 0x10FFFF);
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Remove leading and trailing rule white space and compress
+     * internal rule white space to a single space character.
+     *
+     * @see UCharacterProperty#isRuleWhiteSpace
+     */
+    private static String mungeCharName(String source) {
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<source.length(); ) {
+            int ch = UTF16.charAt(source, i);
+            i += UTF16.getCharCount(ch);
+            if (UCharacterProperty.isRuleWhiteSpace(ch)) {
+                if (buf.length() == 0 ||
+                    buf.charAt(buf.length() - 1) == ' ') {
+                    continue;
+                }
+                ch = ' '; // convert to ' '
+            }
+            UTF16.append(buf, ch);
+        }
+        if (buf.length() != 0 &&
+            buf.charAt(buf.length() - 1) == ' ') {
+            buf.setLength(buf.length() - 1);
+        }
+        return buf.toString();
+    }
+
+    //----------------------------------------------------------------
+    // Property set API
+    //----------------------------------------------------------------
+    
+    /**
+     * Modifies this set to contain those code points which have the
+     * given value for the given binary or enumerated property, as
+     * returned by UCharacter.getIntPropertyValue.  Prior contents of
+     * this set are lost.
+     *
+     * @param prop a property in the range
+     * UProperty.BIN_START..UProperty.BIN_LIMIT-1 or
+     * UProperty.INT_START..UProperty.INT_LIMIT-1.
+     *
+     * @param value a value in the range
+     * UCharacter.getIntPropertyMinValue(prop)..
+     * UCharacter.getIntPropertyMaxValue(prop), with one exception.
+     * If prop is UProperty.GENERAL_CATEGORY, then value should not be
+     * a UCharacter.getType() result, but rather a mask value produced
+     * by logically ORing (1 << UCharacter.getType()) values together.
+     * This allows grouped categories such as [:L:] to be repregsented.
+     *
+     * @return a reference to this set
+     *
+     * @draft ICU 2.2
+     */
+    public UnicodeSet applyIntPropertyValue(int prop, int value) {
+        if (prop == UProperty.GENERAL_CATEGORY) {
+            applyFilter(new GeneralCategoryFilter(value));
+        } else {
+            applyFilter(new IntPropertyFilter(prop, value));
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this set to contain those code points which have the
+     * given value for the given property.  Prior contents of this
+     * set are lost.
+     *
+     * @param propertyAlias a property alias, either short or long.
+     * The name is matched loosely.  See PropertyAliases.txt for names
+     * and a description of loose matching.  If the value string is
+     * empty, then this string is interpreted as either a
+     * General_Category value alias, a Script value alias, a binary
+     * property alias, or a special ID.  Special IDs are matched
+     * loosely and correspond to the following sets:
+     *
+     * "ANY" = [\u0000-\U0010FFFF],
+     * "ASCII" = [\u0000-\u007F].
+     *
+     * @param valueAlias a value alias, either short or long.  The
+     * name is matched loosely.  See PropertyValueAliases.txt for
+     * names and a description of loose matching.  In addition to
+     * aliases listed, numeric values and canonical combining classes
+     * may be expressed numerically, e.g., ("nv", "0.5") or ("ccc",
+     * "220").  The value string may also be empty.
+     *
+     * @return a reference to this set
+     *
+     * @draft ICU 2.2
+     */
+    public UnicodeSet applyPropertyAlias(String propertyAlias,
+                                         String valueAlias) {
+        int p;
+        int v;
+        boolean mustNotBeEmpty = false;
+
+        if (valueAlias.length() > 0) {
+            p = UCharacter.getPropertyEnum(propertyAlias);
+
+            if ((p >= UProperty.BINARY_START && p < UProperty.BINARY_LIMIT) ||
+                (p >= UProperty.INT_START && p < UProperty.INT_LIMIT)) {
+                try {
+                    v = UCharacter.getPropertyValueEnum(p, valueAlias);
+                } catch (IllegalArgumentException e) {
+                    // Handle numeric CCC
+                    if (p == UProperty.CANONICAL_COMBINING_CLASS) {
+                        v = Integer.parseInt(Utility.deleteRuleWhiteSpace(valueAlias));
+                        // If the resultant set is empty then the numeric value
+                        // was invalid.
+                        mustNotBeEmpty = true;
+                    } else {
+                        throw e;
+                    }
+                }
+            }
+
+            else {
+
+                switch (p) {
+                case UProperty.NUMERIC_VALUE:
+                    {
+                        double value = Double.parseDouble(Utility.deleteRuleWhiteSpace(valueAlias));
+                        applyFilter(new NumericValueFilter(value));
+                        return this;
+                    }
+                case UProperty.NAME:
+                case UProperty.UNICODE_1_NAME:
+                    {
+                        // Must munge name, since
+                        // UCharacter.charFromName() does not do
+                        // 'loose' matching.
+                        String buf = mungeCharName(valueAlias);
+                        int ch =
+                            (p == UProperty.NAME) ?
+                            UCharacter.getCharFromExtendedName(buf) :
+                            UCharacter.getCharFromName1_0(buf);
+                        if (ch == -1) {
+                            throw new IllegalArgumentException("Invalid character name");
+                        }
+                        clear();
+                        add(ch);
+                        return this;
+                    }
+                }
+
+                // p is a non-binary, non-enumerated property that we
+                // don't support (yet).
+                throw new IllegalArgumentException("Unsupported property");
+            }
+        }
+
+        else {
+            // valueAlias is empty.  Interpret as General Category, Script,
+            // Binary property, or ANY or ASCII.  Upon success, p and v will
+            // be set.
+            try { 
+                p = UProperty.GENERAL_CATEGORY;
+                v = UCharacter.getPropertyValueEnum(p, propertyAlias);
+            } catch (IllegalArgumentException e) {
+                try {
+                    p = UProperty.SCRIPT;
+                    v = UCharacter.getPropertyValueEnum(p, propertyAlias);
+                } catch (IllegalArgumentException e2) {
+                    try {
+                        p = UCharacter.getPropertyEnum(propertyAlias);
+                    } catch (IllegalArgumentException e3) {
+                        p = -1;
+                    }
+                    if (p >= UProperty.BINARY_START && p < UProperty.BINARY_LIMIT) {
+                        v = 1;
+                    } else if (p == -1) {
+                        if (0 == UPropertyAliases.compare(ANY_ID, propertyAlias)) {
+                            set(MIN_VALUE, MAX_VALUE);
+                            return this;
+                        } else if (0 == UPropertyAliases.compare(ASCII_ID, propertyAlias)) {
+                            set(0, 0x7F);
+                            return this;
+                        } else {
+                            // Property name was never matched.
+                            throw new IllegalArgumentException("Invalid property alias");
+                        }
+                    } else {
+                        // Valid propery name, but it isn't binary, so the value
+                        // must be supplied.
+                        throw new IllegalArgumentException("Missing property value");
+                    }
+                }
+            }
+        }
+
+        applyIntPropertyValue(p, v);
+
+        if (mustNotBeEmpty && isEmpty()) {
+            // mustNotBeEmpty is set to true if an empty set indicates
+            // invalid input.
+            throw new IllegalArgumentException("Invalid property value");
+        }
+
+        return this;
+    }
+
+    //----------------------------------------------------------------
+    // Property set patterns
+    //----------------------------------------------------------------
+    
+    /**
+     * Return true if the given position, in the given pattern, appears
+     * to be the start of a property set pattern.
+     */
+    private static boolean resemblesPropertyPattern(String pattern, int pos) {
+        // Patterns are at least 5 characters long
+        if ((pos+5) > pattern.length()) {
+            return false;
+        }
+
+        // Look for an opening [:, [:^, \p, or \P
+        return pattern.regionMatches(pos, "[:", 0, 2) ||
+            pattern.regionMatches(true, pos, "\\p", 0, 2) ||
+            pattern.regionMatches(pos, "\\N", 0, 2);
+    }
+
+    /**
+     * Parse the given property pattern at the given parse position.
+     */
+    private UnicodeSet applyPropertyPattern(String pattern, ParsePosition ppos) {
+        int pos = ppos.getIndex();
+
+        // On entry, ppos should point to one of the following locations:
+
+        // Minimum length is 5 characters, e.g. \p{L}
+        if ((pos+5) > pattern.length()) {
+            return null;
+        }
+
+        boolean posix = false; // true for [:pat:], false for \p{pat} \P{pat} \N{pat}
+        boolean isName = false; // true for \N{pat}, o/w false
+        boolean invert = false;
+
+        // Look for an opening [:, [:^, \p, or \P
+        if (pattern.regionMatches(pos, "[:", 0, 2)) {
+            posix = true;
+            pos = Utility.skipWhitespace(pattern, pos+2);
+            if (pos < pattern.length() && pattern.charAt(pos) == '^') {
+                ++pos;
+                invert = true;
+            }
+        } else if (pattern.regionMatches(true, pos, "\\p", 0, 2) ||
+                   pattern.regionMatches(pos, "\\N", 0, 2)) {
+            char c = pattern.charAt(pos+1);
+            invert = (c == 'P');
+            isName = (c == 'N');
+            pos = Utility.skipWhitespace(pattern, pos+2);
+            if (pos == pattern.length() || pattern.charAt(pos++) != '{') {
+                // Syntax error; "\p" or "\P" not followed by "{"
+                return null;
+            }
+        } else {
+            // Open delimiter not seen
+            return null;
+        }
+
+        // Look for the matching close delimiter, either :] or }
+        int close = pattern.indexOf(posix ? ":]" : "}", pos);
+        if (close < 0) {
+            // Syntax error; close delimiter missing
+            return null;
+        }
+
+        // Look for an '=' sign.  If this is present, we will parse a
+        // medium \p{gc=Cf} or long \p{GeneralCategory=Format}
+        // pattern.
+        int equals = pattern.indexOf('=', pos);
+        String propName, valueName;
+        if (equals >= 0 && equals < close && !isName) {
+            // Equals seen; parse medium/long pattern
+            propName = pattern.substring(pos, equals);
+            valueName = pattern.substring(equals+1, close);
+        }
+        
+        else {
+            // Handle case where no '=' is seen, and \N{}
+            propName = pattern.substring(pos, close);
+            valueName = "";
+            
+            // Handle \N{name}
+            if (isName) {
+                // This is a little inefficient since it means we have to
+                // parse "na" back to UProperty.NAME even though we already
+                // know it's UProperty.NAME.  If we refactor the API to
+                // support args of (int, String) then we can remove
+                // "na" and make this a little more efficient.
+                valueName = propName;
+                propName = "na";
+            }
+        }
+
+        applyPropertyAlias(propName, valueName);
+
+        if (invert) {
+            complement();
+        }
+
+        // Move to the limit position after the close delimiter
+        ppos.setIndex(close + (posix ? 2 : 1));
+
+        return this;
+    }
 }
