@@ -282,8 +282,7 @@ static void TestDecodedBundle(){
 static void TestNewTypes() {
     UResourceBundle* theBundle = NULL;
     char action[256];
-    char testdatapath[256];
-    const char *directory= u_getDataDirectory();
+    const char* testdatapath;
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* res = NULL;
     uint8_t *binResult = NULL;
@@ -297,7 +296,7 @@ static void TestNewTypes() {
     const char* expect ="tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''";
     UChar uExpect[200];
 
-    loadTestData(testdatapath,256,&status);
+    testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
@@ -436,7 +435,7 @@ static void TestNewTypes() {
 static void TestEmptyTypes() {
     UResourceBundle* theBundle = NULL;
     char action[256];
-    char testdatapath[256];
+    const char* testdatapath;
     const char *directory= u_getDataDirectory();
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* res = NULL;
@@ -449,7 +448,7 @@ static void TestEmptyTypes() {
 
     strcpy(action, "Construction of testtypes bundle");
     
-    loadTestData(testdatapath,256,&status);
+    testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
@@ -580,11 +579,10 @@ static void TestEmptyTypes() {
 
 static void TestEmptyBundle(){
     UErrorCode status = U_ZERO_ERROR;
-    char testdatapath[256];
-    const char *directory= u_getDataDirectory();
+    const char* testdatapath=NULL;
     UResourceBundle *resb=0, *dResB=0;
     
-    loadTestData(testdatapath,256,&status);
+    testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
@@ -606,7 +604,7 @@ static void TestEmptyBundle(){
 static void TestBinaryCollationData(){
     UErrorCode status=U_ZERO_ERROR;
     const char*      locale="te";
-    char testdatapath[256];
+    const char* testdatapath;
     UResourceBundle *teRes = NULL;
     UResourceBundle *coll=NULL;
     UResourceBundle *binColl = NULL;
@@ -616,7 +614,7 @@ static void TestBinaryCollationData(){
  
     log_verbose("Testing binary collation data resource......\n");
 
-    loadTestData(testdatapath,256,&status);
+    testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
@@ -664,8 +662,8 @@ static void TestAPI() {
     int32_t len=0;
     const char* key=NULL;
     const UChar* value=NULL;
-    char testdatapath[256];
-    UChar utestdatapath[256];
+    const char* testdatapath;
+    UChar* utestdatapath=NULL;
     char convOutput[256];
     UResourceBundle *teRes = NULL;
     UResourceBundle *teFillin=NULL;
@@ -673,13 +671,15 @@ static void TestAPI() {
     
     log_verbose("Testing ures_openU()......\n");
     
-    loadTestData(testdatapath,256,&status);
+    testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-    
+    len =strlen(testdatapath);
+    utestdatapath = (UChar*) malloc((len+10)*sizeof(UChar));
+
     u_charsToUChars(testdatapath, utestdatapath, strlen(testdatapath)+1);
     /*u_uastrcpy(utestdatapath, testdatapath);*/
 
@@ -779,6 +779,7 @@ static void TestAPI() {
         }
         ures_close(teRes);
     }
+    free(utestdatapath);
 }
 
 static void TestErrorConditions(){
@@ -786,8 +787,8 @@ static void TestErrorConditions(){
     const char*        directory=NULL;
     const char *key=NULL;
     const UChar *value=NULL;
-    char testdatapath[256];
-    UChar utestdatapath[256];
+    const char* testdatapath;
+    UChar* utestdatapath;
     int32_t len=0;
     UResourceBundle *teRes = NULL;
     UResourceBundle *coll=NULL;
@@ -798,13 +799,14 @@ static void TestErrorConditions(){
     int32_t resultLen;
     
     
-    loadTestData(testdatapath,256,&status);
+    testdatapath = loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
         return;
     }
-
+    len = strlen(testdatapath);
+    utestdatapath = (UChar*) malloc(sizeof(UChar) *(len+10));
     u_uastrcpy(utestdatapath, testdatapath);
   
     /*Test ures_openU with status != U_ZERO_ERROR*/
@@ -1002,6 +1004,7 @@ static void TestErrorConditions(){
     ures_close(coll);
     ures_close(binColl);
     ures_close(teRes);
+    free(utestdatapath);
     
 
 }
@@ -1058,7 +1061,7 @@ static void TestConstruction1()
     UErrorCode   err = U_ZERO_ERROR;
     const char*        directory=NULL;
     const char*      locale="te_IN";
-    char testdatapath[256];
+    const char* testdatapath;
 
     int32_t len1=0;
     int32_t len2=0;
@@ -1072,7 +1075,7 @@ static void TestConstruction1()
     U_STRING_INIT(rootVal, "ROOT", 4);
     U_STRING_INIT(te_inVal, "TE_IN", 5);
 
-    loadTestData(testdatapath,256,&status);
+    testdatapath=loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));
@@ -1218,14 +1221,14 @@ static UBool testTag(const char* frag,
     int32_t column_count=0;
     int32_t index = 0;
     int32_t tag_count= 0;
-    char testdatapath[256];
+    const char* testdatapath;
     char verboseOutput[256];
     UResourceBundle* array=NULL;
     UResourceBundle* array2d=NULL;
     UResourceBundle* tags=NULL;
     UResourceBundle* arrayItem1=NULL;
 
-    loadTestData(testdatapath,256,&status);
+    testdatapath = loadTestData(&status);
     if(U_FAILURE(status))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(status));

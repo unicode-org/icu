@@ -452,8 +452,21 @@ static void TestConvert()
     for (codepage_index=0; codepage_index <  NUM_CODEPAGE; ++codepage_index)
     {
         int32_t i = 0;  
-    
-        strcpy(ucs_file_name, ctest_getTestDirectory());
+        char* index = NULL;
+        strcpy(ucs_file_name, loadTestData(&err));
+        
+        index=strrchr(ucs_file_name,(char)U_FILE_SEP_CHAR);
+
+        if((unsigned int)(index-ucs_file_name) != (strlen(ucs_file_name)-1)){
+                *(index+1)=0;
+        }
+        
+        strcat(ucs_file_name,".."U_FILE_SEP_STRING);
+        
+        if(U_FAILURE(err)){
+            log_err("Couldn't get the test data directory... Exiting...Error:%s\n", u_errorName(err));
+            return;
+        }
         strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
 
         ucs_file_in = fopen(ucs_file_name,"rb");
@@ -1419,3 +1432,5 @@ static void bug3()
       log_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
    }
 }
+
+

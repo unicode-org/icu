@@ -144,16 +144,13 @@ protected:
     /* complete a relative path to a full pathname, and convert to platform-specific syntax. */
     /* The character seperating directories for the relative path is '|'.                    */
     static void pathnameInContext( char* fullname, int32_t maxsize, const char* relpath );
-    /*The function to set the Test Directory*/
-    static void setTestDirectory(const char* newDir);
-    /*The function to get the Test Directory*/
-    static const char* getTestDirectory(void);
+
 public:
     static void setICU_DATA();       // Set up ICU_DATA if necessary.
 
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
-    void loadTestData(char* testdatapath,int32_t len,UErrorCode& err);
+    const char* loadTestData(UErrorCode& err);
 
 // static members
 public:

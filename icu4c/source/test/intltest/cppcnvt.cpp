@@ -264,7 +264,20 @@ void ConvertTest::TestConvert()
     {
         err = U_ZERO_ERROR;
         i = 0;
-        strcpy(ucs_file_name, IntlTest::getTestDirectory());
+        char* index = 0;
+        strcpy(ucs_file_name, IntlTest::loadTestData(err));
+        
+        index=strrchr(ucs_file_name,(char)U_FILE_SEP_CHAR);
+
+        if((unsigned int)(index-ucs_file_name) != (strlen(ucs_file_name)-1)){
+                *(index+1)=0;
+        }
+        
+        strcat(ucs_file_name,".."U_FILE_SEP_STRING);
+        if(U_FAILURE(err)){
+             char  errmsg[UCS_FILE_NAME_SIZE + 128];
+             sprintf(errmsg, "Couldn't open the testdata... Exiting...Error:%s \n", u_errorName(err));
+        }
         strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
 
         ucs_file_in = fopen(ucs_file_name, "rb");
