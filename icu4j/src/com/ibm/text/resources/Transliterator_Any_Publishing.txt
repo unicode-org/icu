@@ -1,0 +1,31 @@
+﻿# Test case
+# "The" "(quick)" ('brown') `fox' ` jumped --     "over?"
+
+# Variables
+
+$single = \' ;
+$space = ' ' ;
+$double = \" ;
+$back = \` ;
+$tab = '\u0008' ;
+$makeRight = [[:Z:][:Ps:][:Pi:]] ;
+
+# fix UNIX quotes
+
+$back $back > “ ;
+$back > ‘ ;
+
+# fix typewriter quotes, by context
+
+$makeRight {$double} <> “ ;
+^ {$double} > “ ;
+$double <> ” ;
+
+$makeRight {$single} <> ‘ ;
+^ {$single} > ‘ ;
+$single <> ’;
+
+# fix multiple spaces and hyphens
+
+$space {$space} > ;
+'--' <> — ;
