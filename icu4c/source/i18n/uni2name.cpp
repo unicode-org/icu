@@ -92,22 +92,18 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
 
     while (cursor < limit) {
         UChar32 c = text.char32At(cursor);
-        status = U_ZERO_ERROR;
-        if ((len = u_charName(c, U_UNICODE_CHAR_NAME, buf, sizeof(buf), &status)) <= 0 || U_FAILURE(status)) {
-	    status = U_ZERO_ERROR;
-	    if ((len = u_charName(c, U_UNICODE_10_CHAR_NAME, buf,  sizeof(buf), &status)) <= 0 || U_FAILURE(status)) {
-            sprintf(buf, "U+%04lX", c);
-            len = uprv_strlen(buf);
-	    }
-	}
-
-        str.truncate(1);
-        str.append(UnicodeString(buf, len, "")).append(closeDelimiter);
         int32_t clen = UTF_CHAR_LENGTH(c);
-        text.handleReplaceBetween(cursor, cursor+clen, str);
-        len += 2; // adjust for delimiters
-        cursor += len; // advance cursor and adjust for new text
-        limit += len-clen; // change in length
+        status = U_ZERO_ERROR;
+        if ((len = u_charName(c, U_EXTENDED_CHAR_NAME, buf, sizeof(buf), &status)) >0 && !U_FAILURE(status)) {
+            str.truncate(1);
+            str.append(UnicodeString(buf, len, "")).append(closeDelimiter);
+            text.handleReplaceBetween(cursor, cursor+clen, str);
+            len += 2; // adjust for delimiters
+            cursor += len; // advance cursor and adjust for new text
+            limit += len-clen; // change in length
+        } else {
+            cursor += clen;
+        }
     }
 
     offsets.contextLimit += limit - offsets.limit;
