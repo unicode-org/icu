@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2001, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -73,8 +73,8 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_DATA = @INSTALL_DATA@
 AUTOCONF = @AUTOCONF@
 
-pkgdatadir = $(datadir)/$(PACKAGE)/$(VERSION)
-pkglibdir = $(libdir)/$(PACKAGE)/$(VERSION)
+pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
 
 MKINSTALLDIRS = $(SHELL) $(pkgdatadir)/mkinstalldirs
 

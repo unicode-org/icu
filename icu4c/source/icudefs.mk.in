@@ -40,7 +40,7 @@ SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 # to change the build this way). When building in common mode, the data
 # name is the versioned platform-dependent one. 
 
-ICUDATA_DIR = @pkgicudatadir@/$(PACKAGE)/$(VERSION)
+ICUDATA_DIR = @pkgicudatadir@/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
 
 ICUDATA_BASENAME_VERSION = $(ICUPREFIX)dt@LIB_VERSION_MAJOR@
 ICUDATA_ENTRY_POINT = $(ICUDATA_BASENAME_VERSION)@ICULIBSUFFIXCNAME@
@@ -63,9 +63,9 @@ endif
 
 # ICU specific directories
 
-pkgdatadir = $(datadir)/$(PACKAGE)/$(VERSION)
-pkglibdir = $(libdir)/$(PACKAGE)/$(VERSION)
-pkgsysconfdir = $(sysconfdir)/$(PACKAGE)
+pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkgsysconfdir = $(sysconfdir)$(ICULIBSUFFIX)/$(PACKAGE)
 
 # Installation programs
 
