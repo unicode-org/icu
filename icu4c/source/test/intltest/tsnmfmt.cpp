@@ -153,8 +153,8 @@ IntlTestNumberFormat::testFormat(char *par)
         tryIt(9.99999999999996);
         tryIt(9.999999999999996);
 
-        tryIt((int32_t)T_INT32_MIN);
-        tryIt((int32_t)T_INT32_MAX);
+        tryIt((int32_t)INT32_MIN);
+        tryIt((int32_t)INT32_MAX);
         tryIt((double)LONG_MIN);
         tryIt((double)LONG_MAX);
         tryIt((double)LONG_MIN - 1.0);

@@ -1385,7 +1385,7 @@ scsu_findStaticWindow(int32_t c)
 static int32_t 
 scsu_getLRDefinedWindow(const UnicodeCompressor *comp)
 {
-  int32_t leastRU         = T_INT32_MAX;
+  int32_t leastRU         = INT32_MAX;
   int32_t whichWindow     = INVALIDWINDOW;
   int32_t i;
   

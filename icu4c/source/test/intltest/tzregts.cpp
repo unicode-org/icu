@@ -663,7 +663,7 @@ TimeZoneRegressionTest::Test4154525()
         0, BAD,
         -1, BAD,
         60*60*1000, GOOD,
-        T_INT32_MIN, BAD,
+        INT32_MIN, BAD,
         // Integer.MAX_VALUE, ?, // no upper limit on DST savings at this time
     };
 
