@@ -663,14 +663,16 @@ _EBCDIC_STATEFUL_WriteSub(UConverterFromUnicodeArgs *pArgs, int32_t offsetIndex,
     p = buffer;
 
     /* fromUnicodeStatus contains UBool "in DBCS mode" */
-    if(cnv->subCharLen == 1) {
+    switch(cnv->subCharLen) {
+    case 1:
         if(cnv->fromUnicodeStatus) {
             /* DBCS mode and SBCS sub char: change to SBCS */
             cnv->fromUnicodeStatus = FALSE;
             *p++ = UCNV_SI;
         }
         *p++ = cnv->subChar[0];
-    } else {
+        break;
+    case 2:
         if(!cnv->fromUnicodeStatus) {
             /* SBCS mode and DBCS sub char: change to DBCS */
             cnv->fromUnicodeStatus = TRUE;
@@ -678,6 +680,10 @@ _EBCDIC_STATEFUL_WriteSub(UConverterFromUnicodeArgs *pArgs, int32_t offsetIndex,
         }
         *p++ = cnv->subChar[0];
         *p++ = cnv->subChar[1];
+        break;
+    default:
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
     ucnv_cbFromUWriteBytes(pArgs,
                            buffer, (int32_t)(p - buffer),
