@@ -134,7 +134,10 @@ DecimalFormat::DecimalFormat(UErrorCode& status)
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0)
+  fFormatWidth(0),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
+  fUseSignificantDigits(FALSE)
 {
     UParseError parseError;
     construct(status, parseError);
@@ -159,7 +162,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0)
+  fFormatWidth(0),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
+  fUseSignificantDigits(FALSE)
 {
     UParseError parseError;
     construct(status, parseError, &pattern);
@@ -186,7 +192,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0)
+  fFormatWidth(0),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
+  fUseSignificantDigits(FALSE)
 {
     UParseError parseError;
     if (symbolsToAdopt == NULL)
@@ -211,7 +220,10 @@ DecimalFormat::DecimalFormat(  const UnicodeString& pattern,
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0)
+  fFormatWidth(0),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
+  fUseSignificantDigits(FALSE)
 {
     if (symbolsToAdopt == NULL)
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -238,7 +250,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fMinExponentDigits(0),
   fRoundingIncrement(0),
   fPad(0),
-  fFormatWidth(0)
+  fFormatWidth(0),
+  fMinSignificantDigits(1),
+  fMaxSignificantDigits(6),
+  fUseSignificantDigits(FALSE)
 {
     UParseError parseError;
     construct(status, parseError, &pattern, new DecimalFormatSymbols(symbols));
@@ -381,57 +396,61 @@ static void _copy_us_ptr(UnicodeString** pdest, const UnicodeString* source) {
 DecimalFormat&
 DecimalFormat::operator=(const DecimalFormat& rhs)
 {
-  if(this != &rhs) {
-    NumberFormat::operator=(rhs);
-    fPositivePrefix = rhs.fPositivePrefix;
-    fPositiveSuffix = rhs.fPositiveSuffix;
-    fNegativePrefix = rhs.fNegativePrefix;
-    fNegativeSuffix = rhs.fNegativeSuffix;
-    _copy_us_ptr(&fPosPrefixPattern, rhs.fPosPrefixPattern);
-    _copy_us_ptr(&fPosSuffixPattern, rhs.fPosSuffixPattern);
-    _copy_us_ptr(&fNegPrefixPattern, rhs.fNegPrefixPattern);
-    _copy_us_ptr(&fNegSuffixPattern, rhs.fNegSuffixPattern);
-    if (rhs.fCurrencyChoice == 0) {
-        delete fCurrencyChoice;
-        fCurrencyChoice = 0;
-    } else {
-        fCurrencyChoice = (ChoiceFormat*) rhs.fCurrencyChoice->clone();
-    }
-    if(rhs.fRoundingIncrement == NULL) {
-      delete fRoundingIncrement;
-      fRoundingIncrement = NULL;
-    } 
-    else if(fRoundingIncrement == NULL) {
-      fRoundingIncrement = new DigitList(*rhs.fRoundingIncrement);
-    }
-    else {
-      *fRoundingIncrement = *rhs.fRoundingIncrement;
-    }
-    fRoundingDouble = rhs.fRoundingDouble;
-    fMultiplier = rhs.fMultiplier;
-    fGroupingSize = rhs.fGroupingSize;
-    fGroupingSize2 = rhs.fGroupingSize2;
-    fDecimalSeparatorAlwaysShown = rhs.fDecimalSeparatorAlwaysShown;
-    if(fSymbols == NULL) 
-        fSymbols = new DecimalFormatSymbols(*rhs.fSymbols);
-    else 
-        *fSymbols = *rhs.fSymbols;
-    fUseExponentialNotation = rhs.fUseExponentialNotation;
-    fExponentSignAlwaysShown = rhs.fExponentSignAlwaysShown;
-    /*Bertrand A. D. Update 98.03.17*/
-    fIsCurrencyFormat = rhs.fIsCurrencyFormat;
-    /*end of Update*/
-    fMinExponentDigits = rhs.fMinExponentDigits;
-//    if (fDigitList == NULL)
-//        fDigitList = new DigitList();
+    if(this != &rhs) {
+        NumberFormat::operator=(rhs);
+        fPositivePrefix = rhs.fPositivePrefix;
+        fPositiveSuffix = rhs.fPositiveSuffix;
+        fNegativePrefix = rhs.fNegativePrefix;
+        fNegativeSuffix = rhs.fNegativeSuffix;
+        _copy_us_ptr(&fPosPrefixPattern, rhs.fPosPrefixPattern);
+        _copy_us_ptr(&fPosSuffixPattern, rhs.fPosSuffixPattern);
+        _copy_us_ptr(&fNegPrefixPattern, rhs.fNegPrefixPattern);
+        _copy_us_ptr(&fNegSuffixPattern, rhs.fNegSuffixPattern);
+        if (rhs.fCurrencyChoice == 0) {
+            delete fCurrencyChoice;
+            fCurrencyChoice = 0;
+        } else {
+            fCurrencyChoice = (ChoiceFormat*) rhs.fCurrencyChoice->clone();
+        }
+        if(rhs.fRoundingIncrement == NULL) {
+            delete fRoundingIncrement;
+            fRoundingIncrement = NULL;
+        } 
+        else if(fRoundingIncrement == NULL) {
+            fRoundingIncrement = new DigitList(*rhs.fRoundingIncrement);
+        }
+        else {
+            *fRoundingIncrement = *rhs.fRoundingIncrement;
+        }
+        fRoundingDouble = rhs.fRoundingDouble;
+        fMultiplier = rhs.fMultiplier;
+        fGroupingSize = rhs.fGroupingSize;
+        fGroupingSize2 = rhs.fGroupingSize2;
+        fDecimalSeparatorAlwaysShown = rhs.fDecimalSeparatorAlwaysShown;
+        if(fSymbols == NULL) {
+            fSymbols = new DecimalFormatSymbols(*rhs.fSymbols);
+        } else {
+            *fSymbols = *rhs.fSymbols;
+        }
+        fUseExponentialNotation = rhs.fUseExponentialNotation;
+        fExponentSignAlwaysShown = rhs.fExponentSignAlwaysShown;
+        /*Bertrand A. D. Update 98.03.17*/
+        fIsCurrencyFormat = rhs.fIsCurrencyFormat;
+        /*end of Update*/
+        fMinExponentDigits = rhs.fMinExponentDigits;
+        //    if (fDigitList == NULL)
+        //        fDigitList = new DigitList();
     
-    /* sfb 990629 */
-    fFormatWidth = rhs.fFormatWidth;
-    fPad = rhs.fPad;
-    fPadPosition = rhs.fPadPosition;
-    /* end sfb */
-  }
-  return *this;
+        /* sfb 990629 */
+        fFormatWidth = rhs.fFormatWidth;
+        fPad = rhs.fPad;
+        fPadPosition = rhs.fPadPosition;
+        /* end sfb */
+        fMinSignificantDigits = rhs.fMinSignificantDigits;
+        fMinSignificantDigits = rhs.fMaxSignificantDigits;
+        fUseSignificantDigits = rhs.fUseSignificantDigits;
+    }
+    return *this;
 }
 
 //------------------------------------------------------------------------------
@@ -547,6 +566,7 @@ DecimalFormat::operator==(const Format& that) const
         if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
         debug("Symbols !=");
     }
+    // TODO Add debug stuff for significant digits here
     if (!first) { printf(" ]"); }
 #endif
 
@@ -578,7 +598,11 @@ DecimalFormat::operator==(const Format& that) const
         fUseExponentialNotation == other->fUseExponentialNotation &&
         (!fUseExponentialNotation ||
          fMinExponentDigits == other->fMinExponentDigits) &&
-        *fSymbols == *(other->fSymbols));
+        *fSymbols == *(other->fSymbols) &&
+        fUseSignificantDigits == other->fUseSignificantDigits &&
+        (!fUseSignificantDigits ||
+         (fMinSignificantDigits == other->fMinSignificantDigits &&
+          fMaxSignificantDigits == other->fMaxSignificantDigits)));
 }
 
 //------------------------------------------------------------------------------
@@ -627,7 +651,7 @@ DecimalFormat::format(int64_t number,
     {
         digits.set(((double)number) * fMultiplier,
                    precision(FALSE),
-                   !fUseExponentialNotation && !useSignificantDigits());
+                   !fUseExponentialNotation && !isSignificantDigits());
     }
     else
     {
@@ -716,7 +740,7 @@ DecimalFormat::format(  double number,
 
     // This detects negativity too.
     digits.set(number, precision(FALSE),
-               !fUseExponentialNotation && !useSignificantDigits());
+               !fUseExponentialNotation && !isSignificantDigits());
 
     return subformat(appendTo, fieldPosition, digits, FALSE);
 }
@@ -809,7 +833,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     } else {
         decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
     }
-    UBool useSigDig = useSignificantDigits();
+    UBool useSigDig = isSignificantDigits();
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t minIntDig = getMinimumIntegerDigits();
 
@@ -978,6 +1002,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         int32_t minSigDig = getMinimumSignificantDigits();
         int32_t maxSigDig = getMaximumSignificantDigits();
         if (!useSigDig) {
+            minSigDig = 0;
             maxSigDig = INT32_MAX;
         }
 
@@ -2626,7 +2651,7 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
     UnicodeString roundingDigits;
     int32_t padPos = (fFormatWidth > 0) ? fPadPosition : -1;
     UnicodeString padSpec;
-    UBool useSigDig = useSignificantDigits();
+    UBool useSigDig = isSignificantDigits();
     if (useSigDig) {
         sigDigit = localized ? getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol).char32At(0) :
                                kPatternSignificantDigit;
@@ -3324,13 +3349,15 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             }
             fExponentSignAlwaysShown = expSignAlways;
             fIsCurrencyFormat = isCurrency;
-            int digitTotalCount = digitLeftCount + zeroDigitCount + digitRightCount;
+            int32_t digitTotalCount = digitLeftCount + zeroDigitCount + digitRightCount;
             // The effectiveDecimalPos is the position the decimal is at or
             // would be at if there is no decimal.  Note that if
             // decimalPos<0, then digitTotalCount == digitLeftCount +
             // zeroDigitCount.
-            int effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
-            if (sigDigitCount > 0) {
+            int32_t effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
+            UBool isSigDig = (sigDigitCount > 0);
+            setSignificantDigits(isSigDig);
+            if (isSigDig) {
                 setMinimumSignificantDigits(sigDigitCount);
                 setMaximumSignificantDigits(sigDigitCount + digitRightCount);
             } else {
@@ -3511,35 +3538,40 @@ void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
 }
 
 int32_t DecimalFormat::getMinimumSignificantDigits() const {
-    return -getMinimumIntegerDigits();
+    return fMinSignificantDigits;
 }
 
 int32_t DecimalFormat::getMaximumSignificantDigits() const {
-    return -getMaximumIntegerDigits();
+    return fMaxSignificantDigits;
 }
 
 void DecimalFormat::setMinimumSignificantDigits(int32_t min) {
     if (min < 1) {
         min = 1;   
     }
-    // pin max sig dig to >= min; if unset, use min
-    int32_t max = _max(getMaximumSignificantDigits(), min);
-    internalSetMinimumIntegerDigits(-min);
-    internalSetMaximumIntegerDigits(-max);
+    // pin max sig dig to >= min
+    int32_t max = _max(fMaxSignificantDigits, min);
+    fMinSignificantDigits = min;
+    fMaxSignificantDigits = max;
 }
 
 void DecimalFormat::setMaximumSignificantDigits(int32_t max) {
     if (max < 1) {
         max = 1;
     }
-    // pin min sig dig to 1..max; if unset, use 1
-    int32_t min = _min(_max(getMinimumSignificantDigits(), 1), max);
-    internalSetMinimumIntegerDigits(-min);
-    internalSetMaximumIntegerDigits(-max);
+    // pin min sig dig to 1..max
+    U_ASSERT(fMinSignificantDigits >= 1);
+    int32_t min = _min(fMinSignificantDigits, max);
+    fMinSignificantDigits = min;
+    fMaxSignificantDigits = max;
 }
 
-UBool DecimalFormat::useSignificantDigits() const {
-    return getMinimumIntegerDigits() < 0;
+UBool DecimalFormat::isSignificantDigits() const {
+    return fUseSignificantDigits;
+}
+
+void DecimalFormat::setSignificantDigits(UBool useSignificantDigits) {
+    fUseSignificantDigits = useSignificantDigits;
 }
 
 void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
@@ -3582,7 +3614,7 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
  */
 int32_t
 DecimalFormat::precision(UBool isIntegral) const {
-    if (useSignificantDigits()) {
+    if (isSignificantDigits()) {
         return getMaximumSignificantDigits();
     } else if (fUseExponentialNotation) {
         return getMinimumIntegerDigits() + getMaximumFractionDigits();
