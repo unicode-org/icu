@@ -26,6 +26,9 @@ U_NAMESPACE_BEGIN
  * \brief C++ API: Common ICU base class UObject.
  */
 
+/* TODO undefine this symbol except for tests! See uobject.cpp */
+// #define U_CPP_MEMORY_TEST
+
 /**
  * UObject is the common ICU base class.
  * All other ICU C++ classes are derived from UObject (starting with ICU 2.2).
@@ -56,10 +59,14 @@ public:
     // (uprv_malloc(), uprv_free(), uprv_realloc());
     // they or something else could be used here to implement C++ new/delete
     // for ICU4C C++ classes
-    // void *operator new(size_t size);
-    // void *operator new[](size_t size);
-    // void operator delete(void *p, size_t size);
-    // void operator delete[](void *p, size_t size);
+#ifdef U_CPP_MEMORY_TEST
+    void *operator new(size_t size);
+    void *operator new[](size_t size);
+    void operator delete(void *p);
+    void operator delete[](void *p);
+    void operator delete(void *p, size_t size);
+    void operator delete[](void *p, size_t size);
+#endif
 
     /**
      * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
