@@ -21,8 +21,10 @@
 #ifndef URENAME_H
 #define URENAME_H
 
+#if !U_DISABLE_RENAMING
 
 /* C exports renaming data */
+
 #define T_CString_integerToString T_CString_integerToString_2_0
 #define T_CString_stricmp T_CString_stricmp_2_0
 #define T_CString_stringToInteger T_CString_stringToInteger_2_0
@@ -797,8 +799,10 @@
 
 
 /* C++ class names renaming defines */
+
 #ifdef XP_CPLUSPLUS
 #if !U_HAVE_NAMESPACE
+
 #define AbsoluteValueSubstitution AbsoluteValueSubstitution_2_0
 #define AlternateSubstitutionSubtable AlternateSubstitutionSubtable_2_0
 #define AnchorTable AnchorTable_2_0
@@ -979,6 +983,11 @@
 #define UppercaseTransliterator UppercaseTransliterator_2_0
 #define ValueRecord ValueRecord_2_0
 #define llong llong_2_0
+
 #endif
 #endif
+
 #endif
+
+#endif
+
