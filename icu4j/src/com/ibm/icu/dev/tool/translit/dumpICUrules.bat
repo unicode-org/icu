@@ -28,21 +28,25 @@ goto endofperl
 #
 # Alan Liu 5/19/00 2/27/01
 
-if (scalar @ARGV != 1) {
+if (scalar @ARGV < 1) {
     usage();
 }
 $DIR = shift;
 if (! -d $DIR) {
     usage();
 }
+$ID = shift;
+$ID =~ s/-/_/;
 
 sub usage {
     my $me = $0;
     $me =~ s|.+[/\\]||;
-    print "Usage: $me <dir>\n";
+    print "Usage: $me <dir> [<id>]\n";
     print " where <dir> contains the Transliterator_*.utf8.txt\n";
     print " files.\n";
     print "e.g., $me F:/icu4j/src/com/ibm/text/resources\n";
+    print " optional <id> specifies single ID to transform, e.g.\n";
+    print " Fullwidth-Halfwidth\n";
     die;
 }
 
@@ -106,6 +110,7 @@ $TOOL = $0;
 # Iterate over all Java RBT rule files
 foreach (<$DIR/Transliterator_*.utf8.txt>) {
     next if (/~$/);
+    next if ($ID && !/$ID/);
     my ($out, $id) = convertFileName($_);
     if ($out) {
         if ($out eq $JAVA_ONLY) {
@@ -276,18 +281,35 @@ sub file {
             $cmt =~ s|\#|//|;
             $_ = $white . $cmt;
 
-        } elsif (/^(\s*)(\S.*?)(\s*)(\#.*)?$/) {
-            # Rule line with optional comment
-            my ($white1, $rule, $white2, $cmt) = ($1, $2, $3, $4);
-            $cmt =~ s|\#|//| if ($cmt);
-            $_ = $white1 . '"' . $rule . '"' . $white2 . $cmt;
-
         } elsif (!/\S/) {
             # Blank line -- leave as-is
 
         } else {
-            # Unparseable line
-            print STDERR "Error: Can't parse line: $raw";
+            # Remove single-quoted matter 
+            my @quotes;
+            my $nquotes = 0;
+            my $x = $_;
+            while (s/^([^\']*)(\'[^\']*\')/$1<<x$nquotes>>/) {
+                push @quotes, $2;
+                ++$nquotes;
+            }
+
+            # Extract comment
+            my $cmt = '';
+            if (s|\#(.*)||) {
+                $cmt = '//' . $1;
+            }
+            
+            # Add quotes
+            s|^(\s*)(\S.*?)(\s*)$|$1\"$2\"$3|;
+
+            # Restore single-quoted matter
+            for (my $i=0; $i<$nquotes; ++$i) {
+                s|<<x$i>>|$quotes[$i]|;
+            }
+
+            # Restore comment
+            $_ .= $cmt;
         }
         
         # Restore escaped characters
@@ -309,15 +331,21 @@ sub file {
 ######################################################################
 sub hideEscapes {
     # Transform escaped characters
+    s|\\\\|<<bs>>|g; # DO THIS FIRST Transform backslashes
     s|\\u([a-zA-Z0-9]{4})|<<u$1>>|g; # Transform Unicode escapes
-    s|\\\"|<<dq>>|; # Transform backslash double quote
-    s|\\(.)|<<q$1>>|; # Transform backslash escapes
+    s|\\\"|<<dq>>|g; # Transform backslash double quote
+    s|\\\'|<<sq>>|g; # Transform backslash single quote
+    s|\\\#|<<lb>>|g; # Transform backslash pound
+    s|\\(.)|<<q$1>>|g; # Transform backslash escapes
 }
 
 ######################################################################
 sub restoreEscapes {
     # Restore escaped characters
+    s|<<bs>>|\\\\|g;
     s|<<dq>>|\\\"|g;
+    s|<<sq>>|\\\'|g;
+    s|<<lb>>|\\\#|g;
     s|<<q(.)>>|\\$1|g;
     s|<<u0000>>|\\\\u0000|g; # Double escape U+0000
     s|<<u(....)>>|\\u$1|g;
