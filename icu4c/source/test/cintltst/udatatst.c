@@ -15,6 +15,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
+#include "unicode/uchar.h"
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
@@ -390,7 +391,11 @@ isAcceptable1(void *context,
 static UBool U_CALLCONV
 isAcceptable2(void *context, 
              const char *type, const char *name,
-             const UDataInfo *pInfo){
+      const UDataInfo *pInfo){
+    UVersionInfo unicodeVersion;
+
+    u_getUnicodeVersion(unicodeVersion);
+
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -399,7 +404,7 @@ isAcceptable2(void *context,
         pInfo->dataFormat[2]==0x61 &&
         pInfo->dataFormat[3]==0x6d &&
         pInfo->formatVersion[0]==1 &&
-        pInfo->dataVersion[0]==3 )
+        pInfo->dataVersion[0]==unicodeVersion[0] )
     {
         log_verbose("The data from \"%s.%s\" IS acceptable using the verifing function isAcceptable2()\n", name, type);
         return TRUE;
@@ -439,7 +444,7 @@ isAcceptable3(void *context,
 static void TestUDataOpenChoiceDemo1() {
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
- 
+	
     const char* name[]={
         "cnvalias",
         "unames",
