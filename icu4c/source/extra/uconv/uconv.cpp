@@ -76,7 +76,7 @@ static void initMsg(const char *pname) {
 }
 
 // Print all available codepage converters
-static void printAllConverters(const char *pname, int allinfo)
+static void printAllConverters(const char *pname, int canon)
 {
     UErrorCode err = U_ZERO_ERROR;
     int32_t num = ucnv_countAvailable();
@@ -100,6 +100,8 @@ static void printAllConverters(const char *pname, int allinfo)
         // index
 
         const char *name = ucnv_getAvailableName(i);
+        uint16_t num_aliases;
+
 #if 0
         numprint += printf("%-20s", name);
         if (numprint>maxline)
@@ -108,40 +110,40 @@ static void printAllConverters(const char *pname, int allinfo)
             numprint = 0;
         }
 #else
-        printf("%s ", name);
-        if (allinfo) {
-            uint16_t num_aliases;
+        printf("%s", name);
 
-            err = U_ZERO_ERROR;
-            num_aliases = ucnv_countAliases(name, &err);
-            if (U_FAILURE(err)) {
-                UnicodeString str(name);
-                putchar('\t');
-                u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
-            } else if (num_aliases > 1) {
-                uint16_t a;
-
-                putchar('\t');
-
-                for (a = 1; a < num_aliases; ++a) {
-                    const char *alias = ucnv_getAlias(name, a, &err);
-
-                    if (U_FAILURE(err)) {
-                        UnicodeString str(name);
-                        putchar('\t');
-                        u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
-                        break;
-                    }
-
-                    printf("%s", alias);
-
-                    
-                    if (a < num_aliases) {
-                        putchar(' ');
-                    }
+        err = U_ZERO_ERROR;
+        num_aliases = ucnv_countAliases(name, &err);
+        if (U_FAILURE(err)) {
+            UnicodeString str(name);
+            putchar('\t');
+            u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+        } else if (num_aliases > 1) {
+            uint16_t a;
+            
+            putchar(canon ? '\t' : ' ');
+            
+            for (a = 1; a < num_aliases; ++a) {
+                const char *alias = ucnv_getAlias(name, a, &err);
+                
+                if (U_FAILURE(err)) {
+                    UnicodeString str(name);
+                    putchar('\t');
+                    u_wmsg("cantGetAliases", str.getBuffer(), u_wmsg_errorName(err));
+                    break;
                 }
-                putchar('\n');
+                
+                printf("%s", alias);
+                
+                if (a < num_aliases - 1) {
+                    putchar(' ');
+                }
             }
+            if (canon) {
+                putchar('\n');
+            } else if (i < num - 1) {
+                putchar(' ');
+            } 
         }
 #endif
     }
@@ -349,6 +351,8 @@ int main(int argc, char** argv)
 
     const char *pname = *argv;
 
+    int printConvs = 0, printCanon = 0;
+
     // First, get the arguments from command-line
     // to know the codepages to convert between
     for (; iter!=end; iter++)
@@ -368,12 +372,10 @@ int main(int argc, char** argv)
         }
         else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
-            printAllConverters(pname, 0);
-            goto normal_exit;
+            printConvs = 1;
         }
-        else if (strcmp("--list-converters", *iter) == 0) {
-            printAllConverters(pname, 1);
-            goto normal_exit;
+        else if (strcmp("-c", *iter) == 0) {
+            printCanon = 1;
         }
         else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter) == 0 || !strcmp("--help", *iter))
         {
@@ -386,6 +388,11 @@ int main(int argc, char** argv)
         } else {
             usage(pname, 1);
         }
+    }
+
+    if (printConvs) {
+            printAllConverters(pname, printCanon);
+            goto normal_exit;
     }
 
     if (fromcpage==0 && tocpage==0)

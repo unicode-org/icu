@@ -19,7 +19,7 @@
 .BI "\-l\fP, \fB\-\-list"
 ]
 [
-.BI "\-\-list\-converters\"
+.BI "\-c"
 ]
 [
 .BI "\-L\fP, \fB\-\-list\-transliterators"
@@ -45,9 +45,10 @@ Print help about usage and exit.
 .TP
 .BI "\-l\fP, \fB\-\-list"
 List all the available encodings and exit.
-.BI "\-\-list\-converters"
-List all the available encodings and their aliases in a format compatible
-with
+.BI "\-c"
+If used with
+.BI "\-l\fP, \fB\-\-list"
+the list of encodings is produced in a format compatible with
 .BR convrtrs.txt (5).
 .TP
 .BI "\-L\fP, \fB\-\-list\-transliterators"
