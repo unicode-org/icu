@@ -179,14 +179,14 @@ public:
     /**
      * Gets a const reference to the string value of this object.
      * @return   a const reference to the string value of this object.
-     * @draft
+     * @stable
      */
     inline const UnicodeString& getString(void) const;
 
     /**
      * Gets a reference to the string value of this object.
      * @return   a reference to the string value of this object.
-     * @draft
+     * @stable
      */
     inline UnicodeString& getString(void);
 
