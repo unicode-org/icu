@@ -1331,7 +1331,7 @@ int32_t MessageFormat::findKeyword(const UnicodeString& s,
     UnicodeString buffer = s;
     // Trims the space characters and turns all characters
     // in s to lower case.
-    buffer.trim().toLower();
+    buffer.trim().toLower("");
     for (int32_t i = 0; list[i]; ++i) {
         if (!buffer.compare(list[i], u_strlen(list[i]))) {
             return i;
