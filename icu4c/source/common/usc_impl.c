@@ -298,7 +298,10 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
              */
             if (pairIndex >= 0 && (pairIndex & 1) != 0 && scriptRun->parenSP >= 0) {
                 scriptRun->parenSP -= 1;
-                startSP -= 1;
+                
+                if (scriptRun->parenSP < startSP) {
+                    startSP = scriptRun->parenSP;
+                }
             }
         } else {
             /*
