@@ -254,14 +254,14 @@ CLEAN :
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # Batch inference rule for creating converters
-{"$(ICUDATA)"}.ucm.cnv::
-	@echo Generating converters and c source files
+{$(ICUDATA)}.ucm.cnv::
+	@echo Generating converters
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Inference rule for creating converters
-{"$(ICUDATA)"}.txt.res:
+{$(ICUDATA)}.txt.res:
 	@echo Making Resource Bundle files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(ICUDATA)" -d$(@D) $(?F)
 
