@@ -1,17 +1,16 @@
-﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Telugu.utf8.txt
+// Source: \u005cicu4j\u005csrc\u005ccom\u005cibm\u005ctext\u005cresources/Transliterator_InterIndic_Telugu.utf8.txt
 // Date: Thu Mar  1 20:03:55 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Telugu
 
-InterIndic_Telugu {
+InterIndic-Telugu {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
@@ -21,105 +20,105 @@ InterIndic_Telugu {
 //--------------------------------------------------------------------
 
 // InterIndic-Telugu
-
-"\uE001>ఁ;" // SIGN CANDRABINDU
-"\uE002>ం;" // SIGN ANUSVARA
-"\uE003>ః;" // SIGN VISARGA
-"\uE005>అ;" // LETTER A
-"\uE006>ఆ;" // LETTER AA
-"\uE007>ఇ;" // LETTER I
-"\uE008>ఈ;" // LETTER II
-"\uE009>ఉ;" // LETTER U
-"\uE00A>ఊ;" // LETTER UU
-"\uE00B>ఋ;" // LETTER VOCALIC R
-"\uE00C>ఌ;" // LETTER VOCALIC L
-"\uE00F>ఏ;" // LETTER EE
-"\uE010>ఐ;" // LETTER AI
-"\uE013>ఓ;" // LETTER OO
-"\uE014>ఔ;" // LETTER AU
-"\uE015>క;" // LETTER KA
-"\uE016>ఖ;" // LETTER KHA
-"\uE017>గ;" // LETTER GA
-"\uE018>ఘ;" // LETTER GHA
-"\uE019>ఙ;" // LETTER NGA
-"\uE01A>చ;" // LETTER CA
-"\uE01B>ఛ;" // LETTER CHA
-"\uE01C>జ;" // LETTER JA
-"\uE01D>ఝ;" // LETTER JHA
-"\uE01E>ఞ;" // LETTER NYA
-"\uE01F>ట;" // LETTER TTA
-"\uE020>ఠ;" // LETTER TTHA
-"\uE021>డ;" // LETTER DDA
-"\uE022>ఢ;" // LETTER DDHA
-"\uE023>ణ;" // LETTER NNA
-"\uE024>త;" // LETTER TA
-"\uE025>థ;" // LETTER THA
-"\uE026>ద;" // LETTER DA
-"\uE027>ధ;" // LETTER DHA
-"\uE028>న;" // LETTER NA
-"\uE029>న;" // REMAP (indicExceptions.txt): ఩>న = LETTER NNNA>LETTER NA
-"\uE02A>ప;" // LETTER PA
-"\uE02B>ఫ;" // LETTER PHA
-"\uE02C>బ;" // LETTER BA
-"\uE02D>భ;" // LETTER BHA
-"\uE02E>మ;" // LETTER MA
-"\uE02F>య;" // LETTER YA
-"\uE030>ర;" // LETTER RA
-"\uE032>ల;" // LETTER LA
-"\uE033>ళ;" // LETTER LLA
-"\uE034>ళ;" // REMAP (indicExceptions.txt): ఴ>ళ = LETTER LLLA>LETTER LLA
-"\uE035>వ;" // LETTER VA
-"\uE036>శ;" // LETTER SHA
-"\uE037>ష;" // LETTER SSA
-"\uE038>స;" // LETTER SA
-"\uE039>హ;" // LETTER HA
-// \uE03C>; // UNMAPPED InterIndic-Telugu: SIGN NUKTA
-// \uE03D>; // UNMAPPED InterIndic-Telugu: SIGN AVAGRAHA
-"\uE03E>ా;" // VOWEL SIGN AA
-"\uE03F>ి;" // VOWEL SIGN I
-"\uE040>ీ;" // VOWEL SIGN II
-"\uE041>ు;" // VOWEL SIGN U
-"\uE042>ూ;" // VOWEL SIGN UU
-"\uE043>ృ;" // VOWEL SIGN VOCALIC R
-"\uE044>ౄ;" // VOWEL SIGN VOCALIC RR
-"\uE045>ె;" // REMAP (indicExceptions.txt): ౅>ె = VOWEL SIGN CANDRA E>VOWEL SIGN E
-"\uE047>ే;" // VOWEL SIGN EE
-"\uE048>ై;" // VOWEL SIGN AI
-"\uE049>ొ;" // REMAP (indicExceptions.txt): ౉>ొ = VOWEL SIGN CANDRA O>VOWEL SIGN O
-"\uE04B>ో;" // VOWEL SIGN OO
-"\uE04C>ౌ;" // VOWEL SIGN AU
-"\uE04D>్;" // SIGN VIRAMA
-"\uE050>ఓం;" // REMAP (indicExceptions.txt): ౐>ఓం = OM>LETTER OO.SIGN ANUSVARA
-"\uE055>ౕ;" // LENGTH MARK
-"\uE056>ౖ;" // AI LENGTH MARK
-"\uE057>ౌ;" // REMAP (indicExceptions.txt): ౗>ౌ = AU LENGTH MARK>VOWEL SIGN AU
-"\uE059>ఖ;" // REMAP (indicExceptions.txt): ౙ>ఖ = LETTER KHHA>LETTER KHA
-"\uE05A>గ;" // REMAP (indicExceptions.txt): ౚ>గ = LETTER GHHA>LETTER GA
-"\uE05B>జ;" // REMAP (indicExceptions.txt): ౛>జ = LETTER ZA>LETTER JA
-"\uE05D>ఢ;" // REMAP (indicExceptions.txt): ౝ>ఢ = LETTER RHA>LETTER DDHA
-"\uE05E>ఫ;" // REMAP (indicExceptions.txt): ౞>ఫ = LETTER FA>LETTER PHA
-"\uE05F>య;" // REMAP (indicExceptions.txt): ౟>య = LETTER YYA>LETTER YA
-"\uE060>ౠ;" // LETTER VOCALIC RR
-"\uE061>ౡ;" // LETTER VOCALIC LL
-"\uE062>ి;" // REMAP (indicExceptions.txt): ౢ>ి = VOWEL SIGN VOCALIC L>VOWEL SIGN I
-"\uE063>ీ;" // REMAP (indicExceptions.txt): ౣ>ీ = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
-"\uE066>౦;" // DIGIT ZERO
-"\uE067>౧;" // DIGIT ONE
-"\uE068>౨;" // DIGIT TWO
-"\uE069>౩;" // DIGIT THREE
-"\uE06A>౪;" // DIGIT FOUR
-"\uE06B>౫;" // DIGIT FIVE
-"\uE06C>౬;" // DIGIT SIX
-"\uE06D>౭;" // DIGIT SEVEN
-"\uE06E>౮;" // DIGIT EIGHT
-"\uE06F>౯;" // DIGIT NINE
-// \uE080>; // UNMAPPED InterIndic-Telugu: ISSHAR
-"\uE081>ఎ;" // LETTER E
-"\uE082>ఒ;" // LETTER O
-"\uE083>ఱ;" // LETTER RRA
-"\uE084>ె;" // VOWEL SIGN E
-"\uE085>ొ;" // VOWEL SIGN O
-
+":: NFD (NFC) ;"
+"\ue001>\u0c01;" // SIGN CANDRABINDU
+"\ue002>\u0c02;" // SIGN ANUSVARA
+"\ue003>\u0c03;" // SIGN VISARGA
+"\ue005>\u0c05;" // LETTER A
+"\ue006>\u0c06;" // LETTER AA
+"\ue007>\u0c07;" // LETTER I
+"\ue008>\u0c08;" // LETTER II
+"\ue009>\u0c09;" // LETTER U
+"\ue00a>\u0c0a;" // LETTER UU
+"\ue00b>\u0c0b;" // LETTER VOCALIC R
+"\ue00c>\u0c0c;" // LETTER VOCALIC L
+"\ue00f>\u0c0f;" // LETTER EE
+"\ue010>\u0c10;" // LETTER AI
+"\ue013>\u0c13;" // LETTER OO
+"\ue014>\u0c14;" // LETTER AU
+"\ue015>\u0c15;" // LETTER KA
+"\ue016>\u0c16;" // LETTER KHA
+"\ue017>\u0c17;" // LETTER GA
+"\ue018>\u0c18;" // LETTER GHA
+"\ue019>\u0c19;" // LETTER NGA
+"\ue01a>\u0c1a;" // LETTER CA
+"\ue01b>\u0c1b;" // LETTER CHA
+"\ue01c>\u0c1c;" // LETTER JA
+"\ue01d>\u0c1d;" // LETTER JHA
+"\ue01e>\u0c1e;" // LETTER NYA
+"\ue01f>\u0c1f;" // LETTER TTA
+"\ue020>\u0c20;" // LETTER TTHA
+"\ue021>\u0c21;" // LETTER DDA
+"\ue022>\u0c22;" // LETTER DDHA
+"\ue023>\u0c23;" // LETTER NNA
+"\ue024>\u0c24;" // LETTER TA
+"\ue025>\u0c25;" // LETTER THA
+"\ue026>\u0c26;" // LETTER DA
+"\ue027>\u0c27;" // LETTER DHA
+"\ue028>\u0c28;" // LETTER NA
+"\ue029>\u0c28;" // REMAP (indicExceptions.txt): \u0c29>\u0c28 = LETTER NNNA>LETTER NA
+"\ue02a>\u0c2a;" // LETTER PA
+"\ue02b>\u0c2b;" // LETTER PHA
+"\ue02c>\u0c2c;" // LETTER BA
+"\ue02d>\u0c2d;" // LETTER BHA
+"\ue02e>\u0c2e;" // LETTER MA
+"\ue02f>\u0c2f;" // LETTER YA
+"\ue030>\u0c30;" // LETTER RA
+"\ue032>\u0c32;" // LETTER LA
+"\ue033>\u0c33;" // LETTER LLA
+"\ue034>\u0c33;" // REMAP (indicExceptions.txt): \u0c34>\u0c33 = LETTER LLLA>LETTER LLA
+"\ue035>\u0c35;" // LETTER VA
+"\ue036>\u0c36;" // LETTER SHA
+"\ue037>\u0c37;" // LETTER SSA
+"\ue038>\u0c38;" // LETTER SA
+"\ue039>\u0c39;" // LETTER HA
+// \ue03c>; // UNMAPPED InterIndic-Telugu: SIGN NUKTA
+// \ue03d>; // UNMAPPED InterIndic-Telugu: SIGN AVAGRAHA
+"\ue03e>\u0c3e;" // VOWEL SIGN AA
+"\ue03f>\u0c3f;" // VOWEL SIGN I
+"\ue040>\u0c40;" // VOWEL SIGN II
+"\ue041>\u0c41;" // VOWEL SIGN U
+"\ue042>\u0c42;" // VOWEL SIGN UU
+"\ue043>\u0c43;" // VOWEL SIGN VOCALIC R
+"\ue044>\u0c44;" // VOWEL SIGN VOCALIC RR
+"\ue045>\u0c46;" // VOWEL SIGN CANDRA E>VOWEL SIGN E
+"\ue047>\u0c47;" // VOWEL SIGN EE
+"\ue048>\u0c48;" // VOWEL SIGN AI
+"\ue049>\u0c4a;" // REMAP (indicExceptions.txt): \u0c49>\u0c4a = VOWEL SIGN CANDRA O>VOWEL SIGN O
+"\ue04b>\u0c4b;" // VOWEL SIGN OO
+"\ue04c>\u0c4c;" // VOWEL SIGN AU
+"\ue04d>\u0c4d;" // SIGN VIRAMA
+"\ue050>\u0c13\u0c02;" // REMAP (indicExceptions.txt): \u0c50>\u0c13\u0c02 = OM>LETTER OO.SIGN ANUSVARA
+"\ue055>\u0c55;" // LENGTH MARK
+"\ue056>\u0c56;" // AI LENGTH MARK
+"\ue057>\u0c4c;" // REMAP (indicExceptions.txt): \u0c57>\u0c4c = AU LENGTH MARK>VOWEL SIGN AU
+"\ue059>\u0c16;" // REMAP (indicExceptions.txt): \u0c59>\u0c16 = LETTER KHHA>LETTER KHA
+"\ue05a>\u0c17;" // REMAP (indicExceptions.txt): \u0c5a>\u0c17 = LETTER GHHA>LETTER GA
+"\ue05b>\u0c1c;" // REMAP (indicExceptions.txt): \u0c5b>\u0c1c = LETTER ZA>LETTER JA
+"\ue05d>\u0c22;" // REMAP (indicExceptions.txt): \u0c5d>\u0c22 = LETTER RHA>LETTER DDHA
+"\ue05e>\u0c2b;" // REMAP (indicExceptions.txt): \u0c5e>\u0c2b = LETTER FA>LETTER PHA
+"\ue05f>\u0c2f;" // REMAP (indicExceptions.txt): \u0c5f>\u0c2f = LETTER YYA>LETTER YA
+"\ue060>\u0c60;" // LETTER VOCALIC RR
+"\ue061>\u0c61;" // LETTER VOCALIC LL
+"\ue062>\u0c3f;" // REMAP (indicExceptions.txt): \u0c62>\u0c3f = VOWEL SIGN VOCALIC L>VOWEL SIGN I
+"\ue063>\u0c40;" // REMAP (indicExceptions.txt): \u0c63>\u0c40 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
+"\ue066>\u0c66;" // DIGIT ZERO
+"\ue067>\u0c67;" // DIGIT ONE
+"\ue068>\u0c68;" // DIGIT TWO
+"\ue069>\u0c69;" // DIGIT THREE
+"\ue06a>\u0c6a;" // DIGIT FOUR
+"\ue06b>\u0c6b;" // DIGIT FIVE
+"\ue06c>\u0c6c;" // DIGIT SIX
+"\ue06d>\u0c6d;" // DIGIT SEVEN
+"\ue06e>\u0c6e;" // DIGIT EIGHT
+"\ue06f>\u0c6f;" // DIGIT NINE
+// \ue080>; // UNMAPPED InterIndic-Telugu: ISSHAR
+"\ue00e>\u0c0e;" // LETTER E
+"\ue012>\u0c12;" // LETTER O
+"\ue031>\u0c31;" // LETTER RRA
+"\ue046>\u0c46;" // VOWEL SIGN E
+"\ue04a>\u0c4a;" // VOWEL SIGN O
+    ":: NFC (NFD) ;"
 // eof
   }
 }

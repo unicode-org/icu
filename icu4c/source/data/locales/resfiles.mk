@@ -107,22 +107,24 @@ TRANSLIT_SOURCE=fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
 larabic.txt lcyril.txt ldevan.txt\
 lgreek.txt lhebrew.txt ljamo.txt\
 lkana.txt quotes.txt\
-Bengali_InterIndic.txt\
-Devanagari_InterIndic.txt\
-Gujarati_InterIndic.txt\
-Gurmukhi_InterIndic.txt\
-Kannada_InterIndic.txt\
-Malayalam_InterIndic.txt\
-Oriya_InterIndic.txt\
-Tamil_InterIndic.txt\
-Telugu_InterIndic.txt\
-InterIndic_Bengali.txt\
-InterIndic_Devanagari.txt\
-InterIndic_Gujarati.txt\
-InterIndic_Gurmukhi.txt\
-InterIndic_Kannada.txt\
-InterIndic_Malayalam.txt\
-InterIndic_Oriya.txt\
-InterIndic_Tamil.txt\
-InterIndic_Telugu.txt
+Bengali-InterIndic.txt\
+Devanagari-InterIndic.txt\
+Gujarati-InterIndic.txt\
+Gurmukhi-InterIndic.txt\
+Kannada-InterIndic.txt\
+Malayalam-InterIndic.txt\
+Oriya-InterIndic.txt\
+Tamil-InterIndic.txt\
+Telugu-InterIndic.txt\
+InterIndic-Bengali.txt\
+InterIndic-Devanagari.txt\
+InterIndic-Gujarati.txt\
+InterIndic-Gurmukhi.txt\
+InterIndic-Kannada.txt\
+InterIndic-Malayalam.txt\
+InterIndic-Oriya.txt\
+InterIndic-Tamil.txt\
+InterIndic-Telugu.txt\
+Latin-InterIndic.txt\
+InterIndic-Latin.txt
 

@@ -70,8 +70,8 @@ translit_index {
 { "Latin-Cyrillic", "file", "lcyril", "FORWARD" },
 { "Cyrillic-Latin", "file", "lcyril", "REVERSE" },
 
-{ "Latin-Devanagari", "file", "ldevan", "FORWARD" },
-{ "Devanagari-Latin", "file", "ldevan", "REVERSE" },
+//{ "Latin-Devanagari", "file", "ldevan", "FORWARD" },
+//{ "Devanagari-Latin", "file", "ldevan", "REVERSE" },
 
 { "Latin-Greek", "file", "lgreek", "FORWARD" },
 { "Greek-Latin", "file", "lgreek", "REVERSE" },
@@ -109,7 +109,7 @@ translit_index {
 { "Hangul-Latin", "alias", "[\uAC00-\uD7AF]NFD;Jamo-Latin", "" },
 
 // Inter-Indic composed rules
-
+{ "Latin-InterIndic", "internal", "Latin_InterIndic", "FORWARD" },
 { "Devanagari-InterIndic", "internal", "Devanagari_InterIndic", "FORWARD" },
 { "Bengali-InterIndic", "internal", "Bengali_InterIndic", "FORWARD" },
 { "Gurmukhi-InterIndic", "internal", "Gurmukhi_InterIndic", "FORWARD" },
@@ -120,6 +120,7 @@ translit_index {
 { "Kannada-InterIndic", "internal", "Kannada_InterIndic", "FORWARD" },
 { "Malayalam-InterIndic", "internal", "Malayalam_InterIndic", "FORWARD" },
 
+{ "InterIndic-Latin", "internal", "InterIndic_Latin", "FORWARD" },
 { "InterIndic-Devanagari", "internal", "InterIndic_Devanagari", "FORWARD" },
 { "InterIndic-Bengali", "internal", "InterIndic_Bengali", "FORWARD" },
 { "InterIndic-Gurmukhi", "internal", "InterIndic_Gurmukhi", "FORWARD" },
@@ -129,6 +130,29 @@ translit_index {
 { "InterIndic-Telugu", "internal", "InterIndic_Telugu", "FORWARD" },
 { "InterIndic-Kannada", "internal", "InterIndic_Kannada", "FORWARD" },
 { "InterIndic-Malayalam", "internal", "InterIndic_Malayalam", "FORWARD" },
+
+//Latin-X transliterators
+{ "Latin-Devanagari", "alias", "Latin-InterIndic;InterIndic-Devanagari", ""  },
+{ "Latin-Bengali", "alias", "Latin-InterIndic;InterIndic-Bengali", "" },
+{ "Latin-Gurmukhi", "alias", "Latin-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Latin-Gujarati", "alias", "Latin-InterIndic;InterIndic-Gujarati", "" },
+{ "Latin-Oriya", "alias", "Latin-InterIndic;InterIndic-Oriya", "" },
+{ "Latin-Tamil", "alias", "Latin-InterIndic;InterIndic-Tamil", "" },
+{ "Latin-Telugu", "alias", "Latin-InterIndic;InterIndic-Telugu", "" },
+{ "Latin-Kannada", "alias", "Latin-InterIndic;InterIndic-Kannada", "" },
+{ "Latin-Malayalam", "alias", "Latin-InterIndic;InterIndic-Malayalam", "" },
+
+//X-Latin transliterators
+{ "Devanagari-Latin","alias", "Devanagari-InterIndic;InterIndic-Latin", "" },
+{ "Bengali-Latin", "alias", "Bengali-InterIndic;InterIndic-Latin", "" },
+{ "Gurmukhi-Latin", "alias", "Bengali-InterIndic;InterIndic-Latin", "" },
+{ "Gujarati-Latin", "alias", "Gujarati-InterIndic;InterIndic-Latin", "" },
+{ "Oriya-Latin", "alias", "Oriya-InterIndic;InterIndic-Latin", "" },
+{ "Tamil-Latin", "alias", "Tamil-InterIndic;InterIndic-Latin", "" },
+{ "Telugu-Latin", "alias", "Telugu-InterIndic;InterIndic-Latin", "" },
+{ "Kannada-Latin", "alias", "Kannada-InterIndic;InterIndic-Latin", "" },
+{ "Malayalam-Latin", "alias", "Malayalam-InterIndic;InterIndic-Latin", "" },
+
 
 { "Devanagari-Bengali", "alias", "Devanagari-InterIndic;InterIndic-Bengali", "" },
 { "Devanagari-Gurmukhi", "alias", "Devanagari-InterIndic;InterIndic-Gurmukhi", "" },
