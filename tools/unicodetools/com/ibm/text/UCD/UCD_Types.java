@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/03/19 17:30:56 $
-* $Revision: 1.20 $
+* $Date: 2003/03/20 21:47:26 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 19; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 20; // change to fix the generated file D version. If less than zero, no "d"
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";

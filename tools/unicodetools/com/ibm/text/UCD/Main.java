@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2003/03/19 17:30:57 $
-* $Revision: 1.29 $
+* $Date: 2003/03/20 21:47:28 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -16,22 +16,11 @@ import com.ibm.text.utility.*;
 
 public final class Main implements UCD_Types {
     
-    static final String[] ALL_FILES = {
+    static final String[] CORE_FILES = {
         "CaseFolding",
         "CompositionExclusions",
-        "DerivedBidiClass",
-        "DerivedBinaryProperties",
-        "DerivedCombiningClass",
         "DerivedCoreProperties",
-        "DerivedDecompositionType",
-        "DerivedEastAsianWidth",
-        "DerivedGeneralCategory",
-        "DerivedJoiningGroup",
-        "DerivedJoiningType",
-        "DerivedLineBreak",
         "DerivedNormalizationProps",
-        "DerivedNumericType",
-        "DerivedNumericValues",
         "NormalizationTest",
         "PropertyAliases",
         "PropList",
@@ -40,7 +29,7 @@ public final class Main implements UCD_Types {
         "HangulSyllableType",
         "DerivedAge",
         "StandardizedVariants",
-        "HangulSyllable",
+        "HangulSyllableType",
         //"OtherDerivedProperties",
     };
 
@@ -58,6 +47,10 @@ public final class Main implements UCD_Types {
         "DerivedNumericValues",
     };
 
+    static final String[] ALL_FILES = {
+        "Core", "Extracted"
+    };
+
     public static void main (String[] args) throws Exception {
 
         for (int i = 0; i < args.length; ++i) {
@@ -68,12 +61,19 @@ public final class Main implements UCD_Types {
             if (arg.charAt(0) == '#') return; // skip rest of line
 
             Utility.fixDot();
-            System.out.println("Argument: " + args[i]);
+            System.out.println();
+            System.out.println("** Argument: " + args[i] + " **");
             
             // Expand string arguments
             
-            if (arg.equalsIgnoreCase("All")) {
+            if (arg.equalsIgnoreCase("ALL")) {
                 args = Utility.append(ALL_FILES, Utility.subarray(args, i+1));
+                i = -1;
+                continue;
+            }
+            
+            if (arg.equalsIgnoreCase("CORE")) {
+                args = Utility.append(CORE_FILES, Utility.subarray(args, i+1));
                 i = -1;
                 continue;
             }
