@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "string.h"
+#include "cstring.h"
 #include <time.h>
 
 #define RESTEST_HEAP_CHECK 0
@@ -73,7 +74,7 @@ const UChar kERROR[] = { 0x0045 /*E*/, 0x0052 /*'R'*/, 0x0052 /*'R'*/,
 
 enum E_Where
 {
-  e_Default,
+  e_Root,
   e_te,
   e_te_IN,
   e_Where_count
@@ -102,12 +103,12 @@ param[] =
   /* "IN" means inherits */
   /* "NE" or "ne" means "does not exist" */
 
-  { "default",             U_ZERO_ERROR,             e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
+  { "root",                U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
   { "te",                  U_ZERO_ERROR,             e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
   { "te_IN",               U_ZERO_ERROR,             e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
   { "te_NE",               U_USING_FALLBACK_ERROR,   e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
   { "te_IN_NE",            U_USING_FALLBACK_ERROR,   e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-  { "ne",                  U_USING_DEFAULT_ERROR,    e_Default,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+  { "ne",                  U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -126,19 +127,39 @@ void addResourceBundleTest(TestNode** root)
   addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
   addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
   addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
+  addTest(root, &TestAliasConflict, "tsutil/crestst/TestAlias");
 
 }
 
 
 /***************************************************************************************/
+void TestAliasConflict(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *he = NULL;
+    UResourceBundle *iw = NULL;
+    const UChar *result = NULL;
+    
+    he = ures_open(NULL, "he", &status);
+    iw = ures_open(NULL, "iw", &status);
+    if(U_FAILURE(status)) { 
+        log_err("Failed to get resource with %s", myErrorName(status));
+    }
+    ures_close(iw);
+    result = ures_get(he, "ShortLanguage", &status);
+    if(U_FAILURE(status) || result == NULL) { 
+        log_err("Failed to get resource with %s", myErrorName(status));
+    }
+    ures_close(he);
+}
+
 
 void TestResourceBundles()
 {
 
-  testTag("only_in_Default", TRUE, FALSE, FALSE);
-  testTag("in_Default_te", TRUE, TRUE, FALSE);
-  testTag("in_Default_te_te_IN", TRUE, TRUE, TRUE);
-  testTag("in_Default_te_IN", TRUE, FALSE, TRUE);
+  testTag("only_in_Root", TRUE, FALSE, FALSE);
+  testTag("in_Root_te", TRUE, TRUE, FALSE);
+  testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
+  testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
   testTag("only_in_te", FALSE, TRUE, FALSE);
   testTag("only_in_te_IN", FALSE, FALSE, TRUE);
   testTag("in_te_te_IN", FALSE, TRUE, TRUE);
@@ -155,13 +176,20 @@ void TestConstruction1()
   const UChar *result1, *result2;
   UErrorCode status= U_ZERO_ERROR;
   UErrorCode   err = U_ZERO_ERROR;
-  const char*        directory;
+  const char*        directory=NULL;
   const char*      locale="te_IN";
+  char testdatapath[256];
 
   directory= ctest_getTestDirectory();
+  uprv_strcpy(testdatapath, directory);
+  uprv_strcat(testdatapath, "testdata");
   log_verbose("Testing ures_open()......\n");
-  test1=ures_open(directory, NULL, &err);
-  test2=ures_open(directory, locale, &err);
+/*
+  test1=ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", NULL, &err);
+  test2=ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", locale, &err);
+*/
+  test1=ures_open(testdatapath, NULL, &err);
+  test2=ures_open(testdatapath, locale, &err);
 
   if(U_FAILURE(err))
     {
@@ -169,8 +197,8 @@ void TestConstruction1()
       return;
     }
 
-  result1= ures_get(test1, "string_in_Default_te_te_IN", &err);
-  result2= ures_get(test2, "string_in_Default_te_te_IN", &err);
+  result1= ures_get(test1, "string_in_Root_te_te_IN", &err);
+  result2= ures_get(test2, "string_in_Root_te_te_IN", &err);
 
 
   if (U_FAILURE(err)) {
@@ -180,8 +208,8 @@ void TestConstruction1()
   }
 
 
-  log_verbose("for string_in_Default_te_te_IN, default.txt had  %s\n", austrdup(result1));
-  log_verbose("for string_in_Default_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
+  log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", austrdup(result1));
+  log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
 
 
   /* Test getVersionNumber*/
@@ -202,8 +230,13 @@ void TestConstruction2()
   const char*     directory;
   const char*    locale="te_IN";
   wchar_t widedirectory[256];
+  char testdatapath[256];
+
   directory= ctest_getTestDirectory();
-  mbstowcs(widedirectory, directory, 256);
+  uprv_strcpy(testdatapath, directory);
+  uprv_strcat(testdatapath, "testdata");
+  mbstowcs(widedirectory, testdatapath, 256);
+  /*mbstowcs(widedirectory, "c:\\icu\\icu\\source\\test\\testdata\\testdata", 256);*/
 
   log_verbose("Testing ures_openW().......\n");
 
@@ -213,14 +246,14 @@ void TestConstruction2()
     return;
   }
 
-  result4=ures_get(test4, "string_in_Default_te_te_IN", &err);
+  result4=ures_get(test4, "string_in_Root_te_te_IN", &err);
 
   if (U_FAILURE(err)) {
     log_err("Something threw an error in TestConstruction()  %s\n", myErrorName(err));
     return;
   }
 
-  log_verbose("for string_in_Default_te_te_IN, te_IN.txt had  %s\n", austrdup(result4));
+  log_verbose("for string_in_Root_te_te_IN, te_IN.txt had  %s\n", austrdup(result4));
   u_uastrcpy(temp, "TE_IN");
 
   if(u_strcmp(result4, temp)!=0)
@@ -253,7 +286,7 @@ void TestConstruction2()
 /*****************************************************************************/
 
 bool_t testTag(const char* frag,
-           bool_t in_Default,
+           bool_t in_Root,
            bool_t in_te,
            bool_t in_te_IN)
 {
@@ -262,7 +295,7 @@ bool_t testTag(const char* frag,
   /* Make array from input params */
 
   bool_t is_in[3];
-  const char *NAME[] = { "DEFAULT", "TE", "TE_IN" };
+  const char *NAME[] = { "ROOT", "TE", "TE_IN" };
 
   /* Now try to load the desired items */
   UResourceBundle* theBundle = NULL;
@@ -280,9 +313,14 @@ bool_t testTag(const char* frag,
   int32_t row_count=0;
   int32_t column_count=0;
   int32_t index = 0;
+  char testdatapath[256];
+
   const char*    directory =  ctest_getTestDirectory();
 
-  is_in[0] = in_Default;
+  uprv_strcpy(testdatapath, directory);
+  uprv_strcat(testdatapath, "testdata");
+
+  is_in[0] = in_Root;
   is_in[1] = in_te;
   is_in[2] = in_te_IN;
 
@@ -296,8 +334,8 @@ bool_t testTag(const char* frag,
 
       status = U_ZERO_ERROR;
 
-
-      theBundle = ures_open(directory, param[i].name, &status);
+      theBundle = ures_open(testdatapath, param[i].name, &status);
+      /*theBundle = ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", param[i].name, &status);*/
 
       CONFIRM_ErrorCode(status,param[i].expected_constructor_status);
 
@@ -311,7 +349,7 @@ bool_t testTag(const char* frag,
 	actual_bundle = i;
 
       expected_resource_status = U_MISSING_RESOURCE_ERROR;
-      for (j=e_te_IN; j>=e_Default; --j)
+      for (j=e_te_IN; j>=e_Root; --j)
         {
 	  if (is_in[j] && param[i].inherits[j])
             {
