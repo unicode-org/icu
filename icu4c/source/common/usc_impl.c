@@ -19,7 +19,18 @@
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
-#define PAREN_STACK_DEPTH 128
+#define PAREN_STACK_DEPTH 32
+
+#define MOD(sp) ((sp) % PAREN_STACK_DEPTH)
+#define LIMIT_INC(sp) (((sp) < PAREN_STACK_DEPTH)? (sp) + 1 : PAREN_STACK_DEPTH)
+#define INC(sp,count) (MOD((sp) + (count)))
+#define INC1(sp) (INC(sp, 1))
+#define DEC(sp,count) (MOD((sp) + PAREN_STACK_DEPTH - (count)))
+#define DEC1(sp) (DEC(sp, 1))
+#define STACK_IS_EMPTY(scriptRun) ((scriptRun)->pushCount <= 0)
+#define STACK_IS_NOT_EMPTY(scriptRun) (! STACK_IS_EMPTY(scriptRun))
+#define TOP(scriptRun) ((scriptRun)->parenStack[(scriptRun)->parenSP])
+#define SYNC_FIXUP(scriptRun) ((scriptRun)->fixupCount = 0)
 
 struct ParenStackEntry
 {
@@ -38,6 +49,8 @@ struct UScriptRun
 
     struct ParenStackEntry parenStack[PAREN_STACK_DEPTH];
     int32_t parenSP;
+    int32_t pushCount;
+    int32_t fixupCount;
 };
 
 static int8_t highBit(int32_t value);
@@ -61,6 +74,47 @@ static const UChar32 pairedChars[] = {
     0x3018, 0x3019,
     0x301a, 0x301b
 };
+
+static void push(UScriptRun *scriptRun, int32_t pairIndex, UScriptCode scriptCode)
+{
+    scriptRun->pushCount  = LIMIT_INC(scriptRun->pushCount);
+    scriptRun->fixupCount = LIMIT_INC(scriptRun->fixupCount);
+    
+    scriptRun->parenSP = INC1(scriptRun->parenSP);
+    scriptRun->parenStack[scriptRun->parenSP].pairIndex  = pairIndex;
+    scriptRun->parenStack[scriptRun->parenSP].scriptCode = scriptCode;
+}
+
+static void pop(UScriptRun *scriptRun)
+{
+    if (STACK_IS_EMPTY(scriptRun)) {
+        return;
+    }
+    
+    if (scriptRun->fixupCount > 0) {
+        scriptRun->fixupCount -= 1;
+    }
+    
+    scriptRun->pushCount -= 1;
+    scriptRun->parenSP = DEC1(scriptRun->parenSP);
+    
+    /* If the stack is now empty, reset the stack
+       pointers to their initial values.
+     */
+    if (STACK_IS_EMPTY(scriptRun)) {
+        scriptRun->parenSP = -1;
+    }
+}
+
+static void fixup(UScriptRun *scriptRun, UScriptCode scriptCode)
+{
+    int32_t fixupSP = DEC(scriptRun->parenSP, scriptRun->fixupCount);
+    
+    while (scriptRun->fixupCount-- > 0) {
+        fixupSP = INC1(fixupSP);
+        scriptRun->parenStack[fixupSP].scriptCode = scriptCode;
+    }
+}
 
 static int8_t
 highBit(int32_t value)
@@ -177,6 +231,8 @@ uscript_resetRun(UScriptRun *scriptRun)
         scriptRun->scriptLimit = 0;
         scriptRun->scriptCode  = USCRIPT_INVALID_CODE;
         scriptRun->parenSP     = -1;
+        scriptRun->pushCount   =  0;
+        scriptRun->fixupCount  =  0;
     }
 }
 
@@ -201,7 +257,6 @@ uscript_setRunText(UScriptRun *scriptRun, const UChar *src, int32_t length, UErr
 U_CAPI UBool U_EXPORT2
 uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, UScriptCode *pRunScript)
 {
-    int32_t startSP  = -1;  /* used to find the first new open character */
     UErrorCode error = U_ZERO_ERROR;
 
     /* if we've fallen off the end of the text, we're done */
@@ -209,7 +264,7 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
         return FALSE;
     }
     
-    startSP = scriptRun->parenSP;
+    SYNC_FIXUP(scriptRun);
     scriptRun->scriptCode = USCRIPT_COMMON;
 
     for (scriptRun->scriptStart = scriptRun->scriptLimit; scriptRun->scriptLimit < scriptRun->textLength; scriptRun->scriptLimit += 1) {
@@ -248,33 +303,16 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
          */
         if (pairIndex >= 0) {
             if ((pairIndex & 1) == 0) {
-
-                /*
-                 * If the paren stack is full, empty it. This
-                 * means that deeply nested paired punctuation
-                 * characters will be ignored, but that's an unusual
-                 * case, and it's better to ignore them than to
-                 * write off the end of the stack...
-                 */
-                if (++scriptRun->parenSP >= PAREN_STACK_DEPTH) {
-                    scriptRun->parenSP = 0;
-                }
-
-                scriptRun->parenStack[scriptRun->parenSP].pairIndex = pairIndex;
-                scriptRun->parenStack[scriptRun->parenSP].scriptCode  = scriptRun->scriptCode;
-            } else if (scriptRun->parenSP >= 0) {
+                push(scriptRun, pairIndex, scriptRun->scriptCode);
+            } else {
                 int32_t pi = pairIndex & ~1;
 
-                while (scriptRun->parenSP >= 0 && scriptRun->parenStack[scriptRun->parenSP].pairIndex != pi) {
-                    scriptRun->parenSP -= 1;
+                while (STACK_IS_NOT_EMPTY(scriptRun) && TOP(scriptRun).pairIndex != pi) {
+                    pop(scriptRun);
                 }
 
-                if (scriptRun->parenSP < startSP) {
-                    startSP = scriptRun->parenSP;
-                }
-
-                if (scriptRun->parenSP >= 0) {
-                    sc = scriptRun->parenStack[scriptRun->parenSP].scriptCode;
+                if (STACK_IS_NOT_EMPTY(scriptRun)) {
+                    sc = TOP(scriptRun).scriptCode;
                 }
             }
         }
@@ -283,25 +321,15 @@ uscript_nextRun(UScriptRun *scriptRun, int32_t *pRunStart, int32_t *pRunLimit, U
             if (scriptRun->scriptCode <= USCRIPT_INHERITED && sc > USCRIPT_INHERITED) {
                 scriptRun->scriptCode = sc;
 
-                /*
-                 * now that we have a final script code, fix any open
-                 * characters we pushed before we knew the script code.
-                 */
-                while (startSP < scriptRun->parenSP) {
-                    scriptRun->parenStack[++startSP].scriptCode = scriptRun->scriptCode;
-                }
+                fixup(scriptRun, scriptRun->scriptCode);
             }
 
             /*
              * if this character is a close paired character,
-             * pop it from the stack
+             * pop the matching open character from the stack
              */
-            if (pairIndex >= 0 && (pairIndex & 1) != 0 && scriptRun->parenSP >= 0) {
-                scriptRun->parenSP -= 1;
-                
-                if (scriptRun->parenSP < startSP) {
-                    startSP = scriptRun->parenSP;
-                }
+            if (pairIndex >= 0 && (pairIndex & 1) != 0) {
+                pop(scriptRun);
             }
         } else {
             /*
