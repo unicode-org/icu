@@ -17,6 +17,9 @@
 #define USTRING_H
 #include "unicode/utypes.h"
 
+/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. */
+typedef void *UBreakIterator;
+
 /**
  * \file
  * \brief C API: Unicode string handling functions
@@ -684,6 +687,48 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
 U_CAPI int32_t U_EXPORT2
 u_strToLower(UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
+             const char *locale,
+             UErrorCode *pErrorCode);
+
+/**
+ * Titlecase a string.
+ * Casing is locale-dependent and context-sensitive.
+ * Titlecasing uses a break iterator to find the first characters of words
+ * that are to be titlecased. It titlecases those characters and lowercases
+ * all others.
+ *
+ * The titlecase break iterator can be provided to customize for arbitrary
+ * styles, using rules and dictionaries beyond the standard iterators.
+ * It may be more efficient to always provide an iterator to avoid
+ * opening and closing one for each string.
+ * The standard titlecase iterator for the root locale implements the
+ * algorithm of Unicode TR 21.
+ *
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer are allowed to overlap.
+ *
+ * @param dest      A buffer for the result string. The result will be zero-terminated if
+ *                  the buffer is large enough.
+ * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string
+ * @param srcLength The length of the original string. If -1, then src must be zero-terminated.
+ * @param titleIter A break iterator to find the first characters of words
+ *                  that are to be titlecased.
+ *                  If none is provided (NULL), then a standard titlecase
+ *                  break iterator is opened.
+ * @param locale    The locale to consider, or "" for the root locale or NULL for the default locale.
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string. It may be greater than destCapacity. In that case,
+ *         only some of the result was written to the destination buffer.
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+u_strToTitle(UChar *dest, int32_t destCapacity,
+             const UChar *src, int32_t srcLength,
+             UBreakIterator *titleIter,
              const char *locale,
              UErrorCode *pErrorCode);
 
