@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.6 $
+// $Revision: 1.7 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -230,7 +230,7 @@ IGlobalLocales::initializeMapRegions()
   newPosixIDmap[20].addRegion(0x0810, "it_CH");
   newPosixIDmap[20].addRegion(0x0410, "it_IT");
 
-  newPosixIDmap[23].addRegion(0x0812, "ko_KR");
+  newPosixIDmap[23].addRegion(0x0812, "ko_KP");
   newPosixIDmap[23].addRegion(0x0412, "ko_KR");
 
   newPosixIDmap[26].addRegion(0x0813, "nl_BE");
