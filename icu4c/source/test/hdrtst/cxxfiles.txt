@@ -48,6 +48,8 @@ unirepl.h
 uniset.h
 unistr.h
 unitohex.h
+uobject.h
+usetiter.h
 #added
 loengine.h
 #the following are C++ also
