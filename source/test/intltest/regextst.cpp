@@ -337,9 +337,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         
 cleanupAndReturn:
     if (failed) {
-        errln("\"%s\"  %s  \"%s\"", (const char *)CharString(pattern),
-                                    (const char *)CharString(flags),
-                                    (const char *)CharString(inputString));
+        errln("\"%s\"  %s  \"%s\"", (const char *)CharString(pattern, 0),
+                                    (const char *)CharString(flags, 0),
+                                    (const char *)CharString(inputString, 0));
         // callerPattern->dump();
     }
     delete parseMatcher;
@@ -1816,8 +1816,8 @@ void RegexTest::PerlTests() {
 
         if (expectedS.compare(resultString) != 0) {
             errln("Line %d: Incorrect perl expression results.  Expected \"%s\"; got \"%s\"",
-                lineNum, (const char *)CharString(expectedS),
-                (const char *)CharString(resultString));
+                lineNum, (const char *)CharString(expectedS, 0),
+                (const char *)CharString(resultString, 0));
         }
 
         delete testMat;

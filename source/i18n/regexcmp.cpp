@@ -2392,10 +2392,15 @@ void   RegexCompile::matchStartType() {
                         loopEndLoc   = URX_VAL(loopEndLoc);
                 int32_t minLoopCount = fRXPat->fCompiledPat->elementAti(loc+2);
                 if (minLoopCount == 0) {
-                    loc = loopEndLoc;
-                } else {
-                    loc+=3;  // Skips over operands of CTR_INIT
-                }
+                    // Min Loop Count of 0, treat like a forward branch and
+                    //   move the current minimum length up to the target
+                    //   (end of loop) location.
+                    U_ASSERT(loopEndLoc <= end+1);
+                    if (forwardedLength.elementAti(loopEndLoc) > currentLen) {
+                        forwardedLength.setElementAt(currentLen, loopEndLoc);
+                    }
+                } 
+                loc+=3;  // Skips over operands of CTR_INIT
             }
             atStart = FALSE;
             break;
