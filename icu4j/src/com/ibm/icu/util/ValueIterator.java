@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/03/08 02:02:39 $
-* $Revision: 1.1 $
+* $Date: 2002/03/08 18:23:52 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -36,6 +36,7 @@ package com.ibm.icu.util;
  * </pre>
  * @author synwee
  * @since release 2.1, March 5th 2002
+ * @draft 2.1
  */
 public interface ValueIterator
 {
@@ -45,6 +46,7 @@ public interface ValueIterator
     * Return result wrapper for com.ibm.icu.util.RangeValueIterator.
     * Stores the start and limit of the continous result range and the
     * common value all integers between [start, limit - 1] has.
+    * @draft 2.1
     */
     public class Element
     {
@@ -86,6 +88,7 @@ public interface ValueIterator
      * will be used.
      * @param start first integer in range to iterate
      * @param limit 1 integer after the last integer in range 
+     * @draft 2.1
      */
     public void setRange(int start, int end);
 }
