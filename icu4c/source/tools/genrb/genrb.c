@@ -227,7 +227,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
           printf("Autodetected encoding %s\n", cp);
       }
   }
-  ucbuf = ucbuf_open(in,cp,status);
+  ucbuf = ucbuf_open(in,status);
 
   /* Parse the data into an SRBRoot */
   data = parse(ucbuf, inputDir, status);
