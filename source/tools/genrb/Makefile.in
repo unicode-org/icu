@@ -78,7 +78,7 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS) 
 
 $(DERB) : $(DERB_OBJ)
-	$(LINK) -o $@ $^ $(LIBS) 
+	$(LINK.cc) -o $@ $^ $(LIBS) 
 
 
 # the 'mv' will always fail if you are building in the source dir
