@@ -199,31 +199,39 @@ CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
  
 void ucmp16_close(CompactShortArray* this_obj)
 {
-  if(this_obj->fAlias == FALSE)
-  {
-      icu_free(this_obj->fArray);
-      icu_free(this_obj->fIndex);
+  if(this_obj != NULL) {
+    if(!this_obj->fAlias) {
+      if(this_obj->fArray != NULL) {
+        icu_free(this_obj->fArray);
+      }
+      if(this_obj->fIndex != NULL) {
+        icu_free(this_obj->fIndex);
+      }
+    }
+    if(this_obj->fHashes != NULL) {
+      icu_free(this_obj->fHashes);
+    }
+    icu_free(this_obj);
   }
-  icu_free(this_obj->fHashes);
-  icu_free(this_obj);
-
-  return;
 }
 
 CompactShortArray* setToBogus(CompactShortArray* this_obj)
 {
-  icu_free(this_obj->fArray);
-  this_obj->fArray = NULL;
+  if(this_obj != NULL) {
+    if(!this_obj->fAlias) {
+      icu_free(this_obj->fArray);
+      this_obj->fArray = NULL;
   
-  icu_free(this_obj->fIndex);
-  this_obj->fIndex = NULL;
-  
-  icu_free(this_obj->fHashes);
-  this_obj->fHashes = NULL;
-  
-  this_obj->fCount = 0;
-  this_obj->fCompact = FALSE;
-  this_obj->fBogus = TRUE;
+      icu_free(this_obj->fIndex);
+      this_obj->fIndex = NULL;
+    }
+    icu_free(this_obj->fHashes);
+    this_obj->fHashes = NULL;
+
+    this_obj->fCount = 0;
+    this_obj->fCompact = FALSE;
+    this_obj->fBogus = TRUE;
+  }
   
   return this_obj;
 }
