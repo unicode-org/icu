@@ -1,17 +1,8 @@
 /*
- * @(#)$RCSfile: FrameResources.java,v $ $Revision: 1.2 $ $Date: 2000/10/06 23:15:03 $
- *
- * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
- *
- * The program is provided "as is" without any warranty express or
- * implied, including the warranty of non-infringement and the implied
- * warranties of merchantibility and fitness for a particular purpose.
- * IBM will not be liable for any damages suffered by you as a result
- * of using the Program. In no event will IBM be liable for any
- * special, indirect or consequential damages or lost profits even if
- * IBM has been advised of the possibility of their occurrence. IBM
- * will not be liable for any third party claims against you.
- */
+ *******************************************************************************
+ * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************/
 package com.ibm.richtext.uiimpl.resources;
 
 import java.util.ListResourceBundle;
@@ -74,8 +65,7 @@ public final class FrameResources extends ListResourceBundle {
     // This is the only String which is not its own value:
     public static final String ABOUT_TEXT = "About text";
     private static final String ACTUAL_ABOUT_TEXT =
-        "Copyright (C) Taligent, Inc. 1996 All rights reserved.\n" +
-        "Copyright (C) IBM Corp. 1996-1998\n\n" +
+        "Copyright (C) IBM Corp. 1996-2002 All rights reserved.\n\n" +
         "John Raley\n" +
         "Stephen F. Booth\n" +
         "Doug Felt\n" +

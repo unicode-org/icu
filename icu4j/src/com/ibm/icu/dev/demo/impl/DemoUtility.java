@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoUtility.java,v $ 
- * $Date: 2002/02/19 04:10:23 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/08/01 20:27:20 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -29,9 +29,7 @@ public class DemoUtility
     public static final Color choiceColor = Color.white;
 
     public static final String copyright1 =
-        "(C) Copyright Taligent, Inc. 1996-1998.  Copyright (C) IBM, Inc. 1998 - All Rights Reserved";
-    public static final String copyright2 =
-        "Portions copyright (c) 1996 Sun Microsystems, Inc. All Rights Reserved.";
+        "Copyright (C) IBM Corp and others. 1997 - 2002 All Rights Reserved";
 
     /**
     Provides easy way to use basic functions of GridBagLayout, without

@@ -1,36 +1,16 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ *
+ *   Copyright (C) 1996-2002, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/myLocaleElements.java,v $ 
- * $Date: 2002/02/16 03:05:32 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/08/01 20:27:21 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
- */
- 
-/*
- * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996, 1997 - All Rights Reserved
- *
- * Portions copyright (c) 1996 Sun Microsystems, Inc. All Rights Reserved.
- *
- *   The original version of this source code and documentation is copyrighted
- * and owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These
- * materials are provided under terms of a License Agreement between Taligent
- * and Sun. This technology is protected by multiple US and International
- * patents. This notice and attribution to Taligent may not be removed.
- *   Taligent is a registered trademark of Taligent, Inc.
- *
- * Permission to use, copy, modify, and distribute this software
- * and its documentation for NON-COMMERCIAL purposes and without
- * fee is hereby granted provided that this copyright notice
- * appears in all copies. Please refer to the file "copyright.html"
- * for further important copyright and licensing information.
- *
- *
  */
 
 /**

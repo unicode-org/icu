@@ -1,7 +1,7 @@
 /***************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormat.java,v $ 
- * $Date: 2002/02/16 03:05:09 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/08/01 20:27:21 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -15,17 +15,12 @@
     @test 1.4 98/03/06
     @summary test International Date Format
 */
-/*
-(C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
-(C) Copyright IBM Corp. 1996, 1997, 2001 - All Rights Reserved
-
-  The original version of this source code and documentation is copyrighted and
-owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
-provided under terms of a License Agreement between Taligent and Sun. This
-technology is protected by multiple US and International patents. This notice and
-attribution to Taligent may not be removed.
-  Taligent is a registered trademark of Taligent, Inc.
-*/
+/***************************************************************************
+*
+*   Copyright (C) 1996-2002, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+************************************************************************/
 
 package com.ibm.icu.dev.test.format;
 

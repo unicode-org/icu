@@ -1,27 +1,6 @@
 /*
- * @(#)$RCSfile: FastIntBinarySearch.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:45:10 $
- *
- * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
- *
- * The program is provided "as is" without any warranty express or
- * implied, including the warranty of non-infringement and the implied
- * warranties of merchantibility and fitness for a particular purpose.
- * IBM will not be liable for any damages suffered by you as a result
- * of using the Program. In no event will IBM be liable for any
- * special, indirect or consequential damages or lost profits even if
- * IBM has been advised of the possibility of their occurrence. IBM
- * will not be liable for any third party claims against you.
- */
-/*
-(C) Copyright Taligent, Inc. 1996 - All Rights Reserved
-(C) Copyright IBM Corp. 1996 - All Rights Reserved
-
-  The original version of this source code and documentation is copyrighted and
-owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
-provided under terms of a License Agreement between Taligent and Sun. This
-technology is protected by multiple US and International patents. This notice and
-attribution to Taligent may not be removed.
-  Taligent is a registered trademark of Taligent, Inc.
+*   Copyright (C) 1996-2002, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 */
 
 /*

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/DBBIDemo.java,v $ 
- * $Date: 2002/02/19 04:10:23 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/08/01 20:27:20 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -241,8 +241,6 @@ text.setWrapStyleWord(true);
         Panel copyrightPanel = new Panel();
         addWithFont (copyrightPanel,
             new Label(DemoUtility.copyright1, Label.LEFT),DemoUtility.creditFont);
-        addWithFont (copyrightPanel,
-            new Label(DemoUtility.copyright2, Label.LEFT),DemoUtility.creditFont);
         DemoUtility.fixGrid(copyrightPanel,1);
         add("South", copyrightPanel);
 
