@@ -333,6 +333,8 @@ public:
 	  return ((BreakIterator*)instance)->clone();
   }
 
+  // not currently called because ICUBreakIteratorFactory is always registered and always handles the local
+  // eventually
   virtual UObject* handleDefault(const Key& key, UnicodeString* actualID, UErrorCode& status) const {
 	LocaleKey& lkey = (LocaleKey&)key;
 	int32_t kind = lkey.kind();
@@ -376,19 +378,22 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
 
 // -------------------------------------
 
-UBreakRegistryKey
-BreakIterator::registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
+URegistryKey
+BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status) 
 {
-  return (UBreakRegistryKey)getService()->registerObject(toAdopt, locale, kind, status);
+  return (URegistryKey)getService()->registerObject(toAdopt, locale, kind, status);
 }
 
 // -------------------------------------
 
 UBool 
-BreakIterator::unregisterBreak(UBreakRegistryKey key, UErrorCode& status) 
+BreakIterator::unregister(URegistryKey key, UErrorCode& status) 
 {
-  if (gService != NULL) {
-    return gService->unregisterFactory((Factory*)key, status);
+  if (U_SUCCESS(status)) {
+    if (gService != NULL) {
+      return gService->unregisterFactory((Factory*)key, status);
+    }
+    status = U_ILLEGAL_ARGUMENT_ERROR;
   }
   return FALSE;
 }
@@ -398,7 +403,7 @@ BreakIterator::unregisterBreak(UBreakRegistryKey key, UErrorCode& status)
 StringEnumeration* 
 BreakIterator::getAvailableLocales(void)
 {
-	return getService()->getAvailableLocales();
+  return getService()->getAvailableLocales();
 }
 
 // -------------------------------------
