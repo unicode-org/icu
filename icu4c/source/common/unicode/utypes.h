@@ -330,60 +330,68 @@ typedef void* UClassID;
  */
 
 /**
- * \def U_USTDIO_API
+ * \def U_IO_API
  * Set to export library symbols from inside the ustdio library,
  * and to import them from outside.
  * @stable ICU 2.0
  */
 
 #if defined(U_COMBINED_IMPLEMENTATION)
+#define U_DATA_API     U_EXPORT
 #define U_COMMON_API   U_EXPORT
 #define U_I18N_API     U_EXPORT
 #define U_LAYOUT_API   U_EXPORT
 #define U_LAYOUTEX_API U_EXPORT
-#define U_USTDIO_API   U_EXPORT
+#define U_IO_API       U_EXPORT
 #elif defined(U_STATIC_IMPLEMENTATION)
+#define U_DATA_API
 #define U_COMMON_API
 #define U_I18N_API
 #define U_LAYOUT_API
 #define U_LAYOUTEX_API
-#define U_USTDIO_API
+#define U_IO_API
 #elif defined(U_COMMON_IMPLEMENTATION)
+#define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_EXPORT
 #define U_I18N_API     U_IMPORT
 #define U_LAYOUT_API   U_IMPORT
 #define U_LAYOUTEX_API U_IMPORT
-#define U_USTDIO_API   U_IMPORT
+#define U_IO_API       U_IMPORT
 #elif defined(U_I18N_IMPLEMENTATION)
+#define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_IMPORT
 #define U_I18N_API     U_EXPORT
 #define U_LAYOUT_API   U_IMPORT
 #define U_LAYOUTEX_API U_IMPORT
-#define U_USTDIO_API   U_IMPORT
+#define U_IO_API       U_IMPORT
 #elif defined(U_LAYOUT_IMPLEMENTATION)
+#define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_IMPORT
 #define U_I18N_API     U_IMPORT
 #define U_LAYOUT_API   U_EXPORT
 #define U_LAYOUTEX_API U_IMPORT
-#define U_USTDIO_API   U_IMPORT
+#define U_IO_API       U_IMPORT
 #elif defined(U_LAYOUTEX_IMPLEMENTATION)
+#define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_IMPORT
 #define U_I18N_API     U_IMPORT
 #define U_LAYOUT_API   U_IMPORT
 #define U_LAYOUTEX_API U_EXPORT
-#define U_USTDIO_API   U_IMPORT
+#define U_IO_API       U_IMPORT
 #elif defined(U_USTDIO_IMPLEMENTATION)
+#define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_IMPORT
 #define U_I18N_API     U_IMPORT
 #define U_LAYOUT_API   U_IMPORT
 #define U_LAYOUTEX_API U_IMPORT
-#define U_USTDIO_API   U_EXPORT
+#define U_IO_API       U_EXPORT
 #else
+#define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_IMPORT
 #define U_I18N_API     U_IMPORT
 #define U_LAYOUT_API   U_IMPORT
 #define U_LAYOUTEX_API U_IMPORT
-#define U_USTDIO_API   U_IMPORT
+#define U_IO_API       U_IMPORT
 #endif
 
 /**
