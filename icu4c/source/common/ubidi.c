@@ -107,28 +107,6 @@
  * (L1) is not necessary in adjustWSLevels().
  */
 
-/* prototypes --------------------------------------------------------------- */
-
-static void
-getDirProps(UBiDi *pBiDi, const UChar *text);
-
-static UBiDiDirection
-resolveExplicitLevels(UBiDi *pBiDi);
-
-static UBiDiDirection
-checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode);
-
-static UBiDiDirection
-directionFromFlags(Flags flags);
-
-static void
-resolveImplicitLevels(UBiDi *pBiDi,
-                      int32_t start, int32_t limit,
-                      DirProp sor, DirProp eor);
-
-static void
-adjustWSLevels(UBiDi *pBiDi);
-
 /* to avoid some conditional statements, use tiny constant arrays */
 static const Flags flagLR[2]={ DIRPROP_FLAG(L), DIRPROP_FLAG(R) };
 static const Flags flagE[2]={ DIRPROP_FLAG(LRE), DIRPROP_FLAG(RLE) };
@@ -281,199 +259,6 @@ ubidi_isInverse(UBiDi *pBiDi) {
     }
 }
 
-/* ubidi_setPara ------------------------------------------------------------ */
-
-U_CAPI void U_EXPORT2
-ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
-              UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
-              UErrorCode *pErrorCode) {
-    UBiDiDirection direction;
-
-    /* check the argument values */
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    } else if(pBiDi==NULL || text==NULL ||
-              ((UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel)) ||
-              length<-1
-    ) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    if(length==-1) {
-        length=u_strlen(text);
-    }
-
-    /* initialize the UBiDi structure */
-    pBiDi->text=text;
-    pBiDi->length=length;
-    pBiDi->paraLevel=paraLevel;
-    pBiDi->direction=UBIDI_LTR;
-    pBiDi->trailingWSStart=length;  /* the levels[] will reflect the WS run */
-
-    pBiDi->dirProps=NULL;
-    pBiDi->levels=NULL;
-    pBiDi->runs=NULL;
-
-    if(length==0) {
-        /*
-         * For an empty paragraph, create a UBiDi object with the paraLevel and
-         * the flags and the direction set but without allocating zero-length arrays.
-         * There is nothing more to do.
-         */
-        if(IS_DEFAULT_LEVEL(paraLevel)) {
-            pBiDi->paraLevel&=1;
-        }
-        if(paraLevel&1) {
-            pBiDi->flags=DIRPROP_FLAG(R);
-            pBiDi->direction=UBIDI_RTL;
-        } else {
-            pBiDi->flags=DIRPROP_FLAG(L);
-            pBiDi->direction=UBIDI_LTR;
-        }
-
-        pBiDi->runCount=0;
-        return;
-    }
-
-    pBiDi->runCount=-1;
-
-    /*
-     * Get the directional properties,
-     * the flags bit-set, and
-     * determine the partagraph level if necessary.
-     */
-    if(getDirPropsMemory(pBiDi, length)) {
-        pBiDi->dirProps=pBiDi->dirPropsMemory;
-        getDirProps(pBiDi, text);
-    } else {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    /* are explicit levels specified? */
-    if(embeddingLevels==NULL) {
-        /* no: determine explicit levels according to the (Xn) rules */\
-        if(getLevelsMemory(pBiDi, length)) {
-            pBiDi->levels=pBiDi->levelsMemory;
-            direction=resolveExplicitLevels(pBiDi);
-        } else {
-            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-    } else {
-        /* set BN for all explicit codes, check that all levels are paraLevel..UBIDI_MAX_EXPLICIT_LEVEL */
-        pBiDi->levels=embeddingLevels;
-        direction=checkExplicitLevels(pBiDi, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            return;
-        }
-    }
-
-    /*
-     * The steps after (X9) in the UBiDi algorithm are performed only if
-     * the paragraph text has mixed directionality!
-     */
-    pBiDi->direction=direction;
-    switch(direction) {
-    case UBIDI_LTR:
-        /* make sure paraLevel is even */
-        pBiDi->paraLevel=(UBiDiLevel)((pBiDi->paraLevel+1)&~1);
-
-        /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
-        pBiDi->trailingWSStart=0;
-        break;
-    case UBIDI_RTL:
-        /* make sure paraLevel is odd */
-        pBiDi->paraLevel|=1;
-
-        /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
-        pBiDi->trailingWSStart=0;
-        break;
-    default:
-        /*
-         * If there are no external levels specified and there
-         * are no significant explicit level codes in the text,
-         * then we can treat the entire paragraph as one run.
-         * Otherwise, we need to perform the following rules on runs of
-         * the text with the same embedding levels. (X10)
-         * "Significant" explicit level codes are ones that actually
-         * affect non-BN characters.
-         * Examples for "insignificant" ones are empty embeddings
-         * LRE-PDF, LRE-RLE-PDF-PDF, etc.
-         */
-        if(embeddingLevels==NULL && !(pBiDi->flags&DIRPROP_FLAG_MULTI_RUNS)) {
-            resolveImplicitLevels(pBiDi, 0, length,
-                                    GET_LR_FROM_LEVEL(pBiDi->paraLevel),
-                                    GET_LR_FROM_LEVEL(pBiDi->paraLevel));
-        } else {
-            /* sor, eor: start and end types of same-level-run */
-            UBiDiLevel *levels=pBiDi->levels;
-            int32_t start, limit=0;
-            UBiDiLevel level, nextLevel;
-            DirProp sor, eor;
-
-            /* determine the first sor and set eor to it because of the loop body (sor=eor there) */
-            level=pBiDi->paraLevel;
-            nextLevel=levels[0];
-            if(level<nextLevel) {
-                eor=GET_LR_FROM_LEVEL(nextLevel);
-            } else {
-                eor=GET_LR_FROM_LEVEL(level);
-            }
-
-            do {
-                /* determine start and limit of the run (end points just behind the run) */
-
-                /* the values for this run's start are the same as for the previous run's end */
-                sor=eor;
-                start=limit;
-                level=nextLevel;
-
-                /* search for the limit of this run */
-                while(++limit<length && levels[limit]==level) {}
-
-                /* get the correct level of the next run */
-                if(limit<length) {
-                    nextLevel=levels[limit];
-                } else {
-                    nextLevel=pBiDi->paraLevel;
-                }
-
-                /* determine eor from max(level, nextLevel); sor is last run's eor */
-                if((level&~UBIDI_LEVEL_OVERRIDE)<(nextLevel&~UBIDI_LEVEL_OVERRIDE)) {
-                    eor=GET_LR_FROM_LEVEL(nextLevel);
-                } else {
-                    eor=GET_LR_FROM_LEVEL(level);
-                }
-
-                /* if the run consists of overridden directional types, then there
-                   are no implicit types to be resolved */
-                if(!(level&UBIDI_LEVEL_OVERRIDE)) {
-                    resolveImplicitLevels(pBiDi, start, limit, sor, eor);
-                } else {
-                    /* remove the UBIDI_LEVEL_OVERRIDE flags */
-                    do {
-                        levels[start++]&=~UBIDI_LEVEL_OVERRIDE;
-                    } while(start<limit);
-                }
-            } while(limit<length);
-        }
-
-        /* reset the embedding levels for some non-graphic characters (L1), (X9) */
-        adjustWSLevels(pBiDi);
-
-        /* for "inverse BiDi", ubidi_getRuns() modifies the levels of numeric runs following RTL runs */
-        if(pBiDi->isInverse) {
-            if(!ubidi_getRuns(pBiDi)) {
-                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-        }
-        break;
-    }
-}
-
 /* perform (P2)..(P3) ------------------------------------------------------- */
 
 /*
@@ -544,6 +329,19 @@ getDirProps(UBiDi *pBiDi, const UChar *text) {
 
 /* perform (X1)..(X9) ------------------------------------------------------- */
 
+/* determine if the text is mixed-directional or single-directional */
+static UBiDiDirection
+directionFromFlags(Flags flags) {
+    /* if the text contains AN and neutrals, then some neutrals may become RTL */
+    if(!(flags&MASK_RTL || ((flags&DIRPROP_FLAG(AN)) && (flags&MASK_POSSIBLE_N)))) {
+        return UBIDI_LTR;
+    } else if(!(flags&MASK_LTR)) {
+        return UBIDI_RTL;
+    } else {
+        return UBIDI_MIXED;
+    }
+}
+
 /*
  * Resolve the explicit levels as specified by explicit embedding codes.
  * Recalculate the flags to have them reflect the real properties
@@ -596,7 +394,6 @@ getDirProps(UBiDi *pBiDi, const UChar *text) {
  *
  * This implementation assumes that UBIDI_MAX_EXPLICIT_LEVEL is odd.
  */
-
 static UBiDiDirection
 resolveExplicitLevels(UBiDi *pBiDi) {
     const DirProp *dirProps=pBiDi->dirProps;
@@ -786,19 +583,6 @@ checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     /* determine if the text is mixed-directional or single-directional */
     pBiDi->flags=flags;
     return directionFromFlags(flags);
-}
-
-/* determine if the text is mixed-directional or single-directional */
-static UBiDiDirection
-directionFromFlags(Flags flags) {
-    /* if the text contains AN and neutrals, then some neutrals may become RTL */
-    if(!(flags&MASK_RTL || ((flags&DIRPROP_FLAG(AN)) && (flags&MASK_POSSIBLE_N)))) {
-        return UBIDI_LTR;
-    } else if(!(flags&MASK_LTR)) {
-        return UBIDI_RTL;
-    } else {
-        return UBIDI_MIXED;
-    }
 }
 
 /* perform rules (Wn), (Nn), and (In) on a run of the text ------------------ */
@@ -1211,7 +995,198 @@ adjustWSLevels(UBiDi *pBiDi) {
     }
 }
 
-/* -------------------------------------------------------------------------- */
+/* ubidi_setPara ------------------------------------------------------------ */
+
+U_CAPI void U_EXPORT2
+ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
+              UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
+              UErrorCode *pErrorCode) {
+    UBiDiDirection direction;
+
+    /* check the argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    } else if(pBiDi==NULL || text==NULL ||
+              ((UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel)) ||
+              length<-1
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if(length==-1) {
+        length=u_strlen(text);
+    }
+
+    /* initialize the UBiDi structure */
+    pBiDi->text=text;
+    pBiDi->length=length;
+    pBiDi->paraLevel=paraLevel;
+    pBiDi->direction=UBIDI_LTR;
+    pBiDi->trailingWSStart=length;  /* the levels[] will reflect the WS run */
+
+    pBiDi->dirProps=NULL;
+    pBiDi->levels=NULL;
+    pBiDi->runs=NULL;
+
+    if(length==0) {
+        /*
+         * For an empty paragraph, create a UBiDi object with the paraLevel and
+         * the flags and the direction set but without allocating zero-length arrays.
+         * There is nothing more to do.
+         */
+        if(IS_DEFAULT_LEVEL(paraLevel)) {
+            pBiDi->paraLevel&=1;
+        }
+        if(paraLevel&1) {
+            pBiDi->flags=DIRPROP_FLAG(R);
+            pBiDi->direction=UBIDI_RTL;
+        } else {
+            pBiDi->flags=DIRPROP_FLAG(L);
+            pBiDi->direction=UBIDI_LTR;
+        }
+
+        pBiDi->runCount=0;
+        return;
+    }
+
+    pBiDi->runCount=-1;
+
+    /*
+     * Get the directional properties,
+     * the flags bit-set, and
+     * determine the partagraph level if necessary.
+     */
+    if(getDirPropsMemory(pBiDi, length)) {
+        pBiDi->dirProps=pBiDi->dirPropsMemory;
+        getDirProps(pBiDi, text);
+    } else {
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+
+    /* are explicit levels specified? */
+    if(embeddingLevels==NULL) {
+        /* no: determine explicit levels according to the (Xn) rules */\
+        if(getLevelsMemory(pBiDi, length)) {
+            pBiDi->levels=pBiDi->levelsMemory;
+            direction=resolveExplicitLevels(pBiDi);
+        } else {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+    } else {
+        /* set BN for all explicit codes, check that all levels are paraLevel..UBIDI_MAX_EXPLICIT_LEVEL */
+        pBiDi->levels=embeddingLevels;
+        direction=checkExplicitLevels(pBiDi, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return;
+        }
+    }
+
+    /*
+     * The steps after (X9) in the UBiDi algorithm are performed only if
+     * the paragraph text has mixed directionality!
+     */
+    pBiDi->direction=direction;
+    switch(direction) {
+    case UBIDI_LTR:
+        /* make sure paraLevel is even */
+        pBiDi->paraLevel=(UBiDiLevel)((pBiDi->paraLevel+1)&~1);
+
+        /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
+        pBiDi->trailingWSStart=0;
+        break;
+    case UBIDI_RTL:
+        /* make sure paraLevel is odd */
+        pBiDi->paraLevel|=1;
+
+        /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
+        pBiDi->trailingWSStart=0;
+        break;
+    default:
+        /*
+         * If there are no external levels specified and there
+         * are no significant explicit level codes in the text,
+         * then we can treat the entire paragraph as one run.
+         * Otherwise, we need to perform the following rules on runs of
+         * the text with the same embedding levels. (X10)
+         * "Significant" explicit level codes are ones that actually
+         * affect non-BN characters.
+         * Examples for "insignificant" ones are empty embeddings
+         * LRE-PDF, LRE-RLE-PDF-PDF, etc.
+         */
+        if(embeddingLevels==NULL && !(pBiDi->flags&DIRPROP_FLAG_MULTI_RUNS)) {
+            resolveImplicitLevels(pBiDi, 0, length,
+                                    GET_LR_FROM_LEVEL(pBiDi->paraLevel),
+                                    GET_LR_FROM_LEVEL(pBiDi->paraLevel));
+        } else {
+            /* sor, eor: start and end types of same-level-run */
+            UBiDiLevel *levels=pBiDi->levels;
+            int32_t start, limit=0;
+            UBiDiLevel level, nextLevel;
+            DirProp sor, eor;
+
+            /* determine the first sor and set eor to it because of the loop body (sor=eor there) */
+            level=pBiDi->paraLevel;
+            nextLevel=levels[0];
+            if(level<nextLevel) {
+                eor=GET_LR_FROM_LEVEL(nextLevel);
+            } else {
+                eor=GET_LR_FROM_LEVEL(level);
+            }
+
+            do {
+                /* determine start and limit of the run (end points just behind the run) */
+
+                /* the values for this run's start are the same as for the previous run's end */
+                sor=eor;
+                start=limit;
+                level=nextLevel;
+
+                /* search for the limit of this run */
+                while(++limit<length && levels[limit]==level) {}
+
+                /* get the correct level of the next run */
+                if(limit<length) {
+                    nextLevel=levels[limit];
+                } else {
+                    nextLevel=pBiDi->paraLevel;
+                }
+
+                /* determine eor from max(level, nextLevel); sor is last run's eor */
+                if((level&~UBIDI_LEVEL_OVERRIDE)<(nextLevel&~UBIDI_LEVEL_OVERRIDE)) {
+                    eor=GET_LR_FROM_LEVEL(nextLevel);
+                } else {
+                    eor=GET_LR_FROM_LEVEL(level);
+                }
+
+                /* if the run consists of overridden directional types, then there
+                   are no implicit types to be resolved */
+                if(!(level&UBIDI_LEVEL_OVERRIDE)) {
+                    resolveImplicitLevels(pBiDi, start, limit, sor, eor);
+                } else {
+                    /* remove the UBIDI_LEVEL_OVERRIDE flags */
+                    do {
+                        levels[start++]&=~UBIDI_LEVEL_OVERRIDE;
+                    } while(start<limit);
+                }
+            } while(limit<length);
+        }
+
+        /* reset the embedding levels for some non-graphic characters (L1), (X9) */
+        adjustWSLevels(pBiDi);
+
+        /* for "inverse BiDi", ubidi_getRuns() modifies the levels of numeric runs following RTL runs */
+        if(pBiDi->isInverse) {
+            if(!ubidi_getRuns(pBiDi)) {
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+        }
+        break;
+    }
+}
 
 U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getDirection(const UBiDi *pBiDi) {
