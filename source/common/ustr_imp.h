@@ -60,7 +60,7 @@ uprv_strCompare(const UChar *s1, int32_t length1,
  * @internal
  */
 U_CFUNC UBool
-uprv_haveProperties(void);
+uprv_haveProperties(UErrorCode *pErrorCode);
 
 /**
  * Type of a function that may be passed to the internal case mapping functions
