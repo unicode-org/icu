@@ -78,6 +78,19 @@ operator+(const UnicodeString& left,
     return left + buffer;
 }
 
+UnicodeString
+operator+(const UnicodeString& left,
+      int64_t num)
+{
+    char buffer[64];    // nos changed from 10 to 64
+    char danger = 'p';  // guard against overrunning the buffer (rtg)
+
+    sprintf(buffer, "%lld", num);
+    assert(danger == 'p');
+
+    return left + buffer;
+}
+
 // [LIU] Just to get things working
 UnicodeString
 operator+(const UnicodeString& left,
@@ -121,6 +134,11 @@ UnicodeString toString(const Formattable& f) {
     case Formattable::kLong:
         s = UnicodeString("[Long:") + f.getLong() + "]";
         break;
+
+    case Formattable::kInt64:
+        s = UnicodeString("[Int64:") + f.getInt64() + "]"; // TODO: UnicodeString append Int64?
+        break;
+
     case Formattable::kString:
         f.getString(s);
         s.insert(0, "[String:");

@@ -291,16 +291,8 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             UErrorCode      *status)
 {
     Formattable res;
-        parseRes(res, fmt, text, textLength, parsePos, status);
-    if(U_FAILURE(*status))
-        return 0;
-
-    switch(res.getType()) {
-        case Formattable::kLong: return (double)res.getLong();
-        case Formattable::kInt64: return (double)res.getInt64();
-        case Formattable::kDouble: return res.getDouble();
-        default: return 0;
-        }
+    parseRes(res, fmt, text, textLength, parsePos, status);
+    return res.getDouble(status);
 }
 
 U_CAPI const char* U_EXPORT2

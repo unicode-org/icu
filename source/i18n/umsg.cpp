@@ -412,6 +412,7 @@ umsg_vformat(   UMessageFormat *fmt,
         UChar *stringVal;
         double tDouble=0;
         int32_t tInt =0;
+        int64_t tInt64 = 0;
         UDate tempDate = 0;
         switch(argTypes[i]) {
         case Formattable::kDate:
@@ -427,6 +428,11 @@ umsg_vformat(   UMessageFormat *fmt,
         case Formattable::kLong:
             tInt = va_arg(ap, int32_t);
             args[i].setLong(tInt);
+            break;
+
+        case Formattable::kInt64:
+            tInt64 = va_arg(ap, int64_t);
+            args[i].setInt64(tInt64);
             break;
             
         case Formattable::kString:
@@ -513,6 +519,7 @@ umsg_vparse(UMessageFormat *fmt,
     double *aDouble;
     UChar *aString;
     int32_t* aInt;
+    int64_t* aInt64;
     UnicodeString temp;
     int len =0;
     // assign formattables to varargs
@@ -538,10 +545,18 @@ umsg_vparse(UMessageFormat *fmt,
             break;
 
         case Formattable::kLong:
-            
             aInt = va_arg(ap, int32_t*);
             if(aInt){
                 *aInt = (int32_t) args[i].getLong();
+            }else{
+                *status=U_ILLEGAL_ARGUMENT_ERROR;
+            }
+            break;
+
+        case Formattable::kInt64:
+            aInt64 = va_arg(ap, int64_t*);
+            if(aInt64){
+                *aInt64 = args[i].getInt64();
             }else{
                 *status=U_ILLEGAL_ARGUMENT_ERROR;
             }
