@@ -99,6 +99,7 @@ UChar* NormalizerPerformanceTest::normalizeInput(int32_t& len, const UChar* src 
             break;
         }else if(U_FAILURE(status)){
             printf("Could not normalize input. Error: %s", u_errorName(status));
+            return NULL;
         }
     }
     return dest;
@@ -148,8 +149,8 @@ NormalizerPerformanceTest::NormalizerPerformanceTest(int32_t argc, const char* a
             return;
         }
          
-        NFCBuffer = normalizeInput(NFDBufferLen,src,srcLen,UNORM_NFD);
-        NFDBuffer = normalizeInput(NFCBufferLen,src,srcLen,UNORM_NFC);
+        NFDBuffer = normalizeInput(NFDBufferLen,src,srcLen,UNORM_NFD);
+        NFCBuffer = normalizeInput(NFCBufferLen,src,srcLen,UNORM_NFC);
     }
     
 }
