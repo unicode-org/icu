@@ -5,58 +5,30 @@
 // *
 // *******************************************************************************
 //
-// $Revision: 1.1 $ 
+// $Revision: 1.2 $ 
 // $Tag: 
 // Singapore English locale: Data By Syn Wee Quek
 
 en_SG {
 
-      Version { "x0.3" }
-
-
-
+    Version { "1.0" }
     CurrencyElements { 
             // most commonly used currency sign
             "S$",   // #1 symbol
             "SGD",  // #2 int'l symbol
             ".",    // #3 decimal sep
-
-//            "$",
-//            "S$",
-//            "SGD",
-//            "SGD $",
-//            ".",
-//            ","
     }
     DateTimePatterns {
-// too many here....... --srl
-            // most commonly used formal time format 
             "a hh:mm:ss",
             "a hh:mm:ss",
             "a hh:mm",
             "hh:mm",
-//            "hh:mm a",
-//            "hh:mm:ss a",
-            // most commonly used time format
-//            "hh:mm:ss",
             "dd MMMM yyyy",
             "dd MMM yyyy",
-//            "dd MMM yy",
-//            "dd-MMM-yyyy",
             "dd-MMM-yy",
-//            "dd/MM/yyyy",
             "dd/MM/yy",
             "{1} {0}"
     }
-
-
-// Already in root.txt --srl
-//    Languages { 
-//        en { "English" }
-//    }
-    
-//    LocaleID { "0000" }  [if empty - no need --srl]
-
 
 
     ShortCountry { "SIN" } // copied to zh_SG.txt
