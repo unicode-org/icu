@@ -874,7 +874,7 @@ static uint32_t
     IMPLICIT_BASE_3BYTE = 0,
     IMPLICIT_BASE_4BYTE = 0;
 
-static const uint32_t
+static const UChar32
     CJK_BASE = 0x4E00,
     CJK_LIMIT = 0x9FFF+1,
     CJK_COMPAT_USED_BASE = 0xFA0E,
