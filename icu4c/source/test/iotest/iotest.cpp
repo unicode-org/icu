@@ -512,8 +512,6 @@ static void TestfgetsLineCount() {
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
     stdFile = fopen(STANDARD_TEST_FILE, "r");
 
-    u_uastrncpy(buffer, charBuffer, expectedSize+1);
-
     for (;;) {
         u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
         char *returnedCharBuffer = fgets(charBuffer, sizeof(charBuffer)/sizeof(charBuffer[0]), stdFile);
