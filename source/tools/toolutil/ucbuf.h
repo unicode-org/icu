@@ -17,11 +17,8 @@
 *******************************************************************************
 */
 
-#include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "filestrm.h"
-#include "cmemory.h"
-#include <stdio.h>
 
 #ifndef UCBUF_H
 #define UCBUF_H 1

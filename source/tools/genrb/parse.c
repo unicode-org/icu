@@ -30,6 +30,7 @@
 #include "reslist.h"
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
+#include <stdio.h>
 
 /* Number of tokens to read ahead of the current stream position */
 #define MAX_LOOKAHEAD   3

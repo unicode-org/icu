@@ -2110,7 +2110,7 @@ static void TestResourceLevelAliasing(void) {
       
       if(U_FAILURE(status)) {
         log_err("%s trying to read binary BreakDictionaryData\n");
-      } else if(binSeqLen != binLen || uprv_memcmp(binSequence, binary, binSeqLen) != 0) {
+      } else if(binSeqLen != binLen || memcmp(binSequence, binary, binSeqLen) != 0) {
         log_err("Referencing alias didn't get the right data\n");
       }
       
