@@ -689,11 +689,11 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 							 */
 							switch(len){
 								case 4:
-									targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<24;
+									targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<24;
 								case 3:
-									targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<16;
+									targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<16;
 								case 2:
-									targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<8;
+									targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<8;
 								case 1:
 									targetUniChar+=(uint8_t)(*targetChar);
 								default:
@@ -1524,11 +1524,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
                 targetUniChar=0;
                 switch(len){
 			        case 4:
-				        targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<24;
+				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<24;
 			        case 3:
-				        targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<16;
+				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<16;
 			        case 2:
-				        targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<8;
+				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<8;
 			        case 1:
 				        targetUniChar+=(uint8_t)(*targetChar);
 			        default:
@@ -1735,11 +1735,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                 targetUniChar=0;
                 switch(len){
 			        case 4:
-				        targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<24;
+				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<24;
 			        case 3:
-				        targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<16;
+				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<16;
 			        case 2:
-				        targetUniChar+=(uint32_t)((uint8_t)(*targetChar++))<<8;
+				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<8;
 			        case 1:
 				        targetUniChar+=(uint8_t)(*targetChar);
 			        default:
