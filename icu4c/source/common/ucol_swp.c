@@ -122,22 +122,26 @@ ucol_swapBinary(const UDataSwapper *ds,
         outHeader->charSetFamily=ds->outCharset;
 
         /* swap the options */
-        ds->swapArray32(ds, inBytes+header.options, header.expansion-header.options,
-                           outBytes+header.options, pErrorCode);
+        if(header.options!=0) {
+            ds->swapArray32(ds, inBytes+header.options, header.expansion-header.options,
+                               outBytes+header.options, pErrorCode);
+        }
 
         /* swap the expansions */
-        if(header.contractionIndex!=0) {
-            /* expansions bounded by contractions */
-            count=header.contractionIndex-header.expansion;
-        } else {
-            /* no contractions: expansions bounded by the main trie */
-            count=header.mappingPosition-header.expansion;
+        if(header.mappingPosition!=0 && header.expansion!=0) {
+            if(header.contractionIndex!=0) {
+                /* expansions bounded by contractions */
+                count=header.contractionIndex-header.expansion;
+            } else {
+                /* no contractions: expansions bounded by the main trie */
+                count=header.mappingPosition-header.expansion;
+            }
+            ds->swapArray32(ds, inBytes+header.expansion, (int32_t)count,
+                               outBytes+header.expansion, pErrorCode);
         }
-        ds->swapArray32(ds, inBytes+header.expansion, (int32_t)count,
-                           outBytes+header.expansion, pErrorCode);
 
         /* swap the contractions */
-        if(header.contractionIndex!=0) {
+        if(header.contractionSize!=0) {
             /* contractionIndex: UChar[] */
             ds->swapArray16(ds, inBytes+header.contractionIndex, header.contractionSize*2,
                                outBytes+header.contractionIndex, pErrorCode);
@@ -148,13 +152,17 @@ ucol_swapBinary(const UDataSwapper *ds,
         }
 
         /* swap the main trie */
-        count=header.endExpansionCE-header.mappingPosition;
-        utrie_swap(ds, inBytes+header.mappingPosition, (int32_t)count,
-                      outBytes+header.mappingPosition, pErrorCode);
+        if(header.mappingPosition!=0) {
+            count=header.endExpansionCE-header.mappingPosition;
+            utrie_swap(ds, inBytes+header.mappingPosition, (int32_t)count,
+                          outBytes+header.mappingPosition, pErrorCode);
+        }
 
         /* swap the max expansion table */
-        ds->swapArray32(ds, inBytes+header.endExpansionCE, header.endExpansionCECount*4,
-                           outBytes+header.endExpansionCE, pErrorCode);
+        if(header.endExpansionCECount!=0) {
+            ds->swapArray32(ds, inBytes+header.endExpansionCE, header.endExpansionCECount*4,
+                               outBytes+header.endExpansionCE, pErrorCode);
+        }
 
         /* expansionCESize, unsafeCP, contrEndCP: uint8_t[], no need to swap */
 
