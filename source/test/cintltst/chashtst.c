@@ -259,6 +259,23 @@ static void TestOtherAPI(void){
     if(uhash_iremovei(hash, 1004) != 0){
         log_err("FAIL: uhash_remove failed\n");
     }
+
+    uhash_removeAll(hash);
+    uhash_iput(hash, 2004, (void*)one, &status);
+    uhash_iput(hash, 2005, (void*)two, &status);
+    if(uhash_count(hash) != 2){
+        log_err("FAIL: uhash_count() failed. Expected: 2, Got: %d\n", uhash_count(hash));
+    }
+    if(uhash_iremove(hash, 2004) != (void*)one){
+        log_err("FAIL: uhash_remove failed\n");
+    }
+    if(uhash_iremove(hash, 2004) != NULL){
+        log_err("FAIL: uhash_remove failed\n");
+    }
+    if(uhash_count(hash) != 1){
+        log_err("FAIL: uhash_count() failed. Expected: 1, Got: %d\n", uhash_count(hash));
+    }
+
     uhash_close(hash);
 
 }
