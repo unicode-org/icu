@@ -54,7 +54,7 @@ sv.txt sv_SE.txt th.txt th_TH.txt tr.txt\
 tr_TR.txt uk.txt uk_UA.txt vi.txt vi_VN.txt\
 zh.txt zh_CN.txt zh_HK.txt zh_TW.txt hi.txt hi_IN.txt mt.txt mt_MT.txt eo.txt\
 kok.txt kok_IN.txt ta.txt ta_IN.txt mr.txt mr_IN.txt\
-nb.txt sv_FI.txt nn.txt
+sv_FI.txt 
 
 TRANSLIT_SOURCE = fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
 larabic.txt lcyril.txt ldevan.txt\
