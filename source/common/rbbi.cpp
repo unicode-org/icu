@@ -46,8 +46,8 @@ RuleBasedBreakIterator::fgClassID = 0;
 RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
 {
     init();
+    if (U_FAILURE(status)) {return;};
     fData = new RBBIDataWrapper(data, status);
-    /* test for NULL */
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -63,8 +63,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
 {
     init();
+    if (U_FAILURE(status)) {return;};
     fData = new RBBIDataWrapper(udm, status);
-    /* test for NULL */
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -83,6 +83,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UErrorCode           &status)
 {
     init();
+    if (U_FAILURE(status)) {return;};
     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
         RBBIRuleBuilder::createRuleBasedBreakIterator(rules, parseError, status);
     if (U_SUCCESS(status)) {
@@ -160,7 +161,7 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 
 
 //-----------------------------------------------------------------------------
-// 
+//
 //    init()      Shared initialization routine.   Used by all the constructors.
 //
 //-----------------------------------------------------------------------------
@@ -324,7 +325,7 @@ int32_t RuleBasedBreakIterator::last(void) {
     // rather than the past-the-end offset
     //
     //   (It's so a loop like for(p=it.last(); p!=DONE; p=it.previous()) ...
-    //     will work correctly.)   
+    //     will work correctly.)
 
 
     fLastBreakTagValid = FALSE;
