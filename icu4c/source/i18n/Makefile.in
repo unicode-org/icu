@@ -61,7 +61,8 @@ rbt_rule.o rbt_set.o simpletz.o smpdtfmt.o snbkdat.o \
 sortkey.o tables.o tblcoll.o tcoldata.o timezone.o translit.o \
 txtbdat.o txtbdry.o ubrk.o ucal.o ucol.o udat.o umsg.o unicdcm.o \
 unifltlg.o unirange.o uniset.o unitohex.o unum.o wdbkdat.o wdbktbl.o \
-dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o
+dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o \
+	utrans.o
 
 DEPS = $(OBJECTS:.o=.d)
 
