@@ -17,10 +17,8 @@ subdir = tools/gentest
 
 ##
 
-ICUDATADIR=$(top_builddir)/data
-
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 TARGET = gentest$(EXEEXT)
@@ -32,12 +30,10 @@ OBJECTS = gentest.o genres32.o
 
 DEPS = $(OBJECTS:.o=.d)
 
-TEST_FILES = $(ICUDATADIR)/test.dat
-
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local build-data
+check-local
 
 ## Clear suffix list
 .SUFFIXES :
