@@ -344,6 +344,7 @@ static void
 lineFn(void *context,
        char *fields[][2], int32_t fieldCount,
        UErrorCode *pErrorCode) {
+    static uint32_t prevCode=0;
     uint32_t code=0;
     char *name1Start, *name2Start;
     int16_t name1Length, name2Length;
@@ -373,14 +374,33 @@ lineFn(void *context,
         name2Length=0;
     }
 
-    if(name1Length+name2Length>0) {
-        /* printf("%lx:%.*s(%.*s)\n", code, name1Length, line+name1Start, name2Length, line+name2Start); */
-
-        parseName(name1Start, name1Length);
-        parseName(name2Start, name2Length);
-
-        addLine(code, name1Start, name1Length, name2Start, name2Length);
+    if(name1Length+name2Length==0) {
+        return;
     }
+
+    /* check for non-character code points */
+    if((code&0xfffe)==0xfffe || (uint32_t)(code-0xfdd0)<0x20) {
+        fprintf(stderr, "gennames: error - properties for non-character code point U+%04lx\n",
+                code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* check that the code points (code) are in ascending order */
+    if(code<=prevCode && code>0) {
+        fprintf(stderr, "gennames: error - UnicodeData entries out of order, U+%04lx after U+%04lx\n",
+                code, prevCode);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    prevCode=code;
+
+    /* printf("%lx:%.*s(%.*s)\n", code, name1Length, line+name1Start, name2Length, line+name2Start); */
+
+    parseName(name1Start, name1Length);
+    parseName(name2Start, name2Length);
+
+    addLine(code, name1Start, name1Length, name2Start, name2Length);
 }
 
 static void
