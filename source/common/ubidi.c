@@ -848,7 +848,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
          * regular L characters, plus a flag that ubidi_getRuns() will use
          * to set a similar flag on the corresponding output run.
          */
-        numberLevel=levels[start]/* ### try without this flag for now |UBIDI_LEVEL_OVERRIDE*/;
+        numberLevel=levels[start];
         if(numberLevel&1) {
             ++numberLevel;
         }
