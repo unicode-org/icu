@@ -117,7 +117,7 @@ static void addNewInverse(UCAElements *element, UErrorCode *status) {
     return;
   }
   if(VERBOSE && isContinuation(element->CEs[1])) {
-    fprintf(stdout, "+");
+    //fprintf(stdout, "+");
   }
   inversePos++;
   inverseTable[inversePos][0] = element->CEs[0];
@@ -143,7 +143,7 @@ static void insertInverse(UCAElements *element, uint32_t position, UErrorCode *s
   }
 
   if(VERBOSE && isContinuation(element->CEs[1])) {
-    fprintf(stdout, "+");
+    //fprintf(stdout, "+");
   }
   if(position <= inversePos) {
     /*move stuff around */
@@ -649,7 +649,7 @@ struct {
 
 
 
-
+  int32_t surrogateCount = 0;
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
             fprintf(stderr, "Something returned an error %i (%s) while processing line: %i\nExiting...",
@@ -668,7 +668,7 @@ struct {
             // if element is a contraction, we want to add it to contractions
             if(element->cSize > 1) { // this is a contraction
               if(UTF_IS_LEAD(element->cPoints[0]) && UTF_IS_TRAIL(element->cPoints[1]) && element->cSize == 2) {
-                //fprintf(stdout, "Surrogate %04X %04X!\n", element->cPoints[0], element->cPoints[1]);
+                surrogateCount++;
               } else {
                 contractionCEs[noOfContractions][0] = element->cPoints[0];
                 contractionCEs[noOfContractions][1] = element->cPoints[1];
@@ -691,10 +691,25 @@ struct {
 
     if (VERBOSE) {
         fprintf(stdout, "\nLines read: %i\n", line);
+        fprintf(stdout, "Surrogate count: %i\n", surrogateCount);
+        fprintf(stdout, "Raw data breakdown:\n");
+        fprintf(stdout, "Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);
+        fprintf(stdout, "Number of contractions: %i\n", noOfContractions);
+        fprintf(stdout, "Contraction image size: %i\n", t->image->contractionSize);
+        fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
     }
 
     /* test */
     UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
+
+    if (VERBOSE) {
+        fprintf(stdout, "Compacted data breakdown:\n");
+        fprintf(stdout, "Compact array stage1 top: %i, stage2 top: %i\n", t->mapping->stage1Top, t->mapping->stage2Top);
+        fprintf(stdout, "Number of contractions: %i\n", noOfContractions);
+        fprintf(stdout, "Contraction image size: %i\n", t->image->contractionSize);
+        fprintf(stdout, "Expansions size: %i\n", t->expansions->position);
+    }
+
     writeOutData(myData, contractionCEs, noOfContractions, outputDir, copyright, status);
 
     InverseTableHeader *inverse = assembleInverseTable(status);
@@ -780,20 +795,19 @@ int main(int argc, char* argv[]) {
         copyright = U_COPYRIGHT_STRING;
     }
 
-    if(argc < 0) {
+    /* prepare the filename beginning with the source dir */
+    uprv_strcpy(filename, srcDir);
+    basename=filename+uprv_strlen(filename);
 
-      /* prepare the filename beginning with the source dir */
-      uprv_strcpy(filename, srcDir);
-      basename=filename+uprv_strlen(filename);
+    if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
+        *basename++=U_FILE_SEP_CHAR;
+    }
 
-      if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
-          *basename++=U_FILE_SEP_CHAR;
-      }
-    
+    if(argc < 0) { 
       uprv_strcpy(basename, "FractionalUCA.txt");
     } else {
       argv++;
-      uprv_strcpy(filename, getLongPathname(*argv));
+      uprv_strcpy(basename, getLongPathname(*argv));
     }
 
     return write_uca_table(filename, destdir, copyright, &status);
