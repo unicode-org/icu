@@ -32,7 +32,7 @@ U_NAMESPACE_BEGIN
  * <p> 
  * The algorithm implemented is a modified form of the Boyer Moore's search.
  * For more information  see 
- * <a href=http://oss.software.ibm.com/icu/docs/papers/text-search.html>
+ * <a href=http://oss.software.ibm.com/icu/docs/papers/efficient_text_searching_in_java.html>
  * "Efficient Text Searching in Java"</a>, published in <i>Java Report</i> 
  * in February, 1999, for further information on the algorithm.
  * <p>
