@@ -175,7 +175,6 @@ void RuleBasedBreakIterator::init() {
 
     fText                = NULL;
     fData                = NULL;
-    fCharMappings        = NULL;
     fLastBreakTag        = 0;
     fLastBreakTagValid   = TRUE;
     fDictionaryCharCount = 0;

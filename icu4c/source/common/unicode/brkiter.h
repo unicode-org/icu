@@ -590,8 +590,12 @@ protected:
     /** @internal */
     BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
     /** @internal */
+#if 0
+    // TODO:  Can't do this, it breaks bufferClone, which does an object memcopy.
+    //   Yuk.
     Locale actualLocale;
     Locale validLocale;
+#endif
 private:
     /**
      * The assignment operator has no real implementation.
