@@ -172,6 +172,7 @@ Normalizer::init(CharacterIterator *iter) {
 
 Normalizer::~Normalizer()
 {
+    delete (CharacterIterator *)text->context;
     delete text;
 }
 
