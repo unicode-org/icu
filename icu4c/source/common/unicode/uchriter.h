@@ -272,7 +272,7 @@ public:
    * at or after the current position in the iteration range.
    * @stable ICU 2.0
    */
-  virtual UBool        hasNext();
+  virtual UBool        hasNext() const;
 
   /**
    * Advances to the previous code unit in the iteration range (toward
