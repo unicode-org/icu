@@ -495,7 +495,7 @@ NewResourceBundleTest::testTag(const char* frag,
                             UBool in_te,
                             UBool in_te_IN)
 {
-    UBool passOrig = pass;
+    UBool failOrig = fail;
 
     // Make array from input params
 
@@ -844,7 +844,7 @@ NewResourceBundleTest::testTag(const char* frag,
         CONFIRM_EQ(count, tag_count);
 
     }
-    return (UBool)(passOrig == pass);
+    return (UBool)(failOrig == fail);
 }
 
 void
