@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Jamo.java,v $ 
- * $Date: 2000/04/27 22:28:47 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/04/28 00:25:54 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -30,14 +30,14 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
               // following line used to read "..$medial$final]"
               // assume this was a typo - liu
   + "$consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ$initial$final];"
-  + "$_ye=[yeYE];"
-  + "$_ywe=[yweYWE];"
-  + "$_yw=[ywYW];"
-  + "$_nl=[nlNL];"
-  + "$_gnl=[gnlGNL];"
-  + "$_lsgb=[lsgbLSGB];"
-  + "$_ywao=[ywaoYWAO];"
-  + "$_bl=[blBL];"
+  + "$ye_=[yeYE];"
+  + "$ywe_=[yweYWE];"
+  + "$yw_=[ywYW];"
+  + "$nl_=[nlNL];"
+  + "$gnl_=[gnlGNL];"
+  + "$lsgb_=[lsgbLSGB];"
+  + "$ywao_=[ywaoYWAO];"
+  + "$bl_=[blBL];"
 
               + "$ieung = \u110b;"
 
@@ -149,35 +149,35 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   // LAST of a digraph (or multigraph) AND first of an initial
 
   + "'' < l{ }\u11c0;"      // hangul jongseong thieuth
-  + "'' < $_lsgb{}\u11ba;" // hangul jongseong sios
+  + "'' < $lsgb_{}\u11ba;" // hangul jongseong sios
   + "'' < l{ }\u11c1;"      // hangul jongseong phieuph
   + "'' < l{ }\u11b7;"      // hangul jongseong mieum
   + "'' < n{ }\u11bd;"      // hangul jongseong cieuc
-  + "'' < $_nl{}\u11c2;"   // hangul jongseong hieuh
-  + "'' < $_gnl{}\u11a9;"  // hangul jongseong ssangkiyeok
-  + "'' < $_bl{}\u11b8;"   // hangul jongseong pieup
+  + "'' < $nl_{}\u11c2;"   // hangul jongseong hieuh
+  + "'' < $gnl_{}\u11a9;"  // hangul jongseong ssangkiyeok
+  + "'' < $bl_{}\u11b8;"   // hangul jongseong pieup
   + "'' < d{ }\u11ae;"      // hangul jongseong tikeut
   
-  + "'' < $_ye{}\u116e;"   // hangul jungseong u
-  + "'' < $_ywe{}\u1169;"  // hangul jungseong o
-  + "'' < $_yw{}\u1175;"   // hangul jungseong i
-  + "'' < $_ywao{}\u1166;" // hangul jungseong e
-  + "'' < $_yw{}\u1161;"   // hangul jungseong a
+  + "'' < $ye_{}\u116e;"   // hangul jungseong u
+  + "'' < $ywe_{}\u1169;"  // hangul jungseong o
+  + "'' < $yw_{}\u1175;"   // hangul jungseong i
+  + "'' < $ywao_{}\u1166;" // hangul jungseong e
+  + "'' < $yw_{}\u1161;"   // hangul jungseong a
   
   + "'' < l{ }\u1110;"      // hangul choseong thieuth
-  + "'' < $_lsgb{}\u110a;" // hangul choseong ssangsios
-  + "'' < $_lsgb{}\u1109;" // hangul choseong sios
+  + "'' < $lsgb_{}\u110a;" // hangul choseong ssangsios
+  + "'' < $lsgb_{}\u1109;" // hangul choseong sios
   + "'' < l{ }\u1111;"      // hangul choseong phieuph
   + "'' < l{ }\u1106;"      // hangul choseong mieum
   + "'' < n{ }\u110c;"      // hangul choseong cieuc
   + "'' < n{ }\u110d;"
-  + "'' < $_nl{}\u1112;"   // hangul choseong hieuh
-  + "'' < $_gnl{}\u1101;"  // hangul choseong ssangkiyeok
-  + "'' < $_gnl{}\u1100;"  // hangul choseong kiyeok
+  + "'' < $nl_{}\u1112;"   // hangul choseong hieuh
+  + "'' < $gnl_{}\u1101;"  // hangul choseong ssangkiyeok
+  + "'' < $gnl_{}\u1100;"  // hangul choseong kiyeok
   + "'' < d{ }\u1103;"      // hangul choseong tikeut
   + "'' < d{ }\u1104;"
-  + "'' < $_bl{}\u1107;"   // hangul choseong pieup
-  + "'' < $_bl{}\u1108;"
+  + "'' < $bl_{}\u1107;"   // hangul choseong pieup
+  + "'' < $bl_{}\u1108;"
 
   // INITIALS
 
