@@ -305,6 +305,11 @@ clean:
     loc = ures_getLocale(result->rb, status);
   }
   result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
+  //Test for NULL
+  if (result->requestedLocale == NULL) {
+	*status = U_MEMORY_ALLOCATION_ERROR;
+	return NULL;
+  }
   uprv_strcpy(result->requestedLocale, loc);
   ures_close(collElem);
   return result;
@@ -452,6 +457,11 @@ ucol_openRules( const UChar        *rules,
     result = ucol_initCollator(UCA->image,0,status);
     // And set only the options
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
+    //Test for NULL
+    if (opts == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     uprv_memcpy(opts, src.opts, sizeof(UColOptionSet));
     ucol_setOptionsFromHeader(result, opts, status);
     result->freeOptionsOnClose = TRUE;
@@ -462,6 +472,11 @@ ucol_openRules( const UChar        *rules,
     UChar *newRules;
     result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
     newRules = (UChar *)uprv_malloc((rulesLength+1)*U_SIZEOF_UCHAR);
+    //Test for NULL
+    if (newRules == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     if(rulesLength > 0) {
       uprv_memcpy(newRules, rules, rulesLength*U_SIZEOF_UCHAR);
     }
@@ -501,10 +516,20 @@ ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
   if(coll->hasRealData == TRUE) {
     *length = coll->image->size;
     result = (uint8_t *)uprv_malloc(*length);
+    //Test for NULL
+    if (result == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     uprv_memcpy(result, coll->image, *length);
   } else {
     *length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
     result = (uint8_t *)uprv_malloc(*length);
+    //Test for NULL
+    if (result == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     uprv_memcpy(result, UCA->image, sizeof(UCATableHeader));
     uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
   }
@@ -2902,6 +2927,11 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 int32_t newsize = source->pos - source->string + 1;
                 strbuffer = (UChar *)uprv_malloc(sizeof(UChar) *
                                              (newsize + UCOL_MAX_BUFFER));
+				//test for NULL
+				if (strbuffer == NULL) {
+					*status = U_MEMORY_ALLOCATION_ERROR;
+					return NULL;
+				}
                 UCharOffset = strbuffer + newsize;
                 uprv_memcpy(UCharOffset, buffer,
                                              UCOL_MAX_BUFFER * sizeof(UChar));
@@ -4172,6 +4202,11 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     if(allocateSKBuffer == TRUE) {
       *result = (uint8_t*)uprv_malloc(sortKeySize);
+	  //test for NULL
+	  if (*result == NULL) {
+		*status = U_MEMORY_ALLOCATION_ERROR;
+		return 0;
+	  }
       uprv_memcpy(*result, primStart, sortKeySize);
       if(primStart != prim) {
         uprv_free(primStart);
@@ -4504,6 +4539,11 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
     if(allocateSKBuffer == TRUE) {
       *result = (uint8_t*)uprv_malloc(sortKeySize);
+	  //test for NULL
+	  if (*result == NULL) {
+		*status = U_MEMORY_ALLOCATION_ERROR;
+		return 0;
+	  }
       uprv_memcpy(*result, primStart, sortKeySize);
       if(primStart != prim) {
         uprv_free(primStart);
@@ -4717,7 +4757,7 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
   return CE & UCOL_PRIMARYMASK;
 }
 
-U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status) {
+U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode *status) {
   if(U_FAILURE(*status) || coll == NULL) {
     return 0;
   }
