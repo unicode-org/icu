@@ -133,7 +133,7 @@ enum {
         "CTR_LOOP_P",          \
         "RELOC_OPRND",         \
         "STO_SP",              \
-        "LD_SP"
+        "LD_SP" 
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.

@@ -368,7 +368,8 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
+    REGEX_TESTLM("(abc)*+a", "abcabcabc", FALSE, FALSE);
+    // REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
     // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
     exit(1);
@@ -1234,7 +1235,17 @@ void RegexTest::Extended() {
 
     // Atomic Grouping
     REGEX_FIND("(?>.*)abc", "abcabcabc");      // no match.  .* consumed entire string.
-    //REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
+    REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0><1>abcc</1><2>ccc</2></0>ddd");
+    REGEX_FIND("(\\.\\d\\d(?>[1-9]?))\\d+", "1.625");
+    REGEX_FIND("(\\.\\d\\d(?>[1-9]?))\\d+", "1<0><1>.625</1>0</0>");
+
+    // Possessive *+
+    REGEX_FIND("(abc)*+a", "abcabcabc");
+    REGEX_FIND("(abc)*+a", "<0>abc<1>abc</1>a</0>b");
+    REGEX_FIND("(a*b)*+a", "<0><1>aaaab</1>a</0>aaa");
+
+    // Possessive ?+
+    REGEX_FIND("c?+ddd", "<0>cddd</0>");
 
 }
 
@@ -1271,11 +1282,6 @@ void RegexTest::Errors() {
     REGEX_ERR("abc(?<=xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // look-behind
     REGEX_ERR("abc(?<!xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // negated look-behind
     REGEX_ERR("abc(?<@xyz).*", 1, 7, U_REGEX_RULE_SYNTAX);       // illegal construct
-
-    // Possessive Quantifiers
-    REGEX_ERR("abc++d", 1, 5, U_REGEX_UNIMPLEMENTED);
-    REGEX_ERR("abc*+d", 1, 5, U_REGEX_UNIMPLEMENTED);
-    REGEX_ERR("abc?+d", 1, 5, U_REGEX_UNIMPLEMENTED);
 
     // Attempt to use non-default flags 
     {
