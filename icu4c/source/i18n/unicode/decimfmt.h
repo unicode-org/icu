@@ -430,13 +430,11 @@ class ChoiceFormat;
  * <ul>
  * <li>In order to enable significant digits formatting, use a pattern
  * containing the <code>'@'</code> pattern character.  Alternatively,
- * call either setMinimumSignificantDigits() or
- * setMaximumSignificantDigits().
+ * call setSignificantDigits(TRUE).
  *
  * <li>In order to disable significant digits formatting, use a
  * pattern containing the <code>'0'</code> pattern
- * character. Alternatively, call either
- * setMinimumIntegerDigits() or setMaximumIntegerDigits().
+ * character. Alternatively, call setSignificantDigits(FALSE).
  *
  * <li>If a pattern uses significant digits, it may not contain
  * the <code>'0'</code> character, nor may it include a fraction
@@ -469,16 +467,8 @@ class ChoiceFormat;
  * count of getMaximumSignificantDigits()<code> - 1</code>. For example, the
  * pattern <code>\htmlonly"@@###E0"\endhtmlonly</code> is equivalent to <code>\htmlonly"0.0###E0"\endhtmlonly</code>.
  *
- * <li>Significant digit counts are stored as negative values in the
- * integer digit count fields. Thus, if significant digits are used,
- * then getMinimumIntegerDigits() and
- * getMaximumIntegerDigits() will return negative numbers. The
- * converse is also true. If significant digits are not being used,
- * then getMinimumSignificantDigits() and
- * getMaximumSignificantDigits() will return non-positive numbers.
- *
- * <li>If significant digits are in use, then the fraction digit counts
- * are ignored.
+ * <li>If significant digits are in use, then the integer and fraction
+ * digit counts are ignored.
  *
  * </ul>
  *
@@ -1471,18 +1461,18 @@ public:
 
     /**
      * Returns the minimum number of significant digits that will be
-     * displayed.
-     * @return the fewest significant digits that will be shown, or a
-     * non-positive value if significant digits are not in use
+     * displayed. This value has no effect unless isSignficantDigits()
+     * returns true.
+     * @return the fewest significant digits that will be shown
      * @draft ICU 3.0
      */
     int32_t getMinimumSignificantDigits() const;
 
     /**
      * Returns the maximum number of significant digits that will be
-     * displayed.
-     * @return the most significant digits that will be shown, or a
-     * non-positive value if significant digits are not in use
+     * displayed. This value has no effect unless isSignficantDigits()
+     * returns true.
+     * @return the most significant digits that will be shown
      * @draft ICU 3.0
      */
     int32_t getMaximumSignificantDigits() const;
@@ -1491,10 +1481,8 @@ public:
      * Sets the minimum number of significant digits that will be
      * displayed.  If <code>min</code> is less than one then it is set
      * to one.  If the maximum significant digits count is less than
-     * <code>min</code>, then it is set to <code>min</code>.  If
-     * significant digits were not in use before this call, then the
-     * maximum significant digits count will be set to
-     * <code>min</code>.
+     * <code>min</code>, then it is set to <code>min</code>. This
+     * value has no effect unless isSignficantDigits() returns true.
      * @param min the fewest significant digits to be shown 
      * @draft ICU 3.0
      */
@@ -1504,19 +1492,30 @@ public:
      * Sets the maximum number of significant digits that will be
      * displayed.  If <code>max</code> is less than one then it is set
      * to one.  If the minimum significant digits count is greater
-     * than <code>max</code>, then it is set to <code>max</code>.  If
-     * significant digits were not in use before this call, then the
-     * minimum significant digits count will be set to one.
+     * than <code>max</code>, then it is set to <code>max</code>.
+     * This value has no effect unless isSignficantDigits() returns
+     * true.
      * @param max the most significant digits to be shown 
      * @draft ICU 3.0
      */
     void setMaximumSignificantDigits(int32_t max);
 
- private:
     /**
-     * Returns true if significant digits are in use.
+     * Returns true if significant digits are in use, or false if
+     * integer and fraction digit counts are in use.
+     * @return true if significant digits are in use
+     * @draft ICU 3.0
      */
-    UBool useSignificantDigits() const;
+    UBool isSignificantDigits() const;
+
+    /**
+     * Sets whether significant digits are in use, or integer and
+     * fraction digit counts are in use.
+     * @param useSignficantDigits true to use significant digits, or
+     * false to use integer and fraction digit counts
+     * @draft ICU 3.0
+     */
+    void setSignificantDigits(UBool useSignificantDigits);
 
  public:
     /**
@@ -1732,13 +1731,17 @@ private:
     int32_t                 fMultiplier;
     int32_t                 fGroupingSize;
     int32_t                 fGroupingSize2;
-    UBool                  fDecimalSeparatorAlwaysShown;
-    /*transient*/ UBool    fIsCurrencyFormat;
+    UBool                   fDecimalSeparatorAlwaysShown;
+    /*transient*/ UBool     fIsCurrencyFormat;
     DecimalFormatSymbols*   fSymbols;
 
-    UBool                  fUseExponentialNotation;
+    UBool                   fUseSignificantDigits;
+    int32_t                 fMinSignificantDigits;
+    int32_t                 fMaxSignificantDigits;
+
+    UBool                   fUseExponentialNotation;
     int8_t                  fMinExponentDigits;
-    UBool                  fExponentSignAlwaysShown;
+    UBool                   fExponentSignAlwaysShown;
 
     /* If fRoundingIncrement is NULL, there is no rounding.  Otherwise, round to
      * fRoundingIncrement.getDouble().  Since this operation may be expensive,
