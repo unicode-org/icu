@@ -85,8 +85,10 @@ public class RBTMXExporter extends RBExporter {
                     if (variant != null && !variant.equals("")) {
                         //variant = variant.toUpperCase();
                         return language + "-" + country + "-" + variant;
-                    } else return language + "-" + country;
-                } else return language;
+                    }
+                    return language + "-" + country;
+                }
+                return language;
             }
         }
         return "";
@@ -143,7 +145,6 @@ public class RBTMXExporter extends RBExporter {
         if (base_name.endsWith(".tmx")) base_name = base_name.substring(0,base_name.length()-4);
 		
         String file_name = base_name + ".tmx";
-        StringBuffer buffer = new StringBuffer();
         
         Vector bundle_v = rbm.getBundles();
         Bundle main_bundle = (Bundle)bundle_v.elementAt(0);

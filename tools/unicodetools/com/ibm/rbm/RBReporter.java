@@ -1157,11 +1157,12 @@ public class RBReporter extends JFrame {
 	}
 	
 	public static void main(String args[]) {
+	    RBReporter reporter;
 		if (args.length == 1) {
 			if (args[0].equals("-gui")) {
-				RBReporter reporter = new RBReporter(true);	
+			    reporter = new RBReporter(true);	
 			} else if (args[0].equals("-now")) {
-				RBReporter reporter = new RBReporter(false);
+				reporter = new RBReporter(false);
 				try {
 					reporter.generateReports();
 					System.out.println("RBReporter: Generation of reports successful. " + new Date());
@@ -1170,14 +1171,14 @@ public class RBReporter extends JFrame {
 				}
 				reporter.thisWindowClosing(null);
 			} else if (args[0].equals("-line")) {
-				RBReporter reporter = new RBReporter(false);
+				reporter = new RBReporter(false);
 				if (!reporter.running) reporter.toggleStatus();
 				System.out.println("RBReporter: Next Report at " + reporter.nextReport.toString());
 			} else {
 				System.out.println(getUsage());
 			}
 		} else if (args.length == 0) {
-			RBReporter reporter = new RBReporter(true);
+			reporter = new RBReporter(true);
 		} else {
 			System.out.println(getUsage());
 		}

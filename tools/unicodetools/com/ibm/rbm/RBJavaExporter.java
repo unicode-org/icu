@@ -44,7 +44,7 @@ public class RBJavaExporter extends RBExporter {
                     return false;
                 }
             });
-        } // end if
+        }
     }
 	
     public void export(RBManager rbm) throws IOException {

@@ -20,11 +20,5 @@ import javax.swing.*;
 public abstract class RBExporter {
     protected static JFileChooser chooser;
 	
-    /**
-     * Basic empty constructor.
-     */
-    public RBExporter() {
-    }
-    
     public abstract void export(RBManager rbm) throws IOException;
 }

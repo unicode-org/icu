@@ -125,10 +125,6 @@ class ResourceCreationDialog extends JDialog {
 		variPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
 															 Resources.getTranslation("dialog_variant")));
 		
-		Dimension encDim = new Dimension(50,20);
-		Dimension namDim = new Dimension(350,20);
-		Dimension othDim = new Dimension(400,20);
-		
 		titleField.setColumns(30);
 		commentField.setColumns(30);
 		managerField.setColumns(30);

@@ -797,13 +797,13 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 			// Add the base class
 			root.add(new DefaultMutableTreeNode(mainBundle));
 			
-			DefaultMutableTreeNode currNode = root;
+			//DefaultMutableTreeNode currNode = root;
 			for (int i = 1; i < rbm.getBundles().size(); i++) {
 				Bundle currBundle = (Bundle)rbm.getBundles().elementAt(i);
 				String variant = currBundle.getVariantEncoding();
 				String country = currBundle.getCountryEncoding();
 				String language = currBundle.getLanguageEncoding();
-				DefaultMutableTreeNode languageNode = null;
+				//DefaultMutableTreeNode languageNode = null;
 				// Look for a node representing this language
 				if (language == null || language.equals("")) continue;
 				boolean languageNodeFound = false;
@@ -1463,8 +1463,9 @@ class GroupItemsTableModel extends AbstractTableModel {
 	}
 	
 	public BundleItem getBundleItem(int row) {
-		if (row >= group.getItemCount()) return null;
-		return (BundleItem)group.getBundleItem(row);
+		if (row >= group.getItemCount())
+		    return null;
+		return group.getBundleItem(row);
 	}
 	
 	public void update() {
@@ -1483,6 +1484,7 @@ class UntranslatedItemsTableModel extends AbstractTableModel {
 	
 	public void setBundle(Bundle bundle) {
 		this.bundle = bundle;
+		update();
 	}
 	
 	public int getColumnCount() { return 3; }
@@ -1725,7 +1727,7 @@ class RBManagerMenuBar extends JMenuBar {
 		
         boolean xmlAvailable;
 		try {
-            Class cl = Class.forName("org.apache.xerces.parsers.DOMParser");
+            Class.forName("org.apache.xerces.parsers.DOMParser");
             xmlAvailable = true;
         } catch (ClassNotFoundException e) {
             xmlAvailable = false;

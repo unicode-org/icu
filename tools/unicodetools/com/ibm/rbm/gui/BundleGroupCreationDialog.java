@@ -69,7 +69,7 @@ class BundleGroupCreationDialog extends JDialog {
 		}
 	}
 	
-	public void initComponents(){
+	private void initComponents(){
 		// Error check
 		if (rbm == null) {
 			String alert = Resources.getTranslation("error_no_bundle_for_group");

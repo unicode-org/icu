@@ -76,10 +76,9 @@ public class Resources {
      */
 	
     public static String[] getAvailableLocales() {
-        Locale loc[] = null;
+        //Locale loc[] = null;
         String list[] = null;
         Vector locVect = new Vector();
-//        try {
         try {
             URL resURL = ClassLoader.getSystemResource("com/ibm/rbm/resources/RBManager.properties");
             JarURLConnection resConnection = (JarURLConnection)resURL.openConnection();

@@ -22,8 +22,10 @@ import com.ibm.rbm.gui.RBManagerGUI;
  */
 public class Bundle {
     
-    // The following public class variables reflect the various properties that can be included as
-    // meta-data in a resource bundle formatted by RBManager
+    /**
+     * The following public class variables reflect the various properties that can be included as
+     * meta-data in a resource bundle formatted by RBManager
+     */
     public String name;
     /**
      * The encoding of the bundle (e.g. 'en', 'en_US', 'de', etc.)
@@ -111,9 +113,11 @@ public class Bundle {
      */
 		
     public String getLanguageEncoding() {
-        if (encoding == null) return null;
-        if (encoding.indexOf("_") >= 0) return encoding.substring(0,encoding.indexOf("_"));
-        else return encoding.trim();
+        if (encoding == null)
+            return null;
+        if (encoding.indexOf("_") >= 0)
+            return encoding.substring(0,encoding.indexOf("_"));
+        return encoding.trim();
     }
 		
     /**
@@ -122,11 +126,13 @@ public class Bundle {
      */
 		
     public String getCountryEncoding() {
-        if (encoding == null || encoding.indexOf("_") < 0) return null;
+        if (encoding == null || encoding.indexOf("_") < 0)
+            return null;
         // Strip off the language
         String workStr = encoding.substring(encoding.indexOf("_")+1,encoding.length());
-        if (workStr.indexOf("_") >= 0) return workStr.substring(0,encoding.indexOf("_"));
-        else return workStr.trim();
+        if (workStr.indexOf("_") >= 0)
+            return workStr.substring(0,encoding.indexOf("_"));
+        return workStr.trim();
     }
 		
     /**
