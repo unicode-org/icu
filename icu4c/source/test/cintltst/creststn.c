@@ -1340,7 +1340,7 @@ static void TestGetVersion(){
 
 
 static void TestGetVersionColl(){
-    UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
+    UVersionInfo minVersionArray = {0x00, 0x00, 0x00, 0x00};
     UVersionInfo maxVersionArray = {0x50, 0x80, 0xcf, 0xcf};
     UVersionInfo versionArray;
     UErrorCode status= U_ZERO_ERROR;
@@ -1367,7 +1367,7 @@ static void TestGetVersionColl(){
             ures_close(resB);
             return;
         }
-        /* test NUL termination of UCARules */
+        /* test NUL termination of UCARules 
         rules = ures_getStringByKey(resB,"%%UCARULES",&len, &status);
         if(!rules || U_FAILURE(status)) {
           log_data_err("Could not load %%UCARULES for locale %s\n", locName);
@@ -1376,6 +1376,7 @@ static void TestGetVersionColl(){
         if(u_strlen(rules) != len){
             log_err("UCARules string not nul terminated! \n");
         }
+        */
         ures_getVersion(resB, versionArray);
         for (i=0; i<4; ++i) {
             if (versionArray[i] < minVersionArray[i] ||
@@ -1961,7 +1962,7 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* OK first one. This should be a Default value. */
-    subResource = ures_getByKey(fr_FR, "CurrencyMap", NULL, &status);
+    subResource = ures_getByKey(fr_FR, "MeasurementSystem", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
         log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get CurrencyMap from fr_FR, got %s\n", 

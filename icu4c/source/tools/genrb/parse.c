@@ -591,6 +591,8 @@ addCollation(struct SResource  *result, uint32_t startline, UErrorCode *status)
     UBool              override = FALSE;
     uint32_t           line;
     /* '{' . (name resource)* '}' */
+    version[0]=0; version[1]=0; version[2]=0; version[3]=0;
+
     for (;;)
     {
         ustr_init(&comment);
