@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/07/30 02:38:11 $ 
-* $Revision: 1.10 $
+* $Date: 2002/08/01 19:50:26 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -49,7 +49,7 @@ final class UCharacterNameReader
                                                         throws IOException
     {
         ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+                             DATA_FORMAT_VERSION_);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
   
@@ -158,10 +158,7 @@ final class UCharacterNameReader
     private static final byte DATA_FORMAT_VERSION_[] = 
                                     {(byte)0x1, (byte)0x0, (byte)0x0, (byte)0x0};
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x75, (byte)0x6E, 
-                                                    (byte)0x61, (byte)0x6D};
-    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x2, 
-                                                    (byte)0x0, (byte)0x0};
-                                                     
+                                                    (byte)0x61, (byte)0x6D};                                                 
     /**
     * Corrupted error string
     */

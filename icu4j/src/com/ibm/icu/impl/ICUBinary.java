@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2002/03/10 19:40:15 $
- * $Revision: 1.5 $
+ * $Date: 2002/08/01 19:50:26 $
+ * $Revision: 1.6 $
  *  *****************************************************************************************
  */
 package com.ibm.icu.impl;
@@ -73,10 +73,9 @@ public final class ICUBinary
     *            when header authentication fails.
     * @draft 2.1
     */
-    public static final void readHeader(InputStream inputStream,
+    public static final byte[] readHeader(InputStream inputStream,
                                         byte dataFormatIDExpected[],
-                                        byte dataVersionExpected[],
-                                        byte unicodeVersionExpected[]) 
+                                        byte dataVersionExpected[]) 
                                                           throws IOException
     {
         DataInputStream input = new DataInputStream(inputStream);
@@ -116,12 +115,12 @@ public final class ICUBinary
         input.skipBytes(headersize);
 
         if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_ || 
-            charsize != CHAR_SIZE_ || 
+            charsize != CHAR_SIZE_ ||
             !Arrays.equals(dataFormatIDExpected, dataFormatID) ||
-            !Arrays.equals(dataVersionExpected, dataVersion) ||
-            !Arrays.equals(unicodeVersionExpected, unicodeVersion)) {
+            !Arrays.equals(dataVersionExpected, dataVersion)) {
             throw new IOException(HEADER_AUTHENTICATION_FAILED_);
         }
+        return unicodeVersion;
     }
      
     // private variables -------------------------------------------------

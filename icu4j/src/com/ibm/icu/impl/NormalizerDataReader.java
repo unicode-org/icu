@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/07/30 02:32:56 $
- * $Revision: 1.6 $
+ * $Date: 2002/08/01 19:50:26 $
+ * $Revision: 1.7 $
  *******************************************************************************
  */
  
@@ -290,7 +290,7 @@ final class NormalizerDataReader {
         if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
         
         ICUBinary.readHeader(inputStream, DATA_FORMAT_ID, 
-                             DATA_FORMAT_VERSION, UNICODE_VERSION);
+                             DATA_FORMAT_VERSION);
         
         if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
         
@@ -394,9 +394,5 @@ final class NormalizerDataReader {
                                                     (byte)0x72, (byte)0x6D};
     private static final byte DATA_FORMAT_VERSION[] = {(byte)0x2, (byte)0x1, 
                                                         (byte)0x5, (byte)0x2};
-	//TODO: Set the version info after the VersionInfo class is ported
-    private static final byte UNICODE_VERSION[] = {(byte)0x3, (byte)0x2, 
-                                                    (byte)0x0, (byte)0x0};  
-    private static final String UNICODE_VERSION_STRING = "3.2.0.0";	
 	
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/07/30 02:32:55 $ 
-* $Revision: 1.5 $
+* $Date: 2002/08/01 19:50:26 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -47,8 +47,8 @@ final class UCharacterPropertyReader
     protected UCharacterPropertyReader(InputStream inputStream) 
                                                         throws IOException
     {
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+        m_unicodeVersion_ = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
+                                                 DATA_FORMAT_VERSION_);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
     
@@ -120,8 +120,8 @@ final class UCharacterPropertyReader
         m_dataInputStream_.close();
         ucharppty.m_additionalColumnsCount_ = m_additionalColumnsCount_;
         ucharppty.m_unicodeVersion_ = VersionInfo.getInstance(
-                         (int)UNICODE_VERSION_[0], (int)UNICODE_VERSION_[1],
-                         (int)UNICODE_VERSION_[2], (int)UNICODE_VERSION_[3]);
+                         (int)m_unicodeVersion_[0], (int)m_unicodeVersion_[1],
+                         (int)m_unicodeVersion_[2], (int)m_unicodeVersion_[3]);
     }
     
     // private variables -------------------------------------------------
@@ -146,6 +146,7 @@ final class UCharacterPropertyReader
     private int m_additionalVectorsOffset_;
     private int m_additionalColumnsCount_;
     private int m_reservedOffset_;
+    private byte m_unicodeVersion_[];  
                                       
     /**
     * File format version that this class understands.
@@ -156,6 +157,4 @@ final class UCharacterPropertyReader
     private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x3, (byte)0x1, 
                                              (byte)Trie.INDEX_STAGE_1_SHIFT_, 
                                              (byte)Trie.INDEX_STAGE_2_SHIFT_};
-    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x2, 
-                                                    (byte)0x0, (byte)0x0};  
 }
