@@ -200,7 +200,7 @@ void writeConverterData(UConverterSharedData *mySharedData,
                         const char *cnvDir, 
                         UErrorCode *status)
 {
-  UNewDataMemory *mem = U_NULL;
+  UNewDataMemory *mem = NULL;
   uint32_t sz2;
   
   if(U_FAILURE(*status))
