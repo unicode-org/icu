@@ -281,6 +281,7 @@ public final class RuleBasedCollator extends Collator
     public void setHiraganaQuaternary(boolean flag)
     {
         m_isHiragana4_ = flag;
+        updateInternalState();        
     }
 
     /**
@@ -294,6 +295,7 @@ public final class RuleBasedCollator extends Collator
     public void setHiraganaQuaternaryDefault()
     {
         m_isHiragana4_ = m_defaultIsHiragana4_;
+        updateInternalState();
     }
 
     /**
@@ -421,6 +423,7 @@ public final class RuleBasedCollator extends Collator
     public void setDecompositionDefault()
     {
         setDecomposition(m_defaultDecomposition_);
+        updateInternalState();        
     }
 
     /**
@@ -451,6 +454,7 @@ public final class RuleBasedCollator extends Collator
     public void setStrengthDefault()
     {
         setStrength(m_defaultStrength_);
+        updateInternalState();        
     }
     
     /**
@@ -465,6 +469,7 @@ public final class RuleBasedCollator extends Collator
     public void setNumericCollationDefault()
     {
         setNumericCollation(m_defaultIsNumericCollation_);
+        updateInternalState();        
     }
 
     /**
@@ -660,6 +665,7 @@ public final class RuleBasedCollator extends Collator
     {
         // sort substrings of digits as numbers
         m_isNumericCollation_ = flag;
+        updateInternalState();
     }
 
     // public getters --------------------------------------------------------
@@ -3765,7 +3771,7 @@ public final class RuleBasedCollator extends Collator
         else {
             m_isSimple3_ = false;
         }
-        if(!m_isCaseLevel_ && getStrength() <= AttributeValue.TERTIARY_
+        if(!m_isCaseLevel_ && getStrength() <= AttributeValue.TERTIARY_ && !m_isNumericCollation_
           && !m_isAlternateHandlingShifted_ && !latinOneFailed_) {
           if(latinOneCEs_ == null || latinOneRegenTable_) {
             if(setUpLatinOne()) { // if we succeed in building latin1 table, we'll use it
@@ -3946,6 +3952,7 @@ public final class RuleBasedCollator extends Collator
         } else {
           switch (RuleBasedCollator.getTag(CE)) {
           case CollationElementIterator.CE_EXPANSION_TAG_:
+          case CollationElementIterator.CE_DIGIT_TAG_:
             //sCh.delete(0, sCh.length());
             //sCh.append(ch);
             //it.setText(sCh.toString());
