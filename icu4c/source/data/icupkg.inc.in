@@ -11,7 +11,7 @@ PLATFORM=@platform@
 
 top_srcdir=@top_srcdir@
 srcdir=@srcdir@
-top_builddir=../..
+top_builddir=..
 
 SHELL=@SHELL@
 CFLAGS=@CFLAGS@ 
@@ -83,7 +83,6 @@ ld_rpath_suf=@ld_rpath_suf@
 include $(top_builddir)/icudefs.mk
 include @platform_make_fragment@
 
-top_builddir = ../..
 subdir = tools/tmp
 
 ##### Add the following to source/config/Makefile.in
