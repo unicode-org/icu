@@ -41,7 +41,7 @@
 /* synwee : public can't remove */
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
 // int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
-int32_t const CollationElementIterator::NO_MORE_CES = 0x00010101;
+// int32_t const CollationElementIterator::NO_MORE_CES = 0x00010101;
 
 /* CollationElementIterator public constructor/destructor ------------------ */
 
@@ -68,8 +68,7 @@ UTextOffset CollationElementIterator::getOffset() const
 /**
 * Get the ordering priority of the next character in the string.
 * @return the next character's ordering. Returns NULLORDER if an error has 
-*         occured otherwise if the end of string has been reached, 
-*         NO_MORE_CES is returned.
+*         occured or if the end of string has been reached
 */
 int32_t CollationElementIterator::next(UErrorCode& status)
 {
@@ -190,8 +189,7 @@ UBool CollationElementIterator::operator==(
 * Get the ordering priority of the previous collation element in the string.
 * @param status the error code status.
 * @return the previous element's ordering. Returns NULLORDER if an error has 
-*         occured otherwise if the start of string has been reached, 
-*         NO_MORE_CES is returned.
+*         occured or if the start of string has been reached.
 */
 int32_t CollationElementIterator::previous(UErrorCode& status)
 {
