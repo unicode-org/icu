@@ -1,5 +1,6 @@
+# Copyright © 1999-2000, International Business Machines Corporation and others. All Rights Reserved
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.8 $ $Date: 2000/02/26 21:55:44 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.9 $ $Date: 2000/03/07 22:09:02 $
 # 
 
 TOPDIR=		..

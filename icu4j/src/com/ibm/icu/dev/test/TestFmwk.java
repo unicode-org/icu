@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TestFmwk.java,v $ $Revision: 1.5 $ $Date: 2000/02/25 23:57:10 $
+ * $RCSfile: TestFmwk.java,v $ $Revision: 1.6 $ $Date: 2000/03/07 22:09:03 $
  *
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
@@ -82,10 +82,6 @@ public class TestFmwk {
         }
     }
     
-    public void setParent(TestFmwk parent) {
-    	params = parent.params;
-    }
-
     public void run(String[] args) throws Exception {
     	if (params == null) params = new TestParams();
         // Parse the test arguments.  They can be either the flag
@@ -155,6 +151,15 @@ public class TestFmwk {
         if (params.nothrow) {
             System.exit(params.errorCount);
         }
+    }
+
+	protected void run(TestFmwk childTest) throws Exception {
+		test.setParent(this);
+		test.run(new String[0]);
+	}
+
+    private void setParent(TestFmwk parent) {
+    	params = parent.params;
     }
 
     /**
