@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/10/17 17:43:03 $
- * $Revision: 1.48 $
+ * $Date: 2001/10/24 13:35:21 $
+ * $Revision: 1.49 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import java.text.ParsePosition;
 import java.io.UnsupportedEncodingException;
 import com.ibm.text.resources.ResourceReader;
 import com.ibm.util.CaseInsensitiveString;
+import com.ibm.util.Utility;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -241,7 +242,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.48 $ $Date: 2001/10/17 17:43:03 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.49 $ $Date: 2001/10/24 13:35:21 $
  */
 public abstract class Transliterator {
     /**
@@ -525,7 +526,7 @@ public abstract class Transliterator {
             UTF16.isLeadSurrogate(text.charAt(index.limit - 1))) {
             // Oops, there is a dangling lead surrogate in the buffer.
             // This will break most transliterators, since they will
-            // assume it is part of a pari.  Don't transliterate until
+            // assume it is part of a pair.  Don't transliterate until
             // more text comes in.
             return;
         }
@@ -711,7 +712,7 @@ public abstract class Transliterator {
 
         // Start is valid where it is.  Limit needs to be put back where
         // it was, modulo adjustments for deletions/insertions.
-        index.limit = globalLimit;    
+        index.limit = globalLimit;
     }
 
     /**
@@ -938,8 +939,11 @@ public abstract class Transliterator {
             }
         } else {
             if (parser.data == null) {
-                // idBlock, no data -- this is an alias
-                t = getInstance(parser.idBlock, dir);
+                // idBlock, no data -- this is an alias.  The ID has
+                // been munged from reverse into forward mode, if
+                // necessary, so instantiate the ID in the forward
+                // direction.
+                t = getInstance(parser.idBlock);
                 if (t != null) {
                     t.setID(ID);
                 }
@@ -953,7 +957,7 @@ public abstract class Transliterator {
                     t.setFilter(parser.compoundFilter);
                 }
             }
-        } 
+        }
 
         return t;
     }
@@ -1000,7 +1004,7 @@ public abstract class Transliterator {
         splitTransIndex[0] = -1;
         int pos = 0;
         int i;
-        
+
         // A compound filter is a filter on an entire compound
         // transliterator.  It is indicated by the syntax [abc]; A-B;
         // B-C or in the reverse direction A-B; B-C; ([abc]).  We
@@ -1154,14 +1158,6 @@ public abstract class Transliterator {
             limit = skipSpaces(ID, ++limit);
         }
 
-        if (!create) {
-            // TODO Improve performance by scanning the UnicodeSet pattern
-            // without actually constructing it, if create is false.  That
-            // is, create a method like this one for UnicodeSet.
-            pos[0] = limit;
-            return null;
-        }
-
         // 'id' is the ID with the filter pattern removed and with
         // whitespace deleted.  In a Foo(Bar) ID, id is Foo for FORWARD
         // and Bar for REVERSE.
@@ -1235,15 +1231,10 @@ public abstract class Transliterator {
                 filter = null;
             }
 
-            else {
+            else if (create) {
                 StringBuffer s = new StringBuffer();
 
-                // TODO: Revisit registry synchronization issues
-                //synchronized (registry) {
-                    t = registry.get(id.toString(), s);
-                    // Need to enclose this in a block to prevent deadlock when
-                    // instantiating aliases (below).
-                //}
+                t = registry.get(id.toString(), s);
 
                 if (s.length() != 0) {
                     // assert(t==0);
@@ -1257,8 +1248,15 @@ public abstract class Transliterator {
                     return null;
                 }
 
-                // Set the filter, if any
-                t.setFilter(filter);
+                // Set the filter, if any.  The transliterator may
+                // already have a filter on it so we need to AND any
+                // id-based filter together with it.  E.g.,
+                // getInstance("[abc] Latin-Foo"), where Latin-Foo is
+                // an RBT of "::[:Latin:]; a>A;".
+                // getInstance("Latin-Foo") is going to return an RBT
+                // with an a [:Latin:] filter, and we need to AND this
+                // with [abc].
+                t.setFilter(UnicodeFilterLogic.and(filter, t.getFilter()));
             }
         }
 
@@ -1268,6 +1266,15 @@ public abstract class Transliterator {
         if (dir == FORWARD) {
             id.setLength(0);
             id.append(ID.substring(pos[0], preDelimLimit));
+        } else if (isCompoundFilter) {
+            // Change [:Foo:] to ([:Foo:]) and vice versa
+            id.setLength(0);
+            if (revStart < 0) {
+                id.append('(').append(ID.substring(setStart, setLimit)).
+                    append(')');
+            } else {
+                id.append(ID.substring(revStart+1, revLimit));
+            }
         } else if (revStart < 0) {
             id.insert(sep, ID.substring(setStart, setLimit));
         } else {
@@ -1276,12 +1283,10 @@ public abstract class Transliterator {
             str = str.trim();
             id.setLength(0);
             id.append(ID.substring(revStart+1, revLimit));
-            // TODO make this more efficient
-            id = new StringBuffer(id.toString().trim());
+            Utility.trim(id);
             id.append('(').append(str).append(')');
         }
-        // TODO make this more efficient
-        id = new StringBuffer(id.toString().trim());
+        Utility.trim(id);
 
         if (t != null) {
             t.setID(id.toString());
