@@ -24,7 +24,7 @@
 #include "itformat.h"
 #include "itconv.h"
 #include "transtst.h"
-
+#include "itrbbi.h"
 
 void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {
@@ -76,7 +76,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
                     callTest( test, par );
                 }
                 break;
-
+        case 6: name = "rbbi"; 
+                if (exec) {
+                    logln("TestSuite RuleBasedBreakIterator----"); logln();
+                    IntlTestRBBI test;
+                    callTest( test, par );
+                }
+                break;
 
         default: name = ""; break;
     }
