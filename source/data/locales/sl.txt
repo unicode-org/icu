@@ -31,22 +31,22 @@ sl {
             "{1} {0}",
     }
     DayAbbreviations { 
-            "Ned",
-            "Pon",
-            "Tor",
-            "Sre",
-            "\u010Cet",
-            "Pet",
-            "Sob",
+            "ned",
+            "pon",
+            "tor",
+            "sre",
+            "\u010det",
+            "pet",
+            "sob",
     }
     DayNames { 
-            "Nedelja",
-            "Ponedeljek",
-            "Torek",
-            "Sreda",
-            "\u010Cetrtek",
-            "Petek",
-            "Sobota",
+            "nedelja",
+            "ponedeljek",
+            "torek",
+            "sreda",
+            "\u010detrtek",
+            "petek",
+            "sobota",
     }
     Eras { 
             "pr.n.\u0161.",

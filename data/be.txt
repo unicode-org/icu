@@ -51,7 +51,7 @@ be {
             "\u043D.\u0435.",
     }
     Languages { 
-        be { "\u0431\u0435\u043B\u0430\u0440\u0443\u0441\u043A\u0456" }
+        be { "\u0411\u0435\u043B\u0430\u0440\u0443\u0441\u043A\u0456" }
     }
     LocaleID { "23" }
     LocaleString { "be" }

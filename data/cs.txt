@@ -33,22 +33,22 @@ cs {
             "{1} {0}",
     }
     DayAbbreviations { 
-            "Ne",
-            "Po",
-            "\u00DAt",
-            "St",
-            "\u010Ct",
-            "P\u00E1",
-            "So",
+            "ne",
+            "po",
+            "\u00FAt",
+            "st",
+            "\u010dt",
+            "p\u00E1",
+            "so",
     }
     DayNames { 
-            "Ned\u011Ble",
-            "Pond\u011Bl\u00ED",
-            "\u00DAter\u00FD",
-            "St\u0159eda",
-            "\u010Ctvrtek",
-            "P\u00E1tek",
-            "Sobota",
+            "ned\u011Ble",
+            "pond\u011Bl\u00ED",
+            "\u00FAter\u00FD",
+            "st\u0159eda",
+            "\u010dtvrtek",
+            "p\u00E1tek",
+            "sobota",
     }
     Eras { 
             "p\u0159.Kr.",
