@@ -378,7 +378,7 @@ public:
      *                          &lt;= X &lt; limit[i+1].
      * @param formatsToAdopt    The format strings you want to use for each limit.
      * @param count             The size of the above arrays.
-     * @deprecated Remove after 2003-mar-25. Use setChoices instead.
+     * @obsolete ICU 2.6. Use setChoices instead since this API will be removed in that release.
      */
     virtual void adoptChoices(double* limitsToAdopt,
                               UnicodeString* formatsToAdopt,
@@ -392,7 +392,7 @@ public:
      * @param closuresToAdopt Array of limit booleans to adopt
      * @param formatsToAdopt Array of format string to adopt
      * @param count The size of the above arrays
-     * @deprecated Remove after 2003-mar-25. Use setChoices instead.
+     * @obsolete ICU 2.6. Use setChoices instead since this API will be removed in that release.
      */
     virtual void adoptChoices(double* limitsToAdopt,
                               UBool* closuresToAdopt,
@@ -641,7 +641,7 @@ public:
      * If NaN, returns same value.
      * <P>
      * Does not affect floating-point flags,
-     * @deprecated This will be removed after 2002-Jun-30. Use closures API instead.
+     * @obsolete ICU 2.4. Use closures instead since this API will be removed in that release.
      */
     static double nextDouble(double d, UBool positive);
 
@@ -650,7 +650,7 @@ public:
      * If NaN, returns same value.
      * Used to make half-open intervals.
      * @see ChoiceFormat::previousDouble
-     * @deprecated This will be removed after 2002-Jun-30. Use closures API instead.
+     * @obsolete ICU 2.4. Use closures instead since this API will be removed in that release.
      */
     static double nextDouble(double d );
 
@@ -658,7 +658,7 @@ public:
      * Finds the greatest double less than d.
      * If NaN, returns same value.
      * @see ChoiceFormat::nextDouble
-     * @deprecated This will be removed after 2002-Jun-30. Use closures API instead.
+     * @obsolete ICU 2.4. Use closures instead since this API will be removed in that release.
      */
     static double previousDouble(double d );
 #endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
