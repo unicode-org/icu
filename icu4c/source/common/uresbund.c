@@ -652,7 +652,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
         case RES_INT:
         case RES_BINARY:
         case RES_STRING:
-            return copyResb(NULL, resB);
+            return copyResb(fillIn, resB);
             break;
         case RES_TABLE:
             r = res_getTableItemByIndex(&(resB->fResData), resB->fRes, resB->fIndex, &key);

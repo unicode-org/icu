@@ -140,6 +140,9 @@ DecimalFormatSymbols::initialize(const Locale& locale, UErrorCode& status,
     }
 
     initialize(numberElements, currencyElements);
+
+    delete[] numberElements;
+    delete[] currencyElements;
 }
 
 // Initializes the DecimalFormatSymbol instance with the data obtained

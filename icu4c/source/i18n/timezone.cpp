@@ -64,6 +64,7 @@ const uint32_t*     TimeZone::INDEX_BY_ID = 0;
 const OffsetIndex*  TimeZone::INDEX_BY_OFFSET = 0;
 UnicodeString*      TimeZone::ZONE_IDS = 0;
 UBool              TimeZone::DATA_LOADED = FALSE;
+UDataMemory*        TimeZone::UDATA_POINTER = 0;
 UMTX                TimeZone::LOCK;
 
 /**
@@ -84,8 +85,9 @@ void TimeZone::loadZoneData() {
         Mutex lock(&LOCK);
         if (!DATA_LOADED) {
             UErrorCode status = U_ZERO_ERROR;
-            UDataMemory *data = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME,
-                                                 isDataAcceptable, 0, &status);
+            UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
+                                                 isDataAcceptable, 0, &status); // see the comment on udata_close line
+            UDataMemory *data = UDATA_POINTER;
             if (U_SUCCESS(status)) {
                 DATA = (TZHeader*)udata_getMemory(data);
                 // Result guaranteed to be nonzero if data is nonzero
@@ -119,6 +121,10 @@ void TimeZone::loadZoneData() {
                         name += uprv_strlen(name) + 1;
                     }
                 }
+                //udata_close(data);    // Without udata_close purify will report a leak. However, DATA_LOADED is 
+                                        // static, and udata_openChoice will be called only once, and data from
+                                        // udata_openChoice needs to stick around.
+                                        
             }
 
             // Whether we succeed or fail, stop future attempts
@@ -573,7 +579,10 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         Formattable n(kParseFailed);
 
         numberFormat->parse(id, n, pos);
-        if (pos.getIndex() == start) return 0;
+        if (pos.getIndex() == start) {
+            delete numberFormat;
+            return 0;
+        }
         offset = n.getLong();
 
         if (pos.getIndex() < id.length() &&
@@ -585,7 +594,10 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
             int32_t oldPos = pos.getIndex();
             n.setLong(kParseFailed);
             numberFormat->parse(id, n, pos);
-            if (pos.getIndex() == oldPos) return 0;
+            if (pos.getIndex() == oldPos) {
+                delete numberFormat;
+                return 0;
+            }
             offset += n.getLong();
         }
         else 
@@ -605,8 +617,8 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
         if(negative)
             offset = -offset;
 
-        return new SimpleTimeZone(offset * 60000, CUSTOM_ID);
         delete numberFormat;
+        return new SimpleTimeZone(offset * 60000, CUSTOM_ID);
     }
     return 0;
 }
