@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/25 17:18:28 $ 
-* $Revision: 1.15 $
+* $Date: 2000/04/27 23:34:06 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -23,8 +23,8 @@
     <property name="build.dir" value="classes"/>
     <property name="obsolete.dir" value="build"/>
     <property name="jar.file" value="icu4j.jar"/>
+    <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
     <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
-    <property name="zipsrc.file" value="../icu4jsrc${DSTAMP}.zip"/>
     <property name="classpath" value="${build.dir}"/>
     <property name="build.compiler" value="classic"/>
     <property name="richedit.dist.dir" value="richeditDist"/>
@@ -131,22 +131,24 @@
          includes="${richedit.cont.dir}/**/*"/>
   </target>
   
-  <target name="zip" depends="docs,jar">
+  <target name="zipbin" depends="docs,jar">
     <!--Create a zip archive of the source, docs, and jar file for
     distribution.  The zip file will be created in the directory above
     the root ICU4J directory.-->
-    <zip zipfile="${zip.file}"
+    <zip zipfile="${zipbin.file}"
          basedir="."
          excludes="${richedit.dist.dir},${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
   </target>
 
-  <target name="zipsrc">
+  <target name="zip">
     <!--Create a zip archive of just the source for distribution.  The
     zip file will be created in the directory above the root ICU4J
-    directory.-->
-    <zip zipfile="${zipsrc.file}"
+    directory. The exclude pattern ${src.dir}/data/unicode/*-*.txt
+    eliminates old archive copies like SpecialCasing-2.txt and
+    UnicodeData-2.1.8.txt -->
+    <zip zipfile="${zip.file}"
          basedir="."
-         excludes="${richedit.dist.dir},${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,${doc.dir}/**,${jar.file},**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/*-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,${doc.dir}/**,${jar.file},**/CVS/**/*"/>
   </target>
 
   <target name="clean">
