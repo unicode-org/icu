@@ -454,10 +454,6 @@ u_fgets(UFILE        *f,
         /* refill the buffer */
         ufile_fill_uchar_buffer(f);
 
-        /* skip over any remaining delimiters */
-        while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
-            (f->fUCPos)++;
-
         /* return s */
         return s;
     }
@@ -496,10 +492,6 @@ u_fgets(UFILE        *f,
 
             /* refill the buffer */
             ufile_fill_uchar_buffer(f);
-
-            /* skip over any remaining delimiters */
-            while(IS_STRING_DELIMITER(*(f->fUCPos)) && f->fUCPos < f->fUCLimit)
-                (f->fUCPos)++;
 
             /* break out */
             break;
