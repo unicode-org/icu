@@ -24,6 +24,7 @@
 #include "uparse.h"
 #include "unicode/uscript.h"
 #include "usc_impl.h"
+#include "uprops.h"
 
 #include <string.h>
 #include <math.h>
@@ -1851,6 +1852,18 @@ enumExtCharNamesFn(void *context,
     return enumCharNamesFn(&ecncp->length, code, nameChoice, name, length);
 }
 
+/**
+ * This can be made more efficient by moving it into putil.c and having
+ * it directly access the ebcdic translation tables.
+ * TODO: If we get this method in putil.c, then delete it from here.
+ */
+static UChar
+u_charToUChar(char c) {
+    UChar uc;
+    u_charsToUChars(&c, &uc, 1);
+    return uc;
+}
+
 static void
 TestCharNames() {
     static char name[80];
@@ -1927,6 +1940,96 @@ TestCharNames() {
     if(0x61!=u_charFromName(U_UNICODE_CHAR_NAME, "LATin smALl letTER A", &errorCode)) {
         log_err("u_charFromName(U_UNICODE_CHAR_NAME, \"LATin smALl letTER A\") did not find U+0061 (%s)\n", u_errorName(errorCode));
     }
+
+    /* Test getCharNameCharacters */
+    {
+        enum { BUFSIZE = 256 };
+        UErrorCode ec = U_ZERO_ERROR;
+        char buf[BUFSIZE];
+        int32_t i;
+        UChar32 cp;
+        UChar pat[BUFSIZE], dumbPat[BUFSIZE];
+        int32_t l1, l2;
+        UBool map[256];
+
+        USet* set = uset_open(1, 0); /* empty set */
+        USet* dumb = uset_open(1, 0); /* empty set */
+        uprv_getCharNameCharacters(set);
+
+        /* build set the dumb (but sure-fire) way */
+        for (i=0; i<256; ++i) map[i] = FALSE;
+
+        for (cp=0; cp<0x110000; ++cp) {
+            int32_t choice;
+            for (choice=0; choice<3; ++choice) {
+                int32_t len = u_charName(cp, (UCharNameChoice) choice,
+                                         buf, BUFSIZE, &ec);
+                if (U_FAILURE(ec)) {
+                    log_err("FAIL: u_charName failed when it shouldn't\n");
+                    uset_close(set);
+                    uset_close(dumb);
+                    return;
+                }
+
+                for (i=0; i<len; ++i) {
+                    if (!map[(uint8_t) buf[i]]) {
+                        uset_add(dumb, (UChar32)u_charToUChar(buf[i]));
+                        map[(uint8_t) buf[i]] = TRUE;
+                    }
+                }
+            }
+        }
+
+        /* add all lowers, uppers, and #s to the dumb set */
+        for (i=u_charToUChar('A'); i<=u_charToUChar('Z'); ++i) {
+            uset_add(dumb, (UChar32)i);
+        }
+        for (i=u_charToUChar('a'); i<=u_charToUChar('z'); ++i) {
+            uset_add(dumb, (UChar32)i);
+        }
+        for (i=u_charToUChar('0'); i<=u_charToUChar('9'); ++i) {
+            uset_add(dumb, (UChar32)i);
+        }
+
+        /* compare the sets.  Where is my uset_equals?!! */
+        l1 = uset_toPattern(set, pat, BUFSIZE, TRUE, &ec);
+        l2 = uset_toPattern(dumb, dumbPat, BUFSIZE, TRUE, &ec);
+        if (U_FAILURE(ec)) {
+            log_err("FAIL: uset_toPattern failed when it shouldn't\n");
+            uset_close(set);
+            uset_close(dumb);
+            return;
+        }
+
+        if (l1 >= BUFSIZE) {
+            l1 = BUFSIZE-1;
+            pat[l1] = 0;
+        }
+        if (l2 >= BUFSIZE) {
+            l2 = BUFSIZE-1;
+            dumbPat[l2] = 0;
+        }
+
+        if (l1 != l2 ||
+            0 != u_strcmp(pat, dumbPat)) {
+            char c1[256], c2[256];
+            u_UCharsToChars(pat, c1, l1);
+            u_UCharsToChars(dumbPat, c2, l2);
+            c1[l1] = c2[l2] = 0;
+            log_err("FAIL: uprv_getCharNameCharacters() returned %s, expected %s\n",
+                    c1, c2);
+        } else {
+            char c1[256];
+            u_UCharsToChars(pat, c1, l1);
+            c1[l1] = 0;
+            log_verbose("Ok: uprv_getCharNameCharacters() returned %s\n",
+                        c1);
+        }
+
+        uset_close(set);
+        uset_close(dumb);
+    }
+
 
     /* ### TODO: test error cases and other interesting things */
 }
