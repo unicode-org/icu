@@ -81,7 +81,7 @@ void ConvertTest::TestConvert()
     void              *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
     UChar             myUnitarget[MAX_FILE_LEN];
     UChar             *myUnitarget_1 = myUnitarget;
-    UnicodeConverterCPP* someConverters[5];
+    UnicodeConverter* someConverters[5];
     /******************************************************************
                                 Checking Unicode -> ksc
      ******************************************************************/
@@ -177,11 +177,11 @@ void ConvertTest::TestConvert()
     UConverterToUCallback toUAction = NULL;
     void* toUContext = NULL;
 
-    /*Calling all the UnicodeConverterCPP API and checking functionality*/
+    /*Calling all the UnicodeConverter API and checking functionality*/
   
-        /*Tests UnicodeConverterCPP::getAvailableNames*/
-    logln("\n---Testing UnicodeConverterCPP::getAvailableNames...");
-    available_conv = UnicodeConverterCPP::getAvailableNames(testLong1, err);
+        /*Tests UnicodeConverter::getAvailableNames*/
+    logln("\n---Testing UnicodeConverter::getAvailableNames...");
+    available_conv = UnicodeConverter::getAvailableNames(testLong1, err);
 
     if (U_FAILURE(err)) 
     {
@@ -193,36 +193,39 @@ void ConvertTest::TestConvert()
 
     ucnv_flushCache();
 
-    someConverters[0] = new UnicodeConverterCPP("ibm-949",err);
+    /* Do some tests w/ UnicodeConverter, some w/ UnicodeConverterCPP */
+
+    someConverters[0] = new UnicodeConverter("ibm-949",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[1] = new UnicodeConverterCPP("ibm-949",err);
+    someConverters[1] = new UnicodeConverter("ibm-949",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
-    someConverters[2] = new UnicodeConverterCPP("ibm-949",err);
+    someConverters[2] = new UnicodeConverter("ibm-949",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
+
     someConverters[3] = new UnicodeConverterCPP("ibm-834", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
     someConverters[4] = new UnicodeConverterCPP("ibm-943", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
    
-    logln("\n---Testing UnicodeConverterCPP::flushCache...");
-    if (UnicodeConverterCPP::flushCache()==0) logln("Flush cache ok");
+    logln("\n---Testing UnicodeConverter::flushCache...");
+    if (UnicodeConverter::flushCache()==0) logln("Flush cache ok");
     else errln("Flush Cache failed");
     
     delete someConverters[0];
     delete someConverters[1];
     delete someConverters[2];
     delete someConverters[3];
-    if (j=UnicodeConverterCPP::flushCache()==2) logln("Flush cache ok");
+    if (j=UnicodeConverter::flushCache()==2) logln("Flush cache ok");
     else errln("Flush Cache failed");
     
     delete someConverters[4];
-    if (UnicodeConverterCPP::flushCache()==1) logln("Flush cache ok");
+    if (UnicodeConverter::flushCache()==1) logln("Flush cache ok");
     else errln("Flush Cache failed");
 
-    logln("\n---Testing UnicodeConverterCPP::UnicodeConverterCPP()...");
-    someConverters[0] = new UnicodeConverterCPP;
-    someConverters[1] = new UnicodeConverterCPP;
-    someConverters[2] = new UnicodeConverterCPP("utf8", err);
+    logln("\n---Testing UnicodeConverter::UnicodeConverter()...");
+    someConverters[0] = new UnicodeConverter;
+    someConverters[1] = new UnicodeConverter;
+    someConverters[2] = new UnicodeConverter("utf8", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + err);
 
     logln("\n---Testing getName...");
@@ -241,7 +244,7 @@ void ConvertTest::TestConvert()
         logln(UnicodeString("Result of Converters[0]->getName() was ") + UnicodeString(someConverters[0]->getName(err)));
     }
 
-    logln("\n---Testing UnicodeConverterCPP::operator==...");
+    logln("\n---Testing UnicodeConverter::operator==...");
     if (((*someConverters[1] == *someConverters[0])==TRUE)&&
     (*someConverters[1] == *someConverters[2])==FALSE)
       logln("Equality test ok");
@@ -254,14 +257,14 @@ void ConvertTest::TestConvert()
       }
     }
     
-    logln("\n---Testing UnicodeConverterCPP::operator!=...");
+    logln("\n---Testing UnicodeConverter::operator!=...");
     if (((*someConverters[1] != *someConverters[0])==FALSE)&&
     (*someConverters[1] != *someConverters[2])==TRUE)
       logln("Not Equal test ok");
     else errln("Not Equal test failed");
     
-    logln("\n---Testing UnicodeConverterCPP::operator=...");
-    someConverters[3] = new UnicodeConverterCPP;
+    logln("\n---Testing UnicodeConverter::operator=...");
+    someConverters[3] = new UnicodeConverter;
     *someConverters[3] = *someConverters[2];
     if ((*someConverters[2] == *someConverters[3]))
       logln("Equality test ok");
@@ -287,7 +290,7 @@ void ConvertTest::TestConvert()
 
         /*Creates a converter*/
 
-    UnicodeConverterCPP* myConverter = new UnicodeConverterCPP(CodePageNumberToTest[codepage_index],UCNV_IBM, err);
+    UnicodeConverter* myConverter = new UnicodeConverter(CodePageNumberToTest[codepage_index],UCNV_IBM, err);
     
         if (!myConverter)   
         {
@@ -297,17 +300,17 @@ void ConvertTest::TestConvert()
 
     
         /*Tests getMaxBytesPerChar and getMinBytesPerChar*/
-    logln("\n---Testing UnicodeConverterCPP::getMaxBytesPerChar...");
+    logln("\n---Testing UnicodeConverter::getMaxBytesPerChar...");
     if (myConverter->getMaxBytesPerChar()==CodePagesMaxChars[codepage_index])  logln("Max byte per character OK");
     else errln("Max byte per character failed");
     
-    logln("\n---Testing UnicodeConverterCPP::getMinBytesPerChar...");
+    logln("\n---Testing UnicodeConverter::getMinBytesPerChar...");
     if (myConverter->getMinBytesPerChar()==CodePagesMinChars[codepage_index])  logln("Min byte per character OK");
     else errln("Min byte per character failed");
       
 
         /*getSubstitutions char*/
-    logln("\n---Testing UnicodeConverterCPP::getSubstitutionChars...");
+    logln("\n---Testing UnicodeConverter::getSubstitutionChars...");
     ii=4;
     myConverter->getSubstitutionChars(myptr,ii,err);
    
@@ -317,7 +320,7 @@ void ConvertTest::TestConvert()
     
     
     
-    logln("\n---Testing UnicodeConverterCPP::setSubstitutionChars RoundTrip Test ...");
+    logln("\n---Testing UnicodeConverter::setSubstitutionChars RoundTrip Test ...");
     myConverter->setSubstitutionChars(myptr, ii, err);
     if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));
     myConverter->getSubstitutionChars(save, ii, err);
@@ -326,20 +329,20 @@ void ConvertTest::TestConvert()
     else logln("Saved substitution character ok");
     
     /*resetState*/
-    logln("\n---Testing UnicodeConverterCPP::resetState...");
+    logln("\n---Testing UnicodeConverter::resetState...");
     myConverter->resetState();
     
     
     /*getName*/
     UnicodeString* testUnistr          =   new UnicodeString();
-    logln("\n---Testing UnicodeConverterCPP::getName...");
+    logln("\n---Testing UnicodeConverter::getName...");
     if (strCaseIcmp(myConverter->getName(err),
             CodePagesToTest[codepage_index])) errln("getName failed");
     else logln("getName ok");
     
     /*getDisplayName*/
     testUnistr->remove();
-    logln("\n---Testing UnicodeConverterCPP::getDisplayName...");
+    logln("\n---Testing UnicodeConverter::getDisplayName...");
     myConverter->getDisplayName(CodePagesLocale[codepage_index],*testUnistr);
 
     /*printUChar(T_UnicodeString_getUChars(testUnistr));
@@ -347,14 +350,14 @@ void ConvertTest::TestConvert()
     
 
         /*getMissingUnicodeAction*/
-    /*    logln("\n---Testing UnicodeConverterCPP::getMissingUnicodeAction...");
+    /*    logln("\n---Testing UnicodeConverter::getMissingUnicodeAction...");
     if ((MIA1 = myConverter->getMissingUnicodeAction()) != CodePagesMissingUnicodeAction[codepage_index]) errln("Missing action failed");
     else logln("Missing action ok");*/
 
 
 
         /*getMissingCharAction*/
-    /*    logln("\n---Testing UnicodeConverterCPP::getMissingCharAction...");
+    /*    logln("\n---Testing UnicodeConverter::getMissingCharAction...");
     if ((MIA2 = myConverter->getMissingCharAction()) != CodePagesMissingCharAction[codepage_index]) errln("Missing action failed");
     else logln("Missing action ok");*/
 
@@ -362,7 +365,7 @@ void ConvertTest::TestConvert()
     myConverter->getMissingCharAction(&MIA2, &MIA2Context);
 
         /*setMissingUnicodeAction*/
-    logln("\n---Testing UnicodeConverterCPP::setMissingUnicodeAction...");
+    logln("\n---Testing UnicodeConverter::setMissingUnicodeAction...");
     myConverter->setMissingUnicodeAction(otherUnicodeAction(MIA1), &BOM, &fromUAction, &fromUContext, err);
     if (U_FAILURE(err) || fromUAction != MIA1 || fromUContext != MIA1Context)
     {
@@ -379,7 +382,7 @@ void ConvertTest::TestConvert()
     }
 
 
-    logln("\n---Testing UnicodeConverterCPP::setMissingUnicodeAction Roundtrip...");
+    logln("\n---Testing UnicodeConverter::setMissingUnicodeAction Roundtrip...");
     myConverter->setMissingUnicodeAction(MIA1, MIA1Context, &fromUAction, &fromUContext, err);
     if (U_FAILURE(err) || fromUAction != otherUnicodeAction(MIA1) || fromUContext != &BOM)
     {
@@ -396,7 +399,7 @@ void ConvertTest::TestConvert()
     }
 
         /*setMissingCharAction*/
-    logln("\n---Testing UnicodeConverterCPP::setMissingCharAction...");
+    logln("\n---Testing UnicodeConverter::setMissingCharAction...");
     myConverter->setMissingCharAction(otherCharAction(MIA2), &BOM, &toUAction, &toUContext, err);
     if (U_FAILURE(err) || toUAction != MIA2 || toUContext != MIA2Context)
     {
@@ -412,7 +415,7 @@ void ConvertTest::TestConvert()
         logln("Missing action ok");
     }
     
-    logln("\n---Testing UnicodeConverterCPP::setMissingCharAction Roundtrip...");
+    logln("\n---Testing UnicodeConverter::setMissingCharAction Roundtrip...");
     myConverter->setMissingCharAction(MIA2, MIA2Context, &toUAction, &toUContext, err);
     if (U_FAILURE(err) || toUAction != otherCharAction(MIA2) || toUContext != &BOM)
     {
@@ -430,7 +433,7 @@ void ConvertTest::TestConvert()
 
 
         /*getCodepage*/
-    logln("\n---Testing UnicodeConverterCPP::getCodepage...");
+    logln("\n---Testing UnicodeConverter::getCodepage...");
     cp =    myConverter->getCodepage(err);
     if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));    
     if (cp != CodePageNumberToTest[codepage_index]) errln("Codepage number test failed");
@@ -439,7 +442,7 @@ void ConvertTest::TestConvert()
 
     
         /*getCodepagePlatform*/
-    logln("\n---Testing UnicodeConverterCPP::getCodepagePlatform ...");
+    logln("\n---Testing UnicodeConverter::getCodepagePlatform ...");
     if (CodePagesPlatform[codepage_index]!=myConverter->getCodepagePlatform(err)) errln("Platform codepage test failed");
     else logln("Platform codepage test ok");
     if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));  
@@ -474,7 +477,7 @@ void ConvertTest::TestConvert()
         
         testLong1 = MAX_FILE_LEN;
 
-        logln("\n---Testing UnicodeConverterCPP::fromUnicodeString");
+        logln("\n---Testing UnicodeConverter::fromUnicodeString");
         myConverter->fromUnicodeString(output_cp_buffer, testLong1, *uniString, err);
         if (U_FAILURE(err))   logln("\nFAILURE...");
 
@@ -492,7 +495,7 @@ void ConvertTest::TestConvert()
         /*Calls the Conversion Routine*/
         /*Uni1 ----ToUnicodeString----> Cp1 ----FromUnicodeString---->Uni2*/
 
-        logln("\n---Testing UnicodeConverterCPP::toUnicodeString");
+        logln("\n---Testing UnicodeConverter::toUnicodeString");
         myConverter->toUnicodeString(*uniString2 , output_cp_buffer, testLong1,  err);
 
         if (U_FAILURE(err))   logln ("FAILURE! " + (UnicodeString)myErrorName(err));
@@ -555,7 +558,7 @@ void ConvertTest::TestConvert()
     char mySJIS[12] = {(char)0xFA, (char)0X51, (char)0XB8, (char)0XDB, (char)0XBD, (char)0XCB, (char)0XDB, (char)0XCC, (char)0XDE, (char)0XD0 , (char)0XFA, (char)0X50};
     
 
-    UnicodeConverterCPP SJIS(943, UCNV_IBM, err);
+    UnicodeConverter SJIS(943, UCNV_IBM, err);
     UnicodeString myString;
 
 
@@ -617,7 +620,7 @@ UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
 void ConvertTest::TestAmbiguous() 
 {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeConverterCPP *ascii_cnv = 0, *sjis_cnv = 0;
+    UnicodeConverter *ascii_cnv = 0, *sjis_cnv = 0;
     const char target[] = {
         /* "\\usr\\local\\share\\data\\icutest.txt" */
         0x5c, 0x75, 0x73, 0x72,
@@ -629,13 +632,13 @@ void ConvertTest::TestAmbiguous()
     };
     UnicodeString asciiResult, sjisResult;
     
-    sjis_cnv = new UnicodeConverterCPP("SJIS", status);
+    sjis_cnv = new UnicodeConverter("SJIS", status);
     if (U_FAILURE(status))
     {
         errln("Failed to create a SJIS converter\n");
         return;
     }
-    ascii_cnv = new UnicodeConverterCPP("LATIN-1", status);
+    ascii_cnv = new UnicodeConverter("LATIN-1", status);
     if (U_FAILURE(status))
     {
         errln("Failed to create a SJIS converter\n");
