@@ -42,7 +42,9 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 #ifdef WIN32
 static const UChar DELIMITERS [] = { DELIM_CR, DELIM_LF, 0x0000 };
 static const uint32_t DELIMITERS_LEN = 2;
-#elif (U_CHARSET_FAMILY == U_EBCDIC_FAMILY)
+#elif (U_CHARSET_FAMILY == U_EBCDIC_FAMILY) && !defined(OS390)
+/* This is the newline for EBCDIC machines except z/OS (os/390) OE */
+/* TODO: Default newline writing should be detected based upon the converter being used. */
 static const UChar DELIMITERS [] = { DELIM_NEL, 0x0000 };
 static const uint32_t DELIMITERS_LEN = 1;
 #else
