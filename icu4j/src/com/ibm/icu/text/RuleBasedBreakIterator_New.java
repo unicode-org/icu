@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004 International Business Machines Corporation and    *
+ * Copyright (C) 2004 International Business Machines Corporation and          *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,6 +49,15 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @internal
      */
     public static boolean       fTrace;
+    
+    /**
+     * Dump the contents of the state table and character classes for this break iterator.
+     * For debugging only.
+     * @internal
+     */
+    public void dump() {
+        this.fRData.dump();   
+    }
 
 
     //=======================================================================
@@ -621,20 +630,17 @@ public int getRuleStatusVec(int[] fillInArray) {
     
     
     private static int CINext32(CharacterIterator ci) {
-        int retVal = 0;
-        char cLead = ci.next();
-        retVal = (int)cLead;
-        if (UTF16.isLeadSurrogate(cLead)) {
-            char cTrail = ci.next();
-            if (UTF16.isTrailSurrogate(cTrail)) {
-                retVal = ((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10 +
-                         ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE);
-            } else {
-                ci.previous();
-            }           
+        //  TODO:  pre-increment is a pain.  Redo all to use post-increment.
+        int retVal;
+        int curChar = CICurrent32(ci);
+        ci.next();
+        if (curChar >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
+            ci.next();   
         }
+        retVal = CICurrent32(ci);
         return retVal;
-    }
+   }
+    
     
     private static int CIPrevious32(CharacterIterator ci) {
         int retVal = 0;
@@ -643,8 +649,9 @@ public int getRuleStatusVec(int[] fillInArray) {
         if (UTF16.isTrailSurrogate(cTrail)) {
             char cLead = ci.previous();
             if (UTF16.isLeadSurrogate(cLead)) {
-                retVal = ((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10 +
-                         ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE);
+                retVal = (((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
+                          ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
+                          UTF16.SUPPLEMENTARY_MIN_VALUE;
             } else {
                 ci.next();
             }           
@@ -653,14 +660,15 @@ public int getRuleStatusVec(int[] fillInArray) {
     }
     
     private static int CICurrent32(CharacterIterator ci) {
-        char cLead = ci.current();
-        int  retVal = (int)cLead;
-        if (UTF16.isLeadSurrogate(cLead)) {
-            char cTrail = ci.next();
+        char  lead   = ci.current();
+        int   retVal = lead;
+        if (UTF16.isLeadSurrogate(lead)) {
+            int  trail = (int)ci.next();
             ci.previous();
-            if (UTF16.isTrailSurrogate(cTrail)) {
-                retVal = ((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10 +
-                         ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE);
+            if (UTF16.isTrailSurrogate((char)trail)) {
+                retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
+                         (trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
+						 UTF16.SUPPLEMENTARY_MIN_VALUE;
             }
          }
         return retVal;
@@ -694,7 +702,7 @@ public int getRuleStatusVec(int[] fillInArray) {
     
     private int handleNext(short stateTable[]) {
         if (fTrace) {
-            System.out.println("Handle Next   pos   char  state category");
+            System.out.println("Handle Next   pos      char  state category");
         }
 
         // No matter what, handleNext alway correctly sets the break tag value.
@@ -764,13 +772,9 @@ public int getRuleStatusVec(int[] fillInArray) {
             category &= ~0x4000;
  
             if (fTrace) {
-                System.out.print("            " +  fText.getIndex() + "   ");
-                if (0x20<=c && c<0x7f) {
-                    System.out.print((char)c + "  ");
-                } else {
-                    System.out.print(Integer.toHexString(c) + "   ");
-                }
-                System.out.print(state + "   " + category);
+                System.out.print("            " +  RBBIDataWrapper.intToString(fText.getIndex(), 5)); 
+                System.out.print(RBBIDataWrapper.intToHexString(c, 10));
+                System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
             }
 
             // look up a state transition in the state table

@@ -313,10 +313,27 @@ public class RBBIDataWrapper {
     }
     
     /** Fixed width int-to-string conversion.   
-     *  TODO:  there must be easy built-in way to do this  */
-    private static String intToString(int n, int width) {
+     *  TODO:  there must be an easy built-in way to do this  
+     *  @internal
+     * 
+     */
+    static public String intToString(int n, int width) {
         StringBuffer  dest = new StringBuffer(width);   
         dest.append(n);
+        while (dest.length() < width) {
+           dest.insert(0, ' ');   
+        }
+        return dest.toString();
+    }
+    
+    /** Fixed width int-to-string conversion.   
+     *  TODO:  there must be an easy built-in way to do this  
+     *  @internal
+     * 
+     */
+    static public String intToHexString(int n, int width) {
+        StringBuffer  dest = new StringBuffer(width);   
+        dest.append(Integer.toHexString(n));
         while (dest.length() < width) {
            dest.insert(0, ' ');   
         }
