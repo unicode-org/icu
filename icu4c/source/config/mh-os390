@@ -144,7 +144,7 @@ LIBICULE=	$(top_builddir)/layout/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION).
 LIBICULX=	$(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
-LIBICUIO=	$(top_builddir)/extra/ustdio/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+LIBICUIO=	$(top_builddir)/io/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 
 ## Special 390 rules
 
