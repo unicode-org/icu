@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/08/28 16:45:18 $
- * $Revision: 1.116 $
+ * $Date: 2002/09/09 16:33:43 $
+ * $Revision: 1.117 $
  *
  *****************************************************************************************
  */
@@ -833,9 +833,15 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator.getInstance("Name-Any");
 
         expect(uni2name, "\u00A0abc\u4E01\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF",
-               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{CHARACTER TABULATION}{<control-0081>}{<noncharacter-FFFF>}");
-        expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{CHARACTER TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
-               "\u00A0abc\u4E01{x\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF\u0004{");
+               "\\N{NO-BREAK SPACE}abc\\N{CJK UNIFIED IDEOGRAPH-4E01}\\N{MICRO SIGN}\\N{GUJARATI SIGN CANDRABINDU}\\N{REPLACEMENT CHARACTER}\\N{END OF TRANSMISSION}\\N{CHARACTER TABULATION}\\N{<control-0081>}\\N{<noncharacter-FFFF>}");
+        expect(name2uni, "{\\N { NO-BREAK SPACE}abc\\N{  CJK UNIFIED  IDEOGRAPH-4E01  }\\N{x\\N{MICRO SIGN}\\N{GUJARATI SIGN CANDRABINDU}\\N{REPLACEMENT CHARACTER}\\N{END OF TRANSMISSION}\\N{CHARACTER TABULATION}\\N{<control-0081>}\\N{<noncharacter-FFFF>}\\N{<control-0004>}\\N{",
+               "{\u00A0abc\u4E01\\N{x\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF\u0004\\N{");
+
+        // round trip
+        Transliterator t = Transliterator.getInstance("Any-Name;Name-Any");
+        
+        String s = "{\u00A0abc\u4E01\\N{x\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF\u0004\\N{";
+        expect(t, s, s);
     }
 
     /**
@@ -1251,7 +1257,11 @@ public class TransliteratorTest extends TestFmwk {
 
         expect(Transliterator.getInstance("Any-Name"),
                CharsToUnicodeString("\\U00010330\\U000E0061\\u00A0"),
-               "{GOTHIC LETTER AHSA}{TAG LATIN SMALL LETTER A}{NO-BREAK SPACE}");
+               "\\N{GOTHIC LETTER AHSA}\\N{TAG LATIN SMALL LETTER A}\\N{NO-BREAK SPACE}");
+
+        expect(Transliterator.getInstance("Name-Any"),
+               "\\N{GOTHIC LETTER AHSA}\\N{TAG LATIN SMALL LETTER A}\\N{NO-BREAK SPACE}",
+               CharsToUnicodeString("\\U00010330\\U000E0061\\u00A0"));
 
         expect(Transliterator.getInstance("Any-Hex/Unicode"),
                CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
@@ -2502,7 +2512,7 @@ public class TransliteratorTest extends TestFmwk {
         }
         
         expect(t, "\u0301",
-               "U+0301 {COMBINING ACUTE ACCENT}");
+               "U+0301 \\N{COMBINING ACUTE ACCENT}");
     }
 
     public void TestInvalidBackRef() {
@@ -2575,7 +2585,7 @@ public class TransliteratorTest extends TestFmwk {
         //TestUserFunctionFactory.add("gif-Any", Transliterator.getInstance("Any-Null"));
 
         TestUserFunctionFactory.add("Any-RemoveCurly",
-            Transliterator.createFromRules("RemoveCurly", "[\\{\\}] > ;", Transliterator.FORWARD));
+            Transliterator.createFromRules("RemoveCurly", "[\\{\\}] > ; \\\\N > ;", Transliterator.FORWARD));
         //TestUserFunctionFactory.add("RemoveCurly-Any", Transliterator.getInstance("Any-Null"));
 
         logln("Trying &hex");
@@ -2595,7 +2605,7 @@ public class TransliteratorTest extends TestFmwk {
 
         // Test that filters are allowed after &
         t = Transliterator.createFromRules("test",
-                "(.) > &Hex($1) ' ' &[\\{\\}]Remove(&Name($1)) ' ';", Transliterator.FORWARD);
+                "(.) > &Hex($1) ' ' &Any-RemoveCurly(&Name($1)) ' ';", Transliterator.FORWARD);
         expect(t, "abc", "\\u0061 LATIN SMALL LETTER A \\u0062 LATIN SMALL LETTER B \\u0063 LATIN SMALL LETTER C ");
 
         // Unregister our test stuff
