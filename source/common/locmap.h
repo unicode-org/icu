@@ -6,7 +6,7 @@
 *
 *****************************************************************************************
 */
-// $Revision: 1.6 $
+// $Revision: 1.7 $
 //===============================================================================
 //
 // File locmap.hpp      : Locale Mapping Classes
@@ -21,81 +21,16 @@
 //  3/11/97     aliu        Added setId().
 //  4/20/99     Madhu       Added T_convertToPosix()
 //===============================================================================
-#ifndef LOCMAP_H
+
+/* include this first so that we are sure to get WIN32 defined */
+#include "unicode/utypes.h"
+
+#if defined(WIN32) && !defined(LOCMAP_H)
 #define LOCMAP_H
 
-#include "unicode/utypes.h"
 #ifdef XP_CPLUSPLUS
-class Locale;
-/////////////////////////////////////////////////
-//
-// Internal Classes for LCID <--> POSIX Mapping
-//
-/////////////////////////////////////////////////
 
-/* forward declaration */
 class ILcidPosixMap;
-
-class ILcidPosixElement
-{
-public:
-  ILcidPosixElement(uint32_t, const char*);
-
-  ILcidPosixElement();
-  ILcidPosixElement(const ILcidPosixElement&);
-  ILcidPosixElement& operator=(const ILcidPosixElement&);
-
-  ~ILcidPosixElement();
-
-private:
-  int32_t setId(const char* id);
-  enum { MAX_ID_LENGTH = 8 };
-
-  uint32_t fHostID;
-  char fPosixID[MAX_ID_LENGTH];
-
-  friend class ILcidPosixMap;
-};
-
-class ILcidPosixMap
-{
-public:
-
-  ILcidPosixMap();
-  void initialize (uint32_t hostID,
-                   const char* posixID,
-                   uint32_t totalNumberOfRegions = 1);
-
-  ~ILcidPosixMap();
-
-  void addRegion (uint32_t hostID,
-                  const char* posixID);
-
-  uint16_t hostLangID(void) const
-  { return fHostLangID; };
-
-  const char* posixLangID(void) const
-  { return fPosixLangID; };
-
-  uint32_t hostID(const char* fromPosixID) const;
-  const char* posixID(uint32_t fromHostID) const;
-
-  static const char* fgWildCard;
-
-
-private:
-  ILcidPosixMap(const ILcidPosixMap&);
-  ILcidPosixMap& operator=(const ILcidPosixMap&);
-
-  uint16_t fHostLangID;
-  char fPosixLangID[3];
-
-  ILcidPosixElement* fRegionMaps;
-  uint32_t fMapSize;
-  uint32_t fNumRegions;
-};
-
-//
 
 class IGlobalLocales {
     public:
@@ -118,10 +53,8 @@ private:
                 ~IGlobalLocales() { }
 };
 
-#else
- U_CAPI const char* U_EXPORT2 T_convertToPosix(uint32_t hostid);
-#endif
 #endif
 
+U_CFUNC const char *T_convertToPosix(uint32_t hostid);
 
-
+#endif
