@@ -800,12 +800,14 @@ public final class CollationElementIterator
 	 * <li>The leading combining class from the current character is 0 or the 
 	 *     trailing combining class of the previous char was zero.
 	 * </ul>
-	 * Incoming source offsets points to the next processing character.
+	 * Incoming source offsets points to the current processing character.
 	 * Return source offsets points to the current processing character.
 	 * </p>
+	 * @param ch current character
+	 * @param offset current character offset
 	 * @return true if FCDCheck passes, false otherwise
 	 */
-	private boolean FCDCheck() 
+	private boolean FCDCheck(char ch, int offset) 
 	{
     	boolean result = true;
 
@@ -813,8 +815,8 @@ public final class CollationElementIterator
     	
 		// Get the trailing combining class of the current character.  
 		// If it's zero, we are OK.
-    	char ch = m_source_.previous();
-    	m_FCDStart_ = m_source_.getIndex();
+    	m_FCDStart_ = offset;
+    	m_source_.setIndex(offset);
     	// trie access
     	char fcd = 0; // synwee todo: unorm_getFCD16(ch);
     	if (fcd != 0 && UTF16.isLeadSurrogate(ch)) {
@@ -860,6 +862,7 @@ public final class CollationElementIterator
             }
         }
         m_source_.setIndex(m_FCDStart_);
+        m_source_.next();
         m_FCDLimit_ = m_source_.getIndex();
     	return result;
 	}
@@ -873,7 +876,8 @@ public final class CollationElementIterator
 	private char nextChar()
 	{
 		char result;
-    	// loop handles the next character whether it is in the buffer or not.
+		int startoffset = m_source_.getIndex();
+		// loop handles the next character whether it is in the buffer or not.
 	    if (m_bufferOffset_ == -1) {
 	        // we're working on the source and not normalizing. fast path.
 	        // note Thai pre-vowel reordering uses buffer too
@@ -890,22 +894,24 @@ public final class CollationElementIterator
 	            m_buffer_.delete(0, m_buffer_.length());
 	            return nextChar();
 	        }
+	        return result;
 		}
 	
 	    if (m_collator_.m_decomposition_ == Collator.NO_DECOMPOSITION 
-	        || m_bufferOffset_ != -1 || m_FCDLimit_ > m_source_.getIndex()
+	        || m_bufferOffset_ != -1 || m_FCDLimit_ > startoffset
 	        // skip the fcd checks
 	  		|| result < FULL_ZERO_COMBINING_CLASS_FAST_LIMIT_  
 	   		// Fast fcd safe path. trail combining class == 0.
 	   		) {
-	   		m_source_.next();
+	   		
+	        m_source_.next();
 	   		return result;
 	    }
 		
-	    if (result < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
+		if (result < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
 	        // We need to peek at the next character in order to tell if we are 
 	        // FCD
-	        char next = m_source_.next(); 
+	        char next = m_source_.next();
 	        if (next == CharacterIterator.DONE 
 	            || next == LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
 	            return result; // end of source string and if next character 
@@ -914,18 +920,17 @@ public final class CollationElementIterator
 	    }
 	
 	    // Need a more complete FCD check and possible normalization.
-	    if (!FCDCheck()) {
+	    if (!FCDCheck(result, startoffset)) {
 	        normalize();
 	        result = m_buffer_.charAt(0);
 	        m_bufferOffset_ = 1;	  
 	    }	
-	    m_source_.next();
 	    return result;
 	}
 	
 	/**
 	* <p>Incremental normalization, this is an essential optimization.
-	*7 Assuming FCD checks has been done, normalize the non-FCD characters into 
+	* Assuming FCD checks has been done, normalize the non-FCD characters into 
 	* the buffer.
 	* Source offsets points to the current processing character.</p>
 	*/
@@ -959,14 +964,16 @@ public final class CollationElementIterator
 	 * Input source offsets points to the previous character.
 	 * Return source offsets points to the current processing character.
 	 * </p>
+	 * @param ch current character
+	 * @param offset current character offset
 	 * @return true if FCDCheck passes, false otherwise
-	*/
-	private boolean FCDCheckBackwards()
+	 */
+	private boolean FCDCheckBackwards(char ch, int offset)
 	{
 	    boolean result = true;    
-	    char ch = m_source_.next();
 	    char fcd = 0; 
-	    m_FCDLimit_ = m_source_.getIndex();
+	    m_FCDLimit_ = offset;
+	    m_source_.setIndex(offset);
 	    if (!UTF16.isSurrogate(ch)) {
 	        fcd = 0; // synwee todo unorm_getFCD16(fcdTrieIndex, c);
 	    } 
@@ -1053,10 +1060,10 @@ public final class CollationElementIterator
 	        }
 		}    
 		char result = m_source_.previous();
+		int startoffset = m_source_.getIndex();
 	    if (result < LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_ 
 	        || m_collator_.m_decomposition_ == Collator.NO_DECOMPOSITION 
-	        || m_FCDStart_ <= m_source_.getIndex()
-	        || m_source_.getIndex() == 0) {
+	        || m_FCDStart_ <= startoffset || m_source_.getIndex() == 0) {
 	        return result;
 	    }
 	    char ch = m_source_.previous();
@@ -1066,7 +1073,7 @@ public final class CollationElementIterator
 	        return result;
 	    }
 	    // Need a more complete FCD check and possible normalization.
-	    if (!FCDCheckBackwards()) {
+	    if (!FCDCheckBackwards(ch, startoffset)) {
 	        normalizeBackwards();
 	        m_bufferOffset_ --;
 	        result = m_buffer_.charAt(m_bufferOffset_);

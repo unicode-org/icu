@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/05/20 23:43:01 $ 
-* $Revision: 1.6 $
+* $Date: 2002/05/22 01:14:38 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -809,7 +809,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	      	}
 	    }
 	
-		if (compare[4]) {  // checkQuad
+		if (doShift4) {  // checkQuad
 	      	result = doQuaternaryCompare(cebuffer, lowestpvalue);
 	      	if (result != 0) {
 	      		return result;
@@ -1320,7 +1320,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	protected void updateInternalState() 
 	{
       	if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
-        	m_caseSwitch_ = CASE_SWITCH_;
+        	m_caseSwitch_ = (byte)CASE_SWITCH_;
       	} 
       	else {
         	m_caseSwitch_ = NO_CASE_SWITCH_;
@@ -1334,7 +1334,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
         	m_bottom3_ = COMMON_BOTTOM_3_;
       	} 
       	else {
-        	m_mask3_ = CE_KEEP_CASE_;
+        	m_mask3_ = (byte)CE_KEEP_CASE_;
         	m_addition3_ = FLAG_BIT_MASK_CASE_SWITCH_ON_;
         	if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
           		m_common3_ = COMMON_UPPER_FIRST_3_;
@@ -1518,18 +1518,18 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	/**
 	 * Case first constants
 	 */
-	private static final byte CASE_SWITCH_ = (byte)0xC0;
-	private static final byte NO_CASE_SWITCH_ = 0;
+	private static final int CASE_SWITCH_ = 0xC0;
+	private static final int NO_CASE_SWITCH_ = 0;
 	/**
 	 * Case level constants
 	 */
-	private static final byte CE_REMOVE_CASE_ = (byte)0x3F;
-	private static final byte CE_KEEP_CASE_ = (byte)0xFF;
+	private static final int CE_REMOVE_CASE_ = 0x3F;
+	private static final int CE_KEEP_CASE_ = 0xFF;
 	/**
 	 * Case strength mask
 	 */
-	private static final byte CE_CASE_BIT_MASK_ = (byte)0xC0;
-	private static final byte CE_CASE_MASK_3_ = (byte)0xFF;
+	private static final int CE_CASE_BIT_MASK_ = 0xC0;
+	private static final int CE_CASE_MASK_3_ = 0xFF;
 	/** 
 	 * Sortkey size factor. Values can be changed.
 	 */
@@ -2320,7 +2320,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 		if (bytes[1].length <= bytescount[1] + isize) {
         	bytes[1] = increase(bytes[1], bytescount[1], 1 + isize);
         }
-        BOSCU.writeIdenticalLevelRun(source, bytes[1], bytescount[1]); 
+        bytescount[1] = BOSCU.writeIdenticalLevelRun(source, bytes[1], 
+        											 bytescount[1]); 
 	}
 	
 	/**
@@ -2533,15 +2534,19 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	{
 		// if we reach here, the ce offset accessed is the last ce
 		// appended to the buffer
-		boolean isNullOrder = (cebuffer[0][cebuffersize[0] - 1] 
-			 					== CollationElementIterator.NULLORDER);
-			 					
+		boolean isSourceNullOrder = (cebuffer[0][cebuffersize[0] - 1] 
+			 							== CollationElementIterator.NULLORDER);
+		boolean isTargetNullOrder = (cebuffer[1][cebuffersize[1] - 1] 
+			 							== CollationElementIterator.NULLORDER);	 					
 		cebuffer[0] = null;
 	    cebuffer[1] = null;
 	    cebuffersize[0] = 0;
 	    cebuffersize[1] = 0;
-	    if (isNullOrder) {
+	    if (isSourceNullOrder) {
 	    	return -1;
+	    }
+	    if (isTargetNullOrder) {
+	    	return 1;
 	    }
 	    // getting rid of the sign
 	    sorder >>>= CE_PRIMARY_SHIFT_;
@@ -2685,6 +2690,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	          				CollationElementIterator.NULLORDER) {
 	          			return -1;
 	          		}
+	          		if (cebuffer[1][toffset - 1] == 
+	          				CollationElementIterator.NULLORDER) {
+	          			return 1;
+	          		}
 	               	return (sorder < torder) ? -1 : 1;
 	          	}
 	        }
@@ -2696,11 +2705,11 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        	int sorder = getSecondaryFrenchCE(cebuffer, offset, 
 	        										continuationoffset, 0);
 	        	int torder = getSecondaryFrenchCE(cebuffer, offset, 
-	        										continuationoffset,1);
+	        										continuationoffset, 1);
 	          	if (sorder == torder) {
-	            	if (cebuffer[0][offset[0] - 1] 
-	            						== CollationElementIterator.NULLORDER	            					 
-	            		|| (offset[0] < 0 && offset[1] < 0)) {
+	            	if ((offset[0] < 0 && offset[1] < 0) 
+	            		|| cebuffer[0][offset[0]] 
+	            					== CollationElementIterator.NULLORDER) {
 	              		break;
 	            	} 
 	          	} 
@@ -2729,17 +2738,19 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	    while (result == CollationElementIterator.IGNORABLE 
 	    		&& offset[index] >= 0) {
 	        if (continuationoffset[index] == 0) {
-	        	while (isContinuation(cebuffer[0][offset[index] --]));
-	            // after this, sorder is at the start of continuation, 
-	            // and offset points before that 
-	            if (isContinuation(cebuffer[0][offset[index] + 1])) {
-	            	// save offset for later
-	            	continuationoffset[index] = offset[index]; 
-	            	offset[index] += 2;  
-	           	}
+	        	result = cebuffer[index][offset[index]];
+		        while (isContinuation(cebuffer[index][offset[index] --]));
+		            // after this, sorder is at the start of continuation, 
+		            // and offset points before that 
+		            if (isContinuation(cebuffer[index][offset[index] + 1])) {
+		            	// save offset for later
+		            	continuationoffset[index] = offset[index]; 
+		            	offset[index] += 2;  
+		           	}
+	        	//}
 	        }
 	        else {
-	        	result = cebuffer[0][offset[index] ++];
+	        	result = cebuffer[index][offset[index] ++];
 	        	if (!isContinuation(result)) { 
 	        		// we have finished with this continuation
 	           		offset[index] = continuationoffset[index];
@@ -2780,7 +2791,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        while ((torder & CE_REMOVE_CASE_) 
 	        						== CollationElementIterator.IGNORABLE) {
 	        	torder = cebuffer[1][toffset ++];
-	          	if (!isContinuation(sorder)) {
+	          	if (!isContinuation(torder)) {
 	            	torder &= CE_CASE_MASK_3_;
 	            	torder ^= m_caseSwitch_;
 	          	} 
@@ -2852,6 +2863,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        	if (cebuffer[0][soffset - 1] == 
 	          							CollationElementIterator.NULLORDER) {
 	          		return -1;
+	          	}
+	          	if (cebuffer[1][toffset - 1] == 
+	          				CollationElementIterator.NULLORDER) {
+	          		return 1;
 	          	}
 	            return (sorder < torder) ? -1 : 1;
 	        }
@@ -2926,6 +2941,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        	if (cebuffer[0][soffset - 1] == 
 	          		CollationElementIterator.NULLORDER) {
 	          		return -1;
+	          	}
+	          	if (cebuffer[1][toffset - 1] == 
+	          		CollationElementIterator.NULLORDER) {
+	          		return 1;
 	          	}
 	            return (sorder < torder) ? -1 : 1;
 	        }
