@@ -72,15 +72,15 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
                                          UBool flush,
                                          UErrorCode * err)
 {
-  const UChar *mySource = *source, *srcTemp;
-  unsigned char *myTarget = (unsigned char *) *target, *tgtTemp;
+  const UChar *mySource = *source;
+  unsigned char *myTarget = (unsigned char *) *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - (char *) myTarget;
   int32_t sourceLength = sourceLimit - mySource;
   UConverterFromUnicodeArgs args;
+  UConverterCallbackReason reason;
 
-  args.sourceStart = *source;
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
@@ -95,33 +95,61 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
           else
             {
               *err = U_INVALID_CHAR_FOUND;
-              _this->invalidUCharBuffer[0] = (UChar) mySource[mySourceIndex++];
+              reason = UCNV_UNASSIGNED;
+              _this->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex];
               _this->invalidUCharLength = 1;
+              if (UTF_IS_LEAD(mySource[mySourceIndex++]))
+              {
+                  if (mySourceIndex < sourceLength)
+                  {
+                      if (UTF_IS_TRAIL(mySource[mySourceIndex]))
+                      {
+                          _this->invalidUCharBuffer[1] = (UChar)mySource[mySourceIndex];
+                          _this->invalidUCharLength++;
+                          mySourceIndex++;
+                      }
+                      else 
+                      {
+                          reason = UCNV_ILLEGAL;
+                      }                          
+                  }
+                  else if (flush == TRUE)
+                  {
+                      reason = UCNV_ILLEGAL;
+                      *err = U_TRUNCATED_CHAR_FOUND;
+                  } 
+                  else 
+                  {
+                      _this->fromUSurrogateLead = _this->invalidUCharBuffer[0];
+                      /* do not call the callback */
+                  }
+              }
+              if (_this->fromUSurrogateLead == 0) 
+              {
+                  int32_t currentOffset = myTargetIndex;
+    /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
+                  args.converter = _this;
+                  args.target = (char*)myTarget + myTargetIndex;;
+                  args.targetLimit = targetLimit;
+                  args.source = mySource + mySourceIndex;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets;
+                  args.size = sizeof(args);
 
-/* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
-              srcTemp = mySource + mySourceIndex;
-              tgtTemp = myTarget + myTargetIndex;
-              args.converter = _this;
-              args.pTarget = (char**)&tgtTemp;
-              args.targetLimit = targetLimit;
-              args.pSource = &srcTemp;
-              args.sourceLimit = sourceLimit;
-              args.flush = flush;
-              args.offsets = offsets?offsets+myTargetIndex:0;
-              args.size = sizeof(args);
-
-              FromU_CALLBACK_MACRO(args.converter->fromUContext,
-                                 args,
-                                 srcTemp,
-                                 1,
-                                 (UChar32) (*srcTemp),
-                                 UCNV_UNASSIGNED,
-                                 err);
-
-              if (U_FAILURE (*err)) break;
-              _this->invalidUCharLength = 0;
-              myTargetIndex = (unsigned char *) (*(args.pTarget)) - myTarget;
-              mySourceIndex = *(args.pSource) - mySource;
+                  FromU_CALLBACK_MACRO(args.converter->fromUContext,
+                                     args,
+                                     _this->invalidUCharBuffer,
+                                     _this->invalidUCharLength,
+                                     (UChar32) (_this->invalidUCharLength == 2 ? 
+                                         UTF16_GET_PAIR_VALUE(_this->invalidUCharBuffer[0], 
+                                                              _this->invalidUCharBuffer[2]) 
+                                                : _this->invalidUCharBuffer[0]),
+                                     reason,
+                                     err);
+                  if (U_FAILURE (*err)) break;
+                  _this->invalidUCharLength = 0;
+              }
             }
         }
       else

@@ -78,8 +78,8 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
                                UBool flush,
                                UErrorCode * err)
 {
-  const char *mySource = *source, *srcTemp;
-  UChar *myTarget = *target, *tgtTemp;
+  const char *mySource = *source;
+  UChar *myTarget = *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -90,8 +90,6 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
   UBool *myStarters = NULL;
   UConverterToUnicodeArgs args;
 
-
-  args.sourceStart = *source;
   myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
   myToUnicodeFallback = &_this->sharedData->table->mbcs.toUnicodeFallback;
   myStarters = _this->sharedData->table->mbcs.starters;
@@ -157,28 +155,24 @@ static void T_UConverter_toUnicode_MBCS (UConverter * _this,
                   
 
                   args.converter = _this;
-                  srcTemp = mySource + mySourceIndex;
-                  tgtTemp = myTarget + myTargetIndex;
-                  args.pTarget = &tgtTemp;
+                  args.target = myTarget + myTargetIndex;
                   args.targetLimit = targetLimit;
-                  args.pSource = &srcTemp;
+                  args.source = mySource + mySourceIndex;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
-                  args.offsets = offsets?offsets+myTargetIndex:0;
+                  args.offsets = offsets;
                   args.size = sizeof(args);
 
                   /* to do hsys: add more smarts to the codeUnits and length later */
                   ToU_CALLBACK_MACRO(_this->toUContext,
                                      args,
-                                     srcTemp,
-                                     1, 
+                                     _this->invalidCharBuffer,
+                                     _this->invalidCharLength, 
                                      UCNV_UNASSIGNED,
                                      err);
 
                   if (U_FAILURE (*err))    break;
                   _this->invalidCharLength = 0;
-                  myTargetIndex = *(args.pTarget) - myTarget;
-                  mySourceIndex = *(args.pSource) - mySource;
                 }
             }
         }
@@ -218,8 +212,8 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                                                 UBool flush,
                                                 UErrorCode * err)
 {
-  const char *mySource = *source, *srcTemp;
-  UChar *myTarget = *target, *tgtTemp;
+  const char *mySource = *source;
+  UChar *myTarget = *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -231,7 +225,6 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   UBool *myStarters = NULL;
   UConverterToUnicodeArgs args;
   
-  args.sourceStart = *source;
   myToUnicode = &_this->sharedData->table->mbcs.toUnicode;
   myToUnicodeFallback = &_this->sharedData->table->mbcs.toUnicodeFallback;
   myStarters = _this->sharedData->table->mbcs.starters;
@@ -304,6 +297,7 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
               if (targetUniChar == missingUCharMarker)  
               {
                   int32_t currentOffset = offsets[myTargetIndex-1] + ((oldMySourceChar>0x00FF)?2:1);
+                  int32_t My_i = myTargetIndex; 
                           
                   *err = U_INVALID_CHAR_FOUND;
                   if (mySourceChar > 0xff)
@@ -318,28 +312,23 @@ static void T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                       _this->invalidCharBuffer[0] = (char) mySourceChar;
                     }
                   args.converter = _this;
-                  srcTemp = mySource + mySourceIndex;
-                  tgtTemp = myTarget + myTargetIndex;
-                  args.pTarget = &tgtTemp;
+                  args.target = myTarget + myTargetIndex;
                   args.targetLimit = targetLimit;
-                  args.pSource = &srcTemp;
+                  args.source = mySource + mySourceIndex;
                   args.sourceLimit = sourceLimit;
                   args.flush = flush;
                   args.offsets = offsets?offsets+myTargetIndex:0;
                   args.size = sizeof(args);
 
-                  /* to do hsys: add more smarts to the codeUnits and length later and offsets */
-                  ToU_CALLBACK_MACRO(_this->toUContext,
+                  ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this->toUContext,
                                      args,
-                                     srcTemp,
-                                     1, 
+                                     _this->invalidCharBuffer,
+                                     _this->invalidCharLength, 
                                      UCNV_UNASSIGNED,
                                      err);
           
                   if (U_FAILURE (*err))    break;
                   _this->invalidCharLength = 0;
-                  myTargetIndex = *(args.pTarget) - myTarget;
-                  mySourceIndex = *(args.pSource) - mySource;
                 }
             }
         }
@@ -380,8 +369,8 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
                                       UErrorCode * err)
 
 {
-  const UChar *mySource = *source, *srcTemp;
-  char *myTarget = *target, *tgtTemp;
+  const UChar *mySource = *source;
+  char *myTarget = *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -390,8 +379,8 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
   UConverterFromUnicodeArgs args;
+  UConverterCallbackReason reason;
 
-  args.sourceStart = *source;
   myFromUnicode = &_this->sharedData->table->mbcs.fromUnicode;
   myFromUnicodeFallback = &_this->sharedData->table->mbcs.fromUnicodeFallback;
 
@@ -453,33 +442,61 @@ static void   T_UConverter_fromUnicode_MBCS (UConverter * _this,
           }
           if (targetUniChar == missingCharMarker)
             {
+ 
               *err = U_INVALID_CHAR_FOUND;
               _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
               _this->invalidUCharLength = 1;
-
-              srcTemp = mySource + mySourceIndex;
-              tgtTemp = myTarget + myTargetIndex;
-              args.converter = _this;
-              args.pTarget = &tgtTemp;
-              args.targetLimit = targetLimit;
-              args.pSource = &srcTemp;
-              args.sourceLimit = sourceLimit;
-              args.flush = flush;
-              args.offsets = (offsets)?offsets+myTargetIndex:0;
-              args.size = sizeof(args);
-/* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
-              /* HSYS: to do: more smarts */
-              FromU_CALLBACK_MACRO(args.converter->fromUContext,
-                                     args,
-                                     srcTemp,
-                                     1,
-                                     (UChar32) (*srcTemp),
-                                     UCNV_UNASSIGNED,
-                                     err);
-              if (U_FAILURE (*err)) break;
-              myTargetIndex = *(args.pTarget) - myTarget;
-              mySourceIndex = *(args.pSource) - mySource;
-              _this->invalidUCharLength = 0;
+             if (UTF_IS_LEAD(mySource[mySourceIndex-1]))
+              {
+                  if (mySource < sourceLimit)
+                  {
+                      if (UTF_IS_TRAIL(mySource[mySourceIndex]))
+                      {
+                          _this->invalidUCharBuffer[1] = (UChar)mySource[mySourceIndex];
+                          _this->invalidUCharLength++;
+                          mySourceIndex++;
+                      }
+                      else 
+                      {
+                          reason = UCNV_ILLEGAL;
+                      }                          
+                  }
+                  else if (flush == TRUE)
+                  {
+                      reason = UCNV_ILLEGAL;
+                      *err = U_TRUNCATED_CHAR_FOUND;
+                  } 
+                  else 
+                  {
+                      _this->fromUSurrogateLead = _this->invalidUCharBuffer[0];
+                      /* do not call the callback */
+                  }
+              }
+              if (_this->fromUSurrogateLead == 0) 
+              {
+                  args.converter = _this;
+                  args.target = myTarget + myTargetIndex;
+                  args.targetLimit = targetLimit;
+                  args.source = mySource + mySourceIndex;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets;
+                  args.size = sizeof(args);
+    /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
+                  /* HSYS: to do: more smarts */
+                  FromU_CALLBACK_MACRO(args.converter->fromUContext,
+                                         args,
+                                         _this->invalidUCharBuffer,
+                                         _this->invalidUCharLength,
+                                         (UChar32) (_this->invalidUCharLength == 2 ? 
+                                             UTF16_GET_PAIR_VALUE(_this->invalidUCharBuffer[0], 
+                                                                  _this->invalidUCharBuffer[2]) 
+                                                    : _this->invalidUCharBuffer[0]),
+                                         reason,
+                                         err);
+                  if (U_FAILURE (*err)) break;
+                  _this->invalidUCharLength = 0;
+              }
             }
         }
       else
@@ -508,8 +525,8 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
                                                     UErrorCode * err)
 
 {
-  const UChar *mySource = *source, *srcTemp;
-  char *myTarget = *target, *tgtTemp;
+  const UChar *mySource = *source;
+  char *myTarget = *target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
   int32_t targetLength = targetLimit - myTarget;
@@ -518,8 +535,8 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
   UConverterFromUnicodeArgs args;
+  UConverterCallbackReason reason;
 
-  args.sourceStart = *source;
   myFromUnicode = &_this->sharedData->table->mbcs.fromUnicode;
   myFromUnicodeFallback = &_this->sharedData->table->mbcs.fromUnicodeFallback;
 
@@ -590,37 +607,65 @@ static void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
           if (targetUniChar == missingCharMarker)
             {
               int32_t currentOffset = mySourceIndex -1;
+              int32_t My_i = myTargetIndex; 
               
               *err = U_INVALID_CHAR_FOUND;
-              _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
+              reason = UCNV_UNASSIGNED;
+              _this->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex - 1];
               _this->invalidUCharLength = 1;
-
-
-              srcTemp = mySource + mySourceIndex;
-              tgtTemp = myTarget + myTargetIndex;
-              args.converter = _this;
-              args.pTarget = &tgtTemp;
-              args.targetLimit = targetLimit;
-              args.pSource = &srcTemp;
-              args.sourceLimit = sourceLimit;
-              args.flush = flush;
-              args.offsets = offsets?offsets+myTargetIndex:0;
-              args.size = sizeof(args);
-/* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
-              /* HSYS: to do: more smarts including offsets*/
-              FromU_CALLBACK_MACRO(args.converter->fromUContext,
-                                     args,
-                                     srcTemp,
-                                     1,
-                                     (UChar32) (*srcTemp),
-                                     UCNV_UNASSIGNED,
-                                     err);
+              if (UTF_IS_LEAD(mySource[mySourceIndex-1]))
+              {
+                  if (mySource < sourceLimit)
+                  {
+                      if (UTF_IS_TRAIL(mySource[mySourceIndex]))
+                      {
+                          _this->invalidUCharBuffer[1] = (UChar)mySource[mySourceIndex];
+                          _this->invalidUCharLength++;
+                          mySourceIndex++;
+                      }
+                      else 
+                      {
+                          reason = UCNV_ILLEGAL;
+                      }                          
+                  }
+                  else if (flush == TRUE)
+                  {
+                      reason = UCNV_ILLEGAL;
+                      *err = U_TRUNCATED_CHAR_FOUND;
+                  } 
+                  else 
+                  {
+                      _this->fromUSurrogateLead = _this->invalidUCharBuffer[0];
+                      /* do not call the callback */
+                  }
+              }
+              if (_this->fromUSurrogateLead == 0) 
+              {
+                  args.converter = _this;
+                  args.target = myTarget + myTargetIndex;
+                  args.targetLimit = targetLimit;
+                  args.source = mySource + mySourceIndex;
+                  args.sourceLimit = sourceLimit;
+                  args.flush = flush;
+                  args.offsets = offsets?offsets+myTargetIndex:0;
+                  args.size = sizeof(args);
+    /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
+                  /* HSYS: to do: more smarts including offsets*/
+                  FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args.converter->fromUContext,
+                                         args,
+                                         _this->invalidUCharBuffer,
+                                         _this->invalidUCharLength,
+                                         (UChar32) (_this->invalidUCharLength == 2 ? 
+                                             UTF16_GET_PAIR_VALUE(_this->invalidUCharBuffer[0], 
+                                                                  _this->invalidUCharBuffer[2]) 
+                                                    : _this->invalidUCharBuffer[0]),
+                                         reason,
+                                         err);
               
-              if (U_FAILURE (*err)) break;
-              myTargetIndex = *(args.pTarget) - myTarget;
-              mySourceIndex = *(args.pSource) - mySource;
-              _this->invalidUCharLength = 0;
-            }
+                  if (U_FAILURE (*err)) break;
+                  _this->invalidUCharLength = 0;
+                }
+          }
         }
       else
         {
@@ -654,7 +699,6 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
-  args.sourceStart = *source;
   /*Checks to see if the byte is a lead*/
   if (converter->sharedData->table->mbcs.starters[(uint8_t)**source] == FALSE)
     {
@@ -702,13 +746,13 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
       
       *err = U_INVALID_CHAR_FOUND;
       *source = sourceInitial;
-      
+
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
       args.converter = converter;
-      args.pTarget = &myUCharPtr;
+      args.target = myUCharPtr;
       args.targetLimit = myUCharPtr + 1;
-      args.pSource = &sourceFinal;
+      args.source = sourceFinal;
       args.sourceLimit = sourceLimit;
       args.flush = TRUE;
       args.offsets = NULL;  
@@ -716,7 +760,7 @@ static UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
       converter->fromCharErrorBehaviour(converter->toUContext,
                                     &args,
                                     sourceFinal,
-                                    1,
+                                    sourceLimit-sourceFinal,
                                     UCNV_UNASSIGNED,
                                     err);
 

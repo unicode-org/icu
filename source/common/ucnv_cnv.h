@@ -79,6 +79,8 @@ U_CDECL_BEGIN
                                                   codePoint, \
                                                   reason, \
                                                   err); \
+                 myTargetIndex = args.target - (char*)myTarget; \
+                 mySourceIndex = args.source - mySource; \
                 }
 
 #define ToU_CALLBACK_MACRO(context, args, codePoints, length, reason, err) \
@@ -93,6 +95,46 @@ U_CDECL_BEGIN
                                                  length, \
                                                  reason, \
                                                  err); \
+                 myTargetIndex = args.target - myTarget; \
+                 mySourceIndex = args.source - (const char*)mySource; \
+                }
+
+#define FromU_CALLBACK_OFFSETS_LOGIC_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
+              if (args.converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
+              else \
+                { \
+                 int32_t My_i = myTargetIndex; \
+                  /*copies current values for the ErrorFunctor to update */ \
+                  /*Calls the ErrorFunctor */ \
+                  args.converter->fromUCharErrorBehaviour ( \
+                                                 context, \
+                                                 &args, \
+                                                 codeUnits, \
+                                                 length, \
+                                                 codePoint, \
+                                                 reason, \
+                                                 err); \
+                  /*Update the local Indexes so that the conversion can restart at the right points */ \
+                 myTargetIndex = args.target - (char*)myTarget; \
+                 mySourceIndex = args.source - mySource; \
+                  for (;My_i < myTargetIndex;My_i++) offsets[My_i] += currentOffset  ;    \
+                }
+
+#define ToU_CALLBACK_OFFSETS_LOGIC_MACRO(context, args, codePoints, length, reason, err) \
+              if (args.converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
+              else \
+                { \
+                      args.converter->fromCharErrorBehaviour ( \
+                                                 context, \
+                                                 &args, \
+                                                 codePoints, \
+                                                 length, \
+                                                 reason, \
+                                                 err); \
+                  /*Update the local Indexes so that the conversion can restart at the right points */ \
+                 myTargetIndex = args.target - myTarget; \
+                 mySourceIndex = args.source - (const char*)mySource; \
+                  for (;My_i < myTargetIndex;My_i++) {offsets[My_i] += currentOffset  ;   } \
                 }
 
 

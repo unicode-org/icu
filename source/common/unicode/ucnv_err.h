@@ -68,10 +68,9 @@ typedef struct {
 	uint16_t size;
 	UBool flush;
 	UConverter *converter;
-    const UChar *sourceStart;
-	const UChar **pSource;
+	const UChar *source;
 	const UChar *sourceLimit;
-	char **pTarget;
+	char *target;
 	const char *targetLimit;
 	int32_t *offsets;  /* *offset = blah ; offset++; */
 } UConverterFromUnicodeArgs;
@@ -84,10 +83,9 @@ typedef struct {
 	uint16_t size;
 	UBool flush;
 	UConverter *converter;
-    const char *sourceStart;
-	const char **pSource;
+	const char *source;
 	const char *sourceLimit;
-	UChar **pTarget;
+	UChar *target;
 	const UChar *targetLimit;
 	int32_t *offsets;
 } UConverterToUnicodeArgs;

@@ -136,6 +136,7 @@ typedef struct {
 struct UConverter {
     uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
     uint32_t fromUnicodeStatus;
+    UChar    fromUSurrogateLead;
     int32_t mode;
     UBool  useFallback;
 

@@ -435,7 +435,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	char junk[9999];
 	char offset_str[9999];
 	char *p;
-    UConverterFromUCallback oldAction;
+    UConverterFromUCallback oldAction = NULL;
     void* oldContext = NULL;
 	
 	
@@ -619,7 +619,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 	char offset_str[9999];
 	UChar *p;
 	UConverterToUCallback action;
-    UConverterToUCallback oldAction;
+    UConverterToUCallback oldAction = NULL;
     void* oldContext = NULL;
 
 	int32_t   realBufferSize;

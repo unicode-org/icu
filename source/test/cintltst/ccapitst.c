@@ -197,8 +197,8 @@ void TestConvert()
         }
     };
 
-    UConverterFromUCallback oldFromUAction;
-    UConverterToUCallback oldToUAction;
+    UConverterFromUCallback oldFromUAction = NULL;
+    UConverterToUCallback oldToUAction = NULL;
     void* oldFromUContext = NULL;
     void* oldToUContext = NULL;
 

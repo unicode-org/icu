@@ -32,14 +32,16 @@
  * @param args : callback fromUnicode arguments
  * @param target : output target buffer of the callback result.
  * @param length : the length of target buffer
+ * @param offsetIndex : the relative offset index from callback.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbFromUWriteSub
  * @draft
  */
 
 U_CAPI void U_EXPORT2 ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
-                       const char* target,
+                       const char* source,
                        int32_t length,
+                       int32_t offsetIndex,
                        UErrorCode * err);
 
 /**
@@ -49,13 +51,35 @@ U_CAPI void U_EXPORT2 ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
  * @param args : callback fromUnicode arguments
  * @param target : output target buffer of the callback result.
  * @param length : the length of target buffer
+ * @param offsetIndex : the relative offset index from callback.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbFromUWriteBytes
  * @draft
  */
 
 U_CAPI void U_EXPORT2 ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
+                       int32_t offsetIndex,
                        UErrorCode * err);
+
+
+/**
+ * Used by the callback functions.  This function will write out the error
+ * character(s) to the target UChar buffer.
+ *
+ * @param args : callback fromUnicode arguments
+ * @param target : output target buffer of the callback result.
+ * @param length : the length of target buffer
+ * @param offsetIndex : the relative offset index from callback.
+ * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
+ * @see ucnv_cbToUWriteSub
+ * @draft
+ */
+U_CAPI void U_EXPORT2 ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
+                             const UChar* source,
+                             int32_t length,
+                             int32_t offsetIndex,
+                             UErrorCode * err);
+
 /**
  * Used by the callback functions.  This function will write out the error
  * character(s) to the target UChar buffer.
@@ -63,26 +87,30 @@ U_CAPI void U_EXPORT2 ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
  * @param args : callback toUnicode arguments
  * @param target : output target buffer of the callback result.
  * @param length : the length of target buffer
+ * @param offsetIndex : the relative offset index from callback.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbToUWriteSub
  * @draft
  */
 
 U_CAPI void U_EXPORT2 ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
-                       UChar* target,
+                       UChar* source,
                        int32_t length,
+                       int32_t offsetIndex,
                        UErrorCode * err);
 /**
  * Used by the callback functions.  This function will write out the error
  * character(s) to the substitution character.
  *
  * @param args : callback fromUnicode arguments
+ * @param offsetIndex : the relative offset index from callback.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbToUWriteUChars
  * @draft
  */
 
 U_CAPI void U_EXPORT2 ucnv_cbToUWriteSub (UConverterToUnicodeArgs *args,
+                       int32_t offsetIndex,
                        UErrorCode * err);
 #endif
 
