@@ -1243,8 +1243,6 @@ private:
   // of this object, so the clearCache method is provided.
   //
 
-  static const double INVALID;
-
   double    julianDay       ;
   double    julianCentury   ;
   double    sunLongitude    ;
