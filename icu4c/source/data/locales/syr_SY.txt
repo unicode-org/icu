@@ -29,8 +29,8 @@ syr_SY{
         "{1} {0}",
     }
 
-    DateTimeElements{
-        "5",
-        "1"
+    DateTimeElements:intvector {
+        5,
+        1
     }
 }

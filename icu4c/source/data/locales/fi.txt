@@ -71,9 +71,9 @@ fi {
         YE { "Jemen" }
         ZA { "Etel\u00e4-Afrikka" }
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     DateTimePatterns { 
         "H:mm:ss z",

@@ -21,9 +21,9 @@ en_IE {
         "EUR",
         ".",
     }
-    DateTimeElements { 
-        "2",
-        "1",
+    DateTimeElements:intvector { 
+        2,
+        1,
     }
     DateTimePatterns { 
         "HH:mm:ss 'o''clock' z",

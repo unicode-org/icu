@@ -642,9 +642,9 @@ root {
         "XXX",
         "",
     }
-    DateTimeElements { 
-        "1",
-        "1",
+    DateTimeElements:intvector { 
+        1,
+        1,
     }
     DateTimePatterns { 
         "h:mm:ss a z",
@@ -865,7 +865,7 @@ root {
         is  { "Icelandic" }
         it  { "Italian" }
         iu  { "Inukitut" }
-        //iw  { "Hebrew" }  // Use he instead
+        iw  { "Hebrew" }  // Use he instead
         ja  { "Japanese" }
         //ji  { "Yiddish" } // Use yi instead
         jpr { "Judeo-Persian" }

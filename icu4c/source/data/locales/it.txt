@@ -11,9 +11,9 @@ it {
         IT { "Italia" }
         CH { "Svizzera" }
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     DateTimePatterns { 
         "HH:mm:ss z",

@@ -27,8 +27,8 @@ ka_GE{
         "dd.MM.yy",
         "{1} {0}",
     }
-    DateTimeElements{
-        "0",
-        "1"
+    DateTimeElements:intvector {
+        1,
+        2
     }
 }

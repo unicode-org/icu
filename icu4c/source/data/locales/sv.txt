@@ -75,9 +75,9 @@ sv {
         YE { "Jemen" }
         ZA { "Sydafrika" }
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     DateTimePatterns { 
         "'kl 'H:mm z",

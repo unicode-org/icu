@@ -15,9 +15,9 @@ sw {
 //        KE { "Kenya" }
 //        TZ { "Tanzania" }
 //    }
-    DateTimeElements { 
-        "2",
-        "1",
+    DateTimeElements:intvector { 
+        2,
+        1,
     }
     DayAbbreviations {  // The DayNames are correct, but DayAbbreviations are only guesses.
         "Jpi",

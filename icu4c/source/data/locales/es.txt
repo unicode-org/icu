@@ -91,9 +91,9 @@ es {
         //VE { "Venezuela" }
         ZA { "Sud\u00E1frica" }
     }
-    DateTimeElements { 
-        "2",
-        "1",
+    DateTimeElements:intvector { 
+        2,
+        1,
     }
     DateTimePatterns { 
         "HH'H'mm'' z",

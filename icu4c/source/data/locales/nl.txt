@@ -11,9 +11,9 @@ nl {
         NL { "Nederland" }
         BE { "Belgi\u00EB" }
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     DateTimePatterns { 
         "H:mm:ss' uur' z",

@@ -16,9 +16,9 @@ da {
     Countries { 
         DK { "Danmark" }
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     DateTimePatterns { 
         "HH:mm:ss z",

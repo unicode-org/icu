@@ -41,9 +41,9 @@ eo {
         "yy-MM-dd",
         "{1} {0}",
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     AmPmMarkers { 
         "atm",
