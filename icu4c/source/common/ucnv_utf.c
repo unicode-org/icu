@@ -26,6 +26,71 @@
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
+/* Prototypes --------------------------------------------------------------- */
+
+/* Keep these here to make finicky compilers happy */
+
+U_CFUNC void T_UConverter_toUnicode_UTF8(UConverterToUnicodeArgs *args,
+                                         UErrorCode *err);
+U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
+                                                       UErrorCode *err);
+U_CFUNC void T_UConverter_fromUnicode_UTF8(UConverterFromUnicodeArgs *args,
+                                           UErrorCode *err);
+U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(UConverterFromUnicodeArgs *args,
+                                                        UErrorCode *err);
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
+                                               UErrorCode *err);
+
+U_CFUNC void _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                                          UErrorCode *pErrorCode);
+U_CFUNC void _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                                            UErrorCode *pErrorCode);
+U_CFUNC void _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                                          UErrorCode *pErrorCode);
+U_CFUNC void _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                                            UErrorCode *pErrorCode);
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
+                                                   UErrorCode* err);
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
+                                                   UErrorCode* err);
+
+U_CFUNC void T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs *args,
+                                             UErrorCode *err);
+U_CFUNC void T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs *args,
+                                                          UErrorCode *err);
+U_CFUNC void T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs *args,
+                                               UErrorCode *err);
+U_CFUNC void T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs *args,
+                                                            UErrorCode *err);
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs *args,
+                                                   UErrorCode *err);
+
+U_CFUNC void T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs *args,
+                                             UErrorCode *err);
+U_CFUNC void T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs *args,
+                                                          UErrorCode *err);
+U_CFUNC void T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs *args,
+                                               UErrorCode *err);
+U_CFUNC void T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs *args,
+                                                            UErrorCode *err);
+U_CFUNC UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs *args,
+                                                   UErrorCode *err);
+
+U_CFUNC void _UTF7Reset(UConverter *cnv, UConverterResetChoice choice);
+U_CFUNC void _UTF7Open(UConverter *cnv,
+                       const char *name,
+                       const char *locale,
+                       uint32_t options,
+                       UErrorCode *pErrorCode);
+U_CFUNC void _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                                       UErrorCode *pErrorCode);
+U_CFUNC UChar32 _UTF7GetNextUChar(UConverterToUnicodeArgs *pArgs,
+                                  UErrorCode *pErrorCode);
+U_CFUNC void _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                                         UErrorCode *pErrorCode);
+U_CFUNC const char * _UTF7GetName(const UConverter *cnv);
+
+
 /* UTF-8 -------------------------------------------------------------------- */
 
 /* UTF-8 Conversion DATA
@@ -1331,8 +1396,9 @@ const UConverterSharedData _UTF16LEData={
 
 /* UTF-32BE ----------------------------------------------------------------- */
 
-void T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
-                                     UErrorCode * err)
+U_CFUNC void
+T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
+                                UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
     UChar *myTarget = args->target;
@@ -1438,8 +1504,9 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-void T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
-                                     UErrorCode * err)
+U_CFUNC void
+T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
+                                             UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
     UChar *myTarget = args->target;
@@ -1552,8 +1619,9 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-void T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
-                                       UErrorCode * err)
+U_CFUNC void
+T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
+                                  UErrorCode * err)
 {
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
@@ -1624,8 +1692,9 @@ lowsurogate:
     args->source = mySource;
 }
 
-void T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
-                                       UErrorCode * err)
+U_CFUNC void
+T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
+                                               UErrorCode * err)
 {
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
@@ -1700,8 +1769,9 @@ lowsurogate:
     args->source = mySource;
 }
 
-UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
-                                                   UErrorCode* err)
+U_CFUNC UChar32
+T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
+                                   UErrorCode* err)
 {
     UChar myUCharBuf[2];
     UChar *myUCharPtr;
@@ -1803,8 +1873,9 @@ const UConverterSharedData _UTF32BEData = {
 
 /* UTF-32LE ---------------------------------------------------------- */
 
-void T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
-                                      UErrorCode * err)
+U_CFUNC void
+T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
+                                UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
     UChar *myTarget = args->target;
@@ -1911,8 +1982,9 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-void T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
-                                      UErrorCode * err)
+U_CFUNC void
+T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
+                                             UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
     UChar *myTarget = args->target;
@@ -2026,8 +2098,9 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-void  T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
-                                         UErrorCode * err)
+U_CFUNC void
+T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
+                                  UErrorCode * err)
 {
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
@@ -2098,8 +2171,9 @@ lowsurogate:
     args->source = mySource;
 }
 
-void  T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
-                                         UErrorCode * err)
+U_CFUNC void
+T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
+                                               UErrorCode * err)
 {
     const UChar *mySource = args->source;
     unsigned char *myTarget = (unsigned char *) args->target;
@@ -2174,8 +2248,9 @@ lowsurogate:
     args->source = mySource;
 }
 
-UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
-                                                   UErrorCode* err)
+U_CFUNC UChar32
+T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
+                                   UErrorCode* err)
 {
     UChar myUCharBuf[2];
     UChar *myUCharPtr;
