@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2003/06/03 18:49:35 $
- * $Revision: 1.50 $
+ * $Date: 2004/02/25 01:25:20 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.50 $ $Date: 2003/06/03 18:49:35 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.51 $ $Date: 2004/02/25 01:25:20 $
  */
 class TransliterationRule {
 
@@ -551,7 +551,7 @@ class TransliterationRule {
      * @return string representation of this object
      */
     public String toString() {
-        return getClass().getName() + '{' + toRule(true) + '}';
+        return '{' + toRule(true) + '}';
     }
 
     /**
@@ -583,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.51  2004/02/25 01:25:20  alan
+ * jitterbug 3517: make toString output shorter
+ *
  * Revision 1.50  2003/06/03 18:49:35  alan
  * jitterbug 2959: update copyright dates to include 2003
  *
