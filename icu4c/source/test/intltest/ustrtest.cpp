@@ -640,4 +640,34 @@ UnicodeStringTest::TestStackAllocation()
     }
 
     delete test;
+
+    // test the UChar32 constructor
+    UnicodeString c32Test((UChar32)0x10ff2a);
+    if( c32Test.length() != Unicode::charLength(0x10ff2a) ||
+        c32Test.char32At(c32Test.length() - 1) != 0x10ff2a
+    ) {
+        errln("The UnicodeString(UChar32) constructor does not work with a 0x10ff2a filler");
+    }
+
+    // test the (new) capacity constructor
+    UnicodeString capTest(5, 0x2a, 5);
+    if( capTest.length() != 5 * Unicode::charLength(0x2a) ||
+        capTest.char32At(0) != 0x2a ||
+        capTest.char32At(4) != 0x2a
+    ) {
+        errln("The UnicodeString capacity constructor does not work with an ASCII filler");
+    }
+
+    capTest = UnicodeString(5, 0x10ff2a, 5);
+    if( capTest.length() != 5 * Unicode::charLength(0x10ff2a) ||
+        capTest.char32At(0) != 0x10ff2a ||
+        capTest.char32At(4) != 0x10ff2a
+    ) {
+        errln("The UnicodeString capacity constructor does not work with a 0x10ff2a filler");
+    }
+
+    capTest = UnicodeString(5, (UChar32)0, 0);
+    if(capTest.length() != 0) {
+        errln("The UnicodeString capacity constructor does not work with a 0x10ff2a filler");
+    }
 }
