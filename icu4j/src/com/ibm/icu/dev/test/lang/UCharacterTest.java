@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/04/03 22:55:36 $
-* $Revision: 1.51 $
+* $Date: 2003/04/04 00:17:36 $
+* $Revision: 1.52 $
 *
 *******************************************************************************
 */
@@ -1501,6 +1501,26 @@ public final class UCharacterTest extends TestFmwk
 	        { 0xfa12, UProperty.UNIFIED_IDEOGRAPH, 0 },
 	
 	        /* enum/integer type properties */
+	        /* test default Bidi classes for unassigned code points */
+            { 0x0590, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+		    { 0x05a2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+		    { 0x05ed, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+		    { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+		    { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0xfb37, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0xfb42, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x10806, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x10909, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x10fe4, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+   
+            { 0x0606, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x061c, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x063f, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x070e, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0x0775, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0xfbc2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0xfd90, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
+            { 0xfefe, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
 	
 	        { 0x02AF, UProperty.BLOCK, UCharacter.UnicodeBlock.IPA_EXTENSIONS.getID() },
 	        { 0x0C4E, UProperty.BLOCK, UCharacter.UnicodeBlock.TELUGU.getID()},
