@@ -68,7 +68,7 @@ cdattst.o cdetst.o cdtdptst.o cdtrgtst.o cestst.o cfintst.o cformtst.o	\
 cfrtst.o cg7coll.o chashtst.o cintltst.o citertst.o cjaptst.o cloctst.o cmsgtst.o	\
 cnmdptst.o cnormtst.o cnumtst.o cregrtst.o crestst.o cturtst.o		\
 cucdtst.o cutiltst.o encoll.o nucnvtst.o susctest.o nccbtst.o \
-cbiditst.o cbididat.o eurocreg.o udatatst.o
+cbiditst.o cbididat.o eurocreg.o udatatst.o utf16tst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
