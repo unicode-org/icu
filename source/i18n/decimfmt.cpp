@@ -491,8 +491,7 @@ DecimalFormat::format(int32_t number,
     {
         digits.set(((double)number) * fMultiplier,
                    fUseExponentialNotation ?
-                            getMinimumIntegerDigits() + getMaximumFractionDigits() :
-                            getMaximumFractionDigits(),
+                            getMinimumIntegerDigits() + getMaximumFractionDigits() : 0,
                    !fUseExponentialNotation);
     }
     else
