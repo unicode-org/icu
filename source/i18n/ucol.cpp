@@ -372,7 +372,7 @@ int32_t ucol_getState(const UCollator *coll, UColStateEnum contents,
       colState->locale[0] = 0; // This one is rule - based - possibly we need to issue a warning here!
     }
 
-    uint32_t variableTopValue = coll->variableTopValue;
+//    uint32_t variableTopValue = coll->variableTopValue;
     colState->alternateHandling = (uint32_t)coll->alternateHandling; 
     colState->frenchCollation = (uint32_t)coll->frenchCollation;
     colState->caseFirst = (uint32_t)coll->caseFirst;         
@@ -407,7 +407,7 @@ int32_t ucol_getState(const UCollator *coll, UColStateEnum contents,
 }
 
 void ucol_checkState (const uint8_t *state, UErrorCode *status) {
-  uint32_t i = 0;
+//  uint32_t i = 0;
   if(U_FAILURE(*status) || state == NULL) {
     return;
   }  
@@ -442,7 +442,7 @@ UCollator *ucol_openState(const uint8_t *state, UErrorCode *status) {
   }
   ucol_checkState(state, status);
   UCollator *result = NULL;
-  UStateStruct *baseState = (UStateStruct *)state;
+//  UStateStruct *baseState = (UStateStruct *)state;
   UColStateStruct *collState = (UColStateStruct *)(state + sizeof(UStateStruct));
   // The code below assumes that the data is of correct endianess and charset.
   // It has to be done after check state, if needed.
