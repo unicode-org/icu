@@ -10,371 +10,345 @@
 
 lgreek {
     Rule {
+        // ==============================================
+        // Modern Greek Transliteration Rules
+        //
+        // This transliterates modern Greek characters, but using rules
+        // that are traditional for Ancient Greek, and
+        // thus more resemble Greek words that have become part
+        // of English. It differs from the official Greek
+        // transliteration, which is more phonetic (since
+        // most modern Greek vowels, for example, have
+        // degenerated simply to sound like "ee").
+        //
+        // There are only a few tricky parts.
+        // 1. eta and omega don't map directly to Latin vowels,
+        //    so we use a macron on e and o, and some
+        //    other combinations if they are accented.
+        // 2. The accented, diaeresis i and y are substituted too.
+        // 3. Some letters use digraphs, like "ph". While typical,
+        //    they need some special handling.
+        // 4. A gamma before a gamma or a few other letters is
+        //    transliterated as an "n", as in "Anglo"
+        // 5. An ypsilon after a vowel is a "u", as in
+        //    "Mouseio". Otherwise it is a "y" as in "Physikon"
+        // 6. The construction of the rules is made simpler by making sure
+        //    that most rules for lowercase letters exactly correspond to the
+        //    rules for uppercase letters, *except* for the case of the letters
+        //    in the rule itself. That way, after modifying the uppercase rules,
+        //    you can just copy, paste, and "set to lowercase" to get
+        //    the rules for lowercase letters!
+        // ==============================================
+
+        // ==============================================
+        // Variables, used to make the rules more comprehensible
+        // and for conditionals.
+        // ==============================================
+
+        // Latin Letters
+
+        "E-MACRON=\u0112;"
+        "e-macron=\u0113;"
+        "O-MACRON=\u014C;"
+        "o-macron=\u014D;"
+        "Y-UMLAUT=\u0178;"
+        "y-umlaut=\u00FF;"
+
+//*     // with real accents.
+//*     "E-MACRON-ACUTE=\u0112\u0301;"
+//*     "e-macron-acute=\u0113\u0301;"
+//*     "O-MACRON-ACUTE=\u014C\u0301;"
+//*     "o-macron-acute=\u014D\u0301;"
+//*     "y-umlaut-acute=\u00FF\u0301;"
+//*     "\u00ef-acute=\u00ef\u0301;"
+//*     "\u00fc-acute=\u00fc\u0301;"
+//*     //
+
+        // single letter equivalents
+
+        "E-MACRON-ACUTE=\u00CA;"
+        "e-macron-acute=\u00EA;"
+        "O-MACRON-ACUTE=\u00D4;"
+        "o-macron-acute=\u00F4;"
+        "y-umlaut-acute=\u0177;"
+        "\u00ef-acute=\u00EE;"
+        "\u00fc-acute=\u00FB;"       
+
         // Greek Letters
 
-        "grAl=\u0391\n"
-        "grBe=\u0392\n"
-        "grGa=\u0393\n"
-        "grDe=\u0394\n"
-        "grEp=\u0395\n"
-        "grZe=\u0396\n"
-        "grEt=\u0397\n"
-        "grTh=\u0398\n"
-        "grIo=\u0399\n"
-        "grKa=\u039A\n"
-        "grLa=\u039B\n"
-        "grMu=\u039C\n"
-        "grNu=\u039D\n"
-        "grKs=\u039E\n"
-        "grOm=\u039F\n"
-        "grPi=\u03A0\n"
-        "grRh=\u03A1\n"
-        "grSi=\u03A3\n"
-        "grTa=\u03A4\n"
-        "grUp=\u03A5\n"
-        "grPh=\u03A6\n"
-        "grKh=\u03A7\n"
-        "grPs=\u03A8\n"
-        "grOme=\u03A9\n"
+        "ALPHA=\u0391;"
+        "BETA=\u0392;"
+        "GAMMA=\u0393;"
+        "DELTA=\u0394;"
+        "EPSILON=\u0395;"
+        "ZETA=\u0396;"
+        "ETA=\u0397;"
+        "THETA=\u0398;"
+        "IOTA=\u0399;"
+        "KAPPA=\u039A;"
+        "LAMBDA=\u039B;"
+        "MU=\u039C;"
+        "NU=\u039D;"
+        "XI=\u039E;"
+        "OMICRON=\u039F;"
+        "PI=\u03A0;"
+        "RHO=\u03A1;"
+        "SIGMA=\u03A3;"
+        "TAU=\u03A4;"
+        "YPSILON=\u03A5;"
+        "PHI=\u03A6;"
+        "CHI=\u03A7;"
+        "PSI=\u03A8;"
+        "OMEGA=\u03A9;"
 
-        "gral=\u03B1\n"
-        "grbe=\u03B2\n"
-        "grga=\u03B3\n"
-        "grde=\u03B4\n"
-        "grep=\u03B5\n"
-        "grze=\u03B6\n"
-        "gret=\u03B7\n"
-        "grth=\u03B8\n"
-        "grio=\u03B9\n"
-        "grka=\u03BA\n"
-        "grla=\u03BB\n"
-        "grmu=\u03BC\n"
-        "grnu=\u03BD\n"
-        "grks=\u03BE\n"
-        "grom=\u03BF\n"
-        "grpi=\u03C0\n"
-        "grrh=\u03C1\n"
-        "grsi=\u03C3\n"
-        "grta=\u03C4\n"
-        "grup=\u03C5\n"
-        "grph=\u03C6\n"
-        "grkh=\u03C7\n"
-        "grps=\u03C8\n"
-        "grome=\u03C9\n"
+        "ALPHA+=\u0386;"
+        "EPSILON+=\u0388;"
+        "ETA+=\u0389;"
+        "IOTA+=\u038A;"
+        "OMICRON+=\u038C;"
+        "YPSILON+=\u038E;"
+        "OMEGA+=\u038F;"
+        "IOTA\u00a8=\u03AA;"
+        "YPSILON\u00a8=\u03AB;"
 
-        //forms
-        "grfinal=\u03C2\n"
-
-        "grAcAl=\u0386\n"
-        "grAcEp=\u0388\n"
-        "grAcEt=\u0389\n"
-        "grAcIo=\u038A\n"
-        "grAcOm=\u038C\n"
-        "grAcUp=\u038E\n"
-        "grAcOme=\u038F\n"
-        "grDiIo=\u03AA\n"
-        "grDiUp=\u03AB\n"
-
-        "gracal=\u03AC\n"
-        "gracep=\u03AD\n"
-        "gracet=\u03AE\n"
-        "gracio=\u03AF\n"
-        "gracom=\u03CC\n"
-        "gracup=\u03CD\n"
-        "gracome=\u03CE\n"
-        "grdiio=\u03CA\n"
-        "grdiup=\u03CB\n"
-
-        //gracdiio=\u00FD
-        //gracdiup=\u00FE
-
-        "letter=[[:Lu:][:Ll:]]\n"
-
-        // convert Roman to Native
-        "Greek>\u039c\u0397\u039d\u0399\u039d\u0020\u0391\u0395\u0399\u0394\u0395\u002c\u0020\u0398\u0395\u0391\u002c\u0020--\u0397\u039b\u0397\u0399\u0391\u0394\u0395\u03a9\u0020\u0391\u03a7\u0399\u039b\u0397\u039f\u03a3\n"
-
-        "AV`>{grAl}{grAcUp}\n"
-        "EV`>{grEp}{grAcUp}\n"
-        "AV>{grAl}{grUp}\n"
-        "EV>{grEp}{grUp}\n"
-        "NG>{grGa}{grGa}\n"
-        "NK>{grGa}{grKa}\n"
-        "NX>{grGa}{grKs}\n"
-        "NCH>{grGa}{grKh}\n"
-
-        //+ "final = [ .;]\n" // Syntax error, unused anyway - Liu
-
-        "A`>{grAcAl}\n"
-        "EE`>{grAcEt}\n"
-        "E`>{grAcEp}\n"
-        "I`>{grAcIo}\n"
-        "U`>{grAcUp}\n"
-        "OO`>{grAcOme}\n"
-        "O`>{grAcOm}\n"
-        "''I>{grDiIo}\n"
-        "''U>{grDiUp}\n"
-        "A>{grAl}\n"
-        "B>{grBe}\n"
-        "C[I>{grSi}\n"
-        "C[E>{grSi}\n"
-        "C[Y>{grSi}\n"
-        "CH>{grKh}\n"
-        "C>{grKa}\n"
-        "D>{grDe}\n"
-        "EE>{grEt}\n"
-        "E>{grEp}\n"
-        "F>{grPh}\n"
-        "G>{grGa}\n"
-        "H>{grKh}\n"
-        "I>{grIo}\n"
-        "J>{grIo}\n"
-        "KS>{grKs}\n"
-        "KH>{grKh}\n"
-        "K>{grKa}\n"
-        "L>{grLa}\n"
-        "M>{grMu}\n"
-        "N>{grNu}\n"
-        "OO>{grOme}\n"
-        "O>{grOm}\n"
-        "PS>{grPs}\n"
-        "PH>{grPh}\n"
-        "P>{grPi}\n"
-        "Q>{grKa}\n"
-        "R>{grRh}\n"
-        "S>{grSi}\n"
-        "TH>{grTh}\n"
-        "T>{grTa}\n"
-        "W>{grUp}{grUp}\n"
-        "U>{grUp}\n"
-        "V>{grUp}\n"
-        "X>{grKs}\n"
-        "Y>{grUp}\n"
-        "Z>{grZe}\n"
-
-        //now Native to Roman
-
-        "AV<{grAl}{grUp}\n"
-        "EV<{grEp}{grUp}\n"
-        "AV`<{grAl}{grAcUp}\n"
-        "EV`<{grEp}{grAcUp}\n"
-        "N''<{grNu}[{grGa}\n"
-        "NG<{grGa}{grGa}\n"
-        "N''<{grNu}[{grKa}\n"
-        "NK<{grGa}{grKa}\n"
-        "N''<{grNu}[{grKs}\n"
-        "NX<{grGa}{grKs}\n"
-        "N''<{grNu}[{grKh}\n"
-        "NCH<{grGa}{grKh}\n"
-
-        "A<{grAl}\n"
-        "B<{grBe}\n"
-        "G<{grGa}\n"
-        "D<{grDe}\n"
-        "E''<{grEp}[{grEp}\n"
-        "E''<{grEp}[{grEt}\n"
-        "E''<{grEp}[{grAcEp}\n"
-        "E''<{grEp}[{grAcEt}\n"
-        "E<{grEp}\n"
-        "Z<{grZe}\n"
-        "EE<{grEt}\n"
-        "TH<{grTh}\n"
-        "I<{grIo}\n"
-        "K<{grKa}\n"
-        "L<{grLa}\n"
-        "M<{grMu}\n"
-        "N<{grNu}\n"
-        "X<{grKs}\n"
-        "O''<{grOm}[{grOm}\n"
-        "O''<{grOm}[{grOme}\n"
-        "O''<{grOm}[{grAcOm}\n"
-        "O''<{grOm}[{grAcOme}\n"
-        "O<{grOm}\n"
-        "P''<{grPi}[{grSi}\n"
-        "P''<{grPi}[{grfinal}\n"
-        "P<{grPi}\n"
-        "R<{grRh}\n"
-        "S<{grSi}\n"
-        "T<{grTa}\n"
-        "W<{grUp}{grUp}\n"
-
-        "V<{grUp}[{grAcAl}\n"
-        "V<{grUp}[{grAcEp}\n"
-        "V<{grUp}[{grAcEt}\n"
-        "V<{grUp}[{grAcIo}\n"
-        "V<{grUp}[{grAcOm}\n"
-        "V<{grUp}[{grAcUp}\n"
-        "V<{grUp}[{grAcOme}\n"
-
-        "V<{grUp}[{grAl}\n"
-        "V<{grUp}[{grEp}\n"
-        "V<{grUp}[{grEt}\n"
-        "V<{grUp}[{grIo}\n"
-        "V<{grUp}[{grOm}\n"
-        //{grUp}[{grUp}<V
-        "V<{grUp}[{grOme}\n"
-
-        "U<{grUp}\n"
-        "PH<{grPh}\n"
-        "CH<{grKh}\n"
-        "PS<{grPs}\n"
-        "OO<{grOme}\n"
-        //forms
-        "A`<{grAcAl}\n"
-        "E`<{grAcEp}\n"
-        "EE`<{grAcEt}\n"
-        "I`<{grAcIo}\n"
-        "O`<{grAcOm}\n"
-        "U`<{grAcUp}\n"
-        "OO`<{grAcOme}\n"
-        "''I<{grDiIo}\n"
-        "''U<{grDiUp}\n"
-
-        //{gracdiio}<XX
-        //{gracdiup}<XX
-          //{grfinal}<XX
-
-        "av`>{gral}{gracup}\n"
-        "ev`>{grep}{gracup}\n"
-        "av>{gral}{grup}\n"
-        "ev>{grep}{grup}\n"
-        "ng>{grga}{grga}\n"
-        "nk>{grga}{grka}\n"
-        "nx>{grga}{grks}\n"
-        "nch>{grga}{grkh}\n"
-
-        "a`>{gracal}\n"
-        "ee`>{gracet}\n"
-        "e`>{gracep}\n"
-        "i`>{gracio}\n"
-        "u`>{gracup}\n"
-        "oo`>{gracome}\n"
-        "o`>{gracom}\n"
-        "''i>{grdiio}\n"
-        "''u>{grdiup}\n"
-        "a>{gral}\n"
-        "b>{grbe}\n"
-        "c[i>{grsi}\n"
-        "c[e>{grsi}\n"
-        "c[y>{grsi}\n"
-        "ch>{grkh}\n"
-        "c>{grka}\n"
-        "d>{grde}\n"
-        "ee>{gret}\n"
-        "e>{grep}\n"
-        "f>{grph}\n"
-        "g>{grga}\n"
-        "h>{grkh}\n"
-        "i>{grio}\n"
-        "j>{grio}\n"
-        "ks>{grks}\n"
-        "kh>{grkh}\n"
-        "k>{grka}\n"
-        "l>{grla}\n"
-        "m>{grmu}\n"
-        "n>{grnu}\n"
-        "oo>{grome}\n"
-        "o>{grom}\n"
-        "ps>{grps}\n"
-        "ph>{grph}\n"
-        "p>{grpi}\n"
-        "q>{grka}\n"
-        "r>{grrh}\n"
-        "s>|{grfinal}\n"
-        "{grfinal}[{letter}>{grsi}\n"
-        "th>{grth}\n"
-        "t>{grta}\n"
-        "w>{grup}{grup}\n"
-        "u>{grup}\n"
-        "v>{grup}\n"
-        "x>{grks}\n"
-        "y>{grup}\n"
-        "z>{grze}\n"
-
+        "alpha=\u03B1;"
+        "beta=\u03B2;"
+        "gamma=\u03B3;"
+        "delta=\u03B4;"
+        "epsilon=\u03B5;"
+        "zeta=\u03B6;"
+        "eta=\u03B7;"
+        "theta=\u03B8;"
+        "iota=\u03B9;"
+        "kappa=\u03BA;"
+        "lambda=\u03BB;"
+        "mu=\u03BC;"
+        "nu=\u03BD;"
+        "xi=\u03BE;"
+        "omicron=\u03BF;"
+        "pi=\u03C0;"
+        "rho=\u03C1;"
+        "sigma=\u03C3;"
+        "tau=\u03C4;"
+        "ypsilon=\u03C5;"
+        "phi=\u03C6;"
+        "chi=\u03C7;"
+        "psi=\u03C8;"
+        "omega=\u03C9;"
 
         //forms
-        "''>\n"
-        //now native to roman
 
-        "av<{gral}{grup}\n"
-        "ev<{grep}{grup}\n"
-        "av`<{gral}{gracup}\n"
-        "ev`<{grep}{gracup}\n"
-        "n''<{grnu}[{grga}\n"
-        "ng<{grga}{grga}\n"
-        "n''<{grnu}[{grka}\n"
-        "nk<{grga}{grka}\n"
-        "n''<{grnu}[{grks}\n"
-        "nx<{grga}{grks}\n"
-        "n''<{grnu}[{grkh}\n"
-        "nch<{grga}{grkh}\n"
+        "alpha+=\u03AC;"
+        "epsilon+=\u03AD;"
+        "eta+=\u03AE;"
+        "iota+=\u03AF;"
+        "omicron+=\u03CC;"
+        "ypsilon+=\u03CD;"
+        "omega+=\u03CE;"
+        "iota\u00a8=\u03CA;"
+        "ypsilon\u00a8=\u03CB;"
+        "iota\u00a8+=\u0390;"
+        "ypsilon\u00a8+=\u03B0;"
+        "sigma+=\u03C2;"
 
-        "a<{gral}\n"
-        "b<{grbe}\n"
-        "g<{grga}\n"
-        "d<{grde}\n"
-        "e''<{grep}[{grep}\n"
-        "e''<{grep}[{gret}\n"
-        "e''<{grep}[{gracep}\n"
-        "e''<{grep}[{gracet}\n"
-        "e<{grep}\n"
-        "z<{grze}\n"
-        "ee<{gret}\n"
-        "th<{grth}\n"
-        "i<{grio}\n"
-        "k<{grka}\n"
-        "l<{grla}\n"
-        "m<{grmu}\n"
-        "n<{grnu}\n"
-        "x<{grks}\n"
-        "o''<{grom}[{grom}\n"
-        "o''<{grom}[{grome}\n"
-        "o''<{grom}[{gracom}\n"
-        "o''<{grom}[{gracome}\n"
-        "o<{grom}\n"
-        "p''<{grpi}[{grsi}\n"
-        "p''<{grpi}[{grfinal}\n"
-        "p<{grpi}\n"
-        "r<{grrh}\n"
-        "s<{grsi}\n"
-        "s<{grfinal}\n"
-        "t<{grta}\n"
-        "w<{grup}{grup}\n"
+        // Variables for conditional mappings
 
-        "v<{grup}[{gracal}\n"
-        "v<{grup}[{gracep}\n"
-        "v<{grup}[{gracet}\n"
-        "v<{grup}[{gracio}\n"
-        "v<{grup}[{gracom}\n"
-        "v<{grup}[{gracup}\n"
-        "v<{grup}[{gracome}\n"
+        // Use lowercase for all variable names, to allow cut/paste below.
 
-        "v<{grup}[{gral}\n"
-        "v<{grup}[{grep}\n"
-        "v<{grup}[{gret}\n"
-        "v<{grup}[{grio}\n"
-        "v<{grup}[{grom}\n"
-        //{grup}[{grup}<v
-        "v<{grup}[{grome}\n"
+        "letter=[[:Lu:][:Ll:]];"
+        "lower=[[:Ll:]];"
+        "vowel=[aeiouAEIOU"
+          "{ALPHA}{EPSILON}{ETA}{IOTA}{OMICRON}{YPSILON}{OMEGA}"
+          "{ALPHA+}{EPSILON+}{ETA+}{IOTA+}{OMICRON+}{YPSILON+}{OMEGA+}"
+          "{IOTA\u00a8}{YPSILON\u00a8}"
+          "{alpha}{epsilon}{eta}{iota}{omicron}{ypsilon}{omega}"
+          "{alpha+}{epsilon+}{eta+}{iota+}{omicron+}{ypsilon+}{omega+}"
+          "{iota\u00a8}{ypsilon\u00a8}"
+          "{iota\u00a8+}{ypsilon\u00a8+}"
+          "];"
+        "n-gamma=[GKXCgkxc];"
+        "gamma-n=[{GAMMA}{KAPPA}{CHI}{XI}{gamma}{kappa}{chi}{xi}];"
+        "pp=[Pp];"
 
-        "u<{grup}\n"
-        "ph<{grph}\n"
-        "ch<{grkh}\n"
-        "ps<{grps}\n"
-        "oo<{grome}\n"
-        //forms
-        "a`<{gracal}\n"
-        "e`<{gracep}\n"
-        "ee`<{gracet}\n"
-        "i`<{gracio}\n"
-        "o`<{gracom}\n"
-        "u`<{gracup}\n"
-        "oo`<{gracome}\n"
-        "''i<{grdiio}\n"
-        "''u<{grdiup}\n"
-        "<''\n"
+        // ==============================================
+        // Rules
+        // ==============================================
+        // The following are special titlecases, and should
+        // not be copied when duplicating the lowercase
+        // ==============================================
 
-        //{gracdiio}<xx
-        //{gracdiup}<xx
-        //{grfinal}<xx
+        "Th<{THETA}({lower};"
+        "Ph<{PHI}({lower};"
+        "Ch<{CHI}({lower};"
+      //masked: "Ps<{PHI}({lower};"
+
+        // Because there is no uppercase forms for final sigma,
+        // we had to move all the sigma rules up here.
+
+        // insert ' to preserve round trip, for double letters
+        // don't need to do this for the digraphs with h,
+        // since it is not created when mapping back from greek
+
+        "''S<{pp}){SIGMA};" // for PS
+        "''s<{pp}){sigma};" // for ps
+        "''s<{pp}){sigma+};" // for ps
+
+        "S({letter}>{SIGMA};"    "S<{SIGMA};"
+        "s({letter}>{sigma};"    "s<{sigma};"
+        "s<>{sigma+};"
+
+        // because there are no uppercase forms, had to move these up too.
+
+        "i\"`>{iota\u00a8+};"
+        "y\"`>{ypsilon\u00a8+};"
+
+        "{\u00ef-acute}<>{iota\u00a8+};"
+        "{vowel}){\u00fc-acute}>{ypsilon\u00a8+};"  "{\u00fc-acute}<{vowel}){ypsilon\u00a8+};"
+        "{y-umlaut-acute}<>{ypsilon\u00a8+};"
+
+        // ==============================================
+        // Uppercase Forms.
+        // To make lowercase forms, just copy and lowercase below
+        // ==============================================
+
+        // Typing variants, in case the keyboard doesn't have accents
+
+        "A`>{ALPHA+};"
+        "E`>{EPSILON+};"
+        "EE`>{ETA+};"
+        "EE>{ETA};" 
+        "I`>{IOTA+};"
+        "O`>{OMICRON+};"
+        "OO`>{OMEGA+};"
+        "OO>{OMEGA};"
+        "I\">{IOTA\u00a8};"
+        "Y\">{YPSILON\u00a8};"
+
+        // Basic Letters
+
+        "A<>{ALPHA};"
+        "\u00c1<>{ALPHA+};"
+        "B<>{BETA};"
+        "N){n-gamma}>{GAMMA};"  "N<{GAMMA}({gamma-n};"
+        "G<>{GAMMA};"
+        "D<>{DELTA};"
+        "E<>{EPSILON};"
+        "\u00c9<>{EPSILON+};"
+        "Z<>{ZETA};"
+        "{E-MACRON-ACUTE}<>{ETA+};"
+        "{E-MACRON}<>{ETA};"
+        "TH<>{THETA};"
+        "I<>{IOTA};"
+        "\u00cd<>{IOTA+};"
+        "\u00cf<>{IOTA\u00a8};"
+        "K<>{KAPPA};"
+        "L<>{LAMBDA};"
+        "M<>{MU};"
+        "N<>{NU};"
+        "X<>{XI};"
+        "O<>{OMICRON};"
+        "\u00d3>{OMICRON+};"  "\u00d3<{OMEGA+};"
+        "PH<>{PHI};" // needs ordering before P
+        "PS<>{PSI};" // needs ordering before P
+        "P<>{PI};"
+        "R<>{RHO};"
+        "T<>{TAU};"
+        "{vowel})U>{YPSILON};"    "U<{vowel}){YPSILON};"
+        "{vowel})\u00da>{YPSILON+};"  "\u00da<{vowel}){YPSILON+};"
+        "{vowel})\u00dc>{YPSILON\u00a8};"    "\u00dc<{vowel}){YPSILON\u00a8};"
+        "Y<>{YPSILON};"
+        "\u00dd<>{YPSILON+};"
+        "{Y-UMLAUT}<>{YPSILON\u00a8};"
+        "CH<>{CHI};"
+        "{O-MACRON-ACUTE}>{OMEGA+};" "{O-MACRON-ACUTE}<{OMICRON+};"
+        "{O-MACRON}<>{OMEGA};"
+
+        // Extra English Letters. Mapped for completeness
+
+        "C(I>{SIGMA};"
+        "C(E>{SIGMA};"
+        "C(Y>{SIGMA};"
+        "C>{KAPPA};"
+        "F>{PHI};"
+        "H>{CHI};"
+        "J>{IOTA};"
+        "Q>{KAPPA};"
+        "V>{YPSILON};"
+        "W>{YPSILON};"
+
+        // ==============================================
+        // Lowercase Forms. Just copy above and lowercase
+        // ==============================================
+
+        // typing variants, in case the keyboard doesn't have accents
+
+        "a`>{alpha+};"
+        "e`>{epsilon+};"
+        "ee`>{eta+};"
+        "ee>{eta};" 
+        "i`>{iota+};"
+        "o`>{omicron+};"
+        "oo`>{omega+};"
+        "oo>{omega};"
+        "i\">{iota\u00a8};"
+        "y\">{ypsilon\u00a8};"
+
+        // basic letters
+
+        "a<>{alpha};"
+        "\u00e1<>{alpha+};"
+        "b<>{beta};"
+        "n){n-gamma}>{gamma};"  "n<{gamma}({gamma-n};"
+        "g<>{gamma};"
+        "d<>{delta};"
+        "e<>{epsilon};"
+        "\u00e9<>{epsilon+};"
+        "z<>{zeta};"
+        "{e-macron-acute}<>{eta+};"
+        "{e-macron}<>{eta};"
+        "th<>{theta};"
+        "i<>{iota};"
+        "\u00ed<>{iota+};"
+        "\u00ef<>{iota\u00a8};"
+        "k<>{kappa};"
+        "l<>{lambda};"
+        "m<>{mu};"
+        "n<>{nu};"
+        "x<>{xi};"
+        "o<>{omicron};"
+        "\u00f3>{omicron+};"  "\u00f3<{omega+};"
+        "ph<>{phi};" // needs ordering before p
+        "ps<>{psi};" // needs ordering before p
+        "p<>{pi};"
+        "r<>{rho};"
+        "t<>{tau};"
+        "{vowel})u>{ypsilon};"    "u<{vowel}){ypsilon};"
+        "{vowel})\u00fa>{ypsilon+};"  "\u00fa<{vowel}){ypsilon+};"
+        "{vowel})\u00fc>{ypsilon\u00a8};"  "\u00fc<{vowel}){ypsilon\u00a8};"
+        "y<>{ypsilon};"
+        "\u00fd<>{ypsilon+};"
+        "{y-umlaut}<>{ypsilon\u00a8};"
+        "ch<>{chi};"
+        "{o-macron-acute}>{omega+};" "{o-macron-acute}<{omicron+};"
+        "{o-macron}<>{omega};"
+
+        // extra english letters. mapped for completeness
+
+        "c(i>{sigma};"
+        "c(e>{sigma};"
+        "c(y>{sigma};"
+        "c>{kappa};"
+        "f>{phi};"
+        "h>{chi};"
+        "j>{iota};"
+        "q>{kappa};"
+        "v>{ypsilon};"
+        "w>{ypsilon};"
+
+        // ====================================
+        // Normal final rule: remove '
+        // ====================================
+
+        "''>;"
     }
 }
