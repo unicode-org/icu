@@ -541,7 +541,6 @@ private:
      * @param status    Receives a status code, which will be U_ZERO_ERROR if the operation
      *                  succeeds.
      * @return A reference to "result".
-     * @draft
      */
     UnicodeString& subFormat(   UnicodeString& result,
                                 UChar ch,
@@ -606,7 +605,6 @@ private:
      * @param obeyCount if true then the count is strictly obeyed.
      * @return the new start position if matching succeeded; a negative number
      * indicating matching failure, otherwise.
-     * @draft
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                  UBool obeyCount, UBool ambiguousYear[]) const;
