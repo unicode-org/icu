@@ -13,6 +13,9 @@
 // http://www.ifag.de/kartographie/Stagn/Staatennamen.htm
 // Date there: 1999-apr-19
 
+// Note 2003-sep-19: The site seems to have moved to
+// http://www.bkg.bund.de/kartographie/stagn/Staatennamen.htm
+
 de {
     Version{ "2.0" }
 
