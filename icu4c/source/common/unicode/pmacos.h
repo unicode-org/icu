@@ -27,9 +27,11 @@
 #endif
 
 /* We want the console window (argc/argv) */
+/*
 #ifndef XP_MAC_CONSOLE
 #define  XP_MAC_CONSOLE
 #endif
+*/
 
 /* Define whether inttypes.h is available */
 #define U_HAVE_INTTYPES_H 0
