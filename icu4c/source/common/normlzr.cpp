@@ -165,6 +165,9 @@ Normalizer::normalize(const UnicodeString& source,
                       UErrorCode &status) {
     if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
+        if(U_SUCCESS(status)) {
+            status=U_ILLEGAL_ARGUMENT_ERROR;
+        }
     } else {
         UChar *buffer=result.getBuffer(source.length());
         int32_t length=unorm_internalNormalize(buffer, result.getCapacity(),
@@ -207,6 +210,9 @@ Normalizer::compose(const UnicodeString& source,
                     UErrorCode &status) {
     if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
+        if(U_SUCCESS(status)) {
+            status=U_ILLEGAL_ARGUMENT_ERROR;
+        }
     } else {
         UChar *buffer=result.getBuffer(source.length());
         int32_t length=unorm_compose(buffer, result.getCapacity(),
@@ -237,6 +243,9 @@ Normalizer::decompose(const UnicodeString& source,
                       UErrorCode &status) {
     if(source.isBogus() || U_FAILURE(status)) {
         result.setToBogus();
+        if(U_SUCCESS(status)) {
+            status=U_ILLEGAL_ARGUMENT_ERROR;
+        }
     } else {
         UChar *buffer=result.getBuffer(source.length());
         int32_t length=unorm_decompose(buffer, result.getCapacity(),
@@ -258,6 +267,42 @@ Normalizer::decompose(const UnicodeString& source,
             result.setToBogus();
         }
     }
+}
+
+UnicodeString &
+Normalizer::concatenate(UnicodeString &left, UnicodeString &right,
+                        UnicodeString &result,
+                        UNormalizationMode mode, int32_t options,
+                        UErrorCode &errorCode) {
+    if(left.isBogus() || right.isBogus() || U_FAILURE(errorCode)) {
+        result.setToBogus();
+        if(U_SUCCESS(errorCode)) {
+            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    } else {
+        UChar *buffer=result.getBuffer(left.length()+right.length());
+        int32_t length=unorm_concatenate(left.getBuffer(), left.length(),
+                                         right.getBuffer(), right.length(),
+                                         buffer, result.getCapacity(),
+                                         mode, options,
+                                         &errorCode);
+        result.releaseBuffer(length);
+        if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
+            errorCode=U_ZERO_ERROR;
+            buffer=result.getBuffer(length);
+            int32_t length=unorm_concatenate(left.getBuffer(), left.length(),
+                                             right.getBuffer(), right.length(),
+                                             buffer, result.getCapacity(),
+                                             mode, options,
+                                             &errorCode);
+            result.releaseBuffer(length);
+        }
+
+        if(U_FAILURE(errorCode)) {
+            result.setToBogus();
+        }
+    }
+    return result;
 }
 
 //-------------------------------------------------------------------------
