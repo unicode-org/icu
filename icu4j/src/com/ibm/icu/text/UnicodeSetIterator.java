@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2003/06/03 18:49:35 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/09/29 15:27:12 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -213,6 +213,17 @@ public class UnicodeSetIterator {
         	stringIterator = set.strings.iterator();
         	if (!stringIterator.hasNext()) stringIterator = null;
         }
+    }
+    
+    /**
+     * Gets the current string from the iterator. Only use after calling next(), not nextRange().
+     * @internal
+     */
+    public String getString() {
+        if (codepoint == IS_STRING) {
+            return UTF16.valueOf(codepoint);
+        }
+        return string;
     }
     
     // ======================= PRIVATES ===========================
