@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2002/07/14 22:04:49 $
-* $Revision: 1.6 $
+* $Date: 2002/07/21 08:43:39 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -14,13 +14,22 @@
 package com.ibm.text.UCD;
 import java.io.*;
 import com.ibm.text.utility.*;
+
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.Replaceable;
+import com.ibm.icu.text.ReplaceableString;
+import com.ibm.icu.text.UnicodeMatcher;
+
+
 import java.util.*;
 
 
 public final class GenerateHanTransliterator implements UCD_Types {
+    
+    static final boolean DISAMBIG = false;
+    static final boolean DEBUG = false;
     
     static class HanInfo {
         int count = 0;
@@ -237,45 +246,46 @@ public final class GenerateHanTransliterator implements UCD_Types {
     	Default.setUCD();
         try {
             System.out.println("Starting");
-            log = Utility.openPrintWriter("Transliterate_log.txt", false, false);
-            err = Utility.openPrintWriter("Transliterate_err.txt", false, false);
-            log.print('\uFEFF');
+            System.out.println("Quoting: " + quoteNonLetters.toRules(true));
+            System.out.println("Quoting: " + quoteNonLetters.toRules(true));
+            
             
             String key; // kMandarin, kKorean, kJapaneseKun, kJapaneseOn
-            String filter; // "kJis0";
             String filename;
             
             switch (type) {
                 case DEFINITION:
                     key = "kDefinition"; // kMandarin, kKorean, kJapaneseKun, kJapaneseOn
-                    filter = null; // "kJis0";
-                    filename = "Transliterator_Han_Latin_Definition.txt";
+                    filename = "Raw_Transliterator_Han_Latin_Definition.txt";
                     break;
                 case JAPANESE: 
                     key = "kJapaneseOn";
-                    filter = null; // "kJis0";
-                    filename = "Transliterator_ja_Latin.txt";
+                    filename = "Raw_Transliterator_ja_Latin.txt";
                     break;
                 case CHINESE:
                     key = "kMandarin";
-                    filename = "Transliterator_Han_Latin.txt";
-                    filter = null;
+                    filename = "Raw_Transliterator_Han_Latin.txt";
                     break;
                 default: throw new IllegalArgumentException("Unexpected option: must be 0..2");
             }
                 
-            if (type == DEFINITION) readCDICTDefinitions();
-            readUnihanData(key, filter);
+            log = Utility.openPrintWriter("Transliterate_log.txt", false, false);
+            err = Utility.openPrintWriter("Transliterate_err.txt", false, false);
+            log.print('\uFEFF');
+            
+            readUnihanData(key);
+            readCDICTDefinitions(type);
             
             if (false) {
                 readCDICT();
                 compareUnihanWithCEDICT();
             }
             
-            readFrequencyData();
+            readFrequencyData(type);
             
             out = Utility.openPrintWriter(filename, false, false);
-            out.println("# Convert CJK characters");
+            out.println("# Start RAW data for converting CJK characters");
+            /*
             out.println("# Note: adds space between them and letters.");
             out.println("{ ([:Han:]) } [:L:] > | $1 ' ';");
             out.println("[\\.\\,\\?\\!\uFF0E\uFF0C\uFF1F\uFF01\u3001\u3002[:Pe:][:Pf:]] { } [:L:] > ' ';");
@@ -288,41 +298,65 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 out.println("[:hiragana:] { } [[:L:]-[:hiragana:]] > ' ';");
                 out.println("[[:L:]-[:hiragana:]] { } [:hiragana:]> ' ';");
             }
-                        
+            */
+            
             Set gotAlready = new HashSet();
             Iterator it = rankList.iterator();
             Set lenSet = new TreeSet();
             Set backSet = new TreeSet();
             int rank = 0;
+            Map definitionCount = new HashMap();
+            
+            
             while (it.hasNext()) {
-                Comparable keyChar = (Comparable) it.next();
-                Comparable def = (Comparable) unihanMap.get(keyChar);
+                String keyChar = (String) it.next();
+                String def = (String) unihanMap.get(keyChar);
                 if (def == null) continue; // skipping
                 // sort longer definitions first!
+                
+                Integer countInteger = (Integer) definitionCount.get(def);
+                int defCount = (countInteger == null) ? 0 : countInteger.intValue();
+                String oldDef = def;
+                if (DISAMBIG && (defCount != 0 || def.indexOf(' ') >= 0)) {
+                    def += " " + toSub.transliterate(String.valueOf(defCount));
+                }
+                
                 lenSet.add(new Pair(
-                    new Pair(new Integer(-keyChar.toString().length()), 
-                        new Pair(new Integer(-def.toString().length()), new Integer(rank++))),
+                    new Pair(new Integer(-UTF16.countCodePoint(keyChar)), 
+                        new Pair(new Integer(-def.length()), new Integer(rank++))),
                     new Pair(keyChar, def)));
                 backSet.add(new Pair(
                     new Pair(new Integer(-def.toString().length()), new Integer(rank++)),
                     new Pair(keyChar, def)));
+                    
+                definitionCount.put(oldDef, new Integer(defCount+1));
                 gotAlready.add(keyChar);
             }
             
             // add the ones that are not ranked!
             it = unihanMap.keySet().iterator();
             while (it.hasNext()) {
-                Comparable keyChar = (Comparable) it.next();
+                String keyChar = (String) it.next();
                 if (gotAlready.contains(keyChar)) continue;
                 
-                Comparable def = (Comparable) unihanMap.get(keyChar);
+                String def = (String) unihanMap.get(keyChar);
+
+                Integer countInteger = (Integer) definitionCount.get(def);
+                int defCount = (countInteger == null) ? 0 : countInteger.intValue();
+                String oldDef = def;
+                if (DISAMBIG && (defCount != 0 || def.indexOf(' ') >= 0)) {
+                    def += " " + toSub.transliterate(String.valueOf(defCount));
+                }
+                
                 lenSet.add(new Pair(
-                    new Pair(new Integer(-keyChar.toString().length()), 
+                    new Pair(new Integer(-UTF16.countCodePoint(keyChar)), 
                         new Pair(new Integer(-def.toString().length()), new Integer(rank++))),
                     new Pair(keyChar, def)));
                 backSet.add(new Pair(
                     new Pair(new Integer(-def.toString().length()), new Integer(rank++)),
                     new Pair(keyChar, def)));
+
+                definitionCount.put(oldDef, new Integer(defCount+1));
             }
             
             // First, find the ones that we want a definition for, based on the ranking
@@ -358,27 +392,33 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 String keyChar = (String) p.first; 
                 String def = (String) p.second;
                 String rel = doReverse.contains(keyChar) ? " <> " : " > ";
-                out.println(quoteNonLetters.transliterate(keyChar) + rel + quoteNonLetters.transliterate(def) + ";");
-                //if (TESTING) System.out.println("# " + code + " > " + definition);
+                
+                out.println(quoteNonLetters.transliterate(keyChar) + rel
+                    + quoteNonLetters.transliterate(def) + ";");
+                    //if (TESTING) System.out.println("# " + code + " > " + definition);
             }
             
             out.println("\u3002 <> '.';");
+            out.println("# End RAW data for converting CJK characters");
+            
+            /*
             if (type == JAPANESE) {
                 out.println(":: katakana-latin;");
                 out.println(":: hiragana-latin;");
             }
             out.println(":: fullwidth-halfwidth ();");
-
+            */
             
             
             System.out.println("Total: " + totalCount);
             System.out.println("Defined Count: " + count);
+            
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         } finally {
             if (log != null) log.close();
-            if (out != null) out.close();
             if (err != null) err.close();
+            if (out != null) out.close();
         }
     }
     
@@ -390,7 +430,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
     static int totalCount;
     static int oldLine;
     
-    static void readFrequencyData() throws java.io.IOException {
+    static void readFrequencyData(int type) throws java.io.IOException {
         String line = "";
         try {
             
@@ -400,61 +440,68 @@ public final class GenerateHanTransliterator implements UCD_Types {
             // 1 ? 17176
             
             Set combinedRank = new TreeSet();
-            
-            System.out.println("Reading chinese_frequency.txt");
-            BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\chinese_frequency.txt", true);
+            BufferedReader br;
             int counter = 0;
-            while (true) {
-                line = Utility.readDataLine(br);
-                if (line == null) break;
-                if (line.length() == 0) continue;
-                Utility.dot(counter++);
-                int tabPos = line.indexOf('\t');
-                int rank = Integer.parseInt(line.substring(0,tabPos));
-                int cp = line.charAt(tabPos+1);
-                //if ((rank % 100) == 0) System.out.println(rank + ", " + Utility.hex(cp));
-                combinedRank.add(new Pair(new Integer(rank), UTF16.valueOf(cp)));
-            }
-            br.close();
+            Iterator it;
             
-            System.out.println("Reading japanese_frequency.txt");
-     
-            br = Utility.openReadFile( BASE_DIR + "dict\\japanese_frequency.txt", true);
-            Map japaneseMap = new HashMap();
-            while (true) {
-                line = Utility.readDataLine(br);
-                if (line == null) break;
-                if (line.length() == 0) continue;
-                Utility.dot(counter++);
-                int tabPos = line.indexOf(' ');
-                
-                int tabPos2 = line.indexOf(' ', tabPos+1);
-                int freq = Integer.parseInt(line.substring(tabPos2+1));
-                
-                for (int i = tabPos+1; i < tabPos2; ++i) {
-                    int cp = line.charAt(i);
-                    int script = Default.ucd.getScript(cp);
-                    if (script != HAN_SCRIPT) {
-                        if (script != HIRAGANA_SCRIPT && script != KATAKANA_SCRIPT) {
-                            System.out.println("Huh: " + Default.ucd.getCodeAndName(cp));
-                        }
-                        continue;
-                    }
-                    // if ((rank % 100) == 0) System.out.println(rank + ", " + Utility.hex(cp));
-                    Utility.addCount(japaneseMap, UTF16.valueOf(cp), -freq);
+            if (type == CHINESE) {
+                System.out.println("Reading chinese_frequency.txt");
+                br = Utility.openReadFile(BASE_DIR + "dict\\chinese_frequency.txt", true);
+                counter = 0;
+                while (true) {
+                    line = Utility.readDataLine(br);
+                    if (line == null) break;
+                    if (line.length() == 0) continue;
+                    Utility.dot(counter++);
+                    int tabPos = line.indexOf('\t');
+                    int rank = Integer.parseInt(line.substring(0,tabPos));
+                    int cp = line.charAt(tabPos+1);
+                    //if ((rank % 100) == 0) System.out.println(rank + ", " + Utility.hex(cp));
+                    combinedRank.add(new Pair(new Integer(rank), UTF16.valueOf(cp)));
                 }
+                br.close();
             }
-            br.close();
             
-            // get rank order japanese
-            Iterator it = japaneseMap.keySet().iterator();
-            int countJapanese = 0;
-            while (it.hasNext()) {
-                Comparable key = (Comparable) it.next();
-                Comparable val = (Comparable) japaneseMap.get(key);
-                combinedRank.add(new Pair(new Integer(++countJapanese), key));
+            if (type == JAPANESE) {
+                System.out.println("Reading japanese_frequency.txt");
+         
+                br = Utility.openReadFile( BASE_DIR + "dict\\japanese_frequency.txt", true);
+                Map japaneseMap = new HashMap();
+                while (true) {
+                    line = Utility.readDataLine(br);
+                    if (line == null) break;
+                    if (line.length() == 0) continue;
+                    Utility.dot(counter++);
+                    int tabPos = line.indexOf(' ');
+                    
+                    int tabPos2 = line.indexOf(' ', tabPos+1);
+                    int freq = Integer.parseInt(line.substring(tabPos2+1));
+                    
+                    for (int i = tabPos+1; i < tabPos2; ++i) {
+                        int cp = line.charAt(i);
+                        int script = Default.ucd.getScript(cp);
+                        if (script != HAN_SCRIPT) {
+                            if (script != HIRAGANA_SCRIPT && script != KATAKANA_SCRIPT) {
+                                System.out.println("Huh: " + Default.ucd.getCodeAndName(cp));
+                            }
+                            continue;
+                        }
+                        // if ((rank % 100) == 0) System.out.println(rank + ", " + Utility.hex(cp));
+                        Utility.addCount(japaneseMap, UTF16.valueOf(cp), -freq);
+                    }
+                }
+                br.close();
+                // get rank order japanese
+                it = japaneseMap.keySet().iterator();
+                int countJapanese = 0;
+                while (it.hasNext()) {
+                    Comparable key = (Comparable) it.next();
+                    Comparable val = (Comparable) japaneseMap.get(key);
+                    combinedRank.add(new Pair(new Integer(++countJapanese), key));
+                }
+     
             }
- 
+            
             
             int overallRank = 0;
             it = combinedRank.iterator();
@@ -582,12 +629,16 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     // form: ???? [ai4 wu1 ji2 wu1] /love me/love my dog/
     
-    static void readCDICTDefinitions() throws IOException {
-        System.out.println("Reading cdict.txt");
-        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\cdict.txt", true);
+    static void readCDICTDefinitions(int type) throws IOException {
+        String fname = "cdict.txt";
+        if (type == JAPANESE) fname = "edict.txt";
+        
+        System.out.println("Reading " + fname);
+        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\" + fname, true);
         int counter = 0;
         String[] pieces = new String[50];
         String line = "";
+        String definition;
         try {
             while (true) {
                 line = Utility.readDataLine(br);
@@ -597,18 +648,26 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 
                 
                 int pinyinStart = line.indexOf('[');
-                String word = line.substring(0,pinyinStart).trim();
                 int pinyinEnd = line.indexOf(']', pinyinStart+1);
                 int defStart = line.indexOf('/', pinyinEnd+1);
                 int defEnd = line.indexOf('/', defStart+1);
-                String definition = fixDefinition(line.substring(defStart+1, defEnd), line);
-                // word might have / in it, so do each part separately
-                int wordSlash = word.indexOf('/');
-                if (wordSlash < 0) {
+                
+                int firstData = pinyinStart >= 0 ? pinyinStart : defStart;
+                
+                String word = line.substring(0,firstData).trim();
+                
+                if (type == DEFINITION) {
+                    definition = fixDefinition(line.substring(defStart+1, defEnd), line);
                     addCheck(word, definition, line);
-                } else {
-                    addCheck(word.substring(0, wordSlash), definition, line);
-                    addCheck(word.substring(wordSlash+1), definition, line);
+                } else if (pinyinStart >= 0) {
+                    definition = line.substring(pinyinStart+1, pinyinEnd).trim();
+                    if (type == JAPANESE) {
+                        processEdict(word, definition, line);
+                    } else {
+                        definition = convertPinyin.transliterate(definition);
+                        //definition = Utility.replace(definition, " ", "\\ ");
+                        addCheck(word, definition, line);
+                    }
                 }
             }
             br.close();
@@ -617,10 +676,204 @@ public final class GenerateHanTransliterator implements UCD_Types {
         }
     }
     
+    static void processEdict(String word, String definition, String line) {
+        // We have a situation where we have words of the form CCCHHHKKKCCHHCCH > HHHHHHKKKHHHHHHHH
+        // C = CJK, H = Hiragana, K = katakana
+        
+        // We want to break those up into the following rules.
+        // { CCC } HHHKKKCCCHH => HHH
+        // CCCHHHKKK { CC } HHCCH => HH
+        // CCCHHHKKKCCHH { CC } H => HH
+        
+        int[] offset = {0};
+        int[] offset2 = {0};        
+        int[][] pairList = new int[50][2];
+        int pairCount = 0;
+        
+        // first gather the information as to where the CJK blocks are
+        // do this all at once, so we can refer to stuff ahead of us
+        while (true) {
+            // find next CJK block
+            // where CJK really means anything but kana
+            int type = find(word, kana, offset, offset2, word.length(), false, false);
+            if (type == UnicodeMatcher.U_MISMATCH) break; // we are done.
+            pairList[pairCount][0] = offset[0];
+            pairList[pairCount++][1] = offset2[0];
+            offset[0] = offset2[0]; // get ready for the next one
+        }
+        
+        // IF we only got one CJK block, and it goes from the start to the end, then just do it.
+        
+        if (pairCount == 1 && pairList[0][0] == 0 && pairList[0][1] == word.length()) {
+            addCheck(word, kanaToLatin.transliterate(definition), line);
+            return;
+        }
+        
+        // IF we didn't find any Kanji, bail.
+        
+        if (pairCount < 1) {
+            System.out.println("No Kanji on line, skipping");
+            System.out.println(hex.transliterate(word) + " > " + hex.transliterate(definition)
+                + ", " + kanaToLatin.transliterate(definition));
+            return;
+        }
+            
+        // Now generate the rules
+        
+        
+        if (DEBUG && pairCount > 1) {
+            System.out.println("Paircount: " + pairCount);
+            System.out.println("\t" + hex.transliterate(word) + " > " + hex.transliterate(definition) + ", " + kanaToLatin.transliterate(definition));
+        }
+        
+        pairList[pairCount][0] = word.length(); // to make the algorithm easier, we add a termination
+        int delta = 0; // the current difference in positions between the definition and the word
+        
+        for (int i = 0; i < pairCount; ++i) {
+            int start = pairList[i][0];
+            int limit = pairList[i][1];
+            if (DEBUG && pairCount > 1) System.out.println(start + ", " + limit + ", " + delta);
+            
+            // that part was easy. the hard part is figuring out where this corresponds to in the definition.
+            // For now, we use a simple mechanism.
+            
+            // The word and the definition should match to this point, so we just use the start (offset by delta)
+            // We'll check just to be sure.
+            
+            int lastLimit = i == 0 ? 0 : pairList[i-1][1];
+            
+            int defStart = start + delta;
+            
+            String defPrefix = definition.substring(0, defStart);
+            String wordInfix = word.substring(lastLimit, start);
+            
+            boolean firstGood = defPrefix.endsWith(wordInfix);
+            if (!firstGood) {
+                String wordInfix2 = katakanatoHiragana.transliterate(wordInfix);
+                firstGood = defPrefix.endsWith(wordInfix2);
+            }
+            if (!firstGood) {
+                // Houston, we have a problem.
+                Utility.fixDot();
+                System.out.println("Suspect line: " + hex.transliterate(word) + " > " + hex.transliterate(definition)
+                    + ", " + kanaToLatin.transliterate(definition));
+                System.out.println("\tNo match for " + hex.transliterate(word.substring(lastLimit, start)) 
+                    + " at end of " + hex.transliterate(definition.substring(0, defStart)));
+                break; // BAIL
+            }
+            
+            // For the limit of the defintion, we get the intermediate portion of the word
+            // then search for it in the definition.
+            // We could get tripped up if the end of the transliteration of the Kanji matched the start.
+            // If so, we should find out on the next pass.
+            
+            int defLimit;
+            if (limit == word.length()) {
+                defLimit = definition.length();
+            } else {
+                String afterPart = word.substring(limit, pairList[i+1][0]);
+                defLimit = definition.indexOf(afterPart, defStart+1); // we assume the CJK is at least one!
+                if (defLimit < 0) {
+                    String afterPart2 = katakanatoHiragana.transliterate(afterPart);
+                    defLimit = definition.indexOf(afterPart2, defStart+1); // we assume the CJK is at least one!
+                }
+                
+                if (defLimit < 0) {
+                    // Houston, we have a problem.
+                    Utility.fixDot();
+                    System.out.println("Suspect line: " + hex.transliterate(word) + " > " + hex.transliterate(definition)
+                        + ", " + kanaToLatin.transliterate(definition));
+                    System.out.println("\tNo match for " + hex.transliterate(afterPart) 
+                        + " in " + hex.transliterate(definition.substring(0, defStart+1)));
+                }
+                break;
+            }
+            
+            String defPart = definition.substring(defStart, defLimit);
+            defPart = kanaToLatin.transliterate(defPart);
+            
+            // FOR NOW, JUNK the context before!!
+            // String contextWord = word.substring(0, start) + "{" + word.substring(start, limit) + "}" + word.substring(limit);
+            String contextWord = word.substring(start, limit);
+            if (limit != word.length()) contextWord += "}" + word.substring(limit);
+            
+            addCheck(contextWord, defPart, line);
+            if (DEBUG && pairCount > 1) System.out.println("\t" + hex.transliterate(contextWord) + " > " + hex.transliterate(defPart));
+            
+            delta = defLimit - limit;
+        }
+        
+    }
+    
+    // Useful Utilities?
+    
+    /** 
+     * Returns the start of the first substring that matches m.
+     * Most arguments are the same as UnicodeMatcher.matches, except for offset[]
+     * @positive Use true if you want the first point that matches, and false if you want the first point that doesn't match.
+     * @offset On input, the starting position. On output, the start of the match position (not the end!!)
+     */
+    static int find(Replaceable s, UnicodeMatcher m, int[] offset, int limit, boolean incremental, boolean positive) {
+        int direction = offset[0] <= limit ? 1 : -1;
+
+        
+        while (offset[0] != limit) {
+            int original = offset[0];
+            int type = m.matches(s, offset, limit, incremental); // if successful, changes offset.
+            if (type == UnicodeMatcher.U_MISMATCH) {
+                if (!positive) {
+                    return UnicodeMatcher.U_MATCH;
+                }
+                offset[0] += direction;  // used to skip to next code unit, in the positive case
+                // !! This should be safe, and saves checking the length of the code point
+            } else if (positive) {
+                offset[0] = original; // reset to the start position!!!
+                return type;
+            }
+        }
+        return UnicodeMatcher.U_MISMATCH;
+    }
+    
+    /** 
+     * Returns the start/limit of the first substring that matches m. Most arguments are the same as find().<br>
+     * <b>Warning:</b> if the search is backwards, then substringEnd will contain the <i>start</i> of the substring
+     * and offset will contain the </i>limit</i> of the substring.
+     */
+    static int find(Replaceable s, UnicodeMatcher m, int[] offset, int[] offset2, int limit, boolean incremental, boolean positive) {
+        int type = find(s, m, offset, limit, incremental, positive);
+        if (type == UnicodeMatcher.U_MISMATCH) return type;
+        offset2[0] = offset[0];
+        int type2 = find(s, m, offset2, limit, incremental, !positive);
+        return type;
+    }
+    
+    static int find(String ss, UnicodeMatcher m, int[] offset, int limit, boolean incremental, boolean positive) {
+        // UGLY that we have to create a wrapper!
+        return find(new ReplaceableString(ss), m, offset, limit, incremental, positive);
+    }
+    
+    static int find(String ss, UnicodeMatcher m, int[] offset, int[] offset2, int limit, boolean incremental, boolean positive) {
+        // UGLY that we have to create a wrapper!
+        return find(new ReplaceableString(ss), m, offset, offset2, limit, incremental, positive);
+    }
+    
     static UnicodeSet pua = new UnicodeSet("[:private use:]");
     static UnicodeSet numbers = new UnicodeSet("[0-9]");
     
     static void addCheck(String word, String definition, String line) {
+        int lastSlash = 0;
+        while (lastSlash < word.length()) {
+            int wordSlash = word.indexOf('/', lastSlash);
+            if (wordSlash < 0) wordSlash = word.length();
+            addCheck2(word.substring(lastSlash, wordSlash), definition, line);
+            lastSlash = wordSlash + 1;
+        }
+    }
+    
+    static void addCheck2(String word, String definition, String line) {
+        definition = Default.nfc.normalize(definition) + " ";
+        word = Default.nfc.normalize(word);
+        
         if (pua.containsSome(word) ) {
             Utility.fixDot();
             System.out.println("PUA on: " + line);
@@ -711,17 +964,11 @@ public final class GenerateHanTransliterator implements UCD_Types {
     static Map simplifiedToTraditional = new HashMap();
     static Map traditionalToSimplified = new HashMap();
   
-    static void readUnihanData(String key, String filter) throws java.io.IOException {
+    static void readUnihanData(String key) throws java.io.IOException {
 
         BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, true); 
 
         int count = 0;
-        String oldCode = "";
-        String oldLine = "";
-        int oldStart = 0;
-        boolean foundFilter = (filter == null);
-        boolean foundKey = false;
-        
         int lineCounter = 0;
         
         while (true) {
@@ -734,97 +981,63 @@ public final class GenerateHanTransliterator implements UCD_Types {
             line = line.trim();
             
             int tabPos = line.indexOf('\t');
-            String code = line.substring(2, tabPos);
+            int tabPos2 = line.indexOf('\t', tabPos+1);
+            
+            String scode = line.substring(2, tabPos).trim();
+            
+            int code = Integer.parseInt(scode, 16);            
+            String property = line.substring(tabPos+1, tabPos2).trim();
+            
+            String propertyValue = line.substring(tabPos2+1).trim();
+            if (propertyValue.indexOf("U+") >= 0) propertyValue = fixHex.transliterate(propertyValue);
             
             // gather traditional mapping
-            if (line.indexOf("kTraditionalVariant") >= 0) {
-                int tabPos2 = line.indexOf('\t', tabPos+1);
-                int tabPos3 = line.indexOf(' ', tabPos2+1);
-                if (tabPos3 < 0) tabPos3 = line.length();
-                
-                String code2 = line.substring(tabPos2+3, tabPos3);
-                simplifiedToTraditional.put(UTF16.valueOf(Integer.parseInt(code, 16)), 
-                    UTF16.valueOf(Integer.parseInt(code2, 16)));
+            if (property.equals("kTraditionalVariant")) {
+                simplifiedToTraditional.put(UTF16.valueOf(code), propertyValue);
             }
             
-            if (line.indexOf("kSimplifiedVariant") >= 0) {
-                int tabPos2 = line.indexOf('\t', tabPos+1);
-                int tabPos3 = line.indexOf(' ', tabPos2+1);
-                if (tabPos3 < 0) tabPos3 = line.length();
-                
-                String code2 = line.substring(tabPos2+3, tabPos3);
-                traditionalToSimplified.put(UTF16.valueOf(Integer.parseInt(code, 16)), 
-                    UTF16.valueOf(Integer.parseInt(code2, 16)));
+            if (property.equals("kSimplifiedVariant")) {
+                traditionalToSimplified.put(UTF16.valueOf(code), propertyValue);
             }
             
-            
-            
-            /* if (code.compareTo("9FA0") >= 0) {
-                System.out.println("? " + line);
-            }*/
-            if (!code.equals(oldCode)) {
-            	totalCount++;
-            	
-                if (foundKey && foundFilter) {
-                    count++;
-                    /*if (true) { //*/
-                    if (TESTING && (count == 1 || (count % 100) == 0)) {
-                        System.out.println(count + ": " + oldLine);
-                    }
-                    storeDef(out, oldCode, oldLine, oldStart);
-                }
-                if (TESTING) if (count > 1000) {
-                    System.out.println("ABORTING at 1000 for testing");
-                    break;
-                }
-                oldCode = code;
-                foundKey = false;
-                foundFilter = (filter == null);
-            }
-            
-            // detect key, filter. Must be on different lines
-            if (!foundFilter && line.indexOf(filter) >= 0) {
-                foundFilter = true;
-            } else if (!foundKey && (oldStart = line.indexOf(key)) >= 0) {
-                foundKey = true;
-                oldLine = line;
-                oldStart += key.length();
-            }
+            if (property.equals(key) || key.equals("kJapaneseOn") && property.equals("kJapaneseKun")) {
+                storeDef(out, code, propertyValue, line);
+            }            
         }
-        if (foundKey && foundFilter) storeDef(out, oldCode, oldLine, oldStart);
         
         in.close();
     }
     
-    static void storeDef(PrintWriter out, String code, String line, int start) {
-        if (code.length() == 0) return;
-        
+    static void storeDef(PrintWriter out, int cp, String rawDefinition, String line) {
         // skip spaces & numbers at start
-        for (;start < line.length(); ++start) {
-            char ch = line.charAt(start);
+        int start;
+        for (start = 0;start < rawDefinition.length(); ++start) {
+            char ch = rawDefinition.charAt(start);
             if (ch != ' ' && ch != '\t' && (ch < '0' || ch > '9')) break;
         }
 
         // go up to comma or semicolon, whichever is earlier
-        int end = line.indexOf(";", start);
-        if (end < 0) end = line.length();
+        int end = rawDefinition.indexOf(";", start);
+        if (end < 0) end = rawDefinition.length();
         
-        int end2 = line.indexOf(",", start);
-        if (end2 < 0) end2 = line.length();
+        int end2 = rawDefinition.indexOf(",", start);
+        if (end2 < 0) end2 = rawDefinition.length();
         if (end > end2) end = end2;
   
+        // IF CHINESE or JAPANESE, stop at first space!!!
+        
         if (type != DEFINITION) {
-            end2 = line.indexOf(" ", start);
-            if (end2 < 0) end2 = line.length();
+            end2 = rawDefinition.indexOf(" ", start);
+            if (end2 < 0) end2 = rawDefinition.length();
             if (end > end2) end = end2;
         }
         
-        String definition = line.substring(start,end);
+        String definition = rawDefinition.substring(start,end);
         if (type == CHINESE) {
             // since data are messed up, terminate after first digit
             int end3 = findInString(definition, "12345")+1;
             if (end3 == 0) {
-                log.println("Bad pinyin data: " + line);
+                log.println("Bad pinyin data: " + rawDefinition);
                 end3 = definition.length();
             }
             definition = definition.substring(0, end3);
@@ -832,18 +1045,18 @@ public final class GenerateHanTransliterator implements UCD_Types {
             definition = convertPinyin.transliterate(definition);
         }
         if (type == DEFINITION) {
-            definition = removeMatched(definition,'(', ')', line);
-            definition = removeMatched(definition,'[', ']', line);
-            definition = fixDefinition(definition, line);
+            definition = removeMatched(definition,'(', ')', rawDefinition);
+            definition = removeMatched(definition,'[', ']', rawDefinition);
+            definition = fixDefinition(definition, rawDefinition);
         }
         definition = definition.trim();
         definition = Default.ucd.getCase(definition, FULL, LOWER);
-        String cp = UTF16.valueOf(Integer.parseInt(code, 16));
+
         if (definition.length() == 0) {
             Utility.fixDot();
             System.out.println("Zero value for " + Default.ucd.getCode(cp) + " on: " + hex.transliterate(line));
         } else {
-            addCheck(cp, definition, line);
+            addCheck(UTF16.valueOf(cp), definition, rawDefinition);
         }
         /*
         String key = (String) unihanMap.get(definition);
@@ -855,7 +1068,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
         */
     }
     
-    static String fixDefinition(String definition, String line) {
+    static String fixDefinition(String definition, String rawDefinition) {
         definition = definition.trim();
         definition = Utility.replace(definition, "  ", " ");
         definition = Utility.replace(definition, " ", "-");
@@ -894,12 +1107,37 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     static StringBuffer handlePinyinTemp = new StringBuffer();
     
-    static Transliterator hex = Transliterator.getInstance("[^\\u0020-\\u007F] hex");
-    static Transliterator quoteNonLetters = Transliterator.createFromRules("any-quotenonletters", 
-        "([[\\u0021-\\u007E]-[:L:]-[\\']-[0-9]]) > \\u005C $1; \\' > \\'\\';", Transliterator.FORWARD);
+    static final Transliterator hex = Transliterator.getInstance("[^\\u0020-\\u007F] hex");
+    static final Transliterator quoteNonLetters = Transliterator.createFromRules("any-quotenonletters", 
+          "([[\\u0020-\\u007E]-[:L:]-[\\'\\{\\}]-[0-9]]) > \\u005C $1; "
+        + "\\' > \\'\\';",
+        Transliterator.FORWARD);
+    static final Transliterator toSub = Transliterator.createFromRules("any-subscript", 
+            " 0 > \u2080; "
+          + " 1 > \u2081; "
+          + " 2 > \u2082; "
+          + " 3 > \u2084; "
+          + " 4 > \u2084; "
+          + " 5 > \u2085; "
+          + " 6 > \u2086; "
+          + " 7 > \u2087; "
+          + " 8 > \u2088; "
+          + " 9 > \u2089; ",
+        Transliterator.FORWARD);
     
+    static final Transliterator kanaToLatin = Transliterator.createFromRules("any-subscript", 
+            " $kata = [[:katakana:]\u30FC]; "
+          + "[:hiragana:] {} [:^hiragana:] > ' '; "
+          + "$kata {} [^[:hiragana:]$kata] > ' '; "  
+          + "::Katakana-Latin; "
+          + "::Hiragana-Latin;",
+        Transliterator.FORWARD);
+        
+    static final Transliterator katakanatoHiragana = Transliterator.getInstance("katakana-hiragana");        
     
-    
+    static final UnicodeSet kana = new UnicodeSet("[[:hiragana:][:katakana:]\u30FC]");
+    // since we are working in NFC, we don't worry about the combining marks.
+            
     // ADD Factory since otherwise getInverse blows out
     static class DummyFactory implements Transliterator.Factory {
         static DummyFactory singleton = new DummyFactory();
@@ -936,6 +1174,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                     + "([aAeE]) ($vowel* $consonant*) ($digit) > $1 &digit-tone($3) $2;\n"
                     + "([oO]) ([$vowel-[aeAE]]* $consonant*) ($digit) > $1 &digit-tone($3) $2;\n"
                     + "($vowel) ($consonant*) ($digit) > $1 &digit-tone($3) $2;\n"
+                    + "($digit) > &digit-tone($1);\n"
                     + "::NFC;\n";
  
     	Transliterator at = Transliterator.createFromRules("digit-tone", dt, Transliterator.FORWARD);
