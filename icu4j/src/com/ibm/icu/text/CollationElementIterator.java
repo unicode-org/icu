@@ -355,15 +355,41 @@ public final class CollationElementIterator
                 }
             }
             else {
-                if (m_bufferOffset_ < 0 && m_source_.getIndex() != 0) {
+                if (m_bufferOffset_ < 0 && m_source_.getIndex() != 0
+                    && isThaiPreVowel(peekCharacter(-1))) {
                     // we now rearrange unconditionally
-                    if (isThaiPreVowel(m_source_.previous())) {
+                    backupInternalState(m_utilSpecialBackUp_);
+                    // we have to check if the previous character is also Thai
+                    // if not, we can just set the result
+                    // we have already determined that the normalization
+                    // buffer is empty
+                    m_source_.previous();
+                    if (m_source_.getIndex() == 0 
+                        || !isThaiPreVowel(peekCharacter(-1))) {
                         result = CE_THAI_;
                     }
-                    else {
-                        result = m_collator_.m_trie_.getLeadValue(ch);
+                    else {        
+                        // previous is also reordered
+                        // we need to go back as long as they are being 
+                        // reordered
+                        // count over the range of reorderable characters 
+                        // and see 
+                        // if there is an even or odd number of them
+                        // if even, we should not reorder. 
+                        // If odd we should reorder.
+                        int noReordered = 1; // the one we already detected
+                        while (m_source_.getIndex() != 0  
+                               && isThaiPreVowel(m_source_.previous())) {
+                             noReordered ++;
+                        }
+                        if ((noReordered & 1) != 0) { 
+                            // odd number of reorderables
+                            result = CE_THAI_;
+                        } else {
+                            result = m_collator_.m_trie_.getLeadValue(ch);
+                        }
                     }
-                    m_source_.next();
+                    updateInternalState(m_utilSpecialBackUp_);
                 }
                 else {
                     result = m_collator_.m_trie_.getLeadValue(ch);
@@ -1862,6 +1888,12 @@ public final class CollationElementIterator
                     collator.m_expansion_[++ offset];
             }
         }
+        // in case of one element expansion, we 
+        // want to immediately return CEpos
+        if (m_CEBufferSize_ == 1) {
+            m_CEBufferSize_ = 0;
+            m_CEBufferOffset_ = 0;
+        }
         return m_CEBuffer_[0];
     }
 
@@ -2525,5 +2557,27 @@ public final class CollationElementIterator
                    + (CJK_COMPAT_USED_LIMIT_ - CJK_COMPAT_USED_BASE_);
         }
         return cp + NON_CJK_OFFSET_; // non-CJK
+    }
+    
+    /** 
+     * Gets a character from the source string at a given offset
+     * Handles both normal and iterative cases.
+     * No error checking - caller beware!
+     * @param offset offset from current position which character is to be 
+     *               retrieved
+     * @return character at current position + offset
+     */
+    private char peekCharacter(int offset) 
+    {
+        if (offset != 0) {
+            int currentoffset = m_source_.getIndex();
+            m_source_.setIndex(currentoffset + offset);
+            char result = m_source_.current();
+            m_source_.setIndex(currentoffset);
+            return result;
+        } 
+        else {
+            return m_source_.current();
+        }
     }
 }
