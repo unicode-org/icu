@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Arabic.java,v $ 
- * $Date: 2000/04/22 00:04:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/04/28 01:21:29 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -70,6 +70,16 @@ public class TransliterationRule_Latin_Arabic extends ListResourceBundle {
                 "$shadda=\u0651;"+
                 "$sokoon=\u0652;"+
 
+              // handle doubles - liu
+              "t'' < {$teh} [$teh$theh$tehmarbuta$tah];" +
+              "h'' < {$heh} [$heh$hah];"+
+              "s'' < {$seen} $sheen;"+
+              // handle a few pathological special cases to make round
+              // trip work. - liu
+              "d'~'d   <> $dal $dal;"+
+              "dh'~'dh <> $dhal $dhal;"+
+              "dd'~'dd <> $dad $dad;"+
+
                 // convert English to Arabic
                 "Arabic>"+
                 "\u062a\u062a\u0645\u062a\u0639' '"+
@@ -87,6 +97,8 @@ public class TransliterationRule_Latin_Arabic extends ListResourceBundle {
                 "a>$fatha;"+
                 "b>$beh;"+
                 "c>$kaf;"+
+              // To be symmetrical with shadda rules below, we want to
+              // map $dad $shadda to dd'dd, etc.  - liu
                 "$dhal{dh>$shadda;"+
                 "dh>$dhal;"+
                 "$dad{dd>$shadda;"+
@@ -244,6 +256,9 @@ public class TransliterationRule_Latin_Arabic extends ListResourceBundle {
                 "''z<z{$zain;"+
                 "z<$zain;"+
 
+              // The following three rules map x $shadda to x x, where
+              // x is dh or dd.  If x is d, d'd is output.  Net effect
+              // is to map s.th. like $dad $shadda to dd'dd. - liu
                 "dh<dh{$shadda;"+
                 "dd<dd{$shadda;"+
                 "''d<d{$shadda;"
