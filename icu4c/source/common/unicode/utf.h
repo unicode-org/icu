@@ -75,9 +75,9 @@
 *   For example, if it can be assumed that a string is well-formed and the index will stay within the bounds,
 *   then the _UNSAFE version may be used.
 *   If a UTF-8 string is to be processed, then the macros with UTF8_ prefixes need to be used.</p>
-*   <b>Usage:</b>  ICU coding guidelines for if() statements should be followed when using these macros
+*   <p><b>Usage:</b>  ICU coding guidelines for if() statements should be followed when using these macros.
 *                  Compound statements (curly braces {}) must be used  for if-else-while... 
-*                  bodies and all macro statements should be terminated with semicolon.
+*                  bodies and all macro statements should be terminated with semicolon.</p>
 */
 
 #ifndef __UTF_H__
