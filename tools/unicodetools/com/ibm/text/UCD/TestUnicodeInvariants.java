@@ -75,6 +75,10 @@ public class TestUnicodeInvariants {
        out.write('\uFEFF'); // BOM
        BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
        BagFormatter bf = new BagFormatter();
+       bf.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
+       BagFormatter bf2 = new BagFormatter();
+       bf2.setUnicodePropertyFactory(ToolUnicodePropertySource.make(""));
+       bf2.setMergeRanges(false);
        ChainedSymbolTable st = new ChainedSymbolTable(new SymbolTable[] {
            ToolUnicodePropertySource.make("4.0.0").getSymbolTable("\u00D7"),
            ToolUnicodePropertySource.make(Default.ucdVersion()).getSymbolTable("")});
@@ -106,7 +110,16 @@ public class TestUnicodeInvariants {
                continue;
            }
 
-           char relation = 0;
+           // detect variables
+           if (line.startsWith("Show")) {
+           		String part = line.substring(4).trim();
+           		pp.setIndex(0);
+           		UnicodeSet leftSet = new UnicodeSet(part, pp, st);
+           		bf2.showSetNames(out, leftSet);
+				continue;
+           }
+
+          char relation = 0;
            String rightSide = null;
            String leftSide = null;
            UnicodeSet leftSet = null;

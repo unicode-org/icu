@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2004/12/11 06:03:08 $
-* $Revision: 1.16 $
+* $Date: 2005/02/24 02:59:34 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -20,9 +20,17 @@ import java.text.SimpleDateFormat;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.ICUPropertyFactory;
+import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UCharArrayIterator;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.StringPrep;
+import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
+
 import java.math.BigDecimal;
 
 import java.util.regex.*;
@@ -35,6 +43,9 @@ public class TestData implements UCD_Types {
     static UnicodeProperty.Factory upf;
     
 	public static void main (String[] args) throws IOException {
+		//checkChars(false);
+		new GenStringPrep().genStringPrep();
+		if (true) return;
         
         System.out.println("main: " + Default.getDate());
         upf = ICUPropertyFactory.make();
@@ -138,6 +149,269 @@ public class TestData implements UCD_Types {
 		}
 	}
 	
+	static class GenStringPrep {
+		UnicodeSet[] coreChars = new UnicodeSet[100];
+		UnicodeSet[] decompChars = new UnicodeSet[100];
+		UCD ucd = Default.ucd();
+
+		Collator uca = Collator.getInstance(ULocale.ENGLISH);
+		{
+			uca.setStrength(Collator.IDENTICAL);
+		}
+
+		UnicodeSet bidiR = new UnicodeSet(
+				"[[:Bidi_Class=AL:][:Bidi_Class=R:]]");
+
+		UnicodeSet bidiL = new UnicodeSet("[:Bidi_Class=l:]");
+		UnicodeSet hasUpper = new UnicodeSet();
+
+
+		void genStringPrep() throws IOException {
+			StringBuffer inbuffer = new StringBuffer();
+			StringBuffer intermediate, outbuffer;
+			for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+				Utility.dot(cp);
+				inbuffer.setLength(0);
+				UTF16.append(inbuffer, cp);
+				try {
+					intermediate = IDNA.convertToASCII(inbuffer,
+							IDNA.USE_STD3_RULES);
+					if (intermediate.length() == 0)
+						continue;
+					outbuffer = IDNA.convertToUnicode(intermediate,
+							IDNA.USE_STD3_RULES);
+				} catch (StringPrepParseException e) {
+					continue;
+				} catch (Exception e) {
+					System.out.println("Failure at: " + Utility.hex(cp));
+					continue;
+				}
+				if (!TestData.equals(inbuffer, outbuffer))
+					continue;
+				int script = ucd.getScript(cp);
+				if (!Default.nfd().isNormalized(cp)) {
+					if (decompChars[script] == null)
+						decompChars[script] = new UnicodeSet();
+					decompChars[script].add(cp);
+				} else {
+					if (coreChars[script] == null)
+						coreChars[script] = new UnicodeSet();
+					coreChars[script].add(cp);
+				}
+			}
+			// find characters with no uppercase
+			for (UnicodeSetIterator it = new UnicodeSetIterator(lowercase); it.next();) {
+				String str = UTF16.valueOf(it.codepoint);
+				if (!str.equals(ucd.getCase(str, FULL, UPPER))) hasUpper.add(it.codepoint);
+			}
+			
+			Utility.fixDot();
+			PrintWriter out = BagFormatter.openUTF8Writer(GEN_DIR,
+					"idn-chars.html");
+			out
+					.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+			out.println("<title>IDN Characters</title><style>");
+			out.println("<!--");
+			out
+					.println(".script       { font-size: 150%; background-color: #C0C0C0 }");
+			out.println("th           { text-align: left }");
+			out.println("-->");
+			out.println("</style></head><body><table>");
+
+			for (int scriptCode = 0; scriptCode < coreChars.length; ++scriptCode) {
+				if (scriptCode == COMMON_SCRIPT
+						|| scriptCode == INHERITED_SCRIPT)
+					continue;
+				showCodes(out, scriptCode);
+			}
+			showCodes(out, COMMON_SCRIPT);
+			showCodes(out, INHERITED_SCRIPT);
+			out.println("</table></body></html>");
+			out.close();
+		}
+		
+		UnicodeSet lowercase = new UnicodeSet("[:Lowercase:]");
+
+		/**
+		 * @param out
+		 * @param ucd
+		 * @param coreChars
+		 * @param decompChars
+		 * @param scriptCode
+		 */
+		private void showCodes(PrintWriter out, int scriptCode) {
+			if (coreChars[scriptCode] == null
+					&& decompChars[scriptCode] == null)
+				return;
+			System.out.println(ucd.getScriptID_fromIndex((byte) scriptCode));
+			String script = Default.ucd().getScriptID_fromIndex(
+					(byte) scriptCode);
+			out.println();
+			out.println("<tr><th class='script'>Script: " + script + "</th></tr>");
+			UnicodeSet core = new UnicodeSet(coreChars[scriptCode]);
+			UnicodeSet otherCore = new UnicodeSet(core).removeAll(hasUpper);
+			core.removeAll(otherCore);
+			if (core.size() == 0) {
+				UnicodeSet temp = core;
+				core = otherCore;
+				otherCore = temp;
+			}
+			printlnSet(out, "Atomic", core, scriptCode);
+			if (otherCore.size() != 0) printlnSet(out, "Atomic [noUpper]", otherCore, scriptCode);							
+			UnicodeSet decomp = decompChars[scriptCode];
+			if (decomp != null && decomp.size() != 0) printlnSet(out, "Decomposable", decomp, scriptCode);
+		}
+
+		/**
+		 * @param out
+		 * @param unicodeset
+		 * @param uca
+		 * @param scriptCode
+		 */
+		private  void printlnSet(PrintWriter out, String title,
+				UnicodeSet unicodeset, int scriptCode) {
+			if (unicodeset == null)
+				return;
+			int size = unicodeset.size();
+			String dir = unicodeset.containsSome(bidiR)
+					&& unicodeset.containsNone(bidiL) ? " dir='rtl'" : "";
+			out.println("<tr><th class='" + title + "'>" + title + " ("
+					+ nf.format(size) + ")</th></tr>");
+			out.print("<tr><td" + dir + ">");
+			UnicodeSetIterator usi = new UnicodeSetIterator();
+			if (scriptCode == HAN_SCRIPT || scriptCode == HANGUL_SCRIPT) {
+				usi.reset(unicodeset);
+				while (usi.nextRange()) {
+					if (usi.codepoint == usi.codepointEnd) {
+						out.print(formatCode(UTF16
+								.valueOf(usi.codepoint)));
+					} else {
+						out.print(formatCode(UTF16
+								.valueOf(usi.codepoint))
+								+ ".. "
+								+ formatCode(UTF16
+										.valueOf(usi.codepointEnd)));
+					}
+				}
+			} else {
+				Set reordered = new TreeSet(uca);
+				usi.reset(unicodeset);
+				while (usi.next()) {
+					boolean foo = reordered.add(usi.getString());
+					if (!foo)
+						throw new IllegalArgumentException("Collision with "
+								+ Default.ucd().getCodeAndName(usi.getString()));
+				}
+				for (Iterator it = reordered.iterator(); it.hasNext();) {
+					out.print(formatCode((String) it
+							.next()));
+				}
+			}
+			out.println("</td></tr>");
+		}
+
+		/**
+		 * @param string
+		 * @return
+		 */
+		private String formatCode(String string) {
+			int cat = ucd.getCategory(UTF16.charAt(string,0));
+			return "<span title='" + ucd.getCodeAndName(string) + "'>"
+			+ (cat == Me || cat == Mn ? "\u00A0" : "") //\u25cc
+			+ BagFormatter.toHTML.transliterate(string)
+			+ " </span>";
+		}
+	}
+	
+	/**
+	 * @param inbuffer
+	 * @param outbuffer
+	 * @return
+	 */
+	public static boolean equals(StringBuffer inbuffer, StringBuffer outbuffer) {
+		if (inbuffer.length() != outbuffer.length()) return false;
+		for (int i = inbuffer.length() - 1; i >= 0; --i) {
+			if (inbuffer.charAt(i) != outbuffer.charAt(i)) return false;
+		}
+		return true;
+	}
+
+	private static void checkChars(boolean mergeRanges) {
+		UCD ucd = Default.ucd();
+		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
+		UnicodeSet isUpper = ups.getSet("Uppercase=true");
+		UnicodeSet isLower = ups.getSet("Lowercase=true");
+		UnicodeSet isTitle = ups.getSet("gc=Lt");
+		UnicodeSet otherAlphabetic = ups.getSet("Alphabetic=true").addAll(ups.getSet("gc=Sk"));
+		// create the following
+		UnicodeSet hasFold = new UnicodeSet();
+		UnicodeSet hasUpper = new UnicodeSet();
+		UnicodeSet hasLower = new UnicodeSet();
+		UnicodeSet hasTitle = new UnicodeSet();
+		UnicodeSet compat = new UnicodeSet();
+		UnicodeSet bicameralsScripts = new UnicodeSet();
+
+		UCD u40 = UCD.make("4.0.0");
+		BitSet scripts = new BitSet();
+		for (int i = 0; i <= 0x10FFFF; ++i) {
+			int gc = ucd.getCategory(i);
+			if (gc == Cn || gc == PRIVATE_USE) continue;
+			String str = UTF16.valueOf(i);
+			if (!str.equals(ucd.getCase(str, FULL, FOLD))) hasFold.add(i);
+			if (!str.equals(ucd.getCase(str, FULL, UPPER))) hasUpper.add(i);
+			if (!str.equals(ucd.getCase(str, FULL, LOWER))) {
+				hasLower.add(i);
+				scripts.set(ucd.getScript(i));
+			}
+			if (!str.equals(ucd.getCase(str, FULL, TITLE))) hasTitle.add(i);
+			if (!str.equals(Default.nfkd().normalize(str))) compat.add(i);
+			//System.out.println(ucd.getCodeAndName(i) + "\t" + (u40.isAllocated(i) ? "already in 4.0" : "new in 4.1"));
+		}
+		BagFormatter bf = new BagFormatter();
+		bf.setMergeRanges(mergeRanges);
+		bf.setUnicodePropertyFactory(ups);
+		printItems(bf, compat, "isUpper or isTitle without hasLower", 
+				new UnicodeSet(isUpper).addAll(isTitle).removeAll(hasLower));
+		printItems(bf, compat, "hasLower, but not isUpper or isTitle", 
+				new UnicodeSet(hasLower).removeAll(isTitle).removeAll(isUpper));
+		printItems(bf, compat, "isLower without hasUpper", 
+				new UnicodeSet(isLower).addAll(isTitle).removeAll(hasUpper));
+		printItems(bf, compat, "hasUpper, but not isLower or isTitle", 
+				new UnicodeSet(hasUpper).removeAll(isTitle).removeAll(isLower));
+
+		UnicodeSet scriptSet = new UnicodeSet();
+		UnicodeProperty scriptProp = ups.getProperty("Script");
+		for (int i = 0; i < scripts.size(); ++i) {
+			if (!scripts.get(i)) continue;
+			if (i == COMMON_SCRIPT) continue;
+			String scriptName = ucd.getScriptID_fromIndex((byte)i);
+			System.out.println(scriptName);
+			scriptSet.addAll(scriptProp.getSet(scriptName));
+		}
+		UnicodeSet allCased = new UnicodeSet().addAll(isUpper).addAll(isLower).addAll(isTitle);
+		printItems(bf, compat, "(Bicameral) isAlpha or Symbol Modifier, but not isCased", 
+				new UnicodeSet(scriptSet).retainAll(otherAlphabetic).removeAll(allCased));
+		printItems(bf, compat, "(Bicameral) isCased, but not isAlpha or Symbol Modifier", 
+				new UnicodeSet(scriptSet).retainAll(allCased).removeAll(otherAlphabetic));
+	}
+
+	
+	/**
+	 * @param bf
+	 * @param compat
+	 * @param temp
+	 */
+	private static void printItems(BagFormatter bf, UnicodeSet compat, String title, UnicodeSet temp) {
+		System.out.println();
+		System.out.println(title + " -- (non compat)");		
+		UnicodeSet temp2 = new UnicodeSet(temp).removeAll(compat);
+		System.out.println(bf.showSetNames(temp2));
+		System.out.println();
+		temp2 = new UnicodeSet(temp).retainAll(compat);
+		System.out.println(title + " -- (compat)");
+		System.out.println(bf.showSetNames(temp2));
+	}
+
 	static PrintWriter log;
 	
     public static void checkShaping() throws IOException {

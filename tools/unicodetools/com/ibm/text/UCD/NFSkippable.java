@@ -208,7 +208,7 @@ public final class NFSkippable extends UCDProperty {
             NFSkippable skipper = new NFSkippable(mode, Default.ucd());
             generateSet(out, "SKIPPABLE[" + Normalizer.getName(mode) + "]", skipper);
         }
-        
+        System.out.println("Done");
         out.close();
     }
     
