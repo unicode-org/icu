@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Quantifier.java,v $ 
- * $Date: 2001/10/04 18:24:15 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/17 19:17:06 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -45,9 +45,15 @@ class Quantifier implements UnicodeMatcher {
         int start = offset[0];
         int count = 0;
         while (count < maxCount) {
+            int pos = offset[0];
             int m = matcher.matches(text, offset, limit, incremental);
             if (m == U_MATCH) {
                 ++count;
+                if (pos == offset[0]) {
+                    // If offset has not moved we have a zero-width match.
+                    // Don't keep matching it infinitely.
+                    break;
+                }
             } else if (incremental && m == U_PARTIAL_MATCH) {
                 return U_PARTIAL_MATCH;
             } else {

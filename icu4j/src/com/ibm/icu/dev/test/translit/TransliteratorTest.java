@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/10/10 20:23:27 $
- * $Revision: 1.52 $
+ * $Date: 2001/10/17 19:19:00 $
+ * $Revision: 1.53 $
  *
  *****************************************************************************************
  */
@@ -1318,7 +1318,7 @@ public class TransliteratorTest extends TestFmwk {
         public TestFact(String theID) {
             id = theID;
         }
-        public Transliterator getInstance() {
+        public Transliterator getInstance(String ignoredID) {
             return new NameableNullTrans(id);
         }
     };
@@ -1533,6 +1533,15 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
+    /**
+     * Test new property set syntax
+     */
+    public void TestPropertySet() {
+        expect("a>A; \\p{Lu}>x; \\p{ALL}>y;", "abcDEF", "Ayyxxx");
+        expect("(.+)>'[' $1 ']';", " a stitch \n in time \r saves 9",
+               "[ a stitch ]\n[ in time ]\r[ saves 9]");
+    }
+
     //======================================================================
     // icu4j ONLY
     // These tests are not mirrored (yet) in icu4c at
@@ -1549,6 +1558,10 @@ public class TransliteratorTest extends TestFmwk {
         } catch (IllegalArgumentException e) {
             errln("FAIL: " + rule + " => " + e);
         }
+    }
+
+    public void TestDebugIndic() {
+        expect("'-'h\\u0323>a;", "-h\u0323", "a");
     }
 
     //======================================================================

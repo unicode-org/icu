@@ -1,3 +1,13 @@
+/*
+**********************************************************************
+*   Copyright (c) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
+* $Date: 2001/10/17 19:17:06 $
+* $Revision: 1.4 $
+**********************************************************************
+*/
 package com.ibm.text;
 
 import com.ibm.text.resources.ResourceReader;
@@ -85,6 +95,13 @@ class TransliteratorParser {
      */
     private String undefinedVariableName;
 
+    /**
+     * The stand-in character for the 'dot' set, represented by '.' in
+     * patterns.  This is allocated the first time it is needed, and
+     * reused thereafter.
+     */
+    private int dotStandIn = -1;
+
     //----------------------------------------------------------------------
     // Constants
     //----------------------------------------------------------------------
@@ -109,8 +126,6 @@ class TransliteratorParser {
 
     private static final char CONTEXT_ANTE        = '{'; // ante{key
     private static final char CONTEXT_POST        = '}'; // key}post
-    private static final char SET_OPEN            = '[';
-    private static final char SET_CLOSE           = ']';
     private static final char CURSOR_POS          = '|';
     private static final char CURSOR_OFFSET       = '@';
     private static final char ANCHOR_START        = '^';
@@ -118,6 +133,9 @@ class TransliteratorParser {
     private static final char KLEENE_STAR         = '*';
     private static final char ONE_OR_MORE         = '+';
     private static final char ZERO_OR_ONE         = '?';
+
+    private static final char DOT                 = '.';
+    private static final String DOT_SET           = "[^[:Zp:][:Zl:]\r\n$]";
 
     // By definition, the ANCHOR_END special character is a
     // trailing SymbolTable.SYMBOL_REF character.
@@ -541,6 +559,15 @@ class TransliteratorParser {
                     // Text after a presumed end anchor is a syntax err
                     syntaxError("Malformed variable reference", rule, start);
                 }
+                if (UnicodeSet.resemblesPattern(rule, pos-1)) {
+                    if (pp == null) {
+                        pp = new ParsePosition(0);
+                    }
+                    pp.setIndex(pos-1); // Backup to opening '['
+                    buf.append(parser.parseSet(rule, pp));
+                    pos = pp.getIndex();                    
+                    continue;
+                }
                 // Handle escapes
                 if (c == ESCAPE) {
                     if (pos == limit) {
@@ -682,14 +709,6 @@ class TransliteratorParser {
                     }
                     post = buf.length();
                     break;
-                case SET_OPEN:
-                    if (pp == null) {
-                        pp = new ParsePosition(0);
-                    }
-                    pp.setIndex(pos-1); // Backup to opening '['
-                    buf.append(parser.parseSet(rule, pp));
-                    pos = pp.getIndex();
-                    break;
                 case CURSOR_POS:
                     if (cursor >= 0) {
                         syntaxError("Multiple cursors", rule, start);
@@ -717,6 +736,9 @@ class TransliteratorParser {
                             syntaxError("Misplaced " + c, rule, start);
                         }
                     }
+                    break;
+                case DOT:
+                    buf.append(parser.getDotStandIn());
                     break;
                 case KLEENE_STAR:
                 case ONE_OR_MORE:
@@ -783,7 +805,6 @@ class TransliteratorParser {
                         buf.append(parser.generateStandInFor(m));
                     }
                     break;
-                // case SET_CLOSE:
                 default:
                     // Disallow unquoted characters other than [0-9A-Za-z]
                     // in the printable ASCII range.  These characters are
@@ -1357,6 +1378,17 @@ class TransliteratorParser {
         return variableNext++;
     }
 
+    /**
+     * Return the stand-in for the dot set.  It is allocated the first
+     * time and reused thereafter.
+     */
+    char getDotStandIn() {
+        if (dotStandIn == -1) {
+            dotStandIn = generateStandInFor(new UnicodeSet(DOT_SET));
+        }
+        return (char) dotStandIn;
+    }
+    
     /**
      * Append the value of the given variable name to the given
      * StringBuffer.
