@@ -34,6 +34,7 @@ public class CheckTags {
     RootDoc root;
     boolean log;
     boolean brief;
+    boolean isShort;
     DocStack stack = new DocStack();
 
     class DocNode {
@@ -115,7 +116,7 @@ public class CheckTags {
             //            System.out.println(">>> " + last + " error: " + error + " show: " + show + " nomsg: " + nomsg);
 
             if (show) {
-                if (brief && error) {
+                if (isShort || (brief && error)) {
                     msg = null; // nuke error messages if we're brief, just report headers and totals
                 }
                 for (int i = 0; i <= ix;) {
@@ -161,7 +162,9 @@ public class CheckTags {
             return 1;
         } else if (option.equals("-brief")) {
             return 1;
-        }
+        } else if (option.equals("-short")) {
+	    return 1;
+	}
         return 0;
     }
 
@@ -175,7 +178,9 @@ public class CheckTags {
                 this.log = true;
             } else if (opt.equals("-brief")) {
                 this.brief = true;
-            }
+            } else if (opt.equals("-short")) {
+		this.isShort = true;
+	    }
         }
     }
 
@@ -268,11 +273,19 @@ public class CheckTags {
             // the synthetic constructors...
 
             boolean isClass = doc.isClass() || doc.isInterface();
-            String header = "--- " + (isClass ? doc.qualifiedName() : doc.name());
+            String header;
+	    if (!isShort || isClass) {
+		header = "--- ";
+	    } else {
+		header = "";
+	    }
+	    header += (isClass ? doc.qualifiedName() : doc.name());
             if (doc instanceof ExecutableMemberDoc) {
                 header += ((ExecutableMemberDoc)doc).flatSignature();
             }
-            header += " ---";
+	    if (!isShort || isClass) {
+		header += " ---";
+	    }
             stack.push(header, isClass);
             if (log) {
                 logln();
