@@ -47,8 +47,8 @@ endif
 #         the stub data and the real data at the same time.
 #
 ifneq ($(ENABLE_SHARED),)
-SO_TARGET = $(top_builddir)/data/libicudata.$(SO)
-MIDDLE_SO_TARGET = $(top_builddir)/data/lib$(ICUDATA_NAME).$(SO)
+SO_TARGET = libicudata.$(SO)
+MIDDLE_SO_TARGET = lib$(ICUDATA_NAME).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) 
 endif
 
