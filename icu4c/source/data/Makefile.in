@@ -157,12 +157,13 @@ DAT_FILES_SHORT=uprops.icu ucase.icu pnames.icu unames.icu unorm.icu cnvalias.ic
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
-# ALL of these files can be deleted (the following BRK files) - they are copied
-BRK_FILES_SHORT=char.brk line.brk line_th.brk sent.brk word.brk title.brk word_th.brk
+-include $(BRKSRCDIR)/brkfiles.mk
+-include $(BRKSRCDIR)/brklocal.mk
+ALL_BRK_SOURCE=char.txt title.txt word.txt $(BRK_SOURCE) $(BRK_SOURCE_LOCAL)
+BRK_FILES_SHORT=$(ALL_BRK_SOURCE:%.txt=%.brk)
 BRK_FILES=$(BRK_FILES_SHORT:%=$(BUILDDIR)/%)
-# don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
 
-## UCM files 
+## UCM files
 -include $(UCMSRCDIR)/ucmcore.mk
 -include $(UCMSRCDIR)/ucmfiles.mk
 -include $(UCMSRCDIR)/ucmebcdic.mk
