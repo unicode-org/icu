@@ -4015,9 +4015,23 @@ static void TestEquals(void) {
       ucol_close(source);
     /*}*/
   }
+}
 
- 
-
+static void TestJ2726(void) {
+  UChar a[2] = { 0x61, 0x00 }; /*"a"*/
+  UChar aSpace[3] = { 0x61, 0x20, 0x00 }; /*"a "*/
+  UChar spaceA[3] = { 0x20, 0x61, 0x00 }; /*" a"*/
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_open("en", &status);
+  ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_PRIMARY, &status);
+  doTest(coll, a, aSpace, UCOL_EQUAL);
+  doTest(coll, aSpace, a, UCOL_EQUAL);
+  doTest(coll, a, spaceA, UCOL_EQUAL);
+  doTest(coll, spaceA, a, UCOL_EQUAL);
+  doTest(coll, spaceA, aSpace, UCOL_EQUAL);
+  doTest(coll, aSpace, spaceA, UCOL_EQUAL);
+  ucol_close(coll);
 }
 
 
@@ -4073,6 +4087,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestPartialSortKeyTermination);
     TEST(TestSettings);
     TEST(TestEquals);
+    TEST(TestJ2726);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
