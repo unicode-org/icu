@@ -72,6 +72,8 @@ char symPrefix[100];
 
 extern int
 main(int argc, char* argv[]) {
+    options[2].value = ".";
+
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
