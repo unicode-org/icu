@@ -2098,7 +2098,7 @@ TestUnescape() {
     length=u_unescape(
         "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
         buffer, sizeof(buffer)/sizeof(buffer[0]));
-    if(length!=45 || u_strcmp(buffer, expect)!=0) {
+    if(length!=44 || u_strcmp(buffer, expect)!=0) {
         log_err("failure in u_unescape(): length %d!=45 and/or incorrect result string\n", length);
     }
 
@@ -2106,7 +2106,7 @@ TestUnescape() {
     length=u_unescape(
         "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
         NULL, sizeof(buffer)/sizeof(buffer[0]));
-    if(length!=45 || u_strcmp(buffer, expect)!=0) {
+    if(length!=44 || u_strcmp(buffer, expect)!=0) {
         log_err("failure in u_unescape(preflighting): length %d!=45\n", length);
     }
 
@@ -2458,7 +2458,7 @@ TestUScriptRunAPI()
     for (run = 0; run < nTestRuns; run += 1) {
         runStarts[run] = stringLimit;
         stringLimit += u_unescape(testData[run].runText, &testString[stringLimit], 1024 - stringLimit);
-        stringLimit -= 1;
+        /*stringLimit -= 1;*/
     }
 
     /* The limit of the last run */ 
