@@ -90,13 +90,69 @@ UnicodeString::UnicodeString()
     fFlags(kShortString)
 {}
 
-UnicodeString::UnicodeString(int32_t capacity)
+UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
   : fArray(0),
     fLength(0),
     fCapacity(US_STACKBUF_SIZE),
     fFlags(0)
 {
-  allocate(capacity);
+  if(count <= 0) {
+    // just allocate and do not do anything else
+    allocate(capacity);
+  } else {
+    // count > 0, allocate and fill the new string with count c's
+    int32_t unitCount = UTF_CHAR_LENGTH(c), length = count * unitCount;
+    if(capacity < length) {
+      capacity = length;
+    }
+    if(allocate(capacity)) {
+      int32_t i = 0;
+
+      // fill the new string with c
+      if(unitCount == 1) {
+        // fill with length UChars
+        while(i < length) {
+          fArray[i++] = (UChar)c;
+        }
+      } else {
+        // get the code units for c
+        UChar units[UTF_MAX_CHAR_LENGTH];
+        UTF_APPEND_CHAR_UNSAFE(units, i, c);
+
+        // now it must be i==unitCount
+        i = 0;
+
+        // for Unicode, unitCount can only be 1, 2, 3, or 4
+        // 1 is handled above
+        switch(unitCount) {
+        case 2:
+          while(i < length) {
+            fArray[i++]=units[0];
+            fArray[i++]=units[1];
+          }
+          break;
+        case 3:
+          while(i < length) {
+            fArray[i++]=units[0];
+            fArray[i++]=units[1];
+            fArray[i++]=units[2];
+          }
+          break;
+        case 4:
+          while(i < length) {
+            fArray[i++]=units[0];
+            fArray[i++]=units[1];
+            fArray[i++]=units[2];
+            fArray[i++]=units[3];
+          }
+          break;
+        default:
+          break;
+        }
+      }
+    }
+    fLength = length;
+  }
 }
 
 UnicodeString::UnicodeString(UChar ch)
@@ -108,7 +164,7 @@ UnicodeString::UnicodeString(UChar ch)
   fStackBuffer[0] = ch;
 }
 
-UnicodeString::UnicodeString(UChar32 ch, ESignature)
+UnicodeString::UnicodeString(UChar32 ch)
   : fArray(fStackBuffer),
     fLength(1),
     fCapacity(US_STACKBUF_SIZE),
