@@ -240,9 +240,14 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "Pointer to integer (Count) %n: n=1  n=1" C_NEW_LINE) != 0) {
-        log_err("u_fgets got %s\n", myString);
+        log_err("u_fgets got \"%s\"\n", myString);
     }
 
+    u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
+    u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
+    if (myString == NULL || strcmp(myString, "Pointer to integer Value: 35" C_NEW_LINE) != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
 /*
     *n = 1;
     u_fscanf(myFile, "Pointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
@@ -419,6 +424,124 @@ static void TestFilePrintCompatibility() {
     }
     fclose(myCFile);
 }
+
+#define TestFPrintFormat(uFormat, uValue, cFormat, cValue) \
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);\
+    /* Reinitialize the buffer to verify null termination works. */\
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    \
+    uNumPrinted = u_fprintf(myFile, uFormat, uValue);\
+    u_fclose(myFile);\
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);\
+    u_fgets(myFile, sizeof(uBuffer)/sizeof(*uBuffer), uBuffer);\
+    u_fclose(myFile);\
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));\
+    cNumPrinted = sprintf(buffer, cFormat, cValue);\
+    if (strcmp(buffer, compBuffer) != 0) {\
+        log_err("%" uFormat " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
+    }\
+    if (cNumPrinted != uNumPrinted) {\
+        log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
+    }\
+
+
+static void TestFprintfFormat() {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0};
+    static const char abcChars[] = "abc";
+    UChar uBuffer[256];
+    char buffer[256];
+    char compBuffer[256];
+    int32_t uNumPrinted;
+    int32_t cNumPrinted;
+    UFILE *myFile;
+
+    TestFPrintFormat("%8U", abcUChars, "%8s", abcChars);
+    TestFPrintFormat("%-8U", abcUChars, "%-8s", abcChars);
+
+    TestFPrintFormat("%8s", abcChars, "%8s", abcChars);
+    TestFPrintFormat("%-8s", abcChars, "%-8s", abcChars);
+
+    TestFPrintFormat("%8c", 0x65, "%8c", 0x65);
+    TestFPrintFormat("%-8c", 0x65, "%-8c", 0x65);
+
+    TestFPrintFormat("%8K", (UChar)0x65, "%8c", 0x65);
+    TestFPrintFormat("%-8K", (UChar)0x65, "%-8c", 0x65);
+
+    TestFPrintFormat("%8f", 1.23456789, "%8f", 1.23456789);
+    TestFPrintFormat("%-8f", 1.23456789, "%-8f", 1.23456789);
+
+    TestFPrintFormat("%8e", 1.23456789, "%8e", 1.23456789);
+    TestFPrintFormat("%-8e", 1.23456789, "%-8e", 1.23456789);
+
+    TestFPrintFormat("%8g", 1.23456789, "%8g", 1.23456789);
+    TestFPrintFormat("%-8g", 1.23456789, "%-8g", 1.23456789);
+
+    TestFPrintFormat("%8x", 123456, "%8x", 123456);
+    TestFPrintFormat("%-8x", 123456, "%-8x", 123456);
+
+    TestFPrintFormat("%8X", 123456, "%8X", 123456);
+    TestFPrintFormat("%-8X", 123456, "%-8X", 123456);
+    TestFPrintFormat("%#x", 123456, "%#x", 123456);
+    TestFPrintFormat("%#x", -123456, "%#x", -123456);
+
+    TestFPrintFormat("%8o", 123456, "%8o", 123456);
+    TestFPrintFormat("%-8o", 123456, "%-8o", 123456);
+    TestFPrintFormat("%#o", 123, "%#o", 123);
+    TestFPrintFormat("%#o", -123, "%#o", -123);
+
+    TestFPrintFormat("%8u", 123456, "%8u", 123456);
+    TestFPrintFormat("%-8u", 123456, "%-8u", 123456);
+    TestFPrintFormat("%8u", -123456, "%8u", -123456);
+    TestFPrintFormat("%-8u", -123456, "%-8u", -123456);
+
+    TestFPrintFormat("%8d", 123456, "%8d", 123456);
+    TestFPrintFormat("%-8d", 123456, "%-8d", 123456);
+
+    TestFPrintFormat("%8i", 123456, "%8i", 123456);
+    TestFPrintFormat("%-8i", 123456, "%-8i", 123456);
+
+    TestFPrintFormat("% d", 123456, "% d", 123456);
+    TestFPrintFormat("% d", -123456, "% d", -123456);
+
+    log_verbose("Get really crazy with the formatting.\n");
+
+    TestFPrintFormat("%-+ #12x", 123, "%-+ #12x", 123);
+    TestFPrintFormat("%-+ #12x", -123, "%-+ #12x", -123);
+    TestFPrintFormat("%+ #12x", 123, "%+ #12x", 123);
+    TestFPrintFormat("%+ #12x", -123, "%+ #12x", -123);
+
+    TestFPrintFormat("%-+ 12d", 123, "%-+ 12d", 123);
+    TestFPrintFormat("%-+ 12d", -123, "%-+ 12d", -123);
+    TestFPrintFormat("%+ 12d", 123, "%+ 12d", 123);
+    TestFPrintFormat("%+ 12d", -123, "%+ 12d", -123);
+    TestFPrintFormat("%+12d", 123, "%+12d", 123);
+    TestFPrintFormat("%+12d", -123, "%+12d", -123);
+    TestFPrintFormat("%- 12d", 123, "%- 12d", 123);
+    TestFPrintFormat("%- 12d", -123, "%- 12d", -123);
+    TestFPrintFormat("% 12d", 123, "% 12d", 123);
+    TestFPrintFormat("% 12d", -123, "% 12d", -123);
+
+    TestFPrintFormat("%-+ 12.1e", 1.234, "%-+ 12.1e", 1.234);
+    TestFPrintFormat("%-+ 12.1e", -1.234, "%-+ 12.1e", -1.234);
+    TestFPrintFormat("%+ 12.1e", 1.234, "%+ 12.1e", 1.234);
+    TestFPrintFormat("%+ 12.1e", -1.234, "%+ 12.1e", -1.234);
+    TestFPrintFormat("%+12.1e", 1.234, "%+12.1e", 1.234);
+    TestFPrintFormat("%+12.1e", -1.234, "%+12.1e", -1.234);
+    TestFPrintFormat("% 12.1e", 1.234, "% 12.1e", 1.234);
+    TestFPrintFormat("% 12.1e", -1.234, "% 12.1e", -1.234);
+
+    TestFPrintFormat("%-+ 12.1f", 1.234, "%-+ 12.1f", 1.234);
+    TestFPrintFormat("%-+ 12.1f", -1.234, "%-+ 12.1f", -1.234);
+    TestFPrintFormat("%+ 12.1f", 1.234, "%+ 12.1f", 1.234);
+    TestFPrintFormat("%+ 12.1f", -1.234, "%+ 12.1f", -1.234);
+    TestFPrintFormat("%+12.1f", 1.234, "%+12.1f", 1.234);
+    TestFPrintFormat("%+12.1f", -1.234, "%+12.1f", -1.234);
+    TestFPrintFormat("% 12.1f", 1.234, "% 12.1f", 1.234);
+    TestFPrintFormat("% 12.1f", -1.234, "% 12.1f", -1.234);
+}
+
+#undef TestFPrintFormat
 
 static void TestString() {
     int32_t n[1];
@@ -613,11 +736,165 @@ static void TestString() {
 //    u_sscanf(uStringBuf, NULL, "Spell Out %%V (non-ANSI): %V\n", *n);
 }
 
+#define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
+    u_uastrncpy(testStr, "xxxxxxxxxxxxxx", sizeof(testStr)/sizeof(testStr[0]));\
+    size = u_snprintf(testStr, limit, "en_US_POSIX", format, value);\
+    u_austrncpy(cTestResult, testStr, sizeof(cTestResult)/sizeof(cTestResult[0]));\
+    if (size != expectedSize || strcmp(cTestResult, expectedStr) != 0) {\
+        log_err("Unexpected formatting. size=%d expectedSize=%d cTestResult=%s expectedStr=%s\n",\
+            size, expectedSize, cTestResult, expectedStr);\
+    }\
+    else {\
+        log_verbose("Got: %s\n", cTestResult);\
+    }\
+
+
+static void TestSnprintf() {
+    UChar testStr[256];
+    char cTestResult[256];
+    int32_t size;
+
+    Test_u_snprintf(0, "%d", 123, 0, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(2, "%d", 123, 2, "12xxxxxxxxxxxx");
+    Test_u_snprintf(3, "%d", 123, 3, "123xxxxxxxxxxx");
+    Test_u_snprintf(4, "%d", 123, 3, "123");
+
+    Test_u_snprintf(0, "%s", "abcd", 0, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(3, "%s", "abcd", 3, "abcxxxxxxxxxxx");
+    Test_u_snprintf(4, "%s", "abcd", 4, "abcdxxxxxxxxxx");
+    Test_u_snprintf(5, "%s", "abcd", 4, "abcd");
+
+    Test_u_snprintf(0, "%e", 12.34, 0, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(1, "%e", 12.34, 1, "1xxxxxxxxxxxxx");
+    Test_u_snprintf(2, "%e", 12.34, 2, "1.xxxxxxxxxxxx");
+    Test_u_snprintf(3, "%e", 12.34, 3, "1.2xxxxxxxxxxx");
+    Test_u_snprintf(5, "%e", 12.34, 5, "1.234xxxxxxxxx");
+    Test_u_snprintf(6, "%e", 12.34, 6, "1.2340xxxxxxxx");
+    Test_u_snprintf(8, "%e", 12.34, 8, "1.234000xxxxxx");
+    Test_u_snprintf(9, "%e", 12.34, 9, "1.234000exxxxx");
+    Test_u_snprintf(10, "%e", 12.34, 10, "1.234000e+xxxx");
+    Test_u_snprintf(11, "%e", 12.34, 11, "1.234000e+0xxx");
+    Test_u_snprintf(13, "%e", 12.34, 13, "1.234000e+001x");
+    Test_u_snprintf(14, "%e", 12.34, 13, "1.234000e+001");
+}
+
+#define TestSPrintFormat(uFormat, uValue, cFormat, cValue) \
+    /* Reinitialize the buffer to verify null termination works. */\
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    \
+    uNumPrinted = u_sprintf(uBuffer, "en_US_POSIX", uFormat, uValue);\
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
+    cNumPrinted = sprintf(buffer, cFormat, cValue);\
+    if (strcmp(buffer, compBuffer) != 0) {\
+        log_err("%" uFormat " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
+    }\
+    if (cNumPrinted != uNumPrinted) {\
+        log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
+    }\
+
+
+static void TestSprintfFormat() {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0};
+    static const char abcChars[] = "abc";
+    UChar uBuffer[256];
+    char buffer[256];
+    char compBuffer[256];
+    int32_t uNumPrinted;
+    int32_t cNumPrinted;
+
+    TestSPrintFormat("%8U", abcUChars, "%8s", abcChars);
+    TestSPrintFormat("%-8U", abcUChars, "%-8s", abcChars);
+
+    TestSPrintFormat("%8s", abcChars, "%8s", abcChars);
+    TestSPrintFormat("%-8s", abcChars, "%-8s", abcChars);
+
+    TestSPrintFormat("%8c", 0x65, "%8c", 0x65);
+    TestSPrintFormat("%-8c", 0x65, "%-8c", 0x65);
+
+    TestSPrintFormat("%8K", (UChar)0x65, "%8c", 0x65);
+    TestSPrintFormat("%-8K", (UChar)0x65, "%-8c", 0x65);
+
+    TestSPrintFormat("%8f", 1.23456789, "%8f", 1.23456789);
+    TestSPrintFormat("%-8f", 1.23456789, "%-8f", 1.23456789);
+
+    TestSPrintFormat("%8e", 1.23456789, "%8e", 1.23456789);
+    TestSPrintFormat("%-8e", 1.23456789, "%-8e", 1.23456789);
+
+    TestSPrintFormat("%8g", 1.23456789, "%8g", 1.23456789);
+    TestSPrintFormat("%-8g", 1.23456789, "%-8g", 1.23456789);
+
+    TestSPrintFormat("%8x", 123456, "%8x", 123456);
+    TestSPrintFormat("%-8x", 123456, "%-8x", 123456);
+
+    TestSPrintFormat("%8X", 123456, "%8X", 123456);
+    TestSPrintFormat("%-8X", 123456, "%-8X", 123456);
+    TestSPrintFormat("%#x", 123456, "%#x", 123456);
+    TestSPrintFormat("%#x", -123456, "%#x", -123456);
+
+    TestSPrintFormat("%8o", 123456, "%8o", 123456);
+    TestSPrintFormat("%-8o", 123456, "%-8o", 123456);
+    TestSPrintFormat("%#o", 123, "%#o", 123);
+    TestSPrintFormat("%#o", -123, "%#o", -123);
+
+    TestSPrintFormat("%8u", 123456, "%8u", 123456);
+    TestSPrintFormat("%-8u", 123456, "%-8u", 123456);
+    TestSPrintFormat("%8u", -123456, "%8u", -123456);
+    TestSPrintFormat("%-8u", -123456, "%-8u", -123456);
+
+    TestSPrintFormat("%8d", 123456, "%8d", 123456);
+    TestSPrintFormat("%-8d", 123456, "%-8d", 123456);
+
+    TestSPrintFormat("%8i", 123456, "%8i", 123456);
+    TestSPrintFormat("%-8i", 123456, "%-8i", 123456);
+
+    TestSPrintFormat("% d", 123456, "% d", 123456);
+    TestSPrintFormat("% d", -123456, "% d", -123456);
+
+    log_verbose("Get really crazy with the formatting.\n");
+
+    TestSPrintFormat("%-+ #12x", 123, "%-+ #12x", 123);
+    TestSPrintFormat("%-+ #12x", -123, "%-+ #12x", -123);
+    TestSPrintFormat("%+ #12x", 123, "%+ #12x", 123);
+    TestSPrintFormat("%+ #12x", -123, "%+ #12x", -123);
+
+    TestSPrintFormat("%-+ 12d", 123, "%-+ 12d", 123);
+    TestSPrintFormat("%-+ 12d", -123, "%-+ 12d", -123);
+    TestSPrintFormat("%+ 12d", 123, "%+ 12d", 123);
+    TestSPrintFormat("%+ 12d", -123, "%+ 12d", -123);
+    TestSPrintFormat("%+12d", 123, "%+12d", 123);
+    TestSPrintFormat("%+12d", -123, "%+12d", -123);
+    TestSPrintFormat("%- 12d", 123, "%- 12d", 123);
+    TestSPrintFormat("%- 12d", -123, "%- 12d", -123);
+    TestSPrintFormat("% 12d", 123, "% 12d", 123);
+    TestSPrintFormat("% 12d", -123, "% 12d", -123);
+
+    TestSPrintFormat("%-+ 12.1e", 1.234, "%-+ 12.1e", 1.234);
+    TestSPrintFormat("%-+ 12.1e", -1.234, "%-+ 12.1e", -1.234);
+    TestSPrintFormat("%+ 12.1e", 1.234, "%+ 12.1e", 1.234);
+    TestSPrintFormat("%+ 12.1e", -1.234, "%+ 12.1e", -1.234);
+    TestSPrintFormat("%+12.1e", 1.234, "%+12.1e", 1.234);
+    TestSPrintFormat("%+12.1e", -1.234, "%+12.1e", -1.234);
+    TestSPrintFormat("% 12.1e", 1.234, "% 12.1e", 1.234);
+    TestSPrintFormat("% 12.1e", -1.234, "% 12.1e", -1.234);
+
+    TestSPrintFormat("%-+ 12.1f", 1.234, "%-+ 12.1f", 1.234);
+    TestSPrintFormat("%-+ 12.1f", -1.234, "%-+ 12.1f", -1.234);
+    TestSPrintFormat("%+ 12.1f", 1.234, "%+ 12.1f", 1.234);
+    TestSPrintFormat("%+ 12.1f", -1.234, "%+ 12.1f", -1.234);
+    TestSPrintFormat("%+12.1f", 1.234, "%+12.1f", 1.234);
+    TestSPrintFormat("%+12.1f", -1.234, "%+12.1f", -1.234);
+    TestSPrintFormat("% 12.1f", 1.234, "% 12.1f", 1.234);
+    TestSPrintFormat("% 12.1f", -1.234, "% 12.1f", -1.234);
+}
+
+#undef TestSPrintFormat
+
 static void TestStringCompatibility() {
-    UChar myUString[512];
-    UChar uStringBuf[512];
-    char myString[512] = "";
-    char testBuf[512] = "";
+    UChar myUString[256];
+    UChar uStringBuf[256];
+    char myString[256] = "";
+    char testBuf[256] = "";
     int32_t num;
 
     u_memset(myUString, 0x0a, sizeof(myUString)/ sizeof(*myUString));
@@ -709,48 +986,6 @@ static void TestStringCompatibility() {
     }
 }
 
-#define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
-    u_uastrncpy(testStr, "xxxxxxxxxxxxxx", sizeof(testStr)/sizeof(testStr[0]));\
-    size = u_snprintf(testStr, limit, "en_US_POSIX", format, value);\
-    u_austrncpy(cTestResult, testStr, sizeof(cTestResult)/sizeof(cTestResult[0]));\
-    if (size != expectedSize || strcmp(cTestResult, expectedStr) != 0) {\
-        log_err("Unexpected formatting. size=%d expectedSize=%d cTestResult=%s expectedStr=%s\n",\
-            size, expectedSize, cTestResult, expectedStr);\
-    }\
-    else {\
-        log_verbose("Got: %s\n", cTestResult);\
-    }\
-
-
-static void TestSnprintf() {
-    UChar testStr[256];
-    char cTestResult[256];
-    int32_t size;
-
-    Test_u_snprintf(0, "%d", 123, 0, "xxxxxxxxxxxxxx");
-    Test_u_snprintf(2, "%d", 123, 2, "12xxxxxxxxxxxx");
-    Test_u_snprintf(3, "%d", 123, 3, "123xxxxxxxxxxx");
-    Test_u_snprintf(4, "%d", 123, 3, "123");
-
-    Test_u_snprintf(0, "%s", "abcd", 0, "xxxxxxxxxxxxxx");
-    Test_u_snprintf(3, "%s", "abcd", 3, "abcxxxxxxxxxxx");
-    Test_u_snprintf(4, "%s", "abcd", 4, "abcdxxxxxxxxxx");
-    Test_u_snprintf(5, "%s", "abcd", 4, "abcd");
-
-    Test_u_snprintf(0, "%e", 12.34, 0, "xxxxxxxxxxxxxx");
-    Test_u_snprintf(1, "%e", 12.34, 1, "1xxxxxxxxxxxxx");
-    Test_u_snprintf(2, "%e", 12.34, 2, "1.xxxxxxxxxxxx");
-    Test_u_snprintf(3, "%e", 12.34, 3, "1.2xxxxxxxxxxx");
-    Test_u_snprintf(5, "%e", 12.34, 5, "1.234xxxxxxxxx");
-    Test_u_snprintf(6, "%e", 12.34, 6, "1.2340xxxxxxxx");
-    Test_u_snprintf(8, "%e", 12.34, 8, "1.234000xxxxxx");
-    Test_u_snprintf(9, "%e", 12.34, 9, "1.234000exxxxx");
-    Test_u_snprintf(10, "%e", 12.34, 10, "1.234000e+xxxx");
-    Test_u_snprintf(11, "%e", 12.34, 11, "1.234000e+0xxx");
-    Test_u_snprintf(13, "%e", 12.34, 13, "1.234000e+001x");
-    Test_u_snprintf(14, "%e", 12.34, 13, "1.234000e+001");
-}
-
 static void TestStream() {
 #if U_IOSTREAM_SOURCE >= 198506
     char testStreamBuf[512];
@@ -816,13 +1051,15 @@ static void TestStream() {
 }
 
 static void addAllTests(TestNode** root) {
-    addTest(root, &TestFile, "fileapi/TestFile");
-    addTest(root, &TestCodepage, "fileapi/TestCodepage");
-    addTest(root, &TestFilePrintCompatibility, "fileapi/TestFilePrintCompatibility");
-    addTest(root, &TestString, "strapi/TestString");
-    addTest(root, &TestStringCompatibility, "strapi/TestStringCompatibility");
-    addTest(root, &TestSnprintf, "strapi/TestSnprintf");
-    addTest(root, &TestStream, "iostream/TestStream");
+    addTest(root, &TestFile, "file/TestFile");
+    addTest(root, &TestCodepage, "file/TestCodepage");
+    addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
+    addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
+    addTest(root, &TestString, "string/TestString");
+    addTest(root, &TestSprintfFormat, "string/TestSprintfFormat");
+    addTest(root, &TestSnprintf, "string/TestSnprintf");
+    addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
+    addTest(root, &TestStream, "stream/TestStream");
 }
 
 int main(int argc, char* argv[])
