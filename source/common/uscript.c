@@ -210,7 +210,7 @@ static const UScriptCode scriptAbbrCodes[] = {
         USCRIPT_SYRIAC     ,
       /*  USCRIPT_SYRIAC     , */
       /*  USCRIPT_SYRIAC     , */
-        USCRIPT_SYRIAC     ,
+      /*  USCRIPT_SYRIAC     , */
         USCRIPT_TAMIL      ,
         USCRIPT_TELUGU     ,
         USCRIPT_THAANA     ,
@@ -768,48 +768,77 @@ findCodeIndex(const UScriptCode unsorted[], const UScriptCode target, int size){
     return -1;
 }
 
-U_CAPI UScriptCode 
-uscript_getCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
+U_CAPI int32_t 
+uscript_getCode(const char* nameOrAbbrOrLocale,
+                UScriptCode* fillIn,
+                int32_t capacity,
+                UErrorCode* err){
+
     UScriptCode code = USCRIPT_INVALID_CODE;
     int strIndex=0;
-
+    int32_t numFilled=0;
+    int32_t len=0;
     /* check arguments */
     if(U_FAILURE(*err)){
-        return code;
+        return numFilled;
     }
     /* try the Names array first */
     strIndex = findStringIndex(scriptNames, nameOrAbbrOrLocale, USCRIPT_NAMES_ARRAY_SIZE);
     
     if(strIndex>=0 && strIndex < USCRIPT_NAMES_ARRAY_SIZE){ 
         code = (UScriptCode) scriptNameCodes[strIndex];
+        len = 1;
     }
     /* we did not find in names array so try abbr array*/
     if(code ==USCRIPT_INVALID_CODE){
         strIndex = findStringIndex(scriptAbbr, nameOrAbbrOrLocale, USCRIPT_ABBR_ARRAY_SIZE);
         if(strIndex>=0 && strIndex < USCRIPT_NAMES_ARRAY_SIZE){ 
             code = (UScriptCode) scriptAbbrCodes[strIndex];
+            len = 1;
         }
     }
+
     /* we still haven't found it try locale */
     if(code==USCRIPT_INVALID_CODE){
         UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,err);
         if(U_SUCCESS(*err)&& *err != U_USING_DEFAULT_ERROR){
-            int32_t len=0;
             UResourceBundle* resD = ures_getByKey(resB,kLocaleScript,NULL,err);
             int index =0;
-            const UChar* name = ures_getStringByIndex(resD,0,&len,err);
             if(U_SUCCESS(*err) ){
-                char cName[50] = {'\0'};
-                u_UCharsToChars(name,cName,len);
-                index = findStringIndex(scriptNames, cName, USCRIPT_NAMES_ARRAY_SIZE);
-                code = (UScriptCode) scriptNameCodes[index];
+                len =0;
+                while(ures_hasNext(resD)){
+                    const UChar* name = ures_getNextString(resD,&len,NULL,err);
+                    if(U_SUCCESS(*err)){
+                        char cName[50] = {'\0'};
+                        u_UCharsToChars(name,cName,len);
+                        index = findStringIndex(scriptAbbr, cName, USCRIPT_NAMES_ARRAY_SIZE);
+                        code = (UScriptCode) scriptAbbrCodes[index];
+                        /* got the script code now fill in the buffer */
+                        if(numFilled<=capacity){ 
+                            *(fillIn)++=code;
+                            numFilled++;
+                        }else{
+                            *err=U_BUFFER_OVERFLOW_ERROR;
+                            return len;
+                        }
+                    }
+                }
             }
             ures_close(resD);
         
         }
         ures_close(resB);
+    }else{
+        /* we found it */
+        if(numFilled<=capacity){ 
+            *(fillIn)++=code;
+            numFilled++;
+        }else{
+            *err=U_BUFFER_OVERFLOW_ERROR;
+            return len;
+        }
     }
-    return code;
+    return numFilled;
 }
 
 U_CAPI const char* 

@@ -169,10 +169,10 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     // Canonicalize script name -or- do locale->script mapping
     status = U_ZERO_ERROR;
     CharString spc(top);
-    UScriptCode s = uscript_getCode(spc, &status);
-    if (s != USCRIPT_INVALID_CODE) {
-        scriptName = UnicodeString(uscript_getName(s), "");
-    }
+    const int32_t capacity = 10;
+    UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
+    int32_t num = uscript_getCode(spc,script,capacity, &status);
+
 
     // Canonicalize top
     char buf[256];
