@@ -1738,7 +1738,8 @@ void RBBITest::testFollowing(RuleBasedBreakIterator& bi, BITestData &td)
     UErrorCode  status = U_ZERO_ERROR;
     int32_t     p;
     int32_t     tag;
-    int32_t     lastP  = -1;
+    int32_t     lastP  = -2;     // A value that will never be returned as a break position.
+                                 //   cannot be -1; that is returned for DONE.
     int         i;
 
     logln("testFollowing():");
