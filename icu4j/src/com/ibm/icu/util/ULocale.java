@@ -678,7 +678,7 @@ public final class ULocale implements Serializable {
      * @draft IDU 3.0
      */
     public static ULocale createCanonical(String nonCanonicalID) {
-        return new ULocale(new IDParser(nonCanonicalID, true).getName(), null);
+        return new ULocale(canonicalize(nonCanonicalID), null);
     }
 
     private static String lscvToID(String lang, String script, String country, String variant) {
@@ -1881,11 +1881,13 @@ public final class ULocale implements Serializable {
      * Utility to fetch locale display data from resource bundle tables.
      */
     private static String getTableString(String tableName, String subtableName, String item, ULocale displayLocale) {
-        try {
-            ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
-            return getTableString(tableName, subtableName, item, bundle);
-        } catch (Exception e) {
-//          System.out.println("gtsu: " + e.getMessage());
+        if (item.length() > 0) {
+            try {
+                ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(displayLocale);
+                return getTableString(tableName, subtableName, item, bundle);
+            } catch (Exception e) {
+//              System.out.println("gtsu: " + e.getMessage());
+            }
         }
         return item;
     }
@@ -1895,27 +1897,27 @@ public final class ULocale implements Serializable {
      */
     private static String getTableString(String tableName, String subtableName, String item, ICUResourceBundle bundle) {
         try {
-	  for (;;) {
-            // special case currency
-            if ("currency".equals(subtableName)) {
-                ICUResourceBundle table = bundle.getWithFallback("Currencies");
-                table = table.getWithFallback(item);
-                return table.getString(1);
-            } else {
-                ICUResourceBundle table = bundle.getWithFallback(tableName);
-		try {
-		  if (subtableName != null) {
-                    table = bundle.getWithFallback(subtableName);
-		  }
-		  table = table.getWithFallback(item);
-		  return table.getString();
-		}
-		catch (MissingResourceException e) {
-		  table = table.getWithFallback("Fallback");
-		  bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(new ULocale(table.getString()));
-		}
+            for (;;) {
+                // special case currency
+                if ("currency".equals(subtableName)) {
+                    ICUResourceBundle table = bundle.getWithFallback("Currencies");
+                    table = table.getWithFallback(item);
+                    return table.getString(1);
+                } else {
+                    ICUResourceBundle table = bundle.getWithFallback(tableName);
+                    try {
+                        if (subtableName != null) {
+                            table = bundle.getWithFallback(subtableName);
+                        }
+                        table = table.getWithFallback(item);
+                        return table.getString();
+                    }
+                    catch (MissingResourceException e) {
+                        table = table.getWithFallback("Fallback");
+                        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(new ULocale(table.getString()));
+                    }
+                }
             }
-	  }
         }
         catch (Exception e) {
 //          System.out.println("gtsi: " + e.getMessage());
