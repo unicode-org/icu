@@ -94,10 +94,11 @@ U_CAPI void U_EXPORT2 ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
  */
 
 U_CAPI void U_EXPORT2 ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
-                       UChar* source,
-                       int32_t length,
-                       int32_t offsetIndex,
-                       UErrorCode * err);
+                                             const UChar* source,
+                                             int32_t length,
+                                             int32_t offsetIndex,
+                                             UErrorCode * err);
+
 /**
  * Used by the callback functions.  This function will write out the error
  * character(s) to the substitution character.
