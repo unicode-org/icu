@@ -180,7 +180,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * Returns a binary data from a binary resource. 
      *
      * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
-     * @see #getString
      * @see #getIntVector
      * @see #getInt
      * @throws MissingResourceException
@@ -196,7 +195,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      *
      * @return a pointer to a chunk of unsigned bytes which live in a memory mapped/DLL file.
      * @see #getBinary
-     * @see #getString
      * @see #getInt
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
@@ -212,7 +210,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * @return an integer value
      * @see #getIntVector
      * @see #getBinary
-     * @see #getString
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
      * @stable ICU 2.0
@@ -228,7 +225,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * @return an integer value
      * @see #getIntVector
      * @see #getBinary
-     * @see #getString
      * @throws MissingResourceException
      * @throws UResourceTypeMismatchException
      * @stable ICU 2.0
@@ -340,7 +336,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     /**
      * Returns the string in a given resource at the specified index.
      *
-     * @param indexS            an index to the wanted string.
+     * @param index            an index to the wanted string.
      * @return                  a string which lives in the resource.
      * @throws IndexOutOfBoundsException
      * @throws UResourceTypeMismatchException
@@ -363,10 +359,10 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     
     /**
      * Returns a functionally equivalent locale, considering keywords as well, for the specified keyword.
-     * @param BASE resource specifier
+     * @param baseName resource specifier
      * @param resName top level resource to consider (such as "collations")
      * @param keyword a particular keyword to consider (such as "collation" )
-     * @param locid The requested locale 
+     * @param locID The requested locale 
      * @param fillinIsAvailable If non-null, 1-element array of fillin parameter that indicates whether the 
      * requested locale was available. The locale is defined as 'available' if it physically 
      * exists within the specified tree.
@@ -429,7 +425,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
         do {
             try {
                     ICUResourceBundle irb = r.get(resName);
-                    UResourceBundle urb = irb.get(kwVal); 
+                   /* UResourceBundle urb = */irb.get(kwVal); 
                     fullBase = r.getULocale(); // If the get() completed, we have the full base locale
             } catch (MissingResourceException t) {
                 // Ignore error, 
@@ -450,7 +446,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             do {
                 try {
                         ICUResourceBundle irb = r.get(resName);
-                        UResourceBundle urb = irb.get(kwVal); 
+                        /*UResourceBundle urb =*/ irb.get(kwVal); 
                         // if we didn't fail before this..
                         fullBase = r.getULocale();
                 } catch (MissingResourceException t) {
@@ -476,7 +472,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
 
     /**
      * Given a tree path and keyword, return a string enumeration of all possible values for that keyword.
-     * @param BASE resource specifier
+     * @param baseName resource specifier
      * @param keyword a particular keyword to consider, must match a top level resource name 
      * within the tree. (i.e. "collations")
      * @internal ICU 3.0
@@ -556,8 +552,7 @@ public abstract class ICUResourceBundle extends UResourceBundle{
      * Gets a resource bundle using the specified base name, locale, and class root.
      *
      * @param baseName the base name of the resource bundle, a fully qualified class name
-     * @param locale the locale for which a resource bundle is desired
-     * @param root the class object from which to load the resource bundle
+     * @param localeName the locale for which a resource bundle is desired
      * @param disableFallback Option to disable locale inheritence. 
      *                          If true the fallback chain will not be built.
      * @exception MissingResourceException
@@ -581,7 +576,6 @@ public abstract class ICUResourceBundle extends UResourceBundle{
 
     /**
      * Return a set of the locale names supported by a collection of resource bundles.
-     * @param bundlePrefix the prefix of the resource bundles to use.
      */
     public static Set getAvailableLocaleNameSet() {
         return getAvailableLocaleNameSet(ICU_BASE_NAME);

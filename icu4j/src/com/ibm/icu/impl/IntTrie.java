@@ -29,7 +29,7 @@ public class IntTrie extends Trie
     * trie.</p>
     * @param inputStream file input stream to a ICU data file, containing 
     *                    the trie
-    * @param dataManipulate, object which provides methods to parse the char 
+    * @param datamanipulate, object which provides methods to parse the char 
     *                        data
     * @exception IOException thrown when data reading fails
     * @draft 2.1
@@ -92,7 +92,6 @@ public class IntTrie extends Trie
     * Get the value associated with a pair of surrogates.
     * @param lead a lead surrogate
     * @param trail a trail surrogate
-    * @param trie data value associated with the surrogate characters
     * @draft 2.1
     */
     public final int getSurrogateValue(char lead, char trail)

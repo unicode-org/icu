@@ -555,13 +555,13 @@ public class ICUListResourceBundle extends ListResourceBundle {
         return obj;
     }
     
-    private Object findResourceWithFallback(Object[][] contents, String key){
+    private Object findResourceWithFallback(Object[][] cnts, String key){
         Object obj = null;
 
-        for (int i = 0; i < contents.length; ++i) {
+        for (int i = 0; i < cnts.length; ++i) {
             // key must be non-null String
-            String tempKey = (String) contents[i][0];
-            obj = contents[i][1];
+            String tempKey = (String) cnts[i][0];
+            obj = cnts[i][1];
             if(tempKey != null && tempKey.equals(key)){
                 return obj;
             }

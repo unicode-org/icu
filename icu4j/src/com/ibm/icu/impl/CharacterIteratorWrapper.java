@@ -126,9 +126,7 @@ public class CharacterIteratorWrapper extends UCharacterIterator {
 		}
     }
     
-    /**
-     * @see UCharacterIterator#moveIndex()
-     */
+
     public int moveIndex(int delta){
     	int length = iterator.getEndIndex() - iterator.getBeginIndex(); 
         int idx = iterator.getIndex()+delta;
