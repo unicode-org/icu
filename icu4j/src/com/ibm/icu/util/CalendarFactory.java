@@ -1,8 +1,10 @@
 package com.ibm.icu.util;
 
 import java.util.Locale;
-
-public interface CalendarFactory {
+/**
+ * @prototype
+ */
+interface CalendarFactory {
     public Calendar create(TimeZone tz, Locale loc);
     public String factoryName();
 }

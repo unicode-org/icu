@@ -632,7 +632,7 @@ import java.util.Set;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.33 $ $Date: 2002/10/04 19:49:10 $
+ * @version      $Revision: 1.34 $ $Date: 2002/11/17 01:42:15 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1475,8 +1475,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * not null, looks in the collection of CalendarFactories for a match
      * and uses that factory to instantiate the calendar.  Otherwise, it
      * uses the default factory that has been registered for the locale.
+     * @prototype
      */
-    public static synchronized Calendar getInstance(TimeZone zone,
+    /* public */ static synchronized Calendar getInstance(TimeZone zone,
                                                     Locale locale,
                                                     String factoryName)
     {
@@ -1528,8 +1529,9 @@ public abstract class Calendar implements Serializable, Cloneable {
 
     /**
      * Return a set of all the registered calendar factory names.
+     * @prototype
      */
-    public static Set getCalendarFactoryNames() {
+    /* public */ static Set getCalendarFactoryNames() {
         return Collections.unmodifiableSet(getFactoryMap().keySet());
     }
 
@@ -1537,8 +1539,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Register a new CalendarFactory.  getInstance(TimeZone, Locale, String) will
      * try to locate a registered factories matching the factoryName.  Only registered
      * factories will be found.
+     * @prototype
      */
-    public static void registerFactory(CalendarFactory factory) {
+    private static void registerFactory(CalendarFactory factory) {
         if (factory == null) {
             throw new IllegalArgumentException("Factory must not be null");
         }
@@ -1547,8 +1550,9 @@ public abstract class Calendar implements Serializable, Cloneable {
 
     /**
      * Convenience override of register(CalendarFactory, Locale, boolean);
+     * @prototype
      */
-    public static Object register(CalendarFactory factory, Locale locale) {
+    /* public */ static Object register(CalendarFactory factory, Locale locale) {
         return register(factory, locale, true);
     }
 
@@ -1556,8 +1560,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Registers a default CalendarFactory for the provided locale.
      * If the factory has not already been registered with
      * registerFactory, it will be.  
+     * @prototype
      */
-    public static Object register(CalendarFactory factory, Locale locale, boolean visible) {
+    /* public */ static Object register(CalendarFactory factory, Locale locale, boolean visible) {
         if (factory == null) {
             throw new IllegalArgumentException("calendar must not be null");
         }
@@ -1570,8 +1575,9 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Unregister the CalendarFactory associated with this key 
      * (obtained from register).
+     * @prototype
      */
-    public static boolean unregister(Object registryKey) {
+    /* public */ static boolean unregister(Object registryKey) {
         return service == null 
             ? false
             : service.unregisterFactory((Factory)registryKey);
@@ -1895,6 +1901,43 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public boolean after(Object when) {
         return compare(when) > 0;
+    }
+
+    /**
+     * Compares this Calendar with that Date or Calendar's time, using
+     * this Calendar's time zone, with the granularity of the provided
+     * field.  The return value is 0 if the time is the same, <0 if
+     * this is before that, and >0 if this is after that.  Valid
+     * values for field are ERA, YEAR, MONTH, WEEK_OF_YEAR, DAY_OF_YEAR, HOUR, MINUTE,
+     * SECOND.
+     * @prototype
+     */
+    /* public */ int compare(Calendar cal, int field) {
+        return compare(new Date(cal.getTimeInMillis()), field);
+    }
+
+    private static int[] FIELDLIST = { ERA, YEAR, MONTH, WEEK_OF_YEAR, DAY_OF_YEAR, HOUR, MINUTE, SECOND };
+
+    /* @prototype */
+    /* public */ int compare(Date when, int field) {
+        long oldms = getTimeInMillis();
+        int result = -2;
+        for (int i = 0; i < FIELDLIST.length; ++i) {
+            int f = FIELDLIST[i];
+            int diff = fieldDifference(when, f);
+            if (diff != 0) {
+                result = diff > 0 ? 1 : -1;
+                break;
+            } else if (f == field) {
+                result = 0;
+                break;
+            }
+        }
+        setTimeInMillis(oldms); // restore calendar
+        if (result == -2) {
+            throw new IllegalArgumentException("Invalid field: " + field);
+        }
+        return result;
     }
 
     /**
