@@ -25,13 +25,11 @@
 #include "ucol_imp.h"
 #include "ucol_wgt.h"
 #include "cmemory.h"
+#include "uarrsort.h"
 
 #ifdef UCOL_DEBUG
 #   include <stdio.h>
 #endif
-
-/* we are using qsort() */
-#include <stdlib.h>
 
 #if defined(UCOL_DEBUG) && defined(WIN32)
     /* turn off "unreferenced formal parameter" */
@@ -125,9 +123,9 @@ lengthenRange(WeightRange *range, uint32_t maxByte, uint32_t countBytes) {
     return length;
 }
 
-/* for qsort: sort ranges in weight order */
-static int
-compareRanges(const void *left, const void *right) {
+/* for uprv_sortArray: sort ranges in weight order */
+static int32_t U_CALLCONV
+compareRanges(const void *context, const void *left, const void *right) {
     uint32_t l, r;
 
     l=((const WeightRange *)left)->start;
@@ -464,7 +462,9 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit,
 
     if(rangeCount>1) {
         /* sort the ranges by weight values */
-        qsort(ranges, rangeCount, sizeof(WeightRange), compareRanges);
+        UErrorCode errorCode=U_ZERO_ERROR;
+        uprv_sortArray(ranges, rangeCount, sizeof(WeightRange), compareRanges, NULL, FALSE, &errorCode);
+        /* ignore error code: we know that the internal sort function will not fail here */
     }
 
 #ifdef UCOL_DEBUG
