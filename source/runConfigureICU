@@ -21,6 +21,7 @@ usage()
     echo "          10. 'SOL2.7CC'if you are using native CC compiler on Solaris"
     echo "          11. 'PTX' if you are using c++ on Dynix/PTX v4.5"
     echo "          12. 'SOLARISX86' if you are using the native CC compiler on Solarisx86"
+    echo "          13. 'AIX4.3VA' if you are using VA compiler on AIX4.3"
     echo
     echo "Any other options will be passed on to configure. (see 'configure --help')"
 
@@ -77,6 +78,13 @@ case $platform in
                 echo Running configure $*  for AIX using xlC compiler ...
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
+                #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
+                #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+                ./configure $*  ;;
+        AIX4.3VA)
+                echo Running configure $*  for AIX using xlC compiler ...
+                CC=/usr/vacpp/bin/xlc; export CC
+                CXX=/usr/vacpp/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
                 $configure $*  ;;
