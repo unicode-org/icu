@@ -1228,7 +1228,7 @@ private:
     static const char fgClassID;
 
 private:
-    static void initializeRegistry(void);
+    static UBool initializeRegistry(void);
 
 };
 
