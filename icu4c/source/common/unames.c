@@ -2077,7 +2077,7 @@ uchar_swapNames(const UDataSwapper *ds,
             switch(inRange->type) {
             case 0:
                 /* swap prefix string */
-                ds->swapInvChars(ds, inRange+1, uprv_strlen((const char *)(inRange+1)),
+                ds->swapInvChars(ds, inRange+1, (int32_t)uprv_strlen((const char *)(inRange+1)),
                                     outRange+1, pErrorCode);
                 if(U_FAILURE(*pErrorCode)) {
                     udata_printError(ds, "uchar_swapNames(prefix string of algorithmic range %u) failed - %s\n",
