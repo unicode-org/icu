@@ -56,7 +56,6 @@ struct collIterate {
 #define UCOL_UNMAPPEDCHARVALUE 0x7fff0000     // from coleiterator
 
 #define UCOL_LEVELTERMINATOR 1
-#define UCOL_IGNORABLE 0x0000
 #define UCOL_CHARINDEX 0x70000000             // need look up in .commit()
 #define UCOL_EXPANDCHARINDEX 0x7E000000       // Expand index follows
 #define UCOL_CONTRACTCHARINDEX 0x7F000000     // contract indexes follows
@@ -76,6 +75,18 @@ struct collIterate {
 #define UCOL_SECONDARYORDERSHIFT 8            // secondary order shift
 #define UCOL_SORTKEYOFFSET 2                  // minimum sort key offset
 #define UCOL_CONTRACTCHAROVERFLOW 0x7FFFFFFF  // Indicates the char is a contract char
+
+
+#define UCOL_COLELEMENTSTART 0x02020202       // starting value for collation elements
+#define UCOL_PRIMARYLOWZEROMASK 0x00FF0000    // testing mask for primary low element
+#define UCOL_RESETSECONDARYTERTIARY 0x00000202// reseting value for secondaries and tertiaries
+#define UCOL_RESETTERTIARY 0x00000002         // reseting value for tertiaries
+
+#define UCOL_IGNORABLE 0x02020202
+#define UCOL_PRIMIGNORABLE 0x0202
+#define UCOL_SECIGNORABLE 0x02
+#define UCOL_TERIGNORABLE 0x02
+
 
 #define UCOL_PRIMARYORDER(order) (((order) & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT)
 #define UCOL_SECONDARYORDER(order) (((order) & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT)
@@ -723,7 +734,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             pTOrder = UCOL_PRIMARYORDER(tOrder);
             if (pSOrder != pTOrder)
             {
-                if (sOrder == 0)
+                if (sOrder == UCOL_IGNORABLE)
                 {
                     // The entire source element is ignorable.
                     // Skip to the next source element, but don't fetch another target element.
@@ -731,7 +742,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     continue;
                 }
 
-                if (tOrder == 0)
+                if (tOrder == UCOL_IGNORABLE)
                 {
                     gets = FALSE;
                     continue;
@@ -739,7 +750,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 
                 // The source and target elements aren't ignorable, but it's still possible
                 // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == 0)  // primary order in source is ignorable
+                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
                 {
                     // The source's primary is ignorable, but the target's isn't.  We treat ignorables
                     // as a secondary difference, so remember that we found one.
@@ -751,7 +762,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     // Skip to the next source element, but don't fetch another target element.
                     gett = FALSE;
                 }
-                else if (pTOrder == 0)
+                else if (pTOrder == UCOL_PRIMIGNORABLE)
                 {
                     // record differences - see the comment above.
                     if (checkSecTer)
@@ -823,14 +834,14 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             // The source string has more elements, but the target string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(sOrder) != 0)
+                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the source string.
                     // This is a primary difference, so the source is greater
                     return UCOL_GREATER; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(sOrder) != 0)
+                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements mean the source string is greater
                     if (checkSecTer)
@@ -849,14 +860,14 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             // The target string has more elements, but the source string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(tOrder) != 0)
+                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the target string.
                     // This is a primary difference, so the source is less
                     return UCOL_LESS; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(tOrder) != 0)
+                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements in the target mean the source string is less
                     if (checkSecTer)
@@ -925,7 +936,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             pTOrder = UCOL_PRIMARYORDER(tOrder);
             if (pSOrder != pTOrder)
             {
-                if (sOrder == 0)
+                if (sOrder == UCOL_IGNORABLE)
                 {
                     // The entire source element is ignorable.
                     // Skip to the next source element, but don't fetch another target element.
@@ -933,7 +944,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     continue;
                 }
 
-                if (tOrder == 0)
+                if (tOrder == UCOL_IGNORABLE)
                 {
                     gets = FALSE;
                     continue;
@@ -941,7 +952,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
 
                 // The source and target elements aren't ignorable, but it's still possible
                 // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == 0)  // primary order in source is ignorable
+                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
                 {
                     // The source's primary is ignorable, but the target's isn't.  We treat ignorables
                     // as a secondary difference, so remember that we found one.
@@ -952,7 +963,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                     // Skip to the next source element, but don't fetch another target element.
                     gett = FALSE;
                 }
-                else if (pTOrder == 0)
+                else if (pTOrder == UCOL_PRIMIGNORABLE)
                 {
                     // record differences - see the comment above.
                     if (checkSecTer)
@@ -1024,14 +1035,14 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             // The source string has more elements, but the target string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(sOrder) != 0)
+                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the source string.
                     // This is a primary difference, so the source is greater
                     return UCOL_GREATER; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(sOrder) != 0)
+                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements mean the source string is greater
                     if (checkSecTer)
@@ -1053,14 +1064,14 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             // The target string has more elements, but the source string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(tOrder) != 0)
+                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the target string.
                     // This is a primary difference, so the source is less
                     return UCOL_LESS; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(tOrder) != 0)
+                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements in the target mean the source string is less
                     if (checkSecTer)
@@ -1249,7 +1260,7 @@ ucol_strcoll(    const    UCollator    *coll,
             pTOrder = UCOL_PRIMARYORDER(tOrder);
             if (pSOrder != pTOrder)
             {
-                if (sOrder == 0)
+                if (sOrder == UCOL_IGNORABLE)
                 {
                     // The entire source element is ignorable.
                     // Skip to the next source element, but don't fetch another target element.
@@ -1257,7 +1268,7 @@ ucol_strcoll(    const    UCollator    *coll,
                     continue;
                 }
 
-                if (tOrder == 0)
+                if (tOrder == UCOL_IGNORABLE)
                 {
                     gets = FALSE;
                     continue;
@@ -1265,7 +1276,7 @@ ucol_strcoll(    const    UCollator    *coll,
 
                 // The source and target elements aren't ignorable, but it's still possible
                 // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == 0)  // primary order in source is ignorable
+                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
                 {
                     // The source's primary is ignorable, but the target's isn't.  We treat ignorables
                     // as a secondary difference, so remember that we found one.
@@ -1277,7 +1288,7 @@ ucol_strcoll(    const    UCollator    *coll,
                     // Skip to the next source element, but don't fetch another target element.
                     gett = FALSE;
                 }
-                else if (pTOrder == 0)
+                else if (pTOrder == UCOL_PRIMIGNORABLE)
                 {
                     // record differences - see the comment above.
                     if (checkSecTer)
@@ -1349,14 +1360,14 @@ ucol_strcoll(    const    UCollator    *coll,
             // The source string has more elements, but the target string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(sOrder) != 0)
+                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the source string.
                     // This is a primary difference, so the source is greater
                     return UCOL_GREATER; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(sOrder) != 0)
+                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements mean the source string is greater
                     if (checkSecTer)
@@ -1375,14 +1386,14 @@ ucol_strcoll(    const    UCollator    *coll,
             // The target string has more elements, but the source string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(tOrder) != 0)
+                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the target string.
                     // This is a primary difference, so the source is less
                     return UCOL_LESS; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(tOrder) != 0)
+                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements in the target mean the source string is less
                     if (checkSecTer)
@@ -1451,7 +1462,7 @@ ucol_strcoll(    const    UCollator    *coll,
             pTOrder = UCOL_PRIMARYORDER(tOrder);
             if (pSOrder != pTOrder)
             {
-                if (sOrder == 0)
+                if (sOrder == UCOL_IGNORABLE)
                 {
                     // The entire source element is ignorable.
                     // Skip to the next source element, but don't fetch another target element.
@@ -1459,7 +1470,7 @@ ucol_strcoll(    const    UCollator    *coll,
                     continue;
                 }
 
-                if (tOrder == 0)
+                if (tOrder == UCOL_IGNORABLE)
                 {
                     gets = FALSE;
                     continue;
@@ -1467,7 +1478,7 @@ ucol_strcoll(    const    UCollator    *coll,
 
                 // The source and target elements aren't ignorable, but it's still possible
                 // for the primary component of one of the elements to be ignorable....
-                if (pSOrder == 0)  // primary order in source is ignorable
+                if (pSOrder == UCOL_PRIMIGNORABLE)  // primary order in source is ignorable
                 {
                     // The source's primary is ignorable, but the target's isn't.  We treat ignorables
                     // as a secondary difference, so remember that we found one.
@@ -1478,7 +1489,7 @@ ucol_strcoll(    const    UCollator    *coll,
                     // Skip to the next source element, but don't fetch another target element.
                     gett = FALSE;
                 }
-                else if (pTOrder == 0)
+                else if (pTOrder == UCOL_PRIMIGNORABLE)
                 {
                     // record differences - see the comment above.
                     if (checkSecTer)
@@ -1550,14 +1561,14 @@ ucol_strcoll(    const    UCollator    *coll,
             // The source string has more elements, but the target string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(sOrder) != 0)
+                if (UCOL_PRIMARYORDER(sOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the source string.
                     // This is a primary difference, so the source is greater
                     return UCOL_GREATER; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(sOrder) != 0)
+                if (UCOL_SECONDARYORDER(sOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements mean the source string is greater
                     if (checkSecTer)
@@ -1579,14 +1590,14 @@ ucol_strcoll(    const    UCollator    *coll,
             // The target string has more elements, but the source string hasn't.
             do
             {
-                if (UCOL_PRIMARYORDER(tOrder) != 0)
+                if (UCOL_PRIMARYORDER(tOrder) != UCOL_PRIMIGNORABLE)
                 {
                     // We found an additional non-ignorable base character in the target string.
                     // This is a primary difference, so the source is less
                     return UCOL_LESS; // (strength is PRIMARY)
                 }
 
-                if (UCOL_SECONDARYORDER(tOrder) != 0)
+                if (UCOL_SECONDARYORDER(tOrder) != UCOL_SECIGNORABLE)
                 {
                     // Additional secondary elements in the target mean the source string is less
                     if (checkSecTer)
@@ -1706,7 +1717,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
         secondary = ((order & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT);
         tertiary = (order & UCOL_TERTIARYORDERMASK);
 
-        if(primary != UCOL_IGNORABLE) {
+        if(primary != UCOL_PRIMIGNORABLE) {
             currentSize += 2;
             if(compareSec) {
                 currentSize++;
@@ -1839,30 +1850,30 @@ ucol_getSortKey(const    UCollator    *coll,
             secondary = ((order & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT);
             tertiary = (order & UCOL_TERTIARYORDERMASK);
 
-            if(primary != UCOL_IGNORABLE) {
-                *(primaries++) = (primary>>8)+UCOL_SORTKEYOFFSET;
-                *(primaries++) = (primary&0xFF)+UCOL_SORTKEYOFFSET;
+            if(primary != UCOL_PRIMIGNORABLE) {
+                *(primaries++) = (primary>>8);
+                *(primaries++) = (primary&0xFF);
                 sortKeySize += 2;
                 if(compareSec) {
-                    *(secondaries++) = secondary+UCOL_SORTKEYOFFSET;
+                    *(secondaries++) = secondary;
                     sortKeySize++;
                 }
                 if(compareTer) {
-                    *(tertiaries++) = tertiary+UCOL_SORTKEYOFFSET;
+                    *(tertiaries++) = tertiary;
                     sortKeySize++;
                 }
-            } else if(secondary != 0) {
+            } else if(secondary != UCOL_SECIGNORABLE) {
                 if(compareSec) {
-                    *(secondaries++) = secondary+UCOL_SORTKEYOFFSET;
+                    *(secondaries++) = secondary;
                     sortKeySize++;
                 }
                 if(compareTer) {
-                    *(tertiaries++) = tertiary+UCOL_SORTKEYOFFSET;
+                    *(tertiaries++) = tertiary;
                     sortKeySize++;
                 }
-            } else if(tertiary != 0) {
+            } else if(tertiary != UCOL_TERIGNORABLE) {
                 if(compareTer) {
-                    *(tertiaries++) = tertiary+UCOL_SORTKEYOFFSET;
+                    *(tertiaries++) = tertiary;
                     sortKeySize++;
                 }
             }

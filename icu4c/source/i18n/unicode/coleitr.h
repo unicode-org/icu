@@ -385,7 +385,7 @@ CollationElementIterator::getMaxExpansion(int32_t order) const
 inline UBool
 CollationElementIterator::isIgnorable(int32_t order)
 {
-    return (primaryOrder(order) == 0);
+    return (primaryOrder(order) == RuleBasedCollator::PRIMIGNORABLE);
 }
 
 /**

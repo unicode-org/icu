@@ -978,6 +978,17 @@ private:
   static  const   int32_t             SORTKEYOFFSET;
   static  const   int32_t             CONTRACTCHAROVERFLOW;
 
+  static  const   int32_t             COLELEMENTSTART;
+  static  const   int32_t             PRIMARYLOWZEROMASK;
+  static  const   int32_t             RESETSECONDARYTERTIARY;
+  static  const   int32_t             RESETTERTIARY;
+
+  static  const   int32_t             IGNORABLE;
+  static  const   int32_t             PRIMIGNORABLE;
+  static  const   int32_t             SECIGNORABLE;
+  static  const   int32_t             TERIGNORABLE;
+
+
   static const int16_t                FILEID;
 
   static       UnicodeString      DEFAULTRULES;
