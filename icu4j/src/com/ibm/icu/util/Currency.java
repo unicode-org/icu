@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2003/11/21 22:52:04 $
- * $Revision: 1.17 $
+ * $Date: 2004/01/12 22:49:44 $
+ * $Revision: 1.18 $
  *
  *******************************************************************************
  */
@@ -122,8 +122,16 @@ public class Currency implements Serializable {
                 break;
             }
         }
-            
-        return curriso != null ? new Currency(curriso) : null;
+        
+        Currency curr = null;
+        if (curriso != null) {
+            curr = new Currency(curriso);
+
+            // TODO: Determine valid and actual locale correctly.
+            ULocale uloc = new ULocale(bundle.getLocale());
+            curr.setLocale(uloc, uloc);
+        }
+        return curr;
     }
 
     /**
@@ -424,6 +432,78 @@ public class Currency implements Serializable {
     // POW10[i] = 10^i
     private static final int[] POW10 = { 1, 10, 100, 1000, 10000, 100000,
                                 1000000, 10000000, 100000000, 1000000000 };
+
+    // -------- BEGIN ULocale boilerplate --------
+
+    /**
+     * Return the locale that was used to create this object, or null.
+     * This may may differ from the locale requested at the time of
+     * this object's creation.  For example, if an object is created
+     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
+     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
+     * <tt>en_US</tt> may be the most specific locale that exists (the
+     * <i>valid</i> locale).
+     * @param type type of information requested, either {@link
+     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
+     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+     * @return the information specified by <i>type</i>, or null if
+     * this object was not constructed from locale data.
+     * @see com.ibm.icu.util.ULocale
+     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+     * @draft ICU 2.8
+     */
+    public final ULocale getLocale(ULocale.Type type) {
+        return type == ULocale.ACTUAL_LOCALE ?
+                                              this.actualLocale : this.validLocale;
+    }
+
+    /**
+     * Set information about the locales that were used to create this
+     * object.  If the object was not constructed from locale data,
+     * both arguments should be set to null.  Otherwise, neither
+     * should be null.  The actual locale must be at the same level or
+     * less specific than the valid locale.  This method is intended
+     * for use by factories or other entities that create objects of
+     * this class.
+     * @param valid the most specific locale containing any resource
+     * data, or null
+     * @param actual the locale containing data used to construct this
+     * object, or null
+     * @see com.ibm.icu.util.ULocale
+     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+     * @internal
+     */
+    final void setLocale(ULocale valid, ULocale actual) {
+        // Change the following to an assertion later
+        if ((valid == null) != (actual == null)) {
+            ///CLOVER:OFF
+            throw new IllegalArgumentException();
+            ///CLOVER:ON
+        }
+        // Another check we could do is that the actual locale is at
+        // the same level or less specific than the valid locale.
+        this.validLocale = valid;
+        this.actualLocale = actual;
+    }
+
+    /**
+     * The most specific locale containing any resource data, or null.
+     * @see com.ibm.icu.util.ULocale
+     * @internal
+     */
+    private ULocale validLocale;
+
+    /**
+     * The locale containing data used to construct this object, or
+     * null.
+     * @see com.ibm.icu.util.ULocale
+     * @internal
+     */
+    private ULocale actualLocale;
+
+    // -------- END ULocale boilerplate --------
 }
 
 //eof
