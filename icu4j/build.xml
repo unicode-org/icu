@@ -90,7 +90,7 @@
     	<!-- fix the data folder every time there is a version update-->
 		<property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
     	<property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
-    	
+
 	    <path id="build.classpath">
 	        <pathelement path="${build.dir}"/>
 	    </path>
@@ -106,17 +106,17 @@
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
         <echo message="clover initstring = '${clover.initstring}'"/>
-    	
+
     	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
         	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
         	<srcfiles dir="${build.dir}" includes="${icu4j.data.path}/res_index.res"/>
     	</uptodate>
-    	
+
     	<uptodate property="icu4j.testdata.resources" targetfile="${src.dir}/com/ibm/icu/dev/data">
         	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
         	<srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
     	</uptodate>
-    	
+
     </target>
 
     <!-- build everything but dist-related stuff -->
@@ -126,26 +126,26 @@
          use this target to force resources to be rebuilt
         	<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
         	<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
-        	
--->  
+
+-->
 	<target name="resources" depends="init">
 		<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
 		<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
 		<unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
 		<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
-	</target>	
+	</target>
     <target name="icudata" depends="init" if="icu4j.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
     	<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
     </target>
-		
+
     <target name="testdata" depends="init" if="icu4j.testdata.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
     	<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
-<!--	
+<!--
     <target name="icu" depends="init" if="icu4j.resources">
          use this target to conditionally build resources only if icu4j.resources is set
         <unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
@@ -230,6 +230,8 @@
     <target name ="testData" depends="init">
         <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
               todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
+        <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
+              todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
         <javac includes="com/ibm/icu/dev/data/*.java"
                     excludes="**/CVS/**/*"
                     srcdir="${src.dir}"
@@ -345,7 +347,7 @@
             debug="on" deprecation="off"/>
 	<copy toDir="${build.dir}/com/ibm/icu/dev/tool/ime/translit">
 	      <fileset dir="${src.dir}/com/ibm/icu/dev/tool/ime/translit" includes="*.properties"/>
-	</copy>	      
+	</copy>
         <jar jarfile="${ime.jar.file}"
             compress="true"
 	    basedir="${build.dir}"
