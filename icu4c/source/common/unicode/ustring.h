@@ -72,7 +72,7 @@
  *
  * @param s The array of UChars, NULL (U+0000) terminated.
  * @return The number of UChars in <TT>chars</TT>, minus the terminator.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strlen(const UChar *s);
@@ -88,7 +88,7 @@ u_strlen(const UChar *s);
  * @param length The number of UChar code units to be checked, or -1 to count all
  *               code points before the first NUL (U+0000).
  * @return The number of code points in the specified code units.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_countChar32(const UChar *s, int32_t length);
@@ -122,7 +122,7 @@ u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number);
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strcat(UChar     *dst, 
@@ -137,7 +137,7 @@ u_strcat(UChar     *dst,
  * @param src The source string.
  * @param n The maximum number of characters to compare.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strncat(UChar     *dst, 
@@ -158,7 +158,7 @@ u_strncat(UChar     *dst,
  * @return A pointer to the first occurrence of <code>substring</code> in <code>s</code>,
  *         or <code>s</code> itself if the <code>substring</code> is empty,
  *         or <code>NULL</code> if <code>substring</code> is not in <code>s</code>.
- * @stable
+ * @stable ICU 2.0
  *
  * @see u_strrstr
  * @see u_strFindFirst
@@ -201,7 +201,7 @@ u_strFindFirst(const UChar *s, int32_t length, const UChar *substring, int32_t s
  * @param c The BMP code point to find.
  * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @stable ICU 2.0
  *
  * @see u_strchr32
  * @see u_memchr
@@ -221,7 +221,7 @@ u_strchr(const UChar *s, UChar c);
  * @param c The code point to find.
  * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @stable ICU 2.0
  *
  * @see u_strchr
  * @see u_memchr32
@@ -325,7 +325,7 @@ u_strrchr32(const UChar *s, UChar32 c);
  *
  * @return A pointer to the  character in str that matches one of the
  *         characters in accept, or NULL if no such character is found.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar * U_EXPORT2
 u_strpbrk(const UChar *string, const UChar *matchSet);
@@ -336,7 +336,7 @@ u_strpbrk(const UChar *string, const UChar *matchSet);
  * Works just like C's strcspn but with Unicode.
  *
  * @see u_strspn
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strcspn(const UChar *string, const UChar *matchSet);
@@ -347,7 +347,7 @@ u_strcspn(const UChar *string, const UChar *matchSet);
  * Works just like C's strspn but with Unicode.
  *
  * @see u_strcspn
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strspn(const UChar *string, const UChar *matchSet);
@@ -375,7 +375,7 @@ u_strspn(const UChar *string, const UChar *matchSet);
  *              &myLocalSaveState for this parameter).
  * @return A pointer to the next token found in src, or NULL
  *         when there are no more tokens.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar * U_EXPORT2
 u_strtok_r(UChar    *src, 
@@ -390,7 +390,7 @@ u_strtok_r(UChar    *src,
  * @return 0 if <TT>s1</TT> and <TT>s2</TT> are bitwise equal; a negative
  * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
  * value if <TT>s1</TT> is bitwise greater than <TT>s2,/TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t  U_EXPORT2
 u_strcmp(const UChar     *s1, 
@@ -405,7 +405,7 @@ u_strcmp(const UChar     *s1,
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
@@ -505,7 +505,7 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
  * @return 0 if <TT>s1</TT> and <TT>s2</TT> are bitwise equal; a negative
  * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
  * value if <TT>s1</TT> is bitwise greater than <TT>s2,/TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strncmp(const UChar     *ucs1, 
@@ -523,7 +523,7 @@ u_strncmp(const UChar     *ucs1,
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
@@ -545,7 +545,7 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
  *
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
@@ -569,7 +569,7 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
  *
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
@@ -593,7 +593,7 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
  *
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options);
@@ -604,7 +604,7 @@ u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options)
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strcpy(UChar     *dst, 
@@ -619,7 +619,7 @@ u_strcpy(UChar     *dst,
  * @param src The source string.
  * @param n The maximum number of characters to copy.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strncpy(UChar     *dst, 
@@ -634,7 +634,7 @@ u_strncpy(UChar     *dst,
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
                const char *src );
@@ -649,7 +649,7 @@ U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
  * @param src The source string.
  * @param n The maximum number of characters to copy.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
             const char *src,
@@ -663,7 +663,7 @@ U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
  * @param dst The destination string.
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI char* U_EXPORT2 u_austrcpy(char *dst,
             const UChar *src );
@@ -678,7 +678,7 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *dst,
  * @param src The source string.
  * @param n The maximum number of characters to copy.
  * @return A pointer to <TT>dst</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
             const UChar *src,
@@ -690,7 +690,7 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
  * @param src The source string
  * @param count The number of characters to copy
  * @return A pointer to <TT>dest</TT>
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_memcpy(UChar *dest, const UChar *src, int32_t count);
@@ -701,7 +701,7 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count);
  * @param src The source string
  * @param count The number of characters to move
  * @return A pointer to <TT>dest</TT>
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_memmove(UChar *dest, const UChar *src, int32_t count);
@@ -713,7 +713,7 @@ u_memmove(UChar *dest, const UChar *src, int32_t count);
  * @param c The character to initialize the string.
  * @param count The maximum number of characters to set.
  * @return A pointer to <TT>dest</TT>.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_memset(UChar *dest, UChar c, int32_t count);
@@ -727,7 +727,7 @@ u_memset(UChar *dest, UChar c, int32_t count);
  * @return When buf1 < buf2, a negative number is returned.
  *      When buf1 == buf2, 0 is returned.
  *      When buf1 > buf2, a positive number is returned.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
@@ -743,7 +743,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
@@ -759,7 +759,7 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
  * @param count The length of the string.
  * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @stable ICU 2.0
  *
  * @see u_strchr
  * @see u_memchr32
@@ -779,7 +779,7 @@ u_memchr(const UChar *s, UChar c, int32_t count);
  * @param count The length of the string.
  * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>
  *         or <code>NULL</code> if <code>c</code> is not in <code>s</code>.
- * @stable
+ * @stable ICU 2.0
  *
  * @see u_strchr32
  * @see u_memchr
@@ -862,7 +862,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * &#32;       return u_strcmp(ustringVar1, ustringVar2);
  * &#32;   }
  * </pre>
- * @stable
+ * @stable ICU 2.0
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
@@ -920,7 +920,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * @see u_unescapeAt
  * @see UnicodeString#unescape()
  * @see UnicodeString#unescapeAt()
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_unescape(const char *src,
@@ -936,7 +936,7 @@ u_unescape(const char *src,
  * @return the character represented by the escape sequence at
  * offset
  * @see u_unescapeAt
- * @stable
+ * @stable ICU 2.0
  */
 U_CDECL_BEGIN
 typedef UChar (U_CALLCONV *UNESCAPE_CHAR_AT)(int32_t offset, void *context);
@@ -968,7 +968,7 @@ U_CDECL_END
  * @see u_unescape()
  * @see UnicodeString#unescape()
  * @see UnicodeString#unescapeAt()
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_unescapeAt(UNESCAPE_CHAR_AT charAt,
@@ -994,7 +994,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strToUpper(UChar *dest, int32_t destCapacity,
@@ -1020,7 +1020,7 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strToLower(UChar *dest, int32_t destCapacity,
@@ -1097,7 +1097,7 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 u_strFoldCase(UChar *dest, int32_t destCapacity,
@@ -1122,7 +1122,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI wchar_t* U_EXPORT2
 u_strToWCS(wchar_t *dest, 
@@ -1148,7 +1148,7 @@ u_strToWCS(wchar_t *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromWCS(UChar   *dest,
@@ -1174,7 +1174,7 @@ u_strFromWCS(UChar   *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI char* U_EXPORT2 
 u_strToUTF8(char *dest,           
@@ -1201,7 +1201,7 @@ u_strToUTF8(char *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
@@ -1228,7 +1228,7 @@ u_strFromUTF8(UChar *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar32* U_EXPORT2 
 u_strToUTF32(UChar32 *dest, 
@@ -1255,7 +1255,7 @@ u_strToUTF32(UChar32 *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2 
 u_strFromUTF32(UChar   *dest,

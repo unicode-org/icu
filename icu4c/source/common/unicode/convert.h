@@ -392,7 +392,7 @@ UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
    * @param that The UnicodeConverter to be compared for equality
    * @return true when both UnicodeConverters refer to the same
    * character in the same character-storage object
-   * @stable
+   * @stable ICU 2.0
    */
  UBool              operator==(const UnicodeConverter& that) const;
  
@@ -404,7 +404,7 @@ UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
    * @Returns true when the iterators refer to different
    * text-storage objects, or to different characters in the
    * same text-storage object
-   * @stable
+   * @stable ICU 2.0
    */
  UBool              operator!=(const UnicodeConverter& that) const;
  

@@ -120,18 +120,18 @@
 
 /**
  * UResourceBundle is an opaque type for handles for resource bundles in C APIs.
- * @stable
+ * @stable ICU 2.0
  */
 struct UResourceBundle;
 
 /**
- * @stable
+ * @stable ICU 2.0
  */
 typedef struct UResourceBundle UResourceBundle;
 
 /**
  * Numeric constants for types of resource items.
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum {
     RES_NONE=-1,
@@ -178,7 +178,7 @@ typedef enum {
  * nor any of its fall back locales could be found.
  * @return      a newly allocated resource bundle.
  * @see ures_close
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResourceBundle*  U_EXPORT2 
 ures_open(const char*    path,
@@ -200,7 +200,7 @@ ures_open(const char*    path,
  * @param status fills in the outgoing error code. Either U_ZERO_ERROR or U_MISSING_RESOURCE_ERROR
  * @return      a newly allocated resource bundle or NULL if it doesn't exist.
  * @see ures_close
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_openDirect(const char* path, 
@@ -245,7 +245,7 @@ ures_openW(const wchar_t* path,
  *                root locale will be used.
  * @param status : fills in the outgoing error code.
  * @return      a newly allocated resource bundle.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_openU(const UChar* path, 
@@ -266,7 +266,7 @@ ures_openU(const UChar* path,
  *                <STRONG>Tables</STRONG>: returns the number of resources in the table
  *                <STRONG>single string</STRONG>: returns 1
  *@see ures_getSize
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ures_countArrayItems(const UResourceBundle* resourceBundle,
@@ -278,7 +278,7 @@ ures_countArrayItems(const UResourceBundle* resourceBundle,
  *
  * @param resourceBundle: a pointer to a resourceBundle struct. Can be NULL.
  * @see ures_open
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ures_close(UResourceBundle* resourceBundle);
@@ -291,7 +291,7 @@ ures_close(UResourceBundle* resourceBundle);
  * @return  A version number string as specified in the resource bundle or its parent.
  *          The caller does not own this string.
  * @see ures_getVersion
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char* U_EXPORT2 
 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
@@ -303,7 +303,7 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle);
  * @param resB The resource bundle for which the version is checked.
  * @param versionInfo A UVersionInfo array that is filled with the version number
  *                    as specified in the resource bundle or its parent.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ures_getVersion(const UResourceBundle* resB, 
@@ -318,7 +318,7 @@ ures_getVersion(const UResourceBundle* resB,
  * @param resourceBundle: resource bundle in question
  * @param status: just for catching illegal arguments
  * @return  A Locale name
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char* U_EXPORT2 
 ures_getLocale(const UResourceBundle* resourceBundle, 
@@ -358,7 +358,7 @@ ures_openFillIn(UResourceBundle *r,
  * @see ures_getIntVector
  * @see ures_getInt
  * @see ures_getUInt
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const UChar* U_EXPORT2 
 ures_getString(const UResourceBundle* resourceBundle, 
@@ -380,7 +380,7 @@ ures_getString(const UResourceBundle* resourceBundle,
  * @see ures_getIntVector
  * @see ures_getInt
  * @see ures_getUInt
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const uint8_t* U_EXPORT2 
 ures_getBinary(const UResourceBundle* resourceBundle, 
@@ -402,7 +402,7 @@ ures_getBinary(const UResourceBundle* resourceBundle,
  * @see ures_getString
  * @see ures_getInt
  * @see ures_getUInt
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const int32_t* U_EXPORT2 
 ures_getIntVector(const UResourceBundle* resourceBundle, 
@@ -423,7 +423,7 @@ ures_getIntVector(const UResourceBundle* resourceBundle,
  * @see ures_getIntVector
  * @see ures_getBinary
  * @see ures_getString
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI uint32_t U_EXPORT2 
 ures_getUInt(const UResourceBundle* resourceBundle, 
@@ -443,7 +443,7 @@ ures_getUInt(const UResourceBundle* resourceBundle,
  * @see ures_getIntVector
  * @see ures_getBinary
  * @see ures_getString
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ures_getInt(const UResourceBundle* resourceBundle, 
@@ -458,7 +458,7 @@ ures_getInt(const UResourceBundle* resourceBundle,
  *
  * @param resourceBundle: a resource
  * @return number of resources in a given resource.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 ures_getSize(UResourceBundle *resourceBundle);
@@ -469,7 +469,7 @@ ures_getSize(UResourceBundle *resourceBundle);
  * @param resourceBundle: a resource
  * @return type of the given resource.
  * @see UResType
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResType U_EXPORT2 
 ures_getType(UResourceBundle *resourceBundle);
@@ -480,7 +480,7 @@ ures_getType(UResourceBundle *resourceBundle);
  *
  * @param resourceBundle: a resource
  * @return a key associated to this resource, or NULL if it doesn't have a key
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char * U_EXPORT2 
 ures_getKey(UResourceBundle *resB);
@@ -493,7 +493,7 @@ ures_getKey(UResourceBundle *resB);
  * Resets the internal context of a resource so that iteration starts from the first element.
  *
  * @param resourceBundle: a resource
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 ures_resetIterator(UResourceBundle *resourceBundle);
@@ -503,7 +503,7 @@ ures_resetIterator(UResourceBundle *resourceBundle);
  *
  * @param resourceBundle a resource
  * @return TRUE if there are more elements, FALSE if there is no more elements
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2 
 ures_hasNext(UResourceBundle *resourceBundle);
@@ -518,7 +518,7 @@ ures_hasNext(UResourceBundle *resourceBundle);
  * @param status            fills in the outgoing error code. You may still get a non NULL result even if an
  *                          error occured. Check status instead.
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_getNextResource(UResourceBundle *resourceBundle, 
@@ -535,7 +535,7 @@ ures_getNextResource(UResourceBundle *resourceBundle,
  * @param status            fills in the outgoing error code. If an error occured, we may return NULL, but don't
  *                          count on it. Check status instead!
  * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const UChar* U_EXPORT2 
 ures_getNextString(UResourceBundle *resourceBundle, 
@@ -553,7 +553,7 @@ ures_getNextString(UResourceBundle *resourceBundle,
  * @param status            fills in the outgoing error code. Don't count on NULL being returned if an error has
  *                          occured. Check status instead.
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_getByIndex(const UResourceBundle *resourceBundle, 
@@ -570,7 +570,7 @@ ures_getByIndex(const UResourceBundle *resourceBundle,
  * @param status            fills in the outgoing error code. If an error occured, we may return NULL, but don't
  *                          count on it. Check status instead!
  * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const UChar* U_EXPORT2 
 ures_getStringByIndex(const UResourceBundle *resB, 
@@ -588,7 +588,7 @@ ures_getStringByIndex(const UResourceBundle *resB,
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code.
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_getByKey(const UResourceBundle *resourceBundle, 
@@ -606,7 +606,7 @@ ures_getByKey(const UResourceBundle *resourceBundle,
  * @param status            fills in the outgoing error code. If an error occured, we may return NULL, but don't
  *                          count on it. Check status instead!
  * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const UChar* U_EXPORT2 
 ures_getStringByKey(const UResourceBundle *resB, 
@@ -627,7 +627,7 @@ U_NAMESPACE_BEGIN
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
  * @return        an UnicodeString object. If there is an error, string is bogus
- * @stable
+ * @stable ICU 2.0
  */
 inline UnicodeString 
 ures_getUnicodeString(const UResourceBundle *resB, 
@@ -646,7 +646,7 @@ ures_getUnicodeString(const UResourceBundle *resB,
  * @param key               fill in for key associated with this string
  * @param status            fills in the outgoing error code
  * @return an UnicodeString object.
- * @stable
+ * @stable ICU 2.0
  */
 inline UnicodeString 
 ures_getNextUnicodeString(UResourceBundle *resB, 
@@ -665,7 +665,7 @@ ures_getNextUnicodeString(UResourceBundle *resB,
  * @param index             an index to the wanted string.
  * @param status            fills in the outgoing error code
  * @return                  an UnicodeString object. If there is an error, string is bogus
- * @stable
+ * @stable ICU 2.0
  */
 inline UnicodeString 
 ures_getUnicodeStringByIndex(const UResourceBundle *resB, 
@@ -685,7 +685,7 @@ ures_getUnicodeStringByIndex(const UResourceBundle *resB,
  * @param key               a key associated with the wanted string
  * @param status            fills in the outgoing error code
  * @return                  an UnicodeString object. If there is an error, string is bogus
- * @stable
+ * @stable ICU 2.0
  */
 inline UnicodeString 
 ures_getUnicodeStringByKey(const UResourceBundle *resB, 

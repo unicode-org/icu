@@ -173,7 +173,7 @@
  * </pre>
  * </blockquote>
  *
- * @stable
+ * @stable ICU 2.0
  */
 U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
@@ -332,7 +332,7 @@ public:
    /**
     * Construct an empty locale. It's only used when a fill-in parameter is
     * needed.
-    * @stable
+    * @stable ICU 2.0
     */
     Locale(); 
 
@@ -349,7 +349,7 @@ public:
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
-     * @stable
+     * @stable ICU 2.0
      */
     Locale( const   char * language,
             const   char * country  = 0, 
@@ -359,14 +359,14 @@ public:
      * Initializes a Locale object from another Locale object.
      *
      * @param other The Locale object being copied in.
-     * @stable
+     * @stable ICU 2.0
      */
     Locale(const    Locale& other);
 
 
     /**
      * Destructor
-     * @stable
+     * @stable ICU 2.0
      */
     ~Locale() ;
 
@@ -375,7 +375,7 @@ public:
      *
      * @param other The Locale object being copied in.
      * @return      *this
-     * @stable
+     * @stable ICU 2.0
      */
     Locale& operator=(const Locale& other);
 
@@ -384,7 +384,7 @@ public:
      *
      * @param other The locale key object to be compared with this.
      * @return      True if the two locale keys are the same, false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool   operator==(const    Locale&     other) const;
 
@@ -394,7 +394,7 @@ public:
      * @param other The locale key object to be compared with this.
      * @return      True if the two locale keys are not the same, false
      *              otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool   operator!=(const    Locale&     other) const;
 
@@ -411,7 +411,7 @@ public:
      * Note that the initial setting will match the host system.
      * @retrun the default locale for this instance of the Java Virtual Machine
      * @system
-     * @stable
+     * @stable ICU 2.0
      */
     static  const Locale& getDefault(void);
 
@@ -422,7 +422,7 @@ public:
      * @param newLocale Locale to set to.
      * @param success The error code.
      * @system
-     * @stable
+     * @stable ICU 2.0
      */
     static  void    setDefault(const    Locale&     newLocale,
                                                     UErrorCode&  success);
@@ -434,7 +434,7 @@ public:
      * @param name The name to create from.  If name is null,
      *  the default Locale is used.
      * @return new locale object
-     * @stable
+     * @stable ICU 2.0
      * @see uloc_getName
      */
     static Locale createFromName(const char *name);
@@ -443,21 +443,21 @@ public:
     /**
      * Returns the locale's ISO-639 language code.
      * @return      An alias to the code
-     * @stable
+     * @stable ICU 2.0
      */
     inline const char *  getLanguage( ) const;
 
     /**
      * Returns the locale's ISO-3166 country code.
      * @return      An alias to the code
-     * @stable
+     * @stable ICU 2.0
      */
     inline const char *  getCountry( ) const;
 
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
-     * @stable
+     * @stable ICU 2.0
      */
     inline const char *  getVariant( ) const;
 
@@ -467,7 +467,7 @@ public:
      * to two leading underbars will occur. Example: "en", "de_DE", "en_US_WIN",
      * "de__POSIX", "fr__MAC", "__MAC", "_MT", "_FR_EURO"
      * @return      A pointer to "name".
-     * @stable
+     * @stable ICU 2.0
      */
     inline const char * getName() const;
 
@@ -475,14 +475,14 @@ public:
      * returns the locale's three-letter language code, as specified
      * in ISO draft standard ISO-639-2..
      * @return      An alias to the code, or NULL
-     * @stable
+     * @stable ICU 2.0
      */
     const char * getISO3Language() const;
 
     /**
      * Fills in "name" with the locale's three-letter ISO-3166 country code.
      * @return      An alias to the code, or NULL
-     * @stable
+     * @stable ICU 2.0
      */
     const char * getISO3Country() const;
 
@@ -491,7 +491,7 @@ public:
      * This value is stored in the resource data for the locale as a one-to-four-digit
      * hexadecimal number.  If the resource is missing, in the wrong format, or
      * there is no Windows LCID value that corresponds to this locale, returns 0.
-     * @stable
+     * @stable ICU 2.0
      */
     uint32_t        getLCID(void) const;
 
@@ -502,7 +502,7 @@ public:
      * dispLang to "French".
      * @param dispLang  Receives the language's display name.
      * @return          A reference to "dispLang".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
 
@@ -517,7 +517,7 @@ public:
      *                  for inLocale would result in "Englisch".
      * @param dispLang  Receives the language's display name.
      * @return          A reference to "dispLang".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
                                                 UnicodeString&  dispLang) const;
@@ -529,7 +529,7 @@ public:
      * dispCountry to "France".
      * @param dispCountry   Receives the country's display name.
      * @return              A reference to "dispCountry".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
 
@@ -545,7 +545,7 @@ public:
      *                      "Vereinigte Staaten".
      * @param dispCountry   Receives the country's display name.
      * @return              A reference to "dispCountry".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
                                                 UnicodeString&  dispCountry) const;
@@ -555,7 +555,7 @@ public:
      * for user display in the default locale.
      * @param dispVar   Receives the variant's name.
      * @return          A reference to "dispVar".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
 
@@ -565,7 +565,7 @@ public:
      * @param inLocale  Specifies the locale to be used to display the name.
      * @param dispVar   Receives the variant's display name.
      * @return          A reference to "dispVar".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
                                                 UnicodeString&  dispVar) const;
@@ -579,7 +579,7 @@ public:
      * would be "Spanish (Mexico,Traditional)".
      * @param name  Receives the locale's display name.
      * @return      A reference to "name".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayName(         UnicodeString&  name) const;
 
@@ -593,14 +593,14 @@ public:
      * @param inLocale  Specifies the locale to be used to display the name.
      * @param name      Receives the locale's display name.
      * @return          A reference to "name".
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString&  getDisplayName( const   Locale&         inLocale,
                                             UnicodeString&  name) const;
 
     /**
      * Generates a hash code for the locale.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t         hashCode(void) const;
 
@@ -627,7 +627,7 @@ public:
      * @return      A pointer to an array of Locale objects.  This array is the list
      *              of all locales with installed resource files.  The called does NOT
      *              get ownership of this list, and must NOT delete it.
-     * @stable
+     * @stable ICU 2.0
      */
     static  const   Locale*     getAvailableLocales(int32_t& count);
 
@@ -637,7 +637,7 @@ public:
      * owned by ICU-- do not delete them, and do not write through them.  The array is
      * terminated with a null pointer.
      * @return a list of all available country codes
-     * @stable
+     * @stable ICU 2.0
      */
     static const char* const* getISOCountries();
 
@@ -647,7 +647,7 @@ public:
      * by ICU-- do not delete them, and do not write through them.  The array is
      * terminated with a null pointer.
      * @return a list of all available language codes
-     * @stable
+     * @stable ICU 2.0
      */
     static const char* const*  getISOLanguages();
 

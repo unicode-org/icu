@@ -80,20 +80,20 @@ U_NAMESPACE_BEGIN
  * \endcode
  * </p>
  *
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API ForwardCharacterIterator : public UObject {
 public:
   /**
    * Value returned by most of ForwardCharacterIterator's functions
    * when the iterator has reached the limits of its iteration.
-   * @stable
+   * @stable ICU 2.0
    */
   enum { DONE = 0xffff };
 
   /**
    * Destructor.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual ~ForwardCharacterIterator() {}
 
@@ -103,7 +103,7 @@ public:
    * @param that The ForwardCharacterIterator to be compared for equality
    * @return true when both iterators refer to the same
    * character in the same character-storage object
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool operator==(const ForwardCharacterIterator& that) const = 0;
         
@@ -115,14 +115,14 @@ public:
    * @Returns true when the iterators refer to different
    * text-storage objects, or to different characters in the
    * same text-storage object
-   * @stable
+   * @stable ICU 2.0
    */
   inline UBool operator!=(const ForwardCharacterIterator& that) const;
 
   /**
    * Generates a hash code for this iterator.  
    * @return the hash code.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t hashCode(void) const = 0;
         
@@ -131,7 +131,7 @@ public:
    * RTTI").<P> Despite the fact that this function is public,
    * DO NOT CONSIDER IT PART OF CHARACTERITERATOR'S API! 
    * @Returns a UClassID for this ForwardCharacterIterator 
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -141,7 +141,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
    * @return the current code unit.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         nextPostInc(void) = 0;
         
@@ -151,7 +151,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code points to return, returns DONE.
    * @return the current code point.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       next32PostInc(void) = 0;
         
@@ -162,7 +162,7 @@ public:
    * iteration.
    * @returns FALSE if there are no more code units or code points
    * at or after the current position in the iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool        hasNext() = 0;
 
@@ -346,13 +346,13 @@ protected:
  * \endcode
  * </pre>
  *
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API CharacterIterator : public ForwardCharacterIterator {
 public:
   /**
    * Origin enumeration for the move() and move32() functions.
-   * @stable
+   * @stable ICU 2.0
    */
   enum EOrigin { kStart, kCurrent, kEnd };
 
@@ -362,7 +362,7 @@ public:
    * character in the same text-storage object as this one.  The
    * caller is responsible for deleting the new clone.  
    * @return a pointer to a new CharacterIterator
-   * @stable
+   * @stable ICU 2.0
    */
   virtual CharacterIterator* clone(void) const = 0;
 
@@ -371,7 +371,7 @@ public:
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with next().
    * @return the first code unit in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         first(void) = 0;
 
@@ -381,7 +381,7 @@ public:
    * to the second code unit. This is an alternative to setToStart()
    * for forward iteration with nextPostInc().
    * @return the first code unit in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         firstPostInc(void);
 
@@ -392,7 +392,7 @@ public:
    * Note that an iteration with next32PostInc(), beginning with,
    * e.g., setToStart() or firstPostInc(), is more efficient.
    * @return the first code point in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       first32(void) = 0;
 
@@ -402,7 +402,7 @@ public:
    * to the second code point. This is an alternative to setToStart()
    * for forward iteration with next32PostInc().
    * @return the first code point in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       first32PostInc(void);
 
@@ -411,7 +411,7 @@ public:
    * iteration range. This can be used to begin a forward
    * iteration with nextPostInc() or next32PostInc().
    * @return the start position of the iteration range
-   * @stable
+   * @stable ICU 2.0
    */
   inline int32_t    setToStart();
 
@@ -420,7 +420,7 @@ public:
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous().
    * @return the last code unit.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         last(void) = 0;
         
@@ -429,7 +429,7 @@ public:
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous32().
    * @return the last code point.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       last32(void) = 0;
 
@@ -438,7 +438,7 @@ public:
    * the last code unit or code point. This can be used to begin a backward
    * iteration with previous() or previous32().
    * @return the end position of the iteration range
-   * @stable
+   * @stable ICU 2.0
    */
   inline int32_t    setToEnd();
 
@@ -448,7 +448,7 @@ public:
    * returns that code unit.  
    * @param position the "position"-th code unit in the text-storage object
    * @return the "position"-th code unit.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         setIndex(int32_t position) = 0;
 
@@ -461,21 +461,21 @@ public:
    * (its first code unit).
    * @param position the "position"-th code unit in the text-storage object
    * @return the "position"-th code point.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       setIndex32(int32_t position) = 0;
 
   /**
    * Returns the code unit the iterator currently refers to. 
    * @return the current code unit. 
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         current(void) const = 0;
         
   /**
    * Returns the code point the iterator currently refers to.  
    * @return the current code point.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       current32(void) const = 0;
         
@@ -484,7 +484,7 @@ public:
    * (toward endIndex()), and returns that code unit.  If there are
    * no more code units to return, returns DONE.
    * @return the next code unit.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         next(void) = 0;
         
@@ -496,7 +496,7 @@ public:
    * efficient than iteration with "post-increment" semantics
    * that is provided by next32PostInc().
    * @return the next code point.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       next32(void) = 0;
         
@@ -505,7 +505,7 @@ public:
    * (toward startIndex()), and returns that code unit.  If there are
    * no more code units to return, returns DONE.  
    * @return the previous code unit.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         previous(void) = 0;
 
@@ -514,7 +514,7 @@ public:
    * (toward startIndex()), and returns that code point.  If there are
    * no more code points to return, returns DONE. 
    * @return the previous code point. 
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       previous32(void) = 0;
 
@@ -525,7 +525,7 @@ public:
    * iteration.
    * @return FALSE if there are no more code units or code points
    * before the current position in the iteration range, return TRUE otherwise.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool        hasPrevious() = 0;
 
@@ -537,7 +537,7 @@ public:
    * necessarily 0.  
    * @returns the numeric index in the underlying text-storage
    * object of the character returned by first().
-   * @stable
+   * @stable ICU 2.0
    */
   inline int32_t       startIndex(void) const;
         
@@ -548,7 +548,7 @@ public:
    * @return the numeric index in the underlying text-storage
    * object of the position immediately BEYOND the character
    * returned by last().
-   * @stable
+   * @stable ICU 2.0
    */
   inline int32_t       endIndex(void) const;
         
@@ -558,7 +558,7 @@ public:
    * (i.e., the character returned by current()).  
    * @return the numberic index in the text-storage object of 
    * the character the iterator currently refers to
-   * @stable
+   * @stable ICU 2.0
    */
   inline int32_t       getIndex(void) const;
 
@@ -566,7 +566,7 @@ public:
    * Returns the length of the entire text in the underlying
    * text-storage object.
    * @return the length of the entire text in the text-storage object
-   * @stable
+   * @stable ICU 2.0
    */
   inline int32_t           getLength() const;
 
@@ -579,7 +579,7 @@ public:
    * a negative delta means backward.
    * @origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t      move(int32_t delta, EOrigin origin) = 0;
 
@@ -592,7 +592,7 @@ public:
    * a negative delta means backward.
    * @origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t      move32(int32_t delta, EOrigin origin) = 0;
 
@@ -600,7 +600,7 @@ public:
    * Copies the text under iteration into the UnicodeString
    * referred to by "result".  
    * @param result Receives a copy of the text under iteration.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void            getText(UnicodeString&  result) = 0;
 

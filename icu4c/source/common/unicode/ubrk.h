@@ -243,7 +243,7 @@ typedef enum UWordBreak {
  * @param status A UErrorCode to receive any errors.
  * @return A UBreakIterator for the specified locale.
  * @see ubrk_openRules
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBreakIterator* U_EXPORT2
 ubrk_open(UBreakIteratorType type,
@@ -289,7 +289,7 @@ ubrk_openRules(const UChar     *rules,
  * @param status to indicate whether the operation went on smoothly or there were errors
  *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBreakIterator * U_EXPORT2
 ubrk_safeClone(
@@ -304,7 +304,7 @@ ubrk_safeClone(
 * Close a UBreakIterator.
 * Once closed, a UBreakIterator may no longer be used.
 * @param bi The break iterator to close.
- * @stable
+ * @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2
 ubrk_close(UBreakIterator *bi);
@@ -315,7 +315,7 @@ ubrk_close(UBreakIterator *bi);
  * @param text The text to be set
  * @param textLength The length of the text
  * @param status The error code
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 ubrk_setText(UBreakIterator* bi,
@@ -329,7 +329,7 @@ ubrk_setText(UBreakIterator* bi,
  * @param bi The break iterator to use.
  * @return The character index most recently returned by \Ref{ubrk_next}, \Ref{ubrk_previous},
  * \Ref{ubrk_first}, or \Ref{ubrk_last}.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_current(const UBreakIterator *bi);
@@ -341,7 +341,7 @@ ubrk_current(const UBreakIterator *bi);
  * @return The character index of the next text boundary, or UBRK_DONE
  * if all text boundaries have been returned.
  * @see ubrk_previous
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_next(UBreakIterator *bi);
@@ -353,7 +353,7 @@ ubrk_next(UBreakIterator *bi);
  * @return The character index of the preceding text boundary, or UBRK_DONE
  * if all text boundaries have been returned.
  * @see ubrk_next
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_previous(UBreakIterator *bi);
@@ -364,7 +364,7 @@ ubrk_previous(UBreakIterator *bi);
  * @param bi The break iterator to use.
  * @return The character index of the first character in the text being scanned.
  * @see ubrk_last
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_first(UBreakIterator *bi);
@@ -377,7 +377,7 @@ ubrk_first(UBreakIterator *bi);
  * @return The character offset immediately <EM>beyond</EM> the last character in the
  * text being scanned.
  * @see ubrk_first
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_last(UBreakIterator *bi);
@@ -389,7 +389,7 @@ ubrk_last(UBreakIterator *bi);
  * @param offset The offset to begin scanning.
  * @return The text boundary preceding offset, or UBRK_DONE.
  * @see ubrk_following
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_preceding(UBreakIterator *bi,
@@ -402,7 +402,7 @@ ubrk_preceding(UBreakIterator *bi,
  * @param offset The offset to begin scanning.
  * @return The text boundary following offset, or UBRK_DONE.
  * @see ubrk_preceding
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
 ubrk_following(UBreakIterator *bi,
@@ -415,7 +415,7 @@ ubrk_following(UBreakIterator *bi,
 * @param index The index of the desired locale.
 * @return A locale for which number text breaking information is available, or 0 if none.
 * @see ubrk_countAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI const char* U_EXPORT2
 ubrk_getAvailable(int32_t index);
@@ -426,7 +426,7 @@ ubrk_getAvailable(int32_t index);
 * calls to \Ref{ubrk_getAvailable}.
 * @return The number of locales for which text breaking information is available.
 * @see ubrk_getAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2
 ubrk_countAvailable(void);
@@ -439,7 +439,7 @@ ubrk_countAvailable(void);
 * @param bi The break iterator to use.
 * @param offset the offset to check.
 * @return True if "offset" is a boundary position.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI  UBool U_EXPORT2
 ubrk_isBoundary(UBreakIterator *bi, int32_t offset);

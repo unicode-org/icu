@@ -63,14 +63,14 @@
 
 /**
  * FROM_U, TO_U options for sub and skip callbacks
- * @stable
+ * @stable ICU 2.0
  */
 #define UCNV_SUB_STOP_ON_ILLEGAL "i"
 #define UCNV_SKIP_STOP_ON_ILLEGAL "i"
 
 /**
  * FROM_U_CALLBACK_ESCAPE options
- * @stable
+ * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_ICU       NULL
 #define UCNV_ESCAPE_JAVA      "J"
@@ -83,7 +83,7 @@
  * The process condition code to be used with the callbacks.  
  * Codes which are greater than UCNV_IRREGULAR should be 
  * passed on to any chained callbacks.
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum {
     UCNV_UNASSIGNED = 0,  /**< The code point is unassigned.
@@ -120,7 +120,7 @@ typedef enum {
 
 /**
  * The structure for the fromUnicode callback function parameter.
- * @stable
+ * @stable ICU 2.0
  */
 typedef struct {
     uint16_t size;
@@ -136,7 +136,7 @@ typedef struct {
 
 /**
  * The structure for the toUnicode callback function parameter.
- * @stable
+ * @stable ICU 2.0
  */
 typedef struct {
     uint16_t size;
@@ -154,7 +154,7 @@ typedef struct {
  * DO NOT CALL THIS FUNCTION DIRECTLY!
  * This From Unicode callback STOPS at the ILLEGAL_SEQUENCE,
  * returning the error code back to the caller immediately.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
                   const void *context,
@@ -172,7 +172,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
  * This To Unicode callback STOPS at the ILLEGAL_SEQUENCE,
  * returning the error code back to the caller immediately.
  * 
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
                   const void *context,
@@ -192,7 +192,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
  *                      returning the error code back to the caller immediately.
  *                 NULL: Skips any ILLEGAL_SEQUENCE
  *                     
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
                   const void *context,
@@ -214,7 +214,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
  *                      returning the error code back to the caller immediately.
  *                 NULL: Substitutes any ILLEGAL_SEQUENCE
  * @see ucnv_setSubstChars
- * @stable
+ * @stable ICU 2.0
  */
 
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
@@ -263,7 +263,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          &#x23456
- * @stable
+ * @stable ICU 2.0
  */
 
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
@@ -286,7 +286,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
  *                      returning the error code back to the caller immediately.
  *                 NULL: Skips any ILLEGAL_SEQUENCE
  *                     
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
                   const void *context,
@@ -305,7 +305,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
  *                 UCNV_SUB_STOP_ON_ILLEGAL: STOPS at the ILLEGAL_SEQUENCE,
  *                      returning the error code back to the caller immediately.
  *                 NULL: Substitutes any ILLEGAL_SEQUENCE
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
                   const void *context,
@@ -320,7 +320,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
  * This To Unicode callback will Substitute the ILLEGAL SEQUENCE with the
  * hexadecimal representation of the illegal bytes
  *  (in the format  %XNN, e.g. "%XFF%X0A%XC8%X03").
- * @stable
+ * @stable ICU 2.0
  */
 
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (

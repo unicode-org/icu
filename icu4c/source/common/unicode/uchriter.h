@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
  * compare equal).
  * @see CharacterIterator
  * @see ForwardCharacterIterator
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API UCharCharacterIterator : public CharacterIterator {
 public:
@@ -34,7 +34,7 @@ public:
    * destructor will not delete it).
    * @param textPtr The UChar array to be iterated over
    * @param length The length of the UChar array
-   * @stable
+   * @stable ICU 2.0
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length);
 
@@ -49,7 +49,7 @@ public:
    * @param textPtr The UChar array to be iteratd over
    * @param length The length of the UChar array
    * @param position The starting position of the iteration
-   * @stable
+   * @stable ICU 2.0
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length,
                          int32_t position);
@@ -68,7 +68,7 @@ public:
    * @param textBegin  The begin position of the iteration range
    * @param textEnd    The end position of the iteration range
    * @param position    The starting position of the iteration
-   * @stable
+   * @stable ICU 2.0
    */
   UCharCharacterIterator(const UChar* textPtr, int32_t length,
                          int32_t textBegin,
@@ -80,13 +80,13 @@ public:
    * of the same string as "that", and its initial position is the
    * same as "that"'s current position.  
    * @param that The UCharCharacterIterator to be copied
-   * @stable
+   * @stable ICU 2.0
    */
   UCharCharacterIterator(const UCharCharacterIterator&  that);
 
   /**
    * Destructor. 
-   * @stable
+   * @stable ICU 2.0
    */
   ~UCharCharacterIterator();
 
@@ -96,7 +96,7 @@ public:
    * character within that string as "that" does. 
    * @param that The object to be copied
    * @return the newly created object 
-   * @stable
+   * @stable ICU 2.0
    */
   UCharCharacterIterator&
   operator=(const UCharCharacterIterator&    that);
@@ -107,14 +107,14 @@ public:
    * @param that The ForwardCharacterIterator used to be compared for equality
    * @return true if the iterators iterate over the same range of the
    * same string and are pointing at the same character.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
   /**
    * Generates a hash code for this iterator.  
    * @return the hash code.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t         hashCode(void) const;
 
@@ -123,7 +123,7 @@ public:
    * character in the same range of the same string as this one.  The
    * caller must delete the new iterator.  
    * @return the CharacterIterator newly created
-   * @stable
+   * @stable ICU 2.0
    */
   virtual CharacterIterator* clone(void) const;
                                 
@@ -132,7 +132,7 @@ public:
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with next().
    * @return the first code unit in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         first(void);
 
@@ -142,7 +142,7 @@ public:
    * to the second code unit. This is an alternative to setToStart()
    * for forward iteration with nextPostInc().
    * @return the first code unit in its iteration range
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         firstPostInc(void);
 
@@ -153,7 +153,7 @@ public:
    * Note that an iteration with next32PostInc(), beginning with,
    * e.g., setToStart() or firstPostInc(), is more efficient.
    * @return the first code point in its iteration range
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       first32(void);
 
@@ -163,7 +163,7 @@ public:
    * to the second code point. This is an alternative to setToStart()
    * for forward iteration with next32PostInc().
    * @return the first code point in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       first32PostInc(void);
 
@@ -172,7 +172,7 @@ public:
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous().
    * @return the last code unit in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         last(void);
 
@@ -181,7 +181,7 @@ public:
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous32().
    * @return the last code point in its iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       last32(void);
 
@@ -191,7 +191,7 @@ public:
    * returns that code unit.  
    * @position the position within the text-storage object
    * @return the code unit
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         setIndex(int32_t position);
 
@@ -204,21 +204,21 @@ public:
    * (its first code unit).
    * @position the position within the text-storage object
    * @return the code unit
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       setIndex32(int32_t position);
 
   /**
    * Returns the code unit the iterator currently refers to.  
    * @return the code unit the iterator currently refers to.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         current(void) const;
 
   /**
    * Returns the code point the iterator currently refers to.  
    * @return the code point the iterator currently refers to.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       current32(void) const;
 
@@ -227,7 +227,7 @@ public:
    * endIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE. 
    * @return the next code unit in the iteration range. 
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         next(void);
 
@@ -237,7 +237,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
    * @return the current code unit.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         nextPostInc(void);
         
@@ -249,7 +249,7 @@ public:
    * efficient than iteration with "post-increment" semantics
    * that is provided by next32PostInc().
    * @return the next code point in the iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       next32(void);
 
@@ -259,7 +259,7 @@ public:
    * (toward endIndex()).  If there are
    * no more code points to return, returns DONE.
    * @return the current point.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       next32PostInc(void);
         
@@ -270,7 +270,7 @@ public:
    * iteration.
    * @return FALSE if there are no more code units or code points
    * at or after the current position in the iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool        hasNext();
 
@@ -279,7 +279,7 @@ public:
    * startIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE.  
    * @return the previous code unit in the iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar         previous(void);
 
@@ -288,7 +288,7 @@ public:
    * startIndex()), and returns that code point.  If there are no more
    * code points to return, returns DONE.
    * @return the previous code point in the iteration range.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UChar32       previous32(void);
 
@@ -299,7 +299,7 @@ public:
    * iteration.
    * @return FALSE if there are no more code units or code points
    * before the current position in the iteration range.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool        hasPrevious();
 
@@ -312,7 +312,7 @@ public:
    * a negative delta means backward.
    * @origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t      move(int32_t delta, EOrigin origin);
 
@@ -325,13 +325,13 @@ public:
    * a negative delta means backward.
    * @origin Origin enumeration {kStart, kCurrent, kEnd}
    * @return the new position
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t      move32(int32_t delta, EOrigin origin);
 
   /**
    * Sets the iterator to iterate over a new range of text
-   * @stable
+   * @stable ICU 2.0
    */
   void setText(const UChar* newText, int32_t newTextLength);
   
@@ -340,14 +340,14 @@ public:
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.
    * @param result Receives a copy of the text under iteration.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void            getText(UnicodeString& result);
 
   /**
    * Return a class ID for this object (not really public) 
    * @return a class ID for this object.  
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UClassID         getDynamicClassID(void) const 
     { return getStaticClassID(); }
@@ -355,7 +355,7 @@ public:
   /**
    * Return a class ID for this class (not really public) 
    * @return a class ID for this class  
-   * @stable
+   * @stable ICU 2.0
    */
   static UClassID          getStaticClassID(void) 
     { return (UClassID)(&fgClassID); }

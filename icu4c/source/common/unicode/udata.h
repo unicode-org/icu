@@ -66,7 +66,7 @@ U_CDECL_BEGIN
  * common place to store the source version of the data;
  * for data from the Unicode character database, this could
  * reflect the Unicode version.</p>
- * @stable
+ * @stable ICU 2.0
  */
 typedef struct {
     /** @memo sizeof(UDataInfo) */
@@ -100,7 +100,7 @@ typedef struct {
 
 /**
  * Forward declaration of the data memory type.
- * @stable
+ * @stable ICU 2.0
  */
 typedef struct UDataMemory UDataMemory;
 
@@ -115,7 +115,7 @@ typedef struct UDataMemory UDataMemory;
  *              by <code>udata_openChoice()</code> if this function
  *              returns <code>TRUE</code>.
  * @return TRUE if the current data memory is acceptable
- * @stable
+ * @stable ICU 2.0
  */
 typedef UBool U_CALLCONV
 UDataMemoryIsAcceptable(void *context,
@@ -140,7 +140,7 @@ UDataMemoryIsAcceptable(void *context,
  * @return A pointer (handle) to a data memory object, or <code>NULL</code>
  *         if an error occurs. Call <code>udata_getMemory()</code>
  *         to get a pointer to the actual data.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UDataMemory * U_EXPORT2
 udata_open(const char *path, const char *type, const char *name,
@@ -202,7 +202,7 @@ udata_open(const char *path, const char *type, const char *name,
  * @return A pointer (handle) to a data memory object, or <code>NULL</code>
  *         if an error occurs. Call <code>udata_getMemory()</code>
  *         to get a pointer to the actual data.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UDataMemory * U_EXPORT2
 udata_openChoice(const char *path, const char *type, const char *name,
@@ -214,7 +214,7 @@ udata_openChoice(const char *path, const char *type, const char *name,
  * This function must be called to allow the system to
  * release resources associated with this data memory.
  * @param pData The pointer to data memory object
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 udata_close(UDataMemory *pData);
@@ -223,7 +223,7 @@ udata_close(UDataMemory *pData);
  * Get the pointer to the actual data inside the data memory.
  * The data is read-only.
  * @param pData The pointer to data memory object
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const void * U_EXPORT2
 udata_getMemory(UDataMemory *pData);
@@ -244,7 +244,7 @@ udata_getMemory(UDataMemory *pData);
  * in the data memory object. If this structure is smaller than
  * <code>pInfo->size</code>, then the <code>size</code> will be
  * adjusted and only part of the structure will be filled.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
@@ -278,7 +278,7 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo);
  *
  * @param data pointer to ICU common data
  * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
- * @stable
+ * @stable ICU 2.0
  */
 
 U_CAPI void U_EXPORT2
@@ -305,7 +305,7 @@ udata_setCommonData(const void *data, UErrorCode *err);
  *             to (open) this data.
  * @param data pointer to the data
  * @param err outgoing error status <code>U_USING_DEFAULT_ERROR, U_UNSUPPORTED_ERROR</code>
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2
 udata_setAppData(const char *path, const void *data, UErrorCode *err);

@@ -254,7 +254,7 @@ class UVector;
  * </blockquote>
  *
  * @author Alan Liu
- * @stable
+ * @stable ICU 2.0
  */
 class U_COMMON_API UnicodeSet : public UnicodeFilter {
 
@@ -297,7 +297,7 @@ public:
 
     /**
      * Constructs an empty set.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet();
 
@@ -316,7 +316,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @exception <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet(const UnicodeString& pattern,
                UErrorCode& status);
@@ -331,19 +331,19 @@ public:
 
     /**
      * Constructs a set that is identical to the given UnicodeSet.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet(const UnicodeSet& o);
 
     /**
      * Destructs the set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~UnicodeSet();
 
     /**
      * Assigns this object to be a copy of another.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet& operator=(const UnicodeSet& o);
 
@@ -356,14 +356,14 @@ public:
      *
      * @param o set to be compared for equality with this set.
      * @return <tt>true</tt> if the specified set is equal to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const UnicodeSet& o) const;
 
     /**
      * Compares the specified object with this set for equality.  Returns
      * <tt>true</tt> if the specified set is not equal to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const UnicodeSet& o) const;
 
@@ -371,7 +371,7 @@ public:
      * Returns a copy of this object.  All UnicodeFunctor objects have
      * to support cloning in order to allow classes using
      * UnicodeFunctors, such as Transliterator, to implement cloning.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeFunctor* clone() const;
 
@@ -380,7 +380,7 @@ public:
      *
      * @return the hash code value for this set.
      * @see Object#hashCode()
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t hashCode(void) const;
 
@@ -412,7 +412,7 @@ public:
      * @param pattern a string specifying what characters are in the set
      * @exception <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& applyPattern(const UnicodeString& pattern,
                                      UErrorCode& status);
@@ -427,7 +427,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
                                      UBool escapeUnprintable = FALSE) const;
@@ -493,7 +493,7 @@ public:
      * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 65536</code>.
      *
      * @return the number of elements in this set (its cardinality).
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t size(void) const;
 
@@ -501,7 +501,7 @@ public:
      * Returns <tt>true</tt> if this set contains no elements.
      *
      * @return <tt>true</tt> if this set contains no elements.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool isEmpty(void) const;
 
@@ -509,7 +509,7 @@ public:
      * Returns true if this set contains the given character.
      * @param c character to be checked for containment
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool contains(UChar32 c) const;
     
@@ -519,7 +519,7 @@ public:
      * @param start first character, inclusive, of the range
      * @param end last character, inclusive, of the range
      * @return true if the test condition is met
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool contains(UChar32 start, UChar32 end) const;
 
@@ -682,7 +682,7 @@ public:
      * to this set.
      * @param end last character, inclusive, of range to be added
      * to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& add(UChar32 start, UChar32 end);
 
@@ -690,7 +690,7 @@ public:
      * Adds the specified character to this set if it is not already
      * present.  If this set already contains the specified character,
      * the call leaves this set unchanged.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet& add(UChar32 c);
 
@@ -776,14 +776,14 @@ public:
      * to this set.
      * @param end last character, inclusive, of range to be retained
      * to this set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& retain(UChar32 start, UChar32 end);
 
 
     /**
      * Retain the specified character from this set if it is present.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet& retain(UChar32 c);
 
@@ -797,7 +797,7 @@ public:
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& remove(UChar32 start, UChar32 end);
 
@@ -805,7 +805,7 @@ public:
      * Removes the specified character from this set if it is present.
      * The set will not contain the specified range once the call
      * returns.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet& remove(UChar32 c);
 
@@ -822,7 +822,7 @@ public:
      * Inverts this set.  This operation modifies this set so that
      * its value is its complement.  This is equivalent to
      * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& complement(void);
 
@@ -837,7 +837,7 @@ public:
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& complement(UChar32 start, UChar32 end);
 
@@ -845,7 +845,7 @@ public:
      * Complements the specified character in this set.  The character
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeSet& complement(UChar32 c);
 
@@ -868,7 +868,7 @@ public:
      *
      * @param c set whose elements are to be added to this set.
      * @see #add(char, char)
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& addAll(const UnicodeSet& c);
 
@@ -880,7 +880,7 @@ public:
      * the <i>intersection</i> of the two sets.
      *
      * @param c set that defines which elements this set will retain.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& retainAll(const UnicodeSet& c);
 
@@ -892,7 +892,7 @@ public:
      *
      * @param c set that defines which elements will be removed from
      *          this set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& removeAll(const UnicodeSet& c);
 
@@ -909,7 +909,7 @@ public:
     /**
      * Removes all of the elements from this set.  This set will be
      * empty after this call returns.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeSet& clear(void);
 
@@ -1001,7 +1001,7 @@ public:
      * .          Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
