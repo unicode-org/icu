@@ -503,16 +503,22 @@ ucol_close(UCollator *coll)
 }
 
 U_CAPI UCollator*
-ucol_openRules(    const    UChar                  *rules,
-        int32_t                 rulesLength,
-        UNormalizationMode      mode,
-        UCollationStrength      strength,
-        UErrorCode              *status)
+ucol_openRules( const UChar        *rules,
+                int32_t            rulesLength,
+                UNormalizationMode mode,
+                UCollationStrength strength,
+                UParseError        *parseError,
+                UErrorCode         *status)
 {
   uint32_t listLen = 0;
   UColTokenParser src;
   UColAttributeValue norm;
-
+  UParseError tErr;
+  
+  if(parseError == NULL){
+      parseError = &tErr;
+  }
+  
   switch(mode) {
   case UNORM_NONE:
     norm = UCOL_OFF;
@@ -531,10 +537,12 @@ ucol_openRules(    const    UChar                  *rules,
 
   ucol_initUCA(status);
 
-  if(U_FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)){
+      return 0;
+  }
 
   ucol_tok_initTokenList(&src, rules, rulesLength, UCA, status);
-  listLen = ucol_tok_assembleTokenList(&src, status);
+  listLen = ucol_tok_assembleTokenList(&src,parseError, status);
 
   if(U_FAILURE(*status)) {
     /* if status is U_ILLEGAL_ARGUMENT_ERROR, src->current points at the offending option */
@@ -593,7 +601,18 @@ ucol_openRules(    const    UChar                  *rules,
 
   return result;
 }
-
+/*
+U_CAPI UCollator*
+ucol_openRules( const UChar             *rules,
+                int32_t                 rulesLength,
+                UNormalizationMode      mode,
+                UCollationStrength      strength,
+                UErrorCode              *status)
+{
+    UParseError parseError;
+    return ucol_openRulesWithError(rules,rulesLength,mode,strength,&parseError,status);
+}
+*/
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
 /* you should be able to get the binary chunk to write out...  Doesn't look very full now */
 U_CAPI uint8_t *
@@ -4206,6 +4225,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
                                        length,
                                        ucol_getNormalization(coll),
                                        ucol_getStrength(coll),
+                                       NULL,
                                        status);
         if (U_SUCCESS(*status))
         {
@@ -5072,3 +5092,4 @@ ucol_equal(        const    UCollator        *coll,
   return (ucol_strcoll(coll, source, sourceLength, target, targetLength)
       == UCOL_EQUAL);
 }
+

@@ -468,16 +468,16 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
         }
         if (anchorEnd) {
             // Text after a presumed end anchor is a syntax err
-            return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_REFERENCE, rule, start);
+            return syntaxError(U_MALFORMED_VARIABLE_REFERENCE, rule, start);
         }
         // Handle escapes
         if (c == ESCAPE) {
             if (pos == limit) {
-                return syntaxError(RuleBasedTransliterator::TRAILING_BACKSLASH, rule, start);
+                return syntaxError(U_TRAILING_BACKSLASH, rule, start);
             }
             UChar32 escaped = rule.unescapeAt(pos); // pos is already past '\\'
             if (escaped == (UChar32) -1) {
-                return syntaxError(RuleBasedTransliterator::MALFORMED_UNICODE_ESCAPE, rule, start);
+                return syntaxError(U_MALFORMED_UNICODE_ESCAPE, rule, start);
             }
             buf.append(escaped);
             continue;
@@ -498,7 +498,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 quoteStart = buf.length();
                 for (;;) {
                     if (iq < 0) {
-                        return syntaxError(RuleBasedTransliterator::UNTERMINATED_QUOTE, rule, start);
+                        return syntaxError(U_UNTERMINATED_QUOTE, rule, start);
                     }
                     scratch.truncate(0);
                     rule.extractBetween(pos, iq, scratch);
@@ -521,7 +521,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             if (buf.length() == 0 && !anchorStart) {
                 anchorStart = TRUE;
             } else {
-              return syntaxError(RuleBasedTransliterator::MISPLACED_ANCHOR_START,
+              return syntaxError(U_MISPLACED_ANCHOR_START,
                                  rule, start);
             }
           break;
@@ -564,7 +564,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                         }
                         if (r > 214748364 ||
                             (r == 214748364 && d > 7)) {
-                            return syntaxError(RuleBasedTransliterator::UNDEFINED_SEGMENT_REFERENCE,
+                            return syntaxError(U_UNDEFINED_SEGMENT_REFERENCE,
                                                rule, start);
                         }
                         r = 10*r + d;
@@ -599,13 +599,13 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             break;
         case CONTEXT_ANTE:
             if (ante >= 0) {
-                return syntaxError(RuleBasedTransliterator::MULTIPLE_ANTE_CONTEXTS, rule, start);
+                return syntaxError(U_MULTIPLE_ANTE_CONTEXTS, rule, start);
             }
             ante = buf.length();
             break;
         case CONTEXT_POST:
             if (post >= 0) {
-                return syntaxError(RuleBasedTransliterator::MULTIPLE_POST_CONTEXTS, rule, start);
+                return syntaxError(U_MULTIPLE_POST_CONTEXTS, rule, start);
             }
             post = buf.length();
             break;
@@ -613,25 +613,25 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             pp.setIndex(pos-1); // Backup to opening '['
             buf.append(parser.parseSet(rule, pp));
             if (U_FAILURE(parser.status)) {
-                return syntaxError(RuleBasedTransliterator::MALFORMED_SET, rule, start);
+                return syntaxError(U_MALFORMED_SET, rule, start);
             }
             pos = pp.getIndex();
             break;
         case CURSOR_POS:
             if (cursor >= 0) {
-                return syntaxError(RuleBasedTransliterator::MULTIPLE_CURSORS, rule, start);
+                return syntaxError(U_MULTIPLE_CURSORS, rule, start);
             }
             cursor = buf.length();
             break;
         case CURSOR_OFFSET:
             if (cursorOffset < 0) {
                 if (buf.length() > 0) {
-                    return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+                    return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
                 }
                 --cursorOffset;
             } else if (cursorOffset > 0) {
                 if (buf.length() != cursorOffsetPos || cursor >= 0) {
-                    return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+                    return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
                 }
                 ++cursorOffset;
             } else {
@@ -641,7 +641,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                     cursorOffsetPos = buf.length();
                     cursorOffset = 1;
                 } else {
-                    return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+                    return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
                 }
             }
             break;
@@ -662,10 +662,10 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                     segments->getLastParenOffset(isOpenParen) == buf.length()) {
                     // The */+ immediately follows a segment
                     if (isOpenParen) {
-                        return syntaxError(RuleBasedTransliterator::MISPLACED_QUANTIFIER, rule, start);
+                        return syntaxError(U_MISPLACED_QUANTIFIER, rule, start);
                     }
                     if (!segments->extractLastParenSubstring(start, limit)) {
-                        return syntaxError(RuleBasedTransliterator::MISMATCHED_SEGMENT_DELIMITERS, rule, start);
+                        return syntaxError(U_MISMATCHED_SEGMENT_DELIMITERS, rule, start);
                     }
                     isSegment = TRUE;
                 } else {
@@ -714,7 +714,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
                   (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
                   (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) {
-                return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rule, start);
+                return syntaxError(U_UNQUOTED_SPECIAL, rule, start);
             }
             buf.append(c);
             break;
@@ -722,7 +722,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
     }
 
     if (cursorOffset > 0 && cursor != cursorOffsetPos) {
-        return syntaxError(RuleBasedTransliterator::MISPLACED_CURSOR_OFFSET, rule, start);
+        return syntaxError(U_MISPLACED_CURSOR_OFFSET, rule, start);
     }
     // text = buf.toString();
     return pos;
@@ -842,7 +842,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
 
     // Clear error struct
     if (parseError != 0) {
-        parseError->code = parseError->line = 0;
+        //parseError->code = parseError->line = 0;
         parseError->offset = 0;
         parseError->preContext[0] = parseError->postContext[0] = (UChar)0;
     }
@@ -855,9 +855,10 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
 
     parseData->data = data;
     variablesVector.removeAllElements();
-    if (parseError != 0) {
+/*    if (parseError != 0) {
         parseError->code = 0;
     }
+*/
     determineVariableRange();
 
     UnicodeString str; // scratch
@@ -985,7 +986,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     }
 
     if (pos == limit || u_strchr(gOPERATORS, (op = rule.charAt(pos++))) == NULL) {
-        return syntaxError(RuleBasedTransliterator::MISSING_OPERATOR, rule, start);
+        return syntaxError(U_MISSING_OPERATOR, rule, start);
     }
 
     // Found an operator char.  Check for forward-reverse operator.
@@ -1005,7 +1006,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
             ++pos;
         } else {
             // RuleHalf parser must have terminated at an operator
-            return syntaxError(RuleBasedTransliterator::UNQUOTED_SPECIAL, rule, start);
+            return syntaxError(U_UNQUOTED_SPECIAL, rule, start);
         }
     }
 
@@ -1019,15 +1020,15 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
         // defined).
         if (undefinedVariableName.length() == 0) {
             // "Missing '$' or duplicate definition"
-            return syntaxError(RuleBasedTransliterator::BAD_VARIABLE_DEFINITION, rule, start);
+            return syntaxError(U_BAD_VARIABLE_DEFINITION, rule, start);
         }
         if (left->text.length() != 1 || left->text.charAt(0) != variableLimit) {
             // "Malformed LHS"
-            return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_DEFINITION, rule, start);
+            return syntaxError(U_MALFORMED_VARIABLE_DEFINITION, rule, start);
         }
         if (left->anchorStart || left->anchorEnd ||
             right->anchorStart || right->anchorEnd) {
-            return syntaxError(RuleBasedTransliterator::MALFORMED_VARIABLE_DEFINITION, rule, start);
+            return syntaxError(U_MALFORMED_VARIABLE_DEFINITION, rule, start);
         } 
         // We allow anything on the right, including an empty string.
         UnicodeString* value = new UnicodeString(right->text);
@@ -1041,7 +1042,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     // any undefined variable names.
     if (undefinedVariableName.length() != 0) {
         syntaxError(// "Undefined variable $" + undefinedVariableName,
-                    RuleBasedTransliterator::UNDEFINED_VARIABLE,
+                    U_UNDEFINED_VARIABLE,
                     rule, start);
     }
 
@@ -1095,7 +1096,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
         //(-right->cursorOffset > left->ante) ||
         right->anchorStart || right->anchorEnd) {
 
-        return syntaxError(RuleBasedTransliterator::MALFORMED_RULE, rule, start);
+        return syntaxError(U_MALFORMED_RULE, rule, start);
     }
 
     // Check integrity of segments and segment references.  Each
@@ -1103,11 +1104,11 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     // references must not refer to segments that do not exist.
     if (left->segments != NULL) {
         if (!left->segments->validate()) {
-            return syntaxError(RuleBasedTransliterator::MISSING_SEGMENT_CLOSE, rule, start);
+            return syntaxError(U_MISSING_SEGMENT_CLOSE, rule, start);
         }
         int32_t n = left->segments->count();
         if (right->maxRef > n) {
-            return syntaxError(RuleBasedTransliterator::UNDEFINED_SEGMENT_REFERENCE, rule, start);
+            return syntaxError(U_UNDEFINED_SEGMENT_REFERENCE, rule, start);
         }
     }
 
@@ -1135,7 +1136,7 @@ int32_t TransliteratorParser::syntaxError(int32_t parseErrorCode,
                                                const UnicodeString& rule,
                                                int32_t start) {
     if (parseError != 0) {
-        parseError->code = parseErrorCode;
+//        parseError->code = parseErrorCode;
         parseError->line = 0; // We don't return a line #
         parseError->offset = start; // Character offset from rule start
         int32_t end = quotedIndexOf(rule, start, rule.length(), END_OF_RULE);
@@ -1150,7 +1151,7 @@ int32_t TransliteratorParser::syntaxError(int32_t parseErrorCode,
         parseError->preContext[len] = 0;
         parseError->postContext[0] = 0;
     }
-    status = U_ILLEGAL_ARGUMENT_ERROR;
+    status = (UErrorCode)parseErrorCode;
     return start;
 }
 
