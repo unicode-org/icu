@@ -59,6 +59,10 @@ $Format  = [[:Cf:]];
 $Hiragana = [:Hiragana:];
 $Ideographic = [:IDEOGRAPHIC:];
 
+## -------------------------------------------------
+
+!!forward;
+
 $CR $LF;
 
 # rule 3 and 4
@@ -92,13 +96,17 @@ $ALetterSeq
 
 $NumericEx ($Format* $NumericEx)* {100};
 
-# rule 9, 10
+# rule 9
 
-($ALetterEx | $NumericEx) ($Format* ($ALetterEx | $NumericEx))* {200};
+$ALetterEx ($Format* ($ALetterEx | $NumericEx))* {200};
+
+# rule 10
+
+$NumericEx + ($Format* $ALetterEx)+ ($Format* $NumericEx)* {200};
 
 # rule 11 and 12 
 
-$NumericEx $Format* ($MidNumEx | $MidNumLetEx) $Format* $NumericEx {100}; 
+$NumericEx ($Format* ($MidNumEx | $MidNumLetEx) $Format* $NumericEx)+ {100}; 
 
 # rule 13
 
@@ -106,7 +114,8 @@ $KatakanaEx ($Format* $KatakanaEx)* {300};
 $Hiragana $Extend* {300}; 
 $Ideographic $Extend* {400};
 
-# reverse rules!!
+## -------------------------------------------------
+
 !!reverse;
 
 $BackALetterEx     = $Extend* $ALetter;
@@ -118,25 +127,25 @@ $BackMidNumLetEx   = $Extend* $MidNumLet;
 $BackMidLetterEx   = $Extend* $MidLetter;
 $BackKatakanaEx    = $Extend* $Katakana;
 
-! $LF $CR;
+$LF $CR;
 
-! $Extend* [^$Format];
+$Extend* [^$Format];
 
 # rule 5
 
-! ($BackALetterEx $Format*)* $BackABaseLetterEx;
-! ($BackALetterEx $Format*)* $BackACMLetterEx / $Format;
+($BackALetterEx $Format*)* $BackABaseLetterEx;
+($BackALetterEx $Format*)* $BackACMLetterEx / $Format;
 
 # rule 6 and 7
 
-! (
+(
        ($BackALetterEx $Format*)* 
        ($BackABaseLetterEx | $BackACMLetterEx $Format) 
        ($Format* ($BackMidLetterEx | $BackMidNumLetEx))
   )+ 
   $Format* ($BackALetterEx $Format*)* $BackABaseLetterEx;
   
-! (
+(
        ($BackALetterEx $Format*)* 
        ($BackABaseLetterEx | $BackACMLetterEx $Format) 
        ($Format* ($BackMidLetterEx | $BackMidNumLetEx))
@@ -145,17 +154,24 @@ $BackKatakanaEx    = $Extend* $Katakana;
 
 # rule 8
 
-! $BackNumericEx $Format* $BackNumericEx; 
+$BackNumericEx $Format* $BackNumericEx; 
 
 # rule 9, 10
 
-! (($BackALetterEx | $BackNumericEx) $Format*)+ ($BackABaseLetterEx | $BackNumericEx);
-! (($BackALetterEx | $BackNumericEx) $Format*)+ $BackACMLetterEx / $Format;
+(($BackALetterEx | $BackNumericEx) $Format*)+ ($BackABaseLetterEx | $BackNumericEx);
+(($BackALetterEx | $BackNumericEx) $Format*)+ $BackACMLetterEx / $Format;
 
 # rule 11 and 12
 
-! $BackNumericEx $Format* ($BackMidNumEx | $BackMidNumLetEx) $Format* $BackNumericEx;
+$BackNumericEx $Format* ($BackMidNumEx | $BackMidNumLetEx) $Format* $BackNumericEx;
 
 # rule 13
 
-! $BackKatakanaEx $Format* $BackKatakanaEx;
+$BackKatakanaEx $Format* $BackKatakanaEx;
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+$Extend* [^$Extend];
+$BackACMLetterEx / $Format;
