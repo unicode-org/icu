@@ -89,6 +89,10 @@ SOURCE=.\toolutil.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucmpwrit.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\unewdata.c
 # End Source File
 # End Group
