@@ -69,7 +69,7 @@
 #include "cmemory.h"
 
 /* the global mutex. Use it proudly and wash it often. */
-UMTX    gGlobalMutex = NULL;
+static UMTX    gGlobalMutex = NULL;
 
 #if defined(WIN32)
 static CRITICAL_SECTION gPlatformMutex;

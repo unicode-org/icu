@@ -26,42 +26,6 @@
 #include "ucnv_cnv.h"
 #include "cmemory.h"
 
-/* Prototypes ------------------------------------------------------------- */
-
-/* Keep these here to make finicky compilers happy */
-
-U_CFUNC void
-_SCSUReset(UConverter *cnv, UConverterResetChoice choice);
-U_CFUNC void
-_SCSUOpen(UConverter *cnv,
-          const char *name,
-          const char *locale,
-          uint32_t options,
-          UErrorCode *pErrorCode);
-U_CFUNC void
-_SCSUClose(UConverter *cnv);
-U_CFUNC void
-_SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                          UErrorCode *pErrorCode);
-U_CFUNC UChar32
-_SCSUGetNextUChar(UConverterToUnicodeArgs *pArgs,
-                  UErrorCode *pErrorCode);
-U_CFUNC void
-_SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                            UErrorCode *pErrorCode);
-U_CFUNC const char *
-_SCSUGetName(const UConverter *cnv);
-U_CFUNC void
-_SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
-               int32_t offsetIndex,
-               UErrorCode *pErrorCode);
-U_CFUNC UConverter * 
-_SCSUSafeClone(const UConverter     *cnv, 
-              void *stackBuffer, 
-              int32_t *pBufferSize, 
-              UErrorCode *status);
-
-
 /* SCSU definitions --------------------------------------------------------- */
 
 /* SCSU command byte values */
@@ -183,9 +147,9 @@ enum {
     lGeneric, l_ja
 };
 
-/* MBCS setup functions ----------------------------------------------------- */
+/* SCSU setup functions ----------------------------------------------------- */
 
-U_CFUNC void
+static void
 _SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
     SCSUData *scsu=(SCSUData *)cnv->extraInfo;
 
@@ -221,7 +185,7 @@ _SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-U_CFUNC void
+static void
 _SCSUOpen(UConverter *cnv,
           const char *name,
           const char *locale,
@@ -240,7 +204,7 @@ _SCSUOpen(UConverter *cnv,
     }
 }
 
-U_CFUNC void
+static void
 _SCSUClose(UConverter *cnv) {
     if(!cnv->isCopyLocal){
         if(cnv->extraInfo!=NULL) {
@@ -254,7 +218,7 @@ _SCSUClose(UConverter *cnv) {
 
 /* ### check operator precedence | << + < */
 
-U_CFUNC void
+static void
 _SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -640,7 +604,7 @@ callback:
     }
 }
 
-U_CFUNC UChar32
+static UChar32
 _SCSUGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
     return ucnv_getNextUCharFromToUImpl(pArgs, _SCSUToUnicodeWithOffsets, TRUE, pErrorCode);
@@ -786,7 +750,7 @@ getDynamicOffset(uint32_t c, uint32_t *pOffset) {
  *  - Only replace the result after an SDX or SCU?
  */
 
-U_CFUNC void
+static void
 _SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -1333,7 +1297,7 @@ callback:
 
 /* miscellaneous ------------------------------------------------------------ */
 
-U_CFUNC const char *
+static const char *
 _SCSUGetName(const UConverter *cnv) {
     SCSUData *scsu=(SCSUData *)cnv->extraInfo;
 
@@ -1345,7 +1309,7 @@ _SCSUGetName(const UConverter *cnv) {
     }
 }
 
-U_CFUNC void
+static void
 _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
                int32_t offsetIndex,
                UErrorCode *pErrorCode) {
@@ -1376,7 +1340,7 @@ struct cloneStruct
     SCSUData mydata;
 };
 
-U_CFUNC UConverter * 
+static UConverter * 
 _SCSUSafeClone(const UConverter *cnv, 
                void *stackBuffer, 
                int32_t *pBufferSize, 
