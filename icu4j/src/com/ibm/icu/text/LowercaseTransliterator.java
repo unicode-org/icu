@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/LowercaseTransliterator.java,v $ 
- * $Date: 2002/02/28 23:55:47 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/03/15 22:48:07 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 import java.util.*;
-import com.ibm.icu.impl.UnicodeProperty;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UCharacterIterator;
 
 /**
@@ -75,8 +75,8 @@ class LowercaseTransliterator extends Transliterator{
         while (textPos < limit) {
         	original.setIndex(textPos);
             cp = original.currentCodepoint();
-            oldLen = UnicodeProperty.getCharCount(cp);
-            int newLen = UnicodeProperty.toLowerCase(loc, cp, original, buffer);
+            oldLen = UTF16.getCharCount(cp);
+            int newLen = m_charppty_.toLowerCase(loc, cp, original, buffer);
             if (newLen >= 0) {
                 text.replace(textPos, textPos + oldLen, buffer, 0, newLen);
                 if (newLen != oldLen) {
@@ -91,6 +91,10 @@ class LowercaseTransliterator extends Transliterator{
         offsets.start = offsets.limit;
     }
     
-    private char buffer[] = new char[UnicodeProperty.MAX_CASE_MAP_SIZE];
-
+    private char buffer[] = new char[UCharacterProperty.MAX_CASE_MAP_SIZE];
+    /**
+     * Character properties data base
+     */
+    private static final UCharacterProperty m_charppty_ = 
+    							            UCharacterProperty.getInstance(); 
 }

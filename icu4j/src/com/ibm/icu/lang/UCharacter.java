@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/15 02:13:10 $ 
-* $Revision: 1.31 $
+* $Date: 2002/03/15 22:48:07 $ 
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,7 @@ import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.NormalizerImpl;
 
 /**
@@ -92,7 +93,7 @@ public final class UCharacter
     /** 
     * The lowest Unicode code point value.
     */
-    public static final int MIN_VALUE = UnicodeProperty.MIN_VALUE;
+    public static final int MIN_VALUE = UTF16.CODEPOINT_MIN_VALUE;
 
     /**
     * The highest Unicode code point value (scalar value) according to the 
@@ -100,13 +101,13 @@ public final class UCharacter
     * This is a 21-bit value (21 bits, rounded up).<br>
     * Up-to-date Unicode implementation of java.lang.Character.MIN_VALUE
     */
-    public static final int MAX_VALUE = UnicodeProperty.MAX_VALUE; 
+    public static final int MAX_VALUE = UTF16.CODEPOINT_MAX_VALUE; 
       
     /**
     * The minimum value for Supplementary code points
     */
     public static final int SUPPLEMENTARY_MIN_VALUE = 
-                                          UnicodeProperty.SUPPLEMENTARY_MIN_VALUE;
+                                          UTF16.SUPPLEMENTARY_MIN_VALUE;
       
     /**
     * Unicode value used when translating into Unicode encoding form and there 
@@ -580,7 +581,14 @@ public final class UCharacter
             return null;
         }
         
-        return UnicodeProperty.toString(ch);
+        if (ch < SUPPLEMENTARY_MIN_VALUE) {
+            return String.valueOf((char)ch);
+        }
+        
+        StringBuffer result = new StringBuffer();
+        result.append(UTF16.getLeadSurrogate(ch));
+        result.append(UTF16.getTrailSurrogate(ch));
+        return result.toString();
     }
                                     
     /**
@@ -831,10 +839,10 @@ public final class UCharacter
         if (ch < MIN_VALUE) {
             return false;
         }
-        if (ch < UnicodeProperty.SURROGATE_MIN_VALUE) {
+        if (ch < UTF16.SURROGATE_MIN_VALUE) {
             return true;
         }
-        if (ch <= UnicodeProperty.SURROGATE_MAX_VALUE) {
+        if (ch <= UTF16.SURROGATE_MAX_VALUE) {
             return false;
         }
         if (isNonCharacter(ch)) {
@@ -861,7 +869,7 @@ public final class UCharacter
         int codepoint;
         for (int i = 0; i < size; i ++)
         {
-            codepoint = UnicodeProperty.charAt(str, i);
+            codepoint = UTF16.charAt(str, i);
             if (!isLegal(codepoint)) {
                 return false;
             }
@@ -1001,11 +1009,11 @@ public final class UCharacter
     */
     public static int getCodePoint(char lead, char trail) 
     {
-        if (lead >= UnicodeProperty.LEAD_SURROGATE_MIN_VALUE && 
-	        lead <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE &&
-            trail >= UnicodeProperty.TRAIL_SURROGATE_MIN_VALUE && 
-	        trail <= UnicodeProperty.TRAIL_SURROGATE_MAX_VALUE) {
-            return UnicodeProperty.getRawSupplementary(lead, trail);
+        if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE && 
+	        lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
+            trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE && 
+	        trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+            return UCharacterProperty.getRawSupplementary(lead, trail);
         }
         return UCharacter.REPLACEMENT_CHAR;
     }
@@ -1085,7 +1093,7 @@ public final class UCharacter
     	if (locale == null) {
     		locale = Locale.getDefault();
     	}
-        return UnicodeProperty.toUpperCase(locale, str, 0, str.length());
+        return PROPERTY_.toUpperCase(locale, str, 0, str.length());
     }
       
     /**
@@ -1102,7 +1110,7 @@ public final class UCharacter
     	if (locale == null) {
     		locale = Locale.getDefault();
     	}
-        UnicodeProperty.toLowerCase(locale, str, 0, length, result);
+        PROPERTY_.toLowerCase(locale, str, 0, length, result);
         return result.toString();
     }
     
@@ -1134,7 +1142,7 @@ public final class UCharacter
         	}
             breakiter = BreakIterator.getWordInstance(locale);
         }
-        return UnicodeProperty.toTitleCase(locale, str, breakiter);
+        return PROPERTY_.toTitleCase(locale, str, breakiter);
     }
     
     /**
@@ -1179,12 +1187,13 @@ public final class UCharacter
                 else {
                     // special case folding mappings, hardcoded
                     if (defaultmapping && 
-                        (ch == UnicodeProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
+                        (ch == 
+                           UCharacterProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
                          ch == 
-                           UnicodeProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
+                    UCharacterProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
                     {
                         // map dotted I and dotless i to U+0069 small i
-                        return UnicodeProperty.LATIN_SMALL_LETTER_I_;
+                        return UCharacterProperty.LATIN_SMALL_LETTER_I_;
                     }
                     // return ch itself because it is excluded from case folding
                     return ch;
@@ -1226,8 +1235,8 @@ public final class UCharacter
 
         // case mapping loop
         while (offset < size) {
-            ch = UnicodeProperty.charAt(str, offset);
-            offset += UnicodeProperty.getCharCount(ch);
+            ch = UTF16.charAt(str, offset);
+            offset += UTF16.getCharCount(ch);
             int props = PROPERTY_.getProperty(ch);
             if (!UCharacterProperty.isExceptionIndicator(props)) {
                 int type = UCharacterProperty.getPropType(props);
@@ -1249,17 +1258,19 @@ public final class UCharacter
                     else {
                         // special case folding mappings, hardcoded
                         if (defaultmapping && 
-                            (ch == UnicodeProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
+                            (ch == 
+                            UCharacterProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
                              ch == 
-                           UnicodeProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
+                    UCharacterProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
                         {
                             // map dotted I and dotless i to U+0069 small i
-                            result.append(UnicodeProperty.LATIN_SMALL_LETTER_I_);
+                            result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
                         } 
                         else {
                             // output c itself because it is excluded from 
                             // case folding
-                            UnicodeProperty.append(result, ch);
+                            UTF16.append(result, ch);
                         }
                     }
                     // do not fall through to the output of c
@@ -1276,7 +1287,7 @@ public final class UCharacter
             }
 
             // handle 1:1 code point mappings from UnicodeData.txt
-            UnicodeProperty.append(result, ch);
+            UTF16.append(result, ch);
         }
         
         return result.toString();
@@ -1365,7 +1376,7 @@ public final class UCharacter
     */
     public static RangeValueIterator getTypeIterator()
     {
-        return new UCharacterTypeIterator();
+        return new UCharacterTypeIterator(PROPERTY_);
     }
 
 	/**
@@ -1551,7 +1562,7 @@ public final class UCharacter
     */
     protected static final UCharacterName NAME_;
       
-    // block to initialise name database and unicode 1.0 data indicator
+    // block to initialise name database and unicode 1.0 data 
     static
     {
         try
@@ -1586,8 +1597,20 @@ public final class UCharacter
     /**
     * Database storing the sets of character property
     */
-    private static final UCharacterProperty PROPERTY_ = 
-                                                    UnicodeProperty.PROPERTY;
+    private static final UCharacterProperty PROPERTY_;
+                                                    
+	// block to initialise character property database
+    static
+    {
+        try
+        {
+            PROPERTY_ = UCharacterProperty.getInstance();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
+    }                                                    
    
     /**
     * To get the last character out from a data type
@@ -1736,7 +1759,7 @@ public final class UCharacter
     private static final int CJK_IDEOGRAPH_COMPLEX_THOUSAND_ = 0x4edf;    
     private static final int CJK_IDEOGRAPH_TEN_THOUSAND_     = 0x824c;    
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_  = 0x5104;
-    
+                           
     // private constructor -----------------------------------------------
       
     /**

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2002/03/08 02:04:00 $ 
-* $Revision: 1.14 $
+* $Date: 2002/03/15 22:48:07 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,6 @@ import java.io.DataInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.UnicodeProperty;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -1126,7 +1125,7 @@ final class UCharacterName
         }    
         int result = UCharacter.getType(ch);
         if (result == UCharacterCategory.SURROGATE) {            
-            if (ch <= UnicodeProperty.LEAD_SURROGATE_MAX_VALUE) {
+            if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
                 result = UCharacterCategory.LEAD_SURROGATE_;
             }
             else {

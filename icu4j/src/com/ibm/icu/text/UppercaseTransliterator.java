@@ -5,14 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UppercaseTransliterator.java,v $ 
- * $Date: 2002/02/28 23:55:46 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/15 22:48:07 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 import java.util.*;
-import com.ibm.icu.impl.UnicodeProperty;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UCharacterIterator;
 
 /**
@@ -72,7 +72,7 @@ class UppercaseTransliterator extends Transliterator {
         	original.setIndex(textPos);
             cp = original.currentCodepoint();
             oldLen = UTF16.getCharCount(cp);
-            int newLen = UnicodeProperty.toUpperOrTitleCase(loc, cp, original, true, buffer);
+            int newLen = m_charppty_.toUpperOrTitleCase(loc, cp, original, true, buffer);
             if (newLen >= 0) {
                 text.replace(textPos, textPos + oldLen, buffer, 0, newLen);
                 if (newLen != oldLen) {
@@ -87,6 +87,10 @@ class UppercaseTransliterator extends Transliterator {
         offsets.start = offsets.limit;
     }
     
-    private char buffer[] = new char[UnicodeProperty.MAX_CASE_MAP_SIZE];
-
+    private char buffer[] = new char[UCharacterProperty.MAX_CASE_MAP_SIZE];
+	/**
+	 * Character property database
+	 */
+	private static final UCharacterProperty m_charppty_ = 
+										UCharacterProperty.getInstance();
 }
