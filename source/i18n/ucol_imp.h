@@ -427,15 +427,15 @@ enum {
 #define UCOL_RESET_TOP_VALUE                0x9F000303
 #define UCOL_FIRST_PRIMARY_IGNORABLE        0x00008705
 #define UCOL_LAST_PRIMARY_IGNORABLE         0x0000DD05
-#define UCOL_LAST_PRIMARY_IGNORABLE_CONT    0x0000C1C0
+#define UCOL_LAST_PRIMARY_IGNORABLE_CONT    0x000051C0
 #define UCOL_FIRST_SECONDARY_IGNORABLE      0x00000000
 #define UCOL_LAST_SECONDARY_IGNORABLE       0x00000500
 #define UCOL_FIRST_TERTIARY_IGNORABLE       0x00000000
 #define UCOL_LAST_TERTIARY_IGNORABLE        0x00000000
 #define UCOL_FIRST_VARIABLE                 0x05070505
-#define UCOL_LAST_VARIABLE                  0x13CF0505
-#define UCOL_FIRST_NON_VARIABLE             0x16200505
-#define UCOL_LAST_NON_VARIABLE              0x767C0505
+#define UCOL_LAST_VARIABLE                  0x179B0505
+#define UCOL_FIRST_NON_VARIABLE             0x1A200505
+#define UCOL_LAST_NON_VARIABLE              0x7B41058F
 
 #define UCOL_NEXT_TOP_VALUE                 0xE8960303
 #define UCOL_NEXT_FIRST_PRIMARY_IGNORABLE   0x00008905
@@ -445,7 +445,7 @@ enum {
 #define UCOL_NEXT_FIRST_TERTIARY_IGNORABLE  0x00000000
 #define UCOL_NEXT_LAST_TERTIARY_IGNORABLE   0x00000000
 #define UCOL_NEXT_FIRST_VARIABLE            0x05090505
-#define UCOL_NEXT_LAST_VARIABLE             0x16200505
+#define UCOL_NEXT_LAST_VARIABLE             0x1A200505
 
 #define PRIMARY_IMPLICIT_MIN 0xE8000000
 #define PRIMARY_IMPLICIT_MAX 0xF0000000
@@ -532,11 +532,44 @@ typedef struct {
 } UColOptionSet;
 
 typedef struct {
+  uint32_t UCA_RESET_TOP_VALUE;                /*0x9F000303*/
+#if 0
+  uint32_t UCA_FIRST_PRIMARY_IGNORABLE;        /*0x00008705*/
+  uint32_t UCA_LAST_PRIMARY_IGNORABLE;         /*0x0000DD05*/
+  uint32_t UCA_LAST_PRIMARY_IGNORABLE_CONT;    /*0x0000C1C0*/
+  uint32_t UCA_FIRST_SECONDARY_IGNORABLE;      /*0x00000000*/
+  uint32_t UCA_LAST_SECONDARY_IGNORABLE;       /*0x00000500*/
+  uint32_t UCA_FIRST_TERTIARY_IGNORABLE;       /*0x00000000*/
+  uint32_t UCA_LAST_TERTIARY_IGNORABLE;        /*0x00000000*/
+  uint32_t UCA_FIRST_VARIABLE;                 /*0x05070505*/
+  uint32_t UCA_LAST_VARIABLE;                  /*0x13CF0505*/
+  uint32_t UCA_FIRST_NON_VARIABLE;             /*0x16200505*/
+  uint32_t UCA_LAST_NON_VARIABLE;              /*0x767C0505*/
+#endif
+
+  uint32_t UCA_NEXT_TOP_VALUE;                 /*0xE8960303*/
+#if 0
+  uint32_t UCA_NEXT_FIRST_PRIMARY_IGNORABLE;   /*0x00008905*/
+  uint32_t UCA_NEXT_LAST_PRIMARY_IGNORABLE;    /*0x03000303*/
+  uint32_t UCA_NEXT_FIRST_SECONDARY_IGNORABLE; /*0x00008705*/
+  uint32_t UCA_NEXT_LAST_SECONDARY_IGNORABLE;  /*0x00000500*/
+  uint32_t UCA_NEXT_FIRST_TERTIARY_IGNORABLE;  /*0x00000000*/
+  uint32_t UCA_NEXT_LAST_TERTIARY_IGNORABLE;   /*0x00000000*/
+  uint32_t UCA_NEXT_FIRST_VARIABLE;            /*0x05090505*/
+  uint32_t UCA_NEXT_LAST_VARIABLE;             /*0x16200505*/
+#endif
+
+  uint32_t UCA_PRIMARY_IMPLICIT_MIN; /*0xE8000000*/
+  uint32_t UCA_PRIMARY_IMPLICIT_MAX; /*0xF0000000*/
+} UCAConstants;
+
+typedef struct {
       int32_t size;
       /* all the offsets are in bytes */
       /* to get the address add to the header address and cast properly */
       uint32_t options; /* these are the default options for the collator */
-      uint32_t contractionUCACombos;        /* this one is needed only for UCA, to copy the appropriate contractions */
+      uint32_t UCAConsts; /* structure which holds values for indirect positioning and implicit ranges */
+      /*uint32_t contractionUCACombos;*/        /* this one is needed only for UCA, to copy the appropriate contractions */
       uint32_t unusedReserved1;         /* reserved for future use */
       uint32_t mappingPosition;  /* const uint8_t *mappingPosition; */
       uint32_t expansion;        /* uint32_t *expansion;            */
@@ -746,6 +779,8 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
 U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
+U_CAPI void U_EXPORT2 
+uprv_uca_initImplicitConstants(uint32_t baseByte);
 
 #ifdef XP_CPLUSPLUS
 /*
