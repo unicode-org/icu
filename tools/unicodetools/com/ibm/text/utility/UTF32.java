@@ -1,10 +1,23 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/UTF32.java,v $
+* $Date: 2001/08/31 00:19:16 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.utility;
 
 /**
 * Utility class for demonstrating UTF16 character conversions and indexing conversions.
 * Ideally, these methods would be on existing classes in Java, but they can also be used
 * in a stand-alone utility class like this one.
-* <p>Code that uses strings alone rarely need modification. 
+* <p>Code that uses strings alone rarely need modification.
 * By design, UTF-16 does not allow overlap, so searching for strings is a safe operation.
 * Similarly, concatenation is always safe. Substringing is safe if the start and end are both
 * on UTF32 boundaries. In normal code, the values for start and end are on those boundaries,
@@ -17,14 +30,14 @@ package com.ibm.text.utility;
 * They are used for iteration, filtering and copying. See the examples below.
 * </li><li>
 * <code>bounds32()</code> is useful for finding the nearest UTF-32 boundaries.
-* However, in most circumstances it is better to use 
+* However, in most circumstances it is better to use
 * <a <a href="http://java.sun.com/products/jdk/1.2/docs/api/java/text/BreakIterator.html#getCharacterInstance(java.util.Locale)">
 * BreakIterator.getCharacterInstance(Locale)</a> to find character boundaries
 * that are closer to end-user expectations.
 * </li><li>
-* <code>valueOf32()</code> is occasionally convenient for producing a string containing a UTF-32 value. 
+* <code>valueOf32()</code> is occasionally convenient for producing a string containing a UTF-32 value.
 * </li><li>
-* <code>findOffset16()</code> and <code>findOffset32()</code> are generally not needed, 
+* <code>findOffset16()</code> and <code>findOffset32()</code> are generally not needed,
 * except when interfacing to specifications that use UTF-32 indices (such as XSL).
 * </li><li>
 * <code>isLegal()</code> can be used to test whether UTF-16 or UTF-32 values are valid.
@@ -32,11 +45,11 @@ package com.ibm.text.utility;
 * <code>isLeadSurrogate()</code>, <code>isSurrogate()</code>, and <code>isTrailSurrogate()</code>
 * test the type of a char. They are useful for lower-level code.
 * </li><li>
-* <code>getChar32()</code>, <code>getLead()</code>, and <code>getTrail()</code> 
+* <code>getChar32()</code>, <code>getLead()</code>, and <code>getTrail()</code>
 * are sometimes useful for putting together and taking apart UTF-32 values.
 * </li></ul>
 * <strong>Examples:</strong>
-* <p>The following examples illustrate use of some of these methods. 
+* <p>The following examples illustrate use of some of these methods.
 <pre>
 // iteration forwards: Original
 for (int i = 0; i < s.length(); ++i) {
@@ -69,7 +82,7 @@ for (int i = s.length()-1; i > 0; i-=UTF32.count16(ch)) {
 * <ul><li>
 * <strong>Naming:</strong> For clarity, High and Low surrogates are called <code>Lead</code> and <code>Trail</code> in the API,
 * which gives a better sense of their ordering in a string. <code>offset16</code> and <code>offset32</code> are used to distinguish
-* offsets to UTF-16 boundaries vs offsets to UTF-32 boundaries. 
+* offsets to UTF-16 boundaries vs offsets to UTF-32 boundaries.
 * <code>int char32</code> is used to contain UTF-32 characters, as opposed to <code>char</code>, which is a UTF-16 code unit.
 * </li><li>
 * <strong>Roundtripping Offsets:</strong> You can always roundtrip
@@ -78,7 +91,7 @@ for (int i = s.length()-1; i > 0; i-=UTF32.count16(ch)) {
 * from a UTF-16 offset to a UTF-32 offset and back if and only if <code>bounds(string, offset16) != TRAIL</code>.
 * </li><li>
 * <strong>Exceptions:</strong> The error checking will throw an exception if indices are out of bounds.
-* Other than than that, all methods will behave reasonably, 
+* Other than than that, all methods will behave reasonably,
 * even if unmatched surrogates or out-of-bounds UTF-32 values are present.
 * <code>isLegal()</code> can be used to check for validity if desired.
 * </li><li>
@@ -87,7 +100,7 @@ for (int i = s.length()-1; i > 0; i-=UTF32.count16(ch)) {
 * It also matches common display practice as
 * missing glyphs (see the Unicode Standard Section 5.4, 5.5).
 * </li><li>
-* <strong>Out-of-bounds UTF-32 values:</strong> If a <code>char32</code> contains an out-of-bounds UTF-32 value, 
+* <strong>Out-of-bounds UTF-32 values:</strong> If a <code>char32</code> contains an out-of-bounds UTF-32 value,
 * then it is treated as REPLACEMENT_CHAR for consistency across the API.
 * </li><li>
 * <strong>Optimization:</strong> The method implementations may need optimization if the compiler doesn't fold static final methods.
@@ -97,17 +110,17 @@ for (int i = s.length()-1; i > 0; i-=UTF32.count16(ch)) {
 * @author Mark Davis, with help from Markus Scherer
 */
 public final class UTF32 {
-    
+
     // =========================================================
     // UTILITIES
     // =========================================================
-    
+
     /**
      * Unicode value used when translating into Unicode encoding form
      * and there is no existing character.
      */
 	public static final char REPLACEMENT_CHAR = '\uFFFD';
-	    
+
     /**
      * Value returned in <code><a href="#bounds32(java.lang.String, int)">bounds32()</a></code>.
      */
@@ -118,21 +131,21 @@ public final class UTF32 {
     * If a validity check is required, use <code><a href="#isLegal(char)">isLegal()</a></code>
     * on char32 before calling.
      * <p><i>If this were integrated into the Java API, it could be a static method of either Character or String.</i>
-    * @return 2 if is in surrogate space, otherwise 1. 
+    * @return 2 if is in surrogate space, otherwise 1.
     * @param ch the input character.
     */
     public static int count16(int char32) {
         if (char32 < MIN_SUPPLEMENTARY) return 1;
         return 2;
     }
-    
+
    /**
      * Extract a single UTF-32 value from a string.
      * Used when iterating forwards or backwards (with <code>count16()</code>, as well as random access.
      * If a validity check is required, use <code><a href="#isLegal(char)">isLegal()</a></code> on the return value.
      * <p><i>If this were integrated into the Java API, it could be a method of String, StringBuffer and possibly CharacterIterator.</i>
      * @return UTF-32 value for the UTF-32 value that contains the char at offset16.
-     * The boundaries of that codepoint are the same as in <code>bounds32()</code>. 
+     * The boundaries of that codepoint are the same as in <code>bounds32()</code>.
      * @param source array of UTF-16 chars
      * @param offset16 UTF-16 offset to the start of the character.
      */
@@ -141,11 +154,11 @@ public final class UTF32 {
         if (!isSurrogate(single)) return single;
 
         try { // use exception to catch out-of-bounds
-        
+
             // Convert the UTF-16 surrogate pair if necessary.
             // For simplicity in usage, and because the frequency of pairs is low,
             // look both directions.
-            
+
 	        if (isLeadSurrogate(single)) {
 	            char trail = source.charAt(++offset16);
 	            if (isTrailSurrogate(trail)) {
@@ -166,11 +179,11 @@ public final class UTF32 {
         if (!isSurrogate(single)) return single;
 
         try { // use exception to catch out-of-bounds
-        
+
             // Convert the UTF-16 surrogate pair if necessary.
             // For simplicity in usage, and because the frequency of pairs is low,
             // look both directions.
-            
+
 	        if (isLeadSurrogate(single)) {
 	            char trail = source.charAt(++offset16);
 	            if (isTrailSurrogate(trail)) {
@@ -185,21 +198,21 @@ public final class UTF32 {
         } catch (StringIndexOutOfBoundsException e) {}
         return single; // return unmatched surrogate
     }
-    
+
     public static int char32At(char[] source, int start16, int end16, int offset16) {
         if (offset16 < start16 || offset16 >= end16) {
             throw new ArrayIndexOutOfBoundsException(offset16);
         }
-        
+
         char single = source[offset16];
         if (!isSurrogate(single)) return single;
 
         try { // use exception to catch out-of-bounds
-        
+
             // Convert the UTF-16 surrogate pair if necessary.
             // For simplicity in usage, and because the frequency of pairs is low,
             // look both directions.
-            
+
 	        if (isLeadSurrogate(single)) {
 	            ++offset16;
 	            if (offset16 >= end16) return single;
@@ -216,8 +229,8 @@ public final class UTF32 {
         } catch (ArrayIndexOutOfBoundsException e) {}
         return single; // return unmatched surrogate
     }
-    
-    
+
+
     // moral equivalent of valueOf32(charAt32(x)), but no memory alloc
     public static String getCodePointSubstring(String s, int offset16) {
         switch(bounds32(s,offset16)) {
@@ -275,16 +288,16 @@ public final class UTF32 {
         // mismatch, just use long form
         b.replace(position, end+1, valueOf32(codePoint));
     }
-        
+
     /**
      * See if a char value is legal. It can't be:
      * <ul><li>Not-a-character (either \\uFFFF or\\uFFFE).
      * The datatype char itself prevents out of bounds errors.
      * </li></ul>
-     * Note: legal does not mean that it is assigned in this version of Unicode. 
+     * Note: legal does not mean that it is assigned in this version of Unicode.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
      * @param UTF-32 value to test
-     * @return true iff legal. 
+     * @return true iff legal.
      */
     public static boolean isLegal(char char16) {
         return (char16 < 0xFFFE);
@@ -300,7 +313,7 @@ public final class UTF32 {
      * Note: legal does not mean that it is assigned in this version of Unicode.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
      * @param char32 UTF-32 value to test
-     * @return true iff legal. 
+     * @return true iff legal.
      */
     public static boolean isLegal(int char32) {
         if (char32 < 0) return false;
@@ -319,7 +332,7 @@ public final class UTF32 {
     public static boolean isSurrogate(int char32) {
         return (SURROGATE_BASE <= char32 && char32 < SURROGATE_LIMIT);
     }
-    
+
    /**
     * Determines whether the code point is a supplementary.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
@@ -329,7 +342,7 @@ public final class UTF32 {
     public static boolean isSupplementary(int char32) {
         return (char32 >= MIN_SUPPLEMENTARY && char32 <= MAX_UNICODE);
     }
-    
+
    /**
     * Determines whether the code point is a supplementary.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
@@ -339,7 +352,7 @@ public final class UTF32 {
     public static boolean isBasic(int char32) {
         return (char32 >= 0 && char32 < MIN_SUPPLEMENTARY);
     }
-    
+
    /**
     * Determines whether the character is a trail surrogate.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
@@ -349,7 +362,7 @@ public final class UTF32 {
     public static boolean isTrailSurrogate(char ch) {
         return (TRAIL_BASE <= ch && ch < TRAIL_LIMIT);
     }
-    
+
    /**
     * Determines whether the character is a lead surrogate.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
@@ -359,7 +372,7 @@ public final class UTF32 {
     public static boolean isLeadSurrogate(char ch) {
         return (LEAD_BASE <= ch && ch < LEAD_LIMIT);
     }
-        
+
    /**
     * Returns the lead surrogate.
     * If a validity check is required, use <code><a href="#isLegal(char)">isLegal()</a></code> on char32 before calling.
@@ -374,7 +387,7 @@ public final class UTF32 {
         }
         return (char)char32;
     }
-    
+
    /**
     * Returns the trail surrogate.
     * If a validity check is required, use <code><a href="#isLegal(char)">isLegal()</a></code> on char32 before calling.
@@ -385,11 +398,11 @@ public final class UTF32 {
     */
     public static char getTrail(int char32) {
         if (char32 >= MIN_SUPPLEMENTARY) {
-            return (char)(TRAIL_BASE + (char32 & TRAIL_MASK));       
+            return (char)(TRAIL_BASE + (char32 & TRAIL_MASK));
         }
         return '\u0000';
     }
-    
+
    /**
     * Convenience method corresponding to String.valueOf(char). It returns a one or two char string containing
     * the UTF-32 value. If the input value can't be converted, it substitutes REPLACEMENT_CHAR.
@@ -408,10 +421,10 @@ public final class UTF32 {
         }
     }
     private static char[] buf2 = new char[2]; // used to avoid allocations
-    
+
    /**
     * Returns the UTF-32 character corresponding to the two chars.
-    * If a validity check is required, check the arguments with 
+    * If a validity check is required, check the arguments with
     * <code>isLeadSurrogate()</code> and <code>isTrailSurrogate()</code>, respectively before calling.
      * <p><i>If this were integrated into the Java API, it could be a static method of String or Character.</i>
     * @return the UTF-32 character, or REPLACEMENT_CHAR if invalid.
@@ -424,7 +437,7 @@ public final class UTF32 {
         }
         return REPLACEMENT_CHAR;
     }
-        
+
     /**
     * Returns the type of the UTF32 boundaries around the char at offset16.
     * Used for random access.
@@ -470,7 +483,7 @@ public final class UTF32 {
         }
         return SINGLE;
     }
-    
+
     // should be renamed bounds
 
     public static int bounds32(char[] source, int oStart, int oEnd, int offset16) {
@@ -493,7 +506,7 @@ public final class UTF32 {
 
 
     /**
-    * Returns the UTF-16 offset that corresponds to a UTF-32 offset. 
+    * Returns the UTF-16 offset that corresponds to a UTF-32 offset.
     * Used for random access. See the <a name="_top_">class description</a>
     * for notes on roundtripping.
      * <p><i>If this were integrated into the Java API, it could be a method of String, StringBuffer and possibly CharacterIterator.</i>
@@ -506,7 +519,7 @@ public final class UTF32 {
         int remaining = offset32; // for decrementing
         boolean hadLeadSurrogate = false;
         int i;
-        
+
         for (i = 0; remaining > 0 && i < source.length(); ++i) {
             char ch = source.charAt(i);
             if (hadLeadSurrogate && isTrailSurrogate(ch)) {
@@ -516,15 +529,15 @@ public final class UTF32 {
                 --remaining;                        // count others as 1
             }
         }
-        
+
         // if we didn't use up all of remaining (or if we started < 0)
         // then it is beyond the bounds
-        
+
         if (remaining != 0) throw new StringIndexOutOfBoundsException(offset32);
-        
+
         // special check for last surrogate if needed, for consistency with
         // other situations
-        
+
         if (hadLeadSurrogate && i < source.length() && isTrailSurrogate(source.charAt(i))) {
             ++i;                                // grab extra unicode
         }
@@ -574,13 +587,13 @@ public final class UTF32 {
      * @param target string to add to
      */
     public static void append32(StringBuffer target, int char32) {
-        
+
         // Check for irregular values
-            
+
         if (char32 < 0 || char32 > MAX_UNICODE) char32 = REPLACEMENT_CHAR;
-        
+
         // Write the UTF-16 values
-        
+
 	    if (char32 >= MIN_SUPPLEMENTARY) {
 	        target.append((char)(LEAD_BASE_OFFSET + (char32 >> SURROGATE_SHIFT)));
 	        target.append((char)(TRAIL_BASE + (char32 & TRAIL_MASK)));
@@ -588,7 +601,7 @@ public final class UTF32 {
 	        target.append((char)char32);
 	    }
     }
-    
+
     /**
      * Compare strings using Unicode code point order, instead of UTF-16 code unit order.
      */
@@ -615,7 +628,7 @@ public final class UTF32 {
                 char ca = sa.charAt(i);
                 char cb = sb.charAt(i);
                 if (ca == cb) continue; // skip remap if equal
-                
+
                 // start of only different section
                 if (ca >= 0xD800) {  // reshuffle to get right codepoint order
                     ca += (ca < 0xE000) ? 0x2000 : -0x800;
@@ -624,7 +637,7 @@ public final class UTF32 {
                     cb += (cb < 0xE000) ? 0x2000 : -0x800;
                 }
                 // end of only different section
-                
+
                 if (ca < cb) return -1;
                 return 1; // wasn't equal, so return 1
             }
@@ -633,75 +646,75 @@ public final class UTF32 {
             return 0;
         }
     }
-                        
+
     // ===========================================================
     // PRIVATES
     // ===========================================================
-    
+
     /**
      * Prevent instance from being created.
      */
     private UTF32() {}
-    
+
    /**
      * Maximum code point values for UTF-32.
      */
     private static final int MAX_UNICODE = 0x10FFFF;
-    
+
    /**
      * Maximum values for Basic code points (BMP).
      */
     private static final int MAX_BASIC = 0xFFFF;
-    
+
    /**
      * Minimum value for Supplementary code points (SMP).
      */
     private static final int MIN_SUPPLEMENTARY = 0x10000;
-    
+
     /**
      * Used to mask off single plane in checking for NON_CHARACTER
      */
     private static final int PLANE_MASK = 0xFFFF;
-    
+
     /**
      * Range of non-characters in each plane
      */
-    private static final int 
-        NON_CHARACTER_BASE = 0xFFFE, 
+    private static final int
+        NON_CHARACTER_BASE = 0xFFFE,
         NON_CHARACTER_END = 0xFFFF;
 
     // useful statics and tables for fast lookup
-    
+
 	/**
 	 * Values for surrogate detection. X is a surrogate iff X & SURROGATE_MASK == SURROGATE_MASK.
 	 */
     static final int SURROGATE_MASK = 0xD800;
-    
+
     /**
      * Bottom 10 bits for use in surrogates.
      */
 	private static final int TRAIL_MASK = 0x3FF;
-	
+
     /**
      * Shift value for surrogates.
      */
 	private static final int SURROGATE_SHIFT = 10;
-	
-	/** 
+
+	/**
 	 * Lead surrogates go from LEAD_BASE up to LEAD_LIMIT-1.
 	 */
 	private static final int LEAD_BASE = 0xD800, LEAD_LIMIT = 0xDC00;
-	
-	/** 
+
+	/**
 	 * Trail surrogates go from TRAIL_BASE up to TRAIL_LIMIT-1.
 	 */
 	private static final int TRAIL_BASE = 0xDC00, TRAIL_LIMIT = 0xE000;
-	
-	/** 
+
+	/**
 	 * Surrogates go from SURROGATE_BASE up to SURROGATE_LIMIT-1.
 	 */
 	private static final int SURROGATE_BASE = 0xD800, SURROGATE_LIMIT = 0xE000;
-    
+
     /**
      * Any codepoint at or greater than SURROGATE_SPACE_BASE requires 2 16-bit code units.
      */
@@ -712,7 +725,7 @@ public final class UTF32 {
      */
 	private static final int SURROGATE_OFFSET = MIN_SUPPLEMENTARY
 	    - (LEAD_BASE << SURROGATE_SHIFT) - TRAIL_BASE;
-	    
+
 	private static final int LEAD_BASE_OFFSET = LEAD_BASE - (MIN_SUPPLEMENTARY >> SURROGATE_SHIFT);
-	
+
 };

@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
+* $Date: 2001/08/31 00:20:40 $ 
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCA;
 
 import java.util.*;
