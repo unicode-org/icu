@@ -132,6 +132,8 @@ class BreakIterator;        // unicode/brkiter.h
  * - If primitive string pointer values (e.g., const UChar * or char *)
  *   for input strings are NULL, then those input string parameters are treated
  *   as if they pointed to an empty string.
+ *   However, this is <em>not</em> the case for char * parameters for charset names
+ *   or other IDs.
  * - Most UnicodeString methods do not take a UErrorCode parameter because
  *   there are usually very few opportunities for failure other than a shortage
  *   of memory, error codes in low-level C++ string methods would be inconvenient,
