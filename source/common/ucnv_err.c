@@ -84,7 +84,7 @@ void   UCNV_FROM_U_CALLBACK_STOP (
                   UConverterCallbackReason reason,
 				  UErrorCode * err)
 {
-  reason = UCNV_ILLEGAL;
+  /* the caller must have set the error code accordingly */
   return;
 }
 
@@ -98,7 +98,7 @@ void   UCNV_TO_U_CALLBACK_STOP (
                    UConverterCallbackReason reason,
 			       UErrorCode * err)
 {
-  reason = UCNV_ILLEGAL;
+  /* the caller must have set the error code accordingly */
   return;
 }
 
@@ -111,8 +111,10 @@ void   UCNV_FROM_U_CALLBACK_SKIP (
                   UConverterCallbackReason reason,
 				  UErrorCode * err)
 {
-  if (CONVERSION_U_SUCCESS (*err))    return;
-  *err = U_ZERO_ERROR;
+  if (reason <= UCNV_IRREGULAR)
+  {
+    *err = U_ZERO_ERROR;
+  }
 }
 
 void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
@@ -127,9 +129,15 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
     char togo[5];
     int32_t togoLen;
 
+    if (reason > UCNV_IRREGULAR)
+    {
+        return;
+    }
 
-
-    if (CONVERSION_U_SUCCESS (*err)) return;
+    /* ### TODO:
+     * This should use the new ucnv_cbWrite...() functions instead of doing
+     * "tricks" as before we had a good callback API!
+     */
 
     /*In case we're dealing with a modal converter a la UCNV_EBCDIC_STATEFUL,
     we need to make sure that the emitting of the substitution charater in the right mode*/
@@ -219,7 +227,15 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
   uint32_t myFromUnicodeStatus = fromArgs->converter->fromUnicodeStatus;
   UConverterFromUCallback original = NULL;
 
-  if (CONVERSION_U_SUCCESS (*err))   return;
+  if (reason > UCNV_IRREGULAR)
+  {
+    return;
+  }
+
+  /* ### TODO:
+   * This should use the new ucnv_cbWrite...() functions instead of doing
+   * "tricks" as before we had a good callback API!
+   */
 
   ucnv_reset (&myConverter);
   myConverter.fromUnicodeStatus = myFromUnicodeStatus;
@@ -236,12 +252,18 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
       return;
     }
 
+  /*
+   * ### TODO:
+   * This should actually really work with the codePoint, not with the codeUnits;
+   * how do we represent a code point > 0xffff? It should be one single escape, not
+   * two for a surrogate pair!
+   */
   codepoint[0] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
   codepoint[1] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
 
-  while (i < fromArgs->converter->invalidUCharLength)
+  while (i < length)
     {
-      itou (codepoint + 2, fromArgs->converter->invalidUCharBuffer[i++], 16, 4);
+      itou (codepoint + 2, codeUnits[i++], 16, 4);
       uprv_memcpy (valueString + valueStringLength, codepoint, sizeof (UChar) * 6);
       valueStringLength += CODEPOINT_STRING_LENGTH - 1;
     }
@@ -271,8 +293,6 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
       return;
     }
 
-
-  
   valueStringLength = myTargetAlias - myTarget;
   
   /*if we have enough space on the output buffer we just copy
@@ -327,8 +347,10 @@ void UCNV_TO_U_CALLBACK_SKIP (
                  UConverterCallbackReason reason,
 			     UErrorCode * err)
 {
-  if (CONVERSION_U_SUCCESS (*err))   return;
-  *err = U_ZERO_ERROR;
+  if (reason <= UCNV_IRREGULAR)
+  {
+    *err = U_ZERO_ERROR;
+  }
 }
 
 void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
@@ -339,9 +361,16 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
                  UConverterCallbackReason reason,
 			     UErrorCode * err)
 {
-  
-  if (CONVERSION_U_SUCCESS (*err))   return;
-  
+  if (reason > UCNV_IRREGULAR)
+  {
+    return;
+  }
+
+  /* ### TODO:
+   * This should use the new ucnv_cbWrite...() functions instead of doing
+   * "tricks" as before we had a good callback API!
+   */
+
   if ((toArgs->targetLimit - toArgs->target) >= 1)
     {
       *toArgs->target = 0xFFFD;
@@ -373,19 +402,25 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (
 {
   UChar uniValueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
-  UChar codepoint[CODEPOINT_STRING_LENGTH];
   int32_t i = 0;
   
-  if (CONVERSION_U_SUCCESS (*err))   return;
-  
-  codepoint[0] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-  codepoint[1] = (UChar) UNICODE_X_CODEPOINT;	/* adding X */
-  
-  while (i < toArgs->converter->invalidCharLength)
+  if (reason > UCNV_IRREGULAR)
+  {
+    return;
+  }
+
+  /* ### TODO:
+   * This should use the new ucnv_cbWrite...() functions instead of doing
+   * "tricks" as before we had a good callback API!
+   * (Actually, this function is not all that bad.)
+   */
+
+  while (i < length)
     {
-      itou (codepoint + 2, toArgs->converter->invalidCharBuffer[i++], 16, 2);
-      uprv_memcpy (uniValueString + valueStringLength, codepoint, sizeof (UChar) * 4);
-      valueStringLength += 4;
+      uniValueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
+      uniValueString[valueStringLength++] = (UChar) UNICODE_X_CODEPOINT;	/* adding X */
+      itou (uniValueString + valueStringLength, codeUnits[i++], 16, 2);
+      valueStringLength += 2;
     }
   
   if ((toArgs->targetLimit - toArgs->target) >= valueStringLength)
