@@ -967,7 +967,16 @@ U_CAPI UBool U_EXPORT2 ucol_isTailored(const UCollator *coll, const UChar u, UEr
 U_CAPI const InverseUCATableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
 
 U_CAPI void U_EXPORT2 
-uprv_uca_initImplicitConstants(uint32_t baseByte);
+uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCode *status);
+
+U_CAPI uint32_t U_EXPORT2
+uprv_uca_getImplicitFromRaw(UChar32 cp);
+
+U_CAPI uint32_t U_EXPORT2
+uprv_uca_getImplicitPrimary(UChar32 cp);
+
+U_CAPI UChar32 U_EXPORT2
+uprv_uca_getRawFromImplicit(uint32_t implicit);
 
 /** Check whether two collators are equal. Collators are considered equal if they
  *  will sort strings the same. This means that both the current attributes and the
@@ -978,6 +987,8 @@ uprv_uca_initImplicitConstants(uint32_t baseByte);
  */
 U_CAPI UBool U_EXPORT2
 ucol_equals(const UCollator *source, const UCollator *target);
+
+
 
 #ifdef XP_CPLUSPLUS
 /*

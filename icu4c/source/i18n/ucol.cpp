@@ -984,53 +984,74 @@ ucol_cleanup(void)
     return TRUE;
 }
 
+/* new Mark's code */
+
+/**
+ * For generation of Implicit CEs
+ * @author Davis
+ *
+ * Cleaned up so that changes can be made more easily.
+ * Old values:
+# First Implicit: E26A792D
+# Last Implicit: E3DC70C0
+# First CJK: E0030300
+# Last CJK: E0A9DD00
+# First CJK_A: E0A9DF00
+# Last CJK_A: E0DE3100
+ */
 /* Following is a port of Mark's code for new treatment of implicits.
  * It is positioned here, since ucol_initUCA need to initialize the
  * variables below according to the data in the fractional UCA.
  */
 
 /**
-  * Function used to:
-  * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
-  * b) bump any non-CJK characters by 10FFFF.
-  * The relevant blocks are:
-  * A:	4E00..9FFF; CJK Unified Ideographs
-  *		F900..FAFF; CJK Compatibility Ideographs
-  * B:	3400..4DBF; CJK Unified Ideographs Extension A
-  *		20000..XX;	CJK Unified Ideographs Extension B (and others later on)
-  * As long as
-  *	no new B characters are allocated between 4E00 and FAFF, and
-  *	no new A characters are outside of this range,
-  * (very high probability) this simple code will work.
-  * The reordered blocks are:
-  * Block1 is CJK
-  * Block2 is CJK_COMPAT_USED
-  * Block3 is CJK_A
-  * Any other CJK gets its normal code point
-  * Any non-CJK gets +10FFFF
-  * When we reorder Block1, we make sure that it is at the very start,
-  * so that it will use a 3-byte form.
-  */
+    * Function used to: 
+    * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
+    * b) bump any non-CJK characters by 10FFFF.
+    * The relevant blocks are:
+    * A:    4E00..9FFF; CJK Unified Ideographs
+    *       F900..FAFF; CJK Compatibility Ideographs
+    * B:    3400..4DBF; CJK Unified Ideographs Extension A
+    *       20000..XX;  CJK Unified Ideographs Extension B (and others later on)
+    * As long as
+    *   no new B characters are allocated between 4E00 and FAFF, and
+    *   no new A characters are outside of this range,
+    * (very high probability) this simple code will work.
+    * The reordered blocks are:
+    * Block1 is CJK
+    * Block2 is CJK_COMPAT_USED
+    * Block3 is CJK_A
+    * (all contiguous)
+    * Any other CJK gets its normal code point
+    * Any non-CJK gets +10FFFF
+    * When we reorder Block1, we make sure that it is at the very start,
+    * so that it will use a 3-byte form.
+    * Warning: the we only pick up the compatibility characters that are
+    * NOT decomposed, so that block is smaller!
+    */
 
 // CONSTANTS
 static const uint32_t
     NON_CJK_OFFSET = 0x110000,
-    BYTES_TO_AVOID = 3,
-    OTHER_COUNT = 256 - BYTES_TO_AVOID,
-    LAST_COUNT = OTHER_COUNT / 2,
-    LAST_COUNT2 = OTHER_COUNT / 21, // room for intervening, without expanding to 5 bytes
-    IMPLICIT_3BYTE_COUNT = 1;
+    MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
-// These depend on initUCA, and are initialized at that time
-static uint32_t
-    IMPLICIT_BASE_BYTE = 0,
-    IMPLICIT_LIMIT_BYTE = 0, // leave room for 1 3-byte and 2 4-byte forms
-
-    IMPLICIT_4BYTE_BOUNDARY = 0,
-    LAST_MULTIPLIER = 0,
-    LAST2_MULTIPLIER = 0,
-    IMPLICIT_BASE_3BYTE = 0,
-    IMPLICIT_BASE_4BYTE = 0;
+/**
+ * Precomputed by constructor
+ */
+static int32_t
+    final3Multiplier = 0,
+    final4Multiplier = 0,
+    final3Count = 0,
+    final4Count = 0,
+    medialCount = 0,
+    min3Primary = 0,
+    min4Primary = 0,
+    max4Primary = 0,
+    minTrail = 0,
+    maxTrail = 0,
+    max3Trail = 0,
+    max4Trail = 0,
+    min4Boundary = 0;
 
 static const UChar32
     CJK_BASE = 0x4E00,
@@ -1042,103 +1063,237 @@ static const UChar32
     CJK_B_BASE = 0x20000,
     CJK_B_LIMIT = 0x2A6DF+1;
 
-static inline UChar32 swapCJK(UChar32 cp) {
-
-	if (cp >= CJK_BASE) {
-		if (cp < CJK_LIMIT)				return cp - CJK_BASE;
-
-		if (cp < CJK_COMPAT_USED_BASE)	return cp + NON_CJK_OFFSET;
-
-		if (cp < CJK_COMPAT_USED_LIMIT)	return cp - CJK_COMPAT_USED_BASE
-												+ (CJK_LIMIT - CJK_BASE);
-		if (cp < CJK_B_BASE)				return cp + NON_CJK_OFFSET;
-
-		if (cp < CJK_B_LIMIT)			return cp; // non-BMP-CJK
-
-		return cp + NON_CJK_OFFSET;	// non-CJK
-	}
-	if (cp < CJK_A_BASE)					return cp + NON_CJK_OFFSET;
-
-	if (cp < CJK_A_LIMIT)				return cp - CJK_A_BASE
-												+ (CJK_LIMIT - CJK_BASE)
-												+ (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
-    return cp + NON_CJK_OFFSET; // non-CJK
+static UChar32 swapCJK(UChar32 i) {
+    
+    if (i >= CJK_BASE) {
+        if (i < CJK_LIMIT)              return i - CJK_BASE;
+        
+        if (i < CJK_COMPAT_USED_BASE)   return i + NON_CJK_OFFSET;
+        
+        if (i < CJK_COMPAT_USED_LIMIT)  return i - CJK_COMPAT_USED_BASE
+                                                + (CJK_LIMIT - CJK_BASE);
+        if (i < CJK_B_BASE)             return i + NON_CJK_OFFSET;
+        
+        if (i < CJK_B_LIMIT)            return i; // non-BMP-CJK
+        
+        return i + NON_CJK_OFFSET;  // non-CJK
+    }
+    if (i < CJK_A_BASE)                 return i + NON_CJK_OFFSET;
+    
+    if (i < CJK_A_LIMIT)                return i - CJK_A_BASE
+                                                + (CJK_LIMIT - CJK_BASE) 
+                                                + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
+    return i + NON_CJK_OFFSET; // non-CJK
 }
 
 
 // GET IMPLICIT PRIMARY WEIGHTS
 // Return value is left justified primary key
-
-static inline uint32_t getImplicitPrimary(UChar32 cp) {
-
-    //if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
-
-    cp = swapCJK(cp);
-
-    //if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
-
-    // we now have a range of numbers from 0 to 21FFFF.
-
-    // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-    // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-    // we shift so that HAN all has the same first primary, for compression.
-    // for the 4 byte case, we make the gap as large as we can fit.
-    // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-    // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-
-    int32_t last0 = cp - IMPLICIT_4BYTE_BOUNDARY;
-    if (last0 < 0) {
-        int32_t last1 = cp / LAST_COUNT;
-        last0 = cp % LAST_COUNT;
-
-        int32_t last2 = last1 / OTHER_COUNT;
-        last1 %= OTHER_COUNT;
-        /*
-        if (DEBUG || last2 > 0xFF-BYTES_TO_AVOID) System.out.println("3B: " + Utility.hex(cp) + " => "
-            + Utility.hex(last2) + ", "
-            + Utility.hex(last1) + ", "
-            + Utility.hex(last0) + ", "
-        );
-        */
-
-        return IMPLICIT_BASE_3BYTE + (last2 << 24) + (last1 << 16) + ((last0*LAST_MULTIPLIER) << 8);
-    } else {
-        int32_t last1 = last0 / LAST_COUNT2;
-        last0 %= LAST_COUNT2;
-
-        int32_t last2 = last1 / OTHER_COUNT;
-        last1 %= OTHER_COUNT;
-
-        int32_t last3 = last2 / OTHER_COUNT;
-        last2 %= OTHER_COUNT;
-
-        /*
-        if (DEBUG || last3 > 0xFF-BYTES_TO_AVOID) System.out.println("4B: " + Utility.hex(cp) + " => "
-            + Utility.hex(last3) + ", "
-            + Utility.hex(last2) + ", "
-            + Utility.hex(last1) + ", "
-            + Utility.hex(last0 * LAST2_MULTIPLIER) + ", "
-        );
-        */
-
-       return IMPLICIT_BASE_4BYTE + (last3 << 24) + (last2 << 16) + (last1 << 8) + (last0 * LAST2_MULTIPLIER);
+U_CAPI uint32_t U_EXPORT2
+uprv_uca_getImplicitFromRaw(UChar32 cp) {
+    /*
+    if (cp < 0 || cp > MAX_INPUT) {
+        throw new IllegalArgumentException("Code point out of range " + Utility.hex(cp));
     }
+    */
+    int32_t last0 = cp - min4Boundary;
+    if (last0 < 0) {
+        int32_t last1 = cp / final3Count;
+        last0 = cp % final3Count;
+                    
+        int32_t last2 = last1 / medialCount;
+        last1 %= medialCount;
+        
+        last0 = minTrail + last0*final3Multiplier; // spread out, leaving gap at start
+        last1 = minTrail + last1; // offset
+        last2 = min3Primary + last2; // offset
+        /*
+        if (last2 >= min4Primary) {
+            throw new IllegalArgumentException("4-byte out of range: " + Utility.hex(cp) + ", " + Utility.hex(last2));
+        } 
+        */
+        return (last2 << 24) + (last1 << 16) + (last0 << 8);
+    } else {
+        int32_t last1 = last0 / final4Count;
+        last0 %= final4Count;
+        
+        int32_t last2 = last1 / medialCount;
+        last1 %= medialCount;
+        
+        int32_t last3 = last2 / medialCount;
+        last2 %= medialCount;
+        
+        last0 = minTrail + last0*final4Multiplier; // spread out, leaving gap at start           
+        last1 = minTrail + last1; // offset
+        last2 = minTrail + last2; // offset
+        last3 = min4Primary + last3; // offset
+        /*
+        if (last3 > max4Primary) {
+            throw new IllegalArgumentException("4-byte out of range: " + Utility.hex(cp) + ", " + Utility.hex(last3));
+        } 
+        */
+        return (last3 << 24) + (last2 << 16) + (last1 << 8) + last0;
+    }
+}
+
+U_CAPI uint32_t U_EXPORT2
+uprv_uca_getImplicitPrimary(UChar32 cp) {
+    //if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
+        
+    cp = swapCJK(cp);
+    cp++;
+    // we now have a range of numbers from 0 to 21FFFF.
+        
+    //if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+        
+    return uprv_uca_getImplicitFromRaw(cp);
+}
+
+/**
+ * Converts implicit CE into raw integer ("code point")
+ * @param implicit
+ * @return -1 if illegal format
+ */
+U_CAPI UChar32 U_EXPORT2
+uprv_uca_getRawFromImplicit(uint32_t implicit) {
+    UChar32 result;
+    UChar32 b3 = implicit & 0xFF;
+    implicit >>= 8;
+    UChar32 b2 = implicit & 0xFF;
+    implicit >>= 8;
+    UChar32 b1 = implicit & 0xFF;
+    implicit >>= 8;
+    UChar32 b0 = implicit & 0xFF;
+
+    // simple parameter checks
+    if (b0 < min3Primary || b0 > max4Primary
+      || b1 < minTrail || b1 > maxTrail) return -1;
+    // normal offsets
+    b1 -= minTrail;
+
+    // take care of the final values, and compose
+    if (b0 < min4Primary) {
+        if (b2 < minTrail || b2 > max3Trail || b3 != 0) return -1;
+        b2 -= minTrail;
+        UChar32 remainder = b2 % final3Multiplier;
+        if (remainder != 0) return -1;
+        b0 -= min3Primary;
+        b2 /= final3Multiplier;
+        result = ((b0 * medialCount) + b1) * final3Count + b2;
+    } else {
+         if (b2 < minTrail || b2 > maxTrail
+        || b3 < minTrail || b3 > max4Trail) return -1;
+        b2 -= minTrail;
+        b3 -= minTrail;
+        UChar32 remainder = b3 % final4Multiplier;
+        if (remainder != 0) return -1;
+        b3 /= final4Multiplier;
+        b0 -= min4Primary;
+        result = (((b0 * medialCount) + b1) * medialCount + b2) * final4Count + b3 + min4Boundary;
+    }
+    // final check
+    if (result < 0 || result > MAX_INPUT) return -1;
+    return result;
+}
+
+
+static inline int32_t divideAndRoundUp(int a, int b) {
+    return 1 + (a-1)/b;
 }
 
 /* this function is either called from initUCA or from genUCA before
  * doing canonical closure for the UCA.
  */
-U_CAPI void U_EXPORT2
-uprv_uca_initImplicitConstants(uint32_t baseByte)
-{
-  IMPLICIT_BASE_BYTE = baseByte;
-  IMPLICIT_LIMIT_BYTE = IMPLICIT_BASE_BYTE + 4; // leave room for 1 3-byte and 2 4-byte forms
 
-  IMPLICIT_4BYTE_BOUNDARY = IMPLICIT_3BYTE_COUNT * OTHER_COUNT * LAST_COUNT;
-  LAST_MULTIPLIER = OTHER_COUNT / LAST_COUNT;
-  LAST2_MULTIPLIER = OTHER_COUNT / LAST_COUNT2;
-  IMPLICIT_BASE_3BYTE = (IMPLICIT_BASE_BYTE << 24) + 0x030300;
-  IMPLICIT_BASE_4BYTE = ((IMPLICIT_BASE_BYTE + IMPLICIT_3BYTE_COUNT) << 24) + 0x030303;
+/**
+ * Set up to generate implicits.
+ * @param minPrimary
+ * @param maxPrimary
+ * @param minTrail final byte
+ * @param maxTrail final byte
+ * @param gap3 the gap we leave for tailoring for 3-byte forms
+ * @param gap4 the gap we leave for tailoring for 4-byte forms
+ */
+static void initImplicitConstants(int minPrimary, int maxPrimary, 
+                                    int minTrailIn, int maxTrailIn, 
+                                    int gap3, int primaries3count,
+                                    UErrorCode *status) {
+    // some simple parameter checks
+    if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) { 
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    };
+    if (minTrail < 0 || minTrailIn >= maxTrailIn || maxTrailIn > 0xFF) { 
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    };
+    if (primaries3count < 1) { 
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    };
+
+    minTrail = minTrailIn;
+    maxTrail = maxTrailIn;
+    
+    min3Primary = minPrimary;
+    max4Primary = maxPrimary;
+    // compute constants for use later.
+    // number of values we can use in trailing bytes
+    // leave room for empty values between AND above, e.g. if gap = 2
+    // range 3..7 => +3 -4 -5 -6 -7: so 1 value
+    // range 3..8 => +3 -4 -5 +6 -7 -8: so 2 values
+    // range 3..9 => +3 -4 -5 +6 -7 -8 -9: so 2 values
+    final3Multiplier = gap3 + 1;
+    final3Count = (maxTrail - minTrail + 1) / final3Multiplier;
+    max3Trail = minTrail + (final3Count - 1) * final3Multiplier;
+    
+    // medials can use full range
+    medialCount = (maxTrail - minTrail + 1);
+    // find out how many values fit in each form
+    int32_t threeByteCount = medialCount * final3Count;
+    // now determine where the 3/4 boundary is.
+    // we use 3 bytes below the boundary, and 4 above
+    int32_t primariesAvailable = maxPrimary - minPrimary + 1;
+    int32_t primaries4count = primariesAvailable - primaries3count;
+    
+    
+    int32_t min3ByteCoverage = primaries3count * threeByteCount;
+    min4Primary = minPrimary + primaries3count;
+    min4Boundary = min3ByteCoverage;
+    // Now expand out the multiplier for the 4 bytes, and redo.
+
+    int32_t totalNeeded = MAX_INPUT - min4Boundary;
+    int32_t neededPerPrimaryByte = divideAndRoundUp(totalNeeded, primaries4count);
+    //if (DEBUG) System.out.println("neededPerPrimaryByte: " + neededPerPrimaryByte);
+    int32_t neededPerFinalByte = divideAndRoundUp(neededPerPrimaryByte, medialCount * medialCount);
+    //if (DEBUG) System.out.println("neededPerFinalByte: " + neededPerFinalByte);
+    int32_t gap4 = (maxTrail - minTrail - 1) / neededPerFinalByte;
+    //if (DEBUG) System.out.println("expandedGap: " + gap4);
+    if (gap4 < 1) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    final4Multiplier = gap4 + 1;
+    final4Count = neededPerFinalByte;
+    max4Trail = minTrail + (final4Count - 1) * final4Multiplier;
+    /*
+    if (DEBUG) {
+        System.out.println("final4Count: " + final4Count);
+        for (int counter = 0; counter <= final4Count; ++counter) {
+            int value = minTrail + (1 + counter)*final4Multiplier;
+            System.out.println(counter + "\t" + value + "\t" + Utility.hex(value));
+        }
+    }
+    */
+}
+    
+    /**
+     * Supply parameters for generating implicit CEs
+     */
+U_CAPI void U_EXPORT2
+uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCode *status) {
+    // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
+    initImplicitConstants(minPrimary, maxPrimary, 0x03, 0xFE, 1, 1, status);
 }
 
 /* do not close UCA returned by ucol_initUCA! */
@@ -1189,7 +1344,7 @@ ucol_initUCA(UErrorCode *status) {
                 }
                 // Initalize variables for implicit generation
                 const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);
-                uprv_uca_initImplicitConstants(UCAconsts->UCA_PRIMARY_IMPLICIT_MIN);
+                uprv_uca_initImplicitConstants(UCAconsts->UCA_PRIMARY_IMPLICIT_MIN, UCAconsts->UCA_PRIMARY_IMPLICIT_MAX, status);
                 _staticUCA->mapping->getFoldingOffset = _getFoldingOffset;
             }else{
                 udata_close(result);
@@ -2432,7 +2587,7 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource) {
   if(isNonChar(cp)) {
     return 0;
   }
-  uint32_t r = getImplicitPrimary(cp);
+  uint32_t r = uprv_uca_getImplicitPrimary(cp);
   *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
   return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
 }
@@ -3425,7 +3580,7 @@ inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource) {
     return 0;
   }
 
-  uint32_t r = getImplicitPrimary(cp);
+  uint32_t r = uprv_uca_getImplicitPrimary(cp);
 
   *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
   collationSource->toReturn = collationSource->CEpos;
