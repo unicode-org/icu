@@ -12,6 +12,7 @@
 #include <string.h>
 
 #include "unicode/utypes.h"
+#include "unicode/uclean.h"
 #include "umutex.h"
 #include "threadtest.h"
 
@@ -159,6 +160,7 @@ struct RunInfo
     int                 checkTime;
     AbstractThreadTest *fTest;
     bool                stopFlag;
+    bool                exitFlag;
     int32_t             runningThreads;
 };
 
@@ -300,14 +302,8 @@ void parseCommandLine(int argc, char **argv)
 //----------------------------------------------------------------------
 //
 //  threadMain   The main function for each of the swarm of test threads.
-//               Run in an infinite loop, parsing each of the documents
-//               given on the command line in turn.
+//               Run in a loop, executing the runOnce() test function each time.
 //
-//               There is no return from this fuction, and no graceful
-//               thread termination.  Threads are stuck running here
-//               until the OS shuts them down as a consequence of the
-//               main thread of the process (which never calls this
-//               function) exiting.
 //
 //----------------------------------------------------------------------
 
@@ -354,7 +350,19 @@ void threadMain (void *param)
 
         thInfo->fHeartBeat = true;
         thInfo->fCycles++;
+
+        //
+        // If main thread says it's time to exit, break out of the loop.
+        //
+        if (gRunInfo.exitFlag) {
+            break;
+        }
     }
+            
+    umtx_atomic_dec(&gRunInfo.runningThreads);
+
+    // Returning will kill the thread.
+    return;
 }
 
 }
@@ -383,6 +391,7 @@ int main (int argc, char **argv)
     if (gRunInfo.numThreads == 0)
         exit(0);
 
+    gRunInfo.exitFlag = FALSE;
     gRunInfo.stopFlag = TRUE;      // Will cause the new threads to block 
     umtx_lock(&gMutex);
 
@@ -471,6 +480,12 @@ int main (int argc, char **argv)
 
     //
     //  Time's up, we are done.  (We only get here if this was a timed run)
+    //  Tell the threads to exit.
+    //
+    gRunInfo.exitFlag = true;
+    while (gRunInfo.runningThreads > 0) { ThreadFuncs::yield(); }
+
+    //
     //  Tally up the total number of cycles completed by each of the threads.
     //
     double totalCyclesCompleted = 0;
@@ -481,9 +496,13 @@ int main (int argc, char **argv)
     double cyclesPerMinute = totalCyclesCompleted / (double(gRunInfo.totalTime) / double(60));
     printf("\n%8.1f cycles per minute.", cyclesPerMinute);
 
-    //  The threads are all still alive; we just return
-    //   and leave it to the operating sytem to kill them.
     //
+    //  Memory should be clean coming out
+    //
+    delete gRunInfo.fTest;
+    delete [] gThreadInfo;
+    umtx_destroy(&gMutex);
+    u_cleanup();
 
     return 0;
 }
