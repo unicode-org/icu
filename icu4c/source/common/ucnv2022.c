@@ -1923,7 +1923,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
     do{
 
         /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
-        mySourceLimit = getEndOfBuffer_2022(&(args->source), mySourceLimit, args->flush);
+        mySourceLimit = getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush);
 
         if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/{
             saveThis = args->converter;
@@ -1941,19 +1941,19 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
         /*-Done with buffer with entire buffer
         -Error while converting
         */
-        if (U_FAILURE(*err) || (args->source == mySourceLimit)) 
+        if (U_FAILURE(*err) || (args->source == args->sourceLimit)) 
             return;
 
         sourceStart = args->source;
         changeState_2022(args->converter,
                &(args->source), 
-               mySourceLimit,
+               args->sourceLimit,
                ISO_2022_KR,
                err);
         /* args->source = sourceStart; */
 
 
-    }while(args->source < mySourceLimit);
+    }while(args->source < args->sourceLimit);
     /* return*/
 }
 
