@@ -11,7 +11,7 @@
 #include "ruleiter.h"
 #include "unicode/parsepos.h"
 #include "unicode/unistr.h"
-#include "symtable.h" // TODO => unicode/symtable.h
+#include "unicode/symtable.h"
 #include "uprops.h"
 
 U_NAMESPACE_BEGIN

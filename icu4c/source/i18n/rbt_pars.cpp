@@ -29,7 +29,7 @@
 #include "rbt_rule.h"
 #include "strmatch.h"
 #include "strrepl.h"
-#include "symtable.h"
+#include "unicode/symtable.h"
 #include "tridpars.h"
 #include "uvector.h"
 #include "util.h"
@@ -1417,7 +1417,7 @@ int32_t TransliteratorParser::syntaxError(UErrorCode parseErrorCode,
  */
 UChar TransliteratorParser::parseSet(const UnicodeString& rule,
                                           ParsePosition& pos) {
-    UnicodeSet* set = new UnicodeSet(rule, pos, *parseData, status);
+    UnicodeSet* set = new UnicodeSet(rule, pos, USET_IGNORE_SPACE, parseData, status);
     set->compact();
     return generateStandInFor(set);
 }

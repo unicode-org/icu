@@ -3439,7 +3439,7 @@ UnicodeSet *RegexCompile::scanSet() {
     }
 
     uset = new UnicodeSet(fRXPat->fPattern, pos,
-                         usetFlags, localStatus);
+                         usetFlags, NULL, localStatus);
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
@@ -3512,7 +3512,7 @@ UnicodeSet *RegexCompile::scanProp() {
     }
 
     // Build the UnicodeSet from the set pattern we just built up in a string.
-    uset = new UnicodeSet(setPattern,  usetFlags, *fStatus);
+    uset = new UnicodeSet(setPattern, usetFlags, NULL, *fStatus);
     if (U_FAILURE(*fStatus)) {
         delete uset;
         uset =  NULL;
