@@ -296,7 +296,7 @@ ga{
         AED { "AED", "Dirham Aontas na nÉimíríochtaí Arabacha" } // 12/2/1971-
         AFA { "AFA", "Afgainí (1927-2002)"  } // 1927-
         AFN { "Af",  "Afgainí"              }
-        AIF { "AIF", "Franc Affars agus Issas " } // 07/05/1967-06/27/1977
+        AIF { "AIF", "Franc Affars agus Issas" } // 07/05/1967-06/27/1977
         ALK { "ALK", "Lek Albánach (1946-1961)" } // 1946-1961
         ALL { "lek", "Lek Albánach"         } // 1961-
         ALV { "ALV", "Lek Valute Albánach"  } // 1992-1993
@@ -425,7 +425,7 @@ ga{
         GNF { "GF",  "Franc Guine"         } // 01/06/1986-
         GNI { "GNI", "Franc Guine (1960-1972)" } // 03/01/1960-10/02/1972
         GNS { "GNS", "Syli Guine"          } // 10/02/1972-01/06/1986
-        GPF { "GPF", "Franc Guadeloupe "     } // 07/11/1851-12/31/1959
+        GPF { "GPF", "Franc Guadeloupe"     } // 07/11/1851-12/31/1959
         GQE { "GQE", "Ekwele Guineana na Guine Meánchriosaí" } // 07/07/1975-01/01/1985
         GQF { "GQF", "Franco na Guine Meánchriosaí" } // 01/01/1985-1992
         GQP { "GQP", "Peseta Guineana na Guine Meánchriosaí" } // 10/12/1968-07/07/1975
@@ -481,7 +481,7 @@ ga{
         LAK { "LAK", "Kip Laosach"          } // 05/05/1955-
         LBP { "LL",  "Punt na Liobáine"       } // 01/01/1948-
         LIF { "LIF", "Franc Lichtinstéin"  } // 03/17/1799-
-        LKR { "SL Re","Rúipí Srí Lanca "      } // 05/22/1978-
+        LKR { "SL Re","Rúipí Srí Lanca"      } // 05/22/1978-
         LNR { "LNR", "Rúipí na Siolióne"         } // 12/16/1949-05/22/1978
         LRD { "LRD", "Dollar na Libéire"      } // 01/01/1944-
         LSL { "M",   "Loti Leosóta"         } // 01/22/1980-
