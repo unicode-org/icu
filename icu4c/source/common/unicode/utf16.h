@@ -45,7 +45,7 @@
  * Does this code unit alone encode a code point (BMP, not a surrogate)?
  * @param c 16-bit code unit
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_IS_SINGLE(c) !U_IS_SURROGATE(c)
 
@@ -53,7 +53,7 @@
  * Is this code unit a lead surrogate (U+d800..U+dbff)?
  * @param c 16-bit code unit
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
 
@@ -61,7 +61,7 @@
  * Is this code unit a trail surrogate (U+dc00..U+dfff)?
  * @param c 16-bit code unit
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
 
@@ -69,7 +69,7 @@
  * Is this code unit a surrogate (U+d800..U+dfff)?
  * @param c 16-bit code unit
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_IS_SURROGATE(c) U_IS_SURROGATE(c)
 
@@ -78,7 +78,7 @@
  * is it a lead surrogate?
  * @param c 16-bit code unit
  * @return TRUE or FALSE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
 
@@ -97,7 +97,7 @@
  * @param lead lead surrogate (U+d800..U+dbff)
  * @param trail trail surrogate (U+dc00..U+dfff)
  * @return supplementary code point (U+10000..U+10ffff)
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_GET_SUPPLEMENTARY(lead, trail) \
     (((lead)<<10UL)+(trail)-U16_SURROGATE_OFFSET)
@@ -108,7 +108,7 @@
  * supplementary code point (0x10000..0x10ffff).
  * @param supplementary 32-bit code point (U+10000..U+10ffff)
  * @return lead surrogate (U+d800..U+dbff) for supplementary
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_LEAD(supplementary) (UChar)(((supplementary)>>10)+0xd7c0)
 
@@ -117,7 +117,7 @@
  * supplementary code point (0x10000..0x10ffff).
  * @param supplementary 32-bit code point (U+10000..U+10ffff)
  * @return trail surrogate (U+dc00..U+dfff) for supplementary
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_TRAIL(supplementary) (UChar)(((supplementary)&0x3ff)|0xdc00)
 
@@ -126,14 +126,14 @@
  * The result is not defined if c is not a Unicode code point (U+0000..U+10ffff).
  * @param c 32-bit code point
  * @return 1 or 2
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_LENGTH(c) ((uint32_t)(c)<=0xffff ? 1 : 2)
 
 /**
  * The maximum number of 16-bit code units per Unicode code point (U+0000..U+10ffff).
  * @return 2
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_MAX_LENGTH 2
 
@@ -152,7 +152,7 @@
  * @param i string offset
  * @param c output UChar32 variable
  * @see U16_GET
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_GET_UNSAFE(s, i, c) { \
     (c)=(s)[i]; \
@@ -183,7 +183,7 @@
  * @param length string length
  * @param c output UChar32 variable
  * @see U16_GET_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_GET(s, start, i, length, c) { \
     (c)=(s)[i]; \
@@ -220,7 +220,7 @@
  * @param i string offset
  * @param c output UChar32 variable
  * @see U16_NEXT
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_NEXT_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
@@ -247,7 +247,7 @@
  * @param length string length
  * @param c output UChar32 variable
  * @see U16_NEXT_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_NEXT(s, i, length, c) { \
     (c)=(s)[(i)++]; \
@@ -271,7 +271,7 @@
  * @param i string offset
  * @param c code point to append
  * @see U16_APPEND
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_APPEND_UNSAFE(s, i, c) { \
     if((uint32_t)(c)<=0xffff) { \
@@ -297,7 +297,7 @@
  * @param c code point to append
  * @param isError output UBool set to TRUE if an error occurs, otherwise not modified
  * @see U16_APPEND_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_APPEND(s, i, capacity, c, isError) { \
     if((uint32_t)(c)<=0xffff) { \
@@ -318,7 +318,7 @@
  * @param s const UChar * string
  * @param i string offset
  * @see U16_FWD_1
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_FWD_1_UNSAFE(s, i) { \
     if(U16_IS_LEAD((s)[(i)++])) { \
@@ -335,7 +335,7 @@
  * @param i string offset, i<length
  * @param length string length
  * @see U16_FWD_1_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_FWD_1(s, i, length) { \
     if(U16_IS_LEAD((s)[(i)++]) && (i)<(length) && U16_IS_TRAIL((s)[i])) { \
@@ -353,7 +353,7 @@
  * @param i string offset
  * @param n number of code points to skip
  * @see U16_FWD_N
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_FWD_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
@@ -374,7 +374,7 @@
  * @param length string length
  * @param n number of code points to skip
  * @see U16_FWD_N_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_FWD_N(s, i, length, n) { \
     int32_t __N=(n); \
@@ -395,7 +395,7 @@
  * @param s const UChar * string
  * @param i string offset
  * @see U16_SET_CP_START
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_SET_CP_START_UNSAFE(s, i) { \
     if(U16_IS_TRAIL((s)[i])) { \
@@ -415,7 +415,7 @@
  * @param start starting string offset (usually 0)
  * @param i string offset, start<=i
  * @see U16_SET_CP_START_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_SET_CP_START(s, start, i) { \
     if(U16_IS_TRAIL((s)[i]) && (i)>(start) && U16_IS_LEAD((s)[(i)-1])) { \
@@ -443,7 +443,7 @@
  * @param i string offset
  * @param c output UChar32 variable
  * @see U16_PREV
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_PREV_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
@@ -471,7 +471,7 @@
  * @param i string offset, start<=i
  * @param c output UChar32 variable
  * @see U16_PREV_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_PREV(s, start, i, c) { \
     (c)=(s)[--(i)]; \
@@ -493,7 +493,7 @@
  * @param s const UChar * string
  * @param i string offset
  * @see U16_BACK_1
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_BACK_1_UNSAFE(s, i) { \
     if(U16_IS_TRAIL((s)[--(i)])) { \
@@ -511,7 +511,7 @@
  * @param start starting string offset (usually 0)
  * @param i string offset, start<=i
  * @see U16_BACK_1_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_BACK_1(s, start, i) { \
     if(U16_IS_TRAIL((s)[--(i)]) && (i)>(start) && U16_IS_LEAD((s)[(i)-1])) { \
@@ -530,7 +530,7 @@
  * @param i string offset
  * @param n number of code points to skip
  * @see U16_BACK_N
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_BACK_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
@@ -552,7 +552,7 @@
  * @param i string offset, i<length
  * @param n number of code points to skip
  * @see U16_BACK_N_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_BACK_N(s, start, i, n) { \
     int32_t __N=(n); \
@@ -573,7 +573,7 @@
  * @param s const UChar * string
  * @param i string offset
  * @see U16_SET_CP_LIMIT
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_SET_CP_LIMIT_UNSAFE(s, i) { \
     if(U16_IS_LEAD((s)[(i)-1])) { \
@@ -594,7 +594,7 @@
  * @param i string offset, start<=i<=length
  * @param length string length
  * @see U16_SET_CP_LIMIT_UNSAFE
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define U16_SET_CP_LIMIT(s, start, i, length) { \
     if((start)<(i) && (i)<(length) && U16_IS_LEAD((s)[(i)-1]) && U16_IS_TRAIL((s)[i])) { \

@@ -65,9 +65,9 @@
 #endif
 
 /*==========================================================================*/
-/* For C wrappers, we use the symbol U_CAPI.                                */
+/* For C wrappers, we use the symbol U_STABLE.                                */
 /* This works properly if the includer is C or C++.                         */
-/* Functions are declared   U_CAPI return-type U_EXPORT2 function-name()... */
+/* Functions are declared   U_STABLE return-type U_EXPORT2 function-name()... */
 /*==========================================================================*/
 
 /**
@@ -143,6 +143,10 @@
 
 /** This is used to declare a function as a public ICU C API @stable ICU 2.0*/
 #define U_CAPI U_CFUNC U_EXPORT
+#define U_STABLE U_CAPI
+#define U_DRAFT  U_CAPI
+#define U_DEPRECATED U_CAPI
+#define U_OBSOLETE U_CAPI
 
 /*==========================================================================*/
 /* limits for int32_t etc., like in POSIX inttypes.h                        */

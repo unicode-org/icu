@@ -143,7 +143,7 @@ public:
      * all strings that createTimeZone() accepts)
      *
      * @return an enumeration object, owned by the caller.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static StringEnumeration* createEnumeration();
 
@@ -162,7 +162,7 @@ public:
      * @param rawOffset an offset from GMT in milliseconds, ignoring
      * the effect of daylight savings time, if any
      * @return an enumeration object, owned by the caller 
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static StringEnumeration* createEnumeration(int32_t rawOffset);
 
@@ -174,7 +174,7 @@ public:
      * @param country The ISO 3166 two-letter country code, or NULL to
      * retrieve zones not affiliated with any country.
      * @return an enumeration object, owned by the caller 
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static StringEnumeration* createEnumeration(const char* country);
 
@@ -459,17 +459,17 @@ public:
 
     /**
      * Enum for use with getDisplayName
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     enum EDisplayType {
         /**
          * Selector for short display name
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         SHORT = 1,
         /**
          * Selector for long display name
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         LONG
     };

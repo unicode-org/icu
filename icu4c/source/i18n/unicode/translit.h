@@ -256,17 +256,17 @@ private:
     /**
      * A context integer or pointer for a factory function, passed by
      * value.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     union Token {
         /**
          * This token, interpreted as a 32-bit integer.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         int32_t integer;
         /**
          * This token, interpreted as a native pointer.
-         * @draft ICU 2.4
+         * @stable ICU 2.4
          */
         void*   pointer;
     };
@@ -298,7 +298,7 @@ private:
      * @param context a context pointer that will be stored and
      *                later passed to the factory function when an ID matching
      *                the registration ID is being instantiated with this factory.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     typedef Transliterator* (*Factory)(const UnicodeString& ID, Token context);
 
@@ -311,19 +311,19 @@ protected:
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     Transliterator(const UnicodeString& ID, UnicodeFilter* adoptedFilter);
 
     /**
      * Copy constructor.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     Transliterator(const Transliterator&);
 
     /**
      * Assignment operator.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     Transliterator& operator=(const Transliterator&);
 
@@ -336,7 +336,7 @@ protected:
      * NULL to leave the ID unchanged
      * @return a newly created Transliterator or null if the ID is
      * invalid.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static Transliterator* createBasicInstance(const UnicodeString& id,
                                                const UnicodeString* canon);
@@ -613,7 +613,7 @@ protected:
      * <code>pos.limit</code>.
      *
      * @see #transliterate
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual void handleTransliterate(Replaceable& text,
                                      UTransPosition& pos,
@@ -628,7 +628,7 @@ protected:
      * @param incremental if TRUE, then assume more characters may be inserted
      * at index.limit, and postpone processing to accomodate future incoming
      * characters
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual void filteredTransliterate(Replaceable& text,
                                        UTransPosition& index,
@@ -694,7 +694,7 @@ protected:
      * Method for subclasses to use to set the maximum context length.
      * @param maxContextLength the new value to be set.
      * @see #getMaximumContextLength
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     void setMaximumContextLength(int32_t maxContextLength);
 
@@ -765,7 +765,7 @@ public:
      * <tt>NULL</tt>.
      * @return the filter used by this transliterator, or <tt>NULL</tt> if this
      *         transliterator uses no filter.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     UnicodeFilter* orphanFilter(void);
 
@@ -919,7 +919,7 @@ public:
      * @return a reference to result
      * @see #getTargetSet
      * @see #handleGetSourceSet
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     UnicodeSet& getSourceSet(UnicodeSet& result) const;
 
@@ -935,7 +935,7 @@ public:
      * @param result receives result set; previous contents lost
      * @see #getSourceSet
      * @see #getTargetSet
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual void handleGetSourceSet(UnicodeSet& result) const;
 
@@ -950,7 +950,7 @@ public:
      * @param result receives result set; previous contents lost
      * @return a reference to result
      * @see #getTargetSet
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UnicodeSet& getTargetSet(UnicodeSet& result) const;
 
@@ -1200,7 +1200,7 @@ protected:
      * Set the ID of this transliterators.  Subclasses shouldn't do
      * this, unless the underlying script behavior has changed.
      * @param id the new id t to be set.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     void setID(const UnicodeString& id);
 

@@ -37,7 +37,19 @@
 #include "unicode/utf.h"
 #include "unicode/uversion.h"
 #include "unicode/uconfig.h"
+
+#ifdef U_HIDE_DRAFT_API
 #include "unicode/udraft.h"
+#endif
+
+#ifdef U_HIDE_DEPRECATED_API
+#include "unicode/udeprcted.h"
+#endif
+
+#ifdef U_HIDE_DEPRECATED_API
+#include "unicode/uobslete.h"
+#endif
+
 
 /*!
  * \file
@@ -406,6 +418,7 @@ typedef void* UClassID;
 #define U_STANDARD_CPP_NAMESPACE
 #endif
 
+
 /*===========================================================================*/
 /* Global delete operator                                                    */
 /*===========================================================================*/
@@ -716,15 +729,12 @@ typedef enum UErrorCode {
  * in the UErrorCode enum above.
  * @stable ICU 2.0
  */
-U_CAPI const char * U_EXPORT2
+U_STABLE const char * U_EXPORT2
 u_errorName(UErrorCode code);
 
 
 
-#define U_DRAFT  U_CAPI
-#define U_STABLE U_CAPI
-#define U_INTERNAL U_CAPI
-#define U_SYSTEM U_CAPI
+
 
 /*===========================================================================*/
 /* Include header for platform utilies */

@@ -49,13 +49,13 @@ public:
      * since UDate is currently typedefed to be either double or long.
      * If UDate is changed later to be a bonafide class
      * or struct, then we no longer need this enum.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     enum ISDATE { kIsDate };
 
     /**
      * Default constructor
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     Formattable(); // Type kLong, value 0
 
@@ -169,18 +169,18 @@ public:
 
     /** 
      * The list of possible data types of this Formattable object.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     enum Type {
-                /** @draft ICU 2.4 */
+                /** @stable ICU 2.4 */
         kDate,      // Date
-                /** @draft ICU 2.4 */
+                /** @stable ICU 2.4 */
         kDouble,    // double
-                /** @draft ICU 2.4 */
+                /** @stable ICU 2.4 */
         kLong,      // long
-                /** @draft ICU 2.4 */
+                /** @stable ICU 2.4 */
         kString,    // UnicodeString
-                /** @draft ICU 2.4 */
+                /** @stable ICU 2.4 */
         kArray,     // Formattable[]
                 /** @draft ICU 2.8 */
                 kInt64      // int64

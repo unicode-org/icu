@@ -193,6 +193,8 @@ typedef enum UBreakIteratorType {
   UBRK_LINE,
   /** Sentence breaks @stable ICU 2.0 */
   UBRK_SENTENCE,
+
+#ifndef U_HIDE_DEPRECATED_API
   /** 
    * Title Case breaks 
    * The iterator created using this type locates title boundaries as described for 
@@ -202,6 +204,8 @@ typedef enum UBreakIteratorType {
    * @deprecated ICU 2.8 Use the word break iterator for titlecasing for Unicode 4 and later.
    */
   UBRK_TITLE
+#endif /* U_HIDE_DEPRECATED_API */
+
 } UBreakIteratorType;
 
 /** Value indicating all text boundaries have been returned.
@@ -306,7 +310,7 @@ typedef enum USentenceBreakTag {
  * @see ubrk_openRules
  * @stable ICU 2.0
  */
-U_CAPI UBreakIterator* U_EXPORT2
+U_STABLE UBreakIterator* U_EXPORT2
 ubrk_open(UBreakIteratorType type,
       const char *locale,
       const UChar *text,
@@ -328,7 +332,7 @@ ubrk_open(UBreakIteratorType type,
  * @see ubrk_open
  * @stable ICU 2.2
  */
-U_CAPI UBreakIterator* U_EXPORT2
+U_STABLE UBreakIterator* U_EXPORT2
 ubrk_openRules(const UChar     *rules,
                int32_t         rulesLength,
                const UChar     *text,
@@ -352,7 +356,7 @@ ubrk_openRules(const UChar     *rules,
  * @return pointer to the new clone
  * @stable ICU 2.0
  */
-U_CAPI UBreakIterator * U_EXPORT2
+U_STABLE UBreakIterator * U_EXPORT2
 ubrk_safeClone(
           const UBreakIterator *bi,
           void *stackBuffer,
@@ -371,7 +375,7 @@ ubrk_safeClone(
 * @param bi The break iterator to close.
  * @stable ICU 2.0
 */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubrk_close(UBreakIterator *bi);
 
 /**
@@ -382,7 +386,7 @@ ubrk_close(UBreakIterator *bi);
  * @param status The error code
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubrk_setText(UBreakIterator* bi,
              const UChar*    text,
              int32_t         textLength,
@@ -396,7 +400,7 @@ ubrk_setText(UBreakIterator* bi,
  * \Ref{ubrk_first}, or \Ref{ubrk_last}.
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_current(const UBreakIterator *bi);
 
 /**
@@ -408,7 +412,7 @@ ubrk_current(const UBreakIterator *bi);
  * @see ubrk_previous
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_next(UBreakIterator *bi);
 
 /**
@@ -420,7 +424,7 @@ ubrk_next(UBreakIterator *bi);
  * @see ubrk_next
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_previous(UBreakIterator *bi);
 
 /**
@@ -431,7 +435,7 @@ ubrk_previous(UBreakIterator *bi);
  * @see ubrk_last
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_first(UBreakIterator *bi);
 
 /**
@@ -444,7 +448,7 @@ ubrk_first(UBreakIterator *bi);
  * @see ubrk_first
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_last(UBreakIterator *bi);
 
 /**
@@ -456,7 +460,7 @@ ubrk_last(UBreakIterator *bi);
  * @see ubrk_following
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_preceding(UBreakIterator *bi,
            int32_t offset);
 
@@ -469,7 +473,7 @@ ubrk_preceding(UBreakIterator *bi,
  * @see ubrk_preceding
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_following(UBreakIterator *bi,
            int32_t offset);
 
@@ -482,7 +486,7 @@ ubrk_following(UBreakIterator *bi,
 * @see ubrk_countAvailable
 * @stable ICU 2.0
 */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 ubrk_getAvailable(int32_t index);
 
 /**
@@ -493,7 +497,7 @@ ubrk_getAvailable(int32_t index);
 * @see ubrk_getAvailable
 * @stable ICU 2.0
 */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 ubrk_countAvailable(void);
 
 
@@ -506,7 +510,7 @@ ubrk_countAvailable(void);
 * @return True if "offset" is a boundary position.
 * @stable ICU 2.0
 */
-U_CAPI  UBool U_EXPORT2
+U_STABLE  UBool U_EXPORT2
 ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
 
 /**
@@ -518,7 +522,7 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
  * For word break iterators, the possible values are defined in enum UWordBreak.
  * @stable ICU 2.2
  */
-U_CAPI  int32_t U_EXPORT2
+U_STABLE  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi);
 
 /**
@@ -538,7 +542,7 @@ ubrk_getRuleStatus(UBreakIterator *bi);
  *                  the most recent boundary returned by the break iterator.
  * @draft ICU 3.0
  */
-U_CAPI  int32_t U_EXPORT2
+U_DRAFT  int32_t U_EXPORT2
 ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status);
 
 /**
@@ -550,7 +554,7 @@ ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, 
  * @return locale string
  * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
  */
-U_CAPI const char* U_EXPORT2
+U_DRAFT const char* U_EXPORT2
 ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);
 
 

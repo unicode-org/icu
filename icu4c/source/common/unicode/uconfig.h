@@ -24,7 +24,7 @@
  * The switches are fairly coarse, controlling large modules.
  * Basic services cannot be turned off.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 
 /**
@@ -36,7 +36,7 @@
  * If you want "only collation" and do not build for EBCDIC,
  * then you can #define UCONFIG_NO_LEGACY_CONVERSION 1 as well.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_ONLY_COLLATION
 #   define UCONFIG_ONLY_COLLATION 0
@@ -68,7 +68,7 @@
  * Turning off legacy conversion is not possible on EBCDIC platforms
  * because they need ibm-37 or ibm-1047 default converters.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_LEGACY_CONVERSION
 #   define UCONFIG_NO_LEGACY_CONVERSION 0
@@ -100,7 +100,7 @@
  * \def UCONFIG_NO_BREAK_ITERATION
  * This switch turns off break iteration.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_BREAK_ITERATION
 #   define UCONFIG_NO_BREAK_ITERATION 0
@@ -122,7 +122,7 @@
  * \def 
  * This switch turns off collation and collation-based string search.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_COLLATION
 #   define UCONFIG_NO_COLLATION 0
@@ -132,7 +132,7 @@
  * \def UCONFIG_NO_FORMATTING
  * This switch turns off formatting and calendar/timezone services.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_FORMATTING
 #   define UCONFIG_NO_FORMATTING 0
@@ -142,7 +142,7 @@
  * \def UCONFIG_NO_TRANSLITERATION
  * This switch turns off transliteration.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_TRANSLITERATION
 #   define UCONFIG_NO_TRANSLITERATION 0
@@ -152,7 +152,7 @@
  * \def UCONFIG_NO_REGULAR_EXPRESSIONS
  * This switch turns off regular expressions.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_REGULAR_EXPRESSIONS
 #   define UCONFIG_NO_REGULAR_EXPRESSIONS 0

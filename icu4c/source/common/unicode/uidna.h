@@ -47,6 +47,8 @@
  *
  */
 
+#ifndef U_HIDE_DRAFT_API
+
 /** 
  * Option to prohibit processing of unassigned codepoints in the input and
  * do not check if the input conforms to STD-3 ASCII rules.
@@ -69,6 +71,8 @@
  * @draft ICU 2.6
  */
 #define UIDNA_USE_STD3_RULES   0x0002
+
+#endif /*U_HIDE_DRAFT_API*/
     
 /**
  * This function implements the ToASCII operation as defined in the IDNA RFC.
@@ -108,7 +112,7 @@
  * @return                  Number of ASCII characters converted.
  * @draft ICU 2.6
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_toASCII(const UChar* src, int32_t srcLength, 
               UChar* dest, int32_t destCapacity,
               int32_t options,
@@ -158,7 +162,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  * @return                  Number of Unicode characters converted.
  * @draft ICU 2.6
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_toUnicode(const UChar* src, int32_t srcLength,
                 UChar* dest, int32_t destCapacity,
                 int32_t options,
@@ -208,7 +212,7 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
  * @return                  Number of ASCII characters converted.
  * @draft ICU 2.6
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
                    UChar* dest, int32_t destCapacity,
                    int32_t options,
@@ -254,7 +258,7 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
  * @return                  Number of ASCII characters converted.
  * @draft ICU 2.6
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UChar* dest, int32_t destCapacity,
                      int32_t options,
@@ -295,7 +299,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
  * @return <0 or 0 or >0 as usual for string comparisons
  * @draft ICU 2.6
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uidna_compare(  const UChar *s1, int32_t length1,
                 const UChar *s2, int32_t length2,
                 int32_t options,

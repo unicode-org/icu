@@ -102,9 +102,9 @@ typedef enum UScriptCode {
  * @param capacity the capacity (size) fo UScriptCode buffer passed in.
  * @param err the error status code.
  * @return The number of script codes filled in the buffer passed in 
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI int32_t  U_EXPORT2 
+U_STABLE int32_t  U_EXPORT2 
 uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capacity,UErrorCode *err);
 
 /**
@@ -113,9 +113,9 @@ uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capac
  * @param scriptCode UScriptCode enum
  * @return script long name as given in
  * PropertyValueAliases.txt, or NULL if scriptCode is invalid
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI const char*  U_EXPORT2 
+U_STABLE const char*  U_EXPORT2 
 uscript_getName(UScriptCode scriptCode);
 
 /**
@@ -124,9 +124,9 @@ uscript_getName(UScriptCode scriptCode);
  * @param scriptCode UScriptCode enum
  * @return script abbreviated name as given in
  * PropertyValueAliases.txt, or NULL if scriptCode is invalid
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI const char*  U_EXPORT2 
+U_STABLE const char*  U_EXPORT2 
 uscript_getShortName(UScriptCode scriptCode);
 
 /** 
@@ -135,9 +135,9 @@ uscript_getShortName(UScriptCode scriptCode);
  * @param codepoint UChar32 codepoint
  * @param err the error status code.
  * @return The UScriptCode, or 0 if codepoint is invalid 
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI UScriptCode  U_EXPORT2 
+U_STABLE UScriptCode  U_EXPORT2 
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
 #endif

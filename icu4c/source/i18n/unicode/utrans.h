@@ -123,7 +123,7 @@ typedef struct UTransPosition {
      * anything before this index.  INPUT/OUTPUT parameter: This parameter
      * is updated by a transliteration operation to reflect the maximum
      * amount of antecontext needed by a transliterator.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     int32_t contextStart;
     
@@ -133,7 +133,7 @@ typedef struct UTransPosition {
      * anything at or after this index.  INPUT/OUTPUT parameter: This
      * parameter is updated to reflect changes in the length of the
      * text, but points to the same logical position in the text.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     int32_t contextLimit;
     
@@ -142,7 +142,7 @@ typedef struct UTransPosition {
      * INPUT/OUTPUT parameter: This parameter is advanced past
      * characters that have already been transliterated by a
      * transliteration operation.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     int32_t start;
     
@@ -151,7 +151,7 @@ typedef struct UTransPosition {
      * INPUT/OUTPUT parameter: This parameter is updated to reflect
      * changes in the length of the text, but points to the same
      * logical position in the text.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     int32_t limit;
 
@@ -184,7 +184,7 @@ typedef struct UTransPosition {
  *         utrans_xxx() functions, or NULL if the open call fails.
  * @draft ICU 2.8
  */
-U_CAPI UTransliterator* U_EXPORT2
+U_DRAFT UTransliterator* U_EXPORT2
 utrans_openU(const UChar *id,
              int32_t idLength,
              UTransDirection dir,
@@ -208,7 +208,7 @@ utrans_openU(const UChar *id,
  * inverse of trans, or NULL if the open call fails.
  * @stable ICU 2.0
  */
-U_CAPI UTransliterator* U_EXPORT2 
+U_STABLE UTransliterator* U_EXPORT2 
 utrans_openInverse(const UTransliterator* trans,
                    UErrorCode* status);
 
@@ -222,7 +222,7 @@ utrans_openInverse(const UTransliterator* trans,
  * utrans_xxx() functions, or NULL if the clone call fails.
  * @stable ICU 2.0
  */
-U_CAPI UTransliterator* U_EXPORT2 
+U_STABLE UTransliterator* U_EXPORT2 
 utrans_clone(const UTransliterator* trans,
              UErrorCode* status);
 
@@ -232,7 +232,7 @@ utrans_clone(const UTransliterator* trans,
  * @param trans the transliterator to be closed.
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_close(UTransliterator* trans);
 
 /**
@@ -249,7 +249,7 @@ utrans_close(UTransliterator* trans);
  *
  * @draft ICU 2.8
  */
-U_CAPI const UChar * U_EXPORT2
+U_DRAFT const UChar * U_EXPORT2
 utrans_getUnicodeID(const UTransliterator *trans,
                     int32_t *resultLength);
 
@@ -267,7 +267,7 @@ utrans_getUnicodeID(const UTransliterator *trans,
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_register(UTransliterator* adoptedTrans,
                 UErrorCode* status);
 
@@ -280,7 +280,7 @@ utrans_register(UTransliterator* adoptedTrans,
  * @param idLength the length of id, or -1 if id is zero-terminated
  * @draft ICU 2.8
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 utrans_unregisterID(const UChar* id, int32_t idLength);
 
 /**
@@ -301,7 +301,7 @@ utrans_unregisterID(const UChar* id, int32_t idLength);
  * @see UnicodeSet
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_setFilter(UTransliterator* trans,
                  const UChar* filterPattern,
                  int32_t filterPatternLen,
@@ -314,7 +314,7 @@ utrans_setFilter(UTransliterator* trans,
  * @return the number of system transliterators.
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 utrans_countAvailableIDs(void);
 
 /**
@@ -326,7 +326,7 @@ utrans_countAvailableIDs(void);
  *
  * @draft ICU 2.8
  */
-U_CAPI UEnumeration * U_EXPORT2
+U_DRAFT UEnumeration * U_EXPORT2
 utrans_openIDs(UErrorCode *pErrorCode);
 
 /********************************************************************
@@ -356,7 +356,7 @@ utrans_openIDs(UErrorCode *pErrorCode);
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_trans(const UTransliterator* trans,
              UReplaceable* rep,
              UReplaceableCallbacks* repFunc,
@@ -407,7 +407,7 @@ utrans_trans(const UTransliterator* trans,
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_transIncremental(const UTransliterator* trans,
                         UReplaceable* rep,
                         UReplaceableCallbacks* repFunc,
@@ -445,7 +445,7 @@ utrans_transIncremental(const UTransliterator* trans,
  * @param status a pointer to the UErrorCode
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_transUChars(const UTransliterator* trans,
                    UChar* text,
                    int32_t* textLength,
@@ -480,7 +480,7 @@ utrans_transUChars(const UTransliterator* trans,
  * @see utrans_transIncremental
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 utrans_transIncrementalUChars(const UTransliterator* trans,
                               UChar* text,
                               int32_t* textLength,
@@ -515,7 +515,7 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
  * utrans_xxx() functions, or NULL if the open call fails.
  * @deprecated ICU 2.8 Use utrans_openU() instead, see utrans.h
  */
-U_CAPI UTransliterator* U_EXPORT2 
+U_DEPRECATED UTransliterator* U_EXPORT2 
 utrans_open(const char* id,
             UTransDirection dir,
             const UChar* rules,         /* may be Null */
@@ -538,7 +538,7 @@ utrans_open(const char* id,
  * zero-termination.  This may be greater than bufCapacity.
  * @deprecated ICU 2.8 Use utrans_getUnicodeID() instead, see utrans.h
  */
-U_CAPI int32_t U_EXPORT2 
+U_DEPRECATED int32_t U_EXPORT2 
 utrans_getID(const UTransliterator* trans,
              char* buf,
              int32_t bufCapacity);
@@ -552,7 +552,7 @@ utrans_getID(const UTransliterator* trans,
  * @param id a zero-terminated ID
  * @deprecated ICU 2.8 Use utrans_unregisterID() instead, see utrans.h
  */
-U_CAPI void U_EXPORT2 
+U_DEPRECATED void U_EXPORT2 
 utrans_unregister(const char* id);
 
 /**
@@ -573,7 +573,7 @@ utrans_unregister(const char* id);
  * zero-termination.  This may be greater than bufCapacity.
  * @deprecated ICU 2.8 Use utrans_openIDs() instead, see utrans.h
  */
-U_CAPI int32_t U_EXPORT2 
+U_DEPRECATED int32_t U_EXPORT2 
 utrans_getAvailableID(int32_t index,
                       char* buf,
                       int32_t bufCapacity);

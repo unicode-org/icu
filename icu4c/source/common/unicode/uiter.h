@@ -50,6 +50,8 @@ typedef enum UCharIteratorOrigin {
     UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
 } UCharIteratorOrigin;
 
+#ifndef U_HIDE_DRAFT_API
+
 /** Constants for UCharIterator. @draft ICU 2.6 */
 enum {
     /**
@@ -69,6 +71,7 @@ enum {
     UITER_UNKNOWN_INDEX=-2
 };
 
+
 /**
  * Constant for UCharIterator getState() indicating an error or
  * an unknown state.
@@ -81,6 +84,8 @@ enum {
  * @draft ICU 2.6
  */
 #define UITER_NO_STATE ((uint32_t)0xffffffff)
+
+#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Function type declaration for UCharIterator.getIndex().
@@ -489,7 +494,7 @@ struct UCharIterator {
  * @see UnicodeString::char32At()
  * @stable ICU 2.1
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 uiter_current32(UCharIterator *iter);
 
 /**
@@ -506,7 +511,7 @@ uiter_current32(UCharIterator *iter);
  * @see U16_NEXT
  * @stable ICU 2.1
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 uiter_next32(UCharIterator *iter);
 
 /**
@@ -523,7 +528,7 @@ uiter_next32(UCharIterator *iter);
  * @see U16_PREV
  * @stable ICU 2.1
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 uiter_previous32(UCharIterator *iter);
 
 /**
@@ -544,7 +549,7 @@ uiter_previous32(UCharIterator *iter);
  * @see UITER_NO_STATE
  * @draft ICU 2.6
  */
-U_CAPI uint32_t U_EXPORT2
+U_DRAFT uint32_t U_EXPORT2
 uiter_getState(const UCharIterator *iter);
 
 /**
@@ -562,7 +567,7 @@ uiter_getState(const UCharIterator *iter);
  * @see UCharIteratorSetState
  * @draft ICU 2.6
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
 
 /**
@@ -587,7 +592,7 @@ uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
  * @see UCharIterator
  * @stable ICU 2.1
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
 
 /**
@@ -610,7 +615,7 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
  * @see uiter_setString
  * @draft ICU 2.6
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
 
 /**
@@ -646,7 +651,7 @@ uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
  * @see UCharIterator
  * @draft ICU 2.6
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
 
 #ifdef XP_CPLUSPLUS
@@ -671,7 +676,7 @@ uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
  * @see UCharIterator
  * @stable ICU 2.1
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 uiter_setCharacterIterator(UCharIterator *iter, CharacterIterator *charIter);
 
 /**
@@ -696,7 +701,7 @@ uiter_setCharacterIterator(UCharIterator *iter, CharacterIterator *charIter);
  * @see UCharIterator
  * @stable ICU 2.1
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 uiter_setReplaceable(UCharIterator *iter, const Replaceable *rep);
 
 #endif

@@ -41,19 +41,19 @@
 
 /** The standard copyright notice that gets compiled into each library. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
   " Copyright (C) 2003, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** Maximum length of the copyright string.
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING_LENGTH  128
 
 /** The current ICU major version as an integer. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_ICU_VERSION_MAJOR_NUM 2
 
@@ -65,7 +65,7 @@
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
@@ -78,7 +78,7 @@
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_ICU_VERSION "2.8"
 
@@ -89,22 +89,22 @@
 #define U_ICU_VERSION_SHORT "28"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_MAX_VERSION_LENGTH 4
 
 /** In a string, ICU version fields are delimited by dots.
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_VERSION_DELIMITER '.'
 
 /** The maximum length of an ICU version string.
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define U_MAX_VERSION_STRING_LENGTH 20
 
 /** The binary form of a version on ICU APIs is an array of 4 uint8_t.
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
@@ -129,9 +129,9 @@ U_NAMESPACE_USE
  * @param versionString A string with dotted-decimal version information,
  *                      with up to four non-negative number fields with
  *                      values of up to 255 each.
- *  @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_versionFromString(UVersionInfo versionArray, const char *versionString);
 
 /**
@@ -144,9 +144,9 @@ u_versionFromString(UVersionInfo versionArray, const char *versionString);
  *                      a string corresponding to the numeric version
  *                      information in versionArray.
  *                      The buffer size must be at least U_MAX_VERSION_STRING_LENGTH.
- *  @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_versionToString(UVersionInfo versionArray, char *versionString);
 
 /**
@@ -157,7 +157,7 @@ u_versionToString(UVersionInfo versionArray, char *versionString);
  * @param versionArray the version # information, the result will be filled in
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_getVersion(UVersionInfo versionArray);
 
 
@@ -176,7 +176,7 @@ u_getVersion(UVersionInfo versionArray);
  * in contractions, ignore primary ignorables after shifted 
  * version 5 - ICU 2.8 - changed implicit generation code
  * This value may change in the subsequent releases of ICU
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define UCOL_RUNTIME_VERSION 5
 
@@ -188,7 +188,7 @@ u_getVersion(UVersionInfo versionArray);
  * version 6 - ICU 2.8 - fixed bug in builder that allowed 0xFF in primary values
  * Backward compatible with the old rules. 
  * This value may change in the subsequent releases of ICU
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 #define UCOL_BUILDER_VERSION 6
 
@@ -198,13 +198,13 @@ u_getVersion(UVersionInfo versionArray);
  * supplementary code points 
  * Version 4 in ICU 2.2, following UCA=3.1.1d6, UCD=3.2.0 
  * This value may change in the subsequent releases of ICU
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 /*#define UCOL_FRACTIONAL_UCA_VERSION 4*/
 
 /** This is the version of the tailorings 
  *  This value may change in the subsequent releases of ICU
- *  @draft ICU 2.4
+ *  @stable ICU 2.4
  */
 #define UCOL_TAILORINGS_VERSION 1
 
