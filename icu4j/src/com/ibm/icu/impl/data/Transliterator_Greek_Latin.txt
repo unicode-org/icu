@@ -3,12 +3,14 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/21 02:27:14 $
-# $Revision: 1.14 $
+# $Date: 2001/11/29 17:27:44 $
+# $Revision: 1.15 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
-:: [\u0000-\u007F \u00B7 [:Greek:] [:Latin:] [:nonspacing mark:]] ;
+# [\u0000-\u007F \u00B7 [:Greek:] [:Latin:] [:nonspacing mark:]] ;
+
+:: [\u0000-\u007F \u0370-\u03FF [:Greek:] [:nonspacing mark:]] ;
 :: NFKD (NFC) ; 
 
 # TEST CASES
@@ -76,8 +78,8 @@ $accent_minus = [[$accent]-[$iotasub$macron]];
 $upper $accent * { $iotasub > I ; 
 $iotasub > i ; 
 
-| $1 $iotasub < ([:L:] $macron [:M:]*) i ;
-| $1 $iotasub < ([:L:] $macron [:M:]*) I ;
+| $1 $iotasub < ($evowel $macron [:M:]*) i ;
+| $1 $iotasub < ($evowel $macron [:M:]*) I ;
 
 # BREATHING
 
@@ -319,4 +321,5 @@ $rough <> h ;
  < [Νν] { \' } $egammaLike ;
 
 ::NFC (NFKD) ;
-:: ([\u0000-\u007F [:Latin:] [:Greek:] [:nonspacing mark:]]) ;
+# ([\u0000-\u007F [:Latin:] [:Greek:] [:nonspacing mark:]]) ;
+:: ([\u0000-\u007F \u00B7 [:Latin:] [:nonspacing mark:]]) ;

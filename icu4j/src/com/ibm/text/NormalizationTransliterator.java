@@ -13,7 +13,7 @@ import java.util.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.12 $ $Date: 2001/11/28 22:30:48 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.13 $ $Date: 2001/11/29 17:27:44 $
  */
 final class NormalizationTransliterator extends Transliterator {
 
@@ -160,7 +160,9 @@ final class NormalizationTransliterator extends Transliterator {
             }
         }
         if (!isIncremental) {
-            overallDelta += convert(text, lastSafe, limit);
+            int delta = convert(text, lastSafe, limit);
+            overallDelta += delta;
+            lastSafe = limit + delta;
         }
         offsets.contextLimit += overallDelta;
         offsets.limit += overallDelta;
