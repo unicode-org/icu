@@ -541,10 +541,3 @@ FFFFE..FFFFF  ; Noncharacter_Code_Point # Cn   [2]
 10FFFE..10FFFF; Noncharacter_Code_Point # Cn   [2] 
 
 # Total code points: 66
-
-# ================================================
-# Markus Scherer 2002mar02 added from UTR 21, will be proposed for inclusion in future UCD
-
-0027; Other_Case_Ignorable
-00AD; Other_Case_Ignorable
-2019; Other_Case_Ignorable
