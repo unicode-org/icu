@@ -306,6 +306,8 @@ ucol_openRules( const UChar        *rules,
  * The structure and the syntax of the string is defined in the "Naming collators"
  * section of the users guide: 
  * http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Naming_Collators
+ * Attributes are overriden by the subsequent attributes. So, for "S2_S3", final
+ * strength will be 3. 3066bis locale overrides individual locale parts.
  * The call to this function is equivalent to a call to ucol_open, followed by a 
  * series of calls to ucol_setAttribute and ucol_setVariableTop.
  * @param definition A short string containing a locale and a set of attributes. 
@@ -313,6 +315,9 @@ ucol_openRules( const UChar        *rules,
  *                   state for a locale.
  * @param parseError if not NULL, structure that will get filled with error's pre
  *                   and post context in case of error.
+ * @param forceDefaults controls whether the settings that are the same as the collator 
+ *                   default settings are set (TRUE) or not (FALSE). If the definition
+ *                   strings are to be cached, should be set to FALSE.
  * @param status     Error code. Apart from regular error conditions connected to 
  *                   instantiating collators (like out of memory or similar), this
  *                   API will return an error if an invalid attribute or attribute/value
@@ -329,6 +334,7 @@ ucol_openRules( const UChar        *rules,
  */
 U_CAPI UCollator* U_EXPORT2
 ucol_openFromShortString( const char *definition,
+                          UBool forceDefaults,
                           UParseError *parseError,
                           UErrorCode *status);
 
@@ -1011,6 +1017,9 @@ ucol_collatorToIdentifier(const UCollator *coll,
 /**
  * Open a collator given a 31-bit identifier
  * @param identifier 31-bit identifier, encoded by calling ucol_collatorToIdentifier
+ * @param forceDefaults controls whether the settings that are the same as the collator 
+ *                   default settings are set (TRUE) or not (FALSE). If the definition
+ *                   strings are to be cached, should be set to FALSE.
  * @param status for returning errors
  * @return UCollator object
  * @see ucol_collatorToIdentifier
@@ -1019,6 +1028,7 @@ ucol_collatorToIdentifier(const UCollator *coll,
  */
 U_CAPI UCollator* U_EXPORT2
 ucol_openFromIdentifier(uint32_t identifier,
+                        UBool forceDefaults,
                         UErrorCode *status);
 
 
@@ -1027,17 +1037,43 @@ ucol_openFromIdentifier(uint32_t identifier,
  * @param identifier 31-bit identifier, encoded by calling ucol_collatorToIdentifier
  * @param buffer buffer to store the result
  * @param capacity buffer capacity
+ * @param forceDefaults whether the settings that are the same as the default setting
+ *                      should be forced anyway. Setting this argument to FALSE reduces
+ *                      the number of different configurations, but decreases performace
+ *                      as a collator has to be instantiated.
  * @param status for returning errors
  * @return length of the short definition string
  * @see ucol_collatorToIdentifier
  * @see ucol_openFromIdentifier
+ * @see ucol_shortStringToIdentifier
  * @internal ICU 3.0
  */
 U_CAPI int32_t U_EXPORT2
 ucol_identifierToShortString(uint32_t identifier,
                              char *buffer,
                              int32_t capacity,
+                             UBool forceDefaults,
                              UErrorCode *status);
+
+/**
+ * Calculate the identifier given a short definition string. Supports preflighting.
+ * @param definition short string definition
+ * @param forceDefaults whether the settings that are the same as the default setting
+ *                      should be forced anyway. Setting this argument to FALSE reduces
+ *                      the number of different configurations, but decreases performace
+ *                      as a collator has to be instantiated.
+ * @param status for returning errors
+ * @return identifier
+ * @see ucol_collatorToIdentifier
+ * @see ucol_openFromIdentifier
+ * @see ucol_identifierToShortString
+ * @internal ICU 3.0
+ */
+U_CAPI uint32_t U_EXPORT2
+ucol_shortStringToIdentifier(const char *definition,
+                             UBool forceDefaults,
+                             UErrorCode *status);
+
 
 
 /**
@@ -1053,6 +1089,29 @@ ucol_identifierToShortString(uint32_t identifier,
  */
 U_CAPI UColAttributeValue  U_EXPORT2
 ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode *status);
+
+/** Check whether two collators are equal. Collators are considered equal if they
+ *  will sort strings the same. This means that both the current attributes and the
+ *  rules must be equivalent. Currently used for RuleBasedCollator::operator==.
+ *  @param source first collator
+ *  @param target second collator
+ *  @return TRUE or FALSE
+ *  @internal ICU 3.0
+ */
+U_CAPI UBool U_EXPORT2
+ucol_equals(const UCollator *source, const UCollator *target);
+
+/** Calculates the set of unsafe code points, given a collator.
+ *  @param coll Collator
+ *  @param unsafe a fill-in set to receive the unsafe points
+ *  @param status for catching errors
+ *  @return number of elements in the set
+ *  @internal ICU 3.0
+ */
+U_CAPI int32_t U_EXPORT2
+ucol_getUnsafeSet( const UCollator *coll,
+                  USet *unsafe,
+                  UErrorCode *status);
 
 #endif /* #if !UCONFIG_NO_COLLATION */
 
