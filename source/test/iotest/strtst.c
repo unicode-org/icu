@@ -207,7 +207,7 @@ static void TestString(void) {
         if (strcmp(myString, longStr)) {
             log_err("%%S Got: %s, Expected: %s\n", myString, longStr);
         }
-        if (retVal != strlen(longStr)) {
+        if (retVal != (int32_t)strlen(longStr)) {
             log_err("%%S returned different sizes. Got: %d  Expected: %d\n", retVal, strlen(longStr));
         }
 
@@ -216,7 +216,7 @@ static void TestString(void) {
         if (strcmp(myString, longStr)) {
             log_err("%%S Got: %s, Expected: %s\n", myString, longStr);
         }
-        if (retVal != strlen(longStr)) {
+        if (retVal != (int32_t)strlen(longStr)) {
             log_err("%%S returned different sizes. Got: %d  Expected: %d\n", retVal, strlen(longStr));
         }
 
@@ -231,7 +231,7 @@ static void TestString(void) {
         if (u_strcmp(myUString+10, uStringBuf)) {
             log_err("%%S Long strings differ. Expected: %s\n", longStr + 10);
         }
-        if (retVal != strlen(longStr + 10)) {
+        if (retVal != (int32_t)strlen(longStr + 10)) {
             log_err("%%S returned different sizes. Got: %d  Expected: %d\n", retVal, strlen(longStr));
         }
 
