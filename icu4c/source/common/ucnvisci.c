@@ -130,10 +130,6 @@ static const uint16_t lookupInitialData[][3]={
     
 static void 
 _ISCIIOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, UErrorCode *errorCode){
-    /* test for buffer overflows */
-    if (U_FAILURE(*errorCode)) {
-        return;
-    }
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISCII));
 
     if(cnv->extraInfo != NULL) {
@@ -814,10 +810,6 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     uint16_t range = 0;
     UBool deltaChanged = FALSE;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -1158,10 +1150,6 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UChar32* toUnicodeStatus=NULL;
     UChar* contextCharToUnicode = NULL;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if ((args->converter == NULL) || (target < args->target) || (source < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -1247,10 +1235,6 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                 *contextCharToUnicode=NO_CHAR_MARKER;
             }
 
-            /* test for buffer overflows */
-            if (U_FAILURE(*err)) {
-                return;
-            }
             /* look at the pre-context and perform special processing */
             switch(sourceChar){
             case ISCII_INV:

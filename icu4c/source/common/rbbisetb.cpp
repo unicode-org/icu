@@ -517,10 +517,6 @@ RangeDescriptor::~RangeDescriptor() {
 //
 //-------------------------------------------------------------------------------------
 void RangeDescriptor::split(UChar32 where, UErrorCode &status) {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
     assert(where>fStartChar && where<=fEndChar);
     RangeDescriptor *nr = new RangeDescriptor(*this, status);
     /* test for NULL */

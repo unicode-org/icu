@@ -44,10 +44,6 @@ u_internalStrToTitle(UChar *dest, int32_t destCapacity,
     int32_t prev, index, destIndex, length;
     UBool isFirstIndex;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     /* set up local variables */
     uiter_setString(&iter, src, srcLength);
     destIndex=0;
@@ -83,10 +79,6 @@ u_internalStrToTitle(UChar *dest, int32_t destCapacity,
                                             pErrorCode);
             }
             destIndex+=length;
-        }
-        /* test for buffer overflows */
-        if (U_FAILURE(*pErrorCode)) {
-            return 0;
         }
 
         if(index>=srcLength) {

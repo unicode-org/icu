@@ -185,10 +185,6 @@ NFRuleSet::parseRules(UnicodeString& description, const RuleBasedNumberFormat* o
         }
         currentDescription.setTo(description, oldP, p - oldP);
         NFRule::makeRules(currentDescription, this, rules.last(), owner, rules, status);
-        /* test for buffer overflows */
-        if (U_FAILURE(status)) {
-            return;
-        }
         oldP = p + 1;
     }
 

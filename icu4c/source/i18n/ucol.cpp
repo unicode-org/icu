@@ -1364,10 +1364,6 @@ void collPrevIterNormalize(collIterate *data)
 
     normLen = unorm_normalize(pStart, (pEnd - pStart) + 1, UNORM_NFD, 0,
                               data->writableBuffer, 0, &status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     if (data->writableBufSize <= normLen) {
             freeHeapWritableBuffer(data);
@@ -1386,10 +1382,6 @@ void collPrevIterNormalize(collIterate *data)
     *(pStartNorm - 1) = 0;
     unorm_normalize(pStart, (pEnd - pStart) + 1, UNORM_NFD, 0, pStartNorm,
                     normLen, &status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     data->pos        = data->writableBuffer + data->writableBufSize;
     data->origFlags  = data->flags;
@@ -1514,10 +1506,6 @@ static
 inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                                UErrorCode *status)
 {
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
     uint32_t result = UCOL_NULLORDER;
     if (data->CEpos > data->CEs) {
         data->toReturn --;
@@ -1680,10 +1668,6 @@ ucol_getPrevCE(const UCollator *coll, collIterate *data,
 /* this should be connected to special Jamo handling */
 U_CAPI uint32_t  U_EXPORT2
 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
   collIterate colIt;
   uint32_t order;
   IInit_collIterate(coll, &u, 1, &colIt);
@@ -1803,10 +1787,6 @@ inline void normalizeNextContraction(collIterate *data)
 
     normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, buffer, 0,
                               &status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     if (buffersize <= normLen + strsize) {
         uint32_t  size = strsize + normLen + 1;
@@ -1823,10 +1803,6 @@ inline void normalizeNextContraction(collIterate *data)
     /* null-termination will be added here */
     unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm,
                     normLen + 1, &status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     data->pos        = data->writableBuffer + strsize;
     data->origFlags  = data->flags;
@@ -2117,10 +2093,6 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
   collIterateState entryState;
   backupState(source, &entryState);
   UChar32 cp = ch;
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
   //UChar *entryPos = source->pos;
   for (;;) {
     // This loop will repeat only in the case of contractions, and only when a contraction
@@ -2660,10 +2632,6 @@ inline void normalizePrevContraction(collIterate *data)
 
     normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, buffer, 0,
                               &status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     if (nulltermsize <= normLen) {
         uint32_t  size = buffersize - nulltermsize + normLen + 1;
@@ -2685,10 +2653,6 @@ inline void normalizePrevContraction(collIterate *data)
     *(pStartNorm - 1) = 0;
     unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm, normLen,
                     &status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
 
     data->pos        = data->writableBuffer + nulltermsize;
     data->origFlags  = data->flags;
@@ -2819,10 +2783,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         uint32_t *endCEBuffer;
         UChar   *strbuffer;
         int32_t noChars = 0;
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
 
   for(;;)
   {
@@ -3036,10 +2996,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         temp.flags &= ~UCOL_ITER_NORM;
 
         CE = ucol_IGetNextCE(coll, &temp, status);
-        /* test for buffer overflows */
-        if (U_FAILURE(*status)) {
-            return 0;
-        }
         endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
         while (CE != UCOL_NO_MORE_CES) {
             *(source->CEpos ++) = CE;
@@ -3056,10 +3012,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 return UCOL_NULLORDER;
             }
             CE = ucol_IGetNextCE(coll, &temp, status);
-            /* test for buffer overflows */
-            if (U_FAILURE(*status)) {
-                return 0;
-            }
         }
         freeHeapWritableBuffer(&temp);
         if (strbuffer != buffer) {
@@ -3242,10 +3194,6 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 /* anyway */
 static
 uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, uint32_t newSize, UErrorCode *status) {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
 #ifdef UCOL_DEBUG
   fprintf(stderr, ".");
 #endif
@@ -3476,11 +3424,6 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
     for(;;) {
           order = ucol_IGetNextCE(coll, s, &status);
-          /* test for buffer overflows */
-          if (U_FAILURE(status)) {
-              return 0;
-          }
-
           if(order == UCOL_NO_MORE_CES) {
               break;
           }
@@ -3909,11 +3852,6 @@ ucol_calcSortKey(const    UCollator    *coll,
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
             order = ucol_IGetNextCE(coll, &s, status);
-            /* test for buffer overflows */
-            if (U_FAILURE(*status)) {
-                return 0;
-            }
-
             if(order == UCOL_NO_MORE_CES) {
                 finished = TRUE;
                 break;
@@ -4431,10 +4369,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
             order = ucol_IGetNextCE(coll, &s, status);
-            /* test for buffer overflows */
-            if (U_FAILURE(*status)) {
-                return 0;
-            }
 
             if(order == 0) {
               continue;
@@ -4848,10 +4782,6 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
   IInit_collIterate(coll, varTop, len, &s);
 
   uint32_t CE = ucol_IGetNextCE(coll, &s, status);
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
 
   /* here we check if we have consumed all characters */
   /* you can put in either one character or a contraction */
@@ -4862,10 +4792,6 @@ ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCod
   }
 
   uint32_t nextCE = ucol_IGetNextCE(coll, &s, status);
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
 
   if(isContinuation(nextCE) && (nextCE & UCOL_PRIMARYMASK) != 0) {
     *status = U_PRIMARY_TOO_LONG_ERROR;

@@ -152,21 +152,13 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         currencyElements[i] = currencyElementsRes.getStringEx(i, status);
     }
 
-    if (U_FAILURE(status)) {
-        /* clean the memory */
-        delete[] numberElements;
-        delete[] currencyElements;
-        return;
-    }
+    if (U_FAILURE(status)) return;
 
     // If the array size is too small, something is wrong with the resource
     // bundle, returns the failure error code.
     if (numberElementsLength < 11 ||
         currencyElementsLength < 3) {
         status = U_INVALID_FORMAT_ERROR;
-        /* clean the memory */
-        delete[] numberElements;
-        delete[] currencyElements;
         return;
     }
 

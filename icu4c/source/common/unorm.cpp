@@ -1464,10 +1464,6 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
     int32_t destIndex;
     uint8_t trailCC;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     if(!_haveData(*pErrorCode)) {
         return 0;
     }
@@ -1651,10 +1647,6 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
     uint16_t fcd16;
     int16_t prevCC, cc;
 
-     /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     if(!_haveData(*pErrorCode)) {
         return 0;
     }
@@ -2219,10 +2211,6 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     UChar minNoMaybe;
     uint8_t trailCC;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     decompQCMask=(qcMask<<2)&0xf; /* decomposition quick check mask */
 
     if(!(decompQCMask&_NORM_QC_NFKD)) {
@@ -2595,10 +2583,6 @@ unorm_compose(UChar *dest, int32_t destCapacity,
               UErrorCode *pErrorCode) {
     int32_t destIndex;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     if(!_haveData(*pErrorCode)) {
         return 0;
     }
@@ -2802,10 +2786,6 @@ _findPreviousIterationBoundary(UCharIterator &src,
     UChar c, c2;
     UBool isBoundary;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     /* initialize */
     stackBuffer=buffer;
     startIndex=bufferCapacity; /* fill the buffer from the end backwards */
@@ -3043,10 +3023,6 @@ _findNextIterationBoundary(UCharIterator &src,
     int32_t bufferIndex;
     UChar c, c2;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     if(!src.hasNext(&src)) {
         return 0;
     }
@@ -3487,10 +3463,6 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
     // current code units, and code points for lookups
     int32_t c1, c2, cp1, cp2;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
     // no argument error checking because this itself is not an API
 
     // assume that at least one of the options _COMPARE_EQUIV and U_COMPARE_IGNORE_CASE is set

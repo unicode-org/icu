@@ -58,10 +58,6 @@ UVector::UVector(UObjectDeleter d, UKeyComparator c, int32_t initialCapacity, UE
 }
 
 void UVector::_init(int32_t initialCapacity, UErrorCode &status) {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
     // Fix bogus initialCapacity values; avoid malloc(0)
     if (initialCapacity < 1) {
         initialCapacity = DEFUALT_CAPACITY;
@@ -294,11 +290,6 @@ int32_t UVector::indexOf(UHashTok key, int32_t startIndex) const {
 }
 
 UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return FALSE;
-    }
-
     if (capacity >= minimumCapacity) {
         return TRUE;
     } else {

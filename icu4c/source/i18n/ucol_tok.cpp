@@ -639,10 +639,6 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                         UParseError *parseError,
                         UErrorCode *status) { 
 /* parsing part */
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
   UBool variableTop = FALSE;
   UBool top = FALSE;
   UBool inChars = TRUE;
@@ -1011,11 +1007,6 @@ Processing Description
 
 static UColToken *ucol_tok_initAReset(UColTokenParser *src, UChar *expand, uint32_t *expandNext,
                                       UParseError *parseError, UErrorCode *status) {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
-
   if(src->resultLen == src->listCapacity) {
     // Unfortunately, this won't work, as we store addresses of lhs in token
     src->listCapacity *= 2;
@@ -1109,10 +1100,6 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
 
   baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
   baseContCE = ucol_getNextCE(src->UCA, &s, status);
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
   if(baseContCE == UCOL_NO_MORE_CES) {
     baseContCE = 0;
   }
@@ -1182,10 +1169,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
   UBool variableTop = FALSE;
   UBool top = FALSE;
   uint16_t specs = 0;
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
   UColTokListHeader *ListList = NULL;
 
   src->parsedToken.strength = UCOL_TOK_UNSET; 

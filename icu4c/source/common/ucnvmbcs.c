@@ -362,10 +362,6 @@ _MBCSLoad(UConverterSharedData *sharedData,
     UConverterMBCSTable *mbcsTable=&sharedData->table->mbcs;
     _MBCSHeader *header=(_MBCSHeader *)raw;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     if(header->version[0]!=4) {
         *pErrorCode=U_INVALID_TABLE_FORMAT;
         return;
@@ -433,10 +429,6 @@ _MBCSOpen(UConverter *cnv,
           const char *locale,
           uint32_t options,
           UErrorCode *pErrorCode) {
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     _MBCSReset(cnv, UCNV_RESET_BOTH);
     if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
         /* set a flag for GB 18030 mode, which changes the callback behavior */
@@ -497,10 +489,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     UChar c;
     uint8_t action;
     UConverterCallbackReason reason;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
+
     /* use optimized function if possible */
     cnv=pArgs->converter;
     if(cnv->sharedData->table->mbcs.countStates==1) {
@@ -801,10 +790,6 @@ _MBCSSingleToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     uint8_t action;
     UConverterCallbackReason reason;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
@@ -982,10 +967,6 @@ _MBCSSingleToBMPWithOffsets(UConverterToUnicodeArgs *pArgs,
     uint8_t action;
     UConverterCallbackReason reason;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
@@ -1223,10 +1204,6 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     uint8_t action;
     UConverterCallbackReason reason;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0xffff;
-    }
     /* use optimized function if possible */
     cnv=pArgs->converter;
     if(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SURROGATES) {
@@ -1448,10 +1425,6 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
     uint8_t action;
     UConverterCallbackReason reason;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0xffff;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=(const uint8_t *)pArgs->source;
@@ -1748,10 +1721,6 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t length, prevLength;
     uint8_t unicodeMask;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* use optimized function if possible */
     cnv=pArgs->converter;
     outputType=cnv->sharedData->table->mbcs.outputType;
@@ -2238,10 +2207,6 @@ _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t length, prevLength;
     uint8_t unicodeMask;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* use optimized function if possible */
     cnv=pArgs->converter;
     unicodeMask=cnv->sharedData->table->mbcs.unicodeMask;
@@ -2494,11 +2459,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     UConverterCallbackReason reason;
     uint16_t value, minValue;
     UBool hasSupplementary;
-    
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
+
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=pArgs->source;
@@ -2711,10 +2672,6 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     UConverterCallbackReason reason;
     uint16_t value, minValue;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     source=pArgs->source;
@@ -3135,10 +3092,6 @@ _MBCSGetStarters(const UConverter* cnv,
     const int32_t *state0=cnv->sharedData->table->mbcs.stateTable[0];
     int i;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     for(i=0; i<256; ++i) {
         /* all bytes that cause a state transition from state 0 are lead bytes */
         starters[i]= (UBool)MBCS_ENTRY_IS_TRANSITION(state0[i]);
@@ -3163,10 +3116,6 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
     char buffer[4];
     int32_t length;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* first, select between subChar and subChar1 */
     if(cnv->subChar1!=0 && cnv->invalidUCharBuffer[0]<=0xff) {
         /* select subChar1 if it is set (not 0) and the unmappable Unicode code point is up to U+00ff (IBM MBCS behavior) */
@@ -3274,10 +3223,6 @@ fromUCallback(UConverter *cnv,
               UConverterCallbackReason reason, UErrorCode *pErrorCode) {
     int32_t i;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     if(cnv->extraInfo==gb18030Ranges && reason==UCNV_UNASSIGNED) {
         const uint32_t *range;
 
@@ -3325,10 +3270,6 @@ toUCallback(UConverter *cnv,
             UConverterCallbackReason reason, UErrorCode *pErrorCode) {
     int32_t i;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     if(cnv->extraInfo==gb18030Ranges && reason==UCNV_UNASSIGNED && length==4) {
         const uint32_t *range;
         uint32_t linear;
