@@ -196,8 +196,6 @@ static void TestTertiary( )
     int32_t i,j;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("da_DK", &status);
-    /* problem in strcollinc for unfinshed contractions */
-    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
 	return;

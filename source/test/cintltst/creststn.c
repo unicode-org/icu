@@ -535,7 +535,7 @@ static void TestErrorConditions(){
     /*Test ures_getBinary(0 status != U_ILLEGAL_ARGUMENT_ERROR*/
     status=U_ZERO_ERROR;
     coll = ures_getByKey(teRes, "CollationElements", coll, &status);
-    binColl=ures_getByKey(teRes, "%%Collation", binColl, &status);
+    binColl=ures_getByKey(teRes, "%%CollationNew", binColl, &status);
 
     status=U_ILLEGAL_ARGUMENT_ERROR;
     binResult=(uint8_t*)ures_getBinary(binColl,  &len, &status);
