@@ -11,7 +11,7 @@ import java.io.*;
 import javax.swing.*;
 import java.util.*;
 
-import org.apache.xerces.dom.*;
+import org.apache.xerces.dom.DocumentImpl;
 import org.apache.xml.serialize.*;
 import org.w3c.dom.*;
 
@@ -94,7 +94,7 @@ public class RBTMXExporter extends RBExporter {
         return "";
     }
 	
-    private void appendTUV(DocumentImpl xml, Element tu, BundleItem item) {
+    private void appendTUV(Document xml, Element tu, BundleItem item) {
         Element tuv = xml.createElement("tuv");
         tuv.setAttribute("lang", convertEncoding(item));
         tuv.setAttribute("creationdate",convertToISO(item.getCreatedDate()));
@@ -149,7 +149,7 @@ public class RBTMXExporter extends RBExporter {
         Vector bundle_v = rbm.getBundles();
         Bundle main_bundle = (Bundle)bundle_v.elementAt(0);
         
-        DocumentImpl xml = new DocumentImpl();
+        Document xml = new DocumentImpl();
         Element root = xml.createElement("tmx");
         root.setAttribute("version", "1.2");
         xml.appendChild(root);

@@ -9,7 +9,8 @@ package com.ibm.rbm;
 import java.io.*;
 import java.util.*;
 
-import org.apache.xerces.parsers.DOMParser;
+import javax.xml.parsers.*;
+
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -56,16 +57,17 @@ public class RBTMXImporter extends RBImporter {
         File tmx_file = getChosenFile();
 		
         try {
-            InputSource is = new InputSource(new FileInputStream(tmx_file));
-            //is.setEncoding("UTF-8");
-            DOMParser parser = new DOMParser();
-            parser.parse(is);
-            tmx_xml = parser.getDocument();
+        	FileInputStream fis = new FileInputStream(tmx_file);
+            InputSource is = new InputSource(fis);
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        	tmx_xml = builder.parse(is);
+            fis.close();
         } catch (Exception e) {
-            RBManagerGUI.debugMsg(e.getMessage());
             e.printStackTrace(System.err);
+        	throw new IOException(e.getMessage());
         }
-        if (tmx_xml == null) return;
+        if (tmx_xml == null)
+        	return;
         
         importDoc();
     }

@@ -1526,6 +1526,7 @@ class RBManagerMenuBar extends JMenuBar {
         boolean xmlAvailable;
 		try {
             Class.forName("org.apache.xerces.parsers.DOMParser");
+            Class.forName("javax.xml.parsers.DocumentBuilder");
             xmlAvailable = true;
         } catch (ClassNotFoundException e) {
             xmlAvailable = false;

@@ -51,13 +51,11 @@ public class RBxliffImporter extends RBImporter {
     protected void beginImport() throws IOException {
         super.beginImport();
         File xlf_file = getChosenFile();
-        FileInputStream fis;
 		
         try {
-        	fis = new FileInputStream(xlf_file);
+        	FileInputStream fis = new FileInputStream(xlf_file);
             InputSource is = new InputSource(fis);
-            DocumentBuilder builder;
-        	builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             xlf_xml = builder.parse(is);
             fis.close();
         }
@@ -73,7 +71,6 @@ public class RBxliffImporter extends RBImporter {
         	return;
         
         importDoc();
-        fis.close();
         
     }
     
@@ -99,7 +96,8 @@ public class RBxliffImporter extends RBImporter {
         while (header != null
         		&& !(header.getNodeType() == Node.ELEMENT_NODE
         		&& (header.getNodeName().equalsIgnoreCase("header")
-				|| header.getNodeName().equalsIgnoreCase("body")))) {
+				|| header.getNodeName().equalsIgnoreCase("body"))))
+        {
         	header = header.getNextSibling();
         }
         if (header.getNodeName().equalsIgnoreCase("header")) {
