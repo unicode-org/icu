@@ -839,6 +839,12 @@
 				RelativePath=".\udatamem.h">
 			</File>
 			<File
+				RelativePath=".\udataswp.c">
+			</File>
+			<File
+				RelativePath=".\udataswp.h">
+			</File>
+			<File
 				RelativePath=".\umapfile.c">
 				<FileConfiguration
 					Name="Release|Win32">

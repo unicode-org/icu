@@ -596,7 +596,6 @@
 #define ucnv_io_getConverterName ucnv_io_getConverterName_2_6
 #define ucnv_io_getDefaultConverterName ucnv_io_getDefaultConverterName_2_6
 #define ucnv_io_setDefaultConverterName ucnv_io_setDefaultConverterName_2_6
-#define ucnv_io_stripForCompare ucnv_io_stripForCompare_2_6
 #define ucnv_isAmbiguous ucnv_isAmbiguous_2_6
 #define ucnv_open ucnv_open_2_6
 #define ucnv_openAllNames ucnv_openAllNames_2_6
@@ -967,7 +966,6 @@
 #define uprv_strdup uprv_strdup_2_6
 #define uprv_strtod uprv_strtod_2_6
 #define uprv_timezone uprv_timezone_2_6
-#define uprv_tolower uprv_tolower_2_6
 #define uprv_toupper uprv_toupper_2_6
 #define uprv_trunc uprv_trunc_2_6
 #define uprv_tzname uprv_tzname_2_6
