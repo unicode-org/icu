@@ -47,7 +47,7 @@ addUTF16Test(TestNode** root)
   addTest(root, &TestFwdBack,           "utf16tst/TestFwdBack"       );
   addTest(root, &TestSetChar,           "utf16tst/TestSetChar"       );
   addTest(root, &TestAppendChar,        "utf16tst/TestAppendChar"    );
-  addTest(root, &TestAppend,            "utf8tst/TestAppend"         );
+  addTest(root, &TestAppend,            "utf16tst/TestAppend"        );
   addTest(root, &TestSurrogate,         "utf16tst/TestSurrogate"     );
 }
 
@@ -656,14 +656,14 @@ static void TestAppend() {
         0x61, 0xdf, 0x901, 0x3040,
         0xac00, 0xd800, 0xdbff, 0xdcde,
         0xdffd, 0xe000, 0xffff, 0xd800, 0xdc00,
-        0xd848, 0xdf45, 0xdb40, 0xdc21, 0xdbff, 0xdfff, /* not 0x110000 */
+        0xd808, 0xdf45, 0xdb40, 0xdc21, 0xdbff, 0xdfff, /* not 0x110000 */
         /* none from this line */
         0, 0x400
     }, expectSafe[]={
         0x61, 0xdf, 0x901, 0x3040,
         0xac00, 0xd800, 0xdbff, 0xdcde,
         0xdffd, 0xe000, 0xffff, 0xd800, 0xdc00,
-        0xd848, 0xdf45, 0xdb40, 0xdc21, 0xdbff, 0xdfff, /* not 0x110000 */
+        0xd808, 0xdf45, 0xdb40, 0xdc21, 0xdbff, 0xdfff, /* not 0x110000 */
         /* none from this line */
         0, 0x400
     };
@@ -690,7 +690,7 @@ static void TestAppend() {
     wrongIsError=FALSE;
     for(i=0; i<LENGTHOF(codePoints); ++i) {
         c=codePoints[i];
-        expectIsError= c<0 || 0x10ffff<c || U_IS_SURROGATE(c);
+        expectIsError= c<0 || 0x10ffff<c; /* || U_IS_SURROGATE(c); */ /* surrogates in UTF-32 shouldn't be used, but it's okay to pass them around internally. */
         isError=FALSE;
 
         U16_APPEND(buffer, length, LENGTHOF(buffer), c, isError);
