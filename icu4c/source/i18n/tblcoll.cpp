@@ -64,17 +64,17 @@
   #include "unistrm.h"
 #endif
 
-/* forward declarations ----------------------------------------------------- */
-
-UChar forwardCharIteratorGlue(void *iterator);
-
 /* global variable ---------------------------------------------------------- */
 
 /*
 synwee : using another name for this
-const uint32_t tblcoll_StackBufferLen = 1024;
+const uint32_t tblcoll_STACK_BUFFER_LENGTH_ = 1024;
 */
-const uint32_t StackBufferLen = 1024;
+#define STACK_BUFFER_LENGTH_ 1024
+
+/* forward declarations ----------------------------------------------------- */
+
+UChar forwardCharIteratorGlue(void *iterator);
 
 /* RuleBasedCollator declaration ----------------------------------------- */
 
@@ -125,10 +125,10 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
  
   int32_t length = rules.length();
 
-	UChar ucharrules[StackBufferLen];
+	UChar ucharrules[STACK_BUFFER_LENGTH_];
 	UChar *pucharrules = ucharrules;
 	
-  if (length >= StackBufferLen)
+  if (length >= STACK_BUFFER_LENGTH_)
 		pucharrules = new UChar[length + 1];
 	
 	rules.extract(0, length, pucharrules);
@@ -158,10 +158,10 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
  
   int32_t length = rules.length();
 
-	UChar ucharrules[StackBufferLen];
+	UChar ucharrules[STACK_BUFFER_LENGTH_];
 	UChar *pucharrules = ucharrules;
 	
-  if (length >= StackBufferLen)
+  if (length >= STACK_BUFFER_LENGTH_)
 		pucharrules = new UChar[length + 1];
 	
 	rules.extract(0, length, pucharrules);
@@ -192,10 +192,10 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
  
   int32_t length = rules.length();
 
-	UChar ucharrules[StackBufferLen];
+	UChar ucharrules[STACK_BUFFER_LENGTH_];
 	UChar *pucharrules = ucharrules;
 	
-  if (length >= StackBufferLen)
+  if (length >= STACK_BUFFER_LENGTH_)
 		pucharrules = new UChar[length + 1];
 	
 	rules.extract(0, length, pucharrules);
@@ -227,10 +227,10 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   int32_t length = rules.length();
 
-	UChar ucharrules[StackBufferLen];
+	UChar ucharrules[STACK_BUFFER_LENGTH_];
 	UChar *pucharrules = ucharrules;
 	
-  if (length >= StackBufferLen)
+  if (length >= STACK_BUFFER_LENGTH_)
 		pucharrules = new UChar[length + 1];
 	
 	rules.extract(0, length, pucharrules);
@@ -390,17 +390,17 @@ Collator::EComparisonResult RuleBasedCollator::compare(
                                              const UnicodeString& source,
                                              const UnicodeString& target) const
 {
-  UChar uSstart[StackBufferLen];
-	UChar uTstart[StackBufferLen];
+  UChar uSstart[STACK_BUFFER_LENGTH_];
+	UChar uTstart[STACK_BUFFER_LENGTH_];
 	UChar *uSource = uSstart;
 	UChar *uTarget = uTstart;
 	uint32_t sourceLen = source.length();
 	uint32_t targetLen = target.length();
 
-	if(sourceLen >= StackBufferLen)
+	if(sourceLen >= STACK_BUFFER_LENGTH_)
 		uSource = new UChar[sourceLen+1];
 	
-	if(targetLen >= StackBufferLen)
+	if(targetLen >= STACK_BUFFER_LENGTH_)
 		uTarget = new UChar[targetLen+1];
 	
   source.extract(0, sourceLen, uSource);
@@ -456,11 +456,11 @@ CollationKey& RuleBasedCollator::getCollationKey(
                                                   CollationKey& sortkey,
                                                   UErrorCode& status) const
 {
-	UChar sStart[StackBufferLen];
+	UChar sStart[STACK_BUFFER_LENGTH_];
 	UChar *uSource = sStart;
 	uint32_t sourceLen = source.length();
 
-	if(sourceLen >= StackBufferLen)
+	if(sourceLen >= STACK_BUFFER_LENGTH_)
 		uSource = new UChar[sourceLen+1];
 	
   source.extract(0, sourceLen, uSource);
@@ -560,10 +560,10 @@ int32_t RuleBasedCollator::getSortKey(const UnicodeString& source,
                                          uint8_t *result, int32_t resultLength) 
                                          const 
 {
-	UChar sStart[StackBufferLen];
+	UChar sStart[STACK_BUFFER_LENGTH_];
 	UChar *uSource = sStart;
 	uint32_t sourceLen = source.length();
-	if(sourceLen >= StackBufferLen)
+	if(sourceLen >= STACK_BUFFER_LENGTH_)
 		uSource = new UChar[sourceLen+1];
 	
   source.extract(0, sourceLen, uSource);
@@ -688,7 +688,6 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     {
       status = U_ZERO_ERROR;
 
-      uint32_t size = 0;
       if (status == U_ZERO_ERROR)
         status = U_USING_DEFAULT_ERROR;
       

@@ -101,7 +101,7 @@ U_CAPI int32_t
 ucol_next(UCollationElements *elems,
           UErrorCode         *status)
 {
-  int32_t result;
+  uint32_t result;
   if (U_FAILURE(*status)) {
     return UCOL_NULLORDER;
   }
@@ -154,7 +154,7 @@ ucol_previous(UCollationElements *elems,
   }
   else
   {
-    int32_t result;
+    uint32_t result;
 
     if (elems->reset_ && 
         (elems->iteratordata_.pos == elems->iteratordata_.string))
@@ -225,7 +225,7 @@ ucol_getMaxExpansion(const UCollationElements *elems,
                            int32_t            order)
 {
   uint8_t result;
-  UCOL_GETMAXEXPANSION(elems->iteratordata_.coll, order, result);
+  UCOL_GETMAXEXPANSION(elems->iteratordata_.coll, (uint32_t)order, result);
   return result;
 }
  
