@@ -28,10 +28,10 @@
     }                                                           \
     else                                                        \
     {                                                           \
-        c -= 0x0010000;                                         \
-        *(target)++ = (UChar) (0xd800 + (UChar) (c >> 10));     \
-        *(target)++ = (UChar) (0xdc00 + (UChar) (c & 0x3ff));   \
+        target[0] = U16_LEAD(c);								\
+        target[1] = U16_TRAIL(c);							    \
         len=2;                                                  \
+		target +=2;												\
     }                                                           \
 }
 
