@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/bnf/Attic/BigNumberFormatTest.java,v $ 
- * $Date: 2000/12/06 00:01:27 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/05/21 23:31:54 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -395,4 +395,29 @@ public class BigNumberFormatTest extends TestFmwk {
             errln("FAIL");
         }
     }        
+
+    public void TestBigDecimalJ28() {
+        String[] DATA = {
+            "1", "1E0",
+            "-1", "-1E0",
+            "0", "0E0",
+            "12e34", "1.2E35",
+            "-12.3e-45", "-1.23E-44",
+            "0.73e-7", "7.3E-8",
+        };
+        NumberFormat fmt = NumberFormat.getScientificInstance(Locale.US);
+        logln("Pattern: " + ((DecimalFormat)fmt).toPattern());
+        for (int i=0; i<DATA.length; i+=2) {
+            String input = DATA[i];
+            String exp = DATA[i+1];
+            com.ibm.math.BigDecimal bd = new com.ibm.math.BigDecimal(input);
+            String output = fmt.format(bd);
+            if (output.equals(exp)) {
+                logln("input=" + input + " num=" + bd + " output=" + output);
+            } else {
+                errln("FAIL: input=" + input + " num=" + bd + " output=" + output +
+                      " expected=" + exp);
+            }
+        }
+    }
 }
