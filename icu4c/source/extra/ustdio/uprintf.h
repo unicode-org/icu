@@ -31,23 +31,22 @@
  * Struct encapsulating a single uprintf format specification.
  */
 typedef struct u_printf_spec_info {
-  UChar     fSpec;            /* Conversion specification */
+  int32_t    fPrecision;    /* Precision  */
+  int32_t    fWidth;        /* Width  */
 
-  int32_t    fPrecision;        /* Precision  */
-  int32_t    fWidth;            /* Width  */
+  UChar     fSpec;          /* Conversion specification */
+  UChar     fPadChar;       /* Padding character  */
 
-  UChar     fPadChar;        /* Padding character  */
+  UBool     fAlt;           /* # flag  */
+  UBool     fSpace;         /* Space flag  */
+  UBool     fLeft;          /* - flag  */
+  UBool     fShowSign;      /* + flag  */
+  UBool     fZero;          /* 0 flag  */
 
-  UBool     fAlt;            /* # flag  */
-  UBool     fSpace;            /* Space flag  */
-  UBool     fLeft;            /* - flag  */
-  UBool     fShowSign;        /* + flag  */
-  UBool     fZero;            /* 0 flag  */
-
-  UBool     fIsLongDouble;        /* L flag  */
-  UBool     fIsShort;        /* h flag  */
+  UBool     fIsLongDouble;  /* L flag  */
+  UBool     fIsShort;       /* h flag  */
   UBool     fIsLong;        /* l flag  */
-  UBool     fIsLongLong;        /* ll flag  */
+  UBool     fIsLongLong;    /* ll flag  */
 } u_printf_spec_info;
 
 typedef int32_t U_EXPORT2

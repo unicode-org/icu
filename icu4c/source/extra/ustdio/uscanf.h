@@ -30,16 +30,16 @@
  * Struct encapsulating a single uscanf format specification.
  */
 struct u_scanf_spec_info {
-  UChar     fSpec;            /* Format specification  */
+  int32_t    fWidth;        /* Width  */
 
-  int32_t    fWidth;            /* Width  */
+  UChar     fSpec;          /* Format specification  */
 
-  UChar     fPadChar;        /* Padding character  */
+  UChar     fPadChar;       /* Padding character  */
 
-  UBool     fIsLongDouble;        /* L flag  */
-  UBool     fIsShort;        /* h flag  */
+  UBool     fIsLongDouble;  /* L flag  */
+  UBool     fIsShort;       /* h flag  */
   UBool     fIsLong;        /* l flag  */
-  UBool     fIsLongLong;        /* ll flag  */
+  UBool     fIsLongLong;    /* ll flag  */
 };
 typedef struct u_scanf_spec_info u_scanf_spec_info;
 
