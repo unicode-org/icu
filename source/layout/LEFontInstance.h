@@ -38,7 +38,7 @@ public:
      *
      * @return the adjusted character
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual LEUnicode32 mapChar(LEUnicode32 ch) const = 0;
 };
@@ -75,7 +75,7 @@ public:
      * This virtual destructor is here so that the subclass
      * destructors can be invoked through the base class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual inline ~LEFontInstance() {};
 
@@ -150,7 +150,7 @@ public:
      * @return the address of the table in memory, or <code>NULL</code>
      *         if the table doesn't exist.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual const void *getFontTable(LETag tableTag) const = 0;
 
@@ -178,7 +178,7 @@ public:
      *
      * @return the number of design units pre EM.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual le_int32 getUnitsPerEM() const = 0;
 
@@ -253,7 +253,7 @@ public:
      *
      * @return true if the point coordinates could be stored.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual le_bool getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const = 0;
 
@@ -263,7 +263,7 @@ public:
      *
      * @return the pixel width of the EM square
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual float getXPixelsPerEm() const = 0;
 
@@ -273,7 +273,7 @@ public:
      *
      * @return the pixel height of the EM square
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     virtual float getYPixelsPerEm() const = 0;
 
@@ -395,7 +395,7 @@ public:
      *
      * @return the floating point value
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static float fixedToFloat(le_int32 fixed);
 
@@ -407,7 +407,7 @@ public:
      *
      * @return the fixed point value
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     static le_int32 floatToFixed(float theFloat);
 
