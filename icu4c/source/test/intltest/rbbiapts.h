@@ -72,6 +72,7 @@ public:
      *  Tests word break status returns.
      */
     void TestRuleStatus();
+    void TestRuleStatusVec();
 
     void TestBug2190();
 
