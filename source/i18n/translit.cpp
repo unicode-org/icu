@@ -37,7 +37,6 @@
 #include "unicode/unitohex.h"
 #include "unicode/uscript.h"
 
-U_NAMESPACE_BEGIN
 
 // keep in sync with CompoundTransliterator
 static const UChar ID_SEP      = 0x002D; /*-*/
