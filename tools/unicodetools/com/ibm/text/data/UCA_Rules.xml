@@ -2,7 +2,7 @@
 <!--
 UCA Rules
 This file contains the UCA tables for the given version, but transformed into rule syntax.
-Generated:   2002-07-02,10:20:09 GMT [MD]
+Generated:   2002-07-02,11:54:07 GMT [MD]
 NOTE: Since UCA handles canonical equivalents, no composites are necessary
 (except in extensions).
 For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
@@ -3028,6 +3028,17 @@ p<variableTop/>
   <p/>♮
   <p/>♯
   <p/>0
+  <t/>０
+  <t/>㍘
+<x/>点
+  <t/>𝟎
+  <eq/>𝟘
+  <eq/>𝟢
+  <eq/>𝟬
+  <eq/>𝟶
+  <t/>⓪
+  <t/>⁰
+  <t/>₀
   <s/>٠
   <s/>۰
   <s/>०
@@ -3046,41 +3057,8 @@ p<variableTop/>
   <s/>០
   <s/>᠐
   <s/>〇
-  <s/>０
-  <t/>㍘
-<x/>点
-  <t/>𝟎
-  <eq/>𝟘
-  <eq/>𝟢
-  <eq/>𝟬
-  <eq/>𝟶
-  <t/>⓪
-  <t/>⁰
-  <t/>₀
   <p/>1
-  <s/>١
-  <s/>۱
-  <s/>፩
-  <s/>१
-  <s/>১
-  <s/>৴
-  <s/>੧
-  <s/>૧
-  <s/>୧
-  <s/>௧
-  <s/>౧
-  <s/>೧
-  <s/>൧
-  <s/>๑
-  <s/>໑
-  <s/>༡
-  <eq/>༪
-  <s/>၁
-  <s/>១
-  <s/>᠑
-  <s/>〡
-  <s/>𐌠
-  <s/>１
+  <t/>１
   <t/>⒈
 <x/>.
   <t/>⒑
@@ -3181,10 +3159,7 @@ p<variableTop/>
 <x/>8
   <t/>⑲
 <x/>9
-  <s/>❶
-  <s/>➀
-  <s/>➊
-  <s/>¹
+  <t/>¹
   <t/>₁
   <t/>⅟
 <x/>⁄
@@ -3200,29 +3175,33 @@ p<variableTop/>
 <x/>⁄6
   <t/>⅛
 <x/>⁄8
+  <s/>❶
+  <s/>➀
+  <s/>➊
+  <s/>١
+  <s/>۱
+  <s/>፩
+  <s/>१
+  <s/>১
+  <s/>৴
+  <s/>੧
+  <s/>૧
+  <s/>୧
+  <s/>௧
+  <s/>౧
+  <s/>೧
+  <s/>൧
+  <s/>๑
+  <s/>໑
+  <s/>༡
+  <eq/>༪
+  <s/>၁
+  <s/>១
+  <s/>᠑
+  <s/>〡
+  <s/>𐌠
   <p/>2
-  <s/>٢
-  <s/>۲
-  <s/>፪
-  <s/>२
-  <s/>২
-  <s/>৵
-  <s/>੨
-  <s/>૨
-  <s/>୨
-  <s/>௨
-  <s/>౨
-  <s/>೨
-  <s/>൨
-  <s/>๒
-  <s/>໒
-  <s/>༢
-  <eq/>༫
-  <s/>၂
-  <s/>២
-  <s/>᠒
-  <s/>〢
-  <s/>２
+  <t/>２
   <t/>⒉
 <x/>.
   <t/>⒛
@@ -3271,16 +3250,67 @@ p<variableTop/>
   <t/>②
   <t/>⑳
 <x/>0
-  <s/>❷
-  <s/>➁
-  <s/>➋
-  <s/>²
+  <t/>²
   <t/>₂
   <t/>⅔
 <x/>⁄3
   <t/>⅖
 <x/>⁄5
+  <s/>❷
+  <s/>➁
+  <s/>➋
+  <s/>٢
+  <s/>۲
+  <s/>፪
+  <s/>२
+  <s/>২
+  <s/>৵
+  <s/>੨
+  <s/>૨
+  <s/>୨
+  <s/>௨
+  <s/>౨
+  <s/>೨
+  <s/>൨
+  <s/>๒
+  <s/>໒
+  <s/>༢
+  <eq/>༫
+  <s/>၂
+  <s/>២
+  <s/>᠒
+  <s/>〢
   <p/>3
+  <t/>３
+  <t/>⒊
+<x/>.
+  <t/>㏽
+<x/>0日
+  <t/>㏾
+<x/>1日
+  <t/>㏢
+<x/>日
+  <t/>㋂
+<x/>月
+  <t/>㍛
+<x/>点
+  <t/>𝟑
+  <eq/>𝟛
+  <eq/>𝟥
+  <eq/>𝟯
+  <eq/>𝟹
+  <t/>③
+  <t/>³
+  <t/>₃
+  <t/>¾
+<x/>⁄4
+  <t/>⅗
+<x/>⁄5
+  <t/>⅜
+<x/>⁄8
+  <s/>❸
+  <s/>➂
+  <s/>➌
   <s/>٣
   <s/>۳
   <s/>፫
@@ -3302,37 +3332,29 @@ p<variableTop/>
   <s/>៣
   <s/>᠓
   <s/>〣
-  <s/>３
-  <t/>⒊
-<x/>.
-  <t/>㏽
-<x/>0日
-  <t/>㏾
-<x/>1日
-  <t/>㏢
-<x/>日
-  <t/>㋂
-<x/>月
-  <t/>㍛
-<x/>点
-  <t/>𝟑
-  <eq/>𝟛
-  <eq/>𝟥
-  <eq/>𝟯
-  <eq/>𝟹
-  <t/>③
-  <s/>❸
-  <s/>➂
-  <s/>➌
-  <s/>³
-  <t/>₃
-  <t/>¾
-<x/>⁄4
-  <t/>⅗
-<x/>⁄5
-  <t/>⅜
-<x/>⁄8
   <p/>4
+  <t/>４
+  <t/>⒋
+<x/>.
+  <t/>㏣
+<x/>日
+  <t/>㋃
+<x/>月
+  <t/>㍜
+<x/>点
+  <t/>𝟒
+  <eq/>𝟜
+  <eq/>𝟦
+  <eq/>𝟰
+  <eq/>𝟺
+  <t/>④
+  <t/>⁴
+  <t/>₄
+  <t/>⅘
+<x/>⁄5
+  <s/>❹
+  <s/>➃
+  <s/>➍
   <s/>٤
   <s/>۴
   <s/>፬
@@ -3354,29 +3376,31 @@ p<variableTop/>
   <s/>៤
   <s/>᠔
   <s/>〤
-  <s/>４
-  <t/>⒋
-<x/>.
-  <t/>㏣
-<x/>日
-  <t/>㋃
-<x/>月
-  <t/>㍜
-<x/>点
-  <t/>𝟒
-  <eq/>𝟜
-  <eq/>𝟦
-  <eq/>𝟰
-  <eq/>𝟺
-  <t/>④
-  <s/>❹
-  <s/>➃
-  <s/>➍
-  <s/>⁴
-  <t/>₄
-  <t/>⅘
-<x/>⁄5
   <p/>5
+  <t/>５
+  <t/>⒌
+<x/>.
+  <t/>㏤
+<x/>日
+  <t/>㋄
+<x/>月
+  <t/>㍝
+<x/>点
+  <t/>𝟓
+  <eq/>𝟝
+  <eq/>𝟧
+  <eq/>𝟱
+  <eq/>𝟻
+  <t/>⑤
+  <t/>⁵
+  <t/>₅
+  <t/>⅚
+<x/>⁄6
+  <t/>⅝
+<x/>⁄8
+  <s/>❺
+  <s/>➄
+  <s/>➎
   <s/>٥
   <s/>۵
   <s/>፭
@@ -3398,31 +3422,27 @@ p<variableTop/>
   <s/>᠕
   <s/>〥
   <s/>𐌡
-  <s/>５
-  <t/>⒌
-<x/>.
-  <t/>㏤
-<x/>日
-  <t/>㋄
-<x/>月
-  <t/>㍝
-<x/>点
-  <t/>𝟓
-  <eq/>𝟝
-  <eq/>𝟧
-  <eq/>𝟱
-  <eq/>𝟻
-  <t/>⑤
-  <s/>❺
-  <s/>➄
-  <s/>➎
-  <s/>⁵
-  <t/>₅
-  <t/>⅚
-<x/>⁄6
-  <t/>⅝
-<x/>⁄8
   <p/>6
+  <t/>６
+  <t/>⒍
+<x/>.
+  <t/>㏥
+<x/>日
+  <t/>㋅
+<x/>月
+  <t/>㍞
+<x/>点
+  <t/>𝟔
+  <eq/>𝟞
+  <eq/>𝟨
+  <eq/>𝟲
+  <eq/>𝟼
+  <t/>⑥
+  <t/>⁶
+  <t/>₆
+  <s/>❻
+  <s/>➅
+  <s/>➏
   <s/>٦
   <s/>۶
   <s/>፮
@@ -3443,27 +3463,29 @@ p<variableTop/>
   <s/>៦
   <s/>᠖
   <s/>〦
-  <s/>６
-  <t/>⒍
-<x/>.
-  <t/>㏥
-<x/>日
-  <t/>㋅
-<x/>月
-  <t/>㍞
-<x/>点
-  <t/>𝟔
-  <eq/>𝟞
-  <eq/>𝟨
-  <eq/>𝟲
-  <eq/>𝟼
-  <t/>⑥
-  <s/>❻
-  <s/>➅
-  <s/>➏
-  <s/>⁶
-  <t/>₆
   <p/>7
+  <t/>７
+  <t/>⒎
+<x/>.
+  <t/>㏦
+<x/>日
+  <t/>㋆
+<x/>月
+  <t/>㍟
+<x/>点
+  <t/>𝟕
+  <eq/>𝟟
+  <eq/>𝟩
+  <eq/>𝟳
+  <eq/>𝟽
+  <t/>⑦
+  <t/>⁷
+  <t/>₇
+  <t/>⅞
+<x/>⁄8
+  <s/>❼
+  <s/>➆
+  <s/>➐
   <s/>٧
   <s/>۷
   <s/>፯
@@ -3484,29 +3506,27 @@ p<variableTop/>
   <s/>៧
   <s/>᠗
   <s/>〧
-  <s/>７
-  <t/>⒎
-<x/>.
-  <t/>㏦
-<x/>日
-  <t/>㋆
-<x/>月
-  <t/>㍟
-<x/>点
-  <t/>𝟕
-  <eq/>𝟟
-  <eq/>𝟩
-  <eq/>𝟳
-  <eq/>𝟽
-  <t/>⑦
-  <s/>❼
-  <s/>➆
-  <s/>➐
-  <s/>⁷
-  <t/>₇
-  <t/>⅞
-<x/>⁄8
   <p/>8
+  <t/>８
+  <t/>⒏
+<x/>.
+  <t/>㏧
+<x/>日
+  <t/>㋇
+<x/>月
+  <t/>㍠
+<x/>点
+  <t/>𝟖
+  <eq/>𝟠
+  <eq/>𝟪
+  <eq/>𝟴
+  <eq/>𝟾
+  <t/>⑧
+  <t/>⁸
+  <t/>₈
+  <s/>❽
+  <s/>➇
+  <s/>➑
   <s/>٨
   <s/>۸
   <s/>፰
@@ -3527,27 +3547,27 @@ p<variableTop/>
   <s/>៨
   <s/>᠘
   <s/>〨
-  <s/>８
-  <t/>⒏
-<x/>.
-  <t/>㏧
-<x/>日
-  <t/>㋇
-<x/>月
-  <t/>㍠
-<x/>点
-  <t/>𝟖
-  <eq/>𝟠
-  <eq/>𝟪
-  <eq/>𝟴
-  <eq/>𝟾
-  <t/>⑧
-  <s/>❽
-  <s/>➇
-  <s/>➑
-  <s/>⁸
-  <t/>₈
   <p/>9
+  <t/>９
+  <t/>⒐
+<x/>.
+  <t/>㏨
+<x/>日
+  <t/>㋈
+<x/>月
+  <t/>㍡
+<x/>点
+  <t/>𝟗
+  <eq/>𝟡
+  <eq/>𝟫
+  <eq/>𝟵
+  <eq/>𝟿
+  <t/>⑨
+  <t/>⁹
+  <t/>₉
+  <s/>❾
+  <s/>➈
+  <s/>➒
   <s/>٩
   <s/>۹
   <s/>፱
@@ -3568,26 +3588,6 @@ p<variableTop/>
   <s/>៩
   <s/>᠙
   <s/>〩
-  <s/>９
-  <t/>⒐
-<x/>.
-  <t/>㏨
-<x/>日
-  <t/>㋈
-<x/>月
-  <t/>㍡
-<x/>点
-  <t/>𝟗
-  <eq/>𝟡
-  <eq/>𝟫
-  <eq/>𝟵
-  <eq/>𝟿
-  <t/>⑨
-  <s/>❾
-  <s/>➈
-  <s/>➒
-  <s/>⁹
-  <t/>₉
   <p/>a
   <t/>ａ
   <t/>℀
@@ -4376,9 +4376,7 @@ p<variableTop/>
   <t/>Ŋ
   <p/>o
   <t/>ｏ
-  <s/>œ
-<x/>e
-  <s/>ℴ
+  <t/>ℴ
   <eq/>𝐨
   <eq/>𝑜
   <eq/>𝒐
@@ -4394,9 +4392,7 @@ p<variableTop/>
   <t/>ⓞ
   <t/>O
   <t/>Ｏ
-  <s/>Œ
-<x/>e
-  <s/>𝐎
+  <t/>𝐎
   <eq/>𝑂
   <eq/>𝑶
   <eq/>𝒪
@@ -4413,6 +4409,10 @@ p<variableTop/>
   <t/>º
   <t/>㍵
 <x/>V
+  <s/>œ
+<x/>e
+  <t/>Œ
+<x/>e
   <p/>ɶ
   <p/>ø
   <t/>Ø
@@ -4572,14 +4572,7 @@ p<variableTop/>
   <t/>ｓ
   <t/>ﬆ
 <x/>t
-  <s/>ß
-<x/>s
-  <s/>ſ
-  <t/>ẛ
-<x/>̇
-  <t/>ﬅ
-<x/>t
-  <s/>𝐬
+  <t/>𝐬
   <eq/>𝑠
   <eq/>𝒔
   <eq/>𝓈
@@ -4616,6 +4609,13 @@ p<variableTop/>
 <x/>r
   <t/>㏜
 <x/>v
+  <s/>ß
+<x/>s
+  <s/>ſ
+  <t/>ẛ
+<x/>̇
+  <t/>ﬅ
+<x/>t
   <p/>ʂ
   <p/>ʃ
   <t/>Ʃ
@@ -5356,9 +5356,9 @@ p<variableTop/>
   <p/>в
   <t/>В
   <p/>г
+  <t/>Г
   <s/>ґ
-  <s/>Г
-  <s/>Ґ
+  <t/>Ґ
   <p/>ғ
   <t/>Ғ
   <p/>ҕ
@@ -5780,8 +5780,8 @@ p<variableTop/>
   <t/>ﬨ
   <p/>ء
   <eq/>ٴ
+  <t/>ﺀ
   <s/>۽
-  <s/>ﺀ
   <p/>آ
   <t/>ﺂ
   <t/>ﺁ
@@ -6813,8 +6813,7 @@ p<variableTop/>
   <p/>ڷ
   <p/>ڸ
   <p/>م
-  <s/>۾
-  <s/>ﻣ
+  <t/>ﻣ
   <t/>ﳎ
 <x/>ج
   <t/>ﶌ
@@ -6866,6 +6865,7 @@ p<variableTop/>
 <x/>ى
   <t/>ﱊ
 <x/>ي
+  <s/>۾
   <p/>ن
   <t/>ﻧ
   <t/>ﳒ
@@ -10465,22 +10465,74 @@ p<variableTop/>
   <t/>𐐤
   <p/>𐑍
   <t/>𐐥
+<reset/>一<!-- U+4E00 CJK UNIFIED IDEOGRAPH-4E00-->
+  <t/>⼀
+  <t/>㊀
+  <t/>㆒
+<reset/>丁<!-- U+4E01 CJK UNIFIED IDEOGRAPH-4E01-->
+  <t/>㆜
+<reset/>七<!-- U+4E03 CJK UNIFIED IDEOGRAPH-4E03-->
+  <t/>㊆
+<reset/>三<!-- U+4E09 CJK UNIFIED IDEOGRAPH-4E09-->
+  <t/>㊂
+  <t/>㆔
+<reset/>上<!-- U+4E0A CJK UNIFIED IDEOGRAPH-4E0A-->
+  <t/>㊤
+  <t/>㆖
+<reset/>下<!-- U+4E0B CJK UNIFIED IDEOGRAPH-4E0B-->
+  <t/>㊦
+  <t/>㆘
+<reset/>丙<!-- U+4E19 CJK UNIFIED IDEOGRAPH-4E19-->
+  <t/>㆛
+<reset/>丨<!-- U+4E28 CJK UNIFIED IDEOGRAPH-4E28-->
+  <t/>⼁
 <reset/>丬<!-- U+4E2C CJK UNIFIED IDEOGRAPH-4E2C-->
   <eq/>⺦
+<reset/>中<!-- U+4E2D CJK UNIFIED IDEOGRAPH-4E2D-->
+  <t/>㊥
+  <t/>㆗
+<reset/>丶<!-- U+4E36 CJK UNIFIED IDEOGRAPH-4E36-->
+  <t/>⼂
+  <t/>⺀
 <reset/>丸<!-- U+4E38 CJK UNIFIED IDEOGRAPH-4E38-->
   <eq/>丸
 <reset/>丽<!-- U+4E3D CJK UNIFIED IDEOGRAPH-4E3D-->
   <eq/>丽
+<reset/>丿<!-- U+4E3F CJK UNIFIED IDEOGRAPH-4E3F-->
+  <t/>⼃
 <reset/>乁<!-- U+4E41 CJK UNIFIED IDEOGRAPH-4E41-->
   <eq/>乁
+<reset/>乙<!-- U+4E59 CJK UNIFIED IDEOGRAPH-4E59-->
+  <t/>⼄
+  <t/>⺄
+  <t/>㆚
 <reset/>乚<!-- U+4E5A CJK UNIFIED IDEOGRAPH-4E5A-->
   <eq/>⺃
 <reset/>乛<!-- U+4E5B CJK UNIFIED IDEOGRAPH-4E5B-->
   <eq/>⺂
+<reset/>九<!-- U+4E5D CJK UNIFIED IDEOGRAPH-4E5D-->
+  <t/>㊈
+<reset/>亅<!-- U+4E85 CJK UNIFIED IDEOGRAPH-4E85-->
+  <t/>⼅
+<reset/>二<!-- U+4E8C CJK UNIFIED IDEOGRAPH-4E8C-->
+  <t/>⼆
+  <t/>㊁
+  <t/>㆓
+<reset/>五<!-- U+4E94 CJK UNIFIED IDEOGRAPH-4E94-->
+  <t/>㊄
+<reset/>亠<!-- U+4EA0 CJK UNIFIED IDEOGRAPH-4EA0-->
+  <t/>⼇
+<reset/>人<!-- U+4EBA CJK UNIFIED IDEOGRAPH-4EBA-->
+  <t/>⼈
+  <t/>㆟
 <reset/>亻<!-- U+4EBB CJK UNIFIED IDEOGRAPH-4EBB-->
   <eq/>⺅
 <reset/>仌<!-- U+4ECC CJK UNIFIED IDEOGRAPH-4ECC-->
   <eq/>仌
+<reset/>企<!-- U+4F01 CJK UNIFIED IDEOGRAPH-4F01-->
+  <t/>㊭
+<reset/>休<!-- U+4F11 CJK UNIFIED IDEOGRAPH-4F11-->
+  <t/>㊡
 <reset/>你<!-- U+4F60 CJK UNIFIED IDEOGRAPH-4F60-->
   <eq/>你
 <reset/>侮<!-- U+4FAE CJK UNIFIED IDEOGRAPH-4FAE-->
@@ -10497,32 +10549,59 @@ p<variableTop/>
   <eq/>像
 <reset/>僧<!-- U+50E7 CJK UNIFIED IDEOGRAPH-50E7-->
   <eq/>僧
+<reset/>優<!-- U+512A CJK UNIFIED IDEOGRAPH-512A-->
+  <t/>㊝
+<reset/>儿<!-- U+513F CJK UNIFIED IDEOGRAPH-513F-->
+  <t/>⼉
 <reset/>免<!-- U+514D CJK UNIFIED IDEOGRAPH-514D-->
   <eq/>免
 <reset/>兔<!-- U+5154 CJK UNIFIED IDEOGRAPH-5154-->
   <eq/>兔
 <reset/>兤<!-- U+5164 CJK UNIFIED IDEOGRAPH-5164-->
   <eq/>兤
+<reset/>入<!-- U+5165 CJK UNIFIED IDEOGRAPH-5165-->
+  <t/>⼊
 <reset/>內<!-- U+5167 CJK UNIFIED IDEOGRAPH-5167-->
   <eq/>內
+<reset/>八<!-- U+516B CJK UNIFIED IDEOGRAPH-516B-->
+  <t/>⼋
+  <t/>㊇
+<reset/>六<!-- U+516D CJK UNIFIED IDEOGRAPH-516D-->
+  <t/>㊅
 <reset/>具<!-- U+5177 CJK UNIFIED IDEOGRAPH-5177-->
   <eq/>具
+<reset/>冂<!-- U+5182 CJK UNIFIED IDEOGRAPH-5182-->
+  <t/>⼌
+  <t/>⺆
 <reset/>再<!-- U+518D CJK UNIFIED IDEOGRAPH-518D-->
   <eq/>再
 <reset/>冒<!-- U+5192 CJK UNIFIED IDEOGRAPH-5192-->
   <eq/>冒
 <reset/>冕<!-- U+5195 CJK UNIFIED IDEOGRAPH-5195-->
   <eq/>冕
+<reset/>冖<!-- U+5196 CJK UNIFIED IDEOGRAPH-5196-->
+  <t/>⼍
 <reset/>冗<!-- U+5197 CJK UNIFIED IDEOGRAPH-5197-->
   <eq/>冗
+<reset/>写<!-- U+5199 CJK UNIFIED IDEOGRAPH-5199-->
+  <t/>㊢
 <reset/>冤<!-- U+51A4 CJK UNIFIED IDEOGRAPH-51A4-->
   <eq/>冤
+<reset/>冫<!-- U+51AB CJK UNIFIED IDEOGRAPH-51AB-->
+  <t/>⼎
 <reset/>冬<!-- U+51AC CJK UNIFIED IDEOGRAPH-51AC-->
   <eq/>冬
 <reset/>况<!-- U+51B5 CJK UNIFIED IDEOGRAPH-51B5-->
   <eq/>况
+<reset/>几<!-- U+51E0 CJK UNIFIED IDEOGRAPH-51E0-->
+  <t/>⼏
+  <t/>⺇
 <reset/>凵<!-- U+51F5 CJK UNIFIED IDEOGRAPH-51F5-->
   <eq/>凵
+  <t/>⼐
+<reset/>刀<!-- U+5200 CJK UNIFIED IDEOGRAPH-5200-->
+  <t/>⼑
+  <t/>⺈
 <reset/>刂<!-- U+5202 CJK UNIFIED IDEOGRAPH-5202-->
   <eq/>⺉
 <reset/>刃<!-- U+5203 CJK UNIFIED IDEOGRAPH-5203-->
@@ -10537,28 +10616,60 @@ p<variableTop/>
   <eq/>割
 <reset/>剷<!-- U+5277 CJK UNIFIED IDEOGRAPH-5277-->
   <eq/>剷
+<reset/>力<!-- U+529B CJK UNIFIED IDEOGRAPH-529B-->
+  <t/>⼒
 <reset/>劳<!-- U+52B3 CJK UNIFIED IDEOGRAPH-52B3-->
   <eq/>劳
+<reset/>労<!-- U+52B4 CJK UNIFIED IDEOGRAPH-52B4-->
+  <t/>㊘
 <reset/>勇<!-- U+52C7 CJK UNIFIED IDEOGRAPH-52C7-->
   <eq/>勇
 <reset/>勉<!-- U+52C9 CJK UNIFIED IDEOGRAPH-52C9-->
   <eq/>勉
 <reset/>勤<!-- U+52E4 CJK UNIFIED IDEOGRAPH-52E4-->
   <eq/>勤
+<reset/>勹<!-- U+52F9 CJK UNIFIED IDEOGRAPH-52F9-->
+  <t/>⼓
 <reset/>勺<!-- U+52FA CJK UNIFIED IDEOGRAPH-52FA-->
   <eq/>勺
 <reset/>包<!-- U+5305 CJK UNIFIED IDEOGRAPH-5305-->
   <eq/>包
 <reset/>匆<!-- U+5306 CJK UNIFIED IDEOGRAPH-5306-->
   <eq/>匆
+<reset/>匕<!-- U+5315 CJK UNIFIED IDEOGRAPH-5315-->
+  <t/>⼔
 <reset/>北<!-- U+5317 CJK UNIFIED IDEOGRAPH-5317-->
   <eq/>北
+<reset/>匚<!-- U+531A CJK UNIFIED IDEOGRAPH-531A-->
+  <t/>⼕
+<reset/>匸<!-- U+5338 CJK UNIFIED IDEOGRAPH-5338-->
+  <t/>⼖
+<reset/>医<!-- U+533B CJK UNIFIED IDEOGRAPH-533B-->
+  <t/>㊩
+<reset/>十<!-- U+5341 CJK UNIFIED IDEOGRAPH-5341-->
+  <t/>⼗
+  <eq/>〸
+  <t/>㊉
+<reset/>卄<!-- U+5344 CJK UNIFIED IDEOGRAPH-5344-->
+  <t/>〹
+<reset/>卅<!-- U+5345 CJK UNIFIED IDEOGRAPH-5345-->
+  <t/>〺
 <reset/>卉<!-- U+5349 CJK UNIFIED IDEOGRAPH-5349-->
   <eq/>卉
 <reset/>卑<!-- U+5351 CJK UNIFIED IDEOGRAPH-5351-->
   <eq/>卑
+<reset/>協<!-- U+5354 CJK UNIFIED IDEOGRAPH-5354-->
+  <t/>㊯
 <reset/>博<!-- U+535A CJK UNIFIED IDEOGRAPH-535A-->
   <eq/>博
+<reset/>卜<!-- U+535C CJK UNIFIED IDEOGRAPH-535C-->
+  <t/>⼘
+  <t/>⺊
+<reset/>卩<!-- U+5369 CJK UNIFIED IDEOGRAPH-5369-->
+  <t/>⼙
+  <t/>⺋
+<reset/>印<!-- U+5370 CJK UNIFIED IDEOGRAPH-5370-->
+  <t/>㊞
 <reset/>即<!-- U+5373 CJK UNIFIED IDEOGRAPH-5373-->
   <eq/>即
 <reset/>卽<!-- U+537D CJK UNIFIED IDEOGRAPH-537D-->
@@ -10567,16 +10678,29 @@ p<variableTop/>
   <eq/>卿
   <eq/>卿
   <eq/>卿
+<reset/>厂<!-- U+5382 CJK UNIFIED IDEOGRAPH-5382-->
+  <t/>⼚
+  <t/>⺁
+<reset/>厶<!-- U+53B6 CJK UNIFIED IDEOGRAPH-53B6-->
+  <t/>⼛
+<reset/>又<!-- U+53C8 CJK UNIFIED IDEOGRAPH-53C8-->
+  <t/>⼜
 <reset/>及<!-- U+53CA CJK UNIFIED IDEOGRAPH-53CA-->
   <eq/>及
 <reset/>叟<!-- U+53DF CJK UNIFIED IDEOGRAPH-53DF-->
   <eq/>叟
+<reset/>口<!-- U+53E3 CJK UNIFIED IDEOGRAPH-53E3-->
+  <t/>⼝
 <reset/>叫<!-- U+53EB CJK UNIFIED IDEOGRAPH-53EB-->
   <eq/>叫
 <reset/>叱<!-- U+53F1 CJK UNIFIED IDEOGRAPH-53F1-->
   <eq/>叱
+<reset/>右<!-- U+53F3 CJK UNIFIED IDEOGRAPH-53F3-->
+  <t/>㊨
 <reset/>吆<!-- U+5406 CJK UNIFIED IDEOGRAPH-5406-->
   <eq/>吆
+<reset/>名<!-- U+540D CJK UNIFIED IDEOGRAPH-540D-->
+  <t/>㊔
 <reset/>吸<!-- U+5438 CJK UNIFIED IDEOGRAPH-5438-->
   <eq/>吸
 <reset/>呈<!-- U+5448 CJK UNIFIED IDEOGRAPH-5448-->
@@ -10612,10 +10736,20 @@ p<variableTop/>
   <eq/>噑
 <reset/>噴<!-- U+5674 CJK UNIFIED IDEOGRAPH-5674-->
   <eq/>噴
+<reset/>囗<!-- U+56D7 CJK UNIFIED IDEOGRAPH-56D7-->
+  <t/>⼞
+<reset/>四<!-- U+56DB CJK UNIFIED IDEOGRAPH-56DB-->
+  <t/>㊃
+  <t/>㆕
 <reset/>圖<!-- U+5716 CJK UNIFIED IDEOGRAPH-5716-->
   <eq/>圖
 <reset/>圗<!-- U+5717 CJK UNIFIED IDEOGRAPH-5717-->
   <eq/>圗
+<reset/>土<!-- U+571F CJK UNIFIED IDEOGRAPH-571F-->
+  <t/>⼟
+  <t/>㊏
+<reset/>地<!-- U+5730 CJK UNIFIED IDEOGRAPH-5730-->
+  <t/>㆞
 <reset/>型<!-- U+578B CJK UNIFIED IDEOGRAPH-578B-->
   <eq/>型
 <reset/>城<!-- U+57CE CJK UNIFIED IDEOGRAPH-57CE-->
@@ -10630,20 +10764,39 @@ p<variableTop/>
   <eq/>堲
 <reset/>墬<!-- U+58AC CJK UNIFIED IDEOGRAPH-58AC-->
   <eq/>墬
+<reset/>士<!-- U+58EB CJK UNIFIED IDEOGRAPH-58EB-->
+  <t/>⼠
 <reset/>壮<!-- U+58EE CJK UNIFIED IDEOGRAPH-58EE-->
   <eq/>壮
 <reset/>売<!-- U+58F2 CJK UNIFIED IDEOGRAPH-58F2-->
   <eq/>売
 <reset/>壷<!-- U+58F7 CJK UNIFIED IDEOGRAPH-58F7-->
   <eq/>壷
+<reset/>夂<!-- U+5902 CJK UNIFIED IDEOGRAPH-5902-->
+  <t/>⼡
 <reset/>夆<!-- U+5906 CJK UNIFIED IDEOGRAPH-5906-->
   <eq/>夆
+<reset/>夊<!-- U+590A CJK UNIFIED IDEOGRAPH-590A-->
+  <t/>⼢
+<reset/>夕<!-- U+5915 CJK UNIFIED IDEOGRAPH-5915-->
+  <t/>⼣
 <reset/>多<!-- U+591A CJK UNIFIED IDEOGRAPH-591A-->
   <eq/>多
+<reset/>夜<!-- U+591C CJK UNIFIED IDEOGRAPH-591C-->
+  <t/>㊰
 <reset/>夢<!-- U+5922 CJK UNIFIED IDEOGRAPH-5922-->
   <eq/>夢
+<reset/>大<!-- U+5927 CJK UNIFIED IDEOGRAPH-5927-->
+  <t/>⼤
+  <t/>㍽
+<x/>正
+<reset/>天<!-- U+5929 CJK UNIFIED IDEOGRAPH-5929-->
+  <t/>㆝
 <reset/>奢<!-- U+5962 CJK UNIFIED IDEOGRAPH-5962-->
   <eq/>奢
+<reset/>女<!-- U+5973 CJK UNIFIED IDEOGRAPH-5973-->
+  <t/>⼥
+  <t/>㊛
 <reset/>姘<!-- U+59D8 CJK UNIFIED IDEOGRAPH-59D8-->
   <eq/>姘
 <reset/>姬<!-- U+59EC CJK UNIFIED IDEOGRAPH-59EC-->
@@ -10661,6 +10814,14 @@ p<variableTop/>
 <reset/>嬾<!-- U+5B3E CJK UNIFIED IDEOGRAPH-5B3E-->
   <eq/>嬾
   <eq/>嬾
+<reset/>子<!-- U+5B50 CJK UNIFIED IDEOGRAPH-5B50-->
+  <t/>⼦
+<reset/>学<!-- U+5B66 CJK UNIFIED IDEOGRAPH-5B66-->
+  <t/>㊫
+<reset/>宀<!-- U+5B80 CJK UNIFIED IDEOGRAPH-5B80-->
+  <t/>⼧
+<reset/>宗<!-- U+5B97 CJK UNIFIED IDEOGRAPH-5B97-->
+  <t/>㊪
 <reset/>寃<!-- U+5BC3 CJK UNIFIED IDEOGRAPH-5BC3-->
   <eq/>寃
 <reset/>寘<!-- U+5BD8 CJK UNIFIED IDEOGRAPH-5BD8-->
@@ -10669,19 +10830,33 @@ p<variableTop/>
   <eq/>寧
 <reset/>寳<!-- U+5BF3 CJK UNIFIED IDEOGRAPH-5BF3-->
   <eq/>寳
+<reset/>寸<!-- U+5BF8 CJK UNIFIED IDEOGRAPH-5BF8-->
+  <t/>⼨
 <reset/>寿<!-- U+5BFF CJK UNIFIED IDEOGRAPH-5BFF-->
   <eq/>寿
 <reset/>将<!-- U+5C06 CJK UNIFIED IDEOGRAPH-5C06-->
   <eq/>将
+<reset/>小<!-- U+5C0F CJK UNIFIED IDEOGRAPH-5C0F-->
+  <t/>⼩
+  <t/>⺌
+  <t/>⺍
 <reset/>尢<!-- U+5C22 CJK UNIFIED IDEOGRAPH-5C22-->
   <eq/>⺐
   <eq/>尢
+  <t/>⼪
+  <t/>⺎
 <reset/>尣<!-- U+5C23 CJK UNIFIED IDEOGRAPH-5C23-->
   <eq/>⺏
+  <t/>⺑
+<reset/>尸<!-- U+5C38 CJK UNIFIED IDEOGRAPH-5C38-->
+  <t/>⼫
 <reset/>屠<!-- U+5C60 CJK UNIFIED IDEOGRAPH-5C60-->
   <eq/>屠
 <reset/>屮<!-- U+5C6E CJK UNIFIED IDEOGRAPH-5C6E-->
   <eq/>屮
+  <t/>⼬
+<reset/>山<!-- U+5C71 CJK UNIFIED IDEOGRAPH-5C71-->
+  <t/>⼭
 <reset/>岍<!-- U+5C8D CJK UNIFIED IDEOGRAPH-5C8D-->
   <eq/>岍
 <reset/>峀<!-- U+5CC0 CJK UNIFIED IDEOGRAPH-5CC0-->
@@ -10696,22 +10871,40 @@ p<variableTop/>
   <eq/>嵼
 <reset/>嶲<!-- U+5DB2 CJK UNIFIED IDEOGRAPH-5DB2-->
   <eq/>嶲
+<reset/>巛<!-- U+5DDB CJK UNIFIED IDEOGRAPH-5DDB-->
+  <t/>⼮
 <reset/>巡<!-- U+5DE1 CJK UNIFIED IDEOGRAPH-5DE1-->
   <eq/>巡
 <reset/>巢<!-- U+5DE2 CJK UNIFIED IDEOGRAPH-5DE2-->
   <eq/>巢
+<reset/>工<!-- U+5DE5 CJK UNIFIED IDEOGRAPH-5DE5-->
+  <t/>⼯
+<reset/>左<!-- U+5DE6 CJK UNIFIED IDEOGRAPH-5DE6-->
+  <t/>㊧
+<reset/>己<!-- U+5DF1 CJK UNIFIED IDEOGRAPH-5DF1-->
+  <t/>⼰
 <reset/>巳<!-- U+5DF3 CJK UNIFIED IDEOGRAPH-5DF3-->
   <eq/>⺒
 <reset/>巽<!-- U+5DFD CJK UNIFIED IDEOGRAPH-5DFD-->
   <eq/>巽
+<reset/>巾<!-- U+5DFE CJK UNIFIED IDEOGRAPH-5DFE-->
+  <t/>⼱
 <reset/>帨<!-- U+5E28 CJK UNIFIED IDEOGRAPH-5E28-->
   <eq/>帨
 <reset/>帽<!-- U+5E3D CJK UNIFIED IDEOGRAPH-5E3D-->
   <eq/>帽
 <reset/>幩<!-- U+5E69 CJK UNIFIED IDEOGRAPH-5E69-->
   <eq/>幩
+<reset/>干<!-- U+5E72 CJK UNIFIED IDEOGRAPH-5E72-->
+  <t/>⼲
+<reset/>平<!-- U+5E73 CJK UNIFIED IDEOGRAPH-5E73-->
+  <p/>㍻
+<x/>成
 <reset/>幺<!-- U+5E7A CJK UNIFIED IDEOGRAPH-5E7A-->
   <eq/>⺓
+  <t/>⼳
+<reset/>广<!-- U+5E7F CJK UNIFIED IDEOGRAPH-5E7F-->
+  <t/>⼴
 <reset/>庰<!-- U+5EB0 CJK UNIFIED IDEOGRAPH-5EB0-->
   <eq/>庰
 <reset/>庳<!-- U+5EB3 CJK UNIFIED IDEOGRAPH-5EB3-->
@@ -10720,21 +10913,38 @@ p<variableTop/>
   <eq/>庶
 <reset/>廊<!-- U+5ECA CJK UNIFIED IDEOGRAPH-5ECA-->
   <eq/>廊
+<reset/>廴<!-- U+5EF4 CJK UNIFIED IDEOGRAPH-5EF4-->
+  <t/>⼵
 <reset/>廾<!-- U+5EFE CJK UNIFIED IDEOGRAPH-5EFE-->
   <eq/>廾
+  <t/>⼶
+<reset/>弋<!-- U+5F0B CJK UNIFIED IDEOGRAPH-5F0B-->
+  <t/>⼷
+<reset/>弓<!-- U+5F13 CJK UNIFIED IDEOGRAPH-5F13-->
+  <t/>⼸
 <reset/>弢<!-- U+5F22 CJK UNIFIED IDEOGRAPH-5F22-->
   <eq/>弢
   <eq/>弢
 <reset/>弳<!-- U+5F33 CJK UNIFIED IDEOGRAPH-5F33-->
   <eq/>当
+<reset/>彐<!-- U+5F50 CJK UNIFIED IDEOGRAPH-5F50-->
+  <t/>⼹
+  <t/>⺕
 <reset/>彑<!-- U+5F51 CJK UNIFIED IDEOGRAPH-5F51-->
   <eq/>⺔
+<reset/>彡<!-- U+5F61 CJK UNIFIED IDEOGRAPH-5F61-->
+  <t/>⼺
 <reset/>形<!-- U+5F62 CJK UNIFIED IDEOGRAPH-5F62-->
   <eq/>形
 <reset/>彫<!-- U+5F6B CJK UNIFIED IDEOGRAPH-5F6B-->
   <eq/>彫
+<reset/>彳<!-- U+5F73 CJK UNIFIED IDEOGRAPH-5F73-->
+  <t/>⼻
 <reset/>徚<!-- U+5F9A CJK UNIFIED IDEOGRAPH-5F9A-->
   <eq/>徚
+<reset/>心<!-- U+5FC3 CJK UNIFIED IDEOGRAPH-5FC3-->
+  <t/>⼼
+  <t/>⺗
 <reset/>忄<!-- U+5FC4 CJK UNIFIED IDEOGRAPH-5FC4-->
   <eq/>⺖
 <reset/>忍<!-- U+5FCD CJK UNIFIED IDEOGRAPH-5FCD-->
@@ -10772,10 +10982,16 @@ p<variableTop/>
   <eq/>懲
 <reset/>懶<!-- U+61F6 CJK UNIFIED IDEOGRAPH-61F6-->
   <eq/>懶
+<reset/>戈<!-- U+6208 CJK UNIFIED IDEOGRAPH-6208-->
+  <t/>⼽
 <reset/>成<!-- U+6210 CJK UNIFIED IDEOGRAPH-6210-->
   <eq/>成
 <reset/>戛<!-- U+621B CJK UNIFIED IDEOGRAPH-621B-->
   <eq/>戛
+<reset/>戶<!-- U+6236 CJK UNIFIED IDEOGRAPH-6236-->
+  <t/>⼾
+<reset/>手<!-- U+624B CJK UNIFIED IDEOGRAPH-624B-->
+  <t/>⼿
 <reset/>扌<!-- U+624C CJK UNIFIED IDEOGRAPH-624C-->
   <eq/>⺘
 <reset/>扝<!-- U+625D CJK UNIFIED IDEOGRAPH-625D-->
@@ -10810,32 +11026,67 @@ p<variableTop/>
   <eq/>摾
 <reset/>撝<!-- U+649D CJK UNIFIED IDEOGRAPH-649D-->
   <eq/>撝
+<reset/>支<!-- U+652F CJK UNIFIED IDEOGRAPH-652F-->
+  <t/>⽀
+<reset/>攴<!-- U+6534 CJK UNIFIED IDEOGRAPH-6534-->
+  <t/>⽁
 <reset/>攵<!-- U+6535 CJK UNIFIED IDEOGRAPH-6535-->
   <eq/>⺙
 <reset/>敏<!-- U+654F CJK UNIFIED IDEOGRAPH-654F-->
   <eq/>敏
 <reset/>敬<!-- U+656C CJK UNIFIED IDEOGRAPH-656C-->
   <eq/>敬
+<reset/>文<!-- U+6587 CJK UNIFIED IDEOGRAPH-6587-->
+  <t/>⽂
+<reset/>斗<!-- U+6597 CJK UNIFIED IDEOGRAPH-6597-->
+  <t/>⽃
+<reset/>斤<!-- U+65A4 CJK UNIFIED IDEOGRAPH-65A4-->
+  <t/>⽄
+<reset/>方<!-- U+65B9 CJK UNIFIED IDEOGRAPH-65B9-->
+  <t/>⽅
+<reset/>无<!-- U+65E0 CJK UNIFIED IDEOGRAPH-65E0-->
+  <t/>⽆
 <reset/>旡<!-- U+65E1 CJK UNIFIED IDEOGRAPH-65E1-->
   <eq/>⺛
 <reset/>旣<!-- U+65E3 CJK UNIFIED IDEOGRAPH-65E3-->
   <eq/>旣
+<reset/>日<!-- U+65E5 CJK UNIFIED IDEOGRAPH-65E5-->
+  <t/>⽇
+  <t/>⺜
+  <t/>㊐
+<reset/>明<!-- U+660E CJK UNIFIED IDEOGRAPH-660E-->
+  <p/>㍾
+<x/>治
+<reset/>昭<!-- U+662D CJK UNIFIED IDEOGRAPH-662D-->
+  <p/>㍼
+<x/>和
 <reset/>晉<!-- U+6649 CJK UNIFIED IDEOGRAPH-6649-->
   <eq/>晉
 <reset/>暑<!-- U+6691 CJK UNIFIED IDEOGRAPH-6691-->
   <eq/>暑
 <reset/>暜<!-- U+669C CJK UNIFIED IDEOGRAPH-669C-->
   <eq/>暜
+<reset/>曰<!-- U+66F0 CJK UNIFIED IDEOGRAPH-66F0-->
+  <t/>⽈
 <reset/>書<!-- U+66F8 CJK UNIFIED IDEOGRAPH-66F8-->
   <eq/>書
 <reset/>最<!-- U+6700 CJK UNIFIED IDEOGRAPH-6700-->
   <eq/>最
+<reset/>月<!-- U+6708 CJK UNIFIED IDEOGRAPH-6708-->
+  <t/>⽉
+  <t/>⺝
+  <t/>㊊
+<reset/>有<!-- U+6709 CJK UNIFIED IDEOGRAPH-6709-->
+  <t/>㊒
 <reset/>朗<!-- U+6717 CJK UNIFIED IDEOGRAPH-6717-->
   <eq/>朗
 <reset/>望<!-- U+671B CJK UNIFIED IDEOGRAPH-671B-->
   <eq/>望
 <reset/>朡<!-- U+6721 CJK UNIFIED IDEOGRAPH-6721-->
   <eq/>朡
+<reset/>木<!-- U+6728 CJK UNIFIED IDEOGRAPH-6728-->
+  <t/>⽊
+  <t/>㊍
 <reset/>杓<!-- U+6753 CJK UNIFIED IDEOGRAPH-6753-->
   <eq/>杓
 <reset/>杞<!-- U+675E CJK UNIFIED IDEOGRAPH-675E-->
@@ -10846,6 +11097,10 @@ p<variableTop/>
   <eq/>柺
 <reset/>栟<!-- U+681F CJK UNIFIED IDEOGRAPH-681F-->
   <eq/>栟
+<reset/>株<!-- U+682A CJK UNIFIED IDEOGRAPH-682A-->
+  <t/>㊑
+  <t/>㍿
+<x/>式会社
 <reset/>桒<!-- U+6852 CJK UNIFIED IDEOGRAPH-6852-->
   <eq/>桒
 <reset/>梅<!-- U+6885 CJK UNIFIED IDEOGRAPH-6885-->
@@ -10864,20 +11119,47 @@ p<variableTop/>
   <eq/>檨
 <reset/>櫛<!-- U+6ADB CJK UNIFIED IDEOGRAPH-6ADB-->
   <eq/>櫛
+<reset/>欠<!-- U+6B20 CJK UNIFIED IDEOGRAPH-6B20-->
+  <t/>⽋
 <reset/>次<!-- U+6B21 CJK UNIFIED IDEOGRAPH-6B21-->
   <eq/>次
 <reset/>歔<!-- U+6B54 CJK UNIFIED IDEOGRAPH-6B54-->
   <eq/>歔
+<reset/>止<!-- U+6B62 CJK UNIFIED IDEOGRAPH-6B62-->
+  <t/>⽌
+<reset/>正<!-- U+6B63 CJK UNIFIED IDEOGRAPH-6B63-->
+  <t/>㊣
 <reset/>歲<!-- U+6B72 CJK UNIFIED IDEOGRAPH-6B72-->
   <eq/>歲
+<reset/>歹<!-- U+6B79 CJK UNIFIED IDEOGRAPH-6B79-->
+  <t/>⽍
+<reset/>歺<!-- U+6B7A CJK UNIFIED IDEOGRAPH-6B7A-->
+  <s/>⺞
 <reset/>殟<!-- U+6B9F CJK UNIFIED IDEOGRAPH-6B9F-->
   <eq/>殟
+<reset/>殳<!-- U+6BB3 CJK UNIFIED IDEOGRAPH-6BB3-->
+  <t/>⽎
 <reset/>殺<!-- U+6BBA CJK UNIFIED IDEOGRAPH-6BBA-->
   <eq/>殺
 <reset/>殻<!-- U+6BBB CJK UNIFIED IDEOGRAPH-6BBB-->
   <eq/>殻
+<reset/>毋<!-- U+6BCB CJK UNIFIED IDEOGRAPH-6BCB-->
+  <t/>⽏
+<reset/>母<!-- U+6BCD CJK UNIFIED IDEOGRAPH-6BCD-->
+  <t/>⺟
+<reset/>比<!-- U+6BD4 CJK UNIFIED IDEOGRAPH-6BD4-->
+  <t/>⽐
+<reset/>毛<!-- U+6BDB CJK UNIFIED IDEOGRAPH-6BDB-->
+  <t/>⽑
+<reset/>氏<!-- U+6C0F CJK UNIFIED IDEOGRAPH-6C0F-->
+  <t/>⽒
 <reset/>民<!-- U+6C11 CJK UNIFIED IDEOGRAPH-6C11-->
   <eq/>⺠
+<reset/>气<!-- U+6C14 CJK UNIFIED IDEOGRAPH-6C14-->
+  <t/>⽓
+<reset/>水<!-- U+6C34 CJK UNIFIED IDEOGRAPH-6C34-->
+  <t/>⽔
+  <t/>㊌
 <reset/>氵<!-- U+6C35 CJK UNIFIED IDEOGRAPH-6C35-->
   <eq/>⺡
 <reset/>氺<!-- U+6C3A CJK UNIFIED IDEOGRAPH-6C3A-->
@@ -10890,6 +11172,8 @@ p<variableTop/>
   <eq/>沿
 <reset/>泍<!-- U+6CCD CJK UNIFIED IDEOGRAPH-6CCD-->
   <eq/>泍
+<reset/>注<!-- U+6CE8 CJK UNIFIED IDEOGRAPH-6CE8-->
+  <t/>㊟
 <reset/>洖<!-- U+6D16 CJK UNIFIED IDEOGRAPH-6D16-->
   <eq/>洖
 <reset/>洴<!-- U+6D34 CJK UNIFIED IDEOGRAPH-6D34-->
@@ -10928,6 +11212,9 @@ p<variableTop/>
   <eq/>瀹
 <reset/>灊<!-- U+704A CJK UNIFIED IDEOGRAPH-704A-->
   <eq/>灊
+<reset/>火<!-- U+706B CJK UNIFIED IDEOGRAPH-706B-->
+  <t/>⽕
+  <t/>㊋
 <reset/>灬<!-- U+706C CJK UNIFIED IDEOGRAPH-706C-->
   <eq/>⺣
 <reset/>灰<!-- U+7070 CJK UNIFIED IDEOGRAPH-7070-->
@@ -10944,22 +11231,47 @@ p<variableTop/>
   <eq/>熜
 <reset/>爨<!-- U+7228 CJK UNIFIED IDEOGRAPH-7228-->
   <eq/>爨
+<reset/>爪<!-- U+722A CJK UNIFIED IDEOGRAPH-722A-->
+  <t/>⽖
 <reset/>爫<!-- U+722B CJK UNIFIED IDEOGRAPH-722B-->
   <eq/>⺤
+  <t/>⺥
 <reset/>爵<!-- U+7235 CJK UNIFIED IDEOGRAPH-7235-->
   <eq/>爵
+<reset/>父<!-- U+7236 CJK UNIFIED IDEOGRAPH-7236-->
+  <t/>⽗
+<reset/>爻<!-- U+723B CJK UNIFIED IDEOGRAPH-723B-->
+  <t/>⽘
+<reset/>爿<!-- U+723F CJK UNIFIED IDEOGRAPH-723F-->
+  <t/>⽙
+<reset/>片<!-- U+7247 CJK UNIFIED IDEOGRAPH-7247-->
+  <t/>⽚
 <reset/>牐<!-- U+7250 CJK UNIFIED IDEOGRAPH-7250-->
   <eq/>牐
+<reset/>牙<!-- U+7259 CJK UNIFIED IDEOGRAPH-7259-->
+  <t/>⽛
+<reset/>牛<!-- U+725B CJK UNIFIED IDEOGRAPH-725B-->
+  <t/>⽜
+  <t/>⺧
+<reset/>特<!-- U+7279 CJK UNIFIED IDEOGRAPH-7279-->
+  <t/>㊕
 <reset/>犀<!-- U+7280 CJK UNIFIED IDEOGRAPH-7280-->
   <eq/>犀
 <reset/>犕<!-- U+7295 CJK UNIFIED IDEOGRAPH-7295-->
   <eq/>犕
+<reset/>犬<!-- U+72AC CJK UNIFIED IDEOGRAPH-72AC-->
+  <t/>⽝
 <reset/>犭<!-- U+72AD CJK UNIFIED IDEOGRAPH-72AD-->
   <eq/>⺨
 <reset/>獺<!-- U+737A CJK UNIFIED IDEOGRAPH-737A-->
   <eq/>獺
+<reset/>玄<!-- U+7384 CJK UNIFIED IDEOGRAPH-7384-->
+  <t/>⽞
+<reset/>玉<!-- U+7389 CJK UNIFIED IDEOGRAPH-7389-->
+  <t/>⽟
 <reset/>王<!-- U+738B CJK UNIFIED IDEOGRAPH-738B-->
   <eq/>王
+  <t/>⺩
 <reset/>玥<!-- U+73A5 CJK UNIFIED IDEOGRAPH-73A5-->
   <eq/>玥
 <reset/>瑇<!-- U+7447 CJK UNIFIED IDEOGRAPH-7447-->
@@ -10972,14 +11284,48 @@ p<variableTop/>
   <eq/>璅
 <reset/>瓊<!-- U+74CA CJK UNIFIED IDEOGRAPH-74CA-->
   <eq/>瓊
+<reset/>瓜<!-- U+74DC CJK UNIFIED IDEOGRAPH-74DC-->
+  <t/>⽠
+<reset/>瓦<!-- U+74E6 CJK UNIFIED IDEOGRAPH-74E6-->
+  <t/>⽡
+<reset/>甘<!-- U+7518 CJK UNIFIED IDEOGRAPH-7518-->
+  <t/>⽢
+<reset/>生<!-- U+751F CJK UNIFIED IDEOGRAPH-751F-->
+  <t/>⽣
 <reset/>甤<!-- U+7524 CJK UNIFIED IDEOGRAPH-7524-->
   <eq/>甤
+<reset/>用<!-- U+7528 CJK UNIFIED IDEOGRAPH-7528-->
+  <t/>⽤
+<reset/>田<!-- U+7530 CJK UNIFIED IDEOGRAPH-7530-->
+  <t/>⽥
+<reset/>甲<!-- U+7532 CJK UNIFIED IDEOGRAPH-7532-->
+  <t/>㆙
+<reset/>男<!-- U+7537 CJK UNIFIED IDEOGRAPH-7537-->
+  <t/>㊚
 <reset/>甾<!-- U+753E CJK UNIFIED IDEOGRAPH-753E-->
   <eq/>甾
 <reset/>異<!-- U+7570 CJK UNIFIED IDEOGRAPH-7570-->
   <eq/>異
+<reset/>疋<!-- U+758B CJK UNIFIED IDEOGRAPH-758B-->
+  <t/>⽦
+  <t/>⺪
+<reset/>疒<!-- U+7592 CJK UNIFIED IDEOGRAPH-7592-->
+  <t/>⽧
 <reset/>瘐<!-- U+7610 CJK UNIFIED IDEOGRAPH-7610-->
   <eq/>瘐
+<reset/>癶<!-- U+7676 CJK UNIFIED IDEOGRAPH-7676-->
+  <t/>⽨
+<reset/>白<!-- U+767D CJK UNIFIED IDEOGRAPH-767D-->
+  <t/>⽩
+<reset/>皮<!-- U+76AE CJK UNIFIED IDEOGRAPH-76AE-->
+  <t/>⽪
+<reset/>皿<!-- U+76BF CJK UNIFIED IDEOGRAPH-76BF-->
+  <t/>⽫
+<reset/>監<!-- U+76E3 CJK UNIFIED IDEOGRAPH-76E3-->
+  <t/>㊬
+<reset/>目<!-- U+76EE CJK UNIFIED IDEOGRAPH-76EE-->
+  <t/>⽬
+  <t/>⺫
 <reset/>直<!-- U+76F4 CJK UNIFIED IDEOGRAPH-76F4-->
   <eq/>直
 <reset/>眞<!-- U+771E CJK UNIFIED IDEOGRAPH-771E-->
@@ -10991,18 +11337,37 @@ p<variableTop/>
   <eq/>睊
 <reset/>瞋<!-- U+778B CJK UNIFIED IDEOGRAPH-778B-->
   <eq/>瞋
+<reset/>矛<!-- U+77DB CJK UNIFIED IDEOGRAPH-77DB-->
+  <t/>⽭
+<reset/>矢<!-- U+77E2 CJK UNIFIED IDEOGRAPH-77E2-->
+  <t/>⽮
+<reset/>石<!-- U+77F3 CJK UNIFIED IDEOGRAPH-77F3-->
+  <t/>⽯
 <reset/>硎<!-- U+784E CJK UNIFIED IDEOGRAPH-784E-->
   <eq/>硎
 <reset/>碌<!-- U+788C CJK UNIFIED IDEOGRAPH-788C-->
   <eq/>碌
 <reset/>磌<!-- U+78CC CJK UNIFIED IDEOGRAPH-78CC-->
   <eq/>磌
+<reset/>示<!-- U+793A CJK UNIFIED IDEOGRAPH-793A-->
+  <t/>⽰
+  <t/>⺬
 <reset/>礻<!-- U+793B CJK UNIFIED IDEOGRAPH-793B-->
   <eq/>⺭
+<reset/>社<!-- U+793E CJK UNIFIED IDEOGRAPH-793E-->
+  <t/>㊓
 <reset/>祖<!-- U+7956 CJK UNIFIED IDEOGRAPH-7956-->
   <eq/>祖
+<reset/>祝<!-- U+795D CJK UNIFIED IDEOGRAPH-795D-->
+  <t/>㊗
 <reset/>福<!-- U+798F CJK UNIFIED IDEOGRAPH-798F-->
   <eq/>福
+<reset/>禸<!-- U+79B8 CJK UNIFIED IDEOGRAPH-79B8-->
+  <t/>⽱
+<reset/>禾<!-- U+79BE CJK UNIFIED IDEOGRAPH-79BE-->
+  <t/>⽲
+<reset/>秘<!-- U+79D8 CJK UNIFIED IDEOGRAPH-79D8-->
+  <t/>㊙
 <reset/>秫<!-- U+79EB CJK UNIFIED IDEOGRAPH-79EB-->
   <eq/>秫
 <reset/>穀<!-- U+7A40 CJK UNIFIED IDEOGRAPH-7A40-->
@@ -11011,18 +11376,29 @@ p<variableTop/>
   <eq/>穊
 <reset/>穏<!-- U+7A4F CJK UNIFIED IDEOGRAPH-7A4F-->
   <eq/>穏
+<reset/>穴<!-- U+7A74 CJK UNIFIED IDEOGRAPH-7A74-->
+  <t/>⽳
 <reset/>窮<!-- U+7AAE CJK UNIFIED IDEOGRAPH-7AAE-->
   <eq/>竮
+<reset/>立<!-- U+7ACB CJK UNIFIED IDEOGRAPH-7ACB-->
+  <t/>⽴
+<reset/>竹<!-- U+7AF9 CJK UNIFIED IDEOGRAPH-7AF9-->
+  <t/>⽵
+  <t/>⺮
 <reset/>篆<!-- U+7BC6 CJK UNIFIED IDEOGRAPH-7BC6-->
   <eq/>篆
 <reset/>築<!-- U+7BC9 CJK UNIFIED IDEOGRAPH-7BC9-->
   <eq/>築
+<reset/>米<!-- U+7C73 CJK UNIFIED IDEOGRAPH-7C73-->
+  <t/>⽶
 <reset/>糒<!-- U+7CD2 CJK UNIFIED IDEOGRAPH-7CD2-->
   <eq/>糒
 <reset/>糣<!-- U+7CE3 CJK UNIFIED IDEOGRAPH-7CE3-->
   <eq/>糣
 <reset/>糨<!-- U+7CE8 CJK UNIFIED IDEOGRAPH-7CE8-->
   <eq/>糨
+<reset/>糸<!-- U+7CF8 CJK UNIFIED IDEOGRAPH-7CF8-->
+  <t/>⽷
 <reset/>糹<!-- U+7CF9 CJK UNIFIED IDEOGRAPH-7CF9-->
   <eq/>⺯
 <reset/>紀<!-- U+7D00 CJK UNIFIED IDEOGRAPH-7D00-->
@@ -11037,449 +11413,55 @@ p<variableTop/>
   <eq/>繅
 <reset/>纟<!-- U+7E9F CJK UNIFIED IDEOGRAPH-7E9F-->
   <eq/>⺰
-<reset/>罒<!-- U+7F52 CJK UNIFIED IDEOGRAPH-7F52-->
-  <eq/>⺲
-<reset/>罓<!-- U+7F53 CJK UNIFIED IDEOGRAPH-7F53-->
-  <eq/>⺱
-<reset/>罺<!-- U+7F7A CJK UNIFIED IDEOGRAPH-7F7A-->
-  <eq/>罺
-<reset/>羋<!-- U+7F8B CJK UNIFIED IDEOGRAPH-7F8B-->
-  <eq/>⺸
-<reset/>羕<!-- U+7F95 CJK UNIFIED IDEOGRAPH-7F95-->
-  <eq/>羕
-<reset/>翺<!-- U+7FFA CJK UNIFIED IDEOGRAPH-7FFA-->
-  <eq/>翺
-<reset/>一<!-- U+4E00 CJK UNIFIED IDEOGRAPH-4E00-->
-  <t/>⼀
-<reset/>丨<!-- U+4E28 CJK UNIFIED IDEOGRAPH-4E28-->
-  <t/>⼁
-<reset/>丶<!-- U+4E36 CJK UNIFIED IDEOGRAPH-4E36-->
-  <t/>⼂
-  <t/>⺀
-<reset/>丿<!-- U+4E3F CJK UNIFIED IDEOGRAPH-4E3F-->
-  <t/>⼃
-<reset/>乙<!-- U+4E59 CJK UNIFIED IDEOGRAPH-4E59-->
-  <t/>⼄
-  <t/>⺄
-<reset/>亅<!-- U+4E85 CJK UNIFIED IDEOGRAPH-4E85-->
-  <t/>⼅
-<reset/>二<!-- U+4E8C CJK UNIFIED IDEOGRAPH-4E8C-->
-  <t/>⼆
-<reset/>亠<!-- U+4EA0 CJK UNIFIED IDEOGRAPH-4EA0-->
-  <t/>⼇
-<reset/>人<!-- U+4EBA CJK UNIFIED IDEOGRAPH-4EBA-->
-  <t/>⼈
-<reset/>儿<!-- U+513F CJK UNIFIED IDEOGRAPH-513F-->
-  <t/>⼉
-<reset/>入<!-- U+5165 CJK UNIFIED IDEOGRAPH-5165-->
-  <t/>⼊
-<reset/>八<!-- U+516B CJK UNIFIED IDEOGRAPH-516B-->
-  <t/>⼋
-<reset/>冂<!-- U+5182 CJK UNIFIED IDEOGRAPH-5182-->
-  <t/>⼌
-  <t/>⺆
-<reset/>冖<!-- U+5196 CJK UNIFIED IDEOGRAPH-5196-->
-  <t/>⼍
-<reset/>冫<!-- U+51AB CJK UNIFIED IDEOGRAPH-51AB-->
-  <t/>⼎
-<reset/>几<!-- U+51E0 CJK UNIFIED IDEOGRAPH-51E0-->
-  <t/>⼏
-  <t/>⺇
-<reset/>凵<!-- U+51F5 CJK UNIFIED IDEOGRAPH-51F5-->
-  <t/>⼐
-<reset/>刀<!-- U+5200 CJK UNIFIED IDEOGRAPH-5200-->
-  <t/>⼑
-  <t/>⺈
-<reset/>力<!-- U+529B CJK UNIFIED IDEOGRAPH-529B-->
-  <t/>⼒
-<reset/>勹<!-- U+52F9 CJK UNIFIED IDEOGRAPH-52F9-->
-  <t/>⼓
-<reset/>匕<!-- U+5315 CJK UNIFIED IDEOGRAPH-5315-->
-  <t/>⼔
-<reset/>匚<!-- U+531A CJK UNIFIED IDEOGRAPH-531A-->
-  <t/>⼕
-<reset/>匸<!-- U+5338 CJK UNIFIED IDEOGRAPH-5338-->
-  <t/>⼖
-<reset/>十<!-- U+5341 CJK UNIFIED IDEOGRAPH-5341-->
-  <t/>⼗
-  <eq/>〸
-<reset/>卄<!-- U+5344 CJK UNIFIED IDEOGRAPH-5344-->
-  <t/>〹
-<reset/>卅<!-- U+5345 CJK UNIFIED IDEOGRAPH-5345-->
-  <t/>〺
-<reset/>卜<!-- U+535C CJK UNIFIED IDEOGRAPH-535C-->
-  <t/>⼘
-  <t/>⺊
-<reset/>卩<!-- U+5369 CJK UNIFIED IDEOGRAPH-5369-->
-  <t/>⼙
-  <t/>⺋
-<reset/>厂<!-- U+5382 CJK UNIFIED IDEOGRAPH-5382-->
-  <t/>⼚
-  <t/>⺁
-<reset/>厶<!-- U+53B6 CJK UNIFIED IDEOGRAPH-53B6-->
-  <t/>⼛
-<reset/>又<!-- U+53C8 CJK UNIFIED IDEOGRAPH-53C8-->
-  <t/>⼜
-<reset/>口<!-- U+53E3 CJK UNIFIED IDEOGRAPH-53E3-->
-  <t/>⼝
-<reset/>囗<!-- U+56D7 CJK UNIFIED IDEOGRAPH-56D7-->
-  <t/>⼞
-<reset/>土<!-- U+571F CJK UNIFIED IDEOGRAPH-571F-->
-  <t/>⼟
-<reset/>士<!-- U+58EB CJK UNIFIED IDEOGRAPH-58EB-->
-  <t/>⼠
-<reset/>夂<!-- U+5902 CJK UNIFIED IDEOGRAPH-5902-->
-  <t/>⼡
-<reset/>夊<!-- U+590A CJK UNIFIED IDEOGRAPH-590A-->
-  <t/>⼢
-<reset/>夕<!-- U+5915 CJK UNIFIED IDEOGRAPH-5915-->
-  <t/>⼣
-<reset/>大<!-- U+5927 CJK UNIFIED IDEOGRAPH-5927-->
-  <t/>⼤
-<reset/>女<!-- U+5973 CJK UNIFIED IDEOGRAPH-5973-->
-  <t/>⼥
-<reset/>子<!-- U+5B50 CJK UNIFIED IDEOGRAPH-5B50-->
-  <t/>⼦
-<reset/>宀<!-- U+5B80 CJK UNIFIED IDEOGRAPH-5B80-->
-  <t/>⼧
-<reset/>寸<!-- U+5BF8 CJK UNIFIED IDEOGRAPH-5BF8-->
-  <t/>⼨
-<reset/>小<!-- U+5C0F CJK UNIFIED IDEOGRAPH-5C0F-->
-  <t/>⼩
-  <t/>⺌
-  <t/>⺍
-<reset/>尢<!-- U+5C22 CJK UNIFIED IDEOGRAPH-5C22-->
-  <t/>⼪
-  <t/>⺎
-<reset/>尣<!-- U+5C23 CJK UNIFIED IDEOGRAPH-5C23-->
-  <s/>⺑
-<reset/>尸<!-- U+5C38 CJK UNIFIED IDEOGRAPH-5C38-->
-  <t/>⼫
-<reset/>屮<!-- U+5C6E CJK UNIFIED IDEOGRAPH-5C6E-->
-  <t/>⼬
-<reset/>山<!-- U+5C71 CJK UNIFIED IDEOGRAPH-5C71-->
-  <t/>⼭
-<reset/>巛<!-- U+5DDB CJK UNIFIED IDEOGRAPH-5DDB-->
-  <t/>⼮
-<reset/>工<!-- U+5DE5 CJK UNIFIED IDEOGRAPH-5DE5-->
-  <t/>⼯
-<reset/>己<!-- U+5DF1 CJK UNIFIED IDEOGRAPH-5DF1-->
-  <t/>⼰
-<reset/>巾<!-- U+5DFE CJK UNIFIED IDEOGRAPH-5DFE-->
-  <t/>⼱
-<reset/>干<!-- U+5E72 CJK UNIFIED IDEOGRAPH-5E72-->
-  <t/>⼲
-<reset/>幺<!-- U+5E7A CJK UNIFIED IDEOGRAPH-5E7A-->
-  <t/>⼳
-<reset/>广<!-- U+5E7F CJK UNIFIED IDEOGRAPH-5E7F-->
-  <t/>⼴
-<reset/>廴<!-- U+5EF4 CJK UNIFIED IDEOGRAPH-5EF4-->
-  <t/>⼵
-<reset/>廾<!-- U+5EFE CJK UNIFIED IDEOGRAPH-5EFE-->
-  <t/>⼶
-<reset/>弋<!-- U+5F0B CJK UNIFIED IDEOGRAPH-5F0B-->
-  <t/>⼷
-<reset/>弓<!-- U+5F13 CJK UNIFIED IDEOGRAPH-5F13-->
-  <t/>⼸
-<reset/>彐<!-- U+5F50 CJK UNIFIED IDEOGRAPH-5F50-->
-  <t/>⼹
-  <t/>⺕
-<reset/>彡<!-- U+5F61 CJK UNIFIED IDEOGRAPH-5F61-->
-  <t/>⼺
-<reset/>彳<!-- U+5F73 CJK UNIFIED IDEOGRAPH-5F73-->
-  <t/>⼻
-<reset/>心<!-- U+5FC3 CJK UNIFIED IDEOGRAPH-5FC3-->
-  <t/>⼼
-  <t/>⺗
-<reset/>戈<!-- U+6208 CJK UNIFIED IDEOGRAPH-6208-->
-  <t/>⼽
-<reset/>戶<!-- U+6236 CJK UNIFIED IDEOGRAPH-6236-->
-  <t/>⼾
-<reset/>手<!-- U+624B CJK UNIFIED IDEOGRAPH-624B-->
-  <t/>⼿
-<reset/>支<!-- U+652F CJK UNIFIED IDEOGRAPH-652F-->
-  <t/>⽀
-<reset/>攴<!-- U+6534 CJK UNIFIED IDEOGRAPH-6534-->
-  <t/>⽁
-<reset/>文<!-- U+6587 CJK UNIFIED IDEOGRAPH-6587-->
-  <t/>⽂
-<reset/>斗<!-- U+6597 CJK UNIFIED IDEOGRAPH-6597-->
-  <t/>⽃
-<reset/>斤<!-- U+65A4 CJK UNIFIED IDEOGRAPH-65A4-->
-  <t/>⽄
-<reset/>方<!-- U+65B9 CJK UNIFIED IDEOGRAPH-65B9-->
-  <t/>⽅
-<reset/>无<!-- U+65E0 CJK UNIFIED IDEOGRAPH-65E0-->
-  <t/>⽆
-<reset/>日<!-- U+65E5 CJK UNIFIED IDEOGRAPH-65E5-->
-  <t/>⽇
-  <t/>⺜
-<reset/>曰<!-- U+66F0 CJK UNIFIED IDEOGRAPH-66F0-->
-  <t/>⽈
-<reset/>月<!-- U+6708 CJK UNIFIED IDEOGRAPH-6708-->
-  <t/>⽉
-  <t/>⺝
-<reset/>木<!-- U+6728 CJK UNIFIED IDEOGRAPH-6728-->
-  <t/>⽊
-<reset/>欠<!-- U+6B20 CJK UNIFIED IDEOGRAPH-6B20-->
-  <t/>⽋
-<reset/>止<!-- U+6B62 CJK UNIFIED IDEOGRAPH-6B62-->
-  <t/>⽌
-<reset/>歹<!-- U+6B79 CJK UNIFIED IDEOGRAPH-6B79-->
-  <t/>⽍
-<reset/>歺<!-- U+6B7A CJK UNIFIED IDEOGRAPH-6B7A-->
-  <s/>⺞
-<reset/>殳<!-- U+6BB3 CJK UNIFIED IDEOGRAPH-6BB3-->
-  <t/>⽎
-<reset/>毋<!-- U+6BCB CJK UNIFIED IDEOGRAPH-6BCB-->
-  <t/>⽏
-<reset/>母<!-- U+6BCD CJK UNIFIED IDEOGRAPH-6BCD-->
-  <t/>⺟
-<reset/>比<!-- U+6BD4 CJK UNIFIED IDEOGRAPH-6BD4-->
-  <t/>⽐
-<reset/>毛<!-- U+6BDB CJK UNIFIED IDEOGRAPH-6BDB-->
-  <t/>⽑
-<reset/>氏<!-- U+6C0F CJK UNIFIED IDEOGRAPH-6C0F-->
-  <t/>⽒
-<reset/>气<!-- U+6C14 CJK UNIFIED IDEOGRAPH-6C14-->
-  <t/>⽓
-<reset/>水<!-- U+6C34 CJK UNIFIED IDEOGRAPH-6C34-->
-  <t/>⽔
-<reset/>火<!-- U+706B CJK UNIFIED IDEOGRAPH-706B-->
-  <t/>⽕
-<reset/>爪<!-- U+722A CJK UNIFIED IDEOGRAPH-722A-->
-  <t/>⽖
-<reset/>爫<!-- U+722B CJK UNIFIED IDEOGRAPH-722B-->
-  <s/>⺥
-<reset/>父<!-- U+7236 CJK UNIFIED IDEOGRAPH-7236-->
-  <t/>⽗
-<reset/>爻<!-- U+723B CJK UNIFIED IDEOGRAPH-723B-->
-  <t/>⽘
-<reset/>爿<!-- U+723F CJK UNIFIED IDEOGRAPH-723F-->
-  <t/>⽙
-<reset/>片<!-- U+7247 CJK UNIFIED IDEOGRAPH-7247-->
-  <t/>⽚
-<reset/>牙<!-- U+7259 CJK UNIFIED IDEOGRAPH-7259-->
-  <t/>⽛
-<reset/>牛<!-- U+725B CJK UNIFIED IDEOGRAPH-725B-->
-  <t/>⽜
-  <t/>⺧
-<reset/>犬<!-- U+72AC CJK UNIFIED IDEOGRAPH-72AC-->
-  <t/>⽝
-<reset/>玄<!-- U+7384 CJK UNIFIED IDEOGRAPH-7384-->
-  <t/>⽞
-<reset/>玉<!-- U+7389 CJK UNIFIED IDEOGRAPH-7389-->
-  <t/>⽟
-<reset/>王<!-- U+738B CJK UNIFIED IDEOGRAPH-738B-->
-  <s/>⺩
-<reset/>瓜<!-- U+74DC CJK UNIFIED IDEOGRAPH-74DC-->
-  <t/>⽠
-<reset/>瓦<!-- U+74E6 CJK UNIFIED IDEOGRAPH-74E6-->
-  <t/>⽡
-<reset/>甘<!-- U+7518 CJK UNIFIED IDEOGRAPH-7518-->
-  <t/>⽢
-<reset/>生<!-- U+751F CJK UNIFIED IDEOGRAPH-751F-->
-  <t/>⽣
-<reset/>用<!-- U+7528 CJK UNIFIED IDEOGRAPH-7528-->
-  <t/>⽤
-<reset/>田<!-- U+7530 CJK UNIFIED IDEOGRAPH-7530-->
-  <t/>⽥
-<reset/>疋<!-- U+758B CJK UNIFIED IDEOGRAPH-758B-->
-  <t/>⽦
-  <t/>⺪
-<reset/>疒<!-- U+7592 CJK UNIFIED IDEOGRAPH-7592-->
-  <t/>⽧
-<reset/>癶<!-- U+7676 CJK UNIFIED IDEOGRAPH-7676-->
-  <t/>⽨
-<reset/>白<!-- U+767D CJK UNIFIED IDEOGRAPH-767D-->
-  <t/>⽩
-<reset/>皮<!-- U+76AE CJK UNIFIED IDEOGRAPH-76AE-->
-  <t/>⽪
-<reset/>皿<!-- U+76BF CJK UNIFIED IDEOGRAPH-76BF-->
-  <t/>⽫
-<reset/>目<!-- U+76EE CJK UNIFIED IDEOGRAPH-76EE-->
-  <t/>⽬
-  <t/>⺫
-<reset/>矛<!-- U+77DB CJK UNIFIED IDEOGRAPH-77DB-->
-  <t/>⽭
-<reset/>矢<!-- U+77E2 CJK UNIFIED IDEOGRAPH-77E2-->
-  <t/>⽮
-<reset/>石<!-- U+77F3 CJK UNIFIED IDEOGRAPH-77F3-->
-  <t/>⽯
-<reset/>示<!-- U+793A CJK UNIFIED IDEOGRAPH-793A-->
-  <t/>⽰
-  <t/>⺬
-<reset/>禸<!-- U+79B8 CJK UNIFIED IDEOGRAPH-79B8-->
-  <t/>⽱
-<reset/>禾<!-- U+79BE CJK UNIFIED IDEOGRAPH-79BE-->
-  <t/>⽲
-<reset/>穴<!-- U+7A74 CJK UNIFIED IDEOGRAPH-7A74-->
-  <t/>⽳
-<reset/>立<!-- U+7ACB CJK UNIFIED IDEOGRAPH-7ACB-->
-  <t/>⽴
-<reset/>竹<!-- U+7AF9 CJK UNIFIED IDEOGRAPH-7AF9-->
-  <t/>⽵
-  <t/>⺮
-<reset/>米<!-- U+7C73 CJK UNIFIED IDEOGRAPH-7C73-->
-  <t/>⽶
-<reset/>糸<!-- U+7CF8 CJK UNIFIED IDEOGRAPH-7CF8-->
-  <t/>⽷
 <reset/>缶<!-- U+7F36 CJK UNIFIED IDEOGRAPH-7F36-->
   <t/>⽸
 <reset/>网<!-- U+7F51 CJK UNIFIED IDEOGRAPH-7F51-->
   <t/>⽹
 <reset/>罒<!-- U+7F52 CJK UNIFIED IDEOGRAPH-7F52-->
-  <s/>⺵
+  <eq/>⺲
+  <t/>⺵
 <reset/>罓<!-- U+7F53 CJK UNIFIED IDEOGRAPH-7F53-->
-  <s/>⺳
+  <eq/>⺱
+  <t/>⺳
   <t/>⺴
+<reset/>罺<!-- U+7F7A CJK UNIFIED IDEOGRAPH-7F7A-->
+  <eq/>罺
 <reset/>羊<!-- U+7F8A CJK UNIFIED IDEOGRAPH-7F8A-->
   <t/>⽺
   <t/>⺶
   <t/>⺷
+<reset/>羋<!-- U+7F8B CJK UNIFIED IDEOGRAPH-7F8B-->
+  <eq/>⺸
+<reset/>羕<!-- U+7F95 CJK UNIFIED IDEOGRAPH-7F95-->
+  <eq/>羕
 <reset/>羽<!-- U+7FBD CJK UNIFIED IDEOGRAPH-7FBD-->
   <t/>⽻
-<reset/>一<!-- U+4E00 CJK UNIFIED IDEOGRAPH-4E00-->
-  <t/>㊀
-<reset/>七<!-- U+4E03 CJK UNIFIED IDEOGRAPH-4E03-->
-  <t/>㊆
-<reset/>三<!-- U+4E09 CJK UNIFIED IDEOGRAPH-4E09-->
-  <t/>㊂
-<reset/>上<!-- U+4E0A CJK UNIFIED IDEOGRAPH-4E0A-->
-  <t/>㊤
-<reset/>下<!-- U+4E0B CJK UNIFIED IDEOGRAPH-4E0B-->
-  <t/>㊦
-<reset/>中<!-- U+4E2D CJK UNIFIED IDEOGRAPH-4E2D-->
-  <t/>㊥
-<reset/>九<!-- U+4E5D CJK UNIFIED IDEOGRAPH-4E5D-->
-  <t/>㊈
-<reset/>二<!-- U+4E8C CJK UNIFIED IDEOGRAPH-4E8C-->
-  <t/>㊁
-<reset/>五<!-- U+4E94 CJK UNIFIED IDEOGRAPH-4E94-->
-  <t/>㊄
-<reset/>企<!-- U+4F01 CJK UNIFIED IDEOGRAPH-4F01-->
-  <t/>㊭
-<reset/>休<!-- U+4F11 CJK UNIFIED IDEOGRAPH-4F11-->
-  <t/>㊡
-<reset/>優<!-- U+512A CJK UNIFIED IDEOGRAPH-512A-->
-  <t/>㊝
-<reset/>八<!-- U+516B CJK UNIFIED IDEOGRAPH-516B-->
-  <t/>㊇
-<reset/>六<!-- U+516D CJK UNIFIED IDEOGRAPH-516D-->
-  <t/>㊅
-<reset/>写<!-- U+5199 CJK UNIFIED IDEOGRAPH-5199-->
-  <t/>㊢
-<reset/>労<!-- U+52B4 CJK UNIFIED IDEOGRAPH-52B4-->
-  <t/>㊘
-<reset/>医<!-- U+533B CJK UNIFIED IDEOGRAPH-533B-->
-  <t/>㊩
-<reset/>十<!-- U+5341 CJK UNIFIED IDEOGRAPH-5341-->
-  <t/>㊉
-<reset/>協<!-- U+5354 CJK UNIFIED IDEOGRAPH-5354-->
-  <t/>㊯
-<reset/>印<!-- U+5370 CJK UNIFIED IDEOGRAPH-5370-->
-  <t/>㊞
-<reset/>右<!-- U+53F3 CJK UNIFIED IDEOGRAPH-53F3-->
-  <t/>㊨
-<reset/>名<!-- U+540D CJK UNIFIED IDEOGRAPH-540D-->
-  <t/>㊔
-<reset/>四<!-- U+56DB CJK UNIFIED IDEOGRAPH-56DB-->
-  <t/>㊃
-<reset/>土<!-- U+571F CJK UNIFIED IDEOGRAPH-571F-->
-  <t/>㊏
-<reset/>夜<!-- U+591C CJK UNIFIED IDEOGRAPH-591C-->
-  <t/>㊰
-<reset/>女<!-- U+5973 CJK UNIFIED IDEOGRAPH-5973-->
-  <t/>㊛
-<reset/>学<!-- U+5B66 CJK UNIFIED IDEOGRAPH-5B66-->
-  <t/>㊫
-<reset/>宗<!-- U+5B97 CJK UNIFIED IDEOGRAPH-5B97-->
-  <t/>㊪
-<reset/>左<!-- U+5DE6 CJK UNIFIED IDEOGRAPH-5DE6-->
-  <t/>㊧
-<reset/>日<!-- U+65E5 CJK UNIFIED IDEOGRAPH-65E5-->
-  <t/>㊐
-<reset/>月<!-- U+6708 CJK UNIFIED IDEOGRAPH-6708-->
-  <t/>㊊
-<reset/>有<!-- U+6709 CJK UNIFIED IDEOGRAPH-6709-->
-  <t/>㊒
-<reset/>木<!-- U+6728 CJK UNIFIED IDEOGRAPH-6728-->
-  <t/>㊍
-<reset/>株<!-- U+682A CJK UNIFIED IDEOGRAPH-682A-->
-  <t/>㊑
-<reset/>正<!-- U+6B63 CJK UNIFIED IDEOGRAPH-6B63-->
-  <t/>㊣
-<reset/>水<!-- U+6C34 CJK UNIFIED IDEOGRAPH-6C34-->
-  <t/>㊌
-<reset/>注<!-- U+6CE8 CJK UNIFIED IDEOGRAPH-6CE8-->
-  <t/>㊟
-<reset/>火<!-- U+706B CJK UNIFIED IDEOGRAPH-706B-->
-  <t/>㊋
-<reset/>特<!-- U+7279 CJK UNIFIED IDEOGRAPH-7279-->
-  <t/>㊕
-<reset/>男<!-- U+7537 CJK UNIFIED IDEOGRAPH-7537-->
-  <t/>㊚
-<reset/>監<!-- U+76E3 CJK UNIFIED IDEOGRAPH-76E3-->
-  <t/>㊬
-<reset/>社<!-- U+793E CJK UNIFIED IDEOGRAPH-793E-->
-  <t/>㊓
-<reset/>祝<!-- U+795D CJK UNIFIED IDEOGRAPH-795D-->
-  <t/>㊗
-<reset/>秘<!-- U+79D8 CJK UNIFIED IDEOGRAPH-79D8-->
-  <t/>㊙
-<reset/>一<!-- U+4E00 CJK UNIFIED IDEOGRAPH-4E00-->
-  <t/>㆒
-<reset/>丁<!-- U+4E01 CJK UNIFIED IDEOGRAPH-4E01-->
-  <t/>㆜
-<reset/>三<!-- U+4E09 CJK UNIFIED IDEOGRAPH-4E09-->
-  <t/>㆔
-<reset/>上<!-- U+4E0A CJK UNIFIED IDEOGRAPH-4E0A-->
-  <t/>㆖
-<reset/>下<!-- U+4E0B CJK UNIFIED IDEOGRAPH-4E0B-->
-  <t/>㆘
-<reset/>丙<!-- U+4E19 CJK UNIFIED IDEOGRAPH-4E19-->
-  <t/>㆛
-<reset/>中<!-- U+4E2D CJK UNIFIED IDEOGRAPH-4E2D-->
-  <t/>㆗
-<reset/>乙<!-- U+4E59 CJK UNIFIED IDEOGRAPH-4E59-->
-  <t/>㆚
-<reset/>二<!-- U+4E8C CJK UNIFIED IDEOGRAPH-4E8C-->
-  <t/>㆓
-<reset/>人<!-- U+4EBA CJK UNIFIED IDEOGRAPH-4EBA-->
-  <t/>㆟
-<reset/>四<!-- U+56DB CJK UNIFIED IDEOGRAPH-56DB-->
-  <t/>㆕
-<reset/>地<!-- U+5730 CJK UNIFIED IDEOGRAPH-5730-->
-  <t/>㆞
-<reset/>天<!-- U+5929 CJK UNIFIED IDEOGRAPH-5929-->
-  <t/>㆝
-<reset/>甲<!-- U+7532 CJK UNIFIED IDEOGRAPH-7532-->
-  <t/>㆙
-<reset/>大<!-- U+5927 CJK UNIFIED IDEOGRAPH-5927-->
-  <p/>㍽
-<x/>正
-<reset/>平<!-- U+5E73 CJK UNIFIED IDEOGRAPH-5E73-->
-  <p/>㍻
-<x/>成
-<reset/>明<!-- U+660E CJK UNIFIED IDEOGRAPH-660E-->
-  <p/>㍾
-<x/>治
-<reset/>昭<!-- U+662D CJK UNIFIED IDEOGRAPH-662D-->
-  <p/>㍼
-<x/>和
-<reset/>株<!-- U+682A CJK UNIFIED IDEOGRAPH-682A-->
-  <p/>㍿
-<x/>式会社
+<reset/>翺<!-- U+7FFA CJK UNIFIED IDEOGRAPH-7FFA-->
+  <eq/>翺
+<reset/>老<!-- U+8001 CJK UNIFIED IDEOGRAPH-8001-->
+  <t/>⽼
 <reset/>耂<!-- U+8002 CJK UNIFIED IDEOGRAPH-8002-->
   <eq/>⺹
 <reset/>者<!-- U+8005 CJK UNIFIED IDEOGRAPH-8005-->
   <eq/>者
+<reset/>而<!-- U+800C CJK UNIFIED IDEOGRAPH-800C-->
+  <t/>⽽
+<reset/>耒<!-- U+8012 CJK UNIFIED IDEOGRAPH-8012-->
+  <t/>⽾
+<reset/>耳<!-- U+8033 CJK UNIFIED IDEOGRAPH-8033-->
+  <t/>⽿
 <reset/>聠<!-- U+8060 CJK UNIFIED IDEOGRAPH-8060-->
   <eq/>聠
 <reset/>聰<!-- U+8070 CJK UNIFIED IDEOGRAPH-8070-->
   <eq/>聰
+<reset/>聿<!-- U+807F CJK UNIFIED IDEOGRAPH-807F-->
+  <t/>⾀
+  <t/>⺻
 <reset/>肀<!-- U+8080 CJK UNIFIED IDEOGRAPH-8080-->
   <eq/>⺺
+<reset/>肉<!-- U+8089 CJK UNIFIED IDEOGRAPH-8089-->
+  <t/>⾁
+  <t/>⺼
 <reset/>肭<!-- U+80AD CJK UNIFIED IDEOGRAPH-80AD-->
   <eq/>肭
 <reset/>育<!-- U+80B2 CJK UNIFIED IDEOGRAPH-80B2-->
@@ -11488,13 +11470,36 @@ p<variableTop/>
   <eq/>脃
 <reset/>脾<!-- U+813E CJK UNIFIED IDEOGRAPH-813E-->
   <eq/>脾
+<reset/>臣<!-- U+81E3 CJK UNIFIED IDEOGRAPH-81E3-->
+  <t/>⾂
+<reset/>自<!-- U+81EA CJK UNIFIED IDEOGRAPH-81EA-->
+  <t/>⾃
+<reset/>至<!-- U+81F3 CJK UNIFIED IDEOGRAPH-81F3-->
+  <t/>⾄
+<reset/>臼<!-- U+81FC CJK UNIFIED IDEOGRAPH-81FC-->
+  <t/>⾅
+  <t/>⺽
 <reset/>舁<!-- U+8201 CJK UNIFIED IDEOGRAPH-8201-->
   <eq/>舁
   <eq/>舁
 <reset/>舄<!-- U+8204 CJK UNIFIED IDEOGRAPH-8204-->
   <eq/>舄
+<reset/>舌<!-- U+820C CJK UNIFIED IDEOGRAPH-820C-->
+  <t/>⾆
+<reset/>舛<!-- U+821B CJK UNIFIED IDEOGRAPH-821B-->
+  <t/>⾇
+<reset/>舟<!-- U+821F CJK UNIFIED IDEOGRAPH-821F-->
+  <t/>⾈
+<reset/>艮<!-- U+826E CJK UNIFIED IDEOGRAPH-826E-->
+  <t/>⾉
+<reset/>色<!-- U+8272 CJK UNIFIED IDEOGRAPH-8272-->
+  <t/>⾊
+<reset/>艸<!-- U+8278 CJK UNIFIED IDEOGRAPH-8278-->
+  <t/>⾋
 <reset/>艹<!-- U+8279 CJK UNIFIED IDEOGRAPH-8279-->
   <eq/>⺾
+  <t/>⺿
+  <t/>⻀
 <reset/>芋<!-- U+828B CJK UNIFIED IDEOGRAPH-828B-->
   <eq/>芋
 <reset/>芑<!-- U+8291 CJK UNIFIED IDEOGRAPH-8291-->
@@ -11541,6 +11546,8 @@ p<variableTop/>
   <eq/>蔖
 <reset/>蕤<!-- U+8564 CJK UNIFIED IDEOGRAPH-8564-->
   <eq/>蕤
+<reset/>虍<!-- U+864D CJK UNIFIED IDEOGRAPH-864D-->
+  <t/>⾌
 <reset/>虎<!-- U+864E CJK UNIFIED IDEOGRAPH-864E-->
   <eq/>⻁
 <reset/>虐<!-- U+8650 CJK UNIFIED IDEOGRAPH-8650-->
@@ -11551,6 +11558,8 @@ p<variableTop/>
   <eq/>虧
 <reset/>虩<!-- U+8669 CJK UNIFIED IDEOGRAPH-8669-->
   <eq/>虩
+<reset/>虫<!-- U+866B CJK UNIFIED IDEOGRAPH-866B-->
+  <t/>⾍
 <reset/>蚈<!-- U+8688 CJK UNIFIED IDEOGRAPH-8688-->
   <eq/>蚈
 <reset/>蚩<!-- U+86A9 CJK UNIFIED IDEOGRAPH-86A9-->
@@ -11571,10 +11580,15 @@ p<variableTop/>
   <eq/>蟡
 <reset/>蠁<!-- U+8801 CJK UNIFIED IDEOGRAPH-8801-->
   <eq/>蠁
+<reset/>血<!-- U+8840 CJK UNIFIED IDEOGRAPH-8840-->
+  <t/>⾎
+<reset/>行<!-- U+884C CJK UNIFIED IDEOGRAPH-884C-->
+  <t/>⾏
 <reset/>衠<!-- U+8860 CJK UNIFIED IDEOGRAPH-8860-->
   <eq/>衠
 <reset/>衣<!-- U+8863 CJK UNIFIED IDEOGRAPH-8863-->
   <eq/>衣
+  <t/>⾐
 <reset/>衤<!-- U+8864 CJK UNIFIED IDEOGRAPH-8864-->
   <eq/>⻂
 <reset/>裗<!-- U+88D7 CJK UNIFIED IDEOGRAPH-88D7-->
@@ -11583,14 +11597,22 @@ p<variableTop/>
   <eq/>裞
 <reset/>裺<!-- U+88FA CJK UNIFIED IDEOGRAPH-88FA-->
   <eq/>裺
+<reset/>襾<!-- U+897E CJK UNIFIED IDEOGRAPH-897E-->
+  <t/>⾑
 <reset/>西<!-- U+897F CJK UNIFIED IDEOGRAPH-897F-->
   <eq/>⻄
 <reset/>覀<!-- U+8980 CJK UNIFIED IDEOGRAPH-8980-->
   <eq/>⻃
+<reset/>見<!-- U+898B CJK UNIFIED IDEOGRAPH-898B-->
+  <t/>⾒
 <reset/>见<!-- U+89C1 CJK UNIFIED IDEOGRAPH-89C1-->
   <eq/>⻅
 <reset/>角<!-- U+89D2 CJK UNIFIED IDEOGRAPH-89D2-->
   <eq/>⻆
+  <t/>⾓
+  <t/>⻇
+<reset/>言<!-- U+8A00 CJK UNIFIED IDEOGRAPH-8A00-->
+  <t/>⾔
 <reset/>誠<!-- U+8AA0 CJK UNIFIED IDEOGRAPH-8AA0-->
   <eq/>誠
 <reset/>諭<!-- U+8AED CJK UNIFIED IDEOGRAPH-8AED-->
@@ -11599,34 +11621,71 @@ p<variableTop/>
   <eq/>變
 <reset/>讠<!-- U+8BA0 CJK UNIFIED IDEOGRAPH-8BA0-->
   <eq/>⻈
+<reset/>谷<!-- U+8C37 CJK UNIFIED IDEOGRAPH-8C37-->
+  <t/>⾕
+<reset/>豆<!-- U+8C46 CJK UNIFIED IDEOGRAPH-8C46-->
+  <t/>⾖
 <reset/>豕<!-- U+8C55 CJK UNIFIED IDEOGRAPH-8C55-->
   <eq/>豕
+  <t/>⾗
+<reset/>豸<!-- U+8C78 CJK UNIFIED IDEOGRAPH-8C78-->
+  <t/>⾘
+<reset/>貝<!-- U+8C9D CJK UNIFIED IDEOGRAPH-8C9D-->
+  <t/>⾙
+<reset/>財<!-- U+8CA1 CJK UNIFIED IDEOGRAPH-8CA1-->
+  <t/>㊖
 <reset/>貫<!-- U+8CAB CJK UNIFIED IDEOGRAPH-8CAB-->
   <eq/>貫
 <reset/>賁<!-- U+8CC1 CJK UNIFIED IDEOGRAPH-8CC1-->
   <eq/>賁
+<reset/>資<!-- U+8CC7 CJK UNIFIED IDEOGRAPH-8CC7-->
+  <t/>㊮
 <reset/>贛<!-- U+8D1B CJK UNIFIED IDEOGRAPH-8D1B-->
   <eq/>贛
 <reset/>贝<!-- U+8D1D CJK UNIFIED IDEOGRAPH-8D1D-->
   <eq/>⻉
+<reset/>赤<!-- U+8D64 CJK UNIFIED IDEOGRAPH-8D64-->
+  <t/>⾚
+<reset/>走<!-- U+8D70 CJK UNIFIED IDEOGRAPH-8D70-->
+  <t/>⾛
 <reset/>起<!-- U+8D77 CJK UNIFIED IDEOGRAPH-8D77-->
   <eq/>起
+<reset/>足<!-- U+8DB3 CJK UNIFIED IDEOGRAPH-8DB3-->
+  <t/>⾜
+  <t/>⻊
 <reset/>趼<!-- U+8DBC CJK UNIFIED IDEOGRAPH-8DBC-->
   <eq/>趼
 <reset/>跋<!-- U+8DCB CJK UNIFIED IDEOGRAPH-8DCB-->
   <eq/>跋
 <reset/>跰<!-- U+8DF0 CJK UNIFIED IDEOGRAPH-8DF0-->
   <eq/>跰
+<reset/>身<!-- U+8EAB CJK UNIFIED IDEOGRAPH-8EAB-->
+  <t/>⾝
+<reset/>車<!-- U+8ECA CJK UNIFIED IDEOGRAPH-8ECA-->
+  <t/>⾞
 <reset/>軔<!-- U+8ED4 CJK UNIFIED IDEOGRAPH-8ED4-->
   <eq/>軔
 <reset/>輸<!-- U+8F38 CJK UNIFIED IDEOGRAPH-8F38-->
   <eq/>輸
 <reset/>车<!-- U+8F66 CJK UNIFIED IDEOGRAPH-8F66-->
   <eq/>⻋
+<reset/>辛<!-- U+8F9B CJK UNIFIED IDEOGRAPH-8F9B-->
+  <t/>⾟
 <reset/>辞<!-- U+8F9E CJK UNIFIED IDEOGRAPH-8F9E-->
   <eq/>辞
+<reset/>辰<!-- U+8FB0 CJK UNIFIED IDEOGRAPH-8FB0-->
+  <t/>⾠
+<reset/>辵<!-- U+8FB5 CJK UNIFIED IDEOGRAPH-8FB5-->
+  <t/>⾡
 <reset/>辶<!-- U+8FB6 CJK UNIFIED IDEOGRAPH-8FB6-->
   <eq/>⻌
+  <t/>⻍
+  <t/>⻎
+<reset/>適<!-- U+9069 CJK UNIFIED IDEOGRAPH-9069-->
+  <t/>㊜
+<reset/>邑<!-- U+9091 CJK UNIFIED IDEOGRAPH-9091-->
+  <t/>⾢
+  <t/>⻏
 <reset/>邔<!-- U+9094 CJK UNIFIED IDEOGRAPH-9094-->
   <eq/>邔
 <reset/>郱<!-- U+90F1 CJK UNIFIED IDEOGRAPH-90F1-->
@@ -11635,6 +11694,15 @@ p<variableTop/>
   <eq/>鄑
 <reset/>鄛<!-- U+911B CJK UNIFIED IDEOGRAPH-911B-->
   <eq/>鄛
+<reset/>酉<!-- U+9149 CJK UNIFIED IDEOGRAPH-9149-->
+  <t/>⾣
+<reset/>釆<!-- U+91C6 CJK UNIFIED IDEOGRAPH-91C6-->
+  <t/>⾤
+<reset/>里<!-- U+91CC CJK UNIFIED IDEOGRAPH-91CC-->
+  <t/>⾥
+<reset/>金<!-- U+91D1 CJK UNIFIED IDEOGRAPH-91D1-->
+  <t/>⾦
+  <t/>㊎
 <reset/>鈸<!-- U+9238 CJK UNIFIED IDEOGRAPH-9238-->
   <eq/>鈸
 <reset/>鉼<!-- U+927C CJK UNIFIED IDEOGRAPH-927C-->
@@ -11651,28 +11719,59 @@ p<variableTop/>
   <eq/>⻐
 <reset/>長<!-- U+9577 CJK UNIFIED IDEOGRAPH-9577-->
   <eq/>⻑
+  <t/>⾧
 <reset/>镸<!-- U+9578 CJK UNIFIED IDEOGRAPH-9578-->
   <eq/>⻒
 <reset/>长<!-- U+957F CJK UNIFIED IDEOGRAPH-957F-->
   <eq/>⻓
+<reset/>門<!-- U+9580 CJK UNIFIED IDEOGRAPH-9580-->
+  <t/>⾨
 <reset/>開<!-- U+958B CJK UNIFIED IDEOGRAPH-958B-->
   <eq/>開
 <reset/>閷<!-- U+95B7 CJK UNIFIED IDEOGRAPH-95B7-->
   <eq/>閷
 <reset/>门<!-- U+95E8 CJK UNIFIED IDEOGRAPH-95E8-->
   <eq/>⻔
+<reset/>阜<!-- U+961C CJK UNIFIED IDEOGRAPH-961C-->
+  <t/>⾩
+  <t/>⻕
 <reset/>阝<!-- U+961D CJK UNIFIED IDEOGRAPH-961D-->
   <eq/>⻖
+<reset/>隶<!-- U+96B6 CJK UNIFIED IDEOGRAPH-96B6-->
+  <t/>⾪
+<reset/>隹<!-- U+96B9 CJK UNIFIED IDEOGRAPH-96B9-->
+  <t/>⾫
 <reset/>雃<!-- U+96C3 CJK UNIFIED IDEOGRAPH-96C3-->
   <eq/>雃
+<reset/>雨<!-- U+96E8 CJK UNIFIED IDEOGRAPH-96E8-->
+  <t/>⾬
+  <t/>⻗
 <reset/>霣<!-- U+9723 CJK UNIFIED IDEOGRAPH-9723-->
   <eq/>霣
+<reset/>靑<!-- U+9751 CJK UNIFIED IDEOGRAPH-9751-->
+  <t/>⾭
 <reset/>青<!-- U+9752 CJK UNIFIED IDEOGRAPH-9752-->
   <eq/>⻘
+<reset/>非<!-- U+975E CJK UNIFIED IDEOGRAPH-975E-->
+  <t/>⾮
+<reset/>面<!-- U+9762 CJK UNIFIED IDEOGRAPH-9762-->
+  <t/>⾯
+<reset/>革<!-- U+9769 CJK UNIFIED IDEOGRAPH-9769-->
+  <t/>⾰
+<reset/>韋<!-- U+97CB CJK UNIFIED IDEOGRAPH-97CB-->
+  <t/>⾱
 <reset/>韠<!-- U+97E0 CJK UNIFIED IDEOGRAPH-97E0-->
   <eq/>韠
 <reset/>韦<!-- U+97E6 CJK UNIFIED IDEOGRAPH-97E6-->
   <eq/>⻙
+<reset/>韭<!-- U+97ED CJK UNIFIED IDEOGRAPH-97ED-->
+  <t/>⾲
+<reset/>音<!-- U+97F3 CJK UNIFIED IDEOGRAPH-97F3-->
+  <t/>⾳
+<reset/>頁<!-- U+9801 CJK UNIFIED IDEOGRAPH-9801-->
+  <t/>⾴
+<reset/>項<!-- U+9805 CJK UNIFIED IDEOGRAPH-9805-->
+  <t/>㊠
 <reset/>頋<!-- U+980B CJK UNIFIED IDEOGRAPH-980B-->
   <eq/>頋
   <eq/>頋
@@ -11680,65 +11779,139 @@ p<variableTop/>
   <eq/>頩
 <reset/>页<!-- U+9875 CJK UNIFIED IDEOGRAPH-9875-->
   <eq/>⻚
+<reset/>風<!-- U+98A8 CJK UNIFIED IDEOGRAPH-98A8-->
+  <t/>⾵
 <reset/>风<!-- U+98CE CJK UNIFIED IDEOGRAPH-98CE-->
   <eq/>⻛
+<reset/>飛<!-- U+98DB CJK UNIFIED IDEOGRAPH-98DB-->
+  <t/>⾶
 <reset/>飞<!-- U+98DE CJK UNIFIED IDEOGRAPH-98DE-->
   <eq/>⻜
 <reset/>食<!-- U+98DF CJK UNIFIED IDEOGRAPH-98DF-->
   <eq/>⻝
+  <t/>⾷
 <reset/>飠<!-- U+98E0 CJK UNIFIED IDEOGRAPH-98E0-->
   <eq/>⻟
+  <t/>⻞
 <reset/>飢<!-- U+98E2 CJK UNIFIED IDEOGRAPH-98E2-->
   <eq/>飢
 <reset/>餩<!-- U+9929 CJK UNIFIED IDEOGRAPH-9929-->
   <eq/>餩
 <reset/>饣<!-- U+9963 CJK UNIFIED IDEOGRAPH-9963-->
   <eq/>⻠
+<reset/>首<!-- U+9996 CJK UNIFIED IDEOGRAPH-9996-->
+  <t/>⾸
+  <t/>⻡
+<reset/>香<!-- U+9999 CJK UNIFIED IDEOGRAPH-9999-->
+  <t/>⾹
 <reset/>馧<!-- U+99A7 CJK UNIFIED IDEOGRAPH-99A7-->
   <eq/>馧
+<reset/>馬<!-- U+99AC CJK UNIFIED IDEOGRAPH-99AC-->
+  <t/>⾺
 <reset/>駂<!-- U+99C2 CJK UNIFIED IDEOGRAPH-99C2-->
   <eq/>駂
 <reset/>駾<!-- U+99FE CJK UNIFIED IDEOGRAPH-99FE-->
   <eq/>駾
 <reset/>马<!-- U+9A6C CJK UNIFIED IDEOGRAPH-9A6C-->
   <eq/>⻢
+<reset/>骨<!-- U+9AA8 CJK UNIFIED IDEOGRAPH-9AA8-->
+  <t/>⾻
+  <t/>⻣
+<reset/>高<!-- U+9AD8 CJK UNIFIED IDEOGRAPH-9AD8-->
+  <t/>⾼
+<reset/>髟<!-- U+9ADF CJK UNIFIED IDEOGRAPH-9ADF-->
+  <t/>⾽
 <reset/>鬒<!-- U+9B12 CJK UNIFIED IDEOGRAPH-9B12-->
   <eq/>鬒
+<reset/>鬥<!-- U+9B25 CJK UNIFIED IDEOGRAPH-9B25-->
+  <t/>⾾
+<reset/>鬯<!-- U+9B2F CJK UNIFIED IDEOGRAPH-9B2F-->
+  <t/>⾿
+<reset/>鬲<!-- U+9B32 CJK UNIFIED IDEOGRAPH-9B32-->
+  <t/>⿀
+<reset/>鬼<!-- U+9B3C CJK UNIFIED IDEOGRAPH-9B3C-->
+  <t/>⿁
+  <t/>⻤
+<reset/>魚<!-- U+9B5A CJK UNIFIED IDEOGRAPH-9B5A-->
+  <t/>⿂
 <reset/>鱀<!-- U+9C40 CJK UNIFIED IDEOGRAPH-9C40-->
   <eq/>鱀
 <reset/>鱼<!-- U+9C7C CJK UNIFIED IDEOGRAPH-9C7C-->
   <eq/>⻥
+<reset/>鳥<!-- U+9CE5 CJK UNIFIED IDEOGRAPH-9CE5-->
+  <t/>⿃
 <reset/>鳽<!-- U+9CFD CJK UNIFIED IDEOGRAPH-9CFD-->
   <eq/>鳽
 <reset/>鵧<!-- U+9D67 CJK UNIFIED IDEOGRAPH-9D67-->
   <eq/>鵧
 <reset/>鸟<!-- U+9E1F CJK UNIFIED IDEOGRAPH-9E1F-->
   <eq/>⻦
+<reset/>鹵<!-- U+9E75 CJK UNIFIED IDEOGRAPH-9E75-->
+  <t/>⿄
+  <t/>⻧
+<reset/>鹿<!-- U+9E7F CJK UNIFIED IDEOGRAPH-9E7F-->
+  <t/>⿅
+<reset/>麥<!-- U+9EA5 CJK UNIFIED IDEOGRAPH-9EA5-->
+  <t/>⿆
 <reset/>麦<!-- U+9EA6 CJK UNIFIED IDEOGRAPH-9EA6-->
   <eq/>⻨
 <reset/>麻<!-- U+9EBB CJK UNIFIED IDEOGRAPH-9EBB-->
   <eq/>麻
+  <t/>⿇
+<reset/>黃<!-- U+9EC3 CJK UNIFIED IDEOGRAPH-9EC3-->
+  <t/>⿈
 <reset/>黄<!-- U+9EC4 CJK UNIFIED IDEOGRAPH-9EC4-->
   <eq/>⻩
+<reset/>黍<!-- U+9ECD CJK UNIFIED IDEOGRAPH-9ECD-->
+  <t/>⿉
+<reset/>黑<!-- U+9ED1 CJK UNIFIED IDEOGRAPH-9ED1-->
+  <t/>⿊
 <reset/>黹<!-- U+9EF9 CJK UNIFIED IDEOGRAPH-9EF9-->
   <eq/>黹
+  <t/>⿋
+<reset/>黽<!-- U+9EFD CJK UNIFIED IDEOGRAPH-9EFD-->
+  <t/>⿌
 <reset/>黾<!-- U+9EFE CJK UNIFIED IDEOGRAPH-9EFE-->
   <eq/>⻪
   <eq/>黾
 <reset/>鼅<!-- U+9F05 CJK UNIFIED IDEOGRAPH-9F05-->
   <eq/>鼅
+<reset/>鼎<!-- U+9F0E CJK UNIFIED IDEOGRAPH-9F0E-->
+  <t/>⿍
 <reset/>鼏<!-- U+9F0F CJK UNIFIED IDEOGRAPH-9F0F-->
   <eq/>鼏
+<reset/>鼓<!-- U+9F13 CJK UNIFIED IDEOGRAPH-9F13-->
+  <t/>⿎
 <reset/>鼖<!-- U+9F16 CJK UNIFIED IDEOGRAPH-9F16-->
   <eq/>鼖
+<reset/>鼠<!-- U+9F20 CJK UNIFIED IDEOGRAPH-9F20-->
+  <t/>⿏
 <reset/>鼻<!-- U+9F3B CJK UNIFIED IDEOGRAPH-9F3B-->
   <eq/>鼻
+  <t/>⿐
+<reset/>齊<!-- U+9F4A CJK UNIFIED IDEOGRAPH-9F4A-->
+  <t/>⿑
+  <t/>⻫
 <reset/>齐<!-- U+9F50 CJK UNIFIED IDEOGRAPH-9F50-->
   <eq/>⻬
+<reset/>齒<!-- U+9F52 CJK UNIFIED IDEOGRAPH-9F52-->
+  <t/>⿒
+  <t/>⻭
 <reset/>齿<!-- U+9F7F CJK UNIFIED IDEOGRAPH-9F7F-->
   <eq/>⻮
+<reset/>龍<!-- U+9F8D CJK UNIFIED IDEOGRAPH-9F8D-->
+  <t/>⿓
+  <t/>⻯
 <reset/>龙<!-- U+9F99 CJK UNIFIED IDEOGRAPH-9F99-->
   <eq/>⻰
+<reset/>龜<!-- U+9F9C CJK UNIFIED IDEOGRAPH-9F9C-->
+  <t/>⿔
+  <t/>⻱
+  <t/>⻲
+<reset/>龟<!-- U+9F9F CJK UNIFIED IDEOGRAPH-9F9F-->
+  <t/>⻳
+<reset/>龠<!-- U+9FA0 CJK UNIFIED IDEOGRAPH-9FA0-->
+  <t/>⿕
 <reset/>﨎<!-- U+FA0E CJK COMPATIBILITY IDEOGRAPH-FA0E-->
   <eq/>﨎
 <reset/>﨏<!-- U+FA0F CJK COMPATIBILITY IDEOGRAPH-FA0F-->
@@ -11763,223 +11936,6 @@ p<variableTop/>
   <eq/>﨨
 <reset/>﨩<!-- U+FA29 CJK COMPATIBILITY IDEOGRAPH-FA29-->
   <eq/>﨩
-<reset/>老<!-- U+8001 CJK UNIFIED IDEOGRAPH-8001-->
-  <t/>⽼
-<reset/>而<!-- U+800C CJK UNIFIED IDEOGRAPH-800C-->
-  <t/>⽽
-<reset/>耒<!-- U+8012 CJK UNIFIED IDEOGRAPH-8012-->
-  <t/>⽾
-<reset/>耳<!-- U+8033 CJK UNIFIED IDEOGRAPH-8033-->
-  <t/>⽿
-<reset/>聿<!-- U+807F CJK UNIFIED IDEOGRAPH-807F-->
-  <t/>⾀
-  <t/>⺻
-<reset/>肉<!-- U+8089 CJK UNIFIED IDEOGRAPH-8089-->
-  <t/>⾁
-  <t/>⺼
-<reset/>臣<!-- U+81E3 CJK UNIFIED IDEOGRAPH-81E3-->
-  <t/>⾂
-<reset/>自<!-- U+81EA CJK UNIFIED IDEOGRAPH-81EA-->
-  <t/>⾃
-<reset/>至<!-- U+81F3 CJK UNIFIED IDEOGRAPH-81F3-->
-  <t/>⾄
-<reset/>臼<!-- U+81FC CJK UNIFIED IDEOGRAPH-81FC-->
-  <t/>⾅
-  <t/>⺽
-<reset/>舌<!-- U+820C CJK UNIFIED IDEOGRAPH-820C-->
-  <t/>⾆
-<reset/>舛<!-- U+821B CJK UNIFIED IDEOGRAPH-821B-->
-  <t/>⾇
-<reset/>舟<!-- U+821F CJK UNIFIED IDEOGRAPH-821F-->
-  <t/>⾈
-<reset/>艮<!-- U+826E CJK UNIFIED IDEOGRAPH-826E-->
-  <t/>⾉
-<reset/>色<!-- U+8272 CJK UNIFIED IDEOGRAPH-8272-->
-  <t/>⾊
-<reset/>艸<!-- U+8278 CJK UNIFIED IDEOGRAPH-8278-->
-  <t/>⾋
-<reset/>艹<!-- U+8279 CJK UNIFIED IDEOGRAPH-8279-->
-  <s/>⺿
-  <t/>⻀
-<reset/>虍<!-- U+864D CJK UNIFIED IDEOGRAPH-864D-->
-  <t/>⾌
-<reset/>虫<!-- U+866B CJK UNIFIED IDEOGRAPH-866B-->
-  <t/>⾍
-<reset/>血<!-- U+8840 CJK UNIFIED IDEOGRAPH-8840-->
-  <t/>⾎
-<reset/>行<!-- U+884C CJK UNIFIED IDEOGRAPH-884C-->
-  <t/>⾏
-<reset/>衣<!-- U+8863 CJK UNIFIED IDEOGRAPH-8863-->
-  <t/>⾐
-<reset/>襾<!-- U+897E CJK UNIFIED IDEOGRAPH-897E-->
-  <t/>⾑
-<reset/>見<!-- U+898B CJK UNIFIED IDEOGRAPH-898B-->
-  <t/>⾒
-<reset/>角<!-- U+89D2 CJK UNIFIED IDEOGRAPH-89D2-->
-  <t/>⾓
-  <t/>⻇
-<reset/>言<!-- U+8A00 CJK UNIFIED IDEOGRAPH-8A00-->
-  <t/>⾔
-<reset/>谷<!-- U+8C37 CJK UNIFIED IDEOGRAPH-8C37-->
-  <t/>⾕
-<reset/>豆<!-- U+8C46 CJK UNIFIED IDEOGRAPH-8C46-->
-  <t/>⾖
-<reset/>豕<!-- U+8C55 CJK UNIFIED IDEOGRAPH-8C55-->
-  <t/>⾗
-<reset/>豸<!-- U+8C78 CJK UNIFIED IDEOGRAPH-8C78-->
-  <t/>⾘
-<reset/>貝<!-- U+8C9D CJK UNIFIED IDEOGRAPH-8C9D-->
-  <t/>⾙
-<reset/>赤<!-- U+8D64 CJK UNIFIED IDEOGRAPH-8D64-->
-  <t/>⾚
-<reset/>走<!-- U+8D70 CJK UNIFIED IDEOGRAPH-8D70-->
-  <t/>⾛
-<reset/>足<!-- U+8DB3 CJK UNIFIED IDEOGRAPH-8DB3-->
-  <t/>⾜
-  <t/>⻊
-<reset/>身<!-- U+8EAB CJK UNIFIED IDEOGRAPH-8EAB-->
-  <t/>⾝
-<reset/>車<!-- U+8ECA CJK UNIFIED IDEOGRAPH-8ECA-->
-  <t/>⾞
-<reset/>辛<!-- U+8F9B CJK UNIFIED IDEOGRAPH-8F9B-->
-  <t/>⾟
-<reset/>辰<!-- U+8FB0 CJK UNIFIED IDEOGRAPH-8FB0-->
-  <t/>⾠
-<reset/>辵<!-- U+8FB5 CJK UNIFIED IDEOGRAPH-8FB5-->
-  <t/>⾡
-<reset/>辶<!-- U+8FB6 CJK UNIFIED IDEOGRAPH-8FB6-->
-  <s/>⻍
-  <t/>⻎
-<reset/>邑<!-- U+9091 CJK UNIFIED IDEOGRAPH-9091-->
-  <t/>⾢
-  <t/>⻏
-<reset/>酉<!-- U+9149 CJK UNIFIED IDEOGRAPH-9149-->
-  <t/>⾣
-<reset/>釆<!-- U+91C6 CJK UNIFIED IDEOGRAPH-91C6-->
-  <t/>⾤
-<reset/>里<!-- U+91CC CJK UNIFIED IDEOGRAPH-91CC-->
-  <t/>⾥
-<reset/>金<!-- U+91D1 CJK UNIFIED IDEOGRAPH-91D1-->
-  <t/>⾦
-<reset/>長<!-- U+9577 CJK UNIFIED IDEOGRAPH-9577-->
-  <t/>⾧
-<reset/>門<!-- U+9580 CJK UNIFIED IDEOGRAPH-9580-->
-  <t/>⾨
-<reset/>阜<!-- U+961C CJK UNIFIED IDEOGRAPH-961C-->
-  <t/>⾩
-  <t/>⻕
-<reset/>隶<!-- U+96B6 CJK UNIFIED IDEOGRAPH-96B6-->
-  <t/>⾪
-<reset/>隹<!-- U+96B9 CJK UNIFIED IDEOGRAPH-96B9-->
-  <t/>⾫
-<reset/>雨<!-- U+96E8 CJK UNIFIED IDEOGRAPH-96E8-->
-  <t/>⾬
-  <t/>⻗
-<reset/>靑<!-- U+9751 CJK UNIFIED IDEOGRAPH-9751-->
-  <t/>⾭
-<reset/>非<!-- U+975E CJK UNIFIED IDEOGRAPH-975E-->
-  <t/>⾮
-<reset/>面<!-- U+9762 CJK UNIFIED IDEOGRAPH-9762-->
-  <t/>⾯
-<reset/>革<!-- U+9769 CJK UNIFIED IDEOGRAPH-9769-->
-  <t/>⾰
-<reset/>韋<!-- U+97CB CJK UNIFIED IDEOGRAPH-97CB-->
-  <t/>⾱
-<reset/>韭<!-- U+97ED CJK UNIFIED IDEOGRAPH-97ED-->
-  <t/>⾲
-<reset/>音<!-- U+97F3 CJK UNIFIED IDEOGRAPH-97F3-->
-  <t/>⾳
-<reset/>頁<!-- U+9801 CJK UNIFIED IDEOGRAPH-9801-->
-  <t/>⾴
-<reset/>風<!-- U+98A8 CJK UNIFIED IDEOGRAPH-98A8-->
-  <t/>⾵
-<reset/>飛<!-- U+98DB CJK UNIFIED IDEOGRAPH-98DB-->
-  <t/>⾶
-<reset/>食<!-- U+98DF CJK UNIFIED IDEOGRAPH-98DF-->
-  <t/>⾷
-<reset/>飠<!-- U+98E0 CJK UNIFIED IDEOGRAPH-98E0-->
-  <s/>⻞
-<reset/>首<!-- U+9996 CJK UNIFIED IDEOGRAPH-9996-->
-  <t/>⾸
-  <t/>⻡
-<reset/>香<!-- U+9999 CJK UNIFIED IDEOGRAPH-9999-->
-  <t/>⾹
-<reset/>馬<!-- U+99AC CJK UNIFIED IDEOGRAPH-99AC-->
-  <t/>⾺
-<reset/>骨<!-- U+9AA8 CJK UNIFIED IDEOGRAPH-9AA8-->
-  <t/>⾻
-  <t/>⻣
-<reset/>高<!-- U+9AD8 CJK UNIFIED IDEOGRAPH-9AD8-->
-  <t/>⾼
-<reset/>髟<!-- U+9ADF CJK UNIFIED IDEOGRAPH-9ADF-->
-  <t/>⾽
-<reset/>鬥<!-- U+9B25 CJK UNIFIED IDEOGRAPH-9B25-->
-  <t/>⾾
-<reset/>鬯<!-- U+9B2F CJK UNIFIED IDEOGRAPH-9B2F-->
-  <t/>⾿
-<reset/>鬲<!-- U+9B32 CJK UNIFIED IDEOGRAPH-9B32-->
-  <t/>⿀
-<reset/>鬼<!-- U+9B3C CJK UNIFIED IDEOGRAPH-9B3C-->
-  <t/>⿁
-  <t/>⻤
-<reset/>魚<!-- U+9B5A CJK UNIFIED IDEOGRAPH-9B5A-->
-  <t/>⿂
-<reset/>鳥<!-- U+9CE5 CJK UNIFIED IDEOGRAPH-9CE5-->
-  <t/>⿃
-<reset/>鹵<!-- U+9E75 CJK UNIFIED IDEOGRAPH-9E75-->
-  <t/>⿄
-  <t/>⻧
-<reset/>鹿<!-- U+9E7F CJK UNIFIED IDEOGRAPH-9E7F-->
-  <t/>⿅
-<reset/>麥<!-- U+9EA5 CJK UNIFIED IDEOGRAPH-9EA5-->
-  <t/>⿆
-<reset/>麻<!-- U+9EBB CJK UNIFIED IDEOGRAPH-9EBB-->
-  <t/>⿇
-<reset/>黃<!-- U+9EC3 CJK UNIFIED IDEOGRAPH-9EC3-->
-  <t/>⿈
-<reset/>黍<!-- U+9ECD CJK UNIFIED IDEOGRAPH-9ECD-->
-  <t/>⿉
-<reset/>黑<!-- U+9ED1 CJK UNIFIED IDEOGRAPH-9ED1-->
-  <t/>⿊
-<reset/>黹<!-- U+9EF9 CJK UNIFIED IDEOGRAPH-9EF9-->
-  <t/>⿋
-<reset/>黽<!-- U+9EFD CJK UNIFIED IDEOGRAPH-9EFD-->
-  <t/>⿌
-<reset/>鼎<!-- U+9F0E CJK UNIFIED IDEOGRAPH-9F0E-->
-  <t/>⿍
-<reset/>鼓<!-- U+9F13 CJK UNIFIED IDEOGRAPH-9F13-->
-  <t/>⿎
-<reset/>鼠<!-- U+9F20 CJK UNIFIED IDEOGRAPH-9F20-->
-  <t/>⿏
-<reset/>鼻<!-- U+9F3B CJK UNIFIED IDEOGRAPH-9F3B-->
-  <t/>⿐
-<reset/>齊<!-- U+9F4A CJK UNIFIED IDEOGRAPH-9F4A-->
-  <t/>⿑
-  <t/>⻫
-<reset/>齒<!-- U+9F52 CJK UNIFIED IDEOGRAPH-9F52-->
-  <t/>⿒
-  <t/>⻭
-<reset/>龍<!-- U+9F8D CJK UNIFIED IDEOGRAPH-9F8D-->
-  <t/>⿓
-  <t/>⻯
-<reset/>龜<!-- U+9F9C CJK UNIFIED IDEOGRAPH-9F9C-->
-  <t/>⿔
-  <t/>⻱
-  <t/>⻲
-<reset/>龟<!-- U+9F9F CJK UNIFIED IDEOGRAPH-9F9F-->
-  <t/>⻳
-<reset/>龠<!-- U+9FA0 CJK UNIFIED IDEOGRAPH-9FA0-->
-  <t/>⿕
-<reset/>財<!-- U+8CA1 CJK UNIFIED IDEOGRAPH-8CA1-->
-  <t/>㊖
-<reset/>資<!-- U+8CC7 CJK UNIFIED IDEOGRAPH-8CC7-->
-  <t/>㊮
-<reset/>適<!-- U+9069 CJK UNIFIED IDEOGRAPH-9069-->
-  <t/>㊜
-<reset/>金<!-- U+91D1 CJK UNIFIED IDEOGRAPH-91D1-->
-  <t/>㊎
-<reset/>項<!-- U+9805 CJK UNIFIED IDEOGRAPH-9805-->
-  <t/>㊠
 <reset/>㒞<!-- U+349E CJK UNIFIED IDEOGRAPH-349E-->
   <eq/>㒞
 <reset/>㒹<!-- U+34B9 CJK UNIFIED IDEOGRAPH-34B9-->
