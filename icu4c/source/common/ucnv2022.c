@@ -1286,6 +1286,9 @@ fromUnicodeCallback(UConverterFromUnicodeArgs* args,const UChar32 sourceChar,con
     int32_t* offsets = *pOffsets;
     const UChar* source = *pSource;
     unsigned char* target = *pTarget;
+
+    args->converter->invalidUCharLength = 0;
+    
     if(sourceChar>0xffff){
         args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((sourceChar)>>10)+0xd7c0);
         args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((sourceChar)&0x3ff)|0xdc00);
@@ -1327,7 +1330,6 @@ fromUnicodeCallback(UConverterFromUnicodeArgs* args,const UChar32 sourceChar,con
     args->source=saveSource;
     args->target=saveTarget;
     args->offsets=saveOffsets;
-    args->converter->invalidUCharLength = 0;
     args->converter->fromUSurrogateLead=0x00;
 
 }
@@ -1347,7 +1349,9 @@ toUnicodeCallback(UConverterToUnicodeArgs* args, const uint32_t sourceChar,const
     UConverterCallbackReason reason;
     int32_t currentOffset;
     int32_t saveIndex = target - args->target;
-    
+
+    args->converter->invalidCharLength=0;
+
     if(sourceChar>0xff){
         currentOffset= source - args->source - 2;
         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(sourceChar>>8);
@@ -1392,7 +1396,6 @@ toUnicodeCallback(UConverterToUnicodeArgs* args, const uint32_t sourceChar,const
           args->offsets[saveIndex] += currentOffset;
         }
     }
-    args->converter->invalidCharLength=0;
     target=args->target;
     *pTarget=target;
     args->source  = saveSource;
