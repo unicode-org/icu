@@ -1,19 +1,15 @@
 
 /*
 ********************************************************************
-* COPYRIGHT: 
-* (C) Copyright Taligent, Inc., 1996
-* (C) Copyright International Business Machines Corporation, 1996 - 1999
-* Licensed Material - Program-Property of IBM - All Rights Reserved. 
-* US Government Users Restricted Rights - Use, duplication, or disclosure 
-* restricted by GSA ADP Schedule Contract with IBM Corp. 
+*
+*   Copyright (C) 1996-1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
 *
 ********************************************************************
 */
 
 /*
  * ==========================================================================
- * Copyright (c) 1995 Taligent, Inc. All Rights Reserved.
  * @version 1.0 23/10/96
  * @author  Helena Shih
  * Based on Taligent international support for java
@@ -76,7 +72,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.3 $ 8/25/98
+ * @version            $Revision: 1.4 $ 8/25/98
  * @author             Helena Shih
  */
 
