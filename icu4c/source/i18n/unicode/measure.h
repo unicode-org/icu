@@ -98,6 +98,13 @@ class U_I18N_API Measure: public UObject {
      */
     inline const MeasureUnit& getUnit() const;
 
+ protected:
+    /**
+     * Default constructor.
+     * @draft ICU 3.0
+     */
+    Measure();
+
  private:
     /**
      * The numeric value of this object, e.g. 2.54 or 100.
