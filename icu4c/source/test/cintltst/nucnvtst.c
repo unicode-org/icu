@@ -1776,8 +1776,8 @@ TestLATIN1() {
     TestNextUChar(cnv, source, limit, results, "LATIN_1");
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
-    TestConv((uint16_t*)in1,sizeof(in1)/2,"LATIN_1","LATIN-1",(unsigned char*)out1,sizeof(out1));
-    TestConv((uint16_t*)in2,sizeof(in2)/2,"ASCII","ASCII",(unsigned char*)out2,sizeof(out2));
+    TestConv((uint16_t*)in1,sizeof(in1)/2,"LATIN_1","LATIN-1",(char*)out1,sizeof(out1));
+    TestConv((uint16_t*)in2,sizeof(in2)/2,"ASCII","ASCII",(char*)out2,sizeof(out2));
 
     ucnv_close(cnv);
 }
