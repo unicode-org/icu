@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2001/12/13 23:35:56 $
-* $Revision: 1.8 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -84,6 +84,7 @@ public final class Main implements UCD_Types {
 
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
             else if (arg.equalsIgnoreCase("checkCase")) VerifyUCD.checkCase();
+            else if (arg.equalsIgnoreCase("checkCase3")) VerifyUCD.checkCase3();
             else if (arg.equalsIgnoreCase("checkCaseLong")) VerifyUCD.checkCase2(true);
             else if (arg.equalsIgnoreCase("checkCaseShort")) VerifyUCD.checkCase2(false);
             else if (arg.equalsIgnoreCase("checkCanonicalProperties")) VerifyUCD.checkCanonicalProperties();
@@ -91,11 +92,16 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("idn")) VerifyUCD.VerifyIDN();
             else if (arg.equalsIgnoreCase("NFTest")) VerifyUCD.NFTest();
             else if (arg.equalsIgnoreCase("test1")) VerifyUCD.test1();
+            else if (arg.equalsIgnoreCase("TrailingZeros")) GenerateData.genTrailingZeros();
+            else if (arg.equalsIgnoreCase("GenerateThaiBreaks")) GenerateThaiBreaks.main(null);
+            
             //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
             else if (arg.equalsIgnoreCase("checkScripts")) VerifyUCD.checkScripts();
             else if (arg.equalsIgnoreCase("IdentifierTest")) VerifyUCD.IdentifierTest();
             else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
+            else if (arg.equalsIgnoreCase("TestDirectoryIterator")) DirectoryIterator.test();
+            else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
             /*else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
                 */
@@ -128,47 +134,47 @@ public final class Main implements UCD_Types {
             
             } else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
                 GenerateData.generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedBidiClass");
+                    "DerivedData/extracted/", "DerivedBidiClass");
                     
             } else if (arg.equalsIgnoreCase("DerivedBinaryProperties")) {
                 GenerateData.generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES+1, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedBinaryProperties" );
+                    "DerivedData/extracted/", "DerivedBinaryProperties" );
                     
             } else if (arg.equalsIgnoreCase("DerivedCombiningClass")) {
                 GenerateData.generateVerticalSlice(COMBINING_CLASS, COMBINING_CLASS+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedCombiningClass" );
+                    "DerivedData/extracted/", "DerivedCombiningClass" );
                     
             } else if (arg.equalsIgnoreCase("DerivedDecompositionType")) {
                 GenerateData.generateVerticalSlice(DECOMPOSITION_TYPE, DECOMPOSITION_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedDecompositionType" );
+                    "DerivedData/extracted/", "DerivedDecompositionType" );
 
             } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
                 GenerateData.generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedEastAsianWidth" );
+                    "DerivedData/extracted/", "DerivedEastAsianWidth" );
                     
             } else if (arg.equalsIgnoreCase("DerivedGeneralCategory")) {
                 GenerateData.generateVerticalSlice(CATEGORY, CATEGORY+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedGeneralCategory" );
+                    "DerivedData/extracted/", "DerivedGeneralCategory" );
                     
             } else if (arg.equalsIgnoreCase("DerivedJoiningGroup")) {
                 GenerateData.generateVerticalSlice(JOINING_GROUP, JOINING_GROUP+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedJoiningGroup" );
+                    "DerivedData/extracted/", "DerivedJoiningGroup" );
                     
             } else if (arg.equalsIgnoreCase("DerivedJoiningType")) {
                 GenerateData.generateVerticalSlice(JOINING_TYPE, JOINING_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedJoiningType" );
+                    "DerivedData/extracted/", "DerivedJoiningType" );
                     
             } else if (arg.equalsIgnoreCase("DerivedLineBreak")) {
                 GenerateData.generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedLineBreak" );
+                    "DerivedData/extracted/", "DerivedLineBreak" );
 
             } else if (arg.equalsIgnoreCase("DerivedNumericType")) {
                 GenerateData.generateVerticalSlice(NUMERIC_TYPE, NUMERIC_TYPE+NEXT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedNumericType" );
+                    "DerivedData/extracted/", "DerivedNumericType" );
 
             } else if (arg.equalsIgnoreCase("DerivedNumericValues")) {
                 GenerateData.generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, GenerateData.HEADER_DERIVED,
-                    "DerivedData/DerivedExtractedProperties/", "DerivedNumericValues" );
+                    "DerivedData/extracted/", "DerivedNumericValues" );
             
     // OTHER STANDARD PROPERTIES
     
@@ -177,7 +183,8 @@ public final class Main implements UCD_Types {
                 GenerateCaseFolding.makeCaseFold(false);
                     
             } else if (arg.equalsIgnoreCase("SpecialCasing")) {
-                GenerateCaseFolding.generateSpecialCasing();
+                GenerateCaseFolding.generateSpecialCasing(true);
+                GenerateCaseFolding.generateSpecialCasing(false);
                     
             } else if (arg.equalsIgnoreCase("CompositionExclusions")) {
                 GenerateData.generateCompExclusions();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.8 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -19,17 +19,16 @@ import java.math.BigDecimal;
 //import com.ibm.text.unicode.UInfo;
 import java.util.*;
 import java.io.*;
-//import java.text.*;
-import com.ibm.text.*;
-
+//import java.text.Un;
+import com.ibm.text.CanonicalIterator;
+import com.ibm.text.UnicodeSet;
+import com.ibm.text.UTF16;
 import com.ibm.text.utility.*;
 
 public class VerifyUCD implements UCD_Types {
     
     public static void verify() throws IOException {
         Main.setUCD();
-        
-        UnicodeProperty softdot = DerivedProperty.make(Type_i, Main.ucd);
         
         checkIdentical("ea=h", "dt=nar");
         checkIdentical("ea=f", "dt=wide");
@@ -74,26 +73,59 @@ can help you narrow these down.
 >GC:Mn -> LB:CM
 >GC:Pe -> LB:CL
 */
+    }
+    
+    static final void checkCase3 () {
+        Main.setUCD();
+        
+        checkNF_AndCase("\u0130", true);
+        checkNF_AndCase("\u0131", true);
+        
+        UnicodeProperty softdot = null;
+        CanonicalIterator cit = new CanonicalIterator("a");
+        UnicodeSet badChars = new UnicodeSet();
+        
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
             if (!Main.ucd.isAllocated(cp)) continue;
             byte cat = Main.ucd.getCategory(cp);
-        // check if cp is normalized then case mapping should be
-            if (false && cat != PRIVATE_USE && cat != SURROGATE) {
-                checkNF_AndCase(Main.nfd, cp);
-                checkNF_AndCase(Main.nfc, cp);
-                checkNF_AndCase(Main.nfkd, cp);
-                checkNF_AndCase(Main.nfkc, cp);
+        // check if canonical equivalents are case-mapped to canonical equivalents
+            if (cat != PRIVATE_USE && cat != SURROGATE) {
+                String str = UTF16.valueOf(cp);
+                if (!checkNF_AndCase(str, false)) badChars.add(cp);
+                //if (Main.ucd.getScript(cp) != GREEK_SCRIPT) continue;
+                str += "\u0334";
+                try {
+                    //System.out.println("Check " + Main.ucd.getCodeAndName(str));
+                    cit.setSource(str);
+                    while (true) {
+                        String s = cit.next();
+                        if (s == null) break;
+                        if (s.equals(str)) continue; // don't check twice
+                        
+                        //System.out.println("  Checking " + Main.ucd.getCodeAndName(s));
+                        if (!checkNF_AndCase(s, false)) badChars.add(cp);
+                    }
+                } catch (StringIndexOutOfBoundsException e) {
+                    System.out.println("Problem with " + Main.ucd.getCodeAndName(str));
+                    throw e;
+                }
+                
             }
             
-            if (Main.ucd.getBinaryProperty(cp, Soft_Dotted) !=
-                softdot.hasValue(cp)) {
-                System.out.println("FAIL: " + Main.ucd.getCodeAndName(cp));
-                System.out.println("Soft_Dotted='" + Main.ucd.getBinaryPropertiesID(cp, Soft_Dotted)
-                    + "', DerivedSD=" + softdot.getValue(cp) + "'");
+            if (false) {
+                if (softdot == null) softdot = DerivedProperty.make(Type_i, Main.ucd);
+                if (Main.ucd.getBinaryProperty(cp, Soft_Dotted) !=
+                    softdot.hasValue(cp)) {
+                    System.out.println("FAIL: " + Main.ucd.getCodeAndName(cp));
+                    System.out.println("Soft_Dotted='" + Main.ucd.getBinaryPropertiesID(cp, Soft_Dotted)
+                        + "', DerivedSD=" + softdot.getValue(cp) + "'");
+                }
             }
                         
         }
+        System.out.println();
+        Utility.showSetNames("", badChars, false, Main.ucd);
     }
     
     static void checkIdentical(String ubpName1, String ubpName2) {
@@ -123,29 +155,42 @@ can help you narrow these down.
         System.out.println();
     }
     
-    static void checkNF_AndCase(Normalizer nfx, int cp) {
-        if (!nfx.normalizationDiffers(cp)) {
-            checkNFC(nfx, "Lower", cp, Main.ucd.getCase(cp, FULL, LOWER));
-            checkNFC(nfx, "Upper", cp, Main.ucd.getCase(cp, FULL, UPPER));
-            checkNFC(nfx, "Title", cp, Main.ucd.getCase(cp, FULL, TITLE));
-            checkNFC(nfx, "Fold", cp, Main.ucd.getCase(cp, FULL, FOLD));
-            checkNFC(nfx, "SLower", cp, Main.ucd.getCase(cp, SIMPLE, LOWER));
-            checkNFC(nfx, "SUpper", cp, Main.ucd.getCase(cp, SIMPLE, UPPER));
-            checkNFC(nfx, "STitle", cp, Main.ucd.getCase(cp, SIMPLE, TITLE));
-            checkNFC(nfx, "SFold", cp, Main.ucd.getCase(cp, SIMPLE, FOLD));
+    static boolean checkNF_AndCase(String source, boolean both) {
+        boolean result = true;
+        String decomp = Main.nfd.normalize(source);
+        if (!decomp.equals(source)) {
+            
+            result &= checkNFC("Lower", source, decomp, Main.ucd.getCase(source, FULL, LOWER), Main.ucd.getCase(decomp, FULL, LOWER));
+            result &= checkNFC("Upper", source, decomp, Main.ucd.getCase(source, FULL, UPPER), Main.ucd.getCase(decomp, FULL, UPPER));
+            result &= checkNFC("Title", source, decomp, Main.ucd.getCase(source, FULL, TITLE), Main.ucd.getCase(decomp, FULL, TITLE));
+            result &= checkNFC("Fold", source, decomp, Main.ucd.getCase(source, FULL, FOLD), Main.ucd.getCase(decomp, FULL, FOLD));
+            
+            if (!both) return result;
+            
+            result &= checkNFC("SLower", source, decomp, Main.ucd.getCase(source, SIMPLE, LOWER), Main.ucd.getCase(decomp, SIMPLE, LOWER));
+            result &= checkNFC("SUpper", source, decomp, Main.ucd.getCase(source, SIMPLE, UPPER), Main.ucd.getCase(decomp, SIMPLE, UPPER));
+            result &= checkNFC("STitle", source, decomp, Main.ucd.getCase(source, SIMPLE, TITLE), Main.ucd.getCase(decomp, SIMPLE, TITLE));
+            result &= checkNFC("SFold", source, decomp, Main.ucd.getCase(source, SIMPLE, TITLE), Main.ucd.getCase(decomp, SIMPLE, TITLE));
         }
+        return result;
     }
     
-    static void checkNFC(Normalizer nfx, String label, int cp, String s) {
-        String decomp = nfx.normalize(s);
-        if (!s.equals(decomp)) {
-            Utility.fixDot();
-            System.out.println("FAIL: " + nfx.getName() + " " + label + " (" + Main.ucd.getCodeAndName(cp) + ")");
-            System.out.println("\t" + Main.ucd.getCode(s) + " => " + Main.ucd.getCode(decomp));
+    static final boolean SHOW_NFC_DIFFERENCE = false;
+    
+    static boolean checkNFC(String label, String source, String decomp, String casedCp, String casedDecomp) {
+        if (!Main.nfd.normalize(casedCp).equals(Main.nfd.normalize(casedDecomp))) {
+            if (SHOW_NFC_DIFFERENCE) {
+                Utility.fixDot();
+                System.out.println("FAIL CASE CE: " + label + " (" + Main.ucd.getCodeAndName(source) + ")");
+                System.out.println("\t" + Main.ucd.getCode(source) + " => " + Main.ucd.getCode(casedCp));
+                System.out.println("\t" + Main.ucd.getCode(decomp) + " => " + Main.ucd.getCode(casedDecomp));
+            }
+            return false;
         }
+        return true;
     }
 
-    public static final String IDN_DIR = DATA_DIR + "\\IDN\\";
+    public static final String IDN_DIR = BASE_DIR + "\\IDN\\";
 
         /*
         System.out.println(Main.ucd.toString(0x0387));
@@ -680,7 +725,7 @@ can help you narrow these down.
         log.close();
     }
     
-    static Map idnMap = new HashMap();
+    static Map idnMap = new java.util.HashMap();
 
     static void showError(String description, int cp, String option) {
         Map probe = (Map) idnMap.get(description);
@@ -1115,15 +1160,86 @@ E0020-E007F; [TAGGING CHARACTERS]
 
         }
     }
+    
+    static final int EXCEPTION_FLAG = 0x8000000;
 
-    public static void checkScripts() {
+    public static void checkScripts() throws IOException {
         Main.setUCD();
+        boolean ok;
+        Map m = new TreeMap();
+        UnicodeSet exceptions = ScriptExceptions.getExceptions();
+        int maxScriptLen = 0;
+        UnicodeSet show = new UnicodeSet();
+        show.add(0x2071);
+        show.add(0x207F);
+        
         for (int i = 0; i < 0x10FFFF; ++i) {
-            //byte script = Main.ucd.getScript(i);
-            if (true) { // script != COMMON_SCRIPT) {
-                System.out.println(Utility.hex(i) + "; " + Main.ucd.getScriptID(i) + " # " + Main.ucd.getName(i));
+            if (!Main.ucd.isAssigned(i)) continue;
+            byte cat = Main.ucd.getCategory(i);
+            byte script = Main.ucd.getScript(i);
+            switch (cat) {
+              case Lo: case Lt: case Ll: case Lu: case Lm: case Mc: case Sk:
+                ok = script != INHERITED_SCRIPT && script != COMMON_SCRIPT;
+                break;
+              case Mn: case Me:
+                ok = script == INHERITED_SCRIPT;
+                break;
+              default:
+                ok = script == COMMON_SCRIPT;
+                break;
+            }
+            if (show.contains(i)) {
+                System.out.println(Main.ucd.getCodeAndName(i)
+                    + "; " + Main.ucd.getScriptID(i)
+                    + "; " + Main.ucd.getCategoryID(i)
+                );
+            }
+            if (!ok) {
+                if (cat == Ll || cat == Lt) cat = Lu;
+                int intKey = (cat << 8) + script;
+                if (exceptions.contains(i)) intKey |= EXCEPTION_FLAG;
+                Integer key = new Integer(intKey);
+                UnicodeSet us = (UnicodeSet) m.get(key);
+                if (us == null) {
+                    us = new UnicodeSet();
+                    m.put(key, us);
+                }
+                us.add(i);
+                int len = Main.ucd.getScriptID(i).length();
+                if (maxScriptLen < len) maxScriptLen = len;
             }
         }
+        
+        PrintWriter log = Utility.openPrintWriter("CheckScriptsLog.txt");
+        
+        Iterator it = m.keySet().iterator();
+        while (it.hasNext()) {
+            Integer key = (Integer) it.next();
+            int intKey = key.intValue();
+            UnicodeSet badChars = (UnicodeSet) m.get(key);
+            int ranges = badChars.getRangeCount();
+            for (int kk = 0; kk < ranges; ++kk) {
+                int start = badChars.getRangeStart(kk);
+                int end = badChars.getRangeEnd(kk);
+                String code = Utility.hex(start) + (start != end ? ".." + Utility.hex(end) : "");
+                String scriptName = Main.ucd.getScriptID(start);
+                String title = "FAIL";
+                if ((intKey & EXCEPTION_FLAG) != 0) title = "EXCEPTION";
+                log.println(title + ": " + code + "; " + Utility.repeat(" ", 14 - code.length())
+                    + scriptName + Utility.repeat(" ", maxScriptLen-scriptName.length())
+                    + " # (" + LCgetCategoryID(start) + ") " + Main.ucd.getName(start)
+                    + (start != end ? ".." + Main.ucd.getName(end) : "")
+                    );
+            }
+            log.println();
+        }
+        log.close();
+    }
+    
+    static public String LCgetCategoryID(int cp) {
+        byte cat = Main.ucd.getCategory(cp);
+        if (cat == Lu || cat == Lt || cat == Ll) return "LC";
+        return Main.ucd.getCategoryID(cp);
     }
 
     public static void checkAgainstUInfo() {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/UTF8StreamWriter.java,v $
-* $Date: 2001/10/25 20:32:38 $
-* $Revision: 1.4 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -36,12 +36,13 @@ public final class UTF8StreamWriter extends Writer {
     private int bIndex = 0;
     private int highSurrogate = 0;
     private boolean removeCR;
+    private boolean Latin1;
 
     public UTF8StreamWriter(OutputStream stream, int buffersize) {
-        this(stream, buffersize, true);
+        this(stream, buffersize, true, false);
     }
 
-    public UTF8StreamWriter(OutputStream stream, int buffersize, boolean removeCR) {
+    public UTF8StreamWriter(OutputStream stream, int buffersize, boolean removeCR, boolean latin1) {
         if (buffersize < 5) {
             throw new IllegalArgumentException("UTF8StreamWriter buffersize must be >= 5");
         }
@@ -50,6 +51,7 @@ public final class UTF8StreamWriter extends Writer {
         bEnd = buffersize;
         bSafeEnd = buffersize - 4;
         this.removeCR = removeCR;
+        this.Latin1 = latin1;
     }
 
     private static final int
@@ -79,6 +81,12 @@ public final class UTF8StreamWriter extends Writer {
             int utf32 = buffer[cStart++];
             
             if (utf32 == 0x0D && removeCR) continue; // skip write
+            
+            if (Latin1) {
+                if (utf32 > 0xFF) bBuffer[bIndex++] = (byte)'?';
+                else bBuffer[bIndex++] = (byte)utf32;
+                continue;
+            }
 
             // special check for surrogates
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2001/12/06 00:05:53 $
-* $Revision: 1.4 $
+* $Date: 2002/03/15 00:34:46 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -59,7 +59,7 @@ public final class ConvertUCD implements UCD_Types {
         // 01CA;LATIN CAPITAL LETTER NJ;Lu;0; L; <compat> 004E 004A;  ;  ;  ;N ;LATIN CAPITAL LETTER N J;    ;  ;01CC;01CB
         //      n                       gc cc bc dm                 dd dv nv bm on                       cm,  uc lc   tc
         {"UnicodeData", "n", "gc", "cc", "bc", "dm", "dd", "dv", "nv", "bm", "on", "OMIT", "*uc", "*lc", "*tc"},
-        {"ExtraProperties", "xp"},
+        //{"ExtraProperties", "xp"},
         {"PropList", "binary"},
 
         //{"ExtraProperties", "xp"},
@@ -428,7 +428,7 @@ public final class ConvertUCD implements UCD_Types {
                 if (ddot >= 0) {
                     cpStart = UTF32.char32At(Utility.fromHex(parts[0].substring(0,ddot)),0);
                     cpTop = UTF32.char32At(Utility.fromHex(parts[0].substring(ddot+2)),0);
-                    System.out.println(Utility.hex(cpStart) + " ... " + Utility.hex(cpTop));
+                    // System.out.println(Utility.hex(cpStart) + " ... " + Utility.hex(cpTop));
                 } else {
                     cpStart = UTF32.char32At(Utility.fromHex(parts[0]),0);
                     cpTop = cpStart;
@@ -448,7 +448,7 @@ public final class ConvertUCD implements UCD_Types {
                     }
                     // END FIX!!
                     properties.add(prop);
-                    if (Utility.find(prop, UCD_Names.DeletedProperties) == -1) { // only undeleted
+                    if (Utility.find(prop, UCD_Names.DeletedProperties, true) == -1) { // only undeleted
                         int end = UTF32.char32At(Utility.fromHex(parts[1]),0);
                         if (end == 0) end = cpStart;
 
@@ -689,7 +689,7 @@ public final class ConvertUCD implements UCD_Types {
     static void appendCharProperties(int cp, String key) {
         int ind;
         //if (true || NEWPROPS) {
-            ind = Utility.lookup(key, UCD_Names.BP);
+            ind = Utility.lookup(key, UCD_Names.BP, true);
         /*} else {
             ind = Utility.lookup(key, UCD_Names.BP_OLD);
         }
@@ -790,13 +790,13 @@ public final class ConvertUCD implements UCD_Types {
                 uData.specialCasing = fieldValue;
 
             } else if (fieldName.equals("xp")) {
-                uData.binaryProperties |= 1 << Utility.lookup(fieldValue, UCD_Names.BP);
+                uData.binaryProperties |= 1 << Utility.lookup(fieldValue, UCD_Names.BP, true);
                 //UCD_Names.BP_OLD
 
             } else if (fieldName.equals("gc")) {
-                uData.generalCategory = Utility.lookup(fieldValue, UCD_Names.GC);
+                uData.generalCategory = Utility.lookup(fieldValue, UCD_Names.GC, true);
             } else if (fieldName.equals("bc")) {
-                uData.bidiClass = Utility.lookup(fieldValue, UCD_Names.BC);
+                uData.bidiClass = Utility.lookup(fieldValue, UCD_Names.BC, true);
             } else if (fieldName.equals("dt")) {
                 if (major < 2) {
                     if (fieldValue.equals("no-break")) fieldValue = "noBreak";
@@ -807,22 +807,22 @@ public final class ConvertUCD implements UCD_Types {
                     else if (fieldValue.equals("no-join")) fieldValue = "compat";
                     else if (fieldValue.equals("join")) fieldValue = "compat";
                 }
-                uData.decompositionType = Utility.lookup(fieldValue, UCD_Names.DT);
+                uData.decompositionType = Utility.lookup(fieldValue, UCD_Names.DT, true);
             } else if (fieldName.equals("nt")) {
-                uData.numericType = Utility.lookup(fieldValue, UCD_Names.NT);
+                uData.numericType = Utility.lookup(fieldValue, UCD_Names.NT, true);
 
             } else if (fieldName.equals("ea")) {
-                uData.eastAsianWidth = Utility.lookup(fieldValue, UCD_Names.EA);
+                uData.eastAsianWidth = Utility.lookup(fieldValue, UCD_Names.EA, true);
             } else if (fieldName.equals("lb")) {
-                uData.lineBreak = Utility.lookup(fieldValue, UCD_Names.LB);
+                uData.lineBreak = Utility.lookup(fieldValue, UCD_Names.LB, true);
 
             } else if (fieldName.equals("sn")) {
-                uData.script = Utility.lookup(fieldValue, UCD_Names.SCRIPT);
+                uData.script = Utility.lookup(fieldValue, UCD_Names.SCRIPT, true);
 
             } else if (fieldName.equals("jt")) {
-                uData.joiningType = Utility.lookup(fieldValue, UCD_Names.JOINING_TYPE);
+                uData.joiningType = Utility.lookup(fieldValue, UCD_Names.JOINING_TYPE, true);
             } else if (fieldName.equals("jg")) {
-                uData.joiningGroup = Utility.lookup(fieldValue, UCD_Names.OLD_JOINING_GROUP);
+                uData.joiningGroup = Utility.lookup(fieldValue, UCD_Names.OLD_JOINING_GROUP, true);
 
             } else if (fieldName.equals("nv")) {
                 if (major < 2) {
