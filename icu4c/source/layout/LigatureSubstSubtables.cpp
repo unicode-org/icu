@@ -1,7 +1,7 @@
 /*
  * @(#)LigatureSubstProc.cpp	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -13,7 +13,7 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
-le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, LEGlyphFilter *filter)
+le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
@@ -21,13 +21,13 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, LE
     if (coverageIndex >= 0)
     {
         Offset ligSetTableOffset = SWAPW(ligSetTableOffsetArray[coverageIndex]);
-        LigatureSetTable *ligSetTable = (LigatureSetTable *) ((char *) this + ligSetTableOffset);
+        const LigatureSetTable *ligSetTable = (const LigatureSetTable *) ((char *) this + ligSetTableOffset);
         le_uint16 ligCount = SWAPW(ligSetTable->ligatureCount);
 
         for (le_uint16 lig = 0; lig < ligCount; lig += 1)
         {
             Offset ligTableOffset = SWAPW(ligSetTable->ligatureTableOffsetArray[lig]);
-            LigatureTable *ligTable = (LigatureTable *) ((char *)ligSetTable + ligTableOffset);
+            const LigatureTable *ligTable = (const LigatureTable *) ((char *)ligSetTable + ligTableOffset);
             le_uint16 compCount = SWAPW(ligTable->compCount) - 1;
             le_int32 startPosition = glyphIterator->getCurrStreamPosition();
             LEGlyphID ligGlyph = SWAPW(ligTable->ligGlyph);

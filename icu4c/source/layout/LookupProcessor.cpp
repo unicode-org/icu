@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -20,8 +20,8 @@ LETag LookupProcessor::notSelected    = 0x00000000;
 LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
 
 
-le_uint32 LookupProcessor::applyLookupTable(LookupTable *lookupTable, GlyphIterator *glyphIterator,
-                                         const LEFontInstance *fontInstance)
+le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator,
+                                         const LEFontInstance *fontInstance) const
 {
     le_uint16 lookupType = SWAPW(lookupTable->lookupType);
     le_uint16 subtableCount = SWAPW(lookupTable->subTableCount);
@@ -29,7 +29,7 @@ le_uint32 LookupProcessor::applyLookupTable(LookupTable *lookupTable, GlyphItera
     le_uint32 delta;
 
     for (le_uint16 subtable = 0; subtable < subtableCount; subtable += 1) {
-        LookupSubtable *lookupSubtable = lookupTable->getLookupSubtable(subtable);
+        const LookupSubtable *lookupSubtable = lookupTable->getLookupSubtable(subtable);
 
         delta = applySubtable(lookupSubtable, lookupType, glyphIterator, fontInstance);
 
@@ -44,8 +44,8 @@ le_uint32 LookupProcessor::applyLookupTable(LookupTable *lookupTable, GlyphItera
 }
 
 void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
-                              le_bool rightToLeft, GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                              const LEFontInstance *fontInstance)
+                              le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
+                              const LEFontInstance *fontInstance) const
 {
     if (lookupSelectArray == NULL) {
         return;
@@ -57,7 +57,7 @@ void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphP
         LETag selectTag = lookupSelectArray[lookup];
 
         if (selectTag != notSelected) {
-            LookupTable *lookupTable = lookupListTable->getLookupTable(lookup);
+            const LookupTable *lookupTable = lookupListTable->getLookupTable(lookup);
             le_uint16 lookupFlags = SWAPW(lookupTable->lookupFlags);
             GlyphIterator glyphIterator(glyphs, glyphPositionAdjustments, glyphCount,
                                   rightToLeft, lookupFlags, selectTag, glyphTags,
@@ -75,9 +75,9 @@ void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphP
 }
 
 le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator,
-                                          const LEFontInstance *fontInstance)
+                                          const LEFontInstance *fontInstance) const
 {
-    LookupTable *lookupTable = lookupListTable->getLookupTable(lookupTableIndex);
+    const LookupTable *lookupTable = lookupListTable->getLookupTable(lookupTableIndex);
     le_uint16 lookupFlags = SWAPW(lookupTable->lookupFlags);
     GlyphIterator tempIterator(*glyphIterator, lookupFlags);
     le_uint32 delta = applyLookupTable(lookupTable, &tempIterator, fontInstance);
@@ -85,10 +85,10 @@ le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIt
     return delta;
 }
 
-LETag LookupProcessor::selectFeature(le_uint16 featureIndex, LETag tagOverride)
+LETag LookupProcessor::selectFeature(le_uint16 featureIndex, LETag tagOverride) const
 {
     LETag featureTag;
-    FeatureTable *featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
+    const FeatureTable *featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
     le_uint16 lookupCount = featureTable? SWAPW(featureTable->lookupCount) : 0;
 
     if (tagOverride != notSelected) {
@@ -105,20 +105,20 @@ LETag LookupProcessor::selectFeature(le_uint16 featureIndex, LETag tagOverride)
  }
 
 
-LookupProcessor::LookupProcessor(char *baseAddress,
+LookupProcessor::LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
         LETag scriptTag, LETag languageTag)
     : lookupListTable(NULL), featureListTable(NULL), lookupSelectArray(NULL),
       requiredFeatureTag(notSelected)
 {
-    ScriptListTable *scriptListTable = NULL;
-    LangSysTable *langSysTable = NULL;
+    const ScriptListTable *scriptListTable = NULL;
+    const LangSysTable *langSysTable = NULL;
     le_uint16 featureCount = 0;
     le_uint16 lookupListCount = 0;
     le_uint16 requiredFeatureIndex;
 
     if (scriptListOffset != 0) {
-        scriptListTable = (ScriptListTable *) (baseAddress + scriptListOffset);
+        scriptListTable = (const ScriptListTable *) (baseAddress + scriptListOffset);
         langSysTable = scriptListTable->findLanguage(scriptTag, languageTag);
 
 		if (langSysTable != 0) {
@@ -127,11 +127,11 @@ LookupProcessor::LookupProcessor(char *baseAddress,
     }
 
     if (featureListOffset != 0) {
-        featureListTable = (FeatureListTable *) (baseAddress + featureListOffset);
+        featureListTable = (const FeatureListTable *) (baseAddress + featureListOffset);
     }
 
     if (lookupListOffset != 0) {
-        lookupListTable = (LookupListTable *) (baseAddress + lookupListOffset);
+        lookupListTable = (const LookupListTable *) (baseAddress + lookupListOffset);
         lookupListCount = SWAPW(lookupListTable->lookupCount);
     }
     

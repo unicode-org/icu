@@ -1,7 +1,7 @@
 /*
  * @(#)MorphTables.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -17,42 +17,39 @@
 //#include "ContextualGlyphInsertionProcessor.h"
 #include "LESwaps.h"
 
-void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount)
+void MorphTableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const
 {
-    ChainHeader *chainHeader = chains;
+    const ChainHeader *chainHeader = chains;
     le_uint32 chainCount = SWAPL(this->nChains);
     le_uint32 chain;
 
-    for (chain = 0; chain < chainCount; chain += 1)
-    {
+    for (chain = 0; chain < chainCount; chain += 1) {
         FeatureFlags defaultFlags = SWAPL(chainHeader->defaultFlags);
         le_uint32 chainLength = SWAPL(chainHeader->chainLength);
         le_int16 nFeatureEntries = SWAPW(chainHeader->nFeatureEntries);
         le_int16 nSubtables = SWAPW(chainHeader->nSubtables);
-        MorphSubtableHeader *subtableHeader =
-            (MorphSubtableHeader *)&chainHeader->featureTable[nFeatureEntries];
+        const MorphSubtableHeader *subtableHeader =
+            (const MorphSubtableHeader *)&chainHeader->featureTable[nFeatureEntries];
         le_int16 subtable;
 
-        for (subtable = 0; subtable < nSubtables; subtable += 1)
-        {
+        for (subtable = 0; subtable < nSubtables; subtable += 1) {
             le_int16 length = SWAPW(subtableHeader->length);
             SubtableCoverage coverage = SWAPW(subtableHeader->coverage);
             FeatureFlags subtableFeatures = SWAPL(subtableHeader->subtableFeatures);
 
             // should check coverage too, really...
-            if ((subtableFeatures & defaultFlags) != 0)
-            {
+            if ((subtableFeatures & defaultFlags) != 0) {
                 subtableHeader->process(glyphs, glyphIndices, glyphCount);
             }
 
-            subtableHeader = (MorphSubtableHeader *) ((char *)subtableHeader + length);
+            subtableHeader = (const MorphSubtableHeader *) ((char *)subtableHeader + length);
         }
 
-        chainHeader = (ChainHeader *)((char *)chainHeader + chainLength);
+        chainHeader = (const ChainHeader *)((char *)chainHeader + chainLength);
     }
 }
 
-void MorphSubtableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount)
+void MorphSubtableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_int32 glyphCount) const
 {
     SubtableProcessor *processor = NULL;
 
@@ -87,8 +84,7 @@ void MorphSubtableHeader::process(LEGlyphID *glyphs, le_int32 *glyphIndices, le_
         break;
     }
 
-    if (processor != NULL)
-    {
+    if (processor != NULL) {
         processor->process(glyphs, glyphIndices, glyphCount);
         delete processor;
     }

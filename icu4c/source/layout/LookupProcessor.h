@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -24,31 +24,31 @@ public:
     static LETag defaultFeature;
 
     void process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
-                 le_bool rightToLeft, GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance);
+                 le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance) const;
 
-    le_uint32 applyLookupTable(LookupTable *lookupTable, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
+    le_uint32 applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 
-    le_uint32 applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
+    le_uint32 applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 
-    virtual le_uint32 applySubtable(LookupSubtable *lookupSubtable, le_uint16 subtableType,
-        GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) = 0;
+    virtual le_uint32 applySubtable(const LookupSubtable *lookupSubtable, le_uint16 subtableType,
+        GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const = 0;
 
     virtual ~LookupProcessor();
 
 protected:
-    LookupProcessor(char *baseAddress,
+    LookupProcessor(const char *baseAddress,
         Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
         LETag scriptTag, LETag languageTag);
 
     LookupProcessor();
 
-    LETag selectFeature(le_uint16 featureIndex, LETag tagOverride = notSelected);
+    LETag selectFeature(le_uint16 featureIndex, LETag tagOverride = notSelected) const;
 
-    LookupListTable     *lookupListTable;
-    FeatureListTable    *featureListTable;
+    const LookupListTable	*lookupListTable;
+    const FeatureListTable	*featureListTable;
 
-    LETag                 *lookupSelectArray;
-    LETag                 requiredFeatureTag;
+    LETag					*lookupSelectArray;
+    LETag					requiredFeatureTag;
 };
 
 #endif

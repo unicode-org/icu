@@ -2,7 +2,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -29,7 +29,7 @@ private:
 
 public:
     CharSubstitutionFilter(const LEFontInstance *fontInstance);
-    le_bool accept(LEGlyphID glyph);
+    le_bool accept(LEGlyphID glyph) const;
 };
 
 CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstance)
@@ -38,13 +38,13 @@ CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstanc
     // nothing to do
 }
 
-le_bool CharSubstitutionFilter::accept(LEGlyphID glyph)
+le_bool CharSubstitutionFilter::accept(LEGlyphID glyph) const
 {
     return fFontInstance->canDisplay((LEUnicode) glyph);
 }
 
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                        GlyphSubstitutionTableHeader *gsubTable)
+                        const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
 {
     // nothing else to do...
@@ -134,13 +134,13 @@ UnicodeArabicOpenTypeLayoutEngine::UnicodeArabicOpenTypeLayoutEngine(const LEFon
 {
 	switch (scriptCode) {
 	case arabScriptCode:
-		fGSUBTable = (GlyphSubstitutionTableHeader *) ArabicShaping::glyphSubstitutionTable;
-		fGDEFTable = (GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
+		fGSUBTable = (const GlyphSubstitutionTableHeader *) ArabicShaping::glyphSubstitutionTable;
+		fGDEFTable = (const GlyphDefinitionTableHeader *) ArabicShaping::glyphDefinitionTable;
 		break;
 
 	case hebrScriptCode:
-		fGSUBTable = (GlyphSubstitutionTableHeader *) HebrewShaping::glyphSubstitutionTable;
-		fGDEFTable = (GlyphDefinitionTableHeader *) HebrewShaping::glyphDefinitionTable;
+		fGSUBTable = (const GlyphSubstitutionTableHeader *) HebrewShaping::glyphSubstitutionTable;
+		fGDEFTable = (const GlyphDefinitionTableHeader *) HebrewShaping::glyphDefinitionTable;
 		break;
 	}
 

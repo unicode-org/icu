@@ -2,7 +2,7 @@
 /*
  * @(#)GXLayoutEngine.h	1.4 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -42,7 +42,7 @@ public:
 	 * @see LayoutEngine::layoutEngineFactory
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, MorphTableHeader *morphTable);
+    GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable);
 
 	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -54,7 +54,7 @@ protected:
 	/**
 	 * The address of the 'mort' table
 	 */
-    MorphTableHeader *fMorphTable;
+    const MorphTableHeader *fMorphTable;
 
     /**
 	 * This method does GX layout using the font's 'mort' table. It converts the

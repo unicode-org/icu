@@ -1,7 +1,7 @@
 /*
  * @(#)OpenTypeUtilities.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -56,7 +56,7 @@ le_int8 OpenTypeUtilities::highBit(le_int32 value)
     return bit;
 }
 
-Offset OpenTypeUtilities::getTagOffset(LETag tag, TagAndOffsetRecord *records, le_int32 recordCount)
+Offset OpenTypeUtilities::getTagOffset(LETag tag, const TagAndOffsetRecord *records, le_int32 recordCount)
 {
     le_uint8 bit = highBit(recordCount);
     le_int32 power = 1 << bit;
@@ -87,7 +87,7 @@ Offset OpenTypeUtilities::getTagOffset(LETag tag, TagAndOffsetRecord *records, l
     return 0;
 }
 
-le_int32 OpenTypeUtilities::getGlyphRangeIndex(LEGlyphID glyphID, GlyphRangeRecord *records, le_int32 recordCount)
+le_int32 OpenTypeUtilities::getGlyphRangeIndex(LEGlyphID glyphID, const GlyphRangeRecord *records, le_int32 recordCount)
 {
     le_uint8 bit = highBit(recordCount);
     le_int32 power = 1 << bit;
@@ -118,7 +118,7 @@ le_int32 OpenTypeUtilities::getGlyphRangeIndex(LEGlyphID glyphID, GlyphRangeReco
     return -1;
 }
 
-le_int32 OpenTypeUtilities::search(le_uint32 value, le_uint32 array[], le_int32 count)
+le_int32 OpenTypeUtilities::search(le_uint32 value, const le_uint32 array[], le_int32 count)
 {
     le_int32 power = 1 << highBit(count);
     le_int32 extra = count - power;
@@ -140,7 +140,7 @@ le_int32 OpenTypeUtilities::search(le_uint32 value, le_uint32 array[], le_int32 
     return index;
 }
 
-le_int32 OpenTypeUtilities::search(le_uint16 value, le_uint16 array[], le_int32 count)
+le_int32 OpenTypeUtilities::search(le_uint16 value, const le_uint16 array[], le_int32 count)
 {
     le_int32 power = 1 << highBit(count);
     le_int32 extra = count - power;

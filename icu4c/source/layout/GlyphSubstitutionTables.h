@@ -1,7 +1,7 @@
 /*
  * @(#)GlyphSubstitutionTables.h	1.9 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -24,10 +24,10 @@ struct GlyphSubstitutionTableHeader
 
     void    process(LEGlyphID *glyphs, const LETag **glyphTags, le_int32 glyphCount,
                  le_bool rightToLeft, LETag scriptTag, LETag languageTag,
-                 GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                 LEGlyphFilter *filter = NULL);
+                 const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
+                 const LEGlyphFilter *filter = NULL) const;
 
-    le_bool coversScript(LETag scriptTag);
+    le_bool coversScript(LETag scriptTag) const;
 };
 
 enum GlyphSubstitutionSubtableTypes

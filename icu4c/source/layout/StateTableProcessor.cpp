@@ -1,7 +1,7 @@
 /*
  * @(#)StateTableProcessor.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -17,17 +17,17 @@ StateTableProcessor::StateTableProcessor()
 {
 }
 
-StateTableProcessor::StateTableProcessor(MorphSubtableHeader *morphSubtableHeader)
+StateTableProcessor::StateTableProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : SubtableProcessor(morphSubtableHeader)
 {
-    stateTableHeader = (MorphStateTableHeader *) morphSubtableHeader;
+    stateTableHeader = (const MorphStateTableHeader *) morphSubtableHeader;
 
     stateSize = SWAPW(stateTableHeader->stHeader.stateSize);
     classTableOffset = SWAPW(stateTableHeader->stHeader.classTableOffset);
     stateArrayOffset = SWAPW(stateTableHeader->stHeader.stateArrayOffset);
     entryTableOffset = SWAPW(stateTableHeader->stHeader.entryTableOffset);
 
-    classTable = (ClassTable *) ((char *) &stateTableHeader->stHeader + classTableOffset);
+    classTable = (const ClassTable *) ((char *) &stateTableHeader->stHeader + classTableOffset);
     firstGlyph = SWAPW(classTable->firstGlyph);
     lastGlyph = firstGlyph + SWAPW(classTable->nGlyphs);
 }
@@ -47,29 +47,22 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
 
     beginStateTable();
 
-    while (currGlyph <= glyphCount)
-    {
+    while (currGlyph <= glyphCount) {
         ClassCode classCode = classCodeOOB;
-        if (currGlyph == glyphCount)
-        {
+        if (currGlyph == glyphCount) {
             // XXX: How do we handle EOT vs. EOL?
             classCode = classCodeEOT;
-        }
-        else
-        {
+        } else {
             LEGlyphID glyphCode = glyphs[currGlyph];
 
-            if (glyphCode == 0xFFFF)
-            {
+            if (glyphCode == 0xFFFF) {
                 classCode = classCodeDEL;
-            }
-            else if ((glyphCode >= firstGlyph) && (glyphCode < lastGlyph))
-            {
+            } else if ((glyphCode >= firstGlyph) && (glyphCode < lastGlyph)) {
                 classCode = classTable->classArray[glyphCode - firstGlyph];
             }
         }
 
-        EntryTableIndex *stateArray = (EntryTableIndex *) ((char *) &stateTableHeader->stHeader + currentState);
+        const EntryTableIndex *stateArray = (const EntryTableIndex *) ((char *) &stateTableHeader->stHeader + currentState);
         EntryTableIndex entryTableIndex = stateArray[(le_uint8)classCode];
 
         currentState = processStateEntry(glyphs, charIndices, currGlyph, glyphCount, entryTableIndex);

@@ -12,7 +12,7 @@
 
 #include "MorphTables.h"
 
-GXLayoutEngine::GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, MorphTableHeader *morphTable) 
+GXLayoutEngine::GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable) 
     : LayoutEngine(fontInstance, scriptCode, languageCode), fMorphTable(morphTable)
 {
     // nothing else to do?

@@ -1,7 +1,7 @@
 /*
  * @(#)GlyphPosnLookupProc.h	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -21,13 +21,13 @@
 class GlyphPositioningLookupProcessor : public LookupProcessor
 {
 public:
-    GlyphPositioningLookupProcessor(GlyphPositioningTableHeader *glyphPositioningTableHeader,
+    GlyphPositioningLookupProcessor(const GlyphPositioningTableHeader *glyphPositioningTableHeader,
         LETag scriptTag, LETag languageTag);
 
     virtual ~GlyphPositioningLookupProcessor();
 
-    virtual le_uint32 applySubtable(LookupSubtable *lookupSubtable, le_uint16 lookupType, GlyphIterator *glyphIterator,
-        const LEFontInstance *fontInstance);
+    virtual le_uint32 applySubtable(const LookupSubtable *lookupSubtable, le_uint16 lookupType, GlyphIterator *glyphIterator,
+        const LEFontInstance *fontInstance) const;
 
 protected:
     GlyphPositioningLookupProcessor();

@@ -349,7 +349,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 		return NULL;
 	}
 
-    GlyphSubstitutionTableHeader *gsubTable = (GlyphSubstitutionTableHeader *) fontInstance->getFontTable(gsubTableTag);
+    const GlyphSubstitutionTableHeader *gsubTable = (const GlyphSubstitutionTableHeader *) fontInstance->getFontTable(gsubTableTag);
 	LayoutEngine *result = NULL;
 
     if (gsubTable != NULL && gsubTable->coversScript(OpenTypeLayoutEngine::getScriptTag(scriptCode))) {
@@ -375,7 +375,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             break;
         }
     } else {
-        MorphTableHeader *morphTable = (MorphTableHeader *) fontInstance->getFontTable(mortTableTag);
+        const MorphTableHeader *morphTable = (MorphTableHeader *) fontInstance->getFontTable(mortTableTag);
 
         if (morphTable != NULL) {
             result = new GXLayoutEngine(fontInstance, scriptCode, languageCode, morphTable);

@@ -1,7 +1,7 @@
 /*
  * @(#)IndicRearrangementProcessor.cpp	1.7 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -14,11 +14,11 @@
 #include "IndicRearrangementProcessor.h"
 #include "LESwaps.h"
 
-IndicRearrangementProcessor::IndicRearrangementProcessor(MorphSubtableHeader *morphSubtableHeader)
+IndicRearrangementProcessor::IndicRearrangementProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)
 {
-    indicRearrangementSubtableHeader = (IndicRearrangementSubtableHeader *) morphSubtableHeader;
-    entryTable = (IndicRearrangementStateEntry *) ((char *) &stateTableHeader->stHeader + entryTableOffset);
+    indicRearrangementSubtableHeader = (const IndicRearrangementSubtableHeader *) morphSubtableHeader;
+    entryTable = (const IndicRearrangementStateEntry *) ((char *) &stateTableHeader->stHeader + entryTableOffset);
 }
 
 IndicRearrangementProcessor::~IndicRearrangementProcessor()
@@ -34,24 +34,21 @@ void IndicRearrangementProcessor::beginStateTable()
 ByteOffset IndicRearrangementProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 &currGlyph,
         le_int32 glyphCount, EntryTableIndex index)
 {
-    IndicRearrangementStateEntry *entry = &entryTable[index];
+    const IndicRearrangementStateEntry *entry = &entryTable[index];
     ByteOffset newState = SWAPW(entry->newStateOffset);
     IndicRearrangementFlags flags = (IndicRearrangementFlags) SWAPW(entry->flags);
 
-    if (flags & irfMarkFirst)
-    {
+    if (flags & irfMarkFirst) {
         firstGlyph = currGlyph;
     }
 
-    if (flags & irfMarkLast)
-    {
+    if (flags & irfMarkLast) {
         lastGlyph = currGlyph;
     }
 
     doRearrangementAction(glyphs, charIndices, (IndicRearrangementVerb) (flags & irfVerbMask));
 
-    if (!(flags & irfDontAdvance))
-    {
+    if (!(flags & irfDontAdvance)) {
         // XXX: Should handle reverse too...
         currGlyph += 1;
     }
@@ -63,7 +60,7 @@ void IndicRearrangementProcessor::endStateTable()
 {
 }
 
-void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_int32 *charIndices, IndicRearrangementVerb verb)
+void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_int32 *charIndices, IndicRearrangementVerb verb) const
 {
     LEGlyphID a, b, c, d;
     le_int32 ia, ib, ic, id, x;
@@ -78,8 +75,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         ia = charIndices[firstGlyph];
         x = firstGlyph + 1;
 
-        while (x <= lastGlyph)
-        {
+        while (x <= lastGlyph) {
             glyphs[x - 1] = glyphs[x];
             charIndices[x - 1] = charIndices[x];
             x += 1;
@@ -94,8 +90,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 1;
 
-        while (x >= firstGlyph)
-        {
+        while (x >= firstGlyph) {
             glyphs[x + 1] = glyphs[x];
             charIndices[x + 1] = charIndices[x];
             x -= 1;
@@ -123,8 +118,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         ib = charIndices[firstGlyph + 1];
         x = firstGlyph + 2;
 
-        while (x <= lastGlyph)
-        {
+        while (x <= lastGlyph) {
             glyphs[x - 2] = glyphs[x];
             charIndices[x - 2] = charIndices[x];
             x += 1;
@@ -144,8 +138,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         ib = charIndices[firstGlyph + 1];
         x = firstGlyph + 2;
 
-        while (x <= lastGlyph)
-        {
+        while (x <= lastGlyph) {
             glyphs[x - 2] = glyphs[x];
             charIndices[x - 2] = charIndices[x];
             x += 1;
@@ -165,8 +158,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 2;
 
-        while (x >= lastGlyph)
-        {
+        while (x >= lastGlyph) {
             glyphs[x + 2] = glyphs[x];
             charIndices[x + 2] = charIndices[x];
             x -= 1;
@@ -186,8 +178,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 2;
 
-        while (x >= lastGlyph)
-        {
+        while (x >= lastGlyph) {
             glyphs[x + 2] = glyphs[x];
             charIndices[x + 2] = charIndices[x];
             x -= 1;
@@ -209,8 +200,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 2;
 
-        while (x > firstGlyph)
-        {
+        while (x > firstGlyph) {
             glyphs[x + 1] = glyphs[x];
             charIndices[x + 1] = charIndices[x];
             x -= 1;
@@ -234,8 +224,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 2;
 
-        while (x > firstGlyph)
-        {
+        while (x > firstGlyph) {
             glyphs[x + 1] = glyphs[x];
             charIndices[x + 1] = charIndices[x];
             x -= 1;
@@ -259,8 +248,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = firstGlyph + 2;
 
-        while (x < lastGlyph)
-        {
+        while (x < lastGlyph) {
             glyphs[x - 2] = glyphs[x];
             charIndices[x - 2] = charIndices[x];
             x += 1;
@@ -284,8 +272,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = firstGlyph + 2;
 
-        while (x < lastGlyph)
-        {
+        while (x < lastGlyph) {
             glyphs[x - 2] = glyphs[x];
             charIndices[x - 2] = charIndices[x];
             x += 1;

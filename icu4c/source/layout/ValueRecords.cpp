@@ -1,7 +1,7 @@
 /*
  * @(#)ValueRecords.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -17,7 +17,7 @@
 #define Nibble(value, nibble) ((value >> (nibble * 4)) & 0xF)
 #define NibbleBits(value, nibble) (bitsInNibble[Nibble(value, nibble)])
 
-le_int16 ValueRecord::getFieldValue(ValueFormat valueFormat, ValueRecordField field)
+le_int16 ValueRecord::getFieldValue(ValueFormat valueFormat, ValueRecordField field) const
 {
     le_int16 valueIndex = getFieldIndex(valueFormat, field);
     le_int16 value = values[valueIndex];
@@ -25,7 +25,7 @@ le_int16 ValueRecord::getFieldValue(ValueFormat valueFormat, ValueRecordField fi
     return SWAPW(value);
 }
 
-le_int16 ValueRecord::getFieldValue(le_int16 index, ValueFormat valueFormat, ValueRecordField field)
+le_int16 ValueRecord::getFieldValue(le_int16 index, ValueFormat valueFormat, ValueRecordField field) const
 {
     le_int16 baseIndex = getFieldCount(valueFormat) * index;
     le_int16 valueIndex = getFieldIndex(valueFormat, field);
@@ -34,8 +34,8 @@ le_int16 ValueRecord::getFieldValue(le_int16 index, ValueFormat valueFormat, Val
     return SWAPW(value);
 }
 
-void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                                 const LEFontInstance *fontInstance)
+void ValueRecord::adjustPosition(ValueFormat valueFormat, const char *base, GlyphPositionAdjustment &positionAdjustment,
+                                 const LEFontInstance *fontInstance) const
 {
     if ((valueFormat & vfbXPlacement) != 0) {
         le_int16 value = getFieldValue(valueFormat, vrfXPlacement);
@@ -88,7 +88,7 @@ void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPosit
             Offset dtOffset = getFieldValue(valueFormat, vrfXPlaDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 xAdj = dt->getAdjustment(xppem);
 
                 positionAdjustment.adjustXPlacement(fontInstance->xPixelsToUnits(xAdj));
@@ -99,7 +99,7 @@ void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPosit
             Offset dtOffset = getFieldValue(valueFormat, vrfYPlaDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 yAdj = dt->getAdjustment(yppem);
 
                 positionAdjustment.adjustYPlacement(fontInstance->yPixelsToUnits(yAdj));
@@ -110,7 +110,7 @@ void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPosit
             Offset dtOffset = getFieldValue(valueFormat, vrfXAdvDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 xAdj = dt->getAdjustment(xppem);
 
                 positionAdjustment.adjustXAdvance(fontInstance->xPixelsToUnits(xAdj));
@@ -121,7 +121,7 @@ void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPosit
             Offset dtOffset = getFieldValue(valueFormat, vrfYAdvDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 yAdj = dt->getAdjustment(yppem);
 
                 positionAdjustment.adjustYAdvance(fontInstance->yPixelsToUnits(yAdj));
@@ -130,8 +130,8 @@ void ValueRecord::adjustPosition(ValueFormat valueFormat, char *base, GlyphPosit
     }
 }
 
-void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                                 const LEFontInstance *fontInstance)
+void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, const char *base, GlyphPositionAdjustment &positionAdjustment,
+                                 const LEFontInstance *fontInstance) const
 {
     if ((valueFormat & vfbXPlacement) != 0) {
         le_int16 value = getFieldValue(index, valueFormat, vrfXPlacement);
@@ -184,7 +184,7 @@ void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, char *
             Offset dtOffset = getFieldValue(index, valueFormat, vrfXPlaDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 xAdj = dt->getAdjustment(xppem);
 
                 positionAdjustment.adjustXAdvance(fontInstance->xPixelsToUnits(xAdj));
@@ -195,7 +195,7 @@ void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, char *
             Offset dtOffset = getFieldValue(index, valueFormat, vrfYPlaDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 yAdj = dt->getAdjustment(yppem);
 
                 positionAdjustment.adjustYAdvance(fontInstance->yPixelsToUnits(yAdj));
@@ -206,7 +206,7 @@ void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, char *
             Offset dtOffset = getFieldValue(index, valueFormat, vrfXAdvDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 xAdj = dt->getAdjustment(xppem);
 
                 positionAdjustment.adjustXAdvance(fontInstance->xPixelsToUnits(xAdj));
@@ -217,7 +217,7 @@ void ValueRecord::adjustPosition(le_int16 index, ValueFormat valueFormat, char *
             Offset dtOffset = getFieldValue(index, valueFormat, vrfYAdvDevice);
 
             if (dtOffset != 0) {
-                DeviceTable *dt = (DeviceTable *) (base + dtOffset);
+                const DeviceTable *dt = (const DeviceTable *) (base + dtOffset);
                 le_int16 yAdj = dt->getAdjustment(yppem);
 
                 positionAdjustment.adjustYAdvance(fontInstance->yPixelsToUnits(yAdj));

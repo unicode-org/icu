@@ -1,7 +1,7 @@
 /*
  * @(#)ContextualSubstSubtables.cpp	1.11 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -22,8 +22,8 @@
     sequenceIndex instead of always resetting to the front.
 */
 void ContextualSubstitutionBase::applySubstitutionLookups(
-        LookupProcessor *lookupProcessor,
-        SubstitutionLookupRecord *substLookupRecordArray,
+        const LookupProcessor *lookupProcessor,
+        const SubstitutionLookupRecord *substLookupRecordArray,
         le_uint16 substCount,
         GlyphIterator *glyphIterator,
         const LEFontInstance *fontInstance,
@@ -31,8 +31,7 @@ void ContextualSubstitutionBase::applySubstitutionLookups(
 {
     GlyphIterator tempIterator(*glyphIterator);
 
-    for (le_int16 subst = 0; subst < substCount; subst += 1)
-    {
+    for (le_int16 subst = 0; subst < substCount; subst += 1) {
         le_uint16 sequenceIndex = SWAPW(substLookupRecordArray[subst].sequenceIndex);
         le_uint16 lookupListIndex = SWAPW(substLookupRecordArray[subst].lookupListIndex);
 
@@ -43,20 +42,17 @@ void ContextualSubstitutionBase::applySubstitutionLookups(
     }
 }
 
-le_bool ContextualSubstitutionBase::matchGlyphIDs(LEGlyphID *glyphArray, le_uint16 glyphCount,
+le_bool ContextualSubstitutionBase::matchGlyphIDs(const LEGlyphID *glyphArray, le_uint16 glyphCount,
                                                GlyphIterator *glyphIterator)
 {
-    for (le_uint16 match = 0; match < glyphCount; match += 1)
-    {
-        if (! glyphIterator->next())
-        {
+    for (le_uint16 match = 0; match < glyphCount; match += 1) {
+        if (! glyphIterator->next()) {
             return false;
         }
 
         LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
 
-        if (glyph != SWAPW(glyphArray[match]))
-        {
+        if (glyph != SWAPW(glyphArray[match])) {
             return false;
         }
     }
@@ -64,14 +60,12 @@ le_bool ContextualSubstitutionBase::matchGlyphIDs(LEGlyphID *glyphArray, le_uint
     return true;
 }
 
-le_bool ContextualSubstitutionBase::matchGlyphClasses(le_uint16 *classArray, le_uint16 glyphCount,
+le_bool ContextualSubstitutionBase::matchGlyphClasses(const le_uint16 *classArray, le_uint16 glyphCount,
                                                GlyphIterator *glyphIterator,
-                                               ClassDefinitionTable *classDefinitionTable)
+                                               const ClassDefinitionTable *classDefinitionTable)
 {
-    for (le_uint16 match = 0; match < glyphCount; match += 1)
-    {
-        if (! glyphIterator->next())
-        {
+    for (le_uint16 match = 0; match < glyphCount; match += 1) {
+        if (! glyphIterator->next()) {
             return false;
         }
 
@@ -79,14 +73,12 @@ le_bool ContextualSubstitutionBase::matchGlyphClasses(le_uint16 *classArray, le_
         le_int32 glyphClass = classDefinitionTable->getGlyphClass(glyph);
         le_int32 matchClass = SWAPW(classArray[match]);
 
-        if (glyphClass != matchClass)
-        {
+        if (glyphClass != matchClass) {
             // Some fonts, e.g. Traditional Arabic, have classes
             // in the class array which aren't in the class definition
             // table. If we're looking for such a class, pretend that
             // we found it.
-            if (classDefinitionTable->hasGlyphClass(matchClass))
-            {
+            if (classDefinitionTable->hasGlyphClass(matchClass)) {
                 return false;
             }
         }
@@ -95,21 +87,18 @@ le_bool ContextualSubstitutionBase::matchGlyphClasses(le_uint16 *classArray, le_
     return true;
 }
 
-le_bool ContextualSubstitutionBase::matchGlyphCoverages(Offset *coverageTableOffsetArray, le_uint16 glyphCount,
-                                                     GlyphIterator *glyphIterator, char *offsetBase)
+le_bool ContextualSubstitutionBase::matchGlyphCoverages(const Offset *coverageTableOffsetArray, le_uint16 glyphCount,
+                                                     GlyphIterator *glyphIterator, const char *offsetBase)
 {
-    for (le_uint16 glyph = 0; glyph < glyphCount; glyph += 1)
-    {
+    for (le_uint16 glyph = 0; glyph < glyphCount; glyph += 1) {
         Offset coverageTableOffset = SWAPW(coverageTableOffsetArray[glyph]);
-        CoverageTable *coverageTable = (CoverageTable *) (offsetBase + coverageTableOffset);
+        const CoverageTable *coverageTable = (const CoverageTable *) (offsetBase + coverageTableOffset);
 
-        if (! glyphIterator->next())
-        {
+        if (! glyphIterator->next()) {
             return false;
         }
 
-        if (coverageTable->getGlyphCoverage((LEGlyphID) glyphIterator->getCurrGlyphID()) < 0)
-        {
+        if (coverageTable->getGlyphCoverage((LEGlyphID) glyphIterator->getCurrGlyphID()) < 0) {
             return false;
         }
     }
@@ -117,8 +106,8 @@ le_bool ContextualSubstitutionBase::matchGlyphCoverages(Offset *coverageTableOff
     return true;
 }
 
-le_uint32 ContextualSubstitutionSubtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                               const LEFontInstance *fontInstance)
+le_uint32 ContextualSubstitutionSubtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                               const LEFontInstance *fontInstance) const
 {
     switch(SWAPW(subtableFormat))
     {
@@ -127,21 +116,21 @@ le_uint32 ContextualSubstitutionSubtable::process(LookupProcessor *lookupProcess
 
     case 1:
     {
-        ContextualSubstitutionFormat1Subtable *subtable = (ContextualSubstitutionFormat1Subtable *) this;
+        const ContextualSubstitutionFormat1Subtable *subtable = (const ContextualSubstitutionFormat1Subtable *) this;
 
         return subtable->process(lookupProcessor, glyphIterator, fontInstance);
     }
 
     case 2:
     {
-        ContextualSubstitutionFormat2Subtable *subtable = (ContextualSubstitutionFormat2Subtable *) this;
+        const ContextualSubstitutionFormat2Subtable *subtable = (const ContextualSubstitutionFormat2Subtable *) this;
 
         return subtable->process(lookupProcessor, glyphIterator, fontInstance);
     }
 
     case 3:
     {
-        ContextualSubstitutionFormat3Subtable *subtable = (ContextualSubstitutionFormat3Subtable *) this;
+        const ContextualSubstitutionFormat3Subtable *subtable = (const ContextualSubstitutionFormat3Subtable *) this;
 
         return subtable->process(lookupProcessor, glyphIterator, fontInstance);
     }
@@ -151,37 +140,33 @@ le_uint32 ContextualSubstitutionSubtable::process(LookupProcessor *lookupProcess
     }
 }
 
-le_uint32 ContextualSubstitutionFormat1Subtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                      const LEFontInstance *fontInstance)
+le_uint32 ContextualSubstitutionFormat1Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                      const LEFontInstance *fontInstance) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
+    if (coverageIndex >= 0) {
         le_uint16 srSetCount = SWAPW(subRuleSetCount);
 
-        if (coverageIndex < srSetCount)
-        {
+        if (coverageIndex < srSetCount) {
             Offset subRuleSetTableOffset = SWAPW(subRuleSetTableOffsetArray[coverageIndex]);
-            SubRuleSetTable *subRuleSetTable =
-                (SubRuleSetTable *) ((char *) this + subRuleSetTableOffset);
+            const SubRuleSetTable *subRuleSetTable =
+                (const SubRuleSetTable *) ((char *) this + subRuleSetTableOffset);
             le_uint16 subRuleCount = SWAPW(subRuleSetTable->subRuleCount);
             le_int32 position = glyphIterator->getCurrStreamPosition();
 
-            for (le_uint16 subRule = 0; subRule < subRuleCount; subRule += 1)
-            {
+            for (le_uint16 subRule = 0; subRule < subRuleCount; subRule += 1) {
                 Offset subRuleTableOffset =
                     SWAPW(subRuleSetTable->subRuleTableOffsetArray[subRule]);
-                SubRuleTable *subRuleTable =
-                    (SubRuleTable *) ((char *) subRuleSetTable + subRuleTableOffset);
+                const SubRuleTable *subRuleTable =
+                    (const SubRuleTable *) ((char *) subRuleSetTable + subRuleTableOffset);
                 le_uint16 matchCount = SWAPW(subRuleTable->glyphCount) - 1;
                 le_uint16 substCount = SWAPW(subRuleTable->substCount);
 
-                if (matchGlyphIDs(subRuleTable->inputGlyphArray, matchCount, glyphIterator))
-                {
-                    SubstitutionLookupRecord *substLookupRecordArray = 
-                        (SubstitutionLookupRecord *) &subRuleTable->inputGlyphArray[matchCount];
+                if (matchGlyphIDs(subRuleTable->inputGlyphArray, matchCount, glyphIterator)) {
+                    const SubstitutionLookupRecord *substLookupRecordArray = 
+                        (const SubstitutionLookupRecord *) &subRuleTable->inputGlyphArray[matchCount];
 
                     applySubstitutionLookups(lookupProcessor, substLookupRecordArray, substCount, glyphIterator, fontInstance, position);
 
@@ -198,40 +183,36 @@ le_uint32 ContextualSubstitutionFormat1Subtable::process(LookupProcessor *lookup
     return 0;
 }
 
-le_uint32 ContextualSubstitutionFormat2Subtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                      const LEFontInstance *fontInstance)
+le_uint32 ContextualSubstitutionFormat2Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                      const LEFontInstance *fontInstance) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
-        ClassDefinitionTable *classDefinitionTable =
-            (ClassDefinitionTable *) ((char *) this + SWAPW(classDefTableOffset));
+    if (coverageIndex >= 0) {
+        const ClassDefinitionTable *classDefinitionTable =
+            (const ClassDefinitionTable *) ((char *) this + SWAPW(classDefTableOffset));
         le_uint16 scSetCount = SWAPW(subClassSetCount);
         le_int32 setClass = classDefinitionTable->getGlyphClass((LEGlyphID) glyphIterator->getCurrGlyphID());
 
-        if (setClass < scSetCount && subClassSetTableOffsetArray[setClass] != 0)
-        {
+        if (setClass < scSetCount && subClassSetTableOffsetArray[setClass] != 0) {
             Offset subClassSetTableOffset = SWAPW(subClassSetTableOffsetArray[setClass]);
-            SubClassSetTable *subClassSetTable =
-                (SubClassSetTable *) ((char *) this + subClassSetTableOffset);
+            const SubClassSetTable *subClassSetTable =
+                (const SubClassSetTable *) ((char *) this + subClassSetTableOffset);
             le_uint16 subClassRuleCount = SWAPW(subClassSetTable->subClassRuleCount);
             le_int32 position = glyphIterator->getCurrStreamPosition();
 
-            for (le_uint16 scRule = 0; scRule < subClassRuleCount; scRule += 1)
-            {
+            for (le_uint16 scRule = 0; scRule < subClassRuleCount; scRule += 1) {
                 Offset subClassRuleTableOffset =
                     SWAPW(subClassSetTable->subClassRuleTableOffsetArray[scRule]);
-                SubClassRuleTable *subClassRuleTable =
-                    (SubClassRuleTable *) ((char *) subClassSetTable + subClassRuleTableOffset);
+                const SubClassRuleTable *subClassRuleTable =
+                    (const SubClassRuleTable *) ((char *) subClassSetTable + subClassRuleTableOffset);
                 le_uint16 matchCount = SWAPW(subClassRuleTable->glyphCount) - 1;
                 le_uint16 substCount = SWAPW(subClassRuleTable->substCount);
 
-                if (matchGlyphClasses(subClassRuleTable->classArray, matchCount, glyphIterator, classDefinitionTable))
-                {
-                    SubstitutionLookupRecord *substLookupRecordArray = 
-                        (SubstitutionLookupRecord *) &subClassRuleTable->classArray[matchCount];
+                if (matchGlyphClasses(subClassRuleTable->classArray, matchCount, glyphIterator, classDefinitionTable)) {
+                    const SubstitutionLookupRecord *substLookupRecordArray = 
+                        (const SubstitutionLookupRecord *) &subClassRuleTable->classArray[matchCount];
 
                     applySubstitutionLookups(lookupProcessor, substLookupRecordArray, substCount, glyphIterator, fontInstance, position);
 
@@ -248,8 +229,8 @@ le_uint32 ContextualSubstitutionFormat2Subtable::process(LookupProcessor *lookup
     return 0;
 }
 
-le_uint32 ContextualSubstitutionFormat3Subtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                      const LEFontInstance *fontInstance)
+le_uint32 ContextualSubstitutionFormat3Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                      const LEFontInstance *fontInstance)const 
 {
     le_uint16 gCount = SWAPW(glyphCount);
     le_uint16 subCount = SWAPW(substCount);
@@ -261,10 +242,9 @@ le_uint32 ContextualSubstitutionFormat3Subtable::process(LookupProcessor *lookup
     // that matched when we're done.
     glyphIterator->prev();
 
-    if (ContextualSubstitutionBase::matchGlyphCoverages(coverageTableOffsetArray, gCount, glyphIterator, (char *) this))
-    {
-        SubstitutionLookupRecord *substLookupRecordArray = 
-            (SubstitutionLookupRecord *) &coverageTableOffsetArray[gCount];
+    if (ContextualSubstitutionBase::matchGlyphCoverages(coverageTableOffsetArray, gCount, glyphIterator, (const char *) this)) {
+        const SubstitutionLookupRecord *substLookupRecordArray = 
+            (const SubstitutionLookupRecord *) &coverageTableOffsetArray[gCount];
 
         ContextualSubstitutionBase::applySubstitutionLookups(lookupProcessor, substLookupRecordArray, subCount, glyphIterator, fontInstance, position);
 
@@ -276,8 +256,8 @@ le_uint32 ContextualSubstitutionFormat3Subtable::process(LookupProcessor *lookup
     return 0;
 }
 
-le_uint32 ChainingContextualSubstitutionSubtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                       const LEFontInstance *fontInstance)
+le_uint32 ChainingContextualSubstitutionSubtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                       const LEFontInstance *fontInstance) const
 {
     switch(SWAPW(subtableFormat))
     {
@@ -286,21 +266,21 @@ le_uint32 ChainingContextualSubstitutionSubtable::process(LookupProcessor *looku
 
     case 1:
     {
-        ChainingContextualSubstitutionFormat1Subtable *subtable = (ChainingContextualSubstitutionFormat1Subtable *) this;
+        const ChainingContextualSubstitutionFormat1Subtable *subtable = (const ChainingContextualSubstitutionFormat1Subtable *) this;
 
         return subtable->process(lookupProcessor, glyphIterator, fontInstance);
     }
 
     case 2:
     {
-        ChainingContextualSubstitutionFormat2Subtable *subtable = (ChainingContextualSubstitutionFormat2Subtable *) this;
+        const ChainingContextualSubstitutionFormat2Subtable *subtable = (const ChainingContextualSubstitutionFormat2Subtable *) this;
 
         return subtable->process(lookupProcessor, glyphIterator, fontInstance);
     }
 
     case 3:
     {
-        ChainingContextualSubstitutionFormat3Subtable *subtable = (ChainingContextualSubstitutionFormat3Subtable *) this;
+        const ChainingContextualSubstitutionFormat3Subtable *subtable = (const ChainingContextualSubstitutionFormat3Subtable *) this;
 
         return subtable->process(lookupProcessor, glyphIterator, fontInstance);
     }
@@ -310,56 +290,50 @@ le_uint32 ChainingContextualSubstitutionSubtable::process(LookupProcessor *looku
     }
 }
 
-le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                              const LEFontInstance *fontInstance)
+le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                              const LEFontInstance *fontInstance) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
+    if (coverageIndex >= 0) {
         le_uint16 srSetCount = SWAPW(chainSubRuleSetCount);
 
-        if (coverageIndex < srSetCount)
-        {
+        if (coverageIndex < srSetCount) {
             Offset chainSubRuleSetTableOffset = SWAPW(chainSubRuleSetTableOffsetArray[coverageIndex]);
-            ChainSubRuleSetTable *chainSubRuleSetTable =
-                (ChainSubRuleSetTable *) ((char *) this + chainSubRuleSetTableOffset);
+            const ChainSubRuleSetTable *chainSubRuleSetTable =
+                (const ChainSubRuleSetTable *) ((char *) this + chainSubRuleSetTableOffset);
             le_uint16 chainSubRuleCount = SWAPW(chainSubRuleSetTable->chainSubRuleCount);
             le_int32 position = glyphIterator->getCurrStreamPosition();
             GlyphIterator tempIterator(*glyphIterator);
 
-            for (le_uint16 subRule = 0; subRule < chainSubRuleCount; subRule += 1)
-            {
+            for (le_uint16 subRule = 0; subRule < chainSubRuleCount; subRule += 1) {
                 Offset chainSubRuleTableOffset =
                     SWAPW(chainSubRuleSetTable->chainSubRuleTableOffsetArray[subRule]);
-                ChainSubRuleTable *chainSubRuleTable =
-                    (ChainSubRuleTable *) ((char *) chainSubRuleSetTable + chainSubRuleTableOffset);
+                const ChainSubRuleTable *chainSubRuleTable =
+                    (const ChainSubRuleTable *) ((char *) chainSubRuleSetTable + chainSubRuleTableOffset);
                 le_uint16 backtrackGlyphCount = SWAPW(chainSubRuleTable->backtrackGlyphCount);
                 le_uint16 inputGlyphCount = (le_uint16) SWAPW(chainSubRuleTable->backtrackGlyphArray[backtrackGlyphCount]) - 1;
-                LEGlyphID *inputGlyphArray = &chainSubRuleTable->backtrackGlyphArray[backtrackGlyphCount + 1];
+                const LEGlyphID *inputGlyphArray = &chainSubRuleTable->backtrackGlyphArray[backtrackGlyphCount + 1];
                 le_uint16 lookaheadGlyphCount = (le_uint16) SWAPW(inputGlyphArray[inputGlyphCount]);
-                LEGlyphID *lookaheadGlyphArray = &inputGlyphArray[inputGlyphCount + 1];
+                const LEGlyphID *lookaheadGlyphArray = &inputGlyphArray[inputGlyphCount + 1];
                 le_uint16 substCount = (le_uint16) SWAPW(lookaheadGlyphArray[lookaheadGlyphCount]);
 
                 tempIterator.setCurrStreamPosition(position);
                 tempIterator.prev(backtrackGlyphCount + 1);
-                if (! matchGlyphIDs(chainSubRuleTable->backtrackGlyphArray, backtrackGlyphCount, &tempIterator))
-                {
+                if (! matchGlyphIDs(chainSubRuleTable->backtrackGlyphArray, backtrackGlyphCount, &tempIterator)) {
                     continue;
                 }
 
                 tempIterator.setCurrStreamPosition(position);
                 tempIterator.next(inputGlyphCount);
-                if (!matchGlyphIDs(lookaheadGlyphArray, lookaheadGlyphCount, &tempIterator))
-                {
+                if (!matchGlyphIDs(lookaheadGlyphArray, lookaheadGlyphCount, &tempIterator)) {
                     continue;
                 }
 
-                if (matchGlyphIDs(inputGlyphArray, inputGlyphCount, glyphIterator))
-                {
-                    SubstitutionLookupRecord *substLookupRecordArray = 
-                        (SubstitutionLookupRecord *) &lookaheadGlyphArray[lookaheadGlyphCount + 1];
+                if (matchGlyphIDs(inputGlyphArray, inputGlyphCount, glyphIterator)) {
+                    const SubstitutionLookupRecord *substLookupRecordArray = 
+                        (const SubstitutionLookupRecord *) &lookaheadGlyphArray[lookaheadGlyphCount + 1];
 
                     applySubstitutionLookups(lookupProcessor, substLookupRecordArray, substCount, glyphIterator, fontInstance, position);
 
@@ -376,65 +350,59 @@ le_uint32 ChainingContextualSubstitutionFormat1Subtable::process(LookupProcessor
     return 0;
 }
 
-le_uint32 ChainingContextualSubstitutionFormat2Subtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                              const LEFontInstance *fontInstance)
+le_uint32 ChainingContextualSubstitutionFormat2Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                              const LEFontInstance *fontInstance) const
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
-        ClassDefinitionTable *backtrackClassDefinitionTable =
-            (ClassDefinitionTable *) ((char *) this + SWAPW(backtrackClassDefTableOffset));
-        ClassDefinitionTable *inputClassDefinitionTable =
-            (ClassDefinitionTable *) ((char *) this + SWAPW(inputClassDefTableOffset));
-        ClassDefinitionTable *lookaheadClassDefinitionTable =
-            (ClassDefinitionTable *) ((char *) this + SWAPW(lookaheadClassDefTableOffset));
+    if (coverageIndex >= 0) {
+        const ClassDefinitionTable *backtrackClassDefinitionTable =
+            (const ClassDefinitionTable *) ((char *) this + SWAPW(backtrackClassDefTableOffset));
+        const ClassDefinitionTable *inputClassDefinitionTable =
+            (const ClassDefinitionTable *) ((char *) this + SWAPW(inputClassDefTableOffset));
+        const ClassDefinitionTable *lookaheadClassDefinitionTable =
+            (const ClassDefinitionTable *) ((char *) this + SWAPW(lookaheadClassDefTableOffset));
         le_uint16 scSetCount = SWAPW(chainSubClassSetCount);
         le_int32 setClass = inputClassDefinitionTable->getGlyphClass((LEGlyphID) glyphIterator->getCurrGlyphID());
 
-        if (setClass < scSetCount && chainSubClassSetTableOffsetArray[setClass] != 0)
-        {
+        if (setClass < scSetCount && chainSubClassSetTableOffsetArray[setClass] != 0) {
             Offset chainSubClassSetTableOffset = SWAPW(chainSubClassSetTableOffsetArray[setClass]);
-            ChainSubClassSetTable *chainSubClassSetTable =
-                (ChainSubClassSetTable *) ((char *) this + chainSubClassSetTableOffset);
+            const ChainSubClassSetTable *chainSubClassSetTable =
+                (const ChainSubClassSetTable *) ((char *) this + chainSubClassSetTableOffset);
             le_uint16 chainSubClassRuleCount = SWAPW(chainSubClassSetTable->chainSubClassRuleCount);
             le_int32 position = glyphIterator->getCurrStreamPosition();
             GlyphIterator tempIterator(*glyphIterator);
 
-            for (le_uint16 scRule = 0; scRule < chainSubClassRuleCount; scRule += 1)
-            {
+            for (le_uint16 scRule = 0; scRule < chainSubClassRuleCount; scRule += 1) {
                 Offset chainSubClassRuleTableOffset =
                     SWAPW(chainSubClassSetTable->chainSubClassRuleTableOffsetArray[scRule]);
-                ChainSubClassRuleTable *chainSubClassRuleTable =
-                    (ChainSubClassRuleTable *) ((char *) chainSubClassSetTable + chainSubClassRuleTableOffset);
+                const ChainSubClassRuleTable *chainSubClassRuleTable =
+                    (const ChainSubClassRuleTable *) ((char *) chainSubClassSetTable + chainSubClassRuleTableOffset);
                 le_uint16 backtrackGlyphCount = SWAPW(chainSubClassRuleTable->backtrackGlyphCount);
                 le_uint16 inputGlyphCount = SWAPW(chainSubClassRuleTable->backtrackClassArray[backtrackGlyphCount]) - 1;
-                le_uint16 *inputClassArray = &chainSubClassRuleTable->backtrackClassArray[backtrackGlyphCount + 1];
+                const le_uint16 *inputClassArray = &chainSubClassRuleTable->backtrackClassArray[backtrackGlyphCount + 1];
                 le_uint16 lookaheadGlyphCount = SWAPW(inputClassArray[inputGlyphCount]);
-                le_uint16 *lookaheadClassArray = &inputClassArray[inputGlyphCount + 1];
+                const le_uint16 *lookaheadClassArray = &inputClassArray[inputGlyphCount + 1];
                 le_uint16 substCount = SWAPW(lookaheadClassArray[lookaheadGlyphCount]);
                 
 
                 tempIterator.setCurrStreamPosition(position);
                 tempIterator.prev(backtrackGlyphCount + 1);
                 if (! matchGlyphClasses(chainSubClassRuleTable->backtrackClassArray, backtrackGlyphCount,
-                    &tempIterator, backtrackClassDefinitionTable))
-                {
+                    &tempIterator, backtrackClassDefinitionTable)) {
                     continue;
                 }
 
                 tempIterator.setCurrStreamPosition(position);
                 tempIterator.next(inputGlyphCount);
-                if (! matchGlyphClasses(lookaheadClassArray, lookaheadGlyphCount, &tempIterator, lookaheadClassDefinitionTable))
-                {
+                if (! matchGlyphClasses(lookaheadClassArray, lookaheadGlyphCount, &tempIterator, lookaheadClassDefinitionTable)) {
                     continue;
                 }
 
-                if (matchGlyphClasses(inputClassArray, inputGlyphCount, glyphIterator, inputClassDefinitionTable))
-                {
-                    SubstitutionLookupRecord *substLookupRecordArray = 
-                        (SubstitutionLookupRecord *) &lookaheadClassArray[lookaheadGlyphCount + 1];
+                if (matchGlyphClasses(inputClassArray, inputGlyphCount, glyphIterator, inputClassDefinitionTable)) {
+                    const SubstitutionLookupRecord *substLookupRecordArray = 
+                        (const SubstitutionLookupRecord *) &lookaheadClassArray[lookaheadGlyphCount + 1];
 
                     applySubstitutionLookups(lookupProcessor, substLookupRecordArray, substCount, glyphIterator, fontInstance, position);
 
@@ -451,30 +419,28 @@ le_uint32 ChainingContextualSubstitutionFormat2Subtable::process(LookupProcessor
     return 0;
 }
 
-le_uint32 ChainingContextualSubstitutionFormat3Subtable::process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
-                                                              const LEFontInstance *fontInstance)
+le_uint32 ChainingContextualSubstitutionFormat3Subtable::process(const LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator,
+                                                              const LEFontInstance *fontInstance) const
 {
     le_uint16 backtrkGlyphCount = SWAPW(backtrackGlyphCount);
     le_uint16 inputGlyphCount = (le_uint16) SWAPW(backtrackCoverageTableOffsetArray[backtrkGlyphCount]);
-    Offset *inputCoverageTableOffsetArray = &backtrackCoverageTableOffsetArray[backtrkGlyphCount + 1];
-    le_uint16 lookaheadGlyphCount = (le_uint16) SWAPW(inputCoverageTableOffsetArray[inputGlyphCount]);
-    Offset *lookaheadCoverageTableOffsetArray = &inputCoverageTableOffsetArray[inputGlyphCount + 1];
+    const Offset *inputCoverageTableOffsetArray = &backtrackCoverageTableOffsetArray[backtrkGlyphCount + 1];
+    const le_uint16 lookaheadGlyphCount = (le_uint16) SWAPW(inputCoverageTableOffsetArray[inputGlyphCount]);
+    const Offset *lookaheadCoverageTableOffsetArray = &inputCoverageTableOffsetArray[inputGlyphCount + 1];
     le_uint16 substCount = (le_uint16) SWAPW(lookaheadCoverageTableOffsetArray[lookaheadGlyphCount]);
     le_int32 position = glyphIterator->getCurrStreamPosition();
     GlyphIterator tempIterator(*glyphIterator);
 
     tempIterator.prev(backtrkGlyphCount + 1);
     if (! ContextualSubstitutionBase::matchGlyphCoverages(backtrackCoverageTableOffsetArray,
-        backtrkGlyphCount, &tempIterator, (char *) this))
-    {
+        backtrkGlyphCount, &tempIterator, (const char *) this)) {
         return 0;
     }
 
     tempIterator.setCurrStreamPosition(position);
     tempIterator.next(inputGlyphCount - 1);
     if (! ContextualSubstitutionBase::matchGlyphCoverages(lookaheadCoverageTableOffsetArray,
-        lookaheadGlyphCount, &tempIterator, (char *) this))
-    {
+        lookaheadGlyphCount, &tempIterator, (const char *) this)) {
         return 0;
     }
 
@@ -485,10 +451,9 @@ le_uint32 ChainingContextualSubstitutionFormat3Subtable::process(LookupProcessor
     glyphIterator->prev();
 
     if (ContextualSubstitutionBase::matchGlyphCoverages(inputCoverageTableOffsetArray,
-        inputGlyphCount, glyphIterator, (char *) this))
-    {
-        SubstitutionLookupRecord *substLookupRecordArray = 
-            (SubstitutionLookupRecord *) &lookaheadCoverageTableOffsetArray[lookaheadGlyphCount + 1];
+        inputGlyphCount, glyphIterator, (const char *) this)) {
+        const SubstitutionLookupRecord *substLookupRecordArray = 
+            (const SubstitutionLookupRecord *) &lookaheadCoverageTableOffsetArray[lookaheadGlyphCount + 1];
 
         ContextualSubstitutionBase::applySubstitutionLookups(lookupProcessor, substLookupRecordArray, substCount, glyphIterator, fontInstance, position);
 

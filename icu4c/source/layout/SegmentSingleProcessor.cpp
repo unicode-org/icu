@@ -1,7 +1,7 @@
 /*
  * @(#)SegmentSingleProcessor.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -17,12 +17,12 @@ SegmentSingleProcessor::SegmentSingleProcessor()
 {
 }
 
-SegmentSingleProcessor::SegmentSingleProcessor(MorphSubtableHeader *morphSubtableHeader)
+SegmentSingleProcessor::SegmentSingleProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : NonContextualGlyphSubstitutionProcessor(morphSubtableHeader)
 {
-    NonContextualGlyphSubstitutionHeader *header = (NonContextualGlyphSubstitutionHeader *) morphSubtableHeader;
+    const NonContextualGlyphSubstitutionHeader *header = (const NonContextualGlyphSubstitutionHeader *) morphSubtableHeader;
 
-    segmentSingleLookupTable = (SegmentSingleLookupTable *) &header->table;
+    segmentSingleLookupTable = (const SegmentSingleLookupTable *) &header->table;
 }
 
 SegmentSingleProcessor::~SegmentSingleProcessor()
@@ -31,15 +31,13 @@ SegmentSingleProcessor::~SegmentSingleProcessor()
 
 void SegmentSingleProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount)
 {
-    LookupSegment *segments = segmentSingleLookupTable->segments;
+    const LookupSegment *segments = segmentSingleLookupTable->segments;
     le_int32 glyph;
 
-    for (glyph = 0; glyph < glyphCount; glyph += 1)
-    {
-        LookupSegment *lookupSegment = segmentSingleLookupTable->lookupSegment(segments, glyphs[glyph]);
+    for (glyph = 0; glyph < glyphCount; glyph += 1) {
+        const LookupSegment *lookupSegment = segmentSingleLookupTable->lookupSegment(segments, glyphs[glyph]);
 
-        if (lookupSegment != NULL)
-        {
+        if (lookupSegment != NULL) {
             glyphs[glyph] += SWAPW(lookupSegment->value);
         }
     }

@@ -1,7 +1,7 @@
 /*
  * @(#)GDEFMarkFilter.h	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -15,13 +15,13 @@
 class GDEFMarkFilter : public LEGlyphFilter
 {
 private:
-    GlyphClassDefinitionTable *classDefTable;
+    const GlyphClassDefinitionTable *classDefTable;
 
 public:
-    GDEFMarkFilter(GlyphDefinitionTableHeader *gdefTable);
+    GDEFMarkFilter(const GlyphDefinitionTableHeader *gdefTable);
     virtual ~GDEFMarkFilter();
 
-    virtual le_bool accept(LEGlyphID glyph);
+    virtual le_bool accept(LEGlyphID glyph) const;
 };
 
 

@@ -1,7 +1,7 @@
 /*
  * @(#)GlyphSubstLookupProc.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -24,8 +24,8 @@
 #include "LESwaps.h"
 
 GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor(
-        GlyphSubstitutionTableHeader *glyphSubstitutionTableHeader,
-        LETag scriptTag, LETag languageTag, LEGlyphFilter *filter)
+        const GlyphSubstitutionTableHeader *glyphSubstitutionTableHeader,
+        LETag scriptTag, LETag languageTag, const LEGlyphFilter *filter)
     : LookupProcessor(
                       (char *) glyphSubstitutionTableHeader,
                       SWAPW(glyphSubstitutionTableHeader->scriptListOffset),
@@ -40,8 +40,8 @@ GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor()
 {
 }
 
-le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookupSubtable, le_uint16 lookupType,
-                                                       GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
+le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(const LookupSubtable *lookupSubtable, le_uint16 lookupType,
+                                                       GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     le_uint32 delta = 0;
 
@@ -52,7 +52,7 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookup
 
     case gsstSingle:
     {
-        SingleSubstitutionSubtable *subtable = (SingleSubstitutionSubtable *) lookupSubtable;
+        const SingleSubstitutionSubtable *subtable = (const SingleSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(glyphIterator, fFilter);
         break;
@@ -60,7 +60,7 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookup
 
     case gsstMultiple:
     {
-        MultipleSubstitutionSubtable *subtable = (MultipleSubstitutionSubtable *) lookupSubtable;
+        const MultipleSubstitutionSubtable *subtable = (const MultipleSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(glyphIterator, fFilter);
         break;
@@ -68,7 +68,7 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookup
 
     case gsstAlternate:
     {
-        AlternateSubstitutionSubtable *subtable = (AlternateSubstitutionSubtable *) lookupSubtable;
+        const AlternateSubstitutionSubtable *subtable = (const AlternateSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(glyphIterator, fFilter);
         break;
@@ -76,7 +76,7 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookup
 
     case gsstLigature:
     {
-        LigatureSubstitutionSubtable *subtable = (LigatureSubstitutionSubtable *) lookupSubtable;
+        const LigatureSubstitutionSubtable *subtable = (const LigatureSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(glyphIterator, fFilter);
         break;
@@ -84,7 +84,7 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookup
 
     case gsstContext:
     {
-        ContextualSubstitutionSubtable *subtable = (ContextualSubstitutionSubtable *) lookupSubtable;
+        const ContextualSubstitutionSubtable *subtable = (const ContextualSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(this, glyphIterator, fontInstance);
         break;
@@ -92,7 +92,7 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(LookupSubtable *lookup
 
     case gsstChainingContext:
     {
-        ChainingContextualSubstitutionSubtable *subtable = (ChainingContextualSubstitutionSubtable *) lookupSubtable;
+        const ChainingContextualSubstitutionSubtable *subtable = (const ChainingContextualSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(this, glyphIterator, fontInstance);
         break;

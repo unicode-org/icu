@@ -1,7 +1,7 @@
 /*
  * @(#)MarkToMarkPosnSubtables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -16,7 +16,7 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
-LEGlyphID MarkToMarkPositioningSubtable::findMark2Glyph(GlyphIterator *glyphIterator)
+LEGlyphID MarkToMarkPositioningSubtable::findMark2Glyph(GlyphIterator *glyphIterator) const
 {
     if (glyphIterator->prev()) {
         return glyphIterator->getCurrGlyphID();
@@ -25,7 +25,7 @@ LEGlyphID MarkToMarkPositioningSubtable::findMark2Glyph(GlyphIterator *glyphIter
     return 0xFFFF;
 }
 
-le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
+le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     LEGlyphID markGlyph = glyphIterator->getCurrGlyphID();
     le_int32 markCoverage = getGlyphCoverage((LEGlyphID) markGlyph);
@@ -36,7 +36,7 @@ le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, co
     }
 
     LEPoint markAnchor;
-    MarkArray *markArray = (MarkArray *) ((char *) this + SWAPW(markArrayOffset));
+    const MarkArray *markArray = (const MarkArray *) ((char *) this + SWAPW(markArrayOffset));
     le_int32 markClass = markArray->getMarkClass(markGlyph, markCoverage, fontInstance, markAnchor);
     le_uint16 mcCount = SWAPW(classCount);
 
@@ -50,7 +50,7 @@ le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, co
     GlyphIterator mark2Iterator(*glyphIterator, lfIgnoreLigatures /*| lfIgnoreBaseGlyphs*/);
     LEGlyphID mark2Glyph = findMark2Glyph(&mark2Iterator);
     le_int32 mark2Coverage = getBaseCoverage((LEGlyphID) mark2Glyph);
-    Mark2Array *mark2Array = (Mark2Array *) ((char *) this + SWAPW(baseArrayOffset));
+    const Mark2Array *mark2Array = (const Mark2Array *) ((char *) this + SWAPW(baseArrayOffset));
     le_uint16 mark2Count = SWAPW(mark2Array->mark2RecordCount);
 
     if (mark2Coverage < 0 || mark2Coverage >= mark2Count) {
@@ -60,9 +60,9 @@ le_int32 MarkToMarkPositioningSubtable::process(GlyphIterator *glyphIterator, co
         return 0;
     }
 
-    Mark2Record *mark2Record = &mark2Array->mark2RecordArray[mark2Coverage * mcCount];
+    const Mark2Record *mark2Record = &mark2Array->mark2RecordArray[mark2Coverage * mcCount];
     Offset anchorTableOffset = SWAPW(mark2Record->mark2AnchorTableOffsetArray[markClass]);
-    AnchorTable *anchorTable = (AnchorTable *) ((char *) mark2Array + anchorTableOffset);
+    const AnchorTable *anchorTable = (const AnchorTable *) ((char *) mark2Array + anchorTableOffset);
     LEPoint mark2Anchor, markAdvance, pixels;
 
     anchorTable->getAnchor(mark2Glyph, fontInstance, mark2Anchor);

@@ -1,7 +1,7 @@
 /*
  * @(#)LookupTables.cpp	1.5 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -23,64 +23,56 @@
     of the derived classes, and implement it in the others by casting
     the "this" pointer to the type that has the implementation.
 */ 
-LookupSegment *BinarySearchLookupTable::lookupSegment(LookupSegment *segments, le_uint32 glyph)
+const LookupSegment *BinarySearchLookupTable::lookupSegment(const LookupSegment *segments, le_uint32 glyph) const
 {
     le_int16 unity = SWAPW(unitSize);
     le_int16 probe = SWAPW(searchRange);
     le_int16 extra = SWAPW(rangeShift);
-    LookupSegment *entry = segments;
-    LookupSegment *trial = (LookupSegment *) ((char *) entry + extra);
+    const LookupSegment *entry = segments;
+    const LookupSegment *trial = (const LookupSegment *) ((char *) entry + extra);
 
-    if (SWAPW(trial->lastGlyph) <= glyph)
-    {
+    if (SWAPW(trial->lastGlyph) <= glyph) {
         entry = trial;
     }
 
-    while (probe > unity)
-    {
+    while (probe > unity) {
         probe >>= 1;
-        trial = (LookupSegment *) ((char *) entry + probe);
+        trial = (const LookupSegment *) ((char *) entry + probe);
 
-        if (SWAPW(trial->lastGlyph) <= glyph)
-        {
+        if (SWAPW(trial->lastGlyph) <= glyph) {
             entry = trial;
         }
     }
 
-    if (SWAPW(entry->firstGlyph) <= glyph)
-    {
+    if (SWAPW(entry->firstGlyph) <= glyph) {
         return entry;
     }
 
     return NULL;
 }
 
-LookupSingle *BinarySearchLookupTable::lookupSingle(LookupSingle *entries, le_uint32 glyph)
+const LookupSingle *BinarySearchLookupTable::lookupSingle(const LookupSingle *entries, le_uint32 glyph) const
 {
     le_int16 unity = SWAPW(unitSize);
     le_int16 probe = SWAPW(searchRange);
     le_int16 extra = SWAPW(rangeShift);
-    LookupSingle *entry = entries;
-    LookupSingle *trial = (LookupSingle *) ((char *) entry + extra);
+    const LookupSingle *entry = entries;
+    const LookupSingle *trial = (const LookupSingle *) ((char *) entry + extra);
 
-    if (SWAPW(trial->glyph) <= glyph)
-    {
+    if (SWAPW(trial->glyph) <= glyph) {
         entry = trial;
     }
 
-    while (probe > unity)
-    {
+    while (probe > unity) {
         probe >>= 1;
-        trial = (LookupSingle *) ((char *) entry + probe);
+        trial = (const LookupSingle *) ((char *) entry + probe);
 
-        if (SWAPW(trial->glyph) <= glyph)
-        {
+        if (SWAPW(trial->glyph) <= glyph) {
             entry = trial;
         }
     }
 
-    if (SWAPW(entry->glyph) == glyph)
-    {
+    if (SWAPW(entry->glyph) == glyph) {
         return entry;
     }
 

@@ -1,7 +1,7 @@
 /*
  * @(#)IndicRearrangementProcessor.h	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
  */
 
@@ -24,17 +24,17 @@ public:
 
     virtual void endStateTable();
 
-    void doRearrangementAction(LEGlyphID *glyphs, le_int32 *charIndices, IndicRearrangementVerb verb);
+    void doRearrangementAction(LEGlyphID *glyphs, le_int32 *charIndices, IndicRearrangementVerb verb) const;
 
-    IndicRearrangementProcessor(MorphSubtableHeader *morphSubtableHeader);
+    IndicRearrangementProcessor(const MorphSubtableHeader *morphSubtableHeader);
     virtual ~IndicRearrangementProcessor();
 
 protected:
     le_int32 firstGlyph;
     le_int32 lastGlyph;
 
-    IndicRearrangementStateEntry *entryTable;
-    IndicRearrangementSubtableHeader *indicRearrangementSubtableHeader;
+    const IndicRearrangementStateEntry *entryTable;
+    const IndicRearrangementSubtableHeader *indicRearrangementSubtableHeader;
 };
 
 #endif
