@@ -24,7 +24,7 @@
 #include "rbbirb.h"
 #include "rbbinode.h"
 
-#include "assert.h"
+#include "uassert.h"
 
 #include <stdio.h>     // TODO - getrid of this.
 
@@ -175,7 +175,7 @@ RBBINode *RBBINode::cloneTree() {
 //
 //-------------------------------------------------------------------------
 void RBBINode::flattenVariables() {
-    assert(fType != varRef);
+    U_ASSERT(fType != varRef);
 
     if (fLeftChild != NULL) {
         if (fLeftChild->fType==varRef) {
@@ -211,7 +211,7 @@ void RBBINode::flattenVariables() {
 //
 //-------------------------------------------------------------------------
 void RBBINode::flattenSets() {
-    assert(fType != setRef);
+    U_ASSERT(fType != setRef);
 
     if (fLeftChild != NULL) {
         if (fLeftChild->fType==setRef) {

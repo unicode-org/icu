@@ -20,7 +20,7 @@
 #include "cmemory.h"
 
 #include "stdio.h"
-#include "assert.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -643,7 +643,7 @@ int32_t RuleBasedBreakIterator::handleNext(void) {
             // Lookahead match is completed.  Set the result accordingly, but only
             //   if no other rule has matched further in the mean time.
             if (lookaheadResult > result) {
-                assert(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
+                U_ASSERT(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
                 //    of overlapping lookahead matches.
                 result          = lookaheadResult;
                 fLastBreakTag   = lookaheadTag;
@@ -782,7 +782,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(void) {
             // Lookahead match is completed.  Set the result accordingly, but only
             //   if no other rule has matched further in the mean time.
             if (lookaheadResult > result) {
-                assert(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
+                U_ASSERT(row->fAccepting == lookaheadStatus);   // TODO:  handle this case
                 //    of overlapping lookahead matches.
                 result          = lookaheadResult;
                 fLastBreakTag   = lookaheadTag;
@@ -838,7 +838,7 @@ int32_t  RuleBasedBreakIterator::getRuleStatus() const {
             int32_t pa = current();
             nonConstThis->previous();
             int32_t pb = nonConstThis->next();
-            assert(pa == pb);
+            U_ASSERT(pa == pb);
         }
     }
     return nonConstThis->fLastBreakTag;
