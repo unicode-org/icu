@@ -52,11 +52,11 @@ CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_sr
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL)
+$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/extra/ustdio
+LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL) -L$(top_builddir)/extra/ustdio -lustdio
 
 OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
-rblist.o ufile.o ustdio.o util.o
+rblist.o  util.o
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -147,10 +147,16 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS)
+	$(LINK.c) -o $@ $^ $(LIBS) 
 
 ## Rule to build a compiled cnv file
 $(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
+	@echo "Creating compiled resource file for $<"
+	@ICU_DATA=$(top_builddir)/data/ ./genrb $< > /dev/null 2>&1
+
+#  $(top_srcdir)/test/testdata/default.res
+
+$(top_srcdir)/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating compiled resource file for $<"
 	@ICU_DATA=$(top_builddir)/data/ ./genrb $< > /dev/null 2>&1
 
