@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 * File uprntf_p.h
 *
@@ -13,7 +13,7 @@
 *   Date        Name        Description
 *   12/02/98    stephen        Creation.
 *   03/12/99    stephen     Modified for new C API.
-*******************************************************************************
+******************************************************************************
 */
 
 #ifndef UPRNTF_P_H
@@ -25,16 +25,7 @@
 
 #include "uprintf.h"
 
-/**
- * Struct encapsulating a single uprintf format specification.
- */
-struct u_printf_spec {
-  u_printf_spec_info    fInfo;        /* Information on this spec */
-  int32_t        fWidthPos;     /* Position of width in arg list */
-  int32_t        fPrecisionPos;    /* Position of precision in arg list */
-  int32_t        fArgPos;    /* Position of data in arg list */
-};
-typedef struct u_printf_spec u_printf_spec;
+#define UP_PERCENT 0x0025
 
 /**
  * Parse a single u_printf format specifier.
@@ -44,8 +35,13 @@ typedef struct u_printf_spec u_printf_spec;
  * @return The number of characters contained in this specifier.
  */
 int32_t
-u_printf_parse_spec (const UChar     *fmt,
-             u_printf_spec    *spec);
+u_printf_print_spec(const u_printf_stream_handler *streamHandler,
+                    const UChar     *fmt,
+                    void            *context,
+                    ULocaleBundle   *formatBundle,
+                    int32_t         patCount,
+                    int32_t         *written,
+                    va_list         *ap);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
