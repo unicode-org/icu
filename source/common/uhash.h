@@ -503,6 +503,18 @@ uhash_compareLong(const UHashKey key1, const UHashKey key2);
  ********************************************************************/
 
 /**
+ * Deleter for Hashtable objects.
+ */
+U_CAPI void
+uhash_deleteHashtable(void *obj);
+
+/**
+ * Deleter for UVector objects.
+ */
+U_CAPI void
+uhash_deleteUVector(void *obj);
+
+/**
  * Deleter for any key or value allocated using uprv_malloc.  Calls
  * uprv_free.
  */

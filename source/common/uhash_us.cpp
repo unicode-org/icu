@@ -11,6 +11,8 @@
 */
 
 #include "uhash.h"
+#include "hash.h"
+#include "uvector.h"
 #include "unicode/unistr.h"
 
 /********************************************************************
@@ -65,3 +67,21 @@ uhash_compareCaselessUnicodeString(const UHashKey key1, const UHashKey key2) {
     }
     return str1->caseCompare(*str2, U_FOLD_CASE_DEFAULT) == 0;
 }
+
+/**
+ * Deleter for Hashtable objects.
+ */
+U_CAPI void
+uhash_deleteHashtable(void *obj) {
+    delete (Hashtable*) obj;
+}
+
+/**
+ * Deleter for UVector objects.
+ */
+U_CAPI void
+uhash_deleteUVector(void *obj) {
+    delete (UVector*) obj;
+}
+
+//eof
