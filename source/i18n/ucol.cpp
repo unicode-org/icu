@@ -666,13 +666,14 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         return UCOL_EQUAL;
     }
 
+    UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
     int32_t sOrder, tOrder;
     uint32_t pSOrder, pTOrder;
     UBool gets = TRUE, gett = TRUE;
-    UBool initialCheckSecTer = cppColl->getStrength() >= UCOL_SECONDARY;
+    UBool initialCheckSecTer = strength  >= UCOL_SECONDARY;
     UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = cppColl->getStrength() >= UCOL_TERTIARY;
-    UBool checkQuad = cppColl->getStrength() >= UCOL_QUATERNARY;
+    UBool checkTertiary = strength  >= UCOL_TERTIARY;
+    UBool checkQuad = strength  >= UCOL_QUATERNARY;
     UBool isFrenchSec = (cppColl->getAttribute(UCOL_FRENCH_COLLATION, status) == UCOL_ON) && checkSecTer;
 
     if(!isFrenchSec) {
@@ -1076,7 +1077,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     // as a tiebreaker if all else is equal
     // NOTE: The java code compares result with 0, and 
     // puts the result of the string comparison directly into result
-    if (result == UCOL_EQUAL && cppColl->getStrength() == UCOL_IDENTICAL)
+    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL)
     {
         UnicodeString sourceDecomp, targetDecomp;
 
@@ -1148,13 +1149,14 @@ ucol_strcoll(    const    UCollator    *coll,
         return UCOL_EQUAL;
     }
 
+    UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
     int32_t sOrder, tOrder;
     uint32_t pSOrder, pTOrder;
     UBool gets = TRUE, gett = TRUE;
-    UBool initialCheckSecTer = cppColl->getStrength() >= UCOL_SECONDARY;
+    UBool initialCheckSecTer = strength  >= UCOL_SECONDARY;
     UBool checkSecTer = initialCheckSecTer;
-    UBool checkTertiary = cppColl->getStrength() >= UCOL_TERTIARY;
-    UBool checkQuad = cppColl->getStrength() >= UCOL_QUATERNARY;
+    UBool checkTertiary = strength  >= UCOL_TERTIARY;
+    UBool checkQuad = strength  >= UCOL_QUATERNARY;
     UBool isFrenchSec = (cppColl->getAttribute(UCOL_FRENCH_COLLATION, status) == UCOL_ON) && checkSecTer;
 
     if(!isFrenchSec) {
@@ -1555,7 +1557,7 @@ ucol_strcoll(    const    UCollator    *coll,
     // as a tiebreaker if all else is equal
     // NOTE: The java code compares result with 0, and 
     // puts the result of the string comparison directly into result
-    if (result == UCOL_EQUAL && cppColl->getStrength() == UCOL_IDENTICAL)
+    if (result == UCOL_EQUAL && strength == UCOL_IDENTICAL)
     {
         UnicodeString sourceDecomp, targetDecomp;
 
