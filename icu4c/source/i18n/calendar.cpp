@@ -544,7 +544,11 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     // a calendar was returned - we assume the factory did the right thing.
     c = (Calendar*)u;
   }
+
+  // Now, reset calendar to default state:
+  c->clear();
   c->adoptTimeZone(zone); //  Set the correct time zone
+  c->setTimeInMillis(getNow(), success); // let the new calendar have the current time.
   return c;
 }
 
