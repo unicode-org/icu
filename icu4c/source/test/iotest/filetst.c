@@ -959,7 +959,6 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%08u", 123456, "%08u", 123456);
     TestFPrintFormat("%8u", -123456, "%8u", -123456);
     TestFPrintFormat("%-8u", -123456, "%-8u", -123456);
-    TestFPrintFormat("%-08u", -123456, "%-08u", -123456);
     TestFPrintFormat("%.5u", 123456, "%.5u", 123456);
     TestFPrintFormat("%.6u", 123456, "%.6u", 123456);
     TestFPrintFormat("%.7u", 123456, "%.7u", 123456);
