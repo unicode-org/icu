@@ -167,7 +167,7 @@ loadPropsData() {
         /* additional properties */
         if(indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0) {
             propsVectors=pData32+indexes[UPROPS_ADDITIONAL_VECTORS_INDEX];
-            countPropsVectors=indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]-indexes[UPROPS_ADDITIONAL_VECTORS_INDEX];
+            countPropsVectors=indexes[UPROPS_RESERVED_INDEX]-indexes[UPROPS_ADDITIONAL_VECTORS_INDEX];
             propsVectorsColumns=indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX];
         }
 
