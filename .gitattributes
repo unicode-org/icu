@@ -137,10 +137,12 @@ icu4c/source/test/testdata/uni-text.txt -text
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
 icu4j/src/com/ibm/demo/calendar/package.html svneol=native#text/html
+icu4j/src/com/ibm/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/rbbi/english.dict -text
 icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/translit/demo.html svneol=native#text/html
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/test/rbbi/english.dict -text
