@@ -10,6 +10,9 @@
 #ifndef PARSEERR_H
 #define PARSEERR_H
 
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+
 /**
  * A ParseError struct is used to returned detailed information about
  * parsing errors.  It is used by ICU parsing engines that parse long
