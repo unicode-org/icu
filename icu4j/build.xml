@@ -731,6 +731,8 @@
             source="1.4"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
+            <copy file="${src.dir}/com/ibm/icu/impl/data/th.brk"
+                todir="${build.dir}/com/ibm/icu/impl/data/"/>
             <!-- BreakIterator does not require collation data so delete it -->
             <delete>
                 <fileset dir="${build.dir}/com/ibm/icu/impl/data/" includes="*.col,*.utf8"/>
@@ -744,8 +746,16 @@
             destdir="${build.dir}"
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
-            <copy file="${src.dir}/com/ibm/icu/dev/data/th18057.txt"
-                todir="${build.dir}/com/ibm/icu/dev/data/"/>
+<!-- TODO this apparently is no longer used
+        <copy file="${src.dir}/com/ibm/icu/dev/data/th18057.txt"
+            todir="${build.dir}/com/ibm/icu/dev/data/"/>
+-->
+        <copy file="${src.dir}/com/ibm/icu/dev/test/rbbi/rbbitst.txt"
+            todir="${build.dir}/com/ibm/icu/dev/test/rbbi"/>
+        <!-- TODO this assumes no other target has extracted these files already, revisit -->
+        <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+            <patternset includes="**/icudt30b/unames.icu"/>
+        </unjar>
     </target>
 
     <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
