@@ -409,6 +409,23 @@ public final class UScript {
     }
 
     /**
+     * Gets a script codes associated with the given ISO 15924 abbreviation or name.
+     * Returns MALAYAM given "Malayam" OR "Mlym".
+     *
+     * @param nameOrAbbr name of the script or ISO 15924 code
+     * @return The script code value or INVALID_CODE if the code cannot be found.
+     * @internal
+     */
+    public static final int getCodeFromName(String nameOrAbbr) {
+        try {
+            return UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
+                                                   nameOrAbbr);
+        } catch (IllegalArgumentException e) {
+            return INVALID_CODE;
+        }
+    }
+
+    /**
      * Gets the script code associated with the given codepoint.
      * Returns UScript.MALAYAM given 0x0D02
      * @param codepoint UChar32 codepoint
