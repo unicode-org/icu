@@ -775,7 +775,9 @@ uprv_timezone()
    some platforms need to have it declared here. */ 
 
 #if defined(IRIX) || defined(U_DARWIN) /* For SGI/MacOSX.  */
-extern char *tzname[]; /* RS6000 and others reject char **tzname.  */ 
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#elif defined(U_CYGWIN)
+extern U_IMPORT char *_tzname[2]; 
 #endif
 
 U_CAPI char* U_EXPORT2
