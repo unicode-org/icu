@@ -44,6 +44,8 @@
 #ifndef COLL_H
 #define COLL_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/ucol.h"
 #include "unicode/normlzr.h"
 #include "unicode/locid.h"
@@ -151,8 +153,7 @@ class CollationKey;
 * @version     2.0 11/15/01
 */
 
-class U_I18N_API Collator
-{
+class U_I18N_API Collator : public UObject {
 public:
 
   // Collator public enums -----------------------------------------------

@@ -12,7 +12,8 @@
 #ifndef RBBITBLB_H
 #define RBBITBLB_H
 
-
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/rbbi.h"
 #include "rbbinode.h"
 
@@ -30,7 +31,7 @@ class RBBIRuleScanner;
 //                         There is no user-visible public API here.
 //
 
-class RBBITableBuilder {
+class RBBITableBuilder : public UObject {
 public:
     // TODO:  add a root node param to the constructor.  We're going to have two
     //        builders, one for the forward table, and one for the reverse table.
@@ -82,7 +83,7 @@ private:
 //
 //  RBBIStateDescriptor - The DFA is constructed as a set of these descriptors,
 //                        one for each state.
-class   RBBIStateDescriptor {
+class RBBIStateDescriptor : public UObject {
 public:
     UBool            fMarked;
     int32_t          fAccepting;

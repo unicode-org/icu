@@ -46,8 +46,9 @@
 #ifndef RESBUND_H
 #define RESBUND_H
   
-#include "unicode/ures.h"
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "unicode/ures.h"
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 
@@ -155,7 +156,7 @@ class RuleBasedCollator;
  * </pre>
  * @stable
  */
-class U_COMMON_API ResourceBundle {
+class U_COMMON_API ResourceBundle : public UObject {
 public:
     /**
      * Constructor

@@ -11,6 +11,8 @@
 #ifndef BRKDICT_H
 #define BRKDICT_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "ucmp8.h"
 #include "umemstrm.h"
 
@@ -27,7 +29,7 @@ U_NAMESPACE_BEGIN
  * transitions.  Indexes are used to compress this array, taking
  * advantage of the fact that this array will always be very sparse.
  */
-class BreakDictionary {
+class BreakDictionary : public UObject {
     //=================================================================================
     // data members
     //=================================================================================

@@ -12,8 +12,7 @@
 
 U_NAMESPACE_BEGIN
 
-class ReorderingOutput
-{
+class ReorderingOutput : public UObject {
 private:
     le_int32 fOutIndex;
 

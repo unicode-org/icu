@@ -13,8 +13,7 @@
 
 U_NAMESPACE_BEGIN
 
-class HebrewShaping
-{
+class HebrewShaping : public UObject {
 public:
     static void shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
                       le_bool rightToLeft, const LETag **tags);

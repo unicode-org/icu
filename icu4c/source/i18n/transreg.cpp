@@ -7,10 +7,9 @@
 *   08/10/2001  aliu        Creation.
 **********************************************************************
 */
-#include "transreg.h"
-#include "rbt_data.h"
-#include "rbt_pars.h"
-#include "tridpars.h"
+
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/nultrans.h"
 #include "unicode/parseerr.h"
@@ -19,6 +18,10 @@
 #include "unicode/translit.h"
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
+#include "transreg.h"
+#include "rbt_data.h"
+#include "rbt_pars.h"
+#include "tridpars.h"
 #include "charstr.h"
 
 // Enable the following symbol to add debugging code that tracks the
@@ -112,7 +115,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
  * canonical form, or the script is transformed from an abbreviation
  * to a full name.
  */
-class Spec {
+class Spec : public UObject {
  public:
     Spec(const UnicodeString& spec);
     ~Spec();
@@ -315,7 +318,7 @@ static void DEBUG_useEntry(Entry* e) {
  * for it.  We could easily add this if there is a need for it in the
  * future.
  */
-class Entry {
+class Entry : public UObject {
 public:
     enum Type {
         RULES_FORWARD,

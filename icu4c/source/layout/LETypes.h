@@ -10,6 +10,7 @@
 #define __LETYPES_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 

@@ -8,6 +8,8 @@
 #ifndef RBT_DATA_H
 #define RBT_DATA_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "rbt_set.h"
 
 U_NAMESPACE_BEGIN
@@ -35,7 +37,7 @@ class Hashtable;
  * data structure handles this.  See the parsing code for more
  * details.
  */
-class U_I18N_API TransliterationRuleData {
+class U_I18N_API TransliterationRuleData : public UObject {
 
 public:
 

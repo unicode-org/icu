@@ -10,6 +10,7 @@
 #define NORMLZR_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/unorm.h"
@@ -108,8 +109,7 @@ U_NAMESPACE_BEGIN
  * @author Laura Werner, Mark Davis, Markus Scherer
  * @draft ICU 2.0
  */
-class U_COMMON_API Normalizer
-{
+class U_COMMON_API Normalizer : public UObject {
 public:
   /**
    * If DONE is returned from an iteration function that returns a code point,

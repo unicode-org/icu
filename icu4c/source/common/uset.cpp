@@ -22,9 +22,10 @@
 */
 
 #include "unicode/utypes.h"
-#include "cmemory.h"
+#include "unicode/uobject.h"
 #include "unicode/uset.h"
 #include "unicode/uniset.h"
+#include "cmemory.h"
 
 U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end) {
@@ -117,7 +118,7 @@ U_NAMESPACE_BEGIN
  * USet support API.  Declaring a class a friend is more portable than
  * trying to declare extern "C" functions as friends.
  */
-class USetAccess {
+class USetAccess : public UObject {
 public:
     // Try to have the compiler inline these
     inline static int32_t getStringCount(const UnicodeSet& set) {

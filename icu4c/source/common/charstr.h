@@ -9,6 +9,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 //--------------------------------------------------------------------
@@ -21,7 +22,7 @@
 
 U_NAMESPACE_BEGIN
 
-class CharString {
+class CharString : public UObject {
  public:
     inline CharString(const UnicodeString& str);
     inline ~CharString();

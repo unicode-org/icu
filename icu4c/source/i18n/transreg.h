@@ -11,6 +11,7 @@
 #define _TRANSREG_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/translit.h"
 #include "hash.h"
 #include "uvector.h"
@@ -34,7 +35,7 @@ class UnicodeString;
  * Why all the shenanigans?  To prevent circular calls between
  * the registry code and the transliterator code that deadlocks.
  */
-class TransliteratorAlias {
+class TransliteratorAlias : public UObject {
  public:
     /**
      * Construct a simple alias.
@@ -93,7 +94,7 @@ class TransliteratorAlias {
  *
  * @author Alan Liu
  */
-class TransliteratorRegistry {
+class TransliteratorRegistry : public UObject {
 
  public:
 

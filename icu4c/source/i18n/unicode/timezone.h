@@ -26,6 +26,8 @@
 #ifndef TIMEZONE_H
 #define TIMEZONE_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -102,7 +104,7 @@ U_NAMESPACE_BEGIN
  * your machine is set up correctly), TimeZone::createDefault() will return a TimeZone
  * for Japanese Standard Time ("Asia/Tokyo").
  */
-class U_I18N_API TimeZone {
+class U_I18N_API TimeZone : public UObject {
 public:
     /**
      * @stable

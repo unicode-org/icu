@@ -16,8 +16,9 @@
 #ifndef NFRLIST_H
 #define NFRLIST_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "cmemory.h"
-#include "unicode/umachine.h"
 
 #include "nfrule.h"
 
@@ -26,7 +27,7 @@ U_NAMESPACE_BEGIN
 // unsafe class for internal use only.  assume memory allocations succeed, indexes are valid.
 // should be a template, but we can't use them
 
-class NFRuleList {
+class NFRuleList : public UObject {
 protected:
     NFRule** fStuff;
     uint32_t fCount;

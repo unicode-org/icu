@@ -16,7 +16,10 @@
 #ifndef NFSUBS_H
 #define NFSUBS_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "nfrule.h"
+
 #if U_HAVE_RBNF
 
 #include "unicode/utypes.h"
@@ -26,7 +29,7 @@
 
 U_NAMESPACE_BEGIN
 
-class NFSubstitution {
+class NFSubstitution : public UObject {
     int32_t pos;
     const NFRuleSet* ruleSet;
     const DecimalFormat* numberFormat;

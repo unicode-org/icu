@@ -8,6 +8,8 @@
 #ifndef TRANSLIT_H
 #define TRANSLIT_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
 #include "unicode/utrans.h" // UTransPosition, UTransDirection
@@ -227,7 +229,7 @@ class TransliteratorIDParser;
  * @author Alan Liu
  * @stable
  */
-class U_I18N_API Transliterator {
+class U_I18N_API Transliterator : public UObject {
 
 private:
 

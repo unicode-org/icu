@@ -414,19 +414,19 @@ UnicodeStringTest::TestExtract()
     }
 
     for (int32_t i = 0; i < 12; i++) {
-        if (test1[(int32_t)(11 + i)] != test2[i]) {
+        if (test1.charAt((int32_t)(11 + i)) != test2.charAt(i)) {
             errln(UnicodeString("extracting into a UnicodeString failed at position ") + i);
             break;
         }
-        if (test1[(int32_t)(11 + i)] != test3[i]) {
+        if (test1.charAt((int32_t)(11 + i)) != test3[i]) {
             errln(UnicodeString("extracting into an array of UChar failed at position ") + i);
             break;
         }
-        if (((char)test1[(int32_t)(11 + i)]) != test4b[i]) {
+        if (((char)test1.charAt((int32_t)(11 + i))) != test4b.charAt(i)) {
             errln(UnicodeString("extracting into an array of char failed at position ") + i);
             break;
         }
-        if (test1[(int32_t)(11 + i)] != test5[i]) {
+        if (test1.charAt((int32_t)(11 + i)) != test5.charAt(i)) {
             errln(UnicodeString("extracting with extractBetween failed at position ") + i);
             break;
         }

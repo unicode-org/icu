@@ -29,15 +29,16 @@
 #ifndef LOCID_H
 #define LOCID_H
 
-
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "unicode/unistr.h"
 #include "unicode/putil.h"
-
-/* all ULOC constants are now in uloc.h. */
 #include "unicode/uloc.h"
 
-#ifdef XP_CPLUSPLUS
-
-#include "unicode/unistr.h"
+/**
+ * \file
+ * \brief C++ API: Locale ID object.
+ */
 
 /**
  * A <code>Locale</code> object represents a specific geographical, political,
@@ -173,8 +174,7 @@
  * @stable
  */
 U_NAMESPACE_BEGIN
-class U_COMMON_API Locale
-{
+class U_COMMON_API Locale : public UObject {
 public:
 #ifdef ICU_LOCID_USE_DEPRECATES
     /**
@@ -836,6 +836,4 @@ inline int32_t         Locale::LocaleProxy::hashCode(void) const
 #endif /* !ICU_LOCID_USE_DEPRECATES */
 U_NAMESPACE_END
 
-#endif  /* XP_CPLUSPLUS */
 #endif
-

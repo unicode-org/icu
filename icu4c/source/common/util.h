@@ -11,6 +11,7 @@
 #define ICU_UTIL_H
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 //--------------------------------------------------------------------
@@ -22,7 +23,7 @@ U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
 
-class U_COMMON_API ICU_Utility {
+class U_COMMON_API ICU_Utility : public UObject {
  public:
 
     /**

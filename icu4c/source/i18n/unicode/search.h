@@ -10,6 +10,8 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/brkiter.h"
@@ -58,7 +60,7 @@ U_NAMESPACE_BEGIN
  *
  * @see StringSearch
  */
-class U_I18N_API SearchIterator {
+class U_I18N_API SearchIterator : public UObject {
 
 public:
 

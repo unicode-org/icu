@@ -12,6 +12,7 @@
 #if U_HAVE_RBNF
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 
 U_NAMESPACE_BEGIN
@@ -25,7 +26,7 @@ class ParsePosition;
 class RuleBasedNumberFormat;
 class UnicodeString;
 
-class NFRule {
+class NFRule : public UObject {
 public:
 
     enum ERuleType {

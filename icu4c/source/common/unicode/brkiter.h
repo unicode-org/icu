@@ -20,7 +20,8 @@
 #ifndef BRKITER_H
 #define BRKITER_H
 
-
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/locid.h"
@@ -177,7 +178,7 @@ U_NAMESPACE_BEGIN
  * \endcode
  * </pre>
  */
-class U_COMMON_API BreakIterator {
+class U_COMMON_API BreakIterator : public UObject {
 public:
     virtual ~BreakIterator();
 
