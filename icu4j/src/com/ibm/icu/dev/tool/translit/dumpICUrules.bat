@@ -11,6 +11,10 @@ goto endofperl
 @rem ';
 #!perl
 #line 14
+# ************************************************************************
+# Copyright (C) 2000-2004, International Business Machines Corporation and
+# others. All Rights Reserved.
+# ************************************************************************
 
 # This perl script creates ICU transliterator data files, that live
 # in icu/data, from ICU4J UTF8 transliterator data files, in
@@ -254,10 +258,8 @@ translit_index {
 END
         
     while (<JAVA_INDEX>) {
-        # ignore $Source $Revision $Date CVS keyword substitutions
-        next if /\$Source/ ;
-        next if /\$Revision/ ;
-        next if /\$Date/ ;
+        # ignore CVS keyword substitutions
+        next if /[$](Source|Revision|Date)/;
 
         # we have printed out the copyright info ... ignore one in Java version
         next if /Copyright/ ;
@@ -368,10 +370,8 @@ sub file {
     # and taking other text and enclosing it in double quotes
     while (<IN>) {
         my $raw = $_;
-        # ignore $Source $Revision $Date CVS keyword substitutions
-        next if /\$Source/ ;
-        next if /\$Revision/ ;
-        next if /\$Date/ ;
+        # ignore CVS keyword substitutions
+        next if /[$](Source|Revision|Date)/;
 
         # we have printed out the copyright info ... ignore one in Java version
         next if /Copyright/ ;
