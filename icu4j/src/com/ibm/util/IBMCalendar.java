@@ -1,5 +1,5 @@
 /*
- * $RCSfile: IBMCalendar.java,v $ $Revision: 1.3 $ $Date: 2000/03/01 17:31:17 $
+ * $RCSfile: IBMCalendar.java,v $ $Revision: 1.4 $ $Date: 2000/03/06 22:44:44 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -1159,11 +1159,23 @@ public abstract class IBMCalendar extends java.util.Calendar {
                 result = new SimpleDateFormat(pattern, symbols);
             } catch (MissingResourceException e) {
                 // No custom patterns
-                result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
+                if (dateStyle == -1) {
+	                result = SimpleDateFormat.getTimeInstance(timeStyle, loc);
+	            } else if (timeStyle == -1) {
+	                result = SimpleDateFormat.getDateInstance(dateStyle, loc);
+	            } else {
+	                result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
+	            }
                 ((java.text.SimpleDateFormat)result).setDateFormatSymbols(oldStyleSymbols(symbols, loc));
             }
         } else {
-            result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
+            if (dateStyle == -1) {
+	            result = SimpleDateFormat.getTimeInstance(timeStyle, loc);
+	        } else if (timeStyle == -1) {
+	            result = SimpleDateFormat.getDateInstance(dateStyle, loc);
+	        } else {
+	            result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
+	        }
         }
         result.setCalendar(cal);
         return result;
