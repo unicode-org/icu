@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.Locale;
+import java.io.*;
 
 /**
  * This class produces the data tables used by the closeOver() method
@@ -37,19 +39,30 @@ import java.util.Vector;
  */
 class UnicodeSetCloseOver {
 
-    public static void main(String[] args) {
-        generateCaseData();
-    }
-
-    // Name of this class
-    static final String ME = UnicodeSetCloseOver.class.getName();
+    // Our output files
+    static final String JAVA_OUT          = "to_UnicodeSet.java";
+    static final String JAVA_CHARPROP_OUT = "to_UCharacterProperty.java";
+    static final String C_SET_OUT         = "to_uniset.cpp";
+    static final String C_UCHAR_OUT       = "to_uchar.c";
 
     // Source code "do not edit" warning
-    static final String WARNING = "MACHINE-GENERATED: Do not edit (see " + ME + ")";
+    static final String WARNING = "MACHINE-GENERATED; Unicode version " +
+        UCharacter.getUnicodeVersion() +
+        "; DO NOT EDIT; See " +
+        UnicodeSetCloseOver.class.getName();
 
     // Case folding options flag.  This must correspond to the options
     // used in UnicodeSet.closeOver() in Java and C++.
     static final boolean DEFAULT_CASE_MAP = true; // false for Turkish
+
+    public static void main(String[] args) throws IOException {
+        System.out.println("This tool will generate several output files.  Each is named according");
+        System.out.println("the target file.  For example, the contents of to_UnicodeSet.java should");
+        System.out.println("be pasted into UnicodeSet.java.");
+        System.out.println();
+
+        generateCaseData();
+    }
 
     /**
      * Create a map of String => Set.  The String in this case is a
@@ -160,7 +173,7 @@ class UnicodeSetCloseOver {
         }
     }
 
-    static void generateCaseData() {
+    static void generateCaseData() throws IOException {
 
         Map equivClasses = createCaseFoldEquivalencyClasses();
 
@@ -178,23 +191,25 @@ class UnicodeSetCloseOver {
 
         //-------------------------------------------------------------
         // Emit Java source
-        System.out.println("\n    // " + WARNING);
-        System.out.println("    private static final String CASE_PAIRS =\n" +
-                           Utility.formatForSource(pairs.toString()) +
-                           ";\n");
+        PrintStream out = new PrintStream(new FileOutputStream(JAVA_OUT));
+        System.out.println("Writing " + JAVA_OUT);
 
-        System.out.println("    // " + WARNING);
-        System.out.println("    private static final String[][] CASE_NONPAIRS = {");
+        out.println("    // " + WARNING);
+        out.println("    private static final String CASE_PAIRS =");
+        out.println(Utility.formatForSource(pairs.toString()) + ";");
+        out.println();
+        out.println("    // " + WARNING);
+        out.println("    private static final String[][] CASE_NONPAIRS = {");
         for (int j=0; j<nonpairs.size(); ++j) {
             String[] a = (String[]) nonpairs.elementAt(j);
-            System.out.print("        {");
+            out.print("        {");
             for (int k=0; k<a.length; ++k) {
-                if (k != 0) System.out.print(", ");
-                System.out.print(Utility.format1ForSource(a[k]));
+                if (k != 0) out.print(", ");
+                out.print(Utility.format1ForSource(a[k]));
             }
-            System.out.println("},");
+            out.println("},");
         }
-        System.out.println("    };");
+        out.println("    };");
 
         //-------------------------------------------------------------
         // Emit C++ source
@@ -209,6 +224,9 @@ class UnicodeSetCloseOver {
         // code point to be located is first folded ('Y' => 'y') then
         // it binary searched against [0]='A', [2]='B', etc.  When a
         // match is found at k, the pair is [k], [k+1].
+
+        out = new PrintStream(new FileOutputStream(C_SET_OUT));
+        System.out.println("Writing " + C_SET_OUT);
 
         // Sort the pairs.  They must be ordered by the folded element.
         // Store these as two-character strings, with charAt(0) being
@@ -234,22 +252,23 @@ class UnicodeSetCloseOver {
         }
 
         // Emit the pairs
-        System.out.println("\n// " + WARNING);
-        System.out.println("static const UChar CASE_PAIRS[] = {");
+        out.println("// " + WARNING);
+        out.println("static const UChar CASE_PAIRS[] = {");
         Iterator it = sortPairs.iterator();
         while (it.hasNext()) {
-            System.out.print("    ");
+            out.print("    ");
             int n = 0;
             while (n++ < 5 && it.hasNext()) {
                 String s = (String) it.next();
-                //System.out.print((int) s.charAt(0) + "," +
+                //out.print((int) s.charAt(0) + "," +
                 //                 (int) s.charAt(1) + ",");
-                System.out.print("0x" + Utility.hex(s.charAt(0)) + ",0x" +
+                out.print("0x" + Utility.hex(s.charAt(0)) + ",0x" +
                                  Utility.hex(s.charAt(1)) + ",");
             }
-            System.out.println();
+            out.println();
         }
-        System.out.println("};\n");
+        out.println("};");
+        out.println();
 
         // The non-pairs are encoded in the following way.  All the
         // single codepoints in each class are grouped together
@@ -263,37 +282,37 @@ class UnicodeSetCloseOver {
         // can be used to initialize a UChar[] array in C.
         
         int maxLen = 0; // Maximum encoded length of any class, including zeros
-        System.out.println("// " + WARNING);
-        System.out.println("static const CaseEquivClass CASE_NONPAIRS[] = {");
+        out.println("// " + WARNING);
+        out.println("static const CaseEquivClass CASE_NONPAIRS[] = {");
         for (int j=0; j<nonpairs.size(); ++j) {
             int len = 0;
             String[] a = (String[]) nonpairs.elementAt(j);
-            System.out.print("    {");
+            out.print("    {");
             // Emit single code points
             for (int k=0; k<a.length; ++k) {
                 if (a[k].length() != 1) continue;
-                //System.out.print((int) a[k].charAt(0) + ",");
-                System.out.print("0x"+Utility.hex(a[k].charAt(0)) + ",");
+                //out.print((int) a[k].charAt(0) + ",");
+                out.print("0x"+Utility.hex(a[k].charAt(0)) + ",");
                 ++len;
             }
-            System.out.print("0,  "); // End of single code points
+            out.print("0,  "); // End of single code points
             ++len;
             // Emit multi-character strings
             for (int k=0; k<a.length; ++k) {
                 if (a[k].length() == 1) continue;
                 for (int m=0; m<a[k].length(); ++m) {
-                    //System.out.print((int) a[k].charAt(m) + ",");
-                    System.out.print("0x"+Utility.hex(a[k].charAt(m)) + ",");
+                    //out.print((int) a[k].charAt(m) + ",");
+                    out.print("0x"+Utility.hex(a[k].charAt(m)) + ",");
                     ++len;
                 }
-                System.out.print("0, "); // End of string
+                out.print("0, "); // End of string
                 ++len;
             }
-            System.out.println("0},"); // End of equivalency class
+            out.println("0},"); // End of equivalency class
             ++len;
             if (len > maxLen) maxLen = len;
         }
-        System.out.println("};");
+        out.println("};");
 
         // Make sure the CaseEquivClass data can fit.
         if (maxLen > 8) {
@@ -311,13 +330,137 @@ class UnicodeSetCloseOver {
         //-------------------------------------------------------------
         // Case-unique set:  All characters c for which closeOver(c)==c.
 
-        UnicodeSet caseUnique = new UnicodeSet();
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            String cp = UTF16.valueOf(i);
-            if (equivClasses.get(UCharacter.foldCase(cp, DEFAULT_CASE_MAP)) == null) {
-                caseUnique.add(i);
+        // UPDATE: Instead of using this, we're using the related
+        // notion of Case_Sensitive.  See below.  Note that
+        // Case_Sensitive != ^Case_Unique.
+
+        if (false) {
+            UnicodeSet caseUnique = new UnicodeSet();
+            for (int i = 0; i <= 0x10FFFF; ++i) {
+                String cp = UTF16.valueOf(i);
+                if (equivClasses.get(UCharacter.foldCase(cp, DEFAULT_CASE_MAP)) == null) {
+                    caseUnique.add(i);
+                }
+            }
+            // out.println("caseUnique = " + caseUnique.toPattern(true));
+        }
+
+        UnicodeSet caseSensitive = getCaseSensitive();
+        //System.out.println("caseSensitive = " + caseSensitive.toPattern(true));
+
+        // Now for C, emit an array of ranges
+        out = new PrintStream(new FileOutputStream(C_UCHAR_OUT));
+        System.out.println("Writing " + C_UCHAR_OUT);
+
+        out.println("/* " + WARNING + " */");
+        emitUCharRangesArray(out, caseSensitive, "CASE_SENSITIVE_RANGES");
+
+        // For Java, emit a string with the ranges (each pair of chars
+        // in the string is a range).
+        out = new PrintStream(new FileOutputStream(JAVA_CHARPROP_OUT));
+        System.out.println("Writing " + JAVA_CHARPROP_OUT);
+        out.println("    // " + WARNING);
+        emitRangesString(out, caseSensitive, "CASE_SENSITIVE_RANGES");
+    }
+
+    /**
+     * Create the set of case-sensitive characters.  These are characters
+     * that participate in any case mapping operation as a source or
+     * as a member of a target string.
+     */
+    static UnicodeSet getCaseSensitive() {
+        UnicodeSet caseSensitive = new UnicodeSet();
+        Locale loc = Locale.US;
+        BreakIterator bi = BreakIterator.getTitleInstance(loc);
+        for (int c = 0; c <= 0x10FFFF; ++c) {
+            String cp = UTF16.valueOf(c);
+            for (int j=0; j<4; ++j) {
+                String s = null;
+                switch (j) {
+                case 0: s = UCharacter.toUpperCase(loc, cp); break;
+                case 1: s = UCharacter.toLowerCase(loc, cp); break;
+                case 2: s = UCharacter.toTitleCase(loc, cp, bi); break;
+                case 3: s = UCharacter.foldCase(cp, DEFAULT_CASE_MAP); break;
+                }
+                if (!s.equals(cp)) {
+                    int cc;
+                    for (int k=0; k<s.length(); k+=UTF16.getCharCount(cc)) {
+                        cc = UTF16.charAt(s, k);
+                        caseSensitive.add(cc);
+                    }
+                    for (int k=0; k<cp.length(); k+=UTF16.getCharCount(cc)) {
+                        cc = UTF16.charAt(cp, k);
+                        caseSensitive.add(cc);
+                    }
+                }
+            }
+            // Also do the single-codepoint API.  This shouldn't add any
+            // code points, but we do it for completeness.
+            for (int j=0; j<4; ++j) {
+                int d = 0;
+                switch (j) {
+                case 0: d = UCharacter.toUpperCase(c); break;
+                case 1: d = UCharacter.toLowerCase(c); break;
+                case 2: d = UCharacter.toTitleCase(c); break;
+                case 3: d = UCharacter.foldCase(c, DEFAULT_CASE_MAP); break;
+                }
+                if (d != c) {
+                    if (!caseSensitive.contains(c) ||
+                        !caseSensitive.contains(d)) {
+                        System.out.println("Warning: code point " + c +
+                                           " => " + d + " created NEW MAPPING"+
+                                           " for Case_Sensitive");
+                    }
+                    caseSensitive.add(c);
+                    caseSensitive.add(d);
+                }
             }
         }
-        System.out.println("caseUnique = " + caseUnique.toPattern(true));
+        return caseSensitive;
+    }
+
+    /**
+     * Given a UnicodeSet, emit it as an array of UChar pairs.  Each
+     * pair will be the start/end of a range.  Code points >= U+10000
+     * will be represented as surrogate pairs.
+     */
+    static void emitUCharRangesArray(PrintStream out, UnicodeSet set, String id) {
+        // Store the pairs in a StringBuffer.  This handles surrogate
+        // representation.
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<set.getRangeCount(); ++i) {
+            UTF16.append(buf, set.getRangeStart(i));
+            UTF16.append(buf, set.getRangeEnd(i));
+        }
+        // Emit the pairs
+        out.println("static const UChar " + id + "[] = {");
+        for (int i=0; i<buf.length(); ) {
+            out.print("    ");
+            for (int n=0; n++<10 && i<buf.length(); ++i) {
+                out.print("0x" + Utility.hex(buf.charAt(i), 4) + ',');
+            }
+            out.println();
+        }
+        out.println("};");
+        out.println("#define " + id + "_LENGTH (sizeof(" + id +
+                    ")/sizeof(" + id + "[0]))");
+    }
+
+    /**
+     * Given a UnicodeSet, emit it as a Java string.  The most economical
+     * format is not the pattern, but instead a pairs list, with each
+     * range pair represented as two adjacent characters.
+     */
+    static void emitRangesString(PrintStream out, UnicodeSet set, String id) {
+        // Store the pairs in a StringBuffer.  This handles surrogate
+        // representation.
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<set.getRangeCount(); ++i) {
+            UTF16.append(buf, set.getRangeStart(i));
+            UTF16.append(buf, set.getRangeEnd(i));
+        }
+        // Emit the pairs
+        out.println("    private static final String " + id + " =");
+        out.println(Utility.formatForSource(buf.toString()) + ";");
     }
 }
