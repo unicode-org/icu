@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/07/12 21:59:22 $
-* $Revision: 1.6 $
+* $Date: 2002/11/15 20:39:26 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -29,6 +29,22 @@ import com.ibm.icu.util.RangeValueIterator;
  * and the IntTrie, hence to accommodate both types of data, the return 
  * result will be in terms of int (32 bit) values.</p>
  * <p>See com.ibm.icu.text.UCharacterTypeIterator for examples of use.</p>
+ * <p>Notes for porting utrie_enum from icu4c to icu4j:<br>
+ * Internally, icu4c's utrie_enum performs all iterations in its body. In Java
+ * sense, the caller will have to pass a object with a callback function 
+ * UTrieEnumRange(const void *context, UChar32 start, UChar32 limit, 
+ * uint32_t value) into utrie_enum. utrie_enum will then find ranges of 
+ * codepoints with the same value as determined by 
+ * UTrieEnumValue(const void *context, uint32_t value). for each range, 
+ * utrie_enum calls the callback function to perform a task. In this way,
+ * icu4c performs the iteration within utrie_enum.
+ * To follow the JDK model, icu4j is slightly different from icu4c.
+ * Instead of requesting the caller to implement an object for a callback.
+ * The caller will have to implement a subclass of TrieIterator, fleshing out
+ * the method extract(int) (equivalent to UTrieEnumValue). Independent of icu4j, 
+ * the caller will have to code his own iteration and flesh out the task 
+ * (equivalent to UTrieEnumRange) to be performed in the iteration loop.
+ * </p>
  * @author synwee
  * @see com.ibm.icu.util.Trie
  * @see com.ibm.icu.text.UCharacterTypeIterator
