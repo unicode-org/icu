@@ -50,6 +50,7 @@ struct CntTable {
 };
 
 CntTable *uprv_cnttab_open(CompactIntArray *mapping, UErrorCode *status);
+CntTable *uprv_cnttab_clone(CntTable *table);
 void uprv_cnttab_close(CntTable *table);
 
 /* construct the table for output */

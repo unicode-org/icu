@@ -157,6 +157,46 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
 return t;
 }
 
+tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t) {
+  tempUCATable *r = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
+  uint16_t *index = (uint16_t *)uprv_malloc(sizeof(uint16_t)*t->mapping->fCount);
+  int32_t *array = (int32_t *)uprv_malloc(sizeof(int32_t)*t->mapping->fCount);
+
+  /* mapping */
+  uprv_memcpy(index, t->mapping->fIndex, t->mapping->fCount*sizeof(uint16_t));
+  uprv_memcpy(array, t->mapping->fArray, t->mapping->fCount*sizeof(int32_t));
+  r->mapping = ucmp32_openAdopt(index, array, t->mapping->fCount);
+
+  /* expansions */
+  r->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
+  r->expansions->position = t->expansions->position;
+  r->expansions->size = t->expansions->size;
+  r->expansions->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*r->expansions->size);
+
+  r->contractions = uprv_cnttab_clone(t->contractions);
+
+  r->maxExpansions = (MaxExpansionTable *)uprv_malloc(sizeof(MaxExpansionTable));
+  r->maxExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxExpansions->size);
+  r->maxExpansions->expansionCESize = (uint8_t *)uprv_malloc(sizeof(uint8_t)*t->maxExpansions->size);
+  r->maxExpansions->size = t->maxExpansions->size;
+  r->maxExpansions->position = t->maxExpansions->position;
+
+  uprv_memcpy(r->maxExpansions->endExpansionCE, t->maxExpansions->endExpansionCE, t->maxExpansions->position*sizeof(uint32_t));
+  uprv_memcpy(r->maxExpansions->expansionCESize, t->maxExpansions->expansionCESize, t->maxExpansions->position*sizeof(uint8_t));
+
+  r->unsafeCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
+  r->contrEndCP = (uint8_t *)uprv_malloc(UCOL_UNSAFECP_TABLE_SIZE);
+  uprv_memcpy(r->unsafeCP, t->unsafeCP, UCOL_UNSAFECP_TABLE_SIZE);
+  uprv_memcpy(r->contrEndCP, t->contrEndCP, UCOL_UNSAFECP_TABLE_SIZE);
+
+  r->UCA = t->UCA;
+  r->image = t->image;
+  r->options = t->options;
+
+  return r;
+}
+
+
 void uprv_uca_closeTempTable(tempUCATable *t) {
   uprv_free(t->expansions->CEs);
   uprv_free(t->expansions);
