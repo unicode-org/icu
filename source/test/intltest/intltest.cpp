@@ -510,9 +510,8 @@ IntlTest::setTestDirectory(const char* newDir)
  *                       tests dynamically load some data.
  */
 void IntlTest::setICU_DATA() {
-    const char *original_ICU_DATA;
+    const char *original_ICU_DATA = getenv("ICU_DATA");
 
-    original_ICU_DATA = getenv("ICU_DATA");
     if (original_ICU_DATA != NULL) {
         /*  If the user set ICU_DATA, don't second-guess the person. */
         return;
@@ -525,7 +524,7 @@ void IntlTest::setICU_DATA() {
      */
 #if defined (U_SRCDATADIR)
     {
-        static char env_string[] = U_SRCDATADIR "/../source/data";
+        static char env_string[] = U_SRCDATADIR "/../source/data/";
         u_setDataDirectory(env_string);
         return;
     }
@@ -556,7 +555,7 @@ void IntlTest::setICU_DATA() {
             /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
-            strcpy(pBackSlash, "\\data");
+            strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
             u_setDataDirectory(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
             return;
         }
