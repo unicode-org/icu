@@ -31,11 +31,11 @@
 
 /* internal definitions ----------------------------------------------------- */
 
-#ifdef U_COMMON_IMPLEMENTATION
+#ifdef U_UTF8_IMPL
 U_CAPI  uint8_t U_EXPORT2 
 utf8_countTrailBytes[256];
 #else
-uint8_t /* U_IMPORT2? */ U_IMPORT
+U_CFUNC uint8_t /* U_IMPORT2? */ U_IMPORT
 utf8_countTrailBytes[256];
 #endif
 
