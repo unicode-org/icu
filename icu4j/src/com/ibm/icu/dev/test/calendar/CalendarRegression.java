@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2003/10/02 20:50:57 $
- * $Revision: 1.18 $
+ * $Date: 2003/10/09 02:50:07 $
+ * $Revision: 1.19 $
  *
  *******************************************************************************
  */
@@ -70,23 +70,28 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             GregorianCalendar cal = new GregorianCalendar(zone);
             cal.clear();
             cal.set(1900, 15, 5, 5, 8, 13);
-            if (cal.get(Calendar.HOUR) != 5 || ids[i].equals("Pacific/Enderbury")) {
+            if (cal.get(Calendar.HOUR) != 5) {
                 logln("Fail: " + zone.getID() + " " +
-                      zone.useDaylightTime() + " " +
-                      cal.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
-                      zone.getRawOffset() / (60*60*1000) +
-                      ": HOUR = " + cal.get(Calendar.HOUR));
+                      zone.useDaylightTime() + "; DST_OFFSET = " +
+                      cal.get(Calendar.DST_OFFSET) / (60*60*1000.0) + "; ZONE_OFFSET = " +
+                      cal.get(Calendar.ZONE_OFFSET) / (60*60*1000.0) + "; getRawOffset() = " +
+                      zone.getRawOffset() / (60*60*1000.0) +
+                      "; HOUR = " + cal.get(Calendar.HOUR));
                 cal.clear();
                 cal.set(1900, 15, 5, 5, 8, 13);
-                cal.getTime();
+                logln("ms = " + cal.getTime() + " (" + cal.getTime().getTime() + ")");
+                cal.get(Calendar.HOUR);
                 java.util.GregorianCalendar cal2 = new java.util.GregorianCalendar(java.util.TimeZone.getTimeZone(ids[i]));
                 cal2.clear();
                 cal2.set(1900, 15, 5, 5, 8, 13);
+                cal2.get(Calendar.HOUR);
                 logln("java.util.GC: " + zone.getID() + " " +
-                      zone.useDaylightTime() + " " +
-                      cal2.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
-                      zone.getRawOffset() / (60*60*1000) +
-                      ": HOUR = " + cal2.get(Calendar.HOUR));
+                    zone.useDaylightTime() + "; DST_OFFSET = " +
+                    cal2.get(Calendar.DST_OFFSET) / (60*60*1000.0) + "; ZONE_OFFSET = " +
+                    cal2.get(Calendar.ZONE_OFFSET) / (60*60*1000.0) + "; getRawOffset() = " +
+                    zone.getRawOffset() / (60*60*1000.0) +
+                    "; HOUR = " + cal.get(Calendar.HOUR));
+                logln("ms = " + cal2.getTime() + " (" + cal2.getTime().getTime() + ")");
                 bad = true;
             } else if (false) { // Change to true to debug
                 logln("OK: " + zone.getID() + " " +
@@ -895,8 +900,8 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void Test4125892() {
         GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
-        DateFormat fmt = new SimpleDateFormat("MMMM d, yyyy G");
-        fmt = null;
+        //DateFormat fmt = new SimpleDateFormat("MMMM d, yyyy G");
+        //fmt = null;
         cal.clear();
         cal.set(Calendar.ERA, GregorianCalendar.BC);
         cal.set(Calendar.YEAR, 81); // 81 BC is a leap year (proleptically)
@@ -1382,14 +1387,14 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         GregorianCalendar calendar = new GregorianCalendar(1996, 1, 29);
 
         calendar.add(Calendar.MONTH, 10); 
-        Date date1 = calendar.getTime();
-        date1 = null;
+        //Date date1 = calendar.getTime();
+        //date1 = null;
         int d1 = calendar.get(Calendar.DAY_OF_MONTH);
 
         calendar = new GregorianCalendar(1996, 1, 29);
         calendar.add(Calendar.MONTH, 11); 
-        Date date2 = calendar.getTime();
-        date2 = null;
+        //Date date2 = calendar.getTime();
+        //date2 = null;
         int d2 = calendar.get(Calendar.DAY_OF_MONTH);
 
         if (d1 != d2) {
