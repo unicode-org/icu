@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/gencmn
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
@@ -23,7 +23,7 @@ MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION) $(DECMN:$(EXEEXT)=).$(SECTION)
 ALL_MAN_FILES = $(MANX_FILES)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ mkmap.tmp $(DEPS) $(RES_FILES) $(TEST_FILES) $(DECMN_DEP) $(ALL_MAN_FILES)
+CLEANFILES = *~ $(DEPS) $(DECMN_DEP) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = gencmn$(EXEEXT)
@@ -54,7 +54,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) $(DECMN) $(ALL_MAN_FILES)
+all-local: $(TARGET) $(DECMN) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
@@ -88,6 +88,9 @@ install-manx: $(MANX_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
 
+# This line is needed to serialize builds when the gmake -j option is used.
+$(DECMN:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
+
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
@@ -101,3 +104,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DECMN_DEP)
 endif
 endif
+

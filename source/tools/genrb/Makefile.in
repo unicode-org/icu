@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genrb
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -59,7 +59,7 @@ install-local: all-local install-man
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 	$(INSTALL) $(DERB) $(DESTDIR)$(bindir)
 
-<dist-local:
+dist-local:
 
 clean-local: 
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
@@ -87,6 +87,9 @@ $(DERB) : $(DERB_OBJ)
 install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
 	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+
+# This line is needed to serialize builds when the gmake -j option is used.
+$(DERB:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
 
 %.$(SECTION): $(srcdir)/%.$(SECTION).in
 	cd $(top_builddir) \
