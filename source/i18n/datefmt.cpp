@@ -92,61 +92,61 @@ DateFormat::operator==(const Format& other) const
 
 UnicodeString&
 DateFormat::format(const Formattable& obj,
-                   UnicodeString& toAppendTo,
+                   UnicodeString& appendTo,
                    FieldPosition& fieldPosition,
                    UErrorCode& status) const
 {
-    if (U_FAILURE(status)) return toAppendTo;
+    if (U_FAILURE(status)) return appendTo;
 
     // if the type of the Formattable is double or long, treat it as if it were a Date
+    UDate date = 0;
     switch (obj.getType())
     {
     case Formattable::kDate:
-        format(obj.getDate(), toAppendTo, fieldPosition);
+        date = obj.getDate();
         break;
     case Formattable::kDouble:
-        format((UDate)obj.getDouble(), toAppendTo, fieldPosition);
+        date = (UDate)obj.getDouble();
         break;
     case Formattable::kLong:
-        format((UDate)obj.getLong(), toAppendTo, fieldPosition);
+        date = (UDate)obj.getLong();
         break;
     default:
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return toAppendTo;
+        return appendTo;
     }
 
     // Is this right?
     //if (fieldPosition.getBeginIndex() == fieldPosition.getEndIndex())
     //  status = U_ILLEGAL_ARGUMENT_ERROR;
 
-    return toAppendTo;
+    return format(date, appendTo, fieldPosition);
 }
 
 //----------------------------------------------------------------------
 
 UnicodeString&
-DateFormat::format(UDate date, UnicodeString& result, FieldPosition& fieldPosition) const {
+DateFormat::format(UDate date, UnicodeString& appendTo, FieldPosition& fieldPosition) const {
     if (fCalendar != NULL) {
         // Use our calendar instance
         UErrorCode ec = U_ZERO_ERROR;
         fCalendar->setTime(date, ec);
         if (U_SUCCESS(ec)) {
-            return format(*fCalendar, result, fieldPosition);
+            return format(*fCalendar, appendTo, fieldPosition);
         }
     }
-    return result;
+    return appendTo;
 }
 
 //----------------------------------------------------------------------
 
 UnicodeString&
-DateFormat::format(UDate date, UnicodeString& result) const
+DateFormat::format(UDate date, UnicodeString& appendTo) const
 {
     // Note that any error information is just lost.  That's okay
     // for this convenience method.
     FieldPosition fpos(0);
-    format(date, result, fpos);
-    return result;
+    return format(date, appendTo, fpos);
 }
 
 //----------------------------------------------------------------------
