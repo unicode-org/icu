@@ -883,6 +883,7 @@ root {
         khi { "Khoisan" }
         kho { "Khotanese" }
         ki  { "Kikuyu" }
+	kj { "kuanyama" }
         kk  { "Kazakh" }
         kl  { "Kalaallisut" }
         km  { "Khmer" }

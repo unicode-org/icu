@@ -16,25 +16,38 @@ sv {
     Countries { 
         AE { "F\u00f6renade Arabemiraten" }
         AL { "Albanien" }
-        AS { "Asien" }
+        AM { "Armenien" }
+        AN { "Nederl\u00e4ndska Antillerna" }
+        AS { "Amerikanska Samoa" }
         AT { "\u00d6sterrike" }
-        AU { "Australien" }
-        BA { "Bosnien" }
+        AU { "Australien" } 
+        AZ { "Azerbajdzjan" }
+        BA { "Bosnien Hercegovina" }
         BE { "Belgien" }
         BG { "Bulgarien" }
         BR { "Brasilien" }
         BY { "Vitryssland" }
+        BZ { "Belice" }
         CA { "Kanada" }
+        CC { "Coco Islands" }
+        CF { "Centralafrika" }
+        CG { "Kongo" }
         CH { "Schweiz" }
+        CI { "Elfenbenskusten" }
+        CM { "Kamerun, republiken" }
         CN { "Kina (folkrepubliken)" }
+        CU { "Kuba" }
+        CX { "Jul\u00F6n" }
+        CY { "Cypern" }
         CZ { "Tjeckien" }
         DE { "Tyskland" }
         DK { "Danmark" }
         DO { "Dominikanska republiken" }
         DZ { "Algeriet" }
-        EE { "Estland" }
+        EE { "Estland" } 
         EG { "Egypten" }
         ES { "Spanien" }
+        ET { "Etiopien" }
         FR { "Frankrike" }
         GB { "Storbritannien" }
         GR { "Grekland" }
@@ -71,7 +84,7 @@ sv {
         TN { "Tunisien" }
         TR { "Turkiet" }
         UA { "Ukraina" }
-//        US { "USA" }
+        US { "USA" }
         YE { "Jemen" }
         ZA { "Sydafrika" }
     }
@@ -108,46 +121,173 @@ sv {
         "fredag",
         "l\u00F6rdag",
     }
-    Languages { 
-        ar { "arabiska" }
-        ba { "baskiska" }
-        be { "vitryska" }
-        bg { "bulgariska" }
-        ca { "katalanska" }
-        cs { "tjeckiska" }
-        da { "danska" }
-        de { "tyska" }
-        el { "grekiska" }
-        en { "engelska" }
-        es { "spanska" }
-        et { "estniska" }
-        fi { "finska" }
-        fr { "franska" }
-        he { "hebreiska" }
-        hr { "kroatiska" }
-        hu { "ungerska" }
-        it { "italienska" }
-        ja { "apanska" }
-        ko { "koreanska" }
-        lt { "litauiska" }
-        lv { "lettiska" }
-        mk { "makedonskt" }
-        nl { "nederl\u00e4ndskt" }
-        no { "norska" }
-        pl { "polska" }
-        pt { "portugisiskt" }
-        ro { "rum\u00e4nskt" }
-        ru { "ryska" }
-        sk { "slovakiska" }
-        sl { "slovenskt" }
-        sq { "albanska" }
-        sr { "serbiska" }
-        sv { "svenska" }
-        th { "thail\u00e4ndska" }
-        tr { "turkiska" }
-        uk { "ukrainska" }
-        zh { "kinesiska" }
-    }
+
+    Languages {
+         aa { "afar" }
+         ab { "abkhasiska" }
+         ae { "avestiska" }
+         af { "afrikaans" }
+         am { "amhariska" }
+         ar { "arabiska" }
+         as { "assami" }
+         ay { "aymara" }
+         az { "azerbajdzjanska" }
+         ba { "basjkiriska" }
+         be { "vitryska" }
+         bg { "bulgariska" }
+         bh { "bihari" }
+         bi { "bislama" }
+         bn { "bengali" }
+         bo { "tibetanska" }
+         br { "bretonska" }
+         bs { "bosniska" }
+         ca { "katalanska" }
+         ce { "tjetjenska" }
+         ch { "chamorro" }
+         co { "korsikanska" }
+         cs { "tjeckiska" }
+         cu { "fornkyrkoslaviska" }
+         cv { "tjuvasjiska" }
+         cy { "walesiska" }
+         da { "danska" }
+         de { "tyska" }
+         dz { "bhutanesiska" }
+         el { "grekiska" }
+         en { "engelska" }
+         eo { "esperanto" }
+         es { "spanska" }
+         et { "estniska" }
+         eu { "baskiska" }
+         fa { "persiska" }
+         fi { "finska" }
+         fj { "djianska" }
+         fo { "f\u00E4r\u00F6iska" }
+         fr { "franska" }
+         fy { "frisiska" }
+         ga { "irl\u00E4ndska" }
+         gd { "skotska" }
+         gl { "galiciska" }
+         gn { "guarani" }
+         gu { "gujarati" }
+         gv { "manx" }
+         ha { "haussa" }
+         he { "hebreiska" }
+         hi { "hindi" }
+         ho { "hirimotu" }
+         hr { "kroatiska" }
+         hu { "ungerska" }
+         hy { "armeniska" }
+         hz { "herero" }
+         ia { "interlingua" }
+         id { "indonesiska" }
+         ie { "interlingue" }
+         ik { "inupiaq" }
+         is { "isl\u00E4ndska" }
+         it { "italienska" }
+         iu { "inuktitut" }
+         ja { "japanska" }
+         jw { "javanesiska" }
+         ka { "georgiska" }
+         ki { "kikuyu" }
+         kk { "kazakiska" }
+         kl { "gr\u00F6nl\u00E4ndska" }
+         km { "kambodjanska" }
+         kn { "kanaresiska (kannada)" }
+         ko { "koreanska" }
+         ks { "kashmiri" }
+         ku { "kurdiska" }
+         kv { "komi" }
+         kw { "corniska" }
+         ky { "kirgisiska" }
+         la { "latin" }
+         lb { "luxemburgska" }
+         ln { "lingala" }
+         lo { "laotiska" }
+         lt { "litauiska" }
+         lv { "lettiska" }
+         mg { "malagassiska" }
+         mh { "marshall" }
+         mi { "maori" }
+         mk { "makedoniska" }
+         ml { "malayalam" }
+         mn { "mongoliska" }
+         mo { "moldaviska" }
+         mr { "marathi" }
+         ms { "malajiska" }
+         mt { "maltesiska" }
+         my { "burmesiska" }
+         na { "nauriska" }
+         nb { "bokm\u00E5l (norska)" }
+         nd { "ndebele (nord)" }
+         ne { "nepaliska" }
+         ng { "ndonga" }
+         nl { "nederl\u00E4ndska" }
+         nn { "nynorska" }
+         no { "norska" }
+         nr { "ndebele (syd)" }
+         nv { "navaho" }
+         ny { "nyanja" }
+         oc { "occitanska" }
+         om { "afan oromoo" }
+         or { "oriya" }
+         os { "ossetiska" }
+         pa { "punjabi" }
+         pi { "pali" }
+         pl { "polska" }
+         ps { "pashto" }
+         pt { "portugisiska" }
+         qu { "quechua" }
+         rm { "r\u00E4toromanska" }
+         rn { "rundi" }
+         ro { "rum\u00E4nska" }
+         ru { "ryska" }
+         rw { "rwanda" }
+         sa { "sanskrit" }
+         sc { "sardiska" }
+         sd { "sindhi" }
+         se { "nordsamiska" }
+         sg { "sango" }
+         si { "singalesiska" }
+         sk { "slovakisk" }
+         sl { "slovenska" }
+         sm { "samoanska" }
+         sn { "shona" }
+         so { "somaliska" }
+         sq { "albanska" }
+         sr { "serbiska" }
+         ss { "siswati" }
+         st { "sotho" }
+         su { "sundanesiska" }
+         sv { "svenska" }
+         sw { "swahili" }
+         ta { "tamil" }
+         te { "telugo" }
+         tg { "tadjikiska" }
+         th { "thail\u00E4ndska" }
+         ti { "tigrinya" }
+         tk { "turkmeniska" }
+         tl { "tagalog" }
+         tn { "tswana" }
+         to { "tonga" }
+         tr { "turkiska" }
+         ts { "tsonga" }
+         tt { "tatariska" }
+         tw { "twi" }
+         ty { "tahitiska" }
+         ug { "uigriska" }
+         uk { "ukrainska" }
+         ur { "urdu" }
+         uz { "uzbekiska" }
+         vi { "vietnamesiska" }
+         vo { "volap\u00FCk" }
+         wo { "wolof" }
+         xh { "xhosa" }
+         yi { "jiddisch" }
+         yo { "yoruba" }
+         za { "zhuang" }
+         zh { "kinesiska" }
+         zu { "zulu" }
+     }
     LocaleID:int { 0x1d }
 //    LocaleString { "sv" }
     MonthAbbreviations { 
