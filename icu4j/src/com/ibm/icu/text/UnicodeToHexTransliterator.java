@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2000/06/28 20:49:54 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/09/21 21:24:39 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import java.util.*;
  * default is uppercase.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.9 $ $Date: 2000/06/28 20:49:54 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.10 $ $Date: 2001/09/21 21:24:39 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -42,7 +42,7 @@ public class UnicodeToHexTransliterator extends Transliterator {
     /**
      * Package accessible ID for this transliterator.
      */
-    static final String _ID = "Unicode-Hex";
+    static final String _ID = "Any-Hex";
 
     private static final char[] HEX_DIGITS = {
         '0', '1', '2', '3', '4', '5', '6', '7',
