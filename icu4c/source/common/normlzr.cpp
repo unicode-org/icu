@@ -243,7 +243,7 @@ Normalizer::compose(const UnicodeString& source,
     
     // Compatibility explosions have lower indices; skip them if necessary
     uint16_t minExplode = (uint16_t)(compat ? 0 : ComposeData::MAX_COMPAT);
-    uint16_t minDecomp = (uint16_t)(compat ? 0 : DecompData::MAX_COMPAT);
+    uint16_t minDecompLocal = (uint16_t)(compat ? 0 : DecompData::MAX_COMPAT);
   
     UTextOffset i = 0;
 
@@ -332,7 +332,7 @@ Normalizer::compose(const UnicodeString& source,
         else if (type == ComposeData::HANGUL && minExplode == 0) {
             // If we're in compatibility mode we need to decompose Hangul to Jamo,
             // because some of the Jamo might have compatibility decompositions.
-            hangulToJamo(ch, explodeBuf, minDecomp);
+            hangulToJamo(ch, explodeBuf, minDecompLocal);
             explodePos = 0;
         }
         else if (type == ComposeData::INITIAL_JAMO) {
@@ -398,7 +398,7 @@ UChar Normalizer::nextCompose()
     
     // Compatibility explosions have lower indices; skip them if necessary
     uint16_t minExplode = (uint16_t)((fMode & COMPAT_BIT) ? 0 : ComposeData::MAX_COMPAT);
-    uint16_t minDecomp = (uint16_t)((fMode & COMPAT_BIT) ? 0 : DecompData::MAX_COMPAT);
+    uint16_t minDecompLocal = (uint16_t)((fMode & COMPAT_BIT) ? 0 : DecompData::MAX_COMPAT);
     
     emptyBitmask64(classesSeen);
     initBuffer();
@@ -482,7 +482,7 @@ UChar Normalizer::nextCompose()
         else if (type == ComposeData::HANGUL && minExplode == 0) {
             // If we're in compatibility mode we need to decompose Hangul to Jamo,
             // because some of the Jamo might have compatibility decompositions.
-            hangulToJamo(ch, explodeBuf, minDecomp);
+            hangulToJamo(ch, explodeBuf, minDecompLocal);
             explodePos = 0;
         }
         else if (type == ComposeData::INITIAL_JAMO) {
@@ -682,7 +682,7 @@ Normalizer::decompose(const UnicodeString& source,
         return;
     }
     UBool     hangul = (options & IGNORE_HANGUL) == 0;
-    uint16_t  minDecomp = (uint16_t)(compat ? 0 : DecompData::MAX_COMPAT);
+    uint16_t  minDecompLocal = (uint16_t)(compat ? 0 : DecompData::MAX_COMPAT);
     UnicodeString buffer;
     int32_t i = 0, bufPtr = -1;
 
@@ -704,7 +704,7 @@ Normalizer::decompose(const UnicodeString& source,
         uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
         uint16_t index = (uint16_t)(offset & DecompData::DECOMP_MASK);
     
-        if (index > minDecomp) {
+        if (index > minDecompLocal) {
             if ((offset & DecompData::DECOMP_RECURSE) != 0) {
                 buffer.truncate(0);
                 doAppend((const UChar*)DecompData::contents, index, buffer);
@@ -713,7 +713,7 @@ Normalizer::decompose(const UnicodeString& source,
                 doAppend((const UChar*)DecompData::contents, index, result);
             }
         } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
-            hangulToJamo(ch, result, minDecomp);
+            hangulToJamo(ch, result, minDecompLocal);
         } else {
             result += ch;
         }
