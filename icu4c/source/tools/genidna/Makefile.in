@@ -1,6 +1,7 @@
 ## Makefile.in for ICU - tools/genidna
-## Copyright (c) 1999-2001, International Business Machines Corporation and
+## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
+## Steven R. Loomis/Markus W. Scherer
 
 ## Source directory information
 srcdir = @srcdir@
@@ -19,24 +20,26 @@ MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 ## Build directory information
 subdir = tools/genidna
 
+ICUDATADIR=$(top_builddir)/data
+UNICODEDATADIR=$(top_srcdir)/../data/unidata
+
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(MAN_FILES) $(DEPS) 
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MAN_FILES)
 
 ## Target information
 TARGET = genidna$(EXEEXT)
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
-LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = genidna.o store.o
 
 DEPS = $(OBJECTS:.o=.d)
 
-
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local	\
+.PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local install-man
+check-local build-data install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -49,32 +52,11 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(MAN_FILES) 
+all-local: $(TARGET) build-data $(MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-
-<dist-local:
-
-clean-local: 
-	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(TARGET) $(OBJECTS)
-
-distclean-local: clean-local
-	$(RMV) Makefile
-
-check-local: all-local
-
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-$(TARGET) : $(OBJECTS)
-	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
-
-
-# the 'mv' will always fail if you are building in the source dir
 
 # man page
 install-man: $(MAN_FILES)
@@ -92,6 +74,24 @@ install-man: $(MAN_FILES)
 #$(TARGET).pdf: $(TARGET).ps
 #	ps2pdf $< $@
 
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
 else
@@ -99,3 +99,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+
