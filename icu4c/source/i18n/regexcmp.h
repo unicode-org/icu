@@ -107,6 +107,8 @@ private:
                                   int32_t end);      //   for possibly matching an empty string.
     int32_t     minMatchLength(int32_t start,
                                int32_t end);
+    int32_t     maxMatchLength(int32_t start,
+                               int32_t end);
 
 
     UErrorCode                    *fStatus;
