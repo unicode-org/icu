@@ -27,7 +27,7 @@ static UBreakIterator *EN_CHARACTERBREAKER_;
 /**
 * Opening all static collators and break iterators
 */
-static void open()
+static void open(void)
 {
     if (TOCLOSE_) {
         UErrorCode  status = U_ZERO_ERROR;
@@ -62,7 +62,7 @@ static void open()
 /**
 * Start opening all static collators and break iterators
 */
-static void TestStart()
+static void TestStart(void)
 {
     open();
     TOCLOSE_ = FALSE;
@@ -71,7 +71,7 @@ static void TestStart()
 /**
 * Closing all static collators and break iterators
 */
-static void close()
+static void close(void)
 {
     if (TOCLOSE_) {
         ucol_close(EN_US_);
@@ -87,7 +87,7 @@ static void close()
 /**
 * End closing all static collators and break iterators
 */
-static void TestEnd()
+static void TestEnd(void)
 {
     TOCLOSE_ = TRUE;
     close();
@@ -169,7 +169,7 @@ static UBreakIterator *getBreakIterator(const char *breaker)
     }
 }
 
-static void TestOpenClose() 
+static void TestOpenClose(void) 
 {
           UErrorCode      status    = U_ZERO_ERROR;
           UStringSearch  *result;
@@ -252,7 +252,7 @@ static void TestOpenClose()
     close();
 }
 
-static void TestInitialization() 
+static void TestInitialization(void) 
 {
           UErrorCode      status = U_ZERO_ERROR;
           UChar           pattern[512];
@@ -476,7 +476,7 @@ static UBool assertEqualWithAttribute(const SearchData            search,
     return TRUE;
 }
 
-static void TestBasic() 
+static void TestBasic(void) 
 {
     int count = 0;
     open();
@@ -489,7 +489,7 @@ static void TestBasic()
     close();
 }
 
-static void TestNormExact() 
+static void TestNormExact(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
@@ -523,7 +523,7 @@ static void TestNormExact()
     close();
 }
 
-static void TestStrength() 
+static void TestStrength(void) 
 {
     int count = 0;
     open();
@@ -536,7 +536,7 @@ static void TestStrength()
     close();
 }
 
-static void TestBreakIterator() {
+static void TestBreakIterator(void) {
     UErrorCode      status      = U_ZERO_ERROR;
     UStringSearch  *strsrch; 
     UChar           text[128];
@@ -633,7 +633,7 @@ ENDTESTBREAKITERATOR:
     close();
 }
 
-static void TestVariable() 
+static void TestVariable(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
@@ -655,7 +655,7 @@ static void TestVariable()
     close();
 }
 
-static void TestOverlap()
+static void TestOverlap(void)
 {
     int count = 0;
     open();
@@ -714,7 +714,7 @@ static void TestOverlap()
     close();
 }
 
-static void TestCollator() 
+static void TestCollator(void) 
 {
     /* test collator that thinks "o" and "p" are the same thing */
           UChar          rules[32];
@@ -793,7 +793,7 @@ ENDTESTCOLLATOR:
     close();
 }
 
-static void TestPattern()
+static void TestPattern(void)
 {
           UStringSearch *strsrch; 
           UChar          pattern[32];
@@ -889,7 +889,7 @@ ENDTESTPATTERN:
     close();
 }
 
-static void TestText() 
+static void TestText(void) 
 {
           UStringSearch *strsrch; 
           UChar          pattern[32];
@@ -962,7 +962,7 @@ ENDTESTPATTERN:
     close();
 }
 
-static void TestCompositeBoundaries() 
+static void TestCompositeBoundaries(void) 
 {
     int count = 0;
     open();
@@ -976,7 +976,7 @@ static void TestCompositeBoundaries()
     close();
 }
 
-static void TestGetSetOffset()
+static void TestGetSetOffset(void)
 {
     int            index   = 0;
     UChar          pattern[32];
@@ -1069,7 +1069,7 @@ static void TestGetSetOffset()
     close();
 }
 
-static void TestGetSetAttribute() 
+static void TestGetSetAttribute(void) 
 {
     UErrorCode      status    = U_ZERO_ERROR;
     UChar           pattern[32];
@@ -1148,7 +1148,7 @@ static void TestGetSetAttribute()
     close();
 }
 
-static void TestGetMatch()
+static void TestGetMatch(void)
 {
     int            count       = 0;
     UErrorCode     status      = U_ZERO_ERROR;
@@ -1244,7 +1244,7 @@ static void TestGetMatch()
     close();
 }
 
-static void TestSetMatch()
+static void TestSetMatch(void)
 {
     int            count       = 0;
     
@@ -1322,7 +1322,7 @@ static void TestSetMatch()
     close();
 }
 
-static void TestReset()
+static void TestReset(void)
 {
     UErrorCode     status    = U_ZERO_ERROR;
     UChar          text[]    = {0x66, 0x69, 0x73, 0x68, 0x20, 
@@ -1367,7 +1367,7 @@ static void TestReset()
     close();
 }
 
-static void TestSupplementary()
+static void TestSupplementary(void)
 {
     int count = 0;
     open();
@@ -1380,7 +1380,7 @@ static void TestSupplementary()
     close();
 }
 
-static void TestContraction() 
+static void TestContraction(void) 
 {
     UChar          rules[128];
     UChar          pattern[128];
@@ -1416,7 +1416,7 @@ static void TestContraction()
     ucol_close(collator);
 }
 
-static void TestIgnorable() 
+static void TestIgnorable(void) 
 {
     UChar          rules[128];
     UChar          pattern[128];
@@ -1452,7 +1452,7 @@ static void TestIgnorable()
     ucol_close(collator);
 }
 
-static void TestCanonical()
+static void TestCanonical(void)
 {
     int count = 0;
     open();
@@ -1465,7 +1465,7 @@ static void TestCanonical()
     close();
 }
 
-static void TestNormCanonical() 
+static void TestNormCanonical(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
@@ -1482,7 +1482,7 @@ static void TestNormCanonical()
     close();
 }
 
-static void TestStrengthCanonical() 
+static void TestStrengthCanonical(void) 
 {
     int count = 0;
     open();
@@ -1495,7 +1495,7 @@ static void TestStrengthCanonical()
     close();
 }
 
-static void TestBreakIteratorCanonical() {
+static void TestBreakIteratorCanonical(void) {
     UErrorCode      status      = U_ZERO_ERROR;
     int             count = 0;
 
@@ -1561,7 +1561,7 @@ ENDTESTBREAKITERATOR:
     close();
 }
 
-static void TestVariableCanonical() 
+static void TestVariableCanonical(void) 
 {
     int count = 0;
     UErrorCode status = U_ZERO_ERROR;
@@ -1583,7 +1583,7 @@ static void TestVariableCanonical()
     close();
 }
 
-static void TestOverlapCanonical()
+static void TestOverlapCanonical(void)
 {
     int count = 0;
     open();
@@ -1644,7 +1644,7 @@ static void TestOverlapCanonical()
     close();
 }
 
-static void TestCollatorCanonical() 
+static void TestCollatorCanonical(void) 
 {
     /* test collator that thinks "o" and "p" are the same thing */
           UChar          rules[32];
@@ -1706,7 +1706,7 @@ ENDTESTCOLLATOR:
     close();
 }
 
-static void TestPatternCanonical()
+static void TestPatternCanonical(void)
 {
           UStringSearch *strsrch; 
           UChar          pattern[32];
@@ -1777,7 +1777,7 @@ ENDTESTPATTERN:
     close();
 }
 
-static void TestTextCanonical() 
+static void TestTextCanonical(void) 
 {
           UStringSearch *strsrch; 
           UChar          pattern[32];
@@ -1841,7 +1841,7 @@ ENDTESTPATTERN:
     close();
 }
 
-static void TestCompositeBoundariesCanonical() 
+static void TestCompositeBoundariesCanonical(void) 
 {
     int count = 0;
     open();
@@ -1855,7 +1855,7 @@ static void TestCompositeBoundariesCanonical()
     close();
 }
 
-static void TestGetSetOffsetCanonical()
+static void TestGetSetOffsetCanonical(void)
 {
     int            index   = 0;
     UChar          pattern[32];
@@ -1937,7 +1937,7 @@ static void TestGetSetOffsetCanonical()
     close();
 }
 
-static void TestSupplementaryCanonical()
+static void TestSupplementaryCanonical(void)
 {
     int count = 0;
     open();
@@ -1950,7 +1950,7 @@ static void TestSupplementaryCanonical()
     close();
 }
 
-static void TestContractionCanonical() 
+static void TestContractionCanonical(void) 
 {
     UChar          rules[128];
     UChar          pattern[128];

@@ -23,7 +23,7 @@
 static UBool compareWithNAN(double x, double y);
 static void doAssert(double expect, double got, const char *message);
 
-static void TestPUtilAPI(){
+static void TestPUtilAPI(void){
 
     double  n1=0.0, y1=0.0, expn1, expy1;
     double  value1 = 0.021;
@@ -379,7 +379,7 @@ static const char* str[] = {
     "U_UNSUPPORTED_ATTRIBUTE"
 };
 
-static void TestErrorName(){
+static void TestErrorName(void){
     int32_t code=0;
     const char* errorName ;
     for(;code<U_ERROR_LIMIT;code++){

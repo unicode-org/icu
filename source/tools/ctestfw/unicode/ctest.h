@@ -51,7 +51,7 @@
 
 /* prototypes *********************************/
 
-typedef void (*TestFunctionPtr)();
+typedef void (*TestFunctionPtr)(void);
 typedef struct TestNode TestNode;
 
 /**

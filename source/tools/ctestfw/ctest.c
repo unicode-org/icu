@@ -23,7 +23,7 @@
 struct TestNode
 {
   char name[MAXTESTNAME];
-  void (*test)();
+  void (*test)(void);
   struct TestNode* sibling;
   struct TestNode* child;
 };
