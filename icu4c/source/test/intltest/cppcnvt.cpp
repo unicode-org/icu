@@ -14,7 +14,7 @@
 
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20
-#define UCS_FILE_NAME_SIZE 100
+#define UCS_FILE_NAME_SIZE 512
 
 /*writes and entire UnicodeString along with a BOM to a file*/
 void WriteToFile(const UnicodeString *a, FILE *myfile); 
@@ -261,6 +261,7 @@ void ConvertTest::TestConvert()
 
     for (codepage_index=0; codepage_index <  NUM_CODEPAGE; codepage_index++)
     {
+        err = U_ZERO_ERROR;
         i = 0;
         strcpy(ucs_file_name, IntlTest::getTestDirectory());
         strcat(ucs_file_name, CodePagesTestFiles[codepage_index]);
@@ -278,9 +279,12 @@ void ConvertTest::TestConvert()
 
         UnicodeConverter* myConverter = new UnicodeConverter(CodePageNumberToTest[codepage_index],UCNV_IBM, err);
 
-        if (!myConverter)
+        if (!myConverter || U_FAILURE(err))
         {
-            errln("Error Creating the converter from " + (UnicodeString)CodePagesToTest[codepage_index] + " codepage.\nMake sure you have ran the uconvdef tool to create " + (UnicodeString)CodePagesToTest[codepage_index] + ".cnv in the locales directory"); 
+            errln("Error Creating the converter from %s codepage.\nMake sure you ran the makeconv tool to create %s.cnv\nFailed with err=%s (%d)",
+                    CodePagesToTest[codepage_index],
+                    CodePagesToTest[codepage_index],
+                    u_errorName(err), err); 
             return;
         }
 

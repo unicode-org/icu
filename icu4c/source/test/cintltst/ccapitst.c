@@ -25,7 +25,7 @@
 
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20
-#define UCS_FILE_NAME_SIZE 100
+#define UCS_FILE_NAME_SIZE 512
 
 /*returns an action other than the one provided*/
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
