@@ -1,0 +1,128 @@
+## ******************************************************************************
+## *
+## *   Copyright (C) 1999-2000, International Business Machines
+## *   Corporation and others.  All Rights Reserved.
+## *
+## *******************************************************************************
+## Makefile.in for ICU - uconv
+## Steven  R. Loomis
+
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
+
+top_builddir = ../..
+subdir = extra/uconv
+
+include $(top_builddir)/icudefs.mk
+ 
+## Platform-specific setup
+include @platform_make_fragment@
+
+# RESSRC comes from resfiles.mk
+include $(srcdir)/resfiles.mk
+
+RESDIR=uconvmsg
+RESFILES=$(RESSRC:%.txt=$(RESDIR)/%.res)
+
+##
+
+SECTION = 1
+
+ALL_MAN_FILES = $(TARGET).$(SECTION)
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(DEPS)
+
+## Target information
+TARGET = uconv
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+
+OBJECTS = uconv.o uwmsg.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local \
+distclean distclean-local dist dist-local check check-local resfiles package-resfiles install-resfiles install-man
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: check-local
+
+all-local: $(TARGET) resfiles $(ALL_MAN_FILES)
+
+install-local: all-local install-target install-resfiles install-man
+
+install-target: all-local
+	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES) $(RESFILES)
+	$(RMV) $(OBJECTS) $(TARGET)
+	$(RMV) $(RESDIR)
+
+distclean-local: clean-local
+	$(RMV) Makefile $(DEPS)
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.cc) -o $@ $^ $(LIBS)
+
+resfiles: $(RESFILES) package-resfiles
+
+package-resfiles: $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -d uconvmsg -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+
+$(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
+	@$(MKINSTALLDIRS) $(RESDIR)
+	@-$(RMV) $@
+	@for file in $(RESFILES); do \
+	  echo `pwd`/$$file >> $@; \
+	done;
+
+install-resfiles: $(RESFILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(ICUDATA_DIR)
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -d uconvmsg -I $(DESTDIR)$(ICUDATA_DIR) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+
+$(RESDIR)/%.res: $(srcdir)/%.txt
+	@$(MKINSTALLDIRS) $(RESDIR)
+	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eUTF-8 -d $(RESDIR) $^
+
+install-man: $(ALL_MAN_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# Don't do this.  This is a problem when changing platforms.
+#ifneq ($(MAKECMDGOALS),distclean)
+#-include $(DEPS)
+#endif
+
