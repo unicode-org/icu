@@ -328,7 +328,33 @@ void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
     }
 }
 
+uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, UCAElements *element, UErrorCode *status) {
+    uint32_t i = 0;
 
+    for (i=1; i<element->cSize; i++) {   /* First add contraction chars to unsafe CP hash table */
+        unsafeCPSet(t->unsafeCP, element->cPoints[i]);
+    }
+    if(UCOL_ISJAMO(element->cPoints[0])) {
+      t->image->jamoSpecial = TRUE;
+    }
+
+    /* then we need to deal with it */
+    /* we could aready have something in table - or we might not */
+    /* The fact is that we want to add or modify an existing contraction */
+    /* and add it backwards then */
+    uint32_t result = uprv_uca_processContraction(t->contractions, element, CE, TRUE, status);
+    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
+      ucmp32_set(t->mapping, element->cPoints[0], result);
+    }
+    /* add the reverse order */
+    uprv_uca_reverseElement(element);
+    CE = ucmp32_get(t->mapping, element->cPoints[0]);
+    uint32_t rev_result = uprv_uca_processContraction(t->contractions, element, CE, FALSE, status);
+    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
+      ucmp32_set(t->mapping, element->cPoints[0], rev_result);
+    }
+    return result;
+}
 
 /* This adds a read element, while testing for existence */
 uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
@@ -378,29 +404,21 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   CE = ucmp32_get(mapping, element->cPoints[0]);
 
   if(element->cSize > 1) { /* we're adding a contraction */
-    uint32_t  i;
-    for (i=1; i<element->cSize; i++) {   /* First add contraction chars to unsafe CP hash table */
-        unsafeCPSet(t->unsafeCP, element->cPoints[i]);
+    UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
+    uprv_memcpy(composed, element, sizeof(UCAElements));
+    composed->cPoints = composed->uchars;
+    *composed->cPoints = *element->cPoints;
+    composed->cSize = unorm_normalize(element->cPoints+1, element->cSize-1, UNORM_NFC, 0, composed->cPoints+1, 128, status);
+    composed->cSize++;
+    if(composed->cSize != element->cSize || uprv_memcmp(composed->cPoints+1, element->cPoints+1, element->cSize-1)) {
+      // do it!
+      CE = uprv_uca_addContraction(t, CE, composed, status);
+      fprintf(stderr, "Adding composed for %04X\n", *element->cPoints);
     }
-    if(UCOL_ISJAMO(element->cPoints[0])) {
-      t->image->jamoSpecial = TRUE;
-    }
+    uprv_free(composed);
 
-    /* then we need to deal with it */
-    /* we could aready have something in table - or we might not */
-    /* The fact is that we want to add or modify an existing contraction */
-    /* and add it backwards then */
-    uint32_t result = uprv_uca_processContraction(contractions, element, CE, TRUE, status);
-    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
-      ucmp32_set(mapping, element->cPoints[0], result);
-    }
-    /* add the reverse order */
-    uprv_uca_reverseElement(element);
-    CE = ucmp32_get(mapping, element->cPoints[0]);
-    result = uprv_uca_processContraction(contractions, element, CE, FALSE, status);
-    if(CE == UCOL_NOT_FOUND || !isContraction(CE)) {
-      ucmp32_set(mapping, element->cPoints[0], result);
-    }
+    CE = uprv_uca_addContraction(t, CE, element, status);
+
   } else { /* easy case, */
     if( CE != UCOL_NOT_FOUND) {
         if(isContraction(CE)) { /* adding a non contraction element (thai, expansion, single) to already existing contraction */
