@@ -1152,6 +1152,7 @@ BasicNormalizerTest::countFoldFCDExceptions(uint32_t foldingOptions) {
 
     count=0;
     for(c=0; c<=0x10ffff; ++c) {
+        errorCode = U_ZERO_ERROR;
         category=u_charType(c);
         if(category==U_UNASSIGNED) {
             continue; // skip unassigned code points
@@ -1189,6 +1190,11 @@ BasicNormalizerTest::countFoldFCDExceptions(uint32_t foldingOptions) {
         foldTrailCC=u_getCombiningClass(d.char32At(d.length()-1));
 
         qcResult=Normalizer::quickCheck(s, UNORM_FCD, errorCode);
+
+        if (U_FAILURE(errorCode)) {
+            ++count;
+            errln("U+%04lx: Failed with error %s", u_errorName(errorCode));
+        }
 
         // bad:
         // - character maps to empty string: adjacent characters may then need reordering
