@@ -35,14 +35,15 @@ U_NAMESPACE_BEGIN
  * UnicodeMatcher protocol.
  *
  * @see UnicodeFilterLogic
- * @draft
+ * @stable
  */
 class U_I18N_API UnicodeFilter : public UnicodeMatcher {
 
 public:
     /**
      * Destructor
-     * @draft */
+     * @stable
+     */
     virtual ~UnicodeFilter();
 
     /**
@@ -50,7 +51,7 @@ public:
      * subset.  In other words, if a character is <b>to be
      * filtered</b>, then <tt>contains()</tt> returns
      * <b><tt>false</tt></b>.
-     * @draft
+     * @stable
      */
     virtual UBool contains(UChar32 c) const = 0;
 
