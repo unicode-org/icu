@@ -954,12 +954,12 @@ TimeZoneTest::TestDisplayName()
     // *** REVISIT SRL how in the world do I check this? looks java specific.
     // Now be smart -- check to see if zh resource is even present.
     // If not, we expect the en fallback behavior.
-    ResourceBundle enRB(u_getDataDirectory(),
+    ResourceBundle enRB(NULL,
                             Locale::getEnglish(), status);
     if(U_FAILURE(status))
         errln("Couldn't get ResourceBundle for en");
 
-    ResourceBundle mtRB(u_getDataDirectory(),
+    ResourceBundle mtRB(NULL,
                          mt_MT, status);
     //if(U_FAILURE(status))
     //    errln("Couldn't get ResourceBundle for mt_MT");

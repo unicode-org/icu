@@ -434,7 +434,7 @@ void DateFormatRegressionTest::Test4065240(void)
 
         // Check to see if the resource is present; if not, we can't test
         ResourceBundle *bundle = new ResourceBundle(
-            u_getDataDirectory(), *curLocale, status);
+            NULL, *curLocale, status);
         failure(status, "new ResourceBundle");
             //(UnicodeString) "java.text.resources.DateFormatZoneData", curLocale);
 

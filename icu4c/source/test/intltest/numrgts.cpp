@@ -1503,7 +1503,7 @@ void NumberFormatRegressionTest::Test4122840(void)
     for (int i = 0; i < count; i++) {
         UErrorCode status = U_ZERO_ERROR;
         ResourceBundle *rb = new ResourceBundle(
-            u_getDataDirectory()/*"java.text.resources.LocaleElements"*/, 
+            NULL/*"java.text.resources.LocaleElements"*/, 
             locales[i], status);
         failure(status, "new ResourceBundle");
         ResourceBundle numPat = rb->get("NumberPatterns", status);
