@@ -471,18 +471,18 @@ typedef enum UErrorCode UErrorCode;
 /* operational success or failure. */
 
 #ifdef XP_CPLUSPLUS
-U_NAMESPACE_BEGIN
     /**
      * Does the error code indicate success?
      * @stable
      */
+    static
     inline UBool U_SUCCESS(UErrorCode code) { return (UBool)(code<=U_ZERO_ERROR); }
     /**
      * Does the error code indicate a failure?
      * @stable
      */
+    static
     inline UBool U_FAILURE(UErrorCode code) { return (UBool)(code>U_ZERO_ERROR); }
-U_NAMESPACE_END
 #else
     /**
      * Does the error code indicate success?
