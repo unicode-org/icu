@@ -76,8 +76,9 @@ void ConvertTest::TestConvert()
     UErrorCode           err                 =   U_ZERO_ERROR;
     const char* const*  available_conv      =   NULL;
     char       ucs_file_name[UCS_FILE_NAME_SIZE];
-    UConverterFromUCallback          MIA1;
-    UConverterToUCallback MIA2;
+    UConverterFromUCallback          MIA1, MIA1_2;
+    UConverterToUCallback MIA2, MIA2_2;
+    void              *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
     UChar             myUnitarget[MAX_FILE_LEN];
     UChar             *myUnitarget_1 = myUnitarget;
     UnicodeConverterCPP* someConverters[5];
@@ -357,36 +358,75 @@ void ConvertTest::TestConvert()
     if ((MIA2 = myConverter->getMissingCharAction()) != CodePagesMissingCharAction[codepage_index]) errln("Missing action failed");
     else logln("Missing action ok");*/
 
-    MIA1 = myConverter->getMissingUnicodeAction();
-    MIA2 = myConverter->getMissingCharAction();
+    myConverter->getMissingUnicodeAction(&MIA1, &MIA1Context);
+    myConverter->getMissingCharAction(&MIA2, &MIA2Context);
 
         /*setMissingUnicodeAction*/
     logln("\n---Testing UnicodeConverterCPP::setMissingUnicodeAction...");
-    myConverter->setMissingUnicodeAction(otherUnicodeAction(MIA1), NULL, &fromUAction, &fromUContext, err);
-    if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));    
-    if (myConverter->getMissingUnicodeAction() != otherUnicodeAction(MIA1)) logln("Missing action failed");
-    else logln("Missing action ok");
+    myConverter->setMissingUnicodeAction(otherUnicodeAction(MIA1), &BOM, &fromUAction, &fromUContext, err);
+    if (U_FAILURE(err) || fromUAction != MIA1 || fromUContext != MIA1Context)
+    {
+        errln ("FAILURE! " + (UnicodeString)myErrorName(err));
+    }
+    myConverter->getMissingUnicodeAction(&MIA1_2, &MIA1Context2);
+    if (MIA1_2 != otherUnicodeAction(MIA1) || MIA1Context2 != &BOM)
+    {
+        errln("Missing action failed");
+    }
+    else
+    {
+        logln("Missing action ok");
+    }
 
 
     logln("\n---Testing UnicodeConverterCPP::setMissingUnicodeAction Roundtrip...");
-    myConverter->setMissingUnicodeAction(MIA1, NULL, &fromUAction, &fromUContext, err);
-    if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));    
-    if (myConverter->getMissingUnicodeAction() != MIA1) errln("Missing action failed");
-    else logln("Missing action ok");
-
+    myConverter->setMissingUnicodeAction(MIA1, MIA1Context, &fromUAction, &fromUContext, err);
+    if (U_FAILURE(err) || fromUAction != otherUnicodeAction(MIA1) || fromUContext != &BOM)
+    {
+        errln ("FAILURE! " + (UnicodeString)myErrorName(err));
+    }
+    myConverter->getMissingUnicodeAction(&MIA1_2, &MIA1Context2);
+    if (MIA1_2 != MIA1 || MIA1Context2 != MIA1Context)
+    {
+        errln("Missing action failed");
+    }
+    else
+    {
+        logln("Missing action ok");
+    }
 
         /*setMissingCharAction*/
     logln("\n---Testing UnicodeConverterCPP::setMissingCharAction...");
-    myConverter->setMissingCharAction(otherCharAction(MIA2), NULL, &toUAction, &toUContext, err);
-    if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));
-    if (myConverter->getMissingCharAction() != otherCharAction(MIA2)) errln("Missing action failed");
-    else logln("Missing action ok");
+    myConverter->setMissingCharAction(otherCharAction(MIA2), &BOM, &toUAction, &toUContext, err);
+    if (U_FAILURE(err) || toUAction != MIA2 || toUContext != MIA2Context)
+    {
+        errln ("FAILURE! " + (UnicodeString)myErrorName(err));
+    }
+    myConverter->getMissingCharAction(&MIA2_2, &MIA2Context2);
+    if (MIA2_2 != otherCharAction(MIA2) || MIA2Context2 != &BOM)
+    {
+        errln("Missing action failed");
+    }
+    else
+    {
+        logln("Missing action ok");
+    }
     
     logln("\n---Testing UnicodeConverterCPP::setMissingCharAction Roundtrip...");
-    myConverter->setMissingCharAction(MIA2, NULL, &toUAction, &toUContext, err);
-    if (U_FAILURE(err)) errln ("FAILURE! " + (UnicodeString)myErrorName(err));    
-    if (myConverter->getMissingCharAction() != MIA2) errln("Missing action failed");
-    else logln("Missing action ok");
+    myConverter->setMissingCharAction(MIA2, MIA2Context, &toUAction, &toUContext, err);
+    if (U_FAILURE(err) || toUAction != otherCharAction(MIA2) || toUContext != &BOM)
+    {
+        errln ("FAILURE! " + (UnicodeString)myErrorName(err));
+    }
+    myConverter->getMissingCharAction(&MIA2_2, &MIA2Context2);
+    if (MIA2_2 != MIA2 || MIA2Context2 != MIA2Context)
+    {
+        errln("Missing action failed");
+    }
+    else
+    {
+        logln("Missing action ok");
+    }
 
 
         /*getCodepage*/
