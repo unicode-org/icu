@@ -28,6 +28,8 @@ U_CFUNC UBool transliterator_cleanup(void);
 
 U_CFUNC UBool unicodeset_cleanup(void);
 
+U_CFUNC UBool dateFormatSymbols_cleanup(void);
+
 U_CFUNC UBool timeZone_cleanup(void);
 
 U_CFUNC UBool ucol_cleanup(void);
