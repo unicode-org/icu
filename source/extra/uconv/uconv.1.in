@@ -155,6 +155,7 @@ Write the the encoding's substitute sequence, or the Unicode
 replacement character
 .B U+FFFD
 when transcoding to Unicode.
+This is the default callback.
 .TP
 .B skip
 Ignore the invalid data.
