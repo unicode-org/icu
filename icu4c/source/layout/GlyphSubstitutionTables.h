@@ -29,7 +29,7 @@ struct GlyphSubstitutionTableHeader
     Offset  featureListOffset;
     Offset  lookupListOffset;
 
-    void    process(LEGlyphID *glyphs, const LETag **glyphTags, le_int32 glyphCount,
+    le_int32    process(LEGlyphID *&glyphs, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
                  le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                  const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                  const LEGlyphFilter *filter = NULL, const LETag *featureOrder = NULL) const;

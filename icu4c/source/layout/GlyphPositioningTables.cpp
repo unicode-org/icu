@@ -23,8 +23,9 @@ void GlyphPositioningTableHeader::process(LEGlyphID *glyphs, GlyphPositionAdjust
                                           const LEFontInstance *fontInstance, const LETag *featureOrder) const
 {
     GlyphPositioningLookupProcessor processor(this, scriptTag, languageTag, featureOrder);
+	le_int32 *charIndices = NULL;
 
-    processor.process(glyphs, glyphPositionAdjustments, glyphTags, glyphCount, rightToLeft,
+    processor.process(glyphs, glyphPositionAdjustments, glyphTags, charIndices, glyphCount, rightToLeft,
         glyphDefinitionTableHeader, fontInstance);
 }
 

@@ -2,8 +2,8 @@
  * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/MPreFixups.h,v $
- * $Date: 2003/06/03 20:58:22 $
- * $Revision: 1.3 $
+ * $Date: 2003/09/24 21:05:13 $
+ * $Revision: 1.4 $
  *
  */
 
@@ -30,7 +30,7 @@ public:
 
     void add(le_int32 baseIndex, le_int32 mpreIndex);
     
-    void apply(LEGlyphID *glyphs, le_int32 *charIndicies);
+    void apply(LEGlyphID *glyphs, le_int32 *charIndices);
 
 private:
     FixupData *fFixupData;
