@@ -179,8 +179,6 @@
         /* get a view of the mapping */
 #ifndef HPUX
         data=mmap(0, length, PROT_READ, MAP_SHARED,  fd, 0);
-#elif defined(U_QNX)
-        data=mmap(0, length, PROT_READ, MAP_PRIVATE|MAP_NOSYNCFILE, fd, 0);
 #else
         data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
 #endif
