@@ -66,7 +66,7 @@ const Locale  Locale::JAPANESE("ja");
 const Locale  Locale::KOREAN("ko");
 const Locale  Locale::CHINESE("zh");
 const Locale  Locale::SIMPLIFIED_CHINESE("zh", "CN");
-const Locale  Locale::TRADITIONAL_CHINESE("zu", "TW");
+const Locale  Locale::TRADITIONAL_CHINESE("zh", "TW");
 
 // Useful constant for country.
 
