@@ -1,11 +1,10 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2001, International Business Machines
+* Copyright (c) 1997-2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
 
-#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 #include "unicode/normlzr.h"
@@ -13,6 +12,7 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "normconf.h"
+#include <stdio.h>
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 
@@ -64,7 +64,6 @@ void NormalizerConformanceTest::TestConformance(void) {
     char backupPath[256];
     FileStream *input = NULL;
     UChar32 c;
-    UErrorCode   err = U_ZERO_ERROR;
 
     /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
@@ -73,12 +72,13 @@ void NormalizerConformanceTest::TestConformance(void) {
 
     // As a fallback, try to guess where the source data was located
     //   at the time ICU was built, and look there.
-    #if defined (U_TOPSRCDIR)
-        strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
-    #else
-        strcpy(backupPath, loadTestData(err));
-        strcat(backupPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
-    #endif
+#if defined (U_TOPSRCDIR)
+    strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
+#else
+    UErrorCode   err = U_ZERO_ERROR;
+    strcpy(backupPath, loadTestData(err));
+    strcat(backupPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+#endif
     strcat(backupPath, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING TEST_SUITE_FILE);
 
     input = T_FileStream_open(newPath, "rb");
