@@ -425,8 +425,70 @@ void  ucnv_reset (UConverter * converter)
   } else {
     converter->mode = UCNV_SI;
   }
+}
 
-  return;
+void ucnv_resetToUnicode(UConverter *converter)
+{
+#if 0
+  UConverterToUnicodeArgs toUArgs = {
+    sizeof(UConverterToUnicodeArgs),
+    TRUE,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  };
+  UErrorCode errorCode = U_ZERO_ERROR;
+
+  if(converter == NULL) {
+    return;
+  }
+
+  toUArgs.converter = converter;
+  converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
+
+  /* now reset the converter itself */
+  converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
+  converter->fromUnicodeStatus = 0;
+  converter->UCharErrorBufferLength = 0;
+  converter->charErrorBufferLength = 0;
+
+  /* Todo: Needs rest of implementation */
+#endif
+}
+
+void ucnv_resetFromUnicode(UConverter *converter)
+{
+#if 0
+  UConverterFromUnicodeArgs fromUArgs = {
+    sizeof(UConverterFromUnicodeArgs),
+    TRUE,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+  };
+  UErrorCode errorCode = U_ZERO_ERROR;
+
+  if(converter == NULL) {
+    return;
+  }
+
+  fromUArgs.converter = converter;
+  converter->fromUCharErrorBehaviour(converter->fromUContext, &fromUArgs, NULL, 0, 0, UCNV_RESET, &errorCode);
+
+  /* now reset the converter itself */
+  converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
+  converter->fromUnicodeStatus = 0;
+  converter->UCharErrorBufferLength = 0;
+  converter->charErrorBufferLength = 0;
+
+  /* Todo: Needs rest of implementation */
+#endif
 }
 
 int8_t  ucnv_getMaxCharSize (const UConverter * converter)
