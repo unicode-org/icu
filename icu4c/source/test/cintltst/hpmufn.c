@@ -15,6 +15,7 @@
 #include "cintltst.h"
 #include "umutex.h"
 #include <stdlib.h>
+#include <string.h>
 
 
 static void TestHeapFunctions(void);
@@ -43,6 +44,23 @@ __FILE__, __LINE__, u_errorName(status), u_errorName(expected)); }
 if (!(expr)) { \
     log_err("FAILED Assertion \"" #expr "\" at  %s:%d.\n", __FILE__, __LINE__); \
 }
+
+
+/*  These tests do cleanup and reinitialize ICU in the course of their operation.
+ *    The ICU data directory must be preserved across these operations.
+ *    Here is a helper function to assist with that.
+ */
+static char *safeGetICUDataDirectory() {
+    const char *dataDir = u_getDataDirectory();  /* Returned string vanashes with u_cleanup */
+    char *retStr = NULL;
+    if (dataDir != NULL) {
+        retStr = (char *)malloc(strlen(dataDir)+1);
+        strcpy(retStr, dataDir);
+    }
+    return retStr;
+}
+
+
     
 /*
  *  Test Heap Functions.
@@ -92,8 +110,11 @@ void  *myMemRealloc(const void *context, void *mem, size_t size) {
 static void TestHeapFunctions() {
     UErrorCode       status = U_ZERO_ERROR;
     UResourceBundle *rb     = NULL;
+    char            *icuDataDir;
 
 
+    icuDataDir = safeGetICUDataDirectory();   /* save icu data dir, so we can put it back
+                                               *  after doing u_cleanup().                */
     /* Can not set memory functions if ICU is already initialized */
     u_setMemoryFunctions(&gContext, myMemAlloc, myMemRealloc, myMemFree, &status);
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
@@ -122,6 +143,7 @@ static void TestHeapFunctions() {
 
     /* After reinitializing ICU, we should not be able to set the memory funcs again. */
     status = U_ZERO_ERROR;
+    u_setDataDirectory(icuDataDir);
     u_init(&status);
     TEST_STATUS(status, U_ZERO_ERROR);
     u_setMemoryFunctions(NULL, myMemAlloc, myMemRealloc, myMemFree, &status);
@@ -139,6 +161,7 @@ static void TestHeapFunctions() {
 
     /* Cleanup should put the heap back to its default implementation. */
     u_cleanup();
+    u_setDataDirectory(icuDataDir);
     status = U_ZERO_ERROR;
     u_init(&status);
     TEST_STATUS(status, U_ZERO_ERROR);
@@ -152,6 +175,7 @@ static void TestHeapFunctions() {
         log_err("Heap functions did not reset after u_cleanup.\n");
     }
     ures_close(rb);
+    free(icuDataDir);
 }
 
 
@@ -216,8 +240,9 @@ void  myMutexUnlock(const void *context, UMTX *mutex) {
 static void TestMutexFunctions() {
     UErrorCode       status = U_ZERO_ERROR;
     UResourceBundle *rb     = NULL;
+    char            *icuDataDir;
 
-
+    icuDataDir = safeGetICUDataDirectory();
     /* Can not set mutex functions if ICU is already initialized */
     u_setMutexFunctions(&gContext, myMutexInit, myMutexDestroy, myMutexLock, myMutexUnlock, &status);
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
@@ -249,6 +274,7 @@ static void TestMutexFunctions() {
 
     /* After reinitializing ICU, we should not be able to set the mutex funcs again. */
     status = U_ZERO_ERROR;
+    u_setDataDirectory(icuDataDir);
     u_init(&status);
     TEST_STATUS(status, U_ZERO_ERROR);
     u_setMutexFunctions(&gContext, myMutexInit, myMutexDestroy, myMutexLock, myMutexUnlock, &status);
@@ -266,6 +292,7 @@ static void TestMutexFunctions() {
 
     /* Cleanup should destroy all of the mutexes. */
     u_cleanup();
+    u_setDataDirectory(icuDataDir);
     status = U_ZERO_ERROR;
     TEST_ASSERT(gTotalMutexesInitialized > 0);
     TEST_ASSERT(gTotalMutexesActive == 0);
@@ -284,6 +311,7 @@ static void TestMutexFunctions() {
     TEST_ASSERT(gTotalMutexesActive == 0);
 
     ures_close(rb);
+    free(icuDataDir);
 }
 
 
@@ -320,6 +348,7 @@ static int32_t myDecFunc(const void *context, int32_t *p) {
 static void TestIncDecFunctions() {
     UErrorCode   status = U_ZERO_ERROR;
     int32_t      t;
+    char         *dataDir;
 
 
     /* Can not set mutex functions if ICU is already initialized */
@@ -327,6 +356,7 @@ static void TestIncDecFunctions() {
     TEST_STATUS(status, U_INVALID_STATE_ERROR);
 
     /* Un-initialize ICU */
+    dataDir = safeGetICUDataDirectory();
     u_cleanup();
 
     /* Can not set functions with NULL values */
@@ -347,6 +377,7 @@ static void TestIncDecFunctions() {
 
     /* After reinitializing ICU, we should not be able to set the inc/dec funcs again. */
     status = U_ZERO_ERROR;
+    u_setDataDirectory(dataDir);
     u_init(&status);
     TEST_STATUS(status, U_ZERO_ERROR);
     u_setAtomicIncDecFunctions(&gIncDecContext, myIncFunc, myDecFunc,  &status);
@@ -367,6 +398,7 @@ static void TestIncDecFunctions() {
     gIncCount = 0;
     gDecCount = 0;
     status = U_ZERO_ERROR;
+    u_setDataDirectory(dataDir);
     u_init(&status);
     TEST_ASSERT(gIncCount == 0);
     TEST_ASSERT(gDecCount == 0);
