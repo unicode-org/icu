@@ -58,6 +58,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(23,TestFilterIDs);
         TESTCASE(24,TestCaseMap);
         TESTCASE(25,TestNameMap);
+        TESTCASE(26,TestLiberalizedID);
         default: name = ""; break;
     }
 }
@@ -1005,6 +1006,31 @@ void TransliteratorTest::TestNameMap(void) {
 
     delete uni2name;
     delete name2uni;
+}
+
+/**
+ * Test liberalized ID syntax.  1006c
+ */
+void TransliteratorTest::TestLiberalizedID(void) {
+    const char* DATA[] = {
+        "latin-arabic", "case insensitivity",
+        "  Null  ", "whitespace",
+        " Latin[a-z]-Arabic  ", "inline filter",
+        "  null  ; latin-arabic  ", "compound whitespace",
+    };
+    const int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
+
+    for (int32_t i=0; i<DATA_length; i+=2) {
+        Transliterator *t = Transliterator::createInstance(DATA[i]);
+        if (t == 0) {
+            errln(UnicodeString("FAIL: ") + DATA[i+1] +
+                  " test with ID \"" + DATA[i] + "\"");
+        } else {
+            logln(UnicodeString("Ok: ") + DATA[i+1] +
+                  " test with ID \"" + DATA[i] + "\"");
+            delete t;
+        }
+    }
 }
 
 //======================================================================

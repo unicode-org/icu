@@ -148,6 +148,12 @@ class TransliteratorTest : public IntlTest {
      */
     void TestNameMap(void);
 
+    /**
+     * Test liberalized ID syntax.  1006c
+     */
+    void TestLiberalizedID(void);
+
+
     //======================================================================
     // Support methods
     //======================================================================
