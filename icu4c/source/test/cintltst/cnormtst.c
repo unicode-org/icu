@@ -14,15 +14,14 @@
 *     synwee                      added test for checkFCD
 *********************************************************************************/
 /*tests for u_normalization*/
-#include <stdlib.h>
 #include "unicode/utypes.h"
-#include "unicode/ucol.h"
-#include "unicode/uloc.h"
+#include <stdlib.h>
+#include <time.h>
+#include "unicode/uchar.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cnormtst.h"
 #include "ccolltst.h"
-#include "unicode/ustring.h"
-#include <time.h>
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
@@ -41,6 +40,9 @@ static void
 TestNextPrevious(void);
 
 static void TestIsNormalized(void);
+
+static void
+TestFCNFKCClosure(void);
 
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
@@ -115,6 +117,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestNormCoverage, "tscoll/cnormtst/TestNormCoverage");
     addTest(root, &TestConcatenate, "tscoll/cnormtst/TestConcatenate");
     addTest(root, &TestNextPrevious, "tscoll/cnormtst/TestNextPrevious");
+    addTest(root, &TestFCNFKCClosure, "tscoll/cnormtst/TestFCNFKCClosure");
 }
 
 void TestDecomp() 
@@ -1342,5 +1345,49 @@ TestNextPrevious() {
     if(iter.index!=1 || buffer[0]!=5) {
         log_err("error unorm_next(pErrorCode==NULL) %s\n", u_errorName(errorCode));
         return;
+    }
+}
+
+static void
+TestFCNFKCClosure(void) {
+    static const struct {
+        UChar32 c;
+        const UChar s[6];
+    } tests[]={
+        { 0x037A, { 0x0020, 0x03B9, 0 } },
+        { 0x03D2, { 0x03C5, 0 } },
+        { 0x20A8, { 0x0072, 0x0073, 0 } },
+        { 0x210B, { 0x0068, 0 } },
+        { 0x210C, { 0x0068, 0 } },
+        { 0x2121, { 0x0074, 0x0065, 0x006C, 0 } },
+        { 0x2122, { 0x0074, 0x006D, 0 } },
+        { 0x2128, { 0x007A, 0 } },
+        { 0x1D5DB, { 0x0068, 0 } },
+        { 0x1D5ED, { 0x007A, 0 } },
+        { 0x0061, { 0 } }
+    };
+
+    UChar buffer[8];
+    UErrorCode errorCode;
+    int32_t i, length;
+
+    for(i=0; i<ARRAY_LENGTH(tests); ++i) {
+        errorCode=U_ZERO_ERROR;
+        length=u_getFC_NFKC_Closure(tests[i].c, buffer, ARRAY_LENGTH(buffer), &errorCode);
+        if(U_FAILURE(errorCode) || length!=u_strlen(buffer) || 0!=u_strcmp(tests[i].s, buffer)) {
+            log_err("u_getFC_NFKC_Closure(U+%04lx) is wrong (%s)\n", tests[i].c, u_errorName(errorCode));
+        }
+    }
+
+    /* error handling */
+    errorCode=U_ZERO_ERROR;
+    length=u_getFC_NFKC_Closure(0x5c, NULL, ARRAY_LENGTH(buffer), &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("u_getFC_NFKC_Closure(dest=NULL) is wrong (%s)\n", u_errorName(errorCode));
+    }
+
+    length=u_getFC_NFKC_Closure(0x5c, buffer, ARRAY_LENGTH(buffer), &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("u_getFC_NFKC_Closure(U_FAILURE) is wrong (%s)\n", u_errorName(errorCode));
     }
 }
