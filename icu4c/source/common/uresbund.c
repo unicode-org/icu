@@ -20,6 +20,7 @@
 
 #include "uresimp.h"
 #include "cwchar.h"
+#include "ucln_cmn.h"
 
 /* this is just for internal purposes. DO NOT USE! */
 static void entryCloseInt(UResourceDataEntry *resB);
@@ -157,6 +158,68 @@ static void initCache(UErrorCode *status) {
         }
     }
 }
+
+/* Works just like ucnv_flushCache() */
+static int32_t ures_flushCache()
+{
+    UResourceDataEntry *resB = NULL;
+    int32_t pos = -1;
+    int32_t rbDeletedNum = 0;
+    const UHashElement *e;
+
+    /*if shared data hasn't even been lazy evaluated yet
+    * return 0
+    */
+    if (cache == NULL)
+        return 0;
+
+    /*creates an enumeration to iterate through every element in the table */
+    umtx_lock(&resbMutex);
+    while ((e = uhash_nextElement(cache, &pos)) != NULL)
+    {
+        resB = (UResourceDataEntry *) e->value;
+        /* Deletes only if reference counter == 0
+         * Don't worry about the children of this node.
+         * Those will eventually get deleted too, if not already.
+         * Don't worry about the parents of this node.
+         * Those will eventually get deleted too, if not already.
+         */
+        if (resB->fCountExisting == 0)
+        {
+            rbDeletedNum++;
+            uhash_removeElement(cache, e);
+            if(resB->fBogus == U_ZERO_ERROR) {
+                res_unload(&(resB->fData));
+            }
+            if(resB->fName != NULL) {
+                uprv_free(resB->fName);
+            }
+            if(resB->fPath != NULL) {
+                uprv_free(resB->fPath);
+            }
+            uprv_free(resB);
+        }
+    }
+    umtx_unlock(&resbMutex);
+
+    return rbDeletedNum;
+}
+
+UBool ucln_ures(void)
+{
+    if (cache != NULL) {
+        ures_flushCache();
+        umtx_lock(NULL);
+        if (cache != NULL && uhash_count(cache) == 0) {
+            uhash_close(cache);
+            cache = NULL;
+            umtx_destroy(&resbMutex);
+        }
+        umtx_unlock(NULL);
+    }
+    return (cache == NULL);
+}
+
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
@@ -891,11 +954,10 @@ static void entryCloseInt(UResourceDataEntry *resB) {
         p = resB->fParent;
         resB->fCountExisting--;
 
-        if(resB->fCountExisting <= 0) {
-
-          /* Entries are left in the cache. TODO: add ures_cacheFlush() to force a flush
-             of the cache. */
+        /* Entries are left in the cache. TODO: add ures_cacheFlush() to force a flush
+         of the cache. */
 /*
+        if(resB->fCountExisting <= 0) {
             uhash_remove(cache, resB);
             if(resB->fBogus == U_ZERO_ERROR) {
                 res_unload(&(resB->fData));
@@ -907,8 +969,8 @@ static void entryCloseInt(UResourceDataEntry *resB) {
                 uprv_free(resB->fPath);
             }
             uprv_free(resB);
-*/
         }
+*/
 
         resB = p;
     }
