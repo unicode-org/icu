@@ -33,7 +33,6 @@ RBNF_ALIAS_SOURCE =
 RBNF_SOURCE = \
 da.txt \
 de.txt \
-el.txt \
 en.txt en_GB.txt\
 eo.txt \
 es.txt \
@@ -52,3 +51,5 @@ sv.txt \
 th.txt \
 uk.txt 
 
+#These are not in use yet
+# el.txt \
