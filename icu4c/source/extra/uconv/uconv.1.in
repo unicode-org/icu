@@ -233,19 +233,17 @@ Same as
 .TP
 .B escape-icu
 Replace the missing characters with a string of the format
-.BR %U\fIhhhh\fP ,
+.BR %U\fIhhhh\fP
+for plane 0 characters, and
+.BR %U\fIhhhh\fP%U\fIhhhh\fP
+for planes 1 and above characters,
 where
 .I hhhh
-is the hexadecimal value of the character.
+is the hexadecimal value of one of the UTF-16 code units representing the
+character. Characters from planes 1 and above are written as a pair of
+UTF-16 surrogate code units.
 .TP
 .B escape-java
-Replace the missing characters with a string of the format
-.BR "\eu\fIhhhh\fP" ,
-where
-.I hhhh
-is the hexadecimal value of the character.
-.TP
-.B escape-c
 Replace the missing characters with a string of the format
 .BR \eu\fIhhhh\fP
 for plane 0 characters, and
@@ -253,8 +251,21 @@ for plane 0 characters, and
 for planes 1 and above characters,
 where
 .I hhhh
-is the hexadecimal value of the character. Characters from planes 1
-and above are written as surrogate pairs.
+is the hexadecimal value of one of the UTF-16 code units representing the
+character. Characters from planes 1 and above are written as a pair of
+UTF-16 surrogate code units.
+.TP
+.B escape-c
+Replace the missing characters with a string of the format
+.BR \eu\fIhhhh\fP
+for plane 0 characters, and
+.BR \eU\fIhhhhhhhh\fP
+for planes 1 and above characters,
+where
+.I hhhh
+and
+.I hhhhhhhh
+are the hexadecimal values of the Unicode codepoint.
 .TP
 .B escape-xml
 Same as
@@ -265,22 +276,26 @@ Replace the missing characters with a string of the format
 .BR &#x\fInnnn\fP; ,
 where
 .I nnnn
-is the decimal value of the character.
+is the decimal value of the Unicode codepoint.
 .TP
 .B escape-xml-hex
 Replace the missing characters with a string of the format
 .BR &#x\fIhhhh\fP; ,
 where
 .I hhhh
-is the hexadecimal value of the character.
+is the hexadecimal value of the Unicode codepoint.
 .TP
 .B escape-unicode
 Replace the missing characters with a string of the format
-.BR U+\fIhhhh\fP ,
+.BR {U+\fIhhhh\fP} ,
 where
 .I hhhh
-is the hexadecimal value of the character. This is the format
-universally used to denote a Unicode codepoint in the litterature.
+is the hexadecimal value of the Unicode codepoint.
+That hexadecimal string is of variable length and can use from 4 to
+6 digits.
+This is the format universally used to denote a Unicode codepoint in
+the litterature, delimited by curly braces for easy recognition of those
+substitutions in the output.
 .SH FILES
 .TP 15
 .B uconvmsg.dat
