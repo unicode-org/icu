@@ -329,17 +329,17 @@ void TestConvert()
         int32_t targetLimit=0, sourceLimit=0, i=0, targetCapacity=0;
         const uint8_t source[]={ 0x00, 0x04, 0x05, 0x06, 0xa2, 0xb4, 0x00};
         const uint8_t expectedTarget[]={ 0x00, 0x37, 0x2d, 0x2e, 0x0e, 0x49, 0x62, 0x0f, 0x00};
-        char *target;
+        char *target=0;
         sourceLimit=sizeof(source)/sizeof(source[0]);
         err=U_ZERO_ERROR;
         targetLimit=0;
             
-        targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", NULL, targetLimit , source, sourceLimit, &err);
+        targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", NULL, targetLimit , (const char*)source, sourceLimit, &err);
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err=U_ZERO_ERROR;
             targetLimit=targetCapacity+1;
             target=(char*)malloc(sizeof(char) * targetLimit);
-            targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
+            targetCapacity=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
         }
         if(U_FAILURE(err)){
             log_err("FAILURE! ucnv_convert(ibm-1363->ibm-1364) failed. %s\n", myErrorName(err));
@@ -351,23 +351,23 @@ void TestConvert()
             }
         }
         /*Test error conditions*/
-        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, 0, &err);
+        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, 0, &err);
         if(i !=0){
             log_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
         }
-        ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, -1, &err);
+        ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, -1, &err);
         if(!(U_FAILURE(err) && err==U_ILLEGAL_ARGUMENT_ERROR)){
             log_err("FAILURE! ucnv_convert() with sourceLimit=-1 is expected to fail\n");
         }
         sourceLimit=sizeof(source)/sizeof(source[0]);
-        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
+        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
         if(i !=0 ){
             log_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
         }
         err=U_ZERO_ERROR;
         sourceLimit=sizeof(source)/sizeof(source[0]);
         targetLimit=0;
-        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , source, sourceLimit, &err);
+        i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
         if(!(U_FAILURE(err) && err==U_BUFFER_OVERFLOW_ERROR)){
             log_err("FAILURE! ucnv_convert() with targetLimit=0 is expected to throw U_BUFFER_OVERFLOW_ERROR\n");
         }
@@ -410,7 +410,7 @@ void TestConvert()
     ucnv_close(someConverters[2]);
     ucnv_close(someConverters[3]);
 
-    if (j=(flushCount=ucnv_flushCache())==2) 
+    if ((flushCount=ucnv_flushCache())==2) 
         log_verbose("Flush cache ok\n");  /*because first, second and third are same  */
     else 
         log_err("Flush Cache failed  line %d, got %d expected 2 or there is an error in ucnv_close()\n",

@@ -39,7 +39,7 @@
 static uint32_t
 randul()
 {
-    uint32_t l;
+    uint32_t l=0;
     int32_t i;
     static UBool initialized = FALSE;
     if (!initialized)

@@ -98,7 +98,7 @@ void TestDecomp()
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
-    UChar *source, *result; 
+    UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
@@ -129,7 +129,7 @@ void TestCompatDecomp()
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
-    UChar *source, *result; 
+    UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
@@ -160,7 +160,7 @@ void TestCanonDecompCompose()
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
-    UChar *source, *result; 
+    UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
@@ -191,7 +191,7 @@ void TestCompatDecompCompose()
 {
     UErrorCode status = U_ZERO_ERROR;
     int32_t x, neededLen, resLen;
-    UChar *source, *result; 
+    UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){

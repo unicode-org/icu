@@ -49,8 +49,8 @@ void TestPatterns(void)
   UChar upat[5];
   UChar unewpat[5];
   UChar unum[5];
-  UChar *unewp;
-  UChar *str;
+  UChar *unewp=NULL;
+  UChar *str=NULL;
   UErrorCode status = U_ZERO_ERROR;
   const char* pat[]    = { "#.#", "#.", ".#", "#" };
   const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
@@ -110,7 +110,7 @@ void TestQuotes(void)
   UFieldPosition pos;
   UChar pat[15];
   UChar res[15];
-  UChar *str;
+  UChar *str=NULL;
   UNumberFormat *fmt;
   status=U_ZERO_ERROR;
   log_verbose("\nTestting the handling of quotes in number format\n");
@@ -178,7 +178,7 @@ void TestExponential(void)
   int32_t ppos;
   UChar *upat;
   UChar pattern[20];
-  UChar *str;
+  UChar *str=NULL;
   UChar uvalfor[20], ulvalfor[20];
   double a;
   UErrorCode status = U_ZERO_ERROR;
@@ -322,10 +322,10 @@ void TestCurrencySign(void)
 {
   int32_t lneed;
   UNumberFormat *fmt;
-  UChar *pattern;
-  UChar *str;
-  UChar *pat;
-  UChar *res;
+  UChar *pattern=NULL;
+  UChar *str=NULL;
+  UChar *pat=NULL;
+  UChar *res=NULL;
   UFieldPosition pos;
   UErrorCode status = U_ZERO_ERROR;
   pattern=(UChar*)malloc(sizeof(UChar) * (strlen("*#,##0.00;-*#,##0.00") + 1) );
@@ -387,7 +387,7 @@ void TestCurrencySign(void)
 void TestCurrency(void)
 {
   UNumberFormat *currencyFmt;
-  UChar *str, *res;
+  UChar *str=NULL, *res=NULL;
   int32_t lneed, i;
   UFieldPosition pos;
   UErrorCode status = U_ZERO_ERROR;
