@@ -2312,7 +2312,7 @@ TestConvertAlgorithmic() {
 static void TestLMBCSMaxChar(void) {
     static const struct {
         int8_t maxSize;
-        char *name;
+        const char *name;
     } converter[] = {
         { 2, "LMBCS-1"},
         { 2, "LMBCS-2"},
