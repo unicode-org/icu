@@ -25,17 +25,7 @@ enum punycode_status {
 };
 
 
-/*typedef unsigned long punycode_uint;*/
-
-#if defined(_WIN32) || defined(WIN32) 
-    typedef unsigned long punycode_uint;
-#else
-#   if UINT_MAX >= (1 << 26) - 1
-        typedef unsigned int punycode_uint;
-#   else
-        typedef unsigned long punycode_uint;
-#   endif
-#endif
+typedef uint32_t punycode_uint;
 
 U_CDECL_BEGIN
 
