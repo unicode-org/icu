@@ -29,7 +29,6 @@
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 #include "unicode/uclean.h"
-#include "dadrcoll.h"
 
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
