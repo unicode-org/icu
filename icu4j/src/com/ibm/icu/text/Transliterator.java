@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/09/28 20:32:39 $
- * $Revision: 1.42 $
+ * $Date: 2001/09/28 20:37:09 $
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.42 $ $Date: 2001/09/28 20:32:39 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.43 $ $Date: 2001/09/28 20:37:09 $
  */
 public abstract class Transliterator {
     /**
@@ -1640,6 +1640,9 @@ public abstract class Transliterator {
      * method, since characters they see are already filtered.  Only
      * subclasses with special requirements, such as those overriding
      * filteredTransliterate(), should need this method.
+     *
+     * @deprecated the new architecture provides filtering at the top
+     * level.  This method will be removed Dec 31 2001.
      */
     protected char filteredCharAt(Replaceable text, int i) {
         char c;
