@@ -15,9 +15,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = test/testdata
 
@@ -83,7 +80,7 @@ dist-local:
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 ifneq ($(wildcard .links),)
-	$(RMV) *.goo *.txt *.bin *.uni .links
+	$(RMV) *.goo *.txt *.bin .links
 endif
 
 distclean-local: clean-local
@@ -100,8 +97,8 @@ builddata: default.goo
 ifneq ($(srcdir),.)
 
 default.goo: $(srcdir)/default.goo
-	$(RMV) *.goo *.txt *.bin *.uni
-	ln -s $(srcdir)/*.goo $(srcdir)/*.txt $(srcdir)/*.bin $(srcdir)/*.uni .
+	$(RMV) *.goo *.txt *.bin
+	ln -s $(srcdir)/*.goo $(srcdir)/*.txt $(srcdir)/*.bin .
 	touch .links
 
 endif
