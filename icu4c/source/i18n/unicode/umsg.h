@@ -596,12 +596,14 @@ umsg_vparse(UMessageFormat *fmt,
             UErrorCode     *status);
 
 
-/** Get the locale for this message format object.
+/**
+ * Get the locale for this message format object.
  * You can choose between valid and actual locale.
  * @param fmt The formatter to get the locale from
  * @param type type of the locale we're looking for (valid or actual) 
  * @param status error code for the operation
  * @return the locale name
+ * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
  */
 U_CAPI const char* U_EXPORT2
 umsg_getLocaleByType(const UMessageFormat *fmt,

@@ -918,6 +918,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset);
  *  @param type type of the locale we're looking for (valid or actual) 
  *  @param status error code for the operation
  *  @return the locale name
+ * @draft ICU 2.8 likely to change in ICU 3.0, based on feedback
  */
 U_CAPI const char * U_EXPORT2
 ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status);
