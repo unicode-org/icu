@@ -46,6 +46,7 @@
 #define icu_strrchr(s, c) strrchr(s, c)
 #define icu_toupper(c) toupper(c)
 #define icu_tolower(c) tolower(c)
+#define icu_strtoul(str, end, base) strtoul(str, end, base)
 
 /*===========================================================================*/
 /* Wide-character functions                                                  */

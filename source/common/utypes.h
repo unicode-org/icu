@@ -82,6 +82,59 @@ typedef int8_t bool_t;
 #endif
 
 /*===========================================================================*/
+/* char Character set family                                                 */
+/*===========================================================================*/
+
+/*
+ * These definitions allow to specify the encoding of text
+ * in the char data type as defined by the platform and the compiler.
+ * It is enough to determine the code point values of "invariant characters",
+ * which are the ones shared by all encodings that are in use
+ * on a given platform.
+ *
+ * Those "invariant characters" should be all the uppercase and lowercase
+ * latin letters, the digits, the space, and "basic punctuation".
+ * Also, '\n', '\r', '\t' should be available.
+ *
+ * The list of "invariant characters" is:
+ *    A-Z  a-z  0-9  SPACE  "  %  &  '  (  )  *  +  ,  -  .  /  :  ;  <  =  >  ?  _
+ * (52 letters + 10 numbers + 20 punc/sym = 82 total)
+ *
+ * In other words, all the graphic characters in 7-bit ASCII should
+ * be safely accessible except the following:
+ * 
+ *    '\' <backslash>
+ *    '[' <left bracket>
+ *    ']' <right bracket>
+ *    '{' <left brace>
+ *    '}' <right brace>
+ *    '^' <circumflex>
+ *    '~' <tilde>
+ *    '!' <exclamation mark>
+ *    '#' <number sign>
+ *    '|' <vertical line>
+ *    '$' <dollar sign>
+ *    '@' <commercial at>
+ *    '`' <grave accent>
+ */
+
+#define U_ASCII_FAMILY 0
+#define U_EBCDIC_FAMILY 1
+
+#ifndef U_CHARSET_FAMILY
+#   define U_CHARSET_FAMILY 0
+#endif
+
+/*===========================================================================*/
+/* sizeof(whar_t)                                                            */
+/*===========================================================================*/
+
+/* U_SIZEOF_WCHAR_T==sizeof(wchar_t) */
+#ifndef U_SIZEOF_WCHAR_T
+#   define U_SIZEOF_WCHAR_T 4
+#endif
+
+/*===========================================================================*/
 /* Unicode string offset                                                     */
 /*===========================================================================*/
 typedef int32_t UTextOffset;
@@ -90,6 +143,9 @@ typedef int32_t UTextOffset;
 /* Unicode character                                                         */
 /*===========================================================================*/
 typedef uint16_t UChar;
+
+/* U_SIZEOF_UCHAR==sizeof(UChar) */
+#define U_SIZEOF_UCHAR 2
 
 /*===========================================================================*/
 /* ICU version number                                                        */
