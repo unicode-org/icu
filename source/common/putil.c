@@ -31,8 +31,9 @@
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
 *   08/04/99    jeffrey R.  Added OS/2 changes
 *   11/15/99    helena      Integrated S/390 IEEE support.
-*   04/26/01    barry n.    OS/400 support for uprv_getDefaultLocaleID
-*   15/08/01    ram         Add itou,stod,dtos,utoi functions
+*   04/26/01    Barry N.    OS/400 support for uprv_getDefaultLocaleID
+*   08/15/01    ram         Add itou,stod,dtos,utoi functions
+*   08/15/01    Steven H.   OS/400 support for uprv_getDefaultCodepage
 ******************************************************************************
 */
 
@@ -89,6 +90,9 @@
 #   include <os2.h>
 #elif defined(OS400)
 #   include <float.h>
+#   include <qusec.h>       /* error code structure */
+#   include <qusrjobi.h>
+#   include <qliept.h>      /* EPT_CALL macro  - this include must be after all other "QSYSINCs" */
 #elif defined(XP_MAC)
 #   include <Files.h>
 #   include <IntlResources.h>
@@ -738,6 +742,132 @@ uprv_digitsAfterDecimal(double x)
     return numDigits;
 }
 
+double 
+uprv_nextDouble(double d, UBool next)
+{
+#if IEEE_754
+  int32_t highBits;
+  uint32_t lowBits;
+  int32_t highMagnitude;
+  uint32_t lowMagnitude;
+  double result;
+  uint32_t *highResult, *lowResult;
+  uint32_t signBit;
+
+  /* filter out NaN's */
+  if (uprv_isNaN(d)) {
+    return d;
+  }
+  
+  /* zero's are also a special case */
+  if (d == 0.0) {
+    double smallestPositiveDouble = 0.0;
+    uint32_t *plowBits = 
+      (uint32_t *)u_bottomNBytesOfDouble(&smallestPositiveDouble, 
+                     sizeof(uint32_t));
+    
+    *plowBits = 1;
+#ifdef OS400
+    /* Don't get an underflow exception */
+    *(plowBits-1) = 0x00100000;
+#endif
+    
+    if (next) {
+      return smallestPositiveDouble;
+    } else {
+      return -smallestPositiveDouble;
+    }
+  }
+  
+  /* if we get here, d is a nonzero value */
+  
+  /* hold all bits for later use */
+  highBits = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(uint32_t));
+  lowBits = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
+  
+  /* strip off the sign bit */
+  highMagnitude = highBits & ~SIGN;
+  lowMagnitude = lowBits;
+  
+  /* if next double away from zero, increase magnitude */
+  if ((highBits >= 0) == next) {
+    if (highMagnitude != 0x7FF00000L || lowMagnitude != 0x00000000L) {
+      lowMagnitude += 1;
+      if (lowMagnitude == 0) {
+        highMagnitude += 1;
+      }
+    }
+  }
+  /* else decrease magnitude */
+  else {
+    lowMagnitude -= 1;
+    if (lowMagnitude > lowBits) {
+      highMagnitude -= 1;
+    }
+#ifdef OS400
+    /* Don't get an underflow exception */
+    if (highMagnitude <  0x00100000 ||
+       (highMagnitude == 0x00100000 && lowMagnitude == 0))
+    {
+        highMagnitude = 0;
+        lowMagnitude = 0;
+    }
+#endif
+  }
+  
+  /* construct result and return */
+  signBit = highBits & SIGN;
+  highResult = (uint32_t *)u_topNBytesOfDouble(&result, sizeof(uint32_t));
+  lowResult  = (uint32_t *)u_bottomNBytesOfDouble(&result, sizeof(uint32_t));
+  
+  *highResult = signBit | highMagnitude;
+  *lowResult  = lowMagnitude;
+  return result;
+#else
+
+  /* This is the portable implementation...*/
+  /* a small coefficient within the precision of the mantissa*/
+  static const double smallValue = 1e-10;  
+  double epsilon = ((d<0)?-d:d) * smallValue; /* first approximation*/
+  double last_eps, sum;
+
+  if (epsilon == 0)
+    epsilon = smallValue; /* for very small d's*/
+  if (!next)
+    epsilon = -epsilon;
+  /* avoid higher precision possibly used for temporay values*/
+
+  last_eps = epsilon * 2.0;
+  sum = d + epsilon;
+
+  while ((sum != d) && (epsilon != last_eps)) {
+    last_eps = epsilon;
+    epsilon /= 2.0;
+    sum = d + epsilon;
+  }
+  return d + last_eps;
+#endif
+}
+
+static char*
+u_topNBytesOfDouble(double* d, int n)
+{
+#if U_IS_BIG_ENDIAN
+    return (char*)d;
+#else
+    return (char*)(d + 1) - n;
+#endif
+}
+
+static char* u_bottomNBytesOfDouble(double* d, int n)
+{
+#if U_IS_BIG_ENDIAN
+    return (char*)(d + 1) - n;
+#else
+    return (char*)d;
+#endif
+}
+
 /*---------------------------------------------------------------------------
   Platform-specific Implementations
   Try these, and if they don't work on your platform, then special case your
@@ -869,14 +999,13 @@ pascal  OSErr   FSpGetFullPath(const FSSpec *spec,
     OSErr       realResult;
     FSSpec      tempSpec;
     CInfoPBRec  pb;
-    
+
     *fullPathLength = 0;
     *fullPath = NULL;
-    
-    
+
     /* Default to noErr */
     realResult = result = noErr;
-    
+
     /* work around Nav Services "bug" (it returns invalid FSSpecs with empty names) */
     if ( spec->name[0] == 0 )
     {
@@ -887,7 +1016,7 @@ pascal  OSErr   FSpGetFullPath(const FSSpec *spec,
         /* Make a copy of the input FSSpec that can be modified */
         BlockMoveData(spec, &tempSpec, sizeof(FSSpec));
     }
-    
+
     if ( result == noErr )
     {
         if ( tempSpec.parID == fsRtParID )
@@ -950,7 +1079,7 @@ pascal  OSErr   FSpGetFullPath(const FSSpec *spec,
             }
         }
     }
-    
+
     if ( result == noErr )
     {
         /* Return the length */
@@ -965,7 +1094,7 @@ pascal  OSErr   FSpGetFullPath(const FSSpec *spec,
             DisposeHandle(*fullPath);
         }
     }
-    
+
     return result;
 }
 # endif /* XP_MAC */
@@ -1496,7 +1625,7 @@ mac_lc_rec mac_lc_recs[] = {
     /* French for Switzerland*/
     MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 19, "de_CH",
     /* German for Switzerland*/
-    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 20, "EL_GR",
+    MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 20, "el_GR",
     /* Greece*/
     MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, MAC_LC_MAGIC_NUMBER, 21, "is_IS",
     /* Iceland ===*/
@@ -1549,25 +1678,137 @@ mac_lc_rec mac_lc_recs[] = {
 #endif
 
 #if U_POSIX_LOCALE
+struct
+{
+  const char *loc;
+  const char *charmap;
+} 
+_localeToDefaultCharmapTable [] =
+{
+/*
+  See:         http://czyborra.com/charsets/iso8859.html
+*/
+
+/* xx_XX locales first, so they will match: */
+ { "zh_CN", "gb2312" },  /* Chinese (Simplified) */
+ { "zh_TW", "Big5" },    /* Chinese (Traditional) */
+
+ { "af", "iso-8859-1" },  /* Afrikaans */
+ { "ar", "iso-8859-6" },  /* Arabic */
+ { "be", "iso-8859-5" },  /* Byelorussian */
+ { "bg", "iso-8859-5" },  /* Bulgarian */
+ { "ca", "iso-8859-1" },  /* Catalan */
+ { "cs", "iso-8859-2" },  /* Czech */
+ { "da", "iso-8859-1" },  /* Danish */
+ { "de", "iso-8859-1" },  /* German */
+ { "el", "iso-8859-7" },  /* Greek */ 
+ { "en", "iso-8859-1" },  /* English */
+ { "eo", "iso-8859-3" },  /* Esperanto */
+ { "es", "iso-8859-1" },  /* Spanish */
+ { "et", "iso-8859-4" },  /* Estonian  */
+ { "eu", "iso-8859-1" },  /* basque */
+ { "fi", "iso-8859-1" },  /* Finnish */
+ { "fo", "iso-8859-1" },  /* faroese */
+ { "fr", "iso-8859-1" },  /* French */
+ { "ga", "iso-8859-1" },  /* Irish (Gaelic) */
+ { "gd", "iso-8859-1" },  /* Scottish */
+ { "he", "iso-8859-8" },  /* hebrew */
+ { "hr", "iso-8859-2" },  /* Croatian */
+ { "hu", "iso-8859-2" },  /* Hungarian */
+ { "in", "iso-8859-1" },  /* Indonesian */
+ { "is", "iso-8859-1" },  /* Icelandic */
+ { "it", "iso-8859-1" },  /* Italian  */
+ { "iw", "iso-8859-8" },  /* hebrew old ISO name */
+ { "ja", "Shift_JIS"  },  /* Japanese [was: ja_JP ] */
+ { "ji", "iso-8859-8" },  /* Yiddish */
+ { "kl", "iso-8859-4" },  /* Greenlandic */
+ { "ko", "euc-kr"     },  /* korean [was: ko_KR ] */
+ { "lt", "iso-8859-4" },  /* Lithuanian */
+ { "lv", "iso-8859-4" },  /* latvian (lettish) */
+ { "mk", "iso-8859-5" },  /* Macedonian */
+ { "mt", "iso-8859-3" },  /* Maltese  */
+ { "nb", "iso-8859-1" },  /* Norwegian Bokmal */
+ { "nl", "iso-8859-1" },  /* dutch */
+ { "no", "iso-8859-1" },  /* Norwegian old ISO name*/
+ { "nn", "iso-8859-1" },  /* Norwegian Nynorsk */
+ { "pl", "iso-8859-2" },  /* Polish */
+ { "pt", "iso-8859-1" },  /* Portugese */
+ { "rm", "iso-8859-1" },  /* Rhaeto-romance */
+ { "ro", "iso-8859-2" },  /* Romanian */
+ { "ru", "iso-8859-5" },  /* Russian */
+ { "sk", "iso-8859-2" },  /* Slovak  */
+ { "sl", "iso-8859-2" },  /* Slovenian */
+ { "sq", "iso-8859-1" },  /* albanian */
+ { "sr", "iso-8859-5" },  /* Serbian */
+ { "sv", "iso-8859-1" },  /* Swedish */
+ { "sw", "iso-8859-1" },  /* Swahili */
+ { "th", "tis-620"    },  /* Thai [windows-874] */
+ { "tr", "iso-8859-9" },  /* Turkish */
+ { "uk", "iso-8859-5" },  /* pre 1990 Ukranian... see: <http://czyborra.com/charsets/cyrillic.html#KOI8-U>  */
+ { "zh", "Big-5"      },  /* Chinese (Traditional) */
+ { NULL, NULL         }
+};
+
+/* Not-used list, overridden old data  */
+#if 0
+ { "ar", "ibm-1256" }, /* arabic */
+ { "ko", "ibm-949" }, /* korean  */
+ { "ru", "ibm-878" }, /* Russian- koi8-r */
+ { "sk", "ibm-912" }, 
+#endif
+
+U_CAPI const char *
+uprv_defaultCodePageForLocale(const char *locale)
+{
+    int32_t i;
+    int32_t locale_len;
+
+    if (locale == NULL) 
+    {
+        return NULL;
+    }
+    locale_len = uprv_strlen(locale);
+
+    if(locale_len < 2)
+    {
+        return NULL; /* non existent. Not a complete check, but it will
+                      * make sure that 'c' doesn't match catalan, etc.
+                      */
+    }
+
+    for(i=0; _localeToDefaultCharmapTable[i].loc; i++)
+    {
+        if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc, 
+                        uprv_min(locale_len, 
+                                 uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
+            == 0)
+        {
+            return _localeToDefaultCharmapTable[i].charmap;
+        }
+    }
+
+    return NULL;
+}
+
 /* Return just the POSIX id, whatever happens to be in it */
 static const char *uprv_getPOSIXID()
 {
-  const char* posixID = getenv("LC_ALL");
-  if (posixID == 0)
-    posixID = getenv("LANG");
-  if (posixID == 0)
-    posixID = setlocale(LC_ALL, NULL);
-
-  if (posixID==0)
-  {
-    posixID = "en_US";
-  }
-  else if ((uprv_strcmp("C", posixID) == 0) ||
-           (uprv_strncmp("C ", posixID, 2) == 0))
-  {  /* HPUX returns 'C C C C C C C' */
-    posixID = "en_US_POSIX";
-  }
-  return posixID;
+    const char* posixID = getenv("LC_ALL");
+    if (posixID == 0)
+        posixID = getenv("LANG");
+    if (posixID == 0)
+        posixID = setlocale(LC_ALL, NULL);
+    
+    if (posixID==0)
+    {
+        posixID = "en_US";
+    }
+    else if ((uprv_strcmp("C", posixID) == 0) ||
+        (uprv_strncmp("C ", posixID, 2) == 0))
+    {  /* HPUX returns 'C C C C C C C' */
+        posixID = "en_US_POSIX";
+    }
+    return posixID;
 }
 #endif
 
@@ -1782,154 +2023,41 @@ uprv_getDefaultLocaleID()
 
 }
 
-/* end of platform-specific implementation */
-
-double 
-uprv_nextDouble(double d, UBool next)
-{
-#if IEEE_754
-  int32_t highBits;
-  uint32_t lowBits;
-  int32_t highMagnitude;
-  uint32_t lowMagnitude;
-  double result;
-  uint32_t *highResult, *lowResult;
-  uint32_t signBit;
-
-  /* filter out NaN's */
-  if (uprv_isNaN(d)) {
-    return d;
-  }
-  
-  /* zero's are also a special case */
-  if (d == 0.0) {
-    double smallestPositiveDouble = 0.0;
-    uint32_t *plowBits = 
-      (uint32_t *)u_bottomNBytesOfDouble(&smallestPositiveDouble, 
-                     sizeof(uint32_t));
-    
-    *plowBits = 1;
-#ifdef OS400
-    /* Don't get an underflow exception */
-    *(plowBits-1) = 0x00100000;
-#endif
-    
-    if (next) {
-      return smallestPositiveDouble;
-    } else {
-      return -smallestPositiveDouble;
-    }
-  }
-  
-  /* if we get here, d is a nonzero value */
-  
-  /* hold all bits for later use */
-  highBits = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(uint32_t));
-  lowBits = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
-  
-  /* strip off the sign bit */
-  highMagnitude = highBits & ~SIGN;
-  lowMagnitude = lowBits;
-  
-  /* if next double away from zero, increase magnitude */
-  if ((highBits >= 0) == next) {
-    if (highMagnitude != 0x7FF00000L || lowMagnitude != 0x00000000L) {
-      lowMagnitude += 1;
-      if (lowMagnitude == 0) {
-        highMagnitude += 1;
-      }
-    }
-  }
-  /* else decrease magnitude */
-  else {
-    lowMagnitude -= 1;
-    if (lowMagnitude > lowBits) {
-      highMagnitude -= 1;
-    }
-#ifdef OS400
-    /* Don't get an underflow exception */
-    if (highMagnitude <  0x00100000 ||
-       (highMagnitude == 0x00100000 && lowMagnitude == 0))
-    {
-        highMagnitude = 0;
-        lowMagnitude = 0;
-    }
-#endif
-  }
-  
-  /* construct result and return */
-  signBit = highBits & SIGN;
-  highResult = (uint32_t *)u_topNBytesOfDouble(&result, sizeof(uint32_t));
-  lowResult  = (uint32_t *)u_bottomNBytesOfDouble(&result, sizeof(uint32_t));
-  
-  *highResult = signBit | highMagnitude;
-  *lowResult  = lowMagnitude;
-  return result;
-#else
-
-  /* This is the portable implementation...*/
-  /* a small coefficient within the precision of the mantissa*/
-  static const double smallValue = 1e-10;  
-  double epsilon = ((d<0)?-d:d) * smallValue; /* first approximation*/
-  double last_eps, sum;
-
-  if (epsilon == 0)
-    epsilon = smallValue; /* for very small d's*/
-  if (!next)
-    epsilon = -epsilon;
-  /* avoid higher precision possibly used for temporay values*/
-
-  last_eps = epsilon * 2.0;
-  sum = d + epsilon;
-
-  while ((sum != d) && (epsilon != last_eps)) {
-    last_eps = epsilon;
-    epsilon /= 2.0;
-    sum = d + epsilon;
-  }
-  return d + last_eps;
-#endif
-}
-
-static char*
-u_topNBytesOfDouble(double* d, int n)
-{
-#if U_IS_BIG_ENDIAN
-    return (char*)d;
-#else
-    return (char*)(d + 1) - n;
-#endif
-}
-
-static char* u_bottomNBytesOfDouble(double* d, int n)
-{
-#if U_IS_BIG_ENDIAN
-    return (char*)(d + 1) - n;
-#else
-    return (char*)d;
-#endif
-}
-
-U_CAPI const char *
-uprv_defaultCodePageForLocale(const char *locale);
-
 const char* uprv_getDefaultCodepage()
 {
 #if defined(OS400)
-  return "ibm-37";
+    uint32_t ccsid = 37; /* Default to ibm-37 */
+    static char codepage[16];
+    Qwc_JOBI0400_t jobinfo;
+    Qus_EC_t error = { sizeof(Qus_EC_t) }; /* SPI error code */
+
+    EPT_CALL(QUSRJOBI)(&jobinfo, sizeof(jobinfo), "JOBI0400",
+        "*                         ", "                ", &error);
+
+    if (error.Bytes_Available == 0) {
+        if (jobinfo.Coded_Char_Set_ID != 0xFFFF) {
+            ccsid = (uint32_t)jobinfo.Coded_Char_Set_ID;
+        }
+        else if (jobinfo.Default_Coded_Char_Set_Id != 0xFFFF) {
+            ccsid = (uint32_t)jobinfo.Default_Coded_Char_Set_Id;
+        }
+        /* else use the default */
+    }
+    sprintf(codepage,"ibm-%d", ccsid);
+    return codepage;
 
 #elif defined(OS390)
-  static char codepage[16];
-  sprintf(codepage,"%s-s390", nl_langinfo(CODESET));
-  return codepage;
+    static char codepage[16];
+    sprintf(codepage,"%s-s390", nl_langinfo(CODESET));
+    return codepage;
 
 #elif defined(XP_MAC)
-  return "ibm-1275"; /* Macintosh Roman. There must be a better way. fixme! */
+    return "ibm-1275"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
 
 #elif defined(WIN32)
-  static char codepage[16];
-  sprintf(codepage, "cp%d", GetACP());
-  return codepage;
+    static char codepage[16];
+    sprintf(codepage, "cp%d", GetACP());
+    return codepage;
 
 #elif U_POSIX_LOCALE
     static char codesetName[100];
@@ -2009,7 +2137,7 @@ const char* uprv_getDefaultCodepage()
     }
     return codesetName;
 #else
-  return "LATIN_1";
+    return "LATIN_1";
 #endif
 }
 
@@ -2160,6 +2288,8 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
         --length;
     }
 }
+
+/* end of platform-specific implementation */
 
 U_CFUNC void
 u_versionFromString(UVersionInfo versionArray, const char *versionString) {
@@ -2318,123 +2448,11 @@ u_errorName(UErrorCode code) {
         return _uErrorName[code];
     } else if(code>=U_ERROR_INFO_START && code<U_ERROR_INFO_LIMIT) {
         return _uErrorInfoName[code-U_ERROR_INFO_START];
-    }else if(U_PARSE_ERROR_END - code <= U_PARSE_ERROR_END - U_PARSE_ERROR_BASE){
+    } else if(U_PARSE_ERROR_END - code <= U_PARSE_ERROR_END - U_PARSE_ERROR_BASE){
         return _uTransErrorName[code - U_PARSE_ERROR_BASE];
     } else {
         return "[BOGUS UErrorCode]";
     }
-}
-
-struct
-{
-  const char *loc;
-  const char *charmap;
-} 
-_localeToDefaultCharmapTable [] =
-{
-/*
-  See:         http:/*czyborra.com/charsets/iso8859.html
-*/
-
-/* xx_XX locales first, so they will match: */
- { "zh_CN", "gb2312" },  /* Chinese (Simplified) */
- { "zh_TW", "Big5" },    /* Chinese (Traditional) */
-
- { "af", "iso-8859-1" },  /* Afrikaans */
- { "ar", "iso-8859-6" },  /* Arabic */
- { "be", "iso-8859-5" },  /* Byelorussian */
- { "bg", "iso-8859-5" },  /* Bulgarian */
- { "ca", "iso-8859-1" },  /* Catalan */
- { "cs", "iso-8859-2" },  /* Czech */
- { "da", "iso-8859-1" },  /* Danish */
- { "de", "iso-8859-1" },  /* German */
- { "el", "iso-8859-7" },  /* Greek */ 
- { "en", "iso-8859-1" },  /* English */
- { "eo", "iso-8859-3" },  /* Esperanto */
- { "es", "iso-8859-1" },  /* Spanish */
- { "et", "iso-8859-4" },  /* Estonian  */
- { "eu", "iso-8859-1" },  /* basque */
- { "fi", "iso-8859-1" },  /* Finnish */
- { "fo", "iso-8859-1" },  /* faroese */
- { "fr", "iso-8859-1" },  /* French */
- { "ga", "iso-8859-1" },  /* Irish (Gaelic) */
- { "gd", "iso-8859-1" },  /* Scottish */
- { "he", "iso-8859-8" },  /* hebrew */
- { "hr", "iso-8859-2" },  /* Croatian */
- { "hu", "iso-8859-2" },  /* Hungarian */
- { "in", "iso-8859-1" },  /* Indonesian */
- { "is", "iso-8859-1" },  /* Icelandic */
- { "it", "iso-8859-1" },  /* Italian  */
- { "iw", "iso-8859-8" },  /* hebrew old ISO name */
- { "ja", "Shift_JIS"  },  /* Japanese [was: ja_JP ] */
- { "ji", "iso-8859-8" },  /* Yiddish */
- { "kl", "iso-8859-4" },  /* Greenlandic */
- { "ko", "euc-kr"     },  /* korean [was: ko_KR ] */
- { "lt", "iso-8859-4" },  /* Lithuanian */
- { "lv", "iso-8859-4" },  /* latvian (lettish) */
- { "mk", "iso-8859-5" },  /* Macedonian */
- { "mt", "iso-8859-3" },  /* Maltese  */
- { "nb", "iso-8859-1" },  /* Norwegian Bokmal */
- { "nl", "iso-8859-1" },  /* dutch */
- { "no", "iso-8859-1" },  /* Norwegian old ISO name*/
- { "nn", "iso-8859-1" },  /* Norwegian Nynorsk */
- { "pl", "iso-8859-2" },  /* Polish */
- { "pt", "iso-8859-1" },  /* Portugese */
- { "rm", "iso-8859-1" },  /* Rhaeto-romance */
- { "ro", "iso-8859-2" },  /* Romanian */
- { "ru", "iso-8859-5" },  /* Russian */
- { "sk", "iso-8859-2" },  /* Slovak  */
- { "sl", "iso-8859-2" },  /* Slovenian */
- { "sq", "iso-8859-1" },  /* albanian */
- { "sr", "iso-8859-5" },  /* Serbian */
- { "sv", "iso-8859-1" },  /* Swedish */
- { "sw", "iso-8859-1" },  /* Swahili */
- { "th", "tis-620"    },  /* Thai [windows-874] */
- { "tr", "iso-8859-9" },  /* Turkish */
- { "uk", "iso-8859-5" },  /* pre 1990 Ukranian... see: <http://czyborra.com/charsets/cyrillic.html#KOI8-U>  */
- { "zh", "Big-5"      },  /* Chinese (Traditional) */
- {  "",  ""           }
-};
-
-/* Not-used list, overridden old data  */
-#if 0
- { "ar", "ibm-1256" }, /* arabic */
- { "ko", "ibm-949" }, /* korean  */
- { "ru", "ibm-878" }, /* Russian- koi8-r */
- { "sk", "ibm-912" }, 
-#endif
-
-U_CAPI const char *
-uprv_defaultCodePageForLocale(const char *locale)
-{
-  int32_t i;
-  int32_t locale_len;
-
-  if (locale == NULL) 
-  {
-    return NULL;
-  }
-  locale_len = uprv_strlen(locale);
-
-  if(locale_len < 2)
-    {
-      return NULL; /* non existent. Not a complete check, but it will
-                    * make sure that 'c' doesn't match catalan, etc.
-                    **/
-    }
-
-  for(i=0; _localeToDefaultCharmapTable[i].loc[0]; i++)
-  {
-    if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc, 
-                    uprv_min(locale_len, 
-                             uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
-       == 0)
-    {
-      return _localeToDefaultCharmapTable[i].charmap;
-    }
-  }
-
-  return NULL;
 }
 
 /*
