@@ -133,6 +133,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestInterIndic(void);
 
+    /**
+     * Test filter syntax in IDs. (J918)
+     */
+    void TestFilterIDs(void);
+
     //======================================================================
     // Support methods
     //======================================================================
