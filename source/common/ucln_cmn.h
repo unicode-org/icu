@@ -19,14 +19,16 @@
 
 #include "unicode/utypes.h"
 
-U_CAPI UBool U_EXPORT2 ucln_ucnv(void);
+U_CAPI UBool U_EXPORT2 ucnv_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 ucln_ures(void);
+U_CAPI UBool U_EXPORT2 ures_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 ucln_uloc(void);
+U_CAPI UBool U_EXPORT2 uloc_cleanup(void);
 
-U_CAPI UBool U_EXPORT2 ucln_ustring(void);
+U_CAPI UBool U_EXPORT2 ustring_cleanup(void);
 
 U_CAPI UBool U_EXPORT2 udata_cleanup(void);
+
+U_CAPI UBool U_EXPORT2 ucnv_io_cleanup(void);
 
 #endif

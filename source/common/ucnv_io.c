@@ -158,6 +158,25 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
     }
 }
 
+U_CAPI UBool U_EXPORT2
+ucnv_io_cleanup()
+{
+    umtx_lock(NULL);
+    if (aliasData) {
+        udata_close(aliasData);
+    }
+
+    aliasData = NULL;
+    aliasTable = NULL;
+
+    converterTable = NULL;
+    tagTable = NULL;
+    umtx_unlock(NULL);
+
+    return TRUE;                   /* Everything was cleaned up */
+}
+
+
 static int16_t getTagNumber(const char *tagname) {
     if (tagTable) {
         int16_t tag, count = (int16_t) *tagTable;
