@@ -753,7 +753,7 @@ CalendarRegressionTest::test4031502()
         GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
         testCal->clear();
         sdf.adoptCalendar(testCal); 
-        sdf.applyPattern("d MMM yyyy"); 
+        sdf.applyPattern("EEE dd MMM yyyy 'WOY'ww'-'YYYY 'DOY'DDD"); 
         bool_t fail = FALSE;
         for (int32_t firstDay=1; firstDay<=2; firstDay++) { 
             for (int32_t minDays=1; minDays<=7; minDays++) { 
@@ -814,7 +814,7 @@ CalendarRegressionTest::test4031502()
                 // get the same answer back.  This is a round-trip test.
                 UDate save = testCal->getTime(status);
                 testCal->clear();
-                testCal->set(Calendar::YEAR, DATA[j+1+i] < 25 ? 1998 : 1997);
+                testCal->set(Calendar::YEAR_WOY, DATA[j+1+i] < 25 ? 1998 : 1997);
                 testCal->set(Calendar::WEEK_OF_YEAR, DATA[j+1+i]);
                 testCal->set(Calendar::DAY_OF_WEEK, (i%7) + Calendar::SUNDAY);
                 if (testCal->getTime(status) != save) {
@@ -832,10 +832,11 @@ CalendarRegressionTest::test4031502()
         // Test field disambiguation with a few special hard-coded cases.
         // This shouldn't fail if the above cases aren't failing.
         int32_t DISAM_int [] = {
-            1998, 1, Calendar::SUNDAY,
-            (1998), (2), (Calendar::SATURDAY),
-            (1998), (53), (Calendar::THURSDAY),
-            (1998), (53), (Calendar::FRIDAY)
+            // y y_woy woy dow
+            1997, 1998, 1, Calendar::SUNDAY,
+            (1998), (1998), (2), (Calendar::SATURDAY),
+            (1998), (1998), (53), (Calendar::THURSDAY),
+            (1999), (1998), (53), (Calendar::FRIDAY)
         };
 
         UDate DISAM_date [] = {
@@ -848,11 +849,35 @@ CalendarRegressionTest::test4031502()
         testCal->setMinimalDaysInFirstWeek(3);
         testCal->setFirstDayOfWeek(Calendar::SUNDAY);
         int32_t i = 0;
-        for (i=0; i < 12; i += 3) {
+
+        /* Enable this code to display various WOY values
+        testCal->clear();
+        for (i=25; i<38; ++i) {
+            testCal->set(1996, Calendar::DECEMBER, i);
+            UDate got = testCal->getTime(status);
+            str.remove();
+            logln(UnicodeString("") + sdf.format(got, str));
+        }
+        for (i=25; i<38; ++i) {
+            testCal->set(1997, Calendar::DECEMBER, i);
+            UDate got = testCal->getTime(status);
+            str.remove();
+            logln(UnicodeString("") + sdf.format(got, str));
+        }
+        for (i=25; i<38; ++i) {
+            testCal->set(1998, Calendar::DECEMBER, i);
+            UDate got = testCal->getTime(status);
+            str.remove();
+            logln(UnicodeString("") + sdf.format(got, str));
+        }
+        */
+
+        for (i=0; i < 16; i += 4) {
             int32_t y = DISAM_int[i];
-            int32_t woy = DISAM_int[i+1];
-            int32_t dow = DISAM_int[i+2];
-            UDate exp = DISAM_date[i/3];
+            int32_t ywoy = DISAM_int[i+1];
+            int32_t woy = DISAM_int[i+2];
+            int32_t dow = DISAM_int[i+3];
+            UDate exp = DISAM_date[i/4];
             testCal->clear();
             testCal->set(Calendar::YEAR, y);
             testCal->set(Calendar::WEEK_OF_YEAR, woy);
@@ -860,7 +885,23 @@ CalendarRegressionTest::test4031502()
             UDate got = testCal->getTime(status);
             str.remove();
             str2.remove();
-            log(UnicodeString("") + y + "-W" + woy +
+            log(UnicodeString("Y") + y + "-W" + woy +
+                             "-DOW" + dow + " expect:" + sdf.format(exp, str) +
+                             " got:" + sdf.format(got, str2));
+            if (got != exp) {
+                log("  FAIL");
+                fail = TRUE;
+            }
+            logln("");
+
+            testCal->clear();
+            testCal->set(Calendar::YEAR_WOY, ywoy);
+            testCal->set(Calendar::WEEK_OF_YEAR, woy);
+            testCal->set(Calendar::DAY_OF_WEEK, dow);
+            got = testCal->getTime(status);
+            str.remove();
+            str2.remove();
+            log(UnicodeString("YWOY") + ywoy + "-W" + woy +
                              "-DOW" + dow + " expect:" + sdf.format(exp, str) +
                              " got:" + sdf.format(got, str2));
             if (got != exp) {
