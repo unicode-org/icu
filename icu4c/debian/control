@@ -5,10 +5,12 @@ Maintainer: Yves Arrouye <yves@debian.org>
 Standards-Version: 3.5.6
 Build-Depends: debhelper, doxygen
 
-Package: libicu-dev
+Package: libicu21-dev
 Section: devel
 Architecture: any
 Depends: libicu${major} (= ${Source-Version}), libc6-dev
+Provides: libicu-dev
+Conflicts: libicu-dev
 Suggests: icu-doc
 Description: International Components for Unicode (development files)
  ICU is a C++ and C library that provides robust and full-featured Unicode
@@ -22,7 +24,7 @@ Description: API documentation for ICU classes and functions
  and locale support. This package contains HTML files documenting the ICU
  APIs.
  
-Package: libicu20
+Package: libicu21
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
