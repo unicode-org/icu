@@ -126,13 +126,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   int32_t length = rules.length();
 
-	UChar ucharrules[STACK_BUFFER_LENGTH_];
-	UChar *pucharrules = ucharrules;
+  UChar ucharrules[STACK_BUFFER_LENGTH_];
+  UChar *pucharrules = ucharrules;
 
   if (length >= STACK_BUFFER_LENGTH_)
-		pucharrules = new UChar[length + 1];
+    pucharrules = new UChar[length + 1];
 
-	rules.extract(0, length, pucharrules);
+  rules.extract(0, length, pucharrules);
   pucharrules[length] = 0;
 
   ucollator = ucol_openRules(pucharrules, length, UCOL_DEFAULT_NORMALIZATION,
@@ -146,8 +146,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
     dataIsOwned = TRUE;
   }
 
-	if (pucharrules != ucharrules)
-		delete[] pucharrules;
+  if (pucharrules != ucharrules)
+    delete[] pucharrules;
 }
 
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
@@ -159,13 +159,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   int32_t length = rules.length();
 
-	UChar ucharrules[STACK_BUFFER_LENGTH_];
-	UChar *pucharrules = ucharrules;
+  UChar ucharrules[STACK_BUFFER_LENGTH_];
+  UChar *pucharrules = ucharrules;
 
   if (length >= STACK_BUFFER_LENGTH_)
-		pucharrules = new UChar[length + 1];
+    pucharrules = new UChar[length + 1];
 
-	rules.extract(0, length, pucharrules);
+  rules.extract(0, length, pucharrules);
   pucharrules[length] = 0;
 
   UCollationStrength strength = getUCollationStrength(collationStrength);
@@ -179,8 +179,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
     dataIsOwned = TRUE;
   }
 
-	if (pucharrules != ucharrules)
-		delete[] pucharrules;
+  if (pucharrules != ucharrules)
+    delete[] pucharrules;
 }
 
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
@@ -193,13 +193,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   int32_t length = rules.length();
 
-	UChar ucharrules[STACK_BUFFER_LENGTH_];
-	UChar *pucharrules = ucharrules;
+  UChar ucharrules[STACK_BUFFER_LENGTH_];
+  UChar *pucharrules = ucharrules;
 
   if (length >= STACK_BUFFER_LENGTH_)
-		pucharrules = new UChar[length + 1];
+    pucharrules = new UChar[length + 1];
 
-	rules.extract(0, length, pucharrules);
+  rules.extract(0, length, pucharrules);
   pucharrules[length] = 0;
 
   UNormalizationMode mode = Normalizer::getUNormalizationMode(
@@ -214,8 +214,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
     dataIsOwned = TRUE;
   }
 
-	if (pucharrules != ucharrules)
-		delete[] pucharrules;
+  if (pucharrules != ucharrules)
+    delete[] pucharrules;
 }
 
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
@@ -228,13 +228,13 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
   int32_t length = rules.length();
 
-	UChar ucharrules[STACK_BUFFER_LENGTH_];
-	UChar *pucharrules = ucharrules;
+  UChar ucharrules[STACK_BUFFER_LENGTH_];
+  UChar *pucharrules = ucharrules;
 
   if (length >= STACK_BUFFER_LENGTH_)
-		pucharrules = new UChar[length + 1];
+    pucharrules = new UChar[length + 1];
 
-	rules.extract(0, length, pucharrules);
+  rules.extract(0, length, pucharrules);
   pucharrules[length] = 0;
 
   UCollationStrength strength = getUCollationStrength(collationStrength);
@@ -248,8 +248,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
     dataIsOwned = TRUE;
   }
 
-	if (pucharrules != ucharrules)
-		delete[] pucharrules;
+  if (pucharrules != ucharrules)
+    delete[] pucharrules;
 }
 
 
@@ -392,31 +392,31 @@ Collator::EComparisonResult RuleBasedCollator::compare(
                                              const UnicodeString& target) const
 {
   UChar uSstart[STACK_BUFFER_LENGTH_];
-	UChar uTstart[STACK_BUFFER_LENGTH_];
-	UChar *uSource = uSstart;
-	UChar *uTarget = uTstart;
-	uint32_t sourceLen = source.length();
-	uint32_t targetLen = target.length();
+  UChar uTstart[STACK_BUFFER_LENGTH_];
+  UChar *uSource = uSstart;
+  UChar *uTarget = uTstart;
+  uint32_t sourceLen = source.length();
+  uint32_t targetLen = target.length();
 
-	if(sourceLen >= STACK_BUFFER_LENGTH_)
-		uSource = new UChar[sourceLen+1];
+  if(sourceLen >= STACK_BUFFER_LENGTH_)
+    uSource = new UChar[sourceLen+1];
 
-	if(targetLen >= STACK_BUFFER_LENGTH_)
-		uTarget = new UChar[targetLen+1];
+  if(targetLen >= STACK_BUFFER_LENGTH_)
+    uTarget = new UChar[targetLen+1];
 
   source.extract(0, sourceLen, uSource);
   uSource[sourceLen] = 0;
   target.extract(0, targetLen, uTarget);
   uTarget[targetLen] = 0;
-	EComparisonResult result = compare(uSource, sourceLen, uTarget, targetLen);
+  EComparisonResult result = compare(uSource, sourceLen, uTarget, targetLen);
 
-	if(uSstart != uSource)
-		delete[] uSource;
+  if(uSstart != uSource)
+    delete[] uSource;
 
-	if(uTstart != uTarget)
-		delete[] uTarget;
+  if(uTstart != uTarget)
+    delete[] uTarget;
 
-	return result;
+  return result;
 }
 
 /**
@@ -457,20 +457,20 @@ CollationKey& RuleBasedCollator::getCollationKey(
                                                   CollationKey& sortkey,
                                                   UErrorCode& status) const
 {
-	UChar sStart[STACK_BUFFER_LENGTH_];
-	UChar *uSource = sStart;
-	uint32_t sourceLen = source.length();
+  UChar sStart[STACK_BUFFER_LENGTH_];
+  UChar *uSource = sStart;
+  uint32_t sourceLen = source.length();
 
-	if(sourceLen >= STACK_BUFFER_LENGTH_)
-		uSource = new UChar[sourceLen+1];
+  if(sourceLen >= STACK_BUFFER_LENGTH_)
+    uSource = new UChar[sourceLen+1];
 
   source.extract(0, sourceLen, uSource);
   uSource[sourceLen] = 0;
-	CollationKey& result = getCollationKey(uSource, sourceLen, sortkey, status);
-	if(sStart != uSource)
-		delete[] uSource;
+  CollationKey& result = getCollationKey(uSource, sourceLen, sortkey, status);
+  if(sStart != uSource)
+    delete[] uSource;
 
-	return result;
+  return result;
 }
 
 CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
@@ -492,7 +492,7 @@ CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
   * a c return value.
   */
   uint8_t *result = (uint8_t *)uprv_malloc(UCOL_MAX_BUFFER * sizeof(uint8_t));
-  uint8_t resLen = ucol_getSortKey(ucollator, source, sourceLen, result,
+  int32_t resLen = ucol_getSortKey(ucollator, source, sourceLen, result,
                                    UCOL_MAX_BUFFER);
   sortkey.adopt(result, resLen);
 
@@ -556,7 +556,7 @@ Collator* RuleBasedCollator::safeClone(void)
 
 Collator::EComparisonResult RuleBasedCollator::compare(
                                               ForwardCharacterIterator &source,
-											                        ForwardCharacterIterator &target)
+                                              ForwardCharacterIterator &target)
 {
   return getEComparisonResult(
     ucol_strcollinc(ucollator, forwardCharIteratorGlue, &source,
@@ -567,28 +567,28 @@ int32_t RuleBasedCollator::getSortKey(const UnicodeString& source,
                                          uint8_t *result, int32_t resultLength)
                                          const
 {
-	UChar sStart[STACK_BUFFER_LENGTH_];
-	UChar *uSource = sStart;
-	uint32_t sourceLen = source.length();
-	if(sourceLen >= STACK_BUFFER_LENGTH_)
-		uSource = new UChar[sourceLen+1];
+  UChar sStart[STACK_BUFFER_LENGTH_];
+  UChar *uSource = sStart;
+  uint32_t sourceLen = source.length();
+  if(sourceLen >= STACK_BUFFER_LENGTH_)
+    uSource = new UChar[sourceLen+1];
 
   source.extract(0, sourceLen, uSource);
   uSource[sourceLen] = 0;
 
-	uint8_t resLen = ucol_getSortKey(ucollator, uSource, sourceLen, result,
+  int32_t resLen = ucol_getSortKey(ucollator, uSource, sourceLen, result,
                                    resultLength);
-	if(sStart != uSource)
-		delete[] uSource;
+  if(sStart != uSource)
+    delete[] uSource;
 
-	return resLen;
+  return resLen;
 }
 
 int32_t RuleBasedCollator::getSortKey(const UChar *source,
                                          int32_t sourceLength, uint8_t *result,
-						                             int32_t resultLength) const
+                                         int32_t resultLength) const
 {
-	return ucol_getSortKey(ucollator, source, sourceLength, result, resultLength);
+  return ucol_getSortKey(ucollator, source, sourceLength, result, resultLength);
 }
 
 Collator::ECollationStrength RuleBasedCollator::getStrength(void) const
