@@ -28,15 +28,14 @@
  * The UCollationElements struct.
  * For usage in C programs.
  */
-/* typedef void * UCollationElements; */
 typedef struct UCollationElements UCollationElements;
 
 /**
- * The UCollationElements  is used as an iterator to walk through
- * each character of an international string. Use the iterator to return the
- * ordering priority of the positioned character. The ordering priority of
- * a character, which we refer to as a key, defines how a character is
- * collated in the given collation object.
+ * The UCollationElements  is used as an iterator to walk through each 
+ * character of an international string. Use the iterator to return the
+ * ordering priority of the positioned character. The ordering priority of a 
+ * character, which we refer to as a key, defines how a character is collated 
+ * in the given collation object.
  * For example, consider the following in Spanish:
  * <pre>
  * .       "ca" -> the first key is key('c') and second key is key('a').
@@ -47,8 +46,6 @@ typedef struct UCollationElements UCollationElements;
  * .       "æb"-> the first key is key('a'), the second key is key('e'), and
  * .       the third key is key('b').
  * </pre>
- * The key of a character, is an const UCOL_PRIMARYMASK, UCOL_SECONDARY_MASK,
- * UCOL_TERTIARYMASK.    
  * <p>Example of the iterator usage: (without error checking)
  * <pre>
  * .  void CollationElementIterator_Example()
@@ -63,19 +60,30 @@ typedef struct UCollationElements UCollationElements;
  * .      coll = ucol_open(NULL, &success);
  * .      c = ucol_openElements(coll, str, u_strlen(str), &status);
  * .      order = ucol_next(c, &success);
- * .      primaryOrder = order & UCOL_PRIMARYMASK;
+ * .      ucol_reset(c);
+ * .      order = ucol_prev(c, &success);
  * .      free(s);
  * .      ucol_close(coll);
  * .      ucol_closeElements(c);
  * .  }
  * </pre>
  * <p>
- * ucol_next() returns the collation order of the next
- * character based on the comparison level of the collator.  A collation order 
+ * ucol_next() returns the collation order of the next.
+ * ucol_prev() returns the collation order of the previous character.
+ * The Collation Element Iterator moves only in one direction between calls to
+ * ucol_reset. That is, ucol_next() and ucol_prev can not be inter-used. 
+ * Whenever ucol_prev is to be called after ucol_next() or vice versa, 
+ * ucol_reset has to be called first to reset the status, shifting pointers to 
+ * either the end or the start of the string. Hence at the next call of 
+ * ucol_prev or ucol_next, the first or last collation order will be returned. 
+ * If a change of direction is done without a ucol_reset, the result is 
+ * undefined.
+ * The result of a forward iterate (ucol_next) and reversed result of the  
+ * backward iterate (ucol_prev) on the same string are equivalent, if 
+ * collation orders with the value UCOL_IGNORABLE are ignored.
+ * Character based on the comparison level of the collator.  A collation order 
  * consists of primary order, secondary order and tertiary order.  The data 
- * type of the collation order is <strong>t_int32</strong>.  The first 16 bits of 
- * a collation order is its primary order; the next 8 bits is the secondary 
- * order and the last 8 bits is the tertiary order.
+ * type of the collation order is <strong>t_int32</strong>. 
  *
  * @see UCollator
  */
