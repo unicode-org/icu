@@ -561,7 +561,6 @@ u_scanf_uinteger_handler(UFILE             *stream,
     uint32_t            *num         = (uint32_t*) (args[0].ptrValue);
     double currDouble;
 
-    memcpy(&uint_args, args, sizeof(ufmt_args));
     uint_args.ptrValue = &currDouble;
     converted_args = u_scanf_double_handler(stream, info, &uint_args, fmt, consumed);
 
