@@ -466,7 +466,7 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
 }
 
 /* structure for SafeClone calculations */
-struct cloneStruct
+struct cloneHZStruct
 {
     UConverter cnv;
     UAlignedMemory deadSpace1;
@@ -482,8 +482,8 @@ _HZ_SafeClone(const UConverter *cnv,
               int32_t *pBufferSize, 
               UErrorCode *status)
 {
-    struct cloneStruct * localClone;
-    int32_t size, bufferSizeNeeded = sizeof(struct cloneStruct);
+    struct cloneHZStruct * localClone;
+    int32_t size, bufferSizeNeeded = sizeof(struct cloneHZStruct);
 
     if (U_FAILURE(*status)){
         return 0;
@@ -494,7 +494,7 @@ _HZ_SafeClone(const UConverter *cnv,
         return 0;
     }
 
-    localClone = (struct cloneStruct *)stackBuffer;
+    localClone = (struct cloneHZStruct *)stackBuffer;
     uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));

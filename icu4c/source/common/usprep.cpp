@@ -49,7 +49,7 @@ static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 static UBool U_CALLCONV
-isAcceptable(void * /* context */,
+isSPrepAcceptable(void * /* context */,
              const char * /* type */, 
              const char * /* name */,
              const UDataInfo *pInfo) {
@@ -74,7 +74,7 @@ isAcceptable(void * /* context */,
 }
 
 static int32_t U_CALLCONV
-getFoldingOffset(uint32_t data) {
+getSPrepFoldingOffset(uint32_t data) {
 
     return (int32_t)data;
 
@@ -155,7 +155,7 @@ loadData(UStringPrepProfile* profile,
 
     /* open the data outside the mutex block */
     //TODO: change the path
-    dataMemory=udata_openChoice(path, type, name, isAcceptable, NULL, errorCode);
+    dataMemory=udata_openChoice(path, type, name, isSPrepAcceptable, NULL, errorCode);
     if(U_FAILURE(*errorCode)) {
         return FALSE;
     }
@@ -163,7 +163,7 @@ loadData(UStringPrepProfile* profile,
     p=(const int32_t *)udata_getMemory(dataMemory);
     pb=(const uint8_t *)(p+_SPREP_INDEX_TOP);
     utrie_unserialize(&_sprepTrie, pb, p[_SPREP_INDEX_TRIE_SIZE], errorCode);
-    _sprepTrie.getFoldingOffset=getFoldingOffset;
+    _sprepTrie.getFoldingOffset=getSPrepFoldingOffset;
 
 
     if(U_FAILURE(*errorCode)) {

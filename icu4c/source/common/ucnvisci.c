@@ -1296,7 +1296,7 @@ CALLBACK:
 }
 
 /* structure for SafeClone calculations */
-struct cloneStruct
+struct cloneISCIIStruct
 {
     UConverter cnv;
     UConverterDataISCII mydata;
@@ -1309,8 +1309,8 @@ _ISCII_SafeClone(const UConverter *cnv,
               int32_t *pBufferSize, 
               UErrorCode *status)
 {
-    struct cloneStruct * localClone;
-    int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+    struct cloneISCIIStruct * localClone;
+    int32_t bufferSizeNeeded = sizeof(struct cloneISCIIStruct);
 
     if (U_FAILURE(*status)){
         return 0;
@@ -1321,7 +1321,7 @@ _ISCII_SafeClone(const UConverter *cnv,
         return 0;
     }
 
-    localClone = (struct cloneStruct *)stackBuffer;
+    localClone = (struct cloneISCIIStruct *)stackBuffer;
     uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISCII));

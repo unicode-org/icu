@@ -99,7 +99,7 @@ static UDataMemory* UDATA = NULL;
  */
 U_CDECL_BEGIN
 static UBool U_CALLCONV
-isAcceptable(void* /*context*/,
+isPNameAcceptable(void* /*context*/,
              const char* /*type*/, const char* /*name*/,
              const UDataInfo* info) {
     return
@@ -133,7 +133,7 @@ static UBool _load() {
     UErrorCode ec = U_ZERO_ERROR;
     UDataMemory* data =
         udata_openChoice(0, PNAME_DATA_TYPE, PNAME_DATA_NAME,
-                         isAcceptable, 0, &ec);
+                         isPNameAcceptable, 0, &ec);
     if (U_SUCCESS(ec)) {
         umtx_lock(NULL);
         if (UDATA == NULL) {
