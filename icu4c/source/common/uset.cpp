@@ -156,7 +156,7 @@ uset_containsAll(const USet* set1, const USet* set2) {
 }
 
 U_CAPI UBool U_EXPORT2
-uset_containsAllCodePoints(USet* set, const UChar *str, int32_t strLen) {
+uset_containsAllCodePoints(const USet* set, const UChar *str, int32_t strLen) {
     // Create a string alias, since nothing is being added to the set.
     UnicodeString s(strLen==-1, str, strLen);
     return ((const UnicodeSet*) set)->containsAll(s);
