@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2000/11/29 21:58:01 $
- * $Revision: 1.7 $
+ * $Date: 2001/10/31 19:06:15 $
+ * $Revision: 1.8 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
@@ -88,8 +88,11 @@ public class ChineseTest extends CalendarTest {
         StringBuffer buf = new StringBuffer();
 
         logln("Gregorian -> Chinese");
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
         for (int i=0; i<DATA.length; ) {
-            Date date = new Date(DATA[i++]-1900, DATA[i++]-1, DATA[i++]);
+            tempcal.set(DATA[i++], DATA[i++]-1, DATA[i++]);
+            Date date = tempcal.getTime();
             cal.setTime(date);
             int y = cal.get(Calendar.EXTENDED_YEAR);
             int m = cal.get(Calendar.MONTH)+1; // 0-based -> 1-based
@@ -112,7 +115,8 @@ public class ChineseTest extends CalendarTest {
 
         logln("Chinese -> Gregorian");
         for (int i=0; i<DATA.length; ) {
-            Date dexp = new Date(DATA[i++]-1900, DATA[i++]-1, DATA[i++]);
+            tempcal.set(DATA[i++], DATA[i++]-1, DATA[i++]);
+            Date dexp = tempcal.getTime();
             int cyear = DATA[i++];
             int cmonth = DATA[i++];
             int cisleapmonth = DATA[i++];
@@ -169,8 +173,10 @@ public class ChineseTest extends CalendarTest {
 
         // Final parameter is either number of days, if > 0, or test
         // duration in seconds, if < 0.
-        doLimitsTest(new ChineseCalendar(), null,
-                     new Date(1989-1900, Calendar.NOVEMBER, 1), -10);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1989, Calendar.NOVEMBER, 1);
+        doLimitsTest(new ChineseCalendar(), null, tempcal.getTime(), -10);
     }
 
     /**
@@ -241,11 +247,15 @@ public class ChineseTest extends CalendarTest {
         DateFormat fmt = DateFormat.getDateTimeInstance(cal,
                                     DateFormat.DEFAULT, DateFormat.DEFAULT);
 
-        Date[] DATA = {
-            // Wed May 23 2001 = Month 4(leap), Day 1, Year 18, Cycle 78
-            new Date(2001-1900, Calendar.MAY, 22),
-            new Date(2001-1900, Calendar.MAY, 23)
-        };
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        
+        Date[] DATA = new Date[2];
+        tempcal.set(2001, Calendar.MAY, 22);
+        DATA[0] = tempcal.getTime();
+        tempcal.set(2001, Calendar.MAY, 23);
+        DATA[1] = tempcal.getTime();
+        // Wed May 23 2001 = Month 4(leap), Day 1, Year 18, Cycle 78
         
         for (int i=0; i<DATA.length; ++i) {
             String s = fmt.format(DATA[i]);

@@ -30,7 +30,10 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
      * Test the behavior of the GregorianCalendar around the changeover.
      */
     public void TestGregorianChangeover() {
-        Date co = new Date(1582-1900, Calendar.OCTOBER, 15);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1582, Calendar.OCTOBER, 15);
+        Date co = tempcal.getTime();
         final int ONE_DAY = 24*60*60*1000;
         GregorianCalendar cal = new GregorianCalendar();
         /*
@@ -193,7 +196,10 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
                 else logln(s);
             }
 
-            cal.setGregorianChange(new Date(1582-1900, Calendar.OCTOBER, 15));
+            java.util.Calendar tempcal = java.util.Calendar.getInstance();
+            tempcal.clear();
+            tempcal.set(1582, Calendar.OCTOBER, 15);
+            cal.setGregorianChange(tempcal.getTime());
             auxMapping(cal, 1582, Calendar.OCTOBER, 4);
             auxMapping(cal, 1582, Calendar.OCTOBER, 15);
             auxMapping(cal, 1582, Calendar.OCTOBER, 16);
@@ -223,7 +229,10 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
     public void TestGenericAPI() {
         // not used String str;
 
-        Date when = new Date(90, Calendar.APRIL, 15);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1990, Calendar.APRIL, 15);
+        Date when = tempcal.getTime();
 
         String tzid = "TestZone";
         int tzoffset = 123400;
@@ -297,23 +306,29 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         cal.setTimeZone(TimeZone.getDefault());
         cal.clear();
         cal.set(1984, 5, 24);
-        if (cal.getTime().getTime() != new Date(84, 5, 24).getTime()) {
+        tempcal.clear();
+        tempcal.set(1984, 5, 24);
+        if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(3 args) failed");
-            logln(" Got: " + cal.getTime() + "  Expected: " + new Date(84, 5, 24));
+            logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
         cal.clear();
         cal.set(1985, 3, 2, 11, 49);
-        if (cal.getTime().getTime() != new Date(85, 3, 2, 11, 49).getTime()) {
+        tempcal.clear();
+        tempcal.set(1985, 3, 2, 11, 49);
+        if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(5 args) failed");
-            logln(" Got: " + cal.getTime() + "  Expected: " + new Date(85, 3, 2, 11, 49));
+            logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
         cal.clear();
         cal.set(1995, 9, 12, 1, 39, 55);
-        if (cal.getTime().getTime() != new Date(95, 9, 12, 1, 39, 55).getTime()) {
+        tempcal.clear();
+        tempcal.set(1995, 9, 12, 1, 39, 55);
+        if (cal.getTime().getTime() != tempcal.getTime().getTime()) {
             errln("FAIL: Calendar.set(6 args) failed");
-            logln(" Got: " + cal.getTime() + "  Expected: " + new Date(95, 9, 12, 1, 39, 55));
+            logln(" Got: " + cal.getTime() + "  Expected: " + tempcal.getTime());
         }
 
         cal.getTime();
@@ -370,12 +385,16 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         // delete gc;
 
         gc = new GregorianCalendar(1998, 10, 14, 21, 43);
-        if (gc.getTime().getTime() != new Date(98, 10, 14, 21, 43).getTime())
+        tempcal.clear();
+        tempcal.set(1998, 10, 14, 21, 43);
+        if (gc.getTime().getTime() != tempcal.getTime().getTime())
             errln("FAIL: new GregorianCalendar(ymdhm) failed");
         // delete gc;
 
         gc = new GregorianCalendar(1998, 10, 14, 21, 43, 55);
-        if (gc.getTime().getTime() != new Date(98, 10, 14, 21, 43, 55).getTime())
+        tempcal.clear();
+        tempcal.set(1998, 10, 14, 21, 43, 55);
+        if (gc.getTime().getTime() != tempcal.getTime().getTime())
             errln("FAIL: new GregorianCalendar(ymdhms) failed");
 
         // C++ only:
@@ -449,7 +468,10 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         logln(" isLeapYear(1800) = " + (b=c.isLeapYear(1800)));
         logln(" (should be FALSE)");
         if (b != false) errln("FAIL");
-        c.setGregorianChange(new Date(0, 0, 1)); // Jan 1 1900
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1900, 0, 1);
+        c.setGregorianChange(tempcal.getTime()); // Jan 1 1900
         logln("With cutoff " + c.getGregorianChange());
         logln(" isLeapYear(1800) = " + (b=c.isLeapYear(1800)));
         logln(" (should be TRUE)");
@@ -627,7 +649,10 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
     // Verify that add and set work regardless of the order in which
     // they are called.
     public void TestAddSetOrder621() {
-        Date d = new Date(97, 4, 14, 13, 23, 45);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(1997, 4, 14, 13, 23, 45);
+        Date d = tempcal.getTime();
 
         Calendar cal = Calendar.getInstance ();
         cal.setTime (d);

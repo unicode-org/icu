@@ -192,10 +192,14 @@ public class TimeZoneBoundaryTest extends TestFmwk
 
     private static String showDate(Date d)
     {
-        return "" + d.getYear() + "/" + showNN(d.getMonth()+1) + "/" + showNN(d.getDate()) +
-            " " + showNN(d.getHours()) + ":" + showNN(d.getMinutes()) +
-            " \"" + d + "\" = " +
-            d.getTime();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(d);
+        return "" + (cal.get(Calendar.YEAR) - 1900) + "/" + 
+               showNN(cal.get(Calendar.MONTH) + 1) + "/" + 
+               showNN(cal.get(Calendar.DAY_OF_MONTH)) + " " + 
+               showNN(cal.get(Calendar.HOUR_OF_DAY)) + ":" 
+               + showNN(cal.get(Calendar.MINUTE)) + " \"" + d + "\" = " +
+               d.getTime();
     }
 
     private static String showDate(long l, TimeZone z)
@@ -207,10 +211,14 @@ public class TimeZoneBoundaryTest extends TestFmwk
     {
         DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
         fmt.setTimeZone(zone);
-        return "" + d.getYear() + "/" + showNN(d.getMonth()+1) + "/" + showNN(d.getDate()) +
-            " " + showNN(d.getHours()) + ":" + showNN(d.getMinutes()) +
-            " \"" + d + "\" = " +
-            fmt.format(d) + " = " + d.getTime();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(d);
+        return "" + (cal.get(Calendar.YEAR) - 1900) + "/" + 
+               showNN(cal.get(Calendar.MONTH) + 1) + "/" + 
+               showNN(cal.get(Calendar.DAY_OF_MONTH)) + " " + 
+               showNN(cal.get(Calendar.HOUR_OF_DAY)) + ":" + 
+               showNN(cal.get(Calendar.MINUTE)) + " \"" + d + "\" = " +
+               fmt.format(d) + " = " + d.getTime();
     }
 
     private static String showNN(int n)
@@ -264,17 +272,21 @@ public class TimeZoneBoundaryTest extends TestFmwk
     {
         TimeZone pst = TimeZone.getTimeZone("PST");
         TimeZone save = TimeZone.getDefault();
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
         try {
             TimeZone.setDefault(pst);
 
             // DST changeover for PST is 4/6/1997 at 2 hours past midnight
-            Date d = new Date(97,Calendar.APRIL,6);
+            tempcal.set(1997, Calendar.APRIL, 6);
+            Date d = tempcal.getTime();
 
             // i is minutes past midnight standard time
             for (int i=60; i<=180; i+=15)
             {
                 boolean inDST = (i >= 120);
-                Date e = new Date(d.getTime() + i*60*1000);
+                Date e = tempcal.getTime();
+                e.setTime(d.getTime() + i*60*1000);
                 verifyDST(e, pst, true, inDST, -8*ONE_HOUR,
                           inDST ? -7*ONE_HOUR : -8*ONE_HOUR);
             }
@@ -287,9 +299,11 @@ public class TimeZoneBoundaryTest extends TestFmwk
             // This only works in PST/PDT
             TimeZone.setDefault(TimeZone.getTimeZone("PST"));
             logln("========================================");
-            findDaylightBoundaryUsingDate(new Date(97,0,1), "PST", PST_1997_BEG);
+            tempcal.set(1997, 0, 1);
+            findDaylightBoundaryUsingDate(tempcal.getTime(), "PST", PST_1997_BEG);
             logln("========================================");
-            findDaylightBoundaryUsingDate(new Date(97,6,1), "PDT", PST_1997_END);
+            tempcal.set(1997, 6, 1);
+            findDaylightBoundaryUsingDate(tempcal.getTime(), "PDT", PST_1997_END);
         }
 
         //  if (true)
@@ -305,17 +319,21 @@ public class TimeZoneBoundaryTest extends TestFmwk
             // Southern hemisphere test
             logln("========================================");
             TimeZone z = TimeZone.getTimeZone(AUSTRALIA);
-            findDaylightBoundaryUsingTimeZone(new Date(97,0,1), true, AUSTRALIA_1997_END, z);
+            tempcal.set(1997, 0, 1);
+            findDaylightBoundaryUsingTimeZone(tempcal.getTime(), true, AUSTRALIA_1997_END, z);
             logln("========================================");
-            findDaylightBoundaryUsingTimeZone(new Date(97,6,1), false, AUSTRALIA_1997_BEG, z);
+            tempcal.set(1997, 6, 1);
+            findDaylightBoundaryUsingTimeZone(tempcal.getTime(), false, AUSTRALIA_1997_BEG, z);
         }
 
         if (true)
         {
             logln("========================================");
-            findDaylightBoundaryUsingTimeZone(new Date(97,0,1), false, PST_1997_BEG);
+            tempcal.set(1997, 0, 1);
+            findDaylightBoundaryUsingTimeZone(tempcal.getTime(), false, PST_1997_BEG);
             logln("========================================");
-            findDaylightBoundaryUsingTimeZone(new Date(97,6,1), true, PST_1997_END);
+            tempcal.set(1997, 6, 1);
+            findDaylightBoundaryUsingTimeZone(tempcal.getTime(), true, PST_1997_END);
         }
 
         // This just shows the offset for April 4-7 in 1997.  This is redundant
@@ -323,10 +341,14 @@ public class TimeZoneBoundaryTest extends TestFmwk
         if (false)
         {
             TimeZone z = TimeZone.getDefault();
-            logln(z.getOffset(1, 97, 3, 4, 6, 0) + " " + new Date(97, 3, 4));
-            logln(z.getOffset(1, 97, 3, 5, 7, 0) + " " + new Date(97, 3, 5));
-            logln(z.getOffset(1, 97, 3, 6, 1, 0) + " " + new Date(97, 3, 6));
-            logln(z.getOffset(1, 97, 3, 7, 2, 0) + " " + new Date(97, 3, 7));
+            tempcal.set(1997, 3, 4);
+            logln(z.getOffset(1, 97, 3, 4, 6, 0) + " " + tempcal.getTime());
+            tempcal.set(1997, 3, 5);
+            logln(z.getOffset(1, 97, 3, 5, 7, 0) + " " + tempcal.getTime());
+            tempcal.set(1997, 3, 6);
+            logln(z.getOffset(1, 97, 3, 6, 1, 0) + " " + tempcal.getTime());
+            tempcal.set(1997, 3, 7);
+            logln(z.getOffset(1, 97, 3, 7, 2, 0) + " " + tempcal.getTime());
         }
     }
 
@@ -559,6 +581,8 @@ public class TimeZoneBoundaryTest extends TestFmwk
             // are creating our own TimeZone objects.
 
             SimpleTimeZone tz;
+            java.util.Calendar tempcal = java.util.Calendar.getInstance();
+            tempcal.clear();
 
             logln("-----------------------------------------------------------------");
             logln("Aug 2ndTues .. Mar 15");
@@ -567,9 +591,11 @@ public class TimeZoneBoundaryTest extends TestFmwk
                                     Calendar.MARCH, 15, 0, 2*ONE_HOUR);
             //logln(tz.toString());
             logln("========================================");
-            _testUsingBinarySearch(tz, new Date(97,0,1), 858416400000L);
+            tempcal.set(1997, 0, 1);
+            _testUsingBinarySearch(tz, tempcal.getTime(), 858416400000L);
             logln("========================================");
-            _testUsingBinarySearch(tz, new Date(97,6,1), 871380000000L);
+            tempcal.set(1997, 6, 1);
+            _testUsingBinarySearch(tz, tempcal.getTime(), 871380000000L);
 
             logln("-----------------------------------------------------------------");
             logln("Apr Wed>=14 .. Sep Sun<=20");
@@ -578,9 +604,11 @@ public class TimeZoneBoundaryTest extends TestFmwk
                                     Calendar.SEPTEMBER, -20, -Calendar.SUNDAY, 2*ONE_HOUR);
             //logln(tz.toString());
             logln("========================================");
-            _testUsingBinarySearch(tz, new Date(97,0,1), 861184800000L);
+            tempcal.set(1997, 0, 1);
+            _testUsingBinarySearch(tz, tempcal.getTime(), 861184800000L);
             logln("========================================");
-            _testUsingBinarySearch(tz, new Date(97,6,1), 874227600000L);
+            tempcal.set(1997, 6, 1);
+            _testUsingBinarySearch(tz, tempcal.getTime(), 874227600000L);
         }
 
         /*
@@ -627,7 +655,10 @@ public class TimeZoneBoundaryTest extends TestFmwk
      */
     void findBoundariesStepwise(int year, long interval, TimeZone z, int expectedChanges)
     {
-        Date d = new Date(year - 1900, Calendar.JANUARY, 1);
+        java.util.Calendar tempcal = java.util.Calendar.getInstance();
+        tempcal.clear();
+        tempcal.set(year, Calendar.JANUARY, 1);
+        Date d = tempcal.getTime();
         long time = d.getTime(); // ms
         long limit = time + ONE_YEAR + ONE_DAY;
         boolean lastState = z.inDaylightTime(d);
