@@ -46,6 +46,41 @@ CollationIteratorTest::~CollationIteratorTest()
 }
 
 /**
+ * Test for CollationElementIterator previous and next for the whole set of
+ * unicode characters.
+ */
+void CollationIteratorTest::TestUnicodeChar()
+{
+    CollationElementIterator *iter;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar codepoint;
+    UnicodeString source;
+    
+    for (codepoint = 1; codepoint < 0xFFFE;)
+    {
+      source.remove();
+
+      while (codepoint % 0xFF != 0) 
+      {
+        if (u_isdefined(codepoint))
+          source += codepoint;
+        codepoint ++;
+      }
+
+      if (u_isdefined(codepoint))
+        source += codepoint;
+      
+      if (codepoint != 0xFFFF)
+        codepoint ++;
+
+      iter = en_us->createCollationElementIterator(source);
+      /* A basic test to see if it's working at all */
+      backAndForth(*iter);
+      delete iter;
+    }
+}
+
+/**
  * Test for CollationElementIterator.previous()
  *
  * @bug 4108758 - Make sure it works with contracting characters
@@ -358,18 +393,32 @@ void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
     int32_t index = orderLength;
     int32_t o;
 
+    // reset the iterator
+    iter.reset();
+
     while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
     {
         if (o != orders[--index])
         {
-            UnicodeString msg1("Mismatch at index ");
-            UnicodeString msg2(": 0x");
-            appendHex(orders[index], 8, msg2);
-            msg2 += " vs 0x";
-            appendHex(o, 8, msg2);
+          if (o == 0)
+            index ++;
+          else
+          {
+            while (index > 0 && orders[-- index] == 0)
+            {
+            }
+            if (o != orders[index])
+            {
+              UnicodeString msg1("Mismatch at index ");
+              UnicodeString msg2(": 0x");
+              appendHex(orders[index], 8, msg2);
+              msg2 += " vs 0x";
+              appendHex(o, 8, msg2);
 
-            errln(msg1 + index + msg2);
-            break;
+              errln(msg1 + index + msg2);
+              break;
+            }
+          }
         }
     }
 
@@ -453,7 +502,8 @@ void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord
             return;
         }
         
-        if (order == CollationElementIterator::NULLORDER || iter->next(status) != CollationElementIterator::NULLORDER)
+        if (order == CollationElementIterator::NULLORDER || 
+            iter->next(status) != CollationElementIterator::NULLORDER)
         {
             UnicodeString msg("verifyExpansion: '");
             
@@ -587,6 +637,7 @@ void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char
         case  2: name = "TestSetText";        if (exec) TestSetText(/* par */);         break;
         case  3: name = "TestMaxExpansion";    if (exec) TestMaxExpansion(/* par */); break;
         case  4: name = "TestClearBuffers"; if (exec) TestClearBuffers(/* par */); break;
+        case  5: name = "TestUnicodeChar"; if (exec) TestUnicodeChar(/* par */); break;
         default: name = ""; break;
     }
 }
