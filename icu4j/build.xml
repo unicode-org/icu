@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/02/28 20:59:05 $ 
-* $Revision: 1.28 $
+* $Date: 2001/02/28 21:13:33 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -38,11 +38,11 @@
 
   <target name="all" depends="core,tests,tools,demos,jar,docs"/>
   
-  <target name="core" depends="init,ucharacterData,translitData">
+  <target name="core" depends="init,coreData">
     <mkdir dir="${build.dir}"/>
     <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
            todir="${build.dir}/com/ibm/text/resources/"/>
-    <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java,com/ibm/icu/text/**/*.java"
+    <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java"
            excludes="**/CVS/**/*"
            srcdir="${src.dir}"
     	   destdir="${build.dir}" 
@@ -50,7 +50,7 @@
            debug="on" deprecation="off" target="1.2"/>
   </target>
   
-  <target name="tests" depends="core,miscData">
+  <target name="tests" depends="core,testData">
     <javac includes="com/ibm/test/**/*.java,com/ibm/icu/test/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
@@ -59,7 +59,7 @@
            debug="on" deprecation="off" target="1.2"/>
   </target>
   
-  <target name="demos" depends="core,miscData">
+  <target name="demos" depends="core,testData">
     <javac includes="com/ibm/demo/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
@@ -91,30 +91,26 @@
     		  />    		  
   </target>
 
-  <target name ="miscData" depends="init">
-    <copy file="${src.dir}/com/ibm/data/misc/english.dict"
-    	   todir="${build.dir}/com/ibm/data/misc/"/>
-  </target>
-
-  
-  <target name="jar" depends="core">
-    <jar jarfile="${jar.file}"
-         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*,com/ibm/icu/text/**/*"
-         basedir="${build.dir}"/>
-  </target>
-
-  <target name ="ucharacterData" depends="init">
+  <target name ="coreData" depends="init">
+    <copy todir="${build.dir}/com/ibm/text/resources">
+      <fileset dir="${src.dir}/com/ibm/text/resources"
+               includes="Transliterator_*.utf8.txt"/>
+    </copy>
     <copy todir="${build.dir}/com/ibm/text">
       <fileset dir="${src.dir}/com/ibm/text"
                includes="unames.dat,uprops.dat"/>
     </copy>
   </target>
 
-  <target name ="translitData" depends="init">
-    <copy todir="${build.dir}/com/ibm/text/resources">
-      <fileset dir="${src.dir}/com/ibm/text/resources"
-               includes="Transliterator_*.utf8.txt"/>
-    </copy>
+  <target name ="testData" depends="init">
+    <copy file="${src.dir}/com/ibm/data/misc/english.dict"
+    	   todir="${build.dir}/com/ibm/data/misc/"/>
+  </target>
+  
+  <target name="jar" depends="core">
+    <jar jarfile="${jar.file}"
+         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
+         basedir="${build.dir}"/>
   </target>
 
   <target name="richeditJar" depends="core">
@@ -142,6 +138,7 @@
 			  bottom="&lt;font size=-1>Copyright (c) 1998-2000 IBM Corporation and others.&lt;/font>"
     		  />    		  
   </target>
+
   <target name="richeditZip" depends="richeditJar,richeditDocs">
     <!--Create a zip archive of the richedit jar and readme -->
     <zip zipfile="${richedit.zip.file}"
