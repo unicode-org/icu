@@ -90,7 +90,6 @@ extern int
 main(int argc, const char *argv[]) {
     static uint8_t buffer[4096];
     char line[512];
-    const char *destdir = 0;
     FileStream *in, *file;
     UNewDataMemory *out;
     char *s;

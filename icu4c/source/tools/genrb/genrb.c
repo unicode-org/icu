@@ -83,10 +83,6 @@ int
 main(int argc,
      char **argv)
 {
-  int printUsage = 0;
-  int printVersion = 0;
-  int useConversionLibrary = 0;
-  int optind = 1;
   int i;
   UErrorCode status;
   const char *arg = NULL;
@@ -168,7 +164,7 @@ main(int argc,
         printf("genrb: %s processing file \"%s\" around line %d, last Tag %s\n", u_errorName(status), arg, lineCount, lastTag);
     }
     if(getErrorText() != 0)
-	printf("Issued Errors and Warnings:\n       (%s)\n", getErrorText());
+        printf("Issued Errors and Warnings:\n       (%s)\n", getErrorText());
   }
 
   return status;
@@ -263,7 +259,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 static char*
 make_res_filename(const char *filename,
                   const char *outputDir,
-		 UErrorCode *status)
+                  UErrorCode *status)
 {
   char *basename;
   char *dirname;
