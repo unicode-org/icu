@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
 #include "unicode/uscript.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -37,10 +38,28 @@ static int32_t pvCount;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-parseAge(const char *filename, uint32_t *pv, UErrorCode *pErrorCode);
+parseTwoFieldFile(char *filename, char *basename,
+                  const char *ucdFile, const char *suffix,
+                  UParseLineFn *lineFn,
+                  UErrorCode *pErrorCode);
 
 static void
-parseScripts(const char *filename, uint32_t *pv, UErrorCode *pErrorCode);
+ageLineFn(void *context,
+          char *fields[][2], int32_t fieldCount,
+          UErrorCode *pErrorCode);
+
+static void
+parseScripts(const char *filename, UErrorCode *pErrorCode);
+
+static void
+blocksLineFn(void *context,
+             char *fields[][2], int32_t fieldCount,
+             UErrorCode *pErrorCode);
+
+static void
+propListLineFn(void *context,
+               char *fields[][2], int32_t fieldCount,
+               UErrorCode *pErrorCode);
 
 /* -------------------------------------------------------------------------- */
 
@@ -53,11 +72,14 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     pv=upvec_open(UPROPS_VECTOR_WORDS, 20000);
 
     /* process various UCD .txt files */
-    writeUCDFilename(basename, "DerivedAge", suffix);
-    parseAge(filename, pv, pErrorCode);
+    parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
     writeUCDFilename(basename, "Scripts", suffix);
-    parseScripts(filename, pv, pErrorCode);
+    parseScripts(filename, pErrorCode);
+
+    parseTwoFieldFile(filename, basename, "Blocks", suffix, blocksLineFn, pErrorCode);
+
+    parseTwoFieldFile(filename, basename, "PropList", suffix, propListLineFn, pErrorCode);
 
     trie=utrie_open(NULL, NULL, 50000, 0, FALSE);
     if(trie==NULL) {
@@ -73,13 +95,28 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     }
 }
 
+static void
+parseTwoFieldFile(char *filename, char *basename,
+                  const char *ucdFile, const char *suffix,
+                  UParseLineFn *lineFn,
+                  UErrorCode *pErrorCode) {
+    char *fields[2][2];
+
+    writeUCDFilename(basename, ucdFile, suffix);
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    u_parseDelimitedFile(filename, ';', fields, 2, lineFn, NULL, pErrorCode);
+}
+
 /* DerivedAge.txt ----------------------------------------------------------- */
 
 static void
 ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
           UErrorCode *pErrorCode) {
-    uint32_t *pv=(uint32_t *)context;
     char *s, *end;
     uint32_t value, start, limit, version;
 
@@ -118,24 +155,12 @@ ageLineFn(void *context,
     }
 }
 
-static void
-parseAge(const char *filename, uint32_t *pv, UErrorCode *pErrorCode) {
-    char *fields[2][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    u_parseDelimitedFile(filename, ';', fields, 2, ageLineFn, pv, pErrorCode);
-}
-
 /* Scripts.txt -------------------------------------------------------------- */
 
 static void
 scriptsLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
-    uint32_t *pv=(uint32_t *)context;
     char *s, *end;
     uint32_t start, limit;
     UScriptCode script;
@@ -160,7 +185,7 @@ scriptsLineFn(void *context,
         U_FAILURE(*pErrorCode) ||
         script<=USCRIPT_INVALID_CODE
     ) {
-        fprintf(stderr, "genprops: syntax error in Scripts.txt field 1 at %s\n", fields[1][0]);
+        fprintf(stderr, "genprops error: unknown script name in Scripts.txt field 1 at %s\n", fields[1][0]);
         if(U_SUCCESS(*pErrorCode)) {
             *pErrorCode=U_PARSE_ERROR;
         }
@@ -174,7 +199,7 @@ scriptsLineFn(void *context,
 }
 
 static void
-parseScripts(const char *filename, uint32_t *pv, UErrorCode *pErrorCode) {
+parseScripts(const char *filename, UErrorCode *pErrorCode) {
     char *fields[2][2];
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -198,7 +223,196 @@ parseScripts(const char *filename, uint32_t *pv, UErrorCode *pErrorCode) {
         exit(*pErrorCode);
     }
 
-    u_parseDelimitedFile(filename, ';', fields, 2, scriptsLineFn, pv, pErrorCode);
+    u_parseDelimitedFile(filename, ';', fields, 2, scriptsLineFn, NULL, pErrorCode);
+}
+
+/* Blocks.txt --------------------------------------------------------------- */
+
+/* Blocks.txt block names in the order of the parallel UBlockCode constants */
+static const char *const
+blockNames[UBLOCK_COUNT]={
+    NULL,                                       /* 0 */
+    "Basic Latin",
+    "Latin-1 Supplement",
+    "Latin Extended-A",
+    "Latin Extended-B",
+    "IPA Extensions",
+    "Spacing Modifier Letters",
+    "Combining Diacritical Marks",
+    "Greek",
+    "Cyrillic",
+    "Armenian",                                 /* 10 */
+    "Hebrew",
+    "Arabic",
+    "Syriac  ",
+    "Thaana",
+    "Devanagari",
+    "Bengali",
+    "Gurmukhi",
+    "Gujarati",
+    "Oriya",
+    "Tamil",                                    /* 20 */
+    "Telugu",
+    "Kannada",
+    "Malayalam",
+    "Sinhala",
+    "Thai",
+    "Lao",
+    "Tibetan",
+    "Myanmar ",
+    "Georgian",
+    "Hangul Jamo",                              /* 30 */
+    "Ethiopic",
+    "Cherokee",
+    "Unified Canadian Aboriginal Syllabics",
+    "Ogham",
+    "Runic",
+    "Khmer",
+    "Mongolian",
+    "Latin Extended Additional",
+    "Greek Extended",
+    "General Punctuation",                      /* 40 */
+    "Superscripts and Subscripts",
+    "Currency Symbols",
+    "Combining Marks for Symbols",
+    "Letterlike Symbols",
+    "Number Forms",
+    "Arrows",
+    "Mathematical Operators",
+    "Miscellaneous Technical",
+    "Control Pictures",
+    "Optical Character Recognition",            /* 50 */
+    "Enclosed Alphanumerics",
+    "Box Drawing",
+    "Block Elements",
+    "Geometric Shapes",
+    "Miscellaneous Symbols",
+    "Dingbats",
+    "Braille Patterns",
+    "CJK Radicals Supplement",
+    "Kangxi Radicals",
+    "Ideographic Description Characters",       /* 60 */
+    "CJK Symbols and Punctuation",
+    "Hiragana",
+    "Katakana",
+    "Bopomofo",
+    "Hangul Compatibility Jamo",
+    "Kanbun",
+    "Bopomofo Extended",
+    "Enclosed CJK Letters and Months",
+    "CJK Compatibility",
+    "CJK Unified Ideographs Extension A",       /* 70 */
+    "CJK Unified Ideographs",
+    "Yi Syllables",
+    "Yi Radicals",
+    "Hangul Syllables",
+    "High Surrogates",
+    "High Private Use Surrogates",
+    "Low Surrogates",
+    "Private Use",
+    "CJK Compatibility Ideographs",
+    "Alphabetic Presentation Forms",            /* 80 */
+    "Arabic Presentation Forms-A",
+    "Combining Half Marks",
+    "CJK Compatibility Forms",
+    "Small Form Variants",
+    "Arabic Presentation Forms-B",
+    "Specials",
+    "Halfwidth and Fullwidth Forms",
+    "Old Italic",
+    "Gothic",
+    "Deseret",                                  /* 90 */
+    "Byzantine Musical Symbols",
+    "Musical Symbols",
+    "Mathematical Alphanumeric Symbols",
+    "CJK Unified Ideographs Extension B",
+    "CJK Compatibility Ideographs Supplement",
+    "Tags"
+};
+
+static void
+blocksLineFn(void *context,
+             char *fields[][2], int32_t fieldCount,
+             UErrorCode *pErrorCode) {
+    uint32_t start, limit;
+    int32_t i;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in Blocks.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse block name */
+    i=getTokenIndex(blockNames, UBLOCK_COUNT, fields[1][0]);
+    if(i<0) {
+        fprintf(stderr, "genprops error: unknown block name \"%s\" in Blocks.txt\n", fields[1][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    if(!upvec_setValue(pv, start, limit, 0, (uint32_t)i<<UPROPS_BLOCK_SHIFT, UPROPS_BLOCK_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops: unable to set block code: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+}
+
+/* PropList.txt ------------------------------------------------------------- */
+
+static const char *const
+propListNames[]={
+    "White_Space",
+    "Bidi_Control",
+    "Join_Control",
+    "Dash",
+    "Hyphen",
+    "Quotation_Mark",
+    "Terminal_Punctuation",
+    "Other_Math",
+    "Hex_Digit",
+    "ASCII_Hex_Digit",
+    "Other_Alphabetic",
+    "Ideographic",
+    "Diacritic",
+    "Extender",
+    "Other_Lowercase",
+    "Other_Uppercase",
+    "Noncharacter_Code_Point",
+    "Other_Grapheme_Extend",
+    "Grapheme_Link",
+    "IDS_Binary_Operator",
+    "IDS_Trinary_Operator",
+    "Radical",
+    "Unified_Ideograph",
+    "Other_Default_Ignorable_Code_Point",
+    "Deprecated",
+    "Soft_Dotted",
+    "Logical_Order_Exception"
+};
+
+static void
+propListLineFn(void *context,
+               char *fields[][2], int32_t fieldCount,
+               UErrorCode *pErrorCode) {
+    uint32_t start, limit;
+    int32_t i;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in PropList.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse binary property name */
+    i=getTokenIndex(propListNames, sizeof(propListNames)/sizeof(*propListNames), fields[1][0]);
+    if(i<0) {
+        fprintf(stderr, "genprops warning: unknown binary property name \"%s\" in PropList.txt\n", fields[1][0]);
+    } else if(!upvec_setValue(pv, start, limit, 1, (uint32_t)(1<<i), (uint32_t)(1<<i), pErrorCode)) {
+        fprintf(stderr, "genprops: unable to set binary property: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
 }
 
 /* data serialization ------------------------------------------------------- */
