@@ -83,4 +83,15 @@ fo {
     Currencies {
         DKK { "kr", "DKK" }
     }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE dd MMMM yyyy",
+        "d. MMM yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
+        "{1} {0}",
+    }
 }

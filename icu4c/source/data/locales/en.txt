@@ -598,7 +598,7 @@ en {
         UAK { "UAK", "Ukrainian Karbovanetz" } // 11/13/1992-10/17/1993
         UGS { "UGS", "Ugandan Shilling (1966-1987)" } // 08/15/1966-05/15/1987
         UGX { "U Sh","Ugandan Shilling"      } // 05/15/1987-
-        USD { "$",   "US Dollar"            } // 04/04/1792-
+        USD { "US$",   "US Dollar"            } // 04/04/1792-
         USN { "USN", "US Dollar (Next day)" }
         USS { "USS", "US Dollar (Same day)" }
         UYF { "UYF", "Uruguay Peso Fuerte"  } // 06/23/1862-07/01/1975

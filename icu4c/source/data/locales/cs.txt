@@ -331,7 +331,7 @@ cs {
         eo { "Esperanto" }
         es { "\u0160pan\u011Bl\u0161tina" }
         et { "Eston\u0161tina" }
-        // eu { "Baski\u010Dtina" } Basque not Bashkir
+        eu { "Baski\u010Dtina" } 
 
         fa { "Per\u0161tina" }
         fi { "Fin\u0161tina" }
