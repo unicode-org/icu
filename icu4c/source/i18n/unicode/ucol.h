@@ -54,14 +54,18 @@
 *  For usage in C programs.
 */
 struct collIterate;
-/** structure representing collation element iterator instance */
+/** structure representing collation element iterator instance 
+ * @stable ICU 2.0
+ */
 typedef struct collIterate collIterate;
 
 /** A collator.
 *  For usage in C programs.
 */
 struct UCollator;
-/** structure representing a collator object instance */
+/** structure representing a collator object instance 
+ * @stable ICU 2.0
+ */
 typedef struct UCollator UCollator;
 
 
@@ -74,7 +78,9 @@ typedef struct UCollator UCollator;
  * target string in the u_strcoll() method.
  * @see u_strcoll()
  * <p>
- * Possible values for a comparison result */
+ * Possible values for a comparison result 
+ * @stable ICU 2.0
+ */
 typedef enum {
   /** string a == string b */
   UCOL_EQUAL    = 0,
@@ -85,10 +91,12 @@ typedef enum {
 } UCollationResult ;
 
 
-/** Enum containing attribute values for controling collation behavior. */
-/* Here are all the allowable values. Not every attribute can take every value. The only */
-/* universal value is UCOL_DEFAULT, which resets the attribute value to the predefined  */
-/* value for that locale */
+/** Enum containing attribute values for controling collation behavior.
+ * Here are all the allowable values. Not every attribute can take every value. The only
+ * universal value is UCOL_DEFAULT, which resets the attribute value to the predefined  
+ * value for that locale 
+ * @stable ICU 2.0
+ */
 typedef enum {
   /** accepted by most attributes */
   UCOL_DEFAULT = -1,
@@ -156,11 +164,14 @@ typedef enum {
  * UCollationStrength is also used to determine the strength of sort keys 
  * generated from UCollator objects
  * These values can be now found in the UColAttributeValue enum.
+ * @stable ICU 2.0
  **/
 typedef UColAttributeValue UCollationStrength;
 
 /** Attributes that collation service understands. All the attributes can take UCOL_DEFAULT
- * value, as well as the values specific to each one. */
+ * value, as well as the values specific to each one. 
+ * @stable ICU 2.0
+ */
 typedef enum {
      /** Attribute for direction of secondary weights - used in French.\ 
       * Acceptable values are UCOL_ON, which results in secondary weights
@@ -221,7 +232,9 @@ typedef enum {
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
 
-/** Options for retrieving the rule string */
+/** Options for retrieving the rule string 
+ *  @stable ICU 2.0
+ */
 typedef enum {
   /** Retrieve tailoring only */
   UCOL_TAILORING_ONLY, 
@@ -472,11 +485,13 @@ ucol_getSortKey(const    UCollator    *coll,
         uint8_t        *result,
         int32_t        resultLength);
 
-/** enum that is taken by ucol_getBound API */
-/* See below for explanation                */
-/* do not change the values assigned to the */
-/* members of this enum. Underlying code    */
-/* depends on them having these numbers     */
+/** enum that is taken by ucol_getBound API 
+ * See below for explanation                
+ * do not change the values assigned to the 
+ * members of this enum. Underlying code    
+ * depends on them having these numbers     
+ * @stable ICU 2.0
+ */
 typedef enum {
   /** lower bound */
   UCOL_BOUND_LOWER = 0,
@@ -675,7 +690,9 @@ ucol_safeClone(const UCollator *coll,
                int32_t         *pBufferSize,
                UErrorCode      *status);
 
-/** default memory size for the new clone. It needs to be this large for os/400 large pointers */
+/** default memory size for the new clone. It needs to be this large for os/400 large pointers 
+ * @stable ICU 2.0
+ */
 #define U_COL_SAFECLONE_BUFFERSIZE 512
 
 /**
