@@ -117,10 +117,11 @@ foreach(sort keys(%CFuncs)) {
 }
 
 print HEADER "\n/* C++ class names renaming defines */\n";
+print HEADER "#ifdef __cplusplus\n";
 foreach(sort keys(%CppClasses)) {
     print HEADER "#define $_ $_$U_ICU_VERSION_SUFFIX\n";
 }
-
+print HEADER "#endif\n";
 print HEADER "#endif\n";
 
 close HEADER;
