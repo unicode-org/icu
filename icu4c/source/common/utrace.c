@@ -133,7 +133,7 @@ utrace_format(char *outBuf, int32_t capacity, const char *fmt, va_list args) {
         case 'p':
             /*  Pointers  */
             ptrArg = va_arg(args, char *);
-            // TODO:  handle 64 bit ptrs.
+            /* TODO:  handle 64 bit ptrs.  */
             intArg = (int)ptrArg;
             T_CString_integerToString(tbuf, intArg, 16);
             for (tbufIx = 0; tbuf[tbufIx] != 0 && outIx < capacity; tbufIx++) {
@@ -147,8 +147,9 @@ utrace_format(char *outBuf, int32_t capacity, const char *fmt, va_list args) {
             break;
             
         default:
-            // %? in format string, where ? is some character not in the set
-            //    of recognized format chars.  Just output it as if % wasn't there.
+            /* %? in format string, where ? is some character not in the set
+             *    of recognized format chars.  Just output it as if % wasn't there.
+             */
             outBuf[outIx++] = fmtC;
         }
     }
