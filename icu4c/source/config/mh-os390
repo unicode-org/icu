@@ -1,8 +1,53 @@
 ## -*-makefile-*-
 ## 390-specific setup 
 
-CFLAGS390=	-W0,"langlvl(extended)" -g -Wc,dll,expo
+###################################################################
+#                    IMPORTANT NOTE                               #
+###################################################################
+# Before you try to run the Makefile, make sure you have the      #
+# environment variables set.                                      #
+#                                                                 #
+# If you are going to do the OS390BATCH build, make sure you have #
+# the OS390BATCH environment variable set.                        #
+#                                                                 #
+#   export OS390BATCH=1                                           #
+#                                                                 #
+# Also, search for the LOADMOD variable and set it to your        #
+# LOADMOD dataset. Make sure you have at least UPDATE access to   #
+# the dataset.                                                    #
+#                                                                 #
+#                                                                 #
+# To build a version of ICU which uses IEEE Floating point        #
+#                                                                 #
+#   export IEEE390=1                                              #
+#                                                                 #
+# To enable DEBUG mode, just type                                 #
+# export DEBUG=1                                                  #
+# on your shell (bash assumed) before building.                   #
+# To cancel DEBUG mode, type                                      #
+# unset DEBUG                                                     #
+# on your shell command line.                                     #
+###################################################################
+
+ifeq (${DEBUG}, 1)
+ICU_BUILD_OPTIONS = -g
+else
+ICU_BUILD_OPTIONS = -2
+endif
+
+ifeq (${IEEE390}, 1)
+ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_ON
+else
+ICU_IEEE          = 
+endif
+
+CFLAGS390=      -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
+## OS390BATCH
+ifeq (${OS390BATCH},1)
+DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -DOS390BATCH
+else
 DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED
+endif
 ARFLAGS=        -cr
 
 
