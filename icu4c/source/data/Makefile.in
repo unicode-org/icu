@@ -349,7 +349,9 @@ $(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(
 
 
 $(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
+	@echo Testing genrb -e option
+	@ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
+	@echo Finished testing genrb -e option
 
 ################################################################### TYP
 # TYP FILES
