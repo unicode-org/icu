@@ -343,6 +343,21 @@ testVisualMap21[]={
 	6, 5, 4, 3, 2, 1, 0, 7
 };
 
+static const uint8_t
+testTextXX[]={
+	L
+};
+
+static const UBiDiLevel
+testLevelsXX[]={
+	2
+};
+
+static const uint8_t
+testVisualMapXX[]={
+	0
+};
+
 BiDiTestData
 tests[]={
     {testText1,  ARRAY_LENGTH(testText1),  UBIDI_DEFAULT_LTR, -1, -1,
@@ -410,7 +425,9 @@ tests[]={
 		testLevels21, testVisualMap20},
 	{testText17, ARRAY_LENGTH(testText17), UBIDI_LTR, 0, 8,
 		UBIDI_MIXED, 0,
-		testLevels22, testVisualMap21}
+	    testLevels22, testVisualMap21},
+    {testTextXX, ARRAY_LENGTH(testTextXX), UBIDI_RTL, -1, -1, 
+        UBIDI_MIXED, 1, testLevelsXX, testVisualMapXX}
 };
 
 int
