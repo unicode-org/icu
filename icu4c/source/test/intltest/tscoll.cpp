@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -50,280 +50,50 @@
 #include "svccoll.h"
 #include "cmemory.h"
 
+#define TESTCLASS(n,classname)        \
+    case n:                           \
+        name = #classname;            \
+        if (exec) {                   \
+            logln(#classname "---");  \
+            logln("");                \
+            classname t;              \
+            callTest(t, par);         \
+        }                             \
+        break
+
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
-    if (exec)
-    {
+    if (exec) {
         logln("TestSuite Collator: ");
     }
 
-    switch (index)
-    {
-    case 0:
-        name = "CollationEnglishTest";
+    switch (index) {
+      TESTCLASS(0, CollationEnglishTest);
+      TESTCLASS(1, CollationFrenchTest);
+      TESTCLASS(2, CollationGermanTest);
+      TESTCLASS(3, CollationSpanishTest);
+      TESTCLASS(4, CollationKanaTest);
+      TESTCLASS(5, CollationTurkishTest);
+      TESTCLASS(6, CollationDummyTest);
+      TESTCLASS(7, G7CollationTest);
+      TESTCLASS(8, CollationMonkeyTest);
+      TESTCLASS(9, CollationAPITest);
+      TESTCLASS(10, CollationRegressionTest);
+      TESTCLASS(11, CollationCurrencyTest);
+      TESTCLASS(12, CollationIteratorTest);
+      TESTCLASS(13, CollationThaiTest);
+      TESTCLASS(14, LotusCollationKoreanTest);
+      TESTCLASS(15, StringSearchTest);
+      TESTCLASS(16, ContractionTableTest);
+      TESTCLASS(17, DataDrivenCollatorTest);
+      TESTCLASS(18, UCAConformanceTest);
+      TESTCLASS(19, CollationServiceTest);
 
-        if (exec)
-        {
-            logln("CollationEnglishtest---");
-            logln("");
-            CollationEnglishTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 1:
-        name = "CollationFrenchTest";
-        
-        if (exec)
-        {
-            logln("CollationFrenchtest---");
-            logln("");
-            CollationFrenchTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 2:
-        name = "CollationGermanTest";
-        
-        if (exec)
-        {
-            logln("CollationGermantest---");
-            logln("");
-
-            CollationGermanTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 3:
-        name = "CollationDanishTest"; 
-
-        if (0) // exec // removed by weiv - we have changed Danish collation
-        {
-            logln("CollationDanishtest---");
-            logln("");
-            
-            CollationDanishTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 4:
-        name = "CollationSpanishTest";
-        
-        if (exec)
-        {
-            logln("CollationSpanishtest---");
-            logln("");
-
-            CollationSpanishTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 5:
-        name = "CollationFinnishTest"; 
-
-        if (0) // exec // removed by weiv - we have changed Finnish collation
-        {
-            logln("CollationFinnishtest---");
-            
-            CollationFinnishTest test;
-            callTest( test, par ); 
-        }
-        break;
-
-    case 6:
-        name = "CollationKanaTest"; 
-
-        if (exec)
-        {
-            logln("CollationKanatest---");
-            
-            CollationKanaTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 7:
-        name = "CollationTurkishTest";
-        
-        if (exec)
-        {
-            logln("CollationTurkishtest---");
-            logln("");
-
-            CollationTurkishTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 8:
-        name = "CollationDummyTest"; 
-
-        if (exec)
-        {
-            logln("CollationDummyTest---");
-            
-            CollationDummyTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 9:
-        name = "G7CollationTest";
-        
-        if (exec)
-        {
-            logln("G7CollationTest---");
-            
-            G7CollationTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 10:
-        name = "CollationMonkeyTest";
-        
-        if (exec)
-        {
-            logln("CollationMonkeyTest---");
-            
-            CollationMonkeyTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 11:
-        name = "CollationAPITest";
-        
-        if (exec)
-        {
-            logln("CollationAPITest---");
-            logln("");
-            
-            CollationAPITest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 12:
-        name = "CollationRegressionTest"; 
-
-        if (exec)
-        {
-            logln("CollationRegressionTest---");
-            
-            CollationRegressionTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 13:
-        name = "CollationCurrencyTest"; 
-
-        if (exec)
-        {
-            logln("CollationCurrencyTest---");
-            logln("");
-            
-            CollationCurrencyTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 14:
-        name = "CollationIteratorTest"; 
-
-        if (exec)
-        {
-            logln("CollationIteratorTest---");
-            
-            CollationIteratorTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 15: 
-      /*        name = "CollationCAPITest"; 
-        if (exec) {
-            logln("Collation C API test---"); logln("");
-            CollationCAPITest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 16: */
-        name = "CollationThaiTest"; 
-        if (exec) {
-            logln("CollationThaiTest---"); 
-            
-            CollationThaiTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 16: 
-        name = "LotusCollationTest";
-
-        name = "LotusCollationKoreanTest"; 
-        if (exec) {
-            logln("LotusCollationKoreanTest---"); logln("");
-            LotusCollationKoreanTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 17:
-        name = "StringSearchTest"; 
-        if (exec) {
-            logln("StringSearchTest---"); 
-            
-            StringSearchTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 18: 
-        name = "ContractionTableTest";
-
-        name = "ContractionTableTest"; 
-        if (exec) {
-            logln("ContractionTableTest---"); logln("");
-            ContractionTableTest test;
-            callTest( test, par );
-        }
-        break;
-
-    case 19:
-      name = "DataDrivenTest";
-      if (exec) {
-        logln("DataDrivenTest---"); logln("");
-        DataDrivenCollatorTest test;
-        callTest( test, par );
-      }
-      break;
-
-    case 20:
-      name = "UCAConformanceTest";
-      if (exec) {
-        logln("UCAConformanceTest---"); logln("");
-        UCAConformanceTest test;
-        callTest( test, par );
-      }
-      break;
-
-    case 21:
-      name = "CollationServiceTest";
-      if (exec) {
-        logln("CollationServiceTest---"); logln("");
-        CollationServiceTest test;
-        callTest( test, par );
-      }
-      break;
-
-    default: name = ""; break;
+      //TESTCLASS(n, CollationDanishTest); // removed by weiv - we have changed Danish collation
+      //TESTCLASS(n, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
+      //TESTCLASS(n, CollationCAPITest);
+      
+      default: name = ""; break;
     }
 }
 
