@@ -118,9 +118,11 @@ static struct SRBRoot *bundle;
 static const char     *inputdir;
 static uint32_t        inputdirLength;
 
+static UBool gMakeBinaryCollation = TRUE;
+
 static struct SResource *parseResource(char *tag, UErrorCode *status);
 
-void initParser(void)
+void initParser(UBool makeBinaryCollation)
 {
     uint32_t i;
 
@@ -140,6 +142,7 @@ void initParser(void)
     {
         ustr_init(&lookahead[i].value);
     }
+    gMakeBinaryCollation = makeBinaryCollation;
 }
 
 /* The nature of the lookahead buffer:
@@ -641,60 +644,66 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
 #if UCONFIG_NO_COLLATION
             warning(line, "Not building collation elements because of UCONFIG_NO_COLLATION, see uconfig.h");
 #else
-            UErrorCode intStatus = U_ZERO_ERROR;
-
-            /* do the collation elements */
-            int32_t     len   = 0;
-            uint8_t   *data  = NULL;
-            UCollator *coll  = NULL;
-            UParseError parseError;
-            /* add sequence */
+            /* first we add the "Sequence", so that we always have rules */
             table_add(result, member, line, status);
+            if(gMakeBinaryCollation) {
+              UErrorCode intStatus = U_ZERO_ERROR;
+
+              /* do the collation elements */
+              int32_t     len   = 0;
+              uint8_t   *data  = NULL;
+              UCollator *coll  = NULL;
+              UParseError parseError;
+              /* add sequence */
+              /*table_add(result, member, line, status);*/
             
-            coll = ucol_openRules(member->u.fString.fChars, member->u.fString.fLength,
-                UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
+              coll = ucol_openRules(member->u.fString.fChars, member->u.fString.fLength,
+                  UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
 
-            if (U_SUCCESS(intStatus) && coll != NULL)
-            {
-                data = ucol_cloneRuleData(coll, &len, &intStatus);
+              if (U_SUCCESS(intStatus) && coll != NULL)
+              {
+                  data = ucol_cloneRuleData(coll, &len, &intStatus);
 
-                /* tailoring rules version */
-                /* This is wrong! */
-                /*coll->dataInfo.dataVersion[1] = version[0];*/
-                /* Copy tailoring version. Builder version already */
-                /* set in ucol_openRules */
-                ((UCATableHeader *)data)->version[1] = version[0];
-                ((UCATableHeader *)data)->version[2] = version[1];
-                ((UCATableHeader *)data)->version[3] = version[2];
+                  /* tailoring rules version */
+                  /* This is wrong! */
+                  /*coll->dataInfo.dataVersion[1] = version[0];*/
+                  /* Copy tailoring version. Builder version already */
+                  /* set in ucol_openRules */
+                  ((UCATableHeader *)data)->version[1] = version[0];
+                  ((UCATableHeader *)data)->version[2] = version[1];
+                  ((UCATableHeader *)data)->version[3] = version[2];
 
-                if (U_SUCCESS(intStatus) && data != NULL)
-                {
-                    member = bin_open(bundle, "%%CollationBin", len, data, NULL, status);
-                    /*table_add(bundle->fRoot, member, line, status);*/
-                    table_add(result, member, line, status);
-                    uprv_free(data);
-                }
-                else
-                {
-                    warning(line, "could not obtain rules from collator");
-                    if(isStrict()){
-                        *status = U_INVALID_FORMAT_ERROR;
-                        return NULL;
-                    }
-                }
+                  if (U_SUCCESS(intStatus) && data != NULL)
+                  {
+                      member = bin_open(bundle, "%%CollationBin", len, data, NULL, status);
+                      /*table_add(bundle->fRoot, member, line, status);*/
+                      table_add(result, member, line, status);
+                      uprv_free(data);
+                  }
+                  else
+                  {
+                      warning(line, "could not obtain rules from collator");
+                      if(isStrict()){
+                          *status = U_INVALID_FORMAT_ERROR;
+                          return NULL;
+                      }
+                  }
 
-                ucol_close(coll);
+                  ucol_close(coll);
+              }
+              else
+              {
+                  warning(line, "%%Collation could not be constructed from CollationElements - check context!");
+                  if(isStrict()){
+                          *status = U_INVALID_FORMAT_ERROR;
+                          return NULL;
+                  }
+              }
+            } else {
+              if(isVerbose()) {
+                printf("Not building Collation binary\n");
+              }
             }
-            else
-            {
-                warning(line, "%%Collation could not be constructed from CollationElements - check context!");
-                if(isStrict()){
-                        *status = U_INVALID_FORMAT_ERROR;
-                        return NULL;
-                }
-            }
-            
-
 #endif
         }
 

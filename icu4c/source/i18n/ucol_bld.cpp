@@ -28,7 +28,7 @@
 #include "umutex.h"
 #include "unicode/uniset.h"
 
-static const InverseTableHeader* invUCA = NULL;
+static const InverseUCATableHeader* invUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
 
 U_CDECL_BEGIN
@@ -1170,24 +1170,33 @@ ucol_bld_cleanup(void)
     return TRUE;
 }
 
-U_CAPI const InverseTableHeader * U_EXPORT2
+U_CAPI const InverseUCATableHeader * U_EXPORT2
 ucol_initInverseUCA(UErrorCode *status)
 {
     if(U_FAILURE(*status)) return NULL;
     
     if(invUCA == NULL) {
-        InverseTableHeader *newInvUCA = NULL;
+        InverseUCATableHeader *newInvUCA = NULL;
         UDataMemory *result = udata_openChoice(NULL, INVC_DATA_TYPE, INVC_DATA_NAME, isAcceptableInvUCA, NULL, status);
         
         if(U_FAILURE(*status)) {
             if (result) {
                 udata_close(result);
             }
-            uprv_free(newInvUCA);
+            // This is not needed, as we are talking about
+            // memory we got from UData
+            //uprv_free(newInvUCA);
         }
         
         if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
-            newInvUCA = (InverseTableHeader *)udata_getMemory(result);
+            newInvUCA = (InverseUCATableHeader *)udata_getMemory(result);
+            UCollator *UCA = ucol_initUCA(status);
+            // UCA versions of UCA and inverse UCA should match
+            if(uprv_memcmp(newInvUCA->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0) {
+              *status = U_INVALID_FORMAT_ERROR;
+              udata_close(result);
+              return NULL;
+            }
             
             umtx_lock(NULL);
             if(invUCA == NULL) {
@@ -1200,7 +1209,9 @@ ucol_initInverseUCA(UErrorCode *status)
             
             if(newInvUCA != NULL) {
                 udata_close(result);
-                uprv_free(newInvUCA);
+                // This is not needed, as we are talking about
+                // memory we got from UData
+                //uprv_free(newInvUCA);
             }
             else {
                 ucln_i18n_registerCleanup();

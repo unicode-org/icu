@@ -270,15 +270,15 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   return inversePos;
 }
 
-static InverseTableHeader *assembleInverseTable(UErrorCode *status)
+static InverseUCATableHeader *assembleInverseTable(UErrorCode *status)
 {
-  InverseTableHeader *result = NULL;
-  uint32_t headerByteSize = paddedsize(sizeof(InverseTableHeader));
+  InverseUCATableHeader *result = NULL;
+  uint32_t headerByteSize = paddedsize(sizeof(InverseUCATableHeader));
   uint32_t inverseTableByteSize = (inversePos+2)*sizeof(uint32_t)*3;
   uint32_t contsByteSize = sContPos * sizeof(UChar);
   uint32_t i = 0;
 
-  result = (InverseTableHeader *)uprv_malloc(headerByteSize + inverseTableByteSize + contsByteSize);
+  result = (InverseUCATableHeader *)uprv_malloc(headerByteSize + inverseTableByteSize + contsByteSize);
   if(result != NULL) {
     result->byteSize = headerByteSize + inverseTableByteSize + contsByteSize;
 
@@ -314,7 +314,7 @@ static InverseTableHeader *assembleInverseTable(UErrorCode *status)
 }
 
 
-static void writeOutInverseData(InverseTableHeader *data, 
+static void writeOutInverseData(InverseUCATableHeader *data, 
                   const char *outputDir, 
                   const char *copyright,
                   UErrorCode *status)
@@ -878,6 +878,11 @@ struct {
         }
     }
 
+    if(UCAVersion[0] == 0 && UCAVersion[1] == 0 && UCAVersion[2] == 0 && UCAVersion[3] == 0) {
+      fprintf(stderr, "UCA version not specified. Cannot create data file!\n");
+      return -1;
+    }
+
 
     if (VERBOSE) {
         fprintf(stdout, "\nLines read: %i\n", line);
@@ -924,7 +929,8 @@ struct {
 
     writeOutData(myData, &consts, contractionCEs, noOfContractions, outputDir, copyright, status);
 
-    InverseTableHeader *inverse = assembleInverseTable(status);
+    InverseUCATableHeader *inverse = assembleInverseTable(status);
+    uprv_memcpy(inverse->UCAVersion, UCAVersion, sizeof(UVersionInfo));
     writeOutInverseData(inverse, outputDir, copyright, status);
 
     uprv_uca_closeTempTable(t);    
@@ -960,6 +966,7 @@ int main(int argc, char* argv[]) {
     char filename[300];
     char *basename = NULL;
     const char *copyright = NULL;
+    uprv_memset(&UCAVersion, 0, 4);
 
     U_MAIN_INIT_ARGS(argc, argv);
 

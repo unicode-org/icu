@@ -1522,7 +1522,7 @@ uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status)
 
     if(U_SUCCESS(*status)) {
       tempColl->rb = NULL;
-      tempColl->binary = NULL;
+      tempColl->elements = NULL;
       tempColl->validLocale = NULL;
       tempColl->requestedLocale = NULL;
       tempColl->hasRealData = TRUE;
