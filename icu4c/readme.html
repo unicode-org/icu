@@ -12,39 +12,42 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <title>ReadMe for ICU</title>
+<style type="text/css">
+      H1 {border-width: 1; border: solid; text-align: center}
+      H2 {text-decoration: underline}
+      H3 {text-decoration: underline}
+      H4 {text-decoration: underline}
+      H5 {text-decoration: underline}
+      HR {height: 2; width: "100%"; text-align: center}
+      PRE {margin-left: .5in; margin-bottom: .5in}
+   
+</style>
   </head>
 
   <body lang="en-US">
-    <h4>Late breaking news:</h4>
-
-    <ul>
-      <li><a href="#hpux_data_note">HP/UX shared library loading</a></li>
-
-      <li><a href="#buffer_overflow">Important change of error codes from
-      streaming conversion functions</a></li>
-    </ul>
-    <hr>
-
-    <h2>ReadMe: International Components for Unicode</h2>
+    <h1>International Components for Unicode<br>
+     ReadMe</h1>
 
     <p>Version: May 30, 2000<br>
      Copyright &copy; 1997-2000 International Business Machines Corporation
     and others. All Rights Reserved.</p>
-    <hr size="2" width="100%" align="center">
+    <hr>
 
     <p><br>
     <br>
     </p>
 
-    <h2><u>Contents</u></h2>
+    <h2>Contents</h2>
 
     <ul type="disc">
+      <li><a href="#news">Late Breaking News And What Is New?</a></li>
+
       <li><a href="#introduction">Introduction</a></li>
 
       <li><a href="#WhatContain">What the International Components for
       Unicode Contain</a></li>
 
-      <li><a href="#API">API overview</a></li>
+      <li><a href="#API">API Overview</a></li>
 
       <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
 
@@ -52,22 +55,32 @@
 
       <li><a href="#HowToInstall">How to Build And Install ICU</a></li>
 
-      <li><a href="#datahandling">How ICU handles data</a></li>
+      <li><a href="#dataHandling">How ICU Handles Data</a></li>
 
       <li><a href="#CharsetConvert">Character Set Conversion
       Information</a></li>
 
-      <li><a href="#VersionNumbers">Version Numbers in ICU</a></li>
+      <li><a href="#VersionNumbers">Version Numbers In ICU</a></li>
 
       <li><a href="#ProgrammingNotes">Programming Notes</a></li>
 
-      <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
+      <li><a href="#WhereToFindMore">Where To Find More Information</a></li>
 
       <li><a href="#SubmittingComments">Submitting Comments, Requesting
       Features and Reporting Bugs</a></li>
     </ul>
 
-    <h2><u><a name="introduction">Introduction</a></u></h2>
+    <h2><a name="#news">Late Breaking News And What Is New?</a></h2>
+
+    <ul>
+      <li><a href="#sharedLibNote">Using Shared Data Libraries</a></li>
+
+      <li><a href="#ErrcodeChanges">Important Change Of Error Codes From
+    Streaming Conversion Functions</a></li>
+    </ul>
+    <hr>
+
+    <h2><a name="introduction">Introduction</a></h2>
 
     <p>Today's software market is a global one in which it is desirable to
     develop and maintain one application that supports a wide variety of
@@ -117,36 +130,35 @@
     committed to fixing any bugs, and will also use your feedback to help
     plan future releases.</p>
 
-    <p><b><u>IMPORTANT</u>: Please make sure you understand the <a href=
-    "license.html">Copyright and License information</a>.</b></p>
+    <p><strong><u>IMPORTANT</u>: Please make sure you understand the <a href=
+    "license.html">Copyright and License information</a>.</strong></p>
 
     <p><br>
     </p>
 
-    <h2><u><a name="WhatContain">What the International Components for
-    Unicode Contain</a></u></h2>
+    <h2><a name="WhatContain">What the International Components for Unicode
+    Contain</a></h2>
 
     <p>There are two ways to download the ICU releases,</p>
 
     <ul type="disc">
-      <li><strong>Official Release Snapshot:</strong><b><br>
-      </b> If you want to use ICU (as opposed to developing it), your best
-      bet is to download an official, packaged ICU version of the ICU source
-      code. These versions are tested more thoroughly than day-to-day
-      development builds of the system, and they are packaged in zip and tar
-      files for convenient download. These packaged files can be found at <a
-      href=
+      <li><strong>Official Release Snapshot:</strong><br>
+       If you want to use ICU (as opposed to developing it), your best bet is
+      to download an official, packaged ICU version of the ICU source code.
+      These versions are tested more thoroughly than day-to-day development
+      builds of the system, and they are packaged in zip and tar files for
+      convenient download. These packaged files can be found at <a href=
       "http://oss.software.ibm.com/icu/download/index.html">http://oss.software.ibm.com/icu/download/index.html</a>.<br>
 
-       If packaged snapshot is named <b>ICUXXXXXX.zip</b> , XXXXXX is the
-      release version number.<br>
+       If packaged snapshot is named <strong>ICUXXXXXX.zip</strong> , XXXXXX
+      is the release version number.<br>
        Please unzip this file. It will re-construct the source
       directory.</li>
 
-      <li><strong>CVS Source Repository:</strong><b><br>
-      </b> If you are interested in developing features, patches, or bug
-      fixes for ICU, you should probably be working with the latest version
-      of the ICU source code. You will need to check the code out of our CVS
+      <li><strong>CVS Source Repository:</strong><br>
+       If you are interested in developing features, patches, or bug fixes
+      for ICU, you should probably be working with the latest version of the
+      ICU source code. You will need to check the code out of our CVS
       repository to ensure that you have the most recent version of all of
       the files. There are several ways to do this:</li>
 
@@ -204,14 +216,14 @@
     please also see <a href=
     "http://oss.software.ibm.com/icu/download/index.html">http:/oss.software.ibm.com/icu/download/index.html</a></p>
 
-    <p>Below, <b>$Root</b> is the placement of the icu directory in your file
-    system, like "drive:\...\icu" in your environment. "drive:\..." stands
-    for any drive and any directory on that drive that you chose to install
-    icu into.</p>
+    <p>Below, <strong>$Root</strong> is the placement of the icu directory in
+    your file system, like "drive:\...\icu" in your environment. "drive:\..."
+    stands for any drive and any directory on that drive that you chose to
+    install icu into.</p>
 
     <table border="1" cellpadding="0" width="100%">
       <caption align="left">
-        <b>The following files describe the code drop</b>
+        <strong>The following files describe the code drop</strong>
       </caption>
 
       <tr>
@@ -234,6 +246,17 @@
           <p>Contains IBM's public license</p>
         </td>
       </tr>
+
+      <tr>
+        <td width="20%">
+          <p>$Root/docs</p>
+        </td>
+
+        <td width="80%">
+          <p>API documentation for the International Components for
+          Unicode</p>
+        </td>
+      </tr>
     </table>
 
     <p><br>
@@ -241,7 +264,8 @@
 
     <table border="1" cellpadding="0" width="100%">
       <caption align="left">
-        <b>The following directories contain source code and data files</b>
+        <strong>The following directories contain source code and data
+        files</strong>
       </caption>
 
       <tr>
@@ -366,8 +390,8 @@
 
     <table border="1" cellpadding="0" width="100%">
       <caption align="left">
-        <b>The following directories are populated when you've built the
-        framework</b><br>
+        <strong>The following directories are populated when you've built the
+        framework</strong><br>
          (on Unix, replace $Root with the value given to the "configure"
         script)
       </caption>
@@ -394,27 +418,90 @@
       </tr>
     </table>
 
-    <p><b>The following diagram shows the main directory structure of the
-    International Components for Unicode:</b></p>
-<pre>
-                                    icu-NNNN
-                                       |
-       output                         icu
-    _____|_____          ______________|______________________________
-    |         |          |       |           |         |             |
- libraries  programs  include   data       source      |             |
-  (built)   (built)   (built)                |      readme.html license.html
-                                             |
-                            _________________|______________________
-                            |      |       |       |       |       |
-                          common  i18n    test   extra   tools  samples
-                                           |               | 
-                                        ___|___         ___|__________________
-                                        |     |         |       |       |    |
-                                  intltest cintltst  makeconv ctestfw genrb ....
-</pre>
+    <p><strong>The following shows the main directory structure of the
+    International Components for Unicode</strong></p>
 
-    <h2><u><a name="API">API Overview</a></u></h2>
+    <ul style='list-style-type: disc'>
+      <li>
+        output 
+
+        <ul style='list-style-type: circle'>
+          <li>libraries (built)</li>
+
+          <li>programs (built)</li>
+        </ul>
+      </li>
+
+      <li>
+        icu-NNNN 
+
+        <ul style='list-style-type: circle'>
+          <li>
+            icu 
+
+            <ul style='list-style-type: square'>
+              <li>readme.html</li>
+
+              <li>license.html</li>
+
+              <li>include (built)</li>
+
+              <li>data</li>
+
+              <li>docs</li>
+
+              <li>
+                source 
+
+                <ul style='list-style-type: disc'>
+                  <li>common</li>
+
+                  <li>
+                    extra 
+
+                    <ul style='list-style-type: circle'>
+                      <li>ustdio</li>
+                    </ul>
+                  </li>
+
+                  <li>i18n</li>
+
+                  <li>samples</li>
+
+                  <li>
+                    test 
+
+                    <ul style='list-style-type: circle'>
+                      <li>cintltst</li>
+
+                      <li>intltest</li>
+                    </ul>
+                  </li>
+
+                  <li>
+                    tools 
+
+                    <ul style='list-style-type: circle'>
+                      <li>ctestfw</li>
+
+                      <li>genrb</li>
+
+                      <li>pkgdata</li>
+
+                      <li>makeconv</li>
+
+                      <li>...</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2><a name="API">API Overview</a></h2>
 
     <p>In the International Components for Unicode, there are two
     categories:</p>
@@ -460,7 +547,7 @@
     <br>
     </p>
 
-    <h2><a name="PlatformDependencies"></a><u>Platform Dependencies</u></h2>
+    <h2><a name="PlatformDependencies">Platform Dependencies</a></h2>
 
     <p>The platform dependencies have been isolated into the following 4
     files:</p>
@@ -554,9 +641,9 @@
       </li>
     </ul>
 
-    <h2><u><a name="ImportantNotes">Important Installation Notes</a></u></h2>
+    <h2><a name="ImportantNotes">Important Installation Notes</a></h2>
 
-    <h3><u><a name="ImportantNotesWin32">Win32 Platform</a></u></h3>
+    <h3><a name="ImportantNotesWin32">Win32 Platform</a></h3>
 
     <p>If you are building on the Win32 platform, it is important that you
     understand a few build details:</p>
@@ -577,23 +664,23 @@
     drive:\installation-directory\icu).</p>
 
     <ul type="disk">
-      <li><b>Windows 2000</b>: Use the System Icon in the Control Panel. Pick
-      the "Advanced" tab. Select the "Environment Variables..." button.
-      Select the variable PATH in the lower box, and select the lower
+      <li><strong>Windows 2000</strong>: Use the System Icon in the Control
+      Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
+      button. Select the variable PATH in the lower box, and select the lower
       "Edit..." button. In the "Variable Value" box, append the string
       ";$Root\bin\Debug" to the end of the path string. If there is nothing
       there, just type in "$Root\bin\Debug". Click the Set button, then the
       OK button.</li>
 
-      <li><b>Windows NT</b>: Use the System Icon in the Control Panel. Pick
-      the "Environment" tab, and select the variable PATH in the lower box.
-      In the "value" box, append the string ";$Root\bin\Debug" at the end of
-      the path string. If there is nothing there, just type in
+      <li><strong>Windows NT</strong>: Use the System Icon in the Control
+      Panel. Pick the "Environment" tab, and select the variable PATH in the
+      lower box. In the "value" box, append the string ";$Root\bin\Debug" at
+      the end of the path string. If there is nothing there, just type in
       "drive:\...\icu\bin\Debug". Click the Set button, then the Ok
       button.</li>
 
-      <li><b>Windows 95/98/ME</b>: Edit the autoexec.bat, and add the
-      following line to the end of file, "SET
+      <li><strong>Windows 95/98/ME</strong>: Edit the autoexec.bat, and add
+      the following line to the end of file, "SET
       PATH=%PATH%;$Root\bin\Debug"</li>
     </ul>
 
@@ -606,7 +693,7 @@
     seemingly get memory errors when you run the executable.<br>
     </p>
 
-    <h3><u><a name="ImportantNotesOS390">OS/390 Platform</a></u></h3>
+    <h3><a name="ImportantNotesOS390">OS/390 Platform</a></h3>
 
     <p>If you are building on the OS/390 UNIX System Services platform, it is
     important that you understand a few details:</p>
@@ -690,7 +777,7 @@
       correct.</li>
     </ul>
 
-    <h3><u><a name="ImportantNotesOS400">OS/400 Platform</a></u></h3>
+    <h3><a name="ImportantNotesOS400">OS/400 Platform</a></h3>
 
     <p>ICU Reference Release 1.4.0 contains partial support for the 400
     platform, but additional work by the user is currently needed to get it
@@ -742,8 +829,9 @@
           the resolution of CRTCPPMOD used by the icc compiler</li>
 
           <li>
-            Configure the Makefiles (see configure below) Note: Verify that
-            the mh-os400 configure file is used. 
+            Configure the Makefiles (see configure below)
+            <strong>Note:</strong> Verify that the mh-os400 configure file is
+            used. 
 
             <ul>
               <li>Run 'configure --host=as400-os400'</li>
@@ -751,9 +839,9 @@
               <li>The 'clean' and 'install' targets will not work without
               changes because of symbolic links. To delete the target module,
               program, or service programs replace <tt>rm -rf</tt> with
-              <b>$(RMV)</b>, and in the library installation targets
-              (install-library) change <tt>$(INSTALL)</tt> to
-              <b><tt>$(INSTALL-S)</tt></b>.</li>
+              <strong>$(RMV)</strong>, and in the library installation
+              targets (install-library) change <tt>$(INSTALL)</tt> to
+              <strong><tt>$(INSTALL-S)</tt></strong>.</li>
             </ul>
           </li>
 
@@ -762,7 +850,7 @@
         <!-- end build environment -->
       </li>
     </ul>
-    Note on NULL pointer checks: 
+    <strong>Note:</strong> About the NULL pointer checks 
 
     <div style="margin-left: 2em">
       In common/ucnv.c and common/unistr.c (search for U_MAX_PTR), there are
@@ -770,10 +858,10 @@
       works differently on the AS/400 architecture.
     </div>
 
-    <h2><u><a name="HowToInstall">How To Build And Install ICU</a></u></h2>
+    <h2><a name="HowToInstall">How To Build And Install ICU</a></h2>
 
-    <h3><u><a name="HowToInstallWindows">How To Build And Install On
-    Windows</a></u></h3>
+    <h3><a name="HowToInstallWindows">How To Build And Install On
+    Windows</a></h3>
 
     <p>Building International Components for Unicode requires:</p>
 
@@ -849,7 +937,7 @@
       <li>You are now able to develop applications with ICU.</li>
     </ol>
 
-    <p><b>Note:</b> To set the active configuration, two different
+    <p><strong>Note:</strong> To set the active configuration, two different
     possibilities are:</p>
 
     <ul type="disc">
@@ -889,8 +977,7 @@
      <br>
      
 
-    <h3><u><a name="HowToInstallUnix">How To Build And Install On
-    Unix</a></u></h3>
+    <h3><a name="HowToInstallUnix">How To Build And Install On Unix</a></h3>
 
     <p>There is a set of Makefiles for Unix that supports Linux w/gcc,
     Solaris w/gcc and Workshop CC, AIX w/xlc and OS/390 with C++.</p>
@@ -970,7 +1057,7 @@
       <li>intltest and cintltst, if you want to run the test suite.</li>
     </ol>
 
-    <p><b>Note about HP/UX data libraries:</b></p>
+    <h3><a name="sharedLibNote">Using Shared Data Libraries</a></h3>
 
     <p style='margin-left:.5in'>HP/UX has a documented characteristic where
     the shl_unload() function always unloads a library, regardless of how
@@ -981,9 +1068,9 @@
     once a data library is loaded (ex: libicudata.sl) by a process, it cannot
     be unloaded and replaced without stopping and restarting the process.</p>
 
-    <h2><a name="datahandling"><u>How ICU handles data</u></a></h2>
+    <h2><a name="dataHandling">How ICU handles data</a></h2>
 
-    <h3><u>How to add a locale data file</u></h3>
+    <h3><a name="addDataHandling">How to add a locale data file</a></h3>
 
     <p>To add locale data files to International Components for Unicode do
     the following:</p>
@@ -1011,8 +1098,8 @@
       on how to verify the ICU release.</li>
     </ol>
 
-    <h3><u><a name="addrbdatatoapp">How to add resource bundle data to your
-    application</a></u></h3>
+    <h3><a name="addRBDataToApp">How to add resource bundle data to your
+    application</a></h3>
 
     <p>Adding resource bundle data to your application is quite simple:</p>
 
@@ -1024,14 +1111,13 @@
     "http://www.ibm.com/java/education/international-unicode/unicodec.html">resource
     bundle format)</a>.</p>
 
-    <p><b>Note</b>: resource bundle tag names should contain only invariant
-    7-bit ASCII characters (e.g. ones from the following set: <code>A-Z, a-z,
-    0-9, &lt;SP&gt;, ", %, &amp;, `, (, ), *, +, ,, -, ., /, :, ;, &lt;, =,
-    &gt;, ?, _)</code>. Use that same directory name (absolute path) when
-    instantiating a resource bundle at run time.</p>
+    <p><strong>Note:</strong> resource bundle tag names should contain only
+    invariant 7-bit ASCII characters (e.g. ones from the following set:
+    <code>A-Z, a-z, 0-9, &lt;SP&gt;, ", %, &amp;, `, (, ), *, +, ,, -, ., /,
+    :, ;, &lt;, =, &gt;, ?, _)</code>. Use that same directory name (absolute
+    path) when instantiating a resource bundle at run time.</p>
 
-    <h3><u><a name="WhereCollation">Where Collation Data is
-    stored</a></u></h3>
+    <h3><a name="WhereCollation">Where Collation Data is stored</a></h3>
 
     <p>Collation data is stored in a single directory on a local disk. Each
     locale's data is stored in a corresponding ASCII text file indicated by a
@@ -1062,16 +1148,18 @@
       <li>You are moving your data to another platform. Since the ".col"
       files are non-portable, you must make sure they are regenerated.</li>
 
-      <li><b>DO NOT</b> copy them from one platform to another.</li>
+      <li><strong>DO NOT</strong> copy them from one platform to
+      another.</li>
 
       <li>You have changed the "CollationElements" data in the locale's
-      ".txt" file. Note that if you change the default rules for some reason,
-      which underlie all collations, then you will have to rebuild ALL your
-      ".col" files, since they all are merged with the default rule set.</li>
+      ".txt" file. <strong>Note:</strong> if you change the default rules for
+      some reason, which underlie all collations, then you will have to
+      rebuild ALL your ".col" files, since they all are merged with the
+      default rule set.</li>
     </ol>
 
-    <h2><u><a name="CharsetConvert">Character Set Conversion
-    Information</a></u></h2>
+    <h2><a name="CharsetConvert">Character Set Conversion
+    Information</a></h2>
 
     <p>The charset conversion library provides ways to convert simple text
     strings (e.g., char*) such as ISO 8859-1 to and from Unicode. The
@@ -1096,7 +1184,7 @@
     request document number SC09-2190-00. The cost of this publication is
     $75.00 US not including tax.</p>
 
-    <h2><u><a name="VersionNumbers">Version Numbers in ICU</a></u></h2>
+    <h2><a name="VersionNumbers">Version Numbers In ICU</a></h2>
 
     <p>ICU supports extensive versioning of its code and data. Versioning
     allows clients to determine when parts of ICU change, and what the effect
@@ -1134,8 +1222,7 @@
     <p>The interpretation of version numbers depends on what is being
     described.</p>
 
-    <h3><u><a name="VersionNumbersRelease">ICU Release Version
-    Number</a></u></h3>
+    <h3><a name="VersionNumbersRelease">ICU Release Version Number</a></h3>
 
     <p>0 (Major): Reference release with major feature addition or
     change.</p>
@@ -1146,8 +1233,7 @@
 
     <p>3 (Patch): Enhancement/patch update.</p>
 
-    <h3><u><a name="VersionNumbersCode">Code Component Version
-    Numbers</a></u></h3>
+    <h3><a name="VersionNumbersCode">Code Component Version Numbers</a></h3>
 
     <p>0 (Major): Breaking change. Results and data generated by the new
     version are incompatible with those generated by the preceding version.
@@ -1173,8 +1259,7 @@
     <p>3 (Patch): Enhancement. A minor change. <em>Example</em>: Performance
     enhancements applied to the code but no changes other than that.</p>
 
-    <h3><u><a name="VersionNumbersData">Data Component Version
-    Numbers</a></u></h3>
+    <h3><a name="VersionNumbersData">Data Component Version Numbers</a></h3>
 
     <p>0 (Major): Incompatible format change. The layout or format of the
     data has changed. For example, an additional array element has been
@@ -1197,18 +1282,16 @@
     <p>3 (Patch): Enhancement. A minor change. <em>Example</em>: We changed
     the comments in the data file, perhaps the copyright notices.</p>
 
-    <h3><u><a name="VersionNumbersData">Resource Bundles and
-    Elements</a></u></h3>
+    <h3><a name="VersionNumbersRB">Resource Bundles and Elements</a></h3>
 
     <p>The data stored in resource bundles is tagged with version numbers. A
     resource bundle can contain a tagged string named "Version" that declares
     the version number in dotted-integer format. <em>Example</em>:</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+<pre>
 en {
   Version { "1.0.3.5" }
   ...
 }
-
 </pre>
 
     <p>A resource bundle may omit the "Version" element, in which case it
@@ -1222,14 +1305,13 @@ en {
 
     <p>Elements within a resource bundle may also contain version numbers,
     for example:</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+<pre>
 be {
   CollationElements { 
     Version { "1.0.0.0" }
     ...
   }
 }
-
 </pre>
 
     <p>Here the CollationElements data is version 1.0.0.0. This version may
@@ -1239,7 +1321,7 @@ be {
     "Version" element of its enclosing resource bundle. (This is a special
     case; in general, resource bundle elements do not inherit data from
     enclosing structures.) <em>Example</em>:</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+<pre>
 en {
   Version { "1.0.3.5" }
   ...
@@ -1250,18 +1332,17 @@ en_US {
     ...(contains no "Version" element)
   }
 }
-
 </pre>
 
     <p>Here, the version of the CollationElements in en_US is 1.0.3.5. It
     inherits the en_US version, which is inherited from en.</p>
 
-    <p><b>NOTE</b>: The API and code to fully support the mechanism described
-    above is not in place yet as of ICU 1.6. See Future Enhancements
-    below.</p>
+    <p><strong>Note:</strong> The API and code to fully support the mechanism
+    described above is not in place yet as of ICU 1.6. See <a href=
+    "#VersionNumbersFuture">Future Enhancements</a> below.</p>
 
-    <h3><u><a name="VersionNumbersWhatComponents">What Components are
-    Versioned</a></u></h3>
+    <h3><a name="VersionNumbersWhatComponents">What Components are
+    Versioned</a></h3>
 
     <p>Currently, the following components are versioned.</p>
 
@@ -1285,7 +1366,7 @@ en_US {
       the collation code and algorithm.</li>
     </ul>
 
-    <h3><u><a name="VersionNumbersFuture">Future Enhancements</a></u></h3>
+    <h3><a name="VersionNumbersFuture">Future Enhancements</a></h3>
 
     <ul>
       <li>The ResourceBundle version number inheritance mechanism is not
@@ -1308,9 +1389,9 @@ en_US {
       implemented.</li>
     </ul>
 
-    <h2><u><a name="ProgrammingNotes">Programming Notes</a></u></h2>
+    <h2><a name="ProgrammingNotes">Programming Notes</a></h2>
 
-    <h3><u><a name="ReportingErrors">Reporting Errors</a></u></h3>
+    <h3><a name="ReportingErrors">Reporting Errors</a></h3>
 
     <p>In order for the code to be portable, only a subset of the C++
     language that will compile correctly on even the oldest of C++ compilers
@@ -1352,10 +1433,9 @@ en_US {
     one everywhere, and also allows us to more closely mimic the C++
     exception protocol.</p>
 
-    <h3><u><a name="FuncDataNaming">C Function and Data Type
-    Naming</a></u></h3>
+    <h3><a name="FuncDataNaming">C Function and Data Type Naming</a></h3>
 
-    <p><b>Function names.</b> If a function is identical (or almost
+    <p><strong>Function names.</strong> If a function is identical (or almost
     identical) to an ANSI or POSIX function, we give it the same name and (as
     much as possible) the same parameter list. A "u" is prepended onto the
     beginning of the name.</p>
@@ -1366,40 +1446,39 @@ en_US {
     "coll", etc.). This code is separated from the actual function name by an
     underscore, and the actual function name can be anything. For
     example,</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+<pre>
 UChar* uloc_getLanguage(...);
 void uloc_setDefaultLocale(...);
 UChar* ures_getString(...);
-
 </pre>
 
-    <p><b>Struct and enum type names.</b> For structs and enum types, the
-    rule is that their names begin with a capital "U." There is no underscore
-    for struct names.</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+    <p><strong>Struct and enum type names.</strong> For structs and enum
+    types, the rule is that their names begin with a capital "U." There is no
+    underscore for struct names.</p>
+<pre>
 UResourceBundle;
 UCollator;
 UCollationResult;
-
 </pre>
 
-    <p><b>Enum value names.</b> Enumeration values have names that begin with
-    "UXXX" where XXX stands for the name of the functional category.</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+    <p><strong>Enum value names.</strong> Enumeration values have names that
+    begin with "UXXX" where XXX stands for the name of the functional
+    category.</p>
+<pre>
 UNUM_DECIMAL;
 UCOL_GREATER;
-
 </pre>
 
-    <p><b>Macro names.</b> Macro names are in all caps, but there are
-    currently no other requirements.</p>
+    <p><strong>Macro names.</strong> Macro names are in all caps, but there
+    are currently no other requirements.</p>
 
-    <p><b>Constant names.</b> Many constant names (constants defined with
-    "const", not macros defined with "#define" that are used as constants)
-    begin with a lowercase k, but this isn&rsquo;t universally enforced.</p>
+    <p><strong>Constant names.</strong> Many constant names (constants
+    defined with "const", not macros defined with "#define" that are used as
+    constants) begin with a lowercase k, but this isn&rsquo;t universally
+    enforced.</p>
 
-    <h3><u><a name="OverflowHandling">Preflighting and Overflow
-    Handling</a></u></h3>
+    <h3><a name="OverflowHandling">Preflighting and Overflow
+    Handling</a></h3>
 
     <p>In ICU's C APIs, the user needs to adhere to the following principles
     for consistency across all functional categories:</p>
@@ -1428,11 +1507,11 @@ UCOL_GREATER;
     this:</p>
 
     <ol start="1" type="1">
-      <li>When using the "<b>preflighting</b>" option: you need to pass the
-      function a <code>NULL</code> pointer for the buffer pointer, and the
-      function returns the actual size of the result. You can then choose to
-      allocate a buffer of the correct size and re-run the operation if you
-      would like to.</li>
+      <li>When using the "<strong>preflighting</strong>" option: you need to
+      pass the function a <code>NULL</code> pointer for the buffer pointer,
+      and the function returns the actual size of the result. You can then
+      choose to allocate a buffer of the correct size and re-run the
+      operation if you would like to.</li>
 
       <li>After allocating a buffer of some reasonable size on the stack and
       passes that to the function, if the result can fit in that buffer,
@@ -1449,20 +1528,21 @@ UCOL_GREATER;
 
     <p>The following three options demonstrates how to use the preflighting
     interface,</p>
-    <hr size="2" width="100%" align="center">
-<pre style='font-family:"Courier New";margin-left:.5in'>
+    <hr>
+<pre>
 /**
  * @param result is a pointer to where the actual result will be.
  * @param maxResultSize is the number of characters the
  *                      buffer pointed to be result has room for.
- * @return The actual length of the result (counting the terminating null)
+ * @return The actual length of the result including the
+ *         terminating &lt;code&gt;NULL&lt;/code&gt;.
  */
-int32_t doSomething( /* input params,*/
+int32_t doSomething( /* input parameters */,
                     UChar* result,
                     int32_t maxResultSize,
                     UErrorCode* err);
 </pre>
-    <hr size="2" width="100%" align="center">
+    <hr>
 
     <p>In this sample, if the actual result doesn&rsquo;t fit in the space
     available in <code>maxResultSize</code>, this function returns the amount
@@ -1483,28 +1563,31 @@ int32_t doSomething( /* input params,*/
     conditions will overwrite the "buffer overflow" error, e.g.
     <code>MISSING_RESOURCE_ERROR</code> etc..</p>
 
-    <h3><u><a name="ArrayReturn">Arrays as return types</a></u></h3>
+    <h3><a name="ArrayReturn">Arrays as return types</a></h3>
 
     <p>Returning an array of strings is fairly easy in C++, but very hard in
     C. Instead of returning the array pointer directly, we opted for an
     iterative interface instead: split the function into two functions. One
     returns the number of elements in the array, and the other one returns a
     single specified element from the array.</p>
-    <hr size="2" width="100%" align="center">
-<pre style='font-family:"Courier New";margin-left:.5in'>
-int32_t countArrayItems(/* params */);
-int32_t getArrayElement(int32_t elementIndex, /* other params */,
+    <hr>
+<pre>
+int32_t countArrayItems(/* parameters */);
+int32_t getArrayElement(int32_t elementIndex,
+
+                        /* other parameters */,
+
                         UChar* result,
                         int32_t maxResultSize,
                         UErrorCode* err);
 </pre>
-    <hr size="2" width="100%" align="center">
+    <hr>
 
     <p>In this case, iterating across all the elements in the array would
     amount to a call to the count() function followed by multiple calls to
     the getElement() function.</p>
-    <hr size="2" width="100%" align="center">
-<pre style='font-family:"Courier New";margin-left:.5in'>
+    <hr>
+<pre>
 UChar element[50];
 
 for (i = 0; i &lt; countArrayItems(...); i++) {
@@ -1512,7 +1595,7 @@ for (i = 0; i &lt; countArrayItems(...); i++) {
     /* do something with element */
 }
 </pre>
-    <hr size="2" width="100%" align="center">
+    <hr>
 
     <p>In the case of the resource bundle <code>ures_XXXX</code> functions
     returning 2-dimensional arrays, the getElement() function takes both x
@@ -1520,29 +1603,31 @@ for (i = 0; i &lt; countArrayItems(...); i++) {
     returns the number of arrays (x axis). Since the size of each array
     element in the resource 2-D arrays should always be the same, this
     provides an easy-to-use C interface.</p>
-    <hr size="2" width="100%" align="center">
-<pre style='font-family:"Courier New";margin-left:.5in'>
+    <hr>
+<pre>
 void countArrayItems(int32_t* rows,
                      int32_t* columns,
-                     /* other params */);
+                     /* other parameters */);
 
 int32_t get2dArrayElement(int32_t rowIndex,
                           int32_t colIndex,
-                          /* other params */,
+
+                          /* other parameters */,
+
                           UChar* result,
                           int32_t maxResultSize,
                           UErrorCode* err);
 </pre>
-    <hr size="2" width="100%" align="center">
+    <hr>
 
-    <h3><u><a name="ErrcodeChanges">Important change of error codes from
-    streaming conversion functions</a></u></h3>
+    <h3><a name="ErrcodeChanges">Important Change Of Error Codes From
+    Streaming Conversion Functions</a></h3>
 
     <p>We have decided to make a semantic change to the conversion API which
     affects applications using ICU that are migrated to use ICU version 1.6
     compared to earlier ICU versions:<br>
      The error code that is set from streaming conversion like</p>
-<pre style='font-family:"Courier New";margin-left:.5in'>
+<pre>
 ucnv_fromUnicode() - ucnv_toUnicode()
 ucnv_fromUChars()  - ucnv_toUChars()
 scsu_compress()    - scsu_decompress()
@@ -1570,8 +1655,7 @@ scsu_compress()    - scsu_decompress()
     mailing list. Please see the list archive for the <a href=
     "http://oss.software.ibm.com/icu/archives/icu/icu.0007/msg00142.html">discussion</a>.</p>
 
-    <h2><u><a name="WhereToFindMore">Where to Find More
-    Information</a></u></h2>
+    <h2><a name="WhereToFindMore">Where To Find More Information</a></h2>
 
     <p><a href=
     "http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a>
@@ -1581,9 +1665,9 @@ scsu_compress()    - scsu_decompress()
     <p><a href="docs/udata.html">docs/udata.html</a> is a raw draft of ICU
     data handling.</p>
 
-    <p><a href="../icuhtml/aindex.html">html/aindex.html</a> is an
+    <p><a href="../icuhtml/aindex.html">icuhtml/aindex.html</a> is an
     alphabetical index to detailed API documentation.<br>
-     <a href="../icuhtml/HIER.html">html/HIER.html</a> is a hierarchical
+     <a href="../icuhtml/HIER.html">icuhtml/HIER.html</a> is a hierarchical
     index to detailed API documentation.</p>
 
     <p><a href="docs/collate.html">docs/collate.html</a> is an overview to
@@ -1597,21 +1681,20 @@ scsu_compress()    - scsu_decompress()
     is a pointer to information on how to make applications global.<br>
     </p>
 
-    <h2><u><a name="SubmittingComments">Submitting Comments, Requesting
-    Features and Reporting Bugs</a></u></h2>
+    <h2><a name="SubmittingComments">Submitting Comments, Requesting Features
+    and Reporting Bugs</a></h2>
 
     <p>To submit comments, request features and report bugs, please contact
     us. While we are not able to respond individually to each comment, we do
     review all comments. Send Internet email to <a href=
     "mailto:icu@oss.software.ibm.com">icu@oss.software.ibm.com</a>.</p>
-    <hr size="2" width="100%" align="center">
+    <hr>
 
     <p>Copyright &copy; 1997-2000 International Business Machines Corporation
     and others. All Rights Reserved.<br>
      IBM Center for Emerging Technologies Silicon Valley,<br>
      10275 N De Anza Blvd., Cupertino, CA 95014<br>
      All rights reserved.</p>
-    <hr size="2" width="100%" align="center">
   </body>
 </html>
 
