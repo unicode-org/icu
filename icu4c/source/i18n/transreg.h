@@ -190,6 +190,14 @@ class TransliteratorRegistry : public UMemory {
     //------------------------------------------------------------------
 
     /**
+     * Return a StringEnumeration over the IDs currently registered
+     * with the system.
+     * @internal
+     */
+    StringEnumeration* getAvailableIDs();
+
+    /**
+     * == OBSOLETE - remove in ICU 3.4 ==
      * Return the number of IDs currently registered with the system.
      * To retrieve the actual IDs, call getAvailableID(i) with
      * i from 0 to countAvailableIDs() - 1.
@@ -199,6 +207,7 @@ class TransliteratorRegistry : public UMemory {
     int32_t countAvailableIDs(void);
 
     /**
+     * == OBSOLETE - remove in ICU 3.4 ==
      * Return the index-th available ID.  index must be between 0
      * and countAvailableIDs() - 1, inclusive.  If index is out of
      * range, the result of getAvailableID(0) is returned.
@@ -337,6 +346,24 @@ class TransliteratorRegistry : public UMemory {
                                      TransliteratorAlias*& aliasReturn,
                                      UParseError& parseError,
                                      UErrorCode& status);
+
+    /**
+     * A StringEnumeration over the registered IDs in this object.
+     */
+    class Enumeration : public StringEnumeration {
+    public:
+        Enumeration(TransliteratorRegistry& reg);
+        virtual ~Enumeration();
+        virtual int32_t count(UErrorCode& status) const;
+        virtual const UnicodeString* snext(UErrorCode& status);
+        virtual void reset(UErrorCode& status);
+        static UClassID getStaticClassID();
+        virtual UClassID getDynamicClassID() const;
+    private:
+        int32_t index;
+        TransliteratorRegistry& reg;
+    };
+    friend class Enumeration;
 
  private:
 
