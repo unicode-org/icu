@@ -185,7 +185,7 @@
  *       char buf[256];
  *       for (double x = 1.0; x &lt;= 8.0; x += 1.0) {
  *           fmt.format(x, str);
- *           buf[str.extract(0, str.length(), buf, 256, &quot;&quot;)] = 0;
+ *           str.extract(0, str.length(), buf, 256, &quot;&quot;);
  *           str.truncate(0);
  *           cout &lt;&lt; x &lt;&lt; &quot; -&gt; &quot;
  *                &lt;&lt; buf &lt;&lt; endl;
@@ -225,7 +225,7 @@
  *           Formattable fInt(i);
  *           testArgs[0] = fInt;
  *           pattform.format(testArgs, 2, str, fp, status );
- *           buf[str.extract(0, str.length(), buf, &quot;&quot;)] = 0;
+ *           str.extract(0, str.length(), buf, &quot;&quot;);
  *           str.truncate(0);
  *           cout &lt;&lt; &quot;Output for i=&quot; &lt;&lt; i &lt;&lt; &quot; : &quot; &lt;&lt; buf &lt;&lt; endl;
  *       }

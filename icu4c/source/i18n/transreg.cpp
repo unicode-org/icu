@@ -52,7 +52,7 @@ CharString::CharString(const UnicodeString& str) {
     } else {
         ptr = buf;
     }
-    ptr[str.extract(0, 0x7FFFFFFF, ptr, "")] = 0;
+    str.extract(0, 0x7FFFFFFF, ptr, "");
 }
 
 CharString::~CharString() {
