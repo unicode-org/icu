@@ -415,7 +415,7 @@ ucbuf_getcx32(UCHARBUF* buf,UErrorCode* error) {
             }
             context[len]= 0 ; /* null terminate the buffer */
             u_UCharsToChars( buf->currentPos, context, len);
-            fprintf(stderr,"Bad escape: [%c%s]...\n", c1,context);
+            fprintf(stderr,"Bad escape: [%c%s]...\n", (int)c1, context);
         }
         *error= U_ILLEGAL_ESCAPE_SEQUENCE;
         return c1;
