@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1996-2001, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2002, International Business Machines Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
 
@@ -413,8 +413,8 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
  * within brackets, {123}, for example.  For rules that do not specify a
  * status, a default value of 0 is returned.
  */
-U_CAPI  int16_t U_EXPORT2
-ubrk_getRuleStatus();
+U_CAPI  int32_t U_EXPORT2
+ubrk_getRuleStatus(UBreakIterator *bi);
 
 
 #endif
