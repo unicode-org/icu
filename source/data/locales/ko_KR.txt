@@ -6,7 +6,7 @@
 // *******************************************************************************
 
 ko_KR {
-   Version { "1.1" }
+   Version { "1.1.1" }
     CurrencyElements { 
             "\u20A9",
             "KRW",
@@ -40,15 +40,6 @@ ko_KR {
             "yyyy.MM.dd",
             "yy.MM.dd",
             "{1} {0}",
-    }
-    DayAbbreviations {
-            "\uAE08\uC694\uC77C",
-            "\uD1A0\uC694\uC77C",
-			"\uD654",
-            "\uC218",
-            "\uBAA9",
-            "\uAE08",
-            "\uD1A0",
     }
     Eras {
             "\uae30\uC6D0\uC804",
