@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2002/03/10 19:40:14 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/05/08 23:58:25 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,61 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Expected 1,50 F, got " + s);
     
     }
+
+    /**
+     * Test the Currency object handling, new as of ICU 2.2.
+     */
+    public void TestCurrencyObject() {
+        NumberFormat fmt = 
+            NumberFormat.getCurrencyInstance(Locale.US);
+        
+        expectCurrency(fmt, null, 1234.56, "$1,234.56");
+
+        expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
+                       1234.56, "\u20AC1,234.56"); // Euro
+
+        expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
+                       1234.56, "\uFFE51,235"); // Yen
+
+        expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
+                       1234.56, "CHF1,234.50"); // 0.25 rounding
+
+        expectCurrency(fmt, Currency.getInstance(Locale.US),
+                       1234.56, "$1,234.56");
+
+        fmt = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+        
+        expectCurrency(fmt, null, 1234.56, "1 234,56 \u20AC");
+
+        expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
+                       1234.56, "1 235 \uFFE5"); // Yen
+
+        expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
+                       1234.56, "1 234,50 CHF"); // 0.25 rounding
+
+        expectCurrency(fmt, Currency.getInstance(Locale.US),
+                       1234.56, "1 234,56 USD");
+
+        expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
+                       1234.56, "1 234,56 \u20AC"); // Euro
+    }
     
+    private void expectCurrency(NumberFormat nf, Currency curr,
+                                double value, String string) {
+        DecimalFormat fmt = (DecimalFormat) nf;
+        if (curr != null) {
+            fmt.setCurrency(curr);
+        }
+        String s = fmt.format(value).replace('\u00A0', ' ');
+
+        if (s.equals(string)) {
+            logln("Ok: " + value + " x " + curr + " => " + s);
+        } else {
+            errln("FAIL: " + value + " x " + curr + " => " + s +
+                  ", expected " + string);
+        }
+    }
+
     /**
      * Do rudimentary testing of parsing.
      */
