@@ -17,36 +17,29 @@
 
 #include "rbcache.h"
 
-ResourceBundleCache::ResourceBundleCache()
-{
-  UErrorCode err = U_ZERO_ERROR;
-  hashTable = uhash_open((UHashFunction)uhash_OLD_hashUString,
-                         uhash_OLD_pointerComparator, &err);
-  uhash_setValueDeleter(hashTable, deleteValue);
+ResourceBundleCache::ResourceBundleCache() {
+    UErrorCode status = U_ZERO_ERROR;
+    hash = new Hashtable(status);
+    hash->setValueDeleter(deleteUHashtable);
 }
 
-void ResourceBundleCache::deleteValue(void* value)
-{
-  uhash_close((UHashtable*)value);
+ResourceBundleCache::~ResourceBundleCache() {
+    delete hash;
+}
+
+void ResourceBundleCache::deleteUHashtable(void* value) {
+    uhash_close((UHashtable*)value);
 }
 
 //----------------------------------------------------------------------------------
 
-VisitedFileCache::VisitedFileCache()
-{
-  UErrorCode err = U_ZERO_ERROR;
-  hashTable = uhash_open((UHashFunction)uhash_OLD_hashUString,
-                         uhash_OLD_pointerComparator, &err);
+VisitedFileCache::VisitedFileCache() {
+    UErrorCode status = U_ZERO_ERROR;
+    hash = new Hashtable(status);
 }
 
-VisitedFileCache::~VisitedFileCache()
-{
-  uhash_close(hashTable);
-}
-
-ResourceBundleCache::~ResourceBundleCache()
-{
-  uhash_close(hashTable);
+VisitedFileCache::~VisitedFileCache() {
+    delete hash;
 }
 
 
