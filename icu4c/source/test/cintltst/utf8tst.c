@@ -208,8 +208,8 @@ void TestNextPrevChar(){
         12,           12,          12,               1,            1,                1, 
         13,           13,          13,               1,            1,                1,   
         14,           14,          14,               1,            1,                1,      
-        18,           15,          15,               1,            1,                1,  
-        16,           16,          16,               0,            0,                0, 
+        14,           15,          15,               1,            1,                1,  
+        14,           16,          16,               0,            0,                0, 
 
 
     };
@@ -219,14 +219,16 @@ void TestNextPrevChar(){
     uint32_t i=0;
     uint32_t offset=0, setOffset=0;
     for(offset=0; offset<sizeof(input); offset++){
-         setOffset=offset;
-         UTF8_NEXT_CHAR_UNSAFE(input, setOffset, c);
-         if(setOffset != movedOffset[i]){
-             log_err("ERROR: UTF8_NEXT_CHAR_UNSAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
-                 offset, movedOffset[i], setOffset);
-         }
-         if(c != result[i]){
-             log_err("ERROR: UTF8_NEXT_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
+         if (offset < sizeof(input) - 2) { /* Can't have it go off the end of the array based on input */
+             setOffset=offset;
+             UTF8_NEXT_CHAR_UNSAFE(input, setOffset, c);
+             if(setOffset != movedOffset[i]){
+                 log_err("ERROR: UTF8_NEXT_CHAR_UNSAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                     offset, movedOffset[i], setOffset);
+             }
+             if(c != result[i]){
+                 log_err("ERROR: UTF8_NEXT_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
+             }
          }
          setOffset=offset;
          UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, FALSE);
