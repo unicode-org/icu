@@ -251,7 +251,7 @@ protected:
  * \code
  *  void processChar( UChar c )
  *  {
- *      cout &lt;&lt; " " &lt;&lt; c;
+ *      cout << " " << c;
  *  }
  * \endcode
  * </pre>
@@ -293,8 +293,8 @@ protected:
  *          c = iter.previous()) {}
  *      UTextOffset start = iter.getIndex() + 1;
  *  
- *      cout &lt;&lt; "start: " &lt;&lt; start &lt;&lt; " end: " &lt;&lt; end &lt;&lt; endl;
- *      for (c = iter.setIndex(start); iter.getIndex() &lt; end; c = iter.next() ) {
+ *      cout << "start: " << start << " end: " << end << endl;
+ *      for (c = iter.setIndex(start); iter.getIndex() < end; c = iter.next() ) {
  *          processChar(c);
  *     }
  *  }
@@ -305,16 +305,16 @@ protected:
  * \code
  *  void CharacterIterator_Example( void )
  *   {
- *       cout &lt;&lt; endl &lt;&lt; "===== CharacterIterator_Example: =====" &lt;&lt; endl;
+ *       cout << endl << "===== CharacterIterator_Example: =====" << endl;
  *       UnicodeString text("Ein kleiner Satz.");
  *       StringCharacterIterator iterator(text);
- *       cout &lt;&lt; "----- traverseForward: -----------" &lt;&lt; endl;
+ *       cout << "----- traverseForward: -----------" << endl;
  *       traverseForward( iterator );
- *       cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "----- traverseBackward: ----------" &lt;&lt; endl;
+ *       cout << endl << endl << "----- traverseBackward: ----------" << endl;
  *       traverseBackward( iterator );
- *       cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "----- traverseOut: ---------------" &lt;&lt; endl;
+ *       cout << endl << endl << "----- traverseOut: ---------------" << endl;
  *       traverseOut( iterator, 7 );
- *       cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; "-----" &lt;&lt; endl;
+ *       cout << endl << endl << "-----" << endl;
  *   }
  * \endcode
  * </pre>

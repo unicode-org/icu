@@ -63,7 +63,10 @@
  * Also, '\n', '\r', '\t' should be available.</p>
  *
  * <p>The list of "invariant characters" is:<br>
- *    A-Z  a-z  0-9  SPACE  "  %  &amp;  '  (  )  *  +  ,  -  .  /  :  ;  &lt;  =  >  ?  _<br>
+ * \code
+ *    A-Z  a-z  0-9  SPACE  "  %  &amp;  '  (  )  *  +  ,  -  .  /  :  ;  <  =  >  ?  _
+ *\endcode
+ *<br>
  * (52 letters + 10 numbers + 20 punc/sym = 82 total)</p>
  *
  * <p>In other words, all the graphic characters in 7-bit ASCII should

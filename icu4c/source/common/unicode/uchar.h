@@ -746,7 +746,7 @@ u_charScript(UChar32    ch);
  * not be called with a command line option to include 1.0 names in unames.dat.
  *
  * @param code The character (code point) for which to get the name.
- *             It must be <code>0&lt;=code&lt;0x10ffff</code>.
+ *             It must be <code>0<=code<0x10ffff</code>.
  * @param nameChoice Selector for which name to get.
  * @param buffer Destination address for copying the name.
  *               The name will always be zero-terminated.
