@@ -2428,9 +2428,12 @@ public class LDML2ICUConverter {
             }
             str = new ICUResourceWriter.ResourceString();
             str.name = "Version";
-            Node version = LDMLUtilities.getNode(specialsDoc, xpath.append("/special").toString());
-            if(version!=null){
-                str.val = LDMLUtilities.getAttributeValue(version, "icu:version");
+            str.val = "1.0";
+            if(specialsDoc!=null){
+                Node version = LDMLUtilities.getNode(specialsDoc, xpath.append("/special").toString());
+                if(version!=null){
+                    str.val = LDMLUtilities.getAttributeValue(version, "icu:version");
+                }
             }
             current.next = str;
             
@@ -2488,7 +2491,7 @@ public class LDML2ICUConverter {
         }
         String numeric = LDMLUtilities.getAttributeValue(node, LDMLConstants.NUMERIC);
         if(numeric!=null){
-            rules.append(" [numeric ");
+            rules.append(" [numericOrdering ");
             rules.append(numeric);
             rules.append(" ]");
         }
@@ -2976,8 +2979,8 @@ public class LDML2ICUConverter {
                         // System.out.println(" - not ELEMENT");
                         continue;
                     }
-                    String name = node.getNodeName();
-                    String type;
+                    //String name = node.getNodeName();
+                    //String type;
                     // System.out.println("Node: " + name.toString());
                     
                     String treeName  = LDMLUtilities.getAttributeValue(node, "type");
