@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2000/04/25 17:19:34 $ 
- * $Revision: 1.19 $
+ * $Date: 2000/05/23 16:51:28 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -390,6 +390,77 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
             expect(t, DATA[i+1], DATA[i+2]);
         }
+    }
+
+/**
+ * Regression test for bugs found in Greek transliteration.
+ */
+public void TestJ277() {
+    Transliterator gl = Transliterator.getInstance("Greek-Latin");
+
+    char sigma = (char)0x3C3;
+    char upsilon = (char)0x3C5;
+    char nu = (char)0x3BD;
+    char PHI = (char)0x3A6;
+    char alpha = (char)0x3B1;
+    char omega = (char)0x3C9;
+    char omicron = (char)0x3BF;
+    char epsilon = (char)0x3B5;
+
+    // sigma upsilon nu -> syn
+    StringBuffer buf = new StringBuffer();
+    buf.append(sigma).append(upsilon).append(nu);
+    String syn = buf.toString();
+    expect(gl, syn, "syn");
+
+    // sigma alpha upsilon nu -> saun
+    buf.setLength(0);
+    buf.append(sigma).append(alpha).append(upsilon).append(nu);
+    String sayn = buf.toString();
+    expect(gl, sayn, "saun");
+
+    // Again, using a smaller rule set
+    String rules =
+                "$alpha   = \u03B1;" +
+                "$nu      = \u03BD;" +
+                "$sigma   = \u03C3;" +
+                "$ypsilon = \u03C5;" +
+                "$vowel   = [aeiouAEIOU$alpha$ypsilon];" +
+                "s <>           $sigma;" +
+                "a <>           $alpha;" +
+                "u <>  $vowel { $ypsilon;" +
+                "y <>           $ypsilon;" +
+                "n <>           $nu;";
+    RuleBasedTransliterator mini = new RuleBasedTransliterator
+        ("mini", rules, Transliterator.REVERSE, null);
+    expect(mini, syn, "syn");
+    expect(mini, sayn, "saun");
+
+//|    // Transliterate the Greek locale data
+//|    Locale el("el");
+//|    DateFormatSymbols syms(el, status);
+//|    if (U_FAILURE(status)) { errln("FAIL: Transliterator constructor failed"); return; }
+//|    int32_t i, count;
+//|    const UnicodeString* data = syms.getMonths(count);
+//|    for (i=0; i<count; ++i) {
+//|        if (data[i].length() == 0) {
+//|            continue;
+//|        }
+//|        UnicodeString out(data[i]);
+//|        gl->transliterate(out);
+//|        bool_t ok = TRUE;
+//|        if (data[i].length() >= 2 && out.length() >= 2 &&
+//|            u_isupper(data[i].charAt(0)) && u_islower(data[i].charAt(1))) {
+//|            if (!(u_isupper(out.charAt(0)) && u_islower(out.charAt(1)))) {
+//|                ok = FALSE;
+//|            }
+//|        }
+//|        if (ok) {
+//|            logln(prettify(data[i] + " -> " + out));
+//|        } else {
+//|            errln(UnicodeString("FAIL: ") + prettify(data[i] + " -> " + out));
+//|        }
+//|    }
     }
 
     /**
