@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/CompoundTransliterator.java,v $ 
- * $Date: 2001/09/21 21:24:04 $ 
- * $Revision: 1.14 $
+ * $Date: 2001/09/28 20:28:09 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.14 $ $Date: 2001/09/21 21:24:04 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.15 $ $Date: 2001/09/28 20:28:09 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -57,7 +57,7 @@ public class CompoundTransliterator extends Transliterator {
     private int compoundRBTIndex;    
 
     private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
+        "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
 
     /**
      * Constructs a new compound transliterator given an array of
@@ -103,32 +103,8 @@ public class CompoundTransliterator extends Transliterator {
      */
     public CompoundTransliterator(String ID, int direction,
                                   UnicodeFilter filter) {
-        // changed MED
-        // Later, add "rule1[filter];rule2...
-        super(ID, null); // don't set filter here!
-        String[] list = split(ID, ';');
-        trans = new Transliterator[list.length];
-        for (int i = 0; i < list.length; ++i) {
-            trans[i] = getInstance(list[direction==FORWARD ? i : (list.length-1-i)],
-                                   direction);
-        }
-        
-        // If the direction is REVERSE then we need to fix the ID.
-        if (direction == REVERSE) {
-            StringBuffer newID = new StringBuffer();
-            for (int i=0; i<list.length; ++i) {
-                if (i > 0) {
-                    newID.append(';');
-                }
-                newID.append(trans[i].getID());
-            }
-            setID(newID.toString());
-        }
-
-        computeMaximumContextLength();
-        if (filter != null) {
-            setFilter(filter);
-        }
+        super(ID, filter);
+        init(ID, direction, -1, null, true);
     }
     
     public CompoundTransliterator(String ID, int direction) {
@@ -267,34 +243,6 @@ public class CompoundTransliterator extends Transliterator {
     }
 
     /**
-     * Splits a string, as in JavaScript
-     */
-    private static String[] split(String s, char divider) {
-        // changed MED
-
-	    // see how many there are
-	    int count = 1;
-	    for (int i = 0; i < s.length(); ++i) {
-	        if (s.charAt(i) == divider) ++count;
-	    }
-	    
-	    // make an array with them
-	    String[] result = new String[count];
-	    int last = 0;
-	    int current = 0;
-	    int i;
-	    for (i = 0; i < s.length(); ++i) {
-	        if (s.charAt(i) == divider) {
-	            result[current++] = s.substring(last,i);
-	            last = i+1;
-	        }
-	    }
-	    result[current++] = s.substring(last,i);
-	    return result;
-	}
-    
-
-    /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
      */
@@ -309,42 +257,6 @@ public class CompoundTransliterator extends Transliterator {
      */
     public Transliterator getTransliterator(int index) {
         return trans[index];
-    }
-
-    /**
-     * Override Transliterator.  Modify the transliterators that make up
-     * this compound transliterator so their filters are the logical AND
-     * of this transliterator's filter and their own.  Original filters
-     * are kept in the filters array.
-     */
-    public void setFilter(UnicodeFilter f) {
-        /**
-         * If there is a filter F for the compound transliterator as a
-         * whole, then we need to modify every non-null filter f in
-         * the chain to be f' = F & f.
-         *
-         * If anyone else is using the transliterators in the chain
-         * outside of this context, they will get unexpected results.
-         */
-        if (f == null) {
-            // Restore original filters
-            if (filters != null) {
-                for (int i=0; i<filters.length; ++i) {
-                    trans[i].setFilter(filters[i]);
-                }
-            }
-        } else {
-            if (filters == null) {
-                filters = new UnicodeFilter[trans.length];
-                for (int i=0; i<filters.length; ++i) {
-                    filters[i] = trans[i].getFilter();
-                }
-            }
-            for (int i=0; i<filters.length; ++i) {
-                trans[i].setFilter(UnicodeFilterLogic.and(f, filters[i]));
-            }
-        }
-        super.setFilter(f);
     }
 
     public String toRules(boolean escapeUnprintable) {
@@ -433,43 +345,47 @@ public class CompoundTransliterator extends Transliterator {
          *    abc/u0041/u0041/u    
          *    S C L
          */
-        int cursor = index.start;
-        int limit = index.limit;
-        int globalLimit = limit;
-        /* globalLimit is the overall limit.  We keep track of this
-         * since we overwrite index.contextLimit with the previous
-         * index.start.  After each transliteration, we update
-         * globalLimit for insertions or deletions that have happened.
-         */
 
+        if (trans.length < 1) {
+            index.start = index.limit;
+            return; // Short circuit for empty compound transliterators
+        }
+
+        // compoundLimit is the limit value for the entire compound
+        // operation.  We overwrite index.limit with the previous
+        // index.start.  After each transliteration, we update
+        // compoundLimit for insertions or deletions that have happened.
+        int compoundLimit = index.limit;
+
+        // compoundStart is the start for the entire compound
+        // operation.
+        int compoundStart = index.start;
+
+        // Give each transliterator a crack at the run of characters.
+        // See comments at the top of the method for more detail.
         for (int i=0; i<trans.length; ++i) {
-            index.start = cursor; // Reset cursor
-            index.limit = limit;
+            index.start = compoundStart; // Reset start
+            int limit = index.limit;
 
-            if (DEBUG) {
-                System.out.print(Utility.escape(i + ": \"" +
-                    substring(text, index.contextStart, index.start) + '|' +
-                    substring(text, index.start, index.contextLimit) +
-                    "\" -> \""));
-            }
-
-            trans[i].handleTransliterate(text, index, incremental);
-
-            if (DEBUG) {
-                System.out.println(Utility.escape(
-                    substring(text, index.contextStart, index.start) + '|' +
-                    substring(text, index.start, index.contextLimit) +
-                    '"'));
-            }
+            trans[i].filteredTransliterate(text, index, incremental);
 
             // Adjust overall limit for insertions/deletions
-            globalLimit += index.limit - limit;
-            limit = index.start; // Move limit to end of committed text
+            compoundLimit += index.limit - limit;
+
+            if (incremental) {
+                // In the incremental case, only allow subsequent
+                // transliterators to modify what has already been
+                // completely processed by prior transliterators.  In the
+                // non-incrmental case, allow each transliterator to
+                // process the entire text.
+                index.limit = index.start;
+            }
         }
-        // Cursor is good where it is -- where the last
-        // transliterator left it.  Limit needs to be put back
-        // where it was, modulo adjustments for deletions/insertions.
-        index.limit = globalLimit;
+
+        // Start is good where it is -- where the last transliterator left
+        // it.  Limit needs to be put back where it was, modulo
+        // adjustments for deletions/insertions.
+        index.limit = compoundLimit;
     }
 
     /**
@@ -485,17 +401,5 @@ public class CompoundTransliterator extends Transliterator {
             }
         }
         setMaximumContextLength(max);
-    }
-
-    /**
-     * DEBUG
-     * Returns a substring of a Replaceable.
-     */
-    private static final String substring(Replaceable str, int start, int limit) {
-        StringBuffer buf = new StringBuffer();
-        while (start < limit) {
-            buf.append(str.charAt(start++));
-        }
-        return buf.toString();
     }
 }

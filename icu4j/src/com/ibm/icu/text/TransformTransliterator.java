@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransformTransliterator.java,v $ 
- * $Date: 2001/05/23 19:43:26 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/09/28 20:27:02 $ 
+ * $Revision: 1.2 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -36,7 +36,7 @@ public abstract class TransformTransliterator extends Transliterator {
         for (start = offsets.start; start < offsets.limit; ++start) {
             // Scan for the first character that is != its transform.
             // If there are none, we fall out without doing anything.
-            char c = filteredCharAt(text, start);
+            char c = text.charAt(start);
             if (hasTransform(c)) {
                 // There is a transforming character at start.  Break
                 // up the remaining string, from start to

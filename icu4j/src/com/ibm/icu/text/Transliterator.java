@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/09/21 21:24:04 $
- * $Revision: 1.40 $
+ * $Date: 2001/09/28 20:32:11 $
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.40 $ $Date: 2001/09/21 21:24:04 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.41 $ $Date: 2001/09/28 20:32:11 $
  */
 public abstract class Transliterator {
     /**
@@ -460,8 +460,8 @@ public abstract class Transliterator {
      */
     public final int transliterate(Replaceable text, int start, int limit) {
         Position pos = new Position(start, limit, start);
-        handleTransliterate(text, pos, false);
-        return pos.contextLimit;
+        filteredTransliterate(text, pos, false);
+        return pos.limit;
     }
 
     /**
@@ -534,23 +534,32 @@ public abstract class Transliterator {
     public final void transliterate(Replaceable text, Position index,
                                     String insertion) {
         if (index.contextStart < 0 ||
-            index.contextLimit > text.length() ||
             index.start < index.contextStart ||
-            index.start > index.contextLimit) {
-            throw new IllegalArgumentException("Invalid index");
+            index.limit < index.start ||
+            index.contextLimit < index.limit ||
+            text.length() < index.contextLimit) {
+            throw new IllegalArgumentException("Invalid index {" +
+                                               index.contextStart + ", " +
+                                               index.start + ", " +
+                                               index.limit + ", " +
+                                               index.contextLimit + "}, len=" +
+                                               text.length());
         }
 
-        int originalStart = index.contextStart;
+//        int originalStart = index.contextStart;
         if (insertion != null) {
             text.replace(index.limit, index.limit, insertion);
             index.limit += insertion.length();
             index.contextLimit += insertion.length();
         }
 
-        handleTransliterate(text, index, true);
+        filteredTransliterate(text, index, true);
 
-        index.contextStart = Math.max(index.start - getMaximumContextLength(),
-                                      originalStart);
+// This doesn't work once we add quantifier support.  Need to rewrite
+// this code to support quantifiers and 'use maximum backup <n>;'.
+//
+//        index.contextStart = Math.max(index.start - getMaximumContextLength(),
+//                                      originalStart);
     }
 
     /**
@@ -569,8 +578,18 @@ public abstract class Transliterator {
      * @see #transliterate(Replaceable, Transliterator.Position, String)
      */
     public final void transliterate(Replaceable text, Position index,
-                                    char insertion) {
-        transliterate(text, index, String.valueOf(insertion));
+                                    int insertion) {
+        if ((insertion & 0xFFFF0000) == 0 && UTF16.isLeadSurrogate((char)insertion)) {
+            // Oops, the caller passed us a single lead surrogate.  In
+            // general, we don't support this, but we'll do the caller a
+            // favor in the special case of LEAD followed by TRAIL
+            // insertion.  Anything else won't work.
+            text.replace(index.limit, index.limit, String.valueOf((char)insertion));
+            ++index.limit;
+            ++index.contextLimit;
+        } else {
+            transliterate(text, index, UTF16.valueOf(insertion));
+        }
     }
 
     /**
@@ -600,7 +619,7 @@ public abstract class Transliterator {
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
-        handleTransliterate(text, index, false);
+        filteredTransliterate(text, index, false);
     }
 
     /**
@@ -620,6 +639,18 @@ public abstract class Transliterator {
      * of <code>index.start</code>.  <code>index.contextStart</code>
      * should <em>not</em> be changed.
      *
+     * <p>Subclasses may safely assume that all characters in
+     * [index.start, index.limit) are unfiltered.  In other words, the
+     * filter has already been applied by the time this method is
+     * called.  See filteredTransliterate().
+     *
+     * <p>This method is <b>not</b> for public consumption.  Calling
+     * this method directly will transliterate [index.start,
+     * index.limit) without applying the filter.  End user code that
+     * wants to call this method should be calling transliterate().
+     * Subclass code that wants to call this method should probably be
+     * calling filteredTransliterate().
+     *
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param pos the start and limit of the text, the position
@@ -630,6 +661,91 @@ public abstract class Transliterator {
      */
     protected abstract void handleTransliterate(Replaceable text,
                                                 Position pos, boolean incremental);
+
+    /**
+     * This method breaks up the input text into runs of unfiltered
+     * characters.  It passes each such run to
+     * <subclass>.handleTransliterate().  Subclasses that can handle the
+     * filter logic more efficiently themselves may override this method.
+     *
+     * All transliteration calls in this class go through this method.
+     */
+    protected void filteredTransliterate(Replaceable text,
+                                         Position index,
+                                         boolean incremental) {
+        if (filter == null) {
+            // Short circuit path for transliterators with no filter
+            handleTransliterate(text, index, incremental);
+            return;
+        }
+
+        // globalLimit is the limit value for the entire operation.  We
+        // set index.limit to the end of each unfiltered run before
+        // calling handleTransliterate(), so we need to maintain the real
+        // value of index.limit here.  After each transliteration, we
+        // update globalLimit for insertions or deletions that have
+        // happened.
+        int globalLimit = index.limit;
+
+        // Break the input text up.  Say the input text has the form:
+        //   xxxabcxxdefxx
+        // where 'x' represents a filtered character.  Then we break this
+        // up into:
+        //   xxxabc xxdef xx
+        // Each pass through the loop consumes a run of filtered
+        // characters (which are ignored) and a subsequent run of
+        // unfiltered characters (which are transliterated).  If, at any
+        // point, we fail to consume our entire segment, we stop.
+        do {
+            // Narrow the range to be transliterated to the first segment
+            // of unfiltered characters at or after index.start.
+
+            int c;
+
+            // Advance compoundStart past filtered chars
+            while (index.start < globalLimit &&
+                   !filter.contains(c=UTF16.charAt(text, index.start))) {
+                index.start += UTF16.getCharCount(c);
+            }
+
+            // Find the end of this run of unfiltered chars
+            index.limit = index.start;
+            while (index.limit < globalLimit &&
+                   filter.contains(c=UTF16.charAt(text, index.limit))) {
+                index.limit += UTF16.getCharCount(c);
+            }
+
+            // Check to see if the unfiltered run is empty.  This only
+            // happens at the end of the string when all the remaining
+            // characters are filtered.
+            if (index.limit == index.start) {
+                // assert(index.start == globalLimit);
+                break;
+            }
+
+            int limit = index.limit;
+
+            // Delegate to subclass for actual transliteration.  If there
+            // is additional filtered text (if limit < globalLimit) then
+            // we pass in an incremental value of FALSE to force the subclass
+            // to complete the transliteration for this segment.
+            handleTransliterate(text, index,
+                                limit < globalLimit ? false : incremental);
+
+            // Adjust overall limit for insertions/deletions.  Don't need
+            // to worry about contextLimit because handleTransliterate()
+            // maintains that.
+            globalLimit += index.limit - limit;
+
+            // If we failed to complete transliterate this segment, then
+            // we are done.  If we did completely transliterate this
+            // segment, then repeat with the next unfiltered segment.
+        } while (index.start == index.limit);
+
+        // Start is valid where it is.  Limit needs to be put back where
+        // it was, modulo adjustments for deletions/insertions.
+        index.limit = globalLimit;    
+    }
 
     /**
      * Returns the length of the longest context required by this transliterator.
@@ -1518,6 +1634,12 @@ public abstract class Transliterator {
      * Method for subclasses to use to obtain a character in the given
      * string, with filtering.  If the character at the given offset
      * is excluded by this transliterator's filter, then U+FFFE is returned.
+     *
+     * <p><b>Note:</b> Most subclasses that implement
+     * handleTransliterator() will <em>not</em> want to use this
+     * method, since characters they see are already filtered.  Only
+     * subclasses with special requirements, such as those overriding
+     * filteredTransliterate(), should need this method.
      */
     protected char filteredCharAt(Replaceable text, int i) {
         char c;

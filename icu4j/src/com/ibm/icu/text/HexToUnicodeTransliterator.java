@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/HexToUnicodeTransliterator.java,v $ 
- * $Date: 2001/09/21 21:24:39 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/09/28 20:27:02 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.util.*;
  * applyPattern() for details.
  *
  * @author Alan Liu
- * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.9 $ $Date: 2001/09/21 21:24:39 $
+ * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.10 $ $Date: 2001/09/28 20:27:02 $
  */
 public class HexToUnicodeTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -305,7 +305,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
                             break;
                         }
                     }
-                    char c = filteredCharAt(text, curs++);
+                    char c = text.charAt(curs++);
                     if (c != affixes[ipat + i]) {
                         match = false;
                         break;
@@ -323,7 +323,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
                             }
                             break;
                         }
-                        int digit = Character.digit(filteredCharAt(text, curs), 16);
+                        int digit = Character.digit(text.charAt(curs), 16);
                         if (digit < 0) {
                             break;
                         }
@@ -347,7 +347,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
                                 match = false;
                                 break;
                             }
-                            char c = filteredCharAt(text, curs++);
+                            char c = text.charAt(curs++);
                             if (c != affixes[ipat + prefixLen + i]) {
                                 match = false;
                                 break;

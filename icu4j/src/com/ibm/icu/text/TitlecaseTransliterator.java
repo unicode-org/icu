@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/07/02 19:24:26 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/09/28 20:27:02 $ 
+ * $Revision: 1.2 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -91,7 +91,7 @@ public class TitlecaseTransliterator extends Transliterator {
             // non-letter, and this character is a letter, then apply
             // the titlecase transformation.  Otherwise apply the
             // lowercase transformation.
-            char c = filteredCharAt(text, start);
+            char c = text.charAt(start);
             if (UCharacter.isLetter(c)) {
                 int newChar;
                 if (wasLastCharALetter) {

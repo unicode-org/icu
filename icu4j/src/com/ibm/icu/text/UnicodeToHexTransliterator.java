@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeToHexTransliterator.java,v $ 
- * $Date: 2001/09/21 21:24:39 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/09/28 20:23:42 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ import java.util.*;
  * default is uppercase.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.10 $ $Date: 2001/09/21 21:24:39 $
+ * @version $RCSfile: UnicodeToHexTransliterator.java,v $ $Revision: 1.11 $ $Date: 2001/09/28 20:23:42 $
  */
 public class UnicodeToHexTransliterator extends Transliterator {
 
@@ -294,16 +294,11 @@ public class UnicodeToHexTransliterator extends Transliterator {
         int cursor = offsets.start;
         int limit = offsets.limit;
 
-        UnicodeFilter filter = getFilter();
         StringBuffer hex = new StringBuffer(prefix);
         int prefixLen = prefix.length();
 
         while (cursor < limit) {
             char c = text.charAt(cursor);
-            if (filter != null && !filter.contains(c)) {
-                ++cursor;
-                continue;
-            }
 
             hex.setLength(prefixLen);
             boolean showRest = false;
