@@ -70,6 +70,8 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fMaxMatchLen      = other.fMaxMatchLen;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
     fStaticSets       = other.fStaticSets;    
+    fStartType        = other.fStartType;
+    fStartInfo        = other.fStartInfo;
     if (fBadState) {
         return *this;
     }
@@ -120,6 +122,8 @@ void RegexPattern::init() {
     fMatcher          = NULL;
     fFrameSize        = 0;
     fDataSize         = 0;
+    fStartType        = START_NO_INFO;
+    fStartInfo        = 0;
     
     UErrorCode status=U_ZERO_ERROR;
     // Init of a completely new RegexPattern.
@@ -459,7 +463,6 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_FAIL:
     case URX_CARET:
     case URX_DOLLAR:
-    case URX_BACKSLASH_A:
     case URX_BACKSLASH_G:
     case URX_BACKSLASH_X:
     case URX_END:
