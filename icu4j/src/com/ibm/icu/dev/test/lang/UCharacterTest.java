@@ -1471,6 +1471,29 @@ public final class UCharacterTest extends TestFmwk
 	        { 0x1d15f, UProperty.FULL_COMPOSITION_EXCLUSION, 1 },
 	        { 0xfb1e, UProperty.FULL_COMPOSITION_EXCLUSION, 0 },
 	
+            { 0x110a, UProperty.NFD_INERT, 1 },      /* Jamo L */
+            { 0x0308, UProperty.NFD_INERT, 0 },
+
+            { 0x1164, UProperty.NFKD_INERT, 1 },     /* Jamo V */
+            { 0x1d79d, UProperty.NFKD_INERT, 0 },   /* math compat version of xi */
+
+            { 0x0021, UProperty.NFC_INERT, 1 },      /* ! */
+            { 0x0061, UProperty.NFC_INERT, 0 },     /* a */
+            { 0x00e4, UProperty.NFC_INERT, 0 },     /* a-umlaut */
+            { 0x0102, UProperty.NFC_INERT, 0 },     /* a-breve */
+            { 0xac1c, UProperty.NFC_INERT, 0 },     /* Hangul LV */
+            { 0xac1d, UProperty.NFC_INERT, 1 },      /* Hangul LVT */
+
+            { 0x1d79d, UProperty.NFKC_INERT, 0 },   /* math compat version of xi */
+            { 0x2a6d6, UProperty.NFKC_INERT, 1 },    /* Han, last of CJK ext. B */
+
+            { 0x00e4, UProperty.SEGMENT_STARTER, 1 },
+            { 0x0308, UProperty.SEGMENT_STARTER, 0 },
+            { 0x110a, UProperty.SEGMENT_STARTER, 1 }, /* Jamo L */
+            { 0x1164, UProperty.SEGMENT_STARTER, 0 },/* Jamo V */
+            { 0xac1c, UProperty.SEGMENT_STARTER, 1 }, /* Hangul LV */
+            { 0xac1d, UProperty.SEGMENT_STARTER, 1 }, /* Hangul LVT */
+
 	        { 0x0044, UProperty.HEX_DIGIT, 1 },
 	        { 0xff46, UProperty.HEX_DIGIT, 1 },
 	        { 0x0047, UProperty.HEX_DIGIT, 0 },
