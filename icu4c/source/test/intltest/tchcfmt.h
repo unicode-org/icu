@@ -28,6 +28,9 @@ class TestChoiceFormat: public IntlTest {
      *    See verbose message output statements for specifically tested API
      **/
     void TestComplexExample(void);
+
+// We can deprecate the test code right away; the API itself goes 2002-Jun-30
+#ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
     /**
      * test the use of next_Double with ChoiceFormat
      **/
@@ -36,10 +39,12 @@ class TestChoiceFormat: public IntlTest {
      * test the numerical results of next_Double and previous_Double
      **/
     void TestGapNextDouble(void);
+
     /**
      * utiltity function for TestGapNextDouble
      **/
     void testValue( double val );
+#endif
 
     /**
      * Test new closure API
