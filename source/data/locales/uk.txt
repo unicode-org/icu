@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\uk.xml
+// * Source File: ../../../locale/common/main/uk.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\uk.xml
+ *  ICU <specials> source: ../../../locale/icu/main/uk.xml
  */
 uk{
     Countries{
@@ -100,7 +100,6 @@ uk{
         GU{"Гуам"}
         GW{"Гвінея-Біссау"}
         GY{"Гуана"}
-        HK{"Гонконг"}
         HM{"Острови Херда і Макдональдса"}
         HN{"Гондурас"}
         HR{"Хорватія"}
@@ -149,7 +148,6 @@ uk{
         ML{"Малі"}
         MM{"Мʼянмар"}
         MN{"Монголія"}
-        MO{"Макао"}
         MP{"Північна Маріана, острови"}
         MQ{"Мартиніка"}
         MR{"Мавританія"}

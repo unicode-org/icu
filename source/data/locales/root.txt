@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\root.xml
+// * Source File: ../../../locale/common/main/root.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\root.xml
+ *  ICU <specials> source: ../../../locale/icu/main/root.xml
  */
 root{
     Currencies{
@@ -103,6 +103,10 @@ root{
                 "y'x'G-Ml-d",
                 "y'x'G-Ml-d",
                 "{1} {0}",
+            }
+            isLeapMonth{
+                "",
+                "*",
             }
         }
         default{"gregorian"}

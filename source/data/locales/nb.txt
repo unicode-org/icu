@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\nb.xml
+// * Source File: ../../../locale/common/main/nb.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\nb.xml
+ *  ICU <specials> source: ../../../locale/icu/main/nb.xml
  */
 nb{
     Countries{
@@ -1991,6 +1991,12 @@ nb{
         "∞",
         "�",
         "+",
+    }
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "¤ #,##0.00;-¤ #,##0.00",
+        "#,##0 %",
+        "#E0",
     }
     Scripts{
         Arab{"arabisk"}

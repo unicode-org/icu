@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\am.xml
+// * Source File: ../../../locale/common/main/am.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\am.xml
+ *  ICU <specials> source: ../../../locale/icu/main/am.xml
  */
 am{
     Countries{
@@ -65,7 +65,6 @@ am{
         GR{"ግሪክ"}
         GW{"ቢሳዎ"}
         GY{"ጉያና"}
-        HK{"ሆንግ ኮንግ"}
         HR{"ክሮኤሽያ"}
         HT{"ሀይቲ"}
         HU{"ሀንጋሪ"}
@@ -92,7 +91,6 @@ am{
         MD{"ሞልዶቫ"}
         MK{"ማከዶኒያ"}
         MN{"ሞንጎሊያ"}
-        MO{"ማካዎ"}
         MR{"ሞሪቴኒያ"}
         MT{"ማልታ"}
         MU{"ማሩሸስ"}

@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\ca.xml
+// * Source File: ../../../locale/common/main/ca.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\ca.xml
+ *  ICU <specials> source: ../../../locale/icu/main/ca.xml
  */
 ca{
     Countries{
@@ -86,7 +86,6 @@ ca{
         GT{"Guatemala"}
         GW{"Guinea Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong"}
         HN{"Hondures"}
         HR{"Croàcia"}
         HT{"Haití"}

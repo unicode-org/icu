@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\sr_Latn.xml
+// * Source File: ../../../locale/common/main/sr_Latn.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\sr_Latn.xml
+ *  ICU <specials> source: ../../../locale/icu/main/sr_Latn.xml
  */
 sr_Latn{
     Countries{
@@ -101,7 +101,7 @@ sr_Latn{
         GU{"Guam"}
         GW{"Gvineja-Bisao"}
         GY{"Gvajana"}
-        HK{"Hong Kong"}
+        HK{"Hong Kong (S. A. R. Kina)"}
         HM{"Herd i Mekdonald Ostrva"}
         HN{"Honduras"}
         HR{"Hrvatska"}
@@ -150,7 +150,7 @@ sr_Latn{
         ML{"Mali"}
         MM{"Mijanmar"}
         MN{"Mongolija"}
-        MO{"Makao"}
+        MO{"Makao (S. A. R. Kina)"}
         MP{"Severna Marijanska Ostrva"}
         MQ{"Martinik"}
         MR{"Mauritanija"}

@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\fa.xml
+// * Source File: ../../../locale/common/main/fa.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\fa.xml
+ *  ICU <specials> source: ../../../locale/icu/main/fa.xml
  */
 fa{
     Countries{
@@ -101,7 +101,6 @@ fa{
         GU{"گوام"}
         GW{"گینه‌ی بیسائو"}
         GY{"گویان"}
-        HK{"هنگ‌کنگ"}
         HM{"جزیره‌ی هرد و جزایر مک‌دونالد"}
         HN{"هندوراس"}
         HR{"کرواسی"}
@@ -150,7 +149,6 @@ fa{
         ML{"مالی"}
         MM{"میانمار"}
         MN{"مغولستان"}
-        MO{"ماکائو"}
         MP{"جزایر ماریانای شمالی"}
         MQ{"مارتینیک"}
         MR{"موریتانی"}
