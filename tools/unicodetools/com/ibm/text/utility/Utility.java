@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/06/02 05:07:08 $
-* $Revision: 1.17 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -588,6 +588,39 @@ public final class Utility {    // COMMON UTILITIES
     public static void appendFile(String filename, boolean utf8, PrintWriter output) throws IOException {
     	appendFile(filename, utf8, output, null);
     }
+    
+    public static BufferedReader openReadFile(String filename, boolean UTF8) throws FileNotFoundException, UnsupportedEncodingException {
+        FileInputStream fis = new FileInputStream(filename);
+        InputStreamReader isr = UTF8 ? new InputStreamReader(fis, "UTF8") : new InputStreamReader(fis);
+        BufferedReader br = new BufferedReader(isr, 32*1024);
+        return br;
+    }
+    
+    public static void addCount(Map m, Object key, int count) {
+        Integer oldCount = (Integer) m.get(key);
+        if (oldCount == null) {
+            m.put(key, new Integer(count));
+            return;
+        }
+        m.put(key, new Integer(oldCount.intValue() + count));
+    }
+    
+    public static String readDataLine(BufferedReader br) throws IOException {
+        String originalLine = "";
+        String line = "";
+        
+        try {
+            line = originalLine = br.readLine();
+            if (line == null) return null;
+            if (line.length() > 0 && line.charAt(0) == 0xFEFF) line = line.substring(1);
+            int commentPos = line.indexOf('#');
+            if (commentPos >= 0) line = line.substring(0, commentPos);
+            line = line.trim();
+        } catch (Exception e) {
+            throw new ChainException("Line \"{0}\",  \"{1}\"", new String[] {originalLine, line}, e);
+        }
+        return line;
+    }
 
     public static void appendFile(String filename, boolean utf8, PrintWriter output, String[] replacementList) throws IOException {
         FileInputStream fis = new FileInputStream(filename);
@@ -691,10 +724,10 @@ public final class Utility {    // COMMON UTILITIES
         copyTextFile(filename, utf8, newName, null);
     }
 
-    public static BufferedReader openUnicodeFile(String filename, String version, boolean show) throws IOException {
+    public static BufferedReader openUnicodeFile(String filename, String version, boolean show, boolean UTF8) throws IOException {
         String name = getMostRecentUnicodeDataFile(filename, version, true, show);
         if (name == null) return null;
-        return new BufferedReader(new FileReader(name),32*1024);
+        return openReadFile(name, UTF8); // new BufferedReader(new FileReader(name),32*1024);
     }
 
     public static String getMostRecentUnicodeDataFile(String filename, String version, 
@@ -758,6 +791,7 @@ public final class Utility {    // COMMON UTILITIES
      * Replaces all occurances of piece with replacement, and returns new String
      */
     public static String replace(String source, String piece, String replacement) {
+        if (source == null || source.length() < piece.length()) return source;
     	int pos = 0;
         while (true) {
             pos = source.indexOf(piece, pos);
@@ -766,6 +800,21 @@ public final class Utility {    // COMMON UTILITIES
             if (replacement.length() > 0) ++pos;
         }
     }
+    
+    public static String replace(String source, String[][] replacements) {
+        for (int i = 0; i < replacements.length; ++i) {
+            source = replace(source, replacements[i][0], replacements[i][1]);
+        }
+        return source;
+    }    
+    
+    public static String replace(String source, String[][] replacements, boolean reverse) {
+        if (!reverse) return replace(source, replacements);
+        for (int i = 0; i < replacements.length; ++i) {
+            source = replace(source, replacements[i][1], replacements[i][0]);
+        }
+        return source;
+    }    
     
     public static String getStack() {
         Exception e = new Exception();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
-* $Date: 2002/06/04 01:59:02 $
-* $Revision: 1.5 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,8 @@
 package com.ibm.text.UCD;
 
 import java.io.IOException;
+import com.ibm.icu.text.UTF16;
+
 //import com.ibm.text.unicode.UInfo;
 import java.util.*;
 import java.io.*;
@@ -35,6 +37,7 @@ public class BuildNames implements UCD_Types {
     static Map words = new TreeMap(new LengthFirstComparator());
     static Map doubleWords = new TreeMap(new LengthFirstComparator());
     static Map tripleWords = new TreeMap(new LengthFirstComparator());
+    static Map quadWords = new TreeMap(new LengthFirstComparator());
     static Set lines = new TreeSet(new LengthFirstComparator());
     static int[] letters = new int[128];
     
@@ -44,6 +47,8 @@ public class BuildNames implements UCD_Types {
     }
     
     static String lastWord = "";
+    static String preLastWord = "";
+    static String prePreLastWord = "";
     
     static void addWord(String word, Map words) {
     	Count count = (Count) words.get(word);
@@ -59,15 +64,21 @@ public class BuildNames implements UCD_Types {
         
         // doubles
         
-        if (position != 0) {
+        if (position > 0) {
         	addWord(lastWord + "/" + word, doubleWords);
         }
-        lastWord = word;
         
         if (position > 1) {
-        	addWord(lastWord + "/" + word, doubleWords);
+        	addWord(preLastWord + "/" + lastWord + "/" + word, tripleWords);
         }
-        lastLastWord = word;
+        
+        if (position > 2) {
+        	addWord(prePreLastWord + "/" + preLastWord + "/" + lastWord + "/" + word, quadWords);
+        }
+        
+        prePreLastWord = preLastWord;
+        preLastWord = lastWord;
+        lastWord = word;
         
         for (int i = 0; i < word.length(); ++i) {
             letters[word.charAt(i)]++;
@@ -129,35 +140,76 @@ public class BuildNames implements UCD_Types {
 
     static void collectWords() throws IOException {
 
+        String fname = "ShortNames.txt";
+        System.out.println("Writing " + fname);
+        PrintWriter log = Utility.openPrintWriter(fname, false, true);
+        
         System.out.println("Gathering data");
         //Counter counter = new Counter();
         String[] parts = new String[100];
         //int total = 0;
         int used = 0;
         int sum = 0;
-        for (int i = 0; i < 0x10FFFF; ++i) {
-            if (Default.ucd.hasComputableName(i)) continue;
-            String name = Default.ucd.getName(i);
-            if (name == null) continue;
-            name = transform(name);
-
-            sum += name.length();
-            used++;
-
-            // replace numbers & letters
-
-            int len = Utility.split(name, ' ', parts);
-            for (int j = 0; j < len; ++j) {
-                stash(parts[j], j);
+        int longSum = 0;
+        
+        for (int cp = 0; cp < 0x10FFFF; ++cp) {
+            if (!Default.ucd.isAllocated(cp)) continue;
+            if (Default.ucd.hasComputableName(cp)) continue;
+            Utility.dot(cp);
+            String name;
+            
+            if (Default.ucd.isRepresented(cp)) {
+                name = Default.ucd.getName(cp, SHORT);
+                log.println(Utility.hex(cp) + " " + name);
+                String backName = Utility.replace(name, UCD_Names.NAME_ABBREVIATIONS, false);
+                if (!name.equals(backName)) {
+                    System.out.println("Failed to recreate: " + name + ", " + backName);
+                }
             }
+            
+            // check the string, and its decomposition. This is just to get a good count.
+            
+            String str = UTF16.valueOf(cp);
+            if (false && !Default.nfkd.isNormalized(cp)) {
+                str += Default.nfkd.normalize(cp);
+            }
+                
+            int cp2;
+            for (int i = 0; i < str.length(); i += UTF16.getCharCount(cp2)) {
+                cp2 = UTF16.charAt(str, i);
+                name = Default.ucd.getName(cp2, SHORT);
+                if (name == null) continue;
+                //name = transform(name);
 
-            lines.add(name);
+                sum += name.length();
+                longSum += Default.ucd.getName(cp2).length();
+                used++;
+
+                // replace numbers & letters
+
+                int len = Utility.split(name, ' ', parts);
+                for (int j = 0; j < len; ++j) {
+                    stash(parts[j], j);
+                }
+
+                lines.add(name);
+            }
         }
-        System.out.println("Overhead: " + (lastLink - used) + ", " + ((lastLink - used) * 100 / used) + "%");
-        System.out.println("Strings: " + sum + ", " + (lastLink*4));
+        log.close();
+        Utility.fixDot();
+        //System.out.println("Overhead: " + (lastLink - used) + ", " + ((lastLink - used) * 100 / used) + "%");
+        //System.out.println("Strings: " + sum + ", " + (lastLink*4));
+        System.out.println("Short Names sum: " + sum + ", average: " + (sum + 0.0)/used);
+        System.out.println("Long Names sum: " + longSum + ", average: " + (longSum + 0.0)/used);
+        System.out.println("Savings: " + (1 - (sum+0.0)/longSum));
+        
         
         printWords(words);
         printWords(doubleWords);
+        printWords(tripleWords);
+        printWords(quadWords);
+        
+        if (true) return;
         
         System.out.println();
         System.out.println("Compacting Words");

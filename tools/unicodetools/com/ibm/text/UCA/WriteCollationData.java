@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/04 23:56:29 $ 
-* $Revision: 1.17 $
+* $Date: 2002/06/13 21:14:05 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.text.UCA;
 import java.util.*;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.CanonicalIterator;
 
 import java.io.*;
 //import java.text.*;
@@ -135,7 +136,7 @@ public class WriteCollationData implements UCD_Types {
  
     static public void writeCaseFolding() throws IOException {
         System.err.println("Writing Javascript data");
-        BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true);
+        BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true, false);
         // new BufferedReader(new FileReader(DIR31 + "CaseFolding-3.d3.alpha.txt"), 64*1024);
         // log = new PrintWriter(new FileOutputStream("CaseFolding_data.js"));
         log = Utility.openPrintWriter("CaseFolding_data.js", false, false);
@@ -1487,6 +1488,11 @@ F900..FAFF; CJK Compatibility Ideographs
                 if (UCA.isImplicitLeadPrimary(primary)) {
                     if (relation == PRIMARY_DIFF) {
                     	int resetCp = UCA.ImplicitToCodePoint(primary, UCA.getPrimary(ces[1]));
+                    	
+                    	int[] ces2 = new int[50];
+                    	int len2 = collator.getCEs(UTF16.valueOf(resetCp), true, ces2);
+                    	relation = getStrengthDifference(ces, len, ces2, len2);
+                    	
                         reset = quoteOperand(UTF16.valueOf(resetCp));
                         resetComment = ucd.getCodeAndName(resetCp);
                         // lastCE = UCA.makeKey(primary, UCA.NEUTRAL_SECONDARY, UCA.NEUTRAL_TERTIARY);
@@ -1542,10 +1548,10 @@ F900..FAFF; CJK Compatibility Ideographs
                 if (xmlReset == 2) {
                     log.print("<reset>" + Utility.quoteXML(reset) + "</reset>");
                 }
-                log.print("  <" + XML_RELATION_NAMES[relation] + ">");
                 if (expansion.length() > 0) {
                     log.print("<x>" + Utility.quoteXML(expansion) + "</x>");
                 }
+                log.print("  <" + XML_RELATION_NAMES[relation] + ">");
                 log.print(Utility.quoteXML(chr));
                 log.print("</" + XML_RELATION_NAMES[relation] + ">");
             } else {
@@ -1631,7 +1637,7 @@ F900..FAFF; CJK Compatibility Ideographs
     
     // static final String[] RELATION_NAMES = {" <", "   <<", "     <<<", "         ="};
     static final String[] RELATION_NAMES = {" <\t", "  <<\t", "   <<<\t", "    =\t"};
-    static final String[] XML_RELATION_NAMES = {"o1", "o2", "o3", "o4"};
+    static final String[] XML_RELATION_NAMES = {"g1", "g2", "g3", "eq"};
     
     static class ArrayWrapper {
     	int[] array;
@@ -2080,16 +2086,80 @@ F900..FAFF; CJK Compatibility Ideographs
         
         System.out.println("Sorting");
         Map ordered = new TreeMap();
-        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, NFD);
+        Set contentsForCanonicalIteration = new TreeSet();
+        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, null); // NFD
         int ccounter = 0;
         while (true) {
             Utility.dot(ccounter++);
             String s = ucac.next();
             if (s == null) break;
+            contentsForCanonicalIteration.add(s);
             ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
         }
-            
         
+        // Add canonically equivalent characters!!
+        System.out.println("Start Adding canonical Equivalents2");
+        int canCount = 0;
+        
+        System.out.println("Add missing decomposibles");
+        for (int i = 0; i < 0x10FFFF; ++i) {
+            if (!ucd.isAllocated(i)) continue;
+            if (NFD.isNormalized(i)) continue;
+            if (collator.getCEType(i) >= UCA.FIXED_CE) continue;
+            String s = UTF16.valueOf(i);
+            if (contentsForCanonicalIteration.contains(s)) continue;
+            contentsForCanonicalIteration.add(s);
+            ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
+            System.out.println(" + " + ucd.getCodeAndName(s));
+            canCount++;
+        }
+        
+        Set additionalSet = new HashSet();
+        System.out.println("Loading canonical iterator");
+        CanonicalIterator canIt = new CanonicalIterator(".");
+        Iterator it2 = contentsForCanonicalIteration.iterator();
+        System.out.println("Adding any FCD equivalents that have different sort keys");
+        while (it2.hasNext()) {
+            String key = (String)it2.next();
+            if (key == null) {
+                System.out.println("Null Key");
+                continue;
+            }
+            canIt.setSource(key);
+            boolean first = true;
+            while (true) {
+                String s = canIt.next();
+                if (s == null) break;
+                if (s.equals(key)) continue;
+                if (contentsForCanonicalIteration.contains(s)) continue;
+                if (additionalSet.contains(s)) continue;
+                
+                if (s.equals("\u01EC")) {
+                    System.out.println("01ec");
+                }
+                
+                // Skip anything that is not FCD.
+                if (!NFD.isFCD(s)) continue;
+                
+                // We ONLY add if the sort key would be different
+                // Than what we would get if we didn't decompose!!
+                String sortKey = collator.getSortKey(s, UCA.NON_IGNORABLE);
+                String nonDecompSortKey = collator.getSortKey(s, UCA.NON_IGNORABLE, false);
+                if (sortKey.equals(nonDecompSortKey)) continue;
+                
+                if (first) {
+                    System.out.println(" " + ucd.getCodeAndName(key));
+                    first = false;
+                }
+                System.out.println(" => " + ucd.getCodeAndName(s));
+                System.out.println("    old: " + collator.toString(nonDecompSortKey));
+                System.out.println("    new: " + collator.toString(sortKey));
+                canCount++;
+                additionalSet.add(s);
+                ordered.put(sortKey + '\u0000' + s, s);
+            }
+        }
+        System.out.println("Done Adding canonical Equivalents -- added " + canCount);
         /*
         
         for (int ch = 0; ch < 0x10FFFF; ++ch) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.12 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -124,20 +124,35 @@ public final class UCD implements UCD_Types {
      * Get the character name.
      */
     public String getName(int codePoint) {
+        return getName(codePoint, NORMAL);
+    }
+
+    /**
+     * Get the character name.
+     */
+    public String getName(String s) {
+        return getName(s, NORMAL);
+    }
+
+    /**
+     * Get the character name.
+     */
+    public String getName(int codePoint, byte style) {
+        if (style == SHORT) return get(codePoint, true).shortName;
         return get(codePoint, true).name;
     }
 
     /**
      * Get the character names for the code points in a string, separated by ", "
      */
-    public String getName(String s) {
+    public String getName(String s, byte style) {
         if (s.length() == 1) return get(s.charAt(0), true).name;
         StringBuffer result = new StringBuffer();
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
             if (i > 0) result.append(", ");
-            result.append(getName(cp));
+            result.append(getName(cp, style));
         }
         return result.toString();
     }
@@ -977,6 +992,9 @@ to guarantee identifier closure.
                 result = UData.UNASSIGNED;
                 if (fixStrings) result.name = "<unassigned-" + Utility.hex(codePoint, 4) + ">";
             }
+            if (result.shortName != null && result.shortName.length() == 0) {
+                result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
+            }
             return result;
           case 0x3400: // CJK Ideograph Extension A
           case 0x4E00: // CJK Ideograph
@@ -1006,13 +1024,17 @@ to guarantee identifier closure.
         result = getRaw(rangeStart);
         if (result == null) {
             result = UData.UNASSIGNED;
-            if (fixStrings) result.name = "<reserved-" + Utility.hex(codePoint, 4) + ">";
+            if (fixStrings) {
+                result.name = "<reserved-" + Utility.hex(codePoint, 4) + ">";
+                result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
+            }
             return result;
         }
 
         result.codePoint = codePoint;
         if (fixStrings) {
             result.name = constructedName;
+            result.shortName = Utility.replace(constructedName, UCD_Names.NAME_ABBREVIATIONS);
             result.decompositionMapping = result.bidiMirror
             = result.simpleLowercase = result.simpleUppercase = result.simpleTitlecase = result.simpleCaseFolding
             = result.fullLowercase = result.fullUppercase = result.fullTitlecase = result.fullCaseFolding
@@ -1024,7 +1046,7 @@ to guarantee identifier closure.
         }
         return result;
     }
-
+    
     // Hangul constants
 
     public static final int

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestNormalization.java,v $
-* $Date: 2002/04/23 01:59:14 $
-* $Revision: 1.4 $
+* $Date: 2002/06/13 21:14:05 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -34,6 +34,13 @@ public final class TestNormalization {
     public static void main(String[] args)  throws java.io.IOException {
         System.out.println("Creating Normalizers");
         Default.setUCD();
+        
+        String[] testSet = {"a\u0304\u0328", "a\u0328\u0304"};
+        for (int i = 0; i < testSet.length; ++i) {
+            String s = testSet[i];
+            boolean test = Default.nfc.isFCD(s);
+            System.out.println(test + ": " + Default.ucd.getCodeAndName(s));
+        }
 
 
             String x = UTF32.valueOf32(0x10000);
