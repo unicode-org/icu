@@ -1,14 +1,36 @@
-# Normalization Test Suite
-# Columns (c1, c2,...) are separated by semicolons
+# NormalizationTest-3.0.1.txt
+# Author: Mark Davis
+# 
+# Format
+#  Columns (c1, c2,...) are separated by semicolons
+#  Comments are indicated with hash marks.
 #
-# Comments are indicated with hash marks
-# The following invariants must be true for all conformant implementations
+# Invariants:
+# 1. The following invariants must be true for all conformant implementations
+#
+# NFC
 #  c2 == NFC(c1) == NFC(c2) == NFC(c3)
+#  c4 == NFC(c4) == NFC(c5)
+#
+# NFD
 #  c3 == NFD(c1) == NFD(c2) == NFD(c3)
+#  c5 == NFD(c4) == NFD(c5
+#
+# NFKC
 #  c4 == NFKC(c1) == NFKC(c2) == NFKC(c3) == NFKC(c4) == NFKC(c5)
+#
+# NFKD
 #  c5 == NFKD(c1) == NFKD(c2) == NFKD(c3) == NFKD(c4) == NFKD(c5)
 #
-# Part 3: Specific cases
+# 2. For every assigned Unicode 3.0 code point X that is not specifically
+# listed in Part 1, the following invariants must be true for all conformant
+# implementations:
+#
+#  X == NFC(X) == NFD(X) == NFKC(X) == NFKD(X)
+#
+##############################################################################################
+#
+# Part 0: Specific cases
 #
 1E0A;1E0A;0044 0307;1E0A;0044 0307; # (Ḋ; Ḋ; D◌̇; Ḋ; D◌̇; ) LATIN CAPITAL LETTER D WITH DOT ABOVE
 1E0C;1E0C;0044 0323;1E0C;0044 0323; # (Ḍ; Ḍ; D◌̣; Ḍ; D◌̣; ) LATIN CAPITAL LETTER D WITH DOT BELOW
@@ -33,7 +55,6 @@
 0045 0300 0304;00C8 0304;0045 0300 0304;00C8 0304;0045 0300 0304; # (E◌̀◌̄; È◌̄; E◌̀◌̄; È◌̄; E◌̀◌̄; ) LATIN CAPITAL LETTER E, COMBINING GRAVE ACCENT, COMBINING MACRON
 #
 # Part 1: Character by character test
-# All characters not explicitly occurring in c1 of Part 1 have identical NFC, D, KC, KD forms.
 #
 00A0;00A0;00A0;0020;0020; # ( ;  ;  ;  ;  ; ) NO-BREAK SPACE
 00A8;00A8;00A8;0020 0308;0020 0308; # (¨; ¨; ¨;  ◌̈;  ◌̈; ) DIAERESIS
