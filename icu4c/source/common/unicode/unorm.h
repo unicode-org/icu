@@ -254,12 +254,40 @@ typedef enum UNormalizationCheckResult {
  * @paran mode         which normalization form to test for
  * @param status       a pointer to a UErrorCode to receive any errors
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+ *
+ * @see unorm_isNormalized
  * @stable
  */
 U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm_quickCheck(const UChar *source, int32_t sourcelength,
                  UNormalizationMode mode,
                  UErrorCode *status);
+
+/**
+ * Test if a string is in a given normalization form.
+ * This is semantically equivalent to source.equals(normalize(source, mode)) .
+ *
+ * Unlike unorm_quickCheck(), this function returns a definitive result,
+ * never a "maybe".
+ * For NFD, NFKD, and FCD, both functions work exactly the same.
+ * For NFC and NFKC where quickCheck may return "maybe", this function will
+ * perform further tests to arrive at a TRUE/FALSE result.
+ *
+ * @param src        String that is to be tested if it is in a normalization format.
+ * @param srcLength  Length of source to test, or -1 if NUL-terminated.
+ * @paran mode       Which normalization form to test for.
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ * @return Boolean value indicating whether the source string is in the
+ *         "mode" normalization form.
+ *
+ * @see unorm_quickCheck
+ * @draft ICU 2.2
+ */
+U_CAPI UBool U_EXPORT2
+unorm_isNormalized(const UChar *src, int32_t srcLength,
+                   UNormalizationMode mode,
+                   UErrorCode *pErrorCode);
 
 /**
  * Iterative normalization forward.

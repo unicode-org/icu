@@ -265,12 +265,37 @@ public:
    * results.
    * @param source       string for determining if it is in a normalized format
    * @paran mode         normalization format
-   * @param status A pointer to a UErrorCode to receive any errors
+   * @param status A reference to a UErrorCode to receive any errors
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+   *
+   * @see isNormalized
    * @draft ICU 2.0
    */
-  static UNormalizationCheckResult
+  static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
+
+  /**
+   * Test if a string is in a given normalization form.
+   * This is semantically equivalent to source.equals(normalize(source, mode)) .
+   *
+   * Unlike unorm_quickCheck(), this function returns a definitive result,
+   * never a "maybe".
+   * For NFD, NFKD, and FCD, both functions work exactly the same.
+   * For NFC and NFKC where quickCheck may return "maybe", this function will
+   * perform further tests to arrive at a TRUE/FALSE result.
+   *
+   * @param src        String that is to be tested if it is in a normalization format.
+   * @paran mode       Which normalization form to test for.
+   * @param errorCode  ICU error code in/out parameter.
+   *                   Must fulfill U_SUCCESS before the function call.
+   * @return Boolean value indicating whether the source string is in the
+   *         "mode" normalization form.
+   *
+   * @see quickCheck
+   * @draft ICU 2.2
+   */
+  static inline UBool
+  isNormalized(const UnicodeString &src, UNormalizationMode mode, UErrorCode &errorCode);
 
   /*
    * Concatenate normalized strings, making sure that the result is normalized as well.
@@ -1042,6 +1067,30 @@ Normalizer::quickCheck(const UnicodeString& source,
                        EMode mode, 
                        UErrorCode &status) {
   return quickCheck(source, getUNormalizationMode(mode, status), status);
+}
+
+inline UNormalizationCheckResult
+Normalizer::quickCheck(const UnicodeString& source,
+                       UNormalizationMode mode, 
+                       UErrorCode &status) {
+    if(U_FAILURE(status)) {
+        return UNORM_MAYBE;
+    }
+
+    return unorm_quickCheck(source.getBuffer(), source.length(),
+                            mode, &status);
+}
+
+inline UBool
+Normalizer::isNormalized(const UnicodeString& source,
+                         UNormalizationMode mode, 
+                         UErrorCode &status) {
+    if(U_FAILURE(status)) {
+        return FALSE;
+    }
+
+    return unorm_isNormalized(source.getBuffer(), source.length(),
+                              mode, &status);
 }
 
 inline int32_t

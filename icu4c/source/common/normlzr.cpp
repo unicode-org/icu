@@ -191,18 +191,6 @@ Normalizer::normalize(const UnicodeString& source,
     }
 }
 
-UNormalizationCheckResult
-Normalizer::quickCheck(const UnicodeString& source,
-                       UNormalizationMode mode, 
-                       UErrorCode &status) {
-    if(U_FAILURE(status)) {
-        return UNORM_MAYBE;
-    }
-
-    return unorm_quickCheck(source.getBuffer(), source.length(),
-                            mode, &status);
-}
-
 void
 Normalizer::compose(const UnicodeString& source, 
                     UBool compat, int32_t options,
