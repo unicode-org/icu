@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/FCDBuilder.java,v $ 
-* $Date: 2001/02/28 20:53:29 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/08 02:06:48 $ 
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -17,8 +17,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Writer;
 import com.ibm.util.ByteTrie;
-import com.ibm.icu.text.UCharacter;
-import com.ibm.icu.text.UTF16;
+import com.ibm.text.UCharacter;
+import com.ibm.text.UTF16;
 import com.ibm.text.Normalizer;
 
 /**
@@ -60,19 +60,21 @@ public class FCDBuilder
     
     String cstr,
            nfd;
-    for (int ch = UCharacter.MIN_VALUE; ch <= UCharacter.MAX_VALUE; ch ++)
+    for (int ch = UCharacter.MIN_VALUE; ch <= UCharacter.MAX_VALUE; ch ++) {
       result[ch] = getFCD(ch);
+    }
     
     ByteTrie trie = new ByteTrie(result);
       
     // testing, checking trie values
-    for (int ch = UCharacter.MIN_VALUE; ch <= UCharacter.MAX_VALUE; ch ++)
+    for (int ch = UCharacter.MIN_VALUE; ch <= UCharacter.MAX_VALUE; ch ++) {
       if (trie.getValue(ch) != getFCD(ch))
       {
         System.out.println("error at 0x" + Integer.toHexString(ch) + " " +
                            getFCD(ch));
         break;
       }
+    }
    
     try
     {
