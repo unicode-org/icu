@@ -24,12 +24,37 @@
 #include "unicode/udata.h"
 #include "unicode/uloc.h"
 #include "unicode/uiter.h"
+#include "unicode/uset.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
 #include "utrie.h"
 #include "ustr_imp.h"
 #include "uprops.h"
+
+// Machine-generated data
+// See com.ibm.icu.dev.tools.UnicodeSetCloseOver
+static const UChar32 CASE_UNIQUE_RANGES[] = {
+    0x0041,0x005A,0x0061,0x007A,0x00B5,0x00B5,0x00C0,0x00D6,0x00D8,0x00F6,
+    0x00F8,0x0130,0x0132,0x0137,0x0139,0x017F,0x0181,0x018C,0x018E,0x0199,
+    0x019C,0x01A9,0x01AC,0x01B9,0x01BC,0x01BD,0x01BF,0x01BF,0x01C4,0x0220,
+    0x0222,0x0233,0x0253,0x0254,0x0256,0x0257,0x0259,0x0259,0x025B,0x025B,
+    0x0260,0x0260,0x0263,0x0263,0x0268,0x0269,0x026F,0x026F,0x0272,0x0272,
+    0x0275,0x0275,0x0280,0x0280,0x0283,0x0283,0x0288,0x0288,0x028A,0x028B,
+    0x0292,0x0292,0x0345,0x0345,0x0386,0x0386,0x0388,0x038A,0x038C,0x038C,
+    0x038E,0x03A1,0x03A3,0x03CE,0x03D0,0x03D1,0x03D5,0x03D6,0x03D8,0x03F2,
+    0x03F4,0x03F5,0x0400,0x0481,0x048A,0x04BF,0x04C1,0x04CE,0x04D0,0x04F5,
+    0x04F8,0x04F9,0x0500,0x050F,0x0531,0x0556,0x0561,0x0587,0x1E00,0x1E9B,
+    0x1EA0,0x1EF9,0x1F00,0x1F15,0x1F18,0x1F1D,0x1F20,0x1F45,0x1F48,0x1F4D,
+    0x1F50,0x1F57,0x1F59,0x1F59,0x1F5B,0x1F5B,0x1F5D,0x1F5D,0x1F5F,0x1F7D,
+    0x1F80,0x1FB4,0x1FB6,0x1FBC,0x1FBE,0x1FBE,0x1FC2,0x1FC4,0x1FC6,0x1FCC,
+    0x1FD0,0x1FD3,0x1FD6,0x1FDB,0x1FE0,0x1FEC,0x1FF2,0x1FF4,0x1FF6,0x1FFC,
+    0x2126,0x2126,0x212A,0x212B,0x2160,0x217F,0x24B6,0x24E9,0xFB00,0xFB06,
+    0xFB13,0xFB17,0xFF21,0xFF3A,0xFF41,0xFF5A,
+    0x00010400,0x00010425,0x00010428,0x0001044D,
+};
+
+#define CASE_UNIQUE_RANGES_LENGTH (sizeof(CASE_UNIQUE_RANGES)/sizeof(CASE_UNIQUE_RANGES[0]))
 
 /* dynamically loaded Unicode character properties -------------------------- */
 
@@ -55,6 +80,9 @@ static int8_t havePropsData=0;
 
 /* index values loaded from uprops.dat */
 static int32_t indexes[UPROPS_INDEX_COUNT];
+
+/* case unique characters */
+static USet* CASE_UNIQUE = NULL;
 
 /* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
 static int32_t U_CALLCONV
@@ -105,6 +133,11 @@ uchar_cleanup()
     countPropsVectors=0;
     dataErrorCode=U_ZERO_ERROR;
     havePropsData=FALSE;
+
+    if (CASE_UNIQUE != NULL) {
+        uset_close(CASE_UNIQUE);
+        CASE_UNIQUE = NULL;
+    }
     return TRUE;
 }
 
@@ -2017,4 +2050,32 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
     return destIndex;
+}
+
+U_CAPI UBool U_EXPORT2
+uchar_isCaseUnique(UChar32 ch) {
+
+    if (CASE_UNIQUE == NULL) {
+        UErrorCode ec = U_ZERO_ERROR;
+        USet* s = uset_open(0, -1); // empty
+        int32_t i;
+        if (s == NULL) {
+            return FALSE;
+        }
+        for (i=0; i<CASE_UNIQUE_RANGES_LENGTH; i+=2) {
+            uset_addRange(s, CASE_UNIQUE_RANGES[i], CASE_UNIQUE_RANGES[i+1]);
+        }
+        uset_complement(s);
+        umtx_lock(NULL);
+        if (CASE_UNIQUE == NULL) {
+            CASE_UNIQUE = s;
+            s = NULL;
+        }
+        umtx_unlock(NULL);
+        if (s != NULL) {
+            uset_close(s);
+        }
+    }
+
+    return CASE_UNIQUE ? uset_contains(CASE_UNIQUE, ch) : FALSE;
 }
