@@ -154,7 +154,6 @@ public final class UScript {
      * Gets the script code associated with the given codepoint.
      * Returns UScript.MALAYAM given 0x0D02 
      * @param codepoint UChar32 codepoint
-     * @param err the error status code.
      * @return The script code 
      * @exception IllegalArgumentException
      * @draft

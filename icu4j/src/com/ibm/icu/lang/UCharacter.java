@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/11/06 19:50:21 $ 
-* $Revision: 1.50 $
+* $Date: 2002/11/13 20:19:43 $ 
+* $Revision: 1.51 $
 *
 *******************************************************************************
 */
@@ -3740,7 +3740,7 @@ public final class UCharacter
      *        &lt; UProperty.BINARY_LIMIT or UProperty.INT_START &lt;= which
      *        &lt; UProperty.INT_LIMIT.
      * @return Minimum value returned by UCharacter.getIntPropertyValue(int) 
-     *         for a Unicode property. Can be negative. 0 if the property 
+     *         for a Unicode property. 0 if the property 
      *         selector is out of range.
      * @see UProperty
      * @see #hasBinaryProperty
@@ -3754,8 +3754,6 @@ public final class UCharacter
         switch (type) {
             case UProperty.BLOCK:
                 return UnicodeBlock.INVALID_CODE.getID();
-            case UProperty.SCRIPT:
-                return UScript.INVALID_CODE;
         }
         return 0; // undefined; and: all other properties have a minimum value 
                   // of 0
@@ -3772,13 +3770,13 @@ public final class UCharacter
      * <li> UProperty.SCRIPT:       -1/45 (USCRIPT_INVALID_CODE/USCRIPT_TAGBANWA)
      * <li> UProperty.IDEOGRAPHIC:   0/1  (FALSE/TRUE)
      * </ul>
-     * For undefined UProperty constant values, both min/max values will be 0.
+     * For undefined UProperty constant values, min/max values will be 0/-1.
      * @param which UProperty selector constant, identifies which binary 
      *        property to check. Must be UProperty.BINARY_START &lt;= which
      *        &lt; UProperty.BINARY_LIMIT or UProperty.INT_START &lt;= which
      *        &lt; UProperty.INT_LIMIT.
      * @return Maximum value returned by u_getIntPropertyValue for a Unicode property.
-     *         0 if the property selector is out of range.
+     *         <= 0 if the property selector is out of range.
      * @see UProperty
      * @see #hasBinaryProperty
      * @see #getUnicodeVersion
@@ -3789,13 +3787,13 @@ public final class UCharacter
     public static int getIntPropertyMaxValue(int type)
     { 
         if (type < UProperty.BINARY_START) {
-            return 0; // undefined
+            return -1; // undefined
         } 
         else if (type < UProperty.BINARY_LIMIT) {
             return 1; // maximum TRUE for all binary properties
         } 
         else if (type < UProperty.INT_START) {
-            return 0; // undefined
+            return -1; // undefined
         } 
         else if (type < UProperty.INT_LIMIT) {
             int max = 0;
@@ -3834,7 +3832,7 @@ public final class UCharacter
                 return max;
             }
         } 
-        return 0; // undefined
+        return -1; // undefined
     }
 
     // protected data members --------------------------------------------
