@@ -81,7 +81,7 @@ import com.ibm.icu.util.UResourceBundle;
             UOption.SOURCEDIR().setDefault("C:\\ICU4C\\locale\\common\\main\\"),
             UOption.DESTDIR().setDefault("C:\\DATA\\GEN\\cldr\\main\\"),
             UOption.create("match", 'm', UOption.REQUIRES_ARG).setDefault(".*"),
-            UOption.create("skip", 's', UOption.REQUIRES_ARG).setDefault("zh_(C|S|HK|M).*"),
+            UOption.create("skip", 'z', UOption.REQUIRES_ARG).setDefault("zh_(C|S|HK|M).*"),
             UOption.create("tzadir", 't', UOption.REQUIRES_ARG).setDefault("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\"),
 
     };
