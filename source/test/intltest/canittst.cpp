@@ -30,6 +30,7 @@ void CanonicalIteratorTest::runIndexedTest(int32_t index, UBool exec,
     switch (index) {
         CASE(0, TestBasic);
         CASE(1, TestExhaustive);
+        CASE(2, TestAPI);
       default: name = ""; break;
     }
 }
@@ -264,3 +265,29 @@ UnicodeString CanonicalIteratorTest::collectionToString(Hashtable *col) {
     return result;
 }
 
+void CanonicalIteratorTest::TestAPI() {
+  UErrorCode status = U_ZERO_ERROR;
+  // Test reset and getSource
+  UnicodeString start("ljubav");
+  logln("Testing CanonicalIterator::getSource");
+  logln("Instantiating canonical iterator with string "+start);
+  CanonicalIterator can(start, status);
+  UnicodeString source = can.getSource();
+  logln("CanonicalIterator::getSource returned "+source);
+  if(start != source) {
+    errln("CanonicalIterator.getSource() didn't return the starting string. Expected "+start+", got "+source);
+  }
+  logln("Testing CanonicalIterator::reset");
+  UnicodeString next = can.next();
+  logln("CanonicalIterator::next returned "+next);
+
+  can.reset();
+
+  UnicodeString afterReset = can.next();
+  logln("After reset, CanonicalIterator::next returned "+afterReset);
+
+  if(next != afterReset) {
+    errln("Next after instantiation ("+next+") is different from next after reset ("+afterReset+").");
+  }
+
+}
