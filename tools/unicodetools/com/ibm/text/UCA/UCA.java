@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/10/26 23:32:03 $ 
-* $Revision: 1.6 $
+* $Date: 2001/10/31 00:01:28 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -236,7 +236,7 @@ final public class UCA implements Comparator {
             
             // add weights
             char w = getPrimary(ce);
-            if (DEBUG) System.out.println("\tCE: " + hex(ce));
+            if (DEBUG) System.out.println("\tCE: " + Utility.hex(ce));
             if (w != 0) primaries.append(w);
             
             w = getSecondary(ce);
@@ -490,7 +490,10 @@ final public class UCA implements Comparator {
     /**
      * Return the type of the CE
      */
-    public byte getCEType(char ch) {
+    public byte getCEType(int ch) {
+        
+        if (ch > 0xFFFF) ch = UTF16.getLeadSurrogate(ch); // first if expands
+        
         int ce = collationElements[ch];
         if ((ce & EXCEPTION_CE_MASK) != EXCEPTION_CE_MASK) return NORMAL_CE;
         if (ce == UNSUPPORTED) {
@@ -586,7 +589,7 @@ final public class UCA implements Comparator {
                 result.append("|");
                 needSep = true;
             } else {
-                result.append(hex(ch));
+                result.append(Utility.hex(ch));
                 needSep = true;
             }
         }
@@ -598,9 +601,9 @@ final public class UCA implements Comparator {
      * Produces a human-readable string for a collation element
      */
     static public String ceToString(int ce) {
-        return "[" + hex(getPrimary(ce)) + "." 
-          + hex(getSecondary(ce)) + "."
-          + hex(getTertiary(ce)) + "]";
+        return "[" + Utility.hex(getPrimary(ce)) + "." 
+          + Utility.hex(getSecondary(ce)) + "."
+          + Utility.hex(getTertiary(ce)) + "]";
     }
     
     /**
@@ -631,32 +634,36 @@ final public class UCA implements Comparator {
     /**
      * Supplies a zero-padded hex representation of an integer (without 0x)
      */
+    /*
     static public String hex(int i) {
         String result = Long.toString(i & 0xFFFFFFFFL, 16).toUpperCase();
         return "00000000".substring(result.length(),8) + result;
     }
-    
+    */
     /**
      * Supplies a zero-padded hex representation of a Unicode character (without 0x, \\u)
      */
+    /*
     static public String hex(char i) {
         String result = Integer.toString(i, 16).toUpperCase();
         return "0000".substring(result.length(),4) + result;
     }
-    
+    */
     /**
      * Supplies a zero-padded hex representation of a Unicode character (without 0x, \\u)
      */
+     /*
     static public String hex(byte b) {
         int i = b & 0xFF;
         String result = Integer.toString(i, 16).toUpperCase();
         return "00".substring(result.length(),2) + result;
     }
-    
+    */
     /**
      * Supplies a zero-padded hex representation of a Unicode String (without 0x, \\u)
      *@param sep can be used to give a sequence, e.g. hex("ab", ",") gives "0061,0062"
      */
+     /*
     static public String hex(String s, String sep) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length(); ++i) {
@@ -665,11 +672,12 @@ final public class UCA implements Comparator {
         }
         return result.toString();
     }
-    
+    */
     /**
      * Supplies a zero-padded hex representation of a Unicode String (without 0x, \\u)
      *@param sep can be used to give a sequence, e.g. hex("ab", ",") gives "0061,0062"
      */
+     /*
     static public String hex(StringBuffer s, String sep) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < s.length(); ++i) {
@@ -678,6 +686,7 @@ final public class UCA implements Comparator {
         }
         return result.toString();
     }
+    */
     
 // =============================================================
 // Privates
@@ -1161,6 +1170,7 @@ final public class UCA implements Comparator {
     public class UCAContents {
         int current = -1;
         Normalizer skipDecomps = new Normalizer(Normalizer.NFD);
+        Normalizer nfd = skipDecomps;
         Iterator enum = null;
         byte ceLimit;
         int currentRange = Integer.MAX_VALUE; // set to ZERO to enable
@@ -1191,11 +1201,15 @@ final public class UCA implements Comparator {
             String result = null; // null if done
             
             // normal case
-            while (current++ <= 0xFFFF) {
-                char ch = (char)current;
-                if (getCEType(ch) >= ceLimit) continue;
-                if (skipDecomps != null && skipDecomps.hasDecomposition(ch)) continue;
-                result = String.valueOf(ch);
+            while (current++ < 0x10FFFF) {
+                //char ch = (char)current;
+                byte type = getCEType(current);
+                
+                if (!nfd.normalizationDiffers(current) || type == HANGUL_CE) {
+                    if (type >= ceLimit) continue;
+                    if (skipDecomps != null && skipDecomps.hasDecomposition(current)) continue;
+                }
+                result = UTF16.valueOf(current);
                 return result;
             }
             
@@ -1502,19 +1516,19 @@ final public class UCA implements Comparator {
         
         hangulHackBottom = collationElements[0x1100] & 0xFFFF0000; // remove secondaries & tertiaries
         hangulHackTop = collationElements[0x11F9] | 0xFFFF; // bump up secondaries and tertiaries
-        if (SHOW_STATS) System.out.println("\tHangul Hack: " + hex(hangulHackBottom) + ", " + hex(hangulHackTop));
+        if (SHOW_STATS) System.out.println("\tHangul Hack: " + Utility.hex(hangulHackBottom) + ", " + Utility.hex(hangulHackTop));
         
         // show some statistics
         if (SHOW_STATS) System.out.println("\tcount1: " + count1);
         if (SHOW_STATS) System.out.println("\tcount2: " + max2);
         if (SHOW_STATS) System.out.println("\tcount3: " + max3);
         
-        if (SHOW_STATS) System.out.println("\tMIN1/MAX1: " + hex(MIN1) + "/" + hex(MAX1));
-        if (SHOW_STATS) System.out.println("\tMIN2/MAX2: " + hex(MIN2) + "/" + hex(MAX2));
-        if (SHOW_STATS) System.out.println("\tMIN3/MAX3: " + hex(MIN3) + "/" + hex(MAX3));
+        if (SHOW_STATS) System.out.println("\tMIN1/MAX1: " + Utility.hex(MIN1) + "/" + Utility.hex(MAX1));
+        if (SHOW_STATS) System.out.println("\tMIN2/MAX2: " + Utility.hex(MIN2) + "/" + Utility.hex(MAX2));
+        if (SHOW_STATS) System.out.println("\tMIN3/MAX3: " + Utility.hex(MIN3) + "/" + Utility.hex(MAX3));
         
-        if (SHOW_STATS) System.out.println("\tVar Min/Max: " + hex(variableLow) + "/" + hex(variableHigh));
-        if (SHOW_STATS) System.out.println("\tNon-Var Min: " + hex(nonVariableLow));
+        if (SHOW_STATS) System.out.println("\tVar Min/Max: " + Utility.hex(variableLow) + "/" + Utility.hex(variableHigh));
+        if (SHOW_STATS) System.out.println("\tNon-Var Min: " + Utility.hex(nonVariableLow));
         
         if (SHOW_STATS) System.out.println("\trenumberedVariable: " + renumberedVariable);
     }
@@ -1565,7 +1579,7 @@ final public class UCA implements Comparator {
             if (strength > 1) {
                 if (weights.get(i)) {
                     count++;
-                    p.println(mf.format(new Object[] {hex((char)i), new Integer(stCounts[strength][i])}));
+                    p.println(mf.format(new Object[] {Utility.hex((char)i), new Integer(stCounts[strength][i])}));
                 }
                 continue;
             }
@@ -1575,8 +1589,8 @@ final public class UCA implements Comparator {
                 int last = i-1;
                 int diff = last - first + 1;
                 count += diff;
-                String lastStr = last == first ? "" : hex((char)last);
-                p.println(mf.format(new Object[] {hex((char)first),lastStr,new Integer(diff), new Integer(count)}));
+                String lastStr = last == first ? "" : Utility.hex((char)last);
+                p.println(mf.format(new Object[] {Utility.hex((char)first),lastStr,new Integer(diff), new Integer(count)}));
                 first = -1;
             }
         }
@@ -1623,17 +1637,17 @@ final public class UCA implements Comparator {
             variable = false; // FIX DATA FILE
         }
         if (key2 > 0x1FF) {
-            throw new IllegalArgumentException("Weight2 doesn't fit: " + hex(key2) + "," + line);
+            throw new IllegalArgumentException("Weight2 doesn't fit: " + Utility.hex(key2) + "," + line);
         }
         if (key3 > 0x7F) {
-            throw new IllegalArgumentException("Weight3 doesn't fit: " + hex(key3) + "," + line);
+            throw new IllegalArgumentException("Weight3 doesn't fit: " + Utility.hex(key3) + "," + line);
         }
         // adjust variable bounds, if needed
         if (variable) {
             if (key1 > nonVariableLow) {
                 if (!haveVariableWarning) {
                     System.out.println("\tBAD DATA: Variable overlap, nonvariable low: "
-                    + hex(nonVariableLow) + ", line: \"" + line + "\"");
+                    + Utility.hex(nonVariableLow) + ", line: \"" + line + "\"");
                     haveVariableWarning = true;
                 }
             } else {
@@ -1644,7 +1658,7 @@ final public class UCA implements Comparator {
             if (key1 < variableHigh) {
                 if (!haveVariableWarning) {
                     System.out.println("\tBAD DATA: Variable overlap, variable high: "
-                    + hex(variableHigh) + ", line: \"" + line + "\"");
+                    + Utility.hex(variableHigh) + ", line: \"" + line + "\"");
                     haveVariableWarning = true;
                 }
             } else {
@@ -1717,8 +1731,8 @@ final public class UCA implements Comparator {
         Object ceObj = new Long(((long)result << 16) | fourth);
         Object probe = uniqueTable.get(ceObj);
         if (probe != null) {
-            System.out.println("\tCE(" + hex(value) 
-              + ")=CE(" + hex(((Character)probe).charValue()) + "); " + line);
+            System.out.println("\tCE(" + Utility.hex(value) 
+              + ")=CE(" + Utility.hex(((Character)probe).charValue()) + "); " + line);
               
         } else {
             uniqueTable.put(ceObj, new Character(value));

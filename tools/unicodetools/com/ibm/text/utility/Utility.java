@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/10/26 23:33:48 $
-* $Revision: 1.6 $
+* $Date: 2001/10/31 00:02:54 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -122,6 +122,14 @@ public final class Utility {    // COMMON UTILITIES
 	    return hex(ch,4);
 	}
 
+	public static String hex(byte ch) {
+	    return hex(ch & 0xFF,2);
+	}
+
+	public static String hex(char ch) {
+	    return hex(ch & 0xFFFF,4);
+	}
+
 	public static String hex(Object s) {
 	    return hex(s, 4, " ");
 	}
@@ -149,21 +157,21 @@ public final class Utility {    // COMMON UTILITIES
 	    return result.toString();
 	}
 
-	public static String hex(byte[] o, int start, int end) {
+	public static String hex(byte[] o, int start, int end, String separator) {
 	    StringBuffer result = new StringBuffer();
 	    //int ch;
 	    for (int i = start; i < end; ++i) {
-	        if (i != 0) result.append(' ');
-	        result.append(hex(o[i] & 0xFF, 2));
+	        if (i != 0) result.append(separator);
+	        result.append(hex(o[i]));
 	    }
 	    return result.toString();
 	}
 
-	public static String hex(char[] o, int start, int end) {
+	public static String hex(char[] o, int start, int end, String separator) {
 	    StringBuffer result = new StringBuffer();
 	    for (int i = start; i < end; ++i) {
-	        if (i != 0) result.append(' ');
-	        result.append(hex(o[i], 4));
+	        if (i != 0) result.append(separator);
+	        result.append(hex(o[i]));
 	    }
 	    return result.toString();
 	}

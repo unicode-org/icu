@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/10/26 23:33:07 $
-* $Revision: 1.8 $
+* $Date: 2001/10/31 00:02:27 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -414,21 +414,51 @@ public class GenerateData implements UCD_Types {
 
 
     public static void listProperties() throws IOException {
-        String propAbb = "";
         String prop = "";
+        String propAbb = "";
+        String value = "";
+        String valueAbb = "";
         
         Map duplicates = new TreeMap();
         Set sorted = new TreeSet(java.text.Collator.getInstance());
-        Map accumulation = new TreeMap();
+        Set accumulation = new TreeSet(java.text.Collator.getInstance());
         String spacing;
         
-        for(int k = 0; k < UCD_Names.NON_ENUMERATED.length; ++k) {
+        BufferedReader blocks = Utility.openUnicodeFile("Blocks", ucd.getVersion());
+        String[] parts = new String[10];
+        while (true) {
+            String line = blocks.readLine();
+            if (line == null) break;
+            int commentPos = line.indexOf('#');
+            if (commentPos >= 0) line = line.substring(0,commentPos);
+            line = line.trim();
+            if (line.length() == 0) continue;
+            int count = Utility.split(line,';',parts);
+            if (count != 2) System.out.println("Whow!");
+            value = fixGaps(parts[1].trim(), true);
+            valueAbb = "n/a";
+            spacing = Utility.repeat(" ", 10-valueAbb.length());
+            sorted.add("blk; " + valueAbb + spacing + "; " + value);
+            checkDuplicate(duplicates, accumulation, value, "Block=" + value);
+        }
+        blocks.close();
+        
+        for (int k = 0; k < UCD_Names.NON_ENUMERATED.length; ++k) {
             propAbb = fixGaps(UCD_Names.NON_ENUMERATED[k][0], false);
             prop = fixGaps(UCD_Names.NON_ENUMERATED[k][1], true);
             spacing = Utility.repeat(" ", 10-propAbb.length());
             sorted.add("AA; " + propAbb + spacing + "; " + prop);
             checkDuplicate(duplicates, accumulation, propAbb, prop);
             if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
+        }
+ 
+        for (int k = 0; k < UCD_Names.SUPER_CATEGORIES.length; ++k) {
+            valueAbb = fixGaps(UCD_Names.SUPER_CATEGORIES[k][0], false);
+            value = fixGaps(UCD_Names.SUPER_CATEGORIES[k][1], true);
+            spacing = Utility.repeat(" ", 10-valueAbb.length());
+            sorted.add("gc; " + valueAbb + spacing + "; " + value);
+            checkDuplicate(duplicates, accumulation, value, "General_Category=" + value);
+            if (!value.equals(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, "General_Category=" + value);
         }
         
         sorted.add("xx; T         ; True");
@@ -460,7 +490,7 @@ public class GenerateData implements UCD_Types {
             if (!ubp.isDefined(i)) continue;
             if (ubp.isTest(i)) continue;
             
-            String value = ubp.getID(i, LONG);
+            value = ubp.getID(i, LONG);
             if (value.length() == 0) value = "none";
             else if (value.equals("<unused>")) continue;
             value = fixGaps(value, true);
@@ -469,9 +499,9 @@ public class GenerateData implements UCD_Types {
                 value = ucd.getCase(value, FULL, TITLE);
             }
             
-            String abbvalue = ubp.getID(i, SHORT);
-            if (abbvalue.length() == 0) abbvalue = "no";
-            abbvalue = fixGaps(abbvalue, false);
+            valueAbb = ubp.getID(i, SHORT);
+            if (valueAbb.length() == 0) valueAbb = "no";
+            valueAbb = fixGaps(valueAbb, false);
 
             if (type == COMBINING_CLASS) {
                 if (value.startsWith("Fixed_")) { continue; }
@@ -480,13 +510,13 @@ public class GenerateData implements UCD_Types {
             /*
             String elide = "";
             if (type == CATEGORY || type == SCRIPT || type == BINARY_PROPERTIES) elide = "\\p{"
-                + abbvalue
+                + valueAbb
                 + "}";
             String abb = "";
             if (type != BINARY_PROPERTIES) abb = "\\p{"
                 + UCD_Names.ABB_UNIFIED_PROPERTIES[i>>8]
                 + "="
-                + abbvalue
+                + valueAbb
                 + "}";
             String norm = "";
             if (type != BINARY_PROPERTIES) norm = "\\p{"
@@ -497,18 +527,18 @@ public class GenerateData implements UCD_Types {
             System.out.println("<tr><td>" + elide + "</td><td>" + abb + "</td><td>" + norm + "</td></tr>");
             */
             
-            spacing = Utility.repeat(" ", 10-abbvalue.length());
+            spacing = Utility.repeat(" ", 10-valueAbb.length());
             
             if (type == BINARY_PROPERTIES || type == DERIVED) {
-                sorted.add("ZZ; " + abbvalue + spacing + "; " + value);
+                sorted.add("ZZ; " + valueAbb + spacing + "; " + value);
                 checkDuplicate(duplicates, accumulation, value, value);
-                if (!value.equalsIgnoreCase(abbvalue)) checkDuplicate(duplicates, accumulation, abbvalue, value);
+                if (!value.equalsIgnoreCase(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, value);
                 continue;
             }
             
-            sorted.add(propAbb + "; " + abbvalue + spacing + "; " + value);
+            sorted.add(propAbb + "; " + valueAbb + spacing + "; " + value);
             checkDuplicate(duplicates, accumulation, value, prop + "=" + value);
-            if (!value.equalsIgnoreCase(abbvalue)) checkDuplicate(duplicates, accumulation, abbvalue, prop + "=" + value);
+            if (!value.equalsIgnoreCase(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, prop + "=" + value);
         }
         
         PrintWriter log = Utility.openPrintWriter("PropertyAliases-" + ucd.getVersion() + "dX.txt");
@@ -525,7 +555,7 @@ public class GenerateData implements UCD_Types {
         log.println("# Note: no two property names can be the same,");
         log.println("# nor can two property value names for the same property be the same.");
         log.println();
-        Utility.print(log, accumulation.values(), "\r\n", new MyBreaker());
+        Utility.print(log, accumulation, "\r\n", new MyBreaker());
         log.println();
         log.close();
     }
@@ -542,7 +572,7 @@ public class GenerateData implements UCD_Types {
         }
     }
     
-    static void checkDuplicate(Map m, Map accumulation, String toCheck, String originalComment) {
+    static void checkDuplicate(Map m, Set accumulation, String toCheck, String originalComment) {
         toCheck = skeleton(toCheck);
         String comment = "{" + originalComment + "}";
         
@@ -575,14 +605,15 @@ public class GenerateData implements UCD_Types {
             }
             
             // accumulate differences
+            /*
             String acc = (String)accumulation.get(toCheck);
-            /*if (acc == null) {
+            if (acc == null) {
                 acc = "# \"" + toCheck + "\":\t" + originalComment;
             }
             acc += ";\t" + result;
             */
             result.add(comment);
-            accumulation.put(toCheck, "# \"" + toCheck + "\":\t" + result);
+            accumulation.add("# " + result.toString() + ":\t" + toCheck);
         } else {
             result = new TreeSet();
             result.add(comment);

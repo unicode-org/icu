@@ -12,8 +12,10 @@
 #
 # FORMAT
 #
-# Each line has three fields. Where the first field is AA, BB, or ZZ, then
-# the line describes a property name.
+# Each line has three fields, separated by semicolons.
+#
+# First Field: Where the first field is AA, BB, or ZZ, then the line describes a property name:
+#
 # AA - non-enumerated properties
 # BB - enumerated, non-binary properties
 # ZZ - binary properties and quick-check properties
@@ -28,10 +30,20 @@
 # xx stands for any binary property
 # qc stands for any quick-check property
 #
-# With loose matching of property names, case distinctions, whitespace,
+# Second Field: The second field is an abbreviated name.
+# If there is no abbreviated name available, the field is marked with "n/a".
+#
+# Third Field: The third field is a long name.
+#
+# With loose matching of property names, the case distinctions, whitespace,
 # and '_' are ignored.
 #
-# NOTE: the property value names are NOT unique across properties, especially
+# NOTE: Currently there is at most one abbreviated name and one long name for
+# each property and property value. However, in the future additional aliases
+# may be added. In such a case, the first line for the property or property value
+# would have the preferred alias for output.
+#
+# NOTE: The property value names are NOT unique across properties, especially
 # with loose matches. For example,
 # AL means Arabic Letter for the Bidi_Class property, and
 # AL means Alpha_Left for the Combining_Class property, and
@@ -40,6 +52,8 @@
 # In addition, some property names may be the same as some property value names:
 # cc means Combining_Class property, and
 # cc means the General_Category property value Control (cc)
+#
+# Comments at the end of the file show cases of non-unique names.
 #
 # The combination of property value and property name is, however, unique.
 # For more information, see UTR #24: Regular Expression Guidelines

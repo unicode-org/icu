@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2001/10/26 23:32:03 $ 
-* $Revision: 1.6 $
+* $Date: 2001/10/31 00:01:28 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,7 @@
 package com.ibm.text.UCA;
 
 import java.util.*;
+import com.ibm.text.UTF16;
 
 import java.io.*;
 //import java.text.*;
@@ -106,13 +107,13 @@ public class WriteCollationData implements UCD_Types {
         
         Normalizer foo = new Normalizer(Normalizer.NFKD);
         char x = '\u1EE2';
-        System.out.println(UCA.hex(x) + " " + ucd.getName(x));
+        System.out.println(Utility.hex(x) + " " + ucd.getName(x));
         String nx = foo.normalize(x);
         for (int i = 0; i < nx.length(); ++i) {
             char c = nx.charAt(i);
             System.out.println(ucd.getCanonicalClass(c));
         }
-        System.out.println(UCA.hex(nx, " ") + " " + ucd.getName(nx));
+        System.out.println(Utility.hex(nx, " ") + " " + ucd.getName(nx));
         */
         
     }
@@ -251,7 +252,7 @@ public class WriteCollationData implements UCD_Types {
         CompactShortArray csa = new CompactShortArray((short)0);
         
         for (char c = 0; c < 0xFFFF; ++c) {
-            if ((c & 0xFFF) == 0) System.err.println(UCA.hex(c));
+            if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
             if (normKD.hasDecomposition(c)) {
                 ++count;
@@ -260,7 +261,7 @@ public class WriteCollationData implements UCD_Types {
                 if (max < decomp.length()) max = decomp.length();
                 if (decomp.length() > 7) ++over7;
                 csa.setElementAt(c, (short)count);
-                log.println("\t KD[0x" + UCA.hex(c) + "]='\\u" + UCA.hex(decomp,"\\u") + "';");
+                log.println("\t KD[0x" + Utility.hex(c) + "]='\\u" + Utility.hex(decomp,"\\u") + "';");
             }
         }
         csa.compact();
@@ -279,7 +280,7 @@ public class WriteCollationData implements UCD_Types {
         csa = new CompactShortArray((short)0);
         
         for (char c = 0; c < 0xFFFF; ++c) {
-            if ((c & 0xFFF) == 0) System.err.println(UCA.hex(c));
+            if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
             if (normD.hasDecomposition(c)) {
                 ++count;
@@ -287,7 +288,7 @@ public class WriteCollationData implements UCD_Types {
                 datasize += decomp.length();
                 if (max < decomp.length()) max = decomp.length();
                 csa.setElementAt(c, (short)count);
-                log.println("\t D[0x" + UCA.hex(c) + "]='\\u" + UCA.hex(decomp,"\\u") + "';");
+                log.println("\t D[0x" + Utility.hex(c) + "]='\\u" + Utility.hex(decomp,"\\u") + "';");
             }
         }
         csa.compact();
@@ -304,12 +305,12 @@ public class WriteCollationData implements UCD_Types {
         CompactByteArray cba = new CompactByteArray();
         
         for (char c = 0; c < 0xFFFF; ++c) {
-            if ((c & 0xFFF) == 0) System.err.println(UCA.hex(c));
+            if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             int canClass = normKD.getCanonicalClass(c);
             if (canClass != 0) {
                 ++count;
                 
-                log.println("\t CC[0x" + UCA.hex(c) + "]=" + canClass + ";");
+                log.println("\t CC[0x" + Utility.hex(c) + "]=" + canClass + ";");
             }
         }
         cba.compact();
@@ -332,7 +333,7 @@ public class WriteCollationData implements UCD_Types {
             char val = (char) enum.value();
             if (0xAC00 <= val && val <= 0xD7A3) continue;
             ++count;
-            log.println("\tC[0x" + UCA.hex(key) + "]=0x" + UCA.hex(val) + ";");
+            log.println("\tC[0x" + Utility.hex(key) + "]=0x" + Utility.hex(val) + ";");
         }
         log.println("// " + count + " composition mappings total");
         log.println();
@@ -480,7 +481,7 @@ public class WriteCollationData implements UCD_Types {
                 decompSortKey = remove(decompSortKey, '\u0020');
             }
             if (!sortKey.equals(decompSortKey)) {
-                log.println("<tr><td>" + UCA.hex(ch)
+                log.println("<tr><td>" + Utility.hex(ch)
                     + "</td><td>" + UCA.toString(sortKey)
                     + "</td><td>" + UCA.toString(decompSortKey)
                     + "</td><td>" + ucd.getName(ch)
@@ -649,9 +650,11 @@ public class WriteCollationData implements UCD_Types {
     static final byte getDecompType(int cp) {
         byte result = ucd.getDecompositionType(cp);
         if (result == ucd.CANONICAL) {
-            String d = NFD.normalize((char)cp); // TODO
-            for (int i = 0; i < d.length(); ++i) {
-                byte t = ucd.getDecompositionType(d.charAt(i));
+            String d = NFD.normalize(cp); // TODO
+            int cp1;
+            for (int i = 0; i < d.length(); i += UTF16.getCharCount(cp1)) {
+                cp1 = UTF16.charAt(d, i);
+                byte t = ucd.getDecompositionType(cp1);
                 if (t > ucd.CANONICAL) return t;
             }
         }
@@ -707,7 +710,7 @@ public class WriteCollationData implements UCD_Types {
     static int[] markCes = new int[50];
     
     static int fixCompatibilityCE(String s, boolean decompose, int[] output, boolean compress) {
-        byte type = getDecompType(s.charAt(0));
+        byte type = getDecompType(UTF16.charAt(s, 0));
         char ch = s.charAt(0);
         
         String decomp = NFKD.normalize(s);
@@ -1654,6 +1657,7 @@ public class WriteCollationData implements UCD_Types {
     static final int COMMON = 5;
     
     static int gapForA = 0;
+    static int[] primaryDelta;
     
     static void writeFractionalUCA(String filename) throws IOException {
         
@@ -1672,9 +1676,9 @@ public class WriteCollationData implements UCD_Types {
         for (int secondary = 0; secondary < compactSecondary.length; ++secondary) {
             if (secondarySet.get(secondary)) {
                 compactSecondary[secondary] = subtotal++;
-                /*System.out.println("compact[" + UCA.hex(secondary)
-                    + "]=" + UCA.hex(compactSecondary[secondary])
-                    + ", " + UCA.hex(fixSecondary(secondary)));*/
+                /*System.out.println("compact[" + Utility.hex(secondary)
+                    + "]=" + Utility.hex(compactSecondary[secondary])
+                    + ", " + Utility.hex(fixSecondary(secondary)));*/
             }
         }
         System.out.println();
@@ -1687,7 +1691,9 @@ public class WriteCollationData implements UCD_Types {
         
         System.out.println("Fixing Primaries");
         BitSet primarySet = collator.getWeightUsage(1);        
-        int[] primaryDelta = new int[65536];
+        
+        primaryDelta = new int[65536];
+        
         // start at 1 so zero stays zero.
         for (int primary = 1; primary < 0xFFFF; ++primary) {
             if (primarySet.get(primary)) primaryDelta[primary] = 2;
@@ -1749,7 +1755,7 @@ public class WriteCollationData implements UCD_Types {
                 
                 lastValue = primaryDelta[primary] = CE >>> 8; 
             }
-            //if ((primary & 0xFF) == 0) System.out.println(UCA.hex(primary) + " => " + hexBytes(primaryDelta[primary]));
+            //if ((primary & 0xFF) == 0) System.out.println(Utility.hex(primary) + " => " + hexBytes(primaryDelta[primary]));
         }
         
         
@@ -1757,19 +1763,37 @@ public class WriteCollationData implements UCD_Types {
         
         System.out.println("Sorting");
         Map ordered = new TreeMap();
-        
-        for (char ch = 0; ch < 0xFFFF; ++ch) {
-            byte type = collator.getCEType(ch);
-            if (type >= UCA.FIXED_CE) continue;
-            String s = String.valueOf(ch);
+        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, null);
+        int ccounter = 0;
+        while (true) {
+            Utility.dot(ccounter++);
+            String s = ucac.next();
+            if (s == null) break;
             ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
         }
+            
+        
+        /*
+        
+        for (int ch = 0; ch < 0x10FFFF; ++ch) {
+            Utility.dot(ch);
+            byte type = collator.getCEType(ch);
+            if (type >= UCA.FIXED_CE && !nfd.hasDecomposition(ch))
+                continue;
+            }
+            String s = com.ibm.text.UTF16.valueOf(ch);
+            ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
+        }
+        
         Hashtable multiTable = collator.getContracting();
         Enumeration enum = multiTable.keys();
+        int ecount = 0;
         while (enum.hasMoreElements()) {
+            Utility.dot(ecount++);
             String s = (String)enum.nextElement();
             ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
         }
+        */
         // JUST FOR TESTING
         if (false) {
             String sample = "\u3400\u3401\u4DB4\u4DB5\u4E00\u4E01\u9FA4\u9FA5\uAC00\uAC01\uD7A2\uD7A3";
@@ -1779,6 +1803,7 @@ public class WriteCollationData implements UCD_Types {
             }
         }
         
+        Utility.fixDot();
         System.out.println("Writing");
         PrintWriter shortLog = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + ".txt"), 32*1024));
         PrintWriter longLog = new PrintWriter(new BufferedWriter(new FileWriter(GEN_DIR + filename + "_long.txt"), 32*1024));
@@ -1821,6 +1846,8 @@ public class WriteCollationData implements UCD_Types {
         String lastChr = "";
         int lastNp = 0;
         boolean doVariable = false;
+        char[] codeUnits = new char[100];
+        
         
         while (it.hasNext()) {
             Object sortKey = it.next();
@@ -1846,8 +1873,12 @@ public class WriteCollationData implements UCD_Types {
                 wasVariable = isVariable;
             }
             oldStr.setLength(0);
-            log.print(UCA.hex(chr, " ") + "; ");
+            chr.getChars(0, chr.length(), codeUnits, 0);
+            
+            log.print(Utility.hex(codeUnits, 0, chr.length(), " ") + "; ");
             boolean nonePrinted = true;
+            boolean isFirst = true;
+            
             for (int q = 0; q < len; ++q) {
                 nonePrinted = false;
                 newPrimary.setLength(0);
@@ -1856,7 +1887,32 @@ public class WriteCollationData implements UCD_Types {
                 
                 int pri = UCA.getPrimary(ces[q]);
                 int sec = UCA.getSecondary(ces[q]); 
-                int ter = UCA.getTertiary(ces[q]); 
+                int ter = UCA.getTertiary(ces[q]);
+                
+                oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
+                
+                // special hack for unsupported!
+                
+                if (pri >= UCA.UNSUPPORTED_BASE) {
+                    ++q;
+                    oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
+                
+                    int pri2 = UCA.getPrimary(ces[q]);
+                    // get old code point
+                    // pri = UNSUPPORTED_BASE + (bigChar >>> 15)
+                    // pri2 = (bigChar & 0x7FFF) | 0x8000
+                    pri -= UCA.UNSUPPORTED_BASE;
+                    pri <<= 15;
+                    pri2 &= 0x7FFF;
+                    pri += pri2;
+                    System.out.println("Unsupported: "
+                        + Utility.hex(UCA.getPrimary(ces[q-1]))
+                        + ", " + Utility.hex(UCA.getPrimary(ces[q]))
+                        + ", " + Utility.hex(pri)
+                        + ", " + Utility.hex(fixPrimary(pri) & 0xFFFFFFFFL)
+                        );
+                        
+                }
                 
                 if (sec != 0x20) {
                     boolean changed = secEq.add(new Integer(sec), new Integer(pri));
@@ -1866,28 +1922,26 @@ public class WriteCollationData implements UCD_Types {
                 }
                 if (sampleEq[sec] == null) sampleEq[sec] = chr;
                 if (sampleEq[ter] == null) sampleEq[ter] = chr;
-                oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
-                int oldPrimaryValue = UCA.getPrimary(ces[q]);
-                int np = primaryDelta[oldPrimaryValue];
-                if (oldPrimaryValue > 0x3400) {
-                    System.out.println(Utility.hex(oldPrimaryValue) + " => " + Utility.hex(np));
-                }
+                
+                // int oldPrimaryValue = UCA.getPrimary(ces[q]);
+                int np = fixPrimary(pri);
                 
                 hexBytes(np, newPrimary);
-                hexBytes(fixSecondary(UCA.getSecondary(ces[q])), newSecondary);
-                hexBytes(fixTertiary(UCA.getTertiary(ces[q])), newTertiary);
-                if (q == 0) {
+                hexBytes(fixSecondary(sec), newSecondary);
+                hexBytes(fixTertiary(ter), newTertiary);
+                if (isFirst) {
                     if (!sameTopByte(np, lastNp)) {
-                        summary.println("Last:  " + Utility.hex(lastNp) + " " + ucd.getName(lastChr.charAt(0)));
+                        summary.println("Last:  " + Utility.hex(lastNp & 0xFFFFFFFFL) + " " + ucd.getName(UTF16.charAt(lastChr,0)));
                         summary.println();
                         if (doVariable) {
                             doVariable = false;
                             summary.println("[variable top = " + Utility.hex(primaryDelta[firstPrimary]) + "] # END OF VARIABLE SECTION!!!");
                             summary.println();
                         }
-                        summary.println("First: " + Utility.hex(np) + " " + ucd.getName(chr.charAt(0)));
+                        summary.println("First: " + Utility.hex(np & 0xFFFFFFFFL) + " " + ucd.getName(UTF16.charAt(chr,0)));
                     }
                     lastNp = np;
+                    isFirst = false;
                 }
                 log.print("[" + newPrimary 
                     + ", " + newSecondary 
@@ -1898,17 +1952,17 @@ public class WriteCollationData implements UCD_Types {
                 log.print("[,,]");
                 oldStr.append(UCA.ceToString(0));
             }
-            longLog.print("    # " + oldStr + " # " + ucd.getName(chr.charAt(0)));
+            longLog.print("    # " + oldStr + " # " + ucd.getName(UTF16.charAt(chr, 0)));
             log.println();
             lastChr = chr;
         }
-        summary.println("Last:  " + Utility.hex(lastNp) + " " + ucd.getName(lastChr.charAt(0)));
+        summary.println("Last:  " + Utility.hex(lastNp) + " " + ucd.getName(UTF16.charAt(lastChr, 0)));
         
         /*
         String sample = "\u3400\u3401\u4DB4\u4DB5\u4E00\u4E01\u9FA4\u9FA5\uAC00\uAC01\uD7A2\uD7A3";
         for (int i = 0; i < sample.length(); ++i) {
             char ch = sample.charAt(i);
-            log.println(UCA.hex(ch) + " => " + UCA.hex(fixHan(ch))
+            log.println(Utility.hex(ch) + " => " + Utility.hex(fixHan(ch))
                     + "          " + ucd.getName(ch));
         }
         */
@@ -1981,8 +2035,24 @@ public class WriteCollationData implements UCD_Types {
     
     
     static boolean isFixedIdeograph(int cp) {
-        return (0x3400 <= cp && cp <= 0x4DB5 || 0x4E00 <= cp && cp <= 0x9FA5 || 0xF900 <= cp && cp <= 0xFA2D);
+        return (0x3400 <= cp && cp <= 0x4DB5 
+            || 0x4E00 <= cp && cp <= 0x9FA5 
+            || 0xF900 <= cp && cp <= 0xFA2D // compat: most of these decompose anyway
+            || 0x20000 <= cp && cp <= 0x2A6D6
+            || 0x2F800 <= cp && cp <= 0x2FA1D // compat: most of these decompose anyway
+            );
     }
+/*
+3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
+4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
+4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
+9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
+2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
+2F800;CJK COMPATIBILITY IDEOGRAPH-2F800;Lo;0;L;4E3D;;;;N;;;;;
+...
+2FA1D;CJK COMPATIBILITY IDEOGRAPH-2FA1D;Lo;0;L;2A600;;;;N;;;;;
+*/
     
     static int remapUCA_CompatibilityIdeographToCp(int cp) {
         switch (cp) {    
@@ -2175,6 +2245,18 @@ public class WriteCollationData implements UCD_Types {
     
     static final int secondaryDoubleStart = 0xD0;
     
+    static int fixPrimary(int x) {
+        int result = 0;
+        if (x <= 0xFFFF) result = primaryDelta[x];
+        else result = getImplicitPrimary(x);
+        
+        /*if (x > 0x3400) {
+            System.out.println(Utility.hex(x) + " => " + Utility.hex(result));
+        }
+        */
+        return result;
+    }
+    
     static int fixSecondary(int x) {
         x = compactSecondary[x];
         return fixSecondary2(x, compactSecondary[0x153], compactSecondary[0x157]);
@@ -2301,7 +2383,7 @@ public class WriteCollationData implements UCD_Types {
             byte b = (byte)(x >>> shift);
             if (b != 0) {
                 if (result.length() != 0) result.append(" ");
-                result.append(UCA.hex(b));
+                result.append(Utility.hex(b));
                 //if (lastb == 0) System.err.println(" bad zero byte: " + result);
             }
             lastb = b;
@@ -2352,7 +2434,7 @@ public class WriteCollationData implements UCD_Types {
                     if (cat <= ucd.OTHER_LETTER && cat != ucd.Lm) {
                         scripts[script] = primary;
                         scriptChar[script] = ch;
-                        if (script == ucd.GREEK_SCRIPT) System.out.println("*" + UCA.hex(primary) + ucd.getName(ch));
+                        if (script == ucd.GREEK_SCRIPT) System.out.println("*" + Utility.hex(primary) + ucd.getName(ch));
                     }
                 }
                 // get representative char for primary
@@ -2469,7 +2551,7 @@ public class WriteCollationData implements UCD_Types {
                 source = source.substring(0,source.length()-1);
                 if (endMark == MARK1) {
                     log.println("<br>");
-                    log.println("Mismatch: " + UCA.hex(source, " ")
+                    log.println("Mismatch: " + Utility.hex(source, " ")
                         + ", " + ucd.getName(source) + "<br>");
                     log.print("  NFD:");
                 } else {
@@ -2557,11 +2639,11 @@ public class WriteCollationData implements UCD_Types {
                 //if (firstRow) out.print(" width='6%'");
                 out.print(">");
                 
-                //log.println(UCA.hex(ch2.charAt(0)));
+                //log.println(Utility.hex(ch2.charAt(0)));
                 boolean ignorable = col2.charAt(0) == 0;
                 out.print(HTMLString(ch2) + "<br><tt>"
                     + (ignorable ? "<u>" : "")
-                    + UCA.hex(ch2, " ")
+                    + Utility.hex(ch2, " ")
                     + (ignorable ? "</u>" : "")
                     );
                 if (SHOW_CE) out.print("</tt><br><tt><b>" + UCA.toString(col2) + "</b>");
@@ -2633,7 +2715,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         String colNbase = collator.getSortKey(ch, option, false);
         String colCbase = collator.getSortKey(toC.normalize(ch), option, false);
         if (!colNbase.equals(colCbase)) {
-            /*System.out.println(UCA.hex(ch));
+            /*System.out.println(Utility.hex(ch));
             System.out.println(printableKey(colNbase));
             System.out.println(printableKey(colNbase));
             System.out.println(printableKey(colNbase));*/
@@ -2747,10 +2829,10 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             String ch = (String)sortedD.get(col);
             String colN = (String)backN.get(ch);
             if (colN == null || colN.length() < 1) {
-                System.out.println("Missing colN value for " + UCA.hex(ch, " ") + ": " + printableKey(colN));
+                System.out.println("Missing colN value for " + Utility.hex(ch, " ") + ": " + printableKey(colN));
             }
             if (col == null || col.length() < 1) {
-                System.out.println("Missing col value for " + UCA.hex(ch, " ") + ": " + printableKey(col));
+                System.out.println("Missing col value for " + Utility.hex(ch, " ") + ": " + printableKey(col));
             }
             
             if (compareMinusLast(col, lastCol) == compareMinusLast(colN, lastColN)) {
@@ -2758,14 +2840,14 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             } else {
                 if (true && count < 200) {
                     System.out.println();
-                    System.out.println(UCA.hex(ch, " ") + ", " + UCA.hex(lastCh, " "));
-                    System.out.println("      col: " + UCA.hex(col, " "));
+                    System.out.println(Utility.hex(ch, " ") + ", " + Utility.hex(lastCh, " "));
+                    System.out.println("      col: " + Utility.hex(col, " "));
                     System.out.println(compareMinusLast(col, lastCol));
-                    System.out.println("  lastCol: " + UCA.hex(lastCol, " "));
+                    System.out.println("  lastCol: " + Utility.hex(lastCol, " "));
                     System.out.println();
-                    System.out.println("     colN: " + UCA.hex(colN, " "));
+                    System.out.println("     colN: " + Utility.hex(colN, " "));
                     System.out.println(compareMinusLast(colN, lastColN));
-                    System.out.println(" lastColN: " + UCA.hex(lastColN, " "));
+                    System.out.println(" lastColN: " + Utility.hex(lastColN, " "));
                 }
                 if (!showedLast) {
                     log.println("<tr><td colspan='3'></td><tr>");
@@ -2791,9 +2873,9 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
     
     static void showLine(int count, String ch, String keyD, String keyN) {
         String decomp = toD.normalize(ch);
-        if (decomp.equals(ch)) decomp = ""; else decomp = "<br><" + UCA.hex(decomp, " ") + "> ";
+        if (decomp.equals(ch)) decomp = ""; else decomp = "<br><" + Utility.hex(decomp, " ") + "> ";
         log.println("<tr><td>" + count + "</td><td>" 
-            + UCA.hex(ch, " ")
+            + Utility.hex(ch, " ")
             + " " + ucd.getName(ch)
             + decomp
             + "</td><td>");
@@ -2863,12 +2945,12 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         if (showName) {
             if (ch.equals(decomp)) {
                 log.println(//title + counter + " "
-                    UCA.hex(ch, " ") 
+                    Utility.hex(ch, " ") 
                     + " " + ucd.getName(ch)
                 );
             } else {
                 log.println(//title + counter + " "
-                    "<b>" + UCA.hex(ch, " ") 
+                    "<b>" + Utility.hex(ch, " ") 
                     + " " + ucd.getName(ch) + "</b>"
                 );
             }
@@ -2877,11 +2959,11 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             String keyN = printableKey(backN.get(chobj));
             if (keyD.equals(keyN)) {
                 log.println(//title + counter + " "
-                    UCA.hex(ch, " ") + " " + keyN);
+                    Utility.hex(ch, " ") + " " + keyN);
             } else {
                 log.println(//title + counter + " "
-                    "<font color='#009900'>" + UCA.hex(ch, " ") + " " + keyN
-                    + "</font><br><font color='#000099'>" + UCA.hex(decomp, " ") + " " + keyD + "</font>"
+                    "<font color='#009900'>" + Utility.hex(ch, " ") + " " + keyN
+                    + "</font><br><font color='#000099'>" + Utility.hex(decomp, " ") + " " + keyD + "</font>"
                 );
             }
         }
