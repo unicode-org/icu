@@ -839,7 +839,7 @@ void TestIDNA::testToASCII(const char* testName, TestFunc func){
     UChar buf[MAX_DEST_SIZE];
 
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
-        u_charsToUChars(asciiIn[i],buf, uprv_strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf, (int32_t)(uprv_strlen(asciiIn[i])+1));
         testAPI(unicodeIn[i], buf,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
         
     }
@@ -851,7 +851,7 @@ void TestIDNA::testToUnicode(const char* testName, TestFunc func){
     UChar buf[MAX_DEST_SIZE];
     
     for(i=0;i< (int32_t)(sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
-        u_charsToUChars(asciiIn[i],buf, uprv_strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf, (int32_t)(uprv_strlen(asciiIn[i])+1));
         testAPI(buf,unicodeIn[i],testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
     }
 }
@@ -865,7 +865,7 @@ void TestIDNA::testIDNToUnicode(const char* testName, TestFunc func){
     int32_t bufLen = 0;
     UParseError parseError;
     for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
-        bufLen = uprv_strlen(domainNames[i]);
+        bufLen = (int32_t)uprv_strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
@@ -891,7 +891,7 @@ void TestIDNA::testIDNToASCII(const char* testName, TestFunc func){
     int32_t bufLen = 0;
     UParseError parseError; 
     for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
-        bufLen = uprv_strlen(domainNames[i]);
+        bufLen = (int32_t)uprv_strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
@@ -937,7 +937,7 @@ void TestIDNA::testCompare(const char* testName, CompareFunc func){
 
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
 
-        u_charsToUChars(asciiIn[i],buf+4, uprv_strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf+4, (int32_t)(uprv_strlen(asciiIn[i])+1));
         u_strcat(buf,com);
 
         // for every entry in unicodeIn array
@@ -1053,7 +1053,7 @@ void TestIDNA::testErrorCases(const char* toASCIIName, TestFunc toASCII,
         ErrorCases errorCase = errorCases[i];
         UChar* src =NULL;
         if(errorCase.ascii != NULL){
-            bufLen =  uprv_strlen(errorCase.ascii);
+            bufLen =  (int32_t)uprv_strlen(errorCase.ascii);
             u_charsToUChars(errorCase.ascii,buf, bufLen+1);
         }else{
             bufLen = 1 ;
@@ -1092,9 +1092,9 @@ void TestIDNA::testConformance(const char* toASCIIName, TestFunc toASCII,
     int32_t expectedLen = 0;
     for(int32_t i=0;i< (int32_t)(sizeof(conformanceTestCases)/sizeof(conformanceTestCases[0]));i++){
         const char* utf8Chars1 = conformanceTestCases[i].in;
-        int32_t utf8Chars1Len = strlen(utf8Chars1);
+        int32_t utf8Chars1Len = (int32_t)strlen(utf8Chars1);
         const char* utf8Chars2 = conformanceTestCases[i].out;
-        int32_t utf8Chars2Len = (utf8Chars2 == NULL) ? 0 : strlen(utf8Chars2);
+        int32_t utf8Chars2Len = (utf8Chars2 == NULL) ? 0 : (int32_t)strlen(utf8Chars2);
 
         UErrorCode status = U_ZERO_ERROR;
         u_strFromUTF8(src,MAX_DEST_SIZE,&srcLen,utf8Chars1,utf8Chars1Len,&status);
@@ -1302,7 +1302,7 @@ void TestIDNA::testChaining(const char* toASCIIName, TestFunc toASCII,
     UChar buf[MAX_DEST_SIZE];
     
     for(i=0;i< (int32_t)(sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
-        u_charsToUChars(asciiIn[i],buf, uprv_strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf, (int32_t)(uprv_strlen(asciiIn[i])+1));
         testChaining(buf,5,toUnicodeName, FALSE, FALSE, toUnicode);
     }
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
@@ -1341,7 +1341,7 @@ void TestIDNA::testRootLabelSeparator(const char* testName, CompareFunc func,
 
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
 
-        u_charsToUChars(asciiIn[i],buf+4, uprv_strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf+4, (int32_t)(uprv_strlen(asciiIn[i])+1));
         u_strcat(buf,com);
 
         // for every entry in unicodeIn array

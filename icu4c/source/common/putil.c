@@ -1287,12 +1287,12 @@ UBool putil_cleanup(void)
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
     char *newDataDir;
-    int length;
+    int32_t length;
 
     if(directory==NULL) {
         directory = "";
     }
-    length=uprv_strlen(directory);
+    length=(int32_t)uprv_strlen(directory);
     newDataDir = (char *)uprv_malloc(length + 2);
     uprv_strcpy(newDataDir, directory);
 
@@ -2366,7 +2366,7 @@ uprv_compareInvAscii(const UDataSwapper *ds,
     }
 
     if(outLength<0) {
-        outLength=uprv_strlen(outString);
+        outLength=(int32_t)uprv_strlen(outString);
     }
     if(localLength<0) {
         localLength=u_strlen(localString);
@@ -2411,7 +2411,7 @@ uprv_compareInvEbcdic(const UDataSwapper *ds,
     }
 
     if(outLength<0) {
-        outLength=uprv_strlen(outString);
+        outLength=(int32_t)uprv_strlen(outString);
     }
     if(localLength<0) {
         localLength=u_strlen(localString);

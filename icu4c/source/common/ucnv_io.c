@@ -649,7 +649,7 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
         if (myContext->listIdx < listCount) {
             const char *myStr = GET_STRING(currList[myContext->listIdx++]);
             if (resultLength) {
-                *resultLength = uprv_strlen(myStr);
+                *resultLength = (int32_t)uprv_strlen(myStr);
             }
             return myStr;
         }
@@ -928,7 +928,7 @@ ucnv_io_nextAllConverters(UEnumeration *enumerator,
     if (*myContext < gConverterListSize) {
         const char *myStr = GET_STRING(gConverterList[(*myContext)++]);
         if (resultLength) {
-            *resultLength = uprv_strlen(myStr);
+            *resultLength = (int32_t)uprv_strlen(myStr);
         }
         return myStr;
     }

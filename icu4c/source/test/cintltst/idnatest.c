@@ -37,19 +37,19 @@ static void TestCompare(void);
 void addIDNATest(TestNode** root);
 
 
-typedef int32_t  
+typedef int32_t
 (*TestFunc) (   const UChar *src, int32_t srcLength,
                 UChar *dest, int32_t destCapacity,
                 int32_t options, UParseError *parseError,
                 UErrorCode *status);
-typedef int32_t  
+typedef int32_t
 (*CompareFunc) (const UChar *s1, int32_t s1Len,
                 const UChar *s2, int32_t s2Len,
                 int32_t options,
                 UErrorCode *status);
 
 
-void 
+void
 addIDNATest(TestNode** root)
 {
    addTest(root, &TestToUnicode,    "idna/TestToUnicode");
@@ -59,8 +59,8 @@ addIDNATest(TestNode** root)
    addTest(root, &TestCompare,      "idna/TestCompare");
 }
 
-static void 
-testAPI(const UChar* src, const UChar* expected, const char* testName, 
+static void
+testAPI(const UChar* src, const UChar* expected, const char* testName,
             UBool useSTD3ASCIIRules,UErrorCode expectedStatus,
             UBool doCompare, UBool testUnassigned,  TestFunc func){
 
@@ -71,8 +71,8 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
     int32_t expectedLen = (expected != NULL) ? u_strlen(expected) : 0;
     int32_t options = (useSTD3ASCIIRules == TRUE) ? UIDNA_USE_STD3_RULES : UIDNA_DEFAULT;
     UParseError parseError;
-    int32_t tSrcLen = 0; 
-    UChar* tSrc = NULL; 
+    int32_t tSrcLen = 0;
+    UChar* tSrc = NULL;
 
     if(src != NULL){
         tSrcLen = u_strlen(src);
@@ -101,7 +101,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
             log_err( "Did not get the expected error for %s null terminated source failed. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
             free(tSrc);
             return;
-        } 
+        }
         if(testUnassigned ){
             status = U_ZERO_ERROR;
             destLen = func(src,-1,NULL,0,options | UIDNA_ALLOW_UNASSIGNED, &parseError, &status);
@@ -113,7 +113,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
                     /* TODO : compare output with expected */
                     if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                         log_err("Did not get the expected result for %s null terminated source with both options set.\n",testName);
-                        
+
                     }
                 }else{
                     log_err( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
@@ -122,7 +122,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
             /*testing query string*/
             if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_ERROR){
                 log_err( "Did not get the expected error for %s null terminated source with options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
-            }  
+            }
         }
 
         status = U_ZERO_ERROR;
@@ -145,7 +145,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
 
         if(status != expectedStatus){
             log_err( "Did not get the expected error for %s with source length. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
-        } 
+        }
         if(testUnassigned){
             status = U_ZERO_ERROR;
 
@@ -181,7 +181,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
                 /* TODO : compare output with expected*/
                 if(U_SUCCESS(status) && (doCompare==TRUE) && u_strCaseCompare(dest,destLen, expected,expectedLen,0,&status)!=0){
                     log_err("Did not get the expected result for %s null terminated source with both options set.\n",testName);
-            
+
                 }
             }else{
                 log_err( "%s null terminated source failed. Requires destCapacity > 300\n",testName);
@@ -190,7 +190,7 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
         /*testing query string*/
         if(status != expectedStatus){
             log_err( "Did not get the expected error for %s null terminated source with options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
-        } 
+        }
 
         status = U_ZERO_ERROR;
 
@@ -218,12 +218,12 @@ testAPI(const UChar* src, const UChar* expected, const char* testName,
 }
 
 static UChar unicodeIn[][41] ={
-    { 
+    {
         0x0644, 0x064A, 0x0647, 0x0645, 0x0627, 0x0628, 0x062A, 0x0643, 0x0644,
         0x0645, 0x0648, 0x0634, 0x0639, 0x0631, 0x0628, 0x064A, 0x061F, 0x0000
     },
     {
-        0x4ED6, 0x4EEC, 0x4E3A, 0x4EC0, 0x4E48, 0x4E0D, 0x8BF4, 0x4E2D, 0x6587, 
+        0x4ED6, 0x4EEC, 0x4E3A, 0x4EC0, 0x4E48, 0x4E0D, 0x8BF4, 0x4E2D, 0x6587,
         0x0000
     },
     {
@@ -247,14 +247,14 @@ static UChar unicodeIn[][41] ={
         0x8A71, 0x3057, 0x3066, 0x304F, 0x308C, 0x306A, 0x3044, 0x306E, 0x304B,
         0x0000
     },
-/*  
+/*
     {
         0xC138, 0xACC4, 0xC758, 0xBAA8, 0xB4E0, 0xC0AC, 0xB78C, 0xB4E4, 0xC774,
         0xD55C, 0xAD6D, 0xC5B4, 0xB97C, 0xC774, 0xD574, 0xD55C, 0xB2E4, 0xBA74,
         0xC5BC, 0xB9C8, 0xB098, 0xC88B, 0xC744, 0xAE4C, 0x0000
     },
 */
-    {   
+    {
         0x043F, 0x043E, 0x0447, 0x0435, 0x043C, 0x0443, 0x0436, 0x0435, 0x043E,
         0x043D, 0x0438, 0x043D, 0x0435, 0x0433, 0x043E, 0x0432, 0x043E, 0x0440,
         0x044F, 0x0442, 0x043F, 0x043E, 0x0440, 0x0443, 0x0441, 0x0441, 0x043A,
@@ -305,7 +305,7 @@ static UChar unicodeIn[][41] ={
         0x305D, 0x306E, 0x30B9, 0x30D4, 0x30FC, 0x30C9, 0x3067, 0x0000
     },
     /* test non-BMP code points */
-    {    
+    {
         0xD800, 0xDF00, 0xD800, 0xDF01, 0xD800, 0xDF02, 0xD800, 0xDF03, 0xD800, 0xDF05,
         0xD800, 0xDF06, 0xD800, 0xDF07, 0xD800, 0xDF09, 0xD800, 0xDF0A, 0xD800, 0xDF0B,
         0x0000
@@ -332,7 +332,7 @@ static UChar unicodeIn[][41] ={
         0x043e, 0x0440, 0x044f, 0x0442, 0x043f, 0x043e, 0x0440, 0x0443,
         0x0441, 0x0441, 0x043a, 0x0438
     }
-   
+
 };
 
 static const char *asciiIn[] = {
@@ -414,7 +414,7 @@ static const char *domainNames[] = {
 
 };
 
-static void 
+static void
 TestToASCII(){
 
     int32_t i;
@@ -422,13 +422,13 @@ TestToASCII(){
     const char* testName = "uidna_toASCII";
     TestFunc func = uidna_toASCII;
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
-        u_charsToUChars(asciiIn[i],buf, strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf, (int32_t)strlen(asciiIn[i])+1);
         testAPI(unicodeIn[i], buf,testName, FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
-        
+
     }
 }
 
-static void 
+static void
 TestToUnicode(){
 
     int32_t i;
@@ -436,13 +436,13 @@ TestToUnicode(){
     const char* testName = "uidna_toUnicode";
     TestFunc func = uidna_toUnicode;
     for(i=0;i< (int32_t)(sizeof(asciiIn)/sizeof(asciiIn[0])); i++){
-        u_charsToUChars(asciiIn[i],buf, strlen(asciiIn[i])+1);
+        u_charsToUChars(asciiIn[i],buf, (int32_t)strlen(asciiIn[i])+1);
         testAPI(buf,unicodeIn[i],testName,FALSE,U_ZERO_ERROR, TRUE, TRUE, func);
     }
 }
 
 
-static void 
+static void
 TestIDNToUnicode(){
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
@@ -453,7 +453,7 @@ TestIDNToUnicode(){
     const char* testName="uidna_IDNToUnicode";
     TestFunc func = uidna_IDNToUnicode;
     for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
-        bufLen = strlen(domainNames[i]);
+        bufLen = (int32_t)strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
@@ -468,22 +468,22 @@ TestIDNToUnicode(){
             break;
         }
     }
-    
+
 }
 
-static void 
+static void
 TestIDNToASCII(){
     int32_t i;
     UChar buf[MAX_DEST_SIZE];
     UChar expected[MAX_DEST_SIZE];
     UErrorCode status = U_ZERO_ERROR;
     int32_t bufLen = 0;
-    UParseError parseError; 
+    UParseError parseError;
     const char* testName="udina_IDNToASCII";
     TestFunc func=uidna_IDNToASCII;
 
     for(i=0;i< (int32_t)(sizeof(domainNames)/sizeof(domainNames[0])); i++){
-        bufLen = strlen(domainNames[i]);
+        bufLen = (int32_t)strlen(domainNames[i]);
         bufLen = u_unescape(domainNames[i],buf, bufLen+1);
         func(buf,bufLen,expected,MAX_DEST_SIZE, UIDNA_ALLOW_UNASSIGNED, &parseError,&status);
         if(U_FAILURE(status)){
@@ -498,11 +498,11 @@ TestIDNToASCII(){
             break;
         }
     }
-    
+
 }
 
 
-static void 
+static void
 testCompareWithSrc(const UChar* s1, int32_t s1Len,
             const UChar* s2, int32_t s2Len,
             const char* testName, CompareFunc func,
@@ -527,7 +527,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
     if(U_FAILURE(status)){
         log_err( "%s null terminated source and options set failed. Error: %s\n",testName, u_errorName(status));
     }
-    
+
     status = U_ZERO_ERROR;
     retVal = func(s1,s1Len,s2,s2Len,UIDNA_DEFAULT,&status);
 
@@ -537,7 +537,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
     if(U_FAILURE(status)){
         log_err( "%s with string length. Error: %s\n",testName, u_errorName(status));
     }
-    
+
     status = U_ZERO_ERROR;
     retVal = func(s1,s1Len,s2,s2Len,UIDNA_ALLOW_UNASSIGNED,&status);
 
@@ -550,7 +550,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
 }
 
 
-static void 
+static void
 TestCompare(){
     int32_t i;
 
@@ -574,28 +574,28 @@ TestCompare(){
     u_strcat(uni1,unicodeIn[1]);
     u_strcat(uni1,com);
 
-    u_charsToUChars(asciiIn[0], temp, strlen(asciiIn[0]));
+    u_charsToUChars(asciiIn[0], temp, (int32_t)strlen(asciiIn[0]));
     u_strcat(ascii0,temp);
     u_strcat(ascii0,com);
-    
+
     memset(temp, 0, U_SIZEOF_UCHAR * MAX_DEST_SIZE);
 
-    u_charsToUChars(asciiIn[1], temp, strlen(asciiIn[1]));
+    u_charsToUChars(asciiIn[1], temp, (int32_t)strlen(asciiIn[1]));
     u_strcat(ascii1,temp);
     u_strcat(ascii1,com);
-    
+
     /* prepend www. */
     u_strcat(source, www);
 
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
         UChar* src;
         int32_t srcLen;
-        
+
         memset(buf+4, 0, (MAX_DEST_SIZE-4) * U_SIZEOF_UCHAR);
-        
-        u_charsToUChars(asciiIn[i],buf+4, strlen(asciiIn[i]));
+
+        u_charsToUChars(asciiIn[i],buf+4, (int32_t)strlen(asciiIn[i]));
         u_strcat(buf,com);
-        
+
 
         /* for every entry in unicodeIn array
            prepend www. and append .com*/
@@ -605,13 +605,13 @@ TestCompare(){
 
         /* a) compare it with itself*/
         src = source;
-        srcLen = u_strlen(src); 
-         
+        srcLen = u_strlen(src);
+
         testCompareWithSrc(src,srcLen,src,srcLen,testName, func, TRUE);
-        
+
         /* b) compare it with asciiIn equivalent */
         testCompareWithSrc(src,srcLen,buf,u_strlen(buf),testName, func,TRUE);
-        
+
         /* c) compare it with unicodeIn not equivalent*/
         if(i==0){
             testCompareWithSrc(src,srcLen,uni1,u_strlen(uni1),testName, func,FALSE);
