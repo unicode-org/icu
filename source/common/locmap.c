@@ -704,12 +704,15 @@ uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
 //////////////////////////////////////
 //
 // POSIX --> LCID
+// This should only be called from uloc_getLCID.
+// The locale ID must be in canonical form.
+// langID is separate so that this file doesn't depend on the uloc_* API.
 //
 /////////////////////////////////////
 */
 
 U_CAPI uint32_t
-uprv_convertToLCID(const char* posixID, UErrorCode* status)
+uprv_convertToLCID(const char *langID, const char* posixID, UErrorCode* status)
 {
 
     uint32_t   low    = 0;
@@ -717,7 +720,6 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
     uint32_t   mid    = high;
     uint32_t   oldmid = 0;
     int32_t    compVal;
-    char       langID[ULOC_FULLNAME_CAPACITY];
 
     uint32_t   value         = 0;
     uint32_t   fallbackValue = (uint32_t)-1;
@@ -725,12 +727,7 @@ uprv_convertToLCID(const char* posixID, UErrorCode* status)
     uint32_t   idx;
 
     /* Check for incomplete id. */
-    if (!posixID || uprv_strlen(posixID) < 2) {
-        return 0;
-    }
-
-    uloc_getLanguage(posixID, langID, sizeof(langID), status);
-    if (U_FAILURE(*status)) {
+    if (!langID || !posixID || uprv_strlen(langID) < 2 || uprv_strlen(posixID) < 2) {
         return 0;
     }
 

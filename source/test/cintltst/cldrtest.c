@@ -352,13 +352,13 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         else if (ures_getType(subBundle) == URES_BINARY || ures_getType(subBundle) == URES_INT) {
             /* Can't do anything to check it */
             /* We'll assume it's all correct */
-            if (strcmp(subBundleKey, "LocaleID") != 0) {
+            if (strcmp(subBundleKey, "MeasurementSystem") != 0) {
                 log_verbose("Skipping key \"%s\" in \"%s\" for locale \"%s\"\n",
                         subBundleKey,
                         ures_getKey(currentBundle),
                         locale);
             }
-            /* Testing for LocaleID is done in testLCID */
+            /* Testing for MeasurementSystem is done in VerifyTranslation */
         }
         else {
             log_err("Type %d for key \"%s\" in \"%s\" is unknown for locale \"%s\"\n",
@@ -378,21 +378,13 @@ testLCID(UResourceBundle *currentBundle,
          const char *localeName)
 {
     UErrorCode status = U_ZERO_ERROR;
-    uint32_t lcid;
     uint32_t expectedLCID;
     char lcidStringC[64] = {0};
 
     expectedLCID = uloc_getLCID(localeName);
-    lcid = uprv_convertToLCID(localeName, &status);
-    if (U_FAILURE(status)) {
-        if (expectedLCID == 0) {
-            log_verbose("INFO:    %-5s does not have any LCID mapping\n",
-                localeName);
-        }
-        else {
-            log_err("ERROR:   %-5s does not have an LCID mapping to 0x%.4X\n",
-                localeName, expectedLCID);
-        }
+    if (expectedLCID == 0) {
+        log_verbose("INFO:    %-5s does not have any LCID mapping\n",
+            localeName);
         return;
     }
 
@@ -403,27 +395,19 @@ testLCID(UResourceBundle *currentBundle,
             expectedLCID, u_errorName(status));
     }
 
-    if(lcid != expectedLCID) {
-        log_err("ERROR:   %-5s wrongfully has 0x%.4x instead of 0x%.4x for LCID\n",
-            localeName, expectedLCID, lcid);
-    }
     if(strcmp(localeName, lcidStringC) != 0) {
         char langName[1024];
         char langLCID[1024];
         uloc_getLanguage(localeName, langName, sizeof(langName), &status);
         uloc_getLanguage(lcidStringC, langLCID, sizeof(langLCID), &status);
 
-        if (expectedLCID == lcid && strcmp(langName, langLCID) == 0) {
+        if (strcmp(langName, langLCID) == 0) {
             log_verbose("WARNING: %-5s resolves to %s (0x%.4x)\n",
-                localeName, lcidStringC, lcid);
-        }
-        else if (expectedLCID == lcid) {
-            log_err("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s\n",
-                localeName, expectedLCID, lcidStringC);
+                localeName, lcidStringC, expectedLCID);
         }
         else {
-            log_err("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s. It should be 0x%x.\n",
-                localeName, expectedLCID, lcidStringC, lcid);
+            log_err("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s\n",
+                localeName, expectedLCID, lcidStringC);
         }
     }
 }
