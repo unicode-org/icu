@@ -1412,7 +1412,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           last1 %= IMPLICIT_OTHER_COUNT_;
           r = 0xEF030303 + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
       }
-      order = (r & 0xFFFF0000) | 0x00000303;
+      order = (r & 0xFFFF0000) | 0x00000505;
       *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
 
     }
@@ -1582,7 +1582,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       order = (r & 0xFFFF0000) | 0x00000303;
       *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x00000080;
       */
-      *(collationSource->CEpos++) = (r & 0xFFFF0000) | 0x00000303;
+      *(collationSource->CEpos++) = (r & 0xFFFF0000) | 0x00000505;
       collationSource->toReturn = collationSource->CEpos;
       order = ((r & 0x0000FFFF)<<16) | 0x000000C0;
   }
@@ -3890,10 +3890,6 @@ void ucol_updateInternalState(UCollator *coll) {
       coll->variableMax1 = (uint8_t)((coll->variableTopValue & 0xFF00) >> 8);
       coll->variableMax2 = (uint8_t)((coll->variableTopValue & 0x00FF));
 
-      /* Set the compression values */
-      uint8_t tertiaryTotal = coll->tertiaryTop - UCOL_COMMON_BOT3-1;
-      coll->tertiaryTopCount = UCOL_PROPORTION3*tertiaryTotal;
-      coll->tertiaryBottomCount = tertiaryTotal - coll->tertiaryTopCount;
 
       if(coll->caseFirst == UCOL_UPPER_FIRST) {
         coll->caseSwitch = UCOL_CASE_SWITCH;
@@ -3918,6 +3914,12 @@ void ucol_updateInternalState(UCollator *coll) {
           coll->tertiaryTop = UCOL_COMMON_TOP3_CASE_SW_ON;
         }
       }
+
+      /* Set the compression values */
+      uint8_t tertiaryTotal = coll->tertiaryTop - UCOL_COMMON_BOT3-1;
+      coll->tertiaryTopCount = UCOL_PROPORTION3*tertiaryTotal;
+      coll->tertiaryBottomCount = tertiaryTotal - coll->tertiaryTopCount;
+
       if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY
         && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE) {
         coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
@@ -4654,6 +4656,7 @@ ucol_strcoll( const UCollator    *coll,
               } else {
                 //sOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&sCEs, sOrder);
+                sInShifted = FALSE;
                 // *(sCEs++) = sOrder;
                 continue;
               }
@@ -4710,6 +4713,7 @@ ucol_strcoll( const UCollator    *coll,
               } else {
                 //tOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&tCEs, tOrder);
+                tInShifted = FALSE;
                 // *(tCEs++) = tOrder;
                 continue;
               }
