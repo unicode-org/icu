@@ -137,6 +137,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                          "\tdone;\n\n");
     }
     
+    pkg_mak_writeAssemblyHeader(makefile, o);
+
     sprintf(tmp,"$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME)_dat.c\n"
                 "\t$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<\n\n");
     T_FileStream_writeLine(makefile, tmp);
@@ -155,6 +157,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
     
     pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
+    pkg_mak_writeAssemblyFooter(makefile, o);
+
     T_FileStream_writeLine(makefile, "\n\n");
     T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_DIR)/%)\n\n");
     

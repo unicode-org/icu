@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.204 2004/02/20 20:16:27 srl Exp $
+dnl $Id: configure.in,v 1.205 2004/03/02 00:36:00 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -293,6 +293,15 @@ then
     HAVE_MMAP=1
 fi
 AC_SUBST(HAVE_MMAP)
+
+dnl Check to see if genccode can generate simple assembly.
+GENCCODE_ASSEMBLY=
+if test "$ac_cv_prog_gcc" = yes; then
+    dnl We're using gcc, and the simple -a gcc command line works for genccode
+    GENCCODE_ASSEMBLY=-a gcc
+fi
+AC_SUBST(GENCCODE_ASSEMBLY)
+
 
 dnl Checks for header files
 AC_CHECK_HEADERS(inttypes.h)

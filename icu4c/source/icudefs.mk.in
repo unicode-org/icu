@@ -61,6 +61,9 @@ ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
 
+# If defined to a valid value, pkgdata will generate a data library more quickly
+GENCCODE_ASSEMBLY = @GENCCODE_ASSEMBLY@
+
 # ICU specific directories
 
 pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)

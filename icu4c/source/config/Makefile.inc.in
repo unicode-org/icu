@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2003, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.37 $
+# $Revision: 1.38 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -233,6 +233,8 @@ endif
 endif
 
 #SH# esac
+
+GENCCODE_ASSEMBLY = @GENCCODE_ASSEMBLY@
 
 ##################################################################
 ##################################################################
