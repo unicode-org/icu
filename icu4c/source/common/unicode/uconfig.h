@@ -60,6 +60,7 @@
 
 /**
  * \def UCONFIG_NO_CONVERSION
+ * ICU will not completely build with this switch turned on.
  * This switch turns off all converters.
  *
  * @draft ICU 3.2
