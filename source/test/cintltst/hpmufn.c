@@ -123,6 +123,7 @@ static void TestHeapFunctions() {
     UErrorCode       status = U_ZERO_ERROR;
     UResourceBundle *rb     = NULL;
     char            *icuDataDir;
+    UVersionInfo unicodeVersion = {0,0,0,0};
 
     UTraceEntry   *traceEntryFunc;           /* Tracing function ptrs.  We need to save    */
     UTraceExit    *traceExitFunc;            /*  and restore them across calls to          */
@@ -181,6 +182,10 @@ static void TestHeapFunctions() {
         log_err("Heap functions are not being called from ICU.\n");
     }
     ures_close(rb);
+    u_getUnicodeVersion(unicodeVersion);
+    if (gBlockCount == 0 || unicodeVersion[0] <= 0) {
+        log_err("Heap functions are not being called from ICU or Unicode version is wrong.\n");
+    }
 
     /* Cleanup should put the heap back to its default implementation. */
     u_cleanup();
