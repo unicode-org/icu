@@ -135,7 +135,7 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(31, TestSupplementaryCanonical)
         CASE(32, TestContractionCanonical)
         CASE(33, TestUClassID)
-		CASE(34, TestSubclass)
+        CASE(34, TestSubclass)
         default: name = ""; break;
     }
 }
@@ -2043,28 +2043,28 @@ void StringSearchTest::TestContractionCanonical()
 
 void StringSearchTest::TestUClassID()
 {
-	char id = *((char *)StringSearch::getStaticClassID());
-	if (id != 0) {
-		errln("Static class id for StringSearch should be 0");
-	}
-	UErrorCode     status    = U_ZERO_ERROR;
+    char id = *((char *)StringSearch::getStaticClassID());
+    if (id != 0) {
+        errln("Static class id for StringSearch should be 0");
+    }
+    UErrorCode     status    = U_ZERO_ERROR;
     UnicodeString  text("text");
     UnicodeString  pattern("pattern");
     StringSearch  *strsrch = new StringSearch(pattern, text, m_en_us_, NULL, 
                                               status);
     id = *((char *)strsrch->getDynamicClassID());
-	if (id != 0) {
-		errln("Dynamic class id for StringSearch should be 0");
-	}
-	delete strsrch;
+    if (id != 0) {
+        errln("Dynamic class id for StringSearch should be 0");
+    }
+    delete strsrch;
 }
 
 class TestSearch : public SearchIterator
 {
 public:
     TestSearch(const UnicodeString &text, 
-		       BreakIterator *breakiter,
-			   const UnicodeString &pattern);
+               BreakIterator *breakiter,
+               const UnicodeString &pattern);
     ~TestSearch();
     void        setOffset(int32_t position, UErrorCode &status);
     int32_t     getOffset() const;
@@ -2084,7 +2084,7 @@ public:
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
-	UnicodeString m_pattern_;
+    UnicodeString m_pattern_;
 
 protected:
     int32_t     handleNext(int32_t position, UErrorCode &status);
@@ -2097,17 +2097,17 @@ private:
      * for ICU "poor man's RTTI".
      */
     static const char fgClassID;
-	uint32_t m_offset_;
+    uint32_t m_offset_;
 };
 
 const char TestSearch::fgClassID=0;
 
 TestSearch::TestSearch(const UnicodeString &text, 
-					   BreakIterator *breakiter,
-					   const UnicodeString &pattern) : SearchIterator(text, breakiter)
+                       BreakIterator *breakiter,
+                       const UnicodeString &pattern) : SearchIterator(text, breakiter)
 {
-	m_offset_ = 0;
-	m_pattern_ = pattern;
+    m_offset_ = 0;
+    m_pattern_ = pattern;
 }
 
 TestSearch::~TestSearch()
@@ -2116,12 +2116,12 @@ TestSearch::~TestSearch()
 
 void TestSearch::setOffset(int32_t position, UErrorCode &status)
 {
-	if (position >= 0 && position <= m_text_.length()) {
-		m_offset_ = position;
-	}
-	else {
-		status = U_INDEX_OUTOFBOUNDS_ERROR;
-	}
+    if (position >= 0 && position <= m_text_.length()) {
+        m_offset_ = position;
+    }
+    else {
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
+    }
 }
 
 int32_t TestSearch::getOffset() const
@@ -2139,11 +2139,11 @@ int32_t TestSearch::handleNext(int32_t start, UErrorCode &status)
     int match = m_text_.indexOf(m_pattern_, start);
     if (match < 0) {
         m_offset_ = m_text_.length();
-		setMatchStart(m_offset_);
-		setMatchLength(0);
+        setMatchStart(m_offset_);
+        setMatchLength(0);
         return USEARCH_DONE;
     }
-	setMatchStart(match);
+    setMatchStart(match);
     m_offset_ = match;
     setMatchLength(m_pattern_.length());
     return match;
@@ -2154,24 +2154,25 @@ int32_t TestSearch::handlePrev(int32_t start, UErrorCode &status)
     int match = m_text_.lastIndexOf(m_pattern_, 0, start);
     if (match < 0) {
         m_offset_ = 0;
-		setMatchStart(m_offset_);
-		setMatchLength(0);
+        setMatchStart(m_offset_);
+        setMatchLength(0);
         return USEARCH_DONE;
     }
-	setMatchStart(match);
+    setMatchStart(match);
     m_offset_ = match;
     setMatchLength(m_pattern_.length());
     return match;
 }
 
 void StringSearchTest::TestSubclass()
-{    
-	UnicodeString text("abc abcd abc");
-	UnicodeString pattern("abc");
-	TestSearch search(text, NULL, pattern);
+{
+    UnicodeString text("abc abcd abc");
+    UnicodeString pattern("abc");
+    TestSearch search(text, NULL, pattern);
     int expected[] = {0, 4, 9};
-	UErrorCode status = U_ZERO_ERROR;
-    for (int i = 0; i < sizeof(expected) / sizeof(int); i ++) {
+    UErrorCode status = U_ZERO_ERROR;
+    int i;
+    for (i = 0; i < sizeof(expected) / sizeof(int); i ++) {
         if (search.next(status) != expected[i]) {
             errln("Error getting next match");
         }
