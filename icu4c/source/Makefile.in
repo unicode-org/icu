@@ -132,7 +132,7 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_DATA) README $(DESTDIR)$(pkgdatadir)/README
-	$(INSTALL_PROGRAM) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
+	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
 
 ifeq ($(DOXYGEN),)
 install-doc:
