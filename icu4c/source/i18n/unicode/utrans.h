@@ -110,6 +110,7 @@ typedef struct UTransPosition {
      * anything before this index.  INPUT/OUTPUT parameter: This parameter
      * is updated by a transliteration operation to reflect the maximum
      * amount of antecontext needed by a transliterator.
+     * @draft ICU 2.4
      */
     int32_t contextStart;
     
@@ -119,6 +120,7 @@ typedef struct UTransPosition {
      * anything at or after this index.  INPUT/OUTPUT parameter: This
      * parameter is updated to reflect changes in the length of the
      * text, but points to the same logical position in the text.
+     * @draft ICU 2.4
      */
     int32_t contextLimit;
     
@@ -127,6 +129,7 @@ typedef struct UTransPosition {
      * INPUT/OUTPUT parameter: This parameter is advanced past
      * characters that have already been transliterated by a
      * transliteration operation.
+     * @draft ICU 2.4
      */
     int32_t start;
     
@@ -135,6 +138,7 @@ typedef struct UTransPosition {
      * INPUT/OUTPUT parameter: This parameter is updated to reflect
      * changes in the length of the text, but points to the same
      * logical position in the text.
+     * @draft ICU 2.4
      */
     int32_t limit;
 
