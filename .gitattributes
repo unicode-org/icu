@@ -319,6 +319,9 @@ icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Korean.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Russian.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSH.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSR.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Simplified_Chinese.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Thai.txt -text
 icu4j/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
