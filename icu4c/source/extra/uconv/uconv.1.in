@@ -28,7 +28,7 @@
 .BI "\-\-canon"
 ]
 [
-.BI "\-x" " trasnsliterator
+.BI "\-x" " transliterator
 ]
 [
 .BI "\-\-to\-callback" " callback"
@@ -50,7 +50,7 @@
 converts its input from one given
 .I encoding
 to another. The transcoding is done using Unicode as a pivot encoding
-(e.g. the data are first transcoded from their orifinal encoding to
+(e.g. the data are first transcoded from their original encoding to
 Unicode, and then from Unicode to the destination encoding).
 It is possible to specify callbacks that are used to handle invalid
 characters in the input, or characters that cannot be transcoded to
