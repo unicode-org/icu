@@ -1143,15 +1143,12 @@ u_scanf_scanset_handler(UFILE             *stream,
                         const UChar        *fmt,
                         int32_t            *consumed)
 {
-    u_scanf_scanset    scanset;
-    int32_t        len;
-    UBool        success;
-    UChar            c;
-    const UChar         *source;
-    UConverter         *conv;
-    UErrorCode         status     = U_ZERO_ERROR;
-    char            *s     = (char*) (args[0].ptrValue);
-    char             *alias, *limit;
+    u_scanf_scanset scanset;
+    int32_t         len;
+    UBool           success;
+    UChar           c;
+    UChar           *s     = (UChar*) (args[0].ptrValue);
+    UChar           *alias, *limit;
 
 
     /* fill the stream's internal buffer */
@@ -1175,35 +1172,20 @@ u_scanf_scanset_handler(UFILE             *stream,
     /* increment consumed by one to eat the final ']' */
     ++(*consumed);
 
-    /* open the default converter */
-    conv = u_getDefaultConverter(&status);
-
     /* verify that the parse was successful and the converter opened */
-    if(! success || U_FAILURE(status))
+    if(! success)
         return -1;
 
     /* grab characters one at a time and make sure they are in the scanset */
     while( (c = u_fgetc(stream)) != U_EOF && alias < limit) {
         if(u_scanf_scanset_in(&scanset, c)) {
-            source = &c;
-            /* convert the character to the default codepage */
-            ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
-                NULL, TRUE, &status);
-
-            if(U_FAILURE(status)) {
-                /* clean up */
-                u_releaseDefaultConverter(conv);
-                return -1;
-            }
+            *(alias++) = c;
         }
-        /* if the character's not in the scanset, break out */
         else {
+            /* if the character's not in the scanset, break out */
             break;
         }
     }
-
-    /* clean up */
-    u_releaseDefaultConverter(conv);
 
     /* put the final character we read back on the stream */
     if(c != U_EOF)
