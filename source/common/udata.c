@@ -470,6 +470,7 @@ static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
      *   TOC, which is how we identify it here.
      */
     UDataMemory   *pData;
+    UDataMemory   copyPData;
 
     if (failedData->vFuncs->NumEntries(failedData) > 0) {
         /*  Not the stub.  We can't extend.  */
@@ -484,21 +485,22 @@ static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
 
     /* How about if there is no pData, eh... */
 
-    if(pData != NULL) {
-      
-      pData->map = 0;                 /* The mapping for this data is owned by the hash table */
-      pData->mapAddr = 0;             /*   which will unmap it when ICU is shut down.         */
+   UDataMemory_init(&copyPData);
+   if(pData != NULL) {
+      UDatamemory_assign(&copyPData, pData);
+      copyPData.map = 0;              /* The mapping for this data is owned by the hash table */
+      copyPData.mapAddr = 0;          /*   which will unmap it when ICU is shut down.         */
                                       /* CommonICUData is also unmapped when ICU is shut down.*/
                                       /* To avoid unmapping the data twice, zero out the map  */
                                       /*   fields in the UDataMemory that we're assigning     */
                                       /*   to CommonICUData.                                  */
+
+      setCommonICUData(&copyPData,    /*  The new common data.                                */
+                   failedData,        /*  Old ICUData ptr.  Overwrite of this value is ok,    */
+                   FALSE,             /*  No warnings if write didn't happen                  */
+                   pErr);             /*  setCommonICUData honors errors; NOP if error set    */
     }
     
-
-    setCommonICUData(pData,         /*  The new common data.                              */
-                 failedData,        /*  Old ICUData ptr.  Overwrite of this value is ok,  */
-                 FALSE,             /*  No warnings if write didn't happen                */
-                 pErr);             /*  setCommonICUData honors errors; NOP if error set  */
 
     return gCommonICUData != failedData;   /* Return true if ICUData pointer was updated.   */
                                     /*   (Could potentialy have been done by another thread racing */
