@@ -258,7 +258,21 @@ case $platform in
     CygWin)
         THE_OS="CygWin"
         THE_COMP="the GNU C++"
+        RELEASE_CFLAGS='-O3'
+        RELEASE_CXXFLAGS='-O3'
         ;;
+# This doesn't work yet.
+#    CygWin/MSVC)
+#        THE_OS="CygWin"
+#        THE_COMP="Microsoft Visual C++"
+#        CC=cl; export CC
+#        CXX=cl; export CXX
+#        RELEASE_CFLAGS='/O2 /Ob2'
+#        RELEASE_CXXFLAGS='/O2 /Ob2'
+#        DEBUG_CFLAGS='/Zi'
+#        DEBUG_CXXFLAGS='/Zi'
+#        DEBUG_LDFLAGS='/DEBUG'
+#        ;;
     MacOSX)
         THE_OS="MacOS X (Darwin)"
         THE_COMP="the GNU C++"
@@ -376,6 +390,11 @@ then
         CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
     fi
     export CXXFLAGS
+    if test "$DEBUG_LDFLAGS" != ""
+    then
+        LDFLAGS="$LDFLAGS $DEBUG_LDFLAGS"
+    fi
+    export LDFLAGS
 fi
 
 # Run configure
