@@ -34,7 +34,7 @@ class  RBBIDataWrapper;
 
 
 /**
- * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
+ * A subclass of BreakIterator whose behavior is specified using a list of rules.
  * <p>Instances of this class are most commonly created by the factory methods of
  *  BreakIterator::createWordInstance(), BreakIterator::createLineInstance(), etc.,
  *  and then used via the abstract API in class BreakIterator</p>
