@@ -115,8 +115,8 @@ public:
     /**
      * The GMT zone has a raw offset of zero and does not use daylight
      * savings time.
-     * @deprecated This variable can be improperly intialized when used during
-     * the static initialization process.  Use getGMT() instead.
+     * @deprecated To be removed after 2002-aug-16.  Use getGMT() instead.  This variable can be improperly intialized when used during
+     * the static initialization process.
      */
     static const TimeZone* GMT;
 #endif
@@ -125,6 +125,7 @@ public:
      * The GMT time zone has a raw offset of zero and does not use daylight
      * savings time. This is a commonly used time zone.
      * @return the GMT time zone.
+     * @since ICU 2.0
      */
     static const TimeZone* getGMT(void);
 
