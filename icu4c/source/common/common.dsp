@@ -167,7 +167,7 @@ SOURCE=.\chariter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\cmemory.cpp
+SOURCE=.\cmemory.c
 # End Source File
 # Begin Source File
 
