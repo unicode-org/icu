@@ -28,8 +28,8 @@ diff -u -r ../tzcode.orig/Makefile ./Makefile
  SHELL=		/bin/sh
  
 -all:		tzselect zic zdump $(LIBOBJS)
-+LS=		/usr/bin/ls
-+SED=		/usr/bin/sed
++LS=		/bin/ls
++SED=		/bin/sed
 +
 +all:		tzselect zic zdump $(LIBOBJS) tz2icu
  
