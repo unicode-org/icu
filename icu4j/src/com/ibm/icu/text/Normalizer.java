@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/08/07 18:06:50 $ 
- * $Revision: 1.22 $
+ * $Date: 2002/09/19 18:12:31 $ 
+ * $Revision: 1.23 $
  *
  *******************************************************************************
  */
@@ -1462,6 +1462,21 @@ public final class Normalizer implements Cloneable{
         }            
     }
     
+    public static int getFC_NFKC_Closure(int c,char[] dest){
+        return NormalizerImpl.getFC_NFKC_Closure(c,dest);
+    }
+    
+    public static String getFC_NFKC_Closure(int c){
+        char[] dest = new char[10];
+        for(;;){
+            int length = getFC_NFKC_Closure(c,dest);
+            if(length<=dest.length){
+                return new String(dest,0,length);
+            }else{
+                dest = new char[length];
+            }
+        }
+    }
     //-------------------------------------------------------------------------
     // Iteration API
     //-------------------------------------------------------------------------
