@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2002/10/05 01:07:02 $
- * $Revision: 1.8 $
+ * $Date: 2002/10/09 18:56:57 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -850,6 +850,7 @@ public class ICUServiceTest extends TestFmwk
         logln("lkey: " + lkey);
 
         lkey = LocaleKey.createWithCanonicalFallback(null, null);
+        logln("lkey from null,null: " + lkey);
 
 	// LocaleKeyFactory 
 	LocaleKeyFactory lkf = new LKFSubclass(false);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2002/10/05 01:07:02 $
- * $Revision: 1.11 $
+ * $Date: 2002/10/09 18:56:58 $
+ * $Revision: 1.12 $
  *
  *******************************************************************************
  */
@@ -200,6 +200,14 @@ public class ICUService extends ICUNotifier {
         public boolean fallback() {
             return false;
         }
+
+        /**
+         * If a key created from id would eventually fallback to match the 
+         * current ID of this key, return true.
+         */
+        public boolean isFallbackOf(String id) {
+            return currentID().equals(id);
+        }
     }
 
     /**
@@ -218,7 +226,7 @@ public class ICUService extends ICUNotifier {
          * the service's getKey(Key, String[], Factory) method
          * passing itself as the factory to get the object that
          * the service would have created prior to the factory's
-         * registration with the service.  This might change the
+         * registration with the service.  This can change the
          * key, so any information required from the key should
          * be extracted before making such a callback.
 	 */
@@ -530,14 +538,41 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
-     * Return a snapshot of the visible IDs for this service.  This
+     * Convenience override for getVisibleIDs(String) that passes null
+     * as the fallback, thus returning all visible IDs.
+     */
+    public Set getVisibleIDs() {
+        return getVisibleIDs(null);
+    }
+
+    /**
+     * <p>Return a snapshot of the visible IDs for this service.  This
      * set will not change as Factories are added or removed, but the
      * supported ids will, so there is no guarantee that all and only
      * the ids in the returned set are visible and supported by the
-     * service in subsequent calls.
+     * service in subsequent calls.</p>
+     *
+     * <p>matchID is passed to createKey to create a key.  If the
+     * key is not null, it is used to filter out ids that don't have
+     * the key as a fallback.
      */
-    public Set getVisibleIDs() {
-	return getVisibleIDMap().keySet();
+    public Set getVisibleIDs(String matchID) {
+        Set result = getVisibleIDMap().keySet();
+
+        Key fallbackKey = createKey(matchID);
+
+        if (fallbackKey != null) {
+            Set temp = new HashSet(result.size());
+            Iterator iter = result.iterator();
+            while (iter.hasNext()) {
+                String id = (String)iter.next();
+                if (fallbackKey.isFallbackOf(id)) {
+                    temp.add(id);
+                }
+            }
+            result = temp;
+        }
+        return result;
     }
 
     /**
@@ -602,20 +637,43 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
-     * Convenience override of getDisplayNames(Locale) that uses the
-     * current default Locale.
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that 
+     * uses the current default Locale as the locale, the default collator for
+     * the locale as the comparator to sort the display names, and null for
+     * the matchID.
      */
     public Map getDisplayNames() {
-	return getDisplayNames(Locale.getDefault());
+        Locale locale = Locale.getDefault();
+        Collator col = Collator.getInstance(locale);
+	return getDisplayNames(locale, col, null);
     }
 
     /**
-     * Convenience override of getDisplayNames(Locale, Collator) that
-     * uses the default collator for the locale as the comparator.
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses the default collator for the locale as the comparator to
+     * sort the display names, and null for the matchID.
      */
     public Map getDisplayNames(Locale locale) {
         Collator col = Collator.getInstance(locale);
-        return getDisplayNames(locale, col);
+        return getDisplayNames(locale, col, null);
+    }
+
+    /**
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses null for the matchID, thus returning all display names.
+     * /
+    public Map getDisplayNames(Locale locale, Comparator col) {
+        return getDisplayNames(locale, col, null);
+    }
+
+    /**
+     * Convenience override of getDisplayNames(Locale, Comparator, String) that
+     * uses the default collator for the locale as the comparator to
+     * sort the display names.
+     */
+    public Map getDisplayNames(Locale locale, String matchID) {
+        Collator col = Collator.getInstance(locale);
+        return getDisplayNames(locale, col, matchID);
     }
 
     /**
@@ -628,12 +686,13 @@ public class ICUService extends ICUNotifier {
      * those in the set.  The display names are sorted based on the 
      * comparator provided.
      */
-    public Map getDisplayNames(Locale locale, Comparator col) {
+    public Map getDisplayNames(Locale locale, Comparator col, String matchID) {
         Map dncache = null;
 	LocaleRef ref = dnref;
         if (ref != null) {
             dncache = ref.get(locale, col);
         }
+
         while (dncache == null) {
 	    synchronized (this) {
 		if (ref == dnref || dnref == null) {
@@ -657,7 +716,20 @@ public class ICUService extends ICUNotifier {
 	    }
         }
 
-        return dncache;
+        Key matchKey = createKey(matchID);
+        if (matchKey == null) {
+            return dncache;
+        }
+
+        HashMap result = new HashMap(dncache);
+        Iterator iter = result.entrySet().iterator();
+        while (iter.hasNext()) {
+            Entry e = (Entry)iter.next();
+            if (!matchKey.isFallbackOf((String)e.getValue())) {
+                iter.remove();
+            }
+        }
+        return result;
     }
 
     // we define a class so we get atomic simultaneous access to the 
@@ -806,10 +878,10 @@ public class ICUService extends ICUNotifier {
     /**
      * Create a key from an id.  This creates a Key instance.
      * Subclasses can override to define more useful keys appropriate
-     * to the factories they accept.
+     * to the factories they accept.  If id is null, returns null.
      */
     public Key createKey(String id) {
-        return new Key(id);
+        return id == null ? null : new Key(id);
     }
 
     /**
