@@ -2694,10 +2694,24 @@ RuleBasedCollator::chopLocale(UnicodeString& localeName)
 
     if (i < 0)
     {
-        i = 0;
+       i = 0;
     }
 
     localeName.remove(i, size - i);
 }
+
+
+uint8_t *
+RuleBasedCollator::cloneRuleData(int32_t &length, UErrorCode &status)
+{
+  if(U_FAILURE(status)) {
+    return NULL;
+  }
+  
+  status = U_UNSUPPORTED_ERROR;
+
+  return NULL;
+}
+
 
 //eof

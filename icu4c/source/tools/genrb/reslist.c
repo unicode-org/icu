@@ -19,6 +19,8 @@
 #include "unewdata.h"
 #include "unicode/ures.h"
 
+#define BIN_ALIGNMENT 16
+
 uint32_t res_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status);
 
@@ -75,6 +77,11 @@ uint32_t array_write(UNewDataMemory *mem, struct SResource *res,
         while(current != NULL) {
             if(current->fType == RES_INT) {
                 *(resources+i) = (current->fType)<<28 | (current->u.fIntValue.fValue & 0xFFFFFFF);
+            } else if(current->fType == RES_BINARY) {
+				uint32_t uo = usedOffset;
+                usedOffset = res_write(mem, current, usedOffset, status);
+                *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
+                usedOffset += (current->fSize) + calcPadding(current->fSize) - (usedOffset-uo);
             } else {
                 usedOffset = res_write(mem, current, usedOffset, status);
                 *(resources+i) = (current->fType)<<28 | (usedOffset>>2);
@@ -104,6 +111,18 @@ uint32_t intvector_write(UNewDataMemory *mem, struct SResource *res,
 
 uint32_t bin_write(UNewDataMemory *mem, struct SResource *res, 
                  uint32_t usedOffset, UErrorCode *status) {
+	uint32_t pad = 0;
+	uint32_t extrapad = calcPadding(res->fSize);
+	uint32_t dataStart = usedOffset+sizeof(res->u.fBinaryValue.fLength);
+	if(dataStart%BIN_ALIGNMENT) {
+		pad = (BIN_ALIGNMENT-dataStart%BIN_ALIGNMENT);
+		udata_writePadding(mem, pad);
+		usedOffset += pad;
+	}
+
+    udata_write32(mem, res->u.fBinaryValue.fLength);
+    udata_writeBlock(mem, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
+	udata_writePadding(mem, (BIN_ALIGNMENT - pad + extrapad));
     return usedOffset;
 }
 
@@ -149,7 +168,12 @@ uint32_t table_write(UNewDataMemory *mem, struct SResource *res,
             *(keys+i) = (current->fKey)+sizeof(uint32_t); /*where the key is plus root pointer*/
             if(current->fType == RES_INT) {
                 *(resources+i) = (current->fType)<<28 | (current->u.fIntValue.fValue & 0xFFFFFFF);
-            } else {
+            } else if(current->fType == RES_BINARY) {
+				uint32_t uo = usedOffset;
+                usedOffset = res_write(mem, current, usedOffset, status);
+                *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
+                usedOffset += (current->fSize) + calcPadding(current->fSize) - (usedOffset-uo);
+			} else {
                 usedOffset = res_write(mem, current, usedOffset, status);
                 *(resources+i) = (current->fType)<<28 | (usedOffset>>2) ;
                 usedOffset += (current->fSize) + calcPadding(current->fSize);
@@ -428,7 +452,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, char *tag, uint32_t length, u
         return NULL;
     }
 
-    res->fType = RES_STRING;
+    res->fType = RES_BINARY;
     res->fKey = bundle_addtag(bundle, tag, status);
 
     if(U_FAILURE(*status)) {
@@ -447,7 +471,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, char *tag, uint32_t length, u
     }
     uprv_memcpy(res->u.fBinaryValue.fData, data, length);
 
-    res->fSize = sizeof(int32_t) + sizeof(uint8_t) * length;
+    res->fSize = sizeof(int32_t) + sizeof(uint8_t) * length + BIN_ALIGNMENT;
 
     return res;
 }

@@ -402,3 +402,9 @@ ucol_getVersion(const UCollator* coll,
 {
     ((Collator*)coll)->getVersion(versionInfo);
 }
+
+U_CAPI uint8_t *
+ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
+{
+  return ((RuleBasedCollator*)coll)->cloneRuleData(*length,*status);
+}

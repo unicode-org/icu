@@ -493,7 +493,9 @@ U_CFUNC UChar** ures_listInstalledLocales(const char* path, int32_t* count) {
 
 U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_t* len, UErrorCode* status) {
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -514,6 +516,46 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
             break;
     }
 }
+
+U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int32_t* len, 
+											   UErrorCode*               status) {
+
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
+	if(resB == NULL) {
+		*status = U_ILLEGAL_ARGUMENT_ERROR;
+		return NULL;
+	}
+    switch(RES_GET_TYPE(resB->fRes)) {
+        case RES_BINARY:
+            return res_getBinary(&(resB->fResData), resB->fRes, len);
+            break;
+        case RES_INT:
+        case RES_STRING:
+        case RES_INT_VECTOR:
+        case RES_ARRAY:
+        case RES_TABLE:
+        default:
+            *status = U_RESOURCE_TYPE_MISMATCH;
+            return NULL;
+            break;
+    }
+
+}
+
+U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *status) {
+
+	if (status==NULL || U_FAILURE(*status)) {
+		return 0xffffffff;
+	}
+	if(resB == NULL) {
+		*status = U_ILLEGAL_ARGUMENT_ERROR;
+		return 0xffffffff;
+	}
+	return RES_GET_UINT(resB->fRes);
+}
+
 
 U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resB) {
 	if(resB == NULL) {
@@ -555,7 +597,9 @@ U_CAPI bool_t U_EXPORT2 ures_hasNext(UResourceBundle *resB) {
 U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t* len, const char ** key, UErrorCode *status) {
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -599,7 +643,9 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resB, UR
     const char *key = NULL;
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -642,7 +688,9 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resB, i
     const char* key = NULL;
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -684,7 +732,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
     const char* key = NULL;
     Resource r = RES_BOGUS;
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -726,7 +776,9 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resB, con
     Resource res = RES_BOGUS;
     const char *key = inKey;
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -769,7 +821,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
     Resource res = RES_BOGUS;
     const char* key = inKey;
 
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -820,7 +874,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
 U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
     const UResourceDataEntry *resB = resourceBundle->fData;
-    if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
     if (!resourceBundle) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -1003,7 +1059,9 @@ U_CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resB,
                     UErrorCode*                status)
 {
     UResourceBundle res;
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -1026,7 +1084,9 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -1055,7 +1115,9 @@ U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resB,
                       UErrorCode*              status)
 {
     UResourceBundle res;
-	if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
 	if(resB == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return NULL;
@@ -1082,7 +1144,9 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
     Resource res = RES_BOGUS;
 
     UResourceBundle resData;
-	if (status==NULL || U_FAILURE(*status)) return 0;
+	if (status==NULL || U_FAILURE(*status)) {
+		return 0;
+	}
 	if(resourceBundle == NULL) {
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		return 0;
@@ -1174,7 +1238,9 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
  */
 U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
-  if (status==NULL || U_FAILURE(*status)) return NULL;
+	if (status==NULL || U_FAILURE(*status)) {
+		return NULL;
+	}
   if (!resourceBundle)
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;

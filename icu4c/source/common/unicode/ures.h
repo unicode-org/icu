@@ -373,6 +373,35 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resourceBund
                UErrorCode*               status);
 
 /**
+ * returns a binary data from a resource. Can be used at most primitive resource types (binaries,
+ * strings, ints)
+ *
+ * @param resourceBundle: a string resource
+ * @param len:    fills in the length of resulting byte chunk
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return a pointer to a chuck of unsigned bytes which live in a memory mapped/DLL file.
+ * @draft
+ */
+U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resourceBundle, int32_t* len, 
+               UErrorCode*               status);
+
+/**
+ * returns an integer from a resource. 
+ *
+ * @param resourceBundle: a string resource
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return an integer value
+ * @draft
+ */
+U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resourceBundle, UErrorCode *status);
+
+/**
  * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
  * the number of child resources.
  *
