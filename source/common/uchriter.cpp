@@ -180,7 +180,7 @@ UCharCharacterIterator::previous() {
 }
 
 UBool
-UCharCharacterIterator::hasPrevious() {
+UCharCharacterIterator::hasPrevious() const {
     return (UBool)(pos > begin ? TRUE : FALSE);
 }
 

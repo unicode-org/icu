@@ -301,7 +301,7 @@ public:
    * before the current position in the iteration range.
    * @stable ICU 2.0
    */
-  virtual UBool        hasPrevious();
+  virtual UBool        hasPrevious() const;
 
   /**
    * Moves the current position relative to the start or end of the
