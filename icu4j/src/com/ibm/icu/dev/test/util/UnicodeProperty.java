@@ -479,6 +479,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             Iterator it2 = getValueAliases(value,temp).iterator();
             while (it2.hasNext()) {
                 String value2 = (String)it2.next();
+                System.out.println("Values:" + value2);
                 if (matcher.matches(value2) 
                   || matcher.matches(toSkeleton(value2))) {
                     cacheValueToSet.getSet(value, result);

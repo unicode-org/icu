@@ -79,7 +79,7 @@ public final class UnicodeMap {
      * @param codepoint
      * @return
      */
-    private int findIndex(int c) {
+    private int _findIndex(int c) {
         int lo = 0;
         int hi = length - 1;
         int i = (lo + hi) >>> 1;
@@ -98,7 +98,7 @@ public final class UnicodeMap {
     }
     
     private void _checkFind(int codepoint, int value) {
-        int other = _findIndex(codepoint);
+        int other = __findIndex(codepoint);
         if (other != value) {
             throw new IllegalArgumentException("Invariant failed: binary search"
                 + "\t" + Utility.hex(codepoint) + ": " + value
@@ -106,7 +106,7 @@ public final class UnicodeMap {
         }
     }
     
-    private int _findIndex(int codepoint) {
+    private int __findIndex(int codepoint) {
         // TODO use binary search
         for (int i = length-1; i > 0; --i) {
             if (transitions[i] <= codepoint) return i;
@@ -140,7 +140,7 @@ public final class UnicodeMap {
      * @param index
      * @param count
      */
-    private void removeAt(int index, int count) {
+    private void _removeAt(int index, int count) {
         for (int i = index + count; i < length; ++i) {
             transitions[i-count] = transitions[i];
             values[i-count] = values[i];
@@ -154,7 +154,7 @@ public final class UnicodeMap {
      * @param index
      * @param count
      */
-    private void insertGapAt(int index, int count) {
+    private void _insertGapAt(int index, int count) {
         int newLength = length + count;
         int[] oldtransitions = transitions;
         Object[] oldvalues = values;
@@ -181,7 +181,7 @@ public final class UnicodeMap {
      * @return this, for chaining
      */
     private UnicodeMap _put(int codepoint, Object value) {
-        int baseIndex = findIndex(codepoint);
+        int baseIndex = _findIndex(codepoint);
         int limitIndex = baseIndex + 1;
         // cases are (a) value is already set
         if (equator.isEqual(values[baseIndex], value)) return this;
@@ -199,13 +199,13 @@ public final class UnicodeMap {
                 // A1a connects with previous & following, so remove index
                 if (connectsWithPrevious) {
                     if (connectsWithFollowing) {
-                        removeAt(baseIndex, 2);
+                        _removeAt(baseIndex, 2);
                         return this;
                     }
-                    removeAt(baseIndex, 1); // extend previous
+                    _removeAt(baseIndex, 1); // extend previous
                     return this;
                 } else if (connectsWithFollowing) {
-                    removeAt(baseIndex, 1); // extend following backwards
+                    _removeAt(baseIndex, 1); // extend following backwards
                     transitions[baseIndex] = codepoint; 
                     return this;
                 }
@@ -220,7 +220,7 @@ public final class UnicodeMap {
             } else {
                 // otherwise insert new transition
                 transitions[baseIndex] = codepoint+1; // fix following range
-                insertGapAt(baseIndex, 1);
+                _insertGapAt(baseIndex, 1);
                 values[baseIndex] = value;
                 transitions[baseIndex] = codepoint;
             }
@@ -236,14 +236,14 @@ public final class UnicodeMap {
                 --transitions[limitIndex]; 
                 return this;                
             } else {
-                insertGapAt(limitIndex, 1);
+                _insertGapAt(limitIndex, 1);
                 transitions[limitIndex] = codepoint;
                 values[limitIndex] = value;
             }
             return this;
         }
         // CASE: in middle of range
-        insertGapAt(++baseIndex,2);
+        _insertGapAt(++baseIndex,2);
         transitions[baseIndex] = codepoint;
         values[baseIndex] = value;
         transitions[++baseIndex] = codepoint + 1;
@@ -330,10 +330,13 @@ public final class UnicodeMap {
      */
     public UnicodeSet getSet(Object value, UnicodeSet result) {
         if (result == null) result = new UnicodeSet();
-        for (int i = 0; i < length; ++i) {
-            if (values[i] == value) result.add(transitions[i], transitions[i+1]);
+        for (int i = 0; i < length - 1; ++i) {
+            if (values[i] == value) result.add(transitions[i], transitions[i+1]-1);
         }
         return result;
+    }
+    public UnicodeSet getSet(Object value) {
+        return getSet(value,null);
     }
     /**
      * Returns the list of possible values. Deposits into
@@ -343,7 +346,7 @@ public final class UnicodeMap {
      */
     public Collection getAvailableValues(Collection result) {
         if (result == null) result = new HashSet();
-         for (int i = 0; i < length; ++i) {
+         for (int i = 0; i < length - 1; ++i) {
             Object value = values[i];
             if (value == null) continue;
             if (result.contains(value)) continue;
@@ -361,7 +364,7 @@ public final class UnicodeMap {
         if (codepoint < 0 || codepoint > 0x10FFFF) {
             throw new IllegalArgumentException("Codepoint out of range: " + codepoint);
         }
-        return values[findIndex(codepoint)];
+        return values[_findIndex(codepoint)];
     }
     
     public String toString() {
