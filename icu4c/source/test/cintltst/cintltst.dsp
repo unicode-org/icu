@@ -248,6 +248,10 @@ SOURCE=.\eurocreg.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\mstrmtst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\nccbtst.c
 # End Source File
 # Begin Source File

@@ -21,6 +21,7 @@ void addNEWResourceBundleTest(TestNode**);
 void addSCSUTest(TestNode** root);
 void addHashtableTest(TestNode** root);
 void addCStringTest(TestNode** root);
+void addMemoryStreamTest(TestNode** root);
 
 void addUtility(TestNode** root)
 {
@@ -31,5 +32,6 @@ void addUtility(TestNode** root)
     addSCSUTest(root);
     addHashtableTest(root);
     addCStringTest(root);
+    addMemoryStreamTest(root);
 }
 
