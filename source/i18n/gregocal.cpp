@@ -33,6 +33,7 @@
 *                           to timeToFields method, updated kMinValues, kMaxValues & kLeastMaxValues
 *   12/09/99    aliu        Fixed j81, calculation errors and roll bugs
 *                           in year of cutover.
+*   01/24/2000  aliu        Revised computeJulianDay for YEAR YEAR_WOY WOY.
 ********************************************************************************
 */
 
@@ -798,13 +799,9 @@ GregorianCalendar::computeTime(UErrorCode& status)
     // This function takes advantage of the fact that unset fields in
     // the time field list have a value of zero.
 
-    // The year defaults to the calculated year_woy or the epoch start.
-    int32_t year = year = (fStamp[YEAR] > fStamp[YEAR_WOY]) ? internalGet(YEAR) : 
-        ((fStamp[YEAR_WOY] != kUnset) ? internalGet(YEAR_WOY) : kEpochYear);
-/*
-    int32_t year = year = (fStamp[YEAR] != kUnset) ? internalGet(YEAR) : 
-        ((fStamp[YEAR_WOY] != kUnset) ? internalGet(YEAR_WOY) : kEpochYear);
-*/
+    // The year is either the YEAR or the epoch year.  YEAR_WOY is
+    // used only if WOY is the predominant field; see computeJulianDay.
+    int32_t year = (fStamp[YEAR] != kUnset) ? internalGet(YEAR) : kEpochYear;
     int32_t era = AD;
     if (fStamp[ERA] != kUnset) {
         era = internalGet(ERA);
@@ -962,14 +959,83 @@ GregorianCalendar::computeTime(UErrorCode& status)
 
 // -------------------------------------
 
+/**
+ * Compute the julian day number of the day BEFORE the first day of
+ * January 1, year 1 of the given calendar.  If julianDay == 0, it
+ * specifies (Jan. 1, 1) - 1, in whatever calendar we are using (Julian
+ * or Gregorian).
+ */
+double GregorianCalendar::computeJulianDayOfYear(bool_t isGregorian,
+                                                 int32_t year, bool_t& isLeap) {
+    isLeap = year%4 == 0;
+    int32_t y = year - 1;
+    double julianDay = 365.0*y + floorDivide(y, 4) + (kJan1_1JulianDay - 3);
+
+    if (isGregorian) {
+        isLeap = isLeap && ((year%100 != 0) || (year%400 == 0));
+        // Add 2 because Gregorian calendar starts 2 days after Julian calendar
+        julianDay += floorDivide(y, 400) - floorDivide(y, 100) + 2;
+    }
+
+    return julianDay;
+}
+
+/**
+ * Compute the day of week, relative to the first day of week, from
+ * 0..6, of the current DOW_LOCAL or DAY_OF_WEEK fields.  This is
+ * equivalent to get(DOW_LOCAL) - 1.
+ */
+int32_t GregorianCalendar::computeRelativeDOW() const {
+    int32_t relDow = 0;
+    if (fStamp[DOW_LOCAL] > fStamp[DAY_OF_WEEK]) {
+        relDow = internalGet(DOW_LOCAL) - 1; // 1-based
+    } else if (fStamp[DAY_OF_WEEK] != kUnset) {
+        relDow = internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
+        if (relDow < 0) relDow += 7;
+    }
+    return relDow;
+}
+
+/**
+ * Compute the day of week, relative to the first day of week,
+ * from 0..6 of the given julian day.
+ */
+int32_t GregorianCalendar::computeRelativeDOW(double julianDay) const {
+    int32_t relDow = julianDayToDayOfWeek(julianDay) - getFirstDayOfWeek();
+    if (relDow < 0) {
+        relDow += 7;
+    }
+    return relDow;
+}
+
+/**
+ * Compute the DOY using the WEEK_OF_YEAR field and the julian day
+ * of the day BEFORE January 1 of a year (a return value from
+ * computeJulianDayOfYear).
+ */
+int32_t GregorianCalendar::computeDOYfromWOY(double julianDayOfYear) const {
+    // Compute DOY from day of week plus week of year
+
+    // Find the day of the week for the first of this year.  This
+    // is zero-based, with 0 being the locale-specific first day of
+    // the week.  Add 1 to get first day of year.
+    int32_t fdy = computeRelativeDOW(julianDayOfYear + 1);
+
+    return
+        // Compute doy of first (relative) DOW of WOY 1
+        (((7 - fdy) < getMinimalDaysInFirstWeek())
+         ? (8 - fdy) : (1 - fdy))
+                
+        // Adjust for the week number.
+        + (7 * (internalGet(WEEK_OF_YEAR) - 1))
+
+        // Adjust for the DOW
+        + computeRelativeDOW();
+}
+
 double 
 GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year) 
 {
-    int32_t month = 0;
-    int32_t date = 0;
-    int32_t y;
-    double millis = 0;
-
     // Find the most recent set of fields specifying the day within
     // the year.  These may be any of the following combinations:
     //   MONTH* + DAY_OF_MONTH*
@@ -989,14 +1055,121 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
     int32_t doyStamp     = fStamp[DAY_OF_YEAR];
     int32_t woyStamp     = fStamp[WEEK_OF_YEAR];
 
+    bool_t isLeap;
+    double julianDay;
+
     int32_t bestStamp = (monthStamp > domStamp) ? monthStamp : domStamp;
     if (womStamp > bestStamp) bestStamp = womStamp;
     if (dowimStamp > bestStamp) bestStamp = dowimStamp;
     if (doyStamp > bestStamp) bestStamp = doyStamp;
-    if (woyStamp > bestStamp) bestStamp = woyStamp;
+    if (woyStamp >= bestStamp) {
+        // Note use of >= here, rather than >.  We will see woy ==
+        // best if (a) all stamps are unset, in which case the
+        // specific handling of unset will be used below, or (b) all
+        // stamps are kInternallySet.  In the latter case we want to
+        // use the YEAR_WOY if it is newer.
+        if (fStamp[YEAR_WOY] > fStamp[YEAR]) {
+            year = internalGet(YEAR_WOY);
+            if (fStamp[ERA] != kUnset && internalGet(ERA) == BC) {
+                year = 1 - year;
+            }
+            // Only the WOY algorithm correctly handles YEAR_WOY, so
+            // force its use by making its stamp the most recent.
+            // This only affects the situation in which all stamps are
+            // equal (see above).
+            bestStamp = ++woyStamp;
+        } else if (woyStamp > bestStamp) {
+            // The WOY stamp is not only equal to, but newer than any
+            // other stamp.  This means the WOY has been explicitly
+            // set, and will be used for computation.
+            bestStamp = woyStamp;
+            if (fStamp[YEAR_WOY] != kUnset && fStamp[YEAR_WOY] >= fStamp[YEAR]) {
 
+                // The YEAR_WOY is set, and is not superceded by the
+                // YEAR; use it.
+                year = internalGet(YEAR_WOY);
+            }
+
+            /* At this point we cannot avoid using the WEEK_OF_YEAR together
+             * with the YEAR field, since the YEAR_WOY is unavailable.  Our goal
+             * is round-trip field integrity.  We cannot guarantee round-trip
+             * time integrity because the YEAR + WOY combination may be
+             * ambiguous; consider a calendar with MDFW 3 and FDW Sunday.  YEAR
+             * 1997 + WOY 1 + DOW Wednesday specifies two days: Jan 1 1997, and
+             * Dec 31 1997.  However, we can guarantee that the YEAR fields, as
+             * set, will remain unchanged.
+             * 
+             * In general, YEAR and YEAR_WOY are equal, but at the ends of the
+             * years, the YEAR and YEAR_WOY can differ by one.  To detect this
+             * in WOY 1, we look at the position of WOY 1.  If it extends into
+             * the previous year, then we check the DOW and see if it falls in
+             * the previous year.  If so, we increment the year.  This allows us
+             * to have round-trip integrity on the YEAR field.
+             *
+             * If the WOY is >= 52, then we do an intial computation of the DOY
+             * for the current year.  If this exceeds the length of this year,
+             * we decrement the year.  Again, this provides round-trip integrity
+             * on the YEAR field. - aliu
+             */
+
+            else if (internalGet(WEEK_OF_YEAR) == 1) {
+                // YEAR_WOY has not been set, so we must use the YEAR.
+                // Since WOY computations rely on the YEAR_WOY, not the
+                // YEAR, we must guess at its value.  It is usually equal
+                // to the YEAR, but may be one greater in WOY 1, and may
+                // be one less in WOY >= 52.  Note that YEAR + WOY is
+                // ambiguous (YEAR_WOY + WOY is not).
+
+                // FDW = Mon, MDFW = 2, Mon Dec 27 1999, WOY 1, YEAR_WOY 2000
+
+                // Find out where WOY 1 falls; some of it may extend
+                // into the previous year.  If so, and if the DOW is
+                // one of those days, then increment the YEAR_WOY.
+                julianDay = computeJulianDayOfYear(isGregorian, year, isLeap);
+                int32_t fdy = computeRelativeDOW(1 + julianDay);
+
+                int32_t doy =
+                    (((7 - fdy) < getMinimalDaysInFirstWeek())
+                     ? (8 - fdy) : (1 - fdy));
+
+                if (doy < 1) {
+                    // Some of WOY 1 for YEAR year extends into YEAR
+                    // year-1 if doy < 1.  doy == 0 -- 1 day of WOY 1
+                    // in previous year; doy == -1 -- 2 days, etc.
+
+                    // Compute the day of week, relative to the first day of week,
+                    // from 0..6.
+                    int32_t relDow = computeRelativeDOW();
+
+                    // Range of days that are in YEAR year (as opposed
+                    // to YEAR year-1) are DOY == 1..6+doy.  Range of
+                    // days of the week in YEAR year are fdy..fdy + 5
+                    // + doy.  These are relative DOWs.
+                    if ((relDow < fdy) || (relDow > (fdy + 5 + doy))) {
+                        ++year;
+                    }
+                }
+
+            } else if (internalGet(WEEK_OF_YEAR) >= 52) {
+                // FDW = Mon, MDFW = 4, Sat Jan 01 2000, WOY 52, YEAR_WOY 1999
+                julianDay = computeJulianDayOfYear(isGregorian, year, isLeap);
+                if (computeDOYfromWOY(julianDay) > yearLength(year)) {
+                    --year;
+                }
+                // It's tempting to take our julianDay and DOY here, in an else
+                // clause, and return them, since they are correct.  However,
+                // this neglects the cutover adjustment, and it's easier to
+                // maintain the code if everything goes through the same control
+                // path below. - aliu
+            }
+        }
+    }
+
+    // The following if() clause checks if the month field
+    // predominates.  This set of computations must be done BEFORE
+    // using the year, since the year value may be adjusted here.
     bool_t useMonth = FALSE;
-
+    int32_t month = 0;
     if (bestStamp != kUnset &&
         (bestStamp == monthStamp ||
          bestStamp == domStamp ||
@@ -1015,24 +1188,17 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
         }
     }
 
-    bool_t isLeap = year%4 == 0;
-    y = year - 1;
-    double julianDay = 365.0*y + floorDivide(y, 4) + (kJan1_1JulianDay - 3);
-
-    if (isGregorian) {
-        isLeap = isLeap && ((year%100 != 0) || (year%400 == 0));
-        // Add 2 because Gregorian calendar starts 2 days after Julian calendar
-        julianDay += floorDivide(y, 400) - floorDivide(y, 100) + 2;
-    }
-
-    // At this point julianDay is the 0-based day BEFORE the first day of
+    // Compute the julian day number of the day BEFORE the first day of
     // January 1, year 1 of the given calendar.  If julianDay == 0, it
     // specifies (Jan. 1, 1) - 1, in whatever calendar we are using (Julian
     // or Gregorian).
+    julianDay = computeJulianDayOfYear(isGregorian, year, isLeap);
 
     if (useMonth) {
 
+        // Move julianDay to the day BEFORE the first of the month.
         julianDay += isLeap ? kLeapNumDays[month] : kNumDays[month];
+        int32_t date = 0;
 
         if (bestStamp == domStamp ||
             bestStamp == monthStamp) {
@@ -1046,11 +1212,8 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
 
             // Find the day of the week for the first of this month.  This
             // is zero-based, with 0 being the locale-specific first day of
-            // the week.  Add 1 to get the 1st day of month.  Subtract
-            // getFirstDayOfWeek() to make 0-based.
-            int32_t fdm = julianDayToDayOfWeek(julianDay + 1) - getFirstDayOfWeek();
-            if (fdm < 0) 
-                fdm += 7;
+            // the week.  Add 1 to get first day of month.
+            int32_t fdm = computeRelativeDOW(julianDay + 1);
 
             // Find the start of the first week.  This will be a date from
             // 1..-6.  It represents the locale-specific first day of the
@@ -1075,9 +1238,9 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
                 // trickiness occurs if the day-of-week-in-month is
                 // negative.
                 int32_t dim = internalGet(DAY_OF_WEEK_IN_MONTH);
-                if (dim >= 0) 
+                if (dim >= 0) {
                     date += 7*(dim - 1);
-                else {
+                } else {
                     // Move date to the last of this day-of-week in this
                     // month, then back up as needed.  If dim==-1, we don't
                     // back up at all.  If dim==-2, we back up once, etc.
@@ -1098,61 +1261,27 @@ GregorianCalendar::computeJulianDay(bool_t isGregorian, int32_t year)
 
         // No month, start with January 0 (day before Jan 1), then adjust.
 
+        int32_t doy = 0;
+        bool_t doCutoverAdjustment = TRUE;
+
         if (bestStamp == kUnset) {
-            ++julianDay; // Advance to January 1
+            doy = 1; // Advance to January 1
+            doCutoverAdjustment = FALSE;
         }
         else if (bestStamp == doyStamp) {
-            julianDay += internalGet(DAY_OF_YEAR);
-
-            // Adjust for cutover year [j81 - aliu]
-            if (year == fGregorianCutoverYear && isGregorian) {
-                julianDay -= 10;
-            }
+            doy = internalGet(DAY_OF_YEAR);
         }
         else if (bestStamp == woyStamp) {
-            // Compute from day of week plus week of year
-
-            // Find the day of the week for the first of this year.  This
-            // is zero-based, with 0 being the locale-specific first day of
-            // the week.  Add 1 to get the 1st day of month.  Subtract
-            // getFirstDayOfWeek() to make 0-based.
-            int32_t fdy = julianDayToDayOfWeek(julianDay + 1) - getFirstDayOfWeek();
-            if (fdy < 0) 
-                fdy += 7;
-
-            // Find the start of the first week.  This may be a valid date
-            // from 1..7, or a date before the first, from 0..-6.  It
-            // represents the locale-specific first day of the week
-            // of the first day of the year.
-
-            // First ignore the minimal days in first week.
-            if(fStamp[DOW_LOCAL]>fStamp[DAY_OF_WEEK]) {
-                date = internalGet(DOW_LOCAL) - fdy ; 
-            } else {
-                date = 1 - fdy + ((fStamp[DAY_OF_WEEK] != kUnset) ?
-                                  (internalGet(DAY_OF_WEEK) - getFirstDayOfWeek()) : 0);
-            }
-
-/*
-            date = 1 - fdy + ((fStamp[DAY_OF_WEEK] != kUnset) ?
-                              (internalGet(DAY_OF_WEEK) - getFirstDayOfWeek()) : 0);
-*/
-            // Adjust for minimal days in first week.
-            if ((7 - fdy) < getMinimalDaysInFirstWeek()) 
-                date += 7;
-
-            // Now adjust for the week number.
-            date += 7 * (internalGet(WEEK_OF_YEAR) - 1);
-
-            julianDay += date;
-
-            // Adjust for cutover year [j81 - aliu]
-            if (year == fGregorianCutoverYear && isGregorian) {
-                julianDay -= 10;
-            }
+            doy = computeDOYfromWOY(julianDay);
         }
-    }
+        
+        // Adjust for cutover year [j81 - aliu]
+        if (doCutoverAdjustment && year == fGregorianCutoverYear && isGregorian) {
+            doy -= 10;
+        }
 
+        julianDay += doy;
+    }
     return julianDay;
 }
 
@@ -1224,12 +1353,11 @@ GregorianCalendar::floorDivide(double numerator, int32_t denominator, int32_t re
 
 // -------------------------------------
 
-// {sfb} why does this work, while Calendar::EStampValues doesn't?
-GregorianCalendar::EStampValues
-GregorianCalendar::aggregateStamp(EStampValues stamp_a, EStampValues stamp_b) 
+int32_t
+GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b) 
 {
-    return ((EStampValues)((stamp_a != kUnset && stamp_b != kUnset) 
-        ? uprv_max((int32_t)stamp_a, (int32_t)stamp_b)
+    return (((stamp_a != kUnset && stamp_b != kUnset) 
+        ? uprv_max(stamp_a, stamp_b)
         : kUnset));
 }
 
@@ -1244,51 +1372,17 @@ GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status)
     if (amount == 0) 
         return;   // Do nothing!
     complete(status);
-/*
-    if (field == YEAR) {
-        int32_t year = internalGet(YEAR);
-        if (internalGetEra() == AD) {
-            year += amount;
-            if (year > 0)
-                set(YEAR, year);
-            else { // year <= 0
-                set(YEAR, 1 - year);
-                // if year == 0, you get 1 BC
-                set(ERA, BC);
-            }
-        }
-        else { // era == BC
-            year -= amount;
-            if (year > 0)
-                set(YEAR, year);
-            else { // year <= 0
-                set(YEAR, 1 - year);
-                // if year == 0, you get 1 AD
-                set(ERA, AD);
-            }
-        }
-*/
+
     if (field == YEAR || field == YEAR_WOY) {
         int32_t year = internalGet(field);
-        if (internalGetEra() == AD) {
-            year += amount;
-            if (year > 0)
-                set(field, year);
-            else { // year <= 0
-                set(field, 1 - year);
-                // if year == 0, you get 1 BC
-                set(ERA, BC);
-            }
-        }
-        else { // era == BC
-            year -= amount;
-            if (year > 0)
-                set(field, year);
-            else { // year <= 0
-                set(field, 1 - year);
-                // if year == 0, you get 1 AD
-                set(ERA, AD);
-            }
+        int32_t era = internalGetEra();
+        year += (era == AD) ? amount : -amount;
+        if (year > 0)
+            set(field, year);
+        else { // year <= 0
+            set(field, 1 - year);
+            // if year == 0, you get 1 BC
+            set(ERA, (AD + BC) - era);
         }
         pinDayOfMonth();
     }
@@ -1422,17 +1516,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
         min = getMinimum(field);
         max = getMaximum(field);
     }
-/*
-    if(field == YEAR_WOY) {
-        roll(YEAR, amount, status);
-        return;
-    }
 
-    if(field == DOW_LOCAL) {
-        roll(DAY_OF_WEEK, amount, status);
-        return;
-    }
-*/
     /* Some of the fields require special handling to work in the month
      * containing the Gregorian cutover point.  Do shared computations
      * for these fields here.  [j81 - aliu] */
@@ -1529,18 +1613,16 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             int32_t woy = internalGet(WEEK_OF_YEAR);
             // Get the ISO year, which matches the week of year.  This
             // may be one year before or after the calendar year.
-            int32_t isoYear = internalGet(YEAR);
+            int32_t isoYear = internalGet(YEAR_WOY);
             int32_t isoDoy = internalGet(DAY_OF_YEAR);
             if (internalGet(MONTH) == Calendar::JANUARY) {
                 if (woy >= 52) {
-                    --isoYear;
                     isoDoy += yearLength(isoYear);
                 }
             }
             else {
                 if (woy == 1) {
-                    isoDoy -= yearLength(isoYear);
-                    ++isoYear;
+                    isoDoy -= yearLength(isoYear-1);
                 }
             }
             woy += amount;
@@ -1563,7 +1645,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
                 woy = ((woy + lastWoy - 1) % lastWoy) + 1;
             }
             set(WEEK_OF_YEAR, woy);
-            set(YEAR, isoYear);
+            set(YEAR_WOY, isoYear); // make YEAR_WOY timestamp > YEAR timestamp
             return;
         }
     case WEEK_OF_MONTH:
@@ -1702,24 +1784,6 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
         }
 
     case DAY_OF_WEEK:
-        {
-            // Roll the day of week using millis.  Compute the millis for
-            // the start of the week, using the first day of week setting.
-            // Restrict the millis to [start, start+7days).
-            double delta = amount * kOneDay; // Scale up from days to millis
-            // Compute the number of days before the current day in this
-            // week.  This will be a value 0..6.
-            int32_t leadDays = internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
-            if (leadDays < 0) 
-                leadDays += 7;
-            double min2 = internalGetTime() - leadDays * kOneDay;
-            internalSetTime(uprv_fmod((internalGetTime() + delta - min2), kOneWeek));
-            if (internalGetTime() < 0) 
-                internalSetTime(internalGetTime() + kOneWeek);
-            setTimeInMillis(internalGetTime() + min2, status);
-            return;
-        }
-
     case DOW_LOCAL:
         {
             // Roll the day of week using millis.  Compute the millis for
@@ -1728,7 +1792,8 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             double delta = amount * kOneDay; // Scale up from days to millis
             // Compute the number of days before the current day in this
             // week.  This will be a value 0..6.
-            int32_t leadDays = internalGet(DOW_LOCAL) - 1;
+            int32_t leadDays = internalGet(field) -
+                ((field == DAY_OF_WEEK) ? getFirstDayOfWeek() : 1);
             if (leadDays < 0) 
                 leadDays += 7;
             double min2 = internalGetTime() - leadDays * kOneDay;
@@ -1898,12 +1963,12 @@ GregorianCalendar::getActualMaximum(EDateFields field) const
             /* Perform a binary search, with the invariant that lowGood is a
              * valid year, and highBad is an out of range year.
              */
-            int32_t lowGood = kLeastMaxValues[YEAR];
-            int32_t highBad = kMaxValues[YEAR] + 1;
+            int32_t lowGood = kLeastMaxValues[field];
+            int32_t highBad = kMaxValues[field] + 1;
             while((lowGood + 1) < highBad) {
                 int32_t y = (lowGood + highBad) / 2;
-                cal->set(YEAR, y);
-                if(cal->get(YEAR, status) == y && cal->get(ERA, status) == era) {
+                cal->set(field, y);
+                if(cal->get(field, status) == y && cal->get(ERA, status) == era) {
                     lowGood = y;
                 } 
                 else {
@@ -1938,28 +2003,6 @@ GregorianCalendar::inDaylightTime(UErrorCode& status) const
 }
 
 // -------------------------------------
-
-int32_t
-GregorianCalendar::getISOYear(UErrorCode& status) 
-{
-    ((GregorianCalendar*)this)->complete(status);
-
-    int32_t woy = internalGet(WEEK_OF_YEAR);
-    // Get the ISO year, which matches the week of year.  This
-    // may be one year before or after the calendar year.
-    int32_t isoYear = internalGet(YEAR);
-    if (internalGet(MONTH) == Calendar::JANUARY) {
-        if (woy >= 52) {
-            --isoYear;
-        }
-    }
-    else {
-        if (woy == 1) {
-            ++isoYear;
-        }
-    }
-    return isoYear;
-}
 
 /**
  * Return the ERA.  We need a special method for this because the
