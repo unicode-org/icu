@@ -202,7 +202,7 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
       r->expansions->CEs = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->expansions->size);
       uprv_memcpy(r->expansions->CEs, t->expansions->CEs, sizeof(uint32_t)*t->expansions->size);
     } else {
-      t->expansions->CEs = NULL;
+      r->expansions->CEs = NULL;
     }
   }
 
