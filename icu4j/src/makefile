@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.2 $ $Date: 2000/02/15 18:19:29 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.3 $ $Date: 2000/02/16 19:04:29 $
 # 
 
 TOPDIR=		..
@@ -23,8 +23,6 @@ javadoc: FORCE
 		-docTitle "International Classes for Java" \
 		-encoding "iso-8859-1" \
 		-docencoding "iso-8859-1" \
-		-linkoffline http://java.sun.com/products/jdk/1.2/docs/api \
-					 file:////jdk/jdk1.2/docs/api \
 		-bottom "<font size=-1>Copyright &copy; 1998-2000 IBM Corporation.</font>" \
 	    com/ibm/text/*.java com/ibm/util/*.java
 

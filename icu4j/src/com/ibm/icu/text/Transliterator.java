@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.11 $ $Date: 2000/01/27 18:59:19 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.12 $ $Date: 2000/02/16 19:04:31 $
  */
 public abstract class Transliterator {
     /**
@@ -653,7 +653,7 @@ public abstract class Transliterator {
     /**
      * Returns a name for this transliterator that is appropriate for
      * display to the user in the default locale.  See {@link
-     * #getDisplayName(Locale)} for details.
+     * #getDisplayName(String,Locale)} for details.
      */
     public final static String getDisplayName(String ID) {
         return getDisplayName(ID, Locale.getDefault());
