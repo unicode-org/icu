@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $ 
- * $Date: 2002/10/02 20:20:21 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/10/04 19:41:02 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -16,6 +16,7 @@ import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.LocaleUtility;
@@ -551,7 +552,7 @@ public abstract class BreakIterator implements Cloneable
             ICULocaleService newService = new ICULocaleService("BreakIterator");
 
             class RBBreakIteratorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind) {
+                protected Object handleCreate(Locale loc, int kind, ICUService service) {
                     return createBreakInstance(loc, kind);
                 }
             }

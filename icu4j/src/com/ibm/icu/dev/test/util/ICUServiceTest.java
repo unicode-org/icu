@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2002/10/02 20:20:25 $
- * $Revision: 1.6 $
+ * $Date: 2002/10/04 19:41:02 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -165,7 +165,7 @@ public class ICUServiceTest extends TestFmwk
 	// an anonymous factory than handles all ids
 	{
 	    Factory factory = new Factory() {
-		    public Object create(Key key) {
+		    public Object create(Key key, ICUService service) {
 			return LocaleUtility.getLocaleFromName(key.currentID());
 		    }
 
@@ -204,7 +204,7 @@ public class ICUServiceTest extends TestFmwk
 			      "en_US_SURFER_GAL",
 			      "en_US_SURFER_DUDE"
 	    };
-	    service.registerFactory(new TestLocaleKeyFactory(xids));
+	    service.registerFactory(new TestLocaleKeyFactory(xids, "Later"));
 	}
 
 	// iterate over the visual ids returned by the multiple factory
@@ -214,7 +214,8 @@ public class ICUServiceTest extends TestFmwk
 	    int count = 0;
 	    while (iter.hasNext()) {
 	        ++count;
-		logln("  " + iter.next());
+                String id = (String)iter.next();
+		logln("  " + id + " --> " + service.get(id));
 	    }
 	    // four visible ids
 	    confirmIdentical("25) visible ids", count, 4);
@@ -245,12 +246,13 @@ public class ICUServiceTest extends TestFmwk
 	// register another multiple factory
 	{
 	    String[] xids = {
-		"en_US_SURFER_GAL", "en_US_SILICON", "en_US_SILICON_GEEK", "en_US"
+		"en_US_SURFER", "en_US_SURFER_GAL", "en_US_SILICON", "en_US_SILICON_GEEK"
 	    };
 	    service.registerFactory(new TestLocaleKeyFactory(xids, "Rad dude"));
 	}
 
-	// this time, we have seven display names (we replaced surfer gal)
+	// this time, we have seven display names
+        // Rad dude's surfer gal 'replaces' later's surfer gal
 	{
 	    Map dids = service.getDisplayNames(LocaleUtility.getLocaleFromName("es"));
 	    Iterator iter = dids.entrySet().iterator();
@@ -258,7 +260,7 @@ public class ICUServiceTest extends TestFmwk
 	    while (iter.hasNext()) {
 	        ++count;
 	        Entry e = (Entry)iter.next();
-	        logln("  " + e.getKey() + " -- > " + e.getValue());
+	        logln("  " + e.getKey() + " --> " + e.getValue());
 	    }
 	    // seven display names, in spanish
 	    confirmIdentical("29) display names", count, 7);
@@ -268,21 +270,23 @@ public class ICUServiceTest extends TestFmwk
 	// returned by the id we used.
 	{
 	    String[] actualID = new String[1];
-	    String id = "en_us_silicon_dude";
-	    String dude = (String)service.get(id, actualID);
-	    if (dude != null) {
+	    String id = "en_us_surfer_gal";
+	    String gal = (String)service.get(id, actualID);
+	    if (gal != null) {
+                logln("actual id: " + actualID[0]);
 		String displayName = service.getDisplayName(actualID[0], Locale.US);
-		logln("found actual: " + dude + " with display name: " + displayName);
+		logln("found actual: " + gal + " with display name: " + displayName);
 		confirmBoolean("30) found display name for actual", displayName != null);
 
 		displayName = service.getDisplayName(id, Locale.US);
-		logln("found query: " + dude + " with display name: " + displayName);
+		logln("found query: " + gal + " with display name: " + displayName);
 		confirmBoolean("31) found display name for query", displayName == null);
 	    } else {
 		errln("30) service could not find entry for " + id);
 	    }
 
-	    id = "en_US_BOZO";
+            // this should be handled by the 'dude' factory, since it overrides en_US_SURFER.
+	    id = "en_US_SURFER_BOZO";
 	    String bozo = (String)service.get(id, actualID);
 	    if (bozo != null) {
 		String displayName = service.getDisplayName(actualID[0], Locale.US);
@@ -297,12 +301,15 @@ public class ICUServiceTest extends TestFmwk
 	    }
 	}
 
+        /*
+        // disallow hiding for now
+
 	// hiding factory should obscure 'sublocales'
 	{
 	    String[] xids = {
 		"en_US_VALLEY", "en_US_SILICON"
 	    };
-	    service.registerFactory(new TestHidingFactory(xids));
+	    service.registerFactory(new TestHidingFactory(xids, "hiding"));
 	}
 
 	{
@@ -314,8 +321,9 @@ public class ICUServiceTest extends TestFmwk
 	        Entry e = (Entry)iter.next();
 	        logln("  " + e.getKey() + " -- > " + e.getValue());
 	    }
-	    confirmIdentical("31 hiding factory", count, 5);
+	    confirmIdentical("35) hiding factory", count, 5);
 	}
+        */
 
 	{
 	    Set xids = service.getVisibleIDs();
@@ -462,7 +470,7 @@ public class ICUServiceTest extends TestFmwk
 	}
 
 	public TestLocaleKeyFactory(String[] ids, String factoryID) {
-            super(VISIBLE_COVERS);
+            super(VISIBLE, factoryID);
 
 	    this.ids = Collections.unmodifiableSet(new HashSet(Arrays.asList(ids)));
 
@@ -473,7 +481,7 @@ public class ICUServiceTest extends TestFmwk
 	    }
 	}
     
-	protected Object handleCreate(Locale loc, int kind) {
+	protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return factoryID + loc.toString();
 	}
 
@@ -481,6 +489,10 @@ public class ICUServiceTest extends TestFmwk
             return ids;
 	}
     }
+
+    /*
+     // Disallow hiding for now since it causes gnarly problems, like
+     // how do you localize the hidden (but still exported) names.
 
     static class TestHidingFactory implements ICUService.Factory {
 	protected final String[] ids;
@@ -500,7 +512,7 @@ public class ICUServiceTest extends TestFmwk
 	    }
 	}
 
-	public Object create(Key key) {
+	public Object create(Key key, ICUService service) {
 	    for (int i = 0; i < ids.length; ++i) {
 		if (LocaleUtility.isFallbackOf(ids[i], key.currentID())) {
 		    return factoryID + key.canonicalID();
@@ -526,6 +538,7 @@ public class ICUServiceTest extends TestFmwk
 	    return factoryID + LocaleUtility.getLocaleFromName(id).getDisplayName(locale);
 	}
     }
+    */
 
     static class CalifornioLanguageFactory extends ICUResourceBundleFactory {
 	private static String californio = "en_US_CA";
@@ -615,7 +628,8 @@ public class ICUServiceTest extends TestFmwk
     }
 
     public void errln(String msg) {
-        System.out.println(msg);
+        // System.out.println(msg);
+        super.errln(msg);
     }
 
     // misc coverage tests
@@ -723,20 +737,20 @@ public class ICUServiceTest extends TestFmwk
 
 	// LocaleKeyFactory 
 	LocaleKeyFactory lkf = new LKFSubclass(false);
-	logln("obj: " + lkf.create(lkey));
+	logln("obj: " + lkf.create(lkey, null));
 	logln(lkf.getDisplayName("foo", null));
 	logln(lkf.getDisplayName("bar", null));
 	lkf.updateVisibleIDs(new HashMap());
 
 	LocaleKeyFactory invisibleLKF = new LKFSubclass(false);
-	logln("obj: " + invisibleLKF.create(lkey));
+	logln("obj: " + invisibleLKF.create(lkey, null));
 	logln(invisibleLKF.getDisplayName("foo", null));
 	logln(invisibleLKF.getDisplayName("bar", null));
 	invisibleLKF.updateVisibleIDs(new HashMap());
 
 	// ResourceBundleFactory
 	ICUResourceBundleFactory rbf = new ICUResourceBundleFactory();
-	logln("RB: " + rbf.create(lkey));
+	logln("RB: " + rbf.create(lkey, null));
 
 	// ICUNotifier
 	ICUNotifier nf = new ICUNSubclass();
@@ -804,7 +818,7 @@ public class ICUServiceTest extends TestFmwk
 	    super(visible ? VISIBLE : INVISIBLE);
 	}
 
-	public Object handleCreate(Key key) {
+	public Object handleCreate(Key key, ICUService service) {
 	    return null;
 	}
 

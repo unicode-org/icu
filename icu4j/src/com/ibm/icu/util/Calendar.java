@@ -632,7 +632,7 @@ import java.util.Set;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.31 $ $Date: 2002/10/02 20:20:25 $
+ * @version      $Revision: 1.32 $ $Date: 2002/10/04 19:41:03 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1471,10 +1471,10 @@ public abstract class Calendar implements Serializable, Cloneable {
     // ==== Factory Stuff ====
 
     /**
-     * Return a calendar of for the TimeZone and locale.  If calType is
+     * Return a calendar of for the TimeZone and locale.  If factoryName is
      * not null, looks in the collection of CalendarFactories for a match
      * and uses that factory to instantiate the calendar.  Otherwise, it
-     * uses the default factory that has been registered for that locale.
+     * uses the default factory that has been registered for the locale.
      */
     public static synchronized Calendar getInstance(TimeZone zone,
                                                     Locale locale,
@@ -1579,12 +1579,12 @@ public abstract class Calendar implements Serializable, Cloneable {
             ICULocaleService newService = new ICULocaleService("Calendar");
 
             class RBCalendarFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale locale, int kind) {
+                protected Object handleCreate(Locale locale, int kind, ICUService service) {
                     return GregorianCalendar.factory();
                 }
             }
-                
             newService.registerFactory(new RBCalendarFactory());
+
             synchronized (Calendar.class) {
                 if (service == null) {
                     service = newService;
