@@ -218,7 +218,7 @@ ResourceBundleTest::TestConstruction()
         testdatapath=loadTestData(err);
         if(U_FAILURE(err))
         {
-            errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
+            errln("Could not load testdata.dat " + UnicodeString(testdatapath) +  ", " + UnicodeString(u_errorName(err)));
             return;
         }
         ResourceBundle  test1((UnicodeString)testdatapath, err);
