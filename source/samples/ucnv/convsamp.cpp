@@ -556,6 +556,7 @@ UErrorCode convsample_13()
   printf("src=%d bytes, dst=%d uchars\n", srcCount, dstCount);
   ucnv_close(conv);
 
+  return U_ZERO_ERROR;
 }
 
 
@@ -646,6 +647,7 @@ UErrorCode convsample_20()
     printf("Did NOT substitute.\n*****\n");
   }
 
+  return U_ZERO_ERROR;
 }
 
 /* main */
