@@ -1014,8 +1014,6 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
       UConverterDataLMBCS * extraInfo;
       ulmbcs_byte_t group; 
       UConverter* cnv; 
-      uint16_t mbChar;
-      CompactShortArray *MyCArray;
             
       if (CurByte == ULMBCS_GRP_CTRL)  /* Control character group - no opt group update */
       {
@@ -1056,15 +1054,20 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
       
          else if (group >= ULMBCS_DOUBLEOPTGROUP_START)    /* double byte conversion */
          {
-            ulmbcs_byte_t  HighCh, LowCh;
 
             CHECK_SOURCE_LIMIT(2);
-            HighCh = *(args->source)++; 
-            LowCh = *(args->source)++;
-          /* check for LMBCS doubled-group-byte case */
-            mbChar = (HighCh == group) ? LowCh : (HighCh<<8) | LowCh;
-            MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
-            uniChar = (UChar) ucmp16_getu (MyCArray, mbChar);
+
+            /* check for LMBCS doubled-group-byte case */
+            if (*args->source == group) {
+               /* single byte */
+               ++args->source;
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1);
+            } else {
+               /* double byte */
+               const char *newLimit = args->source + 2;
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, newLimit);
+               args->source = newLimit; /* set the correct limit even in case of an error */
+            }
          }
          else {                                  /* single byte conversion */
             CHECK_SOURCE_LIMIT(1);
@@ -1079,13 +1082,17 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
             /* The non-optimizable oddballs where there is an explicit byte 
              * AND the second byte is not in the upper ascii range
             */
+               const char *s;
+               char bytes[2];
+
                extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
                cnv = extraInfo->OptGrpConverter [ULMBCS_GRP_EXCEPT];  
             
             /* Lookup value must include opt group */
-               mbChar =  (UChar)(group << 8) | (UChar) CurByte;
-               MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
-               uniChar = (UChar) ucmp16_getu(MyCArray, mbChar);
+               bytes[0] = group;
+               bytes[1] = CurByte;
+               s = bytes;
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &s, bytes + 2);
             }
          }
       }
@@ -1096,22 +1103,24 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
          cnv = extraInfo->OptGrpConverter[group];
          if (group >= ULMBCS_DOUBLEOPTGROUP_START)    /* double byte conversion */
          {
-            ulmbcs_byte_t  HighCh, LowCh;
-      
-            if (cnv->sharedData->table->mbcs.starters[CurByte] == FALSE)
+            if (!_MBCSIsLeadByte(cnv->sharedData, CurByte))
             {
                CHECK_SOURCE_LIMIT(0);
-               mbChar = CurByte;
+
+               /* let the MBCS conversion consume CurByte again */
+               --args->source;
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1);
             }
             else
             {
                CHECK_SOURCE_LIMIT(1);
-               HighCh = CurByte;
-               LowCh = *(args->source)++;
-               mbChar = (HighCh<<8) | LowCh;
+
+               /* let the MBCS conversion consume CurByte again */
+               --args->source;
+
+               /* since we know that we start at a lead byte, args->source _will_ be incremented by 2 */
+               uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 2);
             }
-            MyCArray = &cnv->sharedData->table->mbcs.toUnicode;
-            uniChar = (UChar) ucmp16_getu (MyCArray, mbChar);
          }
          else                                   /* single byte conversion */
          {
@@ -1119,14 +1128,15 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
          }
       }
    }
-   if (uniChar == missingUCharMarker)
+   if ((uniChar - 0xfffd) <= 2) /* 0xfffd<=uniChar<=0xffff, was: uniChar == missingUCharMarker */
    {
-       /*It's is very likely that the ErrorFunctor will write to the
+       /*It is very likely that the ErrorFunctor will write to the
        *internal buffers */
 
       /* This code needs updating when new error callbacks are installed */
 
       UChar * pUniChar = (UChar *)&uniChar;
+      *err = U_INVALID_CHAR_FOUND;
       args->target = pUniChar;
       args->targetLimit = pUniChar + 1;
       args->source = saveSource;
