@@ -193,8 +193,8 @@ private:
     le_int32 ensureCapacity();
 
 	RunArray();
-	RunArray(const RunArray &other);
-	RunArray &operator=(const RunArray &other) { return *this; };
+	RunArray(const RunArray & /*other*/);
+	RunArray &operator=(const RunArray & /*other*/) { return *this; };
 
     const le_int32 *fLimits;
           le_int32  fCount;
@@ -202,19 +202,19 @@ private:
 };
 
 inline RunArray::RunArray()
-	: fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
+	: UObject(), fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
 {
 	// nothing else to do...
 }
 
-inline RunArray::RunArray(const RunArray &other)
-	: fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
+inline RunArray::RunArray(const RunArray & /*other*/)
+	: UObject(), fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(0)
 {
 	// nothing else to do...
 }
 
 inline RunArray::RunArray(const le_int32 *limits, le_int32 count)
-    : fClientArrays(true), fLimits(limits), fCount(count), fCapacity(count)
+    : UObject(), fClientArrays(true), fLimits(limits), fCount(count), fCapacity(count)
 {
     // nothing else to do...
 }
@@ -240,11 +240,6 @@ inline le_int32 RunArray::getCount() const
     return fCount;
 }
 
-inline le_int32 RunArray::getLimit() const
-{
-    return getLimit(fCount - 1);
-}
-
 inline le_int32 RunArray::getLimit(le_int32 run) const
 {
     if (run < 0 || run >= fCount) {
@@ -252,6 +247,11 @@ inline le_int32 RunArray::getLimit(le_int32 run) const
     }
 
     return fLimits[run];
+}
+
+inline le_int32 RunArray::getLimit() const
+{
+    return getLimit(fCount - 1);
 }
 
 /**
@@ -358,7 +358,7 @@ private:
 
 	FontRuns();
 	FontRuns(const FontRuns &other);
-	FontRuns &operator=(const FontRuns &other) { return *this; };
+	FontRuns &operator=(const FontRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -375,7 +375,7 @@ inline FontRuns::FontRuns()
 	// nothing else to do...
 }
 
-inline FontRuns::FontRuns(const FontRuns &other)
+inline FontRuns::FontRuns(const FontRuns & /*other*/)
 	: RunArray(0), fFonts(NULL)
 {
 	// nothing else to do...
@@ -507,7 +507,7 @@ private:
 
 	LocaleRuns();
 	LocaleRuns(const LocaleRuns &other);
-	LocaleRuns &operator=(const LocaleRuns &other) { return *this; };
+	LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -524,7 +524,7 @@ inline LocaleRuns::LocaleRuns()
 	// nothing else to do...
 }
 
-inline LocaleRuns::LocaleRuns(const LocaleRuns &other)
+inline LocaleRuns::LocaleRuns(const LocaleRuns & /*other*/)
 	: RunArray(0), fLocales(NULL)
 {
 	// nothing else to do...
@@ -655,7 +655,7 @@ private:
 
 	ValueRuns();
 	ValueRuns(const ValueRuns &other);
-	ValueRuns &operator=(const ValueRuns &other) { return *this; };
+	ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -672,7 +672,7 @@ inline ValueRuns::ValueRuns()
 	// nothing else to do...
 }
 
-inline ValueRuns::ValueRuns(const ValueRuns &other)
+inline ValueRuns::ValueRuns(const ValueRuns & /*other*/)
 	: RunArray(0), fValues(NULL)
 {
 	// nothing else to do...

@@ -41,7 +41,7 @@ U_NAMESPACE_BEGIN
  *
  * @draft ICU 2.2
  */
-class LESwaps /* not : public UObject because all methods are static */ {
+class U_LAYOUT_API LESwaps /* not : public UObject because all methods are static */ {
 public:
 
     /**
@@ -57,7 +57,7 @@ public:
      */
     static le_bool isBigEndian()
     {
-        static const le_uint16 word = 0xFF00;
+        const le_uint16 word = 0xFF00;
 
         return *((le_uint8 *) &word);
     };

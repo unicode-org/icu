@@ -77,6 +77,11 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
         return 0;
     }
 
+    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
     le_int32 worstCase = count * IndicReordering::getWorstCaseExpansion(fScriptCode);
 
     outChars = LE_NEW_ARRAY(LEUnicode, worstCase);

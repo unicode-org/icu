@@ -26,8 +26,8 @@ const char OpenTypeLayoutEngine::fgClassID=0;
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
-    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable),
-      fFeatureOrder(NULL), fSubstitutionFilter(NULL)
+    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fFeatureOrder(NULL),
+      fGSUBTable(gsubTable), fSubstitutionFilter(NULL)
 {
     static le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
     static le_uint32 gposTableTag = LE_GPOS_TABLE_TAG;
@@ -57,8 +57,8 @@ void OpenTypeLayoutEngine::reset()
 }
 
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL),
-      fFeatureOrder(NULL), fSubstitutionFilter(NULL)
+    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fFeatureOrder(NULL),
+      fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
     setScriptAndLanguageTags();
 }
