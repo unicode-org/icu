@@ -15,7 +15,6 @@
 
 #include "iculserv.h"
 
-U_NAMESPACE_BEGIN
 
 class MyListener : public EventListener {
 };
@@ -1417,7 +1416,6 @@ void ICUServiceTest::testCoverage()
 #endif
 }
 
-U_NAMESPACE_END
 
 /* !UCONFIG_NO_SERVICE */
 #endif
