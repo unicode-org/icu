@@ -51,6 +51,12 @@ LOCAL_BUILT_FILES = icudefs.mk
 DOCDIRS = common i18n
 SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(EXTRA) $(TEST) $(SAMPLE)
 
+SECTION = 1
+
+MANX_FILES = config/icu-config.$(SECTION)
+
+ALL_MAN_FILES = $(MANX_FILES)
+
 ## Extra files to install [nothing at present]
 EXTRA_DATA =
 
@@ -112,7 +118,8 @@ clean-recursive-with-twist:
 
 all-local: $(srcdir)/configure $(LOCAL_BUILT_FILES) $(INSTALLED_BUILT_FILES)
 
-install-local: install-icu install-doc
+install-local: install-icu install-doc install-manx
+
 install-icu: $(INSTALLED_BUILT_FILES)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkgdatadir)/config
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
@@ -171,6 +178,7 @@ $(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_bui
 		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config/icu-config-top $(top_srcdir)/config/icu-config-bottom $(top_builddir)/config/Makefile.inc @platform_make_fragment@ $(top_srcdir)/config/make2sh.sed
+	-$(RMV) $@
 	cp $(top_srcdir)/config/icu-config-top $@
 	@echo "# Following from @platform_make_fragment@" >> $@
 	sed -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
@@ -181,3 +189,10 @@ $(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config
 config.status: $(srcdir)/configure
 	$(SHELL) ./config.status --recheck
 
+install-manx: $(MANX_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
