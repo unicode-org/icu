@@ -13,18 +13,19 @@
  
 package com.ibm.icu.dev.test.collator;
 
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UProperty;
-import com.ibm.icu.text.*;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.dev.test.util.*;
 
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
+import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UnicodeSet;
 
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.util.BNF;
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.Quoter;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
-import java.io.*;
-import java.util.Date;
 import java.util.Random;
 
 public class RandomCollator extends TestFmwk {
@@ -53,7 +54,7 @@ public class RandomCollator extends TestFmwk {
             System.out.println("\nTestRandom skipped for 2003");
             return;
         }
-        String fileName;
+
         PrintWriter pw = BagFormatter.openUTF8Writer("", "RandomCollationTestLog.txt", BagFormatter.CONSOLE);
         TestCollator tc = new TestCollator(chars);
         pw.println("Collation Test Run");
