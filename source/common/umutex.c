@@ -66,7 +66,12 @@
 #endif /* POSIX && (ICU_USE_THREADS==1) */
 
 #ifdef WIN32
-# include <WINDOWS.H>
+# define WIN32_LEAN_AND_MEAN
+# define NOUSER
+# define NOSERVICE
+# define NOIME
+# define NOMCX
+# include <windows.h>
 #endif
 
 #include "umutex.h"
