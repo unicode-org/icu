@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+bg_BG {
+    Version { "1.1" }
+    CurrencyElements { 
+        "\u043B\u0432",
+        "BGL",
+        ",",
+    }
+//    LocaleString { "bg_BG" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "BGR" }
+    LocaleID:int { 0x0402 }
+}

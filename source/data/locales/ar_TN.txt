@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar_TN {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "\u062F.\u062A.\u200F",
+        "TND",
+        ".",
+    }
+    NumberPatterns { 
+        "#,##0.###;#,##0.###-",
+        "\u00A4 #,##0.000;\u00A4 #,##0.000-",
+        "#,##0%",
+        "#E0",
+    }
+//    LocaleString { "ar_TN" }
+//    ShortCountry { "TUN" }
+    LocaleID:int { 0x1c01 }
+}

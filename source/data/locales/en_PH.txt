@@ -1,0 +1,52 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_PH {
+    Version{"1.0"}
+//    AmPmMarkers { 
+//        "AM",
+//        "PM",
+//    }
+
+    CurrencyElements { 
+        "Php",
+        "PHP",
+        ".",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM d, yyyy",
+        "MMMM d, yyyy",
+        "MM d, yy",
+        "M/d/yy",
+        "{1} {0}",
+    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    LocaleID:int { 0x3409 }
+
+}

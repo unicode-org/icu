@@ -1,0 +1,90 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+af {
+    Version { "2.0" }
+
+    AmPmMarkers { 
+        "VM",
+        "NM",
+    }
+    DayAbbreviations { 
+        "So",
+        "Ma",
+        "Di",
+        "Wo",
+        "Do",
+        "Vr",
+        "Sa",
+    }
+    DayNames { 
+        "Sondag",
+        "Maandag",
+        "Dinsdag",
+        "Woensdag",
+        "Donderdag",
+        "Vrydag",
+        "Saterdag",
+    }
+    MonthAbbreviations { 
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
+    }
+    MonthNames { 
+        "Januarie",
+        "Februarie",
+        "Maart",
+        "April",
+        "Mei",
+        "Junie",
+        "Julie",
+        "Augustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
+    }
+
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+    LocaleID:int { 0x36 }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00e8 \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00eb \u00ef \u00f6]" }
+//    LocaleScript{ 
+//                "Latn",  // ISO 15924 Name 
+//    }
+//    LocaleString{ "af" }
+
+    // /**************** Info Below is needed ****************/
+    // CollationElements{}
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
+}

@@ -1,0 +1,110 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ca {
+    Version { "1.0" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "[backwards 2]"
+        "&C < ch <<< Ch <<< CH"
+        "&L < ll <<< l\u00b7l <<< Ll <<< L\u00b7l <<< LL <<< L\u00b7L" }
+    }
+    Countries { 
+        ES { "Espanya" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE dd MMMM yyyy",
+        "d MMMM yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "dg.",
+        "dl.",
+        "dt.",
+        "dc.",
+        "dj.",
+        "dv.",
+        "ds.",
+    }
+    DayNames { 
+        "diumenge",
+        "dilluns",
+        "dimarts",
+        "dimecres",
+        "dijous",
+        "divendres",
+        "dissabte",
+    }
+    Languages { 
+        ca { "catal\u00E0" }
+    }
+    LocaleID:int { 0x03 }
+//    LocaleString { "ca" }
+    MonthAbbreviations { 
+        "gen.",
+        "feb.",
+        "mar\u00E7",
+        "abr.",
+        "maig",
+        "juny",
+        "jul.",
+        "ag.",
+        "set.",
+        "oct.",
+        "nov.",
+        "des.",
+    }
+    MonthNames { 
+        "gener",
+        "febrer",
+        "mar\u00E7",
+        "abril",
+        "maig",
+        "juny",
+        "juliol",
+        "agost",
+        "setembre",
+        "octubre",
+        "novembre",
+        "desembre",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "cat" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//                "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e8 \u00f2 \u00ef \u00fc \u0140 \u00e7 \u00f1]" }
+
+}

@@ -1,0 +1,22 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_BE_PREEURO {
+    Version { "1.0" }
+    CurrencyElements {
+        "BF",
+        "BEF",
+        ",",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00a4;-#,##0.00 \u00a4",
+        "#,##0%",
+        "#E0",
+    }
+
+}

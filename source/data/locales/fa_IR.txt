@@ -1,0 +1,47 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+// Created by Roozbeh Pournader <roozbeh@sharif.edu>
+
+fa_IR {
+    Version { "2.0" }
+    CurrencyElements {
+        "\ufdfc",
+        "IRR",
+        "\u066b",
+    }
+    DateTimeElements:intvector {
+        7,      // Saturday
+        1,
+    }
+    LocaleID:int { 0x0429 }
+    // The following is used for INR (fa_IN) and IRR (fa_IR).  If
+    // currency patterns need to be different for India and Iran
+    // then copy this into fa_IN and fa_IR and delete it from
+    // here, and modify each copy appropriately.  Both INR and IRR
+    // appear to use 2 fraction digits.
+    NumberPatterns { 
+        "#,##0.###",
+        "#,##0.00\u00a4;#,##0.00- \u00a4",
+        "#,##0%",
+        "#E0",
+    }
+    NumberElements { 
+        "\u066b",
+        "\u066c",
+        ";",
+        "\u066a",
+        "\u06f0",
+        "#",
+        "-",
+        "\u00d7\u06f1\u06f0^",
+        "\u2030",
+        "\u221e",
+        "\ufffd",
+    }
+}
+

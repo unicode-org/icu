@@ -1,0 +1,47 @@
+//*******************************************************************************
+//*
+//*   Copyright (C) 2002, International Business Machines
+//*   Corporation and others.  All Rights Reserved.
+//*
+//*******************************************************************************
+
+
+// This is a test resource to check whether the aliasing mechanism works
+// as advertised
+
+testaliases
+{
+    // This should produce an error - circular alias
+    aaa:alias { "testaliases/aab" } // Test circular dependency protection
+    aab:alias { "testaliases/aaa" }
+
+    // aliasing nonexist position
+    nonexisting:alias { "/ICUDATA/uk" }
+
+    // aliasing to another resource
+    simplealias:alias { "testtypes/menu/file/open" } // simple referencing
+
+    // alias that uses another alias and references parts of the end structure
+    referencingalias:alias { "testaliases/anotheralias/Sequence" } // Referencing through another alias
+    anotheralias:alias { "/ICUDATA/uk/CollationElements" }
+
+    // aliasing using position
+    CollationElements:alias { "/ICUDATA/uk" } // Referencing corresponding resource in another bundle
+
+    // aliasing arrays
+    zoneTests {
+        zoneAlias:alias { "/ICUDATA/en/zoneStrings" } // Referencing by index
+        zoneAlias1:alias { "/ICUDATA/en/zoneStrings/3" } // Referencing by index
+        zoneAlias2:alias { "/ICUDATA/en/zoneStrings/3/0" } // Referencing by index
+    }
+
+    // Test aliasing parts of an array using position
+    zoneStrings { 
+        :alias { "/ICUDATA/en" } 
+        :alias { "/ICUDATA/en" } 
+    }
+}
+
+//eof
+
+

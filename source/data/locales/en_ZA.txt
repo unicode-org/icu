@@ -1,0 +1,47 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_ZA {
+    Version { "1.0" }
+//    Duplicated in parent
+//    Countries { 
+//        US { "United States" }
+//        GB { "United Kingdom" }
+//        CA { "Canada" }
+//        IE { "Ireland" }
+//        ZA { "South Africa" }
+//    }
+    CurrencyElements { 
+        "R",
+        "ZAR",
+        ".",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd MMM yyyy",
+        "yyyy/MM/dd",
+        "{1} {0}",
+    }
+//    Duplicated in parent
+//    Languages { 
+//        en { "English" }
+//    }
+    LocaleID:int { 0x1c09 }
+//    LocaleString { "en_ZA" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "ZAF" }
+}

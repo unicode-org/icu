@@ -1,0 +1,28 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ca_ES {
+    Version{ "1.0" }
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    LocaleString { "ca_ES" }
+//    ShortCountry { "ESP" }
+    LocaleID:int { 0x0403 }
+}
