@@ -21,13 +21,15 @@ UNICODE_VERSION=3.1.1
 !IF "$(ICUDBLD)"==""
 !ERROR Can't find ICUDBLD (ICU Data Build dir, should point to icu\source\data\build\ )!
 !ENDIF
-!MESSAGE icu data build path is $(ICUDBLD)
+!MESSAGE ICU data build path is $(ICUDBLD)
 
 
 #  ICUP
 #     The root of the ICU source directory tree
 #
 ICUP=$(ICUDBLD)\..\..\..
+ICUP=$(ICUP:\source\data\build\..\..\..=)
+!MESSAGE ICU data root path is $(ICUP)
 
 
 #
@@ -235,33 +237,33 @@ CLEAN :
 
 
 
-# Inference rule for creating converters, with a kludge to create
-# c versions of converters at the same time
-{$(ICUDATA)}.ucm.cnv::
+# Targets for test converter data
+"$(TESTDATAOUT)\test1.cnv": "$(TESTDATA)\test1.ucm"
+	@cd "$(ICUDATA)"
+	@set ICU_DATA=$(TESTDATAOUT)
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+"$(TESTDATAOUT)\test3.cnv": "$(TESTDATA)\test3.ucm"
+	@cd "$(ICUDATA)"
+	@set ICU_DATA=$(TESTDATAOUT)
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+"$(TESTDATAOUT)\test4.cnv": "$(TESTDATA)\test4.ucm"
+	@cd "$(ICUDATA)"
+	@set ICU_DATA=$(TESTDATAOUT)
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+# Batch inference rule for creating converters
+{"$(ICUDATA)"}.ucm.cnv::
 	@echo Generating converters and c source files
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
-# Targets for test converter data
-$(TESTDATAOUT)\test1.cnv: "$(TESTDATA)\test1.ucm"
-	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(TESTDATAOUT)
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
-
-$(TESTDATAOUT)\test3.cnv: "$(TESTDATA)\test3.ucm"
-	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(TESTDATAOUT)
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
-
-$(TESTDATAOUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
-	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(TESTDATAOUT)
-	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
-
-{$(ICUDATA)}.txt.res:
+# Inference rule for creating converters
+{"$(ICUDATA)"}.txt.res:
 	@echo Making Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s$(ICUDATA) -d$(@D) $(?F)
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(ICUDATA)" -d$(@D) $(?F)
 
 # DLL version information
 icudata.res: "$(ICUDATA)\icudata.rc"
@@ -272,7 +274,7 @@ icudata.res: "$(ICUDATA)\icudata.rc"
 unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) $(ICUDATA)\unidata\UnicodeData.txt
+	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) "$(ICUDATA)\unidata\UnicodeData.txt"
 
 # Targets for uprops.dat
 uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
@@ -290,7 +292,7 @@ unorm.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUDATA)\unidata\DerivedNorma
 cnvalias.dat : {"$(ICUDATA)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
 	@echo Creating data file for Converter Aliases
 	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" $(ICUDATA)\convrtrs.txt
+	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" "$(ICUDATA)\convrtrs.txt"
 
 # Targets for tz
 tz.dat : {"$(ICUDATA)"}timezone.txt {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
@@ -306,7 +308,7 @@ ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\g
 
 invuca.dat: ucadata.dat
 
-$(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
+$(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
 {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat uprops.dat unorm.dat
 
