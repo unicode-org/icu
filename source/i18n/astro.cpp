@@ -13,9 +13,9 @@
 #include "math.h"
 #include <float.h>
 #include "unicode/putil.h"
+#include <stdio.h>  // for toString()
 
 #ifdef U_DEBUG_ASTRO
-# include <stdio.h>
 # include "uresimp.h" // for debugging
 
 static void debug_astro_loc(const char *f, int32_t l)
@@ -56,117 +56,117 @@ static inline UBool isINVALID(double d) {
 }
 
 /**
-     * The number of standard hours in one sidereal day.
-     * Approximately 24.93.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The number of standard hours in one sidereal day.
+ * Approximately 24.93.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::SIDEREAL_DAY = 23.93446960027;
     
 /**
-     * The number of sidereal hours in one mean solar day.
-     * Approximately 24.07.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The number of sidereal hours in one mean solar day.
+ * Approximately 24.07.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::SOLAR_DAY =  24.065709816;
     
 /**
-     * The average number of solar days from one new moon to the next.  This is the time
-     * it takes for the moon to return the same ecliptic longitude as the sun.
-     * It is longer than the sidereal month because the sun's longitude increases
-     * during the year due to the revolution of the earth around the sun.
-     * Approximately 29.53.
-     *
-     * @see #SIDEREAL_MONTH
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The average number of solar days from one new moon to the next.  This is the time
+ * it takes for the moon to return the same ecliptic longitude as the sun.
+ * It is longer than the sidereal month because the sun's longitude increases
+ * during the year due to the revolution of the earth around the sun.
+ * Approximately 29.53.
+ *
+ * @see #SIDEREAL_MONTH
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::SYNODIC_MONTH = 29.530588853;
     
 /**
-     * The average number of days it takes
-     * for the moon to return to the same ecliptic longitude relative to the
-     * stellar background.  This is referred to as the sidereal month.
-     * It is shorter than the synodic month due to
-     * the revolution of the earth around the sun.
-     * Approximately 27.32.
-     *
-     * @see #SYNODIC_MONTH
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The average number of days it takes
+ * for the moon to return to the same ecliptic longitude relative to the
+ * stellar background.  This is referred to as the sidereal month.
+ * It is shorter than the synodic month due to
+ * the revolution of the earth around the sun.
+ * Approximately 27.32.
+ *
+ * @see #SYNODIC_MONTH
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::SIDEREAL_MONTH = 27.32166;
     
 /**
-     * The average number number of days between successive vernal equinoxes.
-     * Due to the precession of the earth's
-     * axis, this is not precisely the same as the sidereal year.
-     * Approximately 365.24
-     *
-     * @see #SIDEREAL_YEAR
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The average number number of days between successive vernal equinoxes.
+ * Due to the precession of the earth's
+ * axis, this is not precisely the same as the sidereal year.
+ * Approximately 365.24
+ *
+ * @see #SIDEREAL_YEAR
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::TROPICAL_YEAR = 365.242191;
-    
+
 /**
-     * The average number of days it takes
-     * for the sun to return to the same position against the fixed stellar
-     * background.  This is the duration of one orbit of the earth about the sun
-     * as it would appear to an outside observer.
-     * Due to the precession of the earth's
-     * axis, this is not precisely the same as the tropical year.
-     * Approximately 365.25.
-     *
-     * @see #TROPICAL_YEAR
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The average number of days it takes
+ * for the sun to return to the same position against the fixed stellar
+ * background.  This is the duration of one orbit of the earth about the sun
+ * as it would appear to an outside observer.
+ * Due to the precession of the earth's
+ * axis, this is not precisely the same as the tropical year.
+ * Approximately 365.25.
+ *
+ * @see #TROPICAL_YEAR
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::SIDEREAL_YEAR = 365.25636;
 
 //-------------------------------------------------------------------------
 // Time-related constants
 //-------------------------------------------------------------------------
 
-    /** 
-     * The number of milliseconds in one second. 
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+/** 
+ * The number of milliseconds in one second. 
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const int32_t  CalendarAstronomer::SECOND_MS = 1000;
 
 /** 
-     * The number of milliseconds in one minute. 
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The number of milliseconds in one minute. 
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const int32_t  CalendarAstronomer::MINUTE_MS = 60*SECOND_MS;
 
 /** 
-     * The number of milliseconds in one hour. 
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The number of milliseconds in one hour. 
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const int32_t  CalendarAstronomer::HOUR_MS   = 60*MINUTE_MS;
 
 /** 
-     * The number of milliseconds in one day. 
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The number of milliseconds in one day. 
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const  double CalendarAstronomer::DAY_MS    = 24.*HOUR_MS;
 
 /**
-     * The start of the julian day numbering scheme used by astronomers, which
-     * is 1/1/4713 BC (Julian), 12:00 GMT.  This is given as the number of milliseconds
-     * since 1/1/1970 AD (Gregorian), a negative number.
-     * Note that julian day numbers and
-     * the Julian calendar are <em>not</em> the same thing.  Also note that
-     * julian days start at <em>noon</em>, not midnight.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The start of the julian day numbering scheme used by astronomers, which
+ * is 1/1/4713 BC (Julian), 12:00 GMT.  This is given as the number of milliseconds
+ * since 1/1/1970 AD (Gregorian), a negative number.
+ * Note that julian day numbers and
+ * the Julian calendar are <em>not</em> the same thing.  Also note that
+ * julian days start at <em>noon</em>, not midnight.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const double CalendarAstronomer::JULIAN_EPOCH_MS = -210866760000000.0;
     
     
@@ -179,7 +179,7 @@ const double CalendarAstronomer::EPOCH_2000_MS = 946598400000.0;
 // Assorted private data used for conversions
 //-------------------------------------------------------------------------
 
-    // My own copies of these so compilers are more likely to optimize them away
+// My own copies of these so compilers are more likely to optimize them away
 const double CalendarAstronomer::PI = 3.14159265358979323846;
 const double CalendarAstronomer::PI2 = CalendarAstronomer::PI * 2.0;
 const double CalendarAstronomer::RAD_HOUR = 12 / CalendarAstronomer::PI;        // radians -> hours
@@ -239,18 +239,18 @@ CalendarAstronomer::~CalendarAstronomer()
 // Time and date getters and setters
 //-------------------------------------------------------------------------
     
-    /**
-     * Set the current date and time of this <code>CalendarAstronomer</code> object.  All
-     * astronomical calculations are performed based on this time setting.
-     *
-     * @param aTime the date and time, expressed as the number of milliseconds since
-     *              1/1/1970 0:00 GMT (Gregorian).
-     *
-     * @see #setDate
-     * @see #getTime
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+/**
+ * Set the current date and time of this <code>CalendarAstronomer</code> object.  All
+ * astronomical calculations are performed based on this time setting.
+ *
+ * @param aTime the date and time, expressed as the number of milliseconds since
+ *              1/1/1970 0:00 GMT (Gregorian).
+ *
+ * @see #setDate
+ * @see #getTime
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 void CalendarAstronomer::setTime(UDate aTime) {
   fTime = aTime;
   U_DEBUG_ASTRO_MSG(("setTime(%.1lf, %sL)\n", aTime, debug_astro_date(aTime+fGmtOffset)));
@@ -310,13 +310,13 @@ double CalendarAstronomer::getJulianDay() {
 }
     
 /**
-     * Return this object's time expressed in julian centuries:
-     * the number of centuries after 1/1/1900 AD, 12:00 GMT
-     *
-     * @see #getJulianDay
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Return this object's time expressed in julian centuries:
+ * the number of centuries after 1/1/1900 AD, 12:00 GMT
+ *
+ * @see #getJulianDay
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 double CalendarAstronomer::getJulianCentury() {
   if (isINVALID(julianCentury)) {
     julianCentury = (getJulianDay() - 2415020.0) / 36525;
@@ -325,10 +325,10 @@ double CalendarAstronomer::getJulianCentury() {
 }
 
 /**
-     * Returns the current Greenwich sidereal time, measured in hours
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Returns the current Greenwich sidereal time, measured in hours
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 double CalendarAstronomer::getGreenwichSidereal() {
   if (isINVALID(siderealTime)) {
     // See page 86 of "Practial Astronomy with your Calculator",
@@ -352,23 +352,23 @@ double CalendarAstronomer::getSiderealOffset() {
 }
     
 /**
-     * Returns the current local sidereal time, measured in hours
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Returns the current local sidereal time, measured in hours
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 double CalendarAstronomer::getLocalSidereal() {
   return normalize(getGreenwichSidereal() + (double)fGmtOffset/HOUR_MS, 24);
 }
     
 /**
-     * Converts local sidereal time to Universal Time.
-     *
-     * @param lst   The Local Sidereal Time, in hours since sidereal midnight
-     *              on this object's current date.
-     *
-     * @return      The corresponding Universal Time, in milliseconds since
-     *              1 Jan 1970, GMT.  
-     */
+ * Converts local sidereal time to Universal Time.
+ *
+ * @param lst   The Local Sidereal Time, in hours since sidereal midnight
+ *              on this object's current date.
+ *
+ * @return      The corresponding Universal Time, in milliseconds since
+ *              1 Jan 1970, GMT.  
+ */
 double CalendarAstronomer::lstToUT(double lst) {
   // Convert to local mean time
   double lt = normalize((lst - getSiderealOffset()) * 0.9972695663, 24);
@@ -387,29 +387,29 @@ double CalendarAstronomer::lstToUT(double lst) {
 // Coordinate transformations, all based on the current time of this object
 //-------------------------------------------------------------------------
 
-    /**
-     * Convert from ecliptic to equatorial coordinates.
-     *
-     * @param ecliptic  A point in the sky in ecliptic coordinates.
-     * @return          The corresponding point in equatorial coordinates.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+/**
+ * Convert from ecliptic to equatorial coordinates.
+ *
+ * @param ecliptic  A point in the sky in ecliptic coordinates.
+ * @return          The corresponding point in equatorial coordinates.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Equatorial& result, const CalendarAstronomer::Ecliptic& ecliptic) 
 {
   return eclipticToEquatorial(result, ecliptic.longitude, ecliptic.latitude);
 }
 
 /**
-     * Convert from ecliptic to equatorial coordinates.
-     *
-     * @param eclipLong     The ecliptic longitude
-     * @param eclipLat      The ecliptic latitude
-     *
-     * @return              The corresponding point in equatorial coordinates.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Convert from ecliptic to equatorial coordinates.
+ *
+ * @param eclipLong     The ecliptic longitude
+ * @param eclipLat      The ecliptic latitude
+ *
+ * @return              The corresponding point in equatorial coordinates.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Equatorial& result, double eclipLong, double eclipLat) 
 {
   // See page 42 of "Practial Astronomy with your Calculator",
@@ -427,19 +427,19 @@ CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(Calenda
   double tanB = tan(eclipLat);
         
   result.set(atan2(sinL*cosE - tanB*sinE, cosL),
-              asin(sinB*cosE + cosB*sinE*sinL) );
+             asin(sinB*cosE + cosB*sinE*sinL) );
   return result;
 }
 
 /**
-     * Convert from ecliptic longitude to equatorial coordinates.
-     *
-     * @param eclipLong     The ecliptic longitude
-     *
-     * @return              The corresponding point in equatorial coordinates.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Convert from ecliptic longitude to equatorial coordinates.
+ *
+ * @param eclipLong     The ecliptic longitude
+ *
+ * @return              The corresponding point in equatorial coordinates.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 CalendarAstronomer::Equatorial& CalendarAstronomer::eclipticToEquatorial(CalendarAstronomer::Equatorial& result, double eclipLong) 
 {
   return eclipticToEquatorial(result, eclipLong, 0);  // TODO: optimize
@@ -475,10 +475,10 @@ CalendarAstronomer::Horizon& CalendarAstronomer::eclipticToHorizon(CalendarAstro
 // The Sun
 //-------------------------------------------------------------------------
 
-    //
-    // Parameters of the Sun's orbit as of the epoch Jan 0.0 1990
-    // Angles are in radians (after multiplying by CalendarAstronomer::PI/180)
-    //
+//
+// Parameters of the Sun's orbit as of the epoch Jan 0.0 1990
+// Angles are in radians (after multiplying by CalendarAstronomer::PI/180)
+//
 const double CalendarAstronomer::JD_EPOCH = 2447891.5; // Julian day of epoch
 
 const double CalendarAstronomer::SUN_ETA_G   = 279.403303 * CalendarAstronomer::PI/180; // Ecliptic longitude at epoch
@@ -532,18 +532,18 @@ const double CalendarAstronomer::SUN_E      =   0.016713;          // Eccentrici
 //      return 0.01675104 - (0.0000418 + 0.000000126*T)*T;
 //  }
 
-    /**
-     * The longitude of the sun at the time specified by this object.
-     * The longitude is measured in radians along the ecliptic
-     * from the "first point of Aries," the point at which the ecliptic
-     * crosses the earth's equatorial plane at the vernal equinox.
-     * <p>
-     * Currently, this method uses an approximation of the two-body Kepler's
-     * equation for the earth and the sun.  It does not take into account the
-     * perturbations caused by the other planets, the moon, etc.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+/**
+ * The longitude of the sun at the time specified by this object.
+ * The longitude is measured in radians along the ecliptic
+ * from the "first point of Aries," the point at which the ecliptic
+ * crosses the earth's equatorial plane at the vernal equinox.
+ * <p>
+ * Currently, this method uses an approximation of the two-body Kepler's
+ * equation for the earth and the sun.  It does not take into account the
+ * perturbations caused by the other planets, the moon, etc.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 double CalendarAstronomer::getSunLongitude()
 {
   // See page 86 of "Practial Astronomy with your Calculator",
@@ -556,8 +556,8 @@ double CalendarAstronomer::getSunLongitude()
 }
   
 /**
-     * TODO Make this public when the entire class is package-private.
-     */
+ * TODO Make this public when the entire class is package-private.
+ */
 /*public*/ void CalendarAstronomer::getSunLongitude(double julianDay, double &longitude, double &meanAnomaly)
 {
   // See page 86 of "Practial Astronomy with your Calculator",
@@ -569,8 +569,8 @@ double CalendarAstronomer::getSunLongitude()
   // circular orbit has travelled since the epoch.
   double epochAngle = norm2PI(PI2/TROPICAL_YEAR*day);
         
-        // The epoch wasn't at the sun's perigee; find the angular distance
-        // since perigee, which is called the "mean anomaly"
+  // The epoch wasn't at the sun's perigee; find the angular distance
+  // since perigee, which is called the "mean anomaly"
   meanAnomaly = norm2PI(epochAngle + SUN_ETA_G - SUN_OMEGA_G);
         
   // Now find the "true anomaly", e.g. the real solar longitude
@@ -581,11 +581,11 @@ double CalendarAstronomer::getSunLongitude()
 }
 
 /**
-     * The position of the sun at this object's current date and time,
-     * in equatorial coordinates.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * The position of the sun at this object's current date and time,
+ * in equatorial coordinates.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 CalendarAstronomer::Equatorial& CalendarAstronomer::getSunPosition(CalendarAstronomer::Equatorial& result) {
   return eclipticToEquatorial(result, getSunLongitude(), 0);
 }
@@ -601,38 +601,38 @@ CalendarAstronomer::Equatorial& CalendarAstronomer::getSunPosition(CalendarAstro
 const CalendarAstronomer::SolarLongitude CalendarAstronomer::VERNAL_EQUINOX  =  CalendarAstronomer::SolarLongitude(0);
     
 /**
-     * Constant representing the summer solstice.
-     * For use with {@link #getSunTime getSunTime}.
-     * Note: In this case, "summer" refers to the northern hemisphere's seasons.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Constant representing the summer solstice.
+ * For use with {@link #getSunTime getSunTime}.
+ * Note: In this case, "summer" refers to the northern hemisphere's seasons.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const CalendarAstronomer::SolarLongitude CalendarAstronomer::SUMMER_SOLSTICE =  CalendarAstronomer::SolarLongitude(PI/2);
     
 /**
-     * Constant representing the autumnal equinox.
-     * For use with {@link #getSunTime getSunTime}.
-     * Note: In this case, "autumn" refers to the northern hemisphere's seasons.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Constant representing the autumnal equinox.
+ * For use with {@link #getSunTime getSunTime}.
+ * Note: In this case, "autumn" refers to the northern hemisphere's seasons.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const CalendarAstronomer::SolarLongitude CalendarAstronomer::AUTUMN_EQUINOX  =  CalendarAstronomer::SolarLongitude(PI);
     
 /**
-     * Constant representing the winter solstice.
-     * For use with {@link #getSunTime getSunTime}.
-     * Note: In this case, "winter" refers to the northern hemisphere's seasons.
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Constant representing the winter solstice.
+ * For use with {@link #getSunTime getSunTime}.
+ * Note: In this case, "winter" refers to the northern hemisphere's seasons.
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 const CalendarAstronomer::SolarLongitude CalendarAstronomer::WINTER_SOLSTICE =  CalendarAstronomer::SolarLongitude((PI*3)/2);
     
 /**
-     * Find the next time at which the sun's ecliptic longitude will have
-     * the desired value.  
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Find the next time at which the sun's ecliptic longitude will have
+ * the desired value.  
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 class SunTimeAngleFunc : public CalendarAstronomer::AngleFunc {
 public:
   virtual double eval(CalendarAstronomer& a) { return a.getSunLongitude(); }
@@ -649,11 +649,11 @@ UDate CalendarAstronomer::getSunTime(double desired, UBool next)
 }
     
 /**
-     * Find the next time at which the sun's ecliptic longitude will have
-     * the desired value.  
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+ * Find the next time at which the sun's ecliptic longitude will have
+ * the desired value.  
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 UDate CalendarAstronomer::getSunTime(const SolarLongitude& desired, UBool next) {
   return getSunTime(desired.value, next);
 }
@@ -957,9 +957,9 @@ UDate CalendarAstronomer::getSunRiseSet(UBool rise)
 //        return midnight + (long) (result * 3600000 / 15);
 //    }
 
-    //-------------------------------------------------------------------------
-    // The Moon
-    //-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+// The Moon
+//-------------------------------------------------------------------------
     
 const double CalendarAstronomer::moonL0 = 318.351648 * CalendarAstronomer::PI/180;   // Mean long. at epoch
 const double CalendarAstronomer::moonP0 =  36.340410 * CalendarAstronomer::PI/180;   // Mean long. of perigee
@@ -1209,7 +1209,7 @@ UDate CalendarAstronomer::timeOfAngle(AngleFunc& func, double desired,
         
   // Using the average period, estimate the next (or previous) time at
   // which the desired angle occurs.
-  double deltaT =  (deltaAngle + (next ? 0 : -PI2)) * (periodDays*DAY_MS) / CalendarAstronomer::PI2;
+  double deltaT =  (deltaAngle + (next ? 0.0 : -CalendarAstronomer::PI2)) * (periodDays*CalendarAstronomer::DAY_MS) / CalendarAstronomer::PI2;
         
   double lastDeltaT = deltaT; // Liu
   UDate startTime = fTime; // Liu
@@ -1309,18 +1309,18 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
 }
     
 /**
-     * Find the "true anomaly" (longitude) of an object from
-     * its mean anomaly and the eccentricity of its orbit.  This uses
-     * an iterative solution to Kepler's equation.
-     *
-     * @param meanAnomaly   The object's longitude calculated as if it were in
-     *                      a regular, circular orbit, measured in radians
-     *                      from the point of perigee.  
-     *
-     * @param eccentricity  The eccentricity of the orbit
-     *
-     * @return The true anomaly (longitude) measured in radians
-     */
+ * Find the "true anomaly" (longitude) of an object from
+ * its mean anomaly and the eccentricity of its orbit.  This uses
+ * an iterative solution to Kepler's equation.
+ *
+ * @param meanAnomaly   The object's longitude calculated as if it were in
+ *                      a regular, circular orbit, measured in radians
+ *                      from the point of perigee.  
+ *
+ * @param eccentricity  The eccentricity of the orbit
+ *
+ * @return The true anomaly (longitude) measured in radians
+ */
 double CalendarAstronomer::trueAnomaly(double meanAnomaly, double eccentricity)
 {
   // First, solve Kepler's equation iteratively
@@ -1338,13 +1338,13 @@ double CalendarAstronomer::trueAnomaly(double meanAnomaly, double eccentricity)
 }
     
 /**
-     * Return the obliquity of the ecliptic (the angle between the ecliptic
-     * and the earth's equator) at the current time.  This varies due to
-     * the precession of the earth's axis.
-     *
-     * @return  the obliquity of the ecliptic relative to the equator,
-     *          measured in radians.
-     */
+ * Return the obliquity of the ecliptic (the angle between the ecliptic
+ * and the earth's equator) at the current time.  This varies due to
+ * the precession of the earth's axis.
+ *
+ * @return  the obliquity of the ecliptic relative to the equator,
+ *          measured in radians.
+ */
 double CalendarAstronomer::eclipticObliquity() {
   if (isINVALID(eclipObliquity)) {
     const double epoch = 2451545.0;     // 2000 AD, January 1.5
@@ -1385,18 +1385,18 @@ void CalendarAstronomer::clearCache() {
 //    System.out.println(s);
 //}
     
-    //private static String deg(double rad) {
-    //    return Double.toString(rad * RAD_DEG);
-    //}
+//private static String deg(double rad) {
+//    return Double.toString(rad * RAD_DEG);
+//}
     
-    //private static String hours(long ms) {
-    //    return Double.toString((double)ms / HOUR_MS) + " hours";
-    //}
+//private static String hours(long ms) {
+//    return Double.toString((double)ms / HOUR_MS) + " hours";
+//}
 
-    /**
-     * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
-     */
+/**
+ * @internal
+ * @deprecated ICU 2.4. This class may be removed or modified.
+ */
 UDate CalendarAstronomer::local(UDate localMillis) {
   // TODO - srl ?
   TimeZone *tz = TimeZone::createDefault();
@@ -1406,6 +1406,29 @@ UDate CalendarAstronomer::local(UDate localMillis) {
   tz->getOffset(localMillis, TRUE, rawOffset, dstOffset, status);
   delete tz;
   return localMillis - rawOffset;
+}
+
+// Debugging functions
+UnicodeString CalendarAstronomer::Ecliptic::toString() const 
+{
+  char tmp[800];
+  sprintf(tmp, "[%.5f,%.5f]", longitude*RAD_DEG, latitude*RAD_DEG);
+  return UnicodeString(tmp, "");
+}
+
+UnicodeString CalendarAstronomer::Equatorial::toString() const 
+{
+  char tmp[400];
+  sprintf(tmp, "%f,%f", 
+          (ascension*RAD_DEG), (declination*RAD_DEG));
+  return UnicodeString(tmp, "");
+}
+
+UnicodeString CalendarAstronomer::Horizon::toString() const 
+{
+  char tmp[800];
+  sprintf(tmp, "[%.5f,%.5f]", altitude*RAD_DEG, azimuth*RAD_DEG);
+  return UnicodeString(tmp, "");
 }
 
 
@@ -1425,5 +1448,6 @@ UDate CalendarAstronomer::local(UDate localMillis) {
 //    return Integer.toString(deg) + "\u00b0" + min + "'" + sec + "\"";
 //  }
 
-#endif //  !UCONFIG_NO_FORMATTING
 
+
+#endif //  !UCONFIG_NO_FORMATTING
