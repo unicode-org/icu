@@ -391,7 +391,7 @@ typedef void* UClassID;
 #define U_LAYOUT_API   U_IMPORT
 #define U_LAYOUTEX_API U_EXPORT
 #define U_IO_API       U_IMPORT
-#elif defined(U_USTDIO_IMPLEMENTATION)
+#elif defined(U_IO_IMPLEMENTATION)
 #define U_DATA_API     U_IMPORT
 #define U_COMMON_API   U_IMPORT
 #define U_I18N_API     U_IMPORT
