@@ -661,53 +661,68 @@ LMBCSConversionWorker (
    ulmbcs_byte_t  * pLMBCS = pStartLMBCS;
    UConverter * xcnv = extraInfo->OptGrpConverter[group];
 
-   ulmbcs_byte_t  mbChar [ULMBCS_CHARSIZE_MAX];
-   ulmbcs_byte_t  * pmbChar = mbChar;
-   UBool isDoubleByteGroup = (UBool)((group >= ULMBCS_DOUBLEOPTGROUP_START) ? TRUE : FALSE);
-   UErrorCode localErr = U_ZERO_ERROR;
-   int bytesConverted =0;
+   int bytesConverted;
+   uint32_t value;
+   ulmbcs_byte_t firstByte;
 
    MyAssert(xcnv);
    MyAssert(group<ULMBCS_GRP_UNICODE);
 
-   ucnv_fromUnicode(
-      xcnv, 
-      (char **)&pmbChar,(char *)mbChar+sizeof(mbChar),
-      (const UChar **)&pUniChar,pUniChar+1,
-      NULL,TRUE,&localErr);
-   bytesConverted = pmbChar - mbChar;
-   pmbChar = mbChar;
+   bytesConverted = _MBCSFromUChar32(xcnv->sharedData, *pUniChar, &value, FALSE);
 
-   /* most common failure mode is the sub-converter using the substitution char (0x7f for our converters)
-   */
-   if (*mbChar == xcnv->subChar[0] || U_FAILURE(localErr) || !bytesConverted )
+   /* get the first result byte */
+   switch(bytesConverted)
    {
+   case 4:
+      firstByte = (ulmbcs_byte_t)(value >> 24);
+      break;
+   case 3:
+      firstByte = (ulmbcs_byte_t)(value >> 16);
+      break;
+   case 2:
+      firstByte = (ulmbcs_byte_t)(value >> 8);
+      break;
+   case 1:
+      firstByte = (ulmbcs_byte_t)value;
+      break;
+   default:
+      /* most common failure mode is an unassigned character */
       groups_tried[group] = TRUE;
       return 0;
    }
+
    *lastConverterIndex = group;
 
    /* All initial byte values in lower ascii range should have been caught by now,
       except with the exception group.
     */
-   MyAssert((*pmbChar <= ULMBCS_C0END) || (*pmbChar >= ULMBCS_C1START) || (group == ULMBCS_GRP_EXCEPT));
+   MyAssert((firstByte <= ULMBCS_C0END) || (firstByte >= ULMBCS_C1START) || (group == ULMBCS_GRP_EXCEPT));
    
    /* use converted data: first write 0, 1 or two group bytes */
    if (group != ULMBCS_GRP_EXCEPT && extraInfo->OptGroup != group)
    {
       *pLMBCS++ = group;
-      if (bytesConverted == 1 && isDoubleByteGroup)
+      if (bytesConverted == 1 && group >= ULMBCS_DOUBLEOPTGROUP_START)
       {
          *pLMBCS++ = group;
       }
    }
    /* then move over the converted data */
-   do 
+   switch(bytesConverted)
    {
-      *pLMBCS++ = *pmbChar++;
-   } 
-   while(--bytesConverted);   
-      
+   case 4:
+      *pLMBCS++ = (ulmbcs_byte_t)(value >> 24);
+   case 3:
+      *pLMBCS++ = (ulmbcs_byte_t)(value >> 16);
+   case 2:
+      *pLMBCS++ = (ulmbcs_byte_t)(value >> 8);
+   case 1:
+      *pLMBCS++ = (ulmbcs_byte_t)value;
+   default:
+      /* will never occur */
+      break;
+   }
+
    return (pLMBCS - pStartLMBCS);
 }
 
