@@ -2024,7 +2024,7 @@ public final class CollationElementIterator
         // if so we generate a custom collation key. Otherwise we pull out 
         // the value stored in the expansion table.
 
-        if (collator.m_isNumericCollation_){
+        if (m_collator_.m_isNumericCollation_){
             int collateVal = 0;
             int trailingZeroIndex = 0;
             boolean nonZeroValReached = false;
@@ -2678,7 +2678,7 @@ public final class CollationElementIterator
     {
         // We do a check to see if we want to collate digits as numbers; if so we generate
         //  a custom collation key. Otherwise we pull out the value stored in the expansion table.
-        if (collator.m_isNumericCollation_){
+        if (m_collator_.m_isNumericCollation_){
             int leadingZeroIndex = 0;
             int collateVal = 0;
             boolean nonZeroValReached = false;
