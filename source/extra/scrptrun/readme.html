@@ -1,0 +1,59 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Eric Mader">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>ScriptRun readme</title>
+</head>
+<body>
+
+<h2>
+What is scrptrun and srtest?</h2>
+The ICU LayoutEngine must be called with text in a single script. scrptrun.h
+and scrptrun.cpp implement the ScriptRun class, which can be used to find
+runs of text that is in a single script. It uses a basic iteration interface.
+<p>srtest is a little program that tests ScriptRun. You can use it as an
+example of how to use ScriptRun. Here's what the output should look like:
+<blockquote><font face="Courier New,Courier"><font size=-1>Script 'DEVANAGARI'
+from 0 to 9.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'ARABIC' from
+9 to 17.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'CYRILLIC' from
+17 to 25.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'LATIN' from
+25 to 33.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'HAN' from 33
+to 35.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'HIRAGANA' from
+35 to 41.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'KATAKANA' from
+41 to 45.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Script 'DESERET' from
+45 to 53.</font></font></blockquote>
+
+<h2>
+How do I build scrptrun and srtest?</h2>
+To use ScriptRun in your application, copy scrptrun.h and scrptrun.cpp
+to your source directory, and use them just as if they were part of your
+application. ScriptRun is so small that it's not worth making it into a
+separate library.
+<p>Building srtest is easy, on Windows build the srtest workspace in &lt;icu>\source\extra\scrptrun.
+On UNIX, connect to &lt;top-build-dir>/extra/scrptrun and do "make all"
+<h2>
+Notes</h2>
+
+<ul>
+<li>
+ScriptRun is based on <a href="http://www.unicode.org/unicode/reports/tr24/">Unicode
+Technical Report #24</a> but the implementation is not complete. In particular
+it doesn't handle paired punctuation correctly. A complete implemetation
+will be added to ICU in the future.</li>
+
+<li>
+Because ScriptRun is designed to be used with the LayoutEngine, it uses
+the LayoutEngine's coding conventions instead of ICU's coding conventions.</li>
+</ul>
+
+</body>
+</html>

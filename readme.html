@@ -1,0 +1,1584 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="GENERATOR" content="HTML Tidy, see www.w3.org">
+    <meta name="COPYRIGHT" content=
+    "Copyright (c) IBM Corporation and others. All Rights Reserved.">
+    <meta name="KEYWORDS" content=
+    "ICU; International Components for Unicode; what's new; readme; read me; introduction; downloads; downloading; building; installation;">
+    <meta name="DESCRIPTION" content=
+    "The introduction to the International Components for Unicode with instructions on building, installation, usage and other information about ICU.">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    <title>ReadMe for ICU</title>
+<style type="text/css">
+      h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
+      h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
+      h2.TOC {page-break-before: auto}
+      h3 {margin-top: 2em; text-decoration: underline}
+      h4 {text-decoration: underline}
+      h5 {text-decoration: underline}
+      caption {font-weight: bold; text-align: left}
+      div.indent {margin-left: 2em}
+      ul.TOC {list-style-type: none}
+      code {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+      samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+</style>
+  </head>
+
+  <body lang="en-US">
+    <h1>International Components for Unicode<br>
+     ReadMe</h1>
+
+    <p>Version: 2001-Aug-02<br>
+     Copyright &copy; 1995-2001 International Business Machines Corporation
+    and others. All Rights Reserved.</p>
+    <hr>
+
+    <h2 class="TOC">Table of Contents</h2>
+
+    <ul class="TOC">
+      <li><a href="#Introduction">Introduction</a></li>
+
+      <li>
+        <a href="#News">Late Breaking News And What Is New?</a> 
+
+        <ul class="TOC">
+          <li><a href="#NewsUnicodeVer">Support for Unicode 3.1</a></li>
+
+          <li><a href="#NewsLicense">License Change from IPL to the X
+          license</a></li>
+
+          <li><a href="#NewsCollation">Collation Improvements</a></li>
+
+          <li><a href="#NewsTranslit">Transliterator Improvements</a></li>
+
+          <li><a href="#NewsUnicodeSet">UnicodeSet Improvements</a></li>
+        </ul>
+      </li>
+
+      <li><a href="#WhatContain">What the International Components for
+      Unicode Contain</a></li>
+
+      <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
+
+      <li>
+        <a href="#HowToBuild">How to Build And Install ICU</a> 
+
+        <ul class="TOC">
+          <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
+
+          <li><a href="#HowToBuildWindows">Windows</a></li>
+
+          <li><a href="#HowToBuildUnix">Unix</a></li>
+
+          <li><a href="#HowToBuildOS390">OS/390 (zSeries)</a></li>
+
+          <li><a href="#HowToBuildOS400">OS/400 (iSeries)</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#ImportantNotes">Important Notes About Using ICU</a> 
+
+        <ul class="TOC">
+          <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
+
+          <li><a href="#ImportantNotesUnix">Unix Type Platforms</a></li>
+
+          <li><a href="#ImportantNotesDeprecatedAPI">Methods for enabling
+          deprecated APIs</a></li>
+        </ul>
+      </li>
+
+      <li><a href="#UsageInformation">Getting More Information About
+      ICU</a></li>
+
+      <li><a href="#SubmittingComments">Submitting Comments, Requesting
+      Features and Reporting Bugs</a></li>
+    </ul>
+    <hr>
+
+    <h2><a name="Introduction">Introduction</a></h2>
+
+    <p>Today's software market is a global one in which it is desirable to
+    develop and maintain one application that supports a wide variety of
+    national languages. International Components for Unicode provides the
+    following tools to help you write language independent applications:</p>
+
+    <ul>
+      <li>Support for the latest Unicode standard</li>
+
+      <li>Resource bundles for storing and accessing localized
+      information</li>
+
+      <li>Number formatters for converting binary numbers into text strings
+      for meaningful display</li>
+
+      <li>Date and time formatters for converting internal time data into
+      text strings for meaningful display</li>
+
+      <li>Message formatters for putting together sequences of strings,
+      numbers dates and other format to create messages</li>
+
+      <li>Text collation supporting language sensitive comparison of
+      strings</li>
+
+      <li>Text boundary analysis for finding characters, word and sentence
+      boundaries</li>
+
+      <li>Changing simple data files rather than modifying program code
+      easily localizes applications written using these tools</li>
+
+      <li>Over 160 locales supported. Visit the <a href=
+      "http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">
+      LocaleExplorer</a> on the ICU website for a demonstration and a full
+      list of supported locales or see the <a href=
+      "http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/index.txt">index
+      file</a> with the supported locales.</li>
+    </ul>
+
+    <p>It is possible to support additional locales by adding more locale
+    data files, with no code changes. Please refer to POSIX programmer's
+    Guide for details on what the ISO locale ID means.</p>
+
+    <p>This document will go into more detail on how to build and install ICU
+    on your machine. Once you start using ICU, the <a href=
+    "#UsageInformation">Where To Find More Information</a> section of this
+    document will be very helpful resource.</p>
+
+    <p>Your comments are important to making this release successful. We are
+    committed to fixing any bugs, and will also use your feedback to help
+    plan future releases.</p>
+
+    <p><strong>IMPORTANT:</strong> Please make sure you understand the <a
+    href="license.html">Copyright and License Information</a>.</p>
+
+    <h2><a name="News">Late Breaking News And What Is New?</a></h2>
+
+    <p>For more news about this release, see the <a href=
+    "http://oss.software.ibm.com/icu/download/">online release notes</a>.</p>
+
+    <h3><a name="NewsUnicodeVer">Support for Unicode 3.1</a></h3>
+
+    <p>The ICU 2.0 data has been upgraded to support Unicode 3.1. This means
+    that the character property data and normalization has changed. Recent
+    versions of ICU already supported Unicode 3.0 data with UTF-16 surrogate
+    pairs.</p>
+
+    <h3><a name="NewsLicense">License Change</a></h3>
+
+    <p>The ICU projects (ICU4C and ICU4J) have changed their licenses from
+    the IPL (IBM Public License) to the X license. The X license is a
+    non-viral and recommended free software license that is compatible with
+    the GNU GPL license. This is effective starting with release 1.8.1 of
+    ICU4C and release 1.3.1 of ICU4J. All previous ICU releases will continue
+    to utilize the IPL. New ICU releases will adopt the X license. The users
+    of previous releases of ICU will need to accept the terms and conditions
+    of the X license in order to adopt the new ICU releases.</p>
+
+    <p>The main effect of the change is to provide GPL compatibility. The X
+    license is listed as GPL compatible, see the gnu page at <a href=
+    "http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.</p>
+
+    <p>The text of the X license is available at <a href=
+    "http://www.x.org/terms.htm">http://www.x.org/terms.htm</a>. The IBM
+    version contains the essential text of the license, omitting the
+    X-specific trademarks and copyright notices.</p>
+
+    <p>For more details please see the <a href=
+    "http://oss.software.ibm.com/icu/press.html">press announcement</a> and
+    the <a href=
+    "http://oss.software.ibm.com/icu/project_faq.html#license">Project
+    FAQ</a>.</p>
+
+    <h3><a name="NewsCollation">Collation Improvements</a></h3>
+
+    <p>The collation framework has been reimplemented to make it faster,
+    Unicode Collation Algorithm compliant, and to make the locale-specific
+    collation data smaller (by separating it from the shared UCA data).<br>
+     <em>Sort keys and even some collation results have changed from ICU 1.6
+    and ICU 1.7.</em><br>
+     For details, see our <a href=
+    "http://oss.software.ibm.com/icu/develop/collation/">collation design
+    document</a>.</p>
+
+    <h3><a name="NewsTranslit">Transliterator Improvements</a></h3>
+
+    <p>The transliterator service has undergone an extensive overhaul,
+    in both the rule-based engine and the built-in system rules.
+
+    <ul>
+
+    <li><b>New or rewritten rules:</b> <tt>Any-Accents</tt>,
+    <tt>Any-Publishing</tt>, <tt>Cyrillic-Latin</tt>*,
+    <tt>Greek-Latin</tt>*, <tt>Greek-Latin/UNGEGN</tt> (aka
+    <tt>el-Latin</tt>), <tt>Hiragana-Latin</tt>*, and
+    <tt>Latin-Katakana</tt>*.  New algorithmic rules include
+    <tt>Any-Name</tt>*, the normalization rules <tt>Any-NFC</tt>,
+    <tt>Any-NFKC</tt>, <tt>Any-NFD</tt>, and <tt>Any-NFKD</tt>, casing
+    rules <tt>Any-Upper</tt>, <tt>Any-Lower</tt>, and
+    <tt>Any-Title</tt>.  <tt>Unicode-Hex</tt>* has been renamed
+    <tt>Any-Hex</tt>*.  <tt>Any-Remove</tt> deletes its input.
+    [*<em>applies to reverse rule as well</em>]
+
+    <li><b>Indic script rules:</b> Transliterators between Indic
+    scripts and from each script to and from Latin have been
+    completely revised.  Scripts included are Bengali, Devanagari,
+    Gujarati, Gurmukhi, Kannada, Malayalam, Oriya, Tamil, and Telugu.
+    Taking Bengali as an example, transliterators <tt>Bengali-X</tt>
+    and <tt>X-Bengali</tt> exist, where X is any of the other listed
+    Indic scripts, or Latin.
+
+    <li><b>Deleted rules:</b> <tt>UnicodeName-UnicodeChar</tt> has
+    been replaced by <tt>Any-Name</tt>*.  <tt>Latin-Arabic</tt>* and
+    <tt>Latin-Hebrew</tt>* have been removed until they can be
+    rewritten.  <tt>KeyboardEscape-Latin1</tt> has been replaced by
+    <tt>Any-Accents</tt> and <tt>Any-Publishing</tt>.
+    <tt>Latin-Kana</tt>* has been replaced by <tt>Latin-Katakana</tt>*
+    and <tt>Latin-Hiragana</tt>*.
+    [*<em>applies to reverse rule as well</em>]
+
+    <li><b>ID syntax changes:</b> Transliterator IDs ignore case and
+    whitespace now.  They now have the standard form
+    <em>[filter]source-target/variant</em>.  The "<em>[filter]</em>"
+    element is optional; if present, it limits the characters that the
+    transliterator operates on.  The "<em>source-</em>" element is
+    optional; if omitted, it is taken to be <tt>Any</tt>.  The
+    "<em>/variant</em>" element is also optional; if present, it
+    selects between different flavors of a related set of
+    transliterators, for example, <tt>Greek-Latin</tt> and
+    <tt>Greek-Latin/UNGEGN</tt>.  The source, target, and variant
+    specifiers are case-insensitive strings of the form
+    <tt>/[_[:L:]][_[:L:][:N:]]*/</tt>.
+    
+    <li><b>Locale support:</b> The source, target, or both may be
+    locales.  In this case the transliterator rules will be looked up
+    in the system locale resource bundles.  Rules are sought under
+    three tags, listed below.  The text after the underscore in each
+    tag is always canonicalized to uppercase before lookup.  <em>Note:
+    The underscore is currently omitted from ICU4C tags, but will be
+    restored when possible.</em>
+
+    <ul><li><tt>TransliterateTo_<em>SCRIPT</em></tt>: 
+    Unidirectional rules from the enclosing locale to another script
+    or specifier.
+    <li><tt>TransliterateFrom_<em>SCRIPT</em></tt>: 
+    Unidirectional rules from another script
+    or specifier to the enclosing locale.
+    <li><tt>Transliterate_<em>SCRIPT</em></tt>:
+    Bidirectional rules, with the forward direction being To and
+    the reverse direction being From.
+    </ul>
+
+    Lookup proceeds in the following order:
+
+    <ul><li>In the dynamic registry:  <em>source-target</em>
+    <li>In the <em>source</em> locale:
+    <tt>TransliterateTo_<em>TARGET</em></tt> then
+    <tt>Transliterate_<em>TARGET</em></tt> (forward direction)
+    <li>In the <em>target</em> locale:
+    <tt>TransliterateFrom_<em>SOURCE</em></tt> then
+    <tt>Transliterate_<em>SOURCE</em></tt> (reverse direction)
+    </ul>
+
+    If either the source or target specifier is not a locale then the
+    corresponding locale lookup is skipped.  If either is a locale,
+    then locale fallback from <tt>aa_BB_CCC</tt> to <tt>aa_BB</tt> to
+    <tt>aa</tt> is performed (where <tt>aa</tt>, <tt>BB</tt>, and
+    <tt>CCC</tt> are the locale language, country, and variant).  The
+    final fallback is from the specifier, whether it is a locale or
+    not (e.g., script abbreviation), to the long script name
+    associated with that specifier.  If a tag lookup succeeds, the
+    attached element should be a string array of <i>2n</i> items where
+    <i>n</i> >= 1.  Each pair of strings is a variant name and rule
+    string.  The variants are matched against the requested variant.
+    If no variant is specified then the first variant is considered to
+    match.
+
+    <li><b>Filters on compounds IDs:</b> A filter on a compound
+    transliterator can now be specified by giving a leading entry that
+    contains a filter and no transliterator ID.  For example,
+    "<tt>[abc]; Latin-Katakana; Katakana-Hiragana</tt>" submits only
+    the characters contained in the UnicodeSet <tt>[abc]</tt> to the
+    compound transliterator <tt>Latin-Katakana;
+    Katakana-Hiragana</tt>.
+    
+    <li><b>Explicit reverse IDs:</b> Typically if a transliterator
+    <tt>A-B</tt> is formed, and its inverse is requested, the system
+    tries to create <tt>B-A</tt>.  That is, the source and target are
+    exchanged.  In some cases, the user may wish a different
+    transliterator to be considered the reverse.  In order to do this,
+    the reverse ID is specified in parentheses immediately following
+    the ID.  For example, "<tt>A-B (B-C)</tt>" is a transliterator
+    <tt>A-B</tt> whose inverse is <tt>B-C</tt>.  If the ID of the
+    inverse is requested, "<tt>B-C (A-B)</tt>" is returned.  The
+    forward or reverse component may be empty, so "<tt>(B-C)</tt>" and
+    "<tt>A-B()</tt>" are legal IDs with <tt>Null</tt> transliterator
+    for the forward and reverse direction, respectively.  This is most
+    useful in compounds where one element has no inverse or where a
+    different inverse from the standard inverse is desired.  For
+    example, "<tt>Any-Lower(); Latin-Cyrillic</tt>".
+
+    <li><b>Quantifiers:</b> Transliterator rules may now contain
+    quantifiers '<tt>*</tt>', '<tt>+</tt>', and '<tt>?</tt>'.  These
+    indicate zero or more, one or more, and zero or one matches,
+    respectively.  Quantifiers apply to the last element, be it a
+    single character, a UnicodeSet, a segment definition, or a quote;
+    the entire preceding element is repeated.  Quantifiers are
+    implemented as greedy, non-backtracking matchers, unlike their
+    typical implementation in regular expressions.  As a result,
+    expressions that match in a traditional regular expression engine
+    (e.g., Perl) will not match in transliterator.  E.g., "[a-z]+ q >
+    x;" will <em>not</em> match "abcq", since the '<tt>+</tt>'
+    quantifier consumes all four characters.
+
+    <li><b>Dot character:</b> A new special character is recognized in
+    rules, '<tt>.</tt>' (U+0020).  This character matches any
+    characters in the set <tt>[^[:Zp:][:Zl:]\r\n$]</tt>.  Note the
+    trailing '<tt>$</tt>' in the set pattern, which indicates that the
+    ETHER character is <em>not</em> matched by '<tt>.</tt>'.
+
+    <li><b>::ID blocks in rules:</b> Transliterator IDs may now be
+    included in rule sets.  These may occur in two locations: as one
+    contiguous block before any other rules, and as one contiguous
+    block after all rules.  The effect of placing <tt>::ID</tt>s into
+    a rule set is to enclose the rule-based transliterator within a
+    compound transliterator containing the indicated IDs.  The
+    <tt>::ID</tt> syntax is exactly the same as the standard ID
+    syntax, with the difference that each ID element is preceded by
+    the special token "<tt>::</tt>".
+
+    <li><b>Segment definitions more flexible:</b> Segment definitions
+    may be nested and are now unlimited in number.  Prior to 2.0,
+    segments could not be nested and were limited to nine ($1 to $9).
+
+    <li><b>Variable range pragma:</b> A new pragma is supported.  This
+    follows the syntax:<code>use variable range 0xE800 0xEFFF;</code>
+    (Any two code points may be specified.)  The code points are
+    specified as decimal constants, octal constants with a leading
+    '0', or hexadecimal constants with a leading "0x".  The given
+    range is used internally for stand-in characters during
+    processing.  The default range is <b>0xF000..0xF8FF</b>.  If a
+    rule set explicitly uses characters in the default variable range,
+    a new range, not containing any characters in use in the rule set,
+    must be specified.  <em>Note:</em> This is the first of several
+    planned pragmas.
+
+    <li><b>Factory method registration:</b> Factory methods (function
+    pointers in ICU4C; functor objects in ICU4J) may be registered
+    against transliterator IDs.  This is generally more efficient than
+    the registration of singleton prototypes, since no actual
+    transliterator object need be created until the user requires one.
+    See the <tt>registerFactory()</tt> method in
+    <tt>Transliterator</tt>.
+
+    <li><b>Filtering semantics changed for subclasses:</b> Subclasses
+    now need not concern themselves with filters.  Instead, they may
+    assume that all characters received by
+    <tt>handleTransliterate()</tt> have already passed through the
+    filter.  This simplifies subclass code greatly.
+
+    </ul>
+
+    <h3><a name="NewsUnicodeSet">UnicodeSet Improvements</a></h3>
+
+    <ul>
+
+    <li><b><tt>[:Any:]</tt> set:</b> The set <tt>[:Any:]</tt> matches
+    all Unicode code points, that is, U+0000..U+10FFFF.
+
+    <li><b><tt>\p{}</tt> syntax:</b> UnicodeSet now recognizes a
+    Perlish syntax for character properties.  Any property designated
+    as <tt>[:Foo:]</tt> may equivalently be designated
+    <tt>\p{Foo}</tt>.
+   
+    <li><b>Short, medium, and long property names:</b> In addition to
+    the short property names, such as <tt>[:Ll:]</tt>, equivalent
+    medium (e.g., <tt>[:gc=Ll:]</tt>) and long (e.g.,
+    <tt>[:GeneralCategory=LowercaseLetter:]</tt>) forms are
+    recongized.  See the <a
+    href="http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/unicodeset_properties.html">UnicodeSet
+    Properties design document</a> for details.  As of this release,
+    general categories, numeric value, and script are supported.
+
+    </ul>
+
+    <h2><a name="WhatContain">What the International Components for Unicode
+    Contain</a></h2>
+
+    <p>There are two ways to download the ICU releases,</p>
+
+    <ul>
+      <li><strong>Official Release Snapshot:</strong><br>
+       If you want to use ICU (as opposed to developing it), you should
+      download an official packaged version of the ICU source code. These
+      versions are tested more thoroughly than day-to-day development builds
+      of the system, and they are packaged in zip and tar files for
+      convenient download. These packaged files can be found at <a href=
+      "http://oss.software.ibm.com/icu/download/">http://oss.software.ibm.com/icu/download/</a>.<br>
+
+       If packaged snapshot is named <strong>ICUXXXXXX.zip</strong> or
+      <strong>ICUXXXXXX.tgz</strong>, XXXXXX is the release version
+      number.<br>
+       Please unzip this file. It will reconstruct the source directory,
+      including anonymous CVS control directories (see below).</li>
+
+      <li>
+        <strong>CVS Source Repository:</strong><br>
+         If you are interested in developing features, patches, or bug fixes
+        for ICU, you should probably be working with the latest version of
+        the ICU source code. You will need to check the code out of our CVS
+        repository to ensure that you have the most recent version of all of
+        the files. There are several ways to do this: 
+
+        <ul>
+          <li>WebCVS:<br>
+           If you want to browse the code and only make occasional downloads,
+          you may want to use WebCVS. It provides a convenient, web-based
+          interface for browsing and downloading the latest version of the
+          ICU source code and documentation. You can also view each file's
+          revision history, display the differences between individual
+          revisions, determine which revisions were part of which official
+          release, and so on.</li>
+
+          <li>
+            WinCVS:<br>
+             If you will be doing serious work on ICU, you should probably
+            install a CVS client on your own machine so that you can do batch
+            operations without going through the WebCVS interface. On
+            Windows, we suggest the WinCVS client. The following is the
+            example instruction on how to download ICU via WinCVS: 
+
+            <ol>
+              <li>Install the WinCVS client, which you can download from the
+              WinCVS home page.</li>
+
+              <li>In the WinCVS preferences, specify your CVSRoot to be
+              ":pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu"<br>
+               with the password "anoncvs". To enter the CVSRoot value,
+              select "Preferences" from the "Cvs Admin" pull-down menu.
+              Authentication should be set to "'passwd' file on the cvs
+              server".</li>
+
+              <li>To "extract" the most recent version of ICU, select
+              "Checkout module" from the "Cvs Admin" menu. Specify "icu" for
+              the module name.</li>
+            </ol>
+          </li>
+
+          <li>CVS command line:<br>
+           You can also check out the repository anonymously on UNIX using
+          the following commands, after first setting your CVSROOT to point
+          to the ICU repository:<br>
+          <br>
+           <i>export
+          CVSROOT=:pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu<br>
+           cvs login CVS password: anoncvs<br>
+           cvs checkout icu<br>
+           cvs logout</i></li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>For more details on how to download ICU directly from the web site,
+    please also see <a href=
+    "http://oss.software.ibm.com/icu/download/">http:/oss.software.ibm.com/icu/download/</a></p>
+
+    <p>Below, <strong>$Root</strong> is the placement of the icu directory in
+    your file system, like "drive:\...\icu" in your environment. "drive:\..."
+    stands for any drive and any directory on that drive that you chose to
+    install icu into.</p>
+
+    <table border="1" cellpadding="0" width="100%" summary="">
+      <caption>
+        The following files describe the code drop.
+      </caption>
+
+      <tr>
+        <td>readme.html</td>
+
+        <td>Describes the International Components for Unicode (this
+        file)</td>
+      </tr>
+
+      <tr>
+        <td>license.html</td>
+
+        <td>Contains IBM's public license</td>
+      </tr>
+    </table>
+
+    <p><br>
+    </p>
+
+    <table border="1" cellpadding="0" width="100%" summary="">
+      <caption>
+        The following directories contain source code and data files.
+      </caption>
+
+      <tr>
+        <td>$Root/source/common/</td>
+
+        <td>The core Unicode and support functionality, such as resource
+        bundles, character properties, locales, codepage conversion,
+        normalization, Unicode properties, Locale, and UnicodeString.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/i18n/</td>
+
+        <td>Modules in i18n are generally the more data-driven, that is to
+        say resource bundle driven, components. These deal with higher level
+        internationalization issues such as formatting, collation, text break
+        analysis, and transliteration.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/test/intltest/</td>
+
+        <td>A test suite including all C++ APIs. For information about
+        running the test suite, see the users' guide.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/test/cintltst/</td>
+
+        <td>A test suite written in C, including all C APIs. For information
+        about running the test suite, see the users' guide.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/data/</td>
+
+        <td>
+          This directory contains the source data in text format, which is
+          compiled into binary form during the ICU build process. The output
+          from these files is stored in $Root/source/data/build while
+          awaiting further packaging. 
+
+          <ul>
+            <li><b>unidata/</b> This directory contains the Unicode data
+            files. Please see <a href=
+            "http://www.unicode.org/">http://www.unicode.org/</a> for more
+            information.</li>
+
+            <li>
+              <p><b>Resource Bundle sources</b> .txt files containing ICU
+              language and culture-specific localization data. Two special
+              bundles are <b>root</b>, which is the fallback data and parent
+              of other bundles, and <b>index</b> which contains a list of
+              installed bundles. <b>resfiles.txt</b> contains the list of
+              resource bundle files.</p>
+
+              <p>Also here are transliteration bundles, and the list of
+              installed transliteration files in
+              <b>translit_index.txt</b>.</p>
+
+              <p>All resource bundles are compiled into .res files. The
+              <b>ucmfiles.txt</b> file contains the list of converter
+              files.</p>
+            </li>
+
+            <li><b>Code page converter tables</b> .ucm files containing
+            mappings to and from Unicode. These are compiled into .cnv
+            files.</li>
+
+            <li><b>convrtrs.txt</b> is the alias mapping table from various
+            converter name formats to ICU internal format and vice versa. It
+            produces cnvalias.dat.</li>
+
+            <li><b>timezone.txt</b> is a generated file which is compiled
+            into tz.dat, containing time zone information.</li>
+          </ul>
+        </td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/data</td>
+
+        <td>This directory is where the final, packaged version of the ICU
+        binary data ends up. If the ICU_DATA environment variable is used,
+        then it should be set to this directory. The intermediate individual
+        data files (.res, .cnv) are kept in the subdirectory
+        "$Root/source/data/build" prior to packaging.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/tools</td>
+
+        <td>Tools for generating the data files. Data files are generated by
+        invoking $Root/source/data/build/makedata.bat on Win32 or
+        $Root/source/make on Unix.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/samples</td>
+
+        <td>Various sample programs that use ICU</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/extra</td>
+
+        <td>Non-supported API additions. Currently, it contains the 'ustdio'
+        file i/o library</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/layout</td>
+
+        <td>Contains the ICU layout engine (not a rasterizer).</td>
+      </tr>
+
+      <tr>
+        <td>$Root/packaging<br>
+         $Root/debian</td>
+
+        <td>These directories contain scripts and tools for packaging the
+        final ICU build for various release platforms.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/config</td>
+
+        <td>Contains helper makefiles for platform specific build commands.
+        Used by 'configure'.</td>
+      </tr>
+
+      <tr>
+        <td>$Root/source/allinone</td>
+
+        <td>Contains top-level ICU project files, for instance to build all
+        of ICU under one MSVC project.</td>
+      </tr>
+    </table>
+    <!-- end of ICU structure ==================================== -->
+
+    <h2><a name="PlatformDependencies">Platform Dependencies</a></h2>
+
+    <p>The platform dependencies have been mostly isolated into the following
+    files in the common library. This information can be useful if you are
+    porting ICU to a new platform.</p>
+
+    <ul>
+      <li>
+        <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br>
+         <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h,
+        ..): Platform-dependent typedefs and defines:<br>
+        <br>
+         
+
+        <ul>
+          <li>XP_CPLUSPLUS for C++ only.</li>
+
+          <li>TRUE and FALSE, UBool, int8_t, int16_t etc.</li>
+
+          <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
+          export</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>
+        <strong>unicode/putil.h, putil.c</strong>: platform-dependent
+        implementations of various functions that are platform dependent:<br>
+        <br>
+         
+
+        <ul>
+          <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity
+          for handling special floating point values.</li>
+
+          <li>uprv_tzset, uprv_timezone, uprv_tzname and time for getting
+          platform specific time and timezone information.</li>
+
+          <li>u_getDataDirectory for getting the default data directory.</li>
+
+          <li>uprv_getDefaultLocaleID for getting the default locale
+          setting.</li>
+
+          <li>uprv_getDefaultCodepage for getting the default codepage
+          encoding.</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>
+        <strong>umutex.h, umutex.c</strong>: Code for doing synchronization
+        in multithreaded applications. If you wish to use International
+        Components for Unicode in a multithreaded application, you must
+        provide a synchronization primitive that the classes can use to
+        protect their global data against simultaneous modifications. See
+        Users' guide for more information.<br>
+        <br>
+         
+
+        <ul>
+          <li>We supply sample implementations for WinNT, Win95, Win98,
+          Sun/Solaris, RedHat/Linux, HP-UX and for AIX on an RS/6000.</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>
+        <strong>unicode/udata.h, udata.c</strong>: The data-accessing
+        interface in ICU is implemented such that there is a lot of
+        flexibility for reading a data file. Each platform can tune the
+        performance of file accessing for its environment by choosing to
+        implement one of the following options:<br>
+        <br>
+         
+
+        <ul>
+          <li>DLL</li>
+
+          <li>Memory map</li>
+
+          <li>Individual files</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>For the Intltest test suite, intltest.cpp in
+      "icu/source/test/intltest/" contains the method pathnameInContext,
+      which must also be adapted to any new platform.</li>
+
+      <li>Using platform specific #ifdef macros are highly discouraged
+      outside of the scope of these files. When the source code gets updated
+      in the future, these #ifdef's can cause testing problems for your
+      platform.</li>
+    </ul>
+
+    <p>It is possible to build each library individually. They must be built
+    in the following order:<br>
+    </p>
+
+    <ol>
+      <li>stubdata</li>
+
+      <li>common</li>
+
+      <li>i18n</li>
+
+      <li>toolutil</li>
+
+      <li>makeconv</li>
+
+      <li>genrb</li>
+
+      <li>gentz</li>
+
+      <li>genccode</li>
+
+      <li>gennames</li>
+
+      <li>genuca</li>
+
+      <li>gennorm</li>
+
+      <li>makedata (a project on Windows, or source/data/Makefile on
+      Unix)</li>
+
+      <li>ctestfw, intltest and cintltst, if you want to run the test
+      suite.</li>
+    </ol>
+
+    <h2><a name="HowToBuild">How To Build And Install ICU</a></h2>
+
+    <h3><a name="HowToBuildSupported">Supported Platforms</a></h3>
+
+    <table border="1" cellpadding="3" summary="">
+      <caption>
+        Here is a status of functionality of ICU on several different
+        platforms.
+      </caption>
+
+      <tr>
+        <th>Operating system</th>
+
+        <th>Compiler</th>
+
+        <th>Testing frequency</th>
+      </tr>
+
+      <tr>
+        <td>Windows 98/NT/2000</td>
+
+        <td>Microsoft Visual C++ 6.0</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>Red Hat Linux 6.1</td>
+
+        <td>gcc 2.91.66</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>AIX 4.3.3</td>
+
+        <td>xlC 3.6.4</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>Solaris 2.6</td>
+
+        <td>Workshop Pro CC 4.2</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>HP/UX 11.01</td>
+
+        <td>aCC A.12.10</td>
+
+        <td>Reference platform</td>
+      </tr>
+
+      <tr>
+        <td>AIX 5.1.0 L</td>
+
+        <td>Visual Age C++ 5.0</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>Solaris 2.7</td>
+
+        <td>Workshop Pro CC 6.0</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>Solaris 2.6</td>
+
+        <td>gcc 2.91.66</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>FreeBSD 4.4</td>
+
+        <td>gcc 2.95.3</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>HP/UX 11.01</td>
+
+        <td>CC A.03.10</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>OS/390 (zSeries)</td>
+
+        <td>CC</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
+        <td>AS/400 (zSeries) V5R1</td>
+
+        <td>iCC</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>NetBSD, OpenBSD</td>
+
+        <td>&nbsp;</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>SGI/IRIX</td>
+
+        <td>&nbsp;</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>PTX</td>
+
+        <td>&nbsp;</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>OS/2</td>
+
+        <td>Visual Age</td>
+
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>Macintosh</td>
+
+        <td>&nbsp;</td>
+
+        <td>Needs help to port</td>
+      </tr>
+    </table>
+
+    <p><br>
+    </p>
+
+    <p><strong>Key to testing frequency</strong></p>
+
+    <dl>
+      <dt><i>Reference platform</i></dt>
+
+      <dd>ICU will work on these platforms with these compilers</dd>
+
+      <dt><i>Regularly tested</i></dt>
+
+      <dd>ICU should work on these platforms with these compilers</dd>
+
+      <dt><i>Rarely tested</i></dt>
+
+      <dd>ICU may not work on these platforms</dd>
+    </dl>
+
+    <h3><a name="HowToBuildWindows">How To Build And Install On
+    Windows</a></h3>
+
+    <p>Building International Components for Unicode requires:</p>
+
+    <ul>
+      <li>Microsoft NT 3.51 and above, or Windows 95 and above</li>
+
+      <li>Microsoft Visual C++ 6.0 (Service Pack 2 is required to work with
+      the release build of max speed optimization).</li>
+    </ul>
+
+    <p>The steps are:</p>
+
+    <ol>
+      <li>Unzip the icu-XXXX.zip file, type "unzip -a icu-XXXX.zip -d
+      drive:\directory" under command prompt or use WinZip.
+      drive:\directory\icu is the root ($Root) directory (you may but don't
+      need to place "icu" into another directory). If you change the root,
+      you will change the project settings accordingly in EACH makefile in
+      the project, updating the "include" and "library" paths.</li>
+
+      <li>Set the environment variable <strong>ICU_DATA</strong> to the full
+      pathname of the data directory. The trailing "\" is required after the
+      directory name (e.g. "$Root\source\data\" will work, but the value
+      "$Root\source\data" is not acceptable). This environment variable
+      indicates where the locale data files and conversion mapping tables are
+      located.</li>
+
+      <li>Be sure that the ICU binary directory, $Root\bin\, is included in
+      the <strong>PATH</strong> environment variable. The tests may not work
+      without the DLL files in the path.</li>
+
+      <li>Set the <strong>TZ</strong> environment variable to
+      <strong>PST8PDT</strong>. The tests will not work in any other
+      timezone.</li>
+
+      <li>Use Microsoft Visual C++ 6.0 to open the
+      "$Root\source\allinone\allinone.dsw" workspace (This workspace includes
+      all the International Components for Unicode libraries, necessary ICU
+      building tools, and the intltest and cintltest test suite projects).
+      Please see the note below if you want to build from the command line
+      instead.</li>
+
+      <li>Set the active Project to the "all" project. To do this: Choose
+      "Project" menu, and select "Set active project". In the submenu, select
+      the "all" workspace.</li>
+
+      <li>Set the active configuration to "Win32 Debug" or "Win32 Release"
+      (See <a href="#HowToBuildWindowsConfig">note</a> below).</li>
+
+      <li>Choose the "Build" menu and select "Rebuild All". If you want to
+      build the Debug and Release at the same time, see the <a href=
+      "#HowToBuildWindowsBatch">note</a> below.</li>
+
+      <li>Run the C++ test suite, "intltest". To do this: set the active
+      project to "intltest", and press F5 to run it.</li>
+
+      <li>Run the C test suite, "cintltst". To do this: set the active
+      project to "cintltst", and press F5 to run it.</li>
+
+      <li>Make sure that both "cintltst" and "intltest" passed without any
+      errors. The return codes are non-zero when they do not pass. Visual C++
+      will display the return codes in the debug tag of the output window.
+      When "intltest" and "cintltest" return 0, it means that everything is
+      installed correctly. You can press Ctrl+F5 on the test project to run
+      the test and see what error messages were displayed (if any tests
+      failed).</li>
+
+      <li>Reset the <strong>TZ</strong> environment variable to its original
+      value, unless you plan on testing ICU any further.</li>
+
+      <li>You are now able to develop applications with ICU.</li>
+    </ol>
+
+    <p><a name="HowToBuildWindowsCommandLine"><strong>Using MSDEV At The
+    Command Line Note:</strong></a> You can build ICU from the command line.
+    Assuming that you have properly installed Microsoft Visual C++ to support
+    command line execution, you can run the following command, 'msdev
+    <i>$Root</i>\source\allinone\allinone.dsw /MAKE "ALL"'.</p>
+
+    <p><a name="HowToBuildWindowsConfig"><strong>Setting Active Configuration
+    Note:</strong></a> To set the active configuration, two different
+    possibilities are:</p>
+
+    <ul>
+      <li>Choose "Build" menu, select "Set Active Configuration", and select
+      "Win32 Release" or "Win32 Debug".</li>
+
+      <li>Another way is to select "Customize" in the "Tools" menu, select
+      the "Toolbars" tab, enable "Build" instead of "Build Minibar", and
+      click on "Close". This will bring up a toolbar which you can move aside
+      the other permanent toolbars at the top of the MSVC window. The
+      advantage is that you now have an easy-to-reach pop-up menu that will
+      always show the currently selected active configuration. Or, you can
+      drag the project and configuration selections and drop them on the menu
+      bar for later selection.</li>
+    </ul>
+
+    <p><a name="HowToBuildWindowsBatch"><strong>Batch Configuration
+    Note:</strong></a> If you want to build the Debug and Release
+    configurations at the same time, choose "Build" menu and select "Batch
+    Build..." instead (and mark all configurations as checked), then click
+    the button named "Rebuild All". The "all" workspace will build all the
+    test programs as well as the tools for generating binary locale data
+    files. The "makedata" project will be run automatically to convert the
+    locale data files from text format into icudata.dll.</p>
+
+    <h3><a name="HowToBuildUnix">How To Build And Install On Unix</a></h3>
+
+    <p>Building International Components for Unicode on Unix requires:</p>
+
+    <p>A UNIX C++ compiler, (gcc, cc, xlc_r, etc...) installed on the target
+    machine. A recent version of GNU make (3.7+). For a list of OS/390 tools
+    please view the <a href="#HowToBuildOS390">OS/390 build section</a> of
+    this document for further details.</p>
+
+    <p>The steps are:</p>
+
+    <ol>
+      <li>Decompress the icuXXXX.tar (or icuXXXX.tgz) file and use pax.</li>
+
+      <li>Before running the test programs or samples, please set the
+      environment variable <strong>ICU_DATA</strong>, the full pathname of
+      the data directory, to indicate where the locale data files and
+      conversion mapping tables are. If this variable is not set, the default
+      user data directory will be used. The trailing "/" is required after
+      the directory name (e.g. "$Root/source/data/" will work, but the value
+      "$Root/source/data" is not acceptable). When you are running individual
+      tests, the <strong>TZ</strong> environment variable needs to be set to
+      <strong>PST8PDT</strong>. Normally "make check" does this for you
+      automatically.</li>
+
+      <li>Change directory to the "icu/source".</li>
+
+      <li>If it is not already set, please set the executable flag for the
+      following files (by executing 'chmod +x' command): runConfigureICU,
+      configure, install-sh and config.*,</li>
+
+      <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
+      for your platform. If you are not using the runConfigureICU script or
+      your platform is not supported by the script, you need to set your CC,
+      CXX, CFLAGS and CXXFLAGS environment variables, and type "./configure".
+      You can type "./configure --help" to print the available options.</li>
+
+      <li>
+        Type "gmake" to compile the libraries and all the data files. 
+
+        <div class="indent">
+          <strong>Note:</strong> On OS/390, both IEEE binary floating point
+          and native S/390 hexadecimal floating point calculations are
+          supported. The default is to build with native floating-point
+          support. Please set the environment variable IEEE390=1 if you would
+          like to make the ICU DLLs with IEEE floating point support.
+        </div>
+      </li>
+
+      <li>Optionally, type "gmake check" to verify the test suite.</li>
+
+      <li>Type "gmake install" to install.</li>
+    </ol>
+
+    <p>Some platforms use package management tools to control the
+    installation and uninstallation of files on the system, as well as the
+    integrity of the system configuration. You may want to check if ICU can
+    be packaged for your package management tools by looking into the
+    "packaging" directory. (Please note that if you are using a snapshot of
+    ICU from CVS, it is probable that the packaging scripts or related files
+    are not up to date with the contents of ICU at this time, so use them
+    with caution.)</p>
+
+    <h3><a name="HowToBuildOS390">OS/390 (zSeries) Platform</a></h3>
+
+    <p>If you are building on the OS/390 UNIX System Services platform, it is
+    important that you understand a few details:</p>
+
+    <ul>
+      <li>The gnu utilities gmake and gzip/gunzip are needed and can be
+      obtained for OS/390 from <a href=
+      "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
+      z/OS Unix - Tools and Toys</a>. Documentation on these tools can be
+      found at the <a href=
+      "http://publib-b.boulder.ibm.com/Redbooks.nsf/RedbookAbstracts/sg245944.html">
+      Open Source Software for OS/390 UNIX</a> Red Book.</li>
+
+      <li>
+        Encoding considerations: The source code assumes that it is compiled
+        with codepage ibm-1047 (to be exact, the UNIX System Services variant
+        of it). The pax command converts all of the source code files from
+        ASCII to codepage ibm-1047 (USS) EBCDIC. However, some files are
+        binary files and must not be converted, or must be converted back to
+        their original state. You can use the <a href=
+        "as_is\os390\unpax-icu.sh">unpax-icu.sh</a> script to do this for you
+        automatically. It will unpackage the tar file and convert all the
+        necessary files for you automatically. The files that must not be
+        converted to ibm-1047 are the following: 
+
+        <ul>
+          <li>All UTF-8 files</li>
+
+          <li>icu/data/*.brk</li>
+
+          <li>icu/source/test/testdata/uni-text.bin</li>
+
+          <li>icu/source/test/testdata/th18057.txt</li>
+        </ul>
+        Such a conversion can be done using iconv:<br>
+         <code>iconv -f IBM-1047 -t ISO8859-1 uni-text.bin &gt;
+        uni-text.bin</code>
+      </li>
+
+      <li>
+        DLL directories and the LIBPATH setting: Building and testing ICU
+        needs the ICU libraries on the LIBPATH. In other words, the LIBPATH
+        should contain (each path prepended with the root directory that
+        contains the icu directory): 
+
+        <ul>
+          <li>icu/source/common</li>
+
+          <li>icu/source/i18n</li>
+
+          <li>icu/source/tools/ctestfw</li>
+
+          <li>icu/source/tools/toolutil</li>
+
+          <li>icu/source/extra/ustdio</li>
+        </ul>
+      </li>
+
+      <li>
+        <p>OS/390 supports both native S/390 hexadecimal floating point and,
+        (with Version 2.6 and later) IEEE binary floating point. This is a
+        compile time option. Applications built with IEEE should use ICU dlls
+        that are built with IEEE (and vice versa). The environment variable
+        IEEE390=1 will cause the OS/390 version of ICU to be built with IEEE
+        floating point. The default is native hexadecimal floating point.<br>
+         <em>Important:</em> Currently (ICU 1.4.2), native floating point
+        support is sufficient for codepage conversion, resource bundle and
+        UnicodeString operations, but the Format APIs, especially
+        ChoiceFormat, require IEEE binary floating point.</p>
+
+        <p>Examples for configuring ICU:<br>
+         Debug build: <code>IEEE390=1 ./configure</code><br>
+         Release build: <code>CFLAGS=-2 IEEE390=1 ./configure</code></p>
+      </li>
+
+      <li>Since the default make on OS/390 is not gmake, the pkgdata tool
+      requires that the "make" command is aliased to your installed version
+      of gmake.</li>
+
+      <li>The makedep executable that is used with the OS/390 ICU build
+      process is not shipped with ICU. It is available at the <a href=
+      "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
+      z/OS Unix - Tools and Toys</a> site. The PATH environment variable
+      should be updated to contain the location of this executable prior to
+      build. Alternatively, makedep may be moved into an existing PATH
+      directory.</li>
+
+      <li>To run all of the tests for ICU, use "gmake check". When running
+      individual tests of the test suite, the TZ environment variable should
+      be set to export TZ="PST8PDT" so that time zone comparisons are
+      correct.</li>
+    </ul>
+
+    <h4><a name="HowToBuildOS390Batch">OS/390 Batch (PDS) support</a></h4>
+
+    <p>By default, ICU builds its libraries into the HFS. However, there is a
+    390-specific switch to build some libraries into PDS files. The switch is
+    the environmental variable OS390BATCH, and if set, the following
+    libraries are built into PDS files: libicuuc<i>XX</i>.dll,
+    libicudt<i>XX</i>e.dll, libicudt<i>XX</i>e_390.dll, and libtestdata.dll.
+    Turning on OS390BATCH does not turn off the normal HFS build, thus the
+    HFS dlls will always be created.</p>
+
+    <p>The names of the PDS files are determined by the value of the
+    environmental variables LOADMOD and LOADEXP. These variables must contain
+    the target PDS names whenever the OS390BATCH variable is set. LOADMOD is
+    the library (.dll) target dataset and LOADEXP is the side deck (.x)
+    target dataset.</p>
+
+    <p>The PDS member names are as follows:</p>
+<pre>
+<samp>IXMICUUC --&gt; libicuuc<i>XX</i>.dll
+IXMICUDA --&gt; libicudt<i>XX</i>e.dll
+IXMICUD1 --&gt; libicudt<i>XX</i>e_390.dll
+IXMICUTE --&gt; libtestdata.dll</samp>
+</pre>
+
+    <p>Example PDS attributes are as follows:</p>
+<pre>
+<samp>Data Set Name . . . : <i>USER</i>.ICU.LOAD
+General Data
+Management class. . : **None**
+Storage class . . . : BASE
+Volume serial . . . : TSO007
+Device type . . . . : 3390
+Data class. . . . . : LOAD
+Organization  . . . : PO
+Record format . . . : U
+Record length . . . : 0
+Block size  . . . . : 32760
+1st extent cylinders: 40
+Secondary cylinders : 59
+Data set name type  : PDS
+
+Data Set Name . . . : <i>USER</i>.ICU.EXP
+General Data
+Management class. . : **None**
+Storage class . . . : BASE
+Volume serial . . . : TSO007
+Device type . . . . : 3390
+Data class. . . . . : **None**
+Organization  . . . : PO
+Record format . . . : FB
+Record length . . . : 80
+Block size  . . . . : 3200
+1st extent cylinders: 3
+Secondary cylinders : 3
+Data set name type  : PDS</samp>
+</pre>
+
+    <h3><a name="HowToBuildOS400">OS/400 (iSeries) Platform</a></h3>
+
+    <p>ICU Reference Release 1.8.1 contains partial support for the 400
+    platform, but additional work by the user is currently needed to get it
+    to build properly. A future release of ICU should work out-of-the-box
+    under OS/400.</p>
+
+    <ul>
+      <li>
+        Requirements: 
+
+        <ul>
+          <li>QSHELL interpreter installed (install base option 30, operating
+          system)</li>
+
+          <li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li>
+
+          <li>ILE C++ for AS/400, PRPQ 5799-GDW (the latest cum package and
+          PTF SF62241 must be installed)</li>
+
+          <li>GNU facilities (You can get the GNU facilities for OS/400 from
+          <a href=
+          "http://www.as400.ibm.com/developer/porting/gnu_utilities.html">http://www.as400.ibm.com/developer/porting/gnu_utilities.html</a>).</li>
+        </ul>
+        <!-- end requirements -->
+      </li>
+
+      <li>
+        Build environment setup: 
+
+        <ol>
+          <li>
+            Create AS400 target library. This library will be the target for
+            the resulting modules, programs and service programs. You will
+            specify this library on the OUTPUTDIR environment variable in
+            step 2.<br>
+             
+<pre>
+<samp>CRTLIB LIB(<i>libraryname</i>)</samp>
+</pre>
+            <br>
+          </li>
+
+          <li>
+            Set up the following environment variables in your build process
+            (use the <i>libraryname</i> from the previous step) 
+<pre>
+<samp>ADDENVVAR ENVVAR(ICU_DATA) VALUE('/icu/source/data')
+ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
+ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
+ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
+</pre>
+            <i>libraryname</i> identifies target as400 library for *module,
+            *pgm and *srvpgm objects.<br>
+            <br>
+          </li>
+
+          <li>Add QCXXN, to your build process library list. This results in
+          the resolution of CRTCPPMOD used by the icc compiler</li>
+
+          <li>
+            In order to get the tests to run correctly, the QUTCOFFSET needs
+            to be set to the Pacific Time Zone offset.<br>
+            <br>
+             To check your QUTCOFFSET: 
+<pre>
+<samp>DSPSYSVAL SYSVAL(QUTCOFFSET)</samp>
+</pre>
+            <br>
+             To change your QUTCOFFSET:<br>
+<pre>
+<samp>CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800')</samp>
+</pre>
+            You should change -0800 to -0700 for daylight savings.<br>
+            <br>
+          </li>
+
+          <li>Run 'CHGJOB CCSID(37)'</li>
+
+          <li>Run 'QSH'</li>
+
+          <li>Run gunzip on the ICU source code compressed tar archive
+          (icu-<i>X</i>-<i>Y</i>.tar.gz or icu-<i>X</i>-<i>Y</i>.tgz).</li>
+
+          <li>Run unpax-icu.sh on the tar file from the ICU download
+          page.</li>
+
+          <li>Change your current directory to icu/source.</li>
+
+          <li>
+            Configure the Makefiles with the as/400 configure script from the
+            ICU download page. <strong>Note:</strong> Verify that the
+            mh-os400 configure file is used. 
+
+            <ul>
+              <li>Run 'configure --host=as400-os400'</li>
+
+              <li>The 'clean' and 'install' targets will not work without
+              changes because of symbolic links. To delete the target module,
+              program, or service programs replace <tt>rm -rf</tt> with
+              <strong>$(RMV)</strong>, and in the library installation
+              targets (install-library) change <tt>$(INSTALL)</tt> to
+              <strong><tt>$(INSTALL-S)</tt></strong>.</li>
+            </ul>
+          </li>
+
+          <li>Run 'gmake -e'. The '-e' option is needed to pickup the
+          compilers.</li>
+
+          <li>Run 'gmake -e check' to run the tests.</li>
+        </ol>
+        <!-- end build environment -->
+      </li>
+    </ul>
+
+    <h2><a name="ImportantNotes">Important Notes About Using ICU</a></h2>
+
+    <h3><a name="ImportantNotesWindows">Windows Platform</a></h3>
+
+    <p>If you are building on the Win32 platform, it is important that you
+    understand a few of the following build details.</p>
+
+    <h4><a name="ImportantNotesWindowsDLL">DLL directories and the PATH
+    setting</a></h4>
+
+    <p>As delivered, the International Components for Unicode build as
+    several DLLs. These DLLs are placed in the "icu\bin" directory. You must
+    add this directory to the PATH environment variable in your system, or
+    any executables you build will not be able to access International
+    Components for Unicode libraries. Alternatively, you can copy the DLL
+    files into a directory already in your PATH, but we do not recommend
+    this. You can wind up with multiple copies of the DLL and wind up using
+    the wrong one.</p>
+
+    <h4><a name="ImportantNotesWindowsPath">Changing your PATH</a></h4>
+
+    <ul>
+      <li><strong>Windows 2000</strong>: Use the System Icon in the Control
+      Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
+      button. Select the variable PATH in the lower box, and select the lower
+      "Edit..." button. In the "Variable Value" box, append the string
+      ";$Root\bin" to the end of the path string. If there is nothing there,
+      just type in "$Root\bin". Click the Set button, then the OK
+      button.</li>
+
+      <li><strong>Windows NT</strong>: Use the System Icon in the Control
+      Panel. Pick the "Environment" tab, and select the variable PATH in the
+      lower box. In the "value" box, append the string ";$Root\bin" at the
+      end of the path string. If there is nothing there, just type in
+      "$Root\bin". Click the Set button, then the OK button.</li>
+
+      <li><strong>Windows 95/98/ME</strong>: Edit the autoexec.bat, and add
+      the following line to the end of file, "SET PATH=%PATH%;$Root\bin"</li>
+    </ul>
+
+    <h4><a name="ImportantNotesWindowsLink">Linking with Runtime
+    libraries</a></h4>
+
+    <p>All the DLLs link with the C runtime library "Debug Multithreaded DLL"
+    or "Multithreaded DLL." (This is changed through the Project Settings
+    dialog, on the C/C++ tab, under Code Generation.) It is important that
+    any executable or other DLL you build which uses the International
+    Components for Unicode DLLs links with these runtime libraries as well.
+    If you do not do this, you will get random memory errors when you run the
+    executable.<br>
+    </p>
+
+    <h3><a name="ImportantNotesUnix">Unix Type Platform</a></h3>
+
+    <p>If you are building on a Unix platform, it is important that you add
+    the location of your ICU libraries (including the data library) to your
+    LD_LIBRARY_PATH environment variable. The ICU libraries may not link or
+    load properly without doing this.</p>
+
+    <h3><a name="ImportantNotesDeprecatedAPI">Methods for enabling deprecated
+    APIs</a></h3>
+
+    <h4>C</h4>
+
+    <p>Some deprecated C APIs can be enabled without recompiling the ICU
+    libraries. This can be achieved by defining certain symbols before
+    including the ICU header files. For example, to enable deprecated C APIs
+    for formatting.</p>
+<pre>
+<code>#ifndef U_USE_DEPRECATED_FORMAT_API
+#  define U_USE_DEPRECATED_FORMAT_API 1
+#endif
+
+#include "unicode/udat.h"
+
+int main(){
+    UDateFormat *def, *fr, *fr_pat ;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar temp[30];
+
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &amp;status);
+    if(U_FAILURE(status)){
+        printf("Error creating the french dateformat using full time style\n %s\n",
+            myErrorName(status) );
+    }
+    /* This is supposed to open default date format,
+       but later on it treats it like it is "en_US".
+       This is very bad when you try to run the tests
+       on a machine where the default locale is NOT "en_US"
+    */
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &amp;status);
+    if(U_FAILURE(status)){
+        .... /* handle the error */
+    }
+}</code>
+</pre>
+
+    <h4>C++</h4>
+
+    <p>Deprecated C++ APIs cannot be enbaled without recompiling ICU
+    libraries. Every service has a specific symbol that should be defined to
+    enable the deprecated API of that service. For example: To enable
+    deprecated APIs in Transliteration service
+    U_USE_DEPRECATED_TRANSLITERATOR_API symbol should be defined before
+    compiling ICU.</p>
+
+    <h2><a name="UsageInformation">Getting More Information About
+    ICU</a></h2>
+
+    <table border="1" cellpadding="3" width="100%" summary="">
+      <caption>
+        Here are some useful links regarding ICU and internationalization in
+        general.
+      </caption>
+
+      <tr>
+        <td><a href=
+        "http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a></td>
+
+        <td>International Components for Unicode homepage</td>
+      </tr>
+
+      <tr>
+        <td><a href=
+        "http://oss.software.ibm.com/icu/userguide/icufaq.html">http://oss.software.ibm.com/icu/userguide/icufaq.html</a></td>
+
+        <td>Frequently asked questions about ICU</td>
+      </tr>
+
+      <tr>
+        <td><a href=
+        "http://oss.software.ibm.com/icu/download">http://oss.software.ibm.com/icu/download</a></td>
+
+        <td>Download the latest version of ICU and documentation</td>
+      </tr>
+
+      <tr>
+        <td><a href=
+        "http://oss.software.ibm.com/icu/apiref/">http://oss.software.ibm.com/icu/apiref/</a></td>
+
+        <td>API Documentation in HTML form</td>
+      </tr>
+
+      <tr>
+        <td><a href=
+        "http://oss.software.ibm.com/icu/userguide/">http://oss.software.ibm.com/icu/userguide/</a></td>
+
+        <td>Draft User's Guide Documentation in HTML form</td>
+      </tr>
+
+      <tr>
+        <td><a href=
+        "http://oss.software.ibm.com/icu/userguide/icu.pdf">http://oss.software.ibm.com/icu/userguide/icu.pdf</a></td>
+
+        <td>Draft User's Guide Documentation in PDF form</td>
+      </tr>
+
+      <tr>
+        <td><a href=
+        "http://www.ibm.com/developer/unicode/">http://www.ibm.com/developer/unicode/</a></td>
+
+        <td>Information on how to make applications global.</td>
+      </tr>
+    </table>
+
+    <h2><a name="SubmittingComments">Submitting Comments, Requesting Features
+    and Reporting Bugs</a></h2>
+
+    <p>To submit comments, request features and report bugs, please contact
+    us. The best forum is the ICU mailing list. See the <a href=
+    "http://oss.software.ibm.com/icu/archives/">information on how to browse
+    and join the list</a>. If you find a bug in the code that has not been
+    submitted and/or fixed yet, then please <a href=
+    "http://oss.software.ibm.com/developerworks/opensource/icu/bugs">submit a
+    jitterbug</a>.</p>
+    <hr>
+
+    <p>Copyright &copy; 1997-2001 International Business Machines Corporation
+    and others. All Rights Reserved.<br>
+     IBM Center for Emerging Technologies Silicon Valley,<br>
+     10275 N De Anza Blvd., Cupertino, CA 95014<br>
+     All rights reserved.</p>
+  </body>
+</html>
+

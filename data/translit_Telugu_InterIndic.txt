@@ -1,0 +1,117 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../text/resources/Transliterator_Telugu_InterIndic.txt
+// Date: Sat Nov 10 17:25:42 2001
+//--------------------------------------------------------------------
+
+// Telugu_InterIndic
+
+translit_Telugu_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \u005cicu4j\u005csrc\u005ccom\u005cibm\u005ctext\u005cresources/Transliterator_Telugu_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+// Telugu_InterIndic
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:07 2001
+//--------------------------------------------------------------------
+// Telugu-InterIndic
+//:: NFD (NFC) ;
+"\u0c01>\ue001;" // SIGN CANDRABINDU
+"\u0c02>\ue002;" // SIGN ANUSVARA
+"\u0c03>\ue003;" // SIGN VISARGA
+"\u0c05>\ue005;" // LETTER A
+"\u0c06>\ue006;" // LETTER AA
+"\u0c07>\ue007;" // LETTER I
+"\u0c08>\ue008;" // LETTER II
+"\u0c09>\ue009;" // LETTER U
+"\u0c0a>\ue00a;" // LETTER UU
+"\u0c0b>\ue00b;" // LETTER VOCALIC R
+"\u0c0c>\ue00c;" // LETTER VOCALIC L
+"\u0c0e>\ue00e;" // LETTER E
+"\u0c0f>\ue00f;" // LETTER EE
+"\u0c10>\ue010;" // LETTER AI
+"\u0c12>\ue012;" // LETTER O
+"\u0c13>\ue013;" // LETTER OO
+"\u0c14>\ue014;" // LETTER AU
+"\u0c15>\ue015;" // LETTER KA
+"\u0c16>\ue016;" // LETTER KHA
+"\u0c17>\ue017;" // LETTER GA
+"\u0c18>\ue018;" // LETTER GHA
+"\u0c19>\ue019;" // LETTER NGA
+"\u0c1a>\ue01a;" // LETTER CA
+"\u0c1b>\ue01b;" // LETTER CHA
+"\u0c1c>\ue01c;" // LETTER JA
+"\u0c1d>\ue01d;" // LETTER JHA
+"\u0c1e>\ue01e;" // LETTER NYA
+"\u0c1f>\ue01f;" // LETTER TTA
+"\u0c20>\ue020;" // LETTER TTHA
+"\u0c21>\ue021;" // LETTER DDA
+"\u0c22>\ue022;" // LETTER DDHA
+"\u0c23>\ue023;" // LETTER NNA
+"\u0c24>\ue024;" // LETTER TA
+"\u0c25>\ue025;" // LETTER THA
+"\u0c26>\ue026;" // LETTER DA
+"\u0c27>\ue027;" // LETTER DHA
+"\u0c28>\ue028;" // LETTER NA
+"\u0c2a>\ue02a;" // LETTER PA
+"\u0c2b>\ue02b;" // LETTER PHA
+"\u0c2c>\ue02c;" // LETTER BA
+"\u0c2d>\ue02d;" // LETTER BHA
+"\u0c2e>\ue02e;" // LETTER MA
+"\u0c2f>\ue02f;" // LETTER YA
+"\u0c30>\ue030;" // LETTER RA
+"\u0c31>\ue031;" // LETTER RRA
+"\u0c32>\ue032;" // LETTER LA
+"\u0c33>\ue033;" // LETTER LLA
+"\u0c35>\ue035;" // LETTER VA
+"\u0c36>\ue036;" // LETTER SHA
+"\u0c37>\ue037;" // LETTER SSA
+"\u0c38>\ue038;" // LETTER SA
+"\u0c39>\ue039;" // LETTER HA
+"\u0c3e>\ue03e;" // VOWEL SIGN AA
+"\u0c3f>\ue03f;" // VOWEL SIGN I
+"\u0c40>\ue040;" // VOWEL SIGN II
+"\u0c41>\ue041;" // VOWEL SIGN U
+"\u0c42>\ue042;" // VOWEL SIGN UU
+"\u0c43>\ue043;" // VOWEL SIGN VOCALIC R
+"\u0c44>\ue044;" // VOWEL SIGN VOCALIC RR
+"\u0c46>\ue046;" // VOWEL SIGN E
+"\u0c47>\ue047;" // VOWEL SIGN EE
+"\u0c48>\ue048;" // VOWEL SIGN AI
+"\u0c4a>\ue04a;" // VOWEL SIGN O
+"\u0c4b>\ue04b;" // VOWEL SIGN OO
+"\u0c4c>\ue04c;" // VOWEL SIGN AU
+"\u0c4d>\ue04d;" // SIGN VIRAMA
+"\u0c55>\ue055;" // LENGTH MARK
+"\u0c56>\ue056;" // AI LENGTH MARK
+"\u0c60>\ue060;" // LETTER VOCALIC RR
+"\u0c61>\ue061;" // LETTER VOCALIC LL
+"\u0c66>\ue066;" // DIGIT ZERO
+"\u0c67>\ue067;" // DIGIT ONE
+"\u0c68>\ue068;" // DIGIT TWO
+"\u0c69>\ue069;" // DIGIT THREE
+"\u0c6a>\ue06a;" // DIGIT FOUR
+"\u0c6b>\ue06b;" // DIGIT FIVE
+"\u0c6c>\ue06c;" // DIGIT SIX
+"\u0c6d>\ue06d;" // DIGIT SEVEN
+"\u0c6e>\ue06e;" // DIGIT EIGHT
+"\u0c6f>\ue06f;" // DIGIT NINE
+//    :: NFC (NFD) ;
+// eof
+  }
+}

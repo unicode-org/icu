@@ -1,0 +1,121 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../text/resources/Transliterator_Bengali_InterIndic.txt
+// Date: Sat Nov 10 17:25:41 2001
+//--------------------------------------------------------------------
+
+// Bengali_InterIndic
+
+translit_Bengali_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Bengali_InterIndic
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:41:57 2001
+//--------------------------------------------------------------------
+// Bengali-InterIndic
+//:: NFD (NFC) ;
+"\u0981>\ue001;" // SIGN CANDRABINDU
+"\u0982>\ue002;" // SIGN ANUSVARA
+"\u0983>\ue003;" // SIGN VISARGA
+"\u0985>\ue005;" // LETTER A
+"\u0986>\ue006;" // LETTER AA
+"\u0987>\ue007;" // LETTER I
+"\u0988>\ue008;" // LETTER II
+"\u0989>\ue009;" // LETTER U
+"\u098a>\ue00a;" // LETTER UU
+"\u098b>\ue00b;" // LETTER VOCALIC R
+"\u098c>\ue00c;" // LETTER VOCALIC L
+"\u098f>\ue00f;" // LETTER E
+"\u0990>\ue010;" // LETTER AI
+"\u0993>\ue013;" // LETTER O
+"\u0994>\ue014;" // LETTER AU
+"\u0995>\ue015;" // LETTER KA
+"\u0996>\ue016;" // LETTER KHA
+"\u0997>\ue017;" // LETTER GA
+"\u0998>\ue018;" // LETTER GHA
+"\u0999>\ue019;" // LETTER NGA
+"\u099a>\ue01a;" // LETTER CA
+"\u099b>\ue01b;" // LETTER CHA
+"\u099c>\ue01c;" // LETTER JA
+"\u099d>\ue01d;" // LETTER JHA
+"\u099e>\ue01e;" // LETTER NYA
+"\u099f>\ue01f;" // LETTER TTA
+"\u09a0>\ue020;" // LETTER TTHA
+"\u09a1>\ue021;" // LETTER DDA
+"\u09a2>\ue022;" // LETTER DDHA
+"\u09a3>\ue023;" // LETTER NNA
+"\u09a4>\ue024;" // LETTER TA
+"\u09a5>\ue025;" // LETTER THA
+"\u09a6>\ue026;" // LETTER DA
+"\u09a7>\ue027;" // LETTER DHA
+"\u09a8>\ue028;" // LETTER NA
+"\u09aa>\ue02a;" // LETTER PA
+"\u09ab>\ue02b;" // LETTER PHA
+"\u09ac>\ue02c;" // LETTER BA
+"\u09ad>\ue02d;" // LETTER BHA
+"\u09ae>\ue02e;" // LETTER MA
+"\u09af>\ue02f;" // LETTER YA
+"\u09b0>\ue030;" // LETTER RA
+"\u09b2>\ue032;" // LETTER LA
+"\u09b6>\ue036;" // LETTER SHA
+"\u09b7>\ue037;" // LETTER SSA
+"\u09b8>\ue038;" // LETTER SA
+"\u09b9>\ue039;" // LETTER HA
+"\u09bc>\ue03c;" // SIGN NUKTA
+"\u09be>\ue03e;" // VOWEL SIGN AA
+"\u09bf>\ue03f;" // VOWEL SIGN I
+"\u09c0>\ue040;" // VOWEL SIGN II
+"\u09c1>\ue041;" // VOWEL SIGN U
+"\u09c2>\ue042;" // VOWEL SIGN UU
+"\u09c3>\ue043;" // VOWEL SIGN VOCALIC R
+"\u09c4>\ue044;" // VOWEL SIGN VOCALIC RR
+"\u09c7>\ue047;" // VOWEL SIGN E
+"\u09c8>\ue048;" // VOWEL SIGN AI
+"\u09cb>\ue04b;" // VOWEL SIGN O
+"\u09cc>\ue04c;" // VOWEL SIGN AU
+"\u09cd>\ue04d;" // SIGN VIRAMA
+"\u09d7>\ue057;" // AU LENGTH MARK
+"\u09dc>\ue053;" // LETTER RRA
+"\u09dd>\ue05d;" // LETTER RHA
+"\u09df>\ue05f;" // LETTER YYA
+"\u09e0>\ue060;" // LETTER VOCALIC RR
+"\u09e1>\ue061;" // LETTER VOCALIC LL
+"\u09e2>\ue062;" // VOWEL SIGN VOCALIC L
+"\u09e3>\ue063;" // VOWEL SIGN VOCALIC LL
+"\u09e6>\ue066;" // DIGIT ZERO
+"\u09e7>\ue067;" // DIGIT ONE
+"\u09e8>\ue068;" // DIGIT TWO
+"\u09e9>\ue069;" // DIGIT THREE
+"\u09ea>\ue06a;" // DIGIT FOUR
+"\u09eb>\ue06b;" // DIGIT FIVE
+"\u09ec>\ue06c;" // DIGIT SIX
+"\u09ed>\ue06d;" // DIGIT SEVEN
+"\u09ee>\ue06e;" // DIGIT EIGHT
+"\u09ef>\ue06f;" // DIGIT NINE
+"\u09f0>\ue0f0;" // UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
+"\u09f1>\ue0f1;" // UNMAPPED Bengali-InterIndic: LETTER RA WITH LOWER DIAGONAL
+// \u09f2>; # UNMAPPED Bengali-InterIndic: RUPEE MARK
+// \u09f3>; # UNMAPPED Bengali-InterIndic: RUPEE SIGN
+// \u09f4>; # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE
+// \u09f5>; # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR TWO
+// \u09f6>; # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR THREE
+// \u09f7>; # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR FOUR
+// \u09f8>; # UNMAPPED Bengali-InterIndic: CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+// \u09f9>; # UNMAPPED Bengali-InterIndic: CURRENCY DENOMINATOR SIXTEEN
+"\u09fa>\ue070;" // ISSHAR
+//    :: NFC (NFD) ;
+// eof
+  }
+}

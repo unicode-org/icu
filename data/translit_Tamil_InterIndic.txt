@@ -1,0 +1,99 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../text/resources/Transliterator_Tamil_InterIndic.txt
+// Date: Sat Nov 10 17:25:42 2001
+//--------------------------------------------------------------------
+
+// Tamil_InterIndic
+
+translit_Tamil_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \u005cicu4j\u005csrc\u005ccom\u005cibm\u005ctext\u005cresources/Transliterator_Tamil_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+// Tamil_InterIndic
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:07 2001
+//--------------------------------------------------------------------
+// Tamil-InterIndic
+//:: NFD (NFC) ;
+"\u0bc6\u0bd7>\ue04c;"
+"\u0b82>\ue002;" // SIGN ANUSVARA
+"\u0b83>\ue003;" // SIGN VISARGA
+"\u0b85>\ue005;" // LETTER A
+"\u0b86>\ue006;" // LETTER AA
+"\u0b87>\ue007;" // LETTER I
+"\u0b88>\ue008;" // LETTER II
+"\u0b89>\ue009;" // LETTER U
+"\u0b8a>\ue00a;" // LETTER UU
+"\u0b8e>\ue00e;" // LETTER E
+"\u0b8f>\ue00f;" // LETTER EE
+"\u0b90>\ue010;" // LETTER AI
+"\u0b92>\ue012;" // LETTER O
+"\u0b93>\ue013;" // LETTER OO
+"\u0b94>\ue014;" // LETTER AU
+"\u0b95>\ue015;" // LETTER KA
+"\u0b99>\ue019;" // LETTER NGA
+"\u0b9a>\ue01a;" // LETTER CA
+"\u0b9c>\ue01c;" // LETTER JA
+"\u0b9e>\ue01e;" // LETTER NYA
+"\u0b9f>\ue01f;" // LETTER TTA
+"\u0ba3>\ue023;" // LETTER NNA
+"\u0ba4>\ue024;" // LETTER TA
+"\u0ba8>\ue028;" // LETTER NA
+"\u0ba9>\ue029;" // LETTER NNNA
+"\u0baa>\ue02a;" // LETTER PA
+"\u0bae>\ue02e;" // LETTER MA
+"\u0baf>\ue02f;" // LETTER YA
+"\u0bb0>\ue030;" // LETTER RA
+"\u0bb1>\ue031;" // LETTER RRA
+"\u0bb2>\ue032;" // LETTER LA
+"\u0bb3>\ue033;" // LETTER LLA
+"\u0bb4>\ue034;" // LETTER LLLA
+"\u0bb5>\ue035;" // LETTER VA
+"\u0bb7>\ue037;" // LETTER SSA
+"\u0bb8>\ue038;" // LETTER SA
+"\u0bb9>\ue039;" // LETTER HA
+"\u0bbe>\ue03e;" // VOWEL SIGN AA
+"\u0bbf>\ue03f;" // VOWEL SIGN I
+"\u0bc0>\ue040;" // VOWEL SIGN II
+"\u0bc1>\ue041;" // VOWEL SIGN U
+"\u0bc2>\ue042;" // VOWEL SIGN UU
+"\u0bc6>\ue046;" // VOWEL SIGN E
+"\u0bc7>\ue047;" // VOWEL SIGN EE
+"\u0bc8>\ue048;" // VOWEL SIGN AI
+"\u0bca>\ue04a;" // VOWEL SIGN O
+"\u0bcb>\ue04b;" // VOWEL SIGN OO
+"\u0bcc>\ue04c;" // VOWEL SIGN AU
+"\u0bcd>\ue04d;" // SIGN VIRAMA
+"\u0bd7>\ue057;" // AU LENGTH MARK
+"\u0be7>\ue067;" // DIGIT ONE
+"\u0be8>\ue068;" // DIGIT TWO
+"\u0be9>\ue069;" // DIGIT THREE
+"\u0bea>\ue06a;" // DIGIT FOUR
+"\u0beb>\ue06b;" // DIGIT FIVE
+"\u0bec>\ue06c;" // DIGIT SIX
+"\u0bed>\ue06d;" // DIGIT SEVEN
+"\u0bee>\ue06e;" // DIGIT EIGHT
+"\u0bef>\ue06f;" // DIGIT NINE
+// \u0bf0>; # UNMAPPED Tamil-InterIndic: NUMBER TEN
+// \u0bf1>; # UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
+// \u0bf2>; # UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
+//    :: NFC (NFD) ;
+// eof
+  }
+}
