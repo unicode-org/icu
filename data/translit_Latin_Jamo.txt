@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Latin_Jamo.txt
-// Date: Wed Nov 21 18:58:49 2001
+// Date: Tue Nov 27 17:39:12 2001
 //--------------------------------------------------------------------
 
 // Latin_Jamo
@@ -18,11 +18,10 @@ translit_Latin_Jamo {
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 
-// note: a global filter is more efficient, but MUST include all source chars
-":: [\\u0000-\u00FF [:Latin:]] ;"
-
-":: NFKD (NFC);"
-":: Lower ();"
+//- N.B. DO NOT put any filters, NFD, etc. here -- those are aliased in
+//- the INDEX file.  This transliterator is, by itself, not
+//- instantiated.  It is used as a part of Latin-Jamo, Latin-Hangul, or
+//- inverses thereof.
 
 // Transliteration from Latin characters to Korean script is done in
 // two steps: Latin to Jamo, then Jamo to Hangul.  The Jamo-Hangul
@@ -43,7 +42,7 @@ translit_Latin_Jamo {
 // We will, however, insert two 'null' jamo to make foreign words
 // conform to Korean syllable structure.  These are the null initial
 // consonant 110B (IEUNG) and the null vowel 1173 (EU).  In Latin text,
-// we will use the hyphen in order to disambiguate strings,
+// we will use the separator in order to disambiguate strings,
 // e.g. "kan-ggan" (initial GG) vs. "kanggan" (final NG + initial G).
 
 // We will not use all of the characters in the jamo block.  We will
@@ -54,7 +53,7 @@ translit_Latin_Jamo {
 // for the rules.  They are phrased in terms of Latin-Jamo transliteration.
 // The Jamo-Latin rules derive from these, since the Jamo-Latin rules are
 // just context-free transliteration of jamo to corresponding short names,
-// with the addition of hyphens to maintain round-trip integrity
+// with the addition of separators to maintain round-trip integrity
 // in the context of the Latin-Jamo rules.
 
 // A sequence of vowels:
@@ -166,6 +165,9 @@ translit_Latin_Jamo {
   // The last character of the latin transliteration of a medial
   "$latinMedialEnd = [aeiou];"
 
+  // Disambiguation separator
+  "$sep = \\\';"
+
 //----------------------------------------------------------------------
 // Jamo-Latin
 
@@ -183,31 +185,31 @@ translit_Latin_Jamo {
 // we are going from single characters, so we can very easily piggyback
 // on the Latin-Jamo.
 
-// The main issue with Jamo-Latin is when to insert hyphens.
-// Hyphens are inserted to obtain correct round trip behavior.  For
+// The main issue with Jamo-Latin is when to insert separators.
+// Separators are inserted to obtain correct round trip behavior.  For
 // example, the sequence Ki A Gf Gi E, if transliterated to "kagge",
 // would then round trip to Ki A GGi E.  To prevent this, we insert a
-// hyphen: "kag-ge".  IMPORTANT: The need for hyphens depends
+// separator: "kag-ge".  IMPORTANT: The need for separators depends
 // very specifically on the behavior of the Latin-Jamo rules.  A change
 // in the Latin-Jamo behavior can completely change the way the
-// hyphen insertion must be done.
+// separator insertion must be done.
 
-// First try to preserve actual hyphens in the jamo text by doubling
+// First try to preserve actual separators in the jamo text by doubling
 // them.  This fixes problems like:
 // (Di)(A)(Ji)(U)(NG)-(IEUNG)(YEO)(Nf)(Gi)(YEO)(L) => dajung-yeongyeol
 // => (Di)(A)(Ji)(U)(NG)(IEUNG)(YEO)(Nf)(Gi)(YEO)(L).  This is optional
-// -- if we don't care about losing hyphens in the jamo, we can delete
+// -- if we don't care about losing separators in the jamo, we can delete
 // this rule.
 
-  "'--' <> '-';"
+  "$sep $sep <> $sep;"
 
 // Triple consonants.  For three consonants "axxx" we insert a
-// hyphen between the first and second "x" if XXf, Xf, and Xi all
+// separator between the first and second "x" if XXf, Xf, and Xi all
 // exist, and we have A Xf XXi.  This prevents the reverse
 // transliteration to A XXf Xi.
 
-  "'-' < $latinMedialEnd g {} $GGi;"
-  "'-' < $latinMedialEnd s {} $SSi;"
+  "$sep < $latinMedialEnd g {} $GGi;"
+  "$sep < $latinMedialEnd s {} $SSi;"
 
 // For vowels the rule is similar.  If there is a vowel "ae" such that
 // "a" by itself and "e" by itself are vowels, then we want to map A E
@@ -219,34 +221,34 @@ translit_Latin_Jamo {
 // sequences where an initial IEUNG is transliterated away:
 //   (IEUNG)(A)(IEUNG)(EO) => aeo => (IEUNG)(AE)(IEUNG)(O)
 
-  "'-' < [^$latinMedial] [y w] e {} [$O $OE];"
-  "'-' < [^$latinMedial] e {} [$O $OE $U];"
-  "'-' < [^$latinMedial] [o a] {} [$E $EO $EU];"
-  "'-' < [^$latinMedial] [w y] a {} [$E $EO $EU];"
+  "$sep < [^$latinMedial] [y w] e {} [$O $OE];"
+  "$sep < [^$latinMedial] e {} [$O $OE $U];"
+  "$sep < [^$latinMedial] [o a] {} [$E $EO $EU];"
+  "$sep < [^$latinMedial] [w y] a {} [$E $EO $EU];"
 
 // Similar to the above, but with an intervening $IEUNG.
 
-  "'-' < [^$latinMedial] [y w] e {} $IEUNG [$O $OE];"
-  "'-' < [^$latinMedial] e {} $IEUNG [$O $OE $U];"
-  "'-' < [^$latinMedial] [o a] {} $IEUNG [$E $EO $EU];"
-  "'-' < [^$latinMedial] [w y] a {} $IEUNG [$E $EO $EU];"
+  "$sep < [^$latinMedial] [y w] e {} $IEUNG [$O $OE];"
+  "$sep < [^$latinMedial] e {} $IEUNG [$O $OE $U];"
+  "$sep < [^$latinMedial] [o a] {} $IEUNG [$E $EO $EU];"
+  "$sep < [^$latinMedial] [w y] a {} $IEUNG [$E $EO $EU];"
 
 // Single finals followed by IEUNG.  The jamo sequence A Xf IEUNG E,
 // where Xi also exists, must be transliterated as "ax-e" to prevent
 // the round trip conversion to A Xi E.
 
-  "'-' < $latinMedialEnd b {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd c {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd d {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd g {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd h {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd j {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd k {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd m {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd n {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd p {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd s {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd t {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd b {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd c {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd d {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd g {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd h {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd j {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd k {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd m {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd n {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd p {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd s {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd t {} $IEUNG $jamoMedial;"
 
 // Double finals followed by IEUNG.  Similar to the single finals
 // followed by IEUNG.  Any latin consonant pair X Y, between medials,
@@ -254,43 +256,43 @@ translit_Latin_Jamo {
 // part of A XYf IEUNG E, to prevent round trip conversion to A Xf Yi
 // E.
 
-  "'-' < $latinMedialEnd b s {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd g g {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd g s {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l b {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l g {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l h {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l m {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l p {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l s {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd l t {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd n g {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd n h {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd n j {} $IEUNG $jamoMedial;"
-  "'-' < $latinMedialEnd s s {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd b s {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd g g {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd g s {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l b {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l g {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l h {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l m {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l p {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l s {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd l t {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd n g {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd n h {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd n j {} $IEUNG $jamoMedial;"
+  "$sep < $latinMedialEnd s s {} $IEUNG $jamoMedial;"
 
 // Split doubles.  Text of the form A Xi Xf E, where XXi also occurs,
 // we transliterate as "ax-xe" to prevent round trip transliteration as
 // A XXi E.
 
-  "'-' < $latinMedialEnd b {} $Bi $jamoMedial;"
-  "'-' < $latinMedialEnd d {} $Di $jamoMedial;"
-  "'-' < $latinMedialEnd j {} $Ji $jamoMedial;"
-  "'-' < $latinMedialEnd g {} $Gi $jamoMedial;"
-  "'-' < $latinMedialEnd s {} $Si $jamoMedial;"
+  "$sep < $latinMedialEnd b {} $Bi $jamoMedial;"
+  "$sep < $latinMedialEnd d {} $Di $jamoMedial;"
+  "$sep < $latinMedialEnd j {} $Ji $jamoMedial;"
+  "$sep < $latinMedialEnd g {} $Gi $jamoMedial;"
+  "$sep < $latinMedialEnd s {} $Si $jamoMedial;"
 
 // XYY.  This corresponds to the XYY rule in Latin-Jamo.  By default
 // Latin-Jamo maps "xyy" to Xf YYi, to keep YY together.  As a result,
 // "xyy" forms that correspond to XYf Yi must be transliterated as
 // "xy-y".
 
-  "'-' < $latinMedialEnd b s {} [$Si $SSi];"
-  "'-' < $latinMedialEnd g s {} [$Si $SSi];"
-  "'-' < $latinMedialEnd l b {} [$Bi $BB];"
-  "'-' < $latinMedialEnd l g {} [$Gi $GGi];"
-  "'-' < $latinMedialEnd l s {} [$Si $SSi];"
-  "'-' < $latinMedialEnd n g {} [$Gi $GGi];"
-  "'-' < $latinMedialEnd n j {} [$Ji $JJ];"
+  "$sep < $latinMedialEnd b s {} [$Si $SSi];"
+  "$sep < $latinMedialEnd g s {} [$Si $SSi];"
+  "$sep < $latinMedialEnd l b {} [$Bi $BB];"
+  "$sep < $latinMedialEnd l g {} [$Gi $GGi];"
+  "$sep < $latinMedialEnd l s {} [$Si $SSi];"
+  "$sep < $latinMedialEnd n g {} [$Gi $GGi];"
+  "$sep < $latinMedialEnd n j {} [$Ji $JJ];"
 
 // Deletion of IEUNG is handled below.
 
@@ -518,18 +520,19 @@ translit_Latin_Jamo {
   "x > | ks;"
   "z > | s;"
 
-// Delete hyphens (Latin-Jamo).
+// Delete separators (Latin-Jamo).
 
-  "'-' > ;"
+  "$sep > ;"
 
 // Delete null consonants (Jamo-Latin).  Do NOT delete null EU vowels,
 // since these may also occur in text.
 
   "< $IEUNG;"
-":: NFC (NFKD);"
 
-// note: a global filter is more efficient, but MUST include all source chars!!
-":: ([:Hangul:]);"
+//- N.B. DO NOT put any filters, NFD, etc. here -- those are aliased in
+//- the INDEX file.  This transliterator is, by itself, not
+//- instantiated.  It is used as a part of Latin-Jamo, Latin-Hangul, or
+//- inverses thereof.
 
 // eof
   }

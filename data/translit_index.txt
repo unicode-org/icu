@@ -73,10 +73,6 @@ translit_index {
 { "Latin-Greek/UNGEGN", "alias", "Latin-el/UNGEGN", "" },
 { "Greek-Latin/UNGEGN", "alias", "el-Latin/UNGEGN", "" },
 
-{ "LowerLatin-Jamo", "internal", "translit_Latin_Jamo", "FORWARD" },
-{ "Latin-Jamo", "alias", "[\\p{Latin}]Any-Lower;LowerLatin-Jamo", "" },
-{ "Jamo-Latin", "file", "translit_Latin_Jamo", "REVERSE" },
-
 { "Latin-Katakana", "file", "translit_Latin_Katakana", "FORWARD" },
 { "Katakana-Latin", "file", "translit_Latin_Katakana", "REVERSE" },
 
@@ -98,10 +94,16 @@ translit_index {
 // Java only: { "Kanji-English", "file", "-", "FORWARD" },
 // Java only: { "Kanji-OnRomaji", "file", "-", "FORWARD" },
 
-// Compound rules
+// Korean
+// N.B. Don't end Latin-Jamo with NFC; that produces Hangul.  For
+// Hangul output use Latin-Hangul.
 
-{ "Latin-Hangul", "alias", "[\u002D[\\p{Latin}]];NFD;Latin-Jamo;NFC", "" },
-{ "Hangul-Latin", "alias", "[\\p{Hangul}];NFD;Jamo-Latin", "" },
+{ "LowerLatin-Jamo", "internal", "translit_Latin_Jamo", "FORWARD" },
+{ "Jamo-LowerLatin", "internal", "translit_Latin_Jamo", "REVERSE" },
+{ "Latin-Jamo", "alias", "[\u0027[\\p{Latin}]];NFKD;Lower;LowerLatin-Jamo", "" },
+{ "Jamo-Latin", "alias", "[\u1100-\u11FF];NFKD;Jamo-LowerLatin;NFC", "" },
+{ "Latin-Hangul", "alias", "[\u0027[\\p{Latin}]];NFKD;Lower;LowerLatin-Jamo;NFC", "" },
+{ "Hangul-Latin", "alias", "[\\p{Hangul}];NFKD;Jamo-LowerLatin;NFC", "" },
 
 // Inter-Indic composed rules
 { "Latin-InterIndic", "internal", "translit_Latin_InterIndic", "FORWARD" },
