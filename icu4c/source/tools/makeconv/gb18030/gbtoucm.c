@@ -16,12 +16,13 @@
 *   This tool reads a mapping table in a very simple format and turns it into
 *   .ucm file format.
 *   The input format is as follows:
-*       unicode [':' | '>'] codepage ['*']
+*       unicode [':' | '>' | '<'] codepage ['*']
 *   With
 *       unicode = hexadecimal number 0..10ffff
 *       codepage = hexadecimal number 0..ffffffff for big-endian bytes
 *       ':' for roundtrip mappings
 *       '>' for fallbacks from Unicode to codepage
+*       '<' for fallbacks from codepage to Unicode
 *       '*' ignored
 *
 *   To compile, just call a C compiler/linker with this source file.
@@ -54,14 +55,19 @@ main(int argc, const char *argv[]) {
 
         /* read Unicode code point */
         c=strtoul(line, &end, 16);
-        if(end==line || *end!=':' && *end!='>') {
-            fprintf(stderr, "error parsing code point from \"%s\"\n", line);
+        if(end==line) {
+            fprintf(stderr, "error: missing code point in \"%s\"\n", line);
             return 1;
         }
         if(*end==':') {
             fallback=0;
-        } else {
+        } else if(*end=='>') {
             fallback=1;
+        } else if(*end=='<') {
+            fallback=3;
+        } else {
+            fprintf(stderr, "error: delimiter not one of :>< in \"%s\"\n", line);
+            return 1;
         }
 
         /* read byte sequence as one long value */
