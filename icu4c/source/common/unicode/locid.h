@@ -34,6 +34,7 @@
 #include "unicode/unistr.h"
 #include "unicode/putil.h"
 #include "unicode/uloc.h"
+#include "unicode/strenum.h"
 
 /**
  * \file
@@ -250,6 +251,8 @@ public:
      * @param country  Uppercase two-letter ISO-3166 code. (optional)
      * @param variant  Uppercase vendor and browser specific code. See class
      *                 description. (optional)
+     * @param keywordsAndValues A string consisting of keyword/values pairs, such as
+     *                 "collation=phonebook;currency=euro"
      *
      * @see getDefault
      * @see uloc_getDefault
@@ -257,7 +260,8 @@ public:
      */
     Locale( const   char * language,
             const   char * country  = 0, 
-            const   char * variant  = 0);
+            const   char * variant  = 0,
+            const   char * keywordsAndValues = 0);
 
     /**
      * Initializes a Locale object from another Locale object.
@@ -386,6 +390,25 @@ public:
      * @stable ICU 2.0
      */
     inline const char * getName() const;
+
+    /**
+     * Gets the list of keywords for the specified locale. 
+     *
+     * @return pointer to StringEnumeration class. Client must dispose of it by calling delete.
+     * @draft ICU 2.8
+     */
+    StringEnumeration * getKeywords(UErrorCode &status) const;
+
+    /**
+     * Get the value for a keyword. 
+     * 
+     * @param keywordName name of the keyword for which we want the value. Case insensitive.
+     * @return pointer to the keyword value owned by the Locale object or NULL if there is 
+     *         no such a keyword.
+     *
+     * @draft ICU 2.8
+     */
+     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, UErrorCode &status) const;
 
     /**
      * returns the locale's three-letter language code, as specified
