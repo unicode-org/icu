@@ -7,6 +7,7 @@ package com.ibm.icu.text;
 import com.ibm.icu.util.*;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import com.ibm.icu.impl.CalendarData;
 import java.util.MissingResourceException;
 
 /**
@@ -61,17 +62,10 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
     public String getLeapMonth(int isLeapMonth) {
         return this.isLeapMonth[isLeapMonth];
     }
-
-    /**
-     * Override DateFormatSymbols.
-     * @stable ICU 2.0
-     */
-    protected void constructCalendarSpecific(ResourceBundle bundle) {
-        super.constructCalendarSpecific(bundle);
-        if (bundle != null) {
-            try {
-                isLeapMonth = bundle.getStringArray("IsLeapMonth");
-            } catch (MissingResourceException e) {}
-        }
+    
+    protected void initializeData(ULocale loc, CalendarData calData) {
+        super.initializeData(loc, calData);
+        isLeapMonth = calData.getStringArray("IsLeapMonth");
     }
+
 }
