@@ -244,12 +244,12 @@ doWriteReverse(const UChar *src, int32_t srcLength,
             /* we need to find out the destination length of the run,
                which will not include the BiDi control characters */
             int32_t length=srcLength;
-            UChar c;
+            UChar ch;
 
             i=0;
             do {
-                c=*src++;
-                if(!IS_BIDI_CONTROL_CHAR(c)) {
+                ch=*src++;
+                if(!IS_BIDI_CONTROL_CHAR(ch)) {
                     ++i;
                 }
             } while(--length>0);
@@ -311,16 +311,16 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
 
     /* more error checking */
     if( src==NULL || srcLength<0 ||
-        dest==NULL || destSize<=0
-    ) {
+        dest==NULL || destSize<=0)
+    {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* do input and output overlap? */
-    if( src>=dest && src<dest+destSize ||
-        dest>=src && dest<src+srcLength
-    ) {
+    if((src>=dest && src<dest+destSize) ||
+       (dest>=src && dest<src+srcLength))
+    {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
