@@ -1,5 +1,5 @@
 *.d
-libicu-*.*
+libicu*.*
 Debug
 Release
 Makefile
