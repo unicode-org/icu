@@ -187,8 +187,7 @@ $(TMPDATADIR)/testdata.lst: Makefile
 $(TMPDATADIR)2/testdata.lst: Makefile $(top_builddir)/test/testdata/root.res
 	@$(MKINSTALLDIRS) $(TMPDATADIR)2
 	@echo $(DATABUILDDIR)/test.dat > $@
-	cp $(top_builddir)/test/testdata/root.res $(TMPDATADIR)2/
-	@echo root.res >> $@
+	@echo $(DATABUILDDIR)/../test/testdata/root.res >> $@
 
 $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 	@$(MKINSTALLDIRS) $(TMPDATADIR)
