@@ -843,15 +843,16 @@ int32_t ucnv_toUChars (const UConverter * converter,
   /*Removes all state info on the UConverter */
   ucnv_reset (&myConverter);
 
-  myTarget_limit = target + targetSize - 1;
-
-  if(myTarget_limit < target)       /*if targetsize is such that the limit*/
-    myTarget_limit = ((UChar*)U_MAX_PTR) - 1; /* would wrap around, truncate it.    */
-
-
-  /*Not in pure pre-flight mode */
   if (targetSize > 0)
-    {
+  {
+      myTarget_limit = target + targetSize - 1;
+      /*if targetsize is such that the limit*/
+      if (myTarget_limit < target) {      
+          /* would wrap around, truncate it.    */
+          myTarget_limit = ((UChar*)U_MAX_PTR) - 1; 
+      }
+
+      /*Not in pure pre-flight mode */
 
       ucnv_toUnicode (&myConverter,
 		      &myTarget,
