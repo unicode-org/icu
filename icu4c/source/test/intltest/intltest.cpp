@@ -336,7 +336,7 @@ IntlTest::prettify(const UnicodeString &source,
 
 // Replace nonprintable characters with unicode escapes
 UnicodeString 
-IntlTest::prettify(const UnicodeString &source) 
+IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
 {
     int32_t i;
     UnicodeString target;
@@ -349,6 +349,22 @@ IntlTest::prettify(const UnicodeString &source)
 
         if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
         {
+            if (parseBackslash) {
+                // If we are preceded by an odd number of backslashes,
+                // then this character has already been backslash escaped.
+                // Delete a backslash.
+                int32_t backslashCount = 0;
+                for (int32_t j=target.length()-1; j>=0; --j) {
+                    if (target.charAt(j) == (UChar)92) {
+                        ++backslashCount;
+                    } else {
+                        break;
+                    }
+                }
+                if ((backslashCount % 2) == 1) {
+                    target.truncate(target.length() - 1);
+                }
+            }
             target += "\\u";
             appendHex(ch, 4, target);
         }
