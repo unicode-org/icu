@@ -1,3 +1,12 @@
+@echo off
+rem Added argument checking, Vladimir Weinsten - IBM Corp., 10/25/99
+
+if "%1"=="" goto :error
+
+if "%2"=="" goto :error
+
+if "%ICU_DATA%"=="" set ICU_DATA=%2\icu\data\
+
 %1\genrb %2\icu\data\default.txt
 %1\genrb %2\icu\data\index.txt
 %1\genrb %2\icu\data\ar.txt
@@ -149,5 +158,15 @@ rem Do the conversion for the test locales
 %1\genrb %2\icu\source\test\testdata\default.txt
 %1\genrb %2\icu\source\test\testdata\te.txt
 %1\genrb %2\icu\source\test\testdata\te_IN.txt
+goto :end
 
+:error
 
+echo call genrb with "Debug" or "Release" as the first argument
+echo and the absolute path to the icu directory as the second.
+echo for example, if you built the Debug version on icu, 
+echo and the full path of icu is d:\mytools\icu then call
+echo genrb Debug d:\mytools
+echo the current directory must be the icu\source\tools\genrb directory with genrb.bat
+
+:end
