@@ -4,12 +4,15 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.25 2002/12/19 17:55:42 srl Exp $
+## $Id: mh-darwin,v 1.26 2003/04/24 22:06:46 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
 SHAREDLIBCXXFLAGS = -dynamic
 SHAREDLIBCPPFLAGS =
+
+# Pad out the paths to the maximum possible length
+LD_FLAGS += -headerpad_max_install_names
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MMD  $(DEFS) $(CPPFLAGS)
@@ -20,8 +23,8 @@ COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -fno-common -c
 COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -fno-common -c
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) -dynamiclib -dynamic $(CFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
-SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(MIDDLE_SO_TARGET)
+SHLIB.c=	$(CC) -dynamiclib -dynamic $(CFLAGS) $(LDFLAGS) -install_name $(MIDDLE_SO_TARGET)
+SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS) -install_name $(MIDDLE_SO_TARGET)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=
