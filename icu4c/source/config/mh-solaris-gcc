@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris-gcc,v 1.23 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-solaris-gcc,v 1.24 2001/10/19 16:48:02 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -fPIC
@@ -13,6 +13,10 @@ SHAREDLIBCPPFLAGS = -DPIC
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+# Commands to link
+LINK.c=       $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=      $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
