@@ -46,7 +46,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public DecimalFormatSymbols() {
-        initialize( Locale.getDefault() );
+        initialize( ULocale.getDefault() );
     }
 
     /**
@@ -55,7 +55,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @stable ICU 2.0
      */
     public DecimalFormatSymbols( Locale locale ) {
-        initialize( locale );
+        initialize( ULocale.forLocale(locale) );
     }
 
     /**
@@ -430,6 +430,16 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the locale for which this object was constructed.
+     * @return the locale for which this object was constructed
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ULocale getULocale() {
+        return ulocale;
+    }
+
+    /**
      * Standard override.
      * @stable ICU 2.0
      */
@@ -486,21 +496,25 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Note: The organization of LocaleElements badly needs to be
      * cleaned up.
      */
-    private void initialize( Locale locale ) {
-        this.locale = locale;
+    private void initialize( ULocale locale ) {
+        this.locale = locale.toLocale();
+	this.ulocale = locale;
+
         /* try the cache first */
         String[][] data = (String[][]) cachedLocaleData.get(locale);
         String[] numberElements;
         if (data == null) {  /* cache miss */
             data = new String[1][];
-            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
+		getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
             data[0] = rb.getStringArray("NumberElements");
             /* update cache */
             cachedLocaleData.put(locale, data);
         }
         numberElements = data[0];
         
-        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
+	    getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
         
         // TODO: Determine actual and valid locale correctly.
         ULocale uloc = r.getULocale();
@@ -570,10 +584,13 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * to be 'E'.
      * Finally, set serialVersionOnStream back to the maximum allowed value so that
      * default serialization will work properly if this object is streamed out again.
-     *
      */
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
+
+	// TODO: it looks to me {dlf} that the serialization code was never updated
+	// to handle the actual/valid ulocale fields.
+
         stream.defaultReadObject();
         ///CLOVER:OFF
         // we don't have data for these old serialized forms any more
@@ -601,6 +618,10 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             // expensive and doesn't seem worth it.
             locale = Locale.getDefault();
         }
+	if (serialVersionOnStream < 4) {
+	    // use same default behavior as for versions with no Locale
+	    ulocale = ULocale.forLocale(locale);
+	}
         serialVersionOnStream = currentSerialVersion;
     }
 
@@ -756,6 +777,11 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     private Locale locale;
 
+    /**
+     * The requested ULocale.  We keep the old locale for serialization compatibility.
+     */
+    private ULocale ulocale;
+
     // Proclaim JDK 1.1 FCS compatibility
     static final long serialVersionUID = 5772796243397350300L;
 
@@ -766,7 +792,8 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     // - 2 for version from AlphaWorks, which includes 3 new fields:
     //     padEscape, exponentSeparator, and plusSign.
     // - 3 for ICU 2.2, which includes the locale field
-    private static final int currentSerialVersion = 3;
+    // - 4 for ICU 3.2, which includes the ULocale field
+    private static final int currentSerialVersion = 4;
     
     /**
      * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.

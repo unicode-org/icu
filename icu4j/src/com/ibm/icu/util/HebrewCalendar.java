@@ -288,7 +288,7 @@ public class HebrewCalendar extends Calendar {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public HebrewCalendar() {
-        this(TimeZone.getDefault(), Locale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault());
     }
 
     /**
@@ -300,7 +300,7 @@ public class HebrewCalendar extends Calendar {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public HebrewCalendar(TimeZone zone) {
-        this(zone, Locale.getDefault());
+        this(zone, ULocale.getDefault());
     }
 
     /**
@@ -313,6 +313,18 @@ public class HebrewCalendar extends Calendar {
      */
     public HebrewCalendar(Locale aLocale) {
         this(TimeZone.getDefault(), aLocale);
+    }
+
+    /**
+     * Constructs a <code>HebrewCalendar</code> based on the current time
+     * in the default time zone with the given locale.
+     *
+     * @param locale The locale for the new calendar.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public HebrewCalendar(ULocale locale) {
+        this(TimeZone.getDefault(), locale);
     }
 
     /**
@@ -331,6 +343,21 @@ public class HebrewCalendar extends Calendar {
     }
 
     /**
+     * Constructs a <code>HebrewCalendar</code> based on the current time
+     * in the given time zone with the given locale.
+     *
+     * @param zone The time zone for the new calendar.
+     *
+     * @param locale The locale for the new calendar.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public HebrewCalendar(TimeZone zone, ULocale locale) {
+        super(zone, locale);
+        setTimeInMillis(System.currentTimeMillis());
+    }
+
+    /**
      * Constructs a <code>HebrewCalendar</code> with the given date set
      * in the default time zone with the default locale.
      *
@@ -344,7 +371,7 @@ public class HebrewCalendar extends Calendar {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public HebrewCalendar(int year, int month, int date) {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         this.set(YEAR, year);
         this.set(MONTH, month);
         this.set(DATE, date);
@@ -359,7 +386,7 @@ public class HebrewCalendar extends Calendar {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public HebrewCalendar(Date date) {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         this.setTime(date);
     }
 
@@ -385,7 +412,7 @@ public class HebrewCalendar extends Calendar {
     public HebrewCalendar(int year, int month, int date, int hour,
                              int minute, int second)
     {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         this.set(YEAR, year);
         this.set(MONTH, month);
         this.set(DATE, date);
@@ -850,7 +877,7 @@ public class HebrewCalendar extends Calendar {
     public static CalendarFactory factory() {
         if (factory == null) {
             factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, Locale loc) {
+                public Calendar create(TimeZone tz, ULocale loc) {
                     return new HebrewCalendar(tz, loc);
                 }
 

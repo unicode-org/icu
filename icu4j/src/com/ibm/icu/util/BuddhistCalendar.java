@@ -90,6 +90,18 @@ public class BuddhistCalendar extends GregorianCalendar {
 
     /**
      * Constructs a <code>BuddhistCalendar</code> based on the current time
+     * in the default time zone with the given locale.
+     *
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public BuddhistCalendar(ULocale locale) {
+        super(locale);
+    }
+
+    /**
+     * Constructs a <code>BuddhistCalendar</code> based on the current time
      * in the given time zone with the given locale.
      *
      * @param zone the given time zone.
@@ -100,6 +112,20 @@ public class BuddhistCalendar extends GregorianCalendar {
      */
     public BuddhistCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
+    }
+
+    /**
+     * Constructs a <code>BuddhistCalendar</code> based on the current time
+     * in the given time zone with the given locale.
+     *
+     * @param zone the given time zone.
+     *
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public BuddhistCalendar(TimeZone zone, ULocale locale) {
+        super(zone, locale);
     }
 
     /**
@@ -231,7 +257,7 @@ public class BuddhistCalendar extends GregorianCalendar {
     public static CalendarFactory factory() {
         if (factory == null) {
             factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, Locale loc) {
+                public Calendar create(TimeZone tz, ULocale loc) {
                     return new BuddhistCalendar(tz, loc);
                 }
 

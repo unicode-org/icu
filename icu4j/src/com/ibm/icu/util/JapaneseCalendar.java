@@ -85,6 +85,17 @@ public class JapaneseCalendar extends GregorianCalendar {
 
     /**
      * Constructs a <code>JapaneseCalendar</code> based on the current time
+     * in the default time zone with the given locale.
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public JapaneseCalendar(ULocale locale) {
+        super(locale);
+    }
+
+    /**
+     * Constructs a <code>JapaneseCalendar</code> based on the current time
      * in the given time zone with the given locale.
      *
      * @param zone the given time zone.
@@ -95,6 +106,20 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     public JapaneseCalendar(TimeZone zone, Locale aLocale) {
         super(zone, aLocale);
+    }
+
+    /**
+     * Constructs a <code>JapaneseCalendar</code> based on the current time
+     * in the given time zone with the given locale.
+     *
+     * @param zone the given time zone.
+     *
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public JapaneseCalendar(TimeZone zone, ULocale locale) {
+        super(zone, locale);
     }
 
     /**
@@ -595,7 +620,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     public static CalendarFactory factory() {
         if (factory == null) {
             factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, Locale loc) {
+                public Calendar create(TimeZone tz, ULocale loc) {
                     return new JapaneseCalendar(tz, loc);
                 }
 

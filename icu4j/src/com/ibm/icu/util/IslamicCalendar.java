@@ -178,7 +178,7 @@ public class IslamicCalendar extends Calendar {
      */
     public IslamicCalendar()
     {
-        this(TimeZone.getDefault(), Locale.getDefault());
+        this(TimeZone.getDefault(), ULocale.getDefault());
     }
 
     /**
@@ -190,7 +190,7 @@ public class IslamicCalendar extends Calendar {
      */
     public IslamicCalendar(TimeZone zone)
     {
-        this(zone, Locale.getDefault());
+        this(zone, ULocale.getDefault());
     }
 
     /**
@@ -204,6 +204,19 @@ public class IslamicCalendar extends Calendar {
     public IslamicCalendar(Locale aLocale)
     {
         this(TimeZone.getDefault(), aLocale);
+    }
+
+    /**
+     * Constructs an <code>IslamicCalendar</code> based on the current time
+     * in the default time zone with the given locale.
+     *
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public IslamicCalendar(ULocale locale)
+    {
+        this(TimeZone.getDefault(), locale);
     }
 
     /**
@@ -222,6 +235,21 @@ public class IslamicCalendar extends Calendar {
     }
 
     /**
+     * Constructs an <code>IslamicCalendar</code> based on the current time
+     * in the given time zone with the given locale.
+     *
+     * @param zone the given time zone.
+     * @param locale the given ulocale.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public IslamicCalendar(TimeZone zone, ULocale locale)
+    {
+        super(zone, locale);
+        setTimeInMillis(System.currentTimeMillis());
+    }
+
+    /**
      * Constructs an <code>IslamicCalendar</code> with the given date set
      * in the default time zone with the default locale.
      *
@@ -230,7 +258,7 @@ public class IslamicCalendar extends Calendar {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(Date date) {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         this.setTime(date);
     }
 
@@ -247,7 +275,7 @@ public class IslamicCalendar extends Calendar {
      */
     public IslamicCalendar(int year, int month, int date)
     {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         this.set(Calendar.YEAR, year);
         this.set(Calendar.MONTH, month);
         this.set(Calendar.DATE, date);
@@ -273,7 +301,7 @@ public class IslamicCalendar extends Calendar {
     public IslamicCalendar(int year, int month, int date, int hour,
                              int minute, int second)
     {
-        super(TimeZone.getDefault(), Locale.getDefault());
+        super(TimeZone.getDefault(), ULocale.getDefault());
         this.set(Calendar.YEAR, year);
         this.set(Calendar.MONTH, month);
         this.set(Calendar.DATE, date);
@@ -650,7 +678,7 @@ public class IslamicCalendar extends Calendar {
     public static CalendarFactory factory() {
         if (factory == null) {
             factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, Locale loc) {
+                public Calendar create(TimeZone tz, ULocale loc) {
                     return new IslamicCalendar(tz, loc);
                 }
 

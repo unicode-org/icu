@@ -49,7 +49,7 @@ public class CurrencyTest extends TestFmwk {
         }
 
     try {
-      usd.getName(Locale.US, 5, new boolean[1]);
+      usd.getName(ULocale.US, 5, new boolean[1]);
       errln("expected getName with invalid type parameter to throw exception");
     }
     catch (Exception e) {
@@ -74,9 +74,9 @@ public class CurrencyTest extends TestFmwk {
       errln("unregister before register erroneously succeeded");
     }
 
-        Locale fu_FU = new Locale("fu", "FU", "");
+        ULocale fu_FU = new ULocale("fu_FU");
 
-        Object key1 = Currency.registerInstance(jpy, Locale.US);
+        Object key1 = Currency.registerInstance(jpy, ULocale.US);
         Object key2 = Currency.registerInstance(jpy, fu_FU);
 
         Currency nus = Currency.getInstance(Locale.US);
@@ -90,7 +90,7 @@ public class CurrencyTest extends TestFmwk {
             errln("expected " + jpy + " but got: " + nus1);
         }
 
-        Locale[] locales = Currency.getAvailableLocales();
+        ULocale[] locales = Currency.getAvailableULocales();
         boolean found = false;
         for (int i = 0; i < locales.length; ++i) {
             if (locales[i].equals(fu_FU)) {
@@ -114,7 +114,7 @@ public class CurrencyTest extends TestFmwk {
             errln("expected " + usd + " but got: " + nus2);
         }
 
-        locales = Currency.getAvailableLocales();
+        locales = Currency.getAvailableULocales();
         found = false;
         for (int i = 0; i < locales.length; ++i) {
             if (locales[i].equals(fu_FU)) {
@@ -133,7 +133,7 @@ public class CurrencyTest extends TestFmwk {
     public void TestNames() {
         // Do a basic check of getName()
         // USD { "US$", "US Dollar"            } // 04/04/1792-
-        Locale en = Locale.ENGLISH;
+        ULocale en = ULocale.ENGLISH;
         boolean[] isChoiceFormat = new boolean[1];
         Currency usd = Currency.getInstance("USD");
         // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK

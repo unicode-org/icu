@@ -75,7 +75,7 @@ public class ULocaleTest extends TestFmwk {
                 }
             }, null, new Registrar() {
                     public Object register(Locale loc, Object prototype) {
-                        return Currency.registerInstance((Currency) prototype, loc);
+                        return Currency.registerInstance((Currency) prototype, ULocale.forLocale(loc));
                     }
                     public boolean unregister(Object key) {
                         return Currency.unregister(key);

@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.ibm.icu.util.ULocale;
+
 /**
  * Provides information about and access to resource bundles in the
  * com.ibm.text.resources package.  Unlike the java version, this does
@@ -41,11 +43,11 @@ public class ICULocaleData {
      * @return a ResourceBundle for the LocaleElements of the given
      * locale, or null on failure
      */
-    public static ResourceBundle getLocaleElements(Locale locale) {
+    public static ResourceBundle getLocaleElements(ULocale locale) {
         if (locale == null) {
-            locale = Locale.getDefault();
+            locale = ULocale.getDefault();
         }
-        return getResourceBundle(ICU_PACKAGE, LOCALE_ELEMENTS, locale.toString());
+        return getResourceBundle(ICU_PACKAGE, LOCALE_ELEMENTS, locale.getBaseName());
     }
 
     /**
@@ -85,11 +87,11 @@ public class ICULocaleData {
      * @return a ResourceBundle with the given base name for the given
      * locale, or null on failure
      */
-    public static ResourceBundle getResourceBundle(String bundleName, Locale locale) {
+    public static ResourceBundle getResourceBundle(String bundleName, ULocale locale) {
         if (locale == null) {
-            locale = Locale.getDefault();
+            locale = ULocale.getDefault();
         }
-        return getResourceBundle(ICU_PACKAGE, bundleName, locale.toString());
+        return getResourceBundle(ICU_PACKAGE, bundleName, locale.getBaseName());
     }
 
     /**
@@ -139,11 +141,11 @@ public class ICULocaleData {
      * Get a resource bundle from the resource bundle path.  Unlike getResourceBundle, this
      * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
      */
-    public static ResourceBundle loadResourceBundle(String bundleName, Locale locale) {
+    public static ResourceBundle loadResourceBundle(String bundleName, ULocale locale) {
         if (locale == null) {
-            locale = Locale.getDefault();
+            locale = ULocale.getDefault();
         }
-        return loadResourceBundle(bundleName, locale.toString());
+        return loadResourceBundle(bundleName, locale.getBaseName());
     }
 
     /**
@@ -220,6 +222,8 @@ public class ICULocaleData {
         if (b == null) {
             ResourceBundle parent = null;
             int i = name.lastIndexOf('_');
+
+            // TODO: convert this to use ULocale
             final Locale rootLocale = new Locale("", "", "");
  
             if (i != -1) {
@@ -315,6 +319,7 @@ public class ICULocaleData {
         return Collections.EMPTY_SET;
     }
 
+    /*
     private static Locale[] createLocaleList(String bundleName) {
         try {
             ResourceBundle index = getResourceBundle(bundleName, "index");
@@ -331,4 +336,5 @@ public class ICULocaleData {
         }
         return new Locale[0];
     }
+    */
 }

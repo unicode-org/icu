@@ -144,6 +144,17 @@ public class ChineseCalendar extends Calendar {
         super(zone, locale);
     }
 
+    /**
+     * Construct a Chinese calendar with the given time zone and locale.
+     * @param zone time zone for this calendar
+     * @param locale ulocale for this calendar
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ChineseCalendar(TimeZone zone, ULocale locale) {
+        super(zone, locale);
+    }
+
     //------------------------------------------------------------------
     // Public constants
     //------------------------------------------------------------------
@@ -290,7 +301,7 @@ public class ChineseCalendar extends Calendar {
      * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
+    protected DateFormat handleGetDateFormat(String pattern, ULocale locale) {
         return new ChineseDateFormat(pattern, locale);
     }
 
@@ -831,7 +842,7 @@ public class ChineseCalendar extends Calendar {
     public static CalendarFactory factory() {
         if (factory == null) {
             factory = new CalendarFactory() {
-                public Calendar create(TimeZone tz, Locale loc) {
+                public Calendar create(TimeZone tz, ULocale loc) {
                     return new ChineseCalendar(tz, loc);
                 }
 

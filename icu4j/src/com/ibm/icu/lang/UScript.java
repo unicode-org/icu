@@ -388,7 +388,7 @@ public final class UScript {
      * @stable ICU 2.4
      */
     public static final int[] getCode(Locale locale){
-        return findCodeFromLocale(new ULocale(locale));
+        return findCodeFromLocale(ULocale.forLocale(locale));
     }
     /**
      * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name.

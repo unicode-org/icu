@@ -145,6 +145,33 @@ public class ICULocaleService extends ICUService {
     }
 
     /**
+     * Convenience override for callers using locales.  This calls
+     * registerObject(Object, Locale, int kind, int coverage)
+     * passing KIND_ANY for the kind, and VISIBLE for the coverage.
+     */
+    public Factory registerObject(Object obj, ULocale locale) {
+        return registerObject(obj, locale, LocaleKey.KIND_ANY, LocaleKeyFactory.VISIBLE);
+    }
+
+    /**
+     * Convenience function for callers using locales.  This calls
+     * registerObject(Object, Locale, int kind, int coverage)
+     * passing VISIBLE for the coverage.
+     */
+    public Factory registerObject(Object obj, ULocale locale, int kind) {
+        return registerObject(obj, locale, kind, LocaleKeyFactory.VISIBLE);
+    }
+
+    /**
+     * Convenience function for callers using locales.  This  instantiates
+     * a SimpleLocaleKeyFactory, and registers the factory.
+     */
+    public Factory registerObject(Object obj, ULocale locale, int kind, int coverage) {
+        Factory factory = new SimpleLocaleKeyFactory(obj, locale, kind, coverage);
+        return registerFactory(factory);
+    }
+
+    /**
      * Convenience method for callers using locales.  This returns the standard
      * Locale list, built from the Set of visible ids.
      */
@@ -621,15 +648,25 @@ public class ICULocaleService extends ICUService {
         private final String id;
         private final int kind;
 
+	// TODO: remove when we no longer need this
         public SimpleLocaleKeyFactory(Object obj, Locale locale, int kind, int coverage) {
+            this(obj, ULocale.forLocale(locale), kind, coverage, null);
+        }
+
+        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, int coverage) {
             this(obj, locale, kind, coverage, null);
         }
 
+	// TODO: remove when we no longer need this
         public SimpleLocaleKeyFactory(Object obj, Locale locale, int kind, int coverage, String name) {
+	    this(obj, ULocale.forLocale(locale), kind, coverage, name);
+	}
+
+        public SimpleLocaleKeyFactory(Object obj, ULocale locale, int kind, int coverage, String name) {
             super(coverage, name);
             
             this.obj = obj;
-            this.id = LocaleUtility.canonicalLocaleString(locale.toString());
+            this.id = locale.getBaseName();
             this.kind = kind;
         }
 

@@ -70,6 +70,8 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
     }
 
     NumberFormat createInstance(Locale desiredLocale, int choice) {
+	// TODO: convert to ULocale when service changes over
+
     // use service cache
 //          if (service.isDefault()) {
 //              return NumberFormat.createInstance(desiredLocale, choice);
@@ -78,9 +80,9 @@ class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
         Locale[] actualLoc = new Locale[1];
         NumberFormat fmt = (NumberFormat)service.get(desiredLocale, choice,
                                                      actualLoc);
-    fmt = (NumberFormat)fmt.clone();
+        fmt = (NumberFormat)fmt.clone();
 
-        ULocale uloc = new ULocale(actualLoc[0]);
+        ULocale uloc = ULocale.forLocale(actualLoc[0]);
         fmt.setLocale(uloc, uloc); // services make no distinction between actual & valid
         return fmt;
     }
