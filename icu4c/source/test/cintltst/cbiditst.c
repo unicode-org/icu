@@ -829,7 +829,6 @@ doLamAlefSpecialVLTRArabicShapingTest() {
     UChar dest[38];
     UErrorCode errorCode;
     int32_t length;
-    int i = 0;
 
     errorCode=U_ZERO_ERROR;
 
@@ -965,7 +964,6 @@ doTashkeelSpecialVLTRArabicShapingTest() {
     UChar dest[43];
     UErrorCode errorCode;
     int32_t length;
-    int i = 0;
 
     errorCode=U_ZERO_ERROR;
 
@@ -1029,7 +1027,6 @@ doLOGICALArabicDeShapingTest() {
     UChar dest[36];
     UErrorCode errorCode;
     int32_t length;
-    int i = 0;
 
     errorCode=U_ZERO_ERROR;
 
