@@ -369,7 +369,7 @@ __versionFromString(UVersionInfo versionArray, const char *versionString) {
     if(versionString!=NULL) {
         for(;;) {
             versionArray[part]=(uint8_t)uprv_strtoul(versionString, &end, 10);
-            if(*end!=U_VERSION_DELIMITER || ++part==U_MAX_VERSION_LENGTH) {
+            if(end==versionString || ++part==U_MAX_VERSION_LENGTH || *end!=U_VERSION_DELIMITER) {
                 break;
             }
             versionString=end+1;
