@@ -12,6 +12,7 @@
 #include "OpenTypeLayoutEngine.h"
 #include "HanLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
+#include "LEGlyphStorage.h"
 
 U_NAMESPACE_BEGIN
 
@@ -38,7 +39,7 @@ const LETag tradFeatureTag = LE_TRAD_FEATURE_TAG;
 const LETag features[] = {loclFeatureTag, emptyTag};
 
 le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
-        LEUnicode *&/*outChars*/, le_int32 *&/*charIndices*/, const LETag **&featureTags, LEErrorCode &success)
+        LEUnicode *&/*outChars*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -49,10 +50,10 @@ le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], l
         return 0;
     }
 
-    featureTags = LE_NEW_ARRAY(const LETag *, count);
+    glyphStorage.allocateGlyphArray(count, FALSE, success);
+    glyphStorage.allocateAuxData(success);
 
-    if (featureTags == NULL) {
-        success = LE_MEMORY_ALLOCATION_ERROR;
+    if (LE_FAILURE(success)) {
         return 0;
     }
 
@@ -61,7 +62,7 @@ le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], l
     // flag from the language tag lookups, so we can use these features
     // with the default LangSys...
     for (le_int32 i = 0; i < count; i += 1) {
-        featureTags[i] = features;
+        glyphStorage.setAuxData(i, (void *) features, success);
     }
 
     return count;
