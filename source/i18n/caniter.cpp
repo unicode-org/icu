@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/20 18:23:40 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/03/21 19:37:25 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -296,6 +296,7 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
 // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
 UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) { //private String[] getEquivalents(String segment) 
     Hashtable *result = new Hashtable(FALSE, status);
+    result->setValueDeleter(uhash_deleteUnicodeString);
     UChar USeg[256];
     int32_t segLen = segment.extract(USeg, 256, status);
     Hashtable *basic = getEquivalents2(USeg, segLen, status);
@@ -326,15 +327,16 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         //while (it2.hasNext()) 
         while (ne2 != NULL) {
             //String possible = (String) it2.next();
-            UnicodeString *possible = new UnicodeString(*((UnicodeString *)(ne2->value.pointer)));
+            //UnicodeString *possible = new UnicodeString(*((UnicodeString *)(ne2->value.pointer)));
+            UnicodeString possible(*((UnicodeString *)(ne2->value.pointer)));
             UnicodeString attempt;
-            Normalizer::normalize(*possible, UNORM_NFD, 0, attempt, status);
+            Normalizer::normalize(possible, UNORM_NFD, 0, attempt, status);
 
             // TODO: check if operator == is semanticaly the same as attempt.equals(segment)
             if (attempt==segment) {
                 //if (PROGRESS) printf("Adding Permutation: %s\n", UToS(Tr(*possible)));
                 // TODO: use the hashtable just to catch duplicates - store strings directly (somehow).
-                result->put(*possible, possible, status); //add(possible);
+                result->put(possible, new UnicodeString(possible), status); //add(possible);
             } else {
                 //if (PROGRESS) printf("-Skipping Permutation: %s\n", UToS(Tr(*possible)));
             }
@@ -343,7 +345,6 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         }
         ne = basic->nextElement(el);
     }
-    delete permutations;
     
     // convert into a String[] to clean up storage
     //String[] finalResult = new String[result.size()];
@@ -359,6 +360,8 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     }
 
 
+    delete permutations;
+    delete basic;
     delete result;
     return finalResult;
 }
@@ -371,7 +374,9 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
 
     //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(segment)));
 
-    result->put(UnicodeString(segment, segLen), new UnicodeString(segment, segLen), status);
+    UnicodeString toPut(segment, segLen);
+
+    result->put(toPut, new UnicodeString(toPut), status);
 
     USerializedSet starts;
     
