@@ -26,6 +26,6 @@
 #include "utypes.h"
 
 /* Print a ustring to the specified FILE* in the default codepage */
-CAPI void uprint(const UChar *s, FILE *f, UErrorCode *status);
+U_CAPI void uprint(const UChar *s, FILE *f, UErrorCode *status);
 
 #endif /* ! UPRINT_H */

@@ -51,11 +51,11 @@ int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
 int32_t ucmp8_getkIndexCount(){ return UCMP8_kIndexCount;}
 /* debug flags*/
 /*=======================================================*/
-CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index) 
+U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index) 
 {
     return (array->fArray[(array->fIndex[index >> UCMP8_kBlockShift] & 0xFFFF) + (index & UCMP8_kBlockMask)]);
 }
-CAPI uint8_t ucmp8_getu(CompactByteArray* array, uint16_t index)
+U_CAPI uint8_t ucmp8_getu(CompactByteArray* array, uint16_t index)
 {
     return (uint8_t)ucmp8_get(array,index);
 }
