@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/11/20 19:08:48 $ 
-* $Revision: 1.21 $
+* $Date: 2000/12/26 22:42:15 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -23,6 +23,7 @@
     <property name="build.dir" value="classes"/>
     <property name="obsolete.dir" value="build"/>
     <property name="jar.file" value="icu4j.jar"/>
+    <property name="ucharacter.jar.file" value="ucharacter.jar"/>
     <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
     <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
     <property name="classpath" value="${build.dir}"/>
@@ -36,7 +37,7 @@
     <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
   </target>
 
-  <target name="all" depends="core,tests,tools,demos,jar,docs"/>
+  <target name="all" depends="core,tests,tools,demos,jar,ucharacterjar,docs"/>
   
   <target name="core">
     <mkdir dir="${build.dir}"/>
@@ -79,7 +80,7 @@
   
   <target name="docs" depends="core">
     <mkdir dir="${doc.dir}"/>
-    <javadoc  packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print,com.ibm.test"
+    <javadoc packagenames="com.ibm.util,com.ibm.text,com.ibm.math,com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print,com.ibm.test,com.ibm.icu.text,com.ibm.icu.test.text"
               sourcepath="${src.dir}"
     		  destdir="${doc.dir}"
     		  nodeprecatedlist="true"
@@ -95,10 +96,27 @@
     <copyfile src="${src.dir}/com/ibm/data/misc/english.dict"
     	   dest="${build.dir}/com/ibm/data/misc/english.dict"/>
   </target>
+
   
   <target name="jar" depends="core">
     <jar jarfile="${jar.file}"
          includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
+         basedir="${build.dir}"/>
+  </target>
+
+  <target name ="ucharacterPropertyData">
+    <copyfile src="${src.dir}/com/ibm/icu/text/uprops.dat"
+    	   dest="${build.dir}/com/ibm/icu/text/uprops.dat"/>
+  </target>
+
+  <target name ="ucharacterNameData">
+    <copyfile src="${src.dir}/com/ibm/icu/text/unames.dat"
+    	   dest="${build.dir}/com/ibm/icu/text/unames.dat"/>
+  </target>
+
+  <target name="ucharacterjar" depends="core,ucharacterPropertyData,ucharacterNameData">
+    <jar jarfile="${ucharacter.jar.file}"
+         includes="com/ibm/icu/text/*.class,com/ibm/icu/text/*.dat"
          basedir="${build.dir}"/>
   </target>
 
