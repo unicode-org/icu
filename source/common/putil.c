@@ -103,12 +103,18 @@
 #   include <MacTypes.h>
 #   include <TextUtils.h>
 #elif defined(AIX)
+/*
 #   include <sys/ldr.h>
+*/
 #elif defined(U_SOLARIS) || defined(U_LINUX)
+/*
 #   include <dlfcn.h>
 #   include <link.h>
+*/
 #elif defined(HPUX)
+/*
 #   include <dl.h>
+*/
 #endif
 
 /* Define the extension for data files, again... */
@@ -125,7 +131,7 @@
 #define INF_TOP ((int16_t)0x3F00)
 #endif
 
-#define SIGN 0x80000000L
+#define SIGN 0x80000000U
 
 /* statics */
 static UBool fgNaNInitialized = FALSE;
@@ -270,8 +276,8 @@ uprv_isInfinite(double number)
     uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
                         sizeof(uint32_t));
 
-    return (UBool)(((highBits  & ~SIGN) == 0x7FF00000L) &&
-      (lowBits == 0x00000000L));
+    return (UBool)(((highBits  & ~SIGN) == 0x7FF00000U) &&
+      (lowBits == 0x00000000U));
 
 #elif defined(OS390)
     uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
@@ -536,11 +542,11 @@ uprv_log10(double d)
     int16_t ailog10 = (int16_t) floor(alog10);
 
     /* Positive logs could be too small, e.g. 0.99 instead of 1.0*/
-    if (alog10 > 0 && d >= pow(10.0, ailog10 + 1))
+    if (alog10 > 0 && d >= pow(10.0, (double)(ailog10 + 1)))
         ++ailog10;
 
     /* Negative logs could be too big, e.g. -0.99 instead of -1.0*/
-    else if (alog10 < 0 && d < pow(10.0, ailog10))
+    else if (alog10 < 0 && d < pow(10.0, (double)(ailog10)))
         --ailog10;
 
     return ailog10;
