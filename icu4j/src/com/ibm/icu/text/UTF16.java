@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2002, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/07/16 00:21:13 $ 
-* $Revision: 1.22 $
+* $Date: 2002/10/26 05:50:40 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -16,15 +16,15 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.NormalizerImpl;
 /**
-* Standalone utility class providing UTF16 character conversions and indexing 
-* conversions.
+* <p>Standalone utility class providing UTF16 character conversions and indexing 
+* conversions.</p>
 * <p>Code that uses strings alone rarely need modification. 
 * By design, UTF-16 does not allow overlap, so searching for strings is a safe 
 * operation. Similarly, concatenation is always safe. Substringing is safe if 
 * the start and end are both on UTF-32 boundaries. In normal code, the values 
 * for start and end are on those boundaries, since they arose from operations 
 * like searching. If not, the nearest UTF-32 boundaries can be determined 
-* using <code>bounds()</code>.
+* using <code>bounds()</code>.</p>
 * <strong>Examples:</strong>
 * <p>The following examples illustrate use of some of these methods. 
 * <pre>
@@ -394,30 +394,6 @@ public final class UTF16
     }
       
     /**
-    * Extract a single UTF-32 value from a string.
-    * If a validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">
-    * UCharacter.isLegal()</a></code> on the return value.
-    * If tbe char retrieved is part of a surrogate pair, its supplementary 
-    * character will be returned. If a complete supplementary character is 
-    * not found the incomplete character will be returned
-    * @return UTF-32 value for the UTF-32 value that contains the char at 
-    *         offset16. The boundaries of that codepoint are the same as in 
-    *         <code>bounds32()</code>. 
-    * @param source array of UTF-16 chars
-    * @param offset32 UTF-32 offset to the start of the character.
-    * @return a single UTF32 value
-    * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-    * @deprecated to be removed after the year 2002, replaced by 
-    *      UTF16.charAt(source, UTF16.findOffsetFromCodePoint(source, 
-    *                   offset32));
-    */
-    public static int charAtCodePointOffset(String source, int offset32) 
-    {
-        return charAt(source, findOffsetFromCodePoint(source, offset32));
-    }
-      
-    /**
     * Determines how many chars this char32 requires.
     * If a validity check is required, use <code>
     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
@@ -569,30 +545,7 @@ public final class UTF16
     }
 
     /**
-    * Returns the type of the boundaries around the char at offset32. Used 
-    * for random access.
-    * @param source string to analyse
-    * @param offset32 UTF32 offset
-    * @return
-    *     <ul>
-    *         <li> SINGLE_CHAR_BOUNDARY : a single char
-    *         <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at
-    *                                        offset32
-    *     </ul>
-    * For bit-twiddlers, see <a href=#bounds(java.lang.String, int)>
-    * bounds(java.lang.String, int)</a> for information on the choice of the 
-    * boundary values.
-    * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-    * @deprecated will be removed after end of year 2002, replaced by
-    *  UTF16.bounds(source, UTF16.findOffsetFromCodePoint(source, offset32));
-    */
-    public static int boundsAtCodePointOffset(String source, int offset32) 
-    {
-        return bounds(source, findOffsetFromCodePoint(source, offset32));
-    }
-
-    /**
-    * Determines whether the <b>code value is a surrogate.
+    * Determines whether the code value is a surrogate.
     * @param ch the input character.
     * @return true iff the input character is a surrogate.
     */
@@ -1146,26 +1099,6 @@ public final class UTF16
         return findCodePointOffset(source, start, limit, limit - start);
     }
       
-    /**
-    * Sets a code point into a UTF32 position.
-    * Adjusts target according if we are replacing a non-supplementary 
-    * codepoint with a supplementary and vice versa.
-    * @param target stringbuffer
-    * @param offset32 UTF32 position to insert into
-    * @exception IndexOutOfBoundsException if offset32 is out of bounds.
-    * @param char32 code point
-    * @deprecated to be removed after the year 2002,
-    * UTF16.setCharAt(target, 
-    *                 findOffsetFromCodePoint(target.toString(), offset32), 
-    *                                         char32);
-    */
-    public static void setCharAtCodePointOffset(StringBuffer target, 
-                                                int offset32, int char32)
-    {
-        int offset16 = findOffsetFromCodePoint(target.toString(), offset32);
-        setCharAt(target, offset16, char32);
-    }
-
     /**
     * Set a code point into a UTF16 position. 
     * Adjusts target according if we are replacing a non-supplementary 
@@ -2116,106 +2049,506 @@ public final class UTF16
         }
         return result;
     }
-
+    
     /**
-    * Compare strings using Unicode code point order, instead of UTF-16 code 
-    * unit order.
+     * Check if the string contains more Unicode code points than a certain 
+     * number. This is more efficient than counting all code points in the 
+     * entire string and comparing that number with a threshold.
+     * This function may not need to scan the string at all if the length is
+     * within a certain range, and never needs to count more than 'number + 1' 
+     * code points. Logically equivalent to (countCodePoint(s) > number). A 
+     * Unicode code point may occupy either one or two code units.
+     * @param source The input string.
+     * @param number The number of code points in the string is compared 
+     *               against the 'number' parameter.
+     * @return boolean value for whether the string contains more Unicode code 
+     *         points than 'number'. 
+     * @draft 2.4
+     */
+    public static boolean hasMoreCodePointsThan(String source, int number)
+    {
+        if (number < 0) {
+            return true;
+        }  
+        if (source == null) {
+            return false;
+        }
+        int length = source.length();
+        
+        // length >= 0 known
+        // source contains at least (length + 1) / 2 code points: <= 2 
+        // chars per cp
+        if (((length + 1) >> 1) > number) {
+            return true;
+        }
+    
+        // check if source does not even contain enough chars
+        int maxsupplementary = length - number;
+        if (maxsupplementary <= 0) {
+            return false;
+        }
+        
+        // there are maxsupplementary = length - number more chars than 
+        // asked-for code points
+    
+        // count code points until they exceed and also check that there are
+        // no more than maxsupplementary supplementary code points (char pairs)
+        int start = 0;
+        while (true) {
+            if (length == 0) {
+                return false;
+            }
+            if (number == 0) {
+                return true;
+            }
+            if (isLeadSurrogate(source.charAt(start ++)) && start != length 
+                && isTrailSurrogate(source.charAt(start))) {
+                start ++;
+                if (-- maxsupplementary <= 0) {
+                    // too many pairs - too few code points
+                    return false;
+                }
+            }
+            -- number;
+        }
+    }
+    
+    /**
+     * Check if the sub-range of char array, from argument start to limit,
+     * contains more Unicode code points than a certain 
+     * number. This is more efficient than counting all code points in the 
+     * entire char array range and comparing that number with a threshold.
+     * This function may not need to scan the char array at all if start and
+     * limit is within a certain range, and never needs to count more than 
+     * 'number + 1' code points. 
+     * Logically equivalent to (countCodePoint(source, start, limit) > number). 
+     * A Unicode code point may occupy either one or two code units.
+     * @param source array of UTF-16 chars
+     * @param start offset to substring in the source array for analyzing
+     * @param limit offset to substring in the source array for analyzing
+     * @param number The number of code points in the string is compared 
+     *               against the 'number' parameter.
+     * @return boolean value for whether the string contains more Unicode code 
+     *         points than 'number'.
+     * @exception IndexOutOfBoundsException thrown when limit &lt; start
+     * @draft 2.4
+     */
+    public static boolean hasMoreCodePointsThan(char source[], int start, 
+                                                int limit, int number)
+    {
+        int length = limit - start;
+        if (length < 0 || start < 0 || limit < 0) {
+            throw new IndexOutOfBoundsException(
+                "Start and limit indexes should be non-negative and start <= limit");
+        }
+        if (number < 0) {
+            return true;
+        }  
+        if (source == null) {
+            return false;
+        }
+    
+        // length >= 0 known
+        // source contains at least (length + 1) / 2 code points: <= 2 
+        // chars per cp
+        if (((length + 1) >> 1) > number) {
+            return true;
+        }
+    
+        // check if source does not even contain enough chars
+        int maxsupplementary = length - number;
+        if (maxsupplementary <= 0) {
+            return false;
+        }
+        
+        // there are maxsupplementary = length - number more chars than 
+        // asked-for code points
+    
+        // count code points until they exceed and also check that there are
+        // no more than maxsupplementary supplementary code points (char pairs)
+        while (true) {
+            if (length == 0) {
+                return false;
+            }
+            if (number == 0) {
+                return true;
+            }
+            if (isLeadSurrogate(source[start ++]) && start != limit 
+                && isTrailSurrogate(source[start])) {
+                start ++;
+                if (-- maxsupplementary <= 0) {
+                    // too many pairs - too few code points
+                    return false;
+                }
+            }
+            -- number;
+        }
+    }
+     
+    /**
+     * Check if the string buffer contains more Unicode code points than a 
+     * certain number. This is more efficient than counting all code points in 
+     * the entire string buffer and comparing that number with a threshold.
+     * This function may not need to scan the string buffer at all if the 
+     * length is within a certain range, and never needs to count more than 
+     * 'number + 1' code points. Logically equivalent to 
+     * (countCodePoint(s) > number). A Unicode code point may occupy either one 
+     * or two code units.
+     * @param source The input string buffer.
+     * @param number The number of code points in the string buffer is compared 
+     *               against the 'number' parameter.
+     * @return boolean value for whether the string buffer contains more 
+     *         Unicode code points than 'number'.
+     * @draft 2.4
+     */
+    public static boolean hasMoreCodePointsThan(StringBuffer source, int number)
+    {
+        if (number < 0) {
+            return true;
+        }  
+        if (source == null) {
+            return false;
+        }
+        int length = source.length();
+        
+        // length >= 0 known
+        // source contains at least (length + 1) / 2 code points: <= 2 
+        // chars per cp
+        if (((length + 1) >> 1) > number) {
+            return true;
+        }
+    
+        // check if source does not even contain enough chars
+        int maxsupplementary = length - number;
+        if (maxsupplementary <= 0) {
+            return false;
+        }
+        
+        // there are maxsupplementary = length - number more chars than 
+        // asked-for code points
+    
+        // count code points until they exceed and also check that there are
+        // no more than maxsupplementary supplementary code points (char pairs)
+        int start = 0;
+        while (true) {
+            if (length == 0) {
+                return false;
+            }
+            if (number == 0) {
+                return true;
+            }
+            if (isLeadSurrogate(source.charAt(start ++)) && start != length 
+                && isTrailSurrogate(source.charAt(start))) {
+                start ++;
+                if (-- maxsupplementary <= 0) {
+                    // too many pairs - too few code points
+                    return false;
+                }
+            }
+            -- number;
+        }
+    }
+    
+    /**
+    * <p>UTF16 string comparator class.
+    * Allows UTF16 string comparison to be done with the various modes</p>
+    * <ul>
+    * <li> Code point comparison or code unit comparison
+    * <li> Case sensitive comparison, case insensitive comparison or case 
+    *      insensitive comparison with special handling for character 'i'.
+    * </ul>
+    * <p>The code unit or code point comparison differ only when comparing 
+    * supplementary code points (&#92;u10000..&#92;u10ffff) to BMP code points 
+    * near the end of the BMP (i.e., &#92;ue000..&#92;uffff). In code unit 
+    * comparison, high BMP code points sort after supplementary code points 
+    * because they are stored as pairs of surrogates which are at 
+    * &#92;ud800..&#92;udfff.</p>
+    * @see #FOLD_CASE_DEFAULT
+    * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
+    * @stable 
     */
     public static final class StringComparator implements java.util.Comparator 
     {
+        // public constructor ------------------------------------------------
+        
         /**
-        * Standard String compare. Only one small section is different, marked in 
-        * the code.
-        */
-        public int compare(Object a, Object b) 
+         * Default constructor that does code unit comparison and case 
+         * sensitive comparison.
+         */
+        public StringComparator()
         {
-	        if (a == b) {
-	        	return 0;
-	        }
-	        if (a == null) {
-	            return -1;
-	        }
-	        if (b == null) {
-	            return 1;
-	        }
-	              
-	        String sa = (String) a;
-	        String sb = (String) b;
-	        int lena = sa.length();
-	        int lenb = sb.length();
-	        int len = lena;
-	        if (len > lenb) {
-	            len = lenb;
-	        }
-	            
-	        for (int i = 0; i < len; ++i) 
-	        {
-	            char ca = sa.charAt(i);
-	            char cb = sb.charAt(i);
-	            if (ca == cb) {
-	            	continue; // skip remap if equal
-	            }
-	                    
-	            // start of only different section
-            	// if either code unit is below 0xd800, i.e., below the 
-            	// surrogate range, then nothing needs to be done
-
-            	// if both are >=0xd800 then special code adjusts code unit 
-            	// values so that all BMP code points (including single 
-            	// surrogate code points) sort below supplementary ones
-
-            	// this is necessary because surrogates are not at the end of 
-            	// the code unit range
-            	if (ca >= LEAD_SURROGATE_MIN_VALUE 
-            		&& cb >= LEAD_SURROGATE_MIN_VALUE) {
-                	// subtract 0x2800 from BMP code points to make them 
-                	// smaller than supplementary ones
-                	if ((ca <= LEAD_SURROGATE_MAX_VALUE && (i + 1) < lena 
-                		&& isTrailSurrogate(sa.charAt(i + 1))) 
-                		|| (isTrailSurrogate(ca) && i > 0 
-                			&& isLeadSurrogate(sa.charAt(i - 1)))) {
-                    	// part of a surrogate pair, leave >=d800
-                	} 
-                	else {
-                    	// BMP code point - may be surrogate code point - make 
-                    	// <d800
-                    	ca -= 0x2800;
-                	}
-
-                	if ((cb <= LEAD_SURROGATE_MAX_VALUE && (i + 1) < lenb 
-                		&& isTrailSurrogate(sb.charAt(i + 1))) 
-                		|| (isTrailSurrogate(cb) && i > 0 
-                			&& isLeadSurrogate(sb.charAt(i - 1)))) {
-                    	// part of a surrogate pair, leave >=d800
-                	} 
-                	else {
-                    	// BMP code point - may be surrogate code point - make 
-                    	// < d800
-                    	cb -= 0x2800;
-                	}
-            	}
-
-	            // end of only different section
-	                    
-	            if (ca < cb) {
-	            	return -1;
-	            }
-	              
-	            return 1; // wasn't equal, so return 1
-	        }
-	          
-	        if (lena < lenb) {
-	            return -1;
-	        }
-	            
-	        if (lena > lenb) {
-	            return 1;
-	        }
-	                
-	        return 0;
+            m_codePointCompare_ = false;
+            m_ignoreCase_ = false;  
+            m_foldCase_ = FOLD_CASE_DEFAULT;
         }
         
+        /**
+         * Constructor that does comparison based on the argument options.
+         * @param codepointcompare flag to indicate true for code point 
+         *        comparison or false for code unit comparison.
+         * @param ignorecase false for case sensitive comparison, true for
+         *        case-insensitive comparison
+         * @param foldcaseoption FOLD_CASE_DEFAULT or 
+         *        FOLD_CASE_EXCLUDE_SPECIAL_I. This option is used only when
+         *        ignorecase is set to true. If ignorecase is false, this option
+         *        is ignored.
+         * @see #FOLD_CASE_DEFAULT
+         * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
+         * @throws IllegalArgumentException if foldcaseoption is out of range
+         */
+        public StringComparator(boolean codepointcompare, 
+                                boolean ignorecase,
+                                int foldcaseoption)
+        {
+            m_codePointCompare_ = codepointcompare;
+            m_ignoreCase_ = ignorecase;   
+            if (foldcaseoption < FOLD_CASE_DEFAULT 
+                || foldcaseoption > FOLD_CASE_EXCLUDE_SPECIAL_I) {
+                throw new IllegalArgumentException("Invalid fold case option");
+            }
+            m_foldCase_ = foldcaseoption;
+        }
+        
+        // public data member ------------------------------------------------
+        
+        /** 
+         * <p>Option value for case folding comparison:</p> 
+         * <p>Comparison is case insensitive, strings are folded using default 
+         * mappings defined in Unicode data file CaseFolding.txt, before 
+         * comparison. 
+         * </p>
+         * @draft 2.4
+         */
+        public static final int FOLD_CASE_DEFAULT = 0;
+        /**
+         * <p>Option value for case folding comparison:</p>
+         * <p>Comparison is case insensitive, strings are folded using modified 
+         * mappings defined in Unicode data file CaseFolding.txt, before 
+         * comparison. 
+         * </p>
+         * <p>The modified set of mappings is provided in a Unicode data file
+         * CaseFolding.txt to handle dotted I and dotless i appropriately for 
+         * Turkic languages (tr, az).</p>
+         * <p>Before Unicode 3.2, CaseFolding.txt contains mappings marked with 
+         * 'I' that are to be included for default mappings and excluded for 
+         * the Turkic-specific mappings.</p>
+         * <p>Unicode 3.2 CaseFolding.txt instead contains mappings marked with 
+         * 'T' that are to be excluded for default mappings and included for 
+         * the Turkic-specific mappings.</p>
+         * @draft 2.4
+         */
+        public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0;
+        
+        // public methods ----------------------------------------------------
+        
+        // public setters ----------------------------------------------------
+        
+        /**
+         * Sets the comparison mode to code point compare if flag is true.
+         * Otherwise comparison mode is set to code unit compare
+         * @param flag true for code point compare, false for code unit compare
+         */
+        public void setCodePointCompare(boolean flag)
+        {
+            m_codePointCompare_ = flag;
+        }
+        
+        /**
+         * Sets the Comparator to case-insensitive comparison mode if argument 
+         * is true, otherwise case sensitive comparison mode if set to false.
+         * @param ignorecase true for case-insitive comparison, false for
+         *        case sensitive comparison
+         * @param foldcaseoptions FOLD_CASE_DEFAULT or 
+         *        FOLD_CASE_EXCLUDE_SPECIAL_I. This option is used only when
+         *        ignorecase is set to true. If ignorecase is false, this option
+         *        is ignored.
+         * @see #FOLD_CASE_DEFAULT
+         * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
+         */
+        public void setIgnoreCase(boolean ignorecase, int foldcaseoption) 
+        {
+            m_ignoreCase_ = ignorecase;
+            if (foldcaseoption < FOLD_CASE_DEFAULT 
+                || foldcaseoption > FOLD_CASE_EXCLUDE_SPECIAL_I) {
+                throw new IllegalArgumentException("Invalid fold case option");
+            }
+            m_foldCase_ = foldcaseoption;
+        }
+        
+        // public getters ----------------------------------------------------
+        
+        /**
+         * Checks if the comparison mode is code point compare.
+         * @return true for code point compare, false for code unit compare
+         */
+        public boolean getCodePointCompare()
+        {
+            return m_codePointCompare_;
+        }
+        
+        /**
+         * Checks if Comparator is in the case insensitive mode.
+         * @return true if Comparator performs case insensitive comparison, 
+         *         false otherwise
+         */
+        public boolean getIgnoreCase() 
+        {
+            return m_ignoreCase_;
+        }
+        
+        /**
+         * Gets the fold case options set in Comparator to be used with case 
+         * insensitive comparison. 
+         * @return either FOLD_CASE_DEFAULT or FOLD_CASE_EXCLUDE_SPECIAL_I
+         * @see #FOLD_CASE_DEFAULT
+         * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
+         */
+        public int getIgnoreCaseOption() 
+        {
+            return m_foldCase_;
+        }
+        
+        // public other methods ----------------------------------------------
+        
+        /**
+         * Compare two strings depending on the options selected during 
+         * construction.
+         * @param a first source string.
+         * @param b second source string.
+         * @return 0 returned if a == b. If a < b, a negative value is returned.
+         *         Otherwise if a > b, a positive value is returned.
+         * @exception ClassCastException thrown when either a or b is not a 
+         *            String object
+         * @draft 2.4
+         */
+        public int compare(Object a, Object b) 
+        {
+            String str1 = (String)a;
+            String str2 = (String)b;
+            
+	        if (str1 == str2) {
+	        	return 0;
+	        }
+	        if (str1 == null) {
+	            return -1;
+	        }
+	        if (str2 == null) {
+	            return 1;
+	        }
+	        
+            if (m_ignoreCase_) {
+                return compareCaseInsensitive(str1, str2);
+            }
+            return compareCaseSensitive(str1, str2);
+        }
+        
+        // private data member ----------------------------------------------
+        
+        /**
+         * Code unit comparison flag. True if code unit comparison is required.
+         * False if code point comparison is required.
+         */
+        private boolean m_codePointCompare_;
+        /**
+         * Fold case comparison option.
+         */
+        private int m_foldCase_;
+        /** 
+         * Flag indicator if ignore case is to be used during comparison
+         */
+        private boolean m_ignoreCase_;
+        /**
+         * Code point order offset for surrogate characters
+         */
+        private static final int CODE_POINT_COMPARE_SURROGATE_OFFSET_ = 0x2800;
+        
+        // private method ---------------------------------------------------
+        
+        /**
+         * Compares case insensitive. This is a direct port of ICU4C, to make
+         * maintainence life easier.
+         * @param s1 first string to compare
+         * @param s2 second string to compare
+         * @return -1 is s1 &lt; s2, 0 if equals, 
+         */
+        private int compareCaseInsensitive(String s1, String s2)  
+        {
+            return NormalizerImpl.cmpEquivFold(s1, s2, 
+                                               m_foldCase_ | 
+                                               Normalizer.COMPARE_IGNORE_CASE);
+        }
 
+        /**
+         * Compares case sensitive. This is a direct port of ICU4C, to make
+         * maintainence life easier.
+         * @param s1 first string to compare
+         * @param s2 second string to compare
+         * @return -1 is s1 &lt; s2, 0 if equals, 
+         */
+        private int compareCaseSensitive(String s1, String s2) 
+        {
+            // compare identical prefixes - they do not need to be fixed up
+            // limit1 = start1 + min(lenght1, length2)
+            int length1 = s1.length();
+            int length2 = s2.length();
+            int minlength = length1;
+            int result = 0;
+            if (length1 < length2) {
+                result = -1;
+            }
+            else if (length1 > length2) {
+                result = 1;
+            }
+                
+            char c1 = 0;
+            char c2 = 0;
+            int index = 0;
+            for (; index < minlength; index ++) {
+                c1 = s1.charAt(index);
+                c2 = s2.charAt(index);
+                // check pseudo-limit
+                if (c1 != c2) {
+                    break;
+                }
+            }
+        
+            if (index == minlength) {
+                return result;
+            }
+            
+            // if both values are in or above the surrogate range, fix them up
+            if (c1 >= LEAD_SURROGATE_MIN_VALUE 
+                && c2 >= LEAD_SURROGATE_MIN_VALUE && m_codePointCompare_) {
+                // subtract 0x2800 from BMP code points to make them smaller 
+                // than supplementary ones
+                if ((c1 <= LEAD_SURROGATE_MAX_VALUE && (index + 1) != length1 
+                    && isTrailSurrogate(s1.charAt(index + 1))) 
+                    || (isTrailSurrogate(c1) && index != 0 
+                        && isLeadSurrogate(s1.charAt(index - 1)))) {
+                    // part of a surrogate pair, leave >=d800
+                } 
+                else {
+                    // BMP code point - may be surrogate code point - make 
+                    // < d800
+                    c1 -= CODE_POINT_COMPARE_SURROGATE_OFFSET_;
+                }
+        
+                if ((c2 <= LEAD_SURROGATE_MAX_VALUE 
+                     && (index + 1) != length2 
+                     && isTrailSurrogate(s2.charAt(index + 1))) ||
+                    (isTrailSurrogate(c2) && index != 0 
+                     && isLeadSurrogate(s2.charAt(index - 1)))) {
+                    // part of a surrogate pair, leave >=d800
+                } 
+                else {
+                    // BMP code point - may be surrogate code point - make <d800
+                    c2 -= CODE_POINT_COMPARE_SURROGATE_OFFSET_;
+                }
+            }
+        
+            // now c1 and c2 are in UTF-32-compatible order
+            return c1 - c2;
+        }
     }
     
     // private data members -------------------------------------------------
@@ -2234,8 +2567,8 @@ public final class UTF16
     private static final int LEAD_SURROGATE_OFFSET_ = 
 	                                    LEAD_SURROGATE_MIN_VALUE - 
 	                                   (SUPPLEMENTARY_MIN_VALUE 
-	                                    >> LEAD_SURROGATE_SHIFT_); 	                  
-    
+	                                    >> LEAD_SURROGATE_SHIFT_);
+                                        
     // private methods ------------------------------------------------------
     
     /**
@@ -2248,6 +2581,7 @@ public final class UTF16
     * points, 2 otherwise.</p>
     * @param ch code point
     * @return string representation of the code point
+    * @deprecated since 2.4, use UCharater.toString(int) instead
     */
     public static String toString(int ch)
     {   
