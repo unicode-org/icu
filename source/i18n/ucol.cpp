@@ -297,8 +297,6 @@ ucol_open(    const    char         *loc,
   /* get CollationElements -> Version */
   UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
 
-  const UChar* trDataVersion;
-
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     result = UCA;
     *status = U_USING_DEFAULT_ERROR;
