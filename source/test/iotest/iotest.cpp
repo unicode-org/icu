@@ -50,10 +50,6 @@ static const UChar NEW_LINE[] = {0x0a,0};
 static void TestFileFromICU(UFILE *myFile) {
     int32_t n[1];
     float myFloat = -1234.0;
-    UDate myDate = 0.0;
-    UDate dec_31_1969 = -57600000.000000; /* TODO: These are not correct */
-    UDate midnight = 86400000.000000; /* TODO: These are not correct */
-    UDate myNewDate = -1.0;
     int32_t newValuePtr[1];
     double newDoubleValuePtr[1];
     UChar myUString[256];
@@ -92,10 +88,7 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "NULL String %%s: %s\n", NULL);
     u_fprintf(myFile, "Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", L"My-String");
     u_fprintf(myFile, "NULL Unicode String %%U (non-ANSI, should be %%S for Microsoft?): %U\n", NULL);
-    u_fprintf(myFile, "Date %%D (non-ANSI): %D\n", myDate);
-    u_fprintf(myFile, "Time %%T (non-ANSI): %T\n", myDate);
     u_fprintf(myFile, "Percent %%P (non-ANSI): %P\n", myFloat);
-    u_fprintf(myFile, "Currency %%M (non-ANSI): %M\n", myFloat);
     u_fprintf(myFile, "Spell Out %%V (non-ANSI): %V\n", myFloat);
 
     *n = 1;
@@ -214,23 +207,8 @@ static void TestFileFromICU(UFILE *myFile) {
     if (strcmp(myString, "(null)")) {
         log_err("%%S Got: %S, Expected: My String\n", myUString);
     }
-    myNewDate = -1.0;
-    u_fscanf(myFile, "Date %%D (non-ANSI): %D\n", &myNewDate);
-    if (myNewDate != dec_31_1969) {
-        log_err("%%D Got: %f, Expected: %f\n", myNewDate, dec_31_1969);
-    }
-    myNewDate = -1.0;
-    u_fscanf(myFile, "Time %%T (non-ANSI): %T\n", &myNewDate);
-    if (myNewDate != midnight) {
-        log_err("%%T Got: %f, Expected: %f\n", myNewDate, midnight);
-    }
     *newDoubleValuePtr = -1.0;
     u_fscanf(myFile, "Percent %%P (non-ANSI): %P\n", newDoubleValuePtr);
-    if (myFloat != *newDoubleValuePtr) {
-        log_err("%%P Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
-    }
-    *newDoubleValuePtr = -1.0;
-    u_fscanf(myFile, "Currency %%M (non-ANSI): %M\n", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%P Got: %f, Expected: %f\n", *newDoubleValuePtr, myFloat);
     }
@@ -987,30 +965,9 @@ static void TestString() {
         log_err("%%U Got: %s, Expected: (null)\n", myString);
     }
 
-    u_sprintf(uStringBuf, NULL, "Date %%D (non-ANSI): %D", myDate);
-    myNewDate = -1.0;
-    u_sscanf(uStringBuf, NULL, "Date %%D (non-ANSI): %D", &myNewDate);
-    if (myNewDate != dec_31_1969) {
-        log_err("%%D Got: %f, Expected: %f\n", myNewDate, dec_31_1969);
-    }
-
-    u_sprintf(uStringBuf, NULL, "Time %%T (non-ANSI): %T", myDate);
-    myNewDate = -1.0;
-    u_sscanf(uStringBuf, NULL, "Time %%T (non-ANSI): %T", &myNewDate);
-    if (myNewDate != midnight) {
-        log_err("%%T Got: %f, Expected: %f\n", myNewDate, midnight);
-    }
-
     u_sprintf(uStringBuf, NULL, "Percent %%P (non-ANSI): %P", myFloat);
     *newDoubleValuePtr = -1.0;
     u_sscanf(uStringBuf, NULL, "Percent %%P (non-ANSI): %P", newDoubleValuePtr);
-    if (myFloat != *newDoubleValuePtr) {
-        log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
-    }
-
-    u_sprintf(uStringBuf, NULL, "Currency %%M (non-ANSI): %M", myFloat);
-    *newDoubleValuePtr = -1.0;
-    u_sscanf(uStringBuf, NULL, "Currency %%M (non-ANSI): %M", newDoubleValuePtr);
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%P Got: %P, Expected: %P\n", *newDoubleValuePtr, myFloat);
     }
