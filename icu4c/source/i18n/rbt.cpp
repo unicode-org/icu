@@ -27,7 +27,7 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,
                                          UParseError& parseError,
                                          UErrorCode& status) {
-    data = 0;
+    fData = 0;
     isDataOwned = TRUE;
     if (U_FAILURE(status)) {
         return;
@@ -45,8 +45,8 @@ void RuleBasedTransliterator::_construct(const UnicodeString& rules,
         return;
     }
 
-    data = parser.orphanData();
-    setMaximumContextLength(data->ruleSet.getMaximumContextLength());
+    fData = parser.orphanData();
+    setMaximumContextLength(fData->ruleSet.getMaximumContextLength());
 }
 
 /**
@@ -135,9 +135,9 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
                                  const TransliterationRuleData* theData,
                                  UnicodeFilter* adoptedFilter) :
     Transliterator(id, adoptedFilter),
-    data((TransliterationRuleData*)theData), // cast away const
+    fData((TransliterationRuleData*)theData), // cast away const
     isDataOwned(FALSE) {
-    setMaximumContextLength(data->ruleSet.getMaximumContextLength());
+    setMaximumContextLength(fData->ruleSet.getMaximumContextLength());
 }
 
 /**
@@ -147,9 +147,9 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
                                                  TransliterationRuleData* theData,
                                                  UBool isDataAdopted) :
     Transliterator(id, 0),
-    data(theData),
+    fData(theData),
     isDataOwned(isDataAdopted) {
-    setMaximumContextLength(data->ruleSet.getMaximumContextLength());
+    setMaximumContextLength(fData->ruleSet.getMaximumContextLength());
 }
 
 /**
@@ -157,7 +157,7 @@ RuleBasedTransliterator::RuleBasedTransliterator(const UnicodeString& id,
  */
 RuleBasedTransliterator::RuleBasedTransliterator(
         const RuleBasedTransliterator& other) :
-    Transliterator(other), data(other.data),
+    Transliterator(other), fData(other.fData),
     isDataOwned(other.isDataOwned) {
 
     // The data object may or may not be owned.  If it is not owned we
@@ -170,7 +170,7 @@ RuleBasedTransliterator::RuleBasedTransliterator(
     // will be later deleted.  System transliterators contain
     // non-owned data.
     if (isDataOwned) {
-        data = new TransliterationRuleData(*other.data);
+        fData = new TransliterationRuleData(*other.fData);
     }
 }
 
@@ -180,7 +180,7 @@ RuleBasedTransliterator::RuleBasedTransliterator(
 RuleBasedTransliterator::~RuleBasedTransliterator() {
     // Delete the data object only if we own it.
     if (isDataOwned) {
-        delete data;
+        delete fData;
     }
 }
 
@@ -227,30 +227,36 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         loopLimit <<= 4;
     }
 
+    if (isDataOwned==FALSE) {
+        fData->lock();
+    }
     while (index.start < index.limit &&
            loopCount <= loopLimit &&
-           data->ruleSet.transliterate(text, index, isIncremental)) {
+           fData->ruleSet.transliterate(text, index, isIncremental)) {
         ++loopCount;
+    }
+    if (isDataOwned==FALSE) {
+        fData->unlock();
     }
 }
 
 UnicodeString& RuleBasedTransliterator::toRules(UnicodeString& rulesSource,
                                                 UBool escapeUnprintable) const {
-    return data->ruleSet.toRules(rulesSource, escapeUnprintable);
+    return fData->ruleSet.toRules(rulesSource, escapeUnprintable);
 }
 
 /**
  * Implement Transliterator framework
  */
 void RuleBasedTransliterator::handleGetSourceSet(UnicodeSet& result) const {
-    data->ruleSet.getSourceTargetSet(result, FALSE);
+    fData->ruleSet.getSourceTargetSet(result, FALSE);
 }
 
 /**
  * Override Transliterator framework
  */
 UnicodeSet& RuleBasedTransliterator::getTargetSet(UnicodeSet& result) const {
-    return data->ruleSet.getSourceTargetSet(result, TRUE);
+    return fData->ruleSet.getSourceTargetSet(result, TRUE);
 }
 
 U_NAMESPACE_END
