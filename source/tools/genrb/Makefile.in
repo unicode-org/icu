@@ -10,10 +10,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-
-include @platform_make_fragment@
-
 ##
 
 SECTION = 1
@@ -30,35 +26,18 @@ CLEANFILES = *~ $(MAN_FILES) $(DEPS)
 TARGET = genrb
 DERB = derb
 
-ENABLE_STATIC = @ENABLE_STATIC@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-ifneq ($(ENABLE_STATIC),)
-LINK = $(LINK.cc)
-else
-LINK = $(LINK.c)
-endif
-
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
-
-##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
-##rblist.o	util.o
-OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o  wrtjava.o rle.o
+OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o \
+wrtjava.o rle.o
 DERB_OBJ = derb.o
 
 DEPS = $(OBJECTS:.o=.d)
 DERB_DEPS = $(DERB_OBJ:.o=.d)
 
 ## List of phony targets
-.PHONY : all all-local install install-local clean clean-local		\
+.PHONY : all all-local install install-local clean clean-local	\
 distclean distclean-local dist dist-local check \
 check-local install-man
 
@@ -96,7 +75,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK) -o $@ $^ $(LIBS) 
+	$(LINK.cc) -o $@ $^ $(LIBS) 
 
 $(DERB) : $(DERB_OBJ)
 	$(LINK) -o $@ $^ $(LIBS) 

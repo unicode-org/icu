@@ -24,21 +24,9 @@ TARGET = icudate
 
 ENABLE_STATIC = @ENABLE_STATIC@
 
-ifneq ($(ENABLE_STATIC),)
 LINK = $(LINK.cc)
-else
-LINK = $(LINK.c)
-endif
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
 
 OBJECTS = uprint.o date.o

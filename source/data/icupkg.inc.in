@@ -13,17 +13,11 @@ top_srcdir=@top_srcdir@
 srcdir=@srcdir@
 top_builddir=..
 
-SHELL=@SHELL@
-CFLAGS=@CFLAGS@ 
-CPPFLAGS=@CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common
-CXXFLAGS=@CXXFLAGS@ 
+include $(top_builddir)/icudefs.mk
+
+CPPFLAGS+= -I$(top_builddir)/common -I$(top_srcdir)/common
 LDFLAGS=@LDFLAGS@ 
 FFLAGS=@FFLAGS@
-DEFS=@DEFS@ 
-ENABLE_RPATH=@ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATH_LDFLAGS=$(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
 LIBS=@LIBS@ 
 ICULIBS=$(LIBS) -licu-uc -licu-i18n
 exec_prefix=@exec_prefix@
@@ -43,11 +37,6 @@ infodir=@infodir@
 mandir=@mandir@
 PACKAGE=@PACKAGE@
 VERSION=@VERSION@
-CC=@CC@
-CXX=@CXX@
-AIX_SHLIB = @AIX_SHLIB@
-AR = @AR@
-RANLIB = @RANLIB@
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -84,9 +73,6 @@ platform=@platform@
 
 ld_rpath_suf=@ld_rpath_suf@
 
-include $(top_builddir)/icudefs.mk
-include @platform_make_fragment@
-
 subdir = tools/tmp
 
 ##### Add the following to source/config/Makefile.in
@@ -96,25 +82,9 @@ GENCMN=$(top_builddir)/tools/gencmn/gencmn
 
 LPATHS=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil
 
-TOOL=env LD_LIBRARY_PATH=$(LPATHS) LIBPATH=$(LPATHS) 
+TOOL=env $(LDLIBRARYPATH_ENVVAR)=$(LPATHS)
 
 ifeq ($(strip $(PLATFORM)),OS390)
   TOOL=
-endif
-
-ifeq ($(strip $(PLATFORM)),AIX)
-  TOOL=env LIBPATH=$(LPATHS)
-endif
-
-ifeq ($(strip $(PLATFORM)),HPUX)
-  TOOL=env LD_LIBRARY_PATH=$(LPATHS)
-endif
-
-ifeq ($(strip $(PLATFORM)),U_LINUX)
-  TOOL=env LD_LIBRARY_PATH=$(LPATHS)
-endif
-
-ifeq ($(strip $(PLATFORM)),U_BSD)
-  TOOL=env LD_LIBRARY_PATH=$(LPATHS)
 endif
 

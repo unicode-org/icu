@@ -11,9 +11,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ##
 
 SECTION = 1
@@ -34,24 +31,8 @@ CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
 ## Target information
 TARGET = makeconv
 
-ENABLE_STATIC = @ENABLE_STATIC@
-
-ifneq ($(ENABLE_STATIC),)
-LINK = $(LINK.cc)
-else
-LINK = $(LINK.c)
-endif
-
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = makeconv.o ucnvstat.o genmbcs.o
 
@@ -106,7 +87,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET): $(OBJECTS)
-	$(LINK) -o $@ $^ $(LIBS)
+	$(LINK.cc) -o $@ $^ $(LIBS)
 
 install-man: install-manx
 install-manx: $(MANX_FILES)

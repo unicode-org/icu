@@ -5,14 +5,12 @@
 ## Source directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-EXEEXT=@EXEEXT@
 
 # So that you have $(top_builddir)/config.status
 top_builddir = ..
 
+## All the flags and other definitions are included here.
 include $(top_builddir)/icudefs.mk
-
-include @platform_make_fragment@
 
 ## Build directory information
 # So that  $(top_builddir)/$(subdir) ~= "here"

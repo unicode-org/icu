@@ -10,9 +10,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = test/cintltst
 
@@ -22,11 +19,9 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = cintltst
 
-ENABLE_STATIC = @ENABLE_STATIC@
-
 # Oh, this hurts my sensibility. This is supposedly a C test and we need to
-# link using a C++ compiler?! Better fix this depency on ustring.o and
-# the ostream !@(*$!@.
+# link using a C++ compiler?! This must be done so that C++ static
+# initialization works in the libraries, like mutex.cpp, ustdio and iostream.
 
 ifneq ($(ENABLE_STATIC),)
 LINK = $(LINK.cc)
@@ -34,21 +29,12 @@ else
 LINK = $(LINK.c)
 endif
 
-DEFS = @DEFS@
-
 BUILDDIR := $(shell pwd)/../..
 
 # we define ICU_UNICODE_VERSION so we can test it
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil \
  -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\" -DICU_VERSION=\"@VERSION@\" -DICUDATA_NAME=\"$(ICUDATA_PLATFORM_NAME)\" -DU_TOPSRCDIR=\"$(top_srcdir)/\" -DU_TOPBUILDDIR=\"$(BUILDDIR)\"
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) @LIBS@ @LIB_M@
+LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = callcoll.o calltest.o capitst.o cbiapts.o cbkittst.o \
 ccaltst.o ccapitst.o ccolltst.o cconvtst.o ccurrtst.o cdantst.o	\
