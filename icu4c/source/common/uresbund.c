@@ -39,7 +39,6 @@ TODO: This cache should probably be removed when the deprecated code is
 */
 static UHashtable *cache = NULL;
 
-static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
@@ -139,14 +138,6 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
 
 /** INTERNAL: Initializes the cache for resources */
 static void initCache(UErrorCode *status) {
-    if(isMutexInited == FALSE) {
-        umtx_lock(NULL);
-        if(isMutexInited == FALSE) {
-          umtx_init(&resbMutex);
-          isMutexInited = TRUE;
-        }
-        umtx_unlock(NULL);
-    }
     if(cache == NULL) {
         UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
         if (U_FAILURE(*status)) {

@@ -93,7 +93,11 @@ umtx_lock(UMTX *mutex)
 
     if (*mutex == NULL)
     {
-        umtx_init(mutex);
+        if (mutex != &gGlobalMutex) {umtx_lock(NULL);};
+        if (*mutex == NULL) {
+            umtx_init(mutex);
+        }
+        if (mutex != &gGlobalMutex) {umtx_unlock(NULL);};
     }
 
 #if defined(WIN32)
@@ -103,15 +107,17 @@ umtx_lock(UMTX *mutex)
 #elif defined(POSIX)
 
 #  ifdef POSIX_DEBUG_REENTRANCY
-    if (gInMutex == TRUE) /* in the mutex -- possible deadlock*/
+    if (gInMutex == TRUE && mutex == &gGlobalMutex) /* in the mutex -- possible deadlock*/
         if(pthread_equal(gLastThread, pthread_self()))
             WeAreDeadlocked();
 #  endif
     pthread_mutex_lock((pthread_mutex_t*) *mutex);
 
 #  ifdef POSIX_DEBUG_REENTRANCY
-    gLastThread = pthread_self();
-    gInMutex = TRUE;
+    if (mutex == &gGlobalMutex) {
+        gLastThread = pthread_self();
+        gInMutex = TRUE;
+    }
 #  endif
 #endif
 #endif /* ICU_USE_THREADS==1 */
@@ -138,7 +144,9 @@ umtx_unlock(UMTX* mutex)
     pthread_mutex_unlock((pthread_mutex_t*)*mutex);
 
 #ifdef POSIX_DEBUG_REENTRANCY
-    gInMutex = FALSE;
+    if (mutex == &gGlobalMutex) {
+        gInMutex = FALSE;
+    }
 #endif
 
 #endif
