@@ -1299,15 +1299,8 @@ static uint8_t getCharCat(UChar32 cp) {
         return U_NONCHARACTER_CODE_POINT;
     }
 
-    /* Undo ICU exceptions to the UCD when determining the
-       category. */
-
-    if (u_iscntrl(cp)) {
-        cat = U_CONTROL_CHAR;
-    } else {
-        if ((cat = u_charType(cp)) == U_SURROGATE) {
-            cat = UTF_IS_LEAD(cp) ? U_LEAD_SURROGATE : U_TRAIL_SURROGATE;
-        }
+    if ((cat = u_charType(cp)) == U_SURROGATE) {
+        cat = UTF_IS_LEAD(cp) ? U_LEAD_SURROGATE : U_TRAIL_SURROGATE;
     }
 
     return cat;

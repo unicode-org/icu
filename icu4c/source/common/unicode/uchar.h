@@ -993,8 +993,6 @@ u_charCellWidth(UChar32 c);
  * Returns a value indicating a character category.
  * The categories are taken from the Unicode Character Database (UCD) in
  * UnicodeData.txt.
- * ICU changes the category of some of the ISO control characters to various
- * separators categories.
  *
  * @param c            the character to be tested
  * @return a value of type int, the character category.
