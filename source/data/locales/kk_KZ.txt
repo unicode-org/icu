@@ -1,0 +1,21 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kk_KZ {
+    Version{ "1.0" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-\u00A4 #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    DateTimeElements:intvector{
+//        1,
+//        2 // Probably 1
+//    }
+
+}
