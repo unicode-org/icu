@@ -1326,7 +1326,7 @@ void bug2()
                        target,
                        sizeof(target),
                        source,
-                       strlen(source),
+                       sizeof(source),
                        &err);
 
    if ( size != 10 ) {
