@@ -155,7 +155,7 @@ static const float RESIZE_POLICY_RATIO_TABLE[6] = {
  * PRIVATE Prototypes
  ********************************************************************/
 
-static UHashtable* _uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
+static UHashtable* _uhash_create(UHashFunction *keyHash, UKeyComparator *keyComp,
                                  int32_t primeIndex, UErrorCode *status);
 
 static void _uhash_allocate(UHashtable *hash, int32_t primeIndex,
@@ -189,14 +189,14 @@ static void _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePol
  ********************************************************************/
 
 U_CAPI UHashtable* U_EXPORT2
-uhash_open(UHashFunction keyHash, UKeyComparator keyComp,
+uhash_open(UHashFunction *keyHash, UKeyComparator *keyComp,
            UErrorCode *status) {
 
     return _uhash_create(keyHash, keyComp, 3, status);
 }
 
 U_CAPI UHashtable* U_EXPORT2
-uhash_openSize(UHashFunction keyHash, UKeyComparator keyComp,
+uhash_openSize(UHashFunction *keyHash, UKeyComparator *keyComp,
                int32_t size,
                UErrorCode *status) {
 
@@ -226,30 +226,30 @@ uhash_close(UHashtable *hash) {
     uprv_free(hash);
 }
 
-U_CAPI UHashFunction U_EXPORT2
-uhash_setKeyHasher(UHashtable *hash, UHashFunction fn) {
-    UHashFunction result = hash->keyHasher;
+U_CAPI UHashFunction *U_EXPORT2
+uhash_setKeyHasher(UHashtable *hash, UHashFunction *fn) {
+    UHashFunction *result = hash->keyHasher;
     hash->keyHasher = fn;
     return result;
 }
 
-U_CAPI UKeyComparator U_EXPORT2
-uhash_setKeyComparator(UHashtable *hash, UKeyComparator fn) {
-    UKeyComparator result = hash->keyComparator;
+U_CAPI UKeyComparator *U_EXPORT2
+uhash_setKeyComparator(UHashtable *hash, UKeyComparator *fn) {
+    UKeyComparator *result = hash->keyComparator;
     hash->keyComparator = fn;
     return result;
 }
 
-U_CAPI UObjectDeleter U_EXPORT2
-uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter fn) {
-    UObjectDeleter result = hash->keyDeleter;
+U_CAPI UObjectDeleter *U_EXPORT2
+uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter *fn) {
+    UObjectDeleter *result = hash->keyDeleter;
     hash->keyDeleter = fn;
     return result;
 }
 
-U_CAPI UObjectDeleter U_EXPORT2
-uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn) {
-    UObjectDeleter result = hash->valueDeleter;
+U_CAPI UObjectDeleter *U_EXPORT2
+uhash_setValueDeleter(UHashtable *hash, UObjectDeleter *fn) {
+    UObjectDeleter *result = hash->valueDeleter;
     hash->valueDeleter = fn;
     return result;
 }
@@ -559,7 +559,7 @@ uhash_freeBlock(void *obj) {
  ********************************************************************/
 
 static UHashtable*
-_uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
+_uhash_create(UHashFunction *keyHash, UKeyComparator *keyComp,
               int32_t primeIndex,
               UErrorCode *status) {
     UHashtable *result;
