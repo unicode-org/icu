@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2001/05/23 21:06:55 $ 
- * $Revision: 1.36 $
+ * $Date: 2001/06/12 23:02:13 $ 
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -794,6 +794,86 @@ public class TransliteratorTest extends TestFmwk {
                "The Quick Brown FoX Jumped Over The LaZy Dogs.");
     }
 
+    /**
+     * Test the normalization transliterator.
+     */
+    public void TestNormalizationTransliterator() {
+        // THE FOLLOWING TWO TABLES ARE COPIED FROM com.ibm.test.normalizer.BasicTest
+        // PLEASE KEEP THEM IN SYNC WITH BasicTest.
+        String[][] CANON = {
+            // Input               Decomposed            Composed
+            {"cat",                "cat",                "cat"               },
+            {"\u00e0ardvark",      "a\u0300ardvark",     "\u00e0ardvark",    },
+                                                         
+            {"\u1e0a",             "D\u0307",            "\u1e0a"            }, // D-dot_above
+            {"D\u0307",            "D\u0307",            "\u1e0a"            }, // D dot_above
+                                                         
+            {"\u1e0c\u0307",       "D\u0323\u0307",      "\u1e0c\u0307"      }, // D-dot_below dot_above
+            {"\u1e0a\u0323",       "D\u0323\u0307",      "\u1e0c\u0307"      }, // D-dot_above dot_below
+            {"D\u0307\u0323",      "D\u0323\u0307",      "\u1e0c\u0307"      }, // D dot_below dot_above
+                                                         
+            {"\u1e10\u0307\u0323", "D\u0327\u0323\u0307","\u1e10\u0323\u0307"}, // D dot_below cedilla dot_above
+            {"D\u0307\u0328\u0323","D\u0328\u0323\u0307","\u1e0c\u0328\u0307"}, // D dot_above ogonek dot_below
+                                                         
+            {"\u1E14",             "E\u0304\u0300",      "\u1E14"            }, // E-macron-grave
+            {"\u0112\u0300",       "E\u0304\u0300",      "\u1E14"            }, // E-macron + grave
+            {"\u00c8\u0304",       "E\u0300\u0304",      "\u00c8\u0304"      }, // E-grave + macron
+                                                         
+            {"\u212b",             "A\u030a",            "\u00c5"            }, // angstrom_sign
+            {"\u00c5",             "A\u030a",            "\u00c5"            }, // A-ring
+                                                         
+            {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated with 3.0
+            {"\u00fd\uFB03n",      "y\u0301\uFB03n",     "\u00fd\uFB03n"     },	//updated with 3.0
+                                                         
+            {"Henry IV",           "Henry IV",           "Henry IV"          },
+            {"Henry \u2163",       "Henry \u2163",       "Henry \u2163"      },
+                                                         
+            {"\u30AC",             "\u30AB\u3099",       "\u30AC"            }, // ga (Katakana)
+            {"\u30AB\u3099",       "\u30AB\u3099",       "\u30AC"            }, // ka + ten
+            {"\uFF76\uFF9E",       "\uFF76\uFF9E",       "\uFF76\uFF9E"      }, // hw_ka + hw_ten
+            {"\u30AB\uFF9E",       "\u30AB\uFF9E",       "\u30AB\uFF9E"      }, // ka + hw_ten
+            {"\uFF76\u3099",       "\uFF76\u3099",       "\uFF76\u3099"      }, // hw_ka + ten
+                                                         
+            {"A\u0300\u0316",      "A\u0316\u0300",      "\u00C0\u0316"      },
+        };                                                
+                                                          
+        String[][] COMPAT = {                        
+            // Input               Decomposed            Composed
+            {"\uFB4f",             "\u05D0\u05DC",       "\u05D0\u05DC",     }, // Alef-Lamed vs. Alef, Lamed
+                                                         
+            {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated for 3.0
+            {"\u00fd\uFB03n",      "y\u0301ffin",        "\u00fdffin"        }, // ffi ligature -> f + f + i
+                                                         
+            {"Henry IV",           "Henry IV",           "Henry IV"          },
+            {"Henry \u2163",       "Henry IV",           "Henry IV"          },
+                                                         
+            {"\u30AC",             "\u30AB\u3099",       "\u30AC"            }, // ga (Katakana)
+            {"\u30AB\u3099",       "\u30AB\u3099",       "\u30AC"            }, // ka + ten
+                                                         
+            {"\uFF76\u3099",       "\u30AB\u3099",       "\u30AC"            }, // hw_ka + ten
+        };
+
+        Transliterator NFD = Transliterator.getInstance("NFD");
+        Transliterator NFC = Transliterator.getInstance("NFC");
+        for (int i=0; i<CANON.length; ++i) {
+            String in = CANON[i][0];
+            String expd = CANON[i][1];
+            String expc = CANON[i][2];
+            expect(NFD, in, expd);
+            expect(NFC, in, expc);
+        }
+
+        Transliterator NFKD = Transliterator.getInstance("NFKD");
+        Transliterator NFKC = Transliterator.getInstance("NFKC");
+        for (int i=0; i<COMPAT.length; ++i) {
+            String in = COMPAT[i][0];
+            String expkd = COMPAT[i][1];
+            String expkc = COMPAT[i][2];
+            expect(NFKD, in, expkd);
+            expect(NFKC, in, expkc);
+        }
+    }
+    
     //======================================================================
     // Support methods
     //======================================================================
