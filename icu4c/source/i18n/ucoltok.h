@@ -33,6 +33,7 @@ struct UColToken {
   int32_t strength;
   int32_t polarity; /* 1 for <, <<, <<<, , ; and -1 for >, >>, >>> */
   UColTokListHeader *listHeader;
+  UBool expandNext;
 };
 
 

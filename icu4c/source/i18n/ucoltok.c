@@ -125,25 +125,18 @@ Processing Description
   reset may be null. 
   2 As you process, you keep a LAST pointer that points to the last token you 
   handled. 
-  3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
-    First convert all expansions into normal form. Examples: 
-      If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
-      d * ... into &x * c/y * d * ... 
-      Note: reset values can never have expansions, although they can cause the 
-      very next item to have one. They may be contractions, if they are found 
-      earlier in the list. 
 */
 
 uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   UColToken *lastToken = NULL;
+  uint32_t newCharsLen = 0, newExtensionsLen = 0;
+  uint32_t charsOffset = 0, extensionOffset = 0;
+
+  uint32_t newStrength = UCOL_TOK_UNSET; 
 
   ucol_tok_initTokenList(src, status);
 
   while(src->current < src->end) {
-    uint32_t newCharsLen = 0, newExtensionsLen = 0;
-    uint32_t charsOffset = 0, extensionOffset = 0;
-
-    uint32_t newStrength = UCOL_TOK_UNSET; 
     { /* parsing part */
 
       UBool inChars = TRUE;
@@ -157,13 +150,19 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
               inQuote = FALSE;
           } else {
             if ((newCharsLen == 0) || inChars) {
+              if(newCharsLen == 0) {
+                charsOffset = src->current - src->source;
+              }
               newCharsLen++;
             } else {
+              if(newExtensionsLen == 0) {
+                extensionOffset = src->current - src->source;
+              }
               newExtensionsLen++;
             }
           }
         } else {
-          // Sets the strength for this entry
+          /* Sets the strength for this entry */
           switch (ch) {
             case 0x003D/*'='*/ : 
               if (newStrength != -1) {
@@ -205,16 +204,16 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
               newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
               break;
 
-            // Ignore the white spaces
+            /* Ignore the white spaces */
             case 0x0009/*'\t'*/:
             case 0x000C/*'\f'*/:
             case 0x000D/*'\r'*/:
             case 0x000A/*'\n'*/:
             case 0x0020/*' '*/:  
-              break; // skip whitespace TODO use Unicode
+              break; /* skip whitespace TODO use Unicode */
 
             case 0x002F/*'/'*/:
-                    // This entry has an extension.
+                    /* This entry has an extension. */
               inChars = FALSE;
               break;
 
@@ -223,6 +222,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
               ch = *(++(src->current)); /*pattern[++index]; */
 
               if (newCharsLen == 0) {
+                charsOffset = src->current - src->source;
                 newCharsLen++;
               } else if (inChars) {
                 newCharsLen++;
@@ -243,17 +243,17 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
                 return 0;
               }
 
-              if(inChars && newCharsLen == 0) {
-                charsOffset = src->current - src->source;
-              }
 
-              if(!(inChars) && newExtensionsLen == 0) {
-                extensionOffset = src->current - src->source;
-              }
 
               if (inChars) {
+                if(newCharsLen == 0) {
+                  charsOffset = src->current - src->source;
+                }
                 newCharsLen++;
               } else {
+                if(newExtensionsLen == 0) {
+                  extensionOffset = src->current - src->source;
+                }
                 newExtensionsLen++;
               }
 
@@ -285,6 +285,10 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
       /*  4 Lookup each [source,  expansion] in the CharsToToken map, and find a sourceToken */
       sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
       if(newStrength != UCOL_TOK_RESET) {
+        if(lastToken == NULL) { /* this means that rules haven't started properly */
+          *status = U_INVALID_FORMAT_ERROR;
+          return 0;
+        }
       /*  6 Otherwise (when relation != reset) */
         if(sourceToken == NULL) {
           /* If sourceToken is null, create new one, */
@@ -323,6 +327,16 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
               set the polarity of sourceToken to be the same as the list you put it in. */
           sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
           sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
+          /*
+            If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
+            d * ... into &x * c/y * d * ... 
+          */
+          if(lastToken->expandNext == TRUE && sourceToken->expansion == 0) {
+            sourceToken->expansion = lastToken->source+0xFF000001;
+            /* same as -0x01000000+1 0r -0x00FFFFFF */
+          }
+
+
         } else {
         /* Otherwise (when LAST is not a reset) 
               if polarity (LAST) == polarity(relation), insert sourceToken after LAST, 
@@ -373,6 +387,22 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
           sourceToken->listHeader = &ListList[listPosition];
+
+          /*
+            3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
+              First convert all expansions into normal form. Examples: 
+                If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
+                d * ... into &x * c/y * d * ... 
+                Note: reset values can never have expansions, although they can cause the 
+                very next item to have one. They may be contractions, if they are found 
+                earlier in the list. 
+          */
+          if(newCharsLen > 1) {
+            sourceToken->expandNext = TRUE;
+          } else {
+            sourceToken->expandNext = FALSE;
+          }
+
  
           init_collIterate(src->source+charsOffset, newCharsLen, &s, FALSE);
 
@@ -393,9 +423,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           listPosition++;
           uhash_put(uchars2tokens, sourceToken, sourceToken, status);
         } else { /* reset to something already in rules */
-          uint32_t CElo;
-          CElo=1;
-
         }
       }
       /*  7 After all this, set LAST to point to sourceToken, and goto step 3. */  

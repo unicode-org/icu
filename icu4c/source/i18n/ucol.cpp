@@ -248,6 +248,7 @@ ucol_openRules(    const    UChar                  *rules,
 
   /* do we need to normalize the string beforehand? */
 
+  uint32_t listLen = 0;
   UColTokenParser src;
   src.source = rules;
   src.current = rules;
@@ -257,7 +258,7 @@ ucol_openRules(    const    UChar                  *rules,
   src.resultLen = 0;
   src.lh = 0;
 
-  ucol_tok_assembleTokenList(&src, status);
+  listLen = ucol_tok_assembleTokenList(&src, status);
   if(U_FAILURE(*status) || src.lh == NULL) {
     return NULL;
   }
