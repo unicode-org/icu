@@ -856,6 +856,13 @@ Transliterator* Transliterator::createInverse(UErrorCode& status) const {
     return Transliterator::createInstance(ID, UTRANS_REVERSE,parseError,status);
 }
 
+Transliterator* Transliterator::createInstance(const UnicodeString& ID,
+                                               UTransDirection dir,
+                                               UErrorCode& status) {
+    UParseError parseError;
+    return createInstance(ID, dir, parseError, status);
+}
+
 /**
  * Returns a <code>Transliterator</code> object given its ID.
  * The ID must be either a system transliterator ID or a ID registered
@@ -869,31 +876,6 @@ Transliterator* Transliterator::createInverse(UErrorCode& status) const {
  */
 Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                                                UTransDirection dir,
-                                               UParseError& parseError,
-                                               UErrorCode& status) {
-    return createInstance(ID, dir, -1, NULL, parseError, status);
-}
-
-Transliterator* Transliterator::createInstance(const UnicodeString& ID,
-                                               UTransDirection dir,
-                                               UErrorCode& status) {
-    UParseError parseError;
-    return createInstance(ID, dir, -1, NULL, parseError, status);
-}
-
-/**
- * Create a transliterator given a compound ID (possibly degenerate,
- * with no ID_DELIM).  If idSplitPoint >= 0 and adoptedSplitTrans !=
- * 0, then insert adoptedSplitTrans in the compound ID at offset
- * idSplitPoint.  Otherwise idSplitPoint should be -1 and
- * adoptedSplitTrans should be 0.  The resultant transliterator will
- * be an atomic (non-compound) transliterator if this is indicated by
- * ID.  Otherwise it will be a compound translitertor.
- */
-Transliterator* Transliterator::createInstance(const UnicodeString& ID,
-                                               UTransDirection dir,
-                                               int32_t idSplitPoint,
-                                               Transliterator *adoptedSplitTrans,
                                                UParseError& parseError,
                                                UErrorCode& status) {
     if (U_FAILURE(status)) {
@@ -1035,7 +1017,7 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
             UnicodeString id("_", "");
             t = new RuleBasedTransliterator(id, parser.orphanData(), TRUE); // TRUE == adopt data object
             t = new CompoundTransliterator(ID, parser.idBlock, parser.idSplitPoint,
-                                           t, parseError, status);
+                                           t, status);
             if (U_FAILURE(status)) {
                 delete t;
                 t = 0;
