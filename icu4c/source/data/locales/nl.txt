@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/nl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/nl.xml
+ *  ICU <specials> source: ./xml/main/nl.xml
  */
 nl{
     Countries{
@@ -208,7 +208,6 @@ nl{
         SM{"San Marino"}
         SN{"Senegal"}
         SO{"Somalië"}
-        SP{"Servië"}
         SR{"Suriname"}
         ST{"Sao Tomé en Principe"}
         SV{"El Salvador"}
@@ -253,10 +252,6 @@ nl{
         ZW{"Zimbabwe"}
     }
     Currencies{
-        ADD{
-            "ADD",
-            "Andorrese diner",
-        }
         ADP{
             "ADP",
             "Andorrese peseta",
@@ -273,10 +268,6 @@ nl{
             "Af",
             "Afghani",
         }
-        AIF{
-            "AIF",
-            "Affars en Issas-franc",
-        }
         ALK{
             "ALK",
             "Albanese lek (1946-1961)",
@@ -284,14 +275,6 @@ nl{
         ALL{
             "lek",
             "Albanese lek",
-        }
-        ALV{
-            "ALV",
-            "Albanese lek valute",
-        }
-        ALX{
-            "ALX",
-            "Albanese dollarwisselcertificaten",
         }
         AMD{
             "dram",
@@ -317,17 +300,9 @@ nl{
             "AOR",
             "Angolese kwanza reajustado (1995-1999)",
         }
-        AOS{
-            "AOS",
-            "Angolese escudo",
-        }
         ARA{
             "ARA",
             "Argentijnse austral",
-        }
-        ARM{
-            "ARM",
-            "Argentijnse peso moneda nacional",
         }
         ARP{
             "ARP",
@@ -345,10 +320,6 @@ nl{
             "$A",
             "Australische dollar",
         }
-        AUP{
-            "AUP",
-            "Australisch pond",
-        }
         AWG{
             "AWG",
             "Arubaanse gulden",
@@ -364,10 +335,6 @@ nl{
         BAM{
             "KM",
             "Bosnische convertibele mark",
-        }
-        BAN{
-            "BAN",
-            "Bosnische nieuwe dinar",
         }
         BBD{
             "BDS$",
@@ -393,21 +360,9 @@ nl{
             "lev",
             "Bulgaarse harde lev",
         }
-        BGM{
-            "BGM",
-            "Bulgaarse socialistische lev",
-        }
         BGN{
             "BGN",
             "Bulgaarse nieuwe lev",
-        }
-        BGO{
-            "BGO",
-            "Bulgaarse lev (1879-1952)",
-        }
-        BGX{
-            "BGX",
-            "Bulgaarse levwisselcertificaten",
         }
         BHD{
             "BD",
@@ -421,10 +376,6 @@ nl{
             "Ber$",
             "Bermuda-dollar",
         }
-        BMP{
-            "BMP",
-            "Bermuda-pond",
-        }
         BND{
             "BND",
             "Bruneise dollar",
@@ -432,10 +383,6 @@ nl{
         BOB{
             "Bs",
             "Boliviano",
-        }
-        BOL{
-            "BOL",
-            "Boliviano (1863-1962)",
         }
         BOP{
             "BOP",
@@ -469,33 +416,17 @@ nl{
             "BRR",
             "Braziliaanse cruzeiro",
         }
-        BRZ{
-            "BRZ",
-            "Braziliaanse cruzeiro (1942-1967)",
-        }
         BSD{
             "BSD",
             "Bahamaanse dollar",
-        }
-        BSP{
-            "BSP",
-            "Bahamaans pond",
         }
         BTN{
             "Nu",
             "Bhutaanse ngultrum",
         }
-        BTR{
-            "BTR",
-            "Bhutaanse rupee",
-        }
         BUK{
             "BUK",
             "Birmese kyat",
-        }
-        BUR{
-            "BUR",
-            "Birmese rupee",
         }
         BWP{
             "BWP",
@@ -505,10 +436,6 @@ nl{
             "BYB",
             "Wit-Russische nieuwe roebel (1994-1999)",
         }
-        BYL{
-            "BYL",
-            "Wit-Russische roebel (1992-1994)",
-        }
         BYR{
             "Rbl",
             "Wit-Russische roebel",
@@ -516,10 +443,6 @@ nl{
         BZD{
             "BZ$",
             "Belizaanse dollar",
-        }
-        BZH{
-            "BZH",
-            "Brits-Hondurese dollar",
         }
         CAD{
             "Can$",
@@ -529,33 +452,9 @@ nl{
             "CDF",
             "Congolese franc congolais",
         }
-        CDG{
-            "CDG",
-            "Congolese franc",
-        }
-        CDL{
-            "CDL",
-            "Congolese zaïre",
-        }
-        CFF{
-            "CFF",
-            "Centraal-Afrikaanse CFA-franc",
-        }
         CHF{
             "SwF",
             "Zwitserse franc",
-        }
-        CKD{
-            "CKD",
-            "Cookeilandse dollar",
-        }
-        CLC{
-            "CLC",
-            "Chileense condor",
-        }
-        CLE{
-            "CLE",
-            "Chileense escudo",
         }
         CLF{
             "CLF",
@@ -565,14 +464,6 @@ nl{
             "Ch$",
             "Chileense peso",
         }
-        CMF{
-            "CMF",
-            "Kameroense CFA-franc",
-        }
-        CNP{
-            "CNP",
-            "Chinese jen min piao yuan",
-        }
         CNX{
             "CNX",
             "Chinese Amerikaanse-dollarwisselcertificaten",
@@ -580,14 +471,6 @@ nl{
         CNY{
             "Y",
             "Chinese yuan renminbi",
-        }
-        COB{
-            "COB",
-            "Colombiaanse papieren peso",
-        }
-        COF{
-            "COF",
-            "Congolese CFA-franc",
         }
         COP{
             "Col$",
@@ -597,10 +480,6 @@ nl{
             "C",
             "Costaricaanse colón",
         }
-        CSC{
-            "CSC",
-            "Tsjechoslowaakse koruna",
-        }
         CSK{
             "CSK",
             "Tsjechoslowaakse harde koruna",
@@ -609,17 +488,9 @@ nl{
             "CUP",
             "Cubaanse peso",
         }
-        CUX{
-            "CUX",
-            "Cubaanse wisselcertificaten",
-        }
         CVE{
             "CVEsc",
             "Kaapverdische escudo",
-        }
-        CWG{
-            "CWG",
-            "Curaçao-gulden",
         }
         CYP{
             "£C",
@@ -637,10 +508,6 @@ nl{
             "DEM",
             "Duitse mark",
         }
-        DES{
-            "DES",
-            "Duitse sperrmark",
-        }
         DJF{
             "DF",
             "Djiboutiaanse franc",
@@ -656,14 +523,6 @@ nl{
         DZD{
             "DA",
             "Algerijnse dinar",
-        }
-        DZF{
-            "DZF",
-            "Algerijnse nieuwe franc",
-        }
-        DZG{
-            "DZG",
-            "Algerijnse franc germinal",
         }
         ECS{
             "ECS",
@@ -693,10 +552,6 @@ nl{
             "Br",
             "Ethiopische birr",
         }
-        ETD{
-            "ETD",
-            "Ethiopische dollar",
-        }
         EUR{
             "€",
             "Euro",
@@ -705,37 +560,17 @@ nl{
             "FIM",
             "Finse markka",
         }
-        FIN{
-            "FIN",
-            "Finse markka (1860-1962)",
-        }
         FJD{
             "F$",
             "Fijische dollar",
-        }
-        FJP{
-            "FJP",
-            "Fijisch pond",
         }
         FKP{
             "FKP",
             "Falklandeilands pond",
         }
-        FOK{
-            "FOK",
-            "Faeröerse kroon",
-        }
         FRF{
             "FRF",
             "Franse franc",
-        }
-        FRG{
-            "FRG",
-            "Franse franc germinal/franc poincare",
-        }
-        GAF{
-            "GAF",
-            "Gabonese CFA-franc",
         }
         GBP{
             "£",
@@ -753,85 +588,37 @@ nl{
             "GHC",
             "Ghanese cedi",
         }
-        GHO{
-            "GHO",
-            "Ghanese oude cedi",
-        }
-        GHP{
-            "GHP",
-            "Ghanees pond",
-        }
-        GHR{
-            "GHR",
-            "Ghanese hergewaardeerde cedi",
-        }
         GIP{
             "GIP",
             "Gibraltarees pond",
-        }
-        GLK{
-            "GLK",
-            "Groenlandse kroon",
         }
         GMD{
             "GMD",
             "Gambiaanse dalasi",
         }
-        GMP{
-            "GMP",
-            "Gambiaans pond",
-        }
         GNF{
             "GF",
             "Guinese franc",
-        }
-        GNI{
-            "GNI",
-            "Guinese franc (1960-1972)",
         }
         GNS{
             "GNS",
             "Guinese syli",
         }
-        GPF{
-            "GPF",
-            "Guadeloupse franc",
-        }
         GQE{
             "GQE",
             "Equatoriaal-Guinese ekwele guineana",
-        }
-        GQF{
-            "GQF",
-            "Equatoriaal-Guinese franco",
-        }
-        GQP{
-            "GQP",
-            "Equatoriaal-Guinese peseta puineana",
         }
         GRD{
             "GRD",
             "Griekse drachme",
         }
-        GRN{
-            "GRN",
-            "Griekse nieuwe drachme",
-        }
         GTQ{
             "Q",
             "Guatemalteekse quetzal",
         }
-        GUF{
-            "GUF",
-            "Frans-Guyaanse franc guiana",
-        }
         GWE{
             "GWE",
             "Portuguees-Guinese escudo",
-        }
-        GWM{
-            "GWM",
-            "Portuguees-Guinese mil reis",
         }
         GWP{
             "GWP",
@@ -865,22 +652,6 @@ nl{
             "Ft",
             "Hongaarse forint",
         }
-        IBP{
-            "IBP",
-            "Noord-Iers pond",
-        }
-        IDG{
-            "IDG",
-            "Indonesische nica-gulden",
-        }
-        IDJ{
-            "IDJ",
-            "Indonesische Java-rupiah",
-        }
-        IDN{
-            "IDN",
-            "Indonesische nieuwe rupiah",
-        }
         IDR{
             "Rp",
             "Indonesische rupiah",
@@ -889,10 +660,6 @@ nl{
             "IR£",
             "Iers pond",
         }
-        ILL{
-            "ILL",
-            "Israëlische shekel",
-        }
         ILP{
             "ILP",
             "Israëlisch pond",
@@ -900,10 +667,6 @@ nl{
         ILS{
             "ILS",
             "Israëlische nieuwe shekel",
-        }
-        IMP{
-            "IMP",
-            "Isle of Man pond sterling",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
@@ -925,17 +688,9 @@ nl{
             "₤",
             "Italiaanse lire",
         }
-        JEP{
-            "JEP",
-            "Jersey pond sterling",
-        }
         JMD{
             "J$",
             "Jamaicaanse dollar",
-        }
-        JMP{
-            "JMP",
-            "Jamaicaans pond",
         }
         JOD{
             "JD",
@@ -953,37 +708,17 @@ nl{
             "som",
             "Kirgizische som",
         }
-        KHO{
-            "KHO",
-            "Cambodjaanse oude riel",
-        }
         KHR{
             "CR",
             "Cambodjaanse riel",
-        }
-        KID{
-            "KID",
-            "Kiribatische dollar",
         }
         KMF{
             "CF",
             "Comorese franc",
         }
-        KPP{
-            "KPP",
-            "Noord-Koreaanse Volksrepubliek-won",
-        }
         KPW{
             "KPW",
             "Noord-Koreaanse won",
-        }
-        KRH{
-            "KRH",
-            "Zuid-Koreaanse hwan",
-        }
-        KRO{
-            "KRO",
-            "Zuid-Koreaanse oude won",
         }
         KRW{
             "KRW",
@@ -997,10 +732,6 @@ nl{
             "KYD",
             "Caymaneilandse dollar",
         }
-        KZR{
-            "KZR",
-            "Kazachstaanse roebel",
-        }
         KZT{
             "T",
             "Kazachstaanse tenge",
@@ -1013,17 +744,9 @@ nl{
             "LL",
             "Libanees pond",
         }
-        LIF{
-            "LIF",
-            "Liechtensteinse frank",
-        }
         LKR{
             "SL Re",
             "Srilankaanse rupee",
-        }
-        LNR{
-            "LNR",
-            "Ceylon-rupee",
         }
         LRD{
             "LRD",
@@ -1053,17 +776,9 @@ nl{
             "LVR",
             "Letse roebel",
         }
-        LYB{
-            "LYB",
-            "Libische Britse Militaire Autoriteit-lire",
-        }
         LYD{
             "LD",
             "Libische dinar",
-        }
-        LYP{
-            "LYP",
-            "Libisch pond",
         }
         MAD{
             "MAD",
@@ -1073,25 +788,9 @@ nl{
             "MAF",
             "Marokkaanse franc",
         }
-        MCF{
-            "MCF",
-            "Monegaskische nieuwe franc",
-        }
-        MCG{
-            "MCG",
-            "Monegaskische franc germinal",
-        }
-        MDC{
-            "MDC",
-            "Monegaskische leu cupon",
-        }
         MDL{
             "MDL",
             "Moldavische leu",
-        }
-        MDR{
-            "MDR",
-            "Moldavische roebel-cupon",
         }
         MGA{
             "MGA",
@@ -1101,17 +800,9 @@ nl{
             "MGF",
             "Malagassische franc",
         }
-        MHD{
-            "MHD",
-            "Marshalleilandse dollar",
-        }
         MKD{
             "MDen",
             "Macedonische denar",
-        }
-        MKN{
-            "MKN",
-            "Macedonische denar (1992-1993)",
         }
         MLF{
             "MLF",
@@ -1121,10 +812,6 @@ nl{
             "MMK",
             "Myanmarese kyat",
         }
-        MMX{
-            "MMX",
-            "Myanmarese dollarwisselcertificaten",
-        }
         MNT{
             "Tug",
             "Mongoolse tugrik",
@@ -1132,10 +819,6 @@ nl{
         MOP{
             "MOP",
             "Macause pataca",
-        }
-        MQF{
-            "MQF",
-            "Martinikaanse franc",
         }
         MRO{
             "UM",
@@ -1153,10 +836,6 @@ nl{
             "MUR",
             "Mauritiaanse rupee",
         }
-        MVP{
-            "MVP",
-            "Maldivische rupee",
-        }
         MVR{
             "MVR",
             "Maldivische rufiyaa",
@@ -1164,10 +843,6 @@ nl{
         MWK{
             "MK",
             "Malawische kwacha",
-        }
-        MWP{
-            "MWP",
-            "Malawisch pond",
         }
         MXN{
             "MEX$",
@@ -1197,29 +872,13 @@ nl{
             "N$",
             "Namibische dollar",
         }
-        NCF{
-            "NCF",
-            "Nieuw-Caledonische franc germinal",
-        }
         NGN{
             "NGN",
             "Nigeriaanse naira",
         }
-        NGP{
-            "NGP",
-            "Nigeriaans pond",
-        }
-        NHF{
-            "NHF",
-            "Nieuw-Hebridiaanse CFP-franc",
-        }
         NIC{
             "NIC",
             "Nicaraguaanse córdoba",
-        }
-        NIG{
-            "NIG",
-            "Nicaraguaanse gouden córdoba",
         }
         NIO{
             "NIO",
@@ -1241,33 +900,13 @@ nl{
             "$NZ",
             "Nieuw-Zeelandse dollar",
         }
-        NZP{
-            "NZP",
-            "Nieuw-Zeelands pond",
-        }
         OMR{
             "RO",
             "Omaanse rial",
         }
-        OMS{
-            "OMS",
-            "Omaanse rial saidi",
-        }
         PAB{
             "PAB",
             "Panamese balboa",
-        }
-        PDK{
-            "PDK",
-            "Trans-Djnestrische roebel-kupon",
-        }
-        PDN{
-            "PDN",
-            "Trans-Djnestrische nieuwe roebel",
-        }
-        PDR{
-            "PDR",
-            "Trans-Djnestrische roebel",
         }
         PEI{
             "PEI",
@@ -1297,21 +936,9 @@ nl{
             "Zl",
             "Poolse zloty",
         }
-        PLX{
-            "PLX",
-            "Poolse Amerikaanse-dollarwisselcertificaten",
-        }
         PLZ{
             "PLZ",
             "Poolse zloty (1950-1995)",
-        }
-        PSP{
-            "PSP",
-            "Palestijns pond",
-        }
-        PTC{
-            "PTC",
-            "Portugese conto",
         }
         PTE{
             "PTE",
@@ -1325,17 +952,9 @@ nl{
             "QR",
             "Qatarese rial",
         }
-        REF{
-            "REF",
-            "Réunionse franc",
-        }
         ROL{
             "leu",
             "Roemeense leu",
-        }
-        RON{
-            "RON",
-            "Roemeense nieuwe leu",
         }
         RUB{
             "RUB",
@@ -1352,10 +971,6 @@ nl{
         SAR{
             "SRl",
             "Saoedische rial",
-        }
-        SAS{
-            "SAS",
-            "Saoedische souvereine rial",
         }
         SBD{
             "SI$",
@@ -1385,10 +1000,6 @@ nl{
             "SHP",
             "Sint-Heleense pond",
         }
-        SIB{
-            "SIB",
-            "Sloveense tolar bons",
-        }
         SIT{
             "SIT",
             "Sloveense tolar",
@@ -1401,37 +1012,17 @@ nl{
             "SLL",
             "Sierraleoonse leone",
         }
-        SML{
-            "SML",
-            "Sanmarinese lire",
-        }
         SOS{
             "So. Sh.",
             "Somalische shilling",
-        }
-        SQS{
-            "SQS",
-            "Somalilandse shilling",
         }
         SRG{
             "Sf",
             "Surinaamse gulden",
         }
-        SSP{
-            "SSP",
-            "Schotse pond",
-        }
         STD{
             "Db",
             "Santomese dobra",
-        }
-        STE{
-            "STE",
-            "Santomese escudo",
-        }
-        SUN{
-            "SUN",
-            "Nieuwe sovjet-roebel",
         }
         SUR{
             "SUR",
@@ -1448,14 +1039,6 @@ nl{
         SZL{
             "E",
             "Swazische lilangeni",
-        }
-        TCC{
-            "TCC",
-            "Turks en Caicos-kroon",
-        }
-        TDF{
-            "TDF",
-            "Tsjaadse CFA-franc",
         }
         THB{
             "THB",
@@ -1481,17 +1064,9 @@ nl{
             "T$",
             "Tongaanse paʻanga",
         }
-        TOS{
-            "TOS",
-            "Tongaans pond sterling",
-        }
         TPE{
             "TPE",
             "Timorese escudo",
-        }
-        TPP{
-            "TPP",
-            "Timorese pataca",
         }
         TRL{
             "TL",
@@ -1500,14 +1075,6 @@ nl{
         TTD{
             "TT$",
             "Trinidad en Tobago-dollar",
-        }
-        TTO{
-            "TTO",
-            "Trinidad en Tobago-oude dollar",
-        }
-        TVD{
-            "TVD",
-            "Tuvaluaanse dollar",
         }
         TWD{
             "NT$",
@@ -1545,10 +1112,6 @@ nl{
             "USS",
             "Amerikaanse dollar (zelfde dag)",
         }
-        UYF{
-            "UYF",
-            "Uruguayaanse peso fuerte",
-        }
         UYP{
             "UYP",
             "Uruguayaanse peso (1975-1993)",
@@ -1557,77 +1120,29 @@ nl{
             "Ur$",
             "Uruguayaanse peso uruguayo",
         }
-        UZC{
-            "UZC",
-            "Oezbekistaanse coupon-som",
-        }
         UZS{
             "UZS",
             "Oezbekistaanse sum",
-        }
-        VAL{
-            "VAL",
-            "Vaticaanse lire",
-        }
-        VDD{
-            "VDD",
-            "Noord-Vietnamese piastre dong viet",
-        }
-        VDN{
-            "VDN",
-            "Noord-Vietnamese nieuwe dong",
-        }
-        VDP{
-            "VDP",
-            "Noord-Vietnamese viet minh piastre dong viet",
         }
         VEB{
             "Be",
             "Venezolaanse bolivar",
         }
-        VGD{
-            "VGD",
-            "Britse Maagdeneilandse dollar",
-        }
         VND{
             "VND",
             "Vietnamese dong",
-        }
-        VNN{
-            "VNN",
-            "Vietnamese nieuwe dong",
-        }
-        VNR{
-            "VNR",
-            "Vietnamese Republiek-dong",
-        }
-        VNS{
-            "VNS",
-            "Vietnamese nationale dong",
         }
         VUV{
             "VT",
             "Vanuatuaanse vatu",
         }
-        WSP{
-            "WSP",
-            "West-Samoaans pond",
-        }
         WST{
             "WST",
             "West-Samoaanse tala",
         }
-        XAD{
-            "XAD",
-            "Aziatische dinar-rekeneenheid",
-        }
         XAF{
             "XAF",
             "CFA-franc BEAC",
-        }
-        XAM{
-            "XAM",
-            "Aziatische monetaire eenheid",
         }
         XAU{
             "XAU",
@@ -1653,17 +1168,9 @@ nl{
             "EC$",
             "Oost-Caribische dollar",
         }
-        XCF{
-            "XCF",
-            "CFA nieuwe franc",
-        }
         XDR{
             "XDR",
             "Special Drawing Rights",
-        }
-        XEF{
-            "XEF",
-            "CFA-franc BCEAEC",
         }
         XEU{
             "XEU",
@@ -1677,18 +1184,6 @@ nl{
             "XFU",
             "Franse UIC-franc",
         }
-        XID{
-            "XID",
-            "Islamitische dinar",
-        }
-        XMF{
-            "XMF",
-            "Franse metropolische nieuwe franc",
-        }
-        XNF{
-            "XNF",
-            "Franse antillen CFA-franc",
-        }
         XOF{
             "XOF",
             "CFA-franc BCEAO",
@@ -1697,17 +1192,9 @@ nl{
             "CFPF",
             "CFP-franc",
         }
-        XTR{
-            "XTR",
-            "COMECON transferable roebel",
-        }
         YDD{
             "YDD",
             "Jemenitische dinar",
-        }
-        YEI{
-            "YEI",
-            "Jemenitische imadi rial",
         }
         YER{
             "YRl",
@@ -1717,14 +1204,6 @@ nl{
             "YUD",
             "Joegoslavische harde dinar",
         }
-        YUF{
-            "YUF",
-            "Joegoslavische federale dinar",
-        }
-        YUG{
-            "YUG",
-            "Joegoslavische 1994-dinar",
-        }
         YUM{
             "YUM",
             "Joegoslavische noviy-dinar",
@@ -1733,21 +1212,9 @@ nl{
             "YUN",
             "Joegoslavische convertibele dinar",
         }
-        YUO{
-            "YUO",
-            "Joegoslavische oktober-dinar",
-        }
-        YUR{
-            "YUR",
-            "Joegoslavische  hervormde dinar",
-        }
         ZAL{
             "ZAL",
             "Zuid-Afrikaanse rand (financieel)",
-        }
-        ZAP{
-            "ZAP",
-            "Zuid-Afrikaans pond",
         }
         ZAR{
             "R",
@@ -1756,10 +1223,6 @@ nl{
         ZMK{
             "ZMK",
             "Zambiaanse kwacha",
-        }
-        ZMP{
-            "ZMP",
-            "Zambiaans pond",
         }
         ZRN{
             "ZRN",
@@ -2070,7 +1533,7 @@ nl{
     Variants{
         REVISED{"Gewijzigd"}
     }
-    Version{"1.2"}
+    Version{"1.43"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -2220,68 +1683,12 @@ nl{
     }
     zoneStrings{
         {
-            "America/Los_Angeles",
-            "Pacific-standaardtijd",
-            "PST",
-            "Pacific-zomertijd",
-            "PDT",
-            "Los Angeles",
-        }
-        {
-            "America/Denver",
-            "Mountain-standaardtijd",
-            "MST",
-            "Mountain-zomertijd",
-            "MDT",
-            "Denver",
-        }
-        {
-            "America/Phoenix",
-            "Mountain-standaardtijd",
-            "MST",
-            "Mountain-standaardtijd",
-            "MST",
-            "Phoenix",
-        }
-        {
-            "America/Chicago",
-            "Central-standaardtijd",
-            "CST",
-            "Central-zomertijd",
-            "CDT",
-            "Chicago",
-        }
-        {
-            "America/New_York",
-            "Eastern-standaardtijd",
-            "EST",
-            "Eastern-zomertijd",
-            "EDT",
-            "New York",
-        }
-        {
-            "America/Indianapolis",
-            "Eastern-standaardtijd",
-            "EST",
-            "Eastern-standaardtijd",
-            "EST",
-            "Indianapolis",
-        }
-        {
-            "Pacific/Honolulu",
-            "Hawaï-standaardtijd",
-            "HST",
-            "Hawaï-standaardtijd",
-            "HST",
-            "Honolulu",
-        }
-        {
-            "America/Anchorage",
-            "Alaska-standaardtijd",
-            "AST",
-            "Alaska-zomertijd",
-            "ADT",
-            "Anchorage",
+            "Etc/GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "Londen",
         }
         {
             "America/Halifax",
@@ -2300,28 +1707,20 @@ nl{
             "St. Johns",
         }
         {
+            "Asia/Shanghai",
+            "Chinese standaardtijd",
+            "CTT",
+            "Chinese standaardtijd",
+            "CDT",
+            "Shanghai",
+        }
+        {
             "Europe/Paris",
             "Midden-Europese standaardtijd",
             "CET",
             "Midden-Europese zomertijd",
             "CEST",
             "Parijs",
-        }
-        {
-            "Etc/GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Londen",
-        }
-        {
-            "Africa/Casablanca",
-            "Greenwich Mean Time",
-            "GMT",
-            "Greenwich Mean Time",
-            "GMT",
-            "Casablanca",
         }
         {
             "Asia/Jerusalem",
@@ -2340,6 +1739,14 @@ nl{
             "Tokyo",
         }
         {
+            "Africa/Casablanca",
+            "Greenwich Mean Time",
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "Casablanca",
+        }
+        {
             "Europe/Bucharest",
             "Oost-Europese standaardtijd",
             "EET",
@@ -2348,12 +1755,68 @@ nl{
             "Boekarest",
         }
         {
-            "Asia/Shanghai",
-            "Chinese standaardtijd",
-            "CTT",
-            "Chinese standaardtijd",
+            "Pacific/Honolulu",
+            "Hawaï-standaardtijd",
+            "HST",
+            "Hawaï-standaardtijd",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "America/Anchorage",
+            "Alaska-standaardtijd",
+            "AST",
+            "Alaska-zomertijd",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacific-standaardtijd",
+            "PST",
+            "Pacific-zomertijd",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Phoenix",
+            "Mountain-standaardtijd",
+            "MST",
+            "Mountain-standaardtijd",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Denver",
+            "Mountain-standaardtijd",
+            "MST",
+            "Mountain-zomertijd",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Chicago",
+            "Central-standaardtijd",
+            "CST",
+            "Central-zomertijd",
             "CDT",
-            "Shanghai",
+            "Chicago",
+        }
+        {
+            "America/Indianapolis",
+            "Eastern-standaardtijd",
+            "EST",
+            "Eastern-standaardtijd",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/New_York",
+            "Eastern-standaardtijd",
+            "EST",
+            "Eastern-zomertijd",
+            "EDT",
+            "New York",
         }
     }
 }

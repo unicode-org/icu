@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/eo.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/eo.xml
+ *  ICU <specials> source: ./xml/main/eo.xml
  */
 eo{
     Countries{
@@ -198,7 +198,6 @@ eo{
         SM{"San-Marino"}
         SN{"Senegalo"}
         SO{"Somalujo"}
-        SP{"Serbujo"}
         SR{"Surinamo"}
         ST{"Sao-Tomeo kaj Principeo"}
         SV{"Salvadoro"}
@@ -233,6 +232,7 @@ eo{
         WS{"Samoo"}
         YE{"Jemeno"}
         YT{"Majoto"}
+        YU{"Serbujo"}
         ZA{"Sud-Afriko"}
         ZM{"Zambio"}
         ZW{"Zimbabvo"}
@@ -395,7 +395,7 @@ eo{
         "�",
         "+",
     }
-    Version{"1.2"}
+    Version{"1.33"}
     calendar{
         gregorian{
             AmPmMarkers{

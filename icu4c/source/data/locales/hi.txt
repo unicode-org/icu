@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/hi.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/hi.xml
+ *  ICU <specials> source: ./xml/main/hi.xml
  */
 hi{
     Countries{
@@ -348,7 +348,7 @@ hi{
         "�",
         "+",
     }
-    Version{"1.2"}
+    Version{"1.33"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -424,6 +424,7 @@ hi{
             "IST",
             "भारतीय समय",
             "IST",
+            "Calcutta",
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/af.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/af.xml
+ *  ICU <specials> source: ./xml/main/af.xml
  */
 af{
     Countries{
@@ -121,7 +121,6 @@ af{
         SI{"Slowenië"}
         SK{"Slowakye"}
         SO{"Somalië"}
-        SP{"Serwië"}
         ST{"Sao Tome en Principe"}
         SV{"Salvador"}
         SY{"Sirië"}
@@ -139,6 +138,7 @@ af{
         VC{"Saint Vincent en die Grenadine"}
         VN{"Viëtnam"}
         YE{"Jemen"}
+        YU{"Serwië"}
         ZA{"Suid-Afrika"}
         ZM{"Zambië"}
     }
@@ -169,7 +169,7 @@ af{
         "�",
         "+",
     }
-    Version{"1.2"}
+    Version{"1.31"}
     calendar{
         gregorian{
             AmPmMarkers{

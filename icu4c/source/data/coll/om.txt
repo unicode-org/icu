@@ -1,23 +1,23 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/collation/om.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/collation/om.xml
+ *  ICU <specials> source: ./xml/collation/om.xml
  */
 om{
-    Version{"1.2"}
+    Version{"1.11"}
     collations{
         standard{
             Sequence{
                 "&Z<ch<<<Ch<<<CH<dh<<<Dh<<<DH<kh<<<Kh<<<KH<ny<<<Ny<<<NY<ph<<<Ph<<<PH<"
                 "sh<<<Sh"
             }
-            Version{"1.1"}
+            Version{"1.3"}
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2004 International Business Machines
+// * Copyright (C) 2005 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File: ../../../locale/common/main/ga.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main/ga.xml
+ *  ICU <specials> source: ./xml/main/ga.xml
  */
 ga{
     Countries{
@@ -206,7 +206,6 @@ ga{
         SM{"San Mairíne"}
         SN{"An tSeineagáil"}
         SO{"An tSomáil"}
-        SP{"An tSeirbia"}
         SR{"Suranam"}
         ST{"Sao Tome agus Principe"}
         SV{"An tSalvadóir"}
@@ -251,10 +250,6 @@ ga{
         ZW{"An tSiombáib"}
     }
     Currencies{
-        ADD{
-            "ADD",
-            "Dínear Andóra",
-        }
         ADP{
             "ADP",
             "Peseta Andóra",
@@ -271,10 +266,6 @@ ga{
             "Af",
             "Afgainí",
         }
-        AIF{
-            "AIF",
-            "Franc Affars agus Issas",
-        }
         ALK{
             "ALK",
             "Lek Albánach (1946-1961)",
@@ -282,14 +273,6 @@ ga{
         ALL{
             "lek",
             "Lek Albánach",
-        }
-        ALV{
-            "ALV",
-            "Lek Valute Albánach",
-        }
-        ALX{
-            "ALX",
-            "Teastais Airgeadraí Dollar na hAlbáine",
         }
         AMD{
             "dram",
@@ -315,17 +298,9 @@ ga{
             "AOR",
             "Kwanza Reajustado Angólach (1995-1999)",
         }
-        AOS{
-            "AOS",
-            "Escudo Angólach",
-        }
         ARA{
             "ARA",
             "Austral Airgintíneach",
-        }
-        ARM{
-            "ARM",
-            "Peso Moneda Nacional Airgintíneach",
         }
         ARP{
             "ARP",
@@ -343,10 +318,6 @@ ga{
             "A$",
             "Dollar Astrálach",
         }
-        AUP{
-            "AUP",
-            "Punt Astrálach",
-        }
         AWG{
             "AWG",
             "Guilder Aruba",
@@ -362,10 +333,6 @@ ga{
         BAM{
             "KM",
             "Marc Inathraithe Bhoisnia-Heirseagaivéin",
-        }
-        BAN{
-            "BAN",
-            "Dínear Nua Bhoisnia-Heirseagaivéin",
         }
         BBD{
             "BDS$",
@@ -391,21 +358,9 @@ ga{
             "lev",
             "Lev Bulgárach Crua",
         }
-        BGM{
-            "BGM",
-            "Lev Bulgárach Sóisialaíoch",
-        }
         BGN{
             "BGN",
             "Lev Nua Bulgárach",
-        }
-        BGO{
-            "BGO",
-            "Lev Bulgárach (1879-1952)",
-        }
-        BGX{
-            "BGX",
-            "Teastais Airgeadraí Lev Bulgárach",
         }
         BHD{
             "BD",
@@ -419,10 +374,6 @@ ga{
             "Ber$",
             "Dollar Bheirmiúda",
         }
-        BMP{
-            "BMP",
-            "Punt Bheirmiúda",
-        }
         BND{
             "BND",
             "Dollar Bhrúiné",
@@ -430,10 +381,6 @@ ga{
         BOB{
             "Bs",
             "Boliviano",
-        }
-        BOL{
-            "BOL",
-            "Boliviano (1863-1962)",
         }
         BOP{
             "BOP",
@@ -467,33 +414,17 @@ ga{
             "BRR",
             "Cruzeiro Brasaíleach",
         }
-        BRZ{
-            "BRZ",
-            "Cruzeiro Brasaíleach (1942-1967)",
-        }
         BSD{
             "BSD",
             "Dollar na mBahámaí",
-        }
-        BSP{
-            "BSP",
-            "Punt na mBahámaí",
         }
         BTN{
             "Nu",
             "Ngultrum Bútánach",
         }
-        BTR{
-            "BTR",
-            "Rúipí na Bútáine",
-        }
         BUK{
             "BUK",
             "Kyat Burmach",
-        }
-        BUR{
-            "BUR",
-            "Rúipí Bhurma",
         }
         BWP{
             "BWP",
@@ -503,10 +434,6 @@ ga{
             "BYB",
             "Rúbal Nua Béalarúiseach (1994-1999)",
         }
-        BYL{
-            "BYL",
-            "Rúbal Béalarúiseach (1992-1994)",
-        }
         BYR{
             "Rbl",
             "Rúbal Béalarúiseach",
@@ -514,10 +441,6 @@ ga{
         BZD{
             "BZ$",
             "Dollar na Beilíse",
-        }
-        BZH{
-            "BZH",
-            "Dollar Hondúrais Bhriotanaigh",
         }
         CAD{
             "Can$",
@@ -527,33 +450,9 @@ ga{
             "CDF",
             "Franc Congolais an Chongó",
         }
-        CDG{
-            "CDG",
-            "Franc Phoblacht an Chongó",
-        }
-        CDL{
-            "CDL",
-            "Zaire an Chongó",
-        }
-        CFF{
-            "CFF",
-            "CFA Franc Phoblacht na hAfraice Láir",
-        }
         CHF{
             "CHF",
             "Franc na hEilvéise",
-        }
-        CKD{
-            "CKD",
-            "Dollar Oileáin Cook",
-        }
-        CLC{
-            "CLC",
-            "Condor na Sile",
-        }
-        CLE{
-            "CLE",
-            "Escudo na Sile",
         }
         CLF{
             "CLF",
@@ -563,14 +462,6 @@ ga{
             "Ch$",
             "Peso na Sile",
         }
-        CMF{
-            "CMF",
-            "CFA Franc Chamarúin",
-        }
-        CNP{
-            "CNP",
-            "Jen Min Piao Yuan Síneach",
-        }
         CNX{
             "CNX",
             "Teastais Airgeadraí Dollar SAM Síneach",
@@ -578,14 +469,6 @@ ga{
         CNY{
             "Y",
             "Yuan Renminbi Síneach",
-        }
-        COB{
-            "COB",
-            "Peso Páipéir na Colóime",
-        }
-        COF{
-            "COF",
-            "CFA Franc Chongó",
         }
         COP{
             "Col$",
@@ -595,10 +478,6 @@ ga{
             "C",
             "Colon Chósta Ríce",
         }
-        CSC{
-            "CSC",
-            "Koruna na Seicslóvaice",
-        }
         CSK{
             "CSK",
             "Koruna Crua na Seicslóvaice",
@@ -607,17 +486,9 @@ ga{
             "CUP",
             "Peso Cúba",
         }
-        CUX{
-            "CUX",
-            "Teastais Airgeadraí Chúba",
-        }
         CVE{
             "CVEsc",
             "Escudo na Rinne Verde",
-        }
-        CWG{
-            "CWG",
-            "Guilder Curacao",
         }
         CYP{
             "£C",
@@ -635,10 +506,6 @@ ga{
             "DEM",
             "Deutsche Mark",
         }
-        DES{
-            "DES",
-            "Sperrmark Gearmánach",
-        }
         DJF{
             "DF",
             "Franc Djibouti",
@@ -654,14 +521,6 @@ ga{
         DZD{
             "DA",
             "Dínear na hAilgéire",
-        }
-        DZF{
-            "DZF",
-            "Franc Nua Ailgérach",
-        }
-        DZG{
-            "DZG",
-            "Franc Germinal Ailgérach",
         }
         ECS{
             "ECS",
@@ -687,10 +546,6 @@ ga{
             "Br",
             "Birr na hAetóipe",
         }
-        ETD{
-            "ETD",
-            "Dollar na hAetóipe",
-        }
         EUR{
             "€",
             "Euro",
@@ -699,37 +554,17 @@ ga{
             "FIM",
             "Markka Fionnlannach",
         }
-        FIN{
-            "FIN",
-            "Markka Fionnlannach (1860-1962)",
-        }
         FJD{
             "F$",
             "Dollar Fhidsí",
-        }
-        FJP{
-            "FJP",
-            "Punt Fhidsí",
         }
         FKP{
             "FKP",
             "Punt Oileáin Fháclainne",
         }
-        FOK{
-            "FOK",
-            "Kronur Oileáin Fharó",
-        }
         FRF{
             "FRF",
             "Franc Francach",
-        }
-        FRG{
-            "FRG",
-            "Franc Germinal Francach/Franc Poincare",
-        }
-        GAF{
-            "GAF",
-            "CFA Franc na Gabúine",
         }
         GBP{
             "£",
@@ -747,85 +582,37 @@ ga{
             "GHC",
             "Cedi Ghána",
         }
-        GHO{
-            "GHO",
-            "Sean-Cedi Ghána",
-        }
-        GHP{
-            "GHP",
-            "Punt Ghána",
-        }
-        GHR{
-            "GHR",
-            "Cedi Athluachtha Ghána",
-        }
         GIP{
             "GIP",
             "Punt Ghiobráltair",
-        }
-        GLK{
-            "GLK",
-            "Krone na Graonlainne",
         }
         GMD{
             "GMD",
             "Dalasi Gaimbia",
         }
-        GMP{
-            "GMP",
-            "Punt Gaimbia",
-        }
         GNF{
             "GF",
             "Franc Guine",
-        }
-        GNI{
-            "GNI",
-            "Franc Guine (1960-1972)",
         }
         GNS{
             "GNS",
             "Syli Guine",
         }
-        GPF{
-            "GPF",
-            "Franc Guadeloupe",
-        }
         GQE{
             "GQE",
             "Ekwele Guineana na Guine Meánchriosaí",
-        }
-        GQF{
-            "GQF",
-            "Franco na Guine Meánchriosaí",
-        }
-        GQP{
-            "GQP",
-            "Peseta Guineana na Guine Meánchriosaí",
         }
         GRD{
             "GRD",
             "Drachma Gréagach",
         }
-        GRN{
-            "GRN",
-            "Drachma Nua Gréagach",
-        }
         GTQ{
             "Q",
             "Quetzal Guatamala",
         }
-        GUF{
-            "GUF",
-            "Franc Guiana na Guáine Francaí",
-        }
         GWE{
             "GWE",
             "Escudo na Guine Portaingéalaí",
-        }
-        GWM{
-            "GWM",
-            "Mil Reis na Guine Portaingéalaí",
         }
         GWP{
             "GWP",
@@ -859,22 +646,6 @@ ga{
             "Ft",
             "Forint Ungárach",
         }
-        IBP{
-            "IBP",
-            "Punt Thuaisceart Éireann",
-        }
-        IDG{
-            "IDG",
-            "Nica Guilder Indinéiseach",
-        }
-        IDJ{
-            "IDJ",
-            "Java Rupiah Indinéiseach",
-        }
-        IDN{
-            "IDN",
-            "Rupiah Nua Indinéiseach",
-        }
         IDR{
             "Rp",
             "Rupiah Indinéiseach",
@@ -883,10 +654,6 @@ ga{
             "IR£",
             "Punt Éireannach",
         }
-        ILL{
-            "ILL",
-            "Sheqel Iosraelach",
-        }
         ILP{
             "ILP",
             "Punt Iosraelach",
@@ -894,10 +661,6 @@ ga{
         ILS{
             "ILS",
             "Sheqel Nua Iosraelach",
-        }
-        IMP{
-            "IMP",
-            "Punt Steirling Oileán Mhanann",
         }
         INR{
             "=0#Rs.|1#Re.|1<Rs.",
@@ -919,17 +682,9 @@ ga{
             "₤",
             "Lira Iodálach",
         }
-        JEP{
-            "JEP",
-            "Punt Steirling Gheirsí",
-        }
         JMD{
             "J$",
             "Dollar Iamácach",
-        }
-        JMP{
-            "JMP",
-            "Punt Iamácach",
         }
         JOD{
             "JD",
@@ -947,37 +702,17 @@ ga{
             "som",
             "Som na Cirgeastáine",
         }
-        KHO{
-            "KHO",
-            "Sean-Riel na Cambóide",
-        }
         KHR{
             "CR",
             "Riel na Cambóide",
-        }
-        KID{
-            "KID",
-            "Dollar Chireabaití",
         }
         KMF{
             "CF",
             "Franc Chomóra",
         }
-        KPP{
-            "KPP",
-            "Won Na nDaoine na Cóiré Thuaidh",
-        }
         KPW{
             "KPW",
             "Won na Cóiré Thuaidh",
-        }
-        KRH{
-            "KRH",
-            "Hwan na Cóiré Theas",
-        }
-        KRO{
-            "KRO",
-            "Sean-Won na Cóiré Theas",
         }
         KRW{
             "KRW",
@@ -991,10 +726,6 @@ ga{
             "KYD",
             "Dollar Oileáin Cayman",
         }
-        KZR{
-            "KZR",
-            "Rúbal Casacstánach",
-        }
         KZT{
             "T",
             "Tenge Casacstánach",
@@ -1007,17 +738,9 @@ ga{
             "LL",
             "Punt na Liobáine",
         }
-        LIF{
-            "LIF",
-            "Franc Lichtinstéin",
-        }
         LKR{
             "SL Re",
             "Rúipí Srí Lanca",
-        }
-        LNR{
-            "LNR",
-            "Rúipí na Siolióne",
         }
         LRD{
             "LRD",
@@ -1047,17 +770,9 @@ ga{
             "LVR",
             "Rúbal Laitviach",
         }
-        LYB{
-            "LYB",
-            "Lira Údarás Míleata Briotanach Libia",
-        }
         LYD{
             "LD",
             "Dínear Libia",
-        }
-        LYP{
-            "LYP",
-            "Punt Libia",
         }
         MAD{
             "MAD",
@@ -1067,25 +782,9 @@ ga{
             "MAF",
             "Franc Mharacó",
         }
-        MCF{
-            "MCF",
-            "Franc Nouveau Mhonacó",
-        }
-        MCG{
-            "MCG",
-            "Franc Germinal Mhonacó",
-        }
-        MDC{
-            "MDC",
-            "Leu Cúpóin Moldóvach",
-        }
         MDL{
             "MDL",
             "Leu Moldóvach",
-        }
-        MDR{
-            "MDR",
-            "Rúbal Cúpóin Moldóvach",
         }
         MGA{
             "MGA",
@@ -1095,17 +794,9 @@ ga{
             "MGF",
             "Franc Madagascar",
         }
-        MHD{
-            "MHD",
-            "Dollar Oileáin Marshall",
-        }
         MKD{
             "MDen",
             "Denar na Macadóine",
-        }
-        MKN{
-            "MKN",
-            "Denar na Macadóine (1992-1993)",
         }
         MLF{
             "MLF",
@@ -1115,10 +806,6 @@ ga{
             "MMK",
             "Kyat Mhaenmar",
         }
-        MMX{
-            "MMX",
-            "Teastais Airgeadra Dollar Mhaenmar",
-        }
         MNT{
             "Tug",
             "Tugrik Mongólach",
@@ -1126,10 +813,6 @@ ga{
         MOP{
             "MOP",
             "Pataca Macao",
-        }
-        MQF{
-            "MQF",
-            "Franc Martinique",
         }
         MRO{
             "UM",
@@ -1147,10 +830,6 @@ ga{
             "MUR",
             "Rúipí Oileán Mhuirís",
         }
-        MVP{
-            "MVP",
-            "Maldive Islands Rúipí",
-        }
         MVR{
             "MVR",
             "Maldive Islands Rufiyaa",
@@ -1158,10 +837,6 @@ ga{
         MWK{
             "MK",
             "Kwacha na Maláive",
-        }
-        MWP{
-            "MWP",
-            "Punt na Maláive",
         }
         MXN{
             "MEX$",
@@ -1191,29 +866,13 @@ ga{
             "N$",
             "Dollar na Namaibe",
         }
-        NCF{
-            "NCF",
-            "Franc Germinal na Nua-Chaladóine",
-        }
         NGN{
             "NGN",
             "Naira Nígéarach",
         }
-        NGP{
-            "NGP",
-            "Punt Nígéarach",
-        }
-        NHF{
-            "NHF",
-            "CFP Franc Nua-Inse Ghall",
-        }
         NIC{
             "NIC",
             "Cordoba Nicearagua",
-        }
-        NIG{
-            "NIG",
-            "Cordoba Ór Nicearagua",
         }
         NIO{
             "NIO",
@@ -1235,33 +894,13 @@ ga{
             "$NZ",
             "Dollar na Nua-Shéalainne",
         }
-        NZP{
-            "NZP",
-            "Punt na Nua-Shéalainne",
-        }
         OMR{
             "RO",
             "Rial Omain",
         }
-        OMS{
-            "OMS",
-            "Rial Saidi Omain",
-        }
         PAB{
             "PAB",
             "Balboa Panamach",
-        }
-        PDK{
-            "PDK",
-            "Rúbal Cupóin Transdniestria",
-        }
-        PDN{
-            "PDN",
-            "Rúbal Nua Transdniestria",
-        }
-        PDR{
-            "PDR",
-            "Transdniestria Rúbal",
         }
         PEI{
             "PEI",
@@ -1291,21 +930,9 @@ ga{
             "Zl",
             "Zloty Polannach",
         }
-        PLX{
-            "PLX",
-            "Teastais Airgeadra Dollar SAM Polannach",
-        }
         PLZ{
             "PLZ",
             "Zloty Polannach (1950-1995)",
-        }
-        PSP{
-            "PSP",
-            "Punt Pailistíneach",
-        }
-        PTC{
-            "PTC",
-            "Conto Portaingéalach",
         }
         PTE{
             "PTE",
@@ -1319,17 +946,9 @@ ga{
             "QR",
             "Rial Catarach",
         }
-        REF{
-            "REF",
-            "Franc Réunion",
-        }
         ROL{
             "leu",
             "Leu Rómánach",
-        }
-        RON{
-            "RON",
-            "Leu Nua Rómánach",
         }
         RUB{
             "RUB",
@@ -1375,10 +994,6 @@ ga{
             "SHP",
             "Punt San Héilin",
         }
-        SIB{
-            "SIB",
-            "Tolar Bons Slóvéanach",
-        }
         SIT{
             "SIT",
             "Tolar Slóvénach",
@@ -1391,10 +1006,6 @@ ga{
             "SLL",
             "Leone Shiarra Leon",
         }
-        SML{
-            "SML",
-            "Lira San Marino",
-        }
         SOS{
             "So. Sh.",
             "Scilling na Sómáile",
@@ -1403,21 +1014,9 @@ ga{
             "Sf",
             "Guilder Shuranaim",
         }
-        SSP{
-            "SSP",
-            "Punt Albanach",
-        }
         STD{
             "Db",
             "Dobra Sao Tome agus Principe",
-        }
-        STE{
-            "STE",
-            "Escudo Sao Tome agus Principe",
-        }
-        SUN{
-            "SUN",
-            "Rúbal Nua Sóvéadach",
         }
         SUR{
             "SUR",
@@ -1434,10 +1033,6 @@ ga{
         SZL{
             "E",
             "Lilangeni na Suasalainne",
-        }
-        TDF{
-            "TDF",
-            "CFA Franc Sead",
         }
         THB{
             "THB",
@@ -1463,17 +1058,9 @@ ga{
             "T$",
             "Paʻanga Tonga",
         }
-        TOS{
-            "TOS",
-            "Punt Steirling Tonga",
-        }
         TPE{
             "TPE",
             "Escudo Tíomóir",
-        }
-        TPP{
-            "TPP",
-            "Pataca Tíomóir",
         }
         TRL{
             "TL",
@@ -1482,14 +1069,6 @@ ga{
         TTD{
             "TT$",
             "Dollar Oileáin na Tríonóide agus Tobága",
-        }
-        TTO{
-            "TTO",
-            "Sean-Dollar Oileáin na Tríonóide agus Tobága",
-        }
-        TVD{
-            "TVD",
-            "Dollar Tuvalu",
         }
         TWD{
             "NT$",
@@ -1527,10 +1106,6 @@ ga{
             "USS",
             "Dollar S.A.M. (an la céanna)",
         }
-        UYF{
-            "UYF",
-            "Peso Fuerte Uragua",
-        }
         UYP{
             "UYP",
             "Peso Uragua (1975-1993)",
@@ -1539,77 +1114,29 @@ ga{
             "Ur$",
             "Peso Uruguayo Uragua",
         }
-        UZC{
-            "UZC",
-            "Som Cúpóin na hÚisbéiceastáine",
-        }
         UZS{
             "UZS",
             "Sum na hÚisbéiceastáine",
-        }
-        VAL{
-            "VAL",
-            "Lira na Vatacáine",
-        }
-        VDD{
-            "VDD",
-            "Piastre Dong Viet Vítneam Thuaidh",
-        }
-        VDN{
-            "VDN",
-            "Dong Nua Vítneam Thuaidh",
-        }
-        VDP{
-            "VDP",
-            "Viet Minh Piastre Dong Viet Vítneam Thuaidh",
         }
         VEB{
             "Be",
             "Bolivar Veiniséala",
         }
-        VGD{
-            "VGD",
-            "Dollar Oileáin Bhriotanacha na Maighdean",
-        }
         VND{
             "VND",
             "Dong Vítneamach",
-        }
-        VNN{
-            "VNN",
-            "Dong Nua Vítneamach",
-        }
-        VNR{
-            "VNR",
-            "Dong Phoblacht Vítneaim",
-        }
-        VNS{
-            "VNS",
-            "Dong Náisiúnta Vítneamach",
         }
         VUV{
             "VT",
             "Vatu Vanuatú",
         }
-        WSP{
-            "WSP",
-            "Punt Samó Thiar",
-        }
         WST{
             "WST",
             "Tala Samó Thiar",
         }
-        XAD{
-            "XAD",
-            "Dínear Áiseach Unit of Account",
-        }
         XAF{
             "XAF",
             "CFA Franc BEAC",
-        }
-        XAM{
-            "XAM",
-            "Aonad Airgeadaíochta na hÁise",
         }
         XAU{
             "XAU",
@@ -1635,17 +1162,9 @@ ga{
             "EC$",
             "Dollar Oirthear na Cairibe",
         }
-        XCF{
-            "XCF",
-            "CFA Nouveau Franc",
-        }
         XDR{
             "XDR",
             "Cearta Speisialta Tarraingthe",
-        }
-        XEF{
-            "XEF",
-            "CFA Franc BCEAEC",
         }
         XEU{
             "XEU",
@@ -1659,18 +1178,6 @@ ga{
             "XFU",
             "UIC-Franc Francach",
         }
-        XID{
-            "XID",
-            "Dínear Ioslamach",
-        }
-        XMF{
-            "XMF",
-            "Nouveau Franc Ceannchathartha Francach",
-        }
-        XNF{
-            "XNF",
-            "CFA Franc na nAntillí Francach",
-        }
         XOF{
             "XOF",
             "CFA Franc BCEAO",
@@ -1679,17 +1186,9 @@ ga{
             "CFPF",
             "CFP Franc",
         }
-        XTR{
-            "XTR",
-            "Rúbal Inaistrithe COMECON",
-        }
         YDD{
             "YDD",
             "Dínear Éimin",
-        }
-        YEI{
-            "YEI",
-            "Imadi Riyal Éimin",
         }
         YER{
             "YRl",
@@ -1699,14 +1198,6 @@ ga{
             "YUD",
             "Dínear Crua Iúgslavach",
         }
-        YUF{
-            "YUF",
-            "Dínear Chónaidhm na hIúgslaive",
-        }
-        YUG{
-            "YUG",
-            "Dínear 1994 Iúgslavach",
-        }
         YUM{
             "YUM",
             "Noviy Dinar Iúgslavach",
@@ -1715,21 +1206,9 @@ ga{
             "YUN",
             "Dínear Inathraithe Iúgslavach",
         }
-        YUO{
-            "YUO",
-            "Dínear Dheireadh Fómhar Iúgslavach",
-        }
-        YUR{
-            "YUR",
-            "Dínear Leasaithe Iúgslavach",
-        }
         ZAL{
             "ZAL",
             "Rand na hAfraice Theas (airgeadúil)",
-        }
-        ZAP{
-            "ZAP",
-            "Punt na hAfraice Theas",
         }
         ZAR{
             "R",
@@ -1738,10 +1217,6 @@ ga{
         ZMK{
             "ZMK",
             "Kwacha Saimbiach",
-        }
-        ZMP{
-            "ZMP",
-            "Punt Saimbiach",
         }
         ZRN{
             "ZRN",
@@ -1882,7 +1357,7 @@ ga{
     LocaleScript{
         "Latn",
     }
-    Version{"1.2"}
+    Version{"1.32"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1954,19 +1429,11 @@ ga{
     localPatternChars{"RbMLkUnsSElFtTauKcBeyrAC"}
     zoneStrings{
         {
-            "Europe/Dublin",
+            "Etc/GMT",
             "Meán-Am Greenwich",
             "MAG",
-            "Am Samhraidh na hÉireann",
-            "ASÉ",
-            "Baile Átha Cliath",
-        }
-        {
-            "Europe/London",
             "Meán-Am Greenwich",
             "MAG",
-            "Am Samhraidh na Breataine",
-            "ASB",
             "Londain",
         }
         {
@@ -1978,12 +1445,20 @@ ga{
             "Béal Feirste",
         }
         {
-            "Etc/GMT",
+            "Europe/London",
             "Meán-Am Greenwich",
             "MAG",
-            "Meán-Am Greenwich",
-            "MAG",
+            "Am Samhraidh na Breataine",
+            "ASB",
             "Londain",
+        }
+        {
+            "Europe/Dublin",
+            "Meán-Am Greenwich",
+            "MAG",
+            "Am Samhraidh na hÉireann",
+            "ASÉ",
+            "Baile Átha Cliath",
         }
     }
 }
