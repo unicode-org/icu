@@ -964,7 +964,7 @@ static void TestMultipleParagraphs(void) {
     /* check handling of whitespace before end of paragraph separator when
      * orderParagraphsLTR==TRUE, when last paragraph has, and lacks, a terminating B
      */
-    memset(src, ' ', MAXLEN);
+    u_memset(src, 0x0020, MAXLEN);
     srcSize = 5;
     ubidi_orderParagraphsLTR(pBidi, TRUE);
     for (i=0x001c; i<=0x0020; i+=(0x0020-0x001c)) {
