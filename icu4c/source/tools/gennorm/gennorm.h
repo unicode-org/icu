@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -33,6 +33,7 @@ typedef struct Norm {
     uint16_t canonBothCCs, compatBothCCs, combiningIndex, specialTag;
     uint32_t *nfd, *nfkd;
     uint32_t value32; /* temporary variable for generating runtime norm32 and fcd values */
+    int32_t fncIndex;
 } Norm;
 
 /* global flags */
@@ -53,6 +54,9 @@ setQCFlags(uint32_t code, uint8_t qcFlags);
 
 extern void
 setCompositionExclusion(uint32_t code);
+
+U_CFUNC void
+setFNC(uint32_t c, UChar *s);
 
 extern void
 processData(void);

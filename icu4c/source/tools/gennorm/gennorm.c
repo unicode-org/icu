@@ -173,6 +173,7 @@ static void
 derivedNormalizationPropertiesLineFn(void *context,
                                      char *fields[][2], int32_t fieldCount,
                                      UErrorCode *pErrorCode) {
+    UChar string[32];
     char *s;
     uint32_t start, end;
     int32_t count;
@@ -193,6 +194,7 @@ derivedNormalizationPropertiesLineFn(void *context,
     /* get property - ignore unrecognized ones */
     s=(char *)u_skipWhitespace(fields[1][0]);
     if(*s=='N' && s[1]=='F') {
+        /* quick check flag */
         qcFlags=0x11;
         s+=2;
         if(*s=='K') {
@@ -222,8 +224,28 @@ derivedNormalizationPropertiesLineFn(void *context,
             setQCFlags(start++, qcFlags);
         }
     } else if(0==uprv_memcmp(s, "Comp_Ex", 7)) {
+        /* full composition exclusion */
         while(start<=end) {
             setCompositionExclusion(start++);
+        }
+    } else if(0==uprv_memcmp(s, "FNC", 3) && *(s=(char *)u_skipWhitespace(s+3))==';') {
+        /* FC_NFKC_Closure, parse field 2 to get the string */
+        char *t;
+
+        /* start of the field */
+        s=(char *)u_skipWhitespace(s+1);
+
+        /* find the end of the field */
+        for(t=s; *t!=';' && *t!='#' && *t!=0 && *t!='\n' && *t!='\r'; ++t) {}
+        *t=0;
+
+        string[0]=(UChar)u_parseString(s, string+1, 31, NULL, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            fprintf(stderr, "gennorm error: illegal FNC string at %s\n", fields[0][0]);
+            exit(*pErrorCode);
+        }
+        while(start<=end) {
+            setFNC(start++, string);
         }
     }
 }
@@ -338,10 +360,12 @@ unicodeDataLineFn(void *context,
 
     if(something) {
         /* there are normalization values, so store them */
+#if 0
         if(beVerbose) {
             printf("store values for U+%04lx: cc=%d, lenNFD=%ld, lenNFKD=%ld\n",
                    (long)code, norm.udataCC, (long)norm.lenNFD, (long)norm.lenNFKD);
         }
+#endif
         storeNorm(code, &norm);
     }
 }
