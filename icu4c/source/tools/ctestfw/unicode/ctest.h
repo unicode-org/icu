@@ -11,6 +11,8 @@
 #ifndef CTEST_H
 #define CTEST_H
 
+#include <stdarg.h>
+
 #include "unicode/utypes.h"
 #include "unicode/utrace.h"
 
@@ -164,6 +166,15 @@ T_CTEST_API void log_err(const char* pattern, ...);
  * @internal Internal APIs for testing purpose only
  */
 T_CTEST_API void log_info(const char* pattern, ...);
+
+/**
+ * Log an informational message. (vprintf style)
+ * @param prefix a string that is output before the pattern and without formatting
+ * @param pattern printf-style format string
+ * @param ap variable-arguments list
+ * @internal Internal APIs for testing purpose only
+ */
+T_CTEST_API void vlog_info(const char *prefix, const char *pattern, va_list ap);
 
 /**
  * Log a verbose informational message. (printf style)
