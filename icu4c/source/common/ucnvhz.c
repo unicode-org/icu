@@ -588,7 +588,7 @@ static void concatEscape(UConverterFromUnicodeArgs* args, int32_t *targetIndex, 
 }
 
 static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-                         const	UChar32* strToAppend,UErrorCode* err, int32_t *sourceIndex){
+                         const	uint32_t* strToAppend,UErrorCode* err, int32_t *sourceIndex){
     
     if(*strToAppend < 0x00FF){
         if( (*targetIndex)+1 >= *targetLength){
