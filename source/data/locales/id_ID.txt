@@ -8,13 +8,13 @@
 id_ID {
    Version { "1.0" }
     DateTimePatterns {
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm",
         "EEEE dd MMMM yyyy",
         "dd MMMM yyyy",
-        "MMM dd,yy",
+        "dd MMM yy",
         "dd/MM/yy",
         "{1} {0}",
     }

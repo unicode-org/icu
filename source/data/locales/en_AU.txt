@@ -24,7 +24,7 @@ en_AU {
         "EEEE, d MMMM yyyy",
         "d MMMM yyyy",
         "dd/MM/yyyy",
-        "dd/MM/yy",
+        "d/MM/yy",
         "{1} {0}",
     }
 //    Duplicated in parent
