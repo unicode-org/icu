@@ -274,7 +274,7 @@ void Test4060212()
     UErrorCode status = U_ZERO_ERROR;
     UDate myDate;
     UChar *myString;
-    UChar dateString[20], pattern[20], tzID[4];
+    UChar dateString[30], pattern[20], tzID[4];
     u_uastrcpy(dateString, "1995-040.05:01:29 -8");
     u_uastrcpy(pattern, "yyyy-DDD.hh:mm:ss z");
 
