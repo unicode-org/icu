@@ -31,6 +31,7 @@ class TransliteratorRoundTripTest : public IntlTest {
     void TestKatakana(void);
     void TestJamo(void);
     void TestHangul(void);
+    void TestHan(void);
     void TestGreek(void);
     void TestGreekUNGEGN(void);
     void Testel(void);
