@@ -62,7 +62,7 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
             if(!uprv_strcmp(filename, "word_th")) {
                 filename = "thaidict.brk";
 
-                result = new DictionaryBasedBreakIterator(image, filename, status);
+                result = new DictionaryBasedBreakIterator(image, (char *)filename, status);
             }
             else {
                 result = new RuleBasedBreakIterator(image);
@@ -103,7 +103,7 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
           if (!uprv_strcmp(key.getLanguage(), "th")) {
                 const char* dataDir = u_getDataDirectory();
                 filename = "thaidict.brk";
-                result = new DictionaryBasedBreakIterator(image, filename, status);
+                result = new DictionaryBasedBreakIterator(image, (char *)filename, status);
             }
             else {
                 result = new RuleBasedBreakIterator(image);
