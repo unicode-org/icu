@@ -149,7 +149,7 @@ public class TestCase {
      * by calling its set method for each field.  This is useful in combination
      * with the equal method.
      *
-     * @see #equal
+     * @see com.ibm.icu.util.Calendar#equals
      */
     public void applyFields(Calendar c) {
         for (int i=0; i < c.getFieldCount(); i++) {

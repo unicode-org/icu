@@ -130,9 +130,9 @@ public abstract class Trie
     * Trie constructor for CharTrie use.
     * @param inputStream ICU data file input stream which contains the
     *                        trie
-    * @param datamanipulate object containing the information to parse the 
+    * @param dataManipulate object containing the information to parse the 
     *                       trie data
-    * @exception IOException thrown when input stream does not have the
+    * @throws IOException thrown when input stream does not have the
     *                        right header.
     * @draft 2.1
     */
@@ -160,7 +160,7 @@ public abstract class Trie
     * Trie constructor
     * @param index array to be used for index
     * @param options used by the trie
-    * @param datamanipulate object containing the information to parse the 
+    * @param dataManipulate object containing the information to parse the 
     *                       trie data
     * @draft 2.2
     */

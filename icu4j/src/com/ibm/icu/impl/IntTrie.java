@@ -16,7 +16,7 @@ import com.ibm.icu.text.UTF16;
 /**
  * Trie implementation which stores data in int, 32 bits.
  * @author synwee
- * @see com.ibm.icu.util.Trie
+ * @see com.ibm.icu.impl.Trie
  * @since release 2.1, Jan 01 2002
  */
 public class IntTrie extends Trie
@@ -29,9 +29,9 @@ public class IntTrie extends Trie
     * trie.</p>
     * @param inputStream file input stream to a ICU data file, containing 
     *                    the trie
-    * @param datamanipulate, object which provides methods to parse the char 
+    * @param dataManipulate object which provides methods to parse the char 
     *                        data
-    * @exception IOException thrown when data reading fails
+    * @throws IOException thrown when data reading fails
     * @draft 2.1
     */
     public IntTrie(InputStream inputStream, DataManipulate datamanipulate)
@@ -218,10 +218,10 @@ public class IntTrie extends Trie
     
     /**
     * Gets the value at the argument index.
-    * For use internally in com.ibm.icu.util.TrieEnumeration.
+    * For use internally in TrieIterator
     * @param index value at index will be retrieved
     * @return 32 bit value
-    * @see com.ibm.icu.util.TrieEnumeration
+    * @see com.ibm.icu.impl.TrieIterator
     * @draft 2.1
     */
     protected final int getValue(int index)

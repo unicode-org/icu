@@ -222,7 +222,7 @@ public class UTF16Util {
      * If a validity check is required, use <code>
      * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
      * char32 before calling.
-     * @param ch the input codepoint.
+     * @param char32 the input codepoint.
      * @return 2 if is in supplementary space, otherwise 1. 
      */
     public static int getCharCount(int char32) 
@@ -255,7 +255,7 @@ public class UTF16Util {
     public static final int TRAIL_SURROGATE_MAX_VALUE = 0xDFFF;
     /**
      * Determines whether the code value is a surrogate.
-     * @param ch the input character.
+     * @param char16 the input character.
      * @return true iff the input character is a surrogate.
      * @stable ICU 2.1
      */

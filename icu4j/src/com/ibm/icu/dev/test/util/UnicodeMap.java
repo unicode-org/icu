@@ -115,14 +115,14 @@ public final class UnicodeMap implements Cloneable {
           * and transitivity: a=b & b=c => a=b)
           * @param a
           * @param b
-          * @return
+          * @return true if a and b are equal
           */
          public boolean isEqual(Object a, Object b);
 
         /**
          * Must obey normal rules: a=b => getHashCode(a)=getHashCode(b)
          * @param object
-         * @return
+         * @return a hash code for the object
          */
         public int getHashCode(Object object);
     }
@@ -145,7 +145,7 @@ public final class UnicodeMap implements Cloneable {
      * Finds an index such that inversionList[i] <= codepoint < inversionList[i+1]
      * Assumes that 0 <= codepoint <= 0x10FFFF
      * @param codepoint
-     * @return
+     * @return the index
      */
     private int _findIndex(int c) {
         int lo = 0;
@@ -334,7 +334,7 @@ public final class UnicodeMap implements Cloneable {
      * Sets the codepoint value.
      * @param codepoint
      * @param value
-     * @return
+     * @return this (for chaining)
      */
     public UnicodeMap put(int codepoint, Object value) {
         if (codepoint < 0 || codepoint > 0x10FFFF) {
@@ -348,7 +348,7 @@ public final class UnicodeMap implements Cloneable {
      * Adds bunch o' codepoints; otherwise like put.
      * @param codepoints
      * @param value
-     * @return this, for chaining
+     * @return this (for chaining)
      */
     public UnicodeMap putAll(UnicodeSet codepoints, Object value) {
         // TODO optimize
@@ -361,9 +361,10 @@ public final class UnicodeMap implements Cloneable {
     
     /**
      * Adds bunch o' codepoints; otherwise like add.
-     * @param codepoints
+     * @param startCodePoint
+     * @param endCodePoint
      * @param value
-     * @return this, for chaining
+     * @return this (for chaining)
      */
     public UnicodeMap putAll(int startCodePoint, int endCodePoint, Object value) {
         if (startCodePoint < 0 || endCodePoint > 0x10FFFF) {
@@ -378,8 +379,8 @@ public final class UnicodeMap implements Cloneable {
     }
     /**
      * Add all the (main) values from a Unicode property
-     * @param prop
-     * @return
+     * @param prop the property to add to the map
+     * @return this (for chaining)
      */
     public UnicodeMap putAll(UnicodeProperty prop) {
         // TODO optimize
@@ -391,8 +392,8 @@ public final class UnicodeMap implements Cloneable {
     
     /**
      * Set the currently unmapped Unicode code points to the given value.
-     * @param value
-     * @return
+     * @param value the value to set
+     * @return this (for chaining)
      */
     public UnicodeMap setMissing(Object value) {
         for (int i = 0; i < length; ++i) {
@@ -425,7 +426,7 @@ public final class UnicodeMap implements Cloneable {
      * result. Creates result if it is null. Remember to clear result if
      * you are not appending to existing collection.
      * @param result
-     * @return
+     * @return result
      */
     public Collection getAvailableValues(Collection result) {
         if (result == null) result = new ArrayList(1);
@@ -448,7 +449,7 @@ public final class UnicodeMap implements Cloneable {
      * Gets the value associated with a given code point.
      * Returns null, if there is no such value.
      * @param codepoint
-     * @return
+     * @return the value
      */
     public Object getValue(int codepoint) {
         if (codepoint < 0 || codepoint > 0x10FFFF) {

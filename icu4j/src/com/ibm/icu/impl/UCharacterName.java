@@ -105,9 +105,9 @@ public final class UCharacterName
 
     /**
     * Find a character by its name and return its code point value
-    * @param character name
     * @param choice selector to indicate if argument name is a Unicode 1.0
     *        or the most current version
+    * @param name the name to search for
     * @return code point
     */
     public int getCharFromName(int choice, String name)

@@ -27,7 +27,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
     
     /**
      * Public constructor
-     * @param replacable text which the iterator will be based on
+     * @param replaceable text which the iterator will be based on
      */
     public ReplaceableUCharacterIterator(Replaceable replaceable){
         if(replaceable==null){

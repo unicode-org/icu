@@ -173,8 +173,7 @@ public class BagFormatter {
      * Returns a list of items in the collection, with each separated by the separator.
      * Each item must not be null; its toString() is called for a printable representation
      * @param c source collection
-     * @param separator to be placed between any strings
-     * @return
+     * @return a String representation of the list
      * @internal
      */
     public String showSetNames(Object c) {
@@ -187,9 +186,8 @@ public class BagFormatter {
     /**
      * Returns a list of items in the collection, with each separated by the separator.
      * Each item must not be null; its toString() is called for a printable representation
+     * @param output destination to which to write names
      * @param c source collection
-     * @param separator to be placed between any strings
-     * @return
      * @internal
      */
     public void showSetNames(PrintWriter output, Object c) {
@@ -200,9 +198,8 @@ public class BagFormatter {
     /**
      * Returns a list of items in the collection, with each separated by the separator.
      * Each item must not be null; its toString() is called for a printable representation
+     * @param filename destination to which to write names
      * @param c source collection
-     * @param separator to be placed between any strings
-     * @return
      * @internal
      */
     public void showSetNames(String filename, Object c) throws IOException {
@@ -637,7 +634,7 @@ public class BagFormatter {
         }
         /** 
          * Find next word, including trailing spaces
-         * @return
+         * @return the next word
          */
         String next() {
             if (position >= limit)
@@ -856,7 +853,7 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return the NameLable representing the source
      */
     public UnicodeLabel getNameSource() {
         if (nameSource == null) {
@@ -875,7 +872,7 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return the UnicodeLabel representing the value
      */
     public UnicodeLabel getValueSource() {
         if (valueSource == null) valueSource = UnicodeLabel.NULL;
@@ -903,14 +900,15 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return true if showCount is true
      */
     public boolean isShowCount() {
         return showCount;
     }
 
     /**
-     * @param b
+     * @param b true to show the count
+     * @return this (for chaining)
      */
     public BagFormatter setShowCount(boolean b) {
         showCount = b;
@@ -918,7 +916,7 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return the property name
      */
     public String getPropName() {
         return propName;
@@ -926,6 +924,7 @@ public class BagFormatter {
 
     /**
      * @param string
+     * @return this (for chaining)
      */
     public BagFormatter setPropName(String string) {
         if (string == null) string = "";
@@ -934,7 +933,7 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return true if this is a hexValue
      */
     public boolean isHexValue() {
         return hexValue;
@@ -942,6 +941,7 @@ public class BagFormatter {
 
     /**
      * @param b
+     * @return this (for chaining)
      */
     public BagFormatter setHexValue(boolean b) {
         hexValue = b;
@@ -949,14 +949,15 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return the full total
      */
     public int getFullTotal() {
         return fullTotal;
     }
 
     /**
-     * @param i
+     * @param i set the full total
+     * @return this (for chaining)
      */
     public BagFormatter setFullTotal(int i) {
         fullTotal = i;
@@ -964,7 +965,7 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return the line separator
      */
     public String getLineSeparator() {
         return lineSeparator;
@@ -972,6 +973,7 @@ public class BagFormatter {
 
     /**
      * @param string
+     * @return this (for chaining)
      */
     public BagFormatter setLineSeparator(String string) {
         lineSeparator = string;
@@ -979,7 +981,7 @@ public class BagFormatter {
     }
 
     /**
-     * @return
+     * @return the UnicodeLabel representing the range break source
      */
     public UnicodeLabel getRangeBreakSource() {
         if (rangeBreakSource == null) {

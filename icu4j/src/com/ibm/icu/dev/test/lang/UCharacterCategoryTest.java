@@ -41,7 +41,6 @@ public class UCharacterCategoryTest extends TestFmwk
 	
 	/**
 	* Gets the name of the argument category
-	* @param category to retrieve name
 	* @return category name
 	*/
 	public void TestToString()

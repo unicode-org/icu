@@ -617,9 +617,11 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     }
     
     /**
-     * 
-     * @param ulocales
-     * @return
+     * Convert a list of ULocales to a list of Locales.  ULocales with a script code will not be converted
+     * since they cannot be represented as a Locale.  This means that the two lists will <b>not</b> match
+     * one-to-one, and that the returned list might be shorter than the input list.
+     * @param ulocales a list of ULocales to convert to a list of Locales.
+     * @return the list of converted ULocales
      * @draft ICU 3.0
      */
     public static final Locale[] getLocaleList(ULocale[] ulocales){

@@ -31,7 +31,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	 * @param baseName
 	 * @param localeID
 	 * @param root
-	 * @return
+	 * @return the new bundle
 	 */
 	public static ICUResourceBundle createBundle(String baseName,
 			String localeID, ClassLoader root) {

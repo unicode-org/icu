@@ -19,7 +19,7 @@ import java.util.Enumeration;
 * UCharacter
 * @author Syn Wee Quek
 * @since oct 06 2000
-* @see com.ibm.icu.text.UCharacter
+* @see com.ibm.icu.lang.UCharacter
 */
 
 public final class UCharacterCompare

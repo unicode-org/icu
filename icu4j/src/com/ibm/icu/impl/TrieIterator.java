@@ -76,8 +76,8 @@ import com.ibm.icu.util.RangeValueIterator;
  * }
  * </p>
  * @author synwee
- * @see com.ibm.icu.util.Trie
- * @see com.ibm.icu.text.UCharacterTypeIterator
+ * @see com.ibm.icu.impl.Trie
+ * @see com.ibm.icu.lang.UCharacterTypeIterator
  * @since release 2.1, Jan 17 2002
  */
 public class TrieIterator implements RangeValueIterator
@@ -113,9 +113,7 @@ public class TrieIterator implements RangeValueIterator
     * @param element return result 
     * @return true if we are not at the end of the iteration, false otherwise.
     * @exception NoSuchElementException - if no more elements exist.
-    * @see #getStart()
-    * @see #getLimit()
-    * @see #getValue()
+    * @see com.ibm.icu.util.RangeValueIterator.Element
     * @draft 2.1
     */
     public final boolean next(Element element)

@@ -133,9 +133,9 @@ public class SortedSetRelation {
      * Utility that could be on SortedSet. Allows faster implementation than
      * what is in Java for doing addAll, removeAll, retainAll, (complementAll).
      * @param a first set
-     * @param allow filter, using ANY, CONTAINS, etc.
+     * @param relation the relation filter, using ANY, CONTAINS, etc.
      * @param b second set
-     * @return whether the filter relationship is true or not.
+     * @return the new set
      */    
     public static SortedSet doOperation(SortedSet a, int relation, SortedSet b) {
         // TODO: optimize this as above
