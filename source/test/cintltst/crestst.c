@@ -28,8 +28,11 @@
 #include "crestst.h"
 #include "unicode/ctest.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 static void TestOpenDirect(void);
 static void TestFallback(void);
+static void TestTable32(void);
 static void TestFileStream(void);
 /*****************************************************************************/
 
@@ -90,7 +93,8 @@ void addResourceBundleTest(TestNode** root)
 {
     addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
     addTest(root, &TestOpenDirect, "tsutil/crestst/TestOpenDirect");
-    addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
+    addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundles");
+    addTest(root, &TestTable32, "tsutil/crestst/TestTable32");
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAliasConflict");
     addTest(root, &TestFileStream, "tsutil/crestst/TestFileStream");
@@ -511,6 +515,161 @@ TestOpenDirect(void) {
         log_err("ures_openDirect(\"translit_index_WronG\") succeeded, should fail!\n");
     }
     ures_close(translit_index);
+}
+
+static int32_t
+parseTable32Key(const char *key) {
+    int32_t number;
+    char c;
+
+    number=0;
+    while((c=*key++)!=0) {
+        number<<=1;
+        if(c=='1') {
+            number|=1;
+        }
+    }
+    return number;
+}
+
+static void
+TestTable32(void) {
+    static const struct {
+        const char *key;
+        int32_t number;
+    } testcases[]={
+        { "ooooooooooooooooo", 0 },
+        { "oooooooooooooooo1", 1 },
+        { "ooooooooooooooo1o", 2 },
+        { "oo11ooo1ooo11111o", 25150 },
+        { "oo11ooo1ooo111111", 25151 },
+        { "o1111111111111111", 65535 },
+        { "1oooooooooooooooo", 65536 },
+        { "1ooooooo11o11ooo1", 65969 },
+        { "1ooooooo11o11oo1o", 65970 },
+        { "1ooooooo111oo1111", 65999 }
+    };
+
+    /* ### TODO UResourceBundle staticItem={ 0 }; - need to know the size */
+    UResourceBundle *res, *item;
+    const UChar *s;
+    const char *key;
+    UErrorCode errorCode;
+    int32_t i, j, number, parsedNumber, length, count;
+
+    errorCode=U_ZERO_ERROR;
+    res=ures_open(loadTestData(&errorCode), "testtable32", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unable to open testdata/testtable32.res - %s\n", u_errorName(errorCode));
+        return;
+    }
+    if(ures_getType(res)!=URES_TABLE) {
+        log_data_err("testdata/testtable32.res has type %d instead of URES_TABLE\n", ures_getType(res));
+    }
+
+    count=ures_getSize(res);
+    if(count!=66000) {
+        log_err("testdata/testtable32.res should have 66000 entries but has %d\n", count);
+    }
+
+    /* get the items by index */
+    for(i=0; i<count; ++i) {
+        item=ures_getByIndex(res, i, NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("unable to get item %d of %d in testdata/testtable32.res - %s\n",
+                    i, count, u_errorName(errorCode));
+            break;
+        }
+
+        key=ures_getKey(item);
+        parsedNumber=parseTable32Key(key);
+
+        switch(ures_getType(item)) {
+        case URES_STRING:
+            s=ures_getString(item, &length, &errorCode);
+            if(U_FAILURE(errorCode) || s==NULL) {
+                log_err("unable to access the string \"%s\" at %d in testdata/testtable32.res - %s\n",
+                        key, i, u_errorName(errorCode));
+                number=-1;
+            } else {
+                j=0;
+                U16_NEXT(s, j, length, number);
+            }
+            break;
+        case URES_INT:
+            number=ures_getInt(item, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("unable to access the integer \"%s\" at %d in testdata/testtable32.res - %s\n",
+                        key, i, u_errorName(errorCode));
+                number=-1;
+            }
+            break;
+        default:
+            log_err("unexpected resource type %d for \"%s\" at %d in testdata/testtable32.res - %s\n",
+                    ures_getType(item), key, i, u_errorName(errorCode));
+            number=-1;
+            break;
+        }
+
+        if(number>=0 && number!=parsedNumber) {
+            log_err("\"%s\" at %d in testdata/testtable32.res has a string/int value of %d, expected %d\n",
+                    key, i, number, parsedNumber);
+        }
+
+        ures_close(item);
+    }
+
+    /* search for some items by key */
+    for(i=0; i<LENGTHOF(testcases); ++i) {
+        item=ures_getByKey(res, testcases[i].key, NULL, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("unable to find the key \"%s\" in testdata/testtable32.res - %s\n",
+                    testcases[i].key, u_errorName(errorCode));
+            continue;
+        }
+
+        switch(ures_getType(item)) {
+        case URES_STRING:
+            s=ures_getString(item, &length, &errorCode);
+            if(U_FAILURE(errorCode) || s==NULL) {
+                log_err("unable to access the string \"%s\" in testdata/testtable32.res - %s\n",
+                        testcases[i].key, u_errorName(errorCode));
+                number=-1;
+            } else {
+                j=0;
+                U16_NEXT(s, j, length, number);
+            }
+            break;
+        case URES_INT:
+            number=ures_getInt(item, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                log_err("unable to access the integer \"%s\" in testdata/testtable32.res - %s\n",
+                        testcases[i].key, u_errorName(errorCode));
+                number=-1;
+            }
+            break;
+        default:
+            log_err("unexpected resource type %d for \"%s\" in testdata/testtable32.res - %s\n",
+                    ures_getType(item), testcases[i].key, u_errorName(errorCode));
+            number=-1;
+            break;
+        }
+
+        if(number>=0 && number!=testcases[i].number) {
+            log_err("\"%s\" in testdata/testtable32.res has a string/int value of %d, expected %d\n",
+                    testcases[i].key, number, testcases[i].number);
+        }
+
+        key=ures_getKey(item);
+        if(0!=uprv_strcmp(key, testcases[i].key)) {
+            log_err("\"%s\" in testdata/testtable32.res claims to have the key \"%s\"\n",
+                    testcases[i].key, key);
+        }
+
+        ures_close(item);
+    }
+
+    ures_close(res);
 }
 
 static void TestFileStream(void){
