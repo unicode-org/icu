@@ -27,10 +27,10 @@
 # This is the list of locales that are built, but not considered installed in ICU.
 # These are usually aliased locales or the root locale.
 COLLATION_ALIAS_SOURCE = \
-de__PHONEBOOK.txt \
-es__TRADITIONAL.txt \
-hi__DIRECT.txt \
-zh_TW_STROKE.txt \
+de__PHONEBOOK.txt\
+es__TRADITIONAL.txt\
+hi__DIRECT.txt\
+zh_TW_STROKE.txt\
 zh__PINYIN.txt
 
 # Please try to keep this list in alphabetical order
