@@ -1,124 +1,183 @@
 ## -*-makefile-*-
 #******************************************************************************
-#   Copyright (C) 1999-2001, International Business Machines
+#   Copyright (C) 1999-2002, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.26 $
+# $Revision: 1.27 $
 #******************************************************************************
-# This Makefile is designed to be included into projects which make use
+# This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
 
-SHELL = @SHELL@
-CFLAGS = @CFLAGS@ 
-CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(prefix)/include
-CXXFLAGS = @CXXFLAGS@ 
-FFLAGS = @FFLAGS@
-DEFS = @DEFS@ 
+# CONTENTS OF THIS FILE
+# 1). Base configuration information and linkage
+# 2). Variables giving access to ICU tools
+# 3). Host information
+# 4). Compiler flags and settings 
+# 5). Data Packaging directives
+# 6). Include of platform make fragment (mh-* file)
+
+##################################################################
+##################################################################
+#
+#       *1*  base configuration information and linkage
+#
+##################################################################
+# The PREFIX is the base of where ICU is installed.
+# Inside this directory you should find  bin, lib, include/unicode, 
+# etc.  If ICU is not installed in this directory, you must change the
+# following line.  There should exist $(prefix)/include/unicode/utypes.h
+# for example.
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+libexecdir = @libexecdir@
+bindir = @bindir@
+datadir = @datadir@
+sbindir = @sbindir@
+
+# about the ICU version
+VERSION = @VERSION@
+UNICODE_VERSION = @UNICODE_VERSION@
+
+# The prefix for ICU libraries, normally 'icu'
+ICUPREFIX = icu
+PACKAGE = @PACKAGE@
+LIBICU = lib$(ICUPREFIX)
+
+# Suffix at the end of libraries. Usually empty.
+ICULIBSUFFIX = @ICULIBSUFFIX@
+# ICULIBSUFFIX_VERSION  is non-empty if it is to contain a library
+# version. For example, if it is 21, it means libraries are named
+# libicuuc21.so for example.
+
+# rpath links a library search path right into the binaries.
 ENABLE_RPATH = @ENABLE_RPATH@
 ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = @LIBS@ 
-ICUPREFIX = icu
-ICULIBSUFFIX = @ICULIBSUFFIX@
-ICULIBS = $(LIBS) -L$(libdir)                      \
-			-l$(ICUPREFIX)data$(ICULIBSUFFIX)      \
-			-l$(ICUPREFIX)i18n$(ICULIBSUFFIX)      \
-			-l$(ICUPREFIX)uc$(ICULIBSUFFIX)        \
-			-l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)  \
-			-lustdio$(ICULIBSUFFIX)
-#TODO layout library probably wants to be added to ICULIBS.
-#			-l$(ICUPREFIX)le$(ICULIBSSUFFIX)      
 
-## Environment variable to set a runtime search path
+
+### To link your application with ICU:
+# 1. use LDFLAGS, CFLAGS, etc from above
+# 2. link with $(ICULIBS)
+# 3. optionally, add one or more of:
+#    - $(ICULIBS_I18N)    - i18n library, formatting, etc.
+#    - $(ICULIBS_LAYOUT)  - ICU layout library. 
+#    - $(ICULIBS_USTDIO)  - ICU stdio equivalent library
+
+ICULIBS_COMMON = -l$(ICUPREFIX)uc$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_DATA   = -l$(ICUPREFIX)data$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_I18N   = -l$(ICUPREFIX)i18n$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_TOOLUTIL = -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_CTESTFW = -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_USTDIO = -lustdio$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_LAYOUT = -l$(ICUPREFIX)le$(ICULIBSUFFIX_VERSION)$(ICULIBSUFFIX)
+ICULIBS_BASE = $(LIBS) -L$(libdir)
+
+# for icu-config to test with
+ICULIBS_COMMON_LIB_NAME = ${LIBICU}uc${ICULIBSUFFIX_VERSION}${ICULIBSUFFIX}.${SO}
+
+# ICULIBS is the set of libraries your application should link
+# with usually. Many applications will want to add $(ICULIBS_I18N) as well. 
+ICULIBS = $(ICULIBS_BASE) $(ICULIBS_I18N) $(ICULIBS_COMMON) $(ICULIBS_DATA) 
+
+##################################################################
+##################################################################
+#
+#       *2*  access to ICU tools
+#
+##################################################################
+# Environment variable to set a runtime search path
 #   (Overridden when necessary in -mh files)
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
-# Force removal [for make clean]
-RMV = rm -rf
+# Access to important ICU tools.
+# Use as follows:  $(INVOKE) $(GENRB) arguments .. 
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
+GENCCODE = $(sbindir)/genccode
+GENCMN   = $(sbindir)/gencmn
+GENRB    = $(sbindir)/genrb
+PKGDATA  = $(sbindir)/pkgdata
 
-exec_prefix = @exec_prefix@
-prefix = @prefix@
-program_transform_name = @program_transform_name@
-bindir = @bindir@
-sbindir = @sbindir@
-libexecdir = @libexecdir@
-datadir = @datadir@
-sysconfdir = @sysconfdir@
-sharedstatedir = @sharedstatedir@
-localstatedir = @localstatedir@
-libdir = @libdir@
-includedir = @includedir@
-oldincludedir = @oldincludedir@
-infodir = @infodir@
-mandir = @mandir@
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
-LIB_VERSION = @LIB_VERSION@
-LIB_VERSION_MAJOR = @LIB_VERSION_MAJOR@
-CC = @CC@
-CXX = @CXX@
-AIX_SHLIB = @AIX_SHLIB@
-AR = @AR@
-RANLIB = @RANLIB@
-# Commands to make a shared library
-#   (Overridden when necessary in -mh files)
-SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=     $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+##################################################################
+##################################################################
+#
+#       *3*  Information about the host
+#
+##################################################################
 
-INSTALL  =  @INSTALL@
-INSTALL_PROGRAM  =  @INSTALL_PROGRAM@
-INSTALL_DATA  =  @INSTALL_DATA@
-
-INSTALL_PROGRAM = @INSTALL_PROGRAM@
-INSTALL_SCRIPT = @INSTALL_SCRIPT@
-INSTALL_DATA = @INSTALL_DATA@
-AUTOCONF = @AUTOCONF@
-
-pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
-pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
-
-MKINSTALLDIRS = $(SHELL) $(pkgdatadir)/mkinstalldirs
-
+# Information about the host that 'configure' was run on.
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
 host_vendor = @host_vendor@
 host_os = @host_os@
-
-LIB_M = @LIB_M@
-CPP = @CPP@
-U_HAVE_INTTYPES_H = @U_HAVE_INTTYPES_H@
-U_IS_BIG_ENDIAN = @U_IS_BIG_ENDIAN@
-HAVE_INT8_T = @HAVE_INT8_T@
-HAVE_UINT8_T = @HAVE_UINT8_T@
-HAVE_INT16_T = @HAVE_INT16_T@
-HAVE_UINT16_T = @HAVE_UINT16_T@
-HAVE_INT32_T = @HAVE_INT32_T@
-HAVE_UINT32_T = @HAVE_UINT32_T@
-HAVE_BOOL_T = @HAVE_BOOL_T@
-EXTRAS_TRUE = @EXTRAS_TRUE@
-EXTRAS_FALSE = @EXTRAS_FALSE@
-TESTS_TRUE = @TESTS_TRUE@
-TESTS_FALSE = @TESTS_FALSE@
-SAMPLES_TRUE = @SAMPLES_TRUE@
-SAMPLES_FALSE = @SAMPLES_FALSE@
-
+# Our platform canonical name (as determined by configure)
+# this is a #define value (i.e. U_XXXX or XXXX)
 platform = @platform@
 
-ld_rpath_suf = @ld_rpath_suf@
-
-include $(pkgdatadir)/config/@platform_make_fragment_name@
-
+##################################################################
+##################################################################
+#
+#       *4*  compiler flags and misc. options
+#
+##################################################################
+AIX_SHLIB = @AIX_SHLIB@
+AR = @AR@
+CC = @CC@
+CFLAGS = @CFLAGS@ 
+CPP = @CPP@
+CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(prefix)/include
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@ 
 DEFAULT_MODE = @DATA_PACKAGING_MODE@
+DEFS = @DEFS@ 
+FFLAGS = @FFLAGS@
+INSTALL  =  @INSTALL@
+INSTALL_DATA  =  @INSTALL_DATA@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_PROGRAM  =  @INSTALL_PROGRAM@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+LIBS = @LIBS@ 
+LIB_M = @LIB_M@
+LIB_VERSION = @LIB_VERSION@
+LIB_VERSION_MAJOR = @LIB_VERSION_MAJOR@
+MKINSTALLDIRS = $(SHELL) $(pkgdatadir)/mkinstalldirs
+RANLIB = @RANLIB@
+RMV = rm -rf
+SHELL = @SHELL@
+SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=     $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
+U_IS_BIG_ENDIAN = @U_IS_BIG_ENDIAN@
+includedir = @includedir@
+infodir = @infodir@
+ld_rpath_suf = @ld_rpath_suf@
+localstatedir = @localstatedir@
+mandir = @mandir@
+oldincludedir = @oldincludedir@
+program_transform_name = @program_transform_name@
+sharedstatedir = @sharedstatedir@
+sysconfdir = @sysconfdir@
+INSTALL-L = ${INSTALL_DATA}
 
-GENCCODE = $(sbindir)/genccode
-GENCMN = $(sbindir)/gencmn
 
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
+##################################################################
+##################################################################
+#
+#       *5* packaging options and directories
+#
+##################################################################
 
-# Should be the same as U_ICUDATA_NAME
+pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
+
+# The basename of the ICU data file (i.e. icudt21b )
 ICUDATA_NAME = icudt@LIB_VERSION_MAJOR@@ICUDATA_CHAR@
+
+# Defaults for pkgdata's mode and directories
+# The default data dir changes depending on what packaging mode 
+# is being used
 ifeq ($(strip $(PKGDATA_MODE)),)
 PKGDATA_MODE=@DATA_PACKAGING_MODE@
 endif
@@ -134,4 +193,17 @@ ICUDATA_DIR = $(pkglibdir)
 ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
+
+
+##################################################################
+##################################################################
+#
+#       *6* Inclusion of platform make fragment (mh-* file)
+#
+##################################################################
+# The mh- file ("make fragment") for the platform is included here. 
+# It may override the above settings.
+# It is put last so that the mh-file can override anything.
+
+include $(pkgdatadir)/config/@platform_make_fragment_name@
 
