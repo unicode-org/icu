@@ -53,7 +53,6 @@ class RegexMatcher;
 class UVector;
 class UVector32;
 class UnicodeSet;
-class RegexStaticSets;
 struct REStackFrame;
 struct Regex8BitSet;
 
@@ -388,9 +387,6 @@ private:
 
     Regex8BitSet   *fStaticSets8;  // Ptr to the static (shared) latin-1 only
                                    //  sets for predefined regex classes.
-
-    static RegexStaticSets *gStaticSets;  // Ptr to all lazily initialized constant
-                                          //   shared sets.
 
     int32_t         fStartType;    // Info on how a match must start.
     int32_t         fInitialStringIdx;     //  
