@@ -17,7 +17,7 @@
 /* prototypes *********************************/
 
 U_CDECL_BEGIN
-typedef void (*TestFunctionPtr)(void);
+typedef void (U_CALLCONV *TestFunctionPtr)(void);
 typedef struct TestNode TestNode;
 U_CDECL_END
 
