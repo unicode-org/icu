@@ -7,7 +7,7 @@
 **********************************************************************
 */
 
-#include "dbbi.h"
+#include "unicode/dbbi.h"
 #include "dbbi_tbl.h"
 #include "uvector.h"
 
