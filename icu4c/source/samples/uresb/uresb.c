@@ -62,9 +62,11 @@ static UOption options[]={
     { "locale", NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0 },
 	UOPTION_ENCODING,
 	{ "path", NULL, NULL, NULL, 'p', UOPT_OPTIONAL_ARG, 0 },
-	{ "truncate", NULL, NULL, NULL, 't', UOPT_OPTIONAL_ARG, 0 }
+	{ "truncate", NULL, NULL, NULL, 't', UOPT_OPTIONAL_ARG, 0 },
+    UOPTION_VERBOSE
 };
 
+static UBool VERBOSE = FALSE;
 
 extern int
 main(int argc, char* argv[]) {
@@ -127,6 +129,10 @@ main(int argc, char* argv[]) {
 	} else {
 		trunc = FALSE;
 	}
+
+    if(options[6].doesOccur) {
+      VERBOSE = TRUE;
+    }
 
     outerr = u_finit(stderr, locale, encoding);
 	out = u_finit(stdout, locale, encoding); 
@@ -200,19 +206,27 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 			*/
 			printIndent(out, indent);
 			if(key != NULL) {
-				u_fprintf(out, "%s { \"%U\" } \n", key, string);
+				u_fprintf(out, "%s { \"%U\" } ", key, string);
 			} else {
-				u_fprintf(out, "\"%U\",\n", string);
+				u_fprintf(out, "\"%U\",", string);
 			}
+            if(VERBOSE) {
+              u_fprintf(out, " // STRING");
+            }
+			u_fprintf(out, "\n");
 		}
 		break;
 	case RES_INT :
 		printIndent(out, indent);
 		if(key != NULL) {
-			u_fprintf(out, "%s:int { %li } \n", key, ures_getInt(resource, status));
-		} else {
-			u_fprintf(out, "%li,\n", ures_getInt(resource, status));
-		}
+			u_fprintf(out, "%s", key);
+        }
+        u_fprintf(out, ":int { %li } ", ures_getInt(resource, status));
+
+        if(VERBOSE) {
+          u_fprintf(out, " // INT");
+        }
+		u_fprintf(out, "\n");
 		break;
 	case RES_BINARY :
 		{
@@ -224,16 +238,19 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 				len = truncsize/2;
 			}
 			if(U_SUCCESS(*status) && len > 0) {
+				printIndent(out, indent);
 				if(key != NULL) {
-					printIndent(out, indent);
-					u_fprintf(out, "%s:binary { ", key);
-					for(i = 0; i<len; i++) {
-						printHex(out, data++);
-					}
-					u_fprintf(out, " }\n");
-				} else {
-					u_fprintf(outerr, "This is a VERY STRANGE resource INDEED!\n");
+		  		  u_fprintf(out, "%s", key);
+				} 
+                u_fprintf(out, ":binary { ");
+				for(i = 0; i<len; i++) {
+					printHex(out, data++);
 				}
+				u_fprintf(out, " }");
+                if(VERBOSE) {
+                  u_fprintf(out, " // BINARY");
+                }
+				u_fprintf(out, "\n");
 
 			} else {
 				reportError(status);
@@ -249,7 +266,15 @@ void printOutBundle(UFILE *out, UResourceBundle *resource, int32_t indent, UErro
 			if(key != NULL) {
 				u_fprintf(out, "%s ", key);
 			}
-			u_fprintf(out, "{\n");
+			u_fprintf(out, "{");
+            if(VERBOSE) {
+              if(ures_getType(resource) == RES_TABLE) {
+                u_fprintf(out, " // TABLE");
+              } else {
+                u_fprintf(out, " // ARRAY");
+              }
+            }
+			u_fprintf(out, "\n");
 
 			while(ures_hasNext(resource)) {
 				t = ures_getNextResource(resource, t, status);
