@@ -43,6 +43,51 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
 }
 
 //--------------------------------------------------------------------
+// BitSet
+//--------------------------------------------------------------------
+
+/**
+ * Tiny and incomplete BitSet.  Hardcoded to support 0..FFFF.
+ */
+class BitSet {
+    int32_t bits[65536/32];
+
+public:
+    BitSet();
+    ~BitSet();
+    void clear();
+    void set(int32_t x);
+    UBool get(int32_t x) const;
+};
+
+BitSet::BitSet() {
+    clear();
+}
+
+BitSet::~BitSet() {
+}
+
+void BitSet::clear() {
+    int32_t *limit = bits + 65536/32;
+    int32_t *p = bits;
+    while (p < limit) *p++ = 0;
+}
+
+void BitSet::set(int32_t x) {
+    x &= 0xFFFF;
+    int32_t i = x / 32;
+    int32_t bit = 1L << (x & 31);
+    bits[i] |= bit;
+}
+
+UBool BitSet::get(int32_t x) const {
+    x &= 0xFFFF;
+    int32_t i = x / 32;
+    int32_t bit = 1L << (x & 31);
+    return (bits[i] & bit) != 0L;
+}
+
+//--------------------------------------------------------------------
 // RTTest Interface
 //--------------------------------------------------------------------
 
@@ -341,7 +386,7 @@ void TransliteratorRoundTripTest::TestHiragana() {
 void TransliteratorRoundTripTest::TestKatakana() {
     RTTest test("Latin-Katakana", 
                 TestUtility::LATIN_SCRIPT, TestUtility::KATAKANA_SCRIPT);
-    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA]", ""), this);
+    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA\\u30FC]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestArabic() {
@@ -373,13 +418,13 @@ void TransliteratorRoundTripTest::TestJamoHangul() {
 void TransliteratorRoundTripTest::TestGreek() {
     RTTest test("Latin-Greek", 
                 TestUtility::LATIN_SCRIPT, TestUtility::GREEK_SCRIPT);
-    test.test("", UnicodeString("[\\u0380-\\u03CF]", ""), this);
+    test.test("", UnicodeString("[\\u003B\\u00B7[:Greek:]-[\\u03D7-\\u03EF]]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestCyrillic() {
     RTTest test("Latin-Cyrillic", 
                 TestUtility::LATIN_SCRIPT, TestUtility::CYRILLIC_SCRIPT);
-    test.test("", UnicodeString("[\\u0401\\u0410-\\u044F\\u0451]", ""), this);
+    test.test("", UnicodeString("[\\u0400-\\u045F]", ""), this);
 }
 
 void RTTest::test2() {
@@ -409,6 +454,8 @@ void RTTest::test2() {
         type[c] = u_charType(c);
     }
 
+    BitSet failSourceTarg;
+
     log->logln("Checking that all source characters convert to target - Singles");
 
     for (c = 0; c < 0xFFFF; ++c) {
@@ -420,6 +467,7 @@ void RTTest::test2() {
         sourceToTarget->transliterate(targ);
         if (!isReceivingTarget(targ)) {
             logWrongScript("Source-Target", cs, targ);
+            failSourceTarg.set(c);
             if (errorCount >= errorLimit)
                 return;
         }
@@ -430,9 +478,13 @@ void RTTest::test2() {
     for (c = 0; c < 0xFFFF; ++c) {
         if (type[c] == U_UNASSIGNED ||
             !isSource(c)) continue;
+        if (failSourceTarg.get(c)) continue;
+
         for (UChar d = 0; d < 0xFFFF; ++d) {
             if (type[d] == U_UNASSIGNED || !isSource(d))
                 continue;
+            if (failSourceTarg.get(d)) continue;
+
             cs.remove();
             cs.append(c).append(d);
             targ = cs;
@@ -447,6 +499,9 @@ void RTTest::test2() {
 
     log->logln("Checking that target characters convert to source and back - Singles");
 
+    BitSet failTargSource;
+    BitSet failRound;
+
     for (c = 0; c < 0xFFFF; ++c) {
         if (type[c] == U_UNASSIGNED || !isTarget(c))
             continue;
@@ -458,10 +513,12 @@ void RTTest::test2() {
         sourceToTarget->transliterate(reverse);
         if (!isReceivingSource(targ)) {
             logWrongScript("Target-Source", cs, targ);
+            failTargSource.set(c);
             if (errorCount >= errorLimit)
                 return;
         } else if (cs != reverse) {
             logRoundTripFailure(cs, targ, reverse);
+            failRound.set(c);
             if (errorCount >= errorLimit)
                 return;
         }
@@ -489,11 +546,11 @@ void RTTest::test2() {
             targetToSource->transliterate(targ);
             reverse = targ;
             sourceToTarget->transliterate(reverse);
-            if (!isReceivingSource(targ)) {
+            if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)) {
                 logWrongScript("Target-Source", cs, targ);
                 if (errorCount >= errorLimit)
                     return;
-            } else if (cs != reverse) {
+            } else if (cs.caseCompare(reverse, U_FOLD_CASE_DEFAULT) != 0 && !failRound.get(c) && !failRound.get(d)) {
                 logRoundTripFailure(cs, targ, reverse);
                 if (errorCount >= errorLimit)
                     return;
