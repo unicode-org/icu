@@ -293,6 +293,12 @@ class TransliteratorTest : public IntlTest {
     void TestEscape();
 
     void TestAnchorMasking();
+
+    /**
+     * Make sure display names of variants look reasonable.
+     */
+    void TestDisplayName();
+
     //======================================================================
     // Support methods
     //======================================================================

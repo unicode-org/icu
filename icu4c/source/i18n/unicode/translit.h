@@ -323,6 +323,25 @@ protected:
                                 UnicodeSet*& compoundFilter,
                                 UParseError& parseError,
                                 UErrorCode& status);
+
+    /**
+     * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T,
+     * S-T/V, or S/V-T.  If the source is missing, return a source of
+     * ANY.
+     * @param id the id string, in any of several forms
+     * @param source fill-in for the source; if the source is not
+     * present, ANY will be given as the source, and FALSE will be
+     * returned.  Otherwise TRUE will be returned
+     * @param target fill-in for the target, which may be empty if the
+     * id is not well-formed.
+     * @param variant fill-in for the variant, which may be empty; if
+     * it is not, it will contain a leading '/'
+     * @return TRUE if the source was present
+     */
+    static UBool IDtoSTV(const UnicodeString& id,
+                         UnicodeString& source, UnicodeString& target,
+                         UnicodeString& variant);
+
     /**
      * Internal parsing method for subclasses.
      */
