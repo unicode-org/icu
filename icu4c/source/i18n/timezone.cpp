@@ -682,16 +682,16 @@ public:
         return NULL;
     }
 
-    void reset(UErrorCode& status) {
+    void reset(UErrorCode& /*status*/) {
         pos = 0;
     }
 
-public:
-        virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
-        static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 private:
-        static const char fgClassID;
+    static const char fgClassID;
 
+public:
+    static inline UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 private:
     /**
      * Guarantee that _bufp is allocated to include _buflen characters
