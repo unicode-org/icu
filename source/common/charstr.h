@@ -34,7 +34,7 @@ public:
     //     @param  str    The unicode string to be converted to char *
     //     @param  codepage   The char * code page.  ""   for invariant conversion.
     //                                               NULL for default code page.
-    inline CharString(const UnicodeString& str, const char *codepage);
+//    inline CharString(const UnicodeString& str, const char *codepage);
 #endif
 
     inline CharString(const UnicodeString& str);
@@ -51,6 +51,9 @@ private:
 
 #if !UCONFIG_NO_CONVERSION
 
+// PLEASE DON'T USE THIS FUNCTION.
+// We don't want the static dependency on conversion or the performance hit that comes from a codepage conversion.
+/*
 inline CharString::CharString(const UnicodeString& str, const char *codepage) {
     int32_t    len;
     ptr = buf;
@@ -59,7 +62,7 @@ inline CharString::CharString(const UnicodeString& str, const char *codepage) {
         ptr = (char *)uprv_malloc(len+1);
         str.extract(0, 0x7FFFFFFF, ptr, len+1, codepage);
     }
-}
+}*/
 
 #endif
 
