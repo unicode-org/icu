@@ -6,6 +6,7 @@
 */
 
 #include "ucolimp.h"
+#include "ucoltok.h"
 
 #include "unicode/uloc.h"
 #include "unicode/coll.h"
@@ -101,6 +102,10 @@ ucol_close(UCollator *coll)
   }
 }
 
+UCATableHeader *ucol_assembleTailoringTable(ListHeader *lh, int32_t resLen, UErrorCode *status) {
+  return NULL;
+}
+
 U_CAPI UCollator*
 ucol_openRules(    const    UChar                  *rules,
         int32_t                 rulesLength,
@@ -108,9 +113,10 @@ ucol_openRules(    const    UChar                  *rules,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
-  return 0;
-  /*
-  synwee : waiting for vladimir's changes
+  int32_t resLen = 0;
+
+  ucol_initUCA(status);
+
   if(U_FAILURE(*status)) return 0;
 
   Normalizer::EMode normMode;
@@ -135,9 +141,11 @@ ucol_openRules(    const    UChar                  *rules,
     return 0;
   }
 
-  ucol_initUCA(status);
+  /* do we need to normalize the string beforehand? */
 
-  UCollator *result = ucol_initCollator(UCA->image,0,status);
+  ListHeader *lh = ucol_tok_assembleTokenList(rules, rulesLength, &resLen, status);
+  UCATableHeader *table = ucol_assembleTailoringTable(lh, resLen, status);
+  UCollator *result = ucol_initCollator(table,0,status);
 
   result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
   u_strcpy(result->rules, rules);
@@ -145,7 +153,6 @@ ucol_openRules(    const    UChar                  *rules,
   result->rb = 0;
 
   return result;
-  */
 }
 
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
@@ -159,7 +166,7 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
     UCollator *result = fillIn;
-    if(U_FAILURE(*status)) {
+    if(U_FAILURE(*status) || image == NULL) {
         return NULL;
     }
 
