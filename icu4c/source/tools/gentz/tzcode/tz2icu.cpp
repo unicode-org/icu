@@ -185,6 +185,16 @@ struct ZoneInfo {
     // Add an alias to the list of aliases OF this zone.
     void addAlias(int index);
 
+    // Is this an alias to another zone?
+    bool isAlias() const {
+        return aliasTo >= 0;
+    }
+
+    // Retrieve alias list
+    const set<int>& getAliases() const {
+        return aliases;
+    }
+
     void print(ostream& os, const string& id) const;
 };
 
@@ -800,12 +810,6 @@ void readFinalZonesAndRules(istream& in) {
             if (finalZones.find(toid) != finalZones.end()) {
                 throw invalid_argument("Bad link: `to' id is a \"real\" zone");
             }
-// TODO remove
-//            // Not all links refer to final zones; need to check
-//            if (finalZones.find(fromid) != finalZones.end()) {
-//                finalZones[fromid].addLink(toid);
-//                //cout << fromid << ": alias is " << toid << endl;
-//            }
 
             links[fromid].insert(toid);
             reverseLinks[toid] = fromid;
@@ -846,46 +850,7 @@ void readFinalZonesAndRules(istream& in) {
 // Resource bundle output
 //--------------------------------------------------------------------
 
-/* Assuming we don't need the leap seconds info or the abbreviations,
-   we have:
-
-   N is ZoneInfo.transition.size(); may be zero.  "tzfile.h" states
-   that N <= 370
-
-   M is ZoneInfo.types.size(); 1..255
-
-   For each transition:
-   - 32 bit  time
-   -  8 bit  type index
-
-   For each type:
-   - 32 bit  offset
-   -  3 bit  flags
-
-   Total storage in bytes is 5 N + ~4.5 M per zone.
-
-   Compressed format #1 (153 KB):
-   - binary:    2 bytes   N
-                1 byte    M
-                N bytes   type index for each transition
-             ~M/2 bytes   flags for each type (ceil(M/2.0))
-   - intvector: N ints    times for each transition
-                M ints    offsets for each type
-
-   vvv *** Here's the one we use *** vvv
-   Compressed format #2 (155 KB):
-   - intvector: N ints    times for each transition
-   - intvector: M ints    offsets for each type
-   - binary:    N bytes   type index for each transition
-             ~M/2 bytes   flags for each type (ceil(M/2.0))
-
-   Compressed format #3 (165 KB):
-   - binary:    N bytes   type index for each transition
-   - binary: ~M/2 bytes   flags for each type (ceil(M/2.0))
-   - intvector: N ints    times for each transition
-   - intvector: M ints    offsets for each type
-// TODO update format docs
-*/
+// SEE olsontz.h FOR RESOURCE BUNDLE DATA LAYOUT
 
 void ZoneInfo::print(ostream& os, const string& id) const {
     // Implement compressed format #2:
@@ -1090,11 +1055,6 @@ void mergeFinalZone(const pair<string,FinalZone>& p) {
     const FinalZone& fz = p.second;
 
     mergeOne(id, fz);
-
-    // TODO remoev
-//    for (set<string>::const_iterator i=fz.aliases.begin(); i!=fz.aliases.end(); ++i) {
-//        mergeOne(*i, fz);
-//    }
 }
 
 /**
@@ -1456,14 +1416,101 @@ int main(int argc, char *argv[]) {
 
         file << "}" << endl;
     }
+
+    file.close();
      
     if (file) { // recheck error bit
         cout << "Finished writing " ICU_TZ_RESOURCE ".txt" << endl;
-        return 0;
     } else {
         cerr << "Error: Unable to open/write to " ICU_TZ_RESOURCE ".txt" << endl;
         return 1;
     }
+
+#define ICU4J_TZ_CLASS "ZoneMetaData"
+
+    // Write out a Java source file containing only a few pieces of
+    // meta-data missing from the core JDK: the equivalency lists and
+    // the country map.
+    ofstream java(ICU4J_TZ_CLASS ".java");
+    if (java) {
+        java << "//---------------------------------------------------------" << endl
+             << "// Copyright (C) 2003";
+        if (thisYear > 2003) {
+            java << "-" << thisYear;
+        }
+        java << ", International Business Machines" << endl
+             << "// Corporation and others.  All Rights Reserved." << endl
+             << "//---------------------------------------------------------" << endl
+             << "// Build tool: tz2icu" << endl
+             << "// Build date: " << asctime(now) /* << endl -- asctime emits CR */
+             << "// Olson source: ftp://elsie.nci.nih.gov/pub/" << endl
+             << "//---------------------------------------------------------" << endl
+             << "// >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<" << endl
+             << "// >> !!! >>>            DO NOT EDIT             <<< !!! <<" << endl
+             << "//---------------------------------------------------------" << endl
+             << endl
+             << "package com.ibm.icu.impl;" << endl
+             << endl
+             << "public final class " ICU4J_TZ_CLASS " {" << endl;
+
+        // Emit equivalency lists
+        bool first1 = true;
+        java << "  public static final String[][] EQUIV = {" << endl;
+        for (ZoneMap::const_iterator i=ZONEINFO.begin(); i!=ZONEINFO.end(); ++i) {
+            if (i->second.isAlias() || i->second.getAliases().size() == 0) {
+                continue;
+            }
+            if (!first1) java << "," << endl;
+            first1 = false;
+            // The ID of this zone (the canonical zone, to which the
+            // aliases point) will be sorted into the list, so it
+            // won't be at position 0.  If we want to know which is
+            // the canonical zone, we should move it to position 0.
+            java << "    { ";
+            bool first2 = true;
+            const set<int>& s = i->second.getAliases();
+            for (set<int>::const_iterator j=s.begin(); j!=s.end(); ++j) {
+                if (!first2) java << ", ";
+                java << '"' << zoneIDlist[*j] << '"';
+                first2 = false;
+            }
+            java << " }";
+        }
+        java << endl
+             << "  };" << endl;
+
+        // Emit country map.
+        first1 = true;
+        java << "  public static final String[][] COUNTRY = {" << endl;
+        for (map<string, set<string> >::const_iterator i=countryMap.begin();
+             i != countryMap.end(); ++i) {
+            if (!first1) java << "," << endl;
+            first1 = false;
+            string country = i->first;
+            const set<string>& zones(i->second);
+            java << "    { \"" << country << '"';
+            for (set<string>::const_iterator j=zones.begin();
+                 j != zones.end(); ++j) {
+                java << ", \"" << *j << '"';
+            }
+            java << " }";
+        }
+        java << endl
+             << "  };" << endl;
+
+        java << "}" << endl;
+    }
+
+    java.close();
+
+    if (java) { // recheck error bit
+        cout << "Finished writing " ICU4J_TZ_CLASS ".java" << endl;
+    } else {
+        cerr << "Error: Unable to open/write to " ICU4J_TZ_CLASS ".java" << endl;
+        return 1;
+    }
+
+    return 0;
 }
 
 //eof
