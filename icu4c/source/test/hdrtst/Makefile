@@ -78,7 +78,7 @@ dtest:
 	@rm -f Makefile.sub
 	@echo "Deprecation #######################################################"
 	@echo 'Should be 1 in each case if file is properly obsoleted.'
-	@for stub in `cat dfiles.txt` ; do \
+	@for stub in `cat dfiles.txt | grep -v '^#'` ; do \
 	  file=unicode/$$stub \
 	  incfile=`basename $$file .h` ; \
 	  echo -n "C++  unicode/$$incfile.h 	- " ; \

@@ -1,5 +1,4 @@
 # Copyright (c) 2001-2003 International Business Machines 
 # Corporation and others. All Rights Reserved.
-bidi.h
-convert.h
-unicode.h
+#
+# in 2.6 - no deprecated headers.
