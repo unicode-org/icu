@@ -66,6 +66,16 @@ public final class NFRuleSet {
      * behavior than a regular rule set.
      */
     private boolean isFractionRuleSet = false;
+    
+    /**
+     * Used to limit recursion for bad rule sets.
+     */
+    private int recursionCount = 0;
+
+	/**
+ 	 * Limit of recursion.
+ 	 */
+	private static final int RECURSION_LIMIT = 50;
 
     //-----------------------------------------------------------------------
     // construction
@@ -385,7 +395,12 @@ public final class NFRuleSet {
     public void format(long number, StringBuffer toInsertInto, int pos) {
         NFRule applicableRule = findNormalRule(number);
 
+	    if (++recursionCount >= RECURSION_LIMIT) {
+	    	recursionCount = 0;
+	    	throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
+	    }
         applicableRule.doFormat(number, toInsertInto, pos);
+        --recursionCount;
     }
 
     /**
@@ -399,7 +414,12 @@ public final class NFRuleSet {
     public void format(double number, StringBuffer toInsertInto, int pos) {
         NFRule applicableRule = findRule(number);
 
+		if (++recursionCount >= RECURSION_LIMIT) {
+			recursionCount = 0;
+			throw new IllegalStateException("Recursion limit exceeded when applying ruleSet " + name);
+		}
         applicableRule.doFormat(number, toInsertInto, pos);
+		--recursionCount;
     }
 
     /**
