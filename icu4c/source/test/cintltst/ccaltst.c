@@ -714,11 +714,14 @@ static void TestAddRollExtensive()
     }
     log_verbose("\nTesting calendar ucal_roll()...\n");
     for(e = UCAL_YEAR;e < UCAL_FIELD_COUNT; e=(UCalendarDateFields)((int32_t)e + 1)) {
-        int32_t limit = maxlimit;
+        limit = maxlimit;
         status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
             ucal_roll(cal, e, 1, &status);
-            if (U_FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
+            if (U_FAILURE(status)) {
+                limit = i;
+                status = U_ZERO_ERROR;
+            }
         }
         for (i = 0; i < limit; i++) {
             ucal_roll(cal, e, -1, &status);
