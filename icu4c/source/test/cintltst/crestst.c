@@ -27,7 +27,8 @@
 #include "crestst.h"
 #include "unicode/ctest.h"
 
-void TestFallback(void);
+static void TestOpenDirect(void);
+static void TestFallback(void);
 
 /*****************************************************************************/
 
@@ -88,6 +89,7 @@ void addResourceBundleTest(TestNode** root)
 {
     addTest(root, &TestConstruction1, "tsutil/crestst/TestConstruction1");
     addTest(root, &TestConstruction2, "tsutil/crestst/TestConstruction2");
+    addTest(root, &TestOpenDirect, "tsutil/crestst/TestOpenDirect");
     addTest(root, &TestResourceBundles, "tsutil/crestst/TestResourceBundle");
     addTest(root, &TestFallback, "tsutil/crestst/TestFallback");
     addTest(root, &TestAliasConflict, "tsutil/crestst/TestAlias");
@@ -474,4 +476,57 @@ void TestFallback()
     status = U_ZERO_ERROR;
     
     ures_close(fr_FR);
+}
+
+static void
+TestOpenDirect(void) {
+    UResourceBundle *translit_index, *item;
+    UErrorCode errorCode;
+
+    /*
+     * test that ures_openDirect() opens a resource bundle
+     * where one can look up its own items but not fallback items
+     * from root or similar
+     */
+    errorCode=U_ZERO_ERROR;
+    translit_index=ures_openDirect(NULL, "translit_index", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("ures_openDirect(\"translit_index\") failed: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    if(0!=uprv_strcmp("translit_index", ures_getLocale(translit_index, &errorCode))) {
+        log_err("ures_openDirect(\"translit_index\").getLocale()!=translit_index\n");
+    }
+    errorCode=U_ZERO_ERROR;
+
+    /* try an item in translit_index, must work */
+    item=ures_getByKey(translit_index, "RuleBasedTransliteratorIDs", NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("translit_index.getByKey(local key) failed: %s\n", u_errorName(errorCode));
+        errorCode=U_ZERO_ERROR;
+    } else {
+        ures_close(item);
+    }
+
+    /* try an item in root, must fail */
+    item=ures_getByKey(translit_index, "Languages", NULL, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        errorCode=U_ZERO_ERROR;
+    } else {
+        log_err("translit_index.getByKey(root key) succeeded!\n");
+        ures_close(item);
+    }
+
+    ures_close(translit_index);
+
+    /* now make sure that "translit_index" will not work with ures_open() */
+    errorCode=U_ZERO_ERROR;
+    translit_index=ures_open(NULL, "translit_index", &errorCode);
+    if(U_FAILURE(errorCode) || errorCode==U_USING_DEFAULT_ERROR || errorCode==U_USING_FALLBACK_ERROR) {
+        errorCode=U_ZERO_ERROR;
+    } else {
+        log_err("ures_open(\"translit_index\") succeeded, should fail!\n");
+        ures_close(translit_index);
+    }
 }
