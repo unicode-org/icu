@@ -286,10 +286,12 @@ typedef enum {
 
 
 /**
- * Gets ICU's default locale.  This pointer and/or the contents of the pointer may
- * become invalid if the uloc_setDefault() is called, so copy the contents of the
- * pointer before calling uloc_setDefault().
- *
+ * Gets ICU's default locale.  
+ * The returned string is a snapshot in time, and will remain valid
+ *   and unchanged even when uloc_setDefault() is called.
+ *   The returned storage is owned by ICU, and must not be altered or deleted
+ *   by the caller.
+ *  
  * @return the ICU default locale
  * @system
  * @stable ICU 2.0
@@ -298,7 +300,15 @@ U_CAPI const char* U_EXPORT2
 uloc_getDefault(void);
 
 /**
- * Sets ICU's default locale.  Call this once during setup or program initialization.  
+ * Sets ICU's default locale.  
+ *    By default (without calling this function), ICU's default locale will be based
+ *    on information obtained from the underlying system environment.
+ *    <p>
+ *    Changes to ICU's default locale do not propagate back to the
+ *    system environment.
+ *    <p>
+ *    Changes to ICU's default locale to not affect any ICU services that
+ *    may already be open based on the previous default locale value.
  *
  * @param localeID the new ICU default locale. A value of NULL will try to get
  *                 the system's default locale.

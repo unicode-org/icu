@@ -325,7 +325,8 @@ public:
      * setDefault() only changes ICU's default locale ID, <strong>not</strong>
      * the default locale ID of the runtime environment.
      *
-     * @param newLocale Locale to set to.
+     * @param newLocale Locale to set to.  If NULL, set to the value obtained
+     *                  from the runtime environement.
      * @param success The error code.
      * @system
      * @stable ICU 2.0
