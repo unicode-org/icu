@@ -30,7 +30,7 @@ static void TestFwdBack(void);
 static void TestSetChar(void);
 static void TestAppendChar(void);
 
-
+void addUTF8Test(TestNode** root);
 
 void
 addUTF8Test(TestNode** root)
