@@ -47,13 +47,6 @@
 #ifndef UCNV_H
 #define UCNV_H
 
-/** Forward declaring the UConverter structure. @stable ICU 2.0 */
-struct UConverter;
-
-/** @stable ICU 2.0 */
-typedef struct UConverter UConverter;
-
-#include "unicode/utypes.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uenum.h"
 
