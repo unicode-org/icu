@@ -448,7 +448,7 @@ UnicodeString UnicodeString::unescape() const {
 }
 
 // u_unescapeAt() callback to get a UChar from a UnicodeString
-static UChar _charAt(int32_t offset, void *context) {
+U_CFUNC UChar _charAt(int32_t offset, void *context) {
     return ((UnicodeString*) context)->charAt(offset);
 }
 

@@ -291,7 +291,9 @@ u_unescape(const char *src,
  * pointer will be whatever is passed into u_unescapeAt().
  * @see u_unescapeAt
  */
+U_CDECL_BEGIN
 typedef UChar (*UNESCAPE_CHAR_AT)(int32_t offset, void *context);
+U_CDECL_END
 
 /**
  * Unescape a single sequence. The character at offset-1 is assumed
