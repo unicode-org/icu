@@ -75,7 +75,7 @@ main(int argc, char* argv[]) {
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    printf("Generating the test memory mapped file"); 
+    printf("Generating the test memory mapped file\n"); 
     createData(options[2].value);
     return 0;
 }
