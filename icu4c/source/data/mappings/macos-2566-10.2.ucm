@@ -23,7 +23,7 @@
 # Encoding description: 
 # Encoding name: Big5-HKSCS
 #
-<code_set_name>               "macos-2566-10_2"
+<code_set_name>               "macos-2566-10.2"
 <mb_cur_max>                  2
 <mb_cur_min>                  1
 <uconv_class>                 "MBCS"

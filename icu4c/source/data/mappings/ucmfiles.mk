@@ -86,7 +86,7 @@ ibm-964_P110-1999.ucm\
 ibm-1363_P110-1997.ucm\
 ibm-1381_P110-1999.ucm\
 ibm-33722_P120-1999.ucm\
-macos-2566-10_2.ucm\
+macos-2566-10.2.ucm\
 jisx-201.ucm jisx-208.ucm jisx-212.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm\
 ibm-5478_P100-1995.ucm\
