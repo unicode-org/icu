@@ -219,6 +219,9 @@ backslash:
    'G'                   n  term                                    doBackslashG
    'p'			    expr-quant                              doProperty       #   \p{Lu}  style property
    'P'			    expr-quant                              doProperty
+   'Q'                   n  term                                    doEnterQuoteMode
+   'S'                   n  expr-quant                              doBackslashS
+   's'                   n  expr-quant                              doBackslashs
    'W'                   n  expr-quant                              doBackslashW
    'w'                   n  expr-quant                              doBackslashw
    'X'                   n  expr-quant                              doBackslashX
