@@ -23,7 +23,10 @@
 #include "rblist.h"
 #include "ucbuf.h"
 
+/* One time parser initalisation */
+void initParser(void);
+
 /* Parse a ResourceBundle text file */
-struct SRBRoot* parse(UCHARBUF* buf, const char* inputDir, UErrorCode *status);
+struct SRBRoot* parse(UCHARBUF *buf, const char* inputDir, UErrorCode *status);
 
 #endif

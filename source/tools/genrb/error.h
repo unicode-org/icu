@@ -18,17 +18,22 @@
 #ifndef ERROR_H
 #define ERROR_H 1
 
-#define U_APPEND_CHAR32(c,target){\
-       if(c <= 0xffff){\
-            *(target)++ = (UChar)c;\
-       }\
-       else{\
-                c-=0x0010000;\
-				*(target)++ = (UChar)(0xd800+(UChar)(c>>10));\
-				*(target)++ = (UChar)(0xdc00+(UChar)(c&0x3ff));\
-       }\
+#define U_APPEND_CHAR32(c,target) {				\
+    if (c <= 0xffff)						\
+    {   							\
+        *(target)++ = (UChar) c;				\
+    }								\
+    else							\
+    {								\
+        c -= 0x0010000;						\
+        *(target)++ = (UChar) (0xd800 + (UChar) (c >> 10));	\
+	*(target)++ = (UChar) (0xdc00 + (UChar) (c & 0x3ff));	\
+    }								\
 }
-void setErrorText(const char *s);
-const char* getErrorText(void);
+
+extern const char *gCurrentFileName;
+
+void error   (uint32_t linenumber, const char *msg, ...);
+void warning (uint32_t linenumber, const char *msg, ...);
 
 #endif
