@@ -1257,6 +1257,45 @@ Data set name type  : PDS
     LD_LIBRARY_PATH environment variable. The ICU libraries may not link or
     load properly without doing this.</p>
 
+    <h3><a name="ImportantNotesDeprecatedAPI">Methods for enabling deprecated APIs</a></h3>
+     <h4>C</h4>
+        <p>Some deprecated C APIs can be enabled without recompiling the ICU libraries.
+           This can be achieved by defining certain symbols before including the ICU header files.
+           For example: To enable deprecated C APIs for formatting </p>
+           <code>
+            <pre style='background:#EEEEEE'>
+               #ifndef U_USE_DEPRECATED_FORMAT_API
+               #  define U_USE_DEPRECATED_FORMAT_API 1
+               #endif
+
+               #include "unicode/udat.h"
+
+               int main(){
+                  UDateFormat *def, *fr, *fr_pat ;
+                  UErrorCode status = U_ZERO_ERROR;
+                  UChar temp[30];
+
+                  fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &status);
+                  if(U_FAILURE(status)){
+                      printf("FAIL: error in creating the dateformat using full time style with french locale\n %s\n",
+                          myErrorName(status) );
+                  }
+                  /* this is supposed to open default date format, but later on it treats it like it is "en_US"
+                     - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
+                  def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &status);
+                  if(U_FAILURE(status)){
+                      .... /* handle the error */
+                  }
+              }
+             </pre>
+           </code>
+     <h4>C++</h4>
+         <p> Deprecated C++ APIs cannot be enbaled without recompiling ICU libraries.
+             Every service has a specific symbol that should be defined to enable the
+             deprecated API of that service. For example: To enable deprecated APIs in
+             Transliteration service U_USE_DEPRECATED_TRANSLITERATOR_API symbol should
+             be defined before compiling ICU.
+         </p>
     <h2><a name="UsageInformation">Getting More Information About
     ICU</a></h2>
 
