@@ -76,7 +76,7 @@ ka{
   "\u221e",
   "\ufffd",
  }
- LocaleScript{ "Goer" }
+ LocaleScript{ "Geor" }
  CollationElements {	    
     Version { "1.0" }
     Sequence { 
