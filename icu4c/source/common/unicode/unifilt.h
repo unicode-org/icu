@@ -68,11 +68,13 @@ public:
     /**
      * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
      * and return the pointer.
+     * @draft ICu 2.4
      */
     virtual UnicodeMatcher* toMatcher() const;
 
     /**
      * Implement UnicodeMatcher API.
+     * @draft ICu 2.4
      */
     virtual UMatchDegree matches(const Replaceable& text,
                                  int32_t& offset,
@@ -81,6 +83,7 @@ public:
 
     /**
      * UnicodeFunctor API.  Nothing to do.
+     * @draft ICu 2.4
      */
     virtual void setData(const TransliterationRuleData*) {}
 
