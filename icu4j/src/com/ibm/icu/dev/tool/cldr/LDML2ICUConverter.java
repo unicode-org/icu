@@ -69,8 +69,8 @@ public class LDML2ICUConverter {
     }
     
     private void usage() {
-        System.out.println("\nUsage: LDMLConverter [OPTIONS] [FILES]\n\n"+
-            "This program is used to convert XLIFF files to ICU ResourceBundle TXT files.\n"+
+        System.out.println("\nUsage: LDML2ICUConverter [OPTIONS] [FILES]\n\n"+
+            "This program is used to convert LDML files to ICU ResourceBundle TXT files.\n"+
             "Please refer to the following options. Options are not case sensitive.\n"+
             "Options:\n"+
             "-s or --sourcedir          source directory for files followed by path, default is current directory.\n" +
@@ -133,14 +133,14 @@ public class LDML2ICUConverter {
              * }
              */ 
             // TODO : uncomment 
-            fullyResolved =  LDMLUtilities.getFullyResolvedLDML(sourceDir, args[i], false, false);
+            fullyResolved =  LDMLUtilities.getFullyResolvedLDML(sourceDir, args[i], false, false, false);
             if(specialsDir!=null){
                 locName = args[i];
                 int index = locName.indexOf(".xml");
                 if(index > -1){
                     locName = locName.substring(0,index);
                 }
-                fullyResolvedSpecials = LDMLUtilities.getFullyResolvedLDML(specialsDir, args[i], false, true);
+                fullyResolvedSpecials = LDMLUtilities.getFullyResolvedLDML(specialsDir, args[i], false, true, false);
                 /*
                 try{ 
                     OutputStreamWriter writer = new
@@ -2348,7 +2348,7 @@ public class LDML2ICUConverter {
          *               before  & [before 1] x< [last variable]   <reset before="primary">x</reset><p><last_variable/></p>
          */
         /*
-         * & [first tertiary ignorable] << à    <reset><first_tertiary_ignorable/></reset><s>à</s>
+         * & [first tertiary ignorable] << \u00e1    <reset><first_tertiary_ignorable/></reset><s>?</s>
          */
         StringBuffer ret = new StringBuffer();
         
