@@ -116,20 +116,24 @@ public:
         return NumberFormat::format(obj, toAppendTo, pos, status);
     }
 
-    virtual UnicodeString& format(    double            number, 
+    /* Just use one of the format functions */
+    virtual UnicodeString& format(    double            /* number */, 
                     UnicodeString&        toAppendTo, 
-                    FieldPosition&        pos) const
+                    FieldPosition&        /* pos */) const
     {
         toAppendTo = "";
         return toAppendTo;
     }
   
-    //public Number parse(String text, ParsePosition parsePosition) 
-    //{ return new Integer(0); }
+    /*
+    public Number parse(String text, ParsePosition parsePosition) 
+    { return new Integer(0); }
+    */
   
-    virtual void parse(    const UnicodeString&    text, 
+    /* Just use one of the parse functions */
+    virtual void parse(    const UnicodeString&    /* text */, 
             Formattable&            result, 
-            ParsePosition&            parsePosition) const
+            ParsePosition&          /* parsePosition */) const
     {
         result.setLong(0L);
     }
