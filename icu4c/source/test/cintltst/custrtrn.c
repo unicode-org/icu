@@ -747,3 +747,4 @@ Test_WCHART_LongString(){
     ures_close(theBundle);    
     
 }
+
