@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/05/14 16:48:49 $ 
-* $Revision: 1.1 $
+* $Date: 2002/05/16 20:04:49 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -38,7 +38,7 @@ final class CollatorReader
     
     /**
     * <p>Protected constructor.</p>
-    * @param inputStream ICU uprop.dat file input stream
+    * @param inputStream ICU callator file input stream
     * @exception IOException throw if data file fails authentication 
     * @draft 2.1
     */
