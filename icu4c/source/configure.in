@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.152 2002/02/12 20:04:50 yves-oss Exp $
+dnl $Id: configure.in,v 1.153 2002/02/13 20:27:53 yves-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -201,6 +201,19 @@ AC_SUBST(ENABLE_STATIC)
 
 AC_PROG_RANLIB
 
+AC_MSG_CHECKING([whether to enable renaming of symbols])
+enabled=yes
+U_DISABLE_RENAMING=0
+AC_ARG_ENABLE(renaming,
+    [  --enable-renaming       add a version suffix to symbols [default=yes]],
+    [ case "${enableval}" in
+	     yes|"") enabled=yes ;;
+	     no) enabled=no; U_DISABLE_RENAMING=1 ;;
+	     *) ;;
+    esac],
+)
+AC_MSG_RESULT($enabled)
+AC_SUBST(U_DISABLE_RENAMING)
 
 dnl Check whether to use the evil rpath or not
 AC_ARG_ENABLE(rpath,
@@ -297,21 +310,6 @@ else
 fi
 
 AC_SUBST(ICU_USE_THREADS)
-
-dnl Check whether to use the renaming or not.
-U_DISABLE_RENAMING=0
-AC_MSG_CHECKING([whether to enable ICU symbols renaming])
-AC_ARG_ENABLE(renaming,
-    [  --enable-renaming       add a version suffix to ICU symbols [default=yes]],
-    [ case "${enableval}" in
-	     yes|"") enabled=yes;;
-	     no) U_DISABLE_RENAMING=1;;
-	     *) ;;
-    esac],
-    [enabled=yes]
-)
-AC_MSG_RESULT($enabled)
-AC_SUBST(U_DISABLE_RENAMING)
 
 dnl Check for mmap()
 
