@@ -257,7 +257,7 @@ public final class UScriptRun
     /**
      * Get the starting index of the current script run.
      *
-     * @returns the index of the first character in the current script run.
+     * @return the index of the first character in the current script run.
      *
      * @internal
      */
