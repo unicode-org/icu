@@ -1,7 +1,7 @@
 //
 //  regexst.h
 //
-//  Copyright (C) 2003, International Business Machines Corporation and others.
+//  Copyright (C) 2003-2004, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains declarations for the class RegexStaticSets

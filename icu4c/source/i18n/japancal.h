@@ -1,15 +1,16 @@
 /*
-* Copyright (C) 2003, International Business Machines Corporation and others. All Rights Reserved.
-********************************************************************************
-*
-* File JAPANCAL.H
-*
-* Modification History:
-*
-*   Date        Name        Description
-*   05/13/2003  srl         copied from gregocal.h
-********************************************************************************
-*/
+ * Copyright (C) 2003-2004, International Business Machines Corporation
+ * and others. All Rights Reserved.
+ ********************************************************************************
+ *
+ * File JAPANCAL.H
+ *
+ * Modification History:
+ *
+ *   Date        Name        Description
+ *   05/13/2003  srl         copied from gregocal.h
+ ********************************************************************************
+ */
 
 #ifndef JAPANCAL_H
 #define JAPANCAL_H
