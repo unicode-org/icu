@@ -18,38 +18,41 @@
 #include "unewdata.h"
 
 /* exports from makeconv.c */
-extern UBool VERBOSE;
+U_CFUNC UBool VERBOSE;
 
 /* exports from genmbcs.c */
 struct MBCSData;
 typedef struct MBCSData MBCSData;
 
-extern MBCSData *
+U_CFUNC  MBCSData *
 MBCSOpen(uint8_t maxCharLength);
 
-extern void
+U_CFUNC  void
 MBCSClose(MBCSData *mbcsData);
 
-extern UBool
+U_CFUNC  UBool
 MBCSAddState(MBCSData *mbcsData, const char *s);
 
-extern UBool
+U_CFUNC  UBool
 MBCSProcessStates(MBCSData *mbcsData);
 
-extern UBool
+U_CFUNC  UBool
 MBCSAddToUnicode(MBCSData *mbcsData,
                  const uint8_t *bytes, int32_t length,
                  UChar32 c,
                  UBool isFallback);
 
-extern UBool
+U_CFUNC  UBool
 MBCSAddFromUnicode(MBCSData *mbcsData,
                    const uint8_t *bytes, int32_t length,
                    UChar32 c,
                    UBool isFallback);
 
-extern void
+U_CFUNC  void
 MBCSPostprocess(MBCSData *mbcsData);
 
-extern uint32_t
+U_CFUNC  uint32_t
 MBCSWrite(MBCSData *mbcsData, UNewDataMemory *pData);
+
+
+
