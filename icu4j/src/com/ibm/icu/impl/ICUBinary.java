@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2002/10/09 23:53:24 $
- * $Revision: 1.7 $
+ * $Date: 2003/09/19 00:14:36 $
+ * $Revision: 1.8 $
  *  *****************************************************************************************
  */
 package com.ibm.icu.impl;
@@ -91,39 +91,42 @@ public final class ICUBinary
     {
         DataInputStream input = new DataInputStream(inputStream);
         char headersize = input.readChar();
-        headersize -= 2;
+        int readcount = 2;
         //reading the header format
         byte magic1 = input.readByte();
-        headersize --;
+        readcount ++;
         byte magic2 = input.readByte();
-        headersize --;
+        readcount ++;
         if (magic1 != MAGIC1 || magic2 != MAGIC2) {
             throw new IOException(MAGIC_NUMBER_AUTHENTICATION_FAILED_);
         }
         
         input.readChar(); // reading size
-        headersize -= 2;
+        readcount += 2;
         input.readChar(); // reading reserved word
-        headersize -= 2;
+        readcount += 2;
         byte bigendian    = input.readByte();
-        headersize --;
+        readcount ++;
         byte charset      = input.readByte();
-        headersize --;
+        readcount ++;
         byte charsize     = input.readByte();
-        headersize --;
+        readcount ++;
         input.readByte(); // reading reserved byte
-        headersize --;
+        readcount ++;
                 
         byte dataFormatID[] = new byte[4];
         input.readFully(dataFormatID);
-        headersize -= 4;
+        readcount += 4;
         byte dataVersion[] = new byte[4];
         input.readFully(dataVersion);
-        headersize -= 4;
+        readcount += 4;
         byte unicodeVersion[] = new byte[4];
         input.readFully(unicodeVersion);
-        headersize -= 4;
-        input.skipBytes(headersize);
+        readcount += 4;
+        if (headersize < readcount) {
+            throw new IOException("Internal Error: Header size error");
+        }
+        input.skipBytes(headersize - readcount);
 
         if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_
             || charsize != CHAR_SIZE_

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/08/27 22:28:45 $
-* $Revision: 1.45 $
+* $Date: 2003/09/19 00:14:37 $
+* $Revision: 1.46 $
 *
 *******************************************************************************
 */
@@ -1593,7 +1593,8 @@ public final class RuleBasedCollator extends Collator
                         }
                         init();
                         return;
-                    }else{
+                    }
+                    else {
                         // due to resource redirection ICUListResourceBundle does not
                         // raise missing resource error
                         //throw new MissingResourceException("Could not get resource for constructing RuleBasedCollator","com.ibm.icu.impl.data.LocaleElements_"+locale.toString(), "%%CollationBin");

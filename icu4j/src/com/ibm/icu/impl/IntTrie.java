@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2003/06/09 23:15:00 $
-* $Revision: 1.11 $
+* $Date: 2003/09/19 00:14:36 $
+* $Revision: 1.12 $
 *
 ******************************************************************************
 */
@@ -260,7 +260,6 @@ public class IntTrie extends Trie
             DataManipulate datamanipulate)
     {
         super(index, options, datamanipulate);
-        m_index_ = index;
         m_data_ = data;
         m_dataLength_ = m_data_.length;
         m_initialValue_ = initialvalue;
