@@ -201,10 +201,6 @@ SOURCE=.\intltest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\isocoll.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\itconv.cpp
 # End Source File
 # Begin Source File
@@ -534,10 +530,6 @@ SOURCE=.\hxuntrts.h
 # Begin Source File
 
 SOURCE=.\intltest.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\isocoll.h
 # End Source File
 # Begin Source File
 
