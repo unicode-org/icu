@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/08/07 23:53:38 $ 
-* $Revision: 1.16 $
+* $Date: 2002/08/08 23:37:53 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -215,7 +215,7 @@ public final class RuleBasedCollator extends Collator
 		builder.setRules(this);
         m_rules_ = rules;
         init();
-        initUtilIterators();
+        initUtility();
     }
     
 	// public methods --------------------------------------------------------
@@ -229,7 +229,7 @@ public final class RuleBasedCollator extends Collator
         RuleBasedCollator result = (RuleBasedCollator)super.clone();
         // since all collation data in the RuleBasedCollator do not change
         // we can safely assign the result.fields to this collator
-        result.initUtilIterators(); // let the new clone have their own util
+        result.initUtility(); // let the new clone have their own util
                                     // iterators
         return result;
     }
@@ -576,14 +576,18 @@ public final class RuleBasedCollator extends Collator
     	m_utilCompare4_ = strength >= QUATERNARY;
 		m_utilCompare5_ = strength == IDENTICAL;
 
-		byte bytes[][] = {new byte[SORT_BUFFER_INIT_SIZE_CASE_], // case
-    					new byte[SORT_BUFFER_INIT_SIZE_1_], // primary 
-						new byte[SORT_BUFFER_INIT_SIZE_2_], // secondary
-						new byte[SORT_BUFFER_INIT_SIZE_3_],	// tertiary	
-						new byte[SORT_BUFFER_INIT_SIZE_4_]	// Quaternary
-    	};
-    	int bytescount[] = {0, 0, 0, 0, 0};
-    	int count[] = {0, 0, 0, 0, 0};
+		m_utilBytesCount0_ = 0;
+        m_utilBytesCount1_ = 0;
+        m_utilBytesCount2_ = 0;
+        m_utilBytesCount3_ = 0;
+        m_utilBytesCount4_ = 0;
+        m_utilBytesCount5_ = 0;
+    	m_utilCount0_ = 0;
+        m_utilCount1_ = 0;
+        m_utilCount2_ = 0;
+        m_utilCount3_ = 0;
+        m_utilCount4_ = 0;
+        m_utilCount5_ = 0;
     	boolean doFrench = m_isFrenchCollation_ && m_utilCompare2_;
     	// TODO: UCOL_COMMON_BOT4 should be a function of qShifted. 
 	    // If we have no qShifted, we don't need to set UCOL_COMMON_BOT4 so 
@@ -612,10 +616,10 @@ public final class RuleBasedCollator extends Collator
             // enough for us to work on.
         	source = Normalizer.normalize(source,Normalizer.FCD);
     	}
-		getSortKeyBytes(source, bytes, bytescount, count, doFrench,
-						hiragana4, commonBottom4, bottomCount4);
-		byte sortkey[] = getSortKey(source, bytes, bytescount, count, 
-									doFrench, commonBottom4, bottomCount4);
+		getSortKeyBytes(source, doFrench, hiragana4, commonBottom4, 
+                        bottomCount4);
+		byte sortkey[] = getSortKey(source, doFrench, commonBottom4, 
+                                    bottomCount4);
 		return new CollationKey(source, sortkey);
     }
     		    
@@ -829,15 +833,15 @@ public final class RuleBasedCollator extends Collator
 	      	return compareBySortKeys(sourcesub, targetsub);
 	    }
 	    
-	    // Preparing the CE buffers. will be filled during the primary phase
-		int cebuffer[][] = {new int[CE_BUFFER_SIZE_], new int[CE_BUFFER_SIZE_]};
-		int cebuffersize[] = {0, 0};
 		// This is the lowest primary value that will not be ignored if shifted
 	    int lowestpvalue = m_isAlternateHandlingShifted_ 
 	    									? m_variableTopValue_ << 16 : 0;
+        m_srcUtilCEBufferSize_ = 0;
+        m_tgtUtilCEBufferSize_ = 0;
 		int result = doPrimaryCompare(doHiragana4, lowestpvalue, source, 
-										target, offset, cebuffer, cebuffersize);
-		if (cebuffer[0] == null && cebuffer[1] == null) {
+									  target, offset);
+		if (m_srcUtilCEBufferSize_ == -1 
+            && m_tgtUtilCEBufferSize_ == -1) {
 			// since the cebuffer is cleared when we have determined that
 			// either source is greater than target or vice versa, the return
 			// result is the comparison result and not the hiragana result
@@ -847,28 +851,28 @@ public final class RuleBasedCollator extends Collator
 		int hiraganaresult = result;
 		
 		if (m_utilCompare2_) {
-			result = doSecondaryCompare(cebuffer, cebuffersize, doFrench);
+			result = doSecondaryCompare(doFrench);
 			if (result != 0) {
 				return result;
 			}
 		}
 		// doing the case bit
 	    if (m_utilCompare0_) {
-	    	result = doCaseCompare(cebuffer);
+	    	result = doCaseCompare();
 			if (result != 0) {
 				return result;
 			}	
 	    }
 		// Tertiary level
 	    if (m_utilCompare3_) {
-	      	result = doTertiaryCompare(cebuffer);
+	      	result = doTertiaryCompare();
 	      	if (result != 0) {
 	      		return result;
 	      	}
 	    }
 	
 		if (doShift4) {  // checkQuad
-	      	result = doQuaternaryCompare(cebuffer, lowestpvalue);
+	      	result = doQuaternaryCompare(lowestpvalue);
 	      	if (result != 0) {
 	      		return result;
 	      	}
@@ -1344,7 +1348,7 @@ public final class RuleBasedCollator extends Collator
     */
     RuleBasedCollator() 
     {
-        initUtilIterators();
+        initUtility();
     }
     
     // package private methods -----------------------------------------------
@@ -1504,7 +1508,7 @@ public final class RuleBasedCollator extends Collator
     RuleBasedCollator(Locale locale) // throws Exception
     {
         ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-	    initUtilIterators();
+	    initUtility();
 	    if (rb != null) {
             try {
                 Object elements = rb.getObject("CollationElements");
@@ -1710,15 +1714,51 @@ public final class RuleBasedCollator extends Collator
     private boolean m_utilCompare3_;
     private boolean m_utilCompare4_;
     private boolean m_utilCompare5_; 
+    /**
+     * Utility byte buffer
+     */
+    private byte m_utilBytes0_[];
+    private byte m_utilBytes1_[];
+    private byte m_utilBytes2_[];
+    private byte m_utilBytes3_[];
+    private byte m_utilBytes4_[];
+    private byte m_utilBytes5_[];
+    
+    private int m_utilBytesCount0_;
+    private int m_utilBytesCount1_;
+    private int m_utilBytesCount2_;
+    private int m_utilBytesCount3_;
+    private int m_utilBytesCount4_;
+    private int m_utilBytesCount5_;
+    private int m_utilCount0_;
+    private int m_utilCount1_;
+    private int m_utilCount2_;
+    private int m_utilCount3_;
+    private int m_utilCount4_;
+    private int m_utilCount5_;
+    
+    private int m_utilFrenchStart_; 
+    private int m_utilFrenchEnd_;
+    
+    /** 
+     * Preparing the CE buffers. will be filled during the primary phase
+     */
+    private int m_srcUtilCEBuffer_[]; 
+    private int m_tgtUtilCEBuffer_[];
+    private int m_srcUtilCEBufferSize_;
+    private int m_tgtUtilCEBufferSize_;
+    
+    private int m_srcUtilContOffset_;
+    private int m_tgtUtilContOffset_;
+    
+    private int m_srcUtilOffset_;
+    private int m_tgtUtilOffset_;
     
     // private methods -------------------------------------------------------
     
     /**
      * Gets the 2 bytes of primary order and adds it to the primary byte array
      * @param ce current ce
-     * @param bytes array of byte arrays for each strength
-     * @param bytescount array of the size of each strength byte arrays 
-     * @param count array of counters for each of the strength
      * @param notIsContinuation flag indicating if the current bytes belong to 
      * 			a continuation ce
      * @param doShift flag indicating if ce is to be shifted
@@ -1727,8 +1767,7 @@ public final class RuleBasedCollator extends Collator
      * @param bottomCount4 smallest byte value for Quaternary
      * @return the new lead primary for compression
      */
-    private final int doPrimaryBytes(int ce, byte bytes[][], int bytescount[],
-    						      int count[], boolean notIsContinuation, 
+    private final int doPrimaryBytes(int ce, boolean notIsContinuation, 
     						      boolean doShift, int leadPrimary,
     						      int commonBottom4, int bottomCount4)
     {
@@ -1736,24 +1775,31 @@ public final class RuleBasedCollator extends Collator
     	int p2 = (ce >>= 16) & LAST_BYTE_MASK_; // in ints for unsigned 
         int p1 = ce >>> 8;  // comparison
     	if (doShift) {
-    		if (count[4] > 0) {
-            	while (count[4] > bottomCount4) {
-            		append(bytes, bytescount, 4,
-            				(byte)(commonBottom4 + bottomCount4));
-           			count[4] -= bottomCount4;
+    		if (m_utilCount4_ > 0) {
+            	while (m_utilCount4_ > bottomCount4) {
+            		m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_,
+            				             (byte)(commonBottom4 + bottomCount4));
+                    m_utilBytesCount4_ ++;
+           			m_utilCount4_ -= bottomCount4;
            		}
-           		append(bytes, bytescount, 4,
-							(byte)(commonBottom4 + (count[4] - 1)));
-           		count[4] = 0;
+           		m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_,
+							           (byte)(commonBottom4 
+                                              + (m_utilCount4_ - 1)));
+                m_utilBytesCount4_ ++;
+           		m_utilCount4_ = 0;
         	}
         	// dealing with a variable and we're treating them as shifted
             // This is a shifted ignorable
             if (p1 != 0) { 
              	// we need to check this since we could be in continuation
-             	append(bytes, bytescount, 4, (byte)p1);
+             	m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                       (byte)p1);
+                m_utilBytesCount4_ ++;
             }
             if (p2 != 0) {
-            	append(bytes, bytescount, 4, (byte)p2);
+            	m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                       (byte)p2);
+                m_utilBytesCount4_ ++;
             }
         } 
         else {
@@ -1765,18 +1811,25 @@ public final class RuleBasedCollator extends Collator
        		if (p1 != CollationElementIterator.IGNORABLE) {
            		if (notIsContinuation) {
            			if (leadPrimary == p1) {
-               			append(bytes, bytescount, 1, (byte)p2);
+               			m_utilBytes1_ = append(m_utilBytes1_, 
+                                               m_utilBytesCount1_, (byte)p2);
+                        m_utilBytesCount1_ ++;
            			} 
                   	else {
                     	if (leadPrimary != 0) {
-                    		append(bytes, bytescount, 1, 
+                    		m_utilBytes1_ = append(m_utilBytes1_, 
+                                                   m_utilBytesCount1_, 
                     				(byte)((p1 > leadPrimary) 
                     						? BYTE_UNSHIFTED_MAX_ 
                       						: BYTE_UNSHIFTED_MIN_));
+                            m_utilBytesCount1_ ++;
                     	}
                     	if (p2 == CollationElementIterator.IGNORABLE) {
                     		// one byter, not compressed
-                        	append(bytes, bytescount, 1, (byte)p1);
+                        	m_utilBytes1_ = append(m_utilBytes1_, 
+                                                   m_utilBytesCount1_, 
+                                                   (byte)p1);
+                            m_utilBytesCount1_ ++;
                         	leadPrimary = 0;
                     	} 
                     	else if (p1 < BYTE_FIRST_NON_LATIN_PRIMARY_
@@ -1788,21 +1841,37 @@ public final class RuleBasedCollator extends Collator
                                                                     >>> 24))) {
                     			// not compressible
                         		leadPrimary = 0;
-                        		append(bytes, bytescount, 1, (byte)p1);
-                        		append(bytes, bytescount, 1, (byte)p2);
+                        		m_utilBytes1_ = append(m_utilBytes1_, 
+                                                       m_utilBytesCount1_, 
+                                                       (byte)p1);
+                                m_utilBytesCount1_ ++;
+                        		m_utilBytes1_ = append(m_utilBytes1_, 
+                                                       m_utilBytesCount1_, 
+                                                       (byte)p2);
+                                m_utilBytesCount1_ ++;
                     	} 
                     	else { // compress
                     		leadPrimary = p1;
-                        	append(bytes, bytescount, 1, (byte)p1);
-                        	append(bytes, bytescount, 1, (byte)p2);
+                        	m_utilBytes1_ = append(m_utilBytes1_, 
+                                                   m_utilBytesCount1_, 
+                                                   (byte)p1);
+                        	m_utilBytesCount1_ ++;
+                            m_utilBytes1_ = append(m_utilBytes1_, 
+                                                  m_utilBytesCount1_, (byte)p2);
+                            m_utilBytesCount1_ ++;
                     	}
                   	}
                 } 
                 else { 
                 	// continuation, add primary to the key, no compression
-                  	append(bytes, bytescount, 1, (byte)p1);
+                  	m_utilBytes1_ = append(m_utilBytes1_, 
+                                           m_utilBytesCount1_, (byte)p1);
+                    m_utilBytesCount1_ ++;
                   	if (p2 != CollationElementIterator.IGNORABLE) {
-                    	append(bytes, bytescount, 1, (byte)p2); // second part
+                    	m_utilBytes1_ = append(m_utilBytes1_, 
+                                           m_utilBytesCount1_, (byte)p2); 
+                        // second part
+                        m_utilBytesCount1_ ++;
                   	}
                 }
             }
@@ -1813,71 +1882,79 @@ public final class RuleBasedCollator extends Collator
     /**
      * Gets the secondary byte and adds it to the secondary byte array
      * @param ce current ce
-     * @param bytes array of byte arrays for each strength
-     * @param bytescount array of the size of each strength byte arrays 
-     * @param count array of counters for each of the strength
      * @param notIsContinuation flag indicating if the current bytes belong to 
      * 			a continuation ce
      * @param doFrench flag indicator if french sort is to be performed
-     * @param frenchOffset start and end offsets to source string for reversing
      */
-    private final void doSecondaryBytes(int ce, byte bytes[][], 
-    								 int bytescount[], int count[], 
-    								 boolean notIsContinuation,
-    						 		 boolean doFrench, int frenchOffset[])
+    private final void doSecondaryBytes(int ce, boolean notIsContinuation,
+    						 		    boolean doFrench)
     {
     	int s = (ce >>= 8) & LAST_BYTE_MASK_; // int for comparison
     	if (s != 0) {
     		if (!doFrench) {
                 // This is compression code.
                 if (s == COMMON_2_ && notIsContinuation) {
-                   count[2] ++;
+                   m_utilCount2_ ++;
                 } 
                 else {
-                  	if (count[2] > 0) {
+                  	if (m_utilCount2_ > 0) {
                     	if (s > COMMON_2_) { // not necessary for 4th level.
-                    		while (count[2] > TOP_COUNT_2_) {
-                        		append(bytes, bytescount, 2,
+                    		while (m_utilCount2_ > TOP_COUNT_2_) {
+                        		m_utilBytes2_ = append(m_utilBytes2_,
+                                        m_utilBytesCount2_,
                         				(byte)(COMMON_TOP_2_ - TOP_COUNT_2_));
-                        		count[2] -= TOP_COUNT_2_;
+                                m_utilBytesCount2_ ++;
+                        		m_utilCount2_ -= TOP_COUNT_2_;
                       		}
-                      		append(bytes, bytescount, 2,
-                      				(byte)(COMMON_TOP_2_ - (count[2] - 1)));
+                      		m_utilBytes2_ = append(m_utilBytes2_,
+                                                   m_utilBytesCount2_,
+                      				               (byte)(COMMON_TOP_2_ 
+                                                       - (m_utilCount2_ - 1)));
+                            m_utilBytesCount2_ ++;
                     	} 
                     	else {
-                    		while (count[2] > BOTTOM_COUNT_2_) {
-                        		append(bytes, bytescount, 2,
+                    		while (m_utilCount2_ > BOTTOM_COUNT_2_) {
+                        		m_utilBytes2_ = append(m_utilBytes2_,
+                                                       m_utilBytesCount2_,
                         			(byte)(COMMON_BOTTOM_2_ + BOTTOM_COUNT_2_));
-                        		count[2] -= BOTTOM_COUNT_2_;
+                                m_utilBytesCount2_ ++;
+                        		m_utilCount2_ -= BOTTOM_COUNT_2_;
                       		}
-                      		append(bytes, bytescount, 2,
-                      				(byte)(COMMON_BOTTOM_2_ + (count[2] - 1)));
+                      		m_utilBytes2_ = append(m_utilBytes2_,
+                                                   m_utilBytesCount2_,
+                      				               (byte)(COMMON_BOTTOM_2_ 
+                                                       + (m_utilCount2_ - 1)));
+                            m_utilBytesCount2_ ++;
                     	}
-                    	count[2] = 0;
+                    	m_utilCount2_ = 0;
                   	}
-                  	append(bytes, bytescount, 2, (byte)s);
+                  	m_utilBytes2_ = append(m_utilBytes2_, m_utilBytesCount2_, 
+                                           (byte)s);
+                    m_utilBytesCount2_ ++;
                 }
             } 
             else {
-                  append(bytes, bytescount, 2, (byte)s);
+                  m_utilBytes2_ = append(m_utilBytes2_, m_utilBytesCount2_, 
+                                         (byte)s);
+                  m_utilBytesCount2_ ++;
                   // Do the special handling for French secondaries
                   // We need to get continuation elements and do intermediate 
                   // restore 
                   // abc1c2c3de with french secondaries need to be edc1c2c3ba 
                   // NOT edc3c2c1ba
                   if (notIsContinuation) {
-                    	if (frenchOffset[0] != -1) {
+                    	if (m_utilFrenchStart_ != -1) {
                         	// reverse secondaries from frenchStartPtr up to 
                         	// frenchEndPtr
-                      		reverseBuffer(bytes[2], frenchOffset);
-                      		frenchOffset[0] = -1;
+                      		reverseBuffer(m_utilBytes2_);
+                      		m_utilFrenchStart_ = -1; 
                     	}
                   } 
                   else {
-                    	if (frenchOffset[0] == -1) {
-                      		frenchOffset[0] = bytescount[2] - 2;
+                    	if (m_utilFrenchStart_ == -1) {
+                      		m_utilFrenchStart_  = m_utilBytesCount2_ - 2;
                     	}
-                    	frenchOffset[1] = bytescount[2] - 1;
+                    	m_utilFrenchEnd_ = m_utilBytesCount2_ - 1;
                   }
         	}
     	}
@@ -1886,12 +1963,11 @@ public final class RuleBasedCollator extends Collator
     /**
      * Reverse the argument buffer 
      * @param buffer to reverse
-     * @param offset start and end offsets to reverse
      */
-    private void reverseBuffer(byte buffer[], int offset[]) 
+    private void reverseBuffer(byte buffer[]) 
     { 
-    	int start = offset[0];
-    	int end = offset[1];
+    	int start = m_utilFrenchStart_;
+    	int end = m_utilFrenchEnd_;
     	while (start < end) { 
     		byte b = buffer[start]; 
     		buffer[start ++] = buffer[end]; 
@@ -1901,16 +1977,15 @@ public final class RuleBasedCollator extends Collator
 
 	/**
 	 * Insert the case shifting byte if required
-	 * @param bytes array of byte arrays corresponding to each strength
-	 * @param bytescount array of the size of the byte arrays
 	 * @param caseshift value
 	 * @return new caseshift value
 	 */
-	private static final int doCaseShift(byte bytes[][], int bytescount[],
-											 int caseshift) 
+	private final int doCaseShift(int caseshift) 
 	{
   		if (caseshift  == 0) {
-    		append(bytes, bytescount, 0, SORT_CASE_BYTE_START_);
+    		m_utilBytes0_ = append(m_utilBytes0_, m_utilBytesCount0_, 
+                                   SORT_CASE_BYTE_START_);
+            m_utilBytesCount0_ ++;
     		caseshift = SORT_CASE_SHIFT_START_;
   		}
   		return caseshift;
@@ -1919,39 +1994,38 @@ public final class RuleBasedCollator extends Collator
 	/**
 	 * Performs the casing sort
 	 * @param tertiary byte in ints for easy comparison
-	 * @param bytes of byte arrays for each strength
-     * @param bytescount array of the size of each strength byte arrays 
-     * @param notIsContinuation flag indicating if the current bytes belong to 
+	 * @param notIsContinuation flag indicating if the current bytes belong to 
      * 			a continuation ce
 	 * @param caseshift
 	 * @return the new value of case shift
 	 */
-	private final int doCaseBytes(int tertiary, byte bytes[][], 
-							   int bytescount[], boolean notIsContinuation, 
-							   int caseshift)
+	private final int doCaseBytes(int tertiary, boolean notIsContinuation, 
+							      int caseshift)
 	{
-		caseshift = doCaseShift(bytes, bytescount, caseshift);
+		caseshift = doCaseShift(caseshift);
               		
         if (notIsContinuation && tertiary != 0) {
         	byte casebits = (byte)(tertiary & 0xC0);
             if (m_caseFirst_ == AttributeValue.UPPER_FIRST_) {
                 if (casebits == 0) {
-                    bytes[0][bytescount[0] - 1] |= (1 << (-- caseshift));
+                    m_utilBytes0_[m_utilBytesCount0_ - 1] 
+                                                      |= (1 << (-- caseshift));
                 } 
                 else {
                      // second bit
-                     caseshift = doCaseShift(bytes, bytescount, caseshift - 1);
-                     bytes[0][bytescount[0] - 1] |= ((casebits >> 6) & 1) 
-                     										<< (-- caseshift);
+                     caseshift = doCaseShift(caseshift - 1);
+                     m_utilBytes0_[m_utilBytesCount0_ - 1] 
+                                    |= ((casebits >> 6) & 1) << (-- caseshift);
                 } 
             }
             else {
                 if (casebits != 0) {
-                    bytes[0][bytescount[0] - 1] |= 1 << (-- caseshift);
+                    m_utilBytes0_[m_utilBytesCount0_ - 1] 
+                                                        |= 1 << (-- caseshift);
                     // second bit
-                    caseshift = doCaseShift(bytes, bytescount, caseshift);
-                    bytes[0][bytescount[0] - 1] |= ((casebits >> 7) & 1) 
-                          									<< (-- caseshift);
+                    caseshift = doCaseShift(caseshift);
+                    m_utilBytes0_[m_utilBytesCount0_ - 1] 
+                                  |= ((casebits >> 7) & 1) << (-- caseshift);
                 }
                 else {
                     caseshift --;
@@ -1965,21 +2039,16 @@ public final class RuleBasedCollator extends Collator
 	/**
 	 * Gets the tertiary byte and adds it to the tertiary byte array
      * @param tertiary byte in int for easy comparison
-     * @param bytes array of byte arrays for each strength
-     * @param bytescount array of the size of each strength byte arrays 
-     * @param count array of counters for each of the strength
      * @param notIsContinuation flag indicating if the current bytes belong to 
      * 			a continuation ce
 	 */
-	private final void doTertiaryBytes(int tertiary, byte bytes[][], 
-									int bytescount[], int count[], 
-									boolean notIsContinuation)
+	private final void doTertiaryBytes(int tertiary, boolean notIsContinuation)
 	{
 		if (tertiary != 0) {
 			// This is compression code.
             // sequence size check is included in the if clause
             if (tertiary == m_common3_ && notIsContinuation) {
-                 count[3] ++;
+                 m_utilCount3_ ++;
             } 
             else {
             	int common3 = m_common3_ & LAST_BYTE_MASK_;
@@ -1990,64 +2059,77 @@ public final class RuleBasedCollator extends Collator
                          && m_common3_ == COMMON_UPPER_FIRST_3_) {
                     tertiary -= m_addition3_;
                 }
-                if (count[3] > 0) {
+                if (m_utilCount3_ > 0) {
                 	if (tertiary > common3) {
-                		while (count[3] > m_topCount3_) {
-                        	append(bytes, bytescount, 3, 
+                		while (m_utilCount3_ > m_topCount3_) {
+                        	m_utilBytes3_ = append(m_utilBytes3_, 
+                                                   m_utilBytesCount3_,
                         					(byte)(m_top3_ - m_topCount3_));
-                        	count[3] -= m_topCount3_;
+                            m_utilBytesCount3_ ++;
+                        	m_utilCount3_ -= m_topCount3_;
                       	}
-                      	append(bytes, bytescount, 3,
-                        		             (byte)(m_top3_ - (count[3] - 1)));
+                      	m_utilBytes3_ = append(m_utilBytes3_, 
+                                               m_utilBytesCount3_,
+                        		               (byte)(m_top3_ 
+                                                      - (m_utilCount3_ - 1)));
+                        m_utilBytesCount3_ ++;
                  	} 
                  	else {
-                 		while (count[3] > m_bottomCount3_) {
-                        	append(bytes, bytescount, 3,
-                       		          (byte)(m_bottom3_ + m_bottomCount3_));
-                        	count[3] -= m_bottomCount3_;
+                 		while (m_utilCount3_ > m_bottomCount3_) {
+                        	m_utilBytes3_ = append(m_utilBytes3_, 
+                                                   m_utilBytesCount3_,
+                       		             (byte)(m_bottom3_ + m_bottomCount3_));
+                            m_utilBytesCount3_ ++;
+                        	m_utilCount3_ -= m_bottomCount3_;
                       	}
-                      	append(bytes, bytescount, 3,
-                        		          (byte)(m_bottom3_ + (count[3] - 1)));
+                      	m_utilBytes3_ = append(m_utilBytes3_, 
+                                               m_utilBytesCount3_,
+                        		               (byte)(m_bottom3_ 
+                                                      + (m_utilCount3_ - 1)));
+                        m_utilBytesCount3_ ++;
                     }
-                    count[3] = 0;
+                    m_utilCount3_ = 0;
                 }
-                append(bytes, bytescount, 3, (byte)tertiary);
+                m_utilBytes3_ = append(m_utilBytes3_, m_utilBytesCount3_, 
+                                       (byte)tertiary);
+                m_utilBytesCount3_ ++;
             }
         }
 	}
 	
 	/**
 	 * Gets the Quaternary byte and adds it to the Quaternary byte array
-     * @param bytes array of byte arrays for each strength
-     * @param bytescount array of the size of each strength byte arrays 
-     * @param count array of counters for each of the strength
      * @param isCodePointHiragana flag indicator if the previous codepoint 
      * 			we dealt with was Hiragana
      * @param commonBottom4 smallest common Quaternary byte 
      * @param bottomCount4 smallest Quaternary byte 
      * @param hiragana4 hiragana Quaternary byte
 	 */
-	private final void doQuaternaryBytes(byte bytes[][], int bytescount[], 
-									  int count[],	
-									  boolean isCodePointHiragana,
+	private final void doQuaternaryBytes(boolean isCodePointHiragana,
 									  int commonBottom4, int bottomCount4,
 									  byte hiragana4)
 	{
 		if (isCodePointHiragana) { // This was Hiragana, need to note it
-			if (count[4] > 0) { // Close this part
-            	while (count[4] > bottomCount4) {
-                    append(bytes, bytescount, 4, (byte)(commonBottom4 
+			if (m_utilCount4_ > 0) { // Close this part
+            	while (m_utilCount4_ > bottomCount4) {
+                    m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                           (byte)(commonBottom4 
                     									+ bottomCount4));
-                    count[4] -= bottomCount4;
+                    m_utilBytesCount4_ ++;
+                    m_utilCount4_ -= bottomCount4;
                 }
-                append(bytes, bytescount, 4, (byte)(commonBottom4 
-                										+ (count[4] - 1)));
-                count[4] = 0;
+                m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                      (byte)(commonBottom4 
+                                             + (m_utilCount4_ - 1)));
+                m_utilBytesCount4_ ++;
+                m_utilCount4_ = 0;
             }
-            append(bytes, bytescount, 4, hiragana4); // Add the Hiragana
+            m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                   hiragana4); // Add the Hiragana
+            m_utilBytesCount4_ ++;
         } 
         else { // This wasn't Hiragana, so we can continue adding stuff
-            count[4] ++;
+            m_utilCount4_ ++;
         }
 	}
 	
@@ -2055,28 +2137,23 @@ public final class RuleBasedCollator extends Collator
 	 * Iterates through the argument string for all ces.
 	 * Split the ces into their relevant primaries, secondaries etc.
 	 * @param source normalized string
-	 * @param bytes an array of byte arrays corresponding to the strengths
-	 * @param bytescount an array of the size of the byte arrays
-	 * @param count array of compression counters for each strength
 	 * @param doFrench flag indicator if special handling of French has to be
 	 * 					done
 	 * @param hiragana4 offset for Hiragana quaternary
 	 * @param commonBottom4 smallest common quaternary byte
 	 * @param bottomCount4 smallest quaternary byte
 	 */
-	private final void getSortKeyBytes(String source, 
-									   byte bytes[][], int bytescount[], 
-									   int count[], boolean doFrench,
+	private final void getSortKeyBytes(String source, boolean doFrench,
 									   byte hiragana4, int commonBottom4, 
 									   int bottomCount4)
 									   
 	{
 		int backupDecomposition = getDecomposition();
 		setDecomposition(NO_DECOMPOSITION); // have to revert to backup later
-    	CollationElementIterator coleiter = 
-    							new CollationElementIterator(source, this);
-    	
-		int frenchOffset[] = {-1, -1};
+    	m_srcUtilIter_.setText(source);
+        m_srcUtilColEIter_.setText(m_srcUtilIter_);
+    	m_utilFrenchStart_ = -1; 
+        m_utilFrenchEnd_ = -1;
     	
     	// scriptorder not implemented yet 
     	// const uint8_t *scriptOrder = coll->scriptOrder;
@@ -2088,7 +2165,7 @@ public final class RuleBasedCollator extends Collator
     	int caseShift = 0;
 	    
     	while (true) {
-        	int ce = coleiter.next();
+        	int ce = m_srcUtilColEIter_.next();
             if (ce == CollationElementIterator.NULLORDER) {
             	break;
             }
@@ -2123,15 +2200,14 @@ public final class RuleBasedCollator extends Collator
                 // we should just completely ignore it
                 continue; 
             } 
-			leadPrimary = doPrimaryBytes(ce, bytes, bytescount, count, 
-									notIsContinuation, doShift, leadPrimary, 
-									commonBottom4, bottomCount4);
+			leadPrimary = doPrimaryBytes(ce, notIsContinuation, doShift, 
+                                         leadPrimary, commonBottom4, 
+                                         bottomCount4);
             if (doShift) {
                 continue;
             }
 			if (m_utilCompare2_) {
-        		doSecondaryBytes(ce, bytes, bytescount, count, 
-        						 notIsContinuation,	doFrench, frenchOffset);
+        		doSecondaryBytes(ce, notIsContinuation,	doFrench);
 			}
 
 			int t = ce & LAST_BYTE_MASK_;
@@ -2140,8 +2216,7 @@ public final class RuleBasedCollator extends Collator
             }
             	
             if (m_utilCompare0_) {
-              	caseShift = doCaseBytes(t, bytes, bytescount, 
-              							notIsContinuation, caseShift);
+              	caseShift = doCaseBytes(t, notIsContinuation, caseShift);
             }
             else if (notIsContinuation) {
                  t ^= m_caseSwitch_;
@@ -2150,20 +2225,18 @@ public final class RuleBasedCollator extends Collator
             t &= m_mask3_;
               	
             if (m_utilCompare3_) {
-            	doTertiaryBytes(t, bytes, bytescount, count, 
-            					notIsContinuation);
+            	doTertiaryBytes(t, notIsContinuation);
             }
                 
             if (m_utilCompare4_ && notIsContinuation) { // compare quad
-                doQuaternaryBytes(bytes, bytescount, count, 
-                			 	coleiter.m_isCodePointHiragana_, 
-                			 	commonBottom4, bottomCount4, hiragana4);
+                doQuaternaryBytes(m_srcUtilColEIter_.m_isCodePointHiragana_, 
+                			 	  commonBottom4, bottomCount4, hiragana4);
             }
         }
         setDecomposition(backupDecomposition); // reverts to original	
-        if (frenchOffset[0] != -1) {
+        if (m_utilFrenchStart_ != -1) {
         	// one last round of checks
-    		reverseBuffer(bytes[2], frenchOffset);
+    		reverseBuffer(m_utilBytes2_);
   		}
 	}
 	
@@ -2171,127 +2244,140 @@ public final class RuleBasedCollator extends Collator
 	 * From the individual strength byte results the final compact sortkey 
 	 * will be calculated.
 	 * @param source text string
-	 * @param bytes an array of byte arrays corresponding to the strengths
-	 * @param bytescount an array of the size of the byte arrays
-	 * @param count array of compression counters for each strength
 	 * @param doFrench flag indicating that special handling of French has to 
 	 * 					be done
 	 * @param commonBottom4 smallest common quaternary byte
 	 * @param bottomCount4 smallest quaternary byte
 	 * @return the compact sortkey
 	 */
-	private final byte[] getSortKey(String source, 
-									byte bytes[][], int bytescount[], 
-									int count[], boolean doFrench, 
+	private final byte[] getSortKey(String source, boolean doFrench, 
 									int commonBottom4, int bottomCount4)
 	{
 		// we have done all the CE's, now let's put them together to form 
       	// a key 
       	if (m_utilCompare2_) {
-        	doSecondary(bytes, bytescount, count, doFrench);
+        	doSecondary(doFrench);
       		if (m_utilCompare0_) {
-				doCase(bytes, bytescount);        
+				doCase();        
       		}
       		if (m_utilCompare3_) {
-      			doTertiary(bytes, bytescount, count);
+      			doTertiary();
       			if (m_utilCompare4_) {
-      				doQuaternary(bytes, bytescount, count, commonBottom4,
-      							 bottomCount4);
+      				doQuaternary(commonBottom4, bottomCount4);
         			if (m_utilCompare5_) {
-          				doIdentical(source, bytes, bytescount);
+          				doIdentical(source);
         			}
 
       			}
       		}
       	}
-      	append(bytes, bytescount, 1, (byte)0);
-    	return bytes[1];
+      	m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte)0);
+        m_utilBytesCount1_ ++;
+        byte result[] = (byte [])m_utilBytes1_.clone();
+    	return result;
 	}
 	
 	/**
 	 * Packs the French bytes
-	 * @param bytes array of byte arrays corresponding to strenghts
-	 * @param bytescount array of the size of byte arrays
 	 * @param count array of compression counts
 	 */
-	private final void doFrench(byte bytes[][], int bytescount[], int count[]) 
+	private final void doFrench() 
 	{
-		for (int i = 0; i < bytescount[2]; i ++) {
-			byte s = bytes[2][bytescount[2] - i - 1];
+		for (int i = 0; i < m_utilBytesCount2_; i ++) {
+			byte s = m_utilBytes2_[m_utilBytesCount2_ - i - 1];
 		    // This is compression code.
 		    if (s == COMMON_2_) {
-		      ++ count[2];
+		        ++ m_utilCount2_;
 		    } 
 		    else {
-		      	if (count[2] > 0) {
+		      	if (m_utilCount2_ > 0) {
 		      		// getting the unsigned value
 		        	if ((s & LAST_BYTE_MASK_) > COMMON_2_) { 
 		        		// not necessary for 4th level.
-		          		while (count[2] > TOP_COUNT_2_) {
-		            		append(bytes, bytescount, 1, 
+		          		while (m_utilCount2_ > TOP_COUNT_2_) {
+		            		m_utilBytes1_ = append(m_utilBytes1_,
+                                                   m_utilBytesCount1_, 
 		            					(byte)(COMMON_TOP_2_ - TOP_COUNT_2_));
-		            		count[2] -= TOP_COUNT_2_;
+                            m_utilBytesCount1_ ++;
+		            		m_utilCount2_ -= TOP_COUNT_2_;
 		          		}
-		          		append(bytes, bytescount, 1, (byte)(COMMON_TOP_2_ 
-		          											- (count[2] - 1)));
+		          		m_utilBytes1_ = append(m_utilBytes1_,
+                                               m_utilBytesCount1_, 
+                                               (byte)(COMMON_TOP_2_ 
+		          									  - (m_utilCount2_ - 1)));
+                        m_utilBytesCount1_ ++;
 		        	} 
 		        	else {
-		          		while (count[2] > BOTTOM_COUNT_2_) {
-		            		append(bytes, bytescount, 1,
+		          		while (m_utilCount2_ > BOTTOM_COUNT_2_) {
+		            		m_utilBytes1_ = append(m_utilBytes1_,
+                                                   m_utilBytesCount1_, 
 		            			(byte)(COMMON_BOTTOM_2_ + BOTTOM_COUNT_2_));
-		            		count[2] -= BOTTOM_COUNT_2_;
+                            m_utilBytesCount1_ ++;
+		            		m_utilCount2_ -= BOTTOM_COUNT_2_;
 		          		}
-		          		append(bytes, bytescount, 1, (byte)(COMMON_BOTTOM_2_ 
-		          											+ (count[2] - 1)));
+		          		m_utilBytes1_ = append(m_utilBytes1_,
+                                               m_utilBytesCount1_,  
+                                               (byte)(COMMON_BOTTOM_2_ 
+		          									  + (m_utilCount2_ - 1)));
+                        m_utilBytesCount1_ ++;
 		        	}
-		        	count[2] = 0;
+		        	m_utilCount2_ = 0;
 		      	}
-		      	append(bytes, bytescount, 1, s);
+		      	m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, s);
+                m_utilBytesCount1_ ++;
 		    }
 		}
-		if (count[2] > 0) {
-		    while (count[2] > BOTTOM_COUNT_2_) {
-		      	append(bytes, bytescount, 1, (byte)(COMMON_BOTTOM_2_ 
+		if (m_utilCount2_ > 0) {
+		    while (m_utilCount2_ > BOTTOM_COUNT_2_) {
+		      	m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                                       (byte)(COMMON_BOTTOM_2_ 
 		      										+ BOTTOM_COUNT_2_));
-		      	count[2] -= BOTTOM_COUNT_2_;
+                m_utilBytesCount1_ ++;
+		      	m_utilCount2_ -= BOTTOM_COUNT_2_;
 		    }
-		    append(bytes, bytescount, 1, (byte)(COMMON_BOTTOM_2_ 
-		    											+ (count[2] - 1)));
+		    m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                                   (byte)(COMMON_BOTTOM_2_ 
+		    										+ (m_utilCount2_ - 1)));
+            m_utilBytesCount1_ ++;
 		}
 	}
 
 	/**
 	 * Compacts the secondary bytes and stores them into the primary array
-	 * @param bytes array of byte arrays corresponding to the strengths
-	 * @param bytecount array of the size of the byte arrays
-	 * @param count array of the number of compression counts
 	 * @param doFrench flag indicator that French has to be handled specially
 	 */
-	private final void doSecondary(byte bytes[][], int bytescount[], 
-									int count[], boolean doFrench)
+	private final void doSecondary(boolean doFrench)
 	{
-		if (count[2] > 0) {
-          	while (count[2] > BOTTOM_COUNT_2_) {
-            	append(bytes, bytescount, 2, (byte)(COMMON_BOTTOM_2_ 
-            											+ BOTTOM_COUNT_2_));
-            	count[2] -= BOTTOM_COUNT_2_;
+		if (m_utilCount2_ > 0) {
+          	while (m_utilCount2_ > BOTTOM_COUNT_2_) {
+            	m_utilBytes2_ = append(m_utilBytes2_, m_utilBytesCount2_,
+                                       (byte)(COMMON_BOTTOM_2_ 
+            					 						+ BOTTOM_COUNT_2_));
+                m_utilBytesCount2_ ++;
+            	m_utilCount2_ -= BOTTOM_COUNT_2_;
           	}
-          	append(bytes, bytescount, 2, (byte)(COMMON_BOTTOM_2_ + 
-          											(count[2] - 1)));
+          	m_utilBytes2_ = append(m_utilBytes2_, m_utilBytesCount2_,
+                                   (byte)(COMMON_BOTTOM_2_ + 
+          											(m_utilCount2_ - 1)));
+            m_utilBytesCount2_ ++;
         }
         
-        append(bytes, bytescount, 1, SORT_LEVEL_TERMINATOR_);
+        m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                               SORT_LEVEL_TERMINATOR_);
+        m_utilBytesCount1_ ++;
         
         if (doFrench) { // do the reverse copy
-           	doFrench(bytes, bytescount, count);
+           	doFrench();
         } 
         else {
-        	if (bytes[1].length <= bytescount[1] + bytescount[2]) {
-        		bytes[1] = increase(bytes[1], bytescount[1], bytescount[2]);
+        	if (m_utilBytes1_.length <= m_utilBytesCount1_
+                                        + m_utilBytesCount2_) {
+        		m_utilBytes1_ = increase(m_utilBytes1_, m_utilBytesCount1_, 
+                                         m_utilBytesCount2_);
         	}
-           	System.arraycopy(bytes[2], 0, bytes[1], bytescount[1], 
-           					 bytescount[2]);
-            bytescount[1] += bytescount[2];
+           	System.arraycopy(m_utilBytes2_, 0, m_utilBytes1_, 
+                             m_utilBytesCount1_, m_utilBytesCount2_);
+            m_utilBytesCount1_ += m_utilBytesCount2_;
         } 
 	}
 	
@@ -2327,83 +2413,91 @@ public final class RuleBasedCollator extends Collator
 	
 	/**
 	 * Compacts the case bytes and stores them into the primary array
-	 * @param bytes array of byte arrays corresponding to the strengths
-	 * @param bytecount array of the size of the byte arrays
 	 */
-	private final void doCase(byte bytes[][], int bytescount[])
+	private final void doCase()
 	{
-		append(bytes, bytescount, 1, SORT_LEVEL_TERMINATOR_);
-		if (bytes[1].length <= bytescount[1] + bytescount[0]) {
-			bytes[1] = increase(bytes[1], bytescount[1], bytescount[0]);
+		m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                               SORT_LEVEL_TERMINATOR_);
+        m_utilBytesCount1_ ++;
+		if (m_utilBytes1_.length <= m_utilBytesCount1_ + m_utilBytesCount0_) {
+			m_utilBytes1_ = increase(m_utilBytes1_, m_utilBytesCount1_, 
+                                     m_utilBytesCount0_);
 		}
-		if (bytes[1].length <= bytescount[1] + bytescount[0]) {
-        	bytes[1] = increase(bytes[1], bytescount[1], bytescount[0]);
-        }
-		System.arraycopy(bytes[0], 0, bytes[1], bytescount[1], bytescount[0]);
-        bytescount[1] += bytescount[0];
+		System.arraycopy(m_utilBytes0_, 0, m_utilBytes1_, m_utilBytesCount1_, 
+                         m_utilBytesCount0_);
+        m_utilBytesCount1_ += m_utilBytesCount0_;
 	}
 	
 	/**
 	 * Compacts the tertiary bytes and stores them into the primary array
-	 * @param bytes array of byte arrays corresponding to the strengths
-	 * @param bytecount array of the size of the byte arrays
-	 * @param count array of the number of compression counts
 	 */
-	private final void doTertiary(byte bytes[][], int bytescount[], 
-									int count[])
+	private final void doTertiary()
 	{
-		if (count[3] > 0) {
+		if (m_utilCount3_ > 0) {
           	if (m_common3_ != COMMON_BOTTOM_3_) {
-          		while (count[3] >= m_topCount3_) {
-              		append(bytes, bytescount, 3, (byte)(m_top3_	
-              												- m_topCount3_));
-              		count[3] -= m_topCount3_;
+          		while (m_utilCount3_ >= m_topCount3_) {
+              		m_utilBytes3_ = append(m_utilBytes3_, m_utilBytesCount3_,
+                                           (byte)(m_top3_ - m_topCount3_));
+                    m_utilBytesCount3_ ++;
+              		m_utilCount3_ -= m_topCount3_;
             	}
-            	append(bytes, bytescount, 3, (byte)(m_top3_ - count[3]));
+            	m_utilBytes3_ = append(m_utilBytes3_, m_utilBytesCount3_, 
+                                       (byte)(m_top3_ - m_utilCount3_));
+                m_utilBytesCount3_ ++;
           	} 
           	else {
-          		while (count[3] > m_bottomCount3_) {
-              		append(bytes, bytescount, 3, (byte)(m_bottom3_ 
+          		while (m_utilCount3_ > m_bottomCount3_) {
+              		m_utilBytes3_ = append(m_utilBytes3_, m_utilBytesCount3_, 
+                                           (byte)(m_bottom3_ 
               											+ m_bottomCount3_));
-              		count[3] -= m_bottomCount3_;
+                    m_utilBytesCount3_ ++;
+              		m_utilCount3_ -= m_bottomCount3_;
             	}
-            	append(bytes, bytescount, 3, (byte)(m_bottom3_ 
-            											+ (count[3] - 1)));
+            	m_utilBytes3_ = append(m_utilBytes3_, m_utilBytesCount3_, 
+                                       (byte)(m_bottom3_ 
+            								  + (m_utilCount3_ - 1)));
+                m_utilBytesCount3_ ++;
           	}
         }
-        append(bytes, bytescount, 1, SORT_LEVEL_TERMINATOR_);
-        if (bytes[1].length <= bytescount[1] + bytescount[3]) {
-        	bytes[1] = increase(bytes[1], bytescount[1], bytescount[3]);
+        m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                               SORT_LEVEL_TERMINATOR_);
+        m_utilBytesCount1_ ++;
+        if (m_utilBytes1_.length <= m_utilBytesCount1_ + m_utilBytesCount3_) {
+        	m_utilBytes1_ = increase(m_utilBytes1_, m_utilBytesCount1_, 
+                                     m_utilBytesCount3_);
         }
-        System.arraycopy(bytes[3], 0, bytes[1], bytescount[1], bytescount[3]);
-        bytescount[1] += bytescount[3];
+        System.arraycopy(m_utilBytes3_, 0, m_utilBytes1_, m_utilBytesCount1_, 
+                         m_utilBytesCount3_);
+        m_utilBytesCount1_ += m_utilBytesCount3_;
 	}
 	
 	/**
 	 * Compacts the quaternary bytes and stores them into the primary array
-	 * @param bytes array of byte arrays corresponding to the strengths
-	 * @param bytecount array of the size of the byte arrays
-	 * @param count array of compression counts
 	 */
-	private final void doQuaternary(byte bytes[][], int bytescount[], 
-									int count[], int commonbottom4, 
-									int bottomcount4)
+	private final void doQuaternary(int commonbottom4, int bottomcount4)
 	{
-		if (count[4] > 0) {
-            while (count[4] > bottomcount4) {
-                append(bytes, bytescount, 4, (byte)(commonbottom4 
-                									+ bottomcount4));
-                count[4] -= bottomcount4;
+		if (m_utilCount4_ > 0) {
+            while (m_utilCount4_ > bottomcount4) {
+                m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                       (byte)(commonbottom4 + bottomcount4));
+                m_utilBytesCount4_ ++;
+                m_utilCount4_ -= bottomcount4;
             }
-            append(bytes, bytescount, 4, (byte)(commonbottom4
-            									+ (count[4] - 1)));
+            m_utilBytes4_ = append(m_utilBytes4_, m_utilBytesCount4_, 
+                                   (byte)(commonbottom4
+            									+ (m_utilCount4_ - 1)));
+            m_utilBytesCount4_ ++;
         }
-        append(bytes, bytescount, 1, SORT_LEVEL_TERMINATOR_);
-        if (bytes[1].length <= bytescount[1] + bytescount[4]) {
-        	bytes[1] = increase(bytes[1], bytescount[1], bytescount[4]);
+        m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                               SORT_LEVEL_TERMINATOR_);
+        m_utilBytesCount1_ ++;
+        if (m_utilBytes1_.length <= m_utilBytesCount1_ + m_utilBytesCount4_) {
+        	m_utilBytes1_ = increase(m_utilBytes1_, m_utilBytesCount1_, 
+                                     m_utilBytesCount4_);
         }
-        System.arraycopy(bytes[4], 0, bytes[1], bytescount[1], bytescount[4]);
-        bytescount[1] += bytescount[4];
+        System.arraycopy(m_utilBytes4_, 0, m_utilBytes1_, m_utilBytesCount1_, 
+                         m_utilBytesCount4_);
+        m_utilBytesCount1_ += m_utilBytesCount4_;
 	}
 	
 	/**
@@ -2411,18 +2505,19 @@ public final class RuleBasedCollator extends Collator
 	 * Appends the BOCSU version of the source string to the ends of the
 	 * byte buffer.
 	 * @param source text string
-	 * @param bytes array of a byte array corresponding to the strengths
-	 * @param bytescount array of the byte array size
 	 */
-	private final void doIdentical(String source, byte bytes[][], 
-								   int bytescount[])
+	private final void doIdentical(String source)
 	{
 		int isize = BOCU.getCompressionLength(source);
-		append(bytes, bytescount, 1, SORT_LEVEL_TERMINATOR_);
-		if (bytes[1].length <= bytescount[1] + isize) {
-        	bytes[1] = increase(bytes[1], bytescount[1], 1 + isize);
+		m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, 
+                               SORT_LEVEL_TERMINATOR_);
+        m_utilBytesCount1_ ++;
+		if (m_utilBytes1_.length <= m_utilBytesCount1_ + isize) {
+        	m_utilBytes1_ = increase(m_utilBytes1_, m_utilBytesCount1_, 
+                                     1 + isize);
         }
-        bytescount[1] = BOCU.compress(source, bytes[1], bytescount[1]); 
+        m_utilBytesCount1_ = BOCU.compress(source, m_utilBytes1_, 
+                                           m_utilBytesCount1_); 
 	}
 	
 	/**
@@ -2494,21 +2589,19 @@ public final class RuleBasedCollator extends Collator
 	 * Appending an byte to an array of bytes and increases it if we run out of 
 	 * space
 	 * @param array of byte arrays
-	 * @param array of the end offsets corresponding to array
-	 * @param appendarrayindex of the int array to append
+	 * @param appendindex index in the byte array to append
 	 * @param value to append
+     * @return array if array size can accomodate the new value, otherwise
+     *         a bigger array will be created and returned
 	 */
-	private static final void append(byte array[][], int arrayoffset[], 
-										int appendarrayindex, byte value)
+	private static final byte[] append(byte array[], int appendindex, 
+                                       byte value)
 	{
-		if (arrayoffset[appendarrayindex] + 1 
-			>= array[appendarrayindex].length) {
-			array[appendarrayindex] = increase(array[appendarrayindex],	
-											   arrayoffset[appendarrayindex],
-											   SORT_BUFFER_INIT_SIZE_);
+		if (appendindex + 1 >= array.length) {
+			array = increase(array,	appendindex, SORT_BUFFER_INIT_SIZE_);
 		}			
-		array[appendarrayindex][arrayoffset[appendarrayindex]] = value;
-		arrayoffset[appendarrayindex] ++;
+		array[appendindex] = value;
+        return array;
 	}
 	
 	/** 
@@ -2543,27 +2636,19 @@ public final class RuleBasedCollator extends Collator
 	 * @param source text string
 	 * @param target text string
 	 * @param textoffset offset in text to start the comparison
-	 * @param cebuffer array of CE buffers to populate, offset 0 for source, 
-	 * 					1 for target, cleared when a primary difference is 
-	 * 					found.
-	 * @param cebuffersize array of CE buffer size corresponding to the 
-	 * 						cebuffer, 0 when a primary difference is found.
 	 * @return comparion result if a primary difference is found, otherwise
 	 * 						hiragana result
 	 */
 	private final int doPrimaryCompare(boolean doHiragana4, int lowestpvalue,
 										String source, String target, 
-										int textoffset, int cebuffer[][], 
-									   	int cebuffersize[])
+										int textoffset)
 									   	
 	{
 		// Preparing the context objects for iterating over strings
         m_srcUtilIter_.setText(source);
-        m_srcUtilColEIter_.setText(m_srcUtilIter_);
-        m_srcUtilColEIter_.setExactOffset(textoffset);
+        m_srcUtilColEIter_.setText(m_srcUtilIter_, textoffset);
         m_tgtUtilIter_.setText(target);
-        m_tgtUtilColEIter_.setText(m_tgtUtilIter_);
-        m_tgtUtilColEIter_.setExactOffset(textoffset);
+        m_tgtUtilColEIter_.setText(m_tgtUtilIter_, textoffset);
 		
 		// Non shifted primary processing is quite simple
 	    if (!m_isAlternateHandlingShifted_) {
@@ -2573,21 +2658,25 @@ public final class RuleBasedCollator extends Collator
 				// We fetch CEs until we hit a non ignorable primary or end.
 	        	do {
 	          		sorder = m_srcUtilColEIter_.next();
-	          		append(cebuffer, cebuffersize, 0, sorder);
+	          		m_srcUtilCEBuffer_ = append(m_srcUtilCEBuffer_, 
+                                                m_srcUtilCEBufferSize_, sorder);
+                    m_srcUtilCEBufferSize_ ++;
 	          		sorder &= CE_PRIMARY_MASK_;
 	        	} while (sorder == CollationElementIterator.IGNORABLE);
 	
 				int torder = 0;
 	        	do {
 	          		torder = m_tgtUtilColEIter_.next();
-	          		append(cebuffer, cebuffersize, 1, torder);
+	          		m_tgtUtilCEBuffer_ = append(m_tgtUtilCEBuffer_, 
+                                                m_tgtUtilCEBufferSize_, torder);
+                    m_tgtUtilCEBufferSize_ ++;
 	          		torder &= CE_PRIMARY_MASK_;
 	        	} while (torder == CollationElementIterator.IGNORABLE);
 	
 	        	// if both primaries are the same
 	        	if (sorder == torder) {
 	            	// and there are no more CEs, we advance to the next level
-	            	if (cebuffer[0][cebuffersize[0] - 1] 
+	            	if (m_srcUtilCEBuffer_[m_srcUtilCEBufferSize_ - 1] 
 	            					== CollationElementIterator.NULLORDER) {
 	              		break;
 	            	}
@@ -2604,8 +2693,7 @@ public final class RuleBasedCollator extends Collator
 	        	} 
 	        	else {
 	            	// if two primaries are different, we are done
-	            	return endPrimaryCompare(sorder, torder, cebuffer, 
-	            								cebuffersize);
+	            	return endPrimaryCompare(sorder, torder);
 	        	}
 	      	} 
 	      	// no primary difference... do the rest from the buffers
@@ -2614,13 +2702,11 @@ public final class RuleBasedCollator extends Collator
 	    else { // shifted - do a slightly more complicated processing :)
 	      	while (true) {
 	        	int sorder = getPrimaryShiftedCompareCE(m_srcUtilColEIter_, 
-                                                    lowestpvalue, 
-	        										cebuffer, cebuffersize, 0);
+                                                        lowestpvalue, true);
 				int torder = getPrimaryShiftedCompareCE(m_tgtUtilColEIter_, 
-                                                    lowestpvalue, 
-													cebuffer, cebuffersize, 1);
+                                                        lowestpvalue, false);
 	        	if (sorder == torder) {
-	            	if (cebuffer[0][cebuffersize[0] - 1] 
+	            	if (m_srcUtilCEBuffer_[m_srcUtilCEBufferSize_ - 1] 
 	            			== CollationElementIterator.NULLORDER) {
 	              		break;
 	            	} 
@@ -2629,8 +2715,7 @@ public final class RuleBasedCollator extends Collator
 	            	}
 	        	} 
 	        	else {
-	    			return endPrimaryCompare(sorder, torder, cebuffer, 
-	    														cebuffersize);
+	    			return endPrimaryCompare(sorder, torder);
 	        	}
 	      	} // no primary difference... do the rest from the buffers
 	    }
@@ -2644,24 +2729,20 @@ public final class RuleBasedCollator extends Collator
 	 * Clears the cebuffer at the same time.
 	 * @param sorder source strength order
 	 * @param torder target strength order
-	 * @param cebuffer array of buffers containing the ce values
-	 * @param cebuffersize array of cebuffer offsets
 	 * @return the comparison result of sorder and torder
 	 */
-	private static final int endPrimaryCompare(int sorder, int torder, 
-										       int cebuffer[][], 
-										       int cebuffersize[])
+	private final int endPrimaryCompare(int sorder, int torder)
 	{
 		// if we reach here, the ce offset accessed is the last ce
 		// appended to the buffer
-		boolean isSourceNullOrder = (cebuffer[0][cebuffersize[0] - 1] 
+		boolean isSourceNullOrder = (m_srcUtilCEBuffer_[
+                                                    m_srcUtilCEBufferSize_ - 1] 
 			 							== CollationElementIterator.NULLORDER);
-		boolean isTargetNullOrder = (cebuffer[1][cebuffersize[1] - 1] 
+		boolean isTargetNullOrder = (m_tgtUtilCEBuffer_[
+                                                    m_tgtUtilCEBufferSize_ - 1] 
 			 							== CollationElementIterator.NULLORDER);	 					
-		cebuffer[0] = null;
-	    cebuffer[1] = null;
-	    cebuffersize[0] = 0;
-	    cebuffersize[1] = 0;
+		m_srcUtilCEBufferSize_ = -1;
+	    m_tgtUtilCEBufferSize_ = -1;
 	    if (isSourceNullOrder) {
 	    	return -1;
 	    }
@@ -2685,23 +2766,26 @@ public final class RuleBasedCollator extends Collator
 	 * 						handled
 	 * @param lowestpvalue lowest primary shifted value that will not be 
 	 * 						ignored
-	 * @param cebuffer array of buffers to append with the next ce
-	 * @param cebuffersize array of offsets corresponding to the cebuffer
-	 * @param cebufferindex index of the buffer to append to
 	 * @return result next modified ce 
 	 */
-	private final static int getPrimaryShiftedCompareCE(
+	private final int getPrimaryShiftedCompareCE(
 										CollationElementIterator coleiter,
-										int lowestpvalue, int cebuffer[][], 
-										int cebuffersize[],	int cebufferindex)
+										int lowestpvalue, boolean isSrc)
 										
 	{
 		boolean shifted = false;
 		int result = CollationElementIterator.IGNORABLE;
+        int cebuffer[] = m_srcUtilCEBuffer_;
+        int cebuffersize = m_srcUtilCEBufferSize_;
+        if (!isSrc) {
+            cebuffer = m_tgtUtilCEBuffer_;
+            cebuffersize = m_tgtUtilCEBufferSize_;
+        }
 	    while (true) {
 	        result = coleiter.next();
 	        if (result == CollationElementIterator.NULLORDER) {
-	            append(cebuffer, cebuffersize, cebufferindex, result);
+	            cebuffer = append(cebuffer, cebuffersize, result);
+                cebuffersize ++;
 	            break;
 	        } 
 	        else if (result == CollationElementIterator.IGNORABLE
@@ -2720,41 +2804,55 @@ public final class RuleBasedCollator extends Collator
 	                	result = (result & CE_PRIMARY_MASK_) 
 	                						| CE_CONTINUATION_MARKER_; 
 	                	// preserve interesting continuation
-	                	append(cebuffer, cebuffersize, cebufferindex, result);
+	                	cebuffer = append(cebuffer, cebuffersize, result);
+                        cebuffersize ++;
 	           			continue;
 	        		} 
 	        		else {
-	           			append(cebuffer, cebuffersize, cebufferindex, result);
+	           			cebuffer = append(cebuffer, cebuffersize, result);
+                        cebuffersize ++;
 	                	break;
 	              	}
 	            } 
 	            else { // Just lower level values
 	            	if (!shifted) {
-	            		append(cebuffer, cebuffersize, cebufferindex, result);
+	            		cebuffer = append(cebuffer, cebuffersize, result);
+                        cebuffersize ++;
 	              	}
 	            }
 	        } 
 	        else { // regular
                 if (Utility.compareUnsigned(result & CE_PRIMARY_MASK_, 
                                             lowestpvalue) > 0) {
-	             	append(cebuffer, cebuffersize, cebufferindex, result);
+	             	cebuffer = append(cebuffer, cebuffersize, result);
+                    cebuffersize ++;
 	             	break;
 	            } 
 	            else {
 	            	if ((result & CE_PRIMARY_MASK_) != 0) {
 	                	shifted = true;
 	                	result &= CE_PRIMARY_MASK_;
-	                	append(cebuffer, cebuffersize, cebufferindex, result);
+	                	cebuffer = append(cebuffer, cebuffersize, result);
+                        cebuffersize ++;
 	                	continue;
 	              	} 
 	              	else {
-	                	append(cebuffer, cebuffersize, cebufferindex, result);
+	                	cebuffer = append(cebuffer, cebuffersize, result);
+                        cebuffersize ++;
 	                	shifted = false;
 	                	continue;
 	              	}
 	            }
 	        }
 	    }
+        if (isSrc) {
+            m_srcUtilCEBuffer_ = cebuffer;
+            m_srcUtilCEBufferSize_ = cebuffersize;
+        }
+        else {
+            m_tgtUtilCEBuffer_ = cebuffer;
+            m_tgtUtilCEBufferSize_ = cebuffersize;
+        }
 	    result &= CE_PRIMARY_MASK_;
 	    return result;
 	}
@@ -2763,34 +2861,26 @@ public final class RuleBasedCollator extends Collator
 	 * Appending an int to an array of ints and increases it if we run out of 
 	 * space
 	 * @param array of int arrays
-	 * @param array of the end offsets corresponding to array
-	 * @param appendarrayindex of the int array to append
+	 * @param appendindex index at which value will be appended
 	 * @param value to append
+     * @return array if size is not increased, otherwise a new array will be 
+     *         returned
 	 */
-	private static final void append(int array[][], int arrayoffset[], 
-										int appendarrayindex, int value)
+	private static final int[] append(int array[], int appendindex, int value)
 	{
-		if (arrayoffset[appendarrayindex] + 1 
-			>= array[appendarrayindex].length) {
-			array[appendarrayindex] = increase(array[appendarrayindex],
-												arrayoffset[appendarrayindex],		
-												CE_BUFFER_SIZE_);
+		if (appendindex + 1 >= array.length) {
+			array = increase(array, appendindex, CE_BUFFER_SIZE_);
 		}			
-		array[appendarrayindex][arrayoffset[appendarrayindex]] = value;
-		arrayoffset[appendarrayindex] ++;
+		array[appendindex] = value;
+        return array;
 	}
 	
 	/**
 	 * Does secondary strength comparison based on the collected ces.
-	 * @param cebuffer array of int arrays that contains the collected ces
-	 * @param cebuffersize array of offsets corresponding to the cebuffer,
-	 *							indicates the offset of the last ce in buffer
 	 * @param doFrench flag indicates if French ordering is to be done
 	 * @return the secondary strength comparison result
 	 */
-	private static final int doSecondaryCompare(int cebuffer[][], 
-												int cebuffersize[],
-												boolean doFrench)
+	private final int doSecondaryCompare(boolean doFrench)
 	{
 		// now, we're gonna reexamine collected CEs
 	    if (!doFrench) { // normal
@@ -2799,25 +2889,27 @@ public final class RuleBasedCollator extends Collator
 	        while (true) {
 	        	int sorder = CollationElementIterator.IGNORABLE;
 	          	while (sorder == CollationElementIterator.IGNORABLE) {
-	            	sorder = cebuffer[0][soffset ++] & CE_SECONDARY_MASK_;
+	            	sorder = m_srcUtilCEBuffer_[soffset ++] 
+                             & CE_SECONDARY_MASK_;
 	          	}
 				int torder = CollationElementIterator.IGNORABLE;
 	          	while (torder == CollationElementIterator.IGNORABLE) {
-	          		torder = cebuffer[1][toffset ++] & CE_SECONDARY_MASK_;
+	          		torder = m_tgtUtilCEBuffer_[toffset ++] 
+                             & CE_SECONDARY_MASK_;
 	          	}
 	
 	          	if (sorder == torder) {
-	            	if (cebuffer[0][soffset - 1]  
+	            	if (m_srcUtilCEBuffer_[soffset - 1]  
 	            					== CollationElementIterator.NULLORDER) {
 	              		break;
 	            	}
 	          	} 
 	          	else {
-	          		if (cebuffer[0][soffset - 1] == 
+	          		if (m_srcUtilCEBuffer_[soffset - 1] == 
 	          				CollationElementIterator.NULLORDER) {
 	          			return -1;
 	          		}
-	          		if (cebuffer[1][toffset - 1] == 
+	          		if (m_tgtUtilCEBuffer_[toffset - 1] == 
 	          				CollationElementIterator.NULLORDER) {
 	          			return 1;
 	          		}
@@ -2826,16 +2918,16 @@ public final class RuleBasedCollator extends Collator
 	        }
 	    } 
 	    else { // do the French 
-	    	int continuationoffset[] = {0, 0};
-	    	int offset[] = {cebuffersize[0] - 2, cebuffersize[1] - 2} ; 
+	    	m_srcUtilContOffset_ = 0;
+            m_tgtUtilContOffset_ = 0;
+            m_srcUtilOffset_ = m_srcUtilCEBufferSize_ - 2; 
+            m_tgtUtilOffset_ = m_tgtUtilCEBufferSize_ - 2; 
 	        while (true) {
-	        	int sorder = getSecondaryFrenchCE(cebuffer, offset, 
-	        										continuationoffset, 0);
-	        	int torder = getSecondaryFrenchCE(cebuffer, offset, 
-	        										continuationoffset, 1);
+	        	int sorder = getSecondaryFrenchCE(true);
+	        	int torder = getSecondaryFrenchCE(false);
 	          	if (sorder == torder) {
-	            	if ((offset[0] < 0 && offset[1] < 0) 
-	            		|| cebuffer[0][offset[0]] 
+	            	if ((m_srcUtilOffset_ < 0 && m_tgtUtilOffset_ < 0) 
+	            		|| m_srcUtilCEBuffer_[m_srcUtilOffset_] 
 	            					== CollationElementIterator.NULLORDER) {
 	              		break;
 	            	} 
@@ -2850,53 +2942,62 @@ public final class RuleBasedCollator extends Collator
 	
 	/**
 	 * Calculates the next secondary french CE.
-	 * @param cebuffer array of buffers to append with the next ce
-	 * @param offset array of offsets corresponding to the cebuffer
-	 * @param continuationoffset index of the start of a continuation
-	 * @param index of cebuffer to use
+	 * @param isSrc flag indicator if we are calculating the src ces
 	 * @return result next modified ce
 	 */
-	private static final int getSecondaryFrenchCE(int cebuffer[][], 
-												  int offset[], 
-												  int continuationoffset[],
-												  int index)
+	private final int getSecondaryFrenchCE(boolean isSrc)
 	{
 		int result = CollationElementIterator.IGNORABLE;
+        int offset = m_srcUtilOffset_;
+        int continuationoffset = m_srcUtilContOffset_;
+        int cebuffer[] = m_srcUtilCEBuffer_;
+        if (!isSrc) {
+            offset = m_tgtUtilOffset_;
+            continuationoffset = m_tgtUtilContOffset_;
+            cebuffer = m_tgtUtilCEBuffer_;
+        }
+        
 	    while (result == CollationElementIterator.IGNORABLE 
-	    		&& offset[index] >= 0) {
-	        if (continuationoffset[index] == 0) {
-	        	result = cebuffer[index][offset[index]];
-		        while (isContinuation(cebuffer[index][offset[index] --]));
-		            // after this, sorder is at the start of continuation, 
-		            // and offset points before that 
-		            if (isContinuation(cebuffer[index][offset[index] + 1])) {
-		            	// save offset for later
-		            	continuationoffset[index] = offset[index]; 
-		            	offset[index] += 2;  
-		           	}
-	        	//}
+	    		&& offset >= 0) {
+	        if (continuationoffset == 0) {
+	        	result = cebuffer[offset];
+		        while (isContinuation(cebuffer[offset --]));
+		        // after this, sorder is at the start of continuation, 
+		        // and offset points before that 
+		        if (isContinuation(cebuffer[offset + 1])) {
+		        	// save offset for later
+		        	continuationoffset = offset; 
+		        	offset += 2;  
+		        }
 	        }
 	        else {
-	        	result = cebuffer[index][offset[index] ++];
+	        	result = cebuffer[offset ++];
 	        	if (!isContinuation(result)) { 
 	        		// we have finished with this continuation
-	           		offset[index] = continuationoffset[index];
+	           		offset = continuationoffset;
 	           		// reset the pointer to before continuation 
-	           		continuationoffset[index] = 0;
+	           		continuationoffset = 0;
 	           		continue;
 	        	}
 	        }
 	        result &= CE_SECONDARY_MASK_; // remove continuation bit        
-	    }    
+	    }  
+        if (isSrc) {
+            m_srcUtilOffset_ = offset;
+            m_srcUtilContOffset_ = continuationoffset;
+        }  
+        else {
+            m_tgtUtilOffset_ = offset;
+            m_tgtUtilContOffset_ = continuationoffset;
+        }
 	    return result;
 	}
 	
 	/**
 	 * Does case strength comparison based on the collected ces.
-	 * @param cebuffer array of int arrays that contains the collected ces
 	 * @return the case strength comparison result
 	 */
-	private final int doCaseCompare(int cebuffer[][])
+	private final int doCaseCompare()
 	{
 		int soffset = 0;
 		int toffset = 0;
@@ -2905,7 +3006,7 @@ public final class RuleBasedCollator extends Collator
 	        int torder = CollationElementIterator.IGNORABLE;
 	        while ((sorder & CE_REMOVE_CASE_) 
 	        						== CollationElementIterator.IGNORABLE) {
-	        	sorder = cebuffer[0][soffset ++];
+	        	sorder = m_srcUtilCEBuffer_[soffset ++];
 	          	if (!isContinuation(sorder)) {
 	            	sorder &= CE_CASE_MASK_3_;
 	            	sorder ^= m_caseSwitch_;
@@ -2917,7 +3018,7 @@ public final class RuleBasedCollator extends Collator
 	
 	        while ((torder & CE_REMOVE_CASE_) 
 	        						== CollationElementIterator.IGNORABLE) {
-	        	torder = cebuffer[1][toffset ++];
+	        	torder = m_tgtUtilCEBuffer_[toffset ++];
 	          	if (!isContinuation(torder)) {
 	            	torder &= CE_CASE_MASK_3_;
 	            	torder ^= m_caseSwitch_;
@@ -2930,17 +3031,17 @@ public final class RuleBasedCollator extends Collator
             sorder &= CE_CASE_BIT_MASK_;
             torder &= CE_CASE_BIT_MASK_;
 			if (sorder == torder) {
-				if (cebuffer[0][soffset - 1] 
+				if (m_srcUtilCEBuffer_[soffset - 1] 
 										== CollationElementIterator.NULLORDER) {
 	          		break;
 	        	} 
 			}
 			else {
-	        	if (cebuffer[0][soffset - 1] 
+	        	if (m_srcUtilCEBuffer_[soffset - 1] 
 	        						== CollationElementIterator.NULLORDER) {
 	          		return -1;
 	        	}
-                if (cebuffer[1][soffset - 1] 
+                if (m_tgtUtilCEBuffer_[soffset - 1] 
                                     == CollationElementIterator.NULLORDER) {
                     return 1;
                 }
@@ -2952,10 +3053,9 @@ public final class RuleBasedCollator extends Collator
 	
 	/**
 	 * Does tertiary strength comparison based on the collected ces.
-	 * @param cebuffer array of int arrays that contains the collected ces
 	 * @return the tertiary strength comparison result
 	 */
-	private final int doTertiaryCompare(int cebuffer[][])
+	private final int doTertiaryCompare()
 	{
 		int soffset = 0;
 	    int toffset = 0;
@@ -2964,7 +3064,7 @@ public final class RuleBasedCollator extends Collator
 	    	int torder = CollationElementIterator.IGNORABLE;
 	        while ((sorder & CE_REMOVE_CASE_) 
 	        					== CollationElementIterator.IGNORABLE) {
-	          	sorder = cebuffer[0][soffset ++] & m_mask3_;
+	          	sorder = m_srcUtilCEBuffer_[soffset ++] & m_mask3_;
 	          	if (!isContinuation(sorder)) {
 	            	sorder ^= m_caseSwitch_;
 	          	} 
@@ -2975,7 +3075,7 @@ public final class RuleBasedCollator extends Collator
 	
 			while ((torder & CE_REMOVE_CASE_) 
 	        					== CollationElementIterator.IGNORABLE) {
-	          	torder = cebuffer[1][toffset ++] & m_mask3_;
+	          	torder = m_tgtUtilCEBuffer_[toffset ++] & m_mask3_;
 	          	if (!isContinuation(torder)) {
 	            	torder ^= m_caseSwitch_;
 	          	} 
@@ -2985,17 +3085,17 @@ public final class RuleBasedCollator extends Collator
 	        }        
 	
 	        if (sorder == torder) {
-	          	if (cebuffer[0][soffset - 1] 
+	          	if (m_srcUtilCEBuffer_[soffset - 1] 
 	          						== CollationElementIterator.NULLORDER) {
 	            	break;
 	          	} 
 	        } 
 	        else {
-	        	if (cebuffer[0][soffset - 1] == 
+	        	if (m_srcUtilCEBuffer_[soffset - 1] == 
 	          							CollationElementIterator.NULLORDER) {
 	          		return -1;
 	          	}
-	          	if (cebuffer[1][toffset - 1] == 
+	          	if (m_tgtUtilCEBuffer_[toffset - 1] == 
 	          				CollationElementIterator.NULLORDER) {
 	          		return 1;
 	          	}
@@ -3007,12 +3107,11 @@ public final class RuleBasedCollator extends Collator
 	
 	/**
 	 * Does quaternary strength comparison based on the collected ces.
-	 * @param cebuffer array of int arrays that contains the collected ces
 	 * @param lowestpvalue the lowest primary value that will not be ignored if 
 	 * 						alternate handling is shifted
 	 * @return the quaternary strength comparison result
 	 */
-	private final int doQuaternaryCompare(int cebuffer[][], int lowestpvalue)
+	private final int doQuaternaryCompare(int lowestpvalue)
 	{
 		boolean sShifted = true;
 	    boolean tShifted = true;
@@ -3023,7 +3122,7 @@ public final class RuleBasedCollator extends Collator
 	    	int torder = CollationElementIterator.IGNORABLE;
 	        while (sorder == CollationElementIterator.IGNORABLE
 	        		|| (isContinuation(sorder) && !sShifted)) {
-	          	sorder = cebuffer[0][soffset ++];
+	          	sorder = m_srcUtilCEBuffer_[soffset ++];
 	          	if (isContinuation(sorder)) {
 	            	if (!sShifted) {
 	              		continue;
@@ -3043,7 +3142,7 @@ public final class RuleBasedCollator extends Collator
 	        sorder >>>= CE_PRIMARY_SHIFT_;
 			while (torder == CollationElementIterator.IGNORABLE 
 	        		|| (isContinuation(torder) && !tShifted)) {
-	          	torder = cebuffer[1][toffset ++];
+	          	torder = m_tgtUtilCEBuffer_[toffset ++];
 	          	if (isContinuation(torder)) {
 	            	if (!tShifted) {
 	              		continue;
@@ -3063,17 +3162,17 @@ public final class RuleBasedCollator extends Collator
 	        torder >>>= CE_PRIMARY_SHIFT_;
 	
 	        if (sorder == torder) {
-	          	if (cebuffer[0][soffset - 1] 
+	          	if (m_srcUtilCEBuffer_[soffset - 1] 
 	          		== CollationElementIterator.NULLORDER) {
 	            	break;
 	          	}
 	        } 
 	        else {
-	        	if (cebuffer[0][soffset - 1] == 
+	        	if (m_srcUtilCEBuffer_[soffset - 1] == 
 	          		CollationElementIterator.NULLORDER) {
 	          		return -1;
 	          	}
-	          	if (cebuffer[1][toffset - 1] == 
+	          	if (m_tgtUtilCEBuffer_[toffset - 1] == 
 	          		CollationElementIterator.NULLORDER) {
 	          		return 1;
 	          	}
@@ -3186,16 +3285,14 @@ public final class RuleBasedCollator extends Collator
 	private final boolean checkIgnorable(String source, int offset)
 													
 	{
-		StringCharacterIterator siter = new StringCharacterIterator(source,
-											offset, source.length(), offset);
-		CollationElementIterator coleiter = new CollationElementIterator(
-	    														siter, this);
-	    int ce = coleiter.next();
+        m_srcUtilIter_.setText(source);
+        m_srcUtilColEIter_.setText(m_srcUtilIter_, offset);
+	    int ce = m_srcUtilColEIter_.next();
 	    while (ce != CollationElementIterator.NULLORDER) {
 	    	if (ce != CollationElementIterator.IGNORABLE) {
 	    		return false;
 	    	}
-	    	ce = coleiter.next();
+	    	ce = m_srcUtilColEIter_.next();
 	    }
 	    return true; 
 	}
@@ -3281,12 +3378,19 @@ public final class RuleBasedCollator extends Collator
     }
     
     /** 
-     *  Initializes utility iterators used by compare
+     *  Initializes utility iterators and byte buffer used by compare
      */
-    private final void initUtilIterators() {
+    private final void initUtility() {
        m_srcUtilIter_ = new StringCharacterIterator(new String(""));
        m_srcUtilColEIter_ = new CollationElementIterator(m_srcUtilIter_, this);
        m_tgtUtilIter_ = new StringCharacterIterator(new String(""));
        m_tgtUtilColEIter_ = new CollationElementIterator(m_tgtUtilIter_, this);
+       m_utilBytes0_ = new byte[SORT_BUFFER_INIT_SIZE_CASE_]; // case
+       m_utilBytes1_ = new byte[SORT_BUFFER_INIT_SIZE_1_]; // primary 
+       m_utilBytes2_ = new byte[SORT_BUFFER_INIT_SIZE_2_]; // secondary
+       m_utilBytes3_ = new byte[SORT_BUFFER_INIT_SIZE_3_]; // tertiary 
+       m_utilBytes4_ = new byte[SORT_BUFFER_INIT_SIZE_4_];  // Quaternary
+       m_srcUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
+       m_tgtUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
     }
 }
