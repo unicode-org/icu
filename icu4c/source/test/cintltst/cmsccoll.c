@@ -1318,6 +1318,9 @@ static void genericOrderingTest(UCollator *coll, const char *s[], uint32_t size)
 static void genericLocaleStarter(const char *locale, const char *s[], uint32_t size) {
   UErrorCode status = U_ZERO_ERROR;
   UCollator *coll = ucol_open(locale, &status);
+
+  log_verbose("Locale starter for %s\n", locale);
+
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
   } else {
@@ -1330,8 +1333,10 @@ static void genericRulesStarter(const char *rules, const char *s[], uint32_t siz
   UChar rlz[2048] = { 0 };
   uint32_t rlen = u_unescape(rules, rlz, 2048);
 
-  /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API andcompiler errors */
+  /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
   UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+
+  log_verbose("Rules starter for %s\n", rules);
 
   if(U_SUCCESS(status)) {
     genericOrderingTest(coll, s, size);
@@ -2282,57 +2287,17 @@ static void TestCompressOverlap() {
 
 void TestCyrillicTailoring(void) {
   static char *test[] = {
-    "\\u0410",
-      "\\u0410\\u0306",
-      "\\u04d0"
+    "\\u0410b",
+      "\\u0410\\u0306a",
+      "\\u04d0A"
   };
-
-  static char rules[256] = "&Z < \\u0410";
-  static UChar rlz[256];
-  uint32_t rLen;
-
-    UErrorCode status = U_ZERO_ERROR;
-
-
-    UChar u = 0;
-    uint32_t nfcSize;
-    uint32_t nfdSize;
-    tester **t = uprv_malloc(0xFFFF * sizeof(tester *));
-    uint32_t noCases = 0;
-    UCollator *coll = NULL;
-
-    t[0] = (tester *)uprv_malloc(sizeof(tester));
-
-    for(u = 0; u < 0xFFFF; u++) {
-        nfcSize = unorm_normalize(&u, 1, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
-        nfdSize = unorm_normalize(&u, 1, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
-
-        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)) {
-            t[noCases]->u = u;
-            noCases++;
-            t[noCases] = (tester *)uprv_malloc(sizeof(tester));
-        }
-    }
-
-
-    /*coll = ucol_open(locName, &status);*/
-    rLen = u_unescape(rules, rlz, 256);
-    coll = ucol_openRules(rlz, rLen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
-
-    for(u=0; u<noCases; u++) {
-        doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
-    }
-
-    ucol_close(coll);
-
-    for(u = 0; u <= noCases; u++) {
-        uprv_free(t[u]);
-    }
-    uprv_free(t);
-
     genericLocaleStarter("ru", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410", test, 3);
     genericRulesStarter("&Z < \\u0410", test, 3);
+    genericRulesStarter("&\\u0410 = \\u0410 < \\u04d0", test, 3);
+    genericRulesStarter("&Z < \\u0410 < \\u04d0", test, 3);
+    genericRulesStarter("&\\u0410 = \\u0410 < \\u0410\\u0301", test, 3);
+    genericRulesStarter("&Z < \\u0410 < \\u0410\\u0301", test, 3);
 }
 
 static void TestContraction() {
@@ -2483,7 +2448,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
     addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
     addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
-    /*addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");*/
+    addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
     addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
     addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
     addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
