@@ -369,7 +369,7 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
             UChar c = newEntry->chars[0];
             int32_t statusIndex = c >> BYTEPOWER;
             uint8_t bitClump = statusArray[statusIndex];
-            uint8_t setBit = BITARRAYMASK << (c & BYTEMASK);
+            uint8_t setBit = (uint8_t)(BITARRAYMASK << (c & BYTEMASK));
 
             if (bitClump != 0 && (bitClump & setBit) != 0) {
                 int32_t i = 0;
@@ -448,7 +448,7 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
 }
 
 int32_t
-MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
+MergeCollation::findLastEntry(const PatternEntry*   lastPatEntry,
                   UnicodeString&  excess,
                   UErrorCode&      success) const
 {
@@ -457,29 +457,29 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
       return -1;
     }
 
-  if (lastEntry == NULL)
+  if (lastPatEntry == NULL)
     {
       return 0;
     }
-  else if (lastEntry->strength != PatternEntry::RESET)
+  else if (lastPatEntry->strength != PatternEntry::RESET)
     {
       int32_t oldIndex = -1;
 
       // If the last entry is a single char entry and has been installed, 
       // that means the last index is the real last index.
-      if (lastEntry->chars.length() == 1)
+      if (lastPatEntry->chars.length() == 1)
     {
-      int32_t index = lastEntry->chars[0] >> BYTEPOWER;
+      int32_t index = lastPatEntry->chars[0] >> BYTEPOWER;
 
       if ((statusArray[index] & 
-           (uint8_t)(BITARRAYMASK << (lastEntry->chars[0] & BYTEMASK))) != 0)
+           (uint8_t)(BITARRAYMASK << (lastPatEntry->chars[0] & BYTEMASK))) != 0)
         {
-          oldIndex = patterns->lastIndexOf(lastEntry);
+          oldIndex = patterns->lastIndexOf(lastPatEntry);
             }
         }
       else
     {
-      oldIndex = patterns->lastIndexOf(lastEntry);
+      oldIndex = patterns->lastIndexOf(lastPatEntry);
         }
 
       // must exist!
@@ -494,7 +494,7 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
   else
     {
       // We're doing a reset, i.e. inserting a new ordering at the position
-      // just after the entry corresponding to lastEntry's first character
+      // just after the entry corresponding to lastPatEntry's first character
       int32_t i;
 
       // Search backwards for string that contains this one;
@@ -514,10 +514,10 @@ MergeCollation::findLastEntry(const PatternEntry*   lastEntry,
           // this case), and then return the next index.
           //
           if (entry->chars.compareBetween(0, entry->chars.length(),
-                          lastEntry->chars,0,entry->chars.length()) == 0)
+                          lastPatEntry->chars,0,entry->chars.length()) == 0)
         {
-          lastEntry->chars.extractBetween(entry->chars.length(), 
-                          lastEntry->chars.length(),
+          lastPatEntry->chars.extractBetween(entry->chars.length(), 
+                          lastPatEntry->chars.length(),
                           buffer);
           excess += buffer;
           break;
