@@ -1204,30 +1204,32 @@ main(int argc, char* argv[])
 }
 
 const char* IntlTest::loadTestData(UErrorCode& err){
-    const char*      directory=NULL;
-    UResourceBundle* test =NULL;
-    char* tdpath=NULL;
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     if( _testDataPath == NULL){
-        directory= pathToDataDirectory();
+        const char*      directory=NULL;
+        UResourceBundle* test =NULL;
+        char* tdpath=NULL;
+        const char* tdrelativepath;
+
+#if defined (U_TOPBUILDDIR)
+        tdrelativepath = "test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+        directory = U_TOPBUILDDIR;
+#else
+        tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+        directory = pathToDataDirectory();
+#endif
 
         tdpath = (char*) malloc(sizeof(char) *(( strlen(directory) * strlen(tdrelativepath)) + 100));
 
 
         /* u_getDataDirectory shoul return \source\data ... set the
          * directory to ..\source\data\..\test\testdata\out\testdata
-         *
-         * Fallback: When Memory mapped file is built
-         * ..\source\data\out\..\..\test\testdata\out\testdata
          */
 		strcpy(tdpath, directory);
-        strcat(tdpath, "out"U_FILE_SEP_STRING);
         strcat(tdpath, tdrelativepath);
         strcat(tdpath,"testdata");
 
         test=ures_open(tdpath, "testtypes", &err);
 
-        /* Fall back did not succeed either so return */
         if(U_FAILURE(err)){
             err = U_FILE_ACCESS_ERROR;
             it_errln((UnicodeString)"Could not load testtypes.res in testdata bundle with path " + tdpath + (UnicodeString)" - " + u_errorName(err));
