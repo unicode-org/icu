@@ -3100,41 +3100,39 @@ unorm_compose(UChar *dest, int32_t destCapacity,
 /**
  * Internal API for normalizing.
  * Does not check for bad input.
+ * Requires _haveData() to be true.
  * @internal
  */
-U_CAPI int32_t U_EXPORT2
+static int32_t
 unorm_internalNormalize(UChar *dest, int32_t destCapacity,
                         const UChar *src, int32_t srcLength,
-                        UNormalizationMode mode, int32_t options,
+                        UNormalizationMode mode, const UnicodeSet *nx,
                         UErrorCode *pErrorCode) {
-    const UnicodeSet *nx;
+    int32_t destLength;
+    uint8_t trailCC;
 
     switch(mode) {
     case UNORM_NFD:
-        return unorm_decompose(dest, destCapacity,
-                               src, srcLength,
-                               FALSE, options,
-                               pErrorCode);
+        destLength=_decompose(dest, destCapacity,
+                              src, srcLength,
+                              FALSE, nx, trailCC);
+        break;
     case UNORM_NFKD:
-        return unorm_decompose(dest, destCapacity,
-                               src, srcLength,
-                               TRUE, options,
-                               pErrorCode);
+        destLength=_decompose(dest, destCapacity,
+                              src, srcLength,
+                              TRUE, nx, trailCC);
+        break;
     case UNORM_NFC:
-        return unorm_compose(dest, destCapacity,
-                             src, srcLength,
-                             FALSE, options,
-                             pErrorCode);
+        destLength=_compose(dest, destCapacity,
+                            src, srcLength,
+                            FALSE, nx, pErrorCode);
+        break;
     case UNORM_NFKC:
-        return unorm_compose(dest, destCapacity,
-                             src, srcLength,
-                             TRUE, options,
-                             pErrorCode);
+        destLength=_compose(dest, destCapacity,
+                            src, srcLength,
+                            TRUE, nx, pErrorCode);
+        break;
     case UNORM_FCD:
-        nx=getNX(options, *pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            return 0;
-        }
         return unorm_makeFCD(dest, destCapacity,
                              src, srcLength,
                              nx,
@@ -3147,11 +3145,41 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
         if(srcLength>0 && srcLength<=destCapacity) {
             uprv_memcpy(dest, src, srcLength*U_SIZEOF_UCHAR);
         }
-        return u_terminateUChars(dest, destCapacity, srcLength, pErrorCode);
+        destLength=srcLength;
+        break;
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+
+    return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
+}
+
+/**
+ * Internal API for normalizing.
+ * Does not check for bad input.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_internalNormalize(UChar *dest, int32_t destCapacity,
+                        const UChar *src, int32_t srcLength,
+                        UNormalizationMode mode, int32_t options,
+                        UErrorCode *pErrorCode) {
+    const UnicodeSet *nx;
+
+    if(!_haveData(*pErrorCode)) {
+        return 0;
+    }
+
+    nx=getNX(options, *pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    return unorm_internalNormalize(dest, destCapacity,
+                                   src, srcLength,
+                                   mode, nx,
+                                   pErrorCode);
 }
 
 /** Public API for normalizing. */
@@ -4300,6 +4328,7 @@ unorm_compare(const UChar *s1, int32_t length1,
     UChar fcd1[300], fcd2[300];
     UChar *d1, *d2;
     const UnicodeSet *nx;
+    UNormalizationMode mode;
     int32_t result;
 
     /* argument checking */
@@ -4341,28 +4370,46 @@ unorm_compare(const UChar *s1, int32_t length1,
      * case-folding preserves the FCD-ness of a string.
      * The outer normalization is then only performed by unorm_cmpEquivFold()
      * when there is a difference.
+     *
+     * Exception: When using the Turkic case-folding option, we do perform
+     * full NFD first. This is because in the Turkic case precomposed characters
+     * with 0049 capital I or 0069 small i fold differently whether they
+     * are first decomposed or not, so an FCD check - a check only for
+     * canonical order - is not sufficient.
      */
+    if(options&U_FOLD_CASE_EXCLUDE_SPECIAL_I) {
+        mode=UNORM_NFD;
+        options&=~UNORM_INPUT_IS_FCD;
+    } else {
+        mode=UNORM_FCD;
+    }
 
     if(!(options&UNORM_INPUT_IS_FCD)) {
         int32_t _len1, _len2;
         UBool isFCD1, isFCD2;
 
         // check if s1 and/or s2 fulfill the FCD conditions
-        isFCD1=unorm_checkFCD(s1, length1, nx);
-        isFCD2=unorm_checkFCD(s2, length2, nx);
+        isFCD1= UNORM_YES==_quickCheck(s1, length1, mode, TRUE, nx, pErrorCode);
+        isFCD2= UNORM_YES==_quickCheck(s2, length2, mode, TRUE, nx, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return 0;
+        }
 
-        if(!isFCD1 && !isFCD2) {
-            // if both strings need normalization then make them NFD right away and
-            // turn off normalization in the comparison function
-            uint8_t trailCC;
+        /*
+         * ICU 2.4 had a further optimization:
+         * If both strings were not in FCD, then they were both NFD'ed,
+         * and the _COMPARE_EQUIV option was turned off.
+         * It is not entirely clear that this is valid with the current
+         * definition of the canonical caseless match.
+         * Therefore, ICU 2.6 removes that optimization.
+         */
 
-            // fully decompose (NFD) s1 and s2
-
-            _len1=_decompose(fcd1, sizeof(fcd1)/U_SIZEOF_UCHAR,
-                             s1, length1,
-                             FALSE, nx,
-                             trailCC);
-            if(_len1<=(int32_t)(sizeof(fcd1)/U_SIZEOF_UCHAR)) {
+        if(!isFCD1) {
+            _len1=unorm_internalNormalize(fcd1, LENGTHOF(fcd1),
+                                          s1, length1,
+                                          mode, nx,
+                                          pErrorCode);
+            if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
                 s1=fcd1;
             } else {
                 d1=(UChar *)uprv_malloc(_len1*U_SIZEOF_UCHAR);
@@ -4371,20 +4418,26 @@ unorm_compare(const UChar *s1, int32_t length1,
                     goto cleanup;
                 }
 
-                _len1=_decompose(d1, _len1,
-                                 s1, length1,
-                                 FALSE, nx,
-                                 trailCC);
+                *pErrorCode=U_ZERO_ERROR;
+                _len1=unorm_internalNormalize(d1, _len1,
+                                              s1, length1,
+                                              mode, nx,
+                                              pErrorCode);
+                if(U_FAILURE(*pErrorCode)) {
+                    goto cleanup;
+                }
 
                 s1=d1;
             }
             length1=_len1;
+        }
 
-            _len2=_decompose(fcd2, sizeof(fcd2)/U_SIZEOF_UCHAR,
-                             s2, length2,
-                             FALSE, nx,
-                             trailCC);
-            if(_len2<=(int32_t)(sizeof(fcd2)/U_SIZEOF_UCHAR)) {
+        if(!isFCD2) {
+            _len2=unorm_internalNormalize(fcd2, LENGTHOF(fcd2),
+                                          s2, length2,
+                                          mode, nx,
+                                          pErrorCode);
+            if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
                 s2=fcd2;
             } else {
                 d2=(UChar *)uprv_malloc(_len2*U_SIZEOF_UCHAR);
@@ -4393,85 +4446,22 @@ unorm_compare(const UChar *s1, int32_t length1,
                     goto cleanup;
                 }
 
-                _len2=_decompose(d2, _len2,
-                                 s2, length2,
-                                 FALSE, nx,
-                                 trailCC);
+                *pErrorCode=U_ZERO_ERROR;
+                _len2=unorm_internalNormalize(d2, _len2,
+                                              s2, length2,
+                                              mode, nx,
+                                              pErrorCode);
+                if(U_FAILURE(*pErrorCode)) {
+                    goto cleanup;
+                }
 
                 s2=d2;
             }
             length2=_len2;
-
-            // compare NFD strings
-            options&=~_COMPARE_EQUIV;
-        } else {
-            // if at least one string is already in FCD then only makeFCD the other
-            // and compare for equivalence
-            if(!isFCD1) {
-                _len1=unorm_makeFCD(fcd1, sizeof(fcd1)/U_SIZEOF_UCHAR,
-                                    s1, length1,
-                                    nx,
-                                    pErrorCode);
-                if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-                    s1=fcd1;
-                } else {
-                    d1=(UChar *)uprv_malloc(_len1*U_SIZEOF_UCHAR);
-                    if(d1==0) {
-                        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                        goto cleanup;
-                    }
-
-                    *pErrorCode=U_ZERO_ERROR;
-                    _len1=unorm_makeFCD(d1, _len1,
-                                        s1, length1,
-                                        nx,
-                                        pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        goto cleanup;
-                    }
-
-                    s1=d1;
-                }
-                length1=_len1;
-            }
-
-            if(!isFCD2) {
-                _len2=unorm_makeFCD(fcd2, sizeof(fcd2)/U_SIZEOF_UCHAR,
-                                    s2, length2,
-                                    nx,
-                                    pErrorCode);
-                if(*pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-                    s2=fcd2;
-                } else {
-                    d2=(UChar *)uprv_malloc(_len2*U_SIZEOF_UCHAR);
-                    if(d2==0) {
-                        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-                        goto cleanup;
-                    }
-
-                    *pErrorCode=U_ZERO_ERROR;
-                    _len2=unorm_makeFCD(d2, _len2,
-                                        s2, length2,
-                                        nx,
-                                        pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        goto cleanup;
-                    }
-
-                    s2=d2;
-                }
-                length2=_len2;
-            }
         }
     }
 
-    if(U_FAILURE(*pErrorCode)) {
-        // do nothing
-    } else if(!(options&(_COMPARE_EQUIV|U_COMPARE_IGNORE_CASE))) {
-        // compare NFD strings case-sensitive: just use normal comparison
-        result=uprv_strCompare(s1, length1, s2, length2,
-                    FALSE, (UBool)(0!=(options&U_COMPARE_CODE_POINT_ORDER)));
-    } else {
+    if(U_SUCCESS(*pErrorCode)) {
         result=unorm_cmpEquivFold(s1, length1, s2, length2, options, pErrorCode);
     }
 
