@@ -633,9 +633,9 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
      { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0006, 0x0008, 0x000a};
 
     /* 1 2 3 0 h1 h2 h3 . DBCS*/
-    const uint8_t expectedIBM835[] =
+    const uint8_t expectedIBM9027[] =
      {  0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0x4c, 0x41, 0x4c, 0x48, 0x4c, 0x55, 0xfe, 0xfe};
-    int32_t  toIBM835Offs    [] =
+    int32_t  toIBM9027Offs    [] =
      {  0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05, 0x06, 0x06, 0x07, 0x07};
 
      /* 1 2 3 0 <?> <?> <?> . SBCS*/
@@ -797,8 +797,8 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         log_err("u-> ibm-943 [UCNV_MBCS] not match.\n");
     /*DBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedIBM835, sizeof(expectedIBM835), "ibm-835", toIBM835Offs,FALSE ))
-        log_err("u-> ibm-835 [UCNV_DBCS] not match.\n");
+            expectedIBM9027, sizeof(expectedIBM9027), "ibm-9027", toIBM9027Offs,FALSE ))
+        log_err("u-> ibm-9027 [UCNV_DBCS] not match.\n");
     /*SBCS*/
     if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs,FALSE ))
