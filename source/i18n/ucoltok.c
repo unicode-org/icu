@@ -39,6 +39,12 @@ ListHeader* ucol_tok_assembleTokenList(const UChar *rules, const int32_t rulesLe
   UColToken *newToken = NULL;
   UColTokenParser src;
 
+  { /* not finished yet */
+    *status = U_UNSUPPORTED_ERROR;
+    return NULL;
+  }
+
+
   src.source = rules;
   src.current = rules;
   src.end = rules+rulesLength;

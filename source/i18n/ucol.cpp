@@ -144,6 +144,10 @@ ucol_openRules(    const    UChar                  *rules,
   /* do we need to normalize the string beforehand? */
 
   ListHeader *lh = ucol_tok_assembleTokenList(rules, rulesLength, &resLen, status);
+  if(U_FAILURE(*status) || lh == NULL) {
+    return NULL;
+  }
+
   UCATableHeader *table = ucol_assembleTailoringTable(lh, resLen, status);
   UCollator *result = ucol_initCollator(table,0,status);
 
@@ -231,24 +235,26 @@ void ucol_initUCA(UErrorCode *status) {
   if(UCA == NULL) {
     UCollator *newUCA = (UCollator *)uprv_malloc(sizeof(UCollator));
     UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptable, NULL, status);
-    newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
-    newUCA->rb = NULL;
+    if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
+      newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
+      newUCA->rb = NULL;
 
-    if(U_FAILURE(*status)) {
-        udata_close(result);
-        uprv_free(newUCA);
-    }
+      if(U_FAILURE(*status)) {
+          udata_close(result);
+          uprv_free(newUCA);
+      }
 
-    umtx_lock(NULL);
-    if(UCA == NULL) {
-        UCA = newUCA;
-        newUCA = NULL;
-    }
-    umtx_unlock(NULL);
+      umtx_lock(NULL);
+      if(UCA == NULL) {
+          UCA = newUCA;
+          newUCA = NULL;
+      }
+      umtx_unlock(NULL);
 
-    if(newUCA != NULL) {
-        udata_close(result);
-        uprv_free(newUCA);
+      if(newUCA != NULL) {
+          udata_close(result);
+          uprv_free(newUCA);
+      }
     }
 
   }
