@@ -432,12 +432,15 @@ UTrieEnumValue(const void *context, uint32_t value);
  * of code points with the same value as retrieved from the trie and
  * transformed by the UTrieEnumValue function.
  *
+ * The callback function can stop the enumeration by returning FALSE.
+ *
  * @param context an opaque pointer, as passed into utrie_enum()
  * @param start the first code point in a contiguous range with value
  * @param limit one past the last code point in a contiguous range with value
  * @param value the value that is set for all code points in [start..limit[
+ * @return FALSE to stop the enumeration
  */
-typedef void U_CALLCONV
+typedef UBool U_CALLCONV
 UTrieEnumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value);
 
 /**
