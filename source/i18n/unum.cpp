@@ -15,7 +15,7 @@
 #include "unicode/uloc.h"
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
-//#include "spellfmt.h"
+#include "unicode/rbnf.h"
 #include "unicode/ustring.h"
 #include "cpputils.h"
 #include "unicode/fmtable.h"
@@ -129,11 +129,7 @@ unum_open(  UNumberFormatStyle    style,
         break;
 
       case UNUM_SPELLOUT:
-        // Todo: TBD: Add spellout support
-        //retVal = (UNumberFormat*)new NumberSpelloutFormat();
-        //break;
-        *status = U_UNSUPPORTED_ERROR;
-        return 0;
+		return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
 
       default:
         *status = U_UNSUPPORTED_ERROR;
@@ -147,6 +143,7 @@ unum_open(  UNumberFormatStyle    style,
 
       return retVal;
   }else{
+	  /* we don't support RBNF patterns yet */
       UParseError tErr;
       int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
       const UnicodeString pat((UChar*)pattern, len, len);
