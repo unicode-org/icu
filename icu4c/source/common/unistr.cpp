@@ -142,7 +142,7 @@ UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
     fArray(0),
     fFlags(0)
 {
-  if(count <= 0) {
+  if(count <= 0 || (uint32_t)c > 0x10ffff) {
     // just allocate and do not do anything else
     allocate(capacity);
   } else {
