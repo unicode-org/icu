@@ -1653,7 +1653,29 @@ public:
    * @return a reference to this
    * @stable
    */
-   UnicodeString& operator= (const UnicodeString& srcText);
+  UnicodeString &operator=(const UnicodeString &srcText);
+
+  /**
+   * Almost the same as the assignment operator.
+   * Replace the characters in this UnicodeString
+   * with the characters from <code>srcText</code>.
+   *
+   * This function works the same for all strings except for ones that
+   * are readonly aliases.
+   * Starting with ICU 2.4, the assignment operator and the copy constructor
+   * allocate a new buffer and copy the buffer contents even for readonly aliases.
+   * This function implements the old, more efficient but less safe behavior
+   * of making this string also a readonly alias to the same buffer.
+   * The fastCopyFrom function must be used only if it is known that the lifetime of
+   * this UnicodeString is at least as long as the lifetime of the aliased buffer
+   * including its contents, for example for strings from resource bundles
+   * or aliases to string contents.
+   *
+   * @param src The text containing the characters to replace.
+   * @return a reference to this
+   * @draft ICU 2.4
+   */
+  UnicodeString &fastCopyFrom(const UnicodeString &src);
 
   /**
    * Assignment operator.  Replace the characters in this UnicodeString
@@ -3014,6 +3036,9 @@ private:
 
   // release the array if owned
   void releaseArray(void);
+
+  // implements assigment operator, copy constructor, and fastCopyFrom()
+  UnicodeString &copyFrom(const UnicodeString &src, UBool fastCopy=FALSE);
 
   // Pin start and limit to acceptable values.
   inline void pinIndices(int32_t& start,
