@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+tr {
+    Version{ "2.0" }
+    // According to Nurdan Mete from IBM Turkey, the following would be the correct
+    // sorting order for Turkish
+    collations {
+        standard { 
+            Version { "2.1" }
+            Sequence { "& C < c\u0327 <<< C\u0327" 
+                       "& G < g\u0306 <<< G\u0306"
+                       "&[before 1]i < \u0131 <<< I"
+                       "& i <<< \u0130" 
+                       "& O < o\u0308 <<< O\u0308"
+                       "& S < s\u0327 <<< S\u0327" 
+                       "& U < u\u0308 <<< U\u0308" }
+        }
+    }
+}

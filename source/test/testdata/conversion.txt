@@ -1,0 +1,979 @@
+//*******************************************************************************
+//
+//   Copyright (C) 2003, International Business Machines
+//   Corporation and others.  All Rights Reserved.
+//
+//   file name:  conversion.txt
+//   encoding:   US-ASCII
+//   tab size:   8 (not used)
+//   indentation:4
+//
+//   created on: 2003jul15
+//   created by: Markus W. Scherer
+//
+//   ICU resource bundle source file with test data for data-driven conversion tests.
+//
+//*******************************************************************************
+
+conversion {
+  Info {
+    Description { "Test data for conversion" }
+    LongDescription {
+      "Test data for data-driven conversion tests in icu/source/test/intltest/convtest.cpp\n"
+      "Run intltest conversion\n"
+
+      "Charset names starting with '*' are for testdata names.\n"
+
+      "ICU callbacks are specified as strings with pairs of characters, each optional.\n"
+      "Callback function - '?'=Sub '0'=Skip '.'=Stop '&'=Escape\n"
+      "Callback option - a letter is passed in directly as const char * see ucnv_err.h\n"
+      "Empty string: Sub callback with NULL option\n"
+
+      "In order to specify a charset substitution character,\n"
+      "add a NUL (U+0000) to the callback string followed by the subchar bytes as Latin-1\n"
+      "characters. For example, for a Sub callback with no option and a subchar of FC FC,\n"
+      "use the string \"?\x00\xFC\xFC\"\n"
+
+      "fallbacks: per-direction boolean, currently only for fromUnicode; see Jitterbug 2401\n"
+
+      "errorCode: (empty)==zero | invalid | illegal | truncated | illesc | unsuppesc\n"
+    }
+  }
+  TestData {
+    toUnicode {
+      Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
+      Cases {
+        // test that ISO-2022-JP encodes ASCII as itself
+        {
+          "ISO-2022-JP",
+          :bin{ 3f4041424344454647 },
+          "?@ABCDEFG",
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+        // test that ISO-2022-CN encodes ASCII as itself
+        {
+          "ISO-2022-CN",
+          :bin{ 3f4041424344454647 },
+          "?@ABCDEFG",
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+
+        // ISO-2022-KR
+
+        // truncated, partial escape sequence
+        {
+          "ibm-25546",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ibm-25546",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        {
+          "ibm-25546",
+          :bin{ 1b2429 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b2429 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ibm-25546",
+          :bin{ 1b242943 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        {
+          "ibm-25546",
+          :bin{ 1b2429430e }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus ASCII character
+        {
+          "ibm-25546",
+          :bin{ 1b24294341 }, "A", :intvector{ 4 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ibm-25546",
+          :bin{ 1b2429430e41 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ibm-25546",
+          :bin{ 1b2429430e4141 }, "\uc88b", :intvector{ 5 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // more complicated example
+        {
+          "ibm-25546",
+          :bin{ 411b242943420e4141affe0f43 },
+          "AB\uc88b%XAF%XFEC",
+          :intvector{ 0, 5, 7, 9, 9, 9, 9, 9, 9, 9, 9, 12 },
+          :int{1}, :int{1}, "", "&", :bin{""}
+        }
+
+        // truncated, partial escape sequence
+        {
+          "ISO-2022-KR",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b2429 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ISO-2022-KR",
+          :bin{ 1b242943 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429430e }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus ASCII character
+        {
+          "ISO-2022-KR",
+          :bin{ 1b24294341 }, "A", :intvector{ 4 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429430e41 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ISO-2022-KR",
+          :bin{ 1b2429430e4141 }, "\uc88b", :intvector{ 5 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // more complicated example
+        {
+          "ISO-2022-KR",
+          :bin{ 411b242943420e4141affe0f43 },
+          "AB\uc88b%XAF%XFEC",
+          :intvector{ 0, 5, 7, 9, 9, 9, 9, 9, 9, 9, 9, 12 },
+          :int{1}, :int{1}, "", "&", :bin{""}
+        }
+
+        // ISO-2022-JP
+
+        // truncated, partial escape sequence
+        {
+          "ISO-2022-JP",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b2442 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b244241 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b24424141 }, "\u758f", :intvector{ 3 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // test the G2 designator & SS2 shift
+        {
+          "ISO-2022-JP-2",
+          :bin{ 431b2e46461b244241411b4e4e353f }, "CF\u758f\u039e\u7591", :intvector{ 0, 4, 8, 12, 13 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // JIS7 with Katakana
+        {
+          "JIS7",
+          :bin{ 41420e41420f4142 }, "AB\uff81\uff82AB", :intvector{ 0, 1, 3, 4, 6, 7 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // JIS8 with Katakana
+        {
+          "JIS8",
+          :bin{ 41c15c1b284a5cc242 }, "A\uff81\\\xa5\uff82B", :intvector{ 0, 1, 2, 6, 7, 8 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+
+        // ISO-2022-CN
+
+        // truncated, partial escape sequence
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b2429 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b242941 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429410e }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus ASCII character
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b24294141 }, "\x41", :intvector{ 4 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429410e41 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ISO_2022,locale=zh,version=1",
+          :bin{ 1b2429410e4141 }, "\u4eae", :intvector{ 5 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 1b2429411b242a480e41411b2429457e7c1b4e70341b242b4d1b2429477c341b4f664c2421 },
+          "\u4eae\u9f82\u56cd\u56cc\U0002a6d6\x30",
+          :intvector{ 9, 15, 19, 29, 33, 33, 35 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+
+        // illegal and unsupported escape sequences
+        // SS2 without designator: illegal
+        {
+          "ISO-2022-CN-EXT",
+          :bin{ 411b4e2121 }, "\x41", :intvector{ 0 },
+          :int{1}, :int{1}, "illesc", ".", :bin{ 1b4e }
+        }
+        // G3 designator: recognized, but not supported for -CN (only for -CN-EXT)
+        {
+          "ISO-2022-CN",
+          :bin{ 411b242b491b4f2121 }, "\x41", :intvector{ 0 },
+          :int{1}, :int{1}, "unsuppesc", ".", :bin{ 1b242b49 }
+        }
+
+        // ISO-2022 SBCS
+        // [U_ENABLE_GENERIC_ISO_2022]
+        // The _generic_ ISO-2022 converter is disabled starting 2003-dec-03 (ICU 2.8).
+        // For details see the icu mailing list from 2003-dec-01 and the ucnv2022.c file.
+        // Language-specific variants of ISO-2022 continue to be available as listed below.
+        //{
+        //  "ISO_2022",
+        //  :bin{ 0008090a0d1a1c1f203f415c7d7e7f },
+        //  "\x00\x08\t\n\r\x1a\x1c\x1f ?A\\}~\x7f",
+        //  :intvector{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 },
+        //  :int{1}, :int{1}, "", ".", :bin{""}
+        //}
+
+        // DBCS-only extensions
+        {
+          "ibm-970",
+          :bin{ 617eece9b2eb },
+          "\x61\x7e\u4e00\ub000",
+          :intvector{ 0, 1, 2, 4 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+
+        {
+          "ibm-971",
+          :bin{ 617eece9b2eb },
+          "\ufffd\u4e00\ub000",
+          :intvector{ 0, 2, 4 },
+          :int{1}, :int{1}, "", "?", :bin{""}
+        }
+
+        {
+          "ibm-16684",
+          :bin{ 430e4395ecc1404042e1 },
+          "\ufffd\u30C8\u30C8\u309A\u3000\u20ac",
+          :intvector{ 0, 2, 4, 4, 6, 8 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        {
+          "ibm-1399",
+          :bin{ 430e4395ecc140400fe1 },
+          "\uff62\u30C8\u30C8\u309A\u3000\u20ac",
+          :intvector{ 0, 2, 4, 4, 6, 9 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        // extensions
+        {
+          "ibm-1390",
+          :bin{ 430e4395ecc1 },
+          "\uff63\u30C8\u30C8\u309A",
+          :intvector{ 0, 2, 4, 4 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        {
+          "ibm-16684",
+          :bin{ ececec8bec8cec8d4386ecb5ecb6ecb7 },
+          "\ufffd\u31f6\u31f7\u31f8\u30ab\u304b\u309a\u304d\u309a\u304f\u309a",
+          :intvector{ 0, 2, 4, 6, 8, 10, 10, 12, 12, 14, 14 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        {
+          "ibm-1390",
+          :bin{ 43860eececec8bec8cec8d4386ecb5ecb6ecb7ecc10fec },
+          "\uff63\uff76\ufffd\u31f6\u31f7\u31f8\u30ab\u304b\u309a\u304d\u309a\u304f\u309a\u30C8\u309A\x1a",
+          :intvector{ 0, 1, 3, 5, 7, 9, 11, 13, 13, 15, 15, 17, 17, 19, 19, 22 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        {
+          "*test3",
+          :bin{ 00050601020b0701020a01020c },
+          "\u20ac\x05\x06\x0b\U00101234\U00023456\ufffd",
+          :intvector{ 0, 1, 2, 3, 6, 6, 7, 7, 10 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        // normal conversions
+        {
+          "UTF-16LE",
+          :bin{ 310000d801dc00d902dc320000d8330001dc3400 },
+          "1\U00010001\U000500022\ufffd3\ufffd4",
+          :intvector{ 0, 2, 2, 6, 6, 10, 12, 14, 16, 18 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+        { "UTF-16LE", :bin{ 00 }, "", :intvector{}, :int{1}, :int{0}, "truncated", ".", :bin{ 00 } }
+        { "UTF-16LE", :bin{ 00d800 }, "", :intvector{}, :int{1}, :int{0}, "truncated", ".", :bin{ 00d800 } }
+
+        {
+          "UTF-16BE",
+          :bin{ 0031d800dc01d900dc020032d8000033dc010034 },
+          "1\U00010001\U000500022\ufffd3\ufffd4",
+          :intvector{ 0, 2, 2, 6, 6, 10, 12, 14, 16, 18 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+        { "UTF-16BE", :bin{ 00 }, "", :intvector{}, :int{1}, :int{0}, "truncated", ".", :bin{ 00 } }
+        { "UTF-16BE", :bin{ d800dc }, "", :intvector{}, :int{1}, :int{0}, "truncated", ".", :bin{ d800dc } }
+
+        // e4b8 is a partial sequence
+        { "UTF-8", :bin{ 31e4ba8ce4b8 }, "1\u4e8c", :intvector{ 0, 1 }, :int{1}, :int{0}, "truncated", ".", :bin{ e4b8 } }
+        { "UTF-8", :bin{ 31e4ba8ce4b8 }, "1\u4e8c\ufffd", :intvector{ 0, 1, 4 }, :int{1}, :int{0}, "", "?", :bin{""} }
+
+        // LMBCS with escape callback (1292a0 is unassigned)
+        {
+          "LMBCS",
+          :bin{ 12c9501292a01292a1 },
+          "\u4e2e%X12%X92%XA0\ue5c4",
+          :intvector{ 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6 },
+          :int{1}, :int{0}, "", "&", :bin{""}
+        }
+
+        // IMAP-mailbox-name with SUB
+        // a<DEL> a&AB~ a&AB\x0c a&AB- a&AB. a&.
+        {
+          "IMAP-mailbox-name",
+          :bin{ 617f612641427e612641420c612641422d612641422e61262e },
+          "a\ufffda\ufffda\ufffda\ufffda\ufffda\ufffd",
+          :intvector{ 0, 1, 2, 4, 7, 9, 12, 14, 17, 19, 22, 23 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        // using testdata_test1.cnv
+        { "*test1", :bin{ 000506070809 }, "\u20ac\x05\x06\U00101234\ufffd\ufffd", :intvector{ 0, 1, 2, 3, 3, 4, 5 }, :int{1}, :int{0}, "", "", :bin{""} }
+
+        // surrogates in CESU-8
+        { "CESU-8", :bin{ eda080eda081edb081 }, "\ud800\U00010401", :intvector{ 0, 3, 6 }, :int{1}, :int{0}, "", "", :bin{""} }
+        // e080 is a partial sequence
+        { "UTF-8", :bin{ 31ffe4ba8ce08061 }, "1\ufffd\u4e8c\ufffda", :intvector{ 0, 1, 2, 5, 7 }, :int{0}, :int{0}, "", "", :bin{ e080 } }
+        // fbbfbfbfbf exceedes U+10ffff
+        { "UTF-8", :bin{ 31fbbfbfbfbf61 }, "1\ufffda", :intvector{ 0, 1, 6 }, :int{0}, :int{0}, "", "", :bin{ fbbfbfbfbf } }
+
+        // lead byte a2 without trail byte
+        { "ibm-1363", :bin{ a2aea2 }, "\u00a1", :intvector{ 0 }, :int{1}, :int{0}, "truncated", ".", :bin{ a2 } }
+        { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 }, :int{1}, :int{0}, "", "?", :bin{""} }
+
+        // simple sample, no error handling
+        { "UTF-8", :bin{ 61F48FBFBF }, "a\U0010FFFF", :intvector{ 0, 1, 1 }, :int{1}, :int{0}, "", "", :bin{""} }
+      }
+    }
+
+    // --------------------------------------------------------------------- ***
+
+    fromUnicode {
+      Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
+      Cases {
+        // test that ISO-2022-JP encodes ASCII as itself
+        {
+          "ISO-2022-JP",
+          "?@ABCDEFG",
+          :bin{       3f4041424344454647 },
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        // test that ISO-2022-CN encodes ASCII as itself
+        {
+          "ISO-2022-CN",
+          "?@ABCDEFG",
+          :bin{       3f4041424344454647 },
+          :intvector{ 0,1,2,3,4,5,6,7,8 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // moved from cintltst /tsconv/nccbtst/TestSkipCallBack
+        {
+          "iso-2022-jp",
+          "\u3000\xe9\u3001",
+          :bin{       1b2442212121221b2842 },
+          :intvector{ 0,0,0,0,0,2,2,2,2,2 },
+          :int{1}, :int{1}, "", "0", ""
+        }
+        // moved from cintltst /tsconv/nccbtst/TestSubCallBack
+        {
+          "iso-2022-jp",
+          "A\xe9B\xe9\u3000",
+          :bin{       411a421a1b244221211b2842 },
+          :intvector{ 0,1,2,3,4,4,4,4,4,4,4,4 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        // moved from cintltst /tsconv/nccbtst/TestSubWithValueCallBack
+        {
+          "iso-2022-jp",
+          "A\xe9B\xe9\u3000",
+          :bin{       41255530304539422555303045391b244221211b2842 },
+          :intvector{ 0,1,1,1,1,1,1,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4 },
+          :int{1}, :int{1}, "", "&", ""
+        }
+        {
+          "iso-2022-cn",
+          "\u4e00\u3712\u4e01",
+          :bin{       1b2429410e523b0f2555333731320e36210f },
+          :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2 },
+          :int{1}, :int{1}, "", "&", ""
+        }
+        {
+          "iso-2022-cn",
+          "A\u3712\u4e00",
+          :bin{       412555333731321b2429410e523b0f },
+          :intvector{ 0,1,1,1,1,1,1,2,2,2,2,2,2,2,2 },
+          :int{1}, :int{1}, "", "&", ""
+        }
+        {
+          "iso-2022-cn",
+          "\u3000\u3712\u3001",
+          :bin{       1b2429410e21210f2555333731320e21220f },
+          :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,2,2 },
+          :int{1}, :int{1}, "", "&", ""
+        }
+
+        // moved from cintltst /tsconv/nucnvtst/TestJIS
+        {
+          "JIS",
+          "\uFF81\uFF82\u30EC\u30ED\u30EE\u30EF\uFF93\uFF94\uFF95\uFF96\uFF97\uFF98",
+          :bin{       1b244225412544256c256d256e256F25622564256625682569256a1b2842 },
+          :intvector{ 0,0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,11,11,11 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "JIS7",
+          "\uFF81\uFF82\u30EC\u30ED\u30EE\u30EF\uFF93\uFF94\uFF95\uFF96\uFF97\uFF98",
+          :bin{       0e41420f1b2442256c256d256e256F0e5354555657580f1b2842 },
+          :intvector{ 0,0,1,2,2,2,2,2,2,3,3,4,4,5,5,6,6,7,8,9,10,11,11,11,11,11 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "JIS8",
+          "\uFF81\uFF82\u30EC\u30ED\u30EE\u30EF\uFF93\uFF94\uFF95\uFF96\uFF97\uFF98",
+          :bin{       C1C21b2442256c256d256e256F1b284AD3D4D5D6D7D81b2842 },
+          :intvector{ 0,1,2,2,2,2,2,3,3,4,4,5,5,6,6,6,6,7,8,9,10,11,11,11,11 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // moved from cintltst /tsconv/ncnvtst/TestErrorBehaviour
+        {
+          "iso-2022-jp",
+          "\u3000\x50\udc01\u3001",
+          :bin{       1B244221211B2842501A1B24422122 },
+          :intvector{ 0,0,0,0,0,1,1,1,1,2,3,3,3,3,3 },
+          :int{0}, :int{1}, "", "?", "\udc01"
+        }
+        {
+          "iso-2022-jp",
+          "\u3000\x50\udc01\u3001",
+          :bin{       1B244221211B2842501A1B244221221b2842 },
+          :intvector{ 0,0,0,0,0,1,1,1,1,2,3,3,3,3,3,3,3,3 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "iso-2022-kr",
+          "\x61\u4e00\udc01\u4e00",
+          :bin{           1b242943610e6c690f1a0e6c69 },
+          :intvector{ -1,-1,-1,-1,0,1,1,1,2,2,3,3,3 },
+          :int{0}, :int{1}, "", "?", "\udc01"
+        }
+        {
+          "iso-2022-kr",
+          "\x61\u4e00\udc01\u4e00",
+          :bin{           1b242943610e6c690f1a0e6c690f },
+          :intvector{ -1,-1,-1,-1,0,1,1,1,2,2,3,3,3,3 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // ISO-2022-KR
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f7b552b35303030357d0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,3,3,3,3,3,3,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "&U", ""
+        }
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f1a0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "?\x00\x1a", ""
+        }
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41412f7e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,6,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "ibm-25546",
+          "AB\uc88b\U00050005\uaccc",
+          :bin{           1b24294341420e41412f7e306a0f },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f7b552b35303030357d0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,3,3,3,3,3,3,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "&U", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41410f1a0e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5,6,6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uacccC",
+          :bin{           1b24294341420e41412f7e306a0f43 },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,6,6 },
+          :int{1}, :int{1}, "", "?\x00\x2f\x7e", ""
+        }
+        {
+          "ISO-2022-KR",
+          "AB\uc88b\U00050005\uaccc",
+          :bin{           1b24294341420e41412f7e306a0f },
+          :intvector{ -1,-1,-1,-1,0,1,2,2,2,3,3,5,5,5 },
+          :int{1}, :int{1}, "", "?\x00\x2f\x7e", ""
+        }
+
+        // ISO-2022-JP-2 with G2 designator & SS2 shift
+        {
+          "ISO-2022-JP-2",
+          "CF\u758f\u038f\u7591",
+          :bin{       43461b244241411b2e461b4e3f353f1b2842 },
+          :intvector{ 0,1,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // JIS7 with Katakana
+        {
+          "JIS7",
+          "AB\uff81\uff82AB",
+          :bin{       41420e41420f4142 },
+          :intvector{ 0,1,2,2,3,4,4,5 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // JIS7 with shift to ASCII at the very end
+        {
+          "JIS7",
+          "AB\uff81\uff82",
+          :bin{       41420e41420f },
+          :intvector{ 0,1,2,2,3,3 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // JIS8 with Katakana
+        {
+          "JIS8",
+          "A\uff81\\\xa5\uff82B",
+          :bin{       41c15c1b284a5cc2421b2842 },
+          :intvector{ 0,1,2,3,3,3,3,4,5,5,5,5 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+
+        // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
+        {
+          "ISO-2022-CN-EXT",
+          "\u4eae\u9f82\u56cd\u56cc\U0002a6d6\x30",
+          :bin{       1b2429410e41411b2429457e7c1b242a481b4e70341b2429477c341b242b4d1b4f664c0f30 },
+          :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,6,6 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // ISO-2022-CN-EXT with shift to ASCII at the very end
+        {
+          "ISO-2022-CN-EXT",
+          "\u4eae\u9f82\u56cd\u56cc\U0002a6d6",
+          :bin{       1b2429410e41411b2429457e7c1b242a481b4e70341b2429477c341b242b4d1b4f664c0f },
+          :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // ISO-2022-CN-EXT without flush so do not shift to ASCII at the very end
+        {
+          "ISO-2022-CN-EXT",
+          "\u4eae\u9f82\u56cd\u56cc\U0002a6d6",
+          :bin{       1b2429410e41411b2429457e7c1b242a481b4e70341b2429477c341b242b4d1b4f664c },
+          :intvector{ 0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4 },
+          :int{0}, :int{1}, "", ".", ""
+        }
+
+        // windows-936 vs. ibm-1386
+        {
+          "ibm-1386",
+          "\x1a\u20ac\u5555\x80\x81\U00055555",
+          :bin{ 7fa2e3dffb7f7fa1a1 },
+          :intvector{ 0, 1, 1, 2, 2, 3, 4, 5, 5 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+        {
+          "windows-936",
+          "\x1a\u20ac\u5555\x80\x81\U00055555",
+          :bin{ 1a80dffb3f3f3f },
+          :intvector{ 0, 1, 2, 2, 3, 4, 5 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // verify that if a conversion table does not have any mapping for U+0000,
+        // then there will not even be a phantom fallback to 00
+        {
+          "ibm-971",
+          "\x00",
+          :bin{ affe },
+          :intvector{ 0, 0 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        {
+          "*test4",
+          "\x00",
+          :bin{ ff },
+          :intvector{ 0 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // extension in testdata
+        {
+          "*test4x",
+          "\u20ac\x09",
+          :bin{ 0009 },
+          :intvector{ 0, 1 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // DBCS-only extensions
+        {
+          "ibm-970",
+          "\x61\uffa1\u2015\ub000",
+          :bin{ 611aa1aab2eb },
+          :intvector{ 0, 1, 2, 2, 3, 3 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        {
+          "ibm-971",
+          "\x61\uffa1\u2015\ub000",
+          :bin{ affeaffeaffeb2eb },
+          :intvector{ 0, 0, 1, 1, 2, 2, 3, 3 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        {
+          "ibm-1390,swaplfnl",
+          "\uff63\u30C8\u30C8\u309A\u3000\x41\u20ac\x0a",
+          :bin{ 430e4395ecc140400fc1e115 },
+          :intvector{ 0, 1, 1, 1, 2, 2, 4, 4, 5, 5, 6, 7 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        {
+          "ibm-16684",
+          "\uff63\u30C8\u30C8\u309A\u3000\x41\u20ac\x0a",
+          :bin{ fefe4395ecc14040fefe42e1fefe },
+          :intvector{ 0, 0, 1, 1, 2, 2, 4, 4, 5, 5, 6, 6, 7, 7 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        {
+          "ibm-1399",
+          "\uff63\u30C8\u30C8\u309A\u3000\x41\u20ac\x0a",
+          :bin{ 440e4395ecc140400fc1e125 },
+          :intvector{ 0, 1, 1, 1, 2, 2, 4, 4, 5, 5, 6, 7 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        // <subchar1> from |2 mappings
+        {
+          "ibm-1390",
+          "\x0e\x0f\u0901\U00050000\uffe8\uffee",
+          :bin{ 3f3f0efefefefe0f3f3f },
+          :intvector{ 0, 1, 2, 2, 2, 3, 3, 5, 5, 6 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // <subchar1> from |2 mappings, and also contains a fallback to 00
+        {
+          "*test4",
+          "\u20ac\u20ad\U00050005\U00023456\U0010ffff\x30",
+          :bin{ 0000e10102030affff },
+          :intvector{ 0, 1, 2, 4, 4, 4, 4, 6, 8 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // setting a <subchar> resets the <subchar1>
+        {
+          "*test4",
+          "\u20ac\u20ad\U00050005\U00023456\U0010ffff\x30",
+          :bin{ 00000102030f0102030a0102030f0102030f },
+          :intvector{ 0, 1, 2, 2, 2, 2, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 8 },
+          :int{1}, :int{1}, "", "?\x00\x01\x02\x03\x0f", ""
+        }
+
+        // fallback to 00 with old single-byte data structure
+        {
+          "*test1",
+          "\u20ac\u20ad\U00101234\U00050000",
+          :bin{ 000007ff },
+          :intvector{ 0, 1, 2, 4 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
+        // extensions
+        {
+          "ibm-1390",
+          "\u025a\u025a\u0300\u025a\u0301\u025a\u0302\uffe8\U0002a0f9",
+          :bin{ 0ed896eccaeccbd896ea530f3f0eb7c20f },
+          :intvector{ 0, 0, 0, 1, 1, 3, 3, 5, 5, 6, 6, 7, 7, 8, 8, 8, 8 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        {
+          "*test3",
+          "\xc4\xc4\xc4\U00101234\xc4\xc4\U00101234\x05",
+          :bin{ ffffff070501020c },
+          :intvector{ 0, 1, 2, 3, 5, 5, 5, 5 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        {
+          "*test3",
+          "\U00101234\U00101234\U00050005\U00101234\U00050005\U00060006",
+          :bin{ 07070001020e05070001020f09 },
+          :intvector{ 0, 2, 2, 2, 2, 2, 2, 6, 6, 6, 6, 6, 6 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        // normal conversions
+        {
+          "UTF-16LE",
+          "1\U00010001\U000500022\ud8003\udc014",
+          :bin{ 310000d801dc00d902dc3200fdff3300fdff3400 },
+          :intvector{ 0, 0, 1, 1, 1, 1, 3, 3, 3, 3, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        { "UTF-16LE", "\ud800", :bin{""}, :intvector{}, :int{1}, :int{0}, "truncated", ".", "\ud800" }
+
+        {
+          "UTF-16BE",
+          "1\U00010001\U000500022\ud8003\udc014",
+          :bin{ 0031d800dc01d900dc020032fffd0033fffd0034 },
+          :intvector{ 0, 0, 1, 1, 1, 1, 3, 3, 3, 3, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        { "UTF-16BE", "\ud800", :bin{""}, :intvector{}, :int{1}, :int{0}, "truncated", ".", "\ud800" }
+
+        // escape callback
+        {
+          "ISCII",
+          "A\u0901\U00023456\u0902B\U00023456C",
+          :bin{ 41ef42a1255544383444255544433536a24225554438344425554443353643 },
+          :intvector{
+            0,
+            1,1,1,
+            2,2,2,2,2,2,
+            2,2,2,2,2,2,
+            4,
+            5,
+            6,6,6,6,6,6,
+            6,6,6,6,6,6,
+            8
+          },
+          :int{1}, :int{0}, "", "&", ""
+        }
+
+        // escape callback (hex)
+        {
+          "iso-2022-jp",
+          "\u3000\U00023456\u3001\U00023456B\u901c",
+          :bin{ 1b244221211b284226237832333435363b1b244221221b284226237832333435363b42262378393031433b },
+          :intvector{
+            0,0,0,0,0,
+            1,1,1,1,1,1,1,1,1,1,1,1,
+            3,3,3,3,3,
+            4,4,4,4,4,4,4,4,4,4,4,4,
+            6,
+            7,7,7,7,7,7,7,7
+          },
+          :int{1}, :int{0}, "", "&X", ""
+        }
+
+        // sub callback
+        {
+          "gb18030",
+          "$\x7f\x80\u01f9\u20ac\u4e00\u9fa6\uffff\U00010000\U0010ffff",
+          :bin{ 247f81308130a8bfa2e3d2bb82358f338431a43990308130e3329a35 },
+          :intvector{ 0, 1, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 10, 10, 10, 10 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        // skip callback
+        { "ibm-930", "\u6D63\u6D64\u6D65\u6D66", :bin{ 0e5d5f5d63466b0f }, :intvector{ 0, 0, 0, 1, 1, 3, 3, 3 }, :int{1}, :int{0}, "", "0", "" }
+        { "ibm-930", "\u6D63\u6D64\ud89a\u6D66", :bin{ 0e5d5f5d63466b0f }, :intvector{ 0, 0, 0, 1, 1, 3, 3, 3 }, :int{1}, :int{0}, "", "0", "" }
+        { "ibm-930", "\u6D63\u6D64\ud89a\u6D66", :bin{ 0e5d5f5d63 }, :intvector{ 0, 0, 0, 1, 1 }, :int{1}, :int{0}, "illegal", "0i", "\ud89a" }
+
+        // sub callback for supplementary code point
+        { "LATIN1",  "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{1}, :int{0}, "", "", "" }
+        { "ibm-920", "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{1}, :int{0}, "", "", "" }
+
+        // sub callback with AA as subchar
+        { "ibm-920", "1\U000104012", :bin{ 31AA32 }, :intvector{ 0, 1, 3 }, :int{1}, :int{0}, "", "?\x00\xAA", "" }
+
+        // same but not flushing
+        { "LATIN1",  "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{0}, :int{0}, "", "", "\U00010401" }
+        { "ibm-920", "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{0}, :int{0}, "", "", "\U00010401" }
+
+        // simple sample, no error handling
+        { "UTF-8", "a\U0010FFFF", :bin{ 61F48FBFBF }, :intvector{ 0, 1, 1, 1, 1 }, :int{1}, :int{0}, "", "", "" }
+      }
+    }
+
+    getUnicodeSet {
+      // charset - will be opened, and ucnv_getUnicodeSet() called on it
+      // map - set of code points and strings that must be in the returned set
+      // mapnot - set of code points and strings that must *not* be in the returned set
+      // which - numeric UConverterUnicodeSet value
+      Headers { "charset", "map", "mapnot", "which" }
+      Cases {
+        // ISO-2022-KR
+        {
+          "ISO-2022-KR",
+          "[\x00-\x7f\xa1\xa4\xfe\u0111\u4e00\u4e01\uac00-\uac02\uffe6]",
+          "[\x80-\xa0\xa3\xa5\xff-\u0110\uac03\uffe7-\U0010ffff]",
+          :int{0}
+        }
+
+        // versions of ISO-2022-JP
+        {
+          "ISO-2022-JP",
+          "[\x00-\x7f\u0391-\u03a1\uff61-\uff9f\u4e00\u4e01\uffe5]",
+          "[\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\uffe6-\U0010ffff]",
+          :int{0}
+        }
+        {
+          "ISO-2022-JP-2",
+          "[\x00-\u0113\u0385-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
+          "[\uffe7-\U0010ffff]",
+          :int{0}
+        }
+
+        // versions of ISO-2022-CN
+        {
+          "ISO-2022-CN",
+          "[\x00-\x7f\u4e00\u4e01\u9f98\ufe6b]",
+          "[\u4e29\uffe6-\U0010ffff]",
+          :int{0}
+        }
+        {
+          "ISO-2022-CN-EXT",
+          "[\x00-\x7f\u4e00-\u4e05\u9f98\ufe6b\u4e28-\u4e2b\U00020000\U00020003-\U00020005\U00029664]",
+          "[\U00020001\U00020002\U0002a6d7-\U0010ffff]",
+          :int{0}
+        }
+
+        // DBCS-only
+        {
+          "ibm-971",
+          "[\xa1\xa4\uac01\ub000]",
+          "[\x00-\x9f\u2015]",
+          :int{0}
+        }
+
+        {
+          "ibm-16684",
+          "[\xa0\xa1\xa4\xa6-\xab\xad-\u017f\u0254\u309b-\u30ff\u4e00-\u4e05\U00023d00\U000243bc\U0002a6b2"
+              "{\u0254\u0300}{\u0254\u0301}{\u304b\u309a}{\u30ad\u309a}{\u30af\u309a}]",
+          "[\x00-0x9f\xa2\xa3\xa5\xac\u0200-\u024f\U00010000-\U0001ffff\U0002a61b-\U0002a6b1]",
+          :int{0}
+        }
+
+        // extensions
+        {
+          "ibm-1390",
+          "[\x00-\x0d\x10-\u017f\u0254\u309b-\u30ff\u4e00-\u4e05\U00023d00\U000243bc\U0002a6b2"
+              "{\u0254\u0300}{\u0254\u0301}{\u304b\u309a}{\u30ad\u309a}{\u30af\u309a}]",
+          "[\x0e\x0f\u0200-\u024f\U00010000-\U0001ffff\U0002a61b-\U0002a6b1]",
+          :int{0}
+        }
+
+        {
+          "*test3",
+          "[\x05\x0b\xc0\u20ac\U00023456\U00101234"
+              "{\U00101234\U00050005\U00060006}{\U00101234\U00050005}{\U00101234\U00060006}{\xc4\xc4\U00101234\x05}]",
+          "[\x06\x0e\U00034567\U000febcd{\U00101234\U00070007}]",
+          :int{0}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,216 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+//  Date        Name        Description
+//  10/23/2000  grhoten     Initial version (source http://www.yale.edu/swahili/)
+
+
+sw {
+    Version { "2.0" }
+
+    // Many of these names came from www.geonames.de
+    Countries {
+        AE { "Muugano wa Falme za Nchi za Kiarabu" }
+        AG { "Antigua na Barbuda" }
+        AR { "Ajentina" }
+
+        BA { "Bosnia na Herzegowina" }
+        BE { "Ubelgiji" }
+        BR { "Brazili" }
+        BS { "Visiwa vya Bahama" }
+
+        CA { "Kanada" }
+        CF { "Jamhuri ya Afrika ya Kati" }
+        CG { "Kongo" }
+        CH { "Uswisi" }
+        CI { "Pwani ya Pembe" }
+        CM { "Kamerun" }
+        CN { "Uchina" }
+        CO { "Kolombia" }
+        //CS { "Serbiya da Montenegro" }
+        CV { "Rasi Verde" }
+        CZ { "Jamhuri ya Czech" }
+
+        DE { "Udachi" }
+        DJ { "Jibuti" }
+        DK { "Udenmarki" }
+        DM { "Dominika" }
+        DO { "Jamhuri ya Dominikan" }
+
+        EC { "Ekvado" }
+        EG { "Misri" }
+        ES { "Uhispania" }
+        ET { "Uhabeshi" }
+
+        FR { "Ufaransa" }
+
+        GB { "Uingereza" }
+        GQ { "Guinea ya Ikweta" }
+
+        HR { "Kroatia" }
+        HU { "Hungaria" }
+
+        IL { "Uyahudi" } // This could be Israeli instead
+        IN { "Uhindi" }
+        IQ { "Iraki" }
+        IR { "Uajemi" } // This could be Iran instead
+        IS { "Barafu" }
+        IT { "Uitaliani" }
+
+        JM { "Jamaika" }
+        JP { "Ujapani" }
+
+        KE { "Kenya" }
+        KH { "Kampuchea" }
+        KM { "Visiwa vya Komoro" }
+        KN { "Saint Kitts na Nevis" }
+        KP { "Korea ya Kaskazini" }
+        KR { "Korea ya Kusini" }
+
+        LU { "Luksemburg" }
+
+        MA { "Moroko" }
+        MC { "Monako" }
+        //MG { "Madagascar" } // Could also be Buki or Malagasi
+        MH { "Visiwa vya Marshall"}
+        MX { "Meksiko" }
+        MY { "Malasya" }
+        MZ { "Msumbiji" }
+
+        NI { "Nikaragua" }
+        NL { "Uholanzi" }
+        NO { "Unorwe" }
+        NP { "Nepali" }
+
+        PG { "Papua Guinea Mpya" }
+        PH { "Filipino" }
+        PT { "Ureno" }
+        PY { "Paragwai" }
+
+        RU { "Urusi" }
+
+        SA { "Arabuni Saudi" }
+        SB { "Visiwa vya Solomon" }
+        SC { "Visiwa vya Shelisheli" }
+        SE { "Uswidi" }
+        SO { "Somali" }
+        ST { "Sao Tome na Principe" }
+
+        TD { "Chadi" }
+        TL { "Timor ya Mashariki" }
+        TR { "Uturuki" }
+        TT { "Trinidad na Tobago" }
+        TZ { "Tanzania" }
+
+        US { "Muungano wa Nchi za Amerika" }
+        UY { "Urugwai" }
+
+        VA { "Vatikano" }
+        VC { "Saint Vincent na Grenadines" }
+
+        YE { "Yemeni" }
+
+        ZA { "Afrika ya Kusini" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
+    }
+    Languages {
+        sw  { "Kiswahili" }
+    }
+    zoneStrings {
+        {
+            "Africa/Nairobi",
+            "Saa za Africa Mashariki",  // East African Time
+            "EAT",
+            "Saa za Africa Mashariki",
+            "EAT",
+            "Nairobi",
+        }
+    }
+    LocaleScript:array{
+      "Latn",  // ISO 15924 Name
+    }
+    ExemplarCharacters{
+      "[a-z]"
+    }
+
+// /**************** Info Below is needed ****************/
+// NumberElements{}
+// AmPmMarkers{}
+// localPatternChars{}
+
+    // Currency display names
+    Currencies {
+        KES { "KSh", "KES" }
+        TZS { "TSh", "TZS" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                7,
+                1,
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Jpi",
+                        "Jtt",
+                        "Jnn",
+                        "Jtn",
+                        "Alh",
+                        "Iju",
+                        "Jmo",
+                    }
+                    wide{
+                        "Jumapili",
+                        "Jumatatu",
+                        "Jumanne",
+                        "Jumatano",
+                        "Alhamisi",
+                        "Ijumaa",
+                        "Jumamosi",
+                    }
+                }
+            }
+            eras{
+                "KK",
+                "BK",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mei",
+                        "Jun",
+                        "Jul",
+                        "Ago",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Des",
+                    }
+                    wide{
+                        "Januari",
+                        "Februari",
+                        "Machi",
+                        "Aprili",
+                        "Mei",
+                        "Juni",
+                        "Julai",
+                        "Agosti",
+                        "Septemba",
+                        "Oktoba",
+                        "Novemba",
+                        "Desemba",
+                    }
+                }
+            }
+        }
+    }
+}

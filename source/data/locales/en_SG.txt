@@ -1,0 +1,47 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//
+// Singapore English locale: Data By Syn Wee Quek
+
+en_SG {
+
+    Version { "2.0" }
+
+
+//    ShortCountry { "SIN" } // copied to zh_SG.txt
+
+    zoneStrings { 
+        {
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore"
+        }
+    }
+    Currencies{
+        SGD { "$",  "Singapore Dollar"     } // 8/9/1965-
+        USD { "US$",     "USD" } // US Dollar
+    }
+
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "a hh:mm:ss",
+                "a hh:mm:ss",
+                "a hh:mm",
+                "a hh:mm",
+                "dd MMMM yyyy",
+                "dd MMM yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}"
+            }
+        }
+    }
+}

@@ -1,0 +1,109 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+pa {
+    Version{ "1.0"}
+    Languages {
+        pa { "\u0A2A\u0A70\u0A1C\u0A3E\u0A2C\u0A40" }
+    }
+    Countries {
+        IN { "\u0A2D\u0A3E\u0A30\u0A24" }
+    }
+
+
+
+
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "\u0a66",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221e",
+        "\ufffd",
+        ".",
+        "+",
+    }
+    Currencies {
+        INR { "\u0A30\u0A41.", "\u0a30\u0a41\u0a2a\u0a3f\u0a2f" }
+    }
+    NumberPatterns {
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "##,##,##0%",
+        "#E0",
+    }
+    LocaleScript:array { "Guru" }
+
+    ExemplarCharacters { "[[:Guru:]\u200c\u200d]" }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u0A38\u0A35\u0A47\u0A30\u0A47",
+                "\u0A36\u0A3E\u0A2E"
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u0A10\u0A24.",
+                        "\u0A38\u0A4B\u0A2E.",
+                        "\u0A2E\u0A70\u0A17\u0A32.",
+                        "\u0A2C\u0A41\u0A27.",
+                        "\u0A35\u0A40\u0A30.",
+                        "\u0A36\u0A41\u0A15\u0A30.",
+                        "\u0A36\u0A28\u0A40."
+                    }
+                    wide{
+                        "\u0A10\u0A24\u0A35\u0A3E\u0A30",
+                        "\u0A38\u0A4B\u0A2E\u0A35\u0A3E\u0A30",
+                        "\u0A2E\u0A70\u0A17\u0A32\u0A35\u0A3E\u0A30",
+                        "\u0A2C\u0A41\u0A27\u0A35\u0A3E\u0A30",
+                        "\u0A35\u0A40\u0A30\u0A35\u0A3E\u0A30",
+                        "\u0A36\u0A41\u0A71\u0A15\u0A30\u0A35\u0A3E\u0A30",
+                        "\u0A36\u0A28\u0A40\u0A1A\u0A30\u0A35\u0A3E\u0A30"
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u0A1C\u0A28\u0A35\u0A30\u0A40",
+                        "\u0A5E\u0A30\u0A35\u0A30\u0A40",
+                        "\u0A2E\u0A3E\u0A30\u0A1A",
+                        "\u0A05\u0A2A\u0A4D\u0A30\u0A48\u0A32",
+                        "\u0A2E\u0A08",
+                        "\u0A1C\u0A42\u0A28",
+                        "\u0A1C\u0A41\u0A32\u0A3E\u0A08",
+                        "\u0A05\u0A17\u0A38\u0A24",
+                        "\u0A38\u0A24\u0A70\u0A2C\u0A30",
+                        "\u0A05\u0A15\u0A24\u0A42\u0A2C\u0A30",
+                        "\u0A28\u0A35\u0A70\u0A2C\u0A30",
+                        "\u0A26\u0A38\u0A70\u0A2C\u0A30",
+                    }
+                    wide{
+                        "\u0A1C\u0A28\u0A35\u0A30\u0A40",
+                        "\u0A5E\u0A30\u0A35\u0A30\u0A40",
+                        "\u0A2E\u0A3E\u0A30\u0A1A",
+                        "\u0A05\u0A2A\u0A4D\u0A30\u0A48\u0A32",
+                        "\u0A2E\u0A08",
+                        "\u0A1C\u0A42\u0A28",
+                        "\u0A1C\u0A41\u0A32\u0A3E\u0A08",
+                        "\u0A05\u0A17\u0A38\u0A24",
+                        "\u0A38\u0A24\u0A70\u0A2C\u0A30",
+                        "\u0A05\u0A15\u0A24\u0A42\u0A2C\u0A30",
+                        "\u0A28\u0A35\u0A70\u0A2C\u0A30",
+                        "\u0A26\u0A38\u0A70\u0A2C\u0A30",
+                    }
+                }
+            }
+        }
+    }
+}

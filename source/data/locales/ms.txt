@@ -1,0 +1,159 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *   Original source - Universal Locales for Linux Project
+// ***************************************************************************
+
+ms{
+    Version{ "1.1" }
+    Countries {
+        Fallback{ "en" }
+        // Most of the Country names are the same as en. They fallback to en to save space.
+
+        AE { "Emiriah Arab Bersatu" }
+        AG { "Antigua dan Barbuda" }
+
+        BA { "Bosnia dan Herzegovina" }
+
+        CA { "Kanada" }
+        CF { "Republik Afrika Tengah" }
+        CI { "Pantai Gading" }
+        CL { "Cile" }
+        CM { "Kamerun" }
+        CN { "Cina" }
+        CR { "Kosta Rika" }
+        CY { "Kibris" }
+        CZ { "Republik Czech" }
+
+        DE { "Jerman" }
+        DJ { "Jibouti" }
+        DO { "Republik Dominican" }
+        DZ { "Aljazair" }
+
+        EG { "Mesir" }
+        EH { "Sahara Barat" }
+        ES { "Sepanyol" }
+
+        FR { "Perancis" }
+
+        GR { "Yunani" }
+        GW { "Guinea Bissau" }
+
+        HU { "Hungari" }
+
+        IN { "Hindia" }
+        IT { "Itali" }
+
+        JM { "Jamaika" }
+        JP { "Jepun" }
+
+        KH { "Kemboja" }
+        KN { "Saint Kitts dan Nevis" }
+        KP { "Utara Korea" }
+        KR { "Selatan Korea" }
+
+        LB { "Lubnan" }
+        LU { "Luksembourg" }
+
+        MA { "Maghribi" }
+        MG { "Madagaskar" }
+        MH { "Kepulauan Marshall" }
+        MV { "Maldiv" }
+        MX { "Meksiko" }
+        MZ { "Mozambik" }
+
+        NL { "Belanda" }
+
+        PH { "Filipina" }
+        PT { "Feringgi" }
+
+        SA { "Arab Saudi" }
+        SB { "Kepulauan Solomon" }
+        SG { "Singapura" }
+        SL { "Siera Leon" }
+        SR { "Surinam" }
+        ST { "Sao Tome dan Principe" }
+
+        TD { "Cad" }
+        TJ { "Tadjikistan" }
+        TR { "Turki" }
+        TT { "Trinidad dan Tobago" }
+
+        US { "Amerika Syarikat" }
+
+        VC { "Saint Vincent dan Grenadines" }
+
+        YE { "Yaman" }
+
+        ZA { "Afrika Selatan" }
+    }
+    Currencies {
+        MYR { "RM", "Ringgit Malaysia" }
+    }
+    ExemplarCharacters{ "[a-z]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    Languages {
+        ms { "Bahasa Melayu" }
+    }
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Ahd",
+                        "Isn",
+                        "Sel",
+                        "Rab",
+                        "Kha",
+                        "Jum",
+                        "Sab",
+                    }
+                    wide{
+                        "Ahad",
+                        "Isnin",
+                        "Selasa",
+                        "Rabu",
+                        "Khamis",
+                        "Jumaat",
+                        "Sabtu",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mac",
+                        "Apr",
+                        "Mei",
+                        "Jun",
+                        "Jul",
+                        "Ogos",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dis"
+                    }
+                    wide{
+                        "Januari",
+                        "Februari",
+                        "Mac",
+                        "April",
+                        "Mei",
+                        "Jun",
+                        "Julai",
+                        "Ogos",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Disember"
+                    }
+                }
+            }
+        }
+    }
+}

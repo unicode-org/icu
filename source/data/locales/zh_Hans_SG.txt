@@ -1,0 +1,11 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_Hans_SG {
+    // TODO: Reverse the direction of this alias.
+    "%%ALIAS" { "zh_SG" }
+}

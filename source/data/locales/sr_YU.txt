@@ -1,0 +1,11 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sr_YU {
+    Version{ "2.0" }
+    /* Discarding duplicate data for tag: NumberPatterns */
+}

@@ -1,0 +1,154 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2004, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Gujarati.txt
+// Date: Tue May 18 17:24:49 2004
+//--------------------------------------------------------------------
+
+// InterIndic_Gujarati
+
+t_InterIndic_Gujr {
+  Rule {
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+// InterIndic-Gujarati
+//:: NFD (NFC) ;
+"\ue001>\u0a81;" // SIGN CANDRABINDU
+"\ue002>\u0a82;" // SIGN ANUSVARA
+"\ue003>\u0a83;" // SIGN VISARGA
+"\uE004>\u0a85;" // FALLBACK TO LETTER A
+"\ue005>\u0a85;" // LETTER A
+"\ue006>\u0a86;" // LETTER AA
+"\ue007>\u0a87;" // LETTER I
+"\ue008>\u0a88;" // LETTER II
+"\ue009>\u0a89;" // LETTER U
+"\ue00a>\u0a8a;" // LETTER UU
+"\ue00b>\u0a8b;" // LETTER VOCALIC R
+"\ue00c>\u0a8c;" // LETTER VOCALIC L
+"\ue00d>\u0a8d;" // GUJARATI VOWEL CANDRA E
+"\ue00e>\u0a8f;" // FALLBACK
+"\ue00f>\u0a8f;" //  InterIndic-Gujarati: LETTER EE (\u0a8f = LETTER E)
+"\ue010>\u0a90;" // LETTER AI
+"\ue011>\u0a91;" // FALLBACK
+"\ue012>\u0a93;" // FALLBACK
+"\ue013>\u0a93;" // UNMAPPED InterIndic-Gujarati: LETTER OO (\u0a93 = LETTER O)
+"\ue014>\u0a94;" // LETTER AU
+"\ue015>\u0a95;" // LETTER KA
+"\ue016>\u0a96;" // LETTER KHA
+"\ue017>\u0a97;" // LETTER GA
+"\ue018>\u0a98;" // LETTER GHA
+"\ue019>\u0a99;" // LETTER NGA
+"\ue01a>\u0a9a;" // LETTER CA
+"\ue01b>\u0a9b;" // LETTER CHA
+"\ue01c>\u0a9c;" // LETTER JA
+"\ue01d>\u0a9d;" // LETTER JHA
+"\ue01e>\u0a9e;" // LETTER NYA
+"\ue01f>\u0a9f;" // LETTER TTA
+"\ue020>\u0aa0;" // LETTER TTHA
+"\ue021>\u0aa1;" // LETTER DDA
+"\ue022>\u0aa2;" // LETTER DDHA
+"\ue023>\u0aa3;" // LETTER NNA
+"\ue024>\u0aa4;" // LETTER TA
+"\ue025>\u0aa5;" // LETTER THA
+"\ue026>\u0aa6;" // LETTER DA
+"\ue027>\u0aa7;" // LETTER DHA
+"\ue028>\u0aa8;" // LETTER NA
+"\ue029>\u0aa8\u0abc;" // FALLBACK to NA+NUKTA
+"\ue02a>\u0aaa;" // LETTER PA
+"\ue02b>\u0aab;" // LETTER PHA
+"\ue02c>\u0aac;" // LETTER BA
+"\ue02d>\u0aad;" // LETTER BHA
+"\ue02e>\u0aae;" // LETTER MA
+"\ue02f>\u0aaf;" // LETTER YA
+"\ue030>\u0ab0;" // LETTER RA
+"\ue031>\u0ab0\u0abc;" // FALLBACK
+"\ue032>\u0ab2;" // LETTER LA
+"\ue033>\u0ab3;" // LETTER LLA
+"\ue034>\u0ab3\u0abc;" //  LETTER LLLA>LETTER LLA+NUKTA
+"\ue035>\u0ab5;" // LETTER VA
+"\ue036>\u0ab6;" // LETTER SHA
+"\ue037>\u0ab7;" // LETTER SSA
+"\ue038>\u0ab8;" // LETTER SA
+"\ue039>\u0ab9;" // LETTER HA
+"\ue03c>\u0abc;" // SIGN NUKTA
+"\ue03d>\u0abd;" // SIGN AVAGRAHA
+"\ue03e>\u0abe;" // VOWEL SIGN AA
+"\ue03f>\u0abf;" // VOWEL SIGN I
+"\ue040>\u0ac0;" // VOWEL SIGN II
+"\ue041>\u0ac1;" // VOWEL SIGN U
+"\ue042>\u0ac2;" // VOWEL SIGN UU
+"\ue043>\u0ac3;" // VOWEL SIGN VOCALIC R
+"\ue044>\u0ac4;" // VOWEL SIGN VOCALIC RR
+"\ue045>\u0ac5;" // VOWEL SIGN CANDRA E
+"\ue046>\u0ac7;" // FALLBACK
+"\ue047>\u0ac7;" //  InterIndic-Gujarati: VOWEL SIGN EE (\u0ac7 = VOWEL SIGN E)
+"\ue048>\u0ac8;" // VOWEL SIGN AI
+"\ue049>\u0ac9;" // VOWEL SIGN CANDRA O
+"\ue04a>\u0acb;" // FALLBACK
+"\ue04b>\u0acb;" // UNMAPPED InterIndic-Gujarati: VOWEL SIGN OO (\u0acb = VOWEL SIGN O)
+"\ue04c>\u0acc;" // VOWEL SIGN AU
+"\ue04d>\u0acd;" // SIGN VIRAMA
+"\ue050>\u0ad0;" // OM
+"\ue051>;"
+"\ue052>;"
+"\ue053>;"
+"\ue054>;"
+"\ue055>;" // UNMAPPED InterIndic-Gujarati: LENGTH MARK
+"\ue056>\u0ac8;" // REMAP (indicExceptions.txt): \u0ad6>\u0ac8 = AI LENGTH MARK>VOWEL SIGN AI
+"\ue057>\u0acc;" // REMAP (indicExceptions.txt): \u0ad7>\u0acc = AU LENGTH MARK>VOWEL SIGN AU
+"\ue058>\u0a95\u0abc;" // FALLBACK
+"\ue059>\u0a96\u0abc;" // REMAP (indicExceptions.txt): \u0ad9>\u0a96\u0abc = LETTER KHHA>LETTER KHA.SIGN NUKTA
+"\ue05a>\u0a97\u0abc;" // REMAP (indicExceptions.txt): \u0ada>\u0a97\u0abc = LETTER GHHA>LETTER GA.SIGN NUKTA
+"\ue05b>\u0a9c\u0abc;" // REMAP (indicExceptions.txt): \u0adb>\u0a9c\u0abc = LETTER ZA>LETTER JA.SIGN NUKTA
+"\ue05c>\u0aa1\u0abc;" // FALLBACK
+"\ue05d>\u0aa2\u0abc;" // REMAP (indicExceptions.txt): \u0add>\u0aa2\u0abc = LETTER RHA>LETTER DDHA.SIGN NUKTA
+"\ue05e>\u0aab\u0abc;" // REMAP (indicExceptions.txt): \u0ade>\u0aab\u0abc = LETTER FA>LETTER PHA.SIGN NUKTA
+"\ue05f>\u0aaf\u0abc;" // REMAP (indicExceptions.txt): \u0adf>\u0aaf\u0abc = LETTER YYA>LETTER YA.SIGN NUKTA
+"\ue060>\u0ae0;" // LETTER VOCALIC RR
+"\ue061>\u0ae1;" // LETTER VOCALIC LL
+"\ue062>\u0abf\u0abc;" // REMAP (indicExceptions.txt): \u0ae2>\u0abf\u0abc = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
+"\ue063>\u0ac0\u0abc;" // REMAP (indicExceptions.txt): \u0ae3>\u0ac0\u0abc = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
+"\uE064>\u0964;"          // DANDA
+"\uE065>\u0965;"          // DOUBLE DANDA
+"\ue066>\u0ae6;" // DIGIT ZERO
+"\ue067>\u0ae7;" // DIGIT ONE
+"\ue068>\u0ae8;" // DIGIT TWO
+"\ue069>\u0ae9;" // DIGIT THREE
+"\ue06a>\u0aea;" // DIGIT FOUR
+"\ue06b>\u0aeb;" // DIGIT FIVE
+"\ue06c>\u0aec;" // DIGIT SIX
+"\ue06d>\u0aed;" // DIGIT SEVEN
+"\ue06e>\u0aee;" // DIGIT EIGHT
+"\ue06f>\u0aef;" // DIGIT NINE
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0ab0;"     // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0ab0;"     // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"           // RUPEE MARK
+"\ue074>;"           // RUPEE SIGN
+"\ue075>;"           // CURRENCY NUMERATOR ONE
+"\ue076>;"           // CURRENCY NUMERATOR TWO
+"\ue077>;"           // CURRENCY NUMERATOR THREE
+"\ue078>;"           // CURRENCY NUMERATOR FOUR
+"\ue079>;"           // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"           // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"           // ISSHAR
+"\uE07C>;"           // TIPPI
+"\uE07D>;"           // ADDAK
+"\uE07E>;"           // IRI
+"\uE07F>;"           // URA
+"\uE080>;"           // EK ONKAR
+"\uE081>\u0ab5;"      // FALLBACK FOR ORIYA LETTER WA 
+"0 > \u0ae6;"       // FALLBACK FOR TAMIL
+"1 > \u0ae7;"
+
+//\ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
+//    :: NFC (NFD) ;
+// eof
+  }
+}

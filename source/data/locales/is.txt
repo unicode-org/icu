@@ -1,0 +1,283 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+is {
+    Version{ "2.0" }
+    Countries { 
+        AE { "Sameinte arab\u00edsku fyrstad\u00e6min" }
+        AF { "Afganistan" }
+        AG { "Antigua og Barbuda" }
+        AL { "Alban\u00eda" }
+        AM { "Armen\u00eda" }
+        AO { "Ang\u00f3la" }
+        AR { "Argent\u00edna" }
+        AT { "Austurr\u00edki" }
+        AU { "\u00c1stral\u00eda" }
+
+        BA { "Bosn\u00eda-Hersegov\u00edna" }
+        BB { "Belg\u00eda" }
+        BG { "B\u00falgar\u00eda" }
+        BI { "B\u00far\u00fand\u00ed" }
+        BO { "B\u00f3liv\u00eda" }
+        BR { "Brasil\u00eda" }
+        BS { "Bahama eyjar" }
+        BT { "Bh\u00fatan" }
+        BY { "Hv\u00edta R\u00fassland" }
+
+        CA { "Kanada" }
+        CF { "Mi\u00f0-Afr\u00edku ly\u00f0veldi\u00f0" }
+        CG { "Kong\u00f3" }
+        CH { "Sviss" }
+        CI { "F\u00edlabeinsstr\u00f6ndin" }
+        CM { "Kamer\u00fan" }
+        CN { "K\u00edna" }
+        CO { "K\u00f3lumb\u00eda" }
+        CR { "Kostar\u00edka" }
+        //CS { "Serb\u00eda og Svartfjallaland" } // TODO: if we allow this, then SP must go away
+        CU { "K\u00faba" }
+        CV { "Gr\u00e6nh\u00f6f\u00f0aeyjar" }
+        CY { "K\u00fdpur" }
+        CZ { "T\u00e9kkland" }
+
+        DE { "\u00de\u00fdskaland" }
+        DK { "Danm\u00f6rk" }
+        DO { "D\u00f3min\u00edska l\u00fd\u00f0veldi\u00f0" }
+        DZ { "Als\u00edr" }
+
+        EC { "Ekvador" }
+        EE { "Eistland" }
+        EG { "Egyptaland" }
+        EH { "Vestur-Sahara" }
+        ER { "Er\u00edtrea" }
+        ES { "Sp\u00e1nn" }
+        ET { "E\u00fe\u00ed\u00f3p\u00eda" }
+
+        FI { "Finnland" }
+        FM { "Mikr\u00f3nes\u00eda" }
+        FR { "Frakkland" }
+
+        GB { "St\u00f3ra Bretland" }
+        GE { "Georg\u00eda" }
+        GH { "Gana" }
+        GN { "G\u00ednea" }
+        GQ { "Mi\u00f0baugs G\u00ednea" }
+        GR { "Grikkland" }
+        GT { "Gvatemala" }
+        GW { "G\u00ednea-Bissau" }
+
+        HN { "Hond\u00faras" }
+        HR { "Kr\u00f3at\u00eda" }
+        HT { "Ha\u00edt\u00ed" }
+        HU { "Ungverjaland" }
+
+        ID { "Ind\u00f3nes\u00eda" }
+        IE { "\u00cdrland" }
+        IL { "\u00cdsrael" }
+        IN { "Indland" }
+        IQ { "\u00cdrak" }
+        IR { "\u00cdran" }
+        IS { "\u00cdsland" }
+        IT { "\u00cdtal\u00eda" }
+
+        JM { "Jama\u00edka" }
+        JO { "J\u00f3rdan\u00eda" }
+
+        KE { "Ken\u00fda" }
+        KG { "Kirgisistan" }
+        KH { "Kamb\u00f3d\u00eda" }
+        KI { "Kiribat\u00ed" }
+        KM { "Comoro eyjar" }
+        KN { "Saint Kitts og Nevis" }
+        KP { "Nor\u00f0ur-K\u00f3rea" }
+        KR { "Su\u00f0ur-K\u00f3rea" }
+        KW { "K\u00faveit" }
+        KZ { "Kasakstan" }
+
+        LB { "L\u00edbanon" }
+        LC { "Saint L\u00fasia" }
+        LR { "L\u00edber\u00eda" }
+        LS { "Les\u00f3t\u00f3" }
+        LT { "Lith\u00e1en" }
+        LU { "L\u00faxemborg" }
+        LV { "Lettland" }
+        LY { "L\u00fdb\u00eda" }
+
+        MA { "Marokk\u00f3" }
+        MC { "M\u00f3nac\u00f3" }
+        MD { "Moldov\u00eda" }
+        MG { "Madagaskar" }
+        MH { "Marshalleyjar" }
+        MK { "Maked\u00f3n\u00eda" }
+        //MM { "B\u00farma" } // Burma? Should be Myanmar?
+        MN { "Mong\u00f3l\u00eda" }
+        MR { "M\u00e1ritan\u00eda" }
+        MU { "M\u00e1rit\u00edus" }
+        MV { "Mald\u00edveyjar" }
+        MX { "Mex\u00edk\u00f3" }
+        MY { "Malas\u00eda" }
+        MZ { "M\u00f3samb\u00edk" }
+
+        NA { "Namib\u00eda" }
+        NE { "N\u00edger" }
+        NG { "N\u00edger\u00eda" }
+        NI { "N\u00edkarag\u00faa" }
+        NL { "Ni\u00f0url\u00f6nd" }
+        NO { "Noregur" }
+        NZ { "N\u00fdja-Sj\u00e1land" }
+
+        OM { "\u00d3man" }
+
+        PE { "Per\u00fa" }
+        PG { "Pap\u00faa N\u00fdja G\u00ednea" }
+        PH { "Filipseyjar" }
+        PL { "P\u00f3lland" }
+        PT { "Port\u00fagal" }
+        PW { "Palaueyjar" }
+        PY { "Paragv\u00e6" }
+
+        QA { "Katar" }
+
+        RO { "R\u00famen\u00eda" }
+        RU { "R\u00fassland" }
+        RW { "R\u00faanda" }
+
+        SA { "S\u00e1di Arab\u00eda" }
+        SB { "Sal\u00f3mons eyjar" }
+        SC { "Seychelle eyjar" }
+        SD { "S\u00fadan" }
+        SE { "Sv\u00ed\u00fejo\u00f0" }
+        SI { "Sl\u00f3ven\u00eda" }
+        SK { "Sl\u00f3vak\u00eda" }
+        SO { "S\u00f3mal\u00eda" }
+        SP { "Serb\u00eda" }
+        SR { "S\u00farinam" }
+        ST { "Sao Tome og Prins\u00edpe" }
+        SY { "S\u00fdrland" }
+        SZ { "Svasiland" }
+
+        TH { "T\u00e6land" }
+        TJ { "Tadjikistan" }
+        TM { "T\u00farkmenistan" }
+        TN { "T\u00fanis" }
+        TR { "Tyrkland" }
+        TT { "Trinidad og Tobago" }
+        TV { "T\u00faval\u00fa" }
+        TW { "T\u00e6van" }
+        TZ { "Tansan\u00eda" }
+
+        UA { "\u00dakra\u00edna" }
+        UG { "\u00daganda" }
+        US { "Bandar\u00edki Nor\u00f0ur-Amer\u00edku" }
+        UY { "\u00dar\u00fagv\u00e6" }
+        UZ { "\u00dasbekistan" }
+
+        VA { "Vat\u00edkani\u00f0" }
+        VC { "Saint Vinsent og Grenad\u00edneyjar" }
+        VE { "Venes\u00faela" }
+
+        WS { "Sam\u00f3a" }
+
+        YE { "Jemen" }
+
+        ZA { "Su\u00f0ur-Afr\u00edka" }
+    }
+    Currencies {
+        ISK { "kr.", "ISK" }
+    }
+    Languages { 
+        is { "\u00EDslenska" }
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+
+    LocaleScript{   
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00fd\u00f6\u00e6\u00f0\u00fe]" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sun",
+                        "m\u00E1n",
+                        "\u00FEri",
+                        "mi\u00F0",
+                        "fim",
+                        "f\u00F6s",
+                        "lau",
+                    }
+                    wide{
+                        "sunnudagur",
+                        "m\u00E1nudagur",
+                        "\u00FEri\u00F0judagur",
+                        "mi\u00F0vikudagur",
+                        "fimmtudagur",
+                        "f\u00F6studagur",
+                        "laugardagur",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "ma\u00ED",
+                        "j\u00FAn",
+                        "j\u00FAl",
+                        "\u00E1g\u00FA",
+                        "sep",
+                        "okt",
+                        "n\u00F3v",
+                        "des",
+                    }
+                    wide{
+                        "jan\u00FAar",
+                        "febr\u00FAar",
+                        "mars",
+                        "apr\u00EDl",
+                        "ma\u00ED",
+                        "j\u00FAn\u00ED",
+                        "j\u00FAl\u00ED",
+                        "\u00E1g\u00FAst",
+                        "september",
+                        "okt\u00F3ber",
+                        "n\u00F3vember",
+                        "desember",
+                    }
+                }
+            }
+        }
+    }
+}

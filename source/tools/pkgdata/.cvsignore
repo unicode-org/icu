@@ -1,0 +1,11 @@
+Debug
+Release
+Makefile
+*.d
+*.o
+*.pdb
+pkgdata
+pkgdata.[0-9]
+icupkg.inc
+*.ncb
+*.opt

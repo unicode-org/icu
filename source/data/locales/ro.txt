@@ -1,0 +1,390 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ro {
+    Version{ "2.0" }
+    Countries { 
+        Fallback{ "en"}
+        //AD { "Andorra" }
+        AE { "Emiratele Arabe Unite" }
+        AF { "Afganistan" }
+        AG { "Antigua \u015Fi Barbuda" }
+        //AI { "Anguilla" }
+        //AL { "Albania" }
+        //AM { "Armenia" }
+        AN { "Antilele Olandeze" }
+        //AO { "Angola" }
+        //AQ { "Antarctica" }
+        //AR { "Argentina" }
+        AS { "Samoa American\u0103" }
+        //AT { "Austria" }
+        //AU { "Australia" }
+        //AW { "Aruba" }
+        AZ { "Azerbaidjan" }
+        BA { "Bosnia \u015Fi Herzegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
+        BE { "Belgia" }
+        //BF { "Burkina Faso" }
+        //BG { "Bulgaria" }
+        //BH { "Bahrain" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        //BM { "Bermuda" }
+        //BN { "Brunei" }
+        //BO { "Bolivia" }
+        BR { "Brazilia" }
+        //BS { "Bahamas" }
+        //BT { "Bhutan" }
+        BV { "Insula Bouvet" }
+        //BW { "Botswana" }
+        BY { "Bielorusia" }
+        //BZ { "Belize" }
+        //CA { "Canada" }
+        CC { "Insulele Cocos (Keeling)" }
+        CD { "Congo, Republica Democratic\u0103" }
+        CF { "Republica Central African\u0103" }
+        //CG { "Congo" }
+        CH { "Eleve\u0163ia" }
+        CI { "Coasta de Filde\u015F" }
+        CK { "Insulele Cook" }
+        //CL { "Chile" }
+        CM { "Camerun" }
+        //CN { "China" }
+        CO { "Columbia" }
+        //CR { "Costa Rica" }
+        //CU { "Cuba" }
+        CV { "Capul Verde" }
+        CX { "Insula Christmas" }
+        CY { "Cipru" }
+        CZ { "Republica Ceh\u0103" }
+        DE { "Germania" }
+        //DJ { "Djibouti" }
+        DK { "Danemarca" }
+        //DM { "Dominica" }
+        DO { "Republica Dominican\u0103" }
+        //DZ { "Algeria" }
+        //EC { "Ecuador" }
+        //EE { "Estonia" }
+        EG { "Egipt" }
+        EH { "Sahara de Vest" }
+        //ER { "Eritrea" }
+        ES { "Spania" }
+        ET { "Etiopia" }
+        FI { "Finlanda" }
+        //FJ { "Fiji" }
+        FK { "Insulele Falkland" }
+        FM { "Micronezia, Statele Federate" }
+        FO { "Insulele Feroe" }
+        FR { "Fran\u0163a" }
+        //GA { "Gabon" }
+        GB { "Regatul Unit" }
+        //GD { "Grenada" }
+        //GE { "Georgia" }
+        GF { "Guyana Francez\u0103" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Groenlanda" }
+        //GM { "Gambia" }
+        GN { "Guineea" }
+        //GP { "Guadeloupe" }
+        GQ { "Guineea Ecuatorial\u0103" }
+        GR { "Grecia" }
+        GS { "Insulele South Georgia \u015Fi South Sandwich" }
+        //GT { "Guatemala" }
+        //GU { "Guam" }
+        GW { "Guineea-Bissau" }
+        //GY { "Guyana" }
+        HK { "R.A.S. Hong Kong a Chinei" }
+        HM { "Insula Heard \u015Fi Insulele McDonald" }
+        //HN { "Honduras" }
+        HR { "Croa\u0163ia" }
+        //HT { "Haiti" }
+        HU { "Ungaria" }
+        ID { "Indonezia" }
+        IE { "Irlanda" }
+        //IL { "Israel" }
+        //IN { "India" }
+        IO { "Teritoriile Britanice din Oceanul Indian" }
+        //IQ { "Iraq" }
+        //IR { "Iran, Republica Islamic\u0103" }
+        IS { "Islanda" }
+        IT { "Italia" }
+        //JM { "Jamaica" }
+        JO { "Iordania" }
+        JP { "Japonia" }
+        //KE { "Kenya" }
+        KG { "Kirghizia" }
+        KH { "Cambodgia" }
+        //KI { "Kiribati" }
+        //KM { "Comoros" }
+        KN { "Saint Kitts \u015Fi Nevis" }
+        KP { "Coreea de Nord" }    // alternate name { "Coreea, Republica Popular\u0103 Democratic\u0103" }
+        KR { "Coreea de Sud" }    // alternate name { "Coreea, Republica" }
+        KW { "Kuweit" }
+        KY { "Insulele Cayman" }
+        KZ { "Kazahstan" }
+        LA { "Lao, Republica Democratic\u0103 Popular\u0103" }
+        LB { "Liban" }
+        //LC { "Saint Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        //LS { "Lesotho" }
+        LT { "Lituania" }
+        LU { "Luxemburg" }
+        LV { "Letonia" }
+        LY { "Libia, Jamahiriya Arab\u0103" }
+        MA { "Maroc" }
+        //MC { "Monaco" }
+        MD { "Moldova, Republica" }
+        //MG { "Madagascar" }
+        MH { "Insulele Marshall" }
+        //MK { "Macedonia" }
+        //ML { "Mali" }
+        //MM { "Myanmar" }
+        //MN { "Mongolia" }
+        MO { "R.A.S. Macao a Chinei" }
+        MP { "Insulele Northern Mariana" }
+        MQ { "Martinica" }
+        //MR { "Mauritania" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Maldive" }
+        //MW { "Malawi" }
+        MX { "Mexic" }
+        MY { "Malaezia" }
+        MZ { "Mozambic" }
+        //NA { "Namibia" }
+        NC { "Noua Caledonie" }
+        //NE { "Niger" }
+        NF { "Insulele Norfolk" }
+        //NG { "Nigeria" }
+        //NI { "Nicaragua" }
+        NL { "Olanda" }
+        NO { "Norvegia" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Noua Zeeland\u0103" }
+        //OM { "Oman" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Polinezia Francez\u0103" }
+        PG { "Papua Noua Guinee" }
+        PH { "Filipine" }
+        //PK { "Pakistan" }
+        PL { "Polonia" }
+        PM { "Saint Pierre \u015Fi Miquelon" }
+        //PN { "Pitcairn" }
+        PR { "Porto Rico" }
+        PS { "Teritoriul Palestinian" }
+        PT { "Portugalia" }
+        //PW { "Palau" }
+        //PY { "Paraguay" }
+        //QA { "Qatar" }
+        RE { "Reunion" }
+        RO { "Rom\u00E2nia" }
+        //RO { "Romania" } // From translation center
+        RU { "Federa\u0163ia Rus\u0103" }
+        //RW { "Rwanda" }
+        SA { "Arabia Saudit\u0103" }
+        SB { "Insulele Solomon" }
+        //SC { "Seychelles" }
+        //SD { "Sudan" }
+        SE { "Suedia" }
+        //SG { "Singapore" }
+        //SH { "Saint Helena" }
+        //SI { "Slovenia" }
+        SJ { "Svalbard \u015Fi Jan Mayen" }
+        SK { "Slovacia" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        //SO { "Somalia" }
+        SR { "Surinam" }
+        ST { "Sao Tome \u015Fi Principe" }
+        //SV { "El Salvador" }
+        SY { "Siria" }    // alternate name { "Republica Arab\u0103 Siria" }
+        //SZ { "Swaziland" }
+        TC { "Insulele Turks \u015Fi Caicos" }
+        TD { "Ciad" }
+        TF { "Teritoriile Franceze de Sud" }
+        //TG { "Togo" }
+        TH { "Tailanda" }
+        TJ { "Tadjikistan" }
+        //TK { "Tokelau" }
+        TL { "Timorul de Est" }
+        //TM { "Turkmenistan" }
+        //TN { "Tunisia" }
+        //TO { "Tonga" }
+        TR { "Turcia" }
+        TT { "Trinidad \u015Fi Tobago" }
+        //TV { "Tuvalu" }
+        TW { "Taiwan, Provincia Chinez\u0103" }    // alternate name { "Taiwan" }
+        //TZ { "Tanzania" }
+        UA { "Ucraina" }
+        //UG { "Uganda" }
+        //UM { "United States Minor Outlying Islands" }
+        US { "Statele Unite" }
+        //UY { "Uruguay" }
+        //UZ { "Uzbekistan" }
+        VA { "Sf\u00E2ntul Scaun (Statul Vatican)" }
+        VC { "Saint Vincent \u015Fi Grenadines" }
+        //VE { "Venezuela" }
+        VG { "Insulele Virgine Britanice" }
+        VI { "Insulele Virgine S.U.A." }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis \u015Fi Futuna" }
+        //WS { "Samoa" }
+        //YE { "Yemen" }
+        //YT { "Mayotte" }
+        YU { "Iugoslavia" }
+        ZA { "Africa de Sud" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
+    }
+
+    Languages { 
+        ar { "Arab\u0103" }
+        bg { "Bulgar\u0103" }
+        cs { "Ceh\u0103" }
+        da { "Danez\u0103" }
+        de { "German\u0103" }
+        el { "Greac\u0103" }
+        en { "Englez\u0103" }
+        es { "Spaniol\u0103" }
+        et { "Estonian\u0103" }
+        fi { "Finlandez\u0103" }
+        fr { "Francez\u0103" }
+        he { "Ebraic\u0103" }
+        hr { "Croat\u0103" }
+        hu { "Maghiar\u0103" }
+        it { "Italian\u0103" }
+        ja { "Japonez\u0103" }
+        ko { "Coreean\u0103" }
+        lt { "Lituanian\u0103" }
+        lv { "Leton\u0103" }
+        nl { "Olandez\u0103" }
+        no { "Norvegian\u0103" }
+        pl { "Polonez\u0103" }
+        pt { "Portughez\u0103" }
+        ro { "Rom\u00E2n\u0103" }
+        ru { "Rus\u0103" }
+        sk { "Slovac\u0103" }
+        sl { "Sloven\u0103" }
+        sv { "Suedez\u0103" }
+        tr { "Turc\u0103" }
+        zh { "Chinez\u0103" }
+        //zh_cn { "Chinez\u0103 (Simplificat\u0103)" }
+        //zh_tw { "Chinez\u0103 (Tradi\u0163ional\u0103)" }
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z \u00e2 \u00ee \u0103 \u015f \u0163]" }
+
+    // Currency display names
+    Currencies {
+        ROL { "lei", "ROL" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd.MM.yyyy",
+                "dd.MM.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "D",
+                        "L",
+                        "Ma",
+                        "Mi",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                    wide{
+                        "duminic\u0103",
+                        "luni",
+                        "mar\u0163i",
+                        "miercuri",
+                        "joi",
+                        "vineri",
+                        "s\u00EEmb\u0103t\u0103",
+                    }
+                }
+            }
+            eras{
+                "d.C.",
+                "\u00EE.d.C.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ian",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mai",
+                        "Iun",
+                        "Iul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "ianuarie",
+                        "februarie",
+                        "martie",
+                        "aprilie",
+                        "mai",
+                        "iunie",
+                        "iulie",
+                        "august",
+                        "septembrie",
+                        "octombrie",
+                        "noiembrie",
+                        "decembrie",
+                    }
+                }
+            }
+        }
+    }
+}

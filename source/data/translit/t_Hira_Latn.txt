@@ -1,0 +1,30 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2004, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../../impl/data/Transliterator_Hiragana_Latin.txt
+// Date: Tue May 18 17:24:49 2004
+//--------------------------------------------------------------------
+
+// Hiragana_Latin
+
+t_Hira_Latn {
+  Rule {
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+":: [\u3041-\u3094\u3099\u309D-\u309E\u30AC\u30AE\u30B0\u30B2\u30B4\u30B6\u30B8\u30BA\u30BC\u30BE\u30C0\u30C2\u30C5\u30C7\u30C9\u30D0\u30D3\u30D6\u30D9\u30DC\u30F4\u30F7-\u30FA\u30FE] ;"
+":: NFD ;"
+
+":: Hiragana-Katakana;"
+":: Katakana-Latin;"
+
+":: NFC ;"
+":: (Lower) ;"
+":: ([',.A-Za-z~\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u021B\u021E-\u021F\u0226-\u0233\u0304\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1FB1\u1FB9\u1FD1\u1FD9\u1FE1\u1FE9\u212A-\u212B]) ;"
+  }
+}

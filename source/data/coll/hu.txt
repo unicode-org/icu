@@ -1,0 +1,63 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+hu {
+    Version{ "2.0" }
+    collations {
+        standard { 
+            Version { "2.0" }
+            Sequence {
+                "& C < cs <<< Cs <<< CS"
+                "& D < dz <<< Dz <<< DZ"
+                "& DZ < dzs <<< Dzs <<< DZS"
+                "& G < gy <<< Gy <<< GY"
+                "& L < ly <<< Ly <<< LY"
+                "& N < ny <<< Ny <<< NY"
+                "& S < sz <<< Sz <<< SZ"
+                "& T < ty <<< Ty <<< TY"
+                "& Z < zs <<< Zs <<< ZS"
+
+                // vowels
+                "& O < \u00F6 <<< \u00D6 << \u0151 <<< \u0150"
+                "& U < \u00FC <<< \u00DC << \u0171 <<< \u0170"
+
+                // special contraction/expansions for doubled letters
+                "& cs <<< ccs / cs"
+                "& Cs <<< Ccs / cs"
+                "& CS <<< CCS / CS"
+                "& dz <<< ddz / dz"
+                "& Dz <<< Ddz / dz"
+                "& DZ <<< DDZ / DZ"
+                "& dzs <<< ddzs / dzs"
+                "& Dzs <<< Ddzs / dzs"
+                "& DZS <<< DDZS / DZS"
+                "& gy <<< ggy / gy"
+                "& Gy <<< Ggy / gy"
+                "& GY <<< GGY / GY"
+                "& ly <<< lly / ly"
+                "& Ly <<< Lly / ly"
+                "& LY <<< LLY / LY"
+                "& ny <<< nny / ny"
+                "& Ny <<< Nny / ny"
+                "& NY <<< NNY / NY"
+                "& sz <<< ssz / sz"
+                "& Sz <<< Ssz / sz"
+                "& SZ <<< SSZ / SZ"
+                "& ty <<< tty / ty"
+                "& Ty <<< Tty / ty"
+                "& TY <<< TTY / TY"
+                "& zs <<< zzs / zs"
+                "& Zs <<< Zzs / zs"
+                "& ZS <<< ZZS / ZS"
+            }
+            
+            // Note: b\u00C3\u00A9rcs\u00C3\u00ADk may be ranked before or after b\u00C3\u00A9rczerge depending on its morphology: 
+            // b\u00C3\u00A9r+cs\u00C3\u00ADk (after b\u00C3\u00A9rczerge) or b\u00C3\u00A9rc+s\u00C3\u00ADk (before b\u00C3\u00A9rczerge).
+            // A SHY can be used to make the difference                }
+      }
+    }
+}

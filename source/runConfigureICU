@@ -1,0 +1,404 @@
+#!/bin/sh
+# Copyright (c) 1999-2004, International Business Machines Corporation and
+# others. All Rights Reserved.
+
+# runConfigureICU: This script will run the "configure" script for the appropriate platform
+# Only supported platforms are recognized
+
+me=`basename $0`
+OPTS=
+
+usage()
+{
+    ec=0$1
+    if test $ec -eq 0
+    then
+        uletter=U
+    else
+        uletter=u
+    fi
+
+    echo "${uletter}sage: $me [ -h, --help ]  [ --enable-debug | --disable-release ] platform [ configurearg ... ]"
+    if test $ec -eq 0
+    then
+        cat <<EOE
+
+Options: -h, --help         Print this message and exit
+         --enable-debug     Enable support for debugging
+         --disable-release  Disable presetting optimization flags
+
+The following names can be supplied as the argument for platform:
+
+    AIX4.3xlC               Use IBM's xlC on AIX 4.3
+    AIX4.3xlC_nothreads     Use IBM's xlC on AIX 4.3 with no multithreading
+    AIX4.3VA                Use IBM's Visual Age xlC_r compiler on AIX 4.3
+    AIXGCC                  Use GCC on AIX
+    ALPHA/LINUXGCC          Use GCC on Alpha/Linux systems
+    ALPHA/LINUXCCC          Use Compaq C compiler on Alpha/Linux systems
+    BeOS                    Use the GNU C++ compiler on BeOS
+    Cygwin                  Use the GNU C++ compiler on Cygwin
+    Cygwin/MSVC             Use the Microsoft Visual C++ compiler on Cygwin
+    FreeBSD                 Use the GNU C++ compiler on Free BSD
+    HP-UX11ACC              Use the Advanced C++ compiler on HP-UX 11
+    HP-UX11CC               Use HP's C++ compiler on HP-UX 11
+    LinuxRedHat             Use the GNU C++ compiler on Linux
+    LINUX/ECC               Use the Intel ECC compiler on Linux
+    LINUX/ICC               Use the Intel ICC compiler on Linux
+    MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
+    QNX                     Use QNX's QCC compiler on QNX/Neutrino
+    SOLARISCC               Use Sun's CC compiler on Solaris
+    SOLARISCC/W4.2          Use Sun's Workshop 4.2 CC compiler on Solaris
+    SOLARISGCC              Use the GNU C++ compiler on Solaris
+    SOLARISX86              Use Sun's CC compiler on Solaris x86
+    TRU64V5.1/CXX           Use Compaq's cxx compiler on Tru64 (OSF)
+    zOS                     Use IBM's cxx compiler on z/OS (os/390)
+    zOSV1R2                 Use IBM's cxx compiler for z/OS 1.2
+    OS390V2R10              Use IBM's cxx compiler for OS/390 2.10
+EOE
+    fi
+
+    exit $ec
+}
+
+# Parse arguments
+
+platform=
+debug=0
+release=1
+
+while test $# -ne 0
+do
+    case "$1" in
+    -h|--help)
+        usage 0
+        ;;
+    --enable-debug)
+        debug=1
+        OPTS="$OPTS --enable-debug"
+        ;;
+    --disable-release)
+        release=0
+        OPTS="$OPTS --disable-release"
+        ;;
+    *)
+        platform="$1"
+        shift
+        break
+        ;;
+    esac
+    shift
+done
+
+if test x$platform = x
+then
+   usage 1
+fi
+
+# Go.
+
+rm -f config.cache
+rm -f config.log
+rm -f config.status
+
+DEBUG_CFLAGS='-g'
+DEBUG_CXXFLAGS='-g'
+
+if test x$configure = x
+then
+    if test -f ./configure
+    then
+        configuredir=.
+    else
+        configuredir=`echo $0 | sed 's,[^/]*$,,'`
+        if test x$configuredir = x$0
+        then
+            configuredir=.
+        fi
+    fi
+
+    if test x$configuredir = x
+    then
+        configuredir=.
+    fi
+
+    configure=$configuredir/configure
+fi
+
+case $platform in
+    AIX4.3xlC)
+        THE_OS=AIX
+        THE_COMP="xlC_r"
+        CC=/usr/ibmcxx/bin/xlc_r; export CC
+        CXX=/usr/ibmcxx/bin/xlC_r; export CXX
+        RELEASE_CFLAGS="-O -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O -qmaxmem=-1"
+        ;;
+    AIX4.3xlC_nothreads)
+        THE_OS=AIX
+        THE_COMP="xlC"
+        CC=/usr/ibmcxx/bin/xlc; export CC
+        CXX=/usr/ibmcxx/bin/xlC; export CXX
+        AIX_SHLIB=/usr/ibmcxx/bin/makeC++SharedLib; export AIX_SHLIB
+        RELEASE_CFLAGS="-O -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O -qmaxmem=-1"
+        OPTS="$OPTS --enable-threads=no"
+        ;;
+    AIX4.3VA)
+        THE_OS=AIX
+        THE_COMP="xlC_r"
+        CC=`which xlc_r`; export CC
+        CXX=`which xlC_r`; export CXX
+        RELEASE_CFLAGS="-O2 -qmaxmem=-1"
+        RELEASE_CXXFLAGS="-O2 -qmaxmem=-1"
+        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
+        ;;
+# For no threads use --enable-threads=no. Visual Age makes no distinction between xlC and xlC_r or any other _r programs.
+    AIXGCC)
+        THE_OS=AIX
+        THE_COMP="gcc"
+        CC=`which gcc`; export CC
+        CXX=`which g++`; export CXX
+        ;;
+    SOLARISX86)
+        THE_OS="SOLARIS X86"
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        CXX_FLAGS="-w";export CXX_FLAGS
+        C_FLAGS="-w";export C_FLAGS
+        LDFLAGS="-L -lCrun";export LDFLAGS
+        RELEASE_CFLAGS=-xO3
+        RELEASE_CXXFLAGS=-O3
+        ;;
+    SOLARISCC)
+        THE_OS=SOLARIS
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        RELEASE_CFLAGS=-xO4
+        RELEASE_CXXFLAGS=-O4
+        ;;
+    SOLARISCC/W4.2)
+        THE_OS=SOLARIS
+        THE_COMP="Sun's CC"
+        CC=`which cc`; export CC
+        CXX=`which CC`; export CXX
+        RELEASE_CFLAGS=-x04
+        RELEASE_CXXFLAGS="-O4 +d"
+        ;;
+    SOLARISGCC)
+        THE_OS=SOLARIS
+        THE_COMP="the GNU C++"
+        CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++"; export CXXFLAGS
+        LDFLAGS="$LDFLAGS -R/usr/local/lib"; export LDFLAGS
+        RELEASE_CXXFLAGS=-O
+        RELEASE_CFLAGS=-O3
+        ;;
+    HP-UX11CC)
+        THE_OS="HP-UX 11"
+        THE_COMP="HP's CC"
+        CC=cc; export CC
+        CXX=CC; export CXX
+        RELEASE_CFLAGS='+O2 +Ofltacc'
+        RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    HP-UX11ACC)
+        THE_OS="HP-UX 11"
+        THE_COMP="aCC"
+        CC=cc; export CC
+        CXX=aCC; export CXX
+        RELEASE_CFLAGS='+O2 +Ofltacc'
+        RELEASE_CXXFLAGS='+O2 +Ofltacc'
+        ;;
+    TRU64V5.1/CXX)
+        THE_OS="OSF1"
+        THE_COMP="Compaq cxx"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        ;;
+    ALPHA/LINUXCCC)
+        THE_OS="Linux"
+        THE_COMP="Compaq's CC"
+        CC=ccc; export CC
+        CXX=cxx; export CXX
+        RELEASE_CFLAGS='-O4'
+        RELEASE_CXXFLAGS='-O4'
+        ;;
+    ALPHA/LINUXGCC)
+        THE_OS="Linux"
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
+        ;;
+    LinuxRedHat*)
+        THE_OS="Linux"
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
+        ;;
+    LINUX/ECC)
+        THE_OS="Linux"
+        THE_COMP="Intel ECC 7.1"
+        CC=ecc; export CC
+        CXX=ecpc; export CXX
+        RELEASE_CFLAGS='-O2'
+        RELEASE_CXXFLAGS='-O2'
+        ;;
+    LINUX/ICC)
+        THE_OS="Linux"
+        THE_COMP="Intel ICC 6.0"
+        CC=icc; export CC
+        CXX=icpc; export CXX
+        RELEASE_CFLAGS='-O0'
+        RELEASE_CXXFLAGS='-O0'
+        ;;
+    Cygwin)
+        THE_OS="Cygwin"
+        THE_COMP="the GNU C++"
+        RELEASE_CFLAGS='-O3'
+        RELEASE_CXXFLAGS='-O3'
+        ;;
+    Cygwin/MSVC)
+        THE_OS="Windows with Cygwin"
+        THE_COMP="Microsoft Visual C++"
+        CC=cl; export CC
+        CXX=cl; export CXX
+        RELEASE_CFLAGS='/O2 /Ob2'
+        RELEASE_CXXFLAGS='/O2 /Ob2'
+        # The real debug flags are defined by the mh file because configure can't handle them.
+        DEBUG_CFLAGS=
+        DEBUG_CXXFLAGS=
+        ;;
+    MacOSX)
+        THE_OS="MacOS X (Darwin)"
+        THE_COMP="the GNU C++"
+        RELEASE_CFLAGS='-O2'
+        RELEASE_CXXFLAGS='-O2'
+        ;;
+    *BSD)
+        THE_OS="BSD"
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
+        ;;
+    QNX)
+        THE_OS="QNX"
+        THE_COMP="QNX cc"
+        CC=qcc; export CC
+        CXX=QCC; export CXX
+        ;;
+    BeOS)
+        THE_OS="BeOS"
+        THE_COMP="the GNU C++"
+        OPTIMIZATIONS="-fdefault-inline -fdefer-pop -fforce-mem -fforce-addr \
+            -finline -finline-functions \
+            -fkeep-inline-functions -fkeep-static-consts -fbranch-count-reg \
+            -ffunction-cse -fstrength-reduce -fthread-jumps -fcse-follow-jumps \
+            -fcse-skip-blocks -frerun-cse-after-loop -frerun-loop-opt \
+            -fexpensive-optimizations -foptimize-register-move -fregmove \
+            -fschedule-insns -fschedule-insns2 -ffloat-store -funroll-loops \
+            -fmove-all-movables -freduce-all-givs -fpeephole \
+            -funroll-all-loops -ffunction-sections -fdata-sections"
+        RELEASE_CFLAGS="$OPTIMIZATIONS"
+        RELEASE_CXXFLAGS="$OPTIMIZATIONS"
+        ;;
+    zOS)
+        THE_OS="z/OS (OS/390)"
+        THE_COMP="z/OS 1.2 (through OS/390 v2r10) C/C++"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        export RELEASE_CFLAGS='-2'
+        export RELEASE_CXXFLAGS='-2'
+        ;;
+    zOSV1R2)
+        THE_OS="z/OS 1.2"
+        THE_COMP="z/OS 1.2 C/C++"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000'
+        export _CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000
+        export LDFLAGS=-Wl,"compat=pm3"
+        export CFLAGS='-Wc,"target(zOSV1R2)"'
+        export CXXFLAGS='-Wc,"target(zOSV1R2)"'
+        export RELEASE_CFLAGS='-2'
+        export RELEASE_CXXFLAGS='-2'
+        ;;
+    OS390V2R10)
+        THE_OS="OS/390 2.10"
+        THE_COMP="OS/390 2.10 C/C++"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x220A0000 _C89_CVERSION=0x220A0000 _CC_CVERSION=0x220A0000 _CXX_PVERSION=0x220A0000 _C89_PVERSION=0x220A0000 _CC_PVERSION=0x220A0000'
+        export _CXX_CVERSION=0x220A0000 _C89_CVERSION=0x220A0000 _CC_CVERSION=0x220A0000 _CXX_PVERSION=0x220A0000 _C89_PVERSION=0x220A0000 _CC_PVERSION=0x220A0000
+        export LDFLAGS=-Wl,"compat=pm3"
+        export CFLAGS='-Wc,"target(OSV2R10)"'
+        export CXXFLAGS='-Wc,"target(OSV2R10)"'
+        export RELEASE_CFLAGS='-2'
+        export RELEASE_CXXFLAGS='-2'
+        ;;
+    *)
+        >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
+        exit 1;;
+esac
+
+
+# Tweak flags
+
+if test $release -eq 1
+then
+    if test "$RELEASE_CFLAGS" = ""
+    then
+        case $CC in
+            gcc|*/gcc|*-gcc-*|*/*-gcc-*)
+                RELEASE_CFLAGS=-O3
+                ;;
+        esac
+    fi
+    if test "$RELEASE_CFLAGS" != ""
+    then
+        CFLAGS="$CFLAGS $RELEASE_CFLAGS"
+    fi
+    export CFLAGS
+    if test "$RELEASE_CXXFLAGS" = ""
+    then
+        case $CXX in
+            g++|*/g++|*-g++-*|*/*-g++-*)
+                RELEASE_CXXFLAGS=-O
+                ;;
+        esac
+    fi
+    if test "$RELEASE_CXXFLAGS" != ""
+    then
+        CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
+    fi
+    export CXXFLAGS
+fi
+
+if test $debug -eq 1
+then
+    if test "$DEBUG_CFLAGS" != ""
+    then
+        CFLAGS="$CFLAGS $DEBUG_CFLAGS"
+    fi
+    export CFLAGS
+    if test "$DEBUG_CXXFLAGS" != ""
+    then
+        CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
+    fi
+    export CXXFLAGS
+    if test "$DEBUG_LDFLAGS" != ""
+    then
+        LDFLAGS="$LDFLAGS $DEBUG_LDFLAGS"
+    fi
+    export LDFLAGS
+fi
+
+# Run configure
+
+echo "Running ./configure $OPTS $@ for $THE_OS using $THE_COMP compiler"
+echo
+$configure $OPTS $@
+echo
+echo If the result of the above commands looks okay to you, go to the directory
+echo source in the ICU distribution to build ICU. Please remember that ICU needs
+echo GNU make to build properly...

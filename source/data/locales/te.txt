@@ -1,0 +1,107 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//
+// Telugu Locale. Data by Ram [ram@jtcsv.com]
+
+te {
+    Version{ "2.0" }
+    Countries {
+        IN { "\u0c2d\u0c3e\u0c30\u0c24 \u0c26\u0c47\u0c33\u0c66" }
+    }
+    // Currency display names
+    Currencies {
+        INR { "\u0C30\u0C42.", "INR" }
+    }
+    ExemplarCharacters{"[[:Telu:]\u200c\u200d]"}
+    LocaleScript{ 
+        "Telu",  // ISO 15924 Name 
+    }
+    Languages {
+        te { "\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41" }
+    }
+    NumberElements {
+        ".",
+        ",",
+        ";",
+        "%",
+        "\u0C66",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ".",
+        "+",
+    }
+    // /**************** Info Below is needed ****************/
+    // Eras{}
+    // localPatternChars{}
+    //
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "\u0c2a\u0c42\u0c30\u0c4d\u0c35\u0c3e\u0c39\u0c4d\u0c28",
+                "\u0c05\u0c2a\u0c30\u0c3e\u0c39\u0c4d\u0c28",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u0c06\u0c26\u0c3f",
+                        "\u0c38\u0c4b\u0c2e",
+                        "\u0c2e\u0c02\u0c17\u0c33",
+                        "\u0c2c\u0c41\u0c27",
+                        "\u0c17\u0c41\u0c30\u0c41",
+                        "\u0c36\u0c41\u0c15\u0c4d\u0c30",
+                        "\u0c36\u0c28\u0c3f",
+                    }
+                    wide{
+                        "\u0c06\u0c26\u0c3f\u0c35\u0c3e\u0c30\u0c02",
+                        "\u0c38\u0c4b\u0c2e\u0c35\u0c3e\u0c30\u0c02",
+                        "\u0c2e\u0c02\u0c17\u0c33\u0c35\u0c3e\u0c30\u0c02",
+                        "\u0c2c\u0c41\u0c27\u0c35\u0c3e\u0c30\u0c02",
+                        "\u0c17\u0c41\u0c30\u0c41\u0c35\u0c3e\u0c30\u0c02",
+                        "\u0c36\u0c41\u0c15\u0c4d\u0c30\u0c35\u0c3e\u0c30\u0c02",
+                        "\u0c36\u0c28\u0c3f\u0c35\u0c3e\u0c30\u0c02",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u0c1c\u0c28\u0c35\u0c30\u0c3f",
+                        "\u0c2b\u0c3f\u0c2c\u0c4d\u0c30\u0c35\u0c30\u0c3f",
+                        "\u0c2e\u0c3e\u0c30\u0c4d\u0c1a\u0c3f",
+                        "\u0c0f\u0c2a\u0c4d\u0c30\u0c3f\u0c32\u0c4d",
+                        "\u0c2e\u0c47",
+                        "\u0c1c\u0c42\u0c28\u0c4d",
+                        "\u0c1c\u0c42\u0c32\u0c48",
+                        "\u0c06\u0c17\u0c38\u0c4d\u0c1f\u0c41",
+                        "\u0c38\u0c46\u0c2a\u0c4d\u0c1f\u0c46\u0c02\u0c2c\u0c30\u0c4d",
+                        "\u0c05\u0c15\u0c4d\u0c1f\u0c4b\u0c2c\u0c30\u0c4d",
+                        "\u0c28\u0c35\u0c02\u0c2c\u0c30\u0c4d",
+                        "\u0c21\u0c3f\u0c38\u0c46\u0c02\u0c2c\u0c30\u0c4d",
+                    }
+                    wide{
+                        "\u0c1c\u0c28\u0c35\u0c30\u0c3f",
+                        "\u0c2b\u0c3f\u0c2c\u0c4d\u0c30\u0c35\u0c30\u0c3f",
+                        "\u0c2e\u0c3e\u0c30\u0c4d\u0c1a\u0c3f",
+                        "\u0c0f\u0c2a\u0c4d\u0c30\u0c3f\u0c32\u0c4d",
+                        "\u0c2e\u0c47",
+                        "\u0c1c\u0c42\u0c28\u0c4d",
+                        "\u0c1c\u0c42\u0c32\u0c48",
+                        "\u0c06\u0c17\u0c38\u0c4d\u0c1f\u0c41",
+                        "\u0c38\u0c46\u0c2a\u0c4d\u0c1f\u0c46\u0c02\u0c2c\u0c30\u0c4d",
+                        "\u0c05\u0c15\u0c4d\u0c1f\u0c4b\u0c2c\u0c30\u0c4d",
+                        "\u0c28\u0c35\u0c02\u0c2c\u0c30\u0c4d",
+                        "\u0c21\u0c3f\u0c38\u0c46\u0c02\u0c2c\u0c30\u0c4d",
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,36 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *   Generated from Universal Locales for Linux Project
+// ***************************************************************************
+
+ms_MY {
+    Version{ "1.0" }
+
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+    calendar{
+        gregorian{
+           weekend:intvector { //Saturday - half day in some offices:Sunday
+             0, 0,   // onset dow, millis in day
+             0, 0    // cease dow, millis in day
+           }
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm",
+                "EEEE dd MMM yyyy",
+                "dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
+    }
+}

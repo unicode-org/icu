@@ -1,0 +1,163 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2004, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Gurmukhi.txt
+// Date: Tue May 18 17:24:49 2004
+//--------------------------------------------------------------------
+
+// InterIndic_Gurmukhi
+
+t_InterIndic_Guru {
+  Rule {
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+// InterIndic-Gurmukhi
+//:: NFD (NFC) ;
+"$vowel = [\u0A05-\u0A14 \u0A3e-\u0A4D];"
+"$consonant = [\u0A15-\u0A39];"
+
+"\ue001>\u0A01;"       // SIGN CHANDRABINDU
+//rules for BINDI
+
+// Anusvara is equivalent to BINDI when preceeded by a vowel
+"$vowel{\ue002>\u0a02;" // SIGN ANUSVARA (\u0a02 = SIGN BINDI)
+// else is equivalent to TIPPI
+"$consonant{\ue002>\u0a70;" // SIGN TIPPI
+"\ue002>\u0a02;"
+
+"\ue003>;"       // FALLBACK BLOW AWAY SIGN VISARGA
+"\uE004>\u0a05;" // FALLBACK TO LETTER A
+"\ue005>\u0a05;" // LETTER A
+"\ue006>\u0a06;" // LETTER AA
+"\ue007>\u0a07;" // LETTER I
+"\ue008>\u0a08;" // LETTER II
+"\ue009>\u0a09;" // LETTER U
+"\ue00a>\u0a0a;" // LETTER UU
+"\ue00b>\u0a30\u0a3f;" // REMAP (indicExceptions.txt): \u0a0b>\u0a30\u0a3f = LETTER VOCALIC R>LETTER RA.VOWEL SIGN I
+"\ue00c>\u0a33;" // FALLBACK
+"\ue00d>\u0a0f;" // FALLBACK
+"\ue00e>\u0a0f;" // FALLBACK
+"\ue00f>\u0a0f;" // LETTER EE
+"\ue010>\u0a10;" // LETTER AI
+"\ue011>\u0a13;" // FALLBACK
+"\ue012>\u0a13;" // FALLBACK
+"\ue013>\u0a13;" // LETTER OO
+"\ue014>\u0a14;" // LETTER AU
+"\ue015>\u0a15;" // LETTER KA
+"\ue016>\u0a16;" // LETTER KHA
+"\ue017>\u0a17;" // LETTER GA
+"\ue018>\u0a18;" // LETTER GHA
+"\ue019>\u0a19;" // LETTER NGA
+"\ue01a>\u0a1a;" // LETTER CA
+"\ue01b>\u0a1b;" // LETTER CHA
+"\ue01c>\u0a1c;" // LETTER JA
+"\ue01d>\u0a1d;" // LETTER JHA
+"\ue01e>\u0a1e;" // LETTER NYA
+"\ue01f>\u0a1f;" // LETTER TTA
+"\ue020>\u0a20;" // LETTER TTHA
+"\ue021>\u0a21;" // LETTER DDA
+"\ue022>\u0a22;" // LETTER DDHA
+"\ue023>\u0a23;" // LETTER NNA
+"\ue024>\u0a24;" // LETTER TA
+"\ue025>\u0a25;" // LETTER THA
+"\ue026>\u0a26;" // LETTER DA
+"\ue027>\u0a27;" // LETTER DHA
+"\ue028>\u0a28;" // LETTER NA
+"\ue029>\u0a28\u0a3c;" // REMAP (indicExceptions.txt): \u0a29>\u0a28 = LETTER NNNA>LETTER NA
+"\ue02a>\u0a2a;" // LETTER PA
+"\ue02b>\u0a2b;" // LETTER PHA
+"\ue02c>\u0a2c;" // LETTER BA
+"\ue02d>\u0a2d;" // LETTER BHA
+"\ue02e>\u0a2e;" // LETTER MA
+"\ue02f>\u0a2f;" // LETTER YA
+"\ue030>\u0a30;" // LETTER RA
+"\ue031>\u0a30\u0a3c;" // FALLBACK LETTER RA+NUKTA
+"\ue032>\u0a32;" // LETTER LA
+"\ue033>\u0a33;" // LETTER LLA
+"\ue034>\u0a33;" // REMAP (indicExceptions.txt): \u0a34>\u0a33 = LETTER LLLA>LETTER LLA
+"\ue035>\u0a35;" // LETTER VA
+"\ue036>\u0a36;" // LETTER SHA
+"\ue037>\u0a36;" // REMAP (indicExceptions.txt): \u0a37>\u0a36 = LETTER SSA>LETTER SHA
+"\ue038>\u0a38;" // LETTER SA
+"\ue039>\u0a39;" // LETTER HA
+"\ue03c>\u0a3c;" // SIGN NUKTA
+"\ue03d>;" // FALLBACK BLOW AWAY SIGN AVAGRAHA
+"\ue03e>\u0a3e;" // VOWEL SIGN AA
+"\ue03f>\u0a3f;" // VOWEL SIGN I
+"\ue040>\u0a40;" // VOWEL SIGN II
+"\ue041>\u0a41;" // VOWEL SIGN U
+"\ue042>\u0a42;" // VOWEL SIGN UU
+"\ue043>;" // FALLBACK BLOW AWAY VOWEL SIGN VOCALIC R
+"\ue044>;" // FALLBACK BLOW AWAY VOWEL SIGN VOCALIC RR
+"\ue045>\u0a48;" // REMAP (indicExceptions.txt): \u0a45>\u0a48 = VOWEL SIGN CANDRA E>VOWEL SIGN AI
+"\ue046>\u0a47;" // FALLABCK
+"\ue047>\u0a47;" // VOWEL SIGN EE
+"\ue048>\u0a48;" // VOWEL SIGN AI
+"\ue049>\u0a4c;" // REMAP (indicExceptions.txt): \u0a49>\u0a4c = VOWEL SIGN CANDRA O>VOWEL SIGN AU
+"\ue04a>\u0a4b;" // FALLBACK
+"\ue04b>\u0a4b;" // VOWEL SIGN OO
+"\ue04c>\u0a4c;" // VOWEL SIGN AU
+"\ue04d>\u0a4d;" // SIGN VIRAMA
+"\ue050>\u0a0f\u0a02;" //  FALLBACK to OO+BINDI : OM
+"\ue051>;"
+"\ue052>;"
+"\ue053>;"
+"\ue054>;"
+"\ue055>;" // FALLBACK BLOW AWAY LENGTH MARK
+"\ue056>\u0a48;" // REMAP (indicExceptions.txt): \u0a56>\u0a48 = AI LENGTH MARK>VOWEL SIGN AI
+"\ue057>\u0a4c;" // REMAP (indicExceptions.txt): \u0a57>\u0a4c = AU LENGTH MARK>VOWEL SIGN AU
+"\ue058>\u0a15\u0a3c;" // FALLBACK RA+ NUKTA
+"\ue059>\u0a59;" // LETTER KHHA
+"\ue05a>\u0a5a;" // LETTER GHHA
+"\ue05b>\u0a5b;" // LETTER ZA
+"\ue05c>\u0a5c;" // LETTER RRA
+"\ue05d>\u0a22\u0a3c;" // REMAP (indicExceptions.txt): \u0a5d>\u0a22\u0a3c = LETTER RHA>LETTER DDHA.SIGN NUKTA
+"\ue05e>\u0a5e;" // LETTER FA
+"\ue05f>\u0a2f\u0a3c;" // REMAP (indicExceptions.txt): \u0a5f>\u0a2f = LETTER YYA>LETTER YA
+"\ue060>\u0a30\u0a3f;" // REMAP (indicExceptions.txt): \u0a60>\u0a30\u0a3f = LETTER VOCALIC RR>LETTER RA.VOWEL SIGN I
+"\ue061>\u0a32\u0a3c;" // 
+"\ue062>\u0a3f\u0a3c;" // REMAP (indicExceptions.txt): \u0a62>\u0a3f\u0a3c = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
+"\ue063>\u0a40\u0a3c;" // REMAP (indicExceptions.txt): \u0a63>\u0a40\u0a3c = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
+"\uE064>\u0964;"          // DANDA
+"\uE065>\u0965;"          // DOUBLE DANDA
+"\ue066>\u0a66;" // DIGIT ZERO
+"\ue067>\u0a67;" // DIGIT ONE
+"\ue068>\u0a68;" // DIGIT TWO
+"\ue069>\u0a69;" // DIGIT THREE
+"\ue06a>\u0a6a;" // DIGIT FOUR
+"\ue06b>\u0a6b;" // DIGIT FIVE
+"\ue06c>\u0a6c;" // DIGIT SIX
+"\ue06d>\u0a6d;" // DIGIT SEVEN
+"\ue06e>\u0a6e;" // DIGIT EIGHT
+"\ue06f>\u0a6f;" // DIGIT NINE
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0a30;"     // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0a30;"     // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"           // RUPEE MARK
+"\ue074>;"           // RUPEE SIGN
+"\ue075>;"           // CURRENCY NUMERATOR ONE
+"\ue076>;"           // CURRENCY NUMERATOR TWO
+"\ue077>;"           // CURRENCY NUMERATOR THREE
+"\ue078>;"           // CURRENCY NUMERATOR FOUR
+"\ue079>;"           // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"           // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"           // ISSHAR
+"\uE07C>\u0a70;"     // TIPPI
+"\uE07D>\u0a71;"     // ADDAK
+"\uE07E>\u0a72;"     // IRI
+"\uE07F>\u0a73;"     // URA
+"\uE080>\u0a74;"     // EK ONKAR
+"\uE081>\u0a35;"      // FALLBACK FOR ORIYA LETTER WA 
+
+"0 > \u0a66;"       // FALLBACK FOR TAMIL
+"1 > \u0a67;"
+//    :: NFC (NFD) ;
+// eof
+  }
+}

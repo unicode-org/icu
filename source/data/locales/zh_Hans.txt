@@ -1,0 +1,11 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_Hans {
+    // There is nothing to do here. Fallback to zh.
+    Version{ "1.0" }
+}

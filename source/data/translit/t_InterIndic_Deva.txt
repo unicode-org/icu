@@ -1,0 +1,174 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2004, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Devanagari.txt
+// Date: Tue May 18 17:24:49 2004
+//--------------------------------------------------------------------
+
+// InterIndic_Devanagari
+
+t_InterIndic_Deva {
+  Rule {
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+
+// InterIndic-Devanagari
+//:: NFD (NFC) ; 
+//Rules for Decomposed characters
+ "\ue028\ue03c > \u0929;"  //\ue029
+ "\ue030\ue03c > \u0931;"  //\ue031
+ "\ue033\ue03c > \u0934;"  //\ue034
+ "\ue015\ue03c > \u0958;"  //\ue058 LETTER QA   (For Urdu)
+ "\ue016\ue03c > \u0959;"  //\ue059 LETTER KHHA (For Urdu)
+ "\ue017\ue03c > \u095a;"  //\ue05a LETTER GHHA (For Urdu)
+ "\ue01c\ue03c > \u095b;"  //\ue05b LETTER ZA   (For Urdu)
+ "\ue021\ue03c > \u095c;"  //\ue05c LETTER DDDHA (pronounced RRA)
+ "\ue022\ue03c > \u095d;"  //\ue05d LETTER RHA   (pronounced RRHA)
+ "\ue02b\ue03c > \u095e;"  //\ue05e LETTER FA
+ "\ue02f\ue03c > \u095f;"  //\ue05f LETTER YYA
+ 
+ //Decomposed compatibility transliterations
+ "\ue012\ue057>\u0914;"   // FALLBACK FOR TAMIL AU
+ "0 > \u0966;"       // FALLBACK FOR TAMIL
+ "1 > \u0967;"
+
+ "\ue055>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU LENGTH MARK
+ "\ue056>;" // FALLBACK BLOW AWAY KANNADA AND TELUGU AI LENGTH MARK
+ "\ue057>;" // FALLBACK BLOW AWAY TAMIL AU LENGTH MARK
+
+ "\ue001 >  \u0901;"  // SIGN CANDRABINDU
+ "\ue002 >  \u0902;"  // SIGN ANUSVARA
+ "\ue003 >  \u0903;"  // SIGN VISARGA
+ "\ue004 >  \u0904;"  // SIGN SHORT A
+ "\ue005 >  \u0905;"  // LETTER A
+ "\ue006 >  \u0906;"  // LETTER AA
+ "\ue007 >  \u0907;"  // LETTER I
+ "\ue008 >  \u0908;"  // LETTER II
+ "\ue009 >  \u0909;"  // LETTER U
+ "\ue00a >  \u090a;"  // LETTER UU
+ "\ue00b >  \u090b;"  // LETTER VOCALIC R
+ "\ue00c >  \u090c;"  // LETTER VOCALIC L
+ "\ue00d >  \u090d;"  // LETTER CANDRA E (For representing English sounds)
+ "\ue00e >  \u090e;"  // LETTER SHORT E(For Southern Scripts)
+ "\ue00f >  \u090f;"  // LETTER E
+ "\ue010 >  \u0910;"  // LETTER AI
+ "\ue011 >  \u0911;"  // LETTER CANDRA O (For representing English sounds)
+ "\ue012 >  \u0912;"  // LETTER SHORT O (For Southern Scripts)
+ "\ue013 >  \u0913;"  // LETTER O
+ "\ue014 >  \u0914;"  // LETTER AU
+ "\ue015 >  \u0915;"  // LETTER KA
+ "\ue016 >  \u0916;"  // LETTER KHA
+ "\ue017 >  \u0917;"  // LETTER GA
+ "\ue018 >  \u0918;"  // LETTER GHA
+ "\ue019 >  \u0919;"  // LETTER NGA
+ "\ue01a >  \u091a;"  // LETTER CA
+ "\ue01b >  \u091b;"  // LETTER CHA
+ "\ue01c >  \u091c;"  // LETTER JA
+ "\ue01d >  \u091d;"  // LETTER JHA
+ "\ue01e >  \u091e;"  // LETTER NYA
+ "\ue01f >  \u091f;"  // LETTER TTA
+ "\ue020 >  \u0920;"  // LETTER TTHA
+ "\ue021 >  \u0921;"  // LETTER DDA
+ "\ue022 >  \u0922;"  // LETTER DDHA
+ "\ue023 >  \u0923;"  // LETTER NNA
+ "\ue024 >  \u0924;"  // LETTER TA
+ "\ue025 >  \u0925;"  // LETTER THA
+ "\ue026 >  \u0926;"  // LETTER DA
+ "\ue027 >  \u0927;"  // LETTER DHA
+ "\ue028 >  \u0928;"  // LETTER NA
+ "\ue029 >  \u0929;"  // LETTER NNNA
+ "\ue02a >  \u092a;"  // LETTER PA
+ "\ue02b >  \u092b;"  // LETTER PHA
+ "\ue02c >  \u092c;"  // LETTER BA
+ "\ue02d >  \u092d;"  // LETTER BHA
+ "\ue02e >  \u092e;"  // LETTER MA
+ "\ue02f >  \u092f;"  // LETTER YA
+ "\ue030 >  \u0930;"  // LETTER RA
+ "\ue031 >  \u0931;"  // LETTER RRA (Eyelash RA for Southern scripts)
+ //\ue031 >  \u0930;  
+ "\ue032 >  \u0932;"  // LETTER LA
+ "\ue033 >  \u0933;"  // LETTER LLA
+ "\ue034 >  \u0934;"  // LETTER LLLA (LLLA for Southern scripts)
+ //\ue034 >  \u0933;  
+ "\ue035 >  \u0935;"  // LETTER VA
+ "\ue036 >  \u0936;"  // LETTER SHA
+ "\ue037 >  \u0937;"  // LETTER SSA
+ "\ue038 >  \u0938;"  // LETTER SA
+ "\ue039 >  \u0939;"  // LETTER HA
+ "\ue03c >  \u093c;"  // SIGN NUKTA
+ "\ue03d >  \u093d;"  // SIGN AVAGRAHA
+ "\ue03e >  \u093e;"  // VOWEL SIGN AA
+ "\ue03f >  \u093f;"  // VOWEL SIGN I
+ "\ue040 >  \u0940;"  // VOWEL SIGN II
+ "\ue041 >  \u0941;"  // VOWEL SIGN U
+ "\ue042 >  \u0942;"  // VOWEL SIGN UU
+ "\ue043 >  \u0943;"  // VOWEL SIGN VOCALIC R
+ "\ue044 >  \u0944;"  // VOWEL SIGN VOCALIC RR
+ "\ue045 >  \u0945;"  // VOWEL SIGN CANDRA E
+ "\ue046 >  \u0946;"  // VOWEL SIGN SHORT E
+ "\ue047 >  \u0947;"  // VOWEL SIGN E
+ "\ue048 >  \u0948;"  // VOWEL SIGN AI
+ "\ue049 >  \u0949;"  // VOWEL SIGN CANDRA O
+ "\ue04a >  \u094a;"  // VOWEL SIGN SHORT O
+ "\ue04b >  \u094b;"  // VOWEL SIGN O
+ "\ue04c >  \u094c;"  // VOWEL SIGN AU
+ "\ue04d >  \u094d;"  // SIGN VIRAMA
+ "\ue050 >  \u0950;"  // OM
+ "\ue051 >  \u0951;"  // STRESS SIGN UDATTA
+ "\ue052 >  \u0952;"  // STRESS SIGN ANUDATTA
+ "\ue053 >  \u0953;"  // GRAVE ACCENT
+ "\ue054 >  \u0954;"  // ACUTE ACCENT
+ "\ue058 >  \u0958;"  // LETTER QA   (For Urdu)
+ "\ue059 >  \u0959;"  // LETTER KHHA (For Urdu)
+ "\ue05a >  \u095a;"  // LETTER GHHA (For Urdu)
+ "\ue05b >  \u095b;"  // LETTER ZA   (For Urdu)
+ "\ue05c >  \u095c;"  // LETTER DDDHA (pronounced RRA)
+ "\ue05d >  \u095d;"  // LETTER RHA   (pronounced RRHA)
+ "\ue05e >  \u095e;"  // LETTER FA
+ "\ue05f >  \u095f;"  // LETTER YYA
+ "\ue060 >  \u0960;"  // LETTER VOCALIC RR
+ "\ue061 >  \u0961;"  // LETTER VOCALIC LL
+ "\ue062 >  \u0962;"  // VOWEL SIGN VOCALIC L
+ "\ue063 >  \u0963;"  // VOWEL SIGN VOCALIC LL
+ "\ue064 >  \u0964;"  // DANDA
+ "\ue065 >  \u0965;"  // DOUBLE DANDA
+ "\ue066 >  \u0966;"  // DIGIT ZERO
+ "\ue067 >  \u0967;"  // DIGIT ONE
+ "\ue068 >  \u0968;"  // DIGIT TWO
+ "\ue069 >  \u0969;"  // DIGIT THREE
+ "\ue06a >  \u096a;"  // DIGIT FOUR
+ "\ue06b >  \u096b;"  // DIGIT FIVE
+ "\ue06c >  \u096c;"  // DIGIT SIX
+ "\ue06d >  \u096d;"  // DIGIT SEVEN
+ "\ue06e >  \u096e;"  // DIGIT EIGHT
+ "\ue06f >  \u096f;"  // DIGIT NINE
+
+ "\ue070>\u0970;"     // ABBREVIATION SIGN
+ "\ue071>\u0930;"     // LETTER RA WITH MIDDLE DIAGONAL
+ "\ue072>\u0930;"     // LETTER RA WITH LOWER DIAGONAL
+ "\ue073>;"           // RUPEE MARK
+ "\ue074>\u0930\u0942;"           // RUPEE SIGN
+ "\ue075>;"           // CURRENCY NUMERATOR ONE
+ "\ue076>;"           // CURRENCY NUMERATOR TWO
+ "\ue077>;"           // CURRENCY NUMERATOR THREE
+ "\ue078>;"           // CURRENCY NUMERATOR FOUR
+ "\ue079>;"           // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+ "\ue07A>;"           // CURRENCY DENOMINATOR SIXTEEN
+ "\ue07B>;"           // ISSHAR
+ "\uE07C>;"           // TIPPI
+ "\uE07D>;"           // ADDAK
+ "\uE07E>;"           // IRI
+ "\uE07F>;"           // URA
+ "\uE080>;"           // EK ONKAR
+ "\uE081>\u0935;"		// FALLBACK FOR ORIYA LETTER WA 
+ 
+//         \u0970  # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
+//    :: NFC;
+// eof
+  }
+}
