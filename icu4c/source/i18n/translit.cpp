@@ -22,6 +22,7 @@
 #include "unicode/unifilt.h"
 #include "unicode/unitohex.h"
 #include "unicode/nultrans.h"
+#include "unicode/putil.h"
 
 /**
  * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -573,27 +574,22 @@ const char* Transliterator::getDataDirectory(void) {
         Mutex lock; // Okay to use the global mutex here
         if (DATA_DIR == 0) {
             /* Construct the transliterator data directory path.  This
-             * is a subdirectory of the locale data directory.  For
-             * now, we get the separator from the data directory
-             * assuming a path separator of one character.  In the
-             * future we might add API to get the separator.
-             *
-             * TODO: Fix this to get the path separator in some better
-             * way.  File an rfe for this.
+             * is a subdirectory of the locale data directory.
              */
             const char* data = Locale::getDataDirectory();
             int32_t len = uprv_strlen(data);
-            char sep[2];
-            sep[0] = data[len-1];
-            sep[1] = 0;
             DATA_DIR = (char*) uprv_malloc(
                                  len + uprv_strlen(RESOURCE_SUB_DIR) + 2);
             if (DATA_DIR == 0) {
-                // This is a fatal unrecoverable error -- what should we do?
+                // This is a fatal unrecoverable error -- we just set DATA_DIR
+                // to the ICU data directory.  We won't be able to retrieve any
+                // rule-based transliterator data but we won't keep trying.
+                DATA_DIR = (char*) data;
+            } else {
+                uprv_strcpy(DATA_DIR, data);
+                uprv_strcat(DATA_DIR, RESOURCE_SUB_DIR);
+                uprv_strcat(DATA_DIR, U_FILE_SEP_STRING);
             }
-            uprv_strcpy(DATA_DIR, data);
-            uprv_strcat(DATA_DIR, RESOURCE_SUB_DIR);
-            uprv_strcat(DATA_DIR, sep);
         }
     }
     return DATA_DIR;
