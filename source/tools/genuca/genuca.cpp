@@ -972,15 +972,6 @@ int main(int argc, char* argv[]) {
     const char *copyright = NULL;
     uprv_memset(&UCAVersion, 0, 4);
 
-    /* Initialize ICU */
-    u_init(&status);
-    if (U_FAILURE(status) && status != U_FILE_ACCESS_ERROR) {
-        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
-            argv[0], u_errorName(status));
-        exit(1);
-    }
-    status = U_ZERO_ERROR;
-
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
@@ -1040,6 +1031,15 @@ int main(int argc, char* argv[]) {
     if (options[7].doesOccur) {
         u_setDataDirectory(options[7].value);
     }
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status) && status != U_FILE_ACCESS_ERROR) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
+
 
     /* prepare the filename beginning with the source dir */
     uprv_strcpy(filename, srcDir);
