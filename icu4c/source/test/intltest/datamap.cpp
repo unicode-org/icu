@@ -21,10 +21,12 @@ DataMap::utoi(const UnicodeString &s) const
   return atoi(ch);
 }
 
-
-void deleteResBund(void *obj) {
+U_CDECL_BEGIN
+void U_CALLCONV
+deleteResBund(void *obj) {
   delete (ResourceBundle *)obj;
 }
+U_CDECL_END
 
 
 RBDataMap::~RBDataMap()
