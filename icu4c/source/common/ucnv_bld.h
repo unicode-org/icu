@@ -153,6 +153,7 @@ struct UConverter {
 
     void *fromUContext;
     void *toUContext;
+    UBool isCopyLocal;	 /* TRUE if created by safeClone with no allocation or ref count */
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
 
     /*
