@@ -92,6 +92,8 @@ U_CDECL_BEGIN
  * then properties marked with "new in Unicode 3.2" are not or not fully available.
  * Check u_getUnicodeVersion to be sure.
  *
+ * @see u_hasBinaryProperty
+ * @see u_getIntPropertyValue
  * @see u_getUnicodeVersion
  * @draft ICU 2.1
  */
@@ -218,7 +220,39 @@ enum UProperty {
         closure under normalization forms NFKC and NFKD. @draft ICU 2.1 */
     UCHAR_XID_START,
     /** One more than the last constant for binary Unicode properties. @draft ICU 2.1 */
-    UCHAR_BINARY_LIMIT
+    UCHAR_BINARY_LIMIT,
+
+    /** Enumerated property Bidi_Class.
+        Same as u_charDirection, returns UCharDirection values. @draft ICU 2.2 */
+    UCHAR_BIDI_CLASS=0x1000,
+    /** First constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
+    UCHAR_INT_START=UCHAR_BIDI_CLASS,
+    /** Enumerated property Block.
+        Same as ublock_getCode, returns UBlockCode values. @draft ICU 2.2 */
+    UCHAR_BLOCK,
+    /** Enumerated property Canonical_Combining_Class.
+        Same as u_getCombiningClass, returns 8-bit numeric values. @draft ICU 2.2 */
+    UCHAR_CANONICAL_COMBINING_CLASS,
+    /* UCHAR_DECOMPOSITION_TYPE, -- ### later ICU release */
+    /** Enumerated property East_Asian_Width.
+        See http://www.unicode.org/reports/tr11/
+        Returns UEastAsianWidth values. @draft ICU 2.2 */
+    UCHAR_EAST_ASIAN_WIDTH,
+    /** Enumerated property General_Category.
+        Same as u_charType, returns UCharCategory values. @draft ICU 2.2 */
+    UCHAR_GENERAL_CATEGORY,
+    /* UCHAR_JOINING_GROUP, -- ### later ICU release */
+    /* UCHAR_JOINING_TYPE, -- ### later ICU release */
+    /* UCHAR_LINE_BREAK, -- ### later ICU release */
+    /** Enumerated property Numeric_Type.
+        Returns UNumericType values. @draft ICU 2.2 */
+    UCHAR_NUMERIC_TYPE,
+    /** Enumerated property Script.
+        Same as uscript_getScript, returns UScriptCode values. @draft ICU 2.2 */
+    UCHAR_SCRIPT,
+
+    /** One more than the last constant for enumerated/integer Unicode properties. @draft ICU 2.2 */
+    UCHAR_INT_LIMIT
 };
 
 /** @draft ICU 2.1 */
@@ -941,7 +975,7 @@ typedef enum UBlockCode UBlockCode;
 
 /**
  * Values returned by the u_getCellWidth() function.
- * @stable
+ * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
  */
 enum UCellWidth
 {
@@ -957,8 +991,29 @@ enum UCellWidth
     U_CELL_WIDTH_COUNT
 };
 
-/** @stable */
+/** @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH. */
 typedef enum UCellWidth UCellWidth;
+
+/**
+ * East Asian Width constants.
+ *
+ * @see UCHAR_EAST_ASIAN_WIDTH
+ * @draft ICU 2.2
+ */
+enum UEastAsianWidth {
+    U_EA_NEUTRAL,
+    U_EA_AMBIGUOUS,
+    U_EA_HALFWIDTH,
+    U_EA_FULLWIDTH,
+    U_EA_NARROW,
+    U_EA_WIDE,
+    U_EA_COUNT
+};
+typedef enum UEastAsianWidth UEastAsianWidth;
+/*
+ * Implementation note:
+ * Keep UEastAsianWidth constant values in sync with names list in genprops/props2.c.
+ */
 
 /**
  * Selector constants for u_charName().
@@ -982,14 +1037,25 @@ enum UCharNameChoice {
 typedef enum UCharNameChoice UCharNameChoice;
 
 /**
+ * Numeric Type constants.
+ *
+ * @see UCHAR_NUMERIC_TYPE
+ * @draft ICU 2.2
+ */
+enum UNumericType {
+    U_NT_NONE,
+    U_NT_DECIMAL,
+    U_NT_DIGIT,
+    U_NT_NUMERIC,
+    U_NT_COUNT
+};
+typedef enum UNumericType UNumericType;
+
+/**
  * Check a binary Unicode property for a code point.
  *
  * Unicode, especially in version 3.2, defines many more properties than the
  * original set in UnicodeData.txt.
- * This API is intended to reflect Unicode properties as defined
- * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
- * For details about the properties see http://www.unicode.org/ .
- * For names of Unicode properties see the UCD file PropertyAliases.txt.
  *
  * The properties APIs are intended to reflect Unicode properties as defined
  * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
@@ -1007,6 +1073,7 @@ typedef enum UCharNameChoice UCharNameChoice;
  *         does not have data for the property at all, or not for this code point.
  *
  * @see UProperty
+ * @see u_getIntPropertyValue
  * @see u_getUnicodeVersion
  * @draft ICU 2.1
  */
@@ -1078,6 +1145,130 @@ u_isUWhiteSpace(UChar32 c);
  * ### TODO Document all properties more precisely, how they are based (or not) on UCD files.
  * Especially u_isdigit, u_isspace, u_isWhitespace.
  */
+
+/**
+ * Get the property value for an enumerated or integer Unicode property for a code point.
+ * Also returns binary property values.
+ *
+ * Unicode, especially in version 3.2, defines many more properties than the
+ * original set in UnicodeData.txt.
+ *
+ * The properties APIs are intended to reflect Unicode properties as defined
+ * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
+ * For details about the properties see http://www.unicode.org/ .
+ * For names of Unicode properties see the UCD file PropertyAliases.txt.
+ *
+ * Sample usage:
+ * UEastAsianWidth ea=(UEastAsianWidth)u_getIntPropertyValue(c, UCHAR_EAST_ASIAN_WIDTH);
+ * UBool b=(UBool)u_getIntPropertyValue(c, UCHAR_IDEOGRAPHIC);
+ *
+ * @param c Code point to test.
+ * @param which UProperty selector constant, identifies which binary property to check.
+ *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
+ * @return Numeric value that is directly the property value or,
+ *         for enumerated properties, corresponds to the numeric value of the enumerated
+ *         constant of the respective property value enumeration type
+ *         (cast to enum type if necessary).
+ *         Returns 0 or 1 (for FALSE/TRUE) for binary Unicode properties.
+ *         Returns 0 if which is out of bounds or if the Unicode version
+ *         does not have data for the property at all, or not for this code point.
+ *
+ * @see UProperty
+ * @see u_hasBinaryProperty
+ * @see u_getIntPropertyMinValue
+ * @see u_getIntPropertyMaxValue
+ * @see u_getUnicodeVersion
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyValue(UChar32 c, UProperty which);
+
+/**
+ * Get the minimum value for an enumerated/integer/binary Unicode property.
+ * Can be used together with u_getIntPropertyMaxValue
+ * to allocate arrays of UnicodeSet or similar.
+ *
+ * @param which UProperty selector constant, identifies which binary property to check.
+ *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
+ * @return Minimum value returned by u_getIntPropertyValue for a Unicode property.
+ *         Can be negative.
+ *         0 if the property selector is out of range.
+ *
+ * @see UProperty
+ * @see u_hasBinaryProperty
+ * @see u_getUnicodeVersion
+ * @see u_getIntPropertyMaxValue
+ * @see u_getIntPropertyValue
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyMinValue(UProperty which);
+
+/**
+ * Get the maximum value for an enumerated/integer/binary Unicode property.
+ * Can be used together with u_getIntPropertyMinValue
+ * to allocate arrays of UnicodeSet or similar.
+ *
+ * Examples for min/max values (for Unicode 3.2):
+ *
+ * - UCHAR_BIDI_CLASS:    0/18 (U_LEFT_TO_RIGHT/U_BOUNDARY_NEUTRAL)
+ * - UCHAR_SCRIPT:       -1/45 (USCRIPT_INVALID_CODE/USCRIPT_TAGBANWA)
+ * - UCHAR_IDEOGRAPHIC:   0/1  (FALSE/TRUE)
+ *
+ * For undefined UProperty constant values, both min/max values will be 0.
+
+ * @param which UProperty selector constant, identifies which binary property to check.
+ *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
+ *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
+ * @return Maximum value returned by u_getIntPropertyValue for a Unicode property.
+ *         0 if the property selector is out of range.
+ *
+ * @see UProperty
+ * @see u_hasBinaryProperty
+ * @see u_getUnicodeVersion
+ * @see u_getIntPropertyMaxValue
+ * @see u_getIntPropertyValue
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_getIntPropertyMaxValue(UProperty which);
+
+/**
+ * Get the numeric value for a Unicode code point as defined in the
+ * Unicode Character Database.
+ *
+ * A "double" return type is necessary because
+ * some numeric values are fractions, negative, or too large for int32_t.
+ *
+ * For characters without any numeric values in the Unicode Character Database,
+ * this function will return U_NO_NUMERIC_VALUE.
+ *
+ * @param c Code point to get the numeric value for.
+ * @return Numeric value of c, or U_NO_NUMERIC_VALUE if none is defined.
+ *
+ * @see U_NO_NUMERIC_VALUE
+ * @draft ICU 2.2
+ */
+U_CAPI double U_EXPORT2
+u_getNumericValue(UChar32 c);
+
+/**
+ * Special value that is returned by u_getNumericValue when
+ * no numeric value is defined for a code point.
+ *
+ * @see u_getNumericValue
+ * @draft ICU 2.2
+ */
+#define U_NO_NUMERIC_VALUE ((double)-123456789.)
+
+/**
+ * ### TODO propose...
+ * @draft ICU 2.2
+ */
+U_CAPI int32_t U_EXPORT2
+u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
 
 /**
  * Determines whether the specified UChar is a lowercase character
@@ -1310,6 +1501,11 @@ U_CAPI UChar32 U_EXPORT2
 u_charMirror(UChar32 c);
 
 /**
+ * Deprecated because the "cell width" functions and implementation are
+ * out of date compared with Unicode Standard Annex #11.
+ * Use u_getIntPropertyValue with UCHAR_EAST_ASIAN_WIDTH.
+ * See http://www.unicode.org/reports/tr11/
+ *
  * Returns a value indicating the display-cell width of the character
  * when used in Asian text, according to the Unicode standard (see p. 6-130
  * of The Unicode Standard, Version 2.0).  The results for various characters
@@ -1360,7 +1556,7 @@ u_charMirror(UChar32 c);
  * conventions.
  * @param c The character to be tested
  * @return a value indicating the display-cell width of the character when used in Asian text
- * @stable
+ * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
  */
 U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 c);
@@ -1457,7 +1653,7 @@ u_charDigitValue(UChar32 c);
  * Returns the Unicode allocation block that contains the character.
  *
  * @param ch The character to be tested
- * @retrun the Unicode allocation block that contains the character
+ * @return the Unicode allocation block that contains the character
  * @see #UBlockCode
  * @draft ICU 2.0
  */
