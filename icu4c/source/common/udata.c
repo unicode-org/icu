@@ -35,6 +35,12 @@
 #define COMMON_DATA_NAME_LENGTH 8
 /* Tests must verify that it remains 8 characters. */
 
+#ifdef OS390
+#define COMMON_DATA1_NAME "icudata390"
+#define COMMON_DATA1_NAME_LENGTH 10
+static UBool s390dll = TRUE;
+#endif
+
 #define DATA_TYPE "dat"
 
 /* If you are excruciatingly bored turn this on .. */
@@ -114,44 +120,44 @@
 #           include <dl.h>
 
             void *dlopen (const char *filename, int flag) {
-	            void *handle; /* real type: 'shl_t' */
+                void *handle; /* real type: 'shl_t' */
 #               ifdef UDATA_DEBUG
-	                fprintf(stderr, "shl_load: %s ", filename);
+                    fprintf(stderr, "shl_load: %s ", filename);
 #               endif
-	            handle=shl_load(filename, BIND_NONFATAL | BIND_DEFERRED | DYNAMIC_PATH, 0L);
+                handle=shl_load(filename, BIND_NONFATAL | BIND_DEFERRED | DYNAMIC_PATH, 0L);
 #               ifdef UDATA_DEBUG
-	                fprintf(stderr, " -> %08X\n", handle );
+                    fprintf(stderr, " -> %08X\n", handle );
 #               endif
-	            return handle;
+                return handle;
             }
 
             void *dlsym(void *h, char *symbol) {
-	            void *val=0;
-	            int rv;
-	            shl_t mysh;
+                void *val=0;
+                int rv;
+                shl_t mysh;
 
-	            mysh=(shl_t)h; /* real type */
+                mysh=(shl_t)h; /* real type */
 
-	            rv=shl_findsym(&mysh, symbol, TYPE_DATA, (void*)&val);
+                rv=shl_findsym(&mysh, symbol, TYPE_DATA, (void*)&val);
 #               ifdef UDATA_DEBUG
-    	            fprintf(stderr, "shl_findsym(%08X, %s) -> %08X [%d]\n", h, symbol, val, rv);
+                    fprintf(stderr, "shl_findsym(%08X, %s) -> %08X [%d]\n", h, symbol, val, rv);
 #               endif
-	            return val;
+                return val;
             }
 
             int dlclose (void *handle) {
 #  ifndef HPUX
 #               ifdef UDATA_DEBUG
-    	            fprintf(stderr, "shl_unload: %08X\n", handle);
+                    fprintf(stderr, "shl_unload: %08X\n", handle);
 #               endif
-	            return shl_unload((shl_t)handle);
+                return shl_unload((shl_t)handle);
 #  else
-		    /* "shl_unload .. always unloads the library.. no refcount is kept on PA32"  
-		       -- HPUX man pages [v. 11] 
+            /* "shl_unload .. always unloads the library.. no refcount is kept on PA32"  
+               -- HPUX man pages [v. 11] 
 
-		       Fine, we'll leak! [for now.. Jitterbug 414 has been filed ]
-		    */
-		    return 0;
+               Fine, we'll leak! [for now.. Jitterbug 414 has been filed ]
+            */
+            return 0;
 #  endif /* HPUX */
             }
 #       endif /* HPUX shl_load */
@@ -327,18 +333,18 @@ typedef struct {
     uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         char buffer[200];
         HANDLE map;
-		char *p;
+        char *p;
 
         /* set up the mapping name and the filename */
         uprv_strcpy(buffer, "icu" U_ICU_VERSION " ");
         uprv_strcat(buffer, path);
-        
-		/* replace in buffer \ with /   */
-		for(p=buffer; *p; p++) {
-			if (*p == '\\') {
-				*p = '/';
-			}
-		}
+
+        /* replace in buffer \ with /   */
+        for(p=buffer; *p; p++) {
+            if (*p == '\\') {
+                *p = '/';
+            }
+        }
 
         /* open the mapping */
         map=OpenFileMapping(FILE_MAP_READ, FALSE, buffer);
@@ -514,10 +520,11 @@ offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
                   const char *dllEntryName,
                   UErrorCode *pErrorCode) {
+
 #ifdef UDATA_DEBUG
   fprintf(stderr, "offsetTOC[%p] looking for %s/%s\n",
-	  pData,
-	  tocEntryName,dllEntryName);
+      pData,
+      tocEntryName,dllEntryName);
 #endif
 
     if(pData->toc!=NULL) {
@@ -540,18 +547,18 @@ offsetTOCLookupFn(const UDataMemory *pData,
         if(uprv_strcmp(tocEntryName, base+toc[2*start])==0) {
             /* found it */
 #ifdef UDATA_DEBUG
-	  fprintf(stderr, "Found: %p\n",(base+toc[2*start+1]));
+      fprintf(stderr, "Found: %p\n",(base+toc[2*start+1]));
 #endif
             return (const DataHeader *)(base+toc[2*start+1]);
         } else {
 #ifdef UDATA_DEBUG
-	  fprintf(stderr, "Not found.\n");
+      fprintf(stderr, "Not found.\n");
 #endif
             return NULL;
         }
     } else {
 #ifdef UDATA_DEBUG
-      fprintf(stderr, "returning header\n");
+        fprintf(stderr, "returning header\n");
 #endif
 
         return pData->pHeader;
@@ -565,8 +572,8 @@ pointerTOCLookupFn(const UDataMemory *pData,
                    UErrorCode *pErrorCode) {
 #ifdef UDATA_DEBUG
   fprintf(stderr, "ptrTOC[%p] looking for %s/%s\n",
-	  pData,
-	  tocEntryName,dllEntryName);
+      pData,
+      tocEntryName,dllEntryName);
 #endif
     if(pData->toc!=NULL) {
         const PointerTOCEntry *toc=(const PointerTOCEntry *)((const uint32_t *)pData->toc+2);
@@ -577,8 +584,8 @@ pointerTOCLookupFn(const UDataMemory *pData,
         limit=*(const uint32_t *)pData->toc; /* number of names in this table of contents */
 
 #ifdef UDATA_DEBUG
-	fprintf(stderr, "  # of ents: %d\n", limit);
-	fflush(stderr);
+        fprintf(stderr, "  # of ents: %d\n", limit);
+        fflush(stderr);
 #endif
 
         while(start<limit-1) {
@@ -593,22 +600,22 @@ pointerTOCLookupFn(const UDataMemory *pData,
         if(uprv_strcmp(tocEntryName, toc[start].entryName)==0) {
             /* found it */
 #ifdef UDATA_DEBUG
-	  fprintf(stderr, "FOUND: %p\n", 
-		  normalizeDataPointer(toc[start].pHeader));
+            fprintf(stderr, "FOUND: %p\n", 
+                normalizeDataPointer(toc[start].pHeader));
 #endif
 
-             return normalizeDataPointer(toc[start].pHeader);
+            return normalizeDataPointer(toc[start].pHeader);
         } else {
 #ifdef UDATA_DEBUG
-	  fprintf(stderr, "NOT found\n");
+            fprintf(stderr, "NOT found\n");
 #endif
             return NULL;
         }
     } else {
 #ifdef UDATA_DEBUG
-         fprintf(stderr, "Returning header\n");
+        fprintf(stderr, "Returning header\n");
 #endif
-	 return pData->pHeader;
+        return pData->pHeader;
     }
 }
 
@@ -627,7 +634,7 @@ dllTOCLookupFn(const UDataMemory *pData,
 
 /* common library functions ------------------------------------------------- */
 
- static UDataMemory commonICUData={ NULL }; 
+static UDataMemory commonICUData={ NULL };
 
 static void
 setCommonICUData(UDataMemory *pData) {
@@ -730,6 +737,11 @@ openCommonData(UDataMemory *pData,
     /* set up path and basename */
     basename=setPathGetBasename(path, pathBuffer);
     if(isICUData) {
+#ifdef OS390
+      if (s390dll)
+        inBasename=COMMON_DATA1_NAME; 
+      else
+#endif
         inBasename=COMMON_DATA_NAME;
     } else {
         inBasename=findBasename(path);
@@ -756,7 +768,14 @@ openCommonData(UDataMemory *pData,
             /* ### hack: we still need to get u_getDataDirectory() fixed
                for OS/390 (batch mode - always return "//"? )
                and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!) */
-            lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);
+            if (s390dll) {
+                lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
+            }
+            else {
+                /* U_ICUDATA_NAME should always have the correct name */
+                lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);
+/*                lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA");*/
+            }
 #       else
             lib=LOAD_LIBRARY(pathBuffer, basename);
 #       endif
@@ -988,6 +1007,63 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* set up the ToC names for DLL and offset-ToC lookups */
     setEntryNames(type, name, tocEntryName, dllEntryName);
 
+#ifdef OS390
+    if(s390dll == TRUE)
+    {
+        /* try to get high frequency S390 common data first */
+        uprv_memset(&dataMemory, 0, sizeof(UDataMemory));
+        pathBuffer[0]=0;
+        pCommonData=openCommonData(&dataMemory, path, isICUData, pathBuffer, &errorCode);
+        if(U_SUCCESS(errorCode)) {
+            /* look up the data piece in the common data */
+            pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
+            if(pHeader!=NULL) {
+                /* data found in the common data, test it */
+                if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
+                   pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
+                   (isAcceptable==NULL || isAcceptable(context, type, name, &pHeader->info))
+                ) {
+                    /* acceptable - allocate parent, too, if necessary */
+                    if(pCommonData==&dataMemory) {
+                        /* trick: do one malloc for both the common and the entry */
+                        pEntryData=(UDataMemory *)uprv_malloc(2*sizeof(UDataMemory));
+                        if(pEntryData!=NULL) {
+                            pCommonData=pEntryData+1;
+                            uprv_memcpy(pCommonData, &dataMemory, sizeof(UDataMemory));
+                        }
+                    } else {
+                        pEntryData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
+                    }
+                    if(pEntryData==NULL) {
+                        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                        return NULL;
+                    }
+                    uprv_memset(pEntryData, 0, sizeof(UDataMemory));
+                    pEntryData->parent=pCommonData;
+                    pEntryData->pHeader=pHeader;
+                    pEntryData->flags=pCommonData->flags&DATA_MEMORY_TYPE_MASK|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
+                    return pEntryData;
+                } else {
+                    /* the data is not acceptable, look further */
+                    errorCode=U_INVALID_FORMAT_ERROR;
+                }
+            }
+
+            /* the data is not in the common data, close that and look further */
+            s390dll=FALSE; 
+            if(pCommonData==&dataMemory) {
+              udata_close(&dataMemory); 
+           /* commonICUData = { NULL }; */
+              (&commonICUData)->flags = 0; 
+    /* clear out the 'mini cache' used in openCommonData */
+                /* This is not thread safe!!!!!!! */
+            }
+        }
+        s390dll=FALSE;
+        (&commonICUData)->flags = 0 ;
+    }
+#endif
+
     /* try to get common data */
     uprv_memset(&dataMemory, 0, sizeof(UDataMemory));
     pathBuffer[0]=0;
@@ -1001,7 +1077,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         /* look up the data piece in the common data */
         pHeader=pCommonData->lookupFn(pCommonData, tocEntryName, dllEntryName, &errorCode);
 #ifdef UDATA_DEBUG
-	fprintf(stderr, "Common found: %p\n", pHeader);
+        fprintf(stderr, "Common found: %p\n", pHeader);
 #endif
         if(pHeader!=NULL) {
             /* data found in the common data, test it */
@@ -1029,13 +1105,13 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 pEntryData->pHeader=pHeader;
                 pEntryData->flags=(pCommonData->flags&DATA_MEMORY_TYPE_MASK)|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
 #ifdef UDATA_DEBUG
-		fprintf(stderr, " made data @%p\n", pEntryData);
+        fprintf(stderr, " made data @%p\n", pEntryData);
 #endif
                 return pEntryData;
             } else {
                 /* the data is not acceptable, look further */
 #ifdef UDATA_DEBUG
-	      fprintf(stderr, "Not acceptable\n");
+            fprintf(stderr, "Not acceptable\n");
 #endif
                 errorCode=U_INVALID_FORMAT_ERROR;
             }
@@ -1157,7 +1233,8 @@ U_CAPI UDataMemory * U_EXPORT2
 udata_open(const char *path, const char *type, const char *name,
            UErrorCode *pErrorCode) {
 #ifdef UDATA_DEBUG
-  fprintf(stderr, "udata_open(): Opening: %s . %s\n", name, type);fflush(stderr);
+    fprintf(stderr, "udata_open(): Opening: %s . %s\n", name, type);
+    fflush(stderr);
 #endif
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
