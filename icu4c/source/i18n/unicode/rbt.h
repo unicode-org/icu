@@ -354,6 +354,19 @@ public:
                             const TransliterationRuleData* theData,
                             UnicodeFilter* adoptedFilter = 0);
 
+ private:
+
+    friend Transliterator; // to access following ct
+
+    /**
+     * Internal constructor.
+     */
+    RuleBasedTransliterator(const UnicodeString& id,
+                            TransliterationRuleData* data,
+                            UBool isDataAdopted);
+
+ public:
+
     /**
      * Copy constructor.
      * @draft

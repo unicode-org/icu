@@ -662,7 +662,7 @@ private:
     //----------------------------------------------------------------
 
     friend class Transliterator;
-    friend class TransliterationRuleParser;
+    friend class TransliteratorParser;
     friend class TransliterationRule;
 
     /**
