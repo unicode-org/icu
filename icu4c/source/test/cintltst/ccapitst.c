@@ -42,6 +42,19 @@
 #   define DEFAULT_CODEPAGE "LATIN_1"
 #endif
 
+int prv_stricmp(const char* string1, const char* string2)
+{
+  int32_t ch;
+  for(;;) {
+    ch = (int32_t)tolower(*string1) - (int32_t)tolower(*string2);
+    if(ch != 0 || *string1 == 0) {
+      return ch;
+    }
+    ++string1;
+    ++string2;
+  }
+}
+
 /*writes and entire UChar* (string) along with a BOM to a file*/
 void WriteToFile(const UChar *a, FILE *myfile); 
 /*Case insensitive compare*/
@@ -326,14 +339,14 @@ void TestConvert()
     
     /* Testing ucnv_getName()*/
 	/*default code page */
-	if ((stricmp(ucnv_getName(someConverters[0], &err), DEFAULT_CODEPAGE)==0)&&
-    (stricmp(ucnv_getName(someConverters[1], &err), DEFAULT_CODEPAGE)==0))
+	if ((prv_stricmp(ucnv_getName(someConverters[0], &err), DEFAULT_CODEPAGE)==0)&&
+    (prv_stricmp(ucnv_getName(someConverters[1], &err), DEFAULT_CODEPAGE)==0))
       log_verbose("getName ok\n");
     else 
         log_err("getName failed\n");
   
     /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
-    if(stricmp(ucnv_getDefaultName(), DEFAULT_CODEPAGE)==0)
+    if(prv_stricmp(ucnv_getDefaultName(), DEFAULT_CODEPAGE)==0)
       log_verbose("getDefaultName o.k.\n");
     else
       log_err("getDefaultName failed \n");

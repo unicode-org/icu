@@ -31,6 +31,19 @@
 #   define DEFAULT_CODEPAGE "LATIN_1"
 #endif
 
+int prv_stricmp(const char* string1, const char* string2)
+{
+  int32_t ch;
+  for(;;) {
+    ch = (int32_t)tolower(*string1) - (int32_t)tolower(*string2);
+    if(ch != 0 || *string1 == 0) {
+      return ch;
+    }
+    ++string1;
+    ++string2;
+  }
+}
+
 /*writes and entire UnicodeString along with a BOM to a file*/
 void WriteToFile(const UnicodeString *a, FILE *myfile); 
 /*Case insensitive compare*/
@@ -231,8 +244,8 @@ void ConvertTest::TestConvert()
     someConverters[2] = new UnicodeConverterCPP("utf8", err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + err);
 
-    if ((stricmp(someConverters[1]->getName(err),DEFAULT_CODEPAGE)==0)&&
-    (stricmp(someConverters[0]->getName(err),DEFAULT_CODEPAGE)==0))
+    if ((prv_stricmp(someConverters[1]->getName(err),DEFAULT_CODEPAGE)==0)&&
+    (prv_stricmp(someConverters[0]->getName(err),DEFAULT_CODEPAGE)==0))
       logln("getName ok");
     else errln("getName failed");
     logln(someConverters[1]->getName(err));
