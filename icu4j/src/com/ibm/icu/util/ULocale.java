@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ULocale.java,v $
-* $Date: 2004/01/08 22:27:14 $
-* $Revision: 1.8 $
+* $Date: 2004/01/15 22:18:09 $
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -37,13 +37,19 @@ import java.io.IOException;
  * #ACTUAL_LOCALE} intended for use in methods named
  * <tt>getLocale()</tt>.  These methods exist in several ICU classes,
  * including {@link com.ibm.icu.util.Calendar}, {@link
- * com.ibm.icu.text.UFormat}, {@link com.ibm.icu.text.BreakIterator},
- * {@link com.ibm.icu.text.Collator}, {@link
+ * com.ibm.icu.util.Currency}, {@link com.ibm.icu.text.UFormat},
+ * {@link com.ibm.icu.text.BreakIterator}, {@link
+ * com.ibm.icu.text.Collator}, {@link
  * com.ibm.icu.text.DateFormatSymbols}, and {@link
  * com.ibm.icu.text.DecimalFormatSymbols} and their subclasses, if
  * any.  Once an object of one of these classes has been created,
  * <tt>getLocale()</tt> may be called on it to determine the valid and
  * actual locale arrived at during the object's construction.
+ *
+ * <p>Note: The <tt>getLocale()</tt> method will be implemented in ICU
+ * 3.0; ICU 2.8 contains a partial preview implementation.  The
+ * <i>actual</i> locale is returned correctly, but the <i>valid</i>
+ * locale is not, in most cases.
  *
  * @see java.util.Locale
  * @author weiv
@@ -101,6 +107,13 @@ public final class ULocale implements Serializable {
         return new ULocale(Locale.getDefault());
     }
 
+    /**
+     * Return a string representation of this object.
+     */
+    public final String toString() {
+        return "ULocale(" + locale.toString() + ")";
+    }
+
     /** 
      * Selector for <tt>getLocale()</tt> indicating the locale of the
      * resource containing the data.  This is always at or above the
@@ -109,8 +122,6 @@ public final class ULocale implements Serializable {
      * above the valid locale.  If the object was not constructed from
      * locale data, then the valid locale is <i>null</i>.
      *
-     * <p>Note: The actual locale will be returned correctly in ICU
-     * 3.0 or later.
      * @draft ICU 2.8
      */
     public static final Type ACTUAL_LOCALE = new Type(0);
@@ -123,6 +134,9 @@ public final class ULocale implements Serializable {
      * then the valid locale will be above the requested locale.  If
      * the object was not constructed from locale data, then the
      * actual locale is <i>null</i>.
+     *
+     * <p>Note: The valid locale will be returned correctly in ICU
+     * 3.0 or later.  In ICU 2.8, it is not returned correctly.
      * @draft ICU 2.8
      */ 
     public static final Type VALID_LOCALE = new Type(1);
