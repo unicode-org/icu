@@ -1307,12 +1307,15 @@ static FileStream * getFractionalUCA(void)
     /* As a fallback, try to guess where the source data was located
      *   at the time ICU was built, and look there.
      */
-    #if defined (U_TOPSRCDIR)
-        strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
-    #else
-        strcpy(backupPath, u_getDataDirectory());
-        strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
-    #endif
+#if defined (U_TOPSRCDIR)
+    strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
+#else
+    {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        strcpy(backupPath, loadTestData(&errorCode));
+        strcat(backupPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+    }
+#endif
     strcat(backupPath, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING "FractionalUCA.txt");
 
     result = T_FileStream_open(newPath, "rb");

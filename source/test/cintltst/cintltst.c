@@ -343,12 +343,27 @@ const char* loadTestData(UErrorCode* err){
             strcat(tdpath, tdrelativepath);
             strcat(tdpath,"testdata");
             *err =U_ZERO_ERROR;
-            test=ures_open(tdpath, "ja_data", err);
-            /* Fall back did not succeed either so return */
+            test=ures_open(tdpath, "testtypes", err);
+            /* we could not find the data in tdpath 
+             * try one more tdpathFallback
+             */
             if(U_FAILURE(*err)){
-                *err = U_FILE_ACCESS_ERROR;
-                log_err("construction of NULL did not succeed  :  %s \n", u_errorName(*err));
-                return "";
+                strcpy(tdpath,directory);
+                strcat(tdpath,".."U_FILE_SEP_STRING);
+                strcat(tdpath,".."U_FILE_SEP_STRING);
+                strcat(tdpath, tdrelativepath);
+                strcat(tdpath,"testdata");
+                *err =U_ZERO_ERROR;
+                test=ures_open(tdpath, "testtypes", err);
+                /* Fall back did not succeed either so return */
+                if(U_FAILURE(*err)){
+                    *err = U_FILE_ACCESS_ERROR;
+                    log_err("construction of NULL did not succeed  :  %s \n", u_errorName(*err));
+                    return "";
+                }
+                ures_close(test);
+                _testDataPath = tdpath;
+                return _testDataPath;
             }
             ures_close(test);
             _testDataPath = tdpath;
