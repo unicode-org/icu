@@ -1,8 +1,8 @@
+## -*-makefile-*-
 #******************************************************************************
-#
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-#
+# $Revision: 1.2 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -78,4 +78,22 @@ ld_rpath_suf=@ld_rpath_suf@
 # end host fragment
 
 
+
+
+GENCCODE=$(sbindir)/genccode
+GENCMN=$(sbindir)/gencmn
+
+TOOL=env LD_LIBRARY_PATH=$(libdir) LIBPATH=$(libdir)
+
+ifeq ($(strip $(PLATFORM)),AIX)
+  TOOL=env LIBPATH=$(libdir)
+endif
+
+ifeq ($(strip $(PLATFORM)),HPUX)
+  TOOL=env LD_LIBRARY_PATH=$(libdir)
+endif
+
+ifeq ($(strip $(PLATFORM)),LINUX)
+  TOOL=env LD_LIBRARY_PATH=$(libdir)
+endif
 
