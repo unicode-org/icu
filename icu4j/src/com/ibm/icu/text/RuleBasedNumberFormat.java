@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2000/05/26 21:38:55 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/12 20:02:00 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -468,7 +468,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.3 $ $Date: 2000/05/26 21:38:55 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.4 $ $Date: 2001/11/12 20:02:00 $
  * @see NumberFormat
  * @see DecimalFormat
  */
@@ -988,13 +988,30 @@ public final class RuleBasedNumberFormat extends NumberFormat {
         return lenientParse;
     }
 
+    /**
+     * Override the default rule set to use.  If ruleSetName is null, reset
+     * to the initial default rule set.
+     * @param ruleSetName the name of the rule set, or null to reset the initial default.
+     * @throws IllegalArgumentException if ruleSetName is not the name of a public ruleset.
+     */
+    public void setDefaultRuleSet(String ruleSetName) {
+        if (ruleSetName == null) {
+            initDefaultRuleSet();
+        } else if (ruleSetName.startsWith("%%")) {
+            throw new IllegalArgumentException("cannot use private rule set: " + ruleSetName);
+        } else {
+            defaultRuleSet = findRuleSet(ruleSetName);
+        }
+    }
+
     //-----------------------------------------------------------------------
     // package-internal API
     //-----------------------------------------------------------------------
 
     /**
      * Returns a reference to the formatter's default rule set.  The default
-     * rule set is the last public rule set in the description.
+     * rule set is the last public rule set in the description, or the one
+     * most recently set by setDefaultRuleSet.
      * @return The formatter's default rule set.
      */
     NFRuleSet getDefaultRuleSet() {
@@ -1143,7 +1160,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
         // rather than the first so that a user can create a new formatter
         // from an existing formatter and change its default bevhaior just
         // by appending more rule sets to the end)
-        setDefaultRuleSet();
+        initDefaultRuleSet();
 
         // finally, we can go back through the temporary descriptions
         // list and finish seting up the substructure (and we throw
@@ -1209,7 +1226,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * text to the end of an existing formatter description to change its
      * behavior.)
      */
-    private void setDefaultRuleSet() {
+    private void initDefaultRuleSet() {
         // seek backward from the end of the list until we reach a rule set
         // whose name DOESN'T begin with %%.  That's the default rule set
         for (int i = ruleSets.length - 1; i >= 0; --i) {
