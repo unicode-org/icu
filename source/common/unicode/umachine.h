@@ -179,5 +179,29 @@ typedef int8_t UBool;
 #   define U_INLINE
 #endif
 
+/*===========================================================================*/
+/* U_WCHAR_IS_UTF16 definition                                               */
+/*===========================================================================*/
+
+#ifndef U_WCHAR_IS_UTF16
+#   ifdef __STDC_ISO_10646__ 
+#       if (U_SIZEOF_WCHAR_T==2)
+#           define U_WCHAR_IS_UTF16
+#       elif (U_SIZEOR_WCHAR_T==4)
+#           define  U_WCHAR_IS_UTF32
+#       endif
+#   elif defined __UCS2__
+#       if (__OS390__ || __OS400__) && (U_SIZEOF_WCHAR_T==2)
+#           define U_WCHAR_IS_UTF16
+#       endif
+#   elif defined __UCS4__
+#       if (U_SIZEOR_WCHAR_T==4)
+#           define U_WCHAR_IS_UTF32
+#       endif
+#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#       define U_WCHAR_IS_UTF16    
+#   endif
+#endif
+
 
 #endif
