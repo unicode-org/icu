@@ -126,7 +126,9 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
 
-    pkg_sttc_writeReadme(o, tmp, status);
+    if (!o->quiet) {
+        pkg_sttc_writeReadme(o, tmp, status);
+    }
     if(U_FAILURE(*status)) {
         return;
     }
