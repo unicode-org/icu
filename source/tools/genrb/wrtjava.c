@@ -664,7 +664,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
             allStrings=FALSE;
 
             write_tabs(out);
-            if(res->fKey > 0){
+            if(current->fKey > 0){
                 T_FileStream_write(out, "\"", 1);
                 T_FileStream_write(out, srBundle->fKeys+current->fKey,
                                    (int32_t)uprv_strlen(srBundle->fKeys+current->fKey));
