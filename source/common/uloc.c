@@ -803,25 +803,7 @@ U_CAPI uint32_t  U_EXPORT2
 uloc_getLCID(const char* localeID) 
 {
     UErrorCode err = U_ZERO_ERROR;
-    uint32_t result = 0;
-    UResourceBundle* bundle = ures_open(NULL, localeID, &err);
-    
-    if (U_SUCCESS(err))
-    {
-        UResourceBundle *resLocaleID = ures_getByKey(bundle, _kLocaleID, NULL, &err);
-        if (U_SUCCESS(err))
-        {
-            result = ures_getInt(resLocaleID, &err);
-            if (U_FAILURE(err))
-            {
-                result = 0;
-            }
-            ures_close(resLocaleID);
-        }
-        ures_close(bundle);
-    }
-    
-    return result;
+    return uprv_convertToLCID(localeID, &err);
 }
 
 /*
