@@ -58,6 +58,8 @@ public:
     void TestCompareReferenceImpl();
     void TestRefIDNA();
     void TestIDNAMonkeyTest();
+    void TestConformance();
+
 private:
     void testToASCII(const char* testName, TestFunc func);
     void testToUnicode(const char* testName, TestFunc func);
@@ -70,7 +72,7 @@ private:
     // main testing functions
     void testAPI(const UChar *src, const UChar *expected, const char *testName, 
              UBool useSTD3ASCIIRules, UErrorCode expectedStatus,
-             UBool doCompare, TestFunc func);
+             UBool doCompare, UBool testUnassigned, TestFunc func);
 
     void testCompare(const UChar* s1, int32_t s1Len,
                         const UChar* s2, int32_t s2Len,
@@ -89,6 +91,12 @@ private:
                             const char* IDNToUnicodeName, TestFunc IDNToUnicode);
 
     void testCompareReferenceImpl(const UChar* src, int32_t srcLen);
+
+    void testConformance(const char* toASCIIName, TestFunc toASCII,
+                         const char* IDNToASCIIName, TestFunc IDNToASCII,
+                         const char* IDNToUnicodeName, TestFunc IDNToUnicode,
+                         const char* toUnicodeName, TestFunc toUnicode
+                         );
 };
 
 // test the TRIE data structure
