@@ -25,7 +25,7 @@
 # conform to Korean syllable structure.  These are the null initial
 # consonant 110B (IEUNG) and the null vowel 1173 (EU).  In Latin text,
 # we will use the hyphen in order to disambiguate strings,
-# e.g. "kan'ggan" (initial GG) vs. "kanggan" (final NG + initial G).
+# e.g. "kan-ggan" (initial GG) vs. "kanggan" (final NG + initial G).
 
 # We will not use all of the characters in the jamo block.  We will
 # only use the 19 initials, 21 medials, and 27 finals possessing a
@@ -168,7 +168,7 @@
 # Hyphens are inserted to obtain correct round trip behavior.  For
 # example, the sequence Ki A Gf Gi E, if transliterated to "kagge",
 # would then round trip to Ki A GGi E.  To prevent this, we insert a
-# hyphen: "kag'ge".  IMPORTANT: The need for hyphens depends
+# hyphen: "kag-ge".  IMPORTANT: The need for hyphens depends
 # very specifically on the behavior of the Latin-Jamo rules.  A change
 # in the Latin-Jamo behavior can completely change the way the
 # hyphen insertion must be done.
@@ -192,17 +192,25 @@
 
 # For vowels the rule is similar.  If there is a vowel "ae" such that
 # "a" by itself and "e" by itself are vowels, then we want to map A E
-# to "a'e" so as not to round trip to AE.  However, in the text Ki EO
-# IEUNG E we don't need to map to "keo'e".  "keoe" suffices.  For
+# to "a-e" so as not to round trip to AE.  However, in the text Ki EO
+# IEUNG E we don't need to map to "keo-e".  "keoe" suffices.  For
 # vowels of the form "aei", in theory both "ae" + "i" and "a" + "ei"
 # must be tested, but in practice only the former occurs.
 
-  '-' < $latinInitial [ye we] {} $O;
-  '-' < $latinInitial e {} [$O $U];
-  '-' < $latinInitial [o a wa ya] {} $E;
+  '-' < $latinInitial [y w] e {} [$O $OE];
+  '-' < $latinInitial e {} [$O $OE $U];
+  '-' < $latinInitial [o a] {} [$E $EO $EU];
+  '-' < $latinInitial [w y] a {} [$E $EO $EU];
+
+# Similar to the above, but with an intervening $IEUNG.
+
+  '-' < $latinInitial [y w] e {} $IEUNG [$O $OE];
+  '-' < $latinInitial e {} $IEUNG [$O $OE $U];
+  '-' < $latinInitial [o a] {} $IEUNG [$E $EO $EU];
+  '-' < $latinInitial [w y] a {} $IEUNG [$E $EO $EU];
 
 # Single finals followed by IEUNG.  The jamo sequence A Xf IEUNG E,
-# where Xi also exists, must be transliterated as "ax'e" to prevent
+# where Xi also exists, must be transliterated as "ax-e" to prevent
 # the round trip conversion to A Xi E.
 
   '-' < $latinMedialEnd b {} $IEUNG $jamoMedial;
@@ -240,7 +248,7 @@
   '-' < $latinMedialEnd s s {} $IEUNG $jamoMedial;
 
 # Split doubles.  Text of the form A Xi Xf E, where XXi also occurs,
-# we transliterate as "ax'xe" to prevent round trip transliteration as
+# we transliterate as "ax-xe" to prevent round trip transliteration as
 # A XXi E.
 
   '-' < $latinMedialEnd b {} $Bi $jamoMedial;
@@ -252,15 +260,15 @@
 # XYY.  This corresponds to the XYY rule in Latin-Jamo.  By default
 # Latin-Jamo maps "xyy" to Xf YYi, to keep YY together.  As a result,
 # "xyy" forms that correspond to XYf Yi must be transliterated as
-# "xy'y".
+# "xy-y".
 
-  '-' < $latinMedialEnd b s {} $Si;
-  '-' < $latinMedialEnd g s {} $Si;
-  '-' < $latinMedialEnd l b {} $Bi;
-  '-' < $latinMedialEnd l g {} $Gi;
-  '-' < $latinMedialEnd l s {} $Si;
-  '-' < $latinMedialEnd n g {} $Gi;
-  '-' < $latinMedialEnd n j {} $Ji;
+  '-' < $latinMedialEnd b s {} [$Si $SSi];
+  '-' < $latinMedialEnd g s {} [$Si $SSi];
+  '-' < $latinMedialEnd l b {} [$Bi $BB];
+  '-' < $latinMedialEnd l g {} [$Gi $GGi];
+  '-' < $latinMedialEnd l s {} [$Si $SSi];
+  '-' < $latinMedialEnd n g {} [$Gi $GGi];
+  '-' < $latinMedialEnd n j {} [$Ji $JJ];
 
 # Deletion of IEUNG is handled below.
 
