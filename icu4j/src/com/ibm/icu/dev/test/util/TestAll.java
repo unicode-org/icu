@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestAll.java,v $
- * $Date: 2003/06/10 00:55:41 $
- * $Revision: 1.4 $
+ * $Date: 2003/11/14 19:15:14 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -31,7 +31,8 @@ public class TestAll extends TestGroup {
             "StringTokenizerTest",
             "CurrencyTest",
             "UtilityTest",
-            "TrieTest"
+            "TrieTest",
+            "LocaleDataTest"
         },
               "Test miscellaneous public utilities");
     }
