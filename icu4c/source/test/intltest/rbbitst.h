@@ -28,7 +28,7 @@ class RBBITest: public IntlTest {
 public:
   
     RBBITest();
-    ~RBBITest();
+    virtual ~RBBITest();
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
     /**

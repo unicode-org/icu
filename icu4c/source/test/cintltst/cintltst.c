@@ -173,6 +173,7 @@ int main(int argc, const char* const argv[])
     return nerrors ? 1 : 0;
 }
 
+/*
 static void ctest_appendToDataDirectory(const char *toAppend)
 {
     const char *oldPath ="";
@@ -209,7 +210,7 @@ static void ctest_appendToDataDirectory(const char *toAppend)
         }
     }
 }
-
+*/
 
 void
 ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
