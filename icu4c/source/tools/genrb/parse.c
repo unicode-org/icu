@@ -8,6 +8,8 @@
 *
 * File parse.c
 *
+* Rewritten 10th July 2001 by Dominic Ludlam <dom@recoil.org>
+*
 * Modification History:
 *
 *   Date        Name        Description
@@ -28,819 +30,1137 @@
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 
+/* Number of tokens to read ahead of the current stream position */
+#define MAX_LOOKAHEAD   2
 
-#define U_ICU_UNIDATA "unidata"
-#define CR      0x000D
-#define LF      0x000A
-#define SPACE   0x0020
+#define U_ICU_UNIDATA   "unidata"
+#define CR              0x000D
+#define LF              0x000A
+#define SPACE           0x0020
+#define ESCAPE          0x005C
 
-U_STRING_DECL(k_start_string, "string", 6);
-U_STRING_DECL(k_start_binary, "binary", 6);
-U_STRING_DECL(k_start_table, "table", 5);
-U_STRING_DECL(k_start_int, "int", 3);
-U_STRING_DECL(k_start_array, "array", 5);
-U_STRING_DECL(k_start_intvector, "intvector", 9);
-U_STRING_DECL(k_start_reserved, "reserved", 8);
-/* U_STRING_DECL(rootName, "root", 4);*/
+U_STRING_DECL(k_type_string,    "string",    6);
+U_STRING_DECL(k_type_binary,    "binary",    6);
+U_STRING_DECL(k_type_bin,       "bin",       3);
+U_STRING_DECL(k_type_table,     "table",     5);
+U_STRING_DECL(k_type_int,       "int",       3);
+U_STRING_DECL(k_type_integer,   "integer",   7);
+U_STRING_DECL(k_type_array,     "array",     5);
+U_STRING_DECL(k_type_intvector, "intvector", 9);
+U_STRING_DECL(k_type_import,    "import",    6);
+U_STRING_DECL(k_type_reserved,  "reserved",  8);
 
-static UBool didInit=FALSE;
-/* static UBool didInitRoot=FALSE;*/
-
-/* Node IDs for the state transition table. */
-enum ENode {
-    eError,
-    eInitial,   /* Next: Locale name */
-    eGotLoc,    /* Next: { */
-    eIdle,      /* Next: Tag name | } */
-    eGotTag,    /* Next: { | : */
-    eNode5,     /* Next: Data | Subtag */
-    eNode6,     /* Next: } | { | , */
-    eList,      /* Next: List data */
-    eNode8,     /* Next: , */
-    eTagList,   /* Next: Subtag data */
-    eNode10,    /* Next: } */
-    eNode11,    /* Next: Subtag */
-    eNode12,    /* Next: { */
-    e2dArray,   /* Next: Data | } */
-    eNode14,    /* Next: , | } */
-    eNode15,    /* Next: , | } */
-    eNode16,     /* Next: { | } */
-    eTypeStart, /* Next: Type name */
-    eGotType    /* Next: { */
+enum EResourceType
+{
+    RT_UNKNOWN,
+    RT_STRING,
+    RT_BINARY,
+    RT_TABLE,
+    RT_INTEGER,
+    RT_ARRAY,
+    RT_INTVECTOR,
+    RT_IMPORT,
+    RT_RESERVED,
 };
 
-/* Action codes for the state transtiion table. */
-enum EAction {
-    /* Generic actions */
-    eNOP       = 0x0100, /* Do nothing */
-    eOpen      = 0x0200, /* Open a new locale data block with the data
-                          string as the locale name */
-    eClose     = 0x0300, /* Close a locale data block */
-    eSetTag    = 0x0400, /* Record the last string as the tag name */
-
-    /* Comma-delimited lists */
-    eBegList   = 0x1100, /* Start a new string list with the last string
-                          as the first element */
-    eEndList   = 0x1200, /* Close a string list being built */
-    eListStr   = 0x1300, /* Record the last string as a data string and
-                          increment the index */
-    eStr       = 0x1400, /* Record the last string as a singleton string */
-
-    /* 2-d lists */
-    eBeg2dList = 0x2100, /* Start a new 2d string list with no elements as yet */
-    eEnd2dList = 0x2200, /* Close a 2d string list being built */
-    e2dStr     = 0x2300, /* Record the last string as a 2d string */
-    eNewRow    = 0x2400, /* Start a new row */
-
-    /* Tagged lists */
-    eBegTagged = 0x3100, /* Start a new tagged list with the last
-                          string as the first subtag */
-    eEndTagged = 0x3200, /* Close a tagged list being build */
-    eSubtag    = 0x3300, /* Record the last string as the subtag */
-    eTaggedStr = 0x3400,  /* Record the last string as a tagged string */
-
-    /* Type support */
-    eBegType = 0x4100, /* Start getting a type */
-    eSetType = 0x4200 /* Record and init type */
+/* only used for debugging */
+const char *resourceNames[] =
+{
+    "Unknown",
+    "String",
+    "Binary",
+    "Table",
+    "Integer",
+    "Array",
+    "Int vector",
+    "Import",
+    "Reserved",
 };
 
-/* A struct which encapsulates a node ID and an action. */
-struct STransition {
-    enum ENode fNext;
-    enum EAction fAction;
+struct Lookahead
+{
+    enum   ETokenType type;
+    struct UString    value;
+    uint32_t          line;
 };
 
-/* This table describes an ATM (state machine) which parses resource
-   bundle text files rather strictly. Each row represents a node. The
-   columns of that row represent transitions into other nodes. Most
-   transitions are "eError" because most transitions are
-   disallowed. For example, if the parser has just seen a tag name, it
-   enters node 4 ("eGotTag"). The state table then marks only one
-   valid transition, which is into node 5, upon seeing an eOpenBrace
-   token. We allow an extra comma after the last element in a
-   comma-delimited list (transition from eList to eIdle on
-   kCloseBrace). */
-static struct STransition gTransitionTable [] = {
-  /*                kString           kOpenBrace            kCloseBrace         kComma       */
-  /*eError*/    {eError,eNOP},       {eError,eNOP},        {eError,eNOP},      {eError,eNOP},
+/* keep in sync with token defines in read.h */
+const char *tokenNames[] =
+{
+    "string",           /* A string token, such as "MonthNames" */
+    "'{'",              /* An opening brace character */
+    "'}'",              /* A closing brace character */
+    "','",              /* A comma */
+    "':'",              /* A colon */
 
-  /*eInitial*/  {eGotLoc,eOpen},     {eError,eNOP},        {eError,eNOP},      {eError,eNOP},
-  /*eGotLoc*/   {eError,eNOP},       {eIdle,eNOP},         {eError,eNOP},      {eError,eNOP},
-
-  /*eIdle*/     {eGotTag,eSetTag},   {eError,eNOP},        {eInitial,eClose},  {eError,eNOP},
-  /*eGotTag*/   {eError,eNOP},       {eNode5,eNOP},        {eError,eNOP},      {eError,eNOP},
-  /*eNode5*/    {eNode6,eNOP},       {e2dArray,eBeg2dList},{eError,eNOP},      {eError,eNOP},
-  /*eNode6*/    {eError,eNOP},       {eTagList,eBegTagged},{eIdle,eStr},       {eList,eBegList},
-
-  /*eList*/     {eNode8,eListStr},   {eError,eNOP},         {eIdle,eEndList},  {eError,eNOP},
-  /*eNode8*/    {eError,eNOP},       {eError,eNOP},         {eIdle,eEndList},  {eList,eNOP},
-
-  /*eTagList*/  {eNode10,eTaggedStr},{eError,eNOP},         {eError,eNOP},     {eError,eNOP},
-  /*eNode10*/   {eError,eNOP},       {eError,eNOP},         {eNode11,eNOP},    {eError,eNOP},
-  /*eNode11*/   {eNode12,eNOP},      {eError,eNOP},         {eIdle,eEndTagged},{eError,eNOP},
-  /*eNode12*/   {eError,eNOP},       {eTagList,eSubtag},    {eError,eNOP},     {eError,eNOP},
-
-  /*e2dArray*/  {eNode14,e2dStr},    {eError,eNOP},         {eNode15,eNOP},    {eError,eNOP},
-  /*eNode14*/   {eError,eNOP},       {eError,eNOP},         {eNode15,eNOP},    {e2dArray,eNOP},
-  /*eNode15*/   {eError,eNOP},       {e2dArray,eNewRow},    {eIdle,eEnd2dList},{eNode16,eNOP},
-  /*eNode16*/   {eError,eNOP},       {e2dArray,eNewRow},    {eIdle,eEnd2dList},{eError,eNOP},
-  /*eTypeStart*/{eGotType,eSetType}, {eError,eNOP},         {eError,eNOP},     {eError,eNOP},
-  /*eGotType*/  {eError,eNOP},       {eError,eNOP},         {eError,eNOP},     {eError,eNOP}
+    "<end of file>",    /* End of the file has been reached successfully */
+    "<error>",          /* An error, such an unterminated quoted string */
 };
 
-/* Row length is 4 */
-#define GETTRANSITION(row,col) (gTransitionTable[col + (row<<2)])
-/* Not anymore, it is 5 now */
-/*#define GETTRANSITION(row,col) (gTransitionTable[col + (row*5)])*/
+/* Just to store "TRUE" */
+static const UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000};
 
-/*********************************************************************
- * Hashtable glue
- ********************************************************************/
+static struct Lookahead  lookahead[MAX_LOOKAHEAD + 1];
+static uint32_t          lookaheadPosition;
+static UCHARBUF         *buffer;
 
-static UBool get(UHashtable *hash, const struct UString* tag) {
-    return (UBool)(uhash_get(hash, tag) != NULL);
+static struct SRBRoot *bundle;
+static const char     *inputdir;
+static uint32_t        inputdirLength;
+
+static struct SResource *parseResource(char *tag, UErrorCode *status);
+
+static char *u2c(UChar *str)
+{
+    static char buffer[1024];
+    u_austrcpy(buffer, str);
+    return buffer;
 }
 
-static void put(UHashtable *hash, const struct UString *tag,
-                UErrorCode* status) {
-    struct UString* key = (struct UString*)uprv_malloc(sizeof(struct UString));
-    ustr_init(key);
-    ustr_cpy(key, tag, status);
-    uhash_put(hash, key, (void*)1, status);
+void initParser(void)
+{
+    uint32_t i;
+
+    U_STRING_INIT(k_type_string,    "string",    6);
+    U_STRING_INIT(k_type_binary,    "binary",    6);
+    U_STRING_INIT(k_type_bin,       "bin",       3);
+    U_STRING_INIT(k_type_table,     "table",     5);
+    U_STRING_INIT(k_type_int,       "int",       3);
+    U_STRING_INIT(k_type_integer,   "integer",   7);
+    U_STRING_INIT(k_type_array,     "array",     5);
+    U_STRING_INIT(k_type_intvector, "intvector", 9);
+    U_STRING_INIT(k_type_import,    "import",    6);
+    U_STRING_INIT(k_type_reserved,  "reserved",  8);
+
+    for (i = 0; i < MAX_LOOKAHEAD + 1; i++)
+    {
+        ustr_init(&lookahead[i].value);
+    }
 }
 
-static void freeUString(void* ustr) {
-    ustr_deinit((struct UString*)ustr);
-    uprv_free(ustr);
-}
+/* The nature of the lookahead buffer:
+   There are MAX_LOOKAHEAD + 1 slots, used as a circular buffer.  This provides
+   MAX_LOOKAHEAD lookahead tokens and a slot for the current token and value.
+   When getToken is called, the current pointer is moved to the next slot and the
+   old slot is filled with the next token from the reader by calling getNextToken.
+   The token values are stored in the slot, which means that token values don't
+   survive a call to getToken, ie.
 
-static int32_t hashUString(const UHashKey ustr) {
-    UHashKey key;
-    key.pointer = ((struct UString*)ustr.pointer)->fChars;
-    return uhash_hashUChars(key);
-}
+   UString *value;
 
-static UBool compareUString(const UHashKey ustr1, const UHashKey ustr2) {
-    UHashKey key1, key2;
-    key1.pointer = ((struct UString*)ustr1.pointer)->fChars;
-    key2.pointer = ((struct UString*)ustr2.pointer)->fChars;
-    return uhash_compareUChars(key1, key2);
-}
+   getToken(&value, NULL, status);
+   getToken(NULL,   NULL, status);      bad - value is now a different string
+*/
+static void
+initLookahead(UCHARBUF *buf, UErrorCode *status)
+{
+    static uint32_t initTypeStrings = 0;
+    uint32_t i;
 
-static char *getModificationData(UCHARBUF* buf, UErrorCode *status) {
-    enum ETokenType modType;
-    struct UString modToken;
-    char *retValue = NULL;
+    if (!initTypeStrings)
+    {
+        initTypeStrings = 1;
+    }
 
-    ustr_init(&modToken);
-    modType = getNextToken(buf, &modToken, status);
-    if(U_SUCCESS(*status) && modType == tok_open_brace) {
-        modType = getNextToken(buf, &modToken, status);
-        if(U_SUCCESS(*status) && modType == tok_string) {
-            retValue = uprv_malloc(u_strlen(modToken.fChars)+1);
-            u_UCharsToChars(modToken.fChars, retValue, u_strlen(modToken.fChars)+1);
-            modType = getNextToken(buf, &modToken, status);
-            if(U_SUCCESS(*status) && modType == tok_close_brace) {
-                return retValue;
-            } else {
-                uprv_free(retValue);
-            }
+    lookaheadPosition = 0;
+    buffer            = buf;
+
+    resetLineNumber();
+
+    for (i = 0; i < MAX_LOOKAHEAD; i++)
+    {
+        lookahead[i].type = getNextToken(buffer, &lookahead[i].value, &lookahead[i].line, status);
+
+        if (U_FAILURE(*status))
+        {
+            return;
         }
     }
-    setErrorText("Invalid modificator directive");
-    *status = U_INVALID_FORMAT_ERROR;
+
+    *status = U_ZERO_ERROR;
+}
+
+static enum ETokenType
+getToken(struct UString **tokenValue, uint32_t *linenumber, UErrorCode *status)
+{
+    enum ETokenType result;
+    uint32_t        i;
+
+    result = lookahead[lookaheadPosition].type;
+
+    if (tokenValue != NULL)
+    {
+        *tokenValue = &lookahead[lookaheadPosition].value;
+    }
+
+    if (linenumber != NULL)
+    {
+        *linenumber = lookahead[lookaheadPosition].line;
+    }
+
+    i = (lookaheadPosition + MAX_LOOKAHEAD) % (MAX_LOOKAHEAD + 1);
+    lookaheadPosition = (lookaheadPosition + 1) % (MAX_LOOKAHEAD + 1);
+    lookahead[i].type = getNextToken(buffer, &lookahead[i].value, &lookahead[i].line, status);
+
+    /* printf("getToken, returning %s\n", tokenNames[result]); */
+
+    return result;
+}
+
+static enum ETokenType
+peekToken(uint32_t lookaheadCount, struct UString **tokenValue, uint32_t *linenumber, UErrorCode *status)
+{
+    uint32_t i = (lookaheadPosition + lookaheadCount) % (MAX_LOOKAHEAD + 1);
+
+    if (U_FAILURE(*status))
+    {
+        return TOK_ERROR;
+    }
+
+    if (lookaheadCount >= MAX_LOOKAHEAD)
+    {
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return TOK_ERROR;
+    }
+
+    if (tokenValue != NULL)
+    {
+        *tokenValue = &lookahead[i].value;
+    }
+
+    if (linenumber != NULL)
+    {
+        *linenumber = lookahead[i].line;
+    }
+
+    return lookahead[i].type;
+}
+
+static void
+expect(enum ETokenType expectedToken, struct UString **tokenValue, uint32_t *linenumber, UErrorCode *status)
+{
+    uint32_t        line;
+    enum ETokenType token = getToken(tokenValue, &line, status);
+
+    if (U_FAILURE(*status))
+    {
+        return;
+    }
+
+    if (linenumber != NULL)
+    {
+        *linenumber = line;
+    }
+
+    if (token != expectedToken)
+    {
+        *status = U_INVALID_FORMAT_ERROR;
+        error(line, "expecting %s, got %s", tokenNames[expectedToken], tokenNames[token]);
+    }
+
+    *status = U_ZERO_ERROR;
+}
+
+static char *getInvariantString(uint32_t *line, UErrorCode *status)
+{
+    struct UString *tokenValue;
+    char           *result;
+    uint32_t        count;
+
+    expect(TOK_STRING, &tokenValue, line, status);
+
+    if (U_FAILURE(*status))
+    {
+	return NULL;
+    }
+
+    count  = u_strlen(tokenValue->fChars) + 1;
+    result = uprv_malloc(count);
+
+    if (result == NULL)
+    {
+	*status = U_MEMORY_ALLOCATION_ERROR;
+	return NULL;
+    }
+
+    u_UCharsToChars(tokenValue->fChars, result, count);
+    return result;
+}
+
+static enum EResourceType
+parseResourceType(UErrorCode *status)
+{
+    struct UString       *tokenValue;
+    enum   EResourceType  result = RT_UNKNOWN;
+    uint32_t              line;
+
+    expect(TOK_STRING, &tokenValue, &line, status);
+
+    if (U_FAILURE(*status))
+    {
+        return RT_UNKNOWN;
+    }
+
+    *status = U_ZERO_ERROR;
+
+    if (u_strcmp(tokenValue->fChars, k_type_string) == 0) {
+        result = RT_STRING;
+    } else if (u_strcmp(tokenValue->fChars, k_type_array) == 0) {
+        result = RT_ARRAY;
+    } else if (u_strcmp(tokenValue->fChars, k_type_table) == 0) {
+        result = RT_TABLE;
+    } else if (u_strcmp(tokenValue->fChars, k_type_binary) == 0) {
+        result = RT_BINARY;
+    } else if (u_strcmp(tokenValue->fChars, k_type_bin) == 0) {
+        result = RT_BINARY;
+    } else if (u_strcmp(tokenValue->fChars, k_type_int) == 0) {
+        result = RT_INTEGER;
+    } else if (u_strcmp(tokenValue->fChars, k_type_integer) == 0) {
+        result = RT_INTEGER;
+    } else if (u_strcmp(tokenValue->fChars, k_type_intvector) == 0) {
+        result = RT_INTVECTOR;
+    } else if (u_strcmp(tokenValue->fChars, k_type_import) == 0) {
+        result = RT_IMPORT;
+    } else if (u_strcmp(tokenValue->fChars, k_type_reserved) == 0) {
+        result = RT_RESERVED;
+    } else {
+        *status = U_INVALID_FORMAT_ERROR;
+        error(line, "unknown resource type '%s'", u2c(tokenValue->fChars));
+    }
+
+    return result;
+}
+
+static struct SResource *
+parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource *result = NULL;
+    struct UString   *tokenValue;
+    FileStream       *file          = NULL;
+    char              filename[256] = { '\0' };
+    char              cs[128]       = { '\0' };
+    uint32_t          line;
+
+    expect(TOK_STRING, &tokenValue, &line, status);
+
+    /* make the filename including the directory */
+    if (inputdir != NULL)
+    {
+        uprv_strcat(filename, inputdir);
+
+        if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
+        {
+            uprv_strcat(filename, U_FILE_SEP_STRING);
+        }
+    }
+
+    u_UCharsToChars(tokenValue->fChars, cs, tokenValue->fLength);
+
+    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
+    uprv_strcat(filename, U_ICU_UNIDATA);
+    uprv_strcat(filename, U_FILE_SEP_STRING);
+    uprv_strcat(filename, cs);
+
+    /* open the file */
+    file = T_FileStream_open(filename, "rb");
+
+    if (file != NULL)
+    {
+	UCHARBUF *ucbuf;
+	UChar32   c    = 0;
+	uint32_t  size = T_FileStream_size(file);
+
+	/* We allocate more space than actually required
+	 * since the actual size needed for storing UChars 
+	 * is not known in UTF-8 byte stream
+	 */
+	UChar *pTarget     = (UChar *) uprv_malloc(sizeof(UChar) * size);
+	UChar *target      = pTarget;
+	UChar *targetLimit = pTarget + size;
+
+	ucbuf = ucbuf_open(file, status);
+
+	/* read the rules into the buffer */
+	while (target < targetLimit)
+	{
+	    c = ucbuf_getc(ucbuf, status);
+
+	    if (c == ESCAPE)
+	    {
+		c = unescape(ucbuf, status);
+
+		if (c == U_ERR)
+		{
+		    uprv_free(pTarget);
+                    T_FileStream_close(file);
+		    return NULL;
+		}
+	    }
+	    else if (c == SPACE || c == CR || c == LF)
+	    {
+		/* ignore spaces carriage returns 
+		 * and line feed unless in the form \uXXXX
+		 */
+		continue;
+	    }
+
+	    /* Append UChar * after dissembling if c > 0xffff*/
+	    if (c != U_EOF)
+	    {
+		U_APPEND_CHAR32(c, target);
+	    }
+	    else
+	    {
+		break;
+	    }
+	}
+
+	result = string_open(bundle, tag, pTarget, target - pTarget, status);
+
+	uprv_free(pTarget);
+	T_FileStream_close(file);
+
+	return result;
+    }
+    else
+    {
+	error(line, "couldn't open input file %s\n", filename);
+	*status = U_FILE_ACCESS_ERROR;
+	return NULL;
+    }
+}
+
+static struct SResource *
+parseString(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct UString   *tokenValue;
+    struct SResource *result = NULL;
+
+    if (tag != NULL && uprv_strcmp(tag, "%%UCARULES") == 0)
+    {
+	return parseUCARules(tag, startline, status);
+    }
+
+    expect(TOK_STRING, &tokenValue, NULL, status);
+
+    if (U_SUCCESS(*status))
+    {
+	/* create the string now - tokenValue doesn't survive a call to getToken (and therefore
+	   doesn't survive expect either) */
+
+        result = string_open(bundle, tag, tokenValue->fChars, tokenValue->fLength, status);
+
+        expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+        if (U_FAILURE(*status))
+        {
+	    string_close(result, status);
+            return NULL;
+        }
+    }
+
+    return result;
+}
+
+static struct SResource *
+parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource  *result = NULL;
+    struct SResource  *member = NULL;
+    struct UString    *tokenValue;
+    enum   ETokenType  token;
+    char               subtag[1024];
+    UVersionInfo       version;
+    UBool      	       override = FALSE;
+    uint32_t           line;
+
+    result = table_open(bundle, tag, status);
+
+    if (result == NULL || U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
+    /* '{' . (name resource)* '}' */
+    while (1)
+    {
+        token = getToken(&tokenValue, &line, status);
+
+        if (token == TOK_CLOSE_BRACE)
+        {
+            return result;
+        }
+
+        if (token != TOK_STRING)
+        {
+            table_close(result, status);
+            *status = U_INVALID_FORMAT_ERROR;
+
+            if (token == TOK_EOF)
+            {
+                error(startline, "unterminated table");
+            }
+            else
+            {
+                error(line, "enexpected token %s", tokenNames[token]);
+            }
+
+            return NULL;
+        }
+
+        u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+
+        if (U_FAILURE(*status))
+        {
+            table_close(result, status);
+            return NULL;
+        }
+
+	expect(TOK_OPEN_BRACE, NULL,        NULL,  status);
+	expect(TOK_STRING,     &tokenValue, &line, status);
+
+        if (U_FAILURE(*status))
+        {
+            table_close(result, status);
+            return NULL;
+        }	
+
+	if (uprv_strcmp(subtag, "Version") == 0)
+	{
+	    char    ver[40];
+	    int32_t length = u_strlen(tokenValue->fChars);
+
+	    if (length >= (int32_t) sizeof(ver))
+	    {
+		length = (int32_t) sizeof(ver) - 1;
+	    }
+
+	    u_UCharsToChars(tokenValue->fChars, ver, length);
+	    u_versionFromString(version, ver);
+	}
+	else if (uprv_strcmp(subtag, "Override") == 0)
+	{
+	    override = FALSE;
+
+	    if (u_strncmp(tokenValue->fChars, trueValue, u_strlen(trueValue)) == 0)
+	    {
+		override = TRUE;
+	    }
+	}
+	else if (uprv_strcmp(subtag, "Sequence") == 0)
+	{
+	    UErrorCode intStatus = U_ZERO_ERROR;
+
+	    /* do the collation elements */
+	    int32_t    len   = 0;
+	    uint8_t   *data  = NULL;
+	    UCollator *coll  = NULL;
+	    UChar     *rules = NULL;
+
+	    coll = ucol_openRules(tokenValue->fChars, tokenValue->fLength, 
+				  UNORM_NONE, UCOL_DEFAULT_STRENGTH, &intStatus);
+
+	    if (U_SUCCESS(intStatus) && coll != NULL)
+	    {
+		data = ucol_cloneRuleData(coll, &len, &intStatus);
+
+		/* tailoring rules version */
+		coll->dataInfo.dataVersion[1] = version[0];
+
+		if (U_SUCCESS(intStatus) && data != NULL)
+		{
+		    member = bin_open(bundle, "%%CollationNew", len, data, status);
+		    table_add(bundle->fRoot, member, line, status);
+		    uprv_free(data);
+		}
+		else
+		{
+		    warning(line, "could not obtain rules from collator");
+		}
+
+		ucol_close(coll);
+	    }
+	    else 
+	    {
+		warning(line, "%%Collation could not be constructed from CollationElements - check context!");
+	    }
+
+	    uprv_free(rules);
+	}
+
+	member = string_open(bundle, subtag, tokenValue->fChars, tokenValue->fLength, status);
+	table_add(result, member, line, status);
+
+	expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+        if (U_FAILURE(*status))
+        {
+            table_close(result, status);
+            return NULL;
+        }	
+    }
+
+    /* not reached */
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return NULL;
+}
+
+/* Necessary, because CollationElements requires the bundle->fRoot member to be present which,
+   if this weren't special-cased, wouldn't be set until the entire file had been processed. */
+static struct SResource *
+realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource  *member = NULL;
+    struct UString    *tokenValue;
+    enum   ETokenType  token;
+    char               subtag[1024];
+    uint32_t           line;
+
+    /* '{' . (name resource)* '}' */
+    while (1)
+    {
+        token = getToken(&tokenValue, &line, status);
+
+        if (token == TOK_CLOSE_BRACE)
+        {
+            return table;
+        }
+
+        if (token != TOK_STRING)
+        {
+            table_close(table, status);
+            *status = U_INVALID_FORMAT_ERROR;
+
+            if (token == TOK_EOF)
+            {
+                error(startline, "unterminated table");
+            }
+            else
+            {
+                error(line, "enexpected token %s", tokenNames[token]);
+            }
+
+            return NULL;
+        }
+
+        u_UCharsToChars(tokenValue->fChars, subtag, u_strlen(tokenValue->fChars) + 1);
+
+        if (U_FAILURE(*status))
+        {
+            table_close(table, status);
+            return NULL;
+        }
+
+        member = parseResource(subtag, status);
+
+        if (member == NULL || U_FAILURE(*status))
+        {
+            table_close(table, status);
+            return NULL;
+        }
+
+        table_add(table, member, line, status);
+
+        if (U_FAILURE(*status))
+        {
+            table_close(table, status);
+            return NULL;
+        }
+    }
+
+    /* not reached */
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return NULL;
+}
+
+static struct SResource *
+parseTable(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource *result;
+
+    if (tag != NULL && uprv_strcmp(tag, "CollationElements") == 0)
+    {
+	return parseCollationElements(tag, startline, status);
+    }
+
+    result = table_open(bundle, tag, status);
+
+    if (result == NULL || U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
+    return realParseTable(result, tag, startline, status);
+}
+
+static struct SResource *
+parseArray(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource  *result = NULL;
+    struct SResource  *member = NULL;
+    struct UString    *tokenValue;
+    enum   ETokenType  token;
+
+    result = array_open(bundle, tag, status);
+
+    if (result == NULL || U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
+    /* '{' . resource [','] '}' */
+    while (1)
+    {
+        /* check for end of array, but don't consume next token unless it really is the end */
+        token = peekToken(0, &tokenValue, NULL, status);
+
+        if (token == TOK_CLOSE_BRACE)
+        {
+            getToken(NULL, NULL, status);
+            break;
+        }
+
+        if (token == TOK_EOF)
+        {
+            array_close(result, status);
+            *status = U_INVALID_FORMAT_ERROR;
+            error(startline, "unterminated array");
+            return NULL;
+        }
+
+        /* string arrays are a special case */
+        if (token == TOK_STRING)
+        {
+            getToken(&tokenValue, NULL, status);
+            member = string_open(bundle, NULL, tokenValue->fChars, tokenValue->fLength, status);
+        }
+        else
+        {
+            member = parseResource(NULL, status);
+        }
+
+        if (member == NULL || U_FAILURE(*status))
+        {
+            array_close(result, status);
+            return NULL;
+        }
+
+        array_add(result, member, status);
+
+        if (U_FAILURE(*status))
+        {
+            array_close(result, status);
+            return NULL;
+        }
+
+        /* eat optional comma if present */
+        token = peekToken(0, NULL, NULL, status);
+
+        if (token == TOK_COMMA)
+        {
+            getToken(NULL, NULL, status);
+        }
+
+        if (U_FAILURE(*status))
+        {
+            array_close(result, status);
+            return NULL;
+        }
+    }
+
+    return result;
+}
+
+static struct SResource *
+parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource  *result = NULL;
+    enum   ETokenType  token;
+    char              *string;
+    int32_t            value;
+
+    result = intvector_open(bundle, tag, status);
+
+    if (result == NULL || U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
+    /* '{' . string [','] '}' */
+    while (1)
+    {
+        /* check for end of array, but don't consume next token unless it really is the end */
+        token = peekToken(0, NULL, NULL, status);
+
+        if (token == TOK_CLOSE_BRACE)
+        {
+            /* it's the end, consume the close brace */
+            getToken(NULL, NULL, status);
+            return result;
+        }
+
+        string = getInvariantString(NULL, status);
+
+        if (U_FAILURE(*status))
+        {
+            intvector_close(result, status);
+            return NULL;
+        }
+
+        value = uprv_strtol(string, NULL, 10);
+        intvector_add(result, value, status);
+
+        uprv_free(string);
+
+        token = peekToken(0, NULL, NULL, status);
+
+        if (U_FAILURE(*status))
+        {
+            intvector_close(result, status);
+            return NULL;
+        }
+
+        /* the comma is optional (even though it is required to prevent the reader from concatenating
+           consecutive entries) so that a missing comma on the last entry isn't an error */
+        if (token == TOK_COMMA)
+        {
+            getToken(NULL, NULL, status);
+        }
+    }
+
+    /* not reached */
+    intvector_close(result, status);
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return NULL;
+}
+
+static struct SResource *
+parseBinary(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource *result = NULL;
+    uint8_t          *value;
+    char             *string;
+    char              toConv[3] = {'\0', '\0', '\0'};
+    uint32_t          count;
+    uint32_t          i;
+    uint32_t          line;
+
+    string = getInvariantString(&line, status);
+
+    if (string == NULL || U_FAILURE(*status))
+    {
+	return NULL;
+    }
+
+    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+    if (U_FAILURE(*status))
+    {
+	uprv_free(string);
+	return NULL;
+    }
+
+    count = uprv_strlen(string);
+    value = uprv_malloc(sizeof(uint8_t) * count);
+
+    if (value == NULL)
+    {
+	uprv_free(string);
+	*status = U_MEMORY_ALLOCATION_ERROR;
+	return NULL;
+    }
+
+    for (i = 0; i < count; i += 2)
+    {
+	toConv[0] = string[i];
+	toConv[1] = string[i + 1];
+
+	value[i >> 1] = (uint8_t) uprv_strtoul(toConv, NULL, 16);
+    }
+
+    result = bin_open(bundle, tag, (i >> 1), value, status);
+
+    uprv_free(string);
+    uprv_free(value);
+
+    return result;
+}
+
+static struct SResource *
+parseInteger(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource *result = NULL;
+    int32_t           value;
+    char             *string;
+
+    string = getInvariantString(NULL, status);
+
+    if (string == NULL || U_FAILURE(*status))
+    {
+	return NULL;
+    }
+
+    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+    if (U_FAILURE(*status))
+    {
+	uprv_free(string);
+	return NULL;
+    }
+
+    value  = uprv_strtol(string, NULL, 10);
+    result = int_open(bundle, tag, value, status);
+
+    uprv_free(string);
+
+    return result;
+}
+
+static struct SResource *
+parseImport(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource *result;
+    FileStream       *file;
+    int32_t           len;
+    uint8_t          *data;
+    char             *filename;
+    uint32_t          line;
+
+    filename = getInvariantString(&line, status);
+
+    if (U_FAILURE(*status))
+    {
+	return NULL;
+    }
+
+    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+    if (U_FAILURE(*status))
+    {
+        uprv_free(filename);
+        return NULL;
+    }
+
+    /* Open the input file for reading */
+    if (inputdir == NULL)
+    {
+	file = T_FileStream_open(filename, "rb");
+    }
+    else
+    {
+	char    *fullname = NULL;
+	int32_t  count    = uprv_strlen(filename);
+
+	if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
+	{
+	    fullname = (char *) uprv_malloc(inputdirLength + count + 2);
+
+	    uprv_strcpy(fullname, inputdir);
+
+	    fullname[inputdirLength]     = U_FILE_SEP_CHAR;
+	    fullname[inputdirLength + 1] = '\0';
+
+	    uprv_strcat(fullname, filename);
+	}
+	else
+	{
+	    fullname = (char *) uprv_malloc(inputdirLength + count + 1);
+
+	    uprv_strcpy(fullname, inputdir);
+	    uprv_strcat(fullname, filename);
+	}
+
+	file = T_FileStream_open(fullname, "rb");
+	uprv_free(fullname);
+    }
+
+    if (file == NULL)
+    {
+	error(line, "couldn't open input file %s", filename);
+	*status = U_FILE_ACCESS_ERROR;
+	return NULL;
+    }
+
+    len  = T_FileStream_size(file);
+    data = uprv_malloc(len);
+
+    T_FileStream_read  (file, data, len);
+    T_FileStream_close (file);
+
+    result = bin_open(bundle, tag, len, data, status);
+
+    uprv_free(data);
+    uprv_free(filename);
+
+    return result;
+}
+
+static struct SResource *
+parseResource(char *tag, UErrorCode *status)
+{
+    enum   ETokenType     token;
+    enum   EResourceType  resType = RT_UNKNOWN;
+    struct UString       *tokenValue;
+    uint32_t              startline;
+    uint32_t              line;
+
+    token = getToken(&tokenValue, &startline, status);
+
+    /* name . [ ':' type ] '{' resource '}' */
+    /* This function parses from the colon onwards.  If the colon is present, parse the
+       type then try to parse a resource of that type.  If there is no explicit type,
+       work it out using the lookahead tokens. */
+    switch (token)
+    {
+    case TOK_EOF:
+        *status = U_INVALID_FORMAT_ERROR;
+        error(startline, "Unexpected EOF encountered");
+        return NULL;
+
+    case TOK_ERROR:
+        *status = U_INVALID_FORMAT_ERROR;
+        return NULL;
+
+    case TOK_COLON:
+        resType = parseResourceType(status);
+        expect(TOK_OPEN_BRACE, &tokenValue, &startline, status);
+
+        if (U_FAILURE(*status))
+        {
+            return NULL;
+        }
+
+        break;
+
+    case TOK_OPEN_BRACE:
+        break;
+
+    default:
+        *status = U_INVALID_FORMAT_ERROR;
+        error(startline, "syntax error while reading a resource, expected '{' or ':'");
+        return NULL;
+    }
+
+    if (resType == RT_UNKNOWN)
+    {
+        /* No explicit type, so try to work it out.  At this point, we've read the first '{'.
+           We could have any of the following:
+              { {          => array (nested)
+              { :          => array
+              { string ,   => string array
+              { string {   => table
+              { string }   => string
+        */
+
+        token = peekToken(0, NULL, &line, status);
+
+        if (U_FAILURE(*status))
+        {
+            return NULL;
+        }
+
+        if (token == TOK_OPEN_BRACE || token == TOK_COLON)
+        {
+            resType = RT_ARRAY;
+        }
+        else if (token == TOK_STRING)
+        {
+            token = peekToken(1, NULL, &line, status);
+
+            if (U_FAILURE(*status))
+            {
+                return NULL;
+            }
+
+            switch (token)
+            {
+            case TOK_COMMA:       resType = RT_ARRAY;  break;
+            case TOK_OPEN_BRACE:  resType = RT_TABLE;  break;
+            case TOK_CLOSE_BRACE: resType = RT_STRING; break;
+            default:
+                *status = U_INVALID_FORMAT_ERROR;
+                error(line, "Unexpected token after string, expected ',', '{' or '}'");
+                return NULL;
+            }
+        }
+        else
+        {
+            *status = U_INVALID_FORMAT_ERROR;
+            error(line, "Unexpected token after '{'");
+            return NULL;
+        }
+
+	/* printf("Type guessed as %s\n", resourceNames[resType]); */
+    }
+
+    /* We should now know what we need to parse next, so call the appropriate parser
+       function and return. */
+    switch (resType)
+    {
+    case RT_STRING:     return parseString    (tag, startline, status);
+    case RT_TABLE:      return parseTable     (tag, startline, status);
+    case RT_ARRAY:      return parseArray     (tag, startline, status);
+    case RT_BINARY:	return parseBinary    (tag, startline, status);
+    case RT_INTEGER:    return parseInteger   (tag, startline, status);
+    case RT_IMPORT:	return parseImport    (tag, startline, status);
+    case RT_INTVECTOR:  return parseIntVector (tag, startline, status);
+
+    default:
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        error(startline, "internal error: unknown resource type found and not handled");
+    }
 
     return NULL;
 }
 
-/*********************************************************************
- * parse
- ********************************************************************/
-int32_t lineCount = 0;
-char lastTag[200] = "";
-
-struct SRBRoot*
-parse(UCHARBUF* buf, const char *inputDir,
-      UErrorCode *status)
+struct SRBRoot *
+parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
 {
-    enum ETokenType type;
-    enum ENode node;
-    struct STransition t;
+    struct UString *tokenValue;
+    uint32_t        line;
 
-    struct UString token;
-    struct UString tag;
+    initLookahead(buf, status);
 
-    char cTag[1024];
-    char cSubTag[1024];
-    struct SRBRoot *bundle = NULL;
-    struct SResource *rootTable = NULL;
-    struct SResource *temp = NULL;
-    struct SResource *temp1 = NULL;
-    struct SResource *temp2 = NULL;
-    int32_t dirlen = 0;
-    UBool colEl = FALSE, colOverride = FALSE, ucaEl = FALSE;
-    UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000}; /* Just to store "TRUE" and "FALSE" */
-                    
-/*  UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000}; */ /* Unicode for "FALSE" */
-
-    /* Hashtable for keeping track of seen tag names */
-    struct UHashtable *data;
-
-    strcpy(lastTag, "<none>");
-
-    if(U_FAILURE(*status)) return NULL;
-
-    /* setup */
-
-    ustr_init(&token);
-    ustr_init(&tag);
-/*
-    cTag = uprv_malloc(1024);
-    if(cTag == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    cSubTag = uprv_malloc(1024);
-    if(cSubTag == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-*/
-    if(inputDir != NULL) {
-        dirlen = uprv_strlen(inputDir);
-    }
-    
-    node = eInitial;
-    data = 0;
-
-
-    lineCount = 1;
-
-    if(buf == NULL) {
-        setErrorText("Could not initialize input file - most probably because of wrong converter\n");
-        *status = U_INVALID_FORMAT_ERROR;
-        goto finish;
-    }
+    inputdir       = currentInputDir;
+    inputdirLength = (inputdir != NULL) ? uprv_strlen(inputdir) : 0;
 
     bundle = bundle_open(status);
-    rootTable = bundle -> fRoot;
 
-    if(U_FAILURE(*status) || buf == NULL) {
-        goto finish;
+    if (bundle == NULL || U_FAILURE(*status))
+    {
+        return NULL;
     }
 
-    /* iterate through the stream */
-    for(;;) {
-        /* Collation tailoring rules version */
-        UVersionInfo version;
-        /* get next token from stream */
-        type = getNextToken(buf, &token, status);
-        if(U_FAILURE(*status)) {
-            goto finish;
-        }
+    expect(TOK_STRING, &tokenValue, NULL, status);
+    bundle_setlocale(bundle, tokenValue->fChars, status);
+    expect(TOK_OPEN_BRACE, NULL, &line, status);
 
-        switch(type) {
-        case tok_EOF:
-            *status = (node == eInitial) ? U_ZERO_ERROR : U_INVALID_FORMAT_ERROR;
-            if(U_FAILURE(*status)) {
-                setErrorText("Unexpected EOF encountered");
-            }
-            goto finish;
-            /*break;*/
-
-        case tok_error:
-            *status = U_INVALID_FORMAT_ERROR;
-            goto finish;
-            /*break;*/
-
-        default:
-            break;
-        }
-
-
-        t = GETTRANSITION(node, type);
-        node = t.fNext;
-
-        if(node == eError) {
-            *status = U_INVALID_FORMAT_ERROR;
-            goto finish;
-        }
-
-        switch(t.fAction) {
-        case eNOP:
-            break;
-
-          /* Record the last string as the tag name */
-        case eSetTag:
-            ustr_cpy(&tag, &token, status);
-            u_UCharsToChars(tag.fChars, cTag, u_strlen(tag.fChars)+1);
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-             strcpy(lastTag, cTag);
-           /*  fprintf(stdout, "%d: %s\n", lineCount,  lastTag); //[prints all tags]
-            */
-
-            if(get(data, &tag)) {
-                char *s;
-                *status = U_INVALID_FORMAT_ERROR;
-                s = uprv_malloc(1024);
-                strcpy(s, "Duplicate tag name detected: ");
-                u_austrcpy(s+strlen(s), tag.fChars);
-                setErrorText(s);
-                goto finish;
-            }
-            {
-                char *modificator = uprv_strchr(cTag, ':');
-                if(modificator != NULL) {
-                    /* type modificator - do the type modification*/
-                    *modificator = '\0';
-                    ustr_deinit(&tag);
-                    ustr_setlen(&tag, uprv_strlen(cTag), status);
-                    u_charsToUChars(cTag, tag.fChars, uprv_strlen(cTag));
-                    /* we need to test whether we have the same name, different type here */
-                    if(get(data, &tag)) {
-                      char *s;
-                      *status = U_INVALID_FORMAT_ERROR;
-                      s = uprv_malloc(1024);
-                      strcpy(s, "Duplicate tag name detected: ");
-                      u_austrcpy(s+strlen(s), tag.fChars);
-                      setErrorText(s);
-                      goto finish;
-                    }
-                    modificator++;
-                    /* including streams of binary data */
-                    if(uprv_strcmp(modificator, "bin") == 0) {
-                      char *binaryValue;
-                      char toConv[3];
-                      uint32_t i = 0, bytesConverted = 0;
-                      uint8_t val = 0;
-                      uint8_t *newValue;
-                      fprintf(stdout, "bin\n");
-                      binaryValue = getModificationData(buf, status);
-                      if(U_SUCCESS(*status) && binaryValue != NULL) {
-                        /* do the parsing & outputing of the data */
-                        fprintf(stdout, "Will parse binary value  %s and store it in tag: %s\n", binaryValue, cTag);
-                        newValue = uprv_malloc(sizeof(uint8_t)*uprv_strlen(binaryValue));
-                        for(i = 0; i<uprv_strlen(binaryValue); i+=2) {
-                          toConv[0] = *(binaryValue+i);
-                          toConv[1] = *(binaryValue+i+1);
-                          toConv[2] = '\0';
-                          val = (uint8_t)uprv_strtoul(toConv, NULL, 16);
-                          newValue[bytesConverted] = val;
-                          bytesConverted++;
-                        }
-                        temp1 = bin_open(bundle, cTag, bytesConverted, newValue, status);
-                        table_add(rootTable, temp1, status);
-
-                        uprv_free(newValue);
-                        uprv_free(binaryValue);
-                        node = eIdle;
-                      } else {
-                        if(binaryValue != NULL) {
-                          uprv_free(binaryValue);
-                        }
-                        node = eError;
-                      }
-                    }
-                    /* including integers */
-                    else if(uprv_strcmp(modificator, "int") == 0) {
-                      char *intValue;
-                      int32_t val;
-                      fprintf(stdout, "int\n");
-                      intValue = getModificationData(buf, status);
-                      if(U_SUCCESS(*status) && intValue != NULL) {
-                        /* do the parsing & outputing of the data */
-                        fprintf(stdout, "Will parse integer value  %s and store it in tag: %s\n", intValue, cTag);
-                        val = uprv_strtol(intValue, NULL, 10);
-                        uprv_free(intValue);
-                        temp1 = int_open(bundle, cTag, val, status);
-                        fprintf(stdout, "Added integer %s, value %d -> %s\n", cTag, val,
-                          u_errorName(*status) );
-                        table_add(rootTable, temp1, status);
-
-                        put(data, &tag, status);
-                        node = eIdle;
-                      } else {
-                        if(intValue != NULL) {
-                          uprv_free(intValue);
-                        }
-                        node = eError;
-                      }
-                    }
-                    /* importing a file and storing it in a binary object */
-                    else if(uprv_strcmp(modificator, "import") == 0) {
-                      FileStream *importFile;
-                      int32_t len;
-                      uint8_t *binData;
-                      char *fileName;
-                      fprintf(stdout, "import\n");
-                      fileName = getModificationData(buf, status);
-                      if(U_SUCCESS(*status) && fileName != NULL) {
-                        /* do the reading & outputing of the file */
-                        fprintf(stdout, "Will read %s and store it in tag:  %s\n", fileName, cTag);
-                        /* Open the input file for reading */
-                        if(inputDir == NULL) {
-                          importFile = T_FileStream_open(fileName, "rb");
-                        } else {
-                          char *openFileName = NULL;
-                          int32_t filelen = uprv_strlen(fileName);
-                          if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
-                            openFileName = (char *) uprv_malloc(dirlen+filelen+2);
-                            uprv_strcpy(openFileName, inputDir);
-                            openFileName[dirlen] = U_FILE_SEP_CHAR;
-                            openFileName[dirlen+1] = '\0';
-                            uprv_strcat(openFileName, fileName);
-                          } else {
-                            openFileName = (char *) uprv_malloc(dirlen+filelen+1);
-                            uprv_strcpy(openFileName, inputDir);
-                            uprv_strcat(openFileName, fileName);
-                          }
-                          importFile = T_FileStream_open(openFileName, "rb");
-                          uprv_free(openFileName);
-                        }
-                        if(importFile == NULL) {
-                          fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag);
-
-                          node = eError;
-                          continue;
-                        }
-
-                        len = T_FileStream_size(importFile);
-                        binData = uprv_malloc(len);
-                        T_FileStream_read(importFile,binData,len);
-                        T_FileStream_close(importFile);
-
-                        temp1 = bin_open(bundle, cTag, len, binData, status);
-                        fprintf(stdout, "Added %s, len %d -> %s\n", cTag, len,
-                                  u_errorName(*status) );
-                        table_add(rootTable, temp1, status);
-                        uprv_free(binData);
-                        uprv_free(fileName);
-                        put(data, &tag, status);
-                        node = eIdle;
-                      } else {
-                        if(fileName != NULL) {
-                          uprv_free(fileName);
-                        }
-                        node = eError;
-                      }
-                    }
-                    /* array of integers, still unimplemented */
-                    else if(uprv_strcmp(modificator, "intarray") == 0) {
-                      fprintf(stdout, "intarray\n");
-                    }
-                    /* unknown tupe - an error */
-                    else {
-                      fprintf(stderr, "Unknown %s\n", modificator);
-                    }
-
-                } else if(uprv_strcmp(cTag, "CollationElements") == 0) {
-                    colEl = TRUE;
-                } else if(uprv_strcmp(cTag, "%%UCARULES")==0){
-                    ucaEl =TRUE;
-                }
-            }
-            break;
-
-          /* Record a singleton string */
-        case eStr:
-            /* check if we have reached here after finding %%UCARULES */
-            if(ucaEl==TRUE){
-                FileStream *in =NULL;
-                char fileName[256]={'\0'};
-                char cs[128] = { '\0'};
-                ucaEl=FALSE; /* reset ucaEL */
-                /* make the fileName including the directory */
-                uprv_strcat(fileName,inputDir);
-                if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
-                    uprv_strcat(fileName,U_FILE_SEP_STRING);
-                }
-                uprv_strcat(fileName,U_ICU_UNIDATA);
-                uprv_strcat(fileName,U_FILE_SEP_STRING);
-                u_UCharsToChars(token.fChars,cs,token.fLength);
-                uprv_strcat(fileName, cs);
-                /* open the file */
-                in = T_FileStream_open(fileName, "rb");
-                if(in){
-                    UChar32 c=0;
-                    UCHARBUF* ucbuf;
-                    int size = T_FileStream_size(in);
-                    /* We allocate more space than actually required
-                     * since the actual size needed for storing UChars 
-                     * is not known in UTF-8 byte stream
-                     */
-                    UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
-                    UChar* target = pTarget;
-                    UChar* targetLimit = pTarget+size;
-                    ucbuf= ucbuf_open(in,status);
-
-                    /*read the rules into the buffer */
-                    while(target<targetLimit){
-                        c = ucbuf_getc(ucbuf,status);
-                        if(c==0x005c){
-                            c = unescape(ucbuf,status);
-                            if(c==U_ERR){
-                                goto finish;
-                            }
-                        }
-                        /* ignore spaces carriage returns 
-                         * and line feed unless in the form \uXXXX
-                         */
-                        else if(c==SPACE || c==CR || c==LF){
-                            continue;
-                        }
-                        /* Append UChar* after dissembling if c>0xffff*/
-                        if(c!=U_EOF) {
-                          U_APPEND_CHAR32(c,target);
-                        } else {
-                          break;
-                        }
-                    }
-                                    
-                    /* Add it to bundle */
-                    temp = string_open(bundle,cTag, pTarget, target-pTarget, status);
-                    table_add(rootTable, temp, status);
-                    put(data, &tag, status);
-                    if(U_FAILURE(*status)) {
-                        goto finish;
-                    }
-                    temp = NULL;
-                    /* clean up */
-                    uprv_free(pTarget);
-                }else{
-                    fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag );
-                    goto finish;
-
-                }
-
-            }else{
-                if(temp != NULL) {
-                    *status = U_INTERNAL_PROGRAM_ERROR;
-                    goto finish;
-                }
-                temp = string_open(bundle, cTag, token.fChars, token.fLength, status);
-                table_add(rootTable, temp, status);
-
-                /*uhash_put(data, tag.fChars, status);*/
-                put(data, &tag, status);
-                if(U_FAILURE(*status)) {
-                    goto finish;
-                }
-                temp = NULL;
-            }
-            break;
-          /* Begin a string list */
-        case eBegList:
-            if(temp != NULL) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            temp = array_open(bundle, cTag, status);
-            temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
-            array_add(temp, temp1, status);
-            temp1 = NULL;
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-          /* Record a comma-delimited list string */
-        case eListStr:
-            temp1 = string_open(bundle, NULL, token.fChars, token.fLength, status);
-            array_add(temp, temp1, status);
-            temp1 = NULL;
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-          /* End a string list */
-        case eEndList:
-            /*uhash_put(data, tag.fChars, status);*/
-            put(data, &tag, status);
-            table_add(rootTable, temp, status);
-            temp = NULL;
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case eBeg2dList:
-            if(temp != NULL) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            temp = array_open(bundle, cTag, status);
-            temp1 = array_open(bundle, NULL, status);
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case eEnd2dList:
-            /*uhash_put(data, tag.fChars, status);*/
-            put(data, &tag, status);
-            array_add(temp, temp1, status);
-            table_add(rootTable, temp, status);
-            temp1 = NULL;
-            temp = NULL;
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case e2dStr:
-            temp2 = string_open(bundle, NULL, token.fChars, token.fLength, status);
-            array_add(temp1, temp2, status);
-            temp2 = NULL;
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case eNewRow:
-            array_add(temp, temp1, status);
-            temp1 = array_open(bundle, NULL, status);
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case eBegTagged:
-            if(temp != NULL) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            temp = table_open(bundle, cTag, status);
-            u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case eEndTagged:
-            /*uhash_put(data, tag.fChars, status);*/
-            put(data, &tag, status);
-            table_add(rootTable, temp, status);
-            temp = NULL;
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            break;
-
-        case eTaggedStr:
-            temp1 = string_open(bundle, cSubTag, token.fChars, token.fLength, status);
-            table_add(temp, temp1, status);
-            temp1 = NULL;
-
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            /* We have seen the Override tag aleady, now checks if the value is "TRUE" or "FALSE". */
-            if (uprv_strcmp(cSubTag, "Override") == 0)
-            {
-                if (u_strncmp(token.fChars, trueValue, u_strlen(trueValue)) == 0)
-                {
-                    colOverride = TRUE;
-                } else {
-                    colOverride = FALSE;
-                }
-            }
-            if(colEl && (uprv_strcmp(cSubTag, "Version") == 0)){
-                char tVer[40];
-                int32_t length=u_strlen(token.fChars);
-                if(length>=(int32_t)sizeof(tVer)) {
-                    length=(int32_t)sizeof(tVer)-1;
-                }
-                u_UCharsToChars(token.fChars, tVer, length);
-                u_versionFromString(version,tVer);
-            }
-            if (colEl && (uprv_strcmp(cSubTag, "Sequence") == 0))
-            {
-                UErrorCode intStatus = U_ZERO_ERROR;
-                /* uint32_t defaultRulesArrayLength = 0;*/
-                /* do the collation elements */
-                int32_t len = 0;
-                uint8_t *binColData = NULL;
-                UCollator *coll = NULL;
-                UChar *rules = NULL;
-                struct UString newTag;
-
-                coll = ucol_openRules(token.fChars, token.fLength, 
-                  UNORM_NONE, UCOL_DEFAULT_STRENGTH, &intStatus);
-
-                if(U_SUCCESS(intStatus) && coll !=NULL) {
-                    binColData = ucol_cloneRuleData(coll, &len, &intStatus);
-                    coll->dataInfo.dataVersion[1] = version[0]; /*tailoring rules version*/
-                    if(U_SUCCESS(*status) && data != NULL) {
-                        temp1 = bin_open(bundle, "%%CollationNew", len, binColData, status);
-                        table_add(rootTable, temp1, status);
-                        uprv_free(binColData);
-                    } else {
-                      setErrorText("Warning: could not obtain rules from collator");
-                    }
-                    ucol_close(coll);
-                } else {
-                    setErrorText("Warning: %%Collation could not be constructed from CollationElements - check context!");
-                }
-                uprv_free(rules);
-                colEl = FALSE;
-                colOverride = FALSE;
-                intStatus = U_ZERO_ERROR;
-                ustr_initChars(&newTag, "CollationElements", -1, &intStatus);
-                if(U_FAILURE(intStatus)) {
-                    goto finish;
-                }
-                put(data, &newTag, &intStatus);
-                ustr_deinit(&newTag);
-                if(U_FAILURE(intStatus)) {
-                    goto finish;
-                }
-            }
-            break;
-          /* Record the last string as the subtag */
-        case eSubtag:
-            u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            if(table_get(temp, cSubTag, status) != 0) {
-                *status = U_INVALID_FORMAT_ERROR;
-                setErrorText("Duplicate subtag found in tagged list");
-                goto finish;
-            }
-            break;
-
-        case eOpen:
-            if(data != 0) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            bundle_setlocale(bundle, token.fChars, status);
-
-            if(U_FAILURE(*status)) {
-                goto finish;
-            }
-            data = uhash_open(hashUString, compareUString, status);
-            uhash_setKeyDeleter(data, freeUString);
-            break;
-
-        case eClose:
-            if(data == 0) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            break;
-        case eSetType:
-            /* type recognition */
-            if(!didInit) {
-                U_STRING_INIT(k_start_string, "string", 6);
-                U_STRING_INIT(k_start_binary, "binary", 6);
-                U_STRING_INIT(k_start_table, "table", 5);
-                U_STRING_INIT(k_start_int, "int", 3);
-                U_STRING_INIT(k_start_array, "array", 5);
-                U_STRING_INIT(k_start_intvector, "intvector", 9);
-                U_STRING_INIT(k_start_reserved, "reserved", 8);
-                didInit=TRUE;
-            }
-            if(u_strcmp(token.fChars, k_start_string) == 0) {
-                node = eGotTag;
-            } else if(u_strcmp(token.fChars, k_start_array) == 0) {
-                node = eGotTag;
-            } else if(u_strcmp(token.fChars, k_start_table) == 0) {
-                node = eGotTag;
-            } else if(u_strcmp(token.fChars, k_start_binary) == 0) {
-                /* start of binary */
-            } else if(u_strcmp(token.fChars, k_start_int) == 0) {
-                /* start of integer */
-            } else if(u_strcmp(token.fChars, k_start_intvector) == 0) {
-                /* start of intvector */
-            } else if(u_strcmp(token.fChars, k_start_reserved) == 0) {
-                /* start of reserved */
-            } else {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            break;
-        }
+    if (U_FAILURE(*status))
+    {
+        bundle_close(bundle, status);
+        return NULL;
     }
 
-finish:
+    realParseTable(bundle->fRoot, NULL, line, status);
 
-    /* clean  up */
+    if (U_FAILURE(*status))
+    {
+        /* realParseTable has already closed the table */
+        bundle->fRoot = NULL;
+        bundle_close(bundle, status);
+        return NULL;
+    }
 
-    if(data != 0)
-        uhash_close(data);
+    if (getToken(NULL, &line, status) != TOK_EOF)
+    {
+        warning(line, "extraneous text after resource bundle (perhaps unmatched braces)");
+    }
 
-    ustr_deinit(&token);
-    ustr_deinit(&tag);
-
-    /*uprv_free(cTag);*/
-    /*uprv_free(cSubTag);*/
-
-    /*if(buf != 0)
-        ucbuf_close(buf);
-*/
     return bundle;
 }
