@@ -76,7 +76,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit; \
 	fi
 
-ifeq ($(OS390BATCH),1)
+ifeq ($(OS390DATA),1)
 OS390PKG= package390
 endif
 
