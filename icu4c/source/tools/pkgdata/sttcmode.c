@@ -121,7 +121,7 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     }
 
     uprv_strcpy(tmp, LIB_STATIC_PREFIX);
-    uprv_strcat(tmp, o->cShortName);
+    uprv_strcat(tmp, o->libName);
     uprv_strcat(tmp, UDATA_LIB_SUFFIX);
 
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
