@@ -235,9 +235,9 @@ static const char * const OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
    /* 0x000D */ NULL,      /* Control char CR */
    /* 0x000E */ NULL,      /* Unused */
    /* 0x000F */ NULL,      /* Control chars: 0x0F20 + C0/C1 character: algorithmic */
-   /* 0x0010 */ "MS_Kanji", /* windows-932 */
-   /* 0x0011 */ "ibm-1363", /* windows-949 */
-   /* 0x0012 */ "ibm-1373", /* windows-950 */
+   /* 0x0010 */ "windows-932",
+   /* 0x0011 */ "windows-949",
+   /* 0x0012 */ "windows-950",
    /* 0x0013 */ "windows-936"
 
    /* The rest are null, including the 0x0014 Unicode compatibility region
