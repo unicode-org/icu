@@ -194,7 +194,10 @@ static const uint8_t asciiDigits[] = {
 };
 
 static const UChar kUMinus = (UChar)0x002d;
-static const char kMinus = 0x2d;
+
+#if LLONG_STRING_CONVERSION
+
+static const char kMinus = '-';
 
 static const uint8_t digitInfo[] = {
         0,     0,     0,     0,     0,     0,     0,     0,
@@ -310,6 +313,8 @@ uint32_t llong::lltoa(char* buf, uint32_t len, uint32_t radix, UBool raw) const
 
     return len;
 }
+
+#endif
 
 uint32_t llong::u_lltoa(UChar* buf, uint32_t len, uint32_t radix, UBool raw) const
 {    
