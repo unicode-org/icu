@@ -187,12 +187,6 @@
 				RelativePath=".\currcoll.h">
 			</File>
 			<File
-				RelativePath=".\dacoll.cpp">
-			</File>
-			<File
-				RelativePath=".\dacoll.h">
-			</File>
-			<File
 				RelativePath=".\dadrcoll.cpp">
 			</File>
 			<File
