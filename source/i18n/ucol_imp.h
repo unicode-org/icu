@@ -692,10 +692,8 @@ SortKeyGenerator(const    UCollator    *coll,
         UErrorCode *status);
 
 struct UCollator {
-    UBool freeOptionsOnClose;
-    UColOptionSet *options;
+    UColOptionSet  *options;
     SortKeyGenerator *sortKeyGen;
-    UBool freeOnClose;
     char* requestedLocale;
     UResourceBundle *rb;
     UResourceBundle *binary;
@@ -704,17 +702,26 @@ struct UCollator {
     UTrie *mapping;
     const uint32_t *latinOneMapping;
     const uint32_t *expansion;
-    const UChar *contractionIndex;
+    const UChar    *contractionIndex;
     const uint32_t *contractionCEs;
-    const uint8_t *scriptOrder;
-    uint8_t caseSwitch;
-    uint8_t tertiaryCommon;
-    uint8_t tertiaryMask;
-    int32_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
-    uint8_t tertiaryTop; /* Upper range when compressing */
-    uint8_t tertiaryBottom; /* Upper range when compressing */
-    uint8_t tertiaryTopCount;
-    uint8_t tertiaryBottomCount;
+    const uint8_t  *scriptOrder;
+
+    const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
+                                          corresponds to expansionCESize */
+    const uint32_t *lastEndExpansionCE;/* pointer to the last element in endExpansionCE */
+    const uint8_t  *expansionCESize;   /* array of the maximum size of a
+                                         expansion ce with the last ce
+                                         corresponding to endExpansionCE,
+                                         terminated with a null */
+    const uint8_t *unsafeCP;           /* unsafe code points hashtable */
+    const uint8_t *contrEndCP;         /* Contraction ending chars hash table */
+    UChar          minUnsafeCP;        /* Smallest unsafe Code Point. */
+    UChar          minContrEndCP;      /* Smallest code point at end of a contraction */
+
+    const UChar *rules;
+    int32_t rulesLength;
+
+    UErrorCode errorCode;             /* internal error code */
 
     uint32_t variableTopValue;
     UColAttributeValue frenchCollation;
@@ -735,24 +742,22 @@ struct UCollator {
     UBool hasRealData;                /* some collators have only options, like French, no rules */
                                       /* to speed up things, we use the UCA image, but we don't want it */
                                       /* to run around */
-    const UChar *rules;
-    int32_t rulesLength;
+
+    UBool freeOnClose;
+    UBool freeOptionsOnClose;
     UBool freeRulesOnClose;
 
-    UDataInfo dataInfo;               /* Data info of UCA table */
-    UErrorCode errorCode;             /* internal error code */
+    int32_t tertiaryAddition; /* when switching case, we need to add or subtract different values */
+    uint8_t caseSwitch;
+    uint8_t tertiaryCommon;
+    uint8_t tertiaryMask;
+    uint8_t tertiaryTop; /* Upper range when compressing */
+    uint8_t tertiaryBottom; /* Upper range when compressing */
+    uint8_t tertiaryTopCount;
+    uint8_t tertiaryBottomCount;
 
-    const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
-                                          corresponds to expansionCESize */
-    const uint32_t *lastEndExpansionCE;/* pointer to the last element in endExpansionCE */
-    const uint8_t  *expansionCESize;   /* array of the maximum size of a
-                                         expansion ce with the last ce
-                                         corresponding to endExpansionCE,
-                                         terminated with a null */
-    const uint8_t *unsafeCP;           /* unsafe code points hashtable */
-    const uint8_t *contrEndCP;         /* Contraction ending chars hash table */
-    UChar          minUnsafeCP;        /* Smallest unsafe Code Point. */
-    UChar          minContrEndCP;      /* Smallest code point at end of a contraction */
+    UDataInfo dataInfo;               /* Data info of UCA table */
+
 };
 
 U_CDECL_END
