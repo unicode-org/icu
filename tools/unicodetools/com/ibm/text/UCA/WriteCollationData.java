@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/04 01:58:55 $ 
-* $Revision: 1.15 $
+* $Date: 2002/06/04 19:01:51 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -2462,12 +2462,10 @@ F900..FAFF; CJK Compatibility Ideographs
         if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
         
         if (!UCA.isCJK(cp) && !UCA.isCJK_AB(cp)) cp += 0x10FFFF; // space everything else after CJK
-        
-        if (DEBUG) System.out.println("Remapped: " + Utility.hex(cp));
-        
-        cp = swapCJK(cp);
+        else cp = swapCJK(cp);
         
         if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+        
         // we now have a range of numbers from 0 to 21FFFF.
         
         int last0 = cp - IMPLICIT_4BYTE_BOUNDARY;
