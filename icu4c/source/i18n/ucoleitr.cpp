@@ -234,6 +234,7 @@ ucol_setOffset(UCollationElements    *elems,
     /* reseting UCOL_ITER_INNORMBUF */
     ci->writableBuffer = ci->stackWritableBuffer;
   }
+  ci->fcdPosition = NULL;
 }
 
 
