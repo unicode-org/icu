@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003, International Business Machines                        *
+* Copyright (C) 2003-2004, International Business Machines                        *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -21,13 +21,14 @@
 #define PAPER_SIZE          "PaperSize"
 
 U_CAPI USet* U_EXPORT2 
-ulocdata_getExemplarSet(USet *fillIn, const char *localeID, UErrorCode *status){
+ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
+                        uint32_t options, UErrorCode *status){
     
     UResourceBundle *bundle = NULL;
     const UChar *exemplarChars = NULL;
     int32_t len = 0;
 
-    if(status == NULL || U_FAILURE(*status)){
+    if (U_FAILURE(*status)){
         return NULL;
     }
     
@@ -37,9 +38,10 @@ ulocdata_getExemplarSet(USet *fillIn, const char *localeID, UErrorCode *status){
     
     if(fillIn != NULL){
         uset_applyPattern(fillIn, exemplarChars, len, 
-                          USET_IGNORE_SPACE, status);
+                          USET_IGNORE_SPACE | options, status);
     }else{
-        fillIn = uset_openPattern(exemplarChars, len, status);
+        fillIn = uset_openPatternOptions(exemplarChars, len,
+                                         USET_IGNORE_SPACE | options, status);
     }
     
     ures_close(bundle);

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003, International Business Machines                        *
+* Copyright (C) 2003-2004, International Business Machines                        *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -23,23 +23,32 @@
 
 
 /**
- * Fills the set with the set of exemplar characters for the locale and 
- * returns the set.
+ * Returns the set of exemplar characters for a locale.
  *
- * @param fillIn    A pointer to USet object to be filled in with the 
- *                  exemplar characters set for the locale. 
- *                  <em> If NULL is passed, then a new USet will be created and returned.
- *                   The caller owns this object and must dispose it by calling uset_close.
- *                   </em>
- * @param localeID  The id of the locale for which the exemplar character set 
- *                  needs to be retrieved.
- * @param status    Must be a valid pointer to an error code value,
- *                  which must not indicate a failure before the function call.
- * @return USet*    The pointer to the fillIn USet object.
- * @draft ICU 2.8
+ * @param fillIn    Pointer to a USet object to receive the 
+ *                  exemplar character set for the given locale.  Previous
+ *                  contents of fillIn are lost.  <em>If fillIn is NULL,
+ *                  then a new USet is created and returned.  The caller
+ *                  owns the result and must dispose of it by calling
+ *                  uset_close.</em>
+ * @param localeID  Locale id for which the exemplar character set
+ *                  is to be retrieved.
+ * @param options   Bitmask for options to apply to the exemplar pattern.
+ *                  Specify zero to retrieve the exemplar set as it is
+ *                  defined in the locale data.  Specify
+ *                  USET_CASE_INSENSITIVE to retrieve a case-folded
+ *                  exemplar set.  See uset_applyPattern for a complete
+ *                  list of valid options.  The USET_IGNORE_SPACE bit is
+ *                  always set, regardless of the value of 'options'.
+ * @param status    Pointer to an input-output error code value;
+ *                  must not be NULL.
+ * @return USet*    Either fillIn, or if fillIn is NULL, a pointer to
+ *                  a newly-allocated USet that the user must close.
+ * @draft ICU 3.0
  */
 U_DRAFT USet* U_EXPORT2 
-ulocdata_getExemplarSet(USet *fillIn, const char *localeID, UErrorCode *status);
+ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
+                        uint32_t options, UErrorCode *status);
 
 #ifndef U_HIDE_DRAFT_API
 /**
