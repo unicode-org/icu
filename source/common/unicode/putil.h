@@ -151,6 +151,15 @@ U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
  */
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
+
+#if OS390
+/** 
+ * Are we in OS/390 batch mode?
+ * @draft
+ */
+U_CAPI UBool uprv_isOS390BatchMode(void);
+#endif
+
 /**
  * Return the default codepage for this platform and locale 
  * @draft
@@ -173,7 +182,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * It is not a general purpose function and not defined for NaN or Infinity
  * @draft
  */
-U_CAPI double           U_EXPORT2 uprv_nextDouble(double d, UBool positive);
+U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
 
 /**
  * Filesystem file and path separator characters.

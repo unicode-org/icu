@@ -132,7 +132,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 #if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2)
 #   undef U_POSIX_LOCALE
 #else
-#   define U_POSIX_LOCALE	1
+#   define U_POSIX_LOCALE    1
 #endif
 
 /*
@@ -762,9 +762,9 @@ u_setDataDirectory(const char *directory) {
 */
 
  /* Dummy FSpGetFullPath */
-pascal	OSErr	FSpGetFullPath(const FSSpec *spec,
-							   short *fullPathLength,
-							   Handle *fullPath)
+pascal OSErr FSpGetFullPath(const FSSpec *spec,
+                            short *fullPathLength,
+                            Handle *fullPath)
 {
     *fullPath = NULL;
     *fullPathLength = 0;
@@ -867,7 +867,7 @@ getLibraryPath(char *path, int size) {
         if(rc>=0) {
             /* search for the list item for the library itself */
             while(p!=NULL) {
-       	       s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
+                s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
                 if(s!=NULL) {
                     if(s>p->l_name) {
                         /* copy the path, without the basename and the last separator */
@@ -1082,56 +1082,55 @@ u_getDataDirectory(void) {
 #       if !defined(XP_MAC)
             /* first try to get the environment variable */
             path=getenv("ICU_DATA");
-/* 	    fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
-/* 	    { */
-/* 	      int i; */
-/* 	      fprintf(stderr, "E=%08X\n", __environ); */
-/* 	      if(__environ) */
-/* 	      for(i=0;__environ[i] && __environ[i][0];i++) */
-/* 		puts(__environ[i]); */
-/* 	    } */
-#else	/* XP_MAC */
-		{
-			OSErr myErr;
-			short vRef;
-			long  dir,newDir;
-	        int16_t volNum;
-			Str255 xpath;
-			FSSpec spec;
-			short  len;
-			Handle full;
+/*         fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
+/*         { */
+/*           int i; */
+/*           fprintf(stderr, "E=%08X\n", __environ); */
+/*           if(__environ) */
+/*           for(i=0;__environ[i] && __environ[i][0];i++) */
+/*         puts(__environ[i]); */
+/*         } */
+#else    /* XP_MAC */
+        {
+            OSErr myErr;
+            short vRef;
+            long  dir,newDir;
+            int16_t volNum;
+            Str255 xpath;
+            FSSpec spec;
+            short  len;
+            Handle full;
 
-	        xpath[0]=0;
-	       	
-    	    myErr = GetVol(xpath, &volNum);
-				
-			if(myErr == noErr) {
-				myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, & vRef, &dir);
-				newDir=-1;
-				if (myErr == noErr) {
-					myErr = 
-						DirCreate(volNum,
-								 dir,
-								 "\pICU",
-								 &newDir);	
-					if( (myErr == noErr) || (myErr == dupFNErr) ) {
-						spec.vRefNum = volNum;
-						spec.parID = dir;
-						uprv_memcpy(spec.name, "\pICU", 4);
-						
-						myErr = FSpGetFullPath(&spec, &len, &full);
-						if(full != NULL)
-						{
-							HLock(full);
-							uprv_memcpy(pathBuffer,  ((char*)(*full)), len);
-							pathBuffer[len] = 0;
-							path = pathBuffer;
-							DisposeHandle(full);
-						}	
-					}
-				}
-			}
-		}
+            xpath[0]=0;
+
+            myErr = GetVol(xpath, &volNum);
+
+            if(myErr == noErr) {
+                myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, & vRef, &dir);
+                newDir=-1;
+                if (myErr == noErr) {
+                    myErr = DirCreate(volNum,
+                                 dir,
+                                 "\pICU",
+                                 &newDir);
+                    if( (myErr == noErr) || (myErr == dupFNErr) ) {
+                        spec.vRefNum = volNum;
+                        spec.parID = dir;
+                        uprv_memcpy(spec.name, "\pICU", 4);
+
+                        myErr = FSpGetFullPath(&spec, &len, &full);
+                        if(full != NULL)
+                        {
+                            HLock(full);
+                            uprv_memcpy(pathBuffer,  ((char*)(*full)), len);
+                            pathBuffer[len] = 0;
+                            path = pathBuffer;
+                            DisposeHandle(full);
+                        }
+                    }
+                }
+            }
+        }
 #       endif
 #       ifdef WIN32
             /* next, try to read the path from the registry */
@@ -1203,6 +1202,18 @@ u_getDataDirectory(void) {
     /* we did set the directory if necessary */
     return gDataDirectory;
 }
+
+/* Set run-time batch boolean if OS390BATCH envar is set -------------------- */
+#ifdef OS390
+U_CAPI UBool
+uprv_isOS390BatchMode() {
+    static UBool isBatchMode=-1;
+    if(isBatchMode<0) {
+        isBatchMode=getenv("OS390BATCH")!=NULL;
+    }
+    return isBatchMode;
+}
+#endif
 
 /* Macintosh-specific locale information ------------------------------------ */
 #ifdef XP_MAC
@@ -1565,12 +1576,20 @@ uprv_nextDouble(double d, UBool next)
 static char*
 u_topNBytesOfDouble(double* d, int n)
 {
-  return U_IS_BIG_ENDIAN ? (char*)d : (char*)(d + 1) - n;
+#if U_IS_BIG_ENDIAN
+    return (char*)d;
+#else
+    return (char*)(d + 1) - n;
+#endif
 }
 
 static char* u_bottomNBytesOfDouble(double* d, int n)
 {
-  return U_IS_BIG_ENDIAN ? (char*)(d + 1) - n : (char*)d;
+#if U_IS_BIG_ENDIAN
+    return (char*)(d + 1) - n
+#else
+    return (char*)d;
+#endif
 }
 
 U_CAPI const char *
@@ -1582,7 +1601,9 @@ const char* uprv_getDefaultCodepage()
   return "ibm-37";
 
 #elif defined(OS390)
-  return "ibm-1047-s390";
+  static char codepage[16];
+  sprintf(codepage,"%s-s390", nl_langinfo(CODESET));
+  return codepage;
 
 #elif defined(XP_MAC)
   return "ibm-1275"; /* Macintosh Roman. There must be a better way. fixme! */
