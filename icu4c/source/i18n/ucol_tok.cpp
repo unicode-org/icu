@@ -23,6 +23,7 @@
  
 #include "ucol_tok.h"
 #include "cmemory.h"
+#include "uprops.h"
 
 U_CDECL_BEGIN
 static int32_t U_EXPORT2 U_CALLCONV
@@ -712,274 +713,269 @@ ucol_tok_parseNextToken(UColTokenParser *src,
           }
       }
     }else {
-      /* Sets the strength for this entry */
-      switch (ch) {
-        case 0x003D/*'='*/ : 
-          if (newStrength != UCOL_TOK_UNSET) {
-            goto EndOfLoop;
-          }
-
-          /* if we start with strength, we'll reset to top */
-          if(startOfRules == TRUE) {
-            top = TRUE;
-            newStrength = UCOL_TOK_RESET;
-            goto EndOfLoop;
-          }
-          newStrength = UCOL_IDENTICAL;
-          break;
-
-        case 0x002C/*','*/:  
-          if (newStrength != UCOL_TOK_UNSET) {
-            goto EndOfLoop;
-          }
-
-          /* if we start with strength, we'll reset to top */
-          if(startOfRules == TRUE) {
-            top = TRUE;
-            newStrength = UCOL_TOK_RESET;
-            goto EndOfLoop;
-          }
-          newStrength = UCOL_TERTIARY;
-          break;
-
-        case  0x003B/*';'*/:
-          if (newStrength != UCOL_TOK_UNSET) {
-            goto EndOfLoop;
-          }
-
-          /* if we start with strength, we'll reset to top */
-          if(startOfRules == TRUE) {
-            top = TRUE;
-            newStrength = UCOL_TOK_RESET;
-            goto EndOfLoop;
-          }
-          newStrength = UCOL_SECONDARY;
-          break;
-
-        case 0x003C/*'<'*/:  
-          if (newStrength != UCOL_TOK_UNSET) {
-            goto EndOfLoop;
-          }
-
-          /* if we start with strength, we'll reset to top */
-          if(startOfRules == TRUE) {
-            top = TRUE;
-            newStrength = UCOL_TOK_RESET;
-            goto EndOfLoop;
-          }
-          /* before this, do a scan to verify whether this is */
-          /* another strength */
-          if(*(src->current+1) == 0x003C) {
-            src->current++;
-            if(*(src->current+1) == 0x003C) {
-              src->current++; /* three in a row! */
-              newStrength = UCOL_TERTIARY;
-            } else { /* two in a row */
-              newStrength = UCOL_SECONDARY;
+      if(!uprv_isRuleWhiteSpace(ch)) {
+        /* Sets the strength for this entry */
+        switch (ch) {
+          case 0x003D/*'='*/ : 
+            if (newStrength != UCOL_TOK_UNSET) {
+              goto EndOfLoop;
             }
-          } else { /* just one */
-            newStrength = UCOL_PRIMARY;
-          }
-          break;
 
-        case 0x0026/*'&'*/:  
-          if (newStrength != UCOL_TOK_UNSET) {
-            /**/
-            goto EndOfLoop;
-          }
+            /* if we start with strength, we'll reset to top */
+            if(startOfRules == TRUE) {
+              top = TRUE;
+              newStrength = UCOL_TOK_RESET;
+              goto EndOfLoop;
+            }
+            newStrength = UCOL_IDENTICAL;
+            break;
 
-          newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
-          break;
+          case 0x002C/*','*/:  
+            if (newStrength != UCOL_TOK_UNSET) {
+              goto EndOfLoop;
+            }
 
-        case 0x005b/*'['*/:
-          /* options - read an option, analyze it */
-          if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
-            uint8_t result = ucol_uprv_tok_readAndSetOption(src, optionEnd, status);
-            src->current = optionEnd;
-            if(U_SUCCESS(*status)) {
-              if(result & UCOL_TOK_TOP) {
-                if(newStrength == UCOL_TOK_RESET) { 
-                  top = TRUE;
-                  charsOffset = (uint32_t)(src->extraCurrent - src->source);
-                  *src->extraCurrent++ = 0xFFFE;
-                  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
-                  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
-                  if(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE == 0) {
-                    newCharsLen = 3;
+            /* if we start with strength, we'll reset to top */
+            if(startOfRules == TRUE) {
+              top = TRUE;
+              newStrength = UCOL_TOK_RESET;
+              goto EndOfLoop;
+            }
+            newStrength = UCOL_TERTIARY;
+            break;
+
+          case  0x003B/*';'*/:
+            if (newStrength != UCOL_TOK_UNSET) {
+              goto EndOfLoop;
+            }
+
+            /* if we start with strength, we'll reset to top */
+            if(startOfRules == TRUE) {
+              top = TRUE;
+              newStrength = UCOL_TOK_RESET;
+              goto EndOfLoop;
+            }
+            newStrength = UCOL_SECONDARY;
+            break;
+
+          case 0x003C/*'<'*/:  
+            if (newStrength != UCOL_TOK_UNSET) {
+              goto EndOfLoop;
+            }
+
+            /* if we start with strength, we'll reset to top */
+            if(startOfRules == TRUE) {
+              top = TRUE;
+              newStrength = UCOL_TOK_RESET;
+              goto EndOfLoop;
+            }
+            /* before this, do a scan to verify whether this is */
+            /* another strength */
+            if(*(src->current+1) == 0x003C) {
+              src->current++;
+              if(*(src->current+1) == 0x003C) {
+                src->current++; /* three in a row! */
+                newStrength = UCOL_TERTIARY;
+              } else { /* two in a row */
+                newStrength = UCOL_SECONDARY;
+              }
+            } else { /* just one */
+              newStrength = UCOL_PRIMARY;
+            }
+            break;
+
+          case 0x0026/*'&'*/:  
+            if (newStrength != UCOL_TOK_UNSET) {
+              /**/
+              goto EndOfLoop;
+            }
+
+            newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
+            break;
+
+          case 0x005b/*'['*/:
+            /* options - read an option, analyze it */
+            if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
+              uint8_t result = ucol_uprv_tok_readAndSetOption(src, optionEnd, status);
+              src->current = optionEnd;
+              if(U_SUCCESS(*status)) {
+                if(result & UCOL_TOK_TOP) {
+                  if(newStrength == UCOL_TOK_RESET) { 
+                    top = TRUE;
+                    charsOffset = (uint32_t)(src->extraCurrent - src->source);
+                    *src->extraCurrent++ = 0xFFFE;
+                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
+                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
+                    if(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE == 0) {
+                      newCharsLen = 3;
+                    } else {
+                      *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
+                      *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
+                      newCharsLen = 5;
+                    } 
+                    if(before) { // This is a combination of before and indirection like '&[before 2][first regular]<b'
+                      *src->extraCurrent++ = 0x002d;
+                      *src->extraCurrent++ = before;
+                      newCharsLen+=2;
+                    }
+
+                    src->current++;
+                    goto EndOfLoop;
                   } else {
-                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
-                    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
-                    newCharsLen = 5;
-                  } 
-                  if(before) { // This is a combination of before and indirection like '&[before 2][first regular]<b'
-                    *src->extraCurrent++ = 0x002d;
-                    *src->extraCurrent++ = before;
-                    newCharsLen+=2;
+                    *status = U_INVALID_FORMAT_ERROR;
+                    syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
                   }
+                } else if(result & UCOL_TOK_VARIABLE_TOP) {
+                  if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
+                    variableTop = TRUE;
+                    charsOffset = (uint32_t)(src->extraCurrent - src->source);
+                    newCharsLen = 1;
+                    *src->extraCurrent++ = 0xFFFF;
+                    src->current++;
+                    goto EndOfLoop;
+                  } else {
+                    *status = U_INVALID_FORMAT_ERROR;
+                    syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                  }
+                } else if (result & UCOL_TOK_BEFORE){
+                  if(newStrength == UCOL_TOK_RESET) {
+                    before = result & UCOL_TOK_BEFORE;
+                  } else {
+                    *status = U_INVALID_FORMAT_ERROR;
+                    syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
 
-                  src->current++;
-                  goto EndOfLoop;
-                } else {
-                  *status = U_INVALID_FORMAT_ERROR;
-                  syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-                }
-              } else if(result & UCOL_TOK_VARIABLE_TOP) {
-                if(newStrength != UCOL_TOK_RESET && newStrength != UCOL_TOK_UNSET) {
-                  variableTop = TRUE;
-                  charsOffset = (uint32_t)(src->extraCurrent - src->source);
-                  newCharsLen = 1;
-                  *src->extraCurrent++ = 0xFFFF;
-                  src->current++;
-                  goto EndOfLoop;
-                } else {
-                  *status = U_INVALID_FORMAT_ERROR;
-                  syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-                }
-              } else if (result & UCOL_TOK_BEFORE){
-                if(newStrength == UCOL_TOK_RESET) {
-                  before = result & UCOL_TOK_BEFORE;
-                } else {
-                  *status = U_INVALID_FORMAT_ERROR;
-                  syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                  }
+                } 
+              } else {
+                syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+                return NULL;
+              }
+            }
+            break;
+		  case 0x0021/*! skip java thai modifier reordering*/:
+			  break; 
+          case 0x002F/*'/'*/:
+            wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
+            inChars = FALSE; /* we're now processing expansion */
+            break;
+          case 0x005C /* back slash for escaped chars */:
+              isEscaped = TRUE;
+              break;
+          /* found a quote, we're gonna start copying */
+          case 0x0027/*'\''*/:
+            if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
+              /*
+			  enabling rules to start with a non-token character a < b
+			  *status = U_INVALID_FORMAT_ERROR;
+              syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+              return NULL;
+			  */
+              newStrength = UCOL_TOK_RESET;
+            }
 
-                }
-              } 
-            } else {
+            inQuote = TRUE;
+
+            if(inChars) { /* we're doing characters */
+              if(wasInQuote == FALSE) {
+                charsOffset = (uint32_t)(src->extraCurrent - src->source);
+              }
+              if (newCharsLen != 0) {
+                  uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
+                  src->extraCurrent += newCharsLen;
+              }
+              newCharsLen++;
+            } else { /* we're doing an expansion */
+              if(wasInQuote == FALSE) {
+                extensionOffset = (uint32_t)(src->extraCurrent - src->source);
+              }
+              if (newExtensionLen != 0) {
+                uprv_memcpy(src->extraCurrent, src->current - newExtensionLen, newExtensionLen*sizeof(UChar));
+                src->extraCurrent += newExtensionLen;
+              }
+              newExtensionLen++;
+            }
+
+            wasInQuote = TRUE;
+
+            ch = *(++(src->current)); 
+            if(ch == 0x0027) { /* copy the double quote */
+              *src->extraCurrent++ = ch;
+              inQuote = FALSE;
+            }
+            break;
+
+          /* '@' is french only if the strength is not currently set */
+          /* if it is, it's just a regular character in collation rules */
+          case 0x0040/*'@'*/:
+            if (newStrength == UCOL_TOK_UNSET) {
+              src->opts->frenchCollation = UCOL_ON;
+              break;
+            }
+
+          case 0x007C /*|*/: /* this means we have actually been reading prefix part */
+            // we want to store read characters to the prefix part and continue reading
+            // the characters (proper way would be to restart reading the chars, but in
+            // that case we would have to complicate the token hasher, which I do not 
+            // intend to play with. Instead, we will do prefixes when prefixes are due
+            // (before adding the elements).
+            src->parsedToken.prefixOffset = charsOffset;
+            src->parsedToken.prefixLen = newCharsLen;
+
+            if(inChars) { /* we're doing characters */
+              if(wasInQuote == FALSE) {
+                charsOffset = (uint32_t)(src->extraCurrent - src->source);
+              }
+              if (newCharsLen != 0) {
+                  uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
+                  src->extraCurrent += newCharsLen;
+              }
+              newCharsLen++;
+            }
+
+            wasInQuote = TRUE;
+
+            ch = *(++(src->current)); 
+            break;
+          
+            //charsOffset = 0;
+            //newCharsLen = 0;
+            //break; // We want to store the whole prefix/character sequence. If we break
+                     // the '|' is going to get lost.
+          default:
+            if (newStrength == UCOL_TOK_UNSET) {
+              /* enabling rules to start with non-tokens a < b
+			  *status = U_INVALID_FORMAT_ERROR;
+              syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
+              return NULL;
+			  */
+			  newStrength = UCOL_TOK_RESET;
+            }
+
+            if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
+              *status = U_INVALID_FORMAT_ERROR;
               syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
               return NULL;
             }
-          }
-          break;
-        /* Ignore the white spaces */
-        case 0x0009/*'\t'*/:
-        case 0x000C/*'\f'*/:
-        case 0x000D/*'\r'*/:
-        case 0x000A/*'\n'*/:
-        case 0x0020/*' '*/:  
-          break; /* skip whitespace TODO use Unicode */
-		case 0x0021/*! skip java thai modifier reordering*/:
-			break; 
-        case 0x002F/*'/'*/:
-          wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
-          inChars = FALSE; /* we're now processing expansion */
-          break;
-        case 0x005C /* back slash for escaped chars */:
-            isEscaped = TRUE;
+
+            if(ch == 0x0000 && src->current+1 == src->end) {
+              break;
+            }
+
+            if (inChars) {
+              if(newCharsLen == 0) {
+                charsOffset = (uint32_t)(src->current - src->source);
+              }
+              newCharsLen++;
+            } else {
+              if(newExtensionLen == 0) {
+                extensionOffset = (uint32_t)(src->current - src->source);
+              }
+              newExtensionLen++;
+            }
+
             break;
-        /* found a quote, we're gonna start copying */
-        case 0x0027/*'\''*/:
-          if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
-            /*
-			enabling rules to start with a non-token character a < b
-			*status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-            return NULL;
-			*/
-            newStrength = UCOL_TOK_RESET;
-          }
-
-          inQuote = TRUE;
-
-          if(inChars) { /* we're doing characters */
-            if(wasInQuote == FALSE) {
-              charsOffset = (uint32_t)(src->extraCurrent - src->source);
-            }
-            if (newCharsLen != 0) {
-                uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
-                src->extraCurrent += newCharsLen;
-            }
-            newCharsLen++;
-          } else { /* we're doing an expansion */
-            if(wasInQuote == FALSE) {
-              extensionOffset = (uint32_t)(src->extraCurrent - src->source);
-            }
-            if (newExtensionLen != 0) {
-              uprv_memcpy(src->extraCurrent, src->current - newExtensionLen, newExtensionLen*sizeof(UChar));
-              src->extraCurrent += newExtensionLen;
-            }
-            newExtensionLen++;
-          }
-
-          wasInQuote = TRUE;
-
-          ch = *(++(src->current)); 
-          if(ch == 0x0027) { /* copy the double quote */
-            *src->extraCurrent++ = ch;
-            inQuote = FALSE;
-          }
-          break;
-
-        /* '@' is french only if the strength is not currently set */
-        /* if it is, it's just a regular character in collation rules */
-        case 0x0040/*'@'*/:
-          if (newStrength == UCOL_TOK_UNSET) {
-            src->opts->frenchCollation = UCOL_ON;
-            break;
-          }
-
-        case 0x007C /*|*/: /* this means we have actually been reading prefix part */
-          // we want to store read characters to the prefix part and continue reading
-          // the characters (proper way would be to restart reading the chars, but in
-          // that case we would have to complicate the token hasher, which I do not 
-          // intend to play with. Instead, we will do prefixes when prefixes are due
-          // (before adding the elements).
-          src->parsedToken.prefixOffset = charsOffset;
-          src->parsedToken.prefixLen = newCharsLen;
-
-          if(inChars) { /* we're doing characters */
-            if(wasInQuote == FALSE) {
-              charsOffset = (uint32_t)(src->extraCurrent - src->source);
-            }
-            if (newCharsLen != 0) {
-                uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
-                src->extraCurrent += newCharsLen;
-            }
-            newCharsLen++;
-          }
-
-          wasInQuote = TRUE;
-
-          ch = *(++(src->current)); 
-          break;
-          
-          //charsOffset = 0;
-          //newCharsLen = 0;
-          //break; // We want to store the whole prefix/character sequence. If we break
-                   // the '|' is going to get lost.
-        default:
-          if (newStrength == UCOL_TOK_UNSET) {
-            /* enabling rules to start with non-tokens a < b
-			*status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-            return NULL;
-			*/
-			newStrength = UCOL_TOK_RESET;
-          }
-
-          if (ucol_tok_isSpecialChar(ch) && (inQuote == FALSE)) {
-            *status = U_INVALID_FORMAT_ERROR;
-            syntaxError(src->source,(int32_t)(src->current-src->source),(int32_t)(src->end-src->source),parseError);
-            return NULL;
-          }
-
-          if(ch == 0x0000 && src->current+1 == src->end) {
-            break;
-          }
-
-          if (inChars) {
-            if(newCharsLen == 0) {
-              charsOffset = (uint32_t)(src->current - src->source);
-            }
-            newCharsLen++;
-          } else {
-            if(newExtensionLen == 0) {
-              extensionOffset = (uint32_t)(src->current - src->source);
-            }
-            newExtensionLen++;
-          }
-
-          break;
-        }
+          }         
+       }
     }
 
     if(wasInQuote) {
