@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRule.java,v $ 
- * $Date: 2002/07/31 00:54:58 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/06/05 23:05:17 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,7 @@ import java.text.*;
  * A class represnting a single rule in a RuleBasedNumberFormat.  A rule
  * inserts its text into the result string and then passes control to its
  * substitutions, which do the same thing.
- * $RCSfile: NFRule.java,v $ $Revision: 1.6 $ $Date: 2002/07/31 00:54:58 $
+ * $RCSfile: NFRule.java,v $ $Revision: 1.7 $ $Date: 2003/06/05 23:05:17 $
  */
 final class NFRule {
     //-----------------------------------------------------------------------
@@ -607,7 +607,7 @@ final class NFRule {
         StringBuffer ruleTextCopy = new StringBuffer(ruleText);
         ruleTextCopy.insert(sub2.getPos(), sub2.toString());
         ruleTextCopy.insert(sub1.getPos(), sub1.toString());
-        result.append(ruleTextCopy);
+        result.append(ruleTextCopy.toString());
 
         // and finally, top the whole thing off with a semicolon and
         // return the result
