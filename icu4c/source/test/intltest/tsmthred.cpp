@@ -30,6 +30,13 @@
 # endif
 #endif
 
+/* Define __EXTENSIONS__ for Solaris and old friends in strict mode. */
+#ifndef __EXTENSIONS__
+#define __EXTENSIONS__
+#endif
+
+#include <signal.h>
+
 /* Define _XPG4_2 for Solaris and friends. */
 #ifndef _XPG4_2
 #define _XPG4_2
@@ -45,7 +52,6 @@
 #define _INCLUDE_XOPEN_SOURCE_EXTENDED
 #endif
 
-#include <signal.h>
 #include <unistd.h>
 
 #endif
