@@ -40,7 +40,7 @@ typedef le_uint16 LEGlyphID;
 
 typedef UChar LEUnicode16;
 typedef UChar32 LEUnicode32;
-typedef UChar LEUnicode;	// FIXME: we should depricate this type in favor of LEUnicode16...
+typedef UChar LEUnicode;    // FIXME: we should deprecate this type in favor of LEUnicode16...
 
 struct LEPoint
 {
@@ -55,18 +55,18 @@ typedef struct LEPoint LEPoint;
 #define LE_ARRAY_COPY(dst, src, count) memcpy(dst, src, (count) * sizeof (src)[0])
 
 enum LEErrorCode {
-	/* informational */
-	// none right now...
+    /* informational */
+    // none right now...
 
-	/* success */
-	LE_NO_ERROR						= U_ZERO_ERROR,
+    /* success */
+    LE_NO_ERROR                     = U_ZERO_ERROR,
 
-	/* failures */
-	LE_ILLEGAL_ARGUMENT_ERROR		= U_ILLEGAL_ARGUMENT_ERROR,
-	LE_MEMORY_ALLOCATION_ERROR		= U_MEMORY_ALLOCATION_ERROR,
-	LE_INDEX_OUT_OF_BOUNDS_ERROR	= U_INDEX_OUTOFBOUNDS_ERROR,
-	LE_NO_LAYOUT_ERROR				= U_UNSUPPORTED_ERROR,
-	LE_INTERNAL_ERROR				= U_INTERNAL_PROGRAM_ERROR
+    /* failures */
+    LE_ILLEGAL_ARGUMENT_ERROR       = U_ILLEGAL_ARGUMENT_ERROR,
+    LE_MEMORY_ALLOCATION_ERROR      = U_MEMORY_ALLOCATION_ERROR,
+    LE_INDEX_OUT_OF_BOUNDS_ERROR    = U_INDEX_OUTOFBOUNDS_ERROR,
+    LE_NO_LAYOUT_ERROR              = U_UNSUPPORTED_ERROR,
+    LE_INTERNAL_ERROR               = U_INTERNAL_PROGRAM_ERROR
 };
 
 #ifndef XP_CPLUSPLUS

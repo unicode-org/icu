@@ -113,10 +113,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     UpdateWindow(hwnd);
 
     while (GetMessage(&msg, NULL, 0, 0)) {
-		if (!TranslateAccelerator(hwnd, hAccel, &msg)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+        if (!TranslateAccelerator(hwnd, hAccel, &msg)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
     }
 
     return msg.wParam;
@@ -259,76 +259,76 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 
     case WM_COMMAND:
-		switch (LOWORD(wParam)) {
-		case IDM_FILE_OPEN:
-		{
-			OPENFILENAMEA ofn;
-			char szFileName[MAX_PATH], szTitleName[MAX_PATH];
-			static char szFilter[] = "Text Files (.txt)\0*.txt\0"
-									 "All Files (*.*)\0*.*\0\0";
+        switch (LOWORD(wParam)) {
+        case IDM_FILE_OPEN:
+        {
+            OPENFILENAMEA ofn;
+            char szFileName[MAX_PATH], szTitleName[MAX_PATH];
+            static char szFilter[] = "Text Files (.txt)\0*.txt\0"
+                                     "All Files (*.*)\0*.*\0\0";
 
-			ofn.lStructSize       = sizeof (OPENFILENAMEA);
-			ofn.hwndOwner         = hwnd;
-			ofn.hInstance         = NULL;
-			ofn.lpstrFilter       = szFilter;
-			ofn.lpstrCustomFilter = NULL;
-			ofn.nMaxCustFilter    = 0;
-			ofn.nFilterIndex      = 0;
-			ofn.lpstrFile         = szFileName;
-			ofn.nMaxFile          = MAX_PATH;
-			ofn.lpstrFileTitle    = szTitleName;
-			ofn.nMaxFileTitle     = MAX_PATH;
-			ofn.lpstrInitialDir   = NULL;
-			ofn.lpstrTitle        = NULL;
-			ofn.Flags             = OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
-			ofn.nFileOffset       = 0;
-			ofn.nFileExtension    = 0;
-			ofn.lpstrDefExt       = "txt";
-			ofn.lCustData         = 0L;
-			ofn.lpfnHook          = NULL;
-			ofn.lpTemplateName    = NULL;
+            ofn.lStructSize       = sizeof (OPENFILENAMEA);
+            ofn.hwndOwner         = hwnd;
+            ofn.hInstance         = NULL;
+            ofn.lpstrFilter       = szFilter;
+            ofn.lpstrCustomFilter = NULL;
+            ofn.nMaxCustFilter    = 0;
+            ofn.nFilterIndex      = 0;
+            ofn.lpstrFile         = szFileName;
+            ofn.nMaxFile          = MAX_PATH;
+            ofn.lpstrFileTitle    = szTitleName;
+            ofn.nMaxFileTitle     = MAX_PATH;
+            ofn.lpstrInitialDir   = NULL;
+            ofn.lpstrTitle        = NULL;
+            ofn.Flags             = OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
+            ofn.nFileOffset       = 0;
+            ofn.nFileExtension    = 0;
+            ofn.lpstrDefExt       = "txt";
+            ofn.lCustData         = 0L;
+            ofn.lpfnHook          = NULL;
+            ofn.lpTemplateName    = NULL;
 
-			szFileName[0] = '\0';
+            szFileName[0] = '\0';
 
-			hdc = GetDC(hwnd);
+            hdc = GetDC(hwnd);
 
-			if (GetOpenFileNameA(&ofn)) {
-				Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, fontMap, guiSupport, hdc);
+            if (GetOpenFileNameA(&ofn)) {
+                Paragraph *newParagraph = Paragraph::paragraphFactory(szFileName, fontMap, guiSupport, hdc);
 
-				if (newParagraph != NULL) {
-					context = (Context *) GetWindowLong(hwnd, 0);
+                if (newParagraph != NULL) {
+                    context = (Context *) GetWindowLong(hwnd, 0);
 
-					if (context->paragraph != NULL) {
-						delete context->paragraph;
-					}
+                    if (context->paragraph != NULL) {
+                        delete context->paragraph;
+                    }
 
-					context->paragraph = newParagraph;
-					InitParagraph(hwnd, context);
-					PrettyTitle(hwnd, szTitleName);
-					InvalidateRect(hwnd, NULL, true);
+                    context->paragraph = newParagraph;
+                    InitParagraph(hwnd, context);
+                    PrettyTitle(hwnd, szTitleName);
+                    InvalidateRect(hwnd, NULL, true);
 
-				}
-			}
+                }
+            }
 
-			ReleaseDC(hwnd, hdc);
+            ReleaseDC(hwnd, hdc);
 
-			return 0;
-		}
+            return 0;
+        }
 
-		case IDM_FILE_EXIT:
-		case IDM_FILE_CLOSE:
-			SendMessage(hwnd, WM_CLOSE, 0, 0);
-			return 0;
+        case IDM_FILE_EXIT:
+        case IDM_FILE_CLOSE:
+            SendMessage(hwnd, WM_CLOSE, 0, 0);
+            return 0;
 
-		case IDM_HELP_ABOUTLAYOUTSAMPLE:
-			MessageBox(hwnd, TEXT("Windows Layout Sample 0.1\n")
-							 TEXT("Copyright (C) 1998-2002 By International Business Machines Corporation and others.\n")
-							 TEXT("Author: Eric Mader"),
-					   szAppName, MB_ICONINFORMATION | MB_OK);
-			return 0;
+        case IDM_HELP_ABOUTLAYOUTSAMPLE:
+            MessageBox(hwnd, TEXT("Windows Layout Sample 0.1\n")
+                             TEXT("Copyright (C) 1998-2002 By International Business Machines Corporation and others.\n")
+                             TEXT("Author: Eric Mader"),
+                       szAppName, MB_ICONINFORMATION | MB_OK);
+            return 0;
 
-		}
-		break;
+        }
+        break;
 
 
     case WM_DESTROY:
@@ -339,7 +339,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             delete context->paragraph;
         }
 
-		delete context;
+        delete context;
 
         if (--windowCount <= 0) {
             delete fontMap;

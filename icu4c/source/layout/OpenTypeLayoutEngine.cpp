@@ -89,20 +89,20 @@ void OpenTypeLayoutEngine::setScriptAndLanguageTags()
 le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, const LETag **featureTags,
                 LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
-	if (LE_FAILURE(success)) {
-		return 0;
-	}
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
 
-	if (chars == NULL || offset < 0 || count < 0) {
-		success = LE_ILLEGAL_ARGUMENT_ERROR;
-		return 0;
-	}
+    if (chars == NULL || offset < 0 || count < 0) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphs, charIndices, success);
 
-	if (LE_FAILURE(success)) {
-		return 0;
-	}
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
 
     if (fGSUBTable != NULL) {
         fGSUBTable->process(glyphs, featureTags, count, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter, fFeatureOrder);
@@ -118,14 +118,14 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
     le_int32 *tempCharIndices = NULL;
     le_int32 outCharCount, outGlyphCount, fakeGlyphCount;
 
-	if (LE_FAILURE(success)) {
-		return 0;
-	}
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
 
-	if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
-		success = LE_ILLEGAL_ARGUMENT_ERROR;
-		return 0;
-	}
+    if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
     outCharCount   = characterProcessing(chars, offset, count, max, rightToLeft, outChars, tempCharIndices, fFeatureTags, success);
 
@@ -158,22 +158,22 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
 void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse,
                                                 LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
 {
-	if (LE_FAILURE(success)) {
-		return;
-	}
+    if (LE_FAILURE(success)) {
+        return;
+    }
 
-	if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0) {
-		success = LE_ILLEGAL_ARGUMENT_ERROR;
-		return;
-	}
+    if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 
     if (fGPOSTable != NULL) {
         GlyphPositionAdjustment *adjustments = new GlyphPositionAdjustment[glyphCount];
 
-		if (adjustments == NULL) {
-			success = LE_MEMORY_ALLOCATION_ERROR;
-			return;
-		}
+        if (adjustments == NULL) {
+            success = LE_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
 
         fGPOSTable->process(glyphs, adjustments, fFeatureTags, glyphCount, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance, fFeatureOrder);
 

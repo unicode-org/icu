@@ -19,15 +19,15 @@ U_NAMESPACE_BEGIN
 class LEGlyphFilter
 {
 public:
-	/**
-	 * This method is used to test a particular
-	 * glyph index to see if it is in the set
-	 * recognized by the filter.
-	 *
-	 * @param glyph - the glyph index to be tested
-	 *
-	 * @return true if the glyph index is in the set.
-	 */
+    /**
+     * This method is used to test a particular
+     * glyph index to see if it is in the set
+     * recognized by the filter.
+     *
+     * @param glyph - the glyph index to be tested
+     *
+     * @return true if the glyph index is in the set.
+     */
     virtual le_bool accept(LEGlyphID glyph) const = 0;
 };
 
