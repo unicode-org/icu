@@ -57,15 +57,13 @@ void TestCalendar()
     UChar *result = 0;
     int32_t resultlength, resultlengthneeded;
 
-    int expect = 30;
-
     /*Testing countAvailableTimeZones*/
     offset=0;
     log_verbose("\nTesting countAvialableTimeZoneIds\n");
     count=ucal_countAvailableTZIDs(offset);
     log_verbose("The number of timezone id's present with offset 0 are %d:\n", count);
-    if(count!=expect)
-        log_err("FAIL: error in the countAvailableTZIDs - got %d expected %d total\n", count, expect);
+    if(count < 5) /* Don't hard code an exact == test here! */
+        log_err("FAIL: error in the countAvailableTZIDs - got %d expected at least 5 total\n", count);
 
     /*Testing getAvialableTZIDs*/
     log_verbose("\nTesting getAvailableTimezoneids");
