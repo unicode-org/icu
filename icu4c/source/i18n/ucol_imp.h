@@ -34,12 +34,12 @@
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/
 /* you can change this value if you need memory - it will affect the performance, though, since we're going to malloc */
-#define UCOL_MAX_BUFFER 64
-#define UCOL_PRIMARY_MAX_BUFFER 2*UCOL_MAX_BUFFER
+#define UCOL_MAX_BUFFER 128
+#define UCOL_PRIMARY_MAX_BUFFER 8*UCOL_MAX_BUFFER
 #define UCOL_SECONDARY_MAX_BUFFER UCOL_MAX_BUFFER
 #define UCOL_TERTIARY_MAX_BUFFER UCOL_MAX_BUFFER
-#define UCOL_CASE_MAX_BUFFER UCOL_MAX_BUFFER
-#define UCOL_QUAD_MAX_BUFFER 2*UCOL_MAX_BUFFER
+#define UCOL_CASE_MAX_BUFFER UCOL_MAX_BUFFER/4
+#define UCOL_QUAD_MAX_BUFFER UCOL_MAX_BUFFER
 
 #define UCOL_NORMALIZATION_GROWTH 2
 #define UCOL_NORMALIZATION_MAX_BUFFER UCOL_MAX_BUFFER*UCOL_NORMALIZATION_GROWTH
