@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/12/11 23:29:51 $
- * $Revision: 1.14 $
+ * $Date: 2003/02/15 01:20:22 $
+ * $Revision: 1.15 $
  *******************************************************************************
  */
  
@@ -2457,14 +2457,7 @@ public final class NormalizerImpl {
 
 	public static int getCombiningClass(int c) {
 	    long norm32;
-        if(c<=0xffff) {
-            norm32=getNorm32((char)c);
-        } else {
-            norm32=getNorm32(UTF16.getLeadSurrogate(c));
-            if((norm32&CC_MASK)!=0) {
-                norm32=getNorm32FromSurrogatePair(norm32,UTF16.getTrailSurrogate(c));
-            }
-        }
+	    norm32=getNorm32(c);
         return (char)((norm32>>CC_SHIFT)&0xFF);
 	}
 	
@@ -2554,14 +2547,20 @@ public final class NormalizerImpl {
                     } else {
                         start=i;
                     }
+                    
                     //System.err.println("\t((high==j) && (table[i+1]>low)) == " + ((high==j) && (tableVal>lowInt)) );
-                    //System.err.println("\t\t j = " + Integer.toHexString(j) +
-                    //                   "\t i = " + Integer.toHexString(i) +
-                    //                   "\t high = "+ Integer.toHexString(high)  +
-                    //                    "\t low = "  + Integer.toHexString(lowInt)   +
-                    //                   "\t table[i+1]: "+ Integer.toHexString(tableVal) 
-                    //                   );
-
+                    
+                    // KLUDGE: IBM JIT in 1.4.0 is sooo broken
+					// The below lines make TestExhaustive pass
+                    if(ICUDebug.enabled()){
+	                    System.err.println("\t\t j = " + Utility.hex(j,4) +
+	                                       "\t i = " + Utility.hex(i,4) +
+	                                       "\t high = "+ Utility.hex(high)  +
+	                                       "\t low = "  + Utility.hex(lowInt,4)   +
+	                                       "\t table[i+1]: "+ Utility.hex(tableVal,4) 
+	                                       );
+                    }
+                   
                 }
 
 	            /* found? */
