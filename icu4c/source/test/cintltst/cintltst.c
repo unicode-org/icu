@@ -108,6 +108,8 @@ int main(int argc, const char* const argv[])
     TestNode *root;
     const char *warnOrErr = "Failure"; 
     const char** argv2;
+    UDate startTime, endTime;
+    int32_t diffTime;
 
     /* initial check for the default converter */
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -115,6 +117,8 @@ int main(int argc, const char* const argv[])
     UConverter *cnv;
 
     U_MAIN_INIT_ARGS(argc, argv);
+
+    startTime = ucal_getNow();
 
     argv2 = (const char**) malloc(sizeof(char*) * argc);
     if (argv2 == NULL) {
@@ -258,6 +262,15 @@ int main(int argc, const char* const argv[])
     }  /* End of loop that repeats the entire test, if requested.  (Normally doesn't loop)  */
 
     free((void*)argv2);
+
+    endTime = ucal_getNow();
+    diffTime = (int32_t)(endTime - startTime);
+    printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
+        ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
+        ((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
+        ((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
+        (diffTime%U_MILLIS_PER_SECOND));
+
     return nerrors ? 1 : 0;
 }
 

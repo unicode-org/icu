@@ -24,6 +24,7 @@
 #include "ustr_cnv.h"
 #include "iotest.h"
 #include "unicode/tstdtmod.h"
+#include "unicode/ucal.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
@@ -866,6 +867,10 @@ int main(int argc, char* argv[])
     int32_t nerrors = 0;
     TestNode *root = NULL;
     UErrorCode errorCode = U_ZERO_ERROR;
+    UDate startTime, endTime;
+    int32_t diffTime;
+
+    startTime = ucal_getNow();
 
     /* Check whether ICU will initialize without forcing the build data directory into
     *  the ICU_DATA path.  Success here means either the data dll contains data, or that
@@ -917,5 +922,14 @@ int main(int argc, char* argv[])
     cleanUpTestTree(root);
     DataDrivenLogger::cleanUp();
     u_cleanup();
+
+    endTime = ucal_getNow();
+    diffTime = (int32_t)(endTime - startTime);
+    printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
+        ((diffTime%U_MILLIS_PER_DAY)/U_MILLIS_PER_HOUR),
+        ((diffTime%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE),
+        ((diffTime%U_MILLIS_PER_MINUTE)/U_MILLIS_PER_SECOND),
+        (diffTime%U_MILLIS_PER_SECOND));
+
     return nerrors;
 }
