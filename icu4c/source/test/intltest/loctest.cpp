@@ -437,7 +437,7 @@ void LocaleTest::TestSimpleResourceInfo() {
             errln("  ISO-3 country code mismatch: " + temp
                 + " versus " + dataTable[CTRY3][i]);
 
-        sprintf(temp2, "%x", testLocale.getLCID());
+        sprintf(temp2, "%x", (int)testLocale.getLCID());
         if (UnicodeString(temp2) != dataTable[LCID][i])
             errln((UnicodeString)"  LCID mismatch: " + temp2 + " versus "
                 + dataTable[LCID][i]);
@@ -2083,7 +2083,7 @@ void LocaleTest::TestCanonicalization(void)
 
     int32_t i, j;
     
-    for (i=0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    for (i=0; i < (int)(sizeof(testCases)/sizeof(testCases[0])); i++) {
         for (j=0; j<3; ++j) {
             const char* expected = (j==1) ? testCases[i].canonicalID : testCases[i].getNameID;
             Locale loc = _canonicalize(j, testCases[i].localeID);
