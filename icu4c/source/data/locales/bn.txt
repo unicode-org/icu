@@ -11,6 +11,9 @@ bn {
     Languages {
         bn { "\u09ac\u09be\u0982\u09b2\u09be" }
     }
+    Countries {
+        IN { "\u09ad\u09be\u09b0\u09a4" }
+    }
     AmPmMarkers { 
         "\u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09B9\u09CD\u09A3",
         "\u0985\u09AA\u09B0\u09BE\u09B9\u09CD\u09A3",
