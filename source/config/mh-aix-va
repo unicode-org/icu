@@ -1,0 +1,83 @@
+## -*-makefile-*-
+## Aix-specific setup (for xlC)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	xlC_r -qmkshrobj
+SHLIB.cc=	xlC_r -qmkshrobj
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=	
+
+
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+LIBICU = libicu-
+## Shared object suffix
+SO=		a
+
+RMV = rm -rf
+## Platform command to remove or move executable target
+INSTALL-S = $(INSTALL)
+
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
+
+## Special AIX rules
+
+## Build archive from shared object
+%.a : %.so
+	$(AR) $(ARFLAGS) $@ $<
+
+## Build import list from export list
+%.e : %.exp
+	@echo "Building an import list for $<"
+	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+../data/%.o : ../data/%.c
+	$(COMPILE.c) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null 2>&1'
+
+%.u : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
+
+## End Aix-specific setup

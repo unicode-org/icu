@@ -1,0 +1,219 @@
+#
+#       Name:		  JIS X	0201 (1976) to Unicode 1.1 Table
+#       Unicode version:  1.1
+#       Table version:	  0.9
+#       Table format:	  Format A
+#       Date:		  8 March 1994
+#       Authors:	  Glenn	Adams <glenn@metis.com>
+#		      John H. Jenkins <John_Jenkins@taligent.com>
+#
+#       Copyright (c) 1991-1994 Unicode, Inc.  All Rights reserved.
+#
+#       This file is provided as-is by Unicode, Inc. (The Unicode Consortium).
+#       No claims are made as to fitness for any particular purpose.  No
+#       warranties of any kind are expressed or implied.  The recipient
+#       agrees to determine applicability of information provided.  If this
+#       file has been provided on magnetic media by Unicode, Inc., the sole
+#       remedy for any claim will be exchange of defective media within 90
+#       days of receipt.
+#
+#       Recipient is granted the right to make copies in any form for
+#       internal distribution and to freely use the information supplied
+#       in the creation of products supporting Unicode.	 Unicode, Inc.
+#       specifically excludes the right to re-distribute this file directly
+#       to third parties or other organizations whether for profit or not.
+#
+#       General notes:
+#
+#       This table contains the data the Unicode Consortium has on how
+#       single-byte JIS X 0201 characters map into Unicode 1.1
+#       (ISO/IEC 10646:1-1993 UCS-2).
+#
+#       Format:	 Three tab-separated columns
+#		Column #1 is the shift JIS code	(in hex as 0xXX)
+#		Column #2 is the Unicode (in hex as 0xXXXX)
+#		Column #3 the Unicode (ISO 10646) name (follows	a comment sign)
+#
+#       The entries are in JIS order
+#
+#   These mappings are provisional, pending definition of
+#       official mappings by Japanese standards bodies.
+#
+#       Any comments or problems, contact <John_Jenkins@taligent.com>
+#
+#
+#
+<code_set_name>		      "JISX201"
+<char_name_mask>	      "AXXXX"
+<mb_cur_max>		      1
+<mb_cur_min>		      1
+<uconv_class>		      "SBCS"
+<subchar>		      \x3F
+#
+CHARMAP
+#
+#
+#ISO 10646      JISX201
+#_________      _________
+<U0020>	        \x20		# SPACE
+<U0021>	        \x21		# EXCLAMATION MARK
+<U0022>	        \x22		# QUOTATION MARK
+<U0023>	        \x23		# NUMBER SIGN
+<U0024>	        \x24		# DOLLAR SIGN
+<U0025>	        \x25		# PERCENT SIGN
+<U0026>	        \x26		# AMPERSAND
+<U0027>	        \x27		# APOSTROPHE
+<U0028>	        \x28		# LEFT PARENTHESIS
+<U0029>	        \x29		# RIGHT	PARENTHESIS
+<U002A>	        \x2A		# ASTERISK
+<U002B>	        \x2B		# PLUS SIGN
+<U002C>	        \x2C		# COMMA
+<U002D>	        \x2D		# HYPHEN-MINUS
+<U002E>	        \x2E		# FULL STOP
+<U002F>	        \x2F		# SOLIDUS
+<U0030>	        \x30		# DIGIT	ZERO
+<U0031>	        \x31		# DIGIT	ONE
+<U0032>	        \x32		# DIGIT	TWO
+<U0033>	        \x33		# DIGIT	THREE
+<U0034>	        \x34		# DIGIT	FOUR
+<U0035>	        \x35		# DIGIT	FIVE
+<U0036>	        \x36		# DIGIT	SIX
+<U0037>	        \x37		# DIGIT	SEVEN
+<U0038>	        \x38		# DIGIT	EIGHT
+<U0039>	        \x39		# DIGIT	NINE
+<U003A>	        \x3A		# COLON
+<U003B>	        \x3B		# SEMICOLON
+<U003C>	        \x3C		# LESS-THAN SIGN
+<U003D>	        \x3D		# EQUALS SIGN
+<U003E>	        \x3E		# GREATER-THAN SIGN
+<U003F>	        \x3F		# QUESTION MARK
+<U0040>	        \x40		# COMMERCIAL AT
+<U0041>	        \x41		# LATIN	CAPITAL LETTER A
+<U0042>	        \x42		# LATIN	CAPITAL LETTER B
+<U0043>	        \x43		# LATIN	CAPITAL LETTER C
+<U0044>	        \x44		# LATIN	CAPITAL LETTER D
+<U0045>	        \x45		# LATIN	CAPITAL LETTER E
+<U0046>	        \x46		# LATIN	CAPITAL LETTER F
+<U0047>	        \x47		# LATIN	CAPITAL LETTER G
+<U0048>	        \x48		# LATIN	CAPITAL LETTER H
+<U0049>	        \x49		# LATIN	CAPITAL LETTER I
+<U004A>	        \x4A		# LATIN	CAPITAL LETTER J
+<U004B>	        \x4B		# LATIN	CAPITAL LETTER K
+<U004C>	        \x4C		# LATIN	CAPITAL LETTER L
+<U004D>	        \x4D		# LATIN	CAPITAL LETTER M
+<U004E>	        \x4E		# LATIN	CAPITAL LETTER N
+<U004F>	        \x4F		# LATIN	CAPITAL LETTER O
+<U0050>	        \x50		# LATIN	CAPITAL LETTER P
+<U0051>	        \x51		# LATIN	CAPITAL LETTER Q
+<U0052>	        \x52		# LATIN	CAPITAL LETTER R
+<U0053>	        \x53		# LATIN	CAPITAL LETTER S
+<U0054>	        \x54		# LATIN	CAPITAL LETTER T
+<U0055>	        \x55		# LATIN	CAPITAL LETTER U
+<U0056>	        \x56		# LATIN	CAPITAL LETTER V
+<U0057>	        \x57		# LATIN	CAPITAL LETTER W
+<U0058>	        \x58		# LATIN	CAPITAL LETTER X
+<U0059>	        \x59		# LATIN	CAPITAL LETTER Y
+<U005A>	        \x5A		# LATIN	CAPITAL LETTER Z
+<U005B>	        \x5B		# LEFT SQUARE BRACKET
+<U00A5>	        \x5C		# YEN SIGN
+<U005D>	        \x5D		# RIGHT	SQUARE BRACKET
+<U005E>	        \x5E		# CIRCUMFLEX ACCENT
+<U005F>	        \x5F		# LOW LINE
+<U0060>	        \x60		# GRAVE	ACCENT
+<U0061>	        \x61		# LATIN	SMALL LETTER A
+<U0062>	        \x62		# LATIN	SMALL LETTER B
+<U0063>	        \x63		# LATIN	SMALL LETTER C
+<U0064>	        \x64		# LATIN	SMALL LETTER D
+<U0065>	        \x65		# LATIN	SMALL LETTER E
+<U0066>	        \x66		# LATIN	SMALL LETTER F
+<U0067>	        \x67		# LATIN	SMALL LETTER G
+<U0068>	        \x68		# LATIN	SMALL LETTER H
+<U0069>	        \x69		# LATIN	SMALL LETTER I
+<U006A>	        \x6A		# LATIN	SMALL LETTER J
+<U006B>	        \x6B		# LATIN	SMALL LETTER K
+<U006C>	        \x6C		# LATIN	SMALL LETTER L
+<U006D>	        \x6D		# LATIN	SMALL LETTER M
+<U006E>	        \x6E		# LATIN	SMALL LETTER N
+<U006F>	        \x6F		# LATIN	SMALL LETTER O
+<U0070>	        \x70		# LATIN	SMALL LETTER P
+<U0071>	        \x71		# LATIN	SMALL LETTER Q
+<U0072>	        \x72		# LATIN	SMALL LETTER R
+<U0073>	        \x73		# LATIN	SMALL LETTER S
+<U0074>	        \x74		# LATIN	SMALL LETTER T
+<U0075>	        \x75		# LATIN	SMALL LETTER U
+<U0076>	        \x76		# LATIN	SMALL LETTER V
+<U0077>	        \x77		# LATIN	SMALL LETTER W
+<U0078>	        \x78		# LATIN	SMALL LETTER X
+<U0079>	        \x79		# LATIN	SMALL LETTER Y
+<U007A>	        \x7A		# LATIN	SMALL LETTER Z
+<U007B>	        \x7B		# LEFT CURLY BRACKET
+<U007C>	        \x7C		# VERTICAL LINE
+<U007D>	        \x7D		# RIGHT	CURLY BRACKET
+<U203E>	        \x7E		# OVERLINE
+<UFF61>	        \xA1		# HALFWIDTH IDEOGRAPHIC	FULL STOP
+<UFF62>	        \xA2		# HALFWIDTH LEFT CORNER	BRACKET
+<UFF63>	        \xA3		# HALFWIDTH RIGHT CORNER BRACKET
+<UFF64>	        \xA4		# HALFWIDTH IDEOGRAPHIC	COMMA
+<UFF65>	        \xA5		# HALFWIDTH KATAKANA MIDDLE DOT
+<UFF66>	        \xA6		# HALFWIDTH KATAKANA LETTER WO
+<UFF67>	        \xA7		# HALFWIDTH KATAKANA LETTER SMALL A
+<UFF68>	        \xA8		# HALFWIDTH KATAKANA LETTER SMALL I
+<UFF69>	        \xA9		# HALFWIDTH KATAKANA LETTER SMALL U
+<UFF6A>	        \xAA		# HALFWIDTH KATAKANA LETTER SMALL E
+<UFF6B>	        \xAB		# HALFWIDTH KATAKANA LETTER SMALL O
+<UFF6C>	        \xAC		# HALFWIDTH KATAKANA LETTER SMALL YA
+<UFF6D>	        \xAD		# HALFWIDTH KATAKANA LETTER SMALL YU
+<UFF6E>	        \xAE		# HALFWIDTH KATAKANA LETTER SMALL YO
+<UFF6F>	        \xAF		# HALFWIDTH KATAKANA LETTER SMALL TU
+<UFF70>	        \xB0		# HALFWIDTH KATAKANA-HIRAGANA PROLONGED	SOUND MARK
+<UFF71>	        \xB1		# HALFWIDTH KATAKANA LETTER A
+<UFF72>	        \xB2		# HALFWIDTH KATAKANA LETTER I
+<UFF73>	        \xB3		# HALFWIDTH KATAKANA LETTER U
+<UFF74>	        \xB4		# HALFWIDTH KATAKANA LETTER E
+<UFF75>	        \xB5		# HALFWIDTH KATAKANA LETTER O
+<UFF76>	        \xB6		# HALFWIDTH KATAKANA LETTER KA
+<UFF77>	        \xB7		# HALFWIDTH KATAKANA LETTER KI
+<UFF78>	        \xB8		# HALFWIDTH KATAKANA LETTER KU
+<UFF79>	        \xB9		# HALFWIDTH KATAKANA LETTER KE
+<UFF7A>	        \xBA		# HALFWIDTH KATAKANA LETTER KO
+<UFF7B>	        \xBB		# HALFWIDTH KATAKANA LETTER SA
+<UFF7C>	        \xBC		# HALFWIDTH KATAKANA LETTER SI
+<UFF7D>	        \xBD		# HALFWIDTH KATAKANA LETTER SU
+<UFF7E>	        \xBE		# HALFWIDTH KATAKANA LETTER SE
+<UFF7F>	        \xBF		# HALFWIDTH KATAKANA LETTER SO
+<UFF80>	        \xC0		# HALFWIDTH KATAKANA LETTER TA
+<UFF81>	        \xC1		# HALFWIDTH KATAKANA LETTER TI
+<UFF82>	        \xC2		# HALFWIDTH KATAKANA LETTER TU
+<UFF83>	        \xC3		# HALFWIDTH KATAKANA LETTER TE
+<UFF84>	        \xC4		# HALFWIDTH KATAKANA LETTER TO
+<UFF85>	        \xC5		# HALFWIDTH KATAKANA LETTER NA
+<UFF86>	        \xC6		# HALFWIDTH KATAKANA LETTER NI
+<UFF87>	        \xC7		# HALFWIDTH KATAKANA LETTER NU
+<UFF88>	        \xC8		# HALFWIDTH KATAKANA LETTER NE
+<UFF89>	        \xC9		# HALFWIDTH KATAKANA LETTER NO
+<UFF8A>	        \xCA		# HALFWIDTH KATAKANA LETTER HA
+<UFF8B>	        \xCB		# HALFWIDTH KATAKANA LETTER HI
+<UFF8C>	        \xCC		# HALFWIDTH KATAKANA LETTER HU
+<UFF8D>	        \xCD		# HALFWIDTH KATAKANA LETTER HE
+<UFF8E>	        \xCE		# HALFWIDTH KATAKANA LETTER HO
+<UFF8F>	        \xCF		# HALFWIDTH KATAKANA LETTER MA
+<UFF90>	        \xD0		# HALFWIDTH KATAKANA LETTER MI
+<UFF91>	        \xD1		# HALFWIDTH KATAKANA LETTER MU
+<UFF92>	        \xD2		# HALFWIDTH KATAKANA LETTER ME
+<UFF93>	        \xD3		# HALFWIDTH KATAKANA LETTER MO
+<UFF94>	        \xD4		# HALFWIDTH KATAKANA LETTER YA
+<UFF95>	        \xD5		# HALFWIDTH KATAKANA LETTER YU
+<UFF96>	        \xD6		# HALFWIDTH KATAKANA LETTER YO
+<UFF97>	        \xD7		# HALFWIDTH KATAKANA LETTER RA
+<UFF98>	        \xD8		# HALFWIDTH KATAKANA LETTER RI
+<UFF99>	        \xD9		# HALFWIDTH KATAKANA LETTER RU
+<UFF9A>	        \xDA		# HALFWIDTH KATAKANA LETTER RE
+<UFF9B>	        \xDB		# HALFWIDTH KATAKANA LETTER RO
+<UFF9C>	        \xDC		# HALFWIDTH KATAKANA LETTER WA
+<UFF9D>	        \xDD		# HALFWIDTH KATAKANA LETTER N
+<UFF9E>	        \xDE		# HALFWIDTH KATAKANA VOICED SOUND MARK
+<UFF9F>	        \xDF		# HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
+#
+END CHARMAP
+#
+#________________________________________________________________________
