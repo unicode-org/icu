@@ -462,28 +462,33 @@ Locale::setDefault( const   Locale&     newLocale,
 Locale
 Locale::createFromName (const char *name)
 {
-    UErrorCode status = U_ZERO_ERROR;
-    char stack[ULOC_FULLNAME_CAPACITY];
-    char *heap = NULL;
-    char *buf = stack;
-    int32_t buflen = ULOC_FULLNAME_CAPACITY;
-    int32_t namelen = (int32_t)uprv_strlen(name);
+    if (name) {
+        UErrorCode status = U_ZERO_ERROR;
+        char stack[ULOC_FULLNAME_CAPACITY];
+        char *heap = NULL;
+        char *buf = stack;
+        int32_t buflen = ULOC_FULLNAME_CAPACITY;
+        int32_t namelen = (int32_t)uprv_strlen(name);
 
-    /* for some reason */
-    if(namelen > buflen) {
-        buflen = namelen+1;
-        heap = (char*)uprv_malloc(buflen);
-        buf = heap;
+        /* for some reason */
+        if(namelen > buflen) {
+            buflen = namelen+1;
+            heap = (char*)uprv_malloc(buflen);
+            buf = heap;
+        }
+
+        uloc_getName(name, buf, buflen, &status);
+
+        Locale l(buf);
+        if(heap != NULL)
+        {
+            free(heap);
+        }
+        return l;
     }
-
-    uloc_getName(name, buf, buflen, &status);
-
-    Locale l(buf);
-    if(heap != NULL)
-    {
-        free(heap);
+    else {
+        return getDefault();
     }
-    return l;
 }
 
 
