@@ -33,26 +33,22 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 
   if(U_FAILURE(*status)) return 0;
   
+  int32_t count = 0;
   const UChar *retVal = 0;
   
-  StringEnumeration* tzs = TimeZone::createEnumeration(rawOffset);
+  const UnicodeString** tzs = TimeZone::createAvailableIDs(rawOffset, 
+                                 count);
+
   if(tzs == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
 
-  UErrorCode ec = U_ZERO_ERROR;
-  if (index >= 0 && index < tzs->count(ec)) {
-      for (;;) {
-          retVal = tzs->unext(ec);
-          if (U_FAILURE(ec) || retVal==NULL) {
-              break;
-          }
-          if (index-- == 0) break;
-      }
-  } else {
+  if(index < count)
+    retVal = tzs[index]->getBuffer();
+  else
     *status = U_INDEX_OUTOFBOUNDS_ERROR;
-  }
+  
   uprv_free(tzs);
   return retVal;
 }
@@ -60,14 +56,18 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 U_CAPI int32_t U_EXPORT2
 ucal_countAvailableTZIDs(int32_t rawOffset)
 {  
-  const StringEnumeration* tzs = TimeZone::createEnumeration(rawOffset);
+
+  int32_t count = 0;
+  
+  const UnicodeString** tzs = TimeZone::createAvailableIDs(rawOffset, 
+                                  count);
+
   if(tzs == 0) {
     // TBD: U_MEMORY_ALLOCATION_ERROR
     return 0;
   }
-  UErrorCode ec = U_ZERO_ERROR;
-  int32_t count = tzs->count(ec);
-  delete (StringEnumeration*)tzs;
+
+  uprv_free(tzs);
   return count;
 }
 
