@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/19 19:27:51 $
- * $Revision: 1.60 $
+ * $Date: 2001/11/19 20:53:06 $
+ * $Revision: 1.61 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.60 $ $Date: 2001/11/19 19:27:51 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.61 $ $Date: 2001/11/19 20:53:06 $
  */
 public abstract class Transliterator {
     /**
@@ -330,6 +330,27 @@ public abstract class Transliterator {
             this.contextLimit = contextLimit;
             this.start = start;
             this.limit = limit;
+        }
+
+        /**
+         * Check all bounds.  If they are invalid, throw an exception.
+         * @param length the length of the string this object applies to
+         * @exception IllegalArgumentException if any indices are out
+         * of bounds
+         */
+        public final void validate(int length) {
+            if (contextStart < 0 ||
+                start < contextStart ||
+                limit < start ||
+                contextLimit < limit ||
+                length < contextLimit) {
+                throw new IllegalArgumentException("Invalid Position {cs=" +
+                                                   contextStart + ", s=" +
+                                                   start + ", l=" +
+                                                   limit + ", cl=" +
+                                                   contextLimit + "}, len=" +
+                                                   length);
+            }
         }
     }
 
@@ -511,18 +532,7 @@ public abstract class Transliterator {
      */
     public final void transliterate(Replaceable text, Position index,
                                     String insertion) {
-        if (index.contextStart < 0 ||
-            index.start < index.contextStart ||
-            index.limit < index.start ||
-            index.contextLimit < index.limit ||
-            text.length() < index.contextLimit) {
-            throw new IllegalArgumentException("Invalid index {" +
-                                               index.contextStart + ", " +
-                                               index.start + ", " +
-                                               index.limit + ", " +
-                                               index.contextLimit + "}, len=" +
-                                               text.length());
-        }
+        index.validate(text.length());
 
 //        int originalStart = index.contextStart;
         if (insertion != null) {
@@ -542,6 +552,7 @@ public abstract class Transliterator {
 
         filteredTransliterate(text, index, true);
 
+// TODO
 // This doesn't work once we add quantifier support.  Need to rewrite
 // this code to support quantifiers and 'use maximum backup <n>;'.
 //
@@ -596,19 +607,7 @@ public abstract class Transliterator {
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
-        if (index.contextStart < 0 ||
-            index.start < index.contextStart ||
-            index.limit < index.start ||
-            index.contextLimit < index.limit ||
-            text.length() < index.contextLimit) {
-            throw new IllegalArgumentException("Invalid index {" +
-                                               index.contextStart + ", " +
-                                               index.start + ", " +
-                                               index.limit + ", " +
-                                               index.contextLimit + "}, len=" +
-                                               text.length());
-        }
-
+        index.validate(text.length());
         filteredTransliterate(text, index, false);
     }
 
@@ -1571,9 +1570,6 @@ public abstract class Transliterator {
      * <code>getInstance("B-A")</code>, or <code>null</code> if that
      * call fails.
      *
-     * <p>This method does not take filtering into account.  The
-     * returned transliterator will have no filter.
-     *
      * <p>Subclasses with knowledge of their inverse may wish to
      * override this method.
      *
@@ -1735,45 +1731,60 @@ public abstract class Transliterator {
             String line = null;
             try {
                 line = r.readLine();
-            } catch (java.io.IOException e) {}
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Can't read Transliterator_index.txt");
+            }
             if (line == null) {
                 break;
             }
-            // Skip over whitespace
-            int pos = 0;
-            while (pos < line.length() &&
-                   Character.isWhitespace(line.charAt(pos))) {
-                ++pos;
-            }
-            // Ignore blank lines and comments
-            if (pos == line.length() || line.charAt(pos) == '#') {
-                continue;
-            }
-            // Parse colon-delimited line
-            int colon = line.indexOf(':', pos);
-            String ID = line.substring(pos, colon);
-            pos = colon+1;
-            colon = line.indexOf(':', pos);
-            String type = line.substring(pos, colon);
-            pos = colon+1;
-
-            if (type.equals("file") || type.equals("internal")) {
-                // Rest of line is <resource>:<encoding>:<direction>
-                //                pos       colon      c2
+            try {
+                // Skip over whitespace
+                int pos = 0;
+                while (pos < line.length() &&
+                       Character.isWhitespace(line.charAt(pos))) {
+                    ++pos;
+                }
+                // Ignore blank lines and comments
+                if (pos == line.length() || line.charAt(pos) == '#') {
+                    continue;
+                }
+                // Parse colon-delimited line
+                int colon = line.indexOf(':', pos);
+                String ID = line.substring(pos, colon);
+                pos = colon+1;
                 colon = line.indexOf(':', pos);
-                int c2 = line.indexOf(':', colon+1);
-                int dir = line.substring(c2+1).equals("FORWARD") ?
-                    FORWARD :  REVERSE;
-                registry.put(ID,
-                             line.substring(pos, colon), // resource
-                             line.substring(colon+1, c2), // encoding
-                             dir,
-                             !type.equals("internal"));
-            } else if (type.equals("alias")) {
-                // Rest of line is the <getInstanceArg>
-                registry.put(ID, line.substring(pos), true);
-            } else {
-                // Unknown type
+                String type = line.substring(pos, colon);
+                pos = colon+1;
+
+                if (type.equals("file") || type.equals("internal")) {
+                    // Rest of line is <resource>:<encoding>:<direction>
+                    //                pos       colon      c2
+                    colon = line.indexOf(':', pos);
+                    int c2 = line.indexOf(':', colon+1);
+                    int dir;
+                    switch (line.charAt(c2+1)) {
+                    case 'F':
+                        dir = FORWARD;
+                        break;
+                    case 'R':
+                        dir = REVERSE;
+                        break;
+                    default:
+                        throw new RuntimeException("Can't parse line: " + line);
+                    }
+                    registry.put(ID,
+                                 line.substring(pos, colon), // resource
+                                 line.substring(colon+1, c2), // encoding
+                                 dir,
+                                 !type.equals("internal"));
+                } else if (type.equals("alias")) {
+                    // Rest of line is the <getInstanceArg>
+                    registry.put(ID, line.substring(pos), true);
+                } else {
+                    // Unknown type
+                    throw new RuntimeException("Can't parse line: " + line);
+                }
+            } catch (StringIndexOutOfBoundsException e) {
                 throw new RuntimeException("Can't parse line: " + line);
             }
         }
