@@ -86,5 +86,28 @@ void TestAPI(void)
     if(uprv_strcmp(temp, "strdup") !=0 ){
         log_err("FAIL: uprv_strdup() failed. Expected: \"strdup\", Got: %s\n", temp);
     }
+  
+    uprv_strcpy(src, "this is lower case");
+    if(T_CString_strnicmp(src, "THIS", 4 ) != 0){
+        log_err("FAIL: *****T_CString_strnicmp() failed.");
+    }
+    if((intValue=T_CString_strnicmp(NULL, "first string is null", 10) )!= -1){
+        log_err("FAIL: T_CString_strnicmp() where the first string is null failed. Expected: -1, returned %d\n", intValue);
+    }
+    if((intValue=T_CString_strnicmp("second string is null", NULL, 10)) != 1){
+        log_err("FAIL: T_CString_strnicmp() where the second string is null failed. Expected: 1, returned %d\n", intValue);
+    }
+    if((intValue=T_CString_strnicmp(NULL, NULL, 10)) != 0){
+        log_err("FAIL: T_CString_strnicmp(NULL, NULL, 10) failed.  Expected:  0, returned %d\n", intValue);;
+    }
+    if((intValue=T_CString_strnicmp("", "", 10)) != 0){
+        log_err("FAIL: T_CString_strnicmp(\"\", \"\") failed.  Expected:  0, returned %d\n", intValue);;
+    }
+    if((intValue=T_CString_strnicmp("", "abc", 10)) != -1){
+        log_err("FAIL: T_CString_stricmp(\"\", \"abc\", 10) failed.  Expected: -1, returned %d\n", intValue);
+    }
+    if((intValue=T_CString_strnicmp("abc", "", 10)) != 1){
+        log_err("FAIL: T_CString_strnicmp(\"abc\", \"\", 10) failed.  Expected: 1, returned %d\n", intValue);
+    }
     
 }
