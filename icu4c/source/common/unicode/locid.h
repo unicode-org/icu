@@ -363,6 +363,15 @@ public:
      */
     static Locale createFromName(const char *name);
 
+    /**
+     * Creates a locale from the given string after canonicalizing
+     * the string by calling uloc_canonicalize().
+     * @param name the locale ID to create from.  Must not be NULL.
+     * @return a new locale object corresponding to the given name
+     * @draft ICU 3.0
+     * @see uloc_canonicalize
+     */
+    static Locale createCanonical(const char* name);
     
     /**
      * Returns the locale's ISO-639 language code.
@@ -671,7 +680,7 @@ private:
      *
      * @param cLocaleID The new locale name.
      */
-    Locale& init(const char* cLocaleID);
+    Locale& init(const char* cLocaleID, UBool canonicalize);
 
     /*
      * Internal constructor to allow construction of a locale object with
