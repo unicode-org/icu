@@ -508,7 +508,7 @@ readHeader(ConvData *data,
             int8_t length;
 
             s=value;
-            length=ucm_parseBytes(bytes, line, &s);
+            length=ucm_parseBytes(bytes, line, (const char **)&s);
             if(1<=length && length<=4 && *s==0) {
                 staticData->subCharLen=length;
                 uprv_memcpy(staticData->subChar, bytes, length);
