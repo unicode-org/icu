@@ -3,11 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:56
+// * Date & Time: 2004/8/26 12:56
 // * Source File: \work\locale\common\collation\\hi.xml
 // *
 // ***************************************************************************
 hi{
+    Version{"1.1.1"}
     collations{
         direct{
             Sequence{
@@ -16,11 +17,11 @@ hi{
                 "<ी<ु<ू<ृ<ॄ<ॅ<ॆ<े<ै<ॉ<ॊ<ो<ौ<्<ॐ<॑<॒<॓<॔<क़<ख़<ग़<ज़<ड़<ढ़<फ़<य़<ॠ<ॡ<ॢ"
                 "<ॣ<।<॥<०<१<२<३<४<५<६<७<८<९<॰"
             }
-            Version{"1.1.1"}
+            Version{"1.0"}
         }
         standard{
             Sequence{" [normalization on ]&[before 1]0<ॐ<।<॥<॰&ह<़<ँ<ं<ः<॑<॒<॓<॔&ऽ<्"}
-            Version{"1.1.1"}
+            Version{"2.0"}
         }
     }
 }

@@ -3,11 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:56
+// * Date & Time: 2004/8/26 12:57
 // * Source File: \work\locale\common\collation\\kl.xml
 // *
 // ***************************************************************************
 kl{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{
@@ -17,7 +18,7 @@ kl{
                 "&Y<<ü<<<Ü<<ű<<<Ű"
                 "&[before 1]ʒ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å"
             }
-            Version{"1.1.1"}
+            Version{"1.0"}
         }
     }
 }
