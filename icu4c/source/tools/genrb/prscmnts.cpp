@@ -83,7 +83,7 @@ getText(const UChar* source, int32_t srcLen,
     }
     pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
     
-    RegexMatcher matcher(patternString, 0, *status);
+    RegexMatcher matcher(patternString, UREGEX_DOTALL, *status);
     if (U_FAILURE(*status)) {
         return 0;
     }
@@ -110,7 +110,7 @@ getDescription( const UChar* source, int32_t srcLen,
     }
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
-    RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
+    RegexPattern      *pattern = RegexPattern::compile("@", UREGEX_MULTILINE, *status);
     UnicodeString src = source;
     
     if (U_FAILURE(*status)) {
@@ -134,7 +134,7 @@ getCount(const UChar* source, int32_t srcLen,
     }
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
-    RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
+    RegexPattern      *pattern = RegexPattern::compile("@", UREGEX_MULTILINE, *status);
     UnicodeString src = source;
 
 
@@ -143,7 +143,7 @@ getCount(const UChar* source, int32_t srcLen,
     }
     int32_t retLen = pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
     
-    RegexMatcher matcher(patternStrings[option], 0, *status);
+    RegexMatcher matcher(patternStrings[option], UREGEX_DOTALL, *status);
     if (U_FAILURE(*status)) {
         return 0;
     } 
@@ -173,7 +173,7 @@ getAt(const UChar* source, int32_t srcLen,
     }
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
-    RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
+    RegexPattern      *pattern = RegexPattern::compile("@", UREGEX_MULTILINE, *status);
     UnicodeString src = source;
 
 
@@ -182,7 +182,7 @@ getAt(const UChar* source, int32_t srcLen,
     }
     int32_t retLen = pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
     
-    RegexMatcher matcher(patternStrings[option], 0, *status);
+    RegexMatcher matcher(patternStrings[option], UREGEX_DOTALL, *status);
     if (U_FAILURE(*status)) {
         return 0;
     } 
