@@ -652,6 +652,53 @@ public:
   */
   virtual void setDecomposition(Normalizer::EMode  mode) = 0;
 
+
+/**
+ * Produce a bound for a given sortkey and a number of levels.
+ * Return value is always the number of bytes needed, regardless of 
+ * whether the result buffer was big enough or even valid.<br>
+ * Resulting bounds can be used to produce a range of strings that are
+ * between upper and lower bounds. For example, if bounds are produced
+ * for a sortkey of string "smith", strings between upper and lower 
+ * bounds with one level would include "Smith", "SMITH", "sMiTh".<br>
+ * There are two upper bounds that can be produced. If UCOL_BOUND_UPPER
+ * is produced, strings matched would be as above. However, if bound
+ * produced using UCOL_BOUND_UPPER_LONG is used, the above example will
+ * also match "Smithsonian" and similar.<br>
+ * For more on usage, see example in cintltst/capitst.c in procedure
+ * TestBounds.
+ * Sort keys may be compared using <TT>strcmp</TT>.
+ * @param source The source sortkey.
+ * @param sourceLength The length of source, or -1 if null-terminated. 
+ *                     (If an unmodified sortkey is passed, it is always null 
+ *                      terminated).
+ * @param boundType Type of bound required. It can be UCOL_BOUND_LOWER, which 
+ *                  produces a lower inclusive bound, UCOL_BOUND_UPPER, that 
+ *                  produces upper bound that matches strings of the same length 
+ *                  or UCOL_BOUND_UPPER_LONG that matches strings that have the 
+ *                  same starting substring as the source string.
+ * @param noOfLevels  Number of levels required in the resulting bound (for most 
+ *                    uses, the recommended value is 1). See users guide for 
+ *                    explanation on number of levels a sortkey can have.
+ * @param result A pointer to a buffer to receive the resulting sortkey.
+ * @param resultLength The maximum size of result.
+ * @param status Used for returning error code if something went wrong. If the 
+ *               number of levels requested is higher than the number of levels
+ *               in the source key, a warning (U_SORT_KEY_TOO_SHORT_WARNING) is 
+ *               issued.
+ * @return The size needed to fully store the bound. 
+ * @see ucol_keyHashCode
+ * @draft ICU 2.1
+ */
+static int32_t getBound(const uint8_t       *source,
+        int32_t             sourceLength,
+        UColBoundMode       boundType,
+        uint32_t            noOfLevels,
+        uint8_t             *result,
+        int32_t             resultLength,
+        UErrorCode          &status);
+
+
 protected:
 
   // Collator protected constructors -------------------------------------
