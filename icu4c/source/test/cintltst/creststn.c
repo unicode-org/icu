@@ -366,7 +366,6 @@ static void TestEmptyTypes() {
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(len, 0);
         CONFIRM_INT_EQ(u_strlen(zeroString), 0);
-//        ures_close(res);
     }
     else {
         log_err("Couldn't get emptyexplicitstring\n");
@@ -382,7 +381,6 @@ static void TestEmptyTypes() {
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(len, 0);
         CONFIRM_INT_EQ(u_strlen(zeroString), 0);
-//        ures_close(res);
     }
     else {
         log_err("Couldn't get emptystring\n");
@@ -397,7 +395,6 @@ static void TestEmptyTypes() {
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(intResult, 0);
-//        ures_close(res);
     }
     else {
         log_err("Couldn't get emptystring\n");
@@ -417,7 +414,6 @@ static void TestEmptyTypes() {
         if(U_SUCCESS(status) || resArray != NULL || len != 0) {
             log_err("Shouldn't get emptyintv\n");
         }
-//        ures_close(res);
     }
 
     status = U_ZERO_ERROR;
@@ -434,7 +430,6 @@ static void TestEmptyTypes() {
         if(U_SUCCESS(status) || binResult != NULL || len != 0) {
             log_err("Shouldn't get emptybin\n");
         }
-//        ures_close(res);
     }
 
     status = U_ZERO_ERROR;
@@ -451,7 +446,6 @@ static void TestEmptyTypes() {
         if(U_SUCCESS(status) || resArray != NULL){
             log_err("Shouldn't get emptyarray\n");
         }
-//        ures_close(res);
     }
 
     status = U_ZERO_ERROR;
@@ -468,7 +462,6 @@ static void TestEmptyTypes() {
         if(U_SUCCESS(status) || resArray != NULL){
             log_err("Shouldn't get emptytable\n");
         }
-//        ures_close(res);
     }
 
     ures_close(res);
