@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2003/06/03 18:49:35 $ 
-* $Revision: 1.31 $
+* $Date: 2003/06/18 00:58:21 $ 
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -30,28 +30,28 @@ import com.ibm.icu.impl.NormalizerImpl;
  * <pre>
  * // iteration forwards: Original
  * for (int i = 0; i &lt; s.length(); ++i) {
- *   char ch = s.charAt(i);
- *   doSomethingWith(ch);
+ *     char ch = s.charAt(i);
+ *     doSomethingWith(ch);
  * }
  *
  * // iteration forwards: Changes for UTF-32
  * int ch;
  * for (int i = 0; i &lt; s.length(); i+=UTF16.getCharCount(ch)) {
- *   ch = UTF16.charAt(s,i);
- *   doSomethingWith(ch);
+ *     ch = UTF16.charAt(s,i);
+ *     doSomethingWith(ch);
  * }
  *
  * // iteration backwards: Original
  * for (int i = s.length() -1; i >= 0; --i) {
- *   char ch = s.charAt(i);
- *    doSomethingWith(ch);
+ *     char ch = s.charAt(i);
+ *     doSomethingWith(ch);
  * }
  *  
  * // iteration backwards: Changes for UTF-32
  * int ch;
  * for (int i = s.length() -1; i > 0; i-=UTF16.getCharCount(ch)) {
- *   ch = UTF16.charAt(s,i);
- *   doSomethingWith(ch);
+ *     ch = UTF16.charAt(s,i);
+ *     doSomethingWith(ch);
  * }
  * </pre>
  * <strong>Notes:</strong>

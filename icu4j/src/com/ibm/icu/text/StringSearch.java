@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/06/03 18:49:35 $ 
- * $Revision: 1.22 $
+ * $Date: 2003/06/18 00:58:21 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -87,7 +87,7 @@ import com.ibm.icu.impl.NormalizerImpl;
  *           a match will be found, since the target text is canonically 
  *           equivalent to "a&#92;u0300&#92;u0325"
  * option 2. P matches S' and if P starts or ends with a combining mark, 
- *           there exists no non-ignorable combining mark before or after S’ 
+ *           there exists no non-ignorable combining mark before or after S' 
  *           in S respectively. Following the example above, the pattern 
  *           "a&#92;u0300" will not find a match in "a&#92;u0325&#92;u0300", 
  *           since
