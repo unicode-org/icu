@@ -119,3 +119,9 @@ typedef unsigned short uint16_t;
 #define U_EXPORT __declspec(dllexport)
 #define U_EXPORT2
 #define U_IMPORT __declspec(dllimport)
+
+/*===========================================================================*/
+/* Programs used by ICU code                                                 */
+/*===========================================================================*/
+
+#define U_MAKE	"nmake"
