@@ -62,12 +62,14 @@ static void TestStandardName()
     UErrorCode err;
 
     /* Iterate over all standards. */
-
+    log_verbose(".");
     for (i = 0, count = ucnv_countStandards(); i < count-1; ++i) {
         const char *standard;
 
+    log_verbose("+");
         err = U_ZERO_ERROR;
         standard = ucnv_getStandard(i, &err);
+    log_verbose(".");
         if (U_FAILURE(err)) {
             log_err("FAIL: ucnv_getStandard(%d), error=%s\n", i, u_errorName(err));
             res = 0;
