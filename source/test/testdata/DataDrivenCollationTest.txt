@@ -16,6 +16,28 @@
                      }
     }
     TestData {
+        TestThaiPartialSortKeyProblems {
+            Info {
+                Description { "These are examples of strings that caused trouble in partial sort key testing." }
+            }
+            Settings {
+                {
+                    TestLocale { "th_TH" }
+                }
+            }
+            // TODO: the tests that are commented out should be enabled when j2720 is fixed
+            Cases { "\u0E01\u0E01\u0E38\u0E18\u0E20\u0E31\u0E13\u0E11\u0E4C"
+                    "<\u0E01\u0E01\u0E38\u0E2A\u0E31\u0E19\u0E42\u0E18",
+                    "\u0E01\u0E07\u0E01\u0E32\u0E23"
+                    "<\u0E01\u0E07\u0E42\u0E01\u0E49",
+                    //"\u0E01\u0E23\u0E19\u0E17\u0E32"
+                    //"<\u0E01\u0E23\u0E19\u0E19\u0E40\u0E0A\u0E49\u0E32",
+                    "\u0E01\u0E23\u0E30\u0E40\u0E08\u0E35\u0E22\u0E27"
+                    "<\u0E01\u0E23\u0E30\u0E40\u0E08\u0E35\u0E4A\u0E22\u0E27",
+                    //"\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E2D"
+                    //"<\u0E01\u0E23\u0E23\u0E40\u0E0A\u0E49\u0E32"
+          }
+        }
         TestJavaStyleRule {
             Info {
                 Description { "java.text allows rules to start as '<<<x<<<y...' "
