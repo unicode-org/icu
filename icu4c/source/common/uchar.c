@@ -922,10 +922,10 @@ uchar_addPropertyStarts(USet *set) {
     USET_ADD_CP_AND_NEXT(set, 0x4e5d);
 
     /* add for u_digit() */
-    uset_add(set, _a);
-    uset_add(set, _z+1);
-    uset_add(set, _A);
-    uset_add(set, _Z+1);
+    uset_add(set, U_a);
+    uset_add(set, U_z+1);
+    uset_add(set, U_A);
+    uset_add(set, U_Z+1);
 
     /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
     uset_add(set, WJ); /* range WJ..NOMDIG */
