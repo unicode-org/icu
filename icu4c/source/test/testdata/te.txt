@@ -28,11 +28,11 @@ te
         tag4 { TE4 }
     }
 
-    string_in_Default_te_te_IN { TE }
+    string_in_Root_te_te_IN { TE }
 
-    array_in_Default_te_te_IN { TE0, TE1, TE2, TE3, TE4 }
+    array_in_Root_te_te_IN { TE0, TE1, TE2, TE3, TE4 }
 
-    array_2d_in_Default_te_te_IN
+    array_2d_in_Root_te_te_IN
     {
         { TE00, TE01, TE02 }
         { TE10, TE11, TE12 }
@@ -40,7 +40,7 @@ te
         { TE30, TE31, TE32 }
     }
 
-    tagged_array_in_Default_te_te_IN
+    tagged_array_in_Root_te_te_IN
     {
         tag7 { TE7 } 
         tag8 { TE8 } 
@@ -50,11 +50,11 @@ te
         tag10 { TE10 } 
     }
 
-    string_in_Default_te { TE }
+    string_in_Root_te { TE }
 
-    array_in_Default_te { TE0, TE1, TE2, TE3, TE4 }
+    array_in_Root_te { TE0, TE1, TE2, TE3, TE4 }
 
-    array_2d_in_Default_te
+    array_2d_in_Root_te
     {
         { TE00, TE01, TE02 }
         { TE10, TE11, TE12 }
@@ -62,7 +62,7 @@ te
         { TE30, TE31, TE32 }
     }
 
-    tagged_array_in_Default_te
+    tagged_array_in_Root_te
     {
         tag2 { TE2 } 
         tag1 { TE1 } 
