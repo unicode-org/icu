@@ -149,10 +149,11 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
     }
 
     // Copy input string from the end of previous match to start of current match
-    int32_t  len = fMatchStart-fLastMatchEnd;
+    int32_t  len = fMatchStart-fLastReplaceEnd;
     if (len > 0) {
-        dest.append(*fInput, fLastMatchEnd, len);
+        dest.append(*fInput, fLastReplaceEnd, len);
     }
+    fLastReplaceEnd = fMatchEnd;
     
 
     // scan the replacement text, looking for substitutions ($n) and \escapes.
@@ -314,8 +315,7 @@ UBool RegexMatcher::find() {
     int32_t startPos = fMatchEnd;
 
     if (fMatch) {
-        // Save the position of any previous successful match for use by the 
-        //  appendReplacement() and appendTail() functions.
+        // Save the position of any previous successful match.
         fLastMatchEnd = fMatchEnd;
 
         if (fMatchStart == fMatchEnd) {
@@ -700,10 +700,11 @@ UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErro
 //
 //--------------------------------------------------------------------------------
 RegexMatcher &RegexMatcher::reset() {
-    fMatchStart   = 0;
-    fMatchEnd     = 0;
-    fLastMatchEnd = -1;
-    fMatch        = FALSE;
+    fMatchStart     = 0;
+    fMatchEnd       = 0;
+    fLastMatchEnd   = -1;
+    fLastReplaceEnd = 0;
+    fMatch          = FALSE;
     resetStack();
     return *this;
 }

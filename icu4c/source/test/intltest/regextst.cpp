@@ -1105,7 +1105,48 @@ void RegexTest::API_Replace() {
     }
     // TODO:  need more through testing of capture substitutions.
     
-    
+    // Bug 4057
+    //
+    {
+        status = U_ZERO_ERROR;
+        UnicodeString s = "The matches start with ss and end with ee ss stuff ee fin";
+        RegexMatcher m("ss(.*?)ee", 0, status);
+        REGEX_CHECK_STATUS;
+        UnicodeString result;
+
+        // Multiple finds do NOT bump up the previous appendReplacement postion.
+        m.reset(s);
+        m.find();
+        m.find();
+        m.appendReplacement(result, "ooh", status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(result == "The matches start with ss and end with ee ooh");
+
+        // After a reset into the interior of a string, appendReplacemnt still starts at beginning.
+        status = U_ZERO_ERROR;
+        result.truncate(0);
+        m.reset(10, status);
+        m.find();
+        m.find();
+        m.appendReplacement(result, "ooh", status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(result == "The matches start with ss and end with ee ooh");
+
+        // find() at interior of string, appendReplacemnt still starts at beginning.
+        status = U_ZERO_ERROR;
+        result.truncate(0);
+        m.reset();
+        m.find(10, status);
+        m.find();
+        m.appendReplacement(result, "ooh", status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(result == "The matches start with ss and end with ee ooh");
+
+        m.appendTail(result);
+        REGEX_ASSERT(result == "The matches start with ss and end with ee ooh fin");
+
+    }
+
     delete matcher2;
     delete pat2;
     delete matcher;
