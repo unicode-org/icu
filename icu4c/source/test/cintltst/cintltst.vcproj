@@ -22,8 +22,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\tools\ctestfw,..\..\common,..\..\i18n,..\..\tools\toolutil"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil"
 				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -83,10 +82,8 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
-				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\tools\ctestfw,..\..\common,..\..\i18n,..\..\tools\toolutil"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\tools\ctestfw;..\..\common;..\..\i18n;..\..\tools\toolutil"
 				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
