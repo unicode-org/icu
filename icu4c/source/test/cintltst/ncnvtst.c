@@ -28,6 +28,8 @@
 #endif
 #define TEST_BUFFER_SIZE 5555555
 
+#define UNICODE_LIMIT 0x10FFFF
+
 static void printSeq(const unsigned char* a, int len);
 static void printSeqErr(const unsigned char* a, int len);
 static void printUSeq(const UChar* a, int len);
@@ -410,7 +412,9 @@ void TestRegression(){
     UChar *sourceLimit=0;
     UChar *extractedTargetBuffer=0;
     UChar *extractedTarget=0;
+    UChar *target=0;
     UChar *limit=0;
+    int32_t count=0;
    
     int32_t offset=0;
     int32_t sourceLength=0, i=0;
@@ -428,14 +432,15 @@ void TestRegression(){
         source[i]=(UChar)0xFFFE;
         extractedTargetBuffer[i]=(UChar)0xFFFE;
     }
-    for(c=0x0000; c <= 0x10FFFF; c++){
+    for(c=0x0000; c <= UNICODE_LIMIT; c++){
         UTF_APPEND_CHAR_SAFE(source, offset, u_strlen(source), c);
+        count++;
     }
       
     src=source;
-    sourceLimit=src+(i * (sizeof(UChar)));
+    sourceLimit=src+(offset);
     targ=buffer;
-    targetLimit=targ+TEST_BUFFER_SIZE;
+    targetLimit=targ+(TEST_BUFFER_SIZE);
     ucnv_fromUnicode (conv,
                   &targ,
                   targetLimit,
@@ -444,6 +449,14 @@ void TestRegression(){
                   NULL,
                   TRUE, 
                   &status);
+    if(U_FAILURE(status)){
+        log_err("FAILED: error= %s at offset=0x%04X and target=0x%02X\n", myErrorName(status), (UNICODE_LIMIT-(sourceLimit-src)/sizeof(UChar)) , *targ);
+    }
+
+    log_verbose("The No: of bytes in target buffer =%ld\n", targ-buffer);
+    
+     targetLimit=targ;
+     targ=buffer;
 
     extractedTarget=extractedTargetBuffer;
     limit=extractedTarget+TEST_BUFFER_SIZE;
@@ -459,13 +472,21 @@ void TestRegression(){
     /*if(memcmp(source, extractedTarget, extractedTarget-extractedTargetBuffer) != 0){
         log_err("FAILED\n");
     }*/
-    for(i=0; i<extractedTarget-extractedTargetBuffer; i++){
-        if(source[i] != extractedTarget[i]){
-            log_err("FAILED: comparision failed at offset=%ld, source=0x%04X, extracted=0x%04X\n", i, source[i], extractedTarget[i]);
+    src=source;
+    target=extractedTargetBuffer;
+    while(target < extractedTarget){
+        if(*src != *target){
+            log_err("FAILED: comparision failed at source=0x%04X, extracted=0x%04X\n", *src, *target);
             break;
         }
-    }
+        src++;
+        target++;
 
+    }
+    if((extractedTarget-extractedTargetBuffer) != (sourceLimit-source)){
+        log_err("The conversion didn't go through the whole range: Expected= %d, Got=%d\n", count, (extractedTarget-extractedTargetBuffer));
+
+    }
     ucnv_close(conv);
     free(source);
     free(extractedTargetBuffer);
