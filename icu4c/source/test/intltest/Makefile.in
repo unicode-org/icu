@@ -48,7 +48,8 @@ tsmthred.o tsmutex.o tsnmfmt.o tsputil.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o transtst.o strtest.o thcoll.o \
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o unhxtrts.o hxuntrts.o \
 ufltlgts.o testutil.o transrt.o normconf.o sfwdchit.o indictrn.o\
-jamotest.o srchtest.o
+jamotest.o srchtest.o \
+itrbnf.o itrbnfrt.o
 
 DEPS = $(OBJECTS:.o=.d)
 

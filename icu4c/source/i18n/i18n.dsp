@@ -166,11 +166,27 @@ SOURCE=.\hextouni.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\llong.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msgfmt.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\name2uni.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfrs.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfrule.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfsubs.cpp
 # End Source File
 # Begin Source File
 
@@ -195,6 +211,10 @@ SOURCE=.\rbbi.cpp
 # Begin Source File
 
 SOURCE=.\rbbi_tbl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbnf.cpp
 # End Source File
 # Begin Source File
 
@@ -814,6 +834,10 @@ InputPath=.\unicode\hextouni.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\llong.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\msgfmt.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -857,6 +881,22 @@ InputPath=.\unicode\name2uni.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfrlist.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfrs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfrule.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\nfsubs.h
 # End Source File
 # Begin Source File
 
@@ -1019,6 +1059,25 @@ InputPath=.\unicode\rbbi.h
 # Begin Source File
 
 SOURCE=.\rbbi_tbl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\rbnf.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\rbnf.h
+
+"..\..\include\unicode\rbnf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\rbnf.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
