@@ -570,30 +570,6 @@ struct FormatThreadTestData
     FormatThreadTestData(double a, const UnicodeString& b) : number(a),string(b) {}
 } ;
 
-// 
-FormatThreadTestData kNumberFormatTestData[] = 
-{
-    FormatThreadTestData((double)5.0, UnicodeString("5", "")),
-    FormatThreadTestData( 6.0, UnicodeString("6", "")),
-    FormatThreadTestData( 20.0, UnicodeString("20", "")),
-    FormatThreadTestData( 8.0, UnicodeString("8", "")),
-    FormatThreadTestData( 8.3, UnicodeString("8.3", "")),
-    FormatThreadTestData( 12345, UnicodeString("12,345", "")),
-    FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
-};
-int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]));
-
-// 
-FormatThreadTestData kPercentFormatTestData[] = 
-{
-    FormatThreadTestData((double)5.0, UnicodeString("500%", "")),
-    FormatThreadTestData( 1.0, UnicodeString("100%", "")),
-    FormatThreadTestData( 0.26, UnicodeString("26%", "")),
-    FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
-    FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
-};
-int32_t kPercentFormatTestDataLength = (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
-
 
 void errorToString(UErrorCode theStatus, UnicodeString &string)
 {
@@ -642,15 +618,40 @@ class FormatThreadTest : public ThreadWithStatus
 {
 public:
     FormatThreadTest() // constructor is NOT multithread safe.
-        : ThreadWithStatus()
+        : ThreadWithStatus(),
+        fOffset(0)
         // the locale to use
     {
         static int32_t fgOffset = 0;
-        fOffset = fgOffset += 3;
+        fgOffset += 3;
+        fOffset = fgOffset;
     }
 
     virtual void run()
     {
+        // Keep this data here to avoid static initialization.
+        FormatThreadTestData kNumberFormatTestData[] = 
+        {
+            FormatThreadTestData((double)5.0, UnicodeString("5", "")),
+            FormatThreadTestData( 6.0, UnicodeString("6", "")),
+            FormatThreadTestData( 20.0, UnicodeString("20", "")),
+            FormatThreadTestData( 8.0, UnicodeString("8", "")),
+            FormatThreadTestData( 8.3, UnicodeString("8.3", "")),
+            FormatThreadTestData( 12345, UnicodeString("12,345", "")),
+            FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
+        };
+        int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / sizeof(kNumberFormatTestData[0]));
+
+        // Keep this data here to avoid static initialization.
+        FormatThreadTestData kPercentFormatTestData[] = 
+        {
+            FormatThreadTestData((double)5.0, UnicodeString("500%", "")),
+            FormatThreadTestData( 1.0, UnicodeString("100%", "")),
+            FormatThreadTestData( 0.26, UnicodeString("26%", "")),
+            FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
+            FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
+        };
+        int32_t kPercentFormatTestDataLength = (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
         int32_t iteration;
 
         UErrorCode status = U_ZERO_ERROR;
