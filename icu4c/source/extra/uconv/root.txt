@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.17 $
+// $Revision: 1.18 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -21,8 +21,6 @@
 //    the Windows side.
 //
 // 6. Send it in to srl@jtcsv.com or ask on the ICU mailing list! thanks!
-        
-
 
 root
 {
@@ -30,7 +28,7 @@ root
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
-  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] -f, --from-code code -t, --to-code code [ file ] [ -o, --output file ]\n" }
+  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliterator ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] -f, --from-code code -t, --to-code code [ file ... ] [ -o, --output file ]\n" }
 
   help {  "Options:  -h, --help                    print this message\n"
           "          -V, --version                 print the program version\n"

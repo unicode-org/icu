@@ -55,7 +55,7 @@
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 [
-.IR file 
+.IR file .\|.\|.
 ]
 [
 .BI "\-o\fP, \fB\-\-output" " file"
@@ -188,7 +188,7 @@ callbacks actually supported by
 is displayed when it is called with
 .BR "\-h\fP, \fB\-\-help" .
 .PP
-.TP \w'\fBescape-codepoint'u+3n
+.TP \w'\fBescape-unicode+3n
 .B substitute
 Write the the encoding's substitute sequence, or the Unicode
 replacement character
@@ -249,7 +249,7 @@ where
 .I hhhh
 is the hexadecimal value of the character.
 .TP
-.B escape-codepoint
+.B escape-unicode
 Replace the missing characters with a string of the format
 .BR U+\fIhhhh\fP ,
 where
