@@ -50,15 +50,15 @@ void NormalizerConformanceTest::TestConformance(void) {
     UnicodeString buf;
     int32_t passCount = 0;
     int32_t failCount = 0;
-    char path[256];
+    char testPath[256];
 
     // Construct the path to the test suite file
-    uprv_strcpy(path, u_getDataDirectory());
-    uprv_strcat(path, TEST_SUITE_DIR);
-    uprv_strcat(path, U_FILE_SEP_STRING);
-    uprv_strcat(path, TEST_SUITE_FILE);
+    uprv_strcpy(testPath, u_getDataDirectory());
+    uprv_strcat(testPath, TEST_SUITE_DIR);
+    uprv_strcat(testPath, U_FILE_SEP_STRING);
+    uprv_strcat(testPath, TEST_SUITE_FILE);
 
-    FileStream *input = T_FileStream_open(path, "r");
+    FileStream *input = T_FileStream_open(testPath, "r");
     if (input == NULL) {
         errln((UnicodeString)"Can't open " TEST_SUITE_FILE);
         return;
