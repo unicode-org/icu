@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $
- * $Date: 2003/06/03 18:34:21 $
- * $Revision: 1.12 $
+ * $Date: 2003/06/11 16:31:31 $
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */

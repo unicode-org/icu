@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterUtility.java,v $ 
-* $Date: 2003/06/09 23:15:00 $ 
-* $Revision: 1.2 $
+* $Date: 2003/06/11 16:31:31 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
