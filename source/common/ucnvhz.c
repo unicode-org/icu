@@ -259,7 +259,9 @@ SAVE_STATE:
                     UConverterCallbackReason reason;
                     int32_t currentOffset ;
                     int32_t saveIndex = myTarget - args->target;
-                    
+
+                    args->converter->invalidCharLength=0;
+                   
                     if(targetUniChar == 0xfffe){
                         reason = UCNV_UNASSIGNED;
                         *err = U_INVALID_CHAR_FOUND;
@@ -298,7 +300,6 @@ SAVE_STATE:
                           args->offsets[saveIndex] += currentOffset;
                         } 
                     }
-                    args->converter->invalidCharLength=0;
                     args->source  = saveSource;
                     myTarget = args->target;
                     args->target  = saveTarget;
@@ -489,6 +490,8 @@ getTrail:
                     const UChar* saveSource = args->source;
                     int32_t *saveOffsets = args->offsets;
 
+                    args->converter->invalidUCharLength = 0;
+
                     if(mySourceChar>0xffff){
                         args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((mySourceChar)>>10)+0xd7c0);
                         args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((mySourceChar)&0x3ff)|0xdc00);
@@ -531,7 +534,6 @@ getTrail:
                     args->source = saveSource;
                     args->target = saveTarget;
                     args->offsets = saveOffsets;
-                    args->converter->invalidUCharLength = 0;
                     args->converter->fromUSurrogateLead=0x00;
                     if (U_FAILURE (*err))
                         break;
