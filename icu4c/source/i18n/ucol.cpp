@@ -924,7 +924,14 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
         if (source->pos>=source->len) { /* this is the end of string */
-          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
+          /* synwee : added for testing */
+          {
+            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
+            if (CE == UCOL_NOT_FOUND && firstFound != UCOL_NOT_FOUND) {
+              CE = firstFound;
+              firstFound = UCOL_NOT_FOUND;
+            }
+          }
           break;
         }
 
