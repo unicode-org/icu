@@ -28,13 +28,21 @@ de {
     collations {
         standard { 
             Version { "1.0" }
-            Sequence { "&A<<<\u00c6/E &a<<<\u00e6/e" }
+            Sequence { 
+                "&A<<\u00c6/E"
+                "&a<<\u00e6/e" 
+            }
         }
         phonebook {
-            Version { "1.0" }
-            Sequence { "&ae <<< \u00E4 &AE <<< \u00C4" 
-                "&oe <<< \u00F6 &OE <<< \u00D6" 
-                "&ue <<< \u00FC &UE <<< \u00DC" }
+            Version { "2.0" }
+            Sequence { 
+                "&a<<\u00e6/e<<\u00E4/e"
+                "&A<<\u00c6/E<<\u00C4/E" 
+                "&\u0153<<\u00F6/e"
+                "&\u0152<<\u00D6/E" 
+                "&u<<\u00FC/e"
+                "&U<<\u00DC/E" 
+            }
         }
     }
     // Currency display names

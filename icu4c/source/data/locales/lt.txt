@@ -13,7 +13,7 @@ lt {
         Sequence { 
             "&\u0328 << \u0307" // put dot-above after ogonek
             "&[before 1]D<č<<<Č"
-            "&[before 1]H<y<<<Y"
+            "&[before 1]J<y<<<Y"
             "&[before 1]T<š<<<Š"
             "&[before 1]Ʒ<ž<<<Ž"
             // sources differ on the following, and the strengths thereof

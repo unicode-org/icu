@@ -11,7 +11,7 @@ tr {
     // sorting order for Turkish
     collations {
         standard { 
-            Version { "2" }
+            Version { "2.1" }
             Sequence { "& C < c\u0327 <<< C\u0327" 
                        "& G < g\u0306 <<< G\u0306"
                        "&[before 1]i < \u0131 <<< I"
