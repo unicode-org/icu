@@ -21,7 +21,7 @@
 #include "utypes.h"
 #include "ucnv_bld.h"
 
-bool_t CONVERSION_SUCCESS (UErrorCode err);
+bool_t CONVERSION_U_SUCCESS (UErrorCode err);
 
 void T_UConverter_toUnicode_SBCS (UConverter * converter,
 				  UChar ** target,

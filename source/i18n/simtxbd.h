@@ -71,12 +71,12 @@ public:
      * Return a polymorphic class ID for this object. Different subclasses
      * will return distinct unequal values.
      */
-    virtual ClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
     /**
      * Return a static class ID for this class.
      */
-    static ClassID getStaticClassID(void) { return (ClassID)&fgClassID; }
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
     /**
      * Return the text iterator over which this operates.

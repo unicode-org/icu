@@ -28,69 +28,54 @@
 
 #include "utypes.h"
 
-#ifndef UHASH_H
-typedef struct _UHashtable UHashtable;
-#endif
+#define UCNV_MAX_SUBCHAR_LEN 4
+#define UCNV_ERROR_BUFFER_LENGTH 20
 
-#ifndef UCMP16_H
-typedef struct _CompactShortArray CompactShortArray;
-#endif
+typedef struct CompactShortArray CompactShortArray;
+typedef struct CompactByteArray CompactByteArray;
 
-#ifndef UCMP8_H
-typedef struct _CompactByteArray CompactByteArray;
-#endif
-
-
-#define MAX_SUBCHAR_LEN 4
-#define ERROR_BUFFER_LENGTH 20
-
-#define IMPLEMENTED_CONVERSION_TYPES 9
+#define UCNV_IMPLEMENTED_CONVERSION_TYPES 9
 /*Sentinel Value used to check the integrity of the binary data files */
 
-#define FILE_CHECK_MARKER 0xBEDA
+#define UCNV_FILE_CHECK_MARKER 0xBEDA
 
-extern const char* COPYRIGHT_STRING;
-extern const int32_t COPYRIGHT_STRING_LENGTH;
+#define UCNV_COPYRIGHT_STRING \
+    " * COPYRIGHT:                                                                   *\n" \
+    " *   (C) Copyright International Business Machines Corporation, 1999            *\n"
 
-#define COPYRIGHT_STRING " * COPYRIGHT:                                                                   *\n *   (C) Copyright International Business Machines Corporation, 1999            *\n"
-
-#define COPYRIGHT_STRING_LENGTH  200
+#define UCNV_COPYRIGHT_STRING_LENGTH  200
 /*maximum length of the converter names */
-#define MAX_CONVERTER_NAME_LENGTH 60
-#define MAX_FULL_FILE_NAME_LENGTH 600+MAX_CONVERTER_NAME_LENGTH
+#define UCNV_MAX_CONVERTER_NAME_LENGTH 60
+#define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
 
-/*Pointer to the aforementionned file */
-#define MAX_LINE_TEXT MAX_CONVERTER_NAME_LENGTH*400
+/*Pointer to the aforementioned file */
+#define UCNV_MAX_LINE_TEXT (UCNV_MAX_CONVERTER_NAME_LENGTH*400)
 
 #define  UCNV_SI 0x0F		/*Shift in for EBDCDIC_STATEFUL and iso2022 states */
 #define  UCNV_SO 0x0E		/*Shift out for EBDCDIC_STATEFUL and iso2022 states */
 
-typedef enum
-{
-  UNSUPPORTED_CONVERTER = -1,
-  SBCS = 0,
-  DBCS = 1,
-  MBCS = 2,
-  LATIN_1 = 3,
-  UTF8 = 4,
-  UTF16_BigEndian = 5,
-  UTF16_LittleEndian = 6,
-  EBCDIC_STATEFUL = 7,
-  ISO_2022 = 8,
-  JIS = 9,
-  EUC = 10,
-  GB = 11
-}
-UCNV_TYPE;
+typedef enum {
+    UCNV_UNSUPPORTED_CONVERTER = -1,
+    UCNV_SBCS = 0,
+    UCNV_DBCS = 1,
+    UCNV_MBCS = 2,
+    UCNV_LATIN_1 = 3,
+    UCNV_UTF8 = 4,
+    UCNV_UTF16_BigEndian = 5,
+    UCNV_UTF16_LittleEndian = 6,
+    UCNV_EBCDIC_STATEFUL = 7,
+    UCNV_ISO_2022 = 8,
+    /** Number of converter types for which we have conversion routines. */
+    UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES = 9,
+    UCNV_JIS = 9,
+    UCNV_EUC = 10,
+    UCNV_GB = 11
+} UConverterType;
 
-/*Number of converters types for which we have conversion routines */
-#define NUMBER_OF_SUPPORTED_CONVERTER_TYPES 9
-
-#ifdef UNKNOWN
-#undef UNKNOWN
-#endif
-typedef enum {UNKNOWN = -1, IBM = 0}
-UCNV_PLATFORM;
+typedef enum {
+    UCNV_UNKNOWN = -1,
+    UCNV_IBM = 0
+} UConverterPlatform;
 
 
 /*Table Node Definitions */
@@ -99,14 +84,14 @@ typedef struct
     UChar toUnicode[256];
     CompactByteArray *fromUnicode;
   }
-SBCS_TABLE;
+UConverterSBCSTable;
 
 typedef struct
   {
     CompactShortArray *toUnicode;
     CompactShortArray *fromUnicode;
   }
-DBCS_TABLE;
+UConverterDBCSTable;
 
 typedef struct
   {
@@ -114,15 +99,15 @@ typedef struct
     CompactShortArray *toUnicode;
     CompactShortArray *fromUnicode;
   }
-MBCS_TABLE;
+UConverterMBCSTable;
 
 typedef union
   {
-    SBCS_TABLE sbcs;
-    DBCS_TABLE dbcs;
-    MBCS_TABLE mbcs;
+    UConverterSBCSTable sbcs;
+    UConverterDBCSTable dbcs;
+    UConverterMBCSTable mbcs;
   }
-ConverterTable;
+UConverterTable;
 
 
 /*Defines the struct of a UConverterSharedData the immutable, shared part of
@@ -131,20 +116,20 @@ ConverterTable;
 typedef struct
   {
     uint32_t referenceCounter;	/*used to count number of clients */
-    char name[MAX_CONVERTER_NAME_LENGTH];	/*internal name of the converter */
-    UCNV_PLATFORM platform;	/*platform of the converter (only IBM now */
+    char name[UCNV_MAX_CONVERTER_NAME_LENGTH];	/*internal name of the converter */
+    UConverterPlatform platform;	/*platform of the converter (only IBM now) */
     int32_t codepage;		/*codepage # (now IBM-$codepage) */
-    UCNV_TYPE conversionType;	/*conversion type */
+    UConverterType conversionType;	/*conversion type */
     int8_t minBytesPerChar;	/*Minimum # bytes per char in this codepage */
     int8_t maxBytesPerChar;	/*Maximum # bytes per char in this codepage */
     struct
       {				/*initial values of some members of the mutable part of object */
 	uint32_t toUnicodeStatus;
 	int8_t subCharLen;
-	unsigned char subChar[MAX_SUBCHAR_LEN];
+	unsigned char subChar[UCNV_MAX_SUBCHAR_LEN];
       }
     defaultConverterValues;
-    ConverterTable *table;	/*Pointer to conversion data */
+    UConverterTable *table;	/*Pointer to conversion data */
   }
 UConverterSharedData;
 
@@ -159,11 +144,11 @@ struct UConverter
     int8_t pad;
     int32_t mode;
     int8_t subCharLen;		/*length of the codepage specific character sequence */
-    unsigned char subChar[MAX_SUBCHAR_LEN];	/*codepage specific character sequence */
-    UChar UCharErrorBuffer[ERROR_BUFFER_LENGTH];	/*used to store unicode data meant for 
+    unsigned char subChar[UCNV_MAX_SUBCHAR_LEN];	/*codepage specific character sequence */
+    UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];	/*used to store unicode data meant for 
 							   *output stream  by the Error function pointers 
 							 */
-    unsigned char charErrorBuffer[ERROR_BUFFER_LENGTH];	/*used to store codepage data meant for
+    unsigned char charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];	/*used to store codepage data meant for
 							   * output stream by the Error function pointers 
 							 */
     int8_t UCharErrorBufferLength;	/*used to indicate the number of valid UChars
@@ -174,7 +159,7 @@ struct UConverter
 					 */
 
     UChar invalidUCharBuffer[3];
-    char invalidCharBuffer[MAX_SUBCHAR_LEN];
+    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];
     /*Error function pointer called when conversion issues
      *occur during a T_UConverter_fromUnicode call
      */
@@ -216,79 +201,7 @@ typedef struct
     unsigned char escSeq2022[10];
     int8_t escSeq2022Length;
   }
-UCNV_Data2022;
-
-typedef void (*UCNV_ToUCallBack) (UConverter *,
-				  UChar **,
-				  const UChar *,
-				  const char **,
-				  const char *,
-				  int32_t* offsets,
-				  bool_t,
-				  UErrorCode *);
-
-typedef void (*UCNV_FromUCallBack) (UConverter *,
-				    char **,
-				    const char *,
-				    const UChar **,
-				    const UChar *,
-				    int32_t* offsets,
-				    bool_t,
-				    UErrorCode *);
-
-
-/*Hashtable used to store UConverterSharedData objects supporting
- *the Caching mechanism
- */
-extern UHashtable *SHARED_DATA_HASHTABLE;
-
-/*Hashtable generated (lazy eval) by algorithmicConverterNames for fast lookup
- *Behaviour is completely different for the Algorithmic conversions.
- *we use this table to as a litmus test.
- */
-extern UHashtable *ALGORITHMIC_CONVERTERS_HASHTABLE;
-
-
-/*Array used to generate ALGORITHMIC_CONVERTERS_HASHTABLE
- *should ALWAYS BE NULL STRING TERMINATED.
- */
-static const char *algorithmicConverterNames[MAX_CONVERTER_NAME_LENGTH] = {
-  "LATIN_1",
-  "UTF8",
-  "UTF16_BigEndian",
-  "UTF16_LittleEndian",
-  "ISO_2022",
-  "JIS",
-  "EUC",
-  "GB",
-  "ISO_2022",
-  ""
-};
-
-/* figures out if we need to go to file to read in the data tables.
- */
-UConverter *createConverter (const char *converterName, UErrorCode * err);
-
-/* Stores the shared data in the SHARED_DATA_HASHTABLE
- */
-void shareConverterData (UConverterSharedData * data);
-
-/* gets the shared data from the SHARED_DATA_HASHTABLE (might return NULL if it isn't there)
- */
-UConverterSharedData *getSharedConverterData (const char *name);
-
-/* Deletes (frees) the Shared data it's passed. first it checks the referenceCounter to
- * see if anyone is using it, if not it frees all the memory stemming from sharedConverterData and
- * returns TRUE,
- * otherwise returns FALSE
- */
-bool_t deleteSharedConverterData (UConverterSharedData * sharedConverterData);
-
-/* returns true if "name" is in algorithmicConverterNames
- */
-bool_t isDataBasedConverter (const char *name);
-
-void copyPlatformString (char *platformString, UCNV_PLATFORM pltfrm);
+UConverterDataISO2022;
 
 
 #endif /* _UCNV_BLD */

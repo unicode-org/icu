@@ -36,14 +36,14 @@ extern int32_t AVAILABLE_CONVERTERS;
 bool_t isInSet (char c, const char *setOfChars);
 
 /*Remove all characters followed by '#' */
-CAPI char * U_EXPORT2 removeComments (char *line);
+U_CAPI char * U_EXPORT2 removeComments (char *line);
 
 
 /*Returns pointer to the next non-whitespace (or non-separators) */
-CAPI int32_t U_EXPORT2 nextTokenOffset (const char *line, const char *separators);
+U_CAPI int32_t U_EXPORT2 nextTokenOffset (const char *line, const char *separators);
 
 /*Copies the next string in token and returns an updated pointer to the next token */
-CAPI char * U_EXPORT2 getToken (char *token, char *line, const char *separators);
+U_CAPI char * U_EXPORT2 getToken (char *token, char *line, const char *separators);
 
 /*Takes an alias name and returns a FileStream pointer of the requested converter table or NULL, if not found */
 FileStream * U_EXPORT2 openConverterFile (const char *name);
@@ -57,8 +57,8 @@ bool_t resolveName (char *realName, const char *alias);
 void setupAliasTableAndAvailableConverters (UErrorCode * err);
 
 /*Uppercases a null-terminate string */
-CAPI char * U_EXPORT2 strtoupper (char *);
+U_CAPI char * U_EXPORT2 strtoupper (char *);
 
 /*case insensitive hash key*/
-CAPI int32_t U_EXPORT2 uhash_hashIString(const void* name);
+U_CAPI int32_t U_EXPORT2 uhash_hashIString(const void* name);
 #endif /* _UCNV_IO */

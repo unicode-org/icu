@@ -208,14 +208,14 @@ public:
      * Concrete subclasses of Format must implement getDynamicClassID()
      * and also a static method and data member:
      *
-     *      static ClassID getStaticClassID() { return (ClassID)&fgClassID; }
+     *      static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
      *      static char fgClassID;
      *
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    virtual ClassID getDynamicClassID() const = 0;
+    virtual UClassID getDynamicClassID() const = 0;
 
 protected:
     /**
