@@ -1,0 +1,389 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+lv {
+    Version{ "2.0"}
+    Countries { 
+        Fallback{ "en"}
+        AD { "Andora" }
+        AE { "Apvienotie Ar\u0101bu Emir\u0101ti" }
+        AF { "Afganist\u0101na" }
+        AG { "Antigva un Barbuda" }
+        AI { "Angilja" }
+        AL { "Alb\u0101nija" }
+        AM { "Arm\u0113nija" }
+        AN { "Anti\u013Cas" }
+        //AO { "Angola" }
+        AQ { "Antarktika" }
+        AR { "Argent\u012Bna" }
+        AS { "Amerik\u0101\u0146u Samoa" }
+        AT { "Austrija" }
+        AU { "Austr\u0101lija" }
+        //AW { "Aruba" }
+        AZ { "Azerbaid\u017E\u0101na" }
+        BA { "Bosnija un Hercegovina" }
+        BB { "Barbadosa" }
+        BD { "Banglade\u0161a" }
+        BE { "Be\u013C\u0123ija" }
+        BF { "Burkinafaso" }
+        BG { "Bulg\u0101rija" }
+        BH { "Bahreina" }
+        //BI { "Burundi" }
+        BJ { "Benina" }
+        BM { "Bermudu salas" }
+        BN { "Bruneja" }
+        BO { "Bol\u012Bvija" }
+        BR { "Braz\u012Blija" }
+        //BS { "Bahamas" }
+        BT { "But\u0101na" }
+        BV { "Buv\u0113 sala" }
+        BW { "Botsv\u0101na" }
+        BY { "Baltkrievija" }
+        BZ { "Beliza" }
+        CA { "Kan\u0101da" }
+        CC { "Kokosu (K\u012Blinga) salas" }
+        CD { "Kongo Demokr\u0101tisk\u0101 Republika" }
+        CF { "Centr\u0101l\u0101frikas Republika" }
+        CG { "Kongo" }
+        CH { "\u0160veice" }
+        CI { "Kotdivu\u0101ra" }
+        CK { "Kuka salas" }
+        CL { "\u010C\u012Ble" }
+        CM { "Kamer\u016Bna" }
+        CN { "\u0136\u012Bna" }
+        CO { "Kolumbija" }
+        CR { "Kostarika" }
+        CU { "Kuba" }
+        CV { "Kaboverde" }
+        CX { "Ziemsv\u0113tku sala" }
+        CY { "Kipra" }
+        CZ { "\u010Cehija" }
+        DE { "V\u0101cija" }
+        DJ { "D\u017Eibutija" }
+        DK { "D\u0101nija" }
+        DM { "Dominika" }
+        DO { "Dominik\u0101nas Republika" }
+        DZ { "Al\u017E\u012Brija" }
+        EC { "Ekvadora" }
+        EE { "Igaunija" }
+        EG { "\u0112\u0123ipte" }
+        EH { "Rietumsah\u0101ra" }
+        ER { "Eritreja" }
+        ES { "Sp\u0101nija" }
+        ET { "Etiopija" }
+        FI { "Somija" }
+        FJ { "Fid\u017Ei" }
+        FK { "Folklenda salas" }
+        FM { "Mikron\u0113zijas Federat\u012Bv\u0101s Valstis" }
+        FO { "Far\u0113ru salas" }
+        FR { "Francija" }
+        GA { "Gabona" }
+        GB { "Lielbrit\u0101nija" }
+        GD { "Gren\u0101da" }
+        GE { "Gruzija" }
+        GF { "Fran\u010Du Gvi\u0101na" }
+        GH { "Gana" }
+        GI { "Gibralt\u0101rs" }
+        GL { "Grenlande" }
+        GM { "Gambija" }
+        GN { "Gvineja" }
+        GP { "Gvadelupa" }
+        GQ { "Ekvatori\u0101l\u0101 Gvineja" }
+        GR { "Grie\u0137ija" }
+        GS { "Dienvidd\u017Eord\u017Eija un Dienvidsendvi\u010Du salas" }
+        GT { "Gvatemala" }
+        GU { "Guama" }
+        GW { "Gvineja-Bisava" }
+        GY { "Gaj\u0101na" }
+        HK { "Honkonga, \u0136\u012Bnas \u012Bpa\u0161\u0101s p\u0101rvaldes apgabals" }
+        HM { "H\u0113rda un Makdonalda salas" }
+        HN { "Hondurasa" }
+        HR { "Horv\u0101tija" }
+        //HT { "Haiti" }
+        HU { "Ung\u0101rija" }
+        ID { "Indon\u0113zija" }
+        IE { "\u012Arija" }
+        IL { "Izra\u0113la" }
+        IN { "Indija" }
+        IO { "Britu Indijas oke\u0101na teritorija" }
+        IQ { "Ir\u0101ka" }
+        IR { "Ir\u0101na" }
+        IS { "Islande" }
+        IT { "It\u0101lija" }
+        JM { "Jamaika" }
+        JO { "Jord\u0101nija" }
+        JP { "Jap\u0101na" }
+        KE { "Kenija" }
+        KG { "Kirg\u012Bzija" }
+        KH { "Kambod\u017Ea" }
+        //KI { "Kiribati" }
+        KM { "Komoru salas" }
+        KN { "Sentkitsa un Nevisa" }
+        KP { "Zieme\u013Ckoreja" }    // alternate name { "Korejas Tautas Demokr\u0101tisk\u0101 Republika" }
+        KR { "Dienvidkoreja" }    // alternate name { "Korejas Republika" }
+        KW { "Kuveita" }
+        KY { "Kaimanu salas" }
+        KZ { "Kazahst\u0101na" }
+        LA { "Laosa" }
+        LB { "Lib\u0101na" }
+        LC { "Sentl\u016Bsija" }
+        LI { "Lihten\u0161teina" }
+        LK { "\u0160rilanka" }
+        LR { "Lib\u0113rija" }
+        LS { "Lesoto" }
+        LT { "Lietuva" }
+        LU { "Luksemburga" }
+        LV { "Latvija" }
+        LY { "L\u012Bbija" }
+        MA { "Maroka" }
+        MC { "Monako" }
+        //MD { "Moldova" }
+        MG { "Madagaskara" }
+        MH { "M\u0101r\u0161ala salas" }
+        MK { "Ma\u0137edonija" }
+        //ML { "Mali" }
+        MM { "Mjanma" }
+        MN { "Mongolija" }
+        MO { "Makao, \u0136\u012Bnas \u012Bpa\u0161\u0101s p\u0101rvaldes apgabals" }
+        MP { "Zieme\u013Cu Marianas" }
+        MQ { "Martinika" }
+        MR { "Maurit\u0101nija" }
+        MS { "Montserrata" }
+        //MT { "Malta" }
+        MU { "Maur\u012Bcija" }
+        MV { "Mald\u012Bvija" }
+        MW { "Mal\u0101vija" }
+        MX { "Meksika" }
+        MY { "Malaizija" }
+        MZ { "Mozambika" }
+        NA { "Nam\u012Bbija" }
+        NC { "Jaunkaledonija" }
+        NE { "Nig\u0113ra" }
+        NF { "Norfolka" }
+        NG { "Nig\u0113rija" }
+        NI { "Nikaragva" }
+        NL { "N\u012Bderlande" }
+        NO { "Norv\u0113\u0123ija" }
+        NP { "Nep\u0101la" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Jaunz\u0113lande" }
+        OM { "Om\u0101na" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Fran\u010Du Polin\u0113zija" }
+        PG { "Papua-Jaungvineja" }
+        PH { "Filip\u012Bnas" }
+        PK { "Pakist\u0101na" }
+        PL { "Polija" }
+        PM { "Senpj\u0113ra un Mikelona" }
+        PN { "Pitk\u0113rna" }
+        PR { "Puertoriko" }
+        PS { "Palest\u012Bnie\u0161u pa\u0161p\u0101rvaldes teritorija" }
+        PT { "Portug\u0101le" }
+        //PW { "Palau" }
+        PY { "Paragvaja" }
+        QA { "Katara" }
+        RE { "Reinjona" }
+        RO { "Rum\u0101nija" }
+        RU { "Krievija" }
+        RW { "Ruanda" }
+        SA { "Sa\u016Bda Ar\u0101bija" }
+        SB { "Z\u0101lamana salas" }
+        SC { "Sei\u0161e\u013Cu salas" }
+        SD { "Sud\u0101na" }
+        SE { "Zviedrija" }
+        SG { "Singap\u016Bra" }
+        SH { "Sv. Hel\u0113nas sala" }
+        SI { "Slov\u0113nija" }
+        SJ { "Svalb\u0101ra un Jana Majena sala" }
+        SK { "Slov\u0101kija" }
+        SL { "Sjerraleone" }
+        SM { "Sanmar\u012Bno" }
+        SN { "Seneg\u0101la" }
+        SO { "Som\u0101lija" }
+        SR { "Surinama" }
+        ST { "Santome un Prinsipi" }
+        SV { "Salvadora" }
+        SY { "S\u012Brija" }    // alternate name { "S\u012Brijas Ar\u0101bu Republika" }
+        SZ { "Svazilenda" }
+        TC { "T\u0113rksas un Kaikosas salas" }
+        TD { "\u010Cada" }
+        TF { "Fran\u010Du dienvidu teritorijas" }
+        //TG { "Togo" }
+        TH { "Taizeme" }
+        TJ { "Tad\u017Eikist\u0101na" }
+        //TK { "Tokelau" }
+        TL { "Austrumtimora" }
+        TM { "Turkmenist\u0101na" }
+        TN { "Tunisija" }
+        //TO { "Tonga" }
+        TR { "Turcija" }
+        TT { "Trinid\u0101da un Tob\u0101go" }
+        //TV { "Tuvalu" }
+        TW { "Taiv\u0101na, \u0136\u012Bnas province" }
+        TZ { "Tanz\u0101nija" }
+        UA { "Ukraina" }
+        //UG { "Uganda" }
+        UM { "ASV maz\u0101s aizj\u016Bras teritorijas" }
+        //US { "ASV" } // Poor translation. ASV -> United States
+        UY { "Urugvaja" }
+        UZ { "Uzbekist\u0101na" }
+        VA { "Vatik\u0101ns" }
+        VC { "Sentvinsenta un Grenad\u012Bnas" }
+        VE { "Venecu\u0113la" }
+        VG { "Britu Vird\u017E\u012Bnu salas" }
+        VI { "Amerik\u0101\u0146u Vird\u017E\u012Bnu salas" } // Poor translation? Amerik\u0101\u0146u -> United States
+        VN { "Vjetnama" }
+        //VU { "Vanuatu" }
+        WF { "Volisa un Futuna" }
+        //WS { "Samoa" }
+        YE { "Jemena" }
+        YT { "Majota" }
+        YU { "Dienvidsl\u0101vija" }
+        ZA { "Dienvid\u0101frika" }
+        ZM { "Zambija" }
+        ZW { "Zimbabve" }
+    }
+
+    Languages { 
+        ar { "ar\u0101bu" }
+        bg { "bulg\u0101ru" }
+        cs { "\u010Dehu" }
+        da { "d\u0101\u0146u" }
+        de { "v\u0101cu" }
+        el { "grie\u0137u" }
+        en { "ang\u013Cu" }
+        es { "sp\u0101\u0146u" }
+        et { "igau\u0146u" }
+        fi { "somu" }
+        fr { "fran\u010Du" }
+        he { "ivrits" }
+        hr { "horv\u0101tu" }
+        hu { "ung\u0101ru" }
+        it { "it\u0101lie\u0161u" }
+        ja { "jap\u0101\u0146u" }
+        ko { "korejie\u0161u" }
+        lt { "lietuvie\u0161u" }
+        lv { "latvie\u0161u" }
+        nl { "holandie\u0161u" }
+        no { "norv\u0113\u0123u" }
+        pl { "po\u013Cu" }
+        pt { "portug\u0101\u013Cu" }
+        ro { "rum\u0101\u0146u" }
+        ru { "krievu" }
+        sk { "slov\u0101ku" }
+        sl { "slov\u0113\u0146u" }
+        sv { "zviedru" }
+        tr { "turku" }
+        zh { "\u0137\u012Bnie\u0161u" }
+        //zh_cn { "\u0137\u012Bnie\u0161u (vienk\u0101r\u0161ot\u0101)" }
+        //zh_tw { "\u0137\u012Bnie\u0161u (tradicion\u0101l\u0101)" }
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
+    ExemplarCharacters { "[a-z \u0101 \u0113 \u012b \u014d \u016b \u0123 \u0137 \u013c \u0146 \u0157 \u010d \u0161 \u017e]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+
+    // Currency display names
+    Currencies {
+        LVL { "Ls", "LVL" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy'. gada 'd. MMMM",
+                "yyyy'. gada 'd. MMMM",
+                "yyyy.d.M",
+                "yy.d.M",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sv",
+                        "P",
+                        "O",
+                        "T",
+                        "C",
+                        "Pk",
+                        "S",
+                    }
+                    wide{
+                        "sv\u0113tdiena",
+                        "pirmdiena",
+                        "otrdiena",
+                        "tre\u0161diena",
+                        "ceturtdiena",
+                        "piektdiena",
+                        "sestdiena",
+                    }
+                }
+            }
+            eras{
+                "pm\u0113",
+                "m\u0113",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mai",
+                        "J\u016Bn",
+                        "J\u016Bl",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "janv\u0101ris",
+                        "febru\u0101ris",
+                        "marts",
+                        "apr\u012Blis",
+                        "maijs",
+                        "j\u016Bnijs",
+                        "j\u016Blijs",
+                        "augusts",
+                        "septembris",
+                        "oktobris",
+                        "novembris",
+                        "decembris",
+                    }
+                }
+            }
+        }
+    }
+}

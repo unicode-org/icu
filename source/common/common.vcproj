@@ -1,0 +1,1898 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="common"
+	ProjectGUID="{F0C3266C-B49D-4097-BDBD-EEB592017672}"
+	SccProjectName=""
+	SccLocalPath="">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\..\..\lib"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="2"
+				ImproveFloatingPointConsistency="TRUE"
+				OptimizeForProcessor="2"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;U_COMMON_IMPLEMENTATION"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				DisableLanguageExtensions="TRUE"
+				PrecompiledHeaderFile=".\Release/common.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				BrowseInformation="1"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="3"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="..\..\bin\icuuc30.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				ProgramDatabaseFile=".\..\..\lib/icuuc30.pdb"
+				BaseAddress="0x4a800000"
+				ImportLibrary="..\..\lib\icuuc.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\..\..\lib/common.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\..\..\lib"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				ImproveFloatingPointConsistency="TRUE"
+				OptimizeForProcessor="2"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;U_COMMON_IMPLEMENTATION;RBBI_DEBUG"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				DisableLanguageExtensions="TRUE"
+				PrecompiledHeaderFile=".\Debug/common.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				BrowseInformation="1"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="..\..\bin\icuuc30d.dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\..\..\lib/icuuc30d.pdb"
+				BaseAddress="0x4a800000"
+				ImportLibrary="..\..\lib\icuucd.lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\..\..\lib/common.tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="bidi"
+			Filter="">
+			<File
+				RelativePath=".\ubidi.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ubidi.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ubidiimp.h">
+			</File>
+			<File
+				RelativePath=".\ubidiln.c">
+			</File>
+			<File
+				RelativePath=".\ubidiwrt.c">
+			</File>
+			<File
+				RelativePath=".\ushape.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ushape.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="break iteration"
+			Filter="">
+			<File
+				RelativePath=".\brkdict.cpp">
+			</File>
+			<File
+				RelativePath=".\brkdict.h">
+			</File>
+			<File
+				RelativePath=".\brkiter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\brkiter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\dbbi.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\dbbi.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\dbbi_tbl.cpp">
+			</File>
+			<File
+				RelativePath=".\dbbi_tbl.h">
+			</File>
+			<File
+				RelativePath=".\rbbi.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\rbbi.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\rbbidata.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbidata.h">
+			</File>
+			<File
+				RelativePath=".\rbbinode.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbinode.h">
+			</File>
+			<File
+				RelativePath=".\rbbirb.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbirb.h">
+			</File>
+			<File
+				RelativePath=".\rbbirpt.h">
+			</File>
+			<File
+				RelativePath=".\rbbiscan.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbiscan.h">
+			</File>
+			<File
+				RelativePath=".\rbbisetb.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbisetb.h">
+			</File>
+			<File
+				RelativePath=".\rbbistbl.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbitblb.cpp">
+			</File>
+			<File
+				RelativePath=".\rbbitblb.h">
+			</File>
+			<File
+				RelativePath=".\ubrk.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\ubrk.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="collation"
+			Filter="">
+			<File
+				RelativePath=".\ucol_swp.c">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\i18n"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\i18n"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ucol_swp.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="collections"
+			Filter="">
+			<File
+				RelativePath=".\hash.h">
+			</File>
+			<File
+				RelativePath=".\unicode\strenum.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uarrsort.c">
+			</File>
+			<File
+				RelativePath=".\uarrsort.h">
+			</File>
+			<File
+				RelativePath=".\ucmp8.c">
+			</File>
+			<File
+				RelativePath=".\ucmp8.h">
+			</File>
+			<File
+				RelativePath=".\uenum.c">
+			</File>
+			<File
+				RelativePath=".\unicode\uenum.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uenumimp.h">
+			</File>
+			<File
+				RelativePath=".\uhash.c">
+			</File>
+			<File
+				RelativePath=".\uhash.h">
+			</File>
+			<File
+				RelativePath=".\uhash_us.cpp">
+			</File>
+			<File
+				RelativePath=".\ustack.cpp">
+			</File>
+			<File
+				RelativePath=".\ustrenum.cpp">
+			</File>
+			<File
+				RelativePath=".\ustrenum.h">
+			</File>
+			<File
+				RelativePath=".\utrie.c">
+			</File>
+			<File
+				RelativePath=".\utrie.h">
+			</File>
+			<File
+				RelativePath=".\uvector.cpp">
+			</File>
+			<File
+				RelativePath=".\uvector.h">
+			</File>
+			<File
+				RelativePath=".\uvectr32.cpp">
+			</File>
+			<File
+				RelativePath=".\uvectr32.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="configuration"
+			Filter="">
+			<File
+				RelativePath=".\common.rc">
+			</File>
+			<File
+				RelativePath=".\cpputils.h">
+			</File>
+			<File
+				RelativePath=".\filestrm.c">
+			</File>
+			<File
+				RelativePath=".\filestrm.h">
+			</File>
+			<File
+				RelativePath=".\locmap.c">
+			</File>
+			<File
+				RelativePath=".\locmap.h">
+			</File>
+			<File
+				RelativePath=".\mutex.h">
+			</File>
+			<File
+				RelativePath=".\putil.c">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="FALSE"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="FALSE"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\putil.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\pwin32.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uassert.h">
+			</File>
+			<File
+				RelativePath=".\unicode\uconfig.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\umachine.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\umemstrm.c">
+			</File>
+			<File
+				RelativePath=".\umemstrm.h">
+			</File>
+			<File
+				RelativePath=".\umutex.c">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="FALSE"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="FALSE"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\umutex.h">
+			</File>
+			<File
+				RelativePath=".\unicode\urename.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\utrace.c">
+			</File>
+			<File
+				RelativePath=".\unicode\utrace.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\utracimp.h">
+			</File>
+			<File
+				RelativePath=".\unicode\utypes.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\uversion.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\udraft.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\udeprctd.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\uobslete.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="conversion"
+			Filter="">
+			<File
+				RelativePath=".\ucnv.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ucnv.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ucnv2022.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_bld.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_bld.h">
+			</File>
+			<File
+				RelativePath=".\ucnv_cb.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ucnv_cb.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ucnv_cnv.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_cnv.h">
+			</File>
+			<File
+				RelativePath=".\ucnv_err.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ucnv_err.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ucnv_ext.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_ext.h">
+			</File>
+			<File
+				RelativePath=".\ucnv_imp.h">
+			</File>
+			<File
+				RelativePath=".\ucnv_io.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_io.h">
+			</File>
+			<File
+				RelativePath=".\ucnv_lmb.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_u16.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_u32.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_u7.c">
+			</File>
+			<File
+				RelativePath=".\ucnv_u8.c">
+			</File>
+			<File
+				RelativePath=".\ucnvbocu.c">
+			</File>
+			<File
+				RelativePath=".\ucnvhz.c">
+			</File>
+			<File
+				RelativePath=".\ucnvisci.c">
+			</File>
+			<File
+				RelativePath=".\ucnvlat1.c">
+			</File>
+			<File
+				RelativePath=".\ucnvmbcs.c">
+			</File>
+			<File
+				RelativePath=".\ucnvmbcs.h">
+			</File>
+			<File
+				RelativePath=".\ucnvscsu.c">
+			</File>
+		</Filter>
+		<Filter
+			Name="data &amp; memory"
+			Filter="">
+			<File
+				RelativePath=".\cmemory.c">
+			</File>
+			<File
+				RelativePath=".\cmemory.h">
+			</File>
+			<File
+				RelativePath=".\unicode\uclean.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ucln.h">
+			</File>
+			<File
+				RelativePath=".\ucln_cmn.c">
+			</File>
+			<File
+				RelativePath=".\ucln_cmn.h">
+			</File>
+			<File
+				RelativePath=".\ucmndata.c">
+			</File>
+			<File
+				RelativePath=".\ucmndata.h">
+			</File>
+			<File
+				RelativePath=".\udata.c">
+			</File>
+			<File
+				RelativePath=".\unicode\udata.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\udatamem.c">
+			</File>
+			<File
+				RelativePath=".\udatamem.h">
+			</File>
+			<File
+				RelativePath=".\udataswp.c">
+			</File>
+			<File
+				RelativePath=".\udataswp.h">
+			</File>
+			<File
+				RelativePath=".\umapfile.c">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="FALSE"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						DisableLanguageExtensions="FALSE"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\umapfile.h">
+			</File>
+			<File
+				RelativePath=".\uobject.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uobject.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="formatting"
+			Filter="">
+			<File
+				RelativePath=".\unicode\parseerr.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\parsepos.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\parsepos.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\umisc.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ustrfmt.c">
+			</File>
+			<File
+				RelativePath=".\ustrfmt.h">
+			</File>
+			<File
+				RelativePath=".\util.cpp">
+			</File>
+			<File
+				RelativePath=".\util.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="idna"
+			Filter="*.c,*.h">
+			<File
+				RelativePath=".\punycode.c">
+			</File>
+			<File
+				RelativePath=".\punycode.h">
+			</File>
+			<File
+				RelativePath=".\uidna.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uidna.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="locales &amp; resources"
+			Filter="">
+			<File
+				RelativePath=".\locbased.cpp">
+			</File>
+			<File
+				RelativePath=".\locbased.h">
+			</File>
+			<File
+				RelativePath=".\locid.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\locid.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\resbund.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\resbund.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ucat.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ucat.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uloc.c">
+			</File>
+			<File
+				RelativePath=".\ulocimp.h">
+			</File>
+			<File
+				RelativePath=".\unicode\uloc.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\ures.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uresbund.c">
+			</File>
+			<File
+				RelativePath=".\uresdata.c">
+			</File>
+			<File
+				RelativePath=".\uresdata.h">
+			</File>
+			<File
+				RelativePath=".\uresimp.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="normalization"
+			Filter="">
+			<File
+				RelativePath=".\caniter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\caniter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\normlzr.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\normlzr.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unorm.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\unorm.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unorm_it.c">
+			</File>
+			<File
+				RelativePath=".\unorm_it.h">
+			</File>
+			<File
+				RelativePath=".\unormimp.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="properties &amp; sets"
+			Filter="">
+			<File
+				RelativePath=".\propname.cpp">
+			</File>
+			<File
+				RelativePath=".\propname.h">
+			</File>
+			<File
+				RelativePath=".\ruleiter.cpp">
+			</File>
+			<File
+				RelativePath=".\ruleiter.h">
+			</File>
+			<File
+				RelativePath=".\unicode\symtable.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uchar.c">
+			</File>
+			<File
+				RelativePath=".\unicode\uchar.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unames.c">
+			</File>
+			<File
+				RelativePath=".\unifilt.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\unifilt.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unifunct.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\unifunct.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\unimatch.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uniset.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uniset.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uprops.c">
+			</File>
+			<File
+				RelativePath=".\uprops.h">
+			</File>
+			<File
+				RelativePath=".\usc_impl.c">
+			</File>
+			<File
+				RelativePath=".\usc_impl.h">
+			</File>
+			<File
+				RelativePath=".\uscript.c">
+			</File>
+			<File
+				RelativePath=".\unicode\uscript.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uset.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uset.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\usetiter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\usetiter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="registration"
+			Filter="">
+			<File
+				RelativePath=".\iculserv.cpp">
+			</File>
+			<File
+				RelativePath=".\iculserv.h">
+			</File>
+			<File
+				RelativePath=".\icunotif.cpp">
+			</File>
+			<File
+				RelativePath=".\icunotif.h">
+			</File>
+			<File
+				RelativePath=".\icuserv.cpp">
+			</File>
+			<File
+				RelativePath=".\icuserv.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="sprep"
+			Filter="">
+			<File
+				RelativePath=".\sprpimpl.h">
+			</File>
+			<File
+				RelativePath=".\usprep.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\usprep.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="strings"
+			Filter="">
+			<File
+				RelativePath=".\chariter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\chariter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\charstr.h">
+			</File>
+			<File
+				RelativePath=".\cstring.c">
+			</File>
+			<File
+				RelativePath=".\cstring.h">
+			</File>
+			<File
+				RelativePath=".\cwchar.c">
+			</File>
+			<File
+				RelativePath=".\cwchar.h">
+			</File>
+			<File
+				RelativePath=".\unicode\rep.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\schriter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\schriter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uchriter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uchriter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uiter.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\uiter.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unistr.cpp">
+			</File>
+			<File
+				RelativePath=".\unicode\unistr.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\urep.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ustr_imp.h">
+			</File>
+			<File
+				RelativePath=".\ustrcase.c">
+			</File>
+			<File
+				RelativePath=".\ustring.c">
+			</File>
+			<File
+				RelativePath=".\unicode\ustring.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ustrtrns.c">
+			</File>
+			<File
+				RelativePath=".\unicode\utf.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\utf16.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\utf32.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\unicode\utf8.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\utf_impl.c">
+			</File>
+			<File
+				RelativePath=".\unicode\utf_old.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

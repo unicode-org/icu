@@ -1,0 +1,18 @@
+﻿// ****************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar {
+    Version{"2.0"}
+    collations {
+      standard { 
+        // according to Ayman M. Roshdy
+        Version { "3.0" }
+        Sequence { "& ة"
+                "= ت"}
+      }
+    }
+}

@@ -1,0 +1,14 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+hi__DIRECT {
+    Version { "1.1" }
+    // This is the order ICU originaly used
+    collations {
+      default { "direct" }
+    }
+}

@@ -1,0 +1,22 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+root {
+   Version { "1.0" }
+    // TODO: Remove this
+    // this is a special tag that makes genrb include UCARules.txt for collation
+    "%%UCARULES" { "UCARules.txt"} // UCARules
+
+    collations {
+        standard {
+            Version  { "0.0" }
+            Sequence { "" }
+        }
+        default { "standard" }
+    }
+
+}

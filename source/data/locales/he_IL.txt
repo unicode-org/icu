@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+he_IL {
+    Version { "2.0" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+    calendar {
+      gregorian {
+          weekend:intvector {
+           6, 0,   // onset dow, millis in day  (Friday   12:00am)
+           1, 0    // cease dow, millis in day  (Saturday 12:00am)
+          }
+       }
+    }
+}

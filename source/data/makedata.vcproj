@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="makedata"
+	SccProjectName=""
+	SccLocalPath=""
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="0"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=release"
+				ReBuildCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=release clean all"
+				CleanCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=release clean"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="0"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=debug"
+				ReBuildCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=debug clean all"
+				CleanCommandLine="NMAKE /f makedata.mak ICUMAKE=&quot;$(ProjectDir)\&quot; CFG=debug clean"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Resource Files"
+			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		</Filter>
+		<Filter
+			Name="Make Files"
+			Filter="mak;mk">
+			<File
+				RelativePath=".\makedata.mak">
+			</File>
+			<File
+				RelativePath=".\misc\miscfiles.mk">
+			</File>
+			<File
+				RelativePath=".\locales\resfiles.mk">
+			</File>
+			<File
+				RelativePath="..\test\testdata\testdata.mk">
+			</File>
+			<File
+				RelativePath=".\translit\trnsfiles.mk">
+			</File>
+			<File
+				RelativePath=".\mappings\ucmcore.mk">
+			</File>
+			<File
+				RelativePath=".\mappings\ucmebcdic.mk">
+			</File>
+			<File
+				RelativePath=".\mappings\ucmfiles.mk">
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

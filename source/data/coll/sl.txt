@@ -1,0 +1,28 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sl {
+    Version{"2.0"}
+    collations {
+      standard { 
+        Version { "1.0" }
+        Sequence { "
+& C
+ < č
+   <<< Č
+ < ć
+   <<< Ć
+& S
+ < š
+   <<< Š
+& Z
+ < ž
+   <<< Ž
+" }
+      }
+    }
+}

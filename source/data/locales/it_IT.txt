@@ -1,0 +1,41 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+it_IT {
+    Version{ "2.0" }
+//    NumberPatterns { 
+//        "#,##0.###;-#,##0.###",
+//        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+//        "#,##0%",
+//    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "H:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MMM/yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+    Currencies{
+        ITL { 
+            "\u20A4", 
+            "Lira Italiana", 
+            :array{
+                "\u00A4 #,##0;-\u00A4 #,##0", /* currency pattern */
+                ",", /* decimal separator */
+                ".", /* grouping separator */
+            }
+        }
+    }
+}

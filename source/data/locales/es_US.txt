@@ -1,0 +1,57 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+es_US {
+    Version { "2.0" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00a4#,##0.00;(\u00a4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+
+    // the PaperSize units are in mm
+    // these values are not exact .. they are rounded off
+    PaperSize:intvector{
+        279, // height
+        216  // width 
+    }
+    MeasurementSystem:int{ 1 } // US system
+    calendar{
+        gregorian{
+            DateTimeElements:intvector { 
+                1,
+                1,
+            }
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "MMM d, yyyy",
+                "M/d/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

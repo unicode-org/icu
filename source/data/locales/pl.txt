@@ -1,0 +1,480 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+pl {
+    Version{ "3.0" }
+    Countries { 
+        Fallback{ "en"}
+        AD { "Andora" }
+        AE { "Zjednoczone Emiraty Arabskie" }
+        AF { "Afganistan" }
+        AG { "Antigua i Barbuda" }
+        //AI { "Anguilla" }
+        //AL { "Albania" }
+        //AM { "Armenia" }
+        AN { "Antyle Holenderskie" }
+        //AO { "Angola" }
+        AQ { "Antarktyka" }
+        AR { "Argentyna" }
+        AS { "Samoa Ameryka\u0144skie" }
+        //AT { "Austria" }
+        //AU { "Australia" }
+        //AW { "Aruba" }
+        AZ { "Azerbejd\u017Can" }
+        BA { "Bo\u015Bnia i Hercegowina" }
+        //BB { "Barbados" }
+        BD { "Bangladesz" }
+        BE { "Belgia" }
+        //BF { "Burkina Faso" }
+        BG { "Bu\u0142garia" }
+        BH { "Bahrajn" }
+        //BI { "Burundi" }
+        //BJ { "Benin" }
+        BM { "Bermudy" }
+        BN { "Brunei Darussalam" }
+        BO { "Boliwia" }
+        BR { "Brazylia" }
+        BS { "Bahamy" }
+        //BT { "Bhutan" }
+        BV { "Wyspa Bouveta" }
+        //BW { "Botswana" }
+        BY { "Bia\u0142oru\u015B" }
+        //BZ { "Belize" }
+        CA { "Kanada" }
+        CC { "Wyspy Kokosowe (Keelinga)" }
+        CD { "Kongo, Republika Demokratyczna" }
+        CF { "Republika \u015Arodkowej Afryki" }
+        CG { "Kongo" }
+        CH { "Szwajcaria" }
+        CI { "Wybrze\u017Ce Ko\u015Bci S\u0142oniowej" }
+        CK { "Wyspy Cooka" }
+        //CL { "Chile" }
+        CM { "Kamerun" }
+        CN { "Chiny" }
+        CO { "Kolumbia" }
+        CR { "Kostaryka" }
+        CU { "Kuba" }
+        CV { "Wyspy Zielonego Przyl\u0105dka" }
+        CX { "Wyspa Bo\u017Cego Narodzenia" }
+        CY { "Cypr" }
+        CZ { "Republika Czeska" }
+        DE { "Niemcy" }
+        DJ { "D\u017Cibuti" }
+        DK { "Dania" }
+        DM { "Dominika" }
+        DO { "Republika Dominika\u0144ska" }
+        DZ { "Algieria" }
+        EC { "Ekwador" }
+        //EE { "Estonia" }
+        EG { "Egipt" }
+        EH { "Sahara Zachodnia" }
+        ER { "Erytrea" }
+        ES { "Hiszpania" }
+        ET { "Etiopia" }
+        FI { "Finlandia" }
+        FJ { "Fid\u017Ci" }
+        FK { "Falklandy (Malwiny)" }    // alternate name { "Falklandy" }
+        FM { "Mikronezja, Stany Sfederowane" }
+        FO { "Wyspy Owcze" }
+        FR { "Francja" }
+        //GA { "Gabon" }
+        GB { "Wielka Brytania" }
+        //GD { "Grenada" }
+        GE { "Gruzja" }
+        GF { "Gujana Francuska" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
+        GL { "Grenlandia" }
+        //GM { "Gambia" }
+        GN { "Gwinea" }
+        GP { "Gwadelupa" }
+        GQ { "Gwinea R\u00F3wnikowa" }
+        GR { "Grecja" }
+        GS { "Wyspy Georgia Po\u0142udniowa i Sandwich Po\u0142udniowy" }
+        GT { "Gwatemala" }
+        //GU { "Guam" }
+        GW { "Gwinea Bissau" }
+        GY { "Gujana" }
+        HK { "Hongkong, Specjalny Region Administracyjny Chin" }
+        HM { "Wyspy Heard i McDonald" }
+        //HN { "Honduras" }
+        HR { "Chorwacja" }
+        //HT { "Haiti" }
+        HU { "W\u0119gry" }
+        ID { "Indonezja" }
+        IE { "Irlandia" }
+        IL { "Izrael" }
+        IN { "Indie" }
+        IO { "Terytorium Brytyjskie Oceanu Indyjskiego" }
+        IQ { "Irak" }
+        //IR { "Iran" }
+        IS { "Islandia" }
+        IT { "W\u0142ochy" }
+        JM { "Jamajka" }
+        JO { "Jordania" }
+        JP { "Japonia" }
+        KE { "Kenia" }
+        KG { "Kirgistan" }
+        KH { "Kambod\u017Ca" }
+        //KI { "Kiribati" }
+        KM { "Komory" }
+        KN { "Saint Kitts i Nevis" }
+        KP { "Korea P\u00F3\u0142nocna" }    // alternate name { "Korea, Demokratyczna Republika Ludowa" }
+        KR { "Korea Po\u0142udniowa" }    // alternate name { "Korea, Republika" }
+        KW { "Kuwejt" }
+        KY { "Kajmany" }
+        KZ { "Kazachstan" }
+        LA { "Laos (Demokratyczna Republika Ludowa)" }
+        LB { "Liban" }
+        //LC { "Saint Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        //LS { "Lesotho" }
+        LT { "Litwa" }
+        LU { "Luksemburg" }
+        LV { "\u0141otwa" }
+        LY { "Libijska" }    // alternate name { "Libijska Arabska Jamahiria" }
+        MA { "Maroko" }
+        MC { "Monako" }
+        MD { "Mo\u0142dawia, Republika" }
+        MG { "Madagaskar" }
+        MH { "Wyspy Marshalla" }
+        MK { "Macedonia, Republika" }
+        //ML { "Mali" }
+        MM { "Birma" }
+        //MN { "Mongolia" }
+        MO { "Makau, Specjalny Region Administracyjny Chin" }
+        MP { "Wsp\u00F3lnota Marian\u00F3w P\u00F3\u0142nocnych" }
+        MQ { "Martynika" }
+        MR { "Mauretania" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
+        //MU { "Mauritius" }
+        MV { "Malediwy" }
+        //MW { "Malawi" }
+        MX { "Meksyk" }
+        MY { "Malezja" }
+        MZ { "Mozambik" }
+        //NA { "Namibia" }
+        NC { "Nowa Kaledonia" }
+        //NE { "Niger" }
+        NF { "Wyspa Norfolk" }
+        //NG { "Nigeria" }
+        NI { "Nikaragua" }
+        NL { "Holandia" }
+        NO { "Norwegia" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
+        NZ { "Nowa Zelandia" }
+        //OM { "Oman" }
+        //PA { "Panama" }
+        //PE { "Peru" }
+        PF { "Polinezja Francuska" }
+        PG { "Papua Nowa Gwinea" }
+        PH { "Filipiny" }
+        //PK { "Pakistan" }
+        PL { "Polska" }
+        PM { "St. Pierre i Miquelon" }
+        //PN { "Pitcairn" }
+        //PR { "Puerto Rico" }
+        PS { "Terytoria Palesty\u0144skie" }
+        PT { "Portugalia" }
+        //PW { "Palau" }
+        PY { "Paragwaj" }
+        QA { "Katar" }
+        RE { "Reunion" }
+        RO { "Rumunia" }
+        RU { "Federacja Rosyjska" }
+        //RW { "Rwanda" }
+        SA { "Arabia Saudyjska" }
+        SB { "Wyspy Salomona" }
+        SC { "Seszele" }
+        //SD { "Sudan" }
+        SE { "Szwecja" }
+        SG { "Singapur" }
+        SH { "Wyspa \u015Awi\u0119tej Heleny" }
+        SI { "S\u0142owenia" }
+        SJ { "Svalbard i Wyspy Jan Mayen" }
+        SK { "S\u0142owacja" }
+        //SL { "Sierra Leone" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        //SO { "Somalia" }
+        SR { "Surinam" }
+        ST { "Wyspy \u015Awi\u0119tego Tomasza i Ksi\u0105\u017C\u0119ca" }
+        SV { "Salwador" }
+        //SY { "Syria" }    // alternate name { "Syryjska Republika Arabska" }
+        SZ { "Suazi" }
+        TC { "Turks i Caicos" }
+        TD { "Czad" }
+        TF { "Francuskie Terytoria Po\u0142udniowe" }
+        //TG { "Togo" }
+        TH { "Tajlandia" }
+        TJ { "Tad\u017Cykistan" }
+        //TK { "Tokelau" }
+        TL { "Timor Wschodni" }
+        TM { "Turkmenia" }
+        TN { "Tunezja" }
+        //TO { "Tonga" }
+        TR { "Turcja" }
+        TT { "Trinidad i Tobago" }
+        //TV { "Tuvalu" }
+        TW { "Tajwan" }
+        //TZ { "Tanzania" }
+        UA { "Ukraina" }
+        //UG { "Uganda" }
+        //UM { "United States Minor Outlying Islands" }
+        US { "Stany Zjednoczone" }
+        UY { "Urugwaj" }
+        //UZ { "Uzbekistan" }
+        VA { "Stolica Apostolska (Pa\u0144stwo Watyka\u0144skie)" }
+        //VC { "Saint Vincent and the Grenadines" }
+        VE { "Wenezuela" }
+        VG { "Brytyjskie Wyspy Dziewicze" }
+        VI { "Wyspy Dziewicze, Stan\u00F3w Zjednoczonych" }
+        VN { "Wietnam" }
+        //VU { "Vanuatu" }
+        WF { "Wallis i Futuna" }
+        //WS { "Samoa" }
+        YE { "Jemen" }
+        YT { "Majotta" }
+        YU { "Jugos\u0142awia" }
+        ZA { "Afryka Po\u0142udniowa" }
+        //ZM { "Zambia" }
+        //ZW { "Zimbabwe" }
+    }
+
+    Languages { 
+        ar { "arabski" }
+        bg { "bu\u0142garski" }
+        cs { "czeski" }
+        da { "du\u0144ski" }
+        de { "niemiecki" }
+        el { "grecki" }
+        en { "angielski" }
+        es { "hiszpa\u0144ski" }
+        et { "esto\u0144ski" }
+        fi { "fi\u0144ski" }
+        fr { "francuski" }
+        he { "hebrajski" }
+        hr { "chorwacki" }
+        hu { "w\u0119gierski" }
+        it { "w\u0142oski" }
+        ja { "japo\u0144ski" }
+        ko { "korea\u0144ski" }
+        lt { "litewski" }
+        lv { "\u0142otewski" }
+        nl { "holenderski" }
+        no { "norweski" }
+        pl { "polski" }
+        pt { "portugalski" }
+        ro { "rumu\u0144ski" }
+        ru { "rosyjski" }
+        sk { "s\u0142owacki" }
+        sl { "s\u0142owe\u0144ski" }
+        sv { "szwedzki" }
+        tr { "turecki" }
+        zh { "chi\u0144ski" }
+        //zh_cn { "chi\u0144ski (uproszczony)" }
+        //zh_tw { "chi\u0144ski (tradycyjny)" }
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    SpelloutRules {
+        "-x: minus >>;\n"
+        "zero; jeden; dwa; trzy; cztery; pi\u0119\u0107;\n"
+        "sze\u015B\u0107; siedem; osiem; dziewi\u0119\u0107; dziesi\u0119\u0107;\n"
+        "jedena\u015Bcie; dwana\u015Bcie; trzyna\u015Bcie; czterna\u015Bcie; pi\u0119tna\u015Bcie;\n"
+        "szesna\u015Bcie; siedemna\u015Bcie; osiemna\u015Bcie; dziewi\u0119tna\u015Bcie;\n"
+        "20: dwadzie\u015Bcia[ >>];\n"
+        "30: trzydzie\u015Bci[ >>];\n"
+        "40: czterdzie\u015Bci[ >>];\n"
+        "50: pi\u0119\u0107dziesi\u0105t[ >>];\n"
+        "60: sze\u015B\u0107dziesi\u0105t[ >>];\n"
+        "70: siedemdziesi\u0105t[ >>];\n"
+        "80: osiemdziesi\u0105t[ >>];\n"
+        "90: dziewi\u0119\u0107dziesi\u0105t[ >>];\n"
+        "100: sto[ >>];\n"
+        "200: dwie\u015Bcie[ >>];\n"
+        "300: trzysta[ >>];\n"
+        "400: czterysta[ >>];\n"
+        "500: pi\u0119\u0107set[ >>];\n"
+        "600: sze\u015B\u0107set[ >>];\n"
+        "700: siedemset[ >>];\n"
+        "800: osiemset[ >>];\n"
+        "900: dziewi\u0119\u0107set[ >>];\n"
+        "1000: tysi\u0105c[ >>];\n"
+        "2000: << tysi\u0105cy[ >>];\n"
+        "1,000,000: milion[ >>];\n"
+        "2,000,000: << miliony[ >>];\n"
+        "1,000,000,000: bilion[ >>];\n"
+        "2,000,000,000: << biliony[ >>];\n"
+        "1,000,000,000,000: trylion[ >>];\n"
+        "2,000,000,000,000: << tryliony[ >>];\n"
+        "1,000,000,000,000,000: =#,##0=;" 
+    }
+
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z \u00f3 \u0105 \u0119 \u0107 \u0144 \u015b \u017a \u0142 \u017c]" }
+
+    // Currency display names
+    Currencies {
+        PLN { "z\u0142", "PLN" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector { 
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "yyyy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "N",
+                        "Pn",
+                        "Wt",
+                        "\u015Ar",
+                        "Cz",
+                        "Pt",
+                        "So",
+                    }
+                    wide{
+                        "niedziela",
+                        "poniedzia\u0142ek",
+                        "wtorek",
+                        "\u015Broda",
+                        "czwartek",
+                        "pi\u0105tek",
+                        "sobota",
+                    }
+                }
+            }
+            eras{
+                "p.n.e.",
+                "n.e.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "st",
+                        "lut",
+                        "mrz",
+                        "kw",
+                        "maj",
+                        "cz",
+                        "lip",
+                        "sier",
+                        "wrz",
+                        "pa\u017a",
+                        "lis",
+                        "gr"
+                    }
+                    narrow {
+                        "s",
+                        "l",
+                        "m",
+                        "k",
+                        "m",
+                        "c",
+                        "l",
+                        "s",
+                        "w",
+                        "p",
+                        "l",
+                        "g"
+                    }
+                    wide{
+                        "stycznia",
+                        "lutego",
+                        "marca",
+                        "kwietnia",
+                        "maja",
+                        "czerwca",
+                        "lipca",
+                        "sierpnia",
+                        "wrze\u015bnia",
+                        "pa\u017adziernika",
+                        "listopada",
+                        "grudnia"
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "st",
+                        "lut",
+                        "mrz",
+                        "kw",
+                        "maj",
+                        "cz",
+                        "lip",
+                        "sier",
+                        "wrz",
+                        "pa\u017a",
+                        "lis",
+                        "gr"
+                    }
+                    narrow {
+                        "s",
+                        "l",
+                        "m",
+                        "k",
+                        "m",
+                        "c",
+                        "l",
+                        "s",
+                        "w",
+                        "p",
+                        "l",
+                        "g"
+                    }
+                    wide{
+                        "Stycze\u0144",
+                        "Luty",
+                        "Marzec",
+                        "Kwiecie\u0144",
+                        "Maj",
+                        "Czerwiec",
+                        "Lipiec",
+                        "Sierpie\u0144",
+                        "Wrzesie\u0144",
+                        "Pa\u017adziernik",
+                        "Listopad",
+                        "Grudzie\u0144"
+                    }
+                }
+            }
+        }
+    }
+}

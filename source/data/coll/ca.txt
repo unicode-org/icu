@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ca {
+    Version { "4.0" }
+    collations {
+      standard { 
+        Version { "1.0" }
+        Sequence { "[backwards 2]"
+        "&C < ch <<< Ch <<< CH"
+        "&L < ll <<< l\u00b7l <<< Ll <<< L\u00b7l <<< LL <<< L\u00b7L" }
+      }
+    }
+}

@@ -1,0 +1,35 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+// Created by Roozbeh Pournader <roozbeh@sharif.edu> and Michael Everson <everson@evertype.com>
+
+fa_AF {
+    Version { "1.0" }
+    collations:alias { "ps" }
+//    collations {
+//      standard { 
+//        Version { "1.0" }
+//        Sequence { "[normalization on]"
+//           "&\u064e<<\u0650<<\u064f<<\u064b<<\u064d<<\u064c"
+//           "&\u0622<\u0627<<\u0623<<\u0672<<\u0671<<\u0625<<\u0673<\u0621"
+//           "&\u062a<\u067c<<\u0679"
+//           "&\u062c<\u0681<<\u062d\u0654"
+//           "&\u0686<\u0685"
+//           "&\u062f<\u0689<<\u0688"
+//           "&\u0631<\u0693<<\u0691"
+//           "&\u0698<\u0696"
+//           "&\u06a9<<\u06aa<<\u0643"
+//           "&\u06ab<<\u06af"
+//           "&\u06bc<<\u06bb"
+//           "&\u0648<<\u0624<<\u06c7<<\u06c9"
+//           "&\u0647<<<\u06c0<<<\u0647\u0654<<\u06d5<<\u06c1<<\u06be<<\u0629<<\u06c3"
+//           "&\u06cc<<\u0649<<\u06d2<<\u064a<<\u06d0<<\u06cd<<\u06cc\u0654<<<\u0649\u0654<<<\u0626"
+//           "&'\u00a0'<<'\u200c'<<'\u200d'"  // This is NBSP << ZWNJ << ZWJ
+//         }
+//      }
+//    }
+}

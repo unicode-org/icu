@@ -1,0 +1,13 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_TW {
+    Version{ "2.0" }
+    collations { 
+        default { "traditional" }
+    }
+}

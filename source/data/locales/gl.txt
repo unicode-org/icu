@@ -1,0 +1,115 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+gl {
+    Version { "2.0" }
+    Countries {
+        ES { "España" }
+    }
+    // Currency display names
+    Currencies {
+        ESP {
+            "\u20A7", 
+            "ESP", 
+            :array{
+                "\u00A4 #,##0;-\u00A4 #,##0", /*currency pattern*/  
+                ",",  /*decimal sperator*/ 
+                ".", /*grouping separator*/
+                
+            }
+        } // Spanish Peseta
+    }
+    Languages {
+        gl { "galego" }
+    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00fc\u00f1]" }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        ",",
+        "+",
+    }
+    
+    // /**************** Info Below is needed ****************/
+    // Countries{}
+    // Eras{}
+    // Languages{}
+    // ShortLanguage { }
+    // localPatternChars{}
+    //
+
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Dom",
+                        "Lun",
+                        "Mar",
+                        "Mér",
+                        "Xov",
+                        "Ven",
+                        "Sáb",
+                    }
+                    wide{
+                        "Domingo",
+                        "Luns",
+                        "Martes",
+                        "Mércores",
+                        "Xoves",
+                        "Venres",
+                        "Sábado",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Xan",
+                        "Feb",
+                        "Mar",
+                        "Abr",
+                        "Mai",
+                        "Xuñ",
+                        "Xul",
+                        "Ago",
+                        "Set",
+                        "Out",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "Xaneiro",
+                        "Febreiro",
+                        "Marzo",
+                        "Abril",
+                        "Maio",
+                        "Xuño",
+                        "Xullo",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Decembro",
+                    }
+                }
+            }
+        }
+    }
+}

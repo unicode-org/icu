@@ -1,0 +1,28 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sq {
+    Version{ "2.0" }
+    collations {
+        standard { 
+            Version { "2.0" }
+            Sequence {  
+                "& [before 1] D < \u00e7 <<< \u00c7"
+                "& [before 1] E < dh <<< Dh <<< DH"
+                "& [before 1] F < \u00eb <<< \u00cb"
+                "& [before 1] H < gj <<< Gj <<< GJ"
+                "& [before 1] M < ll <<< Ll <<< LL"
+                "& [before 1] O < nj <<< Nj <<< NJ"
+                "& [before 1] S < rr <<< Rr <<< RR"
+                "& [before 1] T < sh <<< Sh <<< SH"
+                "& [before 1] U < th <<< Th <<< TH"
+                "& [before 1] Y < xh <<< Xh <<< XH"
+                "& [before 1] \u01b7 < zh <<< Zh <<< ZH" 
+            }
+        }
+    }
+}

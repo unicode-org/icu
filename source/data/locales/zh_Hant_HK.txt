@@ -1,0 +1,11 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_Hant_HK {
+    // TODO: Reverse the direction of this alias.
+    "%%ALIAS" { "zh_HK" }
+}

@@ -1,0 +1,44 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ms_BN{
+    Version{ "1.0" }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss aa",
+                "H:mm:ss",
+                "H:mm:ss",
+                "H:mm:ss",
+                "dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
+    }
+    Currencies {
+        BND { "$", "BND" }
+        USD { "US$", "USD" }
+    }
+}

@@ -1,0 +1,104 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+gv {
+    Version { "2.0" }
+    Countries {
+        GB { "Rywvaneth Unys" }
+    }
+    Languages {
+        gv { "Gaelg" }
+    }
+    LocaleScript:array{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters{
+        "[a-z\u00E7]"
+    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
+    // /**************** Info Below is needed ****************/
+    // localPatternChars{}
+    //
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m."
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Jed",
+                        "Jel",
+                        "Jem",
+                        "Jerc",
+                        "Jerd",
+                        "Jeh",
+                        "Jes",
+                    }
+                    wide{
+                        "Jedoonee",
+                        "Jelhein",
+                        "Jemayrt",
+                        "Jercean",
+                        "Jerdein",
+                        "Jeheiney",
+                        "Jesarn",
+                    }
+                }
+            }
+            eras{
+                "RC", // BC
+                "AD"  // AD
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "J-guer",
+                        "T-arree",
+                        "Mayrnt",
+                        "Avrril",
+                        "Boaldyn",
+                        "M-souree",
+                        "J-souree",
+                        "Luanistyn",
+                        "M-fouyir",
+                        "J-fouyir",
+                        "M.Houney",
+                        "M.Nollick",
+                    }
+                    wide{
+                        "Jerrey-geuree",
+                        "Toshiaght-arree",
+                        "Mayrnt",
+                        "Averil",
+                        "Boaldyn",
+                        "Mean-souree",
+                        "Jerrey-souree",
+                        "Luanistyn",
+                        "Mean-fouyir",
+                        "Jerrey-fouyir",
+                        "Mee Houney",
+                        "Mee ny Nollick",
+                    }
+                }
+            }
+        }
+    }
+}

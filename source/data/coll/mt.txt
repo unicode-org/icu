@@ -1,0 +1,36 @@
+﻿// Copyright (c) 1998-2004 IBM, Inc. and others.
+//
+// Maltese locale.
+// Maintained by srl@monkey.sbay.org [See below for full credits]
+//
+// Search for 'Sources' below for source abbreviations
+
+// Note, this file is in UTF-8
+
+mt {
+    Version { "1.0" } // 2003-10-18 - first MSA 200:2003 compliant v
+
+//   Note, that 'c' doesn't exist in Maltese. But I put it here following ċ 
+//   for compatibility with foreign words.
+
+// Joseph Felici Pace and "ir-Regolament" say: 
+// a b ċ [c] d e f ġ g għ h ħ i ie j k l m n o p q r s t u v w x [y] ż z
+
+// According to DMS MSA:200-2003, 'ie' is sorted as one letter.
+// Therefore, 'IE' is NOT present in this collation table.
+ 
+   collations
+   {
+      standard {
+        Version { "1.2" }
+        Sequence { "[casefirst upper]"  // [MSA 200:2003 4.1] requires Uppercase first. TODO: verify this rule syntax
+                   "& [before 1] d < \u010A <<< \u010B" // ċ  Ċ
+                   "& [before 1] g < Ġ <<< ġ "              // ġ  Ġ
+                   "& [before 1] h < GĦ <<< Għ <<< gĦ <<< għ "
+                   "& [before 1] i < Ħ <<< ħ  "
+                   "& [before 1] z < Ż <<< ż"               // ż Ż
+        }
+     }
+                   
+   }
+}

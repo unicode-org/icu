@@ -1,0 +1,64 @@
+//*******************************************************************************
+//*
+//*   Copyright (C) 2002-2004, International Business Machines
+//*   Corporation and others.  All Rights Reserved.
+//*
+//*******************************************************************************
+
+
+// This is a test resource to check whether the aliasing mechanism works
+// as advertised
+
+testaliases
+{
+    // This should produce an error - circular alias
+    aaa:alias { "testaliases/aab" } // Test circular dependency protection
+    aab:alias { "testaliases/aaa" }
+
+    // aliasing nonexist position
+    nonexisting:alias { "/ICUDATA/ja" }
+
+    // aliasing to another resource
+    simplealias:alias { "testtypes/menu/file/open" } // simple referencing
+
+    // alias that uses another alias and references parts of the end structure
+    referencingalias:alias { "testaliases/anotheralias/2" } // Referencing through another alias
+    anotheralias:alias { "/ICUDATA/ja/LocaleScript" }
+
+    LocaleScript:alias { "/ICUDATA/ja/LocaleScript" }
+
+    // aliasing using position
+    BreakDictionaryData:alias { "/ICUDATA/th" } // Referencing corresponding resource in another bundle
+
+    // aliasing arrays
+    zoneTests {
+        zoneAlias:alias { "/ICUDATA/en/zoneStrings" } // Referencing by index
+        zoneAlias1:alias { "/ICUDATA/en/zoneStrings/3" } // Referencing by index
+        zoneAlias2:alias { "/ICUDATA/en/zoneStrings/3/0" } // Referencing by index
+    }
+
+    // Test aliasing parts of an array using position
+    zoneStrings { 
+        :alias { "/ICUDATA/en" } 
+        :alias { "/ICUDATA/en" } 
+    }
+    // WARNING: this test assumes that on all platforms digits sort normally
+    // if not, the test may fail
+    testGetStringByKeyAliasing {
+        KeyAlias0PST:alias { "/ICUDATA/en/zoneStrings/0/0" } //"PST",
+        KeyAlias1PacificStandardTime:alias { "/ICUDATA/en/zoneStrings/0/1" } //"Pacific Standard Time",
+        KeyAlias2PDT:alias { "/ICUDATA/en/zoneStrings/0/4" } //"PDT",
+        KeyAlias3LosAngeles:alias { "/ICUDATA/en/zoneStrings/0/5" } //"Los Angeles",
+    }
+    testGetStringByIndexAliasing  {
+        :alias { "/ICUDATA/en/zoneStrings/0/0" } //"PST",
+        :alias { "/ICUDATA/en/zoneStrings/0/1" } //"Pacific Standard Time",
+        :alias { "/ICUDATA/en/zoneStrings/0/4" } //"PDT",
+        :alias { "/ICUDATA/en/zoneStrings/0/5" } //"Los Angeles",
+    }
+
+}
+
+//eof
+
+

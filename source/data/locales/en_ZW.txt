@@ -1,0 +1,35 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_ZW {
+    Version { "2.0" }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00a4#,##0.00;-\u00a4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Currencies{
+        ZWD { "Z$",  "Zimbabwean Dollar"      } // 04/18/1980- Zimbabwean Dollar
+        USD { "US$",     "USD" } // US Dollar
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd MMM,yy",
+                "d/M/yyyy",
+                "{1} {0}",
+            }
+        }
+    }
+}

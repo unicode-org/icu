@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+cs {
+    Version{ "3.0" }
+    collations {
+      standard { 
+        Version { "1.0" }
+        Sequence { "& C < c\u030C <<< C\u030C& H < "
+        "ch <<< cH <<< Ch <<< CH & R < r\u030C <<< R\u030C& S < s\u030C <<< S\u030C& Z < z\u030C <<<"
+        " Z\u030C" }
+      }
+    }
+}

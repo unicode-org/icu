@@ -1,0 +1,47 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+it_CH {
+    Version{ "2.0" }
+    NumberElements { 
+        ".",
+        "'",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ".",
+        "+",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;\u00A4-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH.mm:ss' h' z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "d-MMM-yy",
+                "dd.MM.yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

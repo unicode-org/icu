@@ -1,0 +1,1805 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//  Date        Name        Description
+//  11/17/99    aliu        Added support for transliterators.
+//  01/15/2002  grhoten     Synchronized the language and contry codes with ISO standards
+
+// ***  Note: do NOT translate or modify (customize) this root locale.
+//      Instead, put translations in sub locales.
+
+root {
+    Version { "5.0" }
+
+    // The official list list of ISO-3166 country codes are located at:
+    // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
+    Countries {
+        Fallback{""} // this is just to make cloctst not complain and not break the fallback chain..if multilevel fallback is implemented
+        AD { "AD" }
+        AE { "AE" }
+        AF { "AF" }
+        AG { "AG" }
+        AI { "AI" }
+        AL { "AL" }
+        AM { "AM" }
+        AN { "AN" }
+        AO { "AO" }
+        AQ { "AQ" }
+        AR { "AR" }
+        AS { "AS" }
+        AT { "AT" }
+        AU { "AU" }
+        AW { "AW" }
+        AZ { "AZ" }
+
+        BA { "BA" }
+        BB { "BB" }
+        BD { "BD" }
+        BE { "BE" }
+        BF { "BF" }
+        BG { "BG" }
+        BH { "BH" }
+        BI { "BI" }
+        BJ { "BJ" }
+        BM { "BM" }
+        BN { "BN" }
+        BO { "BO" }
+        BR { "BR" }
+        BS { "BS" }
+        BT { "BT" }
+        BV { "BV" }
+        BW { "BW" }
+        BY { "BY" }
+        BZ { "BZ" }
+
+        CA { "CA" }
+        CC { "CC" }
+        CD { "CD" }
+        CF { "CF" }
+        CG { "CG" }
+        CH { "CH" }
+        CI { "CI" }
+        CK { "CK" }
+        CL { "CL" }
+        CM { "CM" }
+        CN { "CN" }
+        CO { "CO" }
+        CR { "CR" }
+        //CS { "CS" } // TODO: if we allow this, then SP must go away
+        CU { "CU" }
+        CV { "CV" }
+        CX { "CX" }
+        CY { "CY" }
+        CZ { "CZ" }
+
+        DE { "DE" }
+        DJ { "DJ" }
+        DK { "DK" }
+        DM { "DM" }
+        DO { "DO" }
+        DZ { "DZ" }
+
+        EC { "EC" }
+        EE { "EE" }
+        EG { "EG" }
+        EH { "EH" }
+        ER { "ER" }
+        ES { "ES" }
+        ET { "ET" }
+
+        FI { "FI" }
+        FJ { "FJ" }
+        FK { "FK" }
+        FM { "FM" }
+        FO { "FO" }
+        FR { "FR" }
+
+        GA { "GA" }
+        GB { "GB" }
+        GD { "GD" }
+        GE { "GE" }
+        GF { "GF" }
+        GH { "GH" }
+        GI { "GI" }
+        GL { "GL" }
+        GM { "GM" }
+        GN { "GN" }
+        GP { "GP" }
+        GQ { "GQ" }
+        GR { "GR" }
+        GS { "GS" }
+        GT { "GT" }
+        GU { "GU" }
+        GW { "GW" }
+        GY { "GY" }
+
+        HK { "HK" }
+        HM { "HM" }
+        HN { "HN" }
+        HR { "HR" }
+        HT { "HT" }
+        HU { "HU" }
+
+        ID { "ID" }
+        IE { "IE" }
+        IL { "IL" }
+        IN { "IN" }
+        IO { "IO" }
+        IQ { "IQ" }
+        IR { "IR" }
+        IS { "IS" }
+        IT { "IT" }
+
+        JM { "JM" }
+        JO { "JO" }
+        JP { "JP" }
+
+        KE { "KE" }
+        KG { "KG" }
+        KH { "KH" }
+        KI { "KI" }
+        KM { "KM" }
+        KN { "KN" }
+        KP { "KP" }
+        KR { "KR" }
+        KW { "KW" }
+        KY { "KY" }
+        KZ { "KZ" }
+
+        LA { "LA" }
+        LB { "LB" }
+        LC { "LC" }
+        LI { "LI" }
+        LK { "LK" }
+        LR { "LR" }
+        LS { "LS" }
+        LT { "LT" }
+        LU { "LU" }
+        LV { "LV" }
+        LY { "LY" }
+
+        MA { "MA" }
+        MC { "MC" }
+        MD { "MD" }
+        MG { "MG" }
+        MH { "MH" }
+        MK { "MK" }
+        ML { "ML" }
+        MM { "MM" }
+        MN { "MN" }
+        MO { "MO" }
+        MP { "MP" }
+        MQ { "MQ" }
+        MR { "MR" }
+        MS { "MS" }
+        MT { "MT" }
+        MU { "MU" }
+        MV { "MV" }
+        MW { "MW" }
+        MX { "MX" }
+        MY { "MY" }
+        MZ { "MZ" }
+
+        NA { "NA" }
+        NC { "NC" }
+        NE { "NE" }
+        NF { "NF" }
+        NG { "NG" }
+        NI { "NI" }
+        NL { "NL" }
+        NO { "NO" }
+        NP { "NP" }
+        NR { "NR" }
+        NU { "NU" }
+        NZ { "NZ" }
+
+        OM { "OM" }
+
+        PA { "PA" }
+        PE { "PE" }
+        PF { "PF" }
+        PG { "PG" }
+        PH { "PH" }
+        PK { "PK" }
+        PL { "PL" }
+        PM { "PM" }
+        PN { "PN" }
+        PR { "PR" }
+        PS { "PS" }
+        PT { "PT" }
+        PW { "PW" }
+        PY { "PY" }
+
+        QA { "QA" }
+
+        RE { "RE" }
+        RO { "RO" }
+        RU { "RU" }
+        RW { "RW" }
+
+        SA { "SA" }
+        SB { "SB" }
+        SC { "SC" }
+        SD { "SD" }
+        SE { "SE" }
+        SG { "SG" }
+        SH { "SH" }
+        SI { "SI" }
+        SJ { "SJ" }
+        SK { "SK" }
+        SL { "SL" }
+        SM { "SM" }
+        SN { "SN" }
+        SO { "SO" }
+        SP { "SP" }
+        SR { "SR" }
+        ST { "ST" }
+        SV { "SV" }
+        SY { "SY" }
+        SZ { "SZ" }
+
+        TC { "TC" }
+        TD { "TD" }
+        TF { "TF" }
+        TG { "TG" }
+        TH { "TH" }
+        TJ { "TJ" }
+        TK { "TK" }
+        TM { "TM" }
+        TN { "TN" }
+        TO { "TO" }
+        TL { "TL" }
+        TR { "TR" }
+        TT { "TT" }
+        TV { "TV" }
+        TW { "TW" }
+        TZ { "TZ" }
+
+        UA { "UA" }
+        UG { "UG" }
+        UM { "UM" }
+        US { "US" }
+        UY { "UY" }
+        UZ { "UZ" }
+
+        VA { "VA" }
+        VC { "VC" }
+        VE { "VE" }
+        VG { "VG" }
+        VI { "VI" }
+        VN { "VN" }
+        VU { "VU" }
+
+        WF { "WF" }
+        WS { "WS" }
+
+        YE { "YE" }
+        YT { "YT" }
+        YU { "YU" }
+
+        ZA { "ZA" }
+
+        ZM { "ZM" }
+        ZW { "ZW" }
+    }
+
+    // Localized display names of currencies, analogous to Countries
+    // and Languages.  "Common usage" display names are listed here in
+    // root.  Only a few unique symbols should be listed here.  "$",
+    // for example, is used to indicate not only USD, but also ARS,
+    // AUD, BND, CAD, CLP, COP, JDF, ETB, MXN, NZD, and SOS.  Hoever,
+    // its default meaning in many locales is USD, so we list it here
+    // and override it in sublocales that use "$" for something else.
+    // @since ICU 2.2
+    Currencies {
+        EUR { "\u20AC", "EUR" } // Euro
+        GBP { "\u00A3", "GBP" } // British Pound Sterling
+        INR { "=0#Rs.|1#Re.|1<Rs.", "INR" } // Indian Rupee
+        ITL { "\u20A4", "ITL" } // Italian Lira
+        JPY { "\u00A5", "JPY" } // Japanese Yen
+        USD { "$",     "USD" } // US Dollar
+    }
+
+    // Currency metadata.  Unlike the "Currencies" element, this is
+    // NOT true locale data.  It exists only in root.  The two
+    // integers are the fraction digits for each currency, and the
+    // rounding increment.  The fraction digits must be an integer
+    // from 0..9.  If there is no rounding, the rounding increment is
+    // zero.  Otherwise the rounding increment is given in units of
+    // 10^(-fraction_digits).  The special tag "DEFAULT" gives the
+    // meta data for all currencies not otherwise listed.
+    // Last update: Tue Apr  8 16:57:42 2003
+    CurrencyMeta {
+        ADP:intvector { 0, 0 } // Andorran Peseta: ANDORRA (AD)
+        BHD:intvector { 3, 0 } // Bahraini Dinar: BAHRAIN (BH)
+        BIF:intvector { 0, 0 } // Burundi Franc: BURUNDI (BI)
+        BYR:intvector { 0, 0 } // Belarussian Ruble: BELARUS (BY)
+        CHF:intvector { 2, 5 } // Swiss Franc: LIECHTENSTEIN (LI), SWITZERLAND (CH)
+        CLF:intvector { 0, 0 } // Unidades de fomento: CHILE (CL)
+        CLP:intvector { 0, 0 } // Chilean Peso: CHILE (CL)
+        DJF:intvector { 0, 0 } // Djibouti Franc: DJIBOUTI (DJ)
+        GNF:intvector { 0, 0 } // Guinea Franc: GUINEA (GN)
+        IQD:intvector { 3, 0 } // Iraqi Dinar: IRAQ (IQ)
+        JOD:intvector { 3, 0 } // Jordanian Dinar: JORDAN (JO)
+        JPY:intvector { 0, 0 } // Yen: JAPAN (JP)
+        KMF:intvector { 0, 0 } // Comoro Franc: COMOROS (KM)
+        KRW:intvector { 0, 0 } // Won: KOREA, REPUBLIC OF (KR)
+        KWD:intvector { 3, 0 } // Kuwaiti Dinar: KUWAIT (KW)
+        LYD:intvector { 3, 0 } // Lybian Dinar: LIBYAN ARAB JAMAHIRIYA (LY)
+        MGF:intvector { 0, 0 } // Malagasy Franc: MADAGASCAR (MG)
+        OMR:intvector { 3, 0 } // Rial Omani: OMAN (OM)
+        PYG:intvector { 0, 0 } // Guarani: PARAGUAY (PY)
+        RWF:intvector { 0, 0 } // Rwanda Franc: RWANDA (RW)
+        TND:intvector { 3, 0 } // Tunisian Dinar: TUNISIA (TN)
+        TRL:intvector { 0, 0 } // Turkish Lira: TURKEY (TR)
+        VUV:intvector { 0, 0 } // Vatu: VANUATU (VU)
+        XAF:intvector { 0, 0 } // CFA Franc BEAC: CAMEROON (CM), CENTRAL AFRICAN REPUBLIC (CF), CHAD (TD), CONGO (CG), EQUATORIAL GUINEA (GQ), GABON (GA)
+        XOF:intvector { 0, 0 } // CFA Franc BCEAO: BENIN (BJ), BURKINA FASO (BF), COTE D'IVOIRE (CI), GUINEA-BISSAU (GW), MALI (ML), NIGER (NE), SENEGAL (SN), TOGO (TG)
+        XPF:intvector { 0, 0 } // CFP Franc: FRENCH POLYNESIA (PF), NEW CALEDONIA (NC), WALLIS AND FUTUNA (WF)
+        DEFAULT:intvector { 2, 0 } // (All currencies not listed)
+    }
+    // Map from ISO 3166 country codes to ISO 4217 currency codes
+    // NOTE: This is not true locale data; it exists only in ROOT
+    // Last update: Tue Apr  8 16:57:42 2003
+    CurrencyMap {
+        _EURO { "EUR" } // : Euro
+        AE { "AED" } // UNITED ARAB EMIRATES: UAE Dirham
+        AF { "AFN" } // AFGHANISTAN: Afghani
+        AG { "XCD" } // ANTIGUA AND BARBUDA: East Caribbean Dollar
+        AI { "XCD" } // ANGUILLA: East Caribbean Dollar
+        AL { "ALL" } // ALBANIA: Leck
+        AM { "AMD" } // ARMENIA: Armenian Dram
+        AN { "ANG" } // NETHERLANDS ANTILLES: Netherlands Antillan Guilder
+        AO { "AOA" } // ANGOLA: Kwanza
+        AR { "ARS" } // ARGENTINA: Argentine Peso
+        AS { "USD" } // AMERICAN SAMOA: US Dollar
+        AT { "EUR" } // AUSTRIA: Euro
+        AT_PREEURO { "ATS" }
+        AU { "AUD" } // AUSTRALIA: Australian Dollar
+        AW { "AWG" } // ARUBA: Aruban Guilder
+        AZ { "AZM" } // AZERBAIJAN: Azerbaijanian Manat
+        BA { "BAM" } // BOSNIA AND HERZEGOVINA: Convertible Marks
+        BB { "BBD" } // BARBADOS: Barbados Dollar
+        BD { "BDT" } // BANGLADESH: Taka
+        BE { "EUR" } // BELGIUM: Euro
+        BE_PREEURO { "BEF" }
+        BF { "XOF" } // BURKINA FASO: CFA Franc BCEAO
+        BG { "BGN" } // BULGARIA: Bulgarian Lev
+        BH { "BHD" } // BAHRAIN: Bahraini Dinar
+        BI { "BIF" } // BURUNDI: Burundi Franc
+        BJ { "XOF" } // BENIN: CFA Franc BCEAO
+        BM { "BMD" } // BERMUDA: Bermudian Dollar
+        BN { "BND" } // BRUNEI DARUSSALAM: Brunei Dollar
+        BO { "BOB" } // BOLIVIA: Boliviano
+        BR { "BRL" } // BRAZIL: Brazilian Real
+        BS { "BSD" } // BAHAMAS: Bahamian Dollar
+        BV { "NOK" } // BOUVET ISLAND: Norwegian Krone
+        BW { "BWP" } // BOTSWANA: Pula
+        BY { "BYR" } // BELARUS: Belarussian Ruble
+        BZ { "BZD" } // BELIZE: Belize Dollar
+        CA { "CAD" } // CANADA: Canadian Dollar
+        CC { "AUD" } // COCOS (KEELING) ISLANDS: Australian Dollar
+        CD { "CDF" } // CONGO, THE DEMOCRATIC REPUBLIC OF THE: Franc Congolais
+        CF { "XAF" } // CENTRAL AFRICAN REPUBLIC: CFA Franc BEAC
+        CG { "XAF" } // CONGO: CFA Franc BEAC
+        CH { "CHF" } // SWITZERLAND: Swiss Franc
+        CI { "XOF" } // COTE D'IVOIRE: CFA Franc BCEAO
+        CK { "NZD" } // COOK ISLANDS: New Zealand Dollar
+        CL { "CLP" } // CHILE: Chilean Peso
+        CM { "XAF" } // CAMEROON: CFA Franc BEAC
+        CN { "CNY" } // CHINA: Yuan Renminbi
+        CO { "COP" } // COLOMBIA: Colombian Peso
+        CR { "CRC" } // COSTA RICA: Costa Rican Colon
+        CU { "CUP" } // CUBA: Cuban Peso
+        CV { "CVE" } // CAPE VERDE: Cape Verde Escudo
+        CX { "AUD" } // CHRISTMAS ISLAND: Australian Dollar
+        CY { "CYP" } // CYPRUS: Cyprus Pound
+        CZ { "CZK" } // CZECH REPUBLIC: Czech Koruna
+        DE { "EUR" } // GERMANY: Euro
+        DE_PREEURO { "DEM" }
+        DJ { "DJF" } // DJIBOUTI: Djibouti Franc
+        DK { "DKK" } // DENMARK: Danish Krone
+        DM { "XCD" } // DOMINICA: East Caribbean Dollar
+        DO { "DOP" } // DOMINICAN REPUBLIC: Dominican Peso
+        DZ { "DZD" } // ALGERIA: Algerian Dinar
+        EC { "USD" } // ECUADOR: US Dollar
+        EE { "EEK" } // ESTONIA: Kroon
+        EG { "EGP" } // EGYPT: Egyptian Pound
+        EH { "MAD" } // WESTERN SAHARA: Moroccan Dirham
+        ER { "ERN" } // ERITREA: Nakfa
+        ES { "EUR" } // SPAIN: Euro
+        ES_PREEURO { "ESP" }
+        ET { "ETB" } // ETHIOPIA: Ethiopian Birr
+        FI { "EUR" } // FINLAND: Euro
+        FI_PREEURO { "FIM" }
+        FJ { "FJD" } // FIJI: Fiji Dollar
+        FK { "FKP" } // FALKLAND ISLANDS (MALVINAS): Falkland Islands Pound
+        FM { "USD" } // MICRONESIA, FEDERATED STATES OF: US Dollar
+        FO { "DKK" } // FAROE ISLANDS: Danish Krone
+        FR { "EUR" } // FRANCE: Euro
+        FR_PREEURO { "FRF" }
+        GA { "XAF" } // GABON: CFA Franc BEAC
+        GB { "GBP" } // UNITED KINGDOM: Pound Sterling
+        GD { "XCD" } // GRENADA: East Caribbean Dollar
+        GE { "GEL" } // GEORGIA: Lari
+        GF { "EUR" } // FRENCH GUIANA: Euro
+        GH { "GHC" } // GHANA: Cedi
+        GI { "GIP" } // GIBRALTAR: Gibraltar Pound
+        GL { "DKK" } // GREENLAND: Danish Krone
+        GM { "GMD" } // GAMBIA: Dalasi
+        GN { "GNF" } // GUINEA: Guinea Franc
+        GP { "EUR" } // GUADELOUPE: Euro
+        GQ { "XAF" } // EQUATORIAL GUINEA: CFA Franc BEAC
+        GR { "EUR" } // GREECE: Euro
+        GR_PREEURO { "GRD" }
+        GT { "GTQ" } // GUATEMALA: Quetzal
+        GU { "USD" } // GUAM: US Dollar
+        GY { "GYD" } // GUYANA: Guyana Dollar
+        HK { "HKD" } // HONG KONG: Hong Kong Dollar
+        HM { "AUD" } // HEARD ISLAND AND MCDONALD ISLANDS: Australian Dollar
+        HN { "HNL" } // HONDURAS: Lempira
+        HR { "HRK" } // CROATIA: Croatian kuna
+        HU { "HUF" } // HUNGARY: Forint
+        ID { "IDR" } // INDONESIA: Rupiah
+        IE { "EUR" } // IRELAND: Euro
+        IE_PREEURO { "IEP" }
+        IL { "ILS" } // ISRAEL: New Israeli Sheqel
+        IN { "INR" } // INDIA: Indian Rupee
+        IO { "USD" } // BRITISH INDIAN OCEAN TERRITORY: US Dollar
+        IQ { "IQD" } // IRAQ: Iraqi Dinar
+        IR { "IRR" } // IRAN, ISLAMIC REPUBLIC OF: Iranian Rial
+        IS { "ISK" } // ICELAND: Iceland Krona
+        IT { "EUR" } // ITALY: Euro
+        IT_PREEURO { "ITL" }
+        JM { "JMD" } // JAMAICA: Jamaican Dollar
+        JO { "JOD" } // JORDAN: Jordanian Dinar
+        JP { "JPY" } // JAPAN: Yen
+        KE { "KES" } // KENYA: Kenyan Shilling
+        KG { "KGS" } // KYRGYZSTAN: Som
+        KH { "KHR" } // CAMBODIA: Riel
+        KI { "AUD" } // KIRIBATI: Australian Dollar
+        KM { "KMF" } // COMOROS: Comoro Franc
+        KN { "XCD" } // SAINT KITTS AND NEVIS: East Caribbean Dollar
+        KP { "KPW" } // KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF: North Korean Won
+        KR { "KRW" } // KOREA, REPUBLIC OF: Won
+        KW { "KWD" } // KUWAIT: Kuwaiti Dinar
+        KY { "KYD" } // CAYMAN ISLANDS: Cayman Islands Dollar
+        KZ { "KZT" } // KAZAKHSTAN: Tenge
+        LA { "LAK" } // LAO PEOPLE'S DEMOCRATIC REPUBLIC: Kip
+        LB { "LBP" } // LEBANON: Lebanese Pound
+        LC { "XCD" } // SAINT LUCIA: East Caribbean Dollar
+        LI { "CHF" } // LIECHTENSTEIN: Swiss Franc
+        LK { "LKR" } // SRI LANKA: Sri Lanka Rupee
+        LR { "LRD" } // LIBERIA: Liberian Dollar
+        LT { "LTL" } // LITHUANIA: Lithuanian Litas
+        LU { "EUR" } // LUXEMBOURG: Euro
+        LU_PREEURO { "LUF" }
+        LV { "LVL" } // LATVIA: Latvian Lats
+        LY { "LYD" } // LIBYAN ARAB JAMAHIRIYA: Lybian Dinar
+        MA { "MAD" } // MOROCCO: Moroccan Dirham
+        MC { "EUR" } // MONACO: Euro
+        MD { "MDL" } // MOLDOVA, REPUBLIC OF: Moldovan Leu
+        MG { "MGF" } // MADAGASCAR: Malagasy Franc
+        MH { "USD" } // MARSHALL ISLANDS: US Dollar
+        MK { "MKD" } // MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF: Denar
+        ML { "XOF" } // MALI: CFA Franc BCEAO
+        MM { "MMK" } // MYANMAR: Kyat
+        MN { "MNT" } // MONGOLIA: Tugrik
+        MO { "MOP" } // MACAO: Pataca
+        MP { "USD" } // NORTHERN MARIANA ISLANDS: US Dollar
+        MQ { "EUR" } // MARTINIQUE: Euro
+        MR { "MRO" } // MAURITANIA: Ouguiya
+        MS { "XCD" } // MONTSERRAT: East Caribbean Dollar
+        MT { "MTL" } // MALTA: Maltese Lira
+        MU { "MUR" } // MAURITIUS: Mauritius Rupee
+        MV { "MVR" } // MALDIVES: Rufiyaa
+        MW { "MWK" } // MALAWI: Kwacha
+        MX { "MXN" } // MEXICO: Mexican Peso
+        MY { "MYR" } // MALAYSIA: Malaysian Ringgit
+        MZ { "MZM" } // MOZAMBIQUE: Metical
+        NC { "XPF" } // NEW CALEDONIA: CFP Franc
+        NE { "XOF" } // NIGER: CFA Franc BCEAO
+        NF { "AUD" } // NORFOLK ISLAND: Australian Dollar
+        NG { "NGN" } // NIGERIA: Naira
+        NI { "NIO" } // NICARAGUA: Cordoba Oro
+        NL { "EUR" } // NETHERLANDS: Euro
+        NL_PREEURO { "NLG" }
+        NO { "NOK" } // NORWAY: Norwegian Krone
+        NP { "NPR" } // NEPAL: Nepalese Rupee
+        NR { "AUD" } // NAURU: Australian Dollar
+        NU { "NZD" } // NIUE: New Zealand Dollar
+        NZ { "NZD" } // NEW ZEALAND: New Zealand Dollar
+        OM { "OMR" } // OMAN: Rial Omani
+        PA { "PAB" } // PANAMA: Balboa
+        PE { "PEN" } // PERU: Nuevo Sol
+        PF { "XPF" } // FRENCH POLYNESIA: CFP Franc
+        PG { "PGK" } // PAPUA NEW GUINEA: Kina
+        PH { "PHP" } // PHILIPPINES: Philippine Peso
+        PK { "PKR" } // PAKISTAN: Pakistan Rupee
+        PL { "PLN" } // POLAND: Zloty
+        PM { "EUR" } // SAINT PIERRE AND MIQUELON: Euro
+        PN { "NZD" } // PITCAIRN: New Zealand Dollar
+        PR { "USD" } // PUERTO RICO: US Dollar
+        PT { "EUR" } // PORTUGAL: Euro
+        PT_PREEURO { "PTE" }
+        PW { "USD" } // PALAU: US Dollar
+        PY { "PYG" } // PARAGUAY: Guarani
+        QA { "QAR" } // QATAR: Qatari Rial
+        RE { "EUR" } // REUNION: Euro
+        RO { "ROL" } // ROMANIA: Leu
+        RU { "RUR" } // RUSSIAN FEDERATION: Russian Ruble
+        RW { "RWF" } // RWANDA: Rwanda Franc
+        SA { "SAR" } // SAUDI ARABIA: Saudi Riyal
+        SB { "SBD" } // SOLOMON ISLANDS: Solomon Islands Dollar
+        SC { "SCR" } // SEYCHELLES: Seychelles Rupee
+        SD { "SDD" } // SUDAN: Sudanese Dinar
+        SE { "SEK" } // SWEDEN: Swedish Krona
+        SG { "SGD" } // SINGAPORE: Singapore Dollar
+        SH { "SHP" } // SAINT HELENA: Saint Helena Pound
+        SI { "SIT" } // SLOVENIA: Tolar
+        SJ { "NOK" } // SVALBARD AND JAN MAYEN: Norwegian Krone
+        SK { "SKK" } // SLOVAKIA: Slovak Koruna
+        SL { "SLL" } // SIERRA LEONE: Leone
+        SM { "EUR" } // SAN MARINO: Euro
+        SN { "XOF" } // SENEGAL: CFA Franc BCEAO
+        SO { "SOS" } // SOMALIA: Somali Shilling
+        SR { "SRG" } // SURINAME: Suriname Guilder
+        ST { "STD" } // SAO TOME AND PRINCIPE: Dobra
+        SV { "SVC" } // EL SALVADOR: El Salvador Colon
+        SY { "SYP" } // SYRIAN ARAB REPUBLIC: Syrian Pound
+        SZ { "SZL" } // SWAZILAND: Lilangeni
+        TC { "USD" } // TURKS AND CAICOS ISLANDS: US Dollar
+        TD { "XAF" } // CHAD: CFA Franc BEAC
+        TF { "EUR" } // FRENCH SOUTHERN TERRITORIES: Euro
+        TG { "XOF" } // TOGO: CFA Franc BCEAO
+        TH { "THB" } // THAILAND: Baht
+        TJ { "TJS" } // TAJIKISTAN: Somoni
+        TK { "NZD" } // TOKELAU: New Zealand Dollar
+        TL { "USD" } // TIMOR-LESTE: US Dollar
+        TM { "TMM" } // TURKMENISTAN: Manat
+        TN { "TND" } // TUNISIA: Tunisian Dinar
+        TO { "TOP" } // TONGA: Pa'anga
+        TR { "TRL" } // TURKEY: Turkish Lira
+        TT { "TTD" } // TRINIDAD AND TOBAGO: Trinidad and Tobago Dollar
+        TV { "AUD" } // TUVALU: Australian Dollar
+        TW { "TWD" } // TAIWAN, PROVINCE OF CHINA: New Taiwan Dollar
+        TZ { "TZS" } // TANZANIA, UNITED REPUBLIC OF: Tanzanian Shilling
+        UA { "UAH" } // UKRAINE: Hryvnia
+        UG { "UGX" } // UGANDA: Uganda Shilling
+        UM { "USD" } // UNITED STATES MINOR OUTLYING ISLANDS: US Dollar
+        US { "USD" } // UNITED STATES: US Dollar
+        UY { "UYU" } // URUGUAY: Peso Uruguayo
+        UZ { "UZS" } // UZBEKISTAN: Uzbekistan Sum
+        VA { "EUR" } // HOLY SEE (VATICAN CITY STATE): Euro
+        VC { "XCD" } // SAINT VINCENT AND THE GRENADINES: East Caribbean Dollar
+        VE { "VEB" } // VENEZUELA: Bolivar
+        VG { "USD" } // VIRGIN ISLANDS, BRITISH: US Dollar
+        VI { "USD" } // VIRGIN ISLANDS, U.S.: US Dollar
+        VN { "VND" } // VIET NAM: Dong
+        VU { "VUV" } // VANUATU: Vatu
+        WF { "XPF" } // WALLIS AND FUTUNA: CFP Franc
+        WS { "WST" } // SAMOA: Tala
+        YE { "YER" } // YEMEN: Yemeni Rial
+        YT { "EUR" } // MAYOTTE: Euro
+        YU { "YUM" } // YUGOSLAVIA: Yugoslavian Dinar
+        ZA { "ZAR" } // SOUTH AFRICA: Rand
+        ZM { "ZMK" } // ZAMBIA: Kwacha
+        ZW { "ZWD" } // ZIMBABWE: Zimbabwe Dollar
+    }
+
+    // International Calendars Data.
+    // NOTE (ICU 3.0) - the format of this data WILL CHANGE in future releases.
+
+    calendar{
+        default{"gregorian"} 
+        islamic{
+            // Islamic calendar  - the Religious (Astronomical) variant first
+            eras:array {
+                "AH" // Anno Hijri
+            }
+            monthNames {
+                default{"format"}
+                format{
+                    default{"wide"}
+                    abbreviated:alias{
+                        "root/calendar/islamic/monthNames/format/wide"
+                    }
+                    wide{
+                        "Muharram",
+                        "Safar",
+                        "Rabi\u02bb I",
+                        "Rabi\u02bb II",
+                        "Jumada I",
+                        "Jumada II",
+                        "Rajab",
+                        "Sha\u02bbban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhu\u02bbl-Qi\u02bbdah",
+                        "Dhu\u02bbl-Hijjah"
+                    }
+                }
+            }
+            
+        }
+        islamic-civil{
+            // Civil is identical other than in calculations
+            eras:alias {
+                "root/calendar/islamic/eras"
+            }
+            monthNames:alias {
+                "root/calendar/islamic/monthNames"
+            }
+        }
+        buddhist{
+            // Buddhist calendar data
+            eras:array {
+                "BE"                             // Buddhist Era  = 543 BC Gregorian
+            }
+            DateTimePatterns{ // shorten year, use Era
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy G",
+                "MMMM d, yyyy G",
+                "MMM d, yyyy G",
+                "M/d/yyyy",
+                "{1} {0}",
+            }
+        }
+        gregorian{
+            AmPmMarkers {
+                "AM",
+                "PM",
+            }
+            DateTimeElements:intvector {
+                1,
+                1,
+            }
+            weekend:intvector {
+                7, 0,   // onset dow, millis in day  (Saturday 12:00am)
+                2, 0    // cease dow, millis in day  (Monday   12:00am)
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss ",
+                "HH:mm",
+                "EEEE, yyyy MMMM dd ",
+                "yyyy MMMM d ",
+                "yyyy MMM d ",
+                "yy/MM/dd", // Changing this will break binary compatibility.
+                "{1} {0}",
+            }
+            dayNames{
+                default{"format"}
+                format{
+                    default{"wide"}
+                    abbreviated {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7"
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7"
+                    }
+                    wide {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7"
+                    }
+                }
+                stand-alone{
+                    default{"wide"}
+                    abbreviated {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7"
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7"
+                    }
+                    wide {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7"
+                    }
+                }
+            }
+            eras {
+                "BCE", // BC
+                "CE"   // AD
+            }
+            monthNames{
+                default{"format"}
+                format{
+                    default{"wide"}
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    }
+                    narrow {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    }
+                    wide {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    }
+                }
+                stand-alone{
+                    default{"wide"}
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    }
+                    narrow {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    }
+                    wide {
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12"
+                    }
+                }
+            }
+        }
+        hebrew{ 
+            monthNames{
+                default{"format"}
+                format{
+                    default{"wide"}
+                    abbreviated:alias{
+                        "root/calendar/hebrew/monthNames/format/wide"
+                    }
+                    wide{
+                        "Tishri",
+                        "Heshvan",
+                        "Kislev",
+                        "Tevet",
+                        "Shevat",
+                        "Adar I",       // Leap years only
+                        "Adar",
+                        "Nisan",
+                        "Iyar",
+                        "Sivan",
+                        "Tamuz",
+                        "Av",
+                        "Elul"
+                    }
+                    
+                }
+            }
+            eras:array {
+            "AM" // Anno Mundi
+            }
+        }
+        japanese{
+            DateTimePatterns:array {
+                "h:mm:ss a z", // full time pattern
+                "h:mm:ss a z", // long time pattern
+                "h:mm:ss a", // medium time pattern
+                "h:mm a", // short time pattern
+                "EEEE, MMMM d, y G", // full date pattern
+                "MMMM d, y G", // long date pattern
+                "MMM d, y G", // medium date pattern
+                "M/d/yy", // short date pattern
+                "{1} {0}" // date-time pattern
+            }
+            // Japanese calendar data
+            eras {
+                // Name                         Gregorian Year
+                "Taika",                        //  645
+                "Hakuchi",                      //  650
+                "Hakuh\u014D",                  //  672
+                "Shuch\u014D",                  //  686
+                "Taih\u014D",                   //  701
+                "Keiun",                        //  704
+                "Wad\u014D",                    //  708
+                "Reiki",                        //  715
+                "Y\u014Dr\u014D",               //  717
+                "Jinki",                        //  724
+                "Tempy\u014D",                  //  729
+                "Tempy\u014D-kamp\u014D",       //  749
+                "Tempy\u014D-sh\u014Dh\u014D",  //  749
+                "Tempy\u014D-h\u014Dji",        //  757
+                "Temph\u014D-jingo",            //  765
+                "Jingo-keiun",                  //  767
+                "H\u014Dki",                    //  770
+                "Ten-\u014D",                   //  781
+                "Enryaku",                      //  782
+                "Daid\u014D",                   //  806
+                "K\u014Dnin",                   //  810
+                "Tench\u014D",                  //  824
+                "Sh\u014Dwa",                   //  834
+                "Kaj\u014D",                    //  848
+                "Ninju",                        //  851
+                "Saiko",                        //  854
+                "Tennan",                       //  857
+                "J\u014Dgan",                   //  859
+                "Genkei",                       //  877
+                "Ninna",                        //  885
+                "Kampy\u014D",                  //  889
+                "Sh\u014Dtai",                  //  898
+                "Engi",                         //  901
+                "Ench\u014D",                   //  923
+                "Sh\u014Dhei",                  //  931
+                "Tengy\u014D",                  //  938
+                "Tenryaku",                     //  947
+                "Tentoku",                      //  957
+                "\u014Cwa",                     //  961
+                "K\u014Dh\u014D",               //  964
+                "Anna",                         //  968
+                "Tenroku",                      //  970
+                "Ten-en",                       //  973
+                "J\u014Dgen",                   //  976
+                "Tengen",                       //  978
+                "Eikan",                        //  983
+                "Kanna",                        //  985
+                "Ei-en",                        //  987
+                "Eiso",                         //  989
+                "Sh\u014Dryaku",                //  990
+                "Ch\u014Dtoku",                 //  995
+                "Ch\u014Dh\u014D",              //  999
+                "Kank\u014D",                   // 1004
+                "Ch\u014Dwa",                   // 1012
+                "Kannin",                       // 1017
+                "Jian",                         // 1021
+                "Manju",                        // 1024
+                "Ch\u014Dgen",                  // 1028
+                "Ch\u014Dryaku",                // 1037
+                "Ch\u014Dky\u016B",             // 1040
+                "Kantoku",                      // 1044
+                "Eish\u014D",                   // 1046
+                "Tengi",                        // 1053
+                "K\u014Dhei",                   // 1058
+                "Jiryaku",                      // 1065
+                "Enky\u016B",                   // 1069
+                "Sh\u014Dho",                   // 1074
+                "Sh\u014Dryaku",                // 1077
+                "Eiho",                         // 1081
+                "\u014Ctoku",                   // 1084
+                "Kanji",                        // 1087
+                "Kaho",                         // 1094
+                "Eich\u014D",                   // 1096
+                "Sh\u014Dtoku",                 // 1097
+                "K\u014Dwa",                    // 1099
+                "Ch\u014Dji",                   // 1104
+                "Kash\u014D",                   // 1106
+                "Tennin",                       // 1108
+                "Ten-ei",                       // 1110
+                "Eiky\u016B",                   // 1113
+                "Gen-ei",                       // 1118
+                "Hoan",                         // 1120
+                "Tenji",                        // 1124
+                "Daiji",                        // 1126
+                "Tensh\u014D",                  // 1131
+                "Ch\u014Dsh\u014D",             // 1132
+                "Hoen",                         // 1135
+                "Eiji",                         // 1141
+                "K\u014Dji",                    // 1142
+                "Teny\u014D",                   // 1144
+                "Ky\u016Ban",                   // 1145
+                "Ninpei",                       // 1151
+                "Ky\u016Bju",                   // 1154
+                "Hogen",                        // 1156
+                "Heiji",                        // 1159
+                "Eiryaku",                      // 1160
+                "\u014Cho",                     // 1161
+                "Ch\u014Dkan",                  // 1163
+                "Eiman",                        // 1165
+                "Nin-an",                       // 1166
+                "Ka\u014D",                     // 1169
+                "Sh\u014Dan",                   // 1171
+                "Angen",                        // 1175
+                "Jish\u014D",                   // 1177
+                "Y\u014Dwa",                    // 1181
+                "Juei",                         // 1182
+                "Genryuku",                     // 1184
+                "Bunji",                        // 1185
+                "Kenky\u016B",                  // 1190
+                "Sh\u014Dji",                   // 1199
+                "Kennin",                       // 1201
+                "Genky\u016B",                  // 1204
+                "Ken-ei",                       // 1206
+                "Sh\u014Dgen",                  // 1207
+                "Kenryaku",                     // 1211
+                "Kenp\u014D",                   // 1213
+                "Sh\u014Dky\u016B",             // 1219
+                "J\u014D\u014D",                // 1222
+                "Gennin",                       // 1224
+                "Karoku",                       // 1225
+                "Antei",                        // 1227
+                "Kanki",                        // 1229
+                "J\u014Dei",                    // 1232
+                "Tempuku",                      // 1233
+                "Bunryaku",                     // 1234
+                "Katei",                        // 1235
+                "Ryakunin",                     // 1238
+                "En-\u014D",                    // 1239
+                "Ninji",                        // 1240
+                "Kangen",                       // 1243
+                "H\u014Dji",                    // 1247
+                "Kench\u014D",                  // 1249
+                "K\u014Dgen",                   // 1256
+                "Sh\u014Dka",                   // 1257
+                "Sh\u014Dgen",                  // 1259
+                "Bun-\u014D",                   // 1260
+                "K\u014Dch\u014D",              // 1261
+                "Bun-ei",                       // 1264
+                "Kenji",                        // 1275
+                "K\u014Dan",                    // 1278
+                "Sh\u014D\u014D",               // 1288
+                "Einin",                        // 1293
+                "Sh\u014Dan",                   // 1299
+                "Kengen",                       // 1302
+                "Kagen",                        // 1303
+                "Tokuji",                       // 1306
+                "Enkei",                        // 1308
+                "\u014Cch\u014D",               // 1311
+                "Sh\u014Dwa",                   // 1312
+                "Bunp\u014D",                   // 1317
+                "Gen\u014D",                    // 1319
+                "Genky\u014D",                  // 1321
+                "Sh\u014Dch\u016B",             // 1324
+                "Kareki",                       // 1326
+                "Gentoku",                      // 1329
+                "Genk\u014D",                   // 1331
+                "Kemmu",                        // 1334
+                "Engen",                        // 1336
+                "K\u014Dkoku",                  // 1340
+                "Sh\u014Dhei",                  // 1346
+                "Kentoku",                      // 1370
+                "Bunch\u0169",                  // 1372
+                "Tenju",                        // 1375
+                "K\u014Dryaku",                 // 1379
+                "K\u014Dwa",                    // 1381
+                "Gench\u0169",                  // 1384
+                "Meitoku",                      // 1384
+                "Kakei",                        // 1387
+                "K\u014D\u014D",                // 1389
+                "Meitoku",                      // 1390
+                "\u014Cei",                     // 1394
+                "Sh\u014Dch\u014D",             // 1428
+                "Eiky\u014D",                   // 1429
+                "Kakitsu",                      // 1441
+                "Bun-an",                       // 1444
+                "H\u014Dtoku",                  // 1449
+                "Ky\u014Dtoku",                 // 1452
+                "K\u014Dsh\u014D",              // 1455
+                "Ch\u014Droku",                 // 1457
+                "Kansh\u014D",                  // 1460
+                "Bunsh\u014D",                  // 1466
+                "\u014Cnin",                    // 1467
+                "Bunmei",                       // 1469
+                "Ch\u014Dky\u014D",             // 1487
+                "Entoku",                       // 1489
+                "Mei\u014D",                    // 1492
+                "Bunki",                        // 1501
+                "Eish\u014D",                   // 1504
+                "Taiei",                        // 1521
+                "Ky\u014Droku",                 // 1528
+                "Tenmon",                       // 1532
+                "K\u014Dji",                    // 1555
+                "Eiroku",                       // 1558
+                "Genki",                        // 1570
+                "Tensh\u014D",                  // 1573
+                "Bunroku",                      // 1592
+                "Keich\u014D",                  // 1596
+                "Genwa",                        // 1615
+                "Kan-ei",                       // 1624
+                "Sh\u014Dho",                   // 1644
+                "Keian",                        // 1648
+                "Sh\u014D\u014D",               // 1652
+                "Meiryaku",                     // 1655
+                "Manji",                        // 1658
+                "Kanbun",                       // 1661
+                "Enp\u014D",                    // 1673
+                "Tenwa",                        // 1681
+                "J\u014Dky\u014D",              // 1684
+                "Genroku",                      // 1688
+                "H\u014Dei",                    // 1704
+                "Sh\u014Dtoku",                 // 1711
+                "Ky\u014Dh\u014D",              // 1716
+                "Genbun",                       // 1736
+                "Kanp\u014D",                   // 1741
+                "Enky\u014D",                   // 1744
+                "Kan-en",                       // 1748
+                "H\u014Dryaku",                 // 1751
+                "Meiwa",                        // 1764
+                "An-ei",                        // 1772
+                "Tenmei",                       // 1781
+                "Kansei",                       // 1789
+                "Ky\u014Dwa",                   // 1801
+                "Bunka",                        // 1804
+                "Bunsei",                       // 1818
+                "Tenp\u014D",                   // 1830
+                "K\u014Dka",                    // 1844
+                "Kaei",                         // 1848
+                "Ansei",                        // 1854
+                "Man-en",                       // 1860
+                "Bunky\u016B",                  // 1861
+                "Genji",                        // 1864
+                "Kei\u014D",                    // 1865
+                "Meiji",                        // 1868
+                "Taish\u014D",                  // 1912
+                "Sh\u014Dwa",                   // 1926
+                "Heisei",                       // 1989
+            }
+        }
+        // Note: Chinese Calendar is not supported in ICU4C 3.0
+        chinese {
+            IsLeapMonth {
+                 "",
+                 "*"
+            }
+            DateTimePatterns:array {
+                "h:mm:ss a z", // full time pattern
+                "h:mm:ss a z", // long time pattern
+                "h:mm:ss a", // medium time pattern
+                "h:mm a", // short time pattern
+                // TODO Fix the following
+                "EEEE y'x'G-Ml-d", // full date pattern
+                "y'x'G-Ml-d", // long date pattern
+                "y'x'G-Ml-d", // medium date pattern
+                "y'x'G-Ml-d", // short date pattern
+                "{1} {0}" // date-time pattern
+            }
+        }
+    }
+
+    // If there is a two letter abbreviation (ISO-639-1) for a three letter
+    // abbreviation (ISO-639-2), the two letter abbreviation must be used.
+    // Source: http://lcweb.loc.gov/standards/iso639-2/englangn.html
+    Languages {
+        Fallback{""}
+        root{ "root" }
+
+        aa  { "aa"  }
+        ab  { "ab"  }
+        ace { "ace" }
+        ach { "ach" }
+        ada { "ada" }
+        ady { "ady" }
+        ae  { "ae"  }
+        af  { "af"  }
+        afa { "afa" }
+        afh { "afh" }
+        ak  { "ak"  }
+        akk { "akk" }
+        ale { "ale" }
+        alg { "alg" }
+        am  { "am"  }
+        an  { "an"  }
+        ang { "ang" }
+        apa { "apa" }
+        ar  { "ar"  }
+        arc { "arc" }
+        arn { "arn" }
+        arp { "arp" }
+        art { "art" }
+        arw { "arw" }
+        as  { "as"  }
+        ast { "ast" }
+        ath { "ath" }
+        aus { "aus" }
+        av  { "av"  }
+        awa { "awa" }
+        ay  { "ay"  }
+        az  { "az"  }
+        ba  { "ba"  }
+        bad { "bad" }
+        bai { "bai" }
+        bal { "bal" }
+        bam { "bam" }
+        ban { "ban" }
+        bas { "bas" }
+        bat { "bat" }
+        be  { "be"  }
+        bej { "bej" }
+        bem { "bem" }
+        ber { "ber" }
+        bg  { "bg"  }
+        bh  { "bh"  }
+        bho { "bho" }
+        bi  { "bi"  }
+        bik { "bik" }
+        bin { "bin" }
+        bla { "bla" }
+        bm  { "bm"  }
+        bn  { "bn"  }
+        bnt { "bnt" }
+        bo  { "bo"  }
+        br  { "br"  }
+        bra { "bra" }
+        bs  { "bs"  }
+        btk { "btk" }
+        bua { "bua" }
+        bug { "bug" }
+        byn { "byn" }
+        ca  { "ca"  }
+        cad { "cad" }
+        cai { "cai" }
+        car { "car" }
+        cau { "cau" }
+        ce  { "ce"  }
+        ceb { "ceb" }
+        cel { "cel" }
+        ch  { "ch"  }
+        chb { "chb" }
+        chg { "chg" }
+        chk { "chk" }
+        chm { "chm" }
+        chn { "chn" }
+        cho { "cho" }
+        chp { "chp" }
+        chr { "chr" }
+        chy { "chy" }
+        cmc { "cmc" }
+        co  { "co"  }
+        cop { "cop" }
+        cpe { "cpe" }
+        cpf { "cpf" }
+        cpp { "cpp" }
+        cr  { "cr"  }
+        crh { "crh" }
+        crp { "crp" }
+        cs  { "cs"  }
+        csb { "csb" }
+        cu  { "cu"  }
+        cus { "cus" }
+        cv  { "cv"  }
+        cy  { "cy"  }
+        da  { "da"  }
+        dak { "dak" }
+        dar { "dar" }
+        day { "day" }
+        de  { "de"  }
+        del { "del" }
+        den { "den" }
+        dgr { "dgr" }
+        din { "din" }
+        doi { "doi" }
+        dra { "dra" }
+        dsb { "dsb" }
+        dua { "dua" }
+        dum { "dum" }
+        dv  { "dv"  }
+        dyu { "dyu" }
+        dz  { "dz"  }
+        ee  { "ee"  }
+        efi { "efi" }
+        egy { "egy" }
+        eka { "eka" }
+        el  { "el"  }
+        elx { "elx" }
+        en  { "en"  }
+        enm { "enm" }
+        eo  { "eo"  }
+        es  { "es"  }
+        et  { "et"  }
+        eu  { "eu"  }
+        ewo { "ewo" }
+        fa  { "fa"  }
+        fan { "fan" }
+        fat { "fat" }
+        ff  { "ff"  }
+        fi  { "fi"  }
+        fiu { "fiu" }
+        fj  { "fj"  }
+        fo  { "fo"  }
+        fon { "fon" }
+        fr  { "fr"  }
+        frm { "frm" }
+        fro { "fro" }
+        fur { "fur" }
+        fy  { "fy"  }
+        ga  { "ga"  }
+        gaa { "gaa" }
+        gay { "gay" }
+        gba { "gba" }
+        gd  { "gd"  }
+        gem { "gem" }
+        gez { "gez" }
+        gil { "gil" }
+        gl  { "gl"  }
+        gmh { "gmh" }
+        gn  { "gn"  }
+        goh { "goh" }
+        gon { "gon" }
+        gor { "gor" }
+        got { "got" }
+        grb { "grb" }
+        grc { "grc" }
+        gu  { "gu"  }
+        gv  { "gv"  }
+        gwi { "gwi" }
+        ha  { "ha"  }
+        hai { "hai" }
+        haw { "haw" }
+        he  { "he"  }
+        hi  { "hi"  }
+        hil { "hil" }
+        him { "him" }
+        hit { "hit" }
+        hmn { "hmn" }
+        ho  { "ho"  }
+        hr  { "hr"  }
+        hsb { "hsb" }
+        ht  { "ht"  }
+        hu  { "hu"  }
+        hup { "hup" }
+        hy  { "hy"  }
+        hz  { "hz"  }
+        ia  { "ia"  }
+        iba { "iba" }
+        id  { "id"  }
+        ie  { "ie"  }
+        ig  { "ig"  }
+        ii  { "ii"  }
+        ijo { "ijo" }
+        ik  { "ik"  }
+        ilo { "ilo" }
+        inc { "inc" }
+        ine { "ine" }
+        inh { "inh" }
+        io  { "io"  }
+        ira { "ira" }
+        iro { "iro" }
+        is  { "is"  }
+        it  { "it"  }
+        iu  { "iu"  }
+        //iw  { "iw"  }
+        ja  { "ja"  }
+        jbo { "jbo" }
+        jpr { "jpr" }
+        jrb { "jrb" }
+        jv  { "jv"  }
+        ka  { "ka"  }
+        kaa { "kaa" }
+        kab { "kab" }
+        kac { "kac" }
+        kam { "kam" }
+        kar { "kar" }
+        kaw { "kaw" }
+        kbd { "kbd" }
+        kg  { "kg"  }
+        kha { "kha" }
+        khi { "khi" }
+        kho { "kho" }
+        ki  { "ki"  }
+        kj  { "kj"  }
+        kk  { "kk"  }
+        kl  { "kl"  }
+        km  { "km"  }
+        kmb { "kmb" }
+        kn  { "kn"  }
+        ko  { "ko"  }
+        kok { "kok" }
+        kos { "kos" }
+        kpe { "kpe" }
+        kr  { "kr"  }
+        krc { "krc" }
+        kro { "kro" }
+        kru { "kru" }
+        ks  { "ks"  }
+        ku  { "ku"  }
+        kum { "kum" }
+        kut { "kut" }
+        kv  { "kv"  }
+        kw  { "kw"  }
+        ky  { "ky"  }
+        la  { "la"  }
+        lad { "lad" }
+        lah { "lah" }
+        lam { "lam" }
+        lb  { "lb"  }
+        lez { "lez" }
+        lg  { "lg"  }
+        li  { "li"  }
+        ln  { "ln"  }
+        lo  { "lo"  }
+        lol { "lol" }
+        loz { "loz" }
+        lt  { "lt"  }
+        lu  { "lu"  }
+        lua { "lua" }
+        lui { "lui" }
+        lun { "lun" }
+        luo { "luo" }
+        lus { "lus" }
+        lv  { "lv"  }
+        mad { "mad" }
+        mag { "mag" }
+        mai { "mai" }
+        mak { "mak" }
+        man { "man" }
+        map { "map" }
+        mas { "mas" }
+        mdf { "mdf" }
+        mdr { "mdr" }
+        men { "men" }
+        mg  { "mg"  }
+        mga { "mga" }
+        mh  { "mh"  }
+        mi  { "mi"  }
+        mic { "mic" }
+        min { "min" }
+        mis { "mis" }
+        mk  { "mk"  }
+        mkh { "mkh" }
+        ml  { "ml"  }
+        mn  { "mn"  }
+        mnc { "mnc" }
+        mni { "mni" }
+        mno { "mno" }
+        mo  { "mo"  }
+        moh { "moh" }
+        mos { "mos" }
+        mr  { "mr"  }
+        ms  { "ms"  }
+        mt  { "mt"  }
+        mul { "mul" }
+        mun { "mun" }
+        mus { "mus" }
+        mwr { "mwr" }
+        my  { "my"  }
+        myn { "myn" }
+        myv { "myv" }
+        na  { "na"  }
+        nah { "nah" }
+        nai { "nai" }
+        nap { "nap" }
+        nb  { "nb"  }
+        nd  { "nd"  }
+        nds { "nds" }
+        ne  { "ne"  }
+        new { "new" }
+        ng  { "ng"  }
+        nia { "nia" }
+        nic { "nic" }
+        niu { "niu" }
+        nl  { "nl"  }
+        nn  { "nn"  }
+        no  { "no"  }
+        nog { "nog" }
+        non { "non" }
+        nr  { "nr"  }
+        nso { "nso" }
+        nub { "nub" }
+        nv  { "nv"  }
+        ny  { "ny"  }
+        nym { "nym" }
+        nyn { "nyn" }
+        nyo { "nyo" }
+        nzi { "nzi" }
+        oc  { "oc"  }
+        oj  { "oj"  }
+        om  { "om"  }
+        or  { "or"  }
+        os  { "os"  }
+        osa { "osa" }
+        ota { "ota" }
+        oto { "oto" }
+        pa  { "pa"  }
+        paa { "paa" }
+        pag { "pag" }
+        pal { "pal" }
+        pam { "pam" }
+        pap { "pap" }
+        pau { "pau" }
+        peo { "peo" }
+        phi { "phi" }
+        phn { "phn" }
+        pi  { "pi"  }
+        pl  { "pl"  }
+        pon { "pon" }
+        pra { "pra" }
+        pro { "pro" }
+        ps  { "ps"  }
+        pt  { "pt"  }
+        // qaa-qtz is reserved for locale use
+        qu  { "qu"  }
+        raj { "raj" }
+        rap { "rap" }
+        rar { "rar" }
+        rm  { "rm"  }
+        rn  { "rn"  }
+        ro  { "ro"  }
+        roa { "roa" }
+        rom { "rom" }
+        ru  { "ru"  }
+        rw  { "rw"  }
+        sa  { "sa"  }
+        sad { "sad" }
+        sah { "sah" }
+        sai { "sai" }
+        sal { "sal" }
+        sam { "sam" }
+        sas { "sas" }
+        sat { "sat" }
+        sc  { "sc"  }
+        sco { "sco" }
+        sd  { "sd"  }
+        se  { "se"  }
+        sel { "sel" }
+        sem { "sem" }
+        sg  { "sg"  }
+        sga { "sga" }
+        sgn { "sgn" }
+        sh  { "sh"  } // This is deprecated. This will be removed once we can use scripts in locale IDs.
+        shn { "shn" }
+        si  { "si"  }
+        sid { "sid" }
+        sio { "sio" }
+        sit { "sit" }
+        sk  { "sk"  }
+        sl  { "sl"  }
+        sla { "sla" }
+        sm  { "sm"  }
+        sma { "sma" }
+        smi { "smi" }
+        smj { "smj" }
+        smn { "smn" }
+        sms { "sms" }
+        sn  { "sn"  }
+        snk { "snk" }
+        so  { "so"  }
+        sog { "sog" }
+        son { "son" }
+        sq  { "sq"  }
+        sr  { "sr"  }
+        srr { "srr" }
+        ss  { "ss"  }
+        ssa { "ssa" }
+        st  { "st"  }
+        su  { "su"  }
+        suk { "suk" }
+        sus { "sus" }
+        sux { "sux" }
+        sv  { "sv"  }
+        sw  { "sw"  }
+        syr { "syr" }
+        ta  { "ta"  }
+        tai { "tai" }
+        te  { "te"  }
+        tem { "tem" }
+        ter { "ter" }
+        tet { "tet" }
+        tg  { "tg"  }
+        th  { "th"  }
+        ti  { "ti"  }
+        tig { "tig" }
+        tiv { "tiv" }
+        tk  { "tk"  }
+        tkl { "tkl" }
+        tl  { "tl"  }
+        tli { "tli" }
+        tmh { "tmh" }
+        tn  { "tn"  }
+        to  { "to"  }
+        tog { "tog" }
+        tpi { "tpi" }
+        tr  { "tr"  }
+        ts  { "ts"  }
+        tsi { "tsi" }
+        tt  { "tt"  }
+        tum { "tum" }
+        tup { "tup" }
+        tut { "tut" }
+        tvl { "tvl" }
+        tw  { "tw"  }
+        ty  { "ty"  }
+        tyv { "tyv" }
+        udm { "udm" }
+        ug  { "ug"  }
+        uga { "uga" }
+        uk  { "uk"  }
+        umb { "umb" }
+        und { "und" }
+        ur  { "ur"  }
+        uz  { "uz"  }
+        vai { "vai" }
+        ve  { "ve"  }
+        vi  { "vi"  }
+        vo  { "vo"  }
+        vot { "vot" }
+        wa  { "wa"  }
+        wak { "wak" }
+        wal { "wal" }
+        war { "war" }
+        was { "was" }
+        wen { "wen" }
+        wo  { "wo"  }
+        xal { "xal" }
+        xh  { "xh"  }
+        yao { "yao" }
+        yap { "yap" }
+        yi  { "yi"  }
+        yo  { "yo"  }
+        ypk { "ypk" }
+        za  { "za"  }
+        zap { "zap" }
+        zen { "zen" }
+        zh  { "zh"  }
+        znd { "znd" }
+        zu  { "zu"  }
+        zun { "zun" }
+    }
+
+    localPatternChars { "GyMdkHmsSEDFwWahKzYeugAZ" }
+
+    ExemplarCharacters{"[]"}
+    LocaleScript:array {
+        "Zyyy"
+    }
+    MeasurementSystem:int{ 0 } // ISO/Metric system
+    // the PaperSize units are in mm
+    PaperSize:intvector{
+        297, // height
+        210  // width
+    }
+    NumberElements {
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ".",
+        "+",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+
+    Scripts {
+        Arab { "Arab" }
+        Armn { "Armn" }
+        Beng { "Beng" }
+        Bopo { "Bopo" }
+        Brai { "Brai" }
+        Buhd { "Buhd" }
+        Cans { "Cans" }
+        Cher { "Cher" }
+        Cprt { "Cprt" }
+        Cyrl { "Cyrl" }
+        Deva { "Deva" }
+        Dsrt { "Dsrt" }
+        Ethi { "Ethi" }
+        Geor { "Geor" }
+        Goth { "Goth" }
+        Grek { "Grek" }
+        Gujr { "Gujr" }
+        Guru { "Guru" }
+        Hang { "Hang" }
+        Hano { "Hano" }
+        Hani { "Hani" }
+        Hans { "Hans" } // Not a formal part of ISO-15924 yet
+        Hant { "Hant" } // Not a formal part of ISO-15924 yet
+        Hebr { "Hebr" }
+        Hira { "Hira" }
+        Hrkt { "Hrkt" }
+        Ital { "Ital" }
+        Kana { "Kana" }
+        Khmr { "Khmr" }
+        Knda { "Knda" }
+        Laoo { "Laoo" }
+        Latn { "Latn" }
+        Limb { "Limb" }
+        Linb { "Linb" }
+        Mlym { "Mlym" }
+        Mong { "Mong" }
+        Mymr { "Mymr" }
+        Ogam { "Ogam" }
+        Orya { "Orya" }
+        Osma { "Osma" }
+        Qaac { "Qaac" }
+        Qaai { "Qaai" }
+        Runr { "Runr" }
+        Shaw { "Shaw" }
+        Sinh { "Sinh" }
+        Syrc { "Syrc" }
+        Tagb { "Tagb" }
+        Tale { "Tale" }
+        Taml { "Taml" }
+        Telu { "Telu" }
+        Tglg { "Tglg" }
+        Thaa { "Thaa" }
+        Thai { "Thai" }
+        Tibt { "Tibt" }
+        Ugar { "Ugar" }
+        Yiii { "Yiii" }
+        Zyyy { "Zyyy" }
+    }
+
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+    /*
+     * Default used to be English (US) rules, but now default just formats
+     * like DecimalFormat.  The former default rules are now the _en rules.
+     */
+    SpelloutRules {
+        "=#,##0.######=;\n"
+    }
+
+    OrdinalRules {
+        "=#,##0=;\n"
+    }
+
+    DurationRules {
+        "=#,##0=;\n"
+    }
+
+
+    //------------------------------------------------------------
+    // BEGIN Transliterator support
+    //------------------------------------------------------------
+
+    // See also icu/source/data/translit/index.txt
+
+    TransliteratorNamePattern {
+        // Format for the display name of a Transliterator.
+        // This is the language-neutral form of this resource.
+        "{0,choice,0#|1#{1}|2#{1}-{2}}" // Display name
+    }
+
+    // Transliterator display names
+    // This is the English form of this resource.
+    "%Translit%Hex"         { "%Translit%Hex" }
+    "%Translit%UnicodeName" { "%Translit%UnicodeName" }
+    "%Translit%UnicodeChar" { "%Translit%UnicodeChar" }
+
+    //------------------------------------------------------------
+    // END Transliterator support
+    //------------------------------------------------------------
+
+    Keys{
+        collation { "COLLATION" }
+        calendar  { "CALENDAR" }
+        currency  { "CURRENCY" }
+    }
+    Types{
+        // keys for collation (traditional may also be used for traditional chinese)
+        // The values in root must always be capitalized because the signify the values are
+        // codes not translations
+        collation{
+            Fallback{ "" }
+            direct      { "DIRECT"    }
+            phonebook   { "PHONEBOOK" }
+            pinyin      { "PINYIN"    }
+            stroke      { "STROKE"    }
+            traditional { "TRADITIONAL" }
+        }
+        calendar{
+            Fallback{ "" }
+            japanese    { "JAPANESE"  }
+            buddhist    { "BUDDHIST"  }
+            islamic     { "ISLAMIC"   }
+            islamic-civil { "ISLAMIC-CIVIL" }
+            hebrew      { "HEBREW"    }
+            chinese     { "CHINESE"   }
+            gregorian   { "GREGORIAN" }
+        }
+    }
+    Variants{
+        Fallback{ "" }
+        //NY      { "NY" }        // No longer valid variant. Here for backwards compatibility.
+        //EURO    { "EURO" }      // EURO variant display name
+        POSIX   { "POSIX" }
+        REVISED { "REVISED" }
+    }
+    zoneStrings:array {
+        {
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        }
+    }
+
+}

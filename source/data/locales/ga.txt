@@ -1,0 +1,1242 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+// A lot of data contributed from Séamus Ó Ciardhuáin, seoc [at] cnds.ucd.ie
+
+ga{
+    Version { "2.0" }
+
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Domh",
+                        "Luan",
+                        "Máirt",
+                        "Céad",
+                        "Déar",
+                        "Aoine",
+                        "Sath",
+                    }
+                    wide{
+                        "Dé Domhnaigh",
+                        "Dé Luain",
+                        "Dé Máirt",
+                        "Dé Céadaoin",
+                        "Déardaoin",
+                        "Dé hAoine",
+                        "Dé Sathairn",
+                    }
+                }
+            }
+            eras{
+                "RC",
+                "AD",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ean",
+                        "Feabh",
+                        "Márta",
+                        "Aib",
+                        "Beal",
+                        "Meith",
+                        "Iúil",
+                        "Lún",
+                        "MFómh",
+                        "DFómh",
+                        "Samh",
+                        "Noll",
+                    }
+                    wide{
+                        "Eanáir",
+                        "Feabhra",
+                        "Márta",
+                        "Aibreán",
+                        "Bealtaine",
+                        "Meitheamh",
+                        "Iúil",
+                        "Lúnasa",
+                        "Meán Fómhair",
+                        "Deireadh Fómhair",
+                        "Samhain",
+                        "Nollaig",
+                    }
+                }
+            }
+        }
+    }
+    Countries {
+        AD { "Andóra" }
+        AE { "Aontas na nÉimíríochtaí Arabacha" }
+        AF { "An Afganastáin" }
+        AG { "Antigua agus Barbuda" }
+        AI { "Anguilla" }
+        AL { "An Albáin" }
+        AM { "An Airméin" }
+        AN { "Antillí na hÍsiltíre" }
+        AO { "Angóla" }
+        AQ { "An Antartaice" } // An tAntartach
+        AR { "An Airgintín" }
+        AS { "Samó Meiriceánach" }
+        AT { "An Ostair" }
+        AU { "An Astráil" }
+        AW { "Aruba" }
+        AZ { "An Asarbaiseáin" }
+
+        BA { "An Bhoisnia-Heirseagaivéin" }
+        BB { "Barbadós" }
+        BD { "An Bhanglaidéis" }
+        BE { "An Bheilg" }
+        BF { "Buircíne Fasó" }
+        BG { "An Bhulgáir" }
+        BH { "Bairéin" }
+        BI { "An Bhurúin" }
+        BJ { "Beinin" }
+        BM { "Beirmiúda" }
+        BN { "Brúiné" }
+        BO { "An Bholaiv" }
+        BR { "An Bhrasaíl" }
+        BS { "Na Bahámaí" }
+        BT { "An Bhútáin" }
+        BV { "Oileáin Bouvet" }
+        BW { "An Bhotsuáin" }
+        BY { "An Bhealarúis" }
+        BZ { "An Bheilís" }
+
+        CA { "Ceanada" }
+        CC { "Oileáin Cocos (Keeling)"}
+        CD { "Poblacht Dhaonlathach an Chongó" }
+        CF { "Poblacht na hAfraice Láir" }
+        CG { "An Congó" }
+        CH { "An Eilvéis" }
+        CI { "An Cósta Eabhair" }
+        CK { "Oileáin Cook" }
+        CL { "An tSile" }
+        CM { "Camarún" }
+        CN { "An tSín" }
+        CO { "An Cholóim" }
+        CR { "Cósta Ríce" }
+//        CS { "Seirbia agus Montainéagró" } // new July 2003 in ISO 3166-1
+        CU { "Cúba" }
+        CV { "Rinn Verde" }
+        CX { "Oileán na Nollag" }
+        CY { "An Chipir" }
+        CZ { "Poblacht na Seice" }
+
+        DE { "An Ghearmáin" }
+        DJ { "Djibouti" }
+        DK { "An Danmhairg" }
+        DM { "Doiminice" }
+        DO { "An Phoblacht Dhoiminiceach" }
+        DZ { "An Ailgéir" }
+
+        EC { "Eacuadór" }
+        EE { "An Eastóin" }
+        EG { "An Éigipt" }
+        EH { "An Sahára Thiar" }
+        ER { "Eritrea" }
+        ES { "An Spáinn" }
+        ET { "An Aetóip" }
+
+        FI { "An Fhionlainn" }
+        FJ { "Fidsí" }
+        FK { "Oileáin Fháclainne" }
+        FM { "An Mhicrinéis" }
+        FO { "Oileáin Fharó" }
+        FR { "An Fhrainc" }
+
+        GA { "An Ghabúin" }
+        GB { "An Ríocht Aontaithe" }
+        GD { "Grenada" }
+        GE { "An tSeoirsia" } // Everson: An Ghrúis
+        GF { "An Ghuáin Fhrancach" }
+        GH { "Gána" }
+        GI { "Giobráltar" }
+        GL { "An Ghraonlainn" }
+        GM { "An Ghaimbia" }
+        GN { "An Ghuine" }
+        GP { "Guadalúip" }
+        GQ { "An Ghuine Mheánchriosach" }
+        GR { "An Ghréig" }
+        GS { "An tSeoirsia Theas agus Oileáin Sandwich Theas" }
+        GT { "Guatamala" }
+        GU { "Guam" }
+        GW { "An Ghuine-Bhissau" }
+        GY { "An Ghuáin" }
+
+        HK { "Hong Cong" }
+        HM { "Oileán Heard agus Oileáin McDonald" }
+        HN { "Hondúras" }
+        HR { "An Chróit" }
+        HT { "Háití" }
+        HU { "An Ungáir" }
+
+        ID { "An Indinéis" }
+        IE { "Éire" }
+        IL { "Iosrael" }
+        IN { "An India" }
+        IO { "Críocha Briotanacha an Aigéin Indiagh" }
+        IQ { "An Iaráic" }
+        IR { "An Iaráin" }
+        IS { "An Íoslainn" }
+        IT { "An Iodáil" }
+
+        JM { "Iamáice" }
+        JO { "An Iordáin" }
+        JP { "An tSeapáin" }
+
+        KE { "An Chéinia" }
+        KG { "An Chirgeastáin" }
+        KH { "An Chambóid" }
+        KI { "Cireabaití" }
+        KM { "Oileáin Chomóra" }
+        KN { "Saint Kitts agus Nevis" }
+        KP { "An Chóiré Thuaidh" }
+        KR { "An Chóiré Theas" }
+        KW { "Cuáit" }
+        KY { "Oileáin Cayman" }
+        KZ { "An Chasacstáin" }
+
+        LA { "Laos" }
+        LB { "An Liobáin" }
+        LC { "Saint Lucia" }
+        LI { "Lichtinstéin" }
+        LK { "Srí Lanca" }
+        LR { "An Libéir" }
+        LS { "Leosóta" }
+        LT { "An Liotuáin" }
+        LU { "Lucsamburg" }
+        LV { "An Laitvia" }
+        LY { "An Libia" }
+
+        MA { "Maracó" }
+        MC { "Monacó" }
+        MD { "An Mholdóiv" }
+        MG { "Madagascar" }
+        MH { "Oileáin Marshall"}
+        MK { "An Mhacadóin" }
+        ML { "Mailí" }
+        MM { "Maenmar" }
+        MN { "An Mhongóil" }
+        MO { "Macao" }
+        MP { "Oileáin Mariana Thuaidh"}
+        MQ { "Martinique" }
+        MR { "An Mharatáin" }
+        MS { "Montsarat" }
+        MT { "Málta" }
+        MU { "Oileán Mhuirís" }
+        MV { "Mhaildiví" }
+        MW { "An Mhaláiv" }
+        MX { "Meicsiceo" }
+        MY { "An Mhalaeisia" }
+        MZ { "Mósaimbíc" }
+
+        NA { "An Namaib" }
+        NC { "An Nua-Chaladóin" }
+        NE { "An Nígir" }
+        NF { "Oileán Norfolk" }
+        NG { "An Nigéir" }
+        NI { "Nicearagua" }
+        NL { "An Ísiltír" }
+        NO { "An Iorua" }
+        NP { "Neipeal" }
+        NR { "Nárú" }
+        NU { "Niue" }
+        NZ { "An Nua-Shéalainn" }
+
+        OM { "Oman" }
+
+        PA { "Panama" }
+        PE { "Peiriú" }
+        PF { "An Pholainéis Fhrancach" }
+        PG { "Nua-Ghuine Phapua" }
+        PH { "Na hOileáin Fhilipíneacha" }
+        PK { "An Phacastáin" }
+        PL { "An Pholainn" }
+        PM { "Saint Pierre agus Miquelon" }
+        PN { "Pitcairn" }
+        PR { "Portó Ríce" }
+        PS { "Na Críocha Pailistíneacha" }
+        PT { "An Phortaingéil" }
+        PW { "Palau" }
+        PY { "Paragua" }
+
+        QA { "Catar" }
+
+        RE { "Réunion" }
+        RO { "An Rómáin" }
+        RU { "Cónaidhm na Rúise" }
+        RW { "Ruanda" }
+
+        SA { "An Araib Shádach" }
+        SB { "Oileáin Solomon" }
+        SC { "Na Séiséil" }
+        SD { "An tSúdáin" }
+        SE { "An tSualainn" }
+        SG { "Singeapór" }
+        SH { "San Héilin" }
+        SI { "An tSlóvéin" }
+        SJ { "Svalbard agus Jan Mayen" }
+        SK { "An tSlóvaic" }
+        SL { "Siarra Leon" }
+        SM { "San Mairíne" }
+        SN { "An tSeineagáil" }
+        SO { "An tSomáil" }
+        SP { "An tSeirbia" } // No longer used according to ISO3166
+        SR { "Suranam" }
+        ST { "Sao Tome agus Principe" }
+        SV { "An tSalvadóir" }
+        SY { "An tSiria" }
+        SZ { "An tSuasalainn" }
+
+        TC { "Oileáin Turks agus Caicos" }
+        TD { "Sead" }
+        TF { "Críocha Francacha Theas" }
+        TG { "Tóga" }
+        TH { "An Téalainn" }
+        TJ { "An Táidsíceastáin" }
+        TK { "Tócalá" }
+        TL { "Tíomór-Leste" }
+        TM { "An Tuircméanastáin" }
+        TN { "An Túinéis" }
+        TO { "Tonga" }
+        TR { "An Tuirc" }
+        TT { "Oileáin na Tríonóide agus Tobága" }
+        TV { "Tuvalú" }
+        TW { "An Téaváin" }
+        TZ { "An Tansáin" }
+
+        UA { "An Úcráin" }
+        UG { "Uganda" }
+        UM { "Mion-Oileáin Imeallacha S.A.M." }
+        US { "Stáit Aontaithe Mheiriceá" }
+        UY { "Urugua" }
+        UZ { "Úisbéiceastáin" }
+
+        VA { "An Chathaoir Naofa (Stát Chathair na Vatacáine)" }
+        VC { "Saint Vincent agus na Grenadines" }
+        VE { "Veiniséala" }
+        VG { "Oileáin Bhriotanacha na Maighdean" }
+        VI { "Oileáin na Maighdean S.A.M." }
+        VN { "Vítneam" }
+        VU { "Vanuatú" }
+
+        WF { "Oileáin Vailís agus Futúna" }
+        WS { "Samó" }
+
+        YE { "Éimin" }
+        YT { "Mayotte" }
+        YU { "An Iúgslaiv" } // No longer used according to ISO3166
+
+        ZA { "An Afraic Theas" }
+        ZM { "An tSaimbia" }
+        ZW { "An tSiombáib" }
+    }
+    // Currency display names
+    Currencies {
+    // ones needing work are marked //??
+    // from the May 2003 list in en.txt (v 2.0)
+    // shilling = scilling
+    // pound = punt
+    // dinar, diner = dínear
+    // ruble = rúbal
+    // rupee = rúipí; nó rúpaí?
+    // afghani = afgainí
+        ADD { "ADD", "Dínear Andóra" }
+        ADP { "ADP", "Peseta Andóra" }
+        AED { "AED", "Dirham Aontas na nÉimíríochtaí Arabacha" }
+        AFA { "AFA", "Afgainí (1927-2002)" }
+        AFN { "Af",  "Afgainí" }
+        AIF { "AIF", "Franc Affars agus Issas" }
+        ALK { "ALK", "Lek Albánach (1946-1961)" }
+        ALL { "lek", "Lek Albánach" }
+        ALV { "ALV", "Lek Valute Albánach" }
+        ALX { "ALX", "Teastais Airgeadraí Dollar na hAlbáine" }
+        AMD { "dram","Dram Airméanach" }
+        ANG { "AÍ f.","Guilder na nAntillí Ísiltíreach" }
+        AOA { "AOA", "Kwanza Angólach" }
+        AOK { "AOK", "Kwanza Angólach (1977-1990)" }
+        AON { "AON", "Kwanza Nua Angólach (1990-2000)" }
+        AOR { "AOR", "Kwanza Reajustado Angólach (1995-1999)" }
+        AOS { "AOS", "Escudo Angólach" }
+        ARA { "ARA", "Austral Airgintíneach" }
+        ARM { "ARM", "Peso Moneda Nacional Airgintíneach" }
+        ARP { "ARP", "Peso na Airgintíne (1983-1985)" }
+        ARS { "Arg$","Peso na Airgintíne" }
+        ATS { "ATS", "Scilling Ostarach" }
+        AUD { "A$",  "Dollar Astrálach" }
+        AUP { "AUP", "Punt Astrálach" }
+        AWG { "AWG", "Guilder Aruba" }
+        AZM { "AZM", "Manat Asarbaiseánach" }
+        BAD { "BAD", "Dínear Bhoisnia-Heirseagaivéin" }
+        BAM { "KM",  "Marc Inathraithe Bhoisnia-Heirseagaivéin" }
+        BAN { "BAN", "Dínear Nua Bhoisnia-Heirseagaivéin" }
+        BBD { "BDS$","Dollar Bharbadóis" }
+        BDT { "Tk",  "Taka Bhanglaidéiseach" }
+        BEC { "BEC", "Franc Beilgeach (inathraithe)" }
+        BEF { "BF",  "Franc Beilgeach" }
+        BEL { "BEL", "Franc Beilgeach (airgeadúil)" }
+        BGL { "lev", "Lev Bulgárach Crua" }
+        BGM { "BGM", "Lev Bulgárach Sóisialaíoch" }
+        BGN { "BGN", "Lev Nua Bulgárach" }
+        BGO { "BGO", "Lev Bulgárach (1879-1952)" }
+        BGX { "BGX", "Teastais Airgeadraí Lev Bulgárach" }
+        BHD { "BD",  "Dínear na Bairéine" }
+        BIF { "Fbu", "Franc na Burúine" }
+        BMD { "Ber$","Dollar Bheirmiúda" }
+        BMP { "BMP", "Punt Bheirmiúda" }
+        BND { "BND", "Dollar Bhrúiné" }
+        BOB { "Bs",  "Boliviano" }
+        BOL { "BOL", "Boliviano (1863-1962)" }
+        BOP { "BOP", "Peso na Bolaive" }
+        BOV { "BOV", "Mvdol Bolavach" }
+        BRB { "BRB", "Cruzeiro Novo Brasaíleach (1967-1986)" }
+        BRC { "BRC", "Cruzado Brasaíleach" }
+        BRE { "BRE", "Cruzeiro Brasaíleach (1990-1993)" }
+        BRL { "R$",  "Real Brasaíleach" }
+        BRN { "BRN", "Cruzado Novo Brasaíleach" }
+        BRR { "BRR", "Cruzeiro Brasaíleach" }
+        BRZ { "BRZ", "Cruzeiro Brasaíleach (1942-1967)" }
+        BSD { "BSD", "Dollar na mBahámaí" }
+        BSP { "BSP", "Punt na mBahámaí" }
+        BTN { "Nu",  "Ngultrum Bútánach" }
+        BTR { "BTR", "Rúipí na Bútáine" }
+        BUK { "BUK", "Kyat Burmach" }
+        BUR { "BUR", "Rúipí Bhurma" }
+        BWP { "BWP", "Pula Botsuánach" }
+        BYB { "BYB", "Rúbal Nua Béalarúiseach (1994-1999)" }
+        BYL { "BYL", "Rúbal Béalarúiseach (1992-1994)" }
+        BYR { "Rbl", "Rúbal Béalarúiseach" }
+        BZD { "BZ$", "Dollar na Beilíse" }
+        BZH { "BZH", "Dollar Hondúrais Bhriotanaigh" }
+        CAD { "Can$","Dollar Ceanada" }
+        CDF { "CDF", "Franc Congolais an Chongó" }
+        CDG { "CDG", "Franc Phoblacht an Chongó" }
+        CDL { "CDL", "Zaire an Chongó" }
+        CFF { "CFF", "CFA Franc Phoblacht na hAfraice Láir" }
+        CHF { "CHF", "Franc na hEilvéise" }
+        CKD { "CKD", "Dollar Oileáin Cook" }
+        CLC { "CLC", "Condor na Sile" }
+        CLE { "CLE", "Escudo na Sile" }
+        CLF { "CLF", "Unidades de Fomento na Sile" }
+        CLP { "Ch$", "Peso na Sile" }
+        CMF { "CMF", "CFA Franc Chamarúin" }
+        CNP { "CNP", "Jen Min Piao Yuan Síneach" }
+        CNX { "CNX", "Teastais Airgeadraí Dollar SAM Síneach" }
+        CNY { "Y",   "Yuan Renminbi Síneach" }
+        COB { "COB", "Peso Páipéir na Colóime" }
+        COF { "COF", "CFA Franc Chongó" }
+        COP { "Col$","Peso na Colóime" }
+        CRC { "C",   "Colon Chósta Ríce" }
+        CSC { "CSC", "Koruna na Seicslóvaice" }
+        CSK { "CSK", "Koruna Crua na Seicslóvaice" }
+        CUP { "CUP", "Peso Cúba" }
+        CUX { "CUX", "Teastais Airgeadraí Chúba" }
+        CVE { "CVEsc","Escudo na Rinne Verde" }
+        CWG { "CWG", "Guilder Curacao" }
+        CYP { "\u00A3C","Punt na Cipire" }
+        CZK { "CZK", "Koruna Phoblacht na Seice" }
+        DDM { "DDM", "Ostmark na hOirGhearmáine" }
+        DEM { "DEM", "Deutsche Mark" }
+        DES { "DES", "Sperrmark Gearmánach" }
+        DJF { "DF",  "Franc Djibouti" }
+        DKK { "DKr", "Krone Danmhargach" }
+        DOP { "RD$", "Peso Doimineacach" }
+        DZD { "DA",  "Dínear na hAilgéire" }
+        DZF { "DZF", "Franc Nua Ailgérach" }
+        DZG { "DZG", "Franc Germinal Ailgérach" }
+        ECS { "ECS", "Sucre Eacuadóir" }
+        ECV { "ECV", "Unidad de Valor Constante (UVC) Eacuadóir" }
+        EEK { "EEK", "Kroon na hEastóine" }
+        EGP { "EGP", "Punt na hÉigipte" }
+        ESP { "ESP", "Peseta Spáinneach" }
+        ETB { "Br",  "Birr na hAetóipe" }
+        ETD { "ETD", "Dollar na hAetóipe" }
+        EUR { "\u20AC","Euro" }
+        FIM { "FIM", "Markka Fionnlannach" }
+        FIN { "FIN", "Markka Fionnlannach (1860-1962)" }
+        FJD { "F$",  "Dollar Fhidsí" }
+        FJP { "FJP", "Punt Fhidsí" }
+        FKP { "FKP", "Punt Oileáin Fháclainne" }
+        FOK { "FOK", "Kronur Oileáin Fharó" }
+        FRF { "FRF", "Franc Francach" }
+        FRG { "FRG", "Franc Germinal Francach/Franc Poincare" }
+        GAF { "GAF", "CFA Franc na Gabúine" }
+        GBP { "\u00A3","Punt Steirling" }
+        GEK { "GEK", "Kupon Larit na Grúise" }
+        GEL { "lari","Lari na Grúise" }
+        GHC { "GHC", "Cedi Ghána" }
+        GHO { "GHO", "Sean-Cedi Ghána" }
+        GHP { "GHP", "Punt Ghána" }
+        GHR { "GHR", "Cedi Athluachtha Ghána" }
+        GIP { "GIP", "Punt Ghiobráltair" }
+        GLK { "GLK", "Krone na Graonlainne" }
+        GMD { "GMD", "Dalasi Gaimbia" }
+        GMP { "GMP", "Punt Gaimbia" }
+        GNF { "GF",  "Franc Guine" }
+        GNI { "GNI", "Franc Guine (1960-1972)" }
+        GNS { "GNS", "Syli Guine" }
+        GPF { "GPF", "Franc Guadeloupe" }
+        GQE { "GQE", "Ekwele Guineana na Guine Meánchriosaí" }
+        GQF { "GQF", "Franco na Guine Meánchriosaí" }
+        GQP { "GQP", "Peseta Guineana na Guine Meánchriosaí" }
+        GRD { "GRD", "Drachma Gréagach" }
+        GRN { "GRN", "Drachma Nua Gréagach" }
+        GTQ { "Q",   "Quetzal Guatamala" }
+        GUF { "GUF", "Franc Guiana na Guáine Francaí" }
+        GWE { "GWE", "Escudo na Guine Portaingéalaí" }
+        GWM { "GWM", "Mil Reis na Guine Portaingéalaí" }
+        GWP { "GWP", "Peso Guine-Bhissau" }
+        GYD { "G$",  "Dollar na Guáine" }
+        HKD { "HK$", "Dollar Hong Cong" }
+        HNL { "L",   "Lempira Hondúrais" }
+        HRD { "HRD", "Dínear na Cróite" }
+        HRK { "HRK", "Kuna Crótach" }
+        HTG { "HTG", "Gourde Háití" }
+        HUF { "Ft",  "Forint Ungárach" }
+        IBP { "IBP", "Punt Thuaisceart Éireann" }
+        IDG { "IDG", "Nica Guilder Indinéiseach" }
+        IDJ { "IDJ", "Java Rupiah Indinéiseach" }
+        IDN { "IDN", "Rupiah Nua Indinéiseach" }
+        IDR { "Rp",  "Rupiah Indinéiseach" }
+        IEP { "IR\u00A3","Punt Éireannach" }
+        ILL { "ILL", "Sheqel Iosraelach" }
+        ILP { "ILP", "Punt Iosraelach" }
+        ILS { "ILS","Sheqel Nua Iosraelach" }
+        IMP { "IMP", "Punt Steirling Oileán Mhanann" }
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Rúipí India" }
+        IQD { "ID",  "Dínear Irácach" }
+        IRR { "RI",  "Rial Iaránach" }
+        ISK { "ISK", "Krona Íoslannach" }
+        ITL { "\u20A4", "Lira Iodálach" }
+        JEP { "JEP", "Punt Steirling Gheirsí" }
+        JMD { "J$",  "Dollar Iamácach" }
+        JMP { "JMP", "Punt Iamácach" }
+        JOD { "JD",  "Dínear Iordánach" }
+        JPY { "\u00A5","Yen Seapánach" }
+        KES { "K Sh","Scilling Céiniach" }
+        KGS { "som", "Som na Cirgeastáine" }
+        KHO { "KHO", "Sean-Riel na Cambóide" }
+        KHR { "CR",  "Riel na Cambóide" }
+        KID { "KID", "Dollar Chireabaití" }
+        KMF { "CF",  "Franc Chomóra" }
+        KPP { "KPP", "Won Na nDaoine na Cóiré Thuaidh" }
+        KPW { "KPW", "Won na Cóiré Thuaidh" }
+        KRH { "KRH", "Hwan na Cóiré Theas" }
+        KRO { "KRO", "Sean-Won na Cóiré Theas" }
+        KRW { "KRW", "Won na Cóiré Theas" }
+        KWD { "KD",  "Dínear Cuátach" }
+        KYD { "KYD", "Dollar Oileáin Cayman" }
+        KZR { "KZR", "Rúbal Casacstánach" }
+        KZT { "T",   "Tenge Casacstánach" }
+        LAK { "LAK", "Kip Laosach" }
+        LBP { "LL",  "Punt na Liobáine" }
+        LIF { "LIF", "Franc Lichtinstéin" }
+        LKR { "SL Re","Rúipí Srí Lanca" }
+        LNR { "LNR", "Rúipí na Siolióne" }
+        LRD { "LRD", "Dollar na Libéire" }
+        LSL { "M",   "Loti Leosóta" }
+        LTL { "LTL", "Lita Liotuánach" }
+        LTT { "LTT", "Talonas Liotuánach" }
+        LUF { "LUF", "Franc Lucsamburg" }
+        LVL { "LVL", "Lats Laitviach" }
+        LVR { "LVR", "Rúbal Laitviach" }
+        LYB { "LYB", "Lira Údarás Míleata Briotanach Libia" }
+        LYD { "LD",  "Dínear Libia" }
+        LYP { "LYP", "Punt Libia" }
+        MAD { "MAD", "Dirham Mharacó" }
+        MAF { "MAF", "Franc Mharacó" }
+        MCF { "MCF", "Franc Nouveau Mhonacó" }
+        MCG { "MCG", "Franc Germinal Mhonacó" }
+        MDC { "MDC", "Leu Cúpóin Moldóvach" }
+        MDL { "MDL", "Leu Moldóvach" }
+        MDR { "MDR", "Rúbal Cúpóin Moldóvach" }
+        MGA { "MGA", "Ariary Madagascar" }
+        MGF { "MGF", "Franc Madagascar" }
+        MHD { "MHD", "Dollar Oileáin Marshall" }
+        MKD { "MDen","Denar na Macadóine" }
+        MKN { "MKN", "Denar na Macadóine (1992-1993)" }
+        MLF { "MLF", "Franc Mhailí" }
+        MMK { "MMK", "Kyat Mhaenmar" }
+        MMX { "MMX", "Teastais Airgeadra Dollar Mhaenmar" }
+        MNT { "Tug", "Tugrik Mongólach" }
+        MOP { "MOP", "Pataca Macao" }
+        MQF { "MQF", "Franc Martinique" }
+        MRO { "UM",  "Ouguiya na Maratáine" }
+        MTL { "Lm",  "Lira Maltach" }
+        MTP { "MTP", "Punt Maltach" }
+        MUR { "MUR", "Rúipí Oileán Mhuirís" }
+        MVP { "MVP", "Maldive Islands Rúipí" }
+        MVR { "MVR", "Maldive Islands Rufiyaa" }
+        MWK { "MK",  "Kwacha na Maláive" }
+        MWP { "MWP", "Punt na Maláive" }
+        MXN { "MEX$","Peso Meicsiceo" }
+        MXP { "MXP", "Peso Airgid Meicsiceo (1861-1992)" }
+        MXV { "MXV", "Unidad de Inversion (UDI) Meicsiceo" }
+        MYR { "RM",  "Ringgit Malaeisia" }
+        MZE { "MZE", "Escudo Mósaimbíce" }
+        MZM { "Mt",  "Metical Mósaimbíce" }
+        NAD { "N$",  "Dollar na Namaibe" }
+        NCF { "NCF", "Franc Germinal na Nua-Chaladóine" }
+        NGN { "NGN", "Naira Nígéarach" }
+        NGP { "NGP", "Punt Nígéarach" }
+        NHF { "NHF", "CFP Franc Nua-Inse Ghall" }
+        NIC { "NIC", "Cordoba Nicearagua" }
+        NIG { "NIG", "Cordoba Ór Nicearagua" }
+        NIO { "NIO", "Cordoba Oro Nicearagua" }
+        NLG { "NLG", "Guilder Ísiltíreach" }
+        NOK { "NKr", "Krone Ioruach" }
+        NPR { "Nrs", "Rúipí Neipeáil" }
+        NZD { "$NZ", "Dollar na Nua-Shéalainne" }
+        NZP { "NZP", "Punt na Nua-Shéalainne" }
+        OMR { "RO",  "Rial Omain" }
+        OMS { "OMS", "Rial Saidi Omain" }
+        PAB { "PAB", "Balboa Panamach" }
+        PDK { "PDK", "Rúbal Cupóin Transdniestria" }
+        PDN { "PDN", "Rúbal Nua Transdniestria" }
+        PDR { "PDR", "Transdniestria Rúbal" }
+        PEI { "PEI", "Inti Pheiriú" }
+        PEN { "PEN", "Sol Nuevo Pheiriú" }
+        PES { "PES", "Sol Pheiriú" }
+        PGK { "PGK", "Kina Nua-Ghuine Phapua" }
+        PHP { "PHP", "Peso Filipíneach" }
+        PKR { "Pra", "Rúipí na Pacastáine" }
+        PLN { "Zl",  "Zloty Polannach" }
+        PLX { "PLX", "Teastais Airgeadra Dollar SAM Polannach" }
+        PLZ { "PLZ", "Zloty Polannach (1950-1995)" }
+        PSP { "PSP", "Punt Pailistíneach" }
+        PTC { "PTC", "Conto Portaingéalach" }
+        PTE { "PTE", "Escudo Portaingélach" }
+        PYG { "PYG", "Guarani Pharagua" }
+        QAR { "QR",  "Rial Catarach" }
+        REF { "REF", "Franc Réunion" }
+        ROL { "leu", "Leu Rómánach" }
+        RON { "RON", "Leu Nua Rómánach" }
+        RUB { "RUB", "Rúbal Rúiseach" }
+        RUR { "RUR", "Rúbal Rúiseach (1991-1998)" }
+        RWF { "RWF", "Franc Ruanda" }
+        SAR { "SRl", "Riyal Sádach" }
+        SBD { "SI$", "Dollar Oileáin Solomon" }
+        SCR { "SR",  "Rúipí na Séiséil" }
+        SDD { "SDD", "Dínear na Súdáine" }
+        SDP { "SDP", "Punt na Súdáine" }
+        SEK { "SKr", "Krona Sualannach" }
+        SGD { "S$",  "Dollar Singeapóir" }
+        SHP { "SHP", "Punt San Héilin" }
+        SIB { "SIB", "Tolar Bons Slóvéanach" }
+        SIT { "SIT", "Tolar Slóvénach" }
+        SKK { "Sk",  "Koruna na Slóvaice" }
+        SLL { "SLL", "Leone Shiarra Leon" }
+        SML { "SML", "Lira San Marino" }
+        SOS { "So. Sh.","Scilling na Sómáile" }
+        SRG { "Sf",  "Guilder Shuranaim" }
+        SSP { "SSP", "Punt Albanach" }
+        STD { "Db",  "Dobra Sao Tome agus Principe" }
+        STE { "STE", "Escudo Sao Tome agus Principe" }
+        SUN { "SUN", "Rúbal Nua Sóvéadach" }
+        SUR { "SUR", "Rúbal Sóvéadach" }
+        SVC { "SVC", "Colon na Salvadóire" }
+        SYP { "LS",  "Punt Siria" }
+        SZL { "E",   "Lilangeni na Suasalainne" }
+        TDF { "TDF", "CFA Franc Sead" }
+        THB { "THB", "Baht na Téalainne" }
+        TJR { "TJR", "Rúbal na Táidsíceastáine" }
+        TJS { "TJS", "Somoni na Táidsíceastáine" }
+        TMM { "TMM", "Manat na An Tuircméanastáine" }
+        TND { "TND", "Dínear na Túinéise" }
+        TOP { "T$",  "Pa\u02bbanga Tonga" }
+        TOS { "TOS", "Punt Steirling Tonga" }
+        TPE { "TPE", "Escudo Tíomóir" }
+        TPP { "TPP", "Pataca Tíomóir" }
+        TRL { "TL",  "Lira Turcach" }
+        TTD { "TT$", "Dollar Oileáin na Tríonóide agus Tobága" }
+        TTO { "TTO", "Sean-Dollar Oileáin na Tríonóide agus Tobága" }
+        TVD { "TVD", "Dollar Tuvalu" }
+        TWD { "NT$", "Dollar Nua na Téaváine" }
+        TZS { "T Sh","Scilling na Tansáine" }
+        UAH { "UAH", "Hryvnia Úcránach" }
+        UAK { "UAK", "Karbovanetz Úcránach" }
+        UGS { "UGS", "Scilling Uganda (1966-1987)" }
+        UGX { "U Sh","Scilling Uganda" }
+        USD { "$",   "Dollar S.A.M." }
+        USN { "USN", "Dollar S.A.M. (an chéad lá eile)" }
+        USS { "USS", "Dollar S.A.M. (an la céanna)" }
+        UYF { "UYF", "Peso Fuerte Uragua" }
+        UYP { "UYP", "Peso Uragua (1975-1993)" }
+        UYU { "Ur$", "Peso Uruguayo Uragua" }
+        UZC { "UZC", "Som Cúpóin na hÚisbéiceastáine" }
+        UZS { "UZS", "Sum na hÚisbéiceastáine" }
+        VAL { "VAL", "Lira na Vatacáine" }
+        VDD { "VDD", "Piastre Dong Viet Vítneam Thuaidh" }
+        VDN { "VDN", "Dong Nua Vítneam Thuaidh" }
+        VDP { "VDP", "Viet Minh Piastre Dong Viet Vítneam Thuaidh" }
+        VEB { "Be",  "Bolivar Veiniséala" }
+        VGD { "VGD", "Dollar Oileáin Bhriotanacha na Maighdean" }
+        VND { "VND", "Dong Vítneamach" }
+        VNN { "VNN", "Dong Nua Vítneamach" }
+        VNR { "VNR", "Dong Phoblacht Vítneaim" }
+        VNS { "VNS", "Dong Náisiúnta Vítneamach" }
+        VUV { "VT",  "Vatu Vanuatú" }
+        WSP { "WSP", "Punt Samó Thiar" }
+        WST { "WST", "Tala Samó Thiar" }
+        XAD { "XAD", "Dínear Áiseach Unit of Account" }
+        XAF { "XAF", "CFA Franc BEAC" }
+        XAM { "XAM", "Aonad Airgeadaíochta na hÁise" }
+        XAU { "XAU", "Ór" }
+        XBA { "XBA", "Aonad Ilchodach Eorpach" }
+        XBB { "XBB", "Aonad Airgeadaíochta Eorpach" }
+        XBC { "XBC", "Aonad Cuntais Eorpach (XBC)" }
+        XBD { "XBD", "Aonad Cuntais Eorpach (XBD)" }
+        XCD { "EC$", "Dollar Oirthear na Cairibe" }
+        XCF { "XCF", "CFA Nouveau Franc" }
+        XDR { "XDR", "Cearta Speisialta Tarraingthe" }
+        XEF { "XEF", "CFA Franc BCEAEC" }
+        XEU { "XEU", "Aonad Airgeadra Eorpach" }
+        XFO { "XFO", "Franc Ór Francach" }
+        XFU { "XFU", "UIC-Franc Francach" }
+        XID { "XID", "Dínear Ioslamach" }
+        XMF { "XMF", "Nouveau Franc Ceannchathartha Francach" }
+        XNF { "XNF", "CFA Franc na nAntillí Francach" }
+        XOF { "XOF", "CFA Franc BCEAO" }
+        XPF { "CFPF","CFP Franc" }
+        XTR { "XTR", "Rúbal Inaistrithe COMECON" }
+        YDD { "YDD", "Dínear Éimin" }
+        YEI { "YEI", "Imadi Riyal Éimin" }
+        YER { "YRl", "Rial Éimin" }
+        YUD { "YUD", "Dínear Crua Iúgslavach" }
+        YUF { "YUF", "Dínear Chónaidhm na hIúgslaive" }
+        YUG { "YUG", "Dínear 1994 Iúgslavach" }
+        YUM { "YUM", "Noviy Dinar Iúgslavach" }
+        YUN { "YUN", "Dínear Inathraithe Iúgslavach" }
+        YUO { "YUO", "Dínear Dheireadh Fómhar Iúgslavach" }
+        YUR { "YUR", "Dínear Leasaithe Iúgslavach" }
+        ZAL { "ZAL", "Rand na hAfraice Theas (airgeadúil)" }
+        ZAP { "ZAP", "Punt na hAfraice Theas" }
+        ZAR { "R",   "Rand na hAfraice Theas" }
+        ZMK { "ZMK", "Kwacha Saimbiach" }
+        ZMP { "ZMP", "Punt Saimbiach" }
+        ZRN { "ZRN", "Zaire Nua Sáíreach" }
+        ZRZ { "ZRZ", "Zaire Sáíreach" }
+        ZWD { "Z$",  "Dollar Siombábach" }
+    }
+
+//    NumberElements { 
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "‰",
+//        "∞",
+//        "�",
+//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa]" }
+    Languages {
+        // ones needing work are marked //??
+        //root{"fréamh"}
+
+        aa  { "Afar" }
+        ab  { "Abcáisis" } // acmhainn Abcáis
+        ae  { "Aivéistis" } // acmhainn
+        af  { "Afracáinis" }
+        ar  { "Araibis" }
+        as  { "Asaimis" } // acmhainn
+        az  { "Asarbaiseáinis" }
+        ba  { "Baiscíris" } // acmhainn An Bhaiscír
+        be  { "Bealarúisis" }
+        bg  { "Bulgáiris" }
+        bn  { "Beangálais" } //??
+        bo  { "Tibéadais" } //??
+        br  { "Briotáinis" }
+        bs  { "Boisnis"}
+        ca  { "Catalóinis" }
+        ce  { "Sisinis" } //??
+        co  { "Corsaicis" } // acmhainn
+        cr  { "Craíais" } //?? acmhainn
+        cs  { "Seicis" }
+        cu  { "Slavais na hEaglaise" } //??
+        cv  { "Suvaisis" } // acmhainn An tSuvais
+        cy  { "Breatnais" }
+        da  { "Danmhairgis" }
+        de  { "Gearmáinis" }
+        el  { "Gréigis" } //  Nua (1453-)
+        en  { "Béarla" }
+        eo  { "Esperanto" }
+        es  { "Spáinnis" }
+        et  { "Eastóinis" }
+        eu  { "Bascais" }
+        fa  { "Peirsis" }
+        fi  { "Fionnlainnis" }
+        fj  { "Fidsis" } // acmhainn
+        fo  { "Faróis" } // acmhainn
+        fr  { "Fraincis" }
+        fy  { "Freaslainnais" }
+        ga  { "Gaeilge" }
+        gd  { "Gaeilge na hAlban" }
+        gu  { "Gúisearáitis" } //acmhainn
+        gv  { "Mannainis" }
+        haw { "Haváíais" } //??
+        he  { "Eabhrais" }
+        hi  { "Hiondúis" }
+        hr  { "Cróitis" }
+        hu  { "Ungáiris" }
+        hy  { "Airméinis" }
+        ia  { "Interlingua" } //??
+        id  { "Indinéisis" }
+        ie  { "Interlingue" } //??
+        ik  { "Inupiaq" }
+        io  { "Ido" }
+        is  { "Íoslainnais" }
+        it  { "Iodáilis" }
+        iu  { "Ionúitis" } // acmhainn
+        //iw  { "Eabhrais" }  // Use he instead
+        ja  { "Seapáinis" }
+        jv  { "Iávais" } //??
+        ka  { "Seoirsis" } //?? Grúisis
+        kk  { "Casachais" } //?? f Casachstáin
+        kn  { "Cannadais" } // acmhainn
+        ko  { "Cóiréis" }
+        ks  { "Caismíris" } //??
+        kw  { "Cornais" }
+        ky  { "Cirgeasais" } // acmhainn Cirgeasach
+        la  { "Laidin" }
+        lb  { "Leitseabuirgis" } // acmhainn
+        lo  { "Laosais" } //?? FTP Laosach
+        lt  { "Liotuáinis" }
+        lv  { "Laitvis" } // acmhainn
+        mg  { "Malagásais" } //??
+        mi  { "Maorais" }
+        mk  { "Macadóinis" }
+        ml  { "Mailéalaimis" } // acmhainn
+        mn  { "Mongóilis" }
+        mo  { "Moldáivis" }
+        mr  { "Maraitis" } // acmhainn
+        mt  { "Maltais" }
+        my  { "Burmais" } //??
+        na  { "Nárúis" } //??
+        nb  { "Ioruais Bokm\u00e5l" }
+        ne  { "Neipealais" } //??
+        nl  { "Ollainnais" }
+        nn  { "Ioruais Nynorsk" }
+        no  { "Ioruais" }
+        nv  { "Navachóis"} // acmhainn na Navachóigh
+        oc  { "Ocatáinis (tar éis 1500); Proven\u00E7al"}
+        os  { "Óiséitis" } // acmhainn An Óiséit
+        pa  { "Puinseaibis" } //??
+        pl  { "Polainnis" }
+        ps  { "Paisteo" }
+        pt  { "Portaingéilis" }
+        qu  { "Ceatsuais" } // acmhainn
+        // The range qaa-qtz is reserved for local use.
+        ro  { "Romáinis" } // de B. => Rúmáinis?
+        ru  { "Rúisis" }
+        sa  { "Sanscrait" }
+        sc  { "Sairdínis" } // acmhainn
+        sd  { "Sindis" } //acmhainn
+        se  { "Sáimis Thuaidh" } //acmhainn
+        sh  { "Seirbea-Chróitis" } // acmhainn
+        sk  { "Slóvacais" }
+        sl  { "Slóvéinis" }
+        sm  { "Samóis" } //??
+        so  { "Somálais" } //??
+        sq  { "Albáinis" }
+        sr  { "Seirbis" }
+        sv  { "Sualainnis" }
+        sw  { "Svahaílis" } // acmhainn
+        ta  { "Tamailis" } //acmhainn
+        th  { "Téalainnis" }
+        tl  { "Tagálaigis" } // acmhainn
+        tr  { "Tuircis" }
+        tt  { "Tatarais" } // acmhainn
+        ty  { "Taihítis" } //??
+        uk  { "Úcráinis" }
+        ur  { "Urdais" } // acmhainn
+        uz  { "Úisbéicis" } //??
+        vi  { "Vítneamais" }
+        wa  { "Vallúnais" }
+        yi  { "Giúdais" }
+        zh  { "Sínis" }
+        zu  { "Súlúis" } //??
+    }
+    localPatternChars { "RbMLkUnsSElFtTauKcBeyrAC" }
+    SpelloutRules {
+
+        // Maoluimhreacha
+        "%default:\n"
+        "-x: míneas >>;\n"
+        "x.x: << pointe >>;\n"
+        "a náid; a haon; a dó; a trí; a ceathair; a cúig;\n"
+        "a sé; a seacht; a hocht; a naoi; a deich;\n"
+        "a haon déag; a dó dhéag;\n"
+        ">> déag;\n"
+        "20: fiche[ >>];\n"
+        "30: tríocha[ >>];\n"
+        "40: daichead[ >>];\n"
+        "50: caoga[ >>];\n"
+        "60: seasca[ >>];\n"
+        "70: seachtó[ >>];\n"
+        "80: ochtó[ >>];\n"
+        "90: nócha[ >>];\n"
+        "100: <%%hundreds<[ >%%hundreds_is>];\n"
+        "1,000: <%%thousands<[, >>];\n"
+        "1,000,000: <%%millions<[, >>];\n"
+        "1,000,000,000: <%%billions<[, >>];\n"
+        "1,000,000,000,000: <%%trillions<[, >>];\n"
+        "1,000,000,000,000,000: =#,##0=;\n"
+
+        "%%cardwithnumber:"
+        " ; aon; dhá; trí; ceithre; cúig; sé; seacht; ocht; naoi; deich;\n"
+        " aon; dhá; trí; ceithre; cúig; sé; seacht; ocht; naoi;\n"
+        "20: fiche[ is >>];\n"
+        "30: tríocha[ is >>];\n"
+        "40: daichead[ is >>];\n"
+        "50: caoga[ is >>];\n"
+        "60: seasca[ is >>];\n"
+        "70: seachtó[ is >>];\n"
+        "80: ochtó[ is >>];\n"
+        "90: nócha[ is >>];\n"
+        "100: <%%hundreds<[ >%%hundreds_is>];\n"
+        "1,000: <%%thousands<[ >%%cardwithnumber>];\n"
+        "1,000,000: <%%millions<[ >%%cardwithnumber>];\n"
+        "1,000,000,000: <%%billions<[ >%%cardwithnumber>];\n"
+        "1,000,000,000: <%%trillions<[ >%%cardwithnumber>];\n"
+        "1,000,000,000,000,000: =#,##0=;\n"
+
+        // rules to give hundreds value
+        "%%hundreds:\n"
+        "1: céad;\n"
+        "2: <%%cardwithnumber< chéad;\n"
+        "7: <%%cardwithnumber< gcéad;\n"
+        // Put in "is" after céad when a multiple of 10
+        "%%hundreds_is:\n"
+        "0:;\n"
+        "=%default=;\n"
+        "20: is =%default=;\n"
+        "21: =%default=;\n"
+        "30: is =%default=;\n"
+        "31: =%default=;\n"
+        "40: is =%default=;\n"
+        "41: =%default=;\n"
+        "50: is =%default=;\n"
+        "51: =%default=;\n"
+        "60: is =%default=;\n"
+        "61: =%default=;\n"
+        "70: is =%default=;\n"
+        "71: =%default=;\n"
+        "80: is =%default=;\n"
+        "81: =%default=;\n"
+        "90: is =%default=;\n"
+        "91: =%default=;\n"
+
+        // rules to give thousands value
+        "%%thousands:\n"
+        "0: míle;\n"
+        "2: <%%cardwithnumber< mhíle;\n"
+        "7: <%%cardwithnumber< míle;\n"
+        "11>: <%%cardwithnumber< mhíle dhéag;\n"
+        "17>: <%%cardwithnumber< míle dhéag;\n"
+        "20>: <%%cardwithnumber< míle;\n"
+        "21>: <%%cardwithnumber< mhíle;\n"
+        "27>: <%%cardwithnumber< míle;\n"
+        "31>: <%%cardwithnumber< mhíle;\n"
+        "37>: <%%cardwithnumber< míle;\n"
+        "41>: <%%cardwithnumber< mhíle;\n"
+        "47>: <%%cardwithnumber< míle;\n"
+        "51>: <%%cardwithnumber< mhíle;\n"
+        "57>: <%%cardwithnumber< míle;\n"
+        "61>: <%%cardwithnumber< mhíle;\n"
+        "67>: <%%cardwithnumber< míle;\n"
+        "71>: <%%cardwithnumber< mhíle;\n"
+        "77>: <%%cardwithnumber< míle;\n"
+        "81>: <%%cardwithnumber< mhíle;\n"
+        "87>: <%%cardwithnumber< míle;\n"
+        "91>: <%%cardwithnumber< mhíle;\n"
+        "97>: <%%cardwithnumber< míle;\n"
+        "   100: <%%hundreds< >%%thousands_is>;\n"
+
+        // Put in "is" after míle when a multiple of 10
+        "%%thousands_is:\n"
+        "0: míle;\n"
+        "1: is =%%cardwithnumber= mhíle;\n"
+        "7: is =%%cardwithnumber= míle;\n"
+        "11>: is <%%thousands<;\n"
+        "20: is =%%thousands=;\n"
+        "21: =%%thousands=;\n"
+        "30: is =%%thousands=;\n"
+        "31: =%%thousands=;\n"
+        "40: is =%%thousands=;\n"
+        "41: =%%thousands=;\n"
+        "50: is =%%thousands=;\n"
+        "51: =%%thousands=;\n"
+        "60: is =%%thousands=;\n"
+        "61: =%%thousands=;\n"
+        "70: is =%%thousands=;\n"
+        "71: =%%thousands=;\n"
+        "80: is =%%thousands=;\n"
+        "81: =%%thousands=;\n"
+        "90: is =%%thousands=;\n"
+        "91: =%%thousands=;\n"
+
+
+        // rules to give millions value
+        "%%millions:\n"
+        "1: milliún;\n"
+        "2: <%%cardwithnumber< mhilliún;\n"
+        "7: <%%cardwithnumber< milliún;\n"
+        "11>: <%%cardwithnumber< mhilliún déag;\n"
+        "17>: <%%cardwithnumber< milliún déag;\n"
+        "20>: <%%cardwithnumber< milliún;\n"
+        "21>: <%%cardwithnumber< mhilliún;\n"
+        "27>: <%%cardwithnumber< milliún;\n"
+        "31>: <%%cardwithnumber< mhilliún;\n"
+        "37>: <%%cardwithnumber< milliún;\n"
+        "41>: <%%cardwithnumber< mhilliún;\n"
+        "47>: <%%cardwithnumber< milliún;\n"
+        "51>: <%%cardwithnumber< mhilliún;\n"
+        "57>: <%%cardwithnumber< milliún;\n"
+        "61>: <%%cardwithnumber< mhilliún;\n"
+        "67>: <%%cardwithnumber< milliún;\n"
+        "71>: <%%cardwithnumber< mhilliún;\n"
+        "77>: <%%cardwithnumber< milliún;\n"
+        "81>: <%%cardwithnumber< mhilliún;\n"
+        "87>: <%%cardwithnumber< milliún;\n"
+        "91>: <%%cardwithnumber< mhilliún;\n"
+        "97>: <%%cardwithnumber< milliún;\n"
+        "   100: <%%hundreds< >%%millions_is>;\n"
+
+        // Put in "is" after milliún when a multiple of 10
+        "%%millions_is:\n"
+        "0: milliún;\n"
+        "1: is =%%cardwithnumber= mhilliún;\n"
+        "7: is =%%cardwithnumber= milliún;\n"
+        "11>: is <%%millions<;\n"
+        "20: is =%%millions=;\n"
+        "21: =%%millions=;\n"
+        "30: is =%%millions=;\n"
+        "31: =%%millions=;\n"
+        "40: is =%%millions=;\n"
+        "41: =%%millions=;\n"
+        "50: is =%%millions=;\n"
+        "51: =%%millions=;\n"
+        "60: is =%%millions=;\n"
+        "61: =%%millions=;\n"
+        "70: is =%%millions=;\n"
+        "71: =%%millions=;\n"
+        "80: is =%%millions=;\n"
+        "81: =%%millions=;\n"
+        "90: is =%%millions=;\n"
+        "91: =%%millions=;\n"
+
+
+        // rules to give billions value
+        // to avoid ambiguity, no eclipsis or aspiration!
+        "%%billions:\n"
+        "1: billiún; <%%cardwithnumber< billiún;\n"
+        "11>: <%%cardwithnumber< billiún déag;\n"
+        "20>: <%%cardwithnumber< billiún;\n"
+        "100: <%%hundreds< >%%billions_is>;\n"
+
+        // Put in "is" after billiún when a multiple of 10
+        "%%billions_is:\n"
+        "0: billiún;\n"
+        "1: is =%%cardwithnumber= billiún;\n"
+        "7: is =%%cardwithnumber= billiún;\n"
+        "11>: is <%%billions<;\n"
+        "20: is =%%billions=;\n"
+        "21: =%%billions=;\n"
+        "30: is =%%billions=;\n"
+        "31: =%%billions=;\n"
+        "40: is =%%billions=;\n"
+        "41: =%%billions=;\n"
+        "50: is =%%billions=;\n"
+        "51: =%%billions=;\n"
+        "60: is =%%billions=;\n"
+        "61: =%%billions=;\n"
+        "70: is =%%billions=;\n"
+        "71: =%%billions=;\n"
+        "80: is =%%billions=;\n"
+        "81: =%%billions=;\n"
+        "90: is =%%billions=;\n"
+        "91: =%%billions=;\n"
+
+        // rules to give trillions value
+        "%%trillions:\n"
+        "1: milliún;\n"
+        "2: <%%cardwithnumber< thrilliún;\n"
+        "7: <%%cardwithnumber< dtrilliún;\n"
+        "11>: <%%cardwithnumber< thrilliún déag;\n"
+        "17>: <%%cardwithnumber< dtrilliún déag;\n"
+        "20>: <%%cardwithnumber< dtrilliún;\n"
+        "21>: <%%cardwithnumber< thrilliún;\n"
+        "27>: <%%cardwithnumber< dtrilliún;\n"
+        "31>: <%%cardwithnumber< thrilliún;\n"
+        "37>: <%%cardwithnumber< dtrilliún;\n"
+        "41>: <%%cardwithnumber< thrilliún;\n"
+        "47>: <%%cardwithnumber< dtrilliún;\n"
+        "51>: <%%cardwithnumber< thrilliún;\n"
+        "57>: <%%cardwithnumber< dtrilliún;\n"
+        "61>: <%%cardwithnumber< thrilliún;\n"
+        "67>: <%%cardwithnumber< dtrilliún;\n"
+        "71>: <%%cardwithnumber< thrilliún;\n"
+        "77>: <%%cardwithnumber< dtrilliún;\n"
+        "81>: <%%cardwithnumber< thrilliún;\n"
+        "87>: <%%cardwithnumber< dtrilliún;\n"
+        "91>: <%%cardwithnumber< thrilliún;\n"
+        "97>: <%%cardwithnumber< dtrilliún;\n"
+        "   100: <%%hundreds< >%%trillions_is;\n"
+
+        // Put in "is" after trilliún when a multiple of 10
+        "%%trillions_is:\n"
+        "0: trilliún;\n"
+        "1: is =%%cardwithnumber= thrilliún;\n"
+        "7: is =%%cardwithnumber= dtrilliún;\n"
+        "11>: is <%%trillions<;\n"
+        "20: is =%%trillions=;\n"
+        "21: =%%trillions=;\n"
+        "30: is =%%trillions=;\n"
+        "31: =%%trillions=;\n"
+        "40: is =%%trillions=;\n"
+        "41: =%%trillions=;\n"
+        "50: is =%%trillions=;\n"
+        "51: =%%trillions=;\n"
+        "60: is =%%trillions=;\n"
+        "61: =%%trillions=;\n"
+        "70: is =%%trillions=;\n"
+        "71: =%%trillions=;\n"
+        "80: is =%%trillions=;\n"
+        "81: =%%trillions=;\n"
+        "90: is =%%trillions=;\n"
+        "91: =%%trillions=;\n"
+
+        "%%lenient-parse:\n"
+        "& ' ' , ',' ;\n"
+    }
+
+    // This rule set formats a number of seconds in sexagesimal notation
+    // (i.e., hours, minutes, and seconds).  %with-words formats it with
+    // words (3,740 is "1 uair, 2 nóiméad, 20 soicind") and %in-numerals
+    // formats it entirely in numerals (3,740 is "1:02:20").
+    // (Based on en rules)
+    DurationRules {
+        // main rule set for formatting with words
+        "%with-words:\n"
+             // seconds
+        "=0= soicind;\n"
+             // use %%min to format values greater than 60 seconds
+        "60/60: <%%min<[, >>];\n"
+               // use %%hr to format values greater than 3,600 seconds
+               // (the ">>>" below causes us to see the number of minutes
+               // when when there are zero minutes)
+        "3600/60: <%%hr<[, >>>];\n"
+        // minutes
+        "%%min:\n"
+        "=0= nóiméad;\n"
+        // hours
+        "%%hr:\n"
+             // casta -- fch. l.40 Caighdeán Oifigiúil
+        "0: =0= uair;\n"
+        "3: =0= huaire;\n"
+        "5: =0= uaire;\n"
+        "6: =0= huaire;\n"
+        "7: =0= n-uaire;\n"
+        "10: =0= n-uair;\n"
+        "11: =0= >%%uaire>;\n"
+        // Tricky bit: next rule does numbers ending in 0; see Gillam's paper
+        // where it explains minor substitutions for 101 to understand.
+        "20: =0= uair; =0= >%%uaire>;\n"
+
+        // "uaire", except after nos. ending in 1, 2 or 0 when "uair"
+        "%%uaire:\n"
+        "1: uair;\n"
+        "3: huaire;\n"
+        "5: uaire;\n"
+        "6: huaire;\n"
+        "7: n-uaire;\n"
+
+        // rules giving hh:mm:ss with all fields shown always
+        "%hms:\n"
+        "0: :=00=;\n"
+        "60/60: :<00<>>>;\n"
+        "3600/60: <#,##0<>>>;\n"
+
+        // main rule set for formatting in numerals
+        "%in-numerals:\n"
+               // values below 60 seconds are shown with "s"
+        "=0=s;\n"
+               // higher values are shown with colons: %%min-sec is used for
+               // values below 3,600 seconds...
+        "60: =%%min-sec=;\n"
+               // ...and %%hr-min-sec is used for values of 3,600 seconds
+               // and above
+        "3600: =%%hr-min-sec=;\n"
+        // this rule causes values of less than 10 minutes to show without
+        // a leading zero
+        "%%min-sec:\n"
+        "0: :=00=;\n"
+        "60/60: <0<>>;\n"
+        // this rule set is used for values of 3,600 or more.  Minutes are always
+        // shown, and always shown with two digits
+        "%%hr-min-sec:\n"
+        "0: :=00=;\n"
+        "60/60: <00<>>;\n"
+        "3600/60: <#,##0<:>>>;\n"
+        // the lenient-parse rules allow several different characters to be used
+        // as delimiters between hours, minutes, and seconds
+        "%%lenient-parse:\n"
+        "& ':' = '.' = ' ' = '-';\n"
+    }
+
+    zoneStrings {
+        {
+            "Europe/Dublin",
+            "Meán-Am Greenwich",
+            "MAG",
+            "Am Samhraidh na hÉireann",
+            "ASÉ",
+            "Baile Átha Cliath",
+        }
+        {
+            "Europe/London",
+            "Meán-Am Greenwich",
+            "MAG",
+            "Am Samhraidh na Breataine",
+            "ASB",
+            "Londain",
+        }
+        {
+            "Europe/Belfast",
+            "Meán-Am Greenwich",
+            "MAG",
+            "Am Samhraidh na Breataine",
+            "ASB",
+            "Béal Feirste",
+        }
+        {
+            "GMT",
+            "Meán-Am Greenwich",
+            "MAG",
+            "Meán-Am Greenwich",
+            "MAG",
+            "Londain",
+        }
+       // many others could go in here if desired
+    }
+}

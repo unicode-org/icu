@@ -1,0 +1,7 @@
+Debug
+Release
+Makefile
+*.d
+*.o
+*.pdb
+gentest

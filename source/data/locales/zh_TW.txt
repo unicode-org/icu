@@ -1,0 +1,1614 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+zh_TW {
+    Version{ "3.0" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
+                "ahh'\u6642'mm'\u5206'ss'\u79D2'",
+                "a h:mm:ss",
+                "a h:mm",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
+                "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+                "yyyy/M/d",
+                "yyyy/M/d",
+                "{1} {0}",
+            }
+            eras{
+                "\u6C11\u570B\u524D",
+                "\u6C11\u570B",
+            }
+        }
+    }
+    Countries { 
+        AD { "\u5B89\u9053\u723E" }
+        AE { "\u963F\u62C9\u4F2F\u806F\u5408\u5927\u516C\u570B" }
+        //AF { "\u963F\u5BCC\u6C57" } // Same as zh
+        AG { "\u5B89\u5730\u5361\u53CA\u5DF4\u5E03\u9054" }
+        AI { "\u5B89\u572D\u62C9\u5CF6" }
+        AL { "\u963F\u723E\u5DF4\u5C3C\u4E9E" }
+        AM { "\u4E9E\u7F8E\u5C3C\u4E9E" }
+        AN { "\u8377\u5C6C\u5B89\u5730\u5217\u65AF" }
+        //AO { "\u5B89\u54E5\u62C9" } // Same as zh
+        AQ { "\u5357\u6975\u6D32" }
+        //AR { "\u963F\u6839\u5EF7" } // Same as zh
+        AS { "\u7F8E\u5C6C\u85A9\u6469\u4E9E\u7FA4\u5CF6" }
+        AT { "\u5967\u5730\u5229" }
+        AU { "\u6FB3\u6D32" }
+        AW { "\u963F\u8DEF\u5DF4" }
+        AZ { "\u4E9E\u585E\u62DC\u7136" }
+        BA { "\u6CE2\u58EB\u5C3C\u4E9E\u8207\u8D6B\u585E\u683C\u7DAD\u7D0D" }
+        BB { "\u5DF4\u8C9D\u591A" }
+        BD { "\u5B5F\u52A0\u62C9" }
+        BE { "\u6BD4\u5229\u6642" }
+        BF { "\u5E03\u57FA\u7D0D\u6CD5\u7D22" }
+        BG { "\u4FDD\u52A0\u5229\u4E9E" }
+        //BH { "\u5DF4\u6797" } // Same as zh
+        BI { "\u6D66\u9686\u5730" }
+        BJ { "\u8C9D\u5357" }
+        BM { "\u767E\u6155\u9054" }
+        BN { "\u6C76\u840A" }
+        BO { "\u73BB\u5229\u7DAD\u4E9E" }
+        //BR { "\u5DF4\u897F" } // Same as zh
+        BS { "\u5DF4\u54C8\u99AC" }
+        //BT { "\u4E0D\u4E39" } // Same as zh
+        BV { "\u5E03\u5A01\u5CF6" }
+        BW { "\u6CE2\u672D\u90A3" }
+        BY { "\u767D\u4FC4\u7F85\u65AF" }
+        BZ { "\u8C9D\u91CC\u65AF" }
+        //CA { "\u52A0\u62FF\u5927" } // Same as zh
+        CC { "\u53EF\u53EF\u65AF\u7FA4\u5CF6" }
+        CD { "\u525B\u679C\u6C11\u4E3B\u5171\u548C\u570B" }
+        CF { "\u4E2D\u975E\u5171\u548C\u570B" }
+        CG { "\u525B\u679C" }
+        //CH { "\u745E\u58EB" } // Same as zh
+        CI { "\u79D1\u7279\u8FEA\u74E6" }
+        CK { "\u5EAB\u514B\u7FA4\u5CF6" }
+        //CL { "\u667A\u5229" } // Same as zh
+        CM { "\u5580\u9EA5\u9686" }
+        CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
+        CO { "\u54E5\u502B\u6BD4\u4E9E" }
+        CR { "\u54E5\u65AF\u5927\u9ECE\u52A0" }
+        //CU { "\u53E4\u5DF4" } // Same as zh
+        CV { "\u7DAD\u5FB7\u89D2" }
+        CX { "\u8056\u8A95\u5CF6" }
+        CY { "\u8CFD\u666E\u52D2\u65AF" }
+        CZ { "\u6377\u514B\u5171\u548C\u570B" }
+        DE { "\u5FB7\u570B" }
+        DJ { "\u5409\u5E03\u5730" }
+        DK { "\u4E39\u9EA5" }
+        DM { "\u591A\u660E\u5C3C\u52A0" }
+        DO { "\u591A\u660E\u5C3C\u52A0\u5171\u548C\u570B" }
+        DZ { "\u963F\u723E\u53CA\u5229\u4E9E" }
+        EC { "\u5384\u74DC\u591A\u723E" }
+        EE { "\u611B\u6C99\u5C3C\u4E9E" }
+        //EG { "\u57C3\u53CA" } // Same as zh
+        //EH { "\u897F\u6492\u54C8\u62C9" } // Same as zh
+        ER { "\u5384\u5229\u5782\u4E9E" }
+        //ES { "\u897F\u73ED\u7259" } // Same as zh
+        ET { "\u8863\u7D22\u6BD4\u4E9E" }
+        FI { "\u82AC\u862D" }
+        FJ { "\u6590\u6FDF" }
+        FK { "\u798F\u514B\u862D\u7FA4\u5CF6" }
+        FM { "\u5BC6\u514B\u7F85\u5C3C\u897F\u4E9E\u7FA4\u5CF6" }
+        FO { "\u6CD5\u7F85\u7FA4\u5CF6" }
+        FR { "\u6CD5\u570B" }
+        GA { "\u52A0\u5F6D" }
+        GB { "\u82F1\u570B" }
+        GD { "\u683C\u745E\u7D0D\u9054" }
+        GE { "\u55AC\u6CBB\u4E9E\u5171\u548C\u570B" }
+        GF { "\u6CD5\u5C6C\u572D\u4E9E\u90A3" }
+        GH { "\u8FE6\u7D0D" }
+        GI { "\u76F4\u5E03\u7F85\u9640" }
+        GL { "\u683C\u9675\u862D" }
+        GM { "\u7518\u6BD4\u4E9E" }
+        GN { "\u5E7E\u5167\u4E9E" }
+        GP { "\u54E5\u5FB7\u666E\u6D1B" }
+        GQ { "\u8D64\u9053\u5E7E\u5167\u4E9E" }
+        GR { "\u5E0C\u81D8" }
+        GS { "\u5357\u55AC\u6CBB\u4E9E\u8207\u5357\u4E09\u660E\u6CBB\u7FA4\u5CF6" }
+        GT { "\u74DC\u5730\u99AC\u62C9" }
+        GU { "\u95DC\u5CF6" }
+        GW { "\u5E7E\u5167\u4E9E\u6BD4\u7D22" }
+        GY { "\u84CB\u4E9E\u7D0D" }
+        //HK { "\u9999\u6E2F" } // Old value
+        HK { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B\u9999\u6E2F\u7279\u5225\u884C\u653F\u5340" }
+        HM { "\u8D6B\u5FB7\u8207\u9EA5\u514B\u7576\u8AFE\u7FA4\u5CF6" }
+        HN { "\u5B8F\u90FD\u62C9\u65AF" }
+        HR { "\u514B\u7F85\u57C3\u897F\u4E9E" }
+        //HT { "\u6D77\u5730" } // Same as zh
+        //HU { "\u5308\u7259\u5229" } // Same as zh
+        ID { "\u5370\u5C3C" }
+        IE { "\u611B\u723E\u862D" }
+        //IL { "\u4EE5\u8272\u5217" } // Same as zh
+        //IN { "\u5370\u5EA6" } // Same as zh
+        IO { "\u82F1\u5C6C\u5370\u5EA6\u6D0B\u9818\u571F" }
+        //IQ { "\u4F0A\u62C9\u514B" } // Same as zh
+        //IR { "\u4F0A\u6717" } // Same as zh
+        IS { "\u51B0\u5CF6" }
+        IT { "\u7FA9\u5927\u5229" }
+        JM { "\u7259\u8CB7\u52A0" }
+        JO { "\u7D04\u65E6" }
+        //JP { "\u65E5\u672C" } // Same as zh
+        KE { "\u80AF\u4E9E" }
+        KG { "\u5409\u723E\u5409\u65AF" }
+        KH { "\u9AD8\u68C9" }
+        KI { "\u5409\u91CC\u5DF4\u65AF" }
+        KM { "\u79D1\u6469\u7F85\u7FA4\u5CF6" }
+        KN { "\u8056\u514B\u91CC\u65AF\u591A\u798F\u53CA\u5C3C\u7DAD\u65AF" }
+        KP { "\u5317\u97D3" }
+        KR { "\u5357\u97D3" }
+        //KW { "\u79D1\u5A01\u7279" } // Same as zh
+        KY { "\u958B\u66FC\u7FA4\u5CF6" }
+        KZ { "\u54C8\u85A9\u514B" }
+        LA { "\u5BEE\u570B" }
+        //LB { "\u9ECE\u5DF4\u5AE9" } // Same as zh
+        LC { "\u8056\u9732\u897F\u4E9E" }
+        LI { "\u5217\u652F\u6566\u65AF\u767B" }
+        LK { "\u65AF\u91CC\u862D\u5361" }
+        LR { "\u8CF4\u6BD4\u745E\u4E9E" }
+        LS { "\u8CF4\u7D22\u6265" }
+        //LT { "\u7ACB\u9676\u5B9B" } // Same as zh
+        LU { "\u76E7\u68EE\u5821" }
+        LV { "\u62C9\u812B\u7DAD\u4E9E" }
+        LY { "\u5229\u6BD4\u4E9E" }
+        //MA { "\u6469\u6D1B\u54E5" } // Same as zh
+        MC { "\u6469\u7D0D\u54E5" }
+        MD { "\u6469\u723E\u591A\u74E6" }
+        MG { "\u99AC\u9054\u52A0\u65AF\u52A0" }
+        MH { "\u99AC\u7D39\u723E\u7FA4\u5CF6" }
+        MK { "\u99AC\u5176\u9813" }
+        ML { "\u99AC\u5229" }
+        MM { "\u7DEC\u7538" }
+        //MN { "\u8499\u53E4" } // Same as zh
+        MO { "\u6FB3\u9580\u7279\u5225\u884C\u653F\u5340" }
+        MP { "\u5317\u99AC\u91CC\u5B89\u7D0D" }
+        MQ { "\u99AC\u4E01\u5C3C\u514B\u5CF6" }
+        MR { "\u8305\u5229\u5854\u5C3C\u4E9E" }
+        MS { "\u8499\u7279\u8272\u62C9\u7279\u5CF6" }
+        MT { "\u99AC\u723E\u4ED6" }
+        MU { "\u6A21\u91CC\u897F\u65AF" }
+        MV { "\u99AC\u723E\u5730\u592B" }
+        MW { "\u99AC\u62C9\u5A01" }
+        //MX { "\u58A8\u897F\u54E5" } // Same as zh
+        MY { "\u99AC\u4F86\u897F\u4E9E" }
+        MZ { "\u83AB\u4E09\u6BD4\u514B" }
+        NA { "\u7D0D\u7C73\u6BD4\u4E9E" }
+        NC { "\u65B0\u5580\u91CC\u591A\u5C3C\u4E9E\u7FA4\u5CF6" }
+        NE { "\u5C3C\u65E5" }
+        NF { "\u8AFE\u798F\u514B\u5CF6" }
+        NG { "\u5948\u53CA\u5229\u4E9E" }
+        //NI { "\u5C3C\u52A0\u62C9\u74DC" } // Same as zh
+        NL { "\u8377\u862D" }
+        //NO { "\u632A\u5A01" } // Same as zh
+        NP { "\u5C3C\u6CCA\u723E" }
+        NR { "\u8AFE\u9B6F" }
+        NU { "\u7D10\u5A01\u5CF6" }
+        NZ { "\u7D10\u897F\u862D" }
+        OM { "\u963F\u66FC\u738B\u570B" }
+        PA { "\u5DF4\u62FF\u99AC" }
+        PE { "\u79D8\u9B6F" }
+        PF { "\u6CD5\u5C6C\u73BB\u91CC\u5C3C\u897F\u4E9E" }
+        PG { "\u5DF4\u5E03\u4E9E\u7D10\u5E7E\u5167\u4E9E" }
+        PH { "\u83F2\u5F8B\u8CD3" }
+        //PK { "\u5DF4\u57FA\u65AF\u5766" } // Same as zh
+        PL { "\u6CE2\u862D" }
+        PM { "\u8056\u5F7C\u5FB7\u8207\u5BC6\u555F\u5D19" }
+        PN { "\u76AE\u7279\u5EB7" }
+        PR { "\u73BB\u591A\u9ECE\u514B" }
+        PS { "\u5DF4\u52D2\u65AF\u5766" }
+        //PT { "\u8461\u8404\u7259" } // Same as zh
+        PW { "\u5E1B\u7409" }
+        //PY { "\u5DF4\u62C9\u572D" } // Same as zh
+        QA { "\u5361\u9054" }
+        RE { "\u7559\u5C3C\u65FA" }
+        RO { "\u7F85\u99AC\u5C3C\u4E9E" }
+        RU { "\u4FC4\u7F85\u65AF" }
+        RW { "\u76E7\u5B89\u9054" }
+        SA { "\u6C99\u70CF\u5730\u963F\u62C9\u4F2F" }
+        SB { "\u7D22\u7F85\u9580\u7FA4\u5CF6" }
+        SC { "\u585E\u5E2D\u723E" }
+        SD { "\u8607\u4E39" }
+        //SE { "\u745E\u5178" } // Same as zh
+        //SG { "\u65B0\u52A0\u5761" } // Same as zh
+        SH { "\u8056\u8D6B\u52D2\u62FF\u5CF6" }
+        SI { "\u65AF\u6D1B\u7DAD\u5C3C\u4E9E" }
+        SJ { "\u51B7\u5CB8\u53CA\u592E\u9EA5\u6069\u7FA4\u5CF6" }
+        //SK { "\u65AF\u6D1B\u4F10\u514B" } // Same as zh
+        SL { "\u7345\u5B50\u5C71" }
+        SM { "\u8056\u99AC\u5229\u8AFE" }
+        SN { "\u585E\u5167\u52A0\u723E" }
+        SO { "\u7D22\u99AC\u5229\u4E9E" }
+        SP { "\u585E\u723E\u7DAD\u4E9E" }
+        SR { "\u8607\u5229\u5357" }
+        ST { "\u8056\u591A\u7F8E\u53CA\u666E\u6797\u897F\u6BD4" }
+        SV { "\u85A9\u723E\u74E6\u591A" }
+        SY { "\u6558\u5229\u4E9E" }
+        SZ { "\u53F2\u74E6\u6FDF\u862D" }
+        TC { "\u571F\u514B\u65AF\u53CA\u958B\u79D1\u65AF\u7FA4\u5CF6" }
+        TD { "\u67E5\u5FB7" }
+        TF { "\u6CD5\u570B\u5357\u5C6C\u5730" }
+        TG { "\u591A\u54E5\u5171\u548C\u570B" }
+        TH { "\u6CF0\u570B" }
+        TJ { "\u5854\u5409\u514B" }
+        TK { "\u6258\u514B\u52DE\u7FA4\u5CF6" }
+        TL { "\u6771\u5E1D\u6587" }
+        TM { "\u571F\u5EAB\u66FC" }
+        TN { "\u7A81\u5C3C\u897F\u4E9E" }
+        TO { "\u6771\u52A0" }
+        //TR { "\u571F\u8033\u5176" } // Same as zh
+        TT { "\u5343\u91CC\u9054\u53CA\u6258\u5DF4\u54E5" }
+        TV { "\u5410\u74E6\u9B6F" }
+        TW { "\u81FA\u7063" }
+        TZ { "\u5766\u5C1A\u5C3C\u4E9E" }
+        UA { "\u70CF\u514B\u862D" }
+        UG { "\u70CF\u5E72\u9054" }
+        UM { "\u7F8E\u5C6C\u908A\u7586\u7FA4\u5CF6" }
+        US { "\u7F8E\u570B" }
+        UY { "\u70CF\u62C9\u572D" }
+        UZ { "\u70CF\u8332\u5225\u514B" }
+        VA { "\u68B5\u5E1D\u5CA1" }
+        VC { "\u8056\u6587\u68EE\u53CA\u683C\u745E\u90A3\u4E01" }
+        VE { "\u59D4\u5167\u745E\u62C9" }
+        VG { "\u82F1\u5C6C\u7DAD\u723E\u4EAC\u7FA4\u5CF6" }
+        VI { "\u7F8E\u5C6C\u7DAD\u723E\u4EAC\u7FA4\u5CF6" }
+        //VN { "\u8D8A\u5357" } // Same as zh
+        VU { "\u842C\u90A3\u675C" }
+        WF { "\u74E6\u5229\u65AF\u548C\u798F\u675C\u7D0D\u7FA4\u5CF6" }
+        WS { "\u85A9\u6469\u4E9E\u7FA4\u5CF6" }
+        YE { "\u8449\u9580" }
+        YT { "\u99AC\u7D04\u7279" }
+        //YU { "\u5357\u65AF\u62C9\u592B" } // Same as zh
+        //ZA { "\u5357\u975E" } // Same as zh
+        ZM { "\u5C1A\u6BD4\u4E9E" }
+        ZW { "\u8F9B\u5DF4\u5A01" }
+    }
+    Languages {
+        //aa  { "\u963F\u6CD5\u6587" } // Same as zh
+        ab { "\u963F\u5E03\u54C8\u897F\u4E9E\u6587" }
+        ace { "\u4e9e\u9f4a\u6587" }
+        ach { "\u963f\u50d1\u5229\u6587" }
+        ada { "\u963f\u7576\u83ab\u6587" }
+        ady { "\u963f\u8fea\u5404\u6587" }
+        ae  { "\u963F\u7DEF\u65AF\u9640\u6587" }
+        af { "\u5357\u975E\u8377\u862D\u6587" }
+        afa { "\u975e\u9583\u65cf\u53ca\u975e\u4e9e\u8a9e\u8a00" }
+        afh { "\u963f\u5f17\u91cc\u5e0c\u5229\u6587" }
+        ak  { "\u963F\u574E\u6587" }
+        akk { "\u963f\u5361\u5fb7\u6587" }
+        ale { "\u963f\u7559\u7533\u6587" }
+        alg { "\u963f\u723e\u5ca1\u6606\u6587" }
+        //am  { "\u963F\u59C6\u54C8\u62C9\u6587" } // Same as zh
+        an  { "\u963F\u62C9\u8CA2\u6587" }
+        ang { "\u53e4\u82f1\u6587 (ca.450-1100)" }
+        apa { "\u963f\u5e15\u5947\u8a9e\u8a00"}
+        //ar { "\u963F\u62C9\u4F2F\u6587" } // Same as zh
+        arc { "\u963f\u62c9\u7c73\u6587" }
+        arn { "\u963f\u52de\u574e\u6587" }
+        arp { "\u963f\u62c9\u5e15\u970d\u6587" }
+        art { "\u5176\u4ed6\u4eba\u5de5\u8a9e\u8a00" }
+        arw { "\u963f\u62c9\u74e6\u514b\u6587" }
+        as { "\u963F\u85A9\u59C6\u6587" }
+        ast { "\u963f\u65af\u5716\u91cc\u4e9e\u6587" }
+        ath { "\u963f\u85a9\u5df4\u65af\u5361\u6587" }
+        aus { "\u6fb3\u6d32\u82f1\u6587" }
+        av  { "\u963F\u6CD5\u6587" }
+        ay { "\u827E\u99AC\u62C9\u6587" }
+        az { "\u4E9E\u585E\u62DC\u7136\u6587" }
+        ba { "\u5DF4\u4EC0\u5BA2\u723E\u6587" }
+        bad { "\u73ed\u9054\u6587" }
+        bai { "\u5df4\u7c73\u7d2f\u514b\u6587" }
+        bal { "\u4ffe\u8def\u652f\u6587" }
+        bam { "\u5df4\u59c6\u5df4\u62c9\u6587" }
+        ban { "\u5df4\u5398\u6587" }
+        bas { "\u5df4\u85a9\u6587" }
+        bat { "\u6ce2\u7f85\u7684\u6587\uff08\u5176\u4ed6\uff09" }
+        be { "\u767D\u4FC4\u7F85\u65AF\u6587" }
+        bej { "\u8c9d\u624e\u6587" }
+        bem { "\u5225\u59c6\u5df4\u6587" }
+        ber { "\u67cf\u67cf\u723e\u6587" }
+        bg { "\u4FDD\u52A0\u5229\u4E9E\u6587" }
+        bh { "\u6BD4\u54C8\u723E\u6587" }
+        bho { "\u535a\u5091\u666e\u723e\u6587" }
+        bi { "\u6BD4\u65AF\u62C9\u99AC\u6587" }
+        bik { "\u6bd4\u79d1\u723e\u6587" }
+        bin { "\u6bd4\u5c3c\u6587" }
+        bla { "\u932b\u514b\u932b\u5361\u6587" }   // Blackfoot
+        //bm  { "\u73ED\u5DF4\u62C9\u6587" } // Same as zh
+        //bn  { "\u5B5F\u52A0\u62C9\u6587" } // Same as zh
+        bnt { "\u73ed\u5716\u6587" }
+        bo  { "\u85CF\u6587" }
+        //br  { "\u5E03\u91CC\u591A\u5C3C\u6587" } // Same as zh
+        bra { "\u5e03\u62c9\u6770\u6587" }
+        bs  { "\u6CE2\u58EB\u5C3C\u4E9E\u6587" }
+        btk { "\u5df4\u5854\u514b\u6587" }
+        bua { "\u5e03\u91cc\u963f\u7279\u6587" }
+        bug { "\u5e03\u5409\u65af\u6587" }
+        //byn { "\u5E03\u6797\u6587" } // Same as zh
+        ca { "\u52A0\u6CF0\u7F85\u5C3C\u4E9E\u6587" }
+        cad { "\u5361\u591a\u6587" }
+        cai { "\u4e2d\u7f8e\u5370\u7b2c\u5b89\u6587\uff08\u5176\u4ed6\uff09" }
+        car { "\u5df4\u52d2\u6bd4\u6587" }
+        cau { "\u9ad8\u52a0\u7d22\u6587\uff08\u5176\u4ed6\uff09" }
+        ce  { "\u8ECA\u81E3\u6587" }
+        ceb { "\u5bbf\u52d9\u65cf\u6587" }
+        cel { "\u514b\u723e\u7279\u6587\uff08\u5176\u4ed6\uff09" }
+        ch  { "\u67E5\u83AB\u6D1B\u6587" }
+        chb { "\u5947\u5e03\u67e5\u6587" }
+        chg { "\u67e5\u52a0\u6587" }
+        chk { "\u8655\u5947\u65af\u6587" }
+        chm { "\u99ac\u91cc\u6587" }
+        chn { "\u5951\u5974\u514b\u6587" }
+        cho { "\u55ac\u514b\u6258\u6587" }
+        chp { "\u5947\u4f69\u74e6\u63da\u6587" }
+        chr { "\u67f4\u7f85\u57fa\u6587" }
+        chy { "\u6c99\u4f0a\u5b89\u6587" }
+        cmc { "\u67e5\u7c73\u514b\u6587" }
+        //co  { "\u79D1\u897F\u5609\u6587" } // Same as zh
+        cop { "\u79d1\u666e\u7279\u6587" }
+        cpe { "\u6b50\u6d32\u8154\u8abf\u548c\u6d0b\u6d87\u6ff1\uff0c\u6e90\u81ea\u82f1\u6587\u7684(\u5176\u4ed6)" }
+        cpf { "\u6b50\u6d32\u8154\u8abf\u548c\u6d0b\u6d87\u6ff1\uff0c\u6e90\u81ea\u6cd5\u6587\u7684(\u5176\u4ed6)" }
+        cpp { "\u6b50\u6d32\u8154\u8abf\u548c\u6d0b\u6d87\u6ff1\uff0c\u6e90\u81ea\u8461\u8404\u7259\u6587\u7684(\u5176\u4ed6)" }
+        cr  { "\u514B\u88E1\u6587" }
+        crh { "\u514b\u91cc\u7c73\u4e9e\u534a\u5cf6\u7684\u571f\u8033\u5176\u6587\uff1b\u514b\u91cc\u7c73\u4e9e\u534a\u5cf6\u7684\u5854\u5854\u723e\u6587" }
+        crp { "\u514b\u91cc\u5967\u723e\u6587\u548c\u76ae\u6b3d\u6587" }
+        //cs { "\u6377\u514B\u6587" } // Same as zh
+        csb { "\u5361\u8212\u5e03\u6587" }
+        //cu  { "\u5B97\u6559\u65AF\u62C9\u592B\u6587" } // Same as zh
+        cus { "\u5eab\u65bd\u7279\u8a9e\u7cfb\uff08\u5176\u4ed6\uff09" }
+        cv  { "\u695A\u74E6\u751A\u6587" }
+        cy { "\u5A01\u723E\u58EB\u6587" }
+        da { "\u4E39\u9EA5\u6587" }
+        dak { "\u9054\u79d1\u4ed6\u6587" }
+        dar { "\u9054\u723e\u683c\u74e6\u6587" }
+        day { "\u8fea\u96c5\u514b\u6587" }
+        //de { "\u5FB7\u6587" } // Same as zh
+        del { "\u5fb7\u62c9\u74e6" }
+        den { "\u65af\u62c9\u592b" }
+        dgr { "\u591a\u683c\u91cc\u5e03\u6587" }
+        din { "\u4e01\u5361\u6587" }
+        doi { "\u591a\u683c\u4f86\u6587" }
+        dra { "\u5fb7\u62c9\u5a01\u6587\uff08\u5176\u4ed6\uff09" }
+        dsb { "\u4e0b\u7d22\u5e03\u6587" }
+        dua { "\u675c\u4e9e\u62c9\u6587" }
+        dum { "\u8377\u862d\uff0c\u4e2d\u53e4 (ca. 1050-1350)" }
+        dv  { "\u8FEA\u7DAD\u897F\u6587" }
+        dyu { "\u8fea\u5c24\u62c9\u6587" }
+        //dz  { "\u4E0D\u4E39\u6587" } // Same as zh
+        ee  { "\u57C3\u7DEF\u6587" }
+        efi { "\u57c3\u83f2\u514b\u6587" }
+        egy { "\u53e4\u57c3\u53ca\u6587)" }
+        eka { "\u827e\u5361\u6731\u514b\u6587" }
+        el { "\u5E0C\u81D8\u6587" }
+        elx { "\u57c3\u862d\u6587" }
+        //en { "\u82F1\u6587" } // Same as zh
+        enm { "\u82f1\u6587\uff0c\u4e2d\u4e16\u7d00 (1100-1500)" }
+        eo { "\u4E16\u754C\u8A9E" }
+        //es { "\u897F\u73ED\u7259\u6587" } // Same as zh
+        et { "\u611B\u6C99\u5C3C\u4E9E\u6587" }
+        //eu  { "\u5DF4\u65AF\u514B\u6587" } // Same as zh
+        ewo { "\u4f9d\u6c6a\u90fd\u6587" }
+        //fa  { "\u6CE2\u65AF\u6587" } // Same as zh
+        fan { "\u82b3\u65cf\u6587" }
+        fat { "\u82b3\u8482\u6587" }
+        ff  { "\u5BCC\u62C9\u6587" }
+        fi { "\u82AC\u862D\u6587" }
+        fiu { "\u82ac\u862d-\u70cf\u6208\u723e\u65cf\u6587(\u5176\u4ed6)" }
+        fj { "\u6590\u6FDF\u6587" }
+        fo { "\u6CD5\u7F85\u6587" }
+        fon { "\u8c50\u6587" }
+        //fr { "\u6CD5\u6587" } // Same as zh
+        //frm { "\u6cd5\u6587"\uff0c\u4e2d\u53e4 (ca. 1400-1600)" }
+        //fro { "\u6cd5\u6587", \u4e0a\u53e4 (842-ca.1400)" }
+        fur { "\u5f17\u7559\u5229\u6587" }
+        fy { "\u5F17\u91CC\u65AF\u862D\u6587" }
+        ga { "\u611B\u723E\u862D\u6587" }
+        gaa { "\u52a0\u65cf\u6587" }
+        gay { "\u52a0\u7d04\u6587" }
+        gba { "\u845b\u5df4\u4e9e\u6587" }
+        gd { "\u8607\u683C\u862D - \u84CB\u723E\u6587" }
+        gem { "\u5fb7\u570b\u7684(\u5176\u4ed6)" }
+        gez { "\u5409\u8332\u6587" }
+        gil { "\u5409\u723e\u4f2f\u7279\u7fa4\u5cf6\u6587" }
+        gl { "\u52A0\u91CC\u897F\u4E9E\u6587" }
+        gmh { "\u5fb7\u6587, \u4e2d\u53e4\u5168\u76db\u6642\u671f (ca.1050-1500)" }
+        //gn  { "\u74DC\u62C9\u5C3C\u6587" } // Same as zh
+        goh { "\u5fb7\u6587,\u4e0a\u53e4\u5168\u76db\u6642\u671f (ca.750-1050)" }
+        gon { "\u5ca1\u5fb7\u6587" }
+        gor { "\u79d1\u9686\u9054\u7f85\u6587" }
+        got { "\u54e5\u7279\u6587" }
+        grb { "\u54e5\u535a\u8a9e" }
+        grc { "\u53e4\u5e0c\u81d8\u6587 (\u81f3 1453)" }
+        gu { "\u5409\u4E9E\u62C9\u5854\u6587" }
+        gv { "\u66FC\u5CF6\u6587" }
+        gwi { "\u572d\u5951\u6587" }
+        //ha  { "\u8C6A\u6492\u6587" } // Same as zh
+         hai { "\u6d77\u9054\u6587" }
+        //haw { "\u590F\u5A01\u5937\u6587" } // Same as zh
+        he { "\u5E0C\u4F2F\u4F86\u6587" }
+        hi { "\u5317\u5370\u5EA6\u6587" }
+        hil { "\u5e0c\u5229\u84cb\u8fb2\u6587" }
+        him { "\u8d6b\u99ac\u67e5\u5229\u6587" }
+        hit { "\u8d6b\u68af\u6587" }
+        hmn { "\u5b5f\u6587" }
+        ho  { "\u897F\u91CC\u83AB\u5716\u571F\u6587" }
+        hr { "\u514B\u7F85\u57C3\u897F\u4E9E\u6587" }
+        hsb { "\u4e0a\u7d22\u5e03\u6587" }
+        ht  { "\u6D77\u5730\u4EBA" }
+        //hu { "\u5308\u7259\u5229\u6587" } // Same as zh
+        hup { "\u80e1\u5e15\u6587" }
+        hy { "\u4E9E\u7F8E\u5C3C\u4E9E\u6587" }
+        hz  { "\u8D6B\u96F7\u7F85\u6587" }
+        ia { "\u62C9\u4E01\u570B\u969B\u6587" }
+        iba { "\u4f0a\u73ed\u6587" }
+        id { "\u5370\u5C3C\u6587" }
+        ie { "\u62C9\u4E01\u570B\u969B\u6587" }
+        ig  { "\u4F0A\u5E03\u6587" }
+        ii  { "\u56DB\u5DDD\u8A71" }
+        ijo { "\u4f0a\u55ac\u6587" }
+        ik { "\u4F9D\u5974\u76AE\u7DAD\u514B\u6587" }
+        ilo { "\u4f0a\u6d1b\u95ca\u6587" }
+        inc { "\u5370\u5ea6\u8a9e\u7cfb\uff08\u5176\u4ed6\uff09" }
+        ine { "\u5370\u6b50\u8a9e\u7cfb\uff08\u5176\u4ed6\uff09" }
+        inh { "\u5370\u53e4\u4ec0\u6587" }
+        io  { "\u4F0A\u6717\u6587" }
+        ira { "\u4f0a\u82b3\u6717\u6587" }
+        iro { "\u6613\u6d1b\u9b41\u6587" }
+        is { "\u51B0\u5CF6\u6587" }
+        it { "\u7FA9\u5927\u5229\u6587" }
+        iu { "\u56E0\u7D10\u7279\u6587" }
+        //ja { "\u65E5\u6587" } // Same as zh
+        jbo { "\u908f\u8f2f\u6587" }
+        jpr { "\u7336\u592a\u6559-\u6ce2\u65af\u6587" }
+        jrb { "\u7336\u592a\u6559-\u963f\u62c9\u4f2f\u6587" }
+        //jv  { "\u722A\u54C7\u6587" } // Same as zh
+        ka { "\u55AC\u6CBB\u4E9E\u6587" }
+        kaa { "\u5361\u62c9\u5361\u723e\u5e15\u514b\u6587" }
+        kab { "\u5361\u6bd4\u723e\u6587" }
+        kac { "\u5361\u7434\u6587" }
+        kam { "\u5361\u59c6\u5df4\u6587" }
+        kar { "\u514b\u502b\u6587" }
+        kaw { "\u5361\u5a01\u6587" }
+        kbd { "\u5361\u5df4\u723e\u9054\u6587" }
+        kg  { "\u525B\u679C\u6587" }
+        kha { "\u5361\u897f\u6587" }
+        khi { "\u5176\u4ed6\u79d1\u4f0a\u6851\u6587" }
+        kho { "\u548c\u95d0[\u8207\u95d0]\u6587" }
+        ki  { "\u5409\u5EAB\u5C24\u4EBA" }
+        kj  { "\u5EE3\u4E9E\u99AC\u6587" }
+        kk { "\u54C8\u85A9\u514B\u6587" }
+        kl { "\u683C\u9675\u862D\u6587" }
+        km { "\u9AD8\u68C9\u6587" }
+        kmb { "\u91d1\u90a6\u675c\u6587" }
+        kn { "\u574E\u90A3\u9054\u6587" }
+        ko { "\u97D3\u6587" }
+        kok { "\u8ca2\u6839\u6587" }
+        kos { "\u79d1\u65af\u96f7\u6069\u6587" }
+        kpe { "\u514b\u4f69\u5217\u6587" }
+        kr  { "\u5361\u52AA\u88E1\u6587" }
+        krc { "\u5361\u62c9\u67f4-\u5305\u723e\u5361\u723e\u6587" }
+        kro { "\u514b\u9b6f\u6587" }
+        kru { "\u5eab\u9b6f\u79d1\u6587" }
+        ks { "\u514B\u4EC0\u7C73\u723E\u6587" }
+        ku { "\u5EAB\u723E\u5FB7\u6587" }
+        kum { "\u5eab\u5bc6\u514b\u6587" }
+        kut { "\u5eab\u7279\u5948\u6587" }
+        //kv  { "\u79D1\u7C73\u6587" } // Same as zh 
+        kw { "\u5EB7\u74E6\u8033\u6587" }
+        ky { "\u5409\u723E\u5409\u65AF\u6587" }
+        //la  { "\u62C9\u4E01\u6587" } // Same as zh
+        lad { "\u62c9\u8fea\u8afe\u6587" }
+        lah { "\u62c9\u4ea8\u9054\u6587" }
+        lam { "\u862d\u5df4\u6587" }
+        lb  { "\u76E7\u68EE\u5821\u6587" }
+        lez { "\u7acb\u9676\u5b9b\u6587" }
+        lg  { "\u5E72\u9054\u6587" }
+        li  { "\u6797\u5821\u6587" }
+        //ln { "\u6797\u52A0\u62C9\u6587" } // Same as zh
+        lo { "\u5BEE\u570B\u6587" }
+        lol { "\u8499\u53e4\u6587" }
+        loz { "\u6d1b\u9f4a\u6587" }
+        //lt { "\u7ACB\u9676\u5B9B\u6587" } // Same as zh
+        lu  { "\u9B6F\u5DF4\u52A0\u4E39\u52A0\u6587" }
+        lua { "\u9b6f\u5df4\u9b6f\u9b6f\u4e9e\u6587" }
+        lui { "\u8def\u6613\u585e\u8afe\u6587" }
+        lun { "\u76e7\u6069\u9054\u6587" }
+        luo { "\u76e7\u5967\u6587" }
+        lus { "\u76e7\u6652\u6587" }
+        //lv { "\u62C9\u812B\u7DAD\u4E9E\u6587" } // Same as zh
+        mad { "\u99ac\u90fd\u62c9\u6587" }
+        mag { "\u99ac\u52a0\u4f0a\u6587" }
+        mai { "\u9081\u8482\u5229\u6587" }
+        mak { "\u671b\u52a0\u932b\u6587" }
+        man { "\u66fc\u4e01\u54e5\u6587" }
+        map { "\u5357\u5cf6\u6587" }
+        mas { "\u99ac\u8cfd\u6587" }
+        mdf { "\u83ab\u514b\u6c99\u6587" }
+        mdr { "\u66fc\u9054\u6587" }
+        men { "\u9580\u5fb7\u6587" }
+        mg { "\u99AC\u723E\u52A0\u4EC0\u6587" }
+        mga { "\u611b\u723e\u862d\u6587\uff0c\u4e2d\u53e4 (900-1200)" }
+        mh  { "\u99AC\u7D39\u723E\u6587"}
+        //mi  { "\u6BDB\u5229\u6587" } // Same as zh
+        mic { "\u7c73\u514b\u99ac\u514b\u6587" }
+        min { "\u7c73\u5357\u5361\u5821\u6587" }
+        mis { "\u5176\u4ed6\u8a9e\u8a00" }
+        mk { "\u99AC\u5176\u9813\u6587" }
+        mkh { "\u5176\u4ed6\u9ad8\u68c9\u8a9e\u7cfb" }
+        ml { "\u99AC\u4F86\u4E9E\u62C9\u59C6\u6587" }
+        //mn  { "\u8499\u53E4\u6587" } // Same as zh
+        mnc { "\u6eff\u65cf\u6587" }
+        mni { "\u66fc\u5c3c\u666e\u88e1\u6587" }
+        mno { "\u99ac\u8afe\u6ce2\u6587" }
+        mo { "\u6469\u723E\u591A\u74E6\u6587" }
+        moh { "\u83ab\u970d\u514b\u6587" }
+        mos { "\u83ab\u897f\u6587" }
+        mr { "\u99AC\u62C9\u5730\u6587" }
+        ms { "\u99AC\u4F86\u6587" }
+        mt { "\u99AC\u723E\u4ED6\u6587" }
+        mul { "\u591a\u7a2e\u8a9e\u8a00" }
+        mun { "\u8499\u9054\u6587" }
+        mus { "\u514b\u91cc\u514b\u6587" }
+        mwr { "\u99ac\u723e\u5c3c\u88e1\u6587" }
+        my { "\u7DEC\u7538\u6587" }
+        myn { "\u99ac\u96c5\u6587" }
+        myv { "\u5384\u723e\u8332\u4e9e\u6587" }
+        na { "\u8AFE\u9B6F\u6587" }
+        nah { "\u7d0d\u74e6\u7279\u6587" }
+        nai { "\u5176\u4ed6\u5317\u7f8e\u5370\u5730\u5b89\u6587" }
+        nap { "\u62ff\u6ce2\u91cc\u6587" }
+        nb { "\u632A\u5A01\u6CE2\u514B\u9ED8\u723E\u6587" }
+        nd  { "\u5317\u5730\u7562\u5217\u6587" }
+        nds { "\u5fb7\u570b\u5317\u90e8\u7684\u5fb7\u6587; \u85a9\u514b\u905c\u6587" }
+        ne { "\u5C3C\u6CCA\u723E\u6587" }
+        new { "\u5c3c\u74e6\u723e\u6587" }
+        ng  { "\u6069\u6771\u52A0\u6587" }
+        nia { "\u5c3c\u4e9e\u65af\u6587" }
+        nic { "\u5176\u4ed6\u5c3c\u65e5\u525b\u679c\u8a9e\u7cfb" }
+        niu { "\u7d10\u57c3\u6587" }
+        nl { "\u8377\u862D\u6587" }
+        nn { "\u65B0\u632A\u5A01\u6587" }
+        //no { "\u632A\u5A01\u6587" } // Same as zh
+        nog { "\u8afe\u84cb\u6587" }
+        non { "\u53e4\u8afe\u723e\u65af\u6587" }
+        nr  { "\u5357\u5730\u7562\u5217\u6587" }
+        nso { "\u5317\u7d22\u6258\u6587" }
+        nub { "\u52aa\u6bd4\u4e9e\u6587" }
+        nv  { "\u7D0D\u74E6\u7D04\u6587"}
+        ny  { "\u5C3C\u63DA\u8CC8\u6587" }
+        nym { "\u5c3c\u63da\u97cb\u9f4a\u6587" }
+        nyn { "\u5c3c\u63da\u79d1\u840a\u6587" }
+        nyo { "\u5c3c\u5967\u56c9\u6587" }
+        nzi { "\u5c3c\u8332\u99ac\u6587" }
+        oc { "\u5967\u897F\u5766\u6587" }
+        oj  { "\u5967\u6770\u5E03\u74E6\u6587" }
+        //om  { "\u963F\u66FC\u6587" } // Same as zh
+        or { "\u6B50\u91CC\u4E9E\u6587" }
+        os  { "\u5967\u585E\u63D0\u6587" }
+        osa { "\u6b50\u585e\u5947\u6587" }
+        ota { "\u9102\u5716\u66fc\u571f\u8033\u5176\u6587 (1500-1928)" }
+        oto { "\u5967\u6258\u7c73\u6587" }
+        //pa { "\u65C1\u906E\u666E\u6587" } // Same as zh
+        paa { "\u5176\u4ed6\u5df4\u5e03\u4e9e\u8af8\u8a9e\u8a00" }
+        pag { "\u6f58\u52a0\u8f9b\u6587" }
+        pal { "\u5df4\u5217\u7dad\u6587" }
+        pam { "\u6f58\u5e15\u5609\u6587" }
+        pap { "\u5e15\u76ae\u963f\u9580\u6258\u6587" }
+        pau { "\u5e1b\u7409\u6587" }
+        peo { "\u53e4\u6ce2\u65af\u6587 (ca.600-400 B.C.)" }
+        phi { "\u5176\u4ed6\u83f2\u5f8b\u8cd3\u6587" }
+        phn { "\u8153\u5c3c\u57fa\u6587" }
+        pi  { "\u5DF4\u5229\u6587" }
+        pl { "\u6CE2\u862D\u6587" }
+        pon { "\u6ce2\u90a3\u8c9d\u6587" }
+        pra { "\u5370\u5ea6\u53e4\u4ee3\u53ca\u4e2d\u4e16\u7d00\u4e4b\u4e2d\u90e8\u53ca\u5317\u90e8\u65b9\u8a00" }
+        pro { "\u666e\u7f85\u6587\u65af\u6587 (to 1500)" }
+        ps { "\u666E\u4EC0\u5716\u6587" }
+        //pt { "\u8461\u8404\u7259\u6587" } // Same as zh
+        qu { "\u84CB\u4E18\u4E9E\u6587" }
+        raj { "\u62c9\u8cc8\u65af\u5766\u8af8\u6587" }
+        rap { "\u5fa9\u6d3b\u5cf6\u6587" }
+        rar { "\u62c9\u7f85\u901a\u52a0\u6587" }     
+        rm { "\u91CC\u6258\u7F85\u66FC\u65AF\u6587" }
+        //rn  { "\u57FA\u9686\u8FEA\u6587" } // Same as zh
+        ro { "\u7F85\u99AC\u5C3C\u4E9E\u6587" }
+        roa { "\u5176\u4ed6\u7f85\u66fc\u6587" }
+        rom { "\u5409\u666e\u8cfd\u6587" }
+        //ru { "\u4FC4\u6587" } // Same as zh
+        rw { "\u76E7\u5B89\u9054\u6587" }
+        //sa  { "\u68B5\u6587" } //same as zh
+        sad { "\u6851\u9054\u97cb\u6587" }
+        sah { "\u96c5\u5eab\u7279\u6587" }
+        sai { "\u5176\u4ed6\u5357\u7f8e\u5370\u7b2c\u5b89\u6587" }
+        sal { "\u85a9\u5229\u751a\u6587" }
+        sam { "\u85a9\u746a\u5229\u4e9e\u963f\u62c9\u59c6\u6587" }
+        sas { "\u6492\u6492\u514b\u6587" }
+        sat { "\u6563\u5854\u5229\u6587" }
+        sc  { "\u6492\u4E01\u6587" }
+        sd { "\u8607\u4E39\u6587" }
+        se  { "\u5317\u65B9\u85A9\u7C73\u6587" }
+        sel { "\u745f\u723e\u5361\u666e\u6587" }
+        sem { "\u5176\u4ed6\u9583\u65cf\u8a9e\u8a00" }
+        //sg  { "\u6851\u6208\u6587" } // Same as zh
+        sga { "\u53e4\u611b\u723e\u862d\u6587\uff08\u81f3 900\uff09" }
+        sgn { "\u624b\u8a9e" }
+        sh { "\u585E\u723E\u7DAD\u4E9E\u514B\u7F85\u57C3\u897F\u4E9E\u6587" }
+        shn { "\u64a3\u6587" }
+        si { "\u50E7\u4F3D\u7F85\u6587" }
+        sid { "\u5E0C\u9054\u6469\u6587" }
+        sio { "\u5927\u8607\u6587" }
+        sit { "\u5176\u4ed6\u6f22\u85cf\u6587" }
+        //sk { "\u65AF\u6D1B\u4F10\u514B\u6587" } // Same as zh
+        sl { "\u65AF\u6D1B\u7DAD\u5C3C\u4E9E\u6587" }
+        sla { "\u5176\u4ed6\u65af\u62c9\u592b\u6587" }
+        sm { "\u85A9\u6469\u4E9E\u6587" }
+        sma { "\u5357\u85a9\u7c73\u6587" }
+        smi { "\u5176\u4ed6\u85a9\u7c73\u6587" }
+        smj { "\u9b6f\u52d2\u85a9\u7c73\u6587" }
+        smn { "\u4f0a\u7d0d\u88e1\u85a9\u7c73\u6587" }
+        sms { "\u65af\u79d1\u7279\u85a9\u7c73\u6587" }
+        sn { "\u585E\u5167\u52A0\u723E\u6587" }
+        snk { "\u7d22\u5c3c\u57fa\u6587" }
+        so { "\u7D22\u99AC\u5229\u6587" }
+        sog { "\u7d22\u683c\u5e95\u4e9e\u7d0d\u6587" }
+        son { "\u6851\u6d77\u6587" }
+        sq { "\u963F\u723E\u5DF4\u5C3C\u4E9E\u6587" }
+        sr { "\u585E\u723E\u7DAD\u4E9E\u6587" }
+        srr { "\u585e\u96f7\u723e\u6587" }
+        //ss  { "\u8F9B\u8F9B\u90A3\u63D0\u6587" } // Same as zh
+        ssa { "\u975e\u6d32\u6492\u54c8\u62c9\u6c99\u6f20\u908a\u7de3\u5730\u5e36\u6587" }
+        //st  { "\u585E\u7D22\u6258\u6587" } // Same as zh
+        su { "\u8607\u4E39\u6587" }
+        suk { "\u8607\u5eab\u99ac\u6587" }
+        sus { "\u8607\u8607\u6587" }
+        sux { "\u8607\u7f8e\u6587"}
+        //sv { "\u745E\u5178\u6587" } // Same as zh
+        sw { "\u53F2\u74E6\u5E0C\u91CC\u6587" }
+        syr { "\u53E4\u6558\u5229\u4E9E\u6587" }
+        ta { "\u5766\u7C73\u723E\u6587" }
+        tai { "\u5176\u4ed6\u6cf0\u6587" }
+        te { "\u6CF0\u76E7\u56FA\u6587" }
+        tem { "\u63d0\u59c6\u6587" }
+        ter { "\u6cf0\u96f7\u8afe\u6587" }
+        tet { "\u6cf0\u9813\u6587" }
+        //tg  { "\u5854\u5409\u514B\u6587" } // Same as zh
+        //th  { "\u6CF0\u6587" } // Same as zh
+        ti { "\u63D0\u683C\u5229\u5C3C\u4E9E\u6587" }
+        tig { "\u8482\u683C\u96F7\u6587" }
+        tiv { "\u63d0\u592b\u6587" }
+        tk { "\u571F\u5EAB\u66FC\u6587" }
+        tkl { "\u6258\u514b\u52de\u6587" }
+        //tl { "\u5854\u52A0\u8DEF\u65CF\u6587" } // Same as zh
+        tli { "\u7279\u6797\u57fa\u7279\u6587" }
+        tmh { "\u5854\u99ac\u5947\u514b\u6587" }
+        tn { "\u7A81\u5C3C\u897F\u4E9E\u6587" }
+        to { "\u6771\u52A0\u6587" }
+        tog { "\u6e6f\u52a0\u6587(\u5c3c\u4e9e\u85a9\u6587)" }
+        tpi { "\u6258\u6bd4\u8f9b\u6587" }
+        //tr { "\u571F\u8033\u5176\u6587" } // Same as zh
+        //ts  { "\u7279\u677E\u52A0\u6587" } // Same as zh
+        tsi { "\u6b3d\u897f\u5b89\u6587" }
+        tt { "\u97C3\u977C\u6587" }
+        tum { "\u5716\u59c6\u5e03\u5361\u6587" }
+        tup { "\u5716\u76ae\u6587" }
+        tut { "\u5176\u4ed6\u963f\u723e\u6cf0\u8af8\u6587" }
+        tvl { "\u5410\u74e6\u9b6f\u6587" }
+        tw { "\u7E41\u9AD4\u4E2D\u6587" }
+        ty  { "\u5927\u6EAA\u5730\u6587" }
+        tyv { "\u571f\u51e1\u6587" }
+        udm { "\u6c83\u8482\u827e\u514b\u6587" }
+        ug { "\u7DAD\u543E\u723E\u6587" }
+        uga { "\u70cf\u52a0\u5217\u6587" }
+        uk { "\u70CF\u514B\u862D\u6587" }
+        umb { "\u59c6\u672c\u675c\u6587" }
+        und { "\u672a\u78ba\u5b9a\u7684" }
+        ur { "\u70CF\u723E\u90FD\u6587" }
+        uz { "\u70CF\u8332\u5225\u514B\u6587" }
+        vai { "\u8d8a\u5357\u6587" }
+        ve  { "\u6EAB\u9054\u6587" }
+        //vi  { "\u8D8A\u5357\u6587" } // Same as zh
+        //vo  { "\u6C83\u62C9\u666E\u514B\u6587" }   // Same as zh
+        vot { "\u6c83\u63d0\u514b\u6587" }
+        wa  { "\u74E6\u9686\u6587" }
+        wak { "\u5938\u57fa\u6b66\u7279\u6587" }
+        wal { "\u74e6\u62c9\u83ab\u6587" }
+        war { "\u74e6\u745e\u6587" }
+        was { "\u74e6\u7d39\u6587" }
+        wen { "\u6587\u5fb7\u6587" }
+        wo { "\u6C83\u723E\u592B\u6587" }
+        xal { "\u5361\u723e\u6885\u514b\u6587" }
+        xh { "\u73ED\u5716\u6587" }
+        yao { "\u7464\u6587" }
+        yap { "\u96c5\u6d66\u6587" }
+        yi  { "\u610F\u7B2C\u7DD2\u6587" }
+        yo { "\u7D04\u9B6F\u5DF4\u6587" }
+        ypk { "\u611b\u65af\u57fa\u6469\u6587" }
+        za  { "\u58EF\u6587" }
+        zap { "\u85a9\u6ce2\u7279\u514b\u6587" }
+        zen { "\u6fa4\u7d0d\u52a0\u6587" }
+        //zh { "\u4E2D\u6587" } // Same as zh
+        znd { "\u8d0a\u5fb7\u6587" }
+        zu { "\u7956\u9B6F\u6587" }
+        zun { "\u7956\u5c3c\u6587" }
+    }
+    
+    Currencies {
+        ADD { "ADD", "\u5b89\u9053\u723e\u7b2c\u7d0d\u723e" } // 1873-06/30/2002
+        ADP { "ADP", "\u5b89\u9053\u723e\u966a\u58eb\u7279" } // 1936-
+        AED { "AED", "\u963f\u62c9\u4f2f\u806f\u5408\u5927\u516c\u570b\u8fea\u723e\u6c57" } // 12/2/1971-
+        AFA { "AFA", "\u963f\u5bcc\u6c57\u5c3c (1927-2002)" } // 1927-
+        AFN { "AFN", "\u963f\u5bcc\u6c57\u5c3c" }
+        AIF { "AIF", "\u963f\u6cd5\u723e\u548c\u4f0a\u85a9\u6cd5\u90ce" } // 07/05/1967-06/27/1977
+        ALK { "ALK", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5217\u514b (1946-1961)" } // 1946-1961
+        ALL { "ALL", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5217\u514b" } // 1961-
+        ALV { "ALV", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5217\u514b\u5e63" } // 1992-1993
+        ALX { "ALX", "\u963f\u723e\u5df4\u5c3c\u4e9e\u5143\u5916\u532f\u5238" } // 1953-1965
+        AMD { "AMD", "\u4e9e\u7f8e\u5c3c\u4e9e\u5fb7\u62c9\u59c6" } // 11/22/1993-
+        ANG { "ANG", "\u8377\u862d \u5b89\u68af\u862d \u76fe" } // 05/10/1940-
+        AOA { "AOA", "\u5b89\u54e5\u62c9\u5bec\u624e" } // 09/1926-12/31/1958
+        AOK { "AOK", "\u5b89\u54e5\u62c9\u5bec\u624e(1977-1990)" } // 01/08/1977-09/25/1990
+        AON { "AON", "\u5b89\u54e5\u62c9\u65b0\u5bec\u624e (1990-2000)" } // 09/25/1990-07/01/1995
+        AOR { "AOR", "\u5b89\u54e5\u62c9\u65b0\u5bec\u624e Reajustado (1995-1999)" } // 07/01/1995-12/13/1999
+        AOS { "AOS", "\u5b89\u54e5\u62c9\u57c3\u65af\u5eab\u591a" } // 12/31/1958-11/11/1976
+        ARA { "ARA", "\u963f\u6839\u5ef7\u5967\u65af\u7279\u7d0d\u723e" } // 06/14/1985-01/01/1992
+        ARM { "ARM", "\u963f\u6839\u5ef7\u62ab\u7d22 Moneda Nacional" } // 1899-01/01/1970
+        ARP { "ARP", "\u963f\u6839\u5ef7\u62ab\u7d22(1983-1985)" } // 06/01/1983-06/14/1985
+        ARS { "ARS", "\u963f\u6839\u5ef7\u62ab\u7d22" } // 01/01/1992-
+        ATS { "ATS", "\u5967\u5730\u5229\u5148\u4ee4" } // 12/04/1947-02/28/2002
+        AUD { "AUD", "\u6fb3\u5e63" } // 02/14/1966-
+        AUP { "AUP", "\u6fb3\u5927\u5229\u4e9e\u938a" } // 1902-02/14/1966
+        AWG { "AWG", "\u963f\u9b6f\u5df4\u76fe" } // 01/01/1986-
+        AZM { "AZM", "\u963f\u585e\u62dc\u5f4a\u99ac\u7279\u7d0d" } // 1992-
+        BAD { "BAD", "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u7b2c\u7d0d\u723e" } // 07/01/1992-08/15/1994
+        BAM { "BAM", "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u53ef\u8f49\u63db\u99ac\u514b" } // 01/01/1995-
+        BAN { "BAN", "\u6ce2\u58eb\u5c3c\u4e9e-\u9ed1\u585e\u54e5\u7dad\u90a3\u65b0\u7b2c\u7d0d\u723e" } // 08/15/1994-01/01/1995
+        BBD { "BBD", "\u5df4\u8c9d\u591a\u5143" } // 11/29/1966-
+        BDT { "BDT", "\u5b5f\u52a0\u62c9\u5854\u5361" } // 01/01/1972-
+        BEC { "BEC", "\u6bd4\u5229\u6642\u6cd5\u90ce \uff08\u53ef\u8f49\u63db\uff09" }
+        BEF { "BEF", "\u6bd4\u5229\u6642\u6cd5\u90ce" } // 1831-2002
+        BEL { "BEL", "\u6bd4\u5229\u6642\u6cd5\u90ce \uff08\u91d1\u878d\uff09" }
+        BGL { "BGL", "\u4fdd\u52a0\u5229\u4e9e\u786c\u5217\u5f17" } // 01/01/1962-01/01/1999
+        BGM { "BGM", "\u4fdd\u52a0\u5229\u4e9e \u793e\u6703\u4e3b\u7fa9\u5217\u5f17" } // 05/1952-01/01/1962
+        BGN { "BGN", "\u4fdd\u52a0\u5229\u4e9e\u65b0\u5217\u5f17" } // 01/01/1999-
+        BGO { "BGO", "\u4fdd\u52a0\u5229\u4e9e\u5217\u5f17 (1879-1952)" } // 07/08/1879-05/1952
+        BGX { "BGX", "\u4fdd\u52a0\u5229\u4e9e\u5217\u5f17\u5916\u532f\u5238" } // 1965-1986
+        BHD { "BHD", "\u5df4\u6797\u7b2c\u7d0d\u723e" } // 10/1965-
+        BIF { "BIF", "\u84b2\u9686\u5730\u6cd5\u90ce" } // 05/19/1964-
+        BMD { "BMD", "\u767e\u6155\u9054\u5e63" } // 02/06/1970-
+        BMP { "BMP", "\u767e\u6155\u9054\u938a" } // 1914-02/06/1970
+        BND { "BND", "\u6c76\u840a\u5143" } // 06/12/1967-
+        BOB { "BOB", "\u73bb\u5229\u7dad\u4e9e\u8ca8\u5e63\u55ae\u4f4d" } // 1986-
+        BOL { "BOL", "\u73bb\u5229\u7dad\u4e9e\u820a\u8ca8\u5e63\u55ae\u4f4d (1863-1962)" } // 06/23/1863-12/31/1962
+        BOP { "BOP", "\u73bb\u5229\u7dad\u4e9e\u62ab\u7d22" } // 01/01/1963-1986
+        BOV { "BOV", "\u73bb\u5229\u7dad\u4e9e \u5e55\u591a" }
+        BRB { "BRB", "\u5df4\u897f\u514b\u9b6f\u85a9\u591a \u8fb2\u74e6 (1967-1986)" } // 02/13/1967-02/28/1986
+        BRC { "BRC", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85" } // 02/28/1986-01/15/1989
+        BRE { "BRE", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85 (1990-1993)" } // 03/16/1990-08/01/1993
+        BRL { "BRL", "\u5df4\u897f\u91cc\u62c9" } // 07/01/1994-
+        BRN { "BRN", "\u5df4\u897f \u514b\u5982\u723e\u9054 \u8fb2\u74e6" } // 01/15/1989-03/16/1990
+        BRR { "BRR", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85" } // 08/01/1993-07/01/1994
+        BRZ { "BRZ", "\u5df4\u897f\u514b\u9b6f\u8cfd\u7f85 (1942-1967)" } // 1942-1967
+        BSD { "BSD", "\u5df4\u54c8\u99ac\u5143" } // 5/25/1966-
+        BSP { "BSP", "\u5df4\u54c8\u99ac\u938a" } // 1869-5/25/1966
+        BTN { "BTN", "\u4e0d\u4e39\u52aa\u624e\u59c6" } // 1974-
+        BTR { "BTR", "\u4e0d\u4e39\u76e7\u5e03" } // 1928-1974
+        BUK { "BUK", "\u7dec\u7538\u5143" } // 01/04/1948-06/18/1989
+        BUR { "BUR", "\u7dec\u7538\u76e7\u5e03" } // 04/01/1937-07/01/1952
+        BWP { "BWP", "\u6ce2\u672d\u90a3 - \u666e\u62c9" } // 1976-
+        BYB { "BYB", "\u767d\u4fc4\u7f85\u65af\u65b0\u76e7\u5e03 (1994-1999)" } // 08/1994-01/01/2000
+        BYL { "BYL", "\u767d\u4fc4\u7f85\u65af\u76e7\u5e03 (1992-1994)" } // 09/25/1992-08/1994
+        BYR { "BYR", "\u767d\u4fc4\u7f85\u65af\u76e7\u5e03" } // 01/01/2000-
+        BZD { "BZD", "\u4f2f\u5229\u8332\u5143" } // 1973-
+        BZH { "BZH", "\u82f1\u570b\u7684\u6d2a\u90fd\u62c9\u65af\u5143r" } // 1855-1972
+        CAD { "CAD", "\u52a0\u5e63" } // 1858-
+        CDF { "CDF", "\u525b\u679c\u6cd5\u90ce" } // 07/1998-
+        CDG { "CDG", "\u525b\u679c\u5171\u548c\u570b\u6cd5\u90ce" } // 06/30/1960-07/22/1967
+        CDL { "CDL", "\u525b\u679c\u624e\u4f0a\u723e" } // 07/23/1967-10/27/1971
+        CFF { "CFF", "\u4e2d\u975e\u5171\u548c\u570b\u897f\u975e\u6cd5\u90ce" } // 04/01/1973-1992
+        CHF { "CHF", "\u745e\u58eb\u6cd5\u90ce" } // 03/17/1799-
+        CKD { "CKD", "\u5eab\u514b\u7fa4\u5cf6\u5143" } // 1987-
+        CLC { "CLC", "\u667a\u5229 \u5eb7\u5c0e" } // 1817-12/31/1959
+        CLE { "CLE", "\u667a\u5229\u57c3\u65af\u5eab\u591a" } // 1/1/1960-1975
+        CLF { "CLF", "\u5361\u6797\u6cb9\u9054\u4f5b\u66fc\u8dce" } // 1975-
+        CLP { "CLP", "\u667a\u5229\u62ab\u7d22" } // 1975-
+        CMF { "CMF", "\u5361\u9ea5\u9686\u897f\u975e\u6cd5\u90ce" } // 01/01/1960-1992
+        CNP { "CNP", "\u4e2d\u570b\u4eba\u6c11\u5e63\u5143" } // 1948-04/30/1953
+        CNX { "CNX", "\u4e2d\u570b\u7f8e\u5143\u5916\u532f\u5238" } // 1979-1998
+        CNY { "CNY", "\u4eba\u6c11\u5e63" } // 03/01/1953-
+        COB { "COB", "\u54e5\u502b\u6bd4\u4e9e\u62ab\u7d22\u9214" }
+        COF { "COF", "\u525b\u679c\u897f\u975e\u6cd5\u90ce" } // 04/01/1973-1992
+        COP { "COP", "\u54e5\u502b\u6bd4\u4e9e\u62ab\u7d22" } // 6/9/1871-
+        CRC { "CRC", "\u54e5\u65af\u5927\u9ece\u52a0\u79d1\u90ce" } // 10/26/1896-
+        CSC { "CSC", "\u6377\u514b\u514b\u6717" } // 05/1945-06/01/1953
+        CSK { "CSK", "\u6377\u514b\u65af\u6d1b\u4f10\u514b\u786c\u514b\u6717" } // 06/01/1953-12/31/1992
+        CUP { "CUP", "\u53e4\u5df4\u62ab\u7d22" } // 1881-
+        CUX { "CUX", "\u53e4\u5df4\u4eba\u5916\u532f\u5238" } // 1985-
+        CVE { "CVE", "\u7dad\u5fb7\u89d2\u57c3\u65af\u5eab\u591a" } // 05/22/1911-
+        CWG { "CWG", "\u5eab\u62c9\u514b \u76fe" } // 1848-1960
+        CYP { "CYP", "\u8cfd\u6d66\u8def\u65af\u938a" } // 9/5/1917-
+        CZK { "CZK", "\u6377\u514b\u514b\u6717" } // 01/01/1993-
+        DDM { "DDM", "\u6771\u5fb7\u6771\u5fb7\u99ac\u514b" } // 07/20/1948-10/02/1990
+        DEM { "DEM", "\u5fb7\u570b\u99ac\u514b" } // 6/20/1948-2002
+        DES { "DES", "\u5fb7\u570b \u8607\u99ac\u514bSperrmark" } // 03/31/1951-12/29/1958
+        DJF { "DJF", "\u5409\u5e03\u5730\u6cd5\u90ce" } // 06/27/1977-
+        DKK { "DKK", "\u4e39\u9ea5\u514b\u7f85\u7d0d" } // 5/27/1873-
+        DOP { "DOP", "\u591a\u660e\u5c3c\u52a0\u62ab\u7d22" } // 10/1947-
+        DZD { "DZD", "\u963f\u723e\u53ca\u5229\u4e9e\u7b2c\u7d0d\u723e" } // 04/01/1964-
+        DZF { "DZF", "\u963f\u723e\u53ca\u5229\u4e9e\u65b0\u6cd5\u90ce" } // 01/01/1960-04/01/1964
+        DZG { "DZG", "\u963f\u723e\u53ca\u5229\u4e9e\u6cd5\u90ce Germinal" } // 08/04/1851-12/31/1959
+        ECS { "ECS", "\u5384\u74dc\u591a\u8607\u514b\u96f7" } // 4/1/1884-2000
+        ECV { "ECV", "\u5384\u74dc\u591a\u723e\u7531\u91cc\u9054\u74e6\u5eb7\u65af\u5766 (UVC)" } // 1980-
+        EEK { "EEK", "\u611b\u6c99\u5c3c\u4e9e\u514b\u6717" } // 06/21/1992-
+        EGP { "EGP", "\u57c3\u53ca\u938a" } // 11/14/1885-
+        ERN { "ERN", "\u5384\u7acb\u7279\u91cc\u4e9e\u7d0d\u514b\u6cd5" } // 1997-
+        ESP { "ESP", "\u897f\u73ed\u7259\u966a\u58eb\u7279" } // 01/01/1859-02/28/2002
+        ETB { "ETB", "\u8863\u7d22\u6bd4\u4e9e\u6bd4\u723e" } // 09/15/1976-
+        ETD { "ETD", "\u57c3\u8cfd\u4fc4\u6bd4\u4e9e\u5143" } // 07/23/1945-09/15/1976
+        EUR { "EUR", "\u6b50\u5143" } // 01/01/1999-
+        FIM { "FIM", "\u82ac\u862d\u99ac\u514b" } // 1/1/1963-2002
+        FIN { "FIN", "\u82ac\u862d\u99ac\u514b (1860-1962)" } // 4/4/1860-12/31/1962
+        FJD { "FJD", "\u6590\u6fdf\u5143" } // 01/13/1969-
+        FJP { "FJP", "\u6590\u6fdf\u938a" } // 1917-01/13/1969
+        FKP { "FKP", "\u798f\u514b\u862d\u7fa4\u5cf6\u938a" } // 1901-
+        FOK { "FOK", "\u6cd5\u7f85\u5cf6\u514b\u6717" } // 1940-
+        FRF { "FRF", "\u6cd5\u570b\u6cd5\u90ce" } // 01/01/1960-2002
+        FRG { "FRG", "\u6cd5\u570b\u6cd5\u90ce \u6377\u7c73\u90a3/\u9f90\u52a0\u840a\u6cd5\u90ce" } // 04/07/1803-12/31/1959
+        GAF { "GAF", "\u52a0\u84ec\u897f\u975e\u6cd5\u90ce" } // 04/01/1973-1992
+        GBP { "GBP", "\u82f1\u938a" } // 07/27/1694-
+        GEK { "GEK", "\u55ac\u6cbb \u5eab\u65c1 \u62c9\u91cc" } // 04/05/1993-09/23/1995
+        GEL { "GEL", "\u55ac\u6cbb\u62c9\u91cc" } // 09/23/1995-
+        GHC { "GHC", "\u8fe6\u7d0d\u4ed9\u8515" } // 03/09/1979-
+        GHO { "GHO", "\u8fe6\u7d0d\u820a\u4ed9\u8515" } // 07/19/1965-02/17/1967
+        GHP { "GHP", "\u8fe6\u7d0d\u938a" } // 07/14/1958-
+        GHR { "GHR", "\u8fe6\u7d0d\u91cd\u65b0\u4f30\u4ef7\u5f8c\u7684\u4ed9\u8515" } // 02/17/1967-03/09/1979
+        GIP { "GIP", "\u76f4\u5e03\u7f85\u9640\u938a" } // 1713-
+        GLK { "GLK", "\u683c\u9675\u862d\u514b\u7f85\u9209" } // 1874-07/01/1967
+        GMD { "GMD", "\u7518\u6bd4\u4e9e\u9054\u62c9\u897f" } // 07/01/1971-
+        GMP { "GMP", "\u5ca1\u6bd4\u4e9e\u938a" } // 05/13/1964-07/01/1971
+        GNF { "GNF", "\u5e7e\u5167\u4e9e\u6cd5\u90ce" } // 01/06/1986-
+        GNI { "GNI", "\u5e7e\u5167\u4e9e\u6cd5\u90ce (1960-1972)" } // 03/01/1960-10/02/1972
+        GNS { "GNS", "\u5e7e\u5167\u4e9e\u897f\u91cc" } // 10/02/1972-01/06/1986
+        GPF { "GPF", "\u74dc\u5fb7\u7f85\u666e\u5cf6\u6cd5\u90ce" } // 07/11/1851-12/31/1959
+        GQE { "GQE", "\u8d64\u9053\u5e7e\u5167\u4e9e\u57c3\u594e\u52d2" } // 07/07/1975-01/01/1985
+        GQF { "GQF", "\u8d64\u9053\u5e7e\u5167\u4e9e\u4f5b\u6717\u54e5" } // 01/01/1985-1992
+        GQP { "GQP", "\u8d64\u9053\u5e7e\u5167\u4e9e\u6bd4\u585e\u5854" } // 10/12/1968-07/07/1975
+        GRD { "GRD", "\u5e0c\u81d8\u5fb7\u62c9\u514b\u99ac" } // 05/01/1954-2002
+        GRN { "GRN", "\u5e0c\u81d8\u65b0\u5fb7\u62c9\u514b\u99ac" } // 11/11/1944-05/01/1954
+        GTQ { "GTQ", "\u74dc\u5730\u99ac\u62c9\u683c\u67e5\u723e" } // 05/27/1925-
+        GUF { "GUF", "\u6cd5\u5c6c\u572d\u4e9e\u90a3\u6cd5\u90ce\u572d\u4e9e\u90a3" } // 07/11/1851-12/31/1959
+        GWE { "GWE", "\u8461\u5c6c\u5e7e\u5167\u4e9e\u57c3\u65af\u5eab\u591a" } // 1879-09/10/1974
+        GWM { "GWM", "\u8461\u5c6c\u5e7e\u5167\u4e9e\u7c73\u723e\u91cc\u65af" } // 1879-09/10/1974
+        GWP { "GWP", "\u5e7e\u5167\u4e9e\u62ab\u7d22\u62ab\u7d22" } // 9/10/1974-12/31/1996
+        GYD { "GYD", "\u572d\u4e9e\u90a3\u5143" } // 05/26/1966-
+        HKD { "HK$", "\u6e2f\u5143" } // 2/2/1895-
+        HNL { "HNL", "\u6d2a\u90fd\u62c9\u65af\u502b\u76ae\u62c9" } // 04/03/1926-
+        HRD { "HRD", "\u514b\u7f85\u5730\u4e9e\u7b2c\u7d0d\u723e" }
+        HRK { "HRK", "\u514b\u7f85\u5730\u4e9e\u5eab\u7d0d" } // 05/30/1994-
+        HTG { "HTG", "\u6d77\u5730\u53e4\u5fb7" } // 08/26/1872-
+        HUF { "HUF", "\u5308\u7259\u5229 - \u798f\u6797" } // 07/23/1946-
+        IBP { "IBP", "\u5317\u611b\u723e\u862d\u938a" } // 07/27/1694-
+        IDG { "IDG", "\u5370\u5ea6\u5c3c\u897f\u4e9e\u5c3c\u53ef\u76fe" } // 09/1945-05/13/1950
+        IDJ { "IDJ", "\u5370\u5ea6\u5c3c\u897f\u4e9e\u722a\u54c7\u76e7\u5e03" } // 10/17/1945-03/13/1950
+        IDN { "IDN", "\u5370\u5ea6\u5c3c\u897f\u4e9e\u65b0\u76e7\u5e03" } // 11/02/1949-12/13/1965
+        IDR { "IDR", "\u5370\u5c3c - \u76e7\u5e03" } // 12/13/1965-
+        IEP { "IEP", "\u611b\u723e\u862d\u938a" } // 1922-2001
+        ILL { "ILL", "\u4ee5\u8272\u5217\u8b1d\u5ba2\u723e" } // 02/22/1980-09/04/1985
+        ILP { "ILP", "\u4ee5\u8272\u5217\u938a" } // 08/16/1948-02/22/1980
+        ILS { "ILS", "\u4ee5\u8272\u5217\u65b0\u8b1d\u514b\u723e" } // 09/04/1985-
+        IMP { "IMP", "\u66fc\u57ce\u5cf6\u82f1\u938a" } // 1865-
+        INR { "=0#Rs.|1#Re.|1<Rs.", "\u5370\u5ea6\u76e7\u5e03" } // 08/17/1835-
+        IQD { "IQD", "\u4f0a\u62c9\u514b\u7b2c\u7d0d\u723e" } // 04/19/1931-
+        IRR { "IRR", "\u4f0a\u6717\u91cc\u4e9e\u723e" } // 05/13/1932-
+        ISK { "ISK", "\u51b0\u5cf6\u514b\u6717" } // 12/1/1918-
+        ITL { "ITL", "\u7fa9\u5927\u5229\u91cc\u62c9" } // 11/10/1859-
+        JEP { "JEP", "\u6fa4\u897f\u938a" } // 1840-
+        JMD { "JMD", "\u7259\u8cb7\u52a0\u5143" } // 09/08/1969-
+        JMP { "JMP", "\u7259\u8cb7\u52a0\u938a" } // 1900-09/08/1969
+        JOD { "JOD", "\u7d04\u65e6\u7b2c\u7d0d\u723e" } // 07/01/1950-
+        JPY { "JP\u00a5", "\u65e5\u5713" } // 06/1871
+        KES { "KES", "\u80af\u5c3c\u4e9e\u5148\u4ee4" } // 09/14/1966-
+        KGS { "KGS", "\u5409\u723e\u5409\u65af\u7d22\u99ac" } // 05/10/1993-
+        KHO { "KHO", "\u67ec\u57d4\u5be8\u820a\u745e\u723e" } // 01/01/1955-1975
+        KHR { "KHR", "\u67ec\u57d4\u5be8\u745e\u723e" } // 03/20/1980-
+        KID { "KID", "\u57fa\u91cc\u5df4\u65af\u5143" } // 07/12/1979-
+        KMF { "KMF", "\u79d1\u6469\u7f85\u6cd5\u90ce" } // 07/06/1975-
+        KPP { "KPP", "\u5317\u671d\u9bae\u4eba\u6c11\u5e63" } // 1947-02/1959
+        KPW { "KPW", "\u5317\u671d\u9bae\u5e63" } // 02/1959-
+        KRH { "KRH", "\u97d3\u570b \u54c8\u74e6" } // 02/15/1953-06/10/1962
+        KRO { "KRO", "\u5357\u97d3\u820a\u5e63" } // 1947-02/15/1953
+        KRW { "KRW", "\u97d3\u570b\u571c" } // 06/10/1962-
+        KWD { "KWD", "\u79d1\u5a01\u7279\u7b2c\u7d0d\u723e" } // 04/01/1961-
+        KYD { "KYD", "\u958b\u66fc\u7fa4\u5cf6\u7f8e\u5143" } // 1971-
+        KZR { "KZR", "\u5361\u624e\u514b\u65af\u5766\u76e7\u5e03" } // 08/1993-11/05/1993
+        KZT { "KZT", "\u5361\u624e\u514b\u65af\u5766\u5766\u5409" } // 11/05/1993-
+        LAK { "LAK", "\u8001\u64be \u958b\u666e" } // 05/05/1955-
+        LBP { "LBP", "\u9ece\u5df4\u5ae9\u938a" } // 01/01/1948-
+        LIF { "LIF", "\u5217\u652f\u6566\u65af\u767b\u6cd5\u90ce" } // 03/17/1799-
+        LKR { "LKR", "\u65af\u91cc\u862d\u5361\u76e7\u5e03" } // 05/22/1978-
+        LNR { "LNR", "\u932b\u862d\u76e7\u5e03" } // 12/16/1949-05/22/1978
+        LRD { "LRD", "\u8cf4\u6bd4\u745e\u4e9e\u5143" } // 01/01/1944-
+        LSL { "LSL", "\u8cf4\u7d22\u6258\u7f85\u8482" } // 01/22/1980-
+        LTL { "LTL", "\u7acb\u9676\u5b9b\u91cc\u5854" } // 06/25/1993-
+        LTT { "LTT", "\u7acb\u9676\u5b9b\u7279\u7f85" } // 10/1/1992-06/25/1993
+        LUF { "LUF", "\u76e7\u68ee\u5821\u6cd5\u90ce" } // 12/20/1848-
+        LVL { "LVL", "\u62c9\u812b\u7dad\u4e9e\u62c9\u7279\u9280\u5e63" } // 06/28/1993-
+        LVR { "LVR", "\u62c9\u812b\u7dad\u4e9e\u76e7\u5e03" } // 05/07/1992-10/17/1993
+        LYB { "LYB", "\u5229\u6bd4\u4e9e\u82f1\u570b\u7684\u8ecd\u4e8b\u7576\u5c40\u91cc\u62c9" } // 1941-12/24/1951
+        LYD { "LYD", "\u5229\u6bd4\u4e9e\u7b2c\u7d0d\u723e" } // 09/01/1971-
+        LYP { "LYP", "\u5229\u6bd4\u4e9e\u938a" } // 12/24/1951-09/01/1971
+        MAD { "MAD", "\u6469\u6d1b\u54e5\u8fea\u62c9\u59c6" } // 10/17/1959-
+        MAF { "MAF", "\u6469\u6d1b\u54e5\u6cd5\u90ce" } // 1881-10/17/1959
+        MCF { "MCF", "\u6469\u7d0d\u54e5\u65b0\u6cd5\u90ce" } // 01/01/1960-
+        MCG { "MCG", "\u6469\u7d0d\u54e5\u6cd5\u90ce \u5091\u7c73\u90a3" } // 03/07/1837-12/31/1959
+        MDC { "MDC", "\u6469\u675c\u96f2\u5217\u4f0a\u5eab\u65c1" } // 06/1992-11/29/1993
+        MDL { "MDL", "\u6469\u675c\u96f2\u5217\u4f0a" } // 11/29/1993-
+        MDR { "MDR", "\u6469\u675c\u96f2\u76e7\u5e03\u5eab\u65c1" } // 05/23/1991-06/1992
+        MGA { "MGA", "\u99ac\u9054\u52a0\u65af\u52a0\u827e\u745e\u723e" } // 11/01/1983-
+        MGF { "MGF", "\u99ac\u9054\u52a0\u65af\u52a0\u6cd5\u90ce" } // 07/01/1963-
+        MHD { "MHD", "\u99ac\u7d39\u723e\u7fa4\u5cf6\u7f8e\u5143" } // 1979-
+        MKD { "MKD", "\u99ac\u5176\u9813\u7b2c\u7d0d\u723e" } // 05/20/1993-
+        MKN { "MKN", "\u99ac\u5176\u9813\u7b2c\u7d0d\u723e(1992-1993)" } // 04/26/1992-05/20/1993
+        MLF { "MLF", "\u99ac\u91cc\u6cd5\u90ce" } // 07/02/1962-1984
+        MMK { "MMK", "\u7dec\u7538\u5143" } // 06/18/1989-
+        MMX { "MMX", "\u7dec\u7538\u7f8e\u5143\u5916\u532f\u5238" }
+        MNT { "MNT", "\u8499\u53e4\u5716\u683c\u91cc\u514b" } // 03/13/1921-
+        MOP { "MOP", "\u6fb3\u9580\u5143" } // 1895-
+        MQF { "MQF", "\u99ac\u63d0\u5c3c\u514b\u5cf6\u6cd5\u90ce" } // 07/11/1851-1959
+        MRO { "MRO", "\u8305\u5229\u5854\u5c3c\u4e9e\u70cf\u5409\u4e9e" } // 06/29/1973-
+        MTL { "MTL", "\u99ac\u723e\u4ed6\u91cc\u62c9" }
+        MTP { "MTP", "\u99ac\u723e\u4ed6\u938a" } // 08/13/1914-
+        MUR { "MUR", "\u6a21\u91cc\u897f\u65af\u76e7\u5e03" } // 1848-03/12/1968
+        MVP { "MVP", "\u99ac\u723e\u5730\u592b\u76e7\u5e03" } // 1960-07/01/1981
+        MVR { "MVR", "\u99ac\u723e\u5730\u592b\u6d77\u5cf6\u76e7\u975e\u4e9e" } // 07/01/1981-
+        MWK { "MWK", "\u99ac\u62c9\u7dad\u514b\u74e6\u67e5" } // 02/15/1971-
+        MWP { "MWP", "\u99ac\u62c9\u7dad\u938a" } // 07/06/1964-02/15/1971
+        MXN { "MXN", "\u58a8\u897f\u54e5 - \u62ab\u7d22" } // 01/01/1993-
+        MXP { "MXP", "\u58a8\u897f\u54e5\u9280\u62ab\u7d22 (1861-1992)" } // 1822-12/31/1992
+        MXV { "MXV", "\u58a8\u897f\u54e5\u6cd5\u5f8b\u53cd\u8f49(UDI)" } // 1975-
+        MYR { "MYR", "\u99ac\u4f86\u897f\u4e9e - \u6797\u5409\u7279" } // 9/16/1963-
+        MZE { "MZE", "\u83ab\u6851\u6bd4\u514b\u57c3\u65af\u5eab\u591a" } // 09/01/1922-06/16/1980
+        MZM { "MZM", "\u83ab\u4e09\u6bd4\u514b\u6885\u8482\u5361\u723e" } // 06/16/1980-
+        NAD { "NAD", "\u7d0d\u7c73\u6bd4\u4e9e\u5143" } // 1993-
+        NCF { "NCF", "\u8d6b\u5e03\u91cc\u5e95\u7fa4\u5cf6 CFP \u6cd5\u90ce" } // 12/26/1945-1992
+        NGN { "NGN", "\u5948\u53ca\u5229\u4e9e\u5948\u62c9" } // 01/01/1973-
+        NGP { "NGP", "\u5948\u53ca\u5229\u4e9e\u938a" } // 07/01/1959-01/01/1973
+        NHF { "NHF", "\u65b0\u8d6b\u5e03\u91cc\u5e95\u7fa4\u5cf6 CFP \u6cd5\u90ce" } // 08/31/1941-12/31/1959
+        NIC { "NIC", "\u5c3c\u52a0\u62c9\u74dc\u79d1\u591a\u5df4" } // 02/15/1988-04/30/1991
+        NIG { "NIG", "\u5c3c\u52a0\u62c9\u74dc\u91d1\u91d1\u54e5\u591a\u83ef" } // 04/03/1926-02/15/1988
+        NIO { "NIO", "\u5c3c\u52a0\u62c9\u74dc \u91d1\u54e5\u591a\u83ef" } // 04/30/1991-
+        NLG { "NLG", "\u8377\u862d\u76fe" } // 1795-
+        NOK { "NOK", "\u632a\u5a01\u514b\u7f85\u7d0d" } // 1905-
+        NPR { "NPR", "\u5c3c\u6cca\u723e\u76e7\u5e03" } // 1945-
+        NZD { "$NZ", "\u7d10\u897f\u862d\u5e63" } // 07/10/1967-
+        NZP { "NZP", "\u7d10\u897f\u862d\u938a" } // 1907-07/10/1967
+        OMR { "OMR", "\u963f\u66fc\u91cc\u5967" } // 11/11/1972-
+        OMS { "OMS", "\u963f\u66fc\u91cc\u4e9e\u723e\u4ed9\u8515i" } // 07/25/1970-11/11/1972
+        PAB { "PAB", "\u5df4\u62ff\u99ac\u5df4\u6ce2\u4e9e" } // 1904-
+        PDK { "PDK", "\u8eca\u57ce\u76e7\u5e03 Kupon" } // 12/01/1994-12/31/2000
+        PDN { "PDN", "\u8eca\u57ce\u65b0\u76e7\u5e03" } // 01/01/2001-
+        PDR { "PDR", "\u8eca\u57ce\u76e7\u5e03" } // 01/24/1994-12/01/1994
+        PEI { "PEI", "\u7955\u9b6f\u56e0\u8482" } // 02/01/1985-07/01/1991
+        PEN { "PEN", "\u79d8\u9b6f\u65b0\u592a\u967d\u5e63" } // 07/01/1991-
+        PES { "PES", "\u79d8\u9b6f\u592a\u967d\u5e63" } // 02/14/1863-02/01/1985
+        PGK { "PGK", "\u5df4\u5e03\u4e9e\u7d10\u5e7e\u5167\u4e9e\u57fa\u90a3" } // 09/16/1975-
+        PHP { "PHP", "\u83f2\u5f8b\u8cd3\u62ab\u7d22" } // 03/02/1903-
+        PKR { "PKR", "\u5df4\u57fa\u65af\u5766\u76e7\u5e03" } // 04/01/1948-
+        PLN { "PLN", "\u6ce2\u862d\u8332\u7f85\u63d0" } // 01/01/1995-
+        PLX { "PLX", "\u6ce2\u862d\u7f8e\u5143\u5916\u532f\u5238" } // 1960-
+        PLZ { "PLZ", "\u6ce2\u862d\u8332\u7f85\u63d0 (1950-1995)" } // 10/28/1950-12/31/1994
+        PSP { "PSP", "\u5df4\u52d2\u65af\u5766\u938a" } // 11/01/1927-07/01/1950
+        PTC { "PTC", "\u8461\u8404\u7259 \u5eb7\u62d6" } // 06/09/1931-2002
+        PTE { "PTE", "\u8461\u8404\u7259\u57c3\u65af\u5eab\u591a" } // 05/22/1911-2002
+        PYG { "PYG", "\u5df4\u62c9\u572d\u74dc\u62c9\u5c3c" } // 11/1943-
+        QAR { "QAR", "\u5361\u9054\u723e\u91cc\u4e9e\u723e" } // 05/19/1973-
+        REF { "REF", "\u7559\u5c3c\u6c6a\u5cf6\u6cd5\u90ce" } // 07/11/1851-12/31/1959
+        ROL { "ROL", "\u7f85\u99ac\u5c3c\u4e9e\u5217\u4f0a" } // 01/28/1952-
+        RON { "RON", "\u7f85\u99ac\u5c3c\u4e9e\u65b0\u5217\u4f0a" } // 08/15/1947-01/28/1952
+        RUB { "RUB", "\u4fc4\u7f85\u65af\u76e7\u5e03" } // 01/01/1999-
+        RUR { "RUR", "\u4fc4\u7f85\u65af\u76e7\u5e03 (1991-1998)" } // 12/25/1991-12/31/1998
+        RWF { "RWF", "\u76e7\u5b89\u9054\u6cd5\u90ce" } // 05/19/1964-
+        SAR { "SRl", "\u6c99\u70cf\u5730\u91cc\u96c5" } // 10/22/1952-
+        SAS { "SAS", "\u6c99\u70cf\u5730\u5b97\u4e3b\u91cc\u96c5" } // 01/01/1936-10/22/1952
+        SBD { "SBD", "\u7d22\u7f85\u9580\u7fa4\u5cf6\u5143" } // 10/24/1977-
+        SCR { "SCR", "\u585e\u820c\u723e\u7fa4\u5cf6\u76e7\u5e03" } // 1900-
+        SDD { "SDD", "\u8607\u4e39\u7b2c\u7d0d\u723e" } // 1992-Kenya Shilling
+        SDP { "SDP", "\u8607\u4e39\u938a" } // 04/08/1957-06/1998
+        SEK { "SEK", "\u745e\u5178\u514b\u7f85\u7d0d" } // 5/27/1873-
+        SGD { "SGD", "\u65b0\u52a0\u5761\u5e63" } // 8/9/1965-
+        SHP { "SHP", "\u8056\u8d6b\u52d2\u62ff \u938a" } // 1917-
+        SIB { "SIB", "\u65af\u6d1b\u6587\u5c3c\u4e9e Tolar Bons" } // 10/08/1991-10/07/1992
+        SIT { "SIT", "\u65af\u6d1b\u7dad\u5c3c\u4e9e\u6258\u52d2" } // 10/07/1992-
+        SKK { "SKK", "\u65af\u6d1b\u4f10\u514b\u514b\u6717" } // 01/31/1992-
+        SLL { "SLL", "\u7345\u5b50\u5c71\u5229\u6602" } // 08/04/1964-
+        SML { "SML", "\u8056\u99ac\u5229\u8afe\u91cc\u62c9" } // 12/23/1865-
+        SOS { "SOS","\u7d22\u99ac\u5229\u4e9e\u5148\u4ee4" } // 07/01/1960-05/24/1991
+        SQS { "SQS", "\u7d22\u99ac\u91cc\u862d\u5148\u4ee4" } // 05/24/1991-
+        SRG { "SRG", "\u8607\u91cc\u5357\u76fe" } // 12/25/1975-
+        SSP { "SSP", "\u8607\u683c\u862d\u938a" } // 1707-
+        STD { "STD", "\u8056\u591a\u7f8e\u5cf6\u548c\u666e\u6797\u897f\u6bd4\u5cf6\u591a\u5e03\u62c9" }
+        STE { "STE", "\u8056\u591a\u7f8e\u5cf6\u548c\u666e\u6797\u897f\u6bd4\u5cf6\u57c3\u65af\u5eab\u591a" } // 05/22/1911-07/05/1975
+        SUN { "SUN", "\u8607\u806f\u65b0\u76e7\u5e03" } // 12/16/1947-12/31/1960
+        SUR { "SUR", "\u8607\u806f\u76e7\u5e03" } // 01/01/1961-12/25/1991
+        SVC { "SVC", "\u611b\u723e \u85a9\u723e\u74e6\u591a\u79d1\u90ce" } // 11/11/1919-
+        SYP { "SYP", "\u6558\u5229\u4e9e\u938a" } // 01/01/1948-
+        SZL { "SZL", "\u65af\u5a01\u58eb\u862d \u91cc\u90ce" } // 09/06/1974-
+        TCC { "TCC", "\u571f\u8033\u5176\u4eba\u548c\u51f1\u79d1\u65af\u51a0" } // 1971-
+        TDF { "TDF", "\u4e4d\u5f97 \u897f\u975e \u6cd5\u90ce" } // 04/01/1973-1992
+        THB { "THB", "\u6cf0\u9296" } // 04/15/1928-
+        TJR { "TJR", "\u5854\u5409\u514b\u65af\u5766\u76e7\u5e03" } // 05/1995-12/31/2000
+        TJS { "TJS", "\u5854\u5409\u514b\u65af\u5766 \u7d22\u83ab\u5c3c" } // 01/01/2001-
+        TMM { "TMM", "\u571f\u5eab\u66fc\u99ac\u7d0d\u7279" } // 11/01/1993-
+        TND { "TND", "\u7a81\u5c3c\u897f\u4e9e\u7b2c\u7d0d\u723e" } // 11/01/1958-
+        TOP { "TOP", "\u6771\u52a0\u6f58\u52a0" } // 02/14/1966-
+        TOS { "TOS", "\u6e6f\u52a0\u82f1\u938a" } // 1921-02/14/1966
+        TPE { "TPE", "\u5e1d\u6c76 \u57c3\u65af\u5eab\u591a" } // 01/02/1959-12/07/1975
+        TPP { "TPP", "\u5e1d\u6c76\u5143" } // 1895-12/31/1958
+        TRL { "TRL", "\u571f\u8033\u5176\u91cc\u62c9" } // 11/01/1922-
+        TTD { "TTD", "\u5343\u91cc\u9054\u53ca\u6258\u5df4\u54e5r" } // 08/31/1962-
+        TTO { "TTO", "\u7279\u7acb\u5c3c\u9054\u548c\u591a\u5df4\u54e5\u820a\u5143r" } // 01/01/1899-08/01/1951
+        TVD { "TVD", "\u5410\u74e6\u9b6f\u7f8e\u5143" } // 1979-
+        TWD { "NT$", "\u65b0\u81fa\u5e63" } // 6/15/1949-
+        TZS { "TZS", "\u5766\u6851\u5c3c\u4e9e \u5148\u4ee4" } // 06/14/1966-
+        UAH { "UAH", "\u70cf\u514b\u862d\u683c\u91cc\u592b\u90a3" } // 09/02/1996-
+        UAK { "UAK", "\u70cf\u514b\u862d \u5361\u672c\u74e6\u90a3\u8332" } // 11/13/1992-10/17/1993
+        UGS { "UGS", "\u70cf\u5e72\u9054\u5148\u4ee4 (1966-1987)" } // 08/15/1966-05/15/1987
+        UGX { "UGX", "\u70cf\u5e72\u9054\u5148\u4ee4" } // 05/15/1987-
+        USD { "US$", "\u7f8e\u5143" } // 04/04/1792-
+        USN { "USN", "\u7f8e\u5143 (\u7b2c\u4e8c\u5929)" }
+        USS { "USS", "\u7f8e\u5143 (\u540c\u4e00\u5929)" }
+        UYF { "UYF", "\u70cf\u62c9\u572d\u62ab\u7d22\u798f\u5384\u7279" } // 06/23/1862-07/01/1975
+        UYP { "UYP", "\u70cf\u62c9\u572d\u62ab\u7d22 (1975-1993)" } // 07/01/1975-03/01/1993
+        UYU { "UYU", "\u70cf\u62c9\u572d\u62ab\u7d22" } // 03/01/1993-
+        UZC { "UZC", "\u70cf\u8332\u5225\u514b\u65af\u5766 \u5eab\u90a6 \u7d22\u99ac" } // 1993-07/1994
+        UZS { "UZS", "\u70cf\u8332\u5225\u514b\u65af\u5766 \u85a9\u6728" } // 07/1994-
+        VAL { "VAL", "\u68b5\u8482\u5ca1\u57ce\u91cc\u62c9" } // 1929-2002
+        VDD { "VDD", "\u5317\u8d8a\u5357 \u76ae\u963f\u65af\u7279\u8d8a\u5357\u76fe" } // 1953-02/28/1958
+        VDN { "VDN", "\u5317\u8d8a\u5357\u65b0\u76fe" } // 02/28/1958-05/03/1978
+        VDP { "VDP", "\u5317\u8d8a\u5357 \u540d \u76ae\u963f\u65af\u7279\u8d8a\u5357\u76fe" } // 11/3/1946-1953
+        VEB { "VEB", "\u59d4\u5167\u745e\u62c9\u535a\u5229\u74e6" } // 05/11/1871-
+        VGD { "VGD", "\u82f1\u5c6c\u7dad\u723e\u65af\u7fa4\u5cf6\u5143" } // 1973-
+        VND { "VND", "\u8d8a\u5357\u76fe" } // 09/14/1985-
+        VNN { "VNN", "\u8d8a\u5357\u65b0\u76fe" } // 05/03/1978-09/14/1985
+        VNR { "VNR", "\u8d8a\u5357\u5171\u548c\u570b \u76fe" } // 12/29/1954-9/22/1975
+        VNS { "VNS", "\u8d8a\u5357\u570b\u5bb6\u76fe" } // 09/22/1975-05/03/1978
+        VUV { "VUV", "\u842c\u90a3\u675c\u842c\u675c" } // 01/01/1981-
+        WSP { "WSP", "\u897f\u85a9\u6469\u4e9e\u938a" } // 12/17/1920-07/10/1962
+        WST { "WST", "\u897f\u85a9\u6469\u4e9e\u5854\u62c9" } // 07/10/1967-
+        XAD { "XAD", "\u4e9e\u6d32\u7b2c\u7d0d\u723e\u6703\u8a08\u55ae\u4f4d" }
+        XAF { "XAF", "\u897f\u975e \u6cd5\u90ce BEAC" } // 1974-
+        XAM { "XAM", "\u4e9e\u6d32\u8ca8\u5e63\u55ae\u4f4d" } // 12/1974-
+        XAU { "XAU", "\u9ec3\u91d1" }
+        XBA { "XBA", "\u6b50\u6d32\u7d9c\u5408\u55ae\u4f4d" }
+        XBB { "XBB", "\u6b50\u6d32\u8ca8\u5e63\u55ae\u4f4d" } // 12/1970-04/1972
+        XBC { "XBC", "\u6b50\u6d32\u6703\u8a08\u55ae\u4f4d(XBC)" } // 04/1972-12/31/1978
+        XBD { "XBD", "\u6b50\u6d32\u6703\u8a08\u55ae\u4f4d(XBD)" } // 1961-12/31/1978
+        XCD { "XCD", "\u683c\u745e\u90a3\u9054\u5143" } // 10/06/1965-
+        XCF { "XCF", "\u897f\u975e \u65b0 \u6cd5\u90ce" } // 01/01/1960-
+        XDR { "XDR", "\u7279\u6b8a\u63d0\u6b3e\u6b0a" } // 1970-
+        XEF { "XEF", "\u897f\u975e \u6cd5\u90ce BCEAEC" } // 12/04/1958-04/01/1973
+        XEU { "XEU", "\u6b50\u6d32\u8ca8\u5e63\u55ae\u4f4d" } // 1975-1998
+        XFO { "XFO", "\u6cd5\u570b\u91d1\u6cd5\u90ce" }
+        XFU { "XFU", "\u6cd5\u570b UIC \u6cd5\u90ce" }
+        XID { "XID", "\u4f0a\u65af\u862d\u7b2c\u7d0d\u723e" }
+        XMF { "XMF", "\u6cd5\u570b\u5927\u57ce\u5e02\u65b0 \u6cd5\u90ce" } // 1960-
+        XNF { "XNF", "\u6cd5\u570b\u5b89\u7684\u5217\u65af\u7fa4\u5cf6 \u897f\u975e \u6cd5\u90ce" } // 01/01/1960-1975
+        XOF { "XOF", "\u897f\u975e \u6cd5\u90ce BCEAO" } // 12/04/1958-
+        XPF { "XPF", "CFP \u6cd5\u90ce" } // 12/26/1945-
+        //XPS { "XPS", "\u82f1\u938a" } // 07/27/1694-
+        //XSS { "XSS", "\u5148\u4ee4\u82f1\u938a" } // 07/27/1694-
+        XTR { "XTR", "COMECON \u53ef\u8f49\u79fb\u76e7\u5e03" } // 1960-1992
+        YDD { "YDD", "\u8449\u9580\u7b2c\u7d0d\u723e" } // 4/1/1965-05/22/1990
+        YEI { "YEI", "\u4e5f\u9580\u963f\u99ac\u8fea\u91cc\u4e9e\u723e" } // 1904-02/1964
+        YER { "YER", "\u4e5f\u9580\u91cc\u4e9e\u723e" } // 02/1964-
+        YUD { "YUD", "\u5357\u65af\u62c9\u592b\u7b2c\u7d0d\u723e\u786c\u5e63" } // 01/01/1966-1990
+        YUF { "YUF", "\u5357\u65af\u62c9\u592b\u806f\u90a6\u7b2c\u7d0d\u723e" } // 12/04/1943-12/31/1965
+        YUG { "YUG", "\u5357\u65af\u62c9\u592b\u4eba1994 \u7b2c\u7d0d\u723e" } // 01/1994-02/1994
+        YUM { "YUM", "\u5357\u65af\u62c9\u592b\u632a\u5a01\u4e9e\u7b2c\u7d0d\u723e" } // 02/1994-
+        YUN { "YUN", "\u5357\u65af\u62c9\u592b \u53ef\u8f49\u63db\u7b2c\u7d0d\u723e" } // 1990-07/1992
+        YUO { "YUO", "\u5357\u65af\u62c9\u592b\u5341\u6708 \u7b2c\u7d0d\u723e" } // 10/1993-12/1993
+        YUR { "YUR", "\u5357\u65af\u62c9\u592b\u6539\u5236\u5f8c\u7684\u7b2c\u7d0d\u723e" } // 07/1992-10/1993
+        ZAL { "ZAL", "\u5357\u975e - \u862d\u7279 (\u91d1\u878d)" }
+        ZAP { "ZAP", "\u5357\u975e\u938a" } // 1920-02/14/1961
+        ZAR { "ZAR", "\u5357\u975e\u862d\u7279" } // 02/14/1961-
+        ZMK { "ZMK", "\u5c1a\u6bd4\u4e9e\u514b\u74e6\u67e5" } // 01/16/1968-
+        ZMP { "ZMP", "\u8d0a\u6bd4\u4e9e\u938a" } // 08/07/1964-01/16/1968
+        ZRN { "ZRN", "\u85a9\u4f0a\u624e\u65b0\u4f0a\u723e" } // 11/01/1993-07/1998
+        ZRZ { "ZRZ", "\u624e\u4f0a\u723e\u624e\u4f0a\u723e" } // 10/27/1971-11/01/1993
+        ZWD { "ZWD", "\u8f9b\u5df4\u5a01\u5143" } // 04/18/1980-
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+   Scripts {
+        Arab { "\u963F\u62C9\u4F2F\u6587" }
+        Armn { "\u4E9E\u7F8E\u5C3C\u4E9E\u6587" }
+        Beng { "\u5B5F\u52A0\u62C9\u6587" }
+        Bopo { "\u6F22\u8A9E\u6CE8\u97F3\u7B26\u865F" }
+        Brai { "\u76F2\u4EBA\u7528\u9EDE\u5B57\u6CD5" }
+        //Buhd { "Buhid \u6587" }
+        Cans { "\u52A0\u62FF\u5927\u539F\u4F4F\u6C11\u901A\u7528\u5B57\u7B26" }
+        Cher { "\u67F4\u7F85\u57FA\u6587" }
+        Cprt { "\u585E\u6D66\u8DEF\u65AF\u6587" }
+        Cyrl { "\u65AF\u62C9\u592B\u8A9E\u7CFB" }
+        //Deva { "\u68B5\u6587" } // Duplicate of zh
+        Dsrt { "\u5FB7\u745F\u96F7\u7279\u6587" }
+        Ethi { "\u8863\u7D22\u5339\u4E9E\u6587" }
+        Geor { "\u55AC\u6CBB\u4E9E\u6587" }
+        Goth { "\u6B4C\u5FB7\u6587" }
+        Grek { "\u5E0C\u81D8\u6587" }
+        Gujr { "\u5409\u4E9E\u62C9\u5854\u6587" }
+        Guru { "\u53E4\u723E\u7A46\u5947\u6587" }
+        Hang { "\u8AFA\u6587" }
+        Hano { "\u54C8\u52AA\u52AA\u6587" }
+        Hani { "\u6F22\u8A9E" }
+        Hans { "\u7C21\u9AD4\u6F22\u8A9E" } // Not a formal part of ISO-15924 yet
+        Hant { "\u7E41\u9AD4\u6F22\u8A9E" } // Not a formal part of ISO-15924 yet
+        Hebr { "\u5E0C\u4F2F\u4F86\u6587" }
+        //Hira { "\u5E73\u5047\u540D" } // Duplicate of zh
+        Ital { "\u53E4\u610F\u5927\u5229\u6587" }
+        //Kana { "\u7247\u5047\u540D" } // Duplicate of zh
+        Khmr { "\u9AD8\u68C9\u6587" }
+        Knda { "\u574E\u90A3\u9054\u6587" }
+        Laoo { "\u5BEE\u570B\u6587" }
+        Latn { "\u62C9\u4E01\u6587" }
+        Limb { "\u6797\u4F48\u6587" }
+        //Linb { "B \u985E\u7DDA\u5F62\u6587\u5B57" }
+        Mlym { "\u99AC\u4F86\u4E9E\u62C9\u59C6\u6587" }
+        Mong { "\u8499\u53E4\u6587" }
+        Mymr { "\u7DEC\u7538\u6587" }
+        Ogam { "\u6B50\u7518\u6587" }
+        Orya { "\u6B50\u5229\u4E9E\u6587" }
+        Osma { "\u6B50\u65AF\u66FC\u4E9E\u6587" }
+        Qaac { "\u79D1\u666E\u7279\u6587" } // Coptic is not a formal part of ISO-15924 yet
+        //Qaai { "\u7E7C\u627F\u6587" } // PUA
+        Runr { "\u53E4\u5317\u6B50\u6587\u5B57" }
+        Shaw { "\u7C2B\u67CF\u7D0D\u5B57\u7B26" }
+        Sinh { "\u932B\u862D\u6587" }
+        Syrc { "\u654D\u5229\u4E9E\u6587" }
+        Tagb { "\u5357\u5CF6\u6587" }
+        //Tale { "Tai Le" }
+        Taml { "\u5766\u7C73\u723E\u6587" }
+        Telu { "\u6CF0\u9B6F\u53E4\u6587" }
+        Tglg { "\u5854\u52A0\u62C9\u6587" }
+        Thaa { "\u5854\u5B89\u90A3\u6587" }
+        Thai { "\u6CF0\u6587" } // Just happens to be a duplicate
+        Tibt { "\u897F\u85CF\u6587" }
+        Ugar { "\u70CF\u52A0\u5217\u6587" }
+        Yiii { "\u5F5E\u6587" }
+        //Zyyy { "\u672A\u78BA\u5B9A\u7684\u8A9E\u7CFB" } // This may need to become "undetermined script"
+    }
+    LocaleScript { "Hani" , "Bopo" }
+    ExemplarCharacters{
+        "[\u4E00-\u4E01\u4E03\u4E08-\u4E0D\u4E14\u4E16\u4E19\u4E1F\u4E26\u4E2D\u4E32"
+        "\u4E38-\u4E39\u4E3B\u4E43\u4E45\u4E48\u4E4B\u4E4E-\u4E4F\u4E56\u4E58-\u4E59"
+        "\u4E5D\u4E5F\u4E7E\u4E82\u4E86\u4E88\u4E8B-\u4E8C\u4E8E\u4E91-\u4E92"
+        "\u4E94-\u4E95\u4E9B\u4E9E\u4EA1\u4EA4\u4EA6\u4EA8\u4EAB-\u4EAC\u4EAE\u4EBA"
+        "\u4EC0-\u4EC1\u4EC7\u4ECA-\u4ECB\u4ECD\u4ED4\u4ED6\u4ED8-\u4ED9\u4EE3-\u4EE5"
+        "\u4EF0\u4EF2\u4EF6\u4EFB\u4EFD\u4F01\u4F0A\u4F0D\u4F11\u4F19\u4F2F-\u4F30\u4F34"
+        "\u4F38\u4F3C\u4F46\u4F48\u4F4D-\u4F4F\u4F54-\u4F55\u4F59\u4F5B-\u4F5C\u4F60"
+        "\u4F69\u4F73\u4F7F\u4F86\u4F8B\u4F9B\u4F9D\u4FAF\u4FB5\u4FBF\u4FC2-\u4FC3\u4FCA"
+        "\u4FD7\u4FDD\u4FE0-\u4FE1\u4FEE\u4FF1\u500B\u500D\u5011-\u5012\u5019-\u501A"
+        "\u501F\u502B\u503C\u5047\u5049\u504F\u505A\u505C\u5065\u5074-\u5077\u5091\u5099"
+        "\u50A2\u50B2-\u50B3\u50B7\u50BB\u50BE\u50C5\u50CF\u50D1\u50F9\u5100\u5104\u5112"
+        "\u5118\u512A\u5141\u5143-\u5145\u5147-\u5149\u514B\u514D\u5152\u5154\u5165"
+        "\u5167-\u5169\u516B-\u516E\u5171\u5175-\u5178\u517C\u518A\u518D\u5192\u51A0"
+        "\u51AC\u51B0\u51B7\u51C6\u51CC\u51DD\u51E1\u51F0-\u51F1\u51FA\u51FD\u5200"
+        "\u5206-\u5207\u520A\u5217\u521D\u5224-\u5225\u5229-\u522A\u5230\u5236-\u5237"
+        "\u523A-\u523B\u5247\u524D\u525B\u5269-\u526A\u526F\u5272\u5275\u5283\u5287"
+        "\u5289\u528D\u529B\u529F-\u52A0\u52A9-\u52AB\u52C1\u52C7\u52C9\u52D2\u52D5"
+        "\u52D9\u52DD-\u52DE\u52E2\u52E4\u52F5\u52F8\u52FF\u5305\u5316-\u5317"
+        "\u5340-\u5341\u5343\u5347-\u5348\u534A\u5352\u5354\u5357\u535A\u5361"
+        "\u5370-\u5371\u5373\u5377\u537B\u539A\u539F\u53AD\u53B2\u53BB\u53C3\u53C8"
+        "\u53CA-\u53CB\u53CD\u53D4\u53D6-\u53D7\u53E3-\u53E6\u53EB-\u53ED\u53EF-\u53F0"
+        "\u53F2-\u53F3\u53F8\u5403-\u5404\u5408-\u540A\u540C-\u540E\u5410-\u5411\u541B"
+        "\u541D\u541F\u5426-\u5427\u542B\u5433\u5435\u5438-\u5439\u543E\u5440\u5442"
+        "\u5446\u544A\u5462\u5468\u5473\u5475\u547C-\u547D\u548C\u5496\u54A6-\u54A7"
+        "\u54AA\u54AC\u54B1\u54C0-\u54C1\u54C7-\u54C9\u54CE\u54E1\u54E5-\u54E6"
+        "\u54E9-\u54EA\u54ED\u54F2\u5509\u5510\u552C\u552E-\u552F\u5531\u5537-\u5538"
+        "\u5546\u554A\u554F\u555F\u5561\u5565-\u5566\u556A\u5582\u5584\u5587\u558A\u5594"
+        "\u559C-\u559D\u55AC\u55AE\u55B5\u55CE\u55DA\u55E8\u55EF\u5606\u5609\u5617\u561B"
+        "\u5634\u563B\u563F\u5668\u5674\u5687\u56B4\u56C9\u56DB\u56DE\u56E0\u56F0\u56FA"
+        "\u5708\u570B\u570D\u5712-\u5713\u5716\u5718\u571F\u5728\u5730\u573E\u5740\u5747"
+        "\u5750\u5761\u5764\u5766\u576A\u5783\u578B\u57CE\u57DF\u57F7\u57F9-\u57FA\u5802"
+        "\u5805-\u5806\u582A\u5831\u5834\u584A\u5854\u5857\u585E\u586B\u5875\u5883\u589E"
+        "\u58A8\u58AE\u58C1\u58D3\u58D8\u58DE\u58E2\u58EB\u58EF\u58FD\u590F\u5915-\u5916"
+        "\u591A\u591C\u5920\u5922\u5925\u5927\u5929-\u592B\u592E\u5931\u593E"
+        "\u5947-\u5949\u594F\u5951\u5954\u5957\u5967\u596A\u596E\u5973\u5976\u5979\u597D"
+        "\u5982\u5999\u59A5\u59A8\u59AE\u59B3\u59B9\u59BB\u59C6\u59CA-\u59CB"
+        "\u59D0-\u59D1\u59D3-\u59D4\u59FF\u5A01\u5A03\u5A18\u5A46\u5A5A\u5A66\u5A92"
+        "\u5ABD\u5ACC\u5B50\u5B54\u5B57-\u5B58\u5B5D\u5B5F\u5B63-\u5B64\u5B69\u5B6B"
+        "\u5B78\u5B83\u5B87-\u5B89\u5B8B-\u5B8C\u5B8F\u5B97-\u5B9A\u5B9C\u5BA2-\u5BA4"
+        "\u5BAE\u5BB3\u5BB6\u5BB9\u5BBF\u5BC2\u5BC4\u5BC6\u5BCC\u5BD2\u5BDE-\u5BDF\u5BE2"
+        "\u5BE6-\u5BE7\u5BE9\u5BEB-\u5BEC\u5BF6\u5C01\u5C04\u5C07-\u5C08\u5C0A-\u5C0B"
+        "\u5C0D-\u5C0F\u5C11\u5C16\u5C1A\u5C24\u5C31\u5C3A\u5C3C\u5C3E\u5C40-\u5C41"
+        "\u5C45-\u5C46\u5C4B\u5C4F\u5C55\u5C60\u5C64\u5C6C\u5C71\u5CB8\u5CF0\u5CF6\u5D07"
+        "\u5D50\u5DBA\u5DDD-\u5DDE\u5DE1\u5DE5-\u5DE8\u5DEB\u5DEE\u5DF1-\u5DF2\u5DF4"
+        "\u5DF7\u5E02-\u5E03\u5E0C\u5E1D\u5E25\u5E2B\u5E2D\u5E33\u5E36\u5E38\u5E3D\u5E45"
+        "\u5E55\u5E63\u5E6B\u5E72-\u5E74\u5E78-\u5E79\u5E7B-\u5E7E\u5E8A\u5E8F\u5E95"
+        "\u5E97\u5E9C\u5EA6-\u5EA7\u5EAB\u5EAD\u5EB7-\u5EB8\u5EC9\u5ED6\u5EE0"
+        "\u5EE2-\u5EE3\u5EF3\u5EF6-\u5EF7\u5EFA\u5F04\u5F0F\u5F15\u5F18\u5F1F\u5F26"
+        "\u5F31\u5F35\u5F37\u5F48\u5F4C\u5F4E\u5F62\u5F65\u5F69\u5F6C-\u5F6D"
+        "\u5F70-\u5F71\u5F79\u5F7C\u5F80-\u5F81\u5F85\u5F88\u5F8B-\u5F8C\u5F90-\u5F92"
+        "\u5F97\u5F9E\u5FA9\u5FAE\u5FB5\u5FB7\u5FB9\u5FC3\u5FC5\u5FCC-\u5FCD"
+        "\u5FD7-\u5FD9\u5FE0\u5FEB\u5FF5\u5FFD\u600E\u6012\u6015-\u6016\u601D\u6021"
+        "\u6025\u6027-\u6028\u602A\u6046\u6050\u6062\u6065\u6068-\u6069\u606D"
+        "\u606F-\u6070\u6085\u6089\u6094\u609F-\u60A0\u60A8\u60B2\u60B6\u60C5\u60D1"
+        "\u60DC\u60E0-\u60E1\u60F1\u60F3\u60F9\u6101\u6108-\u6109\u610F\u611A-\u611B"
+        "\u611F\u6148\u614B\u6155\u6158\u6162-\u6163\u6167\u616E\u6170\u6176\u617E"
+        "\u6182\u6190-\u6191\u61B2\u61B6\u61BE\u61C2\u61C9\u61F6-\u61F7\u61FC\u6200"
+        "\u6210-\u6212\u6216\u622A\u6230\u6232\u6234\u6236\u623F-\u6241\u6247\u624B"
+        "\u624D\u6253\u6258\u6263\u626D\u626F\u6279\u627E-\u6280\u6284\u628A\u6293"
+        "\u6295\u6297-\u6298\u62AB-\u62AC\u62B1\u62B5\u62B9\u62BD\u62C6\u62C9\u62CB"
+        "\u62CD\u62D2\u62D4\u62D6\u62DB-\u62DC\u62EC\u62F3\u62FC\u62FE-\u62FF\u6301"
+        "\u6307\u6309\u6311\u6316\u632F\u633A\u6350\u6355\u6368\u6372\u6377\u6383"
+        "\u6388-\u6389\u638C\u6392\u639B\u63A1-\u63A2\u63A5\u63A7-\u63A8\u63AA"
+        "\u63CF-\u63D0\u63D2\u63DA-\u63DB\u63E1\u63EE\u63F4\u640D\u6416\u641E"
+        "\u642C-\u642D\u6436\u6458\u6469\u6478\u6490\u649E\u64A5\u64AD\u64BF\u64C1"
+        "\u64C7\u64CA-\u64CB\u64CD-\u64CE\u64D4\u64DA\u64E0\u64E6\u64EC\u64F4\u64FA"
+        "\u64FE\u651D\u652F\u6536\u6539\u653B\u653E-\u653F\u6545\u6548\u654F\u6551"
+        "\u6557\u6559\u655D\u6562-\u6563\u6566\u656C\u6574-\u6575\u6578\u6587\u6597"
+        "\u6599\u65AF-\u65B0\u65B7\u65B9\u65BC-\u65BD\u65C1\u65C5\u65CB\u65CF\u65D7"
+        "\u65E2\u65E5-\u65E6\u65E9\u65ED\u6607\u660C\u660E-\u660F\u6613\u661F-\u6620"
+        "\u6625\u6628\u662D\u662F\u6642\u665A\u6668\u666E-\u666F\u6674\u6676\u667A"
+        "\u6691\u6696-\u6697\u66AB\u66B4\u66C9\u66F0\u66F2\u66F4\u66F8\u66FC"
+        "\u66FE-\u6700\u6703\u6708-\u6709\u670B\u670D\u6717\u671B\u671D\u671F\u6728"
+        "\u672A-\u672C\u6731\u6735\u674E\u6750-\u6751\u675C\u675F\u676F\u6771"
+        "\u677E-\u677F\u6790\u6797\u679C-\u679D\u67B6\u67CF-\u67D0\u67D3-\u67D4\u67E5"
+        "\u67F3\u6821\u6838-\u6839\u683C\u6843\u6848\u684C\u6851\u6881\u6885\u689D"
+        "\u68AF-\u68B0\u68C4\u68CB\u68D2\u68DA\u68EE\u6905\u690D\u6930\u694A\u6953\u695A"
+        "\u696D\u6975\u6982\u699C\u69AE\u69CB\u69CD\u6A02\u6A13\u6A19\u6A1E\u6A21\u6A23"
+        "\u6A39\u6A4B\u6A5F\u6A6B\u6A94\u6AA2\u6B04\u6B0A\u6B21\u6B23\u6B32\u6B3A"
+        "\u6B3D-\u6B3E\u6B49\u6B4C\u6B50\u6B61-\u6B66\u6B72\u6B77-\u6B78\u6B7B\u6B8A"
+        "\u6B98\u6BB5\u6BBA\u6BBC\u6BC0\u6BC5\u6BCD\u6BCF\u6BD2\u6BD4\u6BDB\u6BEB\u6C0F"
+        "\u6C11\u6C23\u6C34\u6C38\u6C42\u6C5D\u6C5F-\u6C61\u6C6A\u6C7A\u6C7D\u6C88-\u6C89"
+        "\u6C92\u6C96\u6C99\u6CB3\u6CB9\u6CBB\u6CBF\u6CC1\u6CC9\u6CD5\u6CE1-\u6CE2\u6CE5"
+        "\u6CE8\u6CF0\u6CF3\u6D0B\u6D17\u6D1B\u6D1E\u6D29-\u6D2A\u6D32\u6D3B\u6D3D-\u6D3E"
+        "\u6D41\u6D69-\u6D6A\u6D6E\u6D77\u6D88-\u6D89\u6DAF\u6DB2\u6DB5\u6DBC\u6DD1\u6DDA"
+        "\u6DE1\u6DE8\u6DF1\u6DF7\u6DFA\u6E05\u6E1B\u6E21\u6E2C\u6E2F\u6E38\u6E56\u6E6F"
+        "\u6E90\u6E96\u6E9D\u6EAA-\u6EAB\u6EC4-\u6EC5\u6ECB\u6ED1\u6EF4\u6EFE-\u6EFF"
+        "\u6F02\u6F0F\u6F14\u6F20\u6F22\u6F2B\u6F32\u6F38\u6F54\u6F5B\u6F6E\u6FA4\u6FB3\u6FC0"
+        "\u6FC3\u6FDF\u6FE4\u6FEB\u704C\u7063\u706B\u7070\u707D\u708E\u70AE\u70B8\u70BA"
+        "\u70C8\u70CF\u70E4\u7121\u7126\u7136\u7159\u715E\u7167\u7169\u718A\u719F\u71B1"
+        "\u71C3\u71C8\u71D2\u71DF\u7206\u7210\u721B\u722C-\u722D\u7235-\u7236\u7238\u723A"
+        "\u723D-\u723E\u7246-\u7248\u724C\u7259\u725B\u7260\u7267\u7269\u7272\u7279\u727D"
+        "\u72A7\u72AF\u72C0\u72C2\u72D0\u72D7\u72E0\u72FC\u731B-\u731C\u7336\u7344-\u7345"
+        "\u734E\u7368\u7372\u7378\u737B\u7384\u7387\u7389\u738B\u73A9\u73AB\u73B2\u73CD"
+        "\u73E0\u73ED\u73FE\u7403\u7406\u742A\u7434\u745C\u745E\u746A\u7470\u74B0\u74DC"
+        "\u74E6\u74F6\u7518\u751A\u751C\u751F\u7522\u7528\u7530-\u7533\u7537\u754C\u7559"
+        "\u7562\u7565\u756A-\u756B\u7570\u7576\u758F\u7591\u75BC\u75C5\u75D5\u75DB\u75F4"
+        "\u760B\u7642\u7661\u767B-\u767E\u7684\u7686-\u7687\u76AE\u76C3\u76CA\u76DB-\u76DC"
+        "\u76DF\u76E1\u76E3-\u76E4\u76EE\u76F4\u76F8\u76FC\u76FE\u7701\u7709\u770B"
+        "\u771F-\u7720\u773C\u773E\u775B\u7761\u7763\u77A7\u77AD\u77DB\u77E3\u77E5\u77ED"
+        "\u77F3\u7802\u780D\u7814\u7832\u7834\u786C\u788E\u7897\u789F\u78A7\u78A9\u78B0"
+        "\u78BA\u78BC\u78C1\u78E8\u790E\u7919\u793A\u793E\u7956\u795D-\u795E\u7965\u7968"
+        "\u7981\u798D\u798F\u79AA\u79AE\u79C0-\u79C1\u79CB\u79D1-\u79D2\u79D8\u79DF"
+        "\u79E4\u79E6\u79FB\u7A05\u7A0B\u7A0D\u7A2E\u7A31\u7A3F\u7A4C-\u7A4D\u7A69\u7A76"
+        "\u7A79-\u7A7A\u7A7F\u7A81\u7A97\u7AA9\u7AAE\u7ACB\u7AD9\u7ADF-\u7AE0\u7AE5\u7AEF"
+        "\u7AF6\u7AF9\u7B11\u7B1B\u7B26\u7B28\u7B2C\u7B46\u7B49\u7B4B\u7B54\u7B56\u7B97"
+        "\u7BA1\u7BAD\u7BB1\u7BC0\u7BC4\u7BC7\u7BC9\u7C21\u7C3D\u7C43\u7C4C-\u7C4D\u7C73"
+        "\u7C89\u7C97\u7CBE\u7CCA\u7CD5\u7CDF\u7CFB\u7D00\u7D04-\u7D05\u7D0D\u7D14"
+        "\u7D19-\u7D1B\u7D20\u7D22\u7D2B\u7D2F-\u7D30\u7D39\u7D42\u7D44\u7D50\u7D55\u7D61"
+        "\u7D66\u7D71-\u7D72\u7D93\u7D9C\u7DA0\u7DAD\u7DB1-\u7DB2\u7DCA\u7DD2\u7DDA\u7DE3"
+        "\u7DE8-\u7DE9\u7DF4\u7E23\u7E2E\u7E31\u7E3D-\u7E3E\u7E41\u7E54\u7E5E\u7E6A\u7E73"
+        "\u7E7C\u7E8C\u7F38\u7F3A\u7F6A\u7F6E\u7F70\u7F72\u7F75\u7F77\u7F85\u7F8A\u7F8E"
+        "\u7F9E\u7FA4\u7FA9\u7FBD\u7FC1\u7FD2\u7FD4\u7FF9\u7FFB-\u7FFC\u8000-\u8001\u8003"
+        "\u8005\u800C-\u800D\u8010\u8017\u8033\u8036\u804A\u8056\u805A\u805E\u806F-\u8070"
+        "\u8072\u8077\u807D\u8089\u809A\u80A1\u80A5\u80A9\u80AF\u80B2\u80CC\u80CE\u80D6"
+        "\u80DE\u80E1\u80F8\u80FD\u8106\u812B\u8166\u8170\u8173\u817F\u81BD\u81C9\u81E5"
+        "\u81E8\u81EA\u81ED\u81F3-\u81F4\u81FA\u8207-\u820A\u820D\u8212\u821E-\u821F"
+        "\u822A\u822C\u8239\u8266\u826F\u8272\u827E\u82AC\u82B1\u82B3\u82E5-\u82E6\u82F1"
+        "\u832B\u8336\u8349\u8352\u8377\u8389-\u838A\u838E\u83AB\u83DC\u83E9\u83EF\u83F2"
+        "\u840A\u842C\u843D\u8449\u8457\u845B\u8499\u84BC\u84CB\u84EE\u8521\u8523\u856D"
+        "\u8584\u85A6\u85A9-\u85AA\u85C9\u85CD\u85CF\u85DD\u85E4-\u85E5\u8607\u862D\u864E"
+        "\u8655\u865B\u865F\u8667\u86CB\u86D9\u8702\u871C\u8776\u878D\u87A2\u87F2\u87F9"
+        "\u880D\u883B\u8840\u884C\u8853\u8857\u885B\u885D\u8861\u8863\u8868\u888B\u88AB"
+        "\u88C1-\u88C2\u88D5\u88DC-\u88DD\u88E1\u88FD\u8907\u8932\u897F\u8981\u8986\u898B"
+        "\u898F\u8996\u89AA\u89BA\u89BD\u89C0\u89D2\u89E3\u89F8\u8A00\u8A02\u8A08\u8A0A"
+        "\u8A0E\u8A13\u8A17-\u8A18\u8A2A\u8A2D\u8A31\u8A34\u8A3B-\u8A3C\u8A55\u8A5E\u8A62"
+        "\u8A66\u8A69\u8A71-\u8A73\u8A87\u8A8C-\u8A8D\u8A93\u8A95\u8A9E\u8AA0\u8AA4\u8AAA"
+        "\u8AB0\u8AB2\u8ABC\u8ABF\u8AC7\u8ACB\u8AD2\u8AD6\u8AF8\u8AFE\u8B00\u8B02\u8B1B"
+        "\u8B1D\u8B49\u8B58\u8B5C\u8B66\u8B6F-\u8B70\u8B77\u8B7D\u8B80\u8B8A\u8B93\u8B9A"
+        "\u8C37\u8C46\u8C48\u8C50\u8C61\u8C6A\u8C6C\u8C8C\u8C93\u8C9D-\u8C9E\u8CA0-\u8CA2"
+        "\u8CA8\u8CAA-\u8CAC\u8CB4\u8CB7\u8CBB-\u8CBC\u8CC0\u8CC7\u8CD3\u8CDC\u8CDE"
+        "\u8CE2-\u8CE4\u8CE6\u8CEA\u8CED\u8CF4\u8CFA\u8CFC-\u8CFD\u8D08\u8D0A\u8D0F\u8D64"
+        "\u8D70\u8D77\u8D85\u8D8A\u8D95\u8D99\u8DA3\u8DA8\u8DB3\u8DCC\u8DD1\u8DDD\u8DDF"
+        "\u8DE1\u8DEF\u8DF3\u8E0F\u8E22\u8E5F\u8E64\u8E8D\u8EAB\u8EB2\u8ECA\u8ECC-\u8ECD"
+        "\u8ED2\u8EDF\u8F03\u8F09\u8F14-\u8F15\u8F1B\u8F1D\u8F29-\u8F2A\u8F2F\u8F38\u8F49"
+        "\u8F5F\u8F9B\u8FA6\u8FA8\u8FAD\u8FAF\u8FB1-\u8FB2\u8FC5\u8FCE\u8FD1\u8FEA-\u8FEB"
+        "\u8FF0\u8FF4\u8FF7\u8FFD\u9000-\u9001\u9003\u9006\u900F-\u9010\u9014\u9019-\u901B"
+        "\u901D\u901F-\u9020\u9022-\u9023\u9031-\u9032\u9038\u903C\u9047\u904A-\u904B"
+        "\u904D-\u904E\u9053-\u9055\u9059\u905C\u9060\u9069\u906D\u9072\u9077-\u9078\u907A"
+        "\u907F-\u9081\u9084\u908A\u908F\u90A3\u90A6\u90AA\u90B1\u90CE\u90E8\u90ED\u90F5"
+        "\u90FD\u9109\u912D\u9130\u914D\u9152\u9177-\u9178\u9189\u9192\u919C\u91AB\u91C7"
+        "\u91CB-\u91CF\u91D1\u91DD\u91E3\u9234\u9280\u9298\u92B3\u92B7\u92D2\u92FC\u9304"
+        "\u9322\u9326\u932F\u934B\u9375\u937E\u9396\u93AE\u93E1\u9418\u9435\u9451\u9577"
+        "\u9580\u9583\u9589\u958B\u9592-\u9593\u95A3\u95B1\u95C6\u95CA\u95DC\u95E1\u9632"
+        "\u963B\u963F-\u9640\u9644\u964D\u9650\u9662-\u9664\u966A\u9670\u9673\u9675"
+        "\u9677-\u9678\u967D\u9686\u968A\u968E\u9694\u969B-\u969C\u96A8\u96AA\u96B1\u96BB"
+        "\u96C4-\u96C6\u96D6\u96D9\u96DC\u96DE\u96E2-\u96E3\u96E8\u96EA\u96F2\u96F6-\u96F7"
+        "\u96FB\u9700\u9707\u9727\u9732\u9738-\u9739\u9742\u9748\u9752\u9756\u975C\u975E"
+        "\u9760\u9762\u9769\u978B\u97D3\u97F3\u97FB\u97FF\u9801-\u9802\u9805-\u9806\u9808"
+        "\u9810-\u9811\u9813\u9817-\u9818\u982D\u983B\u9846\u984C-\u984D\u984F\u9858\u985E"
+        "\u9867\u986F\u98A8\u98C4\u98DB\u98DF\u98EF\u98F2\u98FD-\u98FE\u9905\u990A\u9910"
+        "\u9918\u9928\u9996\u9999\u99AC\u99D0\u99D5\u99DB\u9A0E\u9A19\u9A37\u9A45\u9A57"
+        "\u9A5A\u9AA8\u9AD4\u9AD8\u9AEE\u9B06\u9B25\u9B27\u9B31\u9B3C\u9B42\u9B45\u9B54"
+        "\u9B5A\u9B6F\u9BAE\u9CE5\u9CF3-\u9CF4\u9D3B\u9D5D\u9DF9\u9E7F\u9E97\u9EA5\u9EB5"
+        "\u9EBB-\u9EBC\u9EC3\u9ECE\u9ED1\u9ED8\u9EDE\u9EE8\u9F13\u9F20\u9F3B\u9F4A-\u9F4B"
+        "\u9F52\u9F61\u9F8D\u9F9C]"
+   
+    }   
+    Keys{
+         collation { "\u6821\u5C0D" }
+         calendar  { "\u66C6\u6CD5" }
+         currency  { "\u8CA8\u5E63" }
+    }
+    Types{
+        collation{
+            direct      { "\u76F4\u63A5\u9806\u5E8F" }
+            phonebook   { "\u96FB\u8A71\u7C3F\u9806\u5E8F" }
+            pinyin      { "\u62FC\u97F3\u9806\u5E8F" }
+            stroke      { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
+            traditional { "\u50B3\u7D71\u66C6\u6CD5" }
+        }
+        calendar{
+            japanese      { "\u65E5\u672C\u66C6\u6CD5" }
+            buddhist      { "\u4F5B\u6559\u66C6\u6CD5" }
+            islamic       { "\u4F0A\u65AF\u862D\u66C6\u6CD5" }
+            islamic-civil { "\u4F0A\u65AF\u862D\u57CE\u5E02\u66C6\u6CD5" }
+            hebrew        { "\u5E0C\u4F2F\u4F86\u66C6\u6CD5" }
+            chinese       { "\u8FB2\u66C6" }
+            gregorian     { "\u516C\u66C6" }
+        }
+
+    }
+    Variants{
+        // EURO    { "\u6B50\u5143" }
+        // PREEURO { "\u820A\u5E63" }
+        REVISED { "\u5DF2\u4FEE\u8A02" }
+    }
+
+    zoneStrings {
+         {
+            "PST",
+            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642\u9593",
+            "PST",
+            "\u592a\u5e73\u6d0b\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "PDT",
+            "\u6d1b\u6749\u78ef",
+        }
+        {
+            "America/Los_Angeles",
+            "\u592a\u5e73\u6d0b\u6a19\u6e96\u6642\u9593",
+            "PST",
+            "\u592a\u5e73\u6d0b\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "PDT",
+            "\u6d1b\u6749\u78ef",
+        }
+        {
+            "MST",
+            "\u5c71\u5340\u6a19\u6e96\u6642\u9593",
+            "MST",
+            "\u5c71\u5340\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "MDT",
+            "\u4e39\u4f5b",
+        }
+        {
+            "America/Denver",
+            "\u5c71\u5340\u6a19\u6e96\u6642\u9593",
+            "MST",
+            "\u5c71\u5340\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "MDT",
+            "\u4e39\u4f5b",
+        }
+        {
+            "PNT",
+            "\u5c71\u5340\u6a19\u6e96\u6642\u9593",
+            "MST",
+            "\u5c71\u5340\u6a19\u6e96\u6642\u9593",
+            "MST",
+            "\u9cf3\u51f0\u57ce",
+        }
+        {
+            "America/Phoenix",
+            "\u5c71\u5340\u6a19\u6e96\u6642\u9593",
+            "MST",
+            "\u5c71\u5340\u6a19\u6e96\u6642\u9593",
+            "MST",
+            "\u9cf3\u51f0\u57ce",
+        }
+        {
+            "CST",
+            "\u4e2d\u90e8\u6a19\u6e96\u6642\u9593",
+            "CST",
+            "\u4e2d\u90e8\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "CDT",
+            "\u829d\u52a0\u54e5",
+        }
+        {
+            "America/Chicago",
+            "\u4e2d\u90e8\u6a19\u6e96\u6642\u9593",
+            "CST",
+            "\u4e2d\u90e8\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "CDT",
+            "\u829d\u52a0\u54e5",
+        }
+        {
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642\u9593",
+            "EST",
+            "\u6771\u90e8\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "EDT",
+            "\u7d10\u7d04",
+        }
+        {
+            "America/New_York",
+            "\u6771\u90e8\u6a19\u6e96\u6642\u9593",
+            "EST",
+            "\u6771\u90e8\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "EDT",
+            "\u7d10\u7d04",
+        }
+        {
+            "IET",
+            "\u6771\u90e8\u6a19\u6e96\u6642\u9593",
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642\u9593",
+            "EST",
+            "\u5370\u7b2c\u5b89\u90a3\u6ce2\u91cc\u65af",
+        }
+        {
+            "America/Indianapolis",
+            "\u6771\u90e8\u6a19\u6e96\u6642\u9593",
+            "EST",
+            "\u6771\u90e8\u6a19\u6e96\u6642\u9593",
+            "EST",
+            "\u5370\u7b2c\u5b89\u90a3\u6ce2\u91cc\u65af",
+        }
+        {
+            "HST",
+            "\u590f\u5a01\u5937\u6a19\u6e96\u6642\u9593",
+            "HST",
+            "\u590f\u5a01\u5937\u6a19\u6e96\u6642\u9593",
+            "HST",
+            "\u6a80\u9999\u5c71",
+        }
+        {
+            "Pacific/Honolulu",
+            "\u590f\u5a01\u5937\u6a19\u6e96\u6642\u9593",
+            "HST",
+            "\u590f\u5a01\u5937\u6a19\u6e96\u6642\u9593",
+            "HST",
+            "\u6a80\u9999\u5c71",
+        }
+        {
+            "AST",
+            "\u963f\u62c9\u65af\u52a0\u6a19\u6e96\u6642\u9593",
+            "AST",
+            "\u963f\u62c9\u65af\u52a0\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "ADT",
+            "\u5b89\u514b\u91cc\u6cbb"
+        }
+        {
+            "America/Anchorage",
+            "\u963f\u62c9\u65af\u52a0\u6a19\u6e96\u6642\u9593",
+            "AST",
+            "\u963f\u62c9\u65af\u52a0\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "ADT",
+            "\u5b89\u514b\u91cc\u6cbb",
+        }
+        {
+            "America/Halifax",
+            "\u5927\u897f\u6d0b\u6a19\u6e96\u6642\u9593",
+            "AST",
+            "\u5927\u897f\u6d0b\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "ADT",
+            "\u54c8\u91cc\u6cd5\u514b\u65af"
+        }
+        {
+            "CNT",
+            "\u7d10\u82ac\u862d\u6a19\u6e96\u6642\u9593",
+            "CNT",
+            "\u7d10\u82ac\u862d\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "CDT",
+            "\u8056\u7d04\u7ff0",
+        }
+        {
+            "America/St_Johns",
+            "\u7d10\u82ac\u862d\u6a19\u6e96\u6642\u9593",
+            "CNT",
+            "\u7d10\u82ac\u862d\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "CDT",
+            "\u8056\u7d04\u7ff0",
+        }
+        {
+            "ECT",
+            "\u4e2d\u6b50\u6a19\u6e96\u6642\u9593",
+            "CET",
+            "\u4e2d\u6b50\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "CEST",
+            "\u5df4\u9ece",
+
+        }
+        {
+            "Europe/Paris",
+            "\u4e2d\u6b50\u6a19\u6e96\u6642\u9593",
+            "CET",
+            "\u4e2d\u6b50\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "CEST",
+            "\u5df4\u9ece",
+        }
+        {
+            "GMT",
+            "\u683c\u6797\u5a01\u6cbb\u6a19\u6e96\u6642\u9593",
+            "GMT",
+            "\u683c\u6797\u5a01\u6cbb\u6a19\u6e96\u6642\u9593",
+            "GMT",
+            "\u502b\u6566",
+        }
+        {
+            "Africa/Casablanca",
+            "\u683c\u6797\u5a01\u6cbb\u6a19\u6e96\u6642\u9593",
+            "GMT",
+            "\u683c\u6797\u5a01\u6cbb\u6a19\u6e96\u6642\u9593",
+            "GMT",
+            "\u5361\u85a9\u5e03\u862d\u5361",
+        }
+        {
+            "Asia/Jerusalem",
+            "\u4ee5\u8272\u5217\u6a19\u6e96\u6642\u9593",
+            "IST",
+            "\u4ee5\u8272\u5217\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "IDT",
+            "\u8036\u8def\u6492\u51b7",
+        }
+        {
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642\u9593",
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642\u9593",
+            "JST",
+            "\u6771\u4eac",
+        }
+        {
+            "Asia/Tokyo",
+            "\u65e5\u672c\u6a19\u6e96\u6642\u9593",
+            "JST",
+            "\u65e5\u672c\u6a19\u6e96\u6642\u9593",
+            "JST",
+            "\u6771\u4eac",
+        }
+        {
+            "Europe/Bucharest",
+            "\u6771\u6b50\u6a19\u6e96\u6642\u9593",
+            "EET",
+            "\u6771\u6b50\u65e5\u5149\u7bc0\u7d04\u6642\u9593",
+            "EEST",
+            "\u5e03\u52a0\u52d2\u65af\u7279",
+        }
+        {
+            "CTT",
+            "\u4e2d\u570b\u6a19\u6e96\u6642\u9593",
+            "CTT",
+            "\u4e2d\u570b\u6a19\u6e96\u6642\u9593",
+            "CDT",
+            "\u4e0a\u6d77",
+        }
+        {
+            "Asia/Shanghai",
+            "\u4e2d\u570b\u6a19\u6e96\u6642\u9593",
+            "CTT",
+            "\u4e2d\u570b\u6a19\u6e96\u6642\u9593",
+            "CDT",
+            "\u4e0a\u6d77",
+        }
+    }
+}

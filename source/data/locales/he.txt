@@ -1,0 +1,465 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+he {
+    Version{"2.0"}
+    Countries { 
+        AD { "\u05D0\u05E0\u05D3\u05D5\u05E8\u05D4" }
+        AE { "\u05D0\u05D9\u05D7\u05D5\u05D3 \u05D4\u05D0\u05DE\u05D9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05E2\u05E8\u05D1\u05D9\u05D5\u05EA" }
+        AF { "\u05D0\u05E4\u05D2\u05E0\u05D9\u05E1\u05D8\u05DF" }
+        AG { "\u05D0\u05E0\u05D8\u05D9\u05D2\u05D5\u05D0\u05D4 \u05D5\u05D1\u05E8\u05D1\u05D5\u05D3\u05D4" }
+        AI { "\u05D0\u05E0\u05D2\u05D9\u05DC\u05D4" }
+        AL { "\u05D0\u05DC\u05D1\u05E0\u05D9\u05D4" }
+        AM { "\u05D0\u05E8\u05DE\u05E0\u05D9\u05D4" }
+        AN { "\u05D4\u05D0\u05D9\u05E0\u05D8\u05D9\u05DC\u05D9\u05DD \u05D4\u05D4\u05D5\u05DC\u05E0\u05D3\u05D9\u05D9\u05DD" }
+        AO { "\u05D0\u05E0\u05D2\u05D5\u05DC\u05D4" }
+        AQ { "\u05D0\u05E0\u05D8\u05D0\u05E8\u05E7\u05D8\u05D9\u05E7\u05D4" }
+        AR { "\u05D0\u05E8\u05D2\u05E0\u05D8\u05D9\u05E0\u05D4" }
+        AS { "\u05E1\u05DE\u05D5\u05D0\u05D4 \u05D4\u05D0\u05DE\u05E8\u05D9\u05E7\u05E0\u05D9\u05EA" }
+        AT { "\u05D0\u05D5\u05E1\u05D8\u05E8\u05D9\u05D4" }
+        AU { "\u05D0\u05D5\u05E1\u05D8\u05E8\u05DC\u05D9\u05D4" }
+        AW { "\u05D0\u05E8\u05D5\u05D1\u05D4" }
+        AZ { "\u05D0\u05D6\u05E8\u05D1\u05D9\u05D9\u05D2\u05F3\u05DF" }
+        BA { "\u05D1\u05D5\u05E1\u05E0\u05D9\u05D4 \u05D4\u05E8\u05E6\u05D2\u05D5\u05D1\u05D9\u05E0\u05D4" }
+        BB { "\u05D1\u05E8\u05D1\u05D3\u05D5\u05E1" }
+        BD { "\u05D1\u05E0\u05D2\u05DC\u05D3\u05E9" }
+        BE { "\u05D1\u05DC\u05D2\u05D9\u05D4" }
+        BF { "\u05D1\u05D5\u05E8\u05E7\u05D9\u05E0\u05D4 \u05E4\u05D0\u05E1\u05D5" }
+        BG { "\u05D1\u05D5\u05DC\u05D2\u05E8\u05D9\u05D4" }
+        BH { "\u05D1\u05D7\u05E8\u05D9\u05D9\u05DF" }
+        BI { "\u05D1\u05D5\u05E8\u05D5\u05E0\u05D3\u05D9" }
+        BJ { "\u05D1\u05E0\u05D9\u05DF" }
+        BM { "\u05D1\u05E8\u05DE\u05D5\u05D3\u05D4" }
+        BN { "\u05D1\u05E8\u05D5\u05E0\u05D9\u05D9 \u05D3\u05D0\u05E8\u05E1\u05DC\u05D0\u05DD" }
+        BO { "\u05D1\u05D5\u05DC\u05D9\u05D1\u05D9\u05D4" }
+        BR { "\u05D1\u05E8\u05D6\u05D9\u05DC" }
+        BS { "\u05D1\u05D4\u05D0\u05DE\u05D4" }
+        BT { "\u05D1\u05D5\u05D8\u05D0\u05DF" }
+        BV { "\u05D4\u05D0\u05D9 \u05D1\u05D5\u05D1\u05D4" }
+        BW { "\u05D1\u05D5\u05D8\u05E1\u05D5\u05D5\u05D0\u05E0\u05D4" }
+        BY { "\u05D1\u05DC\u05E8\u05D5\u05E1" }
+        BZ { "\u05D1\u05DC\u05D9\u05D6" }
+        CA { "\u05E7\u05E0\u05D3\u05D4" }
+        CC { "\u05D0\u05D9\u05D9 \u05E7\u05D5\u05E7\u05D5\u05E1 (\u05E7\u05D9\u05DC\u05D9\u05E0\u05D2)" }
+        CD { "\u05E7\u05D5\u05E0\u05D2\u05D5, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05DE\u05D5\u05E7\u05E8\u05D8\u05D9\u05EA \u05E9\u05DC" }
+        CF { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05E9\u05DC \u05DE\u05E8\u05DB\u05D6 \u05D0\u05E4\u05E8\u05D9\u05E7\u05D4" }
+        CG { "\u05E7\u05D5\u05E0\u05D2\u05D5" }
+        CH { "\u05E9\u05D5\u05D5\u05D9\u05D9\u05E5" }
+        CI { "\u05D7\u05D5\u05E3 \u05D4\u05E9\u05E0\u05D4\u05D1" }
+        CK { "\u05D0\u05D9\u05D9 \u05E7\u05D5\u05E7" }
+        CL { "\u05E6\u05F3\u05D9\u05DC\u05D4" }
+        CM { "\u05E7\u05DE\u05E8\u05D5\u05DF" }
+        CN { "\u05E1\u05D9\u05DF" }
+        CO { "\u05E7\u05D5\u05DC\u05D5\u05DE\u05D1\u05D9\u05D4" }
+        CR { "\u05E7\u05D5\u05E1\u05D8\u05D4 \u05E8\u05D9\u05E7\u05D4" }
+        CU { "\u05E7\u05D5\u05D1\u05D4" }
+        CV { "\u05E7\u05D9\u05D9\u05E4 \u05D5\u05E8\u05D3\u05D4" }
+        CX { "\u05D0\u05D9\u05D9 \u05DB\u05E8\u05D9\u05E1\u05D8\u05DE\u05E1" }
+        CY { "\u05E7\u05E4\u05E8\u05D9\u05E1\u05D9\u05DF" }
+        CZ { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05E6\u05F3\u05DB\u05D9\u05EA" }
+        DE { "\u05D2\u05E8\u05DE\u05E0\u05D9\u05D4" }
+        DJ { "\u05D2\u05F3\u05D9\u05D1\u05D5\u05D8\u05D9" }
+        DK { "\u05D3\u05E0\u05DE\u05E8\u05E7" }
+        DM { "\u05D3\u05D5\u05DE\u05D9\u05E0\u05D9\u05E7\u05D4" }
+        DO { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05D5\u05DE\u05D9\u05E0\u05D9\u05E7\u05E0\u05D9\u05EA" }
+        DZ { "\u05D0\u05DC\u05D2\u05F3\u05D9\u05E8\u05D9\u05D4" }
+        EC { "\u05D0\u05E7\u05D5\u05D5\u05D0\u05D3\u05D5\u05E8" }
+        EE { "\u05D0\u05E1\u05D8\u05D5\u05E0\u05D9\u05D4" }
+        EG { "\u05DE\u05E6\u05E8\u05D9\u05DD" }
+        EH { "\u05E1\u05D4\u05E8\u05D4 \u05D4\u05DE\u05E2\u05E8\u05D1\u05D9\u05EA" }
+        ER { "\u05D0\u05E8\u05D9\u05EA\u05E8\u05D9\u05D0\u05D4" }
+        ES { "\u05E1\u05E4\u05E8\u05D3" }
+        ET { "\u05D0\u05EA\u05D9\u05D5\u05E4\u05D9\u05D4" }
+        FI { "\u05E4\u05D9\u05E0\u05DC\u05E0\u05D3" }
+        FJ { "\u05E4\u05D9\u05D2\u05F3\u05D9" }
+        FK { "\u05D0\u05D9\u05D9 \u05E4\u05D5\u05E7\u05DC\u05E0\u05D3" }
+        FM { "\u05DE\u05D0\u05D5\u05E8\u05D9\u05E6\u05D9\u05D5\u05E1, \u05D4\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA \u05D4\u05DE\u05D0\u05D5\u05D2\u05D3\u05D5\u05EA \u05E9\u05DC" }
+        FO { "\u05D0\u05D9\u05D9 \u05E4\u05D0\u05E8\u05D5" }
+        FR { "\u05E6\u05E8\u05E4\u05EA" }
+        GA { "\u05D2\u05D1\u05D5\u05DF" }
+        GB { "\u05D1\u05E8\u05D9\u05D8\u05E0\u05D9\u05D4" }
+        GD { "\u05D2\u05E8\u05E0\u05D3\u05D4" }
+        GE { "\u05D2\u05E8\u05D5\u05D6\u05D9\u05D4" }
+        GF { "\u05D2\u05D9\u05D0\u05E0\u05D4 \u05D4\u05E6\u05E8\u05E4\u05EA\u05D9\u05EA" }
+        GH { "\u05D2\u05D0\u05E0\u05D4" }
+        GI { "\u05D2\u05D9\u05D1\u05E8\u05DC\u05D8\u05E8" }
+        GL { "\u05D2\u05E8\u05D9\u05E0\u05DC\u05E0\u05D3" }
+        GM { "\u05D2\u05DE\u05D1\u05D9\u05D4" }
+        GN { "\u05D2\u05D9\u05E0\u05D9\u05D0\u05D4" }
+        GP { "\u05D2\u05D5\u05D5\u05D0\u05D3\u05DC\u05D5\u05E4" }
+        GQ { "\u05D2\u05D9\u05E0\u05D9\u05D0\u05D4 \u05D4\u05DE\u05E9\u05D5\u05D5\u05E0\u05D9\u05EA" }
+        GR { "\u05D9\u05D5\u05D5\u05DF" }
+        GS { "\u05D4\u05D0\u05D9 \u05D2\u05F3\u05D5\u05E8\u05D2\u05F3\u05D9\u05D4 \u05D4\u05D3\u05E8\u05D5\u05DE\u05D9\u05EA \u05D5\u05D0\u05D9\u05D9 \u05E1\u05E0\u05D3\u05D5\u05D5\u05D9\u05E5\u05F3 \u05D4\u05D3\u05E8\u05D5\u05DE\u05D9\u05D9\u05DD" }
+        GT { "\u05D2\u05D5\u05D5\u05D8\u05DE\u05D0\u05DC\u05D4" }
+        GU { "\u05D2\u05D5\u05D0\u05DD" }
+        GW { "\u05D2\u05D9\u05E0\u05D9\u05D0\u05D4-\u05D1\u05D9\u05E1\u05D0\u05D5" }
+        GY { "\u05D2\u05D9\u05D0\u05E0\u05D4" }
+        HK { "\u05D4\u05D5\u05E0\u05D2 \u05E7\u05D5\u05E0\u05D2 S.A.R. \u05E9\u05DC \u05E1\u05D9\u05DF" }
+        HM { "\u05D0\u05D9\u05D9 \u05D4\u05E8\u05D3 \u05D5\u05D0\u05D9\u05D9 \u05DE\u05E7\u05D3\u05D5\u05E0\u05DC\u05E0\u05D3" }
+        HN { "\u05D4\u05D5\u05E0\u05D3\u05D5\u05E8\u05E1" }
+        HR { "\u05E7\u05E8\u05D5\u05D0\u05D8\u05D9\u05D4" }
+        HT { "\u05D4\u05D0\u05D9\u05D8\u05D9" }
+        HU { "\u05D4\u05D5\u05E0\u05D2\u05E8\u05D9\u05D4" }
+        ID { "\u05D0\u05D9\u05E0\u05D3\u05D5\u05E0\u05D6\u05D9\u05D4" }
+        IE { "\u05D0\u05D9\u05E8\u05DC\u05E0\u05D3" }
+        IL { "\u05D9\u05E9\u05E8\u05D0\u05DC" }
+        IN { "\u05D4\u05D5\u05D3\u05D5" }
+        IO { "\u05D4\u05D8\u05E8\u05D9\u05D8\u05D5\u05E8\u05D9\u05D4 \u05D4\u05D1\u05E8\u05D9\u05D8\u05D9\u05EA \u05D1\u05D0\u05D5\u05E7\u05D9\u05E0\u05D5\u05E1 \u05D4\u05D4\u05D5\u05D3\u05D9" }
+        IQ { "\u05E2\u05D9\u05E8\u05E7" }
+        IR { "\u05D0\u05D9\u05E8\u05D0\u05DF, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D0\u05D9\u05E1\u05DC\u05DE\u05D9\u05EA" }
+        IS { "\u05D0\u05D9\u05E1\u05DC\u05E0\u05D3" }
+        IT { "\u05D0\u05D9\u05D8\u05DC\u05D9\u05D4" }
+        JM { "\u05D2\u05F3\u05DE\u05D9\u05D9\u05E7\u05D4" }
+        JO { "\u05D9\u05E8\u05D3\u05DF" }
+        JP { "\u05D9\u05E4\u05DF" }
+        KE { "\u05E7\u05E0\u05D9\u05D4" }
+        KG { "\u05E7\u05D9\u05E8\u05D2\u05D9\u05D6\u05E1\u05D8\u05DF" }
+        KH { "\u05E7\u05DE\u05D1\u05D5\u05D3\u05D9\u05D4" }
+        KI { "\u05E7\u05D9\u05E8\u05D9\u05D1\u05D0\u05D8\u05D9" }
+        KM { "\u05E7\u05D5\u05DE\u05D5\u05E8\u05D5\u05E1" }
+        KN { "\u05E1\u05E0\u05D8 \u05E7\u05D9\u05D8\u05E1 \u05D5\u05E0\u05D9\u05D1\u05E1" }
+        KP { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05E6\u05E4\u05D5\u05DF" }    // alternate name { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05DE\u05D5\u05E7\u05E8\u05D8\u05D9\u05EA \u05D4\u05E2\u05DE\u05DE\u05D9\u05EA" }
+        KR { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05D3\u05E8\u05D5\u05DD" }    // alternate name { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4" }
+        KW { "\u05DB\u05D5\u05D5\u05D9\u05EA" }
+        KY { "\u05D0\u05D9\u05D9 \u05E7\u05D9\u05D9\u05DE\u05D0\u05DF" }
+        KZ { "\u05E7\u05D6\u05D7\u05E1\u05D8\u05DF" }
+        LA { "\u05DC\u05D0\u05D5\u05E1, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05D3\u05DE\u05E7\u05D5\u05E8\u05D8\u05D9\u05EA \u05D4\u05E2\u05DE\u05DE\u05D9\u05EA" }
+        LB { "\u05DC\u05D1\u05E0\u05D5\u05DF" }
+        LC { "\u05E1\u05E0\u05D8 \u05DC\u05D5\u05E9\u05D9\u05D4" }
+        LI { "\u05DC\u05D9\u05DB\u05D8\u05E0\u05E9\u05D8\u05D9\u05D9\u05DF" }
+        LK { "\u05E1\u05E8\u05D9 \u05DC\u05E0\u05E7\u05D4" }
+        LR { "\u05DC\u05D9\u05D1\u05E8\u05D9\u05D4" }
+        LS { "\u05DC\u05E1\u05D5\u05D8\u05D5" }
+        LT { "\u05DC\u05D9\u05D8\u05D0" }
+        LU { "\u05DC\u05D5\u05E7\u05E1\u05DE\u05D1\u05D5\u05E8\u05D2" }
+        LV { "\u05DC\u05D8\u05D1\u05D9\u05D4" }
+        LY { "\u05DC\u05D5\u05D1" }
+        MA { "\u05DE\u05E8\u05D5\u05E7\u05D5" }
+        MC { "\u05DE\u05D5\u05E0\u05E7\u05D5" }
+        MD { "\u05DE\u05D5\u05DC\u05D3\u05D5\u05D1\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4" }
+        MG { "\u05DE\u05D3\u05D2\u05E1\u05E7\u05E8" }
+        MH { "\u05D0\u05D9\u05D9 \u05DE\u05E8\u05E9\u05DC" }
+        MK { "\u05DE\u05E7\u05D3\u05D5\u05E0\u05D9\u05D4, \u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05E9\u05DC" }
+        ML { "\u05DE\u05D0\u05DC\u05D9" }
+        MM { "\u05DE\u05D9\u05E0\u05DE\u05D0\u05E8" }
+        MN { "\u05DE\u05D5\u05E0\u05D2\u05D5\u05DC\u05D9\u05D4" }
+        MO { "\u05DE\u05E7\u05D0\u05D5 S.A.R. \u05E9\u05DC \u05E1\u05D9\u05DF" }
+        MP { "\u05D0\u05D9\u05D9 \u05DE\u05E8\u05D9\u05D0\u05E0\u05D4 \u05D4\u05E6\u05E4\u05D5\u05E0\u05D9\u05D9\u05DD" }
+        MQ { "\u05DE\u05E8\u05D8\u05D9\u05E0\u05D9\u05E7" }
+        MR { "\u05DE\u05D0\u05D5\u05E8\u05D9\u05D8\u05E0\u05D9\u05D4" }
+        MS { "\u05DE\u05D5\u05E0\u05D8\u05E1\u05E8\u05D0\u05D8" }
+        MT { "\u05DE\u05DC\u05D8\u05D4" }
+        MU { "\u05DE\u05D0\u05D5\u05E8\u05D9\u05E6\u05D9\u05D5\u05E1" }
+        MV { "\u05DE\u05DC\u05D3\u05D9\u05D1\u05D0\u05E1" }
+        MW { "\u05DE\u05DC\u05D0\u05D5\u05D5\u05D9" }
+        MX { "\u05DE\u05DB\u05E1\u05D9\u05E7\u05D5" }
+        MY { "\u05DE\u05DC\u05D6\u05D9\u05D4" }
+        MZ { "\u05DE\u05D5\u05D6\u05DE\u05D1\u05D9\u05E7" }
+        NA { "\u05E0\u05DE\u05D9\u05D1\u05D9\u05D4" }
+        NC { "\u05E7\u05DC\u05D3\u05D5\u05E0\u05D9\u05D4 \u05D4\u05D7\u05D3\u05E9\u05D4" }
+        NE { "\u05E0\u05D9\u05D6\u05F3\u05E8" }
+        NF { "\u05D0\u05D9\u05D9 \u05E0\u05D5\u05E8\u05E4\u05E7" }
+        NG { "\u05E0\u05D9\u05D2\u05E8\u05D9\u05D4" }
+        NI { "\u05E0\u05D9\u05E7\u05E8\u05D0\u05D2\u05D5\u05D5\u05D4" }
+        NL { "\u05D4\u05D5\u05DC\u05E0\u05D3" }
+        NO { "\u05E0\u05D5\u05E8\u05D5\u05D5\u05D2\u05D9\u05D4" }
+        NP { "\u05E0\u05E4\u05D0\u05DC" }
+        NR { "\u05E0\u05D0\u05D5\u05E8\u05D5" }
+        NU { "\u05E0\u05D9\u05D5\u05D5\u05D4" }
+        NZ { "\u05E0\u05D9\u05D5 \u05D6\u05D9\u05DC\u05E0\u05D3" }
+        OM { "\u05E2\u05D5\u05DE\u05DF" }
+        PA { "\u05E4\u05E0\u05DE\u05D4" }
+        PE { "\u05E4\u05E8\u05D5" }
+        PF { "\u05E4\u05D5\u05DC\u05D9\u05E0\u05D6\u05D9\u05D4 \u05D4\u05E6\u05E8\u05E4\u05EA\u05D9\u05EA" }
+        PG { "\u05E4\u05E4\u05D5\u05D0\u05D4 \u05D2\u05D9\u05E0\u05D9\u05D0\u05D4 \u05D4\u05D7\u05D3\u05E9\u05D4" }
+        PH { "\u05E4\u05D9\u05DC\u05D9\u05E4\u05D9\u05E0\u05D9\u05DD" }
+        PK { "\u05E4\u05E7\u05D9\u05E1\u05D8\u05DF" }
+        PL { "\u05E4\u05D5\u05DC\u05D9\u05DF" }
+        PM { "\u05E1\u05E0\u05D8 \u05E4\u05D9\u05D9\u05E8 \u05D5\u05DE\u05D9\u05E7\u05DC\u05D5\u05DF" }
+        PN { "\u05E4\u05D9\u05D8\u05E7\u05D9\u05D9\u05E8\u05DF" }
+        PR { "\u05E4\u05D5\u05E8\u05D8\u05D5 \u05E8\u05D9\u05E7\u05D5" }
+        PS { "\u05D4\u05E8\u05E9\u05D5\u05EA \u05D4\u05E4\u05DC\u05E9\u05EA\u05D9\u05E0\u05D9\u05EA" }
+        PT { "\u05E4\u05D5\u05E8\u05D8\u05D5\u05D2\u05DC" }
+        PW { "\u05E4\u05DC\u05D0\u05D5" }
+        PY { "\u05E4\u05E8\u05D0\u05D2\u05D5\u05D5\u05D0\u05D9" }
+        QA { "\u05E7\u05D8\u05E8" }
+        RE { "\u05E8\u05D0\u05D5\u05E0\u05D9\u05D5\u05DF" }
+        RO { "\u05E8\u05D5\u05DE\u05E0\u05D9\u05D4" }
+        RU { "\u05D7\u05D1\u05E8 \u05D4\u05DE\u05D3\u05D9\u05E0\u05D5\u05EA \u05D4\u05E8\u05D5\u05E1\u05D9\u05D5\u05EA" }
+        RW { "\u05E8\u05D5\u05D0\u05E0\u05D3\u05D4" }
+        SA { "\u05E2\u05E8\u05D1 \u05D4\u05E1\u05E2\u05D5\u05D3\u05D9\u05EA" }
+        SB { "\u05D0\u05D9\u05D9 \u05E9\u05DC\u05DE\u05D4" }
+        SC { "\u05D0\u05D9\u05D9 \u05E1\u05D9\u05D9\u05E9\u05DC" }
+        SD { "\u05E1\u05D5\u05D3\u05DF" }
+        SE { "\u05E9\u05D5\u05D5\u05D3\u05D9\u05D4" }
+        SG { "\u05E1\u05D9\u05E0\u05D2\u05E4\u05D5\u05E8" }
+        SH { "\u05E1\u05D9\u05D9\u05E0\u05D8 \u05D4\u05DC\u05E0\u05D4" }
+        SI { "\u05E1\u05DC\u05D5\u05D1\u05E0\u05D9\u05D4" }
+        SJ { "\u05E1\u05D5\u05D5\u05DC\u05D1\u05D0\u05E8\u05D3 \u05D5\u05D6\u05F3\u05D0\u05DF \u05DE\u05D0\u05D9\u05D9\u05DF" }
+        SK { "\u05E1\u05DC\u05D5\u05D1\u05E7\u05D9\u05D4" }
+        SL { "\u05E1\u05D9\u05D9\u05E8\u05D4 \u05DC\u05D0\u05D5\u05E0\u05D4" }
+        SM { "\u05E1\u05DF \u05DE\u05E8\u05D9\u05E0\u05D5" }
+        SN { "\u05E1\u05E0\u05D2\u05DC" }
+        SO { "\u05E1\u05D5\u05DE\u05DC\u05D9\u05D4" }
+        SR { "\u05E1\u05D5\u05E8\u05D9\u05E0\u05D0\u05DD" }
+        ST { "\u05E1\u05DF \u05EA\u05D5\u05DE\u05D4 \u05D5\u05E4\u05E8\u05D9\u05E0\u05E1\u05D9\u05E4\u05D4" }
+        SV { "\u05D0\u05DC \u05E1\u05DC\u05D1\u05D0\u05D3\u05D5\u05E8" }
+        SY { "\u05D4\u05E8\u05E4\u05D5\u05D1\u05DC\u05D9\u05E7\u05D4 \u05D4\u05E2\u05E8\u05D1\u05D9\u05EA \u05D4\u05E1\u05D5\u05E8\u05D9\u05EA" }    // alternate name { "\u05E1\u05D5\u05E8\u05D9\u05D4" }
+        SZ { "\u05E1\u05D5\u05D5\u05D6\u05D9\u05DC\u05E0\u05D3" }
+        TC { "\u05D0\u05D9\u05D9 \u05D8\u05D5\u05E8\u05E7\u05E1 \u05D5\u05E7\u05D0\u05D9\u05E7\u05D5\u05E1" }
+        TD { "\u05E6\u05F3\u05D0\u05D3" }
+        TF { "\u05D8\u05E8\u05D9\u05D8\u05D5\u05E8\u05D9\u05D5\u05EA \u05D3\u05E8\u05D5\u05DE\u05D9\u05D5\u05EA \u05E9\u05DC \u05E6\u05E8\u05E4\u05EA" }
+        TG { "\u05D8\u05D5\u05D2\u05D5" }
+        TH { "\u05EA\u05D0\u05D9\u05DC\u05E0\u05D3" }
+        TJ { "\u05D8\u05D2\u05F3\u05D9\u05E7\u05D9\u05E1\u05D8\u05DF" }
+        TK { "\u05D8\u05D5\u05E7\u05DC\u05D0\u05D5" }
+        TL { "\u05DE\u05D6\u05E8\u05D7 \u05D8\u05D9\u05DE\u05D5\u05E8" }
+        TM { "\u05D8\u05D5\u05E8\u05E7\u05DE\u05E0\u05D9\u05E1\u05D8\u05DF" }
+        TN { "\u05D8\u05D5\u05E0\u05D9\u05E1\u05D9\u05D4" }
+        TO { "\u05D8\u05D5\u05E0\u05D2\u05D4" }
+        TR { "\u05D8\u05D5\u05E8\u05E7\u05D9\u05D4" }
+        TT { "\u05D8\u05E8\u05D9\u05E0\u05D9\u05D3\u05D3 \u05D5\u05D8\u05D5\u05D1\u05D2\u05D5" }
+        TV { "\u05D8\u05D5\u05D1\u05D0\u05DC\u05D5" }
+        TW { "\u05D8\u05D9\u05D5\u05D5\u05D0\u05DF" }
+        TZ { "\u05D8\u05E0\u05D6\u05E0\u05D9\u05D4" }
+        UA { "\u05D0\u05D5\u05E7\u05E8\u05D0\u05D9\u05E0\u05D4" }
+        UG { "\u05D0\u05D5\u05D2\u05E0\u05D3\u05D4" }
+        UM { "\u05D0\u05D9\u05D9\u05DD \u05E7\u05D8\u05E0\u05D9\u05DD \u05E9\u05DC\u05D7\u05D5\u05E3 \u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA" }
+        US { "\u05D0\u05E8\u05E6\u05D5\u05EA \u05D4\u05D1\u05E8\u05D9\u05EA" }
+        UY { "\u05D0\u05D5\u05E8\u05D5\u05D2\u05D5\u05D5\u05D0\u05D9" }
+        UZ { "\u05D0\u05D5\u05D6\u05D1\u05E7\u05D9\u05E1\u05D8\u05DF" }
+        VA { "\u05D4\u05D5\u05D5\u05EA\u05D9\u05E7\u05DF" }
+        VC { "\u05E1\u05E0\u05D8 \u05D5\u05D9\u05E0\u05E1\u05E0\u05D8 \u05D5\u05D4\u05D2\u05E8\u05E0\u05D3\u05D9\u05E0\u05D9\u05DD" }
+        VE { "\u05D5\u05E0\u05E6\u05D5\u05D0\u05DC\u05D4" }
+        VG { "\u05D0\u05D9\u05D9 \u05D4\u05D1\u05EA\u05D5\u05DC\u05D4 \u05D4\u05D1\u05E8\u05D9\u05D8\u05D9\u05D9\u05DD" }
+        VI { "\u05D0\u05D9\u05D9 \u05D4\u05D1\u05EA\u05D5\u05DC\u05D4 \u05D4\u05D0\u05DE\u05E8\u05D9\u05E7\u05E0\u05D9\u05D9\u05DD" }
+        VN { "\u05D5\u05D9\u05D9\u05D8\u05E0\u05D0\u05DD" }
+        VU { "\u05D5\u05D0\u05E0\u05D5\u05D0\u05D8\u05D5" }
+        WF { "\u05D5\u05D0\u05DC\u05D9\u05E1 \u05D5\u05E4\u05D5\u05D8\u05D5\u05E0\u05D4" }
+        WS { "\u05E1\u05DE\u05D5\u05D0\u05D4" }
+        YE { "\u05EA\u05D9\u05DE\u05DF" }
+        YT { "\u05DE\u05D9\u05D5\u05D8\u05D4" }
+        YU { "\u05D9\u05D5\u05D2\u05D5\u05E1\u05DC\u05D1\u05D9\u05D4" }
+        ZA { "\u05D3\u05E8\u05D5\u05DD \u05D0\u05E4\u05E8\u05D9\u05E7\u05D4" }
+        ZM { "\u05D6\u05DE\u05D1\u05D9\u05D4" }
+        ZW { "\u05D6\u05D9\u05DE\u05D1\u05D1\u05D5\u05D5\u05D4" }
+    }
+    Languages { 
+        ar { "\u05E2\u05E8\u05D1\u05D9\u05EA" }
+        bg { "\u05D1\u05D5\u05DC\u05D2\u05E8\u05D9\u05EA" }
+        cs { "\u05E6\u05F3\u05DB\u05D9\u05EA" }
+        da { "\u05D3\u05E0\u05D9\u05EA" }
+        de { "\u05D2\u05E8\u05DE\u05E0\u05D9\u05EA" }
+        el { "\u05D9\u05D5\u05D5\u05E0\u05D9\u05EA" }
+        en { "\u05D0\u05E0\u05D2\u05DC\u05D9\u05EA" }
+        es { "\u05E1\u05E4\u05E8\u05D3\u05D9\u05EA" }
+        et { "\u05D0\u05E1\u05D8\u05D5\u05E0\u05D9\u05EA" }
+        fi { "\u05E4\u05D9\u05E0\u05D9\u05EA" }
+        fr { "\u05E6\u05E8\u05E4\u05EA\u05D9\u05EA" }
+        he { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
+        hr { "\u05E7\u05E8\u05D5\u05D0\u05D8\u05D9\u05EA" }
+        hu { "\u05D4\u05D5\u05E0\u05D2\u05E8\u05D9\u05EA" }
+        it { "\u05D0\u05D9\u05D8\u05DC\u05E7\u05D9\u05EA" }
+        //iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" } //Use he instead
+        ja { "\u05D9\u05E4\u05E0\u05D9\u05EA" }
+        ko { "\u05E7\u05D5\u05E8\u05D9\u05D0\u05E0\u05D9\u05EA" }
+        lt { "\u05DC\u05D9\u05D8\u05D0\u05D9\u05EA" }
+        lv { "\u05DC\u05D8\u05D1\u05D9\u05EA" }
+        nl { "\u05D4\u05D5\u05DC\u05E0\u05D3\u05D9\u05EA" }
+        no { "\u05E0\u05D5\u05E8\u05D5\u05D5\u05D2\u05D9\u05EA" }
+        pl { "\u05E4\u05D5\u05DC\u05E0\u05D9\u05EA" }
+        pt { "\u05E4\u05D5\u05E8\u05D8\u05D5\u05D2\u05D6\u05D9\u05EA" }
+        ro { "\u05E8\u05D5\u05DE\u05E0\u05D9\u05EA" }
+        ru { "\u05E8\u05D5\u05E1\u05D9\u05EA" }
+        sk { "\u05E1\u05DC\u05D5\u05D1\u05E7\u05D9\u05EA" }
+        sl { "\u05E1\u05DC\u05D5\u05D1\u05E0\u05D9\u05EA" }
+        sv { "\u05E9\u05D5\u05D5\u05D3\u05D9\u05EA" }
+        tr { "\u05D8\u05D5\u05E8\u05E7\u05D9\u05EA" }
+        zh { "\u05E1\u05D9\u05E0\u05D9\u05EA" }
+        //zh_cn { "\u05E1\u05D9\u05E0\u05D9\u05EA (\u05DE\u05E4\u05D5\u05E9\u05D8\u05EA)" }
+        //zh_tw { "\u05E1\u05D9\u05E0\u05D9\u05EA (\u05DE\u05E1\u05D5\u05E8\u05EA\u05D9\u05EA)" }
+    }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
+
+    LocaleScript:array { 
+        "Hebr"    // ISO 15924 Name 
+    }
+    ExemplarCharacters{"[[:Hebr:]\u200f\u200e]"}
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+//         * Spellout rules for Hebrew.  Hebrew actually has inflected forms for
+//         * most of the lower-order numbers.  The masculine forms are shown
+//         * here.
+
+    // This data is woefully incomplete.  Can someone fill me in on the
+    // various inflected forms of the numbers, which seem to be necessary
+    // to do Hebrew correctly?  Can somone supply me with data for values
+    // from 1,000,000 on up?  What about the word for zero?  What about
+    // information on negatives and decimals?
+
+    SpelloutRules {
+        "zero (incomplete data); \u05d0\u05d4\u05d3; \u05e9\u05d2\u05d9\u05d9\u05dd; \u05e9\u05dc\u05d5\u05e9\u05d4;\n"
+        "4: \u05d0\u05d3\u05d1\u05e6\u05d4; \u05d7\u05d2\u05d5\u05d9\u05e9\u05d4; \u05e9\u05e9\u05d4;\n"
+        "7: \u05e9\u05d1\u05e6\u05d4; \u05e9\u05de\u05d5\u05d2\u05d4; \u05ea\u05e9\u05e6\u05d4;\n"
+        "10: \u05e6\u05e9\u05d3\u05d4[ >>];\n"
+        "20: \u05e6\u05e9\u05d3\u05d9\u05dd[ >>];\n"
+        "30: \u05e9\u05dc\u05d5\u05e9\u05d9\u05dd[ >>];\n"
+        "40: \u05d0\u05d3\u05d1\u05e6\u05d9\u05dd[ >>];\n"
+        "50: \u05d7\u05de\u05d9\u05e9\u05d9\u05dd[ >>];\n"
+        "60: \u05e9\u05e9\u05d9\u05dd[ >>];\n"
+        "70: \u05e9\u05d1\u05e6\u05d9\u05dd[ >>];\n"
+        "80: \u05e9\u05de\u05d5\u05d2\u05d9\u05dd[ >>];\n"
+        "90: \u05ea\u05e9\u05e6\u05d9\u05dd[ >>];\n"
+        "100: \u05de\u05d0\u05d4[ >>];\n"
+        "200: << \u05de\u05d0\u05d4[ >>];\n"
+        "1000: \u05d0\u05dc\u05e3[ >>];\n"
+        "2000: << \u05d0\u05dc\u05e3[ >>];\n"
+        "1,000,000: =#,##0= (incomplete data);" 
+    }
+
+    // Currency display names
+    Currencies {
+        ILS { "\u20AA", "\u05E9\u0022\u05D7" }
+    }
+
+    // International Calendars Data.
+    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
+
+    calendar{
+        islamic{
+            // Islamic calendar
+            eras:array { 
+                "\u05E9\u05E0\u05EA \u05D4\u05D9\u05D2\u05F3\u05E8\u05D4"
+            }
+            monthNames{
+                format{
+                    abbreviated:alias {  // same as MonthNames (no data)
+                        "he/calendar/islamic/monthNames/format/wide"
+                    }  
+                    wide{
+                        "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
+                        "\u05E1\u05E4\u05E8",                                                           // Safar
+                        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",         // Rabi' al-awwal
+                        "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05EA\u05E0\u05D9",                     // Rabi' al-thani
+                        "\u05D2\u05F3\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",  // Jumada al-awwal
+                        "\u05D2\u05F3\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05EA\u05E0\u05D9",              // Jumada al-thani
+                        "\u05E8\u05D2\u05F3\u05D0\u05D1",                                                    // Rajab
+                        "\u05E9\u05E2\u05D1\u05D0\u05DF",                                               // Sha'ban
+                        "\u05E8\u05D0\u05DE\u05D3\u05DF",                                               // Ramadan
+                        "\u05E9\u05D5\u05D5\u05D0\u05DC",                                               // Shawwal
+                        "\u05D6\u05D5 \u05D0\u05DC-QI'DAH",                                             // Dhu al-Qi'dah  (NEED TRANSLATION!!)
+                        "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2\u05F3\u05D4",                          // Dhu al-Hijjah
+                    }
+                }
+            }
+        } 
+        islamic-civil:alias{
+            "he/calendar/islamic"
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{0} {1}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u05D0",
+                        "\u05D1",
+                        "\u05D2",
+                        "\u05D3",
+                        "\u05D4",
+                        "\u05D5",
+                        "\u05E9",
+                    }
+                    wide{
+                        "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
+                        "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
+                        "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
+                        "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
+                        "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
+                        "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
+                        "\u05E9\u05D1\u05EA",
+                    }
+                }
+            }
+            eras{
+                "\u05DC\u05E4\u05E0\u05D4\u05F4\u05E1",
+                "\u05DC\u05E1\u05D4\u05F4\u05E0"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u05D9\u05E0\u05D5",
+                        "\u05E4\u05D1\u05E8",
+                        "\u05DE\u05E8\u05E5",
+                        "\u05D0\u05E4\u05E8",
+                        "\u05DE\u05D0\u05D9",
+                        "\u05D9\u05D5\u05E0",
+                        "\u05D9\u05D5\u05DC",
+                        "\u05D0\u05D5\u05D2",
+                        "\u05E1\u05E4\u05D8",
+                        "\u05D0\u05D5\u05E7",
+                        "\u05E0\u05D5\u05D1",
+                        "\u05D3\u05E6\u05DE",
+                    }
+                    wide{
+                        "\u05D9\u05E0\u05D5\u05D0\u05E8",
+                        "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
+                        "\u05DE\u05E8\u05E5",
+                        "\u05D0\u05E4\u05E8\u05D9\u05DC",
+                        "\u05DE\u05D0\u05D9",
+                        "\u05D9\u05D5\u05E0\u05D9",
+                        "\u05D9\u05D5\u05DC\u05D9",
+                        "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
+                        "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
+                        "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
+                        "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
+                        "\u05D3\u05E6\u05DE\u05D1\u05E8",
+                    }
+                }
+            }
+        }
+        
+        hebrew{
+            eras:array {
+                "\u05DC\u05D1\u05D4\042\u05E2"
+            }
+            monthNames{
+                format{                  
+                    wide {
+                        "\u05EA\u05E9\u05E8\u05D9",                 // Tishri
+                        "\u05D7\u05E9\u05D5\u05DF",                 // Heshvan
+                        "\u05DB\u05E1\u05DC\u05D5",                 // Kislev
+                        "\u05D8\u05D1\u05EA",                       // Tevet
+                        "\u05E9\u05D1\u05D8",                       // Shevat
+                        "\u05D0\u05D3\u05E8 \u05E8\u05D0\u05E9\u05D5\u05DF",    // Adar I
+                        "\u05D0\u05D3\u05E8 \u05E9\u05E0\u05D9",    // Adar
+                        "\u05E0\u05D9\u05E1\u05DF",                 // Nisan
+                        "\u05D0\u05D9\u05D9\u05E8",                 // Iyar
+                        "\u05E1\u05D9\u05D5\u05DF",                 // Sivan
+                        "\u05EA\u05DE\u05D5\u05D6",                 // Tamuz
+                        "\u05D0\u05D1",                             // Av
+                        "\u05D0\u05DC\u05D5\u05DC",                 // Elul
+                    }
+                    abbreviated:alias {
+                        "he/calendar/hebrew/monthNames/format/wide"
+                    }
+                }
+            }
+        }
+    }
+}

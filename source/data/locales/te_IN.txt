@@ -1,0 +1,45 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+//
+// Telugu Locale. Data by Ram [ram@jtcsv.com]
+
+te_IN {
+    Version{ "2.0" }
+
+    // LanguageLibraryUse { "Te" }
+    // Measurement { "Metric" }
+    NumberPatterns {
+        "##,##,##0.###;-##,##,##0.###",
+        "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
+        "##,##,##0%",
+        "#E0",
+    }
+    //PaperSize {
+    //    Height { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    //}
+    calendar{
+        gregorian{
+           weekend:intvector { // Sunday
+             1, 0,   // onset dow, millis in day  (Sunday 12:00am)
+             2, 0    // cease dow, millis in day  (Monday 12:00am)
+           }
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

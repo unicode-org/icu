@@ -1,0 +1,25 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+gu {
+    Version{ "2.0" }
+    collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { 
+                "[normalization on]"
+                "& હ  "
+                "<  ઼ "
+                "<  ઁ "
+                "<  ં "
+                "<  ઃ "
+                "& ઽ " 
+                "< ્ "
+            }
+        }
+    }
+}

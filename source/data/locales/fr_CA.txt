@@ -1,0 +1,37 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fr_CA {
+    Version { "2.0" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;(#,##0.00\u00A4)",
+        "#,##0%",
+        "#E0",
+    }
+
+    // Currency display names
+    Currencies {
+        CAD { "$", "dollar canadien" } // Canadian Dollar
+        USD { "$ US", "dollar des \u00C9tats-Unis" } // US Dollar
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH' h 'mm' min 'ss' s 'z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "yy-MM-dd",
+                "yy-MM-dd",
+                "{1} {0}",
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sh {
+    Version { "2.0" }
+    collations:alias { "hr" }
+}
