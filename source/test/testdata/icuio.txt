@@ -1,0 +1,54 @@
+//*****************************************************************************
+//
+//  Copyright (C) 2004, International Business Machines
+//  Corporation and others.  All Rights Reserved.
+//
+//  file name:  icuio.txt
+//  encoding:   US-ASCII
+//  tab size:   4 (not used)
+//  indentation:4
+//
+//  created on: 2004Apr06
+//  created by: George Rhoten
+//
+//  ICU resource bundle source file with test data for data-driven ICU I/O tests.
+//
+//*****************************************************************************
+
+icuio {
+    Info {
+        Description { "Test data for ICU I/O" }
+        LongDescription {
+            "Test data for data-driven conversion tests in icu/source/test/iotest/iotest.cpp\n"
+            "Run iotest printf\n"
+
+            "argumentType:\n"
+            "\td: double\n"
+            "\t1: int8_t (hexadecimal)\n"
+            "\t2: int16_t (hexadecimal)\n"
+            "\t4: int32_t (hexadecimal)\n"
+            "\t8: int64_t (hexadecimal)\n"
+            "\ts: char * string\n"
+            "\tS: UChar * string\n"
+        }
+    }
+    TestData {
+        printf {
+            Headers { "format", "result", "argumentType", "argument" }
+            Cases {
+                {
+                    "%e",
+                    "1.200000e+000",
+                    "d",
+                    "1.2"
+                }
+                {
+                    "%hx",
+                    "8ace",
+                    "2",
+                    "8ace"
+                }
+            }
+        }
+    }
+}
