@@ -246,7 +246,7 @@ void RBBISymbolTable::print() const {
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
 
         RBBINode::printUnicodeString(s->key, 15);
-        printf("   %8p   ", s->val);
+        printf("   %8p   ", (void *)s->val);
         RBBINode::printUnicodeString(s->val->fLeftChild->fText);
         printf("\n");
     }

@@ -20,7 +20,7 @@ const char BreakDictionary::fgClassID=0;
 // deserialization
 //=================================================================================
 
-BreakDictionary::BreakDictionary(const char* dictionaryFilename, UErrorCode& status)
+BreakDictionary::BreakDictionary(const char* /*dictionaryFilename*/, UErrorCode& status)
 {
     if (U_FAILURE(status)) return;
     

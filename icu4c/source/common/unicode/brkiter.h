@@ -492,13 +492,13 @@ public:
 protected:
     BreakIterator();
     UBool fBufferClone;
+    BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
 private:
     /**
-     * The copy constructor and assignment operator have no real implementation.
-     * They are provided to make the compiler happy. Do not call.
+     * The assignment operator has no real implementation.
+     * It's provided to make the compiler happy. Do not call.
      */
     BreakIterator& operator=(const BreakIterator&) { return *this; }
-    BreakIterator (const BreakIterator &other) : UObject(other) {}
 };
 
 inline UBool BreakIterator::isBufferClone()

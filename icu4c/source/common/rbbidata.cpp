@@ -184,7 +184,7 @@ const UnicodeString &RBBIDataWrapper::getRuleSourceString() {
 void  RBBIDataWrapper::printData() {
     uint32_t c, s;
 
-    printf("RBBI Data at %p\n", fHeader);
+    printf("RBBI Data at %p\n", (void *)fHeader);
     printf("   Version = %d\n", fHeader->fVersion);
     printf("   total length of data  = %d\n", fHeader->fLength);
     printf("   number of character categories = %d\n\n", fHeader->fCatCount);
