@@ -110,6 +110,9 @@ static Norm *norms;
  */
 static uint32_t haveSeenFlags[256];
 
+/* set of characters with NFD_QC=No (i.e., those with canonical decompositions) */
+static USet *nfdQCNoSet;
+
 /* see addCombiningCP() for details */
 static uint32_t combiningCPs[2000];
 
@@ -176,6 +179,9 @@ init() {
 
     /* reset all "have seen" flags */
     uprv_memset(haveSeenFlags, 0, sizeof(haveSeenFlags));
+
+    /* open an empty set */
+    nfdQCNoSet=uset_open(1, 0);
 
     /* allocate extra data memory for UTF-16 decomposition strings and other values */
     extraMem=utm_open("gennorm extra 16-bit memory", _NORM_EXTRA_INDEX_TOP, _NORM_EXTRA_INDEX_TOP, 2);
@@ -812,6 +818,10 @@ setQCFlags(uint32_t code, uint8_t qcFlags) {
         if((qcFlags&_NORM_QC_NFKD) && (uint16_t)code<indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE]) {
             indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE]=(uint16_t)code;
         }
+    }
+
+    if(qcFlags&_NORM_QC_NFD) {
+        uset_add(nfdQCNoSet, (UChar32)code);
     }
 }
 
@@ -1726,7 +1736,7 @@ generateData(const char *dataDir) {
 
 #else
 
-    U_STRING_DECL(nxCJKCompatPattern, "[[:Ideographic:]&[:NFD_QC=No:]]", 31);
+    U_STRING_DECL(nxCJKCompatPattern, "[:Ideographic:]", 15);
     U_STRING_DECL(nxUnicode32Pattern, "[:^Age=3.2:]", 12);
     USet *set;
     int32_t normTrieSize, fcdTrieSize, auxTrieSize;
@@ -1765,7 +1775,14 @@ generateData(const char *dataDir) {
     canonStartSetsTop+=canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH];
 
     /* create the normalization exclusion sets */
-    U_STRING_INIT(nxCJKCompatPattern, "[[:Ideographic:]&[:NFD_QC=No:]]", 31);
+    /*
+     * nxCJKCompatPattern should be [[:Ideographic:]&[:NFD_QC=No:]]
+     * but we cannot use NFD_QC from the pattern because that would require
+     * unorm.icu which we are just going to generate.
+     * Therefore we have manually collected nfdQCNoSet and intersect Ideographic
+     * with that.
+     */
+    U_STRING_INIT(nxCJKCompatPattern, "[:Ideographic:]", 15);
     U_STRING_INIT(nxUnicode32Pattern, "[:^Age=3.2:]", 12);
 
     canonStartSets[_NORM_SET_INDEX_NX_CJK_COMPAT_OFFSET]=canonStartSetsTop;
@@ -1774,6 +1791,7 @@ generateData(const char *dataDir) {
         fprintf(stderr, "error: uset_openPattern([:Ideographic:]&[:NFD_QC=No:]) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
+    uset_retainAll(set, nfdQCNoSet);
     canonStartSetsTop+=uset_serialize(set, canonStartSets+canonStartSetsTop, LENGTHOF(canonStartSets)-canonStartSetsTop, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: uset_serialize([:Ideographic:]&[:NFD_QC=No:]) failed, %s\n", u_errorName(errorCode));
@@ -1901,6 +1919,8 @@ cleanUpData(void) {
     utrie_close(norm32Trie);
     utrie_close(fcdTrie);
     utrie_close(auxTrie);
+
+    uset_close(nfdQCNoSet);
 
     uprv_free(normTrie);
     uprv_free(norm32Trie);

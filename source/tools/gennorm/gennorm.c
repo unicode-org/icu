@@ -23,11 +23,13 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ustring.h"
 #include "unicode/putil.h"
-#include "cmemory.h"
-#include "cstring.h"
 #include "unicode/uclean.h"
 #include "unicode/udata.h"
+#include "unicode/uset.h"
+#include "cmemory.h"
+#include "cstring.h"
 #include "unewdata.h"
 #include "uoptions.h"
 #include "uparse.h"
@@ -53,6 +55,17 @@ parseDB(const char *filename, UErrorCode *pErrorCode);
 
 /* -------------------------------------------------------------------------- */
 
+enum {
+    HELP_H,
+    HELP_QUESTION_MARK,
+    VERBOSE,
+    COPYRIGHT,
+    DESTDIR,
+    SOURCEDIR,
+    UNICODE_VERSION,
+    ICUDATADIR
+};
+
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
@@ -60,7 +73,8 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 }
+    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
+    UOPTION_ICUDATADIR
 };
 
 extern int
@@ -78,6 +92,7 @@ main(int argc, char* argv[]) {
     options[4].value=u_getDataDirectory();
     options[5].value="";
     options[6].value="3.0.0";
+    options[ICUDATADIR].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -136,6 +151,28 @@ main(int argc, char* argv[]) {
 #else
 
     setUnicodeVersion(options[6].value);
+
+    if (options[ICUDATADIR].doesOccur) {
+        u_setDataDirectory(options[ICUDATADIR].value);
+    }
+
+    /*
+     * Verify that we can work with properties
+     * but don't call u_init() because that needs unorm.icu which we are just
+     * going to build here.
+     */
+    {
+        U_STRING_DECL(ideo, "[:Ideographic:]", 15);
+        USet *set;
+
+        U_STRING_INIT(ideo, "[:Ideographic:]", 15);
+        set=uset_openPattern(ideo, -1, &errorCode);
+        if(U_FAILURE(errorCode) || !uset_contains(set, 0xf900)) {
+            fprintf(stderr, "gennorm is unable to work with properties (uprops.icu): %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+        uset_close(set);
+    }
 
     /* prepare the filename beginning with the source dir */
     uprv_strcpy(filename, srcDir);
