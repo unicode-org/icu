@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/03/23 19:52:03 $ 
-* $Revision: 1.9 $
+* $Date: 2001/06/21 23:17:38 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -68,41 +68,35 @@ public final class UCharacterTest extends TestFmwk
     {
       if (UCharacter.isLetter(lower[i]) && !UCharacter.isLowerCase(lower[i]))
       {
-        errln("FAIL isLowerCase test for 0x" + 
-              Integer.toHexString(lower[i]));
+        errln("FAIL isLowerCase test for \\u" + hex(lower[i]));
         break;
       }
       if (UCharacter.isLetter(upper[i]) && !(UCharacter.isUpperCase(upper[i]) 
                                        || UCharacter.isTitleCase(upper[i])))     
       {
-        errln("FAIL isUpperCase test for 0x" + 
-              Integer.toHexString(upper[i]));
+        errln("FAIL isUpperCase test for \\u" + hex(upper[i]));
         break;
       }
       if (lower[i] != UCharacter.toLowerCase(upper[i]) || 
           (upper[i] != UCharacter.toUpperCase(lower[i]) &&
             upper[i] != UCharacter.toTitleCase(lower[i])))
       {
-        errln("FAIL case conversion test for 0x" + 
-              Integer.toHexString(upper[i]) + " to 0x" + 
-              Integer.toHexString(lower[i]));
+        errln("FAIL case conversion test for \\u" + hex(upper[i]) + " to \\u" 
+              + hex(lower[i]));
         break;
       }
       if (lower[i] != UCharacter.toLowerCase(lower[i]))
       {
-        errln("FAIL lower case conversion test for 0x" + 
-        Integer.toHexString(lower[i]));
+        errln("FAIL lower case conversion test for \\u" + hex(lower[i]));
         break;
       }
       if (upper[i] != UCharacter.toUpperCase(upper[i]) && 
           upper[i] != UCharacter.toTitleCase(upper[i]))
       {
-        errln("FAIL upper case conversion test for 0x" + 
-              Integer.toHexString(upper[i]));
+        errln("FAIL upper case conversion test for \\u" + hex(upper[i]));
         break;
       }
-      logln("Ok    0x" + Integer.toHexString(upper[i]) + " and 0x" +
-            Integer.toHexString(lower[i]));
+      logln("Ok    \\u" + hex(upper[i]) + " and \\u" + hex(lower[i]));
     }
   }
   
@@ -113,25 +107,23 @@ public final class UCharacterTest extends TestFmwk
   {
     for (int i = 0x0041; i < 0x005B; i ++) 
       if (!UCharacter.isLetter(i))
-        errln("FAIL 0x" + Integer.toHexString(i) + " expected to be a letter");
+        errln("FAIL \\u" + hex(i) + " expected to be a letter");
         
     for (int i = 0x0660; i < 0x066A; i ++) 
       if (UCharacter.isLetter(i))
-        errln("FAIL 0x" + Integer.toHexString(i) + 
-              " expected not to be a letter");
+        errln("FAIL \\u" + hex(i) + " expected not to be a letter");
     
     for (int i = 0x0660; i < 0x066A; i ++) 
       if (!UCharacter.isDigit(i))
-        errln("FAIL 0x" + Integer.toHexString(i) + " expected to be a digit");
+        errln("FAIL \\u" + hex(i) + " expected to be a digit");
     
     for (int i = 0x0041; i < 0x005B; i ++) 
       if (!UCharacter.isLetterOrDigit(i))
-        errln("FAIL 0x" + Integer.toHexString(i) + 
-              " expected not to be a digit");
+        errln("FAIL \\u" + hex(i) + " expected not to be a digit");
         
     for (int i = 0x0660; i < 0x066A; i ++) 
       if (!UCharacter.isLetterOrDigit(i))
-        errln("FAIL 0x" + Integer.toHexString(i) + 
+        errln("FAIL \\u" + hex(i) + 
               "expected to be either a letter or a digit");
   }
 
@@ -150,34 +142,33 @@ public final class UCharacterTest extends TestFmwk
     {
       if (!UCharacter.isSpaceChar(spaces[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(spaces[i]) + 
+        errln("FAIL \\u" + hex(spaces[i]) + 
               " expected to be a space character");
         break;
       }
       
       if (UCharacter.isSpaceChar(nonspaces[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonspaces[i]) + 
+        errln("FAIL \\u" + hex(nonspaces[i]) + 
               " expected not to be space character");
         break;
       }
  
       if (!UCharacter.isWhitespace(whitespaces[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(whitespaces[i]) + 
+        errln("FAIL \\u" + hex(whitespaces[i]) + 
               " expected to be a white space character");
         break;
       }
       if (UCharacter.isWhitespace(nonwhitespaces[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonwhitespaces[i]) + 
+        errln("FAIL \\u" + hex(nonwhitespaces[i]) + 
               " expected not to be a space character");
         break;
       }
-      logln("Ok    0x" + Integer.toHexString(spaces[i]) + " and 0x" +
-            Integer.toHexString(nonspaces[i]) + " and 0x" +
-            Integer.toHexString(whitespaces[i]) + " and 0x" +
-            Integer.toHexString(nonwhitespaces[i]));
+      logln("Ok    \\u" + hex(spaces[i]) + " and \\u" + hex(nonspaces[i]) + 
+            " and \\u" + hex(whitespaces[i]) + " and \\u" +
+            hex(nonwhitespaces[i]));
     }
   }
   
@@ -194,14 +185,13 @@ public final class UCharacterTest extends TestFmwk
     {
       if (UCharacter.isDefined(undefined[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(undefined[i]) + 
+        errln("FAIL \\u" + hex(undefined[i]) + 
               " expected not to be defined");
         break;
       }
       if (!UCharacter.isDefined(defined[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(defined[i]) + 
-              " expected defined");
+        errln("FAIL \\u" + hex(defined[i]) + " expected defined");
         break;
       }
     }
@@ -219,14 +209,13 @@ public final class UCharacterTest extends TestFmwk
     {
       if (UCharacter.isBaseForm(nonbase[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonbase[i]) + 
+        errln("FAIL \\u" + hex(nonbase[i]) + 
               " expected not to be a base character");
         break;
       }
       if (!UCharacter.isBaseForm(base[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(base[i]) + 
-              " expected to be a base character");
+        errln("FAIL \\u" + hex(base[i]) + " expected to be a base character");
         break;
       }
     }
@@ -252,7 +241,7 @@ public final class UCharacterTest extends TestFmwk
       if (UCharacter.isDigit(digits[i]) && 
           UCharacter.digit(digits[i]) != digitvalues[i]) 
       {
-        errln("FAIL 0x" + Integer.toHexString(digits[i]) + 
+        errln("FAIL \\u" + hex(digits[i]) + 
               " expected digit with value " + digitvalues[i]);
         break;
       }
@@ -261,8 +250,7 @@ public final class UCharacterTest extends TestFmwk
     for (int i = 0; i < size; i ++)
       if (UCharacter.isDigit(nondigits[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nondigits[i]) + 
-              " expected nondigit");
+        errln("FAIL \\u" + hex(nondigits[i]) + " expected nondigit");
         break;
       }
       
@@ -271,7 +259,7 @@ public final class UCharacterTest extends TestFmwk
       if (UCharacter.isDigit(digits2[i]) &&
           UCharacter.digit(digits2[i]) != digitvalues2[i]) 
       {
-        errln("FAIL 0x" + Integer.toHexString(digits2[i]) + 
+        errln("FAIL \\u" + hex(digits2[i]) + 
               " expected digit with value " + digitvalues2[i]);
         break;
       }
@@ -331,18 +319,18 @@ public final class UCharacterTest extends TestFmwk
     {
       if (!UCharacter.isPrintable(printable[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(printable[i]) + 
+        errln("FAIL \\u" + hex(printable[i]) + 
               " expected to be a printable character");
         break;
       }
       if (UCharacter.isPrintable(nonprintable[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonprintable[i]) +
+        errln("FAIL \\u" + hex(nonprintable[i]) +
               " expected not to be a printable character");
         break;
       }
-      logln("Ok    0x" + Integer.toHexString(printable[i]) + " and 0x" +
-            Integer.toHexString(nonprintable[i]));
+      logln("Ok    \\u" + hex(printable[i]) + " and \\u" + 
+            hex(nonprintable[i]));
     }
     
     // test all ISO 8 controls
@@ -352,7 +340,7 @@ public final class UCharacterTest extends TestFmwk
         ch = 0x7f;
       }
       if (UCharacter.isPrintable(ch)) {
-        errln("Fail 0x" + Integer.toHexString(ch) + 
+        errln("Fail \\u" + hex(ch) + 
               " is a ISO 8 control character hence not printable\n");
       }
     }
@@ -363,8 +351,7 @@ public final class UCharacterTest extends TestFmwk
         ch = 0xa0;
       }
       if (!UCharacter.isPrintable(ch)) {
-        errln("Fail 0x" + Integer.toHexString(ch) + 
-              " is a Latin-1 graphic character\n");
+        errln("Fail \\u" + hex(ch) + " is a Latin-1 graphic character\n");
         }
     }
   }
@@ -386,46 +373,44 @@ public final class UCharacterTest extends TestFmwk
     {
       if (!UCharacter.isUnicodeIdentifierStart(unicodeidstart[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(unicodeidstart[i]) + 
+        errln("FAIL \\u" + hex(unicodeidstart[i]) + 
               " expected to be a unicode identifier start character");
         break;
       }
       if (UCharacter.isUnicodeIdentifierStart(nonunicodeidstart[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonunicodeidstart[i]) + 
+        errln("FAIL \\u" + hex(nonunicodeidstart[i]) + 
               " expected not to be a unicode identifier start character");
         break;
       }
       if (!UCharacter.isUnicodeIdentifierPart(unicodeidpart[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(unicodeidpart[i]) + 
+        errln("FAIL \\u" + hex(unicodeidpart[i]) + 
               " expected to be a unicode identifier part character");
         break;
       }
       if (UCharacter.isUnicodeIdentifierPart(nonunicodeidpart[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonunicodeidpart[i]) + 
+        errln("FAIL \\u" + hex(nonunicodeidpart[i]) + 
               " expected not to be a unicode identifier part character");
         break;
       }
       if (!UCharacter.isIdentifierIgnorable(idignore[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(idignore[i]) + 
+        errln("FAIL \\u" + hex(idignore[i]) + 
               " expected to be a ignorable unicode character");
         break;
       }
       if (UCharacter.isIdentifierIgnorable(nonidignore[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(nonidignore[i]) + 
+        errln("FAIL \\u" + hex(nonidignore[i]) + 
               " expected not to be a ignorable unicode character");
         break;
       }
-      logln("Ok    0x" + Integer.toHexString(unicodeidstart[i]) + " and 0x" +
-            Integer.toHexString(nonunicodeidstart[i]) + " and 0x" +
-            Integer.toHexString(unicodeidpart[i]) + " and 0x" +
-            Integer.toHexString(nonunicodeidpart[i]) + " and 0x" +
-            Integer.toHexString(idignore[i]) + " and 0x" +
-            Integer.toHexString(nonidignore[i]));
+      logln("Ok    \\u" + hex(unicodeidstart[i]) + " and \\u" +
+            hex(nonunicodeidstart[i]) + " and \\u" + hex(unicodeidpart[i]) + 
+            " and \\u" + hex(nonunicodeidpart[i]) + " and \\u" +
+            hex(idignore[i]) + " and \\u" + hex(nonidignore[i]));
     }
   }
   
@@ -505,7 +490,7 @@ public final class UCharacterTest extends TestFmwk
             
         if (UCharacter.getType(ch) != type)
         {
-          errln("FAIL 0x" + Integer.toHexString(ch) + " expected type " + 
+          errln("FAIL \\u" + hex(ch) + " expected type " + 
                 type);
           break;
         }
@@ -513,7 +498,7 @@ public final class UCharacterTest extends TestFmwk
         // testing combining class
         if (UCharacter.getCombiningClass(ch) != cc)
         {
-          errln("FAIL 0x" + Integer.toHexString(ch) + " expected combining " +
+          errln("FAIL \\u" + hex(ch) + " expected combining " +
                 "class " + cc);
           break;
         }
@@ -525,7 +510,7 @@ public final class UCharacterTest extends TestFmwk
         dir = DIR.indexOf(d) >> 2;
         if (UCharacter.getDirection(ch) != dir) 
         {
-          errln("FAIL 0x" + Integer.toHexString(ch) + 
+          errln("FAIL \\u" + hex(ch) + 
                 " expected wrong direction " + dir);
           break;
         }
@@ -574,7 +559,7 @@ public final class UCharacterTest extends TestFmwk
       str = UCharacter.getName(c[i]);
       if (!str.equalsIgnoreCase(name[i]))
       {
-        errln("FAIL 0x" + Integer.toHexString(c[i]) + " expected name " +
+        errln("FAIL \\u" + hex(c[i]) + " expected name " +
               name[i]);
         break;
       }
@@ -584,7 +569,7 @@ public final class UCharacterTest extends TestFmwk
       if ((str == null && oldname[i].length() > 0) || 
           (str != null && !str.equalsIgnoreCase(oldname[i])))
       {
-        errln("FAIL 0x" + Integer.toHexString(c[i]) + " expected 1.0 name " +
+        errln("FAIL \\u" + hex(c[i]) + " expected 1.0 name " +
               oldname[i]);
         break;
       }
@@ -593,8 +578,7 @@ public final class UCharacterTest extends TestFmwk
       uc = UCharacter.getCharFromName(name[i]);
       if (uc != c[i])
       {
-        errln("FAIL " + name[i] + " expected character 0x" + 
-              Integer.toHexString(c[i]));
+        errln("FAIL " + name[i] + " expected character \\u" + hex(c[i]));
         break;
       }
       
@@ -602,8 +586,7 @@ public final class UCharacterTest extends TestFmwk
       uc = UCharacter.getCharFromName1_0(oldname[i]);
       if (uc != c[i] && i != 0 && (i == 1 || i == 6))
       {
-        errln("FAIL " + name[i] + " expected 1.0 character " + 
-              Integer.toHexString(c[i]));
+        errln("FAIL " + name[i] + " expected 1.0 character \\u" + hex(c[i]));
         break;
       }
     }
@@ -614,13 +597,55 @@ public final class UCharacterTest extends TestFmwk
       str = UCharacter.getName(i);
       if (str != null && UCharacter.getCharFromName(str) != i)
       {
-        errln("FAIL 0x" + Integer.toHexString(i) + " " + str  + 
+        errln("FAIL \\u" + hex(i) + " " + str  + 
               " retrieval of name and vice versa" );
         break;
       }
     }
   }
   
+  public void TestCaseFolding() 
+  {
+    int simple[] = {
+        // input, default, exclude special i
+        0x61,   0x61,  0x61,
+        0x49,   0x69,  0x69,
+        0x131,  0x69,  0x131,
+        0xdf,   0xdf,  0xdf,
+        0xfb03, 0xfb03, 0xfb03,
+        0x5ffff,0x5ffff,0x5ffff
+    };
+    
+    // TODO after ICU 1.8: if u_getUnicodeVersion() >= 3.1.0.0 then test 
+    // exclude-special-i cases as well
+    
+    // test simple case folding
+    for (int i = 0; i < simple.length; i += 3) {
+        if (UCharacter.foldCase(simple[i], true) != simple[i + 1]) {
+            errln("FAIL: foldCase(\\u" + hex(simple[i]) + 
+                  ", true) should be \\u" + hex(simple[i + 1]));
+            return;
+        }
+    }
+
+    // test full string case folding with default option and separate buffers
+    String mixed                 = "\u0061\u0042\u0131\u03a3\u00df\ufb03\ud93f\udfff",
+           foldedExcludeSpecialI = "\u0061\u0062\u0131\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff",
+           foldedDefault         = "\u0061\u0062\u0069\u03c2\u0073\u0073\u0066\u0066\u0069\ud93f\udfff";
+    String foldedstr = UCharacter.foldCase(mixed, true);
+    if (!foldedDefault.equals(foldedstr)) {
+        errln("FAIL: foldCase(\\uabcd, true) should be " + foldedDefault);
+    }
+
+    /* ### TODO for ICU 1.8: add the following tests similar to TestCaseMapping  */
+
+    /* test full string case folding with default option and in the same buffer */
+
+    /* test preflighting */
+
+    /* test error handling */
+  }
+
   /**
   * Testing the strings case mapping methods
   */
