@@ -68,7 +68,7 @@ class Legal {
 public:
     Legal() {}
     virtual ~Legal() {}
-    virtual UBool is(const UnicodeString& sourceString) const {return TRUE;}
+    virtual UBool is(const UnicodeString& /*sourceString*/) const {return TRUE;}
 };
 
 class LegalJamo : public Legal {
@@ -247,12 +247,12 @@ private :
 
 // UnicodeSetIterator Implementation ---------------------------------------
 
-UnicodeSetIterator::UnicodeSetIterator(UnicodeSet& set, UBool abb) {
-    reset(set, abb);
+UnicodeSetIterator::UnicodeSetIterator(UnicodeSet& newSet, UBool abb) {
+    reset(newSet, abb);
 }
     
-UnicodeSetIterator::UnicodeSetIterator(UnicodeSet& set) {
-    reset(set);
+UnicodeSetIterator::UnicodeSetIterator(UnicodeSet& newSet) {
+    reset(newSet);
 }
         
 UnicodeSetIterator::UnicodeSetIterator() {
@@ -290,15 +290,15 @@ int UnicodeSetIterator::next() {
     return element;
 }
         
-void UnicodeSetIterator::reset(UnicodeSet& set, UBool abb) {
+void UnicodeSetIterator::reset(UnicodeSet& newSet, UBool abb) {
      abbreviated = abb;
-     this->set = set;
+     this->set = newSet;
      endRange = set.getRangeCount() - 1;
      resetInternal();
 }
         
-void UnicodeSetIterator::reset(UnicodeSet& set) {
-    reset(set, FALSE);
+void UnicodeSetIterator::reset(UnicodeSet& newSet) {
+    reset(newSet, FALSE);
 }
         
 void UnicodeSetIterator::reset() {
@@ -364,7 +364,7 @@ class RTTest : IntlTest {
     UnicodeSet targetRange;
     UnicodeSet toSource;
     UnicodeSet toTarget;
-    UnicodeSet roundtripExclusions;
+    UnicodeSet roundtripExclusionsSet;
     IntlTest* log;
     Legal* legalSource; // NOT owned
     UnicodeSet badCharacters;
@@ -536,9 +536,9 @@ void RTTest::test(const UnicodeString& sourceRangeVal,
     }
     this->toTarget.addAll(okAnyway);
 
-    this->roundtripExclusions.clear();
+    this->roundtripExclusionsSet.clear();
     if (roundtripExclusions != NULL && strlen(roundtripExclusions) > 0) {
-        this->roundtripExclusions.applyPattern(roundtripExclusions, status);
+        this->roundtripExclusionsSet.applyPattern(roundtripExclusions, status);
         if (U_FAILURE(status)) {
             log->errln("FAIL: UnicodeSet::applyPattern(%s)", roundtripExclusions);
             return;
@@ -643,7 +643,7 @@ void RTTest::test2(UBool quick) {
       }
 
       usi.reset(sourceRange);
-      while (TRUE) {
+      for (;;) {
           int c = usi.next();
           if (c < 0) break;
                     
@@ -658,7 +658,7 @@ void RTTest::test2(UBool quick) {
       }
       
       usi.reset(targetRange);
-      while (TRUE) {
+      for (;;) {
           int c = usi.next();
           if (c < 0) break;
               
@@ -679,7 +679,7 @@ void RTTest::test2(UBool quick) {
 
     UnicodeSet failSourceTarg;
     usi.reset(sourceRange);
-    while (TRUE) {
+    for (;;) {
         int c = usi.next();
         if (c < 0) break;
                 
@@ -722,12 +722,12 @@ void RTTest::test2(UBool quick) {
     sourceRangeMinusFailures.removeAll(failSourceTarg);
             
     usi.reset(sourceRangeMinusFailures, quick);
-    while (TRUE) {
+    for (;;) {
         int c = usi.next();
         if (c < 0) break;
              
         usi2.reset(sourceRangeMinusFailures, quick);
-        while (TRUE) {
+        for (;;) {
             int d = usi2.next();
             if (d < 0) break;
                     
@@ -738,7 +738,8 @@ void RTTest::test2(UBool quick) {
             sourceToTarget->transliterate(targ);
             if (UnicodeSetIterator::containsAll(toTarget,targ) == FALSE || 
                 UnicodeSetIterator::containsSome(badCharacters, targ) 
-                == TRUE) {
+                == TRUE)
+            {
                 UnicodeString targD;
                 Normalizer::decompose(targ, FALSE, 0, targD, status);
                 if (U_FAILURE(status)) {
@@ -772,7 +773,7 @@ void RTTest::test2(UBool quick) {
     UnicodeSet failRound;
 
     usi.reset(targetRange);
-    while (TRUE) {
+    for (;;) {
         int c = usi.next();
         if (c < 0) { 
             break;
@@ -801,7 +802,7 @@ void RTTest::test2(UBool quick) {
             }
         }
         if (isSame(cs, reverse) == FALSE && 
-            roundtripExclusions.contains(c) == FALSE) {
+            roundtripExclusionsSet.contains(c) == FALSE) {
             logRoundTripFailure(cs, targ, reverse);
             failRound.add((UChar32)c);
             continue;
@@ -822,13 +823,13 @@ void RTTest::test2(UBool quick) {
 
     log->logln("Checking that target characters convert to source and back - Doubles");
     int32_t count = 0;
-                
+
     UnicodeSet targetRangeMinusFailures(targetRange);
     targetRangeMinusFailures.removeAll(failTargSource);
     targetRangeMinusFailures.removeAll(failRound);
-            
+
     usi.reset(targetRangeMinusFailures, quick);
-    while (TRUE) {
+    for (;;) {
         int c = usi.next();
         if (c < 0) {
             break;
@@ -839,9 +840,9 @@ void RTTest::test2(UBool quick) {
             log->logln((UnicodeString)"Test truncated at " + pairLimit + " x 64k pairs");
             return;
         }
-        
+
         usi2.reset(targetRangeMinusFailures, quick);
-        while (TRUE) {
+        for (;;) {
             int d = usi.next();
             if (d < 0) {
                 break;
@@ -854,7 +855,7 @@ void RTTest::test2(UBool quick) {
             targetToSource->transliterate(targ);
             reverse = targ;
             sourceToTarget->transliterate(reverse);
-            
+
             if (UnicodeSetIterator::containsAll(toSource, targ) == FALSE || 
                 UnicodeSetIterator::containsSome(badCharacters, targ) == TRUE) 
             {
@@ -873,8 +874,8 @@ void RTTest::test2(UBool quick) {
                 }
             }
             if (isSame(cs, reverse) == FALSE && 
-                roundtripExclusions.contains(c) == FALSE&&
-                roundtripExclusions.contains(d) == FALSE) {
+                roundtripExclusionsSet.contains(c) == FALSE&&
+                roundtripExclusionsSet.contains(d) == FALSE) {
                 logRoundTripFailure(cs, targ, reverse);
                 continue;
             } 
@@ -1060,221 +1061,221 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
 }
 
 static const char * array[][4] = {
-    "BENGALI-DEVANAGARI", "[:BENGALI:]", "[:Devanagari:]", 
-    "[\\u0951-\\u0954\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1]", /*roundtrip exclusions*/
-    
-    "DEVANAGARI-BENGALI", "[:Devanagari:]", "[:BENGALI:]",
-    "[\\u0951-\\u0954\\u09D7\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1]", /*roundtrip exclusions*/
-        
-    "GURMUKHI-DEVANAGARI", "[:GURMUKHI:]", "[:Devanagari:]", 
-    "[\\u0936\\u0933\\u0951-\\u0954\\u0902\\u0903\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-GURMUKHI", "[:Devanagari:]", "[:GURMUKHI:]",
-    "[\\u0946\\u0A5C\\u0951-\\u0954\\u0A70\\u0A71\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
-        
-    "GUJARATI-DEVANAGARI", "[:GUJARATI:]", "[:Devanagari:]", 
-    "[\\u0946\\u094A\\u0962\\u0963\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-GUJARATI", "[:Devanagari:]", "[:GUJARATI:]",
-    "[\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912]", /*roundtrip exclusions*/
+    {"BENGALI-DEVANAGARI", "[:BENGALI:]", "[:Devanagari:]", 
+    "[\\u0951-\\u0954\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1]"}, /*roundtrip exclusions*/
 
-    "ORIYA-DEVANAGARI", "[:ORIYA:]", "[:Devanagari:]", 
-    "[\\u0943-\\u094a\\u0962\\u0963\\u0951-\\u0954\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-ORIYA", "[:Devanagari:]", "[:ORIYA:]",
-    "[\\u0b5f\\u0b56\\u0b57\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]", /*roundtrip exclusions*/
-      
-    "Tamil-DEVANAGARI", "[:tamil:]", "[:Devanagari:]", 
-    "[\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-Tamil", "[:Devanagari:]", "[:tamil:]", 
-    "[\\u0bd7]", /*roundtrip exclusions*/
-        
-    "Telugu-DEVANAGARI", "[:telugu:]", "[:Devanagari:]", 
-    "[\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-TELUGU", "[:Devanagari:]", "[:TELUGU:]",
-    "[\\u0c55\\u0c56\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
+    {"DEVANAGARI-BENGALI", "[:Devanagari:]", "[:BENGALI:]",
+    "[\\u0951-\\u0954\\u09D7\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1]"}, /*roundtrip exclusions*/
+
+    {"GURMUKHI-DEVANAGARI", "[:GURMUKHI:]", "[:Devanagari:]", 
+    "[\\u0936\\u0933\\u0951-\\u0954\\u0902\\u0903\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-GURMUKHI", "[:Devanagari:]", "[:GURMUKHI:]",
+    "[\\u0946\\u0A5C\\u0951-\\u0954\\u0A70\\u0A71\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-DEVANAGARI", "[:GUJARATI:]", "[:Devanagari:]", 
+    "[\\u0946\\u094A\\u0962\\u0963\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-GUJARATI", "[:Devanagari:]", "[:GUJARATI:]",
+    "[\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-DEVANAGARI", "[:ORIYA:]", "[:Devanagari:]", 
+    "[\\u0943-\\u094a\\u0962\\u0963\\u0951-\\u0954\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-ORIYA", "[:Devanagari:]", "[:ORIYA:]",
+    "[\\u0b5f\\u0b56\\u0b57\\u0950\\u090D\\u090e\\u0912\\u0911\\u0931\\u0935]"}, /*roundtrip exclusions*/
+
+    {"Tamil-DEVANAGARI", "[:tamil:]", "[:Devanagari:]", 
+    "[\\u093c\\u0943-\\u094a\\u0951-\\u0954\\u0962\\u0963\\u090B\\u090C\\u090D\\u0911\\u0916\\u0917\\u0918\\u091B\\u091D\\u0920\\u0921\\u0922\\u0925\\u0926\\u0927\\u092B\\u092C\\u092D\\u0936\\u093d\\u0950[\\u0958-\\u0961]]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-Tamil", "[:Devanagari:]", "[:tamil:]", 
+    "[\\u0bd7]"}, /*roundtrip exclusions*/
+
+    {"Telugu-DEVANAGARI", "[:telugu:]", "[:Devanagari:]", 
+    "[\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-TELUGU", "[:Devanagari:]", "[:TELUGU:]",
+    "[\\u0c55\\u0c56\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-DEVANAGARI", "[:KANNADA:]", "[:Devanagari:]", 
+    "[\\u0946\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-KANNADA", "[:Devanagari:]", "[:KANNADA:]",
+    "[\\u0cde\\u0cd5\\u0cd6\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]"}, /*roundtrip exclusions*/ 
+
+    {"MALAYALAM-DEVANAGARI", "[:MALAYALAM:]", "[:Devanagari:]", 
+    "[\\u094a\\u094b\\u094c\\u093c\\u0950\\u0944\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]"}, /*roundtrip exclusions*/
+
+    {"DEVANAGARI-MALAYALAM", "[:Devanagari:]", "[:MALAYALAM:]",
+    "[\\u0d4c\\u0d57\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]"}, /*roundtrip exclusions*/
+
+    {"GURMUKHI-BENGALI", "[:GURMUKHI:]", "[:BENGALI:]",  
+    "[\\u09b6\\u09e2\\u09e3\\u09c3\\u09c4\\u09d7\\u098B\\u098C\\u09B7\\u09E0\\u09E1\\u09F0\\u09F1]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-GURMUKHI", "[:BENGALI:]", "[:GURMUKHI:]",
+    "[\\u0a5c\\u0a47\\u0a70\\u0a71\\u0A33\\u0A35\\u0A59\\u0A5A\\u0A5B\\u0A5E\\u0A72\\u0A73\\u0A74]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-BENGALI", "[:GUJARATI:]", "[:BENGALI:]", 
+    "[\\u09d7\\u09e2\\u09e3\\u098c\\u09e1\\u09f0\\u09f1]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-GUJARATI", "[:BENGALI:]", "[:GUJARATI:]",
+    "[\\u0A82\\u0a83\\u0Ac9\\u0Ac5\\u0ac7\\u0A8D\\u0A91\\u0AB3\\u0AB5\\u0ABD\\u0AD0]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-BENGALI", "[:ORIYA:]", "[:BENGALI:]", 
+    "[\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-ORIYA", "[:BENGALI:]", "[:ORIYA:]",
+    "[\\u0b5f\\u0b56\\u0b33\\u0b3d]"}, /*roundtrip exclusions*/
+
+    {"Tamil-BENGALI", "[:tamil:]", "[:BENGALI:]", 
+    "[\\u09bc\\u09c3\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1\\u098B\\u098C\\u0996\\u0997\\u0998\\u099B\\u099D\\u09A0\\u09A1\\u09A2\\u09A5\\u09A6\\u09A7\\u09AB\\u09AC\\u09AD\\u09B6\\u09DC\\u09DD\\u09DF\\u09E0\\u09E1]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-Tamil", "[:BENGALI:]", "[:tamil:]",
+    "[\\u0bc6\\u0bc7\\u0bca\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB3\\u0BB4\\u0BB5]"}, /*roundtrip exclusions*/
+
+    {"Telugu-BENGALI", "[:telugu:]", "[:BENGALI:]", 
+    "[\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-TELUGU", "[:BENGALI:]", "[:TELUGU:]",
+    "[\\u0c55\\u0c56\\u0c47\\u0c46\\u0c4a\\u0C0E\\u0C12\\u0C31\\u0C33\\u0C35]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-BENGALI", "[:KANNADA:]", "[:BENGALI:]", 
+    "[\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-KANNADA", "[:BENGALI:]", "[:KANNADA:]",
+    "[\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0cc7\\u0C8E\\u0C92\\u0CB1\\u0cb3\\u0cb5\\u0cde]"}, /*roundtrip exclusions*/ 
+
+    {"MALAYALAM-BENGALI", "[:MALAYALAM:]", "[:BENGALI:]", 
+    "[\\u09e2\\u09e3\\u09bc\\u09c4\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]"}, /*roundtrip exclusions*/
+
+    {"BENGALI-MALAYALAM", "[:BENGALI:]", "[:MALAYALAM:]",
+    "[\\u0d46\\u0d4a\\u0d47\\u0d31-\\u0d35\\u0d0e\\u0d12]"}, /*roundtrip exclusions*/
        
-    "KANNADA-DEVANAGARI", "[:KANNADA:]", "[:Devanagari:]", 
-    "[\\u0946\\u093c\\u0950\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-KANNADA", "[:Devanagari:]", "[:KANNADA:]",
-    "[\\u0cde\\u0cd5\\u0cd6\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/ 
-        
-    "MALAYALAM-DEVANAGARI", "[:MALAYALAM:]", "[:Devanagari:]", 
-    "[\\u094a\\u094b\\u094c\\u093c\\u0950\\u0944\\u0945\\u0949\\u0951-\\u0954\\u0962\\u0963\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
-        
-    "DEVANAGARI-MALAYALAM", "[:Devanagari:]", "[:MALAYALAM:]",
-    "[\\u0d4c\\u0d57\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
-        
-    "GURMUKHI-BENGALI", "[:GURMUKHI:]", "[:BENGALI:]",  
-    "[\\u09b6\\u09e2\\u09e3\\u09c3\\u09c4\\u09d7\\u098B\\u098C\\u09B7\\u09E0\\u09E1\\u09F0\\u09F1]", /*roundtrip exclusions*/
-        
-    "BENGALI-GURMUKHI", "[:BENGALI:]", "[:GURMUKHI:]",
-    "[\\u0a5c\\u0a47\\u0a70\\u0a71\\u0A33\\u0A35\\u0A59\\u0A5A\\u0A5B\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
-        
-    "GUJARATI-BENGALI", "[:GUJARATI:]", "[:BENGALI:]", 
-    "[\\u09d7\\u09e2\\u09e3\\u098c\\u09e1\\u09f0\\u09f1]", /*roundtrip exclusions*/
-        
-    "BENGALI-GUJARATI", "[:BENGALI:]", "[:GUJARATI:]",
-    "[\\u0A82\\u0a83\\u0Ac9\\u0Ac5\\u0ac7\\u0A8D\\u0A91\\u0AB3\\u0AB5\\u0ABD\\u0AD0]", /*roundtrip exclusions*/
-        
-    "ORIYA-BENGALI", "[:ORIYA:]", "[:BENGALI:]", 
-    "[\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1]", /*roundtrip exclusions*/
-        
-    "BENGALI-ORIYA", "[:BENGALI:]", "[:ORIYA:]",
-    "[\\u0b5f\\u0b56\\u0b33\\u0b3d]", /*roundtrip exclusions*/
-        
-    "Tamil-BENGALI", "[:tamil:]", "[:BENGALI:]", 
-    "[\\u09bc\\u09c3\\u09c4\\u09e2\\u09e3\\u09f0\\u09f1\\u098B\\u098C\\u0996\\u0997\\u0998\\u099B\\u099D\\u09A0\\u09A1\\u09A2\\u09A5\\u09A6\\u09A7\\u09AB\\u09AC\\u09AD\\u09B6\\u09DC\\u09DD\\u09DF\\u09E0\\u09E1]", /*roundtrip exclusions*/
-        
-    "BENGALI-Tamil", "[:BENGALI:]", "[:tamil:]",
-    "[\\u0bc6\\u0bc7\\u0bca\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB3\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
-        
-    "Telugu-BENGALI", "[:telugu:]", "[:BENGALI:]", 
-    "[\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
-        
-    "BENGALI-TELUGU", "[:BENGALI:]", "[:TELUGU:]",
-    "[\\u0c55\\u0c56\\u0c47\\u0c46\\u0c4a\\u0C0E\\u0C12\\u0C31\\u0C33\\u0C35]", /*roundtrip exclusions*/
-        
-    "KANNADA-BENGALI", "[:KANNADA:]", "[:BENGALI:]", 
-    "[\\u09e2\\u09e3\\u09bc\\u09d7\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
-        
-    "BENGALI-KANNADA", "[:BENGALI:]", "[:KANNADA:]",
-    "[\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0cc7\\u0C8E\\u0C92\\u0CB1\\u0cb3\\u0cb5\\u0cde]", /*roundtrip exclusions*/ 
-        
-    "MALAYALAM-BENGALI", "[:MALAYALAM:]", "[:BENGALI:]", 
-    "[\\u09e2\\u09e3\\u09bc\\u09c4\\u09f0\\u09f1\\u09dc\\u09dd\\u09df]", /*roundtrip exclusions*/
-        
-    "BENGALI-MALAYALAM", "[:BENGALI:]", "[:MALAYALAM:]",
-    "[\\u0d46\\u0d4a\\u0d47\\u0d31-\\u0d35\\u0d0e\\u0d12]", /*roundtrip exclusions*/
-       
-    "GUJARATI-GURMUKHI", "[:GUJARATI:]", "[:GURMUKHI:]", 
-    "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0abd]", /*roundtrip exclusions*/
-        
-    "GURMUKHI-GUJARATI", "[:GURMUKHI:]", "[:GUJARATI:]",
-    "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0ab7\\u0abd\\u0ad0\\u0ae0]", /*roundtrip exclusions*/
-        
-    "ORIYA-GURMUKHI", "[:ORIYA:]", "[:GURMUKHI:]", 
-    "[\\u0a21\\u0a47\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
-        
-    "GURMUKHI-ORIYA", "[:GURMUKHI:]", "[:ORIYA:]",
-    "[\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
-        
-    "TAMIL-GURMUKHI", "[:TAMIL:]", "[:GURMUKHI:]", 
-    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0a47\\u0A16\\u0A17\\u0A18\\u0A1B\\u0A1D\\u0A20\\u0A21\\u0A22\\u0A25\\u0A26\\u0A27\\u0A2B\\u0A2C\\u0A2D\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
-        
-    "GURMUKHI-TAMIL", "[:GURMUKHI:]", "[:TAMIL:]",
-    "[\\u0bc6\\u0bca\\u0bd7\\u0bb7\\u0bb3\\u0b83\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
-        
-    "TELUGU-GURMUKHI", "[:TELUGU:]", "[:GURMUKHI:]", 
-    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    {"GUJARATI-GURMUKHI", "[:GUJARATI:]", "[:GURMUKHI:]", 
+    "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0abd]"}, /*roundtrip exclusions*/
 
-    "GURMUKHI-TELUGU", "[:GURMUKHI:]", "[:TELUGU:]",
-    "[\\u0c02\\u0c03\\u0c33\\u0c36\\u0c44\\u0c43\\u0c46\\u0c4a\\u0c56\\u0c55\\u0C0B\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C37\\u0C60\\u0C61]", /*roundtrip exclusions*/
-        
-    "KANNADA-GURMUKHI", "[:KANNADA:]", "[:GURMUKHI:]", 
-    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    {"GURMUKHI-GUJARATI", "[:GURMUKHI:]", "[:GUJARATI:]",
+    "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0ab7\\u0abd\\u0ad0\\u0ae0]"}, /*roundtrip exclusions*/
 
-    "GURMUKHI-KANNADA", "[:GURMUKHI:]", "[:KANNADA:]",
-    "[\\u0c83\\u0cb3\\u0cb6\\u0cc4\\u0cc3\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CB7\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
-        
-    "MALAYALAM-GURMUKHI", "[:MALAYALAM:]", "[:GURMUKHI:]", 
-    "[\\u0a4b\\u0a4c\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
-        
-    "GURMUKHI-MALAYALAM", "[:GURMUKHI:]", "[:MALAYALAM:]",
-    "[\\u0d03\\u0d33\\u0d36\\u0d43\\u0d46\\u0d4a\\u0d4c\\u0d57\\u0D0B\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D37\\u0D60\\u0D61]", /*roundtrip exclusions*/
-        
-    "GUJARATI-ORIYA", "[:GUJARATI:]", "[:ORIYA:]", 
-    "[\\u0b56\\u0b57\\u0B0C\\u0B5F\\u0B61]", /*roundtrip exclusions*/
-        
-    "ORIYA-GUJARATI", "[:ORIYA:]", "[:GUJARATI:]",
-    "[\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8D\\u0A91\\u0AB5\\u0Ad0]", /*roundtrip exclusions*/
-        
-    "TAMIL-GUJARATI", "[:TAMIL:]", "[:GUJARATI:]", 
-    "[\\u0abc\\u0ac3\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8B\\u0A8D\\u0A91\\u0A96\\u0A97\\u0A98\\u0A9B\\u0A9D\\u0AA0\\u0AA1\\u0AA2\\u0AA5\\u0AA6\\u0AA7\\u0AAB\\u0AAC\\u0AAD\\u0AB6\\u0ABD\\u0AD0\\u0AE0]", /*roundtrip exclusions*/
-        
-    "GUJARATI-TAMIL", "[:GUJARATI:]", "[:TAMIL:]",
-    "[\\u0Bc6\\u0Bca\\u0Bd7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
-        
-    "TELUGU-GUJARATI", "[:TELUGU:]", "[:GUJARATI:]", 
-    "[\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
-        
-    "GUJARATI-TELUGU", "[:GUJARATI:]", "[:TELUGU:]",
-    "[\\u0c46\\u0c4a\\u0c55\\u0c56\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C61]", /*roundtrip exclusions*/
-        
-    "KANNADA-GUJARATI", "[:KANNADA:]", "[:GUJARATI:]", 
-    "[\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
-        
-    "GUJARATI-KANNADA", "[:GUJARATI:]", "[:KANNADA:]",
-    "[\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CDE\\u0CE1]", /*roundtrip exclusions*/
-        
-    "MALAYALAM-GUJARATI", "[:MALAYALAM:]", "[:GUJARATI:]", 
-    "[\\u0ac4\\u0acb\\u0acc\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]", /*roundtrip exclusions*/
-        
-    "GUJARATI-MALAYALAM", "[:GUJARATI:]", "[:MALAYALAM:]",
-    "[\\u0d46\\u0d4a\\u0d4c\\u0d55\\u0d57\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D61]", /*roundtrip exclusions*/
-        
-    "TAMIL-ORIYA", "[:TAMIL:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b43\\u0b56\\u0B0B\\u0B0C\\u0B16\\u0B17\\u0B18\\u0B1B\\u0B1D\\u0B20\\u0B21\\u0B22\\u0B25\\u0B26\\u0B27\\u0B2B\\u0B2C\\u0B2D\\u0B36\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
+    {"ORIYA-GURMUKHI", "[:ORIYA:]", "[:GURMUKHI:]", 
+    "[\\u0a21\\u0a47\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]"}, /*roundtrip exclusions*/
 
-    "ORIYA-TAMIL", "[:ORIYA:]", "[:TAMIL:]",
-    "[\\u0bc6\\u0bca\\u0bc7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BB5]", /*roundtrip exclusions*/
-        
-    "TELUGU-ORIYA", "[:TELUGU:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b57\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
-        
-    "ORIYA-TELUGU", "[:ORIYA:]", "[:TELUGU:]",
-    "[\\u0c44\\u0c46\\u0c4a\\u0c55\\u0c47\\u0C0E\\u0C12\\u0C31\\u0C35]", /*roundtrip exclusions*/
-        
-    "KANNADA-ORIYA", "[:KANNADA:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b57\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
-        
-    "ORIYA-KANNADA", "[:ORIYA:]", "[:KANNADA:]",
-    "[\\u0cc4\\u0cc6\\u0cca\\u0cd5\\u0cc7\\u0C8E\\u0C92\\u0CB1\\u0CB5\\u0CDE]", /*roundtrip exclusions*/
-        
-    "MALAYALAM-ORIYA", "[:MALAYALAM:]", "[:ORIYA:]", 
-    "[\\u0b3c\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F]", /*roundtrip exclusions*/
+    {"GURMUKHI-ORIYA", "[:GURMUKHI:]", "[:ORIYA:]",
+    "[\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61]"}, /*roundtrip exclusions*/
 
-    "ORIYA-MALAYALAM", "[:ORIYA:]", "[:MALAYALAM:]",
-    "[\\u0D47\\u0D46\\u0D4a\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D35]", /*roundtrip exclusions*/
+    {"TAMIL-GURMUKHI", "[:TAMIL:]", "[:GURMUKHI:]", 
+    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0a47\\u0A16\\u0A17\\u0A18\\u0A1B\\u0A1D\\u0A20\\u0A21\\u0A22\\u0A25\\u0A26\\u0A27\\u0A2B\\u0A2C\\u0A2D\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]"}, /*roundtrip exclusions*/
 
-    "TELUGU-TAMIL", "[:TELUGU:]", "[:TAMIL:]", 
-    "[\\u0bd7\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
+    {"GURMUKHI-TAMIL", "[:GURMUKHI:]", "[:TAMIL:]",
+    "[\\u0bc6\\u0bca\\u0bd7\\u0bb7\\u0bb3\\u0b83\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]"}, /*roundtrip exclusions*/
 
-    "TAMIL-TELUGU", "[:TAMIL:]", "[:TELUGU:]",
-    "[\\u0c43\\u0c44\\u0c46\\u0c47\\u0c55\\u0c56\\u0c66\\u0C0B\\u0C0C\\u0C16\\u0C17\\u0C18\\u0C1B\\u0C1D\\u0C20\\u0C21\\u0C22\\u0C25\\u0C26\\u0C27\\u0C2B\\u0C2C\\u0C2D\\u0C36\\u0C60\\u0C61]", /*roundtrip exclusions*/
-        
-    "KANNADA-TAMIL", "[:KANNADA:]", "[:TAMIL:]", 
-    "[\\u0bd7\\u0bc6\\u0ba9\\u0bb4]", /*roundtrip exclusions*/
+    {"TELUGU-GURMUKHI", "[:TELUGU:]", "[:GURMUKHI:]", 
+    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]"}, /*roundtrip exclusions*/
 
-    "TAMIL-KANNADA", "[:TAMIL:]", "[:KANNADA:]",
-    "[\\u0cc3\\u0cc4\\u0cc6\\u0cc7\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C96\\u0C97\\u0C98\\u0C9B\\u0C9D\\u0CA0\\u0CA1\\u0CA2\\u0CA5\\u0CA6\\u0CA7\\u0CAB\\u0CAC\\u0CAD\\u0CB6\\u0CDE\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
-        
-    "MALAYALAM-TAMIL", "[:MALAYALAM:]", "[:TAMIL:]", 
-    "[\\u0ba9]", /*roundtrip exclusions*/
+    {"GURMUKHI-TELUGU", "[:GURMUKHI:]", "[:TELUGU:]",
+    "[\\u0c02\\u0c03\\u0c33\\u0c36\\u0c44\\u0c43\\u0c46\\u0c4a\\u0c56\\u0c55\\u0C0B\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C37\\u0C60\\u0C61]"}, /*roundtrip exclusions*/
 
-    "TAMIL-MALAYALAM", "[:TAMIL:]", "[:MALAYALAM:]",
-    "[\\u0d43\\u0d12\\u0D0B\\u0D0C\\u0D16\\u0D17\\u0D18\\u0D1B\\u0D1D\\u0D20\\u0D21\\u0D22\\u0D25\\u0D26\\u0D27\\u0D2B\\u0D2C\\u0D2D\\u0D36\\u0D60\\u0D61]", /*roundtrip exclusions*/
-        
-    "KANNADA-TELUGU", "[:KANNADA:]", "[:TELUGU:]", 
-    "[\\u0c3f\\u0c46\\u0c48\\u0c4a]", /*roundtrip exclusions*/
-        
-    "TELUGU-KANNADA", "[:TELUGU:]", "[:KANNADA:]",
-    "[\\u0cc8\\u0cd5\\u0cd6\\u0CDE]", /*roundtrip exclusions*/
-        
-    "MALAYALAM-TELUGU", "[:MALAYALAM:]", "[:TELUGU:]", 
-    "[\\u0c44\\u0c4a\\u0c4c\\u0c4b\\u0c55\\u0c56]", /*roundtrip exclusions*/
-        
-    "TELUGU-MALAYALAM", "[:TELUGU:]", "[:MALAYALAM:]",
-    "[\\u0d4c\\u0d57\\u0D34]", /*roundtrip exclusions*/
-        
-    "MALAYALAM-KANNADA", "[:MALAYALAM:]", "[:KANNADA:]", 
-    "[\\u0cc4\\u0cc6\\u0cca\\u0ccc\\u0ccb\\u0cd5\\u0cd6\\u0cDe]", /*roundtrip exclusions*/
+    {"KANNADA-GURMUKHI", "[:KANNADA:]", "[:GURMUKHI:]", 
+    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]"}, /*roundtrip exclusions*/
 
-    "KANNADA-MALAYALAM", "[:KANNADA:]", "[:MALAYALAM:]",
-    "[\\u0d4c\\u0d57\\u0d46\\u0D34]", /*roundtrip exclusions*/
+    {"GURMUKHI-KANNADA", "[:GURMUKHI:]", "[:KANNADA:]",
+    "[\\u0c83\\u0cb3\\u0cb6\\u0cc4\\u0cc3\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CB7\\u0CE0\\u0CE1]"}, /*roundtrip exclusions*/
+
+    {"MALAYALAM-GURMUKHI", "[:MALAYALAM:]", "[:GURMUKHI:]", 
+    "[\\u0a4b\\u0a4c\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]"}, /*roundtrip exclusions*/
+
+    {"GURMUKHI-MALAYALAM", "[:GURMUKHI:]", "[:MALAYALAM:]",
+    "[\\u0d03\\u0d33\\u0d36\\u0d43\\u0d46\\u0d4a\\u0d4c\\u0d57\\u0D0B\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D37\\u0D60\\u0D61]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-ORIYA", "[:GUJARATI:]", "[:ORIYA:]", 
+    "[\\u0b56\\u0b57\\u0B0C\\u0B5F\\u0B61]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-GUJARATI", "[:ORIYA:]", "[:GUJARATI:]",
+    "[\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8D\\u0A91\\u0AB5\\u0Ad0]"}, /*roundtrip exclusions*/
+
+    {"TAMIL-GUJARATI", "[:TAMIL:]", "[:GUJARATI:]", 
+    "[\\u0abc\\u0ac3\\u0Ac4\\u0Ac5\\u0Ac9\\u0Ac7\\u0A8B\\u0A8D\\u0A91\\u0A96\\u0A97\\u0A98\\u0A9B\\u0A9D\\u0AA0\\u0AA1\\u0AA2\\u0AA5\\u0AA6\\u0AA7\\u0AAB\\u0AAC\\u0AAD\\u0AB6\\u0ABD\\u0AD0\\u0AE0]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-TAMIL", "[:GUJARATI:]", "[:TAMIL:]",
+    "[\\u0Bc6\\u0Bca\\u0Bd7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]"}, /*roundtrip exclusions*/
+
+    {"TELUGU-GUJARATI", "[:TELUGU:]", "[:GUJARATI:]", 
+    "[\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-TELUGU", "[:GUJARATI:]", "[:TELUGU:]",
+    "[\\u0c46\\u0c4a\\u0c55\\u0c56\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C61]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-GUJARATI", "[:KANNADA:]", "[:GUJARATI:]", 
+    "[\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-KANNADA", "[:GUJARATI:]", "[:KANNADA:]",
+    "[\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CDE\\u0CE1]"}, /*roundtrip exclusions*/
+
+    {"MALAYALAM-GUJARATI", "[:MALAYALAM:]", "[:GUJARATI:]", 
+    "[\\u0ac4\\u0acb\\u0acc\\u0abc\\u0Ac5\\u0Ac9\\u0A8D\\u0A91\\u0ABD\\u0Ad0]"}, /*roundtrip exclusions*/
+
+    {"GUJARATI-MALAYALAM", "[:GUJARATI:]", "[:MALAYALAM:]",
+    "[\\u0d46\\u0d4a\\u0d4c\\u0d55\\u0d57\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D61]"}, /*roundtrip exclusions*/
+
+    {"TAMIL-ORIYA", "[:TAMIL:]", "[:ORIYA:]", 
+    "[\\u0b3c\\u0b43\\u0b56\\u0B0B\\u0B0C\\u0B16\\u0B17\\u0B18\\u0B1B\\u0B1D\\u0B20\\u0B21\\u0B22\\u0B25\\u0B26\\u0B27\\u0B2B\\u0B2C\\u0B2D\\u0B36\\u0B3D\\u0B5C\\u0B5D\\u0B5F\\u0B60\\u0B61]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-TAMIL", "[:ORIYA:]", "[:TAMIL:]",
+    "[\\u0bc6\\u0bca\\u0bc7\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4\\u0BB5]"}, /*roundtrip exclusions*/
+
+    {"TELUGU-ORIYA", "[:TELUGU:]", "[:ORIYA:]", 
+    "[\\u0b3c\\u0b57\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-TELUGU", "[:ORIYA:]", "[:TELUGU:]",
+    "[\\u0c44\\u0c46\\u0c4a\\u0c55\\u0c47\\u0C0E\\u0C12\\u0C31\\u0C35]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-ORIYA", "[:KANNADA:]", "[:ORIYA:]", 
+    "[\\u0b3c\\u0b57\\u0B3D\\u0B5C\\u0B5D\\u0B5F]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-KANNADA", "[:ORIYA:]", "[:KANNADA:]",
+    "[\\u0cc4\\u0cc6\\u0cca\\u0cd5\\u0cc7\\u0C8E\\u0C92\\u0CB1\\u0CB5\\u0CDE]"}, /*roundtrip exclusions*/
+
+    {"MALAYALAM-ORIYA", "[:MALAYALAM:]", "[:ORIYA:]", 
+    "[\\u0b3c\\u0b56\\u0B3D\\u0B5C\\u0B5D\\u0B5F]"}, /*roundtrip exclusions*/
+
+    {"ORIYA-MALAYALAM", "[:ORIYA:]", "[:MALAYALAM:]",
+    "[\\u0D47\\u0D46\\u0D4a\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D35]"}, /*roundtrip exclusions*/
+
+    {"TELUGU-TAMIL", "[:TELUGU:]", "[:TAMIL:]", 
+    "[\\u0bd7\\u0ba9\\u0bb4]"}, /*roundtrip exclusions*/
+
+    {"TAMIL-TELUGU", "[:TAMIL:]", "[:TELUGU:]",
+    "[\\u0c43\\u0c44\\u0c46\\u0c47\\u0c55\\u0c56\\u0c66\\u0C0B\\u0C0C\\u0C16\\u0C17\\u0C18\\u0C1B\\u0C1D\\u0C20\\u0C21\\u0C22\\u0C25\\u0C26\\u0C27\\u0C2B\\u0C2C\\u0C2D\\u0C36\\u0C60\\u0C61]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-TAMIL", "[:KANNADA:]", "[:TAMIL:]", 
+    "[\\u0bd7\\u0bc6\\u0ba9\\u0bb4]"}, /*roundtrip exclusions*/
+
+    {"TAMIL-KANNADA", "[:TAMIL:]", "[:KANNADA:]",
+    "[\\u0cc3\\u0cc4\\u0cc6\\u0cc7\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C96\\u0C97\\u0C98\\u0C9B\\u0C9D\\u0CA0\\u0CA1\\u0CA2\\u0CA5\\u0CA6\\u0CA7\\u0CAB\\u0CAC\\u0CAD\\u0CB6\\u0CDE\\u0CE0\\u0CE1]"}, /*roundtrip exclusions*/
+
+    {"MALAYALAM-TAMIL", "[:MALAYALAM:]", "[:TAMIL:]", 
+    "[\\u0ba9]"}, /*roundtrip exclusions*/
+
+    {"TAMIL-MALAYALAM", "[:TAMIL:]", "[:MALAYALAM:]",
+    "[\\u0d43\\u0d12\\u0D0B\\u0D0C\\u0D16\\u0D17\\u0D18\\u0D1B\\u0D1D\\u0D20\\u0D21\\u0D22\\u0D25\\u0D26\\u0D27\\u0D2B\\u0D2C\\u0D2D\\u0D36\\u0D60\\u0D61]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-TELUGU", "[:KANNADA:]", "[:TELUGU:]", 
+    "[\\u0c3f\\u0c46\\u0c48\\u0c4a]"}, /*roundtrip exclusions*/
+
+    {"TELUGU-KANNADA", "[:TELUGU:]", "[:KANNADA:]",
+    "[\\u0cc8\\u0cd5\\u0cd6\\u0CDE]"}, /*roundtrip exclusions*/
+
+    {"MALAYALAM-TELUGU", "[:MALAYALAM:]", "[:TELUGU:]", 
+    "[\\u0c44\\u0c4a\\u0c4c\\u0c4b\\u0c55\\u0c56]"}, /*roundtrip exclusions*/
+
+    {"TELUGU-MALAYALAM", "[:TELUGU:]", "[:MALAYALAM:]",
+    "[\\u0d4c\\u0d57\\u0D34]"}, /*roundtrip exclusions*/
+
+    {"MALAYALAM-KANNADA", "[:MALAYALAM:]", "[:KANNADA:]", 
+    "[\\u0cc4\\u0cc6\\u0cca\\u0ccc\\u0ccb\\u0cd5\\u0cd6\\u0cDe]"}, /*roundtrip exclusions*/
+
+    {"KANNADA-MALAYALAM", "[:KANNADA:]", "[:MALAYALAM:]",
+    "[\\u0d4c\\u0d57\\u0d46\\u0D34]"} /*roundtrip exclusions*/
 };
 
 void TransliteratorRoundTripTest::TestInterIndic() {
