@@ -669,4 +669,108 @@ public abstract class DateFormat extends Format {
      * Create a new date format.
      */
     protected DateFormat() {}
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    //-------------------------------------------------------------------------
+    // Public static interface for creating custon DateFormats for different
+    // types of Calendars.
+    //-------------------------------------------------------------------------
+    
+    /**
+     * Create a {@link DateFormat} object that can be used to format dates in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * @param cal   The calendar system for which a date format is desired.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param locale The locale for which the date format is desired.
+     */
+    static public DateFormat getDateInstance(Calendar cal, int dateStyle, Locale locale)
+    {
+        return getDateTimeInstance(cal, locale, dateStyle, -1);
+    }
+    
+    /**
+     * Create a {@link DateFormat} object that can be used to format times in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * <b>Note:</b> When this functionality is moved into the core JDK, this method
+     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
+     * <p>
+     * @param cal   The calendar system for which a time format is desired.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param locale The locale for which the time format is desired.
+     *
+     * @see DateFormat#getTimeInstance
+     */
+    static public DateFormat getTimeInstance(Calendar cal, int timeStyle, Locale locale)
+    {
+        return getDateTimeInstance(cal, locale, -1, timeStyle);
+    }
+    
+    /**
+     * Create a {@link DateFormat} object that can be used to format dates and times in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * <b>Note:</b> When this functionality is moved into the core JDK, this method
+     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
+     * <p>
+     * @param cal   The calendar system for which a date/time format is desired.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
+     * @see DateFormat#getDateTimeInstance
+     */
+    static public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
+                                        int timeStyle, Locale locale)
+    {
+        return getDateTimeInstance(cal, locale, dateStyle, timeStyle);
+    }
+
+    /**
+     * Private utility method to retrive a date and/or time format
+     * for the specified calendar and locale.  This method has knowledge of
+     * (and is partly copied from) the corresponding code in SimpleDateFormat,
+     * but it knows how to find the right resource bundle based on the calendar class.
+     * <p>
+     * @param cal       The calendar system whose date/time format is desired.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *                  <code>DateFormat.SHORT</code>, etc, or -1 if the time
+     *                  of day should not be included in the format.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *                  <code>DateFormat.SHORT</code>, etc, or -1 if the date
+     *                  should not be included in the format.
+     *
+     * @param loc       The locale for which the date/time format is desired.
+     *
+     * @see DateFormat#getDateTimeInstance
+     */
+    static private DateFormat getDateTimeInstance(Calendar cal, Locale loc,
+                                            int dateStyle, int timeStyle)
+    {
+        //if (cal instanceof com.ibm.util.Calendar) {
+        //    return ((com.ibm.util.Calendar)cal).getDateTimeFormat(dateStyle,timeStyle,loc);
+        //} else {
+        //    return formatHelper(cal, loc, dateStyle, timeStyle);
+        //}
+        return cal.getDateTimeFormat(dateStyle,timeStyle,loc);
+    }
 }

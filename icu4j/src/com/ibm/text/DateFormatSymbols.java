@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DateFormatSymbols.java,v $ 
- * $Date: 2000/05/26 22:31:43 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/10/17 20:54:59 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -21,6 +21,9 @@ import java.util.Vector;
 import java.util.Enumeration;
 import java.text.resources.DateFormatZoneData;
 import com.ibm.util.Utility;
+import com.ibm.util.Calendar;
+import com.ibm.util.GregorianCalendar;
+import java.util.MissingResourceException;
 
 /**
  * <code>DateFormatSymbols</code> is a public class for encapsulating
@@ -601,4 +604,179 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         return true;
     }
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    /**
+     * Get the {@link DateFormatSymbols} object that should be used to format a
+     * calendar system's dates in the given locale.
+     * <p>
+     * <b>Subclassing:</b><br>
+     * When creating a new Calendar subclass, you must create the
+     * {@link ResourceBundle ResourceBundle}
+     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
+     * The resource bundle name is based on the calendar's fully-specified
+     * class name, with ".resources" inserted at the end of the package name
+     * (just before the class name) and "Symbols" appended to the end.
+     * For example, the bundle corresponding to "com.ibm.util.HebrewCalendar"
+     * is "com.ibm.util.resources.HebrewCalendarSymbols".
+     * <p>
+     * Within the ResourceBundle, this method searches for five keys: 
+     * <ul>
+     * <li><b>DayNames</b> -
+     *      An array of strings corresponding to each possible
+     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
+     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
+     *      This array is 0-based; the name for Sunday goes in the
+     *      first position, at index 0.  If this key is not found
+     *      in the bundle, the day names are inherited from the
+     *      default <code>DateFormatSymbols</code> for the requested locale.
+     *
+     * <li><b>DayAbbreviations</b> -
+     *      An array of abbreviated day names corresponding
+     *      to the values in the "DayNames" array.  If this key
+     *      is not found in the resource bundle, the "DayNames"
+     *      values are used instead.  If neither key is found,
+     *      the day abbreviations are inherited from the default
+     *      <code>DateFormatSymbols</code> for the locale.
+     *
+     * <li><b>MonthNames</b> -
+     *      An array of strings corresponding to each possible
+     *      value of the <code>MONTH</code> field.  If this key is not found
+     *      in the bundle, the month names are inherited from the
+     *      default <code>DateFormatSymbols</code> for the requested locale.
+     *
+     * <li><b>MonthAbbreviations</b> -
+     *      An array of abbreviated day names corresponding
+     *      to the values in the "MonthNames" array.  If this key
+     *      is not found in the resource bundle, the "MonthNames"
+     *      values are used instead.  If neither key is found,
+     *      the day abbreviations are inherited from the default
+     *      <code>DateFormatSymbols</code> for the locale.
+     *
+     * <li><b>Eras</b> -
+     *      An array of strings corresponding to each possible
+     *      value of the <code>ERA</code> field.  If this key is not found
+     *      in the bundle, the era names are inherited from the
+     *      default <code>DateFormatSymbols</code> for the requested locale.
+     * </ul>
+     * <p>
+     * @param cal       The calendar system whose date format symbols are desired.
+     * @param locale    The locale whose symbols are desired.
+     *
+     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+     */
+    public DateFormatSymbols(Calendar cal, Locale locale) {
+        this(locale); // old-style construction
+        if (cal != null) {
+            ResourceBundle bundle = null;
+            try {
+                bundle = getDateFormatBundle(cal, locale);
+            } catch (MissingResourceException e) {
+                if (!(cal instanceof GregorianCalendar)) {
+                    // Ok for symbols to be missing for a Gregorian calendar, but
+                    // not for any other type.
+                    throw e;
+                }
+            }
+            constructCalendarSpecific(bundle);
+        }
+    }
+
+    /**
+     * Fetch a custom calendar's DateFormatSymbols out of the given resource
+     * bundle.  Symbols that are not overridden are inherited from the
+     * default DateFormatSymbols for the locale.
+     * @see DateFormatSymbols#DateFormatSymbols
+     */
+    public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
+        // Get the default symbols for the locale, since most
+        // calendars will only need to override month names and will
+        // want everything else the same
+        this(locale); // old-style construction
+        constructCalendarSpecific(bundle);
+    }
+
+    private void constructCalendarSpecific(ResourceBundle bundle) {
+
+        // Fetch the day names from the resource bundle.  If they're not found,
+        // it's ok; we'll just use the default ones.
+        // Allow a null ResourceBundle just for the sake of completeness;
+        // this is useful for calendars that don't have any overridden symbols
+
+        if (bundle != null) {
+            try {
+                String[] temp = bundle.getStringArray("DayNames");
+                setWeekdays(temp);
+                setShortWeekdays(temp);
+
+                temp = bundle.getStringArray("DayAbbreviations");
+                setShortWeekdays( temp );
+            } catch (MissingResourceException e) {}
+
+            try {
+                String[] temp = bundle.getStringArray("MonthNames");
+                setMonths( temp );
+                setShortMonths( temp );
+
+                temp = bundle.getStringArray("MonthAbbreviations");
+                setShortMonths( temp );
+            } catch (MissingResourceException e) {}
+
+            try {
+                String[] temp = bundle.getStringArray("Eras");
+                setEras( temp );
+            } catch (MissingResourceException e) {}
+        }
+    }
+
+//~    private static final java.text.DateFormatSymbols oldStyleSymbols(DateFormatSymbols syms, Locale loc) {
+//~        java.text.DateFormatSymbols result = new java.text.DateFormatSymbols(loc);
+//~        result.setAmPmStrings(syms.getAmPmStrings());
+//~        result.setEras(syms.getEras());
+//~        result.setLocalPatternChars(syms.getLocalPatternChars());
+//~        result.setMonths(syms.getMonths());
+//~        result.setShortMonths(syms.getShortMonths());
+//~        result.setShortWeekdays(syms.getShortWeekdays());
+//~        result.setWeekdays(syms.getWeekdays());
+//~        result.setZoneStrings(syms.getZoneStrings());
+//~        return result;
+//~    }
+
+    /**
+     * Find the ResourceBundle containing the date format information for
+     * a specified calendar subclass in a given locale.
+     * <p>
+     * The resource bundle name is based on the calendar's fully-specified
+     * class name, with ".resources" inserted at the end of the package name
+     * (just before the class name) and "Symbols" appended to the end.
+     * For example, the bundle corresponding to "com.ibm.util.HebrewCalendar"
+     * is "com.ibm.util.resources.HebrewCalendarSymbols".
+     */
+    static public ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
+                                  throws MissingResourceException {
+
+        // Find the calendar's class name, which we're going to use to construct the
+        // resource bundle name.
+        String fullName = cal.getClass().getName();
+        int lastDot = fullName.lastIndexOf('.');
+        String className = fullName.substring(lastDot+1);
+
+        // The name of the ResourceBundle itself is the calendar's fully-qualified
+        // name, with ".resources" inserted in the package and "Symbols" appended
+        String bundleName = fullName.substring(0, lastDot+1) + "resources."
+                                + className + "Symbols";
+        
+        ResourceBundle result = null;
+        try {
+            result = ResourceBundle.getBundle(bundleName, locale);
+        }
+        catch (MissingResourceException e) {
+            if (!(cal instanceof GregorianCalendar)) {
+                // Ok for symbols to be missing for a Gregorian calendar, but
+                // not for any other type.
+                throw e;
+            }
+        }
+        return result;
+    }
 }

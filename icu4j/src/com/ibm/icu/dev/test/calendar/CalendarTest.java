@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2000/10/17 18:32:50 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/10/17 20:55:09 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -62,8 +62,7 @@ public class CalendarTest extends TestFmwk {
         cal.setTimeZone(UTC);
         
         // Get a format to use for printing dates in the calendar system we're testing
-        // TODO: This is kind of ugly right now . 
-        DateFormat format = Calendar.getDateTimeFormat(cal, DateFormat.SHORT, -1, Locale.getDefault());
+        DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.SHORT, -1, Locale.getDefault());
         
         ((SimpleDateFormat)format).applyPattern(pattern);
         DateFormat testFmt = (DateFormat)format.clone();
