@@ -12,6 +12,9 @@ import java.text.ParseException;
  */
 public class RoundTripTest extends TestFmwk {
     
+    static final boolean EXTRA_TESTS = true;
+    static final boolean PRINT_RULES = true;
+    
     public static void main(String[] args) throws Exception {
         new RoundTripTest().run(args);
     }
@@ -75,16 +78,17 @@ public class RoundTripTest extends TestFmwk {
     }
 
     public void TestGreek() throws IOException, ParseException {
-        try {
-            Legal lt = new LegalGreek(true);
-            new Test("Latin-Greek")
-            .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
-                "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
-                this, lt);
-        } catch (RuntimeException e) {
-            System.out.println(e.getClass().getName() + ", " + e.getMessage());
-            throw e;
-        }
+        new Test("Latin-Greek")
+        .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+            "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
+            this, new LegalGreek(true));
+    }
+
+    public void TestGreekUNGEGN() throws IOException, ParseException {
+        new Test("Latin-Greek/UNGEGN")
+          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+            "[\u00B5\u037A\u03D0-\uFFFF]", /* roundtrip exclusions */
+            this, new LegalGreek(false));
     }
 
     public void Testel() throws IOException, ParseException {
@@ -478,24 +482,27 @@ public class RoundTripTest extends TestFmwk {
     }
     
     public static class LegalJamo extends Legal {
-        // any initial must be followed by a medial (EX initial)
-        // any medial must follow an initial (EX medial)
-        // any final must follow a medial (EX final)
+        // any initial must be followed by a medial (or initial)
+        // any medial must follow an initial (or medial)
+        // any final must follow a medial (or final)
         
         public boolean is(String sourceString) {
             try {
+                int t;
                 String decomp = Normalizer.normalize(sourceString, Normalizer.DECOMP, 0);
-                int oldType = -1;
                 for (int i = 0; i < decomp.length(); ++i) { // don't worry about surrogates
                     switch (getType(decomp.charAt(i))) {
                     case 0:
-                        if (getType(decomp.charAt(i+1)) != 1) return false;
+                        t = getType(decomp.charAt(i+1));
+                        if (t != 0 && t != 1) return false;
                         break;
                     case 1:
-                        if (getType(decomp.charAt(i-1)) != 0) return false;
+                        t = getType(decomp.charAt(i-1));
+                        if (t != 0 && t != 1) return false;
                         break;
                     case 2:
-                        if (getType(decomp.charAt(i-1)) != 1) return false;
+                        t = getType(decomp.charAt(i-1));
+                        if (t != 1 && t != 2) return false;
                         break;
                     }
                 }
@@ -707,7 +714,7 @@ public class RoundTripTest extends TestFmwk {
 
             // note: check that every transliterator transliterates the null string correctly!
 
-            String logFileName = "test_" + transliteratorID + ".html";
+            String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
 
             File lf = new File(logFileName); 
             log.logln("Creating log file " + lf.getAbsoluteFile());
@@ -736,11 +743,91 @@ public class RoundTripTest extends TestFmwk {
                 new File(logFileName).delete();
             }
         }
+        
+        // ok if at least one is not equal
+        public boolean checkIrrelevants(Transliterator t, String irrelevants) {
+            for (int i = 0; i < irrelevants.length(); ++i) {
+                char c = irrelevants.charAt(i);
+                String cs = UTF16.valueOf(c);
+                String targ = t.transliterate(cs);
+                if (cs.equals(targ)) return true;
+            }
+            return false;
+        }
 
         public void test2() {
 
             Transliterator sourceToTarget = Transliterator.getInstance(transliteratorID);
             Transliterator targetToSource = sourceToTarget.getInverse();
+            UnicodeSetIterator usi = new UnicodeSetIterator();
+            UnicodeSetIterator usi2 = new UnicodeSetIterator();
+            
+            log.logln("Checking that at least one irrevant characters is not NFC'ed");
+                
+            String irrelevants = "\u2000\u2001\u2126\u212A\u212B\u2329"; // string is from NFC_NO in the UCD
+                
+            if (!checkIrrelevants(sourceToTarget, irrelevants)) {
+                logFails("Source-Target, irrelevants");
+            }
+            if (!checkIrrelevants(sourceToTarget, irrelevants)) {
+                logFails("Source-Target, irrelevants");
+            }
+            
+            if (EXTRA_TESTS) {
+                log.logln("Checking that toRules works");
+                String rules = "";
+                Transliterator sourceToTarget2;
+                Transliterator targetToSource2;
+                try {
+                    rules = sourceToTarget.toRules(false);
+                    sourceToTarget2 = Transliterator.createFromRules("s2t2", rules, Transliterator.FORWARD);
+                    if (PRINT_RULES) {
+                        out.println("<h3>Forward Rules:</h3><p>");
+                        out.println(TestUtility.replace(rules, "\n", "<br>\n"));
+                        out.println("</p>");
+                    }
+                    rules = targetToSource.toRules(false);
+                    targetToSource2 = Transliterator.createFromRules("t2s2", rules, Transliterator.FORWARD);
+                    if (PRINT_RULES) {
+                        out.println("<h3>Backward Rules:</h3><p>");
+                        out.println(TestUtility.replace(rules, "\n", "<br>\n"));
+                        out.println("</p>");
+                    }
+                } catch (RuntimeException e) {
+                    out.println("<h3>Broken Rules:</h3><p>");
+                    out.println(TestUtility.replace(rules, "\n", "<br>\n"));
+                    out.println("</p>");
+                    out.flush();
+                    throw e;
+                }
+                
+                usi.reset(sourceRange);
+                while (true) {
+                    int c = usi.next();
+                    if (c < 0) break;
+                    
+                    String cs = UTF16.valueOf(c);
+                    String targ = sourceToTarget.transliterate(cs);
+                    String targ2 = sourceToTarget2.transliterate(cs);
+                    if (!targ.equals(targ2)) {
+                        logToRulesFails("Source-Target, toRules", cs, targ, targ2);
+                    }
+                }
+                
+                usi.reset(targetRange);
+                while (true) {
+                    int c = usi.next();
+                    if (c < 0) break;
+                    
+                    String cs = UTF16.valueOf(c);
+                    String targ = targetToSource.transliterate(cs);
+                    String targ2 = targetToSource2.transliterate(cs);
+                    if (!targ.equals(targ2)) {
+                        logToRulesFails("Target-Source, toRules", cs, targ, targ2);
+                    }
+                }
+            }
+            
 
             log.logln("Checking that source characters convert to target - Singles");
             
@@ -750,7 +837,7 @@ public class RoundTripTest extends TestFmwk {
             for (char c = 0; c < 0xFFFF; ++c) {
                 if (!sourceRange.contains(c)) continue;
                 */
-            UnicodeSetIterator usi = new UnicodeSetIterator(sourceRange);
+            usi.reset(sourceRange);
             while (true) {
                 int c = usi.next();
                 if (c < 0) break;
@@ -788,8 +875,6 @@ public class RoundTripTest extends TestFmwk {
             UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
             sourceRangeMinusFailures.removeAll(failSourceTarg);
             
-            UnicodeSetIterator usi2 = new UnicodeSetIterator();
-
             usi.reset(sourceRangeMinusFailures);
             while (true) {
                 int c = usi.next();
@@ -953,6 +1038,27 @@ public class RoundTripTest extends TestFmwk {
         }
 
         final void logNotCanonical(String label, String from, String to, String toCan) {
+            if (++errorCount > errorLimit) {
+                throw new TestTruncated("Test truncated; too many failures");
+            }
+            out.println("<br>Fail (can.equiv)" + label + ": " +
+                        from + " (" +
+                        TestUtility.hex(from) + ") => " +
+                        to + " (" +
+                        TestUtility.hex(to) + ")" +
+                        toCan + " (" +
+                        TestUtility.hex(to) + ")"
+                        );
+        }
+        
+        final void logFails(String label) {
+            if (++errorCount > errorLimit) {
+                throw new TestTruncated("Test truncated; too many failures");
+            }
+            out.println("<br>Fail (can.equiv)" + label);
+        }
+
+        final void logToRulesFails(String label, String from, String to, String toCan) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
