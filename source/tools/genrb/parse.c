@@ -270,7 +270,7 @@ expect(enum ETokenType expectedToken, struct UString **tokenValue, struct UStrin
     {
         *linenumber = line;
     }
-        
+
     if (token != expectedToken)
     {
         *status = U_INVALID_FORMAT_ERROR;
@@ -452,8 +452,8 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
          */
         if (c == STARTCOMMAND)
         {
-          /* preserve commands 
-           * closing bracket will be handled by the 
+          /* preserve commands
+           * closing bracket will be handled by the
            * append at the end of the loop
            */
           while(c != ENDCOMMAND) {
@@ -495,7 +495,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         }
     }
 
-    result = string_open(bundle, tag, pTarget, target - pTarget, NULL, status);
+    result = string_open(bundle, tag, pTarget, (int32_t)(target - pTarget), NULL, status);
 
     ucbuf_close(ucbuf);
     uprv_free(pTarget);
@@ -812,7 +812,7 @@ parseCollationElements(char *tag, uint32_t startline, UBool newCollation, UError
           table_add(result, member, line, status);
         }
         else
-        {        
+        {
           token = peekToken(0, &tokenValue, &line, &comment, status);
           /* this probably needs to be refactored or recursively use the parser */
           /* first we assume that our collation table won't have the explicit type */
@@ -994,7 +994,7 @@ parseArray(char *tag, uint32_t startline, const struct UString *comment, UErrorC
     if(isVerbose()){
         printf(" array %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     ustr_init(&memberComments);
 
     /* '{' . resource [','] '}' */
@@ -1127,7 +1127,7 @@ parseIntVector(char *tag, uint32_t startline, const struct UString *comment, UEr
 
         /* The following is added by Jing/GCL to handle illegal char in the Intvector */
         value = uprv_strtoul(string, &stopstring, 0);/* make intvector support decimal,hexdigit,octal digit ranging from -2^31-2^32-1*/
-        len=stopstring-string;
+        len=(uint32_t)(stopstring-string);
 
         if(len==uprv_strlen(string))
         {
@@ -1197,7 +1197,7 @@ parseBinary(char *tag, uint32_t startline, const struct UString *comment, UError
         printf(" binary %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
 
-    count = uprv_strlen(string);
+    count = (uint32_t)uprv_strlen(string);
     if (count > 0){
         if((count % 2)==0){
             value = uprv_malloc(sizeof(uint8_t) * count);
@@ -1215,7 +1215,7 @@ parseBinary(char *tag, uint32_t startline, const struct UString *comment, UError
                 toConv[1] = string[i + 1];
 
                 value[i >> 1] = (uint8_t) uprv_strtoul(toConv, &stopstring, 16);
-                len=stopstring-toConv;
+                len=(uint32_t)(stopstring-toConv);
 
                 if(len!=uprv_strlen(toConv))
                 {
@@ -1288,7 +1288,7 @@ parseInteger(char *tag, uint32_t startline, const struct UString *comment, UErro
     /* to make integer support hexdecimal, octal digit and decimal*/
     /* to handle illegal char in the integer*/
     value = uprv_strtoul(string, &stopstring, 0);
-    len=stopstring-string;
+    len=(uint32_t)(stopstring-string);
     if(len==uprv_strlen(string))
     {
         result = int_open(bundle, tag, value, comment, status);
@@ -1340,7 +1340,7 @@ parseImport(char *tag, uint32_t startline, const struct UString* comment, UError
     else
     {
 
-        int32_t  count     = uprv_strlen(filename);
+        int32_t  count     = (int32_t)uprv_strlen(filename);
 
         if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
         {
@@ -1424,7 +1424,7 @@ parseInclude(char *tag, uint32_t startline, const struct UString* comment, UErro
     const UChar* uBuffer = NULL;
 
     filename = getInvariantString(&line, NULL, status);
-    count     = uprv_strlen(filename);
+    count     = (int32_t)uprv_strlen(filename);
 
     if (U_FAILURE(*status))
     {
@@ -1450,7 +1450,7 @@ parseInclude(char *tag, uint32_t startline, const struct UString* comment, UErro
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(filename);
         return NULL;
-	}
+    }
 
     if(inputdir!=NULL){
         if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
@@ -1635,10 +1635,10 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
     enum ETokenType    token;
 
     initLookahead(buf, status);
-    
+
     inputdir       = currentInputDir;
-    inputdirLength = (inputdir != NULL) ? uprv_strlen(inputdir) : 0;
-    
+    inputdirLength = (inputdir != NULL) ? (uint32_t)uprv_strlen(inputdir) : 0;
+
     ustr_init(&comment);
     expect(TOK_STRING, &tokenValue, &comment, NULL, status);
 
@@ -1648,8 +1648,8 @@ parse(UCHARBUF *buf, const char *currentInputDir, UErrorCode *status)
     {
         return NULL;
     }
-    
-    
+
+
     bundle_setlocale(bundle, tokenValue->fChars, status);
     /* Commented by Jing/GCL */
     /* expect(TOK_OPEN_BRACE, NULL, &line, status); */

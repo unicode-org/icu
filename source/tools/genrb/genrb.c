@@ -21,7 +21,7 @@
 
 /* Protos */
 static void  processFile(const char *filename, const char* cp, const char *inputDir, const char *outputDir, const char *packageName, UErrorCode *status);
-static char *make_res_filename(const char *filename, const char *outputDir, 
+static char *make_res_filename(const char *filename, const char *outputDir,
                                const char *packageName, UErrorCode *status);
 
 /* File suffixes */
@@ -98,7 +98,7 @@ main(int argc,
     const char *inputDir  = NULL;
     const char *encoding  = "";
     int         i;
-    
+
     U_MAIN_INIT_ARGS(argc, argv);
 
     argc = u_parseArgs(argc, argv, (int32_t)(sizeof(options)/sizeof(options[0])), options);
@@ -195,7 +195,7 @@ main(int argc,
 
     if(options[TOUCHFILE].doesOccur) {
         if(gPackageName == NULL) {
-            fprintf(stderr, "%s: Don't use touchfile (-t) option with no package.\n", 
+            fprintf(stderr, "%s: Don't use touchfile (-t) option with no package.\n",
                     argv[0]);
             return -1;
         }
@@ -242,7 +242,7 @@ main(int argc,
     } else {
       initParser(TRUE);
     }
-    
+
     /*added by Jing*/
     if(options[LANGUAGE].doesOccur) {
         language = options[LANGUAGE].value;
@@ -252,7 +252,7 @@ main(int argc,
     for(i = 1; i < argc; ++i) {
         status = U_ZERO_ERROR;
         arg    = getLongPathname(argv[i]);
-        
+
         if (inputDir) {
             uprv_strcpy(theCurrentFileName, inputDir);
             uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
@@ -281,10 +281,10 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     char           *inputDirBuf  = NULL;
 
     char           outputFileName[256];
-    
+
     int32_t dirlen  = 0;
     int32_t filelen = 0;
-    
+
     if (status==NULL || U_FAILURE(*status)) {
         return;
     }
@@ -300,12 +300,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         openFileName[0] = '\0';
         if (filenameBegin != NULL) {
             /*
-             * When a filename ../../../data/root.txt is specified, 
+             * When a filename ../../../data/root.txt is specified,
              * we presume that the input directory is ../../../data
              * This is very important when the resource file includes
              * another file, like UCARules.txt or thaidict.brk.
              */
-            int32_t filenameSize = filenameBegin - filename + 1;
+            int32_t filenameSize = (int32_t)(filenameBegin - filename + 1);
             inputDirBuf = uprv_strncpy((char *)uprv_malloc(filenameSize), filename, filenameSize);
 
             /* test for NULL */
@@ -332,7 +332,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
             openFileName[0] = '\0';
             /*
-             * append the input dir to openFileName if the first char in 
+             * append the input dir to openFileName if the first char in
              * filename is not file seperation char and the last char input directory is  not '.'.
              * This is to support :
              * genrb -s. /home/icu/data
@@ -357,16 +357,16 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
             }
 
             uprv_strcpy(openFileName, inputDir);
-        
+
         }
     }
 
     uprv_strcat(openFileName, filename);
 
     ucbuf = ucbuf_open(openFileName, &cp,getShowWarning(),TRUE, status);
-    
+
     if(*status == U_FILE_ACCESS_ERROR) {
-        
+
         fprintf(stderr, "couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
         goto finish;
     }
@@ -412,12 +412,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
             }
             else
             {
-                T_FileStream_write(q, msg, uprv_strlen(msg));
+                T_FileStream_write(q, msg, (int32_t)uprv_strlen(msg));
                 T_FileStream_close(q);
             }
             uprv_free(tfname);
         }
-        
+
     }
     if(U_FAILURE(*status)) {
         fprintf(stderr, "couldn't make the res fileName for  bundle %s. Error:%s\n", filename,u_errorName(*status));
@@ -473,7 +473,7 @@ make_res_filename(const char *filename,
 
     if(packageName != NULL)
     {
-        pkgLen = 1 + uprv_strlen(packageName);
+        pkgLen = (int32_t)(1 + uprv_strlen(packageName));
     }
 
     /* setup */
