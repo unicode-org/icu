@@ -121,6 +121,10 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
 
     limit=*p++; /* number of entries */
 
+    if(limit == 0) { /* this table is empty */
+      return URESDATA_ITEM_NOT_FOUND;
+    }
+
     /* do a binary search for the key */
     start=0;
     while(start<limit-1) {
@@ -131,7 +135,7 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
             start=i;
         }
     }
-
+    
     /* did we really find it? */
     if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[start]))==0) {
         limit=*(p-1);   /* itemCount */
@@ -240,11 +244,13 @@ res_getResource(const ResourceData *pResData, const char *key) {
     return _res_findTableItem(pResData->pRoot, pResData->rootRes, key);
 }
 
-U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, const Resource array, const int32_t indexR) {
+U_CFUNC Resource 
+res_getArrayItem(const ResourceData *pResData, const Resource array, const int32_t indexR) {
     return _res_getArrayItem(pResData->pRoot, array, indexR);
 }
 
-U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_t* indexR, const char* *  key) {
+U_CFUNC Resource 
+res_getTableItemByKey(const ResourceData *pResData, const Resource table, int32_t* indexR, const char* *  key) {
     uint16_t tempIndex;
     if(key != NULL) {
         tempIndex  = _res_findTableIndex(pResData->pRoot, table, *key);
@@ -260,7 +266,8 @@ U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, const Resou
     }
 }
 
-U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, const Resource table, int32_t indexR, const char * * key) {
+U_CFUNC Resource 
+res_getTableItemByIndex(const ResourceData *pResData, const Resource table, int32_t indexR, const char * * key) {
     if(indexR>-1) {
         if(key != NULL) {
             *key = _res_getTableKey(pResData->pRoot, table, (uint16_t)indexR);
@@ -271,7 +278,8 @@ U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, const Res
     }
 }
 
-U_CFUNC int32_t res_getTableSize(const ResourceData *pResData, Resource table) {
+U_CFUNC int32_t 
+res_getTableSize(const ResourceData *pResData, Resource table) {
     uint16_t *p=(uint16_t *)RES_GET_POINTER(pResData->pRoot, table);
     return *p;
 }
