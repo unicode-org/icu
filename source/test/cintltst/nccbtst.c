@@ -2546,6 +2546,20 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             6, 6, 6, 6, 6, 6, 6, 6, 8,
             9
         };
+        static const UChar UTF8ToUnicodeXML_DEC[]={
+            0x0020, 0x0064, 0x0050,
+            0x0026, 0x0023, 0x0031, 0x0039, 0x0034, 0x003B, 0x007E,  /* &#194;~ */
+            0x0020,
+            0x0026, 0x0023, 0x0032, 0x0032, 0x0034, 0x003B, 0x0026, 0x0023, 0x0031, 0x0038, 0x0031, 0x003B, 0x007E,
+            0x0040
+        };
+        static const int32_t fromUTF8XML_DEC[] = {
+            0, 1, 2,
+            3, 3, 3, 3, 3, 3, 4,
+            5,
+            6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 8,
+            9
+        };
 
         
         if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
@@ -2637,6 +2651,10 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         if(!testConvertToUnicode(sampleTxtUTF8, sizeof(sampleTxtUTF8),
                 UTF8ToUnicode, sizeof(UTF8ToUnicode)/sizeof(UTF8ToUnicode[0]),"UTF-8",
                 UCNV_TO_U_CALLBACK_ESCAPE, fromUTF8, NULL, 0))
+            log_err("UTF8->u with UCNV_TO_U_CALLBACK_ESCAPE with value did not match.\n"); 
+        if(!testConvertToUnicodeWithContext(sampleTxtUTF8, sizeof(sampleTxtUTF8),
+                UTF8ToUnicodeXML_DEC, sizeof(UTF8ToUnicodeXML_DEC)/sizeof(UTF8ToUnicodeXML_DEC[0]),"UTF-8",
+                UCNV_TO_U_CALLBACK_ESCAPE, fromUTF8XML_DEC, NULL, 0, UCNV_ESCAPE_XML_DEC, U_ZERO_ERROR))
             log_err("UTF8->u with UCNV_TO_U_CALLBACK_ESCAPE with value did not match.\n"); 
     }
 }
