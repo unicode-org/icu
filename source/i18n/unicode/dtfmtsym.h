@@ -65,7 +65,7 @@ class U_I18N_API DateFormatSymbols : public UObject {
 public:
     /**
      * Construct a DateFormatSymbols object by loading format data from
-     * resources for the default locale.
+     * resources for the default locale, in the default calendar (Gregorian).
      * <P>
      * NOTE: This constructor will never fail; if it cannot get resource
      * data for the default locale, it will return a last-resort object
@@ -80,7 +80,7 @@ public:
 
     /**
      * Construct a DateFormatSymbols object by loading format data from
-     * resources for the given locale.
+     * resources for the given locale, in the default calendar (Gregorian).
      *
      * @param locale    Locale to load format data from.
      * @param status    Output param set to success of failure.  Failure
@@ -89,6 +89,41 @@ public:
      * @stable ICU 2.0
      */
     DateFormatSymbols(const Locale& locale,
+                      UErrorCode& status);
+
+    /**
+     * Construct a DateFormatSymbols object by loading format data from
+     * resources for the default locale, in the default calendar (Gregorian).
+     * <P>
+     * NOTE: This constructor will never fail; if it cannot get resource
+     * data for the default locale, it will return a last-resort object
+     * based on hard-coded strings.
+     *
+     * @param type      Type of calendar (as returned by Calendar::getType). 
+     *                  Will be used to access the correct set of strings.
+     *                  (NULL or empty string defaults to "gregorian".)
+     * @param status    Output param set to success of failure.  Failure
+     *                  results if the resources for the default cannot be
+     *                  found or cannot be loaded
+     * @draft ICU 2.6
+     */
+    DateFormatSymbols(const char *type, UErrorCode& status);
+
+    /**
+     * Construct a DateFormatSymbols object by loading format data from
+     * resources for the given locale, in the default calendar (Gregorian).
+     *
+     * @param locale    Locale to load format data from.
+     * @param type      Type of calendar (as returned by Calendar::getType). 
+     *                  Will be used to access the correct set of strings.
+     *                  (NULL or empty string defaults to "gregorian".)
+     * @param status    Output param set to success of failure.  Failure
+     *                  results if the resources for the locale cannot be
+     *                  found or cannot be loaded
+     * @draft ICU 2.6
+     */
+    DateFormatSymbols(const Locale& locale,
+                      const char *type,
                       UErrorCode& status);
 
     /**
@@ -379,14 +414,28 @@ private:
     void initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status);
 
     /**
+     * Load data for specified 'type', falling back to gregorian if needed
+     *
+     * @param rb ResourceBundle
+     * @param tag Resource key to data
+     * @param type Calendar type
+     * @param status Error Status
+     * @internal
+     */
+    ResourceBundle
+      getData(ResourceBundle &rb, const char *tag, const char *type, UErrorCode& status);
+
+
+    /**
      * Called by the constructors to actually load data from the resources
      *
      * @param locale               The locale to get symbols for.
+     * @param type                 Calendar Type (as from Calendar::getType())
      * @param status               Input/output parameter, set to success or
      *                             failure code upon return.
      * @param useLastResortData    determine if use last resort data
      */
-    void initializeData(const Locale&, UErrorCode& status, UBool useLastResortData = FALSE);
+    void initializeData(const Locale&, const char *type, UErrorCode& status, UBool useLastResortData = FALSE);
 
     /**
      * Copy or alias an array in another object, as appropriate.
