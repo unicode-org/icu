@@ -4,8 +4,13 @@
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
-## Top-level Makefile.in for ICU
+## ICU data directory. This is the directory where the final packaging
+## of data goes, + some test data.
+##
+## Point ICU_DATA to this directory.
+##
 ## Stephen F. Booth
+## Steven R. Loomis
 
 ## Install directory information
 srcdir = @srcdir@
@@ -21,22 +26,20 @@ subdir = data
 ## Platform-specific setup
 include @platform_make_fragment@
 
-## Optional directory setup
-@EXTRAS_TRUE@EXTRA = extra
-@EXTRAS_FALSE@EXTRA = 
-@TESTS_TRUE@TEST = test
-@TESTS_FALSE@TEST = 
-@SAMPLES_TRUE@SAMPLE = samples
-@SAMPLES_FALSE@SAMPLE = 
-
 ## Files to remove for 'make clean'
-CLEANFILES = *~ 
+CLEANFILES = *~ $(SPECIALTESTDATA)
 
 DOCDIRS = 
-SUBDIRS = 
+SUBDIRS = build
 
 ## Extra files to install [nothing at present]
-EXTRA_DATA =
+SPECIALTESTDATA=test1.cnv test3.cnv test4.cnv
+TESTDATAOBJDIR=../test/testdata
+top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+CURDIR=$(shell /bin/pwd)
+PKGDATA = $(top_builddir_from_tmp)/tools/pkgdata/pkgdata -O $(top_builddir_from_tmp)/tools/pkgdata/icupkg.inc -d $(CURDIR) -m $(PKGDATA_MODE) 
+
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
@@ -48,9 +51,9 @@ check check-local check-recursive builddata
 .SUFFIXES :
 
 ## List of standard targets
-all: all-local all-recursive
-install: install-recursive install-local
-clean: clean-recursive clean-local
+all: all-recursive 
+install: install-recursive 
+clean: clean-recursive
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: all check-recursive check-local
@@ -73,17 +76,17 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit; \
 	fi
 
-all-local: builddata
+all-local: packagedata testdata packagetest
 
-install-local: 
+
 
 dist-local:
 
-clean-local:
+cleanfiles:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-ifneq ($(wildcard .links),)
-	$(RMV) UnicodeData-$(UNICODE_VERSION).txt thaidict.brk unidata .links
-endif
+
+clean-local: cleanpackage cleanfiles
+
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -94,14 +97,29 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-builddata: UnicodeData-$(UNICODE_VERSION).txt thaidict.brk
+packagedata: build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
+	( cd build ; $(INVOKE) $(PKGDATA) -s . -T . -p $(ICUDATA_NAME) icudata.lst )
 
-UnicodeData-$(UNICODE_VERSION).txt: $(top_srcdir)/../data/UnicodeData-$(UNICODE_VERSION).txt
-	$(RMV) $@ && ln -s $< $@
-	touch .links
+packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
+	( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata testdata.lst )
 
-thaidict.brk: $(top_srcdir)/../data/thaidict.brk
-	$(RMV) $@ && ln -s $< $@
-	$(RMV) unidata && ln -s $(top_srcdir)/../data/unidata .
-	touch .links
+cleanpackage:
+	@echo Cleaning up packaged data..
+	@-( cd build ; $(INVOKE) $(PKGDATA) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null)
+	@-( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata testdata.lst  --clean 2> /dev/null )
+	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak
 
+## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
+install:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
+	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
+	( cd build ; $(INVOKE) $(PKGDATA) -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION) )
+ifeq ($(strip $(PKGDATA_MODE)),dll)
+	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(ICUDATA_NAME).$(SO) icudata.$(SO))
+endif
+
+
+# specials
+testdata: $(SPECIALTESTDATA)
+
+%.cnv: build/%.cnv
+	ln -sf $< .
