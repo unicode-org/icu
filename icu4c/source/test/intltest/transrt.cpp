@@ -1301,26 +1301,8 @@ class LegalIndic :public Legal{
     UnicodeSet sanskritStressSigns;
     UnicodeSet chandrabindu;
     
-public:        
-    LegalIndic(){
-        UErrorCode status = U_ZERO_ERROR;
-        vowelSignSet.addAll( UnicodeSet("[\\u0902\\u0903\\u0904\\u093e-\\u094c\\u0962\\u0963]",status));/* Devanagari */
-        vowelSignSet.addAll( UnicodeSet("[\\u0982\\u0983\\u09be-\\u09cc\\u09e2\\u09e3\\u09D7]",status));/* Bengali */
-        vowelSignSet.addAll( UnicodeSet("[\\u0a02\\u0a03\\u0a3e-\\u0a4c\\u0a62\\u0a63\\u0a70\\u0a71]",status));/* Gurmukhi */
-        vowelSignSet.addAll( UnicodeSet("[\\u0a82\\u0a83\\u0abe-\\u0acc\\u0ae2\\u0ae3]",status));/* Gujarati */
-        vowelSignSet.addAll( UnicodeSet("[\\u0b02\\u0b03\\u0b3e-\\u0b4c\\u0b62\\u0b63\\u0b56\\u0b57]",status));/* Oriya */
-        vowelSignSet.addAll( UnicodeSet("[\\u0b82\\u0b83\\u0bbe-\\u0bcc\\u0be2\\u0be3\\u0bd7]",status));/* Tamil */
-        vowelSignSet.addAll( UnicodeSet("[\\u0c02\\u0c03\\u0c3e-\\u0c4c\\u0c62\\u0c63\\u0c55\\u0c56]",status));/* Telugu */
-        vowelSignSet.addAll( UnicodeSet("[\\u0c82\\u0c83\\u0cbe-\\u0ccc\\u0ce2\\u0ce3\\u0cd5\\u0cd6]",status));/* Kannada */
-        vowelSignSet.addAll( UnicodeSet("[\\u0d02\\u0d03\\u0d3e-\\u0d4c\\u0d62\\u0d63\\u0d57]",status));/* Malayalam */
-
-        avagraha.addAll(UnicodeSet("[\\u093d\\u09bd\\u0abd\\u0b3d\\u0cbd]",status));
-        nukta.addAll(UnicodeSet("[\\u093c\\u09bc\\u0a3c\\u0abc\\u0b3c\\u0cbc]",status));
-        virama.addAll(UnicodeSet("[\\u094d\\u09cd\\u0a4d\\u0acd\\u0b4d\\u0bcd\\u0c4d\\u0ccd\\u0d4d]",status));
-        sanskritStressSigns.addAll(UnicodeSet("[\\u0951\\u0952\\u0953\\u0954\\u097d]",status));
-        chandrabindu.addAll(UnicodeSet("[\\u0901\\u0981\\u0A81\\u0b01\\u0c01]",status));
-
-    }
+public:
+    LegalIndic();
     virtual UBool is(const UnicodeString& sourceString) const;
     virtual ~LegalIndic() {};
 };
@@ -1345,6 +1327,25 @@ UBool LegalIndic::is(const UnicodeString& sourceString) const{
     }
     return TRUE;
 }
+LegalIndic::LegalIndic(){
+        UErrorCode status = U_ZERO_ERROR;
+        vowelSignSet.addAll( UnicodeSet("[\\u0902\\u0903\\u0904\\u093e-\\u094c\\u0962\\u0963]",status));/* Devanagari */
+        vowelSignSet.addAll( UnicodeSet("[\\u0982\\u0983\\u09be-\\u09cc\\u09e2\\u09e3\\u09D7]",status));/* Bengali */
+        vowelSignSet.addAll( UnicodeSet("[\\u0a02\\u0a03\\u0a3e-\\u0a4c\\u0a62\\u0a63\\u0a70\\u0a71]",status));/* Gurmukhi */
+        vowelSignSet.addAll( UnicodeSet("[\\u0a82\\u0a83\\u0abe-\\u0acc\\u0ae2\\u0ae3]",status));/* Gujarati */
+        vowelSignSet.addAll( UnicodeSet("[\\u0b02\\u0b03\\u0b3e-\\u0b4c\\u0b62\\u0b63\\u0b56\\u0b57]",status));/* Oriya */
+        vowelSignSet.addAll( UnicodeSet("[\\u0b82\\u0b83\\u0bbe-\\u0bcc\\u0be2\\u0be3\\u0bd7]",status));/* Tamil */
+        vowelSignSet.addAll( UnicodeSet("[\\u0c02\\u0c03\\u0c3e-\\u0c4c\\u0c62\\u0c63\\u0c55\\u0c56]",status));/* Telugu */
+        vowelSignSet.addAll( UnicodeSet("[\\u0c82\\u0c83\\u0cbe-\\u0ccc\\u0ce2\\u0ce3\\u0cd5\\u0cd6]",status));/* Kannada */
+        vowelSignSet.addAll( UnicodeSet("[\\u0d02\\u0d03\\u0d3e-\\u0d4c\\u0d62\\u0d63\\u0d57]",status));/* Malayalam */
+
+        avagraha.addAll(UnicodeSet("[\\u093d\\u09bd\\u0abd\\u0b3d\\u0cbd]",status));
+        nukta.addAll(UnicodeSet("[\\u093c\\u09bc\\u0a3c\\u0abc\\u0b3c\\u0cbc]",status));
+        virama.addAll(UnicodeSet("[\\u094d\\u09cd\\u0a4d\\u0acd\\u0b4d\\u0bcd\\u0c4d\\u0ccd\\u0d4d]",status));
+        sanskritStressSigns.addAll(UnicodeSet("[\\u0951\\u0952\\u0953\\u0954\\u097d]",status));
+        chandrabindu.addAll(UnicodeSet("[\\u0901\\u0981\\u0A81\\u0b01\\u0c01]",status));
+
+    }
 
 static const char latinForIndic[] = "[['.0-9A-Za-z~\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD"
                                    "\\u00E0-\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6\\u00F9-\\u00FD\\u00FF-\\u010F"
