@@ -96,7 +96,7 @@ char convertersToCheck[][15] = {
 /*  "cp1131",
   "cp1125",*/
   "ibm-902", /* was "cp922" changed 2003jan08 */
-  "cp921",
+  "ibm-901", /* was "cp921" changed 2003jan09 */
   /*"ibm-17248",*/ /* was "cp864" changed 2002nov25 */
   /*"cp1008",
   "cp1046",*/
