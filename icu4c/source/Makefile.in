@@ -52,7 +52,7 @@ DOCDIRS = common i18n
 SUBDIRS = common i18n $(EXTRA) tools $(TEST) $(SAMPLE)
 
 ## Extra files to install
-EXTRA_DATA = convrtrs.txt UnicodeData-3.0.0d5.txt
+EXTRA_DATA = convrtrs.txt UnicodeData-3.0.0.txt
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\
