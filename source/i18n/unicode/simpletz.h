@@ -599,6 +599,14 @@ public:
                               UErrorCode& status) const;
 
     /**
+     * Redeclared TimeZone method.  This implementation simply calls
+     * the base class method, which otherwise would be hidden.
+     * @draft ICU 2.8
+     */
+    virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
+                           int32_t& dstOffset, UErrorCode& ec) const;
+
+    /**
      * Returns the TimeZone's raw GMT offset (i.e., the number of milliseconds to add
      * to GMT to get local time, before taking daylight savings time into account).
      *
@@ -845,6 +853,12 @@ inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth,
 inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                                        int32_t time, UBool after, UErrorCode& status) {
     setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
+}
+
+inline void
+SimpleTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffset,
+                          int32_t& dstOffset, UErrorCode& ec) const {
+    TimeZone::getOffset(date, local, rawOffset, dstOffset, ec);
 }
 
 U_NAMESPACE_END
