@@ -702,6 +702,7 @@ en {
         ace { "Achinese" }
         ach { "Acoli" }
         ada { "Adangme" }
+        ady { "Adyghe" }
         ae  { "Avestan" }
         af  { "Afrikaans" }
         afa { "Afro-Asiatic (Other)" }
@@ -711,6 +712,7 @@ en {
         ale { "Aleut" }
         alg { "Algonquian Languages" }
         am  { "Amharic" }
+        an  { "Aragonese" }
         ang { "English, Old (ca.450-1100)" }
         apa { "Apache Languages"}
         ar  { "Arabic" }
@@ -782,8 +784,10 @@ en {
         cpf { "Creoles and Pidgins, French-based (Other)" }
         cpp { "Creoles and pidgins, Portuguese-based (Other)" }
         cr  { "Cree" }
+        crh { "Crimean Turkish; Crimean Tatar" }
         crp { "Creoles and Pidgins (Other)" }
         cs  { "Czech" }
+        csb { "Kashubian" }
         cu  { "Church Slavic" }
         cus { "Cushitic (Other)" }
         cv  { "Chuvash" }
@@ -800,6 +804,7 @@ en {
         //div { "Divehi" } // Use dv instead
         doi { "Dogri" }
         dra { "Dravidian (Other)" }
+        dsb { "Lower Sorbian" }
         dua { "Duala" }
         dum { "Dutch, Middle (ca. 1050-1350)" }
         dv  { "Divehi" }
@@ -841,7 +846,6 @@ en {
         gez { "Geez" }
         gil { "Gilbertese" }
         gl  { "Gallegan" }
-        gla { "Gaelic (Scots)" }
         gmh { "German, Middle High (ca.1050-1500)" }
         gn  { "Guarani" }
         goh { "German, Old High (ca.750-1050)" }
@@ -864,6 +868,7 @@ en {
         hmn { "Hmong" }
         ho  { "Hiri Motu" }
         hr  { "Croatian" }
+        hsb { "Upper Sorbian" }
         ht  { "Haitian" }
         hu  { "Hungarian" }
         hup { "Hupa" }
@@ -890,6 +895,7 @@ en {
         iu  { "Inuktitut" }
         //iw  { "Hebrew" }  // Use he instead
         ja  { "Japanese" }
+        jbo { "Lojban" }
         //ji  { "Yiddish" } // Use yi instead
         jpr { "Judeo-Persian" }
         jrb { "Judeo-Arabic" }
@@ -919,6 +925,7 @@ en {
         kos { "Kosraean" }
         kpe { "Kpelle" }
         kr  { "Kanuri" }
+        krc { "Karachay-Balkar" }
         kro { "Kru" }
         kru { "Kurukh" }
         ks  { "Kashmiri" }
@@ -935,9 +942,7 @@ en {
         lb  { "Luxembourgish" }
         lez { "Lezghian" }
         lg  { "Ganda" }
-        lin { "Lingala" }
         li  { "Limburgish" }
-        lit { "Lithuanian" }
         ln  { "Lingala" }
         lo  { "Lao" }
         lol { "Mongo" }
@@ -957,6 +962,7 @@ en {
         man { "Mandingo" }
         map { "Austronesian" }
         mas { "Masai" }
+        mdf { "Moksha" }
         mdr { "Mandar" }
         men { "Mende" }
         mg  { "Malagasy" }
@@ -985,6 +991,7 @@ en {
         mwr { "Marwari" }
         my  { "Burmese" }
         myn { "Mayan" }
+        myv { "Erzya" }
         na  { "Nauru" }
         nah { "Nahuatl" }
         nai { "North American Indian (Other)" }
@@ -1001,6 +1008,7 @@ en {
         nl  { "Dutch" }
         nn  { "Norwegian Nynorsk" }
         no  { "Norwegian" }
+        nog { "Nogai" }
         non { "Norse, Old" }
         nr  { "Ndebele, South" }
         nso { "Sotho, Northern" }
@@ -1124,12 +1132,12 @@ en {
         tt  { "Tatar" }
         tum { "Tumbuka" }
         tup { "Tupi languages" }
-        tur { "Turkish" }
         tut { "Altaic (Other)" }
         tvl { "Tuvalu" }
         tw  { "Twi" }
         ty  { "Tahitian" }
         tyv { "Tuvinian" }
+        udm { "Udmurt" }
         ug  { "Uighur" }
         uga { "Ugaritic" }
         uk  { "Ukrainian" }
@@ -1149,6 +1157,7 @@ en {
         was { "Washo" }
         wen { "Sorbian Languages" }
         wo  { "Wolof" }
+        xal { "Kalmyk" }
         xh  { "Xhosa" }
         yao { "Yao" }
         yap { "Yapese" }
