@@ -1084,6 +1084,10 @@ void RegexTest::Extended() {
     // \S and \s  space characters
     REGEX_FIND("\\s+", "not_space<0> \\t \\r \\n \\u3000 \\u2004 \\u2028 \\u2029</0>xyz");
     REGEX_FIND("(\\S+).*?(\\S+).*", "<0><1>Not-spaces</1>   <2>more-non-spaces</2>  </0>");
+
+    // \X  consume one combining char sequence.
+    REGEX_FIND("(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
+        "<0><1>A</1><2>B</2><3> </3>");
 }
 
 
