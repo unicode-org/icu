@@ -117,6 +117,7 @@ static void TestDateFormat()
       if(U_FAILURE(subStatus)) {
 	log_data_err("FAIL: date format %s (getAvailable(%d)) is not instantiable: %s\n", udat_getAvailable(i), i, u_errorName(subStatus));
       }
+      udat_close(any);
     }
 
     /*Testing udat_clone()*/
