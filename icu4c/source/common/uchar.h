@@ -387,6 +387,24 @@ enum UCellWidth
 };
 
 typedef enum UCellWidth UCellWidth;
+
+/**
+ * Selector constants for u_charName().
+ * <code>u_charName() returns either the "modern" name of a
+ * Unicode character or the name that was defined in
+ * Unicode version 1.0, before the Unicode standard merged
+ * with ISO-10646.
+ *
+ * @see u_charName()
+ */
+enum UCharNameChoice {
+    U_UNICODE_CHAR_NAME,
+    U_UNICODE_10_CHAR_NAME,
+    U_CHAR_NAME_CHOICE_COUNT
+};
+
+typedef enum UCharNameChoice UCharNameChoice;
+
 /**
  * Functions to classify characters.
  */
@@ -617,6 +635,30 @@ u_charDigitValue(UChar c);
  */
 U_CAPI UCharScript     U_EXPORT2
 u_charScript(UChar    ch);
+
+/**
+ * Retrieve the name of a Unicode character.
+ * Depending on <code>nameChoice</code>, the character name written
+ * into the buffer is the "modern" name or the name that was defined
+ * in Unicode version 1.0.
+ * The name contains only "invariant" characters
+ * like A-Z, 0-9, space, and '-'.
+ *
+ * @param code The character (code point) for which to get the name.
+ *             It must be <code>0&lt;=code&lt;0x10ffff</code>.
+ * @param nameChoice Selector for which name to get.
+ * @param buffer Destination address for copying the name.
+ * @param bufferLength <code>==sizeof(buffer)</code>
+ * @param pErrorCode Pointer to a UErrorCode variable;
+ *        check for <code>U_SUCCESS()</code> after <code>u_charName()</code>
+ *        returns.
+ *
+ * @see UCharNameChoice
+ */
+U_CAPI UTextOffset U_EXPORT2
+u_charName(uint32_t code, UCharNameChoice nameChoice,
+           char *buffer, UTextOffset bufferLength,
+           UErrorCode *pErrorCode);
 
 /** 
  * The following functions are java specific.
