@@ -345,7 +345,7 @@ struct PosixThreadImplementation
 
 extern "C" void* SimpleThreadProc(void *arg)
 {
-	// This is the code that is run in the new separate thread.
+    // This is the code that is run in the new separate thread.
     SimpleThread *This = (SimpleThread *)arg;
     This->run();      // Run the user code.
 
@@ -832,7 +832,7 @@ UBool U_CALLCONV isAcceptable(void *, const char *, const char *, const UDataInf
 }
 
 //static UMTX debugMutex = NULL;
-static UMTX gDebugMutex;
+//static UMTX gDebugMutex;
 
 
 class FormatThreadTest : public ThreadWithStatus
@@ -881,28 +881,28 @@ public:
         // debugging code, 
         int m;
         for (m=0; m<4000; m++) {
-            status 				   = U_ZERO_ERROR;
-			UResourceBundle *res   = NULL;
-			const char *localeName = NULL;
+            status         = U_ZERO_ERROR;
+            UResourceBundle *res   = NULL;
+            const char *localeName = NULL;
 
             Locale  loc = Locale::getEnglish();
 
-			localeName = loc.getName();
-			// localeName = "en";
+            localeName = loc.getName();
+            // localeName = "en";
 
-		    // ResourceBundle bund = ResourceBundle(0, loc, status);
-			//umtx_lock(&gDebugMutex);
-			res = ures_open(NULL, localeName, &status);
-			//umtx_unlock(&gDebugMutex);
+            // ResourceBundle bund = ResourceBundle(0, loc, status);
+            //umtx_lock(&gDebugMutex);
+            res = ures_open(NULL, localeName, &status);
+            //umtx_unlock(&gDebugMutex);
 
-			//umtx_lock(&gDebugMutex);
-			ures_close(res);
-			//umtx_unlock(&gDebugMutex);
+            //umtx_lock(&gDebugMutex);
+            ures_close(res);
+            //umtx_unlock(&gDebugMutex);
 
-			if (U_FAILURE(status)) {
-				error("Resource bundle construction failed.\n");
-				break;
-			}
+            if (U_FAILURE(status)) {
+                error("Resource bundle construction failed.\n");
+                break;
+            }
         }
         return;
 #endif
@@ -919,7 +919,7 @@ public:
                 FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
         };
         int32_t kNumberFormatTestDataLength = (int32_t)(sizeof(kNumberFormatTestData) / 
-														sizeof(kNumberFormatTestData[0]));
+                                                        sizeof(kNumberFormatTestData[0]));
         
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kPercentFormatTestData[] = 
@@ -928,12 +928,12 @@ public:
                 FormatThreadTestData( 1.0, UnicodeString("100%", "")),
                 FormatThreadTestData( 0.26, UnicodeString("26%", "")),
                 FormatThreadTestData( 
-				   16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
+                   16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
                 FormatThreadTestData( 
-					81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
+                    81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
         };
         int32_t kPercentFormatTestDataLength = 
-				(int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
+                (int32_t)(sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]));
         int32_t iteration;
         
         status = U_ZERO_ERROR;
@@ -960,7 +960,7 @@ public:
             
             if(0 != output.compare(kNumberFormatTestData[whichLine].string)) {
                 error("format().. expected " + kNumberFormatTestData[whichLine].string 
-						+ " got " + output);
+                        + " got " + output);
                 goto cleanupAndReturn;
             }
             
@@ -972,12 +972,12 @@ public:
             if(0 != output.compare(kPercentFormatTestData[whichLine].string))
             {
                 error("percent format().. \n" + 
-						showDifference(kPercentFormatTestData[whichLine].string,output));
+                        showDifference(kPercentFormatTestData[whichLine].string,output));
                 goto cleanupAndReturn;
             }
             
             // Test message error 
-		    const int 		kNumberOfMessageTests = 3;
+            const int       kNumberOfMessageTests = 3;
             UErrorCode      statusToCheck;
             UnicodeString   patternToCheck;
             Locale          messageLocale;
@@ -993,13 +993,13 @@ public:
             case 0:
                 statusToCheck=                      U_FILE_ACCESS_ERROR;
                 patternToCheck=        "0:Someone from {2} is receiving a #{0}"
-									   " error - {1}. Their telephone call is costing "
-									   "{3,number,currency}."; // number,currency
+                                       " error - {1}. Their telephone call is costing "
+                                       "{3,number,currency}."; // number,currency
                 messageLocale=                      Locale("en","US");
                 countryToCheck=                     Locale("","HR");
                 currencyToCheck=                    8192.77;
                 expected=  "0:Someone from Croatia is receiving a #4 error - "
-							"U_FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
+                            "U_FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
                 break;
             case 1:
                 statusToCheck=                      U_INDEX_OUTOFBOUNDS_ERROR;
@@ -1012,28 +1012,28 @@ public:
             case 2:
                 statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
                 patternToCheck=   "2:user in {2} is receiving a #{0} error - {1}. "
-								  "They insist they just spent {3,number,currency} "
-								  "on memory."; // number,currency
+                                  "They insist they just spent {3,number,currency} "
+                                  "on memory."; // number,currency
                 messageLocale=                      Locale("de","AT_PREEURO"); // Austrian German
                 countryToCheck=                     Locale("","US"); // hmm
                 currencyToCheck=                    40193.12;
                 expected=       CharsToUnicodeString(
-							"2:user in Vereinigte Staaten is receiving a #7 error"
-							" - U_MEMORY_ALLOCATION_ERROR. They insist they just spent"
-							" \\u00f6S 40.193,12 on memory.");
+                            "2:user in Vereinigte Staaten is receiving a #7 error"
+                            " - U_MEMORY_ALLOCATION_ERROR. They insist they just spent"
+                            " \\u00f6S 40.193,12 on memory.");
                 break;
             }
             
             UnicodeString result;
             UErrorCode status = U_ZERO_ERROR;
             formatErrorMessage(status,patternToCheck,messageLocale,statusToCheck,
-								countryToCheck,currencyToCheck,result);
+                                countryToCheck,currencyToCheck,result);
             if(U_FAILURE(status))
             {
                 UnicodeString tmp;
                 errorToString(status,tmp);
                 error("Failure on message format, pattern=" + patternToCheck +
-						", error = " + tmp);
+                        ", error = " + tmp);
                 goto cleanupAndReturn;
             }
             
@@ -1209,124 +1209,124 @@ public:
 void MultithreadTest::TestCollators()
 {
 
-  UErrorCode status = U_ZERO_ERROR;
-  FILE *testFile = NULL;
-  char testDataPath[1024];
-  strcpy(testDataPath, IntlTest::loadTestData(status));
-  char* index = 0;
-  if (U_FAILURE(status)) {
-      errln("ERROR: could not open test data %s", u_errorName(status));
-	  return;
-  }
-  index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);
+    UErrorCode status = U_ZERO_ERROR;
+    FILE *testFile = NULL;
+    char testDataPath[1024];
+    strcpy(testDataPath, IntlTest::loadTestData(status));
+    char* index = 0;
+    if (U_FAILURE(status)) {
+        errln("ERROR: could not open test data %s", u_errorName(status));
+        return;
+    }
+    index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);
 
-  if((unsigned int)(index-testDataPath) != (strlen(testDataPath)-1)){
-          *(index+1)=0;
-  }
-  strcat(testDataPath,".."U_FILE_SEP_STRING);
-  strcat(testDataPath, "CollationTest_");
+    if((unsigned int)(index-testDataPath) != (strlen(testDataPath)-1)){
+        *(index+1)=0;
+    }
+    strcat(testDataPath,".."U_FILE_SEP_STRING);
+    strcat(testDataPath, "CollationTest_");
 
-  const char* type = "NON_IGNORABLE";
+    const char* type = "NON_IGNORABLE";
 
-  const char *ext = ".txt";
-  if(testFile) {
-    fclose(testFile);
-  }
-  char buffer[1024];
-  strcpy(buffer, testDataPath);
-  strcat(buffer, type);
-  size_t bufLen = strlen(buffer);
+    const char *ext = ".txt";
+    if(testFile) {
+        fclose(testFile);
+    }
+    char buffer[1024];
+    strcpy(buffer, testDataPath);
+    strcat(buffer, type);
+    size_t bufLen = strlen(buffer);
 
-  // we try to open 3 files:
-  // path/CollationTest_type.txt
-  // path/CollationTest_type_SHORT.txt
-  // path/CollationTest_type_STUB.txt
-  // we are going to test with the first one that we manage to open.
+    // we try to open 3 files:
+    // path/CollationTest_type.txt
+    // path/CollationTest_type_SHORT.txt
+    // path/CollationTest_type_STUB.txt
+    // we are going to test with the first one that we manage to open.
 
-  strcpy(buffer+bufLen, ext);
+    strcpy(buffer+bufLen, ext);
 
-  testFile = fopen(buffer, "rb");
-
-  if(testFile == 0) {
-    strcpy(buffer+bufLen, "_SHORT");
-    strcat(buffer, ext);
     testFile = fopen(buffer, "rb");
 
     if(testFile == 0) {
-      strcpy(buffer+bufLen, "_STUB");
-      strcat(buffer, ext);
-      testFile = fopen(buffer, "rb");
+        strcpy(buffer+bufLen, "_SHORT");
+        strcat(buffer, ext);
+        testFile = fopen(buffer, "rb");
 
-      if (testFile == 0) {
-        *(buffer+bufLen) = 0;
-        errln("ERROR: could not open any of the conformance test files, tried opening base %s", buffer);
-        return;        
-      } else {
-        infoln(
-          "INFO: Working with the stub file.\n"
-          "If you need the full conformance test, please\n"
-          "download the appropriate data files from:\n"
-          "http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/");
-      }
+        if(testFile == 0) {
+            strcpy(buffer+bufLen, "_STUB");
+            strcat(buffer, ext);
+            testFile = fopen(buffer, "rb");
+
+            if (testFile == 0) {
+                *(buffer+bufLen) = 0;
+                errln("ERROR: could not open any of the conformance test files, tried opening base %s", buffer);
+                return;        
+            } else {
+                infoln(
+                    "INFO: Working with the stub file.\n"
+                    "If you need the full conformance test, please\n"
+                    "download the appropriate data files from:\n"
+                    "http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/");
+            }
+        }
     }
-  }
 
-  Line *lines = new Line[200000];
-  memset(lines, 0, sizeof(Line)*200000);
-  int32_t lineNum = 0;
+    Line *lines = new Line[200000];
+    memset(lines, 0, sizeof(Line)*200000);
+    int32_t lineNum = 0;
 
-  UChar bufferU[1024];
-  int32_t buflen = 0;
-  uint32_t first = 0;
-  uint32_t offset = 0;
+    UChar bufferU[1024];
+    int32_t buflen = 0;
+    uint32_t first = 0;
+    uint32_t offset = 0;
 
-  while (fgets(buffer, 1024, testFile) != NULL) {
-    offset = 0;
-    if(*buffer == 0 || buffer[0] == '#') {
-      continue;
+    while (fgets(buffer, 1024, testFile) != NULL) {
+        offset = 0;
+        if(*buffer == 0 || buffer[0] == '#') {
+            continue;
+        }
+        offset = u_parseString(buffer, bufferU, 1024, &first, &status);
+        buflen = offset;
+        bufferU[offset++] = 0;
+        lines[lineNum].buflen = buflen;
+        //lines[lineNum].buff = new UChar[buflen+1];
+        u_memcpy(lines[lineNum].buff, bufferU, buflen);
+        lineNum++;
     }
-    offset = u_parseString(buffer, bufferU, 1024, &first, &status);
-    buflen = offset;
-    bufferU[offset++] = 0;
-    lines[lineNum].buflen = buflen;
-    //lines[lineNum].buff = new UChar[buflen+1];
-    u_memcpy(lines[lineNum].buff, bufferU, buflen);
-    lineNum++;
-  }
-  fclose(testFile);
+    fclose(testFile);
 
 
-  
-  UCollator *coll = ucol_open("root", &status);
-  if(U_FAILURE(status)) {
-    errln("Couldn't open UCA collator");
-    return;
-  }
-  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
-  ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
-  ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);
-  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
-  ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
 
-  int32_t noSpawned = 0;
-  int32_t spawnResult = 0;
+    UCollator *coll = ucol_open("root", &status);
+    if(U_FAILURE(status)) {
+        errln("Couldn't open UCA collator");
+        return;
+    }
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
+    ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
+    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+
+    int32_t noSpawned = 0;
+    int32_t spawnResult = 0;
     CollatorThreadTest *tests;
     tests = new CollatorThreadTest[kCollatorThreadThreads];
- 
+
     logln(UnicodeString("Spawning: ") + kCollatorThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
     int32_t j = 0;
     for(j = 0; j < kCollatorThreadThreads; j++) {
-      //logln("Setting collator %i", j);
-      tests[j].setCollator(coll, lines, lineNum);
+        //logln("Setting collator %i", j);
+        tests[j].setCollator(coll, lines, lineNum);
     }
     for(j = 0; j < kCollatorThreadThreads; j++) {
-      log("%i ", j);
-      spawnResult = tests[j].start();
-      if(spawnResult != 0) {
-	infoln("THREAD INFO: Couldn't spawn more than %i threads", noSpawned);
-	break;
-      }
-      noSpawned++;
+        log("%i ", j);
+        spawnResult = tests[j].start();
+        if(spawnResult != 0) {
+            infoln("THREAD INFO: Couldn't spawn more than %i threads", noSpawned);
+            break;
+        }
+        noSpawned++;
     }
     logln("Spawned all");
 
@@ -1356,7 +1356,7 @@ void MultithreadTest::TestCollators()
                 // print out the error, too, if any.
             }
         }
-	logln("Completed %i tests", completed);
+        logln("Completed %i tests", completed);
 
         if(completed == noSpawned)
         {
@@ -1370,7 +1370,7 @@ void MultithreadTest::TestCollators()
             ucol_close(coll);
             delete[] tests;
             //for(i = 0; i < lineNum; i++) {
-              //delete[] lines[i].buff;
+            //delete[] lines[i].buff;
             //}
             delete[] lines;
 
@@ -1446,7 +1446,7 @@ public:
 void MultithreadTest::TestString()
 {
     int     patience;
-    int     terrs;
+    int     terrs = 0;
     int     j;
 
     UnicodeString *testString = new UnicodeString("This is the original test string.");
