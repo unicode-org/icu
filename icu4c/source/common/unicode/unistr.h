@@ -2782,7 +2782,7 @@ public:
    * of how many Latin display cells the text will take up in a monospaced
    * font.
    * @return the number of display cells occupied by the specified substring.
-   * @stable
+   * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
    */
   int32_t numDisplayCells(int32_t start = 0,
               int32_t length = INT32_MAX,
