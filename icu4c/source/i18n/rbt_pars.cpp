@@ -1576,7 +1576,6 @@ utrans_stripRules(const UChar *source, int32_t sourceLen, UChar *target, UErrorC
                     c = *(source++);
                 }
                 while (c != CR && c != LF);
-                continue;
             }
             else if (c == ESCAPE) {
                 UChar32   c2 = *source;
