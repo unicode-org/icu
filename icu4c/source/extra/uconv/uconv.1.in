@@ -37,7 +37,7 @@
 .BI "\-\-canon"
 ]
 [
-.BI "\-x" " transliterator
+.BI "\-x" " transliteration
 ]
 [
 .BI "\-\-to\-callback" " callback"
@@ -90,10 +90,16 @@ such characters in the input. Other callbacks offer a useful visual
 representation of the invalid data.
 .PP
 .B uconv
-can also run the transcoding through a specified
-.IR transliterator ,
+can also run the specified
+.IR transliteration
+on the transcoded data,
 in which case transliteration will happen as an intermediate step,
 after the data have been transcoded to Unicode.
+The
+.I transliteration
+can be either a list of semicolon-separated transliterator names,
+or an arbitrary complex set of rules in the ICU transliteration
+rules format.
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
@@ -137,12 +143,12 @@ If used with
 .BR "\-L\fP, \fB\-\-list\-transliterators" ,
 print only one transliterator name per line.
 .TP
-.BI "\-x" " transliterator"
-Run the transcoded Unicode data through the given
-.IR transliterator 
+.BI "\-x" " transliteration"
+Run the given
+.IR transliteration
+on the transcoded Unicode data,
 and use the transliterated data as input for the transcoding to
-the the destination encoding. Compound transliterators can be
-created by separating individual names with a semicolon.
+the the destination encoding.
 .TP
 .BI "\-\-to\-callback" " callback"
 Use
