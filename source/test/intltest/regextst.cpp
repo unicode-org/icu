@@ -1175,29 +1175,49 @@ void RegexTest::API_Pattern() {
 //                     A description of the test data format is included in that file.
 //
 //---------------------------------------------------------------------------
+
+const char *
+RegexTest::getPath(char buffer[2048], const char *filename) {
+    UErrorCode status=U_ZERO_ERROR;
+    const char *testDataDirectory = loadTestData(status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: loadTestData() failed - %s", u_errorName(status));
+	    return NULL;
+    }
+
+    const char *folder=U_FILE_SEP_STRING "out" U_FILE_SEP_STRING "testdata";
+    const char *outTestdata=strstr(testDataDirectory, folder);
+    if(outTestdata!=NULL) {
+        /* skip the initial '/' */
+        outTestdata+=strlen(U_FILE_SEP_STRING);
+        int32_t length=outTestdata-testDataDirectory;
+
+        /* replace the trailing folder with the filename */
+        memcpy(buffer, testDataDirectory, length);
+        strcpy(buffer+length, filename);
+        return buffer;
+    } else {
+        errln("Could not find test data file %s because test data directory does not contain %s", filename, folder);
+        return NULL;
+    }
+}
+
 void RegexTest::Extended() {
+    char tdd[2048];
+    const char *path;
     UErrorCode  status  = U_ZERO_ERROR;
     int32_t     lineNum = 0;
 
     //
     //  Open and read the test data file.
     //
-    const char *testDataDirectory = loadTestData(status);
-    if (U_FAILURE(status)) {
-        errln("ERROR: could not open test data %s", u_errorName(status));
-	    return;
-    }
-    UnicodeString tdd(testDataDirectory);
-    RegexMatcher m("([/\\\\])out[/\\\\]testdata", tdd, 0, status);
-    if(U_SUCCESS(status)) {
-      tdd = m.replaceFirst("$1regextst.txt", status);
-    } else {
-      errln("Couldn't set up tests. Error %s", u_errorName(status));
-      return;
+    path=getPath(tdd, "regextst.txt");
+    if(path==NULL) {
+        return; /* something went wrong, error already output */
     }
 
     int    len;
-    UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);
+    UChar *testData = ReadAndConvertFile(path, len, status);
 
     //
     //  Put the test data into a UnicodeString
@@ -1502,28 +1522,21 @@ cleanUpAndReturn:
 //
 //-------------------------------------------------------------------------------
 void RegexTest::PerlTests() {
+    char tdd[2048];
+    const char *path;
     UErrorCode  status = U_ZERO_ERROR;
     UParseError pe;
 
     //
     //  Open and read the test data file.
     //
-    const char *testDataDirectory = loadTestData(status);
-    if (U_FAILURE(status)) {
-        errln("ERROR: could not open test data %s", u_errorName(status));
-	    return;
-    }
-    UnicodeString tdd(testDataDirectory);
-    RegexMatcher m("([/\\\\])out[/\\\\]testdata", tdd, 0, status);
-    if(U_SUCCESS(status)) {
-      tdd = m.replaceFirst("$1re_tests.txt", status);
-    } else {
-      errln("Couldn't set up tests. Error %s", u_errorName(status));
-      return;
+    path=getPath(tdd, "re_tests.txt");
+    if(path==NULL) {
+        return; /* something went wrong, error already output */
     }
 
     int    len;
-    UChar *testData = ReadAndConvertFile((const char *)CharString(tdd), len, status);
+    UChar *testData = ReadAndConvertFile(path, len, status);
 
     //
     //  Put the test data into a UnicodeString

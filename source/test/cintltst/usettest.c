@@ -160,13 +160,17 @@ static void expectContainment(const USet* set,
                               UBool isIn) {
     const char* p = list;
     UChar ustr[128];
-    char pat[128];
+    char *pat;
     UErrorCode ec;
-    int32_t rangeStart = -1, rangeEnd = -1;
+    int32_t rangeStart = -1, rangeEnd = -1, length;
             
     ec = U_ZERO_ERROR;
-    uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
-    u_UCharsToChars(ustr, pat, u_strlen(ustr)+1);
+    length = uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
+    if(U_FAILURE(ec)) {
+        log_err("FAIL: uset_toPattern() fails in expectContainment() - %s\n", u_errorName(ec));
+        return;
+    }
+    pat=aescstrdup(ustr, length);
 
     while (*p) {
         if (*p=='{') {
@@ -243,7 +247,7 @@ static void expectContainment(const USet* set,
     }
 }
 
-/* This only works for BMP chars */
+/* This only works for invariant BMP chars */
 static char oneUCharToChar(UChar32 c) {
     UChar ubuf[1];
     char buf[1];
@@ -256,21 +260,22 @@ static void expectItems(const USet* set,
                         const char* items) {
     const char* p = items;
     UChar ustr[128], itemStr[128];
-    char pat[128], buf[128];
+    char buf[128];
+    char *pat;
     UErrorCode ec;
     int32_t expectedSize = 0;
     int32_t itemCount = uset_getItemCount(set);
     int32_t itemIndex = 0;
     UChar32 start = 1, end = 0;
-    int32_t itemLen = 0;
+    int32_t itemLen = 0, length;
 
     ec = U_ZERO_ERROR;
-    uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
+    length = uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: uset_toPattern => %s\n", u_errorName(ec));
         return;
     }
-    u_UCharsToChars(ustr, pat, u_strlen(ustr)+1);
+    pat=aescstrdup(ustr, length);
 
     if (uset_isEmpty(set) != (strlen(items)==0)) {
         log_err("FAIL: %s should return %s from isEmpty\n",
@@ -279,7 +284,7 @@ static void expectItems(const USet* set,
     }
 
     /* Don't test patterns starting with "[^" */
-    if (strlen(pat) > 2 && pat[1] == '^') {
+    if (u_strlen(ustr) > 2 && ustr[1] == 0x5e /*'^'*/) {
         return;
     }
 
