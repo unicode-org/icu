@@ -24,9 +24,8 @@
 
 #include "cintltst.h"
 
-#define MAX_TOKEN_LEN 128
+#define MAX_TOKEN_LEN 16
 
-   
     /* performs Extra tests*/
    static void TestExtra(void);
 
@@ -37,6 +36,5 @@
 static    void TestTertiary(void);
 
 
-   
 
 #endif

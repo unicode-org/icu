@@ -40,12 +40,11 @@
 
 #include "cintltst.h"
 
-#define MAX_TOKEN_LEN 128
+#define MAX_TOKEN_LEN 16
 #define  TESTLOCALES  12 
 #define  FIXEDTESTSET 15 
 #define  TOTALTESTSET  30 
 
-     
     /* perform test for G7 locales */
     static void TestG7Locales(void);
 
