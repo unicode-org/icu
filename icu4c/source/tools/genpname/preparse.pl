@@ -90,7 +90,6 @@ my %UNSUPPORTED = (Composition_Exclusion => 1,
                    Expands_On_NFKC => 1,
                    Expands_On_NFKD => 1,
                    FC_NFKC_Closure => 1,
-                   Hangul_Syllable_Type => 1,
                    ID_Start_Exceptions => 1,
                    NFC_Quick_Check => 1,
                    NFD_Quick_Check => 1,
@@ -1127,6 +1126,12 @@ sub read_uchar {
         elsif ($mode eq 'UNumericType') {
             if (m|^\s*(U_NT_\w+).+?/\*\[(.+?)\]\*/|) {
                 addDatum($hash, 'nt', $1, $2);
+            }
+        }
+
+        elsif ($mode eq 'UHangulSyllableType') {
+            if (m|^\s*(U_HST_\w+).+?/\*\[(.+?)\]\*/|) {
+                addDatum($hash, 'hst', $1, $2);
             }
         }
 
