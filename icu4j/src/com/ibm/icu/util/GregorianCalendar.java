@@ -5,7 +5,6 @@
 package com.ibm.icu.util;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * <code>GregorianCalendar</code> is a concrete subclass of

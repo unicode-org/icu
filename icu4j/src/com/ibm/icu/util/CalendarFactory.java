@@ -5,15 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CalendarFactory.java,v $ 
-* $Date: 2003/09/04 01:00:30 $ 
-* $Revision: 1.4 $
+* $Date: 2003/10/02 20:50:25 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.util;
 
+import com.ibm.icu.util.TimeZone;
 import java.util.Locale;
-import java.util.TimeZone;
 /**
  * @prototype
  */

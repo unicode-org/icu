@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/09/04 00:58:15 $ 
- * $Revision: 1.18 $
+ * $Date: 2003/10/02 20:50:58 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -22,7 +22,6 @@ import com.ibm.icu.util.*;
 import com.ibm.icu.impl.*;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;

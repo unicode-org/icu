@@ -5,23 +5,27 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarPanel.java,v $ 
- * $Date: 2003/09/04 00:55:20 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/10/02 20:50:56 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.demo.calendar;
 
-import java.awt.*;
-
-import java.util.SimpleTimeZone;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Date;
 import java.util.Locale;
 
-import com.ibm.icu.util.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.dev.demo.impl.*;
+import com.ibm.icu.dev.demo.impl.DemoUtility;
+import com.ibm.icu.text.DateFormatSymbols;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.SimpleTimeZone;
 
 class CalendarPanel extends Canvas {
 

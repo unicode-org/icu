@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2003/09/04 00:57:10 $
- * $Revision: 1.17 $
+ * $Date: 2003/10/02 20:50:57 $
+ * $Revision: 1.18 $
  *
  *******************************************************************************
  */
@@ -15,8 +15,6 @@ import com.ibm.icu.util.*;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.SimpleTimeZone;
-import java.util.TimeZone;
 
 import com.ibm.icu.text.*;
 
@@ -72,12 +70,23 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             GregorianCalendar cal = new GregorianCalendar(zone);
             cal.clear();
             cal.set(1900, 15, 5, 5, 8, 13);
-            if (cal.get(Calendar.HOUR) != 5) {
+            if (cal.get(Calendar.HOUR) != 5 || ids[i].equals("Pacific/Enderbury")) {
                 logln("Fail: " + zone.getID() + " " +
                       zone.useDaylightTime() + " " +
                       cal.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
                       zone.getRawOffset() / (60*60*1000) +
                       ": HOUR = " + cal.get(Calendar.HOUR));
+                cal.clear();
+                cal.set(1900, 15, 5, 5, 8, 13);
+                cal.getTime();
+                java.util.GregorianCalendar cal2 = new java.util.GregorianCalendar(java.util.TimeZone.getTimeZone(ids[i]));
+                cal2.clear();
+                cal2.set(1900, 15, 5, 5, 8, 13);
+                logln("java.util.GC: " + zone.getID() + " " +
+                      zone.useDaylightTime() + " " +
+                      cal2.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
+                      zone.getRawOffset() / (60*60*1000) +
+                      ": HOUR = " + cal2.get(Calendar.HOUR));
                 bad = true;
             } else if (false) { // Change to true to debug
                 logln("OK: " + zone.getID() + " " +

@@ -7,6 +7,7 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 
 import java.text.FieldPosition;
 import java.text.Format;
@@ -15,7 +16,6 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.TimeZone;
 
 /**
  * DateFormat is an abstract class for date/time formatting subclasses which

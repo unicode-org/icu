@@ -3,13 +3,13 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2003/09/04 01:00:30 $
- * $Revision: 1.17 $
+ * $Date: 2003/10/02 20:50:26 $
+ * $Revision: 1.18 $
  */
 package com.ibm.icu.util;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.TimeZone;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * <code>ChineseCalendar</code> is a concrete subclass of {@link Calendar}

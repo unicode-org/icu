@@ -5,25 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2003/09/04 00:57:13 $ 
- * $Revision: 1.10 $
+ * $Date: 2003/10/02 20:50:58 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.calendar;
-
-//import com.ibm.icu.dev.test.*;
-//import com.ibm.icu.util.*;
-
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
-
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.HebrewCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * Tests for the <code>HebrewCalendar</code> class.

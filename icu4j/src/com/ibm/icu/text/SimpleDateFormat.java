@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/09/04 00:59:36 $ 
- * $Revision: 1.23 $
+ * $Date: 2003/10/02 20:50:25 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,7 @@ import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.TimeZone;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +28,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 import java.lang.reflect.Method;
 
 /**
