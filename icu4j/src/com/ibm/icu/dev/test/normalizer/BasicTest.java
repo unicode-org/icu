@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2002/07/25 21:22:54 $
- * $Revision: 1.14 $
+ * $Date: 2002/08/12 16:14:35 $
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -915,8 +915,48 @@ public class BasicTest extends TestFmwk {
 
 
     }
-
     public void TestDebugIter(){
+        String src = Utility.unescape("\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e");
+        String expected = Utility.unescape("\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e");
+        Normalizer iter = new Normalizer(new StringCharacterIterator(Utility.unescape(src)),
+                                                Normalizer.NONE);
+        int index = 0;
+        int ch;
+        UCharacterIterator cIter =  UCharacterIterator.getInstance(expected);
+        
+        while ((ch=iter.next())!= iter.DONE){
+            if (index >= expected.length()) {
+                errln("FAIL: " +  "Unexpected character '" + (char)ch
+                        + "' (" + hex(ch) + ")"
+                        + " at index " + index);
+                break;
+            }
+            int want = UTF16.charAt(expected,index);
+            if (ch != want) {
+                errln("FAIL: " +  "got '" + (char)ch
+                        + "' (" + hex(ch) + ")"
+                        + " but expected '" + want + "' (" + hex(want)+ ")"
+                        + " at index " + index);
+            }
+            index+=  UTF16.getCharCount(ch);
+        }
+        if (index < expected.length()) {
+            errln("FAIL: " +  "Only got " + index + " chars, expected "
+            + expected.length());
+        }
+        
+        cIter.setToLimit();
+        while((ch=iter.previous())!=iter.DONE){
+            int want = cIter.previousCodePoint();
+            if (ch != want ) {
+                errln("FAIL: " + "got '" + (char)ch
+                        + "' (" + hex(ch) + ")"
+                        + " but expected '" + want + "' (" + hex(want) + ")"
+                        + " at index " + index);
+            }
+        }
+    }
+    public void TestDebugIterOld(){
         String input = "\\U0001D15E";
         String expected = "\uD834\uDD57\uD834\uDD65";
         String expectedReverse = "\uD834\uDD65\uD834\uDD57";
@@ -2032,6 +2072,7 @@ public class BasicTest extends TestFmwk {
             errln("Reordering of combining marks failed. Expected: "+Utility.hex(expected)+" Got: "+ Utility.hex(result));
         }
     }
+
     /*
      * Re-enable this test when UTC fixes UAX 21
     public void TestUAX21Failure(){
