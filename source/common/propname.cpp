@@ -121,26 +121,42 @@ pname_cleanup() {
 }
 U_CDECL_END
 
-static UBool load() {
-    if (!PNAME) {
-        UErrorCode ec = U_ZERO_ERROR;
-        UDataMemory* data =
-            udata_openChoice(0, PNAME_DATA_TYPE, PNAME_DATA_NAME,
-                             isAcceptable, 0, &ec);
-        if (U_SUCCESS(ec)) {
-            umtx_lock(NULL);
-            if (UDATA == NULL) {
-                UDATA = data;
-                PNAME = (const PropertyAliases*) udata_getMemory(UDATA);
-                data = NULL;
-            }
-            umtx_unlock(NULL);
+/**
+ * Load the property names data.  Caller should check that data is
+ * not loaded BEFORE calling this function.  Returns TRUE if the load
+ * succeeds.
+ */
+static UBool _load() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UDataMemory* data =
+        udata_openChoice(0, PNAME_DATA_TYPE, PNAME_DATA_NAME,
+                         isAcceptable, 0, &ec);
+    if (U_SUCCESS(ec)) {
+        umtx_lock(NULL);
+        if (UDATA == NULL) {
+            UDATA = data;
+            PNAME = (const PropertyAliases*) udata_getMemory(UDATA);
+            data = NULL;
         }
-        if (data) {
-            udata_close(data);
-        }
+        umtx_unlock(NULL);
+    }
+    if (data) {
+        udata_close(data);
     }
     return PNAME!=NULL;
+}
+
+/**
+ * Inline function that expands to code that does a lazy load of the
+ * property names data.  If the data is already loaded, avoids an
+ * unnecessary function call.  If the data is not loaded, call _load()
+ * to load it, and return TRUE if the load succeeds.
+ */
+static UBool inline load() {
+    umtx_lock(NULL);
+    UBool f = (PNAME!=NULL);
+    umtx_unlock(NULL);
+    return f || _load();
 }
 
 //----------------------------------------------------------------------
