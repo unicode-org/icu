@@ -30,24 +30,24 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
 {
   sprintf(linebuf, "## Makefile for %s created by pkgtool\n"
                    "## from ICU Version %s\n"
-                   "\n"
-                   "include %s\n",
+                   "\n",
           o->shortName,
-          U_ICU_VERSION,
-          o->options);
+          U_ICU_VERSION);
   T_FileStream_writeLine(f, linebuf);
 
   sprintf(linebuf, "NAME=%s\n"
-                   "TARGETDIR=%s\n"
-                   "TEMP_DIR=%s\n"
-                   "MODE=%s\n"
-                   "MAKEFILE=%s\n"
-                   "\n\n\n",
+          "TARGETDIR=%s\n"
+          "TEMP_DIR=%s\n"
+          "MODE=%s\n"
+          "MAKEFILE=%s\n"
+          "include %s\n"
+          "\n\n\n",
           o->shortName,
           o->targetDir,
           o->tmpDir,
           o->mode,
-          o->makeFile);
+          o->makeFile,
+          o->options);
   T_FileStream_writeLine(f, linebuf);
 
   sprintf(linebuf, "## List files [%d] containing data files to process (note: - means stdin)\n"

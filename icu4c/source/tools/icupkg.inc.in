@@ -11,7 +11,7 @@ PLATFORM=@platform@
 
 SHELL=@SHELL@
 CFLAGS=@CFLAGS@ 
-CPPFLAGS=@CPPFLAGS@ -I../source/common -I$(prefix)/include
+CPPFLAGS=@CPPFLAGS@ -I../../../source/common
 CXXFLAGS=@CXXFLAGS@ 
 FFLAGS=@FFLAGS@
 DEFS=@DEFS@ 
@@ -81,19 +81,22 @@ ld_rpath_suf=@ld_rpath_suf@
 
 ##### Add the following to source/config/Makefile.in
 
-GENCCODE=../source/tools/genccode/genccode
-GENCMN=../source/tools/gencmn/gencmn
+GENCCODE=../genccode/genccode
+GENCMN=../gencmn/gencmn
 
-TOOL=env LD_LIBRARY_PATH=../source/common:../source/i18n:../source/tools/toolutil LIBPATH=../source/common:../source/i18n:../source/tools/toolutil 
+LPATHS=../../source/common:../../source/i18n:../../source/tools/toolutil 
+#LPATHS=../source/common:../source/i18n:../source/tools/toolutil 
+
+TOOL=env LD_LIBRARY_PATH=$(LPATHS) LIBPATH=$(LPATHS) 
 
 ifeq ($(strip $(PLATFORM)),AIX)
-  TOOL=env LIBPATH=../source/common:../source/i18n:../source/tools/toolutil
+  TOOL=env LIBPATH=$(LPATHS)
 endif
 
 ifeq ($(strip $(PLATFORM)),HPUX)
-  TOOL=env LD_LIBRARY_PATH=../source/common:../source/i18n:../source/tools/toolutil
+  TOOL=env LD_LIBRARY_PATH=$(LPATHS)
 endif
 
 ifeq ($(strip $(PLATFORM)),U_LINUX)
-  TOOL=env LD_LIBRARY_PATH=../source/common:../source/i18n:../source/tools/toolutil
+  TOOL=env LD_LIBRARY_PATH=$(LPATHS)
 endif
