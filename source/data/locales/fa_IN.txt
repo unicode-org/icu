@@ -7,11 +7,6 @@
 
 fa_IN {
     Version{ "1.2" }
-    CurrencyElements { 
-        "\u20a8",
-        "INR",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a z",
         "h:mm:ss a z",

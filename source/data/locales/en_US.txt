@@ -7,11 +7,6 @@
 
 en_US {
     Version{ "1.0" }
-    CurrencyElements { 
-        "$",
-        "USD",
-        ".",
-    }
 //    LocaleString { "en_US" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
@@ -21,4 +16,9 @@ en_US {
     }
 //    ShortCountry { "USA" }
     LocaleID:int { 0x0409 }
+
+    // Currency display names
+    Currencies {
+        USD { "$", "US Dollar" }
+    }
 }

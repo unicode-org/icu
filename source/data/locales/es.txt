@@ -337,4 +337,20 @@ es {
         // overflow rule
         "1,000,000,000: =#,##0= (incomplete data);" 
      }
+
+    // Currency display names
+    Currencies {
+        BOB { "$b", "BOB" }
+        DOP { "RD$", "DOP" }
+        ECS { "S/.", "ECS" }
+        ESP { "Pts", "ESP" }
+        GTQ { "Q", "GTQ" }
+        HNL { "L.", "HNL" }
+        NIO { "C$", "NIO" }
+        PAB { "B/", "PAB" }
+        PEN { "S/", "PEN" }
+        PYG { "Gs", "PYG" }
+        UYU { "NU$", "UYU" }
+        VEB { "Bs", "VEB" }
+    }
 }

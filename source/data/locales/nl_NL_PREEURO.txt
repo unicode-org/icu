@@ -7,9 +7,4 @@
 
 nl_NL_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "fl",
-        "NLG",
-        ",",
-    }
 }

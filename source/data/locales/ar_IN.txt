@@ -8,11 +8,6 @@
 
 ar_IN {
     Version{ "1.2" }
-    CurrencyElements { 
-        "\u20A8",
-        "INR",
-        ".",
-    }
     DateTimePatterns {
         "h:mm:ss a z",
         "h:mm:ss a z",

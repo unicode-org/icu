@@ -7,11 +7,6 @@
 
 hu_HU {
     Version{ "1.1" }
-    CurrencyElements { 
-        "Ft",
-        "HUF",
-        ",",
-    }
 //    LocaleString { "hu_HU" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

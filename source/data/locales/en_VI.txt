@@ -7,11 +7,6 @@
 
 en_VI {
     Version{ "1.0" }
-    CurrencyElements { 
-        "$",
-        "USD",
-        ".",
-    }
 //    LocaleString { "en_VI" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
@@ -21,4 +16,9 @@ en_VI {
     }
 //    ShortCountry { "VIR" }
     LocaleID:int { 0x2409 }
+
+    // Currency display names
+    Currencies {
+        USD { "$", "US Dollar" }
+    }
 }

@@ -7,11 +7,6 @@
 
 de_LU_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "F",
-        "LUF",
-        ",",
-    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "#,##0 \u00A4;-#,##0 \u00A4",

@@ -7,11 +7,6 @@
 
 es_CR {
     Version { "1.0" }
-    CurrencyElements {
-        "\u20A1",
-        "CRC",
-        ",",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -37,6 +32,12 @@ es_CR {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortCountry { "CRI" }
+
+    // Currency display names
+    Currencies {
+        CRC { "\u20A1", "CRC" }
+    }
 }

@@ -7,11 +7,6 @@
 
 zh_CN {
     Version{ "1.0" }
-    CurrencyElements { 
-        "\uFFE5",
-        "CNY",
-        ".",
-    }
 //    LocaleString { "zh_CN" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

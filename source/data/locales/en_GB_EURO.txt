@@ -7,11 +7,6 @@
 
 en_GB_EURO {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u20ac",
-        "EUR",
-        ".",
-    }
  
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

@@ -502,6 +502,7 @@ de {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "deu" }
     localPatternChars { "GjMtkHmsSEDFwWahKzJe" }
@@ -570,5 +571,12 @@ de {
         "    & ae , \u00e4 & ae , \u00c4\n"
         "    & oe , \u00f6 & oe , \u00d6\n"
         "    & ue , \u00fc & ue , \u00dc\n"
+    }
+
+    // Currency display names
+    Currencies {
+        ATS { "\u00F6S", "ATS" }
+        CHF { "SFr.", "CHF" }
+        DEM { "DM", "DEM" }
     }
 }

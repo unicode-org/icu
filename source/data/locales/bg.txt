@@ -96,6 +96,7 @@ bg {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "bul" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
@@ -115,4 +116,9 @@ bg {
         "Cyrl",     // Abbreviation 
     }
     ExemplarCharacters { "[\u0430-\u044c \u044e\u044f\u0463\u046b]" }
+
+    // Currency display names
+    Currencies {
+        BGL { "\u043B\u0432", "BGL" }
+    }
 }

@@ -7,11 +7,6 @@
 
 es_VE {
     Version { "1.0" }
-    CurrencyElements { 
-        "Bs",
-        "VEB",
-        ",",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -37,6 +32,7 @@ es_VE {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

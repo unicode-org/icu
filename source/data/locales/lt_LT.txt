@@ -7,11 +7,6 @@
 
 lt_LT {
     Version{ "1.1" }
-    CurrencyElements { 
-        "Lt",
-        "LTL",
-        ",",
-    }
 //    LocaleString { "lt_LT" }
     NumberPatterns { 
         "##,##0.##;-##,##0.##",

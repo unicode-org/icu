@@ -76,13 +76,14 @@ gu {
         ",",
         ";",
         "%",
-        "\u0ae6",
+        "\u0AE6",
         "#",
         "-",
         "E",
         "\u2030",
-        "\u221e",
-        "\ufffd",
+        "\u221E",
+        "\uFFFD",
+        ".",
     }
     LocaleScript:array { "Gujr" }
     ExemplarCharacters { "[[:Gujr:]\u200c\u200d]" }
@@ -91,5 +92,10 @@ gu {
         Sequence { 
             "[normalization on]"
         }
+    }
+
+    // Currency display names
+    Currencies {
+        INR { "\u0AB0\u0AC1", "INR" }
     }
 }

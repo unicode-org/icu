@@ -94,6 +94,7 @@ hr {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "hrv" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
@@ -110,4 +111,9 @@ hr {
 //    LocaleScript:array {
 //        "Latn"  // ISO 15924 Name 
 //    }
+
+    // Currency display names
+    Currencies {
+        HRK { "Kn", "HRK" }
+    }
 }

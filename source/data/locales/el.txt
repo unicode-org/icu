@@ -170,6 +170,7 @@ el {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "ell" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
@@ -243,5 +244,10 @@ el {
     TransliterateLATIN {
         "UNGEGN",
         "::Greek-Latin/UNGEGN;"
+    }
+
+    // Currency display names
+    Currencies {
+        GRD { "\u0394\u03C1\u03C7", "GRD" }
     }
 }

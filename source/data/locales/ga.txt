@@ -72,4 +72,9 @@ ga{
 //        "Latn",  // ISO 15924 Name 
 //    }
     ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa]" }
+
+    // Currency display names
+    Currencies {
+        IEP { "\u00A3", "IEP" }
+    }
 }

@@ -7,11 +7,6 @@
 
 sq_AL {
     Version{ "1.1" }
-    CurrencyElements { 
-        "Lek",
-        "ALL",
-        ",",
-    }
 //    LocaleString { "sq_AL" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

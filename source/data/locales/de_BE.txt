@@ -11,11 +11,6 @@ de_BE {
 //        "vorm",
 //        "nachm",
 //    }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
     DateTimePatterns { 
         "HH 'h' mm 'min' ss 's' z",
         "HH:mm:ss z",

@@ -7,9 +7,4 @@
 
 fi_FI_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "mk",
-        "FIM",
-        ",",
-    }
 }

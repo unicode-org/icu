@@ -7,11 +7,6 @@
 
 es_PR {
     Version{ "1.0" }
-    CurrencyElements { 
-        "$",
-        "USD",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -39,4 +34,9 @@ es_PR {
 //        "\uFFFD",
 //    }
 //    ShortCountry { "PRI" }
+
+    // Currency display names
+    Currencies {
+        USD { "$", "USD" }
+    }
 }

@@ -7,9 +7,4 @@
 
 de_DE_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "DM",
-        "DEM",
-        ",",
-    }
 }

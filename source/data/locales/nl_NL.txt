@@ -7,11 +7,6 @@
 
 nl_NL {
     Version{ "1.0" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
 //    LocaleString { "nl_NL" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

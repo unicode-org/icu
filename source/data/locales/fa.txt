@@ -714,4 +714,10 @@ fa {
         YIII { "\u06cc\u06cc" }
         ZYYY { "\u0645\u0634\u062a\u0631\u06a9" }
     }
+
+    // Currency display names
+    Currencies {
+        INR { "\u20A8", "INR" }
+        IRR { "\uFDFC", "IRR" }
+    }
 }

@@ -8,11 +8,6 @@
 es_ES {
     Version { "1.0" }
 //    LocaleString { "es_ES" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
     NumberElements {
         ",",
         ".",
@@ -25,6 +20,7 @@ es_ES {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

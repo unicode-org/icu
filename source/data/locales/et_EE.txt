@@ -7,11 +7,6 @@
 
 et_EE {
     Version{ "1.0" }
-    CurrencyElements { 
-        "kr",
-        "EEK",
-        ",",
-    }
 //    LocaleString { "et_EE" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

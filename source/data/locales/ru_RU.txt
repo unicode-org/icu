@@ -7,14 +7,9 @@
 
 ru_RU {
     Version { "1.1" }
-    CurrencyElements { 
-        "\u0440.",
-        "RUR",
-        ",",
-    }
     NumberElements { 
         ",",
-        "\u00A0",  // &nbsp;
+        "\u00A0",
         ";",
         "%",
         "0",
@@ -24,6 +19,7 @@ ru_RU {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    LocaleString { "ru_RU" }
     NumberPatterns { 

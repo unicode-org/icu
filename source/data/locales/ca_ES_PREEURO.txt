@@ -13,9 +13,4 @@ ca_ES_PREEURO {
         "#,##0%",
         "#E0",
     }
-    CurrencyElements { 
-        "Pts",
-        "ESP",
-        ",",
-    }
 }

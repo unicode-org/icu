@@ -7,11 +7,6 @@
 
 es_US {
     Version { "1.0" }
-    CurrencyElements {
-        "$",
-        "USD",
-        ".",
-    }
 //    NumberElements {
 //        ".",
 //        ",",
@@ -45,5 +40,10 @@ es_US {
         "\u00a4#,##0.00;(\u00a4#,##0.00)",
         "#,##0%",
         "#E0",
+    }
+
+    // Currency display names
+    Currencies {
+        USD { "$", "USD" }
     }
 }

@@ -7,11 +7,6 @@
 
 ar_SD {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u062C.\u0633.\u200F",
-        "SDP",
-        ".",
-    }
 //    LocaleString { "ar_SD" }
 //    ShortCountry { "SDN" }
 }

@@ -142,4 +142,26 @@ ar {
 //        "[\u0621 \u0627-\u063A \u0641-\u064A\u0651 \u0653-\u0655 \u0670-\u06B7 \u06BA-\u06BE \u06C1 \u06C3-\u06CE \u06D0-\u06D2]"
         "[\u0621-\u063A\u0640-\u0655\u0660-\u066C\u200c\u200d\u200f\u200e]"
     }
+
+    // Currency display names
+    Currencies {
+        AED { "\u062F.\u0625.\u200F", "AED" }
+        BHD { "\u062F.\u0628.\u200F", "BHD" }
+        DZD { "\u062F.\u062C.\u200F", "DZD" }
+        EGP { "\u062C.\u0645.\u200F", "EGP" }
+        INR { "\u20A8", "INR" }
+        IQD { "\u062F.\u0639.\u200F", "IQD" }
+        JOD { "\u062F.\u0623.\u200F", "JOD" }
+        KWD { "\u062F.\u0643.\u200F", "KWD" }
+        LBP { "\u0644.\u0644.\u200F", "LBP" }
+        LYD { "\u062F.\u0644.\u200F", "LYD" }
+        MAD { "\u062F.\u0645.\u200F", "MAD" }
+        OMR { "\u0631.\u0639.\u200F", "OMR" }
+        QAR { "\u0631.\u0642.\u200F", "QAR" }
+        SAR { "\u0631.\u0633.\u200F", "SAR" }
+        SDP { "\u062C.\u0633.\u200F", "SDP" }
+        SYP { "\u0644.\u0633.\u200F", "SYP" }
+        TND { "\u062F.\u062A.\u200F", "TND" }
+        YER { "\u0631.\u064A.\u200F", "YER" }
+    }
 }

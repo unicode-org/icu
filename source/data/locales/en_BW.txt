@@ -7,12 +7,6 @@
 
 en_BW {
     Version { "1.0" }
-    ///* Discarding duplicate data for tag: AmPmMarkers */
-    CurrencyElements {
-        "Pu",
-        "BWP",
-        ".",
-    }
     DateTimePatterns {
         "h:mm:ss a",
         "h:mm:ss a",

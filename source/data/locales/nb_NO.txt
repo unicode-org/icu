@@ -7,11 +7,6 @@
 
 nb_NO {
     Version{"1.0"}
-    CurrencyElements {
-	    "kr",
-	    "NOK",
-	    ",",
-    }
     NumberPatterns {
 	    "#,##0.###;-#,##0.###",
 	    "\u00A4 #,##0.00;\u00A4 -#,##0.00",

@@ -7,11 +7,6 @@
 
 pl_PL {
     Version { "1.1" }
-    CurrencyElements { 
-        "z\u0142",
-        "PLN",
-        ",",
-    }
 //    LocaleString { "pl_PL" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

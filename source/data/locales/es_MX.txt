@@ -7,11 +7,6 @@
 
 es_MX {
     Version { "1.1" }
-    CurrencyElements { 
-        "$",
-        "MXN",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -39,4 +34,9 @@ es_MX {
 //        "\uFFFD",
 //    }
 //    ShortCountry { "MEX" }
+
+    // Currency display names
+    Currencies {
+        MXN { "$", "MXN" }
+    }
 }

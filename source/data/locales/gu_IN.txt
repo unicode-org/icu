@@ -8,12 +8,6 @@
 gu_IN {
     Version { "1.0" }
     LocaleID:int { 0x0447 }
-    //ShortCountry { IND }
-    CurrencyElements {
-        "\u0AB0\u0AC1",
-        "INR",  
-        "."
-    }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",

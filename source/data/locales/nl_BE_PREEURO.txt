@@ -7,9 +7,4 @@
 
 nl_BE_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "BF",
-        "BEF",
-        ",",
-    }
 }

@@ -10,11 +10,6 @@
 
 sw_TZ {
     Version { "1.0" }
-    CurrencyElements { 
-        "TSh",
-        "TZS",
-        "",
-    }
 //    LocaleString { "sw_TZ" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

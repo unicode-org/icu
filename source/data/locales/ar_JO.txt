@@ -7,11 +7,6 @@
 
 ar_JO {
     Version{ "1.1" }
-    CurrencyElements { 
-        "\u062F.\u0623.\u200F",
-        "JOD",
-        ".",
-    }
     DayAbbreviations { 
         "\u0627\u0644\u0623\u062D\u062F",
         "\u0627\u0644\u0627\u062B\u0646\u064A\u0646",

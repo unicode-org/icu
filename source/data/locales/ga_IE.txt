@@ -28,9 +28,4 @@ ga_IE {
         "#,##0%",
         "#E0",
     }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ".",
-    }
 }

@@ -98,6 +98,7 @@ lv {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "lav" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
@@ -114,4 +115,9 @@ lv {
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
+
+    // Currency display names
+    Currencies {
+        LVL { "Ls", "LVL" }
+    }
 }

@@ -7,11 +7,6 @@
 
 ar_BH {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u062F.\u0628.\u200F",
-        "BHD",
-        ".",
-    }
 //    LocaleString { "ar_BH" }
 //    ShortCountry { "BHR" }
     LocaleID:int { 0x3c01 }

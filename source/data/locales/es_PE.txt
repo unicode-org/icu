@@ -7,11 +7,6 @@
 
 es_PE {
     Version { "1.0" }
-    CurrencyElements { 
-        "S/",
-        "PEN",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",

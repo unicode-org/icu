@@ -11,11 +11,6 @@ en_IN {
 //        "AM",
 //        "PM",
 //    }
-    CurrencyElements { 
-        "\u20a8",
-        "INR",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a z",
         "h:mm:ss a z",
@@ -48,4 +43,7 @@ en_IN {
         "#E0",
     }
 
+    Currencies {
+        INR { "\u00A90#Rs|1#Re|1<Rs", "\u00A90#Rupees|1#Rupee|1<Rupees" }
+    }
 }

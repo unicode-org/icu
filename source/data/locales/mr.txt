@@ -248,6 +248,11 @@ mr {
         "Deva"        // ISO 15924 Name 
     }
     ExemplarCharacters{"[[:Deva:]-[\u0958-\u095f]\u200c\u200d]"}
+
+    // Currency display names
+    Currencies {
+        INR { "\u0930\u0941", "INR" }
+    }
 }
 
 

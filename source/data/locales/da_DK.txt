@@ -7,11 +7,6 @@
 
 da_DK {
     Version{"1.0"}
-    CurrencyElements { 
-        "kr",
-        "DKK",
-        ",",
-    }
 //    LocaleString { "da_DK" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

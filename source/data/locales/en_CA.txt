@@ -16,11 +16,6 @@ en_CA {
 //        AU { "Australia" }
 //        NZ { "New Zealand" }
 //    }
-    CurrencyElements {
-        "$",
-        "CAD",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a z",
         "h:mm:ss a z",
@@ -182,4 +177,9 @@ en_CA {
             "NDT",
         }
     }*/
+
+    // Currency display names
+    Currencies {
+        CAD { "$", "Canadian Dollar" }
+    }
 }
