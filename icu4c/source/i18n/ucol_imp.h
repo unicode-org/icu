@@ -832,6 +832,16 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
 U_CAPI void U_EXPORT2 
 uprv_uca_initImplicitConstants(uint32_t baseByte);
 
+/** Check whether two collators are equal. Collators are considered equal if they
+ *  will sort strings the same. This means that both the current attributes and the
+ *  rules must be equivalent. Currently used for RuleBasedCollator::operator==.
+ *  @param source first collator
+ *  @param target second collator
+ *  @return TRUE or FALSE
+ */
+U_CAPI UBool U_EXPORT2
+ucol_equals(const UCollator *source, const UCollator *target);
+
 #ifdef XP_CPLUSPLUS
 /*
  *  Test whether a character is potentially "unsafe" for use as a collation

@@ -229,13 +229,17 @@ UBool RuleBasedCollator::operator==(const Collator& that) const
 
   RuleBasedCollator& thatAlias = (RuleBasedCollator&)that;
 
+  // weiv: use C function, commented code below is wrong
+  return ucol_equals(this->ucollator, thatAlias.ucollator);
   /*
   synwee : orginal code does not check for data compatibility
   */
+  /*
   if (ucollator != thatAlias.ucollator)
     return FALSE;
 
   return TRUE;
+  */
 }
 
 RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)

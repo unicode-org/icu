@@ -8338,4 +8338,65 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
   return (USet *)tailored;
 }
 
+U_CAPI UBool U_EXPORT2
+ucol_equals(const UCollator *source, const UCollator *target) {
+  UErrorCode status = U_ZERO_ERROR;
+  // if pointers are equal, collators are equal
+  if(source == target) {
+    return TRUE;
+  }
+  int32_t i = 0, j = 0;
+  // if any of attributes are different, collators are not equal
+  for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
+    if(ucol_getAttribute(source, (UColAttribute)i, &status) != ucol_getAttribute(target, (UColAttribute)i, &status) || U_FAILURE(status)) {
+      return FALSE;
+    }
+  }
+
+  int32_t sourceRulesLen = 0, targetRulesLen = 0;
+  const UChar *sourceRules = ucol_getRules(source, &sourceRulesLen);
+  const UChar *targetRules = ucol_getRules(target, &targetRulesLen);
+
+  if(sourceRulesLen == targetRulesLen && u_strncmp(sourceRules, targetRules, sourceRulesLen) == 0) {
+    // all the attributes are equal and the rules are equal - collators are equal
+    return(TRUE);
+  } 
+  // hard part, need to construct tree from rules and see if they yield the same tailoring
+  UBool result = TRUE;
+  UParseError parseError;
+  UColTokenParser sourceParser, targetParser;
+  int32_t sourceListLen = 0, targetListLen = 0;
+  ucol_tok_initTokenList(&sourceParser, sourceRules, sourceRulesLen, UCA, &status);
+  ucol_tok_initTokenList(&targetParser, targetRules, targetRulesLen, UCA, &status);
+  sourceListLen = ucol_tok_assembleTokenList(&sourceParser, &parseError, &status);
+  targetListLen = ucol_tok_assembleTokenList(&targetParser, &parseError, &status);
+
+  if(sourceListLen != targetListLen) {
+    // different number of resets
+    result = FALSE;
+  } else {
+    UColToken *sourceReset = NULL, *targetReset = NULL;
+    UChar sourceResetString, targetResetString;
+    for(i = 0; i < sourceListLen; i++) {
+      sourceReset = sourceParser.lh[i].reset;
+      sourceResetString = sourceParser.source[sourceReset->source];
+      for(j = 0; j < sourceListLen; j++) {
+        targetReset = targetParser.lh[j].reset;
+        targetResetString = targetParser.source[targetReset->source];
+        if(targetResetString == sourceResetString) {
+          break;
+        }
+      }
+      // couldn't find the reset anchor, so the collators are not equal
+      if(j == sourceListLen) {
+        return FALSE;
+      }
+    }
+  }
+
+  ucol_tok_closeTokenList(&sourceParser);
+  ucol_tok_closeTokenList(&targetParser);
+  return result;
+
+}
 #endif /* #if !UCONFIG_NO_COLLATION */
