@@ -579,8 +579,9 @@ private:
      * @param offsetNumber the offset number of the last processed segment
      * @param segments the string that contains the parsed pattern segments.
      * @param success the error code
+     * @return argument number that was parsed.
      */
-    void            makeFormat( /*int32_t position, */
+    int32_t          makeFormat( /*int32_t position, */
                                 int32_t offsetNumber,
                                 UnicodeString* segments,
                                 UParseError& parseError,
