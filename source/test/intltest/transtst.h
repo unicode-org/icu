@@ -205,6 +205,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestEmptyContext(void);
 
+    /**
+     * Test compound filter ID syntax
+     */
+    void TestCompoundFilterID(void);
+
     //======================================================================
     // Support methods
     //======================================================================
