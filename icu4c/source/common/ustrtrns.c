@@ -767,19 +767,22 @@ u_strFromWCS(UChar   *dest,
     }
 
 #ifdef U_WCHAR_IS_UTF16
-    /* wchar_t is UTF-16 just do a memcpy */
-    if(srcLength==-1){
-        srcLength =0;
-        while(pSrc[srcLength++]!=0){
+    {
+        const wchar_t* pSrc = src;
+        /* wchar_t is UTF-16 just do a memcpy */
+        if(srcLength==-1){
+            srcLength =0;
+            while(pSrc[srcLength++]!=0){
+            }
         }
-    }
-    if(srcLength <= destCapacity){
-        uprv_memcpy(dest,src,srcLength*U_SIZEOF_UCHAR);
-    }else{
-        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-    }
-    if(pDestLength){
-       *pDestLength = srcLength;
+        if(srcLength <= destCapacity){
+            uprv_memcpy(dest,src,srcLength*U_SIZEOF_UCHAR);
+        }else{
+            *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        }
+        if(pDestLength){
+           *pDestLength = srcLength;
+        }
     }
 
     u_terminateUChars(dest,destCapacity,srcLength,pErrorCode);
