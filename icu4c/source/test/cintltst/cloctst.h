@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -70,7 +70,7 @@ static  void TestDisplayNames(void);
 /**
  * routine to perform subtests, used by TestDisplayNames
  */
- static void doTestDisplayNames(const char* inLocale, int32_t compareIndex, int32_t defaultIsFrench);
+ static void doTestDisplayNames(const char* inLocale, int32_t compareIndex);
 
 /**
  * additional intialization for datatables storing expected values
