@@ -45,6 +45,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestGetLocale, "tscoll/capitst/TestGetLocale");    
     addTest(root, &TestSortKeyBufferOverrun, "tscoll/capitst/TestSortKeyBufferOverrun");
     addTest(root, &TestAttribute, "tscoll/capitst/TestAttribute");
+    addTest(root, &TestGetTailoredSet, "tscoll/capitst/TestGetTailoredSet");
 
 }
 
@@ -1496,4 +1497,45 @@ static void TestAttribute()
     }
 
     ucol_close(coll);
+}
+
+void TestGetTailoredSet() {
+  struct {
+    char *rules;
+    char *tests[20];
+    int32_t testsize;
+  } setTest[] = {
+    { "&a < \\u212b", { "\\u212b", "A\\u030a", "\\u00c5" }, 3},
+    { "& S < \\u0161 <<< \\u0160", { "\\u0161", "s\\u030C", "\\u0160", "S\\u030C" }, 4}
+  };
+
+  int32_t i = 0, j = 0;
+  UErrorCode status = U_ZERO_ERROR;
+  UParseError pError;
+
+  UCollator *coll = NULL;
+  UChar buff[1024];
+  int32_t buffLen = 0;
+  USet *set = NULL;
+
+  for(i = 0; i < sizeof(setTest)/sizeof(setTest[0]); i++) {
+    buffLen = u_unescape(setTest[i].rules, buff, 1024);
+    coll = ucol_openRules(buff, buffLen, UCOL_DEFAULT, UCOL_DEFAULT, &pError, &status);
+    if(U_SUCCESS(status)) {
+      set = ucol_getTailoredSet(coll, &status);
+      if(uset_size(set) != setTest[i].testsize) {
+        log_err("Tailored set size different (%d) than expected (%d)\n", uset_size(set), setTest[i].testsize);
+      }
+      for(j = 0; j < setTest[i].testsize; j++) {
+        buffLen = u_unescape(setTest[i].tests[j], buff, 1024);
+        if(!uset_containsString(set, buff, buffLen)) {
+          log_err("Tailored set doesn't contain %s... It should\n", setTest[i].tests[j]);
+        }
+      }
+      uset_close(set);
+    } else {
+      log_err("Couldn't open collator with rules %s\n", setTest[i].rules);
+    }
+    ucol_close(coll);
+  }
 }
