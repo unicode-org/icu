@@ -8,6 +8,9 @@
 *   03/17/2000   Madhu        Creation.
 ************************************************************************/
 
+/* These APIs are becoming private */
+#define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
+
 #include "ittrans.h"
 #include "hxuntrts.h"
 #include "unicode/utypes.h"
