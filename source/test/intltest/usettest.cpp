@@ -377,9 +377,9 @@ void UnicodeSetTest::TestAPI() {
     exp.set((UChar32)3,(UChar32)6);
     exp.add((UChar32)11,(UChar32) 15);
     if (c == exp) {
-        logln((UnicodeString)"c.set(a).xor(b): " + c);
+        logln((UnicodeString)"c.set(a).exclusiveOr(b): " + c);
     } else {
-        errln((UnicodeString)"FAIL: c.set(a).xor(b) = " + c + ", expect " + exp);
+        errln((UnicodeString)"FAIL: c.set(a).exclusiveOr(b) = " + c + ", expect " + exp);
     }
 
     exp = c;
