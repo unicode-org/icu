@@ -127,6 +127,47 @@ T_CString_stricmp(const char *str1, const char *str2) {
     }
 }
 
+U_CAPI int U_EXPORT2
+T_CString_strnicmp(const char *str1, const char *str2, uint32_t n) {
+    if(str1==NULL) {
+        if(str2==NULL) {
+            return 0;
+        } else {
+            return -1;
+        }
+    } else if(str2==NULL) {
+        return 1;
+    } else {
+        /* compare non-NULL strings lexically with lowercase */
+        int rc;
+        unsigned char c1, c2;
+
+        for(; n--;) {
+            c1=(unsigned char)*str1;
+            c2=(unsigned char)*str2;
+            if(c1==0) {
+                if(c2==0) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else if(c2==0) {
+                return 1;
+            } else {
+                /* compare non-zero characters with lowercase */
+                rc=(int)(unsigned char)uprv_tolower(c1)-(int)(unsigned char)uprv_tolower(c2);
+                if(rc!=0) {
+                    return rc;
+                }
+            }
+            ++str1;
+            ++str2;
+        }
+    }
+
+    return 0;
+}
+
 U_CAPI char *uprv_strdup(const char *src) {
     size_t len = strlen(src) + 1;
     char *dup = (char *) malloc(len);
