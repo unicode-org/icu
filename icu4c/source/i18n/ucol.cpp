@@ -857,7 +857,16 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
                 }
                 else
                 {
-                    // Ran off the end of the normalize side buffer.  Revert to the main string and
+                    // Hit null in the normalize side buffer.
+                    // Usually this means the end of the normalized data,
+                    // except for one odd case: a null followed by combining chars,
+                    //   which is the case if we are at the start of the buffer.
+                    if (collationSource->pos == collationSource->writableBuffer+1) {
+                        break;
+                    }
+
+                    //  Null marked end of side buffer.
+                    //   Revert to the main string and
                     //   loop back to top to try again to get a character.
                     collationSource->pos   = collationSource->fcdPosition;
                     collationSource->flags = collationSource->origFlags;
@@ -2943,8 +2952,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
             normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
-        normSource[normSourceLen] = 0;
-        IInit_collIterate(coll, normSource, -1, &s);
+        IInit_collIterate(coll, normSource, normSourceLen, &s);
         s.flags &= ~UCOL_ITER_NORM;
         len = normSourceLen;
       }
@@ -2958,8 +2966,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
             normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
         }
-        normSource[normSourceLen] = 0;
-        IInit_collIterate(coll, normSource, -1, &s);
+        IInit_collIterate(coll, normSource, normSourceLen, &s);
         s.flags &= ~UCOL_ITER_NORM;
         len = normSourceLen;
 
@@ -3508,8 +3515,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                 normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
                 normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, (normSourceLen+1), status);
             }
-            normSource[normSourceLen] = 0;
-            IInit_collIterate(coll, normSource, -1, &s);
+            IInit_collIterate(coll, normSource, normSourceLen, &s);
             s.flags &= ~(UCOL_ITER_NORM);
             len = normSourceLen;
         }
