@@ -31,7 +31,7 @@
 
 #include "unicode/putil.h"
 
-#define ULOC_LANG_CAPACITY 3
+#define ULOC_LANG_CAPACITY 12
 #define ULOC_COUNTRY_CAPACITY 3
 #define ULOC_FULLNAME_CAPACITY 50
 
