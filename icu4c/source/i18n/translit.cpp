@@ -1142,23 +1142,36 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
             if (var < 0) {
                 var = id.length();
             }
+            UBool isSourcePresent = FALSE;
 
             if (sep < 0) {
                 // Form: T/V or T (or /V)
                 id.extractBetween(0, var, target);
                 id.extractBetween(var, 0x7FFFFFFF, variant);
             } else if (sep < var) {
-                // Form: S-T/V or S-T
-                id.extractBetween(0, sep++, source);
-                id.extractBetween(sep, var, target);
+                // Form: S-T/V or S-T (or -T/V or -T)
+                if (sep > 0) {
+                    id.extractBetween(0, sep, source);
+                    isSourcePresent = TRUE;
+                }
+                id.extractBetween(++sep, var, target);
                 id.extractBetween(var, 0x7FFFFFFF, variant);
             } else {
-                // Form: S/V-T
-                id.extractBetween(0, var, source);
+                // Form: (S/V-T or /V-T)
+                if (var > 0) {
+                    id.extractBetween(0, var, source);
+                    isSourcePresent = TRUE;
+                }
                 id.extractBetween(var, sep++, variant);
                 id.extractBetween(sep, 0x7FFFFFFF, target);
             }
             id.truncate(0);
+            // Source and variant may be empty, but target may not be.
+            if (target.length() == 0) {
+                delete fwdFilter;
+                delete revFilter;
+                return NULL;
+            }
             // For forward IDs *or IDs that were part of a Foo(Bar) ID*,
             // normalize them to canonical form.
             if (dir == UTRANS_FORWARD || revStart >= 0) {
@@ -1172,7 +1185,7 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
                         // If the original ID contained "Any-" then make the
                         // special inverse "Any-Foo"; otherwise make it "Foo".
                         // So "Any-NFC" => "Any-NFD" but "NFC" => "NFD".
-                        if (sep < 0) {
+                        if (!isSourcePresent) {
                             id.append(*inverseTarget);
                         } else {
                             source = *inverseTarget;
