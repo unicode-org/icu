@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="es"></language>
 		<variant type="TRADITIONAL">{2}</variant>
 	</identity>
@@ -16,41 +21,43 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-				</calendar>
-			</calendars>
-		</dates>
-			<collations>
-				<collation  >
-					<rules>
-						<reset>N</reset>
-						<p>ñ</p>
-						<t>Ñ</t>
-						<reset>C</reset>
-						<p>ch</p>
-						<tc>ChCH</tc>
-						<reset>l</reset>
-						<p>ll</p>
-						<t>Ll</t>
-					</rules>
-					<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-				</collation  >
-				<collation key="TRADITIONAL" >
-					<rules>
-						<reset>N</reset>
-						<p>ñ</p>
-						<t>Ñ</t>
-						<reset>C</reset>
-						<p>ch</p>
-						<tc>ChCH</tc>
-						<reset>l</reset>
-						<p>ll</p>
-						<t>Ll</t>
-					</rules>
-					<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-				</collation  >
-			</collations>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+			</calendar>
+		</calendars>
+	</dates>
+	<collations version="3.1.1">
+		<collation  >
+			<rules>
+				<reset>N</reset>
+				<p>ñ</p>
+				<t>Ñ</t>
+				<reset>C</reset>
+				<p>ch</p>
+				<t>Ch</t>
+				<t>CH</t>
+				<reset>l</reset>
+				<p>ll</p>
+				<t>Ll</t>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+		<collation type="TRADITIONAL" >
+			<rules>
+				<reset>N</reset>
+				<p>ñ</p>
+				<t>Ñ</t>
+				<reset>C</reset>
+				<p>ch</p>
+				<t>Ch</t>
+				<t>CH</t>
+				<reset>l</reset>
+				<p>ll</p>
+				<t>Ll</t>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
+</ldml>

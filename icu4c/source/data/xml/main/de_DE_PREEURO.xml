@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="de"></language>
 		<territory type="DEU">DE</territory>
 		<variant type="PREEURO">{2}</variant>
@@ -14,39 +19,29 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<currencies>
-				<default type="DEM"/>
-				<currency type="DEM">
-					<symbol>DM</symbol>
-					<displayName>DEM</displayName>
-					<decimal>,</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-		<collations>
-			<collation key="PHONEBOOK" >
-				<rules>
-					<reset>ae</reset>
-					<t>ä</t>
-					<reset>AE</reset>
-					<t>Ä</t>
-					<reset>oe</reset>
-					<t>ö</t>
-					<reset>OE</reset>
-					<t>Ö</t>
-					<reset>ue</reset>
-					<t>ü</t>
-					<reset>UE</reset>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+			</calendar>
+		</calendars>
+	</dates>
+	<collations version="3.1.1">
+		<collation type="PHONEBOOK" >
+			<rules>
+				<reset>ae</reset>
+				<t>ä</t>
+				<reset>AE</reset>
+				<t>Ä</t>
+				<reset>oe</reset>
+				<t>ö</t>
+				<reset>OE</reset>
+				<t>Ö</t>
+				<reset>ue</reset>
+				<t>ü</t>
+				<reset>UE</reset>
+			</rules>
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+		</collation  >
+	</collations >
+</ldml>

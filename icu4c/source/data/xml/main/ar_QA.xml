@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="ar"></language>
 		<territory type="QAT">QA</territory>
 	</identity>
@@ -13,21 +18,78 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<currencies>
-				<default type="QAR"/>
-				<currency type="QAR">
-					<symbol>ر.ق.‏</symbol>
-					<displayName>QAR</displayName>
-					<decimal>.</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthAbbr>
+					<month type="1">يناير</month>
+					<month type="2">فبراير</month>
+					<month type="3">مارس</month>
+					<month type="4">أبريل</month>
+					<month type="5">مايو</month>
+					<month type="6">يونيو</month>
+					<month type="7">يوليو</month>
+					<month type="8">أغسطس</month>
+					<month type="9">سبتمبر</month>
+					<month type="10">أكتوبر</month>
+					<month type="11">نوفمبر</month>
+					<month type="12">ديسمبر</month>
+				</monthAbbr>
+				<dayAbbr>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>###0.###;###0.###-</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤###0.00;-¤###0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
+</ldml>

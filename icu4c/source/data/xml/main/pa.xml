@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
 		<version number="x2.1">Various notes and changes in version x2.1</version>
-		<generation date="2003-04-08" />
+		<generation date="2003-06-25" />
 		<language type="pa"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,9 +26,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
-		<exemplarCharacters>[:Guru:]</exemplarCharacters>
-	</encodings>
+	<characters>
+		<exemplarCharacters>[[:Guru:]‌‍]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Guru</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -94,36 +104,44 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
-		<numberFormats>
-			<default type="decimal"/>
-			<numberFormatStyle type="decimal" >
-				<numberFormat >
-					<pattern>##,##,##0.###</pattern>
-					<pattern>-##,##,##0.###</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="currency" >
-				<numberFormat >
-					<pattern>¤ ##,##,##0.00</pattern>
-					<pattern>-¤ ##,##,##0.00</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="percent" >
-				<numberFormat >
-					<pattern>##,##,##0%</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="scientific" >
-				<numberFormat >
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>##,##,##0.###;-##,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
 					<pattern>#E0</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-		</numberFormats>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>##,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤ ##,##,##0.00;-¤ ##,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings normalization="on"/>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

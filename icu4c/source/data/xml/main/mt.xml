@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="0.10.5">Various notes and changes in version 0.10.5</version>
-		<generation date="2003-04-08" />
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-06-25" />
 		<language type="mt"></language>
 	</identity>
 	<localeDisplayNames>
@@ -493,7 +498,6 @@
 			<territory type="YU">Jugoslavja</territory>
 			<territory type="ZA">Afrika t'Isfel</territory>
 			<territory type="ZM">Żambja</territory>
-			<territory type="ZR">Żaire</territory>
 			<territory type="ZW">Żimbabwe</territory>
 		</territories>
 		<keys>
@@ -504,9 +508,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[[a-z à ì ù è ò ċ ġ ħ {għ} ż]-[cy]]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -565,80 +569,102 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE, d 'ta''' MMMM, yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d 'ta''' MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd-MMM-yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd/MM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>h:mm:ss a</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>h:mm a</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">%simplified:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; punt &gt;&gt;;<cp hex="000A" />    żero; wieħed; tnejn; tlieta; erbgħa; ħamsa; sitta; sebgħa; tmienja; disgħa;<cp hex="000A" />    għaxra; ħdax; tnax; tlettax; erbatax; ħmistax; sittax;<cp hex="000A" />        sbatax; tmintax; dsatax;<cp hex="000A" />    20: [&gt;&gt; u ]għoxrin;<cp hex="000A" />    30: [&gt;&gt; u ]tletin;<cp hex="000A" />    40: [&gt;&gt; u ]erbgħin;<cp hex="000A" />    50: [&gt;&gt; u ]ħamsin;<cp hex="000A" />    60: [&gt;&gt; u ]sittin;<cp hex="000A" />    70: [&gt;&gt; u ]sebgħin;<cp hex="000A" />    80: [&gt;&gt; u ]tmenin;<cp hex="000A" />    90: [&gt;&gt; u ]disgħin;<cp hex="000A" />    100: mija[ u &gt;&gt;];<cp hex="000A" />    200: mitejn[ u &gt;&gt;];<cp hex="000A" />    1000: &lt;&lt; elf[ u &gt;&gt;];<cp hex="000A" />    2000: &lt;&lt; elfejn[ u &gt;&gt;];<cp hex="000A" />    3000: tliet elef [ u &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; miljun[ u &gt;&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; biljun[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; triljun[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; punt &gt;&gt;;<cp hex="000A" />    =%simplified=;<cp hex="000A" />    100: mija[ &gt;%%and&gt;];<cp hex="000A" />    200: mitejn[ &gt;%%and&gt;];<cp hex="000A" />    300: tlett mija[ &gt;%%and&gt;];<cp hex="000A" />    400: erbgħa mija[ &gt;%%and&gt;];<cp hex="000A" />    500: ħames mija[ &gt;%%and&gt;];<cp hex="000A" />    600: sitt mija[ &gt;%%and&gt;];<cp hex="000A" />    700: sebgħa mija[ &gt;%%and&gt;];<cp hex="000A" />    800: tmin mija[ &gt;%%and&gt;];<cp hex="000A" />    900: disgħa mija[ &gt;%%and&gt;];<cp hex="000A" />    1000: &lt;&lt; elf[ &gt;%%and&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%and:<cp hex="000A" />    u =%default=;<cp hex="000A" />    100: =%default=;<cp hex="000A" />%%commas:<cp hex="000A" />    ' and =%default=;<cp hex="000A" />    100: , =%default=;<cp hex="000A" />    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;<cp hex="000A" />    1,000,000: , =%default=;%%lenient-parse:<cp hex="000A" />   &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; <cp hex="000A" /></ruleBasedNumberFormat>
-			<ruleBasedNumberFormat type="duration">%with-words:<cp hex="000A" />    0 sekondi; 1 sekonda; =0= sekondi;<cp hex="000A" />    60/60: &lt;%%min&lt;[, &gt;&gt;];<cp hex="000A" />    3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];<cp hex="000A" />%%min:<cp hex="000A" />    0 minuti; 1 minuta; =0= minuti;<cp hex="000A" />%%hr:<cp hex="000A" />    0 siegħat; 1 siegħa; =0= siegħat;<cp hex="000A" />%in-numerals:<cp hex="000A" />    =0= sek.;<cp hex="000A" />    60: =%%min-sec=;<cp hex="000A" />    3600: =%%hr-min-sec=;<cp hex="000A" />%%min-sec:<cp hex="000A" />    0: :=00=;<cp hex="000A" />    60/60: &lt;0&lt;&gt;&gt;;<cp hex="000A" />%%hr-min-sec:<cp hex="000A" />    0: :=00=;<cp hex="000A" />    60/60: &lt;00&lt;&gt;&gt;;<cp hex="000A" />    3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;<cp hex="000A" />%%lenient-parse:<cp hex="000A" />    &amp; ':' = '.' = ' ' = '-';<cp hex="000A" /></ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
-		<collation  >
-			<rules>
-				<reset>B</reset>
-				<p>ċ</p>
-				<t>Ċ</t>
-				<p>c</p>
-				<t>C</t>
-				<reset>F</reset>
-				<p>ġ</p>
-				<t>Ġ</t>
-				<p>g</p>
-				<t>G</t>
-				<p>għ</p>
-				<tc>gĦGħGĦ</tc>
-				<reset>H</reset>
-				<p>ħ</p>
-				<t>Ħ</t>
-				<reset>Y</reset>
-				<p>ż</p>
-				<t>Ż</t>
-				<p>z</p>
-			</rules>
-			<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-		</collation  >
-	</collations>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="MTL">
+				<displayName>MTL</displayName>
+				<symbol>Lm</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+<collations version="3.1.1">
+	<collation  >
+		<rules>
+			<reset>B</reset>
+			<p>ċ</p>
+			<t>Ċ</t>
+			<p>c</p>
+			<t>C</t>
+			<reset>F</reset>
+			<p>ġ</p>
+			<t>Ġ</t>
+			<p>g</p>
+			<t>G</t>
+			<p>għ</p>
+			<t>gĦ</t>
+			<t>Għ</t>
+			<t>GĦ</t>
+			<reset>H</reset>
+			<p>ħ</p>
+			<t>Ħ</t>
+			<reset>Y</reset>
+			<p>ż</p>
+			<t>Ż</t>
+			<p>z</p>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">%simplified:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; punt &gt;&gt;;<cp hex="000A" />    żero; wieħed; tnejn; tlieta; erbgħa; ħamsa; sitta; sebgħa; tmienja; disgħa;<cp hex="000A" />    għaxra; ħdax; tnax; tlettax; erbatax; ħmistax; sittax;<cp hex="000A" />        sbatax; tmintax; dsatax;<cp hex="000A" />    20: [&gt;&gt; u ]għoxrin;<cp hex="000A" />    30: [&gt;&gt; u ]tletin;<cp hex="000A" />    40: [&gt;&gt; u ]erbgħin;<cp hex="000A" />    50: [&gt;&gt; u ]ħamsin;<cp hex="000A" />    60: [&gt;&gt; u ]sittin;<cp hex="000A" />    70: [&gt;&gt; u ]sebgħin;<cp hex="000A" />    80: [&gt;&gt; u ]tmenin;<cp hex="000A" />    90: [&gt;&gt; u ]disgħin;<cp hex="000A" />    100: mija[ u &gt;&gt;];<cp hex="000A" />    200: mitejn[ u &gt;&gt;];<cp hex="000A" />    1000: &lt;&lt; elf[ u &gt;&gt;];<cp hex="000A" />    2000: &lt;&lt; elfejn[ u &gt;&gt;];<cp hex="000A" />    3000: tliet elef [ u &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; miljun[ u &gt;&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; biljun[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; triljun[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; punt &gt;&gt;;<cp hex="000A" />    =%simplified=;<cp hex="000A" />    100: mija[ &gt;%%and&gt;];<cp hex="000A" />    200: mitejn[ &gt;%%and&gt;];<cp hex="000A" />    300: tlett mija[ &gt;%%and&gt;];<cp hex="000A" />    400: erbgħa mija[ &gt;%%and&gt;];<cp hex="000A" />    500: ħames mija[ &gt;%%and&gt;];<cp hex="000A" />    600: sitt mija[ &gt;%%and&gt;];<cp hex="000A" />    700: sebgħa mija[ &gt;%%and&gt;];<cp hex="000A" />    800: tmin mija[ &gt;%%and&gt;];<cp hex="000A" />    900: disgħa mija[ &gt;%%and&gt;];<cp hex="000A" />    1000: &lt;&lt; elf[ &gt;%%and&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%and:<cp hex="000A" />    u =%default=;<cp hex="000A" />    100: =%default=;<cp hex="000A" />%%commas:<cp hex="000A" />    ' and =%default=;<cp hex="000A" />    100: , =%default=;<cp hex="000A" />    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;<cp hex="000A" />    1,000,000: , =%default=;%%lenient-parse:<cp hex="000A" />   &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; <cp hex="000A" /></icu:ruleBasedNumberFormat>
+		<icu:ruleBasedNumberFormat type="duration">%with-words:<cp hex="000A" />    0 sekondi; 1 sekonda; =0= sekondi;<cp hex="000A" />    60/60: &lt;%%min&lt;[, &gt;&gt;];<cp hex="000A" />    3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];<cp hex="000A" />%%min:<cp hex="000A" />    0 minuti; 1 minuta; =0= minuti;<cp hex="000A" />%%hr:<cp hex="000A" />    0 siegħat; 1 siegħa; =0= siegħat;<cp hex="000A" />%in-numerals:<cp hex="000A" />    =0= sek.;<cp hex="000A" />    60: =%%min-sec=;<cp hex="000A" />    3600: =%%hr-min-sec=;<cp hex="000A" />%%min-sec:<cp hex="000A" />    0: :=00=;<cp hex="000A" />    60/60: &lt;0&lt;&gt;&gt;;<cp hex="000A" />%%hr-min-sec:<cp hex="000A" />    0: :=00=;<cp hex="000A" />    60/60: &lt;00&lt;&gt;&gt;;<cp hex="000A" />    3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;<cp hex="000A" />%%lenient-parse:<cp hex="000A" />    &amp; ':' = '.' = ' ' = '-';<cp hex="000A" /></icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

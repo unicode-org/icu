@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="vi"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,26 +26,26 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z Ạ-ỹ đ ơ à-ã è-ê ì í ò-õ ù ú ý ă ĩ ũ ư]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
-					<month type="1">Tháng một</month>
+					<month type="1">Tháng một</month>
 					<month type="2">Tháng hai</month>
 					<month type="3">Tháng ba</month>
 					<month type="4">Tháng tư</month>
 					<month type="5">Tháng năm</month>
 					<month type="6">Tháng sáu</month>
-					<month type="7">Tháng bảy</month>
+					<month type="7">Tháng bảy</month>
 					<month type="8">Tháng tám</month>
 					<month type="9">Tháng chín</month>
-					<month type="10">Tháng mười</month>
-					<month type="11">Tháng mười một</month>
-					<month type="12">Tháng mười hai</month>
+					<month type="10">Tháng mười</month>
+					<month type="11">Tháng mười một</month>
+					<month type="12">Tháng mười hai</month>
 				</monthNames>
 				<monthAbbr>
 					<month type="1">Thg 1</month>
@@ -57,13 +62,13 @@
 					<month type="12">Thg 12</month>
 				</monthAbbr>
 				<dayNames>
-					<day type="sun">Thứ hai</day>
-					<day type="mon">Thứ ba</day>
-					<day type="tue">Thứ tư</day>
-					<day type="wed">Thứ năm</day>
-					<day type="thu">Thứ sáu</day>
-					<day type="fri">Thứ bảy</day>
-					<day type="sat">Chủ nhật</day>
+					<day type="sun">Thứ hai</day>
+					<day type="mon">Thứ ba</day>
+					<day type="tue">Thứ tư</day>
+					<day type="wed">Thứ năm</day>
+					<day type="thu">Thứ sáu</day>
+					<day type="fri">Thứ bảy</day>
+					<day type="sat">Chủ nhật</day>
 				</dayNames>
 				<dayAbbr>
 					<day type="sun">Th 2</day>
@@ -76,45 +81,57 @@
 				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE dd MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>EEE dd MMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd MMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd/MM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{0} {1}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{0} {1}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -133,42 +150,51 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
-		<numberFormats>
-			<default type="decimal"/>
-			<numberFormatStyle type="decimal" >
-				<numberFormat >
-					<pattern>#,##0.###</pattern>
-					<pattern>-#,##0.###</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="currency" >
-				<numberFormat >
-					<pattern>#,##0.00 ¤</pattern>
-					<pattern>-#,##0.00 ¤</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="percent" >
-				<numberFormat >
-					<pattern>#,##0%</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="scientific" >
-				<numberFormat >
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
 					<pattern>#E0</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-		</numberFormats>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="VND">
+				<displayName>VND</displayName>
+				<symbol>₫</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings normalization="on"/>
-				<rules>
-					<reset>̀</reset>
-					<sc>̛̣̉̃́̆̂</sc>
-					<reset>D</reset>
-					<p>đ</p>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<settings normalization="on"  />
+		<rules>
+			<reset>̀</reset>
+			<sc>̛̣̉̃́̆̂</sc>
+			<reset>D</reset>
+			<p>đ</p>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+	</collation  >
+</collations >
+</ldml>

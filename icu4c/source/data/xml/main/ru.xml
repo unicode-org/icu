@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="ru"></language>
 	</identity>
 	<localeDisplayNames>
@@ -172,7 +177,7 @@
 			<territory type="HR">Хорватия</territory>
 			<territory type="HU">Венгрия</territory>
 			<territory type="IE">Ирландия</territory>
-			<territory type="IL">╚тЁшЄ</territory>
+			<territory type="IL">Израиль</territory>
 			<territory type="IS">Исландия</territory>
 			<territory type="IT">Италия</territory>
 			<territory type="JP">Япония</territory>
@@ -195,6 +200,7 @@
 			<territory type="TH">Таиланд</territory>
 			<territory type="TR">Турция</territory>
 			<territory type="TW">Тайвань</territory>
+			<territory type="UA">Украина</territory>
 			<territory type="US">США</territory>
 			<territory type="ZA">ЮАР</territory>
 		</territories>
@@ -206,9 +212,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[а-я ё і ѣ ѳ ѵ]</exemplarCharacters>
-	</encodings>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Cyrl</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -261,7 +272,7 @@
 					<day type="sat">Сб</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
+					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
 				<eras>
@@ -272,59 +283,83 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>d MMMM yyyy 'г.'</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d MMMM yyyy 'г.'</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd.MM.yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd.MM.yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>H:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">ноль; один; два; три; четыре; пят; шест; семь; восемь; девят;<cp hex="000A" />10: десят; одиннадцать;<cp hex="000A" />двеннадцать; тринадцать; четырнадцать;<cp hex="000A" />15: пятнадцать; шестнадцать; семнадцать; восемнадцать; девятнадцать;<cp hex="000A" />20: двадцать[ &gt;&gt;];<cp hex="000A" />30: трлдцать[ &gt;&gt;];<cp hex="000A" />40: сорок[ &gt;&gt;];<cp hex="000A" />50: пятьдесят[ &gt;&gt;];<cp hex="000A" />60: шестьдесят[ &gt;&gt;];<cp hex="000A" />70: семьдесят[ &gt;&gt;];<cp hex="000A" />80: восемьдесят[ &gt;&gt;];<cp hex="000A" />90: девяносто[ &gt;&gt;];<cp hex="000A" />100: сто[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt; сто[ &gt;&gt;];<cp hex="000A" />1000: тысяча[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; тысяча[ &gt;&gt;];<cp hex="000A" />1,000,000: миллион[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; миллион[ &gt;&gt;];<cp hex="000A" />1,000,000,000: =#,##0=;</ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
-		<collation  >
-			<suppress_contractions>[0400-045f]</suppress_contractions>
-			<special owner="http://oss.software.ibm.com/icu/" version="1.1" />
-		</collation  >
-	</collations>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="RUR">
+				<displayName>RUR</displayName>
+				<symbol>р.</symbol>
+			</currency>
+			<currency type="UAH">
+				<displayName>UAH</displayName>
+				<symbol>грн.</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+<collations version="3.1.1">
+	<collation  >
+		<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
+	</collation  >
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">ноль; один; два; три; четыре; пят; шест; семь; восемь; девят;<cp hex="000A" />10: десят; одиннадцать;<cp hex="000A" />двеннадцать; тринадцать; четырнадцать;<cp hex="000A" />15: пятнадцать; шестнадцать; семнадцать; восемнадцать; девятнадцать;<cp hex="000A" />20: двадцать[ &gt;&gt;];<cp hex="000A" />30: трлдцать[ &gt;&gt;];<cp hex="000A" />40: сорок[ &gt;&gt;];<cp hex="000A" />50: пятьдесят[ &gt;&gt;];<cp hex="000A" />60: шестьдесят[ &gt;&gt;];<cp hex="000A" />70: семьдесят[ &gt;&gt;];<cp hex="000A" />80: восемьдесят[ &gt;&gt;];<cp hex="000A" />90: девяносто[ &gt;&gt;];<cp hex="000A" />100: сто[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt; сто[ &gt;&gt;];<cp hex="000A" />1000: тысяча[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; тысяча[ &gt;&gt;];<cp hex="000A" />1,000,000: миллион[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; миллион[ &gt;&gt;];<cp hex="000A" />1,000,000,000: =#,##0=;</icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

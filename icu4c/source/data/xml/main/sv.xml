@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="sv"></language>
 	</identity>
 	<localeDisplayNames>
@@ -499,9 +504,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z ä ö å á é ë ü]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -553,8 +558,8 @@
 					<day type="sat">lö</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
-					<firstDay day="thu"/>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
 				</week>
 				<eras>
 					<eraAbbr>
@@ -564,45 +569,57 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>'den 'd MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>'den 'd MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>yyyy-MMM-dd</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>yyyy-MM-dd</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>'kl 'H:mm z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>'kl 'H:mm z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -636,36 +653,46 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="SEK">
+				<displayName>SEK</displayName>
+				<symbol>kr</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">%year:<cp hex="000A" />=%neutrum=;<cp hex="000A" />1000&gt;: &lt;%neutrum&lt;hundra[­&gt;&gt;];<cp hex="000A" />10,000: =%neutrum=;<cp hex="000A" />%neutrum:<cp hex="000A" />-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />noll; ett; två; tre; fyra; fem; sex; sju; åtta; nio;<cp hex="000A" />tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;<cp hex="000A" />20: tjugo[&gt;&gt;];<cp hex="000A" />30: trettio[&gt;&gt;];<cp hex="000A" />40: fyrtio[&gt;&gt;];<cp hex="000A" />50: femtio[&gt;&gt;];<cp hex="000A" />60: sextio[&gt;&gt;];<cp hex="000A" />70: sjuttio[&gt;&gt;];<cp hex="000A" />80: åttio[&gt;&gt;];<cp hex="000A" />90: nittio[&gt;&gt;];<cp hex="000A" />100: &lt;&lt;hundra[­&gt;&gt;];<cp hex="000A" />1000: ettusen[ &gt;&gt;];<cp hex="000A" />2000: &lt;%default&lt;­tusen[ &gt;&gt;];<cp hex="000A" />1,000,000: en miljon[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;%default&lt; miljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000: en miljard[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;%default&lt; miljarder[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: en biljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;%default&lt; biljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: en triljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000,000: &lt;%default&lt; triljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" /> -x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />noll; en; två; tre; fyra; fem; sex; sju; åtta; nio;<cp hex="000A" />tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;<cp hex="000A" />20: tjugo[&gt;&gt;];<cp hex="000A" />30: trettio[&gt;&gt;];<cp hex="000A" />40: fyrtio[&gt;&gt;];<cp hex="000A" />50: femtio[&gt;&gt;];<cp hex="000A" />60: sextio[&gt;&gt;];<cp hex="000A" />70: sjuttio[&gt;&gt;];<cp hex="000A" />80: åttio[&gt;&gt;];<cp hex="000A" />90: nittio[&gt;&gt;];<cp hex="000A" />100: etthundra[­&gt;&gt;];<cp hex="000A" />200: &lt;&lt;hundra[­&gt;&gt;];<cp hex="000A" />1000: ettusen[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;­tusen[ &gt;&gt;];<cp hex="000A" />1,000,000: en miljon[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; miljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000: en miljard[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miljarder[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: en biljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; biljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: en triljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000,000: &lt;&lt; triljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000,000: =#,##0=;<cp hex="000A" /></ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
-		<collation  >
-			<rules>
-				<reset>Z</reset>
-				<p>æ</p>
-				<t>Æ</t>
-				<p>å</p>
-				<tc>ÅaaaAAaAA</tc>
-				<p>ä</p>
-				<t>Ä</t>
-				<p>ö</p>
-				<t>Ö</t>
-				<s>ű</s>
-				<t>Ű</t>
-				<p>ő</p>
-				<t>Ő</t>
-				<s>ø</s>
-				<t>Ø</t>
-				<reset>V</reset>
-				<tc>wW</tc>
-				<reset>Y</reset>
-				<t>ü</t>
-			</rules>
-			<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-		</collation  >
-	</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<rules>
+			<reset>Z</reset>
+			<p>æ</p>
+			<t>Æ</t>
+			<p>å</p>
+			<t>Å</t>
+			<t>aa</t>
+			<t>aA</t>
+			<t>Aa</t>
+			<t>AA</t>
+			<p>ä</p>
+			<t>Ä</t>
+			<p>ö</p>
+			<t>Ö</t>
+			<s>ű</s>
+			<t>Ű</t>
+			<p>ő</p>
+			<t>Ő</t>
+			<s>ø</s>
+			<t>Ø</t>
+			<reset>V</reset>
+			<tc>wW</tc>
+			<reset>Y</reset>
+			<t>ü</t>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">%year:<cp hex="000A" />=%neutrum=;<cp hex="000A" />1000&gt;: &lt;%neutrum&lt;hundra[­&gt;&gt;];<cp hex="000A" />10,000: =%neutrum=;<cp hex="000A" />%neutrum:<cp hex="000A" />-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />noll; ett; två; tre; fyra; fem; sex; sju; åtta; nio;<cp hex="000A" />tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;<cp hex="000A" />20: tjugo[&gt;&gt;];<cp hex="000A" />30: trettio[&gt;&gt;];<cp hex="000A" />40: fyrtio[&gt;&gt;];<cp hex="000A" />50: femtio[&gt;&gt;];<cp hex="000A" />60: sextio[&gt;&gt;];<cp hex="000A" />70: sjuttio[&gt;&gt;];<cp hex="000A" />80: åttio[&gt;&gt;];<cp hex="000A" />90: nittio[&gt;&gt;];<cp hex="000A" />100: &lt;&lt;hundra[­&gt;&gt;];<cp hex="000A" />1000: ettusen[ &gt;&gt;];<cp hex="000A" />2000: &lt;%default&lt;­tusen[ &gt;&gt;];<cp hex="000A" />1,000,000: en miljon[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;%default&lt; miljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000: en miljard[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;%default&lt; miljarder[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: en biljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;%default&lt; biljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: en triljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000,000: &lt;%default&lt; triljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" /> -x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />noll; en; två; tre; fyra; fem; sex; sju; åtta; nio;<cp hex="000A" />tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;<cp hex="000A" />20: tjugo[&gt;&gt;];<cp hex="000A" />30: trettio[&gt;&gt;];<cp hex="000A" />40: fyrtio[&gt;&gt;];<cp hex="000A" />50: femtio[&gt;&gt;];<cp hex="000A" />60: sextio[&gt;&gt;];<cp hex="000A" />70: sjuttio[&gt;&gt;];<cp hex="000A" />80: åttio[&gt;&gt;];<cp hex="000A" />90: nittio[&gt;&gt;];<cp hex="000A" />100: etthundra[­&gt;&gt;];<cp hex="000A" />200: &lt;&lt;hundra[­&gt;&gt;];<cp hex="000A" />1000: ettusen[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;­tusen[ &gt;&gt;];<cp hex="000A" />1,000,000: en miljon[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; miljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000: en miljard[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miljarder[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: en biljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; biljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: en triljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000,000: &lt;&lt; triljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000,000: =#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

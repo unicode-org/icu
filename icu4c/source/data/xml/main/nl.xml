@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="nl"></language>
 	</identity>
 	<localeDisplayNames>
@@ -22,9 +27,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z á é í ó ú ä ë ï ö ü ĳ]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -76,50 +81,62 @@
 					<day type="sat">za</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
-					<firstDay day="thu"/>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
 				</week>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>d-MMM-yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>d-M-yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>H:mm:ss' uur' z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>H:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H:mm:ss' uur' z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -140,10 +157,20 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="BEF">
+				<displayName>BEF</displayName>
+				<symbol>BF</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>NLG</displayName>
+				<symbol>fl</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">-x: min &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />(zero?); een; twee; drie; vier; vijf; zes; zeven; acht; negen;<cp hex="000A" />tien; elf; twaalf; dertien; veertien; vijftien; zestien;<cp hex="000A" />zeventien; achtien; negentien;<cp hex="000A" />20: [&gt;&gt; en ]twintig;<cp hex="000A" />30: [&gt;&gt; en ]dertig;<cp hex="000A" />40: [&gt;&gt; en ]veertig;<cp hex="000A" />50: [&gt;&gt; en ]vijftig;<cp hex="000A" />60: [&gt;&gt; en ]zestig;<cp hex="000A" />70: [&gt;&gt; en ]zeventig;<cp hex="000A" />80: [&gt;&gt; en ]tachtig;<cp hex="000A" />90: [&gt;&gt; en ]negentig;<cp hex="000A" />100: &lt;&lt; honderd[ &gt;&gt;];<cp hex="000A" />1000: &lt;&lt; duizend[ &gt;&gt;];<cp hex="000A" />1,000,000: &lt;&lt; miljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000: &lt;&lt; biljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: =#,##0=</ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-</localeData>
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">-x: min &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />(zero?); een; twee; drie; vier; vijf; zes; zeven; acht; negen;<cp hex="000A" />tien; elf; twaalf; dertien; veertien; vijftien; zestien;<cp hex="000A" />zeventien; achtien; negentien;<cp hex="000A" />20: [&gt;&gt; en ]twintig;<cp hex="000A" />30: [&gt;&gt; en ]dertig;<cp hex="000A" />40: [&gt;&gt; en ]veertig;<cp hex="000A" />50: [&gt;&gt; en ]vijftig;<cp hex="000A" />60: [&gt;&gt; en ]zestig;<cp hex="000A" />70: [&gt;&gt; en ]zeventig;<cp hex="000A" />80: [&gt;&gt; en ]tachtig;<cp hex="000A" />90: [&gt;&gt; en ]negentig;<cp hex="000A" />100: &lt;&lt; honderd[ &gt;&gt;];<cp hex="000A" />1000: &lt;&lt; duizend[ &gt;&gt;];<cp hex="000A" />1,000,000: &lt;&lt; miljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000: &lt;&lt; biljoen[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: =#,##0=</icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

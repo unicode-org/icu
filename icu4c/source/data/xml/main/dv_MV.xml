@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="x0.2">Various notes and changes in version x0.2</version>
-		<generation date="2003-04-08" />
+		<version number="x0.3">Various notes and changes in version x0.3</version>
+		<generation date="2003-06-25" />
 		<language type="dv"></language>
 		<territory type="MDV">MV</territory>
 	</identity>
@@ -13,66 +18,68 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<week>
-						<minDays count="6"/>
-						<firstDay day="mon"/>
-					</week>
-					<dateFormats>
-						<default type="medium"/>
-						<dateFormatStyle type="full">
-							<dateFormat >
-								<pattern>EEEE d MMMM yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="long">
-							<dateFormat >
-								<pattern>d MMMM yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="medium">
-							<dateFormat >
-								<pattern>dd-MM-yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="short">
-							<dateFormat >
-								<pattern>d-M-yy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-					</dateFormats>
-					<timeFormats>
-						<default type="medium"/>
-						<timeFormat type="full">
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<week>
+					<minDays count="1"/>
+					<firstDay day="fri"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd-MM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>d-M-yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
 							<pattern>hh:mm:ss a z</pattern>
 						</timeFormat>
-						<timeFormat type="long">
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
 							<pattern>hh:mm:ss a z</pattern>
 						</timeFormat>
-						<timeFormat type="medium">
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
 							<pattern>hh:mm:ss a</pattern>
 						</timeFormat>
-						<timeFormat type="short">
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
 							<pattern>hh:mm a</pattern>
 						</timeFormat>
-					</timeFormats>
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<currencies>
-				<default type="MVR"/>
-				<currency type="MVR">
-					<symbol>ރ.</symbol>
-					<displayName>MVR</displayName>
-					<decimal>.</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+</ldml>

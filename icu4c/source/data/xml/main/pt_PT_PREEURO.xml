@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="pt"></language>
 		<territory type="PRT">PT</territory>
 		<variant type="PREEURO">{2}</variant>
@@ -14,46 +19,47 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<numberFormats>
-				<default type="decimal"/>
-				<numberFormatStyle type="decimal" >
-					<numberFormat >
-						<pattern>#,##0.###</pattern>
-						<pattern>-#,##0.###</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="currency" >
-					<numberFormat >
-						<pattern>#,##0 ¤</pattern>
-						<pattern>-#,##0 ¤</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="percent" >
-					<numberFormat >
-						<pattern>#,##0%</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="scientific" >
-					<numberFormat >
-						<pattern>#E0</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-			</numberFormats>
-			<currencies>
-				<default type="PTE"/>
-				<currency type="PTE">
-					<symbol>Esc.</symbol>
-					<displayName>PTE</displayName>
-					<decimal>$</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>#,##0 ¤;-#,##0 ¤</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<default type="PTE"/>
+			<currency type="PTE">
+				<decimal>$</decimal>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.2">Various notes and changes in version 1.2</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="th"></language>
 	</identity>
 	<localeDisplayNames>
@@ -346,7 +351,6 @@
 			<territory type="YU">ยูโกสลาเวีย</territory>
 			<territory type="ZA">แอฟริกาใต้</territory>
 			<territory type="ZM">แซมเบีย</territory>
-			<territory type="ZR">แซร์</territory>
 			<territory type="ZW">ซิมบาบเว</territory>
 		</territories>
 		<keys>
@@ -357,9 +361,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[:Thai:]</exemplarCharacters>
-	</encodings>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Thai</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -411,55 +420,67 @@
 					<day type="fri">ศ.</day>
 					<day type="sat">ส.</day>
 				</dayAbbr>
+				<am>ก่อนเที่ยง</am>
+				<pm>หลังเที่ยง</pm>
 				<eras>
 					<eraAbbr>
 						<era type="1">ปีก่อนคริสต์กาลที่</era>
 						<era type="2">ค.ศ.</era>
 					</eraAbbr>
 				</eras>
-				<am>ก่อนเที่ยง</am>
-				<pm>หลังเที่ยง</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE'ที่ 'd MMMM G yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>d MMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>d/M/yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>H' นาฬิกา 'm' นาที 'ss' วินาที'</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>H' นาฬิกา 'm' นาที'</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>H:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H' นาฬิกา 'm' นาที 'ss' วินาที'</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H' นาฬิกา 'm' นาที'</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1}, {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -478,25 +499,35 @@
 			</zone>
 		</timeZoneNames>
 	</dates>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">%default:<cp hex="000A" />  -x: ลบ&gt;&gt;;<cp hex="000A" />  x.x: &lt;&lt;จุด&gt;&gt;&gt;;<cp hex="000A" />  ศูนย์; หนึ่ง; สอง; สาม;<cp hex="000A" />  สี่; ห้า; หก; เจ็ด; แปด;<cp hex="000A" />  เก้า; สิบ; สิบเอ็ด;<cp hex="000A" />  สิบสอง; สิบสาม;<cp hex="000A" />  สิบสี่; สิบห้า;<cp hex="000A" />  สิบหก; สิบเจ็ด;<cp hex="000A" />  สิบแปด; สิบเก้า;<cp hex="000A" />  20: ยี่สิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  30: สามสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  40: สี่สิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  50: ห้าสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  60: หกสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  70: เจ็ดสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  80: แปดสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  90: เก้าสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  100: &lt;&lt;ร้อย[&gt;&gt;];<cp hex="000A" />  1000: &lt;&lt;พัน[&gt;&gt;];<cp hex="000A" />  10000: &lt;&lt;หมื่น[&gt;&gt;];<cp hex="000A" />  100000: &lt;&lt;แสน[&gt;&gt;];<cp hex="000A" />  1,000,000: &lt;&lt;ล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%alt-ones:<cp hex="000A" />  ศูนย์;<cp hex="000A" />  เอ็ด;<cp hex="000A" />  =%default=;<cp hex="000A" /></ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
-		<collation  >
-			<settings normalization="on"/>
-			<rules>
-				<reset>Z</reset>
-				<pc>กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤฤๅลฦฦๅวศษสหฬอฮะัาำิีึืุูเแโใไ๐๑๒๓๔๕๖๗๘๙ํ</pc>
-				<reset>}</reset>
-				<pc>ฯๆ๏๚๛฿๎ๅ</pc>
-				<reset>́</reset>
-				<sc>็่้๊๋์</sc>
-				<reset><cp hex="0001" /></reset>
-				<i>ฺ</i>
-			</rules>
-			<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
-		</collation  >
-	</collations>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="THB">
+				<displayName>บาท</displayName>
+				<symbol>฿</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+<collations version="3.1.1">
+	<collation  >
+		<settings normalization="on"  />
+		<rules>
+			<reset>Z</reset>
+			<pc>กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรฤ</pc>
+			<pc>ฤๅลฦ</pc>
+			<pc>ฦๅวศษสหฬอฮะัาำิีึืุูเแโใไ๐๑๒๓๔๕๖๗๘๙ํ</pc>
+			<reset>}</reset>
+			<pc>ฯๆ๏๚๛฿๎ๅ</pc>
+			<reset>́</reset>
+			<sc>็่้๊๋์</sc>
+			<reset><cp hex="0001" /></reset>
+			<i>ฺ</i>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+	</collation  >
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">%default:<cp hex="000A" />  -x: ลบ&gt;&gt;;<cp hex="000A" />  x.x: &lt;&lt;จุด&gt;&gt;&gt;;<cp hex="000A" />  ศูนย์; หนึ่ง; สอง; สาม;<cp hex="000A" />  สี่; ห้า; หก; เจ็ด; แปด;<cp hex="000A" />  เก้า; สิบ; สิบเอ็ด;<cp hex="000A" />  สิบสอง; สิบสาม;<cp hex="000A" />  สิบสี่; สิบห้า;<cp hex="000A" />  สิบหก; สิบเจ็ด;<cp hex="000A" />  สิบแปด; สิบเก้า;<cp hex="000A" />  20: ยี่สิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  30: สามสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  40: สี่สิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  50: ห้าสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  60: หกสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  70: เจ็ดสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  80: แปดสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  90: เก้าสิบ[&gt;%%alt-ones&gt;];<cp hex="000A" />  100: &lt;&lt;ร้อย[&gt;&gt;];<cp hex="000A" />  1000: &lt;&lt;พัน[&gt;&gt;];<cp hex="000A" />  10000: &lt;&lt;หมื่น[&gt;&gt;];<cp hex="000A" />  100000: &lt;&lt;แสน[&gt;&gt;];<cp hex="000A" />  1,000,000: &lt;&lt;ล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];<cp hex="000A" />  1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%alt-ones:<cp hex="000A" />  ศูนย์;<cp hex="000A" />  เอ็ด;<cp hex="000A" />  =%default=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

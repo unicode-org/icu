@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="hy"></language>
 		<territory type="ARM">AM</territory>
 		<variant type="REVISED">{2}</variant>
@@ -14,88 +19,47 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<monthNames>
-						<month type="1">Հունվար</month>
-						<month type="2">Փետրվար</month>
-						<month type="3">Մարտ</month>
-						<month type="4">Ապրիլ</month>
-						<month type="5">Մայիս</month>
-						<month type="6">Հունիս</month>
-						<month type="7">Հուլիս</month>
-						<month type="8">Օգոստոս</month>
-						<month type="9">Սեպտեմբեր</month>
-						<month type="10">Հոկտեմբեր</month>
-						<month type="11">Նոյեմբեր</month>
-						<month type="12">Դեկտեմբեր</month>
-					</monthNames>
-					<monthAbbr>
-						<month type="1">Հնվ</month>
-						<month type="2">Փտվ</month>
-						<month type="3">Մրտ</month>
-						<month type="4">Ապր</month>
-						<month type="5">Մյս</month>
-						<month type="6">Հնս</month>
-						<month type="7">Հլս</month>
-						<month type="8">Օգս</month>
-						<month type="9">Սեպ</month>
-						<month type="10">Հոկ</month>
-						<month type="11">Նոյ</month>
-						<month type="12">Դեկ</month>
-					</monthAbbr>
-					<eras>
-						<eraAbbr>
-							<era type="1">Մ․Թ․Ա․</era>
-							<era type="2">Մ․Թ․</era>
-						</eraAbbr>
-					</eras>
-					<am>Առ․</am>
-					<pm>Կե․</pm>
-					<dateFormats>
-						<default type="medium"/>
-						<dateFormatStyle type="full">
-							<dateFormat >
-								<pattern>EEEE,d MMMM, yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="long">
-							<dateFormat >
-								<pattern>d MMMM yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="medium">
-							<dateFormat >
-								<pattern>d MMM yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="short">
-							<dateFormat >
-								<pattern>dd-MM-yy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-					</dateFormats>
-					<timeFormats>
-						<default type="medium"/>
-						<timeFormat type="full">
-							<pattern>HH:mm:ss z</pattern>
-						</timeFormat>
-						<timeFormat type="long">
-							<pattern>H:mm:ss z</pattern>
-						</timeFormat>
-						<timeFormat type="medium">
-							<pattern>h:mm:ss</pattern>
-						</timeFormat>
-						<timeFormat type="short">
-							<pattern>h:mm</pattern>
-						</timeFormat>
-					</timeFormats>
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</calendar>
-			</calendars>
-		</dates>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Հունվար</month>
+					<month type="2">Փետրվար</month>
+					<month type="3">Մարտ</month>
+					<month type="4">Ապրիլ</month>
+					<month type="5">Մայիս</month>
+					<month type="6">Հունիս</month>
+					<month type="7">Հուլիս</month>
+					<month type="8">Օգոստոս</month>
+					<month type="9">Սեպտեմբեր</month>
+					<month type="10">Հոկտեմբեր</month>
+					<month type="11">Նոյեմբեր</month>
+					<month type="12">Դեկտեմբեր</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Հնվ</month>
+					<month type="2">Փտվ</month>
+					<month type="3">Մրտ</month>
+					<month type="4">Ապր</month>
+					<month type="5">Մյս</month>
+					<month type="6">Հնս</month>
+					<month type="7">Հլս</month>
+					<month type="8">Օգս</month>
+					<month type="9">Սեպ</month>
+					<month type="10">Հոկ</month>
+					<month type="11">Նոյ</month>
+					<month type="12">Դեկ</month>
+				</monthAbbr>
+				<am>Առ․</am>
+				<pm>Կե․</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">Մ․Թ․Ա․</era>
+						<era type="2">Մ․Թ․</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+	</dates>
+</ldml>

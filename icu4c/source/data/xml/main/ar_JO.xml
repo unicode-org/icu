@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="ar"></language>
 		<territory type="JOR">JO</territory>
 	</identity>
@@ -13,83 +18,78 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<monthNames>
-						<month type="1">كانون الثاني</month>
-						<month type="2">شباط</month>
-						<month type="3">آذار</month>
-						<month type="4">نيسان</month>
-						<month type="5">نوار</month>
-						<month type="6">حزيران</month>
-						<month type="7">تموز</month>
-						<month type="8">آب</month>
-						<month type="9">أيلول</month>
-						<month type="10">تشرين الأول</month>
-						<month type="11">تشرين الثاني</month>
-						<month type="12">كانون الأول</month>
-					</monthNames>
-					<monthAbbr>
-						<month type="1">كانون الثاني</month>
-						<month type="2">شباط</month>
-						<month type="3">آذار</month>
-						<month type="4">نيسان</month>
-						<month type="5">نوار</month>
-						<month type="6">حزيران</month>
-						<month type="7">تموز</month>
-						<month type="8">آب</month>
-						<month type="9">أيلول</month>
-						<month type="10">تشرين الأول</month>
-						<month type="11">تشرين الثاني</month>
-						<month type="12">كانون الأول</month>
-					</monthAbbr>
-					<dayAbbr>
-						<day type="sun">الأحد</day>
-						<day type="mon">الاثنين</day>
-						<day type="tue">الثلاثاء</day>
-						<day type="wed">الأربعاء</day>
-						<day type="thu">الخميس</day>
-						<day type="fri">الجمعة</day>
-						<day type="sat">السبت</day>
-					</dayAbbr>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<numberFormats>
-				<default type="decimal"/>
-				<numberFormatStyle type="decimal" >
-					<numberFormat >
-						<pattern>#,##0.###</pattern>
-						<pattern>#,##0.###-</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="currency" >
-					<numberFormat >
-						<pattern>¤ #,##0.000</pattern>
-						<pattern>¤ #,##0.000-</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="percent" >
-					<numberFormat >
-						<pattern>#,##0%</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="scientific" >
-					<numberFormat >
-						<pattern>#E0</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-			</numberFormats>
-			<currencies>
-				<default type="JOD"/>
-				<currency type="JOD">
-					<symbol>د.أ.‏</symbol>
-					<displayName>JOD</displayName>
-					<decimal>.</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">كانون الثاني</month>
+					<month type="2">شباط</month>
+					<month type="3">آذار</month>
+					<month type="4">نيسان</month>
+					<month type="5">أيار</month>
+					<month type="6">حزيران</month>
+					<month type="7">تموز</month>
+					<month type="8">آب</month>
+					<month type="9">أيلول</month>
+					<month type="10">تشرين الأول</month>
+					<month type="11">تشرين الثاني</month>
+					<month type="12">كانون الأول</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">كانون الثاني</month>
+					<month type="2">شباط</month>
+					<month type="3">آذار</month>
+					<month type="4">نيسان</month>
+					<month type="5">أيار</month>
+					<month type="6">حزيران</month>
+					<month type="7">تموز</month>
+					<month type="8">آب</month>
+					<month type="9">أيلول</month>
+					<month type="10">تشرين الأول</month>
+					<month type="11">تشرين الثاني</month>
+					<month type="12">كانون الأول</month>
+				</monthAbbr>
+				<dayAbbr>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;#,##0.###-</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤ #,##0.000;¤ #,##0.000-</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
+</ldml>

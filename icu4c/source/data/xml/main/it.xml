@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="it"></language>
 	</identity>
 	<localeDisplayNames>
@@ -22,9 +27,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z é ó à è ì ò í ú ù ï]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -76,58 +81,70 @@
 					<day type="sat">sab</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
-					<firstDay day="thu"/>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
 				</week>
+				<am>m.</am>
+				<pm>p.</pm>
 				<eras>
 					<eraAbbr>
 						<era type="1">aC</era>
 						<era type="2">dC</era>
 					</eraAbbr>
 				</eras>
-				<am>m.</am>
-				<pm>p.</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>dd MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd/MMM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd/MM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -161,10 +178,220 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="ARP">
+				<displayName>Peso Argentino (vecchio Cod.)</displayName>
+				<symbol>ARP</symbol>
+			</currency>
+			<currency type="ARS">
+				<displayName>Peso Argentino</displayName>
+				<symbol>ARS</symbol>
+			</currency>
+			<currency type="ATS">
+				<displayName>Scellino Austriaco</displayName>
+				<symbol>ATS</symbol>
+			</currency>
+			<currency type="AUD">
+				<displayName>Dollaro Australiano</displayName>
+				<symbol>AUD</symbol>
+			</currency>
+			<currency type="BAM">
+				<displayName>Marco Conv. Bosnia-Erzegovina</displayName>
+				<symbol>KM</symbol>
+			</currency>
+			<currency type="BEF">
+				<displayName>Franco Belga</displayName>
+				<symbol>BEF</symbol>
+			</currency>
+			<currency type="BGL">
+				<displayName>Lev Bulgaro</displayName>
+				<symbol>BGL</symbol>
+			</currency>
+			<currency type="BOB">
+				<displayName>Boliviano</displayName>
+				<symbol>BOB</symbol>
+			</currency>
+			<currency type="BRL">
+				<displayName>Real Brasiliano</displayName>
+				<symbol>BRL</symbol>
+			</currency>
+			<currency type="CAD">
+				<displayName>Dollaro Canadese</displayName>
+				<symbol>CAD</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>Franco Svizzero</displayName>
+				<symbol>SFr.</symbol>
+			</currency>
+			<currency type="CLP">
+				<displayName>Peso Cileno</displayName>
+				<symbol>CLP</symbol>
+			</currency>
+			<currency type="CNY">
+				<displayName>Renmimbi Cinese</displayName>
+				<symbol>CNY</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>Sterlina Cipriota</displayName>
+				<symbol>CYP</symbol>
+			</currency>
+			<currency type="CZK">
+				<displayName>Corona Ceca</displayName>
+				<symbol>CZK</symbol>
+			</currency>
+			<currency type="DEM">
+				<displayName>Marco Tedesco</displayName>
+				<symbol>DEM</symbol>
+			</currency>
+			<currency type="DKK">
+				<displayName>Corona Danese</displayName>
+				<symbol>DKK</symbol>
+			</currency>
+			<currency type="EEK">
+				<displayName>Corona dell'Estonia</displayName>
+				<symbol>EEK</symbol>
+			</currency>
+			<currency type="EGP">
+				<displayName>Sterlina Egiziana</displayName>
+				<symbol>EGP</symbol>
+			</currency>
+			<currency type="ESP">
+				<displayName>Peseta Spagnola</displayName>
+				<symbol>ESP</symbol>
+			</currency>
+			<currency type="EUR">
+				<displayName>Euro</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<displayName>Markka Finlandese</displayName>
+				<symbol>FIM</symbol>
+			</currency>
+			<currency type="FRF">
+				<displayName>Franco Francese</displayName>
+				<symbol>FRF</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>Sterlina Inglese</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>Dracma Greca</displayName>
+				<symbol>GRD</symbol>
+			</currency>
+			<currency type="HKD">
+				<displayName>Dollaro di Hong Kong</displayName>
+				<symbol>HKD</symbol>
+			</currency>
+			<currency type="HUF">
+				<displayName>Fiorino Ungherese</displayName>
+				<symbol>HUF</symbol>
+			</currency>
+			<currency type="IDR">
+				<displayName>Rupia Indiana</displayName>
+				<symbol>IDR</symbol>
+			</currency>
+			<currency type="IEP">
+				<displayName>Lira Irlandese</displayName>
+				<symbol>IEP</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName>Lira Italiana</displayName>
+				<symbol>₤</symbol>
+			</currency>
+			<currency type="JOD">
+				<displayName>Dinaro Giordano</displayName>
+				<symbol>JOD</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>Yen Giapponese</displayName>
+				<symbol>¥</symbol>
+			</currency>
+			<currency type="LTL">
+				<displayName>Lita Lituana</displayName>
+				<symbol>LTL</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>Dirham Marocchino</displayName>
+				<symbol>MAD</symbol>
+			</currency>
+			<currency type="NGN">
+				<displayName>Naira Nigeriana</displayName>
+				<symbol>NGN</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>Fiorino Olandese</displayName>
+				<symbol>NLG</symbol>
+			</currency>
+			<currency type="NOK">
+				<displayName>Corona Norvegese</displayName>
+				<symbol>NOK</symbol>
+			</currency>
+			<currency type="PHP">
+				<displayName>Peso delle Filippine</displayName>
+				<symbol>PHP</symbol>
+			</currency>
+			<currency type="PLZ">
+				<displayName>Zloty Polacco</displayName>
+				<symbol>PLZ</symbol>
+			</currency>
+			<currency type="PTE">
+				<displayName>Escudo Portoghese</displayName>
+				<symbol>PTE</symbol>
+			</currency>
+			<currency type="ROL">
+				<displayName>Leu della Romania</displayName>
+				<symbol>ROL</symbol>
+			</currency>
+			<currency type="RUR">
+				<displayName>Rublo della CSI</displayName>
+				<symbol>RUR</symbol>
+			</currency>
+			<currency type="SAR">
+				<displayName>Ryal Saudita</displayName>
+				<symbol>SAR</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>Corona Svedese</displayName>
+				<symbol>SEK</symbol>
+			</currency>
+			<currency type="SGD">
+				<displayName>Dollaro di Singapore</displayName>
+				<symbol>SGD</symbol>
+			</currency>
+			<currency type="SIT">
+				<displayName>Tallero Sloveno</displayName>
+				<symbol>SIT</symbol>
+			</currency>
+			<currency type="THB">
+				<displayName>Baht Tailandese</displayName>
+				<symbol>THB</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>Lira Turca</displayName>
+				<symbol>TRL</symbol>
+			</currency>
+			<currency type="UAH">
+				<displayName>Hrivna Ucraina</displayName>
+				<symbol>UAH</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>Dollaro Statunitense</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="YUD">
+				<displayName>Yud</displayName>
+				<symbol>YUD</symbol>
+			</currency>
+			<currency type="ZAR">
+				<displayName>Rand Sudafricano</displayName>
+				<symbol>ZAR</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">%main:<cp hex="000A" />    -x: meno &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; virgola &gt;&gt;;<cp hex="000A" />    zero; uno; due; tre; quattro; cinque; sei; sette; otto;<cp hex="000A" />        nove;<cp hex="000A" />    dieci; undici; dodici; tredici; quattordici; quindici; sedici;<cp hex="000A" />        diciasette; diciotto; diciannove;<cp hex="000A" />    20: venti; vent&gt;%%with-i&gt;;<cp hex="000A" />    30: trenta; trent&gt;%%with-i&gt;;<cp hex="000A" />    40: quaranta; quarant&gt;%%with-a&gt;;<cp hex="000A" />    50: cinquanta; cinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: sessanta; sessant&gt;%%with-a&gt;;<cp hex="000A" />    70: settanta; settant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: novanta; novant&gt;%%with-a&gt;;<cp hex="000A" />    100: cento; cent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;&lt;cento; &lt;&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: mille; mill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;&lt;mila; &lt;&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt;mila[ &gt;&gt;];<cp hex="000A" />    1,000,000: =#,##0= (incomplete data);<cp hex="000A" />%%with-a:<cp hex="000A" />    azero; uno; adue; atre; aquattro; acinque; asei; asette; otto;<cp hex="000A" />        anove;<cp hex="000A" />    adieci; undici; adodici; atredici; aquattordici; aquindici; asedici;<cp hex="000A" />        adiciasette; adiciotto; adiciannove;<cp hex="000A" />    20: aventi; avent&gt;%%with-i&gt;;<cp hex="000A" />    30: atrenta; atrent&gt;%%with-i&gt;;<cp hex="000A" />    40: aquaranta; aquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: acinquanta; acinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: asessanta; asessant&gt;%%with-a&gt;;<cp hex="000A" />    70: asettanta; asettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: anovanta; anovant&gt;%%with-a&gt;;<cp hex="000A" />    100: acento; acent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-a&lt;cento; &lt;%%with-a&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: amille; amill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-a&lt;mila; &lt;%%with-a&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-i:<cp hex="000A" />    izero; uno; idue; itre; iquattro; icinque; isei; isette; otto;<cp hex="000A" />        inove;<cp hex="000A" />    idieci; undici; idodici; itredici; iquattordici; iquindici; isedici;<cp hex="000A" />        idiciasette; idiciotto; idiciannove;<cp hex="000A" />    20: iventi; ivent&gt;%%with-i&gt;;<cp hex="000A" />    30: itrenta; itrent&gt;%%with-i&gt;;<cp hex="000A" />    40: iquaranta; iquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: icinquanta; icinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: isessanta; isessant&gt;%%with-a&gt;;<cp hex="000A" />    70: isettanta; isettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: inovanta; inovant&gt;%%with-a&gt;;<cp hex="000A" />    100: icento; icent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-i&lt;cento; &lt;%%with-i&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: imille; imill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-i&lt;mila; &lt;%%with-i&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-o:<cp hex="000A" />    ozero; uno; odue; otre; oquattro; ocinque; osei; osette; otto;<cp hex="000A" />        onove;<cp hex="000A" />    odieci; undici; ododici; otredici; oquattordici; oquindici; osedici;<cp hex="000A" />        odiciasette; odiciotto; odiciannove;<cp hex="000A" />    20: oventi; ovent&gt;%%with-i&gt;;<cp hex="000A" />    30: otrenta; otrent&gt;%%with-i&gt;;<cp hex="000A" />    40: oquaranta; oquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: ocinquanta; ocinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: osessanta; osessant&gt;%%with-a&gt;;<cp hex="000A" />    70: osettanta; osettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: onovanta; onovant&gt;%%with-a&gt;;<cp hex="000A" />    100: ocento; ocent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-o&lt;cento; &lt;%%with-o&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: omille; omill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-o&lt;mila; &lt;%%with-o&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" /></ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-</localeData>
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">%main:<cp hex="000A" />    -x: meno &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; virgola &gt;&gt;;<cp hex="000A" />    zero; uno; due; tre; quattro; cinque; sei; sette; otto;<cp hex="000A" />        nove;<cp hex="000A" />    dieci; undici; dodici; tredici; quattordici; quindici; sedici;<cp hex="000A" />        diciasette; diciotto; diciannove;<cp hex="000A" />    20: venti; vent&gt;%%with-i&gt;;<cp hex="000A" />    30: trenta; trent&gt;%%with-i&gt;;<cp hex="000A" />    40: quaranta; quarant&gt;%%with-a&gt;;<cp hex="000A" />    50: cinquanta; cinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: sessanta; sessant&gt;%%with-a&gt;;<cp hex="000A" />    70: settanta; settant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: novanta; novant&gt;%%with-a&gt;;<cp hex="000A" />    100: cento; cent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;&lt;cento; &lt;&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: mille; mill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;&lt;mila; &lt;&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt;mila[ &gt;&gt;];<cp hex="000A" />    1,000,000: =#,##0= (incomplete data);<cp hex="000A" />%%with-a:<cp hex="000A" />    azero; uno; adue; atre; aquattro; acinque; asei; asette; otto;<cp hex="000A" />        anove;<cp hex="000A" />    adieci; undici; adodici; atredici; aquattordici; aquindici; asedici;<cp hex="000A" />        adiciasette; adiciotto; adiciannove;<cp hex="000A" />    20: aventi; avent&gt;%%with-i&gt;;<cp hex="000A" />    30: atrenta; atrent&gt;%%with-i&gt;;<cp hex="000A" />    40: aquaranta; aquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: acinquanta; acinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: asessanta; asessant&gt;%%with-a&gt;;<cp hex="000A" />    70: asettanta; asettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: anovanta; anovant&gt;%%with-a&gt;;<cp hex="000A" />    100: acento; acent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-a&lt;cento; &lt;%%with-a&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: amille; amill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-a&lt;mila; &lt;%%with-a&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-i:<cp hex="000A" />    izero; uno; idue; itre; iquattro; icinque; isei; isette; otto;<cp hex="000A" />        inove;<cp hex="000A" />    idieci; undici; idodici; itredici; iquattordici; iquindici; isedici;<cp hex="000A" />        idiciasette; idiciotto; idiciannove;<cp hex="000A" />    20: iventi; ivent&gt;%%with-i&gt;;<cp hex="000A" />    30: itrenta; itrent&gt;%%with-i&gt;;<cp hex="000A" />    40: iquaranta; iquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: icinquanta; icinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: isessanta; isessant&gt;%%with-a&gt;;<cp hex="000A" />    70: isettanta; isettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: inovanta; inovant&gt;%%with-a&gt;;<cp hex="000A" />    100: icento; icent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-i&lt;cento; &lt;%%with-i&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: imille; imill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-i&lt;mila; &lt;%%with-i&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" />%%with-o:<cp hex="000A" />    ozero; uno; odue; otre; oquattro; ocinque; osei; osette; otto;<cp hex="000A" />        onove;<cp hex="000A" />    odieci; undici; ododici; otredici; oquattordici; oquindici; osedici;<cp hex="000A" />        odiciasette; odiciotto; odiciannove;<cp hex="000A" />    20: oventi; ovent&gt;%%with-i&gt;;<cp hex="000A" />    30: otrenta; otrent&gt;%%with-i&gt;;<cp hex="000A" />    40: oquaranta; oquarant&gt;%%with-a&gt;;<cp hex="000A" />    50: ocinquanta; ocinquant&gt;%%with-a&gt;;<cp hex="000A" />    60: osessanta; osessant&gt;%%with-a&gt;;<cp hex="000A" />    70: osettanta; osettant&gt;%%with-a&gt;;<cp hex="000A" />    80: ottanta; ottant&gt;%%with-a&gt;;<cp hex="000A" />    90: onovanta; onovant&gt;%%with-a&gt;;<cp hex="000A" />    100: ocento; ocent[&gt;%%with-o&gt;];<cp hex="000A" />    200: &lt;%%with-o&lt;cento; &lt;%%with-o&lt;cent[&gt;%%with-o&gt;];<cp hex="000A" />    1000: omille; omill[&gt;%%with-i&gt;];<cp hex="000A" />    2000: &lt;%%with-o&lt;mila; &lt;%%with-o&lt;mil[&gt;%%with-a&gt;];<cp hex="000A" />    100,000: =%main=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="kok"></language>
 	</identity>
 	<localeDisplayNames>
@@ -160,9 +165,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
-		<exemplarCharacters>[:Deva:]</exemplarCharacters>
-	</encodings>
+	<characters>
+		<exemplarCharacters>[[:Deva:]‌‍]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Deva</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -213,17 +223,25 @@
 					<day type="fri">शुक्र</day>
 					<day type="sat">शनि</day>
 				</dayAbbr>
+				<am>म.पू.</am>
+				<pm>म.नं.</pm>
 				<eras>
 					<eraAbbr>
 						<era type="1">क्रिस्तपूर्व</era>
 						<era type="2">क्रिस्तशखा</era>
 					</eraAbbr>
 				</eras>
-				<am>म.पू.</am>
-				<pm>म.नं.</pm>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="iw"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,9 +26,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
-		<exemplarCharacters>[:Hebr:]</exemplarCharacters>
-	</encodings>
+	<characters>
+		<exemplarCharacters>[[:Hebr:]‏‎]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Hebr</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -83,73 +93,93 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd/MM/yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd/MM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{0} {1}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{0} {1}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">zero (incomplete data); אהד; שגיים; שלושה;<cp hex="000A" />4: אדבצה; חגוישה; ששה;<cp hex="000A" />7: שבצה; שמוגה; תשצה;<cp hex="000A" />10: צשדה[ &gt;&gt;];<cp hex="000A" />20: צשדים[ &gt;&gt;];<cp hex="000A" />30: שלושים[ &gt;&gt;];<cp hex="000A" />40: אדבצים[ &gt;&gt;];<cp hex="000A" />50: חמישים[ &gt;&gt;];<cp hex="000A" />60: ששים[ &gt;&gt;];<cp hex="000A" />70: שבצים[ &gt;&gt;];<cp hex="000A" />80: שמוגים[ &gt;&gt;];<cp hex="000A" />90: תשצים[ &gt;&gt;];<cp hex="000A" />100: מאה[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt; מאה[ &gt;&gt;];<cp hex="000A" />1000: אלף[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; אלף[ &gt;&gt;];<cp hex="000A" />1,000,000: =#,##0= (incomplete data);</ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
-		<collation  >
-			<settings normalization="on"/>
-			<rules>
-				<reset>Z</reset>
-				<pc>אבגדהוװױזחטיײך</pc>
-				<t>כ</t>
-				<pc>לם</pc>
-				<t>מ</t>
-				<p>ן</p>
-				<t>נ</t>
-				<pc>סעף</pc>
-				<t>פ</t>
-				<p>ץ</p>
-				<t>צ</t>
-				<pc>קרש</pc>
-			</rules>
-			<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
-		</collation  >
-	</collations>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="ILS">
+				<displayName>ש"ח</displayName>
+				<symbol>₪</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+<collations version="3.1.1">
+	<collation  >
+		<settings normalization="on"  />
+		<rules>
+			<reset>Z</reset>
+			<pc>אבגדהוװױזחטיײך</pc>
+			<t>כ</t>
+			<pc>לם</pc>
+			<t>מ</t>
+			<p>ן</p>
+			<t>נ</t>
+			<pc>סעף</pc>
+			<t>פ</t>
+			<p>ץ</p>
+			<t>צ</t>
+			<pc>קרש</pc>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+	</collation  >
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">zero (incomplete data); אהד; שגיים; שלושה;<cp hex="000A" />4: אדבצה; חגוישה; ששה;<cp hex="000A" />7: שבצה; שמוגה; תשצה;<cp hex="000A" />10: צשדה[ &gt;&gt;];<cp hex="000A" />20: צשדים[ &gt;&gt;];<cp hex="000A" />30: שלושים[ &gt;&gt;];<cp hex="000A" />40: אדבצים[ &gt;&gt;];<cp hex="000A" />50: חמישים[ &gt;&gt;];<cp hex="000A" />60: ששים[ &gt;&gt;];<cp hex="000A" />70: שבצים[ &gt;&gt;];<cp hex="000A" />80: שמוגים[ &gt;&gt;];<cp hex="000A" />90: תשצים[ &gt;&gt;];<cp hex="000A" />100: מאה[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt; מאה[ &gt;&gt;];<cp hex="000A" />1000: אלף[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt; אלף[ &gt;&gt;];<cp hex="000A" />1,000,000: =#,##0= (incomplete data);</icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>
