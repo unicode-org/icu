@@ -76,7 +76,7 @@ void TitlecaseTransliterator::handleTransliterate(
         Mutex lock;
         if (SKIP == NULL) {
             UErrorCode ec = U_ZERO_ERROR;
-            SKIP = new UnicodeSet(UnicodeString("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:]]", ""), ec);
+            SKIP = new UnicodeSet(UnicodeString("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:]]", ""), ec);
             CASED = new UnicodeSet(UnicodeString("[[:Lu:] [:Ll:] [:Lt:]]", ""), ec);
             ucln_i18n_registerCleanup();
         }
