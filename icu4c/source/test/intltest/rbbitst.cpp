@@ -123,194 +123,194 @@ const UnicodeString  deadTA  = CharsToUnicodeString("\\u0924\\u094d");
 //--------------------------------------------------------------------
 void RBBITest::TestDefaultRuleBasedCharacterIteration()
 {
-   //   RuleBasedBreakIterator* rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
-      logln((UnicodeString)"Testing the RBBI for character iteration by using default rules");
-  //fetch the rules used to create the above RuleBasedBreakIterator
+    //   RuleBasedBreakIterator* rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
+    logln((UnicodeString)"Testing the RBBI for character iteration by using default rules");
+    //fetch the rules used to create the above RuleBasedBreakIterator
     //    UnicodeString defaultRules=rbbi->getRules();
     //     RuleBasedCharacterIterator charIterDefault = new RuleBasedBreakIterator(defaultRules); 
 
-      UErrorCode status=U_ZERO_ERROR;
-      RuleBasedBreakIterator* charIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-      if(U_FAILURE(status)){
-          errln("FAIL : in construction");
-          return;
-      }
+    UErrorCode status=U_ZERO_ERROR;
+    RuleBasedBreakIterator* charIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if(U_FAILURE(status)){
+        errln("FAIL : in construction");
+        return;
+    }
 
-      Vector *chardata = new Vector();
-      chardata->addElement("H");
-      chardata->addElement("e");
-      chardata->addElement("l");
-      chardata->addElement("l");
-      chardata->addElement("o");
-      chardata->addElement(CharsToUnicodeString("e\\u0301"));                   //acuteE
-      chardata->addElement("&");
-      chardata->addElement(CharsToUnicodeString("e\\u0303"));                   //tildaE
-      //devanagiri characters for Hindi support
-      chardata->addElement(CharsToUnicodeString("\\u0906"));                    //devanagiri AA
-      chardata->addElement(CharsToUnicodeString("\\u093e\\u0901"));              //devanagiri vowelsign AA+ chandrabindhu
-      chardata->addElement(CharsToUnicodeString("\\u0916\\u0947"));              //devanagiri KHA+vowelsign E
-      chardata->addElement(CharsToUnicodeString("\\u0938\\u0941\\u0902"));        //devanagiri SA+vowelsign U + anusvara(bindu)
-      chardata->addElement(CharsToUnicodeString("\\u0926"));                    //devanagiri consonant DA
-      chardata->addElement(CharsToUnicodeString("\\u0930"));                    //devanagiri consonant RA
-      chardata->addElement(CharsToUnicodeString("\\u0939\\u094c"));              //devanagiri HA+vowel sign AI
-      chardata->addElement(CharsToUnicodeString("\\u0964"));                    //devanagiri danda
-      //end hindi characters      
-      chardata->addElement(CharsToUnicodeString("A\\u0302"));                   //circumflexA 
-      chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI   
-      // conjoining jamo->.. 
-      chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-      chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
-      chardata->addElement("\n");
-      chardata->addElement("\r\n");                      //keep CRLF sequences together  
-      chardata->addElement(CharsToUnicodeString("S\\u0300"));                   //graveS
-      chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI
-      chardata->addElement("!");
+    Vector *chardata = new Vector();
+    chardata->addElement("H");
+    chardata->addElement("e");
+    chardata->addElement("l");
+    chardata->addElement("l");
+    chardata->addElement("o");
+    chardata->addElement(CharsToUnicodeString("e\\u0301"));                   //acuteE
+    chardata->addElement("&");
+    chardata->addElement(CharsToUnicodeString("e\\u0303"));                   //tildaE
+    //devanagiri characters for Hindi support
+    chardata->addElement(CharsToUnicodeString("\\u0906"));                    //devanagiri AA
+    chardata->addElement(CharsToUnicodeString("\\u093e\\u0901"));              //devanagiri vowelsign AA+ chandrabindhu
+    chardata->addElement(CharsToUnicodeString("\\u0916\\u0947"));              //devanagiri KHA+vowelsign E
+    chardata->addElement(CharsToUnicodeString("\\u0938\\u0941\\u0902"));        //devanagiri SA+vowelsign U + anusvara(bindu)
+    chardata->addElement(CharsToUnicodeString("\\u0926"));                    //devanagiri consonant DA
+    chardata->addElement(CharsToUnicodeString("\\u0930"));                    //devanagiri consonant RA
+    chardata->addElement(CharsToUnicodeString("\\u0939\\u094c"));              //devanagiri HA+vowel sign AI
+    chardata->addElement(CharsToUnicodeString("\\u0964"));                    //devanagiri danda
+    //end hindi characters      
+    chardata->addElement(CharsToUnicodeString("A\\u0302"));                   //circumflexA 
+    chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI   
+    // conjoining jamo->.. 
+    chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
+    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
+    chardata->addElement("\n");
+    chardata->addElement("\r\n");                      //keep CRLF sequences together  
+    chardata->addElement(CharsToUnicodeString("S\\u0300"));                   //graveS
+    chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI
+    chardata->addElement("!");
 
     // What follows is a string of Korean characters (I found it in the Yellow Pages
     // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-      chardata->addElement(CharsToUnicodeString("\\uc0c1"));
-      chardata->addElement(CharsToUnicodeString("\\ud56d"));
-      chardata->addElement(" ");
-      chardata->addElement(CharsToUnicodeString("\\ud55c"));
-      chardata->addElement(CharsToUnicodeString("\\uc778"));
-      chardata->addElement(" ");
-      chardata->addElement(CharsToUnicodeString("\\uc5f0"));
-      chardata->addElement(CharsToUnicodeString("\\ud569"));
-      chardata->addElement(" ");
-      chardata->addElement(CharsToUnicodeString("\\uc7a5"));
-      chardata->addElement(CharsToUnicodeString("\\ub85c"));
-      chardata->addElement(CharsToUnicodeString("\\uad50"));
-      chardata->addElement(CharsToUnicodeString("\\ud68c"));
-      chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\uc0c1"));
+    chardata->addElement(CharsToUnicodeString("\\ud56d"));
+    chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\ud55c"));
+    chardata->addElement(CharsToUnicodeString("\\uc778"));
+    chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\uc5f0"));
+    chardata->addElement(CharsToUnicodeString("\\ud569"));
+    chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\uc7a5"));
+    chardata->addElement(CharsToUnicodeString("\\ub85c"));
+    chardata->addElement(CharsToUnicodeString("\\uad50"));
+    chardata->addElement(CharsToUnicodeString("\\ud68c"));
+    chardata->addElement(" ");
     // conjoining jamo...
-      chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-      chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
-      chardata->addElement(" ");
-      chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
-      chardata->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab"));
-      chardata->addElement(" ");
-      chardata->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
-      chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8"));
-      chardata->addElement(" ");
-      chardata->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
-      chardata->addElement(CharsToUnicodeString("\\u1105\\u1169"));
-      chardata->addElement(CharsToUnicodeString("\\u1100\\u116d"));
-      chardata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
-      generalIteratorTest(*charIterDefault, chardata);
+    chardata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
+    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
+    chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
+    chardata->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab"));
+    chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
+    chardata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8"));
+    chardata->addElement(" ");
+    chardata->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
+    chardata->addElement(CharsToUnicodeString("\\u1105\\u1169"));
+    chardata->addElement(CharsToUnicodeString("\\u1100\\u116d"));
+    chardata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
+    generalIteratorTest(*charIterDefault, chardata);
 
-      delete charIterDefault;
-      delete chardata;
-//      delete rbbi;
-
+    delete charIterDefault;
+    delete chardata;
+//   delete rbbi;
 }
+
 //--------------------------------------------------------------------
 //tests default rules based word iteration
 //--------------------------------------------------------------------
 void RBBITest::TestDefaultRuleBasedWordIteration()
 {
-      logln((UnicodeString)"Testing the RBBI for word iteration using default rules");
+    logln((UnicodeString)"Testing the RBBI for word iteration using default rules");
 //      RuleBasedBreakIterator *rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
 //      fetch the rules used to create the above RuleBasedBreakIterator
 //      UnicodeString defaultRules=rbbi->getRules();
 //      RuleBasedBreakIterator wordIterDefault = new RuleBasedBreakIterator(defaultRules); 
 
-      UErrorCode status=U_ZERO_ERROR; 
-      RuleBasedBreakIterator* wordIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-      if(U_FAILURE(status)){
-          errln("FAIL : in construction");
-          return;
-      }
+    UErrorCode status=U_ZERO_ERROR; 
+    RuleBasedBreakIterator* wordIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    if(U_FAILURE(status)){
+        errln("FAIL : in construction");
+        return;
+    }
 
-      Vector *worddata = new Vector();
-      worddata->addElement ("Write");
-      worddata->addElement (" ");
-      worddata->addElement ("wordrules");
-      worddata->addElement (".");
-      worddata->addElement(" ");
-      worddata->addElement("alpha-beta-gamma");
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0939\\u0948"));   
-      //worddata->addElement("\\u0964");   //danda followed by a space "\u0964->danda: hindi phrase seperator"
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
-      worddata->addElement("?");
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0967\\u0966\\u0966.\\u0966\\u0966%"));     //postnumeric
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966")); //pre-number India currency symbol Rs->\\u20aD
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0905\\u092e\\u091c"));
-      worddata->addElement("\n");
-      worddata->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
-      worddata->addElement("\r");
-      worddata->addElement("It's");
-      worddata->addElement(" ");
-      worddata->addElement("$30.10");
-      worddata->addElement(" ");  
-      worddata->addElement(CharsToUnicodeString("\\u00A2")); //cent sign
-      worddata->addElement(CharsToUnicodeString("\\u00A3")); //pound sign
-      worddata->addElement(CharsToUnicodeString("\\u00A4")); //currency sign
-      worddata->addElement(CharsToUnicodeString("\\u00A5")); //yen sign
-      worddata->addElement("alpha-beta-gamma");
-      worddata->addElement(" ");
-      worddata->addElement("Badges");
-      worddata->addElement("?");
-      worddata->addElement(" ");
-      worddata->addElement("BADGES");
-      worddata->addElement("!");
-      worddata->addElement("1000,233,456.000");
-      worddata->addElement(" ");
-      worddata->addElement("1,23.322%");
-      worddata->addElement(" ");
-      worddata->addElement("123.1222");
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u0024123,000.20"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("179.01\\u0025"));
-      worddata->addElement("X");
-      worddata->addElement(" ");
-      worddata->addElement("Now");
-      worddata->addElement("\r");
-      worddata->addElement("is");
-      worddata->addElement("\n");
-      worddata->addElement("the");
-      worddata->addElement("\r\n");
-      worddata->addElement("time");
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\uc5f0\\ud569"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c"));
-      worddata->addElement(" ");
-      // conjoining jamo...
-      worddata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
-      worddata->addElement(" ");
-      worddata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
-      worddata->addElement(" ");
-      worddata->addElement("Hello");
-      worddata->addElement(",");
-      worddata->addElement(" ");
-      worddata->addElement("how");
-      worddata->addElement(" ");
-      worddata->addElement("are");
-      worddata->addElement(" ");
-      worddata->addElement("you");
-      worddata->addElement(" ");
-      generalIteratorTest(*wordIterDefault, worddata);
+    Vector *worddata = new Vector();
+    worddata->addElement ("Write");
+    worddata->addElement (" ");
+    worddata->addElement ("wordrules");
+    worddata->addElement (".");
+    worddata->addElement(" ");
+    worddata->addElement("alpha-beta-gamma");
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u092f\\u0939"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0939\\u0948"));   
+    //worddata->addElement("\\u0964");   //danda followed by a space "\u0964->danda: hindi phrase seperator"
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
+    worddata->addElement("?");
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0967\\u0966\\u0966.\\u0966\\u0966%"));     //postnumeric
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966")); //pre-number India currency symbol Rs->\\u20aD
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0905\\u092e\\u091c"));
+    worddata->addElement("\n");
+    worddata->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
+    worddata->addElement("\r");
+    worddata->addElement("It's");
+    worddata->addElement(" ");
+    worddata->addElement("$30.10");
+    worddata->addElement(" ");  
+    worddata->addElement(CharsToUnicodeString("\\u00A2")); //cent sign
+    worddata->addElement(CharsToUnicodeString("\\u00A3")); //pound sign
+    worddata->addElement(CharsToUnicodeString("\\u00A4")); //currency sign
+    worddata->addElement(CharsToUnicodeString("\\u00A5")); //yen sign
+    worddata->addElement("alpha-beta-gamma");
+    worddata->addElement(" ");
+    worddata->addElement("Badges");
+    worddata->addElement("?");
+    worddata->addElement(" ");
+    worddata->addElement("BADGES");
+    worddata->addElement("!");
+    worddata->addElement("1000,233,456.000");
+    worddata->addElement(" ");
+    worddata->addElement("1,23.322%");
+    worddata->addElement(" ");
+    worddata->addElement("123.1222");
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u0024123,000.20"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("179.01\\u0025"));
+    worddata->addElement("X");
+    worddata->addElement(" ");
+    worddata->addElement("Now");
+    worddata->addElement("\r");
+    worddata->addElement("is");
+    worddata->addElement("\n");
+    worddata->addElement("the");
+    worddata->addElement("\r\n");
+    worddata->addElement("time");
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\uc5f0\\ud569"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c"));
+    worddata->addElement(" ");
+    // conjoining jamo...
+    worddata->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
+    worddata->addElement(" ");
+    worddata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
+    worddata->addElement(" ");
+    worddata->addElement("Hello");
+    worddata->addElement(",");
+    worddata->addElement(" ");
+    worddata->addElement("how");
+    worddata->addElement(" ");
+    worddata->addElement("are");
+    worddata->addElement(" ");
+    worddata->addElement("you");
+    worddata->addElement(" ");
+    generalIteratorTest(*wordIterDefault, worddata);
 
-      delete wordIterDefault;
-      delete worddata;
-//      delete rbbi;
+    delete wordIterDefault;
+    delete worddata;
+//    delete rbbi;
 }
 //--------------------------------------------------------------------
 //tests default rules based word iteration
@@ -540,125 +540,126 @@ const UnicodeString visarga = CharsToUnicodeString("\\u0903");              /*de
 
 void RBBITest::TestHindiCharacterBreak()
 {
-      Vector *hindicharData = new Vector();
-      //devanagari characters for Hindi support
-      hindicharData->addElement(CharsToUnicodeString("\\u0906"));                    //devanagari AA
-      //hindi character break should make sure that it 
-      // doesn't break in-between a vowelsign and a chandrabindu
-      hindicharData->addElement(CharsToUnicodeString("\\u093e\\u0901"));              //devanagari vowelsign AA+ chandrabindu
-      hindicharData->addElement(CharsToUnicodeString("\\u0916\\u0947"));              //devanagari KHA+vowelsign E
-      hindicharData->addElement(CharsToUnicodeString("\\u0938\\u0941\\u0902"));        //devanagari SA+vowelsign U + anusvara(bindu)
-      hindicharData->addElement(CharsToUnicodeString("\\u0926"));                    //devanagari consonant DA
-      hindicharData->addElement(CharsToUnicodeString("\\u0930"));                    //devanagari consonant RA
-      hindicharData->addElement(CharsToUnicodeString("\\u0939\\u094c"));              //devanagari consonant HA+dependent vowel sign AI
-      hindicharData->addElement(CharsToUnicodeString("\\u0964"));                    //devanagari danda
-      hindicharData->addElement(CharsToUnicodeString("\\u0950"));                    //devanagari OM 
-      hindicharData->addElement(CharsToUnicodeString("\\u0915\\u0943"));              //devanagari KA+dependent vowel RI->KRI
+    Vector *hindicharData = new Vector();
+    //devanagari characters for Hindi support
+    hindicharData->addElement(CharsToUnicodeString("\\u0906"));                    //devanagari AA
+    //hindi character break should make sure that it 
+    // doesn't break in-between a vowelsign and a chandrabindu
+    hindicharData->addElement(CharsToUnicodeString("\\u093e\\u0901"));              //devanagari vowelsign AA+ chandrabindu
+    hindicharData->addElement(CharsToUnicodeString("\\u0916\\u0947"));              //devanagari KHA+vowelsign E
+    hindicharData->addElement(CharsToUnicodeString("\\u0938\\u0941\\u0902"));        //devanagari SA+vowelsign U + anusvara(bindu)
+    hindicharData->addElement(CharsToUnicodeString("\\u0926"));                    //devanagari consonant DA
+    hindicharData->addElement(CharsToUnicodeString("\\u0930"));                    //devanagari consonant RA
+    hindicharData->addElement(CharsToUnicodeString("\\u0939\\u094c"));              //devanagari consonant HA+dependent vowel sign AI
+    hindicharData->addElement(CharsToUnicodeString("\\u0964"));                    //devanagari danda
+    hindicharData->addElement(CharsToUnicodeString("\\u0950"));                    //devanagari OM 
+    hindicharData->addElement(CharsToUnicodeString("\\u0915\\u0943"));              //devanagari KA+dependent vowel RI->KRI
 
-      //dependent half-forms
-      hindicharData->addElement(halfSA+CharsToUnicodeString("\\u0924"));             //halfSA+base consonant TA->STA
-      hindicharData->addElement(halfSA+CharsToUnicodeString("\\u0925"));             //halfSA+base consonant THA->STHA
-      hindicharData->addElement(halfSA+CharsToUnicodeString("\\u092e"));             //halfSA+base consonant MA->SMA
-      hindicharData->addElement(halfCHA+CharsToUnicodeString("\\u091b"));            //halfCHA+base consonant CHHA->CHHHA
-      hindicharData->addElement(halfNA+CharsToUnicodeString("\\u0917"));             //halfNA+base consonant GA->NGA
-      hindicharData->addElement(CharsToUnicodeString("\\u092a\\u094d\\u200d\\u092f"));   //halfPA(PA+virama+zerowidthjoiner+base consonant YA->PYA
+    //dependent half-forms
+    hindicharData->addElement(halfSA+CharsToUnicodeString("\\u0924"));             //halfSA+base consonant TA->STA
+    hindicharData->addElement(halfSA+CharsToUnicodeString("\\u0925"));             //halfSA+base consonant THA->STHA
+    hindicharData->addElement(halfSA+CharsToUnicodeString("\\u092e"));             //halfSA+base consonant MA->SMA
+    hindicharData->addElement(halfCHA+CharsToUnicodeString("\\u091b"));            //halfCHA+base consonant CHHA->CHHHA
+    hindicharData->addElement(halfNA+CharsToUnicodeString("\\u0917"));             //halfNA+base consonant GA->NGA
+    hindicharData->addElement(CharsToUnicodeString("\\u092a\\u094d\\u200d\\u092f"));   //halfPA(PA+virama+zerowidthjoiner+base consonant YA->PYA
 
 
-      //consonant RA rules ----------
-      //if the dead consonant RA precedes either a consonant or an independent vowel,
-      //then it is replaced by its superscript non-spacing mark
-      hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0915"));             //deadRA+devanagari consonant KA->KA+superRA 
-      hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0923"));             //deadRA+devanagari consonant NNA->NNA+superRA
-      hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0917"));             //deadRA+devanagari consonant GA->GA+superRA
+    //consonant RA rules ----------
+    //if the dead consonant RA precedes either a consonant or an independent vowel,
+    //then it is replaced by its superscript non-spacing mark
+    hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0915"));             //deadRA+devanagari consonant KA->KA+superRA 
+    hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0923"));             //deadRA+devanagari consonant NNA->NNA+superRA
+    hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0917"));             //deadRA+devanagari consonant GA->GA+superRA
     //  hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0960"));           //deadRA+devanagari cosonant RRI->RRI+superRA
-      
-      //if any dead consonant(other than dead RA)precedes the consonant RA, then
-      //it is replaced with its nominal forma nd RA is replaced by the subscript non-spacing mark.
-      hindicharData->addElement(deadPHA+ CharsToUnicodeString("\\u0930"));            //deadPHA+devanagari consonant RA->PHA+subRA
-      hindicharData->addElement(deadPA+ CharsToUnicodeString("\\u0930"));             //deadPA+devanagari consonant RA->PA+subRA
-      hindicharData->addElement(deadTTHA+ CharsToUnicodeString("\\u0930"));           //deadTTHA+devanagari consonant RA->TTHA+subRA
-      hindicharData->addElement(deadTA+ CharsToUnicodeString("\\u0930"));             //deadTA+RA->TRA 
-      hindicharData->addElement(CharsToUnicodeString("\\u0936\\u094d\\u0930"));         //deadSHA(SHA+virama)+RA->SHRA 
 
-      //conjuct ligatures
-      hindicharData->addElement(CharsToUnicodeString("\\u0915\\u094d\\u0937"));         //deadKA(KA+virama) followed by SSHA wraps up into a single character KSSHA
-      hindicharData->addElement(deadTA+CharsToUnicodeString("\\u0924"));              //deadTA+TA wraps up into glyph TTHA
-      hindicharData->addElement(CharsToUnicodeString("\\u0926\\u094d\\u0935"));         //deadDA(DA+virama)+VA wraps up into DVA
-      hindicharData->addElement(CharsToUnicodeString("\\u091c\\u094d\\u091e"));         //deadJA(JA+virama)+NYA wraps up into JNYA
-     
-      UErrorCode status= U_ZERO_ERROR;
-      RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-      if(U_FAILURE(status)){
-          errln("FAIL : in construction");
-          return;
-      }
-      generalIteratorTest(*e, hindicharData);
-      delete e;
-      delete hindicharData;
+    //if any dead consonant(other than dead RA)precedes the consonant RA, then
+    //it is replaced with its nominal forma nd RA is replaced by the subscript non-spacing mark.
+    hindicharData->addElement(deadPHA+ CharsToUnicodeString("\\u0930"));            //deadPHA+devanagari consonant RA->PHA+subRA
+    hindicharData->addElement(deadPA+ CharsToUnicodeString("\\u0930"));             //deadPA+devanagari consonant RA->PA+subRA
+    hindicharData->addElement(deadTTHA+ CharsToUnicodeString("\\u0930"));           //deadTTHA+devanagari consonant RA->TTHA+subRA
+    hindicharData->addElement(deadTA+ CharsToUnicodeString("\\u0930"));             //deadTA+RA->TRA 
+    hindicharData->addElement(CharsToUnicodeString("\\u0936\\u094d\\u0930"));         //deadSHA(SHA+virama)+RA->SHRA 
+
+    //conjuct ligatures
+    hindicharData->addElement(CharsToUnicodeString("\\u0915\\u094d\\u0937"));         //deadKA(KA+virama) followed by SSHA wraps up into a single character KSSHA
+    hindicharData->addElement(deadTA+CharsToUnicodeString("\\u0924"));              //deadTA+TA wraps up into glyph TTHA
+    hindicharData->addElement(CharsToUnicodeString("\\u0926\\u094d\\u0935"));         //deadDA(DA+virama)+VA wraps up into DVA
+    hindicharData->addElement(CharsToUnicodeString("\\u091c\\u094d\\u091e"));         //deadJA(JA+virama)+NYA wraps up into JNYA
+
+    UErrorCode status= U_ZERO_ERROR;
+    RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+    if(U_FAILURE(status)){
+        errln("FAIL : in construction");
+        return;
+    }
+    generalIteratorTest(*e, hindicharData);
+    delete e;
+    delete hindicharData;
 }
+
 void RBBITest::TestHindiWordBreak()
-   {
-     Vector *hindiWordData = new Vector();
+{
+    Vector *hindiWordData = new Vector();
 
-      //hindi
-     hindiWordData->addElement(CharsToUnicodeString("\\u0917\\u092a-\\u0936\\u092a"));
-     hindiWordData->addElement("!");
-     hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u0948"));
-     //danda is similar to full stop. danda is a hindi phrase seperator
-     //Make sure it breaks before danda and after danda when it is followed by a space
-     //hindiWordData->addElement(CharsToUnicodeString("\\u0964"));   //fails here doesn't break at danda
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
-     hindiWordData->addElement("?");
-     hindiWordData->addElement("\n"); 
-     hindiWordData->addElement(":");
-     hindiWordData->addElement(deadPA+CharsToUnicodeString("\\u0930\\u093e\\u092f")+visarga);    //no break before visarga
-     hindiWordData->addElement(" ");
+    //hindi
+    hindiWordData->addElement(CharsToUnicodeString("\\u0917\\u092a-\\u0936\\u092a"));
+    hindiWordData->addElement("!");
+    hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u0948"));
+    //danda is similar to full stop. danda is a hindi phrase seperator
+    //Make sure it breaks before danda and after danda when it is followed by a space
+    //hindiWordData->addElement(CharsToUnicodeString("\\u0964"));   //fails here doesn't break at danda
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a"));
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0938\\u093f\\u0916\\u094b\\u0917\\u0947"));
+    hindiWordData->addElement("?");
+    hindiWordData->addElement("\n"); 
+    hindiWordData->addElement(":");
+    hindiWordData->addElement(deadPA+CharsToUnicodeString("\\u0930\\u093e\\u092f")+visarga);    //no break before visarga
+    hindiWordData->addElement(" ");
 
-     hindiWordData->addElement(CharsToUnicodeString("\\u0935") + deadRA+ CharsToUnicodeString("\\u0937\\u093e"));
-     hindiWordData->addElement("\r\n");
-     hindiWordData->addElement(deadPA+ CharsToUnicodeString("\\u0930\\u0915\\u093e\\u0936"));     //deadPA+RA+KA+vowel AA+SHA -> prakash
-     hindiWordData->addElement(","); 
-     hindiWordData->addElement(CharsToUnicodeString("\\u0924\\u0941\\u092e\\u093e\\u0930\\u094b")); 
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u092e\\u093f")+ deadTA+ CharsToUnicodeString("\\u0930"));       //MA+vowel I+ deadTA + RA 
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0915\\u093e"));
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u092a")+ deadTA + CharsToUnicodeString("\\u0930"));            //PA + deadTA + RA
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u092a\\u095d\\u094b"));
+    hindiWordData->addElement(CharsToUnicodeString("\\u0935") + deadRA+ CharsToUnicodeString("\\u0937\\u093e"));
+    hindiWordData->addElement("\r\n");
+    hindiWordData->addElement(deadPA+ CharsToUnicodeString("\\u0930\\u0915\\u093e\\u0936"));     //deadPA+RA+KA+vowel AA+SHA -> prakash
+    hindiWordData->addElement(","); 
+    hindiWordData->addElement(CharsToUnicodeString("\\u0924\\u0941\\u092e\\u093e\\u0930\\u094b")); 
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u092e\\u093f")+ deadTA+ CharsToUnicodeString("\\u0930"));       //MA+vowel I+ deadTA + RA 
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0915\\u093e"));
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u092a")+ deadTA + CharsToUnicodeString("\\u0930"));            //PA + deadTA + RA
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u092a\\u095d\\u094b"));
     // hindiWordData->addElement(CharsToUnicodeString("\\u0964")); //fails here doesn't break at danda
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(deadSA + deadTA + CharsToUnicodeString("\\u0930\\u093f"));       //deadSA+deadTA+RA+vowel I->sthri
-     hindiWordData->addElement(".");
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0967\\u0966\\u0966.\\u0966\\u0966%"));     //postnumeric
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966")); //pre-number India currency symbol Rs.\\u20aD
-     hindiWordData->addElement(" ");
-     hindiWordData->addElement(CharsToUnicodeString("\\u0905\\u092e\\u091c"));
-     hindiWordData->addElement("\n");
-     hindiWordData->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
-     hindiWordData->addElement("\r");
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(deadSA + deadTA + CharsToUnicodeString("\\u0930\\u093f"));       //deadSA+deadTA+RA+vowel I->sthri
+    hindiWordData->addElement(".");
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0967\\u0966\\u0966.\\u0966\\u0966%"));     //postnumeric
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u20a8\\u0967,\\u0967\\u0966\\u0966.\\u0966\\u0966")); //pre-number India currency symbol Rs.\\u20aD
+    hindiWordData->addElement(" ");
+    hindiWordData->addElement(CharsToUnicodeString("\\u0905\\u092e\\u091c"));
+    hindiWordData->addElement("\n");
+    hindiWordData->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
+    hindiWordData->addElement("\r");
 
-     UErrorCode status=U_ZERO_ERROR;
-     RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-      if(U_FAILURE(status)){
-          errln("FAIL : in construction");
-          return;
-      }
-      generalIteratorTest(*e, hindiWordData);
-      delete e;
-      delete hindiWordData;
+    UErrorCode status=U_ZERO_ERROR;
+    RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+    if(U_FAILURE(status)){
+        errln("FAIL : in construction");
+        return;
+    }
+    generalIteratorTest(*e, hindiWordData);
+    delete e;
+    delete hindiWordData;
 }
 /*
 //Bug: if there is no word break before and after danda when it is followed by a space
@@ -683,6 +684,7 @@ void RBBITest::TestDanda()
       delete e;
       delete hindiWordData;
 }
+
 //Make sure the character wrapping is done correctly
 void RBBITest::TestHindiCharacterWrapping()
 {
@@ -699,8 +701,6 @@ void RBBITest::TestHindiCharacterWrapping()
       delete hindicharData;
 
 }*/
-
-
 
 
 
@@ -920,32 +920,29 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {
     
-        case 0: name = "TestDefaultRuleBasedCharacterIteration"; 
+        case 0: name = "TestDefaultRuleBasedCharacterIteration";
             if(exec) TestDefaultRuleBasedCharacterIteration(); break;
-        case 1: name = "TestDefaultRuleBasedWordIteration";      
+        case 1: name = "TestDefaultRuleBasedWordIteration";
             if(exec) TestDefaultRuleBasedWordIteration();      break;
-        case 2: name = "TestDefaultRuleBasedSentenceIteration";  
+        case 2: name = "TestDefaultRuleBasedSentenceIteration";
             if(exec) TestDefaultRuleBasedSentenceIteration();  break;
-        case 3: name = "TestDefaulRuleBasedLineIteration()";
+        case 3: name = "TestDefaulRuleBasedLineIteration";
             if(exec) TestDefaultRuleBasedLineIteration();      break;
-        case 4: name = "TestHindiCharacterBreak()";
+        case 4: name = "TestHindiCharacterBreak";
             if(exec) TestHindiCharacterBreak();                break;
-        case 5: name = "TestHindiWordBreak()";
+        case 5: name = "TestHindiWordBreak";
             if(exec) TestHindiWordBreak();                     break;
-        case 6: name = "TestHindiWordBreak()";
-            if(exec) TestHindiWordBreak();                     break;
-//      case 7: name = "TestDanda()";
-//           if(exec) TestDanda();                              break;
-//       case 8: name = "TestHindiCharacterWrapping()";
-//           if(exec) TestHindiCharacterWrapping();             break;
-
-//      case 9: name = "TestCustomRuleBasedWordIteration";       
+//      case 6: name = "TestDanda()";
+//           if(exec) TestDanda();                             break;
+//      case 7: name = "TestHindiCharacterWrapping()";
+//           if(exec) TestHindiCharacterWrapping();            break;
+//      case 8: name = "TestCustomRuleBasedWordIteration";
 //          if(exec) TestCustomRuleBasedWordIteration();       break;
-//      case 10: name = "TestAbbrRuleBasedWordIteration";         
+//      case 9: name = "TestAbbrRuleBasedWordIteration";
 //          if(exec) TestAbbrRuleBasedWordIteration();         break;
-//      case 11: name = "TestTeluguRuleBasedCharacterIteration";  
+//      case 10: name = "TestTeluguRuleBasedCharacterIteration";
 //          if(exec) TestTeluguRuleBasedCharacterIteration();  break;
-//      case 12: name = "TestCustomRuleBasedCharacterIteration";  
+//      case 11: name = "TestCustomRuleBasedCharacterIteration";
 //          if(exec) TestCustomRuleBasedCharacterIteration();  break;
 
 
@@ -958,13 +955,14 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 //---------------------------------------------
 UnicodeString RBBITest::createTestData(Enumeration* e)
 {
-  UnicodeString result = "";
+    UnicodeString result = "";
 
-  while (e->hasMoreElements()) {
-    result += e->nextElement();
-  }
-  return result;
+    while (e->hasMoreElements()) {
+        result += e->nextElement();
+    }
+    return result;
 }
+
 // general test Implementation subroutines
 void RBBITest::generalIteratorTest(RuleBasedBreakIterator& bi, Vector* expectedResult) 
 {
