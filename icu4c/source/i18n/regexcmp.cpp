@@ -1018,7 +1018,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             int32_t   saveStateLoc = blockTopLoc(TRUE);
             int32_t   dataLoc = -1;
 
-            if (possibleNullMatch(saveStateLoc, fRXPat->fCompiledPat->size()-1)) {
+            if (minMatchLength(saveStateLoc, fRXPat->fCompiledPat->size()-1) == 0) {
                 insertOp(saveStateLoc);
                 dataLoc =  fRXPat->fFrameSize;
                 fRXPat->fFrameSize++;
@@ -1132,7 +1132,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doLiteralChar:
         // We've just scanned a "normal" character from the pattern, 
-        literalChar();
+        literalChar(fC.fChar);
         break;
 
 
@@ -1302,10 +1302,6 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
 
-    case doNamedChar:            // \N{NAMED_CHAR}
-        //  TODO:  implement
-        error(U_REGEX_UNIMPLEMENTED);
-        break;
 
     case doPossesivePlus:
         // Possessive ++ quantifier.
@@ -1503,7 +1499,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 //                         If we aren't in a pattern string, begin one now.
 //
 //------------------------------------------------------------------------------
-void RegexCompile::literalChar()  {
+void RegexCompile::literalChar(UChar32 c)  {
     int32_t           op;            // An operation in the compiled pattern.
     int32_t           opType;
     int32_t           patternLoc;   // A position in the compiled pattern.
@@ -1521,17 +1517,17 @@ void RegexCompile::literalChar()  {
     if (fStringOpStart == -1) {
         // First char of a string in the pattern.
         // Emit a OneChar op into the compiled pattern.
-        emitONE_CHAR(fC.fChar);
+        emitONE_CHAR(c);
 
         // Also add it to the string pool, in case we get a second adjacent literal
         //   and want to change form ONE_CHAR to STRING
         fStringOpStart = fRXPat->fLiteralText.length();
-        fRXPat->fLiteralText.append(fC.fChar);
+        fRXPat->fLiteralText.append(c);
         return;
     }
     
     // We are adding onto an existing string
-    fRXPat->fLiteralText.append(fC.fChar);
+    fRXPat->fLiteralText.append(c);
 
     // If the most recently emitted op is a URX_ONECHAR, change it to a string op.
     op     = fRXPat->fCompiledPat->lastElementi();
@@ -1987,8 +1983,7 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
             // The set contains only a single code point.  Put it into
             //   the compiled pattern as a single char operation rather
             //   than a set, and discard the set itself.
-            int32_t  charToken = URX_BUILD(URX_ONECHAR, firstSetChar);
-            fRXPat->fCompiledPat->addElement(charToken, *fStatus);
+            literalChar(firstSetChar);
             delete theSet;
         }
         break;
@@ -2083,6 +2078,9 @@ UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
 //                     value may be shorter than the actual minimum; it must
 //                     never be longer.
 //
+//                     start and end are the range of p-code operations to be
+//                     examined.  The endpoints are included in the range.
+//
 //----------------------------------------------------------------------------------------
 int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
     if (U_FAILURE(*fStatus)) {
@@ -2097,11 +2095,17 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
     int32_t    op;
     int32_t    opType;
     int32_t    currentLen = 0;
-    UVector32  lengthSoFar(end+1, *fStatus);
-    lengthSoFar.setSize(end+1);
 
-    for (loc=start; loc<=end; loc++) {
-        lengthSoFar.setElementAt(INT32_MAX, loc);
+
+    // forwardedLength is a vector holding minimum-match-length values that
+    //   are propagated forward in the pattern by JMP or STATE_SAVE operations.
+    //   It must be one longer than the pattern being checked because some  ops
+    //   will jmp to a end-of-block+1 location from within a block, and we must
+    //   count those when checking the block.
+    UVector32  forwardedLength(end+2, *fStatus);
+    forwardedLength.setSize(end+2);
+    for (loc=start; loc<=end+1; loc++) {
+        forwardedLength.setElementAt(INT32_MAX, loc);
     }
 
     for (loc = start; loc<=end; loc++) {
@@ -2112,8 +2116,8 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         // If the op we are now at was the destination of a branch in the pattern,
         // and that path has a shorter minimum length than the current accumulated value,
         // replace the current accumulated value.
-        if (lengthSoFar.elementAti(loc) < currentLen) {
-            currentLen = lengthSoFar.elementAti(loc);
+        if (forwardedLength.elementAti(loc) < currentLen) {
+            currentLen = forwardedLength.elementAti(loc);
         }
 
         switch (opType) {
@@ -2165,12 +2169,13 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                 if (jmpDest < loc) {
                     // Loop of some kind.  Can safely ignore, the worst that will happen
                     //  is that we understate the true minimum length
-                    currentLen = lengthSoFar.elementAti(loc+1);
+                    currentLen = forwardedLength.elementAti(loc+1);
                    
                 } else {
                     // Forward jump.  Propagate the current min length to the target loc of the jump.
-                    if (lengthSoFar.elementAti(jmpDest) > currentLen) {
-                        lengthSoFar.setElementAt(currentLen, jmpDest);
+                    U_ASSERT(jmpDest <= end+1);
+                    if (forwardedLength.elementAti(jmpDest) > currentLen) {
+                        forwardedLength.setElementAt(currentLen, jmpDest);
                     }
                 }
             }
@@ -2179,7 +2184,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_FAIL:
             // Fails are kind of like a branch, except that the min length was
             //   propagated already, by the state save.
-            currentLen = lengthSoFar.elementAti(loc+1);
+            currentLen = forwardedLength.elementAti(loc+1);
             break;
 
 
@@ -2189,8 +2194,8 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                 //             of the state save.
                 int32_t  jmpDest = URX_VAL(op);
                 if (jmpDest > loc) {
-                    if (currentLen < lengthSoFar.elementAti(jmpDest)) {
-                        lengthSoFar.setElementAt(currentLen, jmpDest);
+                    if (currentLen < forwardedLength.elementAti(jmpDest)) {
+                        forwardedLength.setElementAt(currentLen, jmpDest);
                     }
                 } 
             }
@@ -2268,8 +2273,14 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             }
             
         }
-        return currentLen;
-        
+
+    // We have finished walking through the ops.  Check whether some forward jump
+    //   propagated a shorter length to location end+1.
+    if (forwardedLength.elementAti(end+1) < currentLen) {
+        currentLen = forwardedLength.elementAti(end+1);
+    }
+            
+    return currentLen;
 }
 
 
@@ -2297,11 +2308,11 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
     int32_t    op;
     int32_t    opType;
     int32_t    currentLen = 0;
-    UVector32  lengthSoFar(end+1, *fStatus);
-    lengthSoFar.setSize(end+1);
+    UVector32  forwardedLength(end+1, *fStatus);
+    forwardedLength.setSize(end+1);
 
     for (loc=start; loc<=end; loc++) {
-        lengthSoFar.setElementAt(0, loc);
+        forwardedLength.setElementAt(0, loc);
     }
 
     for (loc = start; loc<=end; loc++) {
@@ -2312,8 +2323,8 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         // If the op we are now at was the destination of a branch in the pattern,
         // and that path has a longer maximum length than the current accumulated value,
         // replace the current accumulated value.
-        if (lengthSoFar.elementAti(loc) > currentLen) {
-            currentLen = lengthSoFar.elementAti(loc);
+        if (forwardedLength.elementAti(loc) > currentLen) {
+            currentLen = forwardedLength.elementAti(loc);
         }
 
         switch (opType) {
@@ -2388,8 +2399,8 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
                     currentLen = INT32_MAX;
                 } else {
                     // Forward jump.  Propagate the current min length to the target loc of the jump.
-                    if (lengthSoFar.elementAti(jmpDest) < currentLen) {
-                        lengthSoFar.setElementAt(currentLen, jmpDest);
+                    if (forwardedLength.elementAti(jmpDest) < currentLen) {
+                        forwardedLength.setElementAt(currentLen, jmpDest);
                     }
                     currentLen = 0;
                 }
@@ -2399,7 +2410,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_FAIL:
             // Fails are kind of like a branch, except that the max length was
             //   propagated already, by the state save.
-            currentLen = lengthSoFar.elementAti(loc+1);
+            currentLen = forwardedLength.elementAti(loc+1);
             break;
 
 
@@ -2411,8 +2422,8 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
                 //               match length is unbounded.
                 int32_t  jmpDest = URX_VAL(op);
                 if (jmpDest > loc) {
-                    if (currentLen > lengthSoFar.elementAti(jmpDest)) {
-                        lengthSoFar.setElementAt(currentLen, jmpDest);
+                    if (currentLen > forwardedLength.elementAti(jmpDest)) {
+                        forwardedLength.setElementAt(currentLen, jmpDest);
                     }
                 } else {
                     currentLen = INT32_MAX;
@@ -2536,6 +2547,7 @@ static const UChar      chRParen    = 0x29;
 static const UChar      chLBracket  = 0x5b;
 static const UChar      chRBracket  = 0x5d;
 static const UChar      chRBrace    = 0x7d;
+static const UChar      chUpperN    = 0x4E;
 static const UChar      chLowerP    = 0x70;
 static const UChar      chUpperP    = 0x50;
 
@@ -2780,7 +2792,7 @@ UnicodeSet *RegexCompile::scanProp() {
         return NULL;
     }
 
-    U_ASSERT(fC.fChar == chLowerP || fC.fChar == chUpperP);
+    U_ASSERT(fC.fChar == chLowerP || fC.fChar == chUpperP || fC.fChar == chUpperN);
 
     // enclose the \p{property} from the regex pattern source in  [brackets]
     UnicodeString setPattern;
@@ -2800,8 +2812,16 @@ UnicodeSet *RegexCompile::scanProp() {
     }
     setPattern.append(chRBracket);
 
+    uint32_t   usetFlags = 0;
+    if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
+        usetFlags |= USET_CASE_INSENSITIVE;
+    }
+    if (fModeFlags & UREGEX_COMMENTS) {
+        usetFlags |= USET_IGNORE_SPACE;
+    }
+
     // Build the UnicodeSet from the set pattern we just built up in a string.
-    uset = new UnicodeSet(setPattern, *fStatus);
+    uset = new UnicodeSet(setPattern,  usetFlags, *fStatus);
     if (U_FAILURE(*fStatus)) {
         delete uset;
         uset =  NULL;

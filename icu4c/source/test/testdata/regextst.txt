@@ -262,4 +262,20 @@
 
 ".*(?<=: ?)(\w*)"                "<0>1:one  2: two 3:<1>three</1></0>   "
 
-#"(?<=abc*)xyz"           dt    "abcccc<0>xyz</0>"
+#
+# Named Characters
+#
+"a\N{LATIN SMALL LETTER B}c"    "<0>abc</0>"
+"a\N{LATIN SMALL LETTER B}c"  i  "<0>abc</0>"
+"a\N{LATIN SMALL LETTER B}c"  i  "<0>aBc</0>"
+"a\N{LATIN SMALL LETTER B}c"     "aBc"
+
+"\N{FULL STOP}*"                 "<0>...</0>abc"
+
+
+#
+#  Random debugging, Temporary
+#
+#"^(?:a?b?)*$"	        d         "a--"	
+"^(?:a?b?)*$"	                  "a--"
+

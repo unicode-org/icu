@@ -97,9 +97,9 @@ private:
                                                      //  there is space to add an opcode there.
     void        compileSet(UnicodeSet *theSet);      // Generate the compiled pattern for
                                                      //   a reference to a UnicodeSet.
-    void        compileInterval(int32_t InitOp,       // Generate the code for a {min,max} quantifier.
+    void        compileInterval(int32_t InitOp,      // Generate the code for a {min,max} quantifier.
                                int32_t LoopOp);
-    void        literalChar();                       // Compile a literal char
+    void        literalChar(UChar32 c);              // Compile a literal char
     void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the
                                                      //   generated code at the specified location.
@@ -186,10 +186,12 @@ private:
     int32_t                       fIntervalUpper;    // Placed here temporarily, when pattern is
                                                      //   initially scanned.  Each new interval
                                                      //   encountered overwrites these values.
-
                                                      //   -1 for the upper interval value means none
                                                      //   was specified (unlimited occurences.)
 
+    int32_t                       fNameStartPos;     // Starting position of a \N{NAME} name in a
+                                                     //   pattern, valid while remainder of name is
+                                                     //   scanned.
 };
 
 U_NAMESPACE_END
