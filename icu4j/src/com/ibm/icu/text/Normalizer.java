@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/06/11 17:51:25 $ 
- * $Revision: 1.34 $
+ * $Date: 2003/11/14 00:02:47 $ 
+ * $Revision: 1.35 $
  *
  *******************************************************************************
  */
@@ -711,7 +711,7 @@ public final class Normalizer implements Cloneable{
 	 * options>>COMPARE_NORM_OPTIONS_SHIFT will be passed on to the
 	 * internal normalization functions.)
 	 *
-	 * @see compare
+	 * @see #compare
 	 * @draft ICU 2.6
 	 */
 	 public static final int COMPARE_NORM_OPTIONS_SHIFT  = 20;
@@ -1146,7 +1146,7 @@ public final class Normalizer implements Cloneable{
      * 					 The only option that is currently recognized is UNICODE_3_2
      * @return String   The normalized string
      * @draft ICU 2.6
-     * @see UNICODE_3_2
+     * @see #UNICODE_3_2
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
     // upgraded --has just dumb implementation for now
@@ -1158,7 +1158,7 @@ public final class Normalizer implements Cloneable{
      * @param char32    The input string to be normalized.
      * @param aMode     The normalization mode
      * @return String   The normalized string
-     * @see UNICODE_3_2		
+     * @see #UNICODE_3_2		
 	 * @draft ICU 2.6
      */
     // TODO: actually do the optimization when the guts of Normalizer are 
