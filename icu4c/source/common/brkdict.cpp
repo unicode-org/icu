@@ -41,14 +41,7 @@ BreakDictionary::BreakDictionary(const char* /*dictionaryFilename*/, UErrorCode&
     ures_close(th_dict);
     if (U_FAILURE(status)) return;
 
-    UMemoryStream* dictionaryStream = uprv_mstrm_openBuffer(data, len);
-
-    if (dictionaryStream == 0) {
-        status = U_FILE_ACCESS_ERROR;
-        return;
-    }
-    readDictionaryFile(dictionaryStream);
-    uprv_mstrm_close(dictionaryStream);
+    readDictionaryFile(data);
 }
 
 BreakDictionary::~BreakDictionary()
@@ -73,8 +66,13 @@ BreakDictionary::~BreakDictionary()
 #define SWAP16(x) x = (uint16_t)((x << 8 & 0xff00) | (x >> 8 & 0xff))
 #endif
 
+#define DICTIONARY_READ(source, destAddr, len) \
+        uprv_memcpy(destAddr, source, len);\
+        source+=(len)
+
+
 void
-BreakDictionary::readDictionaryFile(UMemoryStream* in)
+BreakDictionary::readDictionaryFile(const uint8_t * in)
 {
     int32_t l;
     int32_t version;
@@ -82,65 +80,65 @@ BreakDictionary::readDictionaryFile(UMemoryStream* in)
     int i;
 
     // read in the version number (right now we just ignore it)
-    uprv_mstrm_read(in, &version, 4);
+    DICTIONARY_READ(in, &version, 4);
 
     // read in the column map (this is serialized in its internal form:
     // an index array followed by a data array)
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     uint16_t* temp = (uint16_t*) uprv_malloc(sizeof(uint16_t)*l);
-    uprv_mstrm_read(in, temp, l * sizeof (int16_t) );
+    DICTIONARY_READ(in, temp, l * sizeof (int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(temp[i]);
     }
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     int8_t* temp2 = (int8_t*) uprv_malloc(sizeof(int8_t)*l);
-    uprv_mstrm_read(in, temp2, l);
+    DICTIONARY_READ(in, temp2, l);
     columnMap = ucmp8_openAdopt(temp, temp2, l);
 
     // read in numCols and numColGroups
-    uprv_mstrm_read(in, &numCols, 4);
+    DICTIONARY_READ(in, &numCols, 4);
     SWAP32(numCols);
-    uprv_mstrm_read(in, &numColGroups, 4);
+    DICTIONARY_READ(in, &numColGroups, 4);
     SWAP32(numColGroups);
 
     // read in the row-number index
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     rowIndex = (int16_t *)uprv_malloc(l*2);
-    uprv_mstrm_read(in, rowIndex, l * sizeof (int16_t) );
+    DICTIONARY_READ(in, rowIndex, l * sizeof (int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(rowIndex[i]);
     }
 
     // load in the populated-cells bitmap: index first, then bitmap list
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     rowIndexFlagsIndex = (int16_t *)uprv_malloc(l*2);
-    uprv_mstrm_read(in, rowIndexFlagsIndex, l * sizeof(int16_t) );
+    DICTIONARY_READ(in, rowIndexFlagsIndex, l * sizeof(int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(rowIndexFlagsIndex[i]);
     }
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     rowIndexFlags = (int32_t *)uprv_malloc(l*4);
-    uprv_mstrm_read(in, rowIndexFlags, l * sizeof(int32_t));
+    DICTIONARY_READ(in, rowIndexFlags, l * sizeof(int32_t));
     for (i = 0; i < l; i++) {
         SWAP32(rowIndexFlags[i]);
     }
 
     // load in the row-shift index
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     rowIndexShifts = (int8_t *)uprv_malloc(l);
-    uprv_mstrm_read(in, rowIndexShifts, l);
+    DICTIONARY_READ(in, rowIndexShifts, l);
 
     // finally, load in the actual state table
-    uprv_mstrm_read(in, &l, 4);
+    DICTIONARY_READ(in, &l, 4);
     SWAP32(l);
     table = (int16_t *)uprv_malloc(l*2);
-    uprv_mstrm_read(in, table, l * sizeof(int16_t) );
+    DICTIONARY_READ(in, table, l * sizeof(int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(table[i]);
     }
