@@ -13,7 +13,6 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "gregoimp.h"  // for Math
-#include "stdio.h"  // for sprintf
 #include "unicode/unistr.h"
 
 /**
