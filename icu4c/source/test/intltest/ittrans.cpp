@@ -38,10 +38,6 @@
                           }                                   \
                           break
 
-#define SKIPCASE(id) case id:                                 \
-                          name = "(skipped)";                 \
-                          break
-
 void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite Transliterator");
@@ -51,16 +47,14 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(2, CompoundTransliteratorTest);
         CASE(3, UniToHexTransliteratorTest);
         CASE(4, HexToUniTransliteratorTest);
+        CASE(5, TransliteratorRoundTripTest);
+        CASE(6, UnicodeSetTest);
+        CASE(7, JamoTest);
+        CASE(8, TransliteratorErrorTest);
+        CASE(9, ReplaceableTest);
 #if !UCONFIG_NO_TRANSLITERATION && defined(U_USE_UNICODE_FILTER_LOGIC_OBSOLETE_2_8)
-        CASE(5, UnicodeFilterLogicTest);
-#else
-        SKIPCASE(5);
+        CASE(10, UnicodeFilterLogicTest);
 #endif
-        CASE(6, TransliteratorRoundTripTest);
-        CASE(7, UnicodeSetTest);
-        CASE(8, JamoTest);
-        CASE(9, TransliteratorErrorTest);
-        CASE(10, ReplaceableTest);
 
         default: name=""; break;
     }
