@@ -791,11 +791,11 @@ static void TestConvert()
         /*testing ucnv_fromUChars() and ucnv_toUChars() */
         /*uchar1---fromUChar--->output_cp_buffer --toUChar--->uchar2*/
 
-        uchar1=(UChar*)malloc(sizeof(UChar) * (u_strlen(ucs_file_buffer)+1));
+        uchar1=(UChar*)malloc(sizeof(UChar) * (i+1));
         u_uastrcpy(uchar1,"");
         u_strncpy(uchar1,ucs_file_buffer,i);
 
-        uchar3=(UChar*)malloc(sizeof(UChar)*(u_strlen(ucs_file_buffer)+1));
+        uchar3=(UChar*)malloc(sizeof(UChar)*(i+1));
         u_uastrcpy(uchar3,"");
         u_strncpy(uchar3,ucs_file_buffer,i);
 
@@ -923,7 +923,7 @@ static void TestConvert()
         ucnv_toUnicode(myConverter, &my_ucs_file_buffer_1,
                 my_ucs_file_buffer + MAX_FILE_LEN,
                 &tmp_mytarget_use,
-                mytarget_use+strlen((char*)mytarget_use),
+                mytarget_use + (mytarget_1 - mytarget),
                 NULL,
                 FALSE,
                 &err);
