@@ -172,6 +172,43 @@ ReplaceableTest::runIndexedTest(int32_t index, UBool exec,
     }
 }
 
+/*
+ * Dummy Replaceable implementation for better API/code coverage.
+ */
+class NoopReplaceable : public Replaceable {
+public:
+    virtual int32_t getLength() const {
+        return 0;
+    }
+
+    virtual UChar getCharAt(int32_t /*offset*/) const{
+        return 0xffff;
+    }
+
+    virtual UChar32 getChar32At(int32_t /*offset*/) const{
+        return 0xffff;
+    }
+
+    void extractBetween(int32_t /*start*/, int32_t /*limit*/, UnicodeString& result) const {
+        result.remove();
+    }
+
+    virtual void handleReplaceBetween(int32_t /*start*/, int32_t /*limit*/, const UnicodeString &/*text*/) {
+        /* do nothing */
+    }
+
+    virtual void copy(int32_t start, int32_t limit, int32_t dest) {
+        /* do nothing */
+    }
+
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+    static const char fgClassID;
+};
+
+const char NoopReplaceable::fgClassID=0;
 
 void ReplaceableTest::TestReplaceableClass(void) {
     UChar rawTestArray[][6] = {
@@ -201,6 +238,18 @@ void ReplaceableTest::TestReplaceableClass(void) {
     //check("*x > a", rawTestArray[9], "113"); // expect "123"?
     //check("*x > a", rawTestArray[10], "_33"); // expect "_23"?
     //check("*(x) > A $1 B", rawTestArray[11], "__223");
+
+    // improve API/code coverage
+    NoopReplaceable noop;
+    Replaceable *p;
+    if((p=noop.clone())!=NULL) {
+        errln("Replaceable::clone() does not return NULL");
+        delete p;
+    }
+
+    if(!noop.hasMetaData()) {
+        errln("Replaceable::hasMetaData() does not return TRUE");
+    }
 }
 
 void ReplaceableTest::check(const UnicodeString& transliteratorName, 
