@@ -35,7 +35,7 @@
 /** source/tools/genren/genren.pl - use this script according to the README   */
 /**                    in that folder                                         */
 
-#include <unicode/umachine.h>
+#include "unicode/umachine.h"
 
 /** The standard copyright notice that gets compiled into each library. */
 #define U_COPYRIGHT_STRING \
