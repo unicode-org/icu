@@ -903,7 +903,14 @@ uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
     uset_add(set, ZWNJ); /* range ZWNJ..ZWJ */
     uset_add(set, ZWJ+1);
 
-    /* add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE */
+    /*
+     * Add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE.
+     * First, we add fixed boundaries for the blocks of Jamos.
+     * Then we check in loops to see where the current Unicode version
+     * actually stops assigning such Jamos. We start each loop
+     * at the end of the per-Jamo-block assignments in Unicode 4 or earlier.
+     * (These have not changed since Unicode 2.)
+     */
     uset_add(set, 0x1100);
     value=U_HST_LEADING_JAMO;
     for(c=0x115a; c<=0x115f; ++c) {
