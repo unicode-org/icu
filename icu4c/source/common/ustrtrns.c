@@ -32,12 +32,7 @@
 #include "ustr_imp.h"
 
 
-U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
-u_growAnyBufferFromStatic(void *context,
-                       void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
-                       int32_t length, int32_t size);
-
-U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
+static UBool 
 u_growAnyBufferFromStatic(void *context,
                        void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length, int32_t size) {
@@ -78,7 +73,7 @@ u_strFromUTF32(UChar   *dest,
     const uint32_t *pSrc = (const uint32_t *)src;
 
     /* args check */
-    if(pErrorCode && U_FAILURE(*pErrorCode)){
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
     
@@ -89,24 +84,21 @@ u_strFromUTF32(UChar   *dest,
 
      /* Check if the source is null terminated */
     if(srcLength == -1 ){
-        while((ch=*pSrc)!=0){
-            if(pDest < pDestLimit){
-                ++pSrc;
-                if(ch<=0xFFFF){
-                    *(pDest++)=(UChar)ch;
+        while(((ch=*pSrc)!=0) && (pDest < pDestLimit)){
+            ++pSrc;
+            if(ch<=0xFFFF){
+                *(pDest++)=(UChar)ch;
+            }else if(ch<=0x10ffff){
+                *(pDest++)=UTF16_LEAD(ch);
+                if(pDest<pDestLimit){
+                    *(pDest++)=UTF16_TRAIL(ch);
                 }else{
-                    *(pDest++)=(uint16_t)((ch>>10)+0xd7c0);   /*UTF_FIRST_SURROGATE(ch);*/
-                    if(pDest<pDestLimit){
-                        *(pDest++)=(uint16_t)((ch&0x3ff)|0xdc00); /*UTF_SECOND_SURROGATE(ch);*/
-                    }else{
-                        reqLength++;
-                        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
+                    reqLength++;
+                    break;
                 }
             }else{
-                *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-                break;
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
             }
         }
         while((ch=*pSrc++) != 0){
@@ -114,24 +106,21 @@ u_strFromUTF32(UChar   *dest,
         }
     }else{
         const uint32_t* pSrcLimit = ((const uint32_t*)pSrc) + srcLength;
-        while(pSrc<pSrcLimit){
-            if(pDest < pDestLimit){
-                ch = *pSrc++;
-                if(ch<=0xFFFF){
-                    *(pDest++)=(UChar)ch;
+        while(((ch=*pSrc)!=0) && (pDest < pDestLimit)){
+            ch = *pSrc++;
+            if(ch<=0xFFFF){
+                *(pDest++)=(UChar)ch;
+            }else if(ch<=0x10FFFF){
+                *(pDest++)=UTF16_LEAD(ch);
+                if(pDest<pDestLimit){
+                    *(pDest++)=UTF16_TRAIL(ch);
                 }else{
-                    *(pDest++)=(uint16_t)((ch>>10)+0xd7c0);   /*UTF_FIRST_SURROGATE(ch);*/
-                    if(pDest<pDestLimit){
-                        *(pDest++)=(uint16_t)((ch&0x3ff)|0xdc00); /*UTF_SECOND_SURROGATE(ch);*/
-                    }else{
-                        reqLength++;
-                        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
+                    reqLength++;
+                    break;
                 }
             }else{
-                *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-                break;
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
             }
         }
         while(pSrc <pSrcLimit){
@@ -139,9 +128,6 @@ u_strFromUTF32(UChar   *dest,
             reqLength+=UTF_CHAR_LENGTH(ch);
         }
     }
-
-    /* return the required length */
-    reqLength+=(pDest - dest);
 
     if(pDestLength){
         *pDestLength = reqLength;
@@ -163,16 +149,19 @@ u_strToUTF32(UChar32 *dest,
              UErrorCode *pErrorCode)
 {
     const UChar* pSrc = src;
+    const UChar* pSrcLimit;
     int32_t reqLength=0;
     uint32_t ch=0;
     int32_t index=0;
     uint32_t *pDest = (uint32_t *)dest;
     uint32_t *pDestLimit = pDest + destCapacity;
+    UChar ch2=0;
 
     /* args check */
-    if(pErrorCode && U_FAILURE(*pErrorCode)){
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
+    
     
     if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
@@ -183,28 +172,38 @@ u_strToUTF32(UChar32 *dest,
         srcLength = u_strlen(pSrc);
     }
 
-    while(index < srcLength){
-        if(pDest <pDestLimit){
-            UTF16_NEXT_CHAR_SAFE(src, index, srcLength, ch, TRUE);
-            if(ch!=UTF_ERROR_VALUE){
-                *(pDest++)= ch;
-            }else{
-                *pErrorCode = U_ILLEGAL_CHAR_FOUND;
-                return NULL;
+    if(srcLength==-1) {
+        while((ch=*pSrc)!=0 && pDest!=pDestLimit) {
+            ++pSrc;
+            /*need not check for NUL because NUL fails UTF_IS_TRAIL() anyway*/
+            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                ++pSrc;
+                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
             }
-        }else{
-            *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-            break;
+            *(pDest++)= ch;
         }
-    }
-    /* donot fill the dest buffer just count the UChars needed */
-    while(index < srcLength){
-        UTF16_NEXT_CHAR_SAFE(src, index, srcLength, ch, TRUE);
-        if(ch!=UTF_ERROR_VALUE){
-            reqLength++;
-        }else{
-            *pErrorCode = U_ILLEGAL_CHAR_FOUND;
-            return NULL;
+        while((ch=*pSrc++)!=0) {
+            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) {
+                ++pSrc;
+            }
+            ++reqLength; 
+        }
+    } else {
+        pSrcLimit = pSrc+srcLength;
+        while(pSrc<pSrcLimit && pDest<pDestLimit) {
+            ch=*pSrc++;
+            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
+                ++pSrc;
+                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+            }
+            *(pDest++)= ch;
+        }
+        while(pSrc!=pSrcLimit) {
+            ch=*pSrc++;
+            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
+                ++pSrc;
+            }
+            ++reqLength;
         }
     }
 
@@ -235,10 +234,10 @@ u_strFromUTF8(UChar *dest,
     uint8_t* pSrc = (uint8_t*) src;
     
     /* args check */
-    if(pErrorCode && U_FAILURE(*pErrorCode)){
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    
+        
     if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -248,29 +247,26 @@ u_strFromUTF8(UChar *dest,
        srcLength = uprv_strlen((char*)pSrc);
     }
     
-    while(index < srcLength){
-        if(pDest <pDestLimit){
-            ch = pSrc[index++];
-            if(ch <=0x7f){
-                *pDest++=(UChar)ch;
-            }else{
-                ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, FALSE);
-                if(ch<=0xFFFF){
-                    *(pDest++)=(UChar)ch;
-                }else{
-                    *(pDest++)=(uint16_t)((ch>>10)+0xd7c0);   /*UTF_FIRST_SURROGATE(ch);*/
-                    if(pDest<pDestLimit){
-                        *(pDest++)=(uint16_t)((ch&0x3ff)|0xdc00); /*UTF_SECOND_SURROGATE(ch);*/
-                    }else{
-                        reqLength++;
-                        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
-                }
-            }
+    while((index < srcLength)&&(pDest<pDestLimit)){
+        ch = pSrc[index++];
+        if(ch <=0x7f){
+            *pDest++=(UChar)ch;
         }else{
-            *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-            break;
+            ch=utf8_nextCharSafeBody(pSrc, &index, srcLength, ch, FALSE);
+            if(ch<=0xFFFF){
+                *(pDest++)=(UChar)ch;
+            }else if(ch<=0x10ffff){
+                *(pDest++)=UTF16_LEAD(ch);
+                if(pDest<pDestLimit){
+                    *(pDest++)=UTF16_TRAIL(ch);
+                }else{
+                    reqLength++;
+                    break;
+                }
+            }else{
+                *pErrorCode = U_INVALID_CHAR_FOUND;
+                return NULL;
+            }
         }
     }
     /* donot fill the dest buffer just count the UChars needed */
@@ -295,7 +291,33 @@ u_strFromUTF8(UChar *dest,
 
     return dest;
 }
-    
+int32_t
+_appendUTF8(uint8_t *pDest,UChar32 c, UErrorCode* pErrorCode){
+    if((c)<=0x7f)  {
+        *pDest++=(uint8_t)c;
+        return 1;
+    } else if((c)<=0x7ff) {
+        *pDest++=(uint8_t)((c>>6)|0xc0);
+        *pDest++=(uint8_t)((c&0x3f)|0x80);
+        return 2;
+    } else if((uint32_t)(c)<=0xffff) {
+        *pDest++=(uint8_t)((c>>12)|0xe0);
+        *pDest++=(uint8_t)(((c>>6)&0x3f)|0x80);
+        *pDest++=(uint8_t)(((c)&0x3f)|0x80);
+        return 3;
+    } else if((uint32_t)(c)<=0x10ffff) {
+        *pDest++=(uint8_t)(((c)>>18)|0xf0);
+        *pDest++=(uint8_t)((((c)>>12)&0x3f)|0x80);
+        *pDest++=(uint8_t)((((c)>>6)&0x3f)|0x80);
+        *pDest++=(uint8_t)(((c)&0x3f)|0x80);
+        return 4;
+    }else{
+        *pErrorCode =U_INVALID_CHAR_FOUND;
+        return -1;
+    }
+}
+
+   
 U_CAPI char* U_EXPORT2 
 u_strToUTF8(char *dest,           
             int32_t destCapacity,
@@ -306,69 +328,78 @@ u_strToUTF8(char *dest,
 
     int32_t reqLength=0;
     const UChar *pSrcLimit;
-    uint32_t ch;
+    uint32_t ch=0,ch2=0;
+    uint8_t *pDest = (uint8_t *)dest;
+    uint8_t *pDestLimit = pDest + destCapacity;
+
 
     /* args check */
-    if(pErrorCode && U_FAILURE(*pErrorCode)){
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    
+        
     if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
 
-    if(srcLength == -1){
-        while(*pSrc!=0){
-            if(reqLength < destCapacity){
-                ch = *pSrc++;
-                if(ch<=0x7f) { 
-                    dest[reqLength++]=(uint8_t)ch; 
-                } else { 
-                    int num = utf8_appendCharSafeBody((uint8_t*)dest, reqLength, destCapacity, ch); 
-                    if(num==reqLength){
-                        *pErrorCode =U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
-                    reqLength = num;
-                }
-            }else{
-                *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+    if(srcLength==-1) {
+        while((ch=*pSrc)!=0 && pDest!=pDestLimit) {
+            ++pSrc;
+            /*need not check for NUL because NUL fails UTF_IS_TRAIL() anyway*/
+            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                ++pSrc;
+                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+            }
+            reqLength += UTF8_CHAR_LENGTH(ch);
+            /* do we have enough room in destination? */
+            if(destCapacity< reqLength){
                 break;
             }
-        }
-        while(*pSrc!=0){
-            ch = *pSrc++;
-            reqLength+=UTF8_CHAR_LENGTH(ch);
-        }
-    }else{
-        pSrcLimit = pSrc + srcLength;
-        while(pSrc < pSrcLimit){
-            if(reqLength  < destCapacity){
-                ch = *pSrc++;
-                if(ch<=0x7f) { 
-                    dest[reqLength++]=(uint8_t)ch; 
-                } else { 
-                    int num = utf8_appendCharSafeBody((uint8_t*)dest, reqLength, destCapacity, ch); 
-                    if(num==reqLength){
-                        *pErrorCode =U_BUFFER_OVERFLOW_ERROR;
-                        break;
-                    }
-                    reqLength = num;
-                }
-            }else{
-                *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
-                break;
+            /* convert and append*/
+            pDest+=_appendUTF8(pDest,ch,pErrorCode);
+            if(U_FAILURE(*pErrorCode)){
+                return NULL;
             }
         }
-        while(pSrc < pSrcLimit){
-            ch = *pSrc++;
-            reqLength+=UTF8_CHAR_LENGTH(ch);
+        while((ch=*pSrc++)!=0) {
+            if(UTF_IS_LEAD(ch) && UTF_IS_TRAIL(ch2=*pSrc)) {
+                ++pSrc;
+                reqLength+=4;
+            } else {
+                reqLength+=UTF8_CHAR_LENGTH(ch);
+            }
+        }
+    } else {
+        pSrcLimit = pSrc+srcLength;
+        while(pSrc<pSrcLimit && pDest<pDestLimit) {
+            ch=*pSrc++;
+            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) { 
+                ++pSrc;
+                ch=UTF16_GET_PAIR_VALUE(ch, ch2);
+            }
+            reqLength += UTF8_CHAR_LENGTH(ch);
+            /* do we have enough room in destination? */
+            if(destCapacity< reqLength){
+                break;
+            }
+            /* convert and append*/
+            pDest+=_appendUTF8(pDest,ch,pErrorCode);
+            if(U_FAILURE(*pErrorCode)){
+                return NULL;
+            }
+        }
+        while(pSrc<pSrcLimit) {
+            ch=*pSrc++;
+            if(UTF_IS_LEAD(ch) && pSrc<pSrcLimit && UTF_IS_TRAIL(ch2=*pSrc)) {
+                ++pSrc;
+                reqLength+=4;
+            } else {
+                reqLength+=UTF8_CHAR_LENGTH(ch);
+            }
         }
     }
-    if(destCapacity==0){
-        reqLength+=destCapacity;
-    }
+
     if(pDestLength){
         *pDestLength = reqLength;
     }
@@ -395,51 +426,74 @@ _strToWCS(wchar_t *dest,
     UConverter* conv = NULL;
     char* saveBuf = tempBuf;
     wchar_t* intTarget=NULL;
+    int32_t intTargetCapacity=0;
     int count=0,retVal=0;
     
     const UChar *pSrcLimit =NULL;
     const UChar *pSrc = src;
     pSrcLimit = pSrc + srcLength;
     conv = u_getDefaultConverter(pErrorCode);
+    
+    if(U_FAILURE(*pErrorCode)){
+        return NULL;
+    }
+    
     do{
+        /* reset the error state */
+        *pErrorCode = U_ZERO_ERROR;
+
         /* convert to chars using default converter */
-        ucnv_fromUnicode(conv,&tempBuf,tempBufLimit,&pSrc,pSrcLimit,NULL,FALSE,pErrorCode);
+        ucnv_fromUnicode(conv,&tempBuf,tempBufLimit,&pSrc,pSrcLimit,NULL,(UBool)(pSrc==pSrcLimit),pErrorCode);
+        count =(tempBuf - saveBuf);
         
         /* This should rarely occur */
         if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR){
-            int32_t bufCount = tempBuf - saveBuf;
-            *pErrorCode=U_ZERO_ERROR;
             tempBuf = saveBuf;
+            
             /* we dont have enough room on the stack grow the buffer */
-            u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
-                    (tempBufCapacity+_STACK_BUFFER_CAPACITY), bufCount,sizeof(char));
-           
+            if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
+                (2*(pSrcLimit-pSrc)+100), count,sizeof(char))){
+                goto cleanup;
+            }
+          
            saveBuf = tempBuf;
            tempBufLimit = tempBuf + tempBufCapacity;
-           tempBuf = tempBuf + bufCount;
-           /* to flush the converters internal state when pSrc<pSrcLimit */
-           continue;
+           tempBuf = tempBuf + count;
 
+        }else if(U_FAILURE(*pErrorCode)){
+            goto cleanup;
         }
 
-    }while (pSrc<pSrcLimit);
+    }while (*pErrorCode == U_BUFFER_OVERFLOW_ERROR);
     
-    count =(tempBuf - saveBuf);
+ 
+    /* done with conversion null terminate the char buffer */
+    if(count>=tempBufCapacity){
+        tempBuf = saveBuf;
+        /* we dont have enough room on the stack grow the buffer */
+        if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
+            tempBufCapacity-count+1, count,sizeof(char))){
+            goto cleanup;
+        }              
+       saveBuf = tempBuf;
+    }
+    
+    saveBuf[count]=0;
+      
 
     /* allocate more space than required 
      * here we assume that every char requires 
      * no more than 2 wchar_ts
      */
-    intTarget = (wchar_t*)uprv_malloc( ((count * 2)+1/* for null termination */) * sizeof(wchar_t) );
+    intTargetCapacity =  (count*2+1) /*for null termination */;
+    intTarget = (wchar_t*)uprv_malloc( intTargetCapacity * sizeof(wchar_t) );
 
     if(intTarget){
 
-        int nulLen = 0;
+        int32_t nulLen = 0;
+        int32_t remaining = intTargetCapacity;
         wchar_t* pIntTarget=intTarget;
-
-        /* null terminate the UChar buffer */
-        u_terminateChars((char*)saveBuf,(tempBufLimit-saveBuf),count,pErrorCode);
-        
+        wchar_t* pIntTargetLimit = intTarget+intTargetCapacity;
         tempBuf = saveBuf;
         
         /* now convert the mbs to wcs */
@@ -448,25 +502,42 @@ _strToWCS(wchar_t *dest,
             /* we can call the system API since we are sure that
              * there is atleast 1 null in the input
              */
-            retVal = uprv_mbstowcs(pIntTarget,(tempBuf+nulLen),(count+1));
+            retVal = uprv_mbstowcs(pIntTarget,(tempBuf+nulLen),remaining);
             
             if(retVal==-1){
                 *pErrorCode = U_INVALID_CHAR_FOUND;
                 break;
-            }
+            }else if(retVal== remaining){/* should never occur */
+                int numWritten = (pIntTarget-intTarget);
+                u_growAnyBufferFromStatic(NULL,&intTarget,
+                                          &intTargetCapacity,
+                                          intTargetCapacity*2,
+                                          numWritten,
+                                          sizeof(wchar_t));
+                pIntTarget = intTarget;
+                remaining=intTargetCapacity;
 
-            /*scan for nulls */
-            /* we donot check for limit since tempBuf is null terminated */
-            while(tempBuf[nulLen++] != 0){
-            }
+                if(nulLen!=count){ /*there are embedded nulls*/
+                    pIntTarget+=numWritten;
+                    remaining-=numWritten;
+                }
+
+            }else{
+                /*scan for nulls */
+                /* we donot check for limit since tempBuf is null terminated */
+                while(tempBuf[nulLen++] != 0){
+                }
+                pIntTarget = pIntTarget + retVal+1;
+                remaining -=(retVal+1);
             
-            /* check if we have reached the source limit*/
-            if(nulLen>=(count)){
-                break;
+                /* check if we have reached the source limit*/
+                if(nulLen>=(count)){
+                    break;
+                }
             }
-            pIntTarget = pIntTarget + retVal+1/* for terminating null*/;
         }
-        
+        count = (int32_t)(pIntTarget-intTarget);
+       
         if(count < destCapacity){
             uprv_memcpy(dest,intTarget,count*sizeof(wchar_t));
 
@@ -484,7 +555,7 @@ _strToWCS(wchar_t *dest,
     }else{
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-    
+cleanup:
     /* are we still using stack buffer */
     if(stackBuffer != saveBuf){
         uprv_free(saveBuf);
@@ -507,10 +578,10 @@ u_strToWCS(wchar_t *dest,
     const UChar *pSrc = src;
 
     /* args check */
-    if(pErrorCode && U_FAILURE(*pErrorCode)){
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    
+        
     if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -522,11 +593,6 @@ u_strToWCS(wchar_t *dest,
 
 #ifdef U_WCHAR_IS_UTF16
     /* wchar_t is UTF-16 just do a memcpy */
-    if(srcLength==-1){
-        srcLength =0;
-        while(pSrc[srcLength++]!=0){
-        }
-    }
     if(srcLength <= destCapacity){
         uprv_memcpy(dest,src,srcLength*U_SIZEOF_UCHAR);
     }else{
@@ -538,7 +604,8 @@ u_strToWCS(wchar_t *dest,
 
     u_terminateUChars(dest,destCapacity,srcLength,pErrorCode);
 
-    return dest;;
+    return dest;
+
 #elif defined U_WCHAR_IS_UTF32
     
     return u_strToUTF32(dest,destCapacity,pDestLength,src,srcLength,pErrorCode);
@@ -563,6 +630,7 @@ _strFromWCS( UChar   *dest,
     UConverter* conv = NULL;
     UChar* pTarget = NULL;
     UChar* pTargetLimit = NULL;
+    UChar* target = NULL;
     
     UChar uStack [_STACK_BUFFER_CAPACITY];
 
@@ -613,14 +681,13 @@ _strFromWCS( UChar   *dest,
         pSrcLimit = src + srcLength;
 
         for(;;){
-            int32_t nulLen = 0;
-            
+            register int32_t nulLen = 0;
+
             /* find nulls in the string */
-            while((pSrc+nulLen)<pSrcLimit && pSrc[nulLen++]!=0){
+            while(nulLen<srcLength && pSrc[nulLen++]!=0){
             }
 
-
-            if((pSrc+nulLen != pSrcLimit)){
+            if((pSrc+nulLen) < pSrcLimit){
                 /* check if we have enough room in pCSrc */
                 if(remaining < (nulLen * MB_CUR_MAX)){
                     /* should rarely occur */
@@ -646,10 +713,10 @@ _strFromWCS( UChar   *dest,
                     goto cleanup;
                 }
 
-                pCSrc = pCSrc + retVal+1 /* already null terminated */;
+                pCSrc += retVal+1 /* already null terminated */;
 
-                pSrc = pSrc+nulLen; /* skip past the null */
-            
+                pSrc += nulLen; /* skip past the null */
+                srcLength-=nulLen; /* decrement the srcLength */
                 remaining -= (pCSrc-pCSave);
 
 
@@ -662,9 +729,15 @@ _strFromWCS( UChar   *dest,
                     /* Should rarely occcur */
                     /* allocate new buffer buffer */
                     pWStack =(wchar_t*) uprv_malloc(sizeof(wchar_t) * nulLen);
+                    if(pWStack==NULL){
+                        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+                        goto cleanup;
+                    }
                 }
-                /* copy the contents to tempStack */
-                uprv_memcpy(pWStack,pSrc,nulLen*sizeof(wchar_t));
+                if(nulLen>0){
+                    /* copy the contents to tempStack */
+                    uprv_memcpy(pWStack,pSrc,nulLen*sizeof(wchar_t));
+                }
             
                 /* null terminate the tempBuffer */
                 pWStack[nulLen] =0 ;
@@ -684,17 +757,12 @@ _strFromWCS( UChar   *dest,
                 /* convert to chars */
                 retVal = uprv_wcstombs(pCSrc,pWStack,remaining);
             
-                pCSrc = pCSrc+retVal +1;
-                pSrc  = pSrc + nulLen;
-            }
-
-            /* ran out of input, break */
-            if(pSrc >= pSrcLimit){
+                pCSrc += retVal +1;
+                pSrc  += nulLen;
+                srcLength-=nulLen; /* decrement the srcLength */
                 break;
             }
-
         }
-
     }
 
     /* OK..now we have converted from wchar_ts to chars now 
@@ -702,29 +770,32 @@ _strFromWCS( UChar   *dest,
      */
     pCSrcLimit = pCSrc;
     pCSrc = pCSave;
-    pTarget = dest;
+    pTarget = target= dest;
     pTargetLimit = dest + destCapacity;    
     
     conv= u_getDefaultConverter(pErrorCode);
     
-    /* convert and write to the target */
-    ucnv_toUnicode(conv,&pTarget,pTargetLimit,(const char**)&pCSrc,pCSrcLimit,NULL,FALSE,pErrorCode);
-    /* count the number converted */
-    count=pTarget - dest;
-
-    while(*pErrorCode ==U_BUFFER_OVERFLOW_ERROR){
+    if(U_FAILURE(*pErrorCode)|| conv==NULL){
+        goto cleanup;
+    }
+    
+    do{
         
         *pErrorCode = U_ZERO_ERROR;
-
-        pTarget = uStack;
-        pTargetLimit = uStack + _STACK_BUFFER_CAPACITY;
         
         /* convert to stack buffer*/
-        ucnv_toUnicode(conv,&pTarget,pTargetLimit,(const char**)&pCSrc,pCSrcLimit,NULL,FALSE,pErrorCode);
+        ucnv_toUnicode(conv,&pTarget,pTargetLimit,(const char**)&pCSrc,pCSrcLimit,NULL,(UBool)(pCSrc==pCSrcLimit),pErrorCode);
         
         /* increment count to number written to stack */
-        count+= pTarget - uStack;
-    }  
+        count+= pTarget - target;
+        
+        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR){
+            target = uStack;
+            pTarget = uStack;
+            pTargetLimit = uStack + _STACK_BUFFER_CAPACITY;
+        }
+        
+    }while(*pErrorCode ==U_BUFFER_OVERFLOW_ERROR);  
     
     if(pDestLength){
         *pDestLength =count;
@@ -757,10 +828,10 @@ u_strFromWCS(UChar   *dest,
 {
 
     /* args check */
-    if(pErrorCode && U_FAILURE(*pErrorCode)){
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)){
         return NULL;
     }
-    
+        
     if((srcLength < -1) || (destCapacity<0) || (!dest && destCapacity > 0)){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
