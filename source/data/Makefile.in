@@ -284,8 +284,8 @@ $(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/
 	$(INVOKE) $(BINDIR)/genpname -d $(BUILDDIR)
 
 # unorm.icu
-$(BUILDDIR)/unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu
-	$(INVOKE) $(BINDIR)/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+$(BUILDDIR)/unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)ucase.icu
+	$(INVOKE) $(BINDIR)/gennorm -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
 $(BUILDDIR)/ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu $(BUILDDIR)/$(ICUDT)ucase.icu
