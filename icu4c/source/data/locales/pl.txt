@@ -67,6 +67,7 @@ pl {
         CN { "Chiny" }
         CO { "Kolumbia" }
         CR { "Kostaryka" }
+        CU { "Kuba" }
         CV { "Wyspy Zielonego Przyl\u0105dka" }
         CX { "Wyspa Bo\u017Cego Narodzenia" }
         CY { "Cypr" }
@@ -86,7 +87,7 @@ pl {
         ET { "Etiopia" }
         FI { "Finlandia" }
         FJ { "Fid\u017Ci" }
-        FK { "Falklandy" }
+        FK { "Falklandy (Malwiny)" }    // alternate name { "Falklandy" }
         FM { "Mikronezja, Stany Sfederowane" }
         FO { "Wyspy Owcze" }
         FR { "Francja" }
@@ -119,6 +120,8 @@ pl {
         IL { "Izrael" }
         IN { "Indie" }
         IO { "Terytorium Brytyjskie Oceanu Indyjskiego" }
+        IQ { "Irak" }
+        //IR { "Iran" }
         IS { "Islandia" }
         IT { "W\u0142ochy" }
         JM { "Jamajka" }
@@ -130,7 +133,8 @@ pl {
         //KI { "Kiribati" }
         KM { "Komory" }
         KN { "Saint Kitts i Nevis" }
-        KR { "Korea, Republika" }
+        KP { "Korea P\u00F3\u0142nocna" }    // alternate name { "Korea, Demokratyczna Republika Ludowa" }
+        KR { "Korea Po\u0142udniowa" }    // alternate name { "Korea, Republika" }
         KW { "Kuwejt" }
         KY { "Kajmany" }
         KZ { "Kazachstan" }
@@ -144,6 +148,7 @@ pl {
         LT { "Litwa" }
         LU { "Luksemburg" }
         LV { "\u0141otwa" }
+        LY { "Libijska" }    // alternate name { "Libijska Arabska Jamahiria" }
         MA { "Maroko" }
         MC { "Monako" }
         MD { "Mo\u0142dawia, Republika" }
@@ -200,6 +205,7 @@ pl {
         SA { "Arabia Saudyjska" }
         SB { "Wyspy Salomona" }
         SC { "Seszele" }
+        //SD { "Sudan" }
         SE { "Szwecja" }
         SG { "Singapur" }
         SH { "Wyspa \u015Awi\u0119tej Heleny" }
@@ -213,6 +219,7 @@ pl {
         SR { "Surinam" }
         ST { "Wyspy \u015Awi\u0119tego Tomasza i Ksi\u0105\u017C\u0119ca" }
         SV { "Salwador" }
+        //SY { "Syria" }    // alternate name { "Syryjska Republika Arabska" }
         SZ { "Suazi" }
         TC { "Turks i Caicos" }
         TD { "Czad" }

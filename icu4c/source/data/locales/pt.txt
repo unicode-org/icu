@@ -58,6 +58,7 @@ pt {
         //CN { "China (PRC)" }
         CO { "Col\u00F4mbia" }
         //CR { "Costa Rica" }
+        //CU { "Cuba" }
         CV { "Cabo Verde" }
         CX { "Ilhas Christmas" }
         CY { "Chipre" }
@@ -110,6 +111,8 @@ pt {
         //IL { "Israel" }
         IN { "\u00CDndia" }
         IO { "Territ\u00F3rio Brit\u00E2nico do Oceano \u00CDndico" }
+        IQ { "Iraque" }
+        IR { "Ir\u00E3" }
         IS { "Isl\u00E2ndia" }
         IT { "It\u00E1lia" }
         //JM { "Jamaica" }
@@ -121,7 +124,8 @@ pt {
         //KI { "Kiribati" }
         KM { "Comores" }
         KN { "S\u00E3o Cristov\u00E3o e Nevis" }
-        KR { "Cor\u00E9ia, Rep\u00FAblica da" }
+        KP { "Cor\u00E9ia, Norte" }    // alternate name { "Cor\u00E9ia, Rep\u00FAblica Popular Democr\u00E1tica da " }
+        KR { "Cor\u00E9ia, Sul" }    // alternate name { "Cor\u00E9ia, Rep\u00FAblica da" }
         //KW { "Kuwait" }
         KY { "Ilhas Cayman" }
         KZ { "Casaquist\u00E3o" }
@@ -135,6 +139,7 @@ pt {
         LT { "Litu\u00E2nia" }
         LU { "Luxemburgo" }
         LV { "Let\u00F4nia" }
+        LY { "Jamahiriya \u00C1rabe L\u00EDbia" }
         MA { "Marrocos" }
         MC { "M\u00F4naco" }
         MD { "Moldova, Rep\u00FAblica de" }
@@ -191,6 +196,7 @@ pt {
         SA { "Ar\u00E1bia Saudita" }
         SB { "Ilhas Salom\u00E3o" }
         //SC { "Seychelles" }
+        SD { "Sud\u00E3o" }
         SE { "Su\u00E9cia" }
         SG { "Cingapura" }
         SH { "Santa Helena" }

@@ -64,6 +64,7 @@ sl {
         CN { "Kitajska" }
         CO { "Kolumbija" }
         CR { "Kostarika" }
+        CU { "Kuba" }
         CV { "Kapverdski otoki" }
         CX { "Bo\u017Ei\u010Dni otok" }
         CY { "Ciper" }
@@ -83,7 +84,7 @@ sl {
         ET { "Etiopija" }
         FI { "Finska" }
         FJ { "Fid\u017Ei" }
-        FK { "Falklandski otoki" }
+        FK { "Falklandski (Malvinski) otoki" }    // alternate name { "Falklandski otoki" }
         FM { "Mikronezija" }
         FO { "Fererski otoki" }
         FR { "Francija" }
@@ -116,6 +117,8 @@ sl {
         IL { "Izrael" }
         IN { "Indija" }
         IO { "Britanska Indija" }
+        IQ { "Irak" }
+        //IR { "Iran" }
         IS { "Islandija" }
         IT { "Italija" }
         JM { "Jamajka" }
@@ -127,7 +130,8 @@ sl {
         //KI { "Kiribati" }
         KM { "Komori" }
         KN { "Saint Kitts in Nevis" }
-        KR { "Republika Koreja" }
+        KP { "Severna Koreja" }    // alternate name { "Demokrati\u010Dna ljudska republika Koreja" }
+        KR { "Ju\u017Ena Koreja" }    // alternate name { "Republika Koreja" }
         KW { "Kuvajt" }
         KY { "Kajmanski otoki" }
         KZ { "Kazahstan" }
@@ -141,6 +145,7 @@ sl {
         LT { "Litva" }
         LU { "Luxemburg" }
         LV { "Latvija" }
+        LY { "Libija" }
         MA { "Maroko" }
         MC { "Monako" }
         MD { "Republika Moldova" }
@@ -197,6 +202,7 @@ sl {
         SA { "Saudova Arabija" }
         SB { "Salomonovo oto\u010Dje" }
         SC { "Sej\u0161eli" }
+        //SD { "Sudan" }
         SE { "\u0160vedska" }
         SG { "Singapur" }
         SH { "Sveta Helena" }
@@ -210,6 +216,7 @@ sl {
         SR { "Surinam" }
         ST { "Sao Tome in Principe" }
         SV { "Salvador" }
+        SY { "Sirija" }
         SZ { "Svazi" }
         TC { "Oto\u010Dji Turks in Caicos" }
         TD { "\u010Cad" }

@@ -62,6 +62,7 @@ lt {
         CN { "Kinija" }
         CO { "Kolumbija" }
         CR { "Kosta Rika" }
+        CU { "Kuba" }
         CV { "\u017Daliojo Ky\u0161ulio salos" }
         CX { "Kal\u0117d\u0173 sala" }
         CY { "Kipras" }
@@ -81,7 +82,7 @@ lt {
         ET { "Etiopija" }
         FI { "Suomija" }
         FJ { "Fid\u017Eis" }
-        FK { "Folklendo salos" }
+        FK { "Folklendo salos (Malvinai)" }    // alternate name { "Folklendo salos" }
         FM { "Mikronezijos Federacin\u0117s Valstijos" }
         FO { "Farer\u0173 salos" }
         FR { "Pranc\u016Bzija" }
@@ -114,6 +115,8 @@ lt {
         IL { "Izraelis" }
         IN { "Indija" }
         IO { "Brit\u0173 Indijos vandenyno teritorija" }
+        IQ { "Irakas" }
+        IR { "Irano" }
         IS { "Islandija" }
         IT { "Italija" }
         JM { "Jamaika" }
@@ -125,7 +128,8 @@ lt {
         KI { "Kiribatis" }
         KM { "Komorai" }
         KN { "Sent Kitsas ir Nevis" }
-        KR { "Kor\u0117jos Respublika" }
+        KP { "\u0160iaur\u0117s Kor\u0117ja" }    // alternate name { "Kor\u0117jos Demokratin\u0117 Liaudies Respublika" }
+        KR { "Piet\u0173 Kor\u0117ja" }    // alternate name { "Kor\u0117jos Respublika" }
         KW { "Kuveitas" }
         KY { "Kaiman\u0173 salos" }
         KZ { "Kazachstanas" }
@@ -139,6 +143,7 @@ lt {
         LT { "Lietuva" }
         LU { "Liuksemburgas" }
         LV { "Latvija" }
+        LY { "Libijos Arab\u0173 D\u017Eamahirija" }
         MA { "Marokas" }
         MC { "Monakas" }
         MD { "Moldovos Respublika" }
@@ -195,6 +200,7 @@ lt {
         SA { "Saudo Arabija" }
         SB { "Saliamono salos" }
         SC { "Sei\u0161eliai" }
+        SD { "Sudanas" }
         SE { "\u0160vedija" }
         SG { "Singap\u016Bras" }
         SH { "\u0160ventoji Elena" }
@@ -208,6 +214,7 @@ lt {
         SR { "Surinamas" }
         ST { "San Tom\u0117 ir Princip\u0117" }
         SV { "El Salvadoras" }
+        SY { "Sirija" }    // alternate name { "Sirijos Arab\u0173 Respublika" }
         SZ { "Svazilendas" }
         TC { "Turks ir Kaikos salos" }
         TD { "\u010Cadas" }
@@ -223,7 +230,7 @@ lt {
         TR { "Turkija" }
         TT { "Trinidadas ir Tobagas" }
         //TV { "Tuvalu" }
-        TW { "Taivanas" }
+        TW { "Taivanis, Kinijos provincija" }
         TZ { "Tanzanija" }
         UA { "Ukraina" }
         //UG { "Uganda" }
