@@ -171,7 +171,7 @@ typedef enum UDateFormatStyle UDateFormatStyle;
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
  * an error occurred.
- * @draft
+ * @stable
  */
 U_CAPI UDateFormat* U_EXPORT2 
 udat_open(UDateFormatStyle  timeStyle,
@@ -222,7 +222,7 @@ udat_clone(const UDateFormat *fmt,
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_parse
 * @see UFieldPosition
-* @draft
+* @stable
 */
 U_CAPI int32_t U_EXPORT2 
 udat_format(    const    UDateFormat*    format,
@@ -244,7 +244,7 @@ udat_format(    const    UDateFormat*    format,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed date/time
 * @see udat_format
-* @draft
+* @stable
 */
 U_CAPI UDate U_EXPORT2 
 udat_parse(    const    UDateFormat*    format,
@@ -390,7 +390,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_applyPattern
-* @draft
+* @stable
 */
 U_CAPI int32_t U_EXPORT2 
 udat_toPattern(    const   UDateFormat     *fmt,
@@ -454,7 +454,7 @@ typedef struct UDateFormatSymbols UDateFormatSymbols;
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_countSymbols
 * @see udat_setSymbols
-* @draft
+* @stable
 */
 U_CAPI int32_t U_EXPORT2 
 udat_getSymbols(const   UDateFormat             *fmt,
@@ -494,7 +494,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @return A pointer to result.
 * @see udat_getSymbols
 * @see udat_countSymbols
-* @draft
+* @stable
 */
 U_CAPI void U_EXPORT2 
 udat_setSymbols(    UDateFormat             *format,

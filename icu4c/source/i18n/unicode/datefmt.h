@@ -257,7 +257,7 @@ public:
      * @param status        Output param filled with success/failure status.
      * @return              The value passed in as toAppendTo (this allows chaining,
      *                      as with UnicodeString::append())
-     * @draft
+     * @stable
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& toAppendTo,
@@ -290,7 +290,7 @@ public:
      * @param fieldPosition On input: an alignment field, if desired (see examples above)
      *                      On output: the offsets of the alignment field (see examples above)
      * @return              A reference to 'toAppendTo'.
-     * @draft
+     * @stable
      */
     virtual UnicodeString& format(  UDate date,
                                     UnicodeString& toAppendTo,
@@ -304,13 +304,13 @@ public:
      * @param date      The UDate value to be formatted into a string.
      * @param result    Output param which will receive the formatted date.
      * @return          A reference to 'result'.
-     * @draft
+     * @stable
      */
     UnicodeString& format(UDate date, UnicodeString& result) const;
 
     /**
      * Redeclared Format method.
-     * @draft
+     * @stable
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& result,
@@ -324,7 +324,7 @@ public:
      *                  'text' cannot be parsed, it will be set to a failure
      *                  code.
      * @result          The parsed UDate value, if successful.
-     * @draft
+     * @stable
      */
     virtual UDate parse( const UnicodeString& text,
                         UErrorCode& status) const;
@@ -346,7 +346,7 @@ public:
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
      * @return      A valid UDate if the input could be parsed.
-     * @draft
+     * @stable
      */
     virtual UDate parse( const UnicodeString& text,
                         ParsePosition& pos) const = 0;
@@ -375,7 +375,7 @@ public:
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
-     * @draft
+     * @stable
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
