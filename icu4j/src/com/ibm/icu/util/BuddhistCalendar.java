@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2000/05/12 23:20:10 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/10/17 18:26:44 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -221,10 +221,10 @@ public class BuddhistCalendar extends GregorianCalendar {
         }
     }
     
-    public void roll(int field, boolean up) {
+    public void roll(int field, int amount) {
         toGregorian();
         try {
-            super.roll(field, up);
+            super.roll(field, amount);
         }
         finally {
             fromGregorian();

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/IslamicCalendar.java,v $ 
- * $Date: 2000/05/12 23:20:10 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/10/17 18:26:45 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -73,7 +73,7 @@ import com.ibm.util.CalendarAstronomer;
  * @author Laura Werner
  * @version 1.0
  */
-public class IslamicCalendar extends IBMCalendar {
+public class IslamicCalendar extends Calendar {
 
     private static String copyright = "Copyright \u00a9 1997-1998 IBM Corp. All Rights Reserved.";
 
