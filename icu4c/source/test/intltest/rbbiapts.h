@@ -78,6 +78,8 @@ public:
 
     void TestBug2190();
 
+    void TestRegistration();
+
     /**
      *Internal subroutines
      **/

@@ -45,6 +45,12 @@ const int32_t BreakIterator::DONE = (int32_t)-1;
 BreakIterator*
 BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 {
+  return createInstance(key, BREAK_WORD, status);
+}
+
+BreakIterator*
+BreakIterator::makeWordInstance(const Locale& key, UErrorCode& status)
+{
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
     // will have to be made fully general at some time in the future!
@@ -90,6 +96,12 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
 BreakIterator*
 BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 {
+  return createInstance(key, BREAK_LINE, status);
+}
+
+BreakIterator*
+BreakIterator::makeLineInstance(const Locale& key, UErrorCode& status)
+{
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
     // will have to be made fully general at some time in the future!
@@ -132,7 +144,13 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
 
 // Creates a break iterator  for character breaks.
 BreakIterator*
-BreakIterator::createCharacterInstance(const Locale& /* key */, UErrorCode& status)
+BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
+{
+  return createInstance(key, BREAK_CHARACTER, status);
+}
+
+BreakIterator*
+BreakIterator::makeCharacterInstance(const Locale& /* key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -164,7 +182,13 @@ BreakIterator::createCharacterInstance(const Locale& /* key */, UErrorCode& stat
 
 // Creates a break iterator  for sentence breaks.
 BreakIterator*
-BreakIterator::createSentenceInstance(const Locale& /*key */, UErrorCode& status)
+BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
+{
+  return createInstance(key, BREAK_SENTENCE, status);
+}
+
+BreakIterator*
+BreakIterator::makeSentenceInstance(const Locale& /*key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files and the alternate rules files for Thai.  This function
@@ -197,7 +221,13 @@ BreakIterator::createSentenceInstance(const Locale& /*key */, UErrorCode& status
 
 // Creates a break iterator for title casing breaks.
 BreakIterator*
-BreakIterator::createTitleInstance(const Locale& /* key */, UErrorCode& status)
+BreakIterator::createTitleInstance(const Locale& key, UErrorCode& status)
+{
+  return createInstance(key, BREAK_TITLE, status);
+}
+
+BreakIterator*
+BreakIterator::makeTitleInstance(const Locale& /* key */, UErrorCode& status)
 {
     // WARNING: This routine is currently written specifically to handle only the
     // default rules files.  This function will have to be made fully general
@@ -225,6 +255,19 @@ BreakIterator::createTitleInstance(const Locale& /* key */, UErrorCode& status)
 
     return result;
 }
+
+// -------------------------------------
+
+BreakIterator*
+BreakIterator::createInstance(const Locale& loc, UBreakType kind, UErrorCode& status)
+{
+  if (fgService != NULL) {
+    return (BreakIterator*)fgService->get(loc, kind, status);
+  } else {
+    return makeInstance(loc, kind, status);
+  }
+}
+
 // -------------------------------------
 
 // Gets all the available locales that has localized text boundary data.
@@ -258,6 +301,7 @@ BreakIterator::getDisplayName(const Locale& objectLocale,
 // Default constructor and destructor
 //
 //-------------------------------------------
+
 BreakIterator::BreakIterator()
 {
     fBufferClone = FALSE;
@@ -265,6 +309,97 @@ BreakIterator::BreakIterator()
 
 BreakIterator::~BreakIterator()
 {
+}
+
+// ------------------------------------------
+//
+// Registration
+//
+//-------------------------------------------
+
+const UObject* 
+BreakIterator::registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakType kind, UErrorCode& status) 
+{
+  return getService()->registerObject(toAdopt, locale, kind, status);
+}
+
+UBool 
+BreakIterator::unregisterBreak(const UObject* key, UErrorCode& status) 
+{
+  if (fgService != NULL) {
+    return fgService->unregisterFactory((Factory*)key, status);
+  }
+  return FALSE;
+}
+
+StringEnumeration* 
+BreakIterator::getAvailableLocales(void)
+{
+	return getService()->getAvailableLocales();
+}
+
+BreakIterator* 
+BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
+{
+    switch (kind) {
+    case BREAK_CHARACTER: return BreakIterator::makeCharacterInstance(loc, status);
+    case BREAK_WORD: return BreakIterator::makeWordInstance(loc, status);
+    case BREAK_LINE: return BreakIterator::makeLineInstance(loc, status);
+    case BREAK_SENTENCE: return BreakIterator::makeSentenceInstance(loc, status);
+    case BREAK_TITLE: return BreakIterator::makeTitleInstance(loc, status);
+    default:
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+      return NULL;
+    }
+}
+
+UMTX BreakIterator::fgLock = 0;
+
+ICULocaleService* BreakIterator::fgService = NULL;
+
+class ICUBreakIteratorFactory : public ICUResourceBundleFactory {
+protected:
+  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const {
+    return BreakIterator::makeInstance(loc, kind, status);
+  }
+};
+
+class ICUBreakIteratorService : public ICULocaleService {
+public:
+  ICUBreakIteratorService()
+    : ICULocaleService("Break Iterator")
+  {
+    UErrorCode status = U_ZERO_ERROR;
+    registerFactory(new ICUBreakIteratorFactory(), status);
+  }
+
+  virtual UObject* cloneInstance(UObject* instance) const {
+	  return ((BreakIterator*)instance)->clone();
+  }
+
+  virtual UObject* handleDefault(const Key& key, UnicodeString* actualID, UErrorCode& status) const {
+	LocaleKey& lkey = (LocaleKey&)key;
+	int32_t kind = lkey.kind();
+	Locale loc;
+	lkey.currentLocale(loc);
+	return BreakIterator::makeInstance(loc, kind, status); // default to root
+  }
+
+  virtual UBool isDefault() const {
+	return countFactories() == 1;
+  }
+};
+
+ICULocaleService*
+BreakIterator::getService() 
+{
+  if (fgService == NULL) {
+    Mutex mutex(&fgLock);
+    if (fgService == NULL) {
+      fgService = new ICUBreakIteratorService();
+    }
+  }
+  return fgService;
 }
 
 U_NAMESPACE_END
