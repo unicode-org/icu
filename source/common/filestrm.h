@@ -43,9 +43,10 @@ T_FileStream_close(FileStream* fileStream);
 U_CAPI UBool U_EXPORT2
 T_FileStream_file_exists(const char* filename);
 
-
+/*
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_tmpfile(void);
+*/
 
 U_CAPI int32_t U_EXPORT2
 T_FileStream_read(FileStream* fileStream, void* addr, int32_t len);
