@@ -77,10 +77,10 @@ static const UnicodeString &Tr(const UnicodeString &source) {
  */
 CanonicalIterator::CanonicalIterator(UnicodeString sourceStr, UErrorCode &status) :
     pieces(NULL),
+    pieces_length(0),
     pieces_lengths(NULL),
     current(NULL),
-    current_length(0),
-    pieces_length(0)
+    current_length(0)
 {
     if(U_SUCCESS(status)) {
       setSource(sourceStr, status);
@@ -519,7 +519,6 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     // check to make sure result is canonically equivalent
     int32_t tempLen = inputLen + bufLen;
 
-    int32_t trialLen = 0;
     UChar trial[bufSize];
     unorm_decompose(trial, bufSize, temp, tempLen, FALSE, FALSE, &status);
 

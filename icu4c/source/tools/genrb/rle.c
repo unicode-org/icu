@@ -35,7 +35,7 @@ static const uint8_t ESCAPE_BYTE = (uint8_t)0xA5;
  * first byte of a pair, or state[0] != 0 if this is the second byte
  * of a pair, in which case state[1] is the first byte.
  */
-uint16_t*
+static uint16_t*
 appendEncodedByte(uint16_t* buffer, uint16_t* buffLimit, uint8_t value, uint8_t state[],UErrorCode* status) {
     if(!status || U_FAILURE(*status)){
         return NULL;
@@ -60,7 +60,7 @@ appendEncodedByte(uint16_t* buffer, uint16_t* buffLimit, uint8_t value, uint8_t 
  * Encode a run, possibly a degenerate run (of < 4 values).
  * @param length The length of the run; must be > 0 && <= 0xFF.
  */
-uint16_t*
+static uint16_t*
 encodeRunByte(uint16_t* buffer,uint16_t* bufLimit, uint8_t value, int32_t length, uint8_t state[], UErrorCode* status) {
     if(!status || U_FAILURE(*status)){
         return NULL;
@@ -101,7 +101,7 @@ encodeRunByte(uint16_t* buffer,uint16_t* bufLimit, uint8_t value, int32_t length
  * Encode a run, possibly a degenerate run (of < 4 values).
  * @param length The length of the run; must be > 0 && <= 0xFFFF.
  */
-uint16_t* 
+static uint16_t* 
 encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t length,UErrorCode* status) {
     uint16_t* saveBuf =  buffer;
     if (length < 4) {
@@ -197,7 +197,6 @@ int32_t
 byteArrayToRLEString(const uint8_t* src,int32_t srcLen, uint16_t* buffer,int32_t bufLen, UErrorCode* status) {
     const uint16_t* saveBuf = buffer;
     uint16_t* bufLimit =  buffer+bufLen;
-    const uint8_t* srcLimit = src+srcLen;
     if(buffer < bufLimit){
         *buffer++ = ((uint16_t) (srcLen >> 16));
 
@@ -308,7 +307,6 @@ rleStringToByteArray(uint16_t* src, int32_t srcLen, uint8_t* target, int32_t tgt
     int32_t runLength = 0;
     int32_t i = 2;
     int32_t ai=0;
-    uint8_t* saveTarget = target;
 
     if(!status || U_FAILURE(*status)){
         return 0;
