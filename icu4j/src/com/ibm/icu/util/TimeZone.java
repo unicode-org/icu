@@ -257,8 +257,8 @@ abstract public class TimeZone implements Serializable, Cloneable {
         dayOfMonth = dayOfYear -
             GREGORIAN_MONTH_COUNT[month][isLeap?1:0] + 1; // one-based DOM
 
-        // Jan 1 1970 is Thursday
-        int dayOfWeek = (int) ((day + Calendar.THURSDAY) % 7);
+        // Jan 1 1 CE is Monday
+        int dayOfWeek = (int) ((day + Calendar.MONDAY) % 7);
         if (dayOfWeek < Calendar.SUNDAY) {
             dayOfWeek += 7;
         }
