@@ -1885,7 +1885,7 @@ public class CollationMiscTest extends TestFmwk{
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rule);
             if(coll!=null){
-                errln("Did not get the expected exception");   
+                logln("Collator did not throw an exception");   
             }
         } catch (Exception e) {
             errln("Error creating RuleBasedCollator with " + rule + " failed");
