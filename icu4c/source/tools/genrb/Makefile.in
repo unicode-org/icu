@@ -73,7 +73,8 @@ RES_FILES = $(TXT_FILES:$(top_srcdir)/../data/%.txt=@DATABUILDDIR@/%.res)
 #TRANSLIT_RES = $(TRANSLIT_SOURCE:%.txt=@DATABUILDDIR@/translit/%.res)
 TEST_FILES = @DATABUILDDIR@/../source/test/testdata/root.res \
 @DATABUILDDIR@/../source/test/testdata/te.res \
-@DATABUILDDIR@/../source/test/testdata/te_IN.res
+@DATABUILDDIR@/../source/test/testdata/te_IN.res \
+@DATABUILDDIR@/../source/test/testdata/testtypes.res
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\

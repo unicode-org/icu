@@ -164,6 +164,7 @@ void addNEWResourceBundleTest(TestNode** root)
   addTest(root, &TestResourceBundles, "tsutil/creststn/TestResourceBundle");
   addTest(root, &TestFallback,        "tsutil/creststn/TestFallback");
   addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAlias");
+  addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
 
 }
 
@@ -186,6 +187,78 @@ void TestAliasConflict(void) {
         log_err("Failed to get resource with %s", myErrorName(status));
     }
     ures_close(he);
+}
+
+void TestNewTypes() {
+  UResourceBundle* theBundle = NULL;
+  char action[256];
+  char testdatapath[256];
+  const char*    directory =  ctest_getTestDirectory();
+  UErrorCode expected_status,status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
+  UResourceBundle* res = NULL;
+  uint8_t *binResult = NULL;
+  int32_t len = 0;
+  int32_t i = 0;
+  int32_t intResult = 0;
+
+  strcpy(action, "Construction of testtypes bundle");
+
+  strcpy(testdatapath, directory);
+  strcat(testdatapath, "testdata");
+  theBundle = ures_open(testdatapath, "testtypes", &status);
+
+  CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+
+  CONFIRM_INT_NE(theBundle, NULL);
+
+  strcpy(action, "getting and testing of binary type");
+  res = ures_getByKey(theBundle, "binarytest", res, &status);
+  CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+  CONFIRM_INT_EQ(ures_getType(res), RES_BINARY);
+  binResult=(uint8_t*)ures_getBinary(res,  &len, &status);
+  if(U_SUCCESS(status)){
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(len, 15);
+    for(i = 0; i<15; i++) {
+      CONFIRM_INT_EQ(binResult[i], i);
+    }
+  }
+
+  strcpy(action, "getting and testing of imported binary type");
+  res = ures_getByKey(theBundle, "importtest", res, &status);
+  CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+  CONFIRM_INT_EQ(ures_getType(res), RES_BINARY);
+  binResult=(uint8_t*)ures_getBinary(res,  &len, &status);
+  if(U_SUCCESS(status)){
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(len, 15);
+    for(i = 0; i<15; i++) {
+      CONFIRM_INT_EQ(binResult[i], i);
+    }
+  }
+
+  strcpy(action, "getting and testing of integer types");
+  res = ures_getByKey(theBundle, "one", res, &status);
+  CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+  CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+  intResult=ures_getInt(res, &status);
+  if(U_SUCCESS(status)){
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(intResult, 1);
+  }
+
+  res = ures_getByKey(theBundle, "onehundredtwentythree", res, &status);
+  CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+  CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+  intResult=ures_getInt(res, &status);
+  if(U_SUCCESS(status)){
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(intResult, 123);
+  }
+
+  ures_close(res);
+  ures_close(theBundle);
+
 }
 
 void TestBinaryCollationData(){

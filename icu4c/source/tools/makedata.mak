@@ -155,20 +155,20 @@ LINK32_TESTDATA_FLAGS = /out:"$(TESTDATA)/testdata.dll" /DLL /NOENTRY
 testdata.dll : $(TESTDATA)testdata.dll
         @cd $(TESTDATA)
 
-$(TESTDATA)testdata.dll : $(TESTDATA)root_res.obj $(TESTDATA)te_res.obj $(TESTDATA)te_IN_res.obj
+$(TESTDATA)testdata.dll : $(TESTDATA)root_res.obj $(TESTDATA)te_res.obj $(TESTDATA)te_IN_res.obj $(TESTDATA)testtypes_res.obj
 	@echo Creating DLL file
 	@cd $(TESTDATA)
 	@$(LINK32) @<<
-$(LINK32_TESTDATA_FLAGS) root_res.obj te_res.obj te_IN_res.obj
+$(LINK32_TESTDATA_FLAGS) root_res.obj te_res.obj te_IN_res.obj testtypes_res.obj
 <<        
 
-$(TESTDATA)root_res.c $(TESTDATA)te_res.c $(TESTDATA)te_IN_res.c : $(TESTDATA)root.res $(TESTDATA)te.res $(TESTDATA)te_IN.res
+$(TESTDATA)root_res.c $(TESTDATA)te_res.c $(TESTDATA)te_IN_res.c $(TESTDATA)testtypes_res.c: $(TESTDATA)root.res $(TESTDATA)te.res $(TESTDATA)te_IN.res $(TESTDATA)testtypes.res
         @echo generating .c file for testdata
         @cd $(TESTDATA)
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $?
 	
 #Targets for testdata.dat
-#testdata.dat : $(TESTDATA)root.res $(TESTDATA)te.res $(TESTDATA)te_IN.res
+#testdata.dat : $(TESTDATA)root.res $(TESTDATA)te.res $(TESTDATA)te_IN.res $(TESTDATA)testtypes.res
 #        @echo Creating testdata.dat
 #	@set ICU_DATA=$(ICUDATA)
 #	@cd $(TESTDATA)
@@ -176,6 +176,7 @@ $(TESTDATA)root_res.c $(TESTDATA)te_res.c $(TESTDATA)te_IN_res.c : $(TESTDATA)ro
 #root.res
 #te.res
 #te_IN.res
+#testtypes.res
 #<<      
      
 # Targets for test.dat 

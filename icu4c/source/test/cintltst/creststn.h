@@ -36,9 +36,11 @@
 
     static void TestAliasConflict(void);
 
-	static void TestFallback(void);
+    static void TestFallback(void);
 
-	static void TestBinaryCollationData(void);
+    static void TestBinaryCollationData(void);
+
+    static void TestNewTypes(void);
    
     
     
