@@ -5,20 +5,26 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2003/11/11 20:12:31 $ 
-* $Revision: 1.16 $
+* $Date: 2004/02/06 21:54:02 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+
 import com.ibm.icu.impl.ICUBinary;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.text.CollationParsedRuleBuilder.InverseUCA;
+import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
 
 /**
 * <p>Internal reader class for ICU data file uca.icu containing 
@@ -36,16 +42,59 @@ import com.ibm.icu.util.VersionInfo;
 
 final class CollatorReader
 {          
+	static char[] read(RuleBasedCollator rbc, UCAConstants ucac) throws IOException {
+		InputStream i = ICUData.getRequiredStream("data/ucadata.icu");
+		BufferedInputStream b = new BufferedInputStream(i, 90000);
+		CollatorReader reader = new CollatorReader(b);
+		char[] result = reader.readImp(rbc, ucac);
+		b.close();
+		return result;
+	}
+	
+	static void initRBC(RuleBasedCollator rbc, byte[] data) throws IOException {
+		final int MIN_BINARY_DATA_SIZE_ = (42 + 25) << 2;
+		
+		InputStream i = new ByteArrayInputStream(data);
+		BufferedInputStream b = new BufferedInputStream(i);
+		CollatorReader reader = new CollatorReader(b, false);
+		if (data.length > MIN_BINARY_DATA_SIZE_) {
+			reader.readImp(rbc, null);
+		} else {
+			reader.readHeader(rbc);
+			reader.readOptions(rbc);
+			// duplicating UCA_'s data
+			rbc.setWithUCATables();
+		}
+	}
+	
+	static InverseUCA getInverseUCA() throws IOException {
+		InverseUCA result = null;
+		InputStream i = ICUData.getRequiredStream("data/invuca.icu");
+//		try	{
+//			String invdat = "/com/ibm/icu/impl/data/invuca.icu";
+//			InputStream i = CollationParsedRuleBuilder.class.getResourceAsStream(invdat);
+			BufferedInputStream b = new BufferedInputStream(i, 110000);
+			result = CollatorReader.readInverseUCA(b);
+			b.close();
+			i.close();
+			return result;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage());
+//		}
+	}
+	
     // protected constructor ---------------------------------------------
     
     /**
     * <p>Protected constructor.</p>
-    * @param inputStream ICU callator file input stream
+    * @param inputStream ICU collator file input stream
     * @exception IOException throw if data file fails authentication 
     * @draft 2.1
     */
-    protected CollatorReader(InputStream inputStream) throws IOException
+    private CollatorReader(InputStream inputStream) throws IOException
     {
+    	this(inputStream, true);
+    	/*
         byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
         // weiv: check that we have the correct Unicode version in 
         // binary files
@@ -55,6 +104,7 @@ final class CollatorReader
             throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
         }
         m_dataInputStream_ = new DataInputStream(inputStream);
+        */
     }
     
     /**
@@ -64,7 +114,7 @@ final class CollatorReader
     * @exception IOException throw if data file fails authentication 
     * @draft 2.1
     */
-    protected CollatorReader(InputStream inputStream, boolean readICUHeader) 
+    private CollatorReader(InputStream inputStream, boolean readICUHeader) 
     														throws IOException
     {
     	if (readICUHeader) {
@@ -89,7 +139,7 @@ final class CollatorReader
     * @param rbc RuleBasedCollator to populate with header information
     * @exception IOException thrown when there's a data error.
     */
-    protected void readHeader(RuleBasedCollator rbc) throws IOException
+    private void readHeader(RuleBasedCollator rbc) throws IOException
     {
         m_size_ = m_dataInputStream_.readInt();
         // all the offsets are in bytes
@@ -192,7 +242,7 @@ final class CollatorReader
      * @exception IOException thrown when there's a data error.
      * @draft 2.2
      */
-    protected void readOptions(RuleBasedCollator rbc) throws IOException
+    private void readOptions(RuleBasedCollator rbc) throws IOException
     {
         int readcount = 0;
         rbc.m_defaultVariableTopValue_ = m_dataInputStream_.readInt();
@@ -245,7 +295,7 @@ final class CollatorReader
     * @exception IOException thrown when there's a data error.
     * @draft 2.2
     */
-    protected char[] read(RuleBasedCollator rbc, 
+    private char[] readImp(RuleBasedCollator rbc, 
                           RuleBasedCollator.UCAConstants UCAConst) 
                                                             throws IOException
     {
@@ -421,7 +471,7 @@ final class CollatorReader
      * @exception IOException thrown when error occurs while reading the 
      *            inverse uca
      */
-    protected static CollationParsedRuleBuilder.InverseUCA readInverseUCA(
+    private static CollationParsedRuleBuilder.InverseUCA readInverseUCA(
                                                       InputStream inputStream)
                                                       throws IOException
     {

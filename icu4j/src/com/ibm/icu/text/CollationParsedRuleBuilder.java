@@ -5,15 +5,14 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2004/01/28 02:05:51 $ 
-* $Revision: 1.29 $
+* $Date: 2004/02/06 21:54:03 $ 
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
  
-import java.io.InputStream;
-import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -380,6 +379,12 @@ final class CollationParsedRuleBuilder
      * Initializing the inverse UCA
      */
     static {
+    	InverseUCA temp = null;
+    	try {
+			temp = CollatorReader.getInverseUCA();
+		} catch (IOException e) {
+		}
+    	/*
         try
         {
             String invdat = "/com/ibm/icu/impl/data/invuca.icu";
@@ -394,13 +399,17 @@ final class CollationParsedRuleBuilder
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-        if(RuleBasedCollator.UCA_ != null) {
-            if(!INVERSE_UCA_.m_UCA_version_.equals(RuleBasedCollator.UCA_.m_UCA_version_)) {
+        */
+        
+        if(temp != null && RuleBasedCollator.UCA_ != null) {
+            if(!temp.m_UCA_version_.equals(RuleBasedCollator.UCA_.m_UCA_version_)) {
                 throw new RuntimeException(INV_UCA_VERSION_MISMATCH_);
             }
         } else {
             throw new RuntimeException(UCA_NOT_INSTANTIATED_);
         }
+        
+        INVERSE_UCA_ = temp;
     }
     
     // package private methods -----------------------------------------------

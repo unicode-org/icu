@@ -5,16 +5,54 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/SimpleBITest.java,v $
- * $Date: 2003/06/03 18:49:30 $
- * $Revision: 1.8 $
+ * $Date: 2004/02/06 21:53:59 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.rbbi;
 
-import java.util.Locale;
-import com.ibm.icu.text.BreakIterator;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ListResourceBundle;
+import java.util.MissingResourceException;
+
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.BreakIterator;
+import com.ibm.icu.text.DictionaryBasedBreakIterator;
+import com.ibm.icu.text.RuleBasedBreakIterator;
+
+// TODO: {dlf} this test currently doesn't test anything!
+// You'll notice that the resource that uses the dictionary isn't even on the resource path,
+// so the dictionary never gets used.  Good thing, too, because it would throw a security
+// exception if run with a security manager.  Not that it would matter, the dictionary 
+// resource isn't even in the icu source tree!
+// In order to fix this:
+// 1) make sure english.dict matches the current dictionary format required by dbbi
+// 2) make sure english.dict gets included in icu4jtests.jar
+// 3) have this test use getResourceAsStream to get a stream on the dictionary, and
+//    directly instantiate a DictionaryBasedBreakIterator.  It can use the rules from
+//    the appropriate section of ResourceBundle_en_US_TEST.  I'd suggest just copying
+//    the rules into this file.
+// 4) change the test text by inserting '|' at word breaks, and '||' at line breaks.  
+// 5) process this text to a) create tables of break indices, and b) clean up the test
+//    for the break iterator to work on
+// 
+// This would NOT test the ability to load dictionary-based break iterators through our
+// normal resource mechanism.  One could install such a break iterator and its
+// resources into the icu4j jar, and it would work, but there's no way to register entire
+// resources from outside yet.  Even if there were, the access restrictions are a bit
+// difficult to manage, if one wanted to register a break iterator whose code and data
+// resides outside the icu4j jar.  Since the code to instantiate would be going through 
+// two protection domains, each domain would have to allow access to the data-- but 
+// icu4j's domain wouldn't know about ours.  So we could instantiate before registering
+// the break iterator, but this would mean we'd have to fully initialize the dictionary(s)
+// at instantiation time, rather than let this be deferred until they are actually needed.
+//
+// I've done items 2 and 3 above.  Unfortunately, since I haven't done item 1, the
+// dictionary builder crashes.  So for now I'm disabling this test.  This is not
+// that important, since we have a thai dictionary that we do test thoroughly.
+//
 
 public class SimpleBITest extends TestFmwk{
     public static final String testText =
@@ -103,21 +141,78 @@ public class SimpleBITest extends TestFmwk{
     public static void main(String[] args) throws Exception {
         new SimpleBITest().run(args);
     }
+    
+	protected boolean validate() {
+		// TODO: remove when english.dict gets fixed
+		return false;
+	}
 
+	private BreakIterator createTestIterator(int kind) {
+		final String bname = "com.ibm.icu.dev.test.rbbi.BreakIteratorRules_en_US_TEST";
+
+		BreakIterator iter = null;
+
+		ListResourceBundle bundle = null;
+		try {
+			Class cls = Class.forName(bname);
+			bundle = (ListResourceBundle)cls.newInstance();
+		}
+		catch (Exception e) {
+			///CLOVER:OFF
+			errln("could not create bundle: " + bname + "exception: " + e.getMessage());
+			///CLOVER:ON
+			return null;
+		}
+		
+		final String[] kindNames = {
+			"Character", "Word", "Line", "Sentence"
+		};
+		String rulesName = kindNames[kind] + "BreakRules";
+		String dictionaryName = kindNames[kind] + "BreakDictionary";
+		
+		String[] classNames = bundle.getStringArray("BreakIteratorClasses");
+		String rules = bundle.getString(rulesName);
+		if (classNames[kind].equals("RuleBasedBreakIterator")) {
+			iter = new RuleBasedBreakIterator(rules);
+		}
+		else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
+			try {
+				String dictionaryPath = bundle.getString(dictionaryName);
+				InputStream dictionary = bundle.getClass().getResourceAsStream(dictionaryPath);
+				System.out.println("looking for " + dictionaryPath + " from " + bundle.getClass() + " returned " + dictionary);
+				iter = new DictionaryBasedBreakIterator(rules, dictionary);
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+				errln(e.getMessage());
+				System.out.println(e); // debug
+			}
+			catch(MissingResourceException e) {
+				errln(e.getMessage());
+				System.out.println(e); // debug
+			}
+		}
+		if (iter == null) {
+			errln("could not create iterator");
+		}
+		
+		return iter;
+	}
+	
     public void testWordBreak() throws Exception {
-        BreakIterator wordBreak =(BreakIterator) BreakIterator.getWordInstance(new Locale("en", "US", "TEST"));
+    	BreakIterator wordBreak = createTestIterator(BreakIterator.KIND_WORD);
         int breaks = doTest(wordBreak);
         logln(String.valueOf(breaks));
     }
 
     public void testLineBreak() throws Exception {
-        BreakIterator lineBreak = BreakIterator.getLineInstance(new Locale("en", "US", "TEST"));
+		BreakIterator lineBreak = createTestIterator(BreakIterator.KIND_LINE);
         int breaks = doTest(lineBreak);
         logln(String.valueOf(breaks));
     }
 
     public void testSentenceBreak() throws Exception {
-        BreakIterator sentenceBreak = BreakIterator.getSentenceInstance(new Locale("en", "US", "TEST"));
+		BreakIterator sentenceBreak = createTestIterator(BreakIterator.KIND_SENTENCE);
         int breaks = doTest(sentenceBreak);
         logln(String.valueOf(breaks));
     }

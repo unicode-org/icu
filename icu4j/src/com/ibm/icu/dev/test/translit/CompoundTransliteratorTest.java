@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/CompoundTransliteratorTest.java,v $ 
- * $Date: 2003/06/03 18:49:31 $ 
- * $Revision: 1.8 $
+ * $Date: 2004/02/06 21:54:06 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -41,7 +41,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
             t3=Transliterator.getInstance(names[2]);
             t4=Transliterator.getInstance(names[3]);
         }catch(IllegalArgumentException ex) {
-            errln("FAIL: Transliterator construction failed");
+            errln("FAIL: Transliterator construction failed" + ex.getMessage());
             throw ex;
         }
   

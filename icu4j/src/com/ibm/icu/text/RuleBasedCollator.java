@@ -5,16 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2004/01/28 02:05:51 $
-* $Revision: 1.57 $
+* $Date: 2004/02/06 21:54:02 $
+* $Revision: 1.58 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
-import java.io.InputStream;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Arrays;
@@ -1561,6 +1558,8 @@ public final class RuleBasedCollator extends Collator
         {
             UCA_ = new RuleBasedCollator();
             UCA_CONSTANTS_ = new UCAConstants();
+            UCA_CONTRACTIONS_ = CollatorReader.read(UCA_, UCA_CONSTANTS_);
+            /*
             InputStream i = UCA_.getClass().getResourceAsStream(
                                         "/com/ibm/icu/impl/data/ucadata.icu");
 
@@ -1569,6 +1568,7 @@ public final class RuleBasedCollator extends Collator
             UCA_CONTRACTIONS_ = reader.read(UCA_, UCA_CONSTANTS_);
             b.close();
             i.close();
+            */
             // called before doing canonical closure for the UCA.
             impCEGen_ = new ImplicitCEGenerator(UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
 //            IMPLICIT_BASE_BYTE_ = UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_;
@@ -1641,10 +1641,13 @@ public final class RuleBasedCollator extends Collator
                     if(rules[0][1] instanceof byte[]){
                         m_rules_ = (String)rules[1][1];
                         byte map[] = (byte [])rules[0][1];
+                        CollatorReader.initRBC(this, map);
+						/*
                         BufferedInputStream input =
                                                  new BufferedInputStream(
                                                     new ByteArrayInputStream(map));
-                        CollatorReader reader = new CollatorReader(input, false);
+                        /*
+						CollatorReader reader = new CollatorReader(input, false);
                         if (map.length > MIN_BINARY_DATA_SIZE_) {
                             reader.read(this, null);
                         }
@@ -1654,6 +1657,7 @@ public final class RuleBasedCollator extends Collator
                             // duplicating UCA_'s data
                             setWithUCATables();
                         }
+                        */
                         // at this point, we have read in the collator
                         // now we need to check whether the binary image has
                         // the right UCA and other versions
@@ -1945,7 +1949,7 @@ public final class RuleBasedCollator extends Collator
      * Minimum size required for the binary collation data in bytes.
      * Size of UCA header + size of options to 4 bytes
      */
-    private static final int MIN_BINARY_DATA_SIZE_ = (42 + 25) << 2;
+    //private static final int MIN_BINARY_DATA_SIZE_ = (42 + 25) << 2;
 
     /**
      * If this collator is to generate only simple tertiaries for fast path

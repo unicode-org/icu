@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/01/27 23:13:13 $
- * $Revision: 1.59 $
+ * $Date: 2004/02/06 21:54:04 $
+ * $Revision: 1.60 $
  *
  *****************************************************************************************
  */
@@ -224,7 +224,6 @@ public class TestFmwk extends AbstractTestLog {
                     if (name.indexOf('.') == -1) {
                         name = defaultPackage + name;
                     }
-
                     try {
                         Class cls = Class.forName(name);
                         if (!TestFmwk.class.isAssignableFrom(cls)) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2003/11/21 22:20:36 $
- * $Revision: 1.12 $
+ * $Date: 2004/02/06 21:54:05 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -158,6 +158,8 @@ public final class ICUListResourceBundleTest extends TestFmwk
         }
         return isEqual;
     }
+    
+    // 
     public void TestAliases(){
         ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testaliases");
         //rb.getObject("CollationElements");

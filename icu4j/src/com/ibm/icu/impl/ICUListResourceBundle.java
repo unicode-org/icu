@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/12/31 21:23:41 $
- * $Revision: 1.18 $
+ * $Date: 2004/02/06 21:54:01 $
+ * $Revision: 1.19 $
  *
  *******************************************************************************
  */
@@ -238,17 +238,16 @@ public class ICUListResourceBundle extends ListResourceBundle {
         private byte[] expanded=null;
         private String resName=null;
         public ResourceBinary(String name){
-            resName=name;
+            resName="data/" + name;
         }
         public Object getResource(Object obj) throws Exception{
             if(expanded==null){
-                InputStream stream = obj.getClass().getResourceAsStream(resName);
+                InputStream stream = ICUData.getStream(resName);
                 if(stream!=null){
                     //throw new MissingResourceException("",obj.getClass().getName(),resName);
                     expanded = readToEOS(stream);
                     return expanded;
                 }
-
             }
             return "";
         }
@@ -258,12 +257,12 @@ public class ICUListResourceBundle extends ListResourceBundle {
         private char[] expanded=null;
         private String resName=null;
         public ResourceString(String name){
-            resName=name;
+            resName="data/"+name;
         }
         public Object getResource(Object obj) throws Exception{
             if(expanded==null){
                 // Resource strings are always UTF-8
-                InputStream stream = obj.getClass().getResourceAsStream(resName);
+                InputStream stream = ICUData.getStream(resName);
                 if(stream!=null){
                     //throw new MissingResourceException("",obj.getClass().getName(),resName);
 

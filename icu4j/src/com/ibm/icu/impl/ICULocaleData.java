@@ -25,7 +25,7 @@ public class ICULocaleData {
     private static Locale[] localeList;
     private static final String PACKAGE1 = "com.ibm.icu.impl.data";
     private static final String[] packageNames = { PACKAGE1 };
-    private static boolean debug = ICUDebug.enabled("localedata");
+    private static final boolean debug = ICUDebug.enabled("localedata");
 
     /**
      * Returns a list of the installed locales.
@@ -207,10 +207,10 @@ public class ICULocaleData {
                 } else {
                     i = name.length();
                 }
+
                 Class cls = ICULocaleData.class.getClassLoader().loadClass(name);
                 if (ICUListResourceBundle.class.isAssignableFrom(cls)) {
                     ICUListResourceBundle bx = (ICUListResourceBundle)cls.newInstance();
-                    
 
                     if (parent != null) {
                         bx.setParentX(parent);
@@ -385,6 +385,7 @@ public class ICULocaleData {
         // ignore, keep looking
         }
         catch (Exception e) {
+	    e.printStackTrace();
         if (debug) {
             System.out.println(e.getMessage());
         }
@@ -418,7 +419,7 @@ public class ICULocaleData {
             return Collections.unmodifiableSet(set);
     }
     catch (MissingResourceException e) {
-            System.out.println("couldn't find index for bundleName: " + bundleName);
+            if (debug) System.out.println("couldn't find index for bundleName: " + bundleName);
             Thread.dumpStack();
     }
         return Collections.EMPTY_SET;
@@ -435,7 +436,7 @@ public class ICULocaleData {
         return locales;
     }
     catch (MissingResourceException e) {
-            System.out.println("couldn't find index for bundleName: " + bundleName);
+            if (debug) System.out.println("couldn't find index for bundleName: " + bundleName);
             Thread.dumpStack();
     }
     return new Locale[0];

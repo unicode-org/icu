@@ -5,14 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/ResourceReader.java,v $
- * $Date: 2002/08/13 23:37:48 $
- * $Revision: 1.5 $
+ * $Date: 2004/02/06 21:54:04 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.impl.data;
 
 import java.io.*;
+
+import com.ibm.icu.impl.ICUData;
 
 /**
  * A reader for text resource data in the current package.  The
@@ -47,7 +49,7 @@ public class ResourceReader {
     public ResourceReader(String resourceName, String encoding)
         throws UnsupportedEncodingException {
 
-        this.resourceName = resourceName;
+        this.resourceName = "data/" + resourceName;
         this.encoding = encoding;
         isReset = false;
         _reset();
@@ -60,7 +62,7 @@ public class ResourceReader {
      * package
      */
     public ResourceReader(String resourceName) {
-        this.resourceName = resourceName;
+        this.resourceName = "data/" + resourceName;
         this.encoding = null;
         isReset = false;
         try {
@@ -114,10 +116,11 @@ public class ResourceReader {
         if (isReset) {
             return;
         }
-        InputStream is = getClass().getResourceAsStream(resourceName);
+		InputStream is = ICUData.getStream(resourceName);
         if (is == null) {
             throw new IllegalArgumentException("Can't open " + resourceName);
         }
+        
         InputStreamReader isr =
             (encoding == null) ? new InputStreamReader(is) :
                                  new InputStreamReader(is, encoding);

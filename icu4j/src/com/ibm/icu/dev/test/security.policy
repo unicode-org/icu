@@ -1,41 +1,8 @@
-
-// Standard extensions get all permissions by default
-
-grant codeBase "file:${java.home}/lib/ext/*" {
-	permission java.security.AllPermission;
-};
-
-// default permissions granted to all domains
-
-grant { 
-	// allows anyone to listen on un-privileged ports
-	permission java.net.SocketPermission "localhost:1024-", "listen";
-
-	// "standard" properies that can be read by anyone
-
-	permission java.util.PropertyPermission "java.version", "read";
-	permission java.util.PropertyPermission "java.vendor", "read";
-	permission java.util.PropertyPermission "java.vendor.url", "read";
-	permission java.util.PropertyPermission "java.class.version", "read";
-	permission java.util.PropertyPermission "os.name", "read";
-	permission java.util.PropertyPermission "os.version", "read";
-	permission java.util.PropertyPermission "os.arch", "read";
-	permission java.util.PropertyPermission "file.separator", "read";
-	permission java.util.PropertyPermission "path.separator", "read";
-	permission java.util.PropertyPermission "line.separator", "read";
-
-	permission java.util.PropertyPermission "java.specification.version", "read";
-	permission java.util.PropertyPermission "java.specification.vendor", "read";
-	permission java.util.PropertyPermission "java.specification.name", "read";
-
-	permission java.util.PropertyPermission "java.vm.specification.version", "read";
-	permission java.util.PropertyPermission "java.vm.specification.vendor", "read";
-	permission java.util.PropertyPermission "java.vm.specification.name", "read";
-	permission java.util.PropertyPermission "java.vm.version", "read";
-	permission java.util.PropertyPermission "java.vm.vendor", "read";
-	permission java.util.PropertyPermission "java.vm.name", "read";
-
-	/// policies required by test framework
+// policies needed to run tests
+grant // codebase "file:${user.dir}/icu4jtests.jar"
+{
+	// temporary for debugging
+        // permission java.lang.RuntimePermission "getProtectionDomain";
 
 	// needed for Locale.setDefault, only used in tests and demos
 	permission java.util.PropertyPermission "user.language", "write";
@@ -43,8 +10,8 @@ grant {
 	// needed for TestUtils
 	permission java.util.PropertyPermission "ICUDataPath", "read";
 	permission java.util.PropertyPermission "user.dir", "read";
-	// yuck, why doesn't the security code normalize file paths?!?!?  supply both versions...
-	permission java.io.FilePermission "src\\com\\ibm\\icu\\dev\\data\\-", "read";
-	permission java.io.FilePermission "src/com/ibm/icu/dev/data/-", "read";
+
+	// time zone tests
+	permission java.util.PropertyPermission "user.timezone", "read";
 };
 

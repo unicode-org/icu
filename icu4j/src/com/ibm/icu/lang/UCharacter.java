@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2004/01/07 20:06:24 $ 
-* $Revision: 1.85 $
+* $Date: 2004/02/06 21:54:00 $ 
+* $Revision: 1.86 $
 *
 *******************************************************************************
 */
@@ -4417,6 +4417,7 @@ public final class UCharacter
         }
         catch (Exception e)
         {
+	    e.printStackTrace();
             //throw new RuntimeException(e.getMessage());
             // DONOT throw an exception
             // we might be building ICU modularly wothout names.icu and pnames.icu
