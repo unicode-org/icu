@@ -119,8 +119,6 @@ void deleteToken(void *token);
 void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value);
 UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status);
 
-int32_t uhash_hashTokens(const void *k);
-UBool uhash_compareTokens(const void *key1, const void *key2);
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status);
 uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
 U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src, 
@@ -130,8 +128,10 @@ U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src,
                         uint8_t *specs,
                         UBool startOfRules,
                         UErrorCode *status);
-
+extern const UChar* rulesToParse;
 #endif
+
+
 
 
 
