@@ -930,7 +930,7 @@ public:
    * U_ILLEGAL_ARGUMENT_ERROR is returned in status.
    * @param ruleSetName the name of the rule set, or null to reset the initial default.
    * @param status set to failure code when a problem occurs.
-   * @draft ICU 2.6
+   * @stable ICU 2.6
    */
   virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
 

@@ -53,20 +53,20 @@ ucurr_forLocale(const char* locale,
  * Selector constants for ucurr_getName().
  *
  * @see ucurr_getName
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 typedef enum UCurrNameStyle {
     /**
      * Selector for ucurr_getName indicating a symbolic name for a
      * currency, such as "$" for USD.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UCURR_SYMBOL_NAME,
 
     /**
      * Selector for ucurr_getName indicating the long name for a
      * currency, such as "US Dollar" for USD.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UCURR_LONG_NAME
 } UCurrNameStyle;
@@ -86,9 +86,9 @@ typedef const void* UCurrRegistryKey;
  * @param status the in/out status code
  * @return a registry key that can be used to unregister this currency code, or NULL
  * if there was an error.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UCurrRegistryKey U_EXPORT2
+U_STABLE UCurrRegistryKey U_EXPORT2
 ucurr_register(const UChar* isoCode, 
                    const char* locale,  
                    UErrorCode* status);
@@ -101,9 +101,9 @@ ucurr_register(const UChar* isoCode,
  * @param key the registry key returned by a previous call to ucurr_register
  * @param status the in/out status code, no special meanings are assigned
  * @return TRUE if the currency for this key was successfully unregistered
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
 #endif /* UCONFIG_NO_SERVICE */
 
@@ -122,9 +122,9 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
  * data contains no entry for 'currency', then 'currency' itself is
  * returned.  If *isChoiceFormat is TRUE, then the result is a
  * ChoiceFormat pattern.  Otherwise it is a static string.
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
-U_DRAFT const UChar* U_EXPORT2
+U_STABLE const UChar* U_EXPORT2
 ucurr_getName(const UChar* currency,
               const char* locale,
               UCurrNameStyle nameStyle,

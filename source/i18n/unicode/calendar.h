@@ -497,7 +497,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
@@ -547,7 +547,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     inline void roll(UCalendarDateFields field, UBool up, UErrorCode& status);
 
@@ -595,7 +595,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
@@ -709,7 +709,7 @@ public:
      * @return the difference, either positive or negative, between
      * this calendar's time and <code>when</code>, in terms of
      * <code>field</code>.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual int32_t fieldDifference(UDate when, UCalendarDateFields field, UErrorCode& status);
 
@@ -796,7 +796,7 @@ public:
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @param value  The given first day of the week.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     void setFirstDayOfWeek(UCalendarDaysOfWeek value);
 
@@ -813,7 +813,7 @@ public:
      *
      * @param status error code
      * @return   The first day of the week.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UCalendarDaysOfWeek getFirstDayOfWeek(UErrorCode &status) const;
 
@@ -855,7 +855,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The minimum value for the given time field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual int32_t getMinimum(UCalendarDateFields field) const;
 
@@ -875,7 +875,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The maximum value for the given time field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual int32_t getMaximum(UCalendarDateFields field) const;
 
@@ -895,7 +895,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The highest minimum value for the given time field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual int32_t getGreatestMinimum(UCalendarDateFields field) const;
 
@@ -915,7 +915,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The lowest maximum value for the given time field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual int32_t getLeastMaximum(UCalendarDateFields field) const;
 
@@ -947,7 +947,7 @@ public:
      * @param field    the field to determine the minimum of
      * @param status   Fill-in parameter which receives the status of this operation.
      * @return         the minimum of the given field for the current date of this Calendar
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     int32_t getActualMinimum(UCalendarDateFields field, UErrorCode& status) const;
 
@@ -983,7 +983,7 @@ public:
      * @param field    the field to determine the maximum of
      * @param status   Fill-in parameter which receives the status of this operation.
      * @return         the maximum of the given field for the current date of this Calendar
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
 
@@ -1013,7 +1013,7 @@ public:
      * @param status Fill-in parameter which receives the status of the operation.
      * @return       The value for the given time field, or zero if the field is unset,
      *               and set() has been called for any other field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     int32_t get(UCalendarDateFields field, UErrorCode& status) const;
 
@@ -1033,7 +1033,7 @@ public:
      *
      * @param field  The given time field.
      * @return   True if the given time field has a value set; false otherwise.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     UBool isSet(UCalendarDateFields field) const;
 
@@ -1051,7 +1051,7 @@ public:
      *
      * @param field  The given time field.
      * @param value  The value to be set for the given time field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     void set(UCalendarDateFields field, int32_t value);
 
@@ -1120,7 +1120,7 @@ public:
      * time into time fields.
      *
      * @param field  The time field to be cleared.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     void clear(UCalendarDateFields field);
 
@@ -1307,7 +1307,7 @@ protected:
      *
      * @param field    The given time field.
      * @param value    The value for the given time field.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     inline void internalSet(UCalendarDateFields field, int32_t value);
 
