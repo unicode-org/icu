@@ -20,6 +20,12 @@
 *   and some common definitions.
 */
 
+
+/* utf.h must be included first. */
+#ifndef __UTF_H__
+# include "unicode/utf.h"
+#endif
+
 #ifndef __UTF8_H__
 #define __UTF8_H__
 

@@ -177,4 +177,13 @@ Collator::getDisplayName(   const   Locale&     objectLocale,
   return objectLocale.getDisplayName(Locale::getDefault(), name);
 }
 
+void
+Collator::getVersion(UVersionInfo versionInfo) const
+{
+  
+    if(versionInfo!=NULL) {
+        uprv_memcpy(versionInfo, fVersion, U_MAX_VERSION_LENGTH);
+    }
+}
+
 //eof
