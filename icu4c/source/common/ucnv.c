@@ -290,6 +290,30 @@ int32_t  ucnv_countAvailable ()
   return ucnv_io_countAvailableConverters(&err);
 }
 
+U_CAPI uint16_t
+ucnv_countAliases(const char *alias, UErrorCode *pErrorCode) {
+    const char *p;
+    return ucnv_io_getAliases(alias, &p, pErrorCode);
+}
+
+
+U_CAPI const char *
+ucnv_getAlias(const char *alias, uint16_t index, UErrorCode *pErrorCode) {
+    return ucnv_io_getAlias(alias, index, pErrorCode);
+}
+
+U_CAPI void
+ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode) {
+    char *p;
+    uint16_t count=ucnv_io_getAliases(alias, &p, pErrorCode);
+    while(count>0) {
+        *aliases++=*p;
+        /* skip a name, first the canonical converter name */
+        *p+=uprv_strlen(p)+1;
+        --count;
+    }
+}
+
 void   ucnv_getSubstChars (const UConverter * converter,
 			   char *mySubChar,
 			   int8_t * len,
