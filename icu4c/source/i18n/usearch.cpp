@@ -1557,6 +1557,7 @@ UBool checkNextCanonicalMatch(UStringSearch *strsrch,
     
     if (strsrch->textIter != coleiter) {
         ucol_closeElements(coleiter);
+        uprv_free(str);
     }
     strsrch->search->matchedIndex = start;
     strsrch->search->matchedLength = *textoffset - start;
@@ -2103,6 +2104,7 @@ UBool checkPreviousCanonicalMatch(UStringSearch *strsrch,
     
     if (strsrch->textIter != coleiter) {
         ucol_closeElements(coleiter);
+        uprv_free(str);
     }
     strsrch->search->matchedIndex  = *textoffset;
     strsrch->search->matchedLength = end - *textoffset;

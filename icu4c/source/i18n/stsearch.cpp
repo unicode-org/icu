@@ -163,8 +163,10 @@ StringSearch::StringSearch(const StringSearch &that) :
 
 StringSearch::~StringSearch()
 {
-    usearch_close(m_strsrch_);
-    m_search_ = NULL;
+    if (m_strsrch_ != NULL) {
+        usearch_close(m_strsrch_);
+        m_search_ = NULL;
+    }
 }
 
 // operator overloading ---------------------------------------------
