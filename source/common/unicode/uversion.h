@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2003, International Business Machines
+*   Copyright (C) 2000-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -44,7 +44,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2003, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2004, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** Maximum length of the copyright string.
  *  @stable ICU 2.4
@@ -55,13 +55,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_MAJOR_NUM 2
+#define U_ICU_VERSION_MAJOR_NUM 3
 
 /** The current ICU minor version as an integer. 
  *  This value will change in the subsequent releases of ICU
  *  @draft ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 8
+#define U_ICU_VERSION_MINOR_NUM 0
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
@@ -73,20 +73,20 @@
  *  This value will change in the subsequent releases of ICU
  *  @draft ICU 2.6
  */
-#define U_ICU_VERSION_SUFFIX _2_8
+#define U_ICU_VERSION_SUFFIX _3_0
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
  *  only appears in this string if it non-zero. 
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "2.8"
+#define U_ICU_VERSION "3.0"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
  *  @draft ICU 2.6
  */
-#define U_ICU_VERSION_SHORT "28"
+#define U_ICU_VERSION_SHORT "30"
 
 /** An ICU version consists of up to 4 numbers from 0..255.
  *  @stable ICU 2.4
@@ -109,9 +109,14 @@
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#define U_ICU_NAMESPACE icu_2_8
+#if U_DISABLE_RENAMING
+#define U_ICU_NAMESPACE icu
+namespace U_ICU_NAMESPACE { }
+#else
+#define U_ICU_NAMESPACE icu_3_0
 namespace U_ICU_NAMESPACE { }
 namespace icu = U_ICU_NAMESPACE;
+#endif
 U_NAMESPACE_USE
 #endif
 
