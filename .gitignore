@@ -52,6 +52,10 @@ icu4c/source/config/Makefile.inc
 icu4c/source/data/*.brk
 icu4c/source/data/*.cnv
 icu4c/source/data/*.dat
+icu4c/source/data/*.dll
+icu4c/source/data/*.exp
+icu4c/source/data/*.lib
+icu4c/source/data/*.obj
 icu4c/source/data/*.res
 icu4c/source/data/.links
 icu4c/source/data/Makefile
