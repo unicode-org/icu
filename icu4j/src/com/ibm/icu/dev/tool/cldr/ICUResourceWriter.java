@@ -146,6 +146,22 @@ public class ICUResourceWriter {
             }
         }
     }
+    public static class  ResourceImport extends Resource{
+        String val;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            String line =  ((name==null)? EMPTY: name)+COLON+IMPORT+ OPENBRACE+QUOTE+escapeSyntaxChars(val)+QUOTE+CLOSEBRACE;
+            if(bare==true){
+                if(name!=null){
+                    throw new RuntimeException("Bare option is set to true but the resource has a name!");
+                }
+                write(writer,line); 
+            }else{
+                write(writer, line+LINESEP);
+            }
+        }
+    }
     public static class  ResourceArray extends Resource{
         Resource first;
         public void write(OutputStream writer, int numIndent, boolean bare){
