@@ -105,6 +105,32 @@ U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceStrin
     IInit_collIterate(collator, sourceString, sourceLen, s);
 }
 
+/** 
+* Backup the state of the collIterate struct data
+* @param data collIterate to backup
+* @param backup storage 
+*/
+inline void backupState(const collIterate *data, collIterateState *backup) 
+{
+    backup->fcdPosition = data->fcdPosition;
+    backup->flags       = data->flags;
+    backup->origFlags   = data->origFlags;
+    backup->pos         = data->pos;
+}
+
+/** 
+* Loads the state into the collIterate struct data
+* @param data collIterate to backup
+* @param backup storage 
+*/
+inline void loadState(collIterate *data, const collIterateState *backup) 
+{
+    data->fcdPosition = backup->fcdPosition;
+    data->flags       = backup->flags;
+    data->origFlags   = backup->origFlags;
+    data->pos         = backup->pos;
+}
+
 /****************************************************************************/
 /* Following are the open/close functions                                   */
 /*                                                                          */
@@ -1383,7 +1409,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
   uint32_t i = 0; /* general counter */
   uint32_t firstCE = UCOL_NOT_FOUND;
-  UChar *firstUChar = source->pos;
+  UChar   *firstUChar = source->pos;
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -1433,8 +1459,8 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
         if ((source->flags & UCOL_ITER_HASLEN) && source->pos>=source->endp) { 
-                                           /* this is the end of string.  (Null terminated handled later,
-                                            when the null doesn't match the contraction sequence.)     */
+        /* this is the end of string.  (Null terminated handled later,
+           when the null doesn't match the contraction sequence.)     */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
             if (CE == UCOL_NOT_FOUND) {
@@ -1460,11 +1486,11 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
           /*source->pos = firstUChar; *//* spit all the not found chars, which led us in this contraction */
           source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
-        } 
+        }
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
 
         if(CE == UCOL_NOT_FOUND) {
-          source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
+          source->pos   = firstUChar; /* spit all the not found chars, which led us in this contraction */
           if(firstCE != UCOL_NOT_FOUND) {
             CE = firstCE;
           }
@@ -1530,7 +1556,13 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
   const UChar    *constart    = NULL;
         uint32_t size;
         uint32_t firstCE      = UCOL_NOT_FOUND;
+        /*
         UChar    *firstUChar  = source->pos;
+        uint8_t  firstflags   = source->flags;
+        */
+        collIterateState state;
+
+  backupState(source, &state);
   for(;;)
   {
     /* the only ces that loops are thai and contractions */
@@ -1582,62 +1614,85 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
       }
       break;
     case CONTRACTION_TAG:
-      /* This should handle contractions */
-      for(;;)
-      {
-        /* 
-        First we position ourselves at the begining of contraction sequence 
-        */
-        constart = UCharOffset = (UChar *)coll->image + getContractOffset(CE);
-        strend = source->endp;
+        /* This should handle contractions */
+        for(;;)
+        {
+            /* First we position at the begining of contraction sequence */
+            constart = UCharOffset = (UChar *)coll->image + 
+                       getContractOffset(CE);
+            strend = source->endp;
 
-        if (firstCE == UCOL_NOT_FOUND) {
-          firstCE = *(coll->contractionCEs + 
-                      (UCharOffset - coll->contractionIndex));
-        }
+            if (firstCE == UCOL_NOT_FOUND) {
+              firstCE = *(coll->contractionCEs + 
+                          (UCharOffset - coll->contractionIndex));
+            }
 
-        if (source->pos <= source->string) { 
-          /* this is the start of string */
-          CE = *(coll->contractionCEs + 
-                 (UCharOffset - coll->contractionIndex)); 
-          if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
-            CE          = firstCE;
-            /* firstCE     = UCOL_NOT_FOUND; */
-            source->pos = firstUChar;
-          }
+            if ((source->pos == source->string) ||
+                (source->pos == source->writableBuffer && 
+                source->fcdPosition == NULL)) { 
+              /* this is the start of string */
+              CE = *(coll->contractionCEs + 
+                     (UCharOffset - coll->contractionIndex)); 
+              if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
+                CE            = firstCE;
+                /*
+                source->pos   = firstUChar;
+                source->flags = firstflags;
+                */
+                loadState(source, &state);
+              }
 
-          break;
-        }
+              break;
+            }
 
-        /*
-        Progressing to backwards block
-        */
-        UCharOffset += *UCharOffset; 
+            /*
+            Progressing to backwards block
+            */
+            UCharOffset += *UCharOffset; 
 
-        schar = *(source->pos - 1);
-        while (schar > (tchar = *UCharOffset)) {
-          UCharOffset ++;
-        }
+            /* not at the border of the writable buffer */
+            if ((source->flags & UCOL_ITER_HASLEN) || 
+                (source->pos != source->writableBuffer)) {
+                schar = *(source->pos - 1);
+            }
+            else {
+                schar = *(source->fcdPosition);
+            }
+
+            while (schar > (tchar = *UCharOffset)) {
+              UCharOffset ++;
+            }
         
-        if (schar != tchar) {
-          UCharOffset = constart; 
-        } 
-        else {
-          source->pos --;
-        }
+            if (schar != tchar) {
+              UCharOffset = constart; 
+            } 
+            else {
+                if ((source->flags & UCOL_ITER_HASLEN) || 
+                    (source->pos != source->writableBuffer)) {
+                    source->pos --;
+                }
+                else {
+                    source->pos = source->fcdPosition;
+                    source->flags = source->origFlags; 
+                }
+            }
 
-        CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-        if (!isContraction(CE)) {
-          if (CE == UCOL_NOT_FOUND) {
-            CE          = firstCE;
-            source->pos = firstUChar;
-          }
-          firstCE = UCOL_NOT_FOUND;
+            CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+            if (!isContraction(CE)) {
+              if (CE == UCOL_NOT_FOUND) {
+                CE            = firstCE;
+                /*
+                source->pos   = firstUChar;
+                source->flags = firstflags;
+                */
+                loadState(source, &state);
+              }
+              firstCE = UCOL_NOT_FOUND;
           
-          break;  
-        }
-      }
-      break;
+              break;  
+            }
+          }
+          break;
     case EXPANSION_TAG: /* this tag always returns */
       /* 
       This should handle expansion.
