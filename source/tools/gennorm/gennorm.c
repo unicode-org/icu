@@ -45,7 +45,7 @@ UBool beVerbose=FALSE, haveCopyright=TRUE;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode);
+parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode, UBool reportError);
 
 static void
 parseDB(const char *filename, UErrorCode *pErrorCode);
@@ -134,16 +134,28 @@ main(int argc, char* argv[]) {
     /* initialize */
     init();
 
-    /* process DerivedNormalizationProperties.txt (quick check flags) */
+    /* process DerivedNormalizationProps.txt (name changed for Unicode 3.2, to <=31 characters) */
     if(suffix==NULL) {
-        uprv_strcpy(basename, "DerivedNormalizationProperties.txt");
+        uprv_strcpy(basename, "DerivedNormalizationProps.txt");
     } else {
-        uprv_strcpy(basename, "DerivedNormalizationProperties");
+        uprv_strcpy(basename, "DerivedNormalizationProps");
         basename[30]='-';
         uprv_strcpy(basename+31, suffix);
         uprv_strcat(basename+31, ".txt");
     }
-    parseDerivedNormalizationProperties(filename, &errorCode);
+    parseDerivedNormalizationProperties(filename, &errorCode, FALSE);
+    if(U_FAILURE(errorCode)) {
+        /* can be only U_FILE_ACCESS_ERROR - try filename from before Unicode 3.2 */
+        if(suffix==NULL) {
+            uprv_strcpy(basename, "DerivedNormalizationProperties.txt");
+        } else {
+            uprv_strcpy(basename, "DerivedNormalizationProperties");
+            basename[30]='-';
+            uprv_strcpy(basename+31, suffix);
+            uprv_strcat(basename+31, ".txt");
+        }
+        parseDerivedNormalizationProperties(filename, &errorCode, TRUE);
+    }
 
     /* process UnicodeData.txt */
     if(suffix==NULL) {
@@ -225,7 +237,7 @@ derivedNormalizationPropertiesLineFn(void *context,
         while(start<=end) {
             setQCFlags(start++, qcFlags);
         }
-    } else if(0==uprv_memcmp(s, "Comp_Ex", 7)) {
+    } else if(0==uprv_memcmp(s, "Comp_Ex", 7) || 0==uprv_memcmp(s, "Full_Composition_Exclusion", 26)) {
         /* full composition exclusion */
         while(start<=end) {
             setCompositionExclusion(start++);
@@ -253,7 +265,7 @@ derivedNormalizationPropertiesLineFn(void *context,
 }
 
 static void
-parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode) {
+parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode, UBool reportError) {
     char *fields[2][2];
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -261,7 +273,7 @@ parseDerivedNormalizationProperties(const char *filename, UErrorCode *pErrorCode
     }
 
     u_parseDelimitedFile(filename, ';', fields, 2, derivedNormalizationPropertiesLineFn, NULL, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
+    if(U_FAILURE(*pErrorCode) && (reportError || *pErrorCode!=U_FILE_ACCESS_ERROR)) {
         fprintf(stderr, "gennorm error: u_parseDelimitedFile(\"%s\") failed - %s\n", filename, u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
