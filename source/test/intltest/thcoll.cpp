@@ -62,6 +62,31 @@ void CollationThaiTest::runIndexedTest(int32_t index, bool_t exec, char* &name,
 }
 
 /**
+ * Read a line terminated by a single ^J or ^M, and convert it from
+ * the TEST_FILE_ENCODING to Unicode.  ASSUMES FILE LINES ARE 127
+ * characters long or less.  This is true for th18057.txt, which
+ * has 80-char or shorter lines.  DOES NOT HANDLE ^M^J sequence.
+ */
+static bool_t readLine(FileStream *in, UnicodeString& line) {
+    if (T_FileStream_eof(in)) {
+        return FALSE;
+    }
+    char buffer[128];
+    char* p = buffer;
+    char* limit = p + sizeof(buffer) - 1; // Leave space for 0
+    while (p<limit) {
+        int c = T_FileStream_getc(in);
+        if (c < 0 || c == 0xD || c == 0xA) {
+            break;
+        }
+        *p++ = c;
+    }
+    *p = 0;
+    line = UnicodeString(buffer, TEST_FILE_ENCODING);
+    return TRUE;
+}
+
+/**
  * Read the external dictionary file, which is already in proper
  * sorted order, and confirm that the collator compares each line as
  * preceding the following line.
@@ -87,30 +112,23 @@ void CollationThaiTest::TestDictionary(void) {
     // Loop through each word in the dictionary and compare it to the previous
     // word.  They should be in sorted order.
     //
-    UnicodeString lastWord;
+    UnicodeString lastWord, word;
     int32_t line = 0;
     int32_t failed = 0;
-    while (T_FileStream_readLine(in, buffer, sizeof(buffer)) != 0) {
-        UnicodeString word(buffer, TEST_FILE_ENCODING);
+    int32_t wordCount = 0;
+    while (readLine(in, word)) {
         line++;
 
-        if (word.charAt(0) == 0x23) {
-            // Skip comments
+        // Skip comments and blank lines
+        if (word.charAt(0) == 0x23 || word.length() == 0) {
             continue;
         }
 
-        // Trim line termination characters from the end
-        int32_t i = word.length()-1;
-        while (i>=0 &&
-               (word.charAt(i) == (UChar)13 ||
-                word.charAt(i) == (UChar)10)) {
-            --i;
-        }
-        word.truncate(i+1);
-
-        // Skip blank lines
-        if (word.length() == 0) {
-            continue;
+        // Show the first 8 words being compared, so we can see what's happening
+        ++wordCount;
+        if (wordCount <= 8) {
+            UnicodeString str;
+            logln((UnicodeString)"Word " + wordCount + ": " + prettify(word, str));
         }
 
         if (lastWord.length() > 0) {
@@ -152,6 +170,8 @@ void CollationThaiTest::TestDictionary(void) {
         errln((UnicodeString)"Summary: " + failed + " of " + (line - 1) +
               " comparisons failed");
     }
+
+    logln((UnicodeString)"Words checked: " + wordCount);
 }
 
 /**
