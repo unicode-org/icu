@@ -882,7 +882,7 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
-    if(length <= 0) {
+    if(length <= 0 && cnv->toUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
     }
@@ -893,7 +893,7 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* complete a partial UChar from the last call */
-    if(cnv->toUnicodeStatus != 0) {
+    if(length != 0 && cnv->toUnicodeStatus != 0) {
         /*
          * copy the byte from the last call and the first one here into the target,
          * byte-wise to keep the platform endianness
@@ -942,7 +942,9 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             /* consume the last byte and store it, making sure that it will never set the status to 0 */
             cnv->toUnicodeStatus = *source++ | 0x100;
         }
-    /* } else length==0 { nothing to do */
+    } else /* length==0 */ if(cnv->toUnicodeStatus!=0 && pArgs->flush) {
+        /* a UChar remains incomplete */
+        *pErrorCode = U_TRUNCATED_CHAR_FOUND;
     }
 
     /* write back the updated pointers */
@@ -1044,7 +1046,7 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t count;
     int32_t sourceIndex     = 0;
 
-    if(length <= 0) {
+    if(length <= 0 && cnv->toUnicodeStatus == 0) {
         /* no input, nothing to do */
         return;
     }
@@ -1055,7 +1057,7 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     /* complete a partial UChar from the last call */
-    if(cnv->toUnicodeStatus != 0) {
+    if(length != 0 && cnv->toUnicodeStatus != 0) {
         /*
          * copy the byte from the last call and the first one here into the target,
          * byte-wise, reversing the platform endianness
@@ -1112,7 +1114,9 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             /* consume the last byte and store it, making sure that it will never set the status to 0 */
             cnv->toUnicodeStatus = *source++ | 0x100;
         }
-    /* } else length==0 { nothing to do */
+    } else /* length==0 */ if(cnv->toUnicodeStatus!=0 && pArgs->flush) {
+        /* a UChar remains incomplete */
+        *pErrorCode = U_TRUNCATED_CHAR_FOUND;
     }
 
     /* write back the updated pointers */
@@ -2503,14 +2507,27 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         }
     }
 
-    if(source==sourceLimit && pArgs->flush && state!=0) {
-        /* handle 0<state<8: call UTF-16BE with too-short input */
-        if(state<8) {
+    if(source==sourceLimit && pArgs->flush) {
+        /* handle truncated input */
+        switch(state) {
+        case 0:
+            break; /* no input at all, nothing to do */
+        case 8:
+            _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
+            break;
+        case 9:
+            _UTF16LEToUnicodeWithOffsets(pArgs, pErrorCode);
+            break;
+        default:
+            /* handle 0<state<8: call UTF-16BE with too-short input */
             pArgs->source=utf16BOM+(state&4); /* select the correct BOM */
             pArgs->sourceLimit=pArgs->source+(state&3); /* replay bytes */
 
             /* no offsets: not enough for output */
             _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
+            /* pArgs->source restored below */
+            pArgs->sourceLimit=sourceLimit;
+            break;
         }
         cnv->mode=0; /* reset */
     } else {
@@ -2745,14 +2762,27 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         }
     }
 
-    if(source==sourceLimit && pArgs->flush && state!=0) {
-        /* handle 0<state<8: call UTF-32BE with too-short input */
-        if(state<8) {
+    if(source==sourceLimit && pArgs->flush) {
+        /* handle truncated input */
+        switch(state) {
+        case 0:
+            break; /* no input at all, nothing to do */
+        case 8:
+            T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
+            break;
+        case 9:
+            T_UConverter_toUnicode_UTF32_LE(pArgs, pErrorCode);
+            break;
+        default:
+            /* handle 0<state<8: call UTF-32BE with too-short input */
             pArgs->source=utf32BOM+(state&4); /* select the correct BOM */
             pArgs->sourceLimit=pArgs->source+(state&3); /* replay bytes */
 
             /* no offsets: not enough for output */
             T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
+            /* pArgs->source restored below */
+            pArgs->sourceLimit=sourceLimit;
+            break;
         }
         cnv->mode=0; /* reset */
     } else {
