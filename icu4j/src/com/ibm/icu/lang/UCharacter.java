@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/03/20 05:11:15 $ 
-* $Revision: 1.35 $
+* $Date: 2002/04/03 04:32:00 $ 
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -184,7 +184,7 @@ public final class UCharacter
     }
 
    /**
-    * Returns the Unicode numeric value of the code point as a nonnegative 
+    * Returns the numeric value of the code point as a nonnegative 
     * integer.
     * <br>If the code point does not have a numeric value, then -1 is returned. 
     * <br>
@@ -993,13 +993,12 @@ public final class UCharacter
     }
       
     /**
-    * Returns a code pointcorresponding to the two UTF16 characters.
-    * If the argument lead is not a high surrogate character or trail is not a 
-    * low surrogate character, UCharacter.REPLACEMENT_CHAR is returned.
+    * Returns a code point corresponding to the two UTF16 characters.
     * @param lead the lead char
     * @param trail the trail char
-    * @return code point or UCharacter.REPLACEMENT_CHAR if surrogate characters 
-    *         are invalid.
+    * @return code point if surrogate characters are valid.
+    * @exception IllegalArgumentException thrown when argument characters do
+    *            not form a valid codepoint
     */
     public static int getCodePoint(char lead, char trail) 
     {
@@ -1009,16 +1008,13 @@ public final class UCharacter
 	        trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
             return UCharacterProperty.getRawSupplementary(lead, trail);
         }
-        return UCharacter.REPLACEMENT_CHAR;
+        throw new IllegalArgumentException("Illegal surrogate characters");
     }
       
     /**
     * Returns the code point corresponding to the UTF16 character.
-    * If argument char16 is a surrogate character, UCharacter.REPLACEMENT_CHAR 
-    * is returned
     * @param char16 the UTF16 character
-    * @return code point or UCharacter.REPLACEMENT_CHAR if argument is not a 
-    *         invalid character.
+    * @return code point if argument is a valid character.
     * @exception IllegalArgumentException thrown when char16 is not a valid
     *            codepoint
     */
@@ -1778,11 +1774,6 @@ public final class UCharacter
         return 0;
     }
     
-    private static boolean isEuropeanDigit(int ch) {
-        return (ch <= 0x7a && ((ch >= 0x41 && ch <= 0x5a) || ch >= 0x61)) ||
-            (ch >= 0xff21 && (ch <= 0xff3a || (ch >= 0xff41 && ch <= 0xff5a)));
-    }
-
     private static int getEuropeanDigit(int ch) {
         if (ch <= 0x7a) {
             if (ch >= 0x41 && ch <= 0x5a) {
