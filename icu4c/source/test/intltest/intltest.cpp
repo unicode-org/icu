@@ -28,6 +28,7 @@
 #include "itmajor.h"
 
 #include "umutex.h"
+#include "uassert.h"
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -1304,6 +1305,50 @@ UnicodeString CharsToUnicodeString(const char* chars)
 {
     UnicodeString str(chars, ""); // Invariant conversion
     return str.unescape();
+}
+
+#define RAND_M  (714025)
+#define RAND_IA (1366)
+#define RAND_IC (150889)
+
+static int32_t RAND_SEED;
+
+/**
+ * Returns a uniform random value x, with 0.0 <= x < 1.0.  Use
+ * with care: Does not return all possible values; returns one of
+ * 714,025 values, uniformly spaced.  However, the period is
+ * effectively infinite.  See: Numerical Recipes, section 7.1.
+ *
+ * @param seedp pointer to seed. Set *seedp to any negative value
+ * to restart the sequence.
+ */
+float IntlTest::random(int32_t* seedp) {
+    static int32_t iy, ir[98];
+    static UBool first=TRUE;
+    int32_t j;
+    if (*seedp < 0 || first) {
+        first = FALSE;
+        if ((*seedp=(RAND_IC-(*seedp)) % RAND_M) < 0) *seedp = -(*seedp);
+        for (j=1;j<=97;++j) {
+            *seedp=(RAND_IA*(*seedp)+RAND_IC) % RAND_M;
+            ir[j]=(*seedp);
+        }
+        *seedp=(RAND_IA*(*seedp)+RAND_IC) % RAND_M;
+        iy=(*seedp);
+    }
+    j=(int32_t)(1 + 97.0*iy/RAND_M);
+    U_ASSERT(j>=1 && j<=97);
+    iy=ir[j];
+    *seedp=(RAND_IA*(*seedp)+RAND_IC) % RAND_M;
+    ir[j]=(*seedp);
+    return (float) iy/RAND_M;
+}
+
+/**
+ * Convenience method using a global seed.
+ */
+float IntlTest::random() {
+    return random(&RAND_SEED);
 }
 
 /*

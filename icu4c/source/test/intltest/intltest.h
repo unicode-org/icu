@@ -119,6 +119,22 @@ public:
 
     FILE *testoutfp;
 
+    /**
+     * Returns a uniform random value x, with 0.0 <= x < 1.0.  Use
+     * with care: Does not return all possible values; returns one of
+     * 714,025 values, uniformly spaced.  However, the period is
+     * effectively infinite.  See: Numerical Recipes, section 7.1.
+     *
+     * @param seedp pointer to seed. Set *seedp to any negative value
+     * to restart the sequence.
+     */
+    static float random(int32_t* seedp);
+
+    /**
+     * Convenience method using a global seed.
+     */
+    static float random();
+
 protected:
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
@@ -143,6 +159,7 @@ private:
     char*       path;           // specifies subtests
 
 protected:
+
     virtual void LL_message( UnicodeString message, UBool newline );
 
     // used for collation result reporting, defined here for convenience
