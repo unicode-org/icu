@@ -849,7 +849,7 @@ root {
         INR { "=0#Rs.|1#Re.|1<Rs.", "INR" } // Indian Rupee
         ITL { "\u20A4", "ITL" } // Italian Lira
         JPY { "\u00A5", "JPY" } // Japanese Yen
-        USD { "$",     "USD" } // US Dollar
+        USD { "US$",    "USD" } // US Dollar
     }
 
     // Currency metadata.  Unlike the "Currencies" element, this is
