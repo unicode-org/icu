@@ -1,3 +1,21 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  genprops.c
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2000mar03
+*   created by: Madhu Katragadda
+*
+*   This program writes a little data file for testing the udata API.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
@@ -6,11 +24,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 
-
-
 #define DATA_NAME "test"
 #define DATA_TYPE "dat"
-
 
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo={
@@ -40,7 +55,7 @@ main(int argc, char *argv[]) {
   char *outputDir = NULL; /* NULL = no output directory, use the default one(data) */
   
   if(argc > 3)
-	  printUsage=1;
+      printUsage=1;
    
    /* parse the options */
    for(option = 1; option < argc; ++option) {
@@ -51,7 +66,7 @@ main(int argc, char *argv[]) {
       printUsage = 1;
     }
 
-	else if(uprv_strcmp(arg, "-D") == 0 || uprv_strcmp(arg, "--dir") == 0) {
+    else if(uprv_strcmp(arg, "-D") == 0 || uprv_strcmp(arg, "--dir") == 0) {
         outputDir = argv[++option];
     }
 
@@ -87,10 +102,10 @@ usage()
 {  
   /*("Usage: gentest [OPTIONS] [DIR]");*/
   fprintf(stderr, "Usage: gentest [OPTIONS] [DIR]\n"
-	              "\tCreates the memory mapped file \"" DATA_NAME "." DATA_TYPE "\" for testing purpose\n"
-				  "Options: \n"
-				  "\t-h, --help        Print this message and exit.\n"
-  				  "\t-D, --dir         Store the created memory mapped file under 'dir'.\n");
+                  "\tCreates the memory mapped file \"" DATA_NAME "." DATA_TYPE "\" for testing purpose\n"
+                  "Options: \n"
+                  "\t-h, --help        Print this message and exit.\n"
+                  "\t-D, --dir         Store the created memory mapped file under 'dir'.\n");
 
 }
 
@@ -99,13 +114,13 @@ static void
 createData(const char* outputDirectory) {
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
-	char stringValue[]={'Y', 'E', 'A', 'R', '\0'};
+    char stringValue[]={'Y', 'E', 'A', 'R', '\0'};
     uint16_t intValue=2000;
-	
+    
     long dataLength;
-	uint32_t size;
+    uint32_t size;
 
-    pData=udata_create(DATA_TYPE, DATA_NAME, outputDirectory, &dataInfo,
+    pData=udata_create(outputDirectory, DATA_TYPE, DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gentest: unable to create data memory, error %d\n", errorCode);
@@ -114,8 +129,8 @@ createData(const char* outputDirectory) {
 
     /* write the data to the file */
     /* a 16 bit value  and a String*/
-	udata_write16(pData, intValue);
- 	udata_writeString(pData, stringValue, sizeof(stringValue));
+    udata_write16(pData, intValue);
+    udata_writeString(pData, stringValue, sizeof(stringValue));
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
