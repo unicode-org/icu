@@ -1,42 +1,37 @@
-# DerivedCoreProperties-4.0.0.txt
-# Date: 2003-03-20, 20:07:28 GMT [MD]
+# DerivedCoreProperties-4.0.1.txt
+# Date: 2004-03-11, 18:55:03 GMT [MD]
+# Mod Date: 2004-03-16, 16:45 PST [KW]
 #
-# Unicode Character Database: Derived Property Data
-# Generated algorithmically from the Unicode Character Database
+# Unicode Character Database
+# Copyright (c) 1991-2004 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints may be omitted
-#       if they have default property values.
-# ================================================
 
 # ================================================
 
 # Derived Property: Math
 #  Generated from: Sm + Other_Math
 
-0028          ; Math # Ps       LEFT PARENTHESIS
-0029          ; Math # Pe       RIGHT PARENTHESIS
-002A          ; Math # Po       ASTERISK
 002B          ; Math # Sm       PLUS SIGN
-002D          ; Math # Pd       HYPHEN-MINUS
-002F          ; Math # Po       SOLIDUS
 003C..003E    ; Math # Sm   [3] LESS-THAN SIGN..GREATER-THAN SIGN
-005B          ; Math # Ps       LEFT SQUARE BRACKET
-005C          ; Math # Po       REVERSE SOLIDUS
-005D          ; Math # Pe       RIGHT SQUARE BRACKET
 005E          ; Math # Sk       CIRCUMFLEX ACCENT
-007B          ; Math # Ps       LEFT CURLY BRACKET
 007C          ; Math # Sm       VERTICAL LINE
-007D          ; Math # Pe       RIGHT CURLY BRACKET
 007E          ; Math # Sm       TILDE
 00AC          ; Math # Sm       NOT SIGN
 00B1          ; Math # Sm       PLUS-MINUS SIGN
 00D7          ; Math # Sm       MULTIPLICATION SIGN
 00F7          ; Math # Sm       DIVISION SIGN
+03D0..03D2    ; Math # L&   [3] GREEK BETA SYMBOL..GREEK UPSILON WITH HOOK SYMBOL
+03D5          ; Math # L&       GREEK PHI SYMBOL
+03F0..03F1    ; Math # L&   [2] GREEK KAPPA SYMBOL..GREEK RHO SYMBOL
+03F4..03F5    ; Math # L&   [2] GREEK CAPITAL THETA SYMBOL..GREEK LUNATE EPSILON SYMBOL
 03F6          ; Math # Sm       GREEK REVERSED LUNATE EPSILON SYMBOL
 2016          ; Math # Po       DOUBLE VERTICAL LINE
 2032..2034    ; Math # Po   [3] PRIME..TRIPLE PRIME
+2040          ; Math # Pc       CHARACTER TIE
 2044          ; Math # Sm       FRACTION SLASH
 2052          ; Math # Sm       COMMERCIAL MINUS SIGN
+2061..2063    ; Math # Cf   [3] FUNCTION APPLICATION..INVISIBLE SEPARATOR
 207A..207C    ; Math # Sm   [3] SUPERSCRIPT PLUS SIGN..SUPERSCRIPT EQUALS SIGN
 207D          ; Math # Ps       SUPERSCRIPT LEFT PARENTHESIS
 207E          ; Math # Pe       SUPERSCRIPT RIGHT PARENTHESIS
@@ -45,17 +40,21 @@
 208E          ; Math # Pe       SUBSCRIPT RIGHT PARENTHESIS
 20D0..20DC    ; Math # Mn  [13] COMBINING LEFT HARPOON ABOVE..COMBINING FOUR DOTS ABOVE
 20E1          ; Math # Mn       COMBINING LEFT RIGHT ARROW ABOVE
+20E5..20E6    ; Math # Mn   [2] COMBINING REVERSE SOLIDUS OVERLAY..COMBINING DOUBLE VERTICAL STROKE OVERLAY
 2102          ; Math # L&       DOUBLE-STRUCK CAPITAL C
 210A..2113    ; Math # L&  [10] SCRIPT SMALL G..SCRIPT SMALL L
 2115          ; Math # L&       DOUBLE-STRUCK CAPITAL N
 2119..211D    ; Math # L&   [5] DOUBLE-STRUCK CAPITAL P..DOUBLE-STRUCK CAPITAL R
 2124          ; Math # L&       DOUBLE-STRUCK CAPITAL Z
 2128          ; Math # L&       BLACK-LETTER CAPITAL Z
+2129          ; Math # So       TURNED GREEK SMALL LETTER IOTA
 212C..212D    ; Math # L&   [2] SCRIPT CAPITAL B..BLACK-LETTER CAPITAL C
 212F..2131    ; Math # L&   [3] SCRIPT SMALL E..SCRIPT CAPITAL F
 2133..2134    ; Math # L&   [2] SCRIPT CAPITAL M..SCRIPT SMALL O
 2135..2138    ; Math # Lo   [4] ALEF SYMBOL..DALET SYMBOL
+213D..213F    ; Math # L&   [3] DOUBLE-STRUCK SMALL GAMMA..DOUBLE-STRUCK CAPITAL PI
 2140..2144    ; Math # Sm   [5] DOUBLE-STRUCK N-ARY SUMMATION..TURNED SANS-SERIF CAPITAL Y
+2145..2149    ; Math # L&   [5] DOUBLE-STRUCK ITALIC CAPITAL D..DOUBLE-STRUCK ITALIC SMALL J
 214B          ; Math # Sm       TURNED AMPERSAND
 2190..2194    ; Math # Sm   [5] LEFTWARDS ARROW..LEFT RIGHT ARROW
 219A..219B    ; Math # Sm   [2] LEFTWARDS ARROW WITH STROKE..RIGHTWARDS ARROW WITH STROKE
@@ -71,46 +70,63 @@
 2320..2321    ; Math # Sm   [2] TOP HALF INTEGRAL..BOTTOM HALF INTEGRAL
 237C          ; Math # Sm       RIGHT ANGLE WITH DOWNWARDS ZIGZAG ARROW
 239B..23B3    ; Math # Sm  [25] LEFT PARENTHESIS UPPER HOOK..SUMMATION BOTTOM
+23B7          ; Math # So       RADICAL SYMBOL BOTTOM
+23D0          ; Math # So       VERTICAL LINE EXTENSION
 25B7          ; Math # Sm       WHITE RIGHT-POINTING TRIANGLE
 25C1          ; Math # Sm       WHITE LEFT-POINTING TRIANGLE
 25F8..25FF    ; Math # Sm   [8] UPPER LEFT TRIANGLE..LOWER RIGHT TRIANGLE
 266F          ; Math # Sm       MUSIC SHARP SIGN
 27D0..27E5    ; Math # Sm  [22] WHITE DIAMOND WITH CENTRED DOT..WHITE SQUARE WITH RIGHTWARDS TICK
+27E6          ; Math # Ps       MATHEMATICAL LEFT WHITE SQUARE BRACKET
+27E7          ; Math # Pe       MATHEMATICAL RIGHT WHITE SQUARE BRACKET
+27E8          ; Math # Ps       MATHEMATICAL LEFT ANGLE BRACKET
+27E9          ; Math # Pe       MATHEMATICAL RIGHT ANGLE BRACKET
+27EA          ; Math # Ps       MATHEMATICAL LEFT DOUBLE ANGLE BRACKET
+27EB          ; Math # Pe       MATHEMATICAL RIGHT DOUBLE ANGLE BRACKET
 27F0..27FF    ; Math # Sm  [16] UPWARDS QUADRUPLE ARROW..LONG RIGHTWARDS SQUIGGLE ARROW
 2900..2982    ; Math # Sm [131] RIGHTWARDS TWO-HEADED ARROW WITH VERTICAL STROKE..Z NOTATION TYPE COLON
+2983          ; Math # Ps       LEFT WHITE CURLY BRACKET
+2984          ; Math # Pe       RIGHT WHITE CURLY BRACKET
+2985          ; Math # Ps       LEFT WHITE PARENTHESIS
+2986          ; Math # Pe       RIGHT WHITE PARENTHESIS
+2987          ; Math # Ps       Z NOTATION LEFT IMAGE BRACKET
+2988          ; Math # Pe       Z NOTATION RIGHT IMAGE BRACKET
+2989          ; Math # Ps       Z NOTATION LEFT BINDING BRACKET
+298A          ; Math # Pe       Z NOTATION RIGHT BINDING BRACKET
+298B          ; Math # Ps       LEFT SQUARE BRACKET WITH UNDERBAR
+298C          ; Math # Pe       RIGHT SQUARE BRACKET WITH UNDERBAR
+298D          ; Math # Ps       LEFT SQUARE BRACKET WITH TICK IN TOP CORNER
+298E          ; Math # Pe       RIGHT SQUARE BRACKET WITH TICK IN BOTTOM CORNER
+298F          ; Math # Ps       LEFT SQUARE BRACKET WITH TICK IN BOTTOM CORNER
+2990          ; Math # Pe       RIGHT SQUARE BRACKET WITH TICK IN TOP CORNER
+2991          ; Math # Ps       LEFT ANGLE BRACKET WITH DOT
+2992          ; Math # Pe       RIGHT ANGLE BRACKET WITH DOT
+2993          ; Math # Ps       LEFT ARC LESS-THAN BRACKET
+2994          ; Math # Pe       RIGHT ARC GREATER-THAN BRACKET
+2995          ; Math # Ps       DOUBLE LEFT ARC GREATER-THAN BRACKET
+2996          ; Math # Pe       DOUBLE RIGHT ARC LESS-THAN BRACKET
+2997          ; Math # Ps       LEFT BLACK TORTOISE SHELL BRACKET
+2998          ; Math # Pe       RIGHT BLACK TORTOISE SHELL BRACKET
 2999..29D7    ; Math # Sm  [63] DOTTED FENCE..BLACK HOURGLASS
+29D8          ; Math # Ps       LEFT WIGGLY FENCE
+29D9          ; Math # Pe       RIGHT WIGGLY FENCE
+29DA          ; Math # Ps       LEFT DOUBLE WIGGLY FENCE
+29DB          ; Math # Pe       RIGHT DOUBLE WIGGLY FENCE
 29DC..29FB    ; Math # Sm  [32] INCOMPLETE INFINITY..TRIPLE PLUS
+29FC          ; Math # Ps       LEFT-POINTING CURVED ANGLE BRACKET
+29FD          ; Math # Pe       RIGHT-POINTING CURVED ANGLE BRACKET
 29FE..2AFF    ; Math # Sm [258] TINY..N-ARY WHITE VERTICAL BAR
 FB29          ; Math # Sm       HEBREW LETTER ALTERNATIVE PLUS SIGN
-FE35          ; Math # Ps       PRESENTATION FORM FOR VERTICAL LEFT PARENTHESIS
-FE36          ; Math # Pe       PRESENTATION FORM FOR VERTICAL RIGHT PARENTHESIS
-FE37          ; Math # Ps       PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET
-FE38          ; Math # Pe       PRESENTATION FORM FOR VERTICAL RIGHT CURLY BRACKET
-FE47          ; Math # Ps       PRESENTATION FORM FOR VERTICAL LEFT SQUARE BRACKET
-FE48          ; Math # Pe       PRESENTATION FORM FOR VERTICAL RIGHT SQUARE BRACKET
-FE59          ; Math # Ps       SMALL LEFT PARENTHESIS
-FE5A          ; Math # Pe       SMALL RIGHT PARENTHESIS
-FE5B          ; Math # Ps       SMALL LEFT CURLY BRACKET
-FE5C          ; Math # Pe       SMALL RIGHT CURLY BRACKET
 FE61          ; Math # Po       SMALL ASTERISK
 FE62          ; Math # Sm       SMALL PLUS SIGN
 FE63          ; Math # Pd       SMALL HYPHEN-MINUS
 FE64..FE66    ; Math # Sm   [3] SMALL LESS-THAN SIGN..SMALL EQUALS SIGN
 FE68          ; Math # Po       SMALL REVERSE SOLIDUS
-FF08          ; Math # Ps       FULLWIDTH LEFT PARENTHESIS
-FF09          ; Math # Pe       FULLWIDTH RIGHT PARENTHESIS
-FF0A          ; Math # Po       FULLWIDTH ASTERISK
 FF0B          ; Math # Sm       FULLWIDTH PLUS SIGN
-FF0D          ; Math # Pd       FULLWIDTH HYPHEN-MINUS
-FF0F          ; Math # Po       FULLWIDTH SOLIDUS
 FF1C..FF1E    ; Math # Sm   [3] FULLWIDTH LESS-THAN SIGN..FULLWIDTH GREATER-THAN SIGN
-FF3B          ; Math # Ps       FULLWIDTH LEFT SQUARE BRACKET
 FF3C          ; Math # Po       FULLWIDTH REVERSE SOLIDUS
-FF3D          ; Math # Pe       FULLWIDTH RIGHT SQUARE BRACKET
 FF3E          ; Math # Sk       FULLWIDTH CIRCUMFLEX ACCENT
-FF5B          ; Math # Ps       FULLWIDTH LEFT CURLY BRACKET
 FF5C          ; Math # Sm       FULLWIDTH VERTICAL LINE
-FF5D          ; Math # Pe       FULLWIDTH RIGHT CURLY BRACKET
 FF5E          ; Math # Sm       FULLWIDTH TILDE
 FFE2          ; Math # Sm       FULLWIDTH NOT SIGN
 FFE9..FFEC    ; Math # Sm   [4] HALFWIDTH LEFTWARDS ARROW..HALFWIDTH DOWNWARDS ARROW
@@ -156,7 +172,7 @@ FFE9..FFEC    ; Math # Sm   [4] HALFWIDTH LEFTWARDS ARROW..HALFWIDTH DOWNWARDS A
 1D7C4..1D7C9  ; Math # L&   [6] MATHEMATICAL SANS-SERIF BOLD ITALIC EPSILON SYMBOL..MATHEMATICAL SANS-SERIF BOLD ITALIC PI SYMBOL
 1D7CE..1D7FF  ; Math # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 
-# Total code points: 1968
+# Total code points: 1998
 
 # ================================================
 
@@ -3396,12 +3412,12 @@ E0100..E01EF  ; XID_Continue # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTO
 # ================================================
 
 # Derived Property: Default_Ignorable_Code_Point
-#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space
+#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs + Noncharacters - White_Space - Annotation_characters
 
-0000..0008    ; Default_Ignorable_Code_Point # Cc   [9] <control>..<control>
-000E..001F    ; Default_Ignorable_Code_Point # Cc  [18] <control>..<control>
-007F..0084    ; Default_Ignorable_Code_Point # Cc   [6] <control>..<control>
-0086..009F    ; Default_Ignorable_Code_Point # Cc  [26] <control>..<control>
+0000..0008    ; Default_Ignorable_Code_Point # Cc   [9] <control-0000>..<control-0008>
+000E..001F    ; Default_Ignorable_Code_Point # Cc  [18] <control-000E>..<control-001F>
+007F..0084    ; Default_Ignorable_Code_Point # Cc   [6] <control-007F>..<control-0084>
+0086..009F    ; Default_Ignorable_Code_Point # Cc  [26] <control-0086>..<control-009F>
 00AD          ; Default_Ignorable_Code_Point # Cf       SOFT HYPHEN
 034F          ; Default_Ignorable_Code_Point # Mn       COMBINING GRAPHEME JOINER
 0600..0603    ; Default_Ignorable_Code_Point # Cf   [4] ARABIC NUMBER SIGN..ARABIC SIGN SAFHA
@@ -3410,29 +3426,44 @@ E0100..E01EF  ; XID_Continue # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTO
 115F..1160    ; Default_Ignorable_Code_Point # Lo   [2] HANGUL CHOSEONG FILLER..HANGUL JUNGSEONG FILLER
 17B4..17B5    ; Default_Ignorable_Code_Point # Cf   [2] KHMER VOWEL INHERENT AQ..KHMER VOWEL INHERENT AA
 180B..180D    ; Default_Ignorable_Code_Point # Mn   [3] MONGOLIAN FREE VARIATION SELECTOR ONE..MONGOLIAN FREE VARIATION SELECTOR THREE
-200B          ; Default_Ignorable_Code_Point # Zs       ZERO WIDTH SPACE
-200C..200F    ; Default_Ignorable_Code_Point # Cf   [4] ZERO WIDTH NON-JOINER..RIGHT-TO-LEFT MARK
+200B..200F    ; Default_Ignorable_Code_Point # Cf   [5] ZERO WIDTH SPACE..RIGHT-TO-LEFT MARK
 202A..202E    ; Default_Ignorable_Code_Point # Cf   [5] LEFT-TO-RIGHT EMBEDDING..RIGHT-TO-LEFT OVERRIDE
 2060..2063    ; Default_Ignorable_Code_Point # Cf   [4] WORD JOINER..INVISIBLE SEPARATOR
-2064..2069    ; Default_Ignorable_Code_Point # Cn   [6] 
+2064..2069    ; Default_Ignorable_Code_Point # Cn   [6] <reserved-2064>..<reserved-2069>
 206A..206F    ; Default_Ignorable_Code_Point # Cf   [6] INHIBIT SYMMETRIC SWAPPING..NOMINAL DIGIT SHAPES
 3164          ; Default_Ignorable_Code_Point # Lo       HANGUL FILLER
-D800..DFFF    ; Default_Ignorable_Code_Point # Cs [2048] 
+D800..DFFF    ; Default_Ignorable_Code_Point # Cs [2048] <surrogate-D800>..<surrogate-DFFF>
+FDD0..FDEF    ; Default_Ignorable_Code_Point # Cn  [32] <noncharacter-FDD0>..<noncharacter-FDEF>
 FE00..FE0F    ; Default_Ignorable_Code_Point # Mn  [16] VARIATION SELECTOR-1..VARIATION SELECTOR-16
 FEFF          ; Default_Ignorable_Code_Point # Cf       ZERO WIDTH NO-BREAK SPACE
 FFA0          ; Default_Ignorable_Code_Point # Lo       HALFWIDTH HANGUL FILLER
-FFF0..FFF8    ; Default_Ignorable_Code_Point # Cn   [9] 
-FFF9..FFFB    ; Default_Ignorable_Code_Point # Cf   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATION TERMINATOR
+FFF0..FFF8    ; Default_Ignorable_Code_Point # Cn   [9] <reserved-FFF0>..<reserved-FFF8>
+FFFE..FFFF    ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-FFFE>..<noncharacter-FFFF>
 1D173..1D17A  ; Default_Ignorable_Code_Point # Cf   [8] MUSICAL SYMBOL BEGIN BEAM..MUSICAL SYMBOL END PHRASE
-E0000         ; Default_Ignorable_Code_Point # Cn       
+1FFFE..1FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-1FFFE>..<noncharacter-1FFFF>
+2FFFE..2FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-2FFFE>..<noncharacter-2FFFF>
+3FFFE..3FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-3FFFE>..<noncharacter-3FFFF>
+4FFFE..4FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-4FFFE>..<noncharacter-4FFFF>
+5FFFE..5FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-5FFFE>..<noncharacter-5FFFF>
+6FFFE..6FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-6FFFE>..<noncharacter-6FFFF>
+7FFFE..7FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-7FFFE>..<noncharacter-7FFFF>
+8FFFE..8FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-8FFFE>..<noncharacter-8FFFF>
+9FFFE..9FFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-9FFFE>..<noncharacter-9FFFF>
+AFFFE..AFFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-AFFFE>..<noncharacter-AFFFF>
+BFFFE..BFFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-BFFFE>..<noncharacter-BFFFF>
+CFFFE..CFFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-CFFFE>..<noncharacter-CFFFF>
+DFFFE..E0000  ; Default_Ignorable_Code_Point # Cn   [3] <noncharacter-DFFFE>..<reserved-E0000>
 E0001         ; Default_Ignorable_Code_Point # Cf       LANGUAGE TAG
-E0002..E001F  ; Default_Ignorable_Code_Point # Cn  [30] 
+E0002..E001F  ; Default_Ignorable_Code_Point # Cn  [30] <reserved-E0002>..<reserved-E001F>
 E0020..E007F  ; Default_Ignorable_Code_Point # Cf  [96] TAG SPACE..CANCEL TAG
-E0080..E00FF  ; Default_Ignorable_Code_Point # Cn [128] 
+E0080..E00FF  ; Default_Ignorable_Code_Point # Cn [128] <reserved-E0080>..<reserved-E00FF>
 E0100..E01EF  ; Default_Ignorable_Code_Point # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
-E01F0..E0FFF  ; Default_Ignorable_Code_Point # Cn [3600] 
+E01F0..E0FFF  ; Default_Ignorable_Code_Point # Cn [3600] <reserved-E01F0>..<reserved-E0FFF>
+EFFFE..EFFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-EFFFE>..<noncharacter-EFFFF>
+FFFFE..FFFFF  ; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-FFFFE>..<noncharacter-FFFFF>
+10FFFE..10FFFF; Default_Ignorable_Code_Point # Cn   [2] <noncharacter-10FFFE>..<noncharacter-10FFFF>
 
-# Total code points: 6283
+# Total code points: 6346
 
 # ================================================
 
@@ -3555,6 +3586,7 @@ E01F0..E0FFF  ; Default_Ignorable_Code_Point # Cn [3600]
 1927..1928    ; Grapheme_Extend # Mn   [2] LIMBU VOWEL SIGN E..LIMBU VOWEL SIGN O
 1932          ; Grapheme_Extend # Mn       LIMBU SMALL LETTER ANUSVARA
 1939..193B    ; Grapheme_Extend # Mn   [3] LIMBU SIGN MUKPHRENG..LIMBU SIGN SA-I
+200C..200D    ; Grapheme_Extend # Cf   [2] ZERO WIDTH NON-JOINER..ZERO WIDTH JOINER
 20D0..20DC    ; Grapheme_Extend # Mn  [13] COMBINING LEFT HARPOON ABOVE..COMBINING FOUR DOTS ABOVE
 20DD..20E0    ; Grapheme_Extend # Me   [4] COMBINING ENCLOSING CIRCLE..COMBINING ENCLOSING CIRCLE BACKSLASH
 20E1          ; Grapheme_Extend # Mn       COMBINING LEFT RIGHT ARROW ABOVE
@@ -3573,7 +3605,7 @@ FE20..FE23    ; Grapheme_Extend # Mn   [4] COMBINING LIGATURE LEFT HALF..COMBINI
 1D1AA..1D1AD  ; Grapheme_Extend # Mn   [4] MUSICAL SYMBOL COMBINING DOWN BOW..MUSICAL SYMBOL COMBINING SNAP PIZZICATO
 E0100..E01EF  ; Grapheme_Extend # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 
-# Total code points: 818
+# Total code points: 820
 
 # ================================================
 
@@ -4016,7 +4048,7 @@ E0100..E01EF  ; Grapheme_Extend # Mn [240] VARIATION SELECTOR-17..VARIATION SELE
 1FF2..1FF4    ; Grapheme_Base # L&   [3] GREEK SMALL LETTER OMEGA WITH VARIA AND YPOGEGRAMMENI..GREEK SMALL LETTER OMEGA WITH OXIA AND YPOGEGRAMMENI
 1FF6..1FFC    ; Grapheme_Base # L&   [7] GREEK SMALL LETTER OMEGA WITH PERISPOMENI..GREEK CAPITAL LETTER OMEGA WITH PROSGEGRAMMENI
 1FFD..1FFE    ; Grapheme_Base # Sk   [2] GREEK OXIA..GREEK DASIA
-2000..200B    ; Grapheme_Base # Zs  [12] EN QUAD..ZERO WIDTH SPACE
+2000..200A    ; Grapheme_Base # Zs  [11] EN QUAD..HAIR SPACE
 2010..2015    ; Grapheme_Base # Pd   [6] HYPHEN..HORIZONTAL BAR
 2016..2017    ; Grapheme_Base # Po   [2] DOUBLE VERTICAL LINE..DOUBLE LOW LINE
 2018          ; Grapheme_Base # Pi       LEFT SINGLE QUOTATION MARK
@@ -4478,5 +4510,4 @@ FFFC..FFFD    ; Grapheme_Base # So   [2] OBJECT REPLACEMENT CHARACTER..REPLACEME
 20000..2A6D6  ; Grapheme_Base # Lo [42711] CJK UNIFIED IDEOGRAPH-20000..CJK UNIFIED IDEOGRAPH-2A6D6
 2F800..2FA1D  ; Grapheme_Base # Lo [542] CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
 
-# Total code points: 95425
-
+# Total code points: 95424

@@ -1,29 +1,58 @@
-# DerivedAge-4.0.0.txt
-# Date: 2003-02-20,17:14:45 GMT [MD]
+# DerivedAge-4.0.1.txt
+# Date: 2004-03-02, 02:41:24 GMT [MD]
+#
+# Unicode Character Database
+# Copyright (c) 1991-2004 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
+# For documentation, see UCD.html
 #
 # Unicode Character Database: Derived Property Data
-# This file shows when various code points were designated in Unicode
+# This file shows when various code points were first assigned in Unicode.
+#
+# Caution: When using the Age *property*, all assigned code points
+# in each version are included, not just the newly assigned code points.
+# For more information, see http://www.unicode.org/reports/tr18/
+#
 # Notes:
-# - The term 'designated' means that a previously reserved code point was specified
-#   to be a noncharacter or surrogate, or assigned as a character,
-#   control or format code.
+#
+# - The term 'assigned' means that a previously reserved code point was assigned
+#   to be a character (graphic, format, control, or private-use); 
+#   a noncharacter code point; or a surrogate code point.
+#   For more information, see The Unicode Standard Section 2.4
+#
 # - Versions are only tracked from 1.1 onwards, since version 1.0
 #   predated changes required by the ISO 10646 merger.
+#
 # - The Hangul Syllables that were removed from 2.0 are not included in the 1.1 listing.
+#
 # - The supplementary private use code points and the non-character code points
-#   were designated in version 2.0, but not specifically listed in the UCD
+#   were assigned in version 2.0, but not specifically listed in the UCD
 #   until versions 3.0 and 3.1 respectively.
+#
+# - Contiguous ranges are broken into separate lines where they would cross code point
+#   types: graphic, format, control, private-use, surrogate, noncharacter
 #
 # For details on the contents of each version, see
 #   http://www.unicode.org/versions/enumeratedversions.html.
+
 # ================================================
 
-# Designated as of 1.1 [excluding removed Hangul Syllables]
+# Property:	Age
 
-0000..001F    ; 1.1 #  [32] <control>..<control>
+#  All code points not explicitly listed for Age
+#  have the value unassigned.
+
+# ================================================
+
+# Assigned as of Unicode 1.1.0 (June, 1993)
+# [excluding removed Hangul Syllables]
+
+0000..001F    ; 1.1 #  [32] <control-0000>..<control-001F>
 0020..007E    ; 1.1 #  [95] SPACE..TILDE
-007F..009F    ; 1.1 #  [33] <control>..<control>
-00A0..01F5    ; 1.1 # [342] NO-BREAK SPACE..LATIN SMALL LETTER G WITH ACUTE
+007F..009F    ; 1.1 #  [33] <control-007F>..<control-009F>
+00A0..00AC    ; 1.1 #  [13] NO-BREAK SPACE..NOT SIGN
+00AD          ; 1.1 #       SOFT HYPHEN
+00AE..01F5    ; 1.1 # [328] REGISTERED SIGN..LATIN SMALL LETTER G WITH ACUTE
 01FA..0217    ; 1.1 #  [30] LATIN CAPITAL LETTER A WITH RING ABOVE AND ACUTE..LATIN SMALL LETTER U WITH INVERTED BREVE
 0250..02A8    ; 1.1 #  [89] LATIN SMALL LETTER TURNED A..LATIN SMALL LETTER TC DIGRAPH WITH CURL
 02B0..02DE    ; 1.1 #  [47] MODIFIER LETTER SMALL H..MODIFIER LETTER RHOTIC HOOK
@@ -70,7 +99,9 @@
 0670..06B7    ; 1.1 #  [72] ARABIC LETTER SUPERSCRIPT ALEF..ARABIC LETTER LAM WITH THREE DOTS ABOVE
 06BA..06BE    ; 1.1 #   [5] ARABIC LETTER NOON GHUNNA..ARABIC LETTER HEH DOACHASHMEE
 06C0..06CE    ; 1.1 #  [15] ARABIC LETTER HEH WITH YEH ABOVE..ARABIC LETTER YEH WITH SMALL V
-06D0..06ED    ; 1.1 #  [30] ARABIC LETTER E..ARABIC SMALL LOW MEEM
+06D0..06DC    ; 1.1 #  [13] ARABIC LETTER E..ARABIC SMALL HIGH SEEN
+06DD          ; 1.1 #       ARABIC END OF AYAH
+06DE..06ED    ; 1.1 #  [16] ARABIC START OF RUB EL HIZB..ARABIC SMALL LOW MEEM
 06F0..06F9    ; 1.1 #  [10] EXTENDED ARABIC-INDIC DIGIT ZERO..EXTENDED ARABIC-INDIC DIGIT NINE
 0901..0903    ; 1.1 #   [3] DEVANAGARI SIGN CANDRABINDU..DEVANAGARI SIGN VISARGA
 0905..0939    ; 1.1 #  [53] DEVANAGARI LETTER A..DEVANAGARI LETTER HA
@@ -231,10 +262,10 @@
 1FDD..1FEF    ; 1.1 #  [19] GREEK DASIA AND VARIA..GREEK VARIA
 1FF2..1FF4    ; 1.1 #   [3] GREEK SMALL LETTER OMEGA WITH VARIA AND YPOGEGRAMMENI..GREEK SMALL LETTER OMEGA WITH OXIA AND YPOGEGRAMMENI
 1FF6..1FFE    ; 1.1 #   [9] GREEK SMALL LETTER OMEGA WITH PERISPOMENI..GREEK DASIA
-2000..200B    ; 1.1 #  [12] EN QUAD..ZERO WIDTH SPACE
-200C..200F    ; 1.1 #   [4] ZERO WIDTH NON-JOINER..RIGHT-TO-LEFT MARK
-2010..2029    ; 1.1 #  [26] HYPHEN..PARAGRAPH SEPARATOR
-202A..202E    ; 1.1 #   [5] LEFT-TO-RIGHT EMBEDDING..RIGHT-TO-LEFT OVERRIDE
+2000..200A    ; 1.1 #  [11] EN QUAD..HAIR SPACE
+200B..200F    ; 1.1 #   [5] ZERO WIDTH SPACE..RIGHT-TO-LEFT MARK
+2010..2027    ; 1.1 #  [24] HYPHEN..HYPHENATION POINT
+2028..202E    ; 1.1 #   [7] LINE SEPARATOR..RIGHT-TO-LEFT OVERRIDE
 2030..2046    ; 1.1 #  [23] PER MILLE SIGN..RIGHT SQUARE BRACKET WITH QUILL
 206A..206F    ; 1.1 #   [6] INHIBIT SYMMETRIC SWAPPING..NOMINAL DIGIT SHAPES
 2070          ; 1.1 #       SUPERSCRIPT ZERO
@@ -284,7 +315,7 @@
 337B..33DD    ; 1.1 #  [99] SQUARE ERA NAME HEISEI..SQUARE WB
 33E0..33FE    ; 1.1 #  [31] IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY ONE..IDEOGRAPHIC TELEGRAPH SYMBOL FOR DAY THIRTY-ONE
 4E00..9FA5    ; 1.1 # [20902] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FA5
-E000..F8FF    ; 1.1 # [6400] <private use area-E000>..<private use area-F8FF>
+E000..F8FF    ; 1.1 # [6400] <private-use-E000>..<private-use-F8FF>
 F900..FA2D    ; 1.1 # [302] CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA2D
 FB00..FB06    ; 1.1 #   [7] LATIN SMALL LIGATURE FF..LATIN SMALL LIGATURE ST
 FB13..FB17    ; 1.1 #   [5] ARMENIAN SMALL LIGATURE MEN NOW..ARMENIAN SMALL LIGATURE MEN XEH
@@ -322,7 +353,7 @@ FFFE..FFFF    ; 1.1 #   [2] <noncharacter-FFFE>..<noncharacter-FFFF>
 
 # ================================================
 
-# Differences between 2.0 and 1.1
+# Newly assigned in Unicode 2.0.0 (July, 1996)
 
 0591..05A1    ; 2.0 #  [17] HEBREW ACCENT ETNAHTA..HEBREW ACCENT PAZER
 05A3..05AF    ; 2.0 #  [13] HEBREW ACCENT MUNAH..HEBREW MARK MASORA CIRCLE
@@ -353,16 +384,16 @@ BFFFE..BFFFF  ; 2.0 #   [2] <noncharacter-BFFFE>..<noncharacter-BFFFF>
 CFFFE..CFFFF  ; 2.0 #   [2] <noncharacter-CFFFE>..<noncharacter-CFFFF>
 DFFFE..DFFFF  ; 2.0 #   [2] <noncharacter-DFFFE>..<noncharacter-DFFFF>
 EFFFE..EFFFF  ; 2.0 #   [2] <noncharacter-EFFFE>..<noncharacter-EFFFF>
-F0000..FFFFD  ; 2.0 # [65534] <reserved-F0000>..<reserved-FFFFD>
+F0000..FFFFD  ; 2.0 # [65534] <private-use-F0000>..<private-use-FFFFD>
 FFFFE..FFFFF  ; 2.0 #   [2] <noncharacter-FFFFE>..<noncharacter-FFFFF>
-100000..10FFFD; 2.0 # [65534] <reserved-100000>..<reserved-10FFFD>
+100000..10FFFD; 2.0 # [65534] <private-use-100000>..<private-use-10FFFD>
 10FFFE..10FFFF; 2.0 #   [2] <noncharacter-10FFFE>..<noncharacter-10FFFF>
 
 # Total code points: 144521
 
 # ================================================
 
-# Differences between 2.1 and 2.0
+# Newly assigned in Unicode 2.1.2 (May, 1998)
 
 20AC          ; 2.1 #       EURO SIGN
 FFFC          ; 2.1 #       OBJECT REPLACEMENT CHARACTER
@@ -371,7 +402,7 @@ FFFC          ; 2.1 #       OBJECT REPLACEMENT CHARACTER
 
 # ================================================
 
-# Differences between 3.0 and 2.1
+# Newly assigned in Unicode 3.0.0 (September, 1999)
 
 01F6..01F9    ; 3.0 #   [4] LATIN CAPITAL LETTER HWAIR..LATIN SMALL LETTER N WITH GRAVE
 0218..021F    ; 3.0 #   [8] LATIN CAPITAL LETTER S WITH COMMA BELOW..LATIN SMALL LETTER H WITH CARON
@@ -458,10 +489,11 @@ FFFC          ; 2.1 #       OBJECT REPLACEMENT CHARACTER
 1401..1676    ; 3.0 # [630] CANADIAN SYLLABICS E..CANADIAN SYLLABICS NNGAA
 1680..169C    ; 3.0 #  [29] OGHAM SPACE MARK..OGHAM REVERSED FEATHER MARK
 16A0..16F0    ; 3.0 #  [81] RUNIC LETTER FEHU FEOH FE F..RUNIC BELGTHOR SYMBOL
-1780..17DC    ; 3.0 #  [93] KHMER LETTER KA..KHMER SIGN AVAKRAHASANYA
+1780..17B3    ; 3.0 #  [52] KHMER LETTER KA..KHMER INDEPENDENT VOWEL QAU
+17B4..17B5    ; 3.0 #   [2] KHMER VOWEL INHERENT AQ..KHMER VOWEL INHERENT AA
+17B6..17DC    ; 3.0 #  [39] KHMER VOWEL SIGN AA..KHMER SIGN AVAKRAHASANYA
 17E0..17E9    ; 3.0 #  [10] KHMER DIGIT ZERO..KHMER DIGIT NINE
-1800..180A    ; 3.0 #  [11] MONGOLIAN BIRGA..MONGOLIAN NIRUGU
-180B..180E    ; 3.0 #   [4] MONGOLIAN FREE VARIATION SELECTOR ONE..MONGOLIAN VOWEL SEPARATOR
+1800..180E    ; 3.0 #  [15] MONGOLIAN BIRGA..MONGOLIAN VOWEL SEPARATOR
 1810..1819    ; 3.0 #  [10] MONGOLIAN DIGIT ZERO..MONGOLIAN DIGIT NINE
 1820..1877    ; 3.0 #  [88] MONGOLIAN LETTER A..MONGOLIAN LETTER MANCHU ZHA
 1880..18A9    ; 3.0 #  [42] MONGOLIAN LETTER ALI GALI ANUSVARA ONE..MONGOLIAN LETTER ALI GALI DAGALGA
@@ -501,7 +533,7 @@ FFF9..FFFB    ; 3.0 #   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATIO
 
 # ================================================
 
-# Differences between 3.1 and 3.0
+# Newly assigned in Unicode 3.1.0 (March, 2001)
 
 03F4..03F5    ; 3.1 #   [2] GREEK CAPITAL THETA SYMBOL..GREEK LUNATE EPSILON SYMBOL
 FDD0..FDEF    ; 3.1 #  [32] <noncharacter-FDD0>..<noncharacter-FDEF>
@@ -546,7 +578,7 @@ E0020..E007F  ; 3.1 #  [96] TAG SPACE..CANCEL TAG
 
 # ================================================
 
-# Differences between 3.2 and 3.1
+# Newly assigned in Unicode 3.2.0 (March, 2002)
 
 0220          ; 3.2 #       LATIN CAPITAL LETTER N WITH LONG RIGHT LEG
 034F          ; 3.2 #       COMBINING GRAPHEME JOINER
@@ -613,7 +645,7 @@ FF5F..FF60    ; 3.2 #   [2] FULLWIDTH LEFT WHITE PARENTHESIS..FULLWIDTH RIGHT WH
 
 # ================================================
 
-# Differences between 4.0 and 3.2
+# Newly assigned in Unicode 4.0.0 (April, 2003)
 
 0221          ; 4.0 #       LATIN SMALL LETTER D WITH CURL
 0234..0236    ; 4.0 #   [3] LATIN SMALL LETTER L WITH CURL..LATIN SMALL LETTER T WITH CURL
@@ -694,4 +726,3 @@ FE47..FE48    ; 4.0 #   [2] PRESENTATION FORM FOR VERTICAL LEFT SQUARE BRACKET..
 E0100..E01EF  ; 4.0 # [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 
 # Total code points: 1226
-

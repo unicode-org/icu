@@ -1,20 +1,21 @@
-# DerivedJoiningType-4.0.0.txt
-# Date: 2003-04-05, 02:42:00 GMT [MD]
+# DerivedJoiningType-4.0.1.txt
+# Date: 2004-03-02, 02:42:08 GMT [MD]
 #
-# Unicode Character Database: Derived Property Data
-# Generated algorithmically from the Unicode Character Database
+# Unicode Character Database
+# Copyright (c) 1991-2004 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints may be omitted
-#       if they have default property values.
-# ================================================
-
 
 # ================================================
-# Joining Type (listing ArabicShaping.txt, field 2).
+
 #	Type T is derived, as described in ArabicShaping.txt
-#	All code points not explicitly listed in this file have the property
-#	value:   U.
+
+#  All code points not explicitly listed for Joining_Type
+#  have the value Non_Joining (U).
+
 # ================================================
+
+# Joining_Type=Join_Causing
 
 0640          ; C # Lm       ARABIC TATWEEL
 200D          ; C # Cf       ZERO WIDTH JOINER
@@ -22,6 +23,8 @@
 # Total code points: 2
 
 # ================================================
+
+# Joining_Type=Dual_Joining
 
 0626          ; D # Lo       ARABIC LETTER YEH WITH HAMZA ABOVE
 0628          ; D # Lo       ARABIC LETTER BEH
@@ -49,6 +52,8 @@
 # Total code points: 111
 
 # ================================================
+
+# Joining_Type=Right_Joining
 
 0622..0625    ; R # Lo   [4] ARABIC LETTER ALEF WITH MADDA ABOVE..ARABIC LETTER ALEF WITH HAMZA BELOW
 0627          ; R # Lo       ARABIC LETTER ALEF
@@ -78,11 +83,7 @@
 
 # ================================================
 
-# No values for L
-
-# Total code points: 0
-
-# ================================================
+# Joining_Type=Transparent
 
 00AD          ; T # Cf       SOFT HYPHEN
 0300..0357    ; T # Mn  [88] COMBINING GRAVE ACCENT..COMBINING RIGHT HALF RING ABOVE
@@ -187,6 +188,7 @@
 1927..1928    ; T # Mn   [2] LIMBU VOWEL SIGN E..LIMBU VOWEL SIGN O
 1932          ; T # Mn       LIMBU SMALL LETTER ANUSVARA
 1939..193B    ; T # Mn   [3] LIMBU SIGN MUKPHRENG..LIMBU SIGN SA-I
+200B          ; T # Cf       ZERO WIDTH SPACE
 200E..200F    ; T # Cf   [2] LEFT-TO-RIGHT MARK..RIGHT-TO-LEFT MARK
 202A..202E    ; T # Cf   [5] LEFT-TO-RIGHT EMBEDDING..RIGHT-TO-LEFT OVERRIDE
 2060..2063    ; T # Cf   [4] WORD JOINER..INVISIBLE SEPARATOR
@@ -210,5 +212,4 @@ E0001         ; T # Cf       LANGUAGE TAG
 E0020..E007F  ; T # Cf  [96] TAG SPACE..CANCEL TAG
 E0100..E01EF  ; T # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 
-# Total code points: 922
-
+# Total code points: 923

@@ -1,19 +1,21 @@
-# DerivedBidiClass-4.0.0.txt
-# Date: 2003-03-20, 20:08:10 GMT [MD]
+# DerivedBidiClass-4.0.1.txt
+# Date: 2004-03-11, 18:33:24 GMT [MD]
 #
-# Unicode Character Database: Derived Property Data
-# Generated algorithmically from the Unicode Character Database
+# Unicode Character Database
+# Copyright (c) 1991-2004 Unicode, Inc.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints may be omitted
-#       if they have default property values.
-# ================================================
-
 
 # ================================================
+
 # Bidi Class (listing UnicodeData.txt, field 4: see UCD.html)
-#	All code points not explicitly listed in this file have the property
-#	value:   L.
+
+#  All code points not explicitly listed for Bidi_Class
+#  have the value Left_To_Right (L).
+
 # ================================================
+
+# Bidi_Class=Left_To_Right
 
 0041..005A    ; L # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z
 0061..007A    ; L # L&  [26] LATIN SMALL LETTER A..LATIN SMALL LETTER Z
@@ -361,6 +363,7 @@
 2336..237A    ; L # So  [69] APL FUNCTIONAL SYMBOL I-BEAM..APL FUNCTIONAL SYMBOL ALPHA
 2395          ; L # So       APL FUNCTIONAL SYMBOL QUAD
 249C..24E9    ; L # So  [78] PARENTHESIZED LATIN SMALL LETTER A..CIRCLED LATIN SMALL LETTER Z
+2800..28FF    ; L # So [256] BRAILLE PATTERN BLANK..BRAILLE PATTERN DOTS-12345678
 3005          ; L # Lm       IDEOGRAPHIC ITERATION MARK
 3006          ; L # Lo       IDEOGRAPHIC CLOSING MARK
 3007          ; L # Nl       IDEOGRAPHIC NUMBER ZERO
@@ -398,8 +401,7 @@
 4E00..9FA5    ; L # Lo [20902] CJK UNIFIED IDEOGRAPH-4E00..CJK UNIFIED IDEOGRAPH-9FA5
 A000..A48C    ; L # Lo [1165] YI SYLLABLE IT..YI SYLLABLE YYR
 AC00..D7A3    ; L # Lo [11172] HANGUL SYLLABLE GA..HANGUL SYLLABLE HIH
-D800..DFFF    ; L # Cs [2048] 
-E000..F8FF    ; L # Co [6400] 
+E000..F8FF    ; L # Co [6400] <private-use-E000>..<private-use-F8FF>
 F900..FA2D    ; L # Lo [302] CJK COMPATIBILITY IDEOGRAPH-F900..CJK COMPATIBILITY IDEOGRAPH-FA2D
 FA30..FA6A    ; L # Lo  [59] CJK COMPATIBILITY IDEOGRAPH-FA30..CJK COMPATIBILITY IDEOGRAPH-FA6A
 FB00..FB06    ; L # L&   [7] LATIN SMALL LIGATURE FF..LATIN SMALL LIGATURE ST
@@ -486,56 +488,61 @@ FFDA..FFDC    ; L # Lo   [3] HALFWIDTH HANGUL LETTER EU..HALFWIDTH HANGUL LETTER
 1D7C4..1D7C9  ; L # L&   [6] MATHEMATICAL SANS-SERIF BOLD ITALIC EPSILON SYMBOL..MATHEMATICAL SANS-SERIF BOLD ITALIC PI SYMBOL
 20000..2A6D6  ; L # Lo [42711] CJK UNIFIED IDEOGRAPH-20000..CJK UNIFIED IDEOGRAPH-2A6D6
 2F800..2FA1D  ; L # Lo [542] CJK COMPATIBILITY IDEOGRAPH-2F800..CJK COMPATIBILITY IDEOGRAPH-2FA1D
-F0000..FFFFD  ; L # Co [65534] 
-100000..10FFFD; L # Co [65534] 
+F0000..FFFFD  ; L # Co [65534] <private-use-F0000>..<private-use-FFFFD>
+100000..10FFFD; L # Co [65534] <private-use-100000>..<private-use-10FFFD>
 
-# Total code points: 230579
+# The above property value applies to 873851 code points not listed here.
+# Total code points: 1102638
 
 # ================================================
 
-0590          ; R # Cn       
-05A2          ; R # Cn       
-05BA          ; R # Cn       
+# Bidi_Class=Right_To_Left
+
+0590          ; R # Cn       <reserved-0590>
+05A2          ; R # Cn       <reserved-05A2>
+05BA          ; R # Cn       <reserved-05BA>
 05BE          ; R # Po       HEBREW PUNCTUATION MAQAF
 05C0          ; R # Po       HEBREW PUNCTUATION PASEQ
 05C3          ; R # Po       HEBREW PUNCTUATION SOF PASUQ
-05C5..05CF    ; R # Cn  [11] 
+05C5..05CF    ; R # Cn  [11] <reserved-05C5>..<reserved-05CF>
 05D0..05EA    ; R # Lo  [27] HEBREW LETTER ALEF..HEBREW LETTER TAV
-05EB..05EF    ; R # Cn   [5] 
+05EB..05EF    ; R # Cn   [5] <reserved-05EB>..<reserved-05EF>
 05F0..05F2    ; R # Lo   [3] HEBREW LIGATURE YIDDISH DOUBLE VAV..HEBREW LIGATURE YIDDISH DOUBLE YOD
 05F3..05F4    ; R # Po   [2] HEBREW PUNCTUATION GERESH..HEBREW PUNCTUATION GERSHAYIM
-05F5..05FF    ; R # Cn  [11] 
-07C0..08FF    ; R # Cn [320] 
+05F5..05FF    ; R # Cn  [11] <reserved-05F5>..<reserved-05FF>
+07C0..08FF    ; R # Cn [320] <reserved-07C0>..<reserved-08FF>
 200F          ; R # Cf       RIGHT-TO-LEFT MARK
 FB1D          ; R # Lo       HEBREW LETTER YOD WITH HIRIQ
 FB1F..FB28    ; R # Lo  [10] HEBREW LIGATURE YIDDISH YOD YOD PATAH..HEBREW LETTER WIDE TAV
 FB2A..FB36    ; R # Lo  [13] HEBREW LETTER SHIN WITH SHIN DOT..HEBREW LETTER ZAYIN WITH DAGESH
-FB37          ; R # Cn       
+FB37          ; R # Cn       <reserved-FB37>
 FB38..FB3C    ; R # Lo   [5] HEBREW LETTER TET WITH DAGESH..HEBREW LETTER LAMED WITH DAGESH
-FB3D          ; R # Cn       
+FB3D          ; R # Cn       <reserved-FB3D>
 FB3E          ; R # Lo       HEBREW LETTER MEM WITH DAGESH
-FB3F          ; R # Cn       
+FB3F          ; R # Cn       <reserved-FB3F>
 FB40..FB41    ; R # Lo   [2] HEBREW LETTER NUN WITH DAGESH..HEBREW LETTER SAMEKH WITH DAGESH
-FB42          ; R # Cn       
+FB42          ; R # Cn       <reserved-FB42>
 FB43..FB44    ; R # Lo   [2] HEBREW LETTER FINAL PE WITH DAGESH..HEBREW LETTER PE WITH DAGESH
-FB45          ; R # Cn       
+FB45          ; R # Cn       <reserved-FB45>
 FB46..FB4F    ; R # Lo  [10] HEBREW LETTER TSADI WITH DAGESH..HEBREW LIGATURE ALEF LAMED
 10800..10805  ; R # Lo   [6] CYPRIOT SYLLABLE A..CYPRIOT SYLLABLE JA
-10806..10807  ; R # Cn   [2] 
+10806..10807  ; R # Cn   [2] <reserved-10806>..<reserved-10807>
 10808         ; R # Lo       CYPRIOT SYLLABLE JO
-10809         ; R # Cn       
+10809         ; R # Cn       <reserved-10809>
 1080A..10835  ; R # Lo  [44] CYPRIOT SYLLABLE KA..CYPRIOT SYLLABLE WO
-10836         ; R # Cn       
+10836         ; R # Cn       <reserved-10836>
 10837..10838  ; R # Lo   [2] CYPRIOT SYLLABLE XA..CYPRIOT SYLLABLE XE
-10839..1083B  ; R # Cn   [3] 
+10839..1083B  ; R # Cn   [3] <reserved-10839>..<reserved-1083B>
 1083C         ; R # Lo       CYPRIOT SYLLABLE ZA
-1083D..1083E  ; R # Cn   [2] 
+1083D..1083E  ; R # Cn   [2] <reserved-1083D>..<reserved-1083E>
 1083F         ; R # Lo       CYPRIOT SYLLABLE ZO
-10840..10FFF  ; R # Cn [1984] 
+10840..10FFF  ; R # Cn [1984] <reserved-10840>..<reserved-10FFF>
 
 # Total code points: 2483
 
 # ================================================
+
+# Bidi_Class=European_Number
 
 0030..0039    ; EN # Nd  [10] DIGIT ZERO..DIGIT NINE
 00B2..00B3    ; EN # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
@@ -544,27 +551,29 @@ FB46..FB4F    ; R # Lo  [10] HEBREW LETTER TSADI WITH DAGESH..HEBREW LIGATURE AL
 2070          ; EN # No       SUPERSCRIPT ZERO
 2074..2079    ; EN # No   [6] SUPERSCRIPT FOUR..SUPERSCRIPT NINE
 2080..2089    ; EN # No  [10] SUBSCRIPT ZERO..SUBSCRIPT NINE
-2460..249B    ; EN # No  [60] CIRCLED DIGIT ONE..NUMBER TWENTY FULL STOP
-24EA          ; EN # No       CIRCLED DIGIT ZERO
+2488..249B    ; EN # No  [20] DIGIT ONE FULL STOP..NUMBER TWENTY FULL STOP
 FF10..FF19    ; EN # Nd  [10] FULLWIDTH DIGIT ZERO..FULLWIDTH DIGIT NINE
 1D7CE..1D7FF  ; EN # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 
-# Total code points: 161
+# Total code points: 120
 
 # ================================================
 
-002F          ; ES # Po       SOLIDUS
+# Bidi_Class=European_Separator
+
+002B          ; ES # Sm       PLUS SIGN
+002D          ; ES # Pd       HYPHEN-MINUS
 FF0F          ; ES # Po       FULLWIDTH SOLIDUS
 
-# Total code points: 2
+# Total code points: 3
 
 # ================================================
+
+# Bidi_Class=European_Terminator
 
 0023          ; ET # Po       NUMBER SIGN
 0024          ; ET # Sc       DOLLAR SIGN
 0025          ; ET # Po       PERCENT SIGN
-002B          ; ET # Sm       PLUS SIGN
-002D          ; ET # Pd       HYPHEN-MINUS
 00A2..00A5    ; ET # Sc   [4] CENT SIGN..YEN SIGN
 00B0          ; ET # So       DEGREE SIGN
 00B1          ; ET # Sm       PLUS-MINUS SIGN
@@ -594,9 +603,11 @@ FF0D          ; ET # Pd       FULLWIDTH HYPHEN-MINUS
 FFE0..FFE1    ; ET # Sc   [2] FULLWIDTH CENT SIGN..FULLWIDTH POUND SIGN
 FFE5..FFE6    ; ET # Sc   [2] FULLWIDTH YEN SIGN..FULLWIDTH WON SIGN
 
-# Total code points: 63
+# Total code points: 61
 
 # ================================================
+
+# Bidi_Class=Arabic_Number
 
 0660..0669    ; AN # Nd  [10] ARABIC-INDIC DIGIT ZERO..ARABIC-INDIC DIGIT NINE
 066B..066C    ; AN # Po   [2] ARABIC DECIMAL SEPARATOR..ARABIC THOUSANDS SEPARATOR
@@ -605,11 +616,14 @@ FFE5..FFE6    ; ET # Sc   [2] FULLWIDTH YEN SIGN..FULLWIDTH WON SIGN
 
 # ================================================
 
+# Bidi_Class=Common_Separator
+
 002C          ; CS # Po       COMMA
-002E          ; CS # Po       FULL STOP
+002E..002F    ; CS # Po   [2] FULL STOP..SOLIDUS
 003A          ; CS # Po       COLON
 00A0          ; CS # Zs       NO-BREAK SPACE
 060C          ; CS # Po       ARABIC COMMA
+2044          ; CS # Sm       FRACTION SLASH
 FE50          ; CS # Po       SMALL COMMA
 FE52          ; CS # Po       SMALL FULL STOP
 FE55          ; CS # Po       SMALL COLON
@@ -617,29 +631,35 @@ FF0C          ; CS # Po       FULLWIDTH COMMA
 FF0E          ; CS # Po       FULLWIDTH FULL STOP
 FF1A          ; CS # Po       FULLWIDTH COLON
 
-# Total code points: 11
+# Total code points: 13
 
 # ================================================
 
-000A          ; B # Cc       <control>
-000D          ; B # Cc       <control>
-001C..001E    ; B # Cc   [3] <control>..<control>
-0085          ; B # Cc       <control>
+# Bidi_Class=Paragraph_Separator
+
+000A          ; B # Cc       <control-000A>
+000D          ; B # Cc       <control-000D>
+001C..001E    ; B # Cc   [3] <control-001C>..<control-001E>
+0085          ; B # Cc       <control-0085>
 2029          ; B # Zp       PARAGRAPH SEPARATOR
 
 # Total code points: 7
 
 # ================================================
 
-0009          ; S # Cc       <control>
-000B          ; S # Cc       <control>
-001F          ; S # Cc       <control>
+# Bidi_Class=Segment_Separator
+
+0009          ; S # Cc       <control-0009>
+000B          ; S # Cc       <control-000B>
+001F          ; S # Cc       <control-001F>
 
 # Total code points: 3
 
 # ================================================
 
-000C          ; WS # Cc       <control>
+# Bidi_Class=White_Space
+
+000C          ; WS # Cc       <control-000C>
 0020          ; WS # Zs       SPACE
 1680          ; WS # Zs       OGHAM SPACE MARK
 180E          ; WS # Zs       MONGOLIAN VOWEL SEPARATOR
@@ -652,6 +672,8 @@ FF1A          ; CS # Po       FULLWIDTH COLON
 # Total code points: 19
 
 # ================================================
+
+# Bidi_Class=Other_Neutral
 
 0021..0022    ; ON # Po   [2] EXCLAMATION MARK..QUOTATION MARK
 0026..0027    ; ON # Po   [2] AMPERSAND..APOSTROPHE
@@ -677,7 +699,6 @@ FF1A          ; CS # Po       FULLWIDTH COLON
 00A9          ; ON # So       COPYRIGHT SIGN
 00AB          ; ON # Pi       LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
 00AC          ; ON # Sm       NOT SIGN
-00AD          ; ON # Cf       SOFT HYPHEN
 00AE          ; ON # So       REGISTERED SIGN
 00AF          ; ON # Sk       MACRON
 00B4          ; ON # Sk       ACUTE ACCENT
@@ -740,7 +761,6 @@ FF1A          ; CS # Po       FULLWIDTH COLON
 203B..203E    ; ON # Po   [4] REFERENCE MARK..OVERLINE
 203F..2040    ; ON # Pc   [2] UNDERTIE..CHARACTER TIE
 2041..2043    ; ON # Po   [3] CARET INSERTION POINT..HYPHEN BULLET
-2044          ; ON # Sm       FRACTION SLASH
 2045          ; ON # Ps       LEFT SQUARE BRACKET WITH QUILL
 2046          ; ON # Pe       RIGHT SQUARE BRACKET WITH QUILL
 2047..2051    ; ON # Po  [11] DOUBLE QUESTION MARK..TWO ASTERISKS ALIGNED VERTICALLY
@@ -808,7 +828,8 @@ FF1A          ; CS # Po       FULLWIDTH COLON
 23B7..23D0    ; ON # So  [26] RADICAL SYMBOL BOTTOM..VERTICAL LINE EXTENSION
 2400..2426    ; ON # So  [39] SYMBOL FOR NULL..SYMBOL FOR SUBSTITUTE FORM TWO
 2440..244A    ; ON # So  [11] OCR HOOK..OCR DOUBLE BACKSLASH
-24EB..24FF    ; ON # No  [21] NEGATIVE CIRCLED NUMBER ELEVEN..NEGATIVE CIRCLED DIGIT ZERO
+2460..2487    ; ON # No  [40] CIRCLED DIGIT ONE..PARENTHESIZED NUMBER TWENTY
+24EA..24FF    ; ON # No  [22] CIRCLED DIGIT ZERO..NEGATIVE CIRCLED DIGIT ZERO
 2500..25B6    ; ON # So [183] BOX DRAWINGS LIGHT HORIZONTAL..BLACK RIGHT-POINTING TRIANGLE
 25B7          ; ON # Sm       WHITE RIGHT-POINTING TRIANGLE
 25B8..25C0    ; ON # So   [9] BLACK RIGHT-POINTING SMALL TRIANGLE..BLACK LEFT-POINTING TRIANGLE
@@ -856,7 +877,6 @@ FF1A          ; CS # Po       FULLWIDTH COLON
 27EA          ; ON # Ps       MATHEMATICAL LEFT DOUBLE ANGLE BRACKET
 27EB          ; ON # Pe       MATHEMATICAL RIGHT DOUBLE ANGLE BRACKET
 27F0..27FF    ; ON # Sm  [16] UPWARDS QUADRUPLE ARROW..LONG RIGHTWARDS SQUIGGLE ARROW
-2800..28FF    ; ON # So [256] BRAILLE PATTERN BLANK..BRAILLE PATTERN DOTS-12345678
 2900..2982    ; ON # Sm [131] RIGHTWARDS TWO-HEADED ARROW WITH VERTICAL STROKE..Z NOTATION TYPE COLON
 2983          ; ON # Ps       LEFT WHITE CURLY BRACKET
 2984          ; ON # Pe       RIGHT WHITE CURLY BRACKET
@@ -1009,32 +1029,59 @@ FFE4          ; ON # So       FULLWIDTH BROKEN BAR
 FFE8          ; ON # So       HALFWIDTH FORMS LIGHT VERTICAL
 FFE9..FFEC    ; ON # Sm   [4] HALFWIDTH LEFTWARDS ARROW..HALFWIDTH DOWNWARDS ARROW
 FFED..FFEE    ; ON # So   [2] HALFWIDTH BLACK SQUARE..HALFWIDTH WHITE CIRCLE
+FFF9..FFFB    ; ON # Cf   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATION TERMINATOR
 FFFC..FFFD    ; ON # So   [2] OBJECT REPLACEMENT CHARACTER..REPLACEMENT CHARACTER
 10101         ; ON # Po       AEGEAN WORD SEPARATOR DOT
 1D300..1D356  ; ON # So  [87] MONOGRAM FOR EARTH..TETRAGRAM FOR FOSTERING
 
-# Total code points: 3007
+# Total code points: 2793
 
 # ================================================
 
-0000..0008    ; BN # Cc   [9] <control>..<control>
-000E..001B    ; BN # Cc  [14] <control>..<control>
-007F..0084    ; BN # Cc   [6] <control>..<control>
-0086..009F    ; BN # Cc  [26] <control>..<control>
+# Bidi_Class=Boundary_Neutral
+
+0000..0008    ; BN # Cc   [9] <control-0000>..<control-0008>
+000E..001B    ; BN # Cc  [14] <control-000E>..<control-001B>
+007F..0084    ; BN # Cc   [6] <control-007F>..<control-0084>
+0086..009F    ; BN # Cc  [26] <control-0086>..<control-009F>
+00AD          ; BN # Cf       SOFT HYPHEN
 070F          ; BN # Cf       SYRIAC ABBREVIATION MARK
-200B          ; BN # Zs       ZERO WIDTH SPACE
-200C..200D    ; BN # Cf   [2] ZERO WIDTH NON-JOINER..ZERO WIDTH JOINER
+200B..200D    ; BN # Cf   [3] ZERO WIDTH SPACE..ZERO WIDTH JOINER
 2060..2063    ; BN # Cf   [4] WORD JOINER..INVISIBLE SEPARATOR
+2064..2069    ; BN # Cn   [6] <reserved-2064>..<reserved-2069>
 206A..206F    ; BN # Cf   [6] INHIBIT SYMMETRIC SWAPPING..NOMINAL DIGIT SHAPES
+FDD0..FDEF    ; BN # Cn  [32] <noncharacter-FDD0>..<noncharacter-FDEF>
 FEFF          ; BN # Cf       ZERO WIDTH NO-BREAK SPACE
-FFF9..FFFB    ; BN # Cf   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATION TERMINATOR
+FFF0..FFF8    ; BN # Cn   [9] <reserved-FFF0>..<reserved-FFF8>
+FFFE..FFFF    ; BN # Cn   [2] <noncharacter-FFFE>..<noncharacter-FFFF>
 1D173..1D17A  ; BN # Cf   [8] MUSICAL SYMBOL BEGIN BEAM..MUSICAL SYMBOL END PHRASE
+1FFFE..1FFFF  ; BN # Cn   [2] <noncharacter-1FFFE>..<noncharacter-1FFFF>
+2FFFE..2FFFF  ; BN # Cn   [2] <noncharacter-2FFFE>..<noncharacter-2FFFF>
+3FFFE..3FFFF  ; BN # Cn   [2] <noncharacter-3FFFE>..<noncharacter-3FFFF>
+4FFFE..4FFFF  ; BN # Cn   [2] <noncharacter-4FFFE>..<noncharacter-4FFFF>
+5FFFE..5FFFF  ; BN # Cn   [2] <noncharacter-5FFFE>..<noncharacter-5FFFF>
+6FFFE..6FFFF  ; BN # Cn   [2] <noncharacter-6FFFE>..<noncharacter-6FFFF>
+7FFFE..7FFFF  ; BN # Cn   [2] <noncharacter-7FFFE>..<noncharacter-7FFFF>
+8FFFE..8FFFF  ; BN # Cn   [2] <noncharacter-8FFFE>..<noncharacter-8FFFF>
+9FFFE..9FFFF  ; BN # Cn   [2] <noncharacter-9FFFE>..<noncharacter-9FFFF>
+AFFFE..AFFFF  ; BN # Cn   [2] <noncharacter-AFFFE>..<noncharacter-AFFFF>
+BFFFE..BFFFF  ; BN # Cn   [2] <noncharacter-BFFFE>..<noncharacter-BFFFF>
+CFFFE..CFFFF  ; BN # Cn   [2] <noncharacter-CFFFE>..<noncharacter-CFFFF>
+DFFFE..E0000  ; BN # Cn   [3] <noncharacter-DFFFE>..<reserved-E0000>
 E0001         ; BN # Cf       LANGUAGE TAG
+E0002..E001F  ; BN # Cn  [30] <reserved-E0002>..<reserved-E001F>
 E0020..E007F  ; BN # Cf  [96] TAG SPACE..CANCEL TAG
+E0080..E00FF  ; BN # Cn [128] <reserved-E0080>..<reserved-E00FF>
+E01F0..E0FFF  ; BN # Cn [3600] <reserved-E01F0>..<reserved-E0FFF>
+EFFFE..EFFFF  ; BN # Cn   [2] <noncharacter-EFFFE>..<noncharacter-EFFFF>
+FFFFE..FFFFF  ; BN # Cn   [2] <noncharacter-FFFFE>..<noncharacter-FFFFF>
+10FFFE..10FFFF; BN # Cn   [2] <noncharacter-10FFFE>..<noncharacter-10FFFF>
 
-# Total code points: 178
+# Total code points: 4016
 
 # ================================================
+
+# Bidi_Class=Nonspacing_Mark
 
 0300..0357    ; NSM # Mn  [88] COMBINING GRAVE ACCENT..COMBINING RIGHT HALF RING ABOVE
 035D..036F    ; NSM # Mn  [19] COMBINING DOUBLE BREVE..COMBINING LATIN SMALL LETTER X
@@ -1157,19 +1204,21 @@ E0100..E01EF  ; NSM # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 
 # ================================================
 
+# Bidi_Class=Arabic_Letter
+
 0600..0603    ; AL # Cf   [4] ARABIC NUMBER SIGN..ARABIC SIGN SAFHA
-0604..060B    ; AL # Cn   [8] 
+0604..060B    ; AL # Cn   [8] <reserved-0604>..<reserved-060B>
 060D          ; AL # Po       ARABIC DATE SEPARATOR
-0616..061A    ; AL # Cn   [5] 
+0616..061A    ; AL # Cn   [5] <reserved-0616>..<reserved-061A>
 061B          ; AL # Po       ARABIC SEMICOLON
-061C..061E    ; AL # Cn   [3] 
+061C..061E    ; AL # Cn   [3] <reserved-061C>..<reserved-061E>
 061F          ; AL # Po       ARABIC QUESTION MARK
-0620          ; AL # Cn       
+0620          ; AL # Cn       <reserved-0620>
 0621..063A    ; AL # Lo  [26] ARABIC LETTER HAMZA..ARABIC LETTER GHAIN
-063B..063F    ; AL # Cn   [5] 
+063B..063F    ; AL # Cn   [5] <reserved-063B>..<reserved-063F>
 0640          ; AL # Lm       ARABIC TATWEEL
 0641..064A    ; AL # Lo  [10] ARABIC LETTER FEH..ARABIC LETTER YEH
-0659..065F    ; AL # Cn   [7] 
+0659..065F    ; AL # Cn   [7] <reserved-0659>..<reserved-065F>
 066D          ; AL # Po       ARABIC FIVE POINTED STAR
 066E..066F    ; AL # Lo   [2] ARABIC LETTER DOTLESS BEH..ARABIC LETTER DOTLESS QAF
 0671..06D3    ; AL # Lo  [99] ARABIC LETTER ALEF WASLA..ARABIC LETTER YEH BARREE WITH HAMZA ABOVE
@@ -1182,34 +1231,36 @@ E0100..E01EF  ; NSM # Mn [240] VARIATION SELECTOR-17..VARIATION SELECTOR-256
 06FD..06FE    ; AL # So   [2] ARABIC SIGN SINDHI AMPERSAND..ARABIC SIGN SINDHI POSTPOSITION MEN
 06FF          ; AL # Lo       ARABIC LETTER HEH WITH INVERTED V
 0700..070D    ; AL # Po  [14] SYRIAC END OF PARAGRAPH..SYRIAC HARKLEAN ASTERISCUS
-070E          ; AL # Cn       
+070E          ; AL # Cn       <reserved-070E>
 0710          ; AL # Lo       SYRIAC LETTER ALAPH
 0712..072F    ; AL # Lo  [30] SYRIAC LETTER BETH..SYRIAC LETTER PERSIAN DHALATH
-074B..074C    ; AL # Cn   [2] 
+074B..074C    ; AL # Cn   [2] <reserved-074B>..<reserved-074C>
 074D..074F    ; AL # Lo   [3] SYRIAC LETTER SOGDIAN ZHAIN..SYRIAC LETTER SOGDIAN FE
-0750..077F    ; AL # Cn  [48] 
+0750..077F    ; AL # Cn  [48] <reserved-0750>..<reserved-077F>
 0780..07A5    ; AL # Lo  [38] THAANA LETTER HAA..THAANA LETTER WAAVU
 07B1          ; AL # Lo       THAANA LETTER NAA
-07B2..07BF    ; AL # Cn  [14] 
+07B2..07BF    ; AL # Cn  [14] <reserved-07B2>..<reserved-07BF>
 FB50..FBB1    ; AL # Lo  [98] ARABIC LETTER ALEF WASLA ISOLATED FORM..ARABIC LETTER YEH BARREE WITH HAMZA ABOVE FINAL FORM
-FBB2..FBD2    ; AL # Cn  [33] 
+FBB2..FBD2    ; AL # Cn  [33] <reserved-FBB2>..<reserved-FBD2>
 FBD3..FD3D    ; AL # Lo [363] ARABIC LETTER NG ISOLATED FORM..ARABIC LIGATURE ALEF WITH FATHATAN ISOLATED FORM
-FD40..FD4F    ; AL # Cn  [16] 
+FD40..FD4F    ; AL # Cn  [16] <reserved-FD40>..<reserved-FD4F>
 FD50..FD8F    ; AL # Lo  [64] ARABIC LIGATURE TEH WITH JEEM WITH MEEM INITIAL FORM..ARABIC LIGATURE MEEM WITH KHAH WITH MEEM INITIAL FORM
-FD90..FD91    ; AL # Cn   [2] 
+FD90..FD91    ; AL # Cn   [2] <reserved-FD90>..<reserved-FD91>
 FD92..FDC7    ; AL # Lo  [54] ARABIC LIGATURE MEEM WITH JEEM WITH KHAH INITIAL FORM..ARABIC LIGATURE NOON WITH JEEM WITH YEH FINAL FORM
-FDC8..FDCF    ; AL # Cn   [8] 
+FDC8..FDCF    ; AL # Cn   [8] <reserved-FDC8>..<reserved-FDCF>
 FDF0..FDFB    ; AL # Lo  [12] ARABIC LIGATURE SALLA USED AS KORANIC STOP SIGN ISOLATED FORM..ARABIC LIGATURE JALLAJALALOUHOU
 FDFC          ; AL # Sc       RIAL SIGN
-FDFE..FDFF    ; AL # Cn   [2] 
+FDFE..FDFF    ; AL # Cn   [2] <reserved-FDFE>..<reserved-FDFF>
 FE70..FE74    ; AL # Lo   [5] ARABIC FATHATAN ISOLATED FORM..ARABIC KASRATAN ISOLATED FORM
-FE75          ; AL # Cn       
+FE75          ; AL # Cn       <reserved-FE75>
 FE76..FEFC    ; AL # Lo [135] ARABIC FATHA ISOLATED FORM..ARABIC LIGATURE LAM WITH ALEF FINAL FORM
-FEFD..FEFE    ; AL # Cn   [2] 
+FEFD..FEFE    ; AL # Cn   [2] <reserved-FEFD>..<reserved-FEFE>
 
 # Total code points: 1136
 
 # ================================================
+
+# Bidi_Class=Left_To_Right_Override
 
 202D          ; LRO # Cf       LEFT-TO-RIGHT OVERRIDE
 
@@ -1217,11 +1268,15 @@ FEFD..FEFE    ; AL # Cn   [2]
 
 # ================================================
 
+# Bidi_Class=Right_To_Left_Override
+
 202E          ; RLO # Cf       RIGHT-TO-LEFT OVERRIDE
 
 # Total code points: 1
 
 # ================================================
+
+# Bidi_Class=Left_To_Right_Embedding
 
 202A          ; LRE # Cf       LEFT-TO-RIGHT EMBEDDING
 
@@ -1229,13 +1284,16 @@ FEFD..FEFE    ; AL # Cn   [2]
 
 # ================================================
 
+# Bidi_Class=Right_To_Left_Embedding
+
 202B          ; RLE # Cf       RIGHT-TO-LEFT EMBEDDING
 
 # Total code points: 1
 
 # ================================================
 
+# Bidi_Class=Pop_Directional_Format
+
 202C          ; PDF # Cf       POP DIRECTIONAL FORMATTING
 
 # Total code points: 1
-
