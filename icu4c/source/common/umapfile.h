@@ -28,6 +28,5 @@
 
 UBool   uprv_mapFile(UDataMemory *pdm, const char *path);
 void    uprv_unmapFile(UDataMemory *pData);
-char *  uprv_computeDirPath(const char *path, char *pathBuffer);
 
 #endif
