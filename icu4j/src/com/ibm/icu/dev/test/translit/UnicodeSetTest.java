@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/18 00:51:31 $ 
- * $Revision: 1.45 $
+ * $Date: 2003/02/21 01:22:29 $ 
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -831,6 +831,11 @@ public class UnicodeSetTest extends TestFmwk {
             "[:Age=3.2:]",
             "\u03D8\u03D9",
             "\u03D6", // 1.1
+
+            // JB#2350: Case_Sensitive
+            "[:Case Sensitive:]",
+            "A\u1FFC\\U00010410",
+            ";\u00B4\\U00010500",
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
@@ -1323,6 +1328,7 @@ public class UnicodeSetTest extends TestFmwk {
     void expectContainment(UnicodeSet set, String charsIn, String charsOut) {
         StringBuffer bad = new StringBuffer();
         if (charsIn != null) {
+            charsIn = Utility.unescape(charsIn);
             for (int i=0; i<charsIn.length(); ++i) {
                 int c = UTF16.charAt(charsIn,i);
                 if(c>0xffff) i++;
@@ -1338,6 +1344,7 @@ public class UnicodeSetTest extends TestFmwk {
             }
         }
         if (charsOut != null) {
+            charsOut = Utility.unescape(charsOut);
             bad.setLength(0);
             for (int i=0; i<charsOut.length(); ++i) {
                 char c = charsOut.charAt(i);
