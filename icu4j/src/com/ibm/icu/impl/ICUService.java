@@ -380,6 +380,8 @@ public class ICUService extends ICUNotifier {
         return getKey(key, actualReturn, null);
     }
 
+    // debugging
+    // Map hardRef;
 
     public Object getKey(Key key, String[] actualReturn, Factory factory) {
         if (factories.size() == 0) {
@@ -387,7 +389,7 @@ public class ICUService extends ICUNotifier {
         }
 
         boolean debug = false;
-        if (debug) System.out.println("Service: " + name + " key: " + key);
+        if (debug) System.out.println("Service: " + name + " key: " + key.canonicalID());
 
         CacheEntry result = null;
         if (key != null) {
@@ -400,12 +402,15 @@ public class ICUService extends ICUNotifier {
                 Map cache = null;
                 SoftReference cref = cacheref; // copy so we don't need to sync on this
                 if (cref != null) {
+                    if (debug) System.out.println("Service " + name + " ref exists");
                     cache = (Map)cref.get();
                 }
                 if (cache == null) {
+                    if (debug) System.out.println("Service " + name + " cache was empty");
                     // synchronized since additions and queries on the cache must be atomic
                     // they can be interleaved, though
                     cache = Collections.synchronizedMap(new HashMap());
+//                  hardRef = cache; // debug
                     cref = new SoftReference(cache);
                 }
 
@@ -477,6 +482,7 @@ public class ICUService extends ICUNotifier {
 
                 if (result != null) {
                     if (putInCache) {
+                        if (debug) System.out.println("caching '" + result.actualDescriptor + "'");
                         cache.put(result.actualDescriptor, result);
                         if (cacheDescriptorList != null) {
                             Iterator iter = cacheDescriptorList.iterator();
@@ -635,19 +641,19 @@ public class ICUService extends ICUNotifier {
     public String getDisplayName(String id, Locale locale) {
         Map m = getVisibleIDMap();
         Factory f = (Factory)m.get(id);
-	if (f != null) {
-	    return f.getDisplayName(id, locale);
-	}
+        if (f != null) {
+            return f.getDisplayName(id, locale);
+        }
 
-	Key key = createKey(id);
-	while (key.fallback()) {
-	    f = (Factory)m.get(key.currentID());
-	    if (f != null) {
-		return f.getDisplayName(id, locale);
-	    }
-	}
-	
-	return null;
+        Key key = createKey(id);
+        while (key.fallback()) {
+            f = (Factory)m.get(key.currentID());
+            if (f != null) {
+                return f.getDisplayName(id, locale);
+            }
+        }
+        
+        return null;
     }
 
     /**
