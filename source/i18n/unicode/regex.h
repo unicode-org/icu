@@ -316,7 +316,7 @@ private:
 
     UVector         *fSets;        // Any UnicodeSets referenced from the pattern.
 
-    UBool           fBadState;     // True if some prior error has left this
+    UErrorCode      fDeferredStatus; // status if some prior error has left this
                                    //  RegexPattern in an unusable state.
 
     int32_t         fMinMatchLen;  // Minimum Match Length.  All matches will have length
