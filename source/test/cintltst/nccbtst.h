@@ -20,12 +20,15 @@
 
 
 static void TestSkipCallBack(void);
+static void TestStopCallBack(void);
 static void TestSubCallBack(void);
 static void TestSubWithValueCallBack(void);
 static void TestLegalAndOtherCallBack(void);
 static void TestSingleByteCallBack(void);
 
 static void TestSkip(int32_t inputsize, int32_t outputsize);
+
+static void TestStop(int32_t inputsize, int32_t outputsize);
 
 static void TestSub(int32_t inputsize, int32_t outputsize);
 

@@ -34,6 +34,7 @@ void addNumFrDepTest(TestNode** root)
   addTest(root, &TestCurrencySign, "tsformat/cnmdptst/TestCurrencySign");
   addTest(root, &TestCurrency,  "tsformat/cnmdptst/TestCurrency");
   addTest(root, &TestRounding487, "tsformat/cnmdptst/TestRounding487");
+  addTest(root, &TestDoubleAttribute, "tsformat/cnmdptst/TestDoubleAttribute");
 
 
 }
@@ -462,3 +463,31 @@ void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const 
   u_uastrcpy(res, expected);
   if (u_strcmp(out, res) != 0) log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
 }
+/*
+ * Testing unum_getDoubleAttribute and  unum_setDoubleAttribute() 
+ */
+void TestDoubleAttribute()
+{
+	double mydata[] = { 1.11, 22.22, 333.33, 4444.44, 55555.55, 666666.66, 7777777.77, 88888888.88, 999999999.99};
+	double dvalue;
+	int i;
+	UErrorCode status=U_ZERO_ERROR;
+	UNumberFormatAttribute attr;
+	UNumberFormatStyle style= UNUM_DEFAULT;
+	UNumberFormat *def;
+	def=unum_open(style, NULL, &status);
+    log_verbose("\nTesting get and set DoubleAttributes\n");
+    attr=UNUM_ROUNDING_INCREMENT;
+    dvalue=unum_getDoubleAttribute(def, attr);
+    for (i = 0; i<9 ; i++)
+	{
+		dvalue = mydata[i]; 
+		unum_setDoubleAttribute(def, attr, dvalue);
+		if(unum_getDoubleAttribute(def,attr)!=mydata[i])
+			log_err("Fail: error in setting and getting double attributes for UNUM_ROUNDING_INCREMENT\n");
+		else
+			log_verbose("Pass: setting and getting double attributes for UNUM_ROUNDING_INCREMENT works fine\n");
+  	} 
+	unum_close(def);
+}
+
