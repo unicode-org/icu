@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
-* $Date: 2002/06/04 23:31:13 $ 
-* $Revision: 1.1 $
+* $Date: 2002/06/05 00:01:09 $ 
+* $Revision: 1.2 $
 **********************************************************************
 */
 #include "unicode/uset.h"
@@ -59,7 +59,7 @@ static void TestAPI() {
     
     /* [] */
     set = uset_open(1, 1);
-    uset_remove(set, 1);
+    uset_clear(set);
     expect(set, "", "abc{ab}", NULL);
     uset_close(set);
 
@@ -73,22 +73,22 @@ static void TestAPI() {
     set = uset_openPattern(PAT, PAT_LEN, &ec);
     expect(set, "abc{ab}", "def{bc}", &ec);
 
-    /* [!a-c{ab}] */
-    uset_complement(set);
-    expect(set, "def{ab}", "abc{bc}", NULL);
+    /* [a-d{ab}] */
+    uset_add(set, 0x64);
+    expect(set, "abcd{ab}", "ef{bc}", NULL);
 
-    /* [!ac{ab}] */
-    uset_add(set, 0x62);
-    expect(set, "bde{ab}", "ac{bc}", NULL);
-
-    /* [!acd{ab}{bc}] */
-    uset_remove(set, 0x64);
+    /* [acd{ab}{bc}] */
+    uset_remove(set, 0x62);
     uset_addString(set, STR_bc, STR_bc_LEN);
-    expect(set, "be{ab}{bc}", "acd{cd}", NULL);
+    expect(set, "acd{ab}{bc}", "bef{cd}", NULL);
 
-    /* [!acd{bc}] */
+    /* [acd{bc}] */
     uset_removeString(set, STR_ab, STR_ab_LEN);
-    expect(set, "be{bc}", "acd{ab}", NULL);
+    expect(set, "acd{bc}", "bfg{ab}", NULL);
+
+    /* [^acd{bc}] */
+    uset_complement(set);
+    expect(set, "bef{bc}", "acd{ac}", NULL);
 
     uset_close(set);
 }
