@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieBuilder.java,v $ 
-* $Date: 2002/07/12 21:59:22 $ 
-* $Revision: 1.6 $
+* $Date: 2002/08/30 23:19:12 $ 
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -31,7 +31,7 @@ import java.util.Arrays;
  *     <LI>Smaller memory footprint.
  * </UL>
  * This is a direct port from the ICU4C version
- * @version            $Revision: 1.6 $
+ * @version            $Revision: 1.7 $
  * @author             Syn Wee Quek
  */
 public class TrieBuilder
@@ -88,7 +88,8 @@ public class TrieBuilder
     public boolean isInZeroBlock(int ch) 
     {
         // valid, uncompacted trie and valid c?
-        if (m_isCompacted_ || !UCharacter.isLegal(ch)) {
+        if (m_isCompacted_ || ch > UCharacter.MAX_VALUE 
+            || ch < UCharacter.MIN_VALUE) {
             return true;
         }
     
@@ -285,7 +286,6 @@ public class TrieBuilder
 	protected int m_indexLength_;
 	protected int m_dataCapacity_; 
 	protected int m_dataLength_;
-	protected boolean m_isDataAllocated_;
 	protected boolean m_isLatin1Linear_;
 	protected boolean m_isCompacted_;
     /**
@@ -373,7 +373,6 @@ public class TrieBuilder
         m_dataLength_ = table.m_dataLength_;
         m_map_ = new int[table.m_map_.length];
         System.arraycopy(table.m_map_, 0, m_map_, 0, m_map_.length);
-        m_isDataAllocated_ = table.m_isDataAllocated_;
         m_isLatin1Linear_ = table.m_isLatin1Linear_;
         m_isCompacted_ = table.m_isCompacted_;
     }
