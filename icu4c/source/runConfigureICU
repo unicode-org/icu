@@ -44,7 +44,7 @@ The following names can be supplied as the argument for platform:
     LinuxRedHat             Use the GNU C++ compiler on Linux
     LINUX/ECC               Use the Intel ECC compiler on Linux
     LINUX/ICC               Use the Intel ICC compiler on Linux
-    LINUX/VA                Use IBM's Visual Age compiler on Power
+    LINUX/VA                Use IBM's Visual Age compiler on Power PC Linux
     MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
     QNX                     Use QNX's QCC compiler on QNX/Neutrino
     SOLARISCC               Use Sun's CC compiler on Solaris
