@@ -38,6 +38,13 @@ CollationFrenchTest::CollationFrenchTest()
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollation = Collator::createInstance(Locale::FRANCE, status);
+    if(!myCollation || U_FAILURE(status)) {
+      errln(__FILE__ "failed to create! err " + UnicodeString(u_errorName(status)));
+	/* if it wasn't already: */
+	delete myCollation;
+	myCollation = NULL;
+    }
+
 }
 
 CollationFrenchTest::~CollationFrenchTest()
@@ -247,6 +254,13 @@ void CollationFrenchTest::TestExtra(/* char* par */)
 void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationFrenchTest: ");
+
+    if((!myCollation) && exec) {
+      errln(__FILE__ " cannot test - failed to create collator.");
+      name = "";
+      return;
+    }
+
     switch (index) {
         case 0: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
         case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;

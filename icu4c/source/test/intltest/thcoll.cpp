@@ -55,6 +55,13 @@ CollationThaiTest::~CollationThaiTest() {
 
 void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &name,
                                        char* /*par*/) {
+
+    if((!coll) && exec) {
+      errln(__FILE__ " cannot test - failed to create collator.");
+      name = "";
+      return;
+    }
+
     switch (index) {
         CASE(0,TestDictionary)
         CASE(1,TestCornerCases)
