@@ -84,7 +84,7 @@ main(int argc,
      char **argv)
 {
   int i;
-  UErrorCode status;
+  UErrorCode status = U_ZERO_ERROR;
   const char *arg = NULL;
   const char *outputDir = NULL; /* NULL = no output directory, use current */
   const char *inputDir = NULL;
@@ -302,7 +302,7 @@ make_res_filename(const char *filename,
   else
   {
       int32_t dirlen = uprv_strlen(outputDir);
-      int32_t dirnamelen = uprv_strlen(dirname);
+      /*int32_t dirnamelen = uprv_strlen(dirname);*/
       int32_t basenamelen = uprv_strlen(basename);
       resName = (char*) uprv_malloc(sizeof(char) * (dirlen + basenamelen + 2));
       /*resName = (char*) uprv_malloc(sizeof(char) * (dirnamelen + basenamelen + 1));*/
@@ -328,6 +328,9 @@ make_res_filename(const char *filename,
 
   return resName;
 }
+
+/* This seems to be dead code */
+#if 0
 
 /* Generate the target .col file name from the input file name */
 static char*
@@ -377,9 +380,9 @@ make_col_filename(const char *filename,
   }
   else
   {
-      
+
       get_dirname(dirname, filename);
-      
+
       colName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(outputDir)
                                                     + uprv_strlen(basename) 
                                                     + uprv_strlen(COL_SUFFIX) + 1));
@@ -392,7 +395,7 @@ make_col_filename(const char *filename,
       uprv_strcat(colName, COL_SUFFIX);
   }
 
- finish:
+finish:
   uprv_free(basename);
   uprv_free(dirname);
 
@@ -419,7 +422,7 @@ static void make_col(const char *filename, UErrorCode *status)
       ucol_close(coll);
     }
 }
-
+#endif
 /*
  * Local Variables:
  * indent-tabs-mode: nil
