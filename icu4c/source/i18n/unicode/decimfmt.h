@@ -203,7 +203,7 @@ public:
      * DecimalFormat when internationalization is not the main concern.
      * <P>
      * To obtain standard formats for a given locale, use the factory methods
-     * on NumberFormat such as getNumberInstance. These factories will
+     * on NumberFormat such as createInstance. These factories will
      * return the most appropriate sub-class of NumberFormat for a given
      * locale.
      * @param status    Output param set to success/failure code. If the
@@ -218,7 +218,7 @@ public:
      * DecimalFormat when internationalization is not the main concern.
      * <P>
      * To obtain standard formats for a given locale, use the factory methods
-     * on NumberFormat such as getNumberInstance. These factories will
+     * on NumberFormat such as createInstance. These factories will
      * return the most appropriate sub-class of NumberFormat for a given
      * locale.
      * @param pattern   A non-localized pattern string.
@@ -236,7 +236,7 @@ public:
      * <P>
      * To obtain standard formats for a given
      * locale, use the factory methods on NumberFormat such as
-     * getInstance or getCurrencyInstance. If you need only minor adjustments
+     * createInstance or createCurrencyInstance. If you need only minor adjustments
      * to a standard format, you can modify the format returned by
      * a NumberFormat factory method.
      *
@@ -258,7 +258,7 @@ public:
      * <P>
      * To obtain standard formats for a given
      * locale, use the factory methods on NumberFormat such as
-     * getInstance or getCurrencyInstance. If you need only minor adjustments
+     * createInstance or createCurrencyInstance. If you need only minor adjustments
      * to a standard format, you can modify the format returned by
      * a NumberFormat factory method.
      *
@@ -281,7 +281,7 @@ public:
      * <P>
      * To obtain standard formats for a given
      * locale, use the factory methods on NumberFormat such as
-     * getInstance or getCurrencyInstance. If you need only minor adjustments
+     * createInstance or createCurrencyInstance. If you need only minor adjustments
      * to a standard format, you can modify the format returned by
      * a NumberFormat factory method.
      *
