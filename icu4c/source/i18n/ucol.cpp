@@ -6939,6 +6939,9 @@ void ucol_updateInternalState(UCollator *coll, UErrorCode *status) {
             } else {
               coll->latinOneUse = FALSE;
             }
+            if(*status == U_UNSUPPORTED_ERROR) {
+              *status = U_ZERO_ERROR;
+            }
           } else { // latin1Table exists and it doesn't need to be regenerated, just use it
             coll->latinOneUse = TRUE;
           }
