@@ -112,6 +112,9 @@ $(DESTDIR)$(pkgsysconfdir)/convrtrs.txt: $(UCMSRCDIR)/convrtrs.txt
 install390: $(BUILDDIR)/icudata390.lst ./icupkg.inc
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(libdir)
 	$(INVOKE) $(PKGDATA) -s $(BUILDDIR) -T $(BUILDDIR)/tmp3901 -p $(ICUDATA_NAME)$(STUB_SUFFIX) -e $(ICUDATA_ENTRY_POINT) $(BUILDDIR)/icudata390.lst -m dll $(PKGDATA_VERSIONING) -I $(DESTDIR)$(ICUPKGDATA_DIR)
+ifeq ($(PKGDATA_MODE),dll)
+	$(INSTALL-L) $(OUTDIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX)$(IMPORT_LIB_EXT) $(DESTDIR)$(ICUPKGDATA_DIR)/$(LIB_ICUDATA_NAME)$(STUB_SUFFIX)$(IMPORT_LIB_EXT)
+endif
 
 #### $(LIB_ICUDATA_NAME)$(BATCH_SUFFIX) is the subset data for batch mode
 package390: $(BUILDDIR)/icudata390.lst $(BUILDDIR)/icudata.lst ./icupkg.inc

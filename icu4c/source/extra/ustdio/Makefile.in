@@ -24,12 +24,14 @@ CLEANFILES = *~ $(DEPS)
 
 ## Target information
 
+TARGET_STUBNAME=io
+
 ifneq ($(ENABLE_STATIC),)
-TARGET = libustdio$(ICULIBSUFFIX).a
+TARGET = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).a
 endif
 
 ifneq ($(ENABLE_SHARED),)
-SO_TARGET = libustdio$(ICULIBSUFFIX).$(SO)
+SO_TARGET = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(SO)
 ALL_SO_TARGETS = $(SO_TARGET) $(MIDDLE_SO_TARGET) $(FINAL_SO_TARGET)
 
 ifeq ($(OS390BATCH),1)
@@ -89,6 +91,10 @@ ifneq ($(FINAL_SO_TARGET),$(SO_TARGET))
 	cd $(DESTDIR)$(libdir) && $(RM) $(MIDDLE_SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(MIDDLE_SO_TARGET)
 	cd $(DESTDIR)$(libdir) && $(RM) $(SO_TARGET) && ln -s $(FINAL_SO_TARGET) $(SO_TARGET)
 endif
+endif
+ifneq ($(IMPORT_LIB_EXT),)
+	$(INSTALL-L) $(FINAL_IMPORT_LIB) $(DESTDIR)$(libdir)/$(FINAL_IMPORT_LIB)
+	cd $(DESTDIR)$(libdir) && $(RM) $(IMPORT_LIB) && ln -s $(FINAL_IMPORT_LIB) $(IMPORT_LIB)
 endif
 
 install-headers:
