@@ -22,7 +22,7 @@ SRCDATADIR=$(top_srcdir)/../data
 UNICODEDATADIR=$(SRCDATADIR)/unidata
 TESTSRCDATADIR=$(top_srcdir)/test/testdata
 TESTOBJDATADIR=$(top_builddir)/test/testdata
-SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(SRCDATADIR)/resfiles.mk $(SRCDATADIR)/ucmfiles.mk
+SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(SRCDATADIR)/resfiles.mk
 
 OBJDATADIR=.
 
@@ -61,10 +61,11 @@ BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
 # don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted
 
 ## UCM files 
-include $(SRCDATADIR)/ucmfiles.mk
+-include $(SRCDATADIR)/ucmcore.mk
+-include $(SRCDATADIR)/ucmfiles.mk
 -include $(SRCDATADIR)/ucmebcdic.mk
 -include $(SRCDATADIR)/ucmlocal.mk
-ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
+ALL_UCM_SOURCE=ibm-37.ucm ibm-1047-s390.ucm $(UCM_SOURCE_CORE) $(UCM_SOURCE_FILES) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
 

@@ -82,41 +82,42 @@ PKGOPT=R:$(ICUP)
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
 
-# We're including a list of ucm files. There are two lists, one is essential 'ucmfiles.mk' and
-# the other is optional 'ucmlocal.mk'
+# We're including a list of .ucm files.
+# There are several lists, they are all optional.
+
+# Always build the mapping files for the EBCDIC fallback codepages
+# They are necessary on EBCDIC machines, and
+# the following logic is much easier if UCM_SOURCE is never empty.
+# (They are small.)
+UCM_SOURCE=ibm-37.ucm ibm-1047-s390.ucm
+
+!IF EXISTS("$(ICUDATA)\ucmcore.mk")
+!INCLUDE "$(ICUDATA)\ucmcore.mk"
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_CORE)
+!ELSE
+!MESSAGE Warning: cannot find "ucmcore.mk". Not building core MIME/Unix/Windows converter files.
+!ENDIF
+
 !IF EXISTS("$(ICUDATA)\ucmfiles.mk")
 !INCLUDE "$(ICUDATA)\ucmfiles.mk"
-UCM_SOURCE=$(UCM_SOURCE)
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_FILES)
 !ELSE
-!ERROR ERROR: cannot find "ucmfiles.mk"
+!MESSAGE Warning: cannot find "ucmfiles.mk". Not building many converter files.
 !ENDIF
 
 !IF EXISTS("$(ICUDATA)\ucmebcdic.mk")
 !INCLUDE "$(ICUDATA)\ucmebcdic.mk"
+UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC)
 !ELSE
-!MESSAGE Warning: cannot find "ucmebcdic.mk".Not building EBCDIC converter files
+!MESSAGE Warning: cannot find "ucmebcdic.mk". Not building EBCDIC converter files.
 !ENDIF
 
 !IF EXISTS("$(ICUDATA)\ucmlocal.mk")
 !INCLUDE "$(ICUDATA)\ucmlocal.mk"
-!IFDEF UCM_SOURCE_LOCAL
 UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
-!ENDIF
 !ELSE
-#!MESSAGE Warning: cannot find "ucmlocal.mk"
+!MESSAGE Information: cannot find "ucmlocal.mk". Not building user-additional converter files.
 !ENDIF
-
-# Note that UCM_SOURCE_EBCDIC could be defined in either of ucmlocal.mk or ucmebcdic.mk.
-# Note also that subsequent dependency rules fail if there are leading spaces on UCM_SOURCE,
-#      hence the contorted logic here.
-!IF ("$(UCM_SOURCE_EBCDIC)" != "")
-!IF ("$(UCM_SOURCE)" == "")
-UCM_SOURCE=$(UCM_SOURCE_EBCDIC)
-!ELSE
-UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_EBCDIC)
-!ENDIF
-!ENDIF
-
 
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 
