@@ -44,7 +44,7 @@ typedef struct {
 typedef struct  {
     uint32_t          count;
     uint32_t          reserved;
-    PointerTOCEntry   entry[2];   // Actual size is from count.
+    PointerTOCEntry   entry[2];   /* Actual size is from count. */
 }  PointerTOC;
 
 
@@ -57,7 +57,7 @@ typedef struct {
 
 typedef struct {
     uint32_t          count;
-    OffsetTOCEntry    entry[2];    // Acutal size of array is from count.
+    OffsetTOCEntry    entry[2];    /* Acutal size of array is from count. */
 }  OffsetTOC;
 
 
