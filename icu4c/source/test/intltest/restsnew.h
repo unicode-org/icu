@@ -14,7 +14,7 @@ public:
     NewResourceBundleTest();
     ~NewResourceBundleTest();
     
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     /** 
      * Perform several extensive tests using the subtest routine testTag
@@ -25,7 +25,7 @@ public:
      **/
     void TestConstruction(void);
 
-	void TestIteration(void);
+    void TestIteration(void);
 
     void TestOtherAPI(void);
 

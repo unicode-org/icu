@@ -14,17 +14,17 @@
 
 
 class IntlTestDecimalFormatAPI: public IntlTest {
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );  
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );  
 
 public:
     /**
      * Tests basic functionality of various API functions for DecimalFormat
      **/
     void testAPI(char *par);
-	void testRounding(char *par);
-private:	
+    void testRounding(char *par);
+private:
     /*Helper functions */
-	void verify(const UnicodeString& message, const UnicodeString& got, double expected);
+    void verify(const UnicodeString& message, const UnicodeString& got, double expected);
 };
 
 #endif

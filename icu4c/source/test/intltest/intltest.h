@@ -91,7 +91,7 @@ public:
     FILE *testoutfp;
 
 protected:
-    virtual void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL ); // overide !
+    virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
     virtual UBool runTestLoop( char* testname, char* par );
 

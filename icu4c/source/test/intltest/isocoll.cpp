@@ -7109,7 +7109,7 @@ void CollationISOTest::TestAll( char* par )
     }
 }
 
-void CollationISOTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationISOTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationISOTest: ");
     switch (index) {

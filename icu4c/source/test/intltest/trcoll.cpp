@@ -110,7 +110,7 @@ void CollationTurkishTest::TestPrimary( char* par )
     }
 }
 
-void CollationTurkishTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationTurkishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationTurkishTest: ");
     switch (index) {

@@ -29,7 +29,7 @@ UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 /*Asciifies the UErrorCodes*/
 #define myErrorName(errorCode) u_errorName(errorCode)
 
-void ConvertTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void ConvertTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite ConvertTest: ");
     switch (index) {
@@ -553,14 +553,14 @@ void ConvertTest::TestConvert()
     else logln("Equality test ok");
 
     logln("\n---Testing Regression 1100057 ...");
-    char mySJIS[12] = {(char)0xFA, (char)0X51, (char)0XB8, (char)0XDB, (char)0XBD, (char)0XCB, (char)0XDB, (char)0XCC, (char)0XDE, (char)0XD0 , (char)0XFA, (char)0X50};
+    const uint8_t mySJIS[12] = {0xFA, 0X51, 0XB8, 0XDB, 0XBD, 0XCB, 0XDB, 0XCC, 0XDE, 0XD0 , 0XFA, 0X50};
     
 
     UnicodeConverter SJIS(943, UCNV_IBM, err);
     UnicodeString myString;
 
 
-    SJIS.toUnicodeString(myString, mySJIS, 12, err);
+    SJIS.toUnicodeString(myString, (const char *)mySJIS, 12, err);
     if (U_FAILURE(err)||(myString.length()!=10)) errln("toUnicodeString test failed");
     else logln("toUnicodeString test ok");
 

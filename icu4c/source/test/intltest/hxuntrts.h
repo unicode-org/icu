@@ -29,35 +29,35 @@ class HexToUnicodeTransliterator;
  */
 class HexToUniTransliteratorTest : public IntlTest {
 public:
-    void runIndexedTest(int32_t index, UBool exec, char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par=NULL);
 
     /*Tests the constructors */
     void TestConstruction(void);
-	/*Tests the function clone, and operator==()*/
-	void TestCloneEqual(void);
-   	/*Tests the function getTransliterator() and setTransliterators() and adoptTransliterators()*/
-	void TestPattern(void);
-	 /*Tests the function handleTransliterate()*/
-	void TestSimpleTransliterate(void);
+    /*Tests the function clone, and operator==()*/
+    void TestCloneEqual(void);
+    /*Tests the function getTransliterator() and setTransliterators() and adoptTransliterators()*/
+    void TestPattern(void);
     /*Tests the function handleTransliterate()*/
-	void TestTransliterate(void);
-	
+    void TestSimpleTransliterate(void);
+    /*Tests the function handleTransliterate()*/
+    void TestTransliterate(void);
+
     //======================================================================
     // Support methods
     //======================================================================
-	void expectTranslit(const HexToUnicodeTransliterator& t,
-						const UnicodeString& message,
-												const UnicodeString& source, 
-												int32_t start, int32_t limit, int32_t cursor,
-												const UnicodeString& expectedResult);
+    void expectTranslit(const HexToUnicodeTransliterator& t,
+                        const UnicodeString& message,
+                        const UnicodeString& source, 
+                        int32_t start, int32_t limit, int32_t cursor,
+                        const UnicodeString& expectedResult);
 
-	void expectPattern(HexToUnicodeTransliterator& t,
-												const UnicodeString& pattern, 
-												const UnicodeString& source, 
-												const UnicodeString& expectedResult);
+    void expectPattern(HexToUnicodeTransliterator& t,
+                       const UnicodeString& pattern, 
+                       const UnicodeString& source, 
+                       const UnicodeString& expectedResult);
     
     void expect(const HexToUnicodeTransliterator& t,
-				const UnicodeString& message,
+                const UnicodeString& message,
                 const UnicodeString& source,
                 const UnicodeString& expectedResult);
       

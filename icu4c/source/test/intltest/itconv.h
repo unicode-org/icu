@@ -18,7 +18,7 @@
 
 class IntlTestConvert: public IntlTest {
 public:
-virtual   void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+virtual   void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 };
 
 

@@ -5,7 +5,7 @@
  * Modification History:
  *
  *   Date          Name        Description
- *   05/22/2000    Madhu	   Added tests for testing new API for utf16 support and more
+ *   05/22/2000    Madhu       Added tests for testing new API for utf16 support and more
  **********************************************************************/
 #include "citrtest.h"
 #include "unicode/schriter.h"
@@ -21,7 +21,7 @@ CharIterTest::~CharIterTest()
 {
 }
 
-void CharIterTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CharIterTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite LocaleTest: ");
     switch (index) {
@@ -261,10 +261,10 @@ void CharIterTest::TestIteration() {
 
             if (iter.current() != c)
                 errln("current() isn't working right");
-		    if (iter.getIndex() != i)
+            if (iter.getIndex() != i)
                 errln("getIndex() isn't working right");
-			if(iter.setIndex(i) != c)
-				errln("setIndex() isn't working right");
+            if(iter.setIndex(i) != c)
+                errln("setIndex() isn't working right");
 
             if (c != CharacterIterator::DONE) {
                 c = iter.previous();
@@ -275,38 +275,38 @@ void CharIterTest::TestIteration() {
         c=iter.previous();
         if(c!= CharacterIterator::DONE)
             errln("previous didn't return DONE at the beginning");
-       
-	
+
+
         //testing firstPostInc, nextPostInc, setTostart
         i = 0;
-		c=iter.firstPostInc();
-		if(c != text[i])
-			errln((UnicodeString)"firstPostInc failed.  Expected->" +  
-			             UCharToUnicodeString(text[i]) + " Got->" + UCharToUnicodeString(c));
-		if(iter.getIndex() != i+1)
-			errln((UnicodeString)"getIndex() after firstPostInc() failed");
-		
-		iter.setToStart();
-		i=0;
+        c=iter.firstPostInc();
+        if(c != text[i])
+            errln((UnicodeString)"firstPostInc failed.  Expected->" +  
+                         UCharToUnicodeString(text[i]) + " Got->" + UCharToUnicodeString(c));
+        if(iter.getIndex() != i+1)
+            errln((UnicodeString)"getIndex() after firstPostInc() failed");
+
+        iter.setToStart();
+        i=0;
         if (iter.startIndex() != 0)
             errln("setToStart failed");
-       
+
         logln("Testing forward iteration...");
         do {
-           	if (c != CharacterIterator::DONE)
+            if (c != CharacterIterator::DONE)
                 c = iter.nextPostInc();
-			
+
             if(c != text[i])
                 errln((UnicodeString)"Character mismatch at position " + i +
                                     (UnicodeString)", iterator has " + UCharToUnicodeString(c) +
                                     (UnicodeString)", string has " + UCharToUnicodeString(text[i]));
-			
-			i++;
-			if(iter.getIndex() != i)
-				errln("getIndex() aftr nextPostInc() isn't working right");
-			if(iter.current() != text[i])
-				errln("current() after nextPostInc() isn't working right");
-			} while (iter.hasNext());
+
+            i++;
+            if(iter.getIndex() != i)
+                errln("getIndex() aftr nextPostInc() isn't working right");
+            if(iter.current() != text[i])
+                errln("current() after nextPostInc() isn't working right");
+        } while (iter.hasNext());
         c=iter.nextPostInc();
         if(c!= CharacterIterator::DONE)
             errln("nextPostInc() didn't return DONE at the beginning");
@@ -336,8 +336,8 @@ void CharIterTest::TestIteration() {
                 errln("current() isn't working right");
             if (iter.getIndex() != i)
                 errln("getIndex() isn't working right");
-			if(iter.setIndex(i) != c)
-				errln("setIndex() isn't working right");
+            if(iter.setIndex(i) != c)
+                errln("setIndex() isn't working right");
 
             if (c != CharacterIterator::DONE) {
                 c = iter.next();
@@ -423,8 +423,8 @@ void CharIterTest::TestIterationUChar32() {
         do {
             if (c == CharacterIterator::DONE && i != text.length())
                 errln("Iterator reached end prematurely");
-			else if(iter.hasNext() == FALSE && i != text.length())
-				errln("Iterator reached end prematurely.  Failed at hasNext");
+            else if(iter.hasNext() == FALSE && i != text.length())
+                errln("Iterator reached end prematurely.  Failed at hasNext");
             else if (c != text.char32At(i))
                 errln((UnicodeString)"Character mismatch at position " + i +
                                     (UnicodeString)", iterator has " + c +
@@ -432,22 +432,22 @@ void CharIterTest::TestIterationUChar32() {
 
             if (iter.current32() != c)
                 errln("current32() isn't working right");
-			if(iter.setIndex32(i) != c)
-				errln("setIndex32() isn't working right");
+            if(iter.setIndex32(i) != c)
+                errln("setIndex32() isn't working right");
             if (c != CharacterIterator::DONE) {
                 c = iter.next32();
-				i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
+                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
               
             }
         } while (c != CharacterIterator::DONE);
         if(iter.hasNext() == TRUE)
            errln("hasNext() returned true at the end of the string");
-	    
-        
-           
-		c=iter.setToEnd();
-		if(iter.getIndex() != text.length() || iter.hasNext() != FALSE)
-			errln("setToEnd failed");
+
+
+
+        c=iter.setToEnd();
+        if(iter.getIndex() != text.length() || iter.hasNext() != FALSE)
+            errln("setToEnd failed");
 
         c=iter.next32();
         if(c!= CharacterIterator::DONE)
@@ -457,77 +457,77 @@ void CharIterTest::TestIterationUChar32() {
             errln("setIndex32(len+1) didn't return DONE");
 
 
-		c = iter.last32();
+        c = iter.last32();
         i = text.length()-1;
         logln("Testing backward iteration...");
         do {
             if (c == CharacterIterator::DONE && i >= 0)
                 errln((UnicodeString)"Iterator reached start prematurely for i=" + i);
-			else if(iter.hasPrevious() == FALSE && i>0)
-				errln((UnicodeString)"Iterator reached start prematurely for i=" + i);
+            else if(iter.hasPrevious() == FALSE && i>0)
+                errln((UnicodeString)"Iterator reached start prematurely for i=" + i);
             else if (c != text.char32At(i))
                 errln(prettify((UnicodeString)"Character mismatch at position " + i +
                                     (UnicodeString)", iterator has " + c +
                                     (UnicodeString)", string has " + text.char32At(i)));
-            
+
             if (iter.current32() != c)
                 errln("current32() isn't working right");
             if(iter.setIndex32(i) != c)
-				errln("setIndex32() isn't working right");
-		    if (iter.getIndex() != i)
+                errln("setIndex32() isn't working right");
+            if (iter.getIndex() != i)
                 errln("getIndex() isn't working right");
             if (c != CharacterIterator::DONE) {
                 c = iter.previous32();
-               	i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i-2 : i-1;
+                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i-2 : i-1;
             }
         } while (c != CharacterIterator::DONE);
-		if(iter.hasPrevious() == TRUE)
-			errln("hasPrevious returned true after reaching the start");
-	
+        if(iter.hasPrevious() == TRUE)
+            errln("hasPrevious returned true after reaching the start");
+
         c=iter.previous32();
         if(c!= CharacterIterator::DONE)
             errln("previous32 didn't return DONE at the beginning");
-      
 
-	
-              
+
+
+
         //testing first32PostInc, next32PostInc, setTostart
         i = 0;
-		c=iter.first32PostInc();
-		if(c != text.char32At(i))
-			errln((UnicodeString)"first32PostInc failed.  Expected->" +  text.char32At(i) + " Got->" + c);
-		if(iter.getIndex() != UTF16_CHAR_LENGTH(c) + i)
-			errln((UnicodeString)"getIndex() after first32PostInc() failed");
-		
-		iter.setToStart();
-		i=0;
+        c=iter.first32PostInc();
+        if(c != text.char32At(i))
+            errln((UnicodeString)"first32PostInc failed.  Expected->" +  text.char32At(i) + " Got->" + c);
+        if(iter.getIndex() != UTF16_CHAR_LENGTH(c) + i)
+            errln((UnicodeString)"getIndex() after first32PostInc() failed");
+
+        iter.setToStart();
+        i=0;
         if (iter.startIndex() != 0)
             errln("setToStart failed");
        
         logln("Testing forward iteration...");
         do {
-           	if (c != CharacterIterator::DONE)
+            if (c != CharacterIterator::DONE)
                 c = iter.next32PostInc();
-			
+
             if(c != text.char32At(i))
                 errln((UnicodeString)"Character mismatch at position " + i +
                                     (UnicodeString)", iterator has " + c +
                                     (UnicodeString)", string has " + text.char32At(i));
-			
-			i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
-			if(iter.getIndex() != i)
-				errln("getIndex() aftr next32PostInc() isn't working right");
-			if(iter.current32() != text.char32At(i))
-				errln("current() after next32PostInc() isn't working right");
-			} while (iter.hasNext());
+
+            i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
+            if(iter.getIndex() != i)
+                errln("getIndex() aftr next32PostInc() isn't working right");
+            if(iter.current32() != text.char32At(i))
+                errln("current() after next32PostInc() isn't working right");
+        } while (iter.hasNext());
         c=iter.next32PostInc();
         if(c!= CharacterIterator::DONE)
             errln("next32PostInc() didn't return DONE at the beginning");
 
-       
+
     }
 
-	 {
+    {
         StringCharacterIterator iter(text, 1, 11, 10);
         if (iter.startIndex() != 1 || iter.endIndex() != 11)
             errln("creation of a restricted-range iterator failed");
@@ -543,8 +543,8 @@ void CharIterTest::TestIterationUChar32() {
         do {
             if (c == CharacterIterator::DONE && i != 11)
                 errln("Iterator reached end prematurely");
-			else if(iter.hasNext() == FALSE)
-				errln("Iterator reached end prematurely");
+            else if(iter.hasNext() == FALSE)
+                errln("Iterator reached end prematurely");
             else if (c != text.char32At(i))
                 errln((UnicodeString)"Character mismatch at position " + i +
                                     (UnicodeString)", iterator has " + c +
@@ -552,12 +552,12 @@ void CharIterTest::TestIterationUChar32() {
 
             if (iter.current32() != c)
                 errln("current32() isn't working right");
-           	if(iter.setIndex32(i) != c)
-				errln("setIndex32() isn't working right");
+            if(iter.setIndex32(i) != c)
+                errln("setIndex32() isn't working right");
 
             if (c != CharacterIterator::DONE) {
                 c = iter.next32();
-               	i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
+                i=UTF16_NEED_MULTIPLE_UCHAR(c) ? i+2 : i+1;
             }
         } while (c != CharacterIterator::DONE);
         c=iter.next32();
@@ -572,8 +572,8 @@ void CharIterTest::TestIterationUChar32() {
         do {
             if (c == CharacterIterator::DONE && i >= 5)
                 errln("Iterator reached start prematurely");
-			else if(iter.hasPrevious() == FALSE && i > 5)
-				errln("Iterator reached start prematurely");
+            else if(iter.hasPrevious() == FALSE && i > 5)
+                errln("Iterator reached start prematurely");
             else if (c != text.char32At(i))
                 errln((UnicodeString)"Character mismatch at position " + i +
                                     (UnicodeString)", iterator has " + c +
@@ -582,8 +582,8 @@ void CharIterTest::TestIterationUChar32() {
                 errln("current32() isn't working right");
             if (iter.getIndex() != i)
                 errln("getIndex() isn't working right");
-			if(iter.setIndex32(i) != c)
-				errln("setIndex32() isn't working right");
+            if(iter.setIndex32(i) != c)
+                errln("setIndex32() isn't working right");
 
             if (c != CharacterIterator::DONE) {
                 c = iter.previous32();

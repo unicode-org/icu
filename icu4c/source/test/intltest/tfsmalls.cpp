@@ -292,7 +292,7 @@ void test_Formattable( void )
 
 }
 
-void TestFormatSmallClasses::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void TestFormatSmallClasses::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     switch (index) {
         case 0: name = "pp"; 

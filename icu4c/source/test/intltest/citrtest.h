@@ -14,7 +14,7 @@ public:
     CharIterTest();
     ~CharIterTest();
     
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     /**
      * Test Constructors and operators ==, != and a few other methods
@@ -28,7 +28,7 @@ public:
      * test the iteration functionality in different ways
      **/
     void TestIteration(void);
-	 /**
+     /**
      * test the iteration functionality in different ways with  unicodestring of UChar32's
      **/
     void TestIterationUChar32(void);

@@ -73,24 +73,24 @@ public:
 
   void addElement(UnicodeString text) { fEnd->fLink = new TextLink(&fBase, text); fEnd = fEnd->fLink; ++fSize; }
   void insertElementAt(UnicodeString text, int pos) { 
-	  if(pos >= fSize || pos < 0)
-		  ;
-	  else if(pos == 0){
+      if(pos >= fSize || pos < 0)
+          ;
+      else if(pos == 0){
           TextLink* insert = new TextLink(&fBase, text);
-		  insert->fLink=fBase.fLink;
-		  ++fSize;
-		  fBase.fLink=insert;
-	  }
-	  else{
+          insert->fLink=fBase.fLink;
+          ++fSize;
+          fBase.fLink=insert;
+      }
+      else{
           TextLink* link = fBase.fLink; 
-		  while(--pos > 0)
+          while(--pos > 0)
              link=link->fLink;
           TextLink* insert = new TextLink(&fBase, text);
-		  insert->fLink =link->fLink;
+          insert->fLink =link->fLink;
           link->fLink=insert;
-		  ++fSize;
+          ++fSize;
 
-	  }
+      }
 
   }
     UnicodeString elementAt(int32_t pos) {
@@ -123,18 +123,18 @@ const UnicodeString  deadTA  = CharsToUnicodeString("\\u0924\\u094d");
 //--------------------------------------------------------------------
 void RBBITest::TestDefaultRuleBasedCharacterIteration()
 {
-   //	RuleBasedBreakIterator* rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
+   //   RuleBasedBreakIterator* rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
       logln((UnicodeString)"Testing the RBBI for character iteration by using default rules");
   //fetch the rules used to create the above RuleBasedBreakIterator
     //    UnicodeString defaultRules=rbbi->getRules();
     //     RuleBasedCharacterIterator charIterDefault = new RuleBasedBreakIterator(defaultRules); 
-	 
-	  UErrorCode status=U_ZERO_ERROR;
-	  RuleBasedBreakIterator* charIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-	  if(U_FAILURE(status)){
-		  errln("FAIL : in construction");
-		  return;
-	  }
+
+      UErrorCode status=U_ZERO_ERROR;
+      RuleBasedBreakIterator* charIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+      if(U_FAILURE(status)){
+          errln("FAIL : in construction");
+          return;
+      }
 
       Vector *chardata = new Vector();
       chardata->addElement("H");
@@ -166,7 +166,7 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
       chardata->addElement(CharsToUnicodeString("i\\u0301"));                   //acuteBelowI
       chardata->addElement("!");
 
-	  // What follows is a string of Korean characters (I found it in the Yellow Pages
+    // What follows is a string of Korean characters (I found it in the Yellow Pages
     // ad for the Korean Presbyterian Church of San Francisco, and I hope I transcribed
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
@@ -201,9 +201,9 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
       chardata->addElement(CharsToUnicodeString("\\u1112\\u116c"));
       generalIteratorTest(*charIterDefault, chardata);
 
-	  delete charIterDefault;
-	  delete chardata;
-	 // delete rbbi;
+      delete charIterDefault;
+      delete chardata;
+//      delete rbbi;
 
 }
 //--------------------------------------------------------------------
@@ -212,17 +212,17 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
 void RBBITest::TestDefaultRuleBasedWordIteration()
 {
       logln((UnicodeString)"Testing the RBBI for word iteration using default rules");
-   //   RuleBasedBreakIterator *rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
-      //fetch the rules used to create the above RuleBasedBreakIterator
-  //    UnicodeString defaultRules=rbbi->getRules();
-  //     RuleBasedBreakIterator wordIterDefault = new RuleBasedBreakIterator(defaultRules); 
+//      RuleBasedBreakIterator *rbbi=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
+//      fetch the rules used to create the above RuleBasedBreakIterator
+//      UnicodeString defaultRules=rbbi->getRules();
+//      RuleBasedBreakIterator wordIterDefault = new RuleBasedBreakIterator(defaultRules); 
 
-	  UErrorCode status=U_ZERO_ERROR; 
-	  RuleBasedBreakIterator* wordIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+      UErrorCode status=U_ZERO_ERROR; 
+      RuleBasedBreakIterator* wordIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
       if(U_FAILURE(status)){
-		  errln("FAIL : in construction");
-		  return;
-	  }
+          errln("FAIL : in construction");
+          return;
+      }
 
       Vector *worddata = new Vector();
       worddata->addElement ("Write");
@@ -230,8 +230,8 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
       worddata->addElement ("wordrules");
       worddata->addElement (".");
       worddata->addElement(" ");
-	  worddata->addElement("alpha-beta-gamma");
-	  worddata->addElement(" ");
+      worddata->addElement("alpha-beta-gamma");
+      worddata->addElement(" ");
       worddata->addElement(CharsToUnicodeString("\\u092f\\u0939"));
       worddata->addElement(" ");
       worddata->addElement(CharsToUnicodeString("\\u0939\\u093f") + halfNA + CharsToUnicodeString("\\u0926\\u0940"));
@@ -297,7 +297,7 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
       worddata->addElement(" ");
       worddata->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
       worddata->addElement(" ");
-	  worddata->addElement("Hello");
+      worddata->addElement("Hello");
       worddata->addElement(",");
       worddata->addElement(" ");
       worddata->addElement("how");
@@ -308,9 +308,9 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
       worddata->addElement(" ");
       generalIteratorTest(*wordIterDefault, worddata);
 
-	  delete wordIterDefault;
-	  delete worddata;
-	 // delete rbbi;
+      delete wordIterDefault;
+      delete worddata;
+//      delete rbbi;
 }
 //--------------------------------------------------------------------
 //tests default rules based word iteration
@@ -328,15 +328,15 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       UErrorCode status=U_ZERO_ERROR;
       RuleBasedBreakIterator* sentIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
       if(U_FAILURE(status)){
-		  errln("FAIL : in construction");
-		  return;
-	  }
+          errln("FAIL : in construction");
+          return;
+      }
       Vector *sentdata = new Vector();
       sentdata->addElement("(This is it.) ");
       sentdata->addElement("Testing the sentence iterator. ");
       sentdata->addElement("\"This isn\'t it.\" ");
       sentdata->addElement("Hi! ");
-	  //sentdata = new Vector();
+      //sentdata = new Vector();
       sentdata->addElement("This is a simple sample sentence. ");
       sentdata->addElement("(This is it.) ");
       sentdata->addElement("This is a simple sample sentence. ");
@@ -399,34 +399,34 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       //sentence breaks for hindi which used Devanagari script
       //make sure there is sentence break after ?,danda(hindi phrase separator),fullstop followed by space and no break after \n \r 
       sentdata->addElement(CharsToUnicodeString("\\u0928\\u092e")+halfSA
-								   + CharsToUnicodeString("\\u0924\\u0947 ")  
+                                   + CharsToUnicodeString("\\u0924\\u0947 ")  
                                    + CharsToUnicodeString("\\u0930\\u092e\\u0947\\u0936, ") 
                                    + CharsToUnicodeString("\\u0905\\u093e\\u092a")
                                    + CharsToUnicodeString("\\u0915\\u0948\\u0938\\u0947 ")
                                    + CharsToUnicodeString("\\u0939\\u0948?"));   
       sentdata->addElement(CharsToUnicodeString("\\u092e\\u0948 \\u0905")
-							       + halfCHA
-								   +CharsToUnicodeString("\\u091b\\u093e \\u0939\\u0942\\u0901\\u0964 "));   
+                                   + halfCHA
+                                   +CharsToUnicodeString("\\u091b\\u093e \\u0939\\u0942\\u0901\\u0964 "));   
       sentdata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u092a\r\n \\u0915\\u0948\\u0938\\u0947 \\u0939\\u0948?"));   
       sentdata->addElement(CharsToUnicodeString("\\u0935\\u0939 ")
-								   + halfKA
-								   +CharsToUnicodeString("\\u092f\\u093e\n \\u0939\\u0948?"));   
+                                   + halfKA
+                                   +CharsToUnicodeString("\\u092f\\u093e\n \\u0939\\u0948?"));   
       sentdata->addElement(CharsToUnicodeString("\\u092f\\u0939 \\u0905\\u093e\\u092e \\u0939\\u0948. "));   
       sentdata->addElement(CharsToUnicodeString("\\u092f\\u0939 means \"this\". ")); 
       sentdata->addElement(CharsToUnicodeString("\"\\u092a\\u095d\\u093e\\u0908\" meaning \"education\" or \"studies\". "));
       sentdata->addElement(CharsToUnicodeString("\\u0905\\u093e\\u091c") 
                                    + CharsToUnicodeString("(")
-								   + halfSA
-								   + CharsToUnicodeString("\\u0935\\u0924\\u0902")
-								   + deadTA+ CharsToUnicodeString("\\u0930 ")
+                                   + halfSA
+                                   + CharsToUnicodeString("\\u0935\\u0924\\u0902")
+                                   + deadTA+ CharsToUnicodeString("\\u0930 ")
                                    + CharsToUnicodeString("\\u0926\\u093f\\u0935\\u093e\\u0938) ")
                                    + CharsToUnicodeString("\\u0939\\u0948\\u0964 "));
       sentdata->addElement("Let's end here. ");
       generalIteratorTest(*sentIterDefault, sentdata);
 
-	  delete sentIterDefault;
-	  delete sentdata;
-//	  delete rbbi;
+      delete sentIterDefault;
+      delete sentdata;
+//      delete rbbi;
 }
 //--------------------------------------------------------------------
 //tests default rules based line iteration
@@ -436,9 +436,9 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
     UErrorCode status= U_ZERO_ERROR;
     RuleBasedBreakIterator* lineIterDefault=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createLineInstance(Locale::getDefault(), status);
     if(U_FAILURE(status)){
-		  errln("FAIL : in construction");
-		  return;
-	  }
+          errln("FAIL : in construction");
+          return;
+      }
     Vector *linedata = new Vector();
       linedata->addElement("Multi-");
       linedata->addElement("Level ");
@@ -521,10 +521,10 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
       linedata->addElement(CharsToUnicodeString("\\u4e02\\uff01"));
       linedata->addElement(CharsToUnicodeString("\\u4e03\\uff1f"));
 
-	generalIteratorTest(*lineIterDefault, linedata);
+    generalIteratorTest(*lineIterDefault, linedata);
 
-	delete lineIterDefault;
-	delete linedata;
+    delete lineIterDefault;
+    delete linedata;
 
 }
 //--------------------------------------------------------------------
@@ -587,14 +587,14 @@ void RBBITest::TestHindiCharacterBreak()
       hindicharData->addElement(CharsToUnicodeString("\\u091c\\u094d\\u091e"));         //deadJA(JA+virama)+NYA wraps up into JNYA
      
       UErrorCode status= U_ZERO_ERROR;
-	  RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
-	  if(U_FAILURE(status)){
-		  errln("FAIL : in construction");
-		  return;
-	  }
-	  generalIteratorTest(*e, hindicharData);
-   	  delete e;
-	  delete hindicharData;
+      RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance(Locale::getDefault(), status);
+      if(U_FAILURE(status)){
+          errln("FAIL : in construction");
+          return;
+      }
+      generalIteratorTest(*e, hindicharData);
+      delete e;
+      delete hindicharData;
 }
 void RBBITest::TestHindiWordBreak()
    {
@@ -649,16 +649,16 @@ void RBBITest::TestHindiWordBreak()
      hindiWordData->addElement("\n");
      hindiWordData->addElement(halfSA+CharsToUnicodeString("\\u0935\\u0924\\u0902")+deadTA+CharsToUnicodeString("\\u0930"));
      hindiWordData->addElement("\r");
-  
+
      UErrorCode status=U_ZERO_ERROR;
-	 RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
-	  if(U_FAILURE(status)){
-		  errln("FAIL : in construction");
-		  return;
-	  }
-	  generalIteratorTest(*e, hindiWordData);
-   	  delete e;
-	  delete hindiWordData;
+     RuleBasedBreakIterator *e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance(Locale::getDefault(), status);
+      if(U_FAILURE(status)){
+          errln("FAIL : in construction");
+          return;
+      }
+      generalIteratorTest(*e, hindiWordData);
+      delete e;
+      delete hindiWordData;
 }
 /*
 //Bug: if there is no word break before and after danda when it is followed by a space
@@ -673,15 +673,15 @@ void RBBITest::TestDanda()
      //following fail----
       hindiWordData->addElement(CharsToUnicodeString("\\u0939\\u0948"));
     //  hindiWordData->addElement(CharsToUnicodeString("\\u0964"));         // devanagari danda
-	  hindiWordData->addElement(" ");
+      hindiWordData->addElement(" ");
       hindiWordData->addElement(CharsToUnicodeString("\\u092f\\u0939"));
   //    hindiWordData->addElement(CharsToUnicodeString("\\u0965"));         //devanagari double danda
-	  hindiWordData->addElement(" ");
-		
-	  RuleBasedBreakIterator* e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
-	  generalIteratorTest(*e, hindiWordData);
-   	  delete e;
-	  delete hindiWordData;
+      hindiWordData->addElement(" ");
+
+      RuleBasedBreakIterator* e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createWordInstance();
+      generalIteratorTest(*e, hindiWordData);
+      delete e;
+      delete hindiWordData;
 }
 //Make sure the character wrapping is done correctly
 void RBBITest::TestHindiCharacterWrapping()
@@ -692,11 +692,11 @@ void RBBITest::TestHindiCharacterWrapping()
       hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0917")); //deadRA+devanagari consonant GA->GA+superRA
       //following fail----
      // hindicharData->addElement(deadRA+ CharsToUnicodeString("\\u0960"));   //deadRA+devanagari RRI->RRI+superRA
-      
-	  RuleBasedBreakIterator* e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
-	  generalIteratorTest(*e, hindicharData);
-   	  delete e;
-	  delete hindicharData;
+
+      RuleBasedBreakIterator* e=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createCharacterInstance();
+      generalIteratorTest(*e, hindicharData);
+      delete e;
+      delete hindicharData;
 
 }*/
 
@@ -711,10 +711,10 @@ void RBBITest::TestHindiCharacterWrapping()
 /*void RBBITest::TestTeluguRuleBasedCharacterIteration()
 {
      logln((UnicodeString)"Testing the RBBI by adding rules for Telugu(Indian Language) Support");
-	 //get the default rules
+     //get the default rules
      RuleBasedBreakIterator *rb= (RuleBasedBreakIterator*)BreakIterator::createCharacterInstance();
      //additional rules for Telugu(Indian Language) support
-	 UnicodeString crules1 = rb->getRules()                                                 +  //default rules +
+     UnicodeString crules1 = rb->getRules()                                                 +  //default rules +
                       "<telvirama>=[\\u0c4d];"                                               +  //telugu virama
                       "<telVowelSign>=[\\u0c3e-\\u0c44\\u0c46\\u0c47\\u0c48\\u0c4a\\u0c4b\\u0c4c];" +  //telugu dependent vowel signs
                       "<telConsonant>=[\\u0c15-\\u0c28\\u0c2a-\\u0c33\\u0c35-\\u0c39];"           +  //telugu consonants
@@ -723,8 +723,8 @@ void RBBITest::TestHindiCharacterWrapping()
                       "<telConjunct>{<telVowelSign>}{<telCharEnd>};";
       RuleBasedBreakIterator charIter=null;
       charIter   = new RuleBasedBreakIterator(crules1); 
-      
-	  Vector *chardata = new Vector();
+
+      Vector *chardata = new Vector();
       //behaviour of telugu characters from specified rules
       chardata->addElement(CharsToUnicodeString("\\u0c15"));                    //telugu consonant KA
       chardata->addElement(CharsToUnicodeString("\\u0c30\\u0c47"));              //telugu consonant RA+telugu dependent vowel EE
@@ -744,11 +744,11 @@ void RBBITest::TestHindiCharacterWrapping()
       chardata->addElement("\n");
       chardata->addElement("\r\n");    
 
-	  generalIteratorTest(charIter, chardata);
-       
-	  delete charIter;
-	  delete charData;
-	  delete rb;
+      generalIteratorTest(charIter, chardata);
+
+      delete charIter;
+      delete charData;
+      delete rb;
 }
 
 //--------------------------------------------------------------------
@@ -765,8 +765,8 @@ void RBBITest::TestCustomRuleBasedCharacterIteration()
                      "<devConsonant>=[\\u0915-\\u0939];"              +  //devanagiri consonant = \\u0915 to \\u0939
                      "<devConsonant>{<devVowelSign>};" ;               //break at all places except the  following 
                                                                        //devanagiri consonants+ devanagiri vowelsign
-     
-	  RuleBasedCharacterIterator charIterCustom   = new RuleBasedBreakIterator(crules2);
+
+      RuleBasedCharacterIterator charIterCustom   = new RuleBasedBreakIterator(crules2);
       Vector *chardata = new Vector();
       chardata->addElement("He");              //ignores 'e'
       chardata->addElement("l");                
@@ -807,8 +807,8 @@ void RBBITest::TestCustomRuleBasedCharacterIteration()
       chardata->addElement(CharsToUnicodeString("\\u0301"));         //breaks in between since it is not mentioned in the rules
       generalIteratorTest(charIterCustom, chardata);
 
-	  delete charIterCustom;
-	  delete chardata;
+      delete charIterCustom;
+      delete chardata;
 }*/
 /*//--------------------------------------------------------------------
 //tests custom rules based word iteration
@@ -857,10 +857,10 @@ void RBBITest::TestCustomRuleBasedWordIteration(){
       worddata->addElement(" ");
       // worddata->addElement(" ");
       generalIteratorTest(wordIterCustom, worddata); 
-      
-	  delete wordIterCustom;
-	  delete worddata;
-}   
+
+      delete wordIterCustom;
+      delete worddata;
+}
 //-------------------------------------------------------------------------------
 //adds extra rules to deal with abbrevations(limited) and test the word Iteration
 //-------------------------------------------------------------------------------
@@ -905,29 +905,29 @@ void RBBITest::TestAbbrRuleBasedWordIteration()
       worddata->addElement(" ");
       worddata->addElement("$2,400.00");
       generalIteratorTest(wordIter, worddata);
-	  
-	  delete wordIter;
-	  delete worddata;
-	  delete rb;
+
+      delete wordIter;
+      delete worddata;
+      delete rb;
 } */  
 
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
 
-void RBBITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {
     
         case 0: name = "TestDefaultRuleBasedCharacterIteration"; 
-			if(exec) TestDefaultRuleBasedCharacterIteration(); break;
+            if(exec) TestDefaultRuleBasedCharacterIteration(); break;
         case 1: name = "TestDefaultRuleBasedWordIteration";      
-			if(exec) TestDefaultRuleBasedWordIteration();      break;
+            if(exec) TestDefaultRuleBasedWordIteration();      break;
         case 2: name = "TestDefaultRuleBasedSentenceIteration";  
-			if(exec) TestDefaultRuleBasedSentenceIteration();  break;
+            if(exec) TestDefaultRuleBasedSentenceIteration();  break;
         case 3: name = "TestDefaulRuleBasedLineIteration()";
-			if(exec) TestDefaultRuleBasedLineIteration();      break;
+            if(exec) TestDefaultRuleBasedLineIteration();      break;
         case 4: name = "TestHindiCharacterBreak()";
             if(exec) TestHindiCharacterBreak();                break;
         case 5: name = "TestHindiWordBreak()";
@@ -939,16 +939,16 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par
 //       case 8: name = "TestHindiCharacterWrapping()";
 //           if(exec) TestHindiCharacterWrapping();             break;
 
-//		case 9: name = "TestCustomRuleBasedWordIteration";       
-//			if(exec) TestCustomRuleBasedWordIteration();       break;
-//		case 10: name = "TestAbbrRuleBasedWordIteration";         
-//			if(exec) TestAbbrRuleBasedWordIteration();         break;
-     //	case 11: name = "TestTeluguRuleBasedCharacterIteration";  
-	//		if(exec) TestTeluguRuleBasedCharacterIteration();  break;
-	//	case 12: name = "TestCustomRuleBasedCharacterIteration";  
-	//		if(exec) TestCustomRuleBasedCharacterIteration();  break;
-		
-        	       
+//      case 9: name = "TestCustomRuleBasedWordIteration";       
+//          if(exec) TestCustomRuleBasedWordIteration();       break;
+//      case 10: name = "TestAbbrRuleBasedWordIteration";         
+//          if(exec) TestAbbrRuleBasedWordIteration();         break;
+//      case 11: name = "TestTeluguRuleBasedCharacterIteration";  
+//          if(exec) TestTeluguRuleBasedCharacterIteration();  break;
+//      case 12: name = "TestCustomRuleBasedCharacterIteration";  
+//          if(exec) TestCustomRuleBasedCharacterIteration();  break;
+
+
         default: name = ""; break; //needed to end loop
     }
 }
@@ -968,218 +968,218 @@ UnicodeString RBBITest::createTestData(Enumeration* e)
 // general test Implementation subroutines
 void RBBITest::generalIteratorTest(RuleBasedBreakIterator& bi, Vector* expectedResult) 
 {
-        Enumeration *elems = expectedResult->elements();
-		UnicodeString text = createTestData(elems);
-		delete elems;
+    Enumeration *elems = expectedResult->elements();
+    UnicodeString text = createTestData(elems);
+    delete elems;
 
-        bi.setText(&text);
+    bi.setText(&text);
 
-        Vector *nextResults = testFirstAndNext(bi, text);
-        Vector *previousResults = testLastAndPrevious(bi, text);
+    Vector *nextResults = testFirstAndNext(bi, text);
+    Vector *previousResults = testLastAndPrevious(bi, text);
 
-        logln("comparing forward and backward...");
-        int errs = getErrors();
-		UnicodeString str1="forward iteration";
-		UnicodeString str2="backward iteration";
-        compareFragmentLists(str1, str2, nextResults,
-                        previousResults);
-        if (getErrors() == errs) {
-            logln("comparing expected and actual...");
-			str1="expected result";
-			str2="actual result";
-            compareFragmentLists(str1, str2, expectedResult,
-                            nextResults);
-        }
+    logln("comparing forward and backward...");
+    int errs = getErrors();
+    UnicodeString str1="forward iteration";
+    UnicodeString str2="backward iteration";
+    compareFragmentLists(str1, str2, nextResults,
+                    previousResults);
+    if (getErrors() == errs) {
+        logln("comparing expected and actual...");
+        str1="expected result";
+        str2="actual result";
+        compareFragmentLists(str1, str2, expectedResult,
+                        nextResults);
+    }
 
-        int32_t *boundaries = new int32_t[expectedResult->size() + 3];
-        boundaries[0] = RuleBasedBreakIterator::DONE;
-        boundaries[1] = 0;
-        for (int i = 0; i < expectedResult->size(); i++)
-            boundaries[i + 2] = boundaries[i + 1] + ((UnicodeString)expectedResult->elementAt(i)).
-                            length();
-		
-        int len = expectedResult->size() + 3 -1;
-		boundaries[len] = RuleBasedBreakIterator::DONE;
-      
-        testFollowing(bi, text, boundaries);
-        testPreceding(bi, text, boundaries);
-        testIsBoundary(bi, text, boundaries);
+    int32_t *boundaries = new int32_t[expectedResult->size() + 3];
+    boundaries[0] = RuleBasedBreakIterator::DONE;
+    boundaries[1] = 0;
+    for (int i = 0; i < expectedResult->size(); i++)
+        boundaries[i + 2] = boundaries[i + 1] + ((UnicodeString)expectedResult->elementAt(i)).
+                        length();
 
-        doMultipleSelectionTest(bi, text);
-        
-        delete[] boundaries;
-        delete nextResults;
-        delete previousResults;
+    int len = expectedResult->size() + 3 -1;
+    boundaries[len] = RuleBasedBreakIterator::DONE;
+
+    testFollowing(bi, text, boundaries);
+    testPreceding(bi, text, boundaries);
+    testIsBoundary(bi, text, boundaries);
+
+    doMultipleSelectionTest(bi, text);
+
+    delete[] boundaries;
+    delete nextResults;
+    delete previousResults;
 }
 
 Vector* RBBITest::testFirstAndNext(RuleBasedBreakIterator& bi, UnicodeString& text) 
 {
-        int32_t p = bi.first();
-        int32_t lastP = p;
-        Vector *result = new Vector();
-        UnicodeString selection;
+    int32_t p = bi.first();
+    int32_t lastP = p;
+    Vector *result = new Vector();
+    UnicodeString selection;
 
-        if (p != 0)
-            errln((UnicodeString)"first() returned " + p + (UnicodeString)" instead of 0");
-        while (p != RuleBasedBreakIterator::DONE) {
-            p = bi.next();
-            if (p != RuleBasedBreakIterator::DONE) {
-                if (p <= lastP)
-                    errln((UnicodeString)"next() failed to move forward: next() on position "
-                                    + lastP + (UnicodeString)" yielded " + p);
+    if (p != 0)
+        errln((UnicodeString)"first() returned " + p + (UnicodeString)" instead of 0");
+    while (p != RuleBasedBreakIterator::DONE) {
+        p = bi.next();
+        if (p != RuleBasedBreakIterator::DONE) {
+            if (p <= lastP)
+                errln((UnicodeString)"next() failed to move forward: next() on position "
+                                + lastP + (UnicodeString)" yielded " + p);
 
-                text.extractBetween(lastP, p, selection);  
-                result->addElement(selection);
-            }
-            else {
-                if (lastP != text.length())
-                    errln((UnicodeString)"next() returned DONE prematurely: offset was "
-                                    + lastP + (UnicodeString)" instead of " + text.length());
-            }
-            lastP = p;
+            text.extractBetween(lastP, p, selection);  
+            result->addElement(selection);
         }
-        return result;
+        else {
+            if (lastP != text.length())
+                errln((UnicodeString)"next() returned DONE prematurely: offset was "
+                                + lastP + (UnicodeString)" instead of " + text.length());
+        }
+        lastP = p;
+    }
+    return result;
 }
 Vector* RBBITest::testLastAndPrevious(RuleBasedBreakIterator& bi, UnicodeString& text) 
 {
-        int32_t p = bi.last();
-        int32_t lastP = p;
-        Vector *result = new Vector();
-		UnicodeString selection;
+    int32_t p = bi.last();
+    int32_t lastP = p;
+    Vector *result = new Vector();
+    UnicodeString selection;
 
-        if (p != text.length())
-            errln((UnicodeString)"last() returned " + p + (UnicodeString)" instead of " + text.length());
-        while (p != RuleBasedBreakIterator::DONE) {
-            p = bi.previous();
-            if (p != RuleBasedBreakIterator::DONE) {
-                if (p >= lastP)
-                    errln((UnicodeString)"previous() failed to move backward: previous() on position "
-                                    + lastP + (UnicodeString)" yielded " + p);
-                text.extractBetween(p, lastP, selection);
-                result->insertElementAt(selection, 0);
-            }
-            else {
-                if (lastP != 0)
-                    errln((UnicodeString)"previous() returned DONE prematurely: offset was "
-                                    + lastP + (UnicodeString)" instead of 0");
-            }
-            lastP = p;
+    if (p != text.length())
+        errln((UnicodeString)"last() returned " + p + (UnicodeString)" instead of " + text.length());
+    while (p != RuleBasedBreakIterator::DONE) {
+        p = bi.previous();
+        if (p != RuleBasedBreakIterator::DONE) {
+            if (p >= lastP)
+                errln((UnicodeString)"previous() failed to move backward: previous() on position "
+                                + lastP + (UnicodeString)" yielded " + p);
+            text.extractBetween(p, lastP, selection);
+            result->insertElementAt(selection, 0);
         }
-		return result;
+        else {
+            if (lastP != 0)
+                errln((UnicodeString)"previous() returned DONE prematurely: offset was "
+                                + lastP + (UnicodeString)" instead of 0");
+        }
+        lastP = p;
+    }
+    return result;
 }
 
 void RBBITest::compareFragmentLists(UnicodeString& f1Name, UnicodeString& f2Name, Vector* f1, Vector* f2) 
 {
-        int32_t p1 = 0;
-        int32_t p2 = 0;
-        UnicodeString s1;
-        UnicodeString s2;
-        int32_t t1 = 0;
-        int32_t t2 = 0;
-	
+    int32_t p1 = 0;
+    int32_t p2 = 0;
+    UnicodeString s1;
+    UnicodeString s2;
+    int32_t t1 = 0;
+    int32_t t2 = 0;
 
-        while (p1 < f1->size() && p2 < f2->size()) {
-            s1 = (UnicodeString)f1->elementAt(p1);
-            s2 = (UnicodeString)f2->elementAt(p2);
-            t1 += s1.length();
-            t2 += s2.length();
 
-            if (s1.compare(s2) == 0) {
-                logln(prettify((UnicodeString)"   >" + s1 + (UnicodeString)"<"));
+    while (p1 < f1->size() && p2 < f2->size()) {
+        s1 = (UnicodeString)f1->elementAt(p1);
+        s2 = (UnicodeString)f2->elementAt(p2);
+        t1 += s1.length();
+        t2 += s2.length();
+
+        if (s1.compare(s2) == 0) {
+            logln(prettify((UnicodeString)"   >" + s1 + (UnicodeString)"<"));
+            ++p1;
+            ++p2;
+        }
+        else {
+            int32_t tempT1 = t1;
+            int32_t tempT2 = t2;
+            int32_t tempP1 = p1;
+            int32_t tempP2 = p2;
+
+            while (tempT1 != tempT2 && tempP1 < f1->size() && tempP2 < f2->size()) {
+                while (tempT1 < tempT2 && tempP1 < f1->size()) {
+                    tempT1 += ((UnicodeString)f1->elementAt(tempP1)).length();
+                    ++tempP1;
+                }
+                while (tempT2 < tempT1 && tempP2 < f2->size()) {
+                    tempT2 += ((UnicodeString)f2->elementAt(tempP2)).length();
+                    ++tempP2;
+                }
+            }
+            logln((UnicodeString)"*** " + f1Name + (UnicodeString)" has:");
+            while (p1 <= tempP1 && p1 < f1->size()) {
+                s1 = (UnicodeString)f1->elementAt(p1);
+                t1 += s1.length();
+                logln(prettify((UnicodeString)" *** >" + s1 + (UnicodeString)"<"));
                 ++p1;
+            }
+            logln("***** " + f2Name + " has:");
+            while (p2 <= tempP2 && p2 < f2->size()) {
+                s2 = (UnicodeString)f2->elementAt(p2);
+                t2 += s2.length();
+                logln(prettify(" ***** >" + s2 + "<"));
                 ++p2;
             }
-            else {
-                int32_t tempT1 = t1;
-                int32_t tempT2 = t2;
-                int32_t tempP1 = p1;
-                int32_t tempP2 = p2;
-
-                while (tempT1 != tempT2 && tempP1 < f1->size() && tempP2 < f2->size()) {
-                    while (tempT1 < tempT2 && tempP1 < f1->size()) {
-                        tempT1 += ((UnicodeString)f1->elementAt(tempP1)).length();
-                        ++tempP1;
-                    }
-                    while (tempT2 < tempT1 && tempP2 < f2->size()) {
-                        tempT2 += ((UnicodeString)f2->elementAt(tempP2)).length();
-                        ++tempP2;
-                    }
-                }
-                logln((UnicodeString)"*** " + f1Name + (UnicodeString)" has:");
-                while (p1 <= tempP1 && p1 < f1->size()) {
-                    s1 = (UnicodeString)f1->elementAt(p1);
-                    t1 += s1.length();
-                    logln(prettify((UnicodeString)" *** >" + s1 + (UnicodeString)"<"));
-                    ++p1;
-                }
-                logln("***** " + f2Name + " has:");
-                while (p2 <= tempP2 && p2 < f2->size()) {
-                    s2 = (UnicodeString)f2->elementAt(p2);
-                    t2 += s2.length();
-                    logln(prettify(" ***** >" + s2 + "<"));
-                    ++p2;
-                }
-                errln((UnicodeString)"Discrepancy between " + f1Name + (UnicodeString)" and " + f2Name);
-            }
+            errln((UnicodeString)"Discrepancy between " + f1Name + (UnicodeString)" and " + f2Name);
         }
+    }
 }
 
 void RBBITest::testFollowing(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) 
 {
-        logln("testFollowing():");
-        int p = 2;
-        for (int i = 0; i <= text.length(); i++) {
-            if (i == boundaries[p])
-                ++p;
+    logln("testFollowing():");
+    int p = 2;
+    for (int i = 0; i <= text.length(); i++) {
+        if (i == boundaries[p])
+            ++p;
 
-            int32_t b = bi.following(i);
-            logln((UnicodeString)"bi.following(" + i + ") -> " + b);
-            if (b != boundaries[p])
-                errln((UnicodeString)"Wrong result from following() for " + i + (UnicodeString)": expected " + boundaries[p]
-                                + (UnicodeString)", got " + b);
-        }
+        int32_t b = bi.following(i);
+        logln((UnicodeString)"bi.following(" + i + ") -> " + b);
+        if (b != boundaries[p])
+            errln((UnicodeString)"Wrong result from following() for " + i + (UnicodeString)": expected " + boundaries[p]
+                            + (UnicodeString)", got " + b);
+    }
 }
 
 void RBBITest::testPreceding(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
-        logln("testPreceding():");
-        int p = 0;
-        for (int i = 0; i <= text.length(); i++) {
-            int32_t b = bi.preceding(i);
-            logln((UnicodeString)"bi.preceding(" + i + ") -> " + b);
-            if (b != boundaries[p])
-                errln((UnicodeString)"Wrong result from preceding() for " + i + (UnicodeString)": expected " + boundaries[p]
-                                + (UnicodeString)", got " + b);
+    logln("testPreceding():");
+    int p = 0;
+    for (int i = 0; i <= text.length(); i++) {
+        int32_t b = bi.preceding(i);
+        logln((UnicodeString)"bi.preceding(" + i + ") -> " + b);
+        if (b != boundaries[p])
+            errln((UnicodeString)"Wrong result from preceding() for " + i + (UnicodeString)": expected " + boundaries[p]
+                            + (UnicodeString)", got " + b);
 
-            if (i == boundaries[p + 1])
-                ++p;
-        }
+        if (i == boundaries[p + 1])
+            ++p;
+    }
 }
 
 void RBBITest::testIsBoundary(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
-        logln("testIsBoundary():");
-        int p = 1;
-        UBool isB;
-        for (int i = 0; i < text.length(); i++) {
-            isB = bi.isBoundary(i);
-            logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
+    logln("testIsBoundary():");
+    int p = 1;
+    UBool isB;
+    for (int i = 0; i < text.length(); i++) {
+        isB = bi.isBoundary(i);
+        logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
 
-            if (i == boundaries[p]) {
-                if (!isB)
-                    errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected true, got false");
-                p++;
-            }
-            else {
-                if (isB)
-                    errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected false, got true");
-            }
+        if (i == boundaries[p]) {
+            if (!isB)
+                errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected true, got false");
+            p++;
         }
+        else {
+            if (isB)
+                errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected false, got true");
+        }
+    }
 }
 
 void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
                                                   UnicodeString& testText)
 {
     iterator.setText(&testText);
-    
+
     RuleBasedBreakIterator* testIterator =(RuleBasedBreakIterator*)iterator.clone();
     int32_t offset = iterator.first();
     int32_t testOffset;
@@ -1189,7 +1189,7 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
 
     if (*testIterator != iterator)
         errln("clone() or operator!= failed: two clones compared unequal");
-    
+
     do {
         testOffset = testIterator->first();
         testOffset = testIterator->next(count);

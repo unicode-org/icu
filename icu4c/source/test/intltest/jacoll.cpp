@@ -102,7 +102,7 @@ void CollationKanaTest::TestTertiary( char* par )
     }
 }
 
-void CollationKanaTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationKanaTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationKanaTest: ");
     switch (index) {
