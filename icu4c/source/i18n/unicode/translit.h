@@ -1258,7 +1258,9 @@ public:
      * @return      the index-th available ID.  index must be between 0
      *              and countAvailableIDs() - 1, inclusive.  If index is out of
      *              range, the result of getAvailableID(0) is returned.
-     * @obsolete ICU 3.4 use getAvailableIDs() instead
+     * @obsolete ICU 3.4 use getAvailableIDs() instead; this function
+     * is not thread safe, since it returns a reference to storage that
+     * may become invalid if another thread calls unregister
      */
     static const UnicodeString& getAvailableID(int32_t index);
 };
