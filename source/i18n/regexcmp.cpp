@@ -1005,7 +1005,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         }
         break;
 
-    case doPossesiveInterval:
+    case doPossessiveInterval:
         // Finished scanning a Possessive {lower,upper}+ interval.  Generate the code for it.
         {
             // Remember the loc for the top of the block being looped over.
@@ -1215,7 +1215,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
 
 
-    case doPossesivePlus:
+    case doPossessivePlus:
         // Possessive ++ quantifier.
         // Compiles to
         //       1.   STO_SP
@@ -1250,7 +1250,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         }
         break;
 
-    case doPossesiveStar:
+    case doPossessiveStar:
         // Possessive *+ quantifier.
         // Compiles to
         //       1.   STO_SP       loc
@@ -1286,7 +1286,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         }
         break;
 
-    case doPossesiveOpt:
+    case doPossessiveOpt:
         // Possessive  ?+ quantifier.
         //  Compiles to
         //     1. STO_SP      loc
@@ -1445,11 +1445,26 @@ void RegexCompile::literalChar(UChar32 c)  {
     // We are adding onto an existing string
     fRXPat->fLiteralText.append(c);
 
-    // If the most recently emitted op is a URX_ONECHAR, change it to a string op.
     op     = fRXPat->fCompiledPat->lastElementi();
     opType = URX_TYPE(op);
     U_ASSERT(opType == URX_ONECHAR || opType == URX_ONECHAR_I || opType == URX_STRING_LEN);
+
+    // If the most recently emitted op is a URX_ONECHAR, 
     if (opType == URX_ONECHAR || opType == URX_ONECHAR_I) {
+        if (U16_IS_TRAIL(c) && U16_IS_LEAD(URX_VAL(op))) {
+            // The most recently emitted op is a ONECHAR that was the first half
+            //   of a surrogate pair.  Update the ONECHAR's operand to be the
+            //   supplementary code point resulting from both halves of the pair.
+            c = U16_GET_SUPPLEMENTARY(URX_VAL(op), c);
+            op = URX_BUILD(opType, c);
+            patternLoc = fRXPat->fCompiledPat->size() - 1;
+            fRXPat->fCompiledPat->setElementAt(op, patternLoc);
+            return;
+        }
+        
+        // The most recently emitted op is a ONECHAR.
+        //  We've now received another adjacent char.  Change the ONECHAR op
+        //   to a string op.
         if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
             op     = URX_BUILD(URX_STRING_I, fStringOpStart);
         } else {
@@ -1460,7 +1475,7 @@ void RegexCompile::literalChar(UChar32 c)  {
         op         = URX_BUILD(URX_STRING_LEN, 0);
         fRXPat->fCompiledPat->addElement(op, *fStatus);
     }
-
+    
     // The pattern contains a URX_SRING / URX_STRING_LEN.  Update the
     //  string length to reflect the new char we just added to the string.
     stringLen  = fRXPat->fLiteralText.length() - fStringOpStart;
