@@ -3984,6 +3984,7 @@ public final class RuleBasedCollator extends Collator
             // many contractions (this should work for latin-1 tables).
             {
               if((CE & 0x00FFF000) != 0) {
+                latinOneFailed_ = true;
                 return false;
               }
 
