@@ -24,6 +24,7 @@ public class TestAll extends TestGroup {
             "TestDeprecatedNormalizerAPI",
             "TestCanonicalIterator",
             "NormalizationMonkeyTest",
+	    "NormalizerRegressionTests",
         });
     }
 
