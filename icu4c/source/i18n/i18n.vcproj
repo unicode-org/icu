@@ -1082,7 +1082,8 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
+"
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
@@ -1270,6 +1271,9 @@
 			</File>
 			<File
 				RelativePath=".\strrepl.cpp">
+			</File>
+			<File
+				RelativePath=".\strrepl.h">
 			</File>
 			<File
 				RelativePath=".\titletrn.cpp">
