@@ -3789,8 +3789,7 @@ case "${host}" in
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencnval/gencnval \
 		  tools/gennames/gennames tools/gentest/gentest \
-          tools/pkgdata/pkgdata tools/genqchk/genqchk \
-		  tools/genfchk/genfchk tools/genprops/genprops
+          tools/pkgdata/pkgdata tools/genprops/genprops
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
