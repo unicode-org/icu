@@ -24,6 +24,7 @@ void TestPUtilAPI();
 void testIEEEremainder();
 static void remainderTest(double x, double y, double exp);
 static void doAssert(double expect, double got, const char *message);
+static UBool compareWithNAN(double x, double y);
 
 
 void
@@ -316,13 +317,27 @@ void testIEEEremainder()
     remainderTest(ninf, nan, nan);
     remainderTest(pinf, nan, nan);
 
-    /* test infinity and zero 
-    remainderTest(pinf, pzero, 1.25);
+    /* test infinity and zero */
+/*    remainderTest(pinf, pzero, 1.25);
     remainderTest(pinf, nzero, 1.25);
     remainderTest(ninf, pzero, 1.25);
-    remainderTest(ninf, nzero, 1.25);
-   */
+    remainderTest(ninf, nzero, 1.25); */
 }
+
+static UBool compareWithNAN(double x, double y)
+{
+  if( uprv_isNaN(x) || uprv_isNaN(y) ) {
+    if(!uprv_isNaN(x) || !uprv_isNaN(y) ) {
+      return FALSE;
+    }
+  }
+  else if (y != x) { /* no NaN's involved */
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
 void remainderTest(double x, double y, double exp)
 {
     double result = uprv_IEEEremainder(x,y);
@@ -332,7 +347,7 @@ void remainderTest(double x, double y, double exp)
         log_err("FAIL: got NaN as result without NaN as argument");
         log_err("      IEEEremainder(%f, %f) is %f, expected %f\n", x, y, result, exp);
     }
-    else if(result != exp){
+    else if(!compareWithNAN(result, exp)) {
         log_err("FAIL:  IEEEremainder(%f, %f) is %f, expected %f\n", x, y, result, exp);
     } else{
         log_verbose("OK: IEEEremainder(%f, %f) is %f\n", x, y, result);
@@ -341,8 +356,7 @@ void remainderTest(double x, double y, double exp)
 }
 void doAssert(double got, double expect, const char *message)
 {
-    if (expect != got){
-        log_err("ERROR :  %s. Expected : %lf, Got: %lf\n", message, expect, got);
-    }
-
+  if(! compareWithNAN(expect, got) ) {
+    log_err("ERROR :  %s. Expected : %lf, Got: %lf\n", message, expect, got);
+  }
 }
