@@ -16,7 +16,7 @@
 #include "unicode/ubidi.h"
 #include "unicode/brkiter.h"
 
-#include "RunArrays.h"
+#include "layout/RunArrays.h"
 
 /**
  * ParagraphLayout.
