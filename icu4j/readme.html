@@ -11,8 +11,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
-* $Date: 2003/11/25 01:23:59 $
-* $Revision: 1.51 $
+* $Date: 2003/12/06 00:19:38 $
+* $Revision: 1.52 $
 *
 *******************************************************************************
 -->
@@ -43,6 +43,7 @@
   <li><a href="#API">Where to Get Documentation</a></li>
   <li><a href="#HowToInstallJavac">How to Install and Build</a></li>
   <li><a href="#HowToModularize">How to modularize ICU4J</a></li>
+  <li><a href="http://oss.software.ibm.com/icu/docs/eclipse_howto/eclipse_howto.htm">How to configure Eclipse for working with ICU4J</a></li>
   <li><a href="#tryingout">Trying Out ICU4J</a></li>
   <li><a href="#resources">ICU4J Resource Information</a></li>
   <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
@@ -494,401 +495,401 @@ The modules are interdependent not independent,i.e., separate modules are not bu
 Currently ICU4J can be divided into the following modules:
 <br><br>
 <table border="1">
-	<tr>
+    <tr>
 
-		<th><b>Module Name</b></th>
+        <th><b>Module Name</b></th>
 
-		<th><b>Ant Targets</b></th>
+        <th><b>Ant Targets</b></th>
 
-		<th><b>Test Package Supported</b></th>
+        <th><b>Test Package Supported</b></th>
 
-		<th><b>Main Classes*&#x2020;</b></th>
+        <th><b>Main Classes*&#x2020;</b></th>
 
-		<th><b>Size</b></th>
+        <th><b>Size</b></th>
 
-	</tr>
-
-	<tr>
-
-		<td>Normalizer</td>
-
-		<td>normalizer, normalizerTests</td>
-
-		<td>com.ibm.icu.dev.test.normalizer</td>
-
-		<td>
-				lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<b><br>text.Normalizer</b>
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<b><br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator</b>
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<br>util.ValueIterator
-			<br>util.VersionInfo
-		</td>
-
-		<td>&nbsp;355 KB</td>
-
-	</tr>
-
-	<tr>
-
-		<td>Collator</td>
-
-		<td>collator, collatorTests</td>
-
-		<td>com.ibm.icu.dev.test.collator</td>
-
-		<td>
-		        lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<br>text.BreakDictionary
-			<br>text.BreakIterator
-			<br>text.BreakIteratorFactory
-			<br>text.CanonicalIterator
-			<b><br>text.CollationElementIterator
-			<br>text.CollationKey
-			<br>text.CollationParsedRuleBuilder
-			<br>text.CollationRuleParser
-			<br>text.Collator
-			<br>text.CollatorReader</b>
-			<br>text.DictionaryBasedBreakIterator
-			<b><br>text.Normalizer</b>
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<br>text.RuleBasedBreakIterator
-			<b><br>text.RuleBasedCollator
-			<br>text.SearchIterator
-			<br>text.StringSearch</b>
-			<b><br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator</b>
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<br>util.ValueIterator
-			<br>util.VersionInfo
-		</td>
-
-		<td>1,716 KB</td>
-
-	</tr>
-
-	<tr>
-
-		<td>Calendar</td>
-
-		<td>calendar, calendarTests</td>
-
-		<td>com.ibm.icu.dev.test.calendar</td>
-
-		<td>
-		        lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<b><br>math.BigDecimal</b>
-			<br>text.BreakIterator
-			<b><br>text.ChineseDateFormat
-			<br>text.ChineseDateFormatSymbols
-			<br>text.DateFormat
-			<br>text.DateFormatSymbols
-			<br>text.DecimalFormat
-			<br>text.DecimalFormatSymbols</b>
-			<br>text.Normalizer
-			<br>text.NumberFormat
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<b><br>text.SimpleDateFormat
-			<br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator</b>
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<b><br>util.BuddhistCalendar
-			<br>util.Calendar
-			<br>util.CalendarAstronomer
-			<br>util.CalendarCache
-			<br>util.CalendarFactory
-			<br>util.ChineseCalendar
-			<br>util.Currency
-			<br>util.DateRule
-			<br>util.EasterHoliday
-			<br>util.EasterRule
-			<br>util.GregorianCalendar
-			<br>util.HebrewCalendar
-			<br>util.HebrewHoliday
-			<br>util.Holiday
-			<br>util.IslamicCalendar
-			<br>util.JapaneseCalendar
-			<br>util.RangeDateRule
-			<br>util.SimpleDateRule
-			<br>util.SimpleHoliday
-			<br>util.SimpleTimeZone
-			<br>util.SimpleTimeZoneAdapter
-			<br>util.TimeZone
-			<br>util.TimeZoneData</b>
-			<br>util.ValueIterator
-			<br>util.VersionInfo
-		</td>
-
-		<td>1,160 KB</td>
-
-
-	</tr>
-
-	<tr>
-
-		<td>&nbsp;BreakIterator</td>
-
-		<td>breakIterator, breakIteratorTests</td>
-
-		<td>com.ibm.icu.dev.test.breakiterator</td>
-
-		<td>
-				lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<b><br>text.BreakDictionary
-			<br>text.BreakIterator
-			<br>text.BreakIteratorFactory
-			<br>text.DictionaryBasedBreakIterator</b>
-			<br>text.Normalizer
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<b><br>text.RuleBasedBreakIterator</b>
-			<br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<br>util.RangeValueIterator
-			<br>util.ValueIterator
-			<br>util.VersionInfo
-		</td>
-
-		<td>1,105 KB</td>
-
-	</tr>
-
-	<tr>
-
-		<td>Basic Properties</td>
-
-		<td>propertiesBasic, propertiesTests</td>
-
-		<td>com.ibm.icu.dev.test.lang</td>
-
-		<td>
-		  <b>     lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<br>lang.UScriptRun </b>
-			<br>text.BreakDictionary
-			<br>text.BreakIterator
-			<br>text.BreakIteratorFactory
-			<br>text.DictionaryBasedBreakIterator
-			<br>text.Normalizer
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<br>text.RuleBasedBreakIterator
-			<br>text.SymbolTable
-			<br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<b><br>text.UTF16 </b>
-			<br>util.CompactByteArray
-			<br>util.RangeValueIterator
-			<br>util.ValueIterator
-			<br>util.VersionInfo
-		</td>
-
-		<td>350 KB</td>
-
-	</tr>
-
-	<tr>
-
-		<td>Full Properties</td>
-
-		<td>propertiesFull,
-		<br>propertiesTests</td>
-
-		<td>com.ibm.icu.dev.test.lang</td>
-
-		<td>
-		    <b>    lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<br>lang.UScriptRun</b>
-			<br>text.BreakDictionary
-			<br>text.BreakIterator
-			<br>text.BreakIteratorFactory
-			<br>text.DictionaryBasedBreakIterator
-			<b><br>text.Normalizer
-			<br>text.Replaceable
-			<br>text.ReplaceableString </b>
-			<br>text.RuleBasedBreakIterator
-		    <b><br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<br>util.RangeValueIterator
-			<br>util.ValueIterator
-			<br>util.VersionInfo </b>
-		</td>
-
-		<td>&nbsp;986 KB</td>
-
-	</tr>
-
-	<tr>
-
-		<td>Formatting</td>
-
-		<td>format, formatTests</td>
-
-		<td>com.ibm.icu.dev.test.format</td>
-
-		<td>
-		        lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<b><br>math.BigDecimal</b>
-			<br>text.BreakIterator
-			<br>text.CanonicalIterator
-			<br>text.ChineseDateFormat
-			<br>text.ChineseDateFormatSymbols
-			<br>text.CollationElementIterator
-			<br>text.CollationKey
-			<br>text.CollationParsedRuleBuilder
-			<br>text.CollationRuleParser
-			<br>text.Collator
-			<br>text.CollatorReader
-			<b><br>text.DateFormat
-			<br>text.DateFormatSymbols
-			<br>text.DecimalFormat
-			<br>text.DecimalFormatSymbols</b>
-			<br>text.Normalizer
-			<b><br>text.NumberFormat</b>
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<br>text.RuleBasedCollator
-			<b><br>text.RuleBasedNumberFormat
-			<br>text.SimpleDateFormat
-			<br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator</b>
-			<br>text.UnicodeFilter
-			<br>text.UnicodeMatcher
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<b><br>util.Calendar
-			<br>util.CalendarAstronomer
-			<br>util.CalendarCache
-			<br>util.CalendarFactory
-			<br>util.ChineseCalendar
-			<br>util.Currency
-			<br>util.GregorianCalendar
-			<br>util.RangeValueIterator
-			<br>util.SimpleTimeZone
-			<br>util.SimpleTimeZoneAdapter
-			<br>util.TimeZone
-			<br>util.TimeZoneData</b>
-			<br>util.ValueIterator
-			<br>util.VersionInfo
-		</td>
-		<td>1,788 KB </td>
-	</tr>
+    </tr>
 
     <tr>
 
-		<td>Transforms</td>
+        <td>Normalizer</td>
 
-		<td>transliterator, transliteratorTests</td>
+        <td>normalizer, normalizerTests</td>
 
-		<td>com.ibm.icu.dev.test.translit</td>
+        <td>com.ibm.icu.dev.test.normalizer</td>
 
-		<td>
-		 <b>		lang.UCharacter
-			<br>lang.UCharacterCategory
-			<br>lang.UCharacterDirection
-			<br>lang.UCharacterNameIterator
-			<br>lang.UCharacterTypeIterator
-			<br>lang.UProperty
-			<br>lang.UScript
-			<br>lang.UScriptRun
-			<br>text.AnyTransliterator
-			<br>text.BreakDictionary
-			<br>text.BreakIterator
-			<br>text.BreakIteratorFactory
-			<br>text.BreakTransliterator
-			<br>text.DictionaryBasedBreakIterator
-			<br>text.Normalizer
-			<br>text.Replaceable
-			<br>text.ReplaceableString
-			<br>text.RuleBasedBreakIterator
-			<br>text.StringReplacer
-			<br>text.Transliterator
-			<br>text.UCharacterIterator
-			<br>text.UForwardCharacterIterator
-			<br>text.UnicodeSet
-			<br>text.UnicodeSetIterator
-			<br>text.UTF16
-			<br>util.RangeValueIterator
-			<br>util.ValueIterator
-			<br>util.VersionInfo</b>
-		</td>
+        <td>
+                lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <b><br>text.Normalizer</b>
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <b><br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator</b>
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <br>util.ValueIterator
+            <br>util.VersionInfo
+        </td>
 
-		<td>1,364 KB</td>
+        <td>&nbsp;355 KB</td>
 
-	</tr>
+    </tr>
+
+    <tr>
+
+        <td>Collator</td>
+
+        <td>collator, collatorTests</td>
+
+        <td>com.ibm.icu.dev.test.collator</td>
+
+        <td>
+                lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <br>text.BreakDictionary
+            <br>text.BreakIterator
+            <br>text.BreakIteratorFactory
+            <br>text.CanonicalIterator
+            <b><br>text.CollationElementIterator
+            <br>text.CollationKey
+            <br>text.CollationParsedRuleBuilder
+            <br>text.CollationRuleParser
+            <br>text.Collator
+            <br>text.CollatorReader</b>
+            <br>text.DictionaryBasedBreakIterator
+            <b><br>text.Normalizer</b>
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <br>text.RuleBasedBreakIterator
+            <b><br>text.RuleBasedCollator
+            <br>text.SearchIterator
+            <br>text.StringSearch</b>
+            <b><br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator</b>
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <br>util.ValueIterator
+            <br>util.VersionInfo
+        </td>
+
+        <td>1,716 KB</td>
+
+    </tr>
+
+    <tr>
+
+        <td>Calendar</td>
+
+        <td>calendar, calendarTests</td>
+
+        <td>com.ibm.icu.dev.test.calendar</td>
+
+        <td>
+                lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <b><br>math.BigDecimal</b>
+            <br>text.BreakIterator
+            <b><br>text.ChineseDateFormat
+            <br>text.ChineseDateFormatSymbols
+            <br>text.DateFormat
+            <br>text.DateFormatSymbols
+            <br>text.DecimalFormat
+            <br>text.DecimalFormatSymbols</b>
+            <br>text.Normalizer
+            <br>text.NumberFormat
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <b><br>text.SimpleDateFormat
+            <br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator</b>
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <b><br>util.BuddhistCalendar
+            <br>util.Calendar
+            <br>util.CalendarAstronomer
+            <br>util.CalendarCache
+            <br>util.CalendarFactory
+            <br>util.ChineseCalendar
+            <br>util.Currency
+            <br>util.DateRule
+            <br>util.EasterHoliday
+            <br>util.EasterRule
+            <br>util.GregorianCalendar
+            <br>util.HebrewCalendar
+            <br>util.HebrewHoliday
+            <br>util.Holiday
+            <br>util.IslamicCalendar
+            <br>util.JapaneseCalendar
+            <br>util.RangeDateRule
+            <br>util.SimpleDateRule
+            <br>util.SimpleHoliday
+            <br>util.SimpleTimeZone
+            <br>util.SimpleTimeZoneAdapter
+            <br>util.TimeZone
+            <br>util.TimeZoneData</b>
+            <br>util.ValueIterator
+            <br>util.VersionInfo
+        </td>
+
+        <td>1,160 KB</td>
+
+
+    </tr>
+
+    <tr>
+
+        <td>&nbsp;BreakIterator</td>
+
+        <td>breakIterator, breakIteratorTests</td>
+
+        <td>com.ibm.icu.dev.test.breakiterator</td>
+
+        <td>
+                lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <b><br>text.BreakDictionary
+            <br>text.BreakIterator
+            <br>text.BreakIteratorFactory
+            <br>text.DictionaryBasedBreakIterator</b>
+            <br>text.Normalizer
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <b><br>text.RuleBasedBreakIterator</b>
+            <br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <br>util.RangeValueIterator
+            <br>util.ValueIterator
+            <br>util.VersionInfo
+        </td>
+
+        <td>1,105 KB</td>
+
+    </tr>
+
+    <tr>
+
+        <td>Basic Properties</td>
+
+        <td>propertiesBasic, propertiesTests</td>
+
+        <td>com.ibm.icu.dev.test.lang</td>
+
+        <td>
+          <b>     lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <br>lang.UScriptRun </b>
+            <br>text.BreakDictionary
+            <br>text.BreakIterator
+            <br>text.BreakIteratorFactory
+            <br>text.DictionaryBasedBreakIterator
+            <br>text.Normalizer
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <br>text.RuleBasedBreakIterator
+            <br>text.SymbolTable
+            <br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <b><br>text.UTF16 </b>
+            <br>util.CompactByteArray
+            <br>util.RangeValueIterator
+            <br>util.ValueIterator
+            <br>util.VersionInfo
+        </td>
+
+        <td>350 KB</td>
+
+    </tr>
+
+    <tr>
+
+        <td>Full Properties</td>
+
+        <td>propertiesFull,
+        <br>propertiesTests</td>
+
+        <td>com.ibm.icu.dev.test.lang</td>
+
+        <td>
+            <b>    lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <br>lang.UScriptRun</b>
+            <br>text.BreakDictionary
+            <br>text.BreakIterator
+            <br>text.BreakIteratorFactory
+            <br>text.DictionaryBasedBreakIterator
+            <b><br>text.Normalizer
+            <br>text.Replaceable
+            <br>text.ReplaceableString </b>
+            <br>text.RuleBasedBreakIterator
+            <b><br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <br>util.RangeValueIterator
+            <br>util.ValueIterator
+            <br>util.VersionInfo </b>
+        </td>
+
+        <td>&nbsp;986 KB</td>
+
+    </tr>
+
+    <tr>
+
+        <td>Formatting</td>
+
+        <td>format, formatTests</td>
+
+        <td>com.ibm.icu.dev.test.format</td>
+
+        <td>
+                lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <b><br>math.BigDecimal</b>
+            <br>text.BreakIterator
+            <br>text.CanonicalIterator
+            <br>text.ChineseDateFormat
+            <br>text.ChineseDateFormatSymbols
+            <br>text.CollationElementIterator
+            <br>text.CollationKey
+            <br>text.CollationParsedRuleBuilder
+            <br>text.CollationRuleParser
+            <br>text.Collator
+            <br>text.CollatorReader
+            <b><br>text.DateFormat
+            <br>text.DateFormatSymbols
+            <br>text.DecimalFormat
+            <br>text.DecimalFormatSymbols</b>
+            <br>text.Normalizer
+            <b><br>text.NumberFormat</b>
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <br>text.RuleBasedCollator
+            <b><br>text.RuleBasedNumberFormat
+            <br>text.SimpleDateFormat
+            <br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator</b>
+            <br>text.UnicodeFilter
+            <br>text.UnicodeMatcher
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <b><br>util.Calendar
+            <br>util.CalendarAstronomer
+            <br>util.CalendarCache
+            <br>util.CalendarFactory
+            <br>util.ChineseCalendar
+            <br>util.Currency
+            <br>util.GregorianCalendar
+            <br>util.RangeValueIterator
+            <br>util.SimpleTimeZone
+            <br>util.SimpleTimeZoneAdapter
+            <br>util.TimeZone
+            <br>util.TimeZoneData</b>
+            <br>util.ValueIterator
+            <br>util.VersionInfo
+        </td>
+        <td>1,788 KB </td>
+    </tr>
+
+    <tr>
+
+        <td>Transforms</td>
+
+        <td>transliterator, transliteratorTests</td>
+
+        <td>com.ibm.icu.dev.test.translit</td>
+
+        <td>
+         <b>        lang.UCharacter
+            <br>lang.UCharacterCategory
+            <br>lang.UCharacterDirection
+            <br>lang.UCharacterNameIterator
+            <br>lang.UCharacterTypeIterator
+            <br>lang.UProperty
+            <br>lang.UScript
+            <br>lang.UScriptRun
+            <br>text.AnyTransliterator
+            <br>text.BreakDictionary
+            <br>text.BreakIterator
+            <br>text.BreakIteratorFactory
+            <br>text.BreakTransliterator
+            <br>text.DictionaryBasedBreakIterator
+            <br>text.Normalizer
+            <br>text.Replaceable
+            <br>text.ReplaceableString
+            <br>text.RuleBasedBreakIterator
+            <br>text.StringReplacer
+            <br>text.Transliterator
+            <br>text.UCharacterIterator
+            <br>text.UForwardCharacterIterator
+            <br>text.UnicodeSet
+            <br>text.UnicodeSetIterator
+            <br>text.UTF16
+            <br>util.RangeValueIterator
+            <br>util.ValueIterator
+            <br>util.VersionInfo</b>
+        </td>
+
+        <td>1,364 KB</td>
+
+    </tr>
 </table>
 <b>
 <font size=2>
@@ -906,7 +907,7 @@ Building any of these modules is as easy as specifying a build target to the Ant
         <li> Build the tests for the module. <br> <code> ant normalizerTests </code> </li>
         <br><b><font size=2>Note:</font></b> You could omit the step 1 and proceed to step 2, for all modules except full character properties, and let the dependecy analysis compile the requisite module.
         <li> Run the tests and verify that the self tests pass. <br> <code> java -classpath $icu4j_root/classes com.ibm.icu.dev.test.TestAll -nothrow -w </code>
- 		<li> Build the jar containing the module. <br> <code>ant moduleJar </code>
+        <li> Build the jar containing the module. <br> <code>ant moduleJar </code>
      </ol>
 
 If more than one module is required, the module build targets can be concatenated, e.g:
@@ -919,15 +920,15 @@ If more than one module is required, the module build targets can be concatenate
 
 <h5> Notes: </h5>
 <ul>
-	<li>Regardless of whether ICU4J is built as a whole or as modules, the jar file produced is named <em>icu4j.jar</em>.</li>
-	<li>To ascertain if an icu4j.jar contains all if ICU or not, please see the manifest file of jar</li>
-	<li>The target moduleJar does not depend on any other target. It just creates a jar of all class files under
-	    $icu4j_root/classes/com/ibm/icu/, excluding the classs files in $icu4j_root/classes/com/ibm/icu/dev folder</li>
+    <li>Regardless of whether ICU4J is built as a whole or as modules, the jar file produced is named <em>icu4j.jar</em>.</li>
+    <li>To ascertain if an icu4j.jar contains all if ICU or not, please see the manifest file of jar</li>
+    <li>The target moduleJar does not depend on any other target. It just creates a jar of all class files under
+        $icu4j_root/classes/com/ibm/icu/, excluding the classs files in $icu4j_root/classes/com/ibm/icu/dev folder</li>
     <li>The list of module build targets can be obtained by running the command : <code> ant -projecthelp </code> </li>
-	<li>To verify that the jar file built using the module target works, please delete all directories under $icu4j_root/classes/com/ibm/icu/, 
-	    except $icu4j_root/classes/com/ibm/icu/dev, and run the tests against the jar file.
-		<br><code> java -classpath $icu4j_root/icu4j.jar com.ibm.icu.dev.test.TestAll -nothrow -w </code>
-	 </li>
+    <li>To verify that the jar file built using the module target works, please delete all directories under $icu4j_root/classes/com/ibm/icu/,
+        except $icu4j_root/classes/com/ibm/icu/dev, and run the tests against the jar file.
+        <br><code> java -classpath $icu4j_root/icu4j.jar com.ibm.icu.dev.test.TestAll -nothrow -w </code>
+     </li>
 </ul>
 
 <h3><a name="tryingout"></a><u>Trying Out ICU4J</u></h3>
@@ -1158,13 +1159,14 @@ overwrite any corresponding .class files already in that directory.
     <li> Change directory to $icu_root\source\tools\genrb  </li>
     <li> Launch genrbjar.pl from that directory itself with the command
         <br>
-         genrbjar.pl $icu_root_dir; $icu4j_root; &lt;ld_path_variable_name&gt; [&lt;locale&gt;+]
+         genrbjar.pl $icu_root_dir $icu4j_root &lt;ld_path_variable_name&gt; [&lt;locale&gt;+]
         <br>
         To create all the locale data files omit the locale argument
     </li>
   </ol>
-  Execution of genrbjar.pl script will create the required source (*.java) files,
-  class file and ICULocaleData.jar in &lt;icu_root_dir&gt;\source\data\locales\java directory.
+  Execution of genrbjar.pl script will create the required source (*.java) files and
+  class file in $icu_root\source\data\locales\java.
+  The ICULocaleData.jar is moved to $icu4j_root\src\com\ibm\icu\impl\data directory.
 
 <h3><a name="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
 
