@@ -774,7 +774,7 @@ uprv_timezone()
 /* Note that U_TZNAME does *not* have to be tzname, but if it does,
    some platforms need to have it declared here. */ 
 
-#ifndef tzname /* For SGI.  */
+#ifdef IRIX /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */ 
 #endif
 
