@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestNormalization.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.5 $
+* $Date: 2004/02/06 18:30:20 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,9 @@ package com.ibm.text.UCD;
 import java.util.*;
 import java.io.*;
 
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.text.utility.*;
 
 public final class TestNormalization {
@@ -192,4 +195,52 @@ public final class TestNormalization {
         }
     }
 
+    public static void checkStarters () {
+        System.out.println("Checking Starters");
+        UnicodeSet leading = new UnicodeSet();
+        UnicodeSet trailing = new UnicodeSet();
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            if (Default.nfc.isLeading(i)) leading.add(i);
+            if (Default.ucd.getCombiningClass(i) != 0) continue;
+            if (Default.nfc.isTrailing(i)) trailing.add(i);
+        }
+        System.out.println("Leading: " + leading.size());
+        System.out.println("Trailing Starters: " + trailing.size());
+        UnicodeSetIterator lead = new UnicodeSetIterator(leading);
+        UnicodeSetIterator trail = new UnicodeSetIterator(trailing);
+        UnicodeSet followers = new UnicodeSet();
+        Map map = new TreeMap(new CompareProperties.UnicodeSetComparator());
+        while (lead.next()) {
+            trail.reset();
+            followers.clear();
+            while (trail.next()) {
+                if (Default.nfc.getComposition(lead.codepoint, trail.codepoint) != 0xFFFF) {
+                    followers.add(trail.codepoint);
+                }
+            }
+            if (followers.size() == 0) continue;
+            System.out.println(Default.ucd.getCode(lead.codepoint)
+                + "\t" + followers.toPattern(true));
+            UnicodeSet possLead = (UnicodeSet) map.get(followers);
+            if (possLead == null) {
+                possLead = new UnicodeSet();
+                map.put(followers.clone(), possLead);
+            }
+            possLead.add(lead.codepoint);
+        }
+        Iterator it = map.keySet().iterator();
+        BagFormatter bf = new BagFormatter();
+        bf.setLineSeparator("<br>");
+        bf.setLabelSource(null);
+        bf.setAbbreviated(true);
+        while (it.hasNext()) {
+            UnicodeSet t = (UnicodeSet) it.next();
+            UnicodeSet l = (UnicodeSet) map.get(t);
+            System.out.println("<tr><td>" 
+                + bf.showSetNames("",l)
+                + "</td><td>"
+                + bf.showSetNames("",t)
+                + "</td></tr>");
+        }
+    }
 }

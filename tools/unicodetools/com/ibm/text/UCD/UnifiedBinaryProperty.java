@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2003/07/21 15:50:05 $
-* $Revision: 1.14 $
+* $Date: 2004/02/06 18:30:19 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -18,16 +18,16 @@ import java.util.*;
 import com.ibm.text.utility.*;
 import com.ibm.icu.text.UnicodeSet;
 
-public final class UnifiedBinaryProperty extends UnicodeProperty {
+public final class UnifiedBinaryProperty extends UCDProperty {
     int majorProp;
     int propValue;
     // DerivedProperty dp;
     
-    public static UnicodeProperty make(int propMask) {
+    public static UCDProperty make(int propMask) {
         return make(propMask, Default.ucd);
     }
     
-    public static UnicodeProperty make(int propMask, UCD ucd) {
+    public static UCDProperty make(int propMask, UCD ucd) {
         if ((propMask & 0xFF00) == DERIVED) {
             return DerivedProperty.make(propMask & 0xFF, ucd);
         }
@@ -35,12 +35,12 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
         return getCached(propMask, ucd);
     }
     
-    public static UnicodeProperty make(String propAndValue, UCD ucd) {
+    public static UCDProperty make(String propAndValue, UCD ucd) {
         return make(getPropmask(propAndValue, ucd), ucd);
     }
     
     public static UnicodeSet getSet(int propMask, UCD ucd) {
-        UnicodeProperty up = make(propMask, ucd);
+        UCDProperty up = make(propMask, ucd);
         return up.getSet();
     }
     
@@ -58,7 +58,7 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             propNameCache = new HashMap();
         
             for (int i = 0; i < LIMIT_ENUM; ++i) {
-                UnicodeProperty up = UnifiedBinaryProperty.make(i, ucd);
+                UCDProperty up = UnifiedBinaryProperty.make(i, ucd);
                 if (up == null) continue;
                 if (!up.isStandard()) continue;
                 if (up.getValueType() < BINARY_PROP) continue;

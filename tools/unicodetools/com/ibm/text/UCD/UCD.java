@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/07/21 15:50:06 $
-* $Revision: 1.28 $
+* $Date: 2004/02/06 18:30:20 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import com.ibm.icu.text.UnicodeSet;
 
 public final class UCD implements UCD_Types {
     
+    private static int SPOT_CHECK = 0x20AC;
+
     static final boolean DEBUG = false;
     
     /**
@@ -361,7 +364,7 @@ public final class UCD implements UCD_Types {
         
             int blockId = 0;
             BlockData blockData = new BlockData();
-            while (Default.ucd.getBlockData(blockId++, blockData)) {
+            while (getBlockData(blockId++, blockData)) {
                 if (blockData.name.equals("Hebrew")
                  || blockData.name.equals("Cypriot_Syllabary")
                 ) {
@@ -399,7 +402,7 @@ public final class UCD implements UCD_Types {
             System.out.println("AL: Adding " + BIDI_AL_Delta);
             BIDI_AL_SET.addAll(BIDI_AL_Delta);
             
-            UnicodeSet noncharacters = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Noncharacter_Code_Point).getSet();
+            UnicodeSet noncharacters = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Noncharacter_Code_Point, this).getSet();
             noncharacters.remove(Utility.BOM);
             
             System.out.println("Removing Noncharacters/BOM  " + noncharacters);
@@ -458,7 +461,7 @@ public final class UCD implements UCD_Types {
         hanExceptions = new IntMap();
         BufferedReader in = null;
         try {
-            in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
+            in = Utility.openUnicodeFile("Unihan", version, true, Utility.UTF8); 
             int lineCounter = 0;
             while (true) {
                 Utility.dot(++lineCounter);
@@ -590,7 +593,7 @@ public final class UCD implements UCD_Types {
         StringBuffer result = new StringBuffer();
         int cp;
         byte currentCaseType = caseType;
-        UnicodeProperty defaultIgnorable = DerivedProperty.make(DerivedProperty.DefaultIgnorable, this);
+        UCDProperty defaultIgnorable = DerivedProperty.make(DerivedProperty.DefaultIgnorable, this);
         
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
@@ -829,7 +832,8 @@ public final class UCD implements UCD_Types {
     }
     
     public static String getCategoryID_fromIndex(byte prop, byte style) {
-        return (style != LONG) ? UCD_Names.GC[prop] : UCD_Names.LONG_GC[prop];
+        return prop < 0 || prop >= UCD_Names.GC.length ? null
+            : (style != LONG) ? UCD_Names.GC[prop] : UCD_Names.LONG_GC[prop];
     }
     
     
@@ -846,6 +850,7 @@ public final class UCD implements UCD_Types {
     }
 
     static String getCombiningClassID_fromIndex (short index, byte style) {
+        if (index > 255) return null;
         index &= 0xFF;
         if (style == NORMAL || style == NUMBER) return String.valueOf(index);
         String s = "Fixed";
@@ -889,7 +894,12 @@ public final class UCD implements UCD_Types {
     }
     
     public static String getBidiClassID_fromIndex(byte prop, byte style) {
-        return style == SHORT ? UCD_Names.BC[prop] : UCD_Names.LONG_BC[prop];
+        return prop < 0 
+            || prop >= UCD_Names.BC.length 
+            ? null
+            : style == SHORT 
+            ? UCD_Names.BC[prop] 
+            : UCD_Names.LONG_BC[prop];
     }
 
     public String getDecompositionTypeID(int codePoint) {
@@ -900,7 +910,8 @@ public final class UCD implements UCD_Types {
         return getDecompositionTypeID_fromIndex(prop, NORMAL);
     }
     public static String getDecompositionTypeID_fromIndex(byte prop, byte style) {
-        return style == SHORT ? UCD_Names.SHORT_DT[prop] : UCD_Names.DT[prop];
+        return prop < 0 || prop >= UCD_Names.DT.length ? null
+        : style == SHORT ? UCD_Names.SHORT_DT[prop] : UCD_Names.DT[prop];
     }
 
     public String getNumericTypeID(int codePoint) {
@@ -912,7 +923,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getNumericTypeID_fromIndex(byte prop, byte style) {
-        return style == SHORT ? UCD_Names.SHORT_NT[prop] : UCD_Names.NT[prop];
+        return prop < 0 || prop >= UCD_Names.NT.length ? null
+        : style == SHORT ? UCD_Names.SHORT_NT[prop] : UCD_Names.NT[prop];
     }
 
     public String getEastAsianWidthID(int codePoint) {
@@ -924,7 +936,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getEastAsianWidthID_fromIndex(byte prop, byte style) {
-        return style != LONG ? UCD_Names.SHORT_EA[prop] : UCD_Names.EA[prop];
+        return prop < 0 || prop >= UCD_Names.EA.length ? null
+        : style != LONG ? UCD_Names.SHORT_EA[prop] : UCD_Names.EA[prop];
     }
 
     public String getLineBreakID(int codePoint) {
@@ -936,7 +949,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getLineBreakID_fromIndex(byte prop, byte style) {
-        return style != LONG ? UCD_Names.LB[prop] : UCD_Names.LONG_LB[prop];
+        return prop < 0 || prop >= UCD_Names.LB.length ? null
+        : style != LONG ? UCD_Names.LB[prop] : UCD_Names.LONG_LB[prop];
     }
 
     public String getJoiningTypeID(int codePoint) {
@@ -948,7 +962,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getJoiningTypeID_fromIndex(byte prop, byte style) {
-        return style != LONG ? UCD_Names.JOINING_TYPE[prop] : UCD_Names.LONG_JOINING_TYPE[prop];
+        return prop < 0 || prop >= UCD_Names.JOINING_TYPE.length ? null
+        : style != LONG ? UCD_Names.JOINING_TYPE[prop] : UCD_Names.LONG_JOINING_TYPE[prop];
     }
 
     public String getJoiningGroupID(int codePoint) {
@@ -961,7 +976,8 @@ public final class UCD implements UCD_Types {
 
     public static String getJoiningGroupID_fromIndex(byte prop, byte style) {
         // no short version
-        return UCD_Names.JOINING_GROUP[prop];
+        return prop < 0 || prop >= UCD_Names.JOINING_GROUP.length ? null
+        : UCD_Names.JOINING_GROUP[prop];
     }
 
     public String getScriptID(int codePoint) {
@@ -973,8 +989,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getScriptID_fromIndex(byte prop, byte length) {
-    	if (length == SHORT) return UCD_Names.ABB_SCRIPT[prop];
-        return UCD_Names.SCRIPT[prop];
+        return prop < 0 || prop >= UCD_Names.JOINING_GROUP.length ? null
+        : (length == SHORT) ? UCD_Names.ABB_SCRIPT[prop] : UCD_Names.SCRIPT[prop];
     }
 
     public String getAgeID(int codePoint) {
@@ -987,7 +1003,8 @@ public final class UCD implements UCD_Types {
 
     public static String getAgeID_fromIndex(byte prop, byte style) {
         // no short for
-        return UCD_Names.AGE[prop];
+        return prop < 0 || prop >= UCD_Names.AGE.length ? null
+        : UCD_Names.AGE[prop];
     }
 
     public String getBinaryPropertiesID(int codePoint, byte bit) {
@@ -999,7 +1016,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getBinaryPropertiesID_fromIndex(byte bit, byte style) {
-        return style == SHORT ? UCD_Names.SHORT_BP[bit] : UCD_Names.BP[bit];
+        return bit < 0 || bit >= UCD_Names.BP.length ? null
+        : style == SHORT ? UCD_Names.SHORT_BP[bit] : UCD_Names.BP[bit];
     }
 
     public static int mapToRepresentative(int ch, boolean lessThan20105) {
@@ -1208,14 +1226,18 @@ to guarantee identifier closure.
         String constructedName = null;
         int rangeStart = mapToRepresentative(codePoint, compositeVersion < 0x020105);
         boolean isHangul = false;
+        boolean isRemapped = false;
         switch (rangeStart) {
           case 0xF900:
             if (compositeVersion < 0x020105) {
                 if (fixStrings) constructedName = "CJK COMPATIBILITY IDEOGRAPH-" + Utility.hex(codePoint, 4);
                 break;
             }
+            //isRemapped = true;
+            break;
             // FALL THROUGH!!!!
-          default:
+          //default:
+            /*
             result = getRaw(codePoint);
             if (result == null) {
                 result = UData.UNASSIGNED;
@@ -1234,52 +1256,61 @@ to guarantee identifier closure.
                     result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
                 }
             }
-            return result;
+            */
+            //break;
           case 0x3400: // CJK Ideograph Extension A
           case 0x4E00: // CJK Ideograph
           case 0x20000: // Extension B
             if (fixStrings) constructedName = "CJK UNIFIED IDEOGRAPH-" + Utility.hex(codePoint, 4);
+            isRemapped = true;
             break;
           case 0xAC00: // Hangul Syllable
             isHangul = true;
             if (fixStrings) {
                 constructedName = "HANGUL SYLLABLE " + getHangulName(codePoint);
             }
+            isRemapped = true;
             break;
           case   0xE000: // Private Use
           case  0xF0000: // Private Use
           case 0x100000: // Private Use
             if (fixStrings) constructedName = "<private use area-" + Utility.hex(codePoint, 4) + ">";
+            isRemapped = true;
             break;
           case 0xD800: // Surrogate
           case 0xDB80: // Private Use
           case 0xDC00: // Private Use
             if (fixStrings) constructedName = "<surrogate-" + Utility.hex(codePoint, 4) + ">";
+            isRemapped = true;
             break;
           case 0xFFFF: // Noncharacter
             if (fixStrings) constructedName = "<noncharacter-" + Utility.hex(codePoint, 4) + ">";
+            isRemapped = true;
             break;
         }
         result = getRaw(rangeStart);
         if (result == null) {
             result = UData.UNASSIGNED;
+            isRemapped = true;
             result.name = null; // clean this up, since we reuse UNASSIGNED
             result.shortName = null;
             if (fixStrings) {
-                result.name = "<reserved-" + Utility.hex(codePoint, 4) + ">";
-                result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
+                constructedName = "<reserved-" + Utility.hex(codePoint, 4) + ">";
+                //result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
             }
-            return result;
+            //return result;
         }
 
         result.codePoint = codePoint;
         if (fixStrings) {
-            result.name = constructedName;
-            result.shortName = Utility.replace(constructedName, UCD_Names.NAME_ABBREVIATIONS);
-            result.decompositionMapping = result.bidiMirror
-            = result.simpleLowercase = result.simpleUppercase = result.simpleTitlecase = result.simpleCaseFolding
-            = result.fullLowercase = result.fullUppercase = result.fullTitlecase = result.fullCaseFolding
-            = UTF32.valueOf32(codePoint);
+            if (result.name == null || isRemapped) result.name = constructedName;
+            if (result.shortName == null) result.shortName = Utility.replace(constructedName, UCD_Names.NAME_ABBREVIATIONS);
+            if (isRemapped) {
+                result.decompositionMapping = result.bidiMirror
+                = result.simpleLowercase = result.simpleUppercase = result.simpleTitlecase = result.simpleCaseFolding
+                = result.fullLowercase = result.fullUppercase = result.fullTitlecase = result.fullCaseFolding
+                = UTF32.valueOf32(codePoint);
+            }
         }
         if (isHangul) {
             if (fixStrings) result.decompositionMapping = getHangulDecompositionPair(codePoint);
@@ -1416,9 +1447,10 @@ to guarantee identifier closure.
         return NA;
     }
 
-    static String getHangulSyllableTypeID_fromIndex(byte index, byte style) {
-        if (style == LONG) return UCD_Names.LONG_HANGUL_SYLLABLE_TYPE[index];
-        return UCD_Names.HANGUL_SYLLABLE_TYPE[index];
+    static String getHangulSyllableTypeID_fromIndex(byte prop, byte style) {
+        return prop < 0 || prop >= UCD_Names.HANGUL_SYLLABLE_TYPE.length ? null
+        : (style == LONG) ? UCD_Names.LONG_HANGUL_SYLLABLE_TYPE[prop] 
+        : UCD_Names.HANGUL_SYLLABLE_TYPE[prop];
     }
 
     String getHangulSyllableTypeID(int char1, byte style) {
@@ -1471,7 +1503,7 @@ to guarantee identifier closure.
                 UData uData = new UData();
                 uData.readBytes(dataIn);
 
-                if (uData.codePoint == 0x5E) {
+                if (uData.codePoint == SPOT_CHECK) {
                     System.out.println("SPOT-CHECK: " + uData);
                 }
 
@@ -1528,6 +1560,18 @@ to guarantee identifier closure.
         public String name;
     }
     
+    public String NOBLOCK = Utility.getUnskeleton("no block", true);
+    
+    public String getBlock(int codePoint) {
+        if (blocks == null) loadBlocks();
+        Iterator it = blocks.iterator();
+        while (it.hasNext()) {
+            BlockData data = (BlockData) it.next();
+            if (codePoint >= data.start && codePoint <= data.end) return data.name;
+        }
+        return NOBLOCK;
+    }
+    
     public boolean getBlockData(int blockId, BlockData output) {
         if (blocks == null) loadBlocks();
         BlockData temp;
@@ -1570,4 +1614,18 @@ to guarantee identifier closure.
             throw new IllegalArgumentException("Can't read block file");
         }
     }
+    /**
+     * @return
+     */
+    public int getCompositeVersion() {
+        return compositeVersion;
+    }
+
+    /**
+     * @param i
+     */
+    public void setCompositeVersion(int i) {
+        compositeVersion = i;
+    }
+
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2003/07/07 15:58:57 $
-* $Revision: 1.12 $
+* $Date: 2004/02/06 18:30:21 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -49,7 +49,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
         log.println("<title>Unihan check</title>");
         log.println("</head>");
 
-        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.getUcdVersion(), true, Utility.UTF8); 
         
         Map properties = new TreeMap();
         
@@ -265,24 +265,25 @@ public final class GenerateHanTransliterator implements UCD_Types {
             switch (type) {
                 case DEFINITION:
                     key = "kDefinition"; // kMandarin, kKorean, kJapaneseKun, kJapaneseOn
-                    filename = "Raw_Transliterator_Han_Latin_Definition.txt";
+                    filename = "Raw_Transliterator_Han_Latin_Definition";
                     break;
                 case JAPANESE: 
                     key = "kJapaneseOn";
-                    filename = "Raw_Transliterator_ja_Latin.txt";
+                    filename = "Raw_Transliterator_ja_Latin";
                     break;
                 case CHINESE:
                     key = "kMandarin";
-                    filename = "Raw_Transliterator_Han_Latin.txt";
+                    filename = "Raw_Transliterator_Han_Latin";
                     break;
                 default: throw new IllegalArgumentException("Unexpected option: must be 0..2");
             }
+            filename += Default.ucd.getVersion() + ".txt";
                 
             err = Utility.openPrintWriter("Transliterate_err.txt", Utility.UTF8_WINDOWS);
             log = Utility.openPrintWriter("Transliterate_log.txt", Utility.UTF8_WINDOWS);
             log.print('\uFEFF');
             
-            if (!SKIP_OVERRIDES) {
+            if (false /*!SKIP_OVERRIDES*/) {
                 log.println();
                 log.println("@*Override Data");
                 log.println();
@@ -1798,7 +1799,7 @@ Bad pinyin data: \u4E7F	?	LE
   
     static void readUnihanData(String key) throws java.io.IOException {
 
-        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.getUcdVersion(), true, Utility.UTF8); 
 
         int count = 0;
         int lineCounter = 0;

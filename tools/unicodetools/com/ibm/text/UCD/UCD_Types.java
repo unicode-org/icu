@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/08/20 03:46:44 $
-* $Revision: 1.25 $
+* $Date: 2004/02/06 18:30:19 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,9 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 2; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 5; // change to fix the generated file D version. If less than zero, no "d"
+    static final byte BINARY_FORMAT = 14; // bumped if binary format of UCD changes. Forces rebuild
+    
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -33,8 +35,6 @@ public interface UCD_Types {
     	CJK_A_LIMIT = 0x4DBF+1,
     	CJK_B_BASE = 0x20000,
     	CJK_B_LIMIT = 0x2A6DF+1;
-    
-    static final byte BINARY_FORMAT = 10; // bumped if binary format of UCD changes
     
     // Unicode Property Types
     static final byte 
@@ -387,7 +387,7 @@ public interface UCD_Types {
 
   static final int
     UNKNOWN = 0,
-    AGE10 = 1,
+    AGE11 = 1,
     AGE20 = 2,
     AGE21 = 3,
     AGE30 = 4,
@@ -396,7 +396,16 @@ public interface UCD_Types {
     AGE40 = 7,
     LIMIT_AGE = 8;
 
-
+    static final String[] AGE_VERSIONS = {
+        "?",
+        "1.1.0",
+        "2.0.0",
+        "2.1.2",
+        "3.0.0",
+        "3.1.0",
+        "3.2.0",
+        "4.0.0"       
+    };
 
 public static byte
     JT_C = 0,

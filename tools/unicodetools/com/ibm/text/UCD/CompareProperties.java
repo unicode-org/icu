@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/CompareProperties.java,v $
-* $Date: 2003/07/21 15:50:07 $
-* $Revision: 1.2 $
+* $Date: 2004/02/06 18:30:23 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -89,7 +89,7 @@ public class CompareProperties implements UCD_Types {
 		}
 	}
 
-	public final class UnicodeSetComparator implements Comparator {
+	public final static class UnicodeSetComparator implements Comparator {
 		/**
 		 * Compares two UnicodeSets, producing a transitive ordering.
 		 * @return -1 if first is smaller (in size) than second, 
@@ -121,7 +121,7 @@ public class CompareProperties implements UCD_Types {
 
     boolean isPartitioned = false;
 	
-	UnicodeProperty[] props = new UnicodeProperty[500];
+	UCDProperty[] props = new UCDProperty[500];
 	UnicodeSet[] sets = new UnicodeSet[500];
 	int count = 0;
 	BitSet[] disjoints = new BitSet[500];
@@ -147,7 +147,7 @@ public class CompareProperties implements UCD_Types {
 	        if (!Default.ucd.isAllocated(cp)) continue;
 	    
 	        for (int i = 0; i < count; ++i) {
-	            UnicodeProperty up = props[i];
+	            UCDProperty up = props[i];
 	            boolean iProp = up.hasValue(cp);
 	            if (iProp) {
 	            	probe.set(i);
@@ -177,7 +177,7 @@ public class CompareProperties implements UCD_Types {
 	        if (i == 0x0900) {
 	        	System.out.println("debug");
 	        }
-	        UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
+	        UCDProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
 	        if (up == null) continue;
 			if (up.getValueType() < BINARY_PROP) {
 				System.out.println("\tSkipping " + up.getName() + "; value varies");
@@ -378,7 +378,7 @@ public class CompareProperties implements UCD_Types {
 		return getPropName(props[propertyIndex]);
 	}
 
-	private String getPropName(UnicodeProperty ubp) {
+	private String getPropName(UCDProperty ubp) {
 		return Utility.getUnskeleton(ubp.getFullName(LONG), true);
 	}
 
@@ -395,7 +395,7 @@ public class CompareProperties implements UCD_Types {
         for (int i = 1; i < UCD_Types.LIMIT_ENUM; ++i) {
             int iType = i & 0xFF00;
             if (iType == UCD_Types.JOINING_GROUP || iType == UCD_Types.AGE || iType == UCD_Types.COMBINING_CLASS || iType == UCD_Types.SCRIPT) continue;
-            UnicodeProperty upi = UnifiedBinaryProperty.make(i, Default.ucd);
+            UCDProperty upi = UnifiedBinaryProperty.make(i, Default.ucd);
             if (upi == null) continue;
             if (!upi.isStandard()) {
                 System.out.println("Skipping " + upi.getName() + "; not standard");
@@ -419,7 +419,7 @@ public class CompareProperties implements UCD_Types {
                 int jType = j & 0xFF00;
                 if (jType == UCD_Types.JOINING_GROUP || jType == UCD_Types.AGE || jType == UCD_Types.COMBINING_CLASS || jType == UCD_Types.SCRIPT
                     || (jType == iType && jType != UCD_Types.BINARY_PROPERTIES)) continue;
-                UnicodeProperty upj = UnifiedBinaryProperty.make(j, Default.ucd);
+                UCDProperty upj = UnifiedBinaryProperty.make(j, Default.ucd);
                 if (upj == null) continue;
                 if (!upj.isStandard()) continue;
                 if (upj.getValueType() < UCD_Types.BINARY_PROP) continue;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/EquivalenceClass.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2004/02/06 18:29:39 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -28,7 +28,7 @@ public class EquivalenceClass {
     // whenever we add a <source, value> pair, we see if any sets collide.
     // associated with each set of sources, we keep a representative Whenever we add to the set, if we
     //
-    Map sourceToEquiv = new HashMap();
+    Map sourceToEquiv = new TreeMap();
     Map valueToRepresentativeSource = new HashMap();
     Map forcedMerge = new HashMap();
     /**
@@ -62,7 +62,7 @@ public class EquivalenceClass {
         if (DEBUG) System.out.println("+Source " + source
             + ", value: " + value);
         if (repSource == null && equivSet == null) {
-            equivSet = new HashSet();
+            equivSet = new TreeSet();
             equivSet.add(source);
             sourceToEquiv.put(source, equivSet);
             valueToRepresentativeSource.put(value, source);
@@ -96,7 +96,7 @@ public class EquivalenceClass {
 
                 // then replace all instances for equivSet by repEquiv
                 // we have to do this in two steps, since iterators are invalidated by changes
-                Set toReplace = new HashSet();
+                Set toReplace = new TreeSet();
                 it = sourceToEquiv.keySet().iterator();
                 while (it.hasNext()) {
                     Object otherSource = it.next();
@@ -126,6 +126,24 @@ public class EquivalenceClass {
             toString((Set)it.next(), result, forcedMerge);
         }
         return result.toString();
+    }
+    
+    private class MyIterator implements Iterator {
+        Iterator it = sourceToEquiv.keySet().iterator();
+        
+        public boolean hasNext() {
+            return it.hasNext();
+        }
+        public Object next() {
+            return sourceToEquiv.get(it.next());
+        }
+        public void remove() {
+            throw new IllegalArgumentException("can't remove");
+        }        
+    }
+
+    public Iterator getSetIterator () {
+        return new MyIterator();
     }
 
     private String toString(Object s) {

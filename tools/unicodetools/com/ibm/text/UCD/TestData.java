@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2003/08/20 03:46:42 $
-* $Revision: 1.12 $
+* $Date: 2004/02/06 18:30:20 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,10 @@ import java.util.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.ICUPropertyFactory;
+import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import java.math.BigDecimal;
@@ -27,12 +31,38 @@ import com.ibm.icu.text.*;
 import com.ibm.text.utility.*;
 
 public class TestData implements UCD_Types {
+    
+    static UnicodeProperty.Factory upf;
+    
 	public static void main (String[] args) throws IOException {
         Default.setUCD();
+        System.out.println(new Date());
+        upf = ICUPropertyFactory.make();
+        System.out.println(new Date());
+ 
+        showPropDiff(
+            "gc=mn", null,
+            "script=inherited", null);
+            
+        // upf.getProperty("gc")
+        //.getPropertySet(new ICUPropertyFactory.RegexMatcher("mn|me"),null)
         
+        showPropDiff(
+        "gc=mn|me", null,
+        "script=inherited", null);
+
         if (true) return;
+
+        showPropDiff(
+            "General_Category=L", null,
+            "Script!=Inherited|Common", 
+                UnifiedBinaryProperty.getSet("script=inherited", Default.ucd)
+                .addAll(UnifiedBinaryProperty.getSet("script=common", Default.ucd))
+                .complement()
+        );
+       
         
-        UnicodeSet sterm = UnifiedProperty.getSet("Sentence_Terminal", Default.ucd);
+        UnicodeSet sterm = UnifiedProperty.getSet("STerm", Default.ucd);
         UnicodeSet term = UnifiedProperty.getSet("Terminal_Punctuation", Default.ucd);
         UnicodeSet po = new UnicodeSet("[:po:]");
         UnicodeSet empty = new UnicodeSet();
@@ -107,8 +137,20 @@ public class TestData implements UCD_Types {
 			log.close();
 		}
 	}
-    
 
+    static BagFormatter bf = new BagFormatter();
+    static UnicodeProperty.Matcher matcher = new ICUPropertyFactory.RegexMatcher();
+
+    private static void showPropDiff(String p1, UnicodeSet s1, String p2, UnicodeSet s2) {
+        System.out.println("Property Listing");
+        if (s1 == null) {
+            s1 = upf.getSet(p1, matcher, null);
+        }
+        if (s2 == null) {
+            s2 = upf.getSet(p2, matcher, null);
+        } 
+        bf.showSetDifferences(bf.CONSOLE,p1,s1,p2,s2);
+    }
     
     static private UnicodeSet getSetForName(String regexPattern) {
         UnicodeSet result = new UnicodeSet();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/AbbreviatedUnicodeSetIterator.java,v $ 
-* $Date: 2003/03/17 23:00:20 $ 
-* $Revision: 1.1 $
+* $Date: 2004/02/06 18:32:04 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ import com.ibm.text.UCD.Normalizer;
 import com.ibm.text.UCD.UCD;
 import com.ibm.text.utility.*;
 import com.ibm.text.UCD.UnifiedBinaryProperty;
-import com.ibm.text.UCD.UnicodeProperty;
+import com.ibm.text.UCD.UCDProperty;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;

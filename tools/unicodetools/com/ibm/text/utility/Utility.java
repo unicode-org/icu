@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/08/20 03:47:59 $
-* $Revision: 1.36 $
+* $Date: 2004/02/06 18:29:39 $
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -148,6 +148,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
      */
     
     public static String getUnskeleton(String source, boolean titlecaseStart) {
+        if (source == null) return source;
         if (source.equals("noBreak")) return source; // HACK
         StringBuffer result = new StringBuffer();
         int lastCat = -1;
@@ -585,7 +586,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     	return quoteXML(source, false);
     }
     
-    private static UnicodeProperty defaultIgnorable = null;
+    private static UCDProperty defaultIgnorable = null;
     
     public static String getDisplay(int cp) {
         String result = UTF16.valueOf(cp);
@@ -1110,6 +1111,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         pw.println();
         pw.println("In both " + name1 + " and " + name2 + ": ");
         pw.println(temp.size() == 0 ? "<none>" : ""+ temp);
+        pw.flush();
         // showSetNames(pw, "\t",  temp,  false,  false,  withChar, names, ucd);
     }
     

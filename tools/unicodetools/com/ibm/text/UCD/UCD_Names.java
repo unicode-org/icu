@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/08/20 03:46:43 $
-* $Revision: 1.23 $
+* $Date: 2004/02/06 18:30:19 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -109,7 +109,7 @@ final class UCD_Names implements UCD_Types {
         "jg",
         "",
         "sc",
-        "ag",
+        "age",
         "hst",
         "",
     };
@@ -148,16 +148,16 @@ final class UCD_Names implements UCD_Types {
         "Soft_Dotted",
         "Logical_Order_Exception",
         "Other_ID_Start",
-        "Sentence_Terminal",
+        "STerm",
         "Variation_Selector"
     };
 
     static final String[] SHORT_BP = {
-	    "BidiM",
+	    "Bidi_M",
 	    "CE",
         "WSpace",
         "NBrk",
-	    "BidiC",
+	    "Bidi_C",
         "JoinC",
         "Dash",
         "Hyphen",
@@ -175,7 +175,7 @@ final class UCD_Names implements UCD_Types {
         "NChar",
         "TurkI",
         "OGrExt",
-        "GrLink",
+        "Gr_Link",
         "IDSB",
         "IDST",
         "Radical",

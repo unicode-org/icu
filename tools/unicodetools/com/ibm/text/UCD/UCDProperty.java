@@ -2,7 +2,7 @@ package com.ibm.text.UCD;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.*;
 
-public abstract class UnicodeProperty implements UCD_Types {
+public abstract class UCDProperty implements UCD_Types {
   
     // TODO: turn all of these into privates, and use setters only
     

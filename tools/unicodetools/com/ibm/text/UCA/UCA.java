@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2003/08/21 07:32:52 $ 
-* $Revision: 1.22 $
+* $Date: 2004/02/06 18:32:03 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ import com.ibm.text.UCD.Normalizer;
 import com.ibm.text.UCD.UCD;
 import com.ibm.text.utility.*;
 import com.ibm.text.UCD.UnifiedBinaryProperty;
-import com.ibm.text.UCD.UnicodeProperty;
+import com.ibm.text.UCD.UCDProperty;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
@@ -1418,7 +1418,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      */
     private void cleanup() {
         
-        UnicodeProperty ubp = UnifiedBinaryProperty.make(
+        UCDProperty ubp = UnifiedBinaryProperty.make(
             UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd);
         UnicodeSet desiredSet = ubp.getSet();
         

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedProperty.java,v $
-* $Date: 2003/07/21 15:50:05 $
-* $Revision: 1.4 $
+* $Date: 2004/02/06 18:30:18 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -18,15 +18,19 @@ import java.util.*;
 import com.ibm.text.utility.*;
 import com.ibm.icu.text.UnicodeSet;
 
-public final class UnifiedProperty extends UnicodeProperty {
+public final class UnifiedProperty extends UCDProperty {
     int majorProp;
     // DerivedProperty dp;
     
-    public static UnicodeProperty make(int propMask) {
+    public static UCDProperty make(int propMask) {
         return make(propMask, Default.ucd);
     }
     
-    public static UnicodeProperty make(int propMask, UCD ucd) {
+    public static UCDProperty make(int propMask, UCD ucd) {
+        if (propMask == AGE) {
+            System.out.println();
+        }
+
         if ((propMask & 0xFF00) == (BINARY_PROPERTIES & 0xFF00)) {
             return UnifiedBinaryProperty.make(propMask, ucd);
         }
@@ -37,12 +41,12 @@ public final class UnifiedProperty extends UnicodeProperty {
         return getCached(propMask, ucd);
     }
     
-    public static UnicodeProperty make(String propID, UCD ucd) {
+    public static UCDProperty make(String propID, UCD ucd) {
         return make(getPropmask(propID, ucd), ucd);
     }
     
     public static UnicodeSet getSet(int propMask, UCD ucd) {
-        UnicodeProperty up = make(propMask, ucd);
+        UCDProperty up = make(propMask, ucd);
         return up.getSet();
     }
     
@@ -51,26 +55,21 @@ public final class UnifiedProperty extends UnicodeProperty {
     }
     
     private static Map propNameCache = null;
+    private static Set availablePropNames = new TreeSet();
+    
+    public static Collection getAvailablePropertiesAliases(Collection result, UCD ucd) {
+        if (propNameCache == null) {
+            cacheNames(ucd);
+        }
+        result.addAll(availablePropNames);
+        return result;  
+    }
     
     public static int getPropmask(String propID, UCD ucd) {
         
         // cache the names
         if (propNameCache == null) {
-            System.out.println("Caching Property Names");
-            propNameCache = new HashMap();
-        
-            for (int i = 0; i < LIMIT_ENUM; ++i) {
-                UnicodeProperty up = UnifiedProperty.make(i, ucd);
-                if (up == null) continue;
-                if (!up.isStandard()) continue;
-                if (up.getValueType() < BINARY_PROP) continue;
-                String shortName = Utility.getSkeleton(up.getProperty(SHORT));
-                String longName = Utility.getSkeleton(up.getProperty(LONG));
-                Integer result = new Integer(i);
-                propNameCache.put(longName, result);
-                propNameCache.put(shortName, result);
-            }
-            System.out.println("Done Caching");
+            cacheNames(ucd);
         }
         
         propID = Utility.getSkeleton(propID);
@@ -79,6 +78,28 @@ public final class UnifiedProperty extends UnicodeProperty {
             throw new IllegalArgumentException("No property found for " + propID);
         }
         return indexObj.intValue();
+    }
+
+    private static void cacheNames(UCD ucd) {
+        System.out.println("Caching Property Names");
+        propNameCache = new HashMap();
+        
+        for (int i = 0; i < LIMIT_ENUM; ++i) {
+            UCDProperty up = UnifiedProperty.make(i, ucd);
+            if (up == null) continue;
+            if (!up.isStandard()) continue;
+            if (up.getValueType() < BINARY_PROP) continue;
+            String shortRaw = up.getProperty(SHORT);
+            String shortName = Utility.getSkeleton(shortRaw);
+            String longRaw = up.getProperty(LONG);
+            String longName = Utility.getSkeleton(longRaw);
+            Integer result = new Integer(i);
+            if (!propNameCache.keySet().contains(longName)) propNameCache.put(longName, result);
+            if (!propNameCache.keySet().contains(shortName)) propNameCache.put(shortName, result);
+            String key = longRaw != null ? longRaw : shortRaw;
+            availablePropNames.add(key);            
+        }
+        System.out.println("Done Caching");
     }
     
     static Map cache = new HashMap();
@@ -92,12 +113,13 @@ public final class UnifiedProperty extends UnicodeProperty {
         UCD ucd;
         public boolean equals(Object other) {
             Clump that = (Clump) other;
-            return (that.prop != prop || !ucd.equals(that));
+            return (that.prop == prop && ucd.equals(that));
         }
     }
     
     private static UnifiedProperty getCached(int propMask, UCD ucd) {
-        System.out.println(ucd);
+
+        //System.out.println(ucd);
         if (ucd.equals(lastUCD) && propMask == lastPropMask) return lastValue;
         probeClump.prop = propMask;
         probeClump.ucd = ucd;
@@ -120,7 +142,9 @@ public final class UnifiedProperty extends UnicodeProperty {
         majorProp = propMask >> 8;
         
         //System.out.println("A: " + getValueType());
-        if (majorProp <= (JOINING_GROUP>>8) || majorProp == SCRIPT>>8) setValueType(FLATTENED_BINARY_PROP);
+        if (majorProp <= (JOINING_GROUP>>8) 
+            || majorProp == SCRIPT>>8
+            || majorProp==(HANGUL_SYLLABLE_TYPE>>8)) setValueType(FLATTENED_BINARY_PROP);
         //System.out.println("B: " + getValueType());
         
         header = UCD_Names.UNIFIED_PROPERTY_HEADERS[majorProp];
@@ -158,7 +182,7 @@ public final class UnifiedProperty extends UnicodeProperty {
         throw new ChainException("Can't call 'hasValue' on non-binary property {0}", new Object[]{
                 new Integer(majorProp)});
     }
-
+    
     public String getFullName(byte style) {
         String pre = "";
         String preShort = getProperty(SHORT);
@@ -168,7 +192,7 @@ public final class UnifiedProperty extends UnicodeProperty {
         else pre = preShort + "(" + preLong + ")";
         return pre;
     }
-
+    
     public String getValue(int cp, byte style) {
         switch (majorProp) {
         case CATEGORY>>8: return ucd.getCategoryID_fromIndex(ucd.getCategory(cp), style);
