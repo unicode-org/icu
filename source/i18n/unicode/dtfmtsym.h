@@ -399,7 +399,7 @@ private:
 inline void
 DateFormatSymbols::setIsOwned(int32_t which, UBool isOwned)
 {
-    fIsOwned = ( fIsOwned & ~(1 << which) ) | ( (isOwned ? 1 : 0) << which );
+    fIsOwned = (uint8_t)(( fIsOwned & ~(1 << which) ) | ( (isOwned ? 1 : 0) << which ));
 }
 
 inline UBool
