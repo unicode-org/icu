@@ -54,6 +54,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 12: name = "TestStackAllocation"; if (exec) TestStackAllocation(); break;
         case 13: name = "TestUnescape"; if (exec) TestUnescape(); break;
         case 14: name = "TestCountChar32"; if (exec) TestCountChar32(); break;
+        case 15: name = "TestStringEnumeration"; if (exec) TestStringEnumeration(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1519,5 +1520,99 @@ UnicodeStringTest::TestBogus() {
     test2.remove();
     if(test1>=test2 || !(test2>test1) || test1.compare(test2)>=0 || !(test2.compare(test1)>0)) {
         errln("bogus<empty failed");
+    }
+}
+
+// StringEnumeration ------------------------------------------------------- ***
+// most of StringEnumeration is tested elsewhere
+// this test improves code coverage
+
+static const char *const
+testEnumStrings[]={
+    "a",
+    "b",
+    "c",
+    "this is a long string which helps us test some buffer limits",
+    "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+};
+
+class TestEnumeration : public StringEnumeration {
+public:
+    TestEnumeration() : i(0) {}
+
+    virtual int32_t count(UErrorCode& status) const {
+        return LENGTHOF(testEnumStrings);
+    }
+
+    virtual const UnicodeString *snext(UErrorCode &status) {
+        if(U_SUCCESS(status) && i<LENGTHOF(testEnumStrings)) {
+            unistr=UnicodeString(testEnumStrings[i++], "");
+            return &unistr;
+        }
+
+        return NULL;
+    }
+
+    virtual void reset(UErrorCode &status) {
+        i=0;
+    }
+
+    static inline UClassID getStaticClassID() {
+        return (UClassID)&fgClassID;
+    }
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
+    }
+
+private:
+    static const char fgClassID;
+
+    int32_t i, length;
+};
+
+const char TestEnumeration::fgClassID=0;
+
+void
+UnicodeStringTest::TestStringEnumeration() {
+    UnicodeString s;
+    TestEnumeration ten;
+    int32_t i, length;
+    UErrorCode status;
+
+    const UChar *pu;
+    const char *pc;
+
+    // test the next() default implementation and ensureCharsCapacity()
+    for(i=0; i<LENGTHOF(testEnumStrings); ++i) {
+        status=U_ZERO_ERROR;
+        pc=ten.next(&length, status);
+        s=UnicodeString(testEnumStrings[i], "");
+        if(U_FAILURE(status) || pc==NULL || length!=s.length() || UnicodeString(pc, length, "")!=s) {
+            errln("StringEnumeration.next(%d) failed", i);
+        }
+    }
+    status=U_ZERO_ERROR;
+    if(ten.next(&length, status)!=NULL) {
+        errln("StringEnumeration.next(done)!=NULL");
+    }
+
+    // test the unext() default implementation
+    ten.reset(status);
+    for(i=0; i<LENGTHOF(testEnumStrings); ++i) {
+        status=U_ZERO_ERROR;
+        pu=ten.unext(&length, status);
+        s=UnicodeString(testEnumStrings[i], "");
+        if(U_FAILURE(status) || pu==NULL || length!=s.length() || UnicodeString(TRUE, pu, length)!=s) {
+            errln("StringEnumeration.unext(%d) failed", i);
+        }
+    }
+    status=U_ZERO_ERROR;
+    if(ten.unext(&length, status)!=NULL) {
+        errln("StringEnumeration.unext(done)!=NULL");
+    }
+
+    // test that the default clone() implementation works, and returns NULL
+    if(ten.clone()!=NULL) {
+        errln("StringEnumeration.clone()!=NULL");
     }
 }

@@ -691,9 +691,6 @@ private:
     int32_t _timestamp;
     UVector _ids;
     int32_t _pos;
-    char   *_bufp;
-    int32_t _buflen;
-    char    _buf[32];
 
 private:
     ServiceEnumeration(const ICULocaleService* service, UErrorCode &status)
@@ -701,8 +698,6 @@ private:
         , _timestamp(service->getTimestamp())
         , _ids(uhash_deleteUnicodeString, NULL, status)
         , _pos(0)
-        , _bufp(_buf)
-        , _buflen(sizeof(_buf))
     {
         _service->getVisibleIDs(_ids, status);
     }
@@ -712,8 +707,6 @@ private:
         , _timestamp(other._timestamp)
         , _ids(uhash_deleteUnicodeString, NULL, status)
         , _pos(0)
-        , _bufp(_buf)
-        , _buflen(sizeof(_buf))
     {
         if(U_SUCCESS(status)) {
             int32_t i, length;
@@ -740,11 +733,7 @@ public:
         return NULL;
     }
 
-    virtual ~ServiceEnumeration() {
-        if(_bufp != _buf) {
-            uprv_free(_bufp);
-        }
-    }
+    virtual ~ServiceEnumeration() {}
 
     virtual StringEnumeration *clone() const {
         UErrorCode status = U_ZERO_ERROR;
@@ -760,46 +749,11 @@ public:
         return upToDate(status) ? _ids.size() : 0;
     }
 
-    const char* next(int32_t* resultLength, UErrorCode& status) {
-        const UnicodeString* us = snext(status);
-        if (us) {
-            int32_t newlen = us->length();
-            if (newlen >= _buflen) {
-                resizeBuffer(newlen + 1);
-            }
-            us->extract(0, INT32_MAX, _bufp, _buflen, "");
-            if (resultLength) {
-                *resultLength = newlen;
-            }
-            return _bufp;
-        }
-        return NULL;
-    }
-
-    const UChar* unext(int32_t* resultLength, UErrorCode& status) {
-        const UnicodeString* us = snext(status);
-        if (U_SUCCESS(status)) {
-            // the cast to a writable UnicodeString is safe because
-            // ICUService::getVisibleIDs() clones each string
-            return ((UnicodeString *)us)->getTerminatedBuffer();
-        }
-        return NULL;
-    }
-
     const UnicodeString* snext(UErrorCode& status) {
         if (upToDate(status) && (_pos < _ids.size())) {
             return (const UnicodeString*)_ids[_pos++];
         }
         return NULL;
-    }
-
-    void resizeBuffer(int32_t newlen) {
-        if (_bufp != _buf) {
-            _bufp = (char *)uprv_realloc(_bufp, newlen);
-        } else {
-            _bufp = (char *)uprv_malloc(newlen);
-        }
-        _buflen = newlen;
     }
 
     UBool upToDate(UErrorCode& status) const {

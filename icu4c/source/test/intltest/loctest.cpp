@@ -1510,6 +1510,7 @@ LocaleTest::TestKeywordVariants(void) {
   StringEnumeration *keywords;
   int32_t keyCount = 0;
   const char *keyword = NULL;
+  const UnicodeString *keywordString;
   int32_t keywordLen = 0;
 
   for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
@@ -1527,10 +1528,21 @@ LocaleTest::TestKeywordVariants(void) {
         err("Expected to get %i keywords, got %i\n", testCases[i].numKeywords, keyCount);
       }
       if(keyCount) {
-        j = 0;
-        while(keyword = keywords->next(&keywordLen, status)) {
-          if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
-            err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+        for(j = 0;;) {
+          if((j&1)==0) {
+            if((keyword = keywords->next(&keywordLen, status)) == NULL) {
+              break;
+            }
+            if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
+              err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+            }
+          } else {
+            if((keywordString = keywords->snext(status)) == NULL) {
+              break;
+            }
+            if(*keywordString != UnicodeString(testCases[i].expectedKeywords[j], "")) {
+              err("Expected to get keyword UnicodeString %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+            }
           }
           j++;
 

@@ -380,7 +380,11 @@ TimeZoneTest::TestGetAvailableIDs913()
     s_length = s->count(ec);
     for (i = 0; i < s_length;++i) {
         if (i > 0) *buf += ", ";
-        *buf += *s->snext(ec);
+        if ((i & 1) == 0) {
+            *buf += *s->snext(ec);
+        } else {
+            *buf += UnicodeString(s->next(NULL, ec), "");
+        }
 
         if((i % 5) == 4) {
             // replace s with a clone of itself

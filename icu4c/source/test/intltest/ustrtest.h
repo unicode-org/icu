@@ -71,6 +71,7 @@ public:
     void _testUnicodeStringHasMoreChar32Than(const UnicodeString &s, int32_t start, int32_t length, int32_t number);
     void TestCountChar32(void);
     void TestBogus();
+    void TestStringEnumeration();
 };
 
 class StringCaseTest: public IntlTest {
