@@ -732,9 +732,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\tzdat.h">
-			</File>
-			<File
 				RelativePath=".\ucal.cpp">
 			</File>
 			<File
