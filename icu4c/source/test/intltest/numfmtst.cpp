@@ -454,8 +454,8 @@ NumberFormatTest::TestInt64() {
 		}
 		dl.set(int64Value);
 		int64Value = dl.getInt64();
-		if (int64Value != -int64max) {
-			errln(fail + "-" + int64maxstr);
+		if (int64Value != int64min) {
+			errln(fail + int64minstr);
 		}
 	}
 	// test negative of min int 64 value (1 more than max int64 value)
