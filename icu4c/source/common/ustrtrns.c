@@ -509,7 +509,7 @@ _strToWCS(wchar_t *dest,
                 break;
             }else if(retVal== remaining){/* should never occur */
                 int numWritten = (pIntTarget-intTarget);
-                u_growAnyBufferFromStatic(NULL,&intTarget,
+                u_growAnyBufferFromStatic(NULL,(void**) &intTarget,
                                           &intTargetCapacity,
                                           intTargetCapacity*2,
                                           numWritten,
