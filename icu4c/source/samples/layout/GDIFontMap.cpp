@@ -14,8 +14,8 @@
 #include "FontMap.h"
 #include "GDIFontMap.h"
 
-GDIFontMap::GDIFontMap(HDC hdc, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, RFIErrorCode &status)
-    : FontMap(fileName, pointSize, guiSupport, status), fHdc(hdc)
+GDIFontMap::GDIFontMap(GDISurface *surface, const char *fileName, le_int16 pointSize, GUISupport *guiSupport, RFIErrorCode &status)
+    : FontMap(fileName, pointSize, guiSupport, status), fSurface(surface)
 {
     // nothing to do?
 }
@@ -27,5 +27,5 @@ GDIFontMap::~GDIFontMap()
 
 const RenderingFontInstance *GDIFontMap::openFont(const char *fontName, le_int16 pointSize, RFIErrorCode &status)
 {
-    return new GDIFontInstance(fHdc, fontName, pointSize, status);
+    return new GDIFontInstance(fSurface, fontName, pointSize, status);
 }

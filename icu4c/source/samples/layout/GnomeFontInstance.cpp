@@ -22,6 +22,52 @@
 #include "sfnt.h"
 #include "cmaps.h"
 
+GnomeSurface::GnomeSurface(GtkWidget *theWidget)
+    : fWidget(theWidget)
+{
+    // nothing else to do
+}
+
+GnomeSurface::~GnomeSurface()
+{
+    // nothing to do
+}
+
+void GnomeSurface::drawGlyphs(const RenderingFontInstance *font, const LEGlyphID *glyphs, le_int32 count,
+                              const le_int32 *dx, le_int32 x, le_int32 y, le_int32 width, le_int32 height) const
+{
+    GnomeFontInstance *gFont = (GnomeFontInstance *) font;
+    TT_Instance instance = gFont->getFont();
+    le_int32 xOffset, yOffset;
+    TT_Raster_Map *raster;
+    TT_Error error;
+
+    raster = gFont->rasterizeGlyphs(glyphs, count, dx, xOffset, yOffset);
+
+    if (raster->width > 0 && raster->rows > 0) {
+        GdkBitmap *bitmap = gdk_bitmap_create_from_data(NULL, (const gchar *) raster->bitmap, raster->width, raster->rows);
+
+        gint bitsx = x + xOffset;
+        gint bitsy = y - yOffset;
+
+        gdk_gc_set_clip_origin(fWidget->style->black_gc, bitsx, bitsy);
+        gdk_gc_set_clip_mask(fWidget->style->black_gc, bitmap);
+
+        gdk_draw_rectangle(fWidget->window,
+                           fWidget->style->black_gc,
+                           TRUE,
+                           bitsx, bitsy,
+                           raster->width, raster->rows);
+
+        gdk_gc_set_clip_origin(fWidget->style->black_gc, 0, 0);
+        gdk_gc_set_clip_mask(fWidget->style->black_gc, NULL);
+
+        gdk_bitmap_unref(bitmap);
+    }
+    
+    gFont->freeRaster(raster);
+}
+
 GnomeFontInstance::GnomeFontInstance(TT_Engine engine, const TT_Text *fontPathName, le_int16 pointSize, RFIErrorCode &status)
     : RenderingFontInstance(NULL, pointSize)
 {
@@ -170,20 +216,17 @@ const char bitReverse[256] = {
     0x0F, 0x8F, 0x4F, 0xCF, 0x2F, 0xAF, 0x6F, 0xEF, 0x1F, 0x9F, 0x5F, 0xDF, 0x3F, 0xBF, 0x7F, 0xFF
 };
 
-
 // FIXME: this would be much faster if we cached the TT_Glyph objects based on the glyph ID...
-void GnomeFontInstance::drawGlyphs(void *surface, LEGlyphID *glyphs, le_uint32 count, le_int32 *dx,
-                                   le_int32 x, le_int32 y, le_int32 width, le_int32 height) const
+TT_Raster_Map *GnomeFontInstance::rasterizeGlyphs(const LEGlyphID *glyphs, le_int32 glyphCount,
+                                                  const le_int32 *dx, le_int32 &xOffset, le_int32 &yOffset) const
 {
-    GtkWidget *widget = (GtkWidget *) surface;
     le_int32 i, xx = 0, yy = 0, zz;
     le_int32 minx = 0, maxx = 0, miny = 0, maxy = 0;
+    TT_Raster_Map *raster = new TT_Raster_Map;
     TT_Glyph_Metrics metrics;
     TT_Error error;
 
-    //printf("drawGlyphs() - x = %d, y = %d, ", x, y);
-
-    for (i = 0; i < count; i += 1) {
+    for (i = 0; i < glyphCount; i += 1) {
         error = TT_Load_Glyph(fInstance, fGlyph, glyphs[i], TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH);
         if (error == 0) {
             TT_Get_Glyph_Metrics(fGlyph, &metrics);
@@ -221,59 +264,46 @@ void GnomeFontInstance::drawGlyphs(void *surface, LEGlyphID *glyphs, le_uint32 c
 
     //printf("minx = %d, maxx = %d, miny = %d, maxy = %d\n", minx, maxx, miny, maxy);
 
-    TT_Raster_Map raster;
     unsigned char *bits;
 
-    raster.flow  = TT_Flow_Down;
-    raster.width = maxx - minx;
-    raster.rows  = maxy - miny;
-    raster.cols  = (raster.width + 7) / 8;
-    raster.size  = raster.cols * raster.rows;
+    raster->flow   = TT_Flow_Down;
+    raster->width  = maxx - minx;
+    raster->rows   = maxy - miny;
+    raster->cols   = (raster->width + 7) / 8;
+    raster->size   = raster->cols * raster->rows;
 
-    raster.bitmap = bits = new unsigned char[raster.size];
+    raster->bitmap = bits = new unsigned char[raster->size];
 
-    for (i = 0; i < raster.size; i += 1) {
+    for (i = 0; i < raster->size; i += 1) {
         bits[i] = 0;
     }
 
     xx = (-minx) * 64; yy = (-miny) * 64;
 
-    for (i = 0; i < count; i += 1) {
+    for (i = 0; i < glyphCount; i += 1) {
         if (glyphs[i] < 0xFFFE) {
             error = TT_Load_Glyph(fInstance, fGlyph, glyphs[i], TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH);
         
             if (error == 0) {
-                TT_Get_Glyph_Bitmap(fGlyph, &raster, xx, yy);
+                TT_Get_Glyph_Bitmap(fGlyph, raster, xx, yy);
             }
         }
 
         xx += (dx[i] * 64);
     }
 
-    for (i = 0; i < raster.size; i += 1) {
+    for (i = 0; i < raster->size; i += 1) {
         bits[i] = bitReverse[bits[i]];
     }
 
-    if (raster.width > 0 && raster.rows > 0) {
-        GdkBitmap *bitmap = gdk_bitmap_create_from_data(NULL, (const gchar *) raster.bitmap, raster.width, raster.rows);
+    xOffset = minx;
+    yOffset = maxy;
 
-        gint bitsx = x + minx;
-        gint bitsy = y - maxy;
+    return raster;
+}
 
-        gdk_gc_set_clip_origin(widget->style->black_gc, bitsx, bitsy);
-        gdk_gc_set_clip_mask(widget->style->black_gc, bitmap);
-
-        gdk_draw_rectangle(widget->window,
-                           widget->style->black_gc,
-                           TRUE,
-                           bitsx, bitsy,
-                           raster.width, raster.rows);
-
-        gdk_gc_set_clip_origin(widget->style->black_gc, 0, 0);
-        gdk_gc_set_clip_mask(widget->style->black_gc, NULL);
-
-        gdk_bitmap_unref(bitmap);
-    }
-    
-    delete[] bits;
+void GnomeFontInstance::freeRaster(TT_Raster_Map *raster)
+{
+    delete[] (char *) raster->bitmap;
+    delete raster;
 }

@@ -21,13 +21,57 @@
 #include "sfnt.h"
 #include "cmaps.h"
 
-GDIFontInstance::GDIFontInstance(HDC hdc, TCHAR *faceName, le_int16 pointSize, RFIErrorCode &status)
-  : fHdc(hdc), fFont(NULL), RenderingFontInstance(hdc, pointSize)
+GDISurface::GDISurface(HDC theHDC)
+    : fHdc(theHDC), fCurrentFont(NULL)
+{
+    // nothing else to do
+}
+
+GDISurface::~GDISurface()
+{
+    // nothing to do
+}
+
+void GDISurface::setHDC(HDC theHDC)
+{
+    fHdc         = theHDC;
+    fCurrentFont = NULL;
+}
+
+void GDISurface::setFont(const RenderingFontInstance *font)
+{
+    const GDIFontInstance *gFont = (const GDIFontInstance *) font;
+
+    if (fCurrentFont != font) {
+        fCurrentFont = font;
+        SelectObject(fHdc, gFont->getFont());
+    }
+}
+
+void GDISurface::drawGlyphs(const RenderingFontInstance *font, const LEGlyphID *glyphs, le_int32 count, const le_int32 *dx,
+    le_int32 x, le_int32 y, le_int32 width, le_int32 height)
+{
+    RECT clip;
+
+    clip.top    = 0;
+    clip.left   = 0;
+    clip.bottom = height;
+    clip.right  = width;
+
+    setFont(font);
+
+    ExtTextOut(fHdc, x, y - font->getAscent(), ETO_CLIPPED | ETO_GLYPH_INDEX, &clip,
+        glyphs, count, (INT *) dx);
+}
+
+GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 pointSize, RFIErrorCode &status)
+  : fSurface(surface), fFont(NULL), RenderingFontInstance(surface, pointSize)
 {
     LOGFONT lf;
     FLOAT dpiX, dpiY;
     POINT pt;
     OUTLINETEXTMETRIC otm;
+    HDC hdc = surface->getHDC();
 
     if (LE_FAILURE(status)) {
         return;
@@ -101,13 +145,14 @@ restore:
     RestoreDC(hdc, -1);
 }
 
-GDIFontInstance::GDIFontInstance(HDC hdc, const char *faceName, le_int16 pointSize, RFIErrorCode &status)
-  : fHdc(hdc), fFont(NULL), RenderingFontInstance(hdc, pointSize)
+GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_int16 pointSize, RFIErrorCode &status)
+  : fSurface(surface), fFont(NULL), RenderingFontInstance(surface, pointSize)
 {
     LOGFONTA lf;
     FLOAT dpiX, dpiY;
     POINT pt;
     OUTLINETEXTMETRIC otm;
+    HDC hdc = surface->getHDC();
 
     if (LE_FAILURE(status)) {
         return;
@@ -199,13 +244,16 @@ GDIFontInstance::~GDIFontInstance()
 
 const void *GDIFontInstance::readFontTable(LETag tableTag) const
 {
-    DWORD stag = SWAPL(tableTag);
-    DWORD len = GetFontData(fHdc, stag, 0, NULL, 0);
+    fSurface->setFont((RenderingFontInstance *) this);
+
+    HDC   hdc    = fSurface->getHDC();
+    DWORD stag   = SWAPL(tableTag);
+    DWORD len    = GetFontData(hdc, stag, 0, NULL, 0);
     void *result = NULL;
 
     if (len != GDI_ERROR) {
         result = new char[len];
-        GetFontData(fHdc, stag, 0, result, len);
+        GetFontData(hdc, stag, 0, result, len);
     }
 
     return result;
@@ -220,11 +268,15 @@ void GDIFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
         return;
     }
 
+
     GLYPHMETRICS metrics;
     DWORD result;
     MAT2 identity = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
+    HDC hdc = fSurface->getHDC();
 
-    result = GetGlyphOutline(fHdc, glyph, GGO_GLYPH_INDEX | GGO_METRICS, &metrics, 0, NULL, &identity);
+    fSurface->setFont((RenderingFontInstance *) this);
+
+    result = GetGlyphOutline(hdc, glyph, GGO_GLYPH_INDEX | GGO_METRICS, &metrics, 0, NULL, &identity);
 
     if (result == GDI_ERROR) {
         return;
@@ -253,16 +305,3 @@ le_bool GDIFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LE
 #endif
 }
 
-void GDIFontInstance::drawGlyphs(void *surface, LEGlyphID *glyphs, le_uint32 count, le_int32 *dx,
-    le_int32 x, le_int32 y, le_int32 width, le_int32 height) const
-{
-    HDC  hdc = (HDC) surface;
-    RECT clip;
-
-    clip.top    = 0;
-    clip.left   = 0;
-    clip.bottom = height;
-    clip.right  = width;
-
-    ExtTextOut(hdc, x, y - fAscent, ETO_CLIPPED | ETO_GLYPH_INDEX, &clip, glyphs, count, (INT *) dx);
-};

@@ -67,7 +67,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\..\include\layout" /I "..\..\extra\scrptrun" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "UNICODE" /D _WIN32_WINNT=0X500 /YX /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\..\include\layout" /I "..\..\extra\scrptrun" /I "..\..\common" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "UNICODE" /D _WIN32_WINNT=0X500 /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -121,6 +121,10 @@ SOURCE=.\paragraph.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ParagraphLayout.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\RenderingFontInstance.cpp
 # End Source File
 # Begin Source File
@@ -130,6 +134,10 @@ SOURCE=..\..\extra\scrptrun\scrptrun.cpp
 # Begin Source File
 
 SOURCE=.\UnicodeReader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Utilities.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -165,6 +173,10 @@ SOURCE=.\paragraph.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ParagraphLayout.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\RenderingFontInstance.h
 # End Source File
 # Begin Source File
@@ -182,6 +194,10 @@ SOURCE=.\sfnt.h
 # Begin Source File
 
 SOURCE=.\UnicodeReader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Utilities.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
