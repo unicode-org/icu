@@ -54,9 +54,10 @@ T_CString_toUpperCase(char* str)
     return origPtr;
 }
 
-/*Takes a int32_t and     fills in  a char* string with that number "radix"-based*/
+/*Takes a int32_t and     fills in  a char* string with that number "radix"-based
+ Return the length of the string */
 
-U_CAPI void U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
 {
   int32_t length=0;
@@ -83,7 +84,7 @@ T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
     buffer[i] = temp;
   }
 
-  return;
+  return length;
 }
 
 
