@@ -151,7 +151,15 @@ void TestGetChar()
         if(c != result[i+1]){
             log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
         }
+        UTF16_GET_CHAR_SAFE_LENIENT(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c);
+        if(c != result[i+1]){
+            log_err("ERROR: UTF16_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
+        }
         UTF16_GET_CHAR_SAFE(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c, TRUE);
+        if(c != result[i+2]){
+            log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
+        }
+        UTF16_GET_CHAR_SAFE_STRICT(input, 0, offset, sizeof(input)/U_SIZEOF_UCHAR, c);
         if(c != result[i+2]){
             log_err("ERROR: UTF16_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
