@@ -432,6 +432,25 @@ public:
                          UBool incremental);
     
     /**
+     * Returns the index of the given character within this set, where
+     * the set is ordered by ascending code point.  If the character
+     * is not in this set, return -1.  The inverse of this method is
+     * <code>charAt()</code>.
+     * @return an index from 0..size()-1, or -1
+     */
+    int32_t indexOf(UChar32 c) const;
+
+    /**
+     * Returns the character at the given index within this set, where
+     * the set is ordered by ascending code point.  If the index is
+     * out of range, return (UChar32)-1.  The inverse of this method is
+     * <code>indexOf()</code>.
+     * @param index an index from 0..size()-1
+     * @return the character at the given index, or (UChar32)-1.
+     */
+    UChar32 charAt(int32_t index) const;
+
+    /**
      * Adds the specified range to this set if it is not already
      * present.  If this set already contains the specified range,
      * the call leaves this set unchanged.  If <code>end > start</code>
