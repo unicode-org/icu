@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and    *
+* Copyright (C) 1997-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -27,6 +27,15 @@
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
+
+/**
+ * Set 'ec' to 'err' only if 'ec' is not already set to a failing UErrorCode.
+ */
+inline void setError(UErrorCode& ec, UErrorCode err) {
+    if (U_SUCCESS(ec)) {
+        ec = err;
+    }
+}
 
 // -------------------------------------
 // default constructor.
@@ -225,10 +234,7 @@ void Formattable::dispose()
     case kArray:
         delete[] fValue.fArrayAndCount.fArray;
         break;
-    case kDate:
-    case kDouble:
-    case kLong:
-    case kInt64:
+    default:
         break;
     }
 }
@@ -248,46 +254,49 @@ Formattable::getType() const
 
 // -------------------------------------
 int32_t
-Formattable::getLong(UErrorCode* status) const
+//Formattable::getLong(UErrorCode* status) const
+Formattable::getLong(UErrorCode& status) const
 {
-    if(U_FAILURE(*status))
+    if (U_FAILURE(status)) {
         return 0;
+    }
         
     switch (fType) {
     case Formattable::kLong: 
         return (int32_t)fValue.fInt64;
     case Formattable::kInt64: 
         if (fValue.fInt64 > INT32_MAX) {
-            *status = U_INVALID_FORMAT_ERROR;
+            status = U_INVALID_FORMAT_ERROR;
             return INT32_MAX;
         } else if (fValue.fInt64 < INT32_MIN) {
-            *status = U_INVALID_FORMAT_ERROR;
+            status = U_INVALID_FORMAT_ERROR;
             return INT32_MIN;
         } else {
             return (int32_t)fValue.fInt64;
         }
     case Formattable::kDouble:
         if (fValue.fDouble > INT32_MAX) {
-            *status = U_INVALID_FORMAT_ERROR;
+            status = U_INVALID_FORMAT_ERROR;
             return INT32_MAX;
         } else if (fValue.fDouble < INT32_MIN) {
-            *status = U_INVALID_FORMAT_ERROR;
+            status = U_INVALID_FORMAT_ERROR;
             return INT32_MIN;
         } else {
-            return (int32_t)fValue.fDouble;
+            return (int32_t)fValue.fDouble; // loses fraction
         }
     default: 
-        *status = U_INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 }
 
 // -------------------------------------
 int64_t
-Formattable::getInt64(UErrorCode* status) const
+Formattable::getInt64(UErrorCode& status) const
 {
-    if(U_FAILURE(*status))
+    if (U_FAILURE(status)) {
         return 0;
+    }
         
     switch (fType) {
     case Formattable::kLong: 
@@ -295,26 +304,27 @@ Formattable::getInt64(UErrorCode* status) const
         return fValue.fInt64;
     case Formattable::kDouble:
         if (fValue.fDouble > U_INT64_MAX) {
-            *status = U_INVALID_FORMAT_ERROR;
+            status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MAX;
         } else if (fValue.fDouble < U_INT64_MIN) {
-            *status = U_INVALID_FORMAT_ERROR;
+            status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MIN;
         } else {
             return (int64_t)fValue.fDouble;
         }
     default: 
-        *status = U_INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 }
 
 // -------------------------------------
 double
-Formattable::getDouble(UErrorCode* status) const
+Formattable::getDouble(UErrorCode& status) const
 {
-    if(U_FAILURE(*status))
+    if (U_FAILURE(status)) {
         return 0;
+    }
         
     switch (fType) {
     case Formattable::kLong: 
@@ -323,7 +333,7 @@ Formattable::getDouble(UErrorCode* status) const
     case Formattable::kDouble:
         return fValue.fDouble;
     default: 
-        *status = U_INVALID_FORMAT_ERROR;
+        status = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 }
@@ -420,10 +430,10 @@ Formattable::adoptArray(Formattable* array, int32_t count)
 
 // -------------------------------------
 UnicodeString& 
-Formattable::getString(UnicodeString& result, UErrorCode* status) const 
+Formattable::getString(UnicodeString& result, UErrorCode& status) const 
 {
-    if (status && U_SUCCESS(*status) && fType != kString) {
-        *status = U_INVALID_FORMAT_ERROR;
+    if (fType != kString) {
+        setError(status, U_INVALID_FORMAT_ERROR);
         result.setToBogus();
     } else {
         result = *fValue.fString;
@@ -433,10 +443,10 @@ Formattable::getString(UnicodeString& result, UErrorCode* status) const
 
 // -------------------------------------
 const UnicodeString& 
-Formattable::getString(UErrorCode* status) const 
+Formattable::getString(UErrorCode& status) const 
 {
-    if (status && U_SUCCESS(*status) && fType != kString) {
-        *status = U_INVALID_FORMAT_ERROR;
+    if (fType != kString) {
+        setError(status, U_INVALID_FORMAT_ERROR);
         return *getBogus();
     }
     return *fValue.fString;
@@ -444,10 +454,10 @@ Formattable::getString(UErrorCode* status) const
 
 // -------------------------------------
 UnicodeString& 
-Formattable::getString(UErrorCode* status) 
+Formattable::getString(UErrorCode& status) 
 {
-    if (status && U_SUCCESS(*status) && fType != kString) {
-        *status = U_INVALID_FORMAT_ERROR;
+    if (fType != kString) {
+        setError(status, U_INVALID_FORMAT_ERROR);
         return *getBogus();
     }
     return *fValue.fString;
@@ -455,11 +465,11 @@ Formattable::getString(UErrorCode* status)
 
 // -------------------------------------
 const Formattable* 
-Formattable::getArray(int32_t& count, UErrorCode* status) const 
+Formattable::getArray(int32_t& count, UErrorCode& status) const 
 {
-    if (status && U_SUCCESS(*status) && fType != kArray) {
+    if (fType != kArray) {
+        setError(status, U_INVALID_FORMAT_ERROR);
         count = 0;
-        *status = U_INVALID_FORMAT_ERROR;
         return NULL;
     }
     count = fValue.fArrayAndCount.fCount; 
