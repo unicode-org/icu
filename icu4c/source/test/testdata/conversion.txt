@@ -17,6 +17,11 @@ conversion {
       "Callback option - a letter is passed in directly as const char * see ucnv_err.h\n"
       "Empty string: Sub callback with NULL option\n"
 
+      "In order to specify a charset substitution character,\n"
+      "add a NUL (U+0000) to the callback string followed by the subchar bytes as Latin-1\n"
+      "characters. For example, for a Sub callback with no option and a subchar of FC FC,\n"
+      "use the string \"?\x00\xFC\xFC\"\n"
+
       "fallbacks: per-direction boolean, currently only for fromUnicode; see Jitterbug 2401\n"
 
       "errorCode: (empty)==zero | invalid | illegal | truncated\n"
@@ -51,9 +56,62 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // escape callback
+        {
+          "ISCII",
+          "A\u0901\U00023456\u0902B\U00023456C",
+          :bin{ 41ef42a1255544383444255544433536a24225554438344425554443353643 },
+          :intvector{
+            0,
+            1,1,1,
+            2,2,2,2,2,2,
+            2,2,2,2,2,2,
+            4,
+            5,
+            6,6,6,6,6,6,
+            6,6,6,6,6,6,
+            8
+          },
+          :int{1}, :int{0}, "", "&", ""
+        }
+
+        // escape callback (hex)
+        {
+          "iso-2022-jp",
+          "\u3000\U00023456\u3001\U00023456B\u901c",
+          :bin{ 1b244221211b284226237832333435363b1b244221221b284226237832333435363b42262378393031433b },
+          :intvector{
+            0,0,0,0,0,
+            1,1,1,1,1,1,1,1,1,1,1,1,
+            3,3,3,3,3,
+            4,4,4,4,4,4,4,4,4,4,4,4,
+            6,
+            7,7,7,7,7,7,7,7
+          },
+          :int{1}, :int{0}, "", "&X", ""
+        }
+
+        // sub callback
+        {
+          "gb18030",
+          "$\x7f\x80\u01f9\u20ac\u4e00\u9fa6\uffff\U00010000\U0010ffff",
+          :bin{ 247f81308130a8bfa2e3d2bb82358f338431a43990308130e3329a35 },
+          :intvector{ 0, 1, 2, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 10, 10, 10, 10 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+
+        // skip callback
+        { "ibm-930", "\u6D63\u6D64\u6D65\u6D66", :bin{ 0e5d5f5d63466b0f }, :intvector{ 0, 0, 0, 1, 1, 3, 3, 3 }, :int{1}, :int{0}, "", "0", "" }
+        { "ibm-930", "\u6D63\u6D64\ud89a\u6D66", :bin{ 0e5d5f5d63466b0f }, :intvector{ 0, 0, 0, 1, 1, 3, 3, 3 }, :int{1}, :int{0}, "", "0", "" }
+        { "ibm-930", "\u6D63\u6D64\ud89a\u6D66", :bin{ 0e5d5f5d63 }, :intvector{ 0, 0, 0, 1, 1 }, :int{1}, :int{0}, "illegal", "0i", "\ud89a" }
+
         // sub callback for supplementary code point
         { "LATIN1",  "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{1}, :int{0}, "", "", "" }
         { "ibm-920", "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{1}, :int{0}, "", "", "" }
+
+        // sub callback with AA as subchar
+        { "ibm-920", "1\U000104012", :bin{ 31AA32 }, :intvector{ 0, 1, 3 }, :int{1}, :int{0}, "", "?\x00\xAA", "" }
+
         // same but not flushing
         { "LATIN1",  "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{0}, :int{0}, "", "", "\U00010401" }
         { "ibm-920", "1\U000104012", :bin{ 311a32 }, :intvector{ 0, 1, 3 }, :int{0}, :int{0}, "", "", "\U00010401" }
