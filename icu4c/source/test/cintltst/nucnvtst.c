@@ -3902,7 +3902,8 @@ TestISO_2022_KR_1() {
 }
 
 static void TestJitterbug2411(){
-    const char* source = "\x1b$)Ckknnjhpoiuyqwehg\n\x1b$)Cjasdfjasdfhoiuy\x1b$)C";
+    const char* source = "\x1b\x24\x29\x43\x6b\x6b\x6e\x6e\x6a\x68\x70\x6f\x69\x75\x79\x71\x77\x65\x68\x67\x0A"
+                         "\x1b\x24\x29\x43\x6a\x61\x73\x64\x66\x6a\x61\x73\x64\x66\x68\x6f\x69\x75\x79\x1b\x24\x29\x43";
     UConverter* kr=NULL, *kr1=NULL;
     UErrorCode errorCode = U_ZERO_ERROR;
     UChar tgt[100]={'\0'};
