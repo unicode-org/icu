@@ -1,51 +1,21 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2004 International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-
 package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 
 /**
- * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
+ * @author andy
+ *
+ * To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Generation - Code and Comments
  */
-
-public class RuleBasedBreakIterator extends BreakIterator {
-
-
-	private RuleBasedBreakIterator delegatedThis = null;
-
-
-    //=======================================================================
-    // constructors
-    //=======================================================================
-
-    /**
-     * Constructs a RuleBasedBreakIterator_Old according to the description
-     * provided.  If the description is malformed, throws an
-     * IllegalArgumentException.  Normally, instead of constructing a
-     * RuleBasedBreakIterator_Old directory, you'll use the factory methods
-     * on BreakIterator to create one indirectly from a description
-     * in the framework's resource files.  You'd use this when you want
-     * special behavior not provided by the built-in iterators.
-     * @stable ICU 2.0
-     */
-    public RuleBasedBreakIterator(String description) {
-    	delegatedThis = new RuleBasedBreakIterator_Old(description);
-    }
-
-    /**
-     * This default constructor is used when creating derived classes
-     * of RulesBasedBreakIterator.  Not intended for use by normal
-     * clients of break iterators.
-     * @internal ICU 3.0
-     */
-    protected RuleBasedBreakIterator() {
-    	delegatedThis = this;
-    }
+public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
     //=======================================================================
     // boilerplate
     //=======================================================================
@@ -57,11 +27,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     public Object clone()
     {
-        RuleBasedBreakIterator result = (RuleBasedBreakIterator) super.clone();
-        result.delegatedThis = result;
-        if (delegatedThis != this) {
-        	result.delegatedThis = (RuleBasedBreakIterator) delegatedThis.clone();
-        }
+    	RuleBasedBreakIterator_New result = (RuleBasedBreakIterator_New) super.clone();
+        // TODO: real clone code
         return result;
     }
 
@@ -71,7 +38,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
     public boolean equals(Object that) {
-    	return delegatedThis.equals(that);
+    	return false;  // TODO:
     }
 
     /**
@@ -79,7 +46,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
     public String toString() {
-        return delegatedThis.toString();
+        return "";      // TODO:
     }
 
     /**
@@ -89,7 +56,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     public int hashCode()
     {
-        return delegatedThis.hashCode();
+        return 0;        // TODO
     }
 
     //=======================================================================
@@ -103,7 +70,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
 	public int first() {
-		return delegatedThis.first();
+		return 0;             // TODO;
 	}
     /**
      * Sets the current iteration position to the end of the text.
@@ -112,7 +79,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
 	public int last() {
-		return delegatedThis.last();
+		return 0;             // TODO:
 	}
     /**
      * Advances the iterator either forward or backward the specified number of steps.
@@ -125,7 +92,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
 	public int next(int n) {
-		return delegatedThis.next(n);
+		return  0;             // TODO:
 	}
     /**
      * Advances the iterator to the next boundary position.
@@ -133,7 +100,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
 	public int next() {
-		return delegatedThis.next();
+		return  0;             // TODO:
 	}
     /**
      * Advances the iterator backwards, to the last boundary preceding this one.
@@ -141,7 +108,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
 	public int previous() {
-		return delegatedThis.previous();
+		return  0;             // TODO:
 	}
     /**
      * Sets the iterator to refer to the first boundary position following
@@ -151,7 +118,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
 	public int following(int offset) {
-		return delegatedThis.following(offset);
+		return  0;             // TODO:
 	}
     /**
      * Sets the iterator to refer to the last boundary position before the
@@ -161,7 +128,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.0
      */
     public int preceding(int offset) {
-    	return delegatedThis.preceding(offset);
+    	return  0;             // TODO:
     }
 
 /**
@@ -173,7 +140,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
  * @stable ICU 2.0
  */
 public boolean isBoundary(int offset) {
-	return delegatedThis.isBoundary(offset);
+	return true;    // TODO:
 }
 
 /**
@@ -182,7 +149,7 @@ public boolean isBoundary(int offset) {
  * @stable ICU 2.0
  */
 public int current() {
-		return delegatedThis.current();
+		return 0;             // TODO:
 	}
 
 
@@ -209,7 +176,7 @@ public int current() {
  * @draft ICU 3.0
  */
 public int  getRuleStatus() {
-	return delegatedThis.getRuleStatus();
+	return  0;             // TODO:
 }
 
 
@@ -234,8 +201,11 @@ public int  getRuleStatus() {
  *                  not the reduced number that were actually returned.
  * @draft ICU 3.0
  */
- public int getRuleStatusVec(int[] fillInArray) {
- 	return delegatedThis.getRuleStatusVec(fillInArray);
+public int getRuleStatusVec(int[] fillInArray) {
+    if (fillInArray != null && fillInArray.length >= 1) {    // TODO:
+        fillInArray[0] = 0;
+    }
+    return 1;
  }
 
 
@@ -248,7 +218,7 @@ public int  getRuleStatus() {
  * @stable ICU 2.0
  */
 	public CharacterIterator getText() {
-		return delegatedThis.getText();
+		return new StringCharacterIterator("");
 	}
 
 
@@ -259,6 +229,6 @@ public int  getRuleStatus() {
      * @stable ICU 2.0
      */
 	public void setText(CharacterIterator newText) {
-		delegatedThis.setText(newText);
 	}
+
 }

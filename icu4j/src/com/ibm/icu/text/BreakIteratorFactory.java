@@ -97,7 +97,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         String[] classNames = bundle.getStringArray("BreakIteratorClasses");
         String rules = bundle.getString(rulesName);
         if (classNames[kind].equals("RuleBasedBreakIterator")) {
-            iter = new RuleBasedBreakIterator(rules);
+            iter = new RuleBasedBreakIterator_Old(rules);
         }
         else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
             try {
@@ -121,7 +121,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
 	    // in our current tests.
 	    ///CLOVER:OFF
             if (iter == null) {
-                iter = new RuleBasedBreakIterator(rules);
+                iter = new RuleBasedBreakIterator_Old(rules);
             }
 	    ///CLOVER:ON
         }
