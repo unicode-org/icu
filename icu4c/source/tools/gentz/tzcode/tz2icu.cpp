@@ -1336,6 +1336,7 @@ int main(int argc, char *argv[]) {
         const string& olson = i->first;
         const set<string>& aliases = i->second;
         ZONEINFO[olson].clearAliases();
+        ZONEINFO[olson].addAlias(zoneIDs[olson]);
         for (set<string>::const_iterator j=aliases.begin();
              j!=aliases.end(); ++j) {
             assert(zoneIDs.find(olson) != zoneIDs.end());
