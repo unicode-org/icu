@@ -1,7 +1,8 @@
 ﻿DataDrivenCollationTest {
-	TestPurpose { "This is locale based collation test for Danish" }
-
-    TestDataParsing { "The following entries are separate tests containing test data for various locales."
+    Info {
+        Headers { "sequence" }
+        Description { "This is locale based collation test for Danish" }
+        LongDescription {     "The following entries are separate tests containing test data for various locales."
                       "Each entry has the following fields: "
                       "TestLocale - the locale that we should instantiate collator with."
                       "ArgumentStrength - strength of collator"
@@ -10,144 +11,151 @@
                       "> and = in single sequence. Cannot mix < and > in the same sequence. Whitespace is"
                       "is ignored unless quoted."
                      }
+    }
     TestData {
         da_TestPrimary {
+            Info {
+                Description { "This test goes through primary strength cases" }
+            }
             Settings {
                 {
-                    Locale { "da_DK" }
-                    Attributes { "[strength 1]" }
+                    TestLocale { "da" }
+                    Arguments { "[strength 1]" }
                 }
             }
-            TestCases {
+            Cases {
                 "Lvi=Lwi",
-                "Lävi<Löwi",
-                "Lübeck=Lybeck",
+                "L\u00e4vi<L\u00f6wi",
+                "L\u00fcbeck=Lybeck",
             }
         }
         da_TestTertiary {
+            Info {
+                Description { "This test goes through tertiary strength cases" }
+            }
             Settings {
                 {
-                    Locale { "da_DK" }
-                    Attributes { "[strength 3]" }
+                    TestLocale { "da" }
+                    Arguments { "[strength 3]" }
                 }
             }
-            TestCases {
+            Cases {
                 "Luc<luck",
-                "luck<Lübeck",
-                "Lübeck>lybeck",
-                "Lävi<Löwe",
-                "Löww<mast",
+                "luck<L\u00fcbeck",
+                "L\u00fcbeck>lybeck",
+                "L\u00e4vi<L\u00f6we",
+                "L\u00f6ww<mast",
                 // constUCharCollationDanishTest::testBugs[][CollationDanishTest::MAX_TOKEN_LEN]="
                 "A/S<"
                 "ANDRE<"
-                "ANDRÉ<"
+                "ANDR\u00c9<"
                 "ANDREAS<"
                 "AS<"
                 "CA<"
-                "ÇA<"
+                "\u00c7A<"
                 "CB<"
-                "ÇC<"
+                "\u00c7C<"
                 "D.S.B.<"
                 "DA<"
                 "DB<"
                 "DSB<"
                 "DSC<"
-                "ÐA<"
-                "ÐC<"
+                "\u00d0A<"
+                "\u00d0C<"
                 "EKSTRA_ARBEJDE<"
                 "EKSTRABUD0<"
-                "HØST<"
+                "H\u00d8ST<"
                 "HAAG<"
-                "HÅNDBOG<"
-                "HAANDVÆRKSBANKEN<"
+                "H\u00c5NDBOG<"
+                "HAANDV\u00c6RKSBANKEN<"
                 "karl<"
                 "Karl<"
-                "NIELS\\ JØRGEN<"
-                "NIELS-JØRGEN<"
+                "NIELS\\ J\u00d8RGEN<"
+                "NIELS-J\u00d8RGEN<"
                 "NIELSEN<"
-                "RÉE,\\ A<"
+                "R\u00c9E,\\ A<"
                 "REE,\\ B<"
-                "RÉE,\\ L<"
+                "R\u00c9E,\\ L<"
                 "REE,\\ V<"
                 "SCHYTT,\\ B<"
                 "SCHYTT,\\ H<"
-                "SCHÜTT,\\ H<"
+                "SCH\u00dcTT,\\ H<"
                 "SCHYTT,\\ L<"
-                "SCHÜTT,\\ M<"
+                "SCH\u00dcTT,\\ M<"
                 "SS<"
-                "ß<"
+                "\u00df<"
                 "SSA<"
                 "STORE\\ VILDMOSE<"
-                "STOREKÆR0<"
+                "STOREK\u00c6R0<"
                 "STORM\\ PETERSEN<"
                 "STORMLY<"
                 "THORVALD<"
                 "THORVARDUR<"
                 "THYGESEN<"
-                "þORVARÐUR<"
-                "VESTERGÅRD,\\ A<"
+                "\u00feORVAR\u00d0UR<"
+                "VESTERG\u00c5RD,\\ A<"
                 "VESTERGAARD,\\ A<"
-                "VESTERGÅRD,\\ B<"
-                "ÆBLE<"
-                "ÄBLE<"
-                "ØBERG<"
-                "ÖBERG",
+                "VESTERG\u00c5RD,\\ B<"
+                "\u00c6BLE<"
+                "\u00c4BLE<"
+                "\u00d8BERG<"
+                "\u00d6BERG",
 
                 // constUCharCollationDanishTest::testNTList[][CollationDanishTest::MAX_TOKEN_LEN]="
                 "andere<"
                 "chaque<"
                 "chemin<"
                 "cote<"
-                "coté<"
-                "côte<"
-                "côté<"
-                "čučēt<"
+                "cot\u00e9<"
+                "c\u00f4te<"
+                "c\u00f4t\u00e9<"
+                "\u010du\u010d\u0113t<"
                 "Czech<"
-                "hiša<"
+                "hi\u0161a<"
                 "irdisch<"
                 "lie<"
                 "lire<"
                 "llama<"
-                "lõug<"
-                "lòza<"
-                "luč<"
+                "l\u00f5ug<"
+                "l\u00f2za<"
+                "lu\u010d<"
                 "luck<"
-                "Lübeck<"
+                "L\u00fcbeck<"
                 "lye<"
-                "lävi<"
-                "Löwen<"
-                "màšta<"
-                "mîr<"
+                "l\u00e4vi<"
+                "L\u00f6wen<"
+                "m\u00e0\u0161ta<"
+                "m\u00eer<"
                 "myndig<"
-                "Männer<"
-                "möchten<"
-                "piña<"
+                "M\u00e4nner<"
+                "m\u00f6chten<"
+                "pi\u00f1a<"
                 "pint<"
                 "pylon<"
-                "šàran<"
+                "\u0161\u00e0ran<"
                 "savoir<"
-                "Šerbūra<"
+                "\u0160erb\u016bra<"
                 "Sietla<"
-                "ślub<"
+                "\u015blub<"
                 "subtle<"
                 "symbol<"
-                "sämtlich<"
+                "s\u00e4mtlich<"
                 "waffle<"
                 "verkehrt<"
                 "wood<"
                 "vox<"
-                "väga<"
+                "v\u00e4ga<"
                 "yen<"
                 "yuan<"
                 "yucca<"
-                "žal<"
-                "žena<"
-                "Ženēva<"
+                "\u017eal<"
+                "\u017eena<"
+                "\u017den\u0113va<"
                 "zoo0<"
                 "Zviedrija<"
-                "Zürich<"
+                "Z\u00fcrich<"
                 "zysk0<"
-                "ändere"
+                "\u00e4ndere"
             }
         }
     }
