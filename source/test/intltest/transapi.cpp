@@ -427,7 +427,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         
 		s="";
 		status=U_ZERO_ERROR;
-        index.start = index.limit = index.cursor = 0;
+        index.contextStart = index.contextLimit = index.start = 0;
 		logln("Testing transliterate(Replaceable, int32_t, UChar, UErrorCode)");
 		for(i=10; i<sizeof(Data)/sizeof(Data[0]); i=i+2){
 			UnicodeString log;
@@ -511,9 +511,9 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 			errln("FAIL : construction");
 	for(int32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
 		UnicodeString log;
-		index.start=getInt(Data[i+0]);
-        index.limit=getInt(Data[i+1]);
-        index.cursor=getInt(Data[i+2]);
+		index.contextStart=getInt(Data[i+0]);
+        index.contextLimit=getInt(Data[i+1]);
+        index.start=getInt(Data[i+2]);
         t->transliterate(s, index, status);
         if(U_FAILURE(status)){
            errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UErrorCode)-->" + (UnicodeString)u_errorName(status));
@@ -542,9 +542,9 @@ void TransliteratorAPITest::TestNullTransliterator(){
     doTest((UnicodeString)"nulTrans->transliterate", replaceable, s);
     replaceable.remove();
     replaceable.append(s);
-    Transliterator::Position index(start, limit, 0);
+    UTransPosition index={start, limit, 0, limit};
     nullTrans->handleTransliterate(replaceable, index, TRUE);
-    if(index.cursor != limit){
+    if(index.start != limit){
         errln("ERROR: NullTransliterator->handleTransliterate() failed");
     }
     doTest((UnicodeString)"NullTransliterator->handleTransliterate", replaceable, s);
@@ -670,9 +670,9 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
             UnicodeString log;
             if (DATA[i+0] != "") {
                  log = s + " + " + DATA[0] + " -> ";
-                 index.start=getInt(DATA[i+2]);
-                 index.limit=getInt(DATA[i+3]);
-                 index.cursor=getInt(DATA[i+4]);
+                 index.contextStart=getInt(DATA[i+2]);
+                 index.contextLimit=getInt(DATA[i+3]);
+                 index.start=getInt(DATA[i+4]);
                  t->transliterate(s, index, DATA[i+0], status);
                  if(U_FAILURE(status)){
 					 errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
@@ -691,9 +691,9 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
 void TransliteratorAPITest::displayOutput(const UnicodeString& got, const UnicodeString& expected, UnicodeString& log, UTransPosition& index){
 		 // Show the start index '{' and the cursor '|'
 			UnicodeString a, b, c;
-			got.extractBetween(0, index.start, a);
-			got.extractBetween(index.start, index.cursor, b);
-			got.extractBetween(index.cursor, got.length(), c);
+			got.extractBetween(0, index.contextStart, a);
+			got.extractBetween(index.contextStart, index.start, b);
+			got.extractBetween(index.start, got.length(), c);
 			log.append(a).
 				append((UChar)0x7b/*{*/).
 				append(b).

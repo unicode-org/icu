@@ -307,7 +307,7 @@ void UniToHexTransliteratorTest::TestSimpleTransliterate(){
 void UniToHexTransliteratorTest::TestTransliterate(){
     UErrorCode status=U_ZERO_ERROR;
 	UnicodeString Data[]={
-		//pattern, source, index.start, index.limit, index.cursor, expectedResult, expectedResult using filter(a, b)
+		//pattern, source, index.contextStart, index.contextLimit, index.start, expectedResult, expectedResult using filter(a, b)
 		(UnicodeString)"U+##00",    (UnicodeString)"abc", "1", "3", "2", (UnicodeString)"abU+63", (UnicodeString)"abc",		
 		(UnicodeString)"\\\\u0000", (UnicodeString)"abc", "1", "2", "1", (UnicodeString)"a\\u0062c", (UnicodeString)"a\\u0062c",
 		(UnicodeString)"Uni0000",   (UnicodeString)"abc", "1", "3", "2", (UnicodeString)"abUni0063", (UnicodeString)"abc",
