@@ -27,15 +27,6 @@ icu4c/source/test/testdata/uni-text.bin -text
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
 icu4j/readme.html svneol=native#text/html
-icu4j/src/com/ibm/data/misc/english.dict -text svneol=native#application/octet-stream
-icu4j/src/com/ibm/demo/calendar/package.html svneol=native#text/html
-icu4j/src/com/ibm/demo/holiday/package.html svneol=native#text/html
-icu4j/src/com/ibm/demo/package.html svneol=native#text/html
-icu4j/src/com/ibm/demo/rbbi/package.html svneol=native#text/html
-icu4j/src/com/ibm/demo/rbnf/package.html svneol=native#text/html
-icu4j/src/com/ibm/demo/translit/demo.html svneol=native#text/html
-icu4j/src/com/ibm/demo/translit/package.html svneol=native#text/html
-icu4j/src/com/ibm/icu/demo/components/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
@@ -63,33 +54,11 @@ icu4j/src/com/ibm/icu/impl/data/uprops.dat -text
 icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
-icu4j/src/com/ibm/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/print/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/styledtext/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/swingui/package.html svneol=native#text/html
 icu4j/src/com/ibm/richtext/textpanel/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/bnf/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/calendar/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/compression/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/normalizer/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/rbbi/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/rbnf/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/search/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/translit/package.html svneol=native#text/html
-icu4j/src/com/ibm/text/package.html svneol=native#text/html
-icu4j/src/com/ibm/text/resources/package.html svneol=native#text/html
-icu4j/src/com/ibm/text/resources/thai_dict -text
-icu4j/src/com/ibm/text/resources/unames.dat -text
-icu4j/src/com/ibm/text/resources/uprops.dat -text
-icu4j/src/com/ibm/tools/compression/package.html svneol=native#text/html
-icu4j/src/com/ibm/tools/normalizer/package.html svneol=native#text/html
-icu4j/src/com/ibm/util/package.html svneol=native#text/html
-icu4j/src/com/ibm/util/resources/package.html svneol=native#text/html
-icu4j/src/data/holidays_jp.ucs -text svneol=native#application/octet-stream
-icu4j/src/data/thai6.ucs -text
-icu4j/src/data/unicode/Draft-TestSuite.txt -text svneol=unset#application/octet-stream
 tools/unicodetools/com/ibm/text/UCA/charts.css svneol=native#text/css
 tools/unicodetools/com/ibm/text/UCA/help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/index.html svneol=native#text/html
