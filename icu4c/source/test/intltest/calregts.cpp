@@ -77,6 +77,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(39,TestMalaysianInstance);
         CASE(40,test4059654);
         CASE(41,test4092362);
+        CASE(42,TestWeekShift);
     default: name = ""; break;
     }
 }
@@ -2084,6 +2085,80 @@ void CalendarRegressionTest::TestMalaysianInstance() {
         errln("FAIL: Can't construct calendar for ms_MY");
     }
     delete cal;
+}
+
+/**
+ * setFirstDayOfWeek and setMinimalDaysInFirstWeek may change the
+ * field <=> time mapping, since they affect the interpretation of
+ * the WEEK_OF_MONTH or WEEK_OF_YEAR fields.
+ */
+void CalendarRegressionTest::TestWeekShift() {
+    UErrorCode ec = U_ZERO_ERROR;
+    GregorianCalendar cal(TimeZone::createTimeZone("America/Los_Angeles"),
+                          Locale("en", "US"), ec);
+    cal.setTime(UDate(997257600000.0), ec); // Wed Aug 08 01:00:00 PDT 2001
+    // In pass one, change the first day of week so that the weeks
+    // shift in August 2001.  In pass two, change the minimal days
+    // in the first week so that the weeks shift in August 2001.
+    //     August 2001     
+    // Su Mo Tu We Th Fr Sa
+    //           1  2  3  4
+    //  5  6  7  8  9 10 11
+    // 12 13 14 15 16 17 18
+    // 19 20 21 22 23 24 25
+    // 26 27 28 29 30 31   
+    for (int32_t pass=0; pass<2; ++pass) {
+        if (pass==0) {
+            cal.setFirstDayOfWeek(UCAL_WEDNESDAY);
+            cal.setMinimalDaysInFirstWeek(4);
+        } else {
+            cal.setFirstDayOfWeek(UCAL_SUNDAY);
+            cal.setMinimalDaysInFirstWeek(4);
+        }
+        cal.add(UCAL_DATE, 1, ec); // Force recalc
+        cal.add(UCAL_DATE, -1, ec);
+
+        UDate time1 = cal.getTime(ec); // Get time -- should not change
+
+        // Now change a week parameter and then force a recalc.
+        // The bug is that the recalc should not be necessary --
+        // calendar should do so automatically.
+        if (pass==0) {
+            cal.setFirstDayOfWeek(UCAL_THURSDAY);
+        } else {
+            cal.setMinimalDaysInFirstWeek(5);
+        }
+
+        int32_t woy1 = cal.get(UCAL_WEEK_OF_YEAR, ec);
+        int32_t wom1 = cal.get(UCAL_WEEK_OF_MONTH, ec);
+
+        cal.add(UCAL_DATE, 1, ec); // Force recalc
+        cal.add(UCAL_DATE, -1, ec);
+
+        int32_t woy2 = cal.get(UCAL_WEEK_OF_YEAR, ec);
+        int32_t wom2 = cal.get(UCAL_WEEK_OF_MONTH, ec);
+
+        UDate time2 = cal.getTime(ec);
+
+        if (U_FAILURE(ec)) {
+            errln("FAIL: internal test error");
+            return;
+        }
+
+        if (time1 != time2) {
+            errln("FAIL: shifting week should not alter time");
+        } else {
+            // logln(time1);
+        }
+        if (woy1 == woy2 && wom1 == wom2) {
+            logln((UnicodeString)"Ok: WEEK_OF_YEAR: " + woy1 +
+                  ", WEEK_OF_MONTH: " + wom1);
+        } else {
+            errln((UnicodeString)"FAIL: WEEK_OF_YEAR: " + woy1 + " => " + woy2 +
+                  ", WEEK_OF_MONTH: " + wom1 + " => " + wom2 +
+                  " after week shift");
+        }
+    }
 }
 
 UDate
