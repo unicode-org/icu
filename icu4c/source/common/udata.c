@@ -36,8 +36,8 @@
 /* Tests must verify that it remains 8 characters. */
 
 #ifdef OS390
-#define COMMON_DATA1_NAME "icudata390"
-#define COMMON_DATA1_NAME_LENGTH 10
+#define COMMON_DATA1_NAME U_ICUDATA_NAME"_390"
+#define COMMON_DATA1_NAME_LENGTH (COMMON_DATA_NAME_LENGTH + 4)
 static UBool s390dll = TRUE;
 #endif
 
@@ -766,14 +766,18 @@ openCommonData(UDataMemory *pData,
 #       ifdef OS390BATCH
             /* ### hack: we still need to get u_getDataDirectory() fixed
                for OS/390 (batch mode - always return "//"? )
-               and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!) */
+               and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
+               This is probably due to the strange file system on OS/390.  It's more like
+               a database with short entry names than a typical file system. */
             if (s390dll) {
                 lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
             }
             else {
                 /* U_ICUDATA_NAME should always have the correct name */
-                lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);
-/*                lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA");*/
+                /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
+                /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
+                /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
+                lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
             }
 #       else
             lib=LOAD_LIBRARY(pathBuffer, basename);

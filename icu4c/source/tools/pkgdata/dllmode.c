@@ -112,7 +112,16 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   /* begin writing makefile ========================= */
 
 
+/*390port start*/
 #ifdef OS390BATCH
+  if (uprv_strcmp(o->shortName, U_ICUDATA_NAME) == 0)
+    sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUDA)'\"\n\n"); 
+  else if (uprv_strcmp(o->shortName, "testdata") == 0)
+    sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUTE)'\"\n\n"); 
+  else if (uprv_strcmp(o->shortName, U_ICUDATA_NAME"_390") == 0)
+    sprintf(tmp, "# File to make:\nBATCH_TARGET=\"//'${LOADMOD}(IXMICUD1)'\"\n\n"); 
+  T_FileStream_writeLine(makefile, tmp);
+
   /* sprintf(tmp, "# File to make (OS390BATCH):\nTARGET='${LOADMOD}(%s)'\n\n", o->shortName); */ 
   sprintf(tmp, "# File to make (OS390BATCH):\nTARGET='${LOADMOD}(%s)'\"\n\n", o->shortName); 
 #else
@@ -120,7 +129,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 #endif
   T_FileStream_writeLine(makefile, tmp);
 
-  sprintf(tmp, "all: $(TARGETDIR)/$(TARGET)\n\n");
+  sprintf(tmp, "all: $(TARGETDIR)/$(TARGET) $(BATCH_TARGET)\n\n");
   T_FileStream_writeLine(makefile, tmp);
 
   /* Write compile rules */
@@ -182,11 +191,15 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "$(TEMP_DIR)/hpux_junk_obj.o: $(TEMP_DIR)/hpux_junk_obj.cpp\n"
                                    "\t$(COMPILE.cc) -o $@ $<\n"
                                    "\n");
-#elif defined(OS390BATCH)
-  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES) $(BIR_DEPS)\n"
-                                   "\t$(SHLIB.c) -o $@ $(OBJECTS) $(BIR_LDFLAGS)\n"
-                                   "# \t-ls -l $@\n\n");
 #else
+
+/*390port*/
+#ifdef OS390BATCH
+  T_FileStream_writeLine(makefile, "$(BATCH_TARGET): $(OBJECTS) $(LISTFILES) $(BIR_DEPS)\n"
+                                   "\t$(SHLIB.c) -o $@ $(OBJECTS) $(BIR_LDFLAGS)\n"
+                                   "#  \t-ls -l $@\n\n");
+#endif
+
   T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES) $(BIR_DEPS)\n"
                                    "\t$(SHLIB.c) -o $@ $(OBJECTS) $(BIR_LDFLAGS)\n"
                                    "\t-ls -l $@\n\n");
