@@ -92,10 +92,7 @@ public:
      */
     virtual Calendar* clone(void) const;
 
-    
-
 public:
-
     /**
      * Override Calendar Returns a unique class ID POLYMORPHICALLY. Pure virtual
      * override. This method is to implement a simple version of RTTI, since not all C++
@@ -144,13 +141,36 @@ public:
     virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
     /**
-     * API overrides
-     * @private
+     * Gets the maximum value for the given time field. e.g. for DAY_OF_MONTH,
+     * 31.
+     *
+     * @param field  The given time field.
+     * @return       The maximum value for the given time field.
+     * @draft ICU 2.6.
      */
     int32_t getMaximum(UCalendarDateFields field) const;
+
+    /**
+     * Gets the lowest maximum value for the given field if varies. Otherwise same as
+     * getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
+     *
+     * @param field  The given time field.
+     * @return       The lowest maximum value for the given time field.
+     * @draft ICU 2.6.
+     */
     int32_t getLeastMaximum(UCalendarDateFields field) const;
+
+    /**
+     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
+     */
     inline virtual int32_t getMaximum(EDateFields field) const { return getMaximum((UCalendarDateFields)field); }
+    /**
+     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
+     */
     inline virtual int32_t getLeastMaximum(EDateFields field) const { return getLeastMaximum((UCalendarDateFields)field); }
+    /**
+     * @deprecated ICU 2.6 use UCalendarDateFields instead of EDateFields
+     */
     inline virtual void add(EDateFields field, int32_t amount, UErrorCode& status) { add((UCalendarDateFields)field, amount, status); }
 
 private:
@@ -159,21 +179,85 @@ private:
     static const char fgClassID;
 
  protected:
+    /**
+     * Return the extended year defined by the current fields.  This will
+     * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields (such
+     * as UCAL_ERA) specific to the calendar system, depending on which set of
+     * fields is newer.
+     * @return the extended year
+     * @internal
+     */
     virtual int32_t handleGetExtendedYear();
+    /**
+     * Subclasses may override this method to compute several fields
+     * specific to each calendar system.  
+     * @internal
+     */
     virtual void handleComputeFields(int32_t julianDay, UErrorCode& status);
+    /**
+     * Subclass API for defining limits of different types.
+     * @param field one of the field numbers
+     * @param limitType one of <code>MINIMUM</code>, <code>GREATEST_MINIMUM</code>,
+     * <code>LEAST_MAXIMUM</code>, or <code>MAXIMUM</code>
+     * @internal
+     */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
+        /**
+     * Return the Julian day number of day before the first day of the
+     * given month in the given extended year.  Subclasses should override
+     * this method to implement their calendar system.
+     * @param eyear the extended year
+     * @param month the zero-based month, or 0 if useMonth is false
+     * @param useMonth if false, compute the day before the first day of
+     * the given year, otherwise, compute the day before the first day of
+     * the given month
+     * @param return the Julian day number of the day before the first
+     * day of the given month and year
+     * @internal
+     */
     virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
                                             UBool useMonth) const;
 
-
-    // older internals below
+    /**
+     * month length of current month
+     * @internal
+     */
     virtual int32_t monthLength(int32_t month) const; 
+    /**
+     * month length of month
+     * @internal
+     */
     virtual int32_t monthLength(int32_t month, int32_t year) const; 
+
+    /**
+     * month length of current month
+     * @internal
+     */
     int32_t getGregorianYear(UErrorCode& status) const;
 
+    /** 
+     * Calculate the era for internal computation
+     * @internal
+     */
     virtual int32_t internalGetEra() const;
+
+    /**
+     * Returns TRUE because the Buddhist Calendar does have a default century
+     * @internal
+     */
     virtual UBool haveDefaultCentury() const;
+
+    /**
+     * Returns the date of the start of the default century
+     * @return start of century - in milliseconds since epoch, 1970
+     * @internal
+     */
     virtual UDate defaultCenturyStart() const;
+
+    /**
+     * Returns the year in which the default century begins
+     * @internal
+     */
     virtual int32_t defaultCenturyStartYear() const;
 
  private: // default century stuff.
@@ -195,27 +279,27 @@ private:
      */
     static const int32_t    fgSystemDefaultCenturyYear;
 
+    /**
+     * start of default century, as a date
+     */
     static const UDate        fgSystemDefaultCentury;
 
     /**
-     * Returns the beginning date of the 100-year window that dates with 2-digit years
-     * are considered to fall within.
-     * @return    the beginning date of the 100-year window that dates with 2-digit years
-     *            are considered to fall within.
+     * Returns the beginning date of the 100-year window that dates 
+     * with 2-digit years are considered to fall within.
      */
     UDate         internalGetDefaultCenturyStart(void) const;
 
     /**
-     * Returns the first year of the 100-year window that dates with 2-digit years
-     * are considered to fall within.
-     * @return    the first year of the 100-year window that dates with 2-digit years
-     *            are considered to fall within.
+     * Returns the first year of the 100-year window that dates with 
+     * 2-digit years are considered to fall within.
      */
     int32_t          internalGetDefaultCenturyStartYear(void) const;
 
     /**
-     * Initializes the 100-year window that dates with 2-digit years are considered
-     * to fall within so that its start date is 80 years before the current time.
+     * Initializes the 100-year window that dates with 2-digit years
+     * are considered to fall within so that its start date is 80 years
+     * before the current time.
      */
     static void  initializeSystemDefaultCentury(void);
 };

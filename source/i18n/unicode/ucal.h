@@ -159,54 +159,126 @@ typedef enum UCalendarType UCalendarType;
  * @stable ICU 2.0
  */
 enum UCalendarDateFields {
-  /** Era field */
+  /** 
+   * Era field
+   * @stable ICU 2.6 
+   */
   UCAL_ERA,
-  /** Year field */
+  /**
+   * Year field
+   * @stable ICU 2.6 
+   */
   UCAL_YEAR,
-  /** Month field */
+  /**
+   * Month field
+   * @stable ICU 2.6 
+   */
   UCAL_MONTH,
-  /** Week of year field */
+  /**
+   * Week of year field
+   * @stable ICU 2.6 
+   */
   UCAL_WEEK_OF_YEAR,
-  /** Week of month field */
+  /**
+   * Week of month field
+   * @stable ICU 2.6 
+   */
   UCAL_WEEK_OF_MONTH,
-  /** Date field */
+  /**
+   * Date field
+   * @stable ICU 2.6 
+   */
   UCAL_DATE,
-  /** Day of year field */
+  /**
+   * Day of year field
+   * @stable ICU 2.6 
+   */
   UCAL_DAY_OF_YEAR,
-  /** Day of week field */
+  /**
+   * Day of week field
+   * @stable ICU 2.6 
+   */
   UCAL_DAY_OF_WEEK,
-  /** Day of week in month field */
+  /**
+   * Day of week in month field
+   * @stable ICU 2.6 
+   */
   UCAL_DAY_OF_WEEK_IN_MONTH,
-  /** AM/PM field */
+  /**
+   * AM/PM field
+   * @stable ICU 2.6 
+   */
   UCAL_AM_PM,
-  /** Hour field */
+  /**
+   * Hour field
+   * @stable ICU 2.6 
+   */
   UCAL_HOUR,
-  /** Hour of day field */
+  /**
+   * Hour of day field
+   * @stable ICU 2.6 
+   */
   UCAL_HOUR_OF_DAY,
-  /** Minute field */
+  /**
+   * Minute field
+   * @stable ICU 2.6 
+   */
   UCAL_MINUTE,
-  /** Second field */
+  /**
+   * Second field
+   * @stable ICU 2.6 
+   */
   UCAL_SECOND,
-  /** Millisecond field */
+  /**
+   * Millisecond field
+   * @stable ICU 2.6 
+   */
   UCAL_MILLISECOND,
-  /** Zone offset field */
+  /**
+   * Zone offset field
+   * @stable ICU 2.6 
+   */
   UCAL_ZONE_OFFSET,
-  /** DST offset field */
+  /**
+   * DST offset field
+   * @stable ICU 2.6 
+   */
   UCAL_DST_OFFSET,
-  /** Year / week of year */
+  /**
+   * Year / week of year 
+   * @stable ICU 2.6
+   */
   UCAL_YEAR_WOY,
-  /** Day of week, localized (1..7) */
+  /**
+   * Day of week, localized (1..7) 
+   * @stable ICU 2.6
+   */
   UCAL_DOW_LOCAL,
-  /** Year of this calendar system, encompassing all supra-year fields. For example, in Gregorian/Julian calendars, positive Extended Year values indicate years AD,  1 BC = -1 extended, 2 BC = -2 extended, and so on. */
+  /**
+   * Year of this calendar system, encompassing all supra-year fields. For example, in Gregorian/Julian calendars, positive Extended Year values indicate years AD,  1 BC = -1 extended, 2 BC = -2 extended, and so on. 
+   * @draft ICU 2.8 
+   */
   UCAL_EXTENDED_YEAR,       
-  /** Modified Julian day number, encompassing all date-related fields.  Demarcates at local midnight.*/
+  /**
+   * Modified Julian day number, encompassing all date-related fields.  Demarcates at local midnight.
+   * @draft ICU 2.8
+   */
   UCAL_JULIAN_DAY, 
-  /** Ranges from 0 to 23:59:59.999 (regardless of DST).  This field behaves <em>exactly</em> like a composite of all time-related fields, not including the zone fields.  As such, it also reflects discontinuities of those fields on DST transition days.  On a day of DST onset, it will jump forward.  On a day of DST cessation, it will jump backward.  This reflects the fact that is must be combined with the DST_OFFSET field to obtain a unique local time value. */
+  /**
+   * Ranges from 0 to 23:59:59.999 (regardless of DST).  This field behaves <em>exactly</em> like a composite of all time-related fields, not including the zone fields.  As such, it also reflects discontinuities of those fields on DST transition days.  On a day of DST onset, it will jump forward.  On a day of DST cessation, it will jump backward.  This reflects the fact that is must be combined with the DST_OFFSET field to obtain a unique local time value.
+   * @draft ICU 2.8
+   */
   UCAL_MILLISECONDS_IN_DAY,
-  /** Field count */
+  /**
+   * Field count
+   * @stable ICU 2.6
+   */
   UCAL_FIELD_COUNT,
 
-  /** Synonym for UCAL_DATE - @internal **/
+  /**
+   * Synonym for UCAL_DATE - 
+   * @draft ICU 2.8
+   **/
   UCAL_DAY_OF_MONTH=UCAL_DATE
 };
 

@@ -2670,8 +2670,8 @@ Calendar::getActualMaximum(UCalendarDateFields field, UErrorCode& status) const
     case ZONE_OFFSET:
     case DST_OFFSET:
     case DOW_LOCAL:
-    case JULIAN_DAY:
-    case MILLISECONDS_IN_DAY:
+    case UCAL_JULIAN_DAY:
+    case UCAL_MILLISECONDS_IN_DAY:
         // These fields all have fixed minima/maxima
         result = getMaximum(field);
         break;

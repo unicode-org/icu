@@ -99,10 +99,14 @@ public:
      */
     virtual Calendar* clone(void) const;
 
+    /**
+     * Return the extended year defined by the current fields.  In the 
+     * Japanese calendar case, this is equal to the equivalent extended Gregorian year.
+     * @internal
+     */
     virtual int32_t handleGetExtendedYear();
 
 public:
-
     /**
      * Override Calendar Returns a unique class ID POLYMORPHICALLY. Pure virtual
      * override. This method is to implement a simple version of RTTI, since not all C++
@@ -137,11 +141,20 @@ public:
     virtual const char * getType() const;
 
     /**
+     * @return FALSE - no default century in Japanese
      * @internal 
-     * @return TRUE if this calendar has the notion of a default century
      */
     virtual UBool haveDefaultCentury() const;
+
+    /**
+     * Not used - no default century.
+     * @internal
+     */
     virtual UDate defaultCenturyStart() const;
+    /**
+     * Not used - no default century.
+     * @internal
+     */
     virtual int32_t defaultCenturyStartYear() const;
 
 private:
@@ -150,38 +163,39 @@ private:
     static const char fgClassID;
 
 protected:
-    //virtual int32_t monthLength(int32_t month) const; 
-    //virtual int32_t monthLength(int32_t month, int32_t year) const; 
-    //    int32_t getGregorianYear(UErrorCode& status) const;
+    /** 
+     * Calculate the era for internal computation
+     * @internal
+     */
     virtual int32_t internalGetEra() const;
-    virtual void handleComputeFields(int32_t julianDay, UErrorCode& status);
-    virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
 
     /**
-     * (Overrides Calendar) Converts Calendar's time field values to GMT as
-     * milliseconds. In this case, we have to be concerned with filling in inconsistent
-     * information. For example, if the year and era only are set, need to make sure
-     * month & date are set correctly.  Ex, 'Heisei 1' starts Jan 8th, not Jan 1st.  
-     * Default month and date values will end up giving the wrong Era.
-     *
-     * @param status  Output param set to success/failure code on exit. If any value
-     *                previously set in the time field is invalid, this will be set to
-     *                an error status.
-     * @stable ICU 2.0
+     * Compute fields from the JD
+     * @internal
      */
+    virtual void handleComputeFields(int32_t julianDay, UErrorCode& status);
+
+    /**
+     * Calculate the limit for a specified type of limit and field
+     * @internal
+     */
+    virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
 
     /***
      * Called by computeJulianDay.  Returns the default month (0-based) for the year,
-     * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
+     * taking year and era into account.  Will return the first month of the given era, if 
+     * the current year is an ascension year.
+     * @internal
      */
-    virtual int32_t getDefaultMonthInYear() ;
-
+    virtual int32_t getDefaultMonthInYear();
 
     /***
      * Called by computeJulianDay.  Returns the default day (1-based) for the month,
-     * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
+     * taking currently-set year and era into account.  Will return the first day of the given
+     * era, if the current month is an ascension year and month.
+     * @internal
      */
-    virtual int32_t getDefaultDayInMonth(int32_t month) ;
+    virtual int32_t getDefaultDayInMonth(int32_t month);
 };
 
 inline UClassID
@@ -197,6 +211,6 @@ U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
-#endif // _GREGOCAL
+#endif
 //eof
 

@@ -16,6 +16,7 @@
 *                           Added documentation of WEEK_OF_YEAR computation.
 *   10/15/99    aliu        Fixed j32, cannot set date to Feb 29 2000 AD.
 *                           {JDK bug 4210209 4209272}
+*   11/07/2003  srl         Update, clean up documentation.
 ********************************************************************************
 */
 
@@ -342,34 +343,6 @@ public:
     virtual UBool isEquivalentTo(const Calendar& other) const;
 
     /**
-     * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
-     * of time to the given time field, based on the calendar's rules.  For more
-     * information, see the documentation for Calendar::add().
-     *
-     * @param field   The time field.
-     * @param amount  The amount of date or time to be added to the field.
-     * @param status  Output param set to success/failure code on exit. If any value
-     *                previously set in the time field is invalid, this will be set to
-     *                an error status.
-     * @deprecated ICU 2.6. Use add(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
-     */
-    //    virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
-
-    /**
-     * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
-     * of time to the given time field, based on the calendar's rules.  For more
-     * information, see the documentation for Calendar::add().
-     *
-     * @param field   The time field.
-     * @param amount  The amount of date or time to be added to the field.
-     * @param status  Output param set to success/failure code on exit. If any value
-     *                previously set in the time field is invalid, this will be set to
-     *                an error status.
-     * @draft ICU 2.6.
-     */
-    //    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
-
-    /**
      * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
      * For more information, see the documentation for Calendar::roll().
      *
@@ -394,7 +367,6 @@ public:
      * @draft ICU 2.6.
      */
     virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
-
 
     /**
      * Return the minimum value that this field could have, given the current date.
@@ -432,14 +404,9 @@ public:
      * for some years the actual maximum for MONTH is 12, and for others 13.
      * @param field    the time field.
      * @return         the maximum value that this field could have, given the current date.
-     * @internal.
-     */
-    virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
-
-    /*
      * @draft ICU 2.6
      */
-    inline int32_t getActualMaximum(UCalendarDateFields field) const;
+    virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
 
     /**
      * (Overrides Calendar) Return true if the current date for this Calendar is in
@@ -523,10 +490,15 @@ protected:
     virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
                                                    UBool useMonth) const;
 
+    /**
+     * Subclasses may override this.  This method calls
+     * handleGetMonthLength() to obtain the calendar-specific month
+     * length.
+     * @param bestField which field to use to calculate the date 
+     * @return julian day specified by calendar fields.
+     * @internal
+     */
     virtual int32_t handleComputeJulianDay(UCalendarDateFields bestField)  ;
-    virtual void computeFields(UErrorCode& ec);
-
-
 
     /**
      * Return the number of days in the given month of the given extended
@@ -537,6 +509,13 @@ protected:
      */
     virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const;
 
+    /**
+     * Return the number of days in the given extended year of this
+     * calendar system.  Subclasses should override this method if they can
+     * provide a more correct or more efficient implementation than the
+     * default implementation in Calendar.
+     * @stable ICU 2.0
+     */
     virtual int32_t handleGetYearLength(int32_t eyear) const;
 
     /**
@@ -590,19 +569,6 @@ protected:
     virtual UDate getEpochDay(UErrorCode& status);
 
     /**
-     * Compute the date-based fields given the milliseconds since the epoch start. Do
-     * not compute the time-based fields (HOUR, MINUTE, etc.).
-     *
-     * @param theTime the time in wall millis (either Standard or DST),
-     * whichever is in effect
-     * @param quick if true, only compute the ERA, YEAR, MONTH, DATE,
-     * DAY_OF_WEEK, and DAY_OF_YEAR.
-     * @param status Fill-in parameter which receives the status of this operation.
-     * @internal
-     */
-    //    virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
-
-    /**
      * Subclass API for defining limits of different types.
      * Subclasses must implement this method to return limits for the
      * following fields:
@@ -625,6 +591,14 @@ protected:
      */
     virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
 
+    /**
+     * Return the extended year defined by the current fields.  This will
+     * use the UCAL_EXTENDED_YEAR field or the UCAL_YEAR and supra-year fields (such
+     * as UCAL_ERA) specific to the calendar system, depending on which set of
+     * fields is newer.
+     * @return the extended year
+     * @internal
+     */
     virtual int32_t handleGetExtendedYear();
 
     /** 
@@ -637,6 +611,21 @@ protected:
     virtual int32_t handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy);
 
 
+    /**
+     * Subclasses may override this method to compute several fields
+     * specific to each calendar system.  These are:
+     *
+     * <ul><li>ERA
+     * <li>YEAR
+     * <li>MONTH
+     * <li>DAY_OF_MONTH
+     * <li>DAY_OF_YEAR
+     * <li>EXTENDED_YEAR</ul>
+     *
+     * <p>The GregorianCalendar implementation implements
+     * a calendar with the specified Julian/Gregorian cutover date.
+     * @internal
+     */
     virtual void handleComputeFields(int32_t julianDay, UErrorCode &status);
 
  private:
@@ -677,9 +666,9 @@ protected:
      * milliseconds from the standard epoch.  Default is October 15, 1582
      * (Gregorian) 00:00:00 UTC, that is, October 4, 1582 (Julian) is followed
      * by October 15, 1582 (Gregorian).  This corresponds to Julian day number
-     * 2299161.
+     * 2299161. This is measured from the standard epoch, not in Julian Days.
+     * @internal
      */
-    // This is measured from the standard epoch, not in Julian Days.
     UDate                fGregorianCutover;
 
     /**
@@ -726,14 +715,16 @@ protected:
 
     /**
      * Used by handleComputeJulianDay() and handleComputeMonthStart().
+     * Temporary field indicating whether the calendar is currently Gregorian as opposed to Julian.
      */
     UBool fIsGregorian;
 
     /**
      * Used by handleComputeJulianDay() and handleComputeMonthStart().
+     * Temporary field indicating that the sense of the gregorian cutover should be inverted
+     * to handle certain calculations on and around the cutover date.
      */
     UBool fInvertGregorian;
-
 
 
  public: // internal implementation
@@ -803,14 +794,6 @@ protected:
     static void  initializeSystemDefaultCentury(void);
 
 };
-
-
-inline int32_t GregorianCalendar::getActualMaximum(UCalendarDateFields field) const
-{
-    UErrorCode status = U_ZERO_ERROR;
-    return getActualMaximum(field, status);
-}
-
 
 U_NAMESPACE_END
 
