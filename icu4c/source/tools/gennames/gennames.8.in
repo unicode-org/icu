@@ -4,7 +4,7 @@
 .\"
 .\" Copyright (C) 2000 IBM, Inc. and others.
 .\"
-.TH GENRB 8 "13 November 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENNAMES 8 "13 November 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B gennames
 \- compile Unicode code points names into a data file
@@ -35,7 +35,7 @@
 .IR filename
 ]
 .SH DESCRIPTION
-.B genrb
+.B gennames
 reads the Unicode character database from
 .I filename
 and produce the file
