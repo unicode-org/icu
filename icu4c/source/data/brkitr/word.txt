@@ -124,19 +124,10 @@ $BackKatakanaEx    = $Extend* $Katakana;
 
 # rule 5
 
-##
-$BackEndACMLetter = $Format+ $Extend* [^$ALetter $Numeric $MidLetter $MidNumLet];
-## $BackALetterSeq = ($BackALetterEx $Format*)* $BackALetterEx;
 ! ($BackALetterEx $Format*)* $BackABaseLetterEx;
-## ! ($BackALetterEx $Format*)* $BackACMLetterEx / $BackEndACMLetter;
 ! ($BackALetterEx $Format*)* $BackACMLetterEx / $Format;
 
 # rule 6 and 7
-
-## ! $BackABaseLetterEx ($BackMidLetterEx | $BackMidNumLetEx) $Format* $BackABaseLetterEx; 
-## ! $BackABaseLetterEx ($BackMidLetterEx | $BackMidNumLetEx) $Format* $BackACMLetterEx / $BackEndACMLetter; 
-## ! $BackACMLetterEx $Format+ ($BackMidLetterEx | $BackMidNumLetEx) $Format* $BackABaseLetterEx; 
-## ! $BackACMLetterEx $Format+ ($BackMidLetterEx | $BackMidNumLetEx) $Format* $BackACMLetterEx / $BackEndACMLetter;
 
 ! (
        ($BackALetterEx $Format*)* 
@@ -156,14 +147,8 @@ $BackEndACMLetter = $Format+ $Extend* [^$ALetter $Numeric $MidLetter $MidNumLet]
 
 ! $BackNumericEx $Format* $BackNumericEx; 
 
-# rule 9
+# rule 9, 10
 
-## ! $BackNumericEx $Format* (($BackNumericEx | $BackALetterEx) $Format*)* $BackABaseLetterEx;
-## ! $BackNumericEx $Format* $BackACMLetterEx / $BackEndACMLetter; ## problem here
-
-# rule 10
-
-## ! ($BackALetterEx $Format*)+ $BackNumericEx;
 ! (($BackALetterEx | $BackNumericEx) $Format*)+ ($BackABaseLetterEx | $BackNumericEx);
 ! (($BackALetterEx | $BackNumericEx) $Format*)+ $BackACMLetterEx / $Format;
 
