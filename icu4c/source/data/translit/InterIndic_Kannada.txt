@@ -134,7 +134,9 @@
 \uE07F>;       # URA
 \uE080>;       # EK ONKAR
 \uE081>\u0cb5; # FALLBACK FOR ORIYA LETTER WA 
-0 > \u0ce6;       # FALLBACK FOR TAMIL
+\uE082>;       # Devanagari Glottal Stop
+\uE083>\u0ca4\u0ccd;  # Bengali Khanda-ta
+0 > \u0ce6;    # FALLBACK FOR TAMIL
 1 > \u0ce7;
 
 #    :: NFC (NFD) ;

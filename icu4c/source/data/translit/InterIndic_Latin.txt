@@ -121,7 +121,11 @@
     $seven=\ue06d;    # DIGIT SEVEN
     $eight=\ue06e;    # DIGIT EIGHT
     $nine=\ue06f;     # DIGIT NINE
-
+    
+    # Glottal stop
+    $dgs=\ue082;
+    #Khanda-ta
+    $kta=\ue083;
 # \u0970>; # UNMAPPED ABBREVIATION SIGN
     $depVowelAbove=[\ue03e-\ue040\ue045-\ue04c];
     $depVowelBelow=[\ue041-\ue044];
@@ -498,6 +502,8 @@
     $ailm >;
     $aulm >;
 
+    $dgs>\u0294;
+    $kta>t\u0331;
     $danda>'.';
     $doubleDanda>'.';
    

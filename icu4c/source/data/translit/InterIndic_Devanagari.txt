@@ -151,8 +151,9 @@
  \uE07E>;           # IRI
  \uE07F>;           # URA
  \uE080>;           # EK ONKAR
- \uE081>\u0935;		# FALLBACK FOR ORIYA LETTER WA 
- 
+ \uE081>\u0935;		  # FALLBACK FOR ORIYA LETTER WA 
+ \uE082>\u097d;     # Devanagari Glottal Sign
+ \uE083>\u0924\u094d;  # Bengali Khanda-ta
 #         \u0970  # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
 #    :: NFC;
 # eof

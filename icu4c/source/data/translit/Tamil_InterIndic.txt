@@ -44,6 +44,7 @@
 \u0BB3>\uE033;      # LETTER LLA
 \u0BB4>\uE034;      # LETTER LLLA
 \u0BB5>\uE035;      # LETTER VA
+\u0BB6>\uE036;      # LETTER SHA
 \u0BB7>\uE037;      # LETTER SSA
 \u0BB8>\uE038;      # LETTER SA
 \u0BB9>\uE039;      # LETTER HA

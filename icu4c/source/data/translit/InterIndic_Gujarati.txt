@@ -129,8 +129,10 @@
 \uE07E>;           # IRI
 \uE07F>;           # URA
 \uE080>;           # EK ONKAR
-\uE081>\u0ab5;      # FALLBACK FOR ORIYA LETTER WA 
-0 > \u0ae6;       # FALLBACK FOR TAMIL
+\uE081>\u0ab5;     # FALLBACK FOR ORIYA LETTER WA 
+\uE082>;           # Devanagari Glottal Stop
+\uE083>\u0aa4\u0acd;  # Bengali Khanda-ta
+0 > \u0ae6;        # FALLBACK FOR TAMIL
 1 > \u0ae7;
 
 #\ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
