@@ -13,6 +13,8 @@
 #include "unicode/udata.h"
 #include "umutex.h"
 
+U_NAMESPACE_BEGIN
+
 //----------------------------------------------------------------------
 // PropertyAliases implementation
 
@@ -77,6 +79,8 @@ PropertyAliases::getPropertyValueEnum(EnumValue prop,
     NameToEnum* n2e = (NameToEnum*) getPointer(vm->nameToEnum_offset);
     return n2e->getEnum(alias, *this);
 }
+
+U_NAMESPACE_END
 
 //----------------------------------------------------------------------
 // UDataMemory structures
@@ -163,8 +167,8 @@ static UBool load() {
 // TODO: Remove the munge code, marked "//TODO:munge" below, after the
 // script/binary data are updated (probably in ICU 2.6).
 
-static const char* SHORT_GCM_NAME = "gcm";
-static const char* LONG_GCM_NAME  = "General_Category_Mask";
+static const char SHORT_GCM_NAME[] = "gcm";
+static const char LONG_GCM_NAME[]  = "General_Category_Mask";
 
 U_CAPI const char* U_EXPORT2
 u_getPropertyName(UProperty property,

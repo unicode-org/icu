@@ -15,6 +15,10 @@
 #include "unicode/uchar.h"
 #include "uprops.h"
 
+class Builder;
+
+U_NAMESPACE_BEGIN
+
 // This header defines the in-memory layout of the property names data
 // structure representing the UCD data files PropertyAliases.txt and
 // PropertyValueAliases.txt.  It is used by:
@@ -30,15 +34,12 @@
 // Fields in UDataInfo:
 
 // PNAME_SIG[] is encoded as numeric literals for compatibility with the HP compiler
-static const uint8_t PNAME_SIG_0 = 0x70; // p
-static const uint8_t PNAME_SIG_1 = 0x6E; // n
-static const uint8_t PNAME_SIG_2 = 0x61; // a
-static const uint8_t PNAME_SIG_3 = 0x6D; // m
+#define PNAME_SIG_0 ((uint8_t)0x70) /* p */
+#define PNAME_SIG_1 ((uint8_t)0x6E) /* n */
+#define PNAME_SIG_2 ((uint8_t)0x61) /* a */
+#define PNAME_SIG_3 ((uint8_t)0x6D) /* m */
 
-static const int8_t PNAME_FORMAT_VERSION = 1; // formatVersion[0]
-
-//----------------------------------------------------------------------
-// PropertyAliases class
+#define PNAME_FORMAT_VERSION ((int8_t)1) /* formatVersion[0] */
 
 /**
  * An offset from the start of the pnames data to a contained entity.
@@ -62,7 +63,37 @@ typedef int16_t Offset; // must be signed
  */
 typedef int32_t EnumValue;
 
-struct ValueMap; // fwd decl
+//----------------------------------------------------------------------
+// ValueMap
+
+/**
+ * For any top-level property that has named values (binary and
+ * enumerated properties), there is a ValueMap object.  This object
+ * maps from enum values to two other maps.  One goes from value enums
+ * to value names.  The other goes from value names to value enums.
+ * 
+ * The value enum values may be contiguous or disjoint.  If they are
+ * contiguous then the enumToName_offset is nonzero, and the
+ * ncEnumToName_offset is zero.  Vice versa if the value enums are
+ * disjoint.
+ *
+ * There are n of these objects, where n is the number of binary
+ * properties + the number of enumerated properties.
+ */
+struct ValueMap {
+
+    // -- begin pnames data --
+    // Enum=>name EnumToOffset / NonContiguousEnumToOffset objects.
+    // Exactly one of these will be nonzero.
+    Offset enumToName_offset;
+    Offset ncEnumToName_offset;
+
+    Offset nameToEnum_offset; // Name=>enum data
+    // -- end pnames data --
+};
+
+//----------------------------------------------------------------------
+// PropertyAliases class
 
 /**
  * A class encapsulating access to the memory-mapped data representing
@@ -99,7 +130,7 @@ class PropertyAliases {
 
     // -- end pnames data --
 
-    friend class Builder;
+    friend class ::Builder;
 
     const ValueMap* getValueMap(EnumValue prop) const;
 
@@ -129,35 +160,6 @@ class PropertyAliases {
 };
 
 //----------------------------------------------------------------------
-// ValueMap
-
-/**
- * For any top-level property that has named values (binary and
- * enumerated properties), there is a ValueMap object.  This object
- * maps from enum values to two other maps.  One goes from value enums
- * to value names.  The other goes from value names to value enums.
- * 
- * The value enum values may be contiguous or disjoint.  If they are
- * contiguous then the enumToName_offset is nonzero, and the
- * ncEnumToName_offset is zero.  Vice versa if the value enums are
- * disjoint.
- *
- * There are n of these objects, where n is the number of binary
- * properties + the number of enumerated properties.
- */
-struct ValueMap {
-
-    // -- begin pnames data --
-    // Enum=>name EnumToOffset / NonContiguousEnumToOffset objects.
-    // Exactly one of these will be nonzero.
-    Offset enumToName_offset;
-    Offset ncEnumToName_offset;
-
-    Offset nameToEnum_offset; // Name=>enum data
-    // -- end pnames data --
-};
-
-//----------------------------------------------------------------------
 // EnumToOffset
 
 /**
@@ -173,7 +175,7 @@ class EnumToOffset {
     Offset _offsetArray; // [array of enumLimit-enumStart]
     // -- end pnames data --
 
-    friend class Builder;
+    friend class ::Builder;
 
     Offset* getOffsetArray() {
         return &_offsetArray;
@@ -215,7 +217,7 @@ class NonContiguousEnumToOffset {
     // Offset _offsetArray; // [array of count] after enumValue[count-1]
     // -- end pnames data --
 
-    friend class Builder;
+    friend class ::Builder;
 
     EnumValue* getEnumArray() {
         return &_enumArray;
@@ -267,7 +269,7 @@ class NameToEnum {
     // Offset _nameArray; // [array of count] offsets to names
     // -- end pnames data --
 
-    friend class Builder;
+    friend class ::Builder;
 
     EnumValue* getEnumArray() {
         return &_enumArray;
@@ -406,6 +408,7 @@ class NameToEnum {
  * 99: # string pool {SP}
  *  [pool of nul-terminated char* strings]
  */
+U_NAMESPACE_END
 
 #endif
 
