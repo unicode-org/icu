@@ -739,7 +739,7 @@ public:
 };
 
 inline UDate
-SimpleDateFormat::get2DigitYearStart(UErrorCode& status) const
+SimpleDateFormat::get2DigitYearStart(UErrorCode& /*status*/) const
 {
     return fDefaultCenturyStart;
 }
