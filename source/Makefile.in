@@ -132,7 +132,7 @@ distclean-local: clean-local
 	$(RMV) Makefile config.cache config.log config.status config/Makefile
 	$(RMV) common/unicode/platform.h common/icucfg.h
 ifeq ($(patsubst ..%,,@RELATIVEDATADIR@),@RELATIVEDATADIR@)
-	$(RMV) @DATABUILDDIR@/../source/test/testdata/*.goo @DATABUILDDIR@/../source/test/testdata/*.txt @DATABUILDDIR@/../source/test/testdata/*.uni
+	$(RMV) @DATABUILDDIR@/../source/test/testdata/*.goo @DATABUILDDIR@/../source/test/testdata/*.txt @DATABUILDDIR@/../source/test/testdata/*.bin @DATABUILDDIR@/../source/test/testdata/*.uni
 	$(RMV) @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk
 endif
 
@@ -161,5 +161,5 @@ builddata: @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thai
 	ln -s `pwd`/$< @DATABUILDDIR@
 
 @DATABUILDDIR@/../source/test/testdata/default.goo: $(srcdir)/test/testdata/default.goo
-	ln -s `pwd`/$(srcdir)/test/testdata/*.goo `pwd`/$(srcdir)/test/testdata/*.txt `pwd`/$(srcdir)/test/testdata/*.uni  @DATABUILDDIR@/../source/test/testdata/
+	ln -s `pwd`/$(srcdir)/test/testdata/*.goo `pwd`/$(srcdir)/test/testdata/*.txt `pwd`/$(srcdir)/test/testdata/*.bin `pwd`/$(srcdir)/test/testdata/*.uni  @DATABUILDDIR@/../source/test/testdata/
 
