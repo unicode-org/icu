@@ -31,6 +31,7 @@
 U_NAMESPACE_BEGIN
 
 class NumberFormat;
+class DateFormat;
 
 /**
  * A MessageFormat produces concatenated messages in a
@@ -662,6 +663,23 @@ private:
     // Variable-size array management
     UBool allocateSubformats(int32_t capacity);
     UBool allocateArgTypes(int32_t capacity);
+
+    /**
+     * Default Format objects used when no format is specified and a
+     * numeric or date argument is formatted.  These are volatile
+     * cache objects maintained only for performance.  They do not
+     * participate in operator=(), copy constructor(), nor
+     * operator==().
+     */
+    NumberFormat* defaultNumberFormat;
+    DateFormat*   defaultDateFormat;
+
+    /**
+     * Method to retrieve default formats (or NULL on failure).
+     * These are semantically const, but may modify *this.
+     */
+    const NumberFormat* getDefaultNumberFormat() const;
+    const DateFormat*   getDefaultDateFormat() const;
 
     /**
      * Finds the word s, in the keyword list and returns the located index.
