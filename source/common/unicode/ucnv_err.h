@@ -30,6 +30,11 @@
  *   and to substitute with a codepage specific substitutions sequence when converting from Codepage -> Unicode
  */
 
+/* This file isn't designed to be included by itself. */
+#ifndef UCNV_H
+# include "unicode/ucnv.h"
+ /* and the rest of this file will be ignored. */
+#endif
 
 #ifndef UCNV_ERR_H
 #define UCNV_ERR_H
@@ -55,9 +60,6 @@ typedef enum {
     UCNV_CLOSE = 4,   
 } UConverterCallbackReason;
 
-/* Forward declaring the UConverter structure */
-struct UConverter;
-typedef struct UConverter UConverter;
 
 /**
  * The structure for the fromUnicode callback function parameter.

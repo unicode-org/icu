@@ -187,8 +187,6 @@ struct UConverter {
 
 U_CDECL_END /* end of UConverter */
 
-typedef struct UConverter UConverter;
-
 
 typedef struct
   {
