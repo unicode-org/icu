@@ -196,14 +196,18 @@ U_CAPI int u_wmsg(FILE *fp, const char *tag, ... )
 }
 
 /* these will break if the # of messages change. simply add or remove 0's .. */
-UChar * gInfoMessages[U_ERROR_WARNING_LIMIT-U_ERROR_WARNING_START] = 
-    { 0,0 };
+UChar **gInfoMessages = NULL;
 
-UChar * gErrMessages[U_ERROR_LIMIT] = 
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+UChar **gErrMessages = NULL;
 
 static const UChar *fetchErrorName(UErrorCode err)
 {
+    if (!gInfoMessages) {
+        gInfoMessages = (UChar **)malloc((U_ERROR_WARNING_LIMIT-U_ERROR_WARNING_START)*sizeof(UChar*));
+    }
+    if (!gErrMessages) {
+        gErrMessages = (UChar **)malloc(U_ERROR_LIMIT*sizeof(UChar*));
+    }
     if(err>=0)
         return gErrMessages[err];
     else
