@@ -943,17 +943,16 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
                 int32_t withParens = -1;
                 UnicodeSet* f = TransliteratorIDParser::parseGlobalFilter(rule, p, direction, withParens, &idBlock);
                 if (f != NULL) {
-                    if (ICU_Utility::parseChar(rule, p, END_OF_RULE)) {
-                        if ((direction == UTRANS_FORWARD) ==
-                            (withParens == 0)) {
-                            if (compoundFilter != NULL) {
-                                // Multiple compound filters
-                                syntaxError(U_MULTIPLE_COMPOUND_FILTERS, rule, pos);
-                                delete f;
-                            } else {
-                                compoundFilter = f;
-                                compoundFilterOffset = idBlockCount;
-                            }
+                    if (ICU_Utility::parseChar(rule, p, END_OF_RULE)
+                        && (direction == UTRANS_FORWARD) == (withParens == 0))
+                    {
+                        if (compoundFilter != NULL) {
+                            // Multiple compound filters
+                            syntaxError(U_MULTIPLE_COMPOUND_FILTERS, rule, pos);
+                            delete f;
+                        } else {
+                            compoundFilter = f;
+                            compoundFilterOffset = idBlockCount;
                         }
                     } else {
                         delete f;
