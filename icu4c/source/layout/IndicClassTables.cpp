@@ -30,17 +30,19 @@ enum
 
     // simple classes
     _xx = IndicClassTable::CC_RESERVED,
-    _ma = IndicClassTable::CC_MODIFYING_MARK_ABOVE,
-    _mp = IndicClassTable::CC_MODIFYING_MARK_POST,
+    _ma = IndicClassTable::CC_VOWEL_MODIFIER | IndicClassTable::CF_POS_ABOVE,
+    _mp = IndicClassTable::CC_VOWEL_MODIFIER | IndicClassTable::CF_POS_AFTER,
+    _sa = IndicClassTable::CC_STRESS_MARK | IndicClassTable::CF_POS_ABOVE,
+    _sb = IndicClassTable::CC_STRESS_MARK | IndicClassTable::CF_POS_BELOW,
     _iv = IndicClassTable::CC_INDEPENDENT_VOWEL,
     _ct = IndicClassTable::CC_CONSONANT | IndicClassTable::CF_CONSONANT,
     _cn = IndicClassTable::CC_CONSONANT_WITH_NUKTA | IndicClassTable::CF_CONSONANT,
     _nu = IndicClassTable::CC_NUKTA,
     _dv = IndicClassTable::CC_DEPENDENT_VOWEL,
-    _dl = _dv | IndicClassTable::CF_MATRA_PRE,
-    _db = _dv | IndicClassTable::CF_MATRA_BELOW,
-    _da = _dv | IndicClassTable::CF_MATRA_ABOVE,
-    _dr = _dv | IndicClassTable::CF_MATRA_POST,
+    _dl = _dv | IndicClassTable::CF_POS_BEFORE,
+    _db = _dv | IndicClassTable::CF_POS_BELOW,
+    _da = _dv | IndicClassTable::CF_POS_ABOVE,
+    _dr = _dv | IndicClassTable::CF_POS_AFTER,
     _lm = _dv | IndicClassTable::CF_LENGTH_MARK,
     _vr = IndicClassTable::CC_VIRAMA,
 
@@ -76,7 +78,7 @@ static const IndicClassTable::CharClass devaCharClasses[] =
     _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _cn, _ct, _ct, _ct, _ct, _ct, _ct, // 0920 - 092F
     _rv, _cn, _ct, _ct, _cn, _ct, _ct, _ct, _ct, _ct, _xx, _xx, _nu, _xx, _dr, _dl, // 0930 - 093F
     _dr, _db, _db, _db, _db, _da, _da, _da, _da, _dr, _dr, _dr, _dr, _vr, _xx, _xx, // 0940 - 094F
-    _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _cn, _cn, _cn, _cn, _cn, _cn, _cn, _cn, // 0950 - 095F
+    _xx, _sa, _sb, _sa, _sa, _xx, _xx, _xx, _cn, _cn, _cn, _cn, _cn, _cn, _cn, _cn, // 0950 - 095F
     _iv, _iv, _db, _db, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, // 0960 - 096F
     _xx                                                                             // 0970
 };
