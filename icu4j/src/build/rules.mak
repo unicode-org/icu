@@ -42,15 +42,16 @@ delete.classlist:
 	@rm -f $(CLASSLIST)
 
 clean:
-!ifdef FILES_java
-	rm -f $(FILES_class)
-!endif
-!ifdef FILES_dict
-    rm -f $(FILES_dict)
-!endif
-!ifdef SUBDIRS
-	@for %%d in ( $(SUBDIRS) ) do cd %d && nmake -nologo clean && cd ..
-!endif
+	rm -rf ..\classes\com
+#!ifdef FILES_java
+#	rm -f $(FILES_class)
+#!endif
+#!ifdef FILES_dict
+#    rm -f $(FILES_dict)
+#!endif
+#!ifdef SUBDIRS
+#	@for %%d in ( $(SUBDIRS) ) do cd %d && nmake -nologo clean && cd ..
+#!endif
 	
 FORCE: ;
 
