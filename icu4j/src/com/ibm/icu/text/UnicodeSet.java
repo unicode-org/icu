@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.9 $ $Date: 2000/02/10 07:38:01 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.10 $ $Date: 2000/02/24 20:45:08 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -808,7 +808,6 @@ public class UnicodeSet implements UnicodeFilter {
                     throw new IllegalArgumentException("Illegal variable reference");
                 }
                 String name = pattern.substring(i, j);
-                ++j;
                 Object obj = symbols.lookup(name);
                 if (obj == null) {
                     throw new IllegalArgumentException("Undefined variable: "
@@ -820,6 +819,7 @@ public class UnicodeSet implements UnicodeFilter {
                 } else {
                     nestedPairs = ((UnicodeSet) obj).pairs.toString();
                 }
+                i = j+1; // Make i point to ']'
             }
 
             /* An opening bracket indicates the first bracket of a nested
@@ -836,7 +836,7 @@ public class UnicodeSet implements UnicodeFilter {
                         throw new IllegalArgumentException("Missing \":]\"");
                     }
                     nestedPairs = getCategoryPairs(pattern.substring(i, j));
-                    i = j+1; // Make i point to ']'
+                    i = j+1; // Make i point to ']' in ":]"
                     if (mode == 3) {
                         // Entire pattern is a category; leave parse loop
                         pairsBuf.append(nestedPairs);
