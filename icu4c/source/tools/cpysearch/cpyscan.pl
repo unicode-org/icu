@@ -15,7 +15,7 @@ my @files = `$command`;
 my $file;
 foreach $file (@files) {
   chomp $file;
-  my @lines = `head -n 10 "$file"`;
+  my @lines = `head -n 20 "$file"`;
   if (grep(/copyright.*(international|ibm)/i, @lines) == 0) {
     print "$file\n";
   }
