@@ -23,10 +23,12 @@ void addConvert(TestNode** root);
 void addCollTest(TestNode** root);
 void addComplexTest(TestNode** root);
 void addUDataTest(TestNode** root);
+void addUTF16Test(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
-    addUtility(root);
+    addUTF16Test(root);
+	addUtility(root);
     addBreakIter(root);
     addFormatTest(root);
     addConvert(root);
