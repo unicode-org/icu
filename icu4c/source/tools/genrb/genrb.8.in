@@ -96,8 +96,8 @@ for the Java file can be given.
 Set the source directory to
 .IR source .
 The default source directory is specified by the environment variable
-.BR ICU_DATA
-or is the location set when ICU was built if 
+.BR ICU_DATA ,
+or the location set when ICU was built if 
 .B ICU_DATA
 is not set.
 .TP
@@ -139,4 +139,6 @@ is set.
 .SH COPYRIGHT
 Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
+.BR derb (8)
+.br
 .BR pkgdata (8)
