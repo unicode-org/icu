@@ -224,7 +224,6 @@ import java.io.*;
  *
  * @author Richard Gillam
  * @internal ICU 2.0
- * $RCSfile: RuleBasedBreakIterator_Old.java,v $ $Revision: 1.3 $ $Date: 2004/05/08 02:56:13 $
  */
 public class RuleBasedBreakIterator_Old extends RuleBasedBreakIterator {
 
