@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.4 $
+* $Revision: 1.5 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -64,7 +64,7 @@ typedef enum UCurrNameStyle {
      * currency, such as "US Dollar" for USD.
      * @draft ICU 2.6
      */
-    UCURR_LONG_NAME,
+    UCURR_LONG_NAME
 } UCurrNameStyle;
 
 /**
