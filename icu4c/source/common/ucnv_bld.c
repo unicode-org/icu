@@ -64,11 +64,6 @@ static UConverterSharedData *createConverterFromFile (const char *converterName,
 
 static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
 
-/**
- *hash function for UConverterSharedData
- */
-static int32_t uhash_hashSharedData (void *sharedData);
-
 /*Defines the struct of a UConverterSharedData the immutable, shared part of
  *UConverter -
  * This is the definition from ICU 1.4, necessary to read converter data
@@ -182,11 +177,6 @@ const UConverterSharedData *
   return NULL;
 }
 
-int32_t uhash_hashSharedData (void *sharedData)
-{
-  return uhash_hashIString(((UConverterSharedData *) sharedData)->name);
-}
-
 /*Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
 void   shareConverterData (UConverterSharedData * data)
 {
@@ -195,7 +185,7 @@ void   shareConverterData (UConverterSharedData * data)
 
   if (SHARED_DATA_HASHTABLE == NULL)
     {
-      UHashtable* myHT = uhash_openSize ((UHashFunction) uhash_hashSharedData, 
+      UHashtable* myHT = uhash_openSize (uhash_hashIChars, uhash_compareIChars,
                                          ucnv_io_countAvailableAliases(&err),
                                          &err);
       if (U_FAILURE (err)) return;
@@ -208,6 +198,8 @@ void   shareConverterData (UConverterSharedData * data)
   umtx_lock (NULL);
   /* ### check to see if the element is not already there! */
   uhash_put(SHARED_DATA_HASHTABLE,
+             (void*) data->name, /* Okay to cast away const as long as
+                                    keyDeleter == NULL */
             data,
             &err);
   umtx_unlock (NULL);
@@ -221,7 +213,7 @@ UConverterSharedData *getSharedConverterData (const char *name)
   if (SHARED_DATA_HASHTABLE == NULL)    return NULL;
   else
     {
-      return (UConverterSharedData*)uhash_get (SHARED_DATA_HASHTABLE, uhash_hashIString (name));
+      return (UConverterSharedData*)uhash_get (SHARED_DATA_HASHTABLE, name);
     }
 }
 

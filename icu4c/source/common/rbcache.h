@@ -55,13 +55,13 @@ class U_COMMON_API VisitedFileCache // Not really external; just making the comp
 
 inline bool_t VisitedFileCache::wasVisited(const UnicodeString& filename) const
 {
-  return (uhash_get(hashTable, uhash_hashUString(filename.getUChars())) != 0);
+  return (uhash_OLD_get(hashTable, uhash_OLD_hashUString(filename.getUChars())) != 0);
 }
 
 inline void VisitedFileCache::markAsVisited(const UnicodeString& filename)
 {
   UErrorCode err = U_ZERO_ERROR;
-  uhash_putKey(hashTable, uhash_hashUString(filename.getUChars()), (void*)TRUE, &err);
+  uhash_OLD_putKey(hashTable, uhash_OLD_hashUString(filename.getUChars()), (void*)TRUE, &err);
 }
 
 

@@ -20,7 +20,8 @@
 ResourceBundleCache::ResourceBundleCache()
 {
   UErrorCode err = U_ZERO_ERROR;
-  hashTable = uhash_open((UHashFunction)uhash_hashUString, &err);
+  hashTable = uhash_open((UHashFunction)uhash_OLD_hashUString,
+                         uhash_OLD_pointerComparator, &err);
   uhash_setValueDeleter(hashTable, deleteValue);
 }
 
@@ -34,7 +35,8 @@ void ResourceBundleCache::deleteValue(void* value)
 VisitedFileCache::VisitedFileCache()
 {
   UErrorCode err = U_ZERO_ERROR;
-  hashTable = uhash_open((UHashFunction)uhash_hashUString, &err);
+  hashTable = uhash_open((UHashFunction)uhash_OLD_hashUString,
+                         uhash_OLD_pointerComparator, &err);
 }
 
 VisitedFileCache::~VisitedFileCache()

@@ -82,10 +82,12 @@ String2dList::getStaticClassID()
 TaggedList::TaggedList()
 {
   UErrorCode err = U_ZERO_ERROR;
-  fHashtableValues = uhash_open((UHashFunction)uhash_hashUString, &err);
+  fHashtableValues = uhash_open((UHashFunction)uhash_OLD_hashUString,
+                                uhash_OLD_pointerComparator, &err);
   uhash_setValueDeleter(fHashtableValues, deleteValue);
   
-  fHashtableKeys = uhash_open((UHashFunction)uhash_hashUString, &err);
+  fHashtableKeys = uhash_open((UHashFunction)uhash_OLD_hashUString,
+                              uhash_OLD_pointerComparator, &err);
 }
   
 TaggedList::~TaggedList()
@@ -100,13 +102,13 @@ TaggedList::put(const UnicodeString& tag,
 {
   UErrorCode err = U_ZERO_ERROR;
   
-  uhash_putKey(fHashtableValues, 
+  uhash_OLD_putKey(fHashtableValues, 
 	       tag.hashCode() & 0x7FFFFFFF,
 	       (new UnicodeString(data)),
 	       &err);
   
-  uhash_putKey(fHashtableKeys,
-	       uhash_size(fHashtableValues),
+  uhash_OLD_putKey(fHashtableKeys,
+	       uhash_count(fHashtableValues),
 	       (new UnicodeString(tag)),
 	       &err);
 }
@@ -115,7 +117,7 @@ const UnicodeString*
 TaggedList::get(const UnicodeString& tag) const
 {
   return (const UnicodeString*)
-    uhash_get(fHashtableValues, tag.hashCode() & 0x7FFFFFFF);
+    uhash_OLD_get(fHashtableValues, tag.hashCode() & 0x7FFFFFFF);
 }
 
 void
