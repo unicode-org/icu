@@ -108,6 +108,13 @@ insertionSort(char *array, int32_t length, int32_t itemSize,
  * This implementation is semi-recursive:
  * It recurses for the smaller sub-array to shorten the recursion depth,
  * and loops for the larger sub-array.
+ *
+ * Loosely after QuickSort algorithms in
+ * Niklaus Wirth
+ * Algorithmen und Datenstrukturen mit Modula-2
+ * B.G. Teubner Stuttgart
+ * 4. Auflage 1986
+ * ISBN 3-519-02260-5
  */
 static void
 subQuickSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
