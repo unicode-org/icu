@@ -3716,6 +3716,8 @@ if test x"$msg" = x; then
 fi
 echo "$ac_t""$msg" 1>&6
 
+ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+
 
 # Check whether --enable-tests or --disable-tests was given.
 if test "${enable_tests+set}" = set; then
@@ -4077,6 +4079,7 @@ s%@thepkgicudatadir@%$thepkgicudatadir%g
 s%@DATA_PACKAGING_CPPFLAGS@%$DATA_PACKAGING_CPPFLAGS%g
 s%@DATA_PACKAGING_MODE@%$DATA_PACKAGING_MODE%g
 s%@ICULIBSUFFIX@%$ICULIBSUFFIX%g
+s%@ICULIBSUFFIXCNAME@%$ICULIBSUFFIXCNAME%g
 s%@TESTS_TRUE@%$TESTS_TRUE%g
 s%@TESTS_FALSE@%$TESTS_FALSE%g
 s%@SAMPLES_TRUE@%$SAMPLES_TRUE%g
