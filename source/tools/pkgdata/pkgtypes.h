@@ -147,5 +147,6 @@ typedef struct UPKGOptions_
 #define UDATA_CMN_SUFFIX ".dat"
 #define UDATA_CMN_INTERMEDIATE_SUFFIX "_dat"
 
+#define PKGDATA_DERIVED_PATH '\t'
 
 #endif
