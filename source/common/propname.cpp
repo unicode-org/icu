@@ -363,12 +363,12 @@ NameToEnum::swap(const UDataSwapper *ds,
         inNameArray=(const Offset *)(inEnumArray+tempMap->count);
         outNameArray=(Offset *)(outEnumArray+tempMap->count);
 
-        /*
-         * ### TODO optimize
-         * After some testing, add a test
-         * if(inCharset==outCharset) { only swap enums and names, do not sort; }
-         * else { sort/copy/swap/permutate as below; }
-         */
+        if(ds->inCharset==ds->outCharset) {
+            /* no need to sort, just swap the enum/name arrays */
+            ds->swapArray32(ds, inEnumArray, tempMap->count*4, outEnumArray, pErrorCode);
+            ds->swapArray16(ds, inNameArray, tempMap->count*2, outNameArray, pErrorCode);
+            return size;
+        }
 
         /*
          * The name and enum arrays are sorted by names and must be resorted
@@ -385,9 +385,13 @@ NameToEnum::swap(const UDataSwapper *ds,
             sortArray[i].index=(Offset)i;
         }
 
+        /*
+         * use a stable sort to avoid shuffling of equal strings,
+         * which makes testing harder
+         */
         uprv_sortArray(sortArray, tempMap->count, sizeof(NameAndIndex),
                        upname_compareRows, outBytes,
-                       FALSE, pErrorCode);
+                       TRUE, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             udata_printError(ds, "upname_swap(NameToEnum).uprv_sortArray(%d items) failed - %s\n",
                              tempMap->count, u_errorName(*pErrorCode));
