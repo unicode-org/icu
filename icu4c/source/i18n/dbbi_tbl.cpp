@@ -8,7 +8,7 @@
 */
 
 #include "dbbi_tbl.h"
-#include "dbbi.h"
+#include "unicode/dbbi.h"
 
 //=======================================================================
 // constructor

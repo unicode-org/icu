@@ -17,10 +17,10 @@
 // This file was generated from the java source file BreakIterator.java
 // *****************************************************************************
 
-#include "dbbi.h"
+#include "unicode/dbbi.h"
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
-#include "resbund.h"
+#include "unicode/resbund.h"
 
 #include <string.h>
 
