@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/10/26 05:50:40 $ 
-* $Revision: 1.23 $
+* $Date: 2002/10/28 21:59:22 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -2277,9 +2277,7 @@ public final class UTF16
          */
         public StringComparator()
         {
-            m_codePointCompare_ = false;
-            m_ignoreCase_ = false;  
-            m_foldCase_ = FOLD_CASE_DEFAULT;
+            this(false, false, FOLD_CASE_DEFAULT);
         }
         
         /**
@@ -2300,7 +2298,7 @@ public final class UTF16
                                 boolean ignorecase,
                                 int foldcaseoption)
         {
-            m_codePointCompare_ = codepointcompare;
+            setCodePointCompare(codepointcompare);
             m_ignoreCase_ = ignorecase;   
             if (foldcaseoption < FOLD_CASE_DEFAULT 
                 || foldcaseoption > FOLD_CASE_EXCLUDE_SPECIAL_I) {
@@ -2337,7 +2335,7 @@ public final class UTF16
          * the Turkic-specific mappings.</p>
          * @draft 2.4
          */
-        public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0;
+        public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 1;
         
         // public methods ----------------------------------------------------
         
@@ -2350,7 +2348,12 @@ public final class UTF16
          */
         public void setCodePointCompare(boolean flag)
         {
-            m_codePointCompare_ = flag;
+            if (flag) {
+                m_codePointCompare_ = Normalizer.COMPARE_CODE_POINT_ORDER;
+            }
+            else {
+                m_codePointCompare_ = 0;
+            }
         }
         
         /**
@@ -2383,7 +2386,7 @@ public final class UTF16
          */
         public boolean getCodePointCompare()
         {
-            return m_codePointCompare_;
+            return m_codePointCompare_ == Normalizer.COMPARE_CODE_POINT_ORDER;
         }
         
         /**
@@ -2448,7 +2451,7 @@ public final class UTF16
          * Code unit comparison flag. True if code unit comparison is required.
          * False if code point comparison is required.
          */
-        private boolean m_codePointCompare_;
+        private int m_codePointCompare_;
         /**
          * Fold case comparison option.
          */
@@ -2474,8 +2477,8 @@ public final class UTF16
         private int compareCaseInsensitive(String s1, String s2)  
         {
             return NormalizerImpl.cmpEquivFold(s1, s2, 
-                                               m_foldCase_ | 
-                                               Normalizer.COMPARE_IGNORE_CASE);
+                                              m_foldCase_ | m_codePointCompare_ 
+                                              | Normalizer.COMPARE_IGNORE_CASE);
         }
 
         /**
@@ -2516,9 +2519,11 @@ public final class UTF16
                 return result;
             }
             
+            boolean codepointcompare 
+                = m_codePointCompare_ == Normalizer.COMPARE_CODE_POINT_ORDER;
             // if both values are in or above the surrogate range, fix them up
             if (c1 >= LEAD_SURROGATE_MIN_VALUE 
-                && c2 >= LEAD_SURROGATE_MIN_VALUE && m_codePointCompare_) {
+                && c2 >= LEAD_SURROGATE_MIN_VALUE && codepointcompare) {
                 // subtract 0x2800 from BMP code points to make them smaller 
                 // than supplementary ones
                 if ((c1 <= LEAD_SURROGATE_MAX_VALUE && (index + 1) != length1 
