@@ -12,13 +12,15 @@ AC_DEFUN(ICU_CHECK_MH_FRAG, [
 		[icu_cv_host_frag],
 		[
 case "${host}" in
-*-*-solaris*) 	
+*-*-solaris*)
 	if test "$ac_cv_prog_gcc" = yes; then	
 		icu_cv_host_frag=$srcdir/config/mh-solaris-gcc 
-        elif test "$host_cpu" = sparcv9; then         
-                icu_cv_host_frag=$srcdir/config/mh-solaris-sparcv9  
 	else
-		icu_cv_host_frag=$srcdir/config/mh-solaris 
+		if test "$SOL64" = yes; then
+	                icu_cv_host_frag=$srcdir/config/mh-solaris-sparcv9  
+		else
+			icu_cv_host_frag=$srcdir/config/mh-solaris 
+		fi
 	fi ;;
 *-*-mips*)	icu_cv_host_frag=$srcdir/config/mh-irix ;;
 *-*-linux*) 	icu_cv_host_frag=$srcdir/config/mh-linux ;;
