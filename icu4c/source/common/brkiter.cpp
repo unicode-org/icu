@@ -400,7 +400,10 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
     
     u_init(&status);
     if (hasService()) {
-        return (BreakIterator*)gService->get(loc, kind, status);
+      Locale validLoc;
+      BreakIterator *result = (BreakIterator*)gService->get(loc, kind, &validLoc, status);
+      uprv_strcpy(result->validLocale, validLoc.getName());
+      return result;
     } else {
         return makeInstance(loc, kind, status);
     }
@@ -441,18 +444,39 @@ BreakIterator::getAvailableLocales(void)
 BreakIterator* 
 BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 {
+  BreakIterator *result = NULL;
     switch (kind) {
-    case UBRK_CHARACTER: return BreakIterator::makeCharacterInstance(loc, status);
-    case UBRK_WORD: return BreakIterator::makeWordInstance(loc, status);
-    case UBRK_LINE: return BreakIterator::makeLineInstance(loc, status);
-    case UBRK_SENTENCE: return BreakIterator::makeSentenceInstance(loc, status);
-    case UBRK_TITLE: return BreakIterator::makeTitleInstance(loc, status);
+    case UBRK_CHARACTER: 
+      result = BreakIterator::makeCharacterInstance(loc, status);
+      break;
+    case UBRK_WORD:
+      result = BreakIterator::makeWordInstance(loc, status);
+      break;
+    case UBRK_LINE:
+      result = BreakIterator::makeLineInstance(loc, status);
+      break;
+    case UBRK_SENTENCE:
+      result = BreakIterator::makeSentenceInstance(loc, status);
+      break;
+    case UBRK_TITLE:
+      result = BreakIterator::makeTitleInstance(loc, status);
+      break;
     default:
         if (U_SUCCESS(status)) {   
             status = U_ILLEGAL_ARGUMENT_ERROR;
         }
         return NULL;
     }
+    // this is more of a placeholder. All the break iterators have the same actual locale: root
+    // except the Thai one
+    ResourceBundle res(NULL, loc, status);
+    uprv_strcpy(result->validLocale, res.getLocale(ULOC_VALID_LOCALE, status).getName());
+    if(uprv_strcmp(loc.getLanguage(), "th") == 0) {
+      uprv_strcpy(result->actualLocale, "th");
+    } else {
+      uprv_strcpy(result->actualLocale, "root");
+    }
+    return result;
 }
 
 Locale 
@@ -460,17 +484,32 @@ BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const
 {
   switch(type) {
   case ULOC_VALID_LOCALE:
-#if 0
+      // TODO: need bufferClone problems fixed before this code can work.
+    return Locale(validLocale);
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return Locale(actualLocale);
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return Locale("");
+  }
+}
+
+const char *
+BreakIterator::getLocaleInternal(ULocDataLocaleType type, UErrorCode& status) const
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
       // TODO: need bufferClone problems fixed before this code can work.
     return validLocale;
     break;
   case ULOC_ACTUAL_LOCALE:
     return actualLocale;
     break;
-#endif
   default:
     status = U_UNSUPPORTED_ERROR;
-    return Locale("");
+    return NULL;
   }
 }
 

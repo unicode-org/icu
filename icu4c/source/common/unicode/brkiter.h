@@ -569,6 +569,13 @@ public:
      */
     virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+    /** Get the locale for this break iterator object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @internal
+     */
+    virtual const char *getLocaleInternal(ULocDataLocaleType type, UErrorCode& status) const;
  private:
     static BreakIterator* makeCharacterInstance(const Locale& loc, UErrorCode& status);
     static BreakIterator* makeWordInstance(const Locale& loc, UErrorCode& status);
@@ -589,13 +596,10 @@ protected:
     UBool fBufferClone;
     /** @internal */
     BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
+
     /** @internal */
-#if 0
-    // TODO:  Can't do this, it breaks bufferClone, which does an object memcopy.
-    //   Yuk.
-    Locale actualLocale;
-    Locale validLocale;
-#endif
+    char actualLocale[50];
+    char validLocale[50];
 private:
     /**
      * The assignment operator has no real implementation.
