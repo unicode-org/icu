@@ -368,7 +368,15 @@ static void TestErrorBehaviour(){
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "ibm-1362", 0, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
-       
+
+        if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-1362", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
+            log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
+        if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+                expected, sizeof(expected), "ibm-1362", offsets, FALSE, U_ZERO_ERROR))
+            log_err("u-> ibm-1362 [UCNV_DBCS] is supposed to fail\n");
+
+        
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
                 expected2, sizeof(expected2), "ibm-1362", 0, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1362 [UCNV_DBCS] did not match \n");
