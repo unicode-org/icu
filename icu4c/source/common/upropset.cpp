@@ -332,12 +332,12 @@ UnicodeSet* UnicodePropertySet::createCombiningClassSet(const UnicodeString& val
     double value = uprv_strtod(cvalueName, &end);
     int32_t ivalue = (int32_t) value;
     if (ivalue != value || ivalue < 0 || *end != 0) {
-	// We have a non-integral or negative value, or non-numeric text.
-	// Try to lookup a symbolic combining class name
-	ivalue = COMBINING_CLASS_MAP->geti(valueName) - MAPVAL;
+    // We have a non-integral or negative value, or non-numeric text.
+    // Try to lookup a symbolic combining class name
+    ivalue = COMBINING_CLASS_MAP->geti(valueName) - MAPVAL;
     }
     if (ivalue >= 0) {
-	// We have a potentially valid combining class
+    // We have a potentially valid combining class
         initSetFromFilter(*set, _combiningClassFilter, &ivalue);
     }
     return set;

@@ -106,7 +106,7 @@ stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origi
         pos=iter->length+delta;
         break;
     default:
-	return -1;  /* Error */
+    return -1;  /* Error */
     }
 
     if(pos<iter->start) {
