@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/30 01:04:10 $
- * $Revision: 1.88 $
+ * $Date: 2001/12/01 00:05:55 $
+ * $Revision: 1.89 $
  *
  *****************************************************************************************
  */
@@ -2167,7 +2167,6 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     //======================================================================
-    // icu4j ONLY
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
     //======================================================================
@@ -2276,7 +2275,6 @@ public class TransliteratorTest extends TestFmwk {
     }
     
     // Check to see that incremental gets at least part way through a reasonable string.
-    // NOT YET IN C
     
     public void TestIncrementalProgress() {
         String test = "The Quick Brown Fox Jumped Over The Lazy Dog.";
@@ -2366,8 +2364,6 @@ public class TransliteratorTest extends TestFmwk {
 
         ReplaceableString rsource = new ReplaceableString(source);
         
-       // NOT YET IN C
-            
         t.finishTransliteration(rsource, index);
         // Do it all at once -- below we do it incrementally
             
