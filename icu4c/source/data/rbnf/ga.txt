@@ -47,7 +47,7 @@ ga {
         "1,000: <%%thousands<[ >%%cardwithnumber>];\n"
         "1,000,000: <%%millions<[ >%%cardwithnumber>];\n"
         "1,000,000,000: <%%billions<[ >%%cardwithnumber>];\n"
-        "1,000,000,000: <%%trillions<[ >%%cardwithnumber>];\n"
+        "1,000,000,000,000: <%%trillions<[ >%%cardwithnumber>];\n"
         "1,000,000,000,000,000: =#,##0=;\n"
 
         // rules to give hundreds value

@@ -13,6 +13,7 @@ import com.ibm.icu.util.ULocale;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Locale;
+import java.util.Random;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -875,7 +876,44 @@ public class RbnfTest extends TestFmwk {
             assertEquals("getRuleSetDisplayNames in fake locale", localizations[3][i+1], RSNames_loc[i]);
         }              
     }
-    
+
+    public void TestAllLocales() {
+	StringBuffer errors = null;
+	ULocale[] locales = ULocale.getAvailableLocales();
+	Random r = createRandom();
+	String[] names = {
+	    " (spellout) ",
+	    " (ordinal)  ",
+	    " (duration) "
+	};
+	for (int i = 0; i < locales.length; ++i) {
+	    ULocale loc = locales[i];
+	    for (int j = 0; j < 3; ++j) {
+		try {
+		    RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(loc, j+1);
+		    float n = ((int)(r.nextInt(1000) - 300)) / 16f;
+		    String s = fmt.format(n);
+		    if (isVerbose()) {
+			logln(loc.getName() + names[j] + "success: " + n + " -> " + s);
+		    }
+		}
+		catch (Exception e) {
+		    String msg = loc.getName() + names[j] + "ERROR:" + e.getMessage();
+		    if (isVerbose()) {
+			logln(msg);
+		    }
+		    if (errors == null) {
+			errors = new StringBuffer();
+		    }
+		    errors.append("\n" + msg);
+		}
+	    }
+	}
+	if (errors != null) {
+	    errln(errors.toString());
+	}
+    }
+
     void doTest(RuleBasedNumberFormat formatter, String[][] testData,
                 boolean testParsing) {
     //        NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
