@@ -205,6 +205,8 @@ char *getModificationData(struct UFILE *file, UErrorCode *status) {
 /*********************************************************************
  * parse
  ********************************************************************/
+int32_t lineCount = 0;
+char lastTag[200] = "";
 
 struct SRBRoot*
 parse(FileStream *f, const char *cp, const char *inputDir,
@@ -232,6 +234,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     /* Hashtable for keeping track of seen tag names */
     struct UHashtable *data;
 
+    strcpy(lastTag, "<none>");
 
     if(U_FAILURE(*status)) return NULL;
 
@@ -256,6 +259,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
   data = 0;
 
   file = u_finit((FILE *)f, 0, cp);
+  lineCount = 1;
 /*  file = u_finit(f, cp, status); */
   if(file == NULL) {
       setErrorText("Could not initialize input file - most probably because of wrong converter\n");
@@ -316,7 +320,11 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         if(U_FAILURE(*status)) {
             goto finish;
         }
-        if(get(data, &tag)) {
+         strcpy(lastTag, cTag);
+       /*  fprintf(stderr, "%d: %s\n", lineCount,  lastTag); //[prints all tags]
+        */
+
+      if(get(data, &tag)) {
 	  char *s;
 	  *status = U_INVALID_FORMAT_ERROR;
 	  s = uprv_malloc(1024);

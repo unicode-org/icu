@@ -41,6 +41,8 @@ U_STRING_DECL(k_start_reserved, "reserved", 8);
 
 static UBool didInit=FALSE;
 
+extern int32_t lineCount;
+
 /* Protos */
 static enum ETokenType getStringToken(UFILE *f, UChar initialChar, 
                       struct UString *token,
@@ -192,6 +194,12 @@ static enum ETokenType getStringToken(UFILE *f,
       for(;;) {
 	/* DON'T skip whitespace */
 	c = getNextChar(f, FALSE, status);
+   	/* EOF reached */
+    if(c == (UChar)U_EOF) {
+        u_fungetc(c, f);
+        return tok_string;
+    }
+
 	if(U_FAILURE(*status)) 
 	  return tok_string;
 
@@ -331,7 +339,9 @@ static UBool isWhitespace(UChar c)
 {
   switch (c) {
     /* ' ', '\t', '\n', '\r', 0x2029, 0xFEFF */
-  case 0x0020: case 0x0009: case 0x000A: case 0x000D:  case 0x2029: case 0xFEFF:
+  case 0x000A: case 0x2029: 
+      lineCount++;
+  case 0x000D: case 0x0020: case 0x0009: case 0xFEFF:
     return TRUE;
     
   default:
@@ -343,7 +353,9 @@ static UBool isNewline(UChar c)
 {
   switch (c) {
     /* '\n', '\r', 0x2029 */
-  case 0x000A: case 0x000D: case 0x2029:
+  case 0x000A: case 0x2029:
+  lineCount++;
+  case 0x000D: 
     return TRUE;
     
   default:
