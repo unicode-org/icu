@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HebrewTest.java,v $ 
- * $Date: 2003/01/21 18:15:08 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/02/27 18:48:38 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -240,6 +240,35 @@ public class HebrewTest extends CalendarTest {
         }
     }
 
+    /**
+     * Problem reported by Armand Bendanan (armand.bendanan@free.fr)
+     * in which setting of the MONTH field in a Hebrew calendar to
+     * ELUL on non leap years causes the date to be set on TISHRI next year.
+     */
+    public void TestElulMonth() {
+        HebrewCalendar cal = new HebrewCalendar();
+        // Leap years are:
+        // 3 6 8 11 14 17 19 (and so on - 19-year cycle)
+        for (int year=1; year<50; year++) {
+            // I hope that year = 0 does not exists
+            // because the test fails for it !
+            cal.clear();
+            
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, ELUL);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            
+            int yact = cal.get(Calendar.YEAR);
+            int mact = cal.get(Calendar.MONTH);
+            
+            if (year != yact || ELUL != mact) {
+                errln("Fail: " + ELUL + "/" + year +
+                      " -> " +
+                      mact + "/" + yact);
+            }
+        }
+    }
+    
     /**
      * Test of the behavior of the month field.  This requires special
      * handling in the Hebrew calendar because of the pattern of leap
