@@ -29,16 +29,14 @@
 
 /* Keep these here to make finicky compilers happy */
 
-U_CFUNC void T_UConverter_toUnicode_UTF8(UConverterToUnicodeArgs *args,
+/*U_CFUNC void T_UConverter_toUnicode_UTF8(UConverterToUnicodeArgs *args,
                                          UErrorCode *err);
 U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
-                                                       UErrorCode *err);
+                                                       UErrorCode *err);*/
 U_CFUNC void T_UConverter_fromUnicode_UTF8(UConverterFromUnicodeArgs *args,
                                            UErrorCode *err);
 U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(UConverterFromUnicodeArgs *args,
                                                         UErrorCode *err);
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
-                                               UErrorCode *err);
 
 
 /* UTF-8 -------------------------------------------------------------------- */
@@ -88,7 +86,7 @@ static const int8_t bytesFromUTF8[256] = {
 static const uint32_t
 utf8_minChar32[7]={ 0, 0, 0x80, 0x800, 0x10000, 0xffffffff, 0xffffffff };
 
-U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
+static void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
                                   UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
@@ -215,7 +213,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
+static void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                 UErrorCode * err)
 {
     const unsigned char *mySource = (unsigned char *) args->source;
@@ -591,7 +589,7 @@ lowsurrogate:
     args->offsets = myOffsets;
 }
 
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
+static UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                                                UErrorCode *err) {
     UConverter *cnv;
     const uint8_t *sourceInitial;
