@@ -783,9 +783,9 @@ TestInvalidRules(){
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
         UCollator* coll=0;
-        u_charsToUChars(rulesArr[i],rules,1000);
-        u_charsToUChars(preContextArr[i],preContextExp,1000);
-        u_charsToUChars(postContextArr[i],postContextExp,1000);
+        u_charsToUChars(rulesArr[i],rules,uprv_strlen(rulesArr[i])+1);
+        u_charsToUChars(preContextArr[i],preContextExp,uprv_strlen(preContextArr[i])+1);
+        u_charsToUChars(postContextArr[i],postContextExp,uprv_strlen(postContextArr[i])+1);
         /* clean up stuff in parseError */
         u_memset(parseError.preContext,0x0000,U_PARSE_CONTEXT_LEN);      
         u_memset(parseError.postContext,0x0000,U_PARSE_CONTEXT_LEN);
