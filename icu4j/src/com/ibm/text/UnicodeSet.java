@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/04/04 22:45:23 $
- * $Revision: 1.31 $
+ * $Date: 2001/09/19 17:43:38 $
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -254,7 +254,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.31 $ $Date: 2001/04/04 22:45:23 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.32 $ $Date: 2001/09/19 17:43:38 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
@@ -494,22 +494,132 @@ public class UnicodeSet implements UnicodeFilter {
     }
 
     /**
+     * Append the <code>toPattern()</code> representation of a
+     * character to the given <code>StringBuffer</code>.
+     */
+    private static void _appendToPat(StringBuffer buf, int c, boolean useHexEscape) {
+        if (useHexEscape) {
+            // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
+            // unprintable
+            if (_escapeUnprintable(buf, c)) {
+                return;
+            }
+        }
+        // Okay to let ':' pass through
+        switch (c) {
+        case '[': // SET_OPEN:
+        case ']': // SET_CLOSE:
+        case '-': // HYPHEN:
+        case '^': // COMPLEMENT:
+        case '&': // INTERSECTION:
+        case '\\': //BACKSLASH:
+            buf.append('\\');
+            break;
+        default:
+            // Escape whitespace
+            if (UCharacter.isWhitespace(c)) {
+                buf.append('\\');
+            }
+            break;
+        }
+        UTF16.append(buf, c);
+    }
+
+    private static final char[] HEX = {'0','1','2','3','4','5','6','7',
+                                       '8','9','A','B','C','D','E','F'};
+
+    /**
+     * Return true if the character is NOT printable ASCII.
+     *
+     * This method should really be in UnicodeString (or similar).  For
+     * now, we implement it here and share it with friend classes.
+     */
+    static boolean _isUnprintable(int c) {
+        return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
+    }
+
+    /**
+     * Escape unprintable characters using <backslash>uxxxx notation for U+0000 to
+     * U+FFFF and <backslash>Uxxxxxxxx for U+10000 and above.  If the character is
+     * printable ASCII, then do nothing and return FALSE.  Otherwise,
+     * append the escaped notation and return TRUE.
+     *
+     * This method should really be in UnicodeString.  For now, we
+     * implement it here and share it with friend classes.
+     */
+    static boolean _escapeUnprintable(StringBuffer result, int c) {
+        if (_isUnprintable(c)) {
+            result.append('\\');
+            if ((c & ~0xFFFF) != 0) {
+                result.append('U');
+                result.append(HEX[0xF&(c>>28)]);
+                result.append(HEX[0xF&(c>>24)]);
+                result.append(HEX[0xF&(c>>20)]);
+                result.append(HEX[0xF&(c>>16)]);
+            } else {
+                result.append('u');
+            }
+            result.append(HEX[0xF&(c>>12)]);
+            result.append(HEX[0xF&(c>>8)]);
+            result.append(HEX[0xF&(c>>4)]);
+            result.append(HEX[0xF&c]);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Returns a string representation of this set.  If the result of
      * calling this function is passed to a UnicodeSet constructor, it
      * will produce another set that is equal to this one.
      */
-    public String toPattern() {
+    public String toPattern(boolean escapeUnprintable) {
         StringBuffer result = new StringBuffer();
         result.append('[');
 
+        // Check against the predefined categories.  We implicitly build
+        // up ALL category sets the first time toPattern() is called.
+        for (int cat=0; cat<CATEGORY_COUNT; ++cat) {
+            if (this.equals(getCategorySet(cat))) {
+                result.append(':');
+                result.append(CATEGORY_NAMES.substring(cat*2, cat*2+2));
+                return result.append(":]").toString();
+            }
+        }
+
         int count = getRangeCount();
-        for (int i = 0; i < count; ++i) {
-            char start = getRangeStart(i);
-            char end = getRangeEnd(i);
-            _toPat(result, start);
-            if (start != end) {
-                result.append("-");
-                _toPat(result, end);
+
+        // If the set contains at least 2 intervals and includes both
+        // MIN_VALUE and MAX_VALUE, then the inverse representation will
+        // be more economical.
+        if (count > 1 &&
+            getRangeStart(0) == MIN_VALUE &&
+            getRangeEnd(count-1) == MAX_VALUE) {
+
+            // Emit the inverse
+            result.append('^');
+
+            for (int i = 1; i < count; ++i) {
+                int start = getRangeEnd(i-1)+1;
+                int end = getRangeStart(i)-1;
+                _appendToPat(result, start, escapeUnprintable);
+                if (start != end) {
+                    result.append('-');
+                    _appendToPat(result, end, escapeUnprintable);
+                }
+            }
+        }
+
+        // Default; emit the ranges as pairs
+        else {
+            for (int i = 0; i < count; ++i) {
+                int start = getRangeStart(i);
+                int end = getRangeEnd(i);
+                _appendToPat(result, start, escapeUnprintable);
+                if (start != end) {
+                    result.append('-');
+                    _appendToPat(result, end, escapeUnprintable);
+                }
             }
         }
 
@@ -942,7 +1052,7 @@ public class UnicodeSet implements UnicodeFilter {
      * Return a programmer-readable string representation of this object.
      */
     public String toString() {
-        return getClass().getName() + '{' + toPattern() + '}';
+        return getClass().getName() + '{' + toPattern(false) + '}';
     }
 
     //----------------------------------------------------------------

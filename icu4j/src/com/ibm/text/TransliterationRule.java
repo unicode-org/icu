@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2001/06/29 22:35:41 $ 
- * $Revision: 1.26 $
+ * $Date: 2001/09/19 17:43:38 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.26 $ $Date: 2001/06/29 22:35:41 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.27 $ $Date: 2001/09/19 17:43:38 $
  */
 class TransliterationRule {
     /**
@@ -123,6 +123,8 @@ class TransliterationRule {
      */
     private int cursorPos;
 
+    private RuleBasedTransliterator.Data data;
+
     /**
      * The character at index i, where i < contextStart || i >= contextLimit,
      * is ETHER.  This allows explicit matching by rules and UnicodeSets
@@ -130,6 +132,9 @@ class TransliterationRule {
      * at the start and/or end.
      */
     static final char ETHER = '\uFFFF';
+
+    private static final char APOSTROPHE = '\'';
+    private static final char BACKSLASH  = '\\';
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -171,7 +176,8 @@ class TransliterationRule {
                                String output,
                                int cursorPos, int cursorOffset,
                                int[] segs,
-                               boolean anchorStart, boolean anchorEnd) {
+                               boolean anchorStart, boolean anchorEnd,
+                               RuleBasedTransliterator.Data theData) {
         // Do range checks only when warranted to save time
         if (anteContextPos < 0) {
             anteContextLength = 0;
@@ -212,7 +218,6 @@ class TransliterationRule {
             if (anchorStart) {
                 buf.append(ETHER);
                 ++anteContextLength;
-                ++cursorPos;
                 // Adjust segment offsets
                 if (segments != null) {
                     for (int i=0; i<segments.length; ++i) {
@@ -226,6 +231,8 @@ class TransliterationRule {
             }
             pattern = buf.toString();
         }
+
+        data = theData;
     }
 
     /**
@@ -245,12 +252,16 @@ class TransliterationRule {
      * <code>output.length()</code>.  If greater than
      * <code>output.length()</code> then an exception is thrown.
      */
-    public TransliterationRule(String input,
-                               int anteContextPos, int postContextPos,
-                               String output,
-                               int cursorPos) {
-        this(input, anteContextPos, postContextPos,
-             output, cursorPos, 0, null, false, false);
+    //public TransliterationRule(String input,
+    //                           int anteContextPos, int postContextPos,
+    //                           String output,
+    //                           int cursorPos) {
+    //    this(input, anteContextPos, postContextPos,
+    //         output, cursorPos, 0, null, false, false);
+    //}
+
+    public void setData(RuleBasedTransliterator.Data theData) {
+        data = theData;
     }
 
     /**
@@ -765,10 +776,268 @@ class TransliterationRule {
             (((set = variables.lookupSet(keyChar)) == null) ?
              keyChar == textChar : set.contains(textChar));
     }
+
+    /**
+     * Append a character to a rule that is being built up.  To flush
+     * the quoteBuf to rule, make one final call with isLiteral == true.
+     * If there is no final character, pass in (int)-1 as c.
+     * @param rule the string to append the character to
+     * @param c the character to append, or (int)-1 if none.
+     * @param isLiteral if true, then the given character should not be
+     * quoted or escaped.  Usually this means it is a syntactic element
+     * such as > or $
+     * @param escapeUnprintable if true, then unprintable characters
+     * should be escaped using <backslash>uxxxx or <backslash>Uxxxxxxxx.  These escapes will
+     * appear outside of quotes.
+     * @param quoteBuf a buffer which is used to build up quoted
+     * substrings.  The caller should initially supply an empty buffer,
+     * and thereafter should not modify the buffer.  The buffer should be
+     * cleared out by, at the end, calling this method with a literal
+     * character.
+     */
+    protected void appendToRule(StringBuffer rule,
+                                int c,
+                                boolean isLiteral,
+                                boolean escapeUnprintable,
+                                StringBuffer quoteBuf) {
+        // If we are escaping unprintables, then escape them outside
+        // quotes.  <backslash>u and <backslash>U are not recognized within quotes.  The same
+        // logic applies to literals, but literals are never escaped.
+        if (isLiteral ||
+            (escapeUnprintable && UnicodeSet._isUnprintable(c))) {
+            if (quoteBuf.length() > 0) {
+                // We prefer backslash APOSTROPHE to double APOSTROPHE
+                // (more readable, less similar to ") so if there are
+                // double APOSTROPHEs at the ends, we pull them outside
+                // of the quote.
+
+                // If the first thing in the quoteBuf is APOSTROPHE
+                // (doubled) then pull it out.
+                while (quoteBuf.length() >= 2 &&
+                       quoteBuf.charAt(0) == APOSTROPHE &&
+                       quoteBuf.charAt(1) == APOSTROPHE) {
+                    rule.append(BACKSLASH).append(APOSTROPHE);
+                    quoteBuf.delete(0, 2);
+                }
+                // If the last thing in the quoteBuf is APOSTROPHE
+                // (doubled) then remove and count it and add it after.
+                int trailingCount = 0;
+                while (quoteBuf.length() >= 2 &&
+                       quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
+                       quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
+                    quoteBuf.setLength(quoteBuf.length()-2);
+                    ++trailingCount;
+                }
+                if (quoteBuf.length() > 0) {
+                    rule.append(APOSTROPHE);
+                    rule.append(quoteBuf);
+                    rule.append(APOSTROPHE);
+                    quoteBuf.setLength(0);
+                }
+                while (trailingCount-- > 0) {
+                    rule.append(BACKSLASH).append(APOSTROPHE);
+                }
+            }
+            if (c != -1) {
+                if (!escapeUnprintable || !UnicodeSet._escapeUnprintable(rule, c)) {
+                    UTF16.append(rule, c);
+                }
+            }
+        }
+
+        // Escape ' and '\' and don't begin a quote just for them
+        else if (quoteBuf.length() == 0 &&
+                 (c == APOSTROPHE || c == BACKSLASH)) {
+            rule.append(BACKSLASH).append((char)c);
+        }
+
+        // Specials (printable ascii that isn't [0-9a-zA-Z]) and
+        // whitespace need quoting.  Also append stuff to quotes if we are
+        // building up a quoted substring already.
+        else if (quoteBuf.length() > 0 ||
+                 (c >= 0x0021 && c <= 0x007E &&
+                  !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
+                    (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
+                    (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
+                 UCharacter.isWhitespace(c)) {
+            UTF16.append(quoteBuf, c);
+            // Double ' within a quote
+            if (c == APOSTROPHE) {
+                quoteBuf.append((char)c);
+            }
+        }
+
+        // Otherwise just append
+        else {
+            UTF16.append(rule, c);
+        }
+
+        //System.out.println("rule=" + rule.toString() + " qb=" + quoteBuf.toString());
+    }
+
+    protected final void appendToRule(StringBuffer rule,
+                                      String text,
+                                      boolean isLiteral,
+                                      boolean escapeUnprintable,
+                                      StringBuffer quoteBuf) {
+        for (int i=0; i<text.length(); ++i) {
+            appendToRule(rule, text.charAt(i), isLiteral, escapeUnprintable, quoteBuf);
+        }
+    }
+
+    static private int[] POW10 = {1, 10, 100, 1000, 10000, 100000, 1000000,
+                                  10000000, 100000000, 1000000000};
+
+    static private final int SEGMENTS_COUNT(int[] segments) {
+        // TODO
+        //return segments[0];
+        return segments.length / 2;
+    }
+
+    /**
+     * Create a source string that represents this rule.  Append it to the
+     * given string.
+     */
+    public String toRule(boolean escapeUnprintable) {
+        int i;
+        
+        StringBuffer rule = new StringBuffer();
+
+        //|| int iseg = FIRST_SEG_POS_INDEX-1;
+        int iseg = -1;
+        int nextSeg = -1;
+        // Build an array of booleans specifying open vs. close paren
+        boolean[] isOpen = null;
+        if (segments != null) {
+            isOpen = new boolean[2*SEGMENTS_COUNT(segments)];
+            for (i=0; i<2*SEGMENTS_COUNT(segments); i+=2) {
+                //|| isOpen[SEGMENTS_NUM(segments,i)  -FIRST_SEG_POS_INDEX] = true;
+                //|| isOpen[SEGMENTS_NUM(segments,i+1)-FIRST_SEG_POS_INDEX] = false;
+                isOpen[i]   = true;
+                isOpen[i+1] = false;
+            }
+            nextSeg = segments[++iseg];
+        }
+
+        // Accumulate special characters (and non-specials following them)
+        // into quoteBuf.  Append quoteBuf, within single quotes, when
+        // a non-quoted element must be inserted.
+        StringBuffer quoteBuf = new StringBuffer();
+
+        // Do not emit the braces '{' '}' around the pattern if there
+        // is neither anteContext nor postContext.
+        boolean emitBraces =
+            (anteContextLength != 0) || (keyLength != pattern.length());
+
+        // Emit the input pattern
+        for (i=0; i<pattern.length(); ++i) {
+            if (emitBraces && i == anteContextLength) {
+                appendToRule(rule, '{', true, escapeUnprintable, quoteBuf);
+            }
+
+            // Append either '(' or ')' if we are at a segment index
+            if (i == nextSeg) {
+                //||appendToRule(rule, isOpen[iseg-FIRST_SEG_POS_INDEX] ?
+                //||                 '(' : ')',
+                //||                 true, escapeUnprintable, quoteBuf);
+                appendToRule(rule, isOpen[iseg] ?
+                                 '(' : ')',
+                                 true, escapeUnprintable, quoteBuf);
+                nextSeg = segments[++iseg];
+            }
+
+            if (emitBraces && i == (anteContextLength + keyLength)) {
+                appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
+            }
+
+            char c = pattern.charAt(i);
+            UnicodeSet set = data.lookupSet(c);
+            if (set == null) {
+                appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
+            } else {
+                appendToRule(rule, set.toPattern(escapeUnprintable),
+                              true, escapeUnprintable, quoteBuf);
+            }
+            //||UnicodeMatcher matcher = data.lookup(c);
+            //||if (matcher == null) {
+            //||    appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
+            //||} else {
+            //||    appendToRule(rule, matcher.toPattern(escapeUnprintable),
+            //||                  true, escapeUnprintable, quoteBuf);
+            //||}
+        }
+
+        if (i == nextSeg) {
+            // assert(!isOpen[iSeg-FIRST_SEG_POS_INDEX]);
+            appendToRule(rule, ')', true, escapeUnprintable, quoteBuf);
+        }
+
+        if (emitBraces && i == (anteContextLength + keyLength)) {
+            appendToRule(rule, '}', true, escapeUnprintable, quoteBuf);
+        }
+
+        appendToRule(rule, " > ", true, escapeUnprintable, quoteBuf);
+
+        // Emit the output pattern
+
+        // Handle a cursor preceding the output
+        int cursor = cursorPos;
+        if (cursor < 0) {
+            while (cursor++ < 0) {
+                appendToRule(rule, '@', true, escapeUnprintable, quoteBuf);
+            }
+            // Fall through and append '|' below
+        }
+
+        for (i=0; i<output.length(); ++i) {
+            if (i == cursor) {
+                appendToRule(rule, '|', true, escapeUnprintable, quoteBuf);
+            }
+            char c = output.charAt(i);
+            int seg = data.lookupSegmentReference(c);
+            if (seg < 0) {
+                appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
+            } else {
+                ++seg; // make 1-based
+                appendToRule(rule, 0x20, true, escapeUnprintable, quoteBuf);
+                rule.append(0x24 /*$*/);
+                boolean show = false; // true if we should display digits
+                for (int p=9; p>=0; --p) {
+                    int d = seg / POW10[p];
+                    seg -= d * POW10[p];
+                    if (d != 0 || p == 0) {
+                        show = true;
+                    }
+                    if (show) {
+                        rule.append((char)(48+d));
+                    }
+                }            
+                rule.append(' ');
+            }
+        }
+
+        // Handle a cursor after the output.  Use > rather than >= because
+        // if cursor == output.length() it is at the end of the output,
+        // which is the default position, so we need not emit it.
+        if (cursor > output.length()) {
+            cursor -= output.length();
+            while (cursor-- > 0) {
+                appendToRule(rule, '@', true, escapeUnprintable, quoteBuf);
+            }
+            appendToRule(rule, '|', true, escapeUnprintable, quoteBuf);
+        }
+
+        appendToRule(rule, ';', true, escapeUnprintable, quoteBuf);
+
+        return rule.toString();
+    }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.27  2001/09/19 17:43:38  alan
+ * jitterbug 60: initial implementation of toRules()
+ *
  * Revision 1.26  2001/06/29 22:35:41  alan4j
  * Implement Any-Upper Any-Lower and Any-Title transliterators
  *

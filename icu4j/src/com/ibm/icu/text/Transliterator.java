@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/07/05 23:35:30 $ 
- * $Revision: 1.37 $
+ * $Date: 2001/09/19 17:43:38 $ 
+ * $Revision: 1.38 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.37 $ $Date: 2001/07/05 23:35:30 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.38 $ $Date: 2001/09/19 17:43:38 $
  */
 public abstract class Transliterator {
     /**
@@ -839,6 +839,19 @@ public abstract class Transliterator {
 
     public static final Transliterator getInstance(String ID) {
         return getInstance(ID, FORWARD);
+    }
+
+    /**
+     * Returns a <code>Transliterator</code> object constructed from
+     * the given rule string.  This will be a RuleBasedTransliterator,
+     * if the rule string contains only rules, or a
+     * CompoundTransliterator, if it contains ID blocks, or a
+     * NullTransliterator, if it contains ID blocks which parse as
+     * empty for the given direction.
+     */
+    public static final Transliterator createFromRules(String ID, String rules, int direction) {
+        // TODO Flesh this out
+        return new RuleBasedTransliterator(ID, rules, direction, null);
     }
 
     /**

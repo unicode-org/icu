@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $ 
- * $Date: 2000/06/29 21:59:23 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/09/19 17:43:38 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -27,9 +27,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.10 $ $Date: 2000/06/29 21:59:23 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.11 $ $Date: 2001/09/19 17:43:38 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.11  2001/09/19 17:43:38  alan
+ * jitterbug 60: initial implementation of toRules()
+ *
  * Revision 1.10  2000/06/29 21:59:23  alan4j
  * Fix handling of Transliterator.Position fields
  *
@@ -294,5 +297,21 @@ class TransliterationRuleSet {
             }
         }
         return null;
+    }
+
+    /**
+     * Create rule strings that represents this rule set.
+     */
+    String toRules(boolean escapeUnprintable) {
+        int i;
+        int count = index[256];
+        StringBuffer ruleSource = new StringBuffer();
+        for (i=0; i<count; ++i) {
+            if (i != 0) {
+                ruleSource.append('\n');
+            }
+            ruleSource.append(rules[i].toRule(escapeUnprintable));
+        }
+        return ruleSource.toString();
     }
 }
