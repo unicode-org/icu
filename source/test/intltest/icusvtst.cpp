@@ -783,7 +783,7 @@ class CalifornioLanguageFactory : public ICUResourceBundleFactory
     static const char* valley; // = californio ## "_VALLEY";
     static const char* surfer; // = californio ## "_SURFER";
     static const char* geek; // = californio ## "_GEEK";
-    static const Hashtable* supportedIDs; // = NULL;
+    static Hashtable* supportedIDs; // = NULL;
 
     static void cleanup(void) {
       delete supportedIDs;
@@ -844,7 +844,7 @@ const char* CalifornioLanguageFactory::californio = "en_US_CA";
 const char* CalifornioLanguageFactory::valley = "en_US_CA_VALLEY";
 const char* CalifornioLanguageFactory::surfer = "en_US_CA_SURFER";
 const char* CalifornioLanguageFactory::geek = "en_US_CA_GEEK";
-const Hashtable* CalifornioLanguageFactory::supportedIDs = NULL;
+Hashtable* CalifornioLanguageFactory::supportedIDs = NULL;
 
 void
 ICUServiceTest::testRBF()
