@@ -69,6 +69,8 @@
         </ul>
       </li>
 
+      <li><a href="#HowToPackage">How To Package ICU</a></li>
+
       <li>
         <a href="#ImportantNotes">Important Notes About Using ICU</a> 
 
@@ -599,7 +601,7 @@
         <td>HP/UX 11.01</td>
 
         <td>aCC A.12.10<br>
-        cc A.11.01.00</td>
+         cc A.11.01.00</td>
 
         <td>Reference platform</td>
       </tr>
@@ -658,7 +660,7 @@
         <td>Red Hat Alpha Linux 7.2</td>
 
         <td>Compaq C++ Compiler 3.2<br>
-        Compaq C Compiler 6.5.6</td>
+         Compaq C Compiler 6.5.6</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -1268,6 +1270,121 @@ del common/libicuuc.o
     </ol>
     <!-- end build environment -->
 
+    <h2><a name="HowToPackage" href="#HowToPackage">How To Package ICU</a></h2>
+
+    <p>There are many ways that a person can package ICU with their software
+    products. Usually only the libraries need to be considered for
+    packaging.</p>
+
+    <p>On Unix, you should have used "gmake install" to make make it easier to
+    develop and package ICU. The bin, lib and include directories are needed to
+    develop applications that use ICU. When ICU is built on Windows, a similar
+    directory structure is built.</p>
+
+    <p>When changes have been made to the standard ICU distribution, it is
+    recommended that at least one of the following guidlines be followed for
+    special packaging.</p>
+
+    <ol>
+      <li>Add a suffix name to the library names. This can be done with the
+      --with-library-suffix configure option.</li>
+
+      <li>The installation script should install the ICU libraries into the
+      application's directory.</li>
+    </ol>
+
+    <p>Following these guidelines prevents other applications that use a
+    standard ICU distribution from conflicting any libraries that you need. On
+    operating systems that do not have a standard C++ ABI (name mangling) for
+    compilers, it is recommended to do this special packaging anyway. More
+    details on customizing ICU are available in the <a href=
+    "http://oss.software.ibm.com/icu/userguide/">User's Guide</a>.</p>
+
+    <table border="1" cellpadding="3">
+      <caption>
+        Here is an example of libraries that are frequently packaged.
+      </caption>
+
+      <tr>
+        <th scope="col">Library Name</th>
+
+        <th scope="col">Windows Filename</th>
+
+        <th scope="col">Linux Filename</th>
+
+        <th scope="col">Comment</th>
+      </tr>
+
+      <tr>
+        <td>Data Library</td>
+
+        <td>icudt<i>XY</i>l.dll</td>
+
+        <td>libicudata.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>Data required by the Common and I18n libraries</td>
+      </tr>
+
+      <tr>
+        <td>Common Library</td>
+
+        <td>icuuc<i>XY</i>.dll</td>
+
+        <td>libicuuc.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>Base library required by all other ICU libraries.</td>
+      </tr>
+
+      <tr>
+        <td>Internationalization (i18n) Library</td>
+
+        <td>icuin<i>XY</i>.dll</td>
+
+        <td>libicui18n.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>Contains many locale based i18n functions.</td>
+      </tr>
+
+      <tr>
+        <td>Layout Engine</td>
+
+        <td>icule<i>XY</i>.dll</td>
+
+        <td>libicule.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>Contains an engine for doing font layout.</td>
+      </tr>
+
+      <tr>
+        <td>Unicode stdio Library</td>
+
+        <td>icuio<i>XY</i>.dll</td>
+
+        <td>libustdio.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>An unsupported library that provides a stdio like API with Unicode
+        support.</td>
+      </tr>
+
+      <tr>
+        <td>Tool Utility Library</td>
+
+        <td>icutu<i>XY</i>.dll</td>
+
+        <td>libicutoolutil.so.<i>XY</i>.<i>Z</i></td>
+
+        <td>Contains code required only by the ICU data building tools.</td>
+      </tr>
+    </table>
+
+    <p>Normally only the above ICU libraries need to be considered for
+    packaging. The versionless symbolic links to these libraries are only
+    needed for easier development. The <i>X</i>, <i>Y</i> and <i>Z</i> parts of
+    the name are the version numbers of ICU. For example, ICU 2.0.2 would have
+    the name libicuuc.so.20.2 for the common library. The exact format of the
+    library names can vary between platforms due to how each platform can
+    handles library versioning.</p>
+
     <h2><a name="ImportantNotes" href="#ImportantNotes">Important Notes About
     Using ICU</a></h2>
 
@@ -1279,7 +1396,7 @@ del common/libicuuc.o
     ICU global mutex is initialized during C++ static initialization, but there
     are some compilers and linkers that do not properly perform C++ static
     initialization in a library (this sometimes happens on HP/UX and on MacOS
-    X).</p>
+    10.1).</p>
 
     <p>Upon the first usage of most ICU APIs, the global mutex will get
     initialized. For example, you could call uloc_countAvailable() or
@@ -1412,10 +1529,10 @@ del common/libicuuc.o
     <p>Note: When packaging a Windows application for distribution and
     installation on user systems, copies of the ICU DLLs should be included
     with the application, and installed for exclusive use by the application.
-    This is the only way to insure that your application is running with the same
-    version of ICU, built with exactly the same options, that you developed and
-    tested with. Refer to Microsoft's guidelines on the usage of DLLs, or
-    search for the phrase "DLL hell" on <a href=
+    This is the only way to insure that your application is running with the
+    same version of ICU, built with exactly the same options, that you
+    developed and tested with. Refer to Microsoft's guidelines on the usage of
+    DLLs, or search for the phrase "DLL hell" on <a href=
     "http://msdn.microsoft.com/">msdn.microsoft.com</a>.</p>
 
     <h3><a name="ImportantNotesUnix" href="#ImportantNotesUnix">Unix Type
