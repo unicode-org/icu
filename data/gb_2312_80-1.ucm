@@ -20,13 +20,15 @@
 #
 #
 #
-<code_set_name>	      "gb_2312_80-1"
-<char_name_mask>	      "AXXXX"
-<mb_cur_max>	      2
-<mb_cur_min>	      1
-<uconv_class>	      "DBCS"
-<subchar>		      \xF4\xFE
-<subchar1>		      \x1A
+<code_set_name>       "gb_2312_80-1"
+<char_name_mask>      "AXXXX"
+<mb_cur_max>          2
+<mb_cur_min>          2
+<uconv_class>         "MBCS"
+<icu:state>           0-20:2, 21-7e:1, 7f-ff:2
+<icu:state>           21-7e
+<icu:state>
+<subchar>             \x7e\x7e
 #
 CHARMAP
 #
