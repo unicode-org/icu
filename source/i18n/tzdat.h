@@ -15,8 +15,6 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING
-
 /* This file defines the format of the memory-mapped data file
  * containing system time zone data for icu.  See also gentz
  * and tz.pl.
@@ -66,6 +64,8 @@
 
 #define TZ_DATA_NAME "tz"
 #define TZ_DATA_TYPE "icu"
+
+#if !UCONFIG_NO_FORMATTING
 
 // Fields in UDataInfo:
 
