@@ -168,20 +168,6 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
     }
 }
 
-static UBool
-_res_isStringArray(Resource *r) {
-        int32_t count=*(int32_t *)r;
-        
-        /* check to make sure all items are strings */
-        while(count>0) {
-            if(RES_GET_TYPE(*++r)!=RES_STRING) {
-                return FALSE;
-            }
-            --count;
-        }
-        return TRUE;
-}
-
 /* helper for res_load() ---------------------------------------------------- */
 
 static UBool
@@ -257,27 +243,6 @@ res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength
     }
 }
 
-U_CFUNC Resource
-res_getStringArray(const ResourceData *pResData, const char *key, int32_t *pCount) {
-    Resource res=_res_findTableItem(pResData->pRoot, pResData->rootRes, key);
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_ARRAY) {
-        Resource *p=RES_GET_POINTER(pResData->pRoot, res);
-        int32_t count=*(int32_t *)p;
-        *pCount=count;
-        
-        /* check to make sure all items are strings */
-        if(!_res_isStringArray(p)) {
-                *pCount=0;
-                return RES_BOGUS;
-        }
-        return res;
-    } else {
-        *pCount=0;
-        return RES_BOGUS;
-    }
-}
-
-
 U_CFUNC int32_t
 res_countArrayItems(const ResourceData *pResData, const Resource res) {
     if(res!=RES_BOGUS) {
@@ -294,61 +259,8 @@ res_countArrayItems(const ResourceData *pResData, const Resource res) {
     return 0;
 }
 
-U_CFUNC int32_t
-res_count2dArrayCols(const ResourceData *pResData, const Resource res) {
-    if(res!=RES_BOGUS) {
-        if(RES_GET_TYPE(res)==RES_ARRAY) {
-            Resource *p=RES_GET_POINTER(pResData->pRoot, res);
-            int32_t count = *(int32_t *)RES_GET_POINTER(pResData->pRoot, *(p+1)); /*Number of columns in the first row*/
-            return count;
-        } 
-    } 
-    return 0;
-}
-
-U_CFUNC Resource
-res_get2DStringArray(const ResourceData *pResData, const char *key, int32_t *pRows, int32_t *pCols) {
-    Resource res=_res_findTableItem(pResData->pRoot, pResData->rootRes, key);
-    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_ARRAY) {
-        Resource *p=RES_GET_POINTER(pResData->pRoot, res);
-        Resource *row=NULL;
-        int32_t row_count=*(int32_t *)p;
-        *pRows = row_count;
-
-        *pCols = *(int32_t *)RES_GET_POINTER(pResData->pRoot, *(p+1)); /*Number of columns in the first row*/
-        
-        /* check to make sure all items are strings */
-        while(row_count>0) {
-            row = RES_GET_POINTER(pResData->pRoot, *(++p));
-            if(!_res_isStringArray(row) || RES_GET_TYPE(*p)!=RES_ARRAY) {
-                *pRows=0;
-                *pCols=0;
-                return RES_BOGUS;
-            } else {
-                int32_t col_count=*(int32_t *)(row);
-                if(*pCols != col_count) {
-                    *pRows=0;
-                    *pCols=0;
-                    return RES_BOGUS;
-                }
-            }
-            --row_count;
-        }
-        return res;
-    } else {
-        *pRows=0;
-        *pCols=0;
-        return RES_BOGUS;
-    }
-}
-
 U_CFUNC Resource
 res_getResource(const ResourceData *pResData, const char *key) {
-    return _res_findTableItem(pResData->pRoot, pResData->rootRes, key);
-}
-
-U_CFUNC Resource
-res_getTable(const ResourceData *pResData, const char *key) {
     return _res_findTableItem(pResData->pRoot, pResData->rootRes, key);
 }
 
@@ -404,52 +316,5 @@ res_getNextStringTableItem(const ResourceData *pResData, Resource table, const U
     *key = _res_getTableKey(pResData->pRoot, table, *indexS);
     (*indexS)++;
     *value = _res_getString(pResData->pRoot, next, len);
-}
-
-U_CFUNC const UChar *
-res_getStringTableItem(const ResourceData *pResData, Resource table, const char *key, int32_t *len) {
-    Resource res = _res_findTableItem(pResData->pRoot, table, key);
-    if(RES_GET_TYPE(res) != RES_STRING) {
-        return NULL;
-    }
-
-    return _res_getString(pResData->pRoot, res, len);
-
-}
-
-
-U_CFUNC const UChar *
-res_get2DStringArrayItem(const ResourceData *pResData,
-                       Resource arrayRes, int32_t row, int32_t col, int32_t *pLength) {
-    Resource res = _res_getArrayItem(pResData->pRoot, arrayRes, row);
-    return _res_getString(pResData->pRoot,
-                          _res_getArrayItem(pResData->pRoot, res, col),
-                          pLength);
-}
-
-U_CFUNC const UChar *
-res_getStringArrayItem(const ResourceData *pResData,
-                       Resource arrayRes, int32_t indexS, int32_t *pLength) {
-    return _res_getString(pResData->pRoot,
-                          _res_getArrayItem(pResData->pRoot, arrayRes, indexS),
-                          pLength);
-}
-
-U_CFUNC const char *
-res_getVersion(const ResourceData *pResData) {
-    UDataInfo *info;
-
-    info = (UDataInfo *)uprv_malloc(sizeof(UDataInfo));
-    uprv_memset(info, 0, sizeof(UDataInfo));
-
-    if(info == NULL) {
-        return NULL;
-    }
-
-    udata_getInfo(pResData->data, info);
-
-    uprv_free(info);
-
-    return NULL;
 }
 
