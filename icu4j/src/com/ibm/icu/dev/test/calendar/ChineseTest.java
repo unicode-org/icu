@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2000/11/28 16:41:38 $
- * $Revision: 1.5 $
+ * $Date: 2000/11/28 22:15:02 $
+ * $Revision: 1.6 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
@@ -12,6 +12,48 @@ import com.ibm.text.*;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Test of ChineseCalendar.
+ *
+ * Leap months in this century:
+ * Wed May 23 2001 = 4638-04*-01, Year 18, Cycle 78
+ * Sun Mar 21 2004 = 4641-02*-01, Year 21, Cycle 78
+ * Thu Aug 24 2006 = 4643-07*-01, Year 23, Cycle 78
+ * Tue Jun 23 2009 = 4646-05*-01, Year 26, Cycle 78
+ * Mon May 21 2012 = 4649-04*-01, Year 29, Cycle 78
+ * Fri Oct 24 2014 = 4651-09*-01, Year 31, Cycle 78
+ * Sun Jul 23 2017 = 4654-06*-01, Year 34, Cycle 78
+ * Sat May 23 2020 = 4657-04*-01, Year 37, Cycle 78
+ * Wed Mar 22 2023 = 4660-02*-01, Year 40, Cycle 78
+ * Fri Jul 25 2025 = 4662-06*-01, Year 42, Cycle 78
+ * Fri Jun 23 2028 = 4665-05*-01, Year 45, Cycle 78
+ * Tue Apr 22 2031 = 4668-03*-01, Year 48, Cycle 78
+ * Thu Dec 22 2033 = 4670-11*-01, Year 50, Cycle 78
+ * Wed Jul 23 2036 = 4673-06*-01, Year 53, Cycle 78
+ * Wed Jun 22 2039 = 4676-05*-01, Year 56, Cycle 78
+ * Sat Mar 22 2042 = 4679-02*-01, Year 59, Cycle 78
+ * Tue Aug 23 2044 = 4681-07*-01, Year 01, Cycle 79
+ * Sun Jun 23 2047 = 4684-05*-01, Year 04, Cycle 79
+ * Thu Apr 21 2050 = 4687-03*-01, Year 07, Cycle 79
+ * Mon Sep 23 2052 = 4689-08*-01, Year 09, Cycle 79
+ * Sat Jul 24 2055 = 4692-06*-01, Year 12, Cycle 79
+ * Wed May 22 2058 = 4695-04*-01, Year 15, Cycle 79
+ * Wed Apr 20 2061 = 4698-03*-01, Year 18, Cycle 79
+ * Fri Aug 24 2063 = 4700-07*-01, Year 20, Cycle 79
+ * Wed Jun 23 2066 = 4703-05*-01, Year 23, Cycle 79
+ * Tue May 21 2069 = 4706-04*-01, Year 26, Cycle 79
+ * Thu Sep 24 2071 = 4708-08*-01, Year 28, Cycle 79
+ * Tue Jul 24 2074 = 4711-06*-01, Year 31, Cycle 79
+ * Sat May 22 2077 = 4714-04*-01, Year 34, Cycle 79
+ * Sat Apr 20 2080 = 4717-03*-01, Year 37, Cycle 79
+ * Mon Aug 24 2082 = 4719-07*-01, Year 39, Cycle 79
+ * Fri Jun 22 2085 = 4722-05*-01, Year 42, Cycle 79
+ * Fri May 21 2088 = 4725-04*-01, Year 45, Cycle 79
+ * Sun Sep 24 2090 = 4727-08*-01, Year 47, Cycle 79
+ * Thu Jul 23 2093 = 4730-06*-01, Year 50, Cycle 79
+ * Tue May 22 2096 = 4733-04*-01, Year 53, Cycle 79
+ * Sun Mar 22 2099 = 4736-02*-01, Year 56, Cycle 79
+ */
 public class ChineseTest extends CalendarTest {
 
     public static void main(String args[]) throws Exception {
@@ -193,45 +235,6 @@ public class ChineseTest extends CalendarTest {
 
     /**
      * Test formatting.
-     *
-     * Leap months in this century:
-     * Wed May 23 2001 = Month 4(leap), Day 1, Year 18, Cycle 78
-     * Sun Mar 21 2004 = Month 2(leap), Day 1, Year 21, Cycle 78
-     * Thu Aug 24 2006 = Month 7(leap), Day 1, Year 23, Cycle 78
-     * Tue Jun 23 2009 = Month 5(leap), Day 1, Year 26, Cycle 78
-     * Mon May 21 2012 = Month 4(leap), Day 1, Year 29, Cycle 78
-     * Fri Oct 24 2014 = Month 9(leap), Day 1, Year 31, Cycle 78
-     * Sun Jul 23 2017 = Month 6(leap), Day 1, Year 34, Cycle 78
-     * Sat May 23 2020 = Month 4(leap), Day 1, Year 37, Cycle 78
-     * Wed Mar 22 2023 = Month 2(leap), Day 1, Year 40, Cycle 78
-     * Fri Jul 25 2025 = Month 6(leap), Day 1, Year 42, Cycle 78
-     * Fri Jun 23 2028 = Month 5(leap), Day 1, Year 45, Cycle 78
-     * Tue Apr 22 2031 = Month 3(leap), Day 1, Year 48, Cycle 78
-     * Thu Dec 22 2033 = Month 11(leap), Day 1, Year 50, Cycle 78
-     * Wed Jul 23 2036 = Month 6(leap), Day 1, Year 53, Cycle 78
-     * Wed Jun 22 2039 = Month 5(leap), Day 1, Year 56, Cycle 78
-     * Sat Mar 22 2042 = Month 2(leap), Day 1, Year 59, Cycle 78
-     * Tue Aug 23 2044 = Month 7(leap), Day 1, Year 01, Cycle 79
-     * Sun Jun 23 2047 = Month 5(leap), Day 1, Year 04, Cycle 79
-     * Thu Apr 21 2050 = Month 3(leap), Day 1, Year 07, Cycle 79
-     * Mon Sep 23 2052 = Month 8(leap), Day 1, Year 09, Cycle 79
-     * Sat Jul 24 2055 = Month 6(leap), Day 1, Year 12, Cycle 79
-     * Wed May 22 2058 = Month 4(leap), Day 1, Year 15, Cycle 79
-     * Wed Apr 20 2061 = Month 3(leap), Day 1, Year 18, Cycle 79
-     * Fri Aug 24 2063 = Month 7(leap), Day 1, Year 20, Cycle 79
-     * Wed Jun 23 2066 = Month 5(leap), Day 1, Year 23, Cycle 79
-     * Tue May 21 2069 = Month 4(leap), Day 1, Year 26, Cycle 79
-     * Thu Sep 24 2071 = Month 8(leap), Day 1, Year 28, Cycle 79
-     * Tue Jul 24 2074 = Month 6(leap), Day 1, Year 31, Cycle 79
-     * Sat May 22 2077 = Month 4(leap), Day 1, Year 34, Cycle 79
-     * Sat Apr 20 2080 = Month 3(leap), Day 1, Year 37, Cycle 79
-     * Mon Aug 24 2082 = Month 7(leap), Day 1, Year 39, Cycle 79
-     * Fri Jun 22 2085 = Month 5(leap), Day 1, Year 42, Cycle 79
-     * Fri May 21 2088 = Month 4(leap), Day 1, Year 45, Cycle 79
-     * Sun Sep 24 2090 = Month 8(leap), Day 1, Year 47, Cycle 79
-     * Thu Jul 23 2093 = Month 6(leap), Day 1, Year 50, Cycle 79
-     * Tue May 22 2096 = Month 4(leap), Day 1, Year 53, Cycle 79
-     * Sun Mar 22 2099 = Month 2(leap), Day 1, Year 56, Cycle 79
      */
     public void TestFormat() {
         ChineseCalendar cal = new ChineseCalendar();
@@ -239,6 +242,7 @@ public class ChineseTest extends CalendarTest {
                                     DateFormat.DEFAULT, DateFormat.DEFAULT);
 
         Date[] DATA = {
+            // Wed May 23 2001 = Month 4(leap), Day 1, Year 18, Cycle 78
             new Date(2001-1900, Calendar.MAY, 22),
             new Date(2001-1900, Calendar.MAY, 23)
         };
@@ -298,8 +302,8 @@ public class ChineseTest extends CalendarTest {
             4,1,2, // Expect 4*-2
             
             // I've disabled this test because it doesn't work this way,
-            // not even with a GregorianCalendar.  MONTH alone isn't enough
-            // to supercede DAY_OF_YEAR.  Some other month-related field is
+            // not even with a GregorianCalendar!  MONTH alone isn't enough
+            // to supersede DAY_OF_YEAR.  Some other month-related field is
             // also required. - Liu 11/28/00
             //! // If we set MONTH last, that should take precedence
             //! ChineseCalendar.IS_LEAP_MONTH, 1,
@@ -352,4 +356,168 @@ public class ChineseTest extends CalendarTest {
             }
         }
     }
+
+    /**
+     * Test the behavior of ChineseCalendar.roll().  The only real
+     * nastiness with roll is the MONTH field around leap months.
+     *//*
+    public void TestRoll() {
+        int[][] tests = new int[][] {
+            //       input                roll by          output
+            //  year  month     day     field amount    year  month     day
+    
+            {   5759, HESHVAN,   2,     MONTH,   1,     5759, KISLEV,    2 },   // non-leap years
+            {   5759, SHEVAT,    2,     MONTH,   1,     5759, ADAR,      2 },
+            {   5759, SHEVAT,    2,     MONTH,   2,     5759, NISAN,     2 },
+            {   5759, SHEVAT,    2,     MONTH,  12,     5759, SHEVAT,    2 },
+            {   5759, AV,        1,     MONTH,  12,     5759, AV,        1 }, // Alan
+
+            {   5757, HESHVAN,   2,     MONTH,   1,     5757, KISLEV,    2 },   // leap years
+            {   5757, SHEVAT,    2,     MONTH,   1,     5757, ADAR_1,    2 },
+            {   5757, SHEVAT,    2,     MONTH,   2,     5757, ADAR,      2 },
+            {   5757, SHEVAT,    2,     MONTH,   3,     5757, NISAN,     2 },
+            {   5757, SHEVAT,    2,     MONTH,  12,     5757, TEVET,     2 },
+            {   5757, SHEVAT,    2,     MONTH,  13,     5757, SHEVAT,    2 },
+            {   5757, AV,        1,     MONTH,  12,     5757, TAMUZ,     1 }, // Alan
+            
+            {   5757, KISLEV,    1,     DATE,   30,     5757, KISLEV,    2 },   // 29-day month
+            {   5758, KISLEV,    1,     DATE,   31,     5758, KISLEV,    2 },   // 30-day month
+            
+            // Try some other fields too
+            {   5757, TISHRI,    1,     YEAR,    1,     5758, TISHRI,    1 },
+
+            // Try some rolls that require other fields to be adjusted
+            {   5757, TISHRI,   30,     MONTH,   1,     5757, HESHVAN,  29 },
+            {   5758, KISLEV,   30,     YEAR,   -1,     5757, KISLEV,   29 },
+        };
+       
+        ChineseCalendar cal = new ChineseCalendar();
+        doRollAdd(ROLL, cal, tests);
+    }
+       */
+    
+    /**
+     * Test the behavior of fields that are out of range.
+     */
+    public void TestOutOfRange() {
+        int[] DATA = new int[] {
+            // Input       Output
+            4638, 13,  1,   4639,  1,  1,
+            4638, 18,  1,   4639,  6,  1,
+            4639,  0,  1,   4638, 12,  1,
+            4639, -6,  1,   4638,  6,  1,
+            4638,  1, 32,   4638,  2,  2, // 1-4638 has 30 days
+            4638,  2, -1,   4638,  1, 29,
+        };
+        ChineseCalendar cal = new ChineseCalendar();
+        for (int i=0; i<DATA.length; ) {
+            int y1 = DATA[i++];
+            int m1 = DATA[i++]-1;
+            int d1 = DATA[i++];
+            int y2 = DATA[i++];
+            int m2 = DATA[i++]-1;
+            int d2 = DATA[i++];
+            cal.clear();
+            cal.set(Calendar.EXTENDED_YEAR, y1);
+            cal.set(MONTH, m1);
+            cal.set(DATE, d1);
+            int y = cal.get(Calendar.EXTENDED_YEAR);
+            int m = cal.get(MONTH);
+            int d = cal.get(DATE);
+            if (y!=y2 || m!=m2 || d!=d2) {
+                errln("Fail: " + y1 + "/" + (m1+1) + "/" + d1 + " resolves to " +
+                      y + "/" + (m+1) + "/" + d + ", expected " +
+                      y2 + "/" + (m2+1) + "/" + d2);
+            } else  if (isVerbose()) {
+                logln("OK: " + y1 + "/" + (m1+1) + "/" + d1 + " resolves to " +
+                      y + "/" + (m+1) + "/" + d);
+            }
+        }
+    }
+
+    /**
+     * Test the behavior of ChineseCalendar.add().  The only real
+     * nastiness with roll is the MONTH field around leap months.
+     */
+    public void TestAdd() {
+        int[][] tests = new int[][] {
+            // MONTHS ARE 1-BASED HERE
+            // input               add           output
+            // year  mon    day    field amount  year  mon    day
+            {  4642,   3,0,  15,   MONTH,   3,   4642,   6,0,  15 }, // normal
+            {  4639,  12,0,  15,   MONTH,   1,   4640,   1,0,  15 }, // across year
+            {  4640,   1,0,  15,   MONTH,  -1,   4639,  12,0,  15 }, // across year
+            {  4638,   3,0,  15,   MONTH,   3,   4638,   5,0,  15 }, // 4=leap
+            {  4638,   3,0,  15,   MONTH,   2,   4638,   4,1,  15 }, // 4=leap
+            {  4638,   4,0,  15,   MONTH,   1,   4638,   4,1,  15 }, // 4=leap
+            {  4638,   4,1,  15,   MONTH,   1,   4638,   5,0,  15 }, // 4=leap
+            {  4638,   4,0,  30,   MONTH,   1,   4638,   4,1,  29 }, // dom should pin
+            {  4638,   4,0,  30,   MONTH,   2,   4638,   5,0,  30 }, // no dom pin
+            {  4638,   4,0,  30,   MONTH,   3,   4638,   6,0,  29 }, // dom should pin
+        };
+       
+        ChineseCalendar cal = new ChineseCalendar();
+        doRollAdd(ADD, cal, tests);
+    }
+
+    void doRollAdd(boolean roll, ChineseCalendar cal, int[][] tests) {
+        String name = roll ? "rolling" : "adding";
+        
+        for (int i = 0; i < tests.length; i++) {
+            int[] test = tests[i];
+
+            cal.clear();
+                cal.set(Calendar.EXTENDED_YEAR, test[0]);
+                cal.set(Calendar.MONTH, test[1]-1);
+                cal.set(ChineseCalendar.IS_LEAP_MONTH, test[2]);
+                cal.set(Calendar.DAY_OF_MONTH, test[3]);
+            if (roll) {
+                cal.roll(test[4], test[5]);
+            } else {
+                cal.add(test[4], test[5]);
+            }
+            if (cal.get(Calendar.EXTENDED_YEAR) != test[6] ||
+                cal.get(MONTH) != (test[7]-1) ||
+                cal.get(ChineseCalendar.IS_LEAP_MONTH) != test[8] ||
+                cal.get(DATE) != test[9]) {
+                errln("Fail: " + name + " " +
+                      ymdToString(test[0], test[1]-1, test[2], test[3])
+                      + " " + fieldName(test[4]) + " by " + test[5]
+                      + ": expected " +
+                      ymdToString(test[6], test[7]-1, test[8], test[9])
+                      + ", got " + ymdToString(cal));
+            } else if (isVerbose()) {
+                logln("OK: " + name + " " +
+                      ymdToString(test[0], test[1]-1, test[2], test[3])
+                    + " " + fieldName(test[4]) + " by " + test[5]
+                    + ": got " + ymdToString(cal));
+            }
+        }
+    }
+
+    /**
+     * Convert year,month,day values to the form "year/month/day".
+     * On input the month value is zero-based, but in the result string it is one-based.
+     */
+    static public String ymdToString(int year, int month, int isLeapMonth, int day) {
+        return "" + year + "/" + (month+1) +
+            ((isLeapMonth!=0)?"(leap)":"") +
+            "/" + day;
+    }
+
+//    public void TestFindLeapMonths() {
+//        ChineseCalendar cal = new ChineseCalendar();
+//        cal.setTime(new Date(2000-1900, Calendar.JANUARY, 1));
+//        long end = new Date(2100-1900, Calendar.JANUARY, 1).getTime();
+//        ChineseDateFormat fmt = (ChineseDateFormat) DateFormat.getInstance(cal);
+//        fmt.applyPattern("u-MMl-dd, 'Year' y, 'Cycle' G");
+//        while (cal.getTimeInMillis() < end) {
+//            if (cal.get(ChineseCalendar.IS_LEAP_MONTH) != 0) {
+//                cal.set(Calendar.DAY_OF_MONTH, 1);
+//                logln(cal.getTime() + " = " + fmt.format(cal.getTime()));
+//                cal.set(Calendar.DAY_OF_MONTH, 29);
+//            }
+//            cal.add(Calendar.DAY_OF_YEAR, 25);
+//        }
+//    }
 }
