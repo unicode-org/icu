@@ -109,6 +109,12 @@ class TransliteratorTest : public IntlTest {
      */
     void TestArbitraryVariableValues(void);
 
+    /**
+     * Confirm that the contextStart, contextLimit, start, and limit
+     * behave correctly. J474.
+     */
+    void TestPositionHandling(void);
+
     //======================================================================
     // Support methods
     //======================================================================

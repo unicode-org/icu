@@ -58,6 +58,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(15,TestSegments);
         CASE(16,TestCursorOffset);
         CASE(17,TestArbitraryVariableValues);
+        CASE(18,TestPositionHandling);
         default: name = ""; break;
     }
 }
@@ -722,6 +723,62 @@ void TransliteratorTest::TestArbitraryVariableValues(void) {
         } else {
             expect(t, DATA[i+1], DATA[i+2]);
         }
+    }
+}
+
+/**
+ * Confirm that the contextStart, contextLimit, start, and limit
+ * behave correctly. J474.
+ */
+void TransliteratorTest::TestPositionHandling(void) {
+    // Array of 3n items
+    // Each item is <rules>, <input>, <expected output>
+    const char* DATA[] = {
+        "a{t} > SS ; {t}b > UU ; {t} > TT ;",
+        "xtat txtb", // pos 0,9,0,9
+        "xTTaSS TTxUUb",
+
+        "a{t} > SS ; {t}b > UU ; {t} > TT ; a > A ; b > B ;",
+        "xtat txtb", // pos 2,9,3,8
+        "xtaSS TTxUUb",
+
+        "a{t} > SS ; {t}b > UU ; {t} > TT ; a > A ; b > B ;",
+        "xtat txtb", // pos 3,8,3,8
+        "xtaTT TTxTTb",
+    };
+
+    // Array of 4n positions -- these go with the DATA array
+    // They are: contextStart, contextLimit, start, limit
+    int32_t POS[] = {
+        0, 9, 0, 9,
+        2, 9, 3, 8,
+        3, 8, 3, 8,
+    };
+
+    int32_t n = sizeof(DATA) / sizeof(DATA[0]) / 3;
+    for (int32_t i=0; i<n; i++) {
+        UErrorCode status = U_ZERO_ERROR;
+        Transliterator *t = new RuleBasedTransliterator("<ID>",
+                                                        DATA[3*i], status);
+        if (U_FAILURE(status)) {
+            delete t;
+            errln("FAIL: RBT constructor");
+            return;
+        }
+        UTransPosition pos = {POS[4*i], POS[4*i+1], POS[4*i+2], POS[4*i+3]};
+        UnicodeString rsource(DATA[3*i+1]);
+        t->transliterate(rsource, pos, status);
+        if (U_FAILURE(status)) {
+            delete t;
+            errln("FAIL: transliterate");
+            return;
+        }
+        t->finishTransliteration(rsource, pos);
+        expectAux(DATA[3*i],
+                  DATA[3*i+1],
+                  rsource,
+                  DATA[3*i+2]);
+        delete t;
     }
 }
 
