@@ -126,7 +126,7 @@ static const int32_t kMaxValues[] = {
 
 U_NAMESPACE_BEGIN
 
-const char GregorianCalendar::fgClassID = 0; // Value is irrelevant
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(GregorianCalendar)
 
 // 00:00:00 UTC, October 15, 1582, expressed in ms from the epoch.
 // Note that only Italy and other Catholic countries actually
@@ -748,6 +748,18 @@ GregorianCalendar::getGregorianYear(UErrorCode &status) const
         }
     }
     return year;
+}
+
+int32_t
+GregorianCalendar::getDefaultMonthInYear() const
+{
+    return 0;
+}
+
+int32_t
+GregorianCalendar::getDefaultDayInMonth(int32_t /*month*/) const
+{
+    return 1;
 }
 
 void
