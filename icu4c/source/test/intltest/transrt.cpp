@@ -1116,7 +1116,7 @@ UBool LegalIndic::is(const UnicodeString& sourceString) const{
     return TRUE;
 }
 
-static const char* latinForIndic = "[['.0-9A-Za-z~\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD"
+static const char latinForIndic[] = "[['.0-9A-Za-z~\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD"
                                    "\\u00E0-\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6\\u00F9-\\u00FD\\u00FF-\\u010F"
                                    "\\u0112-\\u0125\\u0128-\\u0130\\u0134-\\u0137\\u0139-\\u013E\\u0143-\\u0148"
                                    "\\u014C-\\u0151\\u0154-\\u0165\\u0168-\\u017E\\u01A0-\\u01A1\\u01AF-\\u01B0"
@@ -1155,7 +1155,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
 
 /* Defined this way for HP/UX11CC :-( */
 static const int32_t INTER_INDIC_ARRAY_WIDTH = 4;
-static const char * interIndicArray[] = {
+static const char * const interIndicArray[] = {
     "BENGALI-DEVANAGARI", "[:BENGALI:]", "[:Devanagari:]", 
     "[\\u0951-\\u0954\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1]", /*roundtrip exclusions*/
 
