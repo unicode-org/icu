@@ -47,7 +47,10 @@ UBool ScriptRun::next()
 
         UScriptCode sc = uscript_getScript(ch, &error);
 
-        if (sameScript(scriptCode, sc)) {
+        if (ch == ')' && parenSP >= 0 && parenStack[parenSP] != scriptCode) {
+            sc = parenStack[parenSP--];
+            break;
+        } else if (sameScript(scriptCode, sc)) {
             if (scriptCode <= USCRIPT_INHERITED && sc > USCRIPT_INHERITED) {
                 scriptCode = sc;
             }
@@ -56,6 +59,12 @@ UBool ScriptRun::next()
             // end it before the high surrogate
             if (ch >= 0x10000) {
                 scriptEnd -= 1;
+            }
+
+            for (int32_t i = scriptStart; i < scriptEnd; i += 1) {
+                if (charArray[i] == '(') {
+                    parenStack[++parenSP] = scriptCode;
+                }
             }
 
             break;
