@@ -1,7 +1,8 @@
-tmp
-Debug
-Release
-Makefile
 *.d
 *.pdb
+Debug
+Makefile
+Release
+libicuctestfw.so.20.0
 pkgdata
+tmp

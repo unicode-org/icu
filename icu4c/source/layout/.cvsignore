@@ -1,6 +1,7 @@
-tmp
-Debug
-Release
-Makefile
 *.d
 *.pdb
+Debug
+Makefile
+Release
+libicule.so.20.0
+tmp
