@@ -1281,27 +1281,6 @@ static const char* rulesToTest[] = {
     "&[top]<'?';Qum<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q<r,R<u,U"  /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & '?';Qum"*/
 };
 
-static UBool hasCollationElements(const char *locName) {
-
-  UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *ColEl = NULL;
-
-  UResourceBundle *loc = ures_open(NULL, locName, &status);;
-
-  if(U_SUCCESS(status)) {
-    status = U_ZERO_ERROR;
-    ColEl = ures_getByKey(loc, "collations", ColEl, &status);
-    if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
-      ures_close(ColEl);
-      ures_close(loc);
-      return TRUE;
-    }
-    ures_close(ColEl);
-    ures_close(loc);
-  }
-  return FALSE;
-}
-
 
 static void TestCollations(void) {
   int32_t noOfLoc = uloc_countAvailable();
@@ -4185,9 +4164,81 @@ static void TestTibetanConformance(void)
     genericLocaleStarterWithResult("", test, 2, UCOL_EQUAL);
 }
 
-static void PinyinProblem(void) {
+static void TestPinyinProblem(void) {
     static const char *test[] = { "\\u4E56\\u4E56\\u7761", "\\u4E56\\u5B69\\u5B50" };
     genericLocaleStarter("zh__PINYIN", test, sizeof(test)/sizeof(test[0]));
+}
+
+#define MAX_INPUT 0x220001
+#define topByte 0xFF000000;
+#define bottomByte 0xFF;
+#define fourBytes 0xFFFFFFFF;
+
+
+static void showImplicit(UChar32 i) {
+    if (i >= 0 && i <= MAX_INPUT) {
+        log_verbose("%08X\t%08X\n", i, uprv_uca_getImplicitFromRaw(i));
+    } 
+}
+
+static void TestImplicitGeneration(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UChar32 last = 0;
+    UChar32 current;
+    UChar32 i = 0, j = 0;
+    UChar32 roundtrip = 0;
+    UChar32 lastBottom = 0;
+    UChar32 currentBottom = 0;
+    UChar32 lastTop = 0;
+    UChar32 currentTop = 0;
+
+    UCollator *col = ucol_open("root", &status);
+    if(U_FAILURE(status)) {
+        log_err("Couldn't open UCA\n");
+        return;
+    }
+    
+    //int x = foo.getRawImplicit(0xF810);
+    uprv_uca_getRawFromImplicit(0xE20303E7);
+
+    for (i = 0; i <= MAX_INPUT; ++i) {
+        current = uprv_uca_getImplicitFromRaw(i) & fourBytes;
+    
+        // check that it round-trips AND that all intervening ones are illegal
+        roundtrip = uprv_uca_getRawFromImplicit(current);
+        if (roundtrip != i) {
+            log_err("No roundtrip %08X\n", i); 
+        }
+        if (last != 0) {
+            for (j = last + 1; j < current; ++j) {
+                roundtrip = uprv_uca_getRawFromImplicit(j);
+                // raise an error if it *doesn't* find an error
+                if (roundtrip != -1) {
+                    log_err("Fails to recognize illegal %08X\n", j);
+                }
+            }
+        }
+        // now do other consistency checks
+        lastBottom = last & bottomByte;
+        currentBottom = current & bottomByte;
+        lastTop = last & topByte;
+        currentTop = current & topByte;
+
+        // print out some values for spot-checking
+        if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
+            showImplicit(i-3);
+            showImplicit(i-2);
+            showImplicit(i-1);
+            showImplicit(i);
+            showImplicit(i+1);
+            showImplicit(i+2);
+            //System.out.println("...");
+        }
+        last = current;
+    }
+    showImplicit(MAX_INPUT-2);
+    showImplicit(MAX_INPUT-1);
+    showImplicit(MAX_INPUT);    
 }
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
@@ -4246,7 +4297,8 @@ void addMiscCollTest(TestNode** root)
     TEST(NullRule);
     TEST(TestNumericCollation);
     TEST(TestTibetanConformance);
-    TEST(PinyinProblem);
+    TEST(TestPinyinProblem);
+    TEST(TestImplicitGeneration);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */

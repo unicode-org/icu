@@ -44,6 +44,7 @@ void genericLocaleStarterWithResult(const char *locale, const char *s[], uint32_
 void genericLocaleStarterWithOptions(const char *locale, const char *s[], uint32_t size, const UColAttribute *attrs, const UColAttributeValue *values, uint32_t attsize);
 void genericRulesTestWithResult(const char *rules, const char *s[], uint32_t size, UCollationResult result);
 void genericRulesStarter(const char *rules, const char *s[], uint32_t size);
+UBool hasCollationElements(const char *locName);
 
 
 #endif /* #if !UCONFIG_NO_COLLATION */
