@@ -299,7 +299,7 @@ void
 DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
 {
     // for now, simple implementation; later, do proper IEEE stuff
-    char rep[MAX_DIGITS + 7]; // Extra space for '.', e+NNN, and '\0' (actually +7 is enough)
+    char rep[MAX_DIGITS + 8]; // Extra space for '+', '.', e+NNN, and '\0' (actually +8 is enough)
     char *digitPtr      = fDigits;
     char *repPtr        = rep + 2;  // +2 to skip the sign and decimal
     int32_t exponent    = 0;
