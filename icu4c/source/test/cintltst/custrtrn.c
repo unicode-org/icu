@@ -19,9 +19,10 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "ustr_imp.h"
 #include "cintltst.h"
 
-#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 void addUCharTransformTest(TestNode** root);
 
@@ -610,6 +611,44 @@ static void Test_UChar_WCHART_API(void){
         free(uDest);
     }
 
-} 
+    /*
+     * Test u_terminateWChars().
+     * All u_terminateXYZ() use the same implementation macro;
+     * we test this function to improve API coverage.
+     */
+    {
+        wchar_t buffer[10];
 
-  
+        err=U_ZERO_ERROR;
+        buffer[3]=0x20ac;
+        wDestLen=u_terminateWChars(buffer, LENGTHOF(buffer), 3, &err);
+        if(err!=U_ZERO_ERROR || wDestLen!=3 || buffer[3]!=0) {
+            log_err("u_terminateWChars(buffer, all, 3, zero) failed: %s length %d [3]==U+%04x\n",
+                    u_errorName(err), wDestLen, buffer[3]);
+        }
+
+        err=U_ZERO_ERROR;
+        buffer[3]=0x20ac;
+        wDestLen=u_terminateWChars(buffer, 3, 3, &err);
+        if(err!=U_STRING_NOT_TERMINATED_WARNING || wDestLen!=3 || buffer[3]!=0x20ac) {
+            log_err("u_terminateWChars(buffer, 3, 3, zero) failed: %s length %d [3]==U+%04x\n",
+                    u_errorName(err), wDestLen, buffer[3]);
+        }
+
+        err=U_STRING_NOT_TERMINATED_WARNING;
+        buffer[3]=0x20ac;
+        wDestLen=u_terminateWChars(buffer, LENGTHOF(buffer), 3, &err);
+        if(err!=U_ZERO_ERROR || wDestLen!=3 || buffer[3]!=0) {
+            log_err("u_terminateWChars(buffer, all, 3, not-terminated) failed: %s length %d [3]==U+%04x\n",
+                    u_errorName(err), wDestLen, buffer[3]);
+        }
+
+        err=U_ZERO_ERROR;
+        buffer[3]=0x20ac;
+        wDestLen=u_terminateWChars(buffer, 2, 3, &err);
+        if(err!=U_BUFFER_OVERFLOW_ERROR || wDestLen!=3 || buffer[3]!=0x20ac) {
+            log_err("u_terminateWChars(buffer, 2, 3, zero) failed: %s length %d [3]==U+%04x\n",
+                    u_errorName(err), wDestLen, buffer[3]);
+        }
+    }
+} 

@@ -286,7 +286,7 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
 UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
                                                   const char *line,
                                                   int32_t options) {
-    UBool pass = TRUE;
+    UBool pass = TRUE, result;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString out, fcd;
     int32_t fieldNum;
@@ -342,7 +342,13 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
         pass = FALSE;
     }
 
-    if(!Normalizer::isNormalized(field[1], UNORM_NFC, options, status)) {
+    // branch on options==0 for better code coverage
+    if(options==0) {
+        result = Normalizer::isNormalized(field[1], UNORM_NFC, status);
+    } else {
+        result = Normalizer::isNormalized(field[1], UNORM_NFC, options, status);
+    }
+    if(!result) {
         errln("Normalizer error: isNormalized(NFC(s), UNORM_NFC) is FALSE");
         pass = FALSE;
     }
