@@ -84,6 +84,14 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
                       UErrorCode *pErrorCode);
 
 /**
+ * Get the full title case mapping for c (does not check context!).
+ * @return the length of the output, negative if same as c
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+u_internalTitleCase(UChar32 c, UChar *dest, int32_t destCapacity, const char *locale);
+
+/**
  * Return the full case folding mapping for c.
  * Must be used only if uprv_haveProperties() is true.
  * @internal
