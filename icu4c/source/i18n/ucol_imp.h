@@ -250,9 +250,11 @@ U_CAPI uint32_t U_EXPORT2 ucol_getPrevCE(const UCollator *coll,
                                          collIterate *collationSource,
                                          UErrorCode *status);
 /* function used by C++ getCollationKey to prevent restarting the calculation */
-U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
-        const    UChar        *source,
-        int32_t            sourceLength, int32_t *resultLen);
+U_CFUNC int32_t
+ucol_getSortKeyWithAllocation(const UCollator *coll,
+                              const UChar *source, int32_t sourceLength,
+                              uint8_t **pResult,
+                              UErrorCode *pErrorCode);
 
 /* get some memory */
 void *ucol_getABuffer(const UCollator *coll, uint32_t size);
@@ -607,8 +609,9 @@ struct UCollator {
                                       /* to speed up things, we use the UCA image, but we don't want it */
                                       /* to run around */
     const UChar *rules;
+    int32_t rulesLength;
     UBool freeRulesOnClose;
-    UChar zero;
+
     UDataInfo dataInfo;               /* Data info of UCA table */
     UErrorCode errorCode;             /* internal error code */
 
