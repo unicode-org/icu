@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright © {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (c) {1996-2001}, International Business Machines Corporation and others. All Rights Reserved.
 *******************************************************************************
 * File unorm.h
 *
@@ -45,7 +45,7 @@
  * \endcode
  * <p>
  * To a user of your program, however, both of these sequences should be
- * treated as the same "user-level" character "Á".  When you are searching or
+ * treated as the same "user-level" character "A with acute accent".  When you are searching or
  * comparing text, you must ensure that these two sequences are treated 
  * equivalently.  In addition, you must handle characters with more than one
  * accent.  Sometimes the order of a character's combining accents is
