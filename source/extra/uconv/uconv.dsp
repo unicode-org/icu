@@ -77,6 +77,7 @@ SOURCE="$(InputPath)"
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
+# PROP Exclude_From_Build 1
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 MTL=midl.exe
@@ -90,17 +91,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 icuucd.lib icuind.lib uconvmsg.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\..\..\lib" /libpath:"Debug"
-# Begin Custom Build
-ProjDir=.
-TargetPath=.\Debug\uconv.exe
-InputPath=.\Debug\uconv.exe
-InputName=uconv
-SOURCE="$(InputPath)"
-
-"$(ProjDir)\..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\bin
-
-# End Custom Build
 
 !ELSEIF  "$(CFG)" == "uconv - Win64 Release"
 
@@ -229,7 +219,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Release/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Release
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\.. CFG=Release
 
 # End Custom Build
 
@@ -241,7 +231,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Debug/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Debug
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\.. CFG=Debug
 
 # End Custom Build
 
@@ -253,7 +243,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Release/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Release
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\.. CFG=Release
 
 # End Custom Build
 
@@ -265,7 +255,7 @@ InputPath=.\makedata.mak
 InputName=makedata
 
 "Debug/uconvmsg.lib" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\ CFG=Debug
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\.. CFG=Debug
 
 # End Custom Build
 
