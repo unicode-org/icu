@@ -18,6 +18,21 @@
 			</icu:scripts>
 		</special>
 	</characters>
+  <dates>
+    <timeZoneNames>
+      <zone type="">
+        <long>
+          <standard/>
+          <daylight/>
+        </long>
+        <short>
+          <standard/>
+          <daylight/>
+        </short>
+        <exemplarCity/>
+      </zone>
+    </timeZoneNames>
+  </dates>
   <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
     <icu:boundaries>
       <icu:grapheme icu:class="RuleBased" icu:import="char"/>
