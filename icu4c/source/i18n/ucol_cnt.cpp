@@ -141,8 +141,8 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
 
         uprv_memcpy(CEPointer, table->elements[i]->CEs, size*sizeof(uint32_t));
         for(j = 0; j<size; j++) {
-            if(isContraction(*(CEPointer+j))) {
-                *(CEPointer+j) = constructContractCE(table->offsets[getContractOffset(*(CEPointer+j))]);
+            if(isCntTableElement(*(CEPointer+j))) {
+                *(CEPointer+j) = constructContractCE(getCETag(*(CEPointer+j)), table->offsets[getContractOffset(*(CEPointer+j))]);
             }
         }
         cpPointer += size;
@@ -153,8 +153,8 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
     uint32_t CE;
     for(i = 0; i<=0x10FFFF; i++) {
         CE = ucmpe32_get(table->mapping, i);
-        if(isContraction(CE)) {
-            CE = constructContractCE(table->offsets[getContractOffset(CE)]);
+        if(isCntTableElement(CE)) {
+            CE = constructContractCE(getCETag(CE), table->offsets[getContractOffset(CE)]);
             ucmpe32_set(table->mapping, i, CE);
         }
     }
@@ -248,7 +248,7 @@ uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t va
 
     tbl->CEs[tbl->position-1] = value;
 
-    return(constructContractCE(element));
+    return(constructContractCE(table->currentTag, element));
 }
 
 
@@ -286,7 +286,7 @@ uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar 
 
     tbl->position++;
 
-    return(constructContractCE(element));
+    return(constructContractCE(table->currentTag, element));
 }
 
 
@@ -312,7 +312,7 @@ uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar cod
 
     tbl->position++;
 
-    return(constructContractCE(element));
+    return(constructContractCE(table->currentTag, element));
 }
 
 /* sets a part of contraction sequence in table. If element is non existant, it creates on. Returns element handle */
@@ -337,7 +337,7 @@ uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t 
     tbl->codePoints[offset] = codePoint;
 
     //return(offset);
-    return(constructContractCE(element));
+    return(constructContractCE(table->currentTag, element));
 }
 
 ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t element) {
@@ -416,7 +416,7 @@ UBool uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString,
       if(element == UCOL_NOT_FOUND) {
         return FALSE;
       }
-      if(!isContraction(element)) {
+      if(!isCntTableElement(element)) {
         return TRUE;
       }
       ztString++;

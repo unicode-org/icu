@@ -37,6 +37,9 @@ typedef struct {
 } ExpansionTable;
 
 typedef struct {
+    UChar prefixChars[128];
+    UChar *prefix;
+    uint32_t prefixSize;
     UChar uchars[128];
     UChar *cPoints;
     uint32_t cSize;          /* Number of characters in sequence - for contraction */

@@ -1055,6 +1055,8 @@ inline Collator::ECollationStrength RuleBasedCollator::getECollationStrength(
     return Collator::SECONDARY;
   case UCOL_TERTIARY :
     return Collator::TERTIARY;
+  case UCOL_QUATERNARY :
+    return Collator::QUATERNARY;   
   default :
     return Collator::IDENTICAL;
   }
@@ -1071,6 +1073,8 @@ inline UCollationStrength RuleBasedCollator::getUCollationStrength(
     return UCOL_SECONDARY;
   case Collator::TERTIARY :
     return UCOL_TERTIARY;
+  case Collator::QUATERNARY :
+    return UCOL_QUATERNARY;
   default :
     return UCOL_IDENTICAL;
   }
