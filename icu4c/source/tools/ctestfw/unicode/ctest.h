@@ -135,7 +135,7 @@ T_CTEST_API void log_info(const char* pattern, ...);
  * @param ap variable-arguments list
  * @internal Internal APIs for testing purpose only
  */
-/*T_CTEST_API void vlog_info(const char *prefix, const char *pattern, va_list ap);*/
+T_CTEST_API void vlog_info(const char *prefix, const char *pattern, va_list ap);
 
 /**
  * Log a verbose informational message. (printf style)
