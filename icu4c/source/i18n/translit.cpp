@@ -154,7 +154,13 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
  */
 int32_t Transliterator::transliterate(Replaceable& text,
                                       int32_t start, int32_t limit) const {
-    Position offsets = { start, limit, start };
+
+    Position offsets; /* Broken HPUX compiler cannot handle this */
+
+    offsets.start  = start;
+    offsets.limit  = limit;
+    offsets.cursor = start;
+
     handleTransliterate(text, offsets, FALSE);
     return offsets.limit;
 }
@@ -671,8 +677,9 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID) {
         // really get here except under installation, configuration,
         // or unrecoverable run time memory failures.
         _unregister(ID);
-        return 0;
     }
+
+    return 0;
 }
 
 /**
