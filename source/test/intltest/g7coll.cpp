@@ -209,10 +209,10 @@ void G7CollationTest::TestDemo2( char* par )
         return;
     }
 
-    int32_t j;
-    for (j; j < TOTALTESTSET; j++)
+    int32_t j, n;
+    for (j = 0; j < TOTALTESTSET; j++)
     {
-        for (int32_t n = j+1; n < TOTALTESTSET; n++)
+        for (n = j+1; n < TOTALTESTSET; n++)
         {
             doTest(myCollation, testCases[results[9][j]], testCases[results[9][n]], Collator::LESS);
         }
@@ -238,10 +238,10 @@ void G7CollationTest::TestDemo3( char* par )
         return;
     }
 
-    int32_t j;
+    int32_t j, n;
     for (j = 0; j < TOTALTESTSET; j++)
     {
-        for (int32_t n = j+1; n < TOTALTESTSET; n++)
+        for (n = j+1; n < TOTALTESTSET; n++)
         {
             doTest(myCollation, testCases[results[10][j]], testCases[results[10][n]], Collator::LESS);
         }
@@ -267,10 +267,10 @@ void G7CollationTest::TestDemo4( char* par )
         return;
     }
 
-    int32_t j;
+    int32_t j, n;
     for (j = 0; j < TOTALTESTSET; j++)
     {
-        for (int32_t n = j+1; n < TOTALTESTSET; n++)
+        for (n = j+1; n < TOTALTESTSET; n++)
         {
             doTest(myCollation, testCases[results[11][j]], testCases[results[11][n]], Collator::LESS);
         }
