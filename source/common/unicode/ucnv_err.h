@@ -7,6 +7,7 @@
  *
  *   ucnv_err.h:
  */
+
 /**
  * \file
  * \brief C UConverter predefined error callbacks
@@ -17,36 +18,66 @@
  *  can also be considered only as an example of what can be done with
  *  callbacks.  You may of course write your own.
  *
- *   These Functions, although public, should NEVER be called directly, they should be used as parameters to
- *   the ucnv_setFromUCallback and ucnv_setToUCallback functions, to
- *    set the behaviour of a converter
- *   when it encounters ILLEGAL/UNMAPPED/INVALID sequences.
+ *  If you want to write your own, you may also find the functions from
+ *  ucnv_cb.h useful when writing your own callbacks.
  *
- *   usage example:  'STOP' doesn't need any context, but newContext
- *    could be set to something other than 'NULL' if needed.
+ *  These functions, although public, should NEVER be called directly.
+ *  They should be used as parameters to the ucnv_setFromUCallback
+ *  and ucnv_setToUCallback functions, to set the behaviour of a converter
+ *  when it encounters ILLEGAL/UNMAPPED/INVALID sequences.
+ *
+ *  usage example:  'STOP' doesn't need any context, but newContext
+ *    could be set to something other than 'NULL' if needed. The available
+ *    contexts in this header can modify the default behavior of the callback.
  *
  *  \code
- *    UErrorCode err = U_ZERO_ERROR;
- *    UConverter* myConverter = ucnv_open("ibm-949", &err);
- *  const void *newContext = NULL;
+ *  UErrorCode err = U_ZERO_ERROR;
+ *  UConverter *myConverter = ucnv_open("ibm-949", &err);
  *  const void *oldContext;
  *  UConverterFromUCallback oldAction;
  *
  *
- *    if (U_SUCCESS(err))
- *    {
- *  ucnv_setFromUCallBack(myConverter,
+ *  if (U_SUCCESS(err))
+ *  {
+ *      ucnv_setFromUCallBack(myConverter,
  *                       UCNV_FROM_U_CALLBACK_STOP,
- *                       newContext,
+ *                       NULL,
  *                       &oldAction,
  *                       &oldContext,
- *                      &status);
- *    }
+ *                       &status);
+ *  }
  *  \endcode
  *
- *   The code above tells "myConverter" to stop when it encounters a ILLEGAL/TRUNCATED/INVALID sequences when it is used to
- *   convert from Unicode -> Codepage.
- *   The behavior from Codepage to Unicode is not changed.
+ *  The code above tells "myConverter" to stop when it encounters an
+ *  ILLEGAL/TRUNCATED/INVALID sequences when it is used to convert from
+ *  Unicode -> Codepage. The behavior from Codepage to Unicode is not changed,
+ *  and ucnv_setToUCallBack would need to be called in order to change
+ *  that behavior too.
+ *
+ *  Here is an example with a context:
+ *
+ *  \code
+ *  UErrorCode err = U_ZERO_ERROR;
+ *  UConverter *myConverter = ucnv_open("ibm-949", &err);
+ *  const void *oldContext;
+ *  UConverterFromUCallback oldAction;
+ *
+ *
+ *  if (U_SUCCESS(err))
+ *  {
+ *      ucnv_setToUCallBack(myConverter,
+ *                       UCNV_TO_U_CALLBACK_SUBSTITUTE,
+ *                       UCNV_SUB_STOP_ON_ILLEGAL,
+ *                       &oldAction,
+ *                       &oldContext,
+ *                       &status);
+ *  }
+ *  \endcode
+ *
+ *  The code above tells "myConverter" to stop when it encounters an
+ *  ILLEGAL/TRUNCATED/INVALID sequences when it is used to convert from
+ *  Codepage -> Unicode. Any unmapped and legal characters will be
+ *  substituted to be the default substitution character.
  */
 
 /* This file isn't designed to be included all by itself. */
@@ -62,47 +93,47 @@
 
 
 /**
- * FROM_U, TO_U options for sub callback
+ * FROM_U, TO_U context options for sub callback
  * @stable ICU 2.0
  */
 #define UCNV_SUB_STOP_ON_ILLEGAL "i"
 
 /**
- * FROM_U, TO_U options for skip callback
+ * FROM_U, TO_U context options for skip callback
  * @stable ICU 2.0
  */
 #define UCNV_SKIP_STOP_ON_ILLEGAL "i"
 
 /**
- * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to ICU (%UXXXX) 
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to ICU (%UXXXX) 
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_ICU       NULL
 /**
- * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to JAVA (\uXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to JAVA (\uXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_JAVA      "J"
 /**
- * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to C (\uXXXX \UXXXXXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to C (\uXXXX \UXXXXXXXX)
  * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to C (\xXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_C         "C"
 /**
- * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to XML Decimal escape (&#DDDD)
- * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to XML Decimal escape (&#DDDD)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Decimal escape (&#DDDD)
+ * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Decimal escape (&#DDDD)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_XML_DEC   "D"
 /**
- * FROM_U_CALLBACK_ESCAPE option to escape the code unit according to XML Hex escape (&#xXXXX)
- * TO_U_CALLBACK_ESCAPE option to escape the character value accoding to XML Hex escape (&#xXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape the code unit according to XML Hex escape (&#xXXXX)
+ * TO_U_CALLBACK_ESCAPE context option to escape the character value accoding to XML Hex escape (&#xXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_XML_HEX   "X"
 /**
- * FROM_U_CALLBACK_ESCAPE option to escape teh code unit according to Unicode (U+XXXXX)
+ * FROM_U_CALLBACK_ESCAPE context option to escape teh code unit according to Unicode (U+XXXXX)
  * @stable ICU 2.0
  */
 #define UCNV_ESCAPE_UNICODE   "U"
