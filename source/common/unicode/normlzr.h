@@ -593,12 +593,12 @@ public:
    * Set the normalization mode for this object.
    * <p>
    * <b>Note:</b>If the normalization mode is changed while iterating
-   * over a string, calls to {@link next() } and {@link previous() } may
+   * over a string, calls to {@link #next() } and {@link #previous() } may
    * return previously buffers characters in the old normalization mode
    * until the iteration is able to re-sync at the next base character.
-   * It is safest to call {@link setIndexOnly }, {@link reset() },
-   * {@link setText }, {@link first() },
-   * {@link last() }, etc. after calling <code>setMode</code>.
+   * It is safest to call {@link #setIndexOnly }, {@link #reset() },
+   * {@link #setText }, {@link #first() },
+   * {@link #last() }, etc. after calling <code>setMode</code>.
    * <p>
    * @param newMode the new mode for this <code>Normalizer</code>.
    * @see #getUMode
