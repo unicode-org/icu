@@ -1264,7 +1264,7 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
     char     *fullname = NULL;
     int32_t  count     = 0;
     const char* cp = NULL;
-    const UChar* buffer = NULL;
+    const UChar* uBuffer = NULL;
     
     filename = getInvariantString(&line, status);
     count     = uprv_strlen(filename);
@@ -1322,8 +1322,8 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
 
-    buffer = ucbuf_getBuffer(ucbuf,&len,status);
-    result = string_open(bundle, tag,buffer,len, status);
+    uBuffer = ucbuf_getBuffer(ucbuf,&len,status);
+    result = string_open(bundle, tag, uBuffer, len, status);
 
     uprv_free(pTarget);
 
