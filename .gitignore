@@ -17,6 +17,7 @@ icu4c/debian
 icu4c/debian/*.debhelper
 icu4c/debian/*.substvars
 icu4c/debian/*files
+icu4c/debian/control
 icu4c/debian/docs
 icu4c/debian/icu
 icu4c/debian/icu-data
