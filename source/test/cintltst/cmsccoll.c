@@ -1533,7 +1533,6 @@ static void TestEmptyRule() {
 static void TestUCARules() {
   UErrorCode status = U_ZERO_ERROR;
   char blah[] =  "\\u9fff";
-  uint8_t res[256];
   UChar b[256];
   UChar *rules = b;
   UCollator *UCAfromRules = NULL;
@@ -2281,6 +2280,146 @@ static void TestCompressOverlap() {
     }
 }
 
+static void TestContraction() {
+    const static char *testrules[] = {
+        "&A = AB / B",
+        "&A = A\\u0306/\\u0306",
+        "&c = ch / h"
+    };
+    const static UChar testdata[][2] = {
+        {(UChar)'A', (UChar)'B'},
+        {(UChar)'A', (UChar)0x0306},
+        {(UChar)'c', (UChar)'h'}
+    };
+    const static UChar testdata2[][2] = {
+        {(UChar)'c', (UChar)'g'},
+        {(UChar)'c', (UChar)'h'},
+        {(UChar)'c', (UChar)'l'}
+    };
+    const static char *testrules3[] = {
+        "&z < xyz &xyzw < B",
+        "&z < xyz &xyz < B / w",
+        "&z < ch &achm < B",
+        "&z < ch &a < B / chm",
+        "&\\ud800\\udc00w < B",
+        "&\\ud800\\udc00 < B / w",
+        "&a\\ud800\\udc00m < B",
+        "&a < B / \\ud800\\udc00m",
+    };
+
+    UErrorCode  status   = U_ZERO_ERROR;
+    UCollator  *coll;
+    UChar       rule[32] = {0};
+    uint32_t    rlen     = 0;
+    int         i;
+
+    for (i = 0; i < sizeof(testrules) / sizeof(testrules[0]); i ++) {
+        UCollationElements *iter1;
+        int j = 0;
+        log_verbose("Rule %s for testing\n", testrules[i]);
+        rlen = u_unescape(testrules[i], rule, 32);
+        coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        if (U_FAILURE(status)) {
+            log_err("Collator creation failed %s\n", testrules[i]);
+            return;
+        }
+        iter1 = ucol_openElements(coll, testdata[i], 2, &status);
+        if (U_FAILURE(status)) {
+            log_err("Collation iterator creation failed\n");
+            return;
+        }
+        while (j < 2) {
+            UCollationElements *iter2 = ucol_openElements(coll, 
+                                                         &(testdata[i][j]), 
+                                                         1, &status);
+            uint32_t ce;
+            if (U_FAILURE(status)) {
+                log_err("Collation iterator creation failed\n");
+                return;
+            }
+            ce = ucol_next(iter2, &status);
+            while (ce != UCOL_NULLORDER) {
+                if ((uint32_t)ucol_next(iter1, &status) != ce) {
+                    log_err("Collation elements in contraction split does not match\n");
+                    return;
+                }
+                ce = ucol_next(iter2, &status);
+            }
+            j ++;
+            ucol_closeElements(iter2);
+        }
+        if (ucol_next(iter1, &status) != UCOL_NULLORDER) {
+            log_err("Collation elements not exhausted\n");
+            return;
+        }
+        ucol_closeElements(iter1);
+        ucol_close(coll);
+    }
+
+    rlen = u_unescape("& a < b < c < ch < d & c = ch / h", rule, 32);
+    coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+    if (ucol_strcoll(coll, testdata2[0], 2, testdata2[1], 2) != UCOL_LESS) {
+        log_err("Expected \\u%04x\\u%04x < \\u%04x\\u%04x\n",
+                testdata2[0][0], testdata2[0][1], testdata2[1][0], 
+                testdata2[1][1]);
+        return;
+    }
+    if (ucol_strcoll(coll, testdata2[1], 2, testdata2[2], 2) != UCOL_LESS) {
+        log_err("Expected \\u%04x\\u%04x < \\u%04x\\u%04x\n",
+                testdata2[1][0], testdata2[1][1], testdata2[2][0], 
+                testdata2[2][1]);
+        return;
+    }
+    ucol_close(coll);
+
+    for (i = 0; i < sizeof(testrules3) / sizeof(testrules3[0]); i += 2) {
+        UCollator          *coll1,
+                           *coll2;
+        UCollationElements *iter1,
+                           *iter2;
+        UChar               ch = 'B';
+        uint32_t            ce;
+        rlen = u_unescape(testrules3[i << 1], rule, 32);
+        coll1 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        rlen = u_unescape(testrules3[(i << 1) + 1], rule, 32);
+        coll2 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        if (U_FAILURE(status)) {
+            log_err("Collator creation failed %s\n", testrules[i]);
+            return;
+        }
+        iter1 = ucol_openElements(coll1, &ch, 1, &status);
+        iter2 = ucol_openElements(coll2, &ch, 1, &status);
+        if (U_FAILURE(status)) {
+            log_err("Collation iterator creation failed\n");
+            return;
+        }
+        ce = ucol_next(iter1, &status);
+        if (U_FAILURE(status)) {
+            log_err("Retrieving ces failed\n");
+            return;
+        }
+        while (ce != UCOL_NULLORDER) {
+            if (ce != (uint32_t)ucol_next(iter2, &status)) {
+                log_err("CEs does not match\n");
+                return;
+            }
+            ce = ucol_next(iter1, &status);
+            if (U_FAILURE(status)) {
+                log_err("Retrieving ces failed\n");
+                return;
+            }
+        }
+        if (ucol_next(iter2, &status) != UCOL_NULLORDER) {
+            log_err("CEs not exhausted\n");
+            return;
+        }
+        ucol_closeElements(iter1);
+        ucol_closeElements(iter2);
+        ucol_close(coll1);
+        ucol_close(coll2);
+    }
+}
+
 void addMiscCollTest(TestNode** root)
 {
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
@@ -2306,6 +2445,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestIncrementalNormalize, "tscoll/cmsccoll/TestIncrementalNormalize");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
     addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
+    addTest(root, &TestContraction, "tscoll/cmsccoll/TestContraction");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
 }
