@@ -1264,7 +1264,8 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         UBool isRoot = strcmp(rootName, "root") == 0;
                         UBool isSpecial = FALSE;
                         if (currentBundleKey) {
-                            isSpecial = strcmp(currentBundleKey, "Currencies") == 0;
+                            isSpecial = (strcmp(currentBundleKey, "Currencies") == 0 
+                              || strcmp(currentBundleKey, "collations") == 0);
                         }
 
                         if ((isRoot && !isSpecial)

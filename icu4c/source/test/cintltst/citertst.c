@@ -571,7 +571,7 @@ static void TestOffset()
     u_uastrcpy(test1, "What subset of all possible test cases?");
     u_uastrcpy(test2, "has the highest probability of detecting");
     en_us = ucol_open("en_US", &status);
-    log_verbose("Testing getOffset and setOffset for CollationElements\n");
+    log_verbose("Testing getOffset and setOffset for collations\n");
     iter = ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
