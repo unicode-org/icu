@@ -43,6 +43,7 @@ DEFS += -DU_LAYOUT_IMPLEMENTATION
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS =  loengine.o \
+LEFontInstance.o \
 OpenTypeLayoutEngine.o \
 ThaiLayoutEngine.o \
 ThaiShaping.o \

@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     le_int32 failures = 0;
 
     for (le_int32 test = 0; test < testCount; test += 1) {
-        PFIErrorCode fontStatus = PFI_NO_ERROR;
+        LEErrorCode fontStatus = LE_NO_ERROR;
 
         printf("Test %d, font = %s... ", test, testInputs[test].fontName);
 

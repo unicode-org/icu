@@ -262,6 +262,10 @@ SOURCE=.\LayoutEngine.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LEFontInstance.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\LigatureSubstProc.cpp
 # End Source File
 # Begin Source File

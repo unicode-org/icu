@@ -17,48 +17,31 @@
 
 #include <stdio.h>
 
-#include "LETypes.h"
-#include "LEFontInstance.h"
+#include "layout/LETypes.h"
+#include "layout/LEFontInstance.h"
+
+#include "FontTableCache.h"
 
 #include "sfnt.h"
 #include "cmaps.h"
 
-#define TABLE_CACHE_INIT 5
-#define TABLE_CACHE_GROW 5
-
-struct TableCacheEntry
-{
-    LETag tag;
-    void *table;
-};
-
-enum PFIErrorCode {
-    PFI_NO_ERROR = 0,
-
-    PFI_FONT_FILE_NOT_FOUND_ERROR = 1,
-    PFI_MISSING_FONT_TABLE_ERROR  = 2,
-    PFI_OUT_OF_MEMORY_ERROR       = 3
-};
-
-#ifndef XP_CPLUSPLUS
-typedef enum PFIErrorCode PFIErrorCode;
-#endif
-
-class PortableFontInstance : public LEFontInstance
+class PortableFontInstance : public LEFontInstance, protected FontTableCache
 {
 private:
     FILE *fFile;
 
-    float fUnitsPerEM;
-    float fPointSize;
+    float    fPointSize;
+    le_int32 fUnitsPerEM;
+    le_int32 fAscent;
+    le_int32 fDescent;
+    le_int32 fLeading;
 
     const SFNTDirectory *fDirectory;
     le_uint16 fDirPower;
     le_uint16 fDirExtra;
 
-    TableCacheEntry *fTableCache;
-    le_int32 fTableCacheCurr;
-    le_int32 fTableCacheSize;
+    float fDeviceScaleX;
+    float fDeviceScaleY;
 
     CMAPMapper *fCMAPMapper;
 
@@ -68,52 +51,47 @@ private:
 
     static le_int8 highBit(le_int32 value);
 
-    PFIErrorCode PortableFontInstance::initFontTableCache();
-    void PortableFontInstance::flushFontTableCache();
-
     const DirectoryEntry *findTable(LETag tag) const;
     const void *readTable(LETag tag, le_uint32 *length) const;
     void deleteTable(const void *table) const;
+    void getMetrics();
 
-    CMAPMapper *PortableFontInstance::findUnicodeMapper();
+    CMAPMapper *findUnicodeMapper();
+
+protected:
+    const void *readFontTable(LETag tableTag) const;
 
 public:
-    PortableFontInstance(char *fileName, float pointSize, PFIErrorCode &status);
+    PortableFontInstance(char *fileName, float pointSize, LEErrorCode &status);
 
     virtual ~PortableFontInstance();
 
     virtual const void *getFontTable(LETag tableTag) const;
 
-    virtual le_bool canDisplay(LEUnicode32 ch) const
-    {
-        return (le_bool) fCMAPMapper->unicodeToGlyph(ch) != 0;
-    };
-
     virtual le_int32 getUnitsPerEM() const
     {
-        return (le_int32) fUnitsPerEM;
+        return fUnitsPerEM;
     };
 
-    virtual le_int32 getLineHeight() const
+    virtual le_int32 getAscent() const
     {
-        // this is a cheap hack!!
-    return (le_int32) fPointSize;
-    };
+        return fAscent;
+    }
 
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const;
-
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
-
-    virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const
+    virtual le_int32 getDescent() const
     {
-        // This is only used for CDAC fonts, and we'll have to loose that support anyhow...
-        //return (le_int32) fFontObject->getName(platformID, scriptID, languageID, nameID, name);
-        if (name != NULL) {
-            *name = 0;
-        }
+        return fDescent;
+    }
 
-        return 0;
-    };
+    virtual le_int32 getLeading() const
+    {
+        return fLeading;
+    }
+
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const
+    {
+        return fCMAPMapper->unicodeToGlyph(ch);
+    }
 
     virtual void getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const;
 
@@ -129,39 +107,16 @@ public:
         return fPointSize;
     };
 
-    float xUnitsToPoints(float xUnits) const
+    float getScaleFactorX() const
     {
-        return (xUnits * fPointSize) / fUnitsPerEM;
-    };
-
-    float yUnitsToPoints(float yUnits) const
-    {
-        return (yUnits * fPointSize) / fUnitsPerEM;
-    };
-
-    void unitsToPoints(LEPoint &units, LEPoint &points) const
-    {
-        points.fX = xUnitsToPoints(units.fX);
-        points.fY = yUnitsToPoints(units.fY);
+        return 1.0;
     }
 
-    float xPixelsToUnits(float xPixels) const
+    float getScaleFactorY() const
     {
-        return (xPixels * fUnitsPerEM) / fPointSize;
-    };
+        return 1.0;
+    }
 
-    float yPixelsToUnits(float yPixels) const
-    {
-        return (yPixels * fUnitsPerEM) / fPointSize;
-    };
-
-    void pixelsToUnits(LEPoint &pixels, LEPoint &units) const
-    {
-        units.fX = xPixelsToUnits(pixels.fX);
-        units.fY = yPixelsToUnits(pixels.fY);
-    };
-
-    void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const;
 };
 
 #endif
