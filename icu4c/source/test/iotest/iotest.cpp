@@ -1,4 +1,4 @@
-/*  
+/*
 **********************************************************************
 *   Copyright (C) 2002-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -1191,7 +1191,7 @@ static void TestStream() {
     if (strcmp(testStreamBuf, testStr) != 0) {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
     }
-    
+
     inTestStream >> inStr >> inStr2;
     if (inStr.compare(thisMu) != 0) {
         u_austrncpy(inStrC, inStr.getBuffer(), inStr.length());
@@ -1222,16 +1222,16 @@ static void TestTranslitOps()
     UFILE *f;
     UErrorCode err = U_ZERO_ERROR;
     UTransliterator *a = NULL, *b = NULL, *c = NULL;
-    
+
     log_verbose("opening a transliterator and UFILE for testing\n");
-    
+
     f = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);
     if(f == NULL)
     {
         log_err("Couldn't open test file for writing");
         return;
     }
-    
+
     a = utrans_open("Latin-Greek", UTRANS_FORWARD, NULL, -1, NULL, &err);
     if(U_FAILURE(err))
     {
@@ -1239,36 +1239,36 @@ static void TestTranslitOps()
         u_fclose(f);
         return;
     }
-    
-    
+
+
     log_verbose("setting a transliterator\n");
     b = u_fsettransliterator(f, U_WRITE, a, &err);
-    if(U_FAILURE(err)) 
+    if(U_FAILURE(err))
     {
         log_err("Err setting transliterator %s\n", u_errorName(err));
         u_fclose(f);
         return;
     }
-    
+
     if(b != NULL)
     {
         log_err("Err, a transliterator was already set!\n");
     }
-    
+
     log_verbose("un-setting transliterator (setting to null)\n");
     c = u_fsettransliterator(f, U_WRITE, NULL, &err);
-    if(U_FAILURE(err)) 
+    if(U_FAILURE(err))
     {
         log_err("Err setting transliterator %s\n", u_errorName(err));
         u_fclose(f);
         return;
     }
-    
+
     if(c != a)
     {
         log_err("Err, transliterator that came back was not the original one.\n");
     }
-    
+
     log_verbose("Trying to set read transliterator (should fail)\n");
     b = u_fsettransliterator(f, U_READ, NULL, &err);
     if(err != U_UNSUPPORTED_ERROR)
@@ -1282,8 +1282,8 @@ static void TestTranslitOps()
         log_verbose("Got %s error (expected) setting READ transliterator.\n", u_errorName(err));
         err = U_ZERO_ERROR;
     }
-    
-    
+
+
     utrans_close(c);
     u_fclose(f);
 }
@@ -1297,16 +1297,16 @@ static void TestTranslitOut()
     UChar compare[] = { 0xfeff, 0x03a3, 0x03c4, 0x03b5, 0x03c6, 0x1f00, 0x03bd, 0x03bf, 0x03c2, 0x0000 };
     UChar ubuf[256];
     int len;
-    
+
     log_verbose("opening a transliterator and UFILE for testing\n");
-    
+
     f = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", "utf-16");
     if(f == NULL)
     {
         log_err("Couldn't open test file for writing");
         return;
     }
-    
+
     a = utrans_open("Latin-Greek", UTRANS_FORWARD, NULL, -1, NULL, &err);
     if(U_FAILURE(err))
     {
@@ -1314,25 +1314,25 @@ static void TestTranslitOut()
         u_fclose(f);
         return;
     }
-    
+
     log_verbose("setting a transliterator\n");
     b = u_fsettransliterator(f, U_WRITE, a, &err);
-    if(U_FAILURE(err)) 
+    if(U_FAILURE(err))
     {
         log_err("Err setting transliterator %s\n", u_errorName(err));
         u_fclose(f);
         return;
     }
-    
+
     if(b != NULL)
     {
         log_err("Err, a transliterator was already set!\n");
     }
-    
-    u_fprintf(f, "%KStephanos", 0xFEFF);
-    
+
+    u_fprintf(f, "Stephanos");
+
     u_fclose(f);
-    
+
     log_verbose("Re reading test file to verify transliteration\n");
     infile = fopen(STANDARD_TEST_FILE, "rb");
     if(infile == NULL)
@@ -1340,7 +1340,7 @@ static void TestTranslitOut()
         log_err("Couldn't reopen test file\n");
         return;
     }
-    
+
     len=fread(ubuf, sizeof(UChar), u_strlen(compare), infile);
     log_verbose("Read %d UChars\n", len);
     if(len != u_strlen(compare))
@@ -1348,12 +1348,12 @@ static void TestTranslitOut()
         log_err("Wanted %d UChars from file, got %d\n", u_strlen(compare), len);
     }
     ubuf[len]=0;
-    
+
     if(u_strlen(compare) != u_strlen(ubuf))
     {
         log_err("Wanted %d UChars from file, but u_strlen() returns %d\n", u_strlen(compare), len);
     }
-    
+
     if(u_strcmp(compare, ubuf))
     {
         log_err("Read string doesn't match expected.\n");
@@ -1362,9 +1362,9 @@ static void TestTranslitOut()
     {
         log_verbose("Read string matches expected.\n");
     }
-    
+
     fclose(infile);
-    
+
 }
 
 static void addAllTests(TestNode** root) {
