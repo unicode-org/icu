@@ -583,12 +583,6 @@ getNextSeparator(UChar *src,int32_t srcLength,NamePrepTransform* prep,
                 
             }
         }
-        // we have not found the delimiter
-        if(i==srcLength){
-            *limit = src+srcLength;
-            *done = TRUE;
-        }
-        return i;
     }else{
         int32_t i;
         for(i=0;i<srcLength;i++){
