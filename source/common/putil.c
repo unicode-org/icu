@@ -213,8 +213,8 @@ uprv_isNaN(double number)
   uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
                              sizeof(uint32_t));
 
-  return ((highBits & 0x7FF00000L) == 0x7FF00000L) && 
-    (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0));
+  return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) && 
+    (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
 #else
   /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
   /* you'll need to replace this default implementation with what's correct*/
@@ -253,7 +253,8 @@ uprv_isInfinite(double number)
   uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
                              sizeof(uint32_t));
   
-  return ((highBits  & ~SIGN) == 0x7FF00000L) && (lowBits == 0x00000000L);
+  return (UBool)(((highBits  & ~SIGN) == 0x7FF00000L) &&
+      (lowBits == 0x00000000L));
 #else
   /* If your platform doesn't support IEEE 754 but *does* have an infinity*/
   /* value, you'll need to replace this default implementation with what's*/
@@ -274,7 +275,7 @@ UBool
 uprv_isPositiveInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
-  return (number > 0 && uprv_isInfinite(number));
+  return (UBool)(number > 0 && uprv_isInfinite(number));
 #else
   return uprv_isInfinite(number);
 #endif
@@ -284,7 +285,7 @@ UBool
 uprv_isNegativeInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
-  return (number < 0 && uprv_isInfinite(number));
+  return (UBool)(number < 0 && uprv_isInfinite(number));
 #else
   uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                             sizeof(uint32_t));
@@ -634,17 +635,17 @@ uprv_digitsAfterDecimal(double x)
   if (p == 0)
     return 0;
   
-  ptPos = p - buffer;
-  numDigits = strlen(buffer) - ptPos - 1;
+  ptPos = (int16_t)(p - buffer);
+  numDigits = (int16_t)(strlen(buffer) - ptPos - 1);
   
   /* if the number's string representation is in scientific notation, find */
   /* the exponent and take it into account*/
   exponent = 0;
   p = uprv_strchr(buffer, 'e');
   if (p != 0) {
-    int16_t expPos = p - buffer;
+    int16_t expPos = (int16_t)(p - buffer);
     numDigits -= strlen(buffer) - expPos;
-    exponent = atoi(p + 1);
+    exponent = (int16_t)(atoi(p + 1));
   }
   
   /* the string representation may still have spurious decimal digits in it, */
@@ -1800,14 +1801,14 @@ u_versionToString(UVersionInfo versionArray, char *versionString) {
         /* write the decimal field value */
         field=versionArray[0];
         if(field>=100) {
-            *versionString++='0'+field/100;
+            *versionString++=(char)('0'+field/100);
             field%=100;
         }
         if(field>=10) {
-            *versionString++='0'+field/10;
+            *versionString++=(char)('0'+field/10);
             field%=10;
         }
-        *versionString++='0'+field;
+        *versionString++=(char)('0'+field);
 
         /* write the following parts */
         for(part=1; part<count; ++part) {
@@ -1817,14 +1818,14 @@ u_versionToString(UVersionInfo versionArray, char *versionString) {
             /* write the decimal field value */
             field=versionArray[part];
             if(field>=100) {
-                *versionString++='0'+field/100;
+                *versionString++=(char)('0'+field/100);
                 field%=100;
             }
             if(field>=10) {
-                *versionString++='0'+field/10;
+                *versionString++=(char)('0'+field/10);
                 field%=10;
             }
-            *versionString++='0'+field;
+            *versionString++=(char)('0'+field);
         }
     }
 
