@@ -29,6 +29,7 @@
 #include "unicode/unorm.h"
 #include "unicode/udata.h"
 
+#include "unormimp.h"
 #include "cpputils.h"
 #include "cstring.h"
 #include "ucmp32.h"
@@ -50,8 +51,6 @@
 #define ZERO_CC_LIMIT_            0xC0
 
 static UCollator* UCA = NULL;
-
-extern "C" UBool checkFCD(const UChar*, int32_t, UErrorCode*);
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
@@ -672,14 +671,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
     opts->alternateHandling = result->alternateHandling;
 }
 
-
-U_CAPI const uint16_t * getFCHK_STAGE_1_(UErrorCode *);
-U_CAPI const uint16_t * getFCHK_STAGE_2_(UErrorCode *);
-U_CAPI const uint16_t * getFCHK_STAGE_3_(UErrorCode *);
-
-static const uint16_t *FCD_STAGE_1_;
-static const uint16_t *FCD_STAGE_2_;
-static const uint16_t *FCD_STAGE_3_;
+static const uint16_t *fcdTrieIndex=NULL;
 
 
 /**
@@ -807,14 +799,8 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->expansionCESize = (uint8_t*)result->image +
                                                result->image->expansionCESize;
 
-    if (FCD_STAGE_1_ == NULL) {
-        FCD_STAGE_1_ = getFCHK_STAGE_1_(status);
-    }
-    if (FCD_STAGE_2_ == NULL) {
-        FCD_STAGE_2_ = getFCHK_STAGE_2_(status);
-    }
-    if (FCD_STAGE_3_ == NULL) {
-        FCD_STAGE_3_ = getFCHK_STAGE_3_(status);
+    if (fcdTrieIndex == NULL) {
+        fcdTrieIndex = unorm_getFCDTrie(status);
     }
 
     result->errorCode = *status;
@@ -929,10 +915,8 @@ void collIterNormalize(collIterate *collationSource)
 /*          True because the previous call to this function will have always exited       */
 /*          that way, and we get called for every char where cc might be non-zero.        */
 inline UBool collIterFCD(collIterate *collationSource) {
-    UChar32     codepoint;
-    UChar       *srcP;
-    int32_t     length;
-    int32_t     count = 0;
+    UChar       c, c2;
+    const UChar *srcP, *endP;
     uint8_t     leadingCC;
     uint8_t     prevTrailingCC = 0;
     uint16_t    fcd;
@@ -940,52 +924,64 @@ inline UBool collIterFCD(collIterate *collationSource) {
 
     srcP = collationSource->pos-1;
 
-    // If the source string is null terminated, use a fake too-long string length
-    //    (needed for UTF_NEXT_CHAR).  null will stop everything OK.)
-    length = (collationSource->flags & UCOL_ITER_HASLEN) ? collationSource->endp - srcP : INT32_MAX;
+    if (collationSource->flags & UCOL_ITER_HASLEN) {
+        endP = collationSource->endp;
+    } else {
+        endP = NULL;
+    }
 
     // Get the trailing combining class of the current character.  If it's zero,
     //   we are OK.
-    UTF_NEXT_CHAR(srcP, count, length, codepoint);
+    c = *srcP++;
     /* trie access */
-    fcd = FCD_STAGE_3_[
-        FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
-        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-        (codepoint & STAGE_3_MASK_)];
-    prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
-
-    if (prevTrailingCC != 0) {
-        // The current char has a non-zero trailing CC.  Scan forward until we find
-        //   a char with a leading cc of zero.
-        for (;;)
-        {
-            if (count >= length) {
-                break;
+    fcd = unorm_getFCD16(fcdTrieIndex, c);
+    if (fcd != 0) {
+        if (UTF_IS_FIRST_SURROGATE(c)) {
+            if ((endP == NULL || srcP != endP) && UTF_IS_SECOND_SURROGATE(c2=*srcP)) {
+                ++srcP;
+                fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c2);
+            } else {
+                fcd = 0;
             }
-            int32_t savedCount = count;
-            UTF_NEXT_CHAR(srcP, count, length, codepoint);
+        }
 
-            /* trie access */
-            fcd = FCD_STAGE_3_[
-                FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
-                ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-                (codepoint & STAGE_3_MASK_)];
-            leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
-            if (leadingCC == 0) {
-                count = savedCount;    // Hit char that is not part of combining sequence.
-                                       //   back up over it.  (Could be surrogate pair!)
-                break;
+        prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
+
+        if (prevTrailingCC != 0) {
+            // The current char has a non-zero trailing CC.  Scan forward until we find
+            //   a char with a leading cc of zero.
+            while (endP == NULL || srcP != endP)
+            {
+                const UChar *savedSrcP = srcP;
+
+                c = *srcP++;
+                /* trie access */
+                fcd = unorm_getFCD16(fcdTrieIndex, c);
+                if (fcd != 0 && UTF_IS_FIRST_SURROGATE(c)) {
+                    if ((endP == NULL || srcP != endP) && UTF_IS_SECOND_SURROGATE(c2=*srcP)) {
+                        ++srcP;
+                        fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c2);
+                    } else {
+                        fcd = 0;
+                    }
+                }
+                leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
+                if (leadingCC == 0) {
+                    srcP = savedSrcP;      // Hit char that is not part of combining sequence.
+                                           //   back up over it.  (Could be surrogate pair!)
+                    break;
+                }
+
+                if (leadingCC < prevTrailingCC) {
+                    needNormalize = TRUE;
+                }
+
+                prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
             }
-
-            if (leadingCC < prevTrailingCC) {
-                needNormalize = TRUE;
-            }
-
-            prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
         }
     }
 
-    collationSource->fcdPosition = srcP + count;
+    collationSource->fcdPosition = (UChar *)srcP;
 
     return needNormalize;
 }
@@ -1208,23 +1204,29 @@ void collPrevIterNormalize(collIterate *data)
 */
 inline UBool collPrevIterFCD(collIterate *data)
 {
-    UChar32     codepoint;
+    const UChar *src, *start;
+    UChar       c, c2;
     uint8_t     leadingCC;
     uint8_t     trailingCC = 0;
     uint16_t    fcd;
     UBool       result = FALSE;
-    int32_t         length;
 
-    length = (data->pos + 1) - data->string;
+    start = data->string;
+    src = data->pos + 1;
 
     /* Get the trailing combining class of the current character. */
-    UTF_PREV_CHAR(data->string, 0, length, codepoint);
-
-    /* trie access */
-    fcd = FCD_STAGE_3_[
-        FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
-        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-        (codepoint & STAGE_3_MASK_)];
+    c = *--src;
+    if (!UTF_IS_SURROGATE(c)) {
+        fcd = unorm_getFCD16(fcdTrieIndex, c);
+    } else if (UTF_IS_SECOND_SURROGATE(c) && start < src && UTF_IS_FIRST_SURROGATE(c2 = *(src - 1))) {
+        --src;
+        fcd = unorm_getFCD16(fcdTrieIndex, c2);
+        if (fcd != 0) {
+            fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c);
+        }
+    } else /* unpaired surrogate */ {
+        fcd = 0;
+    }
 
     leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
 
@@ -1235,18 +1237,23 @@ inline UBool collPrevIterFCD(collIterate *data)
         */
         for (;;)
         {
-            if (length <= 0) {
-                length = -1;
-                break;
+            if (start == src) {
+                data->fcdPosition = NULL;
+                return result;
             }
 
-            UTF_PREV_CHAR(data->string, 0, length, codepoint);
-
-            /* trie access */
-            fcd = FCD_STAGE_3_[
-                FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
-                ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-                (codepoint & STAGE_3_MASK_)];
+            c = *--src;
+            if (!UTF_IS_SURROGATE(c)) {
+                fcd = unorm_getFCD16(fcdTrieIndex, c);
+            } else if (UTF_IS_SECOND_SURROGATE(c) && start < src && UTF_IS_FIRST_SURROGATE(c2 = *(src - 1))) {
+                --src;
+                fcd = unorm_getFCD16(fcdTrieIndex, c2);
+                if (fcd != 0) {
+                    fcd = unorm_getFCD16FromSurrogatePair(fcdTrieIndex, fcd, c);
+                }
+            } else /* unpaired surrogate */ {
+                fcd = 0;
+            }
 
             trailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
 
@@ -1262,12 +1269,7 @@ inline UBool collPrevIterFCD(collIterate *data)
         }
     }
 
-    if (length < 0) {
-        data->fcdPosition = NULL;
-    }
-    else {
-        data->fcdPosition = data->string + length;
-    }
+    data->fcdPosition = (UChar *)src;
 
     return result;
 }
@@ -3103,7 +3105,7 @@ ucol_calcSortKey(const    UCollator    *coll,
       }
     } else if((normMode != UCOL_OFF)
       /* changed by synwee */
-      && !checkFCD(source, len, status))
+      && UNORM_YES!=unorm_quickCheck(source, len, UNORM_FCD, status))
     {
         normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
@@ -3595,7 +3597,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
     if(normMode != UCOL_OFF) {
-        if (!checkFCD(source, len, status))
+        if (UNORM_YES!=unorm_quickCheck(source, len, UNORM_FCD, status))
         {
             normSourceLen = unorm_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
             if(U_FAILURE(*status)) {
