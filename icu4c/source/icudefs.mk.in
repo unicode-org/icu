@@ -156,7 +156,10 @@ A = a
 
 # Force removal [for make clean]
 RMV = rm -rf
+
 # Platform commands to remove or move executable and library targets
+# INSTALL-L installs libraries. Override in mh-* file to INSTALL_PROGRAM
+#           when the library needs to have executable permissions
 INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
