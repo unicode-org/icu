@@ -31,6 +31,7 @@
 /** source/i18n/i18n.dsp - same as for the common.dsp                         */
 /** source/layout/layout.dsp - same as for the common.dsp                     */
 /** source/extra/ustdio/ustdio.dsp - same as for the common.dsp               */
+/** source/stubdata/stubdata.dsp - same as for the common.dsp                 */
 /** source/data/makedata.mak - change U_ICUDATA_NAME so that it contains      */
 /**                            the new major/minor combination                */
 /** source/tools/genren/genren.pl - use this script according to the README   */
