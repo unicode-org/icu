@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/09/24 22:06:27 $
- * $Revision: 1.99 $
+ * $Date: 2003/09/29 15:25:08 $
+ * $Revision: 1.100 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.Iterator;
-
+import java.util.Collection;
 
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
@@ -2318,6 +2318,28 @@ public class UnicodeSet extends UnicodeFilter {
                                            '"');
     }
 
+    /**
+     * Add the contents of the UnicodeSet (as strings) into a collection.
+     * @param target collection to add into
+     */
+    public void addAllTo(Collection target) {
+        UnicodeSetIterator it = new UnicodeSetIterator(this);
+        while (it.next()) {
+            target.add(it.getString());
+        }
+    }
+
+    /**
+     * Add the contents of the collection (as strings) into this UnicodeSet.
+     * @param source
+     */
+    public void addAll(Collection source) {
+        Iterator it = source.iterator();
+        while (it.hasNext()) {
+            source.add(it.next().toString());
+        }
+    }
+
     //----------------------------------------------------------------
     // Implementation: Utility methods
     //----------------------------------------------------------------
@@ -2872,7 +2894,7 @@ public class UnicodeSet extends UnicodeFilter {
                             return this;
                         } else {
                             // Property name was never matched.
-                            throw new IllegalArgumentException("Invalid property alias");
+                            throw new IllegalArgumentException("Invalid property alias: " + propertyAlias + "=" + valueAlias);
                         }
                     } else {
                         // Valid propery name, but it isn't binary, so the value
