@@ -558,8 +558,9 @@ TimeZone::initDefault()
     // Construct a fixed standard zone with the host's ID
     // and raw offset.
     if (default_zone == NULL) {
+        /* Use Invariant conversion to get the real name */
         default_zone =
-            new SimpleTimeZone(rawOffset, UnicodeString(hostID, (char*)0));
+            new SimpleTimeZone(rawOffset, UnicodeString(hostID, ""));
     }
 
     // If we _still_ don't have a time zone, use GMT.
