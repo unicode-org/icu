@@ -1322,6 +1322,14 @@ InputPath=.\unicode\numfmt.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\olsontz.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\olsontz.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\rbnf.cpp
 # End Source File
 # Begin Source File
