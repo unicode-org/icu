@@ -457,9 +457,9 @@ public:
 private:
     ResourceBundle(); // default constructor not implemented
 
-    UResourceBundle *resource;
+    UResourceBundle *fResource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
-    Locale *locName;
+    Locale *fLocale;
 
 };
 

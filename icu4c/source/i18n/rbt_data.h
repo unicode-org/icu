@@ -130,19 +130,9 @@ public:
      */
     UnicodeReplacer* lookupReplacer(UChar32 standIn) const;
 
-    /**
-     *  Acquire the mutex lock for this data.
-     */
-    void lock();
-
-    /**
-     *  Release the mutex lock for this data
-     */
-    void unlock();
 
 private:
     TransliterationRuleData &operator=(const TransliterationRuleData &other); // forbid copying of this class
-    UMTX    fLock;
 };
 
 U_NAMESPACE_END

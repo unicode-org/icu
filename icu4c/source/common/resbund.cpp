@@ -48,6 +48,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/resbund.h"
+#include "umutex.h"
 
 #include "uresimp.h"
 
@@ -172,52 +173,52 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ResourceBundle)
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const Locale&           locale,
                                 UErrorCode&              error)
-                                :UObject(), locName(NULL)
+                                :UObject(), fLocale(NULL)
 {
     constructForLocale(path, locale, error);
 }
 
 ResourceBundle::ResourceBundle(UErrorCode &err)
-                                :UObject(), locName(NULL)
+                                :UObject(), fLocale(NULL)
 {
-    resource = ures_open(0, Locale::getDefault().getName(), &err);
+    fResource = ures_open(0, Locale::getDefault().getName(), &err);
 }
 
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
-                                :UObject(), locName(NULL)
+                                :UObject(), fLocale(NULL)
 {
     constructForLocale(path, Locale::getDefault(), error);
 }
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other)
-                              :UObject(other), locName(NULL)
+                              :UObject(other), fLocale(NULL)
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    if (other.resource) {
-        resource = ures_copyResb(0, other.resource, &status);
+    if (other.fResource) {
+        fResource = ures_copyResb(0, other.fResource, &status);
     } else {
         /* Copying a bad resource bundle */
-        resource = NULL;
+        fResource = NULL;
     }
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err)
-                               :UObject(), locName(NULL)
+                               :UObject(), fLocale(NULL)
 {
     if (res) {
-        resource = ures_copyResb(0, res, &err);
+        fResource = ures_copyResb(0, res, &err);
     } else {
         /* Copying a bad resource bundle */
-        resource = NULL;
+        fResource = NULL;
     }
 }
 
 ResourceBundle::ResourceBundle(const char* path, const Locale& locale, UErrorCode& err) 
-                               :UObject(), locName(NULL)
+                               :UObject(), fLocale(NULL)
 {
-    resource = ures_open(path, locale.getName(), &err);
+    fResource = ures_open(path, locale.getName(), &err);
 }
 
 
@@ -226,27 +227,27 @@ ResourceBundle& ResourceBundle::operator=(const ResourceBundle& other)
     if(this == &other) {
         return *this;
     }
-    if(resource != 0) {
-        ures_close(resource);
-        resource = NULL;
+    if(fResource != 0) {
+        ures_close(fResource);
+        fResource = NULL;
     }
     UErrorCode status = U_ZERO_ERROR;
-    if (other.resource) {
-        resource = ures_copyResb(0, other.resource, &status);
+    if (other.fResource) {
+        fResource = ures_copyResb(0, other.fResource, &status);
     } else {
         /* Copying a bad resource bundle */
-        resource = NULL;
+        fResource = NULL;
     }
     return *this;
 }
 
 ResourceBundle::~ResourceBundle()
 {
-    if(resource != 0) {
-        ures_close(resource);
+    if(fResource != 0) {
+        ures_close(fResource);
     }
-    if(locName != NULL) {
-      delete(locName);
+    if(fLocale != NULL) {
+      delete(fLocale);
     }
 }
 
@@ -264,63 +265,63 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 
     if(!path.isEmpty()) {
         path.extract(name, sizeof(name), 0, error);
-        resource = ures_open(name, locale.getName(), &error);
+        fResource = ures_open(name, locale.getName(), &error);
     } else {
-        resource = ures_open(0, locale.getName(), &error);
+        fResource = ures_open(0, locale.getName(), &error);
     }
 }
 
 UnicodeString ResourceBundle::getString(UErrorCode& status) const {
     int32_t len = 0;
-    const UChar *r = ures_getString(resource, &len, &status);
+    const UChar *r = ures_getString(fResource, &len, &status);
     return UnicodeString(TRUE, r, len);
 }
 
 const uint8_t *ResourceBundle::getBinary(int32_t& len, UErrorCode& status) const {
-    return ures_getBinary(resource, &len, &status);
+    return ures_getBinary(fResource, &len, &status);
 }
 
 const int32_t *ResourceBundle::getIntVector(int32_t& len, UErrorCode& status) const {
-    return ures_getIntVector(resource, &len, &status);
+    return ures_getIntVector(fResource, &len, &status);
 }
 
 uint32_t ResourceBundle::getUInt(UErrorCode& status) const {
-    return ures_getUInt(resource, &status);
+    return ures_getUInt(fResource, &status);
 }
 
 int32_t ResourceBundle::getInt(UErrorCode& status) const {
-    return ures_getInt(resource, &status);
+    return ures_getInt(fResource, &status);
 }
 
 const char *ResourceBundle::getName(void) {
-    return ures_getName(resource);
+    return ures_getName(fResource);
 }
 
 const char *ResourceBundle::getKey(void) {
-    return ures_getKey(resource);
+    return ures_getKey(fResource);
 }
 
 UResType ResourceBundle::getType(void) {
-    return ures_getType(resource);
+    return ures_getType(fResource);
 }
 
 int32_t ResourceBundle::getSize(void) const {
-    return ures_getSize(resource);
+    return ures_getSize(fResource);
 }
 
 UBool ResourceBundle::hasNext(void) const {
-    return ures_hasNext(resource);
+    return ures_hasNext(fResource);
 }
 
 void ResourceBundle::resetIterator(void) {
-    ures_resetIterator(resource);
+    ures_resetIterator(fResource);
 }
 
 ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
     UResourceBundle r;
 
     ures_initStackObject(&r);
-    ures_getNextResource(resource, &r, &status);
+    ures_getNextResource(fResource, &r, &status);
     ResourceBundle res(&r, status);
     if (U_SUCCESS(status)) {
         ures_close(&r);
@@ -330,13 +331,13 @@ ResourceBundle ResourceBundle::getNext(UErrorCode& status) {
 
 UnicodeString ResourceBundle::getNextString(UErrorCode& status) {
     int32_t len = 0;
-    const UChar* r = ures_getNextString(resource, &len, 0, &status);
+    const UChar* r = ures_getNextString(fResource, &len, 0, &status);
     return UnicodeString(TRUE, r, len);
 }
 
 UnicodeString ResourceBundle::getNextString(const char ** key, UErrorCode& status) {
     int32_t len = 0;
-    const UChar* r = ures_getNextString(resource, &len, key, &status);
+    const UChar* r = ures_getNextString(fResource, &len, key, &status);
     return UnicodeString(TRUE, r, len);
 }
 
@@ -344,7 +345,7 @@ ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
     UResourceBundle r;
 
     ures_initStackObject(&r);
-    ures_getByIndex(resource, indexR, &r, &status);
+    ures_getByIndex(fResource, indexR, &r, &status);
     ResourceBundle res(&r, status);
     if (U_SUCCESS(status)) {
         ures_close(&r);
@@ -354,7 +355,7 @@ ResourceBundle ResourceBundle::get(int32_t indexR, UErrorCode& status) const {
 
 UnicodeString ResourceBundle::getStringEx(int32_t indexS, UErrorCode& status) const {
     int32_t len = 0;
-    const UChar* r = ures_getStringByIndex(resource, indexS, &len, &status);
+    const UChar* r = ures_getStringByIndex(fResource, indexS, &len, &status);
     return UnicodeString(TRUE, r, len);
 }
 
@@ -362,7 +363,7 @@ ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
     UResourceBundle r;
 
     ures_initStackObject(&r);
-    ures_getByKey(resource, key, &r, &status);
+    ures_getByKey(fResource, key, &r, &status);
     ResourceBundle res(&r, status);
     if (U_SUCCESS(status)) {
         ures_close(&r);
@@ -372,34 +373,45 @@ ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
 
 UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) const {
     int32_t len = 0;
-    const UChar* r = ures_getStringByKey(resource, key, &len, &status);
+    const UChar* r = ures_getStringByKey(fResource, key, &len, &status);
     return UnicodeString(TRUE, r, len);
 }
 
 const char*
 ResourceBundle::getVersionNumber()  const
 {
-    return ures_getVersionNumber(resource);
+    return ures_getVersionNumber(fResource);
 }
 
 void ResourceBundle::getVersion(UVersionInfo versionInfo) const {
-    ures_getVersion(resource, versionInfo);
+    ures_getVersion(fResource, versionInfo);
 }
 
 const Locale &ResourceBundle::getLocale(void) const
 {
-  if(locName == NULL) {
-    UErrorCode status = U_ZERO_ERROR;
-    const char *localeName = ures_getLocale(resource, &status);
-    ResourceBundle *me = (ResourceBundle *)this; // semantically const
-    me->locName = new Locale(localeName);
-  }
-  return *locName;
+    UBool needInit;
+    umtx_lock(NULL);
+    needInit = (fLocale == NULL);
+    umtx_unlock(NULL);
+    if(needInit) {
+        UErrorCode status = U_ZERO_ERROR;
+        const char *localeName = ures_getLocale(fResource, &status);
+        Locale  *tLocale = new Locale(localeName);
+        umtx_lock(NULL);
+        ResourceBundle *me = (ResourceBundle *)this; // semantically const
+        if (me->fLocale == NULL) {
+            me->fLocale = tLocale;
+            tLocale = NULL;
+        }
+        umtx_unlock(NULL);
+        delete tLocale;
+    }
+    return *fLocale;
 }
 
 const Locale ResourceBundle::getLocale(ULocDataLocaleType type, UErrorCode &status) const
 {
-  return ures_getLocaleByType(resource, type, &status);
+  return ures_getLocaleByType(fResource, type, &status);
 }
 
 //eof

@@ -341,7 +341,7 @@ Locale::Locale( const   char * newLanguage,
             size += 1;  // at least: _v
         }
 
-        if ( newKeywords != NULL) 
+        if ( newKeywords != NULL)
         {
             ksize = (int32_t)uprv_strlen(newKeywords);
             size += ksize + 1;
@@ -613,17 +613,25 @@ Locale::setToBogus() {
 const Locale&
 Locale::getDefault()
 {
+    const Locale *retLocale;
     umtx_lock(NULL);
-    UBool needInit = (gDefaultLocale == NULL);
+    retLocale = gDefaultLocale;
     umtx_unlock(NULL);
-    if (needInit) {
+    if (retLocale == NULL) {
         umtx_lock(NULL);
         /* uprv_getDefaultLocaleID is not thread safe, so we surround it with a mutex */
         const char *cLocale = uprv_getDefaultLocaleID();
         umtx_unlock(NULL);
         locale_set_default_internal(cLocale);
+        umtx_lock(NULL);
+        // Need a mutex  in case some other thread set a new
+        // default inbetween when we set and when we get the new default.  For
+        // processors with weak memory coherency, we might not otherwise see all
+        // of the newly created new default locale.
+        retLocale = gDefaultLocale;
+        umtx_unlock(NULL);
     }
-    return *gDefaultLocale;
+    return *retLocale;
 }
 
 
