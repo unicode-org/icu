@@ -261,8 +261,8 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
                   checkOffsets ? offs : NULL,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
-    } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
-        
+    } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
+
     if(U_FAILURE(status))
     {
         log_err("Problem doing fromUnicode to %s, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
@@ -423,7 +423,7 @@ UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect,
 
         /*        offs += (targ-oldTarg); */
 
-      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
+      } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
 
     if(U_FAILURE(status))
     {
@@ -1690,11 +1690,11 @@ TestLMBCS() {
          }
          errorCode = 0;
 
-         /* running out of target room : U_INDEX_OUTOFBOUNDS_ERROR*/
+         /* running out of target room : U_BUFFER_OVERFLOW_ERROR */
 
          pUIn = pszUnicode;
          ucnv_fromUnicode(cnv, &pLOut,pLOut+offsets[4],&pUIn,pUIn+sizeof(pszUnicode),off,FALSE, &errorCode);
-         if (errorCode != U_INDEX_OUTOFBOUNDS_ERROR || pLOut != LOut + offsets[4] || pUIn != pszUnicode+4 )
+         if (errorCode != U_BUFFER_OVERFLOW_ERROR || pLOut != LOut + offsets[4] || pUIn != pszUnicode+4 )
          {
             log_err("Unexpected results on out of target room to ucnv_fromUnicode\n");
          }
@@ -1703,7 +1703,7 @@ TestLMBCS() {
 
          pLIn = pszLMBCS;
          ucnv_toUnicode(cnv, &pUOut,pUOut+4,(const char **)&pLIn,(const char *)(pLIn+sizeof(pszLMBCS)),off,FALSE, &errorCode);
-         if (errorCode != U_INDEX_OUTOFBOUNDS_ERROR || pUOut != UOut + 4 || pLIn != (const uint8_t *)pszLMBCS+offsets[4])
+         if (errorCode != U_BUFFER_OVERFLOW_ERROR || pUOut != UOut + 4 || pLIn != (const uint8_t *)pszLMBCS+offsets[4])
          {
             log_err("Unexpected results on out of target room to ucnv_toUnicode\n");
          }
