@@ -18,4 +18,5 @@ et_EE {
             "#,##0%",
     }
     ShortCountry { "EST" }
+    LocaleID { "0425" }
 }

@@ -18,4 +18,5 @@ uk_UA {
             "#,##0%",
     }
     ShortCountry { "UKR" }
+    LocaleID { "0422" }
 }

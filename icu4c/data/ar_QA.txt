@@ -13,4 +13,5 @@ ar_QA {
     }
     LocaleString { "ar_QA" }
     ShortCountry { "QAT" }
+    LocaleID { "4001" }
 }

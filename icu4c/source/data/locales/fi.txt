@@ -52,7 +52,7 @@ fi {
     Languages { 
         fi { "suomi" }
     }
-    LocaleID { "040b" }
+    LocaleID { "0b" }
     LocaleString { "f" }
     MonthAbbreviations { 
             "tammi",

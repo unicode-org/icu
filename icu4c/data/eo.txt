@@ -87,7 +87,7 @@ eo {
         sv { "sveda" }
         tr { "turka" }
     }
-    LocaleID { "07e0" }
+    //LocaleID { "07e0" }
     LocaleString { "eo" }
     MonthAbbreviations { 
             "jan",

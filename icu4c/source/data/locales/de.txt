@@ -446,7 +446,7 @@ de {
         // ? za { "Zhuang" }
         // same as in root?? zu { "Zulu" }
     }
-    LocaleID { "0407" }
+    LocaleID { "07" }
     LocaleString { "de" }
     MonthAbbreviations { 
             "Jan",

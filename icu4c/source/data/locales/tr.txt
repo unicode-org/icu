@@ -52,7 +52,7 @@ tr {
     Languages { 
         tr { "T\u00FCrk\u00E7e" }
     }
-    LocaleID { "041f" }
+    LocaleID { "1f" }
     LocaleString { "tr" }
     MonthAbbreviations { 
             "Oca",

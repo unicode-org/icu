@@ -18,4 +18,5 @@ el_GR {
             "#,##0%",
     }
     ShortCountry { "GRC" }
+    LocaleID { "0408" }
 }

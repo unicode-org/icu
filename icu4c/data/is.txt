@@ -49,7 +49,7 @@ is {
     Languages { 
         is { "\u00EDslenska" }
     }
-    LocaleID { "040f" }
+    LocaleID { "0f" }
     LocaleString { "is" }
     MonthAbbreviations { 
             "jan.",

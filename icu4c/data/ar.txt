@@ -94,7 +94,7 @@ ar {
     Languages { 
         ar { "\u0627\u0644\u0639\u0631\u0628\u064A\u0629" }
     }
-    LocaleID { "0c01" }
+    LocaleID { "01" }
     LocaleString { "ar" }
     MonthAbbreviations { 
             "\u064A\u0646\u0627",

@@ -18,4 +18,5 @@ is_IS {
             "#,##0%",
     }
     ShortCountry { "ISL" }
+    LocaleID { "040f" }
 }

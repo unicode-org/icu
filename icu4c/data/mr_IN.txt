@@ -2,6 +2,7 @@
 // Marathi locale.  Based on Hindi locale
 
 mr_IN {
+      LocaleID { "044e" }
     ShortCountry { IND }
 
     CurrencyElements {

@@ -18,4 +18,5 @@ nl_NL {
             "#,##0%",
     }
     ShortCountry { "NLD" }
+    LocaleID { "0413" }
 }

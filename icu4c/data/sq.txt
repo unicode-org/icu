@@ -54,7 +54,7 @@ sq {
     Languages { 
         sq { "shqipe" }
     }
-    LocaleID { "041c" }
+    LocaleID { "1c" }
     LocaleString { "sq" }
     MonthAbbreviations { 
             "Jan",

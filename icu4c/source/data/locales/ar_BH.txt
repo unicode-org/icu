@@ -13,4 +13,5 @@ ar_BH {
     }
     LocaleString { "ar_BH" }
     ShortCountry { "BHR" }
+    LocaleID { "3c01" }
 }

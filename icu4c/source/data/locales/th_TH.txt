@@ -18,4 +18,5 @@ th_TH {
             "#,##0%",
     }
     ShortCountry { "THA" }
+    LocaleID { "041e" }
 }

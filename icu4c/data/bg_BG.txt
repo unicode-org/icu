@@ -18,4 +18,5 @@ bg_BG {
             "#,##0%",
     }
     ShortCountry { "BGR" }
+    LocaleID { "0402" }
 }

@@ -66,7 +66,7 @@ el {
     Languages { 
         el { "\u03B5\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AC" }
     }
-    LocaleID { "0408" }
+    LocaleID { "08" }
     LocaleString { "el" }
     MonthAbbreviations { 
             "\u0399\u03B1\u03BD",

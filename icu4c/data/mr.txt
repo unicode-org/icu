@@ -1,6 +1,7 @@
 // Copyright (c) 1998-2000 IBM, Inc.
 
 mr {
+   LocaleID { "4e" }
     Version { "0.1" }
     ShortLanguage { mar }
     Languages {

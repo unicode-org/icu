@@ -1025,7 +1025,7 @@ root {
         zu  { "Zulu" }     
         zun { "Zuni" }          
     }
-    LocaleID { "0409" }
+    LocaleID { "0000" }
     LocaleString { "en" }
     MonthAbbreviations { 
             "Jan",

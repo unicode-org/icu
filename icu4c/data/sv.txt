@@ -52,7 +52,7 @@ sv {
     Languages { 
         sv { "svenska" }
     }
-    LocaleID { "041d" }
+    LocaleID { "1d" }
     LocaleString { "sv" }
     MonthAbbreviations { 
             "jan",

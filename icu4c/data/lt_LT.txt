@@ -18,4 +18,5 @@ lt_LT {
             "#,##%",
     }
     ShortCountry { "LTU" }
+    LocaleID { "0427" }
 }

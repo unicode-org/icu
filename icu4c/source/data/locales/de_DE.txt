@@ -18,4 +18,5 @@ de_DE {
             "#,##0%",
     }
     ShortCountry { "DEU" }
+    LocaleID { "0407" }
 }

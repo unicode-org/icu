@@ -52,7 +52,7 @@ lv {
     Languages { 
         lv { "Latvie\u0161u" }
     }
-    LocaleID { "0426" }
+    LocaleID { "26" }
     LocaleString { "lv" }
     MonthAbbreviations { 
             "Jan",

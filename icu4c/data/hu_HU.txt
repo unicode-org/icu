@@ -18,4 +18,5 @@ hu_HU {
             "#,##0%",
     }
     ShortCountry { "HUN" }
+    LocaleID { "040e" }
 }

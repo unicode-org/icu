@@ -84,7 +84,7 @@ fr {
         sv { "su\u00E9dois" }
         tr { "turc" }
     }
-    LocaleID { "040c" }
+    LocaleID { "0c" }
     LocaleString { "fr" }
     MonthAbbreviations { 
             "janv.",

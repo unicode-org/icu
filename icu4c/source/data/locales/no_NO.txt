@@ -18,4 +18,5 @@ no_NO {
             "#,##0%",
     }
     ShortCountry { "NOR" }
+    LocaleID { "0414" }
 }

@@ -18,4 +18,5 @@ cs_CZ {
             "#,##0%",
     }
     ShortCountry { "CZE" }
+    LocaleID { "0405" }
 }

@@ -69,7 +69,7 @@ uk {
     Languages { 
         uk { "\u0443\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0430" }
     }
-    LocaleID { "0422" }
+    LocaleID { "22" }
     LocaleString { "uk" }
     MonthAbbreviations { 
             "\u0441\u0456\u0447",

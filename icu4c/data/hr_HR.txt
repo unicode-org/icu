@@ -18,4 +18,5 @@ hr_HR {
             "#,##0%",
     }
     ShortCountry { "HRV" }
+    LocaleID { "041a" }
 }

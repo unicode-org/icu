@@ -32,7 +32,6 @@ en_BE {
             "dd/MM/yy",
             "{1} {0}",
     }
-    LocaleID { "0809" }
     LocaleString { "en_BE" }
     NumberElements {
             ",",

@@ -61,7 +61,7 @@ iw {
     Languages { 
         iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
     }
-    LocaleID { "040d" }
+    LocaleID { "0d" }
     LocaleString { "iw" }
     MonthAbbreviations { 
             "\u05D9\u05E0\u05D5",

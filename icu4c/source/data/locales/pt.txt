@@ -46,7 +46,7 @@ pt {
     Languages { 
         pt { "portugu\u00EAs" }
     }
-    LocaleID { "0816" }
+    LocaleID { "16" }
     LocaleString { "pt" }
     MonthAbbreviations { 
             "Jan",

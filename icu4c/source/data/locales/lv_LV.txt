@@ -18,4 +18,5 @@ lv_LV {
             "#,##0%",
     }
     ShortCountry { "LVA" }
+    LocaleID { "0426" }
 }

@@ -22,7 +22,7 @@ es_PR {
             "MM-dd-yy",
             "{1} {0}",
     }
-    LocaleID { "" }
+    LocaleID { "500a" }
     LocaleString { "es_PR" }
     NumberElements { 
             ".",

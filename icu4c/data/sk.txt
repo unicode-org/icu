@@ -53,7 +53,7 @@ sk {
     Languages { 
         sk { "Sloven\u010Dina" }
     }
-    LocaleID { "041b" }
+    LocaleID { "1b" }
     LocaleString { "sk" }
     MonthAbbreviations { 
             "jan",
