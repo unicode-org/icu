@@ -8,14 +8,14 @@ GEN_DEPS.c=	:
 GEN_DEPS.cc= 	:
 
 ## Commands to compile
-COMPILE.c=	$(CC) -D_PTHREADS_DRAFT4 +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) -D_PTHREADS_DRAFT4 +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=	$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 ## For aCC, use the C++ linker so that __shlinit gets defined
-#LINK.c=		$(CC) -D_PTHREADS_DRAFT4 +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.c=		$(CXX) -D_PTHREADS_DRAFT4 +z $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) -D_PTHREADS_DRAFT4 +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+#LINK.c=		$(CC) +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) +z $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
 #SHLIB.c=	$(LD) $(LDFLAGS) -b
