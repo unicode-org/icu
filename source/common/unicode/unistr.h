@@ -1097,7 +1097,7 @@ public:
    * @param offset a valid offset into one code point of the text
    * @return offset of the first code unit of the same code point
    */
-  inline UTextOffset getCharStart(UTextOffset offset);
+  inline UTextOffset getCharStart(UTextOffset offset) const;
 
   /**
    * Adjust a random-access offset so that
@@ -1113,7 +1113,7 @@ public:
    * @param offset a valid offset after any code unit of a code point of the text
    * @return offset of the first code unit after the same code point
    */
-  inline UTextOffset getCharLimit(UTextOffset offset);
+  inline UTextOffset getCharLimit(UTextOffset offset) const;
 
   /* Substring extraction */
 
@@ -3083,7 +3083,7 @@ UnicodeString::char32At(UTextOffset offset) const
 }
 
 inline UTextOffset
-UnicodeString::getCharStart(UTextOffset offset) {
+UnicodeString::getCharStart(UTextOffset offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
     UTF_SET_CHAR_START(fArray, 0, offset);
     return offset;
@@ -3093,7 +3093,7 @@ UnicodeString::getCharStart(UTextOffset offset) {
 }
 
 inline UTextOffset
-UnicodeString::getCharLimit(UTextOffset offset) {
+UnicodeString::getCharLimit(UTextOffset offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
     UTF_SET_CHAR_LIMIT(fArray, 0, offset, fLength);
     return offset;
