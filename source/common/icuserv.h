@@ -42,7 +42,6 @@ class ICUServiceKey;
 class ICUServiceFactory;
 class SimpleFactory;
 class ServiceListener;
-class ICUServiceEnumeration;
 class ICUService;
 
 class DNCache;
