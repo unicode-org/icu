@@ -4,7 +4,7 @@
 
 mt_MT {
       
-    Version { "0.6" }     
+    // No version  here - bump the parent.
 
     ShortCountry { MLT }
 
