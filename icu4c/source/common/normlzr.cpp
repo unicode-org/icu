@@ -198,7 +198,7 @@ inline UBool isEmptyBitmask64(uint32_t* mask) {
 
 // Set a single bit (0..63) of the mask
 inline void setBitmask64(uint32_t* mask, int32_t bit) {
-    mask[bit >> 5] |= (1L << (bit & 31));
+    mask[bit >> 5] |= ((uint32_t)1L << (bit & 31));
 }
 
 // Return TRUE if a single bit (0..63) is set in the mask

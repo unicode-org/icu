@@ -99,9 +99,9 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UError
         tersave = *terend;
         *terend = '\0';
     }
-    uint32_t primvalue = (*primary!='\0')?strtoul(primary, &primend, 16):0;
-    uint32_t secvalue = (*secondary!='\0')?strtoul(secondary, &secend, 16):0;
-    uint32_t tervalue = (*tertiary!='\0')?strtoul(tertiary, &terend, 16):0;
+    uint32_t primvalue = (uint32_t)((*primary!='\0')?strtoul(primary, &primend, 16):0);
+    uint32_t secvalue = (uint32_t)((*secondary!='\0')?strtoul(secondary, &secend, 16):0);
+    uint32_t tervalue = (uint32_t)((*tertiary!='\0')?strtoul(tertiary, &terend, 16):0);
     if(primvalue <= 0xFF) {
       primvalue <<= 8;
     }
