@@ -429,12 +429,12 @@ import java.io.ObjectInputStream;
  * <ul>
  * <li>In order to enable significant digits formatting, use a pattern
  * containing the <code>'@'</code> pattern character.  Alternatively,
- * call {@link #setSignificantDigits setSignificantDigits(true)}.
+ * call {@link #setSignificantDigitsUsed setSignificantDigitsUsed(true)}.
  *
  * <li>In order to disable significant digits formatting, use a
  * pattern containing the <code>'0'</code> pattern
- * character. Alternatively, call {@link #setSignificantDigits
- * setSignificantDigits(false)}.
+ * character. Alternatively, call {@link #setSignificantDigitsUsed
+ * setSignificantDigitsUsed(false)}.
  *
  * <li>If a pattern uses significant digits, it may not contain
  * the <code>'0'</code> character, nor may it include a fraction
@@ -704,7 +704,7 @@ public class DecimalFormat extends NumberFormat {
         // number.
         synchronized(digitList) {
             digitList.set(number, precision(false),
-                          !useExponentialNotation && !isSignificantDigits());
+                          !useExponentialNotation && !areSignificantDigitsUsed());
             return subformat(result, fieldPosition, isNegative, false);
         }
     }
@@ -861,7 +861,7 @@ public class DecimalFormat extends NumberFormat {
 
         synchronized(digitList) {
             digitList.set(number, precision(false),
-                          !useExponentialNotation && !isSignificantDigits());
+                          !useExponentialNotation && !areSignificantDigitsUsed());
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
@@ -891,7 +891,7 @@ public class DecimalFormat extends NumberFormat {
 
         synchronized(digitList) {
             digitList.set(number, precision(false),
-                          !useExponentialNotation && !isSignificantDigits());
+                          !useExponentialNotation && !areSignificantDigitsUsed());
             return subformat(result, fieldPosition, number.signum() < 0, false);
         }        
     }
@@ -924,7 +924,7 @@ public class DecimalFormat extends NumberFormat {
      * formats.
      */
     private int precision(boolean isIntegral) {
-        if (isSignificantDigits()) {
+        if (areSignificantDigitsUsed()) {
             return getMaximumSignificantDigits();
         } else if (useExponentialNotation) {
             return getMinimumIntegerDigits() + getMaximumFractionDigits();
@@ -961,7 +961,7 @@ public class DecimalFormat extends NumberFormat {
         char decimal = isCurrencyFormat ?
             symbols.getMonetaryDecimalSeparator() :
             symbols.getDecimalSeparator();
-        boolean useSigDig = isSignificantDigits();
+        boolean useSigDig = areSignificantDigitsUsed();
         int maxIntDig = getMaximumIntegerDigits();
         int minIntDig = getMinimumIntegerDigits();
 
@@ -2847,7 +2847,7 @@ public class DecimalFormat extends NumberFormat {
         char zero = localized ? symbols.getZeroDigit() : PATTERN_ZERO_DIGIT;
         char digit = localized ? symbols.getDigit() : PATTERN_DIGIT;
         char sigDigit = 0;
-        boolean useSigDig = isSignificantDigits();
+        boolean useSigDig = areSignificantDigitsUsed();
         if (useSigDig) {
             sigDigit = localized ? symbols.getSignificantDigit() : PATTERN_SIGNIFICANT_DIGIT;
         }
@@ -3451,7 +3451,7 @@ public class DecimalFormat extends NumberFormat {
                 // zeroDigitCount.
                 int effectiveDecimalPos = decimalPos >= 0 ? decimalPos : digitTotalCount;
                 boolean useSigDig = (sigDigitCount > 0);
-                setSignificantDigits(useSigDig);
+                setSignificantDigitsUsed(useSigDig);
                 if (useSigDig) {
                     setMinimumSignificantDigits(sigDigitCount);
                     setMaximumSignificantDigits(sigDigitCount + digitRightCount);
@@ -3578,7 +3578,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the minimum number of significant digits that will be
-     * displayed. This value has no effect unless isSignificantDigits()
+     * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the fewest significant digits that will be shown
      * @draft ICU 3.0
@@ -3589,7 +3589,7 @@ public class DecimalFormat extends NumberFormat {
 
     /**
      * Returns the maximum number of significant digits that will be
-     * displayed. This value has no effect unless isSignificantDigits()
+     * displayed. This value has no effect unless areSignificantDigitsUsed()
      * returns true.
      * @return the most significant digits that will be shown
      * @draft ICU 3.0
@@ -3603,7 +3603,7 @@ public class DecimalFormat extends NumberFormat {
      * displayed.  If <code>min</code> is less than one then it is set
      * to one.  If the maximum significant digits count is less than
      * <code>min</code>, then it is set to <code>min</code>. This
-     * value has no effect unless isSignificantDigits() returns true.
+     * value has no effect unless areSignificantDigitsUsed() returns true.
      * @param min the fewest significant digits to be shown 
      * @draft ICU 3.0
      */
@@ -3622,7 +3622,7 @@ public class DecimalFormat extends NumberFormat {
      * displayed.  If <code>max</code> is less than one then it is set
      * to one.  If the minimum significant digits count is greater
      * than <code>max</code>, then it is set to <code>max</code>. This
-     * value has no effect unless isSignificantDigits() returns true.
+     * value has no effect unless areSignificantDigitsUsed() returns true.
      * @param min the most significant digits to be shown 
      * @draft ICU 3.0
      */
@@ -3642,7 +3642,7 @@ public class DecimalFormat extends NumberFormat {
      * @return true if significant digits are in use
      * @draft ICU 3.0
      */
-    public boolean isSignificantDigits() {
+    public boolean areSignificantDigitsUsed() {
         return useSignificantDigits;
     }
 
@@ -3653,7 +3653,7 @@ public class DecimalFormat extends NumberFormat {
      * false to use integer and fraction digit counts
      * @draft ICU 3.0
      */
-    public void setSignificantDigits(boolean useSignificantDigits) {
+    public void setSignificantDigitsUsed(boolean useSignificantDigits) {
         this.useSignificantDigits = useSignificantDigits;
     }
 
