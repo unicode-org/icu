@@ -166,10 +166,10 @@ void _expectRules(const char* crules,
 
     /* utrans_transIncrementalUChars() */
     u_strcpy(buf, from);
-    pos.start = pos.cursor = 0;
-    pos.end = pos.limit = u_strlen(buf);
+    pos.start = pos.contextStart = 0;
+    pos.limit = pos.contextLimit = u_strlen(buf);
     utrans_transIncrementalUChars(trans, buf, NULL, CAP, &pos, &status);
-    utrans_transUChars(trans, buf, NULL, CAP, pos.start, &pos.end, &status);
+    utrans_transUChars(trans, buf, NULL, CAP, pos.start, &pos.limit, &status);
     if (U_FAILURE(status)) {
         utrans_close(trans);
         log_err("FAIL: utrans_transIncrementalUChars() failed, error=%s\n",

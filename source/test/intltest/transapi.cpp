@@ -427,7 +427,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
         
 		s="";
 		status=U_ZERO_ERROR;
-        index.contextStart = index.contextLimit = index.start = 0;
+        index.contextStart = index.contextLimit = index.start = index.limit = 0;
 		logln("Testing transliterate(Replaceable, int32_t, UChar, UErrorCode)");
 		for(i=10; i<sizeof(Data)/sizeof(Data[0]); i=i+2){
 			UnicodeString log;
@@ -512,7 +512,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 	for(int32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
 		UnicodeString log;
 		index.contextStart=getInt(Data[i+0]);
-        index.contextLimit=getInt(Data[i+1]);
+        index.contextLimit=index.limit=getInt(Data[i+1]);
         index.start=getInt(Data[i+2]);
         t->transliterate(s, index, status);
         if(U_FAILURE(status)){
@@ -671,7 +671,7 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
             if (DATA[i+0] != "") {
                  log = s + " + " + DATA[0] + " -> ";
                  index.contextStart=getInt(DATA[i+2]);
-                 index.contextLimit=getInt(DATA[i+3]);
+                 index.contextLimit=index.limit=getInt(DATA[i+3]);
                  index.start=getInt(DATA[i+4]);
                  t->transliterate(s, index, DATA[i+0], status);
                  if(U_FAILURE(status)){
