@@ -372,7 +372,7 @@ static void setFromString(DigitList& dl, const char* str) {
 	char c;
 	UBool decimalSet = FALSE;
 	dl.clear();
-	while (c = *str++) {
+	while ((c = *str++)) {
 		if (c == '-') {
 			dl.fIsPositive = FALSE;
 		} else if (c == '+') {
