@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/07/19 00:53:02 $ 
-* $Revision: 1.43 $
+* $Date: 2002/07/26 23:29:37 $ 
+* $Revision: 1.44 $
 *
 *******************************************************************************
 */
@@ -1605,7 +1605,7 @@ public final class UCharacter
 	 * <p>Check if a code point has the White_Space Unicode property.</p>
 	 * <p>Same as UCharacter.hasBinaryProperty(ch, UProperty.WHITE_SPACE).</p>
 	 * <p>This is different from both UCharacter.isSpace(ch) and 
-	 * UCharacter.isWhiteSpace(ch)!</p>
+	 * UCharacter.isWhitespace(ch)!</p>
 	 * @param ch codepoint to be tested
 	 * @draft ICU 2.1
 	 */
