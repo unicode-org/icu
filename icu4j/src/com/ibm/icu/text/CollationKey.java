@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2002/08/02 19:40:19 $ 
-* $Revision: 1.9 $
+* $Date: 2002/09/11 00:12:39 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -77,6 +77,9 @@ package com.ibm.icu.text;
  * System.out.println( keys[2].getSourceString() );
  * </pre>
  * </blockquote>
+ * </p>
+ * <p>
+ * This class is not subclassable
  * </p>
  * @see Collator
  * @see RuleBasedCollator

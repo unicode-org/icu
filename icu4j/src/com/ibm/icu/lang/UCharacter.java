@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/07/30 02:38:11 $ 
-* $Revision: 1.45 $
+* $Date: 2002/09/11 00:12:39 $ 
+* $Revision: 1.46 $
 *
 *******************************************************************************
 */
@@ -72,6 +72,9 @@ import com.ibm.icu.impl.NormalizerImpl;
 * Further detail differences can be determined from the program 
 *        <a href = http://oss.software.ibm.com/developerworks/opensource/cvs/icu4j/~checkout~/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java>
 *        com.ibm.icu.dev.test.lang.UCharacterCompare</a>
+* </p>
+* <p>
+* This class is not subclassable
 * </p>
 * @author Syn Wee Quek
 * @since oct 06 2000

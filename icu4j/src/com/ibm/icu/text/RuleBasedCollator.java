@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/09/06 19:04:07 $ 
-* $Revision: 1.19 $
+* $Date: 2002/09/11 00:12:39 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -177,6 +177,9 @@ import com.ibm.icu.impl.ICUDebug;
  *              = new RuleBasedCollator(en_USCollator.getRules() + jaString);
  * </pre>
  * </blockquote>
+ * </p>
+ * <p>
+ * This class is not subclassable
  * </p>
  * @author Syn Wee Quek
  * @since release 2.2, April 18 2002

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/07/11 21:25:24 $ 
-* $Revision: 1.7 $
+* $Date: 2002/09/11 00:12:39 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -20,11 +20,14 @@ package com.ibm.icu.lang;
 * Equivalent to icu's UCharCategory.
 * Refer to <a href=http://www.unicode.org/Public/UNIDATA/UnicodeData.html>
 * Unicode Consortium</a> for more information about UnicodeData.txt.
+* <p>
+* This class is not subclassable
+* </p>
 * @author Syn Wee Quek
 * @since oct0300
 */
 
-public class UCharacterCategory
+public final class UCharacterCategory
 {
   // public variable -----------------------------------------------------
   

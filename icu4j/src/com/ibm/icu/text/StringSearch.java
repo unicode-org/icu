@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/08/08 23:37:52 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/09/11 00:12:39 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -138,6 +138,9 @@ import com.ibm.icu.impl.NormalizerImpl;
  * <a href=http://oss.software.ibm.com/icu/userguide/searchString.html>
  * String Search</a> user guide and the <code>SearchIterator</code> 
  * documentation for more information and examples of use.
+ * </p>
+ * <p>
+ * This class is not subclassable
  * </p>
  * @see SearchIterator
  * @see RuleBasedCollator
