@@ -628,7 +628,7 @@ UnicodeSetTest::expectContainment(const UnicodeSet& set,
         }
     }
     if (bad.length() > 0) {
-        logln((UnicodeString)"Fail: set " + setName + " does not contain " + prettify(bad) +
+        errln((UnicodeString)"Fail: set " + setName + " does not contain " + prettify(bad) +
               ", expected containment of " + prettify(charsIn));
     } else {
         logln((UnicodeString)"Ok: set " + setName + " contains " + charsIn);
