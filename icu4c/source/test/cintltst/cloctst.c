@@ -48,7 +48,7 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* script code */
     {   "",     "",     "",     "",     "",     "Hans", "", "", ""  },
     /* country code */
-    {   "US",   "FR",   "ES",   "GR",   "NO",   "CN", "DE", "", "JA"    },
+    {   "US",   "FR",   "ES",   "GR",   "NO",   "CN", "DE", "", "JP"    },
     /* variant code */
     {   "",     "",     "",     "",     "NY",   "", "", "", ""      },
     /* full name */
@@ -56,11 +56,11 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
         "el_GR",    "no_NO_NY", "zh_Hans_CN", 
         "de_DE@collation=phonebook", "es@collation=traditional",  "ja_JP@calendar=japanese" },
     /* ISO-3 language */
-    {   "eng",  "fra",  "cat",  "ell",  "nor",  "zho", "deu", "esp", "jap"   },
+    {   "eng",  "fra",  "cat",  "ell",  "nor",  "zho", "deu", "spa", "jpn"   },
     /* ISO-3 country */
-    {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "CHN", "", "", ""   },
+    {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "CHN", "DEU", "", "JPN"   },
     /* LCID */
-    {   "409", "40c", "403", "408", "814",  "804", "", "", ""     },
+    {   "409", "40c", "403", "408", "814",  "804", "407", "a", "411"     },
 
     /* display language (English) */
     {   "English",  "French",   "Catalan", "Greek",    "Norwegian", "Chinese", "German", "Spanish", "Japanese"    },
