@@ -38,7 +38,7 @@ Section: libs
 Architecture: any
 Depends: libicu${major} (>= ${Source-Version}), make
 Recommends: icu-locales
-Description: International Components for Unicode (locale data)
+Description: International Components for Unicode (non locale data)
  ICU is a C++ and C library that provides robust and full-featured Unicode
  and locale support. The library provides calendar support, character
  set conversions, language-sensitive collation, date and time
