@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2005 - All Rights Reserved
  *
  */
 
@@ -177,7 +177,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual le_bool canDisplay(LEUnicode32 ch) const;
+    virtual inline le_bool canDisplay(LEUnicode32 ch) const;
 
     /**
      * This method returns the number of design units in
@@ -301,7 +301,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual float xUnitsToPoints(float xUnits) const;
+    virtual inline float xUnitsToPoints(float xUnits) const;
 
     /**
      * This method converts font design units in the
@@ -313,7 +313,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual float yUnitsToPoints(float yUnits) const;
+    virtual float inline yUnitsToPoints(float yUnits) const;
 
     /**
      * This method converts font design units to points.
@@ -323,7 +323,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual void unitsToPoints(LEPoint &units, LEPoint &points) const;
+    virtual inline void unitsToPoints(LEPoint &units, LEPoint &points) const;
 
     /**
      * This method converts pixels in the
@@ -335,7 +335,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual float xPixelsToUnits(float xPixels) const;
+    virtual inline float xPixelsToUnits(float xPixels) const;
 
     /**
      * This method converts pixels in the
@@ -347,7 +347,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual float yPixelsToUnits(float yPixels) const;
+    virtual inline float yPixelsToUnits(float yPixels) const;
 
     /**
      * This method converts pixels to font design units.
@@ -357,7 +357,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) const;
+    virtual inline void pixelsToUnits(LEPoint &pixels, LEPoint &units) const;
 
     /**
      * Get the X scale factor from the font's transform. The default
@@ -399,7 +399,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const;
+    virtual inline void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const;
 
     /**
      * This is a convenience method used to convert
@@ -411,7 +411,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    static float fixedToFloat(le_int32 fixed);
+    static inline float fixedToFloat(le_int32 fixed);
 
     /**
      * This is a convenience method used to convert
@@ -423,7 +423,7 @@ public:
      *
      * @stable ICU 2.8
      */
-    static le_int32 floatToFixed(float theFloat);
+    static inline le_int32 floatToFixed(float theFloat);
 
     //
     // These methods won't ever be called by the LayoutEngine,
