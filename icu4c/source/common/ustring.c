@@ -835,7 +835,7 @@ static int32_t u_ustrnlen(const UChar *ucs1, int32_t n)
 
     if (ucs1)
     {
-        while (*(ucs1++) && n--)
+        while (n-- && *(ucs1++))
         {
             len++;
         }
