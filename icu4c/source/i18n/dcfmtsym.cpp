@@ -126,6 +126,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
 
     const char* locStr = loc.getName();
     UResourceBundle *resource = ures_open((char *)0, locStr, &status);
+    UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, resource, &status);
     if (U_FAILURE(status))
     {
         // Initializes with last resort data if necessary.
@@ -137,7 +138,6 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     }
     else {
         // Gets the number element array.
-        UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, NULL, &status);
         int32_t numberElementsLength = ures_getSize(numberElementsRes);
 
         if (numberElementsLength > (int32_t)kFormatSymbolCount) {
@@ -183,9 +183,8 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                   ures_getLocaleByType(numberElementsRes,
                                        ULOC_ACTUAL_LOCALE, &status));
         }
-        ures_close(numberElementsRes);
     }
-    ures_close(resource);
+    ures_close(numberElementsRes);
 }
 
 // Initializes the DecimalFormatSymbol instance with the data obtained
