@@ -512,6 +512,14 @@ SOURCE=.\incaltst.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\astrotst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\astrotst.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\itformat.cpp
 # End Source File
 # Begin Source File
