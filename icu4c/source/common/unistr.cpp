@@ -225,7 +225,7 @@ UnicodeString::UnicodeString(UChar *buff,
   : fLength(bufLength),
     fCapacity(buffCapacity),
     fArray(buff),
-    fFlags(kWriteableAlias)
+    fFlags(kWritableAlias)
 {
   if(buff == 0 || bufLength < 0 || bufLength > buffCapacity) {
     setToBogus();
@@ -369,16 +369,22 @@ UnicodeString::operator= (const UnicodeString& src)
 
   // we always copy the length and the hash code
   fLength = src.fLength;
+  if(fLength == 0) {
+    // empty string - use the stack buffer
+    fArray = fStackBuffer;
+    fCapacity = US_STACKBUF_SIZE;
+    fFlags = kShortString;
+    return *this;
+  }
 
+  // fLength>0 and not an "open" src.getBuffer(minCapacity)
   switch(src.fFlags) {
   case kShortString:
     // short string using the stack buffer, do the same
     fArray = fStackBuffer;
     fCapacity = US_STACKBUF_SIZE;
     fFlags = kShortString;
-    if(fLength > 0) {
-      uprv_memcpy(fStackBuffer, src.fArray, fLength * U_SIZEOF_UCHAR);
-    }
+    uprv_memcpy(fStackBuffer, src.fArray, fLength * U_SIZEOF_UCHAR);
     break;
   case kLongString:
     // src uses a refCounted string buffer, use that buffer with refCount
@@ -391,12 +397,10 @@ UnicodeString::operator= (const UnicodeString& src)
     fCapacity = src.fCapacity;
     fFlags = src.fFlags;
     break;
-  case kWriteableAlias:
-    // src is a writeable alias; we make a copy of that instead
+  case kWritableAlias:
+    // src is a writable alias; we make a copy of that instead
     if(allocate(fLength)) {
-      if(fLength > 0) {
-        uprv_memcpy(fArray, src.fArray, fLength * U_SIZEOF_UCHAR);
-      }
+      uprv_memcpy(fArray, src.fArray, fLength * U_SIZEOF_UCHAR);
       break;
     }
     // if there is not enough memory, then fall through to setting to bogus
@@ -938,7 +942,7 @@ UnicodeString::setTo(UBool isTerminated,
   return *this;
 }
 
-// setTo() analogous to the writeable-aliasing constructor with the same signature
+// setTo() analogous to the writable-aliasing constructor with the same signature
 UnicodeString &
 UnicodeString::setTo(UChar *buffer,
                      int32_t buffLength,
@@ -953,7 +957,7 @@ UnicodeString::setTo(UChar *buffer,
   fArray = buffer;
   fLength = buffLength;
   fCapacity = buffCapacity;
-  fFlags = kWriteableAlias;
+  fFlags = kWritableAlias;
   return *this;
 }
 
@@ -1591,23 +1595,36 @@ UnicodeString::doCodepageCreate(const char *codepageData,
 //========================================
 // External Buffer
 //========================================
-// ### TODO:
-// this is very, very dirty: we should not ever expose our array to the outside,
-// and this also violates the const-ness of this object
-// this must be removed when the resource bundle implementation does not need it any more!
-const UChar*
-UnicodeString::getUChars() const {
-  // if we're bogus, do nothing
-  if(isBogus()) {
+
+UChar *
+UnicodeString::getBuffer(int32_t minCapacity) {
+  if(minCapacity>=-1 && cloneArrayIfNeeded(minCapacity)) {
+    fFlags|=kOpenGetBuffer;
+    fLength=0;
+    return fArray;
+  } else {
     return 0;
   }
+}
 
-  if(fCapacity <= fLength || fArray[fLength] != 0) {
-    if(((UnicodeString &)*this).cloneArrayIfNeeded(fLength + 1)) {
-      fArray[fLength] = 0;
+void
+UnicodeString::releaseBuffer(int32_t newLength) {
+  if(fFlags&kOpenGetBuffer && newLength>=-1) {
+    // set the new fLength
+    if(newLength==-1) {
+      // the new length is the string length, capped by fCapacity
+      const UChar *p=fArray, *limit=fArray+fCapacity;
+      while(p<limit && *p!=0) {
+        ++p;
+      }
+      fLength=(int32_t)(p-fArray);
+    } else if(newLength<=fCapacity) {
+      fLength=newLength;
+    } else {
+      fLength=fCapacity;
     }
+    fFlags&=~kOpenGetBuffer;
   }
-  return fArray;
 }
 
 //========================================
@@ -1623,6 +1640,12 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   // the defaults are -1 to have convenience defaults
   if(newCapacity == -1) {
     newCapacity = fCapacity;
+  }
+
+  // while a getBuffer(minCapacity) is "open",
+  // prevent any modifications of the string by returning FALSE here
+  if(fFlags & kOpenGetBuffer) {
+    return FALSE;
   }
 
   /*
@@ -1687,4 +1710,3 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   }
   return TRUE;
 }
-
