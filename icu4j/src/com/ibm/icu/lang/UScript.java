@@ -13,7 +13,6 @@ import com.ibm.icu.impl.UCharacterProperty;
 
 import java.util.ResourceBundle;
 import java.util.Locale;
-import java.util.MissingResourceException;
 
 /**
  * A class to reflect UTR #24: Script Names

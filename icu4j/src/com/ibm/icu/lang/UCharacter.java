@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/06/04 03:22:53 $ 
-* $Revision: 1.78 $
+* $Date: 2003/06/09 23:26:51 $ 
+* $Revision: 1.79 $
 *
 *******************************************************************************
 */
@@ -109,7 +109,7 @@ public final class UCharacter
         // blocks objects ---------------------------------------------------
         
         /** 
-         * @draft ICU 2.4
+         * @draft ICU 2.6
          */
         public static final UnicodeBlock NO_BLOCK 
                                         = new UnicodeBlock("NO_BLOCK", 0);
@@ -1766,10 +1766,22 @@ public final class UCharacter
          * @draft ICU 2.4
          */
         public static final int ZAIN = 50;
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final int FE = 51;        
+        /** 
+         * @draft ICU 2.6 
+         */
+        public static final int KHAPH = 52;
+        /**
+         *  @draft ICU 2.6 
+         */
+        public static final int ZHAIN =53;   
         /**
          * @draft ICU 2.4
          */
-        public static final int COUNT = 51;
+        public static final int COUNT = 54;
     };
     
     /**
@@ -1895,10 +1907,21 @@ public final class UCharacter
          * @draft ICU 2.4
          */
         public static final int ZWSPACE = 28;
+        
+        /**
+         * @draft ICU 2.6
+         */
+        public static final int NEXT_LINE = 29;       /*[NL]*/ /* from here on: new in Unicode 4/ICU 2.6 */
+        
+        /**
+         * @draft ICU 2.6
+         */
+        public static final int  WORD_JOINER = 30;      /*[WJ]*/
+        
         /**
          * @draft ICU 2.4
          */
-        public static final int COUNT = 29;
+        public static final int COUNT = 31;
     };
     
     /**
@@ -4294,33 +4317,34 @@ public final class UCharacter
             case UProperty.BLOCK:
                 max = (PROPERTY_.getMaxValues(0)
                       & BLOCK_MASK_) >> BLOCK_SHIFT_;
-                if (max == 0) {
-                    max = UnicodeBlock.COUNT - 1;
-                }
-                return max;
+                return (max!=0) ? max : UnicodeBlock.COUNT - 1;
             case UProperty.CANONICAL_COMBINING_CLASS:
                 return 0xff; // TODO do we need to be more precise, 
                              // getting the actual maximum?
             case UProperty.DECOMPOSITION_TYPE:
-                return DecompositionType.COUNT - 1;
+                max=PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
+                return (max!=0) ? max : DecompositionType.COUNT - 1;
             case UProperty.EAST_ASIAN_WIDTH:
-                return EastAsianWidth.COUNT - 1;
+                max=(PROPERTY_.getMaxValues(0) & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
+                return (max!=0) ? max : EastAsianWidth.COUNT - 1;
             case UProperty.GENERAL_CATEGORY:
                 return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
             case UProperty.JOINING_GROUP:
-                return JoiningGroup.COUNT - 1;
+               max=(PROPERTY_.getMaxValues(2) & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
+               return (max!=0) ? max : JoiningGroup.COUNT - 1;
             case UProperty.JOINING_TYPE:
-                return JoiningType.COUNT - 1;
+                max=(PROPERTY_.getMaxValues(2) & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
+                return (max!=0) ? max :  JoiningType.COUNT - 1;
             case UProperty.LINE_BREAK:
-                return LineBreak.COUNT - 1;
+                max=(PROPERTY_.getMaxValues(0) & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
+                return (max!=0) ? max :  LineBreak.COUNT - 1;
             case UProperty.NUMERIC_TYPE:
                 return NumericType.COUNT - 1;
             case UProperty.SCRIPT:
-                max = PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;
-                if (max == 0) {
-                    max = UScript.CODE_LIMIT - 1;
-                }
-                return max;
+                max = PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
+                return (max!= 0)? max :  UScript.CODE_LIMIT - 1;
+            case UProperty.HANGUL_SYLLABLE_TYPE:
+                 return HangulSyllableType.COUNT-1;
             }
 
         }
