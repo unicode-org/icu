@@ -415,6 +415,8 @@ public abstract class UResourceBundle extends ResourceBundle{
                 }else{
                     if(defaultID.indexOf(localeName)==-1){
                         b = instantiateICUResource(baseName, defaultID, root);   
+                    }else if(rootLocale.length()!=0){
+                    	b = ICUResourceBundle.createBundle(baseName, rootLocale, root);
                     }
                 }
             }else{

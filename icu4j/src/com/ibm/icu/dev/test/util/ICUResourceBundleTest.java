@@ -53,6 +53,14 @@ public final class ICUResourceBundleTest extends TestFmwk {
         
         
     }
+    public void TestJB3879(){
+        // this tests tests loading of root bundle when a resource bundle 
+        // for the default locale is requested 
+    	ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault());
+        if(bundle==null){
+        	errln("could not create the resource bundle");
+        }
+    }
     public void TestOpen(){
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "en_US_POSIX", ICUData.class.getClassLoader());
        
