@@ -50,7 +50,7 @@ void addCollIterTest(TestNode** root)
  */
 static void TestUnicodeChar()
 {
-    UChar source[0xFF];
+    UChar source[0x100];
     UCollator *en_us;
     UCollationElements *iter;
     UErrorCode status = U_ZERO_ERROR;
