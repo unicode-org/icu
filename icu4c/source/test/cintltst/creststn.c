@@ -207,12 +207,12 @@ static const char* norwayLocales[] = {
     "nb"
 };
 
-static void checkStatus(UErrorCode expected, UErrorCode status) {
+static void checkStatus(int32_t line, UErrorCode expected, UErrorCode status) {
   if(U_FAILURE(status)) {
-    log_data_err("Resource not present, cannot test\n");
+    log_data_err("Resource not present, cannot test (%s:%d)\n", __FILE__, line);
   }
   if(status != expected) {
-    log_err("Expected error code %s, got error code %s\n", u_errorName(expected), u_errorName(status));
+    log_err("%s:%d: Expected error code %s, got error code %s\n", __FILE__, line, u_errorName(expected), u_errorName(status));
   }
 }
 
@@ -221,40 +221,80 @@ static void TestErrorCodes(void) {
 
   UResourceBundle *r = NULL, *r2 = NULL;
 
+  /* First check with ICUDATA */
   /* first bundle should return fallback warning */
-  r = ures_open(U_ICUDATA_COLL, "sr_YU_VOJVODINA", &status);
-  checkStatus(U_USING_FALLBACK_WARNING, status);
+  r = ures_open(NULL, "ti_ER_ASSAB", &status);
+  checkStatus(__LINE__, U_USING_FALLBACK_WARNING, status);
   ures_close(r);
 
   /* this bundle should return zero error, so it shouldn't change the status*/
   status = U_USING_DEFAULT_WARNING;
-  r = ures_open(U_ICUDATA_COLL, "sr_YU", &status);
-  checkStatus(U_USING_DEFAULT_WARNING, status);
+  r = ures_open(NULL, "ti_ER", &status);
+  checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
 
   /* we look up the resource which is aliased, but it lives in fallback */
   if(U_SUCCESS(status) && r != NULL) {
     status = U_USING_DEFAULT_WARNING; 
+    r2 = ures_getByKey(r, "Languages", NULL, &status);  /* languages of 'ti' aliases to 'am' */
+    checkStatus(__LINE__, U_USING_FALLBACK_WARNING, status);
+  } 
+  ures_close(r);
+
+  /* this bundle should return zero error, so it shouldn't change the status*/
+  status = U_USING_DEFAULT_WARNING;
+  r = ures_open(NULL, "ti", &status);
+  checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
+
+  /* we look up the resource which is aliased and at our level */
+  if(U_SUCCESS(status) && r != NULL) {
+    status = U_USING_DEFAULT_WARNING; 
+    r2 = ures_getByKey(r, "Languages", r2, &status);
+    checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
+  }
+  ures_close(r);
+
+  status = U_USING_FALLBACK_WARNING;
+  r = ures_open(NULL, "nolocale", &status);
+  checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
+  ures_close(r);
+  ures_close(r2);
+
+  /** Now, with the collation bundle **/
+  
+  /* first bundle should return fallback warning */
+  r = ures_open(U_ICUDATA_COLL, "sr_YU_VOJVODINA", &status);
+  checkStatus(__LINE__, U_USING_FALLBACK_WARNING, status);
+  ures_close(r);
+
+  /* this bundle should return zero error, so it shouldn't change the status*/
+  status = U_USING_FALLBACK_WARNING;
+  r = ures_open(U_ICUDATA_COLL, "sr", &status);
+  checkStatus(__LINE__, U_USING_FALLBACK_WARNING, status);
+
+  /* we look up the resource which is aliased  */
+  if(U_SUCCESS(status) && r != NULL) {
+    status = U_USING_DEFAULT_WARNING; 
     r2 = ures_getByKey(r, "collations", NULL, &status);
-    checkStatus(U_USING_FALLBACK_WARNING, status);
+    checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
   } 
   ures_close(r);
 
   /* this bundle should return zero error, so it shouldn't change the status*/
   status = U_USING_DEFAULT_WARNING;
   r = ures_open(U_ICUDATA_COLL, "sr", &status);
-  checkStatus(U_USING_DEFAULT_WARNING, status);
+  checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
 
   /* we look up the resource which is aliased and at our level */
   if(U_SUCCESS(status) && r != NULL) {
     status = U_USING_DEFAULT_WARNING; 
     r2 = ures_getByKey(r, "collations", r2, &status);
-    checkStatus(U_USING_DEFAULT_WARNING, status);
+    checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
   }
   ures_close(r);
 
   status = U_USING_FALLBACK_WARNING;
   r = ures_open(U_ICUDATA_COLL, "nolocale", &status);
-  checkStatus(U_USING_DEFAULT_WARNING, status);
+  checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
   ures_close(r);
   ures_close(r2);
 }
@@ -2018,95 +2058,89 @@ static void TestResourceLevelAliasing(void) {
     if(U_FAILURE(status) ) {
         log_data_err("err loading tb resource\n");
     }  else {
-        /* testing aliasing to a non existing resource */
-        tb = ures_getByKey(aliasB, "nonexisting", tb, &status);
-        if(status != U_MISSING_RESOURCE_ERROR) {
-            log_err("Managed to find an alias to non-existing resource\n");
-        } else {
-            status = U_ZERO_ERROR;
-        }
-        
-        
-        /* testing referencing/composed alias */
-        uk = ures_findResource("uk/collations/standard/Sequence", uk, &status);
-        if((uk == NULL) || U_FAILURE(status)) {
-            log_err("Couldn't findResource('uk/collations/standard/sequence') err %s\n", u_errorName(status));
-            goto cleanup;
-            return;
-        } 
-        
-        sequence = ures_getString(uk, &seqLen, &status);
-        
-        tb = ures_getByKey(aliasB, "referencingalias", tb, &status);
-        string = ures_getString(tb, &strLen, &status);
-        
-        if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-            log_err("Referencing alias didn't get the right string\n");
-        }
-        
-        string = ures_getStringByKey(aliasB, "referencingalias", &strLen, &status);
-        if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-            log_err("Referencing alias didn't get the right string\n");
-        }
-        
-        tb = ures_getByKey(aliasB, "collations", tb, &status);
-        tb = ures_getByKey(tb, "standard", tb, &status);
-        tb = ures_getByKey(tb, "Sequence", tb, &status);
-        string = ures_getString(tb, &strLen, &status);
-        
-        if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-            log_err("Referencing alias didn't get the right string\n");
-        }
-
-#if !UCONFIG_NO_COLLATION
-
-        /*
-         * TODO for Vladimir: Make this test independent of UCONFIG_NO_xyz-switchable
-         * modules like collation, so that it can be tested even when collation
-         * data is not included in resource bundles.
-         */
-
-        /* check whether the binary collation data is properly referenced by an alias */
-        uk = ures_findResource("uk/collations/standard/%%CollationBin", uk, &status);
-        binSequence = ures_getBinary(uk, &binSeqLen, &status);
-
-        tb = ures_getByKey(aliasB, "collations", tb, &status);
-        tb = ures_getByKey(tb, "standard", tb, &status);
-        tb = ures_getByKey(tb, "%%CollationBin", tb, &status);
-        binary = ures_getBinary(tb, &binLen, &status);
-
-        if(binSeqLen != binLen || uprv_memcmp(binSequence, binary, binSeqLen) != 0) {
-          log_err("Referencing alias didn't get the right string\n");
-        }
-
-        /* simple alias */
-        testtypes = ures_open(testdatapath, "testtypes", &status);
-        strcpy(buffer, "menu/file/open");
-        s = buffer;
-        uk = ures_findSubResource(testtypes, s, uk, &status);
-        sequence = ures_getString(uk, &seqLen, &status);
-
-        tb = ures_getByKey(aliasB, "simplealias", tb, &status);
-        string = ures_getString(tb, &strLen, &status);
-
-        if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-          log_err("Referencing alias didn't get the right string\n");
-        }
-
-        /* test indexed aliasing */
-
-        tb = ures_getByKey(aliasB, "zoneTests", tb, &status);
-        tb = ures_getByKey(tb, "zoneAlias2", tb, &status);
-        string = ures_getString(tb, &strLen, &status);
-
-        en = ures_findResource("en/zoneStrings/3/0", en, &status);
-        sequence = ures_getString(en, &seqLen, &status);
-
-        if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
-          log_err("Referencing alias didn't get the right string\n");
-        }
-
-#endif
+      /* testing aliasing to a non existing resource */
+      tb = ures_getByKey(aliasB, "nonexisting", tb, &status);
+      if(status != U_MISSING_RESOURCE_ERROR) {
+        log_err("Managed to find an alias to non-existing resource\n");
+      } else {
+        status = U_ZERO_ERROR;
+      }
+      
+      /* testing referencing/composed alias */
+      uk = ures_findResource("ja/LocaleScript/2", uk, &status);
+      if((uk == NULL) || U_FAILURE(status)) {
+        log_err("Couldn't findResource('ja/LocaleScript/2') err %s\n", u_errorName(status));
+        goto cleanup;
+        return;
+      } 
+      
+      sequence = ures_getString(uk, &seqLen, &status);
+      
+      tb = ures_getByKey(aliasB, "referencingalias", tb, &status);
+      string = ures_getString(tb, &strLen, &status);
+      
+      if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+        log_err("Referencing alias didn't get the right string\n");
+      }
+      
+      string = ures_getStringByKey(aliasB, "referencingalias", &strLen, &status);
+      if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+        log_err("Referencing alias didn't get the right string\n");
+      }
+      
+      checkStatus(__LINE__, U_ZERO_ERROR, status);
+      tb = ures_getByKey(aliasB, "LocaleScript", tb, &status);
+      checkStatus(__LINE__, U_ZERO_ERROR, status);
+      tb = ures_getByIndex(tb, 2, tb, &status);
+      checkStatus(__LINE__, U_ZERO_ERROR, status);
+      string = ures_getString(tb, &strLen, &status);
+      checkStatus(__LINE__, U_ZERO_ERROR, status);
+      
+      if(U_FAILURE(status)) {
+        log_err("%s trying to get string via separate getters\n", u_errorName(status));
+      } else if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+        log_err("Referencing alias didn't get the right string\n");
+      }
+      
+      /* check whether the binary collation data is properly referenced by an alias */
+      uk = ures_findResource("th/BreakDictionaryData", uk, &status);
+      binSequence = ures_getBinary(uk, &binSeqLen, &status);
+      
+      tb = ures_getByKey(aliasB, "BreakDictionaryData", tb, &status);
+      binary = ures_getBinary(tb, &binLen, &status);
+      
+      if(U_FAILURE(status)) {
+        log_err("%s trying to read binary BreakDictionaryData\n");
+      } else if(binSeqLen != binLen || uprv_memcmp(binSequence, binary, binSeqLen) != 0) {
+        log_err("Referencing alias didn't get the right data\n");
+      }
+      
+      /* simple alias */
+      testtypes = ures_open(testdatapath, "testtypes", &status);
+      strcpy(buffer, "menu/file/open");
+      s = buffer;
+      uk = ures_findSubResource(testtypes, s, uk, &status);
+      sequence = ures_getString(uk, &seqLen, &status);
+      
+      tb = ures_getByKey(aliasB, "simplealias", tb, &status);
+      string = ures_getString(tb, &strLen, &status);
+      
+      if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+        log_err("Referencing alias didn't get the right string\n");
+      }
+      
+      /* test indexed aliasing */
+      
+      tb = ures_getByKey(aliasB, "zoneTests", tb, &status);
+      tb = ures_getByKey(tb, "zoneAlias2", tb, &status);
+      string = ures_getString(tb, &strLen, &status);
+      
+      en = ures_findResource("en/zoneStrings/3/0", en, &status);
+      sequence = ures_getString(en, &seqLen, &status);
+      
+      if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+        log_err("Referencing alias didn't get the right string\n");
+      }
     }
     /* test getting aliased string by index */
     {
