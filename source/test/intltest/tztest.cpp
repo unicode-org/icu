@@ -19,6 +19,14 @@
 #include <crtdbg.h>
 #endif
 
+#define CASE(id,test) case id:                               \
+                          name = #test;                      \
+                          if (exec) {                        \
+                              logln(#test "---"); logln(""); \
+                              test();                        \
+                          }                                  \
+                          break
+
 // *****************************************************************************
 // class TimeZoneTest
 // *****************************************************************************
@@ -27,79 +35,17 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
 {
     if (exec) logln("TestSuite TestTimeZone");
     switch (index) {
-        case 0:
-            name = "TestPRTOffset";
-            if (exec) {
-                logln("TestPRTOffset---"); logln("");
-                TestPRTOffset();
-            }
-            break;
-        case 1:
-            name = "TestVariousAPI518";
-            if (exec) {
-                logln("TestVariousAPI518---"); logln("");
-                TestVariousAPI518();
-            }
-            break;
-        case 2:
-            name = "TestGetAvailableIDs913";
-            if (exec) {
-                logln("TestGetAvailableIDs913---"); logln("");
-                TestGetAvailableIDs913();
-            }
-            break;
-        case 3:
-            name = "TestGenericAPI";
-            if (exec) {
-                logln("TestGenericAPI---"); logln("");
-                TestGenericAPI();
-            }
-            break;
-        case 4:
-            name = "TestRuleAPI";
-            if (exec) {
-                logln("TestRuleAPI---"); logln("");
-                TestRuleAPI();
-            }
-            break;
-        case 5:
-            name = "TestShortZoneIDs";
-            if (exec) {
-                logln("TestShortZoneIDs---"); logln("");
-                TestShortZoneIDs();
-            }
-            break;
-        case 6:
-            name = "TestCustomParse";
-            if (exec) {
-                logln("TestCustomParse---"); logln("");
-                TestCustomParse();
-            }
-            break;
-        case 7:
-            name = "TestDisplayName";
-            if (exec) {
-                logln("TestDisplayName---"); logln("");
-                TestDisplayName();
-            }
-            break;
-
-        case 8:
-            name = "TestDSTSavings";
-            if (exec) {
-                logln("TestDSTSavings---"); logln("");
-                TestDSTSavings();
-            }
-            break;
-
-        case 9:
-            name = "TestAlternateRules";
-            if (exec) {
-                logln("TestAlternateRules---"); logln("");
-                TestAlternateRules();
-            }
-            break;
-
+        CASE(0, TestPRTOffset);
+        CASE(1, TestVariousAPI518);
+        CASE(2, TestGetAvailableIDs913);
+        CASE(3, TestGenericAPI);
+        CASE(4, TestRuleAPI);
+        CASE(5, TestShortZoneIDs);
+        CASE(6, TestCustomParse);
+        CASE(7, TestDisplayName);
+        CASE(8, TestDSTSavings);
+        CASE(9, TestAlternateRules);
+        CASE(10,TestCountries);
         default: name = ""; break;
     }
 }
@@ -594,14 +540,14 @@ void TimeZoneTest::TestShortZoneIDs()
 
     const char* compatibilityMap[] = {
         // This list is copied from tz.alias.  If tz.alias
-        // changes, this list must be updated.  Current as of 12/3/99
+        // changes, this list must be updated.  Current as of 1/31/01
         "ACT", "Australia/Darwin",
         "AET", "Australia/Sydney",
         "AGT", "America/Buenos_Aires",
         "ART", "Africa/Cairo",
         "AST", "America/Anchorage",
         "BET", "America/Sao_Paulo",
-        "BST", "Asia/Dacca",
+        "BST", "Asia/Dhaka", // Spelling changed in 2000h
         "CAT", "Africa/Harare",
         "CNT", "America/St_Johns",
         "CST", "America/Chicago",
@@ -1054,4 +1000,49 @@ TimeZoneTest::TestAlternateRules()
     if (offset != -5 * U_MILLIS_PER_HOUR)
         errln(UnicodeString("The offset for 10AM, 10/17/98 should have been -5 hours, but we got ")
               + (offset / U_MILLIS_PER_HOUR) + " hours.");
+}
+
+/**
+ * Test country code support.  Jitterbug 776.
+ */
+void TimeZoneTest::TestCountries() {
+    // Make sure America/Los_Angeles is in the "US" group, and
+    // Asia/Tokyo isn't.  Vice versa for the "JP" group.
+    int32_t n;
+    const UnicodeString** s = TimeZone::createAvailableIDs("US", n);
+    UBool la = false, tokyo = false;
+    UnicodeString laZone("America/Los_Angeles", "");
+    UnicodeString tokyoZone("Asia/Tokyo", "");
+    int32_t i;
+
+    for (i=0; i<n; ++i) {
+        if (*s[i] == (laZone)) {
+            la = TRUE;
+        }
+        if (*s[i] == (tokyoZone)) {
+            tokyo = TRUE;
+        }
+    }
+    if (!la || tokyo) {
+        errln("FAIL: " + laZone + " in US = " + la);
+        errln("FAIL: " + tokyoZone + " in US = " + tokyo);
+    }
+    delete[] s;
+    
+    s = TimeZone::createAvailableIDs("JP", n);
+    la = false; tokyo = false;
+    
+    for (i=0; i<n; ++i) {
+        if (*s[i] == (laZone)) {
+            la = TRUE;
+        }
+        if (*s[i] == (tokyoZone)) {
+            tokyo = TRUE;
+        }
+    }
+    if (la || !tokyo) {
+        errln("FAIL: " + laZone + " in JP = " + la);
+        errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
+    }
+    delete[] s;
 }

@@ -9,8 +9,8 @@
 # Author: Alan Liu
 ######################################################################
 # Usage:
-# Call ParseFile for each file to be imported.  Then call Postprocess
-# to remove unused rules and links.
+# Call ParseFile for each file to be imported.  Then call ParseZoneTab
+# to add country data.  Then call Postprocess to remove unused rules.
 
 package TZ;
 use strict;
@@ -21,26 +21,87 @@ require 'dumpvar.pl';
 @ISA = qw(Exporter);
 @EXPORT = qw(ParseFile
              Postprocess
+             ParseZoneTab
              );
-$VERSION = '0.1';
+$VERSION = '0.2';
 
 $STANDARD = '-'; # Name of the Standard Time rule
+
+######################################################################
+# Read the tzdata zone.tab file and add a {country} field to zones
+# in the given hash.
+# Param: File name (<dir>/zone.tab)
+# Param: Ref to hash of zones
+# Param: Ref to hash of links
+sub ParseZoneTab {
+    my ($FILE, $ZONES, $LINKS) = @_;
+
+    my %linkEntries;
+
+    local(*FILE);
+    open(FILE,"<$FILE") or confess "Can't open $FILE: $!";
+    while (<FILE>) {
+        # Handle comments
+        s/\#.*//;
+        next if (!/\S/);
+
+        if (/^\s*([A-Z]{2})\s+[-+0-9]+\s+(\S+)/) {
+            my ($country, $zone) = ($1, $2);
+            if (exists $ZONES->{$zone}) {
+                $ZONES->{$zone}->{country} = $country;
+            } elsif (exists $LINKS->{$zone}) {
+                # We have a country mapping for a zone that isn't in
+                # our hash.  This means it is a link entry.  Save this
+                # then handle it below.
+                $linkEntries{$zone} = $country;
+            } else {
+                print STDERR "Nonexistent zone $zone in $FILE\n";
+            }
+        } else {
+            confess "Can't parse line \"$_\" of $FILE";
+        }
+    }
+    close(FILE);
+
+    # Now that we have mapped all of the zones in %$ZONES (except
+    # those without country affiliations), process the link entries.
+    # For those zones in the table that differ by country from their
+    # source zone, instantiate a new zone in the new country.  An
+    # example is Europe/Vatican, which is linked to Europe/Rome.  If
+    # we don't instantiate it, we have nothing for Vatican City.
+    # Another example is America/Shiprock, which links to
+    # America/Denver.  These are identical and both in the US, so we
+    # don't instantiate America/Shiprock.
+    foreach my $zone (keys %linkEntries) {
+        my $country = $linkEntries{$zone};
+        my $linkZone = $LINKS->{$zone};
+        my $linkCountry = $ZONES->{$linkZone}->{country};
+        if ($linkCountry ne $country) {
+            # print "Cloning $zone ($country) from $linkZone ($linkCountry)\n";
+            _CloneZone($ZONES, $LINKS->{$zone}, $zone);
+            $ZONES->{$zone}->{country} = $country;
+        }
+    }
+}
 
 ######################################################################
 # Param: File name
 # Param: Ref to hash of zones
 # Param: Ref to hash of rules
+# Parma: Ref to hash of links
 # Param: Current year
 sub ParseFile {
-    my ($FILE, $ZONES, $RULES, $YEAR) = @_;
+    my ($FILE, $ZONES, $RULES, $LINKS, $YEAR) = @_;
 
     local(*FILE);
     open(FILE,"<$FILE") or confess "Can't open $FILE: $!";
     my $zone; # Current zone
     my $badLineCount = 0;
     while (<FILE>) {
+        # Handle comments and blanks
         s/\#.*//;
         next if (!/\S/);
+
         #|# Zone NAME           GMTOFF  RULES   FORMAT  [UNTIL]
         #|Zone America/Montreal -4:54:16 -      LMT     1884
         #|                      -5:00   Mont    E%sT
@@ -160,11 +221,16 @@ sub ParseFile {
             #|Link      America/Indianapolis    EST
             #|Link      America/Phoenix         MST
             #|Link      Pacific/Honolulu        HST
+            #
+            # There are also links for country-specific zones.
+            # These are zones the differ only in that they belong
+            # to a different country.  E.g.,
+            #|Link	Europe/Rome	Europe/Vatican
+            #|Link	Europe/Rome	Europe/San_Marino
             if (/^link\s+(\S+)\s+(\S+)/i) {
-                # We currently only record a single link -- if there
-                # are more than one, we should modify this.
                 my ($from, $to) = ($1, $2);
-                $ZONES->{$from}->{link} = $to;
+                # Record all links in $%LINKS
+                $LINKS->{$to} = $from;
             } else {
                 print STDERR "Can't parse in $FILE: $_";
                 ++$badLineCount;
@@ -193,17 +259,18 @@ sub Postprocess {
     my ($ZONES, $RULES) = @_;
     my %ruleInUse;
 
-    # Eliminate zone links that have no corresponding zone
-    foreach (keys %$ZONES) {
-        if (exists $ZONES->{$_}->{link} && !exists $ZONES->{$_}->{rule}) {
-            if (0) {
-                print STDERR
-                    "Deleting link from historical/nonexistent zone: ",
-                    $_, " -> ", $ZONES->{$_}->{link}, "\n";
-            }
-            delete $ZONES->{$_};
-        }
-    }
+# We no longer store links in the zone hash, so we don't need to do this.
+#    # Eliminate zone links that have no corresponding zone
+#    foreach (keys %$ZONES) {
+#        if (exists $ZONES->{$_}->{link} && !exists $ZONES->{$_}->{rule}) {
+#            if (0) {
+#                print STDERR
+#                    "Deleting link from historical/nonexistent zone: ",
+#                    $_, " -> ", $ZONES->{$_}->{link}, "\n";
+#            }
+#            delete $ZONES->{$_};
+#        }
+#    }
 
     # Check that each zone has a corresponding rule.  At the same
     # time, build up a hash that marks each rule that is in use.
@@ -242,5 +309,19 @@ sub Postprocess {
                    $RULES->{$_}->[1]->{on} . "," .
                    $RULES->{$_}->[1]->{at}); # [1]->{save} is always zero
         }
+    }
+}
+
+######################################################################
+# Create a clone of the zone $oldID named $newID in the hash $ZONES.
+# Param: ref to hash of zones
+# Param: ID of zone to clone
+# Param: ID of new zone
+sub _CloneZone {
+    my $ZONES = shift;
+    my $oldID = shift;
+    my $newID = shift;
+    for my $field (keys %{$ZONES->{$oldID}}) {
+        $ZONES->{$newID}->{$field} = $ZONES->{$oldID}->{$field};
     }
 }

@@ -69,6 +69,7 @@ public:
     void TestDSTSavings(void);
     void TestAlternateRules(void);
 
+    void TestCountries(void);
 
     static const UDate INTERVAL;
 

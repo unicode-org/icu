@@ -6,6 +6,7 @@
 *   Date        Name        Description
 *   11/24/99    aliu        Creation.
 *   09/26/00    aliu        Support for equivalency groups added.
+*   01/31/01    aliu        Support for ISO 3166 country codes added.
 **********************************************************************
 */
 
@@ -94,11 +95,13 @@ class gentz {
     TZHeader              header;
     TZEquivalencyGroup*   equivTable;
     OffsetIndex*          offsetIndex;
+    CountryIndex*         countryIndex;
     uint32_t*             nameToEquiv;
     char*                 nameTable;
 
     uint32_t equivTableSize;  // Total bytes in equivalency group table
     uint32_t offsetIndexSize; // Total bytes in offset index table
+    uint32_t countryIndexSize; // Total bytes in country index table
     uint32_t nameToEquivSize; // Total bytes in nameToEquiv
     uint32_t nameTableSize;   // Total bytes in name table
 
@@ -124,6 +127,8 @@ private:
     void          parseDSTRule(char*& p, TZRule& rule);
 
     OffsetIndex*  parseOffsetIndexTable(FileStream* in);
+
+    CountryIndex* parseCountryIndexTable(FileStream* in);
 
     char*         parseNameTable(FileStream* in);
 
@@ -227,15 +232,19 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     // Our order is:
     // - equiv table
     // - offset index
+    // - country index
     // - name index (name to equiv map)
-    // - name table
+    // - name table (must be last!)
     header.equivTableDelta = sizeof(header);
     header.offsetIndexDelta = header.equivTableDelta + equivTableSize;
-    header.nameIndexDelta = header.offsetIndexDelta + offsetIndexSize;
+    header.countryIndexDelta = header.offsetIndexDelta + offsetIndexSize;
+    header.nameIndexDelta = header.countryIndexDelta + countryIndexSize;
+    // Must be last:
     header.nameTableDelta = header.nameIndexDelta + nameToEquivSize;
 
     if (header.equivTableDelta < 0 ||
         header.offsetIndexDelta < 0 ||
+        header.countryIndexDelta < 0 ||
         header.nameIndexDelta < 0 ||
         header.nameTableDelta < 0) {
         die("Table too big -- negative delta");
@@ -258,6 +267,7 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     udata_writeBlock(pdata, &header, sizeof(header));
     udata_writeBlock(pdata, equivTable, equivTableSize);
     udata_writeBlock(pdata, offsetIndex, offsetIndexSize);
+    udata_writeBlock(pdata, countryIndex, countryIndexSize);
     udata_writeBlock(pdata, nameToEquiv, nameToEquivSize);
     udata_writeBlock(pdata, nameTable, nameTableSize);
 
@@ -267,8 +277,8 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     }
 
     if (dataLength != (sizeof(header) + equivTableSize +
-                       offsetIndexSize + nameTableSize +
-                       nameToEquivSize
+                       offsetIndexSize + countryIndexSize +
+                       nameTableSize + nameToEquivSize
                        )) {
         die("Written file doesn't match expected size");
     }
@@ -287,6 +297,9 @@ void gentz::parseTzTextFile(FileStream* in) {
     
     // Parse the GMT offset index table
     offsetIndex = parseOffsetIndexTable(in);
+
+    // Parse the ISO 3166 country index table
+    countryIndex = parseCountryIndexTable(in);
 }
 
 /**
@@ -496,6 +509,65 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     fprintf(stdout, " Read %lu offset index table entries, in-memory size %ld bytes\n",
             n, offsetIndexSize);
     return (OffsetIndex*)result;
+}
+
+CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
+    uint32_t n = readIntegerLine(in, 1, MAX_ZONES);
+
+    // We know how big the whole thing will be: Each zone occupies an
+    // int, and each country adds 3 ints (one for the intcode, one for
+    // next entry offset, one for the zone count).  Each int is 16
+    // bits.
+    //
+    // Everything is 16-bits, so we don't 4-align the entries.
+    // However, we do pad at the end of the table to make the whole
+    // thing of size 4n, if necessary.
+    uint32_t expectedSize = n*(sizeof(CountryIndex)-sizeof(uint16_t)) +
+        header.count * sizeof(uint16_t);
+    uint32_t pad = (4 - (expectedSize % 4)) % 4; // This will be 0 or 2
+    int8_t *result = new int8_t[expectedSize + pad];
+    if (result == 0) {
+        die("Out of memory");
+    }
+
+    // Read each line and construct the corresponding entry.
+    // Along the way, make sure we don't write past 'limit'.
+    CountryIndex* index = (CountryIndex*)result;
+    int8_t* limit = ((int8_t*)result) + expectedSize; // Don't include pad
+    uint32_t i;
+    for (i=0; i<n && (int8_t*)(&index->zoneNumber) < limit; ++i) {
+        readLine(in);
+        char* p = buffer;
+        index->intcode = (uint16_t)parseInteger(p, SEP, 0, 25*32+25 /*ZZ*/);
+        index->count = (uint16_t)parseInteger(p, SEP, 0, header.count-1);
+        uint16_t* zoneNumberArray = &(index->zoneNumber);
+        if ((int8_t*)(&index->zoneNumber + index->count - 1) >= limit) {
+            // Oops -- out of space
+            break;
+        }
+        for (uint16_t j=0; j<index->count; ++j) {
+            zoneNumberArray[j] = (uint16_t)
+                parseInteger(p, (j==(index->count-1))?NUL:SEP,
+                             0, header.count-1);
+        }
+        int8_t* nextIndex = (int8_t*)&(zoneNumberArray[index->count]);
+        index->nextEntryDelta = (uint16_t) ((i==(n-1)) ? 0 : (nextIndex - (int8_t*)index));
+        index = (CountryIndex*)nextIndex;
+    }
+    readEndMarker(in);
+
+    // Make sure size matches expected value, and pad the total size
+    countryIndexSize = (int8_t*)index - (int8_t*)result + pad;
+    if (i != n || countryIndexSize != expectedSize) {
+        die("Yikes! Interal error while constructing offset index table");
+    }
+    if (pad != 0) {
+        countryIndexSize += pad;
+        *(uint16_t*)index = 0; // Clear pad bits
+    }
+    fprintf(stdout, " Read %lu country index table entries, in-memory size %ld bytes\n",
+            n, countryIndexSize);
+    return (CountryIndex*)result;
 }
 
 void gentz::parseHeader(FileStream* in) {

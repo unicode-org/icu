@@ -20,12 +20,14 @@
 #|Zone America/Montreal -4:54:16 -      LMT     1884
 #|                      -5:00   Mont    E%sT
 
-# Optionally, a zone may also have the key:
-# {link}   An old name for this zone, e.g. "HST" (for Pacific/Honolulu)
 # Links come from the file entries:
 #|# Link    LINK-FROM               LINK-TO
 #|Link      America/New_York        EST5EDT
 #|Link      America/Chicago         CST6CDT
+# Link data is _not_ stored in the zone hash.  Instead, links are
+# kept in a separate hash and resolved after all zones are defined.
+# In general, we ignore links, but they provide critical data when
+# generating country information.
 
 # The name of the zone itself is not kept in the zone object.
 # Instead, zones are kept in a big hash.  The keys are the names; the
@@ -36,7 +38,6 @@
 # Example: $ZONES->{"America/Los_Angeles"} =
 #   'format' => 'P%sT'
 #   'gmtoff' => '-8:00'
-#   'link' => 'US/Pacific-New'
 #   'rule' => 'US'
 #   'until' => ''
 
@@ -227,7 +228,7 @@ sub FormZoneEquivalencyGroups {
 sub ParseOffset {
     local $_ = shift;
     if (/^(-)?(\d{1,2})(:(\d\d))?(:(\d\d))?$/) {
-        #        1   2      4        6
+        #  1   2        3 4       5 6
         my $a = (($2 * 60) + (defined $4?$4:0)) * 60 + (defined $6?$6:0);
         $a = -$a if (defined $1 && $1 eq '-');
         return $a;

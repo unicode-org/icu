@@ -34,6 +34,7 @@
 class SimpleTimeZone;
 struct TZHeader;
 struct OffsetIndex;
+struct CountryIndex;
 struct TZEquivalencyGroup;
   
 /**
@@ -158,6 +159,27 @@ public:
      * @stable
      */
     static const UnicodeString** const createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
+
+    /**
+     * Returns a list of time zone IDs associated with the given
+     * country.  Some zones are affiliated with no country (e.g.,
+     * "UTC"); these may also be retrieved, as a group.
+     *
+     * <P>The caller owns the list that is returned, but does not own
+     * the strings contained in that list.  Delete the array, but
+     * <b>DON'T</b> delete the elements in the array.
+     *
+     * @param country The ISO 3166 two-letter country code, or NULL to
+     * retrieve zones not affiliated with any country.
+     * @param numIDs Receives the number of items in the array that is
+     * returned.
+     * @return An array of UnicodeString pointers, where each
+     * UnicodeString is a time zone ID for a time zone with the given
+     * GMT offset.  If there is no timezone that matches the GMT
+     * offset specified, NULL is returned.
+     */
+    static const UnicodeString** const createAvailableIDs(const char* country,
+                                                          int32_t& numIDs);
 
     /**
      * Returns a list of all time zone IDs supported by the TimeZone class (i.e., all
@@ -538,6 +560,13 @@ private:
      * variable size.
      */
     static const OffsetIndex*  INDEX_BY_OFFSET;
+
+    /**
+     * INDEX_BY_COUNTRY is a CountryIndex table.  This table can
+     * be walked through sequentially because the entries are of
+     * variable size.
+     */
+    static const CountryIndex* INDEX_BY_COUNTRY;
 
     ////////////////////////////////////////////////////////////////
     // Other system zone data structures

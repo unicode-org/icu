@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 ######################################################################
-# Copyright (C) 1999, International Business Machines
+# Copyright (C) 1999-2001, International Business Machines
 # Corporation and others.  All Rights Reserved.
 ######################################################################
 # See: ftp://elsie.nci.nih.gov/pub/tzdata<year>
@@ -30,7 +30,7 @@
 # - Lines may be followed by a comment; the parser must ignore
 #   anything of the form /\s+#.*$/ in each line.
 #   |3065,14400 # Asia/Dubai GMT+4:00
-# - The file contains a header and 3 lists.
+# - The file contains a header and 4 lists.
 # - The header contains the version of this data file:
 #    2 original version, without equivalency groups
 #    3 current version, described here
@@ -89,6 +89,20 @@
 #   | -39600,374,6,279,366,374,394,396,399 # -11:00 d=Pacific/Apia Etc/GMT+11 MIT Pacific/Apia Pacific/Midway Pacific/Niue Pacific/Pago_Pago
 #   ...
 #   | end
+# - The fourth list is an index by ISO 3166 country code.  Each line
+#   lists a country and the zones mapped into that country by the
+#   zone.tab file.  Zones not mapped into any file are listed on the
+#   first line.  The first number on each line is the intcode for the
+#   country code.  The intcode for 'US' for example is ('U'-'A') * 32
+#   + ('S' - 'A') == 658.  The second number is the count of list
+#   items, and the following number are the zone indices.
+#   | 238 # index by country entries to follow
+#   | 0,38,230,231,232,276,282,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,364,380,429,431 # (None) Asia/Riyadh87 Asia/Riyadh88 Asia/Riyadh89 CET EET Etc/GMT Etc/GMT+1 Etc/GMT+10 Etc/GMT+11 Etc/GMT+12 Etc/GMT+2 Etc/GMT+3 Etc/GMT+4 Etc/GMT+5 Etc/GMT+6 Etc/GMT+7 Etc/GMT+8 Etc/GMT+9 Etc/GMT-1 Etc/GMT-10 Etc/GMT-11 Etc/GMT-12 Etc/GMT-13 Etc/GMT-14 Etc/GMT-2 Etc/GMT-3 Etc/GMT-4 Etc/GMT-5 Etc/GMT-6 Etc/GMT-7 Etc/GMT-8 Etc/GMT-9 Etc/UCT Etc/UTC GMT MET UTC WET
+#   | 3,1,314 # AD (Andorra) Europe/Andorra
+#   | 4,1,199 # AE (United Arab Emirates) Asia/Dubai
+#   | ...
+#   | 822,2,28,275 # ZW (Zimbabwe) Africa/Harare CAT
+#   | end
 ######################################################################
 # As of 1999j, here are the various possible values taken by the
 # rule fields.  See code below that generates this data.
@@ -108,8 +122,9 @@ use strict;
 use Getopt::Long;
 use vars qw(@FILES $YEAR $DATA_DIR $OUT $SEP @MONTH
             $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION
-            $TZ_ALIAS $TZ_DEFAULT $URL $HTML_FILE $JAVA_FILE
-            $TZ_TXT_VERSION %ZONE_ID_TO_INDEX $END_MARKER);
+            $TZ_ALIAS $TZ_DEFAULT $URL $TXT_FILE $HTML_FILE $JAVA_FILE
+            $TZ_TXT_VERSION %ZONE_ID_TO_INDEX $END_MARKER
+            %COUNTRY_CODES);
 require 'dumpvar.pl';
 use tzparse;
 use tzutil;
@@ -119,10 +134,10 @@ use tzutil;
 # 1 - unreleased version (?)
 # 2 - original version
 # 3 - added equivalency groups
-$TZ_TXT_VERSION = 3;
+# 4 - added country code index
+$TZ_TXT_VERSION = 4;
 
 # File names
-$OUT = 'tz.txt';
 $TZ_ALIAS = 'tz.alias';
 $TZ_DEFAULT = 'tz.default';
 
@@ -161,6 +176,40 @@ if (!$DATA_DIR || ! -d $DATA_DIR) {
     usage();
 }
 
+$TXT_FILE = '';
+$HTML_FILE = '';
+$JAVA_FILE = '';
+while (@ARGV) {
+    local $_ = shift;
+    if (/\.java$/i) {
+        if ($JAVA_FILE) {
+            print STDERR "Error: Multiple java files specified\n";
+            usage();
+        }
+        $JAVA_FILE = $_;
+    } elsif (/\.html?$/i) {
+        if ($HTML_FILE) {
+            print STDERR "Error: Multiple html files specified\n";
+            usage();
+        }
+        $HTML_FILE = $_;
+    } elsif (/\.txt$/i) {
+        if ($TXT_FILE) {
+            print STDERR "Error: Multiple txt files specified\n";
+            usage();
+        }
+        $TXT_FILE = $_;
+    } else {
+        print STDERR "Error: Unexpected command line parameter \"$_\"\n";
+        usage();
+    }
+}
+
+if (!($TXT_FILE || $JAVA_FILE || $HTML_FILE)) {
+    print STDERR "Nothing to do!  Please specify one or more output files.\n";
+    usage();
+}
+
 if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
     $RAW_VERSION = $1;
     $VERSION_YEAR = $2;
@@ -184,15 +233,6 @@ if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
     usage();
 }
 
-$HTML_FILE = shift;
-
-if ($HTML_FILE =~ /\.java$/i) {
-    $JAVA_FILE = $HTML_FILE;
-    $HTML_FILE = shift;
-} else {
-    $JAVA_FILE = shift;
-}
-
 @MONTH = qw(jan feb mar apr may jun
             jul aug sep oct nov dec);
 
@@ -200,22 +240,23 @@ main();
 exit();
 
 sub usage {
-    print STDERR "Usage: $0 data_dir [html_out] [java_out]\n\n";
-    print STDERR "data_dir contains the unpacked files from\n";
-    print STDERR "$URL/tzdataYYYYR,\n";
-    print STDERR "where YYYY is the year and R is the revision\n";
-    print STDERR "letter.\n";
+    print STDERR "Usage: $0 data_dir [txt_out] [html_out] [java_out]\n\n";
+    print STDERR "  data_dir contains the unpacked files from\n";
+    print STDERR "  $URL/tzdataYYYYR,\n";
+    print STDERR "  where YYYY is the year and R is the revision\n";
+    print STDERR "  letter.\n";
     print STDERR "\n";
-    print STDERR "Files that are expected to be present are:\n";
-    print STDERR join(", ", @FILES), "\n";
+    print STDERR "  Files that are expected to be present are:\n";
+    print STDERR "  ", join(", ", @FILES), "\n";
     print STDERR "\n";
-    print STDERR "[html_out] optional name of HTML file to output\n";
-    print STDERR "[java_out] optional name of Java file to output\n";
+    print STDERR "  [txt_out]  optional name of .txt file to output\n";
+    print STDERR "  [html_out] optional name of .htm|.html file to output\n";
+    print STDERR "  [java_out] optional name of .java file to output\n";
     exit 1;
 }
 
 sub main {
-    my (%ZONES, %RULES, @EQUIV);
+    my (%ZONES, %RULES, @EQUIV, %LINKS, %COUNTRIES);
 
     print "Reading";
     foreach (@FILES) {
@@ -224,13 +265,33 @@ sub main {
             usage();
         }
         print ".";
-        TZ::ParseFile("$DATA_DIR/$_", \%ZONES, \%RULES, $YEAR);
+        TZ::ParseFile("$DATA_DIR/$_", \%ZONES, \%RULES, \%LINKS, $YEAR);
     }
     print "done\n";
 
+    # Add country data from zone.tab
+    TZ::ParseZoneTab("$DATA_DIR/zone.tab", \%ZONES, \%LINKS);
+
+    # We'll also read the iso3166.tab file here.  We don't really need
+    # this except for documentation purposes (in generated files)
+    # and for the HTML file.
+    local(*FILE);
+    open(FILE, "$DATA_DIR/iso3166.tab") or die "Can't open $DATA_DIR/iso3166.tab";
+    while (<FILE>) {
+        s/\#.*//;
+        next unless (/\S/);
+        s/\s+$//;
+        if (/^([A-Z]{2})\s+(\S.*)/) {
+            $COUNTRY_CODES{$1} = $2; # Map from code to country name
+        } else {
+            print STDERR "Ignoring $DATA_DIR/iso3166.tab line: $_";
+        }
+    }
+    close(FILE);
+
     TZ::Postprocess(\%ZONES, \%RULES);
 
-    my $aliases = incorporateAliases($TZ_ALIAS, \%ZONES);
+    my $aliases = incorporateAliases($TZ_ALIAS, \%ZONES, \%LINKS);
 
     print
         "Read ", scalar keys %ZONES, " current zones and ",
@@ -247,27 +308,12 @@ sub main {
         $ZONES{GMT} = \%GMT;
     }
 
-    # Validate names and count total size
-    my $NAME_SIZE = 0;
+    # Validate names
     foreach my $z (keys %ZONES) {
         # Make sure zone IDs only contain invariant chars
         assertInvariantChars($z);
-
-        $NAME_SIZE += 1 + length($z);
     }
 
-    # Find the maximum number of zones with the same value of
-    # gmtOffset.
-    my %perOffset; # Hash of offset -> count
-    foreach my $z (keys %ZONES) {
-        # Use TZ::ParseOffset to normalize values - probably unnecessary
-        ++$perOffset{TZ::ParseOffset($ZONES{$z}->{gmtoff})};
-    }
-    my $maxPerOffset = 0;
-    foreach (values %perOffset) {
-        $maxPerOffset = $_ if ($_ > $maxPerOffset);
-    }
-    
     # Create the offset index table, that includes the zones
     # for each offset and the default zone for each offset.
     # This is a hash{$name -> array ref}.  Element [0] of
@@ -276,14 +322,10 @@ sub main {
     my $offsetIndex = createOffsetIndex(\%ZONES, $TZ_DEFAULT);
 
     # Group zones into equivalency groups
-    my $maxPerEquiv = 0;
     TZ::FormZoneEquivalencyGroups(\%ZONES, \%RULES, \@EQUIV);
     print
         "Equivalency groups (including unique zones): ",
         scalar @EQUIV, "\n";
-    foreach my $eg (@EQUIV) {
-        $maxPerEquiv = @$eg if (@$eg > $maxPerEquiv);
-    }
 
     # Sort equivalency table first by GMT offset, then by
     # alphabetic order of encoded rule string.
@@ -306,133 +348,55 @@ sub main {
         $ZONE_ID_TO_INDEX{$z} = $i++;
     }
 
-    open(OUT,">$OUT") or die "Can't open $OUT for writing: $!";
+    # Create the country -> zone array hash
+    # This hash has the form:
+    # $COUNTRIES{'US'}->{zones}->[13] == "America/Los_Angeles"
+    # $COUNTRIES{'US'}->{intcode} == 658
 
-    ############################################################
-    # EMIT HEADER
-    ############################################################
-    # Zone data version
-    print OUT "#--- Header --- Generated by tz.pl\n";
-    print OUT $TZ_TXT_VERSION, " # format version number of this file\n";
-    print OUT $VERSION_YEAR, " # ($RAW_VERSION) version of Olson zone\n";
-    print OUT $VERSION_SUFFIX, " #  data from $URL\n";
-    print OUT scalar keys %ZONES, " # total zone count\n";
-    # The following counts are all used by gentz during its parse
-    # of the tz.txt file and creation of the tz.dat file, even
-    # if they don't show up in the tz.dat file header.  For example,
-    # gentz needs the maxPerOffset to preallocate the offset index
-    # entries.  It needs the NAME_SIZE to allocate the big buffer
-    # that will receive all the names.
-    print OUT scalar @EQUIV, " # equivalency groups count\n";
-    print OUT $maxPerOffset, " # max zones with same gmtOffset\n";
-    print OUT $maxPerEquiv, " # max zones in an equivalency group\n";
-    print OUT $NAME_SIZE, " # length of name table in bytes\n";
-    print OUT $END_MARKER, "\n\n";
-
-    ############################################################
-    # EMIT ZONE TABLE
-    ############################################################
-    # Output the name table, followed by 'end' keyword
-    print OUT "#--- Zone table ---\n";
-    print OUT "#| equiv_index,name\n";
-    print OUT scalar keys %ZONES, " # count of zones to follow\n";
-
-    # IMPORTANT: This sort must correspond to the sort
-    #            order of UnicodeString::compare.  That
-    #            is, it must be a plain sort.
-    foreach my $z (sort keys %ZONES) {
-        # Make sure zone IDs only contain invariant chars
-        assertInvariantChars($z);
-
-        print OUT equivIndexOf($z, \@EQUIV), ',', $z, "\n";        
-    }
-    print OUT $END_MARKER, "\n\n";
-
-    ############################################################
-    # EMIT EQUIVALENCY TABLE
-    ############################################################
-    print OUT "#--- Equivalency table ---\n";
-    print OUT "#| ('s'|'d'),zone_spec,id_count,id_list\n";
-    print OUT scalar @EQUIV, " # count of equivalency groups to follow\n";
-    $i = 0;
-    foreach my $aref (@EQUIV) {
-        # $aref is an array ref; the array is full of zone IDs
-        # Use the ID of the first array element
-        my $z = $aref->[0];
-
-        # Output either 's' or 'd' to indicate standard or DST
-        my $isStd = ($ZONES{$z}->{rule} eq $TZ::STANDARD);
-        print OUT $isStd ? 's,' : 'd,';
-        
-        # Format the zone
-        my ($spec, $notes) = formatZone($z, $ZONES{$z}, \%RULES);
-
-        # Now add the equivalency list
-        push @$spec, scalar @$aref;
-        push @$notes, "[";
-        my $min = -1;
-        foreach $z (@$aref) {
-            my $index = $ZONE_ID_TO_INDEX{$z};
-            # Make sure they are in order
-            die("Unsorted equiv table indices") if ($index <= $min);
-            $min = $index;
-            push @$spec, $index;
-            push @$notes, $z;
-        }
-        push @$notes, "]";
-        
-        unshift @$notes, $i++; # Insert index of this group at front
-        print OUT join($SEP, @$spec) . " # " . join(' ', @$notes), "\n";
-    }
-    print OUT $END_MARKER, "\n\n";
-
-    ############################################################
-    # EMIT INDEX BY GMT OFFSET
-    ############################################################
-    # Create a hash mapping zone name -> integer, from 0..n-1.
-    # Create an array mapping zone number -> name.
-    my %zoneNumber;
-    my @zoneName;
-    $i = 0;
+    # Some zones are not affiliated with any country (e.g., UTC).  We
+    # use a fake country code for these, chosen to precede any real
+    # country code.  'A' or 'AA' work.
+    my $NONE = 'A';
     foreach (sort keys %ZONES) {
-        $zoneName[$i] = $_;
-        $zoneNumber{$_} = $i++;
+        my $country = $ZONES{$_}->{country};
+        $country = $NONE unless ($country);
+        push @{$COUNTRIES{$country}->{zones}}, $_;
+    }
+    foreach my $country (keys %COUNTRIES) {
+        # Compute the int code, which is just a numerical
+        # rep. of the two letters.  Use 0 to represent no
+        # country; this MUST BE CHANGED if AA ever becomes
+        # a valid country code.
+        my $intcode = 0;
+        if ($country ne $NONE) {
+            if ($country =~ /^([A-Z])([A-Z])$/) {
+                $intcode = ((ord($1) - ord('A')) << 5) |
+                    (ord($2) - ord('A'));
+            } else {
+                die "Can't parse country code $country";
+            }
+        }
+        $COUNTRIES{$country}->{intcode} = $intcode;
     }
 
-    # Emit offset index
-    print OUT "#--- Offset index ---\n";
-    print OUT "#| gmt_offset,default_id,id_count,id_list\n";
-    print OUT scalar keys %{$offsetIndex}, " # index by offset entries to follow\n";
-    foreach (sort {$a <=> $b} keys %{$offsetIndex}) {
-        my $aref = $offsetIndex->{$_};
-        my $def = $aref->[0];
-        # Make a slice of 1..n
-        my @b = @{$aref}[1..$#{$aref}];
-        print OUT
-            $_, ",", $zoneNumber{$def}, ",",
-            scalar @b, ",",
-            join(",", map($zoneNumber{$_}, @b)),
-            " # ", formatOffset($_), " d=", $def, " ",
-            join(" ", @b), "\n";
+    # Emit the text file
+    if ($TXT_FILE) {
+        emitText($TXT_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases,
+                 \%COUNTRIES);
+        print "$TXT_FILE written.\n";
     }
-
-    print OUT $END_MARKER, "\n";
-
-    ############################################################
-    # END
-    ############################################################
-    close(OUT);
-    print "$OUT written.\n";
 
     # Emit the Java file
     if ($JAVA_FILE) {
-        emitJava($JAVA_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases);
+        emitJava($JAVA_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases,
+                 \%COUNTRIES);
         print "$JAVA_FILE written.\n";
     }
 
     # Emit the HTML file
     if ($HTML_FILE) {
-        emitHTML($HTML_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases);
+        emitHTML($HTML_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases,
+                 \%COUNTRIES);
         print "$HTML_FILE written.\n";
     }
 
@@ -580,6 +544,183 @@ sub isDefault {
     return ($aref->[0] eq $name);
 }
 
+# Emit a text file that contains data for the system time zones.
+# Param: File name
+# Param: ref to zone hash
+# Param: ref to rule hash
+# Param: ref to equiv table
+# Param: ref to offset index
+# Param: ref to alias hash
+sub emitText {
+    my $file = shift;
+    my $zones = shift;
+    my $rules = shift;
+    my $equiv = shift;
+    my $offsetIndex = shift;
+    my $aliases = shift;
+    my $countries = shift;
+
+    # Find the maximum number of zones with the same value of
+    # gmtOffset.
+    my %perOffset; # Hash of offset -> count
+    foreach my $z (keys %$zones) {
+        # Use TZ::ParseOffset to normalize values - probably unnecessary
+        ++$perOffset{TZ::ParseOffset($zones->{$z}->{gmtoff})};
+    }
+    my $maxPerOffset = 0;
+    foreach (values %perOffset) {
+        $maxPerOffset = $_ if ($_ > $maxPerOffset);
+    }
+
+    # Count maximum number of zones per equivalency group
+    my $maxPerEquiv = 0;
+    foreach my $eg (@$equiv) {
+        $maxPerEquiv = @$eg if (@$eg > $maxPerEquiv);
+    }
+
+    # Count total name size
+    my $name_size = 0;
+    foreach my $z (keys %$zones) {
+        $name_size += 1 + length($z);
+    }
+
+    local(*OUT);
+    open(OUT,">$file") or die "Can't open $file for writing: $!";
+
+    ############################################################
+    # EMIT HEADER
+    ############################################################
+    # Zone data version
+    print OUT "#--- Header --- Generated by tz.pl\n";
+    print OUT $TZ_TXT_VERSION, " # format version number of this file\n";
+    print OUT $VERSION_YEAR, " # ($RAW_VERSION) version of Olson zone\n";
+    print OUT $VERSION_SUFFIX, " #  data from $URL\n";
+    print OUT scalar keys %$zones, " # total zone count\n";
+    # The following counts are all used by gentz during its parse
+    # of the tz.txt file and creation of the tz.dat file, even
+    # if they don't show up in the tz.dat file header.  For example,
+    # gentz needs the maxPerOffset to preallocate the offset index
+    # entries.  It needs the $name_size to allocate the big buffer
+    # that will receive all the names.
+    print OUT scalar @$equiv, " # equivalency groups count\n";
+    print OUT $maxPerOffset, " # max zones with same gmtOffset\n";
+    print OUT $maxPerEquiv, " # max zones in an equivalency group\n";
+    print OUT $name_size, " # length of name table in bytes\n";
+    print OUT $END_MARKER, "\n\n";
+
+    ############################################################
+    # EMIT ZONE TABLE
+    ############################################################
+    # Output the name table, followed by 'end' keyword
+    print OUT "#--- Zone table ---\n";
+    print OUT "#| equiv_index,name\n";
+    print OUT scalar keys %$zones, " # count of zones to follow\n";
+
+    # IMPORTANT: This sort must correspond to the sort
+    #            order of UnicodeString::compare.  That
+    #            is, it must be a plain sort.
+    foreach my $z (sort keys %$zones) {
+        # Make sure zone IDs only contain invariant chars
+        assertInvariantChars($z);
+
+        print OUT equivIndexOf($z, $equiv), ',', $z, "\n";        
+    }
+    print OUT $END_MARKER, "\n\n";
+
+    ############################################################
+    # EMIT EQUIVALENCY TABLE
+    ############################################################
+    print OUT "#--- Equivalency table ---\n";
+    print OUT "#| ('s'|'d'),zone_spec,id_count,id_list\n";
+    print OUT scalar @$equiv, " # count of equivalency groups to follow\n";
+    my $i = 0;
+    foreach my $aref (@$equiv) {
+        # $aref is an array ref; the array is full of zone IDs
+        # Use the ID of the first array element
+        my $z = $aref->[0];
+
+        # Output either 's' or 'd' to indicate standard or DST
+        my $isStd = ($zones->{$z}->{rule} eq $TZ::STANDARD);
+        print OUT $isStd ? 's,' : 'd,';
+        
+        # Format the zone
+        my ($spec, $notes) = formatZone($z, $zones->{$z}, $rules);
+
+        # Now add the equivalency list
+        push @$spec, scalar @$aref;
+        push @$notes, "[";
+        my $min = -1;
+        foreach $z (@$aref) {
+            my $index = $ZONE_ID_TO_INDEX{$z};
+            # Make sure they are in order
+            die("Unsorted equiv table indices") if ($index <= $min);
+            $min = $index;
+            push @$spec, $index;
+            push @$notes, $z;
+        }
+        push @$notes, "]";
+        
+        unshift @$notes, $i++; # Insert index of this group at front
+        print OUT join($SEP, @$spec) . " # " . join(' ', @$notes), "\n";
+    }
+    print OUT $END_MARKER, "\n\n";
+
+    ############################################################
+    # EMIT INDEX BY GMT OFFSET
+    ############################################################
+    # Create a hash mapping zone name -> integer, from 0..n-1.
+    # Create an array mapping zone number -> name.
+    my %zoneNumber;
+    my @zoneName;
+    $i = 0;
+    foreach (sort keys %$zones) {
+        $zoneName[$i] = $_;
+        $zoneNumber{$_} = $i++;
+    }
+
+    # Emit offset index
+    print OUT "#--- Offset INDEX ---\n";
+    print OUT "#| gmt_offset,default_id,id_count,id_list\n";
+    print OUT scalar keys %{$offsetIndex}, " # index by offset entries to follow\n";
+    foreach (sort {$a <=> $b} keys %{$offsetIndex}) {
+        my $aref = $offsetIndex->{$_};
+        my $def = $aref->[0];
+        # Make a slice of 1..n
+        my @b = @{$aref}[1..$#{$aref}];
+        print OUT
+            $_, ",", $zoneNumber{$def}, ",",
+            scalar @b, ",",
+            join(",", map($zoneNumber{$_}, @b)),
+            " # ", formatOffset($_), " d=", $def, " ",
+            join(" ", @b), "\n";
+    }
+
+    print OUT $END_MARKER, "\n\n";
+
+    ############################################################
+    # EMIT INDEX BY COUNTRY
+    ############################################################
+    print OUT "#--- Country INDEX ---\n";
+    print OUT "#| country_int_code,id_count,id_list\n";
+    print OUT scalar keys %$countries, " # index by country entries to follow\n";
+    foreach my $country (sort keys %$countries) {
+        my $intcode = $countries->{$country}->{intcode};
+        my $aref = $countries->{$country}->{zones};
+        print OUT
+            $intcode, ",", scalar @$aref, ",",
+            join(",", map($zoneNumber{$_}, @$aref)), " # ",
+            ($intcode ? ($country . " (" . $COUNTRY_CODES{$country} . ") ") : "(None) "),
+            join(" ", @$aref), "\n";
+    }
+
+    print OUT $END_MARKER, "\n";
+
+    ############################################################
+    # END
+    ############################################################
+    close(OUT);
+}
+
 # Emit a Java file that contains data for the system time zones.
 # Param: File name
 # Param: ref to zone hash
@@ -594,6 +735,7 @@ sub emitJava {
     my $equiv = shift;
     my $offsetIndex = shift;
     my $aliases = shift;
+    my $countries = shift;
 
     my $_indent = "        ";
     
@@ -697,6 +839,23 @@ sub emitJava {
             ", // " . formatOffset($_) . " d=" . $def . " " .
             join(" ", @b) . "\n";
     }
+
+    ############################################################
+    # Index by country
+    my $_INDEX_BY_COUNTRY;
+    foreach my $country (sort keys %$countries) {
+        my $intcode = $countries->{$country}->{intcode};
+        my $aref = $countries->{$country}->{zones};
+        # Emit int code (n1*32 + n0), #of zones,
+        # and list of zones.
+        $_INDEX_BY_COUNTRY .=
+            $_indent . $intcode . ", " .
+            scalar(@$aref) . ", " .
+            join(", ", map($zoneNumber{$_}, @$aref)) . ", // " .
+            ($intcode ? ($country . " (" . $COUNTRY_CODES{$country} . ")") : "(None)") . ": " .
+            join(" ", @$aref) .
+            "\n";
+    }
     
 ############################################################
 # BEGIN JAVA TEMPLATE
@@ -755,6 +914,15 @@ public class tz {
         System.out.println(Utility.formatForSource(Utility.arrayToRLEString(INDEX_BY_OFFSET)));
         System.out.println("        ;\\n");
 
+        System.out.println("    /**");
+        System.out.println("     * RLE encoded form of INDEX_BY_COUNTRY.");
+        System.out.println("     * \@see com.ibm.util.Utility.RLEStringToIntArray");
+        System.out.println("     * >> GENERATED DATA: DO NOT EDIT <<");
+        System.out.println("     */");
+        System.out.println("    static final String INDEX_BY_COUNTRY_RLE =");
+        System.out.println(Utility.formatForSource(Utility.arrayToRLEString(INDEX_BY_COUNTRY)));
+        System.out.println("        ;\\n");
+
         System.out.println("    // END GENERATED SOURCE CODE");
     }
 
@@ -766,13 +934,17 @@ $_IDS
 $_DATA
     };
 
-    static int[] INDEX_BY_NAME_ARRAY = { // not final!
+    static final int[] INDEX_BY_NAME_ARRAY = {
 $_INDEX_BY_NAME
     };
 
     static final int[] INDEX_BY_OFFSET = {
         // gmt_offset,default_id,id_count,id_list
 $_INDEX_BY_OFFSET
+    };
+
+    static final int[] INDEX_BY_COUNTRY = {
+$_INDEX_BY_COUNTRY
     };
 }
 END
@@ -799,6 +971,7 @@ sub emitHTML {
     my $equiv = shift;
     my $offsetIndex = shift;
     my $aliases = shift;
+    my $countries = shift;
 
     # These are variables for the template
     my $_count = scalar keys %{$zones};
@@ -855,6 +1028,23 @@ sub emitHTML {
         $_equivTable .= emitHTMLEquiv($eg, $zones, $rules);
     }
     $_equivTable .= "</table>\n";
+
+    # Build country table
+    my $_countryTable;
+    $_countryTable .= "<p><table>\n";
+    $_countryTable .= "<tr><td>Country</td><td>Zones</td></tr>\n";
+    $_countryTable .= "<tr><td><hr></td><td><hr></td></tr>\n";
+
+    foreach my $country (sort keys %$countries) {
+        $_countryTable .=
+            "<tr valign=top><td nowrap>" .
+            (($country ne 'A') ? ($country . " (" . $COUNTRY_CODES{$country} . ")") : "(None)") .
+            "</td>" . "<td>" .
+            join(", ", map("<a href=\"#" . bookmark($_) . "\">$_</a>", @{$countries->{$country}->{zones}})) .
+            #join(", ", @{$countries->{$country}->{zones}}) .
+            "</td></tr>\n";
+    }    
+    $_countryTable .= "</table>\n";
 
     # Time stamp
     my $_timeStamp = localtime;
@@ -1010,6 +1200,15 @@ not at runtime, so the runtime cost to lookup the equivalency group of
 a given zone is negligible.</p>
 
 $_equivTable
+<hr>
+
+<h2>Time Zones by Country</h2>
+
+<p>ICU captures and exports the country data from the Olson database.
+The country code is the ISO 3166 two-letter code.  Some zones have no
+associated country; these are listed under the entry "(None)".
+
+$_countryTable
 </body>
 </html>
 END
@@ -1105,10 +1304,12 @@ sub emitHTMLRule {
 # sub should be called AFTER all standard zones have been read in.
 # Param: File name of alias list
 # Param: Ref to zone hash
+# Param: Ref to LINK hash
 # Return: Ref to hash of {alias name -> zone name}
 sub incorporateAliases {
     my $aliasFile = shift;
     my $zones = shift;
+    my $links = shift;
     my $n = 0;
     my %hash;
     local *IN;
@@ -1125,6 +1326,11 @@ sub incorporateAliases {
             if (!exists $zones->{$original}) {
                 die "Bad alias in $aliasFile: $alias maps to the nonexistent " .
                     "zone $original. Please fix this entry in the alias table.\n";
+            }
+            if (exists $links->{$alias} &&
+                $links->{$alias} ne $original) {
+                print STDERR "Warning: Alias $alias for $original exists as link for ",
+                    $links->{$alias}, "\n";
             }
             # Create the alias!
             $zones->{$alias} = $zones->{$original};
