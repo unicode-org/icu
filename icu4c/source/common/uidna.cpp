@@ -250,11 +250,7 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
     for( j=0;j<b1Len;j++){
         if(b1[j] > 0x7F){
             srcIsASCII = FALSE;
-        }
-        // here we do not assemble surrogates
-        // since we know that LDH code points
-        // are in the ASCII range only
-        if(isLDHChar(b1[j])==FALSE){
+        }else if(isLDHChar(b1[j])==FALSE){  // if the char is in ASCII range verify that it is an LDH character
             srcIsLDH = FALSE;
             failPos = j;
         }
@@ -262,7 +258,12 @@ _internal_toASCII(const UChar* src, int32_t srcLength,
     
     if(useSTD3ASCIIRules == TRUE){
         // verify 3a and 3b
-        if( srcIsLDH == FALSE /* source contains some non-LDH characters */
+        // 3(a) Verify the absence of non-LDH ASCII code points; that is, the
+        //  absence of 0..2C, 2E..2F, 3A..40, 5B..60, and 7B..7F.
+        // 3(b) Verify the absence of leading and trailing hyphen-minus; that
+        //  is, the absence of U+002D at the beginning and end of the
+        //  sequence.
+        if( srcIsLDH == FALSE /* source at this point should not contain anyLDH characters */
             || b1[0] ==  HYPHEN || b1[b1Len-1] == HYPHEN){
             *status = U_IDNA_STD3_ASCII_RULES_ERROR;
 
@@ -392,11 +393,10 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
         for(;src[srcLength]!=0;){
             if(src[srcLength]> 0x7f){
                 srcIsASCII = FALSE;
-            }
-            // here we do not assemble surrogates
-            // since we know that LDH code points
-            // are in the ASCII range only
-            if(isLDHChar(src[srcLength])==FALSE){
+            }else if(isLDHChar(src[srcLength])==FALSE){
+                // here we do not assemble surrogates
+                // since we know that LDH code points
+                // are in the ASCII range only
                 srcIsLDH = FALSE;
                 failPos = srcLength;
             }
@@ -406,11 +406,10 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
         for(int32_t j=0; j<srcLength; j++){
             if(src[j]> 0x7f){
                 srcIsASCII = FALSE;
-            }
-            // here we do not assemble surrogates
-            // since we know that LDH code points
-            // are in the ASCII range only
-            if(isLDHChar(src[j])==FALSE){
+            }else if(isLDHChar(src[j])==FALSE){
+                // here we do not assemble surrogates
+                // since we know that LDH code points
+                // are in the ASCII range only
                 srcIsLDH = FALSE;
                 failPos = j;
             }
