@@ -1,0 +1,80 @@
+.\" Hey, Emacs! This is -*-nroff-*- you know...
+.\"
+.\" uconv.1: manual page for the uconv utility.
+.\"
+.\" Copyright (C) 2000-2001 IBM, Inc. and others.
+.\"
+.\" Manual page by Yves Arrouye <yves@realnames.com>.
+.\"
+.TH UCONV 1 "9 November 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.SH NAME
+.B uconv
+\- convert data from one encoding to another
+.SH SYNOPSIS
+.B uconv
+[
+.BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
+]
+[
+.BI "\-l\fP, \fB\-\-list"
+]
+[
+.BI "\-c"
+]
+[
+.BI "\-L\fP, \fB\-\-list\-transliterators"
+]
+[
+.BI "\-x" " trasnsliterator
+]
+.BI "\-f\fP, \fB\-\-from\-code" " encoding"
+.BI "\-t\fP, \fB\-\-to\-code" " encoding"
+[
+.I file
+]
+.SH DESCRIPTION
+.B uconv
+converts its input from one given
+.I encoding
+to another. It can also run the transcoding to a specified
+.IR transliterator .
+.SH OPTIONS
+.TP
+.BR \-h\fP, \fB\-?\fP, \fB\-\-help
+Print help about usage and exit.
+.TP
+.BI "\-l\fP, \fB\-\-list"
+List all the available encodings and exit.
+.BI "\-c"
+If used with
+.BI "\-l\fP, \fB\-\-list"
+the list of encodings is produced in a format compatible with
+.BR convrtrs.txt (5).
+.TP
+.BI "\-L\fP, \fB\-\-list\-transliterators"
+List all the available transliterators and exit.
+.TP
+.BI "\-x" " transliterator"
+Run the transcoding through the given
+.IR transliterator .
+.TP
+.BI "\-f\fP, \fB\-\-from\-code" " encoding"
+Set the original encoding of the data to 
+.IR encoding .
+.TP
+.BI "\-t\fP, \fB\-\-to\-code" " encoding"
+Transcode the data to
+.IR encoding .
+.SH CAVEATS AND BUGS
+The
+.BI "\-L\fP, \fB\-\-list-transliterators"
+option is not implemented at this point and
+.B uconv
+will exit with an usage merror and an exit code
+of 1 if it is used.
+.SH VERSION
+@VERSION@
+.SH COPYRIGHT
+Copyright (C) 2001 IBM, Inc. and others.
+.SH SEE ALSO
+.BR convrtrs.txt (5)
