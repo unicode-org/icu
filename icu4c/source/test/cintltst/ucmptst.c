@@ -188,9 +188,9 @@ void TestUCMP8API(){
     CompactByteArray* ucmp8Array1=NULL;
     CompactByteArray* ucmp8Array2=NULL;
     int32_t i=0;
-    int8_t *values;
-    int8_t *valuesSet;
-    int8_t const TEST_DEFAULT_VALUE = (int8_t)0xFF;
+    uint8_t *values;
+    uint8_t *valuesSet;
+    uint8_t const TEST_DEFAULT_VALUE = (uint8_t)0xFF;
     
 
     /*ucmp8_open*/
@@ -228,7 +228,7 @@ void TestUCMP8API(){
     if(ucmp8_getkBlockCount() != 128 ){
         log_err("Error in ucmp8_getkBlockCount()\n");
     } 
-    values=(int8_t*)ucmp8_getArray(ucmp8Array1);
+    values=(uint8_t*)ucmp8_getArray(ucmp8Array1);
     if(values[0] !=TEST_DEFAULT_VALUE){
         log_err("Error: getArray() or init failed\n");
     }
@@ -242,9 +242,9 @@ void TestUCMP8API(){
         log_err("Error: ucmp8_compact failed\n");
     } 
     /*ucmp8_set*/
-    ucmp8_set(ucmp8Array1, 0,  (char)0xFE);
-    valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
-    if(valuesSet[0] != (int8_t)0xFE ){
+    ucmp8_set(ucmp8Array1, 0, (char)0xFE);
+    valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
+    if(valuesSet[0] != (uint8_t)0xFE ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
     if(ucmp8Array1->fCompact == TRUE){
@@ -253,9 +253,9 @@ void TestUCMP8API(){
 
     /*ucmp8_set*/
     ucmp8_compact(ucmp8Array1, 1);
-    ucmp8_set(ucmp8Array1, 0,  (char)0xFD);
-    valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
-    if(valuesSet[0] != (int8_t)0xFD ){
+    ucmp8_set(ucmp8Array1, 0, (char)0xFD);
+    valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
+    if(valuesSet[0] != (uint8_t)0xFD ){
         log_err("ERROR: ucmp8_set() failed\n");
     }
     if(ucmp8Array1->fCompact == TRUE){
@@ -264,9 +264,9 @@ void TestUCMP8API(){
     /*ucmp8_setRange*/
     ucmp8_compact(ucmp8Array1, 1);
     ucmp8_setRange(ucmp8Array1, 0,  10, (char)0xFD);
-    valuesSet=(int8_t*)ucmp8_getArray(ucmp8Array1);
+    valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
     for(i =0 ; i< 10; i++ ){
-        if(valuesSet[0] != (int8_t)0xFD ){
+        if(valuesSet[0] != (uint8_t)0xFD ){
              log_err("ERROR: ucmp8_set() failed\n");
              break;
         }

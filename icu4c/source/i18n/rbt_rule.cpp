@@ -175,7 +175,7 @@ int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) 
         return -1;
     }
     UChar c = pattern.charAt(anteContextLength);
-    return data.lookupSet(c) == NULL ? (c & 0xFF) : -1;
+    return (int16_t)(data.lookupSet(c) == NULL ? (c & 0xFF) : -1);
 }
 
 /**

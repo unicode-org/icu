@@ -89,8 +89,8 @@ public:
     TransliterationRuleData(const TransliterationRuleData&);
 
     ~TransliterationRuleData();
-    
-	const UnicodeSet* lookupSet(UChar standIn) const;
+
+    const UnicodeSet* lookupSet(UChar standIn) const;
 
     /**
      * Return the zero-based index of the segment represented by the given
@@ -104,7 +104,7 @@ public:
      * The reference must be in the range 1..9.
      */
     UChar getSegmentStandin(int32_t ref) const {
-        return segmentBase + ref - 1;
+        return (UChar)(segmentBase + ref - 1);
     }
 };
 

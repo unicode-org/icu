@@ -96,7 +96,7 @@ void ComposedCharIter::getDecomposition(UnicodeString& result) const
     result.truncate(0);
 
     uint16_t offset = ucmp16_getu(DecompData::offsets, curChar);
-    uint16_t index  = offset & DecompData::DECOMP_MASK;
+    uint16_t index  = (uint16_t)(offset & DecompData::DECOMP_MASK);
     if (index > minDecomp) {
         if ((offset & DecompData::DECOMP_RECURSE) != 0) {
             // Let Normalizer::decompose() handle recursive decomp
