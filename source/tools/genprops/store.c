@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -607,6 +607,21 @@ addProps(uint32_t c, uint32_t x) {
     if(!utrie_set32(pTrie, (UChar32)c, x)) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
+    }
+}
+
+extern void
+addCaseSensitive(UChar32 first, UChar32 last) {
+    uint32_t x, cs;
+
+    cs=U_MASK(UPROPS_CASE_SENSITIVE_SHIFT);
+    while(first<=last) {
+        x=utrie_get32(pTrie, first, NULL);
+        if(!utrie_set32(pTrie, first, x|cs)) {
+            fprintf(stderr, "error: too many entries for the properties trie\n");
+            exit(U_BUFFER_OVERFLOW_ERROR);
+        }
+        ++first;
     }
 }
 
