@@ -1259,7 +1259,7 @@ CalendarRegressionTest::test4031502()
         calendar->setTime(makeDate(INT32_MIN),status);
         int32_t year1 = calendar->get(Calendar::YEAR,status);
         int32_t era1 = calendar->get(Calendar::ERA,status);
-        
+
         calendar->setTime(makeDate(INT32_MAX),status);
         int32_t year2 = calendar->get(Calendar::YEAR,status);
         int32_t era2 = calendar->get(Calendar::ERA,status);
@@ -1267,7 +1267,7 @@ CalendarRegressionTest::test4031502()
         if (year1 == year2 && era1 == era2) {
             errln("Fail: Long.MIN_VALUE or Long.MAX_VALUE wrapping around");
         }
-    
+
         delete calendar;
     }
 
@@ -1927,57 +1927,64 @@ void CalendarRegressionTest::TestJ438(void) {
     SimpleDateFormat fmt(UnicodeString("MMM dd yyyy",""), ec);
     fmt.setCalendar(cal);
     UnicodeString s, t, u;
-    if (failure(ec, "setup")) goto err;
-    for (i=0; i<DATA_length; i+=6) {
-        int32_t y1 = DATA[i];
-        int32_t m1 = DATA[i+1];
-        int32_t d1 = DATA[i+2];
-        int32_t y2 = DATA[i+3];
-        int32_t m2 = DATA[i+4];
-        int32_t d2 = DATA[i+5];
+    if (!failure(ec, "setup")) {
+        for (i=0; i<DATA_length; i+=6) {
+            int32_t y1 = DATA[i];
+            int32_t m1 = DATA[i+1];
+            int32_t d1 = DATA[i+2];
+            int32_t y2 = DATA[i+3];
+            int32_t m2 = DATA[i+4];
+            int32_t d2 = DATA[i+5];
 
-        cal.clear();
-        cal.set(y1, m1, d1);
-        UDate date1 = cal.getTime(ec);
-        if (failure(ec, "getTime")) goto err;
-        cal.set(y2, m2, d2);
-        UDate date2 = cal.getTime(ec);
-        if (failure(ec, "getTime")) goto err;
+            cal.clear();
+            cal.set(y1, m1, d1);
+            UDate date1 = cal.getTime(ec);
+            if (failure(ec, "getTime"))
+                break;
+            cal.set(y2, m2, d2);
+            UDate date2 = cal.getTime(ec);
+            if (failure(ec, "getTime"))
+                break;
 
-        cal.setTime(date1, ec);
-        if (failure(ec, "setTime")) goto err;
-        int32_t dy = cal.fieldDifference(date2, Calendar::YEAR, ec);
-        int32_t dm = cal.fieldDifference(date2, Calendar::MONTH, ec);
-        int32_t dd = cal.fieldDifference(date2, Calendar::DATE, ec);
-        if (failure(ec, "fieldDifference")) goto err;
+            cal.setTime(date1, ec);
+            if (failure(ec, "setTime"))
+                break;
+            int32_t dy = cal.fieldDifference(date2, Calendar::YEAR, ec);
+            int32_t dm = cal.fieldDifference(date2, Calendar::MONTH, ec);
+            int32_t dd = cal.fieldDifference(date2, Calendar::DATE, ec);
+            if (failure(ec, "fieldDifference"))
+                break;
 
-        logln(UnicodeString("") +
-              fmt.format(date2, s.remove()) + " - " +
-              fmt.format(date1, t.remove()) + " = " +
-              dy + "y " + dm + "m " + dd + "d");
+            logln(UnicodeString("") +
+                  fmt.format(date2, s.remove()) + " - " +
+                  fmt.format(date1, t.remove()) + " = " +
+                  dy + "y " + dm + "m " + dd + "d");
 
-        cal.setTime(date1, ec);
-        if (failure(ec, "setTime")) goto err;
-        cal.add(Calendar::YEAR, dy, ec);
-        cal.add(Calendar::MONTH, dm, ec);
-        cal.add(Calendar::DATE, dd, ec);
-        if (failure(ec, "add")) goto err;
-        UDate date22 = cal.getTime(ec);
-        if (failure(ec, "getTime")) goto err;
-        if (date2 != date22) {
-            errln(UnicodeString("FAIL: ") +
-                  fmt.format(date1, s.remove()) + " + " +
-                  dy + "y " + dm + "m " + dd + "d = " +
-                  fmt.format(date22, t.remove()) + ", exp " +
-                  fmt.format(date2, u.remove()));
-        } else {
-            logln(UnicodeString("Ok: ") +
-                  fmt.format(date1, s.remove()) + " + " +
-                  dy + "y " + dm + "m " + dd + "d = " +
-                  fmt.format(date22, t.remove()));
+            cal.setTime(date1, ec);
+            if (failure(ec, "setTime"))
+                break;
+            cal.add(Calendar::YEAR, dy, ec);
+            cal.add(Calendar::MONTH, dm, ec);
+            cal.add(Calendar::DATE, dd, ec);
+            if (failure(ec, "add"))
+                break;
+            UDate date22 = cal.getTime(ec);
+            if (failure(ec, "getTime"))
+                break;
+            if (date2 != date22) {
+                errln(UnicodeString("FAIL: ") +
+                      fmt.format(date1, s.remove()) + " + " +
+                      dy + "y " + dm + "m " + dd + "d = " +
+                      fmt.format(date22, t.remove()) + ", exp " +
+                      fmt.format(date2, u.remove()));
+            } else {
+                logln(UnicodeString("Ok: ") +
+                      fmt.format(date1, s.remove()) + " + " +
+                      dy + "y " + dm + "m " + dd + "d = " +
+                      fmt.format(date22, t.remove()));
+            }
         }
     }
- err:
     delete pcal;
 }
 
