@@ -490,8 +490,14 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                 if(isTargetUCharDBCS){
                     if( myTargetIndex <targetLength){
                         args->target[myTargetIndex++] =(char) ((targetUniChar >> 8) -0x80);
+                        if(offsets){
+                            *(offsets++) = mySourceIndex-1;
+                        }
                         if(myTargetIndex < targetLength){
                             args->target[myTargetIndex++] =(char) ((targetUniChar & 0x00FF) -0x80);
+                            if(offsets){
+                                *(offsets++) = mySourceIndex-1;
+                            }
                         }else{
                             args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) ((targetUniChar & 0x00FF) -0x80);
                             *err = U_BUFFER_OVERFLOW_ERROR;
@@ -505,20 +511,16 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                 }else{
                     if( myTargetIndex <targetLength){
                         args->target[myTargetIndex++] = (char) (targetUniChar );
+                        if(offsets){
+                            *(offsets++) = mySourceIndex-1;
+                        }
                         
                     }else{
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) targetUniChar;
                         *err = U_BUFFER_OVERFLOW_ERROR;
                     }
                 }
-                /* write the offsets */
-                if(offsets){
-                    int i = mySourceIndex-1;
-                    len = 2 - (targetUniChar < 0x00FF);
-                    while(len-->0){
-                        *(offsets++) = i;
-                    }
-                }
+
             }
             else{
                 /* oops.. the code point is unassingned

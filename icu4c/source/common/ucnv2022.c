@@ -1500,6 +1500,9 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 if(targetUniChar <= 0x00FF){
                     if( target <targetLimit){
                         *(target++) = (unsigned char) targetUniChar;
+                        if(offsets){
+                            *(offsets++) = source - args->source-1;
+                        }
 
                     }else{
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) targetUniChar;
@@ -1508,8 +1511,15 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 }else{
                     if(target < targetLimit){
                         *(target++) =(unsigned char) (targetUniChar>>8);
+                        if(offsets){
+                              *(offsets++) = source - args->source-1;
+                        }
                         if(target < targetLimit){
                             *(target++) =(unsigned char) (targetUniChar);
+                            if(offsets){
+                                *(offsets++) = source - args->source-1;
+                            }
+
                         }else{
                             args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetUniChar);
                             *err = U_BUFFER_OVERFLOW_ERROR;
@@ -1518,14 +1528,6 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetUniChar>>8);
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetUniChar);
                         *err = U_BUFFER_OVERFLOW_ERROR;
-                    }
-                }
-                /* write the offsets */
-                if(offsets){
-                    int i = source - args->source-1;
-                    len = 2 - (targetUniChar < 0x00FF);
-                    while(len-->0){
-                        *(offsets++) = i;
                     }
                 }
 
@@ -1974,6 +1976,9 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 if(targetByteUnit <= 0x00FF){
                     if( target < targetLimit){
                         *(target++) = (unsigned char) targetByteUnit;
+                        if(offsets){
+                            *(offsets++) = source - args->source-1;
+                        }
 
                     }else{
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetByteUnit);
@@ -1982,8 +1987,14 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 }else{
                     if(target < targetLimit){
                         *(target++) =(unsigned char) ((targetByteUnit>>8) -0x80);
+                        if(offsets){
+                            *(offsets++) = source - args->source-1;
+                        }
                         if(target < targetLimit){
                             *(target++) =(unsigned char) (targetByteUnit -0x80);
+                            if(offsets){
+                                *(offsets++) = source - args->source-1;
+                            }
                         }else{
                             args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetByteUnit -0x80);
                             *err = U_BUFFER_OVERFLOW_ERROR;
@@ -1994,14 +2005,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                         *err = U_BUFFER_OVERFLOW_ERROR;
                     }
                 }
-                /* write the offsets */
-                if(offsets){
-                    int i = source - args->source-1;
-                    int len = 1 + isTargetByteDBCS;
-                    while(len-->0){
-                        *(offsets++) = i;
-                    }
-                }
+
             }
             else{
                 /* oops.. the code point is unassingned
@@ -2608,6 +2612,9 @@ getTrail:
                 if(targetUniChar <= 0x00FF){
                     if( target <targetLimit){
                         *(target++) = (unsigned char) targetUniChar;
+                        if(offsets){
+                            *(offsets++) = source - args->source-1;
+                        }
 
                     }else{
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) targetUniChar;
@@ -2616,8 +2623,14 @@ getTrail:
                 }else{
                     if(target < targetLimit){
                         *(target++) =(unsigned char) (targetUniChar>>8);
+                        if(offsets){
+                            *(offsets++) = source - args->source-1;
+                        }
                         if(target < targetLimit){
                             *(target++) =(unsigned char) (targetUniChar);
+                            if(offsets){
+                                *(offsets++) = source - args->source-1;
+                            }
                         }else{
                             args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetUniChar);
                             *err = U_BUFFER_OVERFLOW_ERROR;
@@ -2626,14 +2639,6 @@ getTrail:
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetUniChar>>8);
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetUniChar);
                         *err = U_BUFFER_OVERFLOW_ERROR;
-                    }
-                }
-                /* write the offsets */
-                if(offsets){
-                    int i = source - args->source-1;
-                    len = 2 - (targetUniChar < 0x00FF);
-                    while(len-->0){
-                        *(offsets++) = i;
                     }
                 }
 
