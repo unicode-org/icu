@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/11/27 21:36:24 $
-* $Revision: 1.14 $
+* $Date: 2001/11/27 21:43:00 $
+* $Revision: 1.15 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -879,12 +879,7 @@ class TransliteratorParser {
                         Transliterator.parseID(rule, idBlockResult, p, sawDelim, cpdFilter, direction, false);
                         if (p[0] == pos || !sawDelim[0]) {
                             // Invalid ::id
-                            int i1 = pos + 2;
-                            while (i1 < rule.length() && rule.charAt(i1) != ';') {
-                                ++i1;
-                            }
-                            throw new IllegalArgumentException("Invalid ::ID " +
-                                                               rule.substring(pos, i1));
+                            syntaxError("Invalid ::ID", rule, pos);
                         }
                         if (direction == Transliterator.REVERSE && idSplitPoint >= 0) {
                             // In the reverse direction parseID adds elements at the start.
@@ -893,7 +888,7 @@ class TransliteratorParser {
                         if (cpdFilter[0] != null) {
                             if (compoundFilter != null) {
                                 // Multiple compound filters
-                                throw new IllegalArgumentException("Multiple compound filters");
+                                syntaxError("Multiple compound filters", rule, pos);
                             }
                             compoundFilter = cpdFilter[0];
                             compoundFilterOffset = (direction == Transliterator.FORWARD) ?
@@ -903,8 +898,7 @@ class TransliteratorParser {
                     } else if (resemblesPragma(rule, pos, limit)) {
                         int ppp = parsePragma(rule, pos, limit);
                         if (ppp < 0) {
-                            throw new IllegalArgumentException("Unrecognized pragma: " +
-                                                               rule.substring(pos));
+                            syntaxError("Unrecognized pragma", rule, pos);
                         }
                         pos = ppp;
                     } else {
@@ -914,7 +908,7 @@ class TransliteratorParser {
                         if (mode == 2) {
                             // ::id in illegal position (because a rule
                             // occurred after the ::id footer block)
-                            throw new IllegalArgumentException("::ID in illegal position");
+                            syntaxError("::ID in illegal position", rule, pos);
                         }
                         mode = 1;
                     }
