@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/06/03 18:49:28 $
- * $Revision: 1.46 $
+ * $Date: 2003/06/11 18:27:08 $
+ * $Revision: 1.47 $
  *
  *****************************************************************************************
  */
@@ -458,6 +458,8 @@ public class TestFmwk extends AbstractTestLog {
                     usageError = true;
                 } else if (arg.equals("-warning") || arg.equals("-w")) {
                     params.warnings = true;
+                } else if (arg.equals("-nodata") || arg.equals("-nd")) {
+                    params.nodata = true;
                 } else if (arg.equals("-prompt")) {
                     prompt = true;
                 } else if (arg.equals("-list") || arg.equals("-l")) {
@@ -682,6 +684,10 @@ public class TestFmwk extends AbstractTestLog {
         return params.verbose;
     }
 
+    public boolean noData() {
+        return params.nodata;
+    }
+
     /**
      * 0 = fewest tests, 5 is normal build, 10 is most tests
      */
@@ -770,6 +776,7 @@ public class TestFmwk extends AbstractTestLog {
                            "       be in alphabetical order to ensure cross-platform consistency.");
         System.out.println(" -v[erbose] Show log messages");
         System.out.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
+        System.out.println(" -nodata | -nd Do not warn if resource data is not present.");
         System.out.println();
         System.out.println(" If a list or describe option is provided, no tests are run.");
         System.out.println();
@@ -871,6 +878,7 @@ public class TestFmwk extends AbstractTestLog {
         public int       listlevel = 0;;
         public boolean   describe = false;
         public boolean   warnings = false;
+        public boolean   nodata = false;
         public int       inclusion = 0;
         public String    filter = null;
         public long        seed = 0;
