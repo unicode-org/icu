@@ -61,7 +61,7 @@ public class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      * @internal
      */
-    private static final int ALIAS=3;
+    protected static final int ALIAS=3;
 
     /**
      * Internal use only.
@@ -70,7 +70,7 @@ public class ICUResourceBundle extends UResourceBundle{
      * @internal
      * @draft ICU 3.0
      */
-    private static final int TABLE32=4;
+    protected static final int TABLE32=4;
 
     /**
      * Resource type constant for a single 28-bit integer, interpreted as
@@ -92,10 +92,6 @@ public class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public static final int INT_VECTOR=14;
-
-    private static final String ICU_RESOURCE_INDEX = "res_index";
-    
-	private static final String DEFAULT_TAG = "default";
     
     /**
      * Return the version number associated with this UResourceBundle as an 
@@ -262,39 +258,11 @@ public class ICUResourceBundle extends UResourceBundle{
             if (obj == null)
                 throw new MissingResourceException("Can't find resource for bundle "
                                                    +this.getClass().getName()
-                                                   +", key "+key,
+                                                   +", key "+getKey(),
                                                    this.getClass().getName(),
-                                                   key);
+                                                   getKey());
         }
         return obj;
-    }
-    protected Object handleGetObject(String key){
-        if(getType()==STRING){
-            return getString();   
-        }
-        ICUResourceBundle obj =  handleGet(key);
-        if(obj!=null){
-            if(obj.getType()==STRING){
-                return obj.getString();   
-            }
-            try{
-                if(obj.getType()==ARRAY){
-                    return obj.handleGetStringArray();   
-                }
-            }catch(UResourceTypeMismatchException ex){
-                return obj;   
-            }
-        }
-        return obj;        
-    }
-    protected ICUResourceBundle handleGet(int index){
-        return null;
-    }
-    protected ICUResourceBundle handleGet(String key){
-        return null;   
-    }
-    protected String[] handleGetStringArray(){
-        return null;   
     }
     // abstract UResourceBundle handleGetInt(int index);
     
@@ -336,7 +304,7 @@ public class ICUResourceBundle extends UResourceBundle{
      */
     public String getString(int index){
         ICUResourceBundle temp = get(index);
-        if(temp.type==STRING){
+        if(temp.getType()==STRING){
             return temp.getString();   
         }
         throw new UResourceTypeMismatchException("");
@@ -496,29 +464,7 @@ public class ICUResourceBundle extends UResourceBundle{
 		}
 		return (String[])keywords.toArray(new String[0]);
     }
-    
-    /**
-     * 
-     * @param baseName
-     * @param localeID
-     * @param root
-     * @return
-     */
-    public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root){
 
-        ICUResourceBundleReader reader = new ICUResourceBundleReader(baseName, localeID, root);
-        ByteBuffer rawData = reader.getData();
-        long rootResource = (UNSIGNED_INT_MASK)& rawData.getInt(0);
-        int type = RES_GET_TYPE(rootResource);
-         if(type==TABLE){
-            return  ResourceTable.getTableInstance(rawData, baseName, localeID, null, rootResource, rootResource, true);   
-        }else if(type == TABLE32){
-            return new ResourceTable32(rawData, baseName, localeID, null, rootResource, rootResource, true); 
-        }else{
-             throw new RuntimeException("Invalid format error"); 
-        }   
-        
-    }
 
     /**
      * This method performs multilevel fallback for fetching items from the bundle
@@ -551,41 +497,19 @@ public class ICUResourceBundle extends UResourceBundle{
         if(result == null){
             throw new MissingResourceException("Can't find resource for bundle "
                     +this.getClass().getName()
-                    +", key "+key,
+                    +", key "+getType(),
                     path,
-                    key);
+                    getKey());
         }
         return result;
     }
 
     // will throw type mismatch exception if the resource is not a string
     public String getStringWithFallback(String path) throws MissingResourceException {
-	return getWithFallback(path).getString();
+	   return getWithFallback(path).getString();
     }
 
-    private ICUResourceBundle findResourceWithFallback(String path, ICUResourceBundle actualBundle) {
-        ICUResourceBundle sub = null;
-        while (actualBundle != null) {
-            StringTokenizer st = new StringTokenizer(path, "/");
-            ICUResourceBundle current = actualBundle;
-            while (st.hasMoreTokens()) {
-                String subKey = st.nextToken();
-                sub = current.handleGet(subKey, null);
-                if(sub==null){
-                   break;   
-                }
-                current = sub;
-            }
-            if(sub!=null){
-                //we found it
-                break;
-            }
-            // if not try the parent bundle
-            actualBundle = (ICUResourceBundle) actualBundle.parent;
-        }
-        return sub;
-    }     
-
+ 
     /**
      * Gets a resource bundle using the specified base name, locale, and class root.
      *
@@ -679,22 +603,77 @@ public class ICUResourceBundle extends UResourceBundle{
          }
          return locales;
     }
-        
+
+    public Enumeration getKeys(){
+        Vector keys = new Vector();
+        ICUResourceBundle item =null;
+        for(int i=0; i<size; i++){
+            item = get(i);
+            keys.add(item.getKey());
+        }
+        return keys.elements();
+    }
+    
+    public ULocale getULocale(){
+        return new ULocale(localeID);   
+    }
+    public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root) {
+        return ICUResourceBundleImpl.createBundle(baseName, localeID, root);
+    }
+    //====== protected members ==============
     protected int type = NONE;
     protected String key;
-    protected int size = NONE;
+    protected int size = 1;
     protected String resPath;
-    protected boolean isTopLevel;
-    
-    protected ICUResourceBundleReader reader;
-    //protected byte[] version;
-    protected ByteBuffer rawData;
-    protected long resource;
-    protected long rootResource;
+    protected long resource = RES_BOGUS;
+    protected boolean isTopLevel = false;
     
     protected static final long UNSIGNED_INT_MASK = 0xffffffffL;
-    // ========== privates ==========
 
+    protected static final long RES_BOGUS = 0xffffffff;
+
+    protected  ICUResourceBundle handleGet(String key, Hashtable table){
+        throw new UResourceTypeMismatchException("");   
+    }
+    protected  ICUResourceBundle handleGet(int index, Hashtable table){
+        throw new UResourceTypeMismatchException("");   
+    }
+    
+
+    protected Object handleGetObject(String key){
+        if(getType()==STRING){
+            return getString();   
+        }
+        ICUResourceBundle obj =  handleGet(key);
+        if(obj!=null){
+            if(obj.getType()==STRING){
+                return obj.getString();   
+            }
+            try{
+                if(obj.getType()==ARRAY){
+                    return obj.handleGetStringArray();   
+                }
+            }catch(UResourceTypeMismatchException ex){
+                return obj;   
+            }
+        }
+        return obj;        
+    }
+    protected ICUResourceBundle handleGet(int index){
+        return null;
+    }
+    protected ICUResourceBundle handleGet(String key){
+        return null;   
+    }
+    protected String[] handleGetStringArray(){
+        return null;   
+    }
+
+    // ========== privates ==========
+    private static final String ICU_RESOURCE_INDEX = "res_index";
+    
+    private static final String DEFAULT_TAG = "default";
+    
     // Flag for enabling/disabling debugging code
     private static final boolean DEBUG = ICUDebug.enabled("localedata");
 
@@ -808,504 +787,29 @@ public class ICUResourceBundle extends UResourceBundle{
         }
 
         return ae;
-    }
+    }  
     
-    private  static final long RES_BOGUS = 0xffffffff;
-
-    protected static final int RES_GET_TYPE(long res){
-       return (int)((res)>>28L);
-    }
-    protected static final int RES_GET_OFFSET(long res){
-        return (int)((res&0x0fffffff)*4);
-    }
-
-    /* get signed and unsigned integer values directly from the Resource handle */
-    protected static final int RES_GET_INT(long res) {
-        return (((int)((res)<<4L))>>4L);
-    }
-    protected static final long RES_GET_UINT(long res){
-        long t = ((res)&0x0fffffffL);
-        return t;
-    }
-    
-    protected static int countItems(final ByteBuffer rawData, final long res) {
-        if(res!=RES_BOGUS) {
-            switch(RES_GET_TYPE(res)) {
-                case STRING:
-                case BINARY:
-                case ALIAS:
-                case INT:
-                case INT_VECTOR:
-                    return 1;
-                case ARRAY:
-                case TABLE32: {
-                    int offset = RES_GET_OFFSET(res);
-                    int value  = rawData.getInt(offset);
-                    return value;
-                }
-                case TABLE: {
-                    int offset = RES_GET_OFFSET(res);
-                    int value  =  rawData.getChar(offset);
-                    return value;
-                }
-                default:
-                    break;
-            }
-        } 
-        return 0;
-    }
-   
- 
-    public Enumeration getKeys(){
-        Vector keys = new Vector();
-        ICUResourceBundle item =null;
-        for(int i=0; i<size; i++){
-            item = get(i);
-            keys.add(item.getKey());
-        }
-        return keys.elements();
-    }
-    protected  ICUResourceBundle handleGet(String key, Hashtable table){
-        throw new UResourceTypeMismatchException("");   
-    }
-    protected  ICUResourceBundle handleGet(int index, Hashtable table){
-        throw new UResourceTypeMismatchException("");   
-    }
-    protected ICUResourceBundle(ByteBuffer rawData, String baseName, String localeID, 
-                                String key, long resource,long rootResource, int type, 
-                                boolean isTopLevel ){ 
-        this.rawData = rawData;
-        this.key = key;
-        this.resource = resource;
-        this.rootResource = rootResource;
-        this.type = type;
-        this.isTopLevel = false;
-        this.size = countItems(rawData, resource);
-        this.baseName = baseName;
-        this.localeID = localeID;
-        //this.locale = new ULocale(localeID).toLocale();
-       
-    }
-    
-    public ULocale getULocale(){
-        return new ULocale(localeID);   
-    }
-
-
-    private static StringBuffer RES_GET_KEY(ByteBuffer rawData, int keyOffset){
-        char ch = 0xFFFF; //sentinel
-        StringBuffer key = new StringBuffer();
-        while((ch=(char)rawData.get(keyOffset))!= 0){
-             key.append(ch);  
-             keyOffset++;
-        }
-        return key;
-    }
-    private static final int getIntOffset(int offset){
-        return (offset*4);
-    }
-    private static final int getCharOffset(int offset){
-        return (offset*2);   
-    }
-  
-    private static final ICUResourceBundle createBundleObject(ByteBuffer rawData, String baseName, String localeID, 
-                                                              String key, long resource, long rootResource,
-                                                              Hashtable table){
-        if(resource!=RES_BOGUS) {
-            switch(RES_GET_TYPE(resource)) {
-                case STRING:{
-                    return new ResourceString(rawData, baseName, localeID, key, resource, rootResource);   
-                }
-                case BINARY:{
-                    return new ResourceBinary(rawData, baseName, localeID, key, resource, rootResource);
-                }
-                case ALIAS:{
-                    return findResource(rawData, baseName, localeID, key, resource, table);   
-                }
-                case INT:{
-                    return new ResourceInt(rawData, baseName, localeID, key, resource, rootResource);   
-                }
-                case INT_VECTOR:{
-                    return new ResourceIntVector(rawData, baseName, localeID, key, resource, rootResource);   
-                }
-                case ARRAY:{
-                    return new ResourceArray(rawData, baseName, localeID, key, resource, rootResource);   
-                }
-                case TABLE32:{
-                    return new ResourceTable32(rawData, baseName, localeID, key, resource, rootResource, false);  
-                }
-                case TABLE: {
-                    return new ResourceTable(rawData, baseName, localeID, key, resource, rootResource, false);   
-                }
-                default:
-                    throw new InternalError("The resource type is unknown");
-            }
-        } 
-        return null; 
-    }
-    private static String getTableKey(ByteBuffer rawData, int size, int currentOffset, int index, int type){
-        switch(type){
-            case TABLE32:{
-                int charOffset = currentOffset+getIntOffset(index);
-                int keyOffset =  rawData.getInt(charOffset);
-                return RES_GET_KEY(rawData,keyOffset).toString();
-            }
-            case TABLE:
-            default:{
-                int charOffset = currentOffset+getCharOffset(index);
-                int keyOffset =  rawData.getChar(charOffset);
-                return RES_GET_KEY(rawData,keyOffset).toString();
-            }
-        }
-    }
-    private static int findKey(ByteBuffer rawData, int size,
-                                int currentOffset, int type,
-                                String target){
-		int mid = 0, start = 0, limit = size, rc;
-		int lastMid = -1;
-		//int myCharOffset = 0, keyOffset = 0;
-		for (;;) {
-			mid = ((start + limit) / 2);
-			if (lastMid == mid) { /* Have we moved? */
-				break; /* We haven't moved, and it wasn't found. */
-			}
-			lastMid = mid;
-
-            String comp = getTableKey(rawData, size,currentOffset,mid,type);
-            rc = target.compareTo(comp);
-			if (rc < 0) {
-				limit = mid;
-			} else if (rc > 0) {
-				start = mid;
-			} else {
-				return mid;
-			}
-		}
-		return -1;
-	}
-    
-    private static class ResourceTable extends ICUResourceBundle{
-
-        public ICUResourceBundle handleGet(String key){
-            return handleGet(key, null);   
-        }
-        protected ICUResourceBundle handleGet(String key, Hashtable table){
-            int offset = RES_GET_OFFSET(resource);
-            // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
-            int currentOffset = (offset)+getCharOffset(1);
-            //int keyOffset = rawData.getChar(currentOffset);
-
-            /* do a binary search for the key */
-            int foundOffset = findKey(rawData, size, currentOffset, type, key);
-            if(foundOffset == -1){
-                //throw new MissingResourceException(ICUResourceBundleReader.getFullName(baseName, localeID),
-                //                                    localeID,
-                //                                    key);
-                return null;
-            }
-            currentOffset += getCharOffset(size+(~size&1))+getIntOffset(foundOffset);
-            long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-            return createBundleObject(rawData, baseName, localeID, key, resource, rootResource, table);
-            
-        }
-        public ICUResourceBundle handleGet(int index){
-            return handleGet(index, null);
-        }
-        public ICUResourceBundle handleGet(int index, Hashtable table){
-            if(index>size){
-                throw new IndexOutOfBoundsException();   
-            }
-            int offset = RES_GET_OFFSET(resource);
-            // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
-            int currentOffset = (offset)+getCharOffset(1);
-            String itemKey = getTableKey(rawData, size, currentOffset, index, type);
-            
-            currentOffset +=  getCharOffset(size+(~size&1))+ getIntOffset(index) ;
-            long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-
-            return createBundleObject(rawData, baseName, localeID, itemKey, resource, rootResource, table);
-        }
-
-        private ResourceTable(ByteBuffer rawData, String baseName, String localeID, String key, 
-                                long resource, long rootResource, boolean isRootResource ){
-            super(rawData, baseName, localeID, key, resource, rootResource, TABLE, isRootResource);
-        }
-        
-        private static ResourceTable getTableInstance(ByteBuffer rawData, String baseName, String localeID, String key, 
-                                                      long resource, long rootResource, boolean isRootResource ){
-            
-            // kludge: %%ALIAS is such a hack! I can understand the
-            // ICU4C legacy .. do we need to port it?
-            ResourceTable table = new ResourceTable(rawData, baseName, localeID, key, resource, rootResource, isRootResource);
-            //return table;
-            
-            ICUResourceBundle b = table.handleGet(0);
-            String itemKey = b.getKey();
-            if(itemKey.equals("%%ALIAS")){
-                String locale = b.getString();
-                ICUResourceBundle actual =  (ICUResourceBundle)UResourceBundle.getBundleInstance(baseName, locale);
-                return (ResourceTable)actual;
-            }  else {
-                return table;
-            }
-            
-        }
-        
-    }
-
-    private static class ResourceTable32 extends ICUResourceBundle{
-
-        public ICUResourceBundle get(String key){
-            return get(key, null);   
-        }
-        public ICUResourceBundle get(String key, Hashtable table){
-            int offset = RES_GET_OFFSET(resource);
-            // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
-            int currentOffset = (offset)+getIntOffset(1);
-            //int keyOffset = rawData.getChar(currentOffset);
-
-            /* do a binary search for the key */
-            int foundOffset = findKey(rawData, size, currentOffset, TABLE32, key);
-            if(foundOffset == -1){
-                throw new MissingResourceException("Could not find resource ",
-                                                    ICUResourceBundleReader.getFullName(baseName, localeID),
-                                                    key);
-            }
-            currentOffset += getIntOffset(size)+getIntOffset(foundOffset);
-            long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-            
-            return createBundleObject(rawData, baseName, localeID, key, resource, rootResource, table);
-        }
-        public ICUResourceBundle get(int index){
-            return get(index, null);   
-        }
-        public ICUResourceBundle get(int index, Hashtable table){
-            if(index>size){
-                throw new IndexOutOfBoundsException();   
-            }
-            int offset = RES_GET_OFFSET(resource);
-            // offset+0 contains number of entries
-            // offset+1 contains the keyOffset  
-            int currentOffset = (offset)+getIntOffset(1)+ getIntOffset(index);
-            String itemKey = getTableKey(rawData, size, currentOffset, 0, TABLE32);
-            
-            currentOffset +=  getIntOffset(size) ;
-            long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-            
-            return createBundleObject(rawData, baseName, localeID, itemKey, resource, rootResource, table);
-        }
-        private ResourceTable32(ByteBuffer rawData, String baseName, String localeID,String key, 
-                                long resource, long rootResource, boolean isRootResource ){
-            super(rawData, key, baseName, localeID, resource, rootResource, TABLE, isRootResource);
-        }
-    }
-    
-    private static class ResourceString extends ICUResourceBundle {
-        private String value;
-        public String getString(){
-            return value;
-        }
-        private ResourceString(ByteBuffer rawData, String baseName, String localeID, 
-                               String key, long resource, long rootResource ){
-            super(rawData, baseName, localeID, key, resource, rootResource, STRING, false);
-            value = getStringValue(rawData, resource);
-        }
-    }
-    private static class ResourceInt extends ICUResourceBundle{
-        public int getInt(){
-            return RES_GET_INT(resource);
-        }
-        public int getUInt(){
-            long ret = RES_GET_UINT(resource);
-            return (int)ret;   
-        }
-
-        private ResourceInt(ByteBuffer rawData, String baseName, String localeID, String key, 
-                            long resource, long rootResource){
-            super(rawData, baseName, localeID, key, resource, rootResource, INT, false);
-        }
-    }
-    private static class ResourceArray extends ICUResourceBundle{
-        protected String[] handleGetStringArray(){
-            String[] strings = new String[size];
-            ICUResourceBundleIterator iter = getIterator();
-            int i = 0;
-            while(iter.hasNext()){
-                strings[i++] = iter.next().getString();   
-            }
-            return strings;
-        }
-        protected ICUResourceBundle handleGet(String index){
-            return handleGet(index, null);
-        }
-        protected ICUResourceBundle handleGet(String index, Hashtable table){
-            int val = getIndex(index);
-            if(val>-1){
-                return handleGet(val, table);
-            }
-            throw new UResourceTypeMismatchException("");
-        }
-        protected ICUResourceBundle handleGet(int index){
-            return handleGet(index, null);   
-        }
-        protected ICUResourceBundle handleGet(int index, Hashtable table){
-            if(index > size){
-                throw new IndexOutOfBoundsException();   
-            }
-            int offset = RES_GET_OFFSET(resource);
-            int itemOffset = offset+getIntOffset(index+1);
-            long itemResource = (UNSIGNED_INT_MASK)&rawData.getInt(itemOffset);
-            return createBundleObject(rawData, baseName, localeID, null,itemResource, rootResource, table);   
-        }
-        private ResourceArray(ByteBuffer rawData, String baseName, String localeID, String key, 
-                long resource, long rootResource ){
-            super(rawData, baseName, localeID, key, resource, rootResource, ARRAY, false );
-        }
-    }
-    private static class ResourceBinary extends ICUResourceBundle{
-        private ByteBuffer value;
-        public ByteBuffer getBinary(){
-            value.rewind();
-            return value;   
-        }
-        private ByteBuffer getValue(){
-            int offset = RES_GET_OFFSET(resource);
-            int length = rawData.getInt(offset);
-            int byteOffset = offset+getIntOffset(1);
-            ByteBuffer val = ByteBuffer.allocate(length);
-            for(int i=0; i<length; i++){
-                val.put(rawData.get(byteOffset+i));
-            }
-            return val;
-        }
-		public ResourceBinary(ByteBuffer rawData, String baseName, String localeID, String key, 
-                              long resource, long rootResource ){
-            super(rawData, baseName, localeID, key, resource, rootResource, BINARY, false );
-            value = getValue();
-		}
-    }
-    private static class ResourceIntVector extends ICUResourceBundle{
-        private int[] value;
-        public int[] getIntVector(){
-            return value;   
-        }  
-        private int[] getValue(){
-            int offset = RES_GET_OFFSET(resource);
-            int length = rawData.getInt(offset);
-            int intOffset = offset+getIntOffset(1);
-            int[] val = new int[length];
-            for(int i=0; i<length; i++){
-                val[i] = rawData.getInt(intOffset+getIntOffset(i));
-            }
-            return val;
-        }
-        public ResourceIntVector(ByteBuffer rawData, String baseName, String localeID, String key, 
-                                long resource, long rootResource){
-            super(rawData, baseName, localeID, key, resource, rootResource,INT_VECTOR, false );
-            value = getValue();
-        }
-    }
-    private static String getStringValue(ByteBuffer rawData, long resource){
-        int offset = RES_GET_OFFSET(resource);
-        int length = rawData.getInt(offset);
-        int stringOffset = offset+getIntOffset(1);
-        
-        StringBuffer val = new StringBuffer();
-        for(int i=0; i<length; i++){
-            val.append(rawData.getChar(stringOffset+getCharOffset(i)));   
-        }
-        return val.toString();
-    }
-    
-    private static final char RES_PATH_SEP_CHAR ='/';
-    private static final String ICUDATA = "ICUDATA";
-    
-    private static int getIndex(String s){
-        if(s.length()==1){
-           char c = s.charAt(0);
-           if(Character.isDigit(c)){
-             return Integer.valueOf(s).intValue();
-           }
-        }
-        return -1;
-    }
-    
-    private static ICUResourceBundle findResource(ByteBuffer rawData, String baseName, 
-                                                   String localeID, String key, long resource,
-                                                   Hashtable table){
-        String locale=null, keyPath=null;
-        String bundleName;
-        String resPath = getStringValue(rawData, resource);
-        if(table==null){
-            table = new Hashtable();   
-        }
-        if(table.get(resPath)!= null){
-            throw new IllegalArgumentException("Circular references in the resource bundles");   
-        }
-        table.put(resPath,"");
-        if(resPath.indexOf(RES_PATH_SEP_CHAR)==0){
-            int i =resPath.indexOf(RES_PATH_SEP_CHAR,1);
-            int j =resPath.indexOf(RES_PATH_SEP_CHAR,i+1);
-            bundleName=resPath.substring(1,i);
-            locale=resPath.substring(i+1);
-            if(j!=-1){
-                locale=resPath.substring(i+1,j);
-                keyPath=resPath.substring(j+1,resPath.length());
-            }
-            //there is a path included
-            if(bundleName.equals(ICUDATA)){
-                bundleName = ICU_BASE_NAME;
-            }
-
-        }else{
-            //no path start with locale
-            int i =resPath.indexOf(RES_PATH_SEP_CHAR);
-            keyPath=resPath.substring(i+1);
-
-            if(i!=-1){
-                locale = resPath.substring(0,i);
-            }else{
-                locale=keyPath;
-                keyPath = null;//keyPath.substring(i, keyPath.length());
-            }
-            bundleName = baseName;
-
-        }
-        
-        ICUResourceBundle bundle = null;
-        if(locale==null){
-            bundle = (ICUResourceBundle)getBundleInstance(bundleName, "", ICU_DATA_CLASS_LOADER, false);
-        }else{
-            bundle = (ICUResourceBundle)getBundleInstance(bundleName, locale, ICU_DATA_CLASS_LOADER, false);
-        }
-        
-        
+    private ICUResourceBundle findResourceWithFallback(String path, ICUResourceBundle actualBundle) {
         ICUResourceBundle sub = null;
-        if(keyPath!=null){
-            StringTokenizer st = new StringTokenizer(keyPath, "/");
-            ICUResourceBundle current = bundle;
+        while (actualBundle != null) {
+            StringTokenizer st = new StringTokenizer(path, "/");
+            ICUResourceBundle current = actualBundle;
             while (st.hasMoreTokens()) {
                 String subKey = st.nextToken();
-                sub = current.handleGet(subKey, table);
+                sub = current.handleGet(subKey, null);
                 if(sub==null){
-                    break;
+                   break;   
                 }
                 current = sub;
             }
-        }else{
-
-            // if the sub resource is not found
-            // try fetching the sub resource with
-            // the key of this alias resource
-            sub = bundle.get(key);   
+            if(sub!=null){
+                //we found it
+                break;
+            }
+            // if not try the parent bundle
+            actualBundle = (ICUResourceBundle) actualBundle.parent;
         }
-        if(sub == null){
-            throw new MissingResourceException(localeID, baseName, key);   
-        }
-        sub.resPath = resPath;
         return sub;
-    }
+    }     
+
 }
