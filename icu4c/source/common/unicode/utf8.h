@@ -31,14 +31,13 @@
  * bodies and all macro statements should be terminated with semicolon.
  */
 
+#ifndef __UTF8_H__
+#define __UTF8_H__
+
 /* utf.h must be included first. */
 #ifndef __UTF_H__
 #   include "unicode/utf.h"
 #endif
-
-
-#ifndef __UTF8_H__
-#define __UTF8_H__
 
 /* internal definitions ----------------------------------------------------- */
 
