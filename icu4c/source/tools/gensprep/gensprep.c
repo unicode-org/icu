@@ -69,6 +69,7 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
+    UOPTION_ICUDATADIR,
     UOPTION_PACKAGE_NAME,
     UOPTION_BUNDLE_NAME,
     { "normalization", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0 },
@@ -83,6 +84,7 @@ enum{
     COPYRIGHT,
     DESTDIR,
     SOURCEDIR,
+    ICUDATADIR,
     PACKAGE_NAME,
     BUNDLE_NAME,
     NORMALIZE,
@@ -111,8 +113,11 @@ static int printHelp(int argc, char* argv[]){
         "\t-d or --destdir          destination directory, followed by the path\n"
         "\t-s or --sourcedir        source directory of ICU data, followed by the path\n"
         "\t-b or --bundle-name      generate the ouput data file with the name specified\n"
-        "\t-p or --package-name     prepend the output data file name with the package name specified\n");
+        "\t-i or --icudatadir       directory for locating any needed intermediate data files,\n"
+        "\t                         followed by path, defaults to %s\n",
+        u_getDataDirectory());
     fprintf(stderr,
+        "\t-p or --package-name     prepend the output data file name with the package name specified\n"
         "\t-n or --normalize        turn on the option for normalization and include mappings\n"
         "\t                         from NormalizationCorrections.txt from the given path,\n"
         "\t                         e.g: /test/icu/source/data/unidata\n"
@@ -134,15 +139,6 @@ main(int argc, char* argv[]) {
     int32_t sprepOptions = 0;
 
     UErrorCode errorCode=U_ZERO_ERROR;
-
-    /* Initialize ICU */
-    u_init(&errorCode);
-    if (U_FAILURE(errorCode)) {
-        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
-            argv[0], u_errorName(errorCode));
-        exit(1);
-    }
-    errorCode = U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
@@ -184,6 +180,9 @@ main(int argc, char* argv[]) {
     }
     if(!options[UNICODE_VERSION].doesOccur){
         return printHelp(argc, argv);
+    }
+    if(options[ICUDATADIR].doesOccur) {
+        u_setDataDirectory(options[ICUDATADIR].value);
     }
 #if UCONFIG_NO_IDNA
 
