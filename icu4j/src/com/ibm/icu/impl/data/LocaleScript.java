@@ -7,6 +7,7 @@
 package com.ibm.text.resources;
 
 import java.util.ListResourceBundle; 
+import com.ibm.text.UScript;
 
 public class LocaleScript extends ListResourceBundle { 
 
@@ -15,252 +16,308 @@ public class LocaleScript extends ListResourceBundle {
       }
 
       private static final Object[][] localeScript = new Object[][] {
-           {"af", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "af", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"ar", new String[] {
-                                      "ARAB",
-                                 }
+           {
+               "ar", new int[] {
+                                  UScript.ARABIC,
+                               }
            },
-           {"be", new String[] {
-                                      "CYRL",
-                                 }
+           {
+               "be", new int[] {
+                                  UScript.CYRILLIC,
+                               }
            },
-           {"bg", new String[] {
-                                      "CYRL",
-                                 }
+           {
+               "bg", new int[] {
+                                  UScript.CYRILLIC,
+                               }
            },
-           {"ca", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "ca", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"cs", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "cs", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"da", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "da", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"de", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "de", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"el", new String[] {
-                                      "GREK",
-                                 }
+           {
+               "el", new int[] {
+                                  UScript.GREEK,
+                               }
            },
-           {"en", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "en", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"eo", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "eo", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"es", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "es", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"et", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "et", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"eu", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "eu", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"fa", new String[] {
-                                      "ARAB",
-                                 }
+           {
+               "fa", new int[] {
+                                  UScript.ARABIC,
+                               }
            },
-           {"fi", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "fi", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"fo", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "fo", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"fr", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "fr", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"ga", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "ga", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"gl", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "gl", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"gv", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "gv", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"he", new String[] {
-                                      "HEBR",
-                                 }
+           {
+               "he", new int[] {
+                                  UScript.HEBREW,
+                               }
            },
-           {"hi", new String[] {
-                                      "DEVA",
-                                 }
+           {
+               "hi", new int[] {
+                                  UScript.DEVANAGARI,
+                               }
            },
-           {"hr", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "hr", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"hu", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "hu", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"id", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "id", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"is", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "is", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"it", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "it", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"iw", new String[] {
-                                      "HEBR",
-                                 }
+           {
+               "ja", new int[] {
+                                  UScript.KATAKANA,
+                                  UScript.HIRAGANA,
+                                  UScript.HAN,
+                               }
            },
-           {"ja", new String[] {
-                                      "KANA",
-                                      "HIRA",
-                                      "HANI"
-                                 }
+           {
+               "kl", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"kl", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "ko", new int[] {
+                                  UScript.HANGUL,
+                                  UScript.HAN,
+                               }
            },
-           {"ko", new String[] {
-                                      "HANG",
-                                      "HANI",
-                                 }
+           {
+               "kok", new int[] {
+                                  UScript.DEVANAGARI,
+                               }
            },
-           {"kok", new String[] {
-                                      "DEVA",
-                                 }
+           {
+               "kw", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"kw", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "lt", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"lt", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "lv", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"lv", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "mk", new int[] {
+                                  UScript.CYRILLIC,
+                               }
            },
-           {"mk", new String[] {
-                                      "CYRL",
-                                 }
+           {
+               "mr", new int[] {
+                                  UScript.DEVANAGARI,
+                               }
            },
-           {"mr", new String[] {
-                                      "DEVA",
-                                 }
+           {
+               "mt", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"mt", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "nb", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"nb", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "nl", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"nl", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "nn", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"nn", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "pl", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"pl", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "pt", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"pt", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "ro", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"ro", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "ru", new int[] {
+                                  UScript.CYRILLIC,
+                               }
            },
-           {"ru", new String[] {
-                                      "CYRL",
-                                 }
+           {
+               "sh", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"sh", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "sk", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"sk", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "sl", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"sl", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "sq", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"sq", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "sr", new int[] {
+                                  UScript.CYRILLIC,
+                               }
            },
-           {"sr", new String[] {
-                                      "CYRL",
-                                 }
+           {
+               "sv", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"sv", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "sw", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"sw", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "ta", new int[] {
+                                  UScript.TAMIL,
+                               }
            },
-           {"ta", new String[] {
-                                      "TAML",
-                                 }
+           {
+               "te", new int[] {
+                                  UScript.TELUGU,
+                               }
            },
-           {"te", new String[] {
-                                      "TELU",
-                                 }
+           {
+               "th", new int[] {
+                                  UScript.THAI,
+                               }
            },
-           {"th", new String[] {
-                                      "THAI",
-                                 }
+           {
+               "tr", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"tr", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "uk", new int[] {
+                                  UScript.CYRILLIC,
+                               }
            },
-           {"uk", new String[] {
-                                      "CYRL",
-                                 }
+           {
+               "vi", new int[] {
+                                  UScript.LATIN,
+                               }
            },
-           {"vi", new String[] {
-                                      "LATN",
-                                 }
+           {
+               "zh", new int[] {
+                                  UScript.HAN,
+                               }
            },
-           {"zh", new String[] {
-                                      "HANI",
-                                 }
-           },
-           {"zh_TW", new String[] {
-                                      "HANI",
-                                      "BOPO",
+           {
+               "zh_TW", new int[]{
+                                  UScript.HAN,
+                                  UScript.BOPOMOFO,
                                  }
            },
       };

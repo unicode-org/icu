@@ -119,7 +119,7 @@ class TransliteratorRegistry {
 
             // Canonicalize script name -or- do locale->script mapping
             int[] s = UScript.getCode(top);
-            if (s[0] != UScript.INVALID_CODE) {
+            if (s != null) {
                 scriptName = UScript.getName(s[0]);
                 // If the script name is the same as top then it's redundant
                 if (scriptName.equalsIgnoreCase(top)) {

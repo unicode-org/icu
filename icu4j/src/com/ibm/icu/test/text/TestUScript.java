@@ -47,7 +47,7 @@ public class TestUScript extends TestFmwk{
 
         for( ; i<testNames.length; i++){
             int[] code = UScript.getCode(testNames[i]);
-            if( code[0] != expected[i]){
+            if((code!=null) && (code[0] != expected[i])){
                 logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
                 numErrors++;
             }
@@ -122,7 +122,7 @@ public class TestUScript extends TestFmwk{
 
         for( ; i<testNames.length; i++){
             int[] code = UScript.getCode(testNames[i]);
-            if( code[0] != expected[i]){
+            if((code!=null) && (code[0] != expected[i])){
                 logln("Error getting script code Got: " +code[0] + " Expected: " +expected[i] +" for name "+testNames[i]);
                 numErrors++;
             }

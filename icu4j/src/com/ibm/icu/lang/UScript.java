@@ -770,43 +770,37 @@ public final class UScript {
 
     private static final String localeScript = "com.ibm.text.resources.LocaleScript";
     
-    private static int[] findCodeFromLocale(Locale locale)
-            throws MissingResourceException{
+    /**
+     * Helper function to find the code from locale.
+     * @param Locale the locale.
+     * @exception MissingResourceException if LocaleScript cannot be opened
+     */
+    private static int[] findCodeFromLocale(Locale locale){
         //TODO: Currently we use a hacked fallback mechanism.
         //Should be changed once ICU4J bundles locale data
         //with the distribution
-        int[] code = new int[1];
-        code[0] = INVALID_CODE;
-        
-        ResourceBundle resB = ResourceBundle.getBundle(localeScript);
-        String temp = locale.toString();
-        while(true){
-            try{
-                String[] scriptArray = resB.getStringArray(temp);
-                code = new int[scriptArray.length];
-                for(int i= 0; i< scriptArray.length ;i++){
-                    int strIndex = findStringIndex(scriptAbbr,scriptArray[i]);
-                    
-                    if(strIndex>=0 && strIndex < scriptAbbr.length){ 
-                        code[i] =  scriptAbbrCodes[strIndex];
-                    }else{
-                        code[i] = INVALID_CODE;
-                    }
-                }
-                break;
-            }catch(MissingResourceException e){
-                
-                /* handle fallback */
-                int index = temp.indexOf('_');
-                if(index >0){
-                    temp = temp.substring(0,index);
-                }else{
+        int[] code = null;
+        try{
+            ResourceBundle resB = ResourceBundle.getBundle(localeScript);
+            String temp = locale.toString();
+            while(true){
+                try{
+                    code =(int[])resB.getObject(temp);
                     break;
+                }catch(MissingResourceException e){         
+                    /* handle fallback */
+                    int index = temp.indexOf('_');
+                    if(index >0){
+                        temp = temp.substring(0,index);
+                    }else{
+                        break;
+                    }
+                    continue;
                 }
-                continue;
-            }
+            }  
+        }catch( MissingResourceException ex){
+            throw new InternalError();
         }
-        
         return code;
      }
 
@@ -842,30 +836,28 @@ public final class UScript {
     
         
     /**
-    * Gets a script code associated with the given locale or ISO 15924 abbreviation or name. 
+    * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name. 
     * Returns MALAYAM given "Malayam" OR "Mlym".
     * Returns LATIN given "en" OR "en_US" 
     * @param locale Locale
-    * @return The script code 
-    * @exception IllegalArgumentException, MissingResourceException
+    * @return The script codes array. null if the the code cannot be found. 
+    * @exception MissingResourceException
     * @draft
     */
     public static final int[] getCode(Locale locale)
-        throws IllegalArgumentException, MissingResourceException{
+        throws MissingResourceException{
             return findCodeFromLocale(locale);
     }
     
     /**
-    * Gets a script code associated with the given locale or ISO 15924 abbreviation or name. 
+    * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name. 
     * Returns MALAYAM given "Malayam" OR "Mlym".
     * Returns LATIN given "en" OR "en_US" 
     * @param nameOrAbbrOrLocale name of the script or ISO 15924 code or locale
-    * @return The script code 
-    * @exception IllegalArgumentException, MissingResourceException
+    * @return The script codes array. null if the the code cannot be found.
     * @draft
     */
-    public static final int[] getCode(String nameOrAbbrOrLocale)
-        throws IllegalArgumentException, MissingResourceException{
+    public static final int[] getCode(String nameOrAbbrOrLocale){
             
         int[] code = new int[1];
         code[0] = INVALID_CODE;
@@ -899,12 +891,11 @@ public final class UScript {
      * @exception IllegalArgumentException
      * @draft
      */
-    public static final int getScript(int codepoint)
-        throws IllegalArgumentException{
+    public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
             return findScriptCode(codepoint);
         }else{
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(Integer.toString(codepoint));
         } 
     }
     
@@ -916,8 +907,7 @@ public final class UScript {
      * @exception IllegalArgumentException
      * @draft
      */
-    public static final String getName(int scriptCode)
-            throws IllegalArgumentException{
+    public static final String getName(int scriptCode){
         int index = -1;
         if(scriptCode > CODE_LIMIT){
             throw new IllegalArgumentException(Integer.toString(scriptCode));
@@ -938,8 +928,7 @@ public final class UScript {
      * @exception IllegalArgumentException
      * @draft
      */
-    public static final String getShortName(int scriptCode)
-            throws IllegalArgumentException{
+    public static final String getShortName(int scriptCode){
         int index = -1;
         if(scriptCode > CODE_LIMIT){
             throw new IllegalArgumentException(Integer.toString(scriptCode));
