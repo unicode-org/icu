@@ -70,6 +70,7 @@ U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src);
 U_CAPI wchar_t *uprv_wcscpy(wchar_t *dst, const wchar_t *src);
 U_CAPI size_t uprv_wcslen(const wchar_t *src);
 #endif
+#define uprv_strdup(s) strdup(s)
 
 /* The following are part of the ANSI C standard, defined in stdlib.h . */
 #define uprv_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
