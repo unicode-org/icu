@@ -658,19 +658,23 @@ _ISO2022Reset(UConverter *converter) {
         converter->charErrorBuffer[0] = 0x1b;
         converter->charErrorBuffer[1] = 0x28;
         converter->charErrorBuffer[2] = 0x42;
+        if (converter->mode == UCNV_SO){
+            ucnv_close (myConverterData->currentConverter);
+            myConverterData->currentConverter=NULL;
+        }
     }
     else {
         /* reset the state variables */
-        setInitialStateToUnicodeJPCN(converter, myConverterData);
-        setInitialStateFromUnicodeJPCN(myConverterData);
-        setInitialStateToUnicodeKR(converter, myConverterData);
-        setInitialStateFromUnicodeKR(converter, myConverterData);
+        if(myConverterData->locale[0] == 'j' || myConverterData->locale[0] == 'c'){
+            setInitialStateToUnicodeJPCN(converter, myConverterData);
+            setInitialStateFromUnicodeJPCN(myConverterData);
+        }
+        else if(myConverterData->locale[0] ='k'){
+            setInitialStateToUnicodeKR(converter, myConverterData);
+            setInitialStateFromUnicodeKR(converter, myConverterData);
+        }
     }
-    if (converter->mode == UCNV_SO && !myConverterData->isLocaleSpecified){
 
-        ucnv_close (myConverterData->currentConverter);
-        myConverterData->currentConverter=NULL;
-    }
 
 }
 static const char* _ISO2022getName(const UConverter* cnv){
