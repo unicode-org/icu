@@ -11,8 +11,6 @@
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 
-#define ID_DELIM ((UChar)0x003B) /*;*/
-
 /**
  * Constructs a new compound transliterator given an array of
  * transliterators.  The array of transliterators may be of any
