@@ -1053,7 +1053,7 @@ static const mac_lc_rec mac_lc_recs[] = {
 
 #if U_POSIX_LOCALE
 /* Return just the POSIX id, whatever happens to be in it */
-static const char *uprv_getPOSIXID()
+static const char *uprv_getPOSIXID(void)
 {
     static const char* posixID = NULL;
     if (posixID == 0) {
