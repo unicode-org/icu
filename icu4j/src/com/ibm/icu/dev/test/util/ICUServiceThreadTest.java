@@ -29,6 +29,8 @@ import java.util.TreeSet;
 
 public class ICUServiceThreadTest extends TestFmwk
 {    
+    private static final boolean PRINTSTATS = false;
+
     public static void main(String[] args) throws Exception {
 	ICUServiceThreadTest test = new ICUServiceThreadTest();
 	test.run(args);
@@ -342,7 +344,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    new GetThread("[" + Integer.toString(i) + "]",  stableService(), 0, this).start();
 	}
 	runThreads();
-	System.out.println(stableService.stats());
+	if (PRINTSTATS) System.out.println(stableService.stats());
     }
 
     // run multiple getVisibleID on a stable service
@@ -351,7 +353,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    new GetVisibleThread("[" + Integer.toString(i) + "]",  stableService(), 0, this).start();
 	}
 	runThreads();
-	System.out.println(stableService.stats());
+	if (PRINTSTATS) System.out.println(stableService.stats());
     }
 
     // run multiple getDisplayName on a stable service
@@ -368,7 +370,7 @@ public class ICUServiceThreadTest extends TestFmwk
 				 this).start();
 	}
 	runThreads();
-	System.out.println(stableService.stats());
+	if (PRINTSTATS) System.out.println(stableService.stats());
     }
 
     // run register/unregister on a service
@@ -381,7 +383,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	    new UnregisterFactoryThread("[" + i + "]", service, 0, this).start();
 	}
 	runThreads();
-	System.out.println(service.stats());
+	if (PRINTSTATS) System.out.println(service.stats());
     }
     
     public void Test04_WitheringService() {
@@ -402,7 +404,7 @@ public class ICUServiceThreadTest extends TestFmwk
 	new UnregisterFactoryListThread("", service, 3, factories, this).start();
 
 	runThreads(2000);
-	System.out.println(service.stats());
+	if (PRINTSTATS) System.out.println(service.stats());
     }
 	
     // "all hell breaks loose"
@@ -438,6 +440,6 @@ public class ICUServiceThreadTest extends TestFmwk
 
 	// yoweee!!!
 	runThreads(10000);
-	System.out.println(service.stats());
+	if (PRINTSTATS) System.out.println(service.stats());
     }
 }
