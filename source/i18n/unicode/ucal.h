@@ -884,6 +884,7 @@ ucal_getLimit(const UCalendar*     cal,
               UCalendarLimitType   type,
               UErrorCode*          status);
 
+#ifdef U_USE_UCAL_OBSOLETE_2_8
 /**
  * Get an available TimeZone ID.
  * A Timezone ID is a string of the form "America/Los Angeles".
@@ -910,6 +911,7 @@ ucal_getAvailableTZIDs(int32_t      rawOffset,
  */
 U_CAPI int32_t U_EXPORT2 
 ucal_countAvailableTZIDs(int32_t rawOffset);
+#endif
 
 /** Get the locale for this calendar object. You can choose between valid and actual locale.
  *  @param cal The calendar object

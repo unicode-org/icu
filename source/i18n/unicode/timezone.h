@@ -178,6 +178,7 @@ public:
      */
     static StringEnumeration* createEnumeration(const char* country);
 
+#ifdef U_USE_TIMEZONE_OBSOLETE_2_8
     /**
      * Returns a list of time zone IDs, one for each time zone with a given GMT offset.
      * The return value is a list because there may be several times zones with the same
@@ -241,6 +242,7 @@ public:
      * @obsolete ICU 2.8.  Use createEnumeration(void) instead since this API will be removed in that release.
      */
     static const UnicodeString** createAvailableIDs(int32_t& numIDs);
+#endif
 
     /**
      * Returns the number of IDs in the equivalency group that
