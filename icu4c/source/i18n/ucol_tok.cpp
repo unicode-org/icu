@@ -90,6 +90,53 @@ uhash_freeBlockWrapper(void *obj) {
   uhash_freeBlock(obj);
 }
 
+
+typedef struct {
+  uint32_t startCE;
+  uint32_t startContCE;
+  uint32_t limitCE;
+  uint32_t limitContCE;
+} indirectBoundaries;
+
+/* these values are used for finding CE values for indirect positioning. */
+/* Indirect positioning is a mechanism for allowing resets on symbolic   */
+/* values. It only works for resets and you cannot tailor indirect names */
+/* An indirect name can define either an anchor point or a range. An     */
+/* anchor point behaves in exactly the same way as a code point in reset */
+/* would, except that it cannot be tailored. A range (we currently only  */
+/* know for the [top] range will explicitly set the upper bound for      */
+/* generated CEs, thus allowing for better control over how many CEs can */
+/* be squeezed between in the range without performance penalty.         */
+/* In that respect, we use [top] for tailoring of locales that use CJK   */
+/* characters. Other indirect values are currently a pure convenience,   */
+/* they can be used to assure that the CEs will be always positioned in  */
+/* the same place relative to a point with known properties (e.g. first  */
+/* primary ignorable). */
+static indirectBoundaries ucolIndirectBoundaries[11] = {
+  { UCOL_RESET_TOP_VALUE,               0, 
+    UCOL_NEXT_TOP_VALUE,                0 },
+  { UCOL_FIRST_PRIMARY_IGNORABLE,       0, 
+    0,                                  0 },
+  { UCOL_LAST_PRIMARY_IGNORABLE,        UCOL_LAST_PRIMARY_IGNORABLE_CONT, 
+    0,                                  0 },
+  { UCOL_FIRST_SECONDARY_IGNORABLE,     0, 
+    0,                                  0 },
+  { UCOL_LAST_SECONDARY_IGNORABLE,      0, 
+    0,                                  0 },
+  { UCOL_FIRST_TERTIARY_IGNORABLE,      0, 
+    0,                                  0 },
+  { UCOL_LAST_TERTIARY_IGNORABLE,       0, 
+    0,                                  0 },
+  { UCOL_FIRST_VARIABLE,                0, 
+    0,                                  0 },
+  { UCOL_LAST_VARIABLE,                 0, 
+    0,                                  0 },
+  { UCOL_FIRST_NON_VARIABLE,            0, 
+    0,                                  0 },
+  { UCOL_LAST_NON_VARIABLE,             0, 
+    0,                                  0 },
+};
+
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
   uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
@@ -143,6 +190,15 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->lh = 0;
   src->lh = (UColTokListHeader *)uprv_malloc(512*sizeof(UColTokListHeader));
   src->resultLen = 0;
+
+  UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
+  
+  // Set values for the top - TODO: once we have values for all the indirects, we are going
+  // to initalize here.
+  ucolIndirectBoundaries[0].startCE =  consts->UCA_RESET_TOP_VALUE;
+  ucolIndirectBoundaries[0].startContCE =  0;
+  ucolIndirectBoundaries[0].limitCE =  consts->UCA_NEXT_TOP_VALUE;
+  ucolIndirectBoundaries[0].limitContCE =  0;
 }
 
 static inline 
@@ -200,52 +256,6 @@ void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, U
     break;
   }
 }
-
-typedef struct {
-  uint32_t startCE;
-  uint32_t startContCE;
-  uint32_t limitCE;
-  uint32_t limitContCE;
-} indirectBoundaries;
-
-/* these values are used for finding CE values for indirect positioning. */
-/* Indirect positioning is a mechanism for allowing resets on symbolic   */
-/* values. It only works for resets and you cannot tailor indirect names */
-/* An indirect name can define either an anchor point or a range. An     */
-/* anchor point behaves in exactly the same way as a code point in reset */
-/* would, except that it cannot be tailored. A range (we currently only  */
-/* know for the [top] range will explicitly set the upper bound for      */
-/* generated CEs, thus allowing for better control over how many CEs can */
-/* be squeezed between in the range without performance penalty.         */
-/* In that respect, we use [top] for tailoring of locales that use CJK   */
-/* characters. Other indirect values are currently a pure convenience,   */
-/* they can be used to assure that the CEs will be always positioned in  */
-/* the same place relative to a point with known properties (e.g. first  */
-/* primary ignorable). */
-static const indirectBoundaries ucolIndirectBoundaries[] = {
-  { UCOL_RESET_TOP_VALUE,               0, 
-    UCOL_NEXT_TOP_VALUE,                0 },
-  { UCOL_FIRST_PRIMARY_IGNORABLE,       0, 
-    0,                                  0 },
-  { UCOL_LAST_PRIMARY_IGNORABLE,        UCOL_LAST_PRIMARY_IGNORABLE_CONT, 
-    0,                                  0 },
-  { UCOL_FIRST_SECONDARY_IGNORABLE,     0, 
-    0,                                  0 },
-  { UCOL_LAST_SECONDARY_IGNORABLE,      0, 
-    0,                                  0 },
-  { UCOL_FIRST_TERTIARY_IGNORABLE,      0, 
-    0,                                  0 },
-  { UCOL_LAST_TERTIARY_IGNORABLE,       0, 
-    0,                                  0 },
-  { UCOL_FIRST_VARIABLE,                0, 
-    0,                                  0 },
-  { UCOL_LAST_VARIABLE,                 0, 
-    0,                                  0 },
-  { UCOL_FIRST_NON_VARIABLE,            0, 
-    0,                                  0 },
-  { UCOL_LAST_NON_VARIABLE,             0, 
-    0,                                  0 },
-};
 
 #define UTOK_OPTION_COUNT 17
 
