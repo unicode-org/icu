@@ -429,23 +429,12 @@ ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
 
 static int32_t U_CALLCONV
 ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
-    int32_t value = -1;
-    if (!pErrorCode || U_FAILURE(*pErrorCode)) {
-        return -1;
-    }
-    if (enumerator) {
-        UAliasContext *myContext = (UAliasContext *)(enumerator->context);
-        uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
+    int32_t value = 0;
+    UAliasContext *myContext = (UAliasContext *)(enumerator->context);
+    uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
 
-        if (listOffset) {
-            value = taggedAliasLists[listOffset];
-        }
-        else {
-            value = 0;
-        }
-    }
-    else {
-        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+    if (listOffset) {
+        value = taggedAliasLists[listOffset];
     }
     return value;
 }
@@ -455,40 +444,25 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
                             int32_t* resultLength,
                             UErrorCode *pErrorCode)
 {
-    if (!pErrorCode || U_FAILURE(*pErrorCode)) {
-        return NULL;
-    }
-    if (enumerator) {
-        UAliasContext *myContext = (UAliasContext *)(enumerator->context);
-        uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
+    UAliasContext *myContext = (UAliasContext *)(enumerator->context);
+    uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
 
-        if (listOffset) {
-            uint32_t listCount = taggedAliasLists[listOffset];
-            const uint16_t *currList = taggedAliasLists + listOffset + 1;
+    if (listOffset) {
+        uint32_t listCount = taggedAliasLists[listOffset];
+        const uint16_t *currList = taggedAliasLists + listOffset + 1;
 
-            if (myContext->listIdx < listCount) {
-                return GET_STRING(currList[myContext->listIdx++]);
-            }
+        if (myContext->listIdx < listCount) {
+            return GET_STRING(currList[myContext->listIdx++]);
         }
-        /* Either we accessed a zero length list, or we enumerated too far. */
-        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
     }
-    else {
-        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-    }
+    /* Either we accessed a zero length list, or we enumerated too far. */
+    *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
     return NULL;
 }
 
 static void U_CALLCONV
 ucnv_io_resetStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
-    if (pErrorCode && U_SUCCESS(*pErrorCode)) {
-        if (enumerator) {
-            ((UAliasContext *)(enumerator->context))->listIdx = 0;
-        }
-        else {
-            *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-    }
+    ((UAliasContext *)(enumerator->context))->listIdx = 0;
 }
 
 static void U_CALLCONV
