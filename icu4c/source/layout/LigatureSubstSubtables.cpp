@@ -9,7 +9,7 @@
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"
 #include "GlyphSubstitutionTables.h"
-#include "LigatureSubstitutionSubtables.h"
+#include "LigatureSubstSubtables.h"
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 

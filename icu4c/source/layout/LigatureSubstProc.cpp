@@ -11,7 +11,7 @@
 #include "MorphStateTables.h"
 #include "SubtableProcessor.h"
 #include "StateTableProcessor.h"
-#include "LigatureSubstitutionProcessor.h"
+#include "LigatureSubstProc.h"
 #include "LESwaps.h"
 
 #define ExtendedComplement(m) ((le_int32) (~((le_uint32) (m))))
