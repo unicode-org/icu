@@ -106,7 +106,7 @@
 
 /*!
  * \def U_SIZEOF_WCHAR_T
- * Do we have wchar.h on this platform? It is there on most platforms.
+ * U_SIZEOF_WCHAR_T==sizeof(wchar_t).
  */
 #ifndef U_HAVE_WCHAR_H
 #   define U_HAVE_WCHAR_H 1
@@ -115,8 +115,35 @@
 /* U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it) */
 #if U_SIZEOF_WCHAR_T==0
 #   undef U_SIZEOF_WCHAR_T
-    /** U_SIZEOF_WCHAR_T==sizeof(wchar_t). */
 #   define U_SIZEOF_WCHAR_T 4
+#endif
+
+/*!
+ * \def U_WCHAR_IS_UTF16
+ * Defined if wchar_t uses UTF-16.
+ */
+/*!
+ * \def U_WCHAR_IS_UTF32
+ * Defined if wchar_t uses UTF-32.
+ */
+#if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
+#   ifdef __STDC_ISO_10646__ 
+#       if (U_SIZEOF_WCHAR_T==2)
+#           define U_WCHAR_IS_UTF16
+#       elif (U_SIZEOF_WCHAR_T==4)
+#           define  U_WCHAR_IS_UTF32
+#       endif
+#   elif defined __UCS2__
+#       if (__OS390__ || __OS400__) && (U_SIZEOF_WCHAR_T==2)
+#           define U_WCHAR_IS_UTF16
+#       endif
+#   elif defined __UCS4__
+#       if (U_SIZEOF_WCHAR_T==4)
+#           define U_WCHAR_IS_UTF32
+#       endif
+#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#       define U_WCHAR_IS_UTF16    
+#   endif
 #endif
 
 /*!
