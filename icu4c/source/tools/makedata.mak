@@ -70,7 +70,7 @@ NULL=
 NULL=nul
 !ENDIF
 
-PATH = $(PATH);$(ICUP)\bin\$(CFG)
+PATH = $(PATH);$(ICUP)\bin;$(ICUP)\bin\$(CFG)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
