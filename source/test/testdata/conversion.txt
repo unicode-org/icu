@@ -3,6 +3,16 @@
 //   Copyright (C) 2003, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
+//   file name:  conversion.txt
+//   encoding:   US-ASCII
+//   tab size:   8 (not used)
+//   indentation:4
+//
+//   created on: 2003jul15
+//   created by: Markus W. Scherer
+//
+//   ICU resource bundle source file with test data for data-driven conversion tests.
+//
 //*******************************************************************************
 
 conversion {
@@ -11,6 +21,8 @@ conversion {
     LongDescription {
       "Test data for data-driven conversion tests in icu/source/test/intltest/convtest.cpp\n"
       "Run intltest conversion\n"
+
+      "Charset names starting with '*' are for testdata names.\n"
 
       "ICU callbacks are specified as strings with pairs of characters, each optional.\n"
       "Callback function - '?'=Sub '0'=Skip '.'=Stop '&'=Escape\n"
@@ -31,20 +43,42 @@ conversion {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // e4b8 is a partial sequence
+        { "UTF-8", :bin{ 31e4ba8ce4b8 }, "1\u4e8c", :intvector{ 0, 1 }, :int{1}, :int{0}, "truncated", ".", :bin{ e4b8 } }
+        { "UTF-8", :bin{ 31e4ba8ce4b8 }, "1\u4e8c\ufffd", :intvector{ 0, 1, 4 }, :int{1}, :int{0}, "", "?", :bin{""} }
+
+        // LMBCS with escape callback (1292a0 is unassigned)
+        {
+          "LMBCS",
+          :bin{ 12c9501292a01292a1 },
+          "\u4e2e%X12%X92%XA0\ue5c4",
+          :intvector{ 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6 },
+          :int{1}, :int{0}, "", "&", :bin{""}
+        }
+
+        // IMAP-mailbox-name with SUB
+        // a<DEL> a&AB~ a&AB\x0c a&AB- a&AB. a&.
+        {
+          "IMAP-mailbox-name",
+          :bin{ 617f612641427e612641420c612641422d612641422e61262e },
+          "a\ufffda\ufffda\ufffda\ufffda\ufffda\ufffd",
+          :intvector{ 0, 1, 2, 4, 7, 9, 12, 14, 17, 19, 22, 23 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        // using testdata_test1.cnv
+        { "*test1", :bin{ 000506070809 }, "\u20ac\x05\x06\U00101234\ufffd\ufffd", :intvector{ 0, 1, 2, 3, 3, 4, 5 }, :int{1}, :int{0}, "", "", :bin{""} }
+
         // surrogates in CESU-8
         { "CESU-8", :bin{ eda080eda081edb081 }, "\ud800\U00010401", :intvector{ 0, 3, 6 }, :int{1}, :int{0}, "", "", :bin{""} }
         // e080 is a partial sequence
-        { "UTF-8", :bin{ 31ffe4ba8ce08061 }, "1\ufffd\u4e8c\ufffda", :intvector{ 0, 1, 2, 5, 7 }, :int{1}, :int{0}, "", "", :bin{ e080 } }
+        { "UTF-8", :bin{ 31ffe4ba8ce08061 }, "1\ufffd\u4e8c\ufffda", :intvector{ 0, 1, 2, 5, 7 }, :int{0}, :int{0}, "", "", :bin{ e080 } }
         // fbbfbfbfbf exceedes U+10ffff
-        { "UTF-8", :bin{ 31fbbfbfbfbf61 }, "1\ufffda", :intvector{ 0, 1, 6 }, :int{1}, :int{0}, "", "", :bin{ fbbfbfbfbf } }
+        { "UTF-8", :bin{ 31fbbfbfbfbf61 }, "1\ufffda", :intvector{ 0, 1, 6 }, :int{0}, :int{0}, "", "", :bin{ fbbfbfbfbf } }
 
         // lead byte a2 without trail byte
         { "ibm-1363", :bin{ a2aea2 }, "\u00a1", :intvector{ 0 }, :int{1}, :int{0}, "truncated", ".", :bin{ a2 } }
-        { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 }, :int{1}, :int{0}, "", "?", :bin{ a2 } }
-
-        // e4b8 is a partial sequence
-        { "UTF-8", :bin{ 31e4ba8ce4b8 }, "1\u4e8c", :intvector{ 0, 1 }, :int{1}, :int{0}, "truncated", ".", :bin{ e4b8 } }
-        { "UTF-8", :bin{ 31e4ba8ce4b8 }, "1\u4e8c\ufffd", :intvector{ 0, 1, 4 }, :int{1}, :int{0}, "", "?", :bin{ e4b8 } }
+        { "ibm-1363", :bin{ a2aea2 }, "\u00a1\u001a", :intvector{ 0, 2 }, :int{1}, :int{0}, "", "?", :bin{""} }
 
         // simple sample, no error handling
         { "UTF-8", :bin{ 61F48FBFBF }, "a\U0010FFFF", :intvector{ 0, 1, 1 }, :int{1}, :int{0}, "", "", :bin{""} }
