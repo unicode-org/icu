@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -54,7 +54,7 @@ static UDataInfo dataInfo={
     0,
 
     { 0x4e, 0x6f, 0x72, 0x6d },   /* dataFormat="Norm" */
-    { 2, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 2, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
     { 3, 1, 0, 0 }                /* dataVersion (Unicode version) */
 };
 
@@ -117,6 +117,11 @@ utm_getStart(UToolMemory *mem) {
     return (char *)mem->array;
 }
 
+static int32_t
+utm_countItems(UToolMemory *mem) {
+    return mem->index;
+}
+
 static void *
 utm_alloc(UToolMemory *mem) {
     char *p=(char *)mem->array+mem->index*mem->size;
@@ -147,7 +152,10 @@ utm_allocN(UToolMemory *mem, int32_t n) {
 
 typedef void EnumTrieFn(void *context, uint32_t code, Norm *norm);
 
-static UNewTrie normTrie={ {0},0,0,0,0,0,0,0,0,{0} }, fcdTrie={ {0},0,0,0,0,0,0,0,0,{0} };
+static UNewTrie
+    normTrie={ {0},0,0,0,0,0,0,0,0,{0} },
+    fcdTrie={ {0},0,0,0,0,0,0,0,0,{0} },
+    auxTrie={ {0},0,0,0,0,0,0,0,0,{0} };
 
 static UToolMemory *normMem, *utf32Mem, *extraMem, *combiningTriplesMem;
 
@@ -174,6 +182,8 @@ static uint16_t combiningTableTop=0;
 
 extern void
 init() {
+    uint16_t *p16;
+
     /* initialize the two tries */
     if(NULL==utrie_open(&normTrie, NULL, 30000, 0, FALSE)) {
         fprintf(stderr, "error: failed to initialize tries\n");
@@ -192,6 +202,9 @@ init() {
 
     /* allocate extra data memory for UTF-16 decomposition strings and other values */
     extraMem=utm_open("gennorm extra 16-bit memory", _NORM_EXTRA_INDEX_TOP, 2);
+    /* initialize the extraMem counter for the top of FNC strings */
+    p16=(uint16_t *)utm_alloc(extraMem);
+    *p16=1;
 
     /* allocate temporary memory for combining triples */
     combiningTriplesMem=utm_open("gennorm combining triples", 0x4000, sizeof(CombiningTriple));
@@ -719,6 +732,7 @@ storeNorm(uint32_t code, Norm *norm) {
     p=createNorm(code);
     norm->qcFlags=p->qcFlags;
     norm->combiningFlags=p->combiningFlags;
+    norm->fncIndex=p->fncIndex;
 
     /* process the decomposition if if there is at one here */
     if((norm->lenNFD|norm->lenNFKD)!=0) {
@@ -805,6 +819,55 @@ setHangulJamoSpecials() {
         fprintf(stderr, "error: too many normalization entries (setting Hangul)\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
+}
+
+/*
+ * set FC-NFKC-Closure string
+ * s contains the closure string; s[0]==length, s[1..length] is the actual string
+ * may modify s[0]
+ */
+U_CFUNC void
+setFNC(uint32_t c, UChar *s) {
+    uint16_t *p;
+    int32_t length, i, count;
+    UChar first;
+
+    count=utm_countItems(extraMem);
+    length=s[0];
+    first=s[1];
+
+    /* try to overlay single-unit strings with existing ones */
+    if(length==1 && first<0xff00) {
+        p=utm_getStart(extraMem);
+        for(i=1; i<count; ++i) {
+            if(first==p[i]) {
+                break;
+            }
+        }
+    } else {
+        i=count;
+    }
+
+    /* append the new string if it cannot be overlayed with an old one */
+    if(i==count) {
+        if(count>_NORM_AUX_MAX_FNC) {
+            fprintf(stderr, "gennorm error: too many FNC strings\n");
+            exit(U_INDEX_OUTOFBOUNDS_ERROR);
+        }
+
+        /* prepend 0xffxx with xx==length */
+        s[0]=(uint16_t)(0xff00+length);
+        ++length;
+        p=(uint16_t *)utm_allocN(extraMem, length);
+        uprv_memcpy(p, s, length*2);
+
+        /* update the top index in extraMem[0] */
+        count+=length;
+        ((uint16_t *)utm_getStart(extraMem))[0]=(uint16_t)count;
+    }
+
+    /* store the index to the string */
+    createNorm(c)->fncIndex=i;
 }
 
 /* build runtime structures ------------------------------------------------- */
@@ -902,9 +965,6 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
         printf("U+%04lx combines both ways\n", (long)code);
     }
 }
-
-/* ### debug */
-static uint32_t countCCSame=0, countCCTrail=0, countCCTwo=0;
 
 static uint32_t
 make32BitNorm(Norm *norm) {
@@ -1056,13 +1116,6 @@ makeAll32() {
             ++count;
         }
     }
-
-    if(beVerbose) {
-        printf("count of 16-bit extra data: %lu\n", (long)extraMem->index);
-        printf("count of (uncompacted) non-zero 32-bit words: %lu\n", (long)count);
-        printf("count CC frequencies: same %lu  trail %lu  two %lu\n",
-                (long)countCCSame, (long)countCCTrail, (long)countCCTwo);
-    }
 }
 
 /*
@@ -1092,6 +1145,26 @@ makeFCD() {
     for(i=0; i<fcdLength; ++i) {
         n=pFCDData[i];
         pFCDData[i]=norms[n].value32;
+    }
+}
+
+static void
+makeAux() {
+    Norm *norm;
+    uint32_t *pData;
+    int32_t i, length;
+
+    pData=utrie_getData(&auxTrie, &length);
+
+    for(i=0; i<length; ++i) {
+        norm=norms+pData[i];
+        /*
+         * 32-bit auxiliary normalization properties
+         * see unormimp.h
+         */
+        pData[i]=
+            ((uint32_t)(norm->combiningFlags&0x80)<<(_NORM_AUX_COMP_EX_SHIFT-7))|
+            (uint32_t)(norm->fncIndex<<_NORM_AUX_FNC_SHIFT);
     }
 }
 
@@ -1158,6 +1231,48 @@ getFoldedFCDValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     return 0;
 }
 
+/*
+ * folding value for auxiliary data:
+ * set bit 31 and store the offset in bits 29..20
+ * if there is any non-0 entry
+ * or together data bits 30 and 19..0 of all of the 1024 supplementary code points
+ */
+static uint32_t U_CALLCONV
+getFoldedAuxValue(UNewTrie *trie, UChar32 start, int32_t offset) {
+    uint32_t value, oredValues;
+    UChar32 limit;
+    UBool inBlockZero;
+
+    oredValues=0;
+    limit=start+0x400;
+    while(start<limit) {
+        value=utrie_get32(trie, start, &inBlockZero);
+        if(inBlockZero) {
+            start+=UTRIE_DATA_BLOCK_LENGTH;
+        } else {
+            oredValues|=value;
+            ++start;
+        }
+    }
+
+    if(oredValues!=0) {
+        /* reduce variation of oredValues */
+        if(oredValues&_NORM_AUX_CANON_SET_MASK) {
+            oredValues|=_NORM_AUX_CANON_SET_MASK;
+        }
+
+        /* move the 10 significant offset bits into bits 29..20 */
+        offset=offset<<(_NORM_AUX_FNC_SHIFT-UTRIE_SURROGATE_BLOCK_BITS);
+        if(offset>_NORM_AUX_FNC_MASK) {
+            fprintf(stderr, "gennorm error: folding offset too large (auxTrie)\n");
+            exit(U_INDEX_OUTOFBOUNDS_ERROR);
+        }
+        return (uint32_t)offset|_NORM_AUX_IS_LEAD_MASK|(oredValues&~_NORM_AUX_FNC_MASK);
+    } else {
+        return 0;
+    }
+}
+
 extern void
 processData() {
 #if 0
@@ -1181,20 +1296,25 @@ processData() {
     setHangulJamoSpecials();
 
     /* clone the normalization trie to make the FCD trie */
-    if(NULL==utrie_clone(&fcdTrie, &normTrie, NULL, 0)) {
+    if( NULL==utrie_clone(&fcdTrie, &normTrie, NULL, 0) ||
+        NULL==utrie_clone(&auxTrie, &normTrie, NULL, 0)
+    ) {
         fprintf(stderr, "error: unable to clone the normalization trie\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
 
     /* --- finalize data for quick checks & normalization --- */
 
-    /* turn the Norm structs (stage2, norms) into 32-bit data words (norm32Table) */
+    /* turn the Norm structs (stage2, norms) into 32-bit data words */
     makeAll32();
 
-    /* --- finalize data for FCD checks: fcdStage1/fcdTable --- */
+    /* --- finalize data for FCD checks --- */
 
     /* FCD data: take Norm.canonBothCCs and store them in the FCD table */
     makeFCD();
+
+    /* --- finalize auxiliary normalization data --- */
+    makeAux();
 
     if(beVerbose) {
 #if 0
@@ -1208,11 +1328,11 @@ processData() {
 
 extern void
 generateData(const char *dataDir) {
-    static uint8_t normTrieBlock[100000], fcdTrieBlock[100000];
+    static uint8_t normTrieBlock[100000], fcdTrieBlock[100000], auxTrieBlock[100000];
 
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
-    int32_t size, normTrieSize, fcdTrieSize, dataLength;
+    int32_t size, normTrieSize, fcdTrieSize, auxTrieSize, dataLength;
 
     normTrieSize=utrie_serialize(&normTrie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -1226,6 +1346,12 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
 
+    auxTrieSize=utrie_serialize(&auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "error: utrie_serialize(auxiliary data) failed, %s\n", u_errorName(errorCode));
+        exit(errorCode);
+    }
+
     /* make sure that the FCD trie is 4-aligned */
     if((extraMem->index+combiningTableTop)&1) {
         combiningTable[combiningTableTop++]=0x1234; /* add one 16-bit word for an even number */
@@ -1236,9 +1362,16 @@ generateData(const char *dataDir) {
         normTrieSize+
         extraMem->index*2+
         combiningTableTop*2+
-        fcdTrieSize;
+        fcdTrieSize+
+        auxTrieSize;
 
     if(beVerbose) {
+        printf("size of normalization trie              %5lu bytes\n", normTrieSize);
+        printf("size of 16-bit extra memory             %5lu UChars/uint16_t\n", extraMem->index);
+        printf("  of that: FC_NFKC_Closure size         %5u UChars/uint16_t\n", ((uint16_t *)utm_getStart(extraMem))[0]);
+        printf("size of combining table                 %5lu uint16_t\n", combiningTableTop);
+        printf("size of FCD trie                        %5lu bytes\n", fcdTrieSize);
+        printf("size of auxiliary trie                  %5lu bytes\n", auxTrieSize);
         printf("size of " DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
     }
 
@@ -1253,6 +1386,8 @@ generateData(const char *dataDir) {
     /* the quick check minimum code points are already set */
 
     indexes[_NORM_INDEX_FCD_TRIE_SIZE]=fcdTrieSize;
+    indexes[_NORM_INDEX_AUX_TRIE_SIZE]=auxTrieSize;
+    /* ### TODO indexes[_NORM_INDEX_UNICODE_SET_COUNT]=###; */
 
     /* write the data */
     pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
@@ -1267,6 +1402,7 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, utm_getStart(extraMem), extraMem->index*2);
     udata_writeBlock(pData, combiningTable, combiningTableTop*2);
     udata_writeBlock(pData, fcdTrieBlock, fcdTrieSize);
+    udata_writeBlock(pData, auxTrieBlock, auxTrieSize);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -1290,6 +1426,7 @@ cleanUpData(void) {
     utm_close(combiningTriplesMem);
     utrie_close(&normTrie);
     utrie_close(&fcdTrie);
+    utrie_close(&auxTrie);
 }
 
 /*
