@@ -61,4 +61,5 @@ ibm-1164.ucm ibm-285.ucm ibm-858.ucm ibm-949.ucm\
 ibm-1250.ucm ibm-290.ucm ibm-859.ucm ibm-950.ucm\
 ibm-1251.ucm ibm-297.ucm ibm-860.ucm ibm-970.ucm\
 ibm-1388.ucm ibm-1162.ucm ibm-939.ucm ibm-941.ucm\
+jisx-201.ucm jisx-208.ucm jisx-212.ucm\
 ibm-1252.ucm ibm-37-s390.ucm ibm-861.ucm lmb-excp.ucm ibm-33722.ucm ibm-964.ucm
