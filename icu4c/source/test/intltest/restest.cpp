@@ -107,12 +107,12 @@ param[] =
     // "IN" means inherits
     // "NE" or "ne" means "does not exist"
 
-    { "root",       0,      U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
-    { "te",            0,      U_ZERO_ERROR,             e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-    { "te_IN",         0,      U_ZERO_ERROR,             e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "te_NE",         0,      U_USING_FALLBACK_ERROR,   e_te,           { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-    { "te_IN_NE",      0,      U_USING_FALLBACK_ERROR,   e_te_IN,        { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "ne",            0,      U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+    { "root",       NULL,   U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
+    { "te",         NULL,   U_ZERO_ERROR,             e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+    { "te_IN",      NULL,   U_ZERO_ERROR,             e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+    { "te_NE",      NULL,   U_USING_FALLBACK_ERROR,   e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+    { "te_IN_NE",   NULL,   U_USING_FALLBACK_ERROR,   e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+    { "ne",         NULL,   U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -158,21 +158,33 @@ int32_t randi(int32_t n)
 
 //***************************************************************************************
 
+/*
+ Don't use more than one of these at a time because of the Locale names
+*/
 ResourceBundleTest::ResourceBundleTest()
 : pass(0),
   fail(0),
   OUT(it_out)
 {
-    param[0].locale = new Locale("root");
-    param[1].locale = new Locale("te");
-    param[2].locale = new Locale("te", "IN");
-    param[3].locale = new Locale("te", "NE");
-    param[4].locale = new Locale("te", "IN", "NE");
-    param[5].locale = new Locale("ne");
+    if (param[5].locale == NULL) {
+        param[0].locale = new Locale("root");
+        param[1].locale = new Locale("te");
+        param[2].locale = new Locale("te", "IN");
+        param[3].locale = new Locale("te", "NE");
+        param[4].locale = new Locale("te", "IN", "NE");
+        param[5].locale = new Locale("ne");
+    }
 }
 
 ResourceBundleTest::~ResourceBundleTest()
 {
+    if (param[5].locale) {
+        int idx;
+        for (idx = 0; idx < (int)(sizeof(param)/sizeof(param[0])); idx++) {
+            delete param[idx].locale;
+            param[idx].locale = NULL;
+        }
+    }
 }
 
 void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
