@@ -137,8 +137,9 @@ static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
-  
-  return  (UChar)*((*source)++);
+
+  /* make sure that we zero-extend, not sign-extend, the byte */
+  return  (UChar)(uint8_t)*((*source)++);
 }
 
 static const UConverterImpl _Latin1Impl={
