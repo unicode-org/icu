@@ -1060,7 +1060,7 @@ void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
 }
 
 static void TestRBNFFormat() {
-    int status;
+    UErrorCode status;
     UParseError perr;
     UChar temp[768];
     UNumberFormat *formats[5];
