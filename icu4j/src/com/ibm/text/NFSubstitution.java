@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NFSubstitution.java,v $ 
- * $Date: 2000/03/10 04:07:21 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/26 21:38:55 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.3 $ $Date: 2000/03/10 04:07:21 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.4 $ $Date: 2000/05/26 21:38:55 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -55,7 +55,7 @@ abstract class NFSubstitution {
      * The DecimalFormat this substitution uses to format its result,
      * or null.  (Either this or ruleSet has to be non-null.)
      */
-    java.text.DecimalFormat numberFormat = null;
+    DecimalFormat numberFormat = null;
 
     //-----------------------------------------------------------------------
     // construction
@@ -207,7 +207,7 @@ abstract class NFSubstitution {
         // that pattern (then set it to use the DecimalFormatSymbols
         // belonging to our formatter)
         else if (description.charAt(0) == '#' || description.charAt(0) == '0') {
-            this.numberFormat = new java.text.DecimalFormat(description);
+            this.numberFormat = new DecimalFormat(description);
             this.numberFormat.setDecimalFormatSymbols(formatter.getDecimalFormatSymbols());
         }
 
@@ -423,7 +423,7 @@ abstract class NFSubstitution {
         if (ruleSet != null) {
             tempResult = ruleSet.parse(text, parsePosition, upperBound);
             if (lenientParse && !ruleSet.isFractionSet() && parsePosition.getIndex() == 0) {
-                tempResult = java.text.NumberFormat.getInstance().parse(text, parsePosition);
+                tempResult = NumberFormat.getInstance().parse(text, parsePosition);
             }
 
         // ...or use our DecimalFormat to parse the text
@@ -1315,7 +1315,7 @@ class FractionalPartSubstitution extends NFSubstitution {
                 workPos.setIndex(0);
                 digit = ruleSet.parse(workText, workPos, 10).intValue();
                 if (lenientParse && workPos.getIndex() == 0) {
-                    digit = java.text.NumberFormat.getInstance().parse(workText, workPos).intValue();
+                    digit = NumberFormat.getInstance().parse(workText, workPos).intValue();
                 }
 
                 if (workPos.getIndex() != 0) {

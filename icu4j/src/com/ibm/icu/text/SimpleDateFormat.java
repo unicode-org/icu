@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2000/05/12 23:19:35 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/05/26 21:38:55 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -14,9 +14,7 @@
 package com.ibm.text;
 
 import com.ibm.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 

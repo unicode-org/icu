@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DecimalFormat.java,v $ 
- * $Date: 2000/04/27 22:41:39 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/05/26 21:38:55 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -340,7 +340,7 @@ import java.util.Hashtable;
  *
  *
  * @see          java.text.Format
- * @see          java.text.NumberFormat
+ * @see          NumberFormat
  * @version      1.48 09/21/98
  * @author       Mark Davis
  * @author       Alan Liu
@@ -356,10 +356,10 @@ public class DecimalFormat extends NumberFormat {
      * on NumberFormat such as getNumberInstance. These factories will
      * return the most appropriate sub-class of NumberFormat for a given
      * locale.
-     * @see java.text.NumberFormat#getInstance
-     * @see java.text.NumberFormat#getNumberInstance
-     * @see java.text.NumberFormat#getCurrencyInstance
-     * @see java.text.NumberFormat#getPercentInstance
+     * @see NumberFormat#getInstance
+     * @see NumberFormat#getNumberInstance
+     * @see NumberFormat#getCurrencyInstance
+     * @see NumberFormat#getPercentInstance
      */
     public DecimalFormat() {
         // [NEW]
@@ -382,10 +382,10 @@ public class DecimalFormat extends NumberFormat {
      * locale.
      * @param pattern A non-localized pattern string.
      * @exception IllegalArgumentException if the given pattern is invalid.
-     * @see java.text.NumberFormat#getInstance
-     * @see java.text.NumberFormat#getNumberInstance
-     * @see java.text.NumberFormat#getCurrencyInstance
-     * @see java.text.NumberFormat#getPercentInstance
+     * @see NumberFormat#getInstance
+     * @see NumberFormat#getNumberInstance
+     * @see NumberFormat#getCurrencyInstance
+     * @see NumberFormat#getPercentInstance
      */
     public DecimalFormat(String pattern) {
     // Always applyPattern after the symbols are set
@@ -407,11 +407,11 @@ public class DecimalFormat extends NumberFormat {
      * @param pattern a non-localized pattern string
      * @param symbols the set of symbols to be used
      * @exception IllegalArgumentException if the given pattern is invalid
-     * @see java.text.NumberFormat#getInstance
-     * @see java.text.NumberFormat#getNumberInstance
-     * @see java.text.NumberFormat#getCurrencyInstance
-     * @see java.text.NumberFormat#getPercentInstance
-     * @see java.text.DecimalFormatSymbols
+     * @see NumberFormat#getInstance
+     * @see NumberFormat#getNumberInstance
+     * @see NumberFormat#getCurrencyInstance
+     * @see NumberFormat#getPercentInstance
+     * @see DecimalFormatSymbols
      */
     public DecimalFormat (String pattern, DecimalFormatSymbols symbols) {
         // Always applyPattern after the symbols are set
@@ -1309,7 +1309,7 @@ public class DecimalFormat extends NumberFormat {
      * Returns the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @return desired DecimalFormatSymbols
-     * @see java.text.DecimalFormatSymbols
+     * @see DecimalFormatSymbols
      */
     public DecimalFormatSymbols getDecimalFormatSymbols() {
         try {
@@ -1325,7 +1325,7 @@ public class DecimalFormat extends NumberFormat {
      * Sets the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @param newSymbols desired DecimalFormatSymbols
-     * @see java.text.DecimalFormatSymbols
+     * @see DecimalFormatSymbols
      */
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
         try {
@@ -1738,8 +1738,8 @@ public class DecimalFormat extends NumberFormat {
      * grouping separators in the integer portion of a number.  For example,
      * in the number "123,456.78", the grouping size is 3.
      * @see #setGroupingSize
-     * @see java.text.NumberFormat#isGroupingUsed
-     * @see java.text.DecimalFormatSymbols#getGroupingSeparator
+     * @see NumberFormat#isGroupingUsed
+     * @see DecimalFormatSymbols#getGroupingSeparator
      */
     public int getGroupingSize () {
         return groupingSize;
@@ -1750,8 +1750,8 @@ public class DecimalFormat extends NumberFormat {
      * grouping separators in the integer portion of a number.  For example,
      * in the number "123,456.78", the grouping size is 3.
      * @see #getGroupingSize
-     * @see java.text.NumberFormat#setGroupingUsed
-     * @see java.text.DecimalFormatSymbols#setGroupingSeparator
+     * @see NumberFormat#setGroupingUsed
+     * @see DecimalFormatSymbols#setGroupingSeparator
      */
     public void setGroupingSize (int newValue) {
         groupingSize = (byte)newValue;
@@ -2526,7 +2526,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @serial
      * @see #getGroupingSize
-     * @see java.text.NumberFormat#isGroupingUsed
+     * @see NumberFormat#isGroupingUsed
      */
     private byte    groupingSize = 3;  // invariant, > 0 if useThousands
     
@@ -2552,7 +2552,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @serial
      * @see #setDecimalFormatSymbols
-     * @see java.text.DecimalFormatSymbols
+     * @see DecimalFormatSymbols
      */
     private DecimalFormatSymbols symbols = null; // LIU new DecimalFormatSymbols();
 
