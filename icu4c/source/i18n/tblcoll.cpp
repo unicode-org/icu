@@ -266,17 +266,17 @@ CollationElementIterator* RuleBasedCollator::createCollationElementIterator
 */
 const UnicodeString& RuleBasedCollator::getRules() const
 {
-  return (*urulestring);
+    return (*urulestring);
 }
 
 void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
 {
-    UChar *rules = NULL;
-    int rulesize = ucol_getRulesEx(ucollator, delta, rules, -1);
-    rules = new UChar[rulesize];
+    int rulesize = ucol_getRulesEx(ucollator, delta, NULL, -1);
+    UChar *rules = (UChar*) uprv_malloc( sizeof(UChar) * (rulesize) );
+
     ucol_getRulesEx(ucollator, delta, rules, rulesize);
     buffer.setTo(rules, rulesize);
-    delete rules;
+    uprv_free(rules);
 }
 
 Collator::EComparisonResult RuleBasedCollator::compare(

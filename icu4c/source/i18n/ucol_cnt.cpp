@@ -137,7 +137,7 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
     table->position = 0;
 
     if(table->offsets != NULL) {
-        free(table->offsets);
+        uprv_free(table->offsets);
     }
     table->offsets = (int32_t *)uprv_malloc(table->size*sizeof(int32_t));
     if(table->offsets == NULL) {
@@ -292,15 +292,15 @@ U_CAPI void  U_EXPORT2
 uprv_cnttab_close(CntTable *table) {
     int32_t i = 0;
     for(i = 0; i<table->size; i++) {
-        free(table->elements[i]->CEs);
-        free(table->elements[i]->codePoints);
-        free(table->elements[i]);
+        uprv_free(table->elements[i]->CEs);
+        uprv_free(table->elements[i]->codePoints);
+        uprv_free(table->elements[i]);
     }
-    free(table->elements);
-    free(table->CEs);
-    free(table->offsets);
-    free(table->codePoints);
-    free(table);
+    uprv_free(table->elements);
+    uprv_free(table->CEs);
+    uprv_free(table->offsets);
+    uprv_free(table->codePoints);
+    uprv_free(table);
 }
 
 /* this is for adding non contractions */

@@ -71,7 +71,7 @@ static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
     }else if(start[0] == '\x0E' && start[1] == '\xFE' && start[2] == '\xFF'){
         *cp ="SCSU";
         signatureLength=3;
-    }else if(start[0] == '\x00' && start[1] == '\x00' && 
+    }else if(start[0] == '\x00' && start[1] == '\x00' &&
             start[2] == '\xFE' && start[3]=='\xFF'){
         *cp = "UTF-32BE";
         signatureLength=4;
@@ -79,27 +79,29 @@ static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
         signatureLength=0;
         autodetect=FALSE;
     }
-    while(signatureLength<*numRead) {
+    T_FileStream_rewind(in);
+    T_FileStream_read(in, start, *numRead);
+/*    while(signatureLength<*numRead) {
         T_FileStream_ungetc(start[--*numRead], in);
-    }
+    }*/
     return autodetect;
 }
 
 /* Autodetects UTF8, UTF-16-BigEndian and UTF-16-LittleEndian BOMs*/
 U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp){
-  UBool autodetect = FALSE;
-  int numRead =0;
-  const char* tcp;
-  autodetect=ucbuf_autodetect_nrw(in,&tcp, &numRead);
-  *cp =tcp;
-  /* rewind the file Stream */
-  T_FileStream_rewind(in);
-  return autodetect;
+    UBool autodetect = FALSE;
+    int numRead =0;
+    const char* tcp;
+    autodetect=ucbuf_autodetect_nrw(in,&tcp, &numRead);
+    *cp =tcp;
+    /* rewind the file Stream */
+    T_FileStream_rewind(in);
+    return autodetect;
 }
 
 /* fill the uchar buffer */
-static UCHARBUF* 
+static UCHARBUF*
 ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     UChar* pTarget=NULL;
     UChar* target=NULL;
@@ -118,10 +120,14 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
 #if DEBUG
     memset(pTarget+offset,0xff,sizeof(UChar)*(MAX_IN_BUF-offset));
 #endif
-    
+
     /* read the file */
     numRead=T_FileStream_read(buf->in,cbuf,MAX_IN_BUF-offset);
     buf->remaining-=numRead;
+
+    /* just to be sure...*/
+    if ( 0 == numRead )
+       buf->remaining = 0;
 
     target=pTarget;
     /* convert the bytes */
@@ -129,7 +135,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
         /* set the callback to stop */
         UConverterToUCallback toUOldAction ;
         void* toUOldContext;
-        void* toUNewContext=NULL;        
+        void* toUNewContext=NULL;
         ucnv_setToUCallBack(buf->conv,
            UCNV_TO_U_CALLBACK_STOP,
            toUNewContext,
@@ -143,7 +149,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
         ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),
                         &source,source+numRead,NULL,
                         (UBool)(buf->remaining==0),err);
-        
+
         if(U_FAILURE(*err)){
             char context[CONTEXT_LEN];
             char preContext[CONTEXT_LEN];
@@ -152,9 +158,9 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             int32_t start=0;
             int32_t stop =0;
             int32_t pos =0;
-            
+
             if( buf->showWarning==TRUE){
-                fprintf(stderr,"\n###WARNING: Encountered abnormal bytes while" 
+                fprintf(stderr,"\n###WARNING: Encountered abnormal bytes while"
                                " converting input stream to target encoding: %s\n",
                                u_errorName(*err));
             }
@@ -164,17 +170,17 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             /* now get the context chars */
             ucnv_getInvalidChars(buf->conv,context,&len,err);
             context[len]= 0 ; /* null terminate the buffer */
-            
+
             pos = source-cbuf-len;
 
             /* for pre-context */
             start = (pos <=CONTEXT_LEN)? 0 : (pos - (CONTEXT_LEN-1));
             stop  = pos-len;
-    
+
             memcpy(preContext,cbuf+start,stop-start);
             /* null terminate the buffer */
             preContext[stop-start] = 0;
-    
+
             /* for post-context */
             start = pos+len;
             stop  = ((pos+CONTEXT_LEN)<= (sourceLimit-cbuf) )? (pos+(CONTEXT_LEN-1)) : (sourceLimit-cbuf);
@@ -182,18 +188,18 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             memcpy(postContext,source,stop-start);
             /* null terminate the buffer */
             postContext[stop-start] = 0;
-           
+
             if(buf->showWarning ==TRUE){
                 /* print out the context */
                 fprintf(stderr,"\tPre-context: %s\n",preContext);
                 fprintf(stderr,"\tContext: %s\n",context);
                 fprintf(stderr,"\tPost-context: %s\n", postContext);
             }
-            
+
             /* reset the converter */
             ucnv_reset(buf->conv);
 
-            /* set the call back to substiture 
+            /* set the call back to substitute
              * and restart conversion
              */
             ucnv_setToUCallBack(buf->conv,
@@ -211,7 +217,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),
                             &source,sourceLimit,NULL,
                             (UBool)(buf->remaining==0),err);
-        
+
         }
         numRead= target-pTarget;
 
@@ -253,7 +259,7 @@ ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
 
 
 /* u_unescapeAt() callback to return a UChar*/
-static UChar 
+static UChar
 _charAt(int32_t offset, void *context) {
     return ((UCHARBUF*) context)->currentPos[offset];
 }
@@ -276,17 +282,17 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     } else {
         c1 = U_EOF;
     }
-    
+
     c2 = *(buf->currentPos);
 
     /* If it isn't a backslash, return it */
     if (c1 != 0x005C) {
         return c1;
     }
-    
+
     /* Determine the amount of data in the buffer */
     length = buf->bufLimit-buf->currentPos;
-    
+
     /* The longest escape sequence is \Uhhhhhhhh; make sure
        we have at least that many characters */
     if (length < 10) {
@@ -295,7 +301,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
         ucbuf_fillucbuf(buf,err);
         length = buf->bufLimit-buf->buffer;
     }
-    
+
     /* Process the escape */
     offset = 0;
     c32 = u_unescapeAt(_charAt, &offset, length, (void*)buf);
@@ -307,7 +313,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
         /* Update the current buffer position */
         buf->currentPos += offset;
     }else{
-        /* unescaping failed so we just return 
+        /* unescaping failed so we just return
          * c1 and not consume the buffer
          * this is useful for rules with escapes
          * in resouce bundles
@@ -364,11 +370,11 @@ ucbuf_open(FileStream* in,const char* cp, UBool showWarning, UErrorCode* err){
     }
 }
 
-/* TODO: this method will fail if at the 
+/* TODO: this method will fail if at the
  * begining of buffer and the uchar to unget
  * is from the previous buffer. Need to implement
  * system to take care of that situation.
- */ 
+ */
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
     /* decrement currentPos pointer
@@ -380,7 +386,7 @@ ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
 }
 
 /* frees the resources of UChar* buffer */
-static void 
+static void
 ucbuf_closebuf(UCHARBUF* buf){
     uprv_free(buf->buffer);
     buf->buffer = NULL;

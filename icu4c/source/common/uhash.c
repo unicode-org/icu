@@ -372,7 +372,7 @@ uhash_find(const UHashtable *hash, const void* key) {
     UHashTok keyholder;
     const UHashElement *e;
     keyholder.pointer = (void*) key;
-	e = _uhash_find(hash, keyholder, hash->keyHasher(keyholder));
+    e = _uhash_find(hash, keyholder, hash->keyHasher(keyholder));
     return IS_EMPTY_OR_DELETED(e->hashcode) ? NULL : e;
 }
 

@@ -713,10 +713,11 @@ static const UChar TRANSLITERATE[] = {84,114,97,110,115,108,105,116,101,114,97,1
 Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
                                             const Spec& specToFind,
                                             const UnicodeString& variant,
-                                            UTransDirection direction) {
+                                            UTransDirection direction)
+{
     UnicodeString utag;
     UnicodeString resStr;
-	int32_t pass;
+    int32_t pass;
 
     for (pass=0; pass<2; ++pass) {
         utag.truncate(0);

@@ -26,9 +26,8 @@
 #include "unicode/udat.h"
 #include "unicode/uloc.h"
 
-#include <string.h>
+#include "cmemory.h"
 #include <ctype.h>
-#include <stdlib.h>
 
 
 /* --- Prototypes ---------------------------- */
@@ -330,7 +329,7 @@ u_vsnprintf(UChar       *buffer,
     written = u_vsnprintf_u(buffer, count, locale, pattern, ap);
     
     /* clean up */
-    free(pattern);
+    uprv_free(pattern);
     
     return written;
 }
@@ -442,7 +441,7 @@ u_sprintf_string_handler(u_localized_string *output,
     }
     
     /* clean up */
-    free(s);
+    uprv_free(s);
     
     return written;
 }
@@ -703,7 +702,7 @@ u_sprintf_char_handler(u_localized_string *output,
     }
     
     /* clean up */
-    free(s);
+    uprv_free(s);
     
     return written;
 }

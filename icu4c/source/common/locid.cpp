@@ -206,10 +206,10 @@ Locale::LocaleProxy::operator const Locale&(void) const
 
 Locale::~Locale()
 {   
-    /*if fullName is on the heap, we delete it*/
+    /*if fullName is on the heap, we free it*/
     if (fullName != fullNameBuffer) 
     {
-        delete []fullName;
+        uprv_free(fullName);
         fullName = NULL;
     }
 }
@@ -294,7 +294,7 @@ Locale::Locale( const   char * newLanguage,
         to go to the heap for temporary buffers*/
         if (size > ULOC_FULLNAME_CAPACITY)
         {
-            togo_heap = new char[size+1];
+            togo_heap = (char *)uprv_malloc(sizeof(char)*(size+1));
             togo = togo_heap;
         }
         else
@@ -336,7 +336,9 @@ Locale::Locale( const   char * newLanguage,
         // string.
         init(togo);
 
-        delete [] togo_heap; /* If it was needed */
+        if (togo_heap) {
+            uprv_free(togo_heap);
+        }
     }
 }
 
@@ -350,13 +352,13 @@ Locale &Locale::operator=(const Locale &other)
 {
     /* Free our current storage */
     if(fullName != fullNameBuffer) {
-        delete [] fullName;
+        uprv_free(fullName);
         fullName = fullNameBuffer;
     }
 
     /* Allocate the full name if necessary */
     if(other.fullName != other.fullNameBuffer) {
-        fullName = new char[(uprv_strlen(other.fullName)+1)];
+        fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
     }
 
     /* Copy the full name */
@@ -382,7 +384,7 @@ Locale& Locale::init(const char* localeID)
 {
     /* Free our current storage */
     if(fullName != fullNameBuffer) {
-        delete [] fullName;
+        uprv_free(fullName);
         fullName = fullNameBuffer;
     }
 
@@ -404,7 +406,7 @@ Locale& Locale::init(const char* localeID)
         length = uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
         if(U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
             /*Go to heap for the fullName if necessary*/
-            fullName = new char[length + 1];
+            fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
             if(fullName == 0) {
                 fullName = fullNameBuffer;
                 break;
@@ -974,7 +976,7 @@ Locale::initLocaleCache(void)
                 //
                 // This can be a memory leak for an extra long default locale,
                 // but this code shouldn't normally get executed.
-                localeCache[idx].fullName = new char[uprv_strlen(localeCache[idx].fullNameBuffer) + 1];
+                localeCache[idx].fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(localeCache[idx].fullNameBuffer) + 1));
                 uprv_strcpy(localeCache[idx].fullName, localeCache[idx].fullNameBuffer);
             }
         }

@@ -391,8 +391,8 @@ public:
   */
   virtual CollationKey& getCollationKey(const UChar*source, 
                                         int32_t sourceLength,
-					                              CollationKey& key,
-					                              UErrorCode& status) const = 0;
+                                        CollationKey& key,
+                                        UErrorCode& status) const = 0;
   /**
   * Generates the hash code for the collation object
   * @stable
@@ -606,8 +606,9 @@ public:
   * @return Number of bytes needed for storing the sort key
   * @draft ICU 1.8
   */
-  virtual int32_t getSortKey(const UnicodeString& source, uint8_t* result,
-						                 int32_t resultLength) const = 0;
+  virtual int32_t getSortKey(const UnicodeString& source,
+                            uint8_t* result,
+                            int32_t resultLength) const = 0;
 
   /**
   * Get the sort key as an array of bytes from an UChar buffer.
@@ -625,7 +626,8 @@ public:
   * @draft ICU 1.8
   */
   virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
-						                 uint8_t*result, int32_t resultLength) const = 0;
+                             uint8_t*result, int32_t resultLength) const = 0;
+
   // start deprecated APIs
   /**
   * Get the decomposition mode of the Collator object.

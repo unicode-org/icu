@@ -21,7 +21,7 @@
 *                            Changed setMaxFractionDigits per Java implementation.
 ********************************************************************************
 */
- 
+
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
@@ -51,7 +51,7 @@ U_NAMESPACE_BEGIN
 
 const char NumberFormat::fgClassID = 0; // Value is irrelevant
 
-// If the maximum base 10 exponent were 4, then the largest number would 
+// If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
 const int32_t NumberFormat::fgMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl
 const int32_t NumberFormat::fgMinIntegerDigits = 127;
@@ -63,7 +63,7 @@ const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
     gLastResortDecimalPat,
     gLastResortCurrencyPat,
     gLastResortPercentPat,
-	gLastResortScientificPat
+    gLastResortScientificPat
 };
 
 // -------------------------------------
@@ -113,7 +113,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
 }
 
 // -------------------------------------
- 
+
 UBool
 NumberFormat::operator==(const Format& that) const
 {
@@ -133,7 +133,7 @@ NumberFormat::operator==(const Format& that) const
 // -------------------------------------
 // Formats the number object and save the format
 // result in the toAppendTo string buffer.
- 
+
 UnicodeString&
 NumberFormat::format(const Formattable& obj,
                         UnicodeString& toAppendTo,
@@ -151,10 +151,10 @@ NumberFormat::format(const Formattable& obj,
     // can't try to format a non-numeric object
     else {
         status = U_INVALID_FORMAT_ERROR;
-        return toAppendTo; 
+        return toAppendTo;
     }
 }
-  
+
 // -------------------------------------
 // Parses the string and save the result object as well
 // as the final parsed position.
@@ -166,33 +166,33 @@ NumberFormat::parseObject(const UnicodeString& source,
 {
     parse(source, result, parse_pos);
 }
- 
+
 // -------------------------------------
 // Formats a double number and save the result in a string.
- 
+
 UnicodeString&
 NumberFormat::format(double number, UnicodeString& toAppendTo) const
 {
     FieldPosition pos(0);
     return format(number, toAppendTo, pos);
 }
- 
+
 // -------------------------------------
 // Formats a long number and save the result in a string.
- 
+
 UnicodeString&
 NumberFormat::format(int32_t number, UnicodeString& toAppendTo) const
 {
     FieldPosition pos(0);
     return format(number, toAppendTo, pos);
 }
- 
+
 // -------------------------------------
 // Parses the text and save the result object.  If the returned
 // parse position is 0, that means the parsing failed, the status
-// code needs to be set to failure.  Ignores the returned parse 
+// code needs to be set to failure.  Ignores the returned parse
 // position, otherwise.
- 
+
 void
 NumberFormat::parse(const UnicodeString& text,
                         Formattable& result,
@@ -206,98 +206,98 @@ NumberFormat::parse(const UnicodeString& text,
         status = U_INVALID_FORMAT_ERROR;
     }
 }
- 
+
 // -------------------------------------
 // Sets to only parse integers.
- 
+
 void
 NumberFormat::setParseIntegerOnly(UBool value)
 {
     fParseIntegerOnly = value;
 }
- 
+
 // -------------------------------------
 // Create a number style NumberFormat instance with the default locale.
- 
+
 NumberFormat*
 NumberFormat::createInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kNumberStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a number style NumberFormat instance with the inLocale locale.
- 
+
 NumberFormat*
 NumberFormat::createInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kNumberStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a currency style NumberFormat instance with the default locale.
- 
+
 NumberFormat*
 NumberFormat::createCurrencyInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kCurrencyStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a currency style NumberFormat instance with the inLocale locale.
- 
+
 NumberFormat*
 NumberFormat::createCurrencyInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kCurrencyStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a percent style NumberFormat instance with the default locale.
- 
+
 NumberFormat*
 NumberFormat::createPercentInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kPercentStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a percent style NumberFormat instance with the inLocale locale.
- 
+
 NumberFormat*
 NumberFormat::createPercentInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kPercentStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a scientific style NumberFormat instance with the default locale.
- 
+
 NumberFormat*
 NumberFormat::createScientificInstance(UErrorCode& status)
 {
     return createInstance(Locale::getDefault(), kScientificStyle, status);
 }
- 
+
 // -------------------------------------
 // Create a scientific style NumberFormat instance with the inLocale locale.
- 
+
 NumberFormat*
 NumberFormat::createScientificInstance(const Locale& inLocale, UErrorCode& status)
 {
     return createInstance(inLocale, kScientificStyle, status);
 }
- 
+
 // -------------------------------------
- 
+
 const Locale*
 NumberFormat::getAvailableLocales(int32_t& count)
 {
     return Locale::getAvailableLocales(count);
 }
- 
+
 // -------------------------------------
-// Checks if the thousand/10 thousand grouping is used in the 
+// Checks if the thousand/10 thousand grouping is used in the
 // NumberFormat instance.
 
 UBool
@@ -305,30 +305,30 @@ NumberFormat::isGroupingUsed() const
 {
     return fGroupingUsed;
 }
- 
+
 // -------------------------------------
-// Sets to use the thousand/10 thousand grouping in the 
+// Sets to use the thousand/10 thousand grouping in the
 // NumberFormat instance.
- 
+
 void
 NumberFormat::setGroupingUsed(UBool newValue)
 {
     fGroupingUsed = newValue;
 }
- 
+
 // -------------------------------------
 // Gets the maximum number of digits for the integral part for
 // this NumberFormat instance.
- 
+
 int32_t NumberFormat::getMaximumIntegerDigits() const
 {
     return fMaxIntegerDigits;
 }
- 
+
 // -------------------------------------
 // Sets the maximum number of digits for the integral part for
 // this NumberFormat instance.
- 
+
 void
 NumberFormat::setMaximumIntegerDigits(int32_t newValue)
 {
@@ -336,21 +336,21 @@ NumberFormat::setMaximumIntegerDigits(int32_t newValue)
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMinIntegerDigits = fMaxIntegerDigits;
 }
- 
+
 // -------------------------------------
 // Gets the minimum number of digits for the integral part for
 // this NumberFormat instance.
- 
+
 int32_t
 NumberFormat::getMinimumIntegerDigits() const
 {
     return fMinIntegerDigits;
 }
- 
+
 // -------------------------------------
 // Sets the minimum number of digits for the integral part for
 // this NumberFormat instance.
- 
+
 void
 NumberFormat::setMinimumIntegerDigits(int32_t newValue)
 {
@@ -358,21 +358,21 @@ NumberFormat::setMinimumIntegerDigits(int32_t newValue)
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMaxIntegerDigits = fMinIntegerDigits;
 }
- 
+
 // -------------------------------------
 // Gets the maximum number of digits for the fractional part for
 // this NumberFormat instance.
- 
+
 int32_t
 NumberFormat::getMaximumFractionDigits() const
 {
     return fMaxFractionDigits;
 }
- 
+
 // -------------------------------------
 // Sets the maximum number of digits for the fractional part for
 // this NumberFormat instance.
- 
+
 void
 NumberFormat::setMaximumFractionDigits(int32_t newValue)
 {
@@ -380,21 +380,21 @@ NumberFormat::setMaximumFractionDigits(int32_t newValue)
     if(fMaxFractionDigits < fMinFractionDigits)
         fMinFractionDigits = fMaxFractionDigits;
 }
- 
+
 // -------------------------------------
 // Gets the minimum number of digits for the fractional part for
 // this NumberFormat instance.
- 
+
 int32_t
 NumberFormat::getMinimumFractionDigits() const
 {
     return fMinFractionDigits;
 }
- 
+
 // -------------------------------------
 // Sets the minimum number of digits for the fractional part for
 // this NumberFormat instance.
- 
+
 void
 NumberFormat::setMinimumFractionDigits(int32_t newValue)
 {
@@ -402,14 +402,14 @@ NumberFormat::setMinimumFractionDigits(int32_t newValue)
     if (fMaxFractionDigits < fMinFractionDigits)
         fMaxFractionDigits = fMinFractionDigits;
 }
- 
+
 // -------------------------------------
 // Creates the NumberFormat instance of the specified style (number, currency,
 // or percent) for the desired locale.
- 
+
 NumberFormat*
-NumberFormat::createInstance(const Locale& desiredLocale, 
-                             EStyles style, 
+NumberFormat::createInstance(const Locale& desiredLocale,
+                             EStyles style,
                              UErrorCode& status)
 {
     if (U_FAILURE(status)) return NULL;
@@ -426,7 +426,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     {
         // We don't appear to have resource data available -- use the last-resort data
         status = U_USING_FALLBACK_ERROR;
-        
+
         // Use the DecimalFormatSymbols constructor which uses last-resort data
         DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(status);
         if (symbolsToAdopt == NULL) {

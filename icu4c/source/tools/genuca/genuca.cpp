@@ -28,7 +28,7 @@
 #include "toolutil.h"
 #include "cstring.h"
 
-#include <stdlib.h>
+#include "cmemory.h"
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -257,7 +257,7 @@ static InverseTableHeader *assembleInverseTable(UErrorCode *status)
   uint32_t contsByteSize = sContPos * sizeof(UChar);
   uint32_t i = 0;
 
-  result = (InverseTableHeader *)malloc(headerByteSize + inverseTableByteSize + contsByteSize);
+  result = (InverseTableHeader *)uprv_malloc(headerByteSize + inverseTableByteSize + contsByteSize);
   if(result != NULL) {
     result->byteSize = headerByteSize + inverseTableByteSize + contsByteSize;
 

@@ -104,7 +104,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
   if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
-    src->source = (UChar *)realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    src->source = (UChar *)uprv_realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
   }
   src->current = src->source;
@@ -920,7 +920,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
         sourceToken->listHeader = lastToken->listHeader;
 
         /*
-        1.	Find the strongest strength in each list, and set strongestP and strongestN 
+        1.  Find the strongest strength in each list, and set strongestP and strongestN 
         accordingly in the headers. 
         */
         if(lastStrength == UCOL_TOK_RESET 
