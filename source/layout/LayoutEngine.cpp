@@ -82,6 +82,14 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
     return ch;
 }
 
+// This is here to get it out of LEGlyphFilter.h.
+// No particular reason to put it here, other than
+// this is a good central location...
+LEGlyphFilter::~LEGlyphFilter()
+{
+	// nothing to do
+}
+
 const char LayoutEngine::fgClassID=0;
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
@@ -270,6 +278,21 @@ void LayoutEngine::positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount,
 
     positions[glyphCount * 2] = x;
     positions[glyphCount * 2 + 1] = y;
+}
+
+void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
+{
+    if (LE_FAILURE(success)) {
+        return;
+    }
+
+    if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0 || glyphCount < 0) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    // default is no adjustments
+    return;
 }
 
 void LayoutEngine::adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, le_bool reverse, LEGlyphFilter *markFilter,

@@ -92,6 +92,21 @@ void OpenTypeLayoutEngine::setScriptAndLanguageTags()
     fLangSysTag = getLangSysTag(fLanguageCode);
 }
 
+le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode /*chars*/[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
+				LEUnicode *&/*outChars*/, le_int32 *&/*charIndices*/, const LETag **&/*featureTags*/, LEErrorCode &success)
+{
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
+
+    if (offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    return count;
+}
+
 // Input: characters, tags
 // Output: glyphs, char indices
 le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, const LETag **featureTags,
@@ -117,6 +132,19 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
     }
 
     return count;
+}
+
+le_int32 OpenTypeLayoutEngine::glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
+                LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+{
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
+
+    glyphs = tempGlyphs;
+    charIndices = tempCharIndices;
+
+    return tempGlyphCount;
 }
 
 le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)

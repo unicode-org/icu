@@ -24,7 +24,7 @@ public:
      * Destructor.
      * @draft ICU 2.4
      */
-    virtual inline ~LEGlyphFilter() {};
+    virtual ~LEGlyphFilter();
 
     /**
      * This method is used to test a particular
