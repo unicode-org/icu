@@ -108,6 +108,9 @@ ucol_openRules(    const    UChar                  *rules,
         UCollationStrength      strength,
         UErrorCode              *status)
 {
+  return 0;
+  /*
+  synwee : waiting for vladimir's changes
   if(U_FAILURE(*status)) return 0;
 
   Normalizer::EMode normMode;
@@ -141,9 +144,8 @@ ucol_openRules(    const    UChar                  *rules,
 
   result->rb = 0;
 
-
   return result;
-
+  */
 }
 
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
