@@ -72,7 +72,7 @@ static UOption options[]={
 /*13*/    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
 /*14*/    UOPTION_SOURCEDIR ,
 /*15*/    UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
-/*16*/    UOPTION_DEF( "version", 'V', UOPT_REQUIRES_ARG)
+/*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG)
 };
 
 const char options_help[][160]={

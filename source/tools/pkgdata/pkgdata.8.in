@@ -32,7 +32,7 @@
 .BI "\-e\fP, \fB\-\-entrypoint" " name"
 ]
 [
-.BI "\-V\fP, \fB\-\-version" " version"
+.BI "\-r\fP, \fB\-\-revision" " version"
 ]
 [
 .BI "\-F\fP, \fB\-\-rebuild"
@@ -161,7 +161,7 @@ The default entry point name is the name set by the
 .BI "\-n\fP, \fB\-\-name"
 option.
 .TP
-.BI "\-V\fP, \fB\-\-version" " version"
+.BI "\-r\fP, \fB\-\-revision" " version"
 Enable versioning of the shared library produced in
 .I dll
 mode. The version number has the format
