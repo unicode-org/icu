@@ -58,6 +58,8 @@ public:
 
     int32_t removei(const UnicodeString& key);
 
+    void removeAll(void);
+
     const UHashElement* find(const UnicodeString& key) const;
 
     const UHashElement* nextElement(int32_t& pos) const;
@@ -139,6 +141,10 @@ inline const UHashElement* Hashtable::find(const UnicodeString& key) const {
 
 inline const UHashElement* Hashtable::nextElement(int32_t& pos) const {
     return uhash_nextElement(hash, &pos);
+}
+
+inline void Hashtable::removeAll(void) {
+  uhash_removeAll(hash);
 }
 
 U_NAMESPACE_END
