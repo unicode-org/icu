@@ -352,16 +352,10 @@ string_write_java(struct SResource *res,UErrorCode *status) {
         
         write_tabs(out);
 
-        T_FileStream_write(out, openBrace, (int32_t)uprv_strlen(openBrace));
-        tabCount++;
-        write_tabs(out);
         T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
         T_FileStream_write(out, "\"", 1);
         T_FileStream_write(out, file, (int32_t)uprv_strlen(file));
         T_FileStream_write(out, "\")\n", 3);
-        tabCount--;
-        write_tabs(out);
-        T_FileStream_write(out, "},\n", 3);
         datFile=T_FileStream_open(fileName,"w");
         
         if(!dest){
