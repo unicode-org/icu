@@ -34,9 +34,10 @@
 void addNumForTest(TestNode** root)
 {
     addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
+    addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
 }
 /* test Number Format API */
-void TestNumberFormat()
+static void TestNumberFormat()
 {
     UChar *result=NULL;
     UChar temp1[512];
@@ -64,7 +65,8 @@ void TestNumberFormat()
     UErrorCode status=U_ZERO_ERROR;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *pattern;
-    UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr, *cur_frpattern, *myclone;
+    UNumberFormat *def, *fr, *cur_def, *cur_fr, *per_def, *per_fr,
+                  *cur_frpattern, *myclone;
     /* Testing unum_open() with various Numberformat styles and locales*/
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
@@ -150,7 +152,7 @@ void TestNumberFormat()
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
-/*        for (i = 0; i < 100000; i++)*/
+/*        for (i = 0; i < 100000; i++) */
         {
             unum_format(cur_def, l, result, resultlength, &pos1, &status);
         }
@@ -177,7 +179,7 @@ free(result);
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
-/*        for (i = 0; i < 100000; i++)*/
+/*        for (i = 0; i < 100000; i++) */
         {
             unum_formatDouble(cur_def, d, result, resultlength, &pos2, &status);
         }
@@ -189,7 +191,7 @@ free(result);
     if(u_strcmp(result, temp1)==0)
         log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
     else
-        log_err("FAIL: Error in munber formatting using unum_formatDouble()\n");
+        log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
 
 
     /* Testing unum_parse() and unum_parseDouble() */
@@ -311,52 +313,6 @@ free(result);
             log_verbose("Pass: extracted the pattern correctly using unum_toPattern()\n");
 free(result);
     }
-
-    /* create a number format using unum_openPattern(....)*/
-    log_verbose("\nTesting unum_openPattern() with padding\n");
-    u_uastrcpy(temp1, "*#,##0.0#*;(#,##0.0#)");
-    status=U_ZERO_ERROR;
-    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
-    if(U_SUCCESS(status))
-    {
-        log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
-    }
-
-    u_uastrcpy(temp1, "*##,##0.0#;*#(#,##0.0#)");
-    status=U_ZERO_ERROR;
-    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
-    if(U_FAILURE(status))
-    {
-        log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
-    }
-    else {
-        log_verbose("Pass: unum_openPattern() works fine\n");
-
-        /*test for unum_toPattern()*/
-        log_verbose("\nTesting unum_toPattern()\n");
-        resultlength=0;
-        resultlengthneeded=unum_toPattern(pattern, FALSE, NULL, resultlength, &status);
-        if(status==U_BUFFER_OVERFLOW_ERROR)
-        {
-            status=U_ZERO_ERROR;
-            resultlength=resultlengthneeded+1;
-            result=(UChar*)malloc(sizeof(UChar) * resultlength);
-            unum_toPattern(pattern, FALSE, result, resultlength, &status);
-        }
-        if(U_FAILURE(status))
-        {
-            log_err("error in extracting the pattern from UNumberFormat: %s\n", myErrorName(status));
-        }
-        else
-        {
-            if(u_strcmp(result, temp1)!=0)
-                log_err("FAIL: Error in extracting the pattern using unum_toPattern()\n");
-            else
-                log_verbose("Pass: extracted the pattern correctly using unum_toPattern()\n");
-free(result);
-        }
-    }
-
 
     /*Testing unum_getSymbols() and unum_setSymbols()*/
     log_verbose("\nTesting unum_getSymbols and unum_setSymbols()\n");
@@ -613,13 +569,14 @@ free(result);
     
     /*testing set and get Attributes extensively */
     log_verbose("\nTesting get and set attributes extensively\n");
-    for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_PADDING_POSITION; attr=(UNumberFormatAttribute)((int32_t)attr + 1) ){
-    newvalue=unum_getAttribute(fr, attr);
-    unum_setAttribute(def, attr, newvalue);
-    if(unum_getAttribute(def,attr)!=unum_getAttribute(fr, attr))
-        log_err("error in setting and getting attributes\n");
-    else
-        log_verbose("Pass: attributes set and retrieved successfully\n");
+    for(attr=UNUM_PARSE_INT_ONLY; attr<= UNUM_PADDING_POSITION; attr=(UNumberFormatAttribute)((int32_t)attr + 1) )
+    {
+        newvalue=unum_getAttribute(fr, attr);
+        unum_setAttribute(def, attr, newvalue);
+        if(unum_getAttribute(def,attr)!=unum_getAttribute(fr, attr))
+            log_err("error in setting and getting attributes\n");
+        else
+            log_verbose("Pass: attributes set and retrieved successfully\n");
     }
 
     
@@ -635,4 +592,101 @@ free(result);
     unum_close(cur_frpattern);
     unum_close(myclone);
     
+}
+
+static void TestNumberFormatPadding()
+{
+    UChar *result=NULL;
+    UChar temp1[512];
+
+    UErrorCode status=U_ZERO_ERROR;
+    int32_t resultlength;
+    int32_t resultlengthneeded;
+    UNumberFormat *pattern;
+    double d1;
+    double d = -10456.37;
+    int32_t parsepos;
+    UFieldPosition pos2;
+
+    /* create a number format using unum_openPattern(....)*/
+    log_verbose("\nTesting unum_openPattern() with padding\n");
+    u_uastrcpy(temp1, "*#,##0.0#*;(#,##0.0#)");
+    status=U_ZERO_ERROR;
+    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
+    if(U_SUCCESS(status))
+    {
+        log_err("error in unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
+    }
+
+/*    u_uastrcpy(temp1, "*x#,###,###,##0.0#;(*x#,###,###,##0.0#)"); */
+    u_uastrcpy(temp1, "*x#,###,###,##0.0#;*x(#,###,###,##0.0#)");
+    status=U_ZERO_ERROR;
+    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
+    }
+    else {
+        log_verbose("Pass: padding unum_openPattern() works fine\n");
+
+        /*test for unum_toPattern()*/
+        log_verbose("\nTesting padding unum_toPattern()\n");
+        resultlength=0;
+        resultlengthneeded=unum_toPattern(pattern, FALSE, NULL, resultlength, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            resultlength=resultlengthneeded+1;
+            result=(UChar*)malloc(sizeof(UChar) * resultlength);
+            unum_toPattern(pattern, FALSE, result, resultlength, &status);
+        }
+        if(U_FAILURE(status))
+        {
+            log_err("error in extracting the padding pattern from UNumberFormat: %s\n", myErrorName(status));
+        }
+        else
+        {
+            if(u_strcmp(result, temp1)!=0)
+                log_err("FAIL: Error in extracting the padding pattern using unum_toPattern()\n");
+            else
+                log_verbose("Pass: extracted the padding pattern correctly using unum_toPattern()\n");
+free(result);
+        }
+/*        u_uastrcpy(temp1, "(xxxxxxx10,456.37)"); */
+        u_uastrcpy(temp1, "xxxxxxx(10,456.37)");
+        resultlength=0;
+        resultlengthneeded=unum_formatDouble(pattern, d, NULL, resultlength, &pos2, &status);
+        if(status==U_BUFFER_OVERFLOW_ERROR)
+        {
+            status=U_ZERO_ERROR;
+            resultlength=resultlengthneeded+1;
+            result=(UChar*)malloc(sizeof(UChar) * resultlength);
+            unum_formatDouble(pattern, d, result, resultlength, &pos2, &status);
+        }
+        if(U_FAILURE(status))
+        {
+            log_err("Error in formatting using unum_formatDouble(.....) with padding : %s\n", myErrorName(status));
+        }
+        if(u_strcmp(result, temp1)==0)
+            log_verbose("Pass: Number Formatting using unum_formatDouble() padding Successful\n");
+        else
+            log_err("FAIL: Error in number formatting using unum_formatDouble() with padding\n");
+
+
+        /* Testing unum_parse() and unum_parseDouble() */
+        log_verbose("\nTesting padding unum_parseDouble()\n");
+        parsepos=0;
+        d1=unum_parseDouble(pattern, result, u_strlen(result), &parsepos, &status);
+        if(U_FAILURE(status))
+        {
+            log_err("padding parse failed. The error is : %s\n", myErrorName(status));
+        }
+
+        if(d1!=d)
+            log_err("Fail: Error in padding parsing\n");
+        else
+            log_verbose("Pass: padding parsing successful\n");
+    }
+
+    unum_close(pattern);
 }
