@@ -245,4 +245,24 @@ ucol_setOffset(UCollationElements    *elems,
   ci->fcdPosition = NULL;
 }
 
+U_CAPI int32_t U_EXPORT2
+ucol_primaryOrder (int32_t order) 
+{
+  order &= UCOL_PRIMARYMASK;
+  return (order >> UCOL_PRIMARYMASK);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucol_secondaryOrder (int32_t order) 
+{
+  order &= UCOL_SECONDARYMASK;
+  return (order >> UCOL_SECONDARYMASK);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucol_tertiaryOrder (int32_t order) 
+{
+  return (order & UCOL_TERTIARYMASK);
+}
+
 #endif /* #if !UCONFIG_NO_COLLATION */
