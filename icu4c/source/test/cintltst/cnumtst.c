@@ -737,7 +737,7 @@ static void TestSignificantDigits()
     int32_t resultlengthneeded;
     int32_t resultlength;
     UErrorCode status = U_ZERO_ERROR;
-    UChar *result;
+    UChar *result = NULL;
     UNumberFormat* fmt;
     double d = 123456.789;
 
@@ -762,6 +762,7 @@ static void TestSignificantDigits()
     if(U_FAILURE(status))
     {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
+        return;
     }
     if(u_strcmp(result, temp)==0)
         log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
@@ -1008,10 +1009,10 @@ static void TestInt64Format() {
 }
 
 
-void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
+static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
+    char temp[512];
     UChar buffer[512];
     int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
-    char temp[512];
     double vals[] = {
         -.2, 0, .2, 5.5, 15.2, 250, 123456789
     };
@@ -1030,11 +1031,10 @@ void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
 
     /* check APIs now */
     {
-        UChar temp[128];
         UErrorCode status = U_ZERO_ERROR;
         UParseError perr;
-        u_uastrcpy(temp, "#,##0.0#");
-        unum_applyPattern(fmt, FALSE, temp, -1, &perr, &status);
+        u_uastrcpy(buffer, "#,##0.0#");
+        unum_applyPattern(fmt, FALSE, buffer, -1, &perr, &status);
         if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
             log_err("got unexpected error for applyPattern: '%s'\n", u_errorName(status));
         }
@@ -1073,9 +1073,6 @@ void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
 
     {
         UErrorCode status = U_ZERO_ERROR;
-        char temp[512];
-        UChar buffer[512];
-        int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
         int len = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
         if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
             log_err("got unexpected error for get default ruleset: '%s'\n", u_errorName(status));
@@ -1097,7 +1094,6 @@ void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
             /* set the default ruleset to the first one found, and retry */
 
             if (len > 0) {
-                int i;
                 for (i = 0; i < len && temp[i] != ';'; ++i){};
                 if (i < len) {
                     buffer[i] = 0;
@@ -1113,7 +1109,7 @@ void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
                             log_err("unexpected ruleset len: %d ex: %d val: %s\n", len2, i, temp);
                         } else {
                             for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
-                                UErrorCode status = U_ZERO_ERROR;
+                                status = U_ZERO_ERROR;
                                 unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
                                 if (U_FAILURE(status)) {
                                     log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
