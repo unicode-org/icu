@@ -1320,24 +1320,22 @@ zh_TW {
         "\u6C11\u570B\u524D",
         "\u6C11\u570B",
     }
-    LocaleID:int { 0x0404 }
-//    LocaleString { "zh_TW" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "TWN" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+    // Fall back to zh
+//    zoneStrings { 
+//        {
+//            "Africa/Casablanca",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//        }
+//    }
     LocaleScript { "Hani" , "Bopo" }
     ExemplarCharacters{
         "[\u4E00-\u4E01\u4E03\u4E07-\u4E11\u4E14-\u4E16\u4E18-\u4E19"

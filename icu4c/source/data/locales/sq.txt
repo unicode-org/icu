@@ -54,8 +54,6 @@ sq {
     Languages { 
         sq { "shqipe" }
     }
-    LocaleID:int { 0x1c }
-//    LocaleString { "sq" }
     MonthAbbreviations { 
         "Jan",
         "Shk",
@@ -98,15 +96,14 @@ sq {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "sqi" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
+            "Europe/Tirane",
+            "CET", // TODO: Replace with long Albanian name
+            "CET",
+            "CEST", // TODO: Replace with long Albanian name
+            "CEST",
         }
     }
 //    LocaleScript{ 

@@ -1647,5 +1647,4 @@ zh_TW_STROKE {
         "<\u7C72<\u706A<\u7229<\u9EA4<\u9F7E<\u9F49<\u9F98"
         }
     }
-    LocaleID:int { 0x20404 }
 }

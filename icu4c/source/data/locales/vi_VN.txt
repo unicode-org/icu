@@ -7,11 +7,4 @@
 
 vi_VN {
     Version{ "2.0" }
-    LocaleID:int { 0x042A }
-//    LocaleString { "vi_VN" }
-//    ShortCountry { "VNM" }
-
-    Currencies {
-        VND { "\u20AB", "VND" } // Vietnamese Dong
-    }
 }
