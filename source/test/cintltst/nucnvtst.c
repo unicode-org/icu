@@ -460,7 +460,7 @@ UBool testConvertToU( const char *source, int sourcelen, const UChar *expect, in
 
         /*        offs += (targ-oldTarg); */
 
-      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (srcLimit < realSourceEnd) ); /* while we just need another buffer */
+      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
 
     if(U_FAILURE(status))
     {
