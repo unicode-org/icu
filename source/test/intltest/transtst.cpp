@@ -1302,7 +1302,7 @@ void TransliteratorTest::TestCreateInstance(){
         UnicodeString expID(DATA[i+2]);
         Transliterator* t =
             Transliterator::createInstance(id,dir,err,ec);
-        UnicodeString newID = t?t->getID():"";
+        UnicodeString newID = t?t->getID():UnicodeString();
         UBool ok = (newID == expID);
         if (!t) {
             newID = u_errorName(ec);
