@@ -269,6 +269,9 @@
 				RelativePath=".\chashtst.c">
 			</File>
 			<File
+				RelativePath=".\sorttest.c">
+			</File>
+			<File
 				RelativePath=".\trietest.c">
 			</File>
 			<File

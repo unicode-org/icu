@@ -25,6 +25,7 @@ void addMemoryStreamTest(TestNode** root);
 void addTrieTest(TestNode** root);
 void addEnumerationTest(TestNode** root);
 void addPosixTest(TestNode** root);
+void addSortTest(TestNode** root);
 
 void addUtility(TestNode** root);
 
@@ -41,4 +42,5 @@ void addUtility(TestNode** root)
     addMemoryStreamTest(root);
     addEnumerationTest(root);
     addPosixTest(root);
+    addSortTest(root);
 }
