@@ -3050,7 +3050,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
 
         // Compare the expected and actual results.
         for (i=0; i<=testText.length(); i++) {
-            char  *errorType = NULL;
+            const char *errorType = NULL;
             if  (forwardBreaks[i] != expectedBreaks[i]) {
                 errorType = "next()";
             } else if (reverseBreaks[i] != expectedBreaks[i]) {
