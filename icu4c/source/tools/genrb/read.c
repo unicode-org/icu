@@ -120,6 +120,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
     UChar    *pTarget   = target;
     int      len=0;
     UBool    isFollowingCharEscaped=FALSE;
+
     /* We are guaranteed on entry that initialChar is not a whitespace
        character. If we are at the EOF, or have some other problem, it
        doesn't matter; we still want to validly return the initialChar
@@ -198,8 +199,24 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     return TOK_ERROR;
                 }
             }
+            
+            if(lastStringWasQuoted){
+                if(getShowWarning()){
+                    warning(lineCount, "Mixing quoted and unquoted strings");
+                }
+                if(isStrict()){
+                    return TOK_ERROR;
+                }
+
+            }
 
             lastStringWasQuoted = FALSE;
+            
+            /* if we reach here we are mixing 
+             * quoted and unquoted strings
+             * warn in normal mode and error in
+             * pedantic mode
+             */
 
             if (c == ESCAPE) {
                 pTarget = target;

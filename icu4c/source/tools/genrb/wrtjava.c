@@ -324,14 +324,14 @@ string_write_java(struct SResource *res,UErrorCode *status) {
     }else if( res->u.fString.fLength > 2000){
 
             int32_t srcLen = res->u.fBinaryValue.fLength/2;
-            uint16_t* target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
+            int32_t tgtLen = srcLen *2;
+            uint16_t* target = (uint16_t*)malloc(sizeof(uint16_t) * tgtLen );
             uint16_t* saveTarget;
-            int32_t tgtLen=0;
             const char* type = "new ICUListResourceBundle.CompressedString(\n";
             if(target){
                 saveTarget  = target;
                 tgtLen = usArrayToRLEString((uint16_t*)res->u.fBinaryValue.fData,
-                                             srcLen,target, srcLen, status);
+                                             srcLen,target, tgtLen, status);
                 if(U_FAILURE(*status)){
                      printf("Could not encode got error : %s \n", u_errorName(*status));
                      return;
@@ -589,11 +589,12 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
         }else{
 
                 srcLen = res->u.fBinaryValue.fLength;
-                target = (uint16_t*)malloc(sizeof(uint16_t) * srcLen);
+                tgtLen = srcLen * 2;
+                target = (uint16_t*)malloc(sizeof(uint16_t) * tgtLen);
                 saveTarget  = target;
                 if(target){
                     tgtLen = byteArrayToRLEString(res->u.fBinaryValue.fData,
-                                                  srcLen,target, srcLen,status);
+                                                  srcLen,target, tgtLen,status);
                     if(U_FAILURE(*status)){
                          printf("Could not encode got error : %s \n", u_errorName(*status));
                          return;

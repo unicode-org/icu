@@ -94,16 +94,18 @@ encodeRunByte(uint16_t* buffer,uint16_t* bufLimit, uint8_t value, int32_t length
         *buffer++=(value);                          \
     }else{                                          \
         *status = U_BUFFER_OVERFLOW_ERROR;          \
-        return (uint16_t*)(buffer - saveBuf);       \
     }                                               \
+    num++;                                          \
 }
+
 /**
  * Encode a run, possibly a degenerate run (of < 4 values).
  * @param length The length of the run; must be > 0 && <= 0xFFFF.
  */
-static uint16_t* 
+static int32_t 
 encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t length,UErrorCode* status) {
     uint16_t* saveBuf =  buffer;
+    int32_t num=0;
     if (length < 4) {
         int j=0;
         for (; j<length; ++j) {
@@ -127,7 +129,7 @@ encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t leng
         APPEND(buffer,bufLimit,(uint16_t) length,status);
         APPEND(buffer,bufLimit,(uint16_t)value,status); /* Don't need to escape this value */
     }
-    return buffer;
+    return num;
 }
 
 /**
@@ -147,6 +149,7 @@ int32_t
 usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t bufLen,UErrorCode* status) {
     const uint16_t* saveBuf = buffer;
     uint16_t* bufLimit =  buffer+bufLen;
+    int32_t num = 0;
     if(buffer < bufLimit){
         *buffer++ =  (uint16_t)(srcLen>>16);
         if(buffer<bufLimit){
@@ -160,22 +163,19 @@ usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t 
                 if (s == runValue && runLength < 0xFFFF){
                     ++runLength;
                 }else {
-                    buffer = encodeRunShort(buffer,bufLimit, (uint16_t)runValue, runLength,status);
-                    if(U_FAILURE(*status)){
-                        return (int32_t) (buffer - saveBuf);
-                    }
+                    num += encodeRunShort(buffer,bufLimit, (uint16_t)runValue, runLength,status);
                     runValue = s;
                     runLength = 1;
                 }
             }
-            buffer = encodeRunShort(buffer,bufLimit,(uint16_t)runValue, runLength,status);
+            num += encodeRunShort(buffer,bufLimit,(uint16_t)runValue, runLength,status);
         }else{
             *status = U_BUFFER_OVERFLOW_ERROR;
         }
     }else{
         *status = U_BUFFER_OVERFLOW_ERROR;
     }
-    return (int32_t) (buffer - saveBuf);
+    return num;
 }
 
 /**

@@ -42,6 +42,20 @@ UBool getShowWarning(){
     return gShowWarning;
 }
 
+static UBool gStrict =FALSE;
+UBool isStrict(){
+    return gStrict;
+}
+void setStrict(UBool val){
+    gStrict = val;
+}
+static UBool gVerbose =FALSE;
+UBool isVerbose(){
+    return gVerbose;
+}
+void setVerbose(UBool val){
+    gVerbose = val;
+}
 void warning(uint32_t linenumber, const char *msg, ...)
 {
     if (gShowWarning)

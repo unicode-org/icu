@@ -28,4 +28,11 @@ void warning (uint32_t linenumber, const char *msg, ...);
 U_CFUNC void setShowWarning(UBool val);
 U_CFUNC UBool getShowWarning(void);
 
+/* strict */
+U_CFUNC void setStrict(UBool val);
+U_CFUNC UBool isStrict(void);
+
+/* verbosity */
+U_CFUNC void setVerbose(UBool val);
+U_CFUNC UBool isVerbose(void);
 #endif
