@@ -631,7 +631,7 @@ uint32_t uloc_getLCID(const char* localeID)
         {
             return 0;
         }
-        u_austrcpy(temp, lcid);
+        u_UCharsToChars(lcid, temp, lcidLen + 1);
         result = (uint32_t)T_CString_stringToInteger(temp, 16);
     }
     
@@ -1045,13 +1045,13 @@ int32_t uloc_getDisplayVariant(const char* locale,
             
             if (variantCapacity >= 1) 
             {
-                u_uastrncpy(variant, inVariant, variantCapacity-1);
+                u_charsToUChars(inVariant, variant, variantCapacity-1);
                 variant[variantCapacity-1] = (UChar)0x0000;
             }
         }
         else
         {
-            u_uastrcpy(variant, inVariant);
+            u_charsToUChars(inVariant, variant, resultLen);
         }
     }
     
