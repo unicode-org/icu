@@ -29,6 +29,7 @@
 #include "unicode/udata.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uinvchar.h"
 #include "uarrsort.h"
 #include "ucmndata.h"
 #include "udataswp.h"

@@ -1730,6 +1730,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\uinvchar.c">
+			</File>
+			<File
+				RelativePath=".\uinvchar.h">
+			</File>
+			<File
 				RelativePath=".\uiter.cpp">
 			</File>
 			<File

@@ -24,6 +24,7 @@
 #include "uhash.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uinvchar.h"
 #include "read.h"
 #include "ustr.h"
 #include "reslist.h"
