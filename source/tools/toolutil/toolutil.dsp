@@ -163,7 +163,15 @@ SOURCE=.\ucbuf.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucm.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucmpwrit.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucmstate.c
 # End Source File
 # Begin Source File
 
@@ -192,6 +200,10 @@ SOURCE=.\toolutil.h
 # Begin Source File
 
 SOURCE=.\ucbuf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucm.h
 # End Source File
 # Begin Source File
 

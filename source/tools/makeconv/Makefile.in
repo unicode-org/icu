@@ -34,7 +34,7 @@ TARGET = makeconv$(EXEEXT)
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
-OBJECTS = makeconv.o ucnvstat.o genmbcs.o
+OBJECTS = makeconv.o ucnvstat.o genmbcs.o gencnvex.o
 
 DEPS = $(OBJECTS:.o=.d)
 

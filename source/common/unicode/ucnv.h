@@ -455,7 +455,7 @@ ucnv_safeClone(const UConverter *cnv,
                UErrorCode       *status);
 
 /** @stable ICU 2.0 */
-#define U_CNV_SAFECLONE_BUFFERSIZE  3072
+#define U_CNV_SAFECLONE_BUFFERSIZE  4096
 
 /**
  * Deletes the unicode converter and releases resources associated

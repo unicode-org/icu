@@ -776,6 +776,7 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->subChar1 = myUConverter->sharedData->staticData->subChar1;
     myUConverter->subCharLen = myUConverter->sharedData->staticData->subCharLen;
     uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);
+    myUConverter->preFromUFirstCP = U_SENTINEL;
 
     if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
         myUConverter->sharedData->impl->open(myUConverter, realName, locale,options, err);

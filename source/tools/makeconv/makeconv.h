@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -20,9 +20,18 @@
 #include "unicode/utypes.h"
 #include "ucnv_bld.h"
 #include "unewdata.h"
+#include "ucm.h"
 
 /* exports from makeconv.c */
 U_CFUNC UBool VERBOSE;
+
+/* converter table type for writing */
+enum {
+    TABLE_NONE,
+    TABLE_BASE,
+    TABLE_EXT,
+    TABLE_BASE_AND_EXT
+};
 
 /* abstract converter generator struct, C++ - style */
 struct NewConverter;
@@ -32,32 +41,17 @@ struct NewConverter {
     void
     (*close)(NewConverter *cnvData);
 
-    UBool
-    (*startMappings)(NewConverter *cnvData);
-
     /** is this byte sequence valid? */
     UBool
     (*isValid)(NewConverter *cnvData,
-               const uint8_t *bytes, int32_t length,
-               uint32_t b);
+               const uint8_t *bytes, int32_t length);
 
     UBool
-    (*addToUnicode)(NewConverter *cnvData,
-                    const uint8_t *bytes, int32_t length,
-                    UChar32 c, uint32_t b,
-                    int8_t isFallback);
-
-    UBool
-    (*addFromUnicode)(NewConverter *cnvData,
-                      const uint8_t *bytes, int32_t length,
-                      UChar32 c, uint32_t b,
-                      int8_t isFallback);
-
-    void
-    (*finishMappings)(NewConverter *cnvData, const UConverterStaticData *staticData);
+    (*addTable)(NewConverter *cnvData, UCMTable *table, UConverterStaticData *staticData);
 
     uint32_t
-    (*write)(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDataMemory *pData);
+    (*write)(NewConverter *cnvData, const UConverterStaticData *staticData,
+             UNewDataMemory *pData, int32_t tableType);
 };
 
 #endif

@@ -80,6 +80,46 @@ ucnv_fromUWriteBytes(UConverter *cnv,
 }
 
 U_CFUNC void
+ucnv_toUWriteUChars(UConverter *cnv,
+                    const UChar *uchars, int32_t length,
+                    UChar **target, const UChar *targetLimit,
+                    int32_t **offsets,
+                    int32_t sourceIndex,
+                    UErrorCode *pErrorCode) {
+    UChar *t=*target;
+    int32_t *o;
+
+    /* write UChars */
+    if(offsets==NULL || (o=*offsets)==NULL) {
+        while(length>0 && t<targetLimit) {
+            *t++=*uchars++;
+            --length;
+        }
+    } else {
+        /* output with offsets */
+        while(length>0 && t<targetLimit) {
+            *t++=*uchars++;
+            *o++=sourceIndex;
+            --length;
+        }
+        *offsets=o;
+    }
+    *target=t;
+
+    /* write overflow */
+    if(length>0) {
+        if(cnv!=NULL) {
+            t=cnv->UCharErrorBuffer;
+            cnv->UCharErrorBufferLength=(int8_t)length;
+            do {
+                *t++=*uchars++;
+            } while(--length>0);
+        }
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+}
+
+U_CFUNC void
 ucnv_toUWriteCodePoint(UConverter *cnv,
                        UChar32 c,
                        UChar **target, const UChar *targetLimit,

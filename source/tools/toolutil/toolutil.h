@@ -20,8 +20,7 @@
 #define __TOOLUTIL_H__
 
 #include "unicode/utypes.h"
-
-
+#include "cmemory.h"
 
 /*
  * For Windows, a path/filename may be the short (8.3) version
@@ -50,5 +49,56 @@ getLongPathname(const char *pathname);
  */
 U_CAPI const char * U_EXPORT2
 findBasename(const char *filename);
+
+/*
+ * UToolMemory is used for generic, custom memory management.
+ * It is allocated with enough space for count*size bytes starting
+ * at array.
+ * The array is declared with a union of large data types so
+ * that its base address is aligned for any types.
+ * If size is a multiple of a data type size, then such items
+ * can be safely allocated inside the array, at offsets that
+ * are themselves multiples of size.
+ */
+struct UToolMemory;
+typedef struct UToolMemory UToolMemory;
+
+/**
+ * Open a UToolMemory object for allocation of initialCapacity to maxCapacity
+ * items with size bytes each.
+ */
+U_CAPI UToolMemory * U_EXPORT2
+utm_open(const char *name, int32_t initialCapacity, int32_t maxCapacity, int32_t size);
+
+/**
+ * Close a UToolMemory object.
+ */
+U_CAPI void U_EXPORT2
+utm_close(UToolMemory *mem);
+
+/**
+ * Get the pointer to the beginning of the array of items.
+ * The pointer becomes invalid after allocation of new items.
+ */
+U_CAPI void * U_EXPORT2
+utm_getStart(UToolMemory *mem);
+
+/**
+ * Get the current number of items.
+ */
+U_CAPI int32_t U_EXPORT2
+utm_countItems(UToolMemory *mem);
+
+/**
+ * Allocate one more item and return the pointer to its start in the array.
+ */
+U_CAPI void * U_EXPORT2
+utm_alloc(UToolMemory *mem);
+
+/**
+ * Allocate n items and return the pointer to the start of the first one in the array.
+ */
+U_CAPI void * U_EXPORT2
+utm_allocN(UToolMemory *mem, int32_t n);
 
 #endif
