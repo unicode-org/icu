@@ -116,23 +116,29 @@ main(int argc,
     }
 
     if(argc<0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
+        /*
+         * Broken into chucks because the C89 standard says the minimum
+         * required supported string length is 509 bytes.
+         */
         fprintf(stderr,
                 "Usage: %s [OPTIONS] [FILES]\n"
-                "\treads the list of resource bundle source files and creates\n"
-                "\tbinary version of reosurce bundles (.res files)\n"
+                "\tReads the list of resource bundle source files and creates\n"
+                "\tbinary version of reosurce bundles (.res files)\n",
+                argv[0]);
+        fprintf(stderr,
                 "Options:\n"
-                "\t-h, -? or --help     this usage text\n"
+                "\t-h or -? or --help   this usage text\n"
                 "\t-V or --version      prints out version number and exits\n"
-                "\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
-/*                "\t-v or --verbose      be verbose\n"*/
                 "\t-q or --quiet        do not display warnings\n"
+                "\t-c or --copyright    include copyright notice\n");
+        fprintf(stderr,
                 "\t-e or --encoding     encoding of source files, leave empty for system default encoding\n"
                 "\t                     NOTE: ICU must be completely built to use this option\n"
+                "\t-d of --destdir      destination directory, followed by the path, defaults to %s\n"
                 "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
                 "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
-                "\t                     followed by path, defaults to %s\n"
-                "\t-c or --copyright    include copyright notice \n",
-                argv[0], u_getDataDirectory(), u_getDataDirectory(),u_getDataDirectory());
+                "\t                     followed by path, defaults to %s\n",
+                u_getDataDirectory(), u_getDataDirectory(), u_getDataDirectory());
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
