@@ -25,10 +25,10 @@ U_NAMESPACE_BEGIN
 
 RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode) :
  fTree(*rootNode) {
-    fRB             = rb;
-    fStatus         = fRB->fStatus;
-    UErrorCode status = U_ZERO_ERROR;
-    fDStates        = new UVector(status);
+    fRB                 = rb;
+    fStatus             = fRB->fStatus;
+    UErrorCode status   = U_ZERO_ERROR;
+    fDStates            = new UVector(status);
     if (U_FAILURE(*fStatus)) {
         return;
     }
@@ -805,6 +805,11 @@ void RBBITableBuilder::exportTable(void *where) {
     table->fRowLen    = sizeof(RBBIStateTableRow) +
                             sizeof(uint16_t) * (fRB->fSetBuilder->getNumCharCategories() - 2);
     table->fNumStates = fDStates->size();
+    table->fFlags     = 0;
+    if (fRB->fLookAheadHardBreak) {
+        table->fFlags  |= RBBI_LOOKAHEAD_HARD_BREAK;
+    }
+    table->fReserved  = 0;
 
     for (state=0; state<table->fNumStates; state++) {
         RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);

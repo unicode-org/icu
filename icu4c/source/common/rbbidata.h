@@ -53,9 +53,9 @@ ubrk_swap(const UDataSwapper *ds,
 
 U_NAMESPACE_BEGIN
 
-/*  */
-/*   The following structs map exactly onto the raw data from ICU common data file. */
-/*  */
+/*  
+ *   The following structs map exactly onto the raw data from ICU common data file. 
+ */
 struct RBBIDataHeader {
     uint32_t         fMagic;       /*  == 0xbla0 */
     uint32_t         fVersion;     /*  == 1 */
@@ -108,12 +108,18 @@ struct  RBBIStateTableRow {
 
 
 struct RBBIStateTable {
-    uint32_t         fNumStates;    /*  Number of states. */
-    uint32_t         fRowLen;       /*  Length of a state table row, in bytes. */
-    char             fTableData[4]; /*  First RBBIStateTableRow begins here. */
-                                    /*    (making it char[] simplifies ugly address */
+    uint32_t         fNumStates;    /*  Number of states.                                 */
+    uint32_t         fRowLen;       /*  Length of a state table row, in bytes.            */
+    uint32_t         fFlags;        /*  Option Flags for this state table                 */
+    uint32_t         fReserved;     /*  reserved                                          */
+    char             fTableData[4]; /*  First RBBIStateTableRow begins here.              */
+                                    /*    (making it char[] simplifies ugly address       */
                                     /*     arithmetic for indexing variable length rows.) */
 };
+
+typedef enum {
+    RBBI_LOOKAHEAD_HARD_BREAK = 1
+} RBBIStateTableFlags;
 
 
 /*  */
@@ -145,14 +151,6 @@ public:
     const UChar              *fRuleSource;
 
     UTrie               fTrie;
-    /*  if fLookAheadHardBreak is true, we will break at the first lookahead match */
-    /*  the search does not go on further to look for a longer match */
-    /*  this also allows breaks at both ends of the string */
-    /*  e.g. rule "ABC / D; ABCDE" and  */
-    /*  text "ABCD ABCDE ABC" will give breaks at */
-    /*        01234567890123 */
-    /*  {0, 3, 4, 5, 8, 9, 10, 11, 14} */
-    UBool               fLookAheadHardBreak;
 
 private:
     int32_t             fRefCount;
