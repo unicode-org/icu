@@ -477,15 +477,17 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
     res->fNext = NULL;
 
     res->u.fBinaryValue.fLength = length;
-    res->u.fBinaryValue.fData   = (uint8_t *) uprv_malloc(sizeof(uint8_t) * length);
+    if (length > 0) {
+        res->u.fBinaryValue.fData   = (uint8_t *) uprv_malloc(sizeof(uint8_t) * length);
 
-    if (res->u.fBinaryValue.fData == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(res);
-        return NULL;
+        if (res->u.fBinaryValue.fData == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(res);
+            return NULL;
+        }
+
+        uprv_memcpy(res->u.fBinaryValue.fData, data, length);
     }
-
-    uprv_memcpy(res->u.fBinaryValue.fData, data, length);
 
     res->fSize = sizeof(int32_t) + sizeof(uint8_t) * length + BIN_ALIGNMENT;
 
