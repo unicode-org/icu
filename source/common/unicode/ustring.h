@@ -95,7 +95,7 @@ U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c);
 
 /**
- * Compare two ustrings for bitwise equality.
+ * Compare two Unicode strings for bitwise equality (code unit order).
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
@@ -107,6 +107,25 @@ u_strchr32(const UChar *s, UChar32 c);
 U_CAPI int32_t  U_EXPORT2
 u_strcmp(const UChar     *s1, 
     const UChar     *s2);
+
+/**
+ * Compare two Unicode strings in code point order.
+ * This is different in UTF-16 from u_strcmp() if supplementary characters are present:
+ * In UTF-16, supplementary characters (with code points U+10000 and above) are
+ * stored with pairs of surrogate code units. These have values from 0xd800 to 0xdfff,
+ * which means that they compare as less than some other BMP characters like U+feff.
+ * This function compares Unicode strings in code point order.
+ * If eihter of the UTF-16 strings is malformed (i.e., it contains unpaired surrogates), then the result is not defined.
+ *
+ * @param s1 A string to compare.
+ * @param s2 A string to compare.
+ * @return a negative/zero/positive integer corresponding to whether
+ * the first string is less than/equal to/greater than the second one
+ * in code point order
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
 
 /**
  * Compare two ustrings for bitwise equality. 
