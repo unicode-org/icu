@@ -91,11 +91,11 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
     then
         if test "$GCC" = yes
         then
-	    CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+	    CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
         fi
         if test "$GXX" = yes
         then
-	    CXXFLAGS="$CXXFLAGS -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+	    CXXFLAGS="$CXXFLAGS -Wall -ansi -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
         fi
     fi
 ])
