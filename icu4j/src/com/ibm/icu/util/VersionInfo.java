@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/03/04 04:34:31 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/03/08 18:22:59 $ 
+ * $Revision: 1.2 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -24,6 +24,81 @@ import java.util.HashMap;
  */
 public final class VersionInfo
 {
+	// public data members -------------------------------------------------
+	
+	/**
+	 * Unicode 1.0 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_1_0 = getInstance(1, 0, 0, 0);
+	/**
+	 * Unicode 1.0.1 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
+	/**
+	 * Unicode 1.1.0 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_1_1_0 = getInstance(1, 1, 0, 0);
+	/**
+	 * Unicode 1.1.5 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_1_1_5 = getInstance(1, 1, 5, 0);
+	/**
+	 * Unicode 2.0 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_2_0 = getInstance(2, 0, 0, 0);	
+	/**
+	 * Unicode 2.1.2 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_2_1_2 = getInstance(2, 1, 2, 0);
+	/**
+	 * Unicode 2.1.5 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_2_1_5 = getInstance(2, 1, 5, 0);
+	/**
+	 * Unicode 2.1.8 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_2_1_8 = getInstance(2, 1, 8, 0);
+	/**
+	 * Unicode 2.1.9 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_2_1_9 = getInstance(2, 1, 9, 0);
+	/**
+	 * Unicode 3.0 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_3_0 = getInstance(3, 0, 0, 0);
+	/**
+	 * Unicode 3.0.1 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_3_0_1 = getInstance(3, 0, 1, 0);
+	/**
+	 * Unicode 3.1.0 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
+	/**
+	 * Unicode 3.1.1 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
+	/**
+	 * Unicode 3.2 version
+	 * @draft 2.1
+	 */
+	public static final VersionInfo UNICODE_3_2 = getInstance(3, 2, 0, 0);
+	
+	// public methods ------------------------------------------------------
+	
     /**
      * Returns an instance of VersionInfo with the argument version.
      * @param version version String in the format of "major.minor.milli.micro", 
