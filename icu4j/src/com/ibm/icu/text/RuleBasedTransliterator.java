@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/02/20 17:59:40 $ 
- * $Revision: 1.42 $
+ * $Date: 2001/09/19 17:43:37 $ 
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.42 $ $Date: 2001/02/20 17:59:40 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.43 $ $Date: 2001/09/19 17:43:37 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -1227,7 +1227,8 @@ public class RuleBasedTransliterator extends Transliterator {
                                          left.text, left.ante, left.post,
                                          right.text, right.cursor, right.cursorOffset,
                                          left.getSegments(),
-                                         left.anchorStart, left.anchorEnd));
+                                         left.anchorStart, left.anchorEnd,
+                                         data));
             
             return pos;
         }
@@ -1461,10 +1462,27 @@ public class RuleBasedTransliterator extends Transliterator {
             }
         }
     }
+
+    /**
+     * Return a representation of this transliterator as source rules.
+     * These rules will produce an equivalent transliterator if used
+     * to construct a new transliterator.
+     * @param escapeUnprintable if TRUE then convert unprintable
+     * character to their hex escape representations, \\uxxxx or
+     * \\Uxxxxxxxx.  Unprintable characters are those other than
+     * U+000A, U+0020..U+007E.
+     * @return rules string
+     */
+    public String toRules(boolean escapeUnprintable) {
+        return data.ruleSet.toRules(escapeUnprintable);
+    }
 }
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.43  2001/09/19 17:43:37  alan
+ * jitterbug 60: initial implementation of toRules()
+ *
  * Revision 1.42  2001/02/20 17:59:40  alan4j
  * Remove backslash-u from log
  *
