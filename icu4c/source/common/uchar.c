@@ -1003,7 +1003,7 @@ U_CFUNC int32_t
 u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      const char *locale,
-                     GrowBuffer *growBuffer, void *context,
+                     UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     uint32_t *pe;
@@ -1182,7 +1182,7 @@ U_CFUNC int32_t
 u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      const UChar *src, int32_t srcLength,
                      const char *locale,
-                     GrowBuffer *growBuffer, void *context,
+                     UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     uint32_t *pe;
@@ -1482,7 +1482,7 @@ U_CFUNC int32_t
 u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
                       const UChar *src, int32_t srcLength,
                       uint32_t options,
-                      GrowBuffer *growBuffer, void *context,
+                      UGrowBuffer *growBuffer, void *context,
                       UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     uint32_t *pe;
