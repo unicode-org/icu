@@ -612,6 +612,7 @@ typedef enum UErrorCode {
     U_BRK_NEW_LINE_IN_QUOTED_STRING,       /**< Missing closing quote in an RBBI rule.            */
     U_BRK_UNDEFINED_VARIABLE,              /**< Use of an undefined $Variable in an RBBI rule.    */
     U_BRK_INIT_ERROR,                      /**< Initialization failure.  Probable missing ICU Data. */
+    U_BRK_RULE_EMPTY_SET,                  /**< Rule contains an empty Unicode Set.               */
     U_BRK_ERROR_LIMIT,                     /**< This must always be the last value to indicate the limit for Break Iterator failures */
 
     /*

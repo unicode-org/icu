@@ -1085,9 +1085,23 @@ void RBBIRuleScanner::scanSet() {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
         RBBIDebugPrintf("UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex());
-         error(localStatus);
-         return;
+        error(localStatus);
+        delete uset;
+        return;
     }
+
+    // Verify that the set contains at least one code point.
+    //
+    if (uset->charAt(0) == -1) {
+        // This set is empty.
+        //  Make it an error, because it almost certainly is not what the user wanted.
+        //  Also, avoids having to think about corner cases in the tree manipulation code
+        //   that occurs later on.
+        error(U_BRK_RULE_EMPTY_SET);
+        delete uset;
+        return;
+    }
+
 
     // Advance the RBBI parse postion over the UnicodeSet pattern.
     //   Don't just set fScanIndex because the line/char positions maintained
@@ -1117,7 +1131,6 @@ void RBBIRuleScanner::scanSet() {
     }
 
 }
-
 
 U_NAMESPACE_END
 

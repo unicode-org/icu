@@ -42,6 +42,8 @@ $Numeric   = [:LineBreak = Numeric:];
 #  Character Class Definitions.
 #    The names are those from TR29.
 #
+$CR         = \u000d;
+$LF         = \u000a;
 $Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
 $Extend     = [[:Grapheme_Extend = TRUE:]]; 
 
@@ -110,7 +112,7 @@ $KatakanaEx+ {300};
 #                   Controls are do not.
 #
 [^$Control [:Ideographic:]] $Extend*;
-[\u000d][\u000a];
+$CR $LF;
 
 #
 #  Reverse Rules.   Back up over any of the chars that can group together.
