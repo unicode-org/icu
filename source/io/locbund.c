@@ -45,7 +45,6 @@ u_locbund_init(ULocaleBundle *result, const char *loc)
     len = (int32_t)strlen(loc);
     result->fLocale = (char*) uprv_malloc(len + 1);
     if(result->fLocale == 0) {
-        uprv_free(result);
         return 0;
     }
     
@@ -119,19 +118,22 @@ u_locbund_close(ULocaleBundle *bundle)
 UNumberFormat*
 u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style)
 {
+    UNumberFormat *formatAlias = NULL;
     if (style >= UNUM_IGNORE) {
-        UNumberFormat **formatAlias = &bundle->fNumberFormat[style-1];
-        if (*formatAlias == NULL) {
+        formatAlias = bundle->fNumberFormat[style-1];
+        if (formatAlias == NULL) {
             UErrorCode status = U_ZERO_ERROR;
-            *formatAlias = unum_open(style, NULL, 0, bundle->fLocale, NULL, &status);
+            formatAlias = unum_open(style, NULL, 0, bundle->fLocale, NULL, &status);
             if (U_FAILURE(status)) {
-                unum_close(*formatAlias);
-                *formatAlias = NULL;
+                unum_close(formatAlias);
+                formatAlias = NULL;
+            }
+            else {
+                bundle->fNumberFormat[style-1] = formatAlias;
             }
         }
-        return *formatAlias;
     }
-    return NULL;
+    return formatAlias;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
