@@ -146,7 +146,13 @@ icu4c/source/samples/date/Debug
 icu4c/source/samples/date/Makefile
 icu4c/source/samples/date/Release
 icu4c/source/samples/date/icudate
+icu4c/source/samples/layout/*.d
+icu4c/source/samples/layout/*.pdb
+icu4c/source/samples/layout/.#*
+icu4c/source/samples/layout/Debug
 icu4c/source/samples/layout/Makefile
+icu4c/source/samples/layout/Release
+icu4c/source/samples/layout/tmp
 icu4c/source/stubdata/*.ao
 icu4c/source/stubdata/*.d
 icu4c/source/stubdata/*.plg
@@ -180,7 +186,13 @@ icu4c/source/test/iotest/*.plg
 icu4c/source/test/iotest/Debug
 icu4c/source/test/iotest/Makefile
 icu4c/source/test/iotest/Release
+icu4c/source/test/letest/*.d
+icu4c/source/test/letest/*.pdb
+icu4c/source/test/letest/.#*
+icu4c/source/test/letest/Debug
 icu4c/source/test/letest/Makefile
+icu4c/source/test/letest/Release
+icu4c/source/test/letest/tmp
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testmap/*.d
