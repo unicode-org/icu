@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.5 2003/04/10 17:42:20 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.6 2003/04/24 21:00:35 emader-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -59,6 +59,7 @@ LIBICUDT=	$(top_builddir)/stubdata/$(LIBICU)data$(ICULIBSUFFIX)$(SO_TARGET_VERSI
 LIBICUUC=	$(top_builddir)/common/$(LIBICU)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBICUI18N=	$(top_builddir)/i18n/$(LIBICU)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBICULE=	$(top_builddir)/layout/$(LIBICU)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
+LIBICULX=	$(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).lib
 LIBUSTDIO=	$(top_builddir)/extra/ustdio/libustdio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR).$lib
