@@ -35,7 +35,8 @@ public class NamePrepTransform {
     
     private NamePrepTransform(){
         // load the resource bundle
-        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","idna_rules", true);
+        //        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","idna_rules", true);
+        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.createBundle("com/ibm/icu/dev/data/testdata","idna_rules", NamePrepTransform.class.getClassLoader());
         String  mapRules      = bundle.getString("MapNoNormalization");
         mapRules             += bundle.getString("MapNFKC");
         mapTransform          = Transliterator.createFromRules("CaseMap",mapRules,Transliterator.FORWARD);

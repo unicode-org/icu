@@ -1051,8 +1051,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     };
 
     public void TestCases() {
-        ResourceReader reader = new ResourceReader(NumberFormatTest.class,
-                                                   "NumberFormatTestCases.txt");
+        String caseFileName = "NumberFormatTestCases.txt";
+        java.io.InputStream is = NumberFormatTest.class.getResourceAsStream(caseFileName);
+
+        ResourceReader reader = new ResourceReader(is, caseFileName);
         TokenIterator tokens = new TokenIterator(reader);
 
         Locale loc = new Locale("en", "US", "");

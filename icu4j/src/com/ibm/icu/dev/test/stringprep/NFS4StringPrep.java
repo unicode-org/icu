@@ -34,33 +34,31 @@ public final class NFS4StringPrep {
     
 
     private  NFS4StringPrep (){
+        ClassLoader loader = NFS4StringPrep.class.getClassLoader();
       try{
-          InputStream  nfscsiFile = ICUData.getStream(this.getClass().getClassLoader(), "com/ibm/icu/dev/data/testdata/nfscsi.spp");
+          InputStream  nfscsiFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscsi.spp");
           nfscsi = new StringPrep(nfscsiFile);
           nfscsiFile.close();
           
-          InputStream  nfscssFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfscss.spp");
+          InputStream  nfscssFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscss.spp");
           nfscss = new StringPrep(nfscssFile);
           nfscssFile.close();
           
-          InputStream  nfscisFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfscis.spp");
+          InputStream  nfscisFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfscis.spp");
           nfscis = new StringPrep(nfscisFile);
           nfscisFile.close();
           
-          InputStream  nfsmxpFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfsmxp.spp");
+          InputStream  nfsmxpFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfsmxp.spp");
           nfsmxp = new StringPrep(nfsmxpFile);
           nfsmxpFile.close();
           
-          InputStream  nfsmxsFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfsmxs.spp");
+          InputStream  nfsmxsFile = loader.getResourceAsStream("com/ibm/icu/dev/data/testdata/nfsmxs.spp");
           nfsmxs = new StringPrep(nfsmxsFile);
           nfsmxsFile.close();
       }catch(IOException e){
           throw new RuntimeException(e.toString());
       }
-      
     }
-    
-
     
     private static byte[] prepare(byte[] src, StringPrep prep)
                 throws StringPrepParseException, UnsupportedEncodingException{

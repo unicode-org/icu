@@ -63,9 +63,9 @@ public void TestExtended() {
     InputStreamReader isr = null;
     StringBuffer  testFileBuf = new StringBuffer();
     try {
-        InputStream is = ICUData.getStream(RBBITestExtended.class, "rbbitst.txt");
+        InputStream is = RBBITestExtended.class.getResourceAsStream("rbbitst.txt");
         if (is == null) {
-            errln("Could not open test data file.");
+            errln("Could not open test data file rbbitst.txt");
             return;
         }
         isr = new InputStreamReader(is, "UTF-8");           
