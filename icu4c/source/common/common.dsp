@@ -1102,57 +1102,6 @@ InputPath=.\unicode\uversion.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\convert.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\convert.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\convert.h
-
-"..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\convert.h
-
-"..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\convert.h
-
-"..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\convert.h
-
-"..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\ucnv.c
 # End Source File
 # Begin Source File
