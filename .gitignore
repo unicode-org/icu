@@ -128,6 +128,12 @@ icu4c/source/layout/Makefile
 icu4c/source/layout/Release
 icu4c/source/layout/libicule.so.20.0
 icu4c/source/layout/tmp
+icu4c/source/layoutex/*.d
+icu4c/source/layoutex/*.pdb
+icu4c/source/layoutex/Debug
+icu4c/source/layoutex/Makefile
+icu4c/source/layoutex/Release
+icu4c/source/layoutex/libicu*.*
 icu4c/source/samples/Makefile
 icu4c/source/samples/XMLConverter/*.d
 icu4c/source/samples/XMLConverter/*.pdb
