@@ -1,10 +1,10 @@
 /*
 **********************************************************************
-* Copyright (c) 2002, International Business Machines
+* Copyright (c) 2002-2003, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.8 $
+* $Revision: 1.9 $
 **********************************************************************
 */
 #ifndef _UCURR_H_

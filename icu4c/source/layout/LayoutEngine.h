@@ -2,7 +2,7 @@
 /*
  * %W% %W%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001, 2002 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
  */
 
