@@ -302,7 +302,7 @@ static void writeOutInverseData(InverseTableHeader *data,
     
     long dataLength;
 
-    pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invDataInfo,
+    pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invUcaDataInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -538,7 +538,7 @@ void writeOutData(UCATableHeader *data,
     
     long dataLength;
 
-    pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &dataInfo,
+    pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &ucaDataInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -735,7 +735,7 @@ int main(int argc, char* argv[]) {
 
     if(options[3].doesOccur) {
       fprintf(stdout, "genuca version %hu.%hu, ICU tool to read UCA text data and create UCA data tables for collation.\n",
-            dataInfo.formatVersion[0], dataInfo.formatVersion[1]);
+            ucaDataInfo.formatVersion[0], ucaDataInfo.formatVersion[1]);
       fprintf(stdout, "Copyright (C) 2000-2001, International Business Machines\n");
       fprintf(stdout, "Corporation and others.  All Rights Reserved.\n");
         exit(0);
