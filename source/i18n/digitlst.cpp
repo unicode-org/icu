@@ -142,6 +142,7 @@ formatBase10(int64_t number, char *outputStr, int32_t outputLen)
 {
     char buffer[MAX_DIGITS + 1];
     int32_t bufferLen;
+    int32_t result;
 
     if (outputLen > MAX_DIGITS) {
         outputLen = MAX_DIGITS;     // Ignore NULL
@@ -165,13 +166,13 @@ formatBase10(int64_t number, char *outputStr, int32_t outputLen)
         number /= 10;
     }
 
-    outputLen -= bufferLen++;
+    result = outputLen - bufferLen++;
 
-    while (bufferLen <= MAX_DIGITS) {     // Copy the number to output
+    while (bufferLen <= outputLen) {     // Copy the number to output
         *(outputStr++) = buffer[bufferLen++];
     }
     *outputStr = 0;   // NULL terminate.
-    return outputLen;
+    return result;
 }
 
 /**
