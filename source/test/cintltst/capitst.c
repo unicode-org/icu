@@ -1093,8 +1093,7 @@ void TestGetLocale() {
     const char* validLocale;
     const char* actualLocale;
   } testStruct[] = {
-    /* remove this case until I resolve the locale of aliased data */
-    /*{ "sr_YU", "sr_YU", "root" },*/
+    { "sr_YU", "sr_YU", "ru" },
     { "sh_YU", "sh_YU", "sh" },
     { "en_US_CALIFORNIA", "en_US", "root" },
     { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
