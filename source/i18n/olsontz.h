@@ -21,6 +21,96 @@ U_NAMESPACE_BEGIN
 
 class SimpleTimeZone;
 
+/**
+ * A time zone based on the Olson database.  Olson time zones change
+ * behavior over time.  The raw offset, rules, presence or absence of
+ * daylight savings time, and even the daylight savings amount can all
+ * vary.
+ *
+ * This class uses a resource bundle named "zoneinfo".  Zoneinfo is a
+ * table containing different kinds of resources.  In several places,
+ * zones are referred to using integers.  A zone's integer is a number
+ * from 0..n-1, where n is the number of zones, with the zones sorted
+ * in lexicographic order.
+ *
+ * 1. Zones.  These have keys corresponding to the Olson IDs, e.g.,
+ * "Asia/Shanghai".  Each resource describes the behavior of the given
+ * zone.  Zones come in several formats, which are differentiated
+ * based on length.
+ *
+ *  a. Alias (int, length 1).  An alias zone is an int resource.  The
+ *  integer is the zone number of the target zone.  The key of this
+ *  resource is an alternate name for the target zone.  Aliases
+ *  represent Olson links and ICU compatibility IDs.
+ *
+ *  b. Simple zone (array, length 3).  The three subelements are:
+ *
+ *   i. An intvector of transitions.  These are given in epoch
+ *   seconds.  This may be an empty invector (length 0).  If the
+ *   transtions list is empty, then the zone's behavior is fixed and
+ *   given by the offset list, which will contain exactly one pair.
+ *   Otherwise each transtion indicates a time after which (inclusive)
+ *   the associated offset pair is in effect.
+ *
+ *   ii. An intvector of offsets.  These are in pairs of raw offset /
+ *   DST offset, in units of seconds.  There will be at least one pair
+ *   (length >= 2 && length % 2 == 0).
+ *
+ *   iii. A binary resource.  This is of the same length as the
+ *   transitions vector, so length may be zero.  Each unsigned byte
+ *   corresponds to one transition, and has a value of 0..n-1, where n
+ *   is the number of pairs in the offset vector.  This forms a map
+ *   between transitions and offset pairs.
+ *
+ *  c. Simple zone with aliases (array, length 4).  This is like a
+ *  simple zone, but also contains a fourth element:
+ *
+ *   iv. An intvector of aliases.  This list includes this zone
+ *   itself, and lists all aliases of this zone.
+ *
+ *  d. Complex zone (array, length 5).  This is like a simple zone,
+ *  but contains two more elements:
+ *
+ *   iv. A string, giving the name of a rule.  This is the "final
+ *   rule", which governs the zone's behavior beginning in the "final
+ *   year".  The rule ID is given without leading underscore, e.g.,
+ *   "EU".
+ *
+ *   v. An intvector of length 2, containing the raw offset for the
+ *   final rule (in seconds), and the final year.  The final rule
+ *   takes effect for years >= the final year.
+ *
+ *  e. Complex zone with aliases (array, length 6).  This is like a
+ *  complex zone, but also contains a sixth element:
+ * 
+ *   vi. An intvector of aliases.  This list includes this zone
+ *   itself, and lists all aliases of this zone.
+ *
+ * 2. Rules.  These have keys corresponding to the Olson rule IDs,
+ * with an underscore prepended, e.g., "_EU".  Each resource describes
+ * the behavior of the given rule using an intvector, containing the
+ * onset list, the cessation list, and the DST savings.  The onset and
+ * cessation lists consist of the month, dowim, dow, time, and time
+ * mode.  The end result is that the 11 integers describing the rule
+ * can be passed directly into the SimpleTimeZone 13-argument
+ * constructor (the other two arguments will be the raw offset, taken
+ * from the complex zone element 5, and the ID string, which is not
+ * used), with the times and the DST savings multiplied by 1000 to
+ * scale from seconds to milliseconds.
+ *
+ * 3. Countries.  These have keys corresponding to the 2-letter ISO
+ * country codes, with a percent sign prepended, e.g., "%US".  Each
+ * resource is an intvector listing the zones associated with the
+ * given country.  The special entry "%" corresponds to "no country",
+ * that is, the category of zones assigned to no country in the Olson
+ * DB.
+ *
+ * 4. Metadata.  Metadata is stored under the key "_".  It is an
+ * intvector of length three containing the number of zones resources,
+ * rule resources, and country resources.  For the purposes of this
+ * count, the metadata entry itself is considered a rule resource,
+ * since its key begins with an underscore.
+ */
 class U_I18N_API OlsonTimeZone: public TimeZone {
  public:
     /**
