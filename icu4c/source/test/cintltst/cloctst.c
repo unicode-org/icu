@@ -1073,8 +1073,11 @@ static void TestObsoleteNames(void)
         { "id",  "ind", "id", "", "" }, /* NO aliasing */
         { "sh",  "srp", "sh", "", "" },
         { "zz_FX",  "", "zz", "FXX", "FX" },
+        { "zz_RO",  "", "zz", "ROU", "RO" },
         { "zz_ZR",  "", "zz", "ZAR", "ZR" },
         { "zz_FXX",  "", "zz", "FXX", "FX" }, /* no aliasing. Doesn't go to PS(PSE). */
+        { "zz_ROM",  "", "zz", "ROU", "RO" },
+        { "zz_ROU",  "", "zz", "ROU", "RO" },
         { "zz_ZAR",  "", "zz", "ZAR", "ZR" },
         { "mlt_PSE", "mlt", "mt", "PSE", "PS" },
         { "iw", "heb", "iw", "", "" },
