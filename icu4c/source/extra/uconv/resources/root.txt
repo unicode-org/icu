@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
-// Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.2 $
+// Copyright (c) 2000-2003 IBM, Inc. and Others.
+// $Revision: 1.3 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -28,31 +28,44 @@ root
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
-  usage { "{0}: {1} [ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] [ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] [ --canon ] [ -x transliteration ] [ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] [ --fallback | --no-fallback ] [ -b, --block-size size ] [ -f, --from-code code ] [ -t, --to-code code ] [ -o, --output file ] [ file ... ]\n" }
+  usage {
+    "{0}: {1} "
+    "[ -h, -?, --help ] [ -V, --version ] [ -s, --silent ] [ -v, --verbose ] "
+    "[ -l, --list | --list-code code | --default-code | -L, --list-transliterators ] "
+    "[ --canon ] [ -x transliteration ] "
+    "[ --to-callback callback | -c ] [ --from-callback callback | -i ] [ --callback callback ] "
+    "[ --fallback | --no-fallback ] "
+    "[ -b, --block-size size ] "
+    "[ -f, --from-code code ] [ -t, --to-code code ] "
+    "[ --add-signature ] [ --remove-signature ] "
+    "[ -o, --output file ] "
+    "[ file ... ]\n" }
 
   help {  "Options:  -h, --help                    print this message\n"
           "          -V, --version                 print the program version\n"
           "          -s, --silent                  suppress messages\n"
           "          -v, --verbose                 display progress information\n"
-	      "          -l, --list                    list all available encodings\n"
-	      "          --list-code code              list only the given encoding\n"
-	      "          --default-code                list only the default encoding\n"
-	      "          -L, --list-transliterators    list all available transliterators\n"
+          "          -l, --list                    list all available encodings\n"
+          "          --list-code code              list only the given encoding\n"
+          "          --default-code                list only the default encoding\n"
+          "          -L, --list-transliterators    list all available transliterators\n"
           "          --canon                       print list in cnvrtrs.txt(5) format\n"
-	      "          -x transliteration            run everything through transliteration\n" 
-	      "          --to-callback callback        use callback on destination encoding\n"
-	      "          -c                            omit invalid characters from the output\n"
-	      "          --from-callback callback      use callback on original encoding\n"
-	      "          -i                            ignore invalid sequences in the input\n"
+          "          -x transliteration            run everything through transliteration\n" 
+          "          --to-callback callback        use callback on destination encoding\n"
+          "          -c                            omit invalid characters from the output\n"
+          "          --from-callback callback      use callback on original encoding\n"
+          "          -i                            ignore invalid sequences in the input\n"
           "          --callback callback           use callback on both encodings\n"
-	      "          -b, --block-size size         read size bytes blocks (default: 4096)\n"
-	      "          --fallback                    use fallback mapping\n"
-	      "          --no-fallback                 do not use fallback mapping\n"
-	      "          -f, --from-code code          set the original encoding\n"
-	      "          -t, --to-code code            set the destination encoding\n" 
+          "          -b, --block-size size         read size bytes blocks (default: 4096)\n"
+          "          --fallback                    use fallback mapping\n"
+          "          --no-fallback                 do not use fallback mapping\n"
+          "          -f, --from-code code          set the original encoding\n"
+          "          -t, --to-code code            set the destination encoding\n" 
+          "          --add-signature               add a U+FEFF Unicode signature character (BOM)\n"
+          "          --remove-signature            remove a U+FEFF Unicode signature character (BOM)\n"
           "          -o, --output file             write output to file\n"
-	      "\n"
-	      "Callbacks:"
+          "\n"
+          "Callbacks:"
   }
 
   cantGetNames   { "Couldn''t get available converter names.\n" } // 0: err
@@ -62,7 +75,7 @@ root
   noFromCodeset  { "No original encoding set (use -f).\n" }
   noToCodeset    {  "No destination encoding set (use -t).\n" }
 
-  badBlockSize	{ "Bad block size: {0}.\n" } // 0: size of the block
+  badBlockSize  { "Bad block size: {0}.\n" } // 0: size of the block
 
   cantSetInBinMode { "Couldn't set standard input to binary mode." }
   cantSetOutBinMode { "Couldn't set standard output to binary mode." }
