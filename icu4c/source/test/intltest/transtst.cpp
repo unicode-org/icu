@@ -3818,7 +3818,7 @@ void TransliteratorTest::TestAllCodepoints(){
     if (t->getDynamicClassID() != cls::getStaticClassID()) { \
       errln("FAIL: " #cls " dynamic and static class ID mismatch"); \
     } \
-    t = t; /*coverage test for assignment op*/ \
+    /* *t = *t; /*can't do this: coverage test for assignment op*/ \
   } \
   delete t; \
 }
@@ -3833,7 +3833,7 @@ void TransliteratorTest::TestAllCodepoints(){
     if (t->getDynamicClassID() != cls ::getStaticClassID()) { \
       errln("FAIL: " #cls " dynamic and static class ID mismatch"); \
     } \
-    t = t; /*coverage test for assignment op*/ \
+    /* *t = *t; /*can't do this: coverage test for assignment op*/ \
   } \
   delete t; \
 }

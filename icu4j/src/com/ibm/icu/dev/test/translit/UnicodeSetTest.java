@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/11/26 18:31:56 $ 
- * $Revision: 1.36 $
+ * $Date: 2002/11/28 00:53:05 $ 
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -478,17 +478,23 @@ public class UnicodeSetTest extends TestFmwk {
         if (!set.equals(exp)) { errln("FAIL: complementAll(\"alan\")"); return; }
 
         exp.applyPattern("[a-z]");
-        if (set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+        if (set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); }
+        if (!set.containsSome(exp)) { errln("FAIL: containsSome(UnicodeSet)"); }
         exp.applyPattern("[aln]");
-        if (!set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
-
+        if (!set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); }
+        if (set.containsSome(exp)) { errln("FAIL: containsSome(UnicodeSet)"); }
+        
         if (set.containsNone((char)0x61, (char)0x7A)) {
             errln("FAIL: containsNone(char, char)");
-            return;
+        }
+        if (!set.containsSome((char)0x61, (char)0x7A)) {
+            errln("FAIL: containsSome(char, char)");
         }
         if (!set.containsNone((char)0x41, (char)0x5A)) {
             errln("FAIL: containsNone(char, char)");
-            return;
+        }
+        if (set.containsSome((char)0x41, (char)0x5A)) {
+            errln("FAIL: containsSome(char, char)");
         }
 
         set.removeAll("liu");
