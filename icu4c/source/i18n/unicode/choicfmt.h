@@ -586,7 +586,7 @@ private:
      * @param status error code.
      * @return the converted double number.
      */
-    static double stod(const UnicodeString& string, UErrorCode& status);
+    static double stod(const UnicodeString& string);
 
     /**
      * Converts a double value to a string using a default NumberFormat object
@@ -596,7 +596,7 @@ private:
      * @@param status error code.
      * @@return the converted string.
      */
-    static UnicodeString& dtos(double value, UnicodeString& string, UErrorCode& status);
+    static UnicodeString& dtos(double value, UnicodeString& string);
 
     //static UMTX fgMutex;
     //static NumberFormat* fgNumberFormat;
