@@ -60,12 +60,18 @@
 #       define MAP_FAILED ((void*)-1)
 #   endif
 
-#   define MAP_IMPLEMENTATION MAP_POSIX
-
-#elif OS390
-    /*   No memory mapping for 390 batch mode.  Fake it using dll loading.  */
-#           include <dll.h>
-#   define MAP_IMPLEMENTATION MAP_390DLL
+#   ifdef OS390
+        /*   No memory mapping for 390 batch mode.  Fake it using dll loading.  */
+#       include <dll.h>
+#       include "cstring.h"  		
+#       include "unicode/udata.h"
+#       define LIB_PREFIX "lib"
+#       define LIB_PREFIX_LENGTH 3
+#       define LIB_SUFFIX ".dll"
+#       define MAP_IMPLEMENTATION MAP_390DLL
+#   else
+#       define MAP_IMPLEMENTATION MAP_POSIX
+#   endif
 
 #else /* unknown platform, no memory map implementation: use FileStream/uprv_malloc() instead */
 
@@ -259,112 +265,122 @@
      */
 
     uprv_mapFile(UDataMemory *pData, const char *path) {
-        /*  TODO:  turn the path into a dll name, try to load it,
-         *         if successful, set the the pHeader field of the UDataMemory
-         *         to the data address.  
-         *
-         *         (If path has a ".dat" extension, take it off and add on whatever
-         *          the standard shared library extension is?)
-         */
+#       define DATA_TYPE "dat"
+
+        const char *inBasename;
+        char *basename, *suffix, *tempbasename;
+        char pathBuffer[1024];
+        char entryName[100];
+        const DataHeader *pHeader;
+        dllhandle *handle;
+        char filename[1024];
+        void *val=0; 
+
+        inBasename=uprv_strrchr(path, U_FILE_SEP_CHAR);
+        if(inBasename==NULL) {
+            inBasename = path;
+        } else {
+            inBasename++;
+        }
+        basename=computeDirPath(path, pathBuffer);
+        if(uprv_strcmp(inBasename, U_ICUDATA_NAME".dat") != 0) {
+            /* must mmap file... for build */
+            int fd;
+            int length;
+            struct stat mystat;
+            void *data;
+            UDataMemory_init(pData); /* Clear the output struct.        */
+
+            /* determine the length of the file */
+            if(stat(path, &mystat)!=0 || mystat.st_size<=0) {
+                return FALSE;
+           }
+            length=mystat.st_size;
+     
+            /* open the file */
+            fd=open(path, O_RDONLY);
+            if(fd==-1) {
+                return FALSE;
+            }
+    
+            /* get a view of the mapping */
+            data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
+            close(fd); /* no longer needed */
+            if(data==MAP_FAILED) {
+                return FALSE;
+            }      
+            pData->map = (char *)data + length;
+            pData->pHeader=(const DataHeader *)data;
+            pData->mapAddr = data;
+            return TRUE;
+        }
+        
+#       ifdef OS390BATCH
+        /* ### hack: we still need to get u_getDataDirectory() fixed
+        for OS/390 (batch mode - always return "//"? )
+        and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
+        This is probably due to the strange file system on OS/390.  It's more like
+        a database with short entry names than a typical file system. */
+            /* U_ICUDATA_NAME should always have the correct name */
+            /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
+            /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
+            /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
+            uprv_strcpy(pathBuffer, "//IXMICUDA"); /*390port*/
+#       else
+            /* set up the library name */
+            uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
+            inBasename = U_ICUDATA_NAME;
+            suffix = basename+LIB_PREFIX_LENGTH;
+            while((*suffix=*inBasename)!=0) {
+                ++suffix;
+                ++inBasename;
+            }
+            uprv_strcpy(suffix, LIB_SUFFIX);
+#       endif      
+     
+#       ifdef UDATA_DEBUG
+             fprintf(stderr, "dllload: %s ", pathBuffer);
+#       endif
+                
+        handle=dllload(pathBuffer);
+    
+#       ifdef UDATA_DEBUG
+               fprintf(stderr, " -> %08X\n", handle );
+#       endif
+            
+        if(handle != NULL) {
+               /* we have a data DLL - what kind of lookup do we need here? */
+               /* try to find the Table of Contents */
+               uprv_strcpy(entryName, U_ICUDATA_NAME);
+               uprv_strcat(entryName, "_" DATA_TYPE);
+            
+               UDataMemory_init(pData); /* Clear the output struct.        */
+               val=dllqueryvar((dllhandle*)handle,entryName);
+               if(val == 0) {
+                    /* failed... so keep looking */
+                    return FALSE;
+               }
+#              ifdef UDATA_DEBUG
+                    fprintf(stderr, "dllqueryvar(%08X, %s) -> %08X\n", handle, entryName, val);
+#              endif
+        
+               pData->pHeader=(const DataHeader *)val;
+               return TRUE;
+         } else {
+               return FALSE; /* no handle */
+         }
     }
 
 
 
     void    uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
-            /*  TODO:  whatever.  Doesn't really need to do anything.  */
-        }
+            uprv_free(pData->map);
+            pData->map     = NULL;
+            pData->mapAddr = NULL;
+            pData->pHeader = NULL;
+        }   
     }
-
-#           define  RTLD_LAZY 0
-#           define  RTLD_GLOBAL 0
-
-static void *dlopen(const char *filename, int flag) {
-                dllhandle *handle;
-
-#               ifdef UDATA_DEBUG
-                    fprintf(stderr, "dllload: %s ", filename);
-#               endif
-                handle=dllload(filename);
-#               ifdef UDATA_DEBUG
-                    fprintf(stderr, " -> %08X\n", handle );
-#               endif
-                    return handle;
-            }
-
-static void *dlsym(void *h, const char *symbol) {
-                void *val=0;
-                val=dllqueryvar((dllhandle*)h,symbol);
-#               ifdef UDATA_DEBUG
-                    fprintf(stderr, "dllqueryvar(%08X, %s) -> %08X\n", h, symbol, val);
-#               endif
-                return val;
-            }
-
-static int dlclose(void *handle) {
-#               ifdef UDATA_DEBUG
-                    fprintf(stderr, "dllfree: %08X\n", handle);
-#               endif
-                return dllfree((dllhandle*)handle);
-            }
-
-
-
-    /* TODO:  the following code is just a mish-mash of pieces from the
-     *        previous OS390 data library loading code that might be useful
-     *        in putting together something that works.
-     */
-
-#if 0
-    Library lib;
-    inBasename=U_ICUDATA_NAME"_390";
-    suffix=strcpy_returnEnd(basename, inBasename);
-    uprv_strcpy(suffix, LIB_SUFFIX);
-
-    if (uprv_isOS390BatchMode()) {
-    /* ### hack: we still need to get u_getDataDirectory() fixed
-    for OS/390 (batch mode - always return "//"? )
-    and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!)
-    This is probably due to the strange file system on OS/390.  It's more like
-        a database with short entry names than a typical file system. */
-        if (s390dll) {
-            lib=LOAD_LIBRARY("//IXMICUD1", "//IXMICUD1");
-        }
-        else {
-            /* U_ICUDATA_NAME should always have the correct name */
-            /* 390port: BUT FOR BATCH MODE IT IS AN EXCEPTION ... */
-            /* 390port: THE NEXT LINE OF CODE WILL NOT WORK !!!!! */
-            /*lib=LOAD_LIBRARY("//" U_ICUDATA_NAME, "//" U_ICUDATA_NAME);*/
-            lib=LOAD_LIBRARY("//IXMICUDA", "//IXMICUDA"); /*390port*/
-        }
-    }
-
-    lib=LOAD_LIBRARY(pathBuffer, basename);
-    if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
-        /* try basename only next */
-        lib=LOAD_LIBRARY(basename, basename);
-    }
-
-    if(IS_LIBRARY(lib)) {
-        /* we have a data DLL - what kind of lookup do we need here? */
-        char entryName[100];
-        const DataHeader *pHeader;
-        *basename=0;
-    }
-
-    udata_checkCommonData(&tData, pErrorCode);
-    if (U_SUCCESS(*pErrorCode)) {
-        /* Don't close the old data - someone might be using it
-         * May need to change the global to be a pointer rather than a static struct
-         * to get a clean switch-over.
-         */
-        setCommonICUData(&tData);
-
-    }
-
-    umtx_unlock(NULL);
-    return TRUE;  /* SUCCESS? */
-#endif 
 
 #else
 #   error MAP_IMPLEMENTATION is set incorrectly
