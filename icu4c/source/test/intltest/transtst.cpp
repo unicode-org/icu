@@ -2050,13 +2050,13 @@ void TransliteratorTest::TestCompoundFilterID(void) {
         }
         UBool ok = (t != NULL && U_SUCCESS(ec));
         if (ok == expOk) {
-            logln((UnicodeString)"Ok: " + id + " => " + (t!=0?t->getID():"NULL") + ", " +
+            logln((UnicodeString)"Ok: " + id + " => " + (t!=0?t->getID():(UnicodeString)"NULL") + ", " +
                   u_errorName(ec));
             if (source.length() != 0) {
                 expect(*t, source, exp);
             }
         } else {
-            errln((UnicodeString)"FAIL: " + id + " => " + (t!=0?t->getID():"NULL") + ", " +
+            errln((UnicodeString)"FAIL: " + id + " => " + (t!=0?t->getID():(UnicodeString)"NULL") + ", " +
                   u_errorName(ec));
         }
     }
