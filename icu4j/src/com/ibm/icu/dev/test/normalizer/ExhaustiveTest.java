@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ExhaustiveTest.java,v $ $Revision: 1.2 $ $Date: 2000/02/26 23:30:48 $
+ * $RCSfile: ExhaustiveTest.java,v $ $Revision: 1.3 $ $Date: 2000/03/07 22:54:08 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -19,10 +19,11 @@ import com.ibm.text.*;
 
 public class ExhaustiveTest extends TestFmwk
 {
-    private static UInfo info;
-
+    private UInfo info;
+	
     public static void main(String[] args) throws Exception
     {
+    	UInfo tempInfo = null;
         String[] tempArgs = new String[args.length];
         int count = 0;
 
@@ -30,7 +31,7 @@ public class ExhaustiveTest extends TestFmwk
         for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-data")) {
-                info = new UInfo(args[++i]);
+                tempInfo = new UInfo(args[++i]);
             } else {
                 tempArgs[count++] = args[i];
             }
@@ -40,11 +41,18 @@ public class ExhaustiveTest extends TestFmwk
         System.arraycopy(tempArgs, 0, args, 0, count);
 
 
-        if (info == null) {
-            info = new UInfo("../src/data/unicode/UnicodeData.txt");
-        }
+        if (tempInfo == null) {
+            tempInfo = new UInfo("../src/data/unicode/UnicodeData.txt");
+	    }
+        new ExhaustiveTest(tempInfo).run(args);
+    }
+    
+    public ExhaustiveTest() {
+    	this.info = new UInfo();
+    }
 
-        new ExhaustiveTest().run(args);
+    public ExhaustiveTest(UInfo info) {
+    	this.info = info;
     }
 
 
