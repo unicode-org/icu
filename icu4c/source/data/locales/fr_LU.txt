@@ -16,6 +16,19 @@ fr_LU {
         2,
         1,
     }
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
 //    LocaleString { "fr_LU" }
 //    ShortCountry { "LUX" }
     LocaleID:int { 0x140c }
