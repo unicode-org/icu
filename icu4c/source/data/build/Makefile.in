@@ -43,12 +43,14 @@ check check-local check-recursive build-testdlls build-basetestdata build-local
 all: all-local
 install: all-local 
 clean: clean-local
-distclean : clean
+distclean : distclean-local
 dist: 
 check: all
 
 all-local: thaidict.brk build-local 
 
+distclean-local: clean
+	$(RMV) Makefile
 
 ##### Define all the data files. the build rule that depends on them is below.
 
