@@ -35,7 +35,6 @@
 *                           available IDs code.  Misc. cleanup.
 *********************************************************************************/
 
-#include "uhash.h"
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/calendar.h"
