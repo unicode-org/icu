@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/CompactArrayTest.java,v $
- * $Date: 2002/08/12 20:26:39 $
- * $Revision: 1.1 $
+ * $Date: 2002/12/11 23:28:34 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -59,8 +59,8 @@ public final class CompactArrayTest extends TestFmwk
 
 	logln("equals: " + cba4.equals(cba5));
 	logln("equals: " + cba.equals(cba4));
-
-	cba4.compact(false);
+    
+  	cba4.compact(false);
 	logln("equals: " + cba4.equals(cba5));
 
 	cba5.compact(true);
@@ -138,6 +138,10 @@ public final class CompactArrayTest extends TestFmwk
 
 	cca3.setElementAt((char)0x405, (char)0xee); // different modification
 	logln("different mod equals: " + cca.equals(cca3));
+    
+    // after setElementAt isCompact is set to false
+    cca3.compact(true);
+    logln("different mod equals: " + cca.equals(cca3));
 
 	// v1.8 fails with extensive compaction, and defaults extensive, so don't compact
 	// cca.compact();

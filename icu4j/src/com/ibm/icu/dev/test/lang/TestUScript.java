@@ -319,6 +319,10 @@ public class TestUScript extends TestFmwk{
             if(name.equals("") ){
                 errln("FAILED: getName for code : "+i);
             }
+            String shortName= UScript.getShortName(i);
+            if(shortName.equals("")){
+                errln("FAILED: getName for code : "+i);
+            }
         }
     }   	
  }
