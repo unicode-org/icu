@@ -3347,7 +3347,7 @@ void UnicodeSet::caseCloseOne(UChar folded) {
         }
     } while (low < high);
     
-    x = low + high; // ((low + high) >> 1) << 1
+    x = (low + high) & ~1; // ((low + high) >> 1) << 1
     if (folded == CASE_PAIRS[x]) {
         add(CASE_PAIRS[x]);
         add(CASE_PAIRS[x+1]);
