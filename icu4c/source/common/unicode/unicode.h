@@ -141,7 +141,7 @@ public:
      */
     enum EUnicodeScript 
     {
-        kBasicLatin,
+        kBasicLatin=UBLOCK_BASIC_LATIN,
         kLatin1Supplement,
         kLatinExtendedA,
         kLatinExtendedB,
@@ -228,7 +228,7 @@ public:
         kArabicPresentationB,
         kNoScript,
         kHalfwidthFullwidthForm,
-        kScriptCount
+        kScriptCount=UBLOCK_COUNT
     };
 
     /**
