@@ -369,7 +369,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     enum ActionType {
       READCE,
-      READHEX,
+      READHEX
     };
 
     // Directives.
