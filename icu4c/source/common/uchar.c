@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2000, International Business Machines
+*   Copyright (C) 1996-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -10,14 +10,13 @@
 *
 *   Date        Name        Description
 *   04/02/97    aliu        Creation.
-*
 *   4/15/99     Madhu       Updated all the function definitions for C Implementation
-*   5/20/99     Madhu		Added the function u_getVersion()
+*   5/20/99     Madhu       Added the function u_getVersion()
 *   8/19/1999   srl         Upgraded scripts to Unicode3.0 
 *   11/11/1999  weiv        added u_isalnum(), cleaned comments
 *   01/11/2000  helena      Renamed u_getVersion to u_getUnicodeVersion.
 *   06/20/2000  helena      OS/400 port changes; mostly typecast.
-********************************************************************************************
+******************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -910,8 +909,8 @@ u_charScript(UChar32 ch)
     for( j = 0; i == -1 && fScriptIndex[j].fFirstCode != 0xFFFF; ++j )
         if( fScriptIndex[j].fFirstCode <= ch && ch <= fScriptIndex[j].fLastCode ) {
             i = j;
-	    if(j == U_CHAR_SCRIPT_COUNT) /* "U_SPECIALS 2" */
-	      i = U_SPECIALS;
+            if(j == U_CHAR_SCRIPT_COUNT) /* "U_SPECIALS 2" */
+                i = U_SPECIALS;
         }
     if(i >= U_CHAR_SCRIPT_COUNT) {
         returnValue = U_NO_SCRIPT;

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-1999, International Business Machines
+*   Copyright (C) 1998-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -14,7 +14,7 @@
 *   04/20/99    stephen     Overhauled per 4/16 code review.
 *   11/18/99    aliu        Made to inherit from Replaceable.  Added method
 *                           handleReplaceBetween(); other methods unchanged.
-*******************************************************************************
+******************************************************************************
 */
 
 #ifndef UNISTR_H

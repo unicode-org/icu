@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  udata.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #endif
 
-/* configuration ------------------------------------------------------------ */
+/* configuration ---------------------------------------------------------- */
 
 #if !defined(HAVE_DLOPEN)
 # define HAVE_DLOPEN 0

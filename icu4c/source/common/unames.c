@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  unames.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
@@ -26,7 +26,7 @@
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
 
-/* prototypes --------------------------------------------------------------- */
+/* prototypes ------------------------------------------------------------- */
 
 #define DATA_NAME "unames"
 #define DATA_TYPE "dat"

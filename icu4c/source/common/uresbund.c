@@ -1,8 +1,8 @@
 /*
-*******************************************************************************
-* Copyright (C) 1997-1999, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
+******************************************************************************
+* Copyright (C) 1997-2001, International Business Machines Corporation and   *
+* others. All Rights Reserved.                                               *
+******************************************************************************
 *
 * File URESBUND.C
 *
@@ -15,7 +15,7 @@
 *   11/09/99    weiv            Added ures_getLocale()
 *   March 2000  weiv        Total overhaul - using data in DLLs
 *   06/20/2000  helena      OS/400 port changes; mostly typecast.
-*******************************************************************************
+******************************************************************************
 */
 
 #include "uresimp.h"

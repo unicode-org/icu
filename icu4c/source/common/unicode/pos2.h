@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -100,9 +100,9 @@ typedef unsigned long uint32_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
-#define U_TZSET		_tzset
-#define U_TIMEZONE	_timezone
-#define U_TZNAME	_tzname
+#define U_TZSET     _tzset
+#define U_TIMEZONE  _timezone
+#define U_TZNAME    _tzname
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
@@ -116,4 +116,4 @@ typedef unsigned long uint32_t;
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
-#define U_MAKE	"gmake"
+#define U_MAKE  "gmake"

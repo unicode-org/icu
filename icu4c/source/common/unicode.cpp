@@ -1,8 +1,8 @@
 /*
-*******************************************************************************
-* Copyright (C) 1996-1999, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
+******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and   *
+* others. All Rights Reserved.                                               *
+******************************************************************************
 */
 //  FILE NAME : unicode.cpp
 //
@@ -28,10 +28,10 @@
 //      C++ Wrappers for Unicode
 //  CHANGES BY
 //      Madhu Katragadda
-//   5/20/99     Madhu		Added the function u_getVersion()
-//  07/09/99     stephen        Added definition for {MIN,MAX}_VALUE
+//   5/20/99     Madhu      Added the function u_getVersion()
+//  07/09/99     stephen    Added definition for {MIN,MAX}_VALUE
 //  11/22/99     aliu       Added MIN_RADIX, MAX_RADIX, digit, forDigit
-//********************************************************************************************
+//****************************************************************************
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2000, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -17,16 +17,16 @@
 *   8/27/1999   schererm    UCharDirection constants: U_...
 *   11/11/1999  weiv        added u_isalnum(), cleaned comments
 *   01/11/2000  helena      Renamed u_getVersion to u_getUnicodeVersion().
-********************************************************************************
+******************************************************************************
 */
 
 #ifndef UCHAR_H
 #define UCHAR_H
 
 #include "unicode/utypes.h"
-/*===========================================================================*/
-/* Unicode version number                                                    */
-/*===========================================================================*/
+/*==========================================================================*/
+/* Unicode version number                                                   */
+/*==========================================================================*/
 #define U_UNICODE_VERSION "3.0.0"
 
 /**
@@ -65,69 +65,69 @@
  */
 enum UCharCategory
 {
-	/** Non-category for unassigned and non-character code points. */
-	U_UNASSIGNED              = 0,
-	/** Lu */
+    /** Non-category for unassigned and non-character code points. */
+    U_UNASSIGNED              = 0,
+    /** Lu */
     U_UPPERCASE_LETTER        = 1,
-	/** Ll */
+    /** Ll */
     U_LOWERCASE_LETTER        = 2,
-	/** Lt */
+    /** Lt */
     U_TITLECASE_LETTER        = 3,
-	/** Lm */
+    /** Lm */
     U_MODIFIER_LETTER         = 4,
-	/** Lo */
+    /** Lo */
     U_OTHER_LETTER            = 5,
-	/** Mn */
+    /** Mn */
     U_NON_SPACING_MARK        = 6,
-	/** Me */
+    /** Me */
     U_ENCLOSING_MARK          = 7,
-	/** Mc */
+    /** Mc */
     U_COMBINING_SPACING_MARK  = 8,
-	/** Nd */
+    /** Nd */
     U_DECIMAL_DIGIT_NUMBER    = 9,
-	/** Nl */
+    /** Nl */
     U_LETTER_NUMBER           = 10,
-	/** No */
+    /** No */
     U_OTHER_NUMBER            = 11,
-	/** Zs */
+    /** Zs */
     U_SPACE_SEPARATOR         = 12,
-	/** Zl */
+    /** Zl */
     U_LINE_SEPARATOR          = 13,
-	/** Zp */
+    /** Zp */
     U_PARAGRAPH_SEPARATOR     = 14,
-	/** Cc */
+    /** Cc */
     U_CONTROL_CHAR            = 15,
-	/** Cf */
+    /** Cf */
     U_FORMAT_CHAR             = 16,
-	/** Co */
+    /** Co */
     U_PRIVATE_USE_CHAR        = 17,
-	/** Cs */
+    /** Cs */
     U_SURROGATE               = 18,
-	/** Pd */
+    /** Pd */
     U_DASH_PUNCTUATION        = 19,
-	/** Ps */
+    /** Ps */
     U_START_PUNCTUATION       = 20,
-	/** Pe */
+    /** Pe */
     U_END_PUNCTUATION         = 21,
-	/** Pc */
+    /** Pc */
     U_CONNECTOR_PUNCTUATION   = 22,
-	/** Po */
+    /** Po */
     U_OTHER_PUNCTUATION       = 23,
-	/** Sm */
+    /** Sm */
     U_MATH_SYMBOL             = 24,
-	/** Sc */
+    /** Sc */
     U_CURRENCY_SYMBOL         = 25,
-	/** Sk */
+    /** Sk */
     U_MODIFIER_SYMBOL         = 26,
-	/** So */
+    /** So */
     U_OTHER_SYMBOL            = 27,
-	/** Pi */
+    /** Pi */
     U_INITIAL_PUNCTUATION     = 28,
-	/** Pf */
+    /** Pf */
     U_FINAL_PUNCTUATION       = 29,
-	/** Cn */
+    /** Cn */
     U_GENERAL_OTHER_TYPES     = 30,
-	/** One higher than the last enum UCharCategory constant. */
+    /** One higher than the last enum UCharCategory constant. */
     U_CHAR_CATEGORY_COUNT
 };
 
@@ -137,44 +137,44 @@ typedef enum UCharCategory UCharCategory;
  */
 enum UCharDirection   { 
     /** */
-	U_LEFT_TO_RIGHT               = 0, 
-	/** */
+    U_LEFT_TO_RIGHT               = 0, 
+    /** */
     U_RIGHT_TO_LEFT               = 1, 
-	/** */
+    /** */
     U_EUROPEAN_NUMBER             = 2,
-	/** */
+    /** */
     U_EUROPEAN_NUMBER_SEPARATOR   = 3,
-	/** */
+    /** */
     U_EUROPEAN_NUMBER_TERMINATOR  = 4,
-	/** */
+    /** */
     U_ARABIC_NUMBER               = 5,
-	/** */
+    /** */
     U_COMMON_NUMBER_SEPARATOR     = 6,
-	/** */
+    /** */
     U_BLOCK_SEPARATOR             = 7,
-	/** */
+    /** */
     U_SEGMENT_SEPARATOR           = 8,
-	/** */
+    /** */
     U_WHITE_SPACE_NEUTRAL         = 9, 
-	/** */
+    /** */
     U_OTHER_NEUTRAL               = 10, 
-	/** */
+    /** */
     U_LEFT_TO_RIGHT_EMBEDDING     = 11,
-	/** */
+    /** */
     U_LEFT_TO_RIGHT_OVERRIDE      = 12,
-	/** */
+    /** */
     U_RIGHT_TO_LEFT_ARABIC        = 13,
-	/** */
+    /** */
     U_RIGHT_TO_LEFT_EMBEDDING     = 14,
-	/** */
+    /** */
     U_RIGHT_TO_LEFT_OVERRIDE      = 15,
-	/** */
+    /** */
     U_POP_DIRECTIONAL_FORMAT      = 16,
-	/** */
+    /** */
     U_DIR_NON_SPACING_MARK        = 17,
-	/** */
+    /** */
     U_BOUNDARY_NEUTRAL            = 18,
-	/** */
+    /** */
     U_CHAR_DIRECTION_COUNT
 };
 
@@ -191,183 +191,183 @@ typedef enum UCharDirection UCharDirection;
  */
 enum UCharScript {
 /* Script names */
-	/** */
+    /** */
     U_BASIC_LATIN,
-	/** */
+    /** */
     U_LATIN_1_SUPPLEMENT,
-	/** */
+    /** */
     U_LATIN_EXTENDED_A,
-	/** */
+    /** */
     U_LATIN_EXTENDED_B,
-	/** */
+    /** */
     U_IPA_EXTENSIONS,
-	/** */
+    /** */
     U_SPACING_MODIFIER_LETTERS,
-	/** */
+    /** */
     U_COMBINING_DIACRITICAL_MARKS,
-	/** */
+    /** */
     U_GREEK,
-	/** */
+    /** */
     U_CYRILLIC,
-	/** */
+    /** */
     U_ARMENIAN,
-	/** */
+    /** */
     U_HEBREW,
-	/** */
+    /** */
     U_ARABIC,
-	/** */
+    /** */
     U_SYRIAC,
-	/** */
+    /** */
     U_THAANA,
-	/** */
+    /** */
     U_DEVANAGARI,
-	/** */
+    /** */
     U_BENGALI,
-	/** */
+    /** */
     U_GURMUKHI,
-	/** */
+    /** */
     U_GUJARATI,
-	/** */
+    /** */
     U_ORIYA,
-	/** */
+    /** */
     U_TAMIL,
-	/** */
+    /** */
     U_TELUGU,
-	/** */
+    /** */
     U_KANNADA,
-	/** */
+    /** */
     U_MALAYALAM,
-	/** */
+    /** */
     U_SINHALA,
-	/** */
+    /** */
     U_THAI,
-	/** */
+    /** */
     U_LAO,
-	/** */
+    /** */
     U_TIBETAN,
-	/** */
+    /** */
     U_MYANMAR,
-	/** */
+    /** */
     U_GEORGIAN,
-	/** */
+    /** */
     U_HANGUL_JAMO,
-	/** */
+    /** */
     U_ETHIOPIC,
-	/** */
+    /** */
     U_CHEROKEE,
-	/** */
+    /** */
     U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
-	/** */
+    /** */
     U_OGHAM,
-	/** */
+    /** */
     U_RUNIC,
-	/** */
+    /** */
     U_KHMER,
-	/** */
+    /** */
     U_MONGOLIAN,
-	/** */
+    /** */
     U_LATIN_EXTENDED_ADDITIONAL,
-	/** */
+    /** */
     U_GREEK_EXTENDED,
-	/** */
+    /** */
     U_GENERAL_PUNCTUATION,
-	/** */
+    /** */
     U_SUPERSCRIPTS_AND_SUBSCRIPTS,
-	/** */
+    /** */
     U_CURRENCY_SYMBOLS,
-	/** */
+    /** */
     U_COMBINING_MARKS_FOR_SYMBOLS,
-	/** */
+    /** */
     U_LETTERLIKE_SYMBOLS,
-	/** */
+    /** */
     U_NUMBER_FORMS,
-	/** */
+    /** */
     U_ARROWS,
-	/** */
+    /** */
     U_MATHEMATICAL_OPERATORS,
-	/** */
+    /** */
     U_MISCELLANEOUS_TECHNICAL,
-	/** */
+    /** */
     U_CONTROL_PICTURES,
-	/** */
+    /** */
     U_OPTICAL_CHARACTER_RECOGNITION,
-	/** */
+    /** */
     U_ENCLOSED_ALPHANUMERICS,
-	/** */
+    /** */
     U_BOX_DRAWING,
-	/** */
+    /** */
     U_BLOCK_ELEMENTS,
-	/** */
+    /** */
     U_GEOMETRIC_SHAPES,
-	/** */
+    /** */
     U_MISCELLANEOUS_SYMBOLS,
-	/** */
+    /** */
     U_DINGBATS,
-	/** */
+    /** */
     U_BRAILLE_PATTERNS,
-	/** */
+    /** */
     U_CJK_RADICALS_SUPPLEMENT,
-	/** */
+    /** */
     U_KANGXI_RADICALS,
-	/** */
+    /** */
     U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS,
-	/** */
+    /** */
     U_CJK_SYMBOLS_AND_PUNCTUATION,
-	/** */
+    /** */
     U_HIRAGANA,
-	/** */
+    /** */
     U_KATAKANA,
-	/** */
+    /** */
     U_BOPOMOFO,
-	/** */
+    /** */
     U_HANGUL_COMPATIBILITY_JAMO,
-	/** */
+    /** */
     U_KANBUN,
-	/** */
+    /** */
     U_BOPOMOFO_EXTENDED,
-	/** */
+    /** */
     U_ENCLOSED_CJK_LETTERS_AND_MONTHS,
-	/** */
+    /** */
     U_CJK_COMPATIBILITY,
-	/** */
+    /** */
     U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A,
-	/** */
+    /** */
     U_CJK_UNIFIED_IDEOGRAPHS,
-	/** */
+    /** */
     U_YI_SYLLABLES,
-	/** */
+    /** */
     U_YI_RADICALS,
-	/** */
+    /** */
     U_HANGUL_SYLLABLES,
-	/** */
+    /** */
     U_HIGH_SURROGATES,
-	/** */
+    /** */
     U_HIGH_PRIVATE_USE_SURROGATES,
-	/** */
+    /** */
     U_LOW_SURROGATES,
-	/** */
+    /** */
     U_PRIVATE_USE_AREA,
-	/** */
+    /** */
     U_CJK_COMPATIBILITY_IDEOGRAPHS,
-	/** */
+    /** */
     U_ALPHABETIC_PRESENTATION_FORMS,
-	/** */
+    /** */
     U_ARABIC_PRESENTATION_FORMS_A,
-	/** */
+    /** */
     U_COMBINING_HALF_MARKS,
-	/** */
+    /** */
     U_CJK_COMPATIBILITY_FORMS,
-	/** */
+    /** */
     U_SMALL_FORM_VARIANTS,
-	/** */
+    /** */
     U_ARABIC_PRESENTATION_FORMS_B,
-	/** */
+    /** */
     U_SPECIALS,
-	/** */
+    /** */
     U_HALFWIDTH_AND_FULLWIDTH_FORMS,
-	/** */
+    /** */
     U_CHAR_SCRIPT_COUNT,
-	/** */
+    /** */
     U_NO_SCRIPT=U_CHAR_SCRIPT_COUNT
 };
 typedef enum UCharScript UCharScript;
@@ -378,16 +378,16 @@ typedef enum UCharScript UCharScript;
  */
 enum UCellWidth
 {
-	/** */
+    /** */
     U_ZERO_WIDTH              = 0,
     /** */
-	U_HALF_WIDTH              = 1,
+    U_HALF_WIDTH              = 1,
     /** */
-	U_FULL_WIDTH              = 2,
+    U_FULL_WIDTH              = 2,
     /** */
-	U_NEUTRAL_WIDTH           = 3,
+    U_NEUTRAL_WIDTH           = 3,
     /** */
-	U_CELL_WIDTH_COUNT
+    U_CELL_WIDTH_COUNT
 };
 
 typedef enum UCellWidth UCellWidth;
@@ -542,7 +542,7 @@ u_isspace(UChar32 c);
  * Note: This method corresponds to the Java method
  * <tt>java.lang.Character.isWhitespace()</tt>.
  *
- * @param   ch	the character to be tested.
+ * @param   ch  the character to be tested.
  * @return  true if the character is an ICU whitespace character;
  *          false otherwise.
  * @see     #isspace

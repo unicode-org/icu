@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -157,4 +157,4 @@ as/400 machines.
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
-#define U_MAKE	"gmake"
+#define U_MAKE  "gmake"

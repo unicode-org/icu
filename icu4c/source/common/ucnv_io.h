@@ -1,13 +1,13 @@
 /*
-   **********************************************************************
-   *   Copyright (C) 1999, International Business Machines
-   *   Corporation and others.  All Rights Reserved.
-   **********************************************************************
-   *
-   *
-   *  ucnv_io.h:
-   *  defines  variables and functions pertaining to file access, and name resolution
-   *  aspect of the library
+ **********************************************************************
+ *   Copyright (C) 1999-2001, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************
+ *
+ *
+ *  ucnv_io.h:
+ *  defines  variables and functions pertaining to file access, and name resolution
+ *  aspect of the library
  */
 
 #ifndef UCNV_IO_H

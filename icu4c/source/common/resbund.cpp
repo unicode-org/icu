@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -13,7 +13,7 @@
 *                           based on code taken from scanForLocale.  Added
 *                           constructor which attempts to read resource bundle
 *                           from a specific file, without searching other files.
-*   02/11/97    aliu        Added UErrorCode return values to constructors.  Fixed
+*   02/11/97    aliu        Added UErrorCode return values to constructors. Fixed
 *                           infinite loops in scanForFile and scanForLocale.
 *                           Modified getRawResourceData to not delete storage in
 *                           localeData and resourceData which it doesn't own.
@@ -27,23 +27,23 @@
 *                           Modified to load locale index out of new file distinct
 *                           from default.txt.
 *   03/25/97    aliu        Modified to support 2-d arrays, needed for timezone data.
-*                           Added support for custom file suffixes.  Again, needed to
-*                           support timezone data.  Improved error handling to detect
-*                           duplicate tags and subtags.
-*   04/07/97    aliu        Fixed bug in getHashtableForLocale().  Fixed handling of
-*                           failing UErrorCode values on entry to API methods.
+*                           Added support for custom file suffixes.  Again, needed
+*                           to support timezone data.  Improved error handling to
+*                           detect duplicate tags and subtags.
+*   04/07/97    aliu        Fixed bug in getHashtableForLocale().  Fixed handling
+*                           of failing UErrorCode values on entry to API methods.
 *                           Fixed bugs in getArrayItem() for negative indices.
 *   04/29/97    aliu        Update to use new Hashtable deletion protocol.
-*   05/06/97    aliu        Flattened kTransitionTable for HP compiler.  Fixed usage of
-*                           CharString.
+*   05/06/97    aliu        Flattened kTransitionTable for HP compiler.
+*                           Fixed usage of CharString.
 * 06/11/99      stephen     Removed parsing of .txt files.
 *                           Reworked to use new binary format.
 *                           Cleaned up.
 * 06/14/99      stephen     Removed methods taking a filename suffix.
 * 06/22/99      stephen     Added missing T_FileStream_close in parse()
-* 11/09/99              weiv            Added getLocale(), rewritten constructForLocale()
+* 11/09/99      weiv        Added getLocale(), rewritten constructForLocale()
 * March 2000    weiv        complete overhaul.
-*******************************************************************************
+******************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -523,7 +523,7 @@ ResourceBundle::getStringArray( const char             *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle array;
-	    ures_setIsStackObject(&array, TRUE);
+        ures_setIsStackObject(&array, TRUE);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -587,7 +587,7 @@ ResourceBundle::get2dArray(const char *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle array;
-	    ures_setIsStackObject(&array, TRUE);
+        ures_setIsStackObject(&array, TRUE);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &array, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -595,7 +595,7 @@ ResourceBundle::get2dArray(const char *resourceTag,
             if(rowCount > 0) {
                 result = new UnicodeString*[rowCount];
                 UResourceBundle row;
-		        ures_setIsStackObject(&row, TRUE);
+                ures_setIsStackObject(&row, TRUE);
                 ures_getByIndex(&array, 0, &row, &err);
                 columnCount = ures_getSize(&row);
                 const UChar* string = 0;
@@ -658,7 +658,7 @@ ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
     if(U_FAILURE(err)) {
         return 0;
     }
-    
+
     char item[256];
     char key[256];
     int32_t taglen = itemTag.length();
@@ -674,7 +674,7 @@ ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
 
     if(sldata == 0) {
         UResourceBundle table;
-	    ures_setIsStackObject(&table, TRUE);
+        ures_setIsStackObject(&table, TRUE);
         UErrorCode fallbackInfo = U_ZERO_ERROR;
         ures_getByKey(resource, resourceTag, &table, &fallbackInfo);
         if(U_SUCCESS(fallbackInfo)) {
@@ -712,7 +712,7 @@ ResourceBundle::getTaggedArray( const char             *resourceTag,
         return;
     }
     UResourceBundle table;
-	ures_setIsStackObject(&table, TRUE);
+    ures_setIsStackObject(&table, TRUE);
     ures_getByKey(resource, resourceTag, &table, &err);
     if(U_SUCCESS(err)) {
         numItems = ures_getSize(&table);

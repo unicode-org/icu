@@ -1,10 +1,10 @@
 /*
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *
 *  FILE NAME : platform.h
 *
@@ -13,7 +13,7 @@
 *   03/02/99    stephen     Added AS400 support.
 *   03/30/99    stephen     Added Linux support.
 *   04/13/99    stephen     Reworked for autoconf.
-*******************************************************************************
+******************************************************************************
 */
 
 /* Define the platform we're on. */
@@ -114,9 +114,9 @@ typedef unsigned short uint16_t;
 /* Information about POSIX support                                           */
 /*===========================================================================*/
 
-#define U_TZSET		_tzset
-#define U_TIMEZONE	_timezone
-#define U_TZNAME	_tzname
+#define U_TZSET     _tzset
+#define U_TIMEZONE  _timezone
+#define U_TZNAME    _tzname
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
@@ -130,4 +130,4 @@ typedef unsigned short uint16_t;
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
-#define U_MAKE	"nmake"
+#define U_MAKE  "nmake"

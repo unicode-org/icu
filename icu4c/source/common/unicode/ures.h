@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -16,7 +16,7 @@
 *   06/14/99    stephen     Removed functions taking a filename suffix.
 *   07/20/99    stephen     Language-independent ypedef to void*
 *   11/09/99    weiv        Added ures_getLocale()
-*******************************************************************************
+******************************************************************************
 */
 
 #ifndef URES_H

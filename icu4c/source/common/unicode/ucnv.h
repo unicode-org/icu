@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -64,7 +64,7 @@ typedef enum {
 
     UCNV_LMBCS_1 = 11,
     UCNV_LMBCS_2, 
-    UCNV_LMBCS_3,		
+    UCNV_LMBCS_3,
     UCNV_LMBCS_4,
     UCNV_LMBCS_5,
     UCNV_LMBCS_6,
@@ -117,7 +117,7 @@ typedef void (*UConverterToUCallback) (
                   const char *codePoints,
                   int32_t length,
                   UConverterCallbackReason reason,
-				  UErrorCode *);
+                  UErrorCode *);
 
 /**
  * Function pointer for error callback in the unicode to codepage direction.
@@ -138,7 +138,7 @@ typedef void (*UConverterFromUCallback) (
                     int32_t length,
                     UChar32 codePoint,
                     UConverterCallbackReason reason,
-				    UErrorCode *);
+                    UErrorCode *);
 
 U_CDECL_END
 
@@ -316,25 +316,24 @@ ucnv_openCCSID (int32_t codepage,
  * Thread safe cloning operation
  * @param cnv converter to be cloned
  * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
-	If buffer is not large enough, new memory will be allocated.
-	Clients can use the U_CNV_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
+ *  If buffer is not large enough, new memory will be allocated.
+ *  Clients can use the U_CNV_SAFECLONE_BUFFERSIZE. This will probably be enough to avoid memory allocations.
  * @param pBufferSize pointer to size of allocated space. 
-	If *pBufferSize == 0, a sufficient size for use in cloning will 
-	be returned ('pre-flighting')
-	If *pBufferSize is not enough for a stack-based safe clone, 
-	new memory will be allocated.
+ *  If *pBufferSize == 0, a sufficient size for use in cloning will 
+ *  be returned ('pre-flighting')
+ *  If *pBufferSize is not enough for a stack-based safe clone, 
+ *  new memory will be allocated.
  * @param status to indicate whether the operation went on smoothly or there were errors
-    An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
+ *  An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were necessary.
  * @return pointer to the new clone
  * @draft API 1.8 freeze
  */
 
 U_CAPI UConverter *
-	ucnv_safeClone(
-		const UConverter 	*cnv, 
-		void 			*stackBuffer,
-		int32_t 		*pBufferSize, 
-		UErrorCode 		*status);
+ucnv_safeClone(const UConverter *cnv, 
+               void             *stackBuffer,
+               int32_t          *pBufferSize, 
+               UErrorCode       *status);
 
 #define U_CNV_SAFECLONE_BUFFERSIZE 512
 
@@ -592,8 +591,8 @@ ucnv_getType (const UConverter * converter);
  * @stable
  */
 U_CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter, 
-				     UBool starters[256],
-				     UErrorCode* err);
+                                       UBool starters[256],
+                                       UErrorCode* err);
 
 
 /**

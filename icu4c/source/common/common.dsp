@@ -557,6 +557,10 @@ SOURCE=.\filestrm.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\hash.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\locid.h
 
 !IF  "$(CFG)" == "common - Win32 Release"

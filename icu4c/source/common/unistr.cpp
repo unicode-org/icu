@@ -1,8 +1,8 @@
 /*
-*******************************************************************************
-* Copyright (C) 1999, International Business Machines Corporation and         *
-* others. All Rights Reserved.                                                *
-*******************************************************************************
+******************************************************************************
+* Copyright (C) 1999-2001, International Business Machines Corporation and   *
+* others. All Rights Reserved.                                               *
+******************************************************************************
 *
 * File unistr.cpp
 *
@@ -14,7 +14,7 @@
 *   07/09/99    stephen     Renamed {hi,lo},{byte,word} to icu_X for HP/UX
 *   11/18/99    aliu        Added handleReplaceBetween() to make inherit from
 *                           Replaceable.
-*******************************************************************************
+******************************************************************************
 */
 
 #include "unicode/utypes.h"

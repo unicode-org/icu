@@ -1,5 +1,5 @@
 /*============================================================================
- * Copyright (C) 1997-1999, International Business Machines Corporation
+ * Copyright (C) 1997-2001, International Business Machines Corporation
  * and others. All Rights Reserved.
  *
  * File cmpshrta.cpp
@@ -14,7 +14,7 @@
  * 04/26/99     Madhu       Ported to C for C Implementation
  * 11/12/99     srl         macroized ucmp32_get()
  * 11/07/00     weiv        aligned implementation with ucmp8
- *===============================================================================
+ *============================================================================
  */
 #include "ucmp32.h"
 #include "cmemory.h"

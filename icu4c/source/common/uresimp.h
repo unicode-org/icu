@@ -1,3 +1,10 @@
+/*
+**********************************************************************
+*   Copyright (C) 2000-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*/
+
 #ifndef URESIMP_H
 #define URESIMP_H
 

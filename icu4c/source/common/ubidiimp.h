@@ -1,10 +1,10 @@
 /*  
-*******************************************************************************
+******************************************************************************
 *
-*   Copyright (C) 1999-2000, International Business Machines
+*   Copyright (C) 1999-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
-*******************************************************************************
+******************************************************************************
 *   file name:  ubidiimp.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
@@ -23,7 +23,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 
-/* miscellaneous definitions ------------------------------------------------ */
+/* miscellaneous definitions ---------------------------------------------- */
 
 typedef uint8_t DirProp;
 typedef uint32_t Flags;
