@@ -264,7 +264,7 @@ public class CheckTags {
             if (log) {
                 logln();
             }
-            doTags(doc.tags());
+            doTags(doc);
             if (isClass) {
                 ClassDoc cdoc = (ClassDoc)doc;
                 doDocs(cdoc.fields(), "Fields", !brief);
@@ -275,7 +275,8 @@ public class CheckTags {
         }
     }
 
-    void doTags(Tag[] tags) {
+    void doTags(ProgramElementDoc doc) {
+        Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
@@ -334,7 +335,7 @@ public class CheckTags {
             }
         }
         if (!foundRequiredTag) {
-            errln("missing required tag");
+            errln("missing required tag [" + doc.position() + "]");
         }
     }
 }
