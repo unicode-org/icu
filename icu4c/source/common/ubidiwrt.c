@@ -368,6 +368,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                      uint16_t options,
                      UErrorCode *pErrorCode) {
     const UChar *text;
+    UChar *saveDest;
     int32_t length, destCapacity;
     int32_t run, runCount, logicalStart, runLength;
 
@@ -404,6 +405,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
     }
 
     /* destSize shrinks, later destination length=destCapacity-destSize */
+    saveDest=dest;
     destCapacity=destSize;
 
     /*
@@ -567,5 +569,5 @@ ubidi_writeReordered(UBiDi *pBiDi,
         }
     }
 
-    return u_terminateUChars(dest, destCapacity, destCapacity-destSize, pErrorCode);
+    return u_terminateUChars(saveDest, destCapacity, destCapacity-destSize, pErrorCode);
 }
