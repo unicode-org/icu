@@ -69,6 +69,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
     switch (index) {
         CASE(0,TestDictionary)
         CASE(1,TestCornerCases)
+        CASE(2,TestNamesList)
         default: name = ""; break;
     }
 }
@@ -79,7 +80,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
  * characters long or less.  This is true for th18057.txt, which
  * has 80-char or shorter lines.  DOES NOT HANDLE ^M^J sequence.
  */
-static UBool readLine(FileStream *in, UnicodeString& line) {
+static UBool readLine(FileStream *in, UnicodeString& line, const char* encoding) {
     if (T_FileStream_eof(in)) {
         return FALSE;
     }
@@ -94,8 +95,75 @@ static UBool readLine(FileStream *in, UnicodeString& line) {
         *p++ = c;
     }
     *p = 0;
-    line = UnicodeString(buffer, TEST_FILE_ENCODING);
+    line = UnicodeString(buffer, encoding);
     return TRUE;
+}
+
+
+/**
+ * Read the external names list, and confirms that the collator 
+ * gets the same results when comparing lines one to another
+ * using regular and iterative comparison.
+ */
+void CollationThaiTest::TestNamesList(void) {
+    if (coll == 0) {
+        errln("Error: could not construct Thai collator");
+        return;
+    }
+ 
+    // Read in a dictionary of Thai words
+    UErrorCode status = U_ZERO_ERROR;
+    char buffer[1024];
+    uprv_strcpy(buffer,IntlTest::loadTestData(status) );
+    char* index = 0;
+   
+    index=strrchr(buffer,(char)U_FILE_SEP_CHAR);
+
+    if((unsigned int)(index-buffer) != (strlen(buffer)-1)){
+            *(index+1)=0;
+    }
+    uprv_strcat(buffer,".."U_FILE_SEP_STRING);
+    uprv_strcat(buffer, "TestNames_Thai.txt");
+
+    FileStream *in = T_FileStream_open(buffer, "rb");
+    if (in == 0) {
+        logln((UnicodeString)"Could not find file: " + buffer +" will not do this test");
+        return;        
+    }
+
+    //
+    // Loop through each word in the dictionary and compare it to the previous
+    // word.  They should be in sorted order.
+    //
+    UnicodeString lastWord, word;
+    int32_t line = 0;
+    int32_t failed = 0;
+    int32_t wordCount = 0;
+    while (readLine(in, word, "UTF16LE")) {
+        line++;
+
+        // Skip comments and blank lines
+        if (word.charAt(0) == 0x23 || word.length() == 0) {
+            continue;
+        }
+
+        // Show the first 8 words being compared, so we can see what's happening
+        ++wordCount;
+        if (wordCount <= 8) {
+            UnicodeString str;
+            logln((UnicodeString)"Word " + wordCount + ": " + IntlTest::prettify(word, str));
+        }
+
+        if (lastWord.length() > 0) {
+            Collator::EComparisonResult result = coll->compare(lastWord, word);
+            doTest(coll, lastWord, word, result);
+        }
+        lastWord = word;
+    }
+
+
+    logln((UnicodeString)"Words checked: " + wordCount);
+    T_FileStream_close(in);
 }
 
 /**
@@ -137,7 +205,7 @@ void CollationThaiTest::TestDictionary(void) {
     int32_t line = 0;
     int32_t failed = 0;
     int32_t wordCount = 0;
-    while (readLine(in, word)) {
+    while (readLine(in, word, "UTF8")) {
         line++;
 
         // Skip comments and blank lines
@@ -153,6 +221,8 @@ void CollationThaiTest::TestDictionary(void) {
         }
 
         if (lastWord.length() > 0) {
+            // TODO: this line should be enabled when j2720 is fixed.
+            //doTest(coll, lastWord, word, Collator::LESS);
             int32_t result = coll->compare(lastWord, word);
 
             if (result >= 0) {
