@@ -109,6 +109,8 @@ static void TestUDataOpen(){
     const char* name            = "test";
     const char* type            = "icu";
     const char  dirSepString[]  = {U_FILE_SEP_CHAR, 0};
+    const char  pathSepString[] = {U_PATH_SEP_CHAR, 0};
+
 
     char* path=(char*)malloc(sizeof(char) * (strlen(ctest_dataOutDir())
                                            + strlen(U_ICUDATA_NAME)
@@ -278,7 +280,7 @@ static void TestUDataOpen(){
      *   overflow handling code.
      */
     {
-#if 0
+#if 1
         /* TODO:  fix doOpenChoice().  Bug 3121. */
         char longTestPath[1024];    /* Implementation goes to heap at length of 128.  */
         char longName[1024];
