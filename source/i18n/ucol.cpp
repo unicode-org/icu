@@ -1024,7 +1024,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                       (UCharOffset - coll->contractionIndex));
         }
 
-        if (source->pos >= source->start) { 
+        if (source->pos <= source->start) { 
           /* this is the start of string */
           CE = *(coll->contractionCEs + 
                  (UCharOffset - coll->contractionIndex)); 
