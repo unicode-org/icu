@@ -60,13 +60,13 @@ enum{
 
 /* indexes[] value names */
 enum {
-    _SPREP_INDEX_TRIE_SIZE                  = 0, /* number of bytes in normalization trie */
+    _SPREP_INDEX_TRIE_SIZE                  = 0, /* number of bytes in StringPrep trie */
     _SPREP_INDEX_MAPPING_DATA_SIZE          = 1, /* The array that contains the mapping   */
     _SPREP_NORM_CORRECTNS_LAST_UNI_VERSION  = 2, /* The index of Unicode version of last entry in NormalizationCorrections.txt */ 
     _SPREP_ONE_UCHAR_MAPPING_INDEX_START    = 3, /* The starting index of 1 UChar mapping index in the mapping data array */
     _SPREP_TWO_UCHARS_MAPPING_INDEX_START   = 4, /* The starting index of 2 UChars mapping index in the mapping data array */
-    _SPREP_THREE_UCHARS_MAPPING_INDEX_START = 5,
-    _SPREP_FOUR_UCHARS_MAPPING_INDEX_START  = 6,
+    _SPREP_THREE_UCHARS_MAPPING_INDEX_START = 5, /* The starting index of 3 UChars mapping index in the mapping data array */
+    _SPREP_FOUR_UCHARS_MAPPING_INDEX_START  = 6, /* The starting index of 4 UChars mapping index in the mapping data array */
     _SPREP_OPTIONS                          = 7, /* Bit set of options to turn on in the profile */
     _SPREP_INDEX_TOP=16                          /* changing this requires a new formatVersion */
 };

@@ -262,7 +262,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
                      UErrorCode* status);
 
 /**
- * Compare two strings for IDNs for equivalence.
+ * Compare two IDN strings for equivalence.
  * This function splits the domain names into labels and compares them.
  * According to IDN RFC, whenever two labels are compared, they are 
  * considered equal if and only if their ASCII forms (obtained by 
