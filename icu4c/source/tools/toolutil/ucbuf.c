@@ -41,7 +41,7 @@ static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
        } else if(start[0] == '\xFF' && start[1] == '\xFE') {
            *cp = "UTF16_LittleEndian";
            *numRead-=2;
-           if(start[2] == '\x00' && start[3] =='\0x00'){
+           if(start[2] == '\x00' && start[3] =='\x00'){
                *cp="UTF32_LittleEndian";
                *numRead+=2;
            }
@@ -73,7 +73,7 @@ U_CAPI UBool U_EXPORT2
 ucbuf_autodetect(FileStream* in,const char** cp){
   UBool autodetect = FALSE;
   int numRead =0;
-  char* tcp ="";
+  const char* tcp;
   autodetect=ucbuf_autodetect_nrw(in,&tcp, &numRead);
   *cp =tcp;
   /* rewind the file Stream */
@@ -200,7 +200,7 @@ U_CAPI UCHARBUF* U_EXPORT2
 ucbuf_open(FileStream* in, UErrorCode* err){
 
     UCHARBUF* buf =(UCHARBUF*) uprv_malloc(sizeof(UCHARBUF));
-    char *cp ="";
+    const char *cp;
     int numRead =0;
     if(U_FAILURE(*err)){
         return NULL;
