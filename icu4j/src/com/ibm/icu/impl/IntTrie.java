@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2003/06/03 18:49:32 $
-* $Revision: 1.10 $
+* $Date: 2003/06/09 23:15:00 $
+* $Revision: 1.11 $
 *
 ******************************************************************************
 */
@@ -160,6 +160,7 @@ public class IntTrie extends Trie
      * @return true if the argument Trie has the same data as this Trie, false
      *         otherwise
      */
+    ///CLOVER:OFF
     public boolean equals(Object other) 
     {
         boolean result = super.equals(other);
@@ -173,6 +174,7 @@ public class IntTrie extends Trie
         }
         return false;
     }
+    ///CLOVER:ON
     
     // protected methods -----------------------------------------------
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterUtility.java,v $ 
-* $Date: 2002/09/19 21:19:04 $ 
-* $Revision: 1.1 $
+* $Date: 2003/06/09 23:15:00 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -49,17 +49,6 @@ public final class UCharacterUtility
     static int toInt(char msc, char lsc)
     {
         return ((msc << 16) | lsc);
-    }
-       
-    /**
-    * converting 2 bytes into a char
-    * @param msb the most significant byte
-    * @param lsb the least significant byte
-    * @return char form
-    */
-    static char toChar(byte msb, byte lsb)
-    {
-        return (char)((msb << 8) | (lsb & 0xFF));
     }
        
     /**
@@ -199,11 +188,13 @@ public final class UCharacterUtility
     
     // private constructor --------------------------------------------------
       
+    ///CLOVER:OFF
     /**
     * private constructor to avoid initialisation
     */
     private UCharacterUtility()
     {
     }
+    ///CLOVER:ON
 }
 

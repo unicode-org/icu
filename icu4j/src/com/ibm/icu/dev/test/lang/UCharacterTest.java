@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/06/03 22:41:26 $
-* $Revision: 1.57 $
+* $Date: 2003/06/09 23:15:00 $
+* $Revision: 1.58 $
 *
 *******************************************************************************
 */
@@ -1926,6 +1926,19 @@ public final class UCharacterTest extends TestFmwk
             } catch (IllegalArgumentException e) {}
         }
     }
+    
+    public void TestIsBMP()
+    {
+        int ch[] = {0x0, -1, 0xffff, 0x10ffff, 0xff, 0x1ffff};
+        boolean flag[] = {true, false, true, false, true, false};
+        for (int i = 0; i < ch.length; i ++) {
+            if (UCharacter.isBMP(ch[i]) != flag[i]) {
+                errln("Fail: \\u" + Utility.hex(ch[i], 8) 
+                      + " failed at UCharacter.isBMP");
+            }
+        }
+    }
+    
 	/* add characters from a serialized set to a normal one */ 
 	private static void _setAddSerialized(UnicodeSet set, USerializedSet sset) { 
 	 //  int start, end; 
