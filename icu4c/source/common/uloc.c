@@ -556,9 +556,7 @@ uloc_getLanguage(const char*    localeID,
 {
 	/* uloc_getLanguage will return a 2 character iso-639
 		code if one exists. *CWB*/
-	int16_t offset;
     int32_t i=0;
-	char lang[4];
     
     
     if (err==NULL || U_FAILURE(*err)) {
@@ -619,8 +617,6 @@ int32_t uloc_getCountry(const char* localeID,
             int32_t countryCapacity,
             UErrorCode* err) 
 {
-	char cnty[4];
-	int16_t offset;
     int32_t i=0;
 
     if(err==NULL || U_FAILURE(*err)) {
