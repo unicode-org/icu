@@ -41,6 +41,14 @@ static const UChar ACE_PREFIX[] ={ 0x0078,0x006E,0x002d,0x002d } ;
 #define LOWER_CASE_DELTA 0x0020
 #define FULL_STOP        0x002E
 
+inline static UChar 
+toASCIILower(UChar ch){
+    if(CAPITAL_A <= ch && ch <= CAPITAL_Z){
+        return ch + LOWER_CASE_DELTA;
+    }
+    return ch;
+}
+
 inline static UBool 
 startsWithPrefix(const UChar* src , int32_t srcLength){
     UBool startsWithPrefix = TRUE;
@@ -50,19 +58,11 @@ startsWithPrefix(const UChar* src , int32_t srcLength){
     }
 
     for(int8_t i=0; i< ACE_PREFIX_LENGTH; i++){
-        if(u_tolower(src[i]) != ACE_PREFIX[i]){
+        if(toASCIILower(src[i]) != ACE_PREFIX[i]){
             startsWithPrefix = FALSE;
         }
     }
     return startsWithPrefix;
-}
-
-inline static UChar 
-toASCIILower(UChar ch){
-    if(CAPITAL_A <= ch && ch <= CAPITAL_Z){
-        return ch + LOWER_CASE_DELTA;
-    }
-    return ch;
 }
 
 inline static void 
@@ -75,16 +75,33 @@ toASCIILower(UChar* src, int32_t srcLen){
 inline static int32_t
 compareCaseInsensitiveASCII(const UChar* s1, int32_t s1Len, 
                             const UChar* s2, int32_t s2Len){
-    if(s1Len != s2Len){
-        return (s1Len > s2Len) ? s1Len : s2Len;
+    
+    int32_t minLength;
+    int32_t lengthResult;
+
+    // are we comparing different lengths?
+    if(s1Len != s2Len) {
+        if(s1Len < s2Len) {
+            minLength = s1Len;
+            lengthResult = -1;
+        } else {
+            minLength = s2Len;
+            lengthResult = 1;
+        }
+    } else {
+        // ok the lengths are equal
+        minLength = s1Len;
+        lengthResult = 0;
     }
+
     UChar c1,c2;
     int32_t rc;
 
     for(int32_t i =0;/* no condition */;i++) {
+
         /* If we reach the ends of both strings then they match */
-        if(i == s1Len) {
-            return 0;
+        if(i == minLength) {
+            return lengthResult;
         }
         
         c1 = s1[i];
@@ -94,46 +111,14 @@ compareCaseInsensitiveASCII(const UChar* s1, int32_t s1Len,
         if(c1!=c2) {
             rc=(int32_t)toASCIILower(c1)-(int32_t)toASCIILower(c2);
             if(rc!=0) {
-                return rc;
+                lengthResult=rc;
+                break;
             }
         }
     }
-    
+    return lengthResult;
 }
 
-static inline 
-void syntaxError(const UChar* rules, 
-                 int32_t pos,
-                 int32_t rulesLen,
-                 UParseError* parseError) {
-
-    if(parseError == NULL){
-        return;
-    }
-    if(pos == rulesLen && rulesLen >0){
-        pos--;
-    }
-    parseError->offset = pos;
-    parseError->line = 0 ; // we are not using line numbers 
-    
-    // for pre-context
-    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
-    int32_t stop  = pos;
-    
-    u_memcpy(parseError->preContext,rules+start,stop-start);
-    //null terminate the buffer
-    parseError->preContext[stop-start] = 0;
-    
-    //for post-context
-    start = pos+1;
-    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
-                                                           rulesLen;
-
-    u_memcpy(parseError->postContext,rules+start,stop-start);
-    //null terminate the buffer
-    parseError->postContext[stop-start]= 0;
-    
-}
 
 U_CAPI int32_t U_EXPORT2
 uidna_toASCII(const UChar* src, int32_t srcLength, 
@@ -221,10 +206,13 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
 
             /* populate the parseError struct */
             if(srcIsLDH==FALSE){
-                syntaxError(b1,(failPos>0) ? (failPos-1) : failPos, b1Len,parseError);
+                // failPos is always set the index of failure
+                syntaxError(b1,failPos, b1Len,parseError);
             }else if(b1[0] == HYPHEN){
+                // fail position is 0 
                 syntaxError(b1,0,b1Len,parseError);
             }else{
+                // the last index in the source is always length-1
                 syntaxError(b1, (b1Len>0) ? b1Len-1 : b1Len, b1Len,parseError);
             }
 
@@ -244,7 +232,11 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
         if(!startsWithPrefix(b1,b1Len)){
 
             //step 6: encode the sequence with punycode
-            caseFlags = (UBool*) uprv_malloc(b1Len * sizeof(UBool));
+
+            // do not preserve the case flags for now!
+            // TODO: Preserve the case while implementing the RFE
+            // caseFlags = (UBool*) uprv_malloc(b1Len * sizeof(UBool));
+            // uprv_memset(caseFlags,TRUE,b1Len);
 
             b2Len = u_strToPunycode(b1,b1Len,b2,b2Capacity,caseFlags, status);
 
@@ -265,8 +257,9 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
             if(U_FAILURE(*status)){
                 goto CLEANUP;
             }
-			// convert all codepoints to lower case ASCII
-            toASCIILower(b2,b2Len);
+            // TODO : Reconsider while implementing the case preserve RFE
+            // convert all codepoints to lower case ASCII
+            // toASCIILower(b2,b2Len);
             reqLength = b2Len+ACE_PREFIX_LENGTH;
 
             if(reqLength > destCapacity){
@@ -280,6 +273,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
 
         }else{
             *status = U_IDNA_ACE_PREFIX_ERROR; 
+            //position of failure is 0
             syntaxError(b1,0,b1Len,parseError);
             goto CLEANUP;
         }
@@ -321,7 +315,7 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
 
     //get the options
     UBool allowUnassigned   = (UBool)((options & UIDNA_ALLOW_UNASSIGNED) != 0);
-    UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
+   // UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
     
     UChar b1Stack[MAX_LABEL_BUFFER_SIZE], b2Stack[MAX_LABEL_BUFFER_SIZE], b3Stack[MAX_LABEL_BUFFER_SIZE];
 
@@ -467,6 +461,9 @@ CLEANUP:
     return u_terminateUChars(dest, destCapacity, reqLength, status);
 }
 
+// returns the length of the label excluding the separator
+// if *limit == separator then the length returned does not include 
+// the separtor.
 static int32_t
 getNextSeparator(UChar *src,int32_t srcLength,StringPrep* prep,
                  UChar **limit,
@@ -495,10 +492,10 @@ getNextSeparator(UChar *src,int32_t srcLength,StringPrep* prep,
             }
         }
         // we have not found the delimiter
-        if(i==srcLength){
-            *limit = src+srcLength;
-            *done = TRUE;
-        }
+        // if(i==srcLength)
+        *limit = src+srcLength;
+        *done = TRUE;
+
         return i;
     }
 }
@@ -517,12 +514,6 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-
-    //get the options
-    UBool allowUnassigned   = (UBool)((options & UIDNA_ALLOW_UNASSIGNED) != 0);
-    UBool useSTD3ASCIIRules = (UBool)((options & UIDNA_USE_STD3_RULES) != 0);
-
-    UChar *start=NULL, *limit=NULL;
 
     int32_t reqLength = 0;
 
@@ -570,22 +561,20 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
             // should never occur
             remainingDestCapacity = 0;
         }
+        if(done == TRUE){
+            break;
+        }
 
         // add the label separator
-        if(done==FALSE){
-            if(remainingDestCapacity > 0){
-                *currentDest++ = FULL_STOP;
-                remainingDestCapacity--;
-            }
-            reqLength++;           
+        if(remainingDestCapacity > 0){
+            *currentDest++ = FULL_STOP;
+            remainingDestCapacity--;
         }
+        reqLength++;           
 
         labelStart = delimiter;
         if(remainingLen >0 ){
             remainingLen = srcLength - (delimiter - src);
-        }
-        if(done == TRUE){
-            break;
         }
 
     }
@@ -609,8 +598,6 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-
-    UChar *start=NULL, *limit=NULL;
 
     int32_t reqLength = 0;
 
@@ -659,21 +646,20 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
             remainingDestCapacity = 0;
         }
 
-        // add the label separator
-        if(done==FALSE){
-            if(remainingDestCapacity > 0){
-                *currentDest++ = FULL_STOP;
-                remainingDestCapacity--;
-            }
-            reqLength++;           
+        if(done == TRUE){
+            break;
         }
+
+        // add the label separator
+        if(remainingDestCapacity > 0){
+            *currentDest++ = FULL_STOP;
+            remainingDestCapacity--;
+        }
+        reqLength++;           
 
         labelStart = delimiter;
         if(remainingLen >0 ){
             remainingLen = srcLength - (delimiter - src);
-        }
-        if(done == TRUE){
-            break;
         }
 
     }
@@ -696,7 +682,7 @@ uidna_compare(  const UChar *s1, int32_t length1,
     UChar b1Stack[MAX_IDN_BUFFER_SIZE], b2Stack[MAX_IDN_BUFFER_SIZE];
     UChar *b1 = b1Stack, *b2 = b2Stack;
     int32_t b1Len, b2Len, b1Capacity = MAX_IDN_BUFFER_SIZE, b2Capacity = MAX_IDN_BUFFER_SIZE;
-    int32_t result;
+    int32_t result=-1;
     
     UParseError parseError;
 

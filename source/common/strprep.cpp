@@ -153,41 +153,6 @@ loadData(UErrorCode &errorCode) {
     return _isDataLoaded;
 }
 
-
-static inline 
-void syntaxError(const UChar* rules, 
-                 int32_t pos,
-                 int32_t rulesLen,
-                 UParseError* parseError) {
-
-    if(parseError == NULL){
-        return;
-    }
-    if(pos == rulesLen && rulesLen >0){
-        pos--;
-    }
-    parseError->offset = pos;
-    parseError->line = 0 ; // we are not using line numbers 
-    
-    // for pre-context
-    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
-    int32_t stop  = pos;
-    
-    u_memcpy(parseError->preContext,rules+start,stop-start);
-    //null terminate the buffer
-    parseError->preContext[stop-start] = 0;
-    
-    //for post-context
-    start = pos+1;
-    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
-                                                            rulesLen;
-
-    u_memcpy(parseError->postContext,rules+start,stop-start);
-    //null terminate the buffer
-    parseError->postContext[stop-start]= 0;
-    
-}
-
 // *****************************************************************************
 // class StringPrep
 // *****************************************************************************
@@ -231,7 +196,7 @@ StringPrep* StringPrep::createNameprepInstance(UErrorCode& status){
     return strprep;
 }
 
-UBool StringPrep::isNotProhibited(UChar32 ch){
+UBool StringPrep::isNotProhibited(UChar32 /*ch*/){
     return FALSE;
 }
 UBool StringPrep::isUnassigned(UChar32 ch){
@@ -307,7 +272,7 @@ int32_t StringPrep::map(const UChar* src, int32_t srcLength,
                     destIndex +=2;
                 }
             }else{
-                syntaxError(src, (srcIndex>0) ? (srcIndex-1) : 0, srcLength,parseError);
+                syntaxError(src,srcIndex-U16_LENGTH(ch), srcLength,parseError);
                 status = U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR;
                 return 0;
             }
@@ -412,7 +377,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
 
     UChar b1Stack[MAX_STACK_BUFFER_SIZE], b2Stack[MAX_STACK_BUFFER_SIZE];
     UChar *b1 = b1Stack, *b2 = b2Stack;
-    int32_t b1Len, b2Len,
+    int32_t b1Len, b2Len=0,
             b1Capacity = MAX_STACK_BUFFER_SIZE , 
             b2Capacity = MAX_STACK_BUFFER_SIZE;
     uint32_t result;
@@ -477,7 +442,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
         if(flag == UIDNA_PROHIBITED 
             && isNotProhibited(ch) == FALSE){
             status = U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR;
-            syntaxError(b1, (b2Index>0) ? (b2Index-1) : b2Index, b2Len, parseError);
+            syntaxError(b1, b2Index-U16_LENGTH(ch), b2Len, parseError);
             goto CLEANUP;
         }
 
@@ -503,9 +468,12 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
     }
 
     //satisfy 3
-    if(rightToLeft == TRUE && firstCharDir != direction  ){
+    if( rightToLeft == TRUE && 
+        !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_RIGHT_TO_LEFT_ARABIC) &&
+          (direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC))
+       ){
         status = U_IDNA_CHECK_BIDI_ERROR;
-        syntaxError(b2, (b2Index>0) ? (b2Index-1) : b2Index,b2Len,parseError);
+        syntaxError(b2, rtlPos, b2Len, parseError);
         return FALSE;
     }
 
