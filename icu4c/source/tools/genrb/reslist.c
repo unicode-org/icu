@@ -51,7 +51,9 @@ static uint8_t calcPadding(uint32_t size) {
 void setIncludeCopyright(UBool val){
     gIncludeCopyright=val;
 }
-
+UBool getIncludeCopyright(void){
+    return gIncludeCopyright;
+}
 /* Writing Functions */
 static uint32_t string_write(UNewDataMemory *mem, struct SResource *res,
                              uint32_t usedOffset, UErrorCode *status) {

@@ -39,8 +39,8 @@ static const char* copyRight =   "/* \n"
                                  " *\n"
                                  " *******************************************************************************\n"
                                  " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-                                 " * $Date: 2002/03/22 03:15:27 $ \n"
-                                 " * $Revision: 1.5 $ \n"
+                                 " * $Date: 2002/03/22 18:57:09 $ \n"
+                                 " * $Revision: 1.6 $ \n"
                                  " *******************************************************************************\n"
                                  " */\n\n"
                                  "/*******************************************************************************\n"
@@ -775,8 +775,9 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         *status = U_FILE_ACCESS_ERROR;
         return;
     }
-
-    T_FileStream_write(out,copyRight,uprv_strlen(copyRight));
+    if(getIncludeCopyright()){
+        T_FileStream_write(out,copyRight,uprv_strlen(copyRight));
+    }
     T_FileStream_write(out,javaClass,uprv_strlen(javaClass));
     T_FileStream_write(out,className,uprv_strlen(className));
     if(j1){
