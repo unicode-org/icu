@@ -203,7 +203,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 	rules.extract(0, length, pucharrules);
   pucharrules[length] = 0;
 
-  UNormalizationMode mode = getUNormalizationMode(decompositionMode);
+  UNormalizationMode mode = Normalizer::getUNormalizationMode(
+                                                   decompositionMode, status);
   ucollator = ucol_openRules(pucharrules, length, mode, 
                              UCOL_DEFAULT_STRENGTH, &status);
 
@@ -238,7 +239,8 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
   pucharrules[length] = 0;
 
   UCollationStrength strength = getUCollationStrength(collationStrength);
-  UNormalizationMode mode = getUNormalizationMode(decompositionMode);
+  UNormalizationMode mode = Normalizer::getUNormalizationMode(
+                                                   decompositionMode, status);
   ucollator = ucol_openRules(pucharrules, length, mode, strength, &status);
   if (U_SUCCESS(status))
   {
@@ -617,7 +619,9 @@ int32_t RuleBasedCollator::hashCode() const
 */
 void RuleBasedCollator::setDecomposition(Normalizer::EMode  mode)
 {
-  ucol_setNormalization(ucollator, getUNormalizationMode(mode));
+  UErrorCode status = U_ZERO_ERROR;
+  ucol_setNormalization(ucollator, Normalizer::getUNormalizationMode(mode,
+                                                                     status));
 }
 
 /**
@@ -627,7 +631,9 @@ void RuleBasedCollator::setDecomposition(Normalizer::EMode  mode)
 */
 Normalizer::EMode RuleBasedCollator::getDecomposition(void) const
 {
-  return getNormalizerEMode(ucol_getNormalization(ucollator));
+  UErrorCode status = U_ZERO_ERROR;
+  return Normalizer::getNormalizerEMode(ucol_getNormalization(ucollator), 
+                                                              status);
 }
 
 // RuleBaseCollatorNew private constructor ----------------------------------
