@@ -18,6 +18,12 @@
 #include "strtest.h"
 #include "unicode/ustring.h"
 
+#if defined(WIN32) && defined(_MSC_VER)
+#include <vector>
+using namespace std;
+#endif
+
+
 void StringTest::TestEndian(void) {
     union {
         uint8_t byte;
@@ -151,6 +157,16 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
                 errln("Test_UTF8_COUNT_TRAIL_BYTES: UTF8_COUNT_TRAIL_BYTES does not work right! "
                       "See utf8.h.");
             }
+        }
+        break;
+    case 8:
+        name="TestSTLCompatibility";
+        if(exec) {
+#if defined(WIN32) && defined(_MSC_VER)
+            /* Just make sure that it compiles with STL's placement new usage. */
+            vector<UnicodeString> myvect;
+            myvect.push_back(UnicodeString("blah"));
+#endif
         }
         break;
     default:
