@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/StringTokenizer.java,v $ 
-* $Date: 2002/10/28 21:59:22 $ 
-* $Revision: 1.1 $
+* $Date: 2002/12/03 22:04:17 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -95,8 +95,7 @@ import com.ibm.icu.text.UTF16;
  * </pre></blockquote>
  * </p>
  * @author syn wee
- * @since oct 26 2002
- * @draft 2.4
+ * @draft ICU 2.4
  */
 public final class StringTokenizer implements Enumeration 
 {
@@ -115,6 +114,7 @@ public final class StringTokenizer implements Enumeration
      * @param returndelims flag indicating whether to return the delimiters 
      *        as tokens.
      * @exception throws a NullPointerException if str is null
+     * @draft ICU 2.4
      */
     public StringTokenizer(String str, UnicodeSet delim, boolean returndelims)
     {
@@ -149,6 +149,7 @@ public final class StringTokenizer implements Enumeration
      * @param str a string to be parsed.
      * @param delim the delimiters.
      * @exception throws a NullPointerException if str is null
+     * @draft ICU 2.4
      */
     public StringTokenizer(String str, UnicodeSet delim)
     {
@@ -168,6 +169,7 @@ public final class StringTokenizer implements Enumeration
      * @param returndelims flag indicating whether to return the delimiters 
      *        as tokens.
      * @exception throws a NullPointerException if str is null
+     * @draft ICU 2.4
      */
     public StringTokenizer(String str, String delim, boolean returndelims)
     {
@@ -202,6 +204,7 @@ public final class StringTokenizer implements Enumeration
      * @param str a string to be parsed.
      * @param delim the delimiters.
      * @exception throws a NullPointerException if str is null
+     * @draft ICU 2.4
      */
     public StringTokenizer(String str, String delim)
     {
@@ -218,6 +221,7 @@ public final class StringTokenizer implements Enumeration
      * <p>Delimiter characters themselves will not be treated as tokens.</p>
      * @param str a string to be parsed
      * @exception throws a NullPointerException if str is null
+     * @draft ICU 2.4
      */
     public StringTokenizer(String str) 
     {
@@ -234,6 +238,7 @@ public final class StringTokenizer implements Enumeration
      * @return <code>true</code> if and only if there is at least one token 
      *         in the string after the current position; <code>false</code> 
      *         otherwise.
+     * @draft ICU 2.4
      */
     public boolean hasMoreTokens() 
     {
@@ -245,6 +250,7 @@ public final class StringTokenizer implements Enumeration
      * @return the next token from this string tokenizer.
      * @exception NoSuchElementException if there are no more tokens in 
      *            this tokenizer's string.
+     * @draft ICU 2.4
      */
     public String nextToken() 
     {
@@ -316,6 +322,7 @@ public final class StringTokenizer implements Enumeration
      * @return the next token, after switching to the new delimiter set.
      * @exception NoSuchElementException if there are no more tokens in 
      *            this tokenizer's string.
+     * @draft ICU 2.4
      */
     public String nextToken(String delim) 
     {
@@ -339,6 +346,7 @@ public final class StringTokenizer implements Enumeration
      * @return the next token, after switching to the new delimiter set.
      * @exception NoSuchElementException if there are no more tokens in 
      *            this tokenizer's string.
+     * @draft ICU 2.4
      */
     public String nextToken(UnicodeSet delim) 
     {
@@ -358,6 +366,7 @@ public final class StringTokenizer implements Enumeration
      * @return <code>true</code> if there are more tokens;
      *         <code>false</code> otherwise.
      * @see #hasMoreTokens()
+     * @draft ICU 2.4
      */
     public boolean hasMoreElements() 
     {
@@ -373,6 +382,7 @@ public final class StringTokenizer implements Enumeration
      * @exception NoSuchElementException if there are no more tokens in 
      *            this tokenizer's string.
      * @see #nextToken()
+     * @draft ICU 2.4
      */
     public Object nextElement() 
     {
@@ -386,6 +396,7 @@ public final class StringTokenizer implements Enumeration
      * @return the number of tokens remaining in the string using the 
      *         current delimiter set.
      * @see #nextToken()
+     * @draft ICU 2.4
      */
     public int countTokens() 
     {
