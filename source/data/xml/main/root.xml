@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
-<ldml>
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml draft="true">
 	<identity>
-		<version number="1.1"/>
+		<version number="5.0"/>
 		<generation date="2004-05-27" />
 		<language type="" /> 
 	</identity>
@@ -808,6 +813,11 @@
 	</layout>
 	<characters>
 		<exemplarCharacters>[]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Zyyy</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<measurement>
 		<measurementSystem type="metric"/>
@@ -1662,4 +1672,20 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+=#,##0.######=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="ordinal">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
+=#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
