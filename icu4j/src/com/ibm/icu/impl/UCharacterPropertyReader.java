@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/10/09 23:53:24 $ 
-* $Revision: 1.8 $
+* $Date: 2003/02/11 01:17:52 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -24,9 +24,6 @@ import com.ibm.icu.util.VersionInfo;
 * ICU data file and split its contents up into blocks of data for use in
 * <a href=UCharacterProperty.html>com.ibm.icu.impl.UCharacterProperty</a>.
 * </p> 
-* <p>For more information about the format of uprops.icu refer to
-* <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/lang/readme.html>
-* ReadMe</a>.<\p>
 * <p>uprops.icu which is in big-endian format is jared together with this 
 * package.</p>
 * @author Syn Wee Quek

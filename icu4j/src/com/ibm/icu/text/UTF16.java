@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/12/11 02:09:05 $ 
-* $Revision: 1.28 $
+* $Date: 2003/02/11 01:19:01 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -174,7 +174,7 @@ public final class UTF16
      * Used when iterating forwards or backwards (with 
      * <code>UTF16.getCharCount()</code>, as well as random access. If a 
      * validity check is required, use 
-     * <code><a href="../UCharacter.html#isLegal(char)">
+     * <code><a href="../lang/UCharacter.html#isLegal(char)">
      * UCharacter.isLegal()</a></code> on the return value.
      * If the char retrieved is part of a surrogate pair, its supplementary 
      * character will be returned. If a complete supplementary character is 
@@ -236,7 +236,7 @@ public final class UTF16
      * Used when iterating forwards or backwards (with
      * <code>UTF16.getCharCount()</code>, as well as random access. If a 
      * validity check is required, use 
-     * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+     * <code><a href="../lang/UCharacter.html#isLegal(char)">UCharacter.isLegal()
      * </a></code> on the return value.
      * If the char retrieved is part of a surrogate pair, its supplementary
      * character will be returned. If a complete supplementary character is 
@@ -295,7 +295,7 @@ public final class UTF16
      * Used when iterating forwards or backwards (with
      * <code>UTF16.getCharCount()</code>, as well as random access. If a
      * validity check is required, use 
-     * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+     * <code><a href="../lang/UCharacter.html#isLegal(char)">UCharacter.isLegal()
      * </a></code> on the return value.
      * If the char retrieved is part of a surrogate pair, its supplementary
      * character will be returned. If a complete supplementary character is 
@@ -354,7 +354,7 @@ public final class UTF16
      * Used when iterating forwards or backwards (with
      * <code>UTF16.getCharCount()</code>, as well as random access. If a 
      * validity check is required, use 
-     * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+     * <code><a href="../lang/UCharacter.html#isLegal(char)">UCharacter.isLegal()
      * </a></code> on the return value.
      * If the char retrieved is part of a surrogate pair, its supplementary
      * character will be returned. If a complete supplementary character is 
@@ -411,7 +411,7 @@ public final class UTF16
     /**
      * Determines how many chars this char32 requires.
      * If a validity check is required, use <code>
-     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
+     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on 
      * char32 before calling.
      * @param ch the input codepoint.
      * @return 2 if is in supplementary space, otherwise 1. 
@@ -602,7 +602,7 @@ public final class UTF16
     /**
      * Returns the lead surrogate.
      * If a validity check is required, use 
-     * <code><a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> 
+     * <code><a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> 
      * on char32 before calling.
      * @param char32 the input character.
      * @return lead surrogate if the getCharCount(ch) is 2; <br>
@@ -622,7 +622,7 @@ public final class UTF16
     /**
      * Returns the trail surrogate.
      * If a validity check is required, use 
-     * <code><a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> 
+     * <code><a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> 
      * on char32 before calling.
      * @param char32 the input character.
      * @return the trail surrogate if the getCharCount(ch) is 2; <br>otherwise 
@@ -643,7 +643,7 @@ public final class UTF16
      * Convenience method corresponding to String.valueOf(char). Returns a one 
      * or two char string containing the UTF-32 value in UTF16 format. If a 
      * validity check is required, use 
-     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
+     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on 
      * char32 before calling.
      * @param char32 the input character.
      * @return string value of char32 in UTF16 format
@@ -666,7 +666,7 @@ public final class UTF16
      * format. If offset16 indexes a surrogate character, the whole 
      * supplementary codepoint will be returned.
      * If a validity check is required, use 
-     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
+     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
      * codepoint at offset16 before calling.
      * The result returned will be a newly created String obtained by calling 
      * source.substring(..) with the appropriate indexes.
@@ -693,7 +693,7 @@ public final class UTF16
      * format. If offset16 indexes a surrogate character, the whole 
      * supplementary codepoint will be returned.
      * If a validity check is required, use 
-     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
+     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
      * codepoint at offset16 before calling.
      * The result returned will be a newly created String obtained by calling 
      * source.substring(..) with the appropriate indexes.
@@ -722,7 +722,7 @@ public final class UTF16
      * subarray. In the latter case, only the surrogate character within 
      * bounds will be returned.
      * If a validity check is required, use 
-     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
+     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
      * codepoint at offset16 before calling.
      * The result returned will be a newly created String containing the 
      * relevant characters.
@@ -1037,7 +1037,7 @@ public final class UTF16
     /**
      * Append a single UTF-32 value to the end of a StringBuffer.
      * If a validity check is required, use 
-     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
+     * <a href="../lang/UCharacter.html#isLegal(char)">isLegal()</a></code> on 
      * char32 before calling.
      * @param char32 value to append.
      * @return the updated StringBuffer

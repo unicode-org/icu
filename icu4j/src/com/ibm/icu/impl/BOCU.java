@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
-* $Date: 2002/10/31 22:35:20 $ 
-* $Revision: 1.3 $
+* $Date: 2003/02/11 01:17:52 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -19,7 +19,7 @@ import com.ibm.icu.text.UCharacterIterator;
  * <p>Binary Ordered Compression for Unicode</p>
  * 
  * <p>Users are strongly encouraged to read the ICU paper on 
- * <a href=http://oss.software.ibm.com/docs/papers/binary_ordered_compression_for_unicode.html>
+ * <a href=http://oss.software.ibm.com/icu/docs/papers/binary_ordered_compression_for_unicode.html>
  * BOCU</a> before attempting to use this class.</p>
  * 
  * <p>BOCU is used to compress unicode text into a stream of unsigned
