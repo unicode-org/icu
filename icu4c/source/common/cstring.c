@@ -25,6 +25,7 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uassert.h"
 
 /*
  * We hardcode case conversion for invariant characters to match our expectation
@@ -133,7 +134,7 @@ T_CString_toUpperCase(char* str)
  * Takes a int32_t and fills in  a char* string with that number "radix"-based.
  * Does not handle negative values (makes an empty string for them).
  * Writes at most 11 chars ("2147483647" plus NUL).
- * Returns the length of the string.
+ * Returns the length of the string (not including the NUL).
  */
 U_CAPI int32_t U_EXPORT2
 T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
@@ -170,6 +171,42 @@ T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
   }
 
   return length;
+}
+
+
+/*
+ * Takes a int64_t and fills in  a char* string with that number "radix"-based.
+ * Writes at most TODO: chars ("??????" plus NUL).
+ * Returns the length of the string, not including the terminating NULL.
+ */
+U_CAPI int32_t U_EXPORT2
+T_CString_int64ToString(char* buffer, int64_t v, uint32_t radix)
+{
+    char      tbuf[30];
+    int32_t   tbx    = sizeof(tbuf);
+    uint8_t   digit;
+    int32_t   length = 0;
+    uint64_t  uval;
+    
+    U_ASSERT(radix>=2 && radix<=16);
+    uval = (uint64_t) v;
+    if(v<0) {
+        uval = (uint64_t)(-v); 
+        buffer[length++] = '-';
+    }
+    
+    tbx = sizeof(tbuf)-1;
+    tbuf[tbx] = 0;   /* We are generating the digits backwards.  Null term the end. */
+    do {
+        digit = (uint8_t)(uval % radix);
+        tbuf[--tbx] = (char)(T_CString_itosOffset(digit));
+        uval  = uval / radix;
+    } while (uval != 0);
+    
+    /* copy converted number into user buffer  */
+    uprv_strcpy(buffer+length, tbuf+tbx);
+    length += sizeof(tbuf) - tbx -1;
+    return length;
 }
 
 

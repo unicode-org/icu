@@ -29,6 +29,7 @@
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/caniter.h"
+#include "unicode/utrace.h"
 
 #include "ucol_bld.h"
 #include "ucol_imp.h"
@@ -341,19 +342,18 @@ U_CAPI UCollator*
 ucol_open(const char *loc,
 		  UErrorCode *status)
 {
+  UTRACE_ENTRY(UTRACE_UCOL_OPEN);
+  UTRACE_DATA1(UTRACE_INFO, "locale = \"%s\"", loc);
   UCollator *result = NULL;
-  if (status==NULL || U_FAILURE(*status)) {
-      return result;
-  }
+
   u_init(status);
-  if (U_FAILURE(*status)) {
-      return result;
-  }
   result = Collator::createUCollator(loc, status);
-  if (result) {
-	  return result;
-  }	
-  return ucol_open_internal(loc, status);
+  if (result == NULL) {
+    result = ucol_open_internal(loc, status);
+  }
+  UTRACE_DATA1(UTRACE_INFO, "Returning %p", result);
+  UTRACE_EXIT(*status);
+  return result;
 }
 
 // API in ucol_imp.h
