@@ -114,7 +114,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 }
                 
                 protected Set getSupportedIDs() {
-                    return ICUResourceBundle.getAvailableLocaleNameSet();
+                    return ICUResourceBundle.getAvailableLocaleNameSet(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
                 }
             }
 

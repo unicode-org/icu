@@ -776,7 +776,7 @@ public class RoundTripTest extends TestFmwk {
         }
     }
 
-    static BreakIterator thaiBreak = BreakIterator.getWordInstance(new Locale("th", "TH"));
+    //static BreakIterator thaiBreak = BreakIterator.getWordInstance(new Locale("th", "TH"));
     // anything is legal except word ending with Logical-order-exception
     public static class LegalThai extends Legal {
         public boolean is(String sourceString) {

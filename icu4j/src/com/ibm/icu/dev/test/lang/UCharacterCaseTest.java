@@ -290,18 +290,33 @@ public final class UCharacterCaseTest extends TestFmwk
 
     public void TestTitle()
     {
-        for (int i = 0; i < TITLE_BREAKITERATORS_.length; i ++) {
-            String test = TITLE_DATA_[i << 1];
-            String expected = TITLE_DATA_[(i << 1) + 1];
-            if (!expected.equals(
-                UCharacter.toTitleCase(test,
-                                       TITLE_BREAKITERATORS_[i]))) {
-                errln("error: titlecasing for " + hex(test) + " should be " +
-                      hex(expected) + " but got " +
-                      hex(UCharacter.toTitleCase(test,
-                                                 TITLE_BREAKITERATORS_[i])));
+         try{ 
+              BreakIterator TITLE_BREAKITERATORS_[] =
+              {
+                BreakIterator.getCharacterInstance(),
+                BreakIterator.getWordInstance(),
+                BreakIterator.getTitleInstance(),
+                BreakIterator.getCharacterInstance(),
+                null,
+                null
+              };
+            for (int i = 0; i < TITLE_BREAKITERATORS_.length; i ++) {
+                String test = TITLE_DATA_[i << 1];
+                String expected = TITLE_DATA_[(i << 1) + 1];
+                if (!expected.equals(
+                    UCharacter.toTitleCase(test,
+                                           TITLE_BREAKITERATORS_[i]))) {
+                    errln("error: titlecasing for " + hex(test) + " should be " +
+                          hex(expected) + " but got " +
+                          hex(UCharacter.toTitleCase(test,
+                                                     TITLE_BREAKITERATORS_[i])));
+                }
             }
-        }
+         }catch(Exception ex){
+            warnln("Could not find data for BreakIterators");
+         }catch(InternalError e){
+            warnln("Could not find data for BreakIterators");
+         }
     }
 
     public void TestSpecial()
@@ -611,13 +626,6 @@ public final class UCharacterCaseTest extends TestFmwk
     private static final Locale ENGLISH_LOCALE_ = new Locale("en", "US");
     private static final Locale LITHUANIAN_LOCALE_ = new Locale("lt", "LT");
 
-    private static final BreakIterator BREAKITERATOR_CHARACTER_ =
-                                 BreakIterator.getCharacterInstance();
-    private static final BreakIterator BREAKITERATOR_WORD_ =
-                                 BreakIterator.getWordInstance();
-    private static final BreakIterator BREAKITERATOR_TITLE_ =
-                                 BreakIterator.getTitleInstance();
-
     private static final int CHARACTER_UPPER_[] =
                       {0x41, 0x0042, 0x0043, 0x0044, 0x0045, 0x0046, 0x0047,
                        0x00b1, 0x00b2, 0xb3, 0x0048, 0x0049, 0x004a, 0x002e,
@@ -713,15 +721,6 @@ public final class UCharacterCaseTest extends TestFmwk
 
 	};
 
-    private static final BreakIterator TITLE_BREAKITERATORS_[] =
-    {
-    	BREAKITERATOR_CHARACTER_,
-    	BREAKITERATOR_WORD_,
-    	BREAKITERATOR_TITLE_,
-    	BREAKITERATOR_CHARACTER_,
-    	null,
-    	null
-    };
 
     /**
      * <p>basic string, lower string, upper string, title string</p>
