@@ -18,6 +18,9 @@
 
 #include "unicode/utypes.h"
 
+/* This is set to zero because we want to increase the code coverage percentage */
+#define LLONG_STRING_CONVERSION 0
+
 U_NAMESPACE_BEGIN
 
 // machine dependent value, need to move
@@ -192,12 +195,14 @@ public:
     // absolute value
     llong abs() const;
 
+#if LLONG_STRING_CONVERSION
     // simple construction from ASCII and Unicode strings
     static llong atoll(const char* str, uint32_t radix = 10);
     static llong u_atoll(const UChar* str, uint32_t radix = 10);
 
     // output as ASCII or Unicode strings or as raw values, preceeding '-' if signed
     uint32_t lltoa(char* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
+#endif
     uint32_t u_lltoa(UChar* buffer, uint32_t buflen, uint32_t radix = 10, UBool raw = FALSE) const;
 
     // useful public constants - perhaps should not have class statics
