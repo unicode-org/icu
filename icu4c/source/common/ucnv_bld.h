@@ -94,28 +94,6 @@ typedef struct UConverterSharedData UConverterSharedData;
 /* Defines a UConverter, the lightweight mutable part the user sees */
 
 struct UConverter {
-    uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
-    uint8_t toUBytes[7];                /* more "toU status"; keeps the bytes of the current character */
-    int8_t toULength;                   /* number of bytes in toUBytes */
-    uint32_t fromUnicodeStatus;
-    UChar    fromUSurrogateLead;        /* similar to toUBytes; keeps the lead surrogate of the current character */
-    int32_t mode;
-    UBool  useFallback;
-
-    int8_t subCharLen;                  /* length of the codepage specific character sequence */
-    int8_t invalidCharLength;
-    int8_t invalidUCharLength;
-    int8_t charErrorBufferLength;       /* number of valid bytes in charErrorBuffer */
-    int8_t UCharErrorBufferLength;      /* number of valid UChars in charErrorBuffer */
-
-    uint8_t subChar1;                                   /* single-byte substitution character if different from subChar */
-    uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
-    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];       /* bytes from last error/callback situation */
-    uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
-
-    UChar invalidUCharBuffer[3];                        /* UChars from last error/callback situation */
-    UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];   /* unicode output from Error functions */
-
     /*
      * Error function pointer called when conversion issues
      * occur during a ucnv_fromUnicode call
@@ -138,17 +116,42 @@ struct UConverter {
                                     UConverterCallbackReason reason,
                                     UErrorCode *);
 
-    const void *fromUContext;
-    const void *toUContext;
-    UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation - Don't free cnv memory on ucnv_close.  */
-    UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
-    UBool sharedDataIsCached;  /* TRUE:  shared data is in cache, don't destroy on ucnv_close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
-
     /*
      * currently only used to point to a struct containing UConverter used by iso 2022;
      * could be used by clients writing their own call back function to pass context to them
      */
     void *extraInfo;
+
+    const void *fromUContext;
+    const void *toUContext;
+
+    UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
+    UBool sharedDataIsCached;  /* TRUE:  shared data is in cache, don't destroy on ucnv_close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
+    UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation - Don't free cnv memory on ucnv_close.  */
+
+    UBool  useFallback;
+    int8_t toULength;                   /* number of bytes in toUBytes */
+    uint8_t toUBytes[7];                /* more "toU status"; keeps the bytes of the current character */
+    uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
+    int32_t mode;
+    uint32_t fromUnicodeStatus;
+    UChar    fromUSurrogateLead;        /* similar to toUBytes; keeps the lead surrogate of the current character */
+
+    int8_t subCharLen;                  /* length of the codepage specific character sequence */
+    int8_t invalidCharLength;
+    int8_t charErrorBufferLength;       /* number of valid bytes in charErrorBuffer */
+
+    int8_t invalidUCharLength;
+    int8_t UCharErrorBufferLength;      /* number of valid UChars in charErrorBuffer */
+
+    uint8_t subChar1;                                   /* single-byte substitution character if different from subChar */
+    uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
+    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];       /* bytes from last error/callback situation */
+    uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
+
+    UChar invalidUCharBuffer[3];                        /* UChars from last error/callback situation */
+    UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];   /* unicode output from Error functions */
+
 };
 
 U_CDECL_END /* end of UConverter */
