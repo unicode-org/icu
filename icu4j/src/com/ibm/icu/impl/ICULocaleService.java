@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/12/12 18:02:09 $
- * $Revision: 1.12 $
+ * $Date: 2003/04/19 00:01:52 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -61,7 +61,7 @@ public class ICULocaleService extends ICUService {
 
     /**
      * Convenience override for callers using locales. This calls
-     * get(Locale, String, Locale[]) with a null kind.
+     * get(Locale, int, Locale[]) with KIND_ANY.
      */
     public Object get(Locale locale, Locale[] actualReturn) {
         return get(locale, LocaleKey.KIND_ANY, actualReturn);
@@ -373,7 +373,7 @@ public class ICULocaleService extends ICUService {
         public Object create(Key key, ICUService service) {
             if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
-                Locale loc = lkey.canonicalLocale();
+                Locale loc = lkey.currentLocale();
                 int kind = lkey.kind();
 
                 return handleCreate(loc, kind, service);
