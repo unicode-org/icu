@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2002-2004, International Business Machines Corporation
+# Copyright (C) 2002-2004, International Business Machines Corporation 
 # and others. All Rights Reserved.
 #
 # file:  word.txt
@@ -84,7 +84,7 @@ $ExtendNumLetEx = $ExtendNumLet $Extend*;
 # see character breaks
 
 $CR $LF;
-[^$Control] $Extend*;
+[^$Control] $Extend+;
 $NumericEx $Extend* {100};
 $ALetterEx $Extend* {200};
 
