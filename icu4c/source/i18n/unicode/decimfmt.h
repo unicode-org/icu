@@ -1605,6 +1605,13 @@ public:
     virtual void setCurrency(const UChar* theCurrency, UErrorCode& ec);
 
     /**
+     * Sets the currency used to display currency amounts.  See
+     * setCurrency(const UChar*, UErrorCode&).
+     * @deprecated ICU 3.0. Use setCurrency(const UChar*, UErrorCode&).
+     */
+    virtual void setCurrency(const UChar* theCurrency);
+
+    /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
      * @stable ICU 2.0
