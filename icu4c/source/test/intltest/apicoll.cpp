@@ -1216,8 +1216,7 @@ void CollationAPITest::TestMaxExpansion()
         if (order == 0)
             order = iter->previous(status);
 
-        while (U_SUCCESS(status) &&
-            ((uint32_t)iter->previous(status) != UCOL_NULLORDER)) {
+        while (U_SUCCESS(status) && iter->previous(status) != UCOL_NULLORDER) {
             count ++;
         }
 
