@@ -25,7 +25,7 @@
  * you can go to the <a href="classes.html"> Alphabetical List</a>, then click on
  * "BreakIterator". Once you are at the class, you will find an inheritance
  * chart, a list of the public members, a detailed description of the class,
- * then detailed member descriptions.<p>
+ * then detailed member descriptions.</p>
  * 
  * <h3>C Programmers:</h3>
  * <p>Use <a href="#Module">Module List</a> or <a href="globals.html"> File Members</a>
@@ -36,7 +36,7 @@
  * Typedefs, Enumerations, and Functions, with detailed descriptions below.
  * If you want to find a specific function, such as ubrk_next(), then click
  * first on <a href="globals.html"> File Members</a>, then use your browser
- * Find dialog to search for "ubrk_next()".<p>
+ * Find dialog to search for "ubrk_next()".</p>
  *
  *
  * <h3>API References for Previous Releases</h3>
@@ -47,7 +47,7 @@
  *
  * <hr>
  *
- * <h2> Architecture  (User's Guide)</h2>
+ * <h2>Architecture (User's Guide)</h2>
  * <ul>
  *   <li><a href="http://oss.software.ibm.com/icu/userguide/index.html">Introduction</a></li>
  *   <li><a href="http://oss.software.ibm.com/icu/userguide/i18n.html">Internationalization</a></li>
@@ -59,7 +59,7 @@
  *
  * <hr>
  *
- * <h2><a name="Module">Module List</h2>
+ * <h2><a name="Module">Module List</a></h2>
  * <table border="1" cols="3" align="center">
  *   <tr>
  *     <td><strong>Module Name</strong></td>

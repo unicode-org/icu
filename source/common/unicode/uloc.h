@@ -55,7 +55,7 @@
  * codes as defined by ISO-639.
  * You can find a full list of these codes at a number of sites, such as:
  * <BR><a href ="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">
- * <code>http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</code></a>
+ * http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</a>
  *
  * <P>
  * The second option includes an additonal <STRONG>ISO Country
@@ -63,7 +63,7 @@
  * as defined by ISO-3166.
  * You can find a full list of these codes at a number of sites, such as:
  * <BR><a href="http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html">
- * <code>http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</code></a>
+ * http://www.chemie.fu-berlin.de/diverse/doc/ISO_3166.html</a>
  *
  * <P>
  * The third option requires another additonal information--the 
@@ -85,7 +85,7 @@
  * <BR><STRONG>Note:</STRONG> When you ask for a resource for a particular
  * locale, you get back the best available match, not necessarily
  * precisely what you asked for. For more information, look at
- * <a href="ures.html"><code>UResourceBundle</code></a>.
+ * <code>UResourceBundle</code>.
  *
  * <P>
  * The <code>Locale</code> provides a number of convenient constants
@@ -192,6 +192,8 @@
  * is coming from an external source (user entry, OS, web browser)
  * and pass the resulting string to other ICU functions.  For example,
  * don't use de-de@EURO as an argument to resourcebundle.
+ *
+ * @see UResourceBundle
  */
 
 /** Useful constant for this language. @stable ICU 2.0 */

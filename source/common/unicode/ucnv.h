@@ -388,7 +388,7 @@ ucnv_openCCSID(int32_t codepage,
  * 'master' converter.</p>
  * 
  * <p>Example Use:
- *      <code>cnv = ucnv_openPackage("myapp", "myconverter", &err);</conv>
+ *      <code>cnv = ucnv_openPackage("myapp", "myconverter", &err);</code>
  * </p>
  *
  * @param packageName name of the package (equivalent to 'path' in udata_open() call)
