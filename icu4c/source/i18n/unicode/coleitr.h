@@ -27,22 +27,9 @@
 #ifndef COLEITR_H
 #define COLEITR_H
 
-// #include "unicode/unistr.h"
 #include "unicode/tblcoll.h"
 #include "unicode/ucoleitr.h"
 
-// #include "tables.h"
-// #include "unicode/chariter.h"
-
-// have to do this because the include path in the main project does not have 
-// tables.h.
-// class VectorOfInt;
-// class Normalizer;
-// class VectorOfPToContractElement;
-// class RuleBasedCollator;
-
-// typedef void * UCollationElements;
-// struct UCollationElements;
 typedef struct UCollationElements UCollationElements;
 
 /**
@@ -294,40 +281,7 @@ protected:
 
 private:
 
-  // friend  class   RuleBasedCollator;
-
   // CollationElementIterator private data members ----------------------------
-
-  // static const int32_t UNMAPPEDCHARVALUE;
-
-  /* 
-  Normalizer* text;       // owning 
-
-  VectorOfInt* bufferAlias; // not owned
-  */
-
-  /**
-  * ownBuffer wants to be a subobject, not a pointer, but that means exposing 
-  * the internal class VectorOfInt by #including the internal header 
-  * "tables.h" -- not allowed! ownBuffer is a fixed-size 2-element vector that 
-  * is used to handle Thai collation; bufferAlias points to ownBuffer in some 
-  * situations. [j159 - aliu]
-  */
-  // VectorOfInt* ownBuffer;
-
-  /**
-  * reorderBuffer is created on demand, so it doesn't want to be a subobject -- 
-  * pointer is fine. It is created and bufferAlias is set to it under certain 
-  * conditions. Once created, it is reused for the life of this object. Because 
-  * of the implementation of VectorOfInt, it grows monotonically. [j159 - aliu]
-  */
-  /*
-  VectorOfInt* reorderBuffer;
-
-  int32_t expIndex;
-  UnicodeString key;
-  const RuleBasedCollator* orderAlias;
-  */
 
   /**
   * Data wrapper for collation elements
@@ -338,50 +292,6 @@ private:
   * Indicates if m_data_ belongs to this object.
   */
   UBool isDataOwned_;
-  
-  // CollationElementIterator private constructor/destructor ------------------
-
-  /**
-  * Default constructor.
-  */
-  /* CollationElementIterator(); */
-  
-  /**
-  * Constructor.
-  * @param order RuleBasedCollator object
-  */
-  CollationElementIterator(const RuleBasedCollator* order);
-
-  // CollationElementIterator private methods ---------------------------------
-
-  /**
-  * Gets the ordering priority of the next contracting character in the string.
-  * @param ch the starting character of a contracting character token
-  * @param status the error code status.
-  * @return the next contracting character's ordering. Returns NULLORDER if the 
-  *         end of string is reached.
-  */
-  // int32_t nextContractChar(UChar32 ch, UErrorCode&  status);
-
-  /**
-  * Gets the ordering priority of the previous contracting character in the
-  * string.
-  * @param ch the starting character of a contracting character token
-  * @param status the error code status.
-  * @return the previous contracting character's ordering. Returns NULLORDER if 
-  *         the start of string is reached.
-  */
-  // int32_t prevContractChar(UChar32 ch, UErrorCode&  status);
-    
-  // inline static UBool isThaiPreVowel(UChar32 ch);
-                 
-  // inline static UBool isThaiBaseConsonant(UChar32 ch);
-               
-  /*
-  VectorOfInt* makeReorderedBuffer(UChar colFirst, int32_t lastValue, 
-                                   VectorOfInt* lastExpansion, UBool forward, 
-                                   UErrorCode& status);
-                                   */
 };
 
 // CollationElementIterator inline method defination --------------------------
@@ -427,26 +337,5 @@ inline UBool CollationElementIterator::isIgnorable(int32_t order)
 {
   return (primaryOrder(order) == RuleBasedCollator::PRIMIGNORABLE);
 }
-
-/**
-* Determine if a character is a Thai vowel (which sorts after
-* its base consonant).
-*/
-/*
-inline UBool CollationElementIterator::isThaiPreVowel(UChar32 ch) 
-{
-  return ((uint32_t)ch - 0xe40) <= (0xe44 - 0xe40);
-}
-*/
-
-/**
-* Determine if a character is a Thai base consonant
-*/
-/*
-inline UBool CollationElementIterator::isThaiBaseConsonant(UChar32 ch) 
-{
-  return ((uint32_t)ch - 0xe01) <= (0xe2e - 0xe01);
-}
-*/
 
 #endif

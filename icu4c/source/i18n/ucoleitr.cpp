@@ -174,11 +174,6 @@ ucol_setText(      UCollationElements *elems,
     return;
   }
 
-  /* gets the correct length of the null-terminated string */
-  if (textLength == -1) {
-    textLength = u_strlen(text);
-  }
-
   if (elems->isWritable && elems->iteratordata_.string != NULL)
   {
     uprv_free(elems->iteratordata_.string);
@@ -198,7 +193,20 @@ U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
   const collIterate *ci = &(elems->iteratordata_);
-  return ci->pos - ci->string;
+  // while processing characters in normalization buffer getOffset will 
+  // return the next non-normalized character. 
+  // should be inline with the old implementation since the old codes uses
+  // nextDecomp in normalizer which also decomposes the string till the 
+  // first base character is found.
+  if (ci->flags & UCOL_ITER_INNORMBUF) {
+      if (ci->fcdPosition == NULL) {
+        return 0;
+      }
+      return ci->fcdPosition - ci->string;
+  }
+  else {
+      return ci->pos - ci->string;
+  }
 }
 
 U_CAPI void

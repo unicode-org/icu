@@ -49,13 +49,6 @@ CollationKey::CollationKey()
 {
 }
 
-// Adopt bytes allocated with malloc
-CollationKey::CollationKey(int32_t count, uint8_t *values)
-    : fBogus(FALSE), fCount(count), fCapacity(count), 
-      fHashCode(kInvalidHashCode), fBytes(values)
-{
-}
-
 // Create a collation key from a bit array.
 CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
     : fBogus(FALSE), fCount(count), fCapacity(count),
@@ -70,11 +63,6 @@ CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
     }
 
     uprv_memcpy(fBytes, newValues, fCount);
-}
-
-CollationKey::CollationKey(const UnicodeString& value)
-{
-    copyUnicodeString(value);
 }
 
 CollationKey::CollationKey(const CollationKey& other)
@@ -116,10 +104,11 @@ void CollationKey::adopt(uint8_t *values, int32_t count) {
     fCapacity = count;
     fHashCode = kInvalidHashCode;
 }
+
 // set the key to an empty state
 CollationKey&
 CollationKey::reset()
-{
+{ 
     fCount = 0;
     fBogus = FALSE;
     fHashCode = kEmptyHashCode;
@@ -173,7 +162,9 @@ CollationKey::operator=(const CollationKey& other)
         }
         else
         {
-            reset();
+            fCount = 0;
+            fBogus = FALSE;
+            fHashCode = kEmptyHashCode;
         }
     }
 
@@ -283,62 +274,6 @@ CollationKey::ensureCapacity(int32_t newSize)
 
     return *this;
 }
-
-int32_t
-CollationKey::storeUnicodeString(int32_t cursor, const UnicodeString &value)
-{
-    UTextOffset input = 0;
-    int32_t charCount = value.length();
-
-    while (input < charCount)
-    {
-        cursor = storeBytes(cursor, value[input++]);
-    }
-
-    return storeBytes(cursor, 0);
-}
-
-CollationKey&
-CollationKey::copyUnicodeString(const UnicodeString &value)
-{
-    int32_t charCount = value.length();
-
-    // We allocate enough space for two null bytes at the end.
-    ensureCapacity((charCount * 2) + 2);
-
-    if (isBogus())
-    {
-        return *this;
-    }
-
-    storeUnicodeString(0, value);
-
-    return *this;
-}
-
-void
-CollationKey::reverseBytes(UTextOffset from, UTextOffset to)
-{
-    uint8_t *left  = &fBytes[from];
-    uint8_t *right = &fBytes[to - 2];
-
-    while (left < right)
-    {
-        uint8_t swap[2];
-
-        swap[0] = right[0];
-        swap[1] = right[1]; 
-
-        right[0] = left[0];
-        right[1] = left[1];
-
-        left[0]  = swap[0];
-        left[1]  = swap[1];
-        
-        left += 2;
-        right -= 2;
-    }
-}
         
 // Create a copy of the byte array.
 uint8_t*
@@ -357,33 +292,6 @@ CollationKey::toByteArray(int32_t& count) const
     }
 
     return result;  
-}
-
-uint16_t*
-CollationKey::copyValues(int32_t &size) const
-{
-    uint16_t *result;
-    uint8_t *input = fBytes;
-    UTextOffset output = 0;
-
-    size = fCount / 2;
-    result = new uint16_t[size];
-
-    if (result == NULL)
-    {
-        size = 0;
-    }
-    else
-    {
-        while (output < size)
-        {
-            result[output] = (uint16_t)((input[0] << 8) | input[1]);
-            output += 1;
-            input += 2;
-        }
-    }
-
-    return result;
 }
 
 int32_t
