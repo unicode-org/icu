@@ -1,6 +1,6 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 1997-2003, International Business Machines
+// *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -31,6 +31,9 @@ gv {
         "Jerdein",
         "Jeheiney",
         "Jesarn",
+    }
+    Languages {
+        gv { "Gaelg" }
     }
     LocaleScript:array{ 
         "Latn",  // ISO 15924 Name 
@@ -84,8 +87,6 @@ gv {
 //        "\ufffd",
 //    }
     // /**************** Info Below is needed ****************/
-    // Countries{}
-    // Languages{}
     // localPatternChars{}
     //
 }
