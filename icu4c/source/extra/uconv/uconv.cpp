@@ -555,7 +555,9 @@ static UBool convertFile(const char *pname,
     // the codepage that uses the most bytes and multiply it against
     // the buffer size.
 
-    tobufsz = bufsz * ucnv_getMaxCharSize(convto);
+    // use bufsz+1 to allow for additional BOM/signature character (U+FEFF)
+    tobufsz = (bufsz+1) * ucnv_getMaxCharSize(convto);
+
     buf = new char[tobufsz];
     unibuf = new UChar[bufsz];
 
