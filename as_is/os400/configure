@@ -3854,11 +3854,11 @@ case "${host}" in
 		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
-		  tools/genccode/genccode \
+		  tools/genrb/derb tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencmn/decmn \
 		  tools/gencnval/gencnval tools/gennorm/gennorm \
 		  tools/gennames/gennames tools/gentest/gentest \
-          tools/pkgdata/pkgdata tools/genprops/genprops
+		  tools/pkgdata/pkgdata tools/genprops/genprops
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
@@ -4014,6 +4014,7 @@ trap 'del -f `echo "README icudefs.mk \
                 tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
+		tools/genbrk/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
                 test/cintltst/Makefile test/iotest/Makefile \
@@ -4202,6 +4203,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
                 tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
+		tools/genbrk/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
                 test/cintltst/Makefile test/iotest/Makefile \
