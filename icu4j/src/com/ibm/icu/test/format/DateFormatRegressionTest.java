@@ -3,6 +3,11 @@
  * Copyright (C) 2001, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatRegressionTest.java,v $ 
+ * $Date: 2001/10/19 11:51:46 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
  */
 
 /** 
