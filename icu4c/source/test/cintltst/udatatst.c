@@ -348,7 +348,7 @@ static void TestUDataSetAppData(){
 
     log_verbose("Testing udata_setAppData() with %s\n", filePath);
 
-#ifdef WIN32
+#if defined(WIN32) || defined(U_CYGWIN)
     fileHandle = open( filePath, O_RDONLY | O_BINARY );
 #else
     fileHandle = open( filePath, O_RDONLY);
@@ -377,7 +377,7 @@ static void TestUDataSetAppData(){
 
     i = read(fileHandle, fileBuf, fileSize);
     if (i != fileSize) {
-        log_err("FAIL: TestUDataSetAppData() error reading file \"%s\".\n", filePath);
+        log_err("FAIL: TestUDataSetAppData() error reading file \"%s\" size=%d read=%d.\n", filePath, fileSize, i);
         goto cleanupAndReturn;
     }
 
