@@ -89,6 +89,11 @@ uset_toPattern(const USet* set,
 }
 
 U_CAPI void U_EXPORT2
+uset_addAll(USet* set, const USet *additionalSet) {
+    ((UnicodeSet*) set)->addAll(*((const UnicodeSet*)additionalSet));
+}
+
+U_CAPI void U_EXPORT2
 uset_add(USet* set, UChar32 c) {
     ((UnicodeSet*) set)->add(c);
 }
