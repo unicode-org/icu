@@ -180,8 +180,7 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
                                         locale, pErrorCode);
     } else if(toWhichCase==TO_TITLE) {
         if(titleIter==NULL) {
-            /* ### TODO UBRK_TITLECASE */
-            titleIter=ubrk_open(UBRK_WORD, locale,
+            titleIter=ubrk_open(UBRK_TITLE, locale,
                                 src, srcLength,
                                 pErrorCode);
             ownTitleIter=(UBool)U_SUCCESS(*pErrorCode);
