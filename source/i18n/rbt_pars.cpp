@@ -69,6 +69,14 @@ static const UChar DOT_SET[] = { // "[^[:Zp:][:Zl:]\r\n$]";
 // A function is denoted &Source-Target/Variant(text)
 #define FUNCTION           ((UChar)38)     /*&*/
 
+// Aliases for some of the syntax characters. These are provided so
+// transliteration rules can be expressed in XML without clashing with
+// XML syntax characters '<', '>', and '&'.
+#define ALT_REVERSE_RULE_OP ((UChar)0x2190) // Left Arrow
+#define ALT_FORWARD_RULE_OP ((UChar)0x2192) // Right Arrow
+#define ALT_FWDREV_RULE_OP  ((UChar)0x2194) // Left Right Arrow
+#define ALT_FUNCTION        ((UChar)0x2206) // Increment (~Greek Capital Delta)
+
 // Special characters disallowed at the top level
 static const UChar ILLEGAL_TOP[] = {41,0}; // ")"
 
@@ -82,12 +90,17 @@ static const UChar ILLEGAL_FUNC[] = {94,40,46,42,43,63,123,125,124,64,0}; // "^(
 // trailing SymbolTable.SYMBOL_REF character.
 // private static final char ANCHOR_END       = '$';
 
-static const UChar gOPERATORS[] = {
-    0x3D, 0x3E, 0x3C, 0     // "=><"
+static const UChar gOPERATORS[] = { // "=><"
+    VARIABLE_DEF_OP, FORWARD_RULE_OP, REVERSE_RULE_OP,
+    ALT_FORWARD_RULE_OP, ALT_REVERSE_RULE_OP, ALT_FWDREV_RULE_OP,
+    0
 };
 
-static const UChar HALF_ENDERS[] = {
-    0x3D, 0x3E, 0x3C, 59, 0 // "=><;"
+static const UChar HALF_ENDERS[] = { // "=><;"
+    VARIABLE_DEF_OP, FORWARD_RULE_OP, REVERSE_RULE_OP,
+    ALT_FORWARD_RULE_OP, ALT_REVERSE_RULE_OP, ALT_FWDREV_RULE_OP,
+    END_OF_RULE,
+    0
 };
 
 // These are also used in Transliterator::toRules()
@@ -511,6 +524,7 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
             }
             break;
         case FUNCTION:
+        case ALT_FUNCTION:
             {
                 int32_t iref = pos;
                 TransliteratorIDParser::SingleID* single =
@@ -1210,6 +1224,19 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
         (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
         ++pos;
         op = FWDREV_RULE_OP;
+    }
+
+    // Translate alternate op characters.
+    switch (op) {
+    case ALT_FORWARD_RULE_OP:
+        op = FORWARD_RULE_OP;
+        break;
+    case ALT_REVERSE_RULE_OP:
+        op = REVERSE_RULE_OP;
+        break;
+    case ALT_FWDREV_RULE_OP:
+        op = FWDREV_RULE_OP;
+        break;
     }
 
     pos = right->parse(rule, pos, limit);
