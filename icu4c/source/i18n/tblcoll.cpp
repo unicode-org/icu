@@ -74,7 +74,7 @@
 
 #include <string.h>
 
-#include "unicode\ustring.h"
+#include "unicode/ustring.h"
 
 
 class RuleBasedCollatorStreamer
