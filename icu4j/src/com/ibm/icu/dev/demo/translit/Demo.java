@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/07/21 08:21:40 $ 
- * $Revision: 1.23 $
+ * $Date: 2002/07/26 19:56:58 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.23 $ $Date: 2002/07/21 08:21:40 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.24 $ $Date: 2002/07/26 19:56:58 $
  */
 public class Demo extends Frame {
 
@@ -319,7 +319,7 @@ public class Demo extends Frame {
                     String id = ruleId.getText();
                     setTransliterator(compound, id);
                 } catch (RuntimeException ex) {
-                    rulesDialog.getArea().setText(compound + "\n" + ex.getMessage());
+                    rulesDialog.getArea().setText(compound + "\n#" + ex.getMessage());
                 }
             }
         });
@@ -535,6 +535,22 @@ public class Demo extends Frame {
         System.out.println("missing from [:latin:][:thai:]: " + all.removeAll(rem).toPattern(true));
     }
     
+    // 200E;LEFT-TO-RIGHT MARK;Cf;0;L;;;;;N;;;;;
+
+    static Transliterator title = Transliterator.getInstance("title");
+    static String hexAndNameRules = "    ([:c:]) > \\u200E &hex/unicode($1) ' ( ) ' &name($1) \\u200E ' ';"
+        + "([:mark:]) > \\u200E &hex/unicode($1) ' ( ' \\u200E \u25CC $1 \\u200E ' ) ' &name($1) \\u200E ' ';"
+        + "(.) > \\u200E &hex/unicode($1) ' ( ' \\u200E $1 \\u200E ' ) ' &name($1) ' ' \\u200E;";
+
+    static Transliterator hexAndName = Transliterator.createFromRules("any-hexAndName", 
+        hexAndNameRules, Transliterator.FORWARD);
+    
+
+
+    //static Transliterator upper = Transliterator.getInstance("upper");
+     
+    static final byte NONE = 0, TITLEWORD = 1, TITLELINE = 2;
+    
     static void genTestFile(File sourceFile, Transliterator translit, String variant) {
         try {
             
@@ -571,7 +587,11 @@ public class Demo extends Frame {
             out.println("td, th       { vertical-align: top; border: 1px solid black }");
             out.println("td.s       { background-color: #EEEEEE;" + direction + " }");
             out.println("td.r       { background-color: #CCCCCC;" + direction + " }");
-            out.println("span.d       { background-color: #FF0000 }");
+            out.println("td.n       { background-color: #FFFFCC; }");
+            out.println("td.title       { border: 0px solid black}");
+            out.println("span.d       { background-color: #FF6666 }");
+            out.println("span.r       { background-color: #66FF66 }");
+
             out.println("body         { font-family: 'Arial Unicode MS', 'Lucida Sans Unicode', Arial, sans-serif; margin: 5 }");
             out.println("--></style>");
             out.println("<title>" + id + " Transliteration Check</title></head>");
@@ -583,8 +603,6 @@ public class Demo extends Frame {
             Transliterator tl = translit;
             Transliterator lt = tl.getInverse();
             
-            Transliterator title = Transliterator.getInstance("title");
-            Transliterator upper = Transliterator.getInstance("upper");
             Transliterator ltFilter = tl.getInverse();
             ltFilter.setFilter(new UnicodeSet("[:^Lu:]"));
             Transliterator tlFilter = lt.getInverse();
@@ -594,8 +612,7 @@ public class Demo extends Frame {
             
             BreakIterator sentenceBreak = BreakIterator.getSentenceInstance();
             
-            int NONE = 0, TITLEWORD = 1;
-            int titleSetting = NONE;
+            byte titleSetting = TITLELINE;
             boolean upperfilter = false;
             boolean first = true;
             while (true) {
@@ -609,13 +626,24 @@ public class Demo extends Frame {
                 
                 if (line.equals("@TITLECASE@")) {
                     titleSetting = TITLEWORD;
-                    out.println("<tr><td rowSpan='2'><b>Names</b></td></tr>");
+                    out.println("<tr><td colspan='2' class='title'><b>Names</b></td></tr>");
                     continue;
                 } else if (line.equals("@UPPERFILTER@")) {
                     upperfilter = true;
                     continue;
+                } else if (line.startsWith("@SET")) {
+                    UnicodeSet s = new UnicodeSet(line.substring(4).trim());
+                    out.println("<tr><td colspan='2' class='title'><b>Characters</b></td></tr>");
+                    UnicodeSetIterator it = new UnicodeSetIterator(s);
+                    while (it.next()) {
+                        addSentenceToTable(out, it.codepoint != it.IS_STRING 
+                            ? UTF16.valueOf(it.codepoint)
+                            : it.string,
+                            NONE, true, testRoundTrip, first, tl, lt);
+                    }
+                    continue;
                 }
-                
+                        
                 sentenceBreak.setText(line);
                 int start = 0;
                 while (true) {
@@ -636,42 +664,10 @@ public class Demo extends Frame {
                         String sentence = coreSentence.substring(oldPos, pos).trim();
                         //System.out.println("Sentence: " + hex.transliterate(coreSentence));
                         oldPos = pos;
-                        if (sentence.length() == 0) continue; // skip empty lines
-                    
-                        String latin;
-                        latin = tl.transliterate(saveAscii.transliterate(sentence));
-
-                        String latinShow = latin;
-                        if (titleSetting == TITLEWORD) {
-                            latinShow = title.transliterate(latin);
-                        } else {
-                            latinShow = titlecaseFirstWord(latinShow);
-                        }
-                        latinShow = restoreAscii.transliterate(latinShow);
                         
-                        String reverse;
-                        reverse = restoreAscii.transliterate(lt.transliterate(latin));
+                        addSentenceToTable(out, sentence,
+                            titleSetting, false, testRoundTrip, first, tl, lt);
                         
-                        String NFCsentence = Normalizer.normalize(sentence, Normalizer.NFC);
-                        
-                        if (testRoundTrip && !reverse.equals(NFCsentence)) {
-                            int minLen = reverse.length();
-                            if (minLen > sentence.length()) minLen = sentence.length();
-                            int i;
-                            for (i = 0; i < minLen; ++i) {
-                                if (reverse.charAt(i) != sentence.charAt(i)) break;
-                            }
-                            reverse = reverse.substring(0,i) + "<span class='d'>" + reverse.substring(i) + "</span>";
-                            sentence = sentence.substring(0,i) + "<span class='d'>" + sentence.substring(i) + "</span>";
-                            out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + sentence 
-                                + "</td><td rowSpan='2'>" + latinShow
-                                + "</td></tr><tr><td class='r'>" + reverse
-                                + "</td></tr><tr><td></td></tr>");
-                        } else {
-                            out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + sentence 
-                                + "</td><td>" + latinShow
-                                + "</td></tr><tr><td></td></tr>");
-                        }
                         first = false;
                     }
                 }
@@ -702,12 +698,12 @@ public class Demo extends Frame {
                 try {
                     String temp = id.substring(0,dashPos);
                     if (temp.equals("ja")) sourceSuper = new UnicodeSet("[[:Han:][:hiragana:][:katakana:]]");
-                    else sourceSuper = new UnicodeSet("[:" + temp + ":]");
+                    else sourceSuper = new UnicodeSet("[[:" + temp + ":][:Mn:][:Me:]]");
                 } catch (Exception e) {}
                 
                 UnicodeSet targetSuper = null;
                 try {
-                    targetSuper = new UnicodeSet("[:" + id.substring(dashPos+1, slashPos) + ":]");
+                    targetSuper = new UnicodeSet("[[:" + id.substring(dashPos+1, slashPos) + ":][:Mn:][:Me:]]");
                 } catch (Exception e) {}
                 
                 int nfdStyle = CLOSE_CASE | CLOSE_FLATTEN | CLOSE_CANONICAL;
@@ -726,6 +722,104 @@ public class Demo extends Frame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    static void addSentenceToTable(PrintWriter out, String sentence, 
+            byte titleSetting, boolean addName, boolean testRoundTrip, boolean first,
+            Transliterator tl, Transliterator lt) {
+        if (sentence.length() == 0) return; // skip empty lines
+        
+        String originalShow = sentence;
+        String latin;
+        latin = tl.transliterate(saveAscii.transliterate(sentence));
+
+        String latinShow = latin;
+        if (titleSetting == TITLEWORD) {
+            latinShow = title.transliterate(latin);
+        } else if (titleSetting == TITLELINE) {
+            latinShow = titlecaseFirstWord(latinShow);
+        }
+        latinShow = restoreAscii.transliterate(latinShow);
+                        
+        String reverse;
+        reverse = restoreAscii.transliterate(lt.transliterate(latin));
+                        
+        String NFKDSentence = Normalizer.normalize(sentence, Normalizer.NFKD);
+        String NFKDLatin = Normalizer.normalize(latin, Normalizer.NFKD);
+        String NFKDReverse = Normalizer.normalize(reverse, Normalizer.NFKD);
+        
+        if (latinShow.length() == 0) {
+            latinShow = "<i>empty</i>";
+        } else if (NFKDSentence.equals(NFKDLatin)) {
+            latinShow = "<span class='r'>" + latinShow + "</span>";
+        }
+        String reverseShow = reverse;
+        
+        if (testRoundTrip && !NFKDReverse.equals(NFKDSentence)) {
+            int minLen = reverse.length();
+            if (minLen > sentence.length()) minLen = sentence.length();
+            int i;
+            for (i = 0; i < minLen; ++i) {
+                if (reverse.charAt(i) != sentence.charAt(i)) break;
+            }
+            //originalShow = sentence.substring(0,i) + "<span class='d'>" + sentence.substring(i) + "</span>";
+            reverseShow = reverseShow.length() == 0 
+                ? "<i>empty</i>" 
+                //: reverse.substring(0,i) + "<span class='d'>" + reverse.substring(i) + "</span>";
+                : showDifference(sentence, reverse);
+            out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + originalShow 
+                + "</td><td rowSpan='2'>" + latinShow
+                + "</td></tr><tr><td class='r'>" + reverseShow
+                + "</td></tr>");
+        } else {
+            out.println("<tr><td class='s'" + (first ? " width='50%'>" : ">") + originalShow 
+                + "</td><td>" + latinShow
+                + "</td></tr>");
+        }
+        if (addName) {
+            latinShow = hexAndName.transliterate(latin);
+            if (latinShow.length() == 0) latinShow = "<i>empty</i>";
+            originalShow = hexAndName.transliterate(sentence);
+            if (originalShow.length() == 0) originalShow = "<i>empty</i>";
+
+            out.println("<tr><td class='n'>" + originalShow
+                + "</td><td class='n'>" + latinShow
+                + "</td></tr>");
+        }
+        out.println("<tr><td></td></tr>");
+        
+    }
+    
+    static String showDifference(String as, String bs) {
+        Differ differ = new Differ(300, 3);
+        StringBuffer out = new StringBuffer();
+        int max = as.length();
+        if (max < bs.length()) max = bs.length();
+        for (int j = 0; j <= max; ++j) {
+            if (j < as.length()) differ.addA(as.substring(j, j+1));
+            if (j < bs.length()) differ.addB(bs.substring(j, j+1));
+            differ.checkMatch(j == max);
+
+            if (differ.getACount() != 0 || differ.getBCount() != 0) {
+                out.append("...");
+                if (differ.getACount() != 0) {
+                    out.append("<span class='r'>");
+                    for (int i = 0; i < differ.getACount(); ++i) {
+                        out.append(differ.getA(i));
+                    }
+                    out.append("</span>");
+                }
+                if (differ.getBCount() != 0) {
+                    out.append("<span class='d'>");
+                    for (int i = 0; i < differ.getBCount(); ++i) {
+                        out.append(differ.getB(i));
+                    }
+                    out.append("</span>");
+                }
+                out.append("...");
+            }
+        }
+        return out.toString();
     }
     
     static void showSets(PrintWriter out, Transliterator translit, Transliterator inverse,
