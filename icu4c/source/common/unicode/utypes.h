@@ -154,10 +154,13 @@
 
 /**
  * \def U_CALLCONV
- * Work around the OS390 compiler issue, to be removed when the compiler
- * updates come out. This should only be used in C++ files that define
- * private (non-exported) C functions. When the C function must be public,
- * you must use the U_CAPI, U_CFUNC or U_CDECL_BEGIN/END definitions.
+ * Similar to U_CDECL_BEGIN/U_CDECL_END, this qualifier is necessary
+ * in callback function typedefs to make sure that the calling convention
+ * is compatible.
+ *
+ * This is only used for non-ICU-API functions.
+ * When a function is a public ICU API,
+ * you must use the U_CAPI and U_EXPORT2 qualifiers.
  */
 #if defined(OS390) && defined(XP_CPLUSPLUS)
 #    define U_CALLCONV __cdecl
