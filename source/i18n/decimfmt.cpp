@@ -44,7 +44,8 @@
 #include "unicode/uchar.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/currency.h"
+#include "unicode/ucurr.h"
+#include "unicode/ustring.h"
 
 U_NAMESPACE_BEGIN
 
@@ -244,12 +245,25 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 
     if (symbolsToAdopt == NULL) {
-        ucurr_forLocale(uloc_getDefault(), currency, &status);
+	setCurrencyForLocale(uloc_getDefault(), status);
     } else {
         setCurrencyForSymbols();
     }
 
     applyPattern(*pattern, FALSE /*not localized*/,parseErr, status);
+}
+
+/**
+ * Sets our currency to be the default currency for the given locale.
+ */
+void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
+    const UChar* c = ucurr_forLocale(locale, &ec);
+    if (c == NULL) {
+	*currency = 0;
+    } else {
+	u_strncpy(currency, c, 3);
+	currency[3] = 0;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -1453,11 +1467,7 @@ DecimalFormat::setCurrencyForSymbols() {
         def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&
         fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol) ==
         def.getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)) {
-        ucurr_forLocale(fSymbols->getLocale().getName(), currency, &ec);
-        /* test for buffer overflows */
-        if (U_FAILURE(ec)) {
-            currency[0] = 0; // Use DFS currency info
-        }
+	setCurrencyForLocale(fSymbols->getLocale().getName(), ec);
     } else {
         currency[0] = 0; // Use DFS currency info
     }
@@ -1957,8 +1967,10 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 }
                 UnicodeString s;
                 if (currency[0] != 0) {
-                    s = intl ? UnicodeString(currency, "")
-                        : ucurr_getSymbolAsUnicodeString(currency, fSymbols->getLocale());
+		    UErrorCode ec = U_ZERO_ERROR;
+		    int32_t len;
+                    s = UnicodeString(intl ? currency
+                        : ucurr_getSymbol(currency, fSymbols->getLocale().getName(), &len, &ec));
                 } else {
                     s = intl ? fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
                         : fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol);
@@ -2996,13 +3008,13 @@ void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
  * null.
  * @since ICU 2.2
  */
-void DecimalFormat::setCurrency(const char* theCurrency) {
+void DecimalFormat::setCurrency(const UChar* theCurrency) {
     // If we are a currency format, then modify our affixes to
     // encode the currency symbol for the given currency in our
     // locale, and adjust the decimal digits and rounding for the
     // given currency.
 
-    uprv_strncpy(currency, theCurrency, 3);
+    u_strncpy(currency, theCurrency, 3);
     currency[3] = 0;
 
     if (fIsCurrencyFormat) {
@@ -3025,7 +3037,7 @@ void DecimalFormat::setCurrency(const char* theCurrency) {
  * the standard ones for its locale.
  * @since ICU 2.2
  */
-const char* DecimalFormat::getCurrency() const {
+const UChar* DecimalFormat::getCurrency() const {
     return currency;
 }
 

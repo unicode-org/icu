@@ -11,7 +11,7 @@
 #include "numfmtst.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
-#include "unicode/currency.h"
+#include "unicode/ucurr.h"
 #include <float.h>
  
 // *****************************************************************************
@@ -494,9 +494,10 @@ void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
                                       double value, const UnicodeString& string) {
     UErrorCode ec = U_ZERO_ERROR;
     DecimalFormat& fmt = * (DecimalFormat*) &nf;
-    char curr[4] = {'-','-','-',0};
+    const UChar DEFAULT_CURR[] = {45/*-*/,0};
+    const UChar* curr = DEFAULT_CURR;
     if (*locale.getLanguage() != 0) {
-        ucurr_forLocale(locale.getName(), curr, &ec);
+        curr = ucurr_forLocale(locale.getName(), &ec);
         if (U_FAILURE(ec)) {
             errln("FAIL: UCurrency::forLocale");
             return;
