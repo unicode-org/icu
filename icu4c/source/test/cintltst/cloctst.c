@@ -2567,102 +2567,102 @@ static void TestKeywordSet(void)
     char buffer[1024];
 
     for(i = 0; i < sizeof(kwSetTestCases)/sizeof(kwSetTestCases[0]); i++) {
-      UErrorCode status = U_ZERO_ERROR;
-      memset(buffer,'%',1023);
-      strcpy(buffer, kwSetTestCases[i].l);
-      resultLen = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, 1023, &status);
-      if(U_FAILURE(status)) {
-        log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
-        continue;
-      }
-      if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=resultLen)) {
-        log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
+        UErrorCode status = U_ZERO_ERROR;
+        memset(buffer,'%',1023);
+        strcpy(buffer, kwSetTestCases[i].l);
+        resultLen = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, 1023, &status);
+        if(U_FAILURE(status)) {
+            log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
+            continue;
+        }
+        if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=resultLen)) {
+            log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
                 kwSetTestCases[i].v, buffer, resultLen, kwSetTestCases[i].x, strlen(buffer));
-      } else {
-        log_info("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
-                 buffer);
-      }
+        } else {
+            log_verbose("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
+                buffer);
+        }
     }
 }
 
 static void TestKeywordSetError(void)
 {
-  char buffer[1024];
-  UErrorCode status;
-  int32_t res;
-  int32_t i;
-  int32_t blen;
+    char buffer[1024];
+    UErrorCode status;
+    int32_t res;
+    int32_t i;
+    int32_t blen;
 
-  /* 0-test whether an error condition modifies the buffer at all */
-  blen=0;
-  i=0;
-  memset(buffer,'%',1023);
-  status = U_ZERO_ERROR;
-  res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
-  if(status != U_ILLEGAL_ARGUMENT_ERROR) {
-    log_err("expected illegal err got %s\n", u_errorName(status));
-    return;
-  }
-/*  if(res!=strlen(kwSetTestCases[i].x)) {
+    /* 0-test whether an error condition modifies the buffer at all */
+    blen=0;
+    i=0;
+    memset(buffer,'%',1023);
+    status = U_ZERO_ERROR;
+    res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
+    if(status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("expected illegal err got %s\n", u_errorName(status));
+        return;
+    }
+    /*  if(res!=strlen(kwSetTestCases[i].x)) {
     log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
     return;
-  } */
-  if(buffer[blen]!='%') {
-    log_err("Buffer byte %d was modified: now %c\n", blen, buffer[blen]);
-    return;
-  }
-  log_info("0-buffer modify OK\n");
-
-  for(i=0;i<=2;i++) {
-    /* 1- test a short buffer with growing text */
-    blen=strlen(kwSetTestCases[i].l)+1;
-    memset(buffer,'%',1023);
-    strcpy(buffer,kwSetTestCases[i].l);
-    status = U_ZERO_ERROR;
-    res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
-    if(status != U_BUFFER_OVERFLOW_ERROR) {
-      log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
-      return;
-    }
-    if(res!=strlen(kwSetTestCases[i].x)) {
-      log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
-      return;
-    }
+    } */
     if(buffer[blen]!='%') {
-      log_err("Buffer byte %d was modified: now %c\n", blen, buffer[blen]);
-      return;
+        log_err("Buffer byte %d was modified: now %c\n", blen, buffer[blen]);
+        return;
     }
-    log_info("1/%d-buffer modify OK\n",i);
-  }
+    log_verbose("0-buffer modify OK\n");
 
-  for(i=3;i<=4;i++) {
-    /* 2- test a short buffer - text the same size or shrinking   */
-    blen=strlen(kwSetTestCases[i].l)+1;
-    memset(buffer,'%',1023);
-    strcpy(buffer,kwSetTestCases[i].l);
-    status = U_ZERO_ERROR;
-    res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
-    if(status != U_ZERO_ERROR) {
-      log_err("expected zero error got %s\n", u_errorName(status));
-      return;
+    for(i=0;i<=2;i++) {
+        /* 1- test a short buffer with growing text */
+        blen=strlen(kwSetTestCases[i].l)+1;
+        memset(buffer,'%',1023);
+        strcpy(buffer,kwSetTestCases[i].l);
+        status = U_ZERO_ERROR;
+        res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
+        if(status != U_BUFFER_OVERFLOW_ERROR) {
+            log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
+            return;
+        }
+        if(res!=strlen(kwSetTestCases[i].x)) {
+            log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
+            return;
+        }
+        if(buffer[blen]!='%') {
+            log_err("Buffer byte %d was modified: now %c\n", blen, buffer[blen]);
+            return;
+        }
+        log_verbose("1/%d-buffer modify OK\n",i);
     }
-    if(buffer[blen+1]!='%') {
-      log_err("Buffer byte %d was modified: now %c\n", blen+1, buffer[blen+1]);
-      return;
+
+    for(i=3;i<=4;i++) {
+        /* 2- test a short buffer - text the same size or shrinking   */
+        blen=strlen(kwSetTestCases[i].l)+1;
+        memset(buffer,'%',1023);
+        strcpy(buffer,kwSetTestCases[i].l);
+        status = U_ZERO_ERROR;
+        res = uloc_setKeywordValue(kwSetTestCases[i].k, kwSetTestCases[i].v, buffer, blen, &status);
+        if(status != U_ZERO_ERROR) {
+            log_err("expected zero error got %s\n", u_errorName(status));
+            return;
+        }
+        if(buffer[blen+1]!='%') {
+            log_err("Buffer byte %d was modified: now %c\n", blen+1, buffer[blen+1]);
+            return;
+        }
+        if(res!=strlen(kwSetTestCases[i].x)) {
+            log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
+            return;
+        }
+        if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=res)) {
+            log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
+                kwSetTestCases[i].v, buffer, res, kwSetTestCases[i].x, strlen(buffer));
+        } else {
+            log_verbose("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
+                buffer);
+        }
+        log_verbose("2/%d-buffer modify OK\n",i);
     }
-    if(res!=strlen(kwSetTestCases[i].x)) {
-      log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
-      return;
-    }
-    if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=res)) {
-      log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
-              kwSetTestCases[i].v, buffer, res, kwSetTestCases[i].x, strlen(buffer));
-    } else {
-        log_info("pass: #%d: %s + [%s=%s] -> %s\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v,
-                 buffer);
-    }
-    log_info("2/%d-buffer modify OK\n",i);
-  }
 }
 
 static int32_t _canonicalize(int32_t selector, /* 0==getName, 1==canonicalize */
