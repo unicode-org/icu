@@ -160,7 +160,7 @@ int32_t Transliterator::transliterate(Replaceable& text,
 
     UTransPosition offsets = { start, limit, start, limit };
     handleTransliterate(text, offsets, FALSE);
-    return offsets.contextLimit;
+    return offsets.limit;
 }
 
 /**
