@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationServiceTest.java,v $ 
- * $Date: 2003/04/19 00:01:52 $
- * $Revision: 1.1 $
+ * $Date: 2003/04/21 21:00:23 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -174,8 +174,6 @@ public class CollationServiceTest extends TestFmwk {
         Collator jpcol = Collator.getInstance(Locale.JAPAN);
         Collator fucol = Collator.getInstance(fu_FU);
         
-        System.out.println("jpcol: " + jpcol);
-
         CollatorInfo[] info = {
             new CollatorInfo(Locale.US, frcol, null),
             new CollatorInfo(Locale.FRANCE, gecol, null),
