@@ -1,8 +1,7 @@
-tmp
 Debug
 Release
 Makefile
 *.d
+*.o
 *.pdb
-pkgdata
 gentest

@@ -1,5 +1,7 @@
 *.d
+*.o
 cintltst
+cintltst.exe
 Debug
 Release
 Makefile

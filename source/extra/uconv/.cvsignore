@@ -1,8 +1,7 @@
 *.d
+*.o
 uconv
 uconv.plg
-uconv.opt
-uconv.ncb
 Debug
 Release
 Makefile

@@ -5,5 +5,5 @@ Release
 Makefile
 icucfg.h
 *.ao
+*.o
 *.plg
-
