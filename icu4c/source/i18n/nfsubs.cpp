@@ -180,7 +180,7 @@ NFSubstitution::NFSubstitution(int32_t _pos,
             return;
         }
 		if (U_FAILURE(status)) {
-			delete this->numberFormat;
+			delete (DecimalFormat*)this->numberFormat;
 			this->numberFormat = NULL;
 			return;
 		}
