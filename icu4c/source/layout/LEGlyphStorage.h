@@ -193,7 +193,7 @@ public:
      * X and Y position for each glyph, plus an extra X and Y for the
      * advance of the last glyph.
      *
-     * @param glyphs - the destiniation position array
+     * @param positions - the destiniation position array
      * @param success - set to an error code if the operation fails
      *
      * @draft ICU 3.0
@@ -482,7 +482,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @darft ICU 3.0
+     * @draft ICU 3.0
      */
     virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 

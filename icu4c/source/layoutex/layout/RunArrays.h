@@ -67,7 +67,7 @@ public:
      *
      * @draft ICU 2.6
      */
-    RunArray(le_int32 initalCapacity);
+    RunArray(le_int32 initialCapacity);
 
     /**
      * The destructor; virtual so that subclass destructors are invoked as well.
