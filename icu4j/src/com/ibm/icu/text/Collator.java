@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/11/18 17:53:53 $
-* $Revision: 1.37 $
+* $Date: 2003/11/21 22:52:05 $
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -679,6 +679,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #compare(String, String)
      * @see #getCollationKey 
      * @see RawCollationKey
+     * @draft ICU 2.8
      */
     public abstract RawCollationKey getRawCollationKey(String source, 
                                                        RawCollationKey key);
@@ -734,11 +735,12 @@ public abstract class Collator implements Comparator, Cloneable
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return new ULocale("");		
+	    return ULocale.ROOT;
 	}
 
 	/** Get the version of this collator object.
 	 *  @return the version object associated with this collator
+	 * @draft ICU 2.8
 	 */
 	public VersionInfo getVersion() {
 		return VersionInfo.getInstance(0);
@@ -746,6 +748,7 @@ public abstract class Collator implements Comparator, Cloneable
 	
 	/** Get the UCA version of this collator object.
 	 *  @return the version object associated with this collator
+	 * @draft ICU 2.8
 	 */
 	public VersionInfo getUCAVersion() {
 		return VersionInfo.getInstance(0);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2003/11/21 08:11:49 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/11/21 22:52:05 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -475,7 +475,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.17 $ $Date: 2003/11/21 08:11:49 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.18 $ $Date: 2003/11/21 22:52:05 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
@@ -1345,7 +1345,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return (ULocale)validLocale.clone();		
+	    return validLocale;		
 	}
     
 }

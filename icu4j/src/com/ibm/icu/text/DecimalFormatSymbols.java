@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2003/11/21 08:11:49 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/11/21 22:52:05 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -760,7 +760,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     private ULocale validLocale;
     
     ULocale getLocale(ULocale.ULocaleDataType type) {
-    	return (ULocale)validLocale.clone();
+    	return validLocale;
     }
     
 }

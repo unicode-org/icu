@@ -3036,7 +3036,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * <code>field</code> parameter specifies the units of the return
      * value.  For example, if <code>fieldDifference(when,
      * Calendar.MONTH)</code> returns 3, then this calendar is set to
-     * 3 months before <code>when</code>, and possibly some addition
+     * 3 months before <code>when</code>, and possibly some additional
      * time less than one month.
      *
      * <p>As a side effect of this call, this calendar is advanced
@@ -3609,7 +3609,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return  (ULocale)validLocale.clone();		
+	    return validLocale;		
 	}
 	
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2003/09/04 23:07:34 $
- * $Revision: 1.20 $
+ * $Date: 2003/11/21 22:52:05 $
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -609,7 +609,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Variant of DateFormatSymbols(Calendar, Locale) that takes the Calendar class
      * instead of a Calandar instance.
      * @see #DateFormatSymbols(Calendar, Locale)
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     public DateFormatSymbols(Class calendarClass, Locale locale) {
         this(locale); // old-style construction
@@ -729,7 +729,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
      * a Calendar instance instead of a Calendar class.
      * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     static public ResourceBundle getDateFormatBundle(Calendar cal, Locale locale)
         throws MissingResourceException {
