@@ -53,6 +53,7 @@ U_STRING_DECL(k_type_array,     "array",     5);
 U_STRING_DECL(k_type_alias,     "alias",     5);
 U_STRING_DECL(k_type_intvector, "intvector", 9);
 U_STRING_DECL(k_type_import,    "import",    6);
+U_STRING_DECL(k_type_include,   "include",   7);
 U_STRING_DECL(k_type_reserved,  "reserved",  8);
 
 enum EResourceType
@@ -66,6 +67,7 @@ enum EResourceType
      RT_ALIAS,
      RT_INTVECTOR,
      RT_IMPORT,
+     RT_INCLUDE,
      RT_RESERVED
 };
 
@@ -81,6 +83,7 @@ const char *resourceNames[] =
      "Alias",
      "Int vector",
      "Import",
+     "Include",
      "Reserved",
 };
 
@@ -132,7 +135,7 @@ void initParser(void)
     U_STRING_INIT(k_type_intvector, "intvector", 9);
     U_STRING_INIT(k_type_import,    "import",    6);
     U_STRING_INIT(k_type_reserved,  "reserved",  8);
-
+    U_STRING_INIT(k_type_include,   "include",   7);
     for (i = 0; i < MAX_LOOKAHEAD + 1; i++)
     {
         ustr_init(&lookahead[i].value);
@@ -326,6 +329,8 @@ parseResourceType(UErrorCode *status)
         result = RT_INTVECTOR;
     } else if (u_strcmp(tokenValue->fChars, k_type_import) == 0) {
         result = RT_IMPORT;
+    } else if (u_strcmp(tokenValue->fChars, k_type_include) == 0) {
+        result = RT_INCLUDE;
     } else if (u_strcmp(tokenValue->fChars, k_type_reserved) == 0) {
         result = RT_RESERVED;
     } else {
@@ -350,6 +355,14 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     uint32_t          line;
     int               len=0;
     UBool quoted = FALSE;
+    UCHARBUF *ucbuf=NULL;
+    UChar32   c     = 0;
+    const char* cp  = NULL;
+    UChar *pTarget     = NULL;
+    UChar *target      = NULL;
+    UChar *targetLimit = NULL;
+    int32_t size = 0;
+
     expect(TOK_STRING, &tokenValue, &line, status);
 
     /* make the filename including the directory */
@@ -377,107 +390,87 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     uprv_strcat(filename, U_FILE_SEP_STRING);
     uprv_strcat(filename, cs);
 
-    /* open the file */
-    file = T_FileStream_open(filename, "rb");
 
-    if (file != NULL)
-    {
-        UCHARBUF *ucbuf;
-        UChar32   c     = 0;
-        uint32_t  size = T_FileStream_size(file);
+    ucbuf = ucbuf_open(filename, &cp, getShowWarning(),FALSE, status);
 
-        /* We allocate more space than actually required
-        * since the actual size needed for storing UChars
-        * is not known in UTF-8 byte stream
-        */
-        UChar *pTarget     = (UChar *) uprv_malloc(sizeof(UChar) * size);
-        UChar *target      = pTarget;
-        UChar *targetLimit = pTarget + size;
-
-        /* test for NULL */
-        if(pTarget == NULL)
-        {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            T_FileStream_close(file);
-            return NULL;
-        }
-
-        ucbuf = ucbuf_open(file, NULL,getShowWarning(), status);
-
-        if (U_FAILURE(*status)) {
-            error(line, "couldn't open input file %s\n", filename);
-            return NULL;
-        }
-
-        /* read the rules into the buffer */
-        while (target < targetLimit)
-        {
-            c = ucbuf_getc(ucbuf, status);
-            if(c == QUOTE) {
-              quoted = !quoted;
-            }
-            /* weiv (06/26/2002): adding the following:
-             * - preserving spaces in commands [...]
-             * - # comments until the end of line
-             */
-            if (c == STARTCOMMAND) 
-            {
-              /* preserve commands 
-               * closing bracket will be handled by the 
-               * append at the end of the loop
-               */
-              while(c != ENDCOMMAND) {
-                U_APPEND_CHAR32(c, target,len);
-                c = ucbuf_getc(ucbuf, status);
-              }
-            } else if (c == HASH && !quoted) {
-              /* skip comments */
-              while(c != CR && c != LF) {
-                c = ucbuf_getc(ucbuf, status);
-              }
-            } else if (c == ESCAPE)
-            {
-                c = unescape(ucbuf, status);
-
-                if (c == U_ERR)
-                {
-                    uprv_free(pTarget);
-                    T_FileStream_close(file);
-                    return NULL;
-                }
-            }
-            else if (c == SPACE || c == CR || c == LF)
-            {
-            /* ignore spaces carriage returns
-            * and line feed unless in the form \uXXXX
-                */
-                continue;
-            }
-
-            /* Append UChar * after dissembling if c > 0xffff*/
-            if (c != U_EOF)
-            {
-                U_APPEND_CHAR32(c, target,len);
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        result = string_open(bundle, tag, pTarget, target - pTarget, status);
-
-        uprv_free(pTarget);
-        T_FileStream_close(file);
-
-        return result;
-    }
-    else
-    {
-        error(line, "couldn't open input file %s\n", filename);
-        *status = U_FILE_ACCESS_ERROR;
+    if (U_FAILURE(*status)) {
+        error(line, "An error occured while opening the input file %s\n", filename);
         return NULL;
     }
+
+    /* We allocate more space than actually required
+    * since the actual size needed for storing UChars
+    * is not known in UTF-8 byte stream
+    */
+    size = ucbuf_size(ucbuf);
+    pTarget     = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * size);
+    target      = pTarget;
+    targetLimit = pTarget+size;   
+
+    /* read the rules into the buffer */
+    while (target < targetLimit)
+    {
+        c = ucbuf_getc(ucbuf, status);
+        if(c == QUOTE) {
+          quoted = !quoted;
+        }
+        /* weiv (06/26/2002): adding the following:
+         * - preserving spaces in commands [...]
+         * - # comments until the end of line
+         */
+        if (c == STARTCOMMAND) 
+        {
+          /* preserve commands 
+           * closing bracket will be handled by the 
+           * append at the end of the loop
+           */
+          while(c != ENDCOMMAND) {
+            U_APPEND_CHAR32(c, target,len);
+            c = ucbuf_getc(ucbuf, status);
+          }
+        } else if (c == HASH && !quoted) {
+          /* skip comments */
+          while(c != CR && c != LF) {
+            c = ucbuf_getc(ucbuf, status);
+          }
+        } else if (c == ESCAPE)
+        {
+            c = unescape(ucbuf, status);
+
+            if (c == U_ERR)
+            {
+                uprv_free(pTarget);
+                T_FileStream_close(file);
+                return NULL;
+            }
+        }
+        else if (c == SPACE || c == CR || c == LF)
+        {
+        /* ignore spaces carriage returns
+        * and line feed unless in the form \uXXXX
+            */
+            continue;
+        }
+
+        /* Append UChar * after dissembling if c > 0xffff*/
+        if (c != U_EOF)
+        {
+            U_APPEND_CHAR32(c, target,len);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    result = string_open(bundle, tag, pTarget, target - pTarget, status);
+
+    uprv_free(pTarget);
+    T_FileStream_close(file);
+
+    return result;
+
+
 }
 
 static struct SResource *
@@ -648,7 +641,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
 
                 if (U_SUCCESS(intStatus) && data != NULL)
                 {
-                    member = bin_open(bundle, "%%CollationBin", len, data, status);
+                    member = bin_open(bundle, "%%CollationBin", len, data, NULL, status);
                     /*table_add(bundle->fRoot, member, line, status);*/
                     table_add(result, member, line, status);
                     uprv_free(data);
@@ -1008,7 +1001,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
                 }
             }
 
-            result = bin_open(bundle, tag, (i >> 1), value, status);
+            result = bin_open(bundle, tag, (i >> 1), value,NULL, status);
 
             uprv_free(value);
         }
@@ -1022,7 +1015,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
     }
     else
     {
-        result = bin_open(bundle, tag, 0, NULL, status);
+        result = bin_open(bundle, tag, 0, NULL, "",status);
         warning(startline, "Encountered empty binary tag");
     }
     uprv_free(string);
@@ -1090,6 +1083,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     uint8_t          *data;
     char             *filename;
     uint32_t          line;
+    char     *fullname = NULL;
 
     filename = getInvariantString(&line, status);
 
@@ -1113,7 +1107,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     }
     else
     {
-        char     *fullname = NULL;
+        
         int32_t  count     = uprv_strlen(filename);
 
         if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
@@ -1125,7 +1119,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
             {
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
-	    }
+            }
 
             uprv_strcpy(fullname, inputdir);
 
@@ -1150,7 +1144,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
         }
 
         file = T_FileStream_open(fullname, "rb");
-        uprv_free(fullname);
+        
     }
 
     if (file == NULL)
@@ -1174,10 +1168,94 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     T_FileStream_read  (file, data, len);
     T_FileStream_close (file);
 
-    result = bin_open(bundle, tag, len, data, status);
+    result = bin_open(bundle, tag, len, data, fullname, status);
 
     uprv_free(data);
     uprv_free(filename);
+    uprv_free(fullname);
+    
+    return result;
+}
+
+static struct SResource *
+parseInclude(char *tag, uint32_t startline, UErrorCode *status)
+{
+    struct SResource *result;
+    int32_t           len=0;
+    char             *filename;
+    uint32_t          line;
+    UChar *pTarget     = NULL;
+    UChar *target      = NULL;
+    UChar *targetLimit = NULL;
+
+    UCHARBUF *ucbuf;
+    UChar32   c     = 0;
+    uint32_t  size = 0;
+    UBool quoted = FALSE;
+    char     *fullname = NULL;
+    int32_t  count     = 0;
+    const char* cp = NULL;
+    
+    filename = getInvariantString(&line, status);
+    count     = uprv_strlen(filename);
+    
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
+    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
+
+    if (U_FAILURE(*status))
+    {
+        uprv_free(filename);
+        return NULL;
+    }
+
+
+    fullname = (char *) uprv_malloc(inputdirLength + count + 2);
+    /* test for NULL */
+    if(fullname == NULL)
+    {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_free(filename);
+        return NULL;
+	}
+
+    if(inputdir!=NULL){
+        if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
+        {
+        
+            uprv_strcpy(fullname, inputdir);
+
+            fullname[inputdirLength]      = U_FILE_SEP_CHAR;
+            fullname[inputdirLength + 1] = '\0';
+
+            uprv_strcat(fullname, filename);
+        }
+        else
+        {
+            uprv_strcpy(fullname, inputdir);
+            uprv_strcat(fullname, filename);
+        }
+    }else{
+        uprv_strcpy(fullname,filename);
+    }
+
+    ucbuf = ucbuf_open(fullname, &cp,getShowWarning(),FALSE,status);
+
+    if (U_FAILURE(*status)) {
+        error(line, "couldn't open input file %s\n", filename);
+        return NULL;
+    }
+
+
+    result = string_open(bundle, tag,(UChar*) ucbuf_getBuffer(ucbuf,&len,status),len, status);
+
+    uprv_free(pTarget);
+
+    uprv_free(filename);
+    uprv_free(fullname);
 
     return result;
 }
@@ -1301,6 +1379,7 @@ parseResource(char *tag, UErrorCode *status)
     case RT_BINARY:     return parseBinary    (tag, startline, status);
     case RT_INTEGER:    return parseInteger   (tag, startline, status);
     case RT_IMPORT:     return parseImport    (tag, startline, status);
+    case RT_INCLUDE:    return parseInclude   (tag, startline, status);
     case RT_INTVECTOR:  return parseIntVector (tag, startline, status);
 
     default:
