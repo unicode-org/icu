@@ -383,7 +383,10 @@ void changeState_2022(UConverter* _this,
       {
         /*Customize the converter with the attributes set on the 2022 converter*/
         myUConverter->fromUCharErrorBehaviour = _this->fromUCharErrorBehaviour;
+        myUConverter->fromUContext = _this->fromUContext;
         myUConverter->fromCharErrorBehaviour = _this->fromCharErrorBehaviour;
+        myUConverter->toUContext = _this->toUContext;
+
         uprv_memcpy(myUConverter->subChar, 
                    _this->subChar,
                    myUConverter->subCharLen = _this->subCharLen);
