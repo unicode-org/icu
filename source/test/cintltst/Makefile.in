@@ -94,11 +94,11 @@ install-local: all-local
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS) $(TARGET)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS)
+	$(RMV) Makefile $(DEPS)
 
 check-local: $(TARGET)
 	ICU_DATA=@DATABUILDDIR@/ TZ=PST8PDT ./$(TARGET)

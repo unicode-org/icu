@@ -97,15 +97,15 @@ install-local: all-local
 dist-local:
 
 rebuild: $(TARGET)
-	-rm -f $(CNV_FILES)
+	-$(RMV) $(CNV_FILES)
 	$(MAKE) all-local
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(TARGET) $(OBJECTS)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS) $(CNV_FILES)
+	$(RMV) Makefile $(DEPS) $(CNV_FILES)
 
 check-local:
 

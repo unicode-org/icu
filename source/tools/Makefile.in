@@ -186,7 +186,7 @@ build-cmnfile:  $(COMMONFILE)
 
 gencmn/mkmap.tmp: Makefile $(DATAFILES)
 	@echo -n Generating $@ list of data files
-	@-rm -f gencmn/mkmap.tmp
+	@-$(RMV) gencmn/mkmap.tmp
 	@for file in $(DATAFILES); do \
 	  echo `pwd`/$$file >> gencmn/mkmap.tmp; \
 	done;
@@ -195,7 +195,7 @@ gencmn/mkmap.tmp: Makefile $(DATAFILES)
 $(COMMONFILE):	$(DATAFILES) gencmn/mkmap.tmp
 	@echo -n Generating common file $(COMMONFILE).  Number of files: Objdata dir is $(OBJDATADIR)
 	-@wc -l gencmn/mkmap.tmp
-	-rm -f $(COMMONFILE)
+	-$(RMV) $(COMMONFILE)
 	(cd gencmn ; ./gencmn -c -d ../$(OBJDATADIR) 1000000 mkmap.tmp )
 	-@ls -l $(COMMONFILE)
 
@@ -270,17 +270,17 @@ install-files:
 install-dlls:
 	@for file in $(UDATA_DLLS); do \
 	  echo $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
+	  $(INSTALL-S) @DATABUILDDIR@/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
 	done
 
 
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 distclean-local: clean-local
-	rm -f Makefile $(SRCDATAFILES) $(DATAFILES) $(TESTDATAD) $(BASETESTDATA)
+	$(RMV) Makefile $(SRCDATAFILES) $(DATAFILES) $(TESTDATAD) $(BASETESTDATA)
 
 check-local:
 
