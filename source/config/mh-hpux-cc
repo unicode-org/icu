@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-cc,v 1.21 2000/10/17 16:52:58 yves Exp $
+## $Id: mh-hpux-cc,v 1.22 2000/10/17 16:53:42 yves Exp $
 
 
 ## This causes source/tools/pkgdata generated makefiles  to create and link
@@ -34,9 +34,6 @@ SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-Wl,+b,
 LD_RPATH_PRE= 	
-
-## Compiler switch to embed a library name
-LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
 
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH
