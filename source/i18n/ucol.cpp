@@ -7548,13 +7548,11 @@ ucol_openAvailableLocales(UErrorCode *status) {
     return uenum_openStringEnumeration(s, status);
 }
 
-// would be nice if KW == RESOURCE_NAME - alan
-
-static const char* KW = "collation";
+// Note: KEYWORDS[0] != RESOURCE_NAME - alan
 
 static const char* RESOURCE_NAME = "collations";
 
-static const char* KEYWORDS[] = { KW };
+static const char* KEYWORDS[] = { "collation" };
 
 #define KEYWORD_COUNT (sizeof(KEYWORDS)/sizeof(KEYWORDS[0]))
 
@@ -7572,7 +7570,7 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
     // hard-coded to accept exactly one collation keyword
     // modify if additional collation keyword is added later
     if (U_SUCCESS(*status) &&
-        keyword==NULL || uprv_strcmp(keyword, KW)!=0) {
+        keyword==NULL || uprv_strcmp(keyword, KEYWORDS[0])!=0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -7586,7 +7584,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
     // odd that resource name is "collations" but keyword is
     // "collation"
     return ures_getFunctionalEquivalent(result, resultCapacity, U_ICUDATA_COLL,
-                                        "collations", KW, locale,
+                                        "collations", KEYWORDS[0], locale,
                                         isAvailable, status);
 }
 
