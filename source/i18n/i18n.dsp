@@ -868,6 +868,25 @@ InputPath=.\unicode\numfmt.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\parseerr.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\parseerr.h
+
+"..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy   unicode\parseerr.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\parsepos.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"

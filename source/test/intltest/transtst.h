@@ -91,6 +91,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestJ243(void);
 
+    /**
+     * Parsers need better syntax error messages.
+     */
+    void TestJ329(void);
+
     //======================================================================
     // Support methods
     //======================================================================
