@@ -274,11 +274,19 @@ u_fputs(const UChar    *s,
     return count;
 }
 
-U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_fputc(UChar        uc,
+U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_fputc(UChar32      uc,
         UFILE        *f)
 {
-    return u_file_write(&uc, 1, f) == 1 ? uc : EOF;
+    UChar buf[2];
+    int32_t idx = 0;
+    UBool isError = FALSE;
+
+    U16_APPEND(buf, idx, sizeof(buf)/sizeof(*buf), uc, isError);
+    if (isError) {
+        return EOF;
+    }
+    return u_file_write(buf, idx, f) == idx ? uc : EOF;
 }
 
 
