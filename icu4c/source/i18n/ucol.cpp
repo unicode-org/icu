@@ -2413,7 +2413,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
     UBool wasShifted = FALSE;
     UBool notIsContinuation = FALSE;
-//    uint8_t leadPrimary = 0;
+    uint8_t leadPrimary = 0;
 
 
     for(;;) {
@@ -2462,6 +2462,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             wasShifted = FALSE;
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
+#define UCOL_PRIM_COMPRESSION 1
 #ifdef UCOL_PRIM_COMPRESSION
             /* calculate sortkey size */
             if(primary1 != UCOL_IGNORABLE) {
@@ -2800,7 +2801,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint32_t prevBuffSize = 0;
 
     uint32_t count2 = 0, count3 = 0, count4 = 0;
-//    uint8_t leadPrimary = 0;
+    uint8_t leadPrimary = 0;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
@@ -3303,7 +3304,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     UBool notIsContinuation = FALSE;
 
     uint32_t count2 = 0, count3 = 0;
-//    uint8_t leadPrimary = 0;
+    uint8_t leadPrimary = 0;
 
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
