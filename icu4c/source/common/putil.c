@@ -50,7 +50,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 
-#ifdef AS400
+#ifdef OS400
 #include <float.h>
 #endif
 
@@ -96,9 +96,10 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
   ---------------------------------------------------------------------------*/
 
 /* Assume POSIX, and modify as necessary below*/
-#define POSIX
-#if defined(_WIN32) || defined(XP_MAC) || defined(AS400) || defined(OS2)
-#undef POSIX
+#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2)
+#   undef POSIX
+#else
+#   define POSIX
 #endif
 
 /*---------------------------------------------------------------------------
@@ -551,7 +552,7 @@ icu_tzset()
   tzset();
 #endif
 
-#if defined(AS400) || defined(XP_MAC)
+#if defined(OS400) || defined(XP_MAC)
   /* no initialization*/
 #endif
 
@@ -567,7 +568,7 @@ icu_timezone()
   return timezone;
 #endif
 
-#if defined(AS400) || defined(XP_MAC)
+#if defined(OS400) || defined(XP_MAC)
   time_t t, t1, t2;
   struct tm tmrec;
   bool_t dst_checked;
@@ -597,7 +598,7 @@ icu_tzname(int index)
   return tzname[index];
 #endif
 
-#if defined(AS400) || defined(XP_MAC)
+#if defined(OS400) || defined(XP_MAC)
   return "";
 #endif
 
@@ -636,7 +637,7 @@ icu_getDefaultDataDirectory()
   return PATH;
 #endif
 
-#ifdef AS400
+#ifdef OS400
   return "/icu/data/";
 #endif
 
@@ -798,7 +799,7 @@ icu_getDefaultLocaleID()
   return posixID;
 #endif
 
-#ifdef AS400
+#ifdef OS400
   /* TBD */
   return "";
 #endif
@@ -962,7 +963,7 @@ const char* icu_getDefaultCodepage()
 {
   /*Lazy evaluates DEFAULT_CONVERTER_NAME*/
   if (DEFAULT_CONVERTER_NAME[0]) return DEFAULT_CONVERTER_NAME;
-#if defined(AS400)
+#if defined(OS400)
   /* Currently TBD 
      in the future should use thread specific CP
   */
