@@ -15,6 +15,7 @@
 #include "unicode/regex.h"
 #include "uassert.h"
 #include "uvector.h"
+#include "uvectr32.h"
 #include "regexcmp.h"
 #include "regeximp.h"
 
@@ -118,7 +119,7 @@ void RegexPattern::init() {
     
     UErrorCode status=U_ZERO_ERROR;
     // Init of a completely new RegexPattern.
-    fCompiledPat = new UVector(status);
+    fCompiledPat = new UVector32(status);
     fSets        = new UVector(status);
     if (U_FAILURE(status) || fCompiledPat == NULL || fSets == NULL) {
         fBadState = TRUE;
