@@ -3019,7 +3019,8 @@ void TransliteratorTest::TestSpecialCases(void) {
     };
 
     UParseError pos;
-    for (int32_t i = 0; i < 6 /*registerRules.length*/; i+=2) {
+    int32_t i;
+    for (i = 0; i < 6 /*registerRules.length*/; i+=2) {
         UErrorCode status = U_ZERO_ERROR;
 
         Transliterator *t = Transliterator::createFromRules(registerRules[0+i], 
