@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
 		<version number="2.0"/>
@@ -659,6 +664,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-zäöåáéëü]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<calendars>
@@ -831,4 +841,66 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%year:
+=%neutrum=;
+1000&gt;: &lt;%neutrum&lt;hundra[­&gt;&gt;];
+10,000: =%neutrum=;
+%neutrum:
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; komma &gt;&gt;;
+noll; ett; två; tre; fyra; fem; sex; sju; åtta; nio;
+tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;
+20: tjugo[&gt;&gt;];
+30: trettio[&gt;&gt;];
+40: fyrtio[&gt;&gt;];
+50: femtio[&gt;&gt;];
+60: sextio[&gt;&gt;];
+70: sjuttio[&gt;&gt;];
+80: åttio[&gt;&gt;];
+90: nittio[&gt;&gt;];
+100: &lt;&lt;hundra[­&gt;&gt;];
+1000: ettusen[ &gt;&gt;];
+2000: &lt;%default&lt;­tusen[ &gt;&gt;];
+1,000,000: en miljon[ &gt;&gt;];
+2,000,000: &lt;%default&lt; miljoner[ &gt;&gt;];
+1,000,000,000: en miljard[ &gt;&gt;];
+2,000,000,000: &lt;%default&lt; miljarder[ &gt;&gt;];
+1,000,000,000,000: en biljon[ &gt;&gt;];
+2,000,000,000,000: &lt;%default&lt; biljoner[ &gt;&gt;];
+1,000,000,000,000,000: en triljon[ &gt;&gt;];
+2,000,000,000,000,000: &lt;%default&lt; triljoner[ &gt;&gt;];
+1,000,000,000,000,000,000: =#,##0=;
+%default:
+ -x: minus &gt;&gt;;
+x.x: &lt;&lt; komma &gt;&gt;;
+noll; en; två; tre; fyra; fem; sex; sju; åtta; nio;
+tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;
+20: tjugo[&gt;&gt;];
+30: trettio[&gt;&gt;];
+40: fyrtio[&gt;&gt;];
+50: femtio[&gt;&gt;];
+60: sextio[&gt;&gt;];
+70: sjuttio[&gt;&gt;];
+80: åttio[&gt;&gt;];
+90: nittio[&gt;&gt;];
+100: etthundra[­&gt;&gt;];
+200: &lt;&lt;hundra[­&gt;&gt;];
+1000: ettusen[ &gt;&gt;];
+2000: &lt;&lt;­tusen[ &gt;&gt;];
+1,000,000: en miljon[ &gt;&gt;];
+2,000,000: &lt;&lt; miljoner[ &gt;&gt;];
+1,000,000,000: en miljard[ &gt;&gt;];
+2,000,000,000: &lt;&lt; miljarder[ &gt;&gt;];
+1,000,000,000,000: en biljon[ &gt;&gt;];
+2,000,000,000,000: &lt;&lt; biljoner[ &gt;&gt;];
+1,000,000,000,000,000: en triljon[ &gt;&gt;];
+2,000,000,000,000,000: &lt;&lt; triljoner[ &gt;&gt;];
+1,000,000,000,000,000,000: =#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
