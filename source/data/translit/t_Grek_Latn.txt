@@ -1,0 +1,283 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../text/resources/Transliterator_Greek_Latin.txt
+// Date: Thu Oct 25 22:17:21 2001
+//--------------------------------------------------------------------
+
+// Greek_Latin
+
+translit_Greek_Latin {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others. All Rights Reserved.
+//--------------------------------------------------------------------
+// $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Grek_Latn.txt,v $
+// $Date: 2001/10/26 05:41:16 $
+// $Revision: 1.1 $
+//--------------------------------------------------------------------
+
+// Rules are predicated on running NFD first, and NFC afterwards
+"::NFD (NFC) ;" 
+
+// TEST CASES
+
+// Ὀλίγοι ἔμφονες πολλῶν ἀφρόνων φοβερώτεροι — Πλάτωνος
+// ᾂ ᾒ ᾢ ᾃ ᾓ ᾣ
+// ᾳ ῃ ῳ ὃ ὄ
+// ὠς ὡς ὢς ὣς
+// Ὠς Ὡς Ὢς Ὣς
+// ὨΣ ὩΣ ὪΣ ὫΣ
+// Ạ, ạ, Ẹ, ẹ, Ọ, ọ
+
+// Useful variables
+
+"$lower = [:Ll:] ;" 
+"$upper = [:Lu:] ;" 
+"$accent = [:M:] ;" 
+
+"$macron = \u0304 ;"
+"$ddot = \u0308 ;"
+
+"$lcgvowel = [αεηιουω] ;" 
+"$ucgvowel = [ΑΕΗΙΟΥΩ] ;" 
+"$gvowel = [$lcgvowel $ucgvowel] ;" 
+"$lcgvowelC = [$lcgvowel $accent] ;" 
+
+"$vowel = [ AEIOUaeiou $gvowel] ;" 
+
+"$beforeLower = $accent * $lower ;" 
+
+"$gammaLike = [ΓΚΞΧγκξχ] ;" 
+"$smooth = ̓ ;" 
+"$rough = ̔ ;" 
+"$iotasub = ͅ ;" 
+
+// Fix punctuation
+
+"\; <> \? ;"
+"· <> \: ;"
+
+// CIRCUMFLEX: convert greek circumflex to normal one. Could use tilde or inverted breve
+
+"\u0342 <> \u0302 ;" 
+
+// IOTA: convert iota subscript to iota
+// first make previous alpha long!
+
+"Α } $accent * $iotasub > A $macron ;"  
+"α } $accent * $iotasub > a $macron ;" 
+
+// now convert to uppercase if after uppercase, ow to lowercase
+
+"$upper $accent * { $iotasub > I ;" 
+"$iotasub > i ;" 
+
+"| $1 $iotasub < ([:L:] $macron [:M:]*) i ;"
+
+// BREATHING
+
+// Convert rough breathing to h, and move before letters.
+
+// Make A ` x = > H a x
+
+ "Α $rough } $beforeLower > H | α ;" 
+ "Ε $rough } $beforeLower > H | ε;" 
+ "Η $rough } $beforeLower > H | η ;" 
+ "Ι ($ddot?) $rough } $beforeLower > H | ι  $1;" 
+ "Ο $rough } $beforeLower > H | ο ;" 
+ "Υ $rough } $beforeLower > H | υ ;" 
+ "Ω ($ddot?) $rough } $beforeLower > H | ω $1;" 
+
+// Make A x ` = > H a x
+
+"Α ($lower) $rough > H | α $1 ;" 
+"Ε ($lower) $rough > H | ε $1 ;" 
+"Η ($lower) $rough > H | η $1 ;" 
+"Ι ($lower $ddot?) $rough > H | ι $1 ;" 
+"Ο ($lower) $rough > H | ο $1 ;" 
+"Υ ($lower) $rough > H | υ $1 ;" 
+"Ω ($lower  $ddot?) $rough > H | ω $1 ;" 
+
+//Otherwise, make x ` into h x and X ` into H X
+
+"($lcgvowel + $ddot? ) $rough > h | $1 ;" 
+"($gvowel + $ddot? ) $rough > H | $1 ;" 
+
+// Go backwards with H
+
+"| $1 $rough < h ([aeiouyAEIOUY] $macron? $ddot? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < h ([aeiouyAEIOUY] $macron? $ddot?) ;"
+
+"| $1 $rough < H ([AEIOUY] $macron?  $ddot?[aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H ([AEIOUY] $macron? $ddot?) ;"
+
+// titlecase, have to fix individually
+"| $1 $rough < H (a $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H (e $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H (i $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H (o $macron?  $ddot? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H (u $macron? $ddot? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H (y $macron? [aeiouyAEIOUY] $macron?) ;"
+"| $1 $rough < H (a $macron? $ddot? ) ;"
+"| $1 $rough < H (e $macron? $ddot? ) ;"
+"| $1 $rough < H (i $macron? $ddot? ) ;"
+"| $1 $rough < H (o $macron? $ddot? ) ;"
+"| $1 $rough < H (u $macron? $ddot? ) ;"
+"| $1 $rough < H (y $macron? $ddot? ) ;"
+
+// Now do smooth
+
+//delete smooth breathing for Latin
+"$smooth > ;" 
+
+// insert in Greek
+ "| $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron? [aeiouyAEIOUY] $macron?) } [^[$smooth]] ;"
+ "| $1 $smooth < [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$macron] ;"
+
+// TODO: preserve smooth/rough breathing if not 
+// on initial vowel sequence
+
+// need to have these up here so the rules don't mask
+
+"η <> e $macron ;"
+"Η <> E $macron ;"
+
+"φ <> ph ;" 
+"Ψ } $beforeLower <> Ps ;" 
+"Ψ <> PS ;" 
+
+"Φ } $beforeLower <> Ph ;" 
+"Φ <> PH ;"
+"ψ <> ps ;" 
+
+"ω <> o $macron ;"
+"Ω <>  O $macron;"
+
+// NORMAL
+
+"α <> a ;" 
+"Α <> A ;" 
+
+"β <> b ;" 
+"Β <> B ;" 
+
+"γ } $gammaLike <> n } [gkc] ;" 
+"γ <> g ;" 
+"Γ } $gammaLike <> N } [gkc] ;" 
+"Γ <> G ;" 
+
+"δ <> d ;" 
+"Δ <> D ;" 
+
+"ε <> e ;" 
+"Ε <> E ;" 
+
+"ζ <> z ;" 
+"Ζ <> Z ;" 
+
+"θ <> th ;" 
+"Θ } $beforeLower <> Th ;" 
+"Θ <> TH ;" 
+
+"ι <> i ;" 
+"Ι <> I ;" 
+
+"κ <> k ;"
+"Κ <> K ;" 
+
+"λ <> l ;" 
+"Λ <> L ;" 
+
+"μ <> m ;" 
+"Μ <> M ;" 
+
+"ν } $gammaLike > n\' ;" 
+"ν <> n ;" 
+"Ν } $gammaLike <> N\' ;" 
+"Ν <> N ;" 
+
+"ξ <> x ;" 
+"Ξ <> X ;" 
+
+"ο <> o ;" 
+"Ο <> O ;" 
+
+"π <> p ;" 
+"Π <> P ;" 
+
+"ρ $rough <> rh;" 
+"Ρ $rough } $beforeLower <> Rh ;" 
+"Ρ $rough <> RH ;" 
+"ρ <> r ;" 
+"Ρ <> R ;" 
+
+"[Pp] {ς > \'s ;" 
+"[Pp] {σ > \'s ;" 
+"σ < [:^L:] [:M:]* { s } [:^L:] ;"
+"ς <> s } [:^L:] ;"
+"σ <> s ;" 
+"[Pp] { Σ <> \'S ;" 
+"Σ <> S ;" 
+
+"τ <> t ;" 
+"Τ <> T ;" 
+
+"$vowel {υ } <> u ;" 
+"υ <> y ;" 
+"$vowel { Υ <> U ;" 
+"Υ <> Y ;" 
+
+"χ <> ch ;" 
+"Χ } $beforeLower <> Ch ;" 
+"Χ <> CH ;" 
+
+// Completeness for ASCII
+
+"$ignore = [[:Mark:]''] * ;"
+
+"| k  < c ;"
+"| ph < f ;"
+"| i  < j ;"
+"| k < q ;"
+"| u < v ;"
+"| u < w ;"
+"| K < C ;"
+"| PH < F } $ignore [:UppercaseLetter:] ;"
+"| PH < [:UppercaseLetter:] $ignore { F ;"
+"| PH < F ;"
+"| I < J ;"
+"| K < Q ;"
+"| U < V ;"
+"| U < W ;"
+
+"$rough } $ignore [:UppercaseLetter:] > H ;"
+"$ignore [:UppercaseLetter:] { $rough > H ;"
+"$rough < H ;"
+"$rough <> h ;"
+
+// Completeness for Greek
+
+"ϐ > | β ;"
+"ϑ > | θ ;"
+"ϒ > | Υ ;"
+"ϕ > | φ ;"
+"ϖ > | π ;"
+
+"ϰ > | κ ;"
+"ϱ > | ρ ;"
+"ϲ > | σ ;"
+"ϳ > j ;"
+"ϴ > | Θ ;"
+"ϵ > | ε ;"
+
+ "ͺ > i;"
+
+"::NFC (NFD) ;" 
+  }
+}

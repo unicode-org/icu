@@ -1,0 +1,112 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../text/resources/Transliterator_Gurmukhi_InterIndic.txt
+// Date: Thu Oct 25 22:17:21 2001
+//--------------------------------------------------------------------
+
+// Gurmukhi_InterIndic
+
+translit_Gurmukhi_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \u005cicu4j\u005csrc\u005ccom\u005cibm\u005ctext\u005cresources/Transliterator_Gurmukhi_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:54 2001
+//--------------------------------------------------------------------
+// Gurmukhi_InterIndic
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:41:58 2001
+//--------------------------------------------------------------------
+// Gurmukhi-InterIndic
+//:: NFD (NFC) ;
+"\u0a02>\ue001;" // REMAP (indicExceptions.txt): \u0a01>\u0a02 = SIGN CANDRABINDU>SIGN BINDI
+"\u0a05>\ue005;" // LETTER A
+"\u0a06>\ue006;" // LETTER AA
+"\u0a07>\ue007;" // LETTER I
+"\u0a08>\ue008;" // LETTER II
+"\u0a09>\ue009;" // LETTER U
+"\u0a0a>\ue00a;" // LETTER UU
+"\u0a0f>\ue00f;" // LETTER EE
+"\u0a10>\ue010;" // LETTER AI
+"\u0a13>\ue013;" // LETTER OO
+"\u0a14>\ue014;" // LETTER AU
+"\u0a15>\ue015;" // LETTER KA
+"\u0a16>\ue016;" // LETTER KHA
+"\u0a17>\ue017;" // LETTER GA
+"\u0a18>\ue018;" // LETTER GHA
+"\u0a19>\ue019;" // LETTER NGA
+"\u0a1a>\ue01a;" // LETTER CA
+"\u0a1b>\ue01b;" // LETTER CHA
+"\u0a1c>\ue01c;" // LETTER JA
+"\u0a1d>\ue01d;" // LETTER JHA
+"\u0a1e>\ue01e;" // LETTER NYA
+"\u0a1f>\ue01f;" // LETTER TTA
+"\u0a20>\ue020;" // LETTER TTHA
+"\u0a21>\ue021;" // LETTER DDA
+"\u0a22>\ue022;" // LETTER DDHA
+"\u0a23>\ue023;" // LETTER NNA
+"\u0a24>\ue024;" // LETTER TA
+"\u0a25>\ue025;" // LETTER THA
+"\u0a26>\ue026;" // LETTER DA
+"\u0a27>\ue027;" // LETTER DHA
+"\u0a28>\ue028;" // LETTER NA
+"\u0a2a>\ue02a;" // LETTER PA
+"\u0a2b>\ue02b;" // LETTER PHA
+"\u0a2c>\ue02c;" // LETTER BA
+"\u0a2d>\ue02d;" // LETTER BHA
+"\u0a2e>\ue02e;" // LETTER MA
+"\u0a2f>\ue02f;" // LETTER YA
+"\u0a30>\ue030;" // LETTER RA
+"\u0a32>\ue032;" // LETTER LA
+"\u0a33>\ue033;" // LETTER LLA
+"\u0a35>\ue035;" // LETTER VA
+"\u0a36>\ue036;" // LETTER SHA
+"\u0a38>\ue038;" // LETTER SA
+"\u0a39>\ue039;" // LETTER HA
+"\u0a3c>\ue03c;" // SIGN NUKTA
+"\u0a3e>\ue03e;" // VOWEL SIGN AA
+"\u0a3f>\ue03f;" // VOWEL SIGN I
+"\u0a40>\ue040;" // VOWEL SIGN II
+"\u0a41>\ue041;" // VOWEL SIGN U
+"\u0a42>\ue042;" // VOWEL SIGN UU
+"\u0a47>\ue047;" // VOWEL SIGN EE
+"\u0a48>\ue048;" // VOWEL SIGN AI
+"\u0a4b>\ue04b;" // VOWEL SIGN OO
+"\u0a4c>\ue04c;" // VOWEL SIGN AU
+"\u0a4d>\ue04d;" // SIGN VIRAMA
+"\u0a59>\ue059;" // LETTER KHHA
+"\u0a5a>\ue05a;" // LETTER GHHA
+"\u0a5b>\ue05b;" // LETTER ZA
+"\u0a5c>\ue05c;" // LETTER RRA
+"\u0a5e>\ue05e;" // LETTER FA
+"\u0a66>\ue066;" // DIGIT ZERO
+"\u0a67>\ue067;" // DIGIT ONE
+"\u0a68>\ue068;" // DIGIT TWO
+"\u0a69>\ue069;" // DIGIT THREE
+"\u0a6a>\ue06a;" // DIGIT FOUR
+"\u0a6b>\ue06b;" // DIGIT FIVE
+"\u0a6c>\ue06c;" // DIGIT SIX
+"\u0a6d>\ue06d;" // DIGIT SEVEN
+"\u0a6e>\ue06e;" // DIGIT EIGHT
+"\u0a6f>\ue06f;" // DIGIT NINE
+// \u0a70>; # UNMAPPED Gurmukhi-InterIndic: TIPPI
+// \u0a71>; # UNMAPPED Gurmukhi-InterIndic: ADDAK
+// \u0a72>; # UNMAPPED Gurmukhi-InterIndic: IRI
+// \u0a73>; # UNMAPPED Gurmukhi-InterIndic: URA
+// \u0a74>; # UNMAPPED Gurmukhi-InterIndic: EK ONKAR
+//    :: NFC (NFD) ;
+// eof
+  }
+}
