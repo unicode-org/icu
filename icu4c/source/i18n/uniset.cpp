@@ -148,7 +148,6 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     capacity(o.len + GROW_EXTRA), bufferCapacity(0),
     buffer(0)
 {
-
     list = new UChar32[capacity];
     *this = o;
 }
@@ -168,6 +167,7 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
     ensureCapacity(o.len);
     len = o.len;
     uprv_memcpy(list, o.list, len*sizeof(UChar32));
+    pat = o.pat;
     return *this;
 }
 
@@ -266,25 +266,17 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     }
 }
 
-const UChar UnicodeSet::HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
-                                   56,57,65,66,67,68,69,70}; // 8-9 A-F
-
 /**
  * Append the <code>toPattern()</code> representation of a
  * character to the given <code>StringBuffer</code>.
  */
-void UnicodeSet::_toPat(UnicodeString& buf, UChar32 c) {
-    if (c & ~0xFFFF) {
-        // Escape anything above U+FFFF
-        buf.append(BACKSLASH);
-        buf.append(UPPER_U);
-        buf.append(HEX[0xF&(c>>20)]);
-        buf.append(HEX[0xF&(c>>16)]);
-        buf.append(HEX[0xF&(c>>12)]);
-        buf.append(HEX[0xF&(c>>8)]);
-        buf.append(HEX[0xF&(c>>4)]);
-        buf.append(HEX[0xF&c]);
-        return;
+void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape) {
+    if (useHexEscape) {
+        // Use hex escape notation (\uxxxx or \Uxxxxxxxx) for anything
+        // unprintable
+        if (_escapeUnprintable(buf, c)) {
+            return;
+        }
     }
     // Okay to let ':' pass through
     switch (c) {
@@ -295,8 +287,58 @@ void UnicodeSet::_toPat(UnicodeString& buf, UChar32 c) {
     case INTERSECTION:
     case BACKSLASH:
         buf.append(BACKSLASH);
+        break;
+    default:
+        // Escape whitespace
+        if (Unicode::isWhitespace(c)) {
+            buf.append(BACKSLASH);
+        }
+        break;
     }
     buf.append((UChar) c);
+}
+
+const UChar UnicodeSet::HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
+                                   56,57,65,66,67,68,69,70}; // 8-9 A-F
+
+/**
+ * Return true if the character is NOT printable ASCII.
+ *
+ * This method should really be in UnicodeString (or similar).  For
+ * now, we implement it here and share it with friend classes.
+ */
+UBool UnicodeSet::_isUnprintable(UChar32 c) {
+    return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
+}
+
+/**
+ * Escape unprintable characters using \uxxxx notation for U+0000 to
+ * U+FFFF and \Uxxxxxxxx for U+10000 and above.  If the character is
+ * printable ASCII, then do nothing and return FALSE.  Otherwise,
+ * append the escaped notation and return TRUE.
+ *
+ * This method should really be in UnicodeString.  For now, we
+ * implement it here and share it with friend classes.
+ */
+UBool UnicodeSet::_escapeUnprintable(UnicodeString& result, UChar32 c) {
+    if (_isUnprintable(c)) {
+        result.append(BACKSLASH);
+        if (c & ~0xFFFF) {
+            result.append(UPPER_U);
+            result.append(HEX[0xF&(c>>28)]);
+            result.append(HEX[0xF&(c>>24)]);
+            result.append(HEX[0xF&(c>>20)]);
+            result.append(HEX[0xF&(c>>16)]);
+        } else {
+            result.append((UChar) 0x0075 /*u*/);
+        }
+        result.append(HEX[0xF&(c>>12)]);
+        result.append(HEX[0xF&(c>>8)]);
+        result.append(HEX[0xF&(c>>4)]);
+        result.append(HEX[0xF&c]);
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /**
@@ -304,17 +346,100 @@ void UnicodeSet::_toPat(UnicodeString& buf, UChar32 c) {
  * calling this function is passed to a UnicodeSet constructor, it
  * will produce another set that is equal to this one.
  */
-UnicodeString& UnicodeSet::toPattern(UnicodeString& result) const {
-    result.remove().append(SET_OPEN);
+UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+    result.truncate(0);
+    return _toPattern(result, escapeUnprintable);
+}
+
+/**
+ * Append a string representation of this set to result.  This will be
+ * a cleaned version of the string passed to applyPattern(), if there
+ * is one.  Otherwise it will be generated.
+ */
+UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
+                                      UBool escapeUnprintable) const {
+    if (pat.length() > 0) {
+        int32_t i;
+        int32_t backslashCount = 0;
+        for (i=0; i<pat.length(); ++i) {
+            UChar c = pat.charAt(i);
+            if (_isUnprintable(c)) {
+                // If the unprintable character is preceded by an odd
+                // number of backslashes, then it has been escaped.
+                // Before unescaping it, we delete the final
+                // backslash.
+                if ((backslashCount % 2) == 1) {
+                    result.truncate(result.length() - 1);
+                }
+                _escapeUnprintable(result, c);
+            } else {
+                result.append(c);
+                if (c == BACKSLASH) {
+                    ++backslashCount;
+                } else {
+                    backslashCount = 0;
+                }
+            }
+        }
+        return result;
+    }
     
+    return _generatePattern(result, escapeUnprintable);
+}
+
+/**
+ * Generate and append a string representation of this set to result.
+ * This does not use this.pat, the cleaned up copy of the string
+ * passed to applyPattern().
+ */
+UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
+                                            UBool escapeUnprintable) const {
+    result.append(SET_OPEN);
+
+    // Check against the predefined categories.  We implicitly build
+    // up ALL category sets the first time toPattern() is called.
+    for (int8_t cat=0; cat<Unicode::GENERAL_TYPES_COUNT; ++cat) {
+        if (*this == getCategorySet(cat)) {
+            result.append(COLON);
+            result.append(CATEGORY_NAMES, cat*2, 2);
+            return result.append(CATEGORY_CLOSE);
+        }
+    }
+
     int32_t count = getRangeCount();
-    for (int32_t i = 0; i < count; ++i) {
-        UChar32 start = getRangeStart(i);
-        UChar32 end = getRangeEnd(i);
-        _toPat(result, start);
-        if (start != end) {
-            result.append(HYPHEN);
-            _toPat(result, end);
+
+    // If the set contains at least 2 intervals and includes both
+    // MIN_VALUE and MAX_VALUE, then the inverse representation will
+    // be more economical.
+    if (count > 1 &&
+        getRangeStart(0) == MIN_VALUE &&
+        getRangeEnd(count-1) == MAX_VALUE) {
+
+        // Emit the inverse
+        result.append(COMPLEMENT);
+
+        for (int32_t i = 1; i < count; ++i) {
+            UChar32 start = getRangeEnd(i-1)+1;
+            UChar32 end = getRangeStart(i)-1;
+            _appendToPat(result, start, escapeUnprintable);
+            if (start != end) {
+                result.append(HYPHEN);
+                _appendToPat(result, end, escapeUnprintable);
+            }
+        }
+    }
+
+    // Default; emit the ranges as pairs
+    else {
+        for (int32_t i = 0; i < count; ++i) {
+            UChar32 start = getRangeStart(i);
+            UChar32 end = getRangeEnd(i);
+            _appendToPat(result, start, escapeUnprintable);
+            if (start != end) {
+                result.append(HYPHEN);
+                _appendToPat(result, end, escapeUnprintable);
+            }
         }
     }
     
@@ -607,6 +732,7 @@ void UnicodeSet::complement(void) {
         ++len;
     }
     swapBuffers();
+    pat.truncate(0);
 }
 
 /**
@@ -616,6 +742,7 @@ void UnicodeSet::complement(void) {
 void UnicodeSet::clear(void) {
     list[0] = HIGH;
     len = 1;
+    pat.truncate(0);
 }
 
 /**
@@ -673,7 +800,7 @@ void UnicodeSet::compact() {
  * character at pattern.charAt(pos.getIndex()) must be '[', or the
  * parse fails.  Parsing continues until the corresponding closing
  * ']'.  If a syntax error is encountered between the opening and
- * closing brace, the parse fails.  Upon return from a U_SUCCESSful
+ * closing brace, the parse fails.  Upon return from a successful
  * parse, the ParsePosition is updated to point to the character
  * following the closing ']', and a StringBuffer containing a
  * pairs list for the parsed pattern is returned.  This method calls
@@ -699,6 +826,30 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     if (U_FAILURE(status)) {
         return;
     }
+
+    // Need to build the pattern in a temporary string because
+    // _applyPattern calls add() etc., which set pat to empty.
+    UnicodeString rebuiltPat;
+    _applyPattern(pattern, pos, symbols, rebuiltPat, status);
+    pat = rebuiltPat;
+}
+
+void UnicodeSet::_applyPattern(const UnicodeString& pattern,
+                               ParsePosition& pos,
+                               const SymbolTable* symbols,
+                               UnicodeString& rebuiltPat,
+                               UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // If the pattern contains any of the following, we save a
+    // rebuilt (variable-substituted) copy of the source pattern:
+    // - a category
+    // - an intersection or subtraction operator
+    // - an anchor (trailing '$', indicating RBT ether)
+    UBool rebuildPattern = FALSE;
+    rebuiltPat.append((UChar) '[');
 
     UBool invert = FALSE;
     clear();
@@ -790,6 +941,7 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
             switch (c) {
             case COMPLEMENT:
                 invert = TRUE;
+                rebuiltPat.append(c);
                 continue; // Back to top to fetch next character
             case COLON:
                 if (i == openPos+1) {
@@ -797,6 +949,8 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
                     --i;
                     c = SET_OPEN;
                     mode = 3;
+                    rebuildPattern = TRUE;
+                    rebuiltPat.append(c);
                     // Fall through and parse category normally
                 }
                 break; // Fall through
@@ -885,14 +1039,22 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
                     }
                     i = j+1; // Make i point to ']' in ":]"
                     if (mode == 3) {
-                        // Entire pattern is a category; leave parse loop
+                        // Entire pattern is a category; leave parse
+                        // loop.  This is oneof 2 ways we leave this
+                        // loop if the pattern is well-formed.
                         *this = *nestedSet;
                         break;
                     }
                 } else {
                     // Recurse to get the pairs for this nested set.
                     pos.setIndex(i);
-                    nestedAux.applyPattern(pattern, pos, symbols, status);
+                    switch (lastOp) {
+                    case HYPHEN:
+                    case INTERSECTION:
+                        rebuiltPat.append(lastOp);
+                        break;
+                    }
+                    nestedAux._applyPattern(pattern, pos, symbols, rebuiltPat, status);
                     nestedSet = &nestedAux;
                     if (U_FAILURE(status)) {
                         return;
@@ -918,13 +1080,16 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
                     return;
                 }
                 add(lastChar, lastChar);
+                _appendToPat(rebuiltPat, lastChar, FALSE);
                 lastChar = -1;
             }
             switch (lastOp) {
             case HYPHEN:
+                rebuildPattern = TRUE;
                 removeAll(*nestedSet);
                 break;
             case INTERSECTION:
+                rebuildPattern = TRUE;
                 retainAll(*nestedSet);
                 break;
             case 0:
@@ -933,14 +1098,16 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
             }
             lastOp = 0;
         } else if (!isLiteral && c == SET_CLOSE) {
-            // Final closing delimiter.  This is the only way we leave this
-            // loop if the pattern is well-formed.
+            // Final closing delimiter.  This is one of 2 ways we
+            // leave this loop if the pattern is well-formed.
             if (anchor > 2 || anchor == 1) {
                 //throw new IllegalArgumentException("Syntax error near $" + pattern);
                 status = U_ILLEGAL_ARGUMENT_ERROR;
                 return;
             }
             if (anchor == 2) {
+                rebuildPattern = TRUE;
+                rebuiltPat.append((UChar) '$');
                 add(TransliterationRule::ETHER);
             }
             break;
@@ -956,6 +1123,9 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
                 return;
             }
             add(lastChar, c);
+            _appendToPat(rebuiltPat, lastChar, FALSE);
+            rebuiltPat.append(HYPHEN);
+            _appendToPat(rebuiltPat, c, FALSE);
             lastOp = 0;
             lastChar = -1;
         } else if (lastOp != 0) {
@@ -967,22 +1137,26 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
             if (lastChar >= 0) {
                 // We have <char><char>
                 add(lastChar, lastChar);
+                _appendToPat(rebuiltPat, lastChar, FALSE);
             }
             lastChar = c;
         }
+    }
+
+    if (lastChar >= 0) {
+        add(lastChar, lastChar);
+        _appendToPat(rebuiltPat, lastChar, FALSE);
     }
 
     // Handle unprocessed stuff preceding the closing ']'
     if (lastOp == HYPHEN) {
         // Trailing '-' is treated as literal
         add(lastOp, lastOp);
+        rebuiltPat.append(HYPHEN);
     } else if (lastOp == INTERSECTION) {
         // throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
-    }
-    if (lastChar >= 0) {
-        add(lastChar, lastChar);
     }
 
     /**
@@ -1006,6 +1180,12 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     }
 
     pos.setIndex(i+1);
+
+    // Rebuild the pattern if needed.  See above for criteria.
+    if (rebuildPattern) {
+        //rebuiltPat.setCharAt(0, (UChar) 1);
+    }
+    rebuiltPat.append((UChar) ']');
 }
 
 //----------------------------------------------------------------
@@ -1201,6 +1381,7 @@ void UnicodeSet::exclusiveOr(const UChar32* other, int32_t otherLen, int8_t pola
         }
     }
     swapBuffers();
+    pat.truncate(0);
 }
 
 // polarity = 0 is normal: x union y
@@ -1294,6 +1475,7 @@ void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
     buffer[k++] = HIGH;    // terminate
     len = k;
     swapBuffers();
+    pat.truncate(0);
 }
 
 // polarity = 0 is normal: x intersect y
@@ -1360,4 +1542,5 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
     buffer[k++] = HIGH;    // terminate
     len = k;
     swapBuffers();
+    pat.truncate(0);
 }
