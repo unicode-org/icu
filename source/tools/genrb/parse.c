@@ -28,6 +28,7 @@
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 
+#define U_ICU_UNIDATA "unidata"
 
 U_STRING_DECL(k_start_string, "string", 6);
 U_STRING_DECL(k_start_binary, "binary", 6);
@@ -229,7 +230,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     struct SResource *temp = NULL;
     struct SResource *temp1 = NULL;
     struct SResource *temp2 = NULL;
-    UBool colEl = FALSE, colOverride = FALSE;
+    UBool colEl = FALSE, colOverride = FALSE, ucaEl = FALSE;
     UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000}; /* Just to store "TRUE" and "FALSE" */
     UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000}; 
 
@@ -484,25 +485,74 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 
                 } else if(uprv_strcmp(cTag, "CollationElements") == 0) {
                     colEl = TRUE;
+                } else if(uprv_strcmp(cTag, "%%UCARULES")==0){
+                    ucaEl =TRUE;
                 }
             }
             break;
 
           /* Record a singleton string */
         case eStr:
-            if(temp != NULL) {
-                *status = U_INTERNAL_PROGRAM_ERROR;
-                goto finish;
-            }
-            temp = string_open(bundle, cTag, token.fChars, token.fLength, status);
-            table_add(rootTable, temp, status);
+            /* check if we have reached here after finding %%UCARULES */
+            if(ucaEl==TRUE){
+                UChar *c,*end,*ucaRulesStr;    
+                FileStream *in =NULL;
+                int fileLength = 0;
+                char fileName[256]={'\0'};
+                char cs[128] = { '\0'};
+                ucaEl=FALSE; /* reset ucaEL */
+                /* make the fileName including the directory */
+                uprv_strcat(fileName,inputDir);
+                uprv_strcat(fileName,U_FILE_SEP_STRING);
+                uprv_strcat(fileName,U_ICU_UNIDATA);
+                uprv_strcat(fileName,U_FILE_SEP_STRING);
+                u_UCharsToChars(token.fChars,cs,token.fLength);
+                uprv_strcat(fileName, cs);
+                /* open the file */
+                in = T_FileStream_open(fileName, "rb");
+                if(in){
+                    fileLength =T_FileStream_size(in);
+                    ucaRulesStr = (UChar*)uprv_malloc(sizeof(UChar) * fileLength);
+                    c= ucaRulesStr;
+                    end = ucaRulesStr + fileLength;
+                    /* read in the rulses */
+                    while(c < end && ! (T_FileStream_error(in) || T_FileStream_eof(in))) {
+                      *c++ = (UChar) T_FileStream_getc(in);
+                    }
+                     /* couldn't read all chars */
+                    if(c < end) {
+                        fprintf(stderr, "Error! Couldn't read all chars from input file %s for tag %s\n", fileName, cTag);
+                    }else{
+                        /* Add it to bundle */
+                        temp = string_open(bundle,cTag, ucaRulesStr, fileLength, status);
+                        table_add(rootTable, temp, status);
+                        put(data, &tag, status);
+                        if(U_FAILURE(*status)) {
+                            goto finish;
+                        }
+                        temp = NULL;
+                    }
+                    uprv_free(ucaRulesStr);
+                }else{
+                    fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag );
+                    goto finish;
+                }
+     
+            }else{
+                if(temp != NULL) {
+                    *status = U_INTERNAL_PROGRAM_ERROR;
+                    goto finish;
+                }
+                temp = string_open(bundle, cTag, token.fChars, token.fLength, status);
+                table_add(rootTable, temp, status);
 
-            /*uhash_put(data, tag.fChars, status);*/
-            put(data, &tag, status);
-            if(U_FAILURE(*status)) {
-                goto finish;
+                /*uhash_put(data, tag.fChars, status);*/
+                put(data, &tag, status);
+                if(U_FAILURE(*status)) {
+                    goto finish;
+                }
+                temp = NULL;
             }
-            temp = NULL;
             break;
           /* Begin a string list */
         case eBegList:
@@ -673,7 +723,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 }
             }
             break;
-            
           /* Record the last string as the subtag */
         case eSubtag:
             u_UCharsToChars(token.fChars, cSubTag, u_strlen(token.fChars)+1);
