@@ -10,6 +10,7 @@ package com.ibm.icu.lang;
 /**
  * A container for the different 'enumerated types' used by UCharacter.
  * @draft ICU 3.0
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class UCharacterEnums {
 
@@ -22,6 +23,7 @@ public class UCharacterEnums {
      * <code>java.lang.Character</code>.
      * @see UCharacterCategory
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static interface ECharacterCategory {
         /**
@@ -212,6 +214,7 @@ public class UCharacterEnums {
          * This name is compatible with java.lang.Character's name for this type.
          * @see #INITIAL_PUNCTUATION
          * @draft ICU 2.8
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int INITIAL_QUOTE_PUNCTUATION = 28;
 
@@ -227,6 +230,7 @@ public class UCharacterEnums {
          * This name is compatible with java.lang.Character's name for this type.
          * @see #FINAL_PUNCTUATION
          * @draft ICU 2.8
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FINAL_QUOTE_PUNCTUATION   = 29;
         
@@ -244,6 +248,7 @@ public class UCharacterEnums {
      * with those defined in <code>java.lang.Character</code>.
      * @see UCharacterDirection
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static interface ECharacterDirection {
         /**
@@ -255,6 +260,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for LEFT_TO_RIGHT.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_LEFT_TO_RIGHT = (byte)LEFT_TO_RIGHT;
 
@@ -267,6 +273,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for RIGHT_TO_LEFT.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT = (byte)RIGHT_TO_LEFT;
 
@@ -279,6 +286,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for EUROPEAN_NUMBER.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_EUROPEAN_NUMBER = (byte)EUROPEAN_NUMBER;
 
@@ -291,6 +299,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for EUROPEAN_NUMBER_SEPARATOR.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_EUROPEAN_NUMBER_SEPARATOR = (byte)EUROPEAN_NUMBER_SEPARATOR;
 
@@ -303,6 +312,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for EUROPEAN_NUMBER_TERMINATOR.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_EUROPEAN_NUMBER_TERMINATOR = (byte)EUROPEAN_NUMBER_TERMINATOR;
 
@@ -315,6 +325,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for ARABIC_NUMBER.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_ARABIC_NUMBER = (byte)ARABIC_NUMBER;
 
@@ -327,6 +338,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for COMMON_NUMBER_SEPARATOR.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_COMMON_NUMBER_SEPARATOR = (byte)COMMON_NUMBER_SEPARATOR;
 
@@ -339,6 +351,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for BLOCK_SEPARATOR.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_PARAGRAPH_SEPARATOR = (byte)BLOCK_SEPARATOR;
 
@@ -351,6 +364,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for SEGMENT_SEPARATOR.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_SEGMENT_SEPARATOR = (byte)SEGMENT_SEPARATOR;
 
@@ -363,6 +377,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for WHITE_SPACE_NEUTRAL.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_WHITESPACE = (byte)WHITE_SPACE_NEUTRAL;
 
@@ -375,6 +390,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for OTHER_NEUTRAL.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_OTHER_NEUTRALS = (byte)OTHER_NEUTRAL;
 
@@ -387,6 +403,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for LEFT_TO_RIGHT_EMBEDDING.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING = (byte)LEFT_TO_RIGHT_EMBEDDING;
 
@@ -399,6 +416,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for LEFT_TO_RIGHT_OVERRIDE.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE = (byte)LEFT_TO_RIGHT_OVERRIDE;
 
@@ -411,6 +429,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for RIGHT_TO_LEFT_ARABIC.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC = (byte)RIGHT_TO_LEFT_ARABIC;
 
@@ -423,6 +442,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for RIGHT_TO_LEFT_EMBEDDING.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING = (byte)RIGHT_TO_LEFT_EMBEDDING;
 
@@ -435,6 +455,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for RIGHT_TO_LEFT_OVERRIDE.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE = (byte)RIGHT_TO_LEFT_OVERRIDE;
 
@@ -447,6 +468,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for POP_DIRECTIONAL_FORMAT.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_POP_DIRECTIONAL_FORMAT = (byte)POP_DIRECTIONAL_FORMAT;
 
@@ -459,6 +481,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for DIR_NON_SPACING_MARK.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_NON_SPACING_MARK = (byte)DIR_NON_SPACING_MARK;
 
@@ -471,6 +494,7 @@ public class UCharacterEnums {
         /**
          * JDK-compatible synonum for BOUNDARY_NEUTRAL.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_BOUNDARY_NEUTRAL = (byte)BOUNDARY_NEUTRAL;
 
@@ -484,6 +508,7 @@ public class UCharacterEnums {
          * Undefined bidirectional character type. Undefined <code>char</code>
          * values have undefined directionality in the Unicode specification.
 	 * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final byte DIRECTIONALITY_UNDEFINED = -1;
     }

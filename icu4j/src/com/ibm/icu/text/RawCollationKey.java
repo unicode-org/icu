@@ -32,6 +32,7 @@ import com.ibm.icu.util.ByteArrayWrapper;
  * }
  * </code>
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  * @see RuleBasedCollator
  * @see CollationKey
  */
@@ -42,6 +43,7 @@ public final class RawCollationKey extends ByteArrayWrapper
     /**
      * Default constructor, internal byte array is null and its size set to 0.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public RawCollationKey() 
     {
@@ -52,6 +54,7 @@ public final class RawCollationKey extends ByteArrayWrapper
      * capacity. Size of the internal byte array will be set to 0.
      * @param capacity length of internal byte array
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public RawCollationKey(int capacity) 
     {
@@ -63,6 +66,7 @@ public final class RawCollationKey extends ByteArrayWrapper
      * Size of the internal byte array will be set to 0.
      * @param bytes byte array to be adopted by RawCollationKey
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public RawCollationKey(byte[] bytes) 
     {
@@ -77,6 +81,7 @@ public final class RawCollationKey extends ByteArrayWrapper
      * @exception ArrayIndexOutOfBoundsException thrown if size is &gt; 
      *            bytes.length
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public RawCollationKey(byte[] bytes, int size) 
     {
@@ -107,6 +112,7 @@ public final class RawCollationKey extends ByteArrayWrapper
      *         &gt; 0 if this RawCollationKey has a bigger sort order than 
      *                target.
      * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int compareTo(RawCollationKey target) 
     {

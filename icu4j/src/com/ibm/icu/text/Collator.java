@@ -307,6 +307,7 @@ public abstract class Collator implements Comparator, Cloneable
     /**
      * Clone the collator.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      * @return a clone of this collator.
      */
     public Object clone() throws CloneNotSupportedException {
@@ -320,6 +321,7 @@ public abstract class Collator implements Comparator, Cloneable
      * display names for them.  If standard locale display names are sufficient, 
      * Collator instances may be registered instead.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static abstract class CollatorFactory {
         /**
@@ -329,6 +331,7 @@ public abstract class Collator implements Comparator, Cloneable
          *
          * @return true if this factory is visible
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public boolean visible() {
             return true;
@@ -340,7 +343,8 @@ public abstract class Collator implements Comparator, Cloneable
          * @param loc the locale for which this collator is to be created.
          * @return the newly created collator.
          * @draft ICU 2.6
-         */
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
         public abstract Collator createCollator(Locale loc);
 
         /**
@@ -350,6 +354,7 @@ public abstract class Collator implements Comparator, Cloneable
          * @param displayLocale the locale for which the display name of the collator should be localized
          * @return the display name
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public String getDisplayName(Locale objectLocale, Locale displayLocale) {
             if (visible()) {
@@ -368,12 +373,14 @@ public abstract class Collator implements Comparator, Cloneable
          *
          * @return the set of supported locale IDs.
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public abstract Set getSupportedLocaleIDs();
 
         /**
          * Empty default constructor.
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         protected CollatorFactory() {
         }
@@ -422,6 +429,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #getInstance(Locale)
      * @see #getInstance()
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final Collator getInstance(ULocale locale) {
         // fetching from service cache is faster than instantiation
@@ -454,6 +462,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return an object that can be used to unregister the registered collator.
      *
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final Object registerInstance(Collator collator, Locale locale) {
         return getShim().registerInstance(collator, locale);
@@ -466,6 +475,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return an object that can be used to unregister the registered factory.
      *
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final Object registerFactory(CollatorFactory factory) {
         return getShim().registerFactory(factory);
@@ -476,6 +486,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param registryKey the object previously returned by registerInstance.
      * @return true if the collator was successfully unregistered.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final boolean unregister(Object registryKey) {
         if (shim == null) {
@@ -507,6 +518,7 @@ public abstract class Collator implements Comparator, Cloneable
      * This list includes any that have been registered, in addition to
      * those that are installed with ICU4J.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale[] getAvailableULocales() {
         if (shim == null) {
@@ -542,6 +554,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return an array of valid collation keywords.
      * @see #getKeywordValues
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final String[] getKeywords() {
         return KEYWORDS;
@@ -553,6 +566,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param keyword one of the keywords returned by getKeywords.
      * @see #getKeywords
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final String[] getKeywordValues(String keyword) {
         if (!keyword.equals(KEYWORDS[0])) {
@@ -586,6 +600,7 @@ public abstract class Collator implements Comparator, Cloneable
      * data.  If non-null, isAvailable must have length >= 1.
      * @return the locale
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale getFunctionalEquivalent(String keyword,
                                                         ULocale locID,
@@ -604,6 +619,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return the locale
      * @see #getFunctionalEquivalent(String,ULocale,boolean[])
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale getFunctionalEquivalent(String keyword,
                                                         ULocale locID) {
@@ -616,6 +632,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param displayLocale the locale for the collator's display name
      * @return the display name
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
         return getShim().getDisplayName(objectLocale, displayLocale);
@@ -626,6 +643,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @param objectLocale the locale of the collator
      * @return the display name
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static public String getDisplayName(Locale objectLocale) {
         return getShim().getDisplayName(objectLocale, Locale.getDefault());
@@ -803,6 +821,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #getCollationKey 
      * @see RawCollationKey
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public abstract RawCollationKey getRawCollationKey(String source, 
                                                        RawCollationKey key);
@@ -828,6 +847,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #getVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public abstract int setVariableTop(String varTop);
     
@@ -837,6 +857,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @return the variable top value of a Collator.
      * @see #setVariableTop
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public abstract int getVariableTop();
     
@@ -849,18 +870,21 @@ public abstract class Collator implements Comparator, Cloneable
      * @see #getVariableTop
      * @see #setVariableTop
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public abstract void setVariableTop(int varTop);
 
     /** Get the version of this collator object.
      *  @return the version object associated with this collator
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public abstract VersionInfo getVersion();
         
     /** Get the UCA version of this collator object.
      *  @return the version object associated with this collator
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public abstract VersionInfo getUCAVersion();
         
@@ -916,6 +940,7 @@ public abstract class Collator implements Comparator, Cloneable
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

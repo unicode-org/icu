@@ -80,6 +80,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Return the character used to represent a significant digit in a pattern.
      * @return the significant digit pattern character
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public char getSignificantDigit() {
         return sigDigit;
@@ -89,6 +90,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * Set the character used to represent a significant digit in a pattern.
      * @param sigDigit the significant digit pattern character
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setSignificantDigit(char sigDigit) {
         this.sigDigit = sigDigit;
@@ -814,6 +816,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

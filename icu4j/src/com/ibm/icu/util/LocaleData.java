@@ -13,6 +13,7 @@ import com.ibm.icu.text.UnicodeSet;
  * A class for accessing miscelleneous data in the locale bundles
  * @author ram
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public final class LocaleData {
     
@@ -39,6 +40,7 @@ public final class LocaleData {
      *                  value of 'options'.
      * @return          The set of exemplar characters for the given locale.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static UnicodeSet getExemplarSet(ULocale locale, int options) {
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
@@ -49,18 +51,21 @@ public final class LocaleData {
     /**
      * Enumeration for representing the measurement systems.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final class MeasurementSystem{
         /** 
          * Measurement system specified by Le Syst&#x00E8;me International d'Unit&#x00E9;s (SI)
          * otherwise known as Metric system. 
          * @draft ICU 2.8
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final MeasurementSystem SI = new MeasurementSystem(0);
  
         /** 
          * Measurement system followed in the United States of America. 
          * @draft ICU 2.8
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */ 
         public static final MeasurementSystem US = new MeasurementSystem(1);
     
@@ -79,6 +84,7 @@ public final class LocaleData {
      * @param locale      The locale for which the measurement system to be retrieved.
      * @return MeasurementSystem the measurement system used in the locale.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final MeasurementSystem getMeasurementSystem(ULocale locale){
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
@@ -100,6 +106,7 @@ public final class LocaleData {
      * A class that represents the size of letter head 
      * used in the country
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final class PaperSize{
         private int height;
@@ -113,6 +120,7 @@ public final class LocaleData {
          * Retruns the height of the paper
          * @return the height 
          * @draft ICU 2.8
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public int getHeight(){
             return height;
@@ -121,6 +129,7 @@ public final class LocaleData {
          * Returns the width of hte paper
          * @return the width
          * @draft ICU 2.8
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public int getWidth(){
             return width;
@@ -133,6 +142,7 @@ public final class LocaleData {
      * @param locale The locale for which the measurement system to be retrieved. 
      * @return The paper size used in the locale
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final PaperSize getPaperSize(ULocale locale){
         ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);

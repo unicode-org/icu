@@ -413,6 +413,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param desiredLocale
      * @param type
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
 
     protected void initializeData(ULocale desiredLocale, String type)
@@ -425,6 +426,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @param desiredLocale
      * @param calData
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
@@ -734,6 +736,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

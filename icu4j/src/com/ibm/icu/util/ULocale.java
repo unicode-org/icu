@@ -79,132 +79,154 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * @author weiv
  * @author Alan Liu
  * @author Ram Viswanadha
+ * @deprecated This is a draft API and might change in a future release of ICU.
  * @draft ICU 2.8 
  */
 public final class ULocale implements Serializable {
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale ENGLISH = new ULocale("en", Locale.ENGLISH);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale FRENCH = new ULocale("fr", Locale.FRENCH);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale GERMAN = new ULocale("de", Locale.GERMAN);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale ITALIAN = new ULocale("it", Locale.ITALIAN);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale JAPANESE = new ULocale("ja", Locale.JAPANESE);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale KOREAN = new ULocale("ko", Locale.KOREAN);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale CHINESE = new ULocale("zh", Locale.CHINESE);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale SIMPLIFIED_CHINESE = new ULocale("zh_Hans", Locale.CHINESE);
 
     /** 
      * Useful constant for language.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale TRADITIONAL_CHINESE = new ULocale("zh_Hant", Locale.CHINESE);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale FRANCE = new ULocale("fr_FR", Locale.FRANCE);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale GERMANY = new ULocale("de_DE", Locale.GERMANY);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale ITALY = new ULocale("it_IT", Locale.ITALY);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale JAPAN = new ULocale("ja_JP", Locale.JAPAN);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale KOREA = new ULocale("ko_KR", Locale.KOREA);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale CHINA = new ULocale("zh_Hans_CN", Locale.CHINA);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale PRC = CHINA;
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale TAIWAN = new ULocale("zh_Hant_TW", Locale.TAIWAN);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale UK = new ULocale("en_GB", Locale.UK);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale US = new ULocale("en_US", Locale.US);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale CANADA = new ULocale("en_CA", Locale.CANADA);
 
     /** 
      * Useful constant for country/region.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final ULocale CANADA_FRENCH = new ULocale("fr_CA", Locale.CANADA_FRENCH);
 
@@ -219,6 +241,7 @@ public final class ULocale implements Serializable {
     /**
      * The root ULocale.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
     public static final ULocale ROOT = new ULocale(EMPTY_STRING, null);
     
@@ -682,6 +705,7 @@ public final class ULocale implements Serializable {
      * Construct a ULocale object from a {@link java.util.Locale}.
      * @param loc a JDK locale
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ULocale(Locale loc) {
         this.localeID = getName(loc.toString());
@@ -703,6 +727,7 @@ public final class ULocale implements Serializable {
      * @param localeID string representation of the locale, e.g:
      * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR,collation=traditional"
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
     public ULocale(String localeID) {
         this.localeID = getName(localeID);
@@ -727,6 +752,7 @@ public final class ULocale implements Serializable {
      * @param c third component of the locale id
      * @see #ULocale(String)
      * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ULocale(String a, String b, String c) {
 	localeID = getName(lscvToID(a, b, c, EMPTY_STRING));
@@ -737,6 +763,7 @@ public final class ULocale implements Serializable {
      * @param nonCanonicalID the locale id to canonicalize
      * @return the locale created from the canonical version of the ID.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static ULocale createCanonical(String nonCanonicalID) {
         return new ULocale(canonicalize(nonCanonicalID), null);
@@ -771,6 +798,7 @@ public final class ULocale implements Serializable {
      * @return a JDK locale that either exactly represents this object
      * or is the closest approximation.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Locale toLocale() {
         if (locale == null) {
@@ -788,6 +816,7 @@ public final class ULocale implements Serializable {
     /**
      * Returns the current default ULocale.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
     public static ULocale getDefault() {
         synchronized (ULocale.class) {
@@ -812,6 +841,7 @@ public final class ULocale implements Serializable {
      * @see SecurityManager#checkPermission
      * @see java.util.PropertyPermission
      * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static synchronized void setDefault(ULocale newLocale){
         Locale.setDefault(newLocale.toLocale());
@@ -822,6 +852,7 @@ public final class ULocale implements Serializable {
      * This is for compatibility with Locale-- in actuality, since ULocale is
      * immutable, there is no reason to clone it, so this API returns 'this'.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Object clone() {
         return this;
@@ -830,6 +861,7 @@ public final class ULocale implements Serializable {
     /**
      * Returns the hashCode.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int hashCode() {
         return localeID.hashCode();
@@ -843,6 +875,7 @@ public final class ULocale implements Serializable {
      *
      * @return true if this Locale is equal to the specified object.
      * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -860,6 +893,7 @@ public final class ULocale implements Serializable {
     /**
      * Returns a list of all installed locales.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static ULocale[] getAvailableLocales() {
         return ICUResourceBundle.getAvailableULocales();
@@ -869,6 +903,7 @@ public final class ULocale implements Serializable {
      * Returns a list of all 2-letter country codes defined in ISO 3166.
      * Can be used to create Locales.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String[] getISOCountries() {
 	initCountryTables();
@@ -882,6 +917,7 @@ public final class ULocale implements Serializable {
      * The list this function returns includes both the new and the old codes for the
      * languages whose codes have changed.]
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String[] getISOLanguages() {
 	initLanguageTables();
@@ -893,6 +929,7 @@ public final class ULocale implements Serializable {
      * or a lowercase ISO 639 code.
      * @see #getDisplayLanguage
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getLanguage() {
         return getLanguage(localeID);
@@ -904,6 +941,7 @@ public final class ULocale implements Serializable {
      * or a lowercase ISO 639 code.
      * @see #getDisplayLanguage
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getLanguage(String localeID) {
         return new IDParser(localeID).getLanguage();
@@ -913,6 +951,7 @@ public final class ULocale implements Serializable {
      * Returns the script code for this locale, which might be the empty string.
      * @see #getDisplayScript
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getScript() {
         return getScript(localeID);
@@ -922,6 +961,7 @@ public final class ULocale implements Serializable {
      * Returns the script code for the specified locale, which might be the empty string.
      * @see #getDisplayScript
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getScript(String localeID) {
         return new IDParser(localeID).getScript();
@@ -932,6 +972,7 @@ public final class ULocale implements Serializable {
      * or an uppercase ISO 3166 2-letter code.
      * @see #getDisplayCountry
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getCountry() {
         return getCountry(localeID);
@@ -943,6 +984,7 @@ public final class ULocale implements Serializable {
      * @param localeID
      * @see #getDisplayCountry
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getCountry(String localeID) {
         return new IDParser(localeID).getCountry();
@@ -952,6 +994,7 @@ public final class ULocale implements Serializable {
      * Returns the variant code for this locale, which might be the empty string.
      * @see #getDisplayVariant
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getVariant() {
         return getVariant(localeID);
@@ -961,6 +1004,7 @@ public final class ULocale implements Serializable {
      * Returns the variant code for the specified locale, which might be the empty string.
      * @see #getDisplayVariant
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getVariant(String localeID) {
         return new IDParser(localeID).getVariant();
@@ -970,6 +1014,7 @@ public final class ULocale implements Serializable {
      * Returns the (normalized) base name for this locale.
      * @return the base name as a String.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getBaseName() {
         return getBaseName(localeID);
@@ -980,6 +1025,7 @@ public final class ULocale implements Serializable {
      * @param localeID the locale ID as a string
      * @return the base name as a String.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getBaseName(String localeID){
         return new IDParser(localeID).getBaseName();
@@ -990,6 +1036,7 @@ public final class ULocale implements Serializable {
      *
      * @return String the full name of the localeID
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
     public String getName() {
         return localeID; // always normalized
@@ -1001,6 +1048,7 @@ public final class ULocale implements Serializable {
      * @param localeID the localeID as a string
      * @return String the full name of the localeID
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getName(String localeID){
         return new IDParser(localeID).getName();
@@ -1009,6 +1057,7 @@ public final class ULocale implements Serializable {
     /**
      * Returns a string representation of this object.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String toString() {
         return localeID;
@@ -1019,6 +1068,7 @@ public final class ULocale implements Serializable {
      * are no keywords, returns null.
      * @return iterator over keywords, or null if there are no keywords.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Iterator getKeywords() {
         return getKeywords(localeID);
@@ -1030,6 +1080,7 @@ public final class ULocale implements Serializable {
      * @return an iterator over the keywords in the specified locale, or null
      * if there are no keywords.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Iterator getKeywords(String localeID){
         return new IDParser(localeID).getKeywords();
@@ -1040,6 +1091,7 @@ public final class ULocale implements Serializable {
      * @param keywordName name of the keyword whose value is desired. Case insensitive.
      * @return the value of the keyword, or null.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getKeywordValue(String keywordName){
         return getKeywordValue(localeID, keywordName);
@@ -1051,6 +1103,7 @@ public final class ULocale implements Serializable {
      * @param keywordName name of the keyword whose value is desired. Case insensitive.
      * @return String the value of the keyword as a string
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getKeywordValue(String localeID, String keywordName) {
         return new IDParser(localeID).getKeywordValue(keywordName);
@@ -1788,6 +1841,7 @@ public final class ULocale implements Serializable {
      * @param localeID the locale id
      * @return the canonicalized id
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String canonicalize(String localeID){
         IDParser parser = new IDParser(localeID, true);
@@ -1881,6 +1935,7 @@ public final class ULocale implements Serializable {
      * @exception MissingResourceException Throws MissingResourceException if the
      * three-letter language abbreviation is not available for this locale.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getISO3Language(){
         return getISO3Language(localeID);
@@ -1895,6 +1950,7 @@ public final class ULocale implements Serializable {
      * @exception MissingResourceException Throws MissingResourceException if the
      * three-letter language abbreviation is not available for this locale.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getISO3Language(String localeID){
 	initLanguageTables();
@@ -1919,6 +1975,7 @@ public final class ULocale implements Serializable {
      * @exception MissingResourceException Throws MissingResourceException if the
      * three-letter country abbreviation is not available for this locale.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getISO3Country(){
         return getISO3Country(localeID);
@@ -1930,6 +1987,7 @@ public final class ULocale implements Serializable {
      * @exception MissingResourceException Throws MissingResourceException if the
      * three-letter country abbreviation is not available for this locale.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getISO3Country(String localeID){
 	initCountryTables();
@@ -2015,6 +2073,7 @@ public final class ULocale implements Serializable {
      * Returns this locale's language localized for display in the default locale.
      * @return the localized language name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayLanguage() {
         return getDisplayLanguageInternal(localeID, getDefault().localeID);
@@ -2025,6 +2084,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayLanguage(ULocale displayLocale) {
         return getDisplayLanguageInternal(localeID, displayLocale.localeID);
@@ -2037,6 +2097,7 @@ public final class ULocale implements Serializable {
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized language name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayLanguage(String localeID, String displayLocaleID) {
         return getDisplayLanguageInternal(localeID, getName(displayLocaleID));
@@ -2049,6 +2110,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized language name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayLanguage(String localeID, ULocale displayLocale) {
 	return getDisplayLanguageInternal(localeID, displayLocale.localeID);
@@ -2063,6 +2125,7 @@ public final class ULocale implements Serializable {
      * Returns this locale's script localized for display in the default locale.
      * @return the localized script name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayScript() {
         return getDisplayScriptInternal(localeID, getDefault().localeID);
@@ -2073,6 +2136,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayScript(ULocale displayLocale) {
         return getDisplayScriptInternal(localeID, displayLocale.localeID);
@@ -2085,6 +2149,7 @@ public final class ULocale implements Serializable {
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized script name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayScript(String localeID, String displayLocaleID) {
         return getDisplayScriptInternal(localeID, getName(displayLocaleID));
@@ -2096,6 +2161,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized script name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayScript(String localeID, ULocale displayLocale) {
 	return getDisplayScriptInternal(localeID, displayLocale.localeID);
@@ -2110,6 +2176,7 @@ public final class ULocale implements Serializable {
      * Returns this locale's country localized for display in the default locale.
      * @return the localized country name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayCountry() {
         return getDisplayCountryInternal(localeID, getDefault().localeID);
@@ -2120,6 +2187,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized country name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayCountry(ULocale displayLocale){
         return getDisplayCountryInternal(localeID, displayLocale.localeID);   
@@ -2132,6 +2200,7 @@ public final class ULocale implements Serializable {
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized country name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayCountry(String localeID, String displayLocaleID) {
         return getDisplayCountryInternal(localeID, getName(displayLocaleID));
@@ -2144,6 +2213,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized country name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayCountry(String localeID, ULocale displayLocale) {
 	return getDisplayCountryInternal(localeID, displayLocale.localeID);
@@ -2158,6 +2228,7 @@ public final class ULocale implements Serializable {
      * Returns this locale's variant localized for display in the default locale.
      * @return the localized variant name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayVariant() {
         return getDisplayVariantInternal(localeID, getDefault().localeID);   
@@ -2168,6 +2239,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized variant name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayVariant(ULocale displayLocale) {
         return getDisplayVariantInternal(localeID, displayLocale.localeID);   
@@ -2180,6 +2252,7 @@ public final class ULocale implements Serializable {
      * @param displayLocaleID the id of the locale in which to display the name.
      * @return the localized variant name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayVariant(String localeID, String displayLocaleID){
         return getDisplayVariantInternal(localeID, getName(displayLocaleID));
@@ -2192,6 +2265,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the name.
      * @return the localized variant name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayVariant(String localeID, ULocale displayLocale) {
 	return getDisplayVariantInternal(localeID, displayLocale.localeID);
@@ -2208,6 +2282,7 @@ public final class ULocale implements Serializable {
      * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayKeyword(String keyword) {
         return getDisplayKeywordInternal(keyword, getDefault().localeID);   
@@ -2220,6 +2295,7 @@ public final class ULocale implements Serializable {
      * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayKeyword(String keyword, String displayLocaleID) {
         return getDisplayKeywordInternal(keyword, getName(displayLocaleID));   
@@ -2232,6 +2308,7 @@ public final class ULocale implements Serializable {
      * @return the localized keyword name.
      * @see #getKeywords
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayKeyword(String keyword, ULocale displayLocale) {
 	return getDisplayKeywordInternal(keyword, displayLocale.localeID);
@@ -2247,6 +2324,7 @@ public final class ULocale implements Serializable {
      * @param keyword the keyword whose value is to be displayed.
      * @return the localized value name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayKeywordValue(String keyword) {
         return getDisplayKeywordValueInternal(localeID, keyword, getDefault().localeID);
@@ -2258,6 +2336,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the value.
      * @return the localized value name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayKeywordValue(String keyword, ULocale displayLocale) {
         return getDisplayKeywordValueInternal(localeID, keyword, displayLocale.localeID);   
@@ -2271,6 +2350,7 @@ public final class ULocale implements Serializable {
      * @param displayLocaleID the id of the locale in which to display the value.
      * @return the localized value name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayKeywordValue(String localeID, String keyword, String displayLocaleID) {
         return getDisplayKeywordValueInternal(localeID, keyword, getName(displayLocaleID));
@@ -2284,6 +2364,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the id of the locale in which to display the value.
      * @return the localized value name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayKeywordValue(String localeID, String keyword, ULocale displayLocale) {
 	return getDisplayKeywordValueInternal(localeID, keyword, displayLocale.localeID);
@@ -2300,6 +2381,7 @@ public final class ULocale implements Serializable {
      * Returns this locale name localized for display in the default locale.
      * @return the localized locale name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName() {
         return getDisplayNameInternal(localeID, getDefault().localeID);
@@ -2310,6 +2392,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName(ULocale displayLocale) {
         return getDisplayNameInternal(localeID, displayLocale.localeID);
@@ -2322,6 +2405,7 @@ public final class ULocale implements Serializable {
      * @param displayLocaleID the id of the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayName(String localeID, String displayLocaleID) {
         return getDisplayNameInternal(localeID, getName(displayLocaleID));
@@ -2334,6 +2418,7 @@ public final class ULocale implements Serializable {
      * @param displayLocale the locale in which to display the locale name.
      * @return the localized locale name.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String getDisplayName(String localeID, ULocale displayLocale) {
 	return getDisplayNameInternal(localeID, displayLocale.localeID);
@@ -2409,6 +2494,7 @@ public final class ULocale implements Serializable {
      * locale data, then the valid locale is <i>null</i>.
      *
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Type ACTUAL_LOCALE = new Type(0);
  
@@ -2424,6 +2510,7 @@ public final class ULocale implements Serializable {
      * <p>Note: The valid locale will be returned correctly in ICU
      * 3.0 or later.  In ICU 2.8, it is not returned correctly.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
     public static Type VALID_LOCALE = new Type(1);
     
@@ -2433,6 +2520,7 @@ public final class ULocale implements Serializable {
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final class Type {
         private int localeType;

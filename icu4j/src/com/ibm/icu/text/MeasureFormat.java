@@ -22,6 +22,7 @@ import com.ibm.icu.util.ULocale;
  * @see com.ibm.icu.text.UFormat
  * @author Alan Liu
  * @draft ICU 3.0
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public abstract class MeasureFormat extends UFormat {
 
@@ -36,6 +37,7 @@ public abstract class MeasureFormat extends UFormat {
      * @param locale desired locale
      * @return a formatter object
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static MeasureFormat getCurrencyFormat(ULocale locale) {
         return new CurrencyFormat(locale);
@@ -46,6 +48,7 @@ public abstract class MeasureFormat extends UFormat {
      * locale.
      * @return a formatter object
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static MeasureFormat getCurrencyFormat() {
         return getCurrencyFormat(ULocale.getDefault());

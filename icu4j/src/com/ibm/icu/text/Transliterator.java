@@ -360,6 +360,7 @@ public abstract class Transliterator {
         /**
          * Constructs a Position object that is a copy of another.
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public Position(Position pos) {
             set(pos);
@@ -368,6 +369,7 @@ public abstract class Transliterator {
         /**
          * Copies the indices of this position from another.
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public void set(Position pos) {
             contextStart = pos.contextStart;
@@ -379,6 +381,7 @@ public abstract class Transliterator {
         /**
          * Returns true if this Position is equal to the given object.
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public boolean equals(Object obj) {
             if (obj instanceof Position) {
@@ -394,6 +397,7 @@ public abstract class Transliterator {
         /**
          * Returns a string representation of this Position.
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public String toString() {
             return "[cs=" + contextStart
@@ -1478,6 +1482,7 @@ public abstract class Transliterator {
      * @return an array of one or more transliterators that make up
      * this transliterator
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Transliterator[] getElements() {
         Transliterator result[];

@@ -20,6 +20,7 @@ import java.lang.Number;
  * @see Currency
  * @author Alan Liu
  * @draft ICU 3.0
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class CurrencyAmount extends Measure {
     
@@ -28,6 +29,7 @@ public class CurrencyAmount extends Measure {
      * @param number the number
      * @param currency the currency
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CurrencyAmount(Number number, Currency currency) {
         super(number, currency);
@@ -38,6 +40,7 @@ public class CurrencyAmount extends Measure {
      * @param number a double value
      * @param currency the currency
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CurrencyAmount(double number, Currency currency) {
         super(new Double(number), currency);
@@ -47,6 +50,7 @@ public class CurrencyAmount extends Measure {
      * Returns the currency of this object.
      * @return this object's Currency
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Currency getCurrency() {
         return (Currency) getUnit();

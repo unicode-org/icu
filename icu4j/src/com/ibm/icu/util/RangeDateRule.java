@@ -13,14 +13,14 @@ import java.util.Vector;
 /**
  * Implementation of DateRule that takes a range.
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
-public class RangeDateRule implements DateRule
-{
+public class RangeDateRule implements DateRule {
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public RangeDateRule()
-    {
+    public RangeDateRule() {
     }
 
     /**
@@ -36,17 +36,17 @@ public class RangeDateRule implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public void add(DateRule rule)
-    {
+    public void add(DateRule rule) {
         add(new Date(Long.MIN_VALUE), rule);
     }
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public void add(Date start, DateRule rule)
-    {
+    public void add(Date start, DateRule rule) {
         // TODO: Insert in the right place
         // System.out.println("Add: " + start.toString());
         ranges.addElement(new Range(start, rule));
@@ -56,9 +56,9 @@ public class RangeDateRule implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public Date firstAfter(Date start)
-    {
+    public Date firstAfter(Date start) {
         // Find the range that I should look at
         int index = startIndex(start);
         if (index == ranges.size()) {
@@ -82,9 +82,9 @@ public class RangeDateRule implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public Date firstBetween(Date start, Date end)
-    {
+    public Date firstBetween(Date start, Date end) {
     	if (end == null) {
     		return firstAfter(start);
     	}
@@ -111,9 +111,9 @@ public class RangeDateRule implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public boolean isOn(Date date)
-    {
+    public boolean isOn(Date date) {
         Range r = rangeAt(startIndex(date));
         return r != null && r.rule != null && r.rule.isOn(date);
     }
@@ -122,9 +122,9 @@ public class RangeDateRule implements DateRule
      * Check whether this event occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public boolean isBetween(Date start, Date end)
-    {
+    public boolean isBetween(Date start, Date end) {
         return firstBetween(start,end) == null;
     }
 
@@ -132,8 +132,7 @@ public class RangeDateRule implements DateRule
      * find the index of the last range whose start date is before "start"
      * returns an index >= ranges.size() if there is none
      */
-    private int startIndex(Date start)
-    {
+    private int startIndex(Date start) {
         int lastIndex = ranges.size();
 
         for (int i = 0; i < ranges.size(); i++) {
@@ -146,14 +145,13 @@ public class RangeDateRule implements DateRule
         return lastIndex;
     }
 
-    private Range rangeAt(int index)
-    {
+    private Range rangeAt(int index) {
        return (index < ranges.size()) ? (Range) ranges.elementAt(index)
                                       : null;
     }
 
     Vector ranges = new Vector(2,2);
-};
+}
 
 //-----------------------------------------------------------------------
 // Privates

@@ -88,6 +88,7 @@ public final class CollationKey implements Comparable
      * Options that used in the API CollationKey.getBound() for getting a 
      * CollationKey based on the bound mode requested.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final class BoundMode 
     {
@@ -99,22 +100,29 @@ public final class CollationKey implements Comparable
         /** 
          * Lower bound
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int LOWER = 0;
+
         /** 
          * Upper bound that will match strings of exact size
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int UPPER = 1;
+
         /** 
          * Upper bound that will match all the strings that have the same 
          * initial substring as the given string
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int UPPER_LONG = 2;
+
         /**
          * Number of bound mode
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int COUNT = 3;
         
@@ -157,6 +165,7 @@ public final class CollationKey implements Comparable
      * @see Collator
      * @see RawCollationKey
      * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CollationKey(String source, RawCollationKey key)
     {
@@ -433,6 +442,7 @@ public final class CollationKey implements Comparable
      * @see Collator#QUATERNARY
      * @see Collator#IDENTICAL
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CollationKey getBound(int boundType, int noOfLevels) 
     {
@@ -529,6 +539,7 @@ public final class CollationKey implements Comparable
      * @exception IllegalArgumentException thrown if source CollationKey
      *            argument is null or of 0 length.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CollationKey merge(CollationKey source)
     {

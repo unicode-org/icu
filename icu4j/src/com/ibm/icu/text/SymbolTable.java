@@ -31,12 +31,14 @@ import java.text.ParsePosition;
  * table parses the name, if there is one, and returns it.
  *
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public interface SymbolTable {
 
     /**
      * The character preceding a symbol reference name.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     static final char SYMBOL_REF = '$';
 
@@ -48,6 +50,7 @@ public interface SymbolTable {
      * @return a char array containing the name's value, or null if
      * there is no mapping for s.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     char[] lookup(String s);
 
@@ -58,6 +61,7 @@ public interface SymbolTable {
      * @return the UnicodeMatcher object represented by the given
      * character, or null if there is no mapping for ch.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     UnicodeMatcher lookupMatcher(int ch);
 
@@ -77,6 +81,7 @@ public interface SymbolTable {
      * @return the parsed name, or null if there is no valid symbolic
      * name at the given position.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     String parseReference(String text, ParsePosition pos, int limit);
 }

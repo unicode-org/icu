@@ -46,6 +46,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Selector for getName() indicating a symbolic name for a
      * currency, such as "$" for USD.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int SYMBOL_NAME = 0;
 
@@ -53,6 +54,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Selector for ucurr_getName indicating the long name for a
      * currency, such as "US Dollar" for USD.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int LONG_NAME = 1;
 
@@ -147,6 +149,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Registers a new currency for the provided locale.  The returned object
      * is a key that can be used to unregister this currency object.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Object registerInstance(Currency currency, Locale locale) {
         return getShim().registerInstance(currency, locale);
@@ -156,6 +159,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * Unregister the currency associated with this key (obtained from
      * registerInstance).
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static boolean unregister(Object registryKey) {
         if (registryKey == null) {
@@ -229,6 +233,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * returned.  If isChoiceFormat[0] is true, then the result is a
      * ChoiceFormat pattern.  Otherwise it is a static string.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getName(Locale locale,
                           int nameStyle,
@@ -587,6 +592,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

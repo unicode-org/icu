@@ -316,6 +316,7 @@ import com.ibm.icu.impl.Utility;
  * @see          ChoiceFormat
  * @author       Mark Davis
  * @draft ICU 3.0
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class MessageFormat extends UFormat {
 
@@ -333,6 +334,7 @@ public class MessageFormat extends UFormat {
      * @param pattern the pattern for this message format
      * @exception IllegalArgumentException if the pattern is invalid
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public MessageFormat(String pattern) {
         this.locale = Locale.getDefault();
@@ -351,6 +353,7 @@ public class MessageFormat extends UFormat {
      * @param locale the locale for this message format
      * @exception IllegalArgumentException if the pattern is invalid
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public MessageFormat(String pattern, Locale locale) {
         this.locale = locale;
@@ -366,6 +369,7 @@ public class MessageFormat extends UFormat {
      *
      * @param locale the locale to be used when creating or comparing subformats
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setLocale(Locale locale) {
         /* Save the pattern, and then reapply so that */
@@ -381,6 +385,7 @@ public class MessageFormat extends UFormat {
      *
      * @return the locale used when creating or comparing subformats
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Locale getLocale() {
         return locale;
@@ -397,6 +402,7 @@ public class MessageFormat extends UFormat {
      * @param pattern the pattern for this message format
      * @exception IllegalArgumentException if the pattern is invalid
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void applyPattern(String pattern) {
             StringBuffer[] segments = new StringBuffer[4];
@@ -475,6 +481,7 @@ public class MessageFormat extends UFormat {
      *
      * @return a pattern representing the current state of the message format
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String toPattern() {
         // later, make this more extensible
@@ -571,6 +578,7 @@ public class MessageFormat extends UFormat {
      * @param newFormats the new formats to use
      * @exception NullPointerException if <code>newFormats</code> is null
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setFormatsByArgumentIndex(Format[] newFormats) {
         for (int i = 0; i <= maxOffset; i++) {
@@ -603,6 +611,7 @@ public class MessageFormat extends UFormat {
      * @param newFormats the new formats to use
      * @exception NullPointerException if <code>newFormats</code> is null
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setFormats(Format[] newFormats) {
         int runsToCopy = newFormats.length;
@@ -631,6 +640,7 @@ public class MessageFormat extends UFormat {
      * @param argumentIndex the argument index for which to use the new format
      * @param newFormat the new format to use
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setFormatByArgumentIndex(int argumentIndex, Format newFormat) {
         for (int j = 0; j <= maxOffset; j++) {
@@ -657,6 +667,7 @@ public class MessageFormat extends UFormat {
      * @exception ArrayIndexOutOfBoundsException if formatElementIndex is equal to or
      *            larger than the number of format elements in the pattern string
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setFormat(int formatElementIndex, Format newFormat) {
         formats[formatElementIndex] = newFormat;
@@ -681,6 +692,7 @@ public class MessageFormat extends UFormat {
      *
      * @return the formats used for the arguments within the pattern
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Format[] getFormatsByArgumentIndex() {
         int maximumArgumentNumber = -1;
@@ -712,6 +724,7 @@ public class MessageFormat extends UFormat {
      *
      * @return the formats used for the format elements in the pattern
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Format[] getFormats() {
         Format[] resultArray = new Format[maxOffset + 1];
@@ -784,6 +797,7 @@ public class MessageFormat extends UFormat {
      *            <code>arguments</code> array is not of the type
      *            expected by the format element(s) that use it.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final StringBuffer format(Object[] arguments, StringBuffer result,
                                      FieldPosition pos)
@@ -803,6 +817,7 @@ public class MessageFormat extends UFormat {
      *            is not of the type expected by the format element(s)
      *            that use it.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String format(String pattern, Object[] arguments) {
         MessageFormat temp = new MessageFormat(pattern);
@@ -827,6 +842,7 @@ public class MessageFormat extends UFormat {
      *            <code>arguments</code> array is not of the type
      *            expected by the format element(s) that use it.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final StringBuffer format(Object arguments, StringBuffer result,
                                      FieldPosition pos)
@@ -913,6 +929,7 @@ public class MessageFormat extends UFormat {
      * 0. When an error occurs, the call to this method will return null.
      * If the source is null, return an empty array.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Object[] parse(String source, ParsePosition pos) {
         if (source == null) {
@@ -1002,6 +1019,7 @@ public class MessageFormat extends UFormat {
      * @exception ParseException if the beginning of the specified string
      *            cannot be parsed.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Object[] parse(String source) throws ParseException {
         ParsePosition pos  = new ParsePosition(0);
@@ -1036,6 +1054,7 @@ public class MessageFormat extends UFormat {
      *         error, returns null.
      * @exception NullPointerException if <code>pos</code> is null.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Object parseObject(String source, ParsePosition pos) {
         return parse(source, pos);
@@ -1046,6 +1065,7 @@ public class MessageFormat extends UFormat {
      *
      * @return a clone of this instance.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Object clone() {
         MessageFormat other = (MessageFormat) super.clone();
@@ -1066,6 +1086,7 @@ public class MessageFormat extends UFormat {
     /**
      * Equality comparison between two message format objects
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean equals(Object obj) {
         if (this == obj)                      // quick check
@@ -1084,6 +1105,7 @@ public class MessageFormat extends UFormat {
     /**
      * Generates a hash code for the message format object.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int hashCode() {
         return pattern.hashCode(); // enough for reasonable distribution
@@ -1095,6 +1117,7 @@ public class MessageFormat extends UFormat {
 //     * <code>AttributedCharacterIterator</code> returned
 //     * from <code>MessageFormat.formatToCharacterIterator</code>.
 //     * @draft ICU 3.0
+//     * @deprecated This is a draft API and might change in a future release of ICU.
 //     */
 //    public static class Field extends Format.Field {
 //        /**

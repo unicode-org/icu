@@ -635,6 +635,7 @@ public abstract class BreakIterator implements Cloneable
      * @return An array of Locales.  All of the locales in the array can
      * be used when creating a BreakIterator.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static synchronized Locale[] getAvailableLocales()
     {
@@ -713,6 +714,7 @@ public abstract class BreakIterator implements Cloneable
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ULocale getLocale(ULocale.Type type) {
         return type == ULocale.ACTUAL_LOCALE ?

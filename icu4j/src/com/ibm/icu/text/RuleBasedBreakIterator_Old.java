@@ -837,6 +837,7 @@ throws IOException {
      * <p>
      *
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int  getRuleStatus() {
     	return 0;
@@ -854,6 +855,7 @@ throws IOException {
      * status can be declared, and a status of zero is always assumed.
      * <p>
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
      public int getRuleStatusVec(int[] fillInArray) {
      	if (fillInArray != null && fillInArray.length >= 1) {

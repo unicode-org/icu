@@ -304,6 +304,9 @@ public class CheckTags {
     void doTags(ProgramElementDoc doc) {
         Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
+	boolean foundDraftTag = false;
+	boolean foundDeprecatedTag = false;
+
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
                 
@@ -320,14 +323,25 @@ public class CheckTags {
                 break;
 
             case DRAFT:
+	      foundRequiredTag = true;
+	      foundDraftTag = true;
               if (tag.text().indexOf("ICU 2.4") != -1) {
-                foundRequiredTag = true;
                 tagErr(tag);
                 break;
               }
-              // fall through
+	      if (tag.text().indexOf("ICU") != 0) {
+		  tagErr(tag);
+		  break;
+	      }
+	      break;
 
             case DEPRECATED:
+		foundDeprecatedTag = true;
+                if (tag.text().indexOf("ICU") == 0) {
+		    foundRequiredTag = true;
+		}
+		break;
+
             case OBSOLETE:
                 if (tag.text().indexOf("ICU") != 0) {
                     tagErr(tag);
@@ -371,5 +385,8 @@ public class CheckTags {
         if (!foundRequiredTag) {
             errln("missing required tag [" + /*doc.position() +*/ "]");
         }
+	if (foundDraftTag && !foundDeprecatedTag) {
+	    errln("draft tag missing deprecated");
+	}
     }
 }
