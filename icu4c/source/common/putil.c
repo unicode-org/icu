@@ -84,6 +84,9 @@
 #   include <Files.h>
 #   include <IntlResources.h>
 #   include <Script.h>
+#   include <Folders.h>
+#   include <Errors.h>
+#   include <TextUtils.h>
 #elif defined(AIX)
 #   include <sys/ldr.h>
 #elif defined(U_SOLARIS) || defined(U_LINUX)
@@ -774,7 +777,26 @@ u_setDataDirectory(const char *directory) {
     }
 }
 
+
 #ifndef ICU_DATA_DIR
+
+# if defined(XP_MAC)
+/*
+  We need FSpGetFullPath() from Apple Sample Code's "MoreFiles". Look in:
+    http://developer.apple.com/samplecode/Sample_Code/Files/MoreFiles.htm
+  and replace the following function..
+*/
+
+ /* Dummy FSpGetFullPath */
+pascal	OSErr	FSpGetFullPath(const FSSpec *spec,
+							   short *fullPathLength,
+							   Handle *fullPath)
+{
+  *fullPath = NULL;
+  *fullPathLength = 0;
+  return fnfErr; 
+}
+# endif /* XP_MAC */
 
 /*
  * get the system drive or volume path
@@ -786,11 +808,10 @@ static int
 getSystemPath(char *path, int size) {
 #   if defined(XP_MAC)
         int16_t volNum;
-
         path[0]=0;
-        OSErr err=GetVol(path, &volNum);
-        if(err!=noErr) {
-            int length=(uint8_t)volName[0];
+        OSErr err=GetVol((unsigned char*)path, &volNum);
+        if(err==noErr) {
+            int length=(uint8_t)path[0];
             if(length>0) {
                 /* convert the Pascal string to a C string */
                 uprv_memmove(path, path+1, length);
@@ -820,7 +841,7 @@ getSystemPath(char *path, int size) {
     return 0;
 }
 
-#endif
+#endif /* ICU_DATA_DIR not defined */
 
 /*
  * get the path to the ICU dynamic library
@@ -870,7 +891,7 @@ getLibraryPath(char *path, int size) {
             if(rc>=0) {
                 /* search for the list item for the library itself */
                 while(p!=NULL) {
-                    s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
+       	           s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
                     if(s!=NULL) {
                         if(s>p->l_name) {
                             /* copy the path, without the basename and the last separator */
@@ -1056,6 +1077,8 @@ findLibraryPath(char *path, int size) {
 /* define a path for fallbacks */
 #ifdef WIN32
 #define FALLBACK_PATH U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data"
+#elif defined(XP_MAC)
+#define FALLBACK_PATH U_FILE_SEP_STRING "ICU" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
 #else
 #define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
 #endif
@@ -1070,20 +1093,62 @@ u_getDataDirectory(void) {
     if(!gHaveDataDirectory) {
         /* we need to look for it */
         char pathBuffer[1024];
-        const char *path;
+        const char *path = NULL;
         int length;
 
 #       if !defined(XP_MAC)
             /* first try to get the environment variable */
             path=getenv("ICU_DATA");
-/*        fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
-/*        { */
-/*            int i; */
-/*            fprintf(stderr, "E=%08X\n", __environ); */
-/*            if(__environ) */
-/*            for(i=0;__environ[i] && __environ[i][0];i++) */
-/*                puts(__environ[i]); */
-/*        } */
+/* 	    fprintf(stderr, " ******** ICU_DATA=%s ********** \n", path); */
+/* 	    { */
+/* 	      int i; */
+/* 	      fprintf(stderr, "E=%08X\n", __environ); */
+/* 	      if(__environ) */
+/* 	      for(i=0;__environ[i] && __environ[i][0];i++) */
+/* 		puts(__environ[i]); */
+/* 	    } */
+#else	/* XP_MAC */
+		{
+			OSErr myErr;
+			short vRef;
+			long  dir,newDir;
+	        int16_t volNum;
+			Str255 xpath;
+			FSSpec spec;
+			short  len;
+			Handle full;
+
+	        xpath[0]=0;
+	       	
+    	    myErr = GetVol(xpath, &volNum);
+				
+			if(myErr == noErr) {
+				myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, & vRef, &dir);
+				newDir=-1;
+				if (myErr == noErr) {
+					myErr = 
+						DirCreate(volNum,
+								 dir,
+								 "\pICU",
+								 &newDir);	
+					if( (myErr == noErr) || (myErr == dupFNErr) ) {
+						spec.vRefNum = volNum;
+						spec.parID = dir;
+						uprv_memcpy(spec.name, "\pICU", 4);
+						
+						myErr = FSpGetFullPath(&spec, &len, &full);
+						if(full != NULL)
+						{
+							HLock(full);
+							uprv_memcpy(pathBuffer,  ((char*)(*full)), len);
+							pathBuffer[len] = 0;
+							path = pathBuffer;
+							DisposeHandle(full);
+						}	
+					}
+				}
+			}
+		}
 #       endif
 #       ifdef WIN32
             /* next, try to read the path from the registry */
@@ -1517,7 +1582,8 @@ const char* uprv_getDefaultCodepage()
 #elif defined(OS390)
   return "ibm-1047-s390";
 #elif defined(XP_MAC)
-  /* TBD */
+  return "ibm-1275"; /* Macintosh Roman... There must be a better way...
+                        fixme! */
 #elif defined(WIN32)
   static char tempString[10] = "";
   static char codepage[12]={ "cp" };
