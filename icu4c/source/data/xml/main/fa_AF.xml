@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
+		<version number="1.0"/>
 		<generation date="2004-05-27" />
 		<language type="fa" /> 
 		<territory type="AF" /> 
@@ -232,4 +237,38 @@
 			</currencyFormatLength >
 		</currencyFormats>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%main:
+-x: منفی &gt;&gt;;
+x.x: &lt;&lt; عشاریه &gt;&gt;;
+صفر; یک; دو; سه; چهار; پنج; شش; هفت; هشت; نه;
+ده; یازده; دوازده; سیزده; چهارده; پانزده; شانزده;
+    هفده; هجده; نزده;
+20: بیست[ و &gt;&gt;];
+30: سی[ و &gt;&gt;];
+40: چهل[ و &gt;&gt;];
+50: پنجاه[ و &gt;&gt;];
+60: شصت[ و &gt;&gt;];
+70: هفتاد[ و &gt;&gt;];
+80: هشتاد[ و &gt;&gt;];
+90: نود[ و &gt;&gt;];
+100: صد[ و &gt;&gt;];
+200: دوصد[ و &gt;&gt;];
+300: سه‌صد[ و &gt;&gt;];
+400: چهارصد[ و &gt;&gt;];
+500: پنجصد[ و &gt;&gt;];
+600: ششصد[ و &gt;&gt;];
+700: هفتصد[ و &gt;&gt;];
+800: هشتصد[ و &gt;&gt;];
+900: نهصد[ و &gt;&gt;];
+1000: &lt;&lt; هزار[ و &gt;&gt;];
+1,000,000: &lt;&lt; میلیون[ و &gt;&gt;];
+1,000,000,000: &lt;&lt; میلیارد[ و &gt;&gt;];
+1,000,000,000,000: =#,##0=;
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
