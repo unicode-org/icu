@@ -393,7 +393,7 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
       }
       
-      sprintf(stanza, "@$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile+genFileOffset); /* for AS/400 */
+      sprintf(stanza, "@$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $(TEMP_DIR)/%s", cfile+genFileOffset); /* for AS/400 */
       commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
       
       sprintf(stanza, "@$(RMV) $(TEMP_DIR)/%s", cfile+genFileOffset);
