@@ -190,7 +190,7 @@ RuleBasedNumberFormat::getRuleSetName(int32_t index) const
             }
         }
     }
-    return *(UnicodeString*)NULL;
+    return result;
 }
 
 int32_t
