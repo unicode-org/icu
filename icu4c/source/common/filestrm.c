@@ -33,8 +33,12 @@
 U_CAPI FileStream*
 T_FileStream_open(const char* filename, const char* mode)
 {
-  FILE *file = fopen(filename, mode);
-  return (FileStream*)file;
+  if(filename != NULL && *filename != 0 && mode != NULL && *mode != 0) {
+    FILE *file = fopen(filename, mode);
+    return (FileStream*)file;
+  } else {
+    return NULL;
+  }
 }
 
 

@@ -385,6 +385,10 @@ void SimpleDateFormat::parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& s
 UnicodeString&
 SimpleDateFormat::format(UDate date, UnicodeString& toAppendTo, FieldPosition& pos) const
 {
+    if (fCalendar == 0) {
+        return toAppendTo;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     pos.setBeginIndex(0);
     pos.setEndIndex(0);
