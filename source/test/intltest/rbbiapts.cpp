@@ -139,8 +139,6 @@ void RBBIAPITest::TestgetRules()
 
     bi1->setText((UnicodeString)"Hello there");
 
-
-
     RuleBasedBreakIterator* bi3 =(RuleBasedBreakIterator*)bi1->clone();
 
     UnicodeString temp=bi1->getRules();
@@ -563,6 +561,8 @@ void RBBIAPITest::TestLastPreviousPreceding()
     delete wordIter1;
     delete lineIter1;
 }
+
+
 void RBBIAPITest::TestIsBoundary(){
     UErrorCode status=U_ZERO_ERROR;
     UnicodeString testString1=CharsToUnicodeString("Write here. \\u092d\\u093e\\u0930\\u0924 \\u0938\\u0941\\u0902\\u0926\\u0930 \\u0939\\u094c\\u0964");
@@ -621,12 +621,12 @@ void RBBIAPITest::TestBuilder() {
 //
 void RBBIAPITest::TestQuoteGrouping() {
      UnicodeString rulesString1 = "#Here comes the rule...\n"
-                                  "'$@!'*;\n"
+                                  "'$@!'*;\n"   //  (\$\@\!)*
                                   ".;\n";
 
-     UnicodeString testString1  = "$@!X$@!XX";
-                                // 01234567890
-     int32_t bounds1[] = {0, 3, 4, 7, 8, 9};
+     UnicodeString testString1  = "$@!$@!X$@!!X";
+                                // 0123456789012
+     int32_t bounds1[] = {0, 6, 7, 10, 11, 12};
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
      
@@ -636,6 +636,55 @@ void RBBIAPITest::TestQuoteGrouping() {
      } else {
          bi->setText(testString1);
          doBoundaryTest(*bi, testString1, bounds1);
+     }
+     delete bi;
+}
+
+//
+//  TestWordStatus
+//      Test word break rule status constants.
+//
+void RBBIAPITest::TestWordStatus() {
+
+     
+     UnicodeString testString1 =   //                  Ideographic    Katakana       Hiragana
+             CharsToUnicodeString("plain word 123.45 \\u9160\\u9161 \\u30a1\\u30a2 \\u3041\\u3094");
+                                // 012345678901234567  8      9    0  1      2    3  4      5    6
+     int32_t bounds1[] =     {     0,   5,6, 10,11, 17,18,  19,   20,21,       23,24,       26};
+     int32_t tag_lo[]  = {UBRK_WORD_NONE,     UBRK_WORD_LETTER, UBRK_WORD_NONE,    UBRK_WORD_LETTER,
+                          UBRK_WORD_NONE,     UBRK_WORD_NUMBER, UBRK_WORD_NONE,
+                          UBRK_WORD_IDEO,     UBRK_WORD_IDEO,   UBRK_WORD_NONE,
+                          UBRK_WORD_HIRAKATA, UBRK_WORD_NONE,   UBRK_WORD_HIRAKATA};
+
+     int32_t tag_hi[]  = {UBRK_WORD_NONE_LIMIT,     UBRK_WORD_LETTER_LIMIT, UBRK_WORD_NONE_LIMIT,    UBRK_WORD_LETTER_LIMIT,
+                          UBRK_WORD_NONE_LIMIT,     UBRK_WORD_NUMBER_LIMIT, UBRK_WORD_NONE_LIMIT,
+                          UBRK_WORD_IDEO_LIMIT,     UBRK_WORD_IDEO_LIMIT,   UBRK_WORD_NONE_LIMIT,
+                          UBRK_WORD_HIRAKATA_LIMIT, UBRK_WORD_NONE_LIMIT,   UBRK_WORD_HIRAKATA_LIMIT};
+
+     UErrorCode status=U_ZERO_ERROR;
+     
+     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getDefault(), status);
+     if(U_FAILURE(status)) {
+         errln("FAIL : in construction");
+     } else {
+         bi->setText(testString1);
+         // First test that the breaks are in the right spots.
+         doBoundaryTest(*bi, testString1, bounds1);
+
+         // Then go back and check tag values
+         int32_t i = 0;
+         int32_t pos, tag;
+         for (pos = bi->first(); pos != BreakIterator::DONE; pos = bi->next(), i++) {
+             if (pos != bounds1[i]) {
+                 errln("FAIL: unexpected word break at postion %d", pos);
+                 break;
+             }
+             tag = bi->getRuleStatus();
+             if (tag < tag_lo[i] || tag >= tag_hi[i]) {
+                 errln("FAIL: incorrect tag value %d at position %d", tag, pos);
+                 break;
+             }
+         }
      }
      delete bi;
 }
@@ -659,6 +708,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 6: name = "TestIsBoundary"; if (exec) TestIsBoundary(); break;
         case 7: name = "TestBuilder"; if (exec) TestBuilder(); break;
         case 8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
+        case 9: name = "TestWordStatus"; if (exec) TestWordStatus(); break;
                    
         default: name = ""; break; /*needed to end loop*/
     }

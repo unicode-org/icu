@@ -25,6 +25,7 @@
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/locid.h"
+#include "unicode/ubrk.h"
 
 
 U_NAMESPACE_BEGIN

@@ -195,6 +195,29 @@ typedef enum UBreakIteratorType UBreakIteratorType;
  */
 #define UBRK_DONE ((int32_t) -1)
 
+
+/**
+ *  Enum constants for the word break tags returned by
+ *  getRuleStatus().  A range of values is defined for each category of
+ *  word, to allow for further subdivisions of a category in future releases.
+ *  Applications should check for tag values falling within the range, rather
+ *  than for single individual values.
+*/
+enum UWordBreak {
+    UBRK_WORD_NONE           = 0,
+    UBRK_WORD_NONE_LIMIT     = 100,
+    UBRK_WORD_NUMBER         = 100,
+    UBRK_WORD_NUMBER_LIMIT   = 200,
+    UBRK_WORD_LETTER         = 200,
+    UBRK_WORD_LETTER_LIMIT   = 300,
+    UBRK_WORD_HIRAKATA       = 300,
+    UBRK_WORD_HIRAKATA_LIMIT = 400,
+    UBRK_WORD_IDEO           = 400,
+    UBRK_WORD_IDEO_LIMIT     = 500
+};
+typedef enum UWordBreak UWordBreak;
+
+
 /**
  * Open a new UBreakIterator for locating text boundaries for a specified locale.
  * A UBreakIterator may be used for detecting character, line, word,
@@ -412,6 +435,8 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
  * returned break position.  The values appear in the rule source
  * within brackets, {123}, for example.  For rules that do not specify a
  * status, a default value of 0 is returned.
+ * <p>
+ * For word break iterators, the possible values are defined in enum UWordBreak.
  */
 U_CAPI  int32_t U_EXPORT2
 ubrk_getRuleStatus(UBreakIterator *bi);
