@@ -37,8 +37,8 @@
 #include "ucnvmbcs.h"
 #include "cstring.h"
 
-#define UCNV_SS2 "\x1B\x4E"
-#define UCNV_SS3 "\x1B\x4F"
+static const char UCNV_SS2[] = "\x1B\x4E";
+static const char UCNV_SS3[] = "\x1B\x4F";
 #define UCNV_SS2_LEN 2
 #define UCNV_SS3_LEN 2
 
@@ -2470,19 +2470,32 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 *
 */
 
+/* The following are defined this way to make the strings truely readonly */
+static const char EMPTY_STR[] = "";
+static const char SHIFT_IN_STR[]  = "\x0F";
+static const char SHIFT_OUT_STR[] = "\x0E";
+static const char GB_2312_80_STR[] = "\x1B\x24\x29\x41";
+static const char ISO_IR_165_STR[] = "\x1B\x24\x29\x45";
+static const char CNS_11643_1992_Plane_1_STR[] = "\x1B\x24\x29\x47";
+static const char CNS_11643_1992_Plane_2_STR[] = "\x1B\x24\x2A\x48";
+static const char CNS_11643_1992_Plane_3_STR[] = "\x1B\x24\x2B\x49";
+static const char CNS_11643_1992_Plane_4_STR[] = "\x1B\x24\x2B\x4A";
+static const char CNS_11643_1992_Plane_5_STR[] = "\x1B\x24\x2B\x4B";
+static const char CNS_11643_1992_Plane_6_STR[] = "\x1B\x24\x2B\x4C";
+static const char CNS_11643_1992_Plane_7_STR[] = "\x1B\x24\x2B\x4D";
 
 /********************** ISO2022-CN Data **************************/
 static const char* const escSeqCharsCN[10] ={
-        "\x0F",             /* ASCII */
-        "\x1B\x24\x29\x41", /* GB 2312-80 */
-        "\x1B\x24\x29\x45", /* ISO-IR-165 */
-        "\x1B\x24\x29\x47", /* CNS 11643-1992 Plane 1 */
-        "\x1B\x24\x2A\x48", /* CNS 11643-1992 Plane 2 */
-        "\x1B\x24\x2B\x49", /* CNS 11643-1992 Plane 3 */
-        "\x1B\x24\x2B\x4A", /* CNS 11643-1992 Plane 4 */
-        "\x1B\x24\x2B\x4B", /* CNS 11643-1992 Plane 5 */
-        "\x1B\x24\x2B\x4C", /* CNS 11643-1992 Plane 6 */
-        "\x1B\x24\x2B\x4D"  /* CNS 11643-1992 Plane 7 */
+        SHIFT_IN_STR,           /* ASCII */
+        GB_2312_80_STR,
+        ISO_IR_165_STR,
+        CNS_11643_1992_Plane_1_STR,
+        CNS_11643_1992_Plane_2_STR,
+        CNS_11643_1992_Plane_3_STR,
+        CNS_11643_1992_Plane_4_STR,
+        CNS_11643_1992_Plane_5_STR,
+        CNS_11643_1992_Plane_6_STR,
+        CNS_11643_1992_Plane_7_STR
 };
 static const int escSeqCharsLenCN[10] = {
     1,      /* length of escSeq for ASCII */
@@ -2497,16 +2510,16 @@ static const int escSeqCharsLenCN[10] = {
     4       /* length of escSeq for CNS 11643-1992 Plane 7 */
 };
 static const char* const shiftSeqCharsCN[10] ={
-        "",                     /* ASCII */
-        (const char*) "\x0E",   /* GB 2312-80 */
-        (const char*) "\x0E",   /* ISO-IR-165 */
-        (const char*) "\x0E",   /* CNS 11643-1992 Plane 1 */
-        UCNV_SS2,               /* CNS 11643-1992 Plane 2 */
-        UCNV_SS3,               /* CNS 11643-1992 Plane 3 */
-        UCNV_SS3,               /* CNS 11643-1992 Plane 4 */
-        UCNV_SS3,               /* CNS 11643-1992 Plane 5 */
-        UCNV_SS3,               /* CNS 11643-1992 Plane 6 */
-        UCNV_SS3                /* CNS 11643-1992 Plane 7 */
+        EMPTY_STR,      /* ASCII */
+        SHIFT_OUT_STR,  /* GB 2312-80 */
+        SHIFT_OUT_STR,  /* ISO-IR-165 */
+        SHIFT_OUT_STR,  /* CNS 11643-1992 Plane 1 */
+        UCNV_SS2,       /* CNS 11643-1992 Plane 2 */
+        UCNV_SS3,       /* CNS 11643-1992 Plane 3 */
+        UCNV_SS3,       /* CNS 11643-1992 Plane 4 */
+        UCNV_SS3,       /* CNS 11643-1992 Plane 5 */
+        UCNV_SS3,       /* CNS 11643-1992 Plane 6 */
+        UCNV_SS3        /* CNS 11643-1992 Plane 7 */
 };
 static const int shiftSeqCharsLenCN[10] ={
     0,      /* length of shiftSeq for ASCII */
