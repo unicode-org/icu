@@ -246,13 +246,15 @@ public abstract class PerfTest {
         //bufferLen = 0;
         verbose = false;
         bulk_mode = false;
-        passes = iterations = time = 0;
+        passes = 3; // default
+        iterations = 0;
+        time = 3; // default
         locale = null;
 
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
         
-        if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
+        if(options[HELP1].doesOccur || options[HELP2].doesOccur) {
             throw new UsageException();
         }
 
@@ -318,7 +320,6 @@ public abstract class PerfTest {
 
         int i, j;
         for (i=0; i<remainingArgc; ++i) {
-
             // is args[i] a method name?
             Method m = getTestMethod(args[i]);
             if (m != null) {
@@ -332,7 +333,12 @@ public abstract class PerfTest {
             break;
         }
 
-        if (methodList.size() < 1 || options[LIST].doesOccur) {
+        if (methodList.size() < 1) { // default to all methods
+            System.out.println("running all methods");
+            methodList.addAll(getAvailableTests().values());
+        }
+
+        if (options[LIST].doesOccur) {
             System.err.println("Available tests:");
             Iterator methods = getAvailableTests().values().iterator();
             TreeSet methodNames = new TreeSet();
@@ -343,10 +349,7 @@ public abstract class PerfTest {
             while (tests.hasNext()) {
                 System.err.println(" " + tests.next());
             }
-            if (options[LIST].doesOccur) {
-                System.exit(0);
-            }
-            throw new UsageException("Must specify at least one method name");
+            return;
         }
 
         // Pass remaining arguments, if any, through to the subclass
@@ -378,6 +381,7 @@ public abstract class PerfTest {
                 throw new RuntimeException(meth.getName() + " returned an illegal operations/iteration()");
             }
 
+            // System.out.println("passes: " + passes + " iterations: " + iterations);
             int n;
             long t;
             for (j=0; j<passes; ++j) {
@@ -394,16 +398,13 @@ public abstract class PerfTest {
                     int loops = 0;
                     int failsafe = 1; // last resort for very fast methods
                     t = 0;
-                    while (t < (int)(n * 0.9)) { // 90% is close enough
-                        if (loops == 0 || t == 0) {
+                    while (t < n) {
+                        if (t < 100) {
                             loops = failsafe;
-                            failsafe *= 10;
+                            failsafe *= 2;
                         } else {
                             //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);                            
-                            loops = (int)((double)n / t * loops + 0.5);
-                            if (loops == 0) {
-                                throw new RuntimeException("Unable to converge on desired duration");
-                            }
+                            loops = Math.max(loops+1, (int)((double)n / t * loops + 0.5));
                         }
                         //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction.time(loops);
