@@ -1023,7 +1023,7 @@ UnicodeString::toUpper(const Locale &locale) {
 
 UnicodeString &
 UnicodeString::foldCase(uint32_t options) {
-  return caseMap(Locale(), options, TO_LOWER);
+  return caseMap(*((const Locale *)NULL), options, FOLD_CASE);
 }
 
 // static helper function for string case mapping
