@@ -2087,7 +2087,7 @@ int32_t   RegexCompile::matchStartType() {
 
     UnicodeSet   startingChars;
     int32_t      startStringIndex;
-    int32_t      startStringChars;
+    int32_t      startStringLen;
 
     UBool        atStart = TRUE;     // True if no part of the pattern yet encountered
                                      //   could have advanced the position in a match.
@@ -2173,11 +2173,20 @@ int32_t   RegexCompile::matchStartType() {
             atStart = FALSE;
             break;
 
-        case URX_STATIC_SETREF:         // TODO:  sense of op, invert the set.
+        case URX_STATIC_SETREF:    
             if (currentLen == 0) {
                 int32_t  sn = URX_VAL(op);
+                UBool negated = ((sn & URX_NEG_SET) == URX_NEG_SET);  
+                sn &= ~URX_NEG_SET;
+
                 const UnicodeSet *s = fRXPat->fStaticSets[sn];
-                startingChars.addAll(*s);
+                if (negated) {
+                    UnicodeSet sc(*s);
+                    sc.complement();
+                    startingChars.addAll(sc);
+                } else {
+                    startingChars.addAll(*s);
+                }
             }
             currentLen++;
             atStart = FALSE;
@@ -2186,6 +2195,7 @@ int32_t   RegexCompile::matchStartType() {
 
 
         case URX_BACKSLASH_D:
+            // Digit Char
              if (currentLen == 0) {
                  UnicodeSet s;   // TODO:  sense of op, invert the set.
                  s.applyIntPropertyValue(UCHAR_GENERAL_CATEGORY_MASK, U_GC_ND_MASK, *fStatus);
@@ -2196,7 +2206,26 @@ int32_t   RegexCompile::matchStartType() {
             break;
 
 
-       case URX_ONECHAR_I:
+        case URX_ONECHAR_I:
+            // Case Insensitive Single Character.
+            if (currentLen == 0) {
+                UChar32  c = URX_VAL(op);
+                if (u_hasBinaryProperty(c, UCHAR_CASE_SENSITIVE)) {
+                    // character may have distinct cased forms.  Add all of them
+                    //   to the set of possible starting match chars.
+                    UnicodeSet s(c, c);
+                    s.closeOver(USET_CASE);
+                    startingChars.addAll(s);
+                } else {
+                    // Char has no case variants.  Just add it as-is to the
+                    //   set of possible starting chars.
+                    startingChars.add(c);
+                }
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
         case URX_BACKSLASH_W:
         case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
         case URX_DOTANY_ALL:    // . matches one or two.
