@@ -37,11 +37,11 @@ T_FileStream_open(const char* filename, const char* mode)
     }
 }
 
-
+/*
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 {
-  /* TBD: _wfopen is believed to be MS-specific? */
+   // TBD: _wfopen is believed to be MS-specific? 
 #if defined(WIN32) && !defined(__WINDOWS__)
     FILE* result = _wfopen(filename, mode);
     return (FileStream*)result;
@@ -50,7 +50,7 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
     char *fn, *md;
     FILE *result;
 
-    /* convert from wchar_t to char */
+    // convert from wchar_t to char 
     fnMbsSize = wcstombs(NULL, filename, ((size_t)-1) >> 1);
     fn = (char*)uprv_malloc(fnMbsSize+2);
     wcstombs(fn, filename, fnMbsSize);
@@ -67,7 +67,7 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
     return (FileStream*)result;
 #endif
 }
-
+*/
 U_CAPI void U_EXPORT2
 T_FileStream_close(FileStream* fileStream)
 {
@@ -211,5 +211,9 @@ T_FileStream_stderr(void)
     return (FileStream*)stderr;
 }
 
+U_CAPI UBool U_EXPORT2
+T_FileStream_remove(const char* fileName){
+	return (remove(fileName) == 0);
+}
 
 

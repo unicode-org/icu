@@ -2808,7 +2808,25 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
                   &status);
     } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (sourceLimit < realSourceEnd)) );
 
-    /* allow failure codes for the stop callback */
+	if(status==U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND){
+		UChar errChars[50]; /* should be sufficient */
+		int8_t len = 50;
+		UErrorCode err = U_ZERO_ERROR;
+		const UChar* limit= NULL;
+		const UChar* start= NULL;
+		ucnv_getInvalidUChars(conv,errChars, &len, &err);
+		if(U_FAILURE(err)){
+			log_err("ucnv_getInvalidUChars failed with error : %s\n",u_errorName(err));
+		}
+		/* src points to limit of invalid chars */
+		limit = src;
+		/* length of in invalid chars should be equal to returned length*/
+		start = src - len;
+		if(u_strncmp(errChars,start,len)!=0){
+			log_err("ucnv_getInvalidUChars did not return the correct invalid chars for encoding %s \n", ucnv_getName(conv,&err));
+		}
+	}
+	/* allow failure codes for the stop callback */
     if(U_FAILURE(status) &&
        (callback != UCNV_FROM_U_CALLBACK_STOP || (status != U_INVALID_CHAR_FOUND && status != U_ILLEGAL_CHAR_FOUND)))
     {
@@ -2986,7 +3004,25 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                 (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of the source data */
                 &status);
     } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
-
+	
+	if(status==U_INVALID_CHAR_FOUND || status == U_ILLEGAL_CHAR_FOUND){
+		char errChars[50]; /* should be sufficient */
+		int8_t len = 50;
+		UErrorCode err = U_ZERO_ERROR;
+		const uint8_t* limit= NULL;
+		const uint8_t* start= NULL;
+		ucnv_getInvalidChars(conv,errChars, &len, &err);
+		if(U_FAILURE(err)){
+			log_err("ucnv_getInvalidChars failed with error : %s\n",u_errorName(err));
+		}
+		/* src points to limit of invalid chars */
+		limit = src;
+		/* length of in invalid chars should be equal to returned length*/
+		start = src - len;
+		if(uprv_strncmp(errChars,(char*)start,len)!=0){
+			log_err("ucnv_getInvalidChars did not return the correct invalid chars for encoding %s \n", ucnv_getName(conv,&err));
+		}
+	}
     /* allow failure codes for the stop callback */
     if(U_FAILURE(status) &&
        (callback != UCNV_TO_U_CALLBACK_STOP || (status != U_INVALID_CHAR_FOUND && status != U_ILLEGAL_CHAR_FOUND && status != U_TRUNCATED_CHAR_FOUND)))

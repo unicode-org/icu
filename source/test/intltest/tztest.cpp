@@ -777,6 +777,16 @@ TimeZoneTest::TestDisplayName()
             errln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
         logln("PST [with options]->" + name);
     }
+	for (i=0; kData[i].expect[0] != '\0'; i++)
+	{
+        name.remove();
+        name = zone->getDisplayName(kData[i].useDst,
+                                   kData[i].style, name);
+        if (name.compare(kData[i].expect) != 0)
+            errln("Fail: Expected " + UnicodeString(kData[i].expect) + "; got " + name);
+        logln("PST [with options]->" + name);
+    }
+
 
     // Make sure that we don't display the DST name by constructing a fake
     // PST zone that has DST all year long.
@@ -852,7 +862,14 @@ TimeZoneTest::TestDisplayName()
         name.compare("GMT+0130") &&
         name.compare("GMT+130"))
         errln("Fail: Expected GMT+01:30 or something similar");
-
+	name.truncate(0);
+    zone2->getDisplayName(name);
+    logln("GMT+90min->" + name);
+    if (name.compare("GMT+01:30") &&
+        name.compare("GMT+1:30") &&
+        name.compare("GMT+0130") &&
+        name.compare("GMT+130"))
+        errln("Fail: Expected GMT+01:30 or something similar");
     // clean up
     delete zone;
     delete zone2;
@@ -1039,6 +1056,29 @@ void TimeZoneTest::TestCountries() {
         errln("FAIL: " + laZone + " in JP = " + la);
         errln("FAIL: " + tokyoZone + " in JP = " + tokyo);
     }
+	StringEnumeration* s1 = TimeZone::createEnumeration("US");
+	StringEnumeration* s2 = TimeZone::createEnumeration("US");
+	for(i=0;i<n;++i){
+		const UnicodeString* id1 = s1->snext(ec);
+		if(id1==NULL || U_FAILURE(ec)){
+			errln("Failed to fetch next from TimeZone enumeration. Length returned : %i Current Index: %i", n,i);
+		}
+		TimeZone* tz1 = TimeZone::createTimeZone(*id1);
+		for(int j=0; j<n;++j){
+			const UnicodeString* id2 = s2->snext(ec);
+			if(id2==NULL || U_FAILURE(ec)){
+				errln("Failed to fetch next from TimeZone enumeration. Length returned : %i Current Index: %i", n,i);
+			}
+			TimeZone* tz2 = TimeZone::createTimeZone(*id2);
+			if(tz1->hasSameRules(*tz2)){
+				logln("ID1 : " + *id1+" == ID2 : " +*id2);
+			}
+			delete tz2;
+		}
+		delete tz1;
+	}
+	delete s1;
+	delete s2;
     delete s;
 }
 
