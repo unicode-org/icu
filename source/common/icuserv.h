@@ -34,6 +34,8 @@ U_NAMESPACE_END
 #include "uvector.h"
 #include "icunotif.h"
 
+class ICUServiceTest;
+
 U_NAMESPACE_BEGIN
 
 class ICUServiceKey;
@@ -42,7 +44,6 @@ class SimpleFactory;
 class ServiceListener;
 class ICUServiceEnumeration;
 class ICUService;
-class ICUServiceTest;
 
 class DNCache;
 
