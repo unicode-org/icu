@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -91,6 +91,9 @@ setUnicodeVersion(const char *v) {
 static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
 
 /* builder data ------------------------------------------------------------- */
+
+/* modularization flags, see gennorm.h (default to "store everything") */
+uint32_t gStoreFlags=0xffffffff;
 
 typedef void EnumTrieFn(void *context, uint32_t code, Norm *norm);
 
@@ -399,6 +402,10 @@ static void
 addCombiningTriple(uint32_t lead, uint32_t trail, uint32_t combined) {
     CombiningTriple *triple;
 
+    if(DO_NOT_STORE(UGENNORM_STORE_COMPOSITION)) {
+        return;
+    }
+
     /*
      * set combiningFlags for the two code points
      * do this after decomposition so that getNorm() above returns NULL
@@ -561,8 +568,12 @@ getHangulDecomposition(uint32_t c, Norm *pHangulNorm, uint32_t hangulBuffer[3]) 
     hangulBuffer[1]=JAMO_V_BASE+c%JAMO_V_COUNT;
     hangulBuffer[0]=JAMO_L_BASE+c/JAMO_V_COUNT;
 
-    pHangulNorm->nfd=pHangulNorm->nfkd=hangulBuffer;
-    pHangulNorm->lenNFD=pHangulNorm->lenNFKD=length;
+    pHangulNorm->nfd=hangulBuffer;
+    pHangulNorm->lenNFD=length;
+    if(DO_STORE(UGENNORM_STORE_COMPAT)) {
+        pHangulNorm->nfkd=hangulBuffer;
+        pHangulNorm->lenNFKD=length;
+    }
 }
 
 /*
@@ -628,7 +639,11 @@ decompStoreNewNF(uint32_t code, Norm *norm) {
         } else if(p->lenNFD!=0) {
             uprv_memcpy(nfkd+lenNFKD, p->nfd, p->lenNFD*4);
             lenNFKD+=p->lenNFD;
-            changedNFKD=TRUE;
+            /*
+             * not  changedNFKD=TRUE;
+             * so that we do not store a new nfkd if there was no nfkd string before
+             * and we only see canonical decompositions
+             */
         } else {
             nfkd[lenNFKD++]=c;
         }
@@ -776,13 +791,18 @@ storeNorm(uint32_t code, Norm *norm) {
     DecompSingle decompSingle;
     Norm *p;
 
+    if(DO_NOT_STORE(UGENNORM_STORE_COMPAT)) {
+        /* ignore compatibility decomposition */
+        norm->lenNFKD=0;
+    }
+
     /* copy existing derived normalization properties */
     p=createNorm(code);
     norm->qcFlags=p->qcFlags;
     norm->combiningFlags=p->combiningFlags;
     norm->fncIndex=p->fncIndex;
 
-    /* process the decomposition if if there is at one here */
+    /* process the decomposition if there is one here */
     if((norm->lenNFD|norm->lenNFKD)!=0) {
         /* decompose this one decomposition further, may generate two decompositions */
         decompStoreNewNF(code, norm);
@@ -802,6 +822,21 @@ storeNorm(uint32_t code, Norm *norm) {
 
 extern void
 setQCFlags(uint32_t code, uint8_t qcFlags) {
+    if(DO_NOT_STORE(UGENNORM_STORE_COMPAT)) {
+        /* ignore compatibility decomposition: unset the KC/KD flags */
+        qcFlags&=~(_NORM_QC_NFKC|_NORM_QC_NFKD);
+
+        /* set the KC/KD flags to the same values as the C/D flags */
+        qcFlags|=qcFlags<<1;
+    }
+    if(DO_NOT_STORE(UGENNORM_STORE_COMPOSITION)) {
+        /* ignore composition data: unset the C/KC flags */
+        qcFlags&=~(_NORM_QC_NFC|_NORM_QC_NFKC);
+
+        /* set the C/KC flags to the same values as the D/KD flags */
+        qcFlags|=qcFlags>>2;
+    }
+
     createNorm(code)->qcFlags|=qcFlags;
 
     /* adjust the minimum code point for quick check no/maybe */
@@ -827,7 +862,9 @@ setQCFlags(uint32_t code, uint8_t qcFlags) {
 
 extern void
 setCompositionExclusion(uint32_t code) {
-    createNorm(code)->combiningFlags|=0x80;
+    if(DO_STORE(UGENNORM_STORE_COMPOSITION)) {
+        createNorm(code)->combiningFlags|=0x80;
+    }
 }
 
 static void
@@ -846,7 +883,9 @@ setHangulJamoSpecials() {
     for(c=0x1100; c<=0x1112; ++c) {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_L;
-        norm->combiningFlags=1;
+        if(DO_STORE(UGENNORM_STORE_COMPOSITION)) {
+            norm->combiningFlags=1;
+        }
 
         /* for each Jamo L create a set with its associated Hangul block */
         norm->canonStart=uset_open(hangul, hangul+21*28-1);
@@ -857,7 +896,9 @@ setHangulJamoSpecials() {
     for(c=0x1161; c<=0x1175; ++c) {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_V;
-        norm->combiningFlags=2;
+        if(DO_STORE(UGENNORM_STORE_COMPOSITION)) {
+            norm->combiningFlags=2;
+        }
         norm->unsafeStart=TRUE;
     }
 
@@ -865,14 +906,20 @@ setHangulJamoSpecials() {
     for(c=0x11a8; c<=0x11c2; ++c) {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_T;
-        norm->combiningFlags=2;
+        if(DO_STORE(UGENNORM_STORE_COMPOSITION)) {
+            norm->combiningFlags=2;
+        }
         norm->unsafeStart=TRUE;
     }
 
     /* set Hangul specials, precompacted */
     norm=(Norm *)utm_alloc(normMem);
     norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_HANGUL;
-    norm->qcFlags=_NORM_QC_NFD|_NORM_QC_NFKD;
+    if(DO_STORE(UGENNORM_STORE_COMPAT)) {
+        norm->qcFlags=_NORM_QC_NFD|_NORM_QC_NFKD;
+    } else {
+        norm->qcFlags=_NORM_QC_NFD;
+    }
 
     if(!utrie_setRange32(normTrie, 0xac00, 0xd7a4, (uint32_t)(norm-norms), TRUE)) {
         fprintf(stderr, "error: too many normalization entries (setting Hangul)\n");
@@ -890,6 +937,13 @@ setFNC(uint32_t c, UChar *s) {
     uint16_t *p;
     int32_t length, i, count;
     UChar first;
+
+    if( DO_NOT_STORE(UGENNORM_STORE_COMPAT) ||
+        DO_NOT_STORE(UGENNORM_STORE_COMPOSITION) ||
+        DO_NOT_STORE(UGENNORM_STORE_AUX)
+    ) {
+        return;
+    }
 
     count=utm_countItems(extraMem);
     length=s[0];
@@ -1096,18 +1150,19 @@ make32BitNorm(Norm *norm) {
             if(norm->lenNFKD>0) {
                 /* a "true" NFKC starter with a compatibility decomposition */
                 if( norm->compatBothCCs>=0x100 || /* lead cc!=0 or */
-                    ((other=getNorm(norm->nfkd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFKC)!=0) /* nfkd[0] not NFC_YES */
+                    ((other=getNorm(norm->nfkd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFKC)!=0) /* nfkd[0] not NFKC_YES */
                 ) {
                     fprintf(stderr,
                         "error: true NFKC starter compatibility decomposition[%u] does not begin\n"
                         "    with a true NFKC starter: U+%04lx U+%04lx%s\n",
-                        norm->lenNFKD, (long)norm->nfkd[0], (long)norm->nfkd[1],                        norm->lenNFKD<=2 ? "" : " ...");
+                        norm->lenNFKD, (long)norm->nfkd[0], (long)norm->nfkd[1],
+                        norm->lenNFKD<=2 ? "" : " ...");
                     exit(U_INVALID_TABLE_FILE);
                 }
             } else if(norm->lenNFD>0) {
                 /* a "true" NFKC starter with only a canonical decomposition */
                 if( norm->canonBothCCs>=0x100 || /* lead cc!=0 or */
-                    ((other=getNorm(norm->nfd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFKC)!=0) /* nfd[0] not NFC_YES */
+                    ((other=getNorm(norm->nfd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFKC)!=0) /* nfd[0] not NFKC_YES */
                 ) {
                     fprintf(stderr,
                         "error: true NFKC starter canonical decomposition[%u] does not begin\n"
@@ -1206,7 +1261,7 @@ makeAll32() {
 
     pNormData=utrie_getData(norm32Trie, &normLength);
 
-    count=0;
+    count=0; /* count is now just used for debugging */
     for(i=0; i<normLength; ++i) {
         n=pNormData[i];
         if(0!=(pNormData[i]=norms[n].value32)) {
@@ -1251,11 +1306,14 @@ makeFCD() {
  */
 static int32_t
 usetContainsOne(const USet* set) {
-    if (uset_size(set) == 1) { /* ### faster to count ranges and check only range?! */
+    if(uset_getItemCount(set)==1) {
+        /* there is a single item (a single range) */
         UChar32 start, end;
-        UErrorCode ec = U_ZERO_ERROR;
-        int32_t len = uset_getItem(set, 0, &start, &end, NULL, 0, &ec);
-        if (len == 0) return start;
+        UErrorCode ec=U_ZERO_ERROR;
+        int32_t len=uset_getItem(set, 0, &start, &end, NULL, 0, &ec);
+        if (len==0 && start==end) { /* a range (len==0) with a single code point */
+            return start;
+        }
     }
     return -1;
 }
@@ -1268,7 +1326,7 @@ makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
         UErrorCode errorCode=U_ZERO_ERROR;
 
         /* does the set contain exactly one code point? */
-        c=usetContainsOne(norm->canonStart); /* ### why? */
+        c=usetContainsOne(norm->canonStart);
 
         /* add an entry to the BMP or supplementary search table */
         if(code<=0xffff) {
@@ -1294,7 +1352,7 @@ makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
 
             if(c>=0) {
                 /* single-code point result for supplementary code point */
-                table[tableLength-2]|=(uint16_t)(0x8000|((c>>8)&0x1f00)); /* ### how does this work again? */
+                table[tableLength-2]|=(uint16_t)(0x8000|((c>>8)&0x1f00));
                 table[tableLength++]=(uint16_t)c;
             } else {
                 table[tableLength++]=(uint16_t)canonStartSetsTop;
@@ -1490,7 +1548,7 @@ getSkippableFlags(const Norm *norm) {
         return 0;
     }
 
-    /* ### check other data generation functions whether they should & do ignore Hangul/Jamo specials */
+    /* ### TODO check other data generation functions whether they should & do ignore Hangul/Jamo specials */
 
     /*
      * Note:
@@ -1605,26 +1663,7 @@ getFoldedNormValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     return leadNorm32;
 }
 
-/* folding value for FCD: just store the offset (16 bits) if there is any non-0 entry */
-static uint32_t U_CALLCONV
-getFoldedFCDValue(UNewTrie *trie, UChar32 start, int32_t offset) {
-    uint32_t value;
-    UChar32 limit;
-    UBool inBlockZero;
-
-    limit=start+0x400;
-    while(start<limit) {
-        value=utrie_get32(trie, start, &inBlockZero);
-        if(inBlockZero) {
-            start+=UTRIE_DATA_BLOCK_LENGTH;
-        } else if(value!=0) {
-            return (uint32_t)offset;
-        } else {
-            ++start;
-        }
-    }
-    return 0;
-}
+/* folding value for FCD: use default function (just store the offset (16 bits) if there is any non-0 entry) */
 
 /*
  * folding value for auxiliary data:
@@ -1685,8 +1724,13 @@ processData() {
     /* add hangul/jamo specials */
     setHangulJamoSpecials();
 
+    /* set this value; will be updated as makeCanonSetFn() adds sets (if there are any, see gStoreFlags) */
+    canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]=(uint16_t)canonStartSetsTop;
+
     /* store search tables and USerializedSets for canonical starters (after Hangul/Jamo specials!) */
-    enumTrie(makeCanonSetFn, NULL);
+    if(DO_STORE(UGENNORM_STORE_AUX) && DO_STORE(UGENNORM_STORE_COMPOSITION)) {
+        enumTrie(makeCanonSetFn, NULL);
+    }
 
     /* clone the normalization builder trie to make the final data tries */
     if( NULL==utrie_clone(norm32Trie, normTrie, NULL, 0) ||
@@ -1747,27 +1791,39 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
 
-    fcdTrieSize=utrie_serialize(fcdTrie, fcdTrieBlock, sizeof(fcdTrieBlock), getFoldedFCDValue, TRUE, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie_serialize(FCD data) failed, %s\n", u_errorName(errorCode));
-        exit(errorCode);
+    if(DO_STORE(UGENNORM_STORE_FCD)) {
+        fcdTrieSize=utrie_serialize(fcdTrie, fcdTrieBlock, sizeof(fcdTrieBlock), NULL, TRUE, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "error: utrie_serialize(FCD data) failed, %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+    } else {
+        fcdTrieSize=0;
     }
 
-    auxTrieSize=utrie_serialize(auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie_serialize(auxiliary data) failed, %s\n", u_errorName(errorCode));
-        exit(errorCode);
+    if(DO_STORE(UGENNORM_STORE_AUX)) {
+        auxTrieSize=utrie_serialize(auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "error: utrie_serialize(auxiliary data) failed, %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+    } else {
+        auxTrieSize=0;
     }
 
     /* move the parts of canonStartSets[] together into a contiguous block */
-    if(canonStartSetsTop<_NORM_MAX_CANON_SETS) {
+    if( canonStartSetsTop<_NORM_MAX_CANON_SETS &&
+        canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]!=0
+    ) {
         uprv_memmove(canonStartSets+canonStartSetsTop,
                      canonStartSets+_NORM_MAX_CANON_SETS,
                      canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]*2);
     }
     canonStartSetsTop+=canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH];
 
-    if(canonStartSetsTop<(_NORM_MAX_CANON_SETS+_NORM_MAX_SET_SEARCH_TABLE_LENGTH)) {
+    if( canonStartSetsTop<(_NORM_MAX_CANON_SETS+_NORM_MAX_SET_SEARCH_TABLE_LENGTH) &&
+        canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]!=0
+    ) {
         uprv_memmove(canonStartSets+canonStartSetsTop,
                      canonStartSets+_NORM_MAX_CANON_SETS+_NORM_MAX_SET_SEARCH_TABLE_LENGTH,
                      canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]*2);
@@ -1792,6 +1848,9 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
     uset_retainAll(set, nfdQCNoSet);
+    if(DO_NOT_STORE(UGENNORM_STORE_EXCLUSIONS)) {
+        uset_clear(set);
+    }
     canonStartSetsTop+=uset_serialize(set, canonStartSets+canonStartSetsTop, LENGTHOF(canonStartSets)-canonStartSetsTop, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: uset_serialize([:Ideographic:]&[:NFD_QC=No:]) failed, %s\n", u_errorName(errorCode));
@@ -1804,6 +1863,9 @@ generateData(const char *dataDir) {
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: uset_openPattern([:^Age=3.2:]) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
+    }
+    if(DO_NOT_STORE(UGENNORM_STORE_EXCLUSIONS)) {
+        uset_clear(set);
     }
     canonStartSetsTop+=uset_serialize(set, canonStartSets+canonStartSetsTop, LENGTHOF(canonStartSets)-canonStartSetsTop, &errorCode);
     if(U_FAILURE(errorCode)) {
