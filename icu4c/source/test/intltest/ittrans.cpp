@@ -54,6 +54,6 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, char* &n
         CASE(7, UnicodeFilterLogicTest);
         CASE(8, TransliteratorRoundTripTest);
         CASE(9, UnicodeSetTest);
-		default: name=""; break;		
-	}
+        default: name=""; break;
+    }
 }
