@@ -954,6 +954,9 @@ findLibraryPath(char *path, int size) {
     return 0;
 }
 
+/* define a path for fallbacks */
+#define FALLBACK_PATH U_FILE_SEP_STRING "share" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING ICU_VERSION U_FILE_SEP_STRING
+
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     /* if we have the directory, then return it immediately */
@@ -1002,7 +1005,7 @@ u_getDataDirectory(void) {
         if(path==NULL || *path==0) {
             length=getLibraryPath(pathBuffer, sizeof(pathBuffer));
             if(length>0) {
-                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
                 path=pathBuffer;
             }
         }
@@ -1011,7 +1014,7 @@ u_getDataDirectory(void) {
         if(path==NULL || *path==0) {
             length=findLibraryPath(pathBuffer, sizeof(pathBuffer));
             if(length>0) {
-                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+                icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
                 path=pathBuffer;
             }
         }
@@ -1024,10 +1027,10 @@ u_getDataDirectory(void) {
 #           else
                 length=getSystemPath(pathBuffer, sizeof(pathBuffer));
                 if(length>0) {
-                    icu_strcpy(pathBuffer+length, U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+                    icu_strcpy(pathBuffer+length, FALLBACK_PATH);
                     path=pathBuffer;
                 } else {
-                    path=U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+                    path=FALLBACK_PATH;
                 }
 #           endif
         }
