@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2001/03/17 01:36:32 $ 
-* $Revision: 1.3 $
+* $Date: 2001/03/21 23:34:44 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -199,9 +199,10 @@ final class UGenPropReader extends UGenReader
     for (int count = 0; count < stagesize; count ++)
     {
       array[count] = (char)(input.readChar() - INDEX_SIZE_);
-      if (max < array[count] && count < 0x448) {
-        max = array[count];
-      }
+      // testing empty spaces
+      // if (max < array[count] && count < 0x440) {
+      //  max = array[count];
+      //}
       
       // setting up the property index for stage 3
       // uprops.dat contain data that includes the address from the top of 
@@ -211,6 +212,9 @@ final class UGenPropReader extends UGenReader
         array[count] -= props;    
       }
     }
+    // System.out.println("\nstage 3 " + (int)m_stage3_);
+    // System.out.println("stage  2 top " + (max - 0x440 - INDEX_SIZE_));
+    // System.out.println("calculated stage 3 " + max);
     
     // setting up the stages block in the instance of UCharacterPropertyDB
     return data.setStage(array);
