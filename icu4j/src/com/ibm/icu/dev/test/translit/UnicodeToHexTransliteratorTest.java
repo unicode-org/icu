@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/Attic/UnicodeToHexTransliteratorTest.java,v $ 
- * $Date: 2000/10/09 16:32:07 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/10/16 16:58:29 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -130,7 +130,7 @@ public class UnicodeToHexTransliteratorTest extends TestFmwk {
         UnicodeToHexTransliterator trans1=null;
         try{
             trans1=new UnicodeToHexTransliterator(pattern1, true, null);
-        }catch(IlegalArgumentException ex1) {
+        }catch(IllegalArgumentException ex1) {
             errln("FAIL: UnicodeToHexTransliterator construction failed with pattern =" + pattern1 +
                    "Exception:" + ex1.toString());
         }
