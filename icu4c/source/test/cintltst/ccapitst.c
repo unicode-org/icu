@@ -83,8 +83,9 @@ void TestConvert()
     UErrorCode          err                 =   U_ZERO_ERROR;
     const char*            available_conv;  
     char                ucs_file_name[UCS_FILE_NAME_SIZE];
-    UConverterFromUCallback          MIA1;
-    UConverterToUCallback              MIA2;
+    UConverterFromUCallback          MIA1, MIA1_2;
+    UConverterToUCallback              MIA2, MIA2_2;
+    void                *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
     UChar                myUnitarget[MAX_FILE_LEN];
     UChar                *myUnitarget_1 = myUnitarget;
     UConverter*            someConverters[5];
@@ -636,24 +637,26 @@ void TestConvert()
      err=U_ZERO_ERROR;
     
     /* testing ucnv_setFromUCallBack() and ucnv_getFromUCallBack()*/
-    MIA1 = ucnv_getFromUCallBack(myConverter);
+    ucnv_getFromUCallBack(myConverter, &MIA1, &MIA1Context);
             
     log_verbose("\n---Testing ucnv_setFromUCallBack...\n");
-    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), NULL, &oldFromUAction, &oldFromUContext, &err);
-    if (U_FAILURE(err)) 
+    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), &BOM, &oldFromUAction, &oldFromUContext, &err);
+    if (U_FAILURE(err) || oldFromUAction != MIA1 || oldFromUContext != MIA1Context) 
     { log_err("FAILURE! %s\n", myErrorName(err)); }
-    
-    if (ucnv_getFromUCallBack(myConverter) != otherUnicodeAction(MIA1)) 
+
+    ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
+    if (MIA1_2 != otherUnicodeAction(MIA1) || MIA1Context2 != &BOM) 
         log_err("get From UCallBack failed\n");
     else 
         log_verbose("get From UCallBack ok\n");
 
     log_verbose("\n---Testing getFromUCallBack Roundtrip...\n");
-    ucnv_setFromUCallBack(myConverter,MIA1, NULL, &oldFromUAction, &oldFromUContext, &err);
-    if (U_FAILURE(err)) 
+    ucnv_setFromUCallBack(myConverter,MIA1, MIA1Context, &oldFromUAction, &oldFromUContext, &err);
+    if (U_FAILURE(err) || oldFromUAction != otherUnicodeAction(MIA1) || oldFromUContext != &BOM) 
     { log_err("FAILURE! %s\n", myErrorName(err));  }
     
-    if (ucnv_getFromUCallBack(myConverter)!= MIA1) 
+    ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
+    if (MIA1_2 != MIA1 || MIA1Context2 != MIA1Context) 
         log_err("get From UCallBack action failed\n");
     else 
         log_verbose("get From UCallBack action ok\n");
@@ -661,32 +664,35 @@ void TestConvert()
     /*testing ucnv_setToUCallBack with error conditions*/
     err=U_ILLEGAL_ARGUMENT_ERROR;
     log_verbose("\n---Testing setFromUCallBack. with err != U_ZERO_ERROR..\n");
-    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), NULL, &oldFromUAction, &oldFromUContext, &err);
-    if(ucnv_getFromUCallBack(myConverter) == otherUnicodeAction(MIA1)){
+    ucnv_setFromUCallBack(myConverter, otherUnicodeAction(MIA1), &BOM, &oldFromUAction, &oldFromUContext, &err);
+    ucnv_getFromUCallBack(myConverter, &MIA1_2, &MIA1Context2);
+    if(MIA1_2 == otherUnicodeAction(MIA1) || MIA1Context2 == &BOM){
         log_err("To setFromUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
     }
     err=U_ZERO_ERROR;
 
     
     /*testing ucnv_setToUCallBack() and ucnv_getToUCallBack()*/
-    MIA2 = ucnv_getToUCallBack(myConverter);
+    ucnv_getToUCallBack(myConverter, &MIA2, &MIA2Context);
     
     log_verbose("\n---Testing setTo UCallBack...\n");
-    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), NULL, &oldToUAction, &oldToUContext, &err);
-    if (U_FAILURE(err)) 
+    ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), &BOM, &oldToUAction, &oldToUContext, &err);
+    if (U_FAILURE(err) || oldToUAction != MIA2 || oldToUContext != MIA2Context) 
     { log_err("FAILURE! %s\n", myErrorName(err));}
 
-    if (ucnv_getToUCallBack(myConverter) != otherCharAction(MIA2)) 
+    ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
+    if (MIA2_2 != otherCharAction(MIA2) || MIA2Context2 != &BOM) 
         log_err("To UCallBack failed\n");
     else 
         log_verbose("To UCallBack ok\n");
     
     log_verbose("\n---Testing setTo UCallBack Roundtrip...\n");
     ucnv_setToUCallBack(myConverter,MIA2, NULL, &oldToUAction, &oldToUContext, &err);
-    if (U_FAILURE(err)) 
+    if (U_FAILURE(err) || oldToUAction != otherCharAction(MIA2) || oldToUContext != &BOM) 
     { log_err("FAILURE! %s\n", myErrorName(err));  }
     
-    if (ucnv_getToUCallBack(myConverter) != MIA2)
+    ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
+    if (MIA2_2 != MIA2 || MIA2Context2 != MIA2Context)
         log_err("To UCallBack failed\n");
     else 
         log_verbose("To UCallBack ok\n");
@@ -695,7 +701,8 @@ void TestConvert()
     err=U_ILLEGAL_ARGUMENT_ERROR;
     log_verbose("\n---Testing setToUCallBack. with err != U_ZERO_ERROR..\n");
     ucnv_setToUCallBack(myConverter,otherCharAction(MIA2), NULL, &oldToUAction, &oldToUContext, &err);
-    if (ucnv_getToUCallBack(myConverter) == otherCharAction(MIA2)){ 
+    ucnv_getToUCallBack(myConverter, &MIA2_2, &MIA2Context2);
+    if (MIA2_2 == otherCharAction(MIA2) || MIA2Context2 == &BOM){ 
         log_err("To setToUCallBack with err != U_ZERO_ERROR is supposed to fail\n");
     }
     err=U_ZERO_ERROR;

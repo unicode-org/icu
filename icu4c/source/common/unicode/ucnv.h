@@ -421,23 +421,29 @@ U_CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter,
  * Gets the current calback function used by the converter when illegal or invalid sequence found.
  *
  * @param converter the unicode converter
- * @return a pointer to the callback function
+ * @param action the callback function pointer
+ * @param context the callback function state
  * @see ucnv_setToUCallBack
  * @stable
  */
-U_CAPI UConverterToUCallback U_EXPORT2
-    ucnv_getToUCallBack (const UConverter * converter);
+U_CAPI void U_EXPORT2
+    ucnv_getToUCallBack (const UConverter * converter,
+                         UConverterToUCallback *action,
+                         void **context);
 
 /**
  * Gets the current callback function used by the converter when illegal or invalid sequence found.
  *
  * @param converter the unicode converter
- * @return a pointer to the callback function
+ * @param action the callback function pointer
+ * @param context the callback function state
  * @see ucnv_setFromUCallBack
  * @stable
  */
-U_CAPI UConverterFromUCallback U_EXPORT2
-    ucnv_getFromUCallBack (const UConverter * converter);
+U_CAPI void U_EXPORT2
+    ucnv_getFromUCallBack (const UConverter * converter,
+                           UConverterFromUCallback *action,
+                           void **context);
 
 /**
  * Gets the current callback function used by the converter when illegal or invalid sequence found.
