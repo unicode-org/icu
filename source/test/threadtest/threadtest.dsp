@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib  shell32.lib icuuc.lib icuin.lib icutu.lib /nologo /subsystem:console /machine:I386 /libpath:"..\..\..\lib\\"
+# ADD LINK32 kernel32.lib user32.lib shell32.lib icuuc.lib icuin.lib icutu.lib /nologo /subsystem:console /machine:I386 /libpath:"..\..\..\lib\\"
 
 !ELSEIF  "$(CFG)" == "threadtest - Win32 Debug"
 
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib  shell32.lib icuucd.lib icuind.lib icutud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\..\..\lib\\"
+# ADD LINK32 kernel32.lib user32.lib shell32.lib icuucd.lib icuind.lib icutud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\..\..\lib\\"
 
 !ENDIF 
 
@@ -87,12 +87,24 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\converttest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\stringtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\threadtest.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\threadtest.h
+# End Source File
 # End Group
 # Begin Group "Resource Files"
 
