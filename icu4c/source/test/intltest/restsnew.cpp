@@ -257,9 +257,9 @@ NewResourceBundleTest::TestConstruction()
 {
     {
         UErrorCode   err = U_ZERO_ERROR;
-        char testdatapath[256];
+        const char* testdatapath;
         Locale       locale("te", "IN");
-        loadTestData(testdatapath,256,err);
+        testdatapath=loadTestData(err);
         if(U_FAILURE(err))
         {
             errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
@@ -308,10 +308,10 @@ NewResourceBundleTest::TestConstruction()
     }
     {
         UErrorCode   err = U_ZERO_ERROR;
-        char testdatapath[256];
+        const char* testdatapath;
         Locale       locale("te", "IN");
 
-        loadTestData(testdatapath,256,err);
+        testdatapath=loadTestData(err);
         if(U_FAILURE(err))
         {
             errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
@@ -344,7 +344,7 @@ void
 NewResourceBundleTest::TestIteration()
 {
     UErrorCode   err = U_ZERO_ERROR;
-    char testdatapath[256];
+    const char* testdatapath;
     const char* data[]={
         "string_in_Root_te_te_IN",   "1",
         "array_in_Root_te_te_IN",    "5",
@@ -353,7 +353,7 @@ NewResourceBundleTest::TestIteration()
 
     Locale       *locale=new Locale("te_IN");
 
-    loadTestData(testdatapath,256,err);
+    testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
         errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
@@ -456,8 +456,8 @@ NewResourceBundleTest::TestIteration()
 void
 NewResourceBundleTest::TestOtherAPI(){
     UErrorCode   err = U_ZERO_ERROR;
-    char testdatapath[256];
-    loadTestData(testdatapath,256,err);
+    const char* testdatapath;
+    testdatapath=loadTestData(err);
     if(U_FAILURE(err))
     {
         errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
@@ -637,10 +637,10 @@ NewResourceBundleTest::testTag(const char* frag,
 
     int32_t i,j,row,col, actual_bundle;
     int32_t index;
-    char testdatapath[256];
+    const char* testdatapath;
 
     UErrorCode status = U_ZERO_ERROR;
-    loadTestData(testdatapath,256,status);
+    testdatapath=loadTestData(status);
     if(U_FAILURE(status))
     {
         errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));

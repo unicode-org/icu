@@ -36,18 +36,7 @@ U_CFUNC void addAllTests(TestNode** root);
  * @relPath the relative path name
  */
 U_CFUNC void ctest_pathnameInContext(char* fullname, int32_t maxsize, const char* relPath ) ;
-/**
- *Fetches the current path name of the test directory
- *returns the path of the test directory
- */
-U_CFUNC const char* ctest_getTestDirectory(void);
-/**
- *
- * sets the path of the test directory
- * @param newDir the test directory to be set
- */
 
-U_CFUNC void ctest_setTestDirectory(const char* newDir); 
 /**
  * Convert a const UChar* into a char*
  * Caller owns storage, but in practice this function
@@ -61,7 +50,7 @@ U_CFUNC char *aescstrdup(const UChar* unichars);
 U_CFUNC void *ctst_malloc(size_t size);
 U_CFUNC void ctst_freeAll();
 
-U_CFUNC void loadTestData(char* testdatapath,int32_t len, UErrorCode* err );
+U_CFUNC const char* loadTestData(UErrorCode* err);
 
 /**
  * function used to specify the error

@@ -255,10 +255,10 @@ ResourceBundleTest::TestConstruction()
 {
     {
         UErrorCode   err = U_ZERO_ERROR;
-        char testdatapath[256];
+        const char* testdatapath;
         Locale       locale("te", "IN");
 
-        loadTestData(testdatapath,256,err);
+        testdatapath=loadTestData(err);
         if(U_FAILURE(err))
         {
             errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
@@ -307,10 +307,10 @@ ResourceBundleTest::TestConstruction()
     }
     {
         UErrorCode   err = U_ZERO_ERROR;
-        char testdatapath[256];
+        const char* testdatapath;
         Locale       locale("te", "IN");
 
-        loadTestData(testdatapath,256,err);
+        testdatapath=loadTestData(err);
         if(U_FAILURE(err))
         {
             errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(err)));
@@ -365,8 +365,8 @@ ResourceBundleTest::testTag(const char* frag,
 //    int32_t row,col;
     int32_t index;
     UErrorCode status = U_ZERO_ERROR;
-    char testdatapath[256];
-    loadTestData(testdatapath,256,status);
+    const char* testdatapath;
+    testdatapath=loadTestData(status);
     if(U_FAILURE(status))
     {
         errln("Could not load testdata.dat %s " + UnicodeString(u_errorName(status)));

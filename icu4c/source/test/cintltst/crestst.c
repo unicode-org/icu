@@ -138,13 +138,13 @@ void TestConstruction1()
     int32_t resultLen;
 
     UErrorCode   err = U_ZERO_ERROR;
-    char testdatapath[256] ;
+    const char* testdatapath ;
     const char*      locale="te_IN";
 
     log_verbose("Testing ures_open()......\n");
     
 
-    loadTestData(testdatapath,256,&err);
+    testdatapath=loadTestData(&err);
     if(U_FAILURE(err))
     {
         log_err("Could not load testdata.dat %s \n",myErrorName(err));
