@@ -25,7 +25,6 @@
 #include "cintltst.h"
 #include "ccaltst.h"
 #include "cformtst.h"
-#include "cmemory.h"
 
 void addCalTest(TestNode** root);
 
