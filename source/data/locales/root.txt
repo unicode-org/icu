@@ -1202,6 +1202,7 @@ root {
         Hant { "Hant" } // Not a formal part of ISO-15924 yet
         Hebr { "Hebr" }
         Hira { "Hira" }
+        Hrkt { "Hrkt" }
         Ital { "Ital" }
         Kana { "Kana" }
         Khmr { "Khmr" }
