@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/29 01:00:10 $
- * $Revision: 1.66 $
+ * $Date: 2001/11/29 16:11:46 $
+ * $Revision: 1.67 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.66 $ $Date: 2001/11/29 01:00:10 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.67 $ $Date: 2001/11/29 16:11:46 $
  */
 public abstract class Transliterator {
     /**
@@ -422,6 +422,18 @@ public abstract class Transliterator {
     protected static final char VARIANT_SEP = '/';
 
     private static final String ANY = "Any";
+
+    /**
+     * To enable debugging output in the Transliterator component, set
+     * DEBUG to true.
+     *
+     * N.B. Make sure to recompile all of the com.ibm.text package
+     * after changing this.  Easiest way to do this is 'ant clean
+     * core' ('ant' will NOT pick up the dependency automatically).
+     *
+     * <<This generates a lot of output.>>
+     */
+    static final boolean DEBUG = false;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -619,31 +631,35 @@ public abstract class Transliterator {
     /**
      * Abstract method that concrete subclasses define to implement
      * keyboard transliteration.  This method should transliterate all
-     * characters between <code>index.start</code> and
-     * <code>index.contextLimit</code> that can be unambiguously
+     * characters between <code>pos.start</code> and
+     * <code>pos.contextLimit</code> that can be unambiguously
      * transliterated, regardless of future insertions of text at
-     * <code>index.contextLimit</code>.  <code>index.start</code> should
+     * <code>pos.contextLimit</code>.  <code>pos.start</code> should
      * be advanced past committed characters (those that will not
      * change in future calls to this method).
-     * <code>index.contextLimit</code> should be updated to reflect text
+     * <code>pos.contextLimit</code> should be updated to reflect text
      * replacements that shorten or lengthen the text between
-     * <code>index.start</code> and <code>index.contextLimit</code>.  Upon
-     * return, neither <code>index.start</code> nor
-     * <code>index.contextLimit</code> should be less than the initial value
-     * of <code>index.start</code>.  <code>index.contextStart</code>
+     * <code>pos.start</code> and <code>pos.contextLimit</code>.  Upon
+     * return, neither <code>pos.start</code> nor
+     * <code>pos.contextLimit</code> should be less than the initial value
+     * of <code>pos.start</code>.  <code>pos.contextStart</code>
      * should <em>not</em> be changed.
      *
      * <p>Subclasses may safely assume that all characters in
-     * [index.start, index.limit) are unfiltered.  In other words, the
+     * [pos.start, pos.limit) are unfiltered.  In other words, the
      * filter has already been applied by the time this method is
      * called.  See filteredTransliterate().
      *
      * <p>This method is <b>not</b> for public consumption.  Calling
-     * this method directly will transliterate [index.start,
-     * index.limit) without applying the filter.  End user code that
+     * this method directly will transliterate [pos.start,
+     * pos.limit) without applying the filter.  End user code that
      * wants to call this method should be calling transliterate().
      * Subclass code that wants to call this method should probably be
      * calling filteredTransliterate().
+     *
+     * <p>If incremental is true, then upon return pos.start may be
+     * less than pos.limit, if some characters are unprocessed.  If
+     * incremental is false, then pos.start should be equal to pos.limit.
      *
      * @param text the buffer holding transliterated and
      * untransliterated text
@@ -730,6 +746,11 @@ public abstract class Transliterator {
         // characters (which are ignored) and a subsequent run of
         // unfiltered characters (which are transliterated).
 
+        StringBuffer log = null;
+        if (DEBUG) {
+            log = new StringBuffer();
+        }
+
         for (;;) {
 
             if (filter != null) {
@@ -754,8 +775,7 @@ public abstract class Transliterator {
             // Check to see if the unfiltered run is empty.  This only
             // happens at the end of the string when all the remaining
             // characters are filtered.
-            if (index.limit == index.start) {
-                // assert(index.start == globalLimit);
+            if (index.start == index.limit) {
                 break;
             }
 
@@ -797,6 +817,12 @@ public abstract class Transliterator {
             // limit) then we commit that run.
 
             if (rollback && isIncrementalRun) {
+
+                if (DEBUG) {
+                    log.setLength(0);
+                    System.out.println("filteredTransliterate{"+getID()+"}i: IN=" +
+                                       Utility.formatInput(text, index));
+                }
 
                 int runStart = index.start;
                 int runLimit = index.limit;
@@ -840,11 +866,22 @@ public abstract class Transliterator {
 
                     index.limit = passLimit;
 
+                    if (DEBUG) {
+                        log.setLength(0);
+                        log.append("filteredTransliterate{"+getID()+"}i: ");
+                        Utility.formatInput(log, text, index);
+                    }
+
                     // Delegate to subclass for actual transliteration.  Upon
                     // return, start will be updated to point after the
                     // transliterated text, and limit and contextLimit will be
                     // adjusted for length changes.
                     handleTransliterate(text, index, true);
+
+                    if (DEBUG) {
+                        log.append(" => ");
+                        Utility.formatInput(log, text, index);
+                    }
 
                     delta = index.limit - passLimit; // change in length
             
@@ -866,6 +903,10 @@ public abstract class Transliterator {
                         index.start = passStart;
                         index.limit = passLimit;
                         index.contextLimit -= delta;
+
+                        if (DEBUG) {
+                            log.append(" (ROLLBACK)");
+                        }
                     }
 
                     // We did completely transliterate this pass.  Update the
@@ -886,6 +927,10 @@ public abstract class Transliterator {
                         runLimit += delta;
                         totalDelta += delta;
                     }
+
+                    if (DEBUG) {
+                        System.out.println(Utility.escape(log.toString()));
+                    }
                 }
 
                 // Adjust overall limit and rollbackOrigin for insertions and
@@ -896,23 +941,51 @@ public abstract class Transliterator {
 
                 // Delete the rollback copy
                 text.replace(rollbackOrigin, rollbackOrigin + runLength, "");
+
+                // Move start past committed text
+                index.start = passStart;
             }
 
             else {
                 // Delegate to subclass for actual transliteration.
+                if (DEBUG) {
+                    log.setLength(0);
+                    log.append("filteredTransliterate{"+getID()+"}: ");
+                    Utility.formatInput(log, text, index);
+                }
+
                 int limit = index.limit;
                 handleTransliterate(text, index, isIncrementalRun);
                 delta = index.limit - limit; // change in length
+
+                if (DEBUG) {
+                    log.append(" => ");
+                    Utility.formatInput(log, text, index);
+                }
+
+                // In a properly written transliterator, start == limit after
+                // handleTransliterate() returns when incremental is false.
+                // Catch cases where the subclass doesn't do this, and throw
+                // an exception.  (Just pinning start to limit is a bad idea,
+                // because what's probably happening is that the subclass
+                // isn't transliterating all the way to the end, and it should
+                // in non-incremental mode.)
+                if (!isIncrementalRun && index.start != index.limit) {
+                    System.out.println("ERROR: Incomplete non-incremental transliteration in " + getID());
+                    index.start = index.limit;
+                }
 
                 // Adjust overall limit for insertions/deletions.  Don't need
                 // to worry about contextLimit because handleTransliterate()
                 // maintains that.
                 globalLimit += delta;
+
+                if (DEBUG) {
+                    System.out.println(Utility.escape(log.toString()));
+                }
             }
 
-            // If we failed to complete transliterate this run,
-            // then we are done.
-            if (index.start != index.limit) {
+            if (filter == null || isIncrementalRun) {
                 break;
             }
             
@@ -923,6 +996,11 @@ public abstract class Transliterator {
         // Start is valid where it is.  Limit needs to be put back where
         // it was, modulo adjustments for deletions/insertions.
         index.limit = globalLimit;
+
+        if (DEBUG) {
+            System.out.println("filteredTransliterate{"+getID()+"}: OUT=" +
+                               Utility.formatInput(text, index));
+        }
     }
 
     /**
