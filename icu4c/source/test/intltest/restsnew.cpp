@@ -42,11 +42,11 @@ enum E_Where
 
 //***************************************************************************************
 
-#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of " << (expected) << endl; pass=FALSE; }
-#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x >= " << (expected) << endl; pass=FALSE; }
-#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x != " << (expected) << endl; pass=FALSE; }
+#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(action + " returned " + (actual) + " instead of " + (expected)); }
+#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(action + " returned " + (actual) + " instead of x >= " + (expected)); }
+#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(action + " returned " + (actual) + " instead of x != " + (expected)); }
 
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << u_errorName(actual) << " instead of " << u_errorName(expected) << endl; pass=FALSE; }
+#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(action + " returned " + u_errorName(actual) + " instead of " + u_errorName(expected)); }
 
 //***************************************************************************************
 
@@ -495,7 +495,7 @@ NewResourceBundleTest::testTag(const char* frag,
                             UBool in_te,
                             UBool in_te_IN)
 {
-    UBool pass=TRUE;
+    int32_t passOrig = pass;
 
     // Make array from input params
 
@@ -786,7 +786,7 @@ NewResourceBundleTest::testTag(const char* frag,
                 if(key.startsWith("tag") && value.startsWith(base)){
                     record_pass();
                 }else{
-                    record_fail();
+                    record_fail("tag = " + key + ", value = " + value);
                 }
 
             }
@@ -844,7 +844,7 @@ NewResourceBundleTest::testTag(const char* frag,
         CONFIRM_EQ(count, tag_count);
 
     }
-    return pass;
+    return (UBool)(passOrig == pass);
 }
 
 void
@@ -853,9 +853,9 @@ NewResourceBundleTest::record_pass()
   ++pass;
 }
 void
-NewResourceBundleTest::record_fail()
+NewResourceBundleTest::record_fail(const UnicodeString &message)
 {
-  err();
+  err(message);
   ++fail;
 }
 //eof
