@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2003/06/03 18:49:28 $ 
- * $Revision: 1.10 $
+ * $Date: 2003/06/06 20:54:00 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -121,7 +121,7 @@ public class AstroTest extends TestFmwk {
 	}
     }
 
-	static final long DAY_MS = 24*60*60*1000L;
+    static final long DAY_MS = 24*60*60*1000L;
 
     public void TestSunriseTimes() {
         //        logln("Sunrise/Sunset times for San Jose, California, USA");
@@ -172,9 +172,11 @@ public class AstroTest extends TestFmwk {
 
         GregorianCalendar cal = new GregorianCalendar(tz, Locale.US);
         GregorianCalendar cal2 = new GregorianCalendar(tz, Locale.US);
-        cal.set(cal.YEAR, 2001);
-        cal.set(cal.MONTH, cal.APRIL);
-        cal.set(cal.DAY_OF_MONTH, 1);
+        cal.clear();
+        cal.set(Calendar.YEAR, 2001);
+        cal.set(Calendar.MONTH, Calendar.APRIL);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 12); // must be near local noon for getSunRiseSet to work
 
         DateFormat df = DateFormat.getTimeInstance(cal, DateFormat.MEDIUM, Locale.US);
         DateFormat df2 = DateFormat.getDateTimeInstance(cal, DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.US);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2003/06/03 18:49:35 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/06/06 20:54:00 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -717,23 +717,35 @@ public class CalendarAstronomer {
     /**
      * Returns the time (GMT) of sunrise or sunset on the local date to which
      * this calendar is currently set.
+     *
+     * NOTE: This method only works well if this object is set to a
+     * time near local noon.  Because of variations between the local
+     * official time zone and the geographic longitude, the
+     * computation can flop over into an adjacent day if this object
+     * is set to a time near local midnight.
+     * 
      * @internal
      * @deprecated ICU 2.4. This class may be removed or modified.
      */
     public long getSunRiseSet(boolean rise)
     {
+        long t0 = time;
+
         // Make a rough guess: 6am or 6pm local time on the current day
         long noon = ((time + fGmtOffset)/DAY_MS)*DAY_MS - fGmtOffset + 12*HOUR_MS;
         
         setTime(noon + (long)((rise ? -6 : 6) * HOUR_MS));
         
-        return riseOrSet(new CoordFunc() {
+        long t = riseOrSet(new CoordFunc() {
                             public Equatorial eval() { return getSunPosition(); }
                          },
                          rise,
                          .533 * DEG_RAD,        // Angular Diameter
                          34 /60.0 * DEG_RAD,    // Refraction correction
                          MINUTE_MS / 12);       // Desired accuracy
+
+        setTime(t0);
+        return t;
     }
 
     //-------------------------------------------------------------------------
