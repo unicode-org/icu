@@ -29,7 +29,7 @@
 #include "uoptions.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
-#include "ucmpwrit.h"
+#include "uparse.h"
 #include "ucm.h"
 #include "makeconv.h"
 #include "genmbcs.h"
@@ -305,18 +305,7 @@ int main(int argc, char* argv[])
             const char *basename;
 
             /* find the last file sepator */
-            basename = uprv_strrchr(arg, U_FILE_SEP_CHAR);
-            if (basename == NULL) {
-                basename = uprv_strrchr(arg, U_FILE_ALT_SEP_CHAR);
-                if (basename == NULL) {
-                    basename = arg;
-                } else {
-                    ++basename;
-                }
-            } else {
-                ++basename;
-            }
-
+            basename = findBasename(arg);
             uprv_strcpy(outBasename, basename);
         }
         else
@@ -593,53 +582,6 @@ readHeader(ConvData *data,
     }
 }
 
-static void
-readTable(ConvData *data, FileStream* convFile,
-          UBool forBase, UCMStates *baseStates,
-          UErrorCode *pErrorCode) {
-    char line[500];
-    char *end;
-    UBool isOK;
-    
-    if(U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    isOK=TRUE;
-
-    for(;;) {
-        /* read the next line */
-        if(!T_FileStream_readLine(convFile, line, sizeof(line))) {
-            fprintf(stderr, "incomplete charmap section\n");
-            isOK=FALSE;
-            break;
-        }
-
-        /* remove CR LF */
-        end=uprv_strchr(line, 0);
-        while(line<end && (*(end-1)=='\r' || *(end-1)=='\n')) {
-            --end;
-        }
-        *end=0;
-
-        /* ignore empty and comment lines */
-        if(line[0]==0 || line[0]=='#') {
-            continue;
-        }
-
-        /* stop at the end of the mapping table */
-        if(0==uprv_strcmp(line, "END CHARMAP")) {
-            break;
-        }
-
-        isOK&=ucm_addMappingFromLine(data->ucm, line, forBase, baseStates);
-    }
-
-    if(!isOK) {
-        *pErrorCode=U_INVALID_TABLE_FORMAT;
-    }
-}
-
 /* return TRUE if a base table was read, FALSE for an extension table */
 static UBool
 readFile(ConvData *data, const char* converterName,
@@ -647,6 +589,8 @@ readFile(ConvData *data, const char* converterName,
     char line[200];
     char *end;
     FileStream *convFile;
+
+    UCMStates *baseStates;
     UBool dataIsBase;
 
     if(U_FAILURE(*pErrorCode)) {
@@ -668,37 +612,39 @@ readFile(ConvData *data, const char* converterName,
 
     if(data->ucm->baseName[0]==0) {
         dataIsBase=TRUE;
-        ucm_processStates(&data->ucm->states);
-
-        /* read the base table */
-        readTable(data, convFile, TRUE, &data->ucm->states, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            return FALSE;
-        }
-
-        /* read an extension table if there is one */
-        while(T_FileStream_readLine(convFile, line, sizeof(line))) {
-            end=uprv_strchr(line, 0);
-            while(line<end &&
-                  (*(end-1)=='\n' || *(end-1)=='\r' || *(end-1)==' ' || *(end-1)=='\t')) {
-                --end;
-            }
-            *end=0;
-
-            if(0==uprv_strcmp(line, "CHARMAP")) {
-                /* read the extension table */
-                readTable(data, convFile, FALSE, &data->ucm->states, pErrorCode);
-                break;
-            }
-        }
+        baseStates=&data->ucm->states;
+        ucm_processStates(baseStates);
     } else {
-        /* read only the extension table */
         dataIsBase=FALSE;
-        readTable(data, convFile, FALSE, NULL, pErrorCode);
+        baseStates=NULL;
+    }
 
-        /* ### TODO enable extension-only tables, Jitterbug 3346 */
-        fprintf(stderr, "error: delta/extension-only conversion tables are not yet supported\n");
-        *pErrorCode=U_INVALID_TABLE_FORMAT;
+    /* read the base table */
+    ucm_readTable(data->ucm, convFile, dataIsBase, baseStates, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return FALSE;
+    }
+
+    /* read an extension table if there is one */
+    while(T_FileStream_readLine(convFile, line, sizeof(line))) {
+        end=uprv_strchr(line, 0);
+        while(line<end &&
+              (*(end-1)=='\n' || *(end-1)=='\r' || *(end-1)==' ' || *(end-1)=='\t')) {
+            --end;
+        }
+        *end=0;
+
+        if(line[0]=='#' || u_skipWhitespace(line)==end) {
+            continue; /* ignore empty and comment lines */
+        }
+
+        if(0==uprv_strcmp(line, "CHARMAP")) {
+            /* read the extension table */
+            ucm_readTable(data->ucm, convFile, FALSE, baseStates, pErrorCode);
+        } else {
+            fprintf(stderr, "unexpected text after the base mapping table\n");
+        }
+        break;
     }
 
     T_FileStream_close(convFile);
@@ -712,7 +658,7 @@ readFile(ConvData *data, const char* converterName,
 }
 
 static void
-createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCode) {
+createConverter(ConvData *data, const char *converterName, UErrorCode *pErrorCode) {
     ConvData baseData;
     UBool dataIsBase;
 
@@ -722,16 +668,10 @@ createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCod
 
     initConvData(data);
 
-    /* ### TODO if there is an extension table:
-        1. the base table must use precision flags
-        2. check base vs. extension for mappings overlap
-     */
     dataIsBase=readFile(data, converterName, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
-
-    initConvData(&baseData);
 
     if(dataIsBase) {
         data->cnvData=MBCSOpen(data->ucm);
@@ -751,7 +691,7 @@ createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCod
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
 
             } else if(
-                !ucm_checkBaseExt(&data->ucm->states, data->ucm->base, data->ucm->ext, TRUE) ||
+                !ucm_checkBaseExt(&data->ucm->states, data->ucm->base, data->ucm->ext, data->ucm->ext, FALSE) ||
                 !data->extData->addTable(data->extData, data->ucm->ext, &data->staticData)
             ) {
                 *pErrorCode=U_INVALID_TABLE_FORMAT;
@@ -765,20 +705,41 @@ createConverter(ConvData *data, const char* converterName, UErrorCode *pErrorCod
             *pErrorCode=U_INVALID_TABLE_FORMAT;
         }
     } else {
-        /* ### TODO assemble a path/filename for data->ucm->states.baseName */
-        /* must be TRUE */readFile(&baseData, ""/*extConverterName*/, pErrorCode);
-        /* ### TODO read extension table */
-        /* ### TODO - actually write the mappings into genmbcs or into ext */
+        char baseFilename[500];
+        char *basename;
 
-        if( !ucm_checkValidity(data->ucm->ext, &baseData.ucm->states) ||
-            !ucm_checkBaseExt(&baseData.ucm->states, baseData.ucm->base, data->ucm->ext, FALSE) ||
-            !data->extData->addTable(data->extData, data->ucm->ext, &data->staticData)
-        ) {
+        initConvData(&baseData);
+
+        /* assemble a path/filename for data->ucm->baseName */
+        uprv_strcpy(baseFilename, converterName);
+        basename=(char *)findBasename(baseFilename);
+        uprv_strcpy(basename, data->ucm->baseName);
+        uprv_strcat(basename, ".ucm");
+
+        /* read the base table */
+        dataIsBase=readFile(&baseData, baseFilename, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return;
+        } else if(!dataIsBase) {
+            fprintf(stderr, "error: the <icu:base> file \"%s\" is not a base table file\n", baseFilename);
             *pErrorCode=U_INVALID_TABLE_FORMAT;
-        }
-    }
+        } else {
+            /* prepare the extension table */
+            data->extData=CnvExtOpen(data->ucm);
+            if(data->extData==NULL) {
+                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
 
-    cleanupConvData(&baseData);
+            } else if(
+                !ucm_checkValidity(data->ucm->ext, &baseData.ucm->states) ||
+                !ucm_checkBaseExt(&baseData.ucm->states, baseData.ucm->base, data->ucm->ext, data->ucm->ext, FALSE) ||
+                !data->extData->addTable(data->extData, data->ucm->ext, &data->staticData)
+            ) {
+                *pErrorCode=U_INVALID_TABLE_FORMAT;
+            }
+        }
+
+        cleanupConvData(&baseData);
+    }
 }
 
 /*

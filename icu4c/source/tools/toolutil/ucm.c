@@ -26,8 +26,10 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "filestrm.h"
 #include "uarrsort.h"
 #include "ucnvmbcs.h"
+#include "ucnv_bld.h"
 #include "ucnv_ext.h"
 #include "uparse.h"
 #include "ucm.h"
@@ -217,6 +219,10 @@ ucm_sortTable(UCMTable *t) {
     UErrorCode errorCode;
     int32_t i;
 
+    if(t->isSorted) {
+        return;
+    }
+
     errorCode=U_ZERO_ERROR;
 
     /* 1. sort by Unicode first */
@@ -252,17 +258,18 @@ ucm_sortTable(UCMTable *t) {
                 u_errorName(errorCode));
         exit(errorCode);
     }
+
+    t->isSorted=TRUE;
 }
 
 enum {
-    MOVE_TO_EXT=0x10,
-    REMOVE_MAPPING=0x20,
-    MOVE_ANY=0x30
+    MOVE_TO_EXT=1,
+    REMOVE_MAPPING=2
 };
 
 /*
- * move mappings with MOVE_ANY ored into their flags from the base table
- * to the extension table
+ * move mappings with their move flag set from the base table
+ * and optionally to the extension table
  *
  * works only with explicit precision flags because it uses some of the
  * flags bits
@@ -276,10 +283,10 @@ moveMappings(UCMTable *base, UCMTable *ext) {
     mbLimit=mb+base->mappingsLength;
 
     while(mb<mbLimit) {
-        flag=mb->f;
-        if(flag&MOVE_ANY) {
-            /* restore the original flag value */
-            mb->f=flag&~MOVE_ANY;
+        flag=mb->moveFlag;
+        if(flag!=0) {
+            /* reset the move flag */
+            mb->moveFlag=0;
 
             if(ext!=NULL && (flag&MOVE_TO_EXT)) {
                 /* add the mapping to the extension table */
@@ -292,6 +299,7 @@ moveMappings(UCMTable *base, UCMTable *ext) {
             }
             --mbLimit;
             --base->mappingsLength;
+            base->isSorted=FALSE;
         } else {
             ++mb;
         }
@@ -304,10 +312,12 @@ enum {
 };
 
 static uint8_t
-checkBaseExtUnicode(UCMTable *base, UCMTable *ext, UBool moveToExt) {
+checkBaseExtUnicode(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
+                    UBool moveToExt, UBool intersectBase) {
     UCMapping *mb, *me, *mbLimit, *meLimit;
     int32_t cmp;
     uint8_t result;
+    UBool isSISO;
 
     mb=base->mappings;
     mbLimit=mb+base->mappingsLength;
@@ -316,6 +326,8 @@ checkBaseExtUnicode(UCMTable *base, UCMTable *ext, UBool moveToExt) {
     meLimit=me+ext->mappingsLength;
 
     result=0;
+
+    isSISO=(UBool)(baseStates->outputType==MBCS_OUTPUT_2_SISO);
 
     for(;;) {
         /* skip irrelevant mappings on both sides */
@@ -346,21 +358,32 @@ checkBaseExtUnicode(UCMTable *base, UCMTable *ext, UBool moveToExt) {
         /* compare the base and extension mappings */
         cmp=compareUnicode(base, mb, ext, me);
         if(cmp<0) {
+            if(intersectBase && (!(isSISO && intersectBase==2) || mb->bLen>1)) {
+                /*
+                 * mapping in base but not in ext, move it
+                 *
+                 * if base is EBCDIC_STATEFUL and ext is DBCS, move DBCS mappings here
+                 * and check SBCS ones for Unicode prefix below
+                 */
+                mb->moveFlag|=MOVE_TO_EXT;
+                result|=NEEDS_MOVE;
+
             /* does mb map from an input sequence that is a prefix of me's? */
-            if( mb->uLen<me->uLen &&
+            } else if( mb->uLen<me->uLen &&
                 0==uprv_memcmp(UCM_GET_CODE_POINTS(base, mb), UCM_GET_CODE_POINTS(ext, me), 4*mb->uLen)
             ) {
                 if(moveToExt) {
                     /* mark this mapping to be moved to the extension table */
-                    mb->f|=MOVE_TO_EXT;
+                    mb->moveFlag|=MOVE_TO_EXT;
+                    result|=NEEDS_MOVE;
                 } else {
                     fprintf(stderr,
                             "ucm error: the base table contains a mapping whose input sequence\n"
                             "           is a prefix of the input sequence of an extension mapping\n");
                     ucm_printMapping(base, mb, stderr);
                     ucm_printMapping(ext, me, stderr);
+                    result|=HAS_ERRORS;
                 }
-                result|=NEEDS_MOVE;
             }
 
             ++mb;
@@ -372,7 +395,11 @@ checkBaseExtUnicode(UCMTable *base, UCMTable *ext, UBool moveToExt) {
             if( mb->f==me->f && mb->bLen==me->bLen &&
                 0==uprv_memcmp(UCM_GET_BYTES(base, mb), UCM_GET_BYTES(ext, me), mb->bLen)
             ) {
-                me->f|=REMOVE_MAPPING;
+                me->moveFlag|=REMOVE_MAPPING;
+                result|=NEEDS_MOVE;
+            } else if(intersectBase) {
+                /* mapping in base but not in ext, move it */
+                mb->moveFlag|=MOVE_TO_EXT;
                 result|=NEEDS_MOVE;
             } else {
                 fprintf(stderr,
@@ -392,7 +419,8 @@ checkBaseExtUnicode(UCMTable *base, UCMTable *ext, UBool moveToExt) {
 }
 
 static uint8_t
-checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool moveToExt) {
+checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext,
+                  UBool moveToExt, UBool intersectBase) {
     UCMapping *mb, *me;
     int32_t *baseMap, *extMap;
     int32_t b, e, bLimit, eLimit, cmp;
@@ -412,17 +440,23 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool mo
 
     for(;;) {
         /* skip irrelevant mappings on both sides */
-        for(;;) {
+        for(;; ++b) {
             if(b==bLimit) {
                 return result;
             }
             mb=base->mappings+baseMap[b];
 
+            if(isSISO && intersectBase==2 && mb->bLen==1) {
+                /*
+                 * comparing an EBCDIC_STATEFUL base against a DBCS extension:
+                 * leave SBCS base mappings alone
+                 */
+                continue;
+            }
+
             if(mb->f==0 || mb->f==3) {
                 break;
             }
-
-            ++b;
         }
 
         for(;;) {
@@ -441,18 +475,23 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool mo
         /* compare the base and extension mappings */
         cmp=compareBytes(base, mb, ext, me, TRUE);
         if(cmp<0) {
+            if(intersectBase) {
+                /* mapping in base but not in ext, move it */
+                mb->moveFlag|=MOVE_TO_EXT;
+                result|=NEEDS_MOVE;
+
             /*
              * does mb map from an input sequence that is a prefix of me's?
              * for SI/SO tables, a single byte is never a prefix because it
              * occurs in a separate single-byte state
              */
-            if( mb->bLen<me->bLen &&
+            } else if( mb->bLen<me->bLen &&
                 (!isSISO || mb->bLen>1) &&
                 0==uprv_memcmp(UCM_GET_BYTES(base, mb), UCM_GET_BYTES(ext, me), mb->bLen)
             ) {
                 if(moveToExt) {
                     /* mark this mapping to be moved to the extension table */
-                    mb->f|=MOVE_TO_EXT;
+                    mb->moveFlag|=MOVE_TO_EXT;
                     result|=NEEDS_MOVE;
                 } else {
                     fprintf(stderr,
@@ -473,7 +512,11 @@ checkBaseExtBytes(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool mo
             if( mb->f==me->f && mb->uLen==me->uLen &&
                 0==uprv_memcmp(UCM_GET_CODE_POINTS(base, mb), UCM_GET_CODE_POINTS(ext, me), 4*mb->uLen)
             ) {
-                me->f|=REMOVE_MAPPING;
+                me->moveFlag|=REMOVE_MAPPING;
+                result|=NEEDS_MOVE;
+            } else if(intersectBase) {
+                /* mapping in base but not in ext, move it */
+                mb->moveFlag|=MOVE_TO_EXT;
                 result|=NEEDS_MOVE;
             } else {
                 fprintf(stderr,
@@ -515,12 +558,18 @@ ucm_checkValidity(UCMTable *table, UCMStates *baseStates) {
 }
 
 U_CAPI UBool U_EXPORT2
-ucm_checkBaseExt(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool moveToExt) {
+ucm_checkBaseExt(UCMStates *baseStates,
+                 UCMTable *base, UCMTable *ext, UCMTable *moveTarget,
+                 UBool intersectBase) {
     uint8_t result;
 
     /* if we have an extension table, we must always use precision flags */
-    if(base->flagsType!=UCM_FLAGS_EXPLICIT || ext->flagsType!=UCM_FLAGS_EXPLICIT) {
-        fprintf(stderr, "ucm error: the base or extension table contains mappings without precision flags\n");
+    if(base->flagsType&UCM_FLAGS_IMPLICIT) {
+        fprintf(stderr, "ucm error: the base table contains mappings without precision flags\n");
+        return FALSE;
+    }
+    if(ext->flagsType&UCM_FLAGS_IMPLICIT) {
+        fprintf(stderr, "ucm error: extension table contains mappings without precision flags\n");
         return FALSE;
     }
 
@@ -530,8 +579,8 @@ ucm_checkBaseExt(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool mov
 
     /* check */
     result=
-        checkBaseExtUnicode(base, ext, moveToExt)|
-        checkBaseExtBytes(baseStates, base, ext, moveToExt);
+        checkBaseExtUnicode(baseStates, base, ext, (UBool)(moveTarget!=NULL), intersectBase)|
+        checkBaseExtBytes(baseStates, base, ext, (UBool)(moveTarget!=NULL), intersectBase);
 
     if(result&HAS_ERRORS) {
         return FALSE;
@@ -539,9 +588,12 @@ ucm_checkBaseExt(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool mov
 
     if(result&NEEDS_MOVE) {
         moveMappings(ext, NULL);
-        moveMappings(base, ext);
+        moveMappings(base, moveTarget);
         ucm_sortTable(base);
         ucm_sortTable(ext);
+        if(moveTarget!=NULL) {
+            ucm_sortTable(moveTarget);
+        }
     }
 
     return TRUE;
@@ -640,6 +692,8 @@ ucm_mergeTables(UCMTable *fromUTable, UCMTable *toUTable,
         ++toUMapping;
         ++toUIndex;
     }
+
+    fromUTable->isSorted=FALSE;
 }
 
 /* separate extension mappings out of base table for rptp2ucm --------------- */
@@ -662,7 +716,7 @@ ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
         if(isSISO && m->bLen==1 && (m->b.bytes[0]==0xe || m->b.bytes[0]==0xf)) {
             fprintf(stderr, "warning: removing illegal mapping from an SI/SO-stateful table\n");
             ucm_printMapping(table, m, stderr);
-            m->f|=REMOVE_MAPPING;
+            m->moveFlag|=REMOVE_MAPPING;
             needsMove=TRUE;
             continue;
         }
@@ -675,7 +729,7 @@ ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
             printMapping(m, UCM_GET_CODE_POINTS(table, m), UCM_GET_BYTES(table, m), stderr);
             isOK=FALSE;
         } else if(type>0) {
-            m->f|=MOVE_TO_EXT;
+            m->moveFlag|=MOVE_TO_EXT;
             needsMove=TRUE;
         }
     }
@@ -685,7 +739,7 @@ ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
     }
     if(needsMove) {
         moveMappings(ucm->base, ucm->ext);
-        return ucm_checkBaseExt(&ucm->states, ucm->base, ucm->ext, TRUE);
+        return ucm_checkBaseExt(&ucm->states, ucm->base, ucm->ext, ucm->ext, FALSE);
     } else {
         ucm_sortTable(ucm->base);
         return TRUE;
@@ -853,6 +907,17 @@ ucm_closeTable(UCMTable *table) {
 }
 
 U_CAPI void U_EXPORT2
+ucm_resetTable(UCMTable *table) {
+    if(table!=NULL) {
+        table->mappingsLength=0;
+        table->flagsType=0;
+        table->unicodeMask=0;
+        table->bytesLength=table->codePointsLength=0;
+        table->isSorted=FALSE;
+    }
+}
+
+U_CAPI void U_EXPORT2
 ucm_addMapping(UCMTable *table,
                UCMapping *m,
                UChar32 codePoints[UCNV_EXT_MAX_UCHARS],
@@ -946,6 +1011,8 @@ ucm_addMapping(UCMTable *table,
 
     tm=table->mappings+table->mappingsLength++;
     uprv_memcpy(tm, m, sizeof(UCMapping));
+
+    table->isSorted=FALSE;
 }
 
 U_CAPI UCMFile * U_EXPORT2
@@ -1051,7 +1118,61 @@ ucm_addMappingFromLine(UCMFile *ucm, const char *line, UBool forBase, UCMStates 
     UChar32 codePoints[UCNV_EXT_MAX_UCHARS];
     uint8_t bytes[UCNV_EXT_MAX_BYTES];
 
+    const char *s;
+
+    /* ignore empty and comment lines */
+    if(line[0]=='#' || *(s=u_skipWhitespace(line))==0 || *s=='\n' || *s=='\r') {
+        return TRUE;
+    }
+
     return
         ucm_parseMappingLine(&m, codePoints, bytes, line) &&
         ucm_addMappingAuto(ucm, forBase, baseStates, &m, codePoints, bytes);
+}
+
+U_CAPI void U_EXPORT2
+ucm_readTable(UCMFile *ucm, FileStream* convFile,
+              UBool forBase, UCMStates *baseStates,
+              UErrorCode *pErrorCode) {
+    char line[500];
+    char *end;
+    UBool isOK;
+    
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    isOK=TRUE;
+
+    for(;;) {
+        /* read the next line */
+        if(!T_FileStream_readLine(convFile, line, sizeof(line))) {
+            fprintf(stderr, "incomplete charmap section\n");
+            isOK=FALSE;
+            break;
+        }
+
+        /* remove CR LF */
+        end=uprv_strchr(line, 0);
+        while(line<end && (*(end-1)=='\r' || *(end-1)=='\n')) {
+            --end;
+        }
+        *end=0;
+
+        /* ignore empty and comment lines */
+        if(line[0]==0 || line[0]=='#') {
+            continue;
+        }
+
+        /* stop at the end of the mapping table */
+        if(0==uprv_strcmp(line, "END CHARMAP")) {
+            break;
+        }
+
+        isOK&=ucm_addMappingFromLine(ucm, line, forBase, baseStates);
+    }
+
+    if(!isOK) {
+        *pErrorCode=U_INVALID_TABLE_FORMAT;
+    }
 }

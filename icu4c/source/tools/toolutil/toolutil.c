@@ -59,18 +59,19 @@ getLongPathname(const char *pathname) {
 U_CAPI const char * U_EXPORT2
 findBasename(const char *filename) {
     const char *basename=uprv_strrchr(filename, U_FILE_SEP_CHAR);
+
+#if U_FILE_ALT_SEP_CHAR!=U_FILE_SEP_CHAR
+    if(basename==NULL) {
+        /* Use lenient matching on Windows, which can accept either \ or /
+           This is useful for environments like Win32+CygWin which have both.
+        */
+        basename=uprv_strrchr(filename, U_FILE_ALT_SEP_CHAR);
+    }
+#endif
+
     if(basename!=NULL) {
         return basename+1;
     } else {
-#ifdef WIN32
-        /* Use lenient matching on Windows, which can accept either \ or /
-           This is useful for CygWin environments which has both
-        */
-        basename=uprv_strrchr(filename, '/');
-        if(basename!=NULL) {
-            return basename+1;
-        }
-#endif
         return filename;
     }
 }
