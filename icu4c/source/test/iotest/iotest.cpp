@@ -243,17 +243,43 @@ static void TestFileFromICU(UFILE *myFile) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
 
-    u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
+    if (u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString) != myUString) {
+        log_err("u_fgets did not return myUString\n");
+    }
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "Pointer to integer (Count) %n: n=1  n=1\n") != 0) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
 
-    u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString);
+    if (u_fgets(myFile, sizeof(myUString)/sizeof(*myUString), myUString) != myUString) {
+        log_err("u_fgets did not return myUString\n");
+    }
     u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
     if (myString == NULL || strcmp(myString, "Pointer to integer Value: 37\n") != 0) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
+
+    if (u_fgets(myFile, 0, myUString) != NULL) {
+        log_err("u_fgets got \"%s\" and it should have returned NULL\n", myString);
+    }
+
+    if (u_fgets(myFile, 1, myUString) != myUString) {
+        log_err("u_fgets did not return myUString\n");
+    }
+    u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
+    if (myString == NULL || strcmp(myString, "") != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
+
+    if (u_fgets(myFile, 2, myUString) != myUString) {
+        log_err("u_fgets did not return myUString\n");
+    }
+    u_austrncpy(myString, myUString, sizeof(myUString)/sizeof(*myUString));
+    if (myString == NULL || strcmp(myString, "\t") != 0) {
+        log_err("u_fgets got \"%s\"\n", myString);
+    }
+
+
 /*
     *n = 1;
     u_fscanf(myFile, "Pointer to integer (Count) %%n: n=%d %n n=%d\n", *n, n, *n);
