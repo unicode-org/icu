@@ -3,6 +3,12 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
+
+## This causes source/tools/Makefile.in to create and link in a
+## bogus C++ file, so that exception handling with +eh will be
+## enabled properly. 
+HPUX_JUNK_OBJ=  hpux_junk_obj.o
+
 ## Commands to generate dependency files
 GEN_DEPS.c= 	:
 GEN_DEPS.cc= 	:
