@@ -169,6 +169,7 @@ public:
         UErrorCode& errorCode);
 
     void TestYWOY(void);
+    void TestJD(void);
 
     void yearAddTest(Calendar& cal, UErrorCode& status);
  
@@ -180,6 +181,9 @@ public: // package
     // for other tests' use
     static UnicodeString fieldName(UCalendarDateFields f);
     static UnicodeString calToStr(const Calendar & cal);
+
+  // internal - for other test use
+ public:
 
 };
 
