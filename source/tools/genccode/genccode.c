@@ -18,6 +18,8 @@
 *
 *   This program reads a binary file and creates a C source code file
 *   with a byte array that contains the data of the binary file.
+*
+*   12/09/1999  weiv    Added multiple file handling
 */
 
 #include <stdio.h>
@@ -47,12 +49,16 @@ extern int
 main(int argc, char *argv[]) {
     if(argc<=1) {
         fprintf(stderr,
-            "usage: %s filename\n"
+            "usage: %s filename1 filename2 ...\n"
             "\tread the binary input file and \n"
             "\tcreate a .c file with a byte array that contains the input file's data\n",
             argv[0]);
     } else {
-        writeCCode(getLongPathname(argv[1]));
+        while (--argc) {
+            fprintf(stdout, "Generating C code for %s\n", getLongPathname(argv[argc]));
+            column=0xffff;
+            writeCCode(getLongPathname(argv[argc]));
+        }
     }
 
     return 0;
