@@ -232,6 +232,8 @@ Formattable::operator=(const Formattable& source)
 UBool
 Formattable::operator==(const Formattable& that) const
 {
+    int32_t i;
+
     if (this == &that) return TRUE;
 
     // Returns FALSE if the data types are different.
@@ -259,7 +261,7 @@ Formattable::operator==(const Formattable& that) const
             break;
         }
         // Checks each element for equality.
-        for (int32_t i=0; i<fValue.fArrayAndCount.fCount; ++i) {
+        for (i=0; i<fValue.fArrayAndCount.fCount; ++i) {
             if (fValue.fArrayAndCount.fArray[i] != that.fValue.fArrayAndCount.fArray[i]) {
                 equal = FALSE;
                 break;
