@@ -35,8 +35,6 @@ U_NAMESPACE_BEGIN
 RegexMatcher::RegexMatcher(const RegexPattern *pat)  { 
     fPattern           = pat;
     fInput             = NULL;
-    fInputUC           = NULL;
-    fInputLength       = 0;
     UErrorCode  status = U_ZERO_ERROR;
     fStack             = new UVector32(status);   // TODO:  do something with status.
     fData              = fSmallData;
@@ -177,7 +175,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
 //
 //--------------------------------------------------------------------------------
 UnicodeString &RegexMatcher::appendTail(UnicodeString &dest) {
-    int32_t  len = fInputLength-fMatchEnd;
+    int32_t  len = fInput->length()-fMatchEnd;
     if (len > 0) {
         dest.append(*fInput, fMatchEnd, len);
     }
@@ -237,12 +235,9 @@ UBool RegexMatcher::find() {
     // TODO:  Needs optimization
     UErrorCode status = U_ZERO_ERROR;
 
-    int32_t  startPos;
-    // TODO:  needs to go up to the very end, so a pattern that can match a zero lenght
-    //        string can match at the end of a string.  Can't do until loop-breaking
-    //        is added to the engine, though, otherwise it triggers too many bugs.
-    startPos = fMatchEnd;
-    U_ASSERT(startPos >= 0 && startPos <= fInputLength);
+    int32_t startPos = fMatchEnd;
+    int32_t inputLen = fInput->length();
+    U_ASSERT(startPos >= 0 && startPos <= inputLen);
     for (;;) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
@@ -251,7 +246,7 @@ UBool RegexMatcher::find() {
         if (fMatch) {
             return TRUE;
         }
-        if (startPos >= fInputLength) {
+        if (startPos >= inputLen) {
             break;
         }
         startPos = fInput->moveIndex32(startPos, 1);
@@ -265,7 +260,8 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
-    if (start < 0 || start >= fInputLength) {
+    int32_t inputLen = fInput->length();
+    if (start < 0 || start >= inputLen) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
@@ -275,7 +271,7 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
     // TODO:  optimize the search for a leading literal string.
     // TODO:  optimize based on the minimum length of a possible match
     int32_t  startPos;
-    for (startPos=start; startPos < fInputLength; startPos=fInput->moveIndex32(startPos, 1)) {
+    for (startPos=start; startPos < inputLen; startPos=fInput->moveIndex32(startPos, 1)) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
             return FALSE;
@@ -351,7 +347,7 @@ UBool RegexMatcher::matches(UErrorCode &status) {
     }
     reset();
     MatchAt(0, status);
-    UBool   success  = (fMatch && fMatchEnd==fInputLength);
+    UBool   success  = (fMatch && fMatchEnd==fInput->length());
     return success;
 }
 
@@ -427,8 +423,6 @@ RegexMatcher &RegexMatcher::reset() {
 
 RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
     fInput          = &input;
-    fInputLength    = input.length();
-    fInputUC        = fInput->getBuffer();
     reset();
     return *this;
 }
@@ -511,7 +505,7 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
     
     // Determine whether char c at current position is a member of the word set of chars.
     // If we're off the end of the string, behave as though we're not at a word char.
-    if (pos < fInputLength) {
+    if (pos < fInput->length()) {
         UChar32  c = fInput->char32At(pos);
         int8_t ctype = u_charType(c);
         if (ctype==U_NON_SPACING_MARK || ctype==U_ENCLOSING_MARK) {
@@ -619,6 +613,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     const UChar         *litText       = fPattern->fLiteralText.getBuffer();
     UVector             *sets          = fPattern->fSets;
     int32_t              inputLen      = fInput->length();
+    const UChar         *inputBuf      = fInput->getBuffer();
 
     REStackFrame        *fp            = resetStack();
     int32_t              frameSize     = fPattern->fFrameSize;
@@ -663,9 +658,9 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
 
         case URX_ONECHAR:
-            if (fp->fInputIdx < fInputLength) {
+            if (fp->fInputIdx < inputLen) {
                 UChar32   c;
-                U16_NEXT(fInputUC, fp->fInputIdx, fInputLength, c);
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 if (c == opValue) {           
                     break;
                 }
@@ -691,7 +686,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
                 int32_t stringEndIndex = fp->fInputIdx + stringLen;
                 if (stringEndIndex <= inputLen &&
-                    u_strncmp(fInputUC+fp->fInputIdx, litText+stringStartIdx, stringLen) == 0) {
+                    u_strncmp(inputBuf+fp->fInputIdx, litText+stringStartIdx, stringLen) == 0) {
                     // Success.  Advance the current input position.
                     fp->fInputIdx = stringEndIndex;
                 } else {
@@ -792,7 +787,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
         case URX_BACKSLASH_D:            // Test for decimal digit
             {
-                if (fp->fInputIdx >= fInputLength) {
+                if (fp->fInputIdx >= inputLen) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -822,7 +817,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         case URX_BACKSLASH_X:          // Match combining character sequence
             {                          //  Closer to Grapheme cluster than to Perl \X
                 // Fail if at end of input
-                if (fp->fInputIdx >= fInputLength) {
+                if (fp->fInputIdx >= inputLen) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -852,7 +847,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                             break;
                         }
                         fp->fInputIdx = fInput->moveIndex32(fp->fInputIdx, 1);
-                        if (fp->fInputIdx >= fInputLength) {
+                        if (fp->fInputIdx >= inputLen) {
                             break; 
                         }
                     }
@@ -877,7 +872,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 // The high bit of the op value is a flag for the match polarity.
                 //    0:   success if input char is in set.
                 //    1:   success if input char is not in set.
-                if (fp->fInputIdx >= fInputLength) {
+                if (fp->fInputIdx >= inputLen) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
@@ -886,7 +881,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 opValue &= ~URX_NEG_SET;
                 U_ASSERT(opValue > 0 && opValue < URX_LAST_SET);
                 UChar32  c;
-                U16_NEXT(fInputUC, fp->fInputIdx, fInputLength, c);
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 const UnicodeSet *s = fPattern->fStaticSets[opValue];
                 if (s->contains(c)) {
                     success = !success;
@@ -899,10 +894,10 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             
 
         case URX_SETREF:
-            if (fp->fInputIdx < fInputLength) {
+            if (fp->fInputIdx < inputLen) {
                 // There is input left.  Pick up one char and test it for set membership.
                 UChar32   c;
-                U16_NEXT(fInputUC, fp->fInputIdx, fInputLength, c);
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 U_ASSERT(opValue > 0 && opValue < sets->size());
                 UnicodeSet *s = (UnicodeSet *)sets->elementAt(opValue);
                 if (s->contains(c)) {
@@ -919,14 +914,14 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         case URX_DOTANY:
             {
                 // . matches anything
-                if (fp->fInputIdx >= fInputLength) {
+                if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
                         fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
                 }
                 // There is input left.  Advance over one char, unless we've hit end-of-line
                 UChar32 c;
-                U16_NEXT(fInputUC, fp->fInputIdx, fInputLength, c);
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
                     (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029)) {
                     // End of line in normal mode.   . does not match.
@@ -941,7 +936,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             {
                 // ., in dot-matches-all (including new lines) mode
                 // . matches anything
-                if (fp->fInputIdx >= fInputLength) {
+                if (fp->fInputIdx >= inputLen) {
                     // At end of input.  Match failed.  Backtrack out.
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                     break;
@@ -1119,7 +1114,7 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                         break;
                     }
                 if ((fp->fInputIdx + len > inputLen) || 
-                    u_strncmp(fInputUC+groupStartIdx, fInputUC+fp->fInputIdx, len) != 0) {
+                    u_strncmp(inputBuf+groupStartIdx, inputBuf+fp->fInputIdx, len) != 0) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no match.
                 } else {
                     fp->fInputIdx += len;     // Match.  Advance current input position.
@@ -1149,7 +1144,37 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 }
             }
             break;
-                   
+
+        case URX_LA_START:
+            {
+                // Entering a lookahead block.
+                // Save Stack Ptr, Input Pos.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                fData[opValue]   = fStack->size();
+                fData[opValue+1] = fp->fInputIdx;
+            }
+            break;
+
+        case URX_LA_END:
+            {
+                // Leaving a look-ahead block.
+                //  restore Stack Ptr, Input Pos to positions they had on entry to block.
+                U_ASSERT(opValue>=0 && opValue+1<fPattern->fDataSize);
+                int32_t stackSize = fStack->size();
+                int32_t newStackSize = fData[opValue];
+                U_ASSERT(stackSize >= newStackSize);
+                if (stackSize > newStackSize) {
+                    int32_t *newFP = fStack->getBuffer() + newStackSize - frameSize;
+                    int32_t i;
+                    for (i=0; i<frameSize; i++) {
+                        newFP[i] = ((int32_t *)fp)[i];
+                    }
+                    fp = (REStackFrame *)newFP;
+                    fStack->setSize(newStackSize);
+                }
+                fp->fInputIdx = fData[opValue+1];
+            }
+            break;
 
         default:
             // Trouble.  The compiled pattern contains an entry with an

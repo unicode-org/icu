@@ -65,7 +65,20 @@ public:
     static void cleanup();                       // Memory cleanup
 
 
+
+    // Categories of parentheses in pattern.
+    //   The category is saved in the compile-time parentheses stack frame, and
+    //   determines the code to be generated when the matching close ) is encountered.
+    enum EParenClass {
+        plain        = -1,               // No special handling
+        capturing    = -2, 
+        atomic       = -3,
+        lookAhead    = -4,
+        negLookAhead = -5
+    };
+
 private:
+
 
     UBool       doParseActions(EParseAction a);
     void        error(UErrorCode e);                   // error reporting convenience function.

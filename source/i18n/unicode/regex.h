@@ -681,9 +681,7 @@ private:
 
     const RegexPattern  *fPattern;
     const UnicodeString *fInput;
-    const UChar         *fInputUC;
 
-    int32_t              fInputLength;
     UBool                fMatch;           // True if the last match was successful.
     int32_t              fMatchStart;      // Position of the start of the most recent match
     int32_t              fMatchEnd;        // First position after the end of the most recent match

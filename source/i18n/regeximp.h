@@ -99,12 +99,18 @@ enum {
                                //   capture group variables in the state stack frame.
      URX_STO_INP_LOC   = 35,   // Store the input location.  Operand is location
                                //   within the matcher data (not stack).
-     URX_JMPX          = 36   // Conditional JMP.
+     URX_JMPX          = 36,  // Conditional JMP.
                                //   First Operand:  JMP target location.
                                //   Second Operand:  Data location containing an 
                                //     input position.  If current input position ==
                                //     saved input position, FAIL rather than taking
-                               //     the JMP.
+                               //     the JMP
+     URX_LA_START      = 37,   // Starting a LookAround expression.
+                               //   Save InputPos and SP in static data.
+                               //   Operand:  Static data offset for the save
+     URX_LA_END        = 38    // Ending a Lookaround expression.
+                               //   Restore InputPos and Stack to saved values.
+                               //   Operand:  Static data offset for saved data.
 };
 
 // Keep this list of opcode names in sync with the above enum
@@ -146,7 +152,9 @@ enum {
         "LD_SP",               \
         "BACKREF",             \
         "STO_INP_LOC",         \
-        "JMPX"
+        "JMPX",                \
+        "LA_START",            \
+        "LA_END"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
