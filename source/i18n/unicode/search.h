@@ -37,9 +37,9 @@ U_NAMESPACE_BEGIN
  * <p>
  * <tt>SearchIterator</tt> defines a protocol for text searching. 
  * Subclasses provide concrete implementations of various search algorithms. 
- * For example, {@link StringSearch} implements language-sensitive pattern 
+ * For example, <tt>StringSearch</tt> implements language-sensitive pattern 
  * matching based on the comparison rules defined in a 
- * {@link RuleBasedCollator} object. 
+ * <tt>RuleBasedCollator</tt> object. 
  * <p> 
  * Other options for searching includes using a BreakIterator to restrict 
  * the points at which matches are detected.
@@ -65,6 +65,7 @@ U_NAMESPACE_BEGIN
  * </code></pre>
  *
  * @see StringSearch
+ * @see RuleBasedCollator
  */
 class U_I18N_API SearchIterator : public UObject {
 
@@ -137,13 +138,17 @@ public:
     /**
     * Returns the index to the match in the text string that was searched.
     * This call returns a valid result only after a successful call to 
-    * {@link #first}, {@link #next}, {@link #previous}, or {@link #last}.
+    * <tt>first</tt>, <tt>next</tt>, <tt>previous</tt>, or <tt>last</tt>.
     * Just after construction, or after a searching method returns 
     * <tt>USEARCH_DONE</tt>, this method will return <tt>USEARCH_DONE</tt>.
     * <p>
     * Use getMatchedLength to get the matched string length.
     * @return index of a substring within the text string that is being 
     *         searched.
+    * @see #first
+    * @see #next
+    * @see #previous
+    * @see #last
     * @draft ICU 2.0
     */
     int32_t getMatchedStart(void) const;
@@ -151,23 +156,31 @@ public:
     /**
      * Returns the length of text in the string which matches the search 
      * pattern. This call returns a valid result only after a successful call 
-     * to {@link #first}, {@link #next}, {@link #previous}, or {@link #last}.
+     * to <tt>first</tt>, <tt>next</tt>, <tt>previous</tt>, or <tt>last</tt>.
      * Just after construction, or after a searching method returns 
      * <tt>USEARCH_DONE</tt>, this method will return 0.
      * @return The length of the match in the target text, or 0 if there
      *         is no match currently.
+     * @see #first
+     * @see #next
+     * @see #previous
+     * @see #last
      * @draft ICU 2.0
      */
     int32_t getMatchedLength(void) const;
     
     /**
      * Returns the text that was matched by the most recent call to 
-     * {@link #first}, {@link #next}, {@link #previous}, or {@link #last}.
+     * <tt>first</tt>, <tt>next</tt>, <tt>previous</tt>, or <tt>last</tt>.
      * If the iterator is not pointing at a valid match (e.g. just after 
      * construction or after <tt>USEARCH_DONE</tt> has been returned, 
      * returns an empty string. 
      * @param result stores the matched string or an empty string if a match
      *        is not found.
+     * @see #first
+     * @see #next
+     * @see #previous
+     * @see #last
      * @draft ICU 2.0
      */
     void getMatchedText(UnicodeString &result) const;
@@ -184,6 +197,7 @@ public:
      *                for. If this parameter is <tt>NULL</tt>, no break
      *                detection is attempted.
      * @param status for errors if it occurs
+     * @see BreakIterator
      * @draft ICU 2.0
      */
     void setBreakIterator(BreakIterator *breakiter, UErrorCode &status);
@@ -195,6 +209,7 @@ public:
      * Note that <tt>NULL</tt> is a legal value; it means that break
      * detection should not be attempted.
      * @return BreakIterator used to restrict matchings.
+     * @see #setBreakIterator
      * @draft ICU 2.0
      */
     const BreakIterator * getBreakIterator(void) const;
@@ -269,13 +284,14 @@ public:
     /**
      * Returns the first index at which the string text matches the search 
      * pattern. The iterator is adjusted so that its current index (as 
-     * returned by {@link #getOffset}) is the match position if one 
+     * returned by <tt>getOffset</tt>) is the match position if one 
      * was found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the iterator will be adjusted to the index USEARCH_DONE
      * @param  status for errors if it occurs
      * @return The character index of the first match, or 
      *         <tt>USEARCH_DONE</tt> if there are no matches.
+     * @see #getOffset
      * @draft ICU 2.0
      */
     int32_t first(UErrorCode &status);
@@ -283,7 +299,7 @@ public:
     /**
      * Returns the first index greater than <tt>position</tt> at which the 
      * string text matches the search pattern. The iterator is adjusted so 
-     * that its current index (as returned by {@link #getOffset}) is the 
+     * that its current index (as returned by <tt>getOffset</tt>) is the 
      * match position if one was found. If a match is not found, 
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
@@ -294,6 +310,7 @@ public:
      * @return The character index of the first match following 
      *         <tt>position</tt>, or <tt>USEARCH_DONE</tt> if there are no 
      *         matches.
+     * @see #getOffset
      * @draft ICU 2.0
      */
     int32_t following(int32_t position, UErrorCode &status);
@@ -301,13 +318,14 @@ public:
     /**
      * Returns the last index in the target text at which it matches the 
      * search pattern. The iterator is adjusted so that its current index 
-     * (as returned by {@link #getOffset}) is the match position if one was 
+     * (as returned by <tt>getOffset</tt>) is the match position if one was 
      * found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the iterator will be adjusted to the index USEARCH_DONE.
      * @param  status for errors if it occurs
      * @return The index of the first match, or <tt>USEARCH_DONE</tt> if 
      *         there are no matches.
+     * @see #getOffset
      * @draft ICU 2.0
      */
     int32_t last(UErrorCode &status);
@@ -315,7 +333,7 @@ public:
     /**
      * Returns the first index less than <tt>position</tt> at which the string 
      * text matches the search pattern. The iterator is adjusted so that its 
-     * current index (as returned by {@link #getOffset}) is the match 
+     * current index (as returned by <tt>getOffset</tt>) is the match 
      * position if one was found. If a match is not found, 
      * <tt>USEARCH_DONE</tt> will be returned and the iterator will be 
      * adjusted to the index USEARCH_DONE
@@ -326,6 +344,7 @@ public:
      * @return The character index of the first match preceding 
      *         <tt>position</tt>, or <tt>USEARCH_DONE</tt> if there are 
      *         no matches.
+     * @see #getOffset
      * @draft ICU 2.0
      */
     int32_t preceding(int32_t position, UErrorCode &status);
@@ -334,13 +353,14 @@ public:
      * Returns the index of the next point at which the text matches the
      * search pattern, starting from the current position
      * The iterator is adjusted so that its current index (as returned by 
-     * {@link #getOffset}) is the match position if one was found.
+     * <tt>getOffset</tt>) is the match position if one was found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the iterator will be adjusted to a position after the end of the text 
      * string.
      * @param  status for errors if it occurs
      * @return The index of the next match after the current position,
      *          or <tt>USEARCH_DONE</tt> if there are no more matches.
+     * @see #getOffset
      * @draft ICU 2.0
      */
      int32_t next(UErrorCode &status);
@@ -349,12 +369,13 @@ public:
      * Returns the index of the previous point at which the string text 
      * matches the search pattern, starting at the current position.
      * The iterator is adjusted so that its current index (as returned by 
-     * {@link #getOffset}) is the match position if one was found.
+     * <tt>getOffset</tt>) is the match position if one was found.
      * If a match is not found, <tt>USEARCH_DONE</tt> will be returned and
      * the iterator will be adjusted to the index USEARCH_DONE
      * @param  status for errors if it occurs
      * @return The index of the previous match before the current position,
      *          or <tt>USEARCH_DONE</tt> if there are no more matches.
+     * @see #getOffset
      * @draft ICU 2.0
      */
     int32_t previous(UErrorCode &status);
@@ -414,6 +435,8 @@ protected:
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
      *                is <tt>NULL</tt>, no break detection is attempted.  
+     * @see #handleNext
+     * @see #handlePrev
 	 * @draft ICU 2.0.
      */
     SearchIterator(const UnicodeString &text, 
@@ -434,6 +457,8 @@ protected:
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
      *                is <tt>NULL</tt>, no break detection is attempted.
+     * @see #handleNext
+     * @see #handlePrev
 	 * @draft ICU 2.0.
      */
     SearchIterator(CharacterIterator &text, BreakIterator *breakiter = NULL);
@@ -455,7 +480,7 @@ protected:
      * <p>
      * If a match is found, the implementation should return the index at
      * which the match starts and should call 
-     * {@link #setMatchLength setMatchLength} with the number of characters 
+     * <tt>setMatchLength</tt> with the number of characters 
      * in the target text that make up the match. If no match is found, the 
      * method should return USEARCH_DONE.
      * <p>
@@ -464,6 +489,7 @@ protected:
      * @param status for error codes if it occurs.
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
+     * @see #setMatchLength
 	 * @draft ICU 2.0.
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status) 
@@ -476,7 +502,7 @@ protected:
      * <p>
      * If a match is found, the implementation should return the index at
      * which the match starts and should call 
-     * {@link #setMatchLength setMatchLength} with the number of characters 
+     * <tt>setMatchLength</tt> with the number of characters 
      * in the target text that make up the match. If no match is found, the 
      * method should return USEARCH_DONE.
      * <p>
@@ -485,6 +511,7 @@ protected:
      * @param status for error codes if it occurs.
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
+     * @see #setMatchLength
 	 * @draft ICU 2.0.
      */
      virtual int32_t handlePrev(int32_t position, UErrorCode &status) 
@@ -496,6 +523,8 @@ protected:
      * Subclasses' <tt>handleNext</tt> and <tt>handlePrev</tt>
      * methods should call this when they find a match in the target text.
      * @param length length of the matched text.
+     * @see #handleNext
+     * @see #handlePrev
 	 * @draft ICU 2.0.
      */
     virtual void setMatchLength(int32_t length);
@@ -506,6 +535,8 @@ protected:
      * Subclasses' <tt>handleNext</tt> and <tt>handlePrev</tt>
      * methods should call this when they find a match in the target text.
      * @param position start offset of the matched text.
+     * @see #handleNext
+     * @see #handlePrev
 	 * @draft ICU 2.0.
      */
     virtual void setMatchStart(int32_t position);
