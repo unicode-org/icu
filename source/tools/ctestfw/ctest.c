@@ -57,10 +57,10 @@ static void iterateTestsWithLevel( const TestNode *root, int len,
 static void help ( const char *argv0 );
 
 static int ERRONEOUS_FUNCTION_COUNT = 0;
- int ERROR_COUNT = 0;
+static int ERROR_COUNT = 0;
 static int INDENT_LEVEL = 0;
- int VERBOSITY = 0; /* be No-verbose by default */
- int ERR_MSG =1; /*error messages will be displayed by default*/
+static int VERBOSITY = 0; /* be No-verbose by default */
+static int ERR_MSG =1; /*error messages will be displayed by default*/
 /*-------------------------------------------*/
 
 /* strncmp that also makes sure there's a \0 at s2[0] */
