@@ -782,10 +782,18 @@ public:
    * to the initial default rule set.  If the rule set is not a public rule set name,
    * U_ILLEGAL_ARGUMENT_ERROR is returned in status.
    * @param ruleSetName the name of the rule set, or null to reset the initial default.
-   * @param status Output param set to failure code when a problem occurs.
+   * @param status set to failure code when a problem occurs.
    * @draft ICU 2.6
    */
   virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
+
+  /**
+   * Return the name of the current default rule set.  If the current rule set is
+   * not public, returns a bogus (and empty) UnicodeString.
+   * @return the name of the current default rule set
+   * @draft ICU 3.0
+   */
+  virtual UnicodeString getDefaultRuleSetName();
 
 public:
     /**

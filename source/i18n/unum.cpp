@@ -42,61 +42,43 @@ unum_open(  UNumberFormatStyle    style,
     { 
         return 0;
     }
-    if(style!=UNUM_PATTERN){
-        UNumberFormat *retVal = 0;
+
+    UNumberFormat *retVal = 0;
         
-        switch(style) {
-        case UNUM_DECIMAL:
-            if(locale == 0)
-                retVal = (UNumberFormat*)NumberFormat::createInstance(*status);
-            else
-                retVal = (UNumberFormat*)NumberFormat::createInstance(Locale(locale),
-                *status);
-            break;
+    switch(style) {
+    case UNUM_DECIMAL:
+	if(locale == 0)
+	    retVal = (UNumberFormat*)NumberFormat::createInstance(*status);
+	else
+	    retVal = (UNumberFormat*)NumberFormat::createInstance(Locale(locale),
+								  *status);
+	break;
             
-        case UNUM_CURRENCY:
-            if(locale == 0)
-                retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(*status);
-            else
-                retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(Locale(locale),
-                *status);
-            break;
+    case UNUM_CURRENCY:
+	if(locale == 0)
+	    retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(*status);
+	else
+	    retVal = (UNumberFormat*)NumberFormat::createCurrencyInstance(Locale(locale),
+									  *status);
+	break;
             
-        case UNUM_PERCENT:
-            if(locale == 0)
-                retVal = (UNumberFormat*)NumberFormat::createPercentInstance(*status);
-            else
-                retVal = (UNumberFormat*)NumberFormat::createPercentInstance(Locale(locale),
-                *status);
-            break;
+    case UNUM_PERCENT:
+	if(locale == 0)
+	    retVal = (UNumberFormat*)NumberFormat::createPercentInstance(*status);
+	else
+	    retVal = (UNumberFormat*)NumberFormat::createPercentInstance(Locale(locale),
+									 *status);
+	break;
             
-        case UNUM_SCIENTIFIC:
-            if(locale == 0)
-                retVal = (UNumberFormat*)NumberFormat::createScientificInstance(*status);
-            else
-                retVal = (UNumberFormat*)NumberFormat::createScientificInstance(Locale(locale),
-                *status);
-            break;
-            
-        case UNUM_SPELLOUT:
-#if U_HAVE_RBNF
-            return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
-#else
-            // fall through
-#endif
-        default:
-            *status = U_UNSUPPORTED_ERROR;
-            return 0;
-        }
-        
-        if(retVal == 0) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return 0;
-        }
-        
-        return retVal;
-    }else{
-        /* we don't support RBNF patterns yet */
+    case UNUM_SCIENTIFIC:
+	if(locale == 0)
+	    retVal = (UNumberFormat*)NumberFormat::createScientificInstance(*status);
+	else
+	    retVal = (UNumberFormat*)NumberFormat::createScientificInstance(Locale(locale),
+									    *status);
+	break;
+
+    case UNUM_PATTERN_DECIMAL: {
         UParseError tErr;
         /* UnicodeString can handle the case when patternLength = -1. */
         const UnicodeString pat(pattern, patternLength);
@@ -109,24 +91,55 @@ unum_open(  UNumberFormatStyle    style,
         if(locale == 0)
             syms = new DecimalFormatSymbols(*status);
         else
-            syms = new DecimalFormatSymbols(Locale(locale),
-            *status);
+            syms = new DecimalFormatSymbols(Locale(locale), *status);
         
         if(syms == 0) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return 0;
         }
         
-        DecimalFormat *fmt = 0;
-        fmt = new DecimalFormat(pat, syms, *parseErr, *status);
-        if(fmt == 0) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
+        retVal = (UNumberFormat*)new DecimalFormat(pat, syms, *parseErr, *status);
+        if(retVal == 0) {
             delete syms;
-            return 0;
+        }
+    } break;
+
+#if U_HAVE_RBNF
+    case UNUM_PATTERN_RULEBASED: {
+        UParseError tErr;
+        /* UnicodeString can handle the case when patternLength = -1. */
+        const UnicodeString pat(pattern, patternLength);
+        
+        if(parseErr==NULL){
+            parseErr = &tErr;
         }
         
-        return (UNumberFormat*) fmt;
+        retVal = (UNumberFormat*)new RuleBasedNumberFormat(pat, Locale(locale), *parseErr, *status);
+    } break;
+
+    case UNUM_SPELLOUT:
+	retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
+	break;
+
+    case UNUM_ORDINAL:
+	retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_ORDINAL, Locale(locale), *status);
+	break;
+
+    case UNUM_DURATION:
+	retVal = (UNumberFormat*)new RuleBasedNumberFormat(URBNF_DURATION, Locale(locale), *status);
+	break;
+#endif
+
+    default:
+	*status = U_UNSUPPORTED_ERROR;
+	return 0;
     }
+        
+    if(retVal == 0) {
+	*status = U_MEMORY_ALLOCATION_ERROR;
+    }
+        
+    return retVal;
 }
 
 U_CAPI void U_EXPORT2
@@ -142,8 +155,13 @@ unum_clone(const UNumberFormat *fmt,
     if(U_FAILURE(*status))
         return 0;
     
-    Format *res = ((DecimalFormat*)fmt)->clone();
-    
+    Format *res = 0;
+    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+        res = ((DecimalFormat*)fmt)->clone();
+    } else {
+        res = ((RuleBasedNumberFormat*)fmt)->clone();
+    }
+
     if(res == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
@@ -311,6 +329,7 @@ U_CAPI int32_t U_EXPORT2
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
+  if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
     switch(attr) {
     case UNUM_PARSE_INT_ONLY:
         return ((NumberFormat*)fmt)->isParseIntegerOnly();
@@ -360,7 +379,13 @@ unum_getAttribute(const UNumberFormat*          fmt,
     default:
         break;
     }
-    return -1;
+  } else {
+    if (attr == UNUM_LENIENT_PARSE) {
+      return ((RuleBasedNumberFormat*)fmt)->isLenient();
+    }
+  }
+
+  return -1;
 }
 
 U_CAPI void U_EXPORT2
@@ -368,6 +393,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             int32_t                 newValue)
 {
+  if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
     switch(attr) {
     case UNUM_PARSE_INT_ONLY:
         ((NumberFormat*)fmt)->setParseIntegerOnly((UBool)newValue);
@@ -436,13 +462,19 @@ unum_setAttribute(    UNumberFormat*          fmt,
         /* Shouldn't get here anyway */
         break;
     }
+  } else {
+    if (attr == UNUM_LENIENT_PARSE) {
+      ((RuleBasedNumberFormat*)fmt)->setLenient((UBool)newValue);
+    }
+  }
 }
 
 U_CAPI double U_EXPORT2
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
-    if (attr == UNUM_ROUNDING_INCREMENT) {
+    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
+	attr == UNUM_ROUNDING_INCREMENT) {
         return ((DecimalFormat*)fmt)->getRoundingIncrement();
     } else {
         return -1.0;
@@ -454,7 +486,8 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             double                 newValue)
 {
-    if (attr == UNUM_ROUNDING_INCREMENT) {   
+    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID() && 
+	attr == UNUM_ROUNDING_INCREMENT) {   
         ((DecimalFormat*)fmt)->setRoundingIncrement(newValue);
     }
 }
@@ -476,34 +509,50 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
         res.setTo(result, 0, resultLength);
     }
     
-    switch(tag) {
-    case UNUM_POSITIVE_PREFIX:
+    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      switch(tag) {
+      case UNUM_POSITIVE_PREFIX:
         ((DecimalFormat*)fmt)->getPositivePrefix(res);
         break;
         
-    case UNUM_POSITIVE_SUFFIX:
+      case UNUM_POSITIVE_SUFFIX:
         ((DecimalFormat*)fmt)->getPositiveSuffix(res);
         break;
         
-    case UNUM_NEGATIVE_PREFIX:
+      case UNUM_NEGATIVE_PREFIX:
         ((DecimalFormat*)fmt)->getNegativePrefix(res);
         break;
         
-    case UNUM_NEGATIVE_SUFFIX:
+      case UNUM_NEGATIVE_SUFFIX:
         ((DecimalFormat*)fmt)->getNegativeSuffix(res);
         break;
         
-    case UNUM_PADDING_CHARACTER:
+      case UNUM_PADDING_CHARACTER:
         res = ((DecimalFormat*)fmt)->getPadCharacterString();
         break;
         
-    case UNUM_CURRENCY_CODE:
+      case UNUM_CURRENCY_CODE:
         res = UnicodeString(((DecimalFormat*)fmt)->getCurrency());
         break;
         
-    default:
+      default:
         *status = U_UNSUPPORTED_ERROR;
         return -1;
+      }
+    } else {
+      RuleBasedNumberFormat* rbnf = (RuleBasedNumberFormat*)fmt;
+      if (tag == UNUM_DEFAULT_RULESET) {
+	res = rbnf->getDefaultRuleSetName();
+      } else if (tag == UNUM_PUBLIC_RULESETS) {
+	int32_t count = rbnf->getNumberOfRuleSetNames();
+	for (int i = 0; i < count; ++i) {
+	  res += rbnf->getRuleSetName(i);
+	  res += (UChar)0x003b; // semicolon
+	}
+      } else {
+	*status = U_UNSUPPORTED_ERROR;
+	return -1;
+      }
     }
     
     return res.extract(result, resultLength, *status);
@@ -522,34 +571,42 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
     int32_t len = (newValueLength == -1 ? u_strlen(newValue) : newValueLength);
     const UnicodeString val((UChar*)newValue, len, len);
     
-    switch(tag) {
-    case UNUM_POSITIVE_PREFIX:
+    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      switch(tag) {
+      case UNUM_POSITIVE_PREFIX:
         ((DecimalFormat*)fmt)->setPositivePrefix(val);
         break;
         
-    case UNUM_POSITIVE_SUFFIX:
+      case UNUM_POSITIVE_SUFFIX:
         ((DecimalFormat*)fmt)->setPositiveSuffix(val);
         break;
         
-    case UNUM_NEGATIVE_PREFIX:
+      case UNUM_NEGATIVE_PREFIX:
         ((DecimalFormat*)fmt)->setNegativePrefix(val);
         break;
         
-    case UNUM_NEGATIVE_SUFFIX:
+      case UNUM_NEGATIVE_SUFFIX:
         ((DecimalFormat*)fmt)->setNegativeSuffix(val);
         break;
         
-    case UNUM_PADDING_CHARACTER:
+      case UNUM_PADDING_CHARACTER:
         ((DecimalFormat*)fmt)->setPadCharacter(*newValue);
         break;
         
-    case UNUM_CURRENCY_CODE:
+      case UNUM_CURRENCY_CODE:
         ((DecimalFormat*)fmt)->setCurrency(newValue, *status);
         break;
         
-    default:
+      default:
         *status = U_UNSUPPORTED_ERROR;
         break;
+      }
+    } else {
+      if (tag == UNUM_DEFAULT_RULESET) {
+	((RuleBasedNumberFormat*)fmt)->setDefaultRuleSet(newValue, *status);
+      } else {
+	*status = U_UNSUPPORTED_ERROR;
+      }
     }
 }
 
@@ -569,12 +626,15 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         // otherwise, alias the destination buffer
         pat.setTo(result, 0, resultLength);
     }
-    
-    if(isPatternLocalized)
+
+    if (((NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      if(isPatternLocalized)
         ((DecimalFormat*)fmt)->toLocalizedPattern(pat);
-    else
+      else
         ((DecimalFormat*)fmt)->toPattern(pat);
-    
+    } else {
+      pat = ((RuleBasedNumberFormat*)fmt)->getRules();
+    }
     return pat.extract(result, resultLength, *status);
 }
 
@@ -592,6 +652,11 @@ unum_getSymbol(UNumberFormat *fmt,
     if(fmt==NULL || (uint16_t)symbol>=UNUM_FORMAT_SYMBOL_COUNT) {
         *status=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
+    }
+
+    if (((NumberFormat*)fmt)->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+      *status = U_UNSUPPORTED_ERROR;
+      return 0;
     }
 
     return ((const DecimalFormat *)fmt)->
@@ -616,6 +681,11 @@ unum_setSymbol(UNumberFormat *fmt,
         return;
     }
     
+    if (((NumberFormat*)fmt)->getDynamicClassID() != DecimalFormat::getStaticClassID()) {
+      *status = U_UNSUPPORTED_ERROR;
+      return;
+    }
+
     DecimalFormatSymbols symbols(*((DecimalFormat *)fmt)->getDecimalFormatSymbols());
     symbols.setSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbol,
         UnicodeString(value, length));  /* UnicodeString can handle the case when length = -1. */
@@ -645,15 +715,16 @@ unum_applyPattern(  UNumberFormat  *format,
     const UnicodeString pat((UChar*)pattern, len, len);
     
     // Verify if the object passed is a DecimalFormat object
-    if(((NumberFormat*)format)->getDynamicClassID()!= DecimalFormat::getStaticClassID()){
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    
-    if(localized)
+    if (((NumberFormat*)format)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
+      if(localized) {
         ((DecimalFormat*)format)->applyLocalizedPattern(pat,*parseError, *status);
-    else
+      } else {
         ((DecimalFormat*)format)->applyPattern(pat,*parseError, *status);
+      }
+    } else {
+      *status = U_UNSUPPORTED_ERROR;
+      return;
+    }
 }
 
 U_CAPI const char* U_EXPORT2

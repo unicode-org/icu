@@ -39,6 +39,7 @@ void addNumForTest(TestNode** root)
     addTest(root, &TestNumberFormat, "tsformat/cnumtst/TestNumberFormat");
     addTest(root, &TestNumberFormatPadding, "tsformat/cnumtst/TestNumberFormatPadding");
     addTest(root, &TestInt64Format, "tsformat/cnumtst/TestInt64Format");
+    addTest(root, &TestRBNFFormat, "tsformat/cnumtst/TestRBNFFormat");
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -908,5 +909,245 @@ static void TestInt64Format() {
   }
   unum_close(fmt);
 }
+
+
+void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
+  UChar buffer[512];
+  int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
+  char temp[512];
+  double vals[] = {
+    -.2, 0, .2, 5.5, 15.2, 250, 123456789
+  };
+  int i;
+
+  for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
+    UErrorCode status = U_ZERO_ERROR;
+    unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
+    if (U_FAILURE(status)) {
+      log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
+    } else {
+      u_austrcpy(temp, buffer);
+      log_verbose("formatting %g returned '%s'\n", vals[i], temp);
+    }
+  }
+
+  // check APIs now
+  {
+      UChar temp[128];
+      UErrorCode status = U_ZERO_ERROR;
+      UParseError perr;
+      u_uastrcpy(temp, "#,##0.0#");
+      unum_applyPattern(fmt, FALSE, temp, -1, &perr, &status);
+      if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
+          log_err("got unexpected error for applyPattern: '%s'\n", u_errorName(status));
+      }
+  }
+
+  {
+      int isLenient = unum_getAttribute(fmt, UNUM_LENIENT_PARSE);
+      log_verbose("lenient: 0x%x\n", isLenient);
+      if (isDecimal ? (isLenient != -1) : (isLenient == TRUE)) {
+          log_err("didn't expect lenient value: %d\n", isLenient);
+      }
+
+      unum_setAttribute(fmt, UNUM_LENIENT_PARSE, TRUE);
+      isLenient = unum_getAttribute(fmt, UNUM_LENIENT_PARSE);
+      if (isDecimal ? (isLenient != -1) : (isLenient == FALSE)) {
+          log_err("didn't expect lenient value after set: %d\n", isLenient);
+      }
+  }
+
+  {
+      double val2;
+      double val = unum_getDoubleAttribute(fmt, UNUM_LENIENT_PARSE);
+      if (val != -1) {
+          log_err("didn't expect double attribute\n");
+      }
+      val = unum_getDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT);
+      if ((val == -1) == isDecimal) {
+          log_err("didn't expect -1 rounding increment\n");
+      }
+      unum_setDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT, val+.5);
+      val2 = unum_getDoubleAttribute(fmt, UNUM_ROUNDING_INCREMENT);
+      if (isDecimal && (val2 - val != .5)) {
+          log_err("set rounding increment had no effect on decimal format");
+      }
+  }
+
+  {
+      UErrorCode status = U_ZERO_ERROR;
+      char temp[512];
+      UChar buffer[512];
+      int BUFSIZE = sizeof(buffer)/sizeof(buffer[0]);
+      int len = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
+      if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
+          log_err("got unexpected error for get default ruleset: '%s'\n", u_errorName(status));
+      }
+      if (U_SUCCESS(status)) {
+          u_austrcpy(temp, buffer);
+          log_verbose("default ruleset: '%s'\n", temp);
+      }
+
+      status = U_ZERO_ERROR;
+      len = unum_getTextAttribute(fmt, UNUM_PUBLIC_RULESETS, buffer, BUFSIZE, &status);
+      if (isDecimal ? (status != U_UNSUPPORTED_ERROR) : U_FAILURE(status)) {
+          log_err("got unexpected error for get public rulesets: '%s'\n", u_errorName(status));
+      }
+      if (U_SUCCESS(status)) {
+          u_austrcpy(temp, buffer);
+          log_verbose("public rulesets: '%s'\n", temp);
+
+          // set the default ruleset to the first one found, and retry
+
+          if (len > 0) {
+              int i;
+              for (i = 0; i < len && temp[i] != ';'; ++i){};
+              if (i < len) {
+                   buffer[i] = 0;
+                   unum_setTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, -1, &status);
+                   if (U_FAILURE(status)) {
+                       log_err("unexpected error setting default ruleset: '%s'\n", u_errorName(status));
+                   } else {
+                       int len2 = unum_getTextAttribute(fmt, UNUM_DEFAULT_RULESET, buffer, BUFSIZE, &status);
+                       if (U_FAILURE(status)) {
+                           log_err("could not fetch default ruleset: '%s'\n", u_errorName(status));
+                       } else if (len2 != i) {
+                           u_austrcpy(temp, buffer);
+                           log_err("unexpected ruleset len: %d ex: %d val: %s\n", len2, i, temp);
+                       } else {
+  for (i = 0; i < sizeof(vals)/sizeof(vals[0]); ++i) {
+    UErrorCode status = U_ZERO_ERROR;
+    unum_formatDouble(fmt, vals[i], buffer, BUFSIZE, NULL, &status);
+    if (U_FAILURE(status)) {
+      log_err("failed to format: %g, returned %s\n", vals[i], u_errorName(status));
+    } else {
+      u_austrcpy(temp, buffer);
+      log_verbose("formatting %g returned '%s'\n", vals[i], temp);
+    }
+  }
+                       }
+                   }
+              }
+          }
+      }
+  }
+
+  {
+      UErrorCode status = U_ZERO_ERROR;
+      int len = unum_toPattern(fmt, FALSE, buffer, BUFSIZE, &status);
+      if (U_SUCCESS(status)) {
+          u_austrcpy(temp, buffer);
+          log_verbose("pattern: '%s'\n", temp);
+      } else if (status != U_BUFFER_OVERFLOW_ERROR) {
+          log_err("toPattern failed unexpectedly: %s\n", u_errorName(status));
+      } else {
+          log_verbose("pattern too long to display\n");
+      }
+  }
+
+  {
+      UErrorCode status = U_ZERO_ERROR;
+      int len = unum_getSymbol(fmt, UNUM_CURRENCY_SYMBOL, buffer, BUFSIZE, &status);
+      if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
+          log_err("unexpected error getting symbol: '%s'\n", u_errorName(status));
+      }
+
+      unum_setSymbol(fmt, UNUM_CURRENCY_SYMBOL, buffer, len, &status);
+      if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
+          log_err("unexpected error setting symbol: '%s'\n", u_errorName(status));
+      }
+  }
+}
+
+static void TestRBNFFormat() {
+  int status;
+  UParseError perr;
+  UChar temp[768];
+  UNumberFormat *formats[5];
+  int COUNT = sizeof(formats)/sizeof(formats[0]);
+  int i;
+  const char* pat;
+
+  for (i = 0; i < COUNT; ++i) {
+    formats[i] = 0;
+  }
+
+  // instantiation
+    status = U_ZERO_ERROR;
+    u_uastrcpy(temp, "#,##0.0#;(#,##0.0#)");
+    formats[0] = unum_open(UNUM_PATTERN_DECIMAL, temp, -1, "en_US", &perr, &status);
+    if (U_FAILURE(status)) {
+      log_err("unable to open decimal pattern");
+    }
+
+    status = U_ZERO_ERROR;
+    formats[1] = unum_open(UNUM_SPELLOUT, NULL, 0, "en_US", &perr, &status);
+    if (U_FAILURE(status)) {
+      log_err("unable to open spellout");
+    }
+
+    status = U_ZERO_ERROR;
+    formats[2] = unum_open(UNUM_ORDINAL, NULL, 0, "en_US", &perr, &status);
+    if (U_FAILURE(status)) {
+      log_err("unable to open ordinal");
+    }
+
+    status = U_ZERO_ERROR;
+    formats[3] = unum_open(UNUM_DURATION, NULL, 0, "en_US", &perr, &status);
+    if (U_FAILURE(status)) {
+      log_err("unable to open duration");
+    }
+
+    status = U_ZERO_ERROR;
+    pat =
+      "%standard:\n"
+      "-x: minus >>;\n"
+      "x.x: << point >>;\n"
+      "zero; one; two; three; four; five; six; seven; eight; nine;\n"
+      "ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+      "seventeen; eighteen; nineteen;\n"
+      "20: twenty[->>];\n"
+      "30: thirty[->>];\n"
+      "40: forty[->>];\n"
+      "50: fifty[->>];\n"
+      "60: sixty[->>];\n"
+      "70: seventy[->>];\n"
+      "80: eighty[->>];\n"
+      "90: ninety[->>];\n"
+      "100: =#,##0=;\n"
+      "%simple:\n"
+      "=%standard=;\n"
+      "20: twenty[ and change];\n"
+      "30: thirty[ and change];\n"
+      "40: forty[ and change];\n"
+      "50: fifty[ and change];\n"
+      "60: sixty[ and change];\n"
+      "70: seventy[ and change];\n"
+      "80: eighty[ and change];\n"
+      "90: ninety[ and change];\n"
+      "100: =#,##0=;\n"
+      "%bogus:\n"
+      "0.x: tiny;\n"
+      "x.x: << point something;\n"
+      "=%standard=;\n"
+      "20: some reasonable number;\n"
+      "100: some substantial number;\n"
+      "100,000,000: some huge number;\n";
+    u_uastrcpy(temp, pat);
+    formats[4] = unum_open(UNUM_PATTERN_RULEBASED, temp, -1, "en_US", &perr, &status);
+    if (U_FAILURE(status)) {
+      log_err("unable to open rulebased pattern");
+    }
+
+    for (i = 0; i < COUNT; ++i) {
+      log_verbose("\n\ntesting format %d\n", i);
+      test_fmt(formats[i], i == 0);
+    }
+
+    for (i = 0; i < COUNT; ++i) {
+      unum_close(formats[i]);
+    }
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
