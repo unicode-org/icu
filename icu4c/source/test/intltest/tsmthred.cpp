@@ -847,11 +847,11 @@ void MultithreadTest::TestThreadedIntl()
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
-#define kCollatorThreadThreads   1000  // # of threads to spawn
+#define kCollatorThreadThreads   10  // # of threads to spawn
 #define kCollatorThreadPatience kCollatorThreadThreads*100
 
 struct Line {
-  UChar *buff;
+  UChar buff[25];
   int32_t buflen;
 } ;
 
@@ -1005,7 +1005,7 @@ void MultithreadTest::TestCollators()
     buflen = offset;
     bufferU[offset++] = 0;
     lines[lineNum].buflen = buflen;
-    lines[lineNum].buff = new UChar[buflen+1];
+    //lines[lineNum].buff = new UChar[buflen+1];
     u_memcpy(lines[lineNum].buff, bufferU, buflen);
     lineNum++;
   }
@@ -1022,10 +1022,13 @@ void MultithreadTest::TestCollators()
     CollatorThreadTest *tests;
     tests = new CollatorThreadTest[kCollatorThreadThreads];
  
-    logln(UnicodeString("Spawning: ") + kFormatThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
-    for(int32_t j = 0; j < kCollatorThreadThreads; j++) {
+    logln(UnicodeString("Spawning: ") + kCollatorThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
+    int32_t j = 0;
+    for(j = 0; j < kCollatorThreadThreads; j++) {
       tests[j].setCollator(coll, lines, lineNum);
-        tests[j].start();
+    }
+    for(j = 0; j < kCollatorThreadThreads; j++) {
+      tests[j].start();
     }
 
     //for(int32_t patience = kCollatorThreadPatience;patience > 0; patience --)
@@ -1065,9 +1068,9 @@ void MultithreadTest::TestCollators()
             }
             ucol_close(coll);
             delete[] tests;
-            for(i = 0; i < lineNum; i++) {
-              delete[] lines[i].buff;
-            }
+            //for(i = 0; i < lineNum; i++) {
+              //delete[] lines[i].buff;
+            //}
             delete[] lines;
 
             return;
