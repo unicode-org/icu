@@ -675,6 +675,26 @@ ucbuf_resolveFileName(const char* inputDir, const char* fileName, char* target, 
     uprv_strcat(target, fileName);
     return target;
 }
+/*
+ * Unicode TR 13 says any of the below chars is
+ * a new line char in a readline function in addition
+ * to CR+LF combination which needs to be 
+ * handled seperately
+ */
+static UBool ucbuf_isCharNewLine(UChar c){
+    switch(c){
+    case 0x000A: /* LF  */
+    case 0x000D: /* CR  */
+    case 0x000C: /* FF  */
+    case 0x0085: /* NEL */
+    case 0x2028: /* LS  */
+    case 0x2029: /* PS  */
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 U_CAPI const UChar* U_EXPORT2
 ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
     UChar* temp = buf->currentPos;
@@ -698,6 +718,10 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                     return NULL;
                 }
             }
+            /*
+             * Accoding to TR 13 readLine functions must interpret
+             * CR, CR+LF, LF, NEL, PS, LS or FF as line seperators
+             */
             /* Windows CR LF */
             if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
                 *len = temp++ - buf->currentPos;
@@ -706,7 +730,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                 return savePos;
             }
             /* else */
-            if (temp>=buf->bufLimit|| c == 0x0a  || c==0x2028 || c==0x0085){  /* Unipad inserts 2028 line separators! */
+            if (temp>=buf->bufLimit|| ucbuf_isCharNewLine(c)){  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
@@ -732,7 +756,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
                 return savePos;
             }
             /* else */
-            if (temp>=buf->bufLimit|| c == 0x0a ||c== 0x0d || c==0x2028 || c==0x0085) {  /* Unipad inserts 2028 line separators! */
+            if (temp>=buf->bufLimit|| ucbuf_isCharNewLine(c)) {  /* Unipad inserts 2028 line separators! */
                 *len = temp - buf->currentPos;
                 savePos = buf->currentPos;
                 buf->currentPos = temp;
