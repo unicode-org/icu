@@ -19,6 +19,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
+#include "unicode/uiter.h"
 #include "cintltst.h"
 #include "cucdtst.h"
 #include <string.h>
@@ -37,6 +38,7 @@ static void TestStringSearching(void);
 static void TestSurrogateSearching(void);
 static void TestUnescape(void);
 static void TestCountChar32(void);
+static void TestUCharIterator(void);
 
 void addUStringTest(TestNode** root)
 {
@@ -46,6 +48,7 @@ void addUStringTest(TestNode** root)
     addTest(root, &TestSurrogateSearching, "tsutil/custrtst/TestSurrogateSearching");
     addTest(root, &TestUnescape, "tsutil/custrtst/TestUnescape");
     addTest(root, &TestCountChar32, "tsutil/custrtst/TestCountChar32");
+    addTest(root, &TestUCharIterator, "tsutil/custrtst/TestUCharIterator");
 
     /* cstrcase.c functions, declared in cucdtst.h */
     addTest(root, &TestCaseLower, "tsutil/custrtst/TestCaseLower");
@@ -1157,5 +1160,21 @@ TestCountChar32() {
                 _testStrHasMoreChar32Than(NULL, 0, length, number);
             }
         }
+    }
+}
+
+/* UCharIterator ------------------------------------------------------------ */
+
+static void
+TestUCharIterator() {
+    UCharIterator iter;
+
+    /* simple API/code coverage - test NOOP UCharIterator */
+    uiter_setString(&iter, NULL, 0);
+    if( iter.current(&iter)!=-1 || iter.next(&iter)!=-1 || iter.previous(&iter)!=-1 ||
+        iter.move(&iter, 1, UITER_CURRENT) || iter.getIndex(&iter, UITER_CURRENT)!=0 ||
+        iter.hasNext(&iter) || iter.hasPrevious(&iter)
+    ) {
+        log_err("NOOP UCharIterator behaves unexpectedly\n");
     }
 }
