@@ -72,6 +72,8 @@ import com.ibm.icu.util.UResourceBundle;
         MATCH = 4,
         SKIP = 5,
         TZADIR = 6;
+        
+    private static final String NEWLINE = "\n";
 
     private static final UOption[] options = {
             UOption.HELP_H(),
@@ -309,8 +311,8 @@ import com.ibm.icu.util.UResourceBundle;
     
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"
-        + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/alpha/ldml.dtd\">\r\n");
+        buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+NEWLINE
+        + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/beta/ldml.dtd\">"+NEWLINE);
         
         Set duplicateZoneIDs = findDuplicateZoneIDs();
         //badTimezoneIDs = new TreeSet();
@@ -344,9 +346,9 @@ import com.ibm.icu.util.UResourceBundle;
         }
         empty.getDifference(old, "", buffer);
         if (finalComment != null) {
-        	buffer.append("\r\n<!--");
+        	buffer.append(NEWLINE+"<!--");
             buffer.append(finalComment);
-            buffer.append("\r\n-->");
+            buffer.append(NEWLINE+"-->");
         }
         return buffer.toString();
     }
@@ -556,7 +558,7 @@ import com.ibm.icu.util.UResourceBundle;
         /*
         public void addComment(String in_comment) {
             if (comment == null) comment = in_comment;
-            else comment += "\r\n" + in_comment;
+            else comment += NEWLINE + in_comment;
             return;
         }
         */
@@ -663,7 +665,7 @@ import com.ibm.icu.util.UResourceBundle;
             for (int j = fsize - 2; j >= common; --j) {
                 indent(j, out);
                 out.append(((Element)former.contexts.get(j)).toString(Element.END_VALUE, false));
-                out.append("\r\n");
+                out.append(NEWLINE);
             }
             if (csize == 0) return; // we must be at the very end, bail.
             
@@ -673,7 +675,7 @@ import com.ibm.icu.util.UResourceBundle;
                 writeElementComment(out, ee, common);
                 indent(common, out);
                 out.append(ee.toString(Element.START_VALUE, false));
-                out.append("\r\n");
+                out.append(NEWLINE);
             }
             // now write the very current element
             Element ee = ((Element)contexts.get(csize-1));
@@ -686,7 +688,7 @@ import com.ibm.icu.util.UResourceBundle;
                 out.append(BagFormatter.toHTML.transliterate(value));
                 out.append(ee.toString(Element.END_VALUE, false));
             }
-            out.append("\r\n");
+            out.append(NEWLINE);
         }
 
         /**
@@ -698,9 +700,9 @@ import com.ibm.icu.util.UResourceBundle;
                 indent(common, out);
 			    out.append("<!--");
 			    out.append(ee.comment);
-                out.append("r\n");
+                out.append(NEWLINE);
                 indent(common, out);
-			    out.append("-->\r\n");
+			    out.append("-->"+NEWLINE);
 			}
 		}
 
@@ -721,7 +723,7 @@ import com.ibm.icu.util.UResourceBundle;
         	if (count == 0) {
         		System.out.println("Skipping start comment for now");
         		//if (startComment == null) startComment = comment;
-        		//else startComment += "\r\n" + comment;
+        		//else startComment += NEWLINE + comment;
         		return;
         	}
         	Element ec = (Element) contexts.get(count-1);
@@ -850,7 +852,7 @@ import com.ibm.icu.util.UResourceBundle;
             StringBuffer buffer = new StringBuffer();
             for (Iterator it = rankToName.iterator(); it.hasNext();) {
                 Object key = it.next();
-                buffer.append("\"").append(key).append("\",\r\n");
+                buffer.append("\"").append(key).append("\","+NEWLINE);
             }
             return buffer.toString();
         }
@@ -907,7 +909,7 @@ import com.ibm.icu.util.UResourceBundle;
         { col.setStrength(Collator.IDENTICAL); }
         Map contextCache = new TreeMap();
         Set fileNames = new TreeSet();
-
+        Set allTypes = new TreeSet();
         void putData(OrderedMap data, String filename) {
             for (Iterator it = data.iterator(); it.hasNext();) {
                 ElementChain copy = (ElementChain) it.next();
@@ -961,6 +963,7 @@ import com.ibm.icu.util.UResourceBundle;
                         out.println("</table></body></html>");
                         out.close();
                     }
+                    allTypes.add(chainName); // add to the list
                 	out = openAndDoHeader(chainName);
                     lastChainName = chainName;
                 }
@@ -988,13 +991,18 @@ import com.ibm.icu.util.UResourceBundle;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
                         else out.print(" ");
-                        out.print("·" + it3.next() + "·");
+                        out.print("\u0387" + it3.next() + "\u0387");
                     }
                     out.println("</td></tr>");
                 }
             }
-            out.println("</table></body></html>");
-            out.close();
+            if(out==null) {
+                System.err.println("Out = null?");
+            } else {
+                out.println("</table></body></html>");
+                out.close();
+            }
+            writeIndex();
         }
 
 		/**
@@ -1003,23 +1011,44 @@ import com.ibm.icu.util.UResourceBundle;
 		 * @throws IOException
 		 */
 		private PrintWriter openAndDoHeader(String type) throws IOException {
-			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type\\" + type + ".html");
+            String fileName = type + ".html";
+			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
             out.println("<html><head>");
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
 			out.println("<title>Comparison By Type: " + type + "</title>");
             out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
 			out.println("</head>");
-            out.println("<body><table>");
+            out.println("<body>");
+            out.println("<ul><li><a href=\"index.html\">index</a></li></ul>");
+            out.println("<table>");
 			return out;
 		}
         private void writeStyleSheet() throws IOException {
-            PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type\\by_type.css");
+            PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + "by_type.css");
             out.println(".head { font-weight:bold; background-color:#DDDDFF }");
             out.println("td, th { border: 1px solid #0000FF; text-align }");
             out.println("th { width:10% }");
             out.println(".nodata { background-color:#FF0000 }");
             out.println("table {margin-top: 1em}");
+            out.close();
+        }
+        
+        private void writeIndex() throws IOException {
+            String fileName = "index" + ".html";
+			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
+            out.println("<html><head>");
+            out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+			out.println("<title>Comparison By Type: " + "index" + "</title>");
+            out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
+            out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
+			out.println("</head>");
+            out.println("<body><ul>");
+            for(Iterator e = allTypes.iterator();e.hasNext();) {
+                String f = (String)e.next();
+                out.println(" <li><a href=\"" + f + ".html" +  "\">" + f + "</a>");
+            }
+            out.println("</ul></body></html>");
             out.close();
         }
     }
@@ -1156,7 +1185,7 @@ import com.ibm.icu.util.UResourceBundle;
             if (commentStack != 0) return;
             String comment = new String(ch, start,length).trim();
             if (finalComment == null) finalComment = comment;
-            else finalComment += "\r\n" + comment;
+            else finalComment += NEWLINE + comment;
             if (DEBUG2) System.out.println("comment: " + comment);
 		}
     };
