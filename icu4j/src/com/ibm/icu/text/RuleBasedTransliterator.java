@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/02/03 00:46:21 $ 
- * $Revision: 1.40 $
+ * $Date: 2001/02/16 18:53:55 $ 
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.40 $ $Date: 2001/02/03 00:46:21 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.41 $ $Date: 2001/02/16 18:53:55 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -861,7 +861,21 @@ public class RuleBasedTransliterator extends Transliterator {
                         if (pos == limit) {
                             syntaxError("Trailing backslash", rule, start);
                         }
-                        buf.append(rule.charAt(pos++));
+                        c = rule.charAt(pos++);
+                        if (c == 'u') {
+                            if ((pos+4) > limit) {
+                                syntaxError("Invalid \\u escape", rule, start);
+                            }
+                            c = '\u0000';
+                            for (int j=pos+4; pos<j;) {
+                                int digit = Character.digit(rule.charAt(pos++), 16);
+                                if (digit<0) {
+                                    syntaxError("Invalid \\u escape", rule, start);
+                                }
+                                c = (char) ((c << 4) | digit);
+                            }                            
+                        }
+                        buf.append(c);
                         continue;
                     }
                     // Handle quoted matter
@@ -1451,6 +1465,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.41  2001/02/16 18:53:55  alan4j
+ * Handle \u escapes
+ *
  * Revision 1.40  2001/02/03 00:46:21  alan4j
  * Load RuleBasedTransliterator files from UTF8 files instead of ResourceBundles
  *
