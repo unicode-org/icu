@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.29 2002/05/13 23:50:13 grhoten-oss Exp $
+## $Id: mh-hpux-acc,v 1.30 2002/07/29 23:33:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -14,10 +14,12 @@ SHAREDLIBCFLAGS = +z
 SHAREDLIBCXXFLAGS = +z
 
 # Use Extended ANSI mode, which is useful for 64-bit numbers
-CFLAGS += -Ae
+# +Olibcalls uses intrinsic functions for strlen and others
+CFLAGS += +Olibcalls -Ae +ESlit
+CXXFLAGS += +Olibcalls
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c +ESlit
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Common 'default' path to ensure the sanity of users.  Search the current
