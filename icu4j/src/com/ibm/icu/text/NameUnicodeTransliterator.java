@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2002/03/27 19:11:37 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/03/27 19:13:22 $ 
+ * $Revision: 1.10 $
  */
 package com.ibm.icu.text;
 import java.util.*;
@@ -89,7 +89,7 @@ class NameUnicodeTransliterator extends Transliterator {
                 break;
 
             case 1: // after open delimiter
-                // Look for [-a-zA-Z0-9].  If \s+ is found, convert it
+                // Look for [-a-zA-Z0-9<>].  If \s+ is found, convert it
                 // to a single space.  If closeDelimiter is found, exit
                 // the loop.  If any other character is found, exit the
                 // loop.  If the limit is found, exit the loop.
