@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2004/02/18 03:08:59 $
-* $Revision: 1.11 $
+* $Date: 2004/04/17 18:21:39 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -782,11 +782,11 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         public boolean isBreak(String source, int offset) {
             
-            setRule("1: sot ÷");
+            setRule("1: sot Ã·");
             if (offset < 0 || offset > source.length()) return false;
             if (offset == 0) return true;
 
-            setRule("2: ÷ eot");
+            setRule("2: Ã· eot");
             if (offset == source.length()) return true;
 
             // UTF-16: never break in the middle of a code point
@@ -801,29 +801,29 @@ abstract public class GenerateBreakTest implements UCD_Types {
             byte before = getResolvedType(cpBefore);
             byte after = getResolvedType(cpAfter);
 
-            setRule("3: CR × LF");
+            setRule("3: CR Ã— LF");
             if (before == CR && after == LF) return false;
 
-            setRule("4: ( Control | CR | LF ) ÷");
+            setRule("4: ( Control | CR | LF ) Ã·");
             if (before == CR || before == LF || before == Control) return true;
 
-            setRule("5: ÷ ( Control | CR | LF )");
+            setRule("5: Ã· ( Control | CR | LF )");
             if (after == Control || after == LF || after == CR) return true;
 
-            setRule("6: L × ( L | V | LV | LVT )");
+            setRule("6: L Ã— ( L | V | LV | LVT )");
             if (before == L && (after == L || after == V || after == LV || after == LVT)) return false;
 
-            setRule("7: ( LV | V ) × ( V | T )");
+            setRule("7: ( LV | V ) Ã— ( V | T )");
             if ((before == LV || before == V) && (after == V || after == T)) return false;
 
-            setRule("8: ( LVT | T ) × T");
+            setRule("8: ( LVT | T ) Ã— T");
             if ((before == LVT || before == T) && (after == T)) return false;
 
-            setRule("9: × Extend");
+            setRule("9: Ã— Extend");
             if (after == Extend) return false;
 
             // Otherwise break after all characters.
-            setRule("10: Any ÷ Any");
+            setRule("10: Any Ã· Any");
             return true;
 
         }
@@ -914,12 +914,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         public boolean isBreak(String source, int offset) {
 
-            setRule("1: sot ÷");
+            setRule("1: sot Ã·");
             if (offset < 0 || offset > source.length()) return false;
   
             if (offset == 0) return true;
 
-            setRule("2: ÷ eot");
+            setRule("2: Ã· eot");
             if (offset == source.length()) return true;
 
             // Treat a grapheme cluster as if it were a single character:
@@ -943,43 +943,43 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             //Don't break between most letters
 
-            setRule("5: ALetter × ALetter");
+            setRule("5: ALetter Ã— ALetter");
             if (before == ALetter && after == ALetter) return false;
 
-            // Don’t break letters across certain punctuation
+            // Donâ€™t break letters across certain punctuation
 
-            setRule("6: ALetter × (MidLetter | MidNumLet) ALetter");
+            setRule("6: ALetter Ã— (MidLetter | MidNumLet) ALetter");
             if (before == ALetter && (after == MidLetter || after == MidNumLet) && after2 == ALetter) return false;
 
-            setRule("7: ALetter (MidLetter | MidNumLet) × ALetter");
+            setRule("7: ALetter (MidLetter | MidNumLet) Ã— ALetter");
             if (before2 == ALetter && (before == MidLetter || before == MidNumLet) && after == ALetter) return false;
 
-            // Don’t break within sequences of digits, or digits adjacent to letters.
+            // Donâ€™t break within sequences of digits, or digits adjacent to letters.
 
-            setRule("8: Numeric × Numeric");
+            setRule("8: Numeric Ã— Numeric");
             if (before == Numeric && after == Numeric) return false;
 
-            setRule("9: ALetter × Numeric");
+            setRule("9: ALetter Ã— Numeric");
             if (before == ALetter && after == Numeric) return false;
 
-            setRule("10: Numeric × ALetter");
+            setRule("10: Numeric Ã— ALetter");
             if (before == Numeric && after == ALetter) return false;
 
 
-            // Don’t break within sequences like: '-3.2'
-            setRule("11: Numeric (MidNum | MidNumLet) × Numeric");
+            // Donâ€™t break within sequences like: '-3.2'
+            setRule("11: Numeric (MidNum | MidNumLet) Ã— Numeric");
             if (before2 == Numeric && (before == MidNum || before == MidNumLet) && after == Numeric) return false;
 
-            setRule("12: Numeric × (MidNum | MidNumLet) Numeric");
+            setRule("12: Numeric Ã— (MidNum | MidNumLet) Numeric");
             if (before == Numeric && (after == MidNum || after == MidNumLet) && after2 == Numeric) return false;
 
             // Don't break between Katakana
 
-            setRule("13: Katakana × Katakana");
+            setRule("13: Katakana Ã— Katakana");
             if (before == Katakana && after == Katakana) return false;
 
             // Otherwise break always.
-            setRule("14: Any ÷ Any");
+            setRule("14: Any Ã· Any");
             return true;
 
         }
@@ -1235,7 +1235,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
             // LB 2a  Never break at the start of text
 
-            setRule("2a: × sot");
+            setRule("2a: Ã— sot");
             if (offset <= 0) return false;
 
             // LB 2b  Always break at the end of text
@@ -1269,26 +1269,26 @@ abstract public class GenerateBreakTest implements UCD_Types {
             //byte after = getResolvedType(cpAfter);
 
 
-            setRule("3a: CR × LF ; ( BK | CR | LF | NL ) !");
+            setRule("3a: CR Ã— LF ; ( BK | CR | LF | NL ) !");
             
             // Always break after hard line breaks (but never between CR and LF).
             // CR ^ LF
             if (before == LB_CR && after == LB_LF) return false;
             if (before == LB_BK || before == LB_LF || before == LB_CR) return true;
 
-            //LB 3b  Don’t break before hard line breaks.
-            setRule("3b: × ( BK | CR | LF )");
+            //LB 3b  Donâ€™t break before hard line breaks.
+            setRule("3b: Ã— ( BK | CR | LF )");
             if (after == LB_BK || after == LB_LF || after == LB_CR) return false;
 
-            // LB 4  Don’t break before spaces or zero-width space.
-            setRule("4: × ( SP | ZW )");
+            // LB 4  Donâ€™t break before spaces or zero-width space.
+            setRule("4: Ã— ( SP | ZW )");
             if (after == LB_SP || after == LB_ZW) return false;
 
             // LB 5 Break after zero-width space.
-            setRule("5: ZW ÷");
+            setRule("5: ZW Ã·");
             if (before == LB_ZW) return true;
 
-            // LB 6  Don’t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
+            // LB 6  Donâ€™t break graphemes (before combining marks, around virama or on sequences of conjoining Jamos.
             setRule("6: DGC -> FC");
             if (!grapheme.isBreak( source,  offset)) return false;
             
@@ -1324,9 +1324,9 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (setBase && backBase == -1) before = LB_AL;
 
             
-            // LB 8  Don’t break before ‘]’ or ‘!’ or ‘;’ or ‘/’,  even after spaces.
-            // × CL, × EX, × IS, × SY
-            setRule("8: × ( CL | EX | IS | SY )");
+            // LB 8  Donâ€™t break before â€˜]â€™ or â€˜!â€™ or â€˜;â€™ or â€˜/â€™,  even after spaces.
+            // Ã— CL, Ã— EX, Ã— IS, Ã— SY
+            setRule("8: Ã— ( CL | EX | IS | SY )");
             if (after == LB_CL || after == LB_EX || after == LB_SY | after == LB_IS) return false;
 
 
@@ -1339,97 +1339,97 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 }
             }
 
-            // LB 9  Don’t break after ‘[’, even after spaces.
-            // OP SP* ×
-            setRule("9: OP SP* ×");
+            // LB 9  Donâ€™t break after â€˜[â€™, even after spaces.
+            // OP SP* Ã—
+            setRule("9: OP SP* Ã—");
             if (lastNonSpace == LB_OP) return false;
 
-            // LB 10  Don’t break within ‘”[’, , even with intervening spaces.
-            // QU SP* × OP
-            setRule("10: QU SP* × OP");
+            // LB 10  Donâ€™t break within â€˜â€[â€™, , even with intervening spaces.
+            // QU SP* Ã— OP
+            setRule("10: QU SP* Ã— OP");
             if (lastNonSpace == LB_QU && after == LB_OP) return false;
 
-            // LB 11  Don’t break within ‘]h’, even with intervening spaces.
-            // CL SP* × NS
-            setRule("11: CL SP* × NS");
+            // LB 11  Donâ€™t break within â€˜]hâ€™, even with intervening spaces.
+            // CL SP* Ã— NS
+            setRule("11: CL SP* Ã— NS");
             if (lastNonSpace == LB_CL && after == LB_NS) return false;
 
-            // LB 11a  Don’t break within ‘——’, even with intervening spaces.
-            // B2 × B2
-            setRule("11a: B2 × B2");
+            // LB 11a  Donâ€™t break within â€˜â€”â€”â€™, even with intervening spaces.
+            // B2 Ã— B2
+            setRule("11a: B2 Ã— B2");
             if (lastNonSpace == LB_B2 && after == LB_B2) return false;
 
 
-            // LB 13  Don’t break before or after NBSP or WORD JOINER
-            // × GL
-            // GL ×
+            // LB 13  Donâ€™t break before or after NBSP or WORD JOINER
+            // Ã— GL
+            // GL Ã—
 
-            setRule("11b: × WJ ; WJ ×");
+            setRule("11b: Ã— WJ ; WJ Ã—");
             if (after == LB_WJ || before == LB_WJ) return false;
 
             // [Note: by this time, all of the "X" in the table are accounted for. We can safely break after spaces.]
 
             // LB 12  Break after spaces
-            setRule("12: SP ÷");
+            setRule("12: SP Ã·");
             if (before == LB_SP) return true;
 
-            // LB 13  Don’t break before or after NBSP or WORD JOINER
-            setRule("13: × GL ; GL ×");
+            // LB 13  Donâ€™t break before or after NBSP or WORD JOINER
+            setRule("13: Ã— GL ; GL Ã—");
             if (after == LB_GL || before == LB_GL) return false;
 
-            // LB 14  Don’t break before or after ‘”’
-            setRule("14: × QU ; QU ×");
+            // LB 14  Donâ€™t break before or after â€˜â€â€™
+            setRule("14: Ã— QU ; QU Ã—");
             if (before == LB_QU || after == LB_QU) return false;
 
             // LB 14a  Break before and after CB
-            setRule("14a: ÷ CB ; CB ÷");
+            setRule("14a: Ã· CB ; CB Ã·");
             if (before == LB_CB || after == LB_CB) return true;
 
-            // LB 15  Don’t break before hyphen-minus, other hyphens, fixed-width spaces,
+            // LB 15  Donâ€™t break before hyphen-minus, other hyphens, fixed-width spaces,
             // small kana and other non- starters,  or after acute accents:
 
-            setRule("15: × ( BA | HY | NS ) ; BB ×");
+            setRule("15: Ã— ( BA | HY | NS ) ; BB Ã—");
             if (after == LB_NS) return false;
             if (after == LB_HY) return false;
             if (after == LB_BA) return false;
             if (before == LB_BB) return false;
 
 
-            //setRule("15a: HY × NU"); // NEW
+            //setRule("15a: HY Ã— NU"); // NEW
             //if (before == LB_HY && after == LB_NU) return false;
 
-            // LB 16  Don’t break between two ellipses, or between letters or numbers and ellipsis:
-            // Examples: ’9...’, ‘a...’, ‘H...’
-            setRule("16: ( AL | ID | IN | NU ) × IN");
+            // LB 16  Donâ€™t break between two ellipses, or between letters or numbers and ellipsis:
+            // Examples: â€™9...â€™, â€˜a...â€™, â€˜H...â€™
+            setRule("16: ( AL | ID | IN | NU ) Ã— IN");
             if ((before == LB_NU || before == LB_AL || before == LB_ID) && after == LB_IN) return false;
             if (before == LB_IN && after == LB_IN) return false;
 
             // Don't break alphanumerics.
-            // LB 17  Don’t break within ‘a9’, ‘3a’, or ‘H%’
+            // LB 17  Donâ€™t break within â€˜a9â€™, â€˜3aâ€™, or â€˜H%â€™
             // Numbers are of the form PR ? ( OP | HY ) ? NU (NU | IS) * CL ?  PO ?
-            // Examples:   $(12.35)    2,1234    (12)¢    12.54¢
+            // Examples:   $(12.35)    2,1234    (12)Â¢    12.54Â¢
             // This is approximated with the following rules. (Some cases already handled above,
-            // like ‘9,’, ‘[9’.)
-            setRule("17: ID × PO ; AL × NU; NU × AL");
+            // like â€˜9,â€™, â€˜[9â€™.)
+            setRule("17: ID Ã— PO ; AL Ã— NU; NU Ã— AL");
             if (before == LB_ID && after == LB_PO) return false;
             if (before == LB_AL && after == LB_NU) return false;
             if (before == LB_NU && after == LB_AL) return false;
 
-            // LB 18  Don’t break between the following pairs of classes.
-            // CL × PO
-            // HY × NU
-            // IS × NU
-            // NU × NU
-            // NU × PO
-            // PR × AL
-            // PR × HY
-            // PR × ID
-            // PR × NU
-            // PR × OP
-            // SY × NU
-            // Example pairs: ‘$9’, ‘$[’, ‘$-‘, ‘-9’, ‘/9’, ‘99’, ‘,9’,  ‘9%’ ‘]%’
+            // LB 18  Donâ€™t break between the following pairs of classes.
+            // CL Ã— PO
+            // HY Ã— NU
+            // IS Ã— NU
+            // NU Ã— NU
+            // NU Ã— PO
+            // PR Ã— AL
+            // PR Ã— HY
+            // PR Ã— ID
+            // PR Ã— NU
+            // PR Ã— OP
+            // SY Ã— NU
+            // Example pairs: â€˜$9â€™, â€˜$[â€™, â€˜$-â€˜, â€˜-9â€™, â€˜/9â€™, â€˜99â€™, â€˜,9â€™,  â€˜9%â€™ â€˜]%â€™
 
-            setRule("18: CL × PO ; NU × PO ; ( IS | NU | HY | PR | SY ) × NU ; PR × ( AL | HY | ID | OP )");
+            setRule("18: CL Ã— PO ; NU Ã— PO ; ( IS | NU | HY | PR | SY ) Ã— NU ; PR Ã— ( AL | HY | ID | OP )");
             if (before == LB_CL && after == LB_PO) return false;
             if (before == LB_IS && after == LB_NU) return false;
             if (before == LB_NU && after == LB_NU) return false;
@@ -1446,30 +1446,30 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (before == LB_SY && after == LB_NU) return false;
 
             // LB 15b  Break after hyphen-minus, and before acute accents:
-            setRule("18b: HY ÷ ; ÷ BB");
+            setRule("18b: HY Ã· ; Ã· BB");
             if (before == LB_HY) return true;
             if (after == LB_BB) return true;
 
-            // LB 19  Don’t break between alphabetics (“at”)
-            // AL × AL
+            // LB 19  Donâ€™t break between alphabetics (â€œatâ€)
+            // AL Ã— AL
 
-            setRule("19: AL × AL");
+            setRule("19: AL Ã— AL");
             if (before == LB_AL && after == LB_AL) return false;
 
             // LB 20  Break everywhere else
-            // ALL ÷
-            // ÷ ALL
+            // ALL Ã·
+            // Ã· ALL
 
             if (ucd.getCompositeVersion() > 0x040000) {
-                setRule("19b: IS × AL");
+                setRule("19b: IS Ã— AL");
                 if (before == LB_IS && after == LB_AL) return false;
             }
 
             // LB 20  Break everywhere else
-            // ALL ÷
-            // ÷ ALL
+            // ALL Ã·
+            // Ã· ALL
 
-            setRule("20: ALL ÷ ; ÷ ALL");
+            setRule("20: ALL Ã· ; Ã· ALL");
             return true;
         }
     }
@@ -1498,8 +1498,8 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 "U.S.A\u0300.", 
                 "3.4", 
                 "c.d",
-                "etc.)\u2019 \u2018(the",
-                "etc.)\u2019 \u2018(The",
+                "etc.)\u2019Â \u2018(the",
+                "etc.)\u2019Â \u2018(The",
                 "the resp. leaders are",
                 "\u5B57.\u5B57",
                 "etc.\u5B83",
@@ -1631,15 +1631,15 @@ abstract public class GenerateBreakTest implements UCD_Types {
         public boolean isBreak(String source, int offset) {
     
             // Break at the start and end of text.
-            setRule("1: sot ÷");
+            setRule("1: sot Ã·");
             if (offset < 0 || offset > source.length()) return false;
   
             if (offset == 0) return true;
 
-            setRule("2: ÷ eot");
+            setRule("2: Ã· eot");
             if (offset == source.length()) return true;
 
-            setRule("3: Sep ÷");
+            setRule("3: Sep Ã·");
             byte beforeChar = getResolvedType(source.charAt(offset-1));
             if (beforeChar == Sep) return true;
             
@@ -1662,22 +1662,22 @@ abstract public class GenerateBreakTest implements UCD_Types {
             
             // HACK COPY for rule collection!
             if (collectingRules) {
-                setRule("6: ATerm × ( Numeric | Lower )");
-                setRule("7: Upper ATerm × Upper");
-                setRule("8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower");
-                setRule("9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )");
-                setRule("10: ( Term | ATerm ) Close* Sp × ( Sp | Sep )");
-                setRule("11: ( Term | ATerm ) Close* Sp* ÷");
-                setRule("12: Any × Any");
+                setRule("6: ATerm Ã— ( Numeric | Lower )");
+                setRule("7: Upper ATerm Ã— Upper");
+                setRule("8: ATerm Close* Sp* Ã— ( Â¬(OLetter | Upper | Lower) )* Lower");
+                setRule("9: ( Term | ATerm ) Close* Ã— ( Close | Sp | Sep )");
+                setRule("10: ( Term | ATerm ) Close* Sp Ã— ( Sp | Sep )");
+                setRule("11: ( Term | ATerm ) Close* Sp* Ã·");
+                setRule("12: Any Ã— Any");
                 collectingRules = false;
             }
             
             // Do not break after ambiguous terminators like period, if immediately followed by a number or lowercase letter, is between uppercase letters, or if the first following letter (optionally after certain punctuation) is lowercase. For example, a period may be an abbreviation or numeric period, and not mark the end of a sentence.
             
             if (before == ATerm) {
-                setRule("6: ATerm × ( Numeric | Lower )");
+                setRule("6: ATerm Ã— ( Numeric | Lower )");
                 if (after == Lower || after == Numeric) return false;
-                setRule("7: Upper ATerm × Upper");
+                setRule("7: Upper ATerm Ã— Upper");
                 if (DEBUG_GRAPHEMES) System.out.println(context + ", " + Upper);
                 if (before2 == Upper && after == Upper) return false;
             }
@@ -1736,17 +1736,17 @@ abstract public class GenerateBreakTest implements UCD_Types {
             
             if (lookAfter == -1) {
                 // Otherwise, do not break
-                // Any × Any (11)
-                setRule("12: Any × Any");
+                // Any Ã— Any (11)
+                setRule("12: Any Ã— Any");
                 return false;
             }
                 
-            // ATerm Close* Sp*×(¬( OLetter))* Lower(8)
+            // ATerm Close* Sp*Ã—(Â¬( OLetter))* Lower(8)
             
             // Break after sentence terminators, but include closing punctuation, trailing spaces, and (optionally) a paragraph separator.
-            // ( Term | ATerm ) Close*×( Close | Sp | Sep )(9)
-            // ( Term | ATerm ) Close* Sp×( Sp | Sep )(10)
-            // ( Term | ATerm ) Close* Sp*÷(11)
+            // ( Term | ATerm ) Close*Ã—( Close | Sp | Sep )(9)
+            // ( Term | ATerm ) Close* SpÃ—( Sp | Sep )(10)
+            // ( Term | ATerm ) Close* Sp*Ã·(11)
 
                         
             // We DID find one. Loop to see if the right side is ok.
@@ -1764,16 +1764,16 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 if (isFirst) {
                     isFirst = false;
                     if (lookAfter == ATerm && t == Upper) {
-                        setRule("8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower");
+                        setRule("8: ATerm Close* Sp* Ã— ( Â¬(OLetter | Upper | Lower) )* Lower");
                         return false;
                     }
                     if (gotSpace) {
                         if (t == Sp || t == Sep) {
-                            setRule("10: ( Term | ATerm ) Close* Sp × ( Sp | Sep )");
+                            setRule("10: ( Term | ATerm ) Close* Sp Ã— ( Sp | Sep )");
                             return false;
                         }
                     } else if (t == Close || t == Sp || t == Sep) {
-                        setRule("9: ( Term | ATerm ) Close* × ( Close | Sp | Sep )");
+                        setRule("9: ( Term | ATerm ) Close* Ã— ( Close | Sp | Sep )");
                         return false;
                     }
                     if (lookAfter == Term) break;
@@ -1782,12 +1782,12 @@ abstract public class GenerateBreakTest implements UCD_Types {
                 // at this point, we have an ATerm. All other conditions are ok, but we need to verify 6
                 if (t != OLetter && t != Upper && t != Lower) continue;
                 if (t == Lower) {
-                    setRule("8: ATerm Close* Sp* × ( ¬(OLetter | Upper | Lower) )* Lower");
+                    setRule("8: ATerm Close* Sp* Ã— ( Â¬(OLetter | Upper | Lower) )* Lower");
                     return false;
                 }
                 break;
             }
-            setRule("11: ( Term | ATerm ) Close* Sp* ÷");
+            setRule("11: ( Term | ATerm ) Close* Sp* Ã·");
             return true;
         }
     }
