@@ -274,10 +274,10 @@ $(BRK_FILES:.brk" =.brk"
 
 # utility target to send us to the right dir
 GODATA :
-	@if not exist "$(ICUDBLD)\$(NULL)" mkdir "$(ICUDBLD)"
 	@if not exist "$(ICUOUT)\$(NULL)" mkdir "$(ICUOUT)"
-	@if not exist "$(TESTDATABLD)\$(NULL)" mkdir "$(TESTDATABLD)"
+	@if not exist "$(ICUDBLD)\$(NULL)" mkdir "$(ICUDBLD)"
 	@if not exist "$(TESTDATAOUT)\$(NULL)" mkdir "$(TESTDATAOUT)"
+	@if not exist "$(TESTDATABLD)\$(NULL)" mkdir "$(TESTDATABLD)"
 	@cd "$(ICUDBLD)"
 
 # This is to remove all the data files
