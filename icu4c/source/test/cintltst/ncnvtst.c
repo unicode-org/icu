@@ -728,9 +728,9 @@ static void TestGetNextErrorBehaviour(){
     const char* source=(const char*)input1;
     UErrorCode err=U_ZERO_ERROR;
     UChar32 c=0;
-    UConverter *cnv=ucnv_open("ibm-1159", &err);
+    UConverter *cnv=ucnv_open("ibm-424", &err);
     if(U_FAILURE(err)) {
-        log_data_err("Unable to open a SBCS(ibm-1159) converter: %s\n", u_errorName(err));
+        log_data_err("Unable to open a SBCS(ibm-424) converter: %s\n", u_errorName(err));
         return;
     }
     c=ucnv_getNextUChar(cnv, &source, source + INPUT_SIZE, &err);
