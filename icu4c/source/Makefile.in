@@ -123,14 +123,14 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
-	cd $(DESTDIR)$(pkglibdir)/..; \
-	    $(RM) current && ln -s $(VERSION) current; \
-	    $(RM) Makefile.inc && ln -s current/Makefile.inc .
 	$(INSTALL_DATA) @platform_make_fragment@ $(DESTDIR)$(pkgdatadir)/config/@platform_make_fragment_name@
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(pkgdatadir)/mkinstalldirs
 	$(INSTALL_DATA) $(top_srcdir)/../license.html $(DESTDIR)$(pkgdatadir)/license.html
 	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
+	cd $(DESTDIR)$(pkglibdir)/..; \
+	    $(RM) current && ln -s $(VERSION) current; \
+	    $(RM) Makefile.inc && ln -s current/Makefile.inc .
 
 ifeq ($(DOXYGEN),)
 install-doc:
