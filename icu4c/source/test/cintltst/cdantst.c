@@ -26,6 +26,7 @@
 #include "cintltst.h"
 #include "ccolltst.h"
 #include "cdantst.h"
+#include "callcoll.h"
 #include "unicode/ustring.h"
 
 static UCollator *myCollation;
@@ -188,38 +189,6 @@ void addDanishCollTest(TestNode** root)
 }
 
     
-
-static void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
-{
-    int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
-    int32_t temp;
-    UCollationResult compareResult, keyResult, incResult;
-    uint8_t *sortKey1, *sortKey2;
-    
-    compareResult = ucol_strcoll(myCollation, source, u_strlen(source), target, u_strlen(target));
-    incResult = ctst_strcollTestIncremental(myCollation, source, u_strlen(source), target, u_strlen(target));
-    
-    sortklen1=ucol_getSortKey(myCollation, source, u_strlen(source),  NULL, 0);
-    sortklen2=ucol_getSortKey(myCollation, target, u_strlen(target),  NULL, 0);
-
-    sortklenmax = (sortklen1>sortklen2?sortklen1:sortklen2);
-    sortklenmin = (sortklen1<sortklen2?sortklen1:sortklen2);
-
-    sortKey1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
-    ucol_getSortKey(myCollation, source, u_strlen(source), sortKey1, sortklen1+1);
-    
-    sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
-    ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
-    
-
-    temp= memcmp(sortKey1, sortKey2, sortklenmin);
-    if(temp < 0) keyResult=UCOL_LESS;
-    else if(temp > 0) keyResult= UCOL_GREATER;
-    else keyResult = UCOL_EQUAL;
-    reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
-    free(sortKey1);
-    free(sortKey2);
-}
 
 static void TestTertiary( )
 {

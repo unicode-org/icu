@@ -1821,7 +1821,7 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
     UChar *uBuf,*test;
     int32_t uBufSize = 120;
     int len=0;
-    int i=1;
+    int i=2;
     UErrorCode errorCode=U_ZERO_ERROR;
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
     cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
@@ -1937,7 +1937,7 @@ static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLim
     UChar *uBuf,*test;
     int32_t uBufSize = 120;
     int len=0;
-    int i=1;
+    int i=2;
     const UChar *temp = sourceLimit;
     UErrorCode errorCode=U_ZERO_ERROR;
     uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
