@@ -112,7 +112,9 @@ $(TESTOBJDATADIR)/testdata.lst: $(SRCLISTDEPS)
 build-local: build-data build-testdata
 
 # Additional data for 390
+ifeq ($(OS390BATCH),1)
 OS390LIST= icudata390.lst
+endif
 #
 
 build-data: $(ALL_FILES) icudata.lst  $(OS390LIST)
