@@ -129,12 +129,10 @@ _findMetaData(const UChar* currency) {
 
 // don't use ICUService since we don't need fallback
 
-struct CReg;
-
-static UMTX gCRegLock = 0;
-static CReg* gCRegHead = 0;
-
 struct CReg : public UMemory {
+  static UMTX gCRegLock;
+  static CReg* gCRegHead;
+
   CReg *next;
   UChar iso[4];
   char  id[12];
@@ -211,7 +209,11 @@ struct CReg : public UMemory {
     }
     umtx_destroy(&gCRegLock);
   }
+
 };
+
+UMTX CReg::gCRegLock = 0;
+CReg* CReg:: gCRegHead = 0;
 
 // -------------------------------------
 
