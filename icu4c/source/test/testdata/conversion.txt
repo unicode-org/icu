@@ -177,6 +177,15 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // extension in testdata
+        {
+          "*test4x",
+          "\u20ac\x09",
+          :bin{ 0009 },
+          :intvector{ 0, 1 },
+          :int{1}, :int{1}, "", "?", ""
+        }
+
         // DBCS-only extensions
         {
           "ibm-970",

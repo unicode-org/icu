@@ -197,7 +197,7 @@ isCnvAcceptable(void *context,
  * Un flatten shared data from a UDATA..
  */
 static UConverterSharedData*
-ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
+ucnv_data_unFlattenClone(UConverterLoadArgs *pArgs, UDataMemory *pData, UErrorCode *status)
 {
     /* UDataInfo info; -- necessary only if some converters have different formatVersion */
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
@@ -254,7 +254,7 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
     data->dataMemory = (void*)pData; /* for future use */
 
     if(data->impl->load != NULL) {
-        data->impl->load(data, raw + source->structSize, status);
+        data->impl->load(data, pArgs, raw + source->structSize, status);
         if(U_FAILURE(*status)) {
             uprv_free(data->table);
             uprv_free(data);
@@ -268,7 +268,7 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
  *goes to disk and opens it.
  *allocates the memory and returns a new UConverter object
  */
-static UConverterSharedData *createConverterFromFile(const char* pkg, const char *fileName, UErrorCode * err)
+static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, UErrorCode * err)
 {
     UDataMemory *data;
     UConverterSharedData *sharedData;
@@ -277,13 +277,13 @@ static UConverterSharedData *createConverterFromFile(const char* pkg, const char
         return NULL;
     }
 
-    data = udata_openChoice(pkg, DATA_TYPE, fileName, isCnvAcceptable, NULL, err);
+    data = udata_openChoice(pArgs->pkg, DATA_TYPE, pArgs->name, isCnvAcceptable, NULL, err);
     if(U_FAILURE(*err))
     {
         return NULL;
     }
 
-    sharedData = ucnv_data_unFlattenClone(data, err);
+    sharedData = ucnv_data_unFlattenClone(pArgs, data, err);
     if(U_FAILURE(*err))
     {
         udata_close(data);
@@ -481,23 +481,23 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
  * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
  */
 UConverterSharedData *
-ucnv_load(const char *pkg, const char *realName, UErrorCode *err) {
+ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err) {
     UConverterSharedData *mySharedConverterData;
 
     if(err == NULL || U_FAILURE(*err)) {
         return NULL;
     }
 
-    if(pkg != NULL && *pkg != 0) {
+    if(pArgs->pkg != NULL && *pArgs->pkg != 0) {
         /* application-provided converters are not currently cached */
-        return createConverterFromFile(pkg, realName, err);
+        return createConverterFromFile(pArgs, err);
     }
 
-    mySharedConverterData = ucnv_getSharedConverterData(realName);
+    mySharedConverterData = ucnv_getSharedConverterData(pArgs->name);
     if (mySharedConverterData == NULL)
     {
         /*Not cached, we need to stream it in from file */
-        mySharedConverterData = createConverterFromFile(NULL, realName, err);
+        mySharedConverterData = createConverterFromFile(pArgs, err);
         if (U_FAILURE (*err) || (mySharedConverterData == NULL))
         {
             return NULL;
@@ -703,8 +703,16 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         /*   converter data cache, and adding new entries to the cache      */
         /*   to prevent other threads from modifying the cache during the   */
         /*   process.                                                       */
+        UConverterLoadArgs args={ 0 };
+
+        args.size=sizeof(UConverterLoadArgs);
+        args.nestedLoads=1;
+        args.options=options;
+        args.pkg=NULL;
+        args.name=realName;
+
         umtx_lock(&cnvCacheMutex);
-        mySharedConverterData = ucnv_load(NULL, realName, err);
+        mySharedConverterData = ucnv_load(&args, err);
         umtx_unlock(&cnvCacheMutex);
         if (U_FAILURE (*err) || (mySharedConverterData == NULL))
         {
@@ -763,30 +771,36 @@ UConverter*
 ucnv_createConverterFromPackage(const char *packageName, const char *converterName, UErrorCode * err)
 {
     char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
-    uint32_t options=0;
     UConverter *myUConverter;
-    UConverterSharedData *mySharedConverterData = NULL;
+    UConverterSharedData *mySharedConverterData;
+
+    UConverterLoadArgs args={ 0 };
 
     if(U_FAILURE(*err)) {
         return NULL; 
     }
 
-    /* first, get the options out of the convertername string */
-    parseConverterOptions(converterName, cnvName, locale, &options, err);
+    args.size=sizeof(UConverterLoadArgs);
+    args.nestedLoads=1;
+    args.pkg=packageName;
+
+    /* first, get the options out of the converterName string */
+    parseConverterOptions(converterName, cnvName, locale, &args.options, err);
     if (U_FAILURE(*err)) {
         /* Very bad name used. */
         return NULL;
     }
+    args.name=cnvName;
     
     /* open the data, unflatten the shared structure */
-    mySharedConverterData = createConverterFromFile(packageName, cnvName, err);
+    mySharedConverterData = createConverterFromFile(&args, err);
     
     if (U_FAILURE(*err)) {
         return NULL; 
     }
 
     /* create the actual converter */
-    myUConverter = ucnv_createConverterFromSharedData(NULL, mySharedConverterData, cnvName, locale, options, err);
+    myUConverter = ucnv_createConverterFromSharedData(NULL, mySharedConverterData, cnvName, locale, args.options, err);
     
     if (U_FAILURE(*err)) {
         ucnv_close(myUConverter);
