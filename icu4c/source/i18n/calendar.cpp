@@ -2099,8 +2099,8 @@ UCalendarDateFields Calendar::newerField(UCalendarDateFields defaultField, UCale
 }
 
 UCalendarDateFields Calendar::resolveFields(const UFieldResolutionTable* precedenceTable) {
-  int32_t bestField = -1;
-  for (int32_t g=0; precedenceTable[g][0][0] != -1 && bestField < 0; ++g) {
+  int32_t bestField = UCAL_FIELD_COUNT;
+  for (int32_t g=0; precedenceTable[g][0][0] != -1 && (bestField == UCAL_FIELD_COUNT); ++g) {
     int32_t bestStamp = kUnset;
     for (int32_t l=0; precedenceTable[g][l][0] != -1; ++l) {
       int32_t lineStamp = kUnset;
@@ -2316,7 +2316,7 @@ int32_t Calendar::computeJulianDay()
   }
 
   UCalendarDateFields bestField = resolveFields(getFieldResolutionTable());
-  if (bestField < 0) {
+  if (bestField == UCAL_FIELD_COUNT) {
     bestField = UCAL_DAY_OF_MONTH;
   }
 
