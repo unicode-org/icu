@@ -34,13 +34,26 @@
 *******************************************************************************
 */
 
+/* Define _XOPEN_SOURCE for Solaris and friends. */
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE
+#endif
 
-/* include standard headers */
+/* Define __USE_POSIX and __USE_XOPEN for Linux and glibc. */
+#ifndef __USE_POSIX
+#define __USE_POSIX
+#endif
+#ifndef __USE_XOPEN
+#define __USE_XOPEN
+#endif
+
+/* Include standard headers. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <locale.h>
+#include <time.h>
 
 /* include ICU headers */
 #include "unicode/utypes.h"
@@ -117,12 +130,6 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 
 #ifdef POSIX
 #include <langinfo.h>
-#endif
-
-#if defined(POSIX) && defined(LINUX)
-#define __USE_POSIX
-#define __USE_XOPEN
-#include <time.h>
 #endif
 
 /*---------------------------------------------------------------------------
