@@ -27,6 +27,11 @@
 
 #define UCNV_MAX_SUBCHAR_LEN 4
 
+/* converter options bits */
+#define UCNV_OPTION_VERSION     0xf
+#define UCNV_OPTION_SWAP_LFNL   0x10
+
+
 U_CDECL_BEGIN /* We must declare the following as 'extern "C"' so that if ucnv
                  itself is compiled under C++, the linkage of the funcptrs will
                  work.
@@ -117,8 +122,8 @@ struct UConverter {
                                     UErrorCode *);
 
     /*
-     * currently only used to point to a struct containing UConverter used by iso 2022;
-     * could be used by clients writing their own call back function to pass context to them
+     * Pointer to additional data that depends on the converter type.
+     * Used by ISO 2022, SCSU, GB 18030 converters, possibly more.
      */
     void *extraInfo;
 
@@ -126,6 +131,9 @@ struct UConverter {
     const void *toUContext;
 
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
+
+    uint32_t options; /* options flags from UConverterOpen, may contain additional bits */
+
     UBool sharedDataIsCached;  /* TRUE:  shared data is in cache, don't destroy on ucnv_close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
     UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation - Don't free cnv memory on ucnv_close.  */
 

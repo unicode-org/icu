@@ -74,7 +74,8 @@ enum {
 #define MBCS_SINGLE_RESULT_FROM_U(table, results, c) (results)[ (table)[ (table)[(c)>>10] +(((c)>>4)&0x3f) ] +((c)&0xf) ]
 
 /* multi-byte fromUnicode: get the 32-bit stage 2 entry */
-#define MBCS_STAGE_2_FROM_U(table, c) ((uint32_t *)(table))[ (table)[(c)>>10] +(((c)>>4)&0x3f) ]
+#define MBCS_STAGE_2_FROM_U(table, c) ((const uint32_t *)(table))[ (table)[(c)>>10] +(((c)>>4)&0x3f) ]
+#define MBCS_FROM_U_IS_ROUNDTRIP(stage2Entry, c) ( ((stage2Entry) & ((uint32_t)1<< (16+((c)&0xf)) )) !=0)
 
 #define MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c) ((uint16_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
 #define MBCS_VALUE_4_FROM_STAGE_2(bytes, stage2Entry, c) ((uint32_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
@@ -119,13 +120,18 @@ typedef struct UConverterMBCSTable {
     uint32_t countToUFallbacks;
 
     const int32_t (*stateTable)/*[countStates]*/[256];
+    int32_t (*swapLFNLStateTable)/*[countStates]*/[256]; /* for swaplfnl */
     const uint16_t *unicodeCodeUnits/*[countUnicodeResults]*/;
     const _MBCSToUFallback *toUFallbacks;
 
     /* fromUnicode */
     const uint16_t *fromUnicodeTable;
     const uint8_t *fromUnicodeBytes;
+    uint8_t *swapLFNLFromUnicodeBytes; /* for swaplfnl */
     uint8_t outputType, unicodeMask;
+
+    /* converter name for swaplfnl */
+    char *swapLFNLName;
 } UConverterMBCSTable;
 
 /**
@@ -171,6 +177,7 @@ typedef struct {
  * This is a simple version of _MBCSGetNextUChar() that is used
  * by other converter implementations.
  * It does not use state from the converter, nor error codes.
+ * It does not handle the EBCDIC swaplfnl option (set in UConverter).
  *
  * Return value:
  * U+fffe   unassigned
@@ -182,7 +189,10 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
                         const char **pSource, const char *sourceLimit,
                         UBool useFallback);
 
-/** This version of _MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages. */
+/**
+ * This version of _MBCSSimpleGetNextUChar() is optimized for single-byte, single-state codepages.
+ * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ */
 U_CFUNC UChar32
 _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
                               uint8_t b, UBool useFallback);
@@ -211,6 +221,8 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
  * This is another simple conversion function for internal use by other
  * conversion implementations.
  * It does not use the converter state nor call callbacks.
+ * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ *
  * It converts one single Unicode code point into codepage bytes, encoded
  * as one 32-bit value. The function returns the number of bytes in *pValue:
  * 1..4 the number of bytes in *pValue
@@ -228,6 +240,8 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
 
 /**
  * This version of _MBCSFromUChar32() is optimized for single-byte codepages.
+ * It does not handle the EBCDIC swaplfnl option (set in UConverter).
+ *
  * It returns the codepage byte for the code point, or -1 if it is unassigned.
  */
 U_CFUNC int32_t
