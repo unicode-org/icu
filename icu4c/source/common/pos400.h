@@ -85,6 +85,7 @@ typedef unsigned long uint32_t;
 /*===========================================================================*/
 
 #define U_CHARSET_FAMILY 1
+#define U_SIZEOF_WCHAR_T 2
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
