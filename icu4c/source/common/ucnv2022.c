@@ -31,6 +31,17 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 
+#define TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS, myConverterData, err){ \
+    if(*err ==U_BUFFER_OVERFLOW_ERROR){ \
+		    /*save the state and return */ \
+		    args->target += myTargetIndex; \
+		    args->source += mySourceIndex; \
+		    myConverterData->sourceIndex = 0; \
+		    myConverterData->targetIndex = 0; \
+		    args->converter->fromUnicodeStatus = isTargetUCharDBCS; \
+		    return; \
+        } \
+}
 
 
 /* Added by ram for ISO-2022JP implementation*/
@@ -94,8 +105,8 @@ typedef enum
   INVALID_2022 = -1, /*Doesn't correspond to a valid iso 2022 escape sequence*/
   VALID_NON_TERMINAL_2022 = 0, /*so far corresponds to a valid iso 2022 escape sequence*/
   VALID_TERMINAL_2022 = 1, /*corresponds to a valid iso 2022 escape sequence*/
-  VALID_MAYBE_TERMINAL_2022 = 2 /*so far matches one iso 2022 escape sequence, but by adding more characters might match another escape sequence*/
-
+  VALID_MAYBE_TERMINAL_2022 = 2, /*so far matches one iso 2022 escape sequence, but by adding more characters might match another escape sequence*/
+  VALID_SS2_SEQUENCE=3
 } UCNV_TableStates_2022;
 
 /*
@@ -145,7 +156,7 @@ int8_t normalize_esq_chars_2022[256] = {
        ,2      ,24     ,0      ,0      ,0      ,3      ,23     ,6      ,0      ,0
        ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
        ,0      ,0      ,0      ,0      ,5      ,8      ,9      ,10     ,11     ,12
-       ,13     ,14     ,15     ,16     ,17     ,18     ,19     ,20     ,0      ,0
+       ,13     ,14     ,15     ,16     ,17     ,18     ,19     ,20     ,25      ,0
        ,0      ,0      ,21     ,0      ,0      ,0      ,0      ,0      ,0      ,0
        ,22     ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
        ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0      ,0
@@ -170,7 +181,7 @@ int8_t normalize_esq_chars_2022[256] = {
 int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
 /*		0			1			2			3			4			5			6			7			8			9			*/
 
-         1			,34			,36			,39			,55			,1093		,1096		,1097		,1098		,1099   
+         1			,34			,36			,39			,55		    ,57,1093		,1096		,1097		,1098		,1099   
 		,1100		,1101		,1102		,1103		,1104		,1105		,1106		,1109		,1154		,1157		
 		,1160		,1161		,1176       ,1254		,1257		,1768		,1773		,35105		,36933		,36936		
         ,36937		,36938		,36939		,36940		,36942		,36943		,36944		,36945		,36946		,36947		
@@ -181,7 +192,7 @@ int32_t escSeqStateTable_Key_2022[MAX_STATES_2022] = {
 const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
 /*		0		 1			 2						3						4						5						6		            	7			                8			9			*/
 
-     NULL		,NULL		,NULL					,NULL					,NULL					,"latin1"				,"latin1"               ,"latin1"	            ,"ibm-865"  ,"ibm-865"    
+     NULL		,NULL		,NULL					,NULL					,NULL				    ,NULL,"latin1"				,"latin1"               ,"latin1"	            ,"ibm-865"  ,"ibm-865"    
 	,"ibm-865"	,"ibm-865"	,"ibm-865"				,"ibm-865"				,"ibm-895"				,"JISX-201"				,"latin1"               ,"latin1"	            ,NULL		,"ibm-955"    
 	,"GB2312"	,"JISX-208"	,NULL                   ,NULL					,"UTF8"					,"ISO-8859-1"			,"ISO-8859-7"			,NULL		            ,"ibm-955"  ,"bm-367"   
     ,"ibm-952"  ,"ibm-949"	,"JISX-212"				,"ibm-1383"				,"ibm-952"				,"ibm-964"				,"ibm-964"				,"ibm-964"              ,"ibm-964"  ,"ibm-964"     
@@ -192,7 +203,7 @@ const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
 UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
 /*			0								1							2							3						4								5								6						7							8							9			*/
 	
-         VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022	,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_MAYBE_TERMINAL_2022	,VALID_TERMINAL_2022		,VALID_TERMINAL_2022    
+         VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022	,VALID_SS2_SEQUENCE,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_MAYBE_TERMINAL_2022	,VALID_TERMINAL_2022		,VALID_TERMINAL_2022    
 		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022    
 		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		
         ,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		,VALID_TERMINAL_2022		
@@ -425,7 +436,7 @@ static Cnv2022Type myConverterType[8]={
 	MBCS,
 
 };
-#define UCNV_SS2 "\x0BN"
+#define UCNV_SS2 "\x1BN"
 
 #define ESC 0x0B
 
@@ -589,17 +600,8 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 				targetUniChar = mySourceChar;
 				if(currentState > 2){
 					concatEscape(args, &myTargetIndex, &myTargetLength, escSeqChars[0],err,strlen(escSeqChars[0]));
-					
-					if(*err ==U_BUFFER_OVERFLOW_ERROR){
-						/*save the state and return */
-						args->target += myTargetIndex;
-						args->source += mySourceIndex;
-						myConverterData->sourceIndex = 0;
-						myConverterData->targetIndex = 0;
-						args->converter->fromUnicodeStatus = isTargetUCharDBCS;
 
-						return;
-					}
+					TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 				}
 			}
 			/* if the source character is CR or LF then append the ASCII escape sequence*/
@@ -610,17 +612,7 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 					isTargetUCharDBCS=FALSE;
 					soAppended =FALSE;
 					myConverterData->soAppended=FALSE;
-
-					if(*err ==U_BUFFER_OVERFLOW_ERROR){
-						/*save the state and return */
-						args->target += myTargetIndex;
-						args->source += mySourceIndex;
-						myConverterData->sourceIndex = 0;
-						myConverterData->targetIndex = 0;
-						args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-
-						return;
-					}
+					TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 				}
 
 				targetUniChar = mySourceChar;
@@ -629,9 +621,9 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 				if(currentState==ISO8859_1 || currentState ==ISO8859_7)
 					isEscapeAppended =FALSE;
 				
-				if(*err ==U_BUFFER_OVERFLOW_ERROR)
-					break;
-				continue;
+	            TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
+				
+                continue;
 			}
 			else{
 			
@@ -733,33 +725,15 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 					
 					isEscapeAppended =TRUE;
 					myConverterData->isEscapeAppended=TRUE;
-					if(*err ==U_BUFFER_OVERFLOW_ERROR){
-						/*save the state and return */
-						args->target += myTargetIndex;
-						args->source += mySourceIndex;
-						myConverterData->sourceIndex = 0;
-						myConverterData->targetIndex = 0;
-						args->converter->fromUnicodeStatus = isTargetUCharDBCS;
 
-						return;
-					}
+					TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 
 					/* Append SSN for shifting to G2 */
 					if(currentState==ISO8859_1 || currentState==ISO8859_7){
 						concatEscape(args, &myTargetIndex, &myTargetLength,
 									UCNV_SS2,err,strlen(UCNV_SS2));
-					
 
-						if(*err ==U_BUFFER_OVERFLOW_ERROR){
-							/*save the state and return */
-							args->target += myTargetIndex;
-							args->source += mySourceIndex;
-							myConverterData->sourceIndex = 0;
-							myConverterData->targetIndex = 0;
-							args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-
-							return;
-						}
+						TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 					}
 				}
 				else{
@@ -771,48 +745,24 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 							concatChar(args, &myTargetIndex, 
 										&myTargetLength, UCNV_SI,err);
 							soAppended =FALSE;
-							if(*err ==U_BUFFER_OVERFLOW_ERROR){
-								/*save the state and return */
-								args->target += myTargetIndex;
-								args->source += mySourceIndex;
-								myConverterData->sourceIndex = 0;
-								myConverterData->targetIndex = 0;
-								args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-
-								return;
-							}
+						    
+                            TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 						}
 						else{ /* Shifting from a single byte to double byte mode*/
 								concatChar(args, &myTargetIndex, 
 									&myTargetLength, UCNV_SO,err);
 							soAppended =TRUE;
 							myConverterData->soAppended =soAppended;
-							if(*err ==U_BUFFER_OVERFLOW_ERROR){
-								/*save the state and return */
-								args->target += myTargetIndex;
-								args->source += mySourceIndex;
-								myConverterData->sourceIndex = 0;
-								myConverterData->targetIndex = 0;
-								args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-
-								return;
-							}
+							
+                            TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 						}
 					}
 				}
 
 				concatString(args, &myTargetIndex, &myTargetLength,
 								&targetUniChar,err, &mySourceIndex);
-					if(*err ==U_BUFFER_OVERFLOW_ERROR){
-						/*save the state and return */
-						args->target += myTargetIndex;
-						args->source += mySourceIndex;
-						myConverterData->sourceIndex = 0;
-						myConverterData->targetIndex = 0;
-						args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-
-						return;
-					}
+				
+                TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
 
 			}/* end of end if(targetUniChar==missingCharMarker)*/
 			else{
@@ -1052,9 +1002,15 @@ void changeState_2022(UConverter* _this,
 			case INVALID_2022:
 				{
 					_this->toUnicodeStatus = 0;
-					*err = U_ILLEGAL_CHAR_FOUND;
+					*err = U_ILLEGAL_ESCAPE_SEQUENCE;
 					return;
 				}
+            case VALID_SS2_SEQUENCE:
+                {
+                    (*source)++;
+                    key = 0;
+                    goto DONE;
+                }
   
 			case VALID_MAYBE_TERMINAL_2022:
 				{
@@ -1071,7 +1027,7 @@ void changeState_2022(UConverter* _this,
 					else{
 						(*source)++;
 						myValue=1;
-						myOffset = 5;
+						myOffset = 6;
 					}
 
 					switch (myValue){
@@ -1124,8 +1080,12 @@ void changeState_2022(UConverter* _this,
 	if ((value == VALID_NON_TERMINAL_2022) || (value == VALID_MAYBE_TERMINAL_2022)) {
 	  return;
 	}
-	if (value > 0) {
-		if(uprv_strcmp(chosenConverterName,"latin1")==0 && uprv_strcmp(myData2022->currentLocale,"jp")==0){
+	if (value > 0 ) {
+        if(value==3){
+            _this->mode = UCNV_SI;
+			myUConverter =myData2022->currentConverter;
+        }
+		else if(uprv_strcmp(chosenConverterName,"latin1")==0 && uprv_strcmp(myData2022->currentLocale,"jp")==0){
 			_this->mode = UCNV_SI;
 			myUConverter =myData2022->currentConverter;
 
@@ -1174,17 +1134,6 @@ const char* getEndOfBuffer_2022(const char* source,
 			int32_t key = 0;
 			int32_t offset;
 			UCNV_TableStates_2022 value = VALID_NON_TERMINAL_2022;
-            /* check for SS2*/
-            if(*mySource+1 == 0x4E){
-                if(mySource == source){
-				    source++;
-                    source++;
-				    return getEndOfBuffer_2022(source,sourceLimit,flush);
-			    }
-			    else{
-				    return mySource;
-			    }
-            }
   
 			for (i=0; 
 					(mySource+i < sourceLimit)&&(value == VALID_NON_TERMINAL_2022);
