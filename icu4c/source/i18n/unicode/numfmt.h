@@ -27,7 +27,6 @@
 #include "unicode/unistr.h"
 #include "unicode/format.h"
 #include "unicode/unum.h" // UNumberFormatStyle
-#include "hash.h"
 #include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
@@ -678,10 +677,10 @@ public:
     virtual UBool visible(void) const = 0;
 
     /**
-     * Return an unmodifiable collection of the locale names directly 
-     * supported by this factory.
+     * Return the locale names directly supported by this factory.  The number of names
+     * is returned in count;
      */
-    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const = 0;
+    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
 
     /**
      * Return a number format of the appropriate type.  If the locale
@@ -699,27 +698,28 @@ public:
 class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
 protected:
     const UBool _visible;
-	Hashtable _ids;
+    UnicodeString _id;
 
 public:
     SimpleNumberFormatFactory(const Locale& locale, UBool visible = TRUE)
-		: _visible(visible)
-	{
-		UErrorCode status = U_ZERO_ERROR;
-		_ids.put(locale.getName(), this, status); // um, ignore error code...
+      : _visible(visible)
+      , _id(locale.getName())
+    {
     }
 
     virtual UBool visible(void) const {
         return _visible;
     }
 
-	virtual const Hashtable* getSupportedIDs(UErrorCode& status) const 
-	{
-		if (U_SUCCESS(status)) {
-			return &_ids;
-		}
-		return NULL;
-	}
+    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const 
+      {
+        if (U_SUCCESS(status)) {
+          count = 1;
+          return &_id;
+        }
+        count = 0;
+        return NULL;
+      }
 };
 
 
