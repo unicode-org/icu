@@ -291,7 +291,7 @@ DateFormatTest::TestFieldPosition(void)
 
     dateFormats[0] = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, Locale::getUS());
     dateFormats[1] = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, Locale::getFrance());
-    dateFormats[2] = new SimpleDateFormat((UnicodeString)"G, y, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, Y, e", status);
+    dateFormats[2] = new SimpleDateFormat((UnicodeString)"G, yy, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, YY, e", status);
     dateFormats[3] = new SimpleDateFormat((UnicodeString)"GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz, YYYY, eeee", status);
     for (j = 0, exp = 0; j < dateFormats_length;++j) {
         UnicodeString str;
