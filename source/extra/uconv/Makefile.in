@@ -21,9 +21,6 @@ include $(top_builddir)/icudefs.mk
 
 MSGNAME=uconvmsg
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 # RESSRC comes from resfiles.mk
 FILESEPCHAR=/
 include $(srcdir)/resfiles.mk
