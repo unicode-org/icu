@@ -49,7 +49,7 @@ protected class Builder extends RuleBasedBreakIterator.Builder {
         for (int i = 0; i < categories.size(); i++) {
             CharSet cs = (CharSet)categories.elementAt(i);
             if (!(cs.intersection(dictionaryChars).empty())) {
-                categoryFlags[i] = true;
+                categoryFlags[i] = TRUE;
             }
         }
     }
