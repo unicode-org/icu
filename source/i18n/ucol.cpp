@@ -1084,6 +1084,7 @@ ucol_openRules(    const    UChar                  *rules,
   listLen = ucol_tok_assembleTokenList(&src, status);
   if(U_FAILURE(*status)) { 
     uprv_free(src.image);
+    ucol_tok_closeTokenList(&src);
     return NULL;
   }
   UCollator *result = NULL;
@@ -1110,10 +1111,13 @@ ucol_openRules(    const    UChar                  *rules,
       uprv_free(table);
       ucol_close(result);
     }
+    uprv_free(src.image);
+    ucol_tok_closeTokenList(&src);
     return NULL;
   }
 
   uprv_free(src.image);
+  ucol_tok_closeTokenList(&src);
 
   ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
 
