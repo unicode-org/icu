@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.2 $ $Date: 2000/04/20 19:23:12 $
+ * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.3 $ $Date: 2001/11/29 21:32:28 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -160,7 +160,7 @@ public final class MTextIterator implements AttributedCharacterIterator,
      * Sets the position to getBeginIndex() and returns the character at that
      * position.
      * @return the first character in the text, or DONE if the text is empty
-     * @see getBeginIndex
+     * @see #getBeginIndex
      */
     public char first() {
         return fCharIter.first();
@@ -170,7 +170,7 @@ public final class MTextIterator implements AttributedCharacterIterator,
      * Sets the position to getEndIndex()-1 (getEndIndex() if the text is empty)
      * and returns the character at that position.
      * @return the last character in the text, or DONE if the text is empty
-     * @see getEndIndex
+     * @see #getEndIndex
      */
     public char last() {
         return fCharIter.last();
@@ -180,7 +180,7 @@ public final class MTextIterator implements AttributedCharacterIterator,
      * Gets the character at the current position (as returned by getIndex()).
      * @return the character at the current position or DONE if the current
      * position is off the end of the text.
-     * @see getIndex
+     * @see #getIndex
      */
     public char current() {
         return fCharIter.current();

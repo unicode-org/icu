@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MFormatter.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: MFormatter.java,v $ $Revision: 1.2 $ $Date: 2001/11/29 21:32:27 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -82,7 +82,7 @@ import com.ibm.textlayout.attributes.AttributeMap;
 * <p>
 * @author John Raley
 *
-* @see MText
+* @see com.ibm.richtext.styledtext.MText
 */
 
 public abstract class MFormatter {
