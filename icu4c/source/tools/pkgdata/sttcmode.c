@@ -31,6 +31,11 @@
 #include "filestrm.h"
 
 
+/** set if AR is NOT to be called implicitly by gnumake 
+ ** (i.e. if  the form   libblah.a($(OBJECTS) doesnt work) 
+ **/
+#define NO_IMPLICIT_AR  0
+
 void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCode *status)
 {
   char tmp[1024];
@@ -125,14 +130,13 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 
         uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
         uprv_strcat(tmp, p);
-        uprv_strcat(tmp, ".");
-        uprv_strcat(tmp, STATIC_O);
+        uprv_strcat(tmp, ".$(STATIC_O)");
 
         *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp));
 
         /* write source list */
         strcpy(cfile,tmp);
-        strcpy(cfile+strlen(cfile)-strlen("." STATIC_O), ".c" );
+        strcpy(cfile+strlen(cfile)-strlen(".$(STATIC_O)"), ".c" );
 
 
         /* Make up parents.. */
@@ -207,7 +211,6 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, tmp);
     T_FileStream_writeLine(makefile, "LIB_TARGET=$(TARGET)\n");
 
-
     uprv_strcpy(tmp, "all: $(TARG_PATH)$(LIB_TARGET)");
     uprv_strcat(tmp, "\n\n");
     T_FileStream_writeLine(makefile, tmp);
@@ -256,8 +259,14 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
 
     T_FileStream_writeLine(makefile,"$(TEMP_PATH)%.$(STATIC_O): $(TEMP_PATH)%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
+#if NO_IMPLICIT_AR
+    T_FileStream_writeLine(makefile, "$(TARG_PATH)$(LIB_TARGET):$(TARG_PATH)$(LIB_TARGET) $(OBJECTS) $(LISTFILES)\n"
+                           "\t$(AR) $(ARFLAGS) $(TARG_PATH)$(LIB_TARGET) $(OBJECTS)\n"
+                            "\t$(RANLIB) $@\n\n");
+#else
     T_FileStream_writeLine(makefile, "$(TARG_PATH)$(LIB_TARGET):$(TARG_PATH)$(LIB_TARGET)($(OBJECTS)) $(LISTFILES)\n"
                             "\t$(RANLIB) $@\n\n");
+#endif
 
 
     T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(TARG_PATH)$(LIB_TARGET) $(TARG_PATH)$(MIDDLE_STATIC_LIB_TARGET) $(TARG_PATH)$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
