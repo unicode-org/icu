@@ -11,8 +11,8 @@
 //
 // NOTICE - Do not use
 //
-// This entire file has been deprecated as of ICU 2.4.
-// This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+// This entire file has been marked obsolete as of ICU 2.4.
+// This will be removed as of ICU 2.8. Use UnicodeSet methods instead.
 //
 //////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ class UnicodeFilter;
  * Unicode characters.  Likewise, createAnd(g, NULL) returns g->clone(),
  * and createAnd(NULL, NULL) returns NULL.
  *
- * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+ * @obsolete ICU 2.8. Use UnicodeSet methods instead since this class will be removed in that release.
  */
 class U_I18N_API UnicodeFilterLogic /* not : public UObject because all methods are static */ {
 
@@ -54,7 +54,7 @@ public:
      * the given filter.
      * @param f may be NULL
      * @result always non-NULL
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @obsolete ICU 2.8. Use UnicodeSet methods instead since this class will be removed in that release.
      */
     static UnicodeFilter* createNot(const UnicodeFilter* f);
 
@@ -66,7 +66,7 @@ public:
      * @param f may be NULL
      * @param g may be NULL
      * @result will be NULL if and only if f == g == NULL
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @obsolete ICU 2.8. Use UnicodeSet methods instead since this class will be removed in that release.
      */
     static UnicodeFilter* createAnd(const UnicodeFilter* f,
                                     const UnicodeFilter* g);
@@ -79,7 +79,7 @@ public:
      * @param adoptedF may be NULL; this argument is adopted
      * @param adoptedG may be NULL; this argument is adopted
      * @result will be NULL if and only if f == g == NULL
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @obsolete ICU 2.8. Use UnicodeSet methods instead since this class will be removed in that release.
      */
     static UnicodeFilter* createAdoptingAnd(UnicodeFilter* adoptedF,
                                             UnicodeFilter* adoptedG);
@@ -92,7 +92,7 @@ public:
      * @param f may be NULL
      * @param g may be NULL
      * @result will be NULL if and only if f == g == NULL
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @obsolete ICU 2.8. Use UnicodeSet methods instead since this class will be removed in that release.
      */
     static UnicodeFilter* createOr(const UnicodeFilter* f,
                                    const UnicodeFilter* g);

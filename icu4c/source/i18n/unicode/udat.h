@@ -524,9 +524,9 @@ udat_setSymbols(    UDateFormat             *format,
                     int32_t                 valueLength,
                     UErrorCode              *status);
 
-/********************* Deprecated API ************************************/
+/********************* Obsolete API ************************************/
 /**
- *@deprecated Remove after Aug 2002
+ * TODO: Remove after Aug 2002
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
 #if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM != 2))

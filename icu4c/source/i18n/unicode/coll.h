@@ -669,7 +669,7 @@ public:
   * Get the decomposition mode of the Collator object.
   * @return the decomposition mode
   * @see Collator#setDecomposition
-  * @deprecated To be removed after 2002-sep-30; use getAttribute().
+  * @obsolete ICU 2.4 Use getAttribute() instead since this API will be removed in that release.
   */
   virtual Normalizer::EMode getDecomposition(void) const = 0;
 
@@ -678,7 +678,7 @@ public:
   * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
   * @param the new decomposition mode
   * @see Collator#getDecomposition
-  * @deprecated To be removed after 2002-sep-30; use setAttribute().
+  * @obsolete ICU 2.4 Use setAttribute() instead since this API will be removed in that release.
   */
   virtual void setDecomposition(Normalizer::EMode  mode) = 0;
 #endif /* ICU_NORMALIZER_USE_DEPRECATES */
@@ -751,7 +751,7 @@ protected:
   * mode is left to the child class.
   * @param collationStrength collation strength
   * @param decompositionMode 
-  * @deprecated 2.4, constructor is not used anywhere. Child classes should 
+  * @deprecated ICU 2.4. This constructor is not used anywhere. Child classes should 
   *             implement their own constructor to handle the strength and
   *             normalization mode
   */
