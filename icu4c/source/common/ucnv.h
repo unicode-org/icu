@@ -26,6 +26,8 @@
 #include "ucnv_bld.h"
 #include "ucnv_err.h"
 
+U_CDECL_BEGIN
+
 typedef void (*UConverterToUCallback) (UConverter *,
 				  UChar **,
 				  const UChar *,
@@ -43,6 +45,8 @@ typedef void (*UConverterFromUCallback) (UConverter *,
 				    int32_t* offsets,
 				    bool_t,
 				    UErrorCode *);
+
+U_CDECL_END
 
 
 /**
