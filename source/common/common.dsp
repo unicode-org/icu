@@ -2463,6 +2463,10 @@ SOURCE=.\unorm_it.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unormcmp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\unormimp.h
 # End Source File
 # End Group
