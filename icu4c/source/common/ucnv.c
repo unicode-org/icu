@@ -2384,6 +2384,50 @@ ucnv_detectUnicodeSignature( const char* source,
     return NULL;
 }
 
+ U_DRAFT int32_t U_EXPORT2
+ ucnv_fromUInputHeld(const UConverter* cnv, UErrorCode* status){
+    
+    if(status== NULL||U_FAILURE(*status)){
+        return -1;
+    }
+    if(cnv==NULL){
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+
+    if(cnv->preFromULength > 0){
+        return U16_LENGTH(cnv->preFromUFirstCP)+cnv->preFromULength ;
+    }else if(cnv->preFromULength < 0){
+        return -cnv->preFromULength ;
+    }else if(cnv->fromUChar32 > 0){
+        return 1;
+    }else if(cnv->preFromUFirstCP >0){
+        return U16_LENGTH(cnv->preFromUFirstCP);
+    }
+    return 0; 
+
+ }
+
+U_DRAFT int32_t U_EXPORT2
+ucnv_toUInputHeld(const UConverter* cnv, UErrorCode* status){
+
+    if(status== NULL||U_FAILURE(*status)){
+        return -1;
+    }
+    if(cnv==NULL){
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+
+    if(cnv->preToULength > 0){
+        return cnv->preToULength ;
+    }else if(cnv->preToULength < 0){
+        return -cnv->preToULength;
+    }else if(cnv->toULength > 0){
+        return cnv->toULength;
+    }
+    return 0;
+}
 #endif
 
 /*
