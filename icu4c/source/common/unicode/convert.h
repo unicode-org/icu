@@ -13,6 +13,8 @@
 #define CONVERT_H
 
 #include "unicode/utypes.h"
+
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
@@ -473,4 +475,6 @@ private:
 };
 
 U_NAMESPACE_END
+#endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
+
 #endif

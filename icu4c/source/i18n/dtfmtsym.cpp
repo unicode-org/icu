@@ -104,6 +104,7 @@ static const UChar gLastResortZoneStrings[5][4] =
     {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
 
+#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
 static UnicodeString *gPatternCharsStr = NULL;
 
 U_CFUNC UBool dateFormatSymbols_cleanup() {
@@ -112,6 +113,7 @@ U_CFUNC UBool dateFormatSymbols_cleanup() {
     }
     return TRUE;
 }
+#endif
 
 U_NAMESPACE_BEGIN
 
@@ -442,6 +444,7 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 
 //------------------------------------------------------
 
+#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
 const UnicodeString&
 DateFormatSymbols::getPatternChars(void)
 {
@@ -452,6 +455,7 @@ DateFormatSymbols::getPatternChars(void)
     }
     return *gPatternCharsStr;
 }
+#endif
 
 //------------------------------------------------------
 
@@ -536,7 +540,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             // we just need to produce something that will be semi-intelligible
             // in most locales.
 
-            status = U_USING_FALLBACK_ERROR;
+            status = U_USING_FALLBACK_WARNING;
 
             initField(&fEras, fErasCount, (const UChar *)gLastResortEras, kEraNum, kEraLen, status);
             initField(&fMonths, fMonthsCount, (const UChar *)gLastResortMonthNames, kMonthNum, kMonthLen,  status);

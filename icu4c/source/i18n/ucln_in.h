@@ -26,14 +26,14 @@ U_CFUNC void ucln_i18n_registerCleanup(void);
 
 U_CFUNC UBool transliterator_cleanup(void);
 
-U_CFUNC UBool unicodePropertySet_cleanup(void);
-
-U_CFUNC UBool dateFormatSymbols_cleanup(void);
-
 U_CFUNC UBool timeZone_cleanup(void);
 
 U_CFUNC UBool ucol_cleanup(void);
 
 U_CFUNC UBool ucol_bld_cleanup(void);
+
+#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
+U_CFUNC UBool dateFormatSymbols_cleanup(void);
+#endif
 
 #endif

@@ -100,9 +100,6 @@ void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-    Locale::fgDefaultLocale.init(id);
-#else
     if (gLocaleCache == NULL) {
         Locale::initLocaleCache();
     }
@@ -111,7 +108,6 @@ void locale_set_default_internal(const char *id)
         Mutex lock;
         gLocaleCache[eDEFAULT].init(id);
     }
-#endif
 }
 U_NAMESPACE_END
 
@@ -145,37 +141,6 @@ U_NAMESPACE_BEGIN
  * static variables
  */
 #ifdef ICU_LOCID_USE_DEPRECATES
-Locale Locale::fgDefaultLocale;
-
-/**
- * Constant definitions
- */
-const Locale  Locale::ENGLISH("en");
-const Locale  Locale::FRENCH("fr");
-const Locale  Locale::GERMAN("de");
-const Locale  Locale::ITALIAN("it");
-const Locale  Locale::JAPANESE("ja");
-const Locale  Locale::KOREAN("ko");
-const Locale  Locale::CHINESE("zh");
-const Locale  Locale::SIMPLIFIED_CHINESE("zh", "CN");
-const Locale  Locale::TRADITIONAL_CHINESE("zh", "TW");
-
-// Useful constant for country.
-
-const Locale  Locale::FRANCE    ("fr", "FR");
-const Locale  Locale::GERMANY   ("de", "DE");
-const Locale  Locale::ITALY     ("it", "IT");
-const Locale  Locale::JAPAN     ("ja", "JP");
-const Locale  Locale::KOREA     ("ko", "KR");
-const Locale  Locale::CHINA     ("zh", "CN");
-const Locale  Locale::PRC       ("zh", "CN");
-const Locale  Locale::TAIWAN    ("zh", "TW");
-const Locale  Locale::UK        ("en", "GB");
-const Locale  Locale::US        ("en", "US");
-const Locale  Locale::CANADA    ("en", "CA");
-const Locale  Locale::CANADA_FRENCH("fr", "CA");
-
-#else
 const Locale::LocaleProxy Locale::ENGLISH  = {eENGLISH};
 const Locale::LocaleProxy Locale::FRENCH   = {eFRENCH};
 const Locale::LocaleProxy Locale::GERMAN   = {eGERMAN};
@@ -508,11 +473,7 @@ Locale::setToBogus() {
 const Locale&
 Locale::getDefault() 
 {
-#ifdef ICU_LOCID_USE_DEPRECATES
-    return fgDefaultLocale;
-#else
     return getLocale(eDEFAULT);
-#endif
 }
 
 void 
@@ -522,9 +483,6 @@ Locale::setDefault( const   Locale&     newLocale,
     if (U_FAILURE(status))
         return;
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-    fgDefaultLocale = newLocale;
-#else
     if (gLocaleCache == NULL) {
         initLocaleCache();
     }
@@ -533,7 +491,6 @@ Locale::setDefault( const   Locale&     newLocale,
         Mutex lock;
         gLocaleCache[eDEFAULT] = newLocale;
     }
-#endif
 }
 
 Locale
@@ -800,7 +757,6 @@ void Locale::setFromPOSIXID(const char *posixID)
     init(posixID);
 }
 
-#ifndef ICU_LOCID_USE_DEPRECATES
 const Locale &
 Locale::getEnglish(void)
 {
@@ -999,8 +955,6 @@ Locale::initLocaleCache(void)
         gLocaleCache = localeCache;
     }
 }
-
-#endif
 
 //eof
 U_NAMESPACE_END

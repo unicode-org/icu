@@ -120,9 +120,9 @@ static const ResourceData *getFallbackData(const UResourceBundle* resBundle, con
         if(*res != RES_BOGUS) { /* If the resource is found in parents, we need to adjust the error */
             if(i>1) {
                 if(uprv_strcmp(resB->fName, uloc_getDefault())==0 || uprv_strcmp(resB->fName, kRootLocaleName)==0) {
-                    *status = U_USING_DEFAULT_ERROR;
+                    *status = U_USING_DEFAULT_WARNING;
                 } else {
-                    *status = U_USING_FALLBACK_ERROR;
+                    *status = U_USING_FALLBACK_WARNING;
                 }
             }
             *realData = resB;
@@ -316,8 +316,8 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
 
         if (result == FALSE || U_FAILURE(*status)) { 
             /* we have no such entry in dll, so it will always use fallback */
-            *status = U_USING_FALLBACK_ERROR;
-            r->fBogus = U_USING_FALLBACK_ERROR;
+            *status = U_USING_FALLBACK_WARNING;
+            r->fBogus = U_USING_FALLBACK_WARNING;
         } else { /* if we have a regular entry */
             /* We might be able to do this a wee bit more efficiently (we could check whether the aliased data) */
             /* is already in the cache), but it's good the way it is */
@@ -332,8 +332,8 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
                 result = res_load(&(r->fData), r->fPath, aliasName, status);
                 if (result == FALSE || U_FAILURE(*status)) { 
                     /* we couldn't load aliased data - so we have no data */
-                    *status = U_USING_FALLBACK_ERROR;
-                    r->fBogus = U_USING_FALLBACK_ERROR;
+                    *status = U_USING_FALLBACK_WARNING;
+                    r->fBogus = U_USING_FALLBACK_WARNING;
                 }
                 setEntryName(r, aliasName, status);
             }
@@ -383,7 +383,7 @@ static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool
       r->fCountExisting--;
       /*entryCloseInt(r);*/
       r = NULL;
-      *status = U_USING_FALLBACK_ERROR;
+      *status = U_USING_FALLBACK_WARNING;
     } else {
       uprv_strcpy(name, r->fName); /* this is needed for supporting aliases */
     }
@@ -438,7 +438,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
           /* insert default locale */
           uprv_strcpy(name, uloc_getDefault());
           r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
-          intStatus = U_USING_DEFAULT_ERROR;
+          intStatus = U_USING_DEFAULT_WARNING;
           if(r != NULL) { /* the default locale exists */
             t1 = r;
             hasRealData = TRUE;
@@ -460,7 +460,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
         if(r != NULL) {
           t1 = r;
-          intStatus = U_USING_DEFAULT_ERROR;
+          intStatus = U_USING_DEFAULT_WARNING;
           hasRealData = TRUE;
         } else { /* we don't even have the root locale */
           *status = U_MISSING_RESOURCE_ERROR;
@@ -469,7 +469,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
           /* insert root locale */
           t2 = init_entry(kRootLocaleName, r->fPath, status);
           if(!hasRealData) {
-            r->fBogus = U_USING_DEFAULT_ERROR;
+            r->fBogus = U_USING_DEFAULT_WARNING;
           }
           hasRealData = (UBool)((t2->fBogus == U_ZERO_ERROR) | hasRealData);
           t1->fParent = t2;
@@ -1470,6 +1470,7 @@ ures_open(const char* path,
     return r;
 }
 
+#ifdef ICU_URES_USE_DEPRECATES
 U_CAPI UResourceBundle*  U_EXPORT2
 ures_openW(const wchar_t* myPath,
                     const char* localeID,
@@ -1497,6 +1498,7 @@ ures_openW(const wchar_t* myPath,
 
     return r;
 }
+#endif /* ICU_URES_USE_DEPRECATES */
 
 
 U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath, 

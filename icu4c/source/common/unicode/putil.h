@@ -214,6 +214,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
+#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
 /*
  * Finds the least double greater than d (if positive == true),
  * or the greatest double less than d (if positive == false).
@@ -226,6 +227,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * @deprecated This will be removed after 2002-Jun-30. Use the ChoiceFormat closures API instead.
  */
 U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
+#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
 
 /**
  * Filesystem file and path separator characters.

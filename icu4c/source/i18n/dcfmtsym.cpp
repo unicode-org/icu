@@ -118,7 +118,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
         // Initializes with last resort data if necessary.
         if (useLastResortData)
         {
-            status = U_USING_FALLBACK_ERROR;
+            status = U_USING_FALLBACK_WARNING;
             initialize();
         }
         return;

@@ -7,6 +7,10 @@
 *   01/11/2000  aliu        Creation.
 **********************************************************************
 */
+
+/* These APIs are becoming private */
+#define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "unicode/nultrans.h"
 
 U_NAMESPACE_BEGIN

@@ -178,37 +178,6 @@ class U_COMMON_API Locale : public UObject {
 public:
 #ifdef ICU_LOCID_USE_DEPRECATES
     /**
-     * Useful constants for language.
-     * @deprecated Remove after 2002-aug-31. Use one of the Locale get functions.
-     */
-    static const Locale ENGLISH;
-    static const Locale FRENCH;
-    static const Locale GERMAN;
-    static const Locale ITALIAN;
-    static const Locale JAPANESE;
-    static const Locale KOREAN;
-    static const Locale CHINESE;
-    static const Locale SIMPLIFIED_CHINESE;
-    static const Locale TRADITIONAL_CHINESE;
-
-    /**
-     * Useful constants for country.
-     * @deprecated Remove after 2002-aug-31. Use one of the Locale get functions.
-     */
-    static const Locale FRANCE;
-    static const Locale GERMANY;
-    static const Locale ITALY;
-    static const Locale JAPAN;
-    static const Locale KOREA;
-    static const Locale CHINA;      /* Alias for PRC */
-    static const Locale PRC;        /* Peoples Republic of China */
-    static const Locale TAIWAN;
-    static const Locale UK;
-    static const Locale US;
-    static const Locale CANADA;
-    static const Locale CANADA_FRENCH;
-#else
-    /**
      * A proxy for the Locale. 
      * This is defined to stay source code compatible and to remove static initialization.
      * Treat it just like a Locale.
@@ -216,7 +185,8 @@ public:
      */
     typedef struct U_COMMON_API LocaleProxy {
 
-        int32_t magicLocaleNumber;  /* Try not to access this. This is not meant for normal use. */
+        /* Try not to access this. This is not meant for normal use. */
+        int32_t magicLocaleNumber;
 
         /** Calls Locale's equivalent function */
         inline const char *getLanguage( ) const;
@@ -726,8 +696,6 @@ private:
 //    static int32_t localeListCount;
 
 #ifdef ICU_LOCID_USE_DEPRECATES
-    static Locale fgDefaultLocale;
-#else
     friend struct LocaleProxy;
 #endif
 
@@ -771,7 +739,7 @@ Locale::isBogus(void) const {
   return fIsBogus;
 }
 
-#ifndef ICU_LOCID_USE_DEPRECATES
+#ifdef ICU_LOCID_USE_DEPRECATES
 /* Proxy functions */
 inline const char *Locale::LocaleProxy::getLanguage( ) const
 {

@@ -142,6 +142,7 @@ typedef enum {
 
   /* *** The rest of this enum is entirely deprecated. *** */
 
+#ifdef ICU_UNORM_USE_DEPRECATES
   /**
    * No decomposition/composition
    * @deprecated To be removed after 2002-sep-30, use UNORM_NONE.
@@ -178,6 +179,7 @@ typedef enum {
    * @deprecated To be removed without replacement after 2002-mar-31.
    */
   UCOL_IGNORE_HANGUL    = 16,
+#endif /* ICU_UNORM_USE_DEPRECATES */
   /**
    * Do not normalize Hangul.
    * @deprecated To be removed without replacement after 2002-mar-31.
@@ -210,12 +212,14 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
                 UChar *result, int32_t resultLength,
                 UErrorCode *status);
 
+#ifdef ICU_UNORM_USE_DEPRECATES
 /**
  * The function u_normalize() has been renamed to unorm_normalize()
  * for consistency. The old name is deprecated.
  * @deprecated To be removed after 2002-mar-31.
  */
 #define u_normalize unorm_normalize
+#endif /* ICU_UNORM_USE_DEPRECATES */
 
 /**
  * Result values for unorm_quickCheck().

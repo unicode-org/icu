@@ -30,6 +30,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 
+#ifdef ICU_UNICODE_CLASS_USE_DEPRECATES
 U_NAMESPACE_BEGIN
 /**
  * This class is deprecated and will be removed.
@@ -1352,5 +1353,6 @@ Unicode::getUnicodeVersion(UVersionInfo versionArray) {
     u_getUnicodeVersion(versionArray);
 }
 U_NAMESPACE_END
+#endif /* ICU_UNICODE_CLASS_USE_DEPRECATES */
 
 #endif

@@ -285,7 +285,7 @@ ucol_open(    const    char         *loc,
   UResourceBundle *binary = ures_getByKey(collElem, "%%CollationBin", NULL, status);
 
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
-    *status = U_USING_DEFAULT_ERROR;
+    *status = U_USING_DEFAULT_WARNING;
     result = ucol_initCollator(UCA->image, result, status);
     // if we use UCA, real locale is root
     result->rb = ures_open(NULL, "", status);
@@ -427,17 +427,23 @@ ucol_openRules( const UChar        *rules,
     parseError = &tErr;
   }
   
-  switch((int)normalizationMode) { // TODO friendly deprecation helper, remove the (int) cast >2002-sep-30
+  switch(normalizationMode) { // TODO friendly deprecation helper, remove the (int) cast >2002-sep-30
   case UCOL_OFF:
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   case UNORM_NONE:      // TODO friendly deprecation helper, remove >2002-sep-30
+#endif
     norm = UCOL_OFF;
     break;
   case UCOL_ON:
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   case UNORM_NFD:       // TODO friendly deprecation helper, remove >2002-sep-30
+#endif
     norm = UCOL_ON;
     break;
-  case UCOL_DEFAULT_NORMALIZATION: // TODO friendly deprecation helper, remove >2002-sep-30
   case UCOL_DEFAULT:
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
+  case UCOL_DEFAULT_NORMALIZATION: // TODO friendly deprecation helper, remove >2002-sep-30
+#endif
     norm = UCOL_DEFAULT;
     break;
   default:
@@ -5023,6 +5029,7 @@ ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status)
     return UCOL_DEFAULT;
 }
 
+#ifdef U_USE_DEPRECATED_UCOL_API
 // deprecated
 U_CAPI void U_EXPORT2
 ucol_setNormalization(  UCollator            *coll,
@@ -5055,6 +5062,7 @@ ucol_getNormalization(const UCollator* coll)
     return UNORM_NONE;
   }
 }
+#endif
 
 U_CAPI void U_EXPORT2
 ucol_setStrength(    UCollator                *coll,
@@ -5117,7 +5125,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
                                        status);
         if (U_SUCCESS(*status))
         {
-            *status = U_SAFECLONE_ALLOCATED_ERROR;
+            *status = U_SAFECLONE_ALLOCATED_WARNING;
         }
     } else {
         localCollator = (UCollator *)stackBuffer;

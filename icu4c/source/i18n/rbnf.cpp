@@ -647,7 +647,7 @@ RuleBasedNumberFormat::getCollator() const
                 temp = NULL;
             }
             if (U_SUCCESS(status)) {
-                newCollator->setDecomposition(Normalizer::DECOMP);
+                newCollator->setAttribute(UCOL_DECOMPOSITION_MODE, UCOL_ON, status);
                 // cast away const
                 ((RuleBasedNumberFormat*)this)->collator = newCollator;
             } else {

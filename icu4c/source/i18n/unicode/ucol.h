@@ -688,6 +688,25 @@ ucol_safeClone(const UCollator *coll,
 U_CAPI int32_t U_EXPORT2 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
 
+/**
+ * gets the locale name of the collator. If the collator
+ * is instantiated from the rules, then this function returns
+ * NULL.
+ * @param coll The UCollator for which the locale is needed
+ * @param type You can choose between requested, valid and actual
+ *             locale. For description see the definition of
+ *             ULocDataLocaleType in uloc.h
+ * @param status error code of the operation
+ * @return real locale name from which the collation data comes. 
+ *         If the collator was instantiated from rules, returns
+ *         NULL.
+ * @draft ICU 2.1
+ */
+U_CAPI const char * U_EXPORT2
+ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
+
+
+#ifdef U_USE_DEPRECATED_UCOL_API
 
 /********************************* Deprecated API ********************************/
 /* This is the C API wrapper for CollationIterator that got booted out from here, including just for */
@@ -747,27 +766,8 @@ ucol_setNormalization(  UCollator        *coll,
             UNormalizationMode    mode);
 
 /**
- * gets the locale name of the collator. If the collator
- * is instantiated from the rules, then this function returns
- * NULL.
- * @param coll The UCollator for which the locale is needed
- * @param type You can choose between requested, valid and actual
- *             locale. For description see the definition of
- *             ULocDataLocaleType in uloc.h
- * @param status error code of the operation
- * @return real locale name from which the collation data comes. 
- *         If the collator was instantiated from rules, returns
- *         NULL.
- * @draft ICU 2.1
- */
-U_CAPI const char * U_EXPORT2
-ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *status);
-
-/**
  *@deprecated Remove after Aug 2002
  */
-#ifdef U_USE_DEPRECATED_FORMAT_API
-
 #if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM != 2))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 

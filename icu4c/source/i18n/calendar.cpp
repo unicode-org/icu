@@ -799,7 +799,7 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     // hard-coded data.
     if (U_FAILURE(status))
     {
-        status = U_USING_FALLBACK_ERROR;
+        status = U_USING_FALLBACK_WARNING;
         ures_close(resource);
         return;
     }
