@@ -5,25 +5,21 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2003/04/19 05:53:48 $
- * $Revision: 1.12 $
+ * $Date: 2003/04/21 21:02:42 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.util;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import java.io.Serializable;
-import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.text.DecimalFormatSymbols;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Key;
-import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
+import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * A class encapsulating a currency, as defined by ISO 4217.  A
@@ -67,52 +63,64 @@ public class Currency implements Serializable {
     public static final int LONG_NAME = 1;
 
     // begin registry stuff 
-    ///CLOVER:OFF
-    private static class CurrencyFactory extends ICUResourceBundleFactory {
-        protected Object handleCreate(Locale loc, int kind, ICUService service) {
-            String country = loc.getCountry();
-            String variant = loc.getVariant();
-            if (variant.equals("PREEURO") || variant.equals("EURO")) {
-                country = country + '_' + variant;
-            }
-            ResourceBundle bundle = ICULocaleData.getLocaleElements(new Locale("", "", ""));
-            Object[][] cm = (Object[][]) bundle.getObject("CurrencyMap");
 
-            // Do a linear search
-            String curriso = null;
-            for (int i=0; i<cm.length; ++i) {
-                if (country.equals((String) cm[i][0])) {
-                    curriso = (String) cm[i][1];
-                    break;
-                }
-            }
-            
-            return curriso != null ? new Currency(curriso) : null;
-        }
+    // shim for service code
+    /* package */ static abstract class ServiceShim {
+        abstract Locale[] getAvailableLocales();
+        abstract Currency createInstance(Locale l);
+        abstract Object registerInstance(Currency c, Locale l);
+        abstract boolean unregister(Object f);
     }
-            
-    private static ICULocaleService service;
-
-    private static ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("Currency");
-            newService.registerFactory(new CurrencyFactory());
-            synchronized (Currency.class) {
-                if (service == null) {
-                    service = newService;
-                }
+    
+    private static ServiceShim shim;
+    private static ServiceShim getShim() {
+        if (shim == null) {
+            try {
+                Class cls = Class.forName("com.ibm.icu.util.CurrencyServiceShim");
+                shim = (ServiceShim)cls.newInstance();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
             }
         }
-        return service;
+        return shim;
     }
-    ///CLOVER:ON
+
     /**
      * Returns a currency object for the default currency in the given
      * locale.
      * @draft ICU 2.2
      */
     public static Currency getInstance(Locale locale) {
-        return (Currency)getService().get(locale);
+        if (shim == null) {
+            return createCurrency(locale);
+        }
+        return shim.createInstance(locale);
+    }
+
+    /**
+     * Instantiate a currency from a resource bundle found in Locale loc.
+     */
+    /* package */ static Currency createCurrency(Locale loc) {
+        String country = loc.getCountry();
+        String variant = loc.getVariant();
+        if (variant.equals("PREEURO") || variant.equals("EURO")) {
+            country = country + '_' + variant;
+        }
+        ResourceBundle bundle = ICULocaleData.getLocaleElements(new Locale("", "", ""));
+        Object[][] cm = (Object[][]) bundle.getObject("CurrencyMap");
+
+        // Do a linear search
+        String curriso = null;
+        for (int i=0; i<cm.length; ++i) {
+            if (country.equals((String) cm[i][0])) {
+                curriso = (String) cm[i][1];
+                break;
+            }
+        }
+            
+        return curriso != null ? new Currency(curriso) : null;
     }
 
     /**
@@ -122,35 +130,41 @@ public class Currency implements Serializable {
     public static Currency getInstance(String theISOCode) {
         return new Currency(theISOCode);
     }
-    ///CLOVER:OFF
+
     /**
      * Registers a new currency for the provided locale.  The returned object
      * is a key that can be used to unregister this currency object.
-     * @prototype
+     * @draft ICU 2.6
      */
-    /* public */ static Object register(Currency currency, Locale locale) {
-        return getService().registerObject(currency, locale);
+    public static Object registerInstance(Currency currency, Locale locale) {
+        return getShim().registerInstance(currency, locale);
     }
 
     /**
      * Unregister the currency associated with this key (obtained from
      * registerInstance).
-     * @prototype
+     * @draft ICU 2.6
      */
-    /* public */ static boolean unregister(Object registryKey) {
-        return getService().unregisterFactory((Factory)registryKey);
+    public static boolean unregister(Object registryKey) {
+        if (registryKey == null) {
+            throw new IllegalArgumentException("registryKey must not be null");
+        }
+        if (shim == null) {
+            return false;
+        }
+        return shim.unregister(registryKey);
     }
-    ///CLOVER:ON
+
     /**
      * Return an array of the locales for which a currency
      * is defined.
      * @draft ICU 2.2
      */
     public static Locale[] getAvailableLocales() {
-        if (service == null) {
+        if (shim == null) {
             return ICULocaleData.getAvailableLocales();
         } else {
-            return service.getAvailableLocales();
+            return shim.getAvailableLocales();
         }
     }
 
@@ -195,32 +209,6 @@ public class Currency implements Serializable {
      */
     public String getCurrencyCode() {
         return isoCode;
-    }
-
-    /**
-     * Fallback from the given locale name by removing the rightmost
-     * _-delimited element.  If there is none, return the root locale ("",
-     * "", "").  If this is the root locale, return null.  NOTE: The
-     * string "root" is not recognized; do not use it.
-     * @return a new Locale that is a fallback from the given locale, or
-     * null.
-     */
-    private static Locale fallback(Locale loc) {
-
-        // Split the locale into parts and remove the rightmost part
-        String[] parts = new String[]
-            { loc.getLanguage(), loc.getCountry(), loc.getVariant() };
-        int i;
-        for (i=2; i>=0; --i) {
-            if (parts[i].length() != 0) {
-                parts[i] = "";
-                break;
-            }
-        }
-        if (i<0) {
-            return null; // All parts were empty
-        }
-        return new Locale(parts[0], parts[1], parts[2]);
     }
 
     /**
@@ -289,7 +277,7 @@ public class Currency implements Serializable {
             if (s != null) {
                 break;
             }
-            locale = fallback(locale);
+            locale = LocaleUtility.fallback(locale);
         }
 
         // Determine if this is a ChoiceFormat pattern.  One leading mark
