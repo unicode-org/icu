@@ -17,7 +17,7 @@ U_NAMESPACE_BEGIN
  * Constants for Unicode script values, generated using
  * ICU4J's <code>UScript</code> class.
  *
- * @draft ICU 2.6
+ * @draft ICU 3.0
  */
 
 enum ScriptCodes {

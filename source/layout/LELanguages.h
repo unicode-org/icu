@@ -18,7 +18,7 @@ U_NAMESPACE_BEGIN
  * this is just a list of languages which the LayoutEngine
  * supports.
  *
- * @draft ICU 2.6
+ * @draft ICU 3.0
  */
 
 enum LanguageCodes {

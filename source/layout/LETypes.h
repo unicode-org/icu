@@ -91,7 +91,7 @@ typedef le_uint32 LETag;
  * Used for 16-bit glyph indices as they're represented
  * in TrueType font tables.
  *
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 typedef le_uint16 TTGlyphID;
 
@@ -102,7 +102,7 @@ typedef le_uint16 TTGlyphID;
  * order 8 bits are client defined. The LayoutEngine
  * will never change or look at the client defined bits.
  *
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 typedef le_uint32 LEGlyphID;
 
@@ -110,7 +110,7 @@ typedef le_uint32 LEGlyphID;
  * Used to mask off the glyph ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_GLYPH_MASK     0x0000FFFF
 
@@ -119,7 +119,7 @@ typedef le_uint32 LEGlyphID;
  * into the low-order bits.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_GLYPH_SHIFT    0
 
@@ -128,7 +128,7 @@ typedef le_uint32 LEGlyphID;
  * Used to mask off the sub-font ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_SUB_FONT_MASK  0x00FF0000
 
@@ -137,7 +137,7 @@ typedef le_uint32 LEGlyphID;
  * into the low-order bits.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_SUB_FONT_SHIFT 16
 
@@ -146,7 +146,7 @@ typedef le_uint32 LEGlyphID;
  * Used to mask off the client-defined part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_CLIENT_MASK    0xFF000000
 
@@ -155,7 +155,7 @@ typedef le_uint32 LEGlyphID;
  * into the low-order bits.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_CLIENT_SHIFT   24
 
@@ -164,7 +164,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to get the Glyph ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_GET_GLYPH(gid) ((gid & LE_GLYPH_MASK) >> LE_GLYPH_SHIFT)
 
@@ -172,7 +172,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to get the sub-font ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_GET_SUB_FONT(gid) ((gid & LE_SUB_FONT_MASK) >> LE_SUB_FONT_SHIFT)
 
@@ -180,7 +180,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to get the client-defined part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_GET_CLIENT(gid) ((gid & LE_CLIENT_MASK) >> LE_CLIENT_SHIFT)
 
@@ -189,7 +189,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to set the Glyph ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_SET_GLYPH(gid, glyph) ((gid & ~LE_GLYPH_MASK) | ((glyph << LE_GLYPH_SHIFT) & LE_GLYPH_MASK))
 
@@ -197,7 +197,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to set the sub-font ID part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_SET_SUB_FONT(gid, font) ((gid & ~LE_SUB_FONT_MASK) | ((font << LE_SUB_FONT_SHIFT) & LE_SUB_FONT_MASK))
 
@@ -205,7 +205,7 @@ typedef le_uint32 LEGlyphID;
  * A convenience macro to set the client-defined part of an LEGlyphID.
  *
  * @see LEGlyphID
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_SET_CLIENT(gid, client) ((gid & ~LE_CLIENT_MASK) | ((client << LE_CLIENT_SHIFT) & LE_CLIENT_MASK))
 
@@ -303,7 +303,7 @@ typedef struct LEPoint LEPoint;
  * WARNING: THIS MACRO WILL ONLY WORK CORRECTLY IF
  * THE ARGUMENT CHARACTERS ARE ASCII.
  *
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 #define LE_MAKE_TAG(a, b, c, d) \
     (((le_uint32)(a) << 24) |   \
@@ -315,7 +315,7 @@ typedef struct LEPoint LEPoint;
  * This enumeration defines constants for the standard
  * TrueType, OpenType and AAT table tags.
  *
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 enum LETableTags {
     LE_ACNT_TABLE_TAG = 0x61636E74UL, /* 'acnt' */
@@ -377,7 +377,7 @@ enum LETableTags {
  * This enumeration defines constants for all
  * the common OpenType feature tags.
  *
- * @draft ICU 2.6
+ * @stable ICU 3.2
  */
 enum LEFeatureTags {
     LE_AALT_FEATURE_TAG = 0x61616C74UL, /* 'aalt' */
