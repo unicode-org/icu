@@ -16,38 +16,37 @@
 
 U_NAMESPACE_BEGIN
 
+#ifdef REGEX_DEBUG   /* For debugging, define REGEX_DEBUG in regex.h, not here in this file. */
 //
-//  debugging support.  Enable one or more of the #defines immediately following
+//  debugging options.  Enable one or more of the three #defines immediately following
 //
-#ifdef _DEBUG
+
 //#define REGEX_SCAN_DEBUG
-//#define REGEX_DUMP_DEBUG
-//#define REGEX_RUN_DEBUG
-#endif
+#define REGEX_DUMP_DEBUG
+#define REGEX_RUN_DEBUG
+
 //  End of #defines inteded to be directly set.
 
-#if defined(REGEX_SCAN_DEBUG) || defined(REGEX_RUN_DEBUG) || defined(REGEX_DUMP_DEBUG)
-#define REGEX_DEBUG 1
 #include <stdio.h>
 #endif
 
 #ifdef REGEX_SCAN_DEBUG
-#define REGEX_SCAN_DEBUG_PRINTF printf
+#define REGEX_SCAN_DEBUG_PRINTF(a) printf a
 #else
-#define REGEX_SCAN_DEBUG_PRINTF
+#define REGEX_SCAN_DEBUG_PRINTF(a)
 #endif
 
 #ifdef REGEX_DUMP_DEBUG
-#define REGEX_DUMP_DEBUG_PRINTF printf
+#define REGEX_DUMP_DEBUG_PRINTF(a) printf a
 #else
-#define REGEX_DUMP_DEBUG_PRINTF
+#define REGEX_DUMP_DEBUG_PRINTF(a)
 #endif
 
 #ifdef REGEX_RUN_DEBUG
-#define REGEX_RUN_DEBUG_PRINTF printf
-#define REGEX_DUMP_DEBUG_PRINTF printf
+#define REGEX_RUN_DEBUG_PRINTF(a) printf a
+#define REGEX_DUMP_DEBUG_PRINTF(a) printf a
 #else
-#define REGEX_RUN_DEBUG_PRINTF
+#define REGEX_RUN_DEBUG_PRINTF(a)
 #endif
 
 

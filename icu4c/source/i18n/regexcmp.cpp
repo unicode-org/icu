@@ -159,12 +159,12 @@ void    RegexCompile::compile(
         //    the search will stop there, if not before.
         //
         tableEl = &gRuleParseStateTable[state];
-        REGEX_SCAN_DEBUG_PRINTF( "char, line, col = (\'%c\', %d, %d)    state=%s ",
-            fC.fChar, fLineNum, fCharNum, RegexStateNames[state]);
+        REGEX_SCAN_DEBUG_PRINTF(("char, line, col = (\'%c\', %d, %d)    state=%s ", 
+            fC.fChar, fLineNum, fCharNum, RegexStateNames[state]));
 
         for (;;) {    // loop through table rows belonging to this state, looking for one
                       //   that matches the current input char.
-            REGEX_SCAN_DEBUG_PRINTF( ".");
+            REGEX_SCAN_DEBUG_PRINTF(("."));
             if (tableEl->fCharClass < 127 && fC.fQuoted == FALSE &&   tableEl->fCharClass == fC.fChar) {
                 // Table row specified an individual character, not a set, and
                 //   the input character is not quoted, and
@@ -198,7 +198,7 @@ void    RegexCompile::compile(
             // No match on this row, advance to the next  row for this state,
             tableEl++;
         }
-        REGEX_SCAN_DEBUG_PRINTF("\n");
+        REGEX_SCAN_DEBUG_PRINTF(("\n"));
 
         //
         // We've found the row of the state table that matches the current input
@@ -215,7 +215,7 @@ void    RegexCompile::compile(
             fStackPtr++;
             if (fStackPtr >= kStackSize) {
                 error(U_REGEX_INTERNAL_ERROR);
-                REGEX_SCAN_DEBUG_PRINTF( "RegexCompile::parse() - state stack overflow.\n");
+                REGEX_SCAN_DEBUG_PRINTF(("RegexCompile::parse() - state stack overflow.\n"));
                 fStackPtr--;
             }
             fStack[fStackPtr] = tableEl->fPushState;
@@ -317,19 +317,6 @@ void    RegexCompile::compile(
         UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(i);
         fRXPat->fSets8[i].init(s);
     }
-
-    //
-    // A stupid bit of non-sense to prevent code coverage testing from complaining
-    //   about the pattern.dump() debug function.  Go through the motions of dumping,
-    //   even though, without the #define set, it will do nothing.
-    //
-#ifndef REGEX_DUMP_DEBUG
-    static UBool phonyDumpDone = FALSE;
-    if (phonyDumpDone==FALSE) {
-        fRXPat->dump();
-        phonyDumpDone = TRUE;
-    }
-#endif
 
 }
 
@@ -3462,7 +3449,7 @@ UnicodeSet *RegexCompile::scanSet() {
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
-        REGEX_SCAN_DEBUG_PRINTF( "UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex());
+        REGEX_SCAN_DEBUG_PRINTF(("UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex()));
         error(localStatus);
         delete uset;
         return NULL;
