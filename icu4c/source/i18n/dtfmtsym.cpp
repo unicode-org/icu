@@ -28,8 +28,7 @@
 
 // generic date-format pattern symbols.  For their meanings, see class docs
 // for SimpleDateFormat
-//UnicodeString DateFormatSymbols::fgPatternChars = "GyMdkHmsSEDFwWahKz";
-UnicodeString DateFormatSymbols::fgPatternChars = "GyMdkHmsSEDFwWahKzYe";
+UnicodeString DateFormatSymbols::fgPatternChars = UnicodeString("GyMdkHmsSEDFwWahKzYe", "");
 
 //------------------------------------------------------
 // Strings of last resort.  These are only used if we have no resource
@@ -43,24 +42,28 @@ UnicodeString DateFormatSymbols::fgPatternChars = "GyMdkHmsSEDFwWahKzYe";
 // These are the month names and abbreviations of last resort.
 const UnicodeString DateFormatSymbols::fgLastResortMonthNames[] =
 {
-    "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13"
+    UnicodeString("01", ""), UnicodeString("02", ""), UnicodeString("03", ""), UnicodeString("04", ""),
+    UnicodeString("05", ""), UnicodeString("06", ""), UnicodeString("07", ""), UnicodeString("08", ""),
+    UnicodeString("09", ""), UnicodeString("10", ""), UnicodeString("11", ""), UnicodeString("12", ""),
+    UnicodeString("13", "")
 };
 
 // These are the weekday names and abbreviations of last resort.
 const UnicodeString DateFormatSymbols::fgLastResortDayNames[] =
 {
-    "", "1", "2", "3", "4", "5", "6", "7"
+    UnicodeString(), UnicodeString("1", ""), UnicodeString("2", ""), UnicodeString("3", ""),
+    UnicodeString("4", ""), UnicodeString("5", ""), UnicodeString("6", ""), UnicodeString("7", "")
 };
 
 // These are the am/pm and BC/AD markers of last resort.
 const UnicodeString DateFormatSymbols::fgLastResortAmPmMarkers[] =
 {
-    "AM", "PM"
+    UnicodeString("AM", ""), UnicodeString("PM", "")
 };
 
 const UnicodeString DateFormatSymbols::fgLastResortEras[] =
 {
-    "BC", "AD"
+    UnicodeString("BC", ""), UnicodeString("AD", "")
 };
 
 // These are the zone strings of last resort.
@@ -68,7 +71,7 @@ UnicodeString** DateFormatSymbols::fgLastResortZoneStringsH = 0;
 
 const UnicodeString DateFormatSymbols::fgLastResortZoneStrings[] =
 {
-    "GMT", "GMT", "GMT", "GMT", "GMT"
+    UnicodeString("GMT", ""), UnicodeString("GMT", ""), UnicodeString("GMT", ""), UnicodeString("GMT", ""), UnicodeString("GMT", "")
 };
 
 //------------------------------------------------------

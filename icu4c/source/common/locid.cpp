@@ -62,30 +62,30 @@ int32_t            Locale::isoCountriesCount;
 /**
  * Constant definitions
  */
-const Locale  Locale::ENGLISH("en");
-const Locale  Locale::FRENCH("fr");
-const Locale  Locale::GERMAN("de");
-const Locale  Locale::ITALIAN("it");
-const Locale  Locale::JAPANESE("ja");
-const Locale  Locale::KOREAN("ko");
-const Locale  Locale::CHINESE("zh");
-const Locale  Locale::SIMPLIFIED_CHINESE("zh", "CN");   
-const Locale  Locale::TRADITIONAL_CHINESE("zh", "TW");
+const Locale  Locale::ENGLISH(UnicodeString("en", ""));
+const Locale  Locale::FRENCH(UnicodeString("fr", ""));
+const Locale  Locale::GERMAN(UnicodeString("de", ""));
+const Locale  Locale::ITALIAN(UnicodeString("it", ""));
+const Locale  Locale::JAPANESE(UnicodeString("ja", ""));
+const Locale  Locale::KOREAN(UnicodeString("ko", ""));
+const Locale  Locale::CHINESE(UnicodeString("zh", ""));
+const Locale  Locale::SIMPLIFIED_CHINESE(UnicodeString("zh", ""), UnicodeString("CN", ""));   
+const Locale  Locale::TRADITIONAL_CHINESE(UnicodeString("zh", ""), UnicodeString("TW", ""));
 
 // Useful constant for country.
 
-const Locale  Locale::FRANCE("fr", "FR");
-const Locale  Locale::GERMANY("de", "DE");
-const Locale  Locale::ITALY("it", "IT");
-const Locale  Locale::JAPAN("ja", "JP");
-const Locale  Locale::KOREA("en", "GB");
-const Locale  Locale::CHINA("zh", "CN");
-const Locale  Locale::PRC("zh", "CN");
-const Locale  Locale::TAIWAN("zh", "TW");
-const Locale  Locale::UK("en", "GB");
-const Locale  Locale::US("en", "US");
-const Locale  Locale::CANADA("en", "CA");
-const Locale  Locale::CANADA_FRENCH("fr", "CA");
+const Locale  Locale::FRANCE(UnicodeString("fr", ""), UnicodeString("FR", ""));
+const Locale  Locale::GERMANY(UnicodeString("de", ""), UnicodeString("DE", ""));
+const Locale  Locale::ITALY(UnicodeString("it", ""), UnicodeString("IT", ""));
+const Locale  Locale::JAPAN(UnicodeString("ja", ""), UnicodeString("JP", ""));
+const Locale  Locale::KOREA(UnicodeString("en", ""), UnicodeString("GB", ""));
+const Locale  Locale::CHINA(UnicodeString("zh", ""), UnicodeString("CN", ""));
+const Locale  Locale::PRC(UnicodeString("zh", ""), UnicodeString("CN", ""));
+const Locale  Locale::TAIWAN(UnicodeString("zh", ""), UnicodeString("TW", ""));
+const Locale  Locale::UK(UnicodeString("en", ""), UnicodeString("GB", ""));
+const Locale  Locale::US(UnicodeString("en", ""), UnicodeString("US", ""));
+const Locale  Locale::CANADA(UnicodeString("en", ""), UnicodeString("CA", ""));
+const Locale  Locale::CANADA_FRENCH(UnicodeString("fr", ""), UnicodeString("CA", ""));
 
 
     /**
@@ -96,25 +96,26 @@ const Locale  Locale::CANADA_FRENCH("fr", "CA");
      * into a single encoded String, and lazy evaluate the table from it.)
      */
     UHashtable* Locale::ctry2LangMapping = 0;
-    const UnicodeString Locale::compressedCtry2LangMapping =
-        "ADfresAEarenAFpsAGenAIrnALsqAMhyruANnlenAOptAResASensmATdeAUenAWnlenAZazhyru\
-BAsrshhrslmksqBBenBDbnhibhenBEfrnldeBFfrBGbgtrBHarenBIrnfrswBJfrBMenBNmsenzh\
-BOesayquBRptBSenBTdzenneBVnoBWentnBYberuBZenesCAenfrCCenCFfrsgCGfrCHfrdeitrm\
-CIfrCKmienCLesCMenfrCNzhboCOesCResCUesCVptCXenCYeltrenCZcsskDEdeDJarfrsoDKda\
-DMenfrDOesDZarfrECesquEEetruEGarenfrEHarfritERamtiarenitESeseucaglETamaren\
-FIfisvFJenfjhiFKenFMenFOfodaFRfreubrcoFXfrGAfrGBengdcyGDenfrGEkahyruGFfrGHen\
-GIenesGLdaikklGMenwoGNfrGPfrenGQesGRelGTesGUenGWptGYenhiurHKzhenHNesHRhrHTfr\
-HUhuIDinennlIEengaILiwarjiINhienguknksmlmrneorpasatateIOenIQarkutkIRfaarku\
-ISisITitfrdeJMenJOarJPjaKEenswKGkyKHkmKIenKMfrarKNenKPkoKRkoKWarenKYenKZkkru\
-LAlofrLBarenfrLCenfrLIdeLKtasienLRenLSstenLTltruplLUfrdeLVlvltruLYarenit\
-MAarfresMCfrenitMDmorobgMGmgenfrMKmkshtrMLfrMMmyMNmnruMOzhptMQfrMRarfrMSen\
-MTmtenitMUenfrhiMWenMXesMYmsenMZptNAenafdeNEfrhaNFenNGenhayoNIesNLnlfyNOno\
-NPneNRnaenNUenNZenmiOMarenPAesenPEesquayPFfrPGenPHentlesPKurenpspasdPLplPMfren\
-PNenPResenPTptPWenPYesgnQAarenREfrtaROrohuRUruRWenfrrwSAarSBenSCenfrSDarsu\
-SEsvSGzhenmstaSHenSIslSJnoSKskhuplshSLenSMitSNfrSOarenitsoSRnleneshiSTptSVes\
-SYarSZenssTCenTDfrarTFfrTGfrTHthTJtgruuzTKenmiTMtkruTNarTOentoTRtrkuTTenTVen\
-TWzhTZenswUAukruUGenswUMenUSenesUYesUZuzruVAlaitVCenVEesVGenVIenVNvizhfr\
-VUenfrbiWFfrWSensmYEarYTfrmgswYUsrshmkhuZAafenZMenZRfrswZWensn";
+    const UnicodeString Locale::compressedCtry2LangMapping = UnicodeString(
+        "ADfresAEarenAFpsAGenAIrnALsqAMhyruANnlenAOptAResASensmATdeAUenAWnlenAZazhyru"
+        "BAsrshhrslmksqBBenBDbnhibhenBEfrnldeBFfrBGbgtrBHarenBIrnfrswBJfrBMenBNmsenzh"
+        "BOesayquBRptBSenBTdzenneBVnoBWentnBYberuBZenesCAenfrCCenCFfrsgCGfrCHfrdeitrm"
+        "CIfrCKmienCLesCMenfrCNzhboCOesCResCUesCVptCXenCYeltrenCZcsskDEdeDJarfrsoDKda"
+        "DMenfrDOesDZarfrECesquEEetruEGarenfrEHarfritERamtiarenitESeseucaglETamaren"
+        "FIfisvFJenfjhiFKenFMenFOfodaFRfreubrcoFXfrGAfrGBengdcyGDenfrGEkahyruGFfrGHen"
+        "GIenesGLdaikklGMenwoGNfrGPfrenGQesGRelGTesGUenGWptGYenhiurHKzhenHNesHRhrHTfr"
+        "HUhuIDinennlIEengaILiwarjiINhienguknksmlmrneorpasatateIOenIQarkutkIRfaarku"
+        "ISisITitfrdeJMenJOarJPjaKEenswKGkyKHkmKIenKMfrarKNenKPkoKRkoKWarenKYenKZkkru"
+        "LAlofrLBarenfrLCenfrLIdeLKtasienLRenLSstenLTltruplLUfrdeLVlvltruLYarenit"
+        "MAarfresMCfrenitMDmorobgMGmgenfrMKmkshtrMLfrMMmyMNmnruMOzhptMQfrMRarfrMSen"
+        "MTmtenitMUenfrhiMWenMXesMYmsenMZptNAenafdeNEfrhaNFenNGenhayoNIesNLnlfyNOno"
+        "NPneNRnaenNUenNZenmiOMarenPAesenPEesquayPFfrPGenPHentlesPKurenpspasdPLplPMfren"
+        "PNenPResenPTptPWenPYesgnQAarenREfrtaROrohuRUruRWenfrrwSAarSBenSCenfrSDarsu"
+        "SEsvSGzhenmstaSHenSIslSJnoSKskhuplshSLenSMitSNfrSOarenitsoSRnleneshiSTptSVes"
+        "SYarSZenssTCenTDfrarTFfrTGfrTHthTJtgruuzTKenmiTMtkruTNarTOentoTRtrkuTTenTVen"
+        "TWzhTZenswUAukruUGenswUMenUSenesUYesUZuzruVAlaitVCenVEesVGenVIenVNvizhfr"
+        "VUenfrbiWFfrWSensmYEarYTfrmgswYUsrshmkhuZAafenZMenZRfrswZWensn",
+        "");
 
 /*Used for stack allocation of temporary buffers
  *can be tweaked  for speed and likelihood of resorting to heap allocation*/ 
@@ -142,10 +143,8 @@ Locale::Locale( const   UnicodeString&  newLanguage)
 {
   UnicodeString togo(newLanguage);
   char myLocaleID[ULOC_FULLNAME_CAPACITY];
-  int32_t size = newLanguage.size();
 
-  togo.extract(0,size, myLocaleID);
-  myLocaleID[size] = '\0';
+  myLocaleID[togo.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
   init(myLocaleID);
 }
 
@@ -159,11 +158,7 @@ Locale::Locale( const   UnicodeString&  newLanguage,
   togo += sep;
   togo += newCountry;
 
-  
-  int size = togo.size();
-
-  togo.extract(0,size, myLocaleID);
-  myLocaleID[size] = '\0';
+  myLocaleID[togo.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
   init(myLocaleID);
 }
 
@@ -198,21 +193,21 @@ Locale::Locale( const   UnicodeString&  newLanguage,
     togo += newVariantCopy ;
       }
   
-  int size = togo.size();
+  int size = togo.length();
 
-  /*is the variant is longer than our internal limit, we need
+  /*if the variant is longer than our internal limit, we need
   to go to the heap for temporary buffers*/
   if (size > ULOC_FULLNAME_CAPACITY)
     {
       char *togo_heap = new char[size+1];
-      togo.extract(0,size, togo_heap);
+      togo.extract(0,size, togo_heap, "");
       togo_heap[size] = '\0';
       init(togo_heap);
       delete []togo_heap;
     }
   else 
     {
-      togo.extract(0,size, myLocaleID);
+      togo.extract(0,size, myLocaleID, "");
       myLocaleID[size] = '\0';
       init(myLocaleID);
     }
@@ -333,9 +328,9 @@ Locale::hashCode() const
 void
 Locale::setHashCode()
 {
-  UnicodeString fullNameUString = language;
-  fullNameUString += country;
-  fullNameUString += variant;
+  UnicodeString fullNameUString(language, "");
+  fullNameUString += UnicodeString(country, "");
+  fullNameUString += UnicodeString(variant, "");
   const UChar *key       = fullNameUString.getUChars();
   int32_t len           = fullNameUString.size();
   int32_t hash          = 0;
@@ -842,10 +837,14 @@ void Locale::setFromPOSIXID(const char *posixID)
 void Locale::setFromPOSIXID(const UnicodeString &posixIDString)
 {
     char onStack[20];
-    char* buffer = onStack;
-    if (posixIDString.size() >= 20)      buffer = new char[posixIDString.size()+1];
-    posixIDString.extract(0, posixIDString.size(), buffer);
-    buffer[posixIDString.size()] = '\0';
+    char* buffer;
+    int32_t length = posixIDString.length();
+    if (length >= 20) {
+        buffer = new char[length+1];
+    } else {
+        buffer = onStack;
+    }
+    buffer[posixIDString.extract(0, length, buffer, "")] = '\0';
     init(buffer);
     if (buffer != onStack)    delete [] buffer;
 }

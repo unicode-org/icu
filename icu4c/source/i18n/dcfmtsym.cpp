@@ -45,14 +45,14 @@ const UChar DecimalFormatSymbols::fgLastResortIntlCurrency[] = { 0x00A4, 0x00A4,
 
 const UnicodeString DecimalFormatSymbols::fgLastResortNumberElements[] =
 {
-    ".",    // decimal separator
-    "",     // group (thousands) separator
-    ";",    // pattern separator
-    "%",    // percent sign
-    "0",    // native 0 digit
-    "#",    // pattern digit
-    "-",    // minus sign
-    "E",    // exponential
+    UnicodeString(".", ""),    // decimal separator
+    UnicodeString(),           // group (thousands) separator
+    UnicodeString(";", ""),    // pattern separator
+    UnicodeString("%", ""),    // percent sign
+    UnicodeString("0", ""),    // native 0 digit
+    UnicodeString("#", ""),    // pattern digit
+    UnicodeString("-", ""),    // minus sign
+    UnicodeString("E", ""),    // exponential
     DecimalFormatSymbols::fgLastResortPerMill,  // per mill
     DecimalFormatSymbols::fgLastResortInfinity, // infinite
     DecimalFormatSymbols::fgLastResortNaN       // NaN
@@ -62,7 +62,7 @@ const UnicodeString DecimalFormatSymbols::fgLastResortCurrencyElements[] =
 {
     DecimalFormatSymbols::fgLastResortCurrency,
     DecimalFormatSymbols::fgLastResortIntlCurrency,
-    "."     // monetary decimal separator
+    UnicodeString(".", "")     // monetary decimal separator
 };
 
 // -------------------------------------
