@@ -342,9 +342,9 @@ public class JamoTest extends TransliteratorTest {
         "\ucc38\uc870\ud558\uc2ed\uc2dc\uc624.";
 
     // TransliteratorTest override
-    void expectAux(String tag, String summary, boolean pass,
+    boolean expectAux(String tag, String summary, boolean pass,
                    String expectedResult) {
-        super.expectAux(tag, jamoToName(summary),
+        return super.expectAux(tag, jamoToName(summary),
                         pass, jamoToName(expectedResult));
     }
 

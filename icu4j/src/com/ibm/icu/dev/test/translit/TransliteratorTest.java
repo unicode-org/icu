@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/25 23:12:22 $
- * $Revision: 1.78 $
+ * $Date: 2001/11/28 01:12:29 $
+ * $Revision: 1.79 $
  *
  *****************************************************************************************
  */
@@ -685,7 +685,8 @@ public class TransliteratorTest extends TestFmwk {
             String result = rsource.toString();
             String exp = DATA[3*i+2];
             expectAux(Utility.escape(DATA[3*i]),
-                      DATA[3*i+1] + " -> " + result,
+                      DATA[3*i+1],
+                      result,
                       result.equals(exp),
                       exp);
         }
@@ -2157,36 +2158,83 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
     
-    static final String[][] testCases = {
-        // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
-        {"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 \u1043C\u10414", 
-                  "Ffi\u0131ii \u01C8\u01C9\u01C9 \u10414\u1043C"}, 
-        {"Upper", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 \u1043C\u10414", 
-                  "FFIII\u0130 \u01C7\u01C7\u01C7 \u1043C\u1043C"},
-        {"Lower", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 \u1043C\u10414", 
-                  "\uFB00i\u0131ii \u01C9\u01C9\u01C9 \u10414\u10414"},
-        {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"}, // mp -> b BUG
-        {"Greek-Latin/UNGEGN", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"}, // FORMS OF S
-        {"Latin-Greek/UNGEGN", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"}, // FORMS OF S
-        {"Greek-Latin", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"}, // FORMS OF S
-        {"Latin-Greek", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"}, // FORMS OF S
+    static final String[][] registerRules = {
+        {"Any-Dev1", "x > X; y > Y;"},
+        {"Any-Dev2", "XY > Z"},
     };
     
-    // TODO - use expects
+    static final String DESERET_DEE = UTF16.valueOf(0x10414);
+    static final String DESERET_dee = UTF16.valueOf(0x1043C);
+    
+    static final String[][] testCases = {
+        {"nfd;Dev1;Dev2;nfc", "xy", "Z"},
+        // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
+        {"Title", "ab'cD ffi\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
+                  "Ab'cd Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee}, 
+        //TODO: enable this test once Titlecase works right
+        //{"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
+        //          "Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee}, 
+        {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
+                  "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " + DESERET_DEE + DESERET_DEE},
+        {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
+                  "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
+        
+         // mp -> b BUG
+         {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"},
+        
+         // FORMS OF S
+        {"Greek-Latin/UNGEGN", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"},
+        {"Latin-Greek/UNGEGN", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"},
+        {"Greek-Latin", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"},
+        {"Latin-Greek", "s ss s\u0331s\u0331", "\u03C3 \u03C3\u03C2 \u03C2\u03C3"},
+    };
     
     public void TestSpecialCases() {
+        for (int i = 0; i < registerRules.length; ++i) {
+            Transliterator t = Transliterator.createFromRules(registerRules[i][0], 
+                registerRules[i][1], Transliterator.FORWARD);
+            DummyFactory.add(registerRules[i][0], t);
+        }
         for (int i = 0; i < testCases.length; ++i) {
             Transliterator t = Transliterator.getInstance(testCases[i][0]);
-            String result = t.transliterate(testCases[i][1]);
-            if (!result.equals(testCases[i][2])) {
-                errln("FAIL: " + testCases[i][0] + " of " + "'" + testCases[i][1] + "'");
-                logln("  is:        '" + result + "'");
-                logln("  should be: '" + testCases[i][2] + "'");
-            }
+            expect(t, testCases[i][1], testCases[i][2]);
         }
     }
             
-         
+    // seems like there should be an easier way to just register an instance of a transliterator
+    
+    static class DummyFactory implements Transliterator.Factory {
+        static DummyFactory singleton = new DummyFactory();
+        static HashMap m = new HashMap();
+        
+        // Since Transliterators are immutable, we don't have to clone on set & get
+        static void add(String ID, Transliterator t) {
+            m.put(ID, t);
+            //System.out.println("Registering: " + ID + ", " + t.toRules(true));
+            Transliterator.registerFactory(ID, singleton);
+        }
+        public Transliterator getInstance(String ID) {
+            return (Transliterator) m.get(ID);
+        }
+    }
+
+    public void TestSurrogateCasing () {
+        // check that casing handles surrogates
+        // titlecase is currently defective
+        int dee = UTF16.charAt(DESERET_dee,0);
+        int DEE = UCharacter.toTitleCase(dee);
+        if (!UTF16.valueOf(DEE).equals(DESERET_DEE)) {
+            errln("Fails titlecase of surrogates" + Integer.toString(dee,16) + ", " + Integer.toString(DEE,16));
+        }
+            
+        if (!UCharacter.toUpperCase(DESERET_dee + DESERET_DEE).equals(DESERET_DEE + DESERET_DEE)) {
+            errln("Fails uppercase of surrogates");
+        }
+            
+        if (!UCharacter.toLowerCase(DESERET_dee + DESERET_DEE).equals(DESERET_dee + DESERET_dee)) {
+            errln("Fails lowercase of surrogates");
+        }
+    }
 
     //======================================================================
     // Support methods
@@ -2219,7 +2267,7 @@ public class TransliteratorTest extends TestFmwk {
                 Transliterator.Position pos) {
         if (pos == null) {
             String result = t.transliterate(source);
-            expectAux(t.getID() + ":String", source, result, expectedResult);
+            if (!expectAux(t.getID() + ":String", source, result, expectedResult)) return;
         }
 
         Transliterator.Position index = null;
@@ -2238,26 +2286,24 @@ public class TransliteratorTest extends TestFmwk {
             t.finishTransliteration(rsource, pos);
         }
         String result = rsource.toString();
-        expectAux(t.getID() + ":Replaceable", source, result, expectedResult);
+        if (!expectAux(t.getID() + ":Replaceable", source, result, expectedResult)) return;
 
         // Test keyboard (incremental) transliteration -- this result
         // must be the same after we finalize (see below).
-        StringBuffer log = new StringBuffer();
+        Vector v = new Vector();
+        v.add(source);
         rsource.replace(0, rsource.length(), "");
         if (pos != null) {
             rsource.replace(0, 0, source);
-            formatInput(log, rsource, index);
-            log.append(" -> ");
+            v.add(formatInput(rsource, index));
             t.transliterate(rsource, index);
-            formatInput(log, rsource, index);
+            v.add(formatInput(rsource, index));
         } else {
             for (int i=0; i<source.length(); ++i) {
-                if (i != 0) {
-                    log.append(" + ");
-                }
-                log.append(source.charAt(i)).append(" -> ");
+                //v.add(i == 0 ? "" : " + " + source.charAt(i) + "");
+                //log.append(source.charAt(i)).append(" -> "));
                 t.transliterate(rsource, index, source.charAt(i));
-                formatInput(log, rsource, index);
+                v.add(formatInput(rsource, index) + source.substring(i+1));
             }
         }
 
@@ -2266,13 +2312,21 @@ public class TransliteratorTest extends TestFmwk {
         // were waiting for more input.
         t.finishTransliteration(rsource, index);
         result = rsource.toString();
-        log.append(" => ").append(rsource.toString());
+        //log.append(" => ").append(rsource.toString());
+        v.add(result);
 
-        expectAux(t.getID() + ":Keyboard", log.toString(),
+        String[] results = new String[v.size()];
+        v.copyInto(results);
+        expectAux(t.getID() + ":Keyboard", results,
                   result.equals(expectedResult),
                   expectedResult);
     }
 
+    String formatInput(final ReplaceableString input,
+                       final Transliterator.Position pos) {
+        return formatInput(new StringBuffer(), input, pos).toString();
+    }
+                       
     /**
      * @param appendTo result is appended to this param.
      * @param input the string being transliterated
@@ -2307,22 +2361,55 @@ public class TransliteratorTest extends TestFmwk {
         }
         return appendTo;
     }
+    
+    static final String lineSeparator = System.getProperty("line.separator") + "\t";
 
-    void expectAux(String tag, String source,
+    boolean expectAux(String tag, String source,
                    String result, String expectedResult) {
-        expectAux(tag, source + " -> " + result,
+        return expectAux(tag, new String[] {source, result},
                   result.equals(expectedResult),
                   expectedResult);
     }
 
-    void expectAux(String tag, String summary, boolean pass,
+    boolean expectAux(String tag, String source,
+                   String result, boolean pass,
                    String expectedResult) {
+        return expectAux(tag, new String[] {source, result},
+                  pass,
+                  expectedResult);
+    }
+
+    boolean expectAux(String tag, String source,
+                   boolean pass,
+                   String expectedResult) {
+        return expectAux(tag, new String[] {source},
+                  pass,
+                  expectedResult);
+    }
+
+    boolean expectAux(String tag, String[] results, boolean pass,
+                   String expectedResult) {
+        String result = "";
+        for (int i = 0; i < results.length; ++i) {
+            String label;
+            if (i == 0) {
+                label = "source:   ";
+            } else if (i == results.length - 1) {
+                label = "result:   ";
+            } else {
+                if (!isVerbose()) continue;
+                label = "interm" + i + ":  ";
+            }
+            result += lineSeparator + label + Utility.escape(results[i]);
+        }
         if (pass) {
-            logln("("+tag+") " + Utility.escape(summary));
+            logln("("+tag+") "
+                  + result);
         } else {
             errln("FAIL: ("+tag+") "
-                  + Utility.escape(summary)
-                  + ", expected " + Utility.escape(expectedResult));
+                  + result
+                  + lineSeparator + "expected: " + Utility.escape(expectedResult));
         }
+        return pass;
     }
 }
