@@ -89,7 +89,7 @@ LATIN_1                  iso-8859-1     { MIME } ibm-819 cp819 latin1 8859-1 csi
 US-ASCII { MIME }        ascii ascii-7 ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6
 ISO_2022                         ISO-2022 { MIME } 2022 cp2022
 ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA MIME } csISO2022JP
-ISO_2022,locale=ja,version=1     ISO-2022-JP-1 JIS 
+ISO_2022,locale=ja,version=1     ISO-2022-JP-1 JIS JIS_Encoding { IANA }
 ISO_2022,locale=ja,version=2     ISO-2022-JP-2 { IANA MIME } csISO2022JP2
 ISO_2022,locale=ja,version=3     JIS7
 ISO_2022,locale=ja,version=4     JIS8
@@ -264,7 +264,6 @@ ibm-1132_P100-2000     ibm-1132 ibm-1132_STD
 ibm-1133_P100-2000     ibm-1133 ibm-1133_STD
 ibm-1137_P100-2000     ibm-1137 ibm-1137_STD
 ibm-1381_P110-2000     ibm-1381 ibm-1381_VSUB_VPUA
-ibm-1381_X110-2000     ibm-1381_VSUB_PUA
 ibm-806_P100-2000      ibm-806 ibm-806_VSUB
 ibm-870_P100-2000      ibm-870 CP870 IBM870 { IANA } ibm-870_STD  ebcdic-cp-roece ebcdic-cp-yu csIBM870
 ibm-875_P100-2000      ibm-875 cp875 ibm-875 875 ibm-875_STD 
