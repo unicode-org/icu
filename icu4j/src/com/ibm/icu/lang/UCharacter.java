@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/02/12 01:50:45 $ 
-* $Revision: 1.65 $
+* $Date: 2003/02/14 18:21:32 $ 
+* $Revision: 1.66 $
 *
 *******************************************************************************
 */
@@ -20,6 +20,7 @@ import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
@@ -3430,6 +3431,20 @@ public final class UCharacter
     }
     
     /**
+     * Returns true if the given code point is "case unique".  A case
+     * unique code point has the property that the case fold closure
+     * of that code point contains only itself.
+     *
+     * @param cp the code point to test
+     * @return true if cp's case fold closure contains only itself.
+     * @see com.ibm.icu.text.UnicodeSet.closeOver
+     * @draft ICU 2.6
+     */
+    public static boolean isCaseUnique(int cp) {
+        return CASE_UNIQUE.contains(cp);
+    }
+
+    /**
      * Return numeric value of Han code points.
      * <br> This returns the value of Han 'numeric' code points,
      * including those for zero, ten, hundred, thousand, ten thousand,
@@ -3967,6 +3982,11 @@ public final class UCharacter
     private static final int[] PROPERTY_DATA_;
     private static final int PROPERTY_INITIAL_VALUE_;
                                                     
+    /**
+     * Set of all case unique characters.
+     */     
+    private static final UnicodeSet CASE_UNIQUE;
+
 	// block to initialise character property database
     static
     {
@@ -3983,6 +4003,10 @@ public final class UCharacter
         {
             throw new RuntimeException(e.getMessage());
         }
+
+        // This pattern is machine-generated.
+        // See com.ibm.icu.dev.tools.UnicodeSetCloseOver
+        CASE_UNIQUE = new UnicodeSet("[^A-Za-z\u00B5\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u0130\u0132-\u0137\u0139-\u017F\u0181-\u018C\u018E-\u0199\u019C-\u01A9\u01AC-\u01B9\u01BC-\u01BD\u01BF\u01C4-\u0220\u0222-\u0233\u0253-\u0254\u0256-\u0257\u0259\u025B\u0260\u0263\u0268-\u0269\u026F\u0272\u0275\u0280\u0283\u0288\u028A-\u028B\u0292\u0345\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03CE\u03D0-\u03D1\u03D5-\u03D6\u03D8-\u03F2\u03F4-\u03F5\u0400-\u0481\u048A-\u04BF\u04C1-\u04CE\u04D0-\u04F5\u04F8-\u04F9\u0500-\u050F\u0531-\u0556\u0561-\u0587\u1E00-\u1E9B\u1EA0-\u1EF9\u1F00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2126\u212A-\u212B\u2160-\u217F\u24B6-\u24E9\uFB00-\uFB06\uFB13-\uFB17\uFF21-\uFF3A\uFF41-\uFF5A\\U00010400-\\U00010425\\U00010428-\\U0001044D]", false);
     }                                                    
     
     /**
