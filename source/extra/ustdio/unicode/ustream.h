@@ -28,10 +28,10 @@
  */
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
-U_COMMON_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
+U_USTDIO_API std::ostream &operator<<(std::ostream& stream, const UnicodeString& s);
 #elif U_IOSTREAM_SOURCE >= 198506
 #include <iostream.h>
-U_COMMON_API ostream &operator<<(ostream& stream, const UnicodeString& s);
+U_USTDIO_API ostream &operator<<(ostream& stream, const UnicodeString& s);
 #endif
 
 /* TODO: We should add the operator<< for UChar* and UDate. Also add the operator>>. */
