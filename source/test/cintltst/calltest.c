@@ -39,10 +39,7 @@ void addAllTests(TestNode** root)
     addBreakIter(root);
     addFormatTest(root);
     addConvert(root);
-    /*
-    synwee : TODO
     addCollTest(root);
-    */
     addComplexTest(root);
     addUDataTest(root);
     addUTransTest(root);
