@@ -622,6 +622,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   CE = ucmp32_get(mapping, element->cPoints[0]);
 
   if(element->cSize > 1) { /* we're adding a contraction */
+    /* OR A SURROGATE - HERE IS WHERE THE DISTINCTION HAS TO BE MADE! */
     UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
     uprv_memcpy(composed, element, sizeof(UCAElements));
     composed->cPoints = composed->uchars;
