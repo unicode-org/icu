@@ -137,7 +137,3 @@ u_init(UErrorCode *status) {
     UTRACE_EXIT_STATUS(*status);
 }
 
-
-U_CFUNC UBool u_isUInit() {
-    return gICUInitialized;
-}

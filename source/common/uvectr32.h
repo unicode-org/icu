@@ -105,9 +105,9 @@ public:
 
     int32_t lastElementi(void) const;
 
-    int32_t indexOf(int32_t obj, int32_t startIndex = 0) const;
+    int32_t indexOf(int32_t elem, int32_t startIndex = 0) const;
 
-    UBool contains(int32_t obj) const;
+    UBool contains(int32_t elem) const;
 
     UBool containsAll(const UVector32& other) const;
 
@@ -154,7 +154,7 @@ public:
      * Insert the given integer into this vector at its sorted position.
      * The current elements are assumed to be sorted already.
      */
-    void sortedInsert(int32_t obj, UErrorCode& ec);
+    void sortedInsert(int32_t elem, UErrorCode& ec);
 
     /**
      * Returns a pointer to the internal array holding the vector.
@@ -189,7 +189,7 @@ private:
     //  In the original UVector, these were in a separate derived class, UStack.
     //  Here in UVector32, they are all together.
 public:
-    UBool empty(void) const;
+    UBool empty(void) const;   // TODO:  redundant, same as empty().  Remove it?
 
     int32_t peeki(void) const;
     

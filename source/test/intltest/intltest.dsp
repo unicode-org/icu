@@ -432,6 +432,14 @@ SOURCE=.\uobjtest.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\astrotst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\astrotst.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\calcasts.cpp
 # End Source File
 # Begin Source File
@@ -517,14 +525,6 @@ SOURCE=.\incaltst.cpp
 # Begin Source File
 
 SOURCE=.\incaltst.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\astrotst.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\astrotst.h
 # End Source File
 # Begin Source File
 
@@ -761,6 +761,10 @@ SOURCE=.\testidna.cpp
 # Begin Source File
 
 SOURCE=.\testidna.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\v32test.h
 # End Source File
 # End Group
 # Begin Group "misc"
@@ -1023,5 +1027,9 @@ SOURCE=.\unhxtrts.cpp
 SOURCE=.\unhxtrts.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\v32test.cpp
+# End Source File
 # End Target
 # End Project

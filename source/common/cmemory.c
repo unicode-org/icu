@@ -121,6 +121,3 @@ U_CFUNC UBool cmemory_inUse() {
     return gHeapInUse;
 }
 
-U_CFUNC void cmemory_clearInUse() {
-    gHeapInUse = FALSE;
-}
