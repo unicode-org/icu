@@ -196,17 +196,20 @@ CompactIntArray* ucmp32_openAdopt(uint16_t *indexArray, int32_t *newValues, int3
  
 void ucmp32_close(    CompactIntArray* this_obj) 
 {
-  icu_free(this_obj->fArray);
-    this_obj->fArray = NULL;
-    icu_free(this_obj->fIndex);
-    this_obj->fIndex = NULL;
-    this_obj->fCount = 0;
-    this_obj->fCompact = FALSE;
+  if(this_obj != NULL) {
+    if(this_obj->fArray != NULL) {
+      icu_free(this_obj->fArray);
+    }
+    if(this_obj->fIndex != NULL) {
+      icu_free(this_obj->fIndex);
+    }
+    icu_free(this_obj);
+  }
 }
 
 bool_t ucmp32_isBogus(const CompactIntArray* this_obj)
 {
-    return this_obj->fBogus;
+    return this_obj == NULL || this_obj->fBogus;
 }
 
 void ucmp32_expand(CompactIntArray* this_obj) {
