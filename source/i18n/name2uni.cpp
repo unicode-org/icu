@@ -110,7 +110,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
             break;
 
         case 1: // after open delimiter
-            // Look for [-a-zA-Z0-9+].  If \w+ is found, convert it
+            // Look for [-a-zA-Z0-9<>].  If \w+ is found, convert it
             // to a single space.  If closeDelimiter is found, exit
             // the loop.  If any other character is found, exit the
             // loop.  If the limit is found, exit the loop.
@@ -134,35 +134,11 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 buf[ibuf] = 0; // Add terminating zero
                 UErrorCode status = U_ZERO_ERROR;
 
-                UChar32 ch = UCHAR_MAX_VALUE + 1;
+                UChar32 ch;
 
-		// Try in this order: U+XXXX (and bail out if we cannot
-		// decode it), or Unicode name then Unicode 1.0 name.
-
-		if (ibuf >= 6 && buf[0] == 0x0055 && buf[1] == 0x002B) {
-		    // We've found a U+ prefix, compute the value.
-		    ch = 0;
-		    int32_t jbuf = 2;
-		    for (; jbuf < ibuf; ++jbuf) {
-			if (buf[jbuf] >= 0x0030 && buf[jbuf] <= 0x0039) {
-			    ch = (ch << 4) + buf[jbuf] - 0x0030;
-			} else if (buf[jbuf] >= 0x0041 && buf[jbuf] <= 0x0046) {
-			    ch = (ch << 4) + buf[jbuf] - 0x0041 + 10;
-			} else {
-			    ch = UCHAR_MAX_VALUE + 1;
-			    break;
-			}
-		    }
-		} else {
-                    u_UCharsToChars(buf, cbuf, ibuf+1);
-		    ch = u_charFromName(U_UNICODE_CHAR_NAME, cbuf, &status);
-		    if (ch == (UChar32) 0xFFFF || U_FAILURE(status)) {
-			status = U_ZERO_ERROR;
-			ch = u_charFromName(U_UNICODE_10_CHAR_NAME, cbuf, &status);
-		    }
-		    if (ch == (UChar32) 0xFFFF) ch = UCHAR_MAX_VALUE + 1;
-		}
-                if (ch != (UChar32) (UCHAR_MAX_VALUE + 1) && U_SUCCESS(status)) {
+		u_UCharsToChars(buf, cbuf, ibuf+1);
+		ch = u_charFromName(U_EXTENDED_CHAR_NAME, cbuf, &status);
+                if (U_SUCCESS(status)) {
                     // Lookup succeeded
                     str.truncate(0);
                     str.append(ch);
@@ -182,15 +158,13 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 continue;
             }
             
-            //if (c >= (UChar)0x0061 && c <= (UChar)0x007A) {
-            //    c -= 0x0020; // [a-z] => [A-Z]
-            //}
-
-            // Check if c =~ [-A-Z0-9+]
+            // Check if c =~ [-A-Za-z0-9<> ]
             if (c == (UChar)0x002D ||
                 (c >= (UChar)0x0041 && c <= (UChar)0x005A) ||
+                (c >= (UChar)0x0061 && c <= (UChar)0x007A) ||
                 (c >= (UChar)0x0030 && c <= (UChar)0x0039) ||
-                c == (UChar)0x002B) {
+                c == (UChar)0x003C || c == (UChar)0x003E ||
+		c == 0x0020) {
                 buf[ibuf++] = (char) c;
                 // If we go a bit past the longest possible name then abort
                 if (ibuf == (LONGEST_NAME + 4)) {
