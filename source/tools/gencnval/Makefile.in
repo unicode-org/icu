@@ -10,7 +10,7 @@ VERSION = @VERSION@
 SECTION = 8
 
 MANX_FILES = $(TARGET).$(SECTION)
-MAN5_FILES = convrtrs.txt.5 cnvalias.dat.5
+MAN5_FILES = convrtrs.txt.5 $(srcdir)/cnvalias.dat.5
 
 GENERATED_MAN_FILES = $(TARGET).$(SECTION) convrtrs.txt.5
 
