@@ -625,7 +625,7 @@ pathToFullPath(const char *path) {
 #if (U_FILE_SEP_CHAR != U_TREE_ENTRY_SEP_CHAR)
     /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
     for(;fullPath[n];n++) {
-      if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR)
+      if(fullPath[n] == U_TREE_ENTRY_SEP_CHAR) {
         fullPath[n] = U_FILE_SEP_CHAR;
       }
     }
