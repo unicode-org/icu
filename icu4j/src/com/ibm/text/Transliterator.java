@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/17 05:24:58 $
- * $Revision: 1.57 $
+ * $Date: 2001/11/17 20:56:13 $
+ * $Revision: 1.58 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.57 $ $Date: 2001/11/17 05:24:58 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.58 $ $Date: 2001/11/17 20:56:13 $
  */
 public abstract class Transliterator {
     /**
@@ -1597,7 +1597,7 @@ public abstract class Transliterator {
 
     /**
      * Register two targets as being inverses of one another.  For
-     * example, calling registerSpecialInverses("NFC", "NFD") causes
+     * example, calling registerSpecialInverses("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
      *
      * <pre>NFC => NFD
@@ -1620,11 +1620,19 @@ public abstract class Transliterator {
      * have canonical casing (the casing desired to be produced when
      * an inverse is formed) and should contain no whitespace or other
      * extraneous characters.
+     *
+     * @param target the target against which to register the inverse
+     * @param inverseTarget the inverse of target, that is
+     * Any-target.getInverse() => Any-inverseTarget
+     * @param bidirectional if true, register the reverse relation
+     * as well, that is, Any-inverseTarget.getInverse() => Any-target
      */
-    public static void registerSpecialInverses(String target1, String target2) {
-        specialInverses.put(new CaseInsensitiveString(target1), target2);
-        if (!target1.equalsIgnoreCase(target2)) {
-            specialInverses.put(new CaseInsensitiveString(target2), target1);
+    static void registerSpecialInverse(String target,
+                                       String inverseTarget,
+                                       boolean bidirectional) {
+        specialInverses.put(new CaseInsensitiveString(target), inverseTarget);
+        if (bidirectional && !target.equalsIgnoreCase(inverseTarget)) {
+            specialInverses.put(new CaseInsensitiveString(inverseTarget), target);
         }
     }
 
@@ -1751,7 +1759,7 @@ public abstract class Transliterator {
         }
 
         specialInverses = new Hashtable();
-        registerSpecialInverses(NullTransliterator.SHORT_ID, NullTransliterator.SHORT_ID);
+        registerSpecialInverse(NullTransliterator.SHORT_ID, NullTransliterator.SHORT_ID, false);
 
         // Register non-rule-based transliterators
         registerClass(HexToUnicodeTransliterator._ID,

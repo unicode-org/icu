@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/LowercaseTransliterator.java,v $ 
- * $Date: 2001/11/17 20:45:35 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/17 20:56:13 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -33,6 +33,8 @@ class LowercaseTransliterator extends TransformTransliterator {
                 return new LowercaseTransliterator();
             }
         });
+
+        Transliterator.registerSpecialInverse("Lower", "Upper", true);
     }
 
     private Locale loc;
