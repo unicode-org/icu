@@ -24,15 +24,16 @@ const char LowercaseTransliterator::_ID[] = "Any-Lower";
  * Constructs a transliterator.
  */
 LowercaseTransliterator::LowercaseTransliterator(const Locale& theLoc) : Transliterator(_ID, 0),
-    loc(theLoc) , buffer(0) {
-    buffer = new UChar[u_getMaxCaseExpansion()];
+    loc(theLoc) , buffer(0)
+{
+    buffer = (UChar *)uprv_malloc(u_getMaxCaseExpansion()*sizeof(buffer[0]));
 }
 
 /**
  * Destructor.
  */
 LowercaseTransliterator::~LowercaseTransliterator() {
-    delete [] buffer;
+    uprv_free(buffer);
 }
 
 /**
@@ -40,8 +41,9 @@ LowercaseTransliterator::~LowercaseTransliterator() {
  */
 LowercaseTransliterator::LowercaseTransliterator(const LowercaseTransliterator& o) :
     Transliterator(o),
-    loc(o.loc), buffer(0) {
-    buffer = new UChar[u_getMaxCaseExpansion()];
+    loc(o.loc), buffer(0)
+{
+    buffer = (UChar *)uprv_malloc(u_getMaxCaseExpansion()*sizeof(buffer[0]));
 }
 
 /**
