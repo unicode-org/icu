@@ -750,6 +750,10 @@ TimeZone::createCustomTimeZone(const UnicodeString& id)
 
         UErrorCode success = U_ZERO_ERROR;
         numberFormat = NumberFormat::createInstance(success);
+        /* test for buffer overflows */
+        if (U_FAILURE(success)) {
+            return 0;
+        }
         numberFormat->setParseIntegerOnly(TRUE);
 
     

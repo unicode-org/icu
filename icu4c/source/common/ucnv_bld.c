@@ -312,6 +312,11 @@ parseConverterOptions(const char *inName,
     char c;
     int32_t len = 0;
 
+    /* test for buffer overflows*/
+    if (U_FAILURE (*err)){
+        return;
+    }
+
     /* copy the converter name itself to cnvName */
     while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
         if (++len>=UCNV_MAX_CONVERTER_NAME_LENGTH) {

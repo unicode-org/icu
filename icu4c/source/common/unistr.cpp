@@ -680,6 +680,10 @@ UnicodeString::doCaseCompare(int32_t start,
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t result=unorm_cmpEquivFold(chars, length, srcChars, srcLength,
                                       options|U_COMPARE_IGNORE_CASE, &errorCode);
+    /* test for buffer overflows */
+    if (U_FAILURE(errorCode)) {
+        return 0;
+    }
     if(result!=0) {
       return (int8_t)(result >> 24 | 1);
     }

@@ -721,7 +721,16 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fLookAhead = 0;
     fTagVal    = 0;
     fPositions = NULL;
+    /* test for buffer overflows */
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     fDtran     = new UVector(lastInputSymbol+1, *fStatus);
+    /* test for NULL */
+    if (fDtran == NULL) {
+        *fStatus = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     fDtran->setSize(lastInputSymbol+1);    // fDtran needs to be pre-sized.
                                            //   It is indexed by input symbols, and will
                                            //   hold  the next state number for each

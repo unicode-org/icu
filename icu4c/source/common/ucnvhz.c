@@ -66,6 +66,10 @@ _HZOpen(UConverter *cnv, const char *name,const char *locale,uint32_t options, U
     cnv->fromUnicodeStatus= 0;
     cnv->mode=0;
     cnv->fromUSurrogateLead=0x0000;
+    /* test for buffer overflows */
+    if (U_FAILURE(*errorCode)) {
+        return;
+    }
     cnv->extraInfo = uprv_malloc (sizeof (UConverterDataHZ));
     if(cnv->extraInfo != NULL){
         ((UConverterDataHZ*)cnv->extraInfo)->gbConverter = ucnv_open("ibm-1386",errorCode);
@@ -145,7 +149,10 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
     UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UConverterDataHZ* myData=(UConverterDataHZ*)(args->converter->extraInfo);
-       
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }  
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -357,7 +364,11 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     UBool isEscapeAppended =FALSE;
     int len =0;
     const char* escSeq=NULL;
-    
+
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -578,7 +589,11 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
     char *p;
     char buffer[4];
     p = buffer;
-    
+
+    /* test for buffer overflows */
+    if (U_FAILURE(*err)) {
+        return;
+    }
     if( convData->isTargetUCharDBCS){
         *p++= UCNV_TILDE;
         *p++= UCNV_CLOSE_BRACE;

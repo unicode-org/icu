@@ -147,6 +147,10 @@ RuleBasedCollator::construct(const UnicodeString& rules,
                              UColAttributeValue decompositionMode,
                              UErrorCode& status)
 {
+  /* test for buffer overflows */
+  if (U_FAILURE(status)) {
+      return;
+  }
   ucollator = ucol_openRules(rules.getBuffer(), rules.length(),
                              decompositionMode, collationStrength,
                              NULL, &status);

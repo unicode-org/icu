@@ -578,6 +578,11 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     ResourceBundle zoneArray = resource.get(fgZoneStringsTag, status);
     fZoneStringsRowCount = zoneArray.getSize();
     ResourceBundle zoneRow = zoneArray.get((int32_t)0, status);
+
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     /* TODO: Fix the case where the zoneStrings is not a perfect square array of information. */
     fZoneStringsColCount = zoneRow.getSize();
     fZoneStrings = new UnicodeString * [fZoneStringsRowCount];
@@ -601,6 +606,10 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
 
     // {sfb} fixed to handle 1-based weekdays
     ResourceBundle weekdaysData = resource.get(fgDayNamesTag, status);
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     fWeekdaysCount = weekdaysData.getSize();
     fWeekdays = new UnicodeString[fWeekdaysCount+1];
     /* test for NULL */
@@ -614,11 +623,16 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     }
 
     ResourceBundle lsweekdaysData = resource.get(fgDayAbbreviationsTag, status);
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     fShortWeekdaysCount = lsweekdaysData.getSize();
     fShortWeekdays = new UnicodeString[fShortWeekdaysCount+1];
     /* test for NULL */
     if (fShortWeekdays == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
+        delete [] fWeekdays;
         return;
     }
     fShortWeekdays[0] = UnicodeString();
@@ -626,6 +640,12 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
         fShortWeekdays[i+1] = lsweekdaysData.getStringEx(i, status);
     }
 
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        delete [] fWeekdays;
+        delete [] fShortWeekdays;
+        return;
+    }
     fWeekdaysCount = fShortWeekdaysCount = 8;
     
     // If the locale data does not include new pattern chars, use the defaults

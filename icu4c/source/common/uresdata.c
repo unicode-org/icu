@@ -199,6 +199,10 @@ isAcceptable(void *context,
 U_CFUNC UBool
 res_load(ResourceData *pResData,
          const char *path, const char *name, UErrorCode *errorCode) {
+    /* test for buffer overflows */
+    if (U_FAILURE(*errorCode)) {
+        return FALSE;
+    }
     /* load the ResourceBundle file */
     pResData->data=udata_openChoice(path, "res", name, isAcceptable, NULL, errorCode);
     if(U_FAILURE(*errorCode)) {

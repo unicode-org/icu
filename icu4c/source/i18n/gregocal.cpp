@@ -204,6 +204,10 @@ GregorianCalendar::GregorianCalendar(int32_t year, int32_t month, int32_t date,
         fNormalizedGregorianCutover(fGregorianCutover),
         fGregorianCutoverYear(1582)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     set(Calendar::ERA, AD);
     set(Calendar::YEAR, year);
     set(Calendar::MONTH, month);
@@ -219,6 +223,10 @@ GregorianCalendar::GregorianCalendar(int32_t year, int32_t month, int32_t date,
         fNormalizedGregorianCutover(fGregorianCutover),
         fGregorianCutoverYear(1582)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     set(Calendar::ERA, AD);
     set(Calendar::YEAR, year);
     set(Calendar::MONTH, month);
@@ -237,6 +245,10 @@ GregorianCalendar::GregorianCalendar(int32_t year, int32_t month, int32_t date,
         fNormalizedGregorianCutover(fGregorianCutover),
         fGregorianCutoverYear(1582)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     set(Calendar::ERA, AD);
     set(Calendar::YEAR, year);
     set(Calendar::MONTH, month);
@@ -643,6 +655,10 @@ GregorianCalendar::computeFields(UErrorCode& status)
 
     // Time to fields takes the wall millis (Standard or DST).
     timeToFields(localMillis, FALSE, status);
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     uint8_t era         = (uint8_t) internalGetEra();
     int32_t year         = internalGet(YEAR);
@@ -682,6 +698,10 @@ GregorianCalendar::computeFields(UErrorCode& status)
         timeToFields(dstMillis, FALSE, status);
     }
 
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     // Fill in all time-related fields based on millisInDay.  Call internalSet()
     // so as not to perturb flags.
     internalSet(MILLISECOND, millisInDay % 1000);
@@ -776,6 +796,10 @@ GregorianCalendar::boundsCheck(int32_t value, EDateFields field) const
 UDate 
 GregorianCalendar::getEpochDay(UErrorCode& status) 
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return 0.0;
+    }
     complete(status);
     // Divide by 1000 (convert to seconds) in order to prevent overflow when
     // dealing with UDate(Long.MIN_VALUE) and UDate(Long.MAX_VALUE).
@@ -950,6 +974,10 @@ GregorianCalendar::computeTime(UErrorCode& status)
                                    monthLength(internalGet(MONTH)),
                                    status) -
             zoneOffset;
+        /* test for buffer overflows */
+        if (U_FAILURE(status)) {
+            return;
+        }
         // Note: Because we pass in wall millisInDay, rather than
         // standard millisInDay, we interpret "1:00 am" on the day
         // of cessation of DST as "1:00 am Std" (assuming the time
@@ -1524,6 +1552,10 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
     int32_t min = 0, max = 0, gap;
     if (field >= 0 && field < FIELD_COUNT) {
         complete(status);
+        /* test for buffer overflows */
+        if (U_FAILURE(status)) {
+            return;
+        }
         min = getMinimum(field);
         max = getMaximum(field);
     }
@@ -1577,6 +1609,10 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
         {
             // Assume min == 0 in calculations below
             UDate start = getTime(status);
+            /* test for buffer overflows */
+            if (U_FAILURE(status)) {
+                return;
+            }
             int32_t oldHour = internalGet(field);
             int32_t newHour = (oldHour + amount) % (max + 1);
             if(newHour < 0)

@@ -233,7 +233,10 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
   uint32_t st = 0;
   uint32_t t1, t2;
   int32_t pos;
-
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return;
+  }
 
   UColToken *tok = lh->first;
   uint32_t tokStrength = tok->strength;
@@ -362,6 +365,10 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
 /* TODO: rename to enum names */
   uint32_t high, low, count=1;
   uint32_t maxByte = (strength == UCOL_TERTIARY)?0x3F:0xFF;
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return 0;
+  }
 
   if(strength == UCOL_SECONDARY) {
     low = UCOL_COMMON_TOP2<<24;
@@ -387,6 +394,10 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
 }
 
 U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_t* highs, UColToken *tok, uint32_t fStrength, UErrorCode *status) {
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return 0;
+  }
   uint32_t strength = tok->strength;
   uint32_t low = lows[fStrength*3+strength];
   uint32_t high = highs[fStrength*3+strength];
@@ -492,7 +503,10 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
 }
 
 U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
-
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return;
+  }
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
 
@@ -525,6 +539,10 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
 
   tok->toInsert = t[tok->strength];
   ucol_inv_getGapPositions(src, lh, status);
+  /* test for buffer overflows */
+  if (U_FAILURE(*status)) {
+      return;
+  }
 
 #if UCOL_DEBUG
   fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);

@@ -168,6 +168,10 @@ void SimpleTimeZone::construct(int32_t rawOffsetGMT,
                                int32_t savingsDST,
                                UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     this->rawOffset      = rawOffsetGMT;
     this->startMonth     = savingsStartMonth;
     this->startDay       = savingsStartDay;
@@ -315,6 +319,10 @@ void
 SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                              int32_t time, TimeMode mode, UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     startMonth     = (int8_t)month;
     startDay       = (int8_t)dayOfWeekInMonth;
     startDayOfWeek = (int8_t)dayOfWeek;
@@ -366,6 +374,10 @@ void
 SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                            int32_t time, TimeMode mode, UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     endMonth     = (int8_t)month;
     endDay       = (int8_t)dayOfWeekInMonth;
     endDayOfWeek = (int8_t)dayOfWeek;
@@ -409,6 +421,10 @@ int32_t
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // Check the month before indexing into staticMonthLength. This
     // duplicates the test that occurs in the 7-argument getOffset(),
     // however, this is unavoidable. We don't mind because this method, in
@@ -428,6 +444,10 @@ int32_t
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                           uint8_t dayOfWeek, int32_t millis, 
                           int32_t monthLength, UErrorCode& status) const {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     // Check the month before indexing into staticMonthLength. This
     // duplicates a test that occurs in the 9-argument getOffset(),
     // however, this is unavoidable. We don't mind because this method, in
@@ -696,6 +716,10 @@ UBool SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
         status = U_MEMORY_ALLOCATION_ERROR;
         return FALSE;
     }
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
     gc->setTime(date, status);
     UBool result = gc->inDaylightTime(status);
     delete gc;
@@ -803,6 +827,10 @@ SimpleTimeZone::hasSameRules(const TimeZone& other) const
 void 
 SimpleTimeZone::decodeRules(UErrorCode& status)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return;
+    }
     decodeStartRule(status);
     decodeEndRule(status);
 }

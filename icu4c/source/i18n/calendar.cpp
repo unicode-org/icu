@@ -96,6 +96,10 @@ Calendar::Calendar(UErrorCode& success)
     fLenient(TRUE),
     fZone(0)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(success)) {
+        return;
+    }
     clear();
     fZone = TimeZone::createDefault();
     setWeekCountData(Locale::getDefault(), success);
@@ -113,6 +117,10 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
     fLenient(TRUE),
     fZone(0)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(success)) {
+        return;
+    }
     if(zone == 0) {
         success = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -136,6 +144,10 @@ Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& succ
     fLenient(TRUE),
     fZone(0)
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(success)) {
+        return;
+    }
     clear();
     fZone = zone.clone();
     setWeekCountData(aLocale, success);
@@ -719,6 +731,10 @@ Calendar::getMinimalDaysInFirstWeek() const
 int32_t
 Calendar::getActualMinimum(EDateFields field, UErrorCode& status) const
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t fieldValue = getGreatestMinimum(field);
     int32_t endValue = getMinimum(field);
 
@@ -762,6 +778,10 @@ Calendar::getActualMinimum(EDateFields field, UErrorCode& status) const
 int32_t
 Calendar::getActualMaximum(EDateFields field, UErrorCode& status) const
 {
+    /* test for buffer overflows */
+    if (U_FAILURE(status)) {
+        return 0;
+    }
     int32_t fieldValue = getLeastMaximum(field);
     int32_t endValue = getMaximum(field);
 
