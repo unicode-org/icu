@@ -50,11 +50,32 @@ typedef enum UCharIteratorOrigin {
     UITER_START, UITER_CURRENT, UITER_LIMIT, UITER_ZERO, UITER_LENGTH
 } UCharIteratorOrigin;
 
+/** Constants for UCharIterator. @draft ICU 2.6 */
+enum {
+    /**
+     * Constant value that may be returned by UCharIteratorMove
+     * indicating that the final UTF-16 index is not known, but that the move succeeded.
+     * This can occur after a setState() when the current UTF-16 index is not known
+     * and a move relative to the current index is requested.
+     * It would be very inefficient to have to count from the beginning of the text
+     * just to get the current index after moving relative to it.
+     * The actual index can be determined with getIndex(UITER_CURRENT)
+     * which will count the UChars if necessary.
+     *
+     * @draft ICU 2.6
+     */
+    UITER_MOVE_UNKNOWN_INDEX=-2
+};
+
 /**
  * Function type declaration for UCharIterator.getIndex().
  *
  * Gets the current position, or the start or limit of the
  * iteration range.
+ *
+ * This function may perform slowly for UITER_CURRENT after setState() was called,
+ * or for UITER_LENGTH, because an iterator implementation may have to count
+ * UChars if the underlying storage is not UTF-16.
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @param origin get the 0, start, limit, length, or current index
@@ -78,13 +99,26 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
  * or backward by specifying a positive or negative delta.
  * Out of bounds movement will be pinned to the start or limit.
  *
+ * This function may perform slowly for moving relative to UITER_LENGTH
+ * because an iterator implementation may have to count the rest of the
+ * UChars if the native storage is not UTF-16.
+ *
+ * When moving relative to the current position after setState() was called,
+ * move() may return UITER_MOVE_UNKNOWN_INDEX (-2) to avoid an inefficient
+ * determination of the actual UTF-16 index.
+ * The actual index can be determined with getIndex(UITER_CURRENT)
+ * which will count the UChars if necessary.
+ * See UITER_MOVE_UNKNOWN_INDEX for details.
+ *
  * @param iter the UCharIterator structure ("this pointer")
  * @param delta can be positive, zero, or negative
  * @param origin move relative to the 0, start, limit, length, or current index
- * @return the new index, or U_SENTINEL on an error condition.
+ * @return the new index, or U_SENTINEL on an error condition,
+ *         or UITER_MOVE_UNKNOWN_INDEX when the index is not known.
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
+ * @see UITER_MOVE_UNKNOWN_INDEX
  * @draft ICU 2.1
  */
 typedef int32_t U_CALLCONV
@@ -180,6 +214,72 @@ UCharIteratorPrevious(UCharIterator *iter);
 typedef int32_t U_CALLCONV
 UCharIteratorReserved(UCharIterator *iter, int32_t something);
 
+/**
+ * Function type declaration for UCharIterator.getState().
+ *
+ * Get the "state" of the iterator in the form of a single 32-bit word.
+ * It is recommended that the state value be calculated to be as small as
+ * is feasible. For strings with limited lengths, fewer than 32 bits may
+ * be sufficient.
+ *
+ * This is used together with setState()/UCharIteratorSetState
+ * to save and restore the iterator position more efficiently than with
+ * getIndex()/move().
+ *
+ * With some UCharIterator implementations (e.g., UTF-8),
+ * getting and setting the UTF-16 index with existing functions
+ * (getIndex(UITER_CURRENT) followed by move(pos, UITER_ZERO)) is possible but
+ * relatively slow because the iterator has to "walk" from a known index
+ * to the requested one.
+ * This takes more time the farther it needs to go.
+ *
+ * An opaque state value allows an iterator implementation to provide
+ * an internal index (UTF-8: the source byte array index) for
+ * fast, constant-time restoration.
+ *
+ * After calling setState(), a getIndex(UITER_CURRENT) may be slow because
+ * the UTF-16 index may not be restored as well, but the iterator can deliver
+ * the correct text contents and move relative to the current position
+ * without performance degradation.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @return the state word
+ *
+ * @see UCharIterator
+ * @see UCharIteratorSetState
+ * @draft ICU 2.6
+ */
+typedef uint32_t U_CALLCONV
+UCharIteratorGetState(const UCharIterator *iter);
+
+/**
+ * Function type declaration for UCharIterator.setState().
+ *
+ * Restore the "state" of the iterator using a state word from a getState() call.
+ * The iterator object need not be the same one as for which getState() was called,
+ * but it must be of the same type (set up using the same uiter_setXYZ function)
+ * and it must iterate over the same string
+ * (binary identical regardless of memory address).
+ * For more about the state word see UCharIteratorGetState.
+ *
+ * After calling setState(), a getIndex(UITER_CURRENT) may be slow because
+ * the UTF-16 index may not be restored as well, but the iterator can deliver
+ * the correct text contents and move relative to the current position
+ * without performance degradation.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @param state the state word from a getState() call
+ *              on a same-type, same-string iterator
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                   which must not indicate a failure before the function call.
+ *
+ * @see UCharIterator
+ * @see UCharIteratorGetState
+ * @draft ICU 2.6
+ */
+typedef void U_CALLCONV
+UCharIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
+
 
 /**
  * C API for code unit iteration.
@@ -238,7 +338,7 @@ struct UCharIterator {
     int32_t limit;
 
     /**
-     * (protected) Not currently used by any instance.
+     * (protected) Used by UTF-8 iterators and possibly others.
      * @draft ICU 2.1
      */
     int32_t reservedField;
@@ -316,6 +416,25 @@ struct UCharIterator {
      * @draft ICU 2.1
      */
     UCharIteratorReserved *reservedFn;
+
+    /**
+     * (public) Return the state of the iterator, to be restored later with setState().
+     * This function pointer is NULL if the iterator does not implement it.
+     *
+     * @see UCharIteratorGet
+     * @draft ICU 2.6
+     */
+    UCharIteratorGetState *getState;
+
+    /**
+     * (public) Restore the iterator state from the state word from a call
+     * to getState().
+     * This function pointer is NULL if the iterator does not implement it.
+     *
+     * @see UCharIteratorSet
+     * @draft ICU 2.6
+     */
+    UCharIteratorSetState *setState;
 };
 
 /**
@@ -374,6 +493,39 @@ U_CAPI UChar32 U_EXPORT2
 uiter_previous32(UCharIterator *iter);
 
 /**
+ * Get the "state" of the iterator in the form of a single 32-bit word.
+ * This is a convenience function that calls iter->getState(iter)
+ * if iter->getState is not NULL; if it is NULL, then 0xffffffff is returned.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @return the state word
+ *
+ * @see UCharIterator
+ * @see UCharIteratorGetState
+ * @draft ICU 2.6
+ */
+U_CAPI uint32_t U_EXPORT2
+uiter_getState(const UCharIterator *iter);
+
+/**
+ * Restore the "state" of the iterator using a state word from a getState() call.
+ * This is a convenience function that calls iter->setState(iter, state, pErrorCode)
+ * if iter->setState is not NULL; if it is NULL, then U_UNSUPPORTED_ERROR is set.
+ *
+ * @param iter the UCharIterator structure ("this pointer")
+ * @param state the state word from a getState() call
+ *              on a same-type, same-string iterator
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                   which must not indicate a failure before the function call.
+ *
+ * @see UCharIterator
+ * @see UCharIteratorSetState
+ * @draft ICU 2.6
+ */
+U_CAPI void U_EXPORT2
+uiter_setState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode);
+
+/**
  * Set up a UCharIterator to iterate over a string.
  *
  * Sets the UCharIterator function pointers for iteration over the string s
@@ -384,6 +536,9 @@ uiter_previous32(UCharIterator *iter);
  *
  * The string pointer s is set into UCharIterator.context without copying
  * or reallocating the string contents.
+ *
+ * getState() simply returns the current index.
+ * move() will always return the final index.
  *
  * @param iter UCharIterator structure to be set for iteration
  * @param s String to iterate over
@@ -402,6 +557,9 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
  * Everything works just like with a normal UChar iterator (uiter_setString),
  * except that UChars are assembled from byte pairs,
  * and that the length argument here indicates an even number of bytes.
+ *
+ * getState() simply returns the current index.
+ * move() will always return the final index.
  *
  * @param iter UCharIterator structure to be set for iteration
  * @param s UTF-16BE string to iterate over
@@ -431,6 +589,15 @@ uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
  * The UTF-8 string pointer s is set into UCharIterator.context without copying
  * or reallocating the string contents.
  *
+ * getState() returns a state value consisting of
+ * - the current UTF-8 source byte index (bits 31..1)
+ * - a flag (bit 0) that indicates whether the UChar position is in the middle
+ *   of a surrogate pair
+ *   (from a 4-byte UTF-8 sequence for the corresponding supplementary code point)
+ *
+ * getState() cannot also encode the UTF-16 index in the state value.
+ * move() after setState() may return UITER_MOVE_UNKNOWN_INDEX.
+ *
  * @param iter UCharIterator structure to be set for iteration
  * @param s UTF-8 string to iterate over
  * @param length Length of s in bytes, or -1 if NUL-terminated
@@ -454,6 +621,9 @@ uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
  * The other "protected" UCharIterator fields are set to 0 and will be ignored.
  * The iteration index and boundaries are controlled by the CharacterIterator.
  *
+ * getState() simply returns the current index.
+ * move() will always return the final index.
+ *
  * @param iter UCharIterator structure to be set for iteration
  * @param charIter CharacterIterator to wrap
  *
@@ -475,6 +645,9 @@ uiter_setCharacterIterator(UCharIterator *iter, CharacterIterator *charIter);
  *
  * The Replaceable pointer rep is set into UCharIterator.context without copying
  * or cloning/reallocating the Replaceable object.
+ *
+ * getState() simply returns the current index.
+ * move() will always return the final index.
  *
  * @param iter UCharIterator structure to be set for iteration
  * @param rep Replaceable to iterate over
