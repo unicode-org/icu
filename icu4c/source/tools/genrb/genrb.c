@@ -84,7 +84,7 @@ UOption options[]={
 
 int
 main(int argc,
-     char **argv)
+     char* argv[])
 {
   int i;
   UErrorCode status = U_ZERO_ERROR;
@@ -95,10 +95,10 @@ main(int argc,
   UBool verbose;
 
 #ifdef XP_MAC_CONSOLE
-  argc = ccommand(&argv);
+  argc = ccommand((char***)&argv);
 #endif
 
-  argc = u_parseArgs(argc, (const char**)argv, sizeof(options)/sizeof(options[0]), options);
+  argc = u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
   /* error handling, printing usage message */
   if(argc<0) {
