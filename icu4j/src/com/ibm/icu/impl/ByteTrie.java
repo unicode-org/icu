@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ByteTrie.java,v $ 
-* $Date: 2002/02/16 03:05:36 $ 
-* $Revision: 1.4 $
+* $Date: 2002/03/02 02:20:01 $ 
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -43,8 +43,9 @@ import com.ibm.icu.lang.UCharacter;
 *   int thirdindex = index2[secondindex] + ch & LAST_FOUR_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.4 $
+* @version            $Revision: 1.5 $
 * @author             Syn Wee Quek
+* @deprecated release 2.1, since icu4c has written their own tool
 */
 public final class ByteTrie
 {
@@ -53,6 +54,7 @@ public final class ByteTrie
   /**
   * constructor 
   * @param array of data to be populated into trie
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   public ByteTrie(byte array[])
   {
@@ -65,6 +67,7 @@ public final class ByteTrie
   * @param stage1 array of the first set of indexes
   * @param stage2 array of the second set of indexes
   * @param stage3 array of data
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   public ByteTrie(int stage1[], int stage2[], byte stage3[])
   {
@@ -79,6 +82,7 @@ public final class ByteTrie
   * Getting the trie data corresponding to the argument index.
   * @param index to be manipulated into corresponding trie index
   * @return trie value at index
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   public byte getValue(int index)
   {
@@ -177,6 +181,7 @@ public final class ByteTrie
   /**
   * Converts trie to a readable format
   * @return string version of the trie
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   public String toString()
   {

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieBuilder.java,v $ 
-* $Date: 2002/02/16 03:05:37 $ 
-* $Revision: 1.3 $
+* $Date: 2002/03/02 02:20:01 $ 
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -41,8 +41,9 @@ package com.ibm.icu.impl;
 *   int thirdindex = index2[secondindex] + ch & LAST_SET_OF_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.3 $
+* @version            $Revision: 1.4 $
 * @author             Syn Wee Quek
+* @deprecated release 2.1, since icu4c has written their own tool
 */
 final class TrieBuilder
 {
@@ -63,6 +64,7 @@ final class TrieBuilder
   *        values which indexes to valuearray.
   * @param valuearray result value array compact value array
   * @return size of valuearray
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   static int build(byte array[], int start, int length, int blocksize, 
                    int indexarray[], byte valuearray[])
@@ -121,6 +123,7 @@ final class TrieBuilder
   *        values which indexes to valuearray.
   * @param valuearray result value array compact value array
   * @return size of valuearray
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   static int build(char array[], int start, int length, int blocksize, 
                    int indexarray[], char valuearray[])
@@ -179,6 +182,7 @@ final class TrieBuilder
   *        values which indexes to valuearray.
   * @param valuearray result value array compact value array
   * @return size of valuearray 
+  * @deprecated release 2.1, since icu4c has written their own tool
   */
   static int build(int array[], int start, int length, int blocksize, 
                    int indexarray[], int valuearray[])
