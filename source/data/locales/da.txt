@@ -62,7 +62,7 @@ da {
         CN { "Kina" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
-        CU { "Cuba" }
+        //CU { "Cuba" }
         CV { "Kap Verde" }
         CX { "Jule\u00F8en" }
         CY { "Cypern" }

@@ -35,7 +35,7 @@ fr {
         BT { "Bhoutan" }
         BV { "\u00CEle Bouvet" }
         BY { "B\u00E9larus" }
-        BZ { "Belize" }
+        //BZ { "Belize" }
 
         CC { "\u00CEles Cocos" }
         CD { "R\u00E9publique D\u00E9mocratique du Congo" }
@@ -186,7 +186,7 @@ fr {
 
         VA { "Le Saint-Si\u00E8ge (Etat de la Cit\u00E9 du Vatican)" }
         VC { "Saint Vincent et les Grenadines" }
-        VE { "Venezuela" }
+        //VE { "Venezuela" }
         VG { "\u00CEles Vierges Britanniques" }
         VI { "\u00CEles Vierges des \u00C9tats-Unis" }
 
