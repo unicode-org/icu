@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/01/28 18:55:43 $
- * $Revision: 1.85 $
+ * $Date: 2003/02/07 01:22:43 $
+ * $Revision: 1.86 $
  *
  *****************************************************************************************
  */
@@ -19,6 +19,10 @@ import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.util.VersionInfo;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.Iterator;
 
@@ -3028,5 +3032,314 @@ public class UnicodeSet extends UnicodeFilter {
         ppos.setIndex(close + (posix ? 2 : 1));
 
         return this;
+    }
+
+    //----------------------------------------------------------------
+    // Case folding API
+    //----------------------------------------------------------------
+
+    /**
+     * Bitmask for closeOver() indicating letter case.  This may be
+     * ORed together with other selectors.
+     * @draft ICU 2.6
+     */
+    static final int CASE = 1;
+
+    /**
+     * Close this set over the given attribute.  For the attribute
+     * CASE, the result is to modify this set so that:
+     *
+     * 1. For each character or string 'a' in this set, all strings
+     * 'b' such that foldCase(a) == foldCase(b) are added to this set.
+     * For most 'a' that are single characters, 'b' will have
+     * b.length() == 1.
+     *
+     * 2. For each string 'e' in the resulting set, if e !=
+     * foldCase(e), 'e' will be removed.
+     *
+     * Example: [aq\u00DF{Bc}{bC}{Fi}] => [aAqQ\u00DF\uFB01{ss}{bc}{fi}]
+     *
+     * @param attribute bitmask for attributes to close over.
+     * Currently only the CASE bit is supported.  Any undefined bits
+     * are ignored.
+     * @return a reference to this set.
+     * @draft ICU 2.6
+     */
+    public UnicodeSet closeOver(int attribute) {
+        if ((attribute & CASE) != 0) {
+            UnicodeSet foldSet = new UnicodeSet();
+            int n = getRangeCount();
+            for (int i=0; i<n; ++i) {
+                int start = getRangeStart(i);
+                int end   = getRangeEnd(i);
+                for (int cp=start; cp<=end; ++cp) {
+                    String fold = (String) TO_CASE_FOLD.get(UTF16.valueOf(cp));
+                    if (fold == null) {
+                        foldSet.add(cp);
+                    } else {
+                        String[] variants = (String[]) FROM_CASE_FOLD.get(fold);
+                        for (int j=0; j<variants.length; ++j) {
+                            foldSet.add(variants[j]);
+                        }
+                    }
+                }
+            }
+            if (strings.size() > 0) {
+                Iterator it = strings.iterator();
+                while (it.hasNext()) {
+                    // Fold first, so "Fi" => "fi".  There is no
+                    // TO_CASE_FOLD mapping for "Fi" but there is "fi"
+                    String s = UCharacter.foldCase((String) it.next(), true);
+                    foldSet.add(s); // false for turkish
+                    String fold = (String) TO_CASE_FOLD.get(s);
+                    if (fold != null) {
+                        String[] variants = (String[]) FROM_CASE_FOLD.get(fold);
+                        for (int j=0; j<variants.length; ++j) {
+                            foldSet.add(variants[j]);
+                        }
+                    }
+                }
+            }
+            if (foldSet.strings.size() > 0) {
+                Iterator it = foldSet.strings.iterator();
+                while (it.hasNext()) {
+                    String s = (String) it.next();
+                    if (!UCharacter.foldCase(s, true).equals(s)) { // false for turkish
+                        it.remove();
+                    }
+                }
+            }
+            set(foldSet);
+        }
+        return this;
+    }
+
+    //----------------------------------------------------------------
+    // Case folding implementation
+    //----------------------------------------------------------------
+    
+    // global tables (could be precompiled)
+    private static Map FROM_CASE_FOLD = new HashMap();
+    private static Map TO_CASE_FOLD = new HashMap();
+    //private static int MAX_FOLD_LEN = 0;
+    
+    // This exception list is generated on the console by turning on the GENERATED flag, 
+    // which MUST be false for normal operation.
+    // Once the list is generated, it is pasted in here.
+    // A bit of a cludge, but this bootstrapping is the easiest way 
+    // to get around certain complications in the data.
+    
+    private final static String[][] FOLD_EXCEPTIONS = {
+        // a\N{MODIFIER LETTER RIGHT HALF RING}
+        {"a\u02BE","A\u02BE","a\u02BE",},
+        // ff
+        {"ff","FF","Ff","fF","ff",},
+        // ffi
+        {"ffi","FFI","FFi","FfI","Ffi","F\uFB01","fFI","fFi","ffI","ffi","f\uFB01","\uFB00I","\uFB00i",},
+        // ffl
+        {"ffl","FFL","FFl","FfL","Ffl","F\uFB02","fFL","fFl","ffL","ffl","f\uFB02","\uFB00L","\uFB00l",},
+        // fi
+        {"fi","FI","Fi","fI","fi",},
+        // fl
+        {"fl","FL","Fl","fL","fl",},
+        // h\N{COMBINING MACRON BELOW}
+        {"h\u0331","H\u0331","h\u0331",},
+        // i\N{COMBINING DOT ABOVE}
+        {"i\u0307","I\u0307","i\u0307",},
+        // j\N{COMBINING CARON}
+        {"j\u030C","J\u030C","j\u030C",},
+        // ss
+        {"ss","SS","Ss","S\u017F","sS","ss","s\u017F","\u017FS","\u017Fs","\u017F\u017F",},
+        // st
+        {"st","ST","St","sT","st","\u017FT","\u017Ft",},
+        // t\N{COMBINING DIAERESIS}
+        {"t\u0308","T\u0308","t\u0308",},
+        // w\N{COMBINING RING ABOVE}
+        {"w\u030A","W\u030A","w\u030A",},
+        // y\N{COMBINING RING ABOVE}
+        {"y\u030A","Y\u030A","y\u030A",},
+        // \N{MODIFIER LETTER APOSTROPHE}n
+        {"\u02BCn","\u02BCN","\u02BCn",},
+        // \N{GREEK SMALL LETTER ALPHA WITH TONOS}\N{GREEK SMALL LETTER IOTA}
+        {"\u03AC\u03B9","\u0386\u0345","\u0386\u0399","\u0386\u03B9","\u0386\u1FBE","\u03AC\u0345","\u03AC\u0399","\u03AC\u03B9","\u03AC\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH TONOS}\N{GREEK SMALL LETTER IOTA}
+        {"\u03AE\u03B9","\u0389\u0345","\u0389\u0399","\u0389\u03B9","\u0389\u1FBE","\u03AE\u0345","\u03AE\u0399","\u03AE\u03B9","\u03AE\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03B1\u0342","\u0391\u0342","\u03B1\u0342",},
+        // \N{GREEK SMALL LETTER ALPHA}\N{COMBINING GREEK PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u03B1\u0342\u03B9","\u0391\u0342\u0345","\u0391\u0342\u0399","\u0391\u0342\u03B9","\u0391\u0342\u1FBE",
+            "\u03B1\u0342\u0345","\u03B1\u0342\u0399","\u03B1\u0342\u03B9","\u03B1\u0342\u1FBE","\u1FB6\u0345",
+            "\u1FB6\u0399","\u1FB6\u03B9","\u1FB6\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA}\N{GREEK SMALL LETTER IOTA}
+        {"\u03B1\u03B9","\u0391\u0345","\u0391\u0399","\u0391\u03B9","\u0391\u1FBE","\u03B1\u0345","\u03B1\u0399","\u03B1\u03B9","\u03B1\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03B7\u0342","\u0397\u0342","\u03B7\u0342",},
+        // \N{GREEK SMALL LETTER ETA}\N{COMBINING GREEK PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u03B7\u0342\u03B9","\u0397\u0342\u0345","\u0397\u0342\u0399","\u0397\u0342\u03B9","\u0397\u0342\u1FBE",
+            "\u03B7\u0342\u0345","\u03B7\u0342\u0399","\u03B7\u0342\u03B9","\u03B7\u0342\u1FBE","\u1FC6\u0345","\u1FC6\u0399",
+            "\u1FC6\u03B9","\u1FC6\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA}\N{GREEK SMALL LETTER IOTA}
+        {"\u03B7\u03B9","\u0397\u0345","\u0397\u0399","\u0397\u03B9","\u0397\u1FBE","\u03B7\u0345","\u03B7\u0399","\u03B7\u03B9","\u03B7\u1FBE",},
+        // \N{GREEK SMALL LETTER IOTA}\N{COMBINING DIAERESIS}\N{COMBINING GRAVE ACCENT}
+        {"\u03B9\u0308\u0300","\u0345\u0308\u0300","\u0399\u0308\u0300","\u03B9\u0308\u0300","\u1FBE\u0308\u0300",},
+        // \N{GREEK SMALL LETTER IOTA}\N{COMBINING DIAERESIS}\N{COMBINING ACUTE ACCENT}
+        {"\u03B9\u0308\u0301","\u0345\u0308\u0301","\u0399\u0308\u0301","\u03B9\u0308\u0301","\u1FBE\u0308\u0301",},
+        // \N{GREEK SMALL LETTER IOTA}\N{COMBINING DIAERESIS}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03B9\u0308\u0342","\u0345\u0308\u0342","\u0399\u0308\u0342","\u03B9\u0308\u0342","\u1FBE\u0308\u0342",},
+        // \N{GREEK SMALL LETTER IOTA}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03B9\u0342","\u0345\u0342","\u0399\u0342","\u03B9\u0342","\u1FBE\u0342",},
+        // \N{GREEK SMALL LETTER RHO}\N{COMBINING COMMA ABOVE}
+        {"\u03C1\u0313","\u03A1\u0313","\u03C1\u0313","\u03F1\u0313",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING DIAERESIS}\N{COMBINING GRAVE ACCENT}
+        {"\u03C5\u0308\u0300","\u03A5\u0308\u0300","\u03C5\u0308\u0300",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING DIAERESIS}\N{COMBINING ACUTE ACCENT}
+        {"\u03C5\u0308\u0301","\u03A5\u0308\u0301","\u03C5\u0308\u0301",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING DIAERESIS}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03C5\u0308\u0342","\u03A5\u0308\u0342","\u03C5\u0308\u0342",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING COMMA ABOVE}
+        {"\u03C5\u0313","\u03A5\u0313","\u03C5\u0313",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING COMMA ABOVE}\N{COMBINING GRAVE ACCENT}
+        {"\u03C5\u0313\u0300","\u03A5\u0313\u0300","\u03C5\u0313\u0300","\u1F50\u0300",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING COMMA ABOVE}\N{COMBINING ACUTE ACCENT}
+        {"\u03C5\u0313\u0301","\u03A5\u0313\u0301","\u03C5\u0313\u0301","\u1F50\u0301",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING COMMA ABOVE}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03C5\u0313\u0342","\u03A5\u0313\u0342","\u03C5\u0313\u0342","\u1F50\u0342",},
+        // \N{GREEK SMALL LETTER UPSILON}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03C5\u0342","\u03A5\u0342","\u03C5\u0342",},
+        // \N{GREEK SMALL LETTER OMEGA}\N{COMBINING GREEK PERISPOMENI}
+        {"\u03C9\u0342","\u03A9\u0342","\u03C9\u0342","\u2126\u0342",},
+        // \N{GREEK SMALL LETTER OMEGA}\N{COMBINING GREEK PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u03C9\u0342\u03B9","\u03A9\u0342\u0345","\u03A9\u0342\u0399","\u03A9\u0342\u03B9","\u03A9\u0342\u1FBE","\u03C9\u0342\u0345","\u03C9\u0342\u0399","\u03C9\u0342\u03B9","\u03C9\u0342\u1FBE","\u1FF6\u0345",
+            "\u1FF6\u0399","\u1FF6\u03B9","\u1FF6\u1FBE","\u2126\u0342\u0345","\u2126\u0342\u0399","\u2126\u0342\u03B9","\u2126\u0342\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA}\N{GREEK SMALL LETTER IOTA}
+        {"\u03C9\u03B9","\u03A9\u0345","\u03A9\u0399","\u03A9\u03B9","\u03A9\u1FBE","\u03C9\u0345","\u03C9\u0399","\u03C9\u03B9","\u03C9\u1FBE","\u2126\u0345","\u2126\u0399","\u2126\u03B9","\u2126\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH TONOS}\N{GREEK SMALL LETTER IOTA}
+        {"\u03CE\u03B9","\u038F\u0345","\u038F\u0399","\u038F\u03B9","\u038F\u1FBE","\u03CE\u0345","\u03CE\u0399","\u03CE\u03B9","\u03CE\u1FBE",},
+        // \N{ARMENIAN SMALL LETTER ECH}\N{ARMENIAN SMALL LETTER YIWN}
+        {"\u0565\u0582","\u0535\u0552","\u0535\u0582","\u0565\u0552","\u0565\u0582",},
+        // \N{ARMENIAN SMALL LETTER MEN}\N{ARMENIAN SMALL LETTER ECH}
+        {"\u0574\u0565","\u0544\u0535","\u0544\u0565","\u0574\u0535","\u0574\u0565",},
+        // \N{ARMENIAN SMALL LETTER MEN}\N{ARMENIAN SMALL LETTER INI}
+        {"\u0574\u056B","\u0544\u053B","\u0544\u056B","\u0574\u053B","\u0574\u056B",},
+        // \N{ARMENIAN SMALL LETTER MEN}\N{ARMENIAN SMALL LETTER XEH}
+        {"\u0574\u056D","\u0544\u053D","\u0544\u056D","\u0574\u053D","\u0574\u056D",},
+        // \N{ARMENIAN SMALL LETTER MEN}\N{ARMENIAN SMALL LETTER NOW}
+        {"\u0574\u0576","\u0544\u0546","\u0544\u0576","\u0574\u0546","\u0574\u0576",},
+        // \N{ARMENIAN SMALL LETTER VEW}\N{ARMENIAN SMALL LETTER NOW}
+        {"\u057E\u0576","\u054E\u0546","\u054E\u0576","\u057E\u0546","\u057E\u0576",},
+        // \N{GREEK SMALL LETTER ALPHA WITH PSILI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F00\u03B9","\u1F00\u0345","\u1F00\u0399","\u1F00\u03B9","\u1F00\u1FBE","\u1F08\u0345","\u1F08\u0399","\u1F08\u03B9","\u1F08\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH DASIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F01\u03B9","\u1F01\u0345","\u1F01\u0399","\u1F01\u03B9","\u1F01\u1FBE","\u1F09\u0345","\u1F09\u0399","\u1F09\u03B9","\u1F09\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH PSILI AND VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F02\u03B9","\u1F02\u0345","\u1F02\u0399","\u1F02\u03B9","\u1F02\u1FBE","\u1F0A\u0345","\u1F0A\u0399","\u1F0A\u03B9","\u1F0A\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH DASIA AND VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F03\u03B9","\u1F03\u0345","\u1F03\u0399","\u1F03\u03B9","\u1F03\u1FBE","\u1F0B\u0345","\u1F0B\u0399","\u1F0B\u03B9","\u1F0B\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH PSILI AND OXIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F04\u03B9","\u1F04\u0345","\u1F04\u0399","\u1F04\u03B9","\u1F04\u1FBE","\u1F0C\u0345","\u1F0C\u0399","\u1F0C\u03B9","\u1F0C\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH DASIA AND OXIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F05\u03B9","\u1F05\u0345","\u1F05\u0399","\u1F05\u03B9","\u1F05\u1FBE","\u1F0D\u0345","\u1F0D\u0399","\u1F0D\u03B9","\u1F0D\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH PSILI AND PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F06\u03B9","\u1F06\u0345","\u1F06\u0399","\u1F06\u03B9","\u1F06\u1FBE","\u1F0E\u0345","\u1F0E\u0399","\u1F0E\u03B9","\u1F0E\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH DASIA AND PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F07\u03B9","\u1F07\u0345","\u1F07\u0399","\u1F07\u03B9","\u1F07\u1FBE","\u1F0F\u0345","\u1F0F\u0399","\u1F0F\u03B9","\u1F0F\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH PSILI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F20\u03B9","\u1F20\u0345","\u1F20\u0399","\u1F20\u03B9","\u1F20\u1FBE","\u1F28\u0345","\u1F28\u0399","\u1F28\u03B9","\u1F28\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH DASIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F21\u03B9","\u1F21\u0345","\u1F21\u0399","\u1F21\u03B9","\u1F21\u1FBE","\u1F29\u0345","\u1F29\u0399","\u1F29\u03B9","\u1F29\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH PSILI AND VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F22\u03B9","\u1F22\u0345","\u1F22\u0399","\u1F22\u03B9","\u1F22\u1FBE","\u1F2A\u0345","\u1F2A\u0399","\u1F2A\u03B9","\u1F2A\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH DASIA AND VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F23\u03B9","\u1F23\u0345","\u1F23\u0399","\u1F23\u03B9","\u1F23\u1FBE","\u1F2B\u0345","\u1F2B\u0399","\u1F2B\u03B9","\u1F2B\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH PSILI AND OXIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F24\u03B9","\u1F24\u0345","\u1F24\u0399","\u1F24\u03B9","\u1F24\u1FBE","\u1F2C\u0345","\u1F2C\u0399","\u1F2C\u03B9","\u1F2C\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH DASIA AND OXIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F25\u03B9","\u1F25\u0345","\u1F25\u0399","\u1F25\u03B9","\u1F25\u1FBE","\u1F2D\u0345","\u1F2D\u0399","\u1F2D\u03B9","\u1F2D\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH PSILI AND PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F26\u03B9","\u1F26\u0345","\u1F26\u0399","\u1F26\u03B9","\u1F26\u1FBE","\u1F2E\u0345","\u1F2E\u0399","\u1F2E\u03B9","\u1F2E\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH DASIA AND PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F27\u03B9","\u1F27\u0345","\u1F27\u0399","\u1F27\u03B9","\u1F27\u1FBE","\u1F2F\u0345","\u1F2F\u0399","\u1F2F\u03B9","\u1F2F\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH PSILI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F60\u03B9","\u1F60\u0345","\u1F60\u0399","\u1F60\u03B9","\u1F60\u1FBE","\u1F68\u0345","\u1F68\u0399","\u1F68\u03B9","\u1F68\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH DASIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F61\u03B9","\u1F61\u0345","\u1F61\u0399","\u1F61\u03B9","\u1F61\u1FBE","\u1F69\u0345","\u1F69\u0399","\u1F69\u03B9","\u1F69\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH PSILI AND VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F62\u03B9","\u1F62\u0345","\u1F62\u0399","\u1F62\u03B9","\u1F62\u1FBE","\u1F6A\u0345","\u1F6A\u0399","\u1F6A\u03B9","\u1F6A\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH DASIA AND VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F63\u03B9","\u1F63\u0345","\u1F63\u0399","\u1F63\u03B9","\u1F63\u1FBE","\u1F6B\u0345","\u1F6B\u0399","\u1F6B\u03B9","\u1F6B\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH PSILI AND OXIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F64\u03B9","\u1F64\u0345","\u1F64\u0399","\u1F64\u03B9","\u1F64\u1FBE","\u1F6C\u0345","\u1F6C\u0399","\u1F6C\u03B9","\u1F6C\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH DASIA AND OXIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F65\u03B9","\u1F65\u0345","\u1F65\u0399","\u1F65\u03B9","\u1F65\u1FBE","\u1F6D\u0345","\u1F6D\u0399","\u1F6D\u03B9","\u1F6D\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH PSILI AND PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F66\u03B9","\u1F66\u0345","\u1F66\u0399","\u1F66\u03B9","\u1F66\u1FBE","\u1F6E\u0345","\u1F6E\u0399","\u1F6E\u03B9","\u1F6E\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH DASIA AND PERISPOMENI}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F67\u03B9","\u1F67\u0345","\u1F67\u0399","\u1F67\u03B9","\u1F67\u1FBE","\u1F6F\u0345","\u1F6F\u0399","\u1F6F\u03B9","\u1F6F\u1FBE",},
+        // \N{GREEK SMALL LETTER ALPHA WITH VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F70\u03B9","\u1F70\u0345","\u1F70\u0399","\u1F70\u03B9","\u1F70\u1FBE","\u1FBA\u0345","\u1FBA\u0399","\u1FBA\u03B9","\u1FBA\u1FBE",},
+        // \N{GREEK SMALL LETTER ETA WITH VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F74\u03B9","\u1F74\u0345","\u1F74\u0399","\u1F74\u03B9","\u1F74\u1FBE","\u1FCA\u0345","\u1FCA\u0399","\u1FCA\u03B9","\u1FCA\u1FBE",},
+        // \N{GREEK SMALL LETTER OMEGA WITH VARIA}\N{GREEK SMALL LETTER IOTA}
+        {"\u1F7C\u03B9","\u1F7C\u0345","\u1F7C\u0399","\u1F7C\u03B9","\u1F7C\u1FBE","\u1FFA\u0345","\u1FFA\u0399","\u1FFA\u03B9","\u1FFA\u1FBE",},
+    };
+    
+    // this initializes the data used to generated the case-equivalents
+
+    static {
+        
+        // Gather up the exceptions in a form we can use
+        
+        for (int i = 0; i < FOLD_EXCEPTIONS.length; ++i) {
+            String[] exception = FOLD_EXCEPTIONS[i];
+            Set s = new HashSet();
+            // there has to be some method to do the following, but I can't find it in the collections
+            for (int j = 0; j < exception.length; ++j) {
+                s.add(exception[j]);
+            }
+            FROM_CASE_FOLD.put(exception[0], s);
+        }
+        
+        // walk through all the characters, and at every case fold result,
+        // put a set of all the characters that map to that result
+        
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            int cat = UCharacter.getType(i);
+            if (cat == Character.UNASSIGNED || cat == Character.PRIVATE_USE) continue;
+            
+            String cp = UTF16.valueOf(i);
+            String mapped = UCharacter.foldCase(cp, true); // false for turkish
+            if (mapped.equals(cp)) continue;
+            
+            // if (MAX_FOLD_LEN < mapped.length()) MAX_FOLD_LEN = mapped.length();
+            
+            // at this point, have different case folding
+            
+            Set s = (Set) FROM_CASE_FOLD.get(mapped);
+            if (s == null) {
+                s = new HashSet();
+                s.add(mapped); // add the case fold result itself
+                FROM_CASE_FOLD.put(mapped, s);
+            }
+            s.add(cp);
+            TO_CASE_FOLD.put(cp, mapped);
+            TO_CASE_FOLD.put(mapped, mapped); // add mapping to self
+        }
+        
+        // Now convert all those sets into linear arrays
+        // We can't do this in place in Java, so make a temporary target array
+        
+        // Note: This could be transformed into a single array, with offsets into it.
+        // Might be best choice in C.
+        
+        Map fromCaseFold2 = new HashMap();
+        Iterator it = FROM_CASE_FOLD.keySet().iterator();
+        while (it.hasNext()) {
+            Object key = it.next();
+            Set s = (Set) FROM_CASE_FOLD.get(key);
+            String[] temp = new String[s.size()];
+            s.toArray(temp);
+            fromCaseFold2.put(key, temp);
+        }
+        FROM_CASE_FOLD = fromCaseFold2;
     }
 }

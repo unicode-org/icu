@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/01/21 21:11:58 $ 
- * $Revision: 1.40 $
+ * $Date: 2003/02/07 01:22:43 $ 
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -929,6 +929,35 @@ public class UnicodeSetTest extends TestFmwk {
                         errln("FAIL: Couldn't create " + pat);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Test closure API.
+     */
+    public void TestCloseOver() {
+        String[] DATA = {
+            // input       selector      output
+            "[aq\u00DF{Bc}{bC}{Fi}]",
+            "1",
+            "[aAqQ\u00DF\uFB01{ss}{bc}{fi}]",
+        };
+
+        UnicodeSet s = new UnicodeSet();
+        UnicodeSet t = new UnicodeSet();
+        for (int i=0; i<DATA.length; i+=3) {
+            String pat = DATA[i];
+            int selector = Integer.parseInt(DATA[i+1]);
+            String exp = DATA[i+2];
+            s.applyPattern(pat);
+            s.closeOver(selector);
+            t.applyPattern(exp);
+            if (s.equals(t)) {
+                logln("Ok: " + pat + ".closeOver(" + selector + ") => " + exp);
+            } else {
+                errln("FAIL: " + pat + ".closeOver(" + selector + ") => " +
+                      s.toPattern(true) + ", expected " + exp);
             }
         }
     }
