@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/04/09 21:37:26 $ 
-* $Revision: 1.27 $
+* $Date: 2003/04/09 22:58:37 $ 
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -2001,9 +2001,20 @@ public final class UCharacterProperty implements Trie.DataManipulate
        
         /* add the start code point of each same-value range of each trie */
         //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
-        TrieIterator normIter = new TrieIterator(m_trie_);
-        RangeValueIterator.Element result = new RangeValueIterator.Element();
-      	/* add code points with hardcoded properties, plus the ones following them */
+        TrieIterator propsIter = new TrieIterator(m_trie_);
+        RangeValueIterator.Element propsResult = new RangeValueIterator.Element();
+      	while(propsIter.next(propsResult)){
+            set.add(propsResult.start);
+        }
+        //utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, set);
+        TrieIterator propsVectorsIter = new TrieIterator(m_additionalTrie_);
+        RangeValueIterator.Element propsVectorsResult = new RangeValueIterator.Element();
+        while(propsVectorsIter.next(propsVectorsResult)){
+            set.add(propsVectorsResult.start);
+        }
+        
+        
+        /* add code points with hardcoded properties, plus the ones following them */
 
     	/* add for IS_THAT_CONTROL_SPACE() */
 	    set.add(TAB); /* range TAB..CR */

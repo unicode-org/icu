@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/27 18:35:52 $
- * $Revision: 1.93 $
+ * $Date: 2003/04/09 23:01:03 $
+ * $Revision: 1.94 $
  *
  *****************************************************************************************
  */
@@ -20,13 +20,10 @@ import com.ibm.icu.impl.UPropertyAliases;
 import com.ibm.icu.impl.SortedSetRelation;
 import com.ibm.icu.util.VersionInfo;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.Iterator;
-import java.util.Vector;
-import java.util.Collections;
+
 
 /**
  * A mutable set of Unicode characters and multicharacter strings.  Objects of this class
@@ -312,9 +309,8 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * TODO: Replace this with an API call when such API is implemented.
      */
-    private static final UnicodeSet INCLUSIONS =
-        new UnicodeSet("[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]");
-
+    private static UnicodeSet INCLUSIONS = null;
+    
     //----------------------------------------------------------------
     // Public API
     //----------------------------------------------------------------
@@ -2707,7 +2703,15 @@ public class UnicodeSet extends UnicodeFilter {
                    v.compareTo(version) <= 0;
         }
     }
-
+    
+    private static synchronized UnicodeSet getInclusions() {
+        if (INCLUSIONS == null) {
+            UCharacterProperty property = UCharacterProperty.getInstance();
+            INCLUSIONS = property.getInclusions();         
+        }
+        return INCLUSIONS;
+    }
+    
     /**
      * Generic filter-based scanning code for UCD property UnicodeSets.
      */
@@ -2729,13 +2733,14 @@ public class UnicodeSet extends UnicodeFilter {
         clear();
 
         int startHasProperty = -1;
-        int limitRange = INCLUSIONS.getRangeCount();
+        UnicodeSet inclusions = getInclusions();
+        int limitRange = inclusions.getRangeCount();
 
         for (int j=0; j<limitRange; ++j) {
             // get current range
-            int start = INCLUSIONS.getRangeStart(j);
-            int end = INCLUSIONS.getRangeEnd(j);
-
+            int start = inclusions.getRangeStart(j);
+            int end = inclusions.getRangeEnd(j);
+            
             // for all the code points in the range, process
             for (int ch = start; ch <= end; ++ch) {
                 // only add to the unicodeset on inflection points --
