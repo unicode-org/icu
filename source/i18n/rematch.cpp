@@ -355,7 +355,8 @@ UBool RegexMatcher::find() {
             for (;;) {
                 int32_t pos = startPos;
                 U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
-                if (fPattern->fInitialChars->contains(c)) {
+                if (c<256 && fPattern->fInitialChars8->contains(c) ||
+                    c>=256 && fPattern->fInitialChars->contains(c)) {
                     MatchAt(pos, fDeferredStatus);
                     if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
@@ -1271,13 +1272,49 @@ GC_Done:
                 U_ASSERT(opValue > 0 && opValue < URX_LAST_SET);
                 UChar32  c;
                 U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
-                const UnicodeSet *s = fPattern->fStaticSets[opValue];
-                if (s->contains(c)) {
-                    success = !success;
+                if (c < 256) {
+                    Regex8BitSet *s8 = &fPattern->fStaticSets8[opValue];
+                    if (s8->contains(c)) {
+                        success = !success;
+                    }
+                } else {
+                    const UnicodeSet *s = fPattern->fStaticSets[opValue];
+                    if (s->contains(c)) {
+                        success = !success;
+                    }
                 }
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
                 }
+            }
+            break;
+            
+
+        case URX_STAT_SETREF_N:
+            {
+                // Test input character for NOT being a member of  one of 
+                //    the predefined sets (Word Characters, for example)
+                if (fp->fInputIdx >= inputLen) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+
+                U_ASSERT(opValue > 0 && opValue < URX_LAST_SET);
+                UChar32  c;
+                U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
+                if (c < 256) {
+                    Regex8BitSet *s8 = &fPattern->fStaticSets8[opValue];
+                    if (s8->contains(c) == FALSE) {
+                        break;
+                    }
+                } else {
+                    const UnicodeSet *s = fPattern->fStaticSets[opValue];
+                    if (s->contains(c) == FALSE) {
+                        break;
+                    }
+                }
+
+                fp = (REStackFrame *)fStack->popFrame(frameSize);
             }
             break;
             
@@ -1288,10 +1325,18 @@ GC_Done:
                 UChar32   c;
                 U16_NEXT(inputBuf, fp->fInputIdx, inputLen, c);
                 U_ASSERT(opValue > 0 && opValue < sets->size());
-                UnicodeSet *s = (UnicodeSet *)sets->elementAt(opValue);
-                if (s->contains(c)) {
-                    // The character is in the set.  A Match.
-                    break;
+                if (c<256) {
+                    Regex8BitSet *s8 = &fPattern->fSets8[opValue];
+                    if (s8->contains(c)) {
+                        break;
+                    }
+                } else {
+                    
+                    UnicodeSet *s = (UnicodeSet *)sets->elementAt(opValue);
+                    if (s->contains(c)) {
+                        // The character is in the set.  A Match.
+                        break;
+                    }
                 }
             }
             // Either at end of input, or the character wasn't in the set.

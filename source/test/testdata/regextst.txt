@@ -299,12 +299,14 @@
 "abc*$"                          "<0>abccc</0>"
 "ab(?:ab[xyz]\s)*"               "<0>ababy abx </0>abc"
 
-"(?:abc|a)(?:bc)+"               "<0>abc</0>"
+"(?:(abc)|a)(?:bc)+"             "<0>abc</0>"
+"(?:(abc)|a)(?:bc)*"             "<0><1>abc</1></0>"
+"^[+\-]?[0-9]*\.?[0-9]*"         "<0>123.456</0>"
 
 #
 #  Random debugging, Temporary
 #
-#"^(?:a?b?)*$"	        d         "a--"	
+#"^(?:a?b?)*$"	                  "a--"	
 "^(?:a?b?)*$"	                  "a--"
 
 "This is a string with (?:one |two |three )endings"   "<0>This is a string with two endings</0>"
