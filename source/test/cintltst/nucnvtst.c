@@ -1273,8 +1273,8 @@ TestEBCDIC_STATEFUL() {
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_ZERO_ERROR, "an invalid character [EBCDIC STATEFUL]");
     }
     ucnv_reset(cnv);
-    source=in2;
-    limit=in2+sizeof(in2);
+    source=(const char*)in2;
+    limit=(const char*)in2+sizeof(in2);
     TestNextUChar(cnv,source,limit,results2,"EBCDIC_STATEFUL(ibm-930),seq#2");
     ucnv_close(cnv);
 

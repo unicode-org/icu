@@ -39,7 +39,7 @@ addCompactArrayTest(TestNode** root)
 }
 
 void TestUCMP16API(){
-     uint16_t newValues[]={
+     int16_t newValues[]={
         0x00, 0x01, 0x02, 0x03, 0x04, 
         0x05, 0x06, 0x07, 0x08, 0x09, 
         0x00, 0x01, 0x02, 0x03, 0x04,
@@ -55,7 +55,7 @@ void TestUCMP16API(){
         0x00, 0x01, 0x02, 0x03, 0x04, 
         0x05, 0x06, 0x07, 0x08, 0x09, 
     };
-     int16_t indexArray[]={
+    uint16_t indexArray[]={
         0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65,
     };
        
@@ -242,7 +242,7 @@ void TestUCMP8API(){
         log_err("Error: ucmp8_compact failed\n");
     } 
     /*ucmp8_set*/
-    ucmp8_set(ucmp8Array1, 0, (char)0xFE);
+    ucmp8_set(ucmp8Array1, 0, (uint8_t)0xFE);
     valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
     if(valuesSet[0] != (uint8_t)0xFE ){
         log_err("ERROR: ucmp8_set() failed\n");
@@ -253,7 +253,7 @@ void TestUCMP8API(){
 
     /*ucmp8_set*/
     ucmp8_compact(ucmp8Array1, 1);
-    ucmp8_set(ucmp8Array1, 0, (char)0xFD);
+    ucmp8_set(ucmp8Array1, 0, (uint8_t)0xFD);
     valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
     if(valuesSet[0] != (uint8_t)0xFD ){
         log_err("ERROR: ucmp8_set() failed\n");
@@ -263,7 +263,7 @@ void TestUCMP8API(){
     }
     /*ucmp8_setRange*/
     ucmp8_compact(ucmp8Array1, 1);
-    ucmp8_setRange(ucmp8Array1, 0,  10, (char)0xFD);
+    ucmp8_setRange(ucmp8Array1, 0,  10, (uint8_t)0xFD);
     valuesSet=(uint8_t*)ucmp8_getArray(ucmp8Array1);
     for(i =0 ; i< 10; i++ ){
         if(valuesSet[0] != (uint8_t)0xFD ){
