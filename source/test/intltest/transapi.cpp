@@ -430,8 +430,10 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
            if (Data[i+0] != "") {
                log = s + " + " + Data[i+0] + " -> ";
                t->keyboardTransliterate(s, index, Data[i+0], status);
-               if(U_FAILURE(status))
+               if(U_FAILURE(status)){
                    errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+				   continue;
+			   }
            }else {
                log = s + " => ";
                t->finishKeyboardTransliteration(s, index);
@@ -454,6 +456,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
                t->keyboardTransliterate(s, index, c, status);
                if(U_FAILURE(status))
                    errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UChar, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+			       continue;
 			 }else {
                log = s + " => ";
                t->finishKeyboardTransliteration(s, index);
@@ -515,7 +518,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 		"20", "21", "20",  "Th\\u0069s is the mai\\u006E string"
 	};
 	
-	UErrorCode status;
+	UErrorCode status=U_ZERO_ERROR;
 	int32_t index[]={0, 0, 0};
 	logln("Testing keyboardTransliterator(Replaceable, int32_t, UErrorCode)");
 	Transliterator *t=Transliterator::createInstance("Unicode-Hex");
@@ -527,8 +530,10 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
         index[1]=getInt(Data[i+1]);
         index[2]=getInt(Data[i+2]);
         t->keyboardTransliterate(s, index, status);
-        if(U_FAILURE(status))
+        if(U_FAILURE(status)){
            errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UErrorCode)-->" + (UnicodeString)u_errorName(status));
+		   continue;
+		}
 		t->finishKeyboardTransliteration(s, index);
 		log = s + " => ";
 		// Show the start index '{' and the cursor '|'
@@ -650,8 +655,10 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
                  index[1]=getInt(DATA[i+3]);
                  index[2]=getInt(DATA[i+4]);
                  t->keyboardTransliterate(s, index, DATA[i+0], status);
-                 if(U_FAILURE(status))
+                 if(U_FAILURE(status)){
 					 errln("FAIL: " + t->getID()+ ".keyboardTransliterator(Replaceable, int32_t[], UnicodeString, UErrorCode)-->" + (UnicodeString)u_errorName(status));
+				 continue;
+				 }
 			} else {
                log = s + " => ";
                t->finishKeyboardTransliteration(s, index);
