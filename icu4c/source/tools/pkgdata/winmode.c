@@ -78,7 +78,9 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   T_FileStream_writeLine(makefile, tmp2);
 
   if(isDll) {
-      uprv_strcpy(tmp, LIB_PREFIX "$(CNAME)" UDATA_SO_SUFFIX);
+      uprv_strcpy(tmp, LIB_PREFIX");
+      uprv_strcat(tmp, o->cShortName);
+      uprv_strcat(tmp, UDATA_SO_SUFFIX);
 
       if(o->nooutput || o->verbose) {
         fprintf(stdout, "# Output %s file: %s%s%s\n", UDATA_SO_SUFFIX, o->targetDir, U_FILE_SEP_STRING, tmp);
@@ -166,9 +168,9 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
       sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
       T_FileStream_writeLine(makefile, tmp2);
   }
-  uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(CNAME)" UDATA_CMN_SUFFIX);
-  
-   
+  uprv_strcpy(tmp, UDATA_CMN_PREFIX);
+  uprv_strcat(tmp, o->cShortName);
+  uprv_strcat(tmp, UDATA_CMN_SUFFIX);
 
 	if(o->nooutput || o->verbose) {
 	  fprintf(stdout, "# Output file: %s%s%s\n", o->targetDir, U_FILE_SEP_STRING, tmp);
