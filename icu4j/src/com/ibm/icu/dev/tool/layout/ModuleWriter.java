@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -84,7 +84,7 @@ public class ModuleWriter
 
     protected static final String moduleHeader = "/*\n" +
             " *\n" +
-            " * (C) Copyright IBM Corp. 1998-2003. All Rights Reserved.\n" +
+            " * (C) Copyright IBM Corp. 1998-2004. All Rights Reserved.\n" +
             " *\n" +
             " * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS\n" +
             " * YOU REALLY KNOW WHAT YOU'RE DOING.\n" +
