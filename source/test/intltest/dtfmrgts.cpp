@@ -517,7 +517,12 @@ void DateFormatRegressionTest::Test4071441(void)
 void DateFormatRegressionTest::Test4073003(void) 
 {
     //try {
-    DateFormat *fmt = DateFormat::createDateInstance(DateFormat::SHORT, Locale::getUK());
+    UErrorCode ec = U_ZERO_ERROR;
+    SimpleDateFormat fmt("dd/MM/yy", Locale::getUK(), ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: SimpleDateFormat constructor");
+        return;
+    }
         UnicodeString tests [] = { 
             (UnicodeString) "12/25/61", 
             (UnicodeString) "12/25/1961", 
@@ -526,26 +531,20 @@ void DateFormatRegressionTest::Test4073003(void)
         };
         UErrorCode status = U_ZERO_ERROR;
         for(int i= 0; i < 4; i+=2) {
-            UDate d = fmt->parse(tests[i], status);
-            failure(status, "fmt->parse");
-            UDate dd = fmt->parse(tests[i+1], status);
-            failure(status, "fmt->parse");
+            UDate d = fmt.parse(tests[i], status);
+            failure(status, "fmt.parse");
+            UDate dd = fmt.parse(tests[i+1], status);
+            failure(status, "fmt.parse");
             UnicodeString s;
-            s = fmt->format(d, s);
+            s = fmt.format(d, s);
             UnicodeString ss;
-            ss = fmt->format(dd, ss);
+            ss = fmt.format(dd, ss);
             if (d != dd)
                 errln((UnicodeString) "Fail: " + d + " != " + dd);
             if (s != ss)
                 errln((UnicodeString)"Fail: " + s + " != " + ss);
             logln("Ok: " + s + " " + d);
         }
-    /*}
-    catch (ParseException e) {
-        errln("Fail: " + e);
-        e.printStackTrace();
-    }*/
-        delete fmt;
 }
 
 /**
