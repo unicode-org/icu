@@ -1007,7 +1007,7 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
             }
         } else {
             if(!uset_add(otherNorm->canonStart, code)) {
-                fprintf(stderr, "gennorm error: uset_add(setOf(U+%04x), U+%04x)\n", c, code);
+                fprintf(stderr, "gennorm error: uset_add(setOf(U+%4lx), U+%4x)\n", c, code);
                 exit(U_INTERNAL_PROGRAM_ERROR);
             }
         }
@@ -1270,7 +1270,6 @@ makeAux() {
     Norm *norm;
     uint32_t *pData;
     int32_t i, length;
-    UErrorCode errorCode=U_ZERO_ERROR;
 
     pData=utrie_getData(&auxTrie, &length);
 
@@ -1507,16 +1506,16 @@ generateData(const char *dataDir) {
         canonStartSetsTop*2;
 
     if(beVerbose) {
-        printf("size of normalization trie              %5lu bytes\n", normTrieSize);
-        printf("size of 16-bit extra memory             %5lu UChars/uint16_t\n", extraMem->index);
+        printf("size of normalization trie              %5u bytes\n", normTrieSize);
+        printf("size of 16-bit extra memory             %5u UChars/uint16_t\n", extraMem->index);
         printf("  of that: FC_NFKC_Closure size         %5u UChars/uint16_t\n", ((uint16_t *)utm_getStart(extraMem))[0]);
-        printf("size of combining table                 %5lu uint16_t\n", combiningTableTop);
-        printf("size of FCD trie                        %5lu bytes\n", fcdTrieSize);
-        printf("size of auxiliary trie                  %5lu bytes\n", auxTrieSize);
+        printf("size of combining table                 %5u uint16_t\n", combiningTableTop);
+        printf("size of FCD trie                        %5u bytes\n", fcdTrieSize);
+        printf("size of auxiliary trie                  %5u bytes\n", auxTrieSize);
         printf("size of canonStartSets[]                %5u uint16_t\n", canonStartSetsTop);
         printf("  number of indexes                     %5u uint16_t\n", _NORM_SET_INDEX_TOP);
         printf("  size of sets                          %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SETS_LENGTH]-_NORM_SET_INDEX_TOP);
-        printf("  number of sets                        %5ld\n", canonSetsCount);
+        printf("  number of sets                        %5d\n", canonSetsCount);
         printf("  size of BMP search table              %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]);
         printf("  size of supplementary search table    %5u uint16_t\n", canonStartSets[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]);
         printf("size of " DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
