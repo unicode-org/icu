@@ -1406,7 +1406,7 @@ IntlTestRBNF::doLenientParseTest(RuleBasedNumberFormat* formatter, const char* t
 
 void
 IntlTestRBNF::TestRBNFDisabled() {
-	logln("*** RBNF currently disabled on this platform ***");
+	errln("*** RBNF currently disabled on this platform ***\n");
 }
 
 /* U_HAVE_RBNF */
