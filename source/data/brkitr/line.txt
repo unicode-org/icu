@@ -7,11 +7,6 @@
 #         Implement default line breaking as defined by Unicode TR 14.
 #
 
-#   Known Deviations from TR14:
-#      LB  7a The Sequence SP CM+  is not treated as an ID.  
-#             The SP  in SP CM is not distinguished from any other SP.
-#      LB 14a, break before and after CB, is not implemented.
-
 
 #
 #  Character Classes defined by TR 14.
@@ -87,7 +82,7 @@ $SYcm = $SY $CM*;
 #  
 #  Rule LB 3
 $LB3NonBreaks = [^$BK $CR $LF $NL];               
-$LB3NonBreaks ($BK | $CR | $LF | $NL){100};   
+$LB3NonBreaks? ($BK | $CR | $LF | $NL){100};   
 $CR $LF {100};
 
 # LB 4         x SP
@@ -107,7 +102,7 @@ $LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
 $LB5NonBreaks [$CL  $EX $IS $SY];
 
 # LB 9
-$OPcm $SP* $LB3NonBreaks?;           #  Need to force trailing $BKs to rule 3, to get status right.
+$OPcm $SP* .?;         
 $OPcm $SP* [$LB5NonBreaks] $CM*;
 
 # LB 10
@@ -120,7 +115,7 @@ $CLcm $SP* $NScm;
 ($B2cm)+;
 
 # LB 11b
-$LB5NonBreaks $GLcm $LB3NonBreaks?;
+$LB5NonBreaks $GLcm .?;
 $LB5NonBreaks $GLcm [$LB5NonBreaks] $CM*;
 $GLcm $LB3NonBreaks?;
 $GLcm [$LB5NonBreaks] $CM*;
@@ -129,7 +124,7 @@ $GLcm [$LB5NonBreaks] $CM*;
 $LB12NonBreaks = [[$LB5NonBreaks] - [$SP]];
 
 # LB 14
-$LB12NonBreaks $QUcm+ $LB3NonBreaks?;
+$LB12NonBreaks $QUcm+ .?;
 $LB12NonBreaks $QUcm+ [$LB5NonBreaks] $CM*;
 $QUcm $LB3NonBreaks?;
 $QUcm [$LB5NonBreaks] $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
