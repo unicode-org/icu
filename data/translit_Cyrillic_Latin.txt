@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Cyrillic_Latin.txt
-// Date: Wed Nov 21 18:58:49 2001
+// Date: Tue Nov 27 20:47:50 2001
 //--------------------------------------------------------------------
 
 // Cyrillic_Latin
@@ -18,15 +18,15 @@ translit_Cyrillic_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Cyrillic_Latin.txt,v $
-// $Date: 2001/11/22 05:50:50 $
-// $Revision: 1.3 $
+// $Date: 2001/11/28 06:04:31 $
+// $Revision: 1.4 $
 //--------------------------------------------------------------------
 // TODO: add remaining characters
 // Should add variants for Russian-English, Russian-German
 // Those can use this as a base, and then remap cases
 // like a $hat to ya or ja.
 
-":: [\\u0000-\u007F [:Cyrillic:] [:nonspacing mark:]] ;"
+":: [\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]] ;"
 
 ":: NFD (NFC) ;"
 
@@ -318,6 +318,6 @@ translit_Cyrillic_Latin {
 
 ":: NFC (NFD) ;"
 // note: a global filter is more efficient, but MUST include all source chars!!
-":: ([\\u0000-\u007E \u02B9 \u02BA [:Latin:] [:nonspacing mark:]]);"
+":: ([\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]]);"
   }
 }

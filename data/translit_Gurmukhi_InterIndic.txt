@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Gurmukhi_InterIndic.txt
-// Date: Tue Nov 20 21:43:01 2001
+// Date: Tue Nov 27 20:47:50 2001
 //--------------------------------------------------------------------
 
 // Gurmukhi_InterIndic
@@ -32,12 +32,12 @@ translit_Gurmukhi_InterIndic {
 // Gurmukhi-InterIndic
 //:: NFD (NFC) ;
 
-"\u0A16\u0A3C>\uE059;" // LETTER KHHA
-"\u0A17\u0A3C>\uE05A;" // LETTER GHHA
-"\u0A1C\u0A3C>\uE05B;" // LETTER ZA
+//\u0A16\u0A3C>\uE059; # LETTER KHHA
+//\u0A17\u0A3C>\uE05A; # LETTER GHHA
+//\u0A1C\u0A3C>\uE05B; # LETTER ZA
 //\u0A38\u0A3C>\uE036; # LETTER SHA
 //\u0A32\u0A3C>\uE033; # LETTER LLA
-"\u0A2B\u0A3C>\uE05E;" // LETTER FA
+//\u0A2B\u0A3C>\uE05E; # LETTER FA
 
 "\u0A02>\uE001;"  // REMAP (indicExceptions.txt): \u0a01>\u0a02 = SIGN CANDRABINDU>SIGN BINDI
 "\u0A05>\uE005;"  // LETTER A
