@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/06/21 23:56:48 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/06/22 07:46:58 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -168,6 +168,7 @@ public abstract class SearchIterator
         targetText.setIndex(targetText.getBeginIndex());
         matchLength = 0;
         m_reset_ = true;
+        m_isForwardSearching_ = true;
         if (breakIterator != null) {
         	breakIterator.setText(targetText);
         }
@@ -202,7 +203,7 @@ public abstract class SearchIterator
 	 */
 	public int getMatchStart()
 	{
-		return targetText.getIndex();
+        return m_lastMatchStart_;
 	}
 
 	/**
@@ -289,8 +290,7 @@ public abstract class SearchIterator
     public String getMatchedText() 
     {
         if (matchLength > 0) {
-            int start = targetText.getIndex();
-            int limit = start + matchLength;
+            int limit = m_lastMatchStart_ + matchLength;
     		StringBuffer result = new StringBuffer(matchLength);
     		result.append(targetText.current());
     		targetText.next();
@@ -298,7 +298,7 @@ public abstract class SearchIterator
     			result.append(targetText.current());
     			targetText.next();
     		}
-            targetText.setIndex(start);
+            targetText.setIndex(m_lastMatchStart_);
     		return result.toString();
     	}
         return null;
@@ -339,6 +339,7 @@ public abstract class SearchIterator
 	            // not enough characters to match
                 matchLength = 0;
                 targetText.setIndex(targetText.getEndIndex());
+                m_lastMatchStart_ = DONE;
 	            return DONE; 
 	        }
 	        m_reset_ = false;
@@ -360,7 +361,8 @@ public abstract class SearchIterator
         if (start == DONE) {
             start = targetText.getBeginIndex();
         }
-	    return handleNext(start);
+	    m_lastMatchStart_ = handleNext(start);
+        return m_lastMatchStart_;
     }
 
     /**
@@ -403,24 +405,22 @@ public abstract class SearchIterator
             // string. the iterator would have been set to offset textLength if 
             // a match is not found.
             m_isForwardSearching_ = false;
-            if (start != DONE) {
+            if (start != targetText.getEndIndex()) {
                 return start;
             }
-            start = targetText.getEndIndex();
         }
         else {
-        	if (start == DONE) {
-        		return DONE;
-        	}
-            if (start == targetText.getBeginIndex()) {
+        	if (start == targetText.getBeginIndex()) {
                 // not enough characters to match
                 matchLength = 0;
                 targetText.setIndex(targetText.getBeginIndex());
+                m_lastMatchStart_ = DONE;
                 return DONE; 
             }
         }
 
-		return handlePrevious(start);
+        m_lastMatchStart_ = handlePrevious(start);
+        return m_lastMatchStart_;
     }
 
     /**
@@ -626,6 +626,7 @@ public abstract class SearchIterator
     		breakIterator.setText(target);
     	}
     	matchLength = 0;
+        m_lastMatchStart_ = DONE;
         m_isOverlap_ = false;
         m_isForwardSearching_ = true;
         m_reset_ = true;
@@ -716,4 +717,8 @@ public abstract class SearchIterator
      * If setIndex() is not called, this value will be DONE.
      */ 
     private int m_setOffset_;
+    /**
+     * Offset of the beginning of the last match
+     */
+    private int m_lastMatchStart_;
 }
