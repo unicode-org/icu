@@ -913,6 +913,7 @@ static const UBlockCodeMap blockCodeIndex[UBLOCK_CODE_INDEX_SIZE] = {
        { 0x000E0000, 0x000E007F, UBLOCK_TAGS },
        { 0x000F0000, 0x000FFFFD, UBLOCK_PRIVATE_USE },
 };
+
 /* Get the script associated with the character*/
 UBlockCode
 ublock_getCode(UChar32 codepoint)
@@ -1073,7 +1074,7 @@ getCaseLocale(const char *locale) {
 }
 
 /* Is case-ignorable? In Unicode 3.1.1, is {HYPHEN, SOFT HYPHEN, {Mn}} ? (Expected to change!) */
-U_INLINE UBool
+static U_INLINE UBool
 isCaseIgnorable(UChar32 c, uint32_t category) {
     return category==U_NON_SPACING_MARK || c==0x2010 || c==0xad;
 }
