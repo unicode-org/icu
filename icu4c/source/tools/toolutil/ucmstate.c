@@ -529,16 +529,16 @@ ucm_processStates(UCMStates *states) {
             entry=states->stateTable[state][cell];
             if((uint8_t)MBCS_ENTRY_STATE(entry)>=states->countStates) {
                 fprintf(stderr, "ucm error: state table entry [%x][%x] has a next state of %x that is too high\n",
-                    state, cell, MBCS_ENTRY_STATE(entry));
+                    (int)state, (int)cell, (int)MBCS_ENTRY_STATE(entry));
                 exit(U_INVALID_TABLE_FORMAT);
             }
             if(MBCS_ENTRY_IS_FINAL(entry) && (states->stateFlags[MBCS_ENTRY_STATE(entry)]&0xf)!=MBCS_STATE_FLAG_DIRECT) {
                 fprintf(stderr, "ucm error: state table entry [%x][%x] is final but has a non-initial next state of %x\n",
-                    state, cell, MBCS_ENTRY_STATE(entry));
+                    (int)state, (int)cell, (int)MBCS_ENTRY_STATE(entry));
                 exit(U_INVALID_TABLE_FORMAT);
             } else if(MBCS_ENTRY_IS_TRANSITION(entry) && (states->stateFlags[MBCS_ENTRY_STATE(entry)]&0xf)==MBCS_STATE_FLAG_DIRECT) {
                 fprintf(stderr, "ucm error: state table entry [%x][%x] is not final but has an initial next state of %x\n",
-                    state, cell, MBCS_ENTRY_STATE(entry));
+                    (int)state, (int)cell, (int)MBCS_ENTRY_STATE(entry));
                 exit(U_INVALID_TABLE_FORMAT);
             }
         }
@@ -547,11 +547,11 @@ ucm_processStates(UCMStates *states) {
     /* is this an SI/SO (like EBCDIC-stateful) state table? */
     if(states->countStates>=2 && (states->stateFlags[1]&0xf)==MBCS_STATE_FLAG_DIRECT) {
         if(states->maxCharLength!=2) {
-            fprintf(stderr, "ucm error: SI/SO codepages must have max 2 bytes/char (not %x)\n", states->maxCharLength);
+            fprintf(stderr, "ucm error: SI/SO codepages must have max 2 bytes/char (not %x)\n", (int)states->maxCharLength);
             exit(U_INVALID_TABLE_FORMAT);
         }
         if(states->countStates<3) {
-            fprintf(stderr, "ucm error: SI/SO codepages must have at least 3 states (not %x)\n", states->countStates);
+            fprintf(stderr, "ucm error: SI/SO codepages must have at least 3 states (not %x)\n", (int)states->countStates);
             exit(U_INVALID_TABLE_FORMAT);
         }
         /* are the SI/SO all in the right places? */
@@ -573,7 +573,7 @@ ucm_processStates(UCMStates *states) {
     /* check that no unexpected state is a "direct" one */
     while(state<states->countStates) {
         if((states->stateFlags[state]&0xf)==MBCS_STATE_FLAG_DIRECT) {
-            fprintf(stderr, "ucm error: state %d is 'initial' - not supported except for SI/SO codepages\n", state);
+            fprintf(stderr, "ucm error: state %d is 'initial' - not supported except for SI/SO codepages\n", (int)state);
             exit(U_INVALID_TABLE_FORMAT);
         }
         ++state;
@@ -1034,7 +1034,7 @@ ucm_countChars(UCMStates *states,
      * must consist of only double-byte sequences
      */
     if(count>1 && states->outputType==MBCS_OUTPUT_2_SISO && length!=2*count) {
-        fprintf(stderr, "ucm error: SI/SO (like EBCDIC-stateful) result with %d characters does not contain all DBCS\n", count);
+        fprintf(stderr, "ucm error: SI/SO (like EBCDIC-stateful) result with %d characters does not contain all DBCS\n", (int)count);
         return -1;
     }
 

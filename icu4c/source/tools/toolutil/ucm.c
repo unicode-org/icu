@@ -934,7 +934,7 @@ ucm_addMapping(UCMTable *table,
                                              table->mappingsCapacity*sizeof(UCMapping));
         if(table->mappings==NULL) {
             fprintf(stderr, "ucm error: unable to allocate %d UCMappings\n",
-                            table->mappingsCapacity);
+                            (int)table->mappingsCapacity);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
 
@@ -950,7 +950,7 @@ ucm_addMapping(UCMTable *table,
         table->codePoints=(UChar32 *)uprv_malloc(table->codePointsCapacity*4);
         if(table->codePoints==NULL) {
             fprintf(stderr, "ucm error: unable to allocate %d UChar32s\n",
-                            table->codePointsCapacity);
+                            (int)table->codePointsCapacity);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
     }
@@ -960,7 +960,7 @@ ucm_addMapping(UCMTable *table,
         table->bytes=(uint8_t *)uprv_malloc(table->bytesCapacity);
         if(table->bytes==NULL) {
             fprintf(stderr, "ucm error: unable to allocate %d bytes\n",
-                            table->bytesCapacity);
+                            (int)table->bytesCapacity);
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
     }
