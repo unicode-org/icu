@@ -47,7 +47,7 @@ static uint8_t utf16fixup[32] = {
     0, 0, 0, 0x20, 0xf8, 0xf8, 0xf8, 0xf8
 };
 
-static UBool
+static UBool U_CALLCONV
 isAcceptableUCA(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
@@ -70,7 +70,7 @@ isAcceptableUCA(void *context,
     }
 }
 
-static UBool
+static UBool U_CALLCONV
 isAcceptableInvUCA(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
@@ -1166,6 +1166,8 @@ void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, 
     result->normalizationModeisDefault = TRUE;
     result->strengthisDefault = TRUE;
     result->variableTopValueisDefault = TRUE;
+
+    ucol_updateInternalState(result);
 }
 
 void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status) {
@@ -1243,7 +1245,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     /* get the version info form UCATableHeader and populate the Collator struct*/
     result->dataInfo.dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
     result->dataInfo.dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
-
+    ucol_updateInternalState(result);
     return result;
 }
 
@@ -1442,8 +1444,8 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           return 0; /* completely ignorable */
         }
         /* Make up an artifical CE from code point as per UCA */
-        order = 0xD08003C3 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
-        *(collationSource->CEpos++) = 0x04000080 | (ch & 0x001F) << 27;
+        order = 0xD0800343 | (ch & 0xF000) << 12 | (ch & 0x0FE0) << 11;
+        *(collationSource->CEpos++) = 0x040000C0 | (ch & 0x001F) << 27;
       }
     }
     return order; /* return the CE */
@@ -1955,6 +1957,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t tertiary = 0;
     int32_t caseShift = 0;
     uint32_t c2 = 0, c3 = 0, c4 = 0; /* variables for compression */
+
+    uint8_t caseSwitch = coll->caseSwitch;
+    uint8_t tertiaryMask = coll->tertiaryMask;
+
     UBool wasShifted = FALSE;
     UBool notIsContinuation = FALSE;
     
@@ -1963,7 +1969,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           order = ucol_getNextCE(coll, s, &status);
           /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
           
-          if((order & 0xFFFFFFBF) == 0) {
+          if(isCEIgnorable(order)) {
             continue;
           }
 
@@ -1976,8 +1982,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           notIsContinuation = !isContinuation(ce);
 
 
-          //tertiary = (order & UCOL_TERTIARYORDERMASK);
-          tertiary = (uint8_t)((order & 0x3f)); /* TODO: need case bit here! this is temporary - removing case bit */         
+          order ^= caseSwitch;
+          tertiary = (uint8_t)((order & tertiaryMask)); 
           secondary = (uint8_t)((order >>= 8) & 0xFF);
           primary2 = (uint8_t)((order >>= 8) & 0xFF);
           primary1 = (uint8_t)(order >>= 8);
@@ -2197,6 +2203,8 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t primary2 = 0;
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
+    uint8_t caseSwitch = coll->caseSwitch;
+    uint8_t tertiaryMask = coll->tertiaryMask;
     UBool caseBit = FALSE;
 
     UBool finished = FALSE;
@@ -2211,10 +2219,10 @@ ucol_calcSortKey(const    UCollator    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            /*order = ucol_getNextCE(coll, &s, status);*/
-            UCOL_GETNEXTCE(order, coll, s, status);
+            order = ucol_getNextCE(coll, &s, status);
+            /*UCOL_GETNEXTCE(order, coll, s, status);*/
 
-            if((order & 0xFFFFFFBF) == 0) {
+            if(isCEIgnorable(order)) {
               continue;
             }
 
@@ -2227,24 +2235,15 @@ ucol_calcSortKey(const    UCollator    *coll,
             ce = order;
             notIsContinuation = !isContinuation(ce);
 
-            caseBit = ((tertiary & 0x40) != 0);
 
-            //tertiary = (order & UCOL_TERTIARYORDERMASK);
-            tertiary = (uint8_t)((order & 0x3f)); /* TODO: need case bit here this is temporary - removing case bit */         
+            order ^= caseSwitch;
+            caseBit = (order & UCOL_CASE_BIT_MASK);
+            tertiary = (uint8_t)((order & tertiaryMask)); 
             secondary = (uint8_t)((order >>= 8) & 0xFF);
             primary2 = (uint8_t)((order >>= 8) & 0xFF);
             primary1 = (uint8_t)(order >>= 8);
 
             if(notIsContinuation) {
-              /* it appears tht something should be done with the case bit */
-              /* however, it is not clear when */
-              /* TODO : continuations also have case bits now, should this go out of the if */
-              if(upperFirst) { /* if there is a case bit */
-                /* Upper cases have this bit turned on, so that they always come after the lower cases */
-                /* if we want to reverse this situation, we'll flip this bit */
-                /*tertiary ^= UCOL_CASE_BIT_MASK; */ /* temporary removing case bit */
-                caseBit = !caseBit;
-              }
               if(scriptOrder != NULL) {
                 primary1 = scriptOrder[primary1];
               }
@@ -2336,7 +2335,9 @@ ucol_calcSortKey(const    UCollator    *coll,
                   caseShift = 7;
                 }
                 if(tertiary != 0) {
-                  *(cases-1) |= caseBit << (caseShift--);
+                  *(cases-1) |= (caseBit!=0) << (caseShift--);
+                } else {
+                  caseShift--;
                 }
               }
 
@@ -2627,6 +2628,9 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     uint8_t primary2 = 0;
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
+    uint8_t caseSwitch = coll->caseSwitch;
+    uint8_t tertiaryMask = coll->tertiaryMask;
+
 
     uint32_t prevBuffSize = 0;
 
@@ -2642,7 +2646,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             /*order = ucol_getNextCE(coll, &s, status);*/
             UCOL_GETNEXTCE(order, coll, s, status);
 
-            if((order & 0xFFFFFFBF) == 0) {
+            if(isCEIgnorable(order)) {
               continue;
             }
 
@@ -2655,7 +2659,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
             ce = order;
             notIsContinuation = !isContinuation(ce);
 
-            tertiary = (uint8_t)((order & 0x3f)); /* TODO need case bit here this is temporary - removing case bit */         
+            order ^= caseSwitch;
+            tertiary = (uint8_t)((order & tertiaryMask)); /* TODO need case bit here this is temporary - removing case bit */         
             secondary = (uint8_t)((order >>= 8) & 0xFF);
             primary2 = (uint8_t)((order >>= 8) & 0xFF);
             primary1 = (uint8_t)(order >>= 8);
@@ -2857,6 +2862,18 @@ UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
 /* Following are the functions that deal with the properties of a collator  */
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
+void ucol_updateInternalState(UCollator *coll) {
+      if(coll->caseFirst == UCOL_UPPER_FIRST) {
+        coll->caseSwitch = UCOL_CASE_SWITCH;
+      } else {
+        coll->caseSwitch = UCOL_NO_CASE_SWITCH;
+      }
+      if(coll->caseLevel == UCOL_ON || coll->caseFirst == UCOL_OFF) {
+        coll->tertiaryMask = UCOL_REMOVE_CASE;
+      } else {
+        coll->tertiaryMask = UCOL_KEEP_CASE;
+      }
+}
 
 /* Attribute setter API */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
@@ -2896,6 +2913,9 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
 		} else if (value == UCOL_UPPER_FIRST) {
 			coll->caseFirst = UCOL_UPPER_FIRST;
             coll->caseFirstisDefault = FALSE;
+        } else if (value == UCOL_OFF) {
+          coll->caseFirst = UCOL_OFF;
+          coll->caseFirstisDefault = FALSE;
 		} else if (value == UCOL_DEFAULT) {
             coll->caseFirst = coll->image->caseFirst;
             coll->caseFirstisDefault = TRUE;
@@ -2950,6 +2970,7 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
 		*status = U_ILLEGAL_ARGUMENT_ERROR;
 		break;
 	}
+    ucol_updateInternalState(coll);
 }
 
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
@@ -3304,6 +3325,8 @@ ucol_strcoll(    const    UCollator    *coll,
     uint32_t sCEsArray[512], tCEsArray[512];
     uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
     uint32_t *sCEend = sCEs+512, *tCEend = tCEs+512;
+    uint8_t caseSwitch = coll->caseSwitch;
+    uint8_t tertiaryMask = coll->tertiaryMask;
 
     uint32_t LVT = shifted*((coll->variableMax1)<<24 | (coll->variableMax2)<<16);
 
@@ -3318,22 +3341,25 @@ ucol_strcoll(    const    UCollator    *coll,
 
         /* Get the next collation element in each of the strings, unless */
         /* we've been requested to skip it. */
-        while(sOrder == 0 && sOrder != 0x00010000) {
+        while(sOrder == 0) {
           /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
           sOrder = ucol_getNextCE(coll, &sColl, &status);
+          sOrder ^= caseSwitch;
           *(sCEs++) = sOrder;
           sOrder &= 0xFFFF0000;
         }
 
-        while(tOrder == 0 && tOrder != 0x00010000) {
+        while(tOrder == 0) {
           /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
           tOrder = ucol_getNextCE(coll, &tColl, &status);
+          tOrder ^= caseSwitch;
           *(tCEs++) = tOrder;
           tOrder &= 0xFFFF0000;
         } 
 
         if(sOrder == tOrder) {
             if(sOrder == 0x00010000) {
+
               break;
             } else {
               sOrder = 0; tOrder = 0;
@@ -3354,88 +3380,11 @@ ucol_strcoll(    const    UCollator    *coll,
           return ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength);
         }
 
-#if 0
-        /* This is abridged version of the loop                 */
-        /* should work the same, but it's harder to understand  */
+/* This is where abridged version for shifted should go */
         for(;;) {
           /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
           sOrder = ucol_getNextCE(coll, &sColl, &status);
-          if(sOrder == 0x00010101) {
-            *(sCEs++) = sOrder;
-            break;
-          } else if((sOrder & 0xFFFFFFBF) == 0) {
-            continue;
-          } else if(isContinuation(sOrder)) {
-            if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
-              if(sInShifted) {
-                sOrder &= 0xFFFF0000;
-              } else {
-                *(sCEs++) = sOrder;
-                break;
-              }
-            } else { /* Just lower level values */
-              if(sInShifted) {
-                continue;
-              }
-            }
-          } else { /* regular */
-            if(sOrder > LVT) {
-              *(sCEs++) = sOrder;
-              break;
-            } else {
-              if((sOrder & 0xFFFF0000) > 0) {
-                sInShifted = TRUE;
-                sOrder &= 0xFFFF0000;
-              }
-            }
-          }
-          *(sCEs++) = sOrder;
-        }
-        sOrder &= 0xFFFF0000;
-        sInShifted = FALSE;
-
-        for(;;) {
-          /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
-          tOrder = ucol_getNextCE(coll, &tColl, &status);*/
-          if(tOrder == 0x00010101) {
-            *(tCEs++) = tOrder;
-            break;
-          } else if((tOrder & 0xFFFFFFBF) == 0) {
-            continue;
-          } else if(isContinuation(tOrder)) {
-            if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
-              if(tInShifted) {
-                tOrder &= 0xFFFF0000;
-              } else {
-                *(tCEs++) = tOrder;
-                break;
-              }
-            } else { /* Just lower level values */
-              if(tInShifted) {
-                continue;
-              } 
-            }
-          } else { /* regular */
-            if(tOrder > LVT) {
-              *(tCEs++) = tOrder;
-              break;
-            } else {
-              if((tOrder & 0xFFFF0000) > 0) {
-                tInShifted = TRUE;
-                tOrder &= 0xFFFF0000;
-              }
-            }
-          }
-          *(tCEs++) = tOrder;
-        }
-        tOrder &= 0xFFFF0000;
-        tInShifted = FALSE;
-#endif 
-
-        for(;;) {
-          /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
-          sOrder = ucol_getNextCE(coll, &sColl, &status);
-          if(sOrder == 0x00010101) {
+          if(sOrder == UCOL_NO_MORE_CES) {
             *(sCEs++) = sOrder;
             break;
           } else if((sOrder & 0xFFFFFFBF) == 0) {
@@ -3447,6 +3396,7 @@ ucol_strcoll(    const    UCollator    *coll,
                 *(sCEs++) = sOrder;
                 continue;
               } else {
+                sOrder ^= caseSwitch;
                 *(sCEs++) = sOrder;
                 break;
               }
@@ -3454,6 +3404,7 @@ ucol_strcoll(    const    UCollator    *coll,
               if(sInShifted) {
                 continue;
               } else {
+                sOrder ^= caseSwitch;
                 *(sCEs++) = sOrder;
                 continue;
               }
@@ -3469,6 +3420,7 @@ ucol_strcoll(    const    UCollator    *coll,
                 *(sCEs++) = sOrder;
                 continue;
               } else {
+                sOrder ^= caseSwitch;
                 *(sCEs++) = sOrder;
                 continue;
               }
@@ -3481,7 +3433,7 @@ ucol_strcoll(    const    UCollator    *coll,
         for(;;) {
           /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
           tOrder = ucol_getNextCE(coll, &tColl, &status);
-          if(tOrder == 0x00010101) {
+          if(tOrder == UCOL_NO_MORE_CES) {
             *(tCEs++) = tOrder;
             break;
           } else if((tOrder & 0xFFFFFFBF) == 0) {
@@ -3493,6 +3445,7 @@ ucol_strcoll(    const    UCollator    *coll,
                 *(tCEs++) = tOrder;
                 continue;
               } else {
+                tOrder ^= caseSwitch;
                 *(tCEs++) = tOrder;
                 break;
               }
@@ -3500,6 +3453,7 @@ ucol_strcoll(    const    UCollator    *coll,
               if(tInShifted) {
                 continue;
               } else {
+                tOrder ^= caseSwitch;
                 *(tCEs++) = tOrder;
                 continue;
               }
@@ -3515,6 +3469,7 @@ ucol_strcoll(    const    UCollator    *coll,
                 *(tCEs++) = tOrder;
                 continue;
               } else {
+                tOrder ^= caseSwitch;
                 *(tCEs++) = tOrder;
                 continue;
               }
@@ -3549,11 +3504,11 @@ ucol_strcoll(    const    UCollator    *coll,
         sCEs = sCEsArray;
         tCEs = tCEsArray;
         for(;;) {
-          while (secS == 0 && secS != 0x0100) {
+          while (secS == 0) {
             secS = *(sCEs++) & 0xFF00;
           }
 
-          while(secT == 0 && secT != 0x0100) {
+          while(secT == 0) {
               secT = *(tCEs++) & 0xFF00;
           }
 
@@ -3576,7 +3531,7 @@ ucol_strcoll(    const    UCollator    *coll,
         sCEs = sCEend-2; /* this could also be sCEs-- if needs to be optimized */
         tCEs = tCEend-2;
         for(;;) {
-          while (secS == 0 && sCEs >= sCEsArray && secS != 0x0100) {
+          while (secS == 0 && sCEs >= sCEsArray) {
             if(sCESave == 0) {
               secS = *(sCEs--) & 0xFF80;
               if(isContinuation(secS)) {
@@ -3597,7 +3552,7 @@ ucol_strcoll(    const    UCollator    *coll,
             secS &= 0xFF00; /* remove the continuation bit */
           }
 
-          while(secT == 0 && tCEs >= tCEsArray && secT != 0x0100) {
+          while(secT == 0 && tCEs >= tCEsArray) {
             if(tCESave == 0) {
               secT = *(tCEs--) & 0xFF80;
               if(isContinuation(secT)) {
@@ -3639,32 +3594,26 @@ ucol_strcoll(    const    UCollator    *coll,
       sCEs = sCEsArray;
       tCEs = tCEsArray;
       for(;;) {
-        while((secS & 0x3F) == 0 || (secS & 0x3F) != 0x01) {
-          secS = *(sCEs++) & 0xFF;
+        while((secS & UCOL_REMOVE_CASE) == 0) {
+          secS = *(sCEs++) & UCOL_TERT_CASE_MASK;
         }
 
-        while((secT & 0x3F) == 0 || (secT & 0x3F) != 0x01) {
-          secT = *(tCEs++) & 0xFF;
+        while((secT & UCOL_REMOVE_CASE) == 0) {
+          secT = *(tCEs++) & UCOL_TERT_CASE_MASK;
         }
 
-        if((secS & 0x40) < (secT & 0x40)) {
-          if(upperFirst) {
-            return UCOL_GREATER;
-          } else {
-            return UCOL_LESS;
-          }
-        } else if((secS & 0x40) > (secT & 0x40)) {
-          if(upperFirst) {
-            return UCOL_LESS;
-          } else {
-            return UCOL_GREATER;
-          }
+        if((secS & UCOL_CASE_BIT_MASK) < (secT & UCOL_CASE_BIT_MASK)) {
+          return UCOL_LESS;
+        } else if((secS & UCOL_CASE_BIT_MASK) > (secT & UCOL_CASE_BIT_MASK)) {
+          return UCOL_GREATER;
         } 
-        if((secS & 0x3F) == (secT & 0x3F)) {
-          if((secS & 0x3F) == 0x01) {
-            break;
-          } 
-        } 
+
+        if((secS & UCOL_REMOVE_CASE) == 0x01 || (secT & UCOL_REMOVE_CASE) == 0x01 ) {
+          break;
+        } else {
+          secS = 0;
+          secT = 0;
+        }
       }
     }
 
@@ -3675,22 +3624,16 @@ ucol_strcoll(    const    UCollator    *coll,
       sCEs = sCEsArray;
       tCEs = tCEsArray;
       for(;;) {
-        while((secS & 0x3F) == 0 && (secS & 0x3F) != 1) {
-          secS = *(sCEs++) & 0x7F;
-        }
-        if(upperFirst) {
-          secS ^= 0x40;
+        while((secS & UCOL_REMOVE_CASE) == 0) {
+          secS = *(sCEs++) & tertiaryMask;
         }
 
-        while((secT & 0x3F)  == 0 && (secT & 0x3F) != 1) {
-            secT = *(tCEs++) & 0x7F;
-        }
-        if(upperFirst) {
-          secT ^= 0x40;
+        while((secT & UCOL_REMOVE_CASE)  == 0) {
+            secT = *(tCEs++) & tertiaryMask;
         }
 
         if(secS == secT) {
-          if((secS & 0x3F) == 1) {
+          if((secS & UCOL_REMOVE_CASE) == 1) {
             break;
           } else {
             secS = 0; secT = 0; 
@@ -4804,4 +4747,83 @@ int32_t getComplicatedCE(const UCollatorOld *coll, collIterate *source, UErrorCo
 }
 
 #endif
+#if 0
+        /* This is abridged version of the loop                 */
+        /* should work the same, but it's harder to understand  */
+        for(;;) {
+          /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
+          sOrder = ucol_getNextCE(coll, &sColl, &status);
+          sOrder ^= caseSwitch;
+          if(sOrder == 0x00010101) {
+            *(sCEs++) = sOrder;
+            break;
+          } else if((sOrder & 0xFFFFFFBF) == 0) {
+            continue;
+          } else if(isContinuation(sOrder)) {
+            if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
+              if(sInShifted) {
+                sOrder &= 0xFFFF0000;
+              } else {
+                *(sCEs++) = sOrder;
+                break;
+              }
+            } else { /* Just lower level values */
+              if(sInShifted) {
+                continue;
+              }
+            }
+          } else { /* regular */
+            if(sOrder > LVT) {
+              *(sCEs++) = sOrder;
+              break;
+            } else {
+              if((sOrder & 0xFFFF0000) > 0) {
+                sInShifted = TRUE;
+                sOrder &= 0xFFFF0000;
+              }
+            }
+          }
+          *(sCEs++) = sOrder;
+        }
+        sOrder &= 0xFFFF0000;
+        sInShifted = FALSE;
+
+        for(;;) {
+          /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
+          tOrder = ucol_getNextCE(coll, &tColl, &status);*/
+          tOrder ^= caseSwitch;
+          if(tOrder == 0x00010101) {
+            *(tCEs++) = tOrder;
+            break;
+          } else if((tOrder & 0xFFFFFFBF) == 0) {
+            continue;
+          } else if(isContinuation(tOrder)) {
+            if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
+              if(tInShifted) {
+                tOrder &= 0xFFFF0000;
+              } else {
+                *(tCEs++) = tOrder;
+                break;
+              }
+            } else { /* Just lower level values */
+              if(tInShifted) {
+                continue;
+              } 
+            }
+          } else { /* regular */
+            if(tOrder > LVT) {
+              *(tCEs++) = tOrder;
+              break;
+            } else {
+              if((tOrder & 0xFFFF0000) > 0) {
+                tInShifted = TRUE;
+                tOrder &= 0xFFFF0000;
+              }
+            }
+          }
+          *(tCEs++) = tOrder;
+        }
+        tOrder &= 0xFFFF0000;
+        tInShifted = FALSE;
+#endif 
 
