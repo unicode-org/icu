@@ -83,7 +83,7 @@ utf8_errorValue[6]={
 };
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict, UBool *pIsError) {
+utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) {
     int32_t i=*pi;
     uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
     if((i)+count<=(length)) {
@@ -118,10 +118,11 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
             illegal|=(trail&0xc0)^0x80;
             break;
         case 0:
-            if(pIsError!=NULL) {
-                *pIsError=TRUE;
+            if(strict>=0) {
+                return UTF8_ERROR_VALUE_1;
+            } else {
+                return U_SENTINEL;
             }
-            return UTF8_ERROR_VALUE_1;
         /* no default branch to optimize switch()  - all values are covered */
         }
 
@@ -132,6 +133,8 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
          * Starting with Unicode 3.0.1, non-shortest forms are illegal.
          * Starting with Unicode 3.2, surrogate code points must not be
          * encoded in UTF-8, and there are no irregular sequences any more.
+         *
+         * U8_ macros (new in ICU 2.4) return negative values for error conditions.
          */
 
         /* correct sequence - all trail bytes have (b7..b6)==(10)? */
@@ -145,21 +148,14 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
                 ++(i);
                 --count;
             }
-            c=utf8_errorValue[errorCount-count];
-            if(pIsError!=NULL) {
-                *pIsError=TRUE;
+            if(strict>=0) {
+                c=utf8_errorValue[errorCount-count];
+            } else {
+                c=U_SENTINEL;
             }
-        } else if((strict) && UTF_IS_UNICODE_NONCHAR(c)) {
+        } else if((strict)>0 && UTF_IS_UNICODE_NONCHAR(c)) {
             /* strict: forbid non-characters like U+fffe */
             c=utf8_errorValue[count];
-            if(pIsError!=NULL) {
-                *pIsError=TRUE;
-            }
-        } else {
-            /* good result */
-            if(pIsError!=NULL) {
-                *pIsError=FALSE;
-            }
         }
     } else /* too few bytes left */ {
         /* error handling */
@@ -168,9 +164,10 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
         while((i)<(length) && UTF8_IS_TRAIL(s[i])) {
             ++(i);
         }
-        c=utf8_errorValue[i-i0];
-        if(pIsError!=NULL) {
-            *pIsError=TRUE;
+        if(strict>=0) {
+            c=utf8_errorValue[i-i0];
+        } else {
+            c=U_SENTINEL;
         }
     }
     *pi=i;
@@ -178,8 +175,8 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
 }
 
 U_CAPI int32_t U_EXPORT2
-utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c) {
-    if((c)<=0x7ff) {
+utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c, UBool *pIsError) {
+    if((uint32_t)(c)<=0x7ff) {
         if((i)+1<(length)) {
             (s)[(i)++]=(uint8_t)(((c)>>6)|0xc0);
             (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80);
@@ -187,7 +184,7 @@ utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c) {
         }
     } else if((uint32_t)(c)<=0xffff) {
         /* Starting with Unicode 3.2, surrogate code points must not be encoded in UTF-8. */
-        if((i)+2<(length) && !UTF_IS_SURROGATE(c)) {
+        if((i)+2<(length) && !U_IS_SURROGATE(c)) {
             (s)[(i)++]=(uint8_t)(((c)>>12)|0xe0);
             (s)[(i)++]=(uint8_t)((((c)>>6)&0x3f)|0x80);
             (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80);
@@ -203,18 +200,22 @@ utf8_appendCharSafeBody(uint8_t *s, int32_t i, int32_t length, UChar32 c) {
         }
     }
     /* c>0x10ffff or not enough space, write an error value */
-    length-=i;
-    if(length>0) {
-        int32_t offset;
-        if(length>3) {
-            length=3;
+    if(pIsError!=NULL) {
+        *pIsError=TRUE;
+    } else {
+        length-=i;
+        if(length>0) {
+            int32_t offset;
+            if(length>3) {
+                length=3;
+            }
+            s+=i;
+            offset=0;
+            c=utf8_errorValue[length-1];
+            UTF8_APPEND_CHAR_UNSAFE(s, offset, c);
+            i=i+offset;
         }
-        s+=i;
-        offset=0;
-        c=utf8_errorValue[length-1];
-        UTF8_APPEND_CHAR_UNSAFE(s, offset, c);
-        i=i+offset;
-     }
+    }
     return i;
 }
 
@@ -229,7 +230,11 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
     for(;;) {
         if(i<=start) {
             /* no lead byte at all */
-            c=UTF8_ERROR_VALUE_1;
+            if(strict>=0) {
+                return UTF8_ERROR_VALUE_1;
+            } else {
+                return U_SENTINEL;
+            }
             break;
         }
 
@@ -250,7 +255,11 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                         if(count>=4) {
                             count=3;
                         }
-                        c=utf8_errorValue[count];
+                        if(strict>=0) {
+                            c=utf8_errorValue[count];
+                        } else {
+                            c=U_SENTINEL;
+                        }
                     } else {
                         /* exit with correct c */
                     }
@@ -260,9 +269,17 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                        include the trail byte that we started with */
                     if(count<shouldCount) {
                         *pi=i;
-                        c=utf8_errorValue[count];
+                        if(strict>=0) {
+                            c=utf8_errorValue[count];
+                        } else {
+                            c=U_SENTINEL;
+                        }
                     } else {
-                        c=UTF8_ERROR_VALUE_1;
+                        if(strict>=0) {
+                            c=UTF8_ERROR_VALUE_1;
+                        } else {
+                            c=U_SENTINEL;
+                        }
                     }
                 }
                 break;
@@ -273,12 +290,20 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                 shift+=6;
             } else {
                 /* more than 5 trail bytes is illegal */
-                c=UTF8_ERROR_VALUE_1;
+                if(strict>=0) {
+                    c=UTF8_ERROR_VALUE_1;
+                } else {
+                    c=U_SENTINEL;
+                }
                 break;
             }
         } else {
             /* single-byte character precedes trailing bytes */
-            c=UTF8_ERROR_VALUE_1;
+            if(strict>=0) {
+                c=UTF8_ERROR_VALUE_1;
+            } else {
+                c=U_SENTINEL;
+            }
             break;
         }
     }

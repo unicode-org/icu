@@ -582,7 +582,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     int32_t inputLen = 0;
     UChar decomp[decompSize];
 
-    UTF_APPEND_CHAR(temp, inputLen, bufSize, comp);
+    U16_APPEND_UNSAFE(temp, inputLen, comp);
     int32_t decompLen = unorm_getDecomposition(comp, FALSE, decomp, decompSize);
     if(decompLen < 0) {
         decompLen = -decompLen;
@@ -597,7 +597,9 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     UChar32 decompCp;
     UTF_NEXT_CHAR(decomp, decompPos, decompLen, decompCp);
 
-    int32_t i = 0;
+    int32_t i;
+    UBool overflow = FALSE;
+
     i = segmentPos;
     while(i < segLen) {
       UTF_NEXT_CHAR(segment, i, segLen, cp);
@@ -620,7 +622,19 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
 
             // brute force approach
 
-          UTF_APPEND_CHAR(buff, bufLen, bufSize, cp);
+            U16_APPEND(buff, bufLen, bufSize, cp, overflow);
+
+            if(overflow) {
+                /*
+                 * ### TODO handle buffer overflow
+                 * The buffer is large, but an overflow may still happen with
+                 * unusual input (many combining marks?).
+                 * Reallocate buffer and continue.
+                 * markus 20020929
+                 */
+
+                overflow = FALSE;
+            }
 
             /* TODO: optimize
             // since we know that the classes are monotonically increasing, after zero

@@ -156,7 +156,7 @@ u_strstr(const UChar *s, const UChar *substring);
  * but u_strchr32() will find neither because they
  * combine to the code point U+10000.
  * Either function will find U+d800 in "a\ud800b".
- * This behavior ensures that UTF_GET_CHAR(u_strchr32(c))==c.
+ * This behavior ensures that U16_GET(u_strchr32(c))==c.
  *
  * @param s The string to search.
  * @param c The code point (0..0x10ffff) to find.
@@ -628,7 +628,7 @@ u_memchr(const UChar *src, UChar ch, int32_t count);
  * but u_memchr32() will find neither because they
  * combine to the code point U+10000.
  * Either function will find U+d800 in "a\ud800b".
- * This behavior ensures that UTF_GET_CHAR(u_memchr32(c))==c.
+ * This behavior ensures that U16_GET(u_memchr32(c))==c.
  *
  * @param src string to search in
  * @param ch character to find
