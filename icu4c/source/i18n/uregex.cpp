@@ -885,6 +885,11 @@ int32_t RegexCImpl::appendTail(URegularExpression    *regexp,
         // The last call to find() on this matcher failed().
         //   Look back to the end of the last find() that succeeded for src index.
         srcIdx = m->fLastMatchEnd;
+        if (srcIdx == -1)  {
+            // There has been no successful match with this matcher.
+            //   We want to copy the whole string.
+            srcIdx = 0;
+        }
     }
 
     int32_t  destIdx     = 0;
