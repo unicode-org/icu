@@ -1,10 +1,4 @@
 /DLL
 /NOENTRY
 /base:"0x4ad00000"
-/comment:"*******************************************************************************"
-/comment:"* COPYRIGHT:                                                                  *"
-/comment:"*   (C) Copyright International Business Machines Corporation, 1999           *"
-/comment:"*   Licensed Material - Program-Property of IBM - All Rights Reserved.        *"
-/comment:"*   US Government Users Restricted Rights - Use, duplication, or disclosure   *"
-/comment:"*   restricted by GSA ADP Schedule Contract with IBM Corp.                    *"
-/comment:"*******************************************************************************"
+/comment:" Copyright (C) 1999 International Business Machines Corporation and others.  All Rights Reserved. "

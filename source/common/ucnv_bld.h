@@ -44,11 +44,6 @@ typedef struct _CompactByteArray CompactByteArray;
 
 #define UCNV_FILE_CHECK_MARKER 0xBEDA
 
-#define UCNV_COPYRIGHT_STRING \
-    " * COPYRIGHT:                                                                   *\n" \
-    " *   (C) Copyright International Business Machines Corporation, 1999            *\n"
-
-#define UCNV_COPYRIGHT_STRING_LENGTH  200
 /*maximum length of the converter names */
 #define UCNV_MAX_CONVERTER_NAME_LENGTH 60
 #define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
