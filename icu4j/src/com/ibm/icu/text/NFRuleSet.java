@@ -19,8 +19,8 @@ import java.util.Vector;
  * control to it, and to arbitrate between different rules when parsing
  * a number.
  */
-// temporary testing only
-public final class NFRuleSet {
+
+final class NFRuleSet {
     //-----------------------------------------------------------------------
     // constants
     //-----------------------------------------------------------------------

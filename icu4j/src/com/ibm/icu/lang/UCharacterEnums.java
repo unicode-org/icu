@@ -480,6 +480,7 @@ public class UCharacterEnums {
         /**
          * Undefined bidirectional character type. Undefined <code>char</code>
          * values have undefined directionality in the Unicode specification.
+	 * @draft ICU 3.0
          */
         public static final byte DIRECTIONALITY_UNDEFINED = -1;
     }
