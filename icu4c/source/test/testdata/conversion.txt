@@ -45,6 +45,14 @@ conversion {
       Cases {
         // extensions
         {
+          "ibm-16684",
+          :bin{ ececec8bec8cec8d4386ecb5ecb6ecb7 },
+          "\ufffd\u31f6\u31f7\u31f8\u30ab\u304b\u309a\u304d\u309a\u304f\u309a",
+          :intvector{ 0, 2, 4, 6, 8, 10, 10, 12, 12, 14, 14 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
+        {
           "ibm-1390",
           :bin{ 43860eececec8bec8cec8d4386ecb5ecb6ecb70fec },
           "\uff63\uff76\ufffd\u31f6\u31f7\u31f8\u30ab\u304b\u309a\u304d\u309a\u304f\u309a\x1a",
