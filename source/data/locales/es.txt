@@ -1,0 +1,338 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+es {
+    Version { "1.1" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "& N < n\u0303, N\u0303" }
+    }
+    /* Duplicates from root commented out. */
+    Countries { 
+        AE { "Emiratos \u00C1rabes Unidos" }
+        AS { "Samoa Americana" }
+        //AR { "Argentina" }
+        BE { "B\u00E9lgica" }
+        BH { "Bahr\u00E1in" }
+        //BO { "Bolivia" }
+        BR { "Brasil" }
+        BZ { "Belice" }
+        BY { "Bielorrusia" }
+        CA { "Canad\u00E1" }
+        CH { "Suiza" }
+        //CL { "Chile" }
+        //CO { "Colombia" }
+        //CR { "Costa Rica" }
+        CZ { "Chequia" }
+        DE { "Alemania" }
+        DK { "Dinamarca" }
+        DO { "Rep\u00FAblica Dominicana" }
+        DZ { "Argelia" }
+        //EC { "Ecuador" }
+        EG { "Egipto" }
+        ES { "Espa\u00F1a" }
+        FI { "Finlandia" }
+        FO { "Islas Feroe" }
+        FR { "Francia" }
+        GB { "Reino Unido" }
+        GL { "Groenlanida" }
+        GR { "Grecia" }
+        //GT { "Guatemala" }
+        //HN { "Honduras" }
+        HR { "Croacia" }
+        HU { "Hungr\u00EDa" }
+        IE { "Irlanda" }
+        IQ { "Irak" }
+        IR { "Ir\u00E1n" }
+        IS { "Islandia" }
+        IT { "Italia" }
+        JO { "Jordania" }
+        JP { "Jap\u00F3n" }
+        KE { "Kenia" }
+        KP { "Corea del Norte" }
+        KR { "Corea del Sur" }
+        LB { "L\u00EDbano" }
+        LT { "Lituania" }
+        LU { "Luxemburgo" }
+        LV { "Letonia" }
+        MA { "Marruecos" }
+        MH { "Islas Marshall" }
+        MP { "Islas Marianas del Norte" }
+        MX { "M\u00E9xico" }
+        //NI { "Nicaragua" }
+        NL { "Pa\u00EDses Bajos" }
+        NO { "Noruega" }
+        NZ { "Nueva Zelanda" }
+        OM { "Om\u00E1n" }
+        PA { "Panam\u00E1" }
+        PE { "Per\u00FA" }
+        PH { "Islas Filipinas" }
+        PK { "Pakist\u00E1n" }
+        PL { "Polonia" }
+        //PR { "Puerto Rico" }
+        //PY { "Paraguay" }
+        RO { "Rumania" }
+        RU { "Rusia" }
+        SA { "Arabia Saud\u00ED" }
+        SD { "Sud\u00E1n" }
+        SE { "Suecia" }
+        SG { "Singapur" }
+        SI { "Eslovenia" }
+        SK { "Eslovaquia" }
+        SP { "Servia" }
+        //SV { "El Salvador" }
+        SY { "Siria" }
+        TH { "Tailandia" }
+        TN { "T\u00FAnez" }
+        TR { "Turqu\u00EDa" }
+        TT { "Trinidad y Tabago" }
+        TW { "Taiw\u00E1n" }
+        UA { "Ucraina" }
+        UM { "Islas Perif\u00E9ricas Menores de los Estados Unidos" }
+        US { "Estados Unidos" }
+        //UY { "Uruguay" }
+        //VE { "Venezuela" }
+        VI { "Islas V\u00EDrgenes de los Estados Unidos" }
+        ZA { "Sud\u00E1frica" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "HH'H'mm'' z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "dd-MMM-yy",
+        "d/MM/yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "dom",
+        "lun",
+        "mar",
+        "mi\u00E9",
+        "jue",
+        "vie",
+        "s\u00E1b",
+    }
+    DayNames { 
+        "domingo",
+        "lunes",
+        "martes",
+        "mi\u00E9rcoles",
+        "jueves",
+        "viernes",
+        "s\u00E1bado",
+    }
+    Eras { 
+        "a.C.",  // Said to be a.C. for antes de Cristo
+        "d.C.",  // Said to be d.C. for despu\u00E9s de Cristo
+    }
+    // Spanish does not capitalize the language names like English
+    Languages {
+        root{"ra\u00EDz" }    // The only exception to ISO-639
+
+        af { "afrikaans" }
+        am { "amharic" }
+        ar { "\u00E1rabe" }
+        az { "azerbayano" }
+        be { "bielorruso" }
+        bg { "b\u00FAlgaro" }
+        bh { "bihari" }
+        bn { "bengal\u00ED" }
+        ca { "catal\u00E1n" }
+        cs { "checo" }
+        da { "dan\u00E9s" }
+        de { "alem\u00E1n" }
+        el { "griego" }
+        en { "ingl\u00E9s" }
+        eo { "esperanto" }
+        es { "espa\u00F1ol" }
+        et { "estonio" }
+        eu { "vasco" }
+        fa { "farsi" }
+        fi { "finland\u00E9s" }
+        fo { "faro\u00E9s" }
+        fr { "franc\u00E9s" }
+        ga { "irland\u00E9s" }
+        gl { "gallego" }
+        gu { "goujarat\u00ED" }
+        he { "hebreo" }
+        hi { "hindi" }
+        hr { "croata" }
+        hu { "h\u00FAngaro" }
+        hy { "armenio" }
+        id { "indonesio" }
+        is { "island\u00e9s" }
+        it { "italiano" }
+        ja { "japon\u00E9s" }
+        ka { "georgiano" }
+        kk { "kazajo" }
+        kl { "groenland\u00E9s" }
+        km { "kmer" }
+        kn { "canara" }
+        ko { "coreano" }
+        ku { "kurdo" }
+        kw { "c\u00F3rnico" }
+        ky { "kirghiz" }
+        la { "lat\u00EDn" }
+        lt { "lituano" }
+        lv { "let\u00F3n" }
+        mk { "macedonio" }
+        mn { "mongol" }
+        mr { "marathi" }
+        ms { "malaisio" }
+        mt { "malt\u00e9s" }
+        my { "birmano" }
+        nl { "holand\u00E9s" }
+        no { "noruego" }
+        pa { "punjab\u00ED" }
+        pl { "polaco" }
+        pt { "portugu\u00E9s" }
+        ro { "rumano" }
+        ru { "ruso" }
+        sh { "serbo-croata" }
+        sk { "eslovaco" }
+        sl { "esloveno" }
+        so { "somal\u00ED" }
+        sq { "alban\u00E9s" }
+        sr { "servio" }
+        sv { "sueco" }
+        sw { "swahili" }
+        te { "telugu" }
+        th { "tailand\u00E9s" }
+        ti { "tigrinya" }
+        tr { "turco" }
+        tt { "tataro" }
+        vi { "vietnam\u00E9s" }
+        uk { "ucraniano" }
+        ur { "urdu" }
+        uz { "uzbeko" }
+        zh { "chino" }
+        zu { "zul\u00FA" }
+    }
+    LocaleID:int { 0x0a }
+//    LocaleString { "es" }
+    MonthAbbreviations { 
+        "ene",
+        "feb",
+        "mar",
+        "abr",
+        "may",
+        "jun",
+        "jul",
+        "ago",
+        "sep",
+        "oct",
+        "nov",
+        "dic",
+    }
+    MonthNames { 
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre",
+    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortLanguage { "spa" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00f1 \u00e1 \u00e9 \u00ed \u00f3 \u00fa]" }
+ 
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+//         * Spellout rules for Spanish.  The Spanish rules are quite similar to
+//         * the English rules, but there are some important differences:
+//         * First, we have to provide separate rules for most of the twenties
+//         * because the ones digit frequently picks up an accent mark that it
+//         * doesn't have when standing alone.  Second, each multiple of 100 has
+//         * to be specified separately because the multiplier on 100 very often
+//         * changes form in the contraction: 500 is "quinientos," not
+//         * "cincocientos."  In addition, the word for 100 is "cien" when
+//         * standing alone, but changes to "ciento" when followed by more digits.
+//         * There also some other differences.
+
+    // The Spanish rules are incomplete.  I'm missing information on negative
+    // numbers and numbers with fractional parts.  I also don't have
+    // information on numbers higher than the millions.
+
+    SpelloutRules {
+        // negative-number and fraction rules
+        "-x: menos >>;\n"
+        "x.x: << punto >>;\n"
+        // words for values from 0 to 19
+        "cero; uno; dos; tres; cuatro; cinco; seis; siete; ocho; nueve;\n"
+        "diez; once; doce; trece; catorce; quince; diecis\u00e9is;\n"
+        "    diecisiete; dieciocho; diecinueve;\n"
+        // words for values from 20 to 29 (necessary because the ones digit
+        // often picks up an accent mark it doesn't have when standing alone)
+        "veinte; veintiuno; veintid\u00f3s; veintitr\u00e9s; veinticuatro;\n"
+        "    veinticinco; veintis\u00e9is; veintisiete; veintiocho;\n"
+        "    veintinueve;\n"
+        // words for multiples of 10 (notice that the tens digit is separated
+        // from the ones digit by the word "y".)
+        "30: treinta[ y >>];\n"
+        "40: cuarenta[ y >>];\n"
+        "50: cincuenta[ y >>];\n"
+        "60: sesenta[ y >>];\n"
+        "70: setenta[ y >>];\n"
+        "80: ochenta[ y >>];\n"
+        "90: noventa[ y >>];\n"
+        // 100 by itself is "cien," but 100 followed by something is "cineto"
+        "100: cien;\n"
+        "101: ciento >>;\n"
+        // words for multiples of 100 (must be stated because they're
+        // rarely simple concatenations)
+        "200: doscientos[ >>];\n"
+        "300: trescientos[ >>];\n"
+        "400: cuatrocientos[ >>];\n"
+        "500: quinientos[ >>];\n"
+        "600: seiscientos[ >>];\n"
+        "700: setecientos[ >>];\n"
+        "800: ochocientos[ >>];\n"
+        "900: novecientos[ >>];\n"
+        // for 1,000, the multiplier on "mil" is omitted: 2,000 is "dos mil,"
+        // but 1,000 is just "mil."
+        "1000: mil[ >>];\n"
+        "2000: << mil[ >>];\n"
+        // 1,000,000 is "un millon," not "uno millon"
+        "1,000,000: un mill\u00f3n[ >>];\n"
+        "2,000,000: << mill\u00f3n[ >>];\n"
+        // overflow rule
+        "1,000,000,000: =#,##0= (incomplete data);" 
+     }
+}

@@ -1,0 +1,34 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+// This is an invariant locale.
+// This has been also known as the C locale on Unix or the invariant locale in Windows.
+en_US_POSIX {
+    Version{ "1.0" }
+    // No grouping separators
+    NumberPatterns { 
+        "###0.###;-###0.###",
+        "\u00A4 ###0.00;-\u00A4 ###0.00",
+        "###0%",
+        "0.000000E+000",
+    }
+    NumberElements {
+        ".",
+        ",",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "0/00",
+        "INF",  // Older programs can parse infinity this way.
+        "\uFFFD",
+    }
+//    LocaleString { "en_US_POSIX" }
+    LocaleID:int { 0x7F }
+}

@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar_KW {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "\u062F.\u0643.\u200F",
+        "KWD",
+        ".",
+    }
+//    LocaleString { "ar_KW" }
+//    ShortCountry { "KWT" }
+    LocaleID:int { 0x3401 }
+    NumberPatterns { 
+        "#,##0.###;#,##0.###-",
+        "\u00A4 #,##0.000;\u00A4 #,##0.000-",
+        "#,##0%",
+        "#E0",
+    }
+}

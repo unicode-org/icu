@@ -1,0 +1,43 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1998-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// English, Malta locale
+// srl@monkey.sbay.org
+
+en_MT {
+    Version{ "1.0" }
+
+//    ShortCountry { MLT }
+
+    CurrencyElements {
+        "Lm",
+        MTL,
+        "."
+    }
+
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+
+    DateTimePatterns {
+        "h:mm:ss a z",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm a",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+
+
+//    LocaleID {"043A"}  ??
+
+}
