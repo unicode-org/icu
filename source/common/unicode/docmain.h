@@ -15,7 +15,7 @@
 
 /*! \mainpage
  *
- * \section API Reference Usage
+ * \section API API Reference Usage
  * 
  * <h3>C++ Programmers:</h3>
  * <p>Use  <a href="hierarchy.html">Class Hierarchy</a> or <a href="classes.html"> Alphabetical List </a>
