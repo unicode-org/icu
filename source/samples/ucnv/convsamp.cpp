@@ -177,7 +177,7 @@ void printUChar(UChar32 ch32)
   This example first creates a UnicodeString out of the Unicode chars.
 
   targetSize must be set to the amount of space available in the target
-  buffer. After UnicodeConverterCPP::fromUnicodeString() is called, 
+  buffer. After UnicodeConverter::fromUnicodeString() is called, 
   targetSize will contain the number of bytes in target[] which were
   used in the resulting codepage.  In this case, there is a 1:1 mapping
   between the input and output characters. The exclamation mark has the
@@ -210,7 +210,7 @@ UErrorCode convsample_01()
   UErrorCode status = U_ZERO_ERROR;
 
   // set up the converter
-  UnicodeConverterCPP conv("koi8-r", status);
+  UnicodeConverter conv("koi8-r", status);
   U_ASSERT(status);
 
   // convert to KOI8-R
@@ -440,7 +440,7 @@ UErrorCode convsample_11()
   UErrorCode status = U_ZERO_ERROR;
 
   // set up the converter
-  UnicodeConverterCPP conv("shift_jis", status);
+  UnicodeConverter conv("shift_jis", status);
   assert(U_SUCCESS(status));
 
   // convert from JIS

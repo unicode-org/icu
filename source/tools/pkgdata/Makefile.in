@@ -75,7 +75,7 @@ install: install-local
 clean: clean-local
 distclean : distclean-local
 dist: dist-local
-check: check-local
+check: all check-local
 
 all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
@@ -92,7 +92,7 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
 
-check-local:
+check-local: all-local
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
