@@ -975,7 +975,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             int32_t digitValue = u_charDigitValue(fC.fChar);
             U_ASSERT(digitValue >= 0);
             fIntervalUpper = fIntervalUpper*10 + digitValue;
-            if (fIntervalLow < 0) {
+            if (fIntervalUpper < 0) {
                 error(U_REGEX_NUMBER_TOO_BIG);
             }
         }
@@ -1993,12 +1993,14 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
     op = URX_BUILD(LoopOp, topOfBlock);
     fRXPat->fCompiledPat->addElement(op, *fStatus);
 
+    if ((fIntervalLow & 0xff000000) != 0 ||
+        fIntervalUpper > 0 && (fIntervalUpper & 0xff000000) != 0) {
+            error(U_REGEX_NUMBER_TOO_BIG);
+        }
+
     if (fIntervalLow > fIntervalUpper && fIntervalUpper != -1) {
         error(U_REGEX_MAX_LT_MIN);
     }
-
-
-
 }
 
 
