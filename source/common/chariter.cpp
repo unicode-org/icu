@@ -8,7 +8,5 @@
 
 #include "unicode/chariter.h"
 
-const UChar CharacterIterator::DONE = 0xffff;
-
 CharacterIterator::~CharacterIterator()
 {}
