@@ -49,46 +49,46 @@ CollationDummyTest::~CollationDummyTest()
     delete myCollation;
 }
 
-const Collator::EComparisonResult CollationDummyTest::results[] = {
-    Collator::LESS,
-    Collator::LESS, /*Collator::GREATER,*/
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::GREATER,
-    Collator::LESS,                                     /*  10 */
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::GREATER,
-    Collator::GREATER,
-    Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
+const UCollationResult CollationDummyTest::results[] = {
+    UCOL_LESS,
+    UCOL_LESS, /*Collator::GREATER,*/
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_GREATER,
+    UCOL_LESS,                                     /*  10 */
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_GREATER,
+    UCOL_GREATER,
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_LESS,
     /*  test primary > 17 */
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::EQUAL,                                    /*  20 */
-    Collator::LESS,
-    Collator::LESS,
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::LESS,
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_EQUAL,                                    /*  20 */
+    UCOL_LESS,
+    UCOL_LESS,
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_LESS,
     /*  test secondary > 26 */
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::EQUAL,                                    /*  30 */
-    Collator::EQUAL,
-    Collator::LESS,
-    Collator::EQUAL,                                     /*  34 */
-    Collator::EQUAL,
-    Collator::EQUAL,
-    Collator::LESS 
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_EQUAL,                                    /*  30 */
+    UCOL_EQUAL,
+    UCOL_LESS,
+    UCOL_EQUAL,                                     /*  34 */
+    UCOL_EQUAL,
+    UCOL_EQUAL,
+    UCOL_LESS 
 };
 
 
@@ -138,7 +138,7 @@ void CollationDummyTest::TestExtra(/* char* par */)
     {
         for (j = i + 1; j < COUNT_TEST_CASES; j += 1)
         {
-            doTest(myCollation, testCases[i], testCases[j], Collator::LESS);
+            doTest(myCollation, testCases[i], testCases[j], UCOL_LESS);
         }
     }
 }
@@ -166,7 +166,7 @@ void CollationDummyTest::TestJB581(void)
         return;
     }
 
-    Collator::EComparisonResult result = coll->compare(source, target);
+    UCollationResult result = coll->compare(source, target);
     /* result is 1, secondary differences only for ignorable space characters*/
     if (result != 1)
     {

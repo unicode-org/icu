@@ -126,19 +126,19 @@ Collator::createInstance(const Locale &loc,
 UBool Collator::equals(const UnicodeString& source, 
                           const UnicodeString& target) const
 {
-  return (compare(source, target) == EQUAL);
+  return (compare(source, target) == UCOL_EQUAL);
 }
 
 UBool Collator::greaterOrEqual(const UnicodeString& source, 
                                   const UnicodeString& target) const
 {
-  return (compare(source, target) != LESS);
+  return (compare(source, target) != UCOL_LESS);
 }
 
 UBool Collator::greater(const UnicodeString& source, 
                            const UnicodeString& target) const
 {
-  return (compare(source, target) == GREATER);
+  return (compare(source, target) == UCOL_GREATER);
 }
 
 const Locale* Collator::getAvailableLocales(int32_t& count) 

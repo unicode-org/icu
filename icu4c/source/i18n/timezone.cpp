@@ -982,8 +982,8 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         // For the pure-DST zone, we use JANUARY and DECEMBER
 
         new SimpleTimeZone(getRawOffset(), getID(tempID),
-                           Calendar::JANUARY , 1, 0, 0,
-                           Calendar::DECEMBER , 31, 0, U_MILLIS_PER_DAY, status) :
+                           UCAL_JANUARY , 1, 0, 0,
+                           UCAL_DECEMBER , 31, 0, U_MILLIS_PER_DAY, status) :
         new SimpleTimeZone(getRawOffset(), getID(tempID));
 
     format.applyPattern(style == LONG ? "zzzz" : "z");

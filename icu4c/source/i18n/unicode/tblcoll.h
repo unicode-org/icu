@@ -248,7 +248,7 @@ public:
    *         target. Otherwise, returns EQUAL.
    * @stable ICU 2.0
    */
-  virtual EComparisonResult compare(const UnicodeString& source,
+  virtual UCollationResult compare(const UnicodeString& source,
                                     const UnicodeString& target) const;
 
 
@@ -265,7 +265,7 @@ public:
    *         target. Otherwise, returns EQUAL.
    * @stable ICU 2.0
    */
-  virtual EComparisonResult compare(const UnicodeString& source,
+  virtual UCollationResult compare(const UnicodeString& source,
                                     const UnicodeString&  target,
                                     int32_t length) const;
 
@@ -302,7 +302,7 @@ public:
    *         target
    * @stable ICU 2.2
    */
-  virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
+  virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength)
                                     const;
 
@@ -755,6 +755,7 @@ private:
   * Converts C's UCollationResult to EComparisonResult
   * @param result member of the enum UComparisonResult
   * @return EComparisonResult equivalent of UCollationResult
+  * @deprecated ICU 2.6. We will not need it.
   */
   Collator::EComparisonResult getEComparisonResult(
                                           const UCollationResult &result) const;

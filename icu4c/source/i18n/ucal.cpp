@@ -222,7 +222,7 @@ ucal_setAttribute(      UCalendar*              cal,
     break;
     
   case UCAL_FIRST_DAY_OF_WEEK:
-    ((Calendar*)cal)->setFirstDayOfWeek((Calendar::EDaysOfWeek)newValue);
+    ((Calendar*)cal)->setFirstDayOfWeek((UCalendarDaysOfWeek)newValue);
     break;
       
   case UCAL_MINIMAL_DAYS_IN_FIRST_WEEK:
@@ -312,7 +312,7 @@ ucal_add(    UCalendar*                cal,
 
   if(U_FAILURE(*status)) return;
 
-  ((Calendar*)cal)->add((Calendar::EDateFields)field, amount, *status);
+  ((Calendar*)cal)->add(field, amount, *status);
 }
 
 U_CAPI void  U_EXPORT2
@@ -324,7 +324,7 @@ ucal_roll(        UCalendar*            cal,
 
   if(U_FAILURE(*status)) return;
 
-  ((Calendar*)cal)->roll((Calendar::EDateFields)field, amount, *status);
+  ((Calendar*)cal)->roll(field, amount, *status);
 }
 
 U_CAPI int32_t  U_EXPORT2
@@ -335,7 +335,7 @@ ucal_get(    const    UCalendar*                cal,
 
   if(U_FAILURE(*status)) return -1;
 
-  return ((Calendar*)cal)->get((Calendar::EDateFields)field, *status);
+  return ((Calendar*)cal)->get(field, *status);
 }
 
 U_CAPI void  U_EXPORT2
@@ -344,7 +344,7 @@ ucal_set(    UCalendar*                cal,
         int32_t                    value)
 {
 
-  ((Calendar*)cal)->set((Calendar::EDateFields)field, value);
+  ((Calendar*)cal)->set(field, value);
 }
 
 U_CAPI UBool  U_EXPORT2
@@ -352,7 +352,7 @@ ucal_isSet(    const    UCalendar*                cal,
         UCalendarDateFields        field)
 {
 
-  return ((Calendar*)cal)->isSet((Calendar::EDateFields)field);
+  return ((Calendar*)cal)->isSet(field);
 }
 
 U_CAPI void  U_EXPORT2
@@ -360,7 +360,7 @@ ucal_clearField(    UCalendar*            cal,
             UCalendarDateFields field)
 {
 
-  ((Calendar*)cal)->clear((Calendar::EDateFields)field);
+  ((Calendar*)cal)->clear(field);
 }
 
 U_CAPI void  U_EXPORT2
@@ -383,23 +383,23 @@ ucal_getLimit(    const    UCalendar*              cal,
   
   switch(type) {
   case UCAL_MINIMUM:
-    return ((Calendar*)cal)->getMinimum((Calendar::EDateFields)field);
+    return ((Calendar*)cal)->getMinimum(field);
 
   case UCAL_MAXIMUM:
-    return ((Calendar*)cal)->getMaximum((Calendar::EDateFields)field);
+    return ((Calendar*)cal)->getMaximum(field);
 
   case UCAL_GREATEST_MINIMUM:
-    return ((Calendar*)cal)->getGreatestMinimum((Calendar::EDateFields)field);
+    return ((Calendar*)cal)->getGreatestMinimum(field);
 
   case UCAL_LEAST_MAXIMUM:
-    return ((Calendar*)cal)->getLeastMaximum((Calendar::EDateFields)field);
+    return ((Calendar*)cal)->getLeastMaximum(field);
 
   case UCAL_ACTUAL_MINIMUM:
-    return ((Calendar*)cal)->getActualMinimum((Calendar::EDateFields)field,
+    return ((Calendar*)cal)->getActualMinimum(field,
                           *status);
 
   case UCAL_ACTUAL_MAXIMUM:
-    return ((Calendar*)cal)->getActualMaximum((Calendar::EDateFields)field,
+    return ((Calendar*)cal)->getActualMaximum(field,
                           *status);
 
   default:

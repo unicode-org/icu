@@ -228,7 +228,7 @@ void CollationMonkeyTest::TestRules(/* char* par */){
         return;
     }
     for(i=0; i<2; i++){
-        doTest(myCollation, testSourceCases[i], testTargetCases[i], Collator::LESS);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], UCOL_LESS);
     }
     delete myCollation;
 
@@ -243,7 +243,7 @@ void CollationMonkeyTest::TestRules(/* char* par */){
         return;
     }
     for(i=0; i<2; i++){
-        doTest(myCollation, testSourceCases[i], testTargetCases[i], Collator::LESS);
+        doTest(myCollation, testSourceCases[i], testTargetCases[i], UCOL_LESS);
     }
     delete myCollation;
     delete col;

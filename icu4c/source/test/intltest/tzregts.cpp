@@ -129,14 +129,14 @@ void TimeZoneRegressionTest:: Test4073215()
     SimpleTimeZone *z = (SimpleTimeZone*) TimeZone::createTimeZone("GMT");
     if (z->useDaylightTime())
         errln("Fail: Fix test to start with non-DST zone");
-    z->setStartRule(Calendar::FEBRUARY, 1, Calendar::SUNDAY, 0, status);
+    z->setStartRule(UCAL_FEBRUARY, 1, UCAL_SUNDAY, 0, status);
     failure(status, "z->setStartRule()");
-    z->setEndRule(Calendar::MARCH, -1, Calendar::SUNDAY, 0, status);
+    z->setEndRule(UCAL_MARCH, -1, UCAL_SUNDAY, 0, status);
     failure(status, "z->setStartRule()");
     if (!z->useDaylightTime())
         errln("Fail: DST not active");
 
-    GregorianCalendar cal(1997, Calendar::JANUARY, 31, status);
+    GregorianCalendar cal(1997, UCAL_JANUARY, 31, status);
     failure(status, "new GregorianCalendar");
     cal.adoptTimeZone(z);
 
@@ -151,7 +151,7 @@ void TimeZoneRegressionTest:: Test4073215()
     if (indt) {
         errln("Fail: Jan 31 inDaylightTime=TRUE, exp FALSE");
     }
-    cal.set(1997, Calendar::MARCH, 1);
+    cal.set(1997, UCAL_MARCH, 1);
     indt = z->inDaylightTime(mar1=cal.getTime(status), status);
     failure(status, "inDaylightTime or getTime call on Mar 1");
     if (!indt) {
@@ -160,7 +160,7 @@ void TimeZoneRegressionTest:: Test4073215()
         failure(status, "getTime");
         errln((UnicodeString)"Fail: " + str + " inDaylightTime=FALSE, exp TRUE");
     }
-    cal.set(1997, Calendar::MARCH, 31);
+    cal.set(1997, UCAL_MARCH, 31);
     indt = z->inDaylightTime(mar31=cal.getTime(status), status);
     failure(status, "inDaylightTime or getTime call on Mar 31");
     if (indt) {
@@ -200,14 +200,14 @@ void TimeZoneRegressionTest:: Test4084933() {
     TimeZone *tz = TimeZone::createTimeZone("PST");
 
     int32_t offset1 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000), status);
+        1997, UCAL_OCTOBER, 26, UCAL_SUNDAY, (2*60*60*1000), status);
     int32_t offset2 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000)-1, status);
+        1997, UCAL_OCTOBER, 26, UCAL_SUNDAY, (2*60*60*1000)-1, status);
 
     int32_t offset3 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (1*60*60*1000), status);
+        1997, UCAL_OCTOBER, 26, UCAL_SUNDAY, (1*60*60*1000), status);
     int32_t offset4 = tz->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (1*60*60*1000)-1, status);
+        1997, UCAL_OCTOBER, 26, UCAL_SUNDAY, (1*60*60*1000)-1, status);
 
     /*
      *  The following was added just for consistency.  It shows that going *to* Daylight
@@ -215,14 +215,14 @@ void TimeZoneRegressionTest:: Test4084933() {
      */
 
     int32_t offset5 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (2*60*60*1000), status);
+        1997, UCAL_APRIL, 6, UCAL_SUNDAY, (2*60*60*1000), status);
     int32_t offset6 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (2*60*60*1000)-1, status);
+        1997, UCAL_APRIL, 6, UCAL_SUNDAY, (2*60*60*1000)-1, status);
 
     int32_t offset7 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000), status);
+        1997, UCAL_APRIL, 6, UCAL_SUNDAY, (1*60*60*1000), status);
     int32_t offset8 = tz->getOffset(1,
-        1997, Calendar::APRIL, 6, Calendar::SUNDAY, (1*60*60*1000)-1, status);
+        1997, UCAL_APRIL, 6, UCAL_SUNDAY, (1*60*60*1000)-1, status);
 
     int32_t SToffset = (int32_t)(-8 * 60*60*1000L);
     int32_t DToffset = (int32_t)(-7 * 60*60*1000L);
@@ -296,10 +296,10 @@ void TimeZoneRegressionTest:: Test4109314() {
         PST, new Date(98,Calendar.OCTOBER,24,22,0), new Date(98,Calendar.OCTOBER,25,6,0),
     };*/
     UDate testData [] = {
-        CalendarRegressionTest::makeDate(98,Calendar::APRIL,4,22,0),    
-        CalendarRegressionTest::makeDate(98, Calendar::APRIL,5,6,0),
-        CalendarRegressionTest::makeDate(98,Calendar::OCTOBER,24,22,0), 
-        CalendarRegressionTest::makeDate(98,Calendar::OCTOBER,25,6,0)
+        CalendarRegressionTest::makeDate(98,UCAL_APRIL,4,22,0),    
+        CalendarRegressionTest::makeDate(98, UCAL_APRIL,5,6,0),
+        CalendarRegressionTest::makeDate(98,UCAL_OCTOBER,24,22,0), 
+        CalendarRegressionTest::makeDate(98,UCAL_OCTOBER,25,6,0)
     };
     UBool pass = TRUE;
     for (int32_t i = 0; i < 4; i+=2) {
@@ -332,33 +332,33 @@ TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *t
     // Here is where the user made an error.  They were passing in the value of
     // the MILLSECOND field; you need to pass in the millis in the day in STANDARD
     // time.
-    UDate millis = testCal->get(Calendar::MILLISECOND, status) +
-        1000.0 * (testCal->get(Calendar::SECOND, status) +
-        60.0 * (testCal->get(Calendar::MINUTE, status) +
-        60.0 * (testCal->get(Calendar::HOUR_OF_DAY, status)))) -
-        testCal->get(Calendar::DST_OFFSET, status);
+    UDate millis = testCal->get(UCAL_MILLISECOND, status) +
+        1000.0 * (testCal->get(UCAL_SECOND, status) +
+        60.0 * (testCal->get(UCAL_MINUTE, status) +
+        60.0 * (testCal->get(UCAL_HOUR_OF_DAY, status)))) -
+        testCal->get(UCAL_DST_OFFSET, status);
 
     /* Fix up millis to be in range.  ASSUME THAT WE ARE NOT AT THE
      * BEGINNING OR END OF A MONTH.  We must add this code because
      * getOffset() has been changed to be more strict about the parameters
      * it receives -- it turns out that this test was passing in illegal
      * values. */
-    int32_t date = testCal->get(Calendar::DATE, status);
-    int32_t dow  = testCal->get(Calendar::DAY_OF_WEEK, status);
+    int32_t date = testCal->get(UCAL_DATE, status);
+    int32_t dow  = testCal->get(UCAL_DAY_OF_WEEK, status);
     while(millis < 0) {
         millis += U_MILLIS_PER_DAY;
         --date;
-        dow = Calendar::SUNDAY + ((dow - Calendar::SUNDAY + 6) % 7);
+        dow = UCAL_SUNDAY + ((dow - UCAL_SUNDAY + 6) % 7);
     }
     while (millis >= U_MILLIS_PER_DAY) {
         millis -= U_MILLIS_PER_DAY;
         ++date;
-        dow = Calendar::SUNDAY + ((dow - Calendar::SUNDAY + 1) % 7);
+        dow = UCAL_SUNDAY + ((dow - UCAL_SUNDAY + 1) % 7);
     }
 
-    tzOffset = testTZ->getOffset((uint8_t)testCal->get(Calendar::ERA, status), 
-                                testCal->get(Calendar::YEAR, status), 
-                                testCal->get(Calendar::MONTH, status), 
+    tzOffset = testTZ->getOffset((uint8_t)testCal->get(UCAL_ERA, status), 
+                                testCal->get(UCAL_YEAR, status), 
+                                testCal->get(UCAL_MONTH, status), 
                                 date, 
                                 (uint8_t)dow, 
                                 (int32_t)millis,
@@ -430,23 +430,23 @@ void TimeZoneRegressionTest:: Test4126678()
     TimeZone *tz = TimeZone::createTimeZone("PST");
     cal->adoptTimeZone(tz);
 
-    cal->set(1998 - 1900, Calendar::APRIL, 5, 10, 0);
+    cal->set(1998 - 1900, UCAL_APRIL, 5, 10, 0);
     //Date dt = new Date(1998-1900, Calendar::APRIL, 5, 10, 0);
     
     if (! tz->useDaylightTime() || U_FAILURE(status))
         errln("We're not in Daylight Savings Time and we should be.\n");
 
     //cal.setTime(dt);
-    int32_t era = cal->get(Calendar::ERA, status);
-    int32_t year = cal->get(Calendar::YEAR, status);
-    int32_t month = cal->get(Calendar::MONTH, status);
-    int32_t day = cal->get(Calendar::DATE, status);
-    int32_t dayOfWeek = cal->get(Calendar::DAY_OF_WEEK, status);
-    int32_t millis = cal->get(Calendar::MILLISECOND, status) +
-        (cal->get(Calendar::SECOND, status) +
-         (cal->get(Calendar::MINUTE, status) +
-          (cal->get(Calendar::HOUR, status) * 60) * 60) * 1000) -
-        cal->get(Calendar::DST_OFFSET, status);
+    int32_t era = cal->get(UCAL_ERA, status);
+    int32_t year = cal->get(UCAL_YEAR, status);
+    int32_t month = cal->get(UCAL_MONTH, status);
+    int32_t day = cal->get(UCAL_DATE, status);
+    int32_t dayOfWeek = cal->get(UCAL_DAY_OF_WEEK, status);
+    int32_t millis = cal->get(UCAL_MILLISECOND, status) +
+        (cal->get(UCAL_SECOND, status) +
+         (cal->get(UCAL_MINUTE, status) +
+          (cal->get(UCAL_HOUR, status) * 60) * 60) * 1000) -
+        cal->get(UCAL_DST_OFFSET, status);
 
     failure(status, "cal->get");
     int32_t offset = tz->getOffset((uint8_t)era, year, month, day, (uint8_t)dayOfWeek, millis, status);
@@ -556,30 +556,30 @@ void TimeZoneRegressionTest:: Test4154542()
     const int32_t GOOD = 1;
     const int32_t BAD  = 0;
 
-    const int32_t GOOD_MONTH       = Calendar::JANUARY;
+    const int32_t GOOD_MONTH       = UCAL_JANUARY;
     const int32_t GOOD_DAY         = 1;
-    const int32_t GOOD_DAY_OF_WEEK = Calendar::SUNDAY;
+    const int32_t GOOD_DAY_OF_WEEK = UCAL_SUNDAY;
     const int32_t GOOD_TIME        = 0;
 
     int32_t DATA [] = {
         GOOD, INT32_MIN,    0,  INT32_MAX,   INT32_MIN,
-        GOOD, Calendar::JANUARY,    -5,  Calendar::SUNDAY,     0,
-        GOOD, Calendar::DECEMBER,    5,  Calendar::SATURDAY,   24*60*60*1000,
-        BAD,  Calendar::DECEMBER,    5,  Calendar::SATURDAY,   24*60*60*1000+1,
-        BAD,  Calendar::DECEMBER,    5,  Calendar::SATURDAY,  -1,
-        BAD,  Calendar::JANUARY,    -6,  Calendar::SUNDAY,     0,
-        BAD,  Calendar::DECEMBER,    6,  Calendar::SATURDAY,   24*60*60*1000,
-        GOOD, Calendar::DECEMBER,    1,  0,                   0,
-        GOOD, Calendar::DECEMBER,   31,  0,                   0,
-        BAD,  Calendar::APRIL,      31,  0,                   0,
-        BAD,  Calendar::DECEMBER,   32,  0,                   0,
-        BAD,  Calendar::JANUARY-1,   1,  Calendar::SUNDAY,     0,
-        BAD,  Calendar::DECEMBER+1,  1,  Calendar::SUNDAY,     0,
-        GOOD, Calendar::DECEMBER,   31, -Calendar::SUNDAY,     0,
-        GOOD, Calendar::DECEMBER,   31, -Calendar::SATURDAY,   0,
-        BAD,  Calendar::DECEMBER,   32, -Calendar::SATURDAY,   0,
-        BAD,  Calendar::DECEMBER,  -32, -Calendar::SATURDAY,   0,
-        BAD,  Calendar::DECEMBER,   31, -Calendar::SATURDAY-1, 0,
+        GOOD, UCAL_JANUARY,    -5,  UCAL_SUNDAY,     0,
+        GOOD, UCAL_DECEMBER,    5,  UCAL_SATURDAY,   24*60*60*1000,
+        BAD,  UCAL_DECEMBER,    5,  UCAL_SATURDAY,   24*60*60*1000+1,
+        BAD,  UCAL_DECEMBER,    5,  UCAL_SATURDAY,  -1,
+        BAD,  UCAL_JANUARY,    -6,  UCAL_SUNDAY,     0,
+        BAD,  UCAL_DECEMBER,    6,  UCAL_SATURDAY,   24*60*60*1000,
+        GOOD, UCAL_DECEMBER,    1,  0,                   0,
+        GOOD, UCAL_DECEMBER,   31,  0,                   0,
+        BAD,  UCAL_APRIL,      31,  0,                   0,
+        BAD,  UCAL_DECEMBER,   32,  0,                   0,
+        BAD,  UCAL_JANUARY-1,   1,  UCAL_SUNDAY,     0,
+        BAD,  UCAL_DECEMBER+1,  1,  UCAL_SUNDAY,     0,
+        GOOD, UCAL_DECEMBER,   31, -UCAL_SUNDAY,     0,
+        GOOD, UCAL_DECEMBER,   31, -UCAL_SATURDAY,   0,
+        BAD,  UCAL_DECEMBER,   32, -UCAL_SATURDAY,   0,
+        BAD,  UCAL_DECEMBER,  -32, -UCAL_SATURDAY,   0,
+        BAD,  UCAL_DECEMBER,   31, -UCAL_SATURDAY-1, 0,
     };
     SimpleTimeZone *zone = new SimpleTimeZone(0, "Z");
     for (int32_t i=0; i < 18*5; i+=5) {
@@ -689,8 +689,8 @@ TimeZoneRegressionTest::Test4154525()
                 case 0:
                     method = "constructor";
                     z = new SimpleTimeZone(0, "id",
-                        Calendar::JANUARY, 1, 0, 0,
-                        Calendar::MARCH, 1, 0, 0,
+                        UCAL_JANUARY, 1, 0, 0,
+                        UCAL_MARCH, 1, 0, 0,
                         savings, status); // <- what we're interested in
                     break;
                 case 1:
@@ -730,8 +730,8 @@ void
 TimeZoneRegressionTest::Test4154650() 
 {
     const int32_t GOOD = 1, BAD = 0;
-    const int32_t GOOD_ERA = GregorianCalendar::AD, GOOD_YEAR = 1998, GOOD_MONTH = Calendar::AUGUST;
-    const int32_t GOOD_DAY = 2, GOOD_DOW = Calendar::SUNDAY, GOOD_TIME = 16*3600000;
+    const int32_t GOOD_ERA = GregorianCalendar::AD, GOOD_YEAR = 1998, GOOD_MONTH = UCAL_AUGUST;
+    const int32_t GOOD_DAY = 2, GOOD_DOW = UCAL_SUNDAY, GOOD_TIME = 16*3600000;
 
     int32_t DATA []= {
         GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, GOOD_TIME,
@@ -741,20 +741,20 @@ TimeZoneRegressionTest::Test4154650()
         BAD,  GregorianCalendar::BC-1, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, GOOD_TIME,
         BAD,  GregorianCalendar::AD+1, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, GOOD_TIME,
 
-        GOOD, GOOD_ERA, GOOD_YEAR, Calendar::JANUARY, GOOD_DAY, GOOD_DOW, GOOD_TIME,
-        GOOD, GOOD_ERA, GOOD_YEAR, Calendar::DECEMBER, GOOD_DAY, GOOD_DOW, GOOD_TIME,
-        BAD,  GOOD_ERA, GOOD_YEAR, Calendar::JANUARY-1, GOOD_DAY, GOOD_DOW, GOOD_TIME,
-        BAD,  GOOD_ERA, GOOD_YEAR, Calendar::DECEMBER+1, GOOD_DAY, GOOD_DOW, GOOD_TIME,
+        GOOD, GOOD_ERA, GOOD_YEAR, UCAL_JANUARY, GOOD_DAY, GOOD_DOW, GOOD_TIME,
+        GOOD, GOOD_ERA, GOOD_YEAR, UCAL_DECEMBER, GOOD_DAY, GOOD_DOW, GOOD_TIME,
+        BAD,  GOOD_ERA, GOOD_YEAR, UCAL_JANUARY-1, GOOD_DAY, GOOD_DOW, GOOD_TIME,
+        BAD,  GOOD_ERA, GOOD_YEAR, UCAL_DECEMBER+1, GOOD_DAY, GOOD_DOW, GOOD_TIME,
         
-        GOOD, GOOD_ERA, GOOD_YEAR, Calendar::JANUARY, 1, GOOD_DOW, GOOD_TIME,
-        GOOD, GOOD_ERA, GOOD_YEAR, Calendar::JANUARY, 31, GOOD_DOW, GOOD_TIME,
-        BAD,  GOOD_ERA, GOOD_YEAR, Calendar::JANUARY, 0, GOOD_DOW, GOOD_TIME,
-        BAD,  GOOD_ERA, GOOD_YEAR, Calendar::JANUARY, 32, GOOD_DOW, GOOD_TIME,
+        GOOD, GOOD_ERA, GOOD_YEAR, UCAL_JANUARY, 1, GOOD_DOW, GOOD_TIME,
+        GOOD, GOOD_ERA, GOOD_YEAR, UCAL_JANUARY, 31, GOOD_DOW, GOOD_TIME,
+        BAD,  GOOD_ERA, GOOD_YEAR, UCAL_JANUARY, 0, GOOD_DOW, GOOD_TIME,
+        BAD,  GOOD_ERA, GOOD_YEAR, UCAL_JANUARY, 32, GOOD_DOW, GOOD_TIME,
 
-        GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, Calendar::SUNDAY, GOOD_TIME,
-        GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, Calendar::SATURDAY, GOOD_TIME,
-        BAD,  GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, Calendar::SUNDAY-1, GOOD_TIME,
-        BAD,  GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, Calendar::SATURDAY+1, GOOD_TIME,
+        GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, UCAL_SUNDAY, GOOD_TIME,
+        GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, UCAL_SATURDAY, GOOD_TIME,
+        BAD,  GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, UCAL_SUNDAY-1, GOOD_TIME,
+        BAD,  GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, UCAL_SATURDAY+1, GOOD_TIME,
 
         GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, 0,
         GOOD, GOOD_ERA, GOOD_YEAR, GOOD_MONTH, GOOD_DAY, GOOD_DOW, 24*3600000-1,
@@ -800,8 +800,8 @@ TimeZoneRegressionTest::Test4162593()
     const int32_t ONE_HOUR = 60*60*1000;
 
     SimpleTimeZone *asuncion = new SimpleTimeZone(-4*ONE_HOUR, "America/Asuncion" /*PY%sT*/,
-        Calendar::OCTOBER, 1, 0 /*DOM*/, 0*ONE_HOUR,
-        Calendar::MARCH, 1, 0 /*DOM*/, 0*ONE_HOUR, 1*ONE_HOUR, status);
+        UCAL_OCTOBER, 1, 0 /*DOM*/, 0*ONE_HOUR,
+        UCAL_MARCH, 1, 0 /*DOM*/, 0*ONE_HOUR, 1*ONE_HOUR, status);
 
     /* Zone
      * Starting time
@@ -811,9 +811,9 @@ TimeZoneRegressionTest::Test4162593()
       0, 0, 0 };
 
     int32_t DATA_INT [] [5] = {
-        {98, Calendar::SEPTEMBER, 30, 22, 0},
-        {100, Calendar::FEBRUARY, 28, 22, 0},
-        {100, Calendar::FEBRUARY, 29, 22, 0},
+        {98, UCAL_SEPTEMBER, 30, 22, 0},
+        {100, UCAL_FEBRUARY, 28, 22, 0},
+        {100, UCAL_FEBRUARY, 29, 22, 0},
      };
 
     UBool DATA_BOOL [] = {
@@ -825,8 +825,8 @@ TimeZoneRegressionTest::Test4162593()
     UnicodeString zone [4];// = new String[4];
     DATA_TZ[0] =  
         new SimpleTimeZone(2*ONE_HOUR, "Asia/Damascus" /*EE%sT*/,
-            Calendar::APRIL, 1, 0 /*DOM*/, 0*ONE_HOUR,
-            Calendar::OCTOBER, 1, 0 /*DOM*/, 0*ONE_HOUR, 1*ONE_HOUR, status);
+            UCAL_APRIL, 1, 0 /*DOM*/, 0*ONE_HOUR,
+            UCAL_OCTOBER, 1, 0 /*DOM*/, 0*ONE_HOUR, 1*ONE_HOUR, status);
     DATA_TZ[1] = asuncion;  DATA_TZ[2] = asuncion;  
 
     for(int32_t j = 0; j < 3; j++) {
@@ -873,7 +873,7 @@ void TimeZoneRegressionTest::TestJ186() {
     // lines marked //~ are commented out.
     SimpleTimeZone z(0, "ID");
     //~z.setDSTSavings(0, status); // Must do this!
-    z.setStartRule(Calendar::FEBRUARY, 1, Calendar::SUNDAY, 0, status);
+    z.setStartRule(UCAL_FEBRUARY, 1, UCAL_SUNDAY, 0, status);
     failure(status, "setStartRule()");
     if (z.useDaylightTime()) {
         errln("Fail: useDaylightTime true with start rule only");
@@ -881,7 +881,7 @@ void TimeZoneRegressionTest::TestJ186() {
     //~if (z.getDSTSavings() != 0) {
     //~    errln("Fail: dst savings != 0 with start rule only");
     //~}
-    z.setEndRule(Calendar::MARCH, -1, Calendar::SUNDAY, 0, status);
+    z.setEndRule(UCAL_MARCH, -1, UCAL_SUNDAY, 0, status);
     failure(status, "setStartRule()");
     if (!z.useDaylightTime()) {
         errln("Fail: useDaylightTime false with rules set");
@@ -966,12 +966,12 @@ TimeZoneRegressionTest::TestJDK12API()
 
     UErrorCode status = U_ZERO_ERROR;
     int32_t offset1 = pst->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000), status);
+        1997, UCAL_OCTOBER, 26, UCAL_SUNDAY, (2*60*60*1000), status);
     failure(status, "getOffset() failed");
 
 
     int32_t offset2 = cst->getOffset(1,
-        1997, Calendar::OCTOBER, 26, Calendar::SUNDAY, (2*60*60*1000), 31, status);
+        1997, UCAL_OCTOBER, 26, UCAL_SUNDAY, (2*60*60*1000), 31, status);
     failure(status, "getOffset() failed");
 
     if(offset1 == offset2)
@@ -979,7 +979,7 @@ TimeZoneRegressionTest::TestJDK12API()
 
     // verify error checking
     pst->getOffset(1,
-        1997, (Calendar::EDateFields)-1, 26, Calendar::SUNDAY, (2*60*60*1000), status);
+        1997, (UCalendarDateFields)-1, 26, UCAL_SUNDAY, (2*60*60*1000), status);
     if(U_SUCCESS(status))
         errln("FAILURE: getOffset() succeeded with -1 for month");
 

@@ -1420,7 +1420,7 @@ LocaleTest::Test4143951()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(Locale("ru", "", ""), status);
-    if (cal->getFirstDayOfWeek() != Calendar::MONDAY) {
+    if (cal->getFirstDayOfWeek() != UCAL_MONDAY) {
         errln("Fail: First day of week in Russia should be Monday");
     }
     delete cal;

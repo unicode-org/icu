@@ -31,6 +31,7 @@
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 #include "unicode/timezone.h"
+#include "unicode/ucal.h"
 
 U_NAMESPACE_BEGIN
 
@@ -151,7 +152,7 @@ public:
      * Field IDs for date and time. Used to specify date/time fields. ERA is calendar
      * specific. Example ranges given are for illustration only; see specific Calendar
      * subclasses for actual ranges.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use C enum UCalendarDateFields defined in ucal.h
      */
     enum EDateFields {
         ERA,                  // Example: 0..1
@@ -183,7 +184,7 @@ public:
      * Useful constant for days of week. Note: Calendar day-of-week is 1-based. Clients
      * who create locale resources for the field of first-day-of-week should be aware of
      * this. For instance, in US locale, first-day-of-week is set to 1, i.e., SUNDAY.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use C enum UCalendarDaysOfWeek defined in ucal.h
      */
     enum EDaysOfWeek {
         SUNDAY = 1,
@@ -197,7 +198,7 @@ public:
 
     /**
      * Useful constants for month. Note: Calendar month is 0-based.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use C enum UCalendarMonths defined in ucal.h
      */
     enum EMonths {
         JANUARY,
@@ -217,7 +218,7 @@ public:
 
     /**
      * Useful constants for hour in 12-hour clock. Used in GregorianCalendar.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use C enum UCalendarAMPMs defined in ucal.h
      */
     enum EAmpm {
         AM,
@@ -463,7 +464,7 @@ public:
      *                leniency, this will be set to an error status.
      * @stable ICU 2.0
      */
-    virtual void add(EDateFields field, int32_t amount, UErrorCode& status) = 0;
+    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status) = 0;
 
     /**
      * Time Field Rolling function. Rolls (up/down) a single unit of time on the given
@@ -478,7 +479,7 @@ public:
      * hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the hour value in the range
      * between 0 and 23, which is zero-based.
      * <P>
-     * NOTE: Do not use this method -- use roll(EDateFields, int, UErrorCode&) instead.
+     * NOTE: Do not use this method -- use roll(UCalendarDateFields, int, UErrorCode&) instead.
      *
      * @param field   The time field.
      * @param up      Indicates if the value of the specified time field is to be rolled
@@ -488,7 +489,7 @@ public:
      *                leniency, this will be set to an error status.
      * @stable ICU 2.0
      */
-    void roll(EDateFields field, UBool up, UErrorCode& status);
+    void roll(UCalendarDateFields field, UBool up, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls by the given amount on the given
@@ -512,7 +513,7 @@ public:
      *                an error status.
      * @stable ICU 2.0
      */
-    virtual void roll(EDateFields field, int32_t amount, UErrorCode& status) = 0;
+    virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) = 0;
 
     /**
      * Return the difference between the given time and the time this
@@ -569,7 +570,7 @@ public:
      * <code>field</code>.
      * @stable ICU 2.0
      */
-    virtual int32_t fieldDifference(UDate when, EDateFields field, UErrorCode& status);
+    virtual int32_t fieldDifference(UDate when, UCalendarDateFields field, UErrorCode& status);
 
     /**
      * Sets the calendar's time zone to be the one passed in. The Calendar takes ownership
@@ -648,7 +649,7 @@ public:
      * @param value  The given first day of the week.
      * @stable ICU 2.0
      */
-    void setFirstDayOfWeek(EDaysOfWeek value);
+    void setFirstDayOfWeek(UCalendarDaysOfWeek value);
 
     /**
      * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
@@ -656,7 +657,7 @@ public:
      * @return   The first day of the week.
      * @stable ICU 2.0
      */
-    EDaysOfWeek getFirstDayOfWeek(void) const;
+    UCalendarDaysOfWeek getFirstDayOfWeek(void) const;
 
     /**
      * Sets what the minimal days required in the first week of the year are; For
@@ -688,7 +689,7 @@ public:
      * @return       The minimum value for the given time field.
      * @stable ICU 2.0
      */
-    virtual int32_t getMinimum(EDateFields field) const = 0;
+    virtual int32_t getMinimum(UCalendarDateFields field) const = 0;
 
     /**
      * Gets the maximum value for the given time field. e.g. for Gregorian DAY_OF_MONTH,
@@ -698,7 +699,7 @@ public:
      * @return       The maximum value for the given time field.
      * @stable ICU 2.0
      */
-    virtual int32_t getMaximum(EDateFields field) const = 0;
+    virtual int32_t getMaximum(UCalendarDateFields field) const = 0;
 
     /**
      * Gets the highest minimum value for the given field if varies. Otherwise same as
@@ -708,7 +709,7 @@ public:
      * @return       The highest minimum value for the given time field.
      * @stable ICU 2.0
      */
-    virtual int32_t getGreatestMinimum(EDateFields field) const = 0;
+    virtual int32_t getGreatestMinimum(UCalendarDateFields field) const = 0;
 
     /**
      * Gets the lowest maximum value for the given field if varies. Otherwise same as
@@ -718,7 +719,7 @@ public:
      * @return       The lowest maximum value for the given time field.
      * @stable ICU 2.0
      */
-    virtual int32_t getLeastMaximum(EDateFields field) const = 0;
+    virtual int32_t getLeastMaximum(UCalendarDateFields field) const = 0;
 
     /**
      * Return the minimum value that this field could have, given the current date.
@@ -734,7 +735,7 @@ public:
      * @return         the minimum of the given field for the current date of this Calendar
      * @stable ICU 2.0
      */
-    int32_t getActualMinimum(EDateFields field, UErrorCode& status) const;
+    int32_t getActualMinimum(UCalendarDateFields field, UErrorCode& status) const;
 
     /**
      * Return the maximum value that this field could have, given the current date.
@@ -752,7 +753,7 @@ public:
      * @return         the maximum of the given field for the current date of this Calendar
      * @stable ICU 2.0
      */
-    int32_t getActualMaximum(EDateFields field, UErrorCode& status) const;
+    int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
 
     /**
      * Gets the value for a given time field. Recalculate the current time field values
@@ -767,7 +768,7 @@ public:
      *               and set() has been called for any other field.
      * @stable ICU 2.0
      */
-    int32_t get(EDateFields field, UErrorCode& status) const;
+    int32_t get(UCalendarDateFields field, UErrorCode& status) const;
 
     /**
      * Determines if the given time field has a value set. This can affect in the
@@ -777,7 +778,7 @@ public:
      * @return   True if the given time field has a value set; false otherwise.
      * @stable ICU 2.0
      */
-    UBool isSet(EDateFields field) const;
+    UBool isSet(UCalendarDateFields field) const;
 
     /**
      * Sets the given time field with the given value.
@@ -786,7 +787,7 @@ public:
      * @param value  The value to be set for the given time field.
      * @stable ICU 2.0
      */
-    void set(EDateFields field, int32_t value);
+    void set(UCalendarDateFields field, int32_t value);
 
     /**
      * Sets the values for the fields YEAR, MONTH, and DATE. Other field values are
@@ -845,7 +846,7 @@ public:
      * @param field  The time field to be cleared.
      * @stable ICU 2.0
      */
-    void clear(EDateFields field);
+    void clear(UCalendarDateFields field);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual method. This method is to
@@ -978,7 +979,7 @@ protected:
      * @return       The value for the given time field.
      * @stable ICU 2.0
      */
-    int32_t internalGet(EDateFields field) const {return fFields[field];}
+    int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
 
     /**
      * Sets the value for a given time field.  This is a fast internal method for
@@ -989,7 +990,7 @@ protected:
      * @param value    The value for the given time field.
      * @stable ICU 2.0
      */
-    void internalSet(EDateFields field, int32_t value);
+    void internalSet(UCalendarDateFields field, int32_t value);
 
 protected:
     /**
@@ -1038,13 +1039,13 @@ protected:
      * The time fields containing values into which the millis is computed.
      * @stable ICU 2.0
      */
-    int32_t     fFields[FIELD_COUNT];
+    int32_t     fFields[UCAL_FIELD_COUNT];
 
     /**
      * The flags which tell if a specified time field for the calendar is set.
      * @stable ICU 2.0
      */
-    UBool      fIsSet[FIELD_COUNT];
+    UBool      fIsSet[UCAL_FIELD_COUNT];
 
     /** Special values of stamp[]
      * @stable ICU 2.0
@@ -1061,7 +1062,7 @@ protected:
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
      * @stable ICU 2.0
      */
-    int32_t        fStamp[FIELD_COUNT];
+    int32_t        fStamp[UCAL_FIELD_COUNT];
 
 private:
 
@@ -1092,7 +1093,7 @@ private:
      * out the week count for a specific date for a given locale. These must be set when
      * a Calendar is constructed.
      */
-    EDaysOfWeek fFirstDayOfWeek;
+    UCalendarDaysOfWeek fFirstDayOfWeek;
     uint8_t     fMinimalDaysInFirstWeek;
 
     /**
@@ -1135,7 +1136,7 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
 // -------------------------------------
 
 inline void 
-Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
+Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
 {
     roll(field, (int32_t)(up ? +1 : -1), status);
 }
@@ -1147,7 +1148,7 @@ Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
  * fUserSetZoneOffset, as well as the isSet[] array.
  */
 inline void
-Calendar::internalSet(EDateFields field, int32_t value)
+Calendar::internalSet(UCalendarDateFields field, int32_t value)
 {
     fFields[field] = value;
 }

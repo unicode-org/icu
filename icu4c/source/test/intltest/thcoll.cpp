@@ -155,7 +155,7 @@ void CollationThaiTest::TestNamesList(void) {
         }
 
         if (lastWord.length() > 0) {
-            Collator::EComparisonResult result = coll->compare(lastWord, word);
+            UCollationResult result = coll->compare(lastWord, word);
             doTest(coll, lastWord, word, result);
         }
         lastWord = word;

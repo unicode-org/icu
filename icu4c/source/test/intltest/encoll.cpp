@@ -130,60 +130,60 @@ const UChar CollationEnglishTest::testTargetCases[][CollationEnglishTest::MAX_TO
         {(UChar)0x0070 /* 'p' */, 0x00EA, (UChar)0x0063 /* 'c' */, (UChar)0x0068 /* 'h' */, (UChar)0x0065 /* 'e' */, 0}                                           // 49
 };
 
-const Collator::EComparisonResult CollationEnglishTest::results[] = {
-        Collator::LESS, 
-        Collator::LESS, /*Collator::GREATER,*/
-        Collator::LESS,
-        Collator::GREATER,
-        Collator::GREATER,
-        Collator::EQUAL,
-        Collator::LESS,
-        Collator::LESS,
-        Collator::LESS,
-        Collator::LESS, /*Collator::GREATER,*/                                                          /* 10 */
-        Collator::GREATER,
-        Collator::LESS,
-        Collator::EQUAL,
-        Collator::LESS,
-        Collator::GREATER,
-        Collator::GREATER,
-        Collator::GREATER,
-        Collator::LESS,
-        Collator::LESS,
-        Collator::LESS,                                                             /* 20 */
-        Collator::LESS,
-        Collator::LESS,
-        Collator::LESS,
-        Collator::GREATER,
-        Collator::GREATER,
-        Collator::GREATER,
+const UCollationResult CollationEnglishTest::results[] = {
+        UCOL_LESS, 
+        UCOL_LESS, /*Collator::GREATER,*/
+        UCOL_LESS,
+        UCOL_GREATER,
+        UCOL_GREATER,
+        UCOL_EQUAL,
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_LESS, /*Collator::GREATER,*/                                                          /* 10 */
+        UCOL_GREATER,
+        UCOL_LESS,
+        UCOL_EQUAL,
+        UCOL_LESS,
+        UCOL_GREATER,
+        UCOL_GREATER,
+        UCOL_GREATER,
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_LESS,                                                             /* 20 */
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_GREATER,
+        UCOL_GREATER,
+        UCOL_GREATER,
         /* Test Tertiary  > 26 */
-        Collator::LESS,
-        Collator::LESS,
-        Collator::GREATER,
-        Collator::LESS,                                                             /* 30 */
-        Collator::GREATER,
-        Collator::EQUAL,
-        Collator::GREATER,
-        Collator::LESS,
-        Collator::LESS,
-        Collator::LESS,
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_GREATER,
+        UCOL_LESS,                                                             /* 30 */
+        UCOL_GREATER,
+        UCOL_EQUAL,
+        UCOL_GREATER,
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_LESS,
         /* test identical > 36 */
-        Collator::EQUAL,
-        Collator::EQUAL,
+        UCOL_EQUAL,
+        UCOL_EQUAL,
         /* test primary > 38 */
-        Collator::EQUAL,
-        Collator::EQUAL,                                                            /* 40 */
-        Collator::LESS,
-        Collator::EQUAL,
-        Collator::EQUAL,
+        UCOL_EQUAL,
+        UCOL_EQUAL,                                                            /* 40 */
+        UCOL_LESS,
+        UCOL_EQUAL,
+        UCOL_EQUAL,
         /* test secondary > 43 */
-        Collator::LESS,
-        Collator::LESS,
-        Collator::EQUAL,
-        Collator::LESS,
-        Collator::LESS, 
-        Collator::LESS                                                                  // 49
+        UCOL_LESS,
+        UCOL_LESS,
+        UCOL_EQUAL,
+        UCOL_LESS,
+        UCOL_LESS, 
+        UCOL_LESS                                                                  // 49
 };
 
 const UChar CollationEnglishTest::testBugs[][CollationEnglishTest::MAX_TOKEN_LEN] = {
@@ -254,23 +254,23 @@ void CollationEnglishTest::TestTertiary(/* char* par */)
     {
         for (j = i+1; j < 10; j++)
         {
-            doTest(myCollation, testBugs[i], testBugs[j], Collator::LESS);
+            doTest(myCollation, testBugs[i], testBugs[j], UCOL_LESS);
         }
     }
 
     //test more interesting cases
-    Collator::EComparisonResult expected;
+    UCollationResult expected;
     const int32_t testMoreSize = (int32_t)(sizeof(testMore) / sizeof(testMore[0]));
     for (i = 0; i < testMoreSize; i++)
     {
         for (j = 0; j < testMoreSize; j++)
         {
             if (i <  j)
-                expected = Collator::LESS;
+                expected = UCOL_LESS;
             else if (i == j)
-                expected = Collator::EQUAL;
+                expected = UCOL_EQUAL;
             else // (i >  j)
-                expected = Collator::GREATER;
+                expected = UCOL_GREATER;
             doTest(myCollation, testMore[i], testMore[j], expected );
         }
     }
@@ -298,18 +298,18 @@ void CollationEnglishTest::TestSecondary(/* char* par */)
 
     //test acute and grave ordering (compare to french collation)
     int32_t j;
-    Collator::EComparisonResult expected;
+    UCollationResult expected;
     const int32_t testAcuteSize = (int32_t)(sizeof(testAcute) / sizeof(testAcute[0]));
     for (i = 0; i < testAcuteSize; i++)
     {
         for (j = 0; j < testAcuteSize; j++)
         {
             if (i <  j)
-                expected = Collator::LESS;
+                expected = UCOL_LESS;
             else if (i == j)
-                expected = Collator::EQUAL;
+                expected = UCOL_EQUAL;
             else // (i >  j)
-                expected = Collator::GREATER;
+                expected = UCOL_GREATER;
             doTest(myCollation, testAcute[i], testAcute[j], expected );
         }
     }

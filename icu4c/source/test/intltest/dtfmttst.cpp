@@ -91,7 +91,7 @@ void DateFormatTest::TestWallyWedel()
         // offset = ttz.getRawOffset();
         cal->setTimeZone(*ttz);
         cal->setTime(today, status);
-        offset = cal->get(Calendar::ZONE_OFFSET, status) + cal->get(Calendar::DST_OFFSET, status);
+        offset = cal->get(UCAL_ZONE_OFFSET, status) + cal->get(UCAL_DST_OFFSET, status);
         // logln(i + " " + ids[i] + " offset " + offset);
         const char* sign = "+";
         if (offset < 0) {
@@ -297,7 +297,7 @@ DateFormatTest::TestFieldPosition(void)
         logln((UnicodeString)" Pattern = " + ((SimpleDateFormat*)df)->toPattern(str));
         str.truncate(0);
         logln((UnicodeString)"  Result = " + df->format(someDate, str));
-        for (int32_t i = 0; i < Calendar::FIELD_COUNT;++i) {
+        for (int32_t i = 0; i < UCAL_FIELD_COUNT;++i) {
             UnicodeString field;
             getFieldText(df, i, someDate, field);
             UnicodeString expStr;
@@ -477,8 +477,8 @@ DateFormatTest::TestCzechMonths459()
     DateFormat* fmt = DateFormat::createDateInstance(DateFormat::FULL, Locale("cs", "", ""));
     UnicodeString pattern;
     logln((UnicodeString)"Pattern " + ((SimpleDateFormat*) fmt)->toPattern(pattern));
-    UDate june = date(97, Calendar::JUNE, 15);
-    UDate july = date(97, Calendar::JULY, 15);
+    UDate june = date(97, UCAL_JUNE, 15);
+    UDate july = date(97, UCAL_JULY, 15);
     UnicodeString juneStr; fmt->format(june, juneStr);
     UnicodeString julyStr; fmt->format(july, julyStr);
     //try {
@@ -487,13 +487,13 @@ DateFormatTest::TestCzechMonths459()
         UnicodeString s; fmt->format(d, s);
         int32_t month,yr,day,hr,min,sec; dateToFields(d,yr,month,day,hr,min,sec);
         logln((UnicodeString)"  -> parse -> " + s + " (month = " + month + ")");
-        if (month != Calendar::JUNE) errln((UnicodeString)"FAIL: Month should be June");
+        if (month != UCAL_JUNE) errln((UnicodeString)"FAIL: Month should be June");
         logln((UnicodeString)"format(July 15 1997) = " + julyStr);
         d = fmt->parse(julyStr, status);
         fmt->format(d, s);
         dateToFields(d,yr,month,day,hr,min,sec);
         logln((UnicodeString)"  -> parse -> " + s + " (month = " + month + ")");
-        if (month != Calendar::JULY) errln((UnicodeString)"FAIL: Month should be July");
+        if (month != UCAL_JULY) errln((UnicodeString)"FAIL: Month should be July");
     //}
     //catch(ParseException e) {
     if (U_FAILURE(status))
@@ -588,7 +588,7 @@ DateFormatTest::TestQuotePattern161()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* formatter = new SimpleDateFormat((UnicodeString)"MM/dd/yyyy 'at' hh:mm:ss a zzz", status);
-    UDate currentTime_1 = date(97, Calendar::AUGUST, 13, 10, 42, 28);
+    UDate currentTime_1 = date(97, UCAL_AUGUST, 13, 10, 42, 28);
     UnicodeString dateString; ((DateFormat*)formatter)->format(currentTime_1, dateString);
     UnicodeString exp("08/13/1997 at 10:42:28 AM ");
     logln((UnicodeString)"format(" + dateToString(currentTime_1) + ") = " + dateString);
@@ -768,8 +768,8 @@ void
 DateFormatTest::TestTwoDigitYear()
 {
     DateFormat* fmt = DateFormat::createDateInstance(DateFormat::SHORT, Locale::getUK());
-    parse2DigitYear(*fmt, "5/6/17", date(117, Calendar::JUNE, 5));
-    parse2DigitYear(*fmt, "4/6/34", date(34, Calendar::JUNE, 4));
+    parse2DigitYear(*fmt, "5/6/17", date(117, UCAL_JUNE, 5));
+    parse2DigitYear(*fmt, "4/6/34", date(34, UCAL_JUNE, 4));
     delete fmt;
 }
  
@@ -853,7 +853,7 @@ DateFormatTest::TestDateFormatZone146()
         //*****************************greenwichcalendar.setTimeZone(TimeZone.getDefault());
         //greenwichcalendar.set(1997, 3, 4, 23, 0);
         // try anything to set hour to 23:00 !!!
-        greenwichcalendar->set(Calendar::HOUR_OF_DAY, 23);
+        greenwichcalendar->set(UCAL_HOUR_OF_DAY, 23);
         // get time
         UDate greenwichdate = greenwichcalendar->getTime(status);
         // format every way
@@ -901,7 +901,7 @@ DateFormatTest::TestDateFormatZone146()
 void
 DateFormatTest::TestLocaleDateFormat() // Bug 495
 {
-    UDate testDate = date(97, Calendar::SEPTEMBER, 15);
+    UDate testDate = date(97, UCAL_SEPTEMBER, 15);
     DateFormat *dfFrench = DateFormat::createDateTimeInstance(DateFormat::FULL, 
         DateFormat::FULL, Locale::getFrench());
     DateFormat *dfUS = DateFormat::createDateTimeInstance(DateFormat::FULL, 

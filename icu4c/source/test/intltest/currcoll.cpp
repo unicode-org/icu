@@ -80,7 +80,7 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
 
     uint32_t i, j;
     UErrorCode status = U_ZERO_ERROR;
-    Collator::EComparisonResult expectedResult = Collator::EQUAL;
+    UCollationResult expectedResult = UCOL_EQUAL;
     RuleBasedCollator *c = (RuleBasedCollator *)Collator::createInstance("en_US", status);
 
     if (U_FAILURE(status))
@@ -100,18 +100,18 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
 
             if (i < j)
             {
-                expectedResult = Collator::LESS;
+                expectedResult = UCOL_LESS;
             }
             else if ( i == j)
             {
-                expectedResult = Collator::EQUAL;
+                expectedResult = UCOL_EQUAL;
             }
             else
             {
-                expectedResult = Collator::GREATER;
+                expectedResult = UCOL_GREATER;
             }
 
-            Collator::EComparisonResult compareResult = c->compare(source, target);
+            UCollationResult compareResult = c->compare(source, target);
 
             CollationKey sourceKey, targetKey;
             UErrorCode status = U_ZERO_ERROR;
@@ -132,7 +132,7 @@ void CollationCurrencyTest::currencyTest(/*char *par*/)
                 continue;
             }
 
-            Collator::EComparisonResult keyResult = sourceKey.compareTo(targetKey);
+            UCollationResult keyResult = sourceKey.compareTo(targetKey);
 
             reportCResult( source, target, sourceKey, targetKey, compareResult, keyResult, compareResult, expectedResult );
 
