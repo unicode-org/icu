@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/translit/Attic/UnicodeSetClosure.java,v $
- * $Date: 2001/11/30 00:27:06 $
- * $Revision: 1.2 $
+ * $Date: 2001/11/30 01:59:45 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -65,8 +65,8 @@ public class UnicodeSetClosure {
             + s.toPattern(true) 
             + (forward ? "" : " )")
             + " ;");
-        out.println("Unicode: " + s.toPattern(false));
         out.println();
+        out.println("Unicode: " + s.toPattern(false));
     }
     
     public static void test() throws Exception {
