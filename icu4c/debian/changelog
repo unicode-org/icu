@@ -1,0 +1,9 @@
+icu (1.6.0.1-20001017-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Yves Arrouye <yves@debian.org>  Tue, 17 Oct 2000 10:28:17 -0700
+
+Local variables:
+mode: debian-changelog
+End:

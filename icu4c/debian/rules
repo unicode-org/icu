@@ -1,0 +1,184 @@
+#!/usr/bin/make -f
+# ICU debian/rules that uses debhelper.
+
+# The Debian packages for ICU are created and maintained by
+# Yves Arrouye <yves@debian.org>. They are part of Debian GNU/Linux
+# since the Debian woody release.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# This is the debhelper compatability version to use.
+export DH_COMPAT=1
+
+# Where the source for ICU is
+srcdir=source
+
+# shared library versions, option 1
+version:=$(shell sed -n 's/^[ 	]*\#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $(srcdir)/common/unicode/utypes.h)
+major:=$(shell echo $(version) | sed -e 's/\.//' -e 's/\..*//')
+
+# option 2, assuming the library is created as src/.libs/libfoo.so.2.0.5 or so
+#version=`ls src/.libs/lib*.so.* | \
+# awk '{if (match($$0,/[0-9]+\.[0-9]+\.[0-9]+$$/)) print substr($$0,RSTART)}'`
+#major=`ls src/.libs/lib*.so.* | \
+# awk '{if (match($$0,/\.so\.[0-9]+$$/)) print substr($$0,RSTART+4)}'`
+
+# Build flags
+
+CFLAGS = -O2 # -Wall
+CXXFLAGS = -O2 # -Wall
+INSTALL_PROGRAM = /usr/bin/install
+
+ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+CFLAGS += -g
+CXXFLAGS += -g
+endif
+ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+INSTALL_PROGRAM += -s
+endif
+
+all: build
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# Add here commands to configure the package.
+	cd $(srcdir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' ./configure --prefix=/usr --mandir=/usr/share/man --with-data-packaging=files --enable-rpath=no --enable-shared --enable-static --disable-samples
+	touch configure-stamp
+
+build: configure-stamp build-stamp
+build-stamp:
+	dh_testdir
+
+	# Add here commands to compile the package.
+	$(MAKE) -C $(srcdir)
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	-$(MAKE) -C $(srcdir) distclean
+
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Add here commands to install the package into debian/tmp.
+	$(MAKE) -C $(srcdir) install DESTDIR=`pwd`/debian/tmp
+
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build some Debian files
+debian/%: debian/%.in
+	cd source \
+	  && CONFIG_FILES=../$< CONFIG_HEADERS= $(SHELL) ./config.status
+
+# Build architecture-dependent files here.
+binary-arch: build install debian/icu.conffiles debian/icu.postinst
+#	dh_testversion
+	dh_testdir
+	dh_testroot
+	rm debian/tmp/usr/sbin/gentest
+	#
+	# build libicu${major} package by moving files from icu-dev
+	#
+	dh_movefiles -plibicu$(major) \
+	    usr/lib/libicuuc.so.* \
+	    usr/lib/libicui18n.so.* \
+	    usr/lib/libicutoolutil.so.* \
+	    usr/lib/libustdio.so.*
+	#
+	# build icu package by moving files from icu-dev
+	#
+	test -d debian/icu/etc/icu || \
+	    mkdir -p debian/icu/etc/icu
+	mv debian/tmp/usr/share/icu/$(version)/convrtrs.txt debian/icu/etc/icu
+	dh_movefiles -picu \
+	    usr/sbin \
+	    usr/share/icu/$(version)/*.cnv \
+	    usr/share/icu/$(version)/*.txt \
+	    usr/share/icu/$(version)/cnvalias.dat \
+	    usr/share/icu/$(version)/u*.dat \
+	    usr/share/icu/$(version)/tz.dat \
+	    usr/share/man
+	#
+	# build icu-locales package by moving files from icu-dev
+	#
+	dh_movefiles -picu-locales \
+	    usr/share/icu/$(version)
+	#
+	# build icu-data from the source data
+	#
+	test -d debian/icu-data/usr/share/icu/${version} || \
+	    mkdir -p debian/icu-data/usr/share/icu/${version}
+	install -m 644 $(srcdir)/../data/ucname.txt \
+	    $(srcdir)/../data/*.ucm \
+	    debian/icu-data/usr/share/icu/${version}
+	test -d debian/icu-data/usr/share/icu/${version}/unidata || \
+	    mkdir -p debian/icu-data/usr/share/icu/${version}/unidata
+	install -m 644 $(srcdir)/../data/unidata/*.* \
+	    debian/icu-data/usr/share/icu/${version}/unidata
+	unidatafile=`(cd $(srcdir)/../data; ls UnicodeData*.txt)`; cd debian/icu-data/usr/share/icu/${version} && ln -s unidata/UnicodeData.txt $$unidatafile
+	#
+	# build icu-i18ndata from the source data
+	#
+	test -d debian/icu-i18ndata/usr/share/icu/${version} || \
+	    mkdir -p debian/icu-i18ndata/usr/share/icu/${version}
+	install -m 644 $(srcdir)/../data/*.txt \
+	    $(srcdir)/../data/*.brk \
+	    debian/icu-i18ndata/usr/share/icu/${version}
+	cd debian/icu-i18ndata/usr/share/icu/${version} && \
+	    rm -f convrtrs.txt UnicodeData*.txt ucname.txt
+	#
+	# do a bit of cleanup
+	#
+	rm -rf debian/tmp/usr/sbin \
+	    debian/tmp/usr/share/icu/${version} \
+	    debian/tmp/usr/share/man
+	#
+	# continue to prepare packages
+	#
+#	dh_installdebconf
+	dh_installdocs docs
+	dh_installexamples $(srcdir)/samples/*
+	dh_installmenu
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installinit
+	dh_installcron
+	dh_installmanpages -picu
+	dh_installinfo
+	dh_undocumented -picu genccode.8 gencmn.8 gennames.8 \
+	    genprops.8 gentz.8 pkgdata.8
+	dh_installchangelogs 
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	# CVS fixup
+	if test -d CVS; then find debian/tmp -name CVS -print | xargs rm -r; fi
+	# You may want to make some executables suid here.
+	dh_suidregister
+	dh_makeshlibs
+	dh_installdeb
+#	dh_perl
+	dh_shlibdeps && \
+	    sed 's/ libicu16[^,]*,//' debian/libicu$(major).substvars >debian/libicu$(major).substvars.new && mv debian/libicu$(major).substvars.new debian/libicu$(major).substvars
+	dh_gencontrol -- -Vversion=$(version) -Vmajor=$(major)
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install
