@@ -9,9 +9,11 @@
 #define RBT_PARS_H
 
 #include "unicode/rbt.h"
+#include "uvector.h"
 
 class TransliterationRuleData;
 class UnicodeSet;
+class ParseData;
 
 class TransliterationRuleParser {
 
@@ -30,6 +32,18 @@ class TransliterationRuleParser {
      * through each API, we keep it here.
      */
     UErrorCode status;
+
+    /**
+     * Temporary symbol table used during parsing.
+     */
+    ParseData* parseData;
+
+    /**
+     * Temporary vector of set variables.  When parsing is complete, this
+     * is copied into the array data.setVariables.  As with data.setVariables,
+     * element 0 corresponds to character data.setVariablesBase.
+     */
+    UVector setVariablesVector;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -81,6 +95,11 @@ private:
      */
     TransliterationRuleParser(const UnicodeString& rules,
                               RuleBasedTransliterator::Direction direction);
+
+    /**
+     * Destructor.
+     */
+    ~TransliterationRuleParser();
 
     /**
      * Parse the given string as a sequence of rules, separated by newline

@@ -143,7 +143,7 @@ bool_t TransliterationRule::matchesIndexValue(uint8_t v,
         return TRUE;
     }
     UChar c = pattern.charAt(anteContextLength);
-    UnicodeSet* set = data.lookupSet(c);
+    const UnicodeSet* set = data.lookupSet(c);
     return set == NULL ? (uint8_t(c) == v) : set->containsIndexValue(v);
 }
 
@@ -314,7 +314,7 @@ int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
 bool_t TransliterationRule::charMatches(UChar keyChar, UChar textChar,
                                         const TransliterationRuleData& data,
                                         const UnicodeFilter* filter) const {
-    UnicodeSet* set = 0;
+    const UnicodeSet* set = 0;
     return (filter == 0 || filter->contains(textChar)) &&
         (((set = data.lookupSet(keyChar)) == 0) ?
          keyChar == textChar : set->contains(textChar));
