@@ -174,7 +174,7 @@ DateFormat::createDateInstance(DateFormat::EStyle style,
   // LocaleElements.
   if(style != kNone)
   {
-    style += kDateOffset;
+    style = (EStyle) (style + kDateOffset);
   }
   return create(kNone, (EStyle) (style), aLocale);
 }
@@ -188,7 +188,7 @@ DateFormat::createDateTimeInstance(EStyle dateStyle,
 {
   if(dateStyle != kNone)
   {
-    dateStyle += kDateOffset;
+    dateStyle = (EStyle) (dateStyle + kDateOffset);
   }
   return create(timeStyle, dateStyle, aLocale);
 }
