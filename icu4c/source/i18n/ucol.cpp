@@ -26,7 +26,7 @@
 #include "unicode/udata.h"
 #include "umutex.h"
 
-static UCollatorNew* UCA = NULL;
+static UCollator* UCA = NULL;
 static CompactIntArray* UCAmapping = NULL;
 
 static UBool
@@ -52,14 +52,14 @@ isAcceptable(void *context,
     }
 }
 
-UCollatorNew* ucol_initCollator(const UCATableHeader *image, UCollatorNew *fillIn, UErrorCode *status) {
-    UCollatorNew *result = fillIn;
+UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
+    UCollator *result = fillIn;
     if(U_FAILURE(*status)) {
         return NULL;
     }
 
     if(result == NULL) {
-        result = (UCollatorNew *)uprv_malloc(sizeof(UCollatorNew));
+        result = (UCollator *)uprv_malloc(sizeof(UCollatorNew));
         if(result == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return result;
@@ -111,7 +111,7 @@ void ucol_initUCA(UErrorCode *status) {
   if(U_FAILURE(*status)) return;
 
   if(UCA == NULL) {
-    UCollatorNew *newUCA = (UCollatorNew *)uprv_malloc(sizeof(UCollatorNew));
+    UCollator *newUCA = (UCollator *)uprv_malloc(sizeof(UCollator));
     UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptable, NULL, status);
     newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
     newUCA->rb = NULL;
@@ -137,8 +137,8 @@ void ucol_initUCA(UErrorCode *status) {
 }
 
 
-U_CAPI UCollatorNew*
-ucol_openNew(    const    char         *loc,
+U_CAPI UCollator*
+ucol_open(    const    char         *loc,
         UErrorCode      *status)
 {
   /* New version */
@@ -146,7 +146,7 @@ ucol_openNew(    const    char         *loc,
 
   ucol_initUCA(status);
 
-  UCollatorNew *result = NULL;
+  UCollator *result = NULL;
   UResourceBundle *b = ures_open(NULL, loc, status);
   UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
 
@@ -165,8 +165,43 @@ ucol_openNew(    const    char         *loc,
   return result;
 }
 
+U_CAPI UCollator*
+ucol_openRules(    const    UChar                  *rules,
+        int32_t                 rulesLength,
+        UNormalizationMode      mode,
+        UCollationStrength      strength,
+        UErrorCode              *status)
+{
+  if(U_FAILURE(*status)) return 0;
+
+  Normalizer::EMode normMode;
+  switch(mode) {
+  case UCOL_NO_NORMALIZATION:
+    normMode = Normalizer::NO_OP;
+    break;
+  case UCOL_DECOMP_CAN:
+    normMode = Normalizer::DECOMP;
+    break;
+  case UCOL_DECOMP_COMPAT:
+    normMode = Normalizer::DECOMP_COMPAT;
+    break;
+  case UCOL_DECOMP_CAN_COMP_COMPAT:
+    normMode = Normalizer::COMPOSE;
+    break;
+  case UCOL_DECOMP_COMPAT_COMP_CAN:
+    normMode = Normalizer::COMPOSE_COMPAT;
+    break;
+  default:
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+
+  return NULL;
+
+}
+
 U_CAPI void
-ucol_closeNew(UCollatorNew *coll)
+ucol_close(UCollator *coll)
 {
   /* Here, it would be advisable to close: */
   /* - UData for UCA (unless we stuff it in the root resb */
@@ -179,7 +214,7 @@ ucol_closeNew(UCollatorNew *coll)
   }
 }
 
-uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSource, UErrorCode *status) {
+uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
     if (U_FAILURE(*status) || (collationSource->pos>=collationSource->len
       && collationSource->CEpos <= collationSource->toReturn)) {      /* have we run out of string and CEs??  */
@@ -197,7 +232,7 @@ uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSourc
       }
       if(order >= UCOL_NOT_FOUND) {                                   /* if a CE is special */
         *(collationSource->CEpos) = order;                            /* prepare the buffer */
-        order = getSpecialCENew(coll, collationSource, status);       /* and try to get the special CE */
+        order = getSpecialCE(coll, collationSource, status);       /* and try to get the special CE */
         if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
           order = ucol_getNextUCA(ch, collationSource, status);
         }
@@ -216,7 +251,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       order = ucmp32_get(UCA->mapping, ch);
     }
     if(order >= UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
-      order = getSpecialCENew(UCA, collationSource, status); 
+      order = getSpecialCE(UCA, collationSource, status); 
     } 
     if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
       /* We have to check if ch is possibly a first surrogate - then we need to take the next code unit */
@@ -241,7 +276,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
     return order; /* return the CE */
 }
 
-uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCode *status) {
+uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
   int32_t i = 0; /* general counter */
   uint32_t CE = *source->CEpos;
   while (true) {
@@ -388,11 +423,54 @@ void uprv_ucol_reverse_buffer(uint8_t *start, uint8_t *end) {
   }
 }
 
+U_CAPI UBool
+ucol_greater(    const    UCollator        *coll,
+        const    UChar            *source,
+        int32_t            sourceLength,
+        const    UChar            *target,
+        int32_t            targetLength)
+{
+  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
+      == UCOL_GREATER);
+}
+
+U_CAPI UBool
+ucol_greaterOrEqual(    const    UCollator    *coll,
+            const    UChar        *source,
+            int32_t        sourceLength,
+            const    UChar        *target,
+            int32_t        targetLength)
+{
+  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
+      != UCOL_LESS);
+}
+
+U_CAPI UBool
+ucol_equal(        const    UCollator        *coll,
+            const    UChar            *source,
+            int32_t            sourceLength,
+            const    UChar            *target,
+            int32_t            targetLength)
+{
+  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
+      == UCOL_EQUAL);
+}
+
 #define MIN_VALUE 0x02
 #define UCOL_VARIABLE_MAX 0x20
 #define UCOL_NEW_IGNORABLE 0
 
-int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
+U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll, 
+        const    UChar        *source,
+        int32_t            sourceLength,
+        int32_t *resultLen) {
+    uint8_t *result = NULL;
+    UErrorCode status = U_ZERO_ERROR;
+    *resultLen = ucol_calcSortKey(coll, source, sourceLength, &result, 0, TRUE, &status);
+    return result;
+}
+
+int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
     UErrorCode status = U_ZERO_ERROR;
     uint8_t compareSec   = (strength >= UCOL_SECONDARY)?0:0xFF;
     uint8_t compareTer   = (strength >= UCOL_TERTIARY)?0:0xFF;
@@ -415,8 +493,8 @@ int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t
     
 
     for(;;) {
-          /*order = ucol_getNextCENew(coll, s, status);*/
-          UCOL_GETNEXTCENEW(order, coll, *s, &status);
+          order = ucol_getNextCE(coll, s, &status);
+          /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
 
           if(order == UCOL_NULLORDER) {
               break;
@@ -514,7 +592,7 @@ int32_t ucol_getSortKeySizeNew(const UCollatorNew *coll, collIterate *s, int32_t
 }
     
 int32_t
-ucol_calcSortKeyNew(const    UCollatorNew    *coll,
+ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        **result,
@@ -590,7 +668,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     len = s.len-s.pos;
 
     if(resultLength == 0) {
-        return ucol_getSortKeySizeNew(coll, &s, sortKeySize, strength, len);
+        return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
     }
 
     int32_t minBufferSize = UCOL_MAX_BUFFER;
@@ -621,10 +699,12 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
     int32_t prevBuffSize = 0;
 
+    int32_t compressedSecs = 0;
+
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            order = ucol_getNextCENew(coll, &s, status);
+            order = ucol_getNextCE(coll, &s, status);
             /*UCOL_GETNEXTCENEW(order, coll, s, status);*/
 
             if(order == UCOL_NULLORDER) {
@@ -688,9 +768,13 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
               if(secondary > compareSec) { 
                 /* This thing should also contain the compression logic, as in: */
-                if (secondary == UCOL_COMMON2 && UCOL_COMMON2 <= *(secondaries-1) && *(secondaries-1) < UCOL_COMMON_MAX2) {
-                    ++*(secondaries-1); /* simply increment!! */
+                if (secondary == UCOL_COMMON2 && *(secondaries-1) == UCOL_COMMON2 && compressedSecs < UCOL_COMMON_MAX2 - UCOL_COMMON2) {
+			          compressedSecs++;
                 } else {
+                  if(compressedSecs != 0) {
+                    *(secondaries-1) = UCOL_COMMON_MAX2 - compressedSecs;
+                    compressedSecs = 0;
+                  }
                   *secondaries++ = secondary;
                   sortKeySize++;
                   if(isFrenchSec) {
@@ -744,7 +828,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
             if(sortKeySize>resultLength) { /* We have stepped over the primary buffer */
               if(allocatePrimary == FALSE) { /* need to save our butts if we cannot reallocate */
                 resultOverflow = TRUE;
-                sortKeySize = ucol_getSortKeySizeNew(coll, &s, sortKeySize, strength, len);
+                sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 finished = TRUE;
                 break;
@@ -879,17 +963,17 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
 
 U_CAPI int32_t
-ucol_getSortKeyNew(const    UCollatorNew    *coll,
+ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        *result,
         int32_t        resultLength)
 {
   UErrorCode status = U_ZERO_ERROR;
-    return ucol_calcSortKeyNew(coll, source, sourceLength, &result, resultLength, FALSE, &status);
+    return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE, &status);
 }
 
-U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
+U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
 	switch(attr) {
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
 		if(value == UCOL_ON) {
@@ -982,7 +1066,7 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
 	}
 }
 
-U_CAPI UColAttributeValue ucol_getAttributeNew(const UCollatorNew *coll, UColAttribute attr, UErrorCode *status) {
+U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
 	switch(attr) {
 	case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
         if(coll->frenchCollationisDefault) {
@@ -1034,529 +1118,35 @@ U_CAPI UColAttributeValue ucol_getAttributeNew(const UCollatorNew *coll, UColAtt
 	return UCOL_DEFAULT;
 }
 
-U_CAPI UCollator*
-ucol_open(    const    char         *loc,
-        UErrorCode      *status)
+U_CAPI uint8_t *
+ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 {
-  if(U_FAILURE(*status)) return 0;
-
-  Collator *col = 0;
-
-  if(loc == 0) 
-    col = Collator::createInstance(*status);
-  else
-    col = Collator::createInstance(Locale(loc), *status);
-
-  if(col == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
-  }
-
-  return (UCollator*)col;
-}
-
-U_CAPI UCollator*
-ucol_openRules(    const    UChar                  *rules,
-        int32_t                 rulesLength,
-        UNormalizationMode      mode,
-        UCollationStrength      strength,
-        UErrorCode              *status)
-{
-  if(U_FAILURE(*status)) return 0;
-
-  int32_t len = (rulesLength == -1 ? u_strlen(rules) : rulesLength);
-  const UnicodeString ruleString((UChar*)rules, len, len);
-
-  Normalizer::EMode normMode;
-  switch(mode) {
-  case UCOL_NO_NORMALIZATION:
-    normMode = Normalizer::NO_OP;
-    break;
-  case UCOL_DECOMP_CAN:
-    normMode = Normalizer::DECOMP;
-    break;
-  case UCOL_DECOMP_COMPAT:
-    normMode = Normalizer::DECOMP_COMPAT;
-    break;
-  case UCOL_DECOMP_CAN_COMP_COMPAT:
-    normMode = Normalizer::COMPOSE;
-    break;
-  case UCOL_DECOMP_COMPAT_COMP_CAN:
-    normMode = Normalizer::COMPOSE_COMPAT;
-    break;
-  default:
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
-  }
-
-  RuleBasedCollator *col = 0;
-  col = new RuleBasedCollator(ruleString, 
-                  (Collator::ECollationStrength) strength, 
-                  normMode, 
-                  *status);
-
-  if(col == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
-  }
-
-  return (UCollator*) col;
-}
-
-U_CAPI void
-ucol_close(UCollator *coll)
-{
-  delete (Collator*)coll;
-}
-
-U_CAPI UBool
-ucol_greater(    const    UCollator        *coll,
-        const    UChar            *source,
-        int32_t            sourceLength,
-        const    UChar            *target,
-        int32_t            targetLength)
-{
-  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
-      == UCOL_GREATER);
-}
-
-U_CAPI UBool
-ucol_greaterOrEqual(    const    UCollator    *coll,
-            const    UChar        *source,
-            int32_t        sourceLength,
-            const    UChar        *target,
-            int32_t        targetLength)
-{
-  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
-      != UCOL_LESS);
-}
-
-U_CAPI UBool
-ucol_equal(        const    UCollator        *coll,
-            const    UChar            *source,
-            int32_t            sourceLength,
-            const    UChar            *target,
-            int32_t            targetLength)
-{
-  return (ucol_strcoll(coll, source, sourceLength, target, targetLength) 
-      == UCOL_EQUAL);
-}
-
-U_CAPI UCollationStrength
-ucol_getStrength(const UCollator *coll)
-{
-  return (UCollationStrength) ((Collator*)coll)->getStrength();
-}
-
-
-U_CAPI void
-ucol_setStrength(    UCollator                *coll,
-            UCollationStrength        strength)
-{
-  ((Collator*)coll)->setStrength((Collator::ECollationStrength)strength);
-}
-
-U_CAPI UNormalizationMode
-ucol_getNormalization(const UCollator* coll)
-{
-  switch(((Collator*)coll)->getDecomposition()) {
-  case Normalizer::NO_OP:
-    return UCOL_NO_NORMALIZATION;
-
-  case Normalizer::COMPOSE:
-    return UCOL_DECOMP_COMPAT_COMP_CAN;
-
-  case Normalizer::COMPOSE_COMPAT:
-    return UCOL_DECOMP_CAN_COMP_COMPAT;
-
-  case Normalizer::DECOMP:
-    return UCOL_DECOMP_CAN;
-
-  case Normalizer::DECOMP_COMPAT:
-    return UCOL_DECOMP_COMPAT;
-
-  }
-  return UCOL_NO_NORMALIZATION;
+  *length = 0;
+  return NULL;
 }
 
 U_CAPI void
 ucol_setNormalization(  UCollator            *coll,
             UNormalizationMode    mode)
 {
-  Normalizer::EMode normMode;
+  UErrorCode status = U_ZERO_ERROR;
   switch(mode) {
   case UCOL_NO_NORMALIZATION:
-    normMode = Normalizer::NO_OP;
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
     break;
   case UCOL_DECOMP_CAN:
-    normMode = Normalizer::DECOMP;
-    break;
-  case UCOL_DECOMP_COMPAT:
-    normMode = Normalizer::DECOMP_COMPAT;
-    break;
-  case UCOL_DECOMP_COMPAT_COMP_CAN:
-    normMode = Normalizer::COMPOSE;
-    break;
-  case UCOL_DECOMP_CAN_COMP_COMPAT:
-    normMode = Normalizer::COMPOSE_COMPAT;
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     break;
   default:
     /* Shouldn't get here. */
+    /* This is quite a bad API */
+    /* deprecate */
     /* *status = U_ILLEGAL_ARGUMENT_ERROR; */
     return;
   }
-
-  ((Collator*)coll)->setDecomposition(normMode);
 }
 
-U_CAPI int32_t
-ucol_getDisplayName(    const    char        *objLoc,
-            const    char        *dispLoc,
-            UChar             *result,
-            int32_t         resultLength,
-            UErrorCode        *status)
-{
-  if(U_FAILURE(*status)) return -1;
-
-  UnicodeString dst(result, resultLength, resultLength);
-  Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
-  int32_t actLen;
-  T_fillOutputParams(&dst, result, resultLength, &actLen, status);
-  return actLen;
-}
-
-U_CAPI const char*
-ucol_getAvailable(int32_t index)
-{
-  return uloc_getAvailable(index);
-}
-
-U_CAPI int32_t
-ucol_countAvailable()
-{
-  return uloc_countAvailable();
-}
-
-inline void *ucol_getABuffer(const UCollator *coll, uint32_t size) {
-    return ((RuleBasedCollator *)coll)->getSomeMemory(size);
-}
-
-U_CAPI const UChar*
-ucol_getRules(    const    UCollator        *coll, 
-        int32_t            *length)
-{
-  const UnicodeString& rules = ((RuleBasedCollator*)coll)->getRules();
-  *length = rules.length();
-  return rules.getUChars();
-}
-
-UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength)
-{
-    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
-    uint8_t *sourceKeyP = sourceKey;
-    uint8_t *targetKeyP = targetKey;
-    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
-
-    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
-    if(sourceKeyLen > UCOL_MAX_BUFFER) {
-        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
-        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
-    }
-
-    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
-    if(targetKeyLen > UCOL_MAX_BUFFER) {
-        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
-        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
-    }
-
-    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
-
-    if(sourceKeyP != sourceKey) {
-        uprv_free(sourceKeyP);
-    }
-
-    if(targetKeyP != targetKey) {
-        uprv_free(targetKeyP);
-    }
-
-    if(result<0) {
-        return UCOL_LESS;
-    } else if(result>0) {
-        return UCOL_GREATER;
-    } else {
-        return UCOL_EQUAL;
-    }
-}
-
-int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
-  if (*(source->CEpos) == UCOL_UNMAPPED) {
-      // Returned an "unmapped" flag and save the character so it can be 
-        // returned next time this method is called.
-        if (*(source->pos) == 0x0000) return *(source->pos++); // \u0000 is not valid in C++'s UnicodeString
-    	*(source->CEpos++) = UCOL_UNMAPPEDCHARVALUE;
-	    *(source->CEpos++) = *(source->pos)<<16;
-    } else {
-        // Contraction sequence start...
-        if (*(source->CEpos) >= UCOL_CONTRACTCHARINDEX) {
-			UChar key[1024];
-			uint32_t posKey = 0;
-
-            VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(*(source->CEpos)-UCOL_CONTRACTCHARINDEX);
-            // The upper line obtained a list of contracting sequences.
-            if (list != NULL) {
-				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
-				int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
-
-				key[posKey++] = *(source->pos++);
-				// This tries to find the longes common match for the data in contraction table...
-				// and needs to be rewritten, especially the test down there!
-				int32_t i;
-                int32_t listSize = list->size();
-				UBool foundSmaller = TRUE;
-				while(source->pos<source->len && foundSmaller) {
-					key[posKey++] = *source->pos;
-
-					foundSmaller = FALSE;
-					i = 0;
-					while(i<listSize && !foundSmaller) {
-						pair = list->at(i);
-                        if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) { 
-                            /* Found a matching contraction sequence */
-                            order = pair->value; /* change the CE value */
-                            source->pos++;       /* consume another char from the source */
-							foundSmaller = TRUE; 
-						}
-						i++;
-
-					}
-				}
-				source->pos--; /* spit back the last char - it wasn't part of the sequence */
-				*(source->CEpos) = order;
-			}
-    }
-	// Expansion sequence start...
-        if (*(source->CEpos) >= UCOL_EXPANDCHARINDEX) {
-            VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(*(source->CEpos)-UCOL_EXPANDCHARINDEX);
-            if(v != NULL) {
-                int32_t expandindex=0;
-                int32_t vSize = v->size();
-                while(expandindex < vSize) {
-                    *(source->CEpos++) = v->at(expandindex++);
-                }
-            }
-        }
-
-     // Thai/Lao reordering
-        if (UCOL_ISTHAIPREVOWEL(*(source->pos)) && 
-			UCOL_ISTHAIBASECONSONANT(*(source->pos+1))) {
-			if(source->isThai == TRUE) {
-				source->isThai = FALSE;
-				if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
-					// allocate a new buffer
-                    source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));
-				} 
-				UChar *sourceCopy = source->pos;
-				UChar *targetCopy = source->writableBuffer;
-				while(sourceCopy < source->len) {
-					if(UCOL_ISTHAIPREVOWEL(*(sourceCopy)) && 
-						UCOL_ISTHAIBASECONSONANT(*(sourceCopy+1))) {
-						*(targetCopy) = *(sourceCopy+1);
-						*(targetCopy+1) = *(sourceCopy);
-						targetCopy+=2;
-						sourceCopy+=2;
-					} else {
-						*(targetCopy++) = *(sourceCopy++);
-					}
-				}
-				source->pos = source->writableBuffer;
-				source->len = targetCopy;
-				source->CEpos = source->toReturn = source->CEs;
-                return UCOL_IGNORABLE;
-            }
-        }
-    }
-    source->pos++;
-    return (*(source->toReturn++));
-}
-
-
-/* This is the original function */
-U_CAPI UCollationResult
-ucol_strcollEx(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength)
-{
-    if (coll == NULL) return UCOL_EQUAL;
-    if (sourceLength == -1) sourceLength = u_strlen(source);
-    if (targetLength == -1) targetLength = u_strlen(target);
-        return (UCollationResult) ((RuleBasedCollator*)coll)->compareEx(source,sourceLength,target,targetLength);
-}
-
-void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
-    s->len = s->stringP = s->stackString ;
-    s->capacity = s->stackString+UCOL_MAX_BUFFER;
-    s->CEpos = s->toReturn = s->CEs;
-    s->source = source;
-    s->sourceContext = sourceContext;
-    s->currentChar = 0xFFFF;
-    s->lastChar = 0xFFFF;
-    s->panic = FALSE;
-}
-
-int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status) {
-
-  uint32_t order;
-
-  if (U_FAILURE(*status) /*|| (ctx->CEpos <= ctx->toReturn)*/) {
-    return UCOL_NULLORDER;
-  }
-  
-  if (ctx->CEpos > ctx->toReturn) {
-      return(*(ctx->toReturn++));
-  }
- 
-  ctx->CEpos = ctx->toReturn = ctx->CEs;
-
-  if(ctx->lastChar == 0xFFFF) {
-      ctx->currentChar = ctx->source(ctx->sourceContext);
-      incctx_appendChar(ctx, ctx->currentChar);
-      //*(ctx->len++) = ctx->currentChar;
-      if(ctx->currentChar == 0xFFFF) {
-          return UCOL_NULLORDER;
-      }
-  } else {
-      ctx->currentChar = ctx->lastChar;
-      ctx->lastChar = 0xFFFF;
-  }
- 
-  order  = ucmp32_get(((RuleBasedCollator *)coll)->data->mapping, ctx->currentChar);
-
-  // this should benefit from reordering of the clauses, so that the cleanest case is returned the first.
-
-  if(order < UCOL_EXPANDCHARINDEX && !(UCOL_ISTHAIPREVOWEL(ctx->currentChar))) {     
-    return (order);
-  }
-  if (order == UCOL_UNMAPPED) {
-      // Returned an "unmapped" flag and save the character so it can be 
-        // returned next time this method is called.
-        if (ctx->currentChar == 0x0000) return ctx->currentChar; // \u0000 is not valid in C++'s UnicodeString
-    	//*(ctx->CEpos++) = UCOL_UNMAPPEDCHARVALUE;
-        order = UCOL_UNMAPPEDCHARVALUE;
-	    *(ctx->CEpos++) = ctx->currentChar<<16;
-    } else {
-        // Contraction sequence start...
-        if (order >= UCOL_CONTRACTCHARINDEX) {
-			UChar key[1024];
-			uint32_t posKey = 0;
-
-            VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(order-UCOL_CONTRACTCHARINDEX);
-            // The upper line obtained a list of contracting sequences.
-            if (list != NULL) {
-				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
-				order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
-
-				key[posKey++] = ctx->currentChar;
-				// This tries to find the longes common match for the data in contraction table...
-				// and needs to be rewritten, especially the test down there!
-				int32_t i;
-                int32_t listSize = list->size();
-				UBool foundSmaller = TRUE;
-                UBool endOfString = FALSE;
-                //*(ctx->len++) = ctx->lastChar;
-                incctx_appendChar(ctx, ctx->lastChar);
-				while(!endOfString && foundSmaller) {
-                    endOfString = ((ctx->lastChar = ctx->source(ctx->sourceContext)) == 0xFFFF);
-					key[posKey++] = ctx->lastChar;
-
-					foundSmaller = FALSE;
-					i = 0;
-					while(i<listSize && !foundSmaller) {
-						pair = list->at(i);
-						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
-							order = pair->value;
-                            //*(ctx->len++) = ctx->lastChar;
-                            incctx_appendChar(ctx, ctx->lastChar);
-							foundSmaller = TRUE;
-						}
-						i++;
-
-					}
-				}
-			}
-    }
-	// Expansion sequence start...
-        if (order >= UCOL_EXPANDCHARINDEX) {
-            VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(order-UCOL_EXPANDCHARINDEX);
-            if(v != NULL) {
-                int32_t expandindex=0;
-                int32_t vSize = v->size();
-                order = v->at(expandindex++); // first character....
-                while(expandindex < vSize) {
-                    *(ctx->CEpos++) = v->at(expandindex++);
-                }
-            }
-        }
-
-     // Thai/Lao reordering
-        // This is gonna be way too goofy - so we're gonna bail out and let others do the work...
-        if (UCOL_ISTHAIPREVOWEL(ctx->currentChar)) {
-                ctx->panic = TRUE;
-                return UCOL_NULLORDER;
-        }
-    }
-    return order;
-}
-
-void incctx_cleanUpContext(incrementalContext *ctx) {
-    if(ctx->stringP != ctx->stackString) {
-        uprv_free(ctx->stringP);
-    }
-}
-
-UChar incctx_appendChar(incrementalContext *ctx, UChar c) {
-    if(ctx->len == ctx->capacity) { /* bother, said Pooh, we need to reallocate */
-        UChar *newStuff;
-        if(ctx->stringP == ctx->stackString) { /* we haven't allocated before, need to allocate */
-            newStuff = (UChar *)uprv_malloc(2*(ctx->capacity - ctx->stringP)*sizeof(UChar));
-            if(newStuff == NULL) {
-                /*freak out*/
-            }
-            uprv_memcpy(newStuff, ctx->stringP, (ctx->capacity - ctx->stringP)*sizeof(UChar));
-        } else { /* we have already allocated, need to reallocate */
-            newStuff = (UChar *)uprv_realloc(ctx->stringP, 2*(ctx->capacity - ctx->stringP)*sizeof(UChar));
-            if(newStuff == NULL) {
-                /*freak out*/
-            }
-        }
-        ctx->len=newStuff+(ctx->len - ctx->stringP);
-        ctx->capacity = newStuff+2*(ctx->capacity - ctx->stringP);
-        ctx->stringP = newStuff;
-    }
-    *(ctx->len++) = c;
-    return c;
-}
-
-
-
-UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx) {
-    if(srcCtx->stringP == srcCtx->len || *(srcCtx->len-1) != 0xFFFF) {
-        while(incctx_appendChar(srcCtx, srcCtx->source(srcCtx->sourceContext)) != 0xFFFF);
-    }
-    if(trgCtx->stringP == trgCtx->len || *(trgCtx->len-1) != 0xFFFF) {
-        while(incctx_appendChar(trgCtx, trgCtx->source(trgCtx->sourceContext)) != 0xFFFF);
-    }
-    UCollationResult result = ucol_strcoll(coll, srcCtx->stringP, srcCtx->len-srcCtx->stringP-1, trgCtx->stringP, trgCtx->len-trgCtx->stringP-1);
-    incctx_cleanUpContext(srcCtx);
-    incctx_cleanUpContext(trgCtx);
-    return result;
-}
-
+/* This is the new function */
 /* This is the incremental function */
 U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll, 
 								 UCharForwardIterator *source, void *sourceContext,
@@ -2057,6 +1647,7 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength)
 {
+#if 0
 	Collator *cppColl = (Collator*)coll;
 
     // check if source and target are valid strings
@@ -2573,388 +2164,172 @@ ucol_strcoll(    const    UCollator    *coll,
     }
 
     return result;
+#endif
+    return UCOL_EQUAL;
 }
 
 
-/* This is the original sort key function */
-U_CAPI int32_t
-ucol_getSortKeyEx(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        *result,
-        int32_t        resultLength)
-{
-  int32_t         count;
-  const uint8_t*     bytes = NULL;
-  CollationKey         key;
-  int32_t         copyLen;
-    int32_t         len = (sourceLength == -1 ? u_strlen(source) 
-                   : sourceLength);
-  //  UnicodeString     string((UChar*)source, len, len);
-  UErrorCode         status = U_ZERO_ERROR;
+void init_incrementalContext(UCharForwardIterator *source, void *sourceContext, incrementalContext *s) {
+    s->len = s->stringP = s->stackString ;
+    s->capacity = s->stackString+UCOL_MAX_BUFFER;
+    s->CEpos = s->toReturn = s->CEs;
+    s->source = source;
+    s->sourceContext = sourceContext;
+    s->currentChar = 0xFFFF;
+    s->lastChar = 0xFFFF;
+    s->panic = FALSE;
+}
 
-  ((RuleBasedCollator*)coll)->getCollationKeyEx(source, len, key, status);
-  if(U_FAILURE(status)) 
-    return 0;
+int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status) {
+#if 0
+  uint32_t order;
 
-  bytes = key.getByteArray(count);
+  if (U_FAILURE(*status) /*|| (ctx->CEpos <= ctx->toReturn)*/) {
+    return UCOL_NULLORDER;
+  }
   
-  copyLen = uprv_min(count, resultLength);
-  uprv_arrayCopy((const int8_t*)bytes, (int8_t*)result, copyLen);
+  if (ctx->CEpos > ctx->toReturn) {
+      return(*(ctx->toReturn++));
+  }
+ 
+  ctx->CEpos = ctx->toReturn = ctx->CEs;
 
-  return count;
+  if(ctx->lastChar == 0xFFFF) {
+      ctx->currentChar = ctx->source(ctx->sourceContext);
+      incctx_appendChar(ctx, ctx->currentChar);
+      //*(ctx->len++) = ctx->currentChar;
+      if(ctx->currentChar == 0xFFFF) {
+          return UCOL_NULLORDER;
+      }
+  } else {
+      ctx->currentChar = ctx->lastChar;
+      ctx->lastChar = 0xFFFF;
+  }
+ 
+  order  = ucmp32_get(((RuleBasedCollator *)coll)->data->mapping, ctx->currentChar);
+
+  // this should benefit from reordering of the clauses, so that the cleanest case is returned the first.
+
+  if(order < UCOL_EXPANDCHARINDEX && !(UCOL_ISTHAIPREVOWEL(ctx->currentChar))) {     
+    return (order);
+  }
+  if (order == UCOL_UNMAPPED) {
+      // Returned an "unmapped" flag and save the character so it can be 
+        // returned next time this method is called.
+        if (ctx->currentChar == 0x0000) return ctx->currentChar; // \u0000 is not valid in C++'s UnicodeString
+    	//*(ctx->CEpos++) = UCOL_UNMAPPEDCHARVALUE;
+        order = UCOL_UNMAPPEDCHARVALUE;
+	    *(ctx->CEpos++) = ctx->currentChar<<16;
+    } else {
+        // Contraction sequence start...
+        if (order >= UCOL_CONTRACTCHARINDEX) {
+			UChar key[1024];
+			uint32_t posKey = 0;
+
+            VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(order-UCOL_CONTRACTCHARINDEX);
+            // The upper line obtained a list of contracting sequences.
+            if (list != NULL) {
+				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
+				order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
+
+				key[posKey++] = ctx->currentChar;
+				// This tries to find the longes common match for the data in contraction table...
+				// and needs to be rewritten, especially the test down there!
+				int32_t i;
+                int32_t listSize = list->size();
+				UBool foundSmaller = TRUE;
+                UBool endOfString = FALSE;
+                //*(ctx->len++) = ctx->lastChar;
+                incctx_appendChar(ctx, ctx->lastChar);
+				while(!endOfString && foundSmaller) {
+                    endOfString = ((ctx->lastChar = ctx->source(ctx->sourceContext)) == 0xFFFF);
+					key[posKey++] = ctx->lastChar;
+
+					foundSmaller = FALSE;
+					i = 0;
+					while(i<listSize && !foundSmaller) {
+						pair = list->at(i);
+						if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) {
+							order = pair->value;
+                            //*(ctx->len++) = ctx->lastChar;
+                            incctx_appendChar(ctx, ctx->lastChar);
+							foundSmaller = TRUE;
+						}
+						i++;
+
+					}
+				}
+			}
+    }
+	// Expansion sequence start...
+        if (order >= UCOL_EXPANDCHARINDEX) {
+            VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(order-UCOL_EXPANDCHARINDEX);
+            if(v != NULL) {
+                int32_t expandindex=0;
+                int32_t vSize = v->size();
+                order = v->at(expandindex++); // first character....
+                while(expandindex < vSize) {
+                    *(ctx->CEpos++) = v->at(expandindex++);
+                }
+            }
+        }
+
+     // Thai/Lao reordering
+        // This is gonna be way too goofy - so we're gonna bail out and let others do the work...
+        if (UCOL_ISTHAIPREVOWEL(ctx->currentChar)) {
+                ctx->panic = TRUE;
+                return UCOL_NULLORDER;
+        }
+    }
+    return order;
+#endif
+    return 0;
 }
 
-int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t currentSize, UColAttributeValue strength, int32_t len) {
-    UErrorCode status = U_ZERO_ERROR;
-    UBool  compareSec   = (strength >= UCOL_SECONDARY);
-    UBool  compareTer   = (strength >= UCOL_TERTIARY);
-    UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
-    UBool  compareIdent = (strength == UCOL_IDENTICAL);
-    int32_t order = UCOL_NULLORDER;
-    uint16_t primary = 0;
-    uint8_t secondary = 0;
-    uint8_t tertiary = 0;
-    
-
-    for(;;) {
-        UCOL_GETNEXTCE(order, coll, *s, status);
-        if(order == UCOL_NULLORDER) {
-            break;
-        }
-
-        primary = ((order & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT);
-        secondary = ((order & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT);
-        tertiary = (order & UCOL_TERTIARYORDERMASK);
-
-        if(primary != UCOL_PRIMIGNORABLE) {
-            currentSize += 2;
-            if(compareSec) {
-                currentSize++;
-            }
-            if(compareTer) {
-                currentSize++;
-            }
-        } else if(secondary != 0) {
-            if(compareSec) {
-                currentSize++;
-            }
-            if(compareTer) {
-                currentSize++;
-            }
-        } else if(tertiary != 0) {
-            if(compareTer) {
-                currentSize++;
-            }
-        }
+void incctx_cleanUpContext(incrementalContext *ctx) {
+    if(ctx->stringP != ctx->stackString) {
+        uprv_free(ctx->stringP);
     }
-
-    if(compareIdent) {
-        currentSize += len*sizeof(UChar);
-        UChar *ident = s->string;
-        while(ident<s->len) {
-            if((*(ident) >> 8) + utf16fixup[*(ident) >> 11]<0x02) {
-
-                currentSize++;
-            }
-            if((*(ident) & 0xFF)<0x02) {
-                currentSize++;
-            }
-        }
-
-    }
-
-    return currentSize;
-    
 }
 
-int32_t
-ucol_calcSortKey(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        **result,
-        int32_t        resultLength,
-        UBool allocatePrimary)
-{
-
-    uint32_t i = 0; // general purpose counter
-
-	UErrorCode status = U_ZERO_ERROR;
-
-    uint8_t second[UCOL_MAX_BUFFER], tert[UCOL_MAX_BUFFER];
-
-    uint8_t *primaries = *result, *secondaries = second, *tertiaries = tert;
-
-    if(primaries == NULL && allocatePrimary == TRUE) {
-        primaries = *result = (uint8_t *)uprv_malloc(2*UCOL_MAX_BUFFER);
-        resultLength = 2*UCOL_MAX_BUFFER;
-    }
-
-    int32_t primSize = resultLength, secSize = UCOL_MAX_BUFFER, terSize = UCOL_MAX_BUFFER;
-
-    int32_t sortKeySize = 1; // it is always \0 terminated
-
-    UChar normBuffer[UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER];
-    UChar *normSource = normBuffer;
-    int32_t normSourceLen = UCOL_NORMALIZATION_GROWTH*UCOL_MAX_BUFFER;
-
-	int32_t len = (sourceLength == -1 ? u_strlen(source) : sourceLength);
-
-    UColAttributeValue strength = ucol_getAttribute(coll, UCOL_STRENGTH, &status);
-
-    UBool  compareSec   = (strength >= UCOL_SECONDARY);
-    UBool  compareTer   = (strength >= UCOL_TERTIARY);
-    UBool  compareQuad  = (strength >= UCOL_QUATERNARY);
-    UBool  compareIdent = (strength == UCOL_IDENTICAL);
-
-    sortKeySize += ((compareSec?1:0) + (compareTer?1:0) + (compareQuad?1:0) + (compareIdent?1:0));
-
-    collIterate s;
-    init_collIterate((UChar *)source, len, &s, FALSE);
-
-    // If we need to normalize, we'll do it all at once at the beggining!
-    UNormalizationMode normMode = ucol_getNormalization(coll);
-    if(normMode != UNORM_NONE) {
-        normSourceLen = u_normalize(source, sourceLength, normMode, 0, normSource, normSourceLen, &status);
-        if(U_FAILURE(status)) {
-            status=U_ZERO_ERROR;
-            normSource = (UChar *) uprv_malloc((normSourceLen+1)*sizeof(UChar));
-            normSourceLen = u_normalize(source, sourceLength, normMode, 0, normSource, (normSourceLen+1), &status);
-        }
-    	normSource[normSourceLen] = 0;
-		s.string = normSource;
-        s.pos = normSource;
-		s.len = normSource+normSourceLen;
-	}
-
-    len = s.len-s.pos;
-
-    if(resultLength == 0) {
-        return ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
-    }
-
-    int32_t minBufferSize = uprv_min(secSize, terSize);
-
-    uint8_t *primStart = primaries;
-    uint8_t *secStart = secondaries;
-    uint8_t *terStart = tertiaries;
-
-    uint32_t order = 0;
-
-    uint16_t primary = 0;
-    uint8_t secondary = 0;
-    uint8_t tertiary = 0;
-
-    UBool finished = FALSE;
-    UBool resultOverflow = FALSE;
-
-    int32_t prevBuffSize = 0;
-
-    for(;;) {
-        for(i=prevBuffSize; i<minBufferSize; ++i) {
-
-            UCOL_GETNEXTCE(order, coll, s, status);
-
-            if(order == UCOL_NULLORDER) {
-                finished = TRUE;
-                break;
+UChar incctx_appendChar(incrementalContext *ctx, UChar c) {
+    if(ctx->len == ctx->capacity) { /* bother, said Pooh, we need to reallocate */
+        UChar *newStuff;
+        if(ctx->stringP == ctx->stackString) { /* we haven't allocated before, need to allocate */
+            newStuff = (UChar *)uprv_malloc(2*(ctx->capacity - ctx->stringP)*sizeof(UChar));
+            if(newStuff == NULL) {
+                /*freak out*/
             }
-
-            primary = ((order & UCOL_PRIMARYORDERMASK)>> UCOL_PRIMARYORDERSHIFT);
-            secondary = ((order & UCOL_SECONDARYORDERMASK)>> UCOL_SECONDARYORDERSHIFT);
-            tertiary = (order & UCOL_TERTIARYORDERMASK);
-
-            if(primary != UCOL_PRIMIGNORABLE) {
-                *(primaries++) = (primary>>8);
-                *(primaries++) = (primary&0xFF);
-                sortKeySize += 2;
-                if(compareSec) {
-                    *(secondaries++) = secondary;
-                    sortKeySize++;
-                }
-                if(compareTer) {
-                    *(tertiaries++) = tertiary;
-                    sortKeySize++;
-                }
-            } else if(secondary != UCOL_SECIGNORABLE) {
-                if(compareSec) {
-                    *(secondaries++) = secondary;
-                    sortKeySize++;
-                }
-                if(compareTer) {
-                    *(tertiaries++) = tertiary;
-                    sortKeySize++;
-                }
-            } else if(tertiary != UCOL_TERIGNORABLE) {
-                if(compareTer) {
-                    *(tertiaries++) = tertiary;
-                    sortKeySize++;
-                }
-            }
-            if(sortKeySize>resultLength) {
-                if(allocatePrimary == FALSE) {
-                    resultOverflow = TRUE;
-                    sortKeySize = ucol_getSortKeySize(coll, &s, sortKeySize, strength, len);
-                    goto cleanup;
-                } else {
-                    uint8_t *newStart;
-                    newStart = (uint8_t *)uprv_realloc(primStart, 2*sortKeySize);
-                    if(primStart == NULL) {
-                        /*freak out*/
-                    }
-                    primaries=newStart+(primaries-primStart);
-                    resultLength = 2*sortKeySize;
-                    primStart = *result = newStart;
-                }
+            uprv_memcpy(newStuff, ctx->stringP, (ctx->capacity - ctx->stringP)*sizeof(UChar));
+        } else { /* we have already allocated, need to reallocate */
+            newStuff = (UChar *)uprv_realloc(ctx->stringP, 2*(ctx->capacity - ctx->stringP)*sizeof(UChar));
+            if(newStuff == NULL) {
+                /*freak out*/
             }
         }
-        if(finished) {
-            break;
-        } else {
-            prevBuffSize = minBufferSize;
-            uint8_t *newStart;
-
-            if(secStart==second) {
-                newStart=(uint8_t*)uprv_malloc(2*secSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-                uprv_memcpy(newStart, secStart, secondaries-secStart);
-            } else {
-                newStart=(uint8_t*)uprv_realloc(secStart, 2*secSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-            }
-            secondaries=newStart+(secondaries-secStart);
-            secStart = newStart;
-            secSize*=2;
-
-            if(terStart==tert) {
-                newStart=(uint8_t*)uprv_malloc(2*terSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-                uprv_memcpy(newStart, terStart, tertiaries-terStart);
-            } else {
-                newStart=(uint8_t*)uprv_realloc(terStart, 2*terSize);
-                if(newStart==NULL) {
-                    /*freak out;*/
-                }
-            }
-            tertiaries=newStart+(tertiaries-terStart);
-            terStart = newStart;
-            terSize*=2;
-
-            minBufferSize = uprv_min(secSize, terSize);
-        }
+        ctx->len=newStuff+(ctx->len - ctx->stringP);
+        ctx->capacity = newStuff+2*(ctx->capacity - ctx->stringP);
+        ctx->stringP = newStuff;
     }
-
-    if(compareSec) {
-      *(primaries++) = UCOL_LEVELTERMINATOR;
-      uint32_t secsize = secondaries-secStart;
-      if(ucol_getAttribute(coll, UCOL_FRENCH_COLLATION, &status) == UCOL_ON) { // do the reverse copy
-          for(i = 0; i<secsize; i++) {
-              *(primaries++) = *(secondaries-i-1);
-          }
-        } else { 
-            uprv_memcpy(primaries, secStart, secsize); 
-            primaries += secsize;
-        }
-
-    }
-
-    if(compareTer) {
-      *(primaries++) = UCOL_LEVELTERMINATOR;
-      uint32_t tersize = tertiaries - terStart;
-      uprv_memcpy(primaries, terStart, tersize);
-      primaries += tersize;
-    }
-
-    if(compareQuad) {
-        *(primaries++) = UCOL_LEVELTERMINATOR;
-    }
-
-    if(compareIdent) {
-		UChar *ident = s.string;
-        uint8_t idByte = 0;
-        sortKeySize += len * sizeof(UChar);
-        *(primaries++) = UCOL_LEVELTERMINATOR;
-        if(sortKeySize <= resultLength) {
-		    while(ident < s.len) {
-                idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
-                if(idByte < 0x02) {
-                    if(sortKeySize < resultLength) {
-                        *(primaries++) = 0x01;
-                        sortKeySize++;
-                        *(primaries++) = idByte + 1;
-                    }
-                } else {
-                    *(primaries++) = idByte;
-                }
-                idByte = (*(ident) & 0xFF);
-                if(idByte < 0x02) {
-                    if(sortKeySize < resultLength) {
-                        *(primaries++) = 0x01;
-                        sortKeySize++;
-                        *(primaries++) = idByte + 1;
-                    }
-                } else {
-                    *(primaries++) = idByte;
-                }
-
-		      ident++;
-          }
-        } else {
-		    while(ident < s.len) {
-                idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
-                if(idByte < 0x02) {
-                    sortKeySize++;
-                }
-                idByte = (*(ident) & 0xFF);
-                if(idByte < 0x02) {
-                    sortKeySize++;
-                }
-		      ident++;
-            }
-        }
-
-    }
-
-    *(primaries++) = '\0';
-
-cleanup:
-    if(terStart != tert) {
-        uprv_free(terStart);
-    }
-    if(secStart != second) {
-        uprv_free(secStart);
-    }
-    if(normSource != normBuffer) {
-        uprv_free(normSource);
-    }
-
-    return sortKeySize;
+    *(ctx->len++) = c;
+    return c;
 }
 
-U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll, 
-        const    UChar        *source,
-        int32_t            sourceLength,
-        int32_t *resultLen) {
-    uint8_t *result = NULL;
-    *resultLen = ucol_calcSortKey(coll, source, sourceLength, &result, 0, TRUE);
+
+
+UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx) {
+    if(srcCtx->stringP == srcCtx->len || *(srcCtx->len-1) != 0xFFFF) {
+        while(incctx_appendChar(srcCtx, srcCtx->source(srcCtx->sourceContext)) != 0xFFFF);
+    }
+    if(trgCtx->stringP == trgCtx->len || *(trgCtx->len-1) != 0xFFFF) {
+        while(incctx_appendChar(trgCtx, trgCtx->source(trgCtx->sourceContext)) != 0xFFFF);
+    }
+    UCollationResult result = ucol_strcoll(coll, srcCtx->stringP, srcCtx->len-srcCtx->stringP-1, trgCtx->stringP, trgCtx->len-trgCtx->stringP-1);
+    incctx_cleanUpContext(srcCtx);
+    incctx_cleanUpContext(trgCtx);
     return result;
 }
 
-U_CAPI int32_t
-ucol_getSortKey(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        *result,
-        int32_t        resultLength)
-{
-    return ucol_calcSortKey(coll, source, sourceLength, &result, resultLength, FALSE);
-}
 
 U_CAPI int32_t
 ucol_keyHashCode(    const    uint8_t*    key, 
@@ -2963,6 +2338,7 @@ ucol_keyHashCode(    const    uint8_t*    key,
   CollationKey newKey(key, length);
   return newKey.hashCode();
 }
+
 
 UCollationElements*
 ucol_openElements(    const    UCollator            *coll,
@@ -3057,24 +2433,215 @@ ucol_getVersion(const UCollator* coll,
     ((Collator*)coll)->getVersion(versionInfo);
 }
 
-U_CAPI uint8_t *
-ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
+U_CAPI UCollationStrength
+ucol_getStrength(const UCollator *coll)
 {
-  return ((RuleBasedCollator*)coll)->cloneRuleData(*length,*status);
+  UErrorCode status = U_ZERO_ERROR;
+  return ucol_getAttribute(coll, UCOL_STRENGTH, &status);
 }
 
-U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
-	((RuleBasedCollator *)coll)->setAttribute(attr, value, *status);
+
+U_CAPI void
+ucol_setStrength(    UCollator                *coll,
+            UCollationStrength        strength)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
 }
 
-U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
-	return (((RuleBasedCollator *)coll)->getAttribute(attr, *status));
+U_CAPI const UChar*
+ucol_getRules(    const    UCollator       *coll, 
+        int32_t            *length)
+{
+  const UnicodeString& rules = ((RuleBasedCollator*)coll)->getRules();
+  *length = rules.length();
+  return rules.getUChars();
 }
 
-U_CAPI UCollator *ucol_safeClone(const UCollator *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
-	return (UCollator *)(((RuleBasedCollator *)coll)->safeClone());
+U_CAPI int32_t
+ucol_getDisplayName(    const    char        *objLoc,
+            const    char        *dispLoc,
+            UChar             *result,
+            int32_t         resultLength,
+            UErrorCode        *status)
+{
+  if(U_FAILURE(*status)) return -1;
+
+  UnicodeString dst(result, resultLength, resultLength);
+  Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
+  int32_t actLen;
+  T_fillOutputParams(&dst, result, resultLength, &actLen, status);
+  return actLen;
 }
 
-U_CAPI int32_t ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
+U_CAPI const char*
+ucol_getAvailable(int32_t index)
+{
+  return uloc_getAvailable(index);
+}
+
+U_CAPI int32_t
+ucol_countAvailable()
+{
+  return uloc_countAvailable();
+}
+
+U_CAPI UNormalizationMode
+ucol_getNormalization(const UCollator* coll)
+{
+  UErrorCode status = U_ZERO_ERROR;
+  if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, &status) == UCOL_ON) {
+    return UCOL_DECOMP_CAN;
+  } else {
+    return UCOL_NO_NORMALIZATION;
+  }
+}
+
+#if 0
+/* This is the old implementation, which should be removed... */
+
+inline void *ucol_getABuffer(const UCollatorOld *coll, uint32_t size) {
+    return ((RuleBasedCollator *)coll)->getSomeMemory(size);
+}
+
+UCollationResult ucol_compareUsingSortKeys(const    UCollatorOld    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
+{
+    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
+    uint8_t *sourceKeyP = sourceKey;
+    uint8_t *targetKeyP = targetKey;
+    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
+
+    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    if(sourceKeyLen > UCOL_MAX_BUFFER) {
+        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
+        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    }
+
+    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    if(targetKeyLen > UCOL_MAX_BUFFER) {
+        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
+        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    }
+
+    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
+
+    if(sourceKeyP != sourceKey) {
+        uprv_free(sourceKeyP);
+    }
+
+    if(targetKeyP != targetKey) {
+        uprv_free(targetKeyP);
+    }
+
+    if(result<0) {
+        return UCOL_LESS;
+    } else if(result>0) {
+        return UCOL_GREATER;
+    } else {
+        return UCOL_EQUAL;
+    }
+}
+
+int32_t getComplicatedCE(const UCollatorOld *coll, collIterate *source, UErrorCode *status) {
+  if (*(source->CEpos) == UCOL_UNMAPPED) {
+      // Returned an "unmapped" flag and save the character so it can be 
+        // returned next time this method is called.
+        if (*(source->pos) == 0x0000) return *(source->pos++); // \u0000 is not valid in C++'s UnicodeString
+    	*(source->CEpos++) = UCOL_UNMAPPEDCHARVALUE;
+	    *(source->CEpos++) = *(source->pos)<<16;
+    } else {
+        // Contraction sequence start...
+        if (*(source->CEpos) >= UCOL_CONTRACTCHARINDEX) {
+			UChar key[1024];
+			uint32_t posKey = 0;
+
+            VectorOfPToContractElement* list = ((RuleBasedCollator *)coll)->data->contractTable->at(*(source->CEpos)-UCOL_CONTRACTCHARINDEX);
+            // The upper line obtained a list of contracting sequences.
+            if (list != NULL) {
+				EntryPair *pair = (EntryPair *)list->at(0); // Taking out the first one.
+				int32_t order = pair->value; // This got us mapping for just the first element - the one that signalled a contraction.
+
+				key[posKey++] = *(source->pos++);
+				// This tries to find the longes common match for the data in contraction table...
+				// and needs to be rewritten, especially the test down there!
+				int32_t i;
+                int32_t listSize = list->size();
+				UBool foundSmaller = TRUE;
+				while(source->pos<source->len && foundSmaller) {
+					key[posKey++] = *source->pos;
+
+					foundSmaller = FALSE;
+					i = 0;
+					while(i<listSize && !foundSmaller) {
+						pair = list->at(i);
+                        if ((pair != NULL) && (pair->fwd == TRUE /*fwd*/) && (pair->equalTo(key, posKey))) { 
+                            /* Found a matching contraction sequence */
+                            order = pair->value; /* change the CE value */
+                            source->pos++;       /* consume another char from the source */
+							foundSmaller = TRUE; 
+						}
+						i++;
+
+					}
+				}
+				source->pos--; /* spit back the last char - it wasn't part of the sequence */
+				*(source->CEpos) = order;
+			}
+    }
+	// Expansion sequence start...
+        if (*(source->CEpos) >= UCOL_EXPANDCHARINDEX) {
+            VectorOfInt *v = ((RuleBasedCollator *)coll)->data->expandTable->at(*(source->CEpos)-UCOL_EXPANDCHARINDEX);
+            if(v != NULL) {
+                int32_t expandindex=0;
+                int32_t vSize = v->size();
+                while(expandindex < vSize) {
+                    *(source->CEpos++) = v->at(expandindex++);
+                }
+            }
+        }
+
+     // Thai/Lao reordering
+        if (UCOL_ISTHAIPREVOWEL(*(source->pos)) && 
+			UCOL_ISTHAIBASECONSONANT(*(source->pos+1))) {
+			if(source->isThai == TRUE) {
+				source->isThai = FALSE;
+				if((source->len - source->pos) > UCOL_WRITABLE_BUFFER_SIZE) {
+					// allocate a new buffer
+                    source->writableBuffer = (UChar *)ucol_getABuffer(coll, (source->len - source->pos)*sizeof(UChar));
+				} 
+				UChar *sourceCopy = source->pos;
+				UChar *targetCopy = source->writableBuffer;
+				while(sourceCopy < source->len) {
+					if(UCOL_ISTHAIPREVOWEL(*(sourceCopy)) && 
+						UCOL_ISTHAIBASECONSONANT(*(sourceCopy+1))) {
+						*(targetCopy) = *(sourceCopy+1);
+						*(targetCopy+1) = *(sourceCopy);
+						targetCopy+=2;
+						sourceCopy+=2;
+					} else {
+						*(targetCopy++) = *(sourceCopy++);
+					}
+				}
+				source->pos = source->writableBuffer;
+				source->len = targetCopy;
+				source->CEpos = source->toReturn = source->CEs;
+                return UCOL_IGNORABLE;
+            }
+        }
+    }
+    source->pos++;
+    return (*(source->toReturn++));
+}
+
+U_CAPI UCollatorOld *ucol_safeClone(const UCollatorOld *coll, void *stackBuffer, uint32_t bufferSize, UErrorCode *status) {
+	return (UCollatorOld *)(((RuleBasedCollator *)coll)->safeClone());
+}
+
+U_CAPI int32_t ucol_getRulesEx(const UCollatorOld *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
 	return 0;
 }
+#endif
