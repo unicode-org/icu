@@ -14,12 +14,20 @@
 U_NAMESPACE_BEGIN
 
 /**
- * These are convenience macros which invoke the swap functions
+ * A convenience macro which invokes the swapWord member function
  * from a concise call.
  *
  * @draft ICU 2.2
  */
 #define SWAPW(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapWord(value))
+
+
+/**
+ * A convenience macro which invokes the swapLong member function
+ * from a concise call.
+ *
+ * @draft ICU 2.2
+ */
 #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
 
 /**

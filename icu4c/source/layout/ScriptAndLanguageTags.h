@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2002. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -38,7 +38,7 @@ const LETag hangScriptTag = 0x68616E67; /* 'hang' (HANGUL) */
 const LETag hebrScriptTag = 0x68656272; /* 'hebr' (HEBREW) */
 const LETag hiraScriptTag = 0x68697261; /* 'hira' (HIRAGANA) */
 const LETag kndaScriptTag = 0x6B6E6461; /* 'knda' (KANNADA) */
-const LETag kataScriptTag = 0x6B617461; /* 'kata' (KATAKANA) */
+const LETag kanaScriptTag = 0x6B616E61; /* 'kana' (KATAKANA) */
 const LETag khmrScriptTag = 0x6B686D72; /* 'khmr' (KHMER) */
 const LETag laooScriptTag = 0x6C616F6F; /* 'laoo' (LAO) */
 const LETag latnScriptTag = 0x6C61746E; /* 'latn' (LATIN) */
@@ -46,7 +46,7 @@ const LETag mlymScriptTag = 0x6D6C796D; /* 'mlym' (MALAYALAM) */
 const LETag mongScriptTag = 0x6D6F6E67; /* 'mong' (MONGOLIAN) */
 const LETag mymrScriptTag = 0x6D796D72; /* 'mymr' (MYANMAR) */
 const LETag ogamScriptTag = 0x6F67616D; /* 'ogam' (OGHAM) */
-const LETag italScriptTag = 0x6974616C; /* 'ital' (OLD-ITALIC) */
+const LETag italScriptTag = 0x6974616C; /* 'ital' (OLD_ITALIC) */
 const LETag oryaScriptTag = 0x6F727961; /* 'orya' (ORIYA) */
 const LETag runrScriptTag = 0x72756E72; /* 'runr' (RUNIC) */
 const LETag sinhScriptTag = 0x73696E68; /* 'sinh' (SINHALA) */
@@ -56,8 +56,12 @@ const LETag teluScriptTag = 0x74656C75; /* 'telu' (TELUGU) */
 const LETag thaaScriptTag = 0x74686161; /* 'thaa' (THAANA) */
 const LETag thaiScriptTag = 0x74686169; /* 'thai' (THAI) */
 const LETag tibtScriptTag = 0x74696274; /* 'tibt' (TIBETAN) */
-const LETag cansScriptTag = 0x63616E73; /* 'cans' (CANADIAN-ABORIGINAL) */
+const LETag cansScriptTag = 0x63616E73; /* 'cans' (CANADIAN_ABORIGINAL) */
 const LETag yiiiScriptTag = 0x79696969; /* 'yiii' (YI) */
+const LETag tglgScriptTag = 0x74676C67; /* 'tglg' (TAGALOG) */
+const LETag hanoScriptTag = 0x68616E6F; /* 'hano' (HANUNOO) */
+const LETag buhdScriptTag = 0x62756864; /* 'buhd' (BUHID) */
+const LETag tagbScriptTag = 0x74616762; /* 'tagb' (TAGBANWA) */
 
 const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 

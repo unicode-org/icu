@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998 - 2002. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -13,6 +13,12 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+ * Constants for Unicode script values, generated using
+ * ICU4J's <code>UScript</code> class.
+ *
+ * @draft ICU 2.4
+ */
 enum ScriptCodes {
     zyyyScriptCode =  0,
     qaaiScriptCode =  1,
@@ -36,7 +42,7 @@ enum ScriptCodes {
     hebrScriptCode = 19,
     hiraScriptCode = 20,
     kndaScriptCode = 21,
-    kataScriptCode = 22,
+    kanaScriptCode = 22,
     khmrScriptCode = 23,
     laooScriptCode = 24,
     latnScriptCode = 25,
@@ -56,8 +62,12 @@ enum ScriptCodes {
     tibtScriptCode = 39,
     cansScriptCode = 40,
     yiiiScriptCode = 41,
+    tglgScriptCode = 42,
+    hanoScriptCode = 43,
+    buhdScriptCode = 44,
+    tagbScriptCode = 45,
 
-    scriptCodeCount = 42
+    scriptCodeCount = 46
 };
 
 U_NAMESPACE_END

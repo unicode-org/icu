@@ -67,7 +67,7 @@ OpenTypeLayoutEngine::~OpenTypeLayoutEngine()
 
 LETag OpenTypeLayoutEngine::getScriptTag(le_int32 scriptCode)
 {
-    if (scriptCode == -1) {
+    if (scriptCode < 0 || scriptCode >= scriptCodeCount) {
         return 0xFFFFFFFF;
     }
 
