@@ -2753,7 +2753,7 @@ public:
   /** Destructor. 
    * @stable ICU 2.0
    */
-  ~UnicodeString();
+  virtual ~UnicodeString();
 
 
   /* Miscellaneous operations */
