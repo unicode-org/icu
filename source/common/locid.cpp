@@ -914,8 +914,8 @@ Locale::initLocaleCache(void)
                 //
                 // This can be a memory leak for an extra long default locale,
                 // but this code shouldn't normally get executed.
-                localeCache[idx].fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(localeCache[idx].fullNameBuffer) + 1));
-                uprv_strcpy(localeCache[idx].fullName, localeCache[idx].fullNameBuffer);
+                localeCache[idx].fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(newLocales[idx].fullName) + 1));
+                uprv_strcpy(localeCache[idx].fullName, newLocales[idx].fullName);
             }
         }
         gLocaleCache = localeCache;
