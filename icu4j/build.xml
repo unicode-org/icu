@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/13 22:52:41 $ 
-* $Revision: 1.5 $
+* $Date: 2000/04/13 23:08:38 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -31,6 +31,7 @@
     <copyfile src="${src.dir}/com/ibm/text/resources/thai_dict"
     	   dest="${build.dir}/com/ibm/text/resources/thai_dict"/>
     <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java"
+           excludes="**/CVS/**/*"
            srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
@@ -40,6 +41,7 @@
   <target name="tests" depends="core">
     <mkdir dir="${build.dir}"/>
     <javac includes="com/ibm/test/**/*.java"
+           excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
@@ -49,6 +51,7 @@
   <target name="demos" depends="core">
     <mkdir dir="${build.dir}"/>
     <javac includes="com/ibm/demo/**/*.java"
+           excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
@@ -60,6 +63,7 @@
   <target name="tools" depends="core">
     <mkdir dir="${build.dir}"/>
     <javac includes="com/ibm/tools/**/*.java"
+           excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
