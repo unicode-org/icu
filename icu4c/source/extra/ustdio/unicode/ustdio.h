@@ -64,6 +64,13 @@
  * %C and %S are aliases of %lc and %ls, which are used for wchar_t.
     We should consider using this for UChar and replace %K and %U,
     or we should make them use wchar_t.
+ * u_fungetc() can't unget a character when it's at the beginning of the
+    internal conversion buffer, and it shouldn't be writing new
+    characters to this buffer because they might be different characters.
+    This can be tested by writing a file, and reading it backwards by
+    using u_fgetc and two u_fungetc() calls with incorrect data.
+    The behavior is undefined for fungetc() when an incorrect character
+    is put back.
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
    0 is returned if the operation was successful and EOF otherwise.
 */
