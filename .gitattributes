@@ -136,6 +136,7 @@ icu4c/source/test/testdata/en_US.uni -text
 icu4c/source/test/testdata/uni-text.txt -text
 icu4j/build.xml svneol=native#text/xml
 icu4j/license.html svneol=native#text/html
+icu4j/readme.html svneol=native#text/html
 icu4j/src/com/ibm/demo/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/demo/package.html svneol=native#text/html
