@@ -1463,7 +1463,7 @@ UBool Transliterator::initializeRegistry() {
         for (row = 0; row < maxRows; row++) {
             colBund = ures_getByIndex(transIDs, row, 0, &status);
             if (U_SUCCESS(status)) {
-                UnicodeString id(ures_getKey(colBund));
+                UnicodeString id(ures_getKey(colBund), -1, US_INV);
                 UResourceBundle* res = ures_getNextResource(colBund, NULL, &status);
                 const char* typeStr = ures_getKey(res);
                 UChar type;
