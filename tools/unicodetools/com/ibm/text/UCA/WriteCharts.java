@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2002/10/05 02:16:17 $
-* $Revision: 1.15 $
+* $Date: 2003/04/25 01:39:15 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -434,6 +434,87 @@ public class WriteCharts implements UCD_Types {
         closeFile(output);
         closeIndexFile(indexFile, "", CASE);
     }
+    
+	static public void scriptChart() throws IOException {
+			Default.setUCD();
+			HACK_KANA = false;
+
+			Set set = new TreeSet();
+
+			for (int i = 0; i <= 0x10FFFF; ++i) {
+				if (!Default.ucd.isRepresented(i)) continue;
+				byte cat = Default.ucd.getCategory(i);
+				if (cat == Cs || cat == Co || cat == Cn) continue;
+
+				String code = UTF16.valueOf(i);
+
+				String decomp = Default.nfkd.normalize(i);
+				int script = getBestScript(decomp);
+
+				set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
+						new Pair(decomp,
+								 new Integer(i))));
+			}
+
+			PrintWriter output = null;
+
+			Iterator it = set.iterator();
+
+			int oldScript = -127;
+
+			int counter = 0;
+			String[] replacement = new String[] {"%%%", "Script Charts"};
+			String folder = "charts\\script\\";
+
+			Utility.copyTextFile("index.html", Utility.UTF8, folder + "index.html", replacement);
+			Utility.copyTextFile("charts.css", Utility.LATIN1, folder + "charts.css");
+			Utility.copyTextFile("script_help.html", Utility.UTF8, folder + "help.html");
+
+			indexFile = Utility.openPrintWriter(folder + "index_list.html", Utility.UTF8_WINDOWS);
+			Utility.appendFile("script_index_header.html", Utility.UTF8, indexFile, replacement);
+
+			/*
+			indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+			indexFile.println("<title>UCA Default Collation Table</title>");
+			indexFile.println("<base target='main'>");
+			indexFile.println("<style><!-- p { font-size: 90% } --></style>");
+			indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
+			indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
+			*/
+
+			int columnCount = 0;
+
+			while (it.hasNext()) {
+				Utility.dot(counter);
+
+				Pair p = (Pair) it.next();
+				int script = ((Integer) p.first).intValue();
+				int cp = ((Integer)((Pair)p.second).second).intValue();
+
+				if (script != oldScript
+						// && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
+						) {
+					closeFile(output);
+					output = null;
+					oldScript = script;
+					columnCount = 0;
+				}
+
+				if (output == null) {
+					output = openFile(0, folder, script);
+				}
+
+				if (columnCount > 10) {
+					output.println("</tr><tr>");
+					columnCount = 0;
+				}
+				showCell(output, UTF16.valueOf(cp), "<td ", "", false);
+				++columnCount;
+			}
+
+			closeFile(output);
+			closeIndexFile(indexFile, "", CASE);
+		}
 
     static public void addMapChar(Map m, Set stoplist, String key, String ch) {
     	if (stoplist.contains(key)) return;
@@ -466,7 +547,8 @@ public class WriteCharts implements UCD_Types {
         System.out.println("Stop-list: " + stoplist);
 
         for (int i = 0; i <= 0x10FFFF; ++i) {
-        	if (!Default.ucd.isRepresented(i)) continue;
+			if (!Default.ucd.isRepresented(i)) continue;
+			if (!Default.ucd.isAssigned(i)) continue;
         	if (0xAC00 <= i && i <= 0xD7A3) continue;
         	if (Default.ucd.hasComputableName(i)) continue;
 
@@ -474,7 +556,7 @@ public class WriteCharts implements UCD_Types {
         	if (s == null) continue;
 
         	if (s.startsWith("<")) {
-        		System.out.println("Wierd character at " + Default.ucd.getCodeAndName(i));
+        		System.out.println("Weird character at " + Default.ucd.getCodeAndName(i));
         	}
         	String ch = UTF16.valueOf(i);
         	int last = -1;
@@ -816,7 +898,7 @@ public class WriteCharts implements UCD_Types {
 
 
                     out.println("<table border='1' cellspacing='0'>");
-                    out.println("<caption>" + scriptName + "<br>(" + letters.size() + " × " + marks.size() + ")</caption>");
+                    out.println("<caption>" + scriptName + "<br>(" + letters.size() + " ? " + marks.size() + ")</caption>");
 
                     Iterator it2 = letters.iterator();
                     while (it2.hasNext()) {

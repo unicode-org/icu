@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/10/03 22:58:17 $ 
-* $Revision: 1.11 $
+* $Date: 2003/04/25 01:39:15 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -43,13 +43,15 @@ public class Main {
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
             System.out.println("OPTION: " + arg);
+			if (arg.charAt(0) == '#') return; // skip rest of line
             
             if		(arg.equalsIgnoreCase("ICU")) args = Utility.append(args, ICU_FILES);
             else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("validateUCA")) GenOverlap.validateUCA(WriteCollationData.collator);
             //else if (arg.equalsIgnoreCase("writeNonspacingDifference")) WriteCollationData.writeNonspacingDifference();
             
-            else if (arg.equalsIgnoreCase("collationChart")) WriteCharts.collationChart(WriteCollationData.collator);
+			else if (arg.equalsIgnoreCase("collationChart")) WriteCharts.collationChart(WriteCollationData.collator);
+			else if (arg.equalsIgnoreCase("scriptChart")) WriteCharts.scriptChart();
             else if (arg.equalsIgnoreCase("normalizationChart")) WriteCharts.normalizationChart();
             else if (arg.equalsIgnoreCase("caseChart")) WriteCharts.caseChart();
             else if (arg.equalsIgnoreCase("indexChart")) WriteCharts.indexChart();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckTags.java,v $ 
-* $Date: 2002/12/17 07:31:26 $ 
-* $Revision: 1.13 $
+* $Date: 2003/04/25 01:39:15 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -252,7 +252,7 @@ public class CheckTags {
 
     void tagErr(Tag tag) {
         // Tag.position() requires JDK 1.4, build.xml tests for this
-        errln(tag.toString() + " [" + tag.position() + "]");
+        errln(tag.toString() + " [" + /* tag.position() + */ "]");
     }
 
     void doDocs(ProgramElementDoc[] docs, String header, boolean reportError) {
@@ -362,7 +362,7 @@ public class CheckTags {
             }
         }
         if (!foundRequiredTag) {
-            errln("missing required tag [" + doc.position() + "]");
+            errln("missing required tag [" + /*doc.position() +*/ "]");
         }
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/testParser.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2003/04/25 01:39:15 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -66,7 +66,7 @@ public class testParser implements XMLParseTypes {
 
     static void test2() throws Exception {
 
-        PrintWriter log = Utility.openPrintWriter("UCD-Extract.html");
+        PrintWriter log = Utility.openPrintWriter("UCD-Extract.html", Utility.UTF8_WINDOWS);
 
         //int fieldCount = 4;
         //int width = 100/fieldCount;

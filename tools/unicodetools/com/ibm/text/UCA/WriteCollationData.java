@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2003/04/01 02:51:57 $ 
-* $Revision: 1.31 $
+* $Date: 2003/04/25 01:39:13 $ 
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -465,7 +465,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         // add characters with different strengths, to verify the order
         addStringY(s + 'a', option);
         addStringY(s + 'b', option);
-        addStringY(s + 'á', option);
+        addStringY(s + '?', option);
         addStringY(s + 'A', option);
         addStringY(s + '!', option);
         if (option == SHIFTED && collator.isVariable(firstChar)) addStringY(s + LOW_ACCENT, option);
@@ -2503,7 +2503,7 @@ F900..FAFF; CJK Compatibility Ideographs
               || (c >= 0xA0 && !UCharacterProperty.isRuleWhiteSpace(c))
               */
             needsQuoting = new UnicodeSet("[a-zA-Z0-9\\u00A0-\\U00010FFF]");
-            needsQuoting.remove();
+            // needsQuoting.remove();
         }
     	s = NFC.normalize(s);
         quoteOperandBuffer.setLength(0);
