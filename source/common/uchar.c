@@ -763,6 +763,36 @@ u_getCombiningClass(UChar32 c) {
     }
 }
 
+U_CAPI int8_t U_EXPORT2
+u_digit(UChar32 ch, int8_t radix) {
+    int8_t value;
+    if((uint8_t)(radix-2)<=(36-2)) {
+        value=(int8_t)u_charDigitValue(ch);
+        if(value<0) {
+            /* ch is not a decimal digit, try latin letters */
+            if(ch>=0x61 && ch<=0x7A) {
+                value=(int8_t)(ch-0x57);  /* ch - 'a' + 10 */
+            } else if(ch>=0x41 && ch<=0x5A) {
+                value=(int8_t)(ch-0x37);  /* ch - 'A' + 10 */
+            }
+        }
+    } else {
+        value=-1;   /* invalid radix */
+    }
+    return (int8_t)((value<radix) ? value : -1);
+}
+
+U_CAPI UChar32 U_EXPORT2
+u_forDigit(int32_t digit, int8_t radix) {
+    if((uint8_t)(radix-2)>(36-2) || (uint32_t)digit>=(uint32_t)radix) {
+        return 0;
+    } else if(digit<10) {
+        return (UChar32)(0x30+digit);
+    } else {
+        return (UChar32)((0x61-10)+digit);
+    }
+}
+
 /* static data tables ------------------------------------------------------- */
 
 struct BlockScriptMap {
