@@ -163,17 +163,17 @@ void CalendarCaseTest::IslamicCivil()
 }
 
 void CalendarCaseTest::Hebrew() {
-    static const int32_t TISHRI  = HebrewCalendar::TISHRI;
-    static const int32_t HESHVAN = HebrewCalendar::HESHVAN;
-    static const int32_t KISLEV  = HebrewCalendar::KISLEV;
-    static const int32_t TEVET   = HebrewCalendar::TEVET;
-    static const int32_t SHEVAT  = HebrewCalendar::SHEVAT;
-    static const int32_t ADAR_1  = HebrewCalendar::ADAR_1;
-    static const int32_t ADAR    = HebrewCalendar::ADAR;
-    static const int32_t NISAN   = HebrewCalendar::NISAN;
-    static const int32_t IYAR    = HebrewCalendar::IYAR;
-    static const int32_t SIVAN   = HebrewCalendar::SIVAN;
-    static const int32_t TAMUZ   = HebrewCalendar::TAMUZ;
+  static const int32_t TISHRI  = HebrewCalendar::TISHRI;
+//     static const int32_t HESHVAN = HebrewCalendar::HESHVAN;
+//     static const int32_t KISLEV  = HebrewCalendar::KISLEV;
+//     static const int32_t TEVET   = HebrewCalendar::TEVET;
+//     static const int32_t SHEVAT  = HebrewCalendar::SHEVAT;
+//     static const int32_t ADAR_1  = HebrewCalendar::ADAR_1;
+//     static const int32_t ADAR    = HebrewCalendar::ADAR;
+//     static const int32_t NISAN   = HebrewCalendar::NISAN;
+//     static const int32_t IYAR    = HebrewCalendar::IYAR;
+//     static const int32_t SIVAN   = HebrewCalendar::SIVAN;
+//     static const int32_t TAMUZ   = HebrewCalendar::TAMUZ;
     static const int32_t AV      = HebrewCalendar::AV;
     static const int32_t ELUL    = HebrewCalendar::ELUL;
 
