@@ -117,7 +117,7 @@ pkgdata.inc: $(srcdir)/pkgdata.inc.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)  $(UCONVMSG_LIB)
-	$(LINK.cc) -o $@ $(OBJECTS) $(LIBS) $(LDFLAGS)
+	$(LINK.cc) -o $@ $(OBJECTS) $(LIBS)
 
 resfiles: $(RESFILES) package-resfiles
 
