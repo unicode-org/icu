@@ -135,7 +135,7 @@ static void TestCalendar()
     log_verbose("\nTesting the ucal_getNow function to check if it is fetching tbe current time\n");
     now=ucal_getNow();
     /* open the date format and format the date to check the output */
-    datdef=udat_open(UDAT_FULL,UDAT_FULL ,NULL, NULL, 0,&status);
+    datdef=udat_open(UDAT_FULL,UDAT_FULL ,NULL, NULL, 0,NULL,0,&status);
     if(U_FAILURE(status)){
         log_err("FAIL: error in creating the dateformat : %s\n", myErrorName(status));
     }
@@ -289,7 +289,7 @@ static void TestGetSetDateAPI()
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /*datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL,fgGMTID,-1, &status);*/
-    datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US",fgGMTID,-1, &status);
+    datdef=udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US",fgGMTID,-1,NULL,0, &status);
     if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat : %s\n", myErrorName(status));
@@ -473,7 +473,7 @@ static void TestFieldGetSet()
         log_err("ucal_open failed: %s\n", myErrorName(status));
         return; 
     }
-    datdef=udat_open(UDAT_SHORT,UDAT_SHORT ,NULL,fgGMTID,-1, &status);
+    datdef=udat_open(UDAT_SHORT,UDAT_SHORT ,NULL,fgGMTID,-1,NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat : %s\n", myErrorName(status));
@@ -882,7 +882,7 @@ static void TestDOWProgression()
         return; 
     }
 
-    datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1, &status);
+    datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1,NULL, 0, &status);
     if(U_FAILURE(status)){
         log_err("error in creating the dateformat : %s\n", myErrorName(status));
     }
@@ -964,7 +964,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
         return; 
     }
     
-    datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1, &status);
+    datfor=udat_open(UDAT_MEDIUM,UDAT_MEDIUM ,NULL, fgGMTID,-1,NULL, 0, &status);
     if(U_FAILURE(status)){
         log_err("error in creating the dateformat : %s\n", myErrorName(status));
     }

@@ -55,7 +55,7 @@ static void TestDateFormat()
     const char t[]="2/3/76 2:50 AM";*/
     /*Testing udat_open() to open a dateformat */
     log_verbose("\nTesting udat_open() with various parameters\n");
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &status);
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, NULL, 0,&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using full time style with french locale\n %s\n", 
@@ -64,26 +64,26 @@ static void TestDateFormat()
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* def = udat_open(UDAT_SHORT, UDAT_SHORT, NULL, NULL, 0, &status); */
-    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &status);
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0,NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
     }
-    it = udat_open(UDAT_DEFAULT, UDAT_MEDIUM, "it_IT", NULL, 0, &status);
+    it = udat_open(UDAT_DEFAULT, UDAT_MEDIUM, "it_IT", NULL, 0, NULL, 0,&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using medium date style with italian locale\n %s\n", 
             myErrorName(status) );
     }
-    de = udat_open(UDAT_LONG, UDAT_LONG, "de_DE", NULL, 0, &status);
+    de = udat_open(UDAT_LONG, UDAT_LONG, "de_DE", NULL, 0, NULL, 0,&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using long time and date styles with german locale\n %s\n",
             myErrorName(status));
     }
     /*creating a default dateformat */
-    def1 = udat_open(UDAT_SHORT, UDAT_SHORT, NULL, NULL, 0, &status);
+    def1 = udat_open(UDAT_SHORT, UDAT_SHORT, NULL, NULL, 0,NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using short date and time style\n %s\n", 
@@ -183,7 +183,7 @@ static void TestDateFormat()
     status=U_ZERO_ERROR;
     log_verbose("\nTesting the udat_openPattern with a specified pattern\n");
     /*for french locale */
-    fr_pat=udat_openPattern(temp, u_strlen(temp), "fr_FR", &status);
+    fr_pat=udat_open(UDAT_IGNORE, UDAT_IGNORE,"fr_FR",NULL,0,temp, u_strlen(temp), &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: Error in creating a date format using udat_openPattern \n %s\n", 
@@ -321,7 +321,7 @@ static void TestSymbols()
 
     /*creating a dateformat with french locale */
     log_verbose("\ncreating a date format with french locale\n");
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL, 0, &status);
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat using full time style with french locale\n %s\n", 
@@ -332,7 +332,7 @@ static void TestSymbols()
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* def = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, &status); */
-    def = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US", NULL, 0, &status);
+    def = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat using short date and time style\n %s\n", 

@@ -56,7 +56,7 @@ void Test4029195()
     log_verbose("Testing date format and parse function in regression test\n");
     today = ucal_getNow();
     
-    df = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US", NULL, 0, &status);
+    df = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,"en_US", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style : %s\n", myErrorName(status));
@@ -152,7 +152,7 @@ void Test4056591()
 
     
     u_uastrcpy(pat, "yyMMdd");
-    def = udat_openPattern(pat, u_strlen(pat), NULL, &status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, NULL, 0,pat, u_strlen(pat), &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
@@ -199,7 +199,7 @@ void Test4059917()
     pattern=(UChar*)uprv_malloc(sizeof(UChar) * 11);
     u_uastrcpy(pattern, "yyyy/MM/dd");
     log_verbose("%s\n", austrdup(pattern) );
-    def = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
@@ -211,7 +211,7 @@ void Test4059917()
     udat_close(def);
     
     u_uastrcpy(pattern, "yyyyMMdd");
-    def = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
@@ -272,12 +272,12 @@ void Test4060212()
     log_verbose( "dateString= %s Using yyyy-DDD.hh:mm:ss\n", austrdup(dateString) );
     status = U_ZERO_ERROR;
     
-    formatter = udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
+    formatter = udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US",NULL,0,pattern, u_strlen(pattern), &status);
     pos=0;
     myDate = udat_parse(formatter, dateString, u_strlen(dateString), &pos, &status);
     
     
-    fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, NULL, 0, &status);
+    fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style: %s\n", 
@@ -316,7 +316,7 @@ void Test4061287()
     u_uastrcpy(pattern, "dd/mm/yyyy");
     status = U_ZERO_ERROR;
     log_verbose("Testing parsing by changing the attribute lenient\n");
-    df = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
+    df = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status)){
         log_err("ERROR: failure in open pattern of test4061287: %s\n", myErrorName(status));
     }
@@ -369,7 +369,7 @@ void Test4073003()
                 "4/3/99" 
         };
     
-    fmt= udat_open(UDAT_SHORT,UDAT_SHORT ,NULL, NULL, 0, &status);
+    fmt= udat_open(UDAT_SHORT,UDAT_SHORT ,NULL, NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using short date and time style: %s\n", 
@@ -431,7 +431,7 @@ void Test4162071()
     u_uastrcpy(format, "EEE', 'dd-MMM-yyyy HH:mm:ss z"); /*  RFC 822/1123 */
     status = U_ZERO_ERROR;
     /* Can't hardcode the result to assume the default locale is "en_US". */
-    df = udat_openPattern(format, u_strlen(format), "en_US", &status);
+    df = udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US",NULL,0,format, u_strlen(format),&status);
     if(U_FAILURE(status)){
         log_err("ERROR: couldn't create date format: %s\n", myErrorName(status));
     }
@@ -456,7 +456,7 @@ void Test714(void)
     UChar *result;
     const char* expect =  "7:25:43 AM";
     
-    fmt= udat_open(UDAT_MEDIUM,UDAT_NONE ,"en_US_CA", NULL, -1, &status);
+    fmt= udat_open(UDAT_MEDIUM,UDAT_NONE ,"en_US_CA", NULL, -1, NULL, 0, &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using medium time style and NO date style: %s\n", 

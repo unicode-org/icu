@@ -52,7 +52,7 @@ void TestTwoDigitYearDSTParse()
 
     pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("EEE MMM dd HH:mm:ss.SSS zzz yyyy G")+1 ));
     u_uastrcpy(pattern, "EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
-    fullFmt= udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
+    fullFmt= udat_open(UDAT_IGNORE, UDAT_IGNORE,"en_US",NULL,0,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))    {
         log_err("FAIL: Error in creating a date format using udat_openPattern \n %s\n", 
             myErrorName(status) );
@@ -60,7 +60,7 @@ void TestTwoDigitYearDSTParse()
     else {log_verbose("PASS: creating dateformat using udat_openPattern() succesful\n");}
     
     u_uastrcpy(pattern, "dd-MMM-yy h:mm:ss 'o''clock' a z");
-    fmt= udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
+    fmt= udat_open(UDAT_IGNORE,UDAT_IGNORE,"en_US", NULL, 0,pattern, u_strlen(pattern), &status);
     
     
     s=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("03-Apr-04 2:20:47 o'clock AM PST")+1) );
@@ -111,7 +111,7 @@ void TestPartialParse994()
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* f = udat_open(UDAT_DEFAULT, UDAT_SHORT, NULL, NULL, 0, &status); */
-    f = udat_open(UDAT_DEFAULT, UDAT_SHORT, "en_US", NULL, 0, &status);
+    f = udat_open(UDAT_DEFAULT, UDAT_SHORT, "en_US", NULL, 0,  NULL, 0,&status);
     if(U_FAILURE(status)){
         log_err("FAIL: ErrorCode received during test: %s\n", myErrorName(status));
     }
@@ -179,7 +179,7 @@ void TestRunTogetherPattern985()
     UErrorCode status = U_ZERO_ERROR;
     pattern=(UChar*)uprv_malloc(sizeof(UChar) * (strlen("yyyyMMddHHmmssSSS")+1) );
     u_uastrcpy(pattern, "yyyyMMddHHmmssSSS");
-    format = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
+    format = udat_open(UDAT_IGNORE, UDAT_IGNORE, NULL, NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){
         log_err("FAIL: Error in date format construction with pattern: %s\n", myErrorName(status));
     }
@@ -212,7 +212,7 @@ void TestCzechMonths459()
     UDate june, july, d;
     UErrorCode status = U_ZERO_ERROR;
     
-    fmt = udat_open(UDAT_FULL, UDAT_FULL, "cs", NULL, 0, &status);
+    fmt = udat_open(UDAT_FULL, UDAT_FULL, "cs", NULL, 0, NULL, 0, &status);
     if(U_FAILURE(status)){log_err("Error in constructing the date format\n"); }
     lneed=0;
     lneed=udat_toPattern(fmt, TRUE, NULL, lneed, &status);
@@ -272,7 +272,7 @@ void TestQuotePattern161()
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* format= udat_openPattern(pattern, u_strlen(pattern), NULL, &status); */
-    format= udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
+    format= udat_open(UDAT_IGNORE, UDAT_IGNORE,"en_US", NULL, 0,pattern, u_strlen(pattern), &status);
     if(U_FAILURE(status)){ log_err("error in udat_openPattern  : %s\n", myErrorName(status));    }
     tzID=(UChar*)uprv_malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");

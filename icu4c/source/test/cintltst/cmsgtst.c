@@ -29,7 +29,7 @@ static const char* txt_testCasePatterns[] = {
    "Quotes '', '{', a {0,number,integer} '{'0}",
    "Quotes '', '{', a {0,number,integer} '{'0}",
    "You deposited {0,number,integer} times an amount of {1,number,currency} on {2,date,short}",
-    "'{'2,time,full}, for {1, number, integer}, {0,number,integer} is {2,time,full} and full date is {2,date,full}",
+    "'{'2,time,full}, for {1, number }, {0,number,integer} is {2,time,full} and full date is {2,date,full}",
    "'{'1,number,percent} for {0,number,integer} is {1,number,percent}",
 };
 
@@ -278,11 +278,7 @@ static void TestSampleFormatAndParse()
     
     /*try to parse this and check*/
     log_verbose("\nTesting the parse Message test#5\n");
-    def1 = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, &status);
-    if(U_FAILURE(status))
-    {
-        log_err("error in creating the dateformat using short date and time style:\n %s\n", myErrorName(status));
-    }
+
     u_parseMessage("en_US", pattern, u_strlen(pattern), result, u_strlen(result), &status, &d, ret, &value);
     if(U_FAILURE(status)){
         log_err("ERROR: error in parsing: test#5: %s\n", myErrorName(status));
@@ -292,15 +288,19 @@ static void TestSampleFormatAndParse()
     else
         log_verbose("PASS: parseMessage successful on test#5\n");
         
+    def1 = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, NULL,0,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("error in creating the dateformat using short date and time style:\n %s\n", myErrorName(status));
+    }else{
 
-
-    if(u_strcmp(myDateFormat(def1, d), myDateFormat(def1, d1))==0)
-        log_verbose("PASS: parseMessage successful test#5\n");
-    else{
-        log_err("FAIL: parseMessage didn't parse the date successfully\n GOT: %s EXPECTED %s\n", 
-            austrdup(myDateFormat(def1,d)), austrdup(myDateFormat(def1,d1)) );
+        if(u_strcmp(myDateFormat(def1, d), myDateFormat(def1, d1))==0)
+            log_verbose("PASS: parseMessage successful test#5\n");
+        else{
+            log_err("FAIL: parseMessage didn't parse the date successfully\n GOT: %s EXPECTED %s\n", 
+                austrdup(myDateFormat(def1,d)), austrdup(myDateFormat(def1,d1)) );
         }
-
+    }
     udat_close(def1);
     ucal_close(cal);
 
@@ -585,6 +585,77 @@ static void TestJ904(void) {
     } else {
         log_err("FAIL: got \"%s\", expected \"%s\"\n", cresult, EXP);
     }
+}
+void TestMessageFormat(void)
+{
+    UMessageFormat *f1, *f2, *f3;
+    UChar pattern[256];
+    UChar result[256];
+    char cresult[256];
+    UParseError parseError;
+    char* locale = "hi_IN";
+    char* retLoc;
+    char* PAT = "Number {1,number,#0.000}, String {0}, Date {2,date,12:mm:ss.SSS}";
+    int32_t length=0;
+    UErrorCode status = U_ZERO_ERROR;
+
+    u_austrcpy(PAT,pattern);
+
+    /* Test umsg_open                   */
+    f1 = umsg_open(pattern,length,NULL,NULL,&status);
+    
+    if(U_FAILURE(status))
+    {
+        log_err("umsg_open failed with pattern %s. Error: \n", PAT, u_errorName(status));
+    }
+   
+    /* Test umsg_open with parse error  */
+    status = U_ZERO_ERROR;
+    f2 = umsg_open(pattern,length,NULL,&parseError,&status);
+    
+    if(U_FAILURE(status))
+    {
+        log_err("umsg_open with parseError failed with pattern %s. Error: %s\n", PAT, u_errorName(status));
+
+    }
+    
+    /* Test umsg_clone                  */
+    status = U_ZERO_ERROR;
+    f3 = umsg_clone(f1,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("umsg_clone failed. Error %s \n", u_errorName(status));
+    }
+   
+    /* Test umsg_setLocale              */
+    umsg_setLocale(f1,locale);
+    /* Test umsg_getLocale              */
+    retLoc = (char*)umsg_getLocale(f1);
+    if(strcmp(retLoc,locale)!=0)
+    {
+        log_err("umsg_setLocale and umsg_getLocale methods failed. Expected:%s Got: %s \n", locale, retLoc);
+    }
+
+    /* Test umsg_applyPattern           */
+    status = U_ZERO_ERROR;
+    umsg_applyPattern(f1,pattern,strlen(PAT),NULL,&status);
+    if(U_FAILURE(status))
+    {
+        log_err("umsg_applyPattern failed. Error %s \n",u_errorName(status));
+    }
+
+    /* Test umsg_toPattern              */
+    umsg_toPattern(f1,result,256,&status);
+    if(U_FAILURE(status) ){
+        log_err("umsg_toPattern method failed. Error: %s \n",u_errorName(status));
+    }
+    if(u_strcmp(result,pattern)!=0){
+        u_UCharsToChars(result,cresult,256);
+        log_err("umsg_toPattern method failed. Expected: %s Got: %s \n",PAT,cresult);
+    }
+    /* umsg_format umsg_parse */
+
+
 }
 
 void addMsgForTest(TestNode** root);

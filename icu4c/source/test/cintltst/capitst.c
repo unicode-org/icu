@@ -328,7 +328,7 @@ void TestRuleBasedColl()
     u_uastrcpy(ruleset1, "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
     u_uastrcpy(ruleset2, "&9 < a, A < b, B < c, C < d, D, e, E");
     
-    col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
+    col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
@@ -337,7 +337,7 @@ void TestRuleBasedColl()
         log_verbose("PASS: RuleBased Collator creation passed\n");
     
     status = U_ZERO_ERROR;
-    col2 = ucol_openRules(ruleset2, u_strlen(ruleset2),  UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
+    col2 = ucol_openRules(ruleset2, u_strlen(ruleset2),  UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
@@ -363,7 +363,7 @@ void TestRuleBasedColl()
     doAssert((u_strcmp(rule2, rule3) != 0), "Default collator getRules failed");
     doAssert((u_strcmp(rule1, rule3) != 0), "Default collator getRules failed");
     
-    col4=ucol_openRules(rule2, u_strlen(rule2), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
+    col4=ucol_openRules(rule2, u_strlen(rule2), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
