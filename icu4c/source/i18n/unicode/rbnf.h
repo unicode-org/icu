@@ -8,6 +8,7 @@
 #ifndef RBNF_H
 #define RBNF_H
 
+#include "unicode/utypes.h"
 #ifdef U_INT64_T_UNAVAILABLE
 #define U_HAVE_RBNF 0
 #else
@@ -19,7 +20,6 @@
 #include "unicode/locid.h"
 #include "unicode/numfmt.h"
 #include "unicode/unistr.h"
-#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 
