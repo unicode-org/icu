@@ -163,7 +163,10 @@
  * A text-break iterator.
  *  For usage in C programs.
  */
-typedef void* UBreakIterator;
+#ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
+#   define UBRK_TYPEDEF_UBREAK_ITERATOR
+    typedef void* UBreakIterator;
+#endif
 
 /** The possible types of text boundaries. */
 enum UBreakIteratorType {

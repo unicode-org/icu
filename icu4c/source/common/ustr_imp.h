@@ -20,7 +20,10 @@
 #include "unicode/uiter.h"
 
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. */
-typedef void *UBreakIterator;
+#ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
+#   define UBRK_TYPEDEF_UBREAK_ITERATOR
+    typedef void *UBreakIterator;
+#endif
 
 /**
  * Are the Unicode properties loaded?
