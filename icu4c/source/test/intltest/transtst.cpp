@@ -64,6 +64,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(28,TestNormalizationTransliterator);
         TESTCASE(29,TestCompoundRBT);
         TESTCASE(30,TestCompoundFilter);
+        TESTCASE(31,TestRemove);
         default: name = ""; break;
     }
 }
@@ -1327,6 +1328,18 @@ void TransliteratorTest::TestCompoundFilter(void) {
            CharsToUnicodeString("CA\\u039A\\u0391"),
            CharsToUnicodeString("\\u043AA\\u043A\\u0430"));
     delete t;                                       
+}
+
+void TransliteratorTest::TestRemove(void) {
+    Transliterator *t = Transliterator::createInstance("Remove[abc]");
+    if (t == 0) {
+        errln("FAIL: createInstance failed");
+        return;
+    }
+    
+    expect(*t, "Able bodied baker's cats", "Ale odied ker's ts");
+    delete t;                                       
+    
 }
 
 //======================================================================

@@ -163,6 +163,8 @@ class TransliteratorTest : public IntlTest {
 
     void TestCompoundFilter(void);
 
+    void TestRemove(void);
+
     //======================================================================
     // Support methods
     //======================================================================
