@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/07/16 00:20:35 $ 
- * $Revision: 1.19 $
+ * $Date: 2002/07/24 16:26:29 $ 
+ * $Revision: 1.20 $
  *
  *******************************************************************************
  */
@@ -156,7 +156,7 @@ public final class Normalizer implements Cloneable{
                      char[] dest, int destStart, int destLimit){
             int srcLen = (srcLimit - srcStart);
             int destLen = (destLimit - destStart);
-            if( srcLen < destLen ){
+            if( srcLen > destLen ){
                 return srcLen;
             }
             System.arraycopy(src,srcStart,dest,destStart,srcLen);
@@ -1981,7 +1981,7 @@ public final class Normalizer implements Cloneable{
         int destLength, bufferLength;
         int/*unsigned*/ mask;
         int[] startIndex= new int[1];
-        char[] chars= new char[2];
+        int[] chars= new int[2];
         //int32_t c, c2;
         char minC;
         int destCapacity = destLimit-destStart;
@@ -1997,14 +1997,14 @@ public final class Normalizer implements Cloneable{
 
         if(isPreviousBoundary==null){
             destLength=0;
-            if((chars[0]=(char)src.previous())>=0) {
+            if((chars[0]=src.previous())>=0) {
                 destLength=1;
-                if(UTF16.isTrailSurrogate(chars[0])){
+                if(UTF16.isTrailSurrogate((char)chars[0])){
                     chars[1]=(char)src.previous();
                     if((int)chars[1]!= UCharacterIterator.DONE){
-                        if(UTF16.isLeadSurrogate(chars[1])) {
+                        if(UTF16.isLeadSurrogate((char)chars[1])) {
                             if(destCapacity>=2) {
-                                dest[1]=chars[0]; // trail surrogate 
+                                dest[1]=(char)chars[0]; // trail surrogate 
                                 destLength=2;
                             }
                             // lead surrogate to be written below 
@@ -2206,7 +2206,7 @@ public final class Normalizer implements Cloneable{
         IsNextBoundary isNextBoundary;
         int /*unsigned*/ mask;
         int /*unsigned*/ bufferLength;
-        char[] chars = new char[2];
+        int[] chars = new int[2];
         char minC;
         int destCapacity = destLimit - destStart;
         int destLength = 0;
@@ -2221,15 +2221,15 @@ public final class Normalizer implements Cloneable{
         
         if(isNextBoundary==null){
             destLength=0;
-            chars[0]=(char)src.next();
+            chars[0]=src.next();
             if((int)chars[0]!=UCharacterIterator.DONE) {
                 destLength=1;
-                if(UTF16.isLeadSurrogate(chars[0])){
+                if(UTF16.isLeadSurrogate((char)chars[0])){
                     chars[1]= (char)src.next();
                     if((int)chars[1]!= UCharacterIterator.DONE) {
-                        if(UTF16.isTrailSurrogate(chars[1])) {
+                        if(UTF16.isTrailSurrogate((char)chars[1])) {
                             if(destCapacity>=2) {
-                                dest[1]=chars[1]; // trail surrogate 
+                                dest[1]=(char)chars[1]; // trail surrogate 
                                 destLength=2;
                             }
                             // lead surrogate to be written below 
@@ -2240,7 +2240,7 @@ public final class Normalizer implements Cloneable{
                 }
     
                 if(destCapacity>0) {
-                    dest[0]=chars[0];
+                    dest[0]=(char)chars[0];
                 }
             }
             return destLength;
