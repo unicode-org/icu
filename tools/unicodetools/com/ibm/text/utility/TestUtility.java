@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/TestUtility.java,v $
-* $Date: 2002/06/22 21:01:25 $
-* $Revision: 1.1 $
+* $Date: 2002/07/14 22:04:49 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -17,9 +17,9 @@ import java.util.*;
 import java.text.*;
 import java.io.*;
 
-public class Main {
+public class TestUtility {
     
-    static public class MyEnum implements EnumBase {
+    static public class MyEnum extends EnumBase {
         public static MyEnum
             ZEROED = (MyEnum) makeNext(myEnum.getClass()),
             SHIFTED = (MyEnum) makeNext(),

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.5 $
+* $Date: 2002/07/14 22:04:49 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,211 @@ import java.util.*;
 
 
 public final class GenerateHanTransliterator implements UCD_Types {
+    
+    static class HanInfo {
+        int count = 0;
+        int minLen = Integer.MAX_VALUE;
+        int maxLen = Integer.MIN_VALUE;
+        int sampleLen = 0;
+        Set samples = new TreeSet();
+        Map map = new TreeMap();
+    }
+    
+    public static void readUnihan() throws java.io.IOException {
+
+        log = Utility.openPrintWriter("Unihan_log.html", false, false);
+        log.println("<body>");
+
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, true); 
+        
+        Map properties = new TreeMap();
+        
+        Integer integerCode = new Integer(0);
+        int lineCounter = 0;
+        
+        while (true) {
+            Utility.dot(++lineCounter);
+            
+            String line = in.readLine();
+            if (line == null) break;
+            if (line.length() < 6) continue;
+            if (line.charAt(0) == '#') continue;
+            line = line.trim();
+            
+            int tabPos = line.indexOf('\t');
+            String scode = line.substring(2, tabPos).trim();
+            
+            int code = Integer.parseInt(scode, 16);
+            if (code != integerCode.intValue()) {
+                integerCode = new Integer(code);
+            }
+            
+            int tabPos2 = line.indexOf('\t', tabPos+1);
+            String property = line.substring(tabPos+1, tabPos2).trim();
+            
+            String propertyValue = line.substring(tabPos2+1).trim();
+            if (propertyValue.indexOf("U+") >= 0) propertyValue = fixHex.transliterate(propertyValue);
+            
+            HanInfo values = (HanInfo) properties.get(property);
+            if (values == null) {
+                values = new HanInfo();
+                properties.put(property, values);
+                Utility.fixDot();
+                System.out.println("Property: " + property);
+            }
+            ++values.count;
+            if (values.minLen > propertyValue.length()) values.minLen = propertyValue.length();
+            if (values.maxLen < propertyValue.length()) values.maxLen = propertyValue.length();
+            if (values.sampleLen < 150) {
+                String temp = scode + ":" + propertyValue;
+                values.sampleLen += temp.length() + 2;
+                values.samples.add(temp);
+            }
+            if (property.endsWith("Variant")
+                || property.endsWith("Numeric")
+                || property.startsWith("kRS")
+                || property.equals("kTotalStrokes")) {
+                values.map.put(integerCode, propertyValue);
+            }
+        }
+ 
+        Set props = properties.keySet();
+        /*
+        log.println("Properties");
+        log.print(" ");
+        Utility.print(log, props, "\r\n ");
+        log.println();
+        log.println();
+        
+        log.println("Sample Values");
+        */
+        Iterator it = props.iterator();
+        log.println("<ol>");
+        while (it.hasNext()) {
+            String property = (String)it.next();
+            HanInfo values = (HanInfo) properties.get(property);
+            log.println("<li><b>" + property + "</b><ul><li>");
+            log.println("count: " + values.count 
+                + ", min length: " + values.minLen 
+                + ", max length: " + values.maxLen);
+            log.println("</li><li>samples:");
+            Utility.print(log, values.samples, "; ");
+            log.println("</li></ul></li>");
+        }
+        log.println("</ol>");
+        
+        String[] list = {"kRSJapanese", "kRSKanWa", "kRSKangXi", "kRSKorean"};
+        Map kRSUnicodeMap = ((HanInfo) properties.get("kRSUnicode")).map;
+        Set redundants = new HashSet();
+        int unequalCount = 0;
+        for (int j = 0; j < list.length; ++j) {
+            unequalCount = 0;
+            log.println("<p><b>Checking Redundants for " + list[j] + "</b></p><blockquote>");
+            redundants.clear();
+            Map otherInfo = ((HanInfo) properties.get(list[j])).map;
+            it = otherInfo.keySet().iterator();
+            while (it.hasNext()) {
+                Integer key = (Integer) it.next();
+                Object ovalue = otherInfo.get(key);
+                Object uvalue = kRSUnicodeMap.get(key);
+                if (ovalue.equals(uvalue)) {
+                    redundants.add(key);
+                } else if (++unequalCount < 5) {
+                    log.println("<p>" + Integer.toString(key.intValue(),16)
+                        + ": <b>" + ovalue + "</b>, " + uvalue + "</p>");
+                }
+            }
+            log.println("</p>Total Unique: " + (otherInfo.size() - redundants.size())
+                + "(out of" + otherInfo.size() + ")</p></blockquote>");
+        }
+        
+        log.println("<p><b>Checking Redundants for kTotalStrokes</b></p><blockquote>");
+        
+        // pass through first to get a count for the radicals
+        Map kTotalStrokesMap = ((HanInfo) properties.get("kTotalStrokes")).map;
+        int[] radCount = new int[512];
+        it = kRSUnicodeMap.keySet().iterator();
+        while(it.hasNext()) {
+            Integer key = (Integer) it.next();
+            String uvalue = (String) kRSUnicodeMap.get(key);
+            if (uvalue.endsWith(".0")) {
+                String tvalue = (String) kTotalStrokesMap.get(key);
+                if (tvalue == null) continue;
+                int rs = getRadicalStroke(uvalue);
+                radCount[rs>>8] = Integer.parseInt(tvalue);
+            }
+        }
+        
+        // now compare the computed value against the real value
+        it = kTotalStrokesMap.keySet().iterator();
+        unequalCount = 0;
+        redundants.clear();
+        while(it.hasNext()) {
+            Integer key = (Integer) it.next();
+            String uvalue = (String) kRSUnicodeMap.get(key);
+            int rs = getRadicalStroke(uvalue);
+            String tvalue = (String) kTotalStrokesMap.get(key);
+            int t = Integer.parseInt(tvalue);
+            int projected = radCount[rs>>8] + (rs & 0xFF);
+            if (t == projected) {
+                redundants.add(key);
+            } else if (++unequalCount < 5) {
+                log.println("<p>" + Integer.toString(key.intValue(),16)
+                    + ": <b>" + t + "</b>, " + projected + "</p>");
+            }
+        }
+        log.println("</p>Total Unique: " + (kTotalStrokesMap.size() - redundants.size())
+                + "(out of" + kTotalStrokesMap.size() + ")</p></blockquote>");
+
+        log.println("</body>");
+        in.close();
+        log.close();
+    }
+    
+    static int getRadicalStroke(String s) {
+        int dotPos = s.indexOf('.');
+        int strokes = Integer.parseInt(s.substring(dotPos+1));
+        int radical = 0;
+        if (s.charAt(dotPos - 1) == '\'') {
+            radical = 256;
+            --dotPos;
+        }
+        radical += Integer.parseInt(s.substring(0,dotPos));
+        return (radical << 8) + strokes;
+    }
+    
+    static Transliterator fixHex = Transliterator.getInstance("hex-any/unicode");
+    
+    /*
+    static String convertUPlus(String other) {
+        int pos1 = other.indexOf("U+");
+        if (pos1 < 0) return other;
+        return fixHex(
+        pos1 += 2;
+        
+        StringBuffer result = new StringBuffer();
+        while (pos1 < other.length()) {
+            int end = getHexEnd(s, pos1);
+            result.append(UTF16.valueOf(Integer.parseInt(other.substring(pos1, end), 16)));
+            pos1 = other.indexOf("U+", pos1);
+            if (pos2 < 0) pos2 = other.length();
+            pos1 = pos2;
+        }
+        return result.toString();
+    }
+    
+    static int getHexEnd(String s, int start) {
+        int i= start;
+        for (; i < s.length; ++i) {
+            char c = s.charAt(i);
+            if ('0' <= c && c <= '9') continue;
+            if ('A' <= c && c <= 'F') continue;
+            if ('a' <= c && c <= 'f') continue;
+            break;
+        }
+        return i;
+    }
+    */
     
     static final boolean TESTING = false;
     static int type;
@@ -59,6 +264,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 default: throw new IllegalArgumentException("Unexpected option: must be 0..2");
             }
                 
+            if (type == DEFINITION) readCDICTDefinitions();
             readUnihanData(key, filter);
             
             if (false) {
@@ -86,6 +292,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
             Set gotAlready = new HashSet();
             Iterator it = rankList.iterator();
             Set lenSet = new TreeSet();
+            Set backSet = new TreeSet();
             int rank = 0;
             while (it.hasNext()) {
                 Comparable keyChar = (Comparable) it.next();
@@ -93,6 +300,10 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 if (def == null) continue; // skipping
                 // sort longer definitions first!
                 lenSet.add(new Pair(
+                    new Pair(new Integer(-keyChar.toString().length()), 
+                        new Pair(new Integer(-def.toString().length()), new Integer(rank++))),
+                    new Pair(keyChar, def)));
+                backSet.add(new Pair(
                     new Pair(new Integer(-def.toString().length()), new Integer(rank++)),
                     new Pair(keyChar, def)));
                 gotAlready.add(keyChar);
@@ -102,26 +313,53 @@ public final class GenerateHanTransliterator implements UCD_Types {
             it = unihanMap.keySet().iterator();
             while (it.hasNext()) {
                 Comparable keyChar = (Comparable) it.next();
+                if (gotAlready.contains(keyChar)) continue;
+                
                 Comparable def = (Comparable) unihanMap.get(keyChar);
-                if (!gotAlready.contains(keyChar)) {
-                    lenSet.add(new Pair(
-                        new Pair(new Integer(-def.toString().length()), new Integer(rank++)),
-                        new Pair(keyChar, def)));
-                }
+                lenSet.add(new Pair(
+                    new Pair(new Integer(-keyChar.toString().length()), 
+                        new Pair(new Integer(-def.toString().length()), new Integer(rank++))),
+                    new Pair(keyChar, def)));
+                backSet.add(new Pair(
+                    new Pair(new Integer(-def.toString().length()), new Integer(rank++)),
+                    new Pair(keyChar, def)));
             }
-                    
+            
+            // First, find the ones that we want a definition for, based on the ranking
+            // We might have a situation where the definitions are masked.
+            // In that case, write forwards and backwards separately
+            
+            Set doReverse = new HashSet();
             Set gotIt = new HashSet();
+            
+            it = backSet.iterator();
+            while (it.hasNext()) {
+                Pair p = (Pair) it.next();
+                p = (Pair) p.second;
+                
+                String keyChar = (String) p.first; 
+                String def = (String) p.second;
+                if (!gotIt.contains(def)) {
+                    if (unihanNonSingular) {
+                        out.println(quoteNonLetters.transliterate(keyChar) + " < " + quoteNonLetters.transliterate(def) + ";");
+                    } else {
+                        doReverse.add(keyChar);
+                    }
+                }
+                gotIt.add(def);
+            }
+            
+           
             it = lenSet.iterator();
             while (it.hasNext()) {
                 Pair p = (Pair) it.next();
                 p = (Pair) p.second;
                 
-                Comparable keyChar = p.first; 
-                Comparable def = p.second;
-                String rel = gotIt.contains(def) ? " > " : " <> ";
-                out.println(keyChar + rel + def + ";");
+                String keyChar = (String) p.first; 
+                String def = (String) p.second;
+                String rel = doReverse.contains(keyChar) ? " <> " : " > ";
+                out.println(quoteNonLetters.transliterate(keyChar) + rel + quoteNonLetters.transliterate(def) + ";");
                 //if (TESTING) System.out.println("# " + code + " > " + definition);
-                gotIt.add(def);
             }
             
             out.println("\u3002 <> '.';");
@@ -129,7 +367,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 out.println(":: katakana-latin;");
                 out.println(":: hiragana-latin;");
             }
-            out.println(":: fullwidth-halfwidth;");
+            out.println(":: fullwidth-halfwidth ();");
 
             
             
@@ -270,21 +508,21 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 String ch2 = Default.nfkd.normalize(ch);
                 pinyin = (String) unihanMap.get(ch2);
                 if (pinyin != null) {
-                    unihanMap.put(ch, pinyin);
+                    addCheck(ch, pinyin, "n/a");
                     kPinyin.add(i);
                 } else {
                     String trial = (String) simplifiedToTraditional.get(ch2);
                     if (trial != null) {
                         pinyin = (String) unihanMap.get(trial);
                         if (pinyin != null) {
-                            unihanMap.put(ch, pinyin);
+                            addCheck(ch, pinyin, "n/a");
                             tPinyin.add(i);
                         } else {
                             trial = (String) traditionalToSimplified.get(ch2);
                             if (trial != null) {
                                 pinyin = (String) unihanMap.get(trial);
                                 if (pinyin != null) {
-                                    unihanMap.put(ch, pinyin);
+                                    addCheck(ch, pinyin, "n/a");
                                     sPinyin.add(i);
                                 }
                             }
@@ -341,6 +579,59 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     static Map rankMap = new TreeMap(); // maps from single char strings to overall rank
     static List rankList = new ArrayList(10000);
+    
+    // form: ???? [ai4 wu1 ji2 wu1] /love me/love my dog/
+    
+    static void readCDICTDefinitions() throws IOException {
+        System.out.println("Reading cdict.txt");
+        BufferedReader br = Utility.openReadFile(BASE_DIR + "dict\\cdict.txt", true);
+        int counter = 0;
+        String[] pieces = new String[50];
+        String line = "";
+        try {
+            while (true) {
+                line = Utility.readDataLine(br);
+                if (line == null) break;
+                if (line.length() == 0) continue;
+                Utility.dot(counter++);
+                
+                
+                int pinyinStart = line.indexOf('[');
+                String word = line.substring(0,pinyinStart).trim();
+                int pinyinEnd = line.indexOf(']', pinyinStart+1);
+                int defStart = line.indexOf('/', pinyinEnd+1);
+                int defEnd = line.indexOf('/', defStart+1);
+                String definition = fixDefinition(line.substring(defStart+1, defEnd), line);
+                // word might have / in it, so do each part separately
+                int wordSlash = word.indexOf('/');
+                if (wordSlash < 0) {
+                    addCheck(word, definition, line);
+                } else {
+                    addCheck(word.substring(0, wordSlash), definition, line);
+                    addCheck(word.substring(wordSlash+1), definition, line);
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+            throw new ChainException("{0} Failed at {1}" , new Object []{new Integer(counter), line}, e);
+        }
+    }
+    
+    static UnicodeSet pua = new UnicodeSet("[:private use:]");
+    static UnicodeSet numbers = new UnicodeSet("[0-9]");
+    
+    static void addCheck(String word, String definition, String line) {
+        if (pua.containsSome(word) ) {
+            Utility.fixDot();
+            System.out.println("PUA on: " + line);
+        } else if (numbers.containsAll(definition) ) {
+            Utility.fixDot();
+            System.out.println("Only numbers on: " + line);
+        } else {
+            unihanMap.put(word, definition);
+        }
+        if (UTF16.countCodePoint(word) > 1) unihanNonSingular = true;
+    }
     
     static void readCDICT() throws IOException {
         System.out.println("Reading cdict.txt");
@@ -543,14 +834,17 @@ public final class GenerateHanTransliterator implements UCD_Types {
         if (type == DEFINITION) {
             definition = removeMatched(definition,'(', ')', line);
             definition = removeMatched(definition,'[', ']', line);
-            definition = definition.trim();
-            definition = Utility.replace(definition, "  ", " ");
-            definition = "'[" + quoteNonLetters.transliterate(definition) + "]'";
+            definition = fixDefinition(definition, line);
         }
-        definition.trim();
+        definition = definition.trim();
         definition = Default.ucd.getCase(definition, FULL, LOWER);
         String cp = UTF16.valueOf(Integer.parseInt(code, 16));
-        unihanMap.put(cp, definition);
+        if (definition.length() == 0) {
+            Utility.fixDot();
+            System.out.println("Zero value for " + Default.ucd.getCode(cp) + " on: " + hex.transliterate(line));
+        } else {
+            addCheck(cp, definition, line);
+        }
         /*
         String key = (String) unihanMap.get(definition);
         if (key == null) {
@@ -560,6 +854,15 @@ public final class GenerateHanTransliterator implements UCD_Types {
         if (TESTING) System.out.println("# " + code + " > " + definition);
         */
     }
+    
+    static String fixDefinition(String definition, String line) {
+        definition = definition.trim();
+        definition = Utility.replace(definition, "  ", " ");
+        definition = Utility.replace(definition, " ", "-");
+        definition = Default.ucd.getCase(definition, FULL, LOWER);
+        return definition;
+    }
+    
     
     // WARNING not supplemenatary-safe!
     
@@ -587,12 +890,13 @@ public final class GenerateHanTransliterator implements UCD_Types {
     }
         
     static Map unihanMap = new HashMap();
+    static boolean unihanNonSingular = false;
     
     static StringBuffer handlePinyinTemp = new StringBuffer();
     
     static Transliterator hex = Transliterator.getInstance("[^\\u0020-\\u007F] hex");
     static Transliterator quoteNonLetters = Transliterator.createFromRules("any-quotenonletters", 
-        "([[\\u0021-\\u007E]-[:L:]-[\\']]) > \\u005C $1; \\' > \\'\\';", Transliterator.FORWARD);
+        "([[\\u0021-\\u007E]-[:L:]-[\\']-[0-9]]) > \\u005C $1; \\' > \\'\\';", Transliterator.FORWARD);
     
     
     
