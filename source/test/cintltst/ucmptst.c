@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2001, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 1998-2004, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ********************************************************************/
 /*
 * File test.c
