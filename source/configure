@@ -2987,13 +2987,14 @@ esac
 
 
 case "${host}" in
-	*-*-hpux*) 	
+	*-*-hpux10*) 	
 		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencnval/gencnval \
-		  tools/gennames/gennames tools/gentest/gentest
+		  tools/gennames/gennames tools/gentest/gentest \
+                  tools/pkgdata/pkgdata
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
