@@ -703,6 +703,14 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
         } else if (lastOp == 0 && !isLiteral && (c == HYPHEN || c == INTERSECTION)) {
             lastOp = c;
         } else if (lastOp == HYPHEN) {
+            if (lastChar >= c) {
+                // Don't allow redundant (a-a) or empty (b-a) ranges;
+                // these are most likely typos.
+                //throw new IllegalArgumentException("Invalid range " + lastChar +
+                //                                       '-' + c);
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return pairsBuf;
+            }
             addPair(pairsBuf, (UChar)lastChar, c);
             lastOp = 0;
             lastChar = -1;
