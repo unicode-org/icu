@@ -9,6 +9,7 @@
 *   indentation:4
 */
 
+#define   UTRACE_IMPL
 #include "unicode/utrace.h"
 #include "cstring.h"
 #include "uassert.h"
@@ -18,6 +19,9 @@ static UTraceEntry     *pTraceEntryFunc = NULL;
 static UTraceExit      *pTraceExitFunc  = NULL;
 static UTraceData      *pTraceDataFunc  = NULL;
 static void            *gTraceContext   = NULL;
+
+U_EXPORT int32_t
+utrace_level;
 
 U_CAPI void U_EXPORT2
 utrace_entry(int32_t fnNumber) {
@@ -29,7 +33,7 @@ utrace_entry(int32_t fnNumber) {
 
 
 U_CAPI void U_EXPORT2
-utrace_exit(int32_t fnNumber, UTraceExitVal returnType, ...) {
+utrace_exit(int32_t fnNumber, int32_t returnType, ...) {
     if (pTraceExitFunc != NULL) {
         va_list args;
         va_start(args, returnType);
@@ -55,7 +59,12 @@ static void outputChar(char c, char *outBuf, int32_t *outIx, int32_t capacity, i
     int32_t i;
     if (*outIx < capacity) {
         outBuf[*outIx] = c;
-        (*outIx)++;
+        if (c != 0) {
+            /* Nulls only appear as end-of-string terminators.  Move them to the output
+             *  buffer, but do not update the length of the buffer, so that any
+             *  following output will overwrite the null. */
+            (*outIx)++;
+        };
     }
     if (c == '\n') {
         for(i=0; i<indent; i++) {
@@ -211,7 +220,7 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
                 int32_t   charsToOutput;
                 int32_t   i;
                 
-                vectorType = fmt[fmtIx];
+                vectorType = fmt[fmtIx];    /* b, h, d, l, p, etc. */
                 if (vectorType != 0) {
                     fmtIx++;
                 }
@@ -221,45 +230,52 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
                 i64Ptr = (int64_t *)i8Ptr;
                 ptrPtr = (void **)i8Ptr;
                 vectorLen =(int32_t)va_arg(args, int32_t);
-                for (i=0; i<vectorLen; i++) { 
-                    switch (vectorType) {
-                    case 'b':
-                        charsToOutput = 2;
-                        longArg = *i8Ptr++;
-                        break;
-                    case 'h':
-                        charsToOutput = 4;
-                        longArg = *i16Ptr++;
-                        break;
-                    case 'd':
-                        charsToOutput = 8;
-                        longArg = *i32Ptr++;
-                        break;
-                    case 'l':
-                        charsToOutput = 16;
-                        longArg = *i64Ptr++;
-                        break;
-                    case 'p':
-                        charsToOutput = 0;
-                        outputPtrBytes(*ptrPtr, outBuf, &outIx, capacity);
-                        ptrPtr++;
-                        break;
-                    case 'c':
-                        charsToOutput = 0;
-                        outputChar(*i8Ptr, outBuf, &outIx, capacity, indent);
-                        i8Ptr++;
-                        break;
-                    case 's':
-                        charsToOutput = 0;
-                        outputString(i8Ptr, outBuf, &outIx, capacity, indent);
-                        outputChar('\n', outBuf, &outIx, capacity, indent);
-                        
-                    }
-                    if (charsToOutput > 0) {
-                        outputHexBytes(longArg, charsToOutput, outBuf, &outIx, capacity);
-                        outputChar(' ', outBuf, &outIx, capacity, indent);
+                if (ptrPtr == NULL) {
+                    outputString("NULL", outBuf, &outIx, capacity, indent);
+                } else {
+                    for (i=0; i<vectorLen; i++) { 
+                        switch (vectorType) {
+                        case 'b':
+                            charsToOutput = 2;
+                            longArg = *i8Ptr++;
+                            break;
+                        case 'h':
+                            charsToOutput = 4;
+                            longArg = *i16Ptr++;
+                            break;
+                        case 'd':
+                            charsToOutput = 8;
+                            longArg = *i32Ptr++;
+                            break;
+                        case 'l':
+                            charsToOutput = 16;
+                            longArg = *i64Ptr++;
+                            break;
+                        case 'p':
+                            charsToOutput = 0;
+                            outputPtrBytes(*ptrPtr, outBuf, &outIx, capacity);
+                            ptrPtr++;
+                            break;
+                        case 'c':
+                            charsToOutput = 0;
+                            outputChar(*i8Ptr, outBuf, &outIx, capacity, indent);
+                            i8Ptr++;
+                            break;
+                        case 's':
+                            charsToOutput = 0;
+                            outputString(i8Ptr, outBuf, &outIx, capacity, indent);
+                            outputChar('\n', outBuf, &outIx, capacity, indent);
+                            
+                        }
+                        if (charsToOutput > 0) {
+                            outputHexBytes(longArg, charsToOutput, outBuf, &outIx, capacity);
+                            outputChar(' ', outBuf, &outIx, capacity, indent);
+                        }
                     }
                 }
+                outputChar('[', outBuf, &outIx, capacity, indent);
+                outputHexBytes(vectorLen, 8, outBuf, &outIx, capacity);
+                outputChar(']', outBuf, &outIx, capacity, indent);
             }
             break;
 
@@ -272,9 +288,47 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
              outputChar(fmtC, outBuf, &outIx, capacity, indent);
         }
     }
+    outputChar(0, outBuf, &outIx, capacity, indent);
     return outIx;
 }
 
+
+U_CAPI void U_EXPORT2 
+utrace_formatExit(char *outBuf, int32_t capacity, int32_t indent, 
+                                  int32_t fnNumber, int32_t argType, va_list args) {
+    int32_t      outIx = 0;
+    int32_t      intVal;
+    UBool        boolVal;
+    void        *ptrVal;
+    UErrorCode   status;
+
+    outputString(utrace_functionName(fnNumber), outBuf, &outIx, capacity, indent);
+    outputString(" returns", outBuf, &outIx, capacity, indent);
+    switch (argType & UTRACE_EXITV_MASK) {
+    case UTRACE_EXITV_I32:
+        outputChar(' ', outBuf, &outIx, capacity, indent);
+        intVal = (int32_t)va_arg(args, int32_t);
+        outputHexBytes(intVal, 8, outBuf, &outIx, capacity);
+        break;
+    case UTRACE_EXITV_PTR:
+        outputChar(' ', outBuf, &outIx, capacity, indent);
+        ptrVal = (void *)va_arg(args, void *);
+        outputPtrBytes(ptrVal, outBuf, &outIx, capacity);
+        break;
+    case UTRACE_EXITV_BOOL:
+        outputChar(' ', outBuf, &outIx, capacity, indent);
+        boolVal = (UBool)va_arg(args, int32_t);    /* gcc wants int, not UBool */
+        outputString(boolVal? "TRUE": "FALSE", outBuf, &outIx, capacity, indent);
+    }
+
+    outputString(".", outBuf, &outIx, capacity, indent);
+    if (argType & UTRACE_EXITV_STATUS) {
+        outputString("  Status = ", outBuf, &outIx, capacity, indent);
+        status = (UErrorCode)va_arg(args, UErrorCode);
+        outputString(u_errorName(status), outBuf, &outIx, capacity, indent);
+    }
+    outputChar(0, outBuf, &outIx, capacity, indent);
+}
 
 
 U_CAPI void U_EXPORT2
@@ -318,6 +372,8 @@ trCollNames[] = {
     "ucol_strcoll",
     "ucol_getSortKey",
     "ucol_getLocale",
+    "ucol_nextSortKeyPart",
+    "ucol_strcollIter",
     0};
 
 

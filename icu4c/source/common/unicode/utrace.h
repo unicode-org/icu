@@ -68,7 +68,11 @@ typedef enum UTraceLevel UTraceLevel;
  * Use only via UTRACE_ macros.
  * @internal
  */
-U_COMMON_API int32_t
+#ifdef UTRACE_IMPL
+U_EXPORT int32_t
+#else
+U_IMPORT int32_t
+#endif
 utrace_level; 
 
 /**
@@ -139,9 +143,9 @@ typedef enum UTraceExitVal UTraceExitVal;
  * @draft ICU 2.8
  */
 #define UTRACE_EXIT() \
-    if(UTRACE_IS_ON) { \
+    {if(UTRACE_IS_ON) { \
         utrace_exit(utraceFnNumber, UTRACE_EXITV_NONE); \
-    }
+    }}
 
 /**
  * Trace statement for each exit point of a function that has a UTRACE_ENTRY()
@@ -152,14 +156,19 @@ typedef enum UTraceExitVal UTraceExitVal;
  * @draft ICU 2.8
  */
 #define UTRACE_EXIT_D(val) \
-    if(UTRACE_IS_ON) { \
+    {if(UTRACE_IS_ON) { \
         utrace_exit(utraceFnNumber, UTRACE_EXITV_I32, val); \
-    }
+    }}
 
 #define UTRACE_EXIT_S(status) \
-    if(UTRACE_IS_ON) { \
+    {if(UTRACE_IS_ON) { \
         utrace_exit(utraceFnNumber, UTRACE_EXITV_STATUS, status); \
-    }
+    }}
+
+#define UTRACE_EXIT_DS(val, status) \
+    {if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, (UTRACE_EXITV_I32 | UTRACE_EXITV_STATUS), val, status); \
+    }}
 
 
 /**
@@ -180,7 +189,7 @@ utrace_entry(int32_t fnNumber);
  * @internal
  */
 U_CAPI void U_EXPORT2
-utrace_exit(int32_t fnNumber, UTraceExitVal returnType, ...);
+utrace_exit(int32_t fnNumber, int32_t returnType, ...);
 
 
 /**
@@ -430,6 +439,10 @@ utrace_format(char *outBuf, int32_t capacity,
               int32_t indent, const char *fmt,  va_list args);
 
 
+U_CAPI void U_EXPORT2
+utrace_formatExit(char *outBuf, int32_t capacity, int32_t indent, 
+                                  int32_t fnNumber, int32_t argtype, va_list args);
+
 /* Trace function numbers --------------------------------------------------- */
 
 /**
@@ -461,8 +474,10 @@ enum UTraceFunctionNumber {
     UTRACE_UCOL_CLOSE,
     UTRACE_UCOL_STRCOLL,
     UTRACE_UCOL_GET_SORTKEY,
-    UTRACE_COLLATION_LIMIT,
-    UTRACE_COLLATION_GETLOCALE
+    UTRACE_UCOL_GETLOCALE,
+    UTRACE_UCOL_NEXTSORTKEYPART,
+    UTRACE_UCOL_STRCOLLITER,
+    UTRACE_COLLATION_LIMIT
 };
 typedef enum UTraceFunctionNumber UTraceFunctionNumber;
 
