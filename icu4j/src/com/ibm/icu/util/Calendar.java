@@ -632,7 +632,7 @@ import java.util.Set;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.34 $ $Date: 2002/11/17 01:42:15 $
+ * @version      $Revision: 1.35 $ $Date: 2002/12/04 01:03:39 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1512,12 +1512,14 @@ public abstract class Calendar implements Serializable, Cloneable {
     private static Map getFactoryMap() {
         if (factoryMap == null) {
             Map m = new HashMap(5);
+            /*
             addFactory(m, BuddhistCalendar.factory());
             addFactory(m, ChineseCalendar.factory());
             addFactory(m, GregorianCalendar.factory());
             addFactory(m, HebrewCalendar.factory());
             addFactory(m, IslamicCalendar.factory());
             addFactory(m, JapaneseCalendar.factory());
+            */
             factoryMap = m;
         }
         return factoryMap;
@@ -1587,14 +1589,14 @@ public abstract class Calendar implements Serializable, Cloneable {
     private static ICULocaleService getService() {
         if (service == null) {
             ICULocaleService newService = new ICULocaleService("Calendar");
-
+            /*
             class RBCalendarFactory extends ICUResourceBundleFactory {
                 protected Object handleCreate(Locale locale, int kind, ICUService service) {
                     return GregorianCalendar.factory();
                 }
             }
             newService.registerFactory(new RBCalendarFactory());
-
+            */
             synchronized (Calendar.class) {
                 if (service == null) {
                     service = newService;

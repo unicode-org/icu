@@ -24,8 +24,8 @@ import java.util.Date;
  * @see      Calendar
  * @see      GregorianCalendar
  * @see      TimeZone
- * @version  1.38 01/19/00
  * @author   David Goldsmith, Mark Davis, Chen-Lieh Huang, Alan Liu
+ * @stable
  */
 public class SimpleTimeZone extends TimeZone {
     /**
@@ -37,6 +37,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param rawOffset  The given base time zone offset to GMT.
      * @param ID         The time zone ID which is obtained from
      *                   TimeZone.getAvailableIDs.
+     * @stable
      */
     public SimpleTimeZone(int rawOffset, String ID)
     {
@@ -101,7 +102,7 @@ public class SimpleTimeZone extends TimeZone {
      *                        member description for an example.
      * @exception IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
-     * @since JDK1.1
+     * @stable
      */
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
@@ -119,7 +120,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param dstSavings   The amount of time in ms saved during DST.
      * @exception IllegalArgumentException the month, day, dayOfWeek, or time
      * parameters are out of range for the start or end rule
-     * @since 1.2
+     * @stable
      */
     public SimpleTimeZone(int rawOffset, String ID,
                           int startMonth, int startDay, int startDayOfWeek, int startTime,
@@ -193,6 +194,7 @@ public class SimpleTimeZone extends TimeZone {
      * Sets the daylight savings starting year.
      *
      * @param year  The daylight savings starting year.
+     * @stable
      */
     public void setStartYear(int year)
     {
@@ -218,6 +220,7 @@ public class SimpleTimeZone extends TimeZone {
      *                          the member description for an example.
      * @exception IllegalArgumentException the month, dayOfWeekInMonth,
      * dayOfWeek, or time parameters are out of range
+     * @stable
      */
     public void setStartRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                              int time)
@@ -241,7 +244,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      standard time in this case.
      * @exception IllegalArgumentException the month,
      * dayOfMonth, or time parameters are out of range
-     * @since 1.2
+     * @stable
      */
     public void setStartRule(int month, int dayOfMonth, int time) {
         setStartRule(month, dayOfMonth, 0, time);
@@ -262,7 +265,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      the last dayOfWeek on or before dayOfMonth.
      * @exception IllegalArgumentException the month, dayOfMonth,
      * dayOfWeek, or time parameters are out of range
-     * @since 1.2
+     * @stable
      */
     public void setStartRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after)
     {
@@ -290,6 +293,7 @@ public class SimpleTimeZone extends TimeZone {
      *                          member description for an example.
      * @exception IllegalArgumentException the month, dayOfWeekInMonth,
      * dayOfWeek, or time parameters are out of range
+     * @stable
      */
     public void setEndRule(int month, int dayOfWeekInMonth, int dayOfWeek,
                            int time)
@@ -313,7 +317,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      time in this case.
      * @exception IllegalArgumentException the month,
      * dayOfMonth, or time parameters are out of range
-     * @since 1.2
+     * @stable
      */
     public void setEndRule(int month, int dayOfMonth, int time)
     {
@@ -335,7 +339,7 @@ public class SimpleTimeZone extends TimeZone {
      *                      the last dayOfWeek on or before dayOfMonth.
      * @exception IllegalArgumentException the month, dayOfMonth,
      * dayOfWeek, or time parameters are out of range
-     * @since 1.2
+     * @stable
      */
     public void setEndRule(int month, int dayOfMonth, int dayOfWeek, int time, boolean after)
     {
@@ -369,6 +373,7 @@ public class SimpleTimeZone extends TimeZone {
      * @return          The milliseconds to add to UTC to get local time.
      * @exception       IllegalArgumentException the era, month, day,
      *                  dayOfWeek, or millis parameters are out of range
+     * @stable
      */
     public int getOffset(int era, int year, int month, int day, int dayOfWeek,
                          int millis)
@@ -611,6 +616,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Overrides TimeZone
      * Gets the GMT offset for this time zone.
+     * @stable
      */
     public int getRawOffset()
     {
@@ -624,6 +630,7 @@ public class SimpleTimeZone extends TimeZone {
      * Sets the base time zone offset to GMT.
      * This is the offset to add *to* UTC to get local time.
      * Please see TimeZone.setRawOffset for descriptions on the parameter.
+     * @stable
      */
     public void setRawOffset(int offsetMillis)
     {
@@ -635,7 +642,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param millisSavedDuringDST the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
-     * @since 1.2
+     * @stable
      */
     public void setDSTSavings(int millisSavedDuringDST) {
         if (millisSavedDuringDST <= 0) {
@@ -649,7 +656,7 @@ public class SimpleTimeZone extends TimeZone {
      * @return the number of milliseconds the time is
      * advanced with respect to standard time when the daylight savings rules
      * are in effect. A positive number, typically one hour (3600000).
-     * @since 1.2
+     * @stable
      */
     public int getDSTSavings() {
         return dstSavings;
@@ -658,6 +665,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Overrides TimeZone
      * Queries if this time zone uses Daylight Savings Time.
+     * @stable
      */
     public boolean useDaylightTime()
     {
@@ -677,6 +685,7 @@ public class SimpleTimeZone extends TimeZone {
 
     /**
      * Overrides Cloneable
+     * @stable
      */
     public Object clone()
     {
@@ -687,6 +696,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Override hashCode.
      * Generates the hash code for the SimpleDateFormat object
+     * @stable
      */
     public synchronized int hashCode()
     {
@@ -700,6 +710,7 @@ public class SimpleTimeZone extends TimeZone {
      * @param obj  The SimpleTimeZone object to be compared with.
      * @return     True if the given obj is the same as this SimpleTimeZone
      *             object; false otherwise.
+     * @stable
      */
     public boolean equals(Object obj)
     {
@@ -718,7 +729,7 @@ public class SimpleTimeZone extends TimeZone {
      * Return true if this zone has the same rules and offset as another zone.
      * @param other the TimeZone object to be compared with
      * @return true if the given zone has the same rules and offset as this one
-     * @since 1.2
+     * @stable
      */
     public boolean hasSameRules(TimeZone other) {
         if (this == other) return true;
@@ -747,6 +758,7 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * Return a string representation of this time zone.
      * @return  a string representation of this time zone.
+     * @stable
      */
     public String toString() {
         return getClass().getName() +
@@ -828,7 +840,6 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * The format of startTime, either WALL_TIME, STANDARD_TIME, or UTC_TIME.
      * @serial
-     * @since JDK 1.3
      */
     private int startTimeMode;
 
@@ -889,7 +900,6 @@ public class SimpleTimeZone extends TimeZone {
     /**
      * The format of endTime, either WALL_TIME, STANDARD_TIME, or UTC_TIME.
      * @serial
-     * @since JDK 1.3
      */
     private int endTimeMode;
 
@@ -960,7 +970,6 @@ public class SimpleTimeZone extends TimeZone {
      * <code>startDay</code> field.
      * <p>If <code>useDaylight</code> is false, this value is ignored.
      * @serial
-     * @since JDK1.1.4
      */
     private int startMode;
 
@@ -989,7 +998,6 @@ public class SimpleTimeZone extends TimeZone {
      * <code>endDay</code> field.
      * <p>If <code>useDaylight</code> is false, this value is ignored.
      * @serial
-     * @since JDK1.1.4
      */
     private int endMode;
 
@@ -999,7 +1007,6 @@ public class SimpleTimeZone extends TimeZone {
      * Typically one hour (3600000); sometimes 30 minutes (1800000).
      * <p>If <code>useDaylight</code> is false, this value is ignored.
      * @serial
-     * @since JDK1.1.4
      */
     private int dstSavings;
 
@@ -1060,7 +1067,6 @@ public class SimpleTimeZone extends TimeZone {
      * and the highest allowable <code>serialVersionOnStream</code>
      * is written.
      * @serial
-     * @since JDK1.1.4
      */
     private int serialVersionOnStream = currentSerialVersion;
 

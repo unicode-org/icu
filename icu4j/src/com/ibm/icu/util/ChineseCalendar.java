@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2002/10/02 20:20:25 $
- * $Revision: 1.11 $
+ * $Date: 2002/12/04 01:03:39 $
+ * $Revision: 1.12 $
  */
 package com.ibm.icu.util;
 import com.ibm.icu.lang.*;
@@ -70,6 +70,7 @@ import java.util.Locale;
  * </ul>
  * @see com.ibm.icu.text.ChineseDateFormat
  * @author Alan Liu
+ * @stable
  */
 public class ChineseCalendar extends Calendar {
 
@@ -121,6 +122,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Construct a Chinese calendar with the default time zone and locale.
+     * @stable
      */
     public ChineseCalendar() {
         super();
@@ -130,6 +132,7 @@ public class ChineseCalendar extends Calendar {
      * Construct a Chinese calendar with the given time zone and locale.
      * @param zone time zone for this calendar
      * @param locale locale for this calendar
+     * @stable
      */
     public ChineseCalendar(TimeZone zone, Locale locale) {
         super(zone, locale);
@@ -142,6 +145,7 @@ public class ChineseCalendar extends Calendar {
     /**
      * Field indicating whether or not the current month is a leap month.
      * Should have a value of 0 for non-leap months, and 1 for leap months.
+     * @stable
      */
     public static int IS_LEAP_MONTH = BASE_FIELD_COUNT;
 
@@ -156,6 +160,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Override Calendar to allocate our additional field.
+     * @stable
      */
     protected int[] handleCreateFields() {
         return new int[FIELD_COUNT];
@@ -227,6 +232,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Override Calendar to return the limit value for the given field.
+     * @stable
      */
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
@@ -237,6 +243,7 @@ public class ChineseCalendar extends Calendar {
      * defined by the current fields.  This will use either the ERA and
      * YEAR field as the cycle and year-of-cycle, or the EXTENDED_YEAR
      * field as the continuous year count, depending on which is newer.
+     * @stable
      */
     protected int handleGetExtendedYear() {
         int year;
@@ -255,6 +262,7 @@ public class ChineseCalendar extends Calendar {
      *
      * <p>Note: This method also reads the IS_LEAP_MONTH field to determine
      * whether or not the given month is a leap month.
+     * @stable
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
         int thisStart = handleComputeMonthStart(extendedYear, month, true) -
@@ -268,6 +276,7 @@ public class ChineseCalendar extends Calendar {
      * using the the given pattern.  This method is responsible for
      * creating the calendar- specific DateFormat and DateFormatSymbols
      * objects as needed.
+     * @stable
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
         return new ChineseDateFormat(pattern, locale);
@@ -300,6 +309,7 @@ public class ChineseCalendar extends Calendar {
     /**
      * Override Calendar to add IS_LEAP_MONTH to the field resolution
      * table.
+     * @stable
      */
     protected int[][][] getFieldResolutionTable() {
         return CHINESE_DATE_PRECEDENCE;
@@ -345,6 +355,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Override Calendar to handle leap months properly.
+     * @stable
      */
     public void add(int field, int amount) {
         switch (field) {
@@ -364,6 +375,7 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Override Calendar to handle leap months properly.
+     * @stable
      */
     public void roll(int field, int amount) {
         switch (field) {
@@ -604,6 +616,7 @@ public class ChineseCalendar extends Calendar {
      * calendar equivalents for the given Julian day.
      *
      * <p>Compute the ChineseCalendar-specific field IS_LEAP_MONTH.
+     * @stable
      */
     protected void handleComputeFields(int julianDay) {
 
@@ -744,6 +757,7 @@ public class ChineseCalendar extends Calendar {
      * by reading the IS_LEAP_MONTH field.
      * @param return the Julian day number of the day before the first
      * day of the given month and year
+     * @stable
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
@@ -786,6 +800,8 @@ public class ChineseCalendar extends Calendar {
         return julianDay - 1;
     }
 
+
+    /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
         if (factory == null) {
@@ -801,4 +817,5 @@ public class ChineseCalendar extends Calendar {
         }
         return factory;
     }
+    */
 }
