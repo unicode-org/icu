@@ -205,7 +205,6 @@ void CollationDanishTest::TestTertiary(/* char* par */)
     myCollation->setStrength(Collator::TERTIARY);
     UErrorCode status = U_ZERO_ERROR;
     /* problem in strcollinc for unfinshed contractions */
-    myCollation->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
     if(U_FAILURE(status)){
       errln("ERROR: in setting normalization mode of the Danish collator\n");
 	    return;
