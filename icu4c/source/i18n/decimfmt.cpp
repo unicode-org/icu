@@ -1939,7 +1939,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 }
                 UnicodeString s;
                 if (currency[0] != 0) {
-                    s = intl ? currency
+                    s = intl ? UnicodeString(currency, "")
                         : UCurrency::getSymbol(currency, fSymbols->getLocale());
                 } else {
                     s = intl ? fSymbols->getSymbol(DecimalFormatSymbols::kIntlCurrencySymbol)
