@@ -205,6 +205,7 @@ void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransli
     count = transCount;
     computeMaximumContextLength();
     adoptFilter(f);
+    setID(joinIDs(trans, count));
 }
 
 /**
