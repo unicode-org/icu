@@ -595,7 +595,7 @@ ucnv_getMinCharSize(const UConverter *converter);
  * @param converter the Unicode converter.
  * @param displayLocale is the specific Locale we want to localised for
  * @param displayName user provided buffer to be filled in
- * @param displayNameCapacty size of displayName Buffer
+ * @param displayNameCapacity size of displayName Buffer
  * @param err error status code
  * @return displayNameLength number of UChar needed in displayName
  * @see ucnv_getName
@@ -963,7 +963,7 @@ ucnv_toUnicode(UConverter *converter,
  * @param srcLength the input string length, or -1 if NUL-terminated
  * @param dest destination string buffer, can be NULL if destCapacity==0
  * @param destCapacity the number of chars available at dest
- * @param errorCode normal ICU error code;
+ * @param pErrorCode normal ICU error code;
  *                  common error codes that may be set by this function include
  *                  U_BUFFER_OVERFLOW_ERROR, U_STRING_NOT_TERMINATED_WARNING,
  *                  U_ILLEGAL_ARGUMENT_ERROR, and conversion errors
@@ -995,7 +995,7 @@ ucnv_fromUChars(UConverter *cnv,
  * @param srcLength the input string length, or -1 if NUL-terminated
  * @param dest destination string buffer, can be NULL if destCapacity==0
  * @param destCapacity the number of UChars available at dest
- * @param errorCode normal ICU error code;
+ * @param pErrorCode normal ICU error code;
  *                  common error codes that may be set by this function include
  *                  U_BUFFER_OVERFLOW_ERROR, U_STRING_NOT_TERMINATED_WARNING,
  *                  U_ILLEGAL_ARGUMENT_ERROR, and conversion errors
@@ -1516,6 +1516,7 @@ ucnv_getStandard(uint16_t n, UErrorCode *pErrorCode);
  * @param name original converter name
  * @param standard name of the standard governing the names; MIME and IANA
  *        are such standards
+ * @param pErrorCode result of operation
  * @return returns the standard converter name;
  *         if a standard converter name cannot be determined,
  *         then <code>NULL</code> is returned. Owned by the library.
