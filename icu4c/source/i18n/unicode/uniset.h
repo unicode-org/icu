@@ -49,34 +49,97 @@ class TransliterationRuleData;
  * similar to that employed by version 8 regular expression character
  * classes:
  *
- * <blockquote><code>
- * pattern := ('[' '^'? item* ']') | ('[:' '^'? category ':]')<br>
- * item := char | (char '-' char) | pattern-expr<br>
- * pattern-expr := pattern | pattern-expr pattern | pattern-expr op pattern<br>
- * op := '&' | '-'<br>
- * special := '[' | ']' | '-'<br>
- * char := <em>any character that is not</em> special |
- *        ('\' <em>any character</em>) |
- *        ('\\u' hex hex hex hex)<br>
- * hex := <em>any hex digit, as defined by </em>Character.digit(c, 16)
- * </code>
- *
- * <br>Legend:
- *
- * <table>
- * <tr><td width=20%><code>a:=b</code>
- * <td><code>a</code> may be replaced by
- * <code>b</code>
- * <tr><td><code>a?</code>
- * <td>zero or one instance of <code>a</code><br>
- * <tr><td><code>a*</code>
- * <td>one or more instances of <code>a</code><br>
- * <tr><td><code>a|b</code>
- * <td>either <code>a</code> or <code>b</code><br>
- * <tr><td><code>'a'</code>
- * <td>the literal string between the quotes
- * </table>
+ * <blockquote>
+ *   <table>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>pattern :=&nbsp; </code></td>
+ *       <td valign="top"><code>('[' '^'? item* ']') |
+ *       ('[:' '^'? category ':]')</code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>item :=&nbsp; </code></td>
+ *       <td valign="top"><code>char | (char '-' char) | pattern-expr<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>pattern-expr :=&nbsp; </code></td>
+ *       <td valign="top"><code>pattern | pattern-expr pattern |
+ *       pattern-expr op pattern<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>op :=&nbsp; </code></td>
+ *       <td valign="top"><code>'&amp;' | '-'<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>special :=&nbsp; </code></td>
+ *       <td valign="top"><code>'[' | ']' | '-'<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>char :=&nbsp; </code></td>
+ *       <td valign="top"><em>any character that is not</em><code> special<br>
+ *       | ('\u005C' </code><em>any character</em><code>)<br>
+ *       | ('\u005Cu' hex hex hex hex)<br>
+ *       </code></td>
+ *     </tr>
+ *     <tr align="top">
+ *       <td nowrap valign="top" align="right"><code>hex :=&nbsp; </code></td>
+ *       <td valign="top"><em>any character for which
+ *       </em><code>Character.digit(c, 16)</code><em>
+ *       returns a non-negative result</em></td>
+ *     </tr>
+ *     <tr>
+ *       <td nowrap valign="top" align="right"><code>category :=&nbsp; </code></td>
+ *       <td valign="top"><code>'M' | 'N' | 'Z' | 'C' | 'L' | 'P' |
+ *       'S' | 'Mn' | 'Mc' | 'Me' | 'Nd' | 'Nl' | 'No' | 'Zs' | 'Zl' |
+ *       'Zp' | 'Cc' | 'Cf' | 'Cs' | 'Co' | 'Cn' | 'Lu' | 'Ll' | 'Lt'
+ *       | 'Lm' | 'Lo' | 'Pc' | 'Pd' | 'Ps' | 'Pe' | 'Po' | 'Sm' |
+ *       'Sc' | 'Sk' | 'So'</code></td>
+ *     </tr>
+ *   </table>
+ *   <br>
+ *   <table border="1">
+ *     <tr>
+ *       <td>Legend: <table>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a := b</code></td>
+ *           <td width="20" valign="top">&nbsp; </td>
+ *           <td valign="top"><code>a</code> may be replaced by <code>b</code> </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a?</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">zero or one instance of <code>a</code><br>
+ *           </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a*</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">one or more instances of <code>a</code><br>
+ *           </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>a | b</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">either <code>a</code> or <code>b</code><br>
+ *           </td>
+ *         </tr>
+ *         <tr>
+ *           <td nowrap valign="top"><code>'a'</code></td>
+ *           <td valign="top"></td>
+ *           <td valign="top">the literal string between the quotes </td>
+ *         </tr>
+ *       </table>
+ *       </td>
+ *     </tr>
+ *   </table>
  * </blockquote>
+ *
+ * Any character may be preceded by a backslash in order to remove any special
+ * meaning.  White space characters, as defined by Character.isWhitespace(), are
+ * ignored, unless they are escaped.
  *
  * Patterns specify individual characters, ranges of characters, and
  * Unicode character categories.  When elements are concatenated, they
@@ -257,21 +320,6 @@ public:
                UErrorCode& status);
 
     /**
-     * Constructs a set from the given pattern, optionally ignoring
-     * white space.  See the class description for the syntax of the
-     * pattern language.
-     * @param pattern a string specifying what characters are in the set
-     * @param ignoreSpaces if <code>true</code>, all spaces in the
-     * pattern are ignored, except those preceded by '\\'.  Spaces are
-     * those characters for which <code>Character.isSpaceChar()</code>
-     * is <code>true</code>.
-     * @exception <code>IllegalArgumentException</code> if the pattern
-     * contains a syntax error.
-     */
-    UnicodeSet(const UnicodeString& pattern, bool_t ignoreSpaces,
-               UErrorCode& status);
-
-    /**
      * Constructs a set from the given Unicode character category.
      * @param category an integer indicating the character category as
      * returned by <code>Character.getType()</code>.
@@ -330,29 +378,11 @@ public:
      * pattern, optionally ignoring white space.  See the class
      * description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
-     * @param ignoreSpaces if <code>true</code>, all spaces in the
-     * pattern are ignored.  Spaces are those characters for which
-     * <code>Character.isSpaceChar()</code> is <code>true</code>.
-     * Characters preceded by '\\' are escaped, losing any special
-     * meaning they otherwise have.  Spaces may be included by
-     * escaping them.
      * @exception <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
      */
     virtual void applyPattern(const UnicodeString& pattern,
-                              bool_t ignoreSpaces,
                               UErrorCode& status);
-
-    /**
-     * Modifies this set to represent the set specified by the given
-     * pattern.  See the class description for the syntax of the pattern
-     * language.
-     * @param pattern a string specifying what characters are in the set
-     * @exception <code>IllegalArgumentException</code> if the pattern
-     * contains a syntax error.
-     */
-    void applyPattern(const UnicodeString& pattern,
-                      UErrorCode& status);
 
     /**
      * Returns a string representation of this set.  If the result of
@@ -489,11 +519,49 @@ public:
      */
     virtual void clear(void);
 
+private:
+
+    //----------------------------------------------------------------
+    // RuleBasedTransliterator support
+    //----------------------------------------------------------------
+
+    friend class TransliterationRuleParser;
+    friend class TransliterationRule;
+
+    /**
+     * Constructs a set from the given pattern.  See the class description
+     * for the syntax of the pattern language.
+
+     * @param pattern a string specifying what characters are in the set
+     * @param pos on input, the position in pattern at which to start parsing.
+     * On output, the position after the last character parsed.
+     * @param varNameToChar a mapping from variable names (String) to characters
+     * (Character).  May be null.  If varCharToSet is non-null, then names may
+     * map to either single characters or sets, depending on whether a mapping
+     * exists in varCharToSet.  If varCharToSet is null then all names map to
+     * single characters.
+     * @param varCharToSet a mapping from characters (Character objects from
+     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
+     * varNameToChar is also non-null.
+     * @exception <code>IllegalArgumentException</code> if the pattern
+     * contains a syntax error.
+     */
+    UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
+               const TransliterationRuleData* data,
+               UErrorCode& status);
+
+    /**
+     * Returns <tt>true</tt> if this set contains any character whose low byte
+     * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     */
+    bool_t containsIndexValue(uint8_t v) const;
+
+private:
+
     //----------------------------------------------------------------
     // Implementation: Pattern parsing
     //----------------------------------------------------------------
-
-private:
 
     /**
      * Parses the given pattern, starting at the given position.  The
@@ -616,11 +684,6 @@ private:
      */
     static UChar charAfter(const UnicodeString& str, int32_t i);
 };
-
-inline void UnicodeSet::applyPattern(const UnicodeString& pattern,
-                                     UErrorCode& status) {
-    applyPattern(pattern, FALSE, status);
-}
 
 inline bool_t UnicodeSet::operator!=(const UnicodeSet& o) const {
 	return !operator==(o);
