@@ -190,7 +190,7 @@ void   shareConverterData (UConverterSharedData * data)
 {
   UErrorCode err = U_ZERO_ERROR;
   /*Lazy evaluates the Hashtable itself */
-    void *sanity = NULL;
+  /*void *sanity = NULL;*/
 
   if (SHARED_DATA_HASHTABLE == NULL)
     {
@@ -207,14 +207,14 @@ void   shareConverterData (UConverterSharedData * data)
   umtx_lock (NULL);
   /* ### check to see if the element is not already there! */
 
-#if 0
+/*
     sanity =   getSharedConverterData (data->staticData->name);
     if(sanity != NULL)
     {
         UCNV_DEBUG_LOG("put:overwrite!",data->staticData->name,sanity);
     }
     UCNV_DEBUG_LOG("put:chk",data->staticData->name,sanity);
-#endif
+*/
 
    uhash_put(SHARED_DATA_HASHTABLE,
     (void*) data->staticData->name, /* Okay to cast away const as long as
