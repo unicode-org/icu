@@ -151,6 +151,9 @@ ConversionTest::TestToUnicode() {
         }
         delete dataModule;
     }
+    else {
+        errln("Failed: could not load test conversion data");
+    }
 }
 
 void
@@ -283,6 +286,9 @@ ConversionTest::TestFromUnicode() {
             delete testData;
         }
         delete dataModule;
+    }
+    else {
+        errln("Failed: could not load test conversion data");
     }
 }
 
