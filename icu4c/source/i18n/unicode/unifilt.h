@@ -28,10 +28,10 @@ public:
     /**
      * Returns <tt>true</tt> for characters that are in the selected
      * subset.  In other words, if a character is <b>to be
-     * filtered</b>, then <tt>isIn()</tt> returns
+     * filtered</b>, then <tt>contains()</tt> returns
      * <b><tt>false</tt></b>.
      */
-    virtual bool_t isIn(UChar c) const = 0;
+    virtual bool_t contains(UChar c) const = 0;
 
     /**
      * Returns a copy of this object.  All UnicodeFilter objects have

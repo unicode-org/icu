@@ -204,7 +204,7 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
  * @param data a dictionary mapping variables to the sets they
  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return the matching rule, or null if none found.
@@ -243,7 +243,7 @@ TransliterationRuleSet::findMatch(const UnicodeString& text,
  * @param data a dictionary mapping variables to the sets they
  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return the matching rule, or null if none found.
@@ -287,7 +287,7 @@ TransliterationRuleSet::findMatch(const Replaceable& text,
  * @param partial output parameter.  <code>partial[0]</code> is set to
  * true if a partial match is returned.
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return the matching rule, or null if none found, or if the text buffer

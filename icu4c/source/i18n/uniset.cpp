@@ -133,6 +133,15 @@ bool_t UnicodeSet::operator==(const UnicodeSet& o) const {
 }
 
 /**
+ * Returns a copy of this object.  All UnicodeFilter objects have
+ * to support cloning in order to allow classes using
+ * UnicodeFilters, such as Transliterator, to implement cloning.
+ */
+UnicodeFilter* UnicodeSet::clone() const {
+    return new UnicodeSet(*this);
+}
+
+/**
  * Returns the hash code value for this set.
  *
  * @return the hash code value for this set.

@@ -267,7 +267,7 @@ private:
 
     /** 
      * This transliterator's filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
@@ -387,7 +387,7 @@ protected:
      * Default constructor.
      * @param ID the string identifier for this transliterator
      * @param adoptedFilter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
@@ -455,7 +455,7 @@ public:
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return The new limit index.  The text previously occupying <code>[start,

@@ -130,7 +130,7 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text,
 
     while (cursor < limit) {
         UChar c = text.charAt(cursor);
-        if (filter != 0 && !filter->isIn(c)) {
+        if (filter != 0 && !filter->contains(c)) {
             ++cursor;
             continue;
         }
