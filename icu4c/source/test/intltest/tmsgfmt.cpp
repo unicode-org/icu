@@ -203,7 +203,6 @@ void TestMessageFormat::testBug2()
 #endif
 
 #include "unicode/datefmt.h"
-#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

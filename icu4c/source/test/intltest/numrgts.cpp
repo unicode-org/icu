@@ -8,7 +8,6 @@
 
 #include <stdio.h> // sprintf
 #include <float.h> // DBL_MIN, DBL_MAX
-#include <limits.h> // LONG_MIN, LONG_MAX
 
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"

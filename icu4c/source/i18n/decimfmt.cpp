@@ -43,8 +43,6 @@
 #include "unicode/resbund.h"
 #include "unicode/unicode.h"
 #include "cmemory.h"
-#include <float.h>
-#include <limits.h>
 
 // #define DEBUG
 

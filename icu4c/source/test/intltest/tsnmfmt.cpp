@@ -9,10 +9,6 @@
 
 #include "unicode/decimfmt.h"
 
-#include <math.h>
-#include <float.h>
-#include <limits.h>
-
 static const char * formattableTypeName(Formattable::Type t)
 {
   switch(t) {

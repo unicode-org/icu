@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <limits.h>
 
 #define RESTEST_HEAP_CHECK 0
 
