@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/10/07 17:24:18 $
- * $Revision: 1.12 $
+ * $Date: 2003/10/16 23:42:48 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.ListResourceBundle;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Hashtable;
@@ -34,6 +35,15 @@ public class ICUListResourceBundle extends ListResourceBundle {
     private static final String ICU_BUNDLE_NAME = "LocaleElements";
     private static final String ICU_PACKAGE_NAME ="com.ibm.icu.impl.data";
     private static final String ENCODING="UTF-8";
+
+    /* package */ Locale icuLocale;
+    /* package */ void setParentX(ResourceBundle b) {
+        setParent(b);
+    }
+
+    public Locale getLocale() {
+        return icuLocale;
+    }
 
     protected ICUListResourceBundle() {
     }

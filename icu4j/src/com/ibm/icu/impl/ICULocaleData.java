@@ -161,7 +161,74 @@ public class ICULocaleData {
      * Gets a LocaleElements resource bundle.
      */
     public static ResourceBundle getLocaleElements(String localeName) {
-    return getResourceBundle(LOCALE_ELEMENTS, localeName);
+        return getResourceBundle(LOCALE_ELEMENTS, localeName);
+    }
+
+    private static SoftReference gBundleCache;
+    private static ResourceBundle loadFromCache(String key) {
+        if (gBundleCache != null) {
+            Map m = (Map)gBundleCache.get();
+            if (m != null) {
+                return (ResourceBundle)m.get(key);
+            }
+        }
+        return null;
+    }
+
+    private static void addToCache(String key, ResourceBundle b) {
+        Map m = null;
+        if (gBundleCache != null) {
+            m = (Map)gBundleCache.get();
+        }
+        if (m == null) {
+            m = new HashMap();
+            gBundleCache = new SoftReference(m);
+        }
+        m.put(key, b);
+    }
+
+    // recursively build bundle
+    private static ResourceBundle instantiate(String name) {
+        ResourceBundle b = loadFromCache(name);
+        if (b == null) {
+            ResourceBundle parent = null;
+            int i = name.lastIndexOf('_');
+            if (i != -1) {
+                parent = instantiate(name.substring(0, i));
+            }
+            try {
+                final Locale rootLocale = new Locale("");
+                Locale locale = rootLocale;
+                i = name.indexOf('_');
+                if (i != -1) {
+                    locale = LocaleUtility.getLocaleFromName(name.substring(i+1));
+                } else {
+                    i = name.length();
+                }
+                Class cls = ICULocaleData.class.getClassLoader().loadClass(name);
+                if (ICUListResourceBundle.class.isAssignableFrom(cls)) {
+                    ICUListResourceBundle bx = (ICUListResourceBundle)cls.newInstance();
+                    if (parent != null) {
+                        bx.setParentX(parent);
+                    }
+                    bx.icuLocale = locale;
+                    b = bx;
+                    System.out.println("iculistresourcebundle: " + name + " is " + b);
+                } else {
+                    b = ResourceBundle.getBundle(name.substring(0, i), locale);
+                    System.out.println("resourcebundle: " + name + " is " + b);
+                }    
+                addToCache(name, b);
+            }
+            catch (ClassNotFoundException e) {
+                b = parent;
+            }
+            catch (Exception e) {
+                System.out.println("failure");
+                System.out.println(e);
+            }
+        }
+        return b;
     }
 
     /**
@@ -169,9 +236,19 @@ public class ICULocaleData {
      * to load class resources from new locations that aren't already on the
      * class path?
      */
-    private static ResourceBundle instantiateBundle(String name, Locale l) {
-    ResourceBundle rb = ResourceBundle.getBundle(name, l);
-    return rb;
+    private synchronized static ResourceBundle instantiateBundle(String name, Locale l) {
+        return instantiate(name + "_" + l);
+        //    ResourceBundle rb = ResourceBundle.getBundle(name, l);
+//          try {
+//              Class cls = ICULocaleData.class.getClassLoader().loadClass(name + "_" + l);
+//              System.out.println("Loaded class: " + cls);
+//              return (ResourceBundle)cls.newInstance();
+//          }
+//          catch (Exception e) {
+//              System.out.println("failure");
+//              System.out.println(e);
+//          }
+//          return ResourceBundle.getBundle(name, l);
     }
 
     /**
