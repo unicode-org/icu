@@ -21,12 +21,11 @@
 .BI "\-l\fP, \fB\-\-list\-code" " code"
 |
 .BI "\-\-default-code"
+|
+.BI "\-L\fP, \fB\-\-list\-transliterators"
 ]
 [
 .BI "\-\-canon"
-]
-[
-.BI "\-L\fP, \fB\-\-list\-transliterators"
 ]
 [
 .BI "\-x" " trasnsliterator
@@ -60,6 +59,9 @@ is not a proper encoding, exit with an error.
 .BI "\-\-default-code"
 List only the name of the default encoding and exit.
 .TP
+.BI "\-L\fP, \fB\-\-list\-transliterators"
+List all the available transliterators and exit.
+.TP
 .BI "\--canon"
 If used with
 .BI "\-l\fP, \fB\-\-list"
@@ -67,9 +69,6 @@ or
 .BR "\-\-default-code" ,
 the list of encodings is produced in a format compatible with
 .BR convrtrs.txt (5).
-.TP
-.BI "\-L\fP, \fB\-\-list\-transliterators"
-List all the available transliterators and exit.
 .TP
 .BI "\-x" " transliterator"
 Run the transcoding through the given
@@ -82,13 +81,6 @@ Set the original encoding of the data to
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 Transcode the data to
 .IR encoding .
-.SH CAVEATS AND BUGS
-The
-.BI "\-L\fP, \fB\-\-list-transliterators"
-option is not implemented at this point and
-.B uconv
-will exit with an usage merror and an exit code
-of 1 if it is used.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
