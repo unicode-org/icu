@@ -83,6 +83,9 @@ makeProps(Props *p);
 extern void
 addProps(uint32_t c, uint32_t props);
 
+extern uint32_t
+getProps(uint32_t c);
+
 extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
