@@ -138,6 +138,7 @@ class TransliteratorRegistry {
      */
     void put(const UnicodeString& ID,
              Transliterator::Factory factory,
+             Transliterator::Token context,
              UBool visible);
 
     /**

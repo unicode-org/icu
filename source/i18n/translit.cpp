@@ -1258,19 +1258,21 @@ void Transliterator::skipSpaces(const UnicodeString& str,
 
 // For public consumption
 void Transliterator::registerFactory(const UnicodeString& id,
-                                     Transliterator::Factory factory) {
+                                     Transliterator::Factory factory,
+                                     Transliterator::Token context) {
     if (registry == 0) {
         initializeRegistry();
     }
     Mutex lock(&registryMutex);
-    _registerFactory(id, factory);
+    _registerFactory(id, factory, context);
 }
 
 // To be called only by Transliterator subclasses that are called
 // to register themselves by initializeRegistry().
 void Transliterator::_registerFactory(const UnicodeString& id,
-                                      Transliterator::Factory factory) {
-    registry->put(id, factory, TRUE);
+                                      Transliterator::Factory factory,
+                                      Transliterator::Token context) {
+    registry->put(id, factory, context, TRUE);
 }
 
 /**

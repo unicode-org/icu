@@ -12,55 +12,26 @@
 
 U_NAMESPACE_BEGIN
 
-
 /**
  * System registration hook.
  */
 void NormalizationTransliterator::registerIDs() {
-    Transliterator::_registerFactory(UnicodeString("Any-NFC", ""), _createNFC);
-    Transliterator::_registerFactory(UnicodeString("Any-NFKC", ""), _createNFKC);
-    Transliterator::_registerFactory(UnicodeString("Any-NFD", ""), _createNFD);
-    Transliterator::_registerFactory(UnicodeString("Any-NFKD", ""), _createNFKD);
+    Transliterator::_registerFactory(UnicodeString("Any-NFC", ""),
+                                     _create, integerToken(UNORM_NFC));
+    Transliterator::_registerFactory(UnicodeString("Any-NFKC", ""),
+                                     _create, integerToken(UNORM_NFKC));
+    Transliterator::_registerFactory(UnicodeString("Any-NFD", ""),
+                                     _create, integerToken(UNORM_NFD));
+    Transliterator::_registerFactory(UnicodeString("Any-NFKD", ""),
+                                     _create, integerToken(UNORM_NFKD));
 }
 
 /**
  * Factory methods
  */
-Transliterator* NormalizationTransliterator::_createNFC() {
-    return new NormalizationTransliterator(UNICODE_STRING("NFC", 3),
-                                           UNORM_NFC, 0);
-}
-Transliterator* NormalizationTransliterator::_createNFKC() {
-    return new NormalizationTransliterator(UNICODE_STRING("NFKC", 4),
-                                           UNORM_NFKC, 0);
-}
-Transliterator* NormalizationTransliterator::_createNFD() {
-    return new NormalizationTransliterator(UNICODE_STRING("NFD", 3),
-                                           UNORM_NFD, 0);
-}
-Transliterator* NormalizationTransliterator::_createNFKD() {
-    return new NormalizationTransliterator(UNICODE_STRING("NFKD", 4),
-                                           UNORM_NFKD, 0);
-}
-
-/**
- * Factory method.
- */
-NormalizationTransliterator*
-NormalizationTransliterator::createInstance(UNormalizationMode mode,
-                                            int32_t opt) {
-    switch(mode) {
-    case UNORM_NFC:
-        return (NormalizationTransliterator *)_createNFC();
-    case UNORM_NFKC:
-        return (NormalizationTransliterator *)_createNFKC();
-    case UNORM_NFD:
-        return (NormalizationTransliterator *)_createNFD();
-    case UNORM_NFKD:
-        return (NormalizationTransliterator *)_createNFKD();
-    default:
-        return 0;
-    }
+Transliterator* NormalizationTransliterator::_create(const UnicodeString& ID,
+                                                     Token context) {
+    return new NormalizationTransliterator(ID, (UNormalizationMode) context.integer, 0);
 }
 
 /**

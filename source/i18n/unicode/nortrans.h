@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 /**
  * A transliterator that performs normalization.
  * @author Alan Liu
- * @version $RCSfile: nortrans.h,v $ $Revision: 1.4 $ $Date: 2001/10/08 23:25:22 $
+ * @version $RCSfile: nortrans.h,v $ $Revision: 1.5 $ $Date: 2001/10/17 17:29:33 $
  */
 class U_I18N_API NormalizationTransliterator : public Transliterator {
 
@@ -34,12 +34,6 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
     int32_t options;
 
  public:
-
-    /**
-     * Factory method.
-     */
-    static NormalizationTransliterator* createInstance(UNormalizationMode mode,
-                                                       int32_t opt=0);
 
     /**
      * Destructor.
@@ -78,10 +72,8 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
  private:
 
     // Transliterator::Factory methods
-    static Transliterator* _createNFC();
-    static Transliterator* _createNFKC();
-    static Transliterator* _createNFD();
-    static Transliterator* _createNFKD();
+    static Transliterator* _create(const UnicodeString& ID,
+                                   Token context);
 
     /**
      * Constructs a transliterator.  This method is private.
