@@ -6,9 +6,9 @@
 # *******************************************************************************
 #
 # File created by rptp2ucm (compiled on Feb 23 2001)
-# from source files 34B00553.RPMAP100 and 055334B0.TPMAP100
+# from source files 44B00553.RPMAP110 and 055344B0.TPMAP110
 #
-<code_set_name>               "ibm-1363_P100-2000"
+<code_set_name>               "ibm-1363_P110-2000"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  2
 <mb_cur_min>                  1
@@ -195,8 +195,8 @@ CHARMAP
 <U00AA> \xA8\xA3 |0
 <U00AB> \x7F |2
 <U00AC> \x7F |2
-<U00AD> \x7F |2
-<U00AE> \x7F |2
+<U00AD> \xA1\xA9 |1
+<U00AE> \xA2\xE7 |0
 <U00AF> \x7F |2
 <U00B0> \xA1\xC6 |0
 <U00B1> \xA1\xBE |0
@@ -205,7 +205,7 @@ CHARMAP
 <U00B4> \xA2\xA5 |0
 <U00B5> \x7F |2
 <U00B6> \xA2\xD2 |0
-<U00B7> \x7F |2
+<U00B7> \xA1\xA4 |1
 <U00B8> \xA2\xAC |0
 <U00B9> \xA9\xF6 |0
 <U00BA> \xA8\xAC |0
@@ -420,6 +420,7 @@ CHARMAP
 <U0451> \xAC\xD7 |0
 <U2010> \xA1\xA9 |0
 <U2014> \xA1\xAA |0
+<U2015> \xA1\xAA |1
 <U2018> \xA1\xAE |0
 <U2019> \xA1\xAF |0
 <U201C> \xA1\xB0 |0
@@ -442,6 +443,7 @@ CHARMAP
 <U2083> \xA9\xFD |0
 <U2084> \xA9\xFE |0
 <U20A9> \x5C |0
+<U20AC> \xA2\xE6 |0
 <U2103> \xA1\xC9 |0
 <U2109> \xA2\xB5 |0
 <U2113> \xA7\xA4 |0
@@ -511,6 +513,7 @@ CHARMAP
 <U222E> \xA2\xB1 |0
 <U2234> \xA1\xC5 |0
 <U2235> \xA1\xF1 |0
+<U223C> \xA1\xAD |1
 <U223D> \xA1\xEF |0
 <U2252> \xA1\xD6 |0
 <U2260> \xA1\xC1 |0
@@ -523,6 +526,7 @@ CHARMAP
 <U2283> \xA1\xF9 |0
 <U2286> \xA1\xF6 |0
 <U2287> \xA1\xF7 |0
+<U2299> \xA2\xC1 |1
 <U22A5> \xA1\xD1 |0
 <U2302> \x7F |2
 <U2312> \xA1\xD2 |0
@@ -17487,6 +17491,7 @@ CHARMAP
 <UFF5B> \xA3\xFB |0
 <UFF5C> \xA3\xFC |0
 <UFF5D> \xA3\xFD |0
+<UFF5E> \xA2\xA6 |1
 <UFFA0> \x7F |2
 <UFFA1> \x7F |2
 <UFFA2> \x7F |2
