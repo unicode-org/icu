@@ -625,11 +625,41 @@ UBool UnicodeSet::contains(UChar32 c) const {
     // Set i to the index of the start item greater than ch
     // We know we will terminate without length test!
     // LATER: for large sets, add binary search
-    int32_t i = -1;
-    for (;;) {
-        if (c < list[++i]) break;
-    }
+    //int32_t i = -1;
+    //for (;;) {
+    //    if (c < list[++i]) break;
+    //}
+    int32_t i = findCodePoint(c);
     return ((i & 1) != 0); // return true if odd
+}
+
+/**
+ * Returns the smallest value i such that c < list[i].  Caller
+ * must ensure that c is a legal value or this method will enter
+ * an infinite loop.  This method performs a binary search.
+ * @param c a character in the range MIN_VALUE..MAX_VALUE
+ * inclusive
+ * @return the smallest integer i in the range 0..len-1,
+ * inclusive, such that c < list[i]
+ */
+int32_t UnicodeSet::findCodePoint(UChar32 c) const {
+    // Return the smallest i such that c < list[i].  Assume
+    // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
+    if (c < list[0]) return 0;
+    int32_t lo = 0;
+    int32_t hi = len - 1;
+    // invariant: c >= list[lo]
+    // invariant: c < list[hi]
+    for (;;) {
+        int32_t i = (lo + hi) / 2;
+        if (i == lo) return hi;
+        if (c < list[i]) {
+            hi = i;
+        } else {
+            lo = i;
+        }
+    }
+    return 0; // To make compiler happy; never reached
 }
 
 /**
@@ -640,10 +670,11 @@ UBool UnicodeSet::contains(UChar32 c) const {
  * @return true if the test condition is met
  */
 UBool UnicodeSet::contains(UChar32 start, UChar32 end) const {
-    int32_t i = -1;
-    for (;;) {
-        if (start < list[++i]) break;
-    }
+    //int32_t i = -1;
+    //for (;;) {
+    //    if (start < list[++i]) break;
+    //}
+    int32_t i = findCodePoint(start);
     return ((i & 1) != 0 && end < list[i]);
 }
 
