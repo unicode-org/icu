@@ -412,6 +412,10 @@ u_fgets(UFILE        *f,
     int32_t count;
     UChar *alias;
 
+    if (n <= 0) {
+        /* Caller screwed up. We need to write the null terminatior. */
+        return NULL;
+    }
 
     /* fill the buffer */
     ufile_fill_uchar_buffer(f);
