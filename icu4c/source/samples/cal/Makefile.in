@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - samples/cal
-## Copyright (c) 1999-2001, International Business Machines Corporation and
+## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -23,7 +23,7 @@ TARGET = icucal
 LINK = $(LINK.cc)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
-LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = uprint.o cal.o
 
@@ -65,7 +65,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK) -o $@ $^ $(LIBS)
+	$(LINK) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

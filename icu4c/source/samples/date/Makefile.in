@@ -1,17 +1,15 @@
 ## Makefile.in for ICU - samples/date
-## Copyright (c) 1999-2001, International Business Machines Corporation and
+## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
-srcdir = @srcdir@
-top_srcdir = @top_srcdir@
+
+srcdir=@srcdir@
+top_srcdir=@top_srcdir@
 
 top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
-
-## Platform-specific setup
-include @platform_make_fragment@
 
 ## Build directory information
 subdir = samples/date
@@ -22,12 +20,10 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = icudate
 
-ENABLE_STATIC = @ENABLE_STATIC@
-
 LINK = $(LINK.cc)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
-LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = uprint.o date.o
 
@@ -69,7 +65,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK) -o $@ $^ $(LIBS)
+	$(LINK) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
