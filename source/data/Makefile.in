@@ -153,7 +153,7 @@ package390: $(OUTTMPDIR)/icudata390.lst $(OUTTMPDIR)/icudata.lst ./icupkg.inc pa
 # X_FILES = full paths (for dependency)
 
 ## DAT files - Misc. data files.
-DAT_FILES_SHORT=uprops.icu pnames.icu unames.icu unorm.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
+DAT_FILES_SHORT=uprops.icu ucase.icu pnames.icu unames.icu unorm.icu cnvalias.icu ucadata.icu invuca.icu uidna.spp 
 DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
 
 ## BRK files
@@ -274,6 +274,10 @@ $(BUILD_DIRS):
 $(BUILDDIR)/uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
 	$(INVOKE) $(BINDIR)/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
+# ucase.icu
+$(BUILDDIR)/ucase.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/gencase$(EXEEXT)
+	$(INVOKE) $(BINDIR)/gencase -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+
 # pnames.icu
 $(BUILDDIR)/pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(BINDIR)/genpname$(EXEEXT)
 	$(INVOKE) $(BINDIR)/genpname -d $(BUILDDIR)
@@ -283,7 +287,7 @@ $(BUILDDIR)/unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Deriv
 	$(INVOKE) $(BINDIR)/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
-$(BUILDDIR)/ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
+$(BUILDDIR)/ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu $(BUILDDIR)/$(ICUDT)ucase.icu
 	$(INVOKE) $(BINDIR)/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
 
 # unames.icu
@@ -397,7 +401,7 @@ icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
 ###########
 ########### 390 (z/OS) support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37_P100-1995.ucm ibm-1047_P100-1995.ucm ibm-4909_P100-1999.ucm
-ALLFILES390=uprops.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=uprops.icu ucase.icu pnames.icu unorm.icu cnvalias.icu $(UCMFILES390:.ucm=.cnv)
 
 $(OUTTMPDIR)/icudata390.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of 390 data files)"
