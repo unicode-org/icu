@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.170 2002/05/31 23:16:07 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.171 2002/06/25 17:23:02 aheninger-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -891,6 +891,7 @@ AC_OUTPUT([README icudefs.mk \
                 tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
+		tools/genbrk/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
                 test/cintltst/Makefile test/iotest/Makefile \

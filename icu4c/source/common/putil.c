@@ -31,7 +31,7 @@
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
 *   08/04/99    jeffrey R.  Added OS/2 changes
 *   11/15/99    helena      Integrated S/390 IEEE support.
-*   04/26/01    Barry N.    OS/400 support for uprv_getDefaultLocaleIDM
+*   04/26/01    Barry N.    OS/400 support for uprv_getDefaultLocaleID
 *   08/15/01    Steven H.   OS/400 support for uprv_getDefaultCodepage
 ******************************************************************************
 */
@@ -1811,6 +1811,22 @@ _uFmtErrorName[U_FMT_PARSE_ERROR_LIMIT - U_FMT_PARSE_ERROR_START] = {
     "U_UNSUPPORTED_ATTRIBUTE"
 };
 
+static const char * const
+_uBrkErrorName[U_BRK_ERROR_LIMIT - U_BRK_ERROR_START] = {
+    "U_BRK_ERROR_START",
+    "U_BRK_INTERNAL_ERROR",
+    "U_BRK_HEX_DIGITS_EXPECTED",
+    "U_BRK_SEMICOLON_EXPECTED",
+    "U_BRK_RULE_SYNTAX",
+    "U_BRK_UNCLOSED_SET",
+    "U_BRK_ASSIGN_ERROR",
+    "U_BRK_VARIABLE_REDFINITION",
+    "U_BRK_MISMATCHED_PAREN",
+    "U_BRK_NEW_LINE_IN_QUOTED_STRING",
+    "U_BRK_UNDEFINED_VARIABLE",
+};
+
+
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code) {
     if(U_ZERO_ERROR <= code && code < U_STANDARD_ERROR_LIMIT) {
@@ -1821,6 +1837,8 @@ u_errorName(UErrorCode code) {
         return _uTransErrorName[code - U_PARSE_ERROR_START];
     } else if(U_FMT_PARSE_ERROR_START <= code && code < U_FMT_PARSE_ERROR_LIMIT){
         return _uFmtErrorName[code - U_FMT_PARSE_ERROR_START];
+    } else if (U_BRK_ERROR_START <= code  && code < U_BRK_ERROR_LIMIT){
+        return _uBrkErrorName[code - U_BRK_ERROR_START];
     } else {
         return "[BOGUS UErrorCode]";
     }

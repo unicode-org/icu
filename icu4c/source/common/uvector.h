@@ -152,6 +152,8 @@ public:
 
     int32_t elementAti(int32_t index) const;
 
+    UBool equals(const UVector &other) const;
+
     void* firstElement(void) const;
 
     void* lastElement(void) const;

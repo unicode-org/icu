@@ -220,7 +220,31 @@ SOURCE=.\rbbi.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbbi_tbl.cpp
+SOURCE=.\rbbidata.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbinode.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbirb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbiscan.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbisetb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbistbl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbitblb.cpp
 # End Source File
 # Begin Source File
 
@@ -817,23 +841,38 @@ InputPath=.\unicode\normlzr.h
 
 !ELSEIF  "$(CFG)" == "common - Win64 Release"
 
-# Begin Custom Build
-InputPath=.\unicode\normlzr.h
-
-"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
 !ELSEIF  "$(CFG)" == "common - Win64 Debug"
 
-# Begin Custom Build
-InputPath=.\unicode\normlzr.h
+!ENDIF 
 
-"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\parseerr.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\parseerr.h
+
+"..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\parseerr.h
+
+"..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
 
 !ENDIF 
 
@@ -878,6 +917,37 @@ InputPath=.\unicode\parsepos.h
 InputPath=.\unicode\parsepos.h
 
 "..\..\include\unicode\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\putil.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\putil.h
+
+"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\putil.h
+
+"..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
@@ -1028,7 +1098,31 @@ InputPath=.\unicode\rbbi.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbbi_tbl.h
+SOURCE=.\rbbidata.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbinode.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbirb.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbirpt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbiscan.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbisetb.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbitblb.h
 # End Source File
 # Begin Source File
 

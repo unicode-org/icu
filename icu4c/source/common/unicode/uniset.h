@@ -921,6 +921,8 @@ private:
     friend class TransliteratorIDParser;
     friend class TransliterationRule;
 
+    friend class RBBIRuleScanner;
+
     /**
      * Constructs a set from the given pattern.  See the class description
      * for the syntax of the pattern language.

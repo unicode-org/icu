@@ -1752,6 +1752,13 @@ void addBrkIterRegrTest(TestNode** root);
 
 void addBrkIterRegrTest(TestNode** root)
 {
+
+#if 0
+    /*  These tests are removed becaue
+     *     1.  The test data is completely redundant with that in the C++ break iterator tests
+     *     2.  The data here is stale, and I don't want to copy all of the changes from the C++ tests, and
+     *     3.  The C API is covered by the API tests.
+     */
         
     addTest(root, &TestForwardWordSelection,        "tstxtbd/cregrtst/TestForwardWordSelection"    );
     addTest(root, &TestBackwardWordSelection,       "tstxtbd/cregrtst/TestBackwardWordSelection"   );
@@ -1787,6 +1794,6 @@ void addBrkIterRegrTest(TestNode** root)
     addTest(root, &TestSentenceInvariants,  "tstxtbd/cregrtst/TestSentenceInvariants");
     addTest(root, &TestCharacterInvariants, "tstxtbd/cregrtst/TestCharacterInvariants");
     addTest(root, &TestLineInvariants,      "tstxtbd/cregrtst/TestLineInvariants");
-
+#endif
    
 }
