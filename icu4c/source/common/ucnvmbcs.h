@@ -128,6 +128,7 @@ typedef struct UConverterMBCSTable {
     const uint16_t *fromUnicodeTable;
     const uint8_t *fromUnicodeBytes;
     uint8_t *swapLFNLFromUnicodeBytes; /* for swaplfnl */
+    uint32_t fromUBytesLength;
     uint8_t outputType, unicodeMask;
 
     /* converter name for swaplfnl */
@@ -147,7 +148,7 @@ typedef struct UConverterMBCSTable {
  *  6   flags, bits:
  *          31.. 8 reserved
  *           7.. 0 outputType
- *  7   reserved
+ *  7   fromUBytesLength -- header.version 4.1 (ICU 2.4) and higher
  *
  * stateTable[countStates][256];
  *
@@ -170,7 +171,7 @@ typedef struct {
              offsetFromUTable,
              offsetFromUBytes,
              flags,
-             reserved;
+             fromUBytesLength;
 } _MBCSHeader;
 
 /**
