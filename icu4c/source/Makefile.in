@@ -40,7 +40,7 @@ include @platform_make_fragment@
 DOXYGEN = @DOXYGEN@
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ 
+CLEANFILES = *~ README
 
 DOCDIRS = common i18n
 SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(EXTRA) $(TEST) $(SAMPLE)
@@ -132,12 +132,12 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) Doxyfile doc
 
 distclean-local: clean-local
-	$(RMV) Makefile README icudefs.mk config/Makefile
+	$(RMV) Makefile config/Makefile icudefs.mk
 	$(RMV) $(top_builddir)/config/Makefile.inc
 	$(RMV) config.cache config.log config.status
-	$(RMV) common/unicode/platform.h common/icucfg.h
 
 check-local:
 
