@@ -238,8 +238,8 @@ static const u_sprintf_info g_u_sprintf_infos[108] = {
 #define USPRINTF_BUFFER_SIZE 1024
 #define USPRINTF_SYMBOL_BUFFER_SIZE 8
 
-static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
-static UChar gSpaceStr[] = {0x20, 0}; /* " " */
+static const UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
+static const UChar gSpaceStr[] = {0x20, 0}; /* " " */
 
 U_CAPI int32_t U_EXPORT2
 u_sprintf(UChar       *buffer,
@@ -502,7 +502,7 @@ u_sprintf_string_handler(u_localized_string *output,
         }
     }
     else {
-        s = gNullStr;
+        s = (UChar *)gNullStr;
     }
     len = u_strlen(s);
 
