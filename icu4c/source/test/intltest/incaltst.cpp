@@ -422,7 +422,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
   }
   {
     UnicodeString expect = CharsToUnicodeString("\\u5b89\\u6c3805\\u5e747\\u67084\\u65e5");
-    UDate         expectDate = -6106035600000;
+    UDate         expectDate = -6106035600000.0;
     Locale        loc("ja_JP_TRADITIONAL");
 
     status = U_ZERO_ERROR;
