@@ -462,9 +462,53 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. use add(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
+     */
+    virtual void add(EDateFields field, int32_t amount, UErrorCode& status) = 0;
+
+    /**
+     * UDate Arithmetic function. Adds the specified (signed) amount of time to the given
+     * time field, based on the calendar's rules. For example, to subtract 5 days from
+     * the current time of the calendar, call add(Calendar::DATE, -5). When adding on
+     * the month or Calendar::MONTH field, other fields like date might conflict and
+     * need to be changed. For instance, adding 1 month on the date 01/31/96 will result
+     * in 02/29/96.
+     *
+     * @param field   Specifies which date field to modify.
+     * @param amount  The amount of time to be added to the field, in the natural unit
+     *                for that field (e.g., days for the day fields, hours for the hour
+     *                field.)
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
+     * @draft ICU 2.6.
      */
     virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status) = 0;
+
+    /**
+     * Time Field Rolling function. Rolls (up/down) a single unit of time on the given
+     * time field. For example, to roll the current date up by one day, call
+     * roll(Calendar::DATE, true). When rolling on the year or Calendar::YEAR field, it
+     * will roll the year value in the range between getMinimum(Calendar::YEAR) and the
+     * value returned by getMaximum(Calendar::YEAR). When rolling on the month or
+     * Calendar::MONTH field, other fields like date might conflict and, need to be
+     * changed. For instance, rolling the month up on the date 01/31/96 will result in
+     * 02/29/96. Rolling up always means rolling forward in time; e.g., rolling the year
+     * up on "100 BC" will result in "99 BC", for Gregorian calendar. When rolling on the
+     * hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the hour value in the range
+     * between 0 and 23, which is zero-based.
+     * <P>
+     * NOTE: Do not use this method -- use roll(EDateFields, int, UErrorCode&) instead.
+     *
+     * @param field   The time field.
+     * @param up      Indicates if the value of the specified time field is to be rolled
+     *                up or rolled down. Use true if rolling up, false otherwise.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid or restricted by
+     *                leniency, this will be set to an error status.
+     * @deprecated ICU 2.6. Use roll(UCalendarDateFields field, UBool up, UErrorCode& status) instead.
+     */
+    void roll(EDateFields field, UBool up, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls (up/down) a single unit of time on the given
@@ -487,7 +531,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid or restricted by
      *                leniency, this will be set to an error status.
-     * @stable ICU 2.0
+     * @draft ICU 2.6.
      */
     void roll(UCalendarDateFields field, UBool up, UErrorCode& status);
 
@@ -511,7 +555,31 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
+     */
+    virtual void roll(EDateFields field, int32_t amount, UErrorCode& status) = 0;
+
+    /**
+     * Time Field Rolling function. Rolls by the given amount on the given
+     * time field. For example, to roll the current date up by one day, call
+     * roll(Calendar::DATE, +1, status). When rolling on the month or
+     * Calendar::MONTH field, other fields like date might conflict and, need to be
+     * changed. For instance, rolling the month up on the date 01/31/96 will result in
+     * 02/29/96.  Rolling by a positive value always means rolling forward in time;
+     * e.g., rolling the year by +1 on "100 BC" will result in "99 BC", for Gregorian
+     * calendar. When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will
+     * roll the hour value in the range between 0 and 23, which is zero-based.
+     * <P>
+     * The only difference between roll() and add() is that roll() does not change
+     * the value of more significant fields when it reaches the minimum or maximum
+     * of its range, whereas add() does.
+     *
+     * @param field   The time field.
+     * @param amount  Indicates amount to roll.
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
+     * @draft ICU 2.6.
      */
     virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status) = 0;
 
@@ -568,7 +636,64 @@ public:
      * @return the difference, either positive or negative, between
      * this calendar's time and <code>when</code>, in terms of
      * <code>field</code>.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use fieldDifference(UDate when, UCalendarDateFields field, UErrorCode& status).
+     */
+    virtual int32_t fieldDifference(UDate when, EDateFields field, UErrorCode& status);
+
+    /**
+     * Return the difference between the given time and the time this
+     * calendar object is set to.  If this calendar is set
+     * <em>before</em> the given time, the returned value will be
+     * positive.  If this calendar is set <em>after</em> the given
+     * time, the returned value will be negative.  The
+     * <code>field</code> parameter specifies the units of the return
+     * value.  For example, if <code>fieldDifference(when,
+     * Calendar::MONTH)</code> returns 3, then this calendar is set to
+     * 3 months before <code>when</code>, and possibly some addition
+     * time less than one month.
+     *
+     * <p>As a side effect of this call, this calendar is advanced
+     * toward <code>when</code> by the given amount.  That is, calling
+     * this method has the side effect of calling <code>add(field,
+     * n)</code>, where <code>n</code> is the return value.
+     *
+     * <p>Usage: To use this method, call it first with the largest
+     * field of interest, then with progressively smaller fields.  For
+     * example:
+     *
+     * <pre>
+     * int y = cal->fieldDifference(when, Calendar::YEAR, err);
+     * int m = cal->fieldDifference(when, Calendar::MONTH, err);
+     * int d = cal->fieldDifference(when, Calendar::DATE, err);</pre>
+     *
+     * computes the difference between <code>cal</code> and
+     * <code>when</code> in years, months, and days.
+     *
+     * <p>Note: <code>fieldDifference()</code> is
+     * <em>asymmetrical</em>.  That is, in the following code:
+     *
+     * <pre>
+     * cal->setTime(date1, err);
+     * int m1 = cal->fieldDifference(date2, Calendar::MONTH, err);
+     * int d1 = cal->fieldDifference(date2, Calendar::DATE, err);
+     * cal->setTime(date2, err);
+     * int m2 = cal->fieldDifference(date1, Calendar::MONTH, err);
+     * int d2 = cal->fieldDifference(date1, Calendar::DATE, err);</pre>
+     *
+     * one might expect that <code>m1 == -m2 && d1 == -d2</code>.
+     * However, this is not generally the case, because of
+     * irregularities in the underlying calendar system (e.g., the
+     * Gregorian calendar has a varying number of days per month).
+     *
+     * @param when the date to compare this calendar's time to
+     * @param field the field in which to compute the result
+     * @param status  Output param set to success/failure code on exit. If any value
+     *                previously set in the time field is invalid, this will be set to
+     *                an error status.
+     * @return the difference, either positive or negative, between
+     * this calendar's time and <code>when</code>, in terms of
+     * <code>field</code>.
+     * @draft ICU 2.6.
      */
     virtual int32_t fieldDifference(UDate when, UCalendarDateFields field, UErrorCode& status);
 
@@ -647,7 +772,15 @@ public:
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @param value  The given first day of the week.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use setFirstDayOfWeek(UCalendarDaysOfWeek value) instead.
+     */
+    void setFirstDayOfWeek(EDaysOfWeek value);
+
+    /**
+     * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
+     *
+     * @param value  The given first day of the week.
+     * @draft ICU 2.6.
      */
     void setFirstDayOfWeek(UCalendarDaysOfWeek value);
 
@@ -687,7 +820,17 @@ public:
      *
      * @param field  The given time field.
      * @return       The minimum value for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getMinimum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getMinimum(EDateFields field) const = 0;
+
+    /**
+     * Gets the minimum value for the given time field. e.g., for Gregorian
+     * DAY_OF_MONTH, 1.
+     *
+     * @param field  The given time field.
+     * @return       The minimum value for the given time field.
+     * @draft ICU 2.6.
      */
     virtual int32_t getMinimum(UCalendarDateFields field) const = 0;
 
@@ -697,7 +840,17 @@ public:
      *
      * @param field  The given time field.
      * @return       The maximum value for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getMaximum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getMaximum(EDateFields field) const = 0;
+
+    /**
+     * Gets the maximum value for the given time field. e.g. for Gregorian DAY_OF_MONTH,
+     * 31.
+     *
+     * @param field  The given time field.
+     * @return       The maximum value for the given time field.
+     * @draft ICU 2.6.
      */
     virtual int32_t getMaximum(UCalendarDateFields field) const = 0;
 
@@ -707,7 +860,17 @@ public:
      *
      * @param field  The given time field.
      * @return       The highest minimum value for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getGreatestMinimum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getGreatestMinimum(EDateFields field) const = 0;
+
+    /**
+     * Gets the highest minimum value for the given field if varies. Otherwise same as
+     * getMinimum(). For Gregorian, no difference.
+     *
+     * @param field  The given time field.
+     * @return       The highest minimum value for the given time field.
+     * @draft ICU 2.6.
      */
     virtual int32_t getGreatestMinimum(UCalendarDateFields field) const = 0;
 
@@ -717,7 +880,17 @@ public:
      *
      * @param field  The given time field.
      * @return       The lowest maximum value for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getLeastMaximum(UCalendarDateFields field) instead.
+     */
+    virtual int32_t getLeastMaximum(EDateFields field) const = 0;
+
+    /**
+     * Gets the lowest maximum value for the given field if varies. Otherwise same as
+     * getMaximum(). e.g., for Gregorian DAY_OF_MONTH, 28.
+     *
+     * @param field  The given time field.
+     * @return       The lowest maximum value for the given time field.
+     * @draft ICU 2.6.
      */
     virtual int32_t getLeastMaximum(UCalendarDateFields field) const = 0;
 
@@ -733,7 +906,23 @@ public:
      * @param field    the field to determine the minimum of
      * @param status   Fill-in parameter which receives the status of this operation.
      * @return         the minimum of the given field for the current date of this Calendar
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getActualMinimum(UCalendarDateFields field, UErrorCode& status) instead.
+     */
+    int32_t getActualMinimum(EDateFields field, UErrorCode& status) const;
+
+    /**
+     * Return the minimum value that this field could have, given the current date.
+     * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
+     *
+     * The version of this function on Calendar uses an iterative algorithm to determine the
+     * actual minimum value for the field.  There is almost always a more efficient way to
+     * accomplish this (in most cases, you can simply return getMinimum()).  GregorianCalendar
+     * overrides this function with a more efficient implementation.
+     *
+     * @param field    the field to determine the minimum of
+     * @param status   Fill-in parameter which receives the status of this operation.
+     * @return         the minimum of the given field for the current date of this Calendar
+     * @draft ICU 2.6.
      */
     int32_t getActualMinimum(UCalendarDateFields field, UErrorCode& status) const;
 
@@ -751,7 +940,25 @@ public:
      * @param field    the field to determine the maximum of
      * @param status   Fill-in parameter which receives the status of this operation.
      * @return         the maximum of the given field for the current date of this Calendar
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use getActualMaximum(UCalendarDateFields field, UErrorCode& status) instead.
+     */
+    int32_t getActualMaximum(EDateFields field, UErrorCode& status) const;
+
+    /**
+     * Return the maximum value that this field could have, given the current date.
+     * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
+     * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
+     * for some years the actual maximum for MONTH is 12, and for others 13.
+     *
+     * The version of this function on Calendar uses an iterative algorithm to determine the
+     * actual maximum value for the field.  There is almost always a more efficient way to
+     * accomplish this (in most cases, you can simply return getMaximum()).  GregorianCalendar
+     * overrides this function with a more efficient implementation.
+     *
+     * @param field    the field to determine the maximum of
+     * @param status   Fill-in parameter which receives the status of this operation.
+     * @return         the maximum of the given field for the current date of this Calendar
+     * @draft ICU 2.6.
      */
     int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
 
@@ -766,7 +973,22 @@ public:
      * @param status Fill-in parameter which receives the status of the operation.
      * @return       The value for the given time field, or zero if the field is unset,
      *               and set() has been called for any other field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use get(UCalendarDateFields field, UErrorCode& status) instead.
+     */
+    int32_t get(EDateFields field, UErrorCode& status) const;
+
+    /**
+     * Gets the value for a given time field. Recalculate the current time field values
+     * if the time value has been changed by a call to setTime(). Return zero for unset
+     * fields if any fields have been explicitly set by a call to set(). To force a
+     * recomputation of all fields regardless of the previous state, call complete().
+     * This method is semantically const, but may alter the object in memory.
+     *
+     * @param field  The given time field.
+     * @param status Fill-in parameter which receives the status of the operation.
+     * @return       The value for the given time field, or zero if the field is unset,
+     *               and set() has been called for any other field.
+     * @draft ICU 2.6.
      */
     int32_t get(UCalendarDateFields field, UErrorCode& status) const;
 
@@ -776,7 +998,17 @@ public:
      *
      * @param field  The given time field.
      * @return   True if the given time field has a value set; false otherwise.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use isSet(UCalendarDateFields field) instead.
+     */
+    UBool isSet(EDateFields field) const;
+
+    /**
+     * Determines if the given time field has a value set. This can affect in the
+     * resolving of time in Calendar. Unset fields have a value of zero, by definition.
+     *
+     * @param field  The given time field.
+     * @return   True if the given time field has a value set; false otherwise.
+     * @draft ICU 2.6.
      */
     UBool isSet(UCalendarDateFields field) const;
 
@@ -785,7 +1017,16 @@ public:
      *
      * @param field  The given time field.
      * @param value  The value to be set for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use set(UCalendarDateFields field, int32_t value) instead.
+     */
+    void set(EDateFields field, int32_t value);
+
+    /**
+     * Sets the given time field with the given value.
+     *
+     * @param field  The given time field.
+     * @param value  The value to be set for the given time field.
+     * @draft ICU 2.6.
      */
     void set(UCalendarDateFields field, int32_t value);
 
@@ -844,7 +1085,17 @@ public:
      * time into time fields.
      *
      * @param field  The time field to be cleared.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use clear(UCalendarDateFields field) instead.
+     */
+    void clear(EDateFields field);
+
+    /**
+     * Clears the value in the given time field, both making it unset and assigning it a
+     * value of zero. This field value will be determined during the next resolving of
+     * time into time fields.
+     *
+     * @param field  The time field to be cleared.
+     * @draft ICU 2.6.
      */
     void clear(UCalendarDateFields field);
 
@@ -977,7 +1228,17 @@ protected:
      *
      * @param field  The given time field.
      * @return       The value for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use internalGet(UCalendarDateFields field) instead.
+     */
+    int32_t internalGet(EDateFields field) const {return fFields[field];}
+
+    /**
+     * Gets the value for a given time field. Subclasses can use this function to get
+     * field values without forcing recomputation of time.
+     *
+     * @param field  The given time field.
+     * @return       The value for the given time field.
+     * @draft ICU 2.6.
      */
     int32_t internalGet(UCalendarDateFields field) const {return fFields[field];}
 
@@ -988,7 +1249,18 @@ protected:
      *
      * @param field    The given time field.
      * @param value    The value for the given time field.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6. Use internalSet(UCalendarDateFields field, int32_t value) instead.
+     */
+    void internalSet(EDateFields field, int32_t value);
+
+    /**
+     * Sets the value for a given time field.  This is a fast internal method for
+     * subclasses.  It does not affect the areFieldsInSync, isTimeSet, or areAllFieldsSet
+     * flags.
+     *
+     * @param field    The given time field.
+     * @param value    The value for the given time field.
+     * @draft ICU 2.6.
      */
     void internalSet(UCalendarDateFields field, int32_t value);
 
@@ -1135,6 +1407,12 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
 
 // -------------------------------------
 
+inline void
+Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
+{
+    roll((UCalendarDateFields) field, up, status);
+}
+
 inline void 
 Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
 {
@@ -1147,6 +1425,13 @@ Calendar::roll(UCalendarDateFields field, UBool up, UErrorCode& status)
  * Fast method for subclasses.  The caller must maintain fUserSetDSTOffset and
  * fUserSetZoneOffset, as well as the isSet[] array.
  */
+
+inline void
+Calendar::internalSet(EDateFields field, int32_t value)
+{
+    internalSet((UCalendarDateFields) field, value);
+}
+
 inline void
 Calendar::internalSet(UCalendarDateFields field, int32_t value)
 {

@@ -1363,6 +1363,10 @@ GregorianCalendar::aggregateStamp(int32_t stamp_a, int32_t stamp_b)
 }
 
 // -------------------------------------
+void 
+GregorianCalendar::add(EDateFields field, int32_t amount, UErrorCode& status) {
+	add((UCalendarDateFields) field, amount, status);
+}
 
 void
 GregorianCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status)
@@ -1501,6 +1505,12 @@ GregorianCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& st
  * Roll a field by a signed amount.
  * Note: This will be made public later. [LIU]
  */
+ 
+void 
+GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status) {
+	roll((UCalendarDateFields) field, amount, status); 
+}
+
 void
 GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& status)
 {
@@ -1844,6 +1854,10 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
 }
 
 // -------------------------------------
+int32_t 
+GregorianCalendar::getMinimum(EDateFields field) const {
+	return getMinimum((UCalendarDateFields) field);
+}
 
 int32_t
 GregorianCalendar::getMinimum(UCalendarDateFields field) const
@@ -1852,6 +1866,11 @@ GregorianCalendar::getMinimum(UCalendarDateFields field) const
 }
 
 // -------------------------------------
+int32_t
+GregorianCalendar::getMaximum(EDateFields field) const
+{
+    return getMaximum((UCalendarDateFields) field);
+}
 
 int32_t
 GregorianCalendar::getMaximum(UCalendarDateFields field) const
@@ -1860,6 +1879,11 @@ GregorianCalendar::getMaximum(UCalendarDateFields field) const
 }
 
 // -------------------------------------
+int32_t
+GregorianCalendar::getGreatestMinimum(EDateFields field) const
+{
+    return getGreatestMinimum((UCalendarDateFields) field);
+}
 
 int32_t
 GregorianCalendar::getGreatestMinimum(UCalendarDateFields field) const
@@ -1868,6 +1892,11 @@ GregorianCalendar::getGreatestMinimum(UCalendarDateFields field) const
 }
 
 // -------------------------------------
+int32_t
+GregorianCalendar::getLeastMaximum(EDateFields field) const
+{
+    return getLeastMaximum((UCalendarDateFields) field);
+}
 
 int32_t
 GregorianCalendar::getLeastMaximum(UCalendarDateFields field) const
@@ -1876,6 +1905,11 @@ GregorianCalendar::getLeastMaximum(UCalendarDateFields field) const
 }
 
 // -------------------------------------
+int32_t 
+GregorianCalendar::getActualMinimum(EDateFields field) const
+{
+    return getActualMinimum((UCalendarDateFields) field);
+}
 
 int32_t 
 GregorianCalendar::getActualMinimum(UCalendarDateFields field) const
