@@ -56,8 +56,12 @@ class CollationKey;
 
 /**
  * The <code>Collator</code> class performs locale-sensitive
- * <code>String</code> comparison. You use this class to build
+ * string comparison. You use this class to build
  * searching and sorting routines for natural language text.
+ * <em>Important: </em>The ICU collation implementation is being reworked.
+ * This means that collation results and especially sort keys will change
+ * from ICU 1.6 to 1.7 and again to 1.8.
+ * For details, see the <a href="http://oss.software.ibm.com/icu/develop/ICU_collation_design.htm">collation design document</a>.
  *
  * <p>
  * <code>Collator</code> is an abstract base class. Subclasses
@@ -117,14 +121,22 @@ class CollationKey;
  * </pre>
  * </blockquote>
  * <p>
- * For comparing <code>String</code>s exactly once, the <code>compare</code>
+ * For comparing strings exactly once, the <code>compare</code>
  * method provides the best performance. When sorting a list of
- * <code>String</code>s however, it is generally necessary to compare each
- * <code>String</code> multiple times. In this case, <code>CollationKey</code>s
- * provide better performance. The <code>CollationKey</code> class converts
- * a <code>String</code> to a series of bits that can be compared bitwise
- * against other <code>CollationKey</code>s. A <code>CollationKey</code> is
- * created by a <code>Collator</code> object for a given <code>String</code>.
+ * strings however, it is generally necessary to compare each
+ * string multiple times. In this case, sort keys
+ * provide better performance. The <code>getSortKey</code> methods convert
+ * a string to a series of bytes that can be compared bitwise
+ * against other sort keys using <code>strcmp()</code>.
+ * Sort keys are written as zero-terminated byte strings.
+ * They consist of several substrings, one for each collation strength level,
+ * that are delimited by 0x01 bytes.
+ * If the string code points are appended for UCOL_IDENTICAL, then they are processed
+ * for correct code point order comparison and may contain 0x01 bytes
+ * but not zero bytes.</p>
+ * <p>An older set of APIs returns a <code>CollationKey</code> object that wraps the
+ * sort key bytes instead of returning the bytes themselves.
+ * Its use is deprecated, but it is still available for compatibility with Java.</p>
  * <p>
  * <strong>Note:</strong> <code>Collator</code>s with different Locale,
  * CollationStrength and DecompositionMode settings will return different
@@ -600,6 +612,7 @@ virtual EComparisonResult compare(ForwardCharacterIterator &source,
 
 /**
  * Get the sort key as an array of bytes from an UnicodeString.
+ * Sort key byte arrays are zero-terminated and can be compared using strcmp().
  * @param source string to be processed.
  * @param result buffer to store result in. If NULL, number of bytes needed will be returned.
  * @param resultLength length of the result buffer. If if not enough the buffer will be filled to capacity. 
@@ -612,6 +625,7 @@ virtual EComparisonResult compare(ForwardCharacterIterator &source,
 
 /**
  * Get the sort key as an array of bytes from an UChar buffer.
+ * Sort key byte arrays are zero-terminated and can be compared using strcmp().
  * @param source string to be processed.
  * @param sourceLength length of string to be processed. 
  *			If -1, the string is 0 terminated and length will be decided by the function.
