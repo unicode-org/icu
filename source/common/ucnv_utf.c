@@ -1205,6 +1205,18 @@ _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
 /* UTF-16BE ----------------------------------------------------------------- */
 
+#if U_IS_BIG_ENDIAN
+#   define _UTF16BEToUnicodeWithOffsets     _UTF16PEToUnicodeWithOffsets
+#   define _UTF16LEToUnicodeWithOffsets     _UTF16OEToUnicodeWithOffsets
+#   define _UTF16BEFromUnicodeWithOffsets   _UTF16PEFromUnicodeWithOffsets
+#   define _UTF16LEFromUnicodeWithOffsets   _UTF16OEFromUnicodeWithOffsets
+#else
+#   define _UTF16BEToUnicodeWithOffsets     _UTF16OEToUnicodeWithOffsets
+#   define _UTF16LEToUnicodeWithOffsets     _UTF16PEToUnicodeWithOffsets
+#   define _UTF16BEFromUnicodeWithOffsets   _UTF16OEFromUnicodeWithOffsets
+#   define _UTF16LEFromUnicodeWithOffsets   _UTF16PEFromUnicodeWithOffsets
+#endif
+
 static UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
@@ -1263,17 +1275,10 @@ static const UConverterImpl _UTF16BEImpl={
     NULL,
     NULL,
 
-#if U_IS_BIG_ENDIAN
-    _UTF16PEToUnicodeWithOffsets,
-    _UTF16PEToUnicodeWithOffsets,
-    _UTF16PEFromUnicodeWithOffsets,
-    _UTF16PEFromUnicodeWithOffsets,
-#else
-    _UTF16OEToUnicodeWithOffsets,
-    _UTF16OEToUnicodeWithOffsets,
-    _UTF16OEFromUnicodeWithOffsets,
-    _UTF16OEFromUnicodeWithOffsets,
-#endif
+    _UTF16BEToUnicodeWithOffsets,
+    _UTF16BEToUnicodeWithOffsets,
+    _UTF16BEFromUnicodeWithOffsets,
+    _UTF16BEFromUnicodeWithOffsets,
     T_UConverter_getNextUChar_UTF16_BE,
 
     NULL,
@@ -1363,17 +1368,10 @@ static const UConverterImpl _UTF16LEImpl={
     NULL,
     NULL,
 
-#if !U_IS_BIG_ENDIAN
-    _UTF16PEToUnicodeWithOffsets,
-    _UTF16PEToUnicodeWithOffsets,
-    _UTF16PEFromUnicodeWithOffsets,
-    _UTF16PEFromUnicodeWithOffsets,
-#else
-    _UTF16OEToUnicodeWithOffsets,
-    _UTF16OEToUnicodeWithOffsets,
-    _UTF16OEFromUnicodeWithOffsets,
-    _UTF16OEFromUnicodeWithOffsets,
-#endif
+    _UTF16LEToUnicodeWithOffsets,
+    _UTF16LEToUnicodeWithOffsets,
+    _UTF16LEFromUnicodeWithOffsets,
+    _UTF16LEFromUnicodeWithOffsets,
     T_UConverter_getNextUChar_UTF16_LE,
 
     NULL,
@@ -2360,9 +2358,477 @@ const UConverterSharedData _UTF32LEData = {
     0
 };
 
+/* UTF-16 (Detect BOM) ------------------------------------------------------ */
+
+/*
+ * Detect a BOM at the beginning of the stream and select UTF-16BE or UTF-16LE
+ * accordingly.
+ * This is a simpler version of the UTF-32 converter below, with
+ * fewer states for shorter BOMs.
+ *
+ * State values:
+ * 0    initial state
+ * 1    saw FE
+ * 2..4 -
+ * 5    saw FF
+ * 6..7 -
+ * 8    UTF-16BE mode
+ * 9    UTF-16LE mode
+ *
+ * During detection: state&3==number of matching bytes so far.
+ *
+ * On output, emit U+FEFF as the first code point.
+ */
+
+static void
+_UTF16Reset(UConverter *cnv, UConverterResetChoice choice) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        /* reset toUnicode: state=0 */
+        cnv->mode=0;
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        /* reset fromUnicode: prepare to output the UTF-16PE BOM */
+        cnv->charErrorBufferLength=2;
+#if U_IS_BIG_ENDIAN
+        cnv->charErrorBuffer[0]=0xfe;
+        cnv->charErrorBuffer[1]=0xff;
+#else
+        cnv->charErrorBuffer[0]=0xff;
+        cnv->charErrorBuffer[1]=0xfe;
+#endif
+    }
+}
+
+static void
+_UTF16Open(UConverter *cnv,
+           const char *name,
+           const char *locale,
+           uint32_t options,
+           UErrorCode *pErrorCode) {
+    _UTF16Reset(cnv, UCNV_RESET_BOTH);
+}
+
+static const char utf16BOM[8]={ (char)0xfe, (char)0xff, 0, 0,    (char)0xff, (char)0xfe, 0, 0 };
+
+static void
+_UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                           UErrorCode *pErrorCode) {
+    UConverter *cnv=pArgs->converter;
+    const char *source=pArgs->source;
+    const char *sourceLimit=pArgs->sourceLimit;
+    int32_t *offsets=pArgs->offsets;
+
+    int32_t state, offsetDelta;
+    char b;
+
+    state=cnv->mode;
+
+    /*
+     * If we detect a BOM in this buffer, then we must add the BOM size to the
+     * offsets because the actual converter function will not see and count the BOM.
+     * offsetDelta will have the number of the BOM bytes that are in the current buffer.
+     */
+    offsetDelta=0;
+
+    while(source<sourceLimit && U_SUCCESS(*pErrorCode)) {
+        switch(state) {
+        case 0:
+            b=*source;
+            if(b==0xfe) {
+                state=1; /* could be FE FF */
+            } else if(b==(char)0xff) {
+                state=5; /* could be FF FE */
+            } else {
+                state=8; /* default to UTF-16BE */
+                continue;
+            }
+            ++source;
+            break;
+        case 1:
+        case 5:
+            if(*source==utf16BOM[state]) {
+                ++source;
+                if(state==1) {
+                    state=8; /* detect UTF-16BE */
+                    offsetDelta=source-pArgs->source;
+                } else if(state==5) {
+                    state=9; /* detect UTF-16LE */
+                    offsetDelta=source-pArgs->source;
+                }
+            } else {
+                /* switch to UTF-16BE and pass the previous bytes */
+                state=8;
+
+                if(source!=pArgs->source) {
+                    /* just reset the source */
+                    source=pArgs->source;
+                } else {
+                    UBool oldFlush=pArgs->flush;
+
+                    /* the first byte is from a previous buffer, replay it first */
+                    pArgs->source=utf16BOM+(state&4); /* select the correct BOM */
+                    pArgs->sourceLimit=pArgs->source+1; /* replay previous byte */
+                    pArgs->flush=FALSE; /* this sourceLimit is not the real source stream limit */
+
+                    _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
+
+                    /* restore real pointers; pArgs->source will be set in case 8/9 */
+                    pArgs->sourceLimit=sourceLimit;
+                    pArgs->flush=oldFlush;
+                }
+                continue;
+            }
+            break;
+        case 8:
+            /* call UTF-16BE */
+            pArgs->source=source;
+            _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
+            source=pArgs->source;
+            break;
+        case 9:
+            /* call UTF-16LE */
+            pArgs->source=source;
+            _UTF16LEToUnicodeWithOffsets(pArgs, pErrorCode);
+            source=pArgs->source;
+            break;
+        default:
+            break; /* does not occur */
+        }
+    }
+
+    /* add BOM size to offsets - see comment at offsetDelta declaration */
+    if(offsets!=NULL && offsetDelta!=0) {
+        int32_t *offsetsLimit=pArgs->offsets;
+        while(offsets<offsetsLimit) {
+            *offsets++ += offsetDelta;
+        }
+    }
+
+    if(source==sourceLimit && pArgs->flush && state!=0) {
+        /* handle 0<state<8: call UTF-16BE with too-short input */
+        if(state<8) {
+            pArgs->source=utf16BOM+(state&4); /* select the correct BOM */
+            pArgs->sourceLimit=pArgs->source+(state&3); /* replay bytes */
+
+            /* no offsets: not enough for output */
+            _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
+        }
+        cnv->mode=0; /* reset */
+    } else {
+        cnv->mode=state;
+    }
+
+    pArgs->source=source;
+}
+
+static UChar32
+_UTF16GetNextUChar(UConverterToUnicodeArgs *pArgs,
+                   UErrorCode *pErrorCode) {
+    switch(pArgs->converter->mode) {
+    case 8:
+        return T_UConverter_getNextUChar_UTF16_BE(pArgs, pErrorCode);
+    case 9:
+        return T_UConverter_getNextUChar_UTF16_LE(pArgs, pErrorCode);
+    default:
+        return ucnv_getNextUCharFromToUImpl(pArgs, _UTF16ToUnicodeWithOffsets, TRUE, pErrorCode);
+    }
+}
+
+static const UConverterImpl _UTF16Impl = {
+    UCNV_UTF16,
+
+    NULL,
+    NULL,
+
+    _UTF16Open,
+    NULL,
+    _UTF16Reset,
+
+    _UTF16ToUnicodeWithOffsets,
+    _UTF16ToUnicodeWithOffsets,
+    _UTF16PEFromUnicodeWithOffsets,
+    _UTF16PEFromUnicodeWithOffsets,
+    _UTF16GetNextUChar,
+
+    NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
+    NULL,
+    NULL,
+    NULL
+};
+
+static const UConverterStaticData _UTF16StaticData = {
+    sizeof(UConverterStaticData),
+    "UTF-16",
+    1200, /* ### TODO review correctness of all Unicode CCSIDs */
+    UCNV_IBM, UCNV_UTF16, 2, 2,
+#if U_IS_BIG_ENDIAN
+    { 0xff, 0xfd, 0, 0 }, 2,
+#else
+    { 0xfd, 0xff, 0, 0 }, 2,
+#endif
+    FALSE, FALSE,
+    0,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+};
+
+const UConverterSharedData _UTF16Data = {
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_UTF16StaticData, FALSE, &_UTF16Impl, 
+    0
+};
+
+/* UTF-32 (Detect BOM) ------------------------------------------------------ */
+
+/*
+ * Detect a BOM at the beginning of the stream and select UTF-32BE or UTF-32LE
+ * accordingly.
+ *
+ * State values:
+ * 0    initial state
+ * 1    saw 00
+ * 2    saw 00 00
+ * 3    saw 00 00 FE
+ * 4    -
+ * 5    saw FF
+ * 6    saw FF FE
+ * 7    saw FF FE 00
+ * 8    UTF-32BE mode
+ * 9    UTF-32LE mode
+ *
+ * During detection: state&3==number of matching bytes so far.
+ *
+ * On output, emit U+FEFF as the first code point.
+ */
+
+static void
+_UTF32Reset(UConverter *cnv, UConverterResetChoice choice) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        /* reset toUnicode: state=0 */
+        cnv->mode=0;
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        /* reset fromUnicode: prepare to output the UTF-32PE BOM */
+        cnv->charErrorBufferLength=4;
+#if U_IS_BIG_ENDIAN
+        cnv->charErrorBuffer[0]=0;
+        cnv->charErrorBuffer[1]=0;
+        cnv->charErrorBuffer[2]=0xfe;
+        cnv->charErrorBuffer[3]=0xff;
+#else
+        cnv->charErrorBuffer[0]=0xff;
+        cnv->charErrorBuffer[1]=0xfe;
+        cnv->charErrorBuffer[2]=0;
+        cnv->charErrorBuffer[3]=0;
+#endif
+    }
+}
+
+static void
+_UTF32Open(UConverter *cnv,
+           const char *name,
+           const char *locale,
+           uint32_t options,
+           UErrorCode *pErrorCode) {
+    _UTF32Reset(cnv, UCNV_RESET_BOTH);
+}
+
+static const char utf32BOM[8]={ 0, 0, (char)0xfe, (char)0xff,    (char)0xff, (char)0xfe, 0, 0 };
+
+static void
+_UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                           UErrorCode *pErrorCode) {
+    UConverter *cnv=pArgs->converter;
+    const char *source=pArgs->source;
+    const char *sourceLimit=pArgs->sourceLimit;
+    int32_t *offsets=pArgs->offsets;
+
+    int32_t state, offsetDelta;
+    char b;
+
+    state=cnv->mode;
+
+    /*
+     * If we detect a BOM in this buffer, then we must add the BOM size to the
+     * offsets because the actual converter function will not see and count the BOM.
+     * offsetDelta will have the number of the BOM bytes that are in the current buffer.
+     */
+    offsetDelta=0;
+
+    while(source<sourceLimit && U_SUCCESS(*pErrorCode)) {
+        switch(state) {
+        case 0:
+            b=*source;
+            if(b==0) {
+                state=1; /* could be 00 00 FE FF */
+            } else if(b==(char)0xff) {
+                state=5; /* could be FF FE 00 00 */
+            } else {
+                state=8; /* default to UTF-32BE */
+                continue;
+            }
+            ++source;
+            break;
+        case 1:
+        case 2:
+        case 3:
+        case 5:
+        case 6:
+        case 7:
+            if(*source==utf32BOM[state]) {
+                ++state;
+                ++source;
+                if(state==4) {
+                    state=8; /* detect UTF-32BE */
+                    offsetDelta=source-pArgs->source;
+                } else if(state==8) {
+                    state=9; /* detect UTF-32LE */
+                    offsetDelta=source-pArgs->source;
+                }
+            } else {
+                /* switch to UTF-32BE and pass the previous bytes */
+                int32_t count=source-pArgs->source; /* number of bytes from this buffer */
+                state=8;
+
+                /* reset the source */
+                source=pArgs->source;
+
+                if(count==(state&3)) {
+                    /* simple: all in the same buffer, just reset source */
+                } else {
+                    UBool oldFlush=pArgs->flush;
+
+                    /* some of the bytes are from a previous buffer, replay those first */
+                    pArgs->source=utf32BOM+(state&4); /* select the correct BOM */
+                    pArgs->sourceLimit=pArgs->source+((state&3)-count); /* replay previous bytes */
+                    pArgs->flush=FALSE; /* this sourceLimit is not the real source stream limit */
+
+                    /* no offsets: bytes from previous buffer, and not enough for output */
+                    T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
+
+                    /* restore real pointers; pArgs->source will be set in case 8/9 */
+                    pArgs->sourceLimit=sourceLimit;
+                    pArgs->flush=oldFlush;
+                }
+                continue;
+            }
+            break;
+        case 8:
+            /* call UTF-32BE */
+            pArgs->source=source;
+            if(offsets==NULL) {
+                T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
+            } else {
+                T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(pArgs, pErrorCode);
+            }
+            source=pArgs->source;
+            break;
+        case 9:
+            /* call UTF-32LE */
+            pArgs->source=source;
+            if(offsets==NULL) {
+                T_UConverter_toUnicode_UTF32_LE(pArgs, pErrorCode);
+            } else {
+                T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(pArgs, pErrorCode);
+            }
+            source=pArgs->source;
+            break;
+        default:
+            break; /* does not occur */
+        }
+    }
+
+    /* add BOM size to offsets - see comment at offsetDelta declaration */
+    if(offsets!=NULL && offsetDelta!=0) {
+        int32_t *offsetsLimit=pArgs->offsets;
+        while(offsets<offsetsLimit) {
+            *offsets++ += offsetDelta;
+        }
+    }
+
+    if(source==sourceLimit && pArgs->flush && state!=0) {
+        /* handle 0<state<8: call UTF-32BE with too-short input */
+        if(state<8) {
+            pArgs->source=utf32BOM+(state&4); /* select the correct BOM */
+            pArgs->sourceLimit=pArgs->source+(state&3); /* replay bytes */
+
+            /* no offsets: not enough for output */
+            T_UConverter_toUnicode_UTF32_BE(pArgs, pErrorCode);
+        }
+        cnv->mode=0; /* reset */
+    } else {
+        cnv->mode=state;
+    }
+
+    pArgs->source=source;
+}
+
+static UChar32
+_UTF32GetNextUChar(UConverterToUnicodeArgs *pArgs,
+                   UErrorCode *pErrorCode) {
+    switch(pArgs->converter->mode) {
+    case 8:
+        return T_UConverter_getNextUChar_UTF32_BE(pArgs, pErrorCode);
+    case 9:
+        return T_UConverter_getNextUChar_UTF32_LE(pArgs, pErrorCode);
+    default:
+        return ucnv_getNextUCharFromToUImpl(pArgs, _UTF32ToUnicodeWithOffsets, FALSE, pErrorCode);
+    }
+}
+
+static const UConverterImpl _UTF32Impl = {
+    UCNV_UTF32,
+
+    NULL,
+    NULL,
+
+    _UTF32Open,
+    NULL,
+    _UTF32Reset,
+
+    _UTF32ToUnicodeWithOffsets,
+    _UTF32ToUnicodeWithOffsets,
+#if U_IS_BIG_ENDIAN
+    T_UConverter_fromUnicode_UTF32_BE,
+    T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC,
+#else
+    T_UConverter_fromUnicode_UTF32_LE,
+    T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC,
+#endif
+    _UTF32GetNextUChar,
+
+    NULL, /* ### TODO implement getStarters for all Unicode encodings?! */
+    NULL,
+    NULL,
+    NULL
+};
+
+static const UConverterStaticData _UTF32StaticData = {
+    sizeof(UConverterStaticData),
+    "UTF-32",
+    1232, /* ### TODO review correctness of all Unicode CCSIDs */
+    UCNV_IBM, UCNV_UTF32, 4, 4,
+#if U_IS_BIG_ENDIAN
+    { 0, 0, 0xff, 0xfd }, 4,
+#else
+    { 0xfd, 0xff, 0, 0 }, 4,
+#endif
+    FALSE, FALSE,
+    0,
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+};
+
+const UConverterSharedData _UTF32Data = {
+    sizeof(UConverterSharedData), ~((uint32_t) 0),
+    NULL, NULL, &_UTF32StaticData, FALSE, &_UTF32Impl, 
+    0
+};
+
 /* UTF-7 -------------------------------------------------------------------- */
 
-/* ### TODO: in the and user guide, document version option (=1 for escaping set O characters) */
+/* ### TODO: in convrtrs.txt and user guide, document version option (=1 for escaping set O characters) */
+/* TODO: version=1 is not really for IMAP, fix documentation; consider version=2 for IMAP */
 /*
  * UTF-7 is a stateful encoding of Unicode, somewhat like UTF7.
  * It is defined in RFC 2152  http://www.imc.org/rfc2152 .
