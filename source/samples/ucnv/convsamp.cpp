@@ -25,15 +25,20 @@
 #include <stdio.h>
 #include <ctype.h>            /* for isspace, etc.    */
 #include <assert.h>
+#include <string.h>
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/convert.h"  /* C++ Converter API    */
 #include "unicode/ustring.h"  /* some more string fcns*/
 
+#include "flagcb.h"
+
 /* Some utility functions */
 
 static const UChar kNone[] = { 0x0000 };
+
+#define U_ASSERT(x)  { if(U_FAILURE(x)) {fflush(stdout);fflush(stderr); fprintf(stderr, #x " == %s\n", u_errorName(x)); assert(U_SUCCESS(x)); }}
 
 /* Print a UChar if possible, in seven characters. */
 void prettyPrintUChar(UChar c)
@@ -194,11 +199,11 @@ UErrorCode convsample_01()
 
   // set up the converter
   UnicodeConverterCPP conv("koi8-r", status);
-  assert(U_SUCCESS(status));
+  U_ASSERT(status);
 
   // convert to KOI8-R
   conv.fromUnicodeString(target, targetSize, myString, status);
-  assert(U_SUCCESS(status));
+  U_ASSERT(status);
 
   // ***************************** END SAMPLE ********************
   
@@ -413,7 +418,7 @@ UErrorCode convsample_05()
 UErrorCode convsample_11()
 {
   printf("\n\n==============================================\n"
-         "Sample 01: C++: simple Unicode -> koi8-r conversion\n");
+         "Sample 11: C++: simple sjis -> Unicode conversion\n");
 
 
   // **************************** START SAMPLE *******************
@@ -454,39 +459,124 @@ UErrorCode convsample_11()
 
 UErrorCode convsample_12()
 {
-#if 0
   printf("\n\n==============================================\n"
-         "Sample 02: C: simple Unicode -> koi8-r conversion\n");
+         "Sample 12: C: simple sjis -> unicode conversion\n");
 
 
   // **************************** START SAMPLE *******************
-  // "cat<cat>OK"
-  UChar source[] = { 0x041C, 0x043E, 0x0441, 0x043A, 0x0432,
-                     0x0430, 0x0021, 0x0000 };
-  char target[100];
+
+  char source[] = { 0x63, 0x61, 0x74, 0x94, 0x4C, 0x82, 0x6E, 0x82, 0x6A, 0x00 };
+  UChar target[100];
   UErrorCode status = U_ZERO_ERROR;
   UConverter *conv;
   int32_t     len;
 
   // set up the converter
-  conv = ucnv_open("koi8-r", &status);
+  conv = ucnv_open("shift_jis", &status);
   assert(U_SUCCESS(status));
 
-  // convert to koi8-r
-  len = ucnv_fromUChars(conv, target, 100, source, -1, &status);
-  assert(U_SUCCESS(status));
-
+  // convert to Unicode
+  len = ucnv_toUChars(conv, target, 100, source, -1, &status);
+  U_ASSERT(status);
   // close the converter
   ucnv_close(conv);
 
   // ***************************** END SAMPLE ********************
   
   // Print it out
-  printUChars("src", source);
+  printBytes("src", source);
   printf("\n");
-  printBytes("targ", target, len);
-#endif
+  printUChars("targ", target, len);
+
   return U_ZERO_ERROR;
+}
+
+
+UBool convsample_20_didSubstitute(const char *source)
+{
+  UChar uchars[100];
+  char bytes[100];
+  UConverter *conv = NULL;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t len, len2;
+  
+  FromUFLAGContext context;
+
+  printf("\n\n==============================================\n"
+         "Sample 20: C: Test for substitution using callbacks\n");
+
+  /* print out the original source */
+  printBytes("src", source);
+  printf("\n");
+
+  /* First, convert from UTF8 to unicode */
+  conv = ucnv_open("utf-8", &status);
+  U_ASSERT(status);
+
+  len = ucnv_toUChars(conv, uchars, 100, source, strlen(source), &status);
+  U_ASSERT(status);
+ 
+  printUChars("uch", uchars, len);
+  printf("\n");
+
+  /* Now, close the converter */
+  ucnv_close(conv);
+
+  /* Now, convert to windows-1252 */
+  conv = ucnv_open("windows-1252", &status);
+  U_ASSERT(status);
+
+  /* Converter starts out with the SUBSTITUTE callback set. */
+
+  /* initialize our callback */
+  context.subCallback = NULL;
+  context.subContext  = NULL;
+  context.flag        = FALSE;
+
+  /* Set our special callback */
+  ucnv_setFromUCallBack(conv,
+                        UCNV_FROM_U_CALLBACK_FLAG,
+                        &context,
+                        &context.subCallback,
+                        &context.subContext,
+                        &status);
+  U_ASSERT(status);
+
+  len2 = ucnv_fromUChars(conv, bytes, 100, uchars, len, &status);
+  U_ASSERT(status);
+
+  ucnv_close(conv);
+
+  /* print out the original source */
+  printBytes("bytes", bytes, len2);
+
+  return context.flag; /* true if callback was called */
+}
+
+UErrorCode convsample_20()
+{
+  const char *sample1 = "abc\xdf\xbf";
+  const char *sample2 = "abc_def";
+
+
+  if(convsample_20_didSubstitute(sample1))
+  {
+    printf("DID substitute.\n******\n");
+  }
+  else
+  {
+    printf("Did NOT substitute.\n*****\n");
+  }
+
+  if(convsample_20_didSubstitute(sample2))
+  {
+    printf("DID substitute.\n******\n");
+  }
+  else
+  {
+    printf("Did NOT substitute.\n*****\n");
+  }
+
 }
 
 /* main */
@@ -494,95 +584,95 @@ const char *scriptName(UCharScript script)
 {
   switch(script)
     {
-case U_BASIC_LATIN: return ("BASIC_LATIN"); return;
-case U_LATIN_1_SUPPLEMENT: return ("LATIN_1_SUPPLEMENT"); return;
-case U_LATIN_EXTENDED_A: return ("LATIN_EXTENDED_A"); return;
-case U_LATIN_EXTENDED_B: return ("LATIN_EXTENDED_B"); return;
-case U_IPA_EXTENSIONS: return ("IPA_EXTENSIONS"); return;
-case U_SPACING_MODIFIER_LETTERS: return ("SPACING_MODIFIER_LETTERS"); return;
-case U_COMBINING_DIACRITICAL_MARKS: return ("COMBINING_DIACRITICAL_MARKS"); return;
-case U_GREEK: return ("GREEK"); return;
-case U_CYRILLIC: return ("CYRILLIC"); return;
-case U_ARMENIAN: return ("ARMENIAN"); return;
-case U_HEBREW: return ("HEBREW"); return;
-case U_ARABIC: return ("ARABIC"); return;
-case U_SYRIAC: return ("SYRIAC"); return;
-case U_THAANA: return ("THAANA"); return;
-case U_DEVANAGARI: return ("DEVANAGARI"); return;
-case U_BENGALI: return ("BENGALI"); return;
-case U_GURMUKHI: return ("GURMUKHI"); return;
-case U_GUJARATI: return ("GUJARATI"); return;
-case U_ORIYA: return ("ORIYA"); return;
-case U_TAMIL: return ("TAMIL"); return;
-case U_TELUGU: return ("TELUGU"); return;
-case U_KANNADA: return ("KANNADA"); return;
-case U_MALAYALAM: return ("MALAYALAM"); return;
-case U_SINHALA: return ("SINHALA"); return;
-case U_THAI: return ("THAI"); return;
-case U_LAO: return ("LAO"); return;
-case U_TIBETAN: return ("TIBETAN"); return;
-case U_MYANMAR: return ("MYANMAR"); return;
-case U_GEORGIAN: return ("GEORGIAN"); return;
-case U_HANGUL_JAMO: return ("HANGUL_JAMO"); return;
-case U_ETHIOPIC: return ("ETHIOPIC"); return;
-case U_CHEROKEE: return ("CHEROKEE"); return;
-case U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS: return ("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS"); return;
-case U_OGHAM: return ("OGHAM"); return;
-case U_RUNIC: return ("RUNIC"); return;
-case U_KHMER: return ("KHMER"); return;
-case U_MONGOLIAN: return ("MONGOLIAN"); return;
-case U_LATIN_EXTENDED_ADDITIONAL: return ("LATIN_EXTENDED_ADDITIONAL"); return;
-case U_GREEK_EXTENDED: return ("GREEK_EXTENDED"); return;
-case U_GENERAL_PUNCTUATION: return ("GENERAL_PUNCTUATION"); return;
-case U_SUPERSCRIPTS_AND_SUBSCRIPTS: return ("SUPERSCRIPTS_AND_SUBSCRIPTS"); return;
-case U_CURRENCY_SYMBOLS: return ("CURRENCY_SYMBOLS"); return;
-case U_COMBINING_MARKS_FOR_SYMBOLS: return ("COMBINING_MARKS_FOR_SYMBOLS"); return;
-case U_LETTERLIKE_SYMBOLS: return ("LETTERLIKE_SYMBOLS"); return;
-case U_NUMBER_FORMS: return ("NUMBER_FORMS"); return;
-case U_ARROWS: return ("ARROWS"); return;
-case U_MATHEMATICAL_OPERATORS: return ("MATHEMATICAL_OPERATORS"); return;
-case U_MISCELLANEOUS_TECHNICAL: return ("MISCELLANEOUS_TECHNICAL"); return;
-case U_CONTROL_PICTURES: return ("CONTROL_PICTURES"); return;
-case U_OPTICAL_CHARACTER_RECOGNITION: return ("OPTICAL_CHARACTER_RECOGNITION"); return;
-case U_ENCLOSED_ALPHANUMERICS: return ("ENCLOSED_ALPHANUMERICS"); return;
-case U_BOX_DRAWING: return ("BOX_DRAWING"); return;
-case U_BLOCK_ELEMENTS: return ("BLOCK_ELEMENTS"); return;
-case U_GEOMETRIC_SHAPES: return ("GEOMETRIC_SHAPES"); return;
-case U_MISCELLANEOUS_SYMBOLS: return ("MISCELLANEOUS_SYMBOLS"); return;
-case U_DINGBATS: return ("DINGBATS"); return;
-case U_BRAILLE_PATTERNS: return ("BRAILLE_PATTERNS"); return;
-case U_CJK_RADICALS_SUPPLEMENT: return ("CJK_RADICALS_SUPPLEMENT"); return;
-case U_KANGXI_RADICALS: return ("KANGXI_RADICALS"); return;
-case U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS: return ("IDEOGRAPHIC_DESCRIPTION_CHARACTERS"); return;
-case U_CJK_SYMBOLS_AND_PUNCTUATION: return ("CJK_SYMBOLS_AND_PUNCTUATION"); return;
-case U_HIRAGANA: return ("HIRAGANA"); return;
-case U_KATAKANA: return ("KATAKANA"); return;
-case U_BOPOMOFO: return ("BOPOMOFO"); return;
-case U_HANGUL_COMPATIBILITY_JAMO: return ("HANGUL_COMPATIBILITY_JAMO"); return;
-case U_KANBUN: return ("KANBUN"); return;
-case U_BOPOMOFO_EXTENDED: return ("BOPOMOFO_EXTENDED"); return;
-case U_ENCLOSED_CJK_LETTERS_AND_MONTHS: return ("ENCLOSED_CJK_LETTERS_AND_MONTHS"); return;
-case U_CJK_COMPATIBILITY: return ("CJK_COMPATIBILITY"); return;
-case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A: return ("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A"); return;
-case U_CJK_UNIFIED_IDEOGRAPHS: return ("CJK_UNIFIED_IDEOGRAPHS"); return;
-case U_YI_SYLLABLES: return ("YI_SYLLABLES"); return;
-case U_YI_RADICALS: return ("YI_RADICALS"); return;
-case U_HANGUL_SYLLABLES: return ("HANGUL_SYLLABLES"); return;
-case U_HIGH_SURROGATES: return ("HIGH_SURROGATES"); return;
-case U_HIGH_PRIVATE_USE_SURROGATES: return ("HIGH_PRIVATE_USE_SURROGATES"); return;
-case U_LOW_SURROGATES: return ("LOW_SURROGATES"); return;
-case U_PRIVATE_USE_AREA /* PRIVATE_USE */: return ("PRIVATE_USE_AREA /* PRIVATE_USE */"); return;
-case U_CJK_COMPATIBILITY_IDEOGRAPHS: return ("CJK_COMPATIBILITY_IDEOGRAPHS"); return;
-case U_ALPHABETIC_PRESENTATION_FORMS: return ("ALPHABETIC_PRESENTATION_FORMS"); return;
-case U_ARABIC_PRESENTATION_FORMS_A: return ("ARABIC_PRESENTATION_FORMS_A"); return;
-case U_COMBINING_HALF_MARKS: return ("COMBINING_HALF_MARKS"); return;
-case U_CJK_COMPATIBILITY_FORMS: return ("CJK_COMPATIBILITY_FORMS"); return;
-case U_SMALL_FORM_VARIANTS: return ("SMALL_FORM_VARIANTS"); return;
-case U_ARABIC_PRESENTATION_FORMS_B: return ("ARABIC_PRESENTATION_FORMS_B"); return;
-case U_SPECIALS: return ("SPECIALS"); return;
-case U_HALFWIDTH_AND_FULLWIDTH_FORMS: return ("HALFWIDTH_AND_FULLWIDTH_FORMS"); return;
-  /*case U_CHAR_SCRIPT_COUNT: return ("SCRIPT_COUNT"); return; */
-case U_NO_SCRIPT: return ("NO_SCRIPT"); return;
+case U_BASIC_LATIN: return ("BASIC_LATIN"); 
+case U_LATIN_1_SUPPLEMENT: return ("LATIN_1_SUPPLEMENT"); 
+case U_LATIN_EXTENDED_A: return ("LATIN_EXTENDED_A"); 
+case U_LATIN_EXTENDED_B: return ("LATIN_EXTENDED_B"); 
+case U_IPA_EXTENSIONS: return ("IPA_EXTENSIONS"); 
+case U_SPACING_MODIFIER_LETTERS: return ("SPACING_MODIFIER_LETTERS"); 
+case U_COMBINING_DIACRITICAL_MARKS: return ("COMBINING_DIACRITICAL_MARKS"); 
+case U_GREEK: return ("GREEK"); 
+case U_CYRILLIC: return ("CYRILLIC"); 
+case U_ARMENIAN: return ("ARMENIAN"); 
+case U_HEBREW: return ("HEBREW"); 
+case U_ARABIC: return ("ARABIC"); 
+case U_SYRIAC: return ("SYRIAC"); 
+case U_THAANA: return ("THAANA"); 
+case U_DEVANAGARI: return ("DEVANAGARI"); 
+case U_BENGALI: return ("BENGALI"); 
+case U_GURMUKHI: return ("GURMUKHI"); 
+case U_GUJARATI: return ("GUJARATI"); 
+case U_ORIYA: return ("ORIYA"); 
+case U_TAMIL: return ("TAMIL"); 
+case U_TELUGU: return ("TELUGU"); 
+case U_KANNADA: return ("KANNADA"); 
+case U_MALAYALAM: return ("MALAYALAM"); 
+case U_SINHALA: return ("SINHALA"); 
+case U_THAI: return ("THAI"); 
+case U_LAO: return ("LAO"); 
+case U_TIBETAN: return ("TIBETAN"); 
+case U_MYANMAR: return ("MYANMAR"); 
+case U_GEORGIAN: return ("GEORGIAN"); 
+case U_HANGUL_JAMO: return ("HANGUL_JAMO"); 
+case U_ETHIOPIC: return ("ETHIOPIC"); 
+case U_CHEROKEE: return ("CHEROKEE"); 
+case U_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS: return ("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS"); 
+case U_OGHAM: return ("OGHAM"); 
+case U_RUNIC: return ("RUNIC"); 
+case U_KHMER: return ("KHMER"); 
+case U_MONGOLIAN: return ("MONGOLIAN"); 
+case U_LATIN_EXTENDED_ADDITIONAL: return ("LATIN_EXTENDED_ADDITIONAL"); 
+case U_GREEK_EXTENDED: return ("GREEK_EXTENDED"); 
+case U_GENERAL_PUNCTUATION: return ("GENERAL_PUNCTUATION"); 
+case U_SUPERSCRIPTS_AND_SUBSCRIPTS: return ("SUPERSCRIPTS_AND_SUBSCRIPTS"); 
+case U_CURRENCY_SYMBOLS: return ("CURRENCY_SYMBOLS"); 
+case U_COMBINING_MARKS_FOR_SYMBOLS: return ("COMBINING_MARKS_FOR_SYMBOLS"); 
+case U_LETTERLIKE_SYMBOLS: return ("LETTERLIKE_SYMBOLS"); 
+case U_NUMBER_FORMS: return ("NUMBER_FORMS"); 
+case U_ARROWS: return ("ARROWS"); 
+case U_MATHEMATICAL_OPERATORS: return ("MATHEMATICAL_OPERATORS"); 
+case U_MISCELLANEOUS_TECHNICAL: return ("MISCELLANEOUS_TECHNICAL"); 
+case U_CONTROL_PICTURES: return ("CONTROL_PICTURES"); 
+case U_OPTICAL_CHARACTER_RECOGNITION: return ("OPTICAL_CHARACTER_RECOGNITION"); 
+case U_ENCLOSED_ALPHANUMERICS: return ("ENCLOSED_ALPHANUMERICS"); 
+case U_BOX_DRAWING: return ("BOX_DRAWING"); 
+case U_BLOCK_ELEMENTS: return ("BLOCK_ELEMENTS"); 
+case U_GEOMETRIC_SHAPES: return ("GEOMETRIC_SHAPES"); 
+case U_MISCELLANEOUS_SYMBOLS: return ("MISCELLANEOUS_SYMBOLS"); 
+case U_DINGBATS: return ("DINGBATS"); 
+case U_BRAILLE_PATTERNS: return ("BRAILLE_PATTERNS"); 
+case U_CJK_RADICALS_SUPPLEMENT: return ("CJK_RADICALS_SUPPLEMENT"); 
+case U_KANGXI_RADICALS: return ("KANGXI_RADICALS"); 
+case U_IDEOGRAPHIC_DESCRIPTION_CHARACTERS: return ("IDEOGRAPHIC_DESCRIPTION_CHARACTERS"); 
+case U_CJK_SYMBOLS_AND_PUNCTUATION: return ("CJK_SYMBOLS_AND_PUNCTUATION"); 
+case U_HIRAGANA: return ("HIRAGANA"); 
+case U_KATAKANA: return ("KATAKANA"); 
+case U_BOPOMOFO: return ("BOPOMOFO"); 
+case U_HANGUL_COMPATIBILITY_JAMO: return ("HANGUL_COMPATIBILITY_JAMO"); 
+case U_KANBUN: return ("KANBUN"); 
+case U_BOPOMOFO_EXTENDED: return ("BOPOMOFO_EXTENDED"); 
+case U_ENCLOSED_CJK_LETTERS_AND_MONTHS: return ("ENCLOSED_CJK_LETTERS_AND_MONTHS"); 
+case U_CJK_COMPATIBILITY: return ("CJK_COMPATIBILITY"); 
+case U_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A: return ("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A"); 
+case U_CJK_UNIFIED_IDEOGRAPHS: return ("CJK_UNIFIED_IDEOGRAPHS"); 
+case U_YI_SYLLABLES: return ("YI_SYLLABLES"); 
+case U_YI_RADICALS: return ("YI_RADICALS"); 
+case U_HANGUL_SYLLABLES: return ("HANGUL_SYLLABLES"); 
+case U_HIGH_SURROGATES: return ("HIGH_SURROGATES"); 
+case U_HIGH_PRIVATE_USE_SURROGATES: return ("HIGH_PRIVATE_USE_SURROGATES"); 
+case U_LOW_SURROGATES: return ("LOW_SURROGATES"); 
+case U_PRIVATE_USE_AREA /* PRIVATE_USE */: return ("PRIVATE_USE_AREA"); 
+case U_CJK_COMPATIBILITY_IDEOGRAPHS: return ("CJK_COMPATIBILITY_IDEOGRAPHS"); 
+case U_ALPHABETIC_PRESENTATION_FORMS: return ("ALPHABETIC_PRESENTATION_FORMS"); 
+case U_ARABIC_PRESENTATION_FORMS_A: return ("ARABIC_PRESENTATION_FORMS_A"); 
+case U_COMBINING_HALF_MARKS: return ("COMBINING_HALF_MARKS"); 
+case U_CJK_COMPATIBILITY_FORMS: return ("CJK_COMPATIBILITY_FORMS"); 
+case U_SMALL_FORM_VARIANTS: return ("SMALL_FORM_VARIANTS"); 
+case U_ARABIC_PRESENTATION_FORMS_B: return ("ARABIC_PRESENTATION_FORMS_B"); 
+case U_SPECIALS: return ("SPECIALS"); 
+case U_HALFWIDTH_AND_FULLWIDTH_FORMS: return ("HALFWIDTH_AND_FULLWIDTH_FORMS"); 
+  /*case U_CHAR_SCRIPT_COUNT: return ("SCRIPT_COUNT");  */
+case U_NO_SCRIPT: return ("NO_SCRIPT"); 
 
     default: return("Unknown??????");
     }
@@ -620,12 +710,17 @@ int main()
   //  return 0;
 
   printf("DEFCONV=%s, DEVLOC=%s\n", ucnv_getDefaultName(), uloc_getDefault());
+
   
   convsample_01();
   convsample_02();
   convsample_03();
-//convsample_04();  /* not written yet */
+  //  convsample_04();  /* not written yet */
   convsample_05();
   convsample_11();
-  convsample_12();
+  //  convsample_12(); [fails]
+
+  convsample_20();
+   
+   return 0;
 }
