@@ -487,7 +487,7 @@ void TestRuleBasedColl()
 	ucol_close(col1);
 	ucol_close(col2);
     /* test that we can start a rule without a & or < */
-    u_uastrcpy(ruleset1, "z < a");
+    u_uastrcpy(ruleset1, "< z < a");
     col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
 	if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
