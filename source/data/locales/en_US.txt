@@ -1,0 +1,29 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_US {
+    Version{ "2.0" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%",
+        "#E0",
+    }
+
+    // the PaperSize units are in mm
+    // these values are not exact .. they are rounded off
+    PaperSize:intvector{
+        279, // height
+        216  // width 
+    }
+    MeasurementSystem:int{ 1 } // US system
+    
+    Currencies{
+        USD { "$",   "US Dollar"            } // 04/04/1792-
+    }
+
+}
