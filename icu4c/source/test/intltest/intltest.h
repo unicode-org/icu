@@ -103,17 +103,20 @@ protected:
     virtual UBool callTest( IntlTest& testToBeCalled, char* par );
 
 
-    UBool      LL_linestart;
-    int32_t     LL_indentlevel;
-
     UBool      verbose;
     UBool      no_err_msg;
     UBool      quick;
     UBool      leaks;
+
+private:
+    UBool      LL_linestart;
+    int32_t     LL_indentlevel;
+
     int32_t     errorCount;
     IntlTest*   caller;
     char*       path;           // specifies subtests
 
+protected:
     virtual void LL_message( UnicodeString message, UBool newline );
 
     // used for collation result reporting, defined here for convenience
