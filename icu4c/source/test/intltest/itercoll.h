@@ -84,7 +84,6 @@ public:
     //
 
 private:
-    void backAndForth(CollationElementIterator &iter);
 
     struct ExpansionRecord
     {
@@ -97,12 +96,6 @@ private:
      */
     void verifyExpansion(UnicodeString rules, ExpansionRecord tests[], int32_t testCount);
     
-    /**
-     * Return an integer array containing all of the collation orders
-     * returned by calls to next on the specified iterator
-     */
-    int32_t *getOrders(CollationElementIterator &iter, int32_t &orderLength);
-
     /**
      * Return a string containing all of the collation orders
      * returned by calls to next on the specified iterator
