@@ -84,11 +84,6 @@ private:
 
     DictionaryBasedBreakIteratorTables  *fTables;
 
-    /**
-     * Class ID
-     */
-    static const char fgClassID;
-
     /**=======================================================================
      * Create a dictionary based break boundary detection iterator.  
      * @param tablesImage The location for the dictionary to be loaded into memory
@@ -176,6 +171,19 @@ public:
     virtual int32_t preceding(int32_t offset);
 
     /**
+     * Returns the class ID for this class.  This is useful only for
+     * comparing to a return value from getDynamicClassID().  For example:
+     *
+     *      Base* polymorphic_pointer = createPolymorphicObject();
+     *      if (polymorphic_pointer->getDynamicClassID() ==
+     *          Derived::getStaticClassID()) ...
+     *
+     * @return          The class ID for all objects of this class.
+     * @stable ICU 2.0
+     */
+    static UClassID getStaticClassID(void);
+
+    /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
      * C++ compilers support genuine RTTI.  Polymorphic operator==() and
@@ -187,19 +195,6 @@ public:
      * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const;
-
-    /**
-     * Returns the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  For example:
-     *
-     *      Base* polymorphic_pointer = createPolymorphicObject();
-     *      if (polymorphic_pointer->getDynamicClassID() ==
-     *          Derived::getStaticClassID()) ...
-     *
-     * @return          The class ID for all objects of this class.
-     * @stable ICU 2.0
-     */
-    static inline UClassID getStaticClassID(void);
 
 protected:
     //=======================================================================
@@ -269,14 +264,6 @@ private:
     friend class DictionaryBasedBreakIteratorTables;
     friend class BreakIterator;
 };
-
-inline UClassID
-DictionaryBasedBreakIterator::getStaticClassID(void)
-{ return (UClassID)(&fgClassID); }
-
-inline UClassID
-DictionaryBasedBreakIterator::getDynamicClassID(void) const
-{ return DictionaryBasedBreakIterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 

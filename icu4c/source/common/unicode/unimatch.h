@@ -66,7 +66,7 @@ public:
      * Destructor.
      * @draft ICU 2.4
      */
-    virtual inline ~UnicodeMatcher() {};
+    virtual ~UnicodeMatcher();
 
     /**
      * Return a UMatchDegree value indicating the degree of match for

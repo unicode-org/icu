@@ -343,7 +343,7 @@ ICUServiceKey::debugClass(UnicodeString& result) const
 }
 #endif
 
-const char ICUServiceKey::fgClassID = '\0';
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ICUServiceKey)
 
 /*
  ******************************************************************
@@ -411,13 +411,13 @@ SimpleFactory::debugClass(UnicodeString& toAppendTo) const
 }
 #endif
 
-const char SimpleFactory::fgClassID = '\0';
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleFactory)
 
 /*
  ******************************************************************
  */
 
-const char ServiceListener::fgClassID = '\0';
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ServiceListener)
 
 /*
  ******************************************************************

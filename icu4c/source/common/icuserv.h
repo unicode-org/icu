@@ -183,20 +183,16 @@ class U_COMMON_API ICUServiceKey : public UObject {
   */
   static UnicodeString& parseSuffix(UnicodeString& result);
 
- public:
+public:
   /**
    * UObject RTTI boilerplate.
    */
-  static inline UClassID getStaticClassID() { 
-    return (UClassID)&fgClassID;
-  }
+  static UClassID getStaticClassID();
 
   /**
    * UObject RTTI boilerplate.
    */
-  virtual UClassID getDynamicClassID() const {
-    return getStaticClassID();
-  }
+  virtual UClassID getDynamicClassID() const;
 
 #ifdef SERVICE_DEBUG
  public:
@@ -204,8 +200,6 @@ class U_COMMON_API ICUServiceKey : public UObject {
   virtual UnicodeString& debugClass(UnicodeString& result) const;
 #endif
 
- private:
-    static const char fgClassID;
 };
 
  /*******************************************************************
@@ -347,16 +341,12 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
  /**
   * UObject RTTI boilerplate.
   */
-  static inline UClassID getStaticClassID() { 
-	  return (UClassID)&fgClassID;
-  }
+  static UClassID getStaticClassID();
 
  /**
   * UObject RTTI boilerplate.
   */
-  virtual UClassID getDynamicClassID() const {
-	  return getStaticClassID();
-  }
+  virtual UClassID getDynamicClassID() const;
 
 #ifdef SERVICE_DEBUG
  public:
@@ -364,8 +354,6 @@ class U_COMMON_API SimpleFactory : public ICUServiceFactory {
   virtual UnicodeString& debugClass(UnicodeString& toAppendTo) const;
 #endif
 
- private:
-  static const char fgClassID;
 };
 
 /*
@@ -394,19 +382,13 @@ public:
     /**
      * UObject RTTI boilerplate.
      */
-    static inline UClassID getStaticClassID() {
-        return (UClassID)&fgClassID;
-    }
+    static UClassID getStaticClassID();
     
     /**
      * UObject RTTI boilerplate.
      */
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
+    virtual UClassID getDynamicClassID() const;
     
-private:
-    static const char fgClassID;
 };
 
 /*

@@ -1,14 +1,14 @@
-//
-//  file:  rbbi.c    Contains the implementation of the rule based break iterator
-//                   runtime engine and the API implementation for
-//                   class RuleBasedBreakIterator
-//
 /*
 ***************************************************************************
 *   Copyright (C) 1999-2003 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
+//
+//  file:  rbbi.c    Contains the implementation of the rule based break iterator
+//                   runtime engine and the API implementation for
+//                   class RuleBasedBreakIterator
+//
 
 #include "unicode/utypes.h"
 
@@ -31,11 +31,8 @@ U_NAMESPACE_BEGIN
 static const int16_t START_STATE = 1;     // The state number of the starting state
 static const int16_t STOP_STATE  = 0;     // The state-transition value indicating "stop"
 
-/**
- * Class ID.  (value is irrelevant; address is important)
- */
-const char
-RuleBasedBreakIterator::fgClassID = 0;
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
 
 
 //=======================================================================

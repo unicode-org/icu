@@ -1115,8 +1115,6 @@ private:
 
 private:
 
-    static const char fgClassID;
-
     //----------------------------------------------------------------
     // RuleBasedTransliterator support
     //----------------------------------------------------------------
@@ -1329,14 +1327,6 @@ private:
 
     static const CaseEquivClass* getCaseMapOf(UChar folded);
 };
-
-inline UClassID
-UnicodeSet::getStaticClassID(void)
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-UnicodeSet::getDynamicClassID(void) const
-{ return UnicodeSet::getStaticClassID(); }
 
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
     return !operator==(o);

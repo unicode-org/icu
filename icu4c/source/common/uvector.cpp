@@ -23,7 +23,7 @@ U_NAMESPACE_BEGIN
 #define HINT_KEY_POINTER   (1)
 #define HINT_KEY_INTEGER   (0)
  
-const char UVector::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UVector)
 
 UVector::UVector(UErrorCode &status) :
     count(0),
@@ -465,7 +465,7 @@ void UVector::sortedInsert(UHashTok tok, USortComparator *compare, UErrorCode& e
     }
 }
 
-const char UStack::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UStack)
 
 UStack::UStack(UErrorCode &status) :
     UVector(status)

@@ -27,7 +27,7 @@ class TransliterationRuleData;
  */
 class U_COMMON_API UnicodeFunctor : public UObject {
 
- public:
+public:
 
     /**
      * Destructor
@@ -67,7 +67,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      */
     virtual UnicodeReplacer* toReplacer() const;
 
-    /**
+    /*
      * Return the class ID for this class.  This is useful only for
      * comparing to a return value from getDynamicClassID().  For example:
      * <pre>
@@ -78,7 +78,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    /*static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }*/
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
@@ -115,24 +115,25 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      */
     virtual void setData(const TransliterationRuleData*) = 0;
 
- protected:
+protected:
 
     /**
+     * Since this class has pure virtual functions,
+     * a constructor can't be used.
      * @stable ICU 2.0
      */
-    UnicodeFunctor();
+    /*UnicodeFunctor();*/
 
- private:
+private:
 
-    /**
+    /*
      * Class identifier for subclasses of UnicodeFunctor that do not
      * define their class (anonymous subclasses).
      */
-    static const char fgClassID;
+    /*static const char fgClassID;*/
 };
 
-inline UnicodeFunctor::UnicodeFunctor() {}
-inline UnicodeFunctor::~UnicodeFunctor() {}
+/*inline UnicodeFunctor::UnicodeFunctor() {}*/
 
 U_NAMESPACE_END
 

@@ -109,7 +109,7 @@ locale_cleanup(void)
 }
 
 U_NAMESPACE_BEGIN
-const char Locale::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
 
 //
 //  locale_set_default_internal.   

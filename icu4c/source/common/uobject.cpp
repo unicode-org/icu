@@ -77,6 +77,11 @@ void UMemory::operator delete[](void *p) {
     }
 }
 
+/* Can't define virtual functions in header.
+   This is defined here to create one function definition for AIX.
+*/
+UObject::~UObject() {}
+
 U_NAMESPACE_END
 
 #endif
