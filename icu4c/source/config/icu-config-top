@@ -3,7 +3,7 @@
 #set -x
 # BEGIN of icu-config-top
 #******************************************************************************
-#   Copyright (C) 1999-2002, International Business Machines
+#   Copyright (C) 1999-2004, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #******************************************************************************
 # This script is designed to aid configuration of ICU.
