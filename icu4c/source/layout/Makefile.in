@@ -96,6 +96,8 @@ HebrewLigatureData.o \
 HebrewShaping.o \
 IndicClassTables.o \
 IndicReordering.o \
+LEInsertionList.o \
+LEGlyphStorage.o \
 LigatureSubstSubtables.o \
 LookupProcessor.o \
 Lookups.o \
