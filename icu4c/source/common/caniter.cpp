@@ -376,37 +376,27 @@ void U_EXPORT2 CanonicalIterator::permute(UnicodeString &source, UBool skipZeros
 
 // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
 UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) {
-    //private String[] getEquivalents(String segment)
-
-    Hashtable *result = new Hashtable(status);
-    /* test for NULL */
-    if (result == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    Hashtable result(status);
+    Hashtable permutations(status);
+    if (U_FAILURE(status)) {
         return 0;
     }
-    if (U_SUCCESS(status)) {
-        result->setValueDeleter(uhash_deleteUnicodeString);
-    }
+    result.setValueDeleter(uhash_deleteUnicodeString);
+    permutations.setValueDeleter(uhash_deleteUnicodeString);
+
     UChar USeg[256];
     int32_t segLen = segment.extract(USeg, 256, status);
     Hashtable *basic = getEquivalents2(USeg, segLen, status);
     //Hashtable *basic = getEquivalents2(segment, segLen, status);
+    if (basic == 0) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete basic;
+        return 0;
+    }
 
     // now get all the permutations
     // add only the ones that are canonically equivalent
     // TODO: optimize by not permuting any class zero.
-
-    Hashtable *permutations = new Hashtable(status);
-    /* test for NULL */
-    if (permutations == 0) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        delete result;
-        delete basic;
-        return 0;
-    }
-    if (U_SUCCESS(status)) {
-        permutations->setValueDeleter(uhash_deleteUnicodeString);
-    }
 
     const UHashElement *ne = NULL;
     int32_t el = -1;
@@ -417,12 +407,12 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         //String item = (String) it.next();
         UnicodeString item = *((UnicodeString *)(ne->value.pointer));
 
-        permutations->removeAll();
-        permute(item, CANITER_SKIP_ZEROES, permutations, status);
+        permutations.removeAll();
+        permute(item, CANITER_SKIP_ZEROES, &permutations, status);
         const UHashElement *ne2 = NULL;
         int32_t el2 = -1;
         //Iterator it2 = permutations.iterator();
-        ne2 = permutations->nextElement(el2);
+        ne2 = permutations.nextElement(el2);
         //while (it2.hasNext())
         while (ne2 != NULL) {
             //String possible = (String) it2.next();
@@ -435,20 +425,18 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
             if (attempt==segment) {
                 //if (PROGRESS) printf("Adding Permutation: %s\n", UToS(Tr(*possible)));
                 // TODO: use the hashtable just to catch duplicates - store strings directly (somehow).
-                result->put(possible, new UnicodeString(possible), status); //add(possible);
+                result.put(possible, new UnicodeString(possible), status); //add(possible);
             } else {
                 //if (PROGRESS) printf("-Skipping Permutation: %s\n", UToS(Tr(*possible)));
             }
 
-          ne2 = permutations->nextElement(el2);
+            ne2 = permutations.nextElement(el2);
         }
         ne = basic->nextElement(el);
     }
 
     /* Test for buffer overflows */
     if(U_FAILURE(status)) {
-        delete result;
-        delete permutations;
         delete basic;
         return 0;
     }
@@ -456,35 +444,31 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     //String[] finalResult = new String[result.size()];
     UnicodeString *finalResult = NULL;
     int32_t resultCount;
-    if((resultCount = result->count())) {
-      finalResult = new UnicodeString[resultCount];
+    if((resultCount = result.count())) {
+        finalResult = new UnicodeString[resultCount];
     } else {
-      status = U_ILLEGAL_ARGUMENT_ERROR;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
     /* test for NULL */
     if (finalResult == 0) {
-      if(U_SUCCESS(status)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-      }
-      delete result;
-      delete permutations;
-      delete basic;
-      return 0;
+        if(U_SUCCESS(status)) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        delete basic;
+        return 0;
     }
     //result.toArray(finalResult);
     result_len = 0;
     el = -1;
-    ne = result->nextElement(el);
+    ne = result.nextElement(el);
     while(ne != NULL) {
-      UnicodeString finResult = *((UnicodeString *)(ne->value.pointer));
-      finalResult[result_len++] = finResult;
-      ne = result->nextElement(el);
+        UnicodeString finResult = *((UnicodeString *)(ne->value.pointer));
+        finalResult[result_len++] = finResult;
+        ne = result.nextElement(el);
     }
 
 
-    delete permutations;
     delete basic;
-    delete result;
     return finalResult;
 }
 
