@@ -218,7 +218,7 @@ storeRange(uint32_t start, uint32_t end, int8_t flag,UErrorCode* status){
     trieWord += flag;
 
     if(start == end){
-        uint32_t i = utrie_get32(&idnTrie,start,NULL);
+        i = utrie_get32(&idnTrie,start,NULL);
         if(i == 0 || i==(uint8_t)flag){
             if(!utrie_set32(&idnTrie,start,trieWord)){
                 fprintf(stderr, "error: too  many entries\n");
