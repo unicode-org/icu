@@ -40,6 +40,10 @@ CLEANFILES=*~ $(TARGET).out
 
 DEPS=$(OBJECTS:.o=.d)
 
+# For ufortune, INVOKE needs current directory on the lib path to pick up
+#  the resources .so.  (For Solaris.  Not needed for Linux.  Others unknown.)
+UFINVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):.:$$$(LDLIBRARYPATH_ENVVAR)
+
 all: subdirs $(TARGET) 
 
 .PHONY: all clean distclean check report subdirs $(SUBDIRS)
@@ -62,7 +66,7 @@ $(TARGET): $(OBJECTS) -lfortune_resources
 
 # Make check: simply runs the sample, logged to a file
 check: $(TARGET)
-	$(INVOKE) $(TARGET) | tee $(TARGET).out
+	$(UFINVOKE) $(TARGET) | tee $(TARGET).out
 
 # Make report: creates a 'report file' with both source and sample run
 report: $(TARGET).report
