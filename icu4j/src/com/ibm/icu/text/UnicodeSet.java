@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/12/02 01:34:31 $
- * $Revision: 1.105 $
+ * $Date: 2004/02/20 23:32:06 $
+ * $Revision: 1.106 $
  *
  *****************************************************************************************
  */
@@ -639,7 +639,9 @@ public class UnicodeSet extends UnicodeFilter {
                 int end = getRangeStart(i)-1;
                 _appendToPat(result, start, escapeUnprintable);
                 if (start != end) {
-                    result.append('-');
+                    if ((start+1) != end) {
+                        result.append('-');
+                    }
                     _appendToPat(result, end, escapeUnprintable);
                 }
             }
@@ -652,7 +654,9 @@ public class UnicodeSet extends UnicodeFilter {
                 int end = getRangeEnd(i);
                 _appendToPat(result, start, escapeUnprintable);
                 if (start != end) {
-                    result.append('-');
+                    if ((start+1) != end) {
+                        result.append('-');
+                    }
                     _appendToPat(result, end, escapeUnprintable);
                 }
             }

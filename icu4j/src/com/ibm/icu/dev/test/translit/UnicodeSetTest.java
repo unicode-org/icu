@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/10/13 23:47:14 $ 
- * $Revision: 1.55 $
+ * $Date: 2004/02/20 23:31:54 $ 
+ * $Revision: 1.56 $
  *
  *****************************************************************************************
  */
@@ -582,9 +582,10 @@ public class UnicodeSetTest extends TestFmwk {
     }
     
     /**
-     * Test pattern behavior of multicharacter strings.
+     * Test toPattern().
      */
-    public void TestStringPatterns() {
+    public void TestToPattern() {
+        // Test pattern behavior of multicharacter strings.
         UnicodeSet s = new UnicodeSet("[a-z {aa} {ab}]");
         expectToPattern(s, "[a-z{aa}{ab}]",
                         new String[] {"aa", "ab", NOT, "ac"});
@@ -608,7 +609,12 @@ public class UnicodeSetTest extends TestFmwk {
         s.add("abc");
         expectToPattern(s, "[{abc}]",
                         new String[] {"abc", NOT, "ab"});
-    }
+
+        // JB#3400: For 2 character ranges prefer [ab] to [a-b]
+        s.clear(); 
+        s.add('a', 'b');
+        expectToPattern(s, "[ab]", null);
+   }
 
     static final Integer 
         I_ANY = new Integer(SortedSetRelation.ANY),
@@ -1594,6 +1600,9 @@ public class UnicodeSetTest extends TestFmwk {
             logln("Ok:   toPattern() => \"" + pat + "\"");
         } else {
             errln("FAIL: toPattern() => \"" + pat + "\", expected \"" + expPat + "\"");
+            return;
+        }
+        if (expStrings == null) {
             return;
         }
         boolean in = true;
