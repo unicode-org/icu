@@ -505,11 +505,11 @@ getNextSeparator(UChar *src,int32_t srcLength,StringPrep* prep,
 }
 
 U_CAPI int32_t U_EXPORT2
-uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
+uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
                    UChar* dest, int32_t destCapacity,
                    int32_t options,
-                   UParseError* parseError,
-                   UErrorCode* status){
+                   UParseError *parseError,
+                   UErrorCode *status){
 
     if(status == NULL || U_FAILURE(*status)){
         return 0;
@@ -533,14 +533,13 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
         return 0;
     }
 
-    //initialize pointers to stack buffers
-    UChar b1Stack[MAX_LABEL_BUFFER_SIZE];
-    UChar  *b1 = b1Stack;
-    int32_t b1Len, labelLen;
-    UChar* delimiter = (UChar*)src;
-    UChar* labelStart = (UChar*)src;
+    //initialize pointers 
+    UChar *delimiter = (UChar*)src;
+    UChar *labelStart = (UChar*)src;
+    UChar *currentDest = (UChar*) dest;
     int32_t remainingLen = srcLength;
-    int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
+    int32_t remainingDestCapacity = destCapacity;
+    int32_t labelLen = 0, labelReqLength = 0;
     UBool done = FALSE;
 
 
@@ -548,35 +547,38 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
 
         labelLen = getNextSeparator(labelStart,remainingLen, prep, &delimiter,&done, status);
         
-        b1Len = uidna_toASCII(labelStart, labelLen, b1, b1Capacity, 
-                              options, parseError, status);
+        labelReqLength = uidna_toASCII( labelStart, labelLen, 
+                                        currentDest, remainingDestCapacity, 
+                                        options, parseError, status);
 
         if(*status == U_BUFFER_OVERFLOW_ERROR){
-            // for pre-flighting we already know the return length
-            // do not re-process the string just save the length
-            // and reset error code
-
+            
             *status = U_ZERO_ERROR; // reset error
+            remainingDestCapacity = 0;
         }
+
     
         if(U_FAILURE(*status)){
             break;
         }
-        int32_t tempLen = (reqLength + b1Len );
-
-        // copy to dest
-        if( tempLen <= destCapacity){
-            uprv_memmove(dest+reqLength, b1, b1Len * U_SIZEOF_UCHAR);
+        
+        reqLength +=labelReqLength;
+        // adjust the destination pointer
+        if(labelReqLength < remainingDestCapacity){
+            currentDest = currentDest + labelReqLength;
+            remainingDestCapacity -= labelReqLength;
+        }else{
+            // should never occur
+            remainingDestCapacity = 0;
         }
-
-        reqLength = tempLen;
 
         // add the label separator
         if(done==FALSE){
-            if(reqLength < destCapacity){
-                dest[reqLength] = FULL_STOP;
+            if(remainingDestCapacity > 0){
+                *currentDest++ = FULL_STOP;
+                remainingDestCapacity--;
             }
-            reqLength++;
+            reqLength++;           
         }
 
         labelStart = delimiter;
@@ -588,11 +590,7 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
         }
 
     }
-
-    if(b1 != b1Stack){
-        uprv_free(b1);
-    }
-    
+   
     delete prep;
     
     return u_terminateUChars(dest, destCapacity, reqLength, status);
@@ -623,63 +621,64 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
         return 0;
     }
 
-    //initialize pointers to stack buffers
-    UChar b1Stack[MAX_LABEL_BUFFER_SIZE];
-    UChar  *b1 = b1Stack;
-    int32_t b1Len, labelLen;
-    UChar* delimiter = (UChar*)src;
-    UChar* labelStart = (UChar*)src;
+    //initialize pointers
+    UChar *delimiter = (UChar*)src;
+    UChar *labelStart = (UChar*)src;
+    UChar *currentDest = (UChar*) dest;
     int32_t remainingLen = srcLength;
-    int32_t b1Capacity = MAX_LABEL_BUFFER_SIZE;
+    int32_t remainingDestCapacity = destCapacity;
+    int32_t labelLen = 0, labelReqLength = 0;
     UBool done = FALSE;
 
-    for(;;){
-        
-        labelLen = getNextSeparator(labelStart, remainingLen, prep, &delimiter, &done, status);
-        
 
-        b1Len = uidna_toUnicode( labelStart,labelLen, b1, b1Capacity, 
-                                 options, parseError, status);
+    for(;;){
+
+        labelLen = getNextSeparator(labelStart,remainingLen, prep, &delimiter,&done, status);
+        
+        labelReqLength = uidna_toUnicode(labelStart, labelLen, 
+                                         currentDest, remainingDestCapacity, 
+                                         options, parseError, status);
 
         if(*status == U_BUFFER_OVERFLOW_ERROR){
-            // for pre-flighting we already know the return length
-            // do not re-process the string just save the length
-            // and reset error code
+            
             *status = U_ZERO_ERROR; // reset error
+            remainingDestCapacity = 0;
         }
+
     
         if(U_FAILURE(*status)){
             break;
         }
-        int32_t tempLen = (reqLength + b1Len );
-        // copy to dest
-        if( tempLen <= destCapacity){
-            uprv_memmove(dest+reqLength, b1, b1Len * U_SIZEOF_UCHAR);
+        
+        reqLength +=labelReqLength;
+        // adjust the destination pointer
+        if(labelReqLength < remainingDestCapacity){
+            currentDest = currentDest + labelReqLength;
+            remainingDestCapacity -= labelReqLength;
+        }else{
+            // should never occur
+            remainingDestCapacity = 0;
         }
 
-        reqLength = tempLen;
         // add the label separator
         if(done==FALSE){
-            if(reqLength < destCapacity){
-                dest[reqLength] = FULL_STOP;
+            if(remainingDestCapacity > 0){
+                *currentDest++ = FULL_STOP;
+                remainingDestCapacity--;
             }
-            reqLength++;
+            reqLength++;           
         }
 
-        labelStart = delimiter;        
+        labelStart = delimiter;
         if(remainingLen >0 ){
             remainingLen = srcLength - (delimiter - src);
         }
-        if(done==TRUE){
+        if(done == TRUE){
             break;
         }
 
     }
-    
-    if(b1 != b1Stack){
-        uprv_free(b1);
-    }
-    
+   
     delete prep;
     
     return u_terminateUChars(dest, destCapacity, reqLength, status);

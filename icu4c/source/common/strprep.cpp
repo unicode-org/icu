@@ -47,6 +47,7 @@ ustrprep_cleanup() {
     return TRUE;
 }
 
+U_CDECL_BEGIN
 static UBool U_CALLCONV
 isAcceptable(void * /* context */,
              const char * /* type */, 
@@ -70,6 +71,8 @@ isAcceptable(void * /* context */,
     }
 }
 
+
+
 static int32_t U_CALLCONV
 getFoldingOffset(uint32_t data) {
     if(data&0x8000) {
@@ -78,6 +81,8 @@ getFoldingOffset(uint32_t data) {
         return 0;
     }
 }
+
+U_CDECL_END
 
 static UBool U_CALLCONV
 loadData(UErrorCode &errorCode) {
