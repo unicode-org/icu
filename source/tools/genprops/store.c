@@ -72,7 +72,10 @@ Formally, the file contains the following structures:
     i5 additionalVectorsColumns; -- number of 32-bit words per properties vector
 
     i6 reservedItemIndex; -- 32-bit unit index to the top of the properties vectors table
-    i7..i15 reservedIndexes; -- reserved values; 0 for now
+    i7..i9 reservedIndexes; -- reserved values; 0 for now
+
+    i10 maxValues; -- maximum block and script code values, see uprops.h (format version 3.1)
+    i11..i15 reservedIndexes; -- reserved values; 0 for now
 
     PT serialized properties trie, see utrie.h (byte size: 4*(i0-16))
 
@@ -270,8 +273,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 3, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
-    { 3, 0, 0, 0 }                              /* dataVersion */
+    { 3, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 3, 2, 0, 0 }                              /* dataVersion */
 };
 
 /* definitions of expected data size limits */
