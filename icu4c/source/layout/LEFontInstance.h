@@ -484,7 +484,7 @@ private:
 
 inline le_bool LEFontInstance::canDisplay(LEUnicode32 ch) const
 {
-    return mapCharToGlyph(ch) != 0;
+    return LE_GET_GLYPH(mapCharToGlyph(ch)) != 0;
 }
 
 inline float LEFontInstance::xUnitsToPoints(float xUnits) const
