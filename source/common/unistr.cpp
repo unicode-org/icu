@@ -492,6 +492,10 @@ UnicodeString::doLastIndexOf(UChar c,
                  UTextOffset start,
                  int32_t length) const
 {
+  if(isBogus()) {
+    return -1;
+  }
+
   // pin indices
   pinIndices(start, length);
   if(length == 0) {

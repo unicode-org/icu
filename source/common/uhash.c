@@ -21,6 +21,7 @@
 
 #include "uhash.h"
 #include "ustring.h"
+#include "cstring.h"
 #include "cmemory.h"
 
 /* Private function prototypes */
@@ -505,59 +506,69 @@ uhash_find(const UHashtable *hash,
 U_CAPI int32_t
 uhash_hashUString(const void *parm)
 {
-  const UChar *key     = (const UChar*) parm;
-  int32_t len         = u_strlen(key);
-  int32_t hash         = UHASH_INVALID;
-  const UChar *limit     = key + len;
-  int32_t inc         = (len >= 128 ? len/64 : 1);
+  if(parm != NULL) {
+    const UChar *key     = (const UChar*) parm;
+    int32_t len         = u_strlen(key);
+    int32_t hash         = UHASH_INVALID;
+    const UChar *limit     = key + len;
+    int32_t inc         = (len >= 128 ? len/64 : 1);
 
-  /*
-    We compute the hash by iterating sparsely over 64 (at most) characters
-    spaced evenly through the string.  For each character, we multiply the
-    previous hash value by a prime number and add the new character in,
-    in the manner of a additive linear congruential random number generator,
-    thus producing a pseudorandom deterministic value which should be well
-    distributed over the output range. [LIU]
-  */
+    /*
+      We compute the hash by iterating sparsely over 64 (at most) characters
+      spaced evenly through the string.  For each character, we multiply the
+      previous hash value by a prime number and add the new character in,
+      in the manner of a additive linear congruential random number generator,
+      thus producing a pseudorandom deterministic value which should be well
+      distributed over the output range. [LIU]
+    */
   
-  while(key < limit) {
-    hash = (hash * 37) + *key;
-    key += inc;
+    while(key < limit) {
+      hash = (hash * 37) + *key;
+      key += inc;
+    }
+  
+    if(hash == UHASH_INVALID) {
+      hash = UHASH_EMPTY;
+    }
+  
+    return hash & 0x7FFFFFFF;
+  } else {
+    return UHASH_INVALID;
   }
-  
-  if(hash == UHASH_INVALID)
-    hash = UHASH_EMPTY;
-  
-  return hash & 0x7FFFFFFF;
 }
 
 U_CAPI int32_t
 uhash_hashString(const void *parm)
 {
-  const char *key     = (const char*) parm;
-  int32_t len         = strlen(key);
-  int32_t hash         = UHASH_INVALID;
-  const char *limit     = key + len;
-  int32_t inc         = (len >= 128 ? len/64 : 1);
+  if(parm != NULL) {
+    const char *key     = (const char*) parm;
+    int32_t len         = icu_strlen(key);
+    int32_t hash         = UHASH_INVALID;
+    const char *limit     = key + len;
+    int32_t inc         = (len >= 128 ? len/64 : 1);
 
-  /*
-    We compute the hash by iterating sparsely over 64 (at most) characters
-    spaced evenly through the string.  For each character, we multiply the
-    previous hash value by a prime number and add the new character in,
-    in the manner of a additive linear congruential random number generator,
-    thus producing a pseudorandom deterministic value which should be well
-    distributed over the output range. [LIU]
-  */
+    /*
+      We compute the hash by iterating sparsely over 64 (at most) characters
+      spaced evenly through the string.  For each character, we multiply the
+      previous hash value by a prime number and add the new character in,
+      in the manner of a additive linear congruential random number generator,
+      thus producing a pseudorandom deterministic value which should be well
+      distributed over the output range. [LIU]
+    */
   
-  while(key < limit) {
-    hash = (hash * 37) + *key;
-    key += inc;
+    while(key < limit) {
+      hash = (hash * 37) + *key;
+      key += inc;
+    }
+  
+    if(hash == UHASH_INVALID) {
+      hash = UHASH_EMPTY;
+    }
+  
+    return hash & 0x7FFFFFFF;
+  } else {
+    return UHASH_INVALID;
   }
-  
-  if(hash == UHASH_INVALID)
-    hash = UHASH_EMPTY;
-  
-  return hash & 0x7FFFFFFF;
 }
 
 U_CAPI int32_t
