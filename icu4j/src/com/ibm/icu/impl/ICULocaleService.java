@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import java.util.Enumeration;
 
 public class ICULocaleService extends ICUService {
     Locale fallbackLocale;
