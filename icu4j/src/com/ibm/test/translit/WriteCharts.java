@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/WriteCharts.java,v $
- * $Date: 2001/11/02 01:01:56 $
- * $Revision: 1.2 $
+ * $Date: 2001/11/02 23:49:39 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,7 @@ package com.ibm.test.translit;
 import com.ibm.text.*;
 import com.ibm.test.*;
 import com.ibm.util.Utility;
-import java.text.*;
+//import java.text.*;
 import java.util.*;
 import java.io.*;
 
@@ -69,67 +69,113 @@ public class WriteCharts {
         
         Transliterator inverse = t.getInverse();
         
+        Transliterator hex = Transliterator.getInstance("Any-Hex");
+                
+        // iterate through script
+        System.out.println("Transliterating " + sourceSet.toPattern(true) 
+            + " with " + Transliterator.getDisplayName(id));
+                
+        UnicodeSet leftOverSet = new UnicodeSet(targetSet);
+            
+        Map map = new TreeMap();
+                
+        int count = sourceSet.getRangeCount();
+        for (int i = 0; i < count; ++i) {
+            int end = sourceSet.getRangeEnd(i);
+            for (int j = sourceSet.getRangeStart(i); j <= end; ++j) {
+                String flag = "";
+                String ss = UTF16.valueOf(j);
+                String ts = t.transliterate(ss);
+                char group = 0;
+                if (!isIn(ts, targetSet)) {
+                    group |= 1;
+                }
+                if (UTF16.countCodePoint(ts) == 1) {
+                    leftOverSet.remove(UTF16.charAt(ts,0));
+                }
+                String rt = inverse.transliterate(ts);
+                if (!isIn(rt, sourceSet)) {
+                    group |= 2;
+                } else if (!ss.equals(rt)) {
+                    group |= 4;
+                }
+                    
+                if ((group & 0x7F) != 0) flag = "</td><td>" + hex.transliterate(ss) + "; " + hex.transliterate(ts) + "; " + hex.transliterate(rt);
+                    
+                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ss, Normalizer.DECOMP_COMPAT, 0)) + ss, 
+                    "<tr><td>" + ss + "</td><td>" + ts + "</td><td>" + rt + "</td><td>" + flag + "</td></tr>" );
+            }
+        }
+        
+        leftOverSet.remove(0x0100,0x02FF); // remove extended & IPA
+        
+        count = leftOverSet.getRangeCount();
+        for (int i = 0; i < count; ++i) {
+            int end = leftOverSet.getRangeEnd(i);
+            for (int j = leftOverSet.getRangeStart(i); j <= end; ++j) {
+                String ts = UTF16.valueOf(j);
+                String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
+                if (!decomp.equals(ts)) continue;
+                
+                String rt = inverse.transliterate(ts);
+                String flag = "";
+                char group = 0x80;
+                    
+                if (!isIn(rt, sourceSet)) {
+                    group |= 8;
+                }
+                if ((group & 0x7F) != 0) flag = "</td><td>" + hex.transliterate(ts) + "; " + hex.transliterate(rt);
+                
+                map.put(group + UCharacter.toLowerCase(Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0)) + ts, 
+                    "<tr><td>-</td><td>" + ts + "</td><td>" + rt + flag + "</td></tr>");
+            }
+        }
+
         // make file name and open
-        File f = new File("chart_" + id.replace('/', '_') + ".txt");
+        File f = new File("chart_" + id.replace('/', '_') + ".html");
         String filename = f.getCanonicalFile().toString();
         PrintWriter out = new PrintWriter(
             new OutputStreamWriter(
                 new FileOutputStream(filename), "UTF-8"));
-        out.print('\uFEFF'); // BOM
+        //out.print('\uFEFF'); // BOM
         
-        Transliterator hex = Transliterator.getInstance("Any-Hex");
-                
-        // iterate through script
+        System.out.println("Writing " + filename);
+        
         try {
-            System.out.println("Transliterating " + sourceSet.toPattern(true) 
-                + " with " + Transliterator.getDisplayName(id)
-                + " to " + filename);
-                
-            UnicodeSet leftOverSet = new UnicodeSet(targetSet);
+            out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
+            out.println("<HTML><HEAD>");
+            out.println("<META content=\"text/html; charset=utf-8\" http-equiv=Content-Type></HEAD>");
+            out.println("<BODY>");
+            String tableHeader = "<p><table border='1'><tr><th>Source</th><th>Target</th><th>Return</th></tr>";
+            String tableFooter = "</table></p>";
+            out.println("<h1>Testing Round Trip</h1>");
+            out.println(tableHeader);
             
-            out.println("# Checking Round Trips for characters in source");
-            out.println();
-                
-            int count = sourceSet.getRangeCount();
-            for (int i = 0; i < count; ++i) {
-                int end = sourceSet.getRangeEnd(i);
-                for (int j = sourceSet.getRangeStart(i); j <= end; ++j) {
-                    String flag = "";
-                    String ss = UTF16.valueOf(j);
-                    String ts = t.transliterate(ss);
-                    if (!isIn(ts, targetSet)) flag += "Not in Target Set; ";
-                    if (UTF16.countCodePoint(ts) == 1) {
-                        leftOverSet.remove(UTF16.charAt(ts,0));
-                    }
-                    String rt = inverse.transliterate(ts);
-                    if (!isIn(rt, sourceSet)) flag += "Not in Source Set; ";
-                    else if (!ss.equals(rt)) flag = "NO Round Trip; ";
+            Iterator it = map.keySet().iterator();
+            char lastGroup = 0;
+            count = 0;
+            while (it.hasNext()) {
+                String key = (String) it.next();
+                char group = key.charAt(0);
+                if (group != lastGroup || count++ > 50) {
+                    lastGroup = group;
+                    count = 0;
+                    out.println(tableFooter);
                     
-                    if (flag.length() != 0) flag += " [" + hex.transliterate(ss)
-                        + "\t" + hex.transliterate(ts)
-                        + "\t" + hex.transliterate(rt) + "]";
-                    out.println(ss + "\t" + ts + "\t" + rt + "\t" + flag);
+                    String title = "";
+                    if ((group & 0x80) != 0) out.println("<hr><h1>Completeness</h1>");
+                    else out.println("<hr><h1>Round Trip</h1>");
+                    if ((group & 8) != 0) out.println("<h2>Possible Errors: Return not in Source Set</h2>");
+                    if ((group & 4) != 0) out.println("<h2>Errors: Return not equal to Source</h2>");
+                    if ((group & 2) != 0) out.println("<h2>Errors: Return not in Source Set</h2>");
+                    if ((group & 1) != 0) out.println("<h2>Errors: Target not in Target Set</h2>");
+                                        
+                    out.println(tableHeader);
                 }
+                String value = (String) map.get(key);
+                out.println(value);
             }
-            
-            out.println();
-            out.println("# Checking fallbacks for characters in target");
-            out.println();
-            
-            count = leftOverSet.getRangeCount();
-            for (int i = 0; i < count; ++i) {
-                int end = leftOverSet.getRangeEnd(i);
-                for (int j = leftOverSet.getRangeStart(i); j <= end; ++j) {
-                    String ts = UTF16.valueOf(j);
-                    String rt = inverse.transliterate(ts);
-                    String flag = "";
-                    
-                    if (!isIn(rt, sourceSet)) flag += "Not in Source Set; ";
-                    if (flag.length() != 0) flag += " [" + hex.transliterate(ts)
-                        + "\t" + hex.transliterate(rt) + "]";
-                    out.println("-\t" + ts + "\t" + rt + "\t" + flag);
-                }
-            }
+            out.println(tableFooter + "</BODY></HTML>");
             
         } finally {
             out.close();
