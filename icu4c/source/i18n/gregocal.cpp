@@ -967,7 +967,7 @@ int32_t GregorianCalendar::getActualMaximum(UCalendarDateFields field, UErrorCod
                 return 0;
             }
             
-            cal->setLenient(true);
+            cal->setLenient(TRUE);
             
             int32_t era = cal->get(UCAL_ERA, status);
             UDate d = cal->getTime(status);
