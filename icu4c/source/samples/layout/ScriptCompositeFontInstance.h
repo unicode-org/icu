@@ -23,48 +23,58 @@ public:
 
     virtual ~ScriptCompositeFontInstance();
 
-    /**
+      /**
      * Get a physical font which can render the given text. For composite fonts,
-	 * if there is no single physical font which can render all of the text,
-	 * return a physical font which can render an initial substring of the text,
-	 * along with the limit offset of that substring.
-	 *
-	 * Internally, the LayoutEngine works with runs of text all in the same
-	 * font and script, so it is best to call this method with text which is
-	 * in a single script, passing the script code in as a hint. If you don't
-	 * know the script of the text, you can pass <code>zyyyScriptCode</code>,
-	 * which is the script code for characters used in more than one script.
-	 *
-	 * The default implementation of this method is intended for instances of
-	 * <code>LEFontInstance</code> which represent a physical font. It returns
-	 * <code>this</code> and indicates that the entire string can be rendered.
-	 *
-	 * Sublcasses which implement composite fonts must override this method.
-	 * Where it makes sense, they should use the script code as a hint to render
-	 * characters from the COMMON script in the font which is used for the given
-	 * script. For example, if the input text is a series of Arabic words separated
-	 * by spaces, and the script code passed in is <code>arabScriptCode</code> you
-	 * should return the font used for Arabic characters for all of the text.
+     * if there is no single physical font which can render all of the text,
+     * return a physical font which can render an initial substring of the text,
+     * and set the <code>offset</code> parameter to the end of that substring.
+     *
+     * Internally, the LayoutEngine works with runs of text all in the same
+     * font and script, so it is best to call this method with text which is
+     * in a single script, passing the script code in as a hint. If you don't
+     * know the script of the text, you can use zero, which is the script code
+     * for characters used in more than one script.
+     *
+     * The default implementation of this method is intended for instances of
+     * <code>LEFontInstance</code> which represent a physical font. It returns
+     * <code>this</code> and indicates that the entire string can be rendered.
+     *
+     * This method will return a valid <code>LEFontInstance</code> unless you
+     * have passed illegal parameters, or an internal error has been encountered. 
+     * For composite fonts, it may return the warning <code>LE_NO_SUBFONT_WARNING</code>
+     * to indicate that the returned font may not be able to render all of
+     * the text. Whenever a valid font is returned, the <code>offset</code> parameter
+     * will be advanced by at least one.
+     *
+     * Subclasses which implement composite fonts must override this method.
+     * Where it makes sense, they should use the script code as a hint to render
+     * characters from the COMMON script in the font which is used for the given
+     * script. For example, if the input text is a series of Arabic words separated
+     * by spaces, and the script code passed in is <code>arabScriptCode</code> you
+     * should return the font used for Arabic characters for all of the input text,
+     * including the spaces. If, on the other hand, the input text contains characters
+     * which cannot be rendered by the font used for Arabic characters, but which can
+     * be rendered by another font, you should return that font for those characters.
      *
      * @param chars   - the array of Unicode characters.
-     * @param start   - a pointer to the starting offset in the text. On exit this
-	 *                  will be set the the limit offset of the text which can be
-	 *                  rendered using the returned font.
+     * @param offset  - a pointer to the starting offset in the text. On exit this
+     *                  will be set the the limit offset of the text which can be
+     *                  rendered using the returned font.
      * @param limit   - the limit offset for the input text.
      * @param script  - the script hint.
      * @param success - set to an error code if the arguments are illegal, or no font
      *                  can be returned for some reason. May also be set to
-     *                  <code>LE_NO_SUBFONT_WARNING</code> if there is no subfont which
-     *                  can render the text.
+     *                  <code>LE_NO_SUBFONT_WARNING</code> if the subfont which
+     *                  was returned cannot render all of the text.
      *
      * @return an <code>LEFontInstance</code> for the sub font which can render the characters, or
      *         <code>NULL</code> if there is an error.
      *
-	 * @see LEScripts.h
-	 *
+     * @see LEScripts.h
+     *
      * @draft ICU 2.6
      */
-    virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *start, le_int32 limit, le_int32 script, LEErrorCode &success) const;
+    virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 limit, le_int32 script, LEErrorCode &success) const;
 
     /**
      * This method maps a single character to a glyph index, using the
