@@ -37,6 +37,12 @@ powerpc*-*-linux*)
 	else
 	  	icu_cv_host_frag=mh-cygwin-msvc
 	fi ;;
+*-*-mingw32)
+	if test "$GCC" = yes; then
+	  	icu_cv_host_frag=mh-mingw
+	else
+	  	icu_cv_host_frag=mh-cygwin-msvc
+	fi ;;
 *-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
 	if test "$GCC" = yes; then
