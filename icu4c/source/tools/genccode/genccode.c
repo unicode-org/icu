@@ -26,7 +26,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "../toolutil/toolutil.h"
+#include "toolutil.h"
 
 static uint16_t column=0xffff;
 

@@ -36,6 +36,7 @@ AUTOCONF = @AUTOCONF@
 ## Pacakge information
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
+UNICODE_VERSION = @UNICODE_VERSION@
 
 ## Optional directory setup
 @EXTRAS_TRUE@EXTRA = extra
@@ -52,10 +53,10 @@ DOCDIRS = common i18n
 SUBDIRS = common i18n $(EXTRA) tools $(TEST) $(SAMPLE)
 
 ## Extra files to install
-EXTRA_DATA = convrtrs.txt UnicodeData-3.0.0.txt
+EXTRA_DATA = convrtrs.txt UnicodeData-$(UNICODE_VERSION).txt
 
 ## List of phony targets
-.PHONY : all all-local all-recursive install install-local		\
+.PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
 check check-local check-recursive
@@ -90,6 +91,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	fi
 
 all-local: configure
+
 
 install-local:
 	@for file in $(EXTRA_DATA); do \
