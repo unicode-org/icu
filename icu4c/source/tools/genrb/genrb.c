@@ -215,6 +215,10 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
     ucbuf = ucbuf_open(in, status);
 
+    if (ucbuf == NULL || U_FAILURE(*status)) {
+        goto finish;
+    }
+
     /* Parse the data into an SRBRoot */
     gCurrentFileName = filename;
     data = parse(ucbuf, inputDir, status);
