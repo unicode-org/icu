@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacter.java,v $ 
-* $Date: 2001/02/26 23:45:37 $ 
-* $Revision: 1.3 $
+* $Date: 2001/02/27 21:30:12 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -1357,7 +1357,7 @@ public final class UCharacter
   // private methods ==============================================
   
   /**
-  * Gets the correct property information from UCharacterPptyDB
+  * Gets the correct property information from UCharacterPropertyDB
   * @param ch character whose information is to be retrieved
   * @return a 32 bit information, returns 0 if no data is found.
   */
