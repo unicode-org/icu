@@ -373,7 +373,10 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
  * This indicates the last element in a UCollationElements has been consumed.
  * Compare with the UCOL_NULLORDER, UCOL_NULLORDER is returned if error occurs.
  */
-#define UCOL_NO_MORE_CES        0x00010101
+#define UCOL_NO_MORE_CES            0x00010101
+#define UCOL_NO_MORE_CES_PRIMARY    0x00010000
+#define UCOL_NO_MORE_CES_SECONDARY  0x00000100
+#define UCOL_NO_MORE_CES_TERTIARY   0x00000001
 
 #define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
 
