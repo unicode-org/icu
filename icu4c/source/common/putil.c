@@ -69,7 +69,7 @@
 /* include system headers */
 #ifdef WIN32
 #   define WIN32_LEAN_AND_MEAN
-#   define NOGDI
+#   define VC_EXTRALEAN
 #   define NOUSER
 #   define NOSERVICE
 #   define NOIME
