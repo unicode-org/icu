@@ -43,7 +43,7 @@
 #include "srchtest.h"
 #include "cntabcol.h"
 #include "lcukocol.h"
-
+#include "ucaconf.h"
 
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
@@ -296,6 +296,15 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       if (exec) {
         logln("DataDrivenTest---"); logln("");
         DataDrivenCollatorTest test;
+        callTest( test, par );
+      }
+      break;
+
+    case 20:
+      name = "UCAConformanceTest";
+      if (exec) {
+        logln("UCAConformanceTest---"); logln("");
+        UCAConformanceTest test;
         callTest( test, par );
       }
       break;
