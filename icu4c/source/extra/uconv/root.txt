@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.25 $
+// $Revision: 1.26 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -79,11 +79,12 @@ root
   cantWrite       { "The converted text couldn't be written: {0}.\n" } // 0: OS error string
   cantRead        { "Error reading from input file {0}.\n" } // 0: OS error string
 
-  premEnd         { "Premature end of Unicode conversion to codepage at or near position {0}.\n" }
-  premEndInput    { "Premature end of input when converting from codepage to Unicode at or near position {0}.\n" }
+  premEnd         { "Premature end of Unicode conversion to codepage at position {0}.\n" }
+  premEndInput    { "Premature end of input when converting from codepage to Unicode at position {0}.\n" }
 
-  problemCvtToU   { "Conversion to Unicode from codepage failed at or near position {0}: {1}.\n" } // 0: position, 1: err
-  problemCvtFromU { "Conversion from Unicode to codepage failed at or near position {0}: {1}.\n"} // 0: err
+  problemCvtToU   { "Conversion to Unicode from codepage failed at position {0}: {1}.\n" } // 0: position, 1: err
+  problemCvtFromU { "Conversion from Unicode to codepage failed at position {0}: {1}.\n"} // 0: err, 1: pos
+  problemCvtFromUOut { "Conversion from Unicode to codepage failed at position {0} in output: {1}.\n"} // 0: err, 1: pos
 
 // ICU errors - used by u_wmsg_errorName()
 
