@@ -261,7 +261,8 @@ void LayoutEngine::positionGlyphs(LEGlyphStorage &glyphStorage, float x, float y
 	glyphStorage.setPosition(glyphCount, x, y, success);
 }
 
-void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
+void LayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/,
+                                        LEGlyphStorage &/*glyphStorage*/, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return;
