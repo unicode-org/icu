@@ -232,11 +232,23 @@ parseLine(const char *line) {
 
     /* get the converter name */
     start=pos;
-    while(line[pos]!=0 && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
+    while(line[pos]!=0 && line[pos]!='{' && line[pos]!='#' && !isspace((unsigned char)line[pos])) {
         ++pos;
     }
     limit=pos;
 
+    if (line[pos] == '{') {   /* skip over tags */
+        ++pos;
+        while (line[pos] && line[pos] != '}' && line[pos] != '#') {
+            ++pos;
+        }
+        if (line[pos] == '}') {
+            ++pos;
+        } else {
+            fprintf(stderr, "unterminated tag list: %s\n", line);
+            exit(U_PARSE_ERROR);
+        }
+    }
     /* store the converter name */
     length=limit-start;
     converter=allocString(length+1);
