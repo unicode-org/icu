@@ -594,7 +594,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                */
               result = main;
               while(*keyPath) {
-                r = res_findResource(&(result->fResData), result->fRes, &keyPath);
+                r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath);
                 if(r == RES_BOGUS) {
                   *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
