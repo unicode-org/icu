@@ -619,7 +619,9 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, UErrorCode& status) co
   return getKey(key, actualReturn, NULL, status);
 }
 
-// make it possible to call reentrantly
+// make it possible to call reentrantly on systems that don't have reentrant mutexes.
+// we can use this simple approach since we know the situation where we're calling
+// reentrantly even without knowing the thread.
 class XMutex : public UMemory {
 public:
   inline XMutex(UMTX *mutex, UBool reentering) 
