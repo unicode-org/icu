@@ -347,6 +347,9 @@ public:
      * Clients can optionally specify directional runs and / or script runs. If these aren't specified
      * they will be computed.
 	 *
+	 * If any errors are encountered during construction, <code>status</code> will be set, and the object
+	 * will be set to be empty.
+     *
      * @param chars is an array of the characters in the paragraph
      *
      * @param count is the number of characters in the paragraph.
@@ -369,19 +372,22 @@ public:
      *
      * @param vertical is <code>true</code> if the paragraph should be set vertically.
      *
+	 * @param status will be set to any error code encountered during construction.
+     *
      * @see ubidi.h
      * @see LEFontInstance.h
      * @see LayoutEngine.h
      * @see RunArrays.h
      *
-     * @draft ICU 2.6
+     * @draft ICU 2.8
      */
     ParagraphLayout(const LEUnicode chars[], le_int32 count,
                     const FontRuns *fontRuns,
                     const ValueRuns *levelRuns,
                     const ValueRuns *scriptRuns,
                     const LocaleRuns *localeRuns,
-                    UBiDiLevel paragraphLevel, le_bool vertical);
+                    UBiDiLevel paragraphLevel, le_bool vertical,
+					LEErrorCode &status);
 
     /**
      * The destructor. Virtual so that it works correctly with
@@ -558,7 +564,7 @@ private:
 
     void computeLocales();
 
-    void computeSubFonts(const FontRuns *fontRuns);
+    void computeSubFonts(const FontRuns *fontRuns, LEErrorCode &status);
 
     void computeMetrics();
 
