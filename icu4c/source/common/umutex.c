@@ -277,14 +277,13 @@ umtx_destroy(UMTX *mutex) {
 #if (ICU_USE_THREADS == 1)
 #if defined (WIN32)
         DeleteCriticalSection((CRITICAL_SECTION*)*mutex);
-        
+        uprv_free(*mutex);
 #elif defined (POSIX)
         pthread_mutex_destroy((pthread_mutex_t*)*mutex);
-        
+        uprv_free(*mutex);
 #endif
 #endif /* ICU_USE_THREADS==1 */
         
-        uprv_free(*mutex);
     }
     *mutex = NULL;
 

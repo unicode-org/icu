@@ -136,7 +136,7 @@ typedef void U_CALLCONV UMtxFunc   (const void *context, UMTX  *mutex);
   *  This function can only be used when ICU is in an initial, unused state, before
   *  u_init() has been called.
   *  This function may be used even when ICU has been built without multi-threaded
-  *  support  (see ICU_USE_THREADS pre-processor variable)
+  *  support  (see ICU_USE_THREADS pre-processor variable, umutex.h)
   *  @param context This pointer value will be saved, and then (later) passed as
   *                 a parameter to the increment and decrement functions each time they
   *                 are called.  This function can only be called 
