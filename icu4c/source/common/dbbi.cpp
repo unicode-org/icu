@@ -43,15 +43,16 @@ DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* rbbiData
     init();
     if (U_FAILURE(status)) {return;};
     fTables = new DictionaryBasedBreakIteratorTables(dictionaryFilename, status);
+    if (U_FAILURE(status)) {
+        if (fTables != NULL) {
+            fTables->removeReference();
+            fTables = NULL;
+        }
+        return;
+    }
     /* test for NULL */
     if(fTables == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    
-    if (U_FAILURE(status)) {
-        fTables->removeReference();
-        fTables = NULL;
         return;
     }
 }
@@ -396,6 +397,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         c = fText->next();
     }
 
+    if (U_FAILURE(status)) {
+        return; // UStack below overwrites the status error codes
+    }
     
     // initialize.  We maintain two stacks: currentBreakPositions contains
     // the list of break positions that will be returned if we successfully
@@ -412,7 +416,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // further, this saves us from having to follow each possible path
     // through the text all the way to the error (hopefully avoiding many
     // future recursive calls as well).
-    UStack currentBreakPositions(status);
+    // there can be only one kind of error in UStack and UVector, so we'll 
+    // just let the error fall through
+    UStack currentBreakPositions(status); 
     UStack possibleBreakPositions(status);
     UVector wrongBreakPositions(status);
 
@@ -445,6 +451,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // the possible-break-positions stack
         if (fTables->fDictionary->at(state, (int32_t)0) == -1) {
             possibleBreakPositions.push(fText->getIndex(), status);
+            if (U_FAILURE(status)) {
+                return;
+            }
         }
 
         // look up the new state to transition to in the dictionary
@@ -456,6 +465,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // of the loop.
         if (state == -1) {
             currentBreakPositions.push(fText->getIndex(), status);
+            if (U_FAILURE(status)) {
+                return;
+            }
             break;
         }
 
@@ -501,6 +513,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                     currentBreakPositions.removeAllElements();
                     for (int32_t i = 0; i < bestBreakPositions.size(); i++) {
                         currentBreakPositions.push(bestBreakPositions.elementAti(i), status);
+                        if (U_FAILURE(status)) {
+                            return;
+                        }
                     }
                     bestBreakPositions.removeAllElements();
                     if (farthestEndPoint < endPos) {
@@ -515,9 +530,15 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                             || currentBreakPositions.peeki() != fText->getIndex())
                             && fText->getIndex() != startPos) {
                         currentBreakPositions.push(fText->getIndex(), status);
+                        if (U_FAILURE(status)) {
+                            return;
+                        }
                     }
                     fText->next();
                     currentBreakPositions.push(fText->getIndex(), status);
+                    if (U_FAILURE(status)) {
+                        return;
+                    }
                 }
             }
 
@@ -561,6 +582,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         currentBreakPositions.popi();
     }
     currentBreakPositions.push(endPos, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // create a regular array to hold the break positions and copy
     // the break positions from the stack to the array (in addition,

@@ -46,8 +46,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
 RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
 {
     init();
+    fData = new RBBIDataWrapper(data, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
-    fData = new RBBIDataWrapper(data, status);
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -63,8 +63,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
 {
     init();
+    fData = new RBBIDataWrapper(udm, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
-    fData = new RBBIDataWrapper(udm, status);
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
