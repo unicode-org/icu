@@ -687,9 +687,15 @@ ucnv_getStarters(const UConverter* converter,
                  UBool starters[256],
                  UErrorCode* err);
 
-/** ### TODO @draft ICU 2.6 */
+/**
+ * Selectors for Unicode sets that can be returned by ucnv_getUnicodeSet().
+ * @see ucnv_getUnicodeSet
+ * @draft ICU 2.6
+ */
 typedef enum UConverterUnicodeSet {
+    /** Select the set of roundtrippable Unicode code points. @draft ICU 2.6 */
     UCNV_ROUNDTRIP_SET,
+    /** Number of UConverterUnicodeSet selectors. @draft ICU 2.6 */
     UCNV_SET_COUNT
 } UConverterUnicodeSet;
 
