@@ -367,6 +367,16 @@ static void TestControlPrint()
             log_err("error: u_isprint(ISO 8 control U+%04x)=TRUE\n", c);
         }
     }
+
+    /* test all Latin-1 graphic characters */
+    for(c=0x20; c<=0xff; ++c) {
+        if(c==0x7f) {
+            c=0xa0;
+        }
+        if(!u_isprint(c)) {
+            log_err("error: u_isprint(Latin-1 graphic character U+%04x)=FALSE\n", c);
+        }
+    }
 }
 
 /* u_isJavaIDStart, u_isJavaIDPart, u_isIDStart(), u_isIDPart(), u_isIDIgnorable()*/
