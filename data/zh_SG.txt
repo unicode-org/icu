@@ -1,11 +1,11 @@
 ﻿  // -*- Coding: utf-8; -*-
 // *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
-// $Revision: 1.2 $
+// $Revision: 1.3 $
 // $Tag: Experimental$
 // Singapore locale: Data By Syn Wee Quek
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2000 IBM, Inc. and Others.
+// Copyright (c) 2001 IBM, Inc. and Others.
 // Marathi locale.  Based on Hindi locale
 
 mr_IN {
