@@ -161,13 +161,16 @@ static Hashtable* CASE_EQUIV_HASH = NULL; // for closeOver(USET_CASE)
 static CompactByteArray* CASE_EQUIV_CBA = NULL; // for closeOver(USET_CASE)
 
 /**
- * Keep code points in range.
+ * Modify the given UChar32 variable so that it is in range, by
+ * pinning values < UNICODESET_LOW to UNICODESET_LOW, and
+ * pinning values > UNICODESET_HIGH-1 to UNICODESET_HIGH-1.
+ * It modifies its argument in-place and also returns it.
  */
 inline UChar32 pinCodePoint(UChar32& c) {
-    if (c < 0) {
-        c = 0;
-    } else if (c > 0x10FFFF) {
-        c = 0x10FFFF;
+    if (c < UNICODESET_LOW) {
+        c = UNICODESET_LOW;
+    } else if (c > (UNICODESET_HIGH-1)) {
+        c = (UNICODESET_HIGH-1);
     }
     return c;
 }
