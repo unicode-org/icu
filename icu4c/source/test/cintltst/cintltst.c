@@ -381,7 +381,6 @@ const char *  ctest_dataSrcDir()
         char *pBackSlash;
         int i;
 
-        dataSrcDir = p;
         strcpy(p, __FILE__);
         /* We want to back over three '\' chars.                            */
         /*   Only Windows should end up here, so looking for '\' is safe.   */
@@ -397,10 +396,18 @@ const char *  ctest_dataSrcDir()
              *  Now append "source\data" and set the environment
              */
             strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING );
+            dataSrcDir = p;
         }
         else {
             /* __FILE__ on MSVC7 does not contain the directory */
-            strcpy(p, ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+			FILE *file = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "Makefile.in", "r");
+			if (file) {
+				fclose(file);
+	            dataSrcDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+			}
+			else {
+	            dataSrcDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING;
+			}
         }
     }
 #endif
@@ -441,7 +448,6 @@ const char *ctest_dataOutDir()
         char *pBackSlash;
         int i;
 
-        dataOutDir = p;
         strcpy(p, __FILE__);
         /* We want to back over three '\' chars.                            */
         /*   Only Windows should end up here, so looking for '\' is safe.   */
@@ -457,10 +463,18 @@ const char *ctest_dataOutDir()
              *  Now append "source\data" and set the environment
              */
             strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING);
+            dataOutDir = p;
         }
         else {
             /* __FILE__ on MSVC7 does not contain the directory */
-            strcpy(p, ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING);
+			FILE *file = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "Makefile.in", "r");
+			if (file) {
+				fclose(file);
+	            dataOutDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING;
+			}
+			else {
+	            dataOutDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING "data" U_FILE_SEP_STRING "out" U_FILE_SEP_STRING;
+			}
         }
     }
 #endif
