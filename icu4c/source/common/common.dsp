@@ -163,6 +163,10 @@ SOURCE=.\brkiter.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\caniter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\chariter.cpp
 # End Source File
 # Begin Source File
@@ -604,6 +608,53 @@ InputPath=.\unicode\brkiter.h
 InputPath=.\unicode\brkiter.h
 
 "..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\caniter.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\caniter.h
+
+"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\caniter.h
+
+"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\caniter.h
+
+"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\caniter.h
+
+"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
