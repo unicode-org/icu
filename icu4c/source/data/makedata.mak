@@ -187,7 +187,7 @@ GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !MESSAGE Information: cannot find "reslocal.mk". Not building user-additional resource bundle files. 
 !ENDIF
 !ELSE
-!ERROR ERROR: cannot find "resfiles.mk"
+!MESSAGE Warning: cannot find "resfiles.mk"
 !ENDIF
 
 RB_FILES = root.res $(GENRB_ALIAS_SOURCE:.txt=.res) $(GENRB_SOURCE:.txt=.res)
@@ -202,14 +202,14 @@ TRANLIT_SOURCE=$(TRANSLIT_SOURCE) $(TRANSLIT_SOURCE_LOCAL)
 !MESSAGE Information: cannot find "trnslocal.mk". Not building user-additional transliterator files.
 !ENDIF
 !ELSE
-!ERROR ERROR: cannot find "trnsfiles.mk"
+!MESSAGE Warning: cannot find "trnsfiles.mk"
 !ENDIF
 
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
 INDEX_RES_FILES = res_index.res
 
-ALL_RES = $(RB_FILES) $(TRANSLIT_FILES)
+ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(TRANSLIT_FILES)
 
 #############################################################################
 #
@@ -257,8 +257,6 @@ $(ICUDT)uidna.icu
 $(CNV_FILES:.cnv =.cnv
 )
 $(ALL_RES:.res =.res
-)
-$(INDEX_RES_FILES:.res =.res
 )
 $(BRK_FILES:.brk" =.brk"
 )
@@ -412,5 +410,5 @@ res_index {
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe $(ICUDT)ucadata.icu $(ICUDT)uprops.icu $(ICUDT)unorm.icu
+$(TRANSLIT_SOURCE) $(GENRB_SOURCE) $(ICUDT)root.res : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe $(ICUDT)ucadata.icu $(ICUDT)uprops.icu $(ICUDT)unorm.icu
 
