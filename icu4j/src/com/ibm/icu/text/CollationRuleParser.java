@@ -1127,12 +1127,29 @@ final class CollationRuleParser
         return true;
     }
     
+    private static boolean isCharNewLine(char c) {
+		switch (c) {
+		case 0x000A: /* LF */
+		case 0x000D: /* CR */
+		case 0x000C: /* FF */
+		case 0x0085: /* NEL */
+		case 0x2028: /* LS */
+		case 0x2029: /* PS */
+			return true;
+		default:
+			return false;
+		}
+	}
+    
     /**
-     * Getting the next token
-     * @param startofrules flag indicating if we are at the start of rules
-     * @return the offset of the rules
-     * @exception ParseException thrown when rule parsing fails
-     */
+	 * Getting the next token
+	 * 
+	 * @param startofrules
+	 *            flag indicating if we are at the start of rules
+	 * @return the offset of the rules
+	 * @exception ParseException
+	 *                thrown when rule parsing fails
+	 */
     private int parseNextToken(boolean startofrules) throws ParseException
     { 
         // parsing part
@@ -1450,6 +1467,12 @@ final class CollationRuleParser
                             // skip whitespace between '|' and the character
                         } while (UCharacterProperty.isRuleWhiteSpace(ch));
                         break;
+                    case 0x0023: // '#' // this is a comment, skip everything through the end of line
+                    	do {
+                            m_current_ ++;
+                    		ch = m_source_.charAt(m_current_);
+                    	} while (!isCharNewLine(ch));        
+                    	break;                    
                     case 0x0021: // '!' // ignoring java set thai reordering
                         break;
                     default :
