@@ -275,11 +275,12 @@ sv {
             "2,000,000,000,000: << biljoner[ >>];\n"
             "1,000,000,000,000,000: en triljon[ >>];\n"
             "2,000,000,000,000,000: << triljoner[ >>];\n"
+            "1,000,000,000,000,000,000: =#,##0=;\n" 
+/* 
+ * Current (java) implementation can't handle these magnitudes
             "1,000,000,000,000,000,000: en triljard[ >>];\n"
             "2,000,000,000,000,000,000: << triljarder[ >>];\n"
-            "1,000,000,000,000,000,000,000: =#,##0=;\n" 
-/* 
- * Current implementation can't handle these magnitudes)
+ * Current (c++) implmenatation can't handle these magnitudes
             "1,000,000,000,000,000,000,000: en kvartiljon[ >>];\n"
             "2,000,000,000,000,000,000,000: << kvartiljoner[ >>];\n"
             "1,000,000,000,000,000,000,000,000: en kvartiljard[ >>];\n"
