@@ -259,7 +259,15 @@ private:
      * @draft ICU 2.4
      */
     union Token {
+        /**
+         * This token, interpreted as a 32-bit integer.
+         * @draft ICU 2.4
+         */
         int32_t integer;
+        /**
+         * This token, interpreted as a native pointer.
+         * @draft ICU 2.4
+         */
         void*   pointer;
     };
 

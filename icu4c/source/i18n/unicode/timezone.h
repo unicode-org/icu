@@ -438,10 +438,18 @@ public:
 
     /**
      * Enum for use with getDisplayName
+     * @draft ICU 2.4
      */
-
     enum EDisplayType {
+        /**
+         * Selector for short display name
+         * @draft ICU 2.4
+         */
         SHORT = 1,
+        /**
+         * Selector for long display name
+         * @draft ICU 2.4
+         */
         LONG
     };
 
