@@ -119,6 +119,7 @@ public class BagFormatter {
         pw.println();
         pw.println(inIn.format(names));
         showSetNames(pw, temp);
+        pw.flush();
     }
     
     public void showSetDifferences(

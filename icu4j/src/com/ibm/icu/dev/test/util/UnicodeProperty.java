@@ -2,6 +2,7 @@ package com.ibm.icu.dev.test.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +18,9 @@ import java.util.TreeSet;
 import sun.io.UnknownCharacterException;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.SymbolTable;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 
@@ -142,6 +145,8 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     }
     
     static public class Factory {
+        static boolean DEBUG = false;
+
         Map canonicalNames = new TreeMap();
         Map skeletonNames = new TreeMap();
         Map propertyCache = new HashMap(1);
@@ -225,6 +230,94 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         public final UnicodeSet getSet(String propAndValue) {
             return getSet(propAndValue, null, null);
         }
+        
+        public final SymbolTable getSymbolTable() {
+            return SYMBOL_TABLE;
+        }
+        
+        SymbolTable SYMBOL_TABLE = new SymbolTable() {
+            /*
+            UnicodeProperty.Factory factory;
+            //static Matcher identifier = Pattern.compile("([:letter:] [\\_\\-[:letter:][:number:]]*)").matcher("");
+        
+            PropertySymbolTable (UnicodeProperty.Factory factory) {
+                this.factory = factory;
+            }
+            */
+        
+            public char[] lookup(String s) {
+                if (DEBUG) System.out.println("\tLooking up " + s);
+                int pos = s.indexOf('=');
+                if (pos < 0) return null; // should never happen
+                UnicodeProperty prop = getProperty(s.substring(0,pos));
+                if (prop == null) {
+                    throw new IllegalArgumentException("Invalid Property in: " + s + "\r\nUse "
+                     + showSet(getAvailableNames())); 
+                }
+                String value = s.substring(pos+1);
+                UnicodeSet set = prop.getSet(value);
+                if (set.size() == 0) {
+                    throw new IllegalArgumentException("Empty Property-Value in: " + s + "\r\nUse "
+                        + showSet(prop.getAvailableValues()));
+                }
+                if (DEBUG) System.out.println("\tReturning " + set.toPattern(true));
+                return set.toPattern(true).toCharArray(); // really ugly
+            }
+
+            /**
+             * @param list
+             * @return
+             */
+            private String showSet(List list) {
+                StringBuffer result = new StringBuffer("[");
+                boolean first = true;
+                for (Iterator it = list.iterator(); it.hasNext();) {
+                    if (!first) result.append(", ");
+                    else first = false;
+                    result.append(it.next().toString());
+                }
+                result.append("]");
+                return result.toString();
+            }
+
+            public UnicodeMatcher lookupMatcher(int ch) {
+                return null;
+            }
+
+            public String parseReference(String text, ParsePosition pos, int limit) {
+                if (DEBUG) System.out.println("\tParsing <" + text.substring(pos.getIndex(),limit) + ">");
+                int start = pos.getIndex();
+                int i = getIdentifier(text, start, limit);
+                if (i == start) return null;
+                String prop = text.substring(start, i);
+                String value = "true";
+                if (i < limit) {
+                    int cp = text.charAt(i);
+                    if (cp == ':' || cp == '=') {
+                        int j = getIdentifier(text, i+1, limit);
+                        value = text.substring(i+1, j);
+                        i = j;
+                    }
+                }
+                pos.setIndex(i);
+                if (DEBUG) System.out.println("\tParsed <" + prop + ">=<" + value + ">");
+                return prop + '=' + value;
+            }
+
+            private int getIdentifier(String text, int start, int limit) {
+                if (DEBUG) System.out.println("\tGetID <" + text.substring(start,limit) + ">");
+                int cp = 0;
+                int i;
+                for (i = start; i < limit; i += UTF16.getCharCount(cp)) {
+                    cp = UTF16.charAt(text, i);
+                    if (!com.ibm.icu.lang.UCharacter.isUnicodeIdentifierPart(cp)) {
+                        break;
+                    }
+                }
+                if (DEBUG) System.out.println("\tGotID <" + text.substring(start,i) + ">");
+                return i;
+            }
+        };
     }
     
 
