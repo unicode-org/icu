@@ -149,11 +149,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif
             break;
         case 11: name = "convert";
+#if !UCONFIG_NO_LEGACY_CONVERSION
                 if (exec) {
                     logln("TestSuite Conversion---"); logln();
                     ConversionTest test;
                     callTest( test, par );
                 }
+#endif
                 break;
 
         default: name = ""; break;

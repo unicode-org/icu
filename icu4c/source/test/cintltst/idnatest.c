@@ -13,12 +13,12 @@
  *   created on: 2003jul11
  *   created by: Ram Viswanadha
  */
-
-#if !UCONFIG_NO_IDNA
-
 #include <stdlib.h>
 #include <string.h>
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/ustring.h"
 #include "unicode/uidna.h"
 #include "cintltst.h"

@@ -16,9 +16,10 @@
 #ifndef _NFSPREP_H
 #define _NFSPREP_H
 
+#include "unicode/utypes.h"
+
 #if !UCONFIG_NO_IDNA
 
-#include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/usprep.h"
 #include <stdlib.h>
