@@ -12,7 +12,16 @@ gl {
     }
     // Currency display names
     Currencies {
-        ESP { "\u20A7", "ESP" } // Spanish Peseta
+        ESP {
+            "\u20A7", 
+            "ESP", 
+            :array{
+                "\u00A4 #,##0;-\u00A4 #,##0", /*currency pattern*/  
+                ",",  /*decimal sperator*/ 
+                ".", /*grouping separator*/
+                
+            }
+        } // Spanish Peseta
     }
     Languages {
         gl { "galego" }

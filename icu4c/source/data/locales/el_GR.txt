@@ -13,4 +13,15 @@ el_GR {
         "#,##0%",
         "#E0",
     }
+    Currencies{
+        GRD { 
+            "\u0394\u03C1\u03C7", 
+            "\u0394\u03C1\u03C7", 
+            :array{
+                "#,##0.00 \u00A4;-#,##0.00 \u00A4", /*currency pattern*/  
+                ",", /*decimal sperator*/
+                ".", /*grouping separator*/ 
+            }
+        } // Currency symbol is the same as the name. This may need to change.
+    }
 }

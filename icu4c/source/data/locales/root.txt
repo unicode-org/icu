@@ -301,14 +301,6 @@ root {
         ITL { "\u20A4", "ITL" } // Italian Lira
         JPY { "\u00A5", "JPY" } // Japanese Yen
         USD { "$",     "USD" } // US Dollar
-        PTE { 
-                "Esc.", "Escudo",      
-                Elements{
-                    "\u00A5 #,##0.00;(\u00A5 #,##0.00)", /*currency pattern*/   
-                    "$", /*decimal sperator*/ 
-                    "." /*grouping separator*/
-                }
-            }
     }
 
     // Currency metadata.  Unlike the "Currencies" element, this is

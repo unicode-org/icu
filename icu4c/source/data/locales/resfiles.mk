@@ -45,30 +45,30 @@ ar_SY.txt ar_TN.txt ar_YE.txt\
 be.txt be_BY.txt\
 bg.txt bg_BG.txt\
 bn.txt bn_IN.txt\
-ca.txt ca_ES.txt ca_ES_PREEURO.txt\
+ca.txt ca_ES.txt\
 cs.txt cs_CZ.txt\
 da.txt da_DK.txt\
-de.txt de_AT.txt de_AT_PREEURO.txt de_BE.txt de_CH.txt\
-de_DE.txt de_DE_PREEURO.txt de_LU.txt de_LU_PREEURO.txt\
-el.txt el_GR.txt el_GR_PREEURO.txt\
-en.txt en_AU.txt en_BE.txt en_BE_PREEURO.txt en_BW.txt en_CA.txt en_GB.txt en_GB_EURO.txt\
-en_HK.txt en_IE.txt en_IE_PREEURO.txt en_IN.txt en_NZ.txt en_PH.txt en_SG.txt en_MT.txt\
+de.txt de_AT.txt de_BE.txt de_CH.txt\
+de_DE.txt de_LU.txt\
+el.txt el_GR.txt\
+en.txt en_AU.txt en_BE.txt en_BW.txt en_CA.txt en_GB.txt\
+en_HK.txt en_IE.txt en_IN.txt en_NZ.txt en_PH.txt en_SG.txt en_MT.txt\
 en_US.txt en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt\
 eo.txt\
 es.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
-es_CR.txt es_DO.txt es_EC.txt es_ES.txt es_ES_PREEURO.txt\
+es_CR.txt es_DO.txt es_EC.txt es_ES.txt\
 es_GT.txt es_HN.txt es_MX.txt es_NI.txt es_PA.txt\
 es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
 es_UY.txt es_VE.txt\
 et.txt et_EE.txt\
-eu.txt eu_ES.txt eu_ES_PREEURO.txt\
+eu.txt eu_ES.txt\
 fa.txt fa_AF.txt fa_IR.txt\
-fi.txt fi_FI.txt fi_FI_PREEURO.txt\
+fi.txt fi_FI.txt\
 fo.txt fo_FO.txt\
-fr.txt fr_BE.txt fr_BE_PREEURO.txt fr_CA.txt fr_CH.txt\
-fr_FR.txt fr_FR_PREEURO.txt fr_LU.txt fr_LU_PREEURO.txt\
-ga.txt ga_IE.txt ga_IE_PREEURO.txt\
-gl.txt gl_ES.txt gl_ES_PREEURO.txt\
+fr.txt fr_BE.txt fr_CA.txt fr_CH.txt\
+fr_FR.txt fr_LU.txt\
+ga.txt ga_IE.txt\
+gl.txt gl_ES.txt\
 gv.txt gv_GB.txt\
 gu.txt gu_IN.txt\
 he.txt he_IL.txt\
@@ -78,7 +78,7 @@ hu.txt hu_HU.txt\
 hy.txt hy_AM.txt hy_AM_REVISED.txt\
 id.txt id_ID.txt\
 is.txt is_IS.txt\
-it.txt it_CH.txt it_IT.txt it_IT_PREEURO.txt\
+it.txt it_CH.txt it_IT.txt\
 ja.txt ja_JP.txt\
 kk.txt kk_KZ.txt\
 kl.txt kl_GL.txt\
@@ -93,13 +93,13 @@ mr.txt mr_IN.txt\
 ms.txt ms_MY.txt ms_BN.txt\
 mt.txt mt_MT.txt\
 nb.txt nb_NO.txt\
-nl.txt nl_BE.txt nl_BE_PREEURO.txt nl_NL.txt nl_NL_PREEURO.txt\
+nl.txt nl_BE.txt nl_NL.txt\
 nn.txt nn_NO.txt\
 om.txt om_ET.txt om_KE.txt\
 pa.txt pa_IN.txt\
 pl.txt pl_PL.txt\
 ps.txt ps_AF.txt\
-pt.txt pt_BR.txt pt_PT.txt pt_PT_PREEURO.txt\
+pt.txt pt_BR.txt pt_PT.txt\
 ro.txt ro_RO.txt\
 ru.txt ru_RU.txt ru_UA.txt\
 sh.txt sh_YU.txt\

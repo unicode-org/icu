@@ -369,10 +369,16 @@ ca {
     }
     ExemplarCharacters { "[a-z \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e8 \u00f2 \u00ef \u00fc \u0140 \u00e7 \u00f1]" }
 
-
     // Currency display names
     Currencies {
-        ESP { "\u20A7", "ESP" } // Spanish Peseta
+        ESP { 
+            "\u20A7", "ESP" ,                
+            :array{
+                "\u00A4 #,##0;-\u00A4 #,##0", /*currency pattern*/  
+                ",",  /*decimal sperator*/ 
+                "." /*grouping separator*/
+            }
+        } // Spanish Peseta
     }
     calendar{
         gregorian{

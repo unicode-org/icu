@@ -582,7 +582,18 @@ NumberFormatTest::escape(UnicodeString& s)
 
  
 // -------------------------------------
- 
+static const char* testCases[][2]= {
+     /* locale ID */  /* expected */
+    {"ca_ES_PREEURO", "\\u20A7 1.150" },
+    {"de_LU_PREEURO", "1,150 F" },
+    {"el_GR_PREEURO", "1.150,50 \\u0394\\u03C1\\u03C7" },
+    {"en_BE_PREEURO", "1.150,50 BF" },
+    {"es_ES_PREEURO", "1.150 \\u20A7" },
+    {"eu_ES_PREEURO", "\\u20A7 1.150" }, 
+    {"gl_ES_PREEURO", "\\u20A7 1.150" },
+    {"it_IT_PREEURO", "\\u20A4 1.150" },
+    {"pt_PT_PREEURO", "1,150$50 Esc."}
+};
 /**
  * Test localized currency patterns.
  */
@@ -597,14 +608,17 @@ NumberFormatTest::TestCurrency(void)
         errln((UnicodeString)"FAIL: Expected 1,50 $");
     delete currencyFmt;
     s.truncate(0);
-    currencyFmt = NumberFormat::createCurrencyInstance(Locale("de_DE_PREEURO"),status);
+    char loc[256]={0};
+    int len = uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc),status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);
     if (!(s=="1,50 DM"))
         errln((UnicodeString)"FAIL: Expected 1,50 DM");
     delete currencyFmt;
     s.truncate(0);
-    currencyFmt = NumberFormat::createCurrencyInstance(Locale("fr_FR_PREEURO"), status);
+    len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc), status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en France a....." + s);
     if (!(s=="1,50 F"))
@@ -612,6 +626,31 @@ NumberFormatTest::TestCurrency(void)
     delete currencyFmt;
     if (U_FAILURE(status))
         errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+    
+    for(int i=0; i < (sizeof(testCases)/sizeof(testCases[i])); i++){
+        status = U_ZERO_ERROR;
+        const char *localeID = testCases[i][0];
+        UnicodeString expected(testCases[i][1]);
+        expected = expected.unescape();
+        s.truncate(0);
+        char loc[256]={0};
+        int len = uloc_canonicalize(localeID, loc, 256, &status);
+        currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc), status);
+        if(U_FAILURE(status)){
+            errln("Could not create currency formatter for locale %s",localeID);
+            continue;
+        }
+        currencyFmt->format(1150.50, s);
+        if(s!=expected){
+            errln(UnicodeString("FAIL: Expected: ")+expected 
+                    + UnicodeString(" Got: ") + s 
+                    + UnicodeString( " for locale: ")+ UnicodeString(localeID) );
+        }
+        if (U_FAILURE(status)){
+            errln((UnicodeString)"FAIL: Status " + (int32_t)status);
+        }
+        delete currencyFmt;
+    }
 }
  
 // -------------------------------------

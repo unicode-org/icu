@@ -1314,6 +1314,17 @@ static void TestObsoleteNames(void)
 
 }
 
+static UBool isCurrencyPreEuro(const char* currencyKey){
+    if( strcmp(currencyKey, "PTE") == 0 ||
+        strcmp(currencyKey, "ESP") == 0 ||
+        strcmp(currencyKey, "LUF") == 0 ||
+        strcmp(currencyKey, "GRD") == 0 ||
+        strcmp(currencyKey, "BEF") == 0 ||
+        strcmp(currencyKey, "ITL") == 0 ){
+            return TRUE;
+    }
+    return FALSE;
+}
 static void
 TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                        UResourceBundle *currentBundle, const char *locale) {
@@ -1327,13 +1338,14 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         const char *currentBundleKey = NULL;
 
         errorCode = U_ZERO_ERROR;
+        currentBundleKey = ures_getKey(currentBundle);
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
-            log_err("Can't open a resource for locale %s\n", locale);
+            log_err("Can't open a resource for locale %s. Error: %s\n", locale, u_errorName(errorCode));
             continue;
         }
         subBundleKey = ures_getKey(subBundle);
-        currentBundleKey = ures_getKey(currentBundle);
+        
 
         subRootBundle = ures_getByKey(root, subBundleKey, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
@@ -1460,7 +1472,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                 }
 
                 if ((subBundleKey == NULL
-                    || (subBundleKey != NULL &&  strcmp(subBundleKey, "LocaleScript") != 0 && strcmp(subBundleKey, "PTE") != 0))
+                    || (subBundleKey != NULL &&  strcmp(subBundleKey, "LocaleScript") != 0 && !isCurrencyPreEuro(subBundleKey)))
                     && ures_getSize(subRootBundle) != ures_getSize(subBundle))
                 {
                     log_err("Different size array with key \"%s\" in \"%s\" from root for locale \"%s\"\n"
@@ -2473,7 +2485,7 @@ static void TestCanonicalization(void)
         { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
         { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
         { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
-        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=EUR" },
+        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=LUF" },
         { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
         { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
         { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },

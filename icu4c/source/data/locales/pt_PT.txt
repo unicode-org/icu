@@ -87,7 +87,17 @@ pt_PT {
         YU { "Jugosl\u00E1via" }
         //ZW { "Zimbabwe" }
     }
-
+    Currencies{
+        PTE { 
+            "Esc.", 
+            "Escudo portugu\u00eas",      
+            :array{
+                "#,##0.00 \u00A4;-#,##0.00 \u00A4", /*currency pattern*/   
+                "$",  /* decimal sperator*/ 
+                ",",  /* grouping separator*/
+            }
+        }
+    }
     Languages {
         ar { "\u00E1rabe" }
         cs { "checo" }
