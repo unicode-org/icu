@@ -1,5 +1,5 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.1 $
+## BEGIN of icu-config-bottom. $Revision: 1.2 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
@@ -22,7 +22,7 @@ ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
 #  esac
     
 #  echo ENABLE RPATH $ENABLE_RPATH and RPATHLDFLAGS=${RPATH_LDFLAGS}
-if [ "x$PKGDATA_MODE" == "x" ]; then
+if [ "x$PKGDATA_MODE" = "x" ]; then
     PKGDATA_MODE=dll
 fi
 
@@ -205,7 +205,7 @@ do
 	    ;;
 
 	--ldflags)
-	    echo $ICULIBS $LIBS
+	    echo $LDFLAGS $ICULIBS $LIBS 
 # $RPATH_LDFLAGS
 	    ;;
 
