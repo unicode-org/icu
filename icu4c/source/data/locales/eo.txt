@@ -7,7 +7,7 @@
 //              or better http://www.jtcsv.com/cgibin/icu-bugs
 
 eo {
-    Version { "2.1" } 
+    Version { "3.0" } 
 
     // collation: accented characters have primary (base character) differences
     // see Jitterbug 1440 http://www.jtcsv.com/cgibin/icu-bugs?findid=1440

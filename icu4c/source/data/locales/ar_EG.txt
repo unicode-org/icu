@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 ar_EG {
-    Version{"1.0"}
+    Version{"2.0"}
 //    LocaleString { "ar_EG" }
 //    ShortCountry { "EGY" }
     LocaleID:int { 0x0c01 }

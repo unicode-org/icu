@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 ar_KW {
-    Version{ "1.1" }
+    Version{ "2.0" }
 //    LocaleString { "ar_KW" }
 //    ShortCountry { "KWT" }
     LocaleID:int { 0x3401 }
