@@ -69,13 +69,6 @@ Set the destination directory to
 .IR destination .
 The default destination directory is specified by the environment variable
 .BR ICU_DATA .
-.SH INVARIANT CHARACTERS
-The
-.B invariant character set
-consists of the following set of characters, expressed as a standard POSIX
-regular expression:
-.BR "[a-z]|[A-Z]|[0-9]|_| |+|-|*|/" .
-This is the set which is guaranteed to be available regardless of code page.
 .SH ENVIRONMENT
 .TP 10
 .B ICU_DATA
