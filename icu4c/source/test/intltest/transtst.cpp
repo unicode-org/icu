@@ -1634,6 +1634,38 @@ void TransliteratorTest::TestSupplemental() {
                                 "{$a} [^\\u0000-\\uFFFF] > y;"),
            CharsToUnicodeString("kax\\U00010300xm"),
            CharsToUnicodeString("ky\\U00010400y\\U00010400m"));
+
+    expectT("Any-Name",
+           CharsToUnicodeString("\\U00010330\\U000E0061\\u00A0"),
+           "{GOTHIC LETTER AHSA}{TAG LATIN SMALL LETTER A}{NO-BREAK SPACE}");
+
+    expectT("Any-Hex/Unicode",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           "U+10330U+10FF00U+E0061U+00A0");
+
+    expectT("Any-Hex/C",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           "\\U00010330\\U0010FF00\\U000E0061\\u00A0");
+
+    expectT("Any-Hex/Perl",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           "\\x{10330}\\x{10FF00}\\x{E0061}\\x{A0}");
+
+    expectT("Any-Hex/Java",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           "\\uD800\\uDF30\\uDBFF\\uDF00\\uDB40\\uDC61\\u00A0");
+
+    expectT("Any-Hex/XML",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           "&#x10330;&#x10FF00;&#xE0061;&#xA0;");
+
+    expectT("Any-Hex/XML10",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           "&#66352;&#1113856;&#917601;&#160;");
+
+    expectT("[\\U000E0000-\\U000E0FFF] Remove",
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
+           CharsToUnicodeString("\\U00010330\\U0010FF00\\u00A0"));
 }
 
 void TransliteratorTest::TestQuantifier() { 
@@ -3264,6 +3296,21 @@ void TransliteratorTest::CheckIncrementalAux(const Transliterator* t,
 //======================================================================
 // Support methods
 //======================================================================
+void TransliteratorTest::expectT(const UnicodeString& id,
+                                 const UnicodeString& source,
+                                 const UnicodeString& expectedResult) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+    Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: Could not create " + id);
+        delete t;
+        return;
+    }
+    expect(*t, source, expectedResult);
+    delete t;
+}
+
 void TransliteratorTest::expect(const UnicodeString& rules,
                                 const UnicodeString& source,
                                 const UnicodeString& expectedResult,
