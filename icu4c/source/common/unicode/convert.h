@@ -15,16 +15,26 @@
 
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
+
 /**
+ * This class is deprecated and will be removed.
+ * Use the more powerful C conversion API with the UConverter type and ucnv_... functions.
+ *
+ * There are also two new functions in ICU 2.0 that convert a UnicodeString
+ * and extract a UnicodeString using a UConverter (search unistr.h for UConverter).
+ * They replace the fromUnicodeString() and toUnicodeString() functions here.
+ * All other UnicodeConverter functions are basically aliases of C API functions.
+ *
+ * Old documentation:
+ *
  * UnicodeConverter is a C++ wrapper class for UConverter.
  * You need one UnicodeConverter object in place of one UConverter object.
  * For details on the API and implementation of the
- * codepage converter iterface see ucnv.h.
+ * codepage converter interface see ucnv.h.
  *
  * @see UConverter
- * @stable
+ * @deprecated To be removed after 2002-sep-30; use the C API with UConverter and ucnv_... functions.
  */
-
 class U_COMMON_API UnicodeConverter
 {
  private:
