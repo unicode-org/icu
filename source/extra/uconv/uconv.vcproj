@@ -41,12 +41,11 @@
 				Outputs="$(ProjectDir)..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuuc.lib icuin.lib uconvmsg.lib"
+				AdditionalDependencies="uconvmsg.lib"
 				OutputFile=".\Release/uconv.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib,Release"
+				AdditionalLibraryDirectories="Release"
 				ProgramDatabaseFile=".\Release/uconv.pdb"
 				SubSystem="1"/>
 			<Tool
@@ -104,12 +103,11 @@
 				Outputs="$(ProjectDir)..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuucd.lib icuind.lib uconvmsg.lib"
+				AdditionalDependencies="uconvmsg.lib"
 				OutputFile=".\Debug/uconv.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib,Debug"
+				AdditionalLibraryDirectories="Debug"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/uconv.pdb"
 				SubSystem="1"/>

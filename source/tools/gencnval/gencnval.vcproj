@@ -42,12 +42,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuuc.lib icutu.lib"
 				OutputFile=".\Release/gencnval.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\toolutil\Release,..\..\..\lib"
 				ProgramDatabaseFile=".\Release/gencnval.pdb"
 				SubSystem="1"/>
 			<Tool
@@ -108,12 +105,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuucd.lib icutud.lib"
 				OutputFile=".\Debug/gencnval.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\toolutil\Debug,..\..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/gencnval.pdb"
 				SubSystem="1"/>

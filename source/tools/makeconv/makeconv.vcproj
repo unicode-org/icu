@@ -44,12 +44,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuucd.lib icutud.lib"
 				OutputFile=".\Debug/makeconv.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/makeconv.pdb"
 				SubSystem="1"/>
@@ -107,12 +104,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuuc.lib icutu.lib"
 				OutputFile=".\Release/makeconv.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
 				ProgramDatabaseFile=".\Release/makeconv.pdb"
 				SubSystem="1"/>
 			<Tool

@@ -41,12 +41,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuuc.lib icuin.lib"
 				OutputFile="..\..\..\bin\icuio28.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib\"
 				ProgramDatabaseFile=".\..\..\..\lib/icuio28.pdb"
 				BaseAddress="0x4ab00000"
 				ImportLibrary="..\..\..\lib/icuio.lib"/>
@@ -111,12 +108,9 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuucd.lib icuind.lib"
 				OutputFile="..\..\..\bin\icuio28d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="debug,..\..\..\lib\"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\..\..\..\lib/icuio28d.pdb"
 				BaseAddress="0x4ab00000"

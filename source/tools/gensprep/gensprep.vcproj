@@ -42,12 +42,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuuc.lib icutu.lib"
 				OutputFile=".\Release/gensprep.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
 				ProgramDatabaseFile=".\Release/gensprep.pdb"
 				SubSystem="1"/>
 			<Tool
@@ -105,12 +102,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icutud.lib icuucd.lib"
 				OutputFile=".\Debug/gensprep.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/gensprep.pdb"
 				SubSystem="1"/>

@@ -42,12 +42,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuuc.lib icutu.lib"
 				OutputFile=".\Release/genprops.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\toolutil\Release,..\..\..\lib\Release,..\..\..\lib"
 				ProgramDatabaseFile=".\Release/genprops.pdb"
 				SubSystem="1"/>
 			<Tool
@@ -108,12 +105,9 @@
 				Outputs="..\..\..\bin\$(TargetFileName)"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuucd.lib icutud.lib"
 				OutputFile=".\Debug/genprops.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\toolutil\Debug,..\..\..\lib\Debug,..\..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/genprops.pdb"
 				SubSystem="1"/>
@@ -147,7 +141,7 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			Filter="c;cpp;rc">
 			<File
 				RelativePath=".\genprops.c">
 			</File>
@@ -163,7 +157,7 @@
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl">
+			Filter="h">
 			<File
 				RelativePath=".\genprops.h">
 			</File>
