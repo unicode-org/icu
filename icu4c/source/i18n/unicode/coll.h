@@ -545,7 +545,8 @@ public:
   *  // result will be "abc" == "ABC"
   *  // tertiary differences will be ignored
   *  Collator::ComparisonResult result = myCollation->compare("abc", 
-  * \endcode                                                              "ABC");
+  *                                                              "ABC");
+  * \endcode 
   * </pre>
   * @see Collator#getStrength
   * @param newStrength the new comparison level.
