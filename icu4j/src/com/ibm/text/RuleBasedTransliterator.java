@@ -6,8 +6,8 @@ import java.util.Vector;
 /**
  * A transliterator that reads a set of rules in order to determine how to
  * perform translations.  Rules are stored in resource bundles indexed by name.
- * Rules are separated by newline characters ('\n'); to include a literal
- * newline, prefix it with a backslash ('\\\n').  Whitespace is significant.  If
+ * Rules are separated by semicolons (';').  To include a literal
+ * semicolon, prefix it with a backslash ('\\;').  Whitespace is significant.  If
  * the first character on a line is '#', the entire line is ignored as a
  * comment.
  *
@@ -181,7 +181,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.2 $ $Date: 1999/12/20 19:13:41 $
  */
 public class RuleBasedTransliterator extends Transliterator {
     /**
@@ -205,7 +205,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
     /**
      * Constructs a new transliterator from the given rules.
-     * @param rules rules, separated by '\n'
+     * @param rules rules, separated by ';'
      * @param direction either FORWARD or REVERSE.
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
@@ -222,7 +222,7 @@ public class RuleBasedTransliterator extends Transliterator {
     /**
      * Constructs a new transliterator from the given rules in the
      * <code>FORWARD</code> direction.
-     * @param rules rules, separated by '\n'
+     * @param rules rules, separated by ';'
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
      */
@@ -578,8 +578,8 @@ public class RuleBasedTransliterator extends Transliterator {
         }
 
         /**
-         * Parse the given string as a sequence of rules, separated by newline
-         * characters ('\n'), and cause this object to implement those rules.  Any
+         * Parse the given string as a sequence of rules, separated by semicolon
+         * characters (';'), and cause this object to implement those rules.  Any
          * previous rules are discarded.  Typically this method is called exactly
          * once, during construction.
          * @exception IllegalArgumentException if there is a syntax error in the
@@ -591,11 +591,11 @@ public class RuleBasedTransliterator extends Transliterator {
             int n = rules.length();
             int i = 0;
             while (i<n) {
-                int limit = rules.indexOf('\n', i);
+                int limit = rules.indexOf(';', i);
 
-                // Recognize "\\\n" as an escaped "\n"
+                // Recognize "\\;" as an escaped ";"
                 while (limit>0 && rules.charAt(limit-1) == '\\') {
-                    limit = rules.indexOf('\n', limit+1);
+                    limit = rules.indexOf(';', limit+1);
                 }
 
                 if (limit == -1) {
