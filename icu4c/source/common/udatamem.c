@@ -101,7 +101,7 @@ udata_close(UDataMemory *pData) {
 U_CAPI const void * U_EXPORT2
 udata_getMemory(UDataMemory *pData) {
     if(pData!=NULL && pData->pHeader!=NULL) {
-        return (char *)(pData->pHeader)+pData->pHeader->dataHeader.headerSize;
+        return (char *)(pData->pHeader)+udata_getHeaderSize(pData->pHeader);
     } else {
         return NULL;
     }
@@ -134,7 +134,7 @@ udata_getLength(UDataMemory *pData) {
          * subtract the header size,
          * return only the size of the actual data starting at udata_getMemory()
          */
-        return pData->length-pData->pHeader->dataHeader.headerSize;
+        return pData->length-udata_getHeaderSize(pData->pHeader);
     } else {
         return -1;
     }
