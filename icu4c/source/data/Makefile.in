@@ -195,6 +195,14 @@ TRNS_SRC_FILES=$(TRNS_SOURCE:%=$(TRNSSRCDIR)/%)
 MSC_SOURCE= $(MISC_SOURCE) $(MISC_SOURCE_LOCAL) 
 MSC_SRC_FILES=$(MSC_SOURCE:%=$(MISCSRCDIR)/%)
 
+ifeq ($(ENABLE_SO_VERSION_DATA),1)
+ifeq ($(PKGDATA_MODE),dll)
+SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
+$(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
+	rc.exe /i$(srcdir)/../common /fo$@ $<
+endif
+endif
+
 ALL_RES_SOURCE= $(RES_SOURCE) $(TRNS_SOURCE) $(MSC_SOURCE)
 RES_FILES = $(ALL_RES_SOURCE:%.txt=$(BUILDDIR)/%.res)
 RES_FILES_SHORT = $(ALL_RES_SOURCE:%.txt=%.res)
@@ -229,7 +237,7 @@ $(OUTTMPDIR)/icudata.lst: $(SRCLISTDEPS)
 	  echo $$file >> $@; \
 	done;
 
-build-local: build-dir build-data build-testdata
+build-local: build-dir $(SO_VERSION_DATA) build-data build-testdata
 
 build-data: build-dir $(ALL_FILES) $(OUTTMPDIR)/icudata.lst $(OS390LIST)
 
