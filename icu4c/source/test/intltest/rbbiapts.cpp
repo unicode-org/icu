@@ -737,6 +737,34 @@ void RBBIAPITest::TestRuleStatusVec() {
          TEST_ASSERT(numStatuses == 1);
          TEST_ASSERT(statusVals[0] == 0);
 
+         //
+         //  Check buffer overflow error handling.   Char == A 
+         //
+         bi->first();
+         pos = bi->next();
+         TEST_ASSERT(pos==1);
+         memset(statusVals, -1, sizeof(statusVals));
+         numStatuses = bi->getRuleStatusVec(statusVals, 0, status);
+         TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == -1);
+
+         status = U_ZERO_ERROR;
+         memset(statusVals, -1, sizeof(statusVals));
+         numStatuses = bi->getRuleStatusVec(statusVals, 1, status);
+         TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == 100);
+         TEST_ASSERT(statusVals[1] == -1);
+
+         status = U_ZERO_ERROR;
+         memset(statusVals, -1, sizeof(statusVals));
+         numStatuses = bi->getRuleStatusVec(statusVals, 2, status);
+         TEST_ASSERT_SUCCESS(status);
+         TEST_ASSERT(numStatuses == 2);
+         TEST_ASSERT(statusVals[0] == 100);
+         TEST_ASSERT(statusVals[1] == 300);
+         TEST_ASSERT(statusVals[2] == -1);
      }
      delete bi;
 
