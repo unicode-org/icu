@@ -227,6 +227,10 @@ CalendarAstronomer::CalendarAstronomer(double longitude, double latitude) :
   fGmtOffset = (double)(fLongitude * 24 * HOUR_MS / CalendarAstronomer::PI2);
 }
     
+CalendarAstronomer::~CalendarAstronomer()
+{
+  delete moonPosition;
+}
     
 //-------------------------------------------------------------------------
 // Time and date getters and setters
@@ -1274,7 +1278,6 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
                      rise?"T":"F", diameter, refraction, epsilon));
   do {
     // See "Practical Astronomy With Your Calculator, section 33.
-    delete pos;
     pos = func.eval(*this);
     double angle = ::acos(-tanL * ::tan(pos->declination));
     double lst = ((rise ? CalendarAstronomer::PI2-angle : angle) + pos->ascension ) * 24 / CalendarAstronomer::PI2;
@@ -1296,7 +1299,6 @@ UDate CalendarAstronomer::riseOrSet(CoordFunc& func, UBool rise,
   double y     = ::asin(sin(x) / ::sin(psi));
   long  delta  = (long)((240 * y * RAD_DEG / cosD)*SECOND_MS);
         
-  delete pos;
   return fTime + (rise ? -delta : delta);
 }
     
