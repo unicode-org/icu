@@ -53,6 +53,25 @@ enum {
     UPROPS_MAX_EXCEPTIONS_COUNT=1L<<UPROPS_VALUE_BITS
 };
 
+#define PROPS_VALUE_IS_EXCEPTION(props) ((props)&UPROPS_EXCEPTION_BIT)
+#define GET_CATEGORY(props) ((props)&0x1f)
+#define GET_NUMERIC_TYPE(props) (((props)>>UPROPS_NUMERIC_TYPE_SHIFT)&7)
+#define GET_UNSIGNED_VALUE(props) ((props)>>UPROPS_VALUE_SHIFT)
+#define GET_SIGNED_VALUE(props) ((int32_t)(props)>>UPROPS_VALUE_SHIFT)
+#define GET_EXCEPTIONS(props) (exceptionsTable+GET_UNSIGNED_VALUE(props))
+
+enum {
+    EXC_UPPERCASE,
+    EXC_LOWERCASE,
+    EXC_TITLECASE,
+    EXC_UNUSED,
+    EXC_NUMERIC_VALUE,
+    EXC_DENOMINATOR_VALUE,
+    EXC_MIRROR_MAPPING,
+    EXC_SPECIAL_CASING,
+    EXC_CASE_FOLDING
+};
+
 /* number of properties vector words */
 #define UPROPS_VECTOR_WORDS     2
 
@@ -126,26 +145,11 @@ enum {
 /**
  * Get a properties vector word for a code point.
  * Implemented in uchar.c for uprops.c.
+ * column==-1 gets the 32-bit main properties word instead.
  * @return 0 if no data or illegal argument
  */
 U_CFUNC uint32_t
 u_getUnicodeProperties(UChar32 c, int32_t column);
-
-/* ### TODO check with PropertyValueAliases.txt and move to uchar.h, @draft ICU 2.x */
-/**
- * East Asian Widths constants.
- * Keep in sync with names list in genprops/props2.c.
- */
-enum UEAWidthCode {
-    U_EA_NEUTRAL,
-    U_EA_AMBIGUOUS,
-    U_EA_HALF_WIDTH,
-    U_EA_FULL_WIDTH,
-    U_EA_NARROW,
-    U_EA_WIDE,
-    U_EA_TOP
-};
-typedef enum UEAWidthCode UEAWidthCode;
 
 /**
  * Unicode property names and property value names are compared
