@@ -1135,10 +1135,11 @@ static void TestConvertSafeClone()
 #define CLONETEST_CONVERTER_COUNT 5
 
 	char charBuffer [10];
-	char * pCharBuffer;
+	char *pCharBuffer;
+	const char *pConstCharBuffer;
 	const char *charBufferLimit = charBuffer + sizeof(charBuffer)/sizeof(*charBuffer);
 	UChar uniBuffer [] = {0x0058, 0x0059, 0x005A}; /* "XYZ" */
-	UChar * pUniBuffer;
+	const UChar * pUniBuffer;
 	const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
 	int index;
 	
@@ -1241,8 +1242,8 @@ static void TestConvertSafeClone()
 						TRUE,
 						&err);
 
-		pCharBuffer = charBuffer;
-		if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pCharBuffer, charBufferLimit, &err))
+		pConstCharBuffer = charBuffer;
+		if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pConstCharBuffer, charBufferLimit, &err))
 		{
 			log_err("FAIL: Cloned converter failed to do conversion\n");
 		}
