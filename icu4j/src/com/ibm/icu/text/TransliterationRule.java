@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2001/09/19 17:43:38 $ 
- * $Revision: 1.27 $
+ * $Date: 2001/09/26 18:00:06 $ 
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -44,34 +44,9 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.27 $ $Date: 2001/09/19 17:43:38 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.28 $ $Date: 2001/09/26 18:00:06 $
  */
 class TransliterationRule {
-    /**
-     * Constant returned by <code>getMatchDegree()</code> indicating a mismatch
-     * between the text and this rule.  One or more characters of the context or
-     * key do not match the text.
-     * @see #getMatchDegree
-     */
-    public static final int MISMATCH      = 0;
-
-    /**
-     * Constant returned by <code>getMatchDegree()</code> indicating a partial
-     * match between the text and this rule.  All characters of the text match
-     * the corresponding context or key, but more characters are required for a
-     * complete match.  There are some key or context characters at the end of
-     * the pattern that remain unmatched because the text isn't long enough.
-     * @see #getMatchDegree
-     */
-    public static final int PARTIAL_MATCH = 1;
-
-    /**
-     * Constant returned by <code>getMatchDegree()</code> indicating a complete
-     * match between the text and this rule.  The text matches all context and
-     * key characters.
-     * @see #getMatchDegree
-     */
-    public static final int FULL_MATCH    = 2;
 
     /**
      * The string that must be matched, consisting of the anteContext, key,
@@ -89,19 +64,20 @@ class TransliterationRule {
     private String output;
 
     /**
-     * Array of segments.  These are segments of the input string that may be
-     * referenced and appear in the output string.  Each segment is stored as an
-     * offset, limit pair.  Segments are referenced by a 1-based index;
-     * reference i thus includes characters at offset segments[2*i-2] to
-     * segments[2*i-1]-1 in the pattern string.
-     *
-     * In the output string, a segment reference is indicated by a character in
-     * a special range, as defined by RuleBasedTransliterator.Data.
-     *
-     * Most rules have no segments, in which case segments is null, and the
-     * output string need not be checked for segment reference characters.
+     * An array of integers encoding the position of the segments.
+     * See RuleBasedTransliterator.Segments for more details.
      */
-    private int[] segments;
+    int[] segments;
+
+    /**
+     * A value we compute from segments.  The first index into segments[]
+     * that is >= anteContextLength.  That is, the first one that is within
+     * the forward scanned part of the pattern -- the key or the postContext.
+     * If there are no segments, this has the value -1.  This index is relative
+     * to FIRST_SEG_POS_INDEX; that is, it should be used as follows:
+     * segments[FIRST_SEG_POS_INDEX + firstKeySeg].
+     */
+    int firstKeySeg;
 
     /**
      * The length of the string that must match before the key.  If
@@ -123,7 +99,22 @@ class TransliterationRule {
      */
     private int cursorPos;
 
-    private RuleBasedTransliterator.Data data;
+    /**
+     * Miscellaneous attributes.
+     */
+    byte flags;
+
+    /**
+     * Flag attributes.
+     */
+    static final int ANCHOR_START = 1;
+    static final int ANCHOR_END   = 2;
+
+    /**
+     * An alias pointer to the data for this rule.  The data provides
+     * lookup services for matchers and segments.
+     */
+    private final RuleBasedTransliterator.Data data;
 
     /**
      * The character at index i, where i < contextStart || i >= contextLimit,
@@ -136,8 +127,22 @@ class TransliterationRule {
     private static final char APOSTROPHE = '\'';
     private static final char BACKSLASH  = '\\';
 
+    // Macros for accessing the array of integers encoding the position of
+    // the segments.  See RuleBasedTransliterator.Segments for more details.
+    // SEGMENTS_COUNT number of segments, n (half the number of parens)
+    // SEGMENTS_LEN   length of the segments array (number of elements)
+    // SEGMENTS_POS   position in 'pattern' of parenthesis i, where i=0..2n-1
+    // SEGMENTS_NUM   index into segments to access POS of $1.open,
+    //                $1.close, $2.open, $2.close,.., $n.open, $n.close
+    //                Relative to FIRST_SEG_POS_INDEX.  Ranges from 0..2n-1.
+    static final int FIRST_SEG_POS_INDEX = 2;
+    static final int SEGMENTS_COUNT(int[] x) { return x[0]; }
+    static final int SEGMENTS_LEN(int[] x) { return (SEGMENTS_COUNT(x)*4+4); }
+    static final int SEGMENTS_POS(int[] x,int i) { return x[FIRST_SEG_POS_INDEX+i]; }
+    static final int SEGMENTS_NUM(int[] x,int i) { return x[x[1]+i]-FIRST_SEG_POS_INDEX; }
+
     private static final String COPYRIGHT =
-        "\u00A9 IBM Corporation 1999. All rights reserved.";
+        "\u00A9 IBM Corporation 1999-2001. All rights reserved.";
 
     /**
      * Construct a new rule with the given input, output text, and other
@@ -178,6 +183,8 @@ class TransliterationRule {
                                int[] segs,
                                boolean anchorStart, boolean anchorEnd,
                                RuleBasedTransliterator.Data theData) {
+        data = theData;
+
         // Do range checks only when warranted to save time
         if (anteContextPos < 0) {
             anteContextLength = 0;
@@ -203,65 +210,35 @@ class TransliterationRule {
             throw new IllegalArgumentException("Invalid cursor position");
         }
         this.cursorPos = cursorPos + cursorOffset;
-        pattern = input;
         this.output = output;
         // We don't validate the segments array.  The caller must
         // guarantee that the segments are well-formed.
         this.segments = segs;
 
-        // Implement anchors by inserting an ETHER character on the
-        // left or right.  If on the left, then the indices must be
-        // incremented.  If on the right, no index change is
-        // necessary.
-        if (anchorStart || anchorEnd) {
-            StringBuffer buf = new StringBuffer();
-            if (anchorStart) {
-                buf.append(ETHER);
-                ++anteContextLength;
-                // Adjust segment offsets
-                if (segments != null) {
-                    for (int i=0; i<segments.length; ++i) {
-                        ++segments[i];
-                    }
-                }
+        // Find the position of the first segment index that is after the
+        // anteContext (in the key).  Note that this may be a start or a
+        // limit index.  If all segments are in the ante context,
+        // firstKeySeg should point past the last segment -- that is, it
+        // should point at the end marker, which is -1.  This allows the
+        // code to back up by one to obtain the last ante context segment.
+        firstKeySeg = -1;
+        if (segments != null) {
+            firstKeySeg = FIRST_SEG_POS_INDEX;
+            while (segments[firstKeySeg] >= 0 &&
+                   segments[firstKeySeg] < anteContextLength) {
+                ++firstKeySeg;
             }
-            buf.append(input);
-            if (anchorEnd) {
-                buf.append(ETHER);
-            }
-            pattern = buf.toString();
+            firstKeySeg -= FIRST_SEG_POS_INDEX; // make relative to FSPI
         }
 
-        data = theData;
-    }
-
-    /**
-     * Construct a new rule with the given input, output text, and other
-     * attributes.  A cursor position may be specified for the output text.
-     * @param input input string, including key and optional ante and
-     * post context
-     * @param anteContextPos offset into input to end of ante context, or -1 if
-     * none.  Must be <= input.length() if not -1.
-     * @param postContextPos offset into input to start of post context, or -1
-     * if none.  Must be <= input.length() if not -1, and must be >=
-     * anteContextPos.
-     * @param output output string
-     * @param cursorPos offset into output at which cursor is located, or -1 if
-     * none.  If less than zero, then the cursor is placed after the
-     * <code>output</code>; that is, -1 is equivalent to
-     * <code>output.length()</code>.  If greater than
-     * <code>output.length()</code> then an exception is thrown.
-     */
-    //public TransliterationRule(String input,
-    //                           int anteContextPos, int postContextPos,
-    //                           String output,
-    //                           int cursorPos) {
-    //    this(input, anteContextPos, postContextPos,
-    //         output, cursorPos, 0, null, false, false);
-    //}
-
-    public void setData(RuleBasedTransliterator.Data theData) {
-        data = theData;
+        pattern = input;
+        flags = 0;
+        if (anchorStart) {
+            flags |= ANCHOR_START;
+        }
+        if (anchorEnd) {
+            flags |= ANCHOR_END;
+        }
     }
 
     /**
@@ -278,7 +255,7 @@ class TransliterationRule {
      * <code>getMaximumContextLength()</code>.
      */
     public int getAnteContextLength() {
-        return anteContextLength;
+        return anteContextLength + (((flags & ANCHOR_START) != 0) ? 1 : 0);
     }
 
     /**
@@ -287,78 +264,14 @@ class TransliterationRule {
      * unless the first character of the key is a set.  If it's a
      * set, or otherwise can match multiple keys, the index value is -1.
      */
-    final int getIndexValue(RuleBasedTransliterator.Data variables) {
+   final int getIndexValue() {
         if (anteContextLength == pattern.length()) {
             // A pattern with just ante context {such as foo)>bar} can
             // match any key.
             return -1;
         }
-        char c = pattern.charAt(anteContextLength);
-        return variables.lookupSet(c) == null ? (c & 0xFF) : -1;
-    }
-
-    /**
-     * Do a replacement of the input pattern with the output text in
-     * the given string, at the given offset.  This method assumes
-     * that a match has already been found in the given text at the
-     * given position.
-     * @param text the text containing the substring to be replaced
-     * @param offset the offset into the text at which the pattern
-     * matches.  This is the offset to the point after the ante
-     * context, if any, and before the match string and any post
-     * context.
-     * @param data the RuleBasedTransliterator.Data object specifying
-     * context for this transliterator.
-     * @return the change in the length of the text
-     */
-    public int replace(Replaceable text, int offset,
-                       RuleBasedTransliterator.Data data) {
-        if (segments == null) {
-            text.replace(offset, offset + keyLength, output);
-            return output.length() - keyLength;
-        } else {
-            /* When there are segments to be copied, use the Replaceable.copy()
-             * API in order to retain out-of-band data.  Copy everything to the
-             * point after the key, then delete the key.  That is, copy things
-             * into offset + keyLength, then replace offset .. offset +
-             * keyLength with the empty string.
-             *
-             * Minimize the number of calls to Replaceable.replace() and
-             * Replaceable.copy().
-             */
-            int textStart = offset - anteContextLength;
-            int dest = offset + keyLength; // copy new text to here
-            StringBuffer buf = new StringBuffer();
-            for (int i=0; i<output.length(); ++i) {
-                char c = output.charAt(i);
-                int b = data.lookupSegmentReference(c);
-                if (b < 0) {
-                    // Accumulate straight (non-segment) text.
-                    buf.append(c);
-                } else {
-                    // Insert any accumulated straight text.
-                    if (buf.length() > 0) {
-                        text.replace(dest, dest, buf.toString());
-                        dest += buf.length();
-                        buf.setLength(0);
-                    }
-                    // Copy segment with out-of-band data
-                    b *= 2;
-                    text.copy(textStart + segments[b],
-                              textStart + segments[b+1], dest);
-                    dest += segments[b+1] - segments[b];
-                }
-                
-            }
-            // Insert any accumulated straight text.
-            if (buf.length() > 0) {
-                text.replace(dest, dest, buf.toString());
-                dest += buf.length();
-            }
-            // Delete the key
-            text.replace(offset, offset + keyLength, "");
-            return dest - (offset + keyLength) - keyLength;
-        }
+        int c = UTF16.charAt(pattern, anteContextLength);
+        return data.lookup(c) == null ? (c & 0xFF) : -1;
     }
 
     /**
@@ -371,15 +284,16 @@ class TransliterationRule {
      * value.  If the rule contains only ante context, as in foo)>bar,
      * then it will match any key.
      */
-    final boolean matchesIndexValue(int v, RuleBasedTransliterator.Data variables) {
+    final boolean matchesIndexValue(byte v) {
         if (anteContextLength == pattern.length()) {
             // A pattern with just ante context {such as foo)>bar} can
             // match any key.
             return true;
         }
-        char c = pattern.charAt(anteContextLength);
-        UnicodeSet set = variables.lookupSet(c);
-        return set == null ? (c & 0xFF) == v : set.containsIndexValue(v);
+        int c = UTF16.charAt(pattern, anteContextLength);
+        UnicodeMatcher matcher = data.lookup(c);
+        return matcher == null ? (c & 0xFF) == v :
+            matcher.matchesIndexValue(v);
     }
 
     /**
@@ -404,6 +318,22 @@ class TransliterationRule {
          * of) the corresponding characters of r2.  The superset
          * operation should be performed to check for UnicodeSet
          * masking.
+         *
+         * Anchors:  Two patterns that differ only in anchors only
+         * mask one another if they are exactly equal, and r2 has
+         * all the anchors r1 has (optionally, plus some).  Here Y
+         * means the row masks the column, N means it doesn't.
+         *
+         *         ab   ^ab    ab$  ^ab$
+         *   ab    Y     Y     Y     Y
+         *  ^ab    N     Y     N     Y
+         *   ab$   N     N     Y     Y
+         *  ^ab$   N     N     N     Y
+         *
+         * Post context: {a}b masks ab, but not vice versa, since {a}b
+         * matches everything ab matches, and {a}b matches {|a|}b but ab
+         * does not.  Pre context is different (a{b} does not align with
+         * ab).
          */
 
         /* LIMITATION of the current mask algorithm: Some rule
@@ -411,370 +341,310 @@ class TransliterationRule {
          * "{Lu}]a>x" masks "A]a>y".  This can be added later. TODO
          */
 
+        int len = pattern.length();
         int left = anteContextLength;
         int left2 = r2.anteContextLength;
         int right = pattern.length() - left;
         int right2 = r2.pattern.length() - left2;
-        return left <= left2 && right <= right2 &&
-            r2.pattern.substring(left2 - left).startsWith(pattern);
-    }
-
-    /**
-     * Return a string representation of this object.
-     * @return string representation of this object
-     */
-    public String toString() {
-        return getClass().getName() + '{'
-            + Utility.escape((anteContextLength > 0 ? (pattern.substring(0, anteContextLength) +
-                                              " {") : "")
-                     + pattern.substring(anteContextLength, anteContextLength + keyLength)
-                     + (anteContextLength + keyLength < pattern.length() ?
-                        ("} " + pattern.substring(anteContextLength + keyLength)) : "")
-                     + " > "
-                     + (cursorPos < output.length()
-                        ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
-                        : output))
-            + '}';
-    }
-
-    /**
-     * Return true if this rule matches the given text.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     */
-    public final boolean matches(Replaceable text,
-                                 Transliterator.Position pos,
-                                 RuleBasedTransliterator.Data variables,
-                                 UnicodeFilter filter) {
-        // Match anteContext, key, and postContext
-        int cursor = pos.start - anteContextLength;
-        // Quick length check; this is a performance win for long rules.
-        // Widen by one (on both sides) to allow anchor matching.
-        if (cursor < (pos.contextStart - 1)
-            || (cursor + pattern.length()) > (pos.contextLimit + 1)) {
-            return false;
+        
+        // TODO Clean this up -- some logic might be combinable with the
+        // next statement.
+        
+        // Test for anchor masking
+        if (left == left2 && right == right2 &&
+            keyLength <= r2.keyLength &&
+            r2.pattern.regionMatches(0, pattern, 0, len)) {
+            // The following boolean logic implements the table above
+            return (flags == r2.flags) ||
+                (!((flags & ANCHOR_START) != 0) && !((flags & ANCHOR_END) != 0)) ||
+                (((r2.flags & ANCHOR_START) != 0) && ((r2.flags & ANCHOR_END) != 0));
         }
-        for (int i=0; i<pattern.length(); ++i, ++cursor) {
-            if (!charMatches(pattern.charAt(i), text, cursor, pos,
-                             variables, filter)) {
-                return false;
+
+        return left <= left2 &&
+            (right < right2 ||
+             (right == right2 && keyLength <= r2.keyLength)) &&
+            r2.pattern.regionMatches(left2 - left, pattern, 0, len);
+    }
+
+    static final int posBefore(Replaceable str, int pos) {
+        return (pos > 0) ?
+            pos - UTF16.getCharCount(UTF16.charAt(str, pos-1)) :
+            pos - 1;
+    }
+    
+    static final int posAfter(Replaceable str, int pos) {
+        return (pos >= 0 && pos < str.length()) ?
+            pos + UTF16.getCharCount(UTF16.charAt(str, pos)) :
+            pos + 1;
+    }
+
+    /**
+     * Attempt a match and replacement at the given position.  Return
+     * the degree of match between this rule and the given text.  The
+     * degree of match may be mismatch, a partial match, or a full
+     * match.  A mismatch means at least one character of the text
+     * does not match the context or key.  A partial match means some
+     * context and key characters match, but the text is not long
+     * enough to match all of them.  A full match means all context
+     * and key characters match.
+     * 
+     * If a full match is obtained, perform a replacement, update pos,
+     * and return U_MATCH.  Otherwise both text and pos are unchanged.
+     * 
+     * @param text the text
+     * @param pos the position indices
+     * @param incremental if TRUE, test for partial matches that may
+     * be completed by additional text inserted at pos.limit.
+     * @return one of <code>U_MISMATCH</code>,
+     * <code>U_PARTIAL_MATCH</code>, or <code>U_MATCH</code>.  If
+     * incremental is FALSE then U_PARTIAL_MATCH will not be returned.
+     */
+    public int matchAndReplace(Replaceable text,
+                               Transliterator.Position pos,
+                               boolean incremental) {
+        // Matching and replacing are done in one method because the
+        // replacement operation needs information obtained during the
+        // match.  Another way to do this is to have the match method
+        // create a match result struct with relevant offsets, and to pass
+        // this into the replace method.
+
+        // ============================ MATCH ===========================
+
+        // Record the actual positions, in the text, of the segments.
+        // These are recorded in the order that they occur in the pattern.
+
+        // segPos[] is an array of 2*SEGMENTS_COUNT elements.  It
+        // records the position in 'text' of each segment boundary, in
+        // the order that they occur in 'pattern'.
+        int[] segPos = null;
+        if (segments != null) {
+            segPos = new int[2*SEGMENTS_COUNT(segments)];
+        }
+        // iSeg is an index into segments[] that accesses the first
+        // array.  As such it ranges from 0 to SEGMENTS_COUNT*2 - 1.
+        // When indexing into segments[] FIRST_SEG_POS_INDEX must be
+        // added to it: segments[FIRST_SEG_POS_INDEX + iSeg].
+        int iSeg = firstKeySeg - 1;
+        // nextSegPos is an offset in 'pattern'.  When the cursor is
+        // equal to nextSegPos, we are at a segment boundary, and we
+        // record the position in the real text in segPos[].
+        int nextSegPos = (iSeg >= 0) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
+
+        int lenDelta, keyLimit;
+        int[] intRef = new int[1];
+
+        // ------------------------ Ante Context ------------------------
+
+        // A mismatch in the ante context, or with the start anchor,
+        // is an outright U_MISMATCH regardless of whether we are
+        // incremental or not.
+        int oText; // offset into 'text'
+        int newStart = 0;
+        int minOText;
+        int oPattern; // offset into 'pattern'
+
+        // Backup oText by one
+        oText = posBefore(text, pos.start);
+
+        for (oPattern=anteContextLength-1; oPattern>=0; --oPattern) {
+            char keyChar = pattern.charAt(oPattern);
+            UnicodeMatcher matcher = data.lookup(keyChar);
+            if (matcher == null) {
+                if (oText >= pos.contextStart &&
+                    keyChar == text.charAt(oText)) {
+                    --oText;
+                } else {
+                    return UnicodeMatcher.U_MISMATCH;
+                }
+            } else {
+                // Subtract 1 from contextStart to make it a reverse limit
+                intRef[0] = oText;
+                if (matcher.matches(text, intRef, pos.contextStart-1, false)
+                    != UnicodeMatcher.U_MATCH) {
+                    return UnicodeMatcher.U_MISMATCH;
+                }
+                oText = intRef[0];
+            }
+            while (nextSegPos == oPattern) {
+                segPos[iSeg] = oText;
+                if (oText >= 0) {
+                    segPos[iSeg] += UTF16.getCharCount(UTF16.charAt(text, oText));
+                } else {
+                    ++segPos[iSeg];
+                }
+                nextSegPos = (--iSeg >= FIRST_SEG_POS_INDEX) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
             }
         }
-        return true;
-    }
 
-//|    /**
-//|     * Array of quantifiers.  Each quantifier is represented by 4
-//|     * integers: The start and limit (in the pattern), the minimum
-//|     * count, and the maximum count.  Counts are inclusive.
-//|     * quant.length is always a multiple of 4.  quant may be null.  If
-//|     * quant is not null, it must have a length >= 4.  Quants are
-//|     * arranged in order of increasing start index, and secondarily in
-//|     * order of increasing limit index.  They may be nested but they
-//|     * may not otherwise overlap.
-//|     */
-//|    private int[] quant;
-//|
-//|    /**
-//|     */
-//|    boolean matchAndReplace(Replaceable text,
-//|                            Transliterator.Position pos,
-//|                            RuleBasedTransliterator.Data data) {
-//|        // Set the cursor to point to the start of the anteContext.
-//|        // The textPos is an index into the source text.
-//|        int textPos = pos.start - anteContextLength;
-//|        
-//|        int patternLen = pattern.length();
-//|
-//|        // patternPos is the relative position in the pattern text, from
-//|        // 0..patternLen-1.
-//|        int patternPos = 0;
-//|
-//|        // Local array of match data.  Match i corresponds to quant i.
-//|        // Each match is described by 2 integers: match start (in the
-//|        // source text) and match limit.  If the match is empty then
-//|        // match start == match limit.  Match count is not stored; if
-//|        // the count fell in the legal range, we accept it; if not, we
-//|        // return with a match failure.  We also store two integers
-//|        // at the start; [0] is the index to the next quant to be
-//|        // matched, and [1] is unused.
-//|        int[] matchState = null;
-//|
-//|        int iQuant = 0;
-//|        int quantStart = -1;
-//|
-//|        if (quant != null) {
-//|            quantStart = quant[iQuant];
-//|
-//|            matchState = new int[2 + (quant.length / 2)];
-//|            for (int i=0; i<matchState.length; ++i) {
-//|                matchState[i] = -1;
-//|            }
-//|
-//|            matchState[0] = 4;
-//|        }
-//|
-//|        while (patternPos < patternLen) {
-//|            if (patternPos == quantStart) {
-//|                // Match a quant, including repetitions and nested quants
-//|                int newTextPos = matchQuant(text, pos, data,
-//|                                           textPos, iQuant, matchState);
-//|                if (newTextPos < 0) {
-//|                    // Match failure
-//|                    return newTextPos;
-//|                }
-//|
-//|                // Match success
-//|                textPos = newTextPos;
-//|
-//|                // Update patternPos to point after the quant we just matched
-//|                patternPos = quant[iQuant+1];
-//|
-//|                // Update the next quant
-//|                iQuant = matchState[0];
-//|                if (iQuant < quant.length) {
-//|                    quantStart = quant[iQuant];
-//|                    matchState[0] += 4;
-//|                } else {
-//|                    quantStart = -1; // No more quants
-//|                }
-//|
-//|                continue;
-//|            }
-//|
-//|            // Do a single-character match test, with the filtering etc.
-//|            // embodied in the Replaceable object.
-//|            if (!charMatches(pattern.charAt(patternPos), text, textPos, data)) {
-//|                // On match failure, return
-//|                return false;
-//|            }
-//|
-//|            ++textPos;
-//|            ++patternPos;
-//|        }
-//|
-//|        // We've successfully matched the pattern.  All the match data
-//|        // is in matchState[].
-//|    }
-//|
-//|    /**
-//|     * @param matchState stores the current match status.  For
-//|     * quant i, matchState[2+2*i] stores the start and
-//|     * matchState[3+2*i] stores the limit index in the matched
-//|     * source text.  matchState[0] stores the next unmatched
-//|     * quant index * 4.
-//|     */
-//|    private int matchQuant(Replaceable text,
-//|                           Transliterator.Position pos,
-//|                           RuleBasedTransliterator.Data data,
-//|                           int textPos,
-//|                           int iQuant,
-//|                           int[] matchState) {
-//|        // assert(quant != null);
-//|        // assert(iQuant < quant.length);
-//|        // assert(matchState != null);
-//|        // assert(matchState.length == quant.length/2 + 2);
-//|
-//|        int nextIQuant = matchState[0];
-//|        int nextQuantStart = -1;
-//|        if (nextIQuant < quant.length) {
-//|            nextQuantStart = quant[nextIQuant];
-//|            matchState[0] += 4;
-//|        }
-//|
-//|        int patternPos = quant[iQuant];
-//|        int quantLimit = quant[iQuant+1];
-//|
-//|        // Save our backup position in case we fail to match a
-//|        // quant repetition.
-//|        int backupTextPos = textPos;
-//|
-//|        // Save our starting match position
-//|        matchState[2*iQuant + 2] = textPos;
-//|
-//|        int matchCount = 0;
-//|
-//|        for (;;) {
-//|            // If we are at the start of the next quant, then match it
-//|            // recursively.  This will (if successful) move the patternPos
-//|            // to the next quant limit, and increment the next iQuant
-//|            // stored in matchState[0] -- but it will not, of course
-//|            // update our nextIQuant; we have to do after we return.
-//|            if (patternPos == nextQuantStart) {
-//|                textPos = matchQuant(text, pos, data, textPos, nextIQuant, matchState);
-//|                if (textPos < 0) {
-//|                    return textPos; // value <0 indicates match failure
-//|                }
-//|
-//|                // We have successfully done a recursive quant match
-//|                // so we know the patternPos is at the next quantLimit.
-//|                patternPos = quant[nextIQuant+1];
-//|
-//|                // Update nextIQuant and nextQuantStart.
-//|                nextIQuant = matchState[0];
-//|                if (nextIQuant < quant.length) {
-//|                    nextQuantStart = quant[nextIQuant];
-//|                    matchState[0] += 4;
-//|                } else {
-//|                    nextQuantStart = -1;
-//|                }
-//|
-//|                continue;
-//|            }
-//|
-//|            // We are not at the start of a nested quant, so do
-//|            // a normal character match.
-//|            if (charMatches(pattern.charAt(patternPos), text, textPos, data)) {
-//|                // Match success -- continue
-//|                ++textPos;
-//|                ++patternPos;
-//|                // If we have matched a full segment, then save a new
-//|                // backup position and see about repeating.
-//|                if (patternPos == quantLimit) {
-//|                    backupTextPos = textPos;
-//|                    ++matchCount;
-//|                    // If we are allowed to have more matched, be greedy;
-//|                    // backup the patternPos and see if we have another match
-//|                    if (matchCount < quant[iQuant+3]) {
-//|                        patternPos = quant[iQuant];
-//|                        continue;
-//|                    }
-//|
-//|                    // We have exhausted the maximum match count, so we
-//|                    // are done.  Save our limit position and return.
-//|                    matchState[2*iQuant + 3] = textPos; // Limit
-//|                    return textPos;
-//|                }
-//|            }
-//|
-//|            // Match failure
-//|            else {
-//|                // Backup to our last successful position and see
-//|                // if we matched the proper count for this quant.
-//|                textPos = backupTextPos;
-//|                
-//|                // assert(matchCount <= quant[iQuant+3]
-//|                if (matchCount >= quant[iQuant+2]) {
-//|                    matchState[2*iQuant + 3] = textPos; // Limit
-//|                    return textPos;
-//|                }
-//|
-//|                // We failed to make the minimum match count.
-//|                return -1;
-//|            }
-//|        }
-//|    }
+        minOText = posAfter(text, oText);
 
-    /**
-     * Return the degree of match between this rule and the given text.  The
-     * degree of match may be mismatch, a partial match, or a full match.  A
-     * mismatch means at least one character of the text does not match the
-     * context or key.  A partial match means some context and key characters
-     * match, but the text is not long enough to match all of them.  A full
-     * match means all context and key characters match.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
-     * <code>FULL_MATCH</code>.
-     * @see #MISMATCH
-     * @see #PARTIAL_MATCH
-     * @see #FULL_MATCH
-     */
-    public int getMatchDegree(Replaceable text,
-                              Transliterator.Position pos,
-                              RuleBasedTransliterator.Data variables,
-                              UnicodeFilter filter) {
-        int len = getRegionMatchLength(text, pos, variables, filter);
-        return len < anteContextLength ? MISMATCH :
-            (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
-    }
+        // ------------------------ Start Anchor ------------------------
 
-    /**
-     * Return the number of characters of the text that match this rule.  If
-     * there is a mismatch, return -1.  If the text is not long enough to match
-     * any characters, return 0.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param variables a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return -1 if there is a mismatch, 0 if the text is not long enough to
-     * match any characters, otherwise the number of characters of text that
-     * match this rule.
-     */
-    protected int getRegionMatchLength(Replaceable text,
-                                       Transliterator.Position pos,
-                                       RuleBasedTransliterator.Data variables,
-                                       UnicodeFilter filter) {
-        int cursor = pos.start - anteContextLength;
-        // Quick length check; this is a performance win for long rules.
-        // Widen by one to allow anchor matching.
-        if (cursor < (pos.contextStart - 1)) {
-            return -1;
+        if (((flags & ANCHOR_START) != 0) && oText != posBefore(text, pos.contextStart)) {
+            return UnicodeMatcher.U_MISMATCH;
         }
-        int i;
-        for (i=0; i<pattern.length() && cursor<pos.contextLimit; ++i, ++cursor) {
-            if (!charMatches(pattern.charAt(i), text, cursor, pos,
-                             variables, filter)) {
-                return -1;
+
+        // -------------------- Key and Post Context --------------------
+
+        iSeg = firstKeySeg;
+        nextSegPos = (iSeg >= 0) ? (segments[FIRST_SEG_POS_INDEX+iSeg] - anteContextLength) : -1;
+
+        oPattern = 0;
+        oText = pos.start;
+        keyLimit = 0;
+        while (oPattern < (pattern.length() - anteContextLength)) {
+            if (incremental && oText == pos.contextLimit) {
+                // We've reached the context limit without a mismatch and
+                // without completing our match.
+                return UnicodeMatcher.U_PARTIAL_MATCH;
+            }
+            if (oText == pos.limit && oPattern < keyLength) {
+                // We're still in the pattern key but we're entering the
+                // post context.
+                return UnicodeMatcher.U_MISMATCH;
+            }
+            while (oPattern == nextSegPos) {
+                segPos[iSeg] = oText;
+                nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
+            }
+            if (oPattern == keyLength) {
+                keyLimit = oText;
+            }
+            char keyChar = pattern.charAt(anteContextLength + oPattern++);
+            UnicodeMatcher matcher = data.lookup(keyChar);
+            if (matcher == null) {
+                // Don't need the oText < pos.contextLimit check if
+                // incremental is TRUE (because it's done above); do need
+                // it otherwise.
+                if (oText < pos.contextLimit &&
+                    keyChar == text.charAt(oText)) {
+                    ++oText;
+                } else {
+                    return UnicodeMatcher.U_MISMATCH;
+                }
+            } else {
+                intRef[0] = oText;
+                int m = matcher.matches(text, intRef, pos.contextLimit, incremental);
+                if (m != UnicodeMatcher.U_MATCH) {
+                    return m;
+                }
+                oText = intRef[0];
             }
         }
-        return i;
-    }
+        while (oPattern == nextSegPos) {
+            segPos[iSeg] = oText;
+            nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
+        }
+        if (oPattern == keyLength) {
+            keyLimit = oText;
+        }
 
-    /**
-     * Return true if the given key matches the given text.  This method
-     * accounts for the fact that the key character may represent a character
-     * set.  Note that the key and text characters may not be interchanged
-     * without altering the results.
-     * @param keyChar a character in the match key
-     * @param textChar a character in the text being transliterated
-     * @param variables a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     */
-    protected static final boolean charMatches(char keyChar, Replaceable text,
-                                               int index, Transliterator.Position pos,
-                                               RuleBasedTransliterator.Data variables,
-                                               UnicodeFilter filter) {
-        UnicodeSet set = null;
-        char textChar = (index >= pos.contextStart && index < pos.contextLimit)
-            ? text.charAt(index) : ETHER;
-        return (filter == null || filter.contains(textChar)) &&
-            (((set = variables.lookupSet(keyChar)) == null) ?
-             keyChar == textChar : set.contains(textChar));
+        // ------------------------- Stop Anchor ------------------------
+
+        if (((flags & ANCHOR_END)) != 0) {
+            if (oText != pos.contextLimit) {
+                return UnicodeMatcher.U_MISMATCH;
+            }
+            if (incremental) {
+                return UnicodeMatcher.U_PARTIAL_MATCH;
+            }
+        }
+
+        // =========================== REPLACE ==========================
+
+        // We have a full match.  The key is between pos.start and
+        // keyLimit.  Segment indices have been recorded in segPos[].
+        // Perform a replacement.
+
+        if (segments == null) {
+            text.replace(pos.start, keyLimit, output);
+            lenDelta = output.length() - (keyLimit - pos.start);
+            if (cursorPos >= 0 && cursorPos < keyLength) {
+                // Within the key, the cursor refers to 16-bit code units
+                newStart = pos.start + cursorPos;
+            } else {
+                newStart = pos.start;
+                int n = cursorPos;
+                // Outside the key, cursorPos counts code points
+                while (n > 0) {
+                    newStart += UTF16.getCharCount(UTF16.charAt(text, newStart));
+                    --n;
+                }
+                while (n < 0) {
+                    newStart -= UTF16.getCharCount(UTF16.charAt(text, newStart-1));
+                    ++n;
+                }
+            }
+        } else {
+            /* When there are segments to be copied, use the Replaceable.copy()
+             * API in order to retain out-of-band data.  Copy everything to the
+             * point after the key, then delete the key.  That is, copy things
+             * into offset + keyLength, then replace offset .. offset +
+             * keyLength with the empty string.
+             *
+             * Minimize the number of calls to Replaceable.replace() and
+             * Replaceable.copy().
+             */
+            int dest = keyLimit; // copy new text to here
+            StringBuffer buf = new StringBuffer();
+            int oOutput; // offset into 'output'
+            for (oOutput=0; oOutput<output.length(); ) {
+                if (oOutput == cursorPos) {
+                    // Record the position of the cursor
+                    newStart = dest - (keyLimit - pos.start);
+                }
+                int c = UTF16.charAt(output, oOutput);
+                int b = data.lookupSegmentReference(c);
+                if (b < 0) {
+                    // Accumulate straight (non-segment) text.
+                    UTF16.append(buf, c);
+                } else {
+                    // Insert any accumulated straight text.
+                    if (buf.length() > 0) {
+                        text.replace(dest, dest, buf.toString());
+                        dest += buf.length();
+                        buf.setLength(0);
+                    }
+                    // Copy segment with out-of-band data
+                    b *= 2;
+                    int start = segPos[SEGMENTS_NUM(segments,b)];
+                    int limit = segPos[SEGMENTS_NUM(segments,b+1)];
+                    text.copy(start, limit, dest);
+                    dest += limit - start;
+                }
+                oOutput += UTF16.getCharCount(c);
+            }
+            // Insert any accumulated straight text.
+            if (buf.length() > 0) {
+                text.replace(dest, dest, buf.toString());
+                dest += buf.length();
+            }
+            if (oOutput == cursorPos) {
+                // Record the position of the cursor
+                newStart = dest - (keyLimit - pos.start);
+            }
+            // Delete the key
+            buf.setLength(0);
+            text.replace(pos.start, keyLimit, buf.toString());
+            lenDelta = dest - keyLimit - (keyLimit - pos.start);
+            // Handle cursor in postContext
+            if (cursorPos > output.length()) {
+                newStart = pos.start + (dest - keyLimit);
+                int n = cursorPos - output.length();
+                // cursorPos counts code points
+                while (n > 0) {
+                    newStart += UTF16.getCharCount(UTF16.charAt(text, newStart));
+                    n--;
+                }
+            }
+        }
+    
+        oText += lenDelta;
+        pos.limit += lenDelta;
+        pos.contextLimit += lenDelta;
+        // Restrict new value of start to [minOText, min(oText, pos.limit)].
+        pos.start = Math.max(minOText, Math.min(Math.min(oText, pos.limit), newStart));
+        return UnicodeMatcher.U_MATCH;
     }
 
     /**
@@ -888,12 +758,6 @@ class TransliterationRule {
     static private int[] POW10 = {1, 10, 100, 1000, 10000, 100000, 1000000,
                                   10000000, 100000000, 1000000000};
 
-    static private final int SEGMENTS_COUNT(int[] segments) {
-        // TODO
-        //return segments[0];
-        return segments.length / 2;
-    }
-
     /**
      * Create a source string that represents this rule.  Append it to the
      * given string.
@@ -903,18 +767,16 @@ class TransliterationRule {
         
         StringBuffer rule = new StringBuffer();
 
-        //|| int iseg = FIRST_SEG_POS_INDEX-1;
-        int iseg = -1;
+        // iseg indexes into segments[] directly (not offset from FSPI)
+        int iseg = FIRST_SEG_POS_INDEX-1;
         int nextSeg = -1;
         // Build an array of booleans specifying open vs. close paren
         boolean[] isOpen = null;
         if (segments != null) {
             isOpen = new boolean[2*SEGMENTS_COUNT(segments)];
             for (i=0; i<2*SEGMENTS_COUNT(segments); i+=2) {
-                //|| isOpen[SEGMENTS_NUM(segments,i)  -FIRST_SEG_POS_INDEX] = true;
-                //|| isOpen[SEGMENTS_NUM(segments,i+1)-FIRST_SEG_POS_INDEX] = false;
-                isOpen[i]   = true;
-                isOpen[i+1] = false;
+                isOpen[SEGMENTS_NUM(segments,i)  ] = true;
+                isOpen[SEGMENTS_NUM(segments,i+1)] = false;
             }
             nextSeg = segments[++iseg];
         }
@@ -937,10 +799,7 @@ class TransliterationRule {
 
             // Append either '(' or ')' if we are at a segment index
             if (i == nextSeg) {
-                //||appendToRule(rule, isOpen[iseg-FIRST_SEG_POS_INDEX] ?
-                //||                 '(' : ')',
-                //||                 true, escapeUnprintable, quoteBuf);
-                appendToRule(rule, isOpen[iseg] ?
+                appendToRule(rule, isOpen[iseg-FIRST_SEG_POS_INDEX] ?
                                  '(' : ')',
                                  true, escapeUnprintable, quoteBuf);
                 nextSeg = segments[++iseg];
@@ -951,20 +810,13 @@ class TransliterationRule {
             }
 
             char c = pattern.charAt(i);
-            UnicodeSet set = data.lookupSet(c);
-            if (set == null) {
+            UnicodeMatcher matcher = data.lookup(c);
+            if (matcher == null) {
                 appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
             } else {
-                appendToRule(rule, set.toPattern(escapeUnprintable),
+                appendToRule(rule, matcher.toPattern(escapeUnprintable),
                               true, escapeUnprintable, quoteBuf);
             }
-            //||UnicodeMatcher matcher = data.lookup(c);
-            //||if (matcher == null) {
-            //||    appendToRule(rule, c, false, escapeUnprintable, quoteBuf);
-            //||} else {
-            //||    appendToRule(rule, matcher.toPattern(escapeUnprintable),
-            //||                  true, escapeUnprintable, quoteBuf);
-            //||}
         }
 
         if (i == nextSeg) {
@@ -1031,10 +883,31 @@ class TransliterationRule {
 
         return rule.toString();
     }
+
+    /**
+     * Return a string representation of this object.
+     * @return string representation of this object
+     */
+    public String toString() {
+        return getClass().getName() + '{'
+            + Utility.escape((anteContextLength > 0 ? (pattern.substring(0, anteContextLength) +
+                                              " {") : "")
+                     + pattern.substring(anteContextLength, anteContextLength + keyLength)
+                     + (anteContextLength + keyLength < pattern.length() ?
+                        ("} " + pattern.substring(anteContextLength + keyLength)) : "")
+                     + " > "
+                     + (cursorPos < output.length()
+                        ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
+                        : output))
+            + '}';
+    }
 }
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.28  2001/09/26 18:00:06  alan
+ * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
+ *
  * Revision 1.27  2001/09/19 17:43:38  alan
  * jitterbug 60: initial implementation of toRules()
  *
