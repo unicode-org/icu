@@ -85,6 +85,7 @@ public:
     void testFormat(void);
     void testParse(void);
     void testAdopt(void);
+    void TestTurkishCasing(void);
 
 private:
 };
