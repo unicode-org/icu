@@ -2653,6 +2653,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
                 cp = U16_GET_SUPPLEMENTARY(thCh, trailCh);                  
               } else {
                 loadState(source, &thaiState, TRUE);
+                cp = (UChar32)thCh;
               }
             } else {
               cp = (UChar32)thCh;
@@ -2662,7 +2663,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           }
           // Now we have the character that needs to be decomposed
           // if the normalizing buffer was not used, we can just use our structure and be happy.
-          if(source->flags & UCOL_ITER_INNORMBUF == 0) {
+          if((source->flags & UCOL_ITER_INNORMBUF) == 0) {
             // decompose into writable buffer
             int32_t decompLen = unorm_getDecomposition(cp, FALSE, &(source->writableBuffer[1]), UCOL_WRITABLE_BUFFER_SIZE-1);
             if(decompLen < 0) {
@@ -2680,10 +2681,8 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             // zero terminate, since normalization buffer is always zero terminated
             source->writableBuffer[decompLen+1] = 0; // we added the prevowel
             if(source->pos) {
-              source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
+              source->fcdPosition       = source->pos;   // Indicate where to continue in main input string
                                                            //   after exhausting the writableBuffer
-            } else if(source->iterator) {
-              source->iterator->next(source->iterator);
             }
             source->pos   = source->writableBuffer;
             source->origFlags         = source->flags;
