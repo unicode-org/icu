@@ -219,7 +219,7 @@ typedef unsigned int uint32_t;
 /* Character data types                                                      */
 /*===========================================================================*/
 
-#ifdef OS390
+#if defined(OS390) || defined(OS400)
 #   define U_CHARSET_FAMILY 1
 #endif
 
@@ -240,12 +240,15 @@ typedef unsigned int uint32_t;
 #define U_HAVE_NL_LANGINFO_CODESET  @U_HAVE_NL_LANGINFO_CODESET@
 #define U_NL_LANGINFO_CODESET       @U_NL_LANGINFO_CODESET@
 
+#if @U_HAVE_TZSET@
 #define U_TZSET         @U_TZSET@
-#define U_HAVE_TIMEZONE @U_HAVE_TIMEZONE@
-#if U_HAVE_TIMEZONE
-#   define U_TIMEZONE   @U_TIMEZONE@
 #endif
+#if @U_HAVE_TIMEZONE@
+#define U_TIMEZONE      @U_TIMEZONE@
+#endif
+#if @U_HAVE_TZNAME@
 #define U_TZNAME        @U_TZNAME@
+#endif
 
 #define U_HAVE_MMAP     @HAVE_MMAP@
 #define U_HAVE_POPEN    @U_HAVE_POPEN@
