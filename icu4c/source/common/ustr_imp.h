@@ -38,6 +38,18 @@ uprv_strCompare(const UChar *s1, int32_t length1,
                 UBool strncmpStyle, UBool codePointOrder);
 
 /**
+ * Internal API, used by u_strcasecmp() etc.
+ * Compare strings case-insensitively,
+ * in code point order or code unit order.
+ * @internal
+ */
+U_CFUNC int32_t
+u_strcmpFold(const UChar *s1, int32_t length1,
+             const UChar *s2, int32_t length2,
+             uint32_t options,
+             UErrorCode *pErrorCode);
+
+/**
  * Are the Unicode properties loaded?
  * This must be used before internal functions are called that do
  * not perform this check.

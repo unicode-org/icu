@@ -63,8 +63,8 @@ UnicodeString::doCaseCompare(int32_t start,
 
   if(chars != srcChars) {
     UErrorCode errorCode=U_ZERO_ERROR;
-    int32_t result=unorm_cmpEquivFold(chars, length, srcChars, srcLength,
-                                      options|U_COMPARE_IGNORE_CASE, &errorCode);
+    int32_t result=u_strcmpFold(chars, length, srcChars, srcLength,
+                                options|U_COMPARE_IGNORE_CASE, &errorCode);
     if(result!=0) {
       return (int8_t)(result >> 24 | 1);
     }

@@ -259,19 +259,6 @@ unorm_compose(UChar *dest, int32_t destCapacity,
  */
 #define _STRNCMP_STYLE 0x1000
 
-/**
- * Internal API, used by u_strcasecmp() etc.
- * Compare strings for canonical equivalence (optional),
- * case-insensitively (optional),
- * in code point order or code unit order.
- * @internal
- */
-U_CAPI int32_t U_EXPORT2
-unorm_cmpEquivFold(const UChar *s1, int32_t length1,
-                   const UChar *s2, int32_t length2,
-                   uint32_t options,
-                   UErrorCode *pErrorCode);
-
 #if !UCONFIG_NO_NORMALIZATION
 
 /**
