@@ -112,8 +112,8 @@ U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
   return gBundle;
 }
 
-/* Format a message and print it's output to stderr */
-U_CAPI void  u_wmsg(const char *tag, ... )
+/* Format a message and print it's output to fp */
+U_CAPI int u_wmsg(FILE *fp, const char *tag, ... )
 {
     const UChar *msg;
     int32_t      msgLen;
@@ -124,16 +124,20 @@ U_CAPI void  u_wmsg(const char *tag, ... )
 
     if(gBundle == NULL)
     {
+#if 0
         fprintf(stderr, "u_wmsg: No path set!!\n"); /* FIXME: codepage?? */
-        return;
+#endif
+        return -1;
     }
 
     msg = ures_getStringByKey(gBundle, tag, &msgLen, &err);
 
     if(U_FAILURE(err))
     {
+#if 0
         fprintf(stderr, "u_wmsg: failed to load tag [%s] [%s] [%s]!!\n", tag,  u_errorName(err), gPath);
-        return;
+#endif
+        return -1;
     }
 
     va_start(ap, tag);
@@ -144,26 +148,31 @@ U_CAPI void  u_wmsg(const char *tag, ... )
 
     if(U_FAILURE(err))
     {
+#if 0
         fprintf(stderr, "u_wmsg: failed to format %s:%s, err %s\n",
             uloc_getDefault(),
             tag,
             u_errorName(err));
-
+#endif
         err = U_ZERO_ERROR;
-        uprint(msg,msgLen, stderr, &err);
-        return;
+        uprint(msg,msgLen, fp, &err);
+        return -1;
     }
 
-    uprint(result, resultLength, stderr, &err);
+    uprint(result, resultLength, fp, &err);
 
     if(U_FAILURE(err))
     {
-        fprintf(stderr, "u_wmsg: failed to print %s:%s, err %s\n",
+#if 0
+        fprintf(stderr, "u_wmsg: failed to print %s: %s, err %s\n",
             uloc_getDefault(),
             tag,
             u_errorName(err));
-        return;
+#endif
+        return -1;
     }
+
+	return 0;
 }
 
 /* these will break if the # of messages change. simply add or remove 0's .. */
