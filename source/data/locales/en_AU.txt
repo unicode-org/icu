@@ -22,10 +22,10 @@ en_AU {
         ".",
     }
     DateTimePatterns { 
-        "hh:mm:ss a z",
-        "h:mm:ss",
-        "h:mm:ss",
-        "h:mm",
+        "h:mm:ss a z",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
         "EEEE, d MMMM yyyy",
         "d MMMM yyyy",
         "dd/MM/yyyy",
