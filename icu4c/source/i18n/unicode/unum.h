@@ -304,24 +304,6 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @param fmt The formatter to set.
 * @param localized TRUE if the pattern is localized, FALSE otherwise.
 * @param pattern The new pattern
-* @param patternLength The length of pattern, or -1 if null-terminated.
-* @see unum_toPattern
-* @deprecated
-U_CAPI void U_EXPORT2 
-unum_applyPattern(          UNumberFormat  *format,
-                            UBool          localized,
-                    const   UChar          *pattern,
-                            int32_t        patternLength
-                            );
-*/
-
-
-/**
-* Set the pattern used by an UNumberFormat.
-* The pattern should follow the pattern syntax rules.
-* @param fmt The formatter to set.
-* @param localized TRUE if the pattern is localized, FALSE otherwise.
-* @param pattern The new pattern
 * @param parseError  A pointer to UParseError to recieve information about errors
 *                    occurred during parsing.
 * @param patternLength The length of pattern, or -1 if null-terminated.
