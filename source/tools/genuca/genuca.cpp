@@ -660,8 +660,8 @@ struct {
   int32_t surrogateCount = 0;
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
-            fprintf(stderr, "Something returned an error %i (%s) while processing line: %i\nExiting...",
-                *status, u_errorName(*status), line);
+            fprintf(stderr, "Something returned an error %i (%s) while processing line %i of $s. Exiting...\n",
+                *status, u_errorName(*status), line, filename);
             exit(*status);
         }
 
