@@ -187,7 +187,7 @@ caseMapLineFn(void *context,
     UBool* mapWithNorm = (UBool*) context;
 
     /* ignore First and Last entries for ranges */
-    if( *fields[1][0]=='<' &&
+    if( fields[1][0] != NULL &&  *fields[1][0]=='<' &&
         (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
         (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
     ) {
@@ -237,14 +237,15 @@ unicodeDataLineFn(void *context,
     uint32_t rangeStart=0,rangeEnd =0;
     UBool* isUnassigned = (UBool*) context;
 
-    /* ignore First and Last entries for ranges 
-    if( *fields[1][0]=='<' &&
+
+    /* ignore First and Last entries for ranges */
+    if( fields[1][0] != NULL &&  *fields[1][0]=='<' &&
         (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
         (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
     ) {
         return;
     }
-   */
+ 
 
     u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
     
