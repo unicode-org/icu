@@ -5,25 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarPanel.java,v $ 
- * $Date: 2002/02/19 04:10:23 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/05/14 18:35:51 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.demo.calendar;
 
-import com.ibm.icu.dev.demo.*;
-
-import java.applet.Applet;
 import java.awt.*;
-import java.awt.event.*;
-//import java.util.*;
-import java.net.*;
-import java.io.*;
 
-//import java.text.DateFormat;
-import com.ibm.icu.text.DateFormat;
 //import java.util.SimpleTimeZone;
 import com.ibm.icu.util.SimpleTimeZone;
 //import java.util.*;
@@ -31,7 +22,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.util.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.demo.impl.*;
 
@@ -163,9 +153,12 @@ class CalendarPanel extends Canvas {
         c.getTime();        // JDK 1.1.2 bug workaround
         c.add(Calendar.SECOND, -1);
         Date endOfMonth = c.getTime();
+        if(endOfMonth==null){
+         //do nothing
+        }
         endOfMonth = null;
         int lastWeek = c.get(Calendar.WEEK_OF_MONTH);
-
+        
         // Calculate the number of full or partial weeks in this month.
         numWeeks = lastWeek - firstWeek + 1;
 

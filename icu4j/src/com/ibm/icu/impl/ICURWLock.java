@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICURWLock.java,v $
- * $Date: 2002/08/13 23:40:52 $
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 18:37:39 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -14,7 +14,6 @@ package com.ibm.icu.impl;
 
 // See Allan Holub's 1999 column in JavaWorld, and Doug Lea's code for RWLocks with writer preference.
 
-import java.util.LinkedList;
 
 /**
  * <p>A simple Reader/Writer lock.  This assumes that there will

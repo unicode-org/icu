@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testcircularalias.java,v $
- * $Date: 2002/08/13 21:43:38 $
- * $Revision: 1.2 $
+ * $Date: 2003/05/14 18:35:27 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.data;
 
-import java.util.ListResourceBundle;
 import com.ibm.icu.impl.ICUListResourceBundle;
 /**
  * @author Ram

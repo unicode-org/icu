@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterNameIterator.java,v $
-* $Date: 2003/01/28 18:55:40 $
-* $Revision: 1.5 $
+* $Date: 2003/05/14 18:38:09 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -238,7 +238,7 @@ class UCharacterNameIterator implements ValueIterator
             int index = m_name_.getGroupLengths(m_groupIndex_, GROUP_OFFSETS_,
                                                 GROUP_LENGTHS_);
             while (m_current_ < limit) {
-                int    offset = m_name_.getGroupOffset(m_current_);
+                int    offset = UCharacterName.getGroupOffset(m_current_);
                 String name   = m_name_.getGroupName(
                                           index + GROUP_OFFSETS_[offset],
                                           GROUP_LENGTHS_[offset], m_choice_);
@@ -276,10 +276,10 @@ class UCharacterNameIterator implements ValueIterator
         while (m_groupIndex_ < m_name_.m_groupcount_ &&
                m_current_ < limit) {
             // iterate till the last group or the last codepoint
-            int startMSB = m_name_.getCodepointMSB(m_current_);
+            int startMSB = UCharacterName.getCodepointMSB(m_current_);
             int gMSB     = m_name_.getGroupMSB(m_groupIndex_); // can be -1
             if (startMSB == gMSB) {
-                if (startMSB == m_name_.getCodepointMSB(limit - 1)) {
+                if (startMSB == UCharacterName.getCodepointMSB(limit - 1)) {
                     // if start and limit - 1 are in the same group, then enumerate
                     // only in that one
                     return iterateSingleGroup(result, limit);
@@ -287,7 +287,7 @@ class UCharacterNameIterator implements ValueIterator
                 // enumerate characters in the partial start group
                 // if (m_name_.getGroupOffset(m_current_) != 0) {
                 if (!iterateSingleGroup(result,
-                                        m_name_.getGroupLimit(gMSB))) {
+                                        UCharacterName.getGroupLimit(gMSB))) {
                     return false;
                 }
                 ++ m_groupIndex_; // continue with the next group
@@ -298,7 +298,7 @@ class UCharacterNameIterator implements ValueIterator
                     m_groupIndex_ ++;
             }
             else {
-                int gMIN = m_name_.getGroupMin(gMSB);
+                int gMIN = UCharacterName.getGroupMin(gMSB);
                 if (gMIN > limit) {
                     gMIN = limit;
                 }

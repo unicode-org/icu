@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DumbTextComponent.java,v $ 
- * $Date: 2002/03/19 00:17:01 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -75,7 +75,7 @@ public class DumbTextComponent extends Canvas
 
 // ================ Events ====================
 
-    public boolean isFocusTraversable() { return true; }
+    // public boolean isFocusTraversable() { return true; }
 
 	public void addActionListener(ActionListener l) {
         selectionListener = AWTEventMulticaster.add(selectionListener, l);

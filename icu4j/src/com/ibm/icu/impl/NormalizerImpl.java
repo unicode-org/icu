@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2003/04/10 08:02:28 $
- * $Revision: 1.19 $
+ * $Date: 2003/05/14 18:37:39 $
+ * $Revision: 1.20 $
  *******************************************************************************
  */
  
@@ -312,9 +312,9 @@ public final class NormalizerImpl {
             reader.read(normBytes, fcdBytes,auxBytes, extraData, combiningTable, 
                         canonStartSets);
                                        
-            normTrieImpl.normTrie = new IntTrie( new ByteArrayInputStream(normBytes),normTrieImpl );
-            fcdTrieImpl.fcdTrie   = new CharTrie( new ByteArrayInputStream(fcdBytes),fcdTrieImpl  );
-            auxTrieImpl.auxTrie   = new CharTrie( new ByteArrayInputStream(auxBytes),auxTrieImpl  );
+            NormTrieImpl.normTrie = new IntTrie( new ByteArrayInputStream(normBytes),normTrieImpl );
+            FCDTrieImpl.fcdTrie   = new CharTrie( new ByteArrayInputStream(fcdBytes),fcdTrieImpl  );
+            AuxTrieImpl.auxTrie   = new CharTrie( new ByteArrayInputStream(auxBytes),auxTrieImpl  );
             
             // we reached here without any exceptions so the data is fully 
             // loaded set the variable to true
@@ -393,7 +393,7 @@ public final class NormalizerImpl {
 	/* data access primitives ----------------------------------------------- */
 	
 	public static long/*unsigned*/ getNorm32(char c) {
-        return ((UNSIGNED_INT_MASK) & (normTrieImpl.normTrie.getLeadValue(c)));
+        return ((UNSIGNED_INT_MASK) & (NormTrieImpl.normTrie.getLeadValue(c)));
 	}
 	
 	public static long/*unsigned*/ getNorm32FromSurrogatePair(long norm32, 
@@ -403,10 +403,10 @@ public final class NormalizerImpl {
          * index block see gennorm/store.c/getFoldedNormValue()
 	     */
 	    return ((UNSIGNED_INT_MASK) & 
-                    normTrieImpl.normTrie.getTrailValue((int)norm32, c2));
+                    NormTrieImpl.normTrie.getTrailValue((int)norm32, c2));
 	}
 	private static long getNorm32(int c){
-        return (UNSIGNED_INT_MASK&(normTrieImpl.normTrie.getCodePointValue(c)));
+        return (UNSIGNED_INT_MASK&(NormTrieImpl.normTrie.getCodePointValue(c)));
     }
     
     private static long getNorm32(int c,int mask){
@@ -433,17 +433,17 @@ public final class NormalizerImpl {
 	}
 
 	public static char	getFCD16(char c) {
-	    return  fcdTrieImpl.fcdTrie.getLeadValue(c);
+	    return  FCDTrieImpl.fcdTrie.getLeadValue(c);
 	}
 	
 	public static char getFCD16FromSurrogatePair(char fcd16, char c2) {
 	    /* the surrogate index in fcd16 is an absolute offset over the 
          * start of stage 1 
          * */
-	    return fcdTrieImpl.fcdTrie.getTrailValue(fcd16, c2);
+	    return FCDTrieImpl.fcdTrie.getTrailValue(fcd16, c2);
 	}
     public static int getFCD16(int c) {
-        return  fcdTrieImpl.fcdTrie.getCodePointValue(c);
+        return  FCDTrieImpl.fcdTrie.getCodePointValue(c);
     }
     	
 	private static int getExtraDataIndex(long norm32) {
@@ -899,7 +899,7 @@ public final class NormalizerImpl {
                     // we need to get its trail cc 
                     //
                     if(!nx_contains(nx, (int)-prevCC)) {
-    	                prevCC=(int)(fcdTrieImpl.fcdTrie.getBMPValue(
+    	                prevCC=(int)(FCDTrieImpl.fcdTrie.getBMPValue(
                                              (char)-prevCC)&0xff
                                              ); 
 	                } else {
@@ -2536,7 +2536,7 @@ public final class NormalizerImpl {
 	
 	public static boolean isFullCompositionExclusion(int c) {
 	    if(isFormatVersion_2_1) {
-	        int aux =auxTrieImpl.auxTrie.getCodePointValue(c);
+	        int aux =AuxTrieImpl.auxTrie.getCodePointValue(c);
 	        return (boolean)((aux & AUX_COMP_EX_MASK)!=0);
 	    } else {
 	        return false;
@@ -2545,7 +2545,7 @@ public final class NormalizerImpl {
 	
 	public static boolean isCanonSafeStart(int c) {
 	    if(isFormatVersion_2_1) {
-	        int aux = auxTrieImpl.auxTrie.getCodePointValue(c);
+	        int aux = AuxTrieImpl.auxTrie.getCodePointValue(c);
 	        return (boolean)((aux & AUX_UNSAFE_MASK)==0);
 	    } else {
 	        return false;
@@ -2677,7 +2677,7 @@ public final class NormalizerImpl {
             destCapacity = dest.length;
         }
         
-        int aux =auxTrieImpl.auxTrie.getCodePointValue(c);
+        int aux =AuxTrieImpl.auxTrie.getCodePointValue(c);
 
         aux&= AUX_FNC_MASK;
         if(aux!=0) {
@@ -2707,7 +2707,7 @@ public final class NormalizerImpl {
     public static boolean isNFSkippable(int c, Normalizer.Mode mode, long mask) {
         long /*unsigned int*/ norm32;
         mask = mask & UNSIGNED_INT_MASK;
-        char aux, fcd;
+        char aux;
    
         /* check conditions (a)..(e), see unormimp.h */
         norm32 = getNorm32(c);
@@ -2739,7 +2739,7 @@ public final class NormalizerImpl {
         }
     
 
-        aux = auxTrieImpl.auxTrie.getCodePointValue(c);
+        aux = AuxTrieImpl.auxTrie.getCodePointValue(c);
         return (aux&AUX_NFC_SKIP_F_MASK)==0; /* TRUE=skippable if the (f) flag is not set */
     
         /* } else { FCC, test fcd<=1 instead of the above } */
@@ -2759,7 +2759,7 @@ public final class NormalizerImpl {
        
         /* add the start code point of each same-value range of each trie */
         //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
-        TrieIterator normIter = new TrieIterator(normTrieImpl.normTrie);
+        TrieIterator normIter = new TrieIterator(NormTrieImpl.normTrie);
         RangeValueIterator.Element normResult = new RangeValueIterator.Element();
         
         while(normIter.next(normResult)){
@@ -2767,7 +2767,7 @@ public final class NormalizerImpl {
         }
         
         //utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
-        TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
+        TrieIterator fcdIter  = new TrieIterator(FCDTrieImpl.fcdTrie);
         RangeValueIterator.Element fcdResult = new RangeValueIterator.Element();
 
         while(fcdIter.next(fcdResult)){
@@ -2776,7 +2776,7 @@ public final class NormalizerImpl {
         
         if(isFormatVersion_2_1){
             //utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, set);
-            TrieIterator auxIter  = new TrieIterator(auxTrieImpl.auxTrie);
+            TrieIterator auxIter  = new TrieIterator(AuxTrieImpl.auxTrie);
             RangeValueIterator.Element auxResult = new RangeValueIterator.Element();
             while(auxIter.next(auxResult)){
                 set.add(auxResult.start);
@@ -2800,7 +2800,7 @@ public final class NormalizerImpl {
 	 * @internal
 	 */
 	public CharTrie getFCDTrie(){
-		return fcdTrieImpl.fcdTrie;
+		return FCDTrieImpl.fcdTrie;
 	}
 
 
@@ -2918,7 +2918,7 @@ public final class NormalizerImpl {
 	    
         long norm32;
 	    int length=0;
-	    norm32 = (long) ((UNSIGNED_INT_MASK) & normTrieImpl.normTrie.getCodePointValue(c));
+	    norm32 = (long) ((UNSIGNED_INT_MASK) & NormTrieImpl.normTrie.getCodePointValue(c));
 	    if((norm32 & QC_NFD)!=0) {
 	        if(isNorm32HangulOrJamo(norm32)) {
 	            /* Hangul syllable: decompose algorithmically */
@@ -3563,7 +3563,7 @@ public final class NormalizerImpl {
 	        int start, end;
 	        long norm32;
 	
-	        while(it.nextRange() && (it.codepoint != it.IS_STRING)) {
+	        while(it.nextRange() && (it.codepoint != UnicodeSetIterator.IS_STRING)) {
 	            start=it.codepoint;
 	            end=it.codepointEnd;
 	            while(start<=end) {

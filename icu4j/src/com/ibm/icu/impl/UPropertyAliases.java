@@ -121,7 +121,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
         InputStream is = getClass().getResourceAsStream(DATA_FILE_NAME);
         BufferedInputStream b = new BufferedInputStream(is, DATA_BUFFER_SIZE);
         // Read and discard Unicode version...
-        byte unicodeVersion[] = ICUBinary.readHeader(b, DATA_FORMAT_ID, this);
+       /* byte unicodeVersion[] = */ICUBinary.readHeader(b, DATA_FORMAT_ID, this);
         DataInputStream d = new DataInputStream(b);
 
         // Record the origin position of the file.  Keep enough around

@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/TextBoundDemo.java,v $ 
- * $Date: 2002/08/01 20:27:21 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.rbbi;
 
-import com.ibm.icu.dev.demo.*;
-import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -22,7 +20,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
-import java.util.*;
 import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.text.BreakIterator;
 

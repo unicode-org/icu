@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/rbbi/Attic/WriteTablesToFiles.java,v $ 
- * $Date: 2002/03/01 02:37:47 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 18:36:43 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.rbbi;
 
 import java.io.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
 public class WriteTablesToFiles {

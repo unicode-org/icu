@@ -5,14 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
-* $Date: 2003/02/11 01:17:52 $ 
-* $Revision: 1.4 $
+* $Date: 2003/05/14 18:37:39 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.text.*;
 import com.ibm.icu.text.UCharacterIterator;
 
 /**

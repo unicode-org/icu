@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbnf/RbnfDemo.java,v $ 
- * $Date: 2002/02/19 04:10:24 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.rbnf;
 
-import com.ibm.icu.dev.demo.*;
-import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;

@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/RBBIDemo.java,v $ 
- * $Date: 2002/08/01 20:27:21 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/05/14 18:35:53 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.rbbi;
 
-import com.ibm.icu.dev.demo.*;
-import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.KeyEvent;

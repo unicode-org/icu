@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UtilityExtensions.java,v $
- * $Date: 2003/01/28 18:55:38 $
- * $Revision: 1.1 $
+ * $Date: 2003/05/14 18:37:40 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -80,7 +80,7 @@ public class UtilityExtensions {
             pos.limit <= pos.contextLimit &&
             pos.contextLimit <= input.length()) {
 
-            String a, b, c, d, e;
+            String  b, c, d;
             //a = input.substring(0, pos.contextStart);
             b = input.substring(pos.contextStart, pos.start);
             c = input.substring(pos.start, pos.limit);

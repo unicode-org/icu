@@ -78,7 +78,7 @@ public class WriteIndicCharts {
             Transliterator t8 = Transliterator.getInstance("InterIndic-Malayalam");
             Transliterator t9 = Transliterator.getInstance("InterIndic-Devanagari");
             Transliterator t10 = Transliterator.getInstance("InterIndic-Latin");
-            UnicodeSetIterator sIter = new UnicodeSetIterator(deva);
+            //UnicodeSetIterator sIter = new UnicodeSetIterator(deva);
             
             for(int i=0x00;i<=0x80;i++){
                String[] arr =  new String[10];
@@ -202,7 +202,7 @@ public class WriteIndicCharts {
 	        Transliterator t8 = Transliterator.getInstance("InterIndic-Malayalam");
 	        Transliterator t9 = Transliterator.getInstance("InterIndic-Devanagari");
             
-	        UnicodeSetIterator sIter = new UnicodeSetIterator(deva);
+	        //UnicodeSetIterator sIter = new UnicodeSetIterator(deva);
 	        
 	        for(int i=0x0900;i<=0x097F;i++){
 	           String[] arr =  new String[10];

@@ -5,25 +5,19 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2003/05/01 18:59:11 $
- * $Revision: 1.14 $
+ * $Date: 2003/05/14 18:37:39 $
+ * $Revision: 1.15 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class ICULocaleService extends ICUService {
     private Locale fallbackLocale;
@@ -419,8 +413,8 @@ public class ICULocaleService extends ICUService {
             Set cache = getSupportedIDs();
             
             boolean visible = (coverage & 0x1) == 0;
-            boolean covers = (coverage & 0x2) != 0;
-            boolean removes = !visible || (coverage & 0x4) != 0;
+           // boolean covers = (coverage & 0x2) != 0;
+           // boolean removes = !visible || (coverage & 0x4) != 0;
 
             // System.out.println("vis: " + visible + " covers: " + covers + " removes: " + removes);
             Map toRemap = new HashMap();

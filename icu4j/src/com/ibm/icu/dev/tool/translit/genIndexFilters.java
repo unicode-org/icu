@@ -8,9 +8,7 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.tool.translit;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
-import java.util.*;
 import java.io.*;
 
 /**

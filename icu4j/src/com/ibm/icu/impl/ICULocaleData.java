@@ -271,7 +271,7 @@ public class ICULocaleData {
         String name = packageNames[i] + "." + bundleName;
         try {
         if (name.indexOf("_zh_") == -1) { // DLF temporary hack
-            Class rbclass = ICULocaleData.class.forName(name);
+            Class rbclass = Class.forName(name);
             ResourceBundle rb = (ResourceBundle)rbclass.newInstance();
             return rb;
         }
