@@ -849,6 +849,11 @@ private:
   */
   friend class Collator;
 
+  /**
+  * Searching over collation elements in a character source
+  */
+  friend class StringSearch;
+
   // private constructors --------------------------------------------------
 
   /**
@@ -893,9 +898,23 @@ private:
   /**
   * Creates the c struct for ucollator
   * @param collator new ucollator data
-  * @param status error status
   */
   void setUCollator(UCollator *collator);
+
+  /**
+  * Creates the c struct for ucollator. This used internally by StringSearch.
+  * Hence the responsibility of cleaning up the ucollator is not done by
+  * this RuleBasedCollator. The isDataOwned flag is set to FALSE.
+  * @param collator new ucollator data
+  * @param rules corresponding collation rules
+  */
+  void setUCollator(UCollator *collator, UnicodeString *rules);
+
+  /**
+  * Get UCollator data struct. Used only by StringSearch.
+  * @return UCollator data struct
+  */
+  const UCollator * getUCollator();
 
   /**
   * Converts C's UCollationResult to EComparisonResult
@@ -947,9 +966,27 @@ inline void RuleBasedCollator::setUCollator(const Locale &locale,
 
 inline void RuleBasedCollator::setUCollator(UCollator *collator)
 {
-  if (ucollator && dataIsOwned)
+  if (ucollator && dataIsOwned) {
     ucol_close(ucollator);
+  }
   ucollator = collator;
+}
+
+inline void RuleBasedCollator::setUCollator(UCollator     *collator, 
+                                            UnicodeString *rules)
+{
+    if (ucollator && dataIsOwned) {
+        ucol_close(ucollator);
+        delete urulestring;
+    }
+    ucollator   = collator;
+    urulestring = rules;
+    dataIsOwned = FALSE;
+}
+
+inline const UCollator * RuleBasedCollator::getUCollator()
+{
+    return ucollator;
 }
 
 inline Collator::EComparisonResult RuleBasedCollator::getEComparisonResult(
