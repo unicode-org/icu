@@ -92,6 +92,7 @@ chArrayContext myCont = {
 };
 
 UEnumeration chEnum = {
+    NULL,
     &myCont,
     chArrayClose,
     chArrayCount,
