@@ -258,6 +258,7 @@ int32_t  ucnv_flushCache ()
   /*creates an enumeration to iterate through every element in the
    *table
    */
+  umtx_lock (NULL);
   while (mySharedData = (UConverterSharedData *) uhash_nextElement (SHARED_DATA_HASHTABLE, &pos))
     {
       /*deletes only if reference counter == 0 */
@@ -265,12 +266,13 @@ int32_t  ucnv_flushCache ()
 	{
 	  UErrorCode err = ZERO_ERROR;
 	  tableDeletedNum++;
-	  umtx_lock (NULL);
+
 	  uhash_remove (SHARED_DATA_HASHTABLE, uhash_hashIString (mySharedData->name), &err);
 	  deleteSharedConverterData (mySharedData);
-	  umtx_unlock (NULL);
+
 	}
     }
+  umtx_unlock (NULL);
 
   return tableDeletedNum;
 }

@@ -15,6 +15,7 @@
 *
 *   Date        Name        Description
 *   05/17/99    stephen	    Creation (ported from java)
+*   09/24/99    stephen     Added new test for data split on decompression.
 *******************************************************************************
 */
 
@@ -29,7 +30,16 @@
 #include "utypes.h"
 #include "cintltst.h"
 
+#ifdef MIN
+#  undef MIN
+#endif
+
 #define MIN(a,b) (a < b ? a : b)
+
+#ifdef MAX
+#  undef MAX
+#endif
+
 #define MAX(a,b) (a > b ? a : b)
 
 
@@ -94,12 +104,14 @@
 #define UQUOTEU 0xF0
 #define UDEFINEX 0xF1
 
-static int32_t digitvalue(char c)
+static int32_t 
+digitvalue(char c)
 {
   return c - 0x30 - (c >= 0x41 ? (c >= 0x61 ? 39 : 7) : 0);
 }
 
-static UChar* unescape(const char *s)
+static UChar* 
+unescape(const char *s)
 {
   UChar *retval;
   UChar *alias;
@@ -135,8 +147,9 @@ static UChar* unescape(const char *s)
   return retval;
 }
 
-static void printChars(const UChar *chars, 
-		       int32_t len)
+static void
+printChars(const UChar *chars, 
+	   int32_t len)
 {
   int32_t i;
 
@@ -147,8 +160,9 @@ static void printChars(const UChar *chars,
 }
 
 
-static void printChars2(const UChar *chars, 
-			int32_t len)
+static void 
+printChars2(const UChar *chars, 
+	    int32_t len)
 {
   int32_t i;
   
@@ -162,8 +176,9 @@ static void printChars2(const UChar *chars,
 }
 
 
-static void printBytes(const uint8_t *byteBuffer, 
-		       int32_t len)
+static void 
+printBytes(const uint8_t *byteBuffer, 
+	   int32_t len)
 {
   int32_t curByteIndex = 0;
   int32_t byteBufferLimit = len;
@@ -287,10 +302,11 @@ static void printBytes(const uint8_t *byteBuffer,
   puts("");
 }
 
-static bool_t printDiffs(const UChar *s1, 
-			 int32_t s1len, 
-			 const UChar *s2, 
-			 int32_t s2len)
+static bool_t
+printDiffs(const UChar *s1, 
+	   int32_t s1len, 
+	   const UChar *s2, 
+	   int32_t s2len)
 {
   bool_t result  = FALSE;
   int32_t len;
@@ -327,9 +343,10 @@ static bool_t printDiffs(const UChar *s1,
 }
 
 /* generate a run of characters in a "window" */
-static void randomRun(UChar *target, 
-		      int32_t pos, 
-		      int32_t len)
+static void
+randomRun(UChar *target, 
+	  int32_t pos, 
+	  int32_t len)
 {
   int32_t offset = (int32_t)(0xFFFF * (double)(rand()/(double)RAND_MAX));
   int32_t i;
@@ -344,7 +361,8 @@ static void randomRun(UChar *target,
 }
 
 /* generate a string of characters, with simulated runs of characters */
-static UChar* randomChars(int32_t len)
+static UChar* 
+randomChars(int32_t len)
 {
   UChar *result = 0;
   int32_t runLen = 0;
@@ -367,8 +385,9 @@ static UChar* randomChars(int32_t len)
   return result;
 }
 
-static void myTest(const UChar *chars, 
-		   int32_t len)
+static void 
+myTest(const UChar *chars, 
+       int32_t len)
 {
   UnicodeCompressor myCompressor;
 
@@ -460,8 +479,9 @@ static void myTest(const UChar *chars,
 #define COMPRESSIONBUFFERSIZE 4
 #define DECOMPRESSIONBUFFERSIZE 2
 
-static void myMultipassTest(const UChar *chars, 
-			    int32_t len)
+static void 
+myMultipassTest(const UChar *chars, 
+		int32_t len)
 {
   UnicodeCompressor myCompressor;
 
@@ -641,17 +661,132 @@ static char *fTestCases [] = {
 
 static unsigned long gTotalChars;
 
-void signal_handler(int signal)
+/* unused unless this is run as a main in an infinite loop */
+void
+signal_handler(int signal)
 {
   printf("total chars compressed = %llu\n", gTotalChars);
   exit(0);
 }
 
-int TestSCSU() 
+
+/* Decompress the two segments */
+static UChar*
+segment_test(uint8_t *segment1,
+	     int32_t seg1Len,
+	     uint8_t *segment2,
+	     int32_t seg2Len)
+{
+    UErrorCode status = ZERO_ERROR;
+    UnicodeCompressor myDecompressor;
+
+    const uint8_t *seg1 = segment1;
+    const uint8_t *seg2 = segment2;
+
+    int32_t charBufferCap = 2*(seg1Len + seg2Len);
+    UChar *charBuffer = (UChar*) malloc(sizeof(UChar) * charBufferCap);
+
+    UChar *target = charBuffer;
+    int32_t outCount = 0, count1 = 0, count2 = 0;
+
+
+    scsu_init(&myDecompressor);
+
+    scsu_decompress(&myDecompressor, &target, charBuffer + charBufferCap,
+		    &seg1, segment1 + seg1Len, &status);
+
+    count1 = seg1 - segment1;
+
+    /*    println("Segment 1 (" + segment1.length + " bytes) " +
+	  "decompressed into " + count1  + " chars");
+	  println("Bytes consumed: " + bytesRead[0]);
+    
+	  print("Got chars: ");
+	  println(System.out, charBuffer, 0, count1);*/
+
+    /*s.append(charBuffer, 0, count1);*/
+
+    scsu_decompress(&myDecompressor, &target,
+		    charBuffer + charBufferCap,
+		    &seg2, segment2 + seg2Len, &status);
+
+    count2 = seg2 - segment2;
+
+    outCount = (target - charBuffer);
+
+    /*    println("Segment 2 (" + segment2.length + " bytes) " +
+	  "decompressed into " + count2  + " chars");
+	  println("Bytes consumed: " + bytesRead[0]);
+	  
+	  print("Got chars: ");
+	  println(System.out, charBuffer, count1, count2);*/
+    
+    /*s.append(charBuffer, count1, count2);*/
+    
+    /*print("Result: ");
+      println(System.out, charBuffer, 0, count1 + count2);
+      println("====================");*/
+    
+    charBuffer [ outCount ] = 0x0000;
+    return charBuffer;
+}
+
+
+int
+TestSCSU() 
 {
   UChar *chars = 0;
   int32_t len = 0;
   int32_t i;
+
+  /* multi-segment test data */
+
+  /* compressed segment breaking on a define window sequence */
+  /*                       B     o     o     t     h     SD1  */
+  uint8_t segment1a [] = { 0x42, 0x6f, 0x6f, 0x74, 0x68, 0x19 };
+  /*                       IDX   ,           S     .          */
+  uint8_t segment1b [] = { 0x01, 0x2c, 0x20, 0x53, 0x2e };
+  /* expected result */
+  UChar result1 [] = { 0x0042, 0x006f, 0x006f, 0x0074, 0x0068, 
+		       0x002c, 0x0020, 0x0053, 0x002e, 0x0000 };
+
+  /* compressed segment breaking on a quote unicode sequence */
+  /*                       B     o     o     t     SQU        */
+  uint8_t segment2a [] = { 0x42, 0x6f, 0x6f, 0x74, 0x0e, 0x00 };
+
+  /*                       h     ,           S     .          */
+  uint8_t segment2b [] = { 0x68, 0x2c, 0x20, 0x53, 0x2e };
+  /* expected result */
+  UChar result2 [] = { 0x0042, 0x006f, 0x006f, 0x0074, 0x0068, 
+		       0x002c, 0x0020, 0x0053, 0x002e, 0x0000 };
+
+  /* compressed segment breaking on a quote unicode sequence */
+  /*                       SCU   UQU                         */
+  uint8_t segment3a [] = { 0x0f, 0xf0, 0x00 };
+    
+  /*                       B                                 */
+  uint8_t segment3b [] = { 0x42 };
+  /* expected result */
+  UChar result3 [] = { 0x0042, 0x0000 };
+
+
+  chars = segment_test(segment1a, 6, segment1b, 5);
+  if(u_strcmp(chars, result1)) {
+    log_err("Failure in multisegment 1\n");
+  }
+  free(chars);
+
+  chars = segment_test(segment2a, 6, segment2b, 5);
+  if(u_strcmp(chars, result2)) {
+    log_err("Failure in multisegment 2\n");
+  }
+  free(chars);
+
+  chars = segment_test(segment3a, 3, segment3b, 1);
+  if(u_strcmp(chars, result3)) {
+    log_err("Failure in multisegment 3\n");
+  }
+  free(chars);
 
   /* register to handle interrupts */
   /*signal(SIGHUP, signal_handler);*/
@@ -695,7 +830,8 @@ int TestSCSU()
   return 0;
 }
 
-void addSUSCTest(TestNode** root)
+void
+addSUSCTest(TestNode** root)
 {
-	addTest(root, &TestSCSU, "scsutest/TestSCSU");
+  addTest(root, &TestSCSU, "scsutest/TestSCSU");
 }

@@ -15,6 +15,7 @@
 *
 *   Date        Name        Description
 *   05/17/99    stephen	    Creation (ported from java UnicodeCompressor.java)
+*   09/21/99    stephen     Updated to handle data splits on decompression.
 *******************************************************************************
 */
 
@@ -29,6 +30,9 @@
 
 /* Maximum value for a window's index */
 #define MAXINDEX 0xFF
+
+/** The size of the internal buffer for a UnicodeCompressor */
+#define SCSU_BUFSIZE 3
 
 /** The UnicodeCompressor struct */
 struct UnicodeCompressor {
@@ -50,6 +54,12 @@ struct UnicodeCompressor {
     
     /** The current time stamp */
     int32_t fTimeStamp;
+
+    /** Internal buffer for saving state */
+    uint8_t fBuffer [ SCSU_BUFSIZE ];
+  
+    /** Number of characters in our internal buffer */
+    int32_t fBufferLength;
 };
 typedef struct UnicodeCompressor UnicodeCompressor;
 
@@ -101,8 +111,8 @@ CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
 /**
  * Decompress a byte array into a Unicode character array.
  *
- * This function is not guaranteed to completely fill the output buffer, nor
- * is it guaranteed to compress the entire input.  
+ * This function will either completely fill the output buffer, or
+ * consume the entire input.  
  * If the source data is completely compressed, <TT>status</TT> will be set
  * to <TT>ZERO_ERROR</TT>.  
  * If the source data is not completely compressed, <TT>status</TT> will be
@@ -110,7 +120,7 @@ CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
  * should be allocated, or data flushed, and the function should be called
  * again with the new buffers.
  *
- * @param comp A pointer to a previously-initialized UnicodeCompressor
+ * @param comp A pointer to a previously-initialized UnicodeDecompressor
  * @param target I/O parameter.  On input, a pointer to a buffer of Unicode
  * characters to receive the compressed data.  On output, points to the 
  * character following the last character written.  This buffer must be
@@ -121,6 +131,7 @@ CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
  * last byte decompressed.
  * @param sourceLimit A pointer to the end of the array <TT>source</TT>.
  * @param status A pointer to an UErrorCode to receive any errors.
+ * @return The number of Unicode characters writeten to <TT>target</TT>.
  *
  * @see #compress
  */
