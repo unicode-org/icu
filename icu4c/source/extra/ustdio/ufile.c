@@ -85,9 +85,10 @@ u_fopen(const char    *filename,
         return 0;
     }
 
-    result->fOwnBundle     = FALSE;
+    result->fTranslit  = NULL;
+    result->fOwnBundle = FALSE;
     result->fUCPos     = result->fUCBuffer;
-    result->fUCLimit     = result->fUCBuffer;
+    result->fUCLimit   = result->fUCBuffer;
 
     /* if the codepage is 0, use the default for the locale */
     if(codepage == 0) {
