@@ -2042,7 +2042,7 @@ public class LDML2ICUConverter {
     private boolean isDraft(Node node, StringBuffer xpath){
         //if the xpath contains : then it is a special node
         // turn off checking of draftness for this node
-        if(xpath.indexOf(":")!=0){
+        if(xpath.indexOf(":")!=-1){
             return false;
         }
         if(LDMLUtilities.isNodeDraft(node)){
