@@ -153,7 +153,7 @@ ibm-902			cp922 {	MIME } # PC	Estonian (w/ euro update)
 ibm-922			# PC Estonian (w/o euro	update)
 ibm-942			shift_jis78	sjis78 ibm-932   # Old s_jis ibm-932 added!
 #ibm-941		 jis-208 jisx-208 # Pure DBCS jisx-208#	ibm-941 is not JISX 208	code page
-ibm-1038		Adobe-Symbol-Encoding csHPPSMath symbol
+#ibm-1038		Adobe-Symbol-Encoding csHPPSMath symbol
 ibm-5346		windows-1250 { MIME } cp1250	# Windows Latin2 (w/ euro update)
 ibm-5347		windows-1251 { MIME } cp1251	# Windows Cyrillic (w/ euro update)
 ibm-5349		windows-1253 { MIME } cp1253	# Windows Greek	(w/ euro update)
