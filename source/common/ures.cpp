@@ -18,6 +18,7 @@
 *   04/01/97    aliu        Creation.
 *   06/14/99    stephen     Removed functions taking a filename suffix.
 *   07/20/99    stephen     Changed for UResourceBundle typedef'd to void*
+*   11/09/99	weiv		Added ures_getLocale()
 *******************************************************************************
 */
 
@@ -66,7 +67,7 @@ U_CAPI const UChar* ures_get(    const UResourceBundle*    resourceBundle,
                 const char*              resourceTag,
                 UErrorCode*               status)
 {
-  if (U_FAILURE(*status)) return NULL;
+  if (status==NULL || U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag)
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -84,7 +85,7 @@ U_CAPI const UChar* ures_getArrayItem(const UResourceBundle*     resourceBundle,
                     int32_t                   resourceIndex,
                     UErrorCode*                status)
 {
-  if (U_FAILURE(*status)) return NULL;
+  if (status==NULL || U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || (resourceIndex < 0))
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -105,7 +106,7 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                       int32_t                 columnIndex,
                       UErrorCode*              status)
 {
-  if (U_FAILURE(*status)) return NULL;
+  if (status==NULL || U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || (rowIndex < 0) || (columnIndex < 0))
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -120,12 +121,23 @@ U_CAPI const UChar* ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
   else return NULL;
 }
 
+U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
+{
+  if (status==NULL || U_FAILURE(*status)) return NULL;
+  if (!resourceBundle)
+    {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+      return NULL;
+    }
+  return ((ResourceBundle*)resourceBundle)->getLocale().getName();
+}
+
 U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       const char*             itemTag,
                       UErrorCode*              status)
 {
-  if (U_FAILURE(*status)) return NULL;
+  if (status==NULL || U_FAILURE(*status)) return NULL;
   if (!resourceBundle || !resourceTag || !itemTag)
     {
       *status = U_ILLEGAL_ARGUMENT_ERROR;

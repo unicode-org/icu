@@ -21,6 +21,7 @@
 *   04/15/99    Madhu       Updated Javadoc  
 *   06/14/99    stephen     Removed functions taking a filename suffix.
 *   07/20/99    stephen     Language-independent ypedef to void*
+*   11/09/99	weiv		Added ures_getLocale()
 *******************************************************************************
 */
 
@@ -324,5 +325,13 @@ U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
  *          string.
  */
 U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
+
+/**
+ * Return the name of the Locale associated with this ResourceBundle.
+ * @param resourceBundle: resource bundle in question
+ * @param status: just for catching illegal arguments
+ * @return  A Locale name
+ */
+U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
 #endif /*_URES*/
 /*eof*/
