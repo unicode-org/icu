@@ -287,7 +287,7 @@ public class CheckTags {
                 break;
                    
             case INTERNAL:
-                tagErr(tag);
+                foundRequiredTag = true;
                 break;
 
             case DRAFT:
@@ -298,21 +298,27 @@ public class CheckTags {
                 break;
 
             case STABLE:
-                if (tag.text().length() != 0) {
-                    tagErr(tag);
+                {
+                    String text = tag.text();
+                    if (text.length() != 0 && text.indexOf("ICU") != 0) {
+                        tagErr(tag);
+                    }
+                    foundRequiredTag = true;
                 }
-                foundRequiredTag = true;
                 break;
 
             case SINCE:
                 tagErr(tag);
                 break;
 
-            case DEPRECATED:
-                if (tag.text().indexOf("be removed") == -1) {
-                    tagErr(tag);
+            case DEPRECATED: 
+                {
+                    String text = tag.text();
+                    if (text.indexOf("ICU") != 0 || text.indexOf("be removed") == -1) {
+                        tagErr(tag);
+                    }
+                    foundRequiredTag = true;
                 }
-                foundRequiredTag = true;
                 break;
 
             case AUTHOR:
