@@ -434,142 +434,146 @@ static int executeMakefile(const UPKGOptions *o)
 
 static void loadLists(UPKGOptions *o, UErrorCode *status)
 {
-  CharList   *l, *tail = NULL, *tail2 = NULL;
-  FileStream *in;
-  char        line[16384];
-  char       *linePtr, *lineNext;
-  const uint32_t   lineMax = 16300;
-  char        tmp[1024], tmp2[1024];
-  char        pkgPrefix[1024];
-  int32_t     pkgPrefixLen;
-  const char *baseName;
-  char       *s;
-  int32_t     ln;
-  UBool       fixPrefix;
-  
-  
-  fixPrefix = options[18].doesOccur;
-  
-  strcpy(pkgPrefix, o->shortName);
-  strcat(pkgPrefix, "_");
-  pkgPrefixLen=uprv_strlen(pkgPrefix);
-  for(l = o->fileListFiles; l; l = l->next) {
-    if(o->verbose) {
-      fprintf(stdout, "# Reading %s..\n", l->str);
-    }
-    /* TODO: stdin */
-    in = T_FileStream_open(l->str, "r");
-
-    if(!in) {
-      fprintf(stderr, "Error opening <%s>.\n", l->str);
-      *status = U_FILE_ACCESS_ERROR;
-      return;
-    }
-
-    ln = 0;
-
-    while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-      ln++;
-      if(uprv_strlen(line)>lineMax) {
-        fprintf(stderr, "%s:%d - line too long (over %d chars)\n", l->str, ln, lineMax);
-        exit(1);
-      }
-      /* remove trailing newline characters */
-      s=line;
-      while(*s!=0) {
-        if(*s=='\r' || *s=='\n') {
-          *s=0;
-          break;
+    CharList   *l, *tail = NULL, *tail2 = NULL;
+    FileStream *in;
+    char        line[16384];
+    char       *linePtr, *lineNext;
+    const uint32_t   lineMax = 16300;
+    char        tmp[1024], tmp2[1024];
+    char        pkgPrefix[1024];
+    int32_t     pkgPrefixLen;
+    const char *baseName;
+    char       *s;
+    int32_t     ln;
+    UBool       fixPrefix;
+    
+    
+    fixPrefix = options[18].doesOccur;
+    
+    strcpy(pkgPrefix, o->shortName);
+    strcat(pkgPrefix, "_");
+    pkgPrefixLen=uprv_strlen(pkgPrefix);
+    for(l = o->fileListFiles; l; l = l->next) {
+        if(o->verbose) {
+            fprintf(stdout, "# Reading %s..\n", l->str);
         }
-        ++s;
-      }
-      if((*line == 0) || (*line == '#')) {
-        continue; /* comment or empty line */
-      }
-
-      /* Now, process the line */
-      linePtr = line;
-      lineNext = NULL;
-
-      while(linePtr && *linePtr) {
-        while(*linePtr == ' ') {
-          linePtr++;
+        /* TODO: stdin */
+        in = T_FileStream_open(l->str, "r");
+        
+        if(!in) {
+            fprintf(stderr, "Error opening <%s>.\n", l->str);
+            *status = U_FILE_ACCESS_ERROR;
+            return;
         }
-        /* Find the next */
-        if(linePtr[0] == '"')
-          {
-            lineNext = uprv_strchr(linePtr+1, '"');
-            if(lineNext == NULL) {
-              fprintf(stderr, "%s:%d - missing trailing double quote (\")\n",
-                      l->str, ln);
-              exit(1);
-            } else {
-              lineNext++;
-              if(*lineNext) {
-                if(*lineNext != ' ') {
-                  fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
-                          l->str, ln,  lineNext-line, (*lineNext)?*lineNext:'0');
-                  exit(1);
+        
+        ln = 0;
+        
+        while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
+            ln++;
+            if(uprv_strlen(line)>lineMax) {
+                fprintf(stderr, "%s:%d - line too long (over %d chars)\n", l->str, ln, lineMax);
+                exit(1);
+            }
+            /* remove spaces at the beginning */
+            linePtr = line;
+            while(isspace(*linePtr)) {
+                linePtr++;
+            }
+            s=linePtr;
+            /* remove trailing newline characters */
+            while(*s!=0) {
+                if(*s=='\r' || *s=='\n') {
+                    *s=0;
+                    break;
                 }
-                *lineNext = 0;
-                lineNext++;
-              }
+                ++s;
             }
-          } else {
-            lineNext = uprv_strchr(linePtr, ' ');
-            if(lineNext) {
-              *lineNext = 0; /* terminate at space */
-              lineNext++;
+            if((*linePtr == 0) || (*linePtr == '#')) {
+                continue; /* comment or empty line */
             }
-          }
-
-        /* add the file */
-        s = (char*)getLongPathname(linePtr);
-
-        baseName = findBasename(s);
+            
+            /* Now, process the line */
+            lineNext = NULL;
+            
+            while(linePtr && *linePtr) {
+                while(*linePtr == ' ') {
+                    linePtr++;
+                }
+                /* Find the next */
+                if(linePtr[0] == '"')
+                {
+                    lineNext = uprv_strchr(linePtr+1, '"');
+                    if(lineNext == NULL) {
+                        fprintf(stderr, "%s:%d - missing trailing double quote (\")\n",
+                            l->str, ln);
+                        exit(1);
+                    } else {
+                        lineNext++;
+                        if(*lineNext) {
+                            if(*lineNext != ' ') {
+                                fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
+                                    l->str, ln,  lineNext-line, (*lineNext)?*lineNext:'0');
+                                exit(1);
+                            }
+                            *lineNext = 0;
+                            lineNext++;
+                        }
+                    }
+                } else {
+                    lineNext = uprv_strchr(linePtr, ' ');
+                    if(lineNext) {
+                        *lineNext = 0; /* terminate at space */
+                        lineNext++;
+                    }
+                }
+                
+                /* add the file */
+                s = (char*)getLongPathname(linePtr);
+                
+                baseName = findBasename(s);
+                
+                if(s != baseName) {
+                    /* s was something 'long' with a path */
+                    if(fixPrefix && uprv_strncmp(pkgPrefix, baseName, pkgPrefixLen)) {
+                        /* path don't have the prefix, add package prefix to short and longname */
+                        uprv_strcpy(tmp, pkgPrefix);
+                        uprv_strcpy(tmp+pkgPrefixLen, baseName);
+                        
+                        uprv_strncpy(tmp2, s, uprv_strlen(s)-uprv_strlen(baseName));  /* should be:   dirpath only, ending in sep */
+                        tmp2[uprv_strlen(s)-uprv_strlen(baseName)]=0;
+                        uprv_strcat(tmp2, pkgPrefix);
+                        uprv_strcat(tmp2, baseName);
+                        
+                        o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
+                        o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp2));
+                    } else {
+                        /* paths already have the prefix */
+                        o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
+                        o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
+                    }
                     
-        if(s != baseName) {
-          /* s was something 'long' with a path */
-          if(fixPrefix && uprv_strncmp(pkgPrefix, baseName, pkgPrefixLen)) {
-            /* path don't have the prefix, add package prefix to short and longname */
-            uprv_strcpy(tmp, pkgPrefix);
-            uprv_strcpy(tmp+pkgPrefixLen, baseName);
-                          
-            uprv_strncpy(tmp2, s, uprv_strlen(s)-uprv_strlen(baseName));  /* should be:   dirpath only, ending in sep */
-            tmp2[uprv_strlen(s)-uprv_strlen(baseName)]=0;
-            uprv_strcat(tmp2, pkgPrefix);
-            uprv_strcat(tmp2, baseName);
-                          
-            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp));
-            o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp2));
-          } else {
-            /* paths already have the prefix */
-            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
-            o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
-          }
-
-        } else { /* s was just a basename, we want to prepend source dir*/
-          /* check for prefix of package */
-          uprv_strcpy(tmp, o->srcDir);
-          uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
-
-          if(fixPrefix && strncmp(pkgPrefix,s, pkgPrefixLen)) {
-            /* didn't have the prefix - add it */
-            uprv_strcat(tmp, pkgPrefix);
-            /* make up a new basename */
-            uprv_strcpy(tmp2, pkgPrefix);
-            uprv_strcat(tmp2, s);
-            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp2));
-          } else {
-            o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
-          }
-          uprv_strcat(tmp, s);
-          o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
+                } else { /* s was just a basename, we want to prepend source dir*/
+                    /* check for prefix of package */
+                    uprv_strcpy(tmp, o->srcDir);
+                    uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
+                    
+                    if(fixPrefix && strncmp(pkgPrefix,s, pkgPrefixLen)) {
+                        /* didn't have the prefix - add it */
+                        uprv_strcat(tmp, pkgPrefix);
+                        /* make up a new basename */
+                        uprv_strcpy(tmp2, pkgPrefix);
+                        uprv_strcat(tmp2, s);
+                        o->files = pkg_appendToList(o->files, &tail, uprv_strdup(tmp2));
+                    } else {
+                        o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
+                    }
+                    uprv_strcat(tmp, s);
+                    o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp));
+                }
+                linePtr = lineNext;
+            }
         }
-        linePtr = lineNext;
-      }
-    }
-    T_FileStream_close(in);
+        T_FileStream_close(in);
   }
 }
 
