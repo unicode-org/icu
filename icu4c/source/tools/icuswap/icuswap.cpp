@@ -321,19 +321,20 @@ udata_swap(const UDataSwapper *ds,
             length=swapFns[i].swapFn(ds, inData, length, outData, pErrorCode);
 
             if(U_FAILURE(*pErrorCode)) {
-                if(ds->inCharset==U_CHARSET_FAMILY) {
+                /* data formats are chosen to be ASCII-readable mnemonics */
+#               if(U_CHARSET_FAMILY==U_ASCII_FAMILY)
                     udata_printError(ds, "udata_swap(): failure swapping data format %02x.%02x.%02x.%02x (\"%c%c%c%c\") - %s\n",
                                      pInfo->dataFormat[0], pInfo->dataFormat[1],
                                      pInfo->dataFormat[2], pInfo->dataFormat[3],
                                      (char)pInfo->dataFormat[0], (char)pInfo->dataFormat[1],
                                      (char)pInfo->dataFormat[2], (char)pInfo->dataFormat[3],
                                      u_errorName(*pErrorCode));
-                } else {
+#               else
                     udata_printError(ds, "udata_swap(): failure swapping data format %02x.%02x.%02x.%02x - %s\n",
                                      pInfo->dataFormat[0], pInfo->dataFormat[1],
                                      pInfo->dataFormat[2], pInfo->dataFormat[3],
                                      u_errorName(*pErrorCode));
-                }
+#               endif
             }
 
             return length;
