@@ -278,6 +278,26 @@
     <p>For details see the <a href="http://oss.software.ibm.com/icu/userguide/design.html">User's
     Guide Design Chapter</a>.</p>
 
+    <h3>Data loading changed</h3>
+
+    <p>ICU data loading is simplified for most users. By default, the ICU build
+    creates a DLL/shared library that is linked directly with the common library
+    (<code>[lib]icuuc</code>). By placing all ICU libraries including the data
+    library into the same folder, ICU should start up and find its data
+    immediately. Dynamic loading of data from DLLs/shared libraries is not
+    supported any more.</p>
+
+    <p>Before ICU 2.0, ICU did not itself link directly with its data library,
+    but some ICU applications did (like the Xerces XML parser) and called <code>udata_setCommonData()</code>.
+    This is not necessary any more in the default case.<br>
+    On the other hand, this same technique can now be used to efficiently load
+    application data (e.g., for its own localization). An application can build
+    a data DLL/library of its own, link it, and call the new API <code>udata_setAppData()</code>.</p>
+
+    <p>For details on finding and loading ICU data and on options for portable,
+    common data files etc. see the <a href="http://oss.software.ibm.com/icu/userguide/icudata.html">User's
+    Guide ICU Data Chapter</a>.</p>
+
     <h3>Collation improvements</h3>
 
     <p>The performance of Japanese Katakana collation is improved, and the
