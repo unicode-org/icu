@@ -444,6 +444,7 @@ private:
      */
     static void             deleteTimeZone(void*);
 
+    static int32_t          fTimezoneCount;
     static UHashtable*       fgHashtable; // hash table of objects in kSystemTimeZones,
                                          // maps zone ID to TimeZone object (lazy evaluated)
     static TimeZone*        fgDefaultZone; // default time zone (lazy evaluated)
