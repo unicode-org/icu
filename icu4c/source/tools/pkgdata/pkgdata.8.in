@@ -79,9 +79,7 @@ is
 In this mode, the different data files are bundled together as an
 architecture-dependent file that can later be memory mapped for use by
 ICU. Data packaged using this mode will be looked up under the ICU
-data directory (see section
-.B ENVIRONMENT
-below). Such packaging is easy to use for applications resource
+data directory. Such packaging is easy to use for applications resource
 bundles, for example, as long as the application can install the
 packaged file in the ICU data directory.
 .PP
@@ -202,16 +200,6 @@ directory
 as set by the
 .BI "\-d\fP, \fB\-\-destdir"
 option.
-
-.SH ENVIRONMENT
-.TP 10
-.B ICU_DATA
-Specifies the directory containing ICU data. Defaults to
-.BR @thedatadir@/icu/@VERSION@/ .
-Some tools in ICU depend on the presence of the trailing slash. It is thus
-important to make sure that it is present if
-.B ICU_DATA
-is set.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
