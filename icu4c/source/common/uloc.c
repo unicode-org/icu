@@ -1892,8 +1892,15 @@ uloc_getISO3Country(const char* localeID)
 U_CAPI uint32_t  U_EXPORT2
 uloc_getLCID(const char* localeID) 
 {
-    UErrorCode err = U_ZERO_ERROR;
-    return uprv_convertToLCID(localeID, &err);
+    UErrorCode status = U_ZERO_ERROR;
+    char       langID[ULOC_FULLNAME_CAPACITY];
+
+    uloc_getLanguage(localeID, langID, sizeof(langID), &status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
+    return uprv_convertToLCID(langID, localeID, &status);
 }
 
 /* ### Default locale **************************************************/
