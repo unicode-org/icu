@@ -412,10 +412,7 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
     char              filename[256] = { '\0' };
     char              cs[128]       = { '\0' };
     uint32_t          line;
-    int               len=0;
-    UBool quoted = FALSE;
     UCHARBUF *ucbuf=NULL;
-    UChar32   c     = 0;
     const char* cp  = NULL;
     UChar *pTarget     = NULL;
     const UChar *pSource     = NULL;
@@ -464,11 +461,9 @@ parseTransliterator(char *tag, uint32_t startline, const struct UString* comment
     * since the actual size needed for storing UChars
     * is not known in UTF-8 byte stream
     */
-    size        = ucbuf_size(ucbuf) + 1;
-    pTarget     = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * size);
-    uprv_memset(pTarget, 0, size*U_SIZEOF_UCHAR);
-
     pSource = ucbuf_getBuffer(ucbuf, &size, status);
+    pTarget     = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * (size + 1));
+    uprv_memset(pTarget, 0, size*U_SIZEOF_UCHAR);
 
     size = utrans_stripRules(pSource, size, pTarget, status);
 
@@ -1489,12 +1484,12 @@ U_STRING_DECL(k_type_import,    "import",    6);
 U_STRING_DECL(k_type_include,   "include",   7);
 U_STRING_DECL(k_type_reserved,  "reserved",  8);
 
-/* Various non-standard plugins that create one or more special resources. */
+/* Various non-standard processing plugins that create one or more special resources. */
 U_STRING_DECL(k_type_plugin_uca_rules,      "process(uca_rules)",        18);
 U_STRING_DECL(k_type_plugin_collation,      "process(collation)",        18);
 U_STRING_DECL(k_type_plugin_transliterator, "process(transliterator)",   23);
 
-enum EResourceType
+typedef enum EResourceType
 {
     RT_UNKNOWN,
     RT_STRING,
@@ -1506,30 +1501,31 @@ enum EResourceType
     RT_INTVECTOR,
     RT_IMPORT,
     RT_INCLUDE,
-    RT_PLUGIN_UCA_RULES,
-    RT_PLUGIN_COLLATION,
-    RT_PLUGIN_TRANSLITERATOR,
+    RT_PROCESS_UCA_RULES,
+    RT_PROCESS_COLLATION,
+    RT_PROCESS_TRANSLITERATOR,
     RT_RESERVED
-};
+} EResourceType;
 
 static struct {
-    const char *name;   /* only used for debugging */
+    const char *nameChars;   /* only used for debugging */
+    const UChar *nameUChars;
     ParseResourceFunction *parseFunction;
 } gResourceTypes[] = {
-    {"Unknown", NULL},
-    {"string", parseString},
-    {"binary", parseBinary},
-    {"table", parseTable},
-    {"integer", parseInteger},
-    {"array", parseArray},
-    {"alias", parseAlias},
-    {"intvector", parseIntVector},
-    {"import", parseImport},
-    {"include", parseInclude},
-    {"plugin[uca_rules]", parseUCARules},
-    {"plugin[collation]", NULL},
-    {"plugin[transliterator]", parseTransliterator},
-    {"reserved", NULL}
+    {"Unknown", NULL, NULL},
+    {"string", k_type_string, parseString},
+    {"binary", k_type_binary, parseBinary},
+    {"table", k_type_table, parseTable},
+    {"integer", k_type_integer, parseInteger},
+    {"array", k_type_array, parseArray},
+    {"alias", k_type_alias, parseAlias},
+    {"intvector", k_type_intvector, parseIntVector},
+    {"import", k_type_import, parseImport},
+    {"include", k_type_include, parseInclude},
+    {"process(uca_rules)", k_type_plugin_uca_rules, parseUCARules},
+    {"process(collation)", k_type_plugin_collation, NULL},
+    {"process(transliterator)", k_type_plugin_transliterator, parseTransliterator},
+    {"reserved", NULL, NULL}
 };
 
 void initParser(UBool makeBinaryCollation)
@@ -1576,52 +1572,17 @@ parseResourceType(UErrorCode *status)
 
     *status = U_ZERO_ERROR;
 
-    if (u_strcmp(tokenValue->fChars, k_type_string) == 0) {
-        result = RT_STRING;
+    /* Search for normal types */
+    for (result = RT_UNKNOWN+1; result < RT_RESERVED; result++) {
+        if (u_strcmp(tokenValue->fChars, gResourceTypes[result].nameUChars) == 0) {
+            break;
+        }
     }
-    else if (u_strcmp(tokenValue->fChars, k_type_array) == 0) {
-        result = RT_ARRAY;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_alias) == 0) {
-        result = RT_ALIAS;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_table) == 0) {
-        result = RT_TABLE;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_binary) == 0) {
-        result = RT_BINARY;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_bin) == 0) {
-        result = RT_BINARY;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_int) == 0) {
+    /* Now search for the aliases */
+    if (u_strcmp(tokenValue->fChars, k_type_int) == 0) {
         result = RT_INTEGER;
     }
-    else if (u_strcmp(tokenValue->fChars, k_type_integer) == 0) {
-        result = RT_INTEGER;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_intvector) == 0) {
-        result = RT_INTVECTOR;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_import) == 0) {
-        result = RT_IMPORT;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_include) == 0) {
-        result = RT_INCLUDE;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_plugin_uca_rules) == 0) {
-        result = RT_PLUGIN_UCA_RULES;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_plugin_collation) == 0) {
-        result = RT_PLUGIN_COLLATION;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_plugin_transliterator) == 0) {
-        result = RT_PLUGIN_TRANSLITERATOR;
-    }
-    else if (u_strcmp(tokenValue->fChars, k_type_reserved) == 0) {
-        result = RT_RESERVED;
-    }
-    else {
+    else if (result == RT_RESERVED) {
         char tokenBuffer[1024];
         u_austrncpy(tokenBuffer, tokenValue->fChars, sizeof(tokenBuffer));
         tokenBuffer[sizeof(tokenBuffer) - 1] = 0;
@@ -1753,7 +1714,7 @@ parseResource(char *tag, const struct UString *comment, UErrorCode *status)
     }
     else {
         *status = U_INTERNAL_PROGRAM_ERROR;
-        error(startline, "internal error: %s resource type found and not handled", gResourceTypes[resType].name);
+        error(startline, "internal error: %s resource type found and not handled", gResourceTypes[resType].nameChars);
     }
 
     return NULL;
