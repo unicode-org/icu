@@ -64,8 +64,8 @@ incFourGB18030(unsigned char bytes[4]) {
 static void
 incSkipFourGB18030(unsigned char bytes[4]) {
     incFourGB18030(bytes);
-    if(0==memcmp(bytes, skip303eBytes, 4)) {
-        /* make sure to skip the mismapped sequence */
+    if(0==memcmp(bytes, skip303eBytes, 4) && flags[0x303e]==1) {
+        /* make sure to skip the mismapped sequence if the data correctly maps U+303e==GB+a989 */
         incFourGB18030(bytes);
     }
 }
