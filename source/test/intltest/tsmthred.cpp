@@ -4,6 +4,23 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#if !defined(WIN32) && !defined(XP_MAC)
+#define POSIX 1
+#endif
+
+#if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
+#define HAVE_IMP
+
+#include <pthread.h>
+#include <unistd.h>
+#include <signal.h>
+
+#endif
+/* HPUX */
+#ifdef sleep
+#undef sleep
+#endif
+
 #include "unicode/utypes.h"
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
@@ -61,11 +78,6 @@ void MultithreadTest::runIndexedTest( int32_t index, bool_t exec,
 #include "unicode/choicfmt.h"
 #include "unicode/msgfmt.h"
 #include "unicode/locid.h"
-
-/* HPUX */
-#ifdef sleep
-#undef sleep
-#endif
 
 #ifdef WIN32
 #define HAVE_IMP
@@ -139,23 +151,11 @@ SimpleThread::run()
 void 
 SimpleThread::sleep(int32_t millis)
 {}
-
-#else
-  #define POSIX 1
 #endif
 
 
 #if defined(POSIX)||defined(SOLARIS)||defined(AIX)||defined(HPUX)
 #define HAVE_IMP
-
-#include <pthread.h>
-#include <unistd.h>
-#include <signal.h>
-
-/* HPUX */
-#ifdef sleep
-#undef sleep
-#endif
 
 struct PosixThreadImplementation
 {
@@ -208,7 +208,9 @@ void SimpleThread::sleep(int32_t millis)
 #ifdef HPUX_CMA
    cma_sleep(millis/100);
 #else
-   usleep(millis * 1000); 
+   useconds_t m = millis * 1000;
+   if (m >= 1000000) m = 100000;
+   usleep(m); 
 #endif
 }
 
