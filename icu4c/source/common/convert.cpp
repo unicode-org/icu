@@ -327,14 +327,14 @@ UnicodeConverter::getCodepage(UErrorCode& err) const
 
 void
 UnicodeConverter::getMissingCharAction(UConverterToUCallback *action,
-                                          void **context) const
+                                       const void **context) const
 {
     ucnv_getToUCallBack(myUnicodeConverter, action, context);
 }
 
 void
 UnicodeConverter::getMissingUnicodeAction(UConverterFromUCallback *action,
-                                             void **context) const
+                                          const void **context) const
 {
     ucnv_getFromUCallBack(myUnicodeConverter, action, context);
 }
@@ -342,20 +342,20 @@ UnicodeConverter::getMissingUnicodeAction(UConverterFromUCallback *action,
 
 void
 UnicodeConverter::setMissingCharAction(UConverterToUCallback  newAction,
-                                          void *newContext,
-                                          UConverterToUCallback *oldAction,
-                                          void **oldContext,
-                                          UErrorCode&         err)
+                                       const void *newContext,
+                                       UConverterToUCallback *oldAction,
+                                       const void **oldContext,
+                                       UErrorCode&  err)
 {
     ucnv_setToUCallBack(myUnicodeConverter, newAction, newContext, oldAction, oldContext, &err);
 }
 
 void
 UnicodeConverter::setMissingUnicodeAction(UConverterFromUCallback   newAction,
-                                             void* newContext,
-                                             UConverterFromUCallback   *oldAction,
-                                             void** oldContext,
-                                             UErrorCode&             err)
+                                          const void* newContext,
+                                          UConverterFromUCallback   *oldAction,
+                                          const void** oldContext,
+                                          UErrorCode&  err)
 {
     ucnv_setFromUCallBack(myUnicodeConverter, newAction, newContext, oldAction, oldContext, &err);
 }

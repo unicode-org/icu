@@ -1112,7 +1112,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     UBool doFlush;
 
     UConverterFromUCallback oldAction = NULL;
-    void* oldContext = NULL;
+    const void* oldContext = NULL;
 
     for(i=0;i<MAX_LENGTH;i++)
         junkout[i] = 0xF0;
@@ -1284,7 +1284,7 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     UBool doFlush;
 
     UConverterToUCallback oldAction = NULL;
-    void* oldContext = NULL;
+    const void* oldContext = NULL;
     
 
     for(i=0;i<MAX_LENGTH;i++)

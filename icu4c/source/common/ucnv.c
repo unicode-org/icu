@@ -562,7 +562,7 @@ UConverterPlatform  ucnv_getPlatform (const UConverter * converter,
 U_CAPI void U_EXPORT2
     ucnv_getToUCallBack (const UConverter * converter,
                          UConverterToUCallback *action,
-                         void **context)
+                         const void **context)
 {
   *action = converter->fromCharErrorBehaviour;
   *context = converter->toUContext;
@@ -571,7 +571,7 @@ U_CAPI void U_EXPORT2
 U_CAPI void U_EXPORT2
     ucnv_getFromUCallBack (const UConverter * converter,
                            UConverterFromUCallback *action,
-                           void **context)
+                           const void **context)
 {
   *action = converter->fromUCharErrorBehaviour;
   *context = converter->fromUContext;
@@ -579,9 +579,9 @@ U_CAPI void U_EXPORT2
 
 void   ucnv_setToUCallBack (UConverter * converter,
                             UConverterToUCallback newAction,
-                            void* newContext,
+                            const void* newContext,
                             UConverterToUCallback *oldAction,
-                            void** oldContext,
+                            const void** oldContext,
                             UErrorCode * err)
 {
   if (U_FAILURE (*err))
@@ -594,9 +594,9 @@ void   ucnv_setToUCallBack (UConverter * converter,
 
 void ucnv_setFromUCallBack (UConverter * converter,
                             UConverterFromUCallback newAction,
-                            void* newContext,
+                            const void* newContext,
                             UConverterFromUCallback *oldAction,
-                            void** oldContext,
+                            const void** oldContext,
                             UErrorCode * err)
 {
   
