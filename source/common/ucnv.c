@@ -1090,7 +1090,7 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
     UChar *pivot, *pivot2;
 
     UConverter *inConverter, *outConverter;
-    const char *mySource=source, *sourceLimit=source+sourceSize;
+    const char *sourceLimit;
     const char *targetLimit;
     int32_t targetCapacity=0;
 
