@@ -12,7 +12,7 @@
  * contributed in 1999.
  *
  * Conversion to the C conversion API and many improvements by
- * Yves Arrouye <yves@realnames.com>, current maintainer. 
+ * Yves Arrouye <yves@realnames.com>, current maintainer.
  *
  */
 
@@ -37,9 +37,9 @@
 #include <fcntl.h>
 #endif
 
-#define DEFAULT_BUFSZ	4096
+#define DEFAULT_BUFSZ   4096
 
-static UResourceBundle *gBundle = 0;	/* Bundle containing messages. */
+static UResourceBundle *gBundle = 0;    /* Bundle containing messages. */
 
 /*
  * Initialize the message bundle so that message strings can be fetched
@@ -51,22 +51,22 @@ static void initMsg(const char *pname) {
     static int ps = 0;
 
     if (!ps) {
-	char dataPath[2048];		/* XXX Sloppy: should be PATH_MAX. */
-	UErrorCode err = U_ZERO_ERROR;
+        char dataPath[2048];        /* XXX Sloppy: should be PATH_MAX. */
+        UErrorCode err = U_ZERO_ERROR;
 
-	ps = 1;
+        ps = 1;
 
-	/* Get messages. */
+        /* Get messages. */
 
-	strcpy(dataPath, u_getDataDirectory());
-	strcat(dataPath, "uconvmsg");
+        strcpy(dataPath, u_getDataDirectory());
+        strcat(dataPath, "uconvmsg");
 
-	gBundle = u_wmsg_setPath(dataPath, &err);
-	if (U_FAILURE(err)) {
-	    fprintf(stderr,
-		    "%s: warning: couldn't open resource bundle %s: %s\n",
-		    pname, dataPath, u_errorName(err));
-	}
+        gBundle = u_wmsg_setPath(dataPath, &err);
+        if (U_FAILURE(err)) {
+            fprintf(stderr,
+                "%s: warning: couldn't open resource bundle %s: %s\n",
+                pname, dataPath, u_errorName(err));
+        }
     }
 }
 
@@ -118,15 +118,15 @@ static struct callback_ent {
 
 static const struct callback_ent *findCallback(const char *name) {
     int i, count =
-	sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
+        sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
 
     /* We'll do a linear search, there aren't many of them and bsearch()
        may not be that portable. */
 
     for (i = 0; i < count; ++i) {
-	if (!strcmp(name, transcode_callbacks[i].name)) {
-	    return &transcode_callbacks[i];
-	}
+        if (!strcmp(name, transcode_callbacks[i].name)) {
+            return &transcode_callbacks[i];
+        }
     }
 
     return 0;
@@ -138,10 +138,9 @@ static const struct callback_ent *findCallback(const char *name) {
    expected for convrters.txt(5). */
 
 static int printConverters(const char *pname, const char *lookfor,
-    int canon) {
-
+    int canon)
+{
     UErrorCode err = U_ZERO_ERROR;
-
     int32_t num;
     uint16_t num_stds;
     const char **stds;
@@ -149,26 +148,26 @@ static int printConverters(const char *pname, const char *lookfor,
     /* If there is a specified name, just handle that now. */
 
     if (lookfor) {
-	if (!canon) {
-	    printf("%s\n", lookfor);
-	    return 0;
-	} else {
-	    /* Because we are printing a canonical name, we need the
-               true converter name. We've done that already except for
-               the default name (because we want to print the exact
-               name one would get when calling ucnv_getDefaultName()
-               in non-canon mode). But since we do not know at this
-               point if we have the default name or something else, we
-               need to normalize again to the canonical converter
-               name. */
+        if (!canon) {
+            printf("%s\n", lookfor);
+            return 0;
+        } else {
+        /*  Because we are printing a canonical name, we need the
+            true converter name. We've done that already except for
+            the default name (because we want to print the exact
+            name one would get when calling ucnv_getDefaultName()
+            in non-canon mode). But since we do not know at this
+            point if we have the default name or something else, we
+            need to normalize again to the canonical converter
+            name. */
 
-	    const char *truename = ucnv_getAlias(lookfor, 0, &err);
-	    if (U_SUCCESS(err)) {
-		lookfor = truename;
-	    } else {
-		err = U_ZERO_ERROR;
-	    }
-	}
+            const char *truename = ucnv_getAlias(lookfor, 0, &err);
+            if (U_SUCCESS(err)) {
+                lookfor = truename;
+            } else {
+                err = U_ZERO_ERROR;
+            }
+        }
     }
 
     /* Print converter names. We come here for one of two reasons: we
@@ -178,9 +177,9 @@ static int printConverters(const char *pname, const char *lookfor,
 
     num = ucnv_countAvailable();
     if (num <= 0) {
-	initMsg(pname);
-	u_wmsg("cantGetNames");
-	return -1;
+        initMsg(pname);
+        u_wmsg("cantGetNames");
+        return -1;
     }
     if (lookfor) {
         num = 1;                /* We know where we want to be. */
@@ -189,28 +188,28 @@ static int printConverters(const char *pname, const char *lookfor,
     num_stds = ucnv_countStandards();
     stds = (const char **) uprv_malloc(num_stds * sizeof(*stds));
     if (!stds) {
-	u_wmsg("cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
-	return -1;
+        u_wmsg("cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
+        return -1;
     } else {
-	uint16_t s;
+        uint16_t s;
 
-	for (s = 0; s < num_stds; ++s) {
-	    stds[s] = ucnv_getStandard(s, &err);
-	    if (U_FAILURE(err)) {
-		u_wmsg("cantGetTag", u_wmsg_errorName(err));
-		return -1;
-	    }
-	}
+        for (s = 0; s < num_stds; ++s) {
+            stds[s] = ucnv_getStandard(s, &err);
+            if (U_FAILURE(err)) {
+                u_wmsg("cantGetTag", u_wmsg_errorName(err));
+                return -1;
+            }
+        }
     }
 
     for (int32_t i = 0; i < num; i++) {
-	const char *name;
-	uint16_t num_aliases;
+        const char *name;
+        uint16_t num_aliases;
 
         /* Set the name either to what we are looking for, or
-           to the current converter name. */
+        to the current converter name. */
 
-	if (lookfor) {
+        if (lookfor) {
             name = lookfor;
         } else {
             name = ucnv_getAvailableName(i);
@@ -218,70 +217,70 @@ static int printConverters(const char *pname, const char *lookfor,
 
         /* Get all the aliases associated to the name. */
 
-	err = U_ZERO_ERROR;
-	num_aliases = ucnv_countAliases(name, &err);
-	if (U_FAILURE(err)) {
-	    printf("%s", name);
+        err = U_ZERO_ERROR;
+        num_aliases = ucnv_countAliases(name, &err);
+        if (U_FAILURE(err)) {
+            printf("%s", name);
 
-	    UnicodeString str(name, strlen(name) + 1);
-	    putchar('\t');
-	    u_wmsg("cantGetAliases", str.getBuffer(),
-		   u_wmsg_errorName(err));
-	    return -1;
-	} else {
-	    uint16_t a, s, t;
+            UnicodeString str(name, strlen(name) + 1);
+            putchar('\t');
+            u_wmsg("cantGetAliases", str.getBuffer(),
+                u_wmsg_errorName(err));
+            return -1;
+        } else {
+            uint16_t a, s, t;
 
             /* Write all the aliases and their tags. */
 
-	    for (a = 0; a < num_aliases; ++a) {
-		const char *alias = ucnv_getAlias(name, a, &err);
+            for (a = 0; a < num_aliases; ++a) {
+                const char *alias = ucnv_getAlias(name, a, &err);
 
-		if (U_FAILURE(err)) {
-		    UnicodeString str(name, strlen(name) + 1);
-		    putchar('\t');
-		    u_wmsg("cantGetAliases", str.getBuffer(),
-			   u_wmsg_errorName(err));
-		    return -1;
-		}
+                if (U_FAILURE(err)) {
+                    UnicodeString str(name, strlen(name) + 1);
+                    putchar('\t');
+                    u_wmsg("cantGetAliases", str.getBuffer(),
+                        u_wmsg_errorName(err));
+                    return -1;
+                }
 
-		printf("%s", alias);
+                printf("%s", alias);
 
-		/* Look (slowly, linear searching) for a tag. */
+                /* Look (slowly, linear searching) for a tag. */
 
-		if (canon) {
-		    for (s = t = 0; s < num_stds; ++s) {
-			const char *standard =
-			    ucnv_getStandardName(name, stds[s], &err);
-			if (U_SUCCESS(err) && standard) {
-			    if (!strcmp(standard, alias)) {
-				if (!t) {
-				    printf(" {");
-				    t = 1;
-				}
-				printf(" %s", stds[s]);
-			    }
-			}
-		    }
-		    if (t) {
-			printf(" }");
-		    }
-		}
+                if (canon) {
+                    for (s = t = 0; s < num_stds; ++s) {
+                        const char *standard =
+                            ucnv_getStandardName(name, stds[s], &err);
+                        if (U_SUCCESS(err) && standard) {
+                            if (!strcmp(standard, alias)) {
+                                if (!t) {
+                                    printf(" {");
+                                    t = 1;
+                                }
+                                printf(" %s", stds[s]);
+                            }
+                        }
+                    }
+                    if (t) {
+                        printf(" }");
+                    }
+                }
 
-		/* Move on. */
+                /* Move on. */
 
-		if (a < num_aliases - 1) {
-		    putchar(a || !canon ? ' ' : '\t');
-		}
-	    }
-	}
+                if (a < num_aliases - 1) {
+                    putchar(a || !canon ? ' ' : '\t');
+                }
+            }
+        }
 
         /* Terminate this entry. */
 
-	if (canon) {
-	    putchar('\n');
-	} else if (i < num - 1) {
-	    putchar(' ');
-	}
+        if (canon) {
+            putchar('\n');
+        } else if (i < num - 1) {
+            putchar(' ');
+        }
     }
 
     /* Free temporary data. */
@@ -296,7 +295,7 @@ static int printConverters(const char *pname, const char *lookfor,
 /* Print all available transliterators. If canon is non zero, print
    one transliterator per line. */
 
-static int printTransliterators(const char *pname, int canon)
+static int printTransliterators(int canon)
 {
     int32_t numtrans = utrans_countAvailableIDs(), i;
     int buflen = 512;
@@ -306,47 +305,46 @@ static int printTransliterators(const char *pname, int canon)
     char sepchar = canon ? '\n' : ' ';
 
     if (!buf) {
-	buf = staticbuf;
-	buflen = sizeof(staticbuf);
+        buf = staticbuf;
+        buflen = sizeof(staticbuf);
     }
 
     for (i = 0; i < numtrans; ++i) {
-	int32_t len = utrans_getAvailableID(i, buf, buflen);
-	if (len >= buflen - 1) {
-	    if (buf != staticbuf) {
-		buflen <<= 1;
-		if (buflen < len) {
-		    buflen = len + 64;
-		}
-		buf = (char *) uprv_realloc(buf, buflen);
-		if (!buf) {
-		    buf = staticbuf;
-		    buflen = sizeof(staticbuf);
-		}
-	    }
-	    utrans_getAvailableID(i, buf, buflen);
-	    if (len >= buflen) {
-		strcpy(buf + buflen - 4, "..."); /* Truncate the
-                                                    name. */
-	    }
-	}
+        int32_t len = utrans_getAvailableID(i, buf, buflen);
+        if (len >= buflen - 1) {
+            if (buf != staticbuf) {
+                buflen <<= 1;
+                if (buflen < len) {
+                    buflen = len + 64;
+                }
+                buf = (char *) uprv_realloc(buf, buflen);
+                if (!buf) {
+                    buf = staticbuf;
+                    buflen = sizeof(staticbuf);
+                }
+            }
+            utrans_getAvailableID(i, buf, buflen);
+            if (len >= buflen) {
+                strcpy(buf + buflen - 4, "..."); /* Truncate the name. */
+            }
+        }
 
-	printf("%s", buf);
-	if (i < numtrans - 1) {
-	    putchar(sepchar);
-	}
+        printf("%s", buf);
+        if (i < numtrans - 1) {
+            putchar(sepchar);
+        }
     }
 
     /* Add a terminating newline if needed. */
 
     if (sepchar != '\n') {
-	putchar('\n');
+        putchar('\n');
     }
 
     /* Free temporary data. */
 
     if (buf != staticbuf) {
-	uprv_free(buf);
+        uprv_free(buf);
     }
 
     /* Success. */
@@ -364,17 +362,18 @@ static inline int32_t dataOffset(const int32_t * fromoffsets,
 
 // Convert a file from one encoding to another
 static UBool convertFile(const char *pname,
-			 const char *fromcpage,
-			 UConverterToUCallback toucallback,
-			 const void *touctxt,
-			 const char *tocpage,
-			 UConverterFromUCallback fromucallback,
-			 const void *fromuctxt,
-			 int fallback,
+                         const char *fromcpage,
+                         UConverterToUCallback toucallback,
+                         const void *touctxt,
+                         const char *tocpage,
+                         UConverterFromUCallback fromucallback,
+                         const void *fromuctxt,
+                         int fallback,
                          size_t bufsz,
-			 const char *translit,
-			 const char *infilestr,
-			 FILE * outfile, int verbose) {
+                         const char *translit,
+                         const char *infilestr,
+                         FILE * outfile, int verbose)
+{
     FILE *infile;
     UBool ret = TRUE;
     UConverter *convfrom = 0;
@@ -385,7 +384,7 @@ static UBool convertFile(const char *pname,
     char *bufp;
     char *buf = 0;
 
-    uint32_t foffset = 0;	/* Where we are in the file, for error reporting. */
+    uint32_t foffset = 0;   /* Where we are in the file, for error reporting. */
 
     const UChar *unibufbp;
     UChar *unibufp;
@@ -400,46 +399,46 @@ static UBool convertFile(const char *pname,
     // Open the correct input file or connect to stdin for reading input
 
     if (infilestr != 0 && strcmp(infilestr, "-")) {
-	infile = fopen(infilestr, "rb");
-	if (infile == 0) {
-	    UnicodeString str1(infilestr, "");
-	    UnicodeString str2(strerror(errno), "");
-	    initMsg(pname);
-	    u_wmsg("cantOpenInputF", str1.getBuffer(), str2.getBuffer());
-	    return FALSE;
-	}
+        infile = fopen(infilestr, "rb");
+        if (infile == 0) {
+            UnicodeString str1(infilestr, "");
+            UnicodeString str2(strerror(errno), "");
+            initMsg(pname);
+            u_wmsg("cantOpenInputF", str1.getBuffer(), str2.getBuffer());
+            return FALSE;
+        }
     } else {
-	infilestr = "-";
-	infile = stdin;
+        infilestr = "-";
+        infile = stdin;
 #ifdef WIN32
-	if (setmode(fileno(stdin), O_BINARY) == -1) {
-	    perror("Cannot set stdin to binary mode");
-	    return FALSE;
-	}
+        if (setmode(fileno(stdin), O_BINARY) == -1) {
+            perror("Cannot set stdin to binary mode");
+            return FALSE;
+        }
 #endif
     }
 
     if (verbose) {
-	fprintf(stderr, "%s:\n", infilestr);
+        fprintf(stderr, "%s:\n", infilestr);
     }
 
     // Create transliterator as needed.
 
     if (translit != NULL && *translit) {
         UParseError parse;
-	UnicodeString str(translit), pestr;
+        UnicodeString str(translit), pestr;
 
         /* Create from rules or by ID as needed. */
 
         parse.line = -1;
 
         if (uprv_strchr(translit, ':') || uprv_strchr(translit, '>') || uprv_strchr(translit, '<') || uprv_strchr(translit, '>')) {
-	    t = Transliterator::createFromRules("Uconv", str, UTRANS_FORWARD, parse, err);
+            t = Transliterator::createFromRules("Uconv", str, UTRANS_FORWARD, parse, err);
         } else {
             t = Transliterator::createInstance(translit, UTRANS_FORWARD, err);
         }
 
-	if (U_FAILURE(err)) {
+        if (U_FAILURE(err)) {
             if (parse.line >= 0) {
                 UChar buf[20];
                 pestr.append(", line ");
@@ -449,17 +448,17 @@ static UBool convertFile(const char *pname,
                 uprv_itou(buf, parse.offset, 10, 0);
                 pestr.append(buf);
             }
-	    str.append((UChar32) 0);
-	    pestr.append((UChar32) 0);
-	    initMsg(pname);
-	    u_wmsg("cantCreateTranslit", str.getBuffer(),
-		   u_wmsg_errorName(err), pestr.getBuffer());
-	    if (t) {
-		delete t;
-		t = 0;
-	    }
-	    goto error_exit;
-	}
+            str.append((UChar32) 0);
+            pestr.append((UChar32) 0);
+            initMsg(pname);
+            u_wmsg("cantCreateTranslit", str.getBuffer(),
+                u_wmsg_errorName(err), pestr.getBuffer());
+            if (t) {
+                delete t;
+                t = 0;
+            }
+            goto error_exit;
+        }
     }
 
     // Create codepage converter. If the codepage or its aliases weren't
@@ -468,32 +467,32 @@ static UBool convertFile(const char *pname,
 
     convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err)) {
-	UnicodeString str(fromcpage, strlen(fromcpage) + 1);
-	initMsg(pname);
-	u_wmsg("cantOpenFromCodeset", str.getBuffer(),
-	       u_wmsg_errorName(err));
-	goto error_exit;
+        UnicodeString str(fromcpage, strlen(fromcpage) + 1);
+        initMsg(pname);
+        u_wmsg("cantOpenFromCodeset", str.getBuffer(),
+            u_wmsg_errorName(err));
+        goto error_exit;
     }
     ucnv_setToUCallBack(convfrom, toucallback, touctxt, 0, 0, &err);
     if (U_FAILURE(err)) {
-	initMsg(pname);
-	u_wmsg("cantSetCallback", u_wmsg_errorName(err));
-	goto error_exit;
+        initMsg(pname);
+        u_wmsg("cantSetCallback", u_wmsg_errorName(err));
+        goto error_exit;
     }
 
     convto = ucnv_open(tocpage, &err);
     if (U_FAILURE(err)) {
-	UnicodeString str(tocpage, strlen(tocpage) + 1);
-	initMsg(pname);
-	u_wmsg("cantOpenToCodeset", str.getBuffer(),
-	       u_wmsg_errorName(err));
-	goto error_exit;
+        UnicodeString str(tocpage, strlen(tocpage) + 1);
+        initMsg(pname);
+        u_wmsg("cantOpenToCodeset", str.getBuffer(),
+            u_wmsg_errorName(err));
+        goto error_exit;
     }
     ucnv_setFromUCallBack(convto, fromucallback, fromuctxt, 0, 0, &err);
     if (U_FAILURE(err)) {
-	initMsg(pname);
-	u_wmsg("cantSetCallback", u_wmsg_errorName(err));
-	goto error_exit;
+        initMsg(pname);
+        u_wmsg("cantSetCallback", u_wmsg_errorName(err));
+        goto error_exit;
     }
     ucnv_setFallback(convto, fallback);
 
@@ -512,55 +511,54 @@ static UBool convertFile(const char *pname,
     // OK, we can convert now.
 
     do {
-	rd = fread(buf, 1, bufsz, infile);
-	if (ferror(infile) != 0) {
-	    UnicodeString str(strerror(errno));
-	    str.append((UChar32) 0);
-	    initMsg(pname);
-	    u_wmsg("cantRead", str.getBuffer());
-	    goto error_exit;
-	}
+        rd = fread(buf, 1, bufsz, infile);
+        if (ferror(infile) != 0) {
+            UnicodeString str(strerror(errno));
+            str.append((UChar32) 0);
+            initMsg(pname);
+            u_wmsg("cantRead", str.getBuffer());
+            goto error_exit;
+        }
 
-	// Convert the read buffer into the new coding
-	// After the call 'unibufp' will be placed on the last
-        // character that was converted in the 'unibuf'. 
-	// Also the 'cbufp' is positioned on the last converted
+        // Convert the read buffer into the new coding
+        // After the call 'unibufp' will be placed on the last
+        // character that was converted in the 'unibuf'.
+        // Also the 'cbufp' is positioned on the last converted
         // character.
-	// At the last conversion in the file, flush should be set to
+        // At the last conversion in the file, flush should be set to
         // true so that we get all characters converted
-	//
-	// The converter must be flushed at the end of conversion so
+        //
+        // The converter must be flushed at the end of conversion so
         // that characters on hold also will be written.
 
-	unibufp = unibuf;
-	cbufp = buf;
-	flush = rd != bufsz;
-	ucnv_toUnicode(convfrom, &unibufp, unibufp + bufsz, &cbufp,
-		       cbufp + rd, fromoffsets, flush, &err);
+        unibufp = unibuf;
+        cbufp = buf;
+        flush = rd != bufsz;
+        ucnv_toUnicode(convfrom, &unibufp, unibufp + bufsz, &cbufp,
+            cbufp + rd, fromoffsets, flush, &err);
 
-	foffset += cbufp - buf;
+        foffset += cbufp - buf;
 
-	if (U_FAILURE(err)) {
-	    char pos[32];
-	    sprintf(pos, "%u", foffset - 1);
-	    UnicodeString str(pos, strlen(pos) + 1);
-	    initMsg(pname);
-	    u_wmsg("problemCvtToU", str.getBuffer(),
-		   u_wmsg_errorName(err));
-	    goto error_exit;
-	}
+        if (U_FAILURE(err)) {
+            char pos[32];
+            sprintf(pos, "%u", foffset - 1);
+            UnicodeString str(pos, strlen(pos) + 1);
+            initMsg(pname);
+            u_wmsg("problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
+            goto error_exit;
+        }
 
-	// At the last conversion, the converted characters should be
+        // At the last conversion, the converted characters should be
         // equal to number of chars read.
 
-	if (flush && cbufp != (buf + rd)) {
-	    char pos[32];
-	    sprintf(pos, "%u", foffset);
-	    UnicodeString str(pos, strlen(pos) + 1);
-	    initMsg(pname);
-	    u_wmsg("premEndInput", str.getBuffer());
-	    goto error_exit;
-	}
+        if (flush && cbufp != (buf + rd)) {
+            char pos[32];
+            sprintf(pos, "%u", foffset);
+            UnicodeString str(pos, strlen(pos) + 1);
+            initMsg(pname);
+            u_wmsg("premEndInput", str.getBuffer());
+            goto error_exit;
+        }
 
         // Prepare to transliterate and convert.
 
@@ -572,37 +570,37 @@ static UBool convertFile(const char *pname,
 
         // Transliterate if needed.
 
-	if (t) {
-	    t->transliterate(u);
-	}
+        if (t) {
+            t->transliterate(u);
+        }
 
         int32_t ulen = u.length();
 
-	// Convert the Unicode buffer into the destination codepage
-	// Again 'bufp' will be placed on the last converted character
-	// And 'unibufbp' will be placed on the last converted unicode character
-	// At the last conversion flush should be set to true to ensure that 
-	// all characters left get converted
+        // Convert the Unicode buffer into the destination codepage
+        // Again 'bufp' will be placed on the last converted character
+        // And 'unibufbp' will be placed on the last converted unicode character
+        // At the last conversion flush should be set to true to ensure that
+        // all characters left get converted
 
         const UChar *unibufu = unibufbp = u.getBuffer();
 
         do {
-            int32_t len = ulen > bufsz ? bufsz : ulen;
+            int32_t len = ulen > (int32_t)bufsz ? (int32_t)bufsz : ulen;
 
             bufp = buf;
-	    unibufp = (UChar *) (unibufbp + len);
+            unibufp = (UChar *) (unibufbp + len);
 
             ucnv_fromUnicode(convto, &bufp, bufp + tobufsz,
                              &unibufbp,
                              unibufp,
                              tooffsets, flush, &err);
-            
+
             if (U_FAILURE(err)) {
                 char pos[32];
-                
+
                 uint32_t erroffset =
                     dataOffset(fromoffsets, bufp - buf, tooffsets);
-                
+
                 sprintf(pos, "%u", foffset - (unibufp - unibufu) + erroffset);
                 UnicodeString str(pos, strlen(pos) + 1);
                 initMsg(pname);
@@ -621,9 +619,9 @@ static UBool convertFile(const char *pname,
                 u_wmsg("premEnd", str.getBuffer());
                 goto error_exit;
             }
-            
+
             // Finally, write the converted buffer to the output file
-            
+
             rd = (size_t) (bufp - buf);
             if (fwrite(buf, 1, rd, outfile) != rd) {
                 UnicodeString str(strerror(errno), "");
@@ -632,9 +630,9 @@ static UBool convertFile(const char *pname,
                 goto error_exit;
             }
         } while ((ulen -= bufsz) > 0);
-    } while (!flush);		// Stop when we have flushed the
+    } while (!flush);           // Stop when we have flushed the
                                 // converters (this means that it's
-                                // the end of output) 
+                                // the end of output)
 
     goto normal_exit;
 
@@ -645,18 +643,18 @@ normal_exit:
     // Cleanup.
 
     if (convfrom) ucnv_close(convfrom);
-    if (convto)	ucnv_close(convto);
+    if (convto) ucnv_close(convto);
 
     if (t) delete t;
 
     if (buf) delete[] buf;
-    if (unibuf)	delete[] unibuf;
+    if (unibuf) delete[] unibuf;
 
     if (fromoffsets) delete[] fromoffsets;
     if (tooffsets) delete[] tooffsets;
 
     if (infile != stdin) {
-	fclose(infile);
+        fclose(infile);
     }
 
     return ret;
@@ -669,24 +667,24 @@ static void usage(const char *pname, int ecode) {
 
     initMsg(pname);
     msg =
-	ures_getStringByKey(gBundle, ecode ? "lcUsageWord" : "ucUsageWord",
-			    &msgLen, &err);
+        ures_getStringByKey(gBundle, ecode ? "lcUsageWord" : "ucUsageWord",
+                            &msgLen, &err);
     UnicodeString upname(pname, strlen(pname) + 1);
     UnicodeString mname(msg, msgLen + 1);
 
     u_wmsg("usage", mname.getBuffer(), upname.getBuffer());
     if (!ecode) {
-	fputc('\n', stderr);
-	u_wmsg("help");
+        fputc('\n', stderr);
+        u_wmsg("help");
 
-	/* Now dump callbacks and finish. */
+        /* Now dump callbacks and finish. */
 
-	int i, count =
-	    sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
-	for (i = 0; i < count; ++i) {
-	    fprintf(stderr, " %s", transcode_callbacks[i].name);
-	}
-	fputc('\n', stderr);
+        int i, count =
+            sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
+        for (i = 0; i < count; ++i) {
+            fprintf(stderr, " %s", transcode_callbacks[i].name);
+        }
+        fputc('\n', stderr);
     }
 
     exit(ecode);
@@ -724,9 +722,10 @@ int main(int argc, char **argv)
 
     // Prettify pname.
     for (pname = *argv + strlen(*argv) - 1;
-	 pname != *argv && *pname != U_FILE_SEP_CHAR; --pname);
+        pname != *argv && *pname != U_FILE_SEP_CHAR; --pname)
+            ;
     if (*pname == U_FILE_SEP_CHAR)
-	++pname;
+        ++pname;
 
     // First, get the arguments from command-line
     // to know the codepages to convert between
@@ -735,154 +734,154 @@ int main(int argc, char **argv)
     // below.
 
     for (iter = argv + 1; iter != end; iter++) {
-	// Check for from charset
-	if (strcmp("-f", *iter) == 0 || !strcmp("--from-code", *iter)) {
-	    iter++;
-	    if (iter != end)
-		fromcpage = *iter;
-	} else if (strcmp("-t", *iter) == 0 || !strcmp("--to-code", *iter)) {
-	    iter++;
-	    if (iter != end)
-		tocpage = *iter;
-	} else if (strcmp("-x", *iter) == 0) {
-	    iter++;
-	    if (iter != end)
-		translit = *iter;
-	    else
-		usage(pname, 1);
-	} else if (!strcmp("--fallback", *iter)) {
-	    fallback = 1;
-	} else if (!strcmp("--no-fallback", *iter)) {
-	    fallback = 0;
-	} else if (strcmp("-b", *iter) == 0 || !strcmp("--block-size", *iter)) {
-	    iter++;
-	    if (iter != end) {
-		bufsz = atoi(*iter);
+        // Check for from charset
+        if (strcmp("-f", *iter) == 0 || !strcmp("--from-code", *iter)) {
+            iter++;
+            if (iter != end)
+                fromcpage = *iter;
+        } else if (strcmp("-t", *iter) == 0 || !strcmp("--to-code", *iter)) {
+            iter++;
+            if (iter != end)
+                tocpage = *iter;
+        } else if (strcmp("-x", *iter) == 0) {
+            iter++;
+            if (iter != end)
+                translit = *iter;
+            else
+                usage(pname, 1);
+        } else if (!strcmp("--fallback", *iter)) {
+            fallback = 1;
+        } else if (!strcmp("--no-fallback", *iter)) {
+            fallback = 0;
+        } else if (strcmp("-b", *iter) == 0 || !strcmp("--block-size", *iter)) {
+            iter++;
+            if (iter != end) {
+                bufsz = atoi(*iter);
                 if ((int) bufsz <= 0) {
                     initMsg(pname);
-		    UnicodeString str(*iter);
-		    initMsg(pname);
-		    u_wmsg("badBlockSize", str.getBuffer());
-		    return 3;
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("badBlockSize", str.getBuffer());
+                    return 3;
                 }
             } else {
-		usage(pname, 1);
+                usage(pname, 1);
             }
-	} else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter)) {
-	    if (printTranslits) {
-		usage(pname, 1);
-	    }
-	    printConvs = 1;
-	} else if (strcmp("--default-code", *iter) == 0) {
-	    if (printTranslits) {
-		usage(pname, 1);
-	    }
-	    printName = ucnv_getDefaultName();
-	} else if (strcmp("--list-code", *iter) == 0) {
-	    if (printTranslits) {
-		usage(pname, 1);
-	    }
+        } else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter)) {
+            if (printTranslits) {
+                usage(pname, 1);
+            }
+            printConvs = 1;
+        } else if (strcmp("--default-code", *iter) == 0) {
+            if (printTranslits) {
+                usage(pname, 1);
+            }
+            printName = ucnv_getDefaultName();
+        } else if (strcmp("--list-code", *iter) == 0) {
+            if (printTranslits) {
+                usage(pname, 1);
+            }
 
-	    iter++;
-	    if (iter != end) {
-		UErrorCode e = U_ZERO_ERROR;
-		printName = ucnv_getAlias(*iter, 0, &e);
-		if (U_FAILURE(e) || !printName) {
-		    UnicodeString str(*iter);
-		    initMsg(pname);
-		    u_wmsg("noSuchCodeset", str.getBuffer());
-		    return 2;
-		}
-	    } else
-		usage(pname, 1);
-	} else if (strcmp("--canon", *iter) == 0) {
-	    printCanon = 1;
-	} else if (strcmp("-L", *iter) == 0
-		   || !strcmp("--list-transliterators", *iter)) {
-	    if (printConvs) {
-		usage(pname, 1);
-	    }
-	    printTranslits = 1;
-	} else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)
-		   || !strcmp("--help", *iter)) {
-	    usage(pname, 0);
-	} else if (!strcmp("-c", *iter)) {
-	    fromucallback = UCNV_FROM_U_CALLBACK_SKIP;
-	} else if (!strcmp("--to-callback", *iter)) {
-	    iter++;
-	    if (iter != end) {
-		const struct callback_ent *cbe = findCallback(*iter);
-		if (cbe) {
-		    fromucallback = cbe->fromu;
-		    fromuctxt = cbe->fromuctxt;
-		} else {
-		    UnicodeString str(*iter);
-		    initMsg(pname);
-		    u_wmsg("unknownCallback", str.getBuffer());
-		    return 4;
-		}
-	    } else {
-		usage(pname, 1);
-	    }
-	} else if (!strcmp("--from-callback", *iter)) {
-	    iter++;
-	    if (iter != end) {
-		const struct callback_ent *cbe = findCallback(*iter);
-		if (cbe) {
-		    toucallback = cbe->tou;
-		    touctxt = cbe->touctxt;
-		} else {
-		    UnicodeString str(*iter);
-		    initMsg(pname);
-		    u_wmsg("unknownCallback", str.getBuffer());
-		    return 4;
-		}
-	    } else {
-		usage(pname, 1);
-	    }
-	} else if (!strcmp("-i", *iter)) {
-	    toucallback = UCNV_TO_U_CALLBACK_SKIP;
-	} else if (!strcmp("--callback", *iter)) {
-	    iter++;
-	    if (iter != end) {
-		const struct callback_ent *cbe = findCallback(*iter);
-		if (cbe) {
-		    fromucallback = cbe->fromu;
-		    fromuctxt = cbe->fromuctxt;
-		    toucallback = cbe->tou;
-		    touctxt = cbe->touctxt;
-		} else {
-		    UnicodeString str(*iter);
-		    initMsg(pname);
-		    u_wmsg("unknownCallback", str.getBuffer());
-		    return 4;
-		}
-	    } else {
-		usage(pname, 1);
-	    }
-	} else if (!strcmp("-s", *iter) || !strcmp("--silent", *iter)) {
-	    verbose = 0;
-	} else if (!strcmp("-v", *iter) || !strcmp("--verbose", *iter)) {
-	    verbose = 1;
-	} else if (!strcmp("-V", *iter) || !strcmp("--version", *iter)) {
-	    printf("%s v2.0\n", pname);
-	    return 0;
-	} else if (!strcmp("-o", *iter) || !strcmp("--output", *iter)) {
-	    ++iter;
-	    if (iter != end && !outfilestr) {
-		outfilestr = *iter;
-	    } else {
-		usage(pname, 1);
-	    }
-	} else if (**iter == '-' && (*iter)[1]) {
-	    usage(pname, 1);
-	}
+            iter++;
+            if (iter != end) {
+                UErrorCode e = U_ZERO_ERROR;
+                printName = ucnv_getAlias(*iter, 0, &e);
+                if (U_FAILURE(e) || !printName) {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("noSuchCodeset", str.getBuffer());
+                    return 2;
+                }
+            } else
+                usage(pname, 1);
+        } else if (strcmp("--canon", *iter) == 0) {
+            printCanon = 1;
+        } else if (strcmp("-L", *iter) == 0
+            || !strcmp("--list-transliterators", *iter)) {
+            if (printConvs) {
+                usage(pname, 1);
+            }
+            printTranslits = 1;
+        } else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)
+            || !strcmp("--help", *iter)) {
+            usage(pname, 0);
+        } else if (!strcmp("-c", *iter)) {
+            fromucallback = UCNV_FROM_U_CALLBACK_SKIP;
+        } else if (!strcmp("--to-callback", *iter)) {
+            iter++;
+            if (iter != end) {
+                const struct callback_ent *cbe = findCallback(*iter);
+                if (cbe) {
+                    fromucallback = cbe->fromu;
+                    fromuctxt = cbe->fromuctxt;
+                } else {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("unknownCallback", str.getBuffer());
+                    return 4;
+                }
+            } else {
+                usage(pname, 1);
+            }
+        } else if (!strcmp("--from-callback", *iter)) {
+            iter++;
+            if (iter != end) {
+                const struct callback_ent *cbe = findCallback(*iter);
+                if (cbe) {
+                    toucallback = cbe->tou;
+                    touctxt = cbe->touctxt;
+                } else {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("unknownCallback", str.getBuffer());
+                    return 4;
+                }
+            } else {
+                usage(pname, 1);
+            }
+        } else if (!strcmp("-i", *iter)) {
+            toucallback = UCNV_TO_U_CALLBACK_SKIP;
+        } else if (!strcmp("--callback", *iter)) {
+            iter++;
+            if (iter != end) {
+                const struct callback_ent *cbe = findCallback(*iter);
+                if (cbe) {
+                    fromucallback = cbe->fromu;
+                    fromuctxt = cbe->fromuctxt;
+                    toucallback = cbe->tou;
+                    touctxt = cbe->touctxt;
+                } else {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("unknownCallback", str.getBuffer());
+                    return 4;
+                }
+            } else {
+                usage(pname, 1);
+            }
+        } else if (!strcmp("-s", *iter) || !strcmp("--silent", *iter)) {
+            verbose = 0;
+        } else if (!strcmp("-v", *iter) || !strcmp("--verbose", *iter)) {
+            verbose = 1;
+        } else if (!strcmp("-V", *iter) || !strcmp("--version", *iter)) {
+            printf("%s v2.0\n", pname);
+            return 0;
+        } else if (!strcmp("-o", *iter) || !strcmp("--output", *iter)) {
+            ++iter;
+            if (iter != end && !outfilestr) {
+                outfilestr = *iter;
+            } else {
+                usage(pname, 1);
+            }
+        } else if (**iter == '-' && (*iter)[1]) {
+            usage(pname, 1);
+        }
     }
 
     if (printConvs || printName) {
-	return printConverters(pname, printName, printCanon) ? 2 : 0;
+        return printConverters(pname, printName, printCanon) ? 2 : 0;
     } else if (printTranslits) {
-	return printTransliterators(pname, printCanon) ? 3 : 0;
+        return printTransliterators(printCanon) ? 3 : 0;
     }
 
     if (!fromcpage || !uprv_strcmp(fromcpage, "-")) {
@@ -894,101 +893,101 @@ int main(int argc, char **argv)
 
     // Open the correct output file or connect to stdout for reading input
     if (outfilestr != 0 && strcmp(outfilestr, "-")) {
-	outfile = fopen(outfilestr, "wb");
-	if (outfile == 0) {
-	    UnicodeString str1(outfilestr, "");
-	    UnicodeString str2(strerror(errno), "");
-	    initMsg(pname);
-	    u_wmsg("cantCreateOutputF",
-		   str1.getBuffer(), str2.getBuffer());
-	    return 1;
-	}
+        outfile = fopen(outfilestr, "wb");
+        if (outfile == 0) {
+            UnicodeString str1(outfilestr, "");
+            UnicodeString str2(strerror(errno), "");
+            initMsg(pname);
+            u_wmsg("cantCreateOutputF",
+                str1.getBuffer(), str2.getBuffer());
+            return 1;
+        }
     } else {
-	outfilestr = "-";
-	outfile = stdout;
+        outfilestr = "-";
+        outfile = stdout;
 #ifdef WIN32
-	if (setmode(fileno(outfile), O_BINARY) == -1) {
-	    perror("Cannot set output file to binary mode");
-	    exit(-1);
-	}
+        if (setmode(fileno(outfile), O_BINARY) == -1) {
+            perror("Cannot set output file to binary mode");
+            exit(-1);
+        }
 #endif
     }
 
     /* Loop again on the arguments to find all the input files, and
-       convert them. XXX Cheap and sloppy. */
+    convert them. XXX Cheap and sloppy. */
 
     for (iter = argv + 1; iter != end; iter++) {
-	if (strcmp("-f", *iter) == 0 || !strcmp("--from-code", *iter)) {
-	    iter++;
-	} else if (strcmp("-t", *iter) == 0 || !strcmp("--to-code", *iter)) {
-	    iter++;
-	} else if (strcmp("-x", *iter) == 0) {
-	    iter++;
-	} else if (!strcmp("--fallback", *iter)) {
-	    ;
-	} else if (!strcmp("--no-fallback", *iter)) {
-	    ;
-	} else if (strcmp("-b", *iter) == 0 || !strcmp("--block-size", *iter)) {
-	    iter++;
-	} else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter)) {
-	    ;
-	} else if (strcmp("--default-code", *iter) == 0) {
-	    ;
-	} else if (strcmp("--list-code", *iter) == 0) {
-	    ;
-	} else if (strcmp("--canon", *iter) == 0) {
-	    ;
-	} else if (strcmp("-L", *iter) == 0
-		   || !strcmp("--list-transliterators", *iter)) {
-	    ;
-	} else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)
-		   || !strcmp("--help", *iter)) {
-	    ;
-	} else if (!strcmp("-c", *iter)) {
-	    ;
-	} else if (!strcmp("--to-callback", *iter)) {
-	    iter++;
-	} else if (!strcmp("--from-callback", *iter)) {
-	    iter++;
-	} else if (!strcmp("-i", *iter)) {
-	    ;
-	} else if (!strcmp("--callback", *iter)) {
-	    iter++;
-	} else if (!strcmp("-s", *iter) || !strcmp("--silent", *iter)) {
-	    ;
-	} else if (!strcmp("-v", *iter) || !strcmp("--verbose", *iter)) {
-	    ;
-	} else if (!strcmp("-V", *iter) || !strcmp("--version", *iter)) {
-	    ;
-	} else if (!strcmp("-o", *iter) || !strcmp("--output", *iter)) {
-	    ++iter;
-	} else {
-	    seenf = 1;
-	    if (!convertFile
-		(pname, fromcpage, toucallback, touctxt, tocpage,
-		 fromucallback, fromuctxt, fallback, bufsz, translit, *iter,
-		 outfile, verbose)) {
-		goto error_exit;
-	    }
-	}
+        if (strcmp("-f", *iter) == 0 || !strcmp("--from-code", *iter)) {
+            iter++;
+        } else if (strcmp("-t", *iter) == 0 || !strcmp("--to-code", *iter)) {
+            iter++;
+        } else if (strcmp("-x", *iter) == 0) {
+            iter++;
+        } else if (!strcmp("--fallback", *iter)) {
+            ;
+        } else if (!strcmp("--no-fallback", *iter)) {
+            ;
+        } else if (strcmp("-b", *iter) == 0 || !strcmp("--block-size", *iter)) {
+            iter++;
+        } else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter)) {
+            ;
+        } else if (strcmp("--default-code", *iter) == 0) {
+            ;
+        } else if (strcmp("--list-code", *iter) == 0) {
+            ;
+        } else if (strcmp("--canon", *iter) == 0) {
+            ;
+        } else if (strcmp("-L", *iter) == 0
+            || !strcmp("--list-transliterators", *iter)) {
+            ;
+        } else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)
+            || !strcmp("--help", *iter)) {
+            ;
+        } else if (!strcmp("-c", *iter)) {
+            ;
+        } else if (!strcmp("--to-callback", *iter)) {
+            iter++;
+        } else if (!strcmp("--from-callback", *iter)) {
+            iter++;
+        } else if (!strcmp("-i", *iter)) {
+            ;
+        } else if (!strcmp("--callback", *iter)) {
+            iter++;
+        } else if (!strcmp("-s", *iter) || !strcmp("--silent", *iter)) {
+            ;
+        } else if (!strcmp("-v", *iter) || !strcmp("--verbose", *iter)) {
+            ;
+        } else if (!strcmp("-V", *iter) || !strcmp("--version", *iter)) {
+            ;
+        } else if (!strcmp("-o", *iter) || !strcmp("--output", *iter)) {
+            ++iter;
+        } else {
+            seenf = 1;
+            if (!convertFile
+                (pname, fromcpage, toucallback, touctxt, tocpage,
+                fromucallback, fromuctxt, fallback, bufsz, translit, *iter,
+                outfile, verbose)) {
+                goto error_exit;
+            }
+        }
     }
 
     if (!seenf) {
-	if (!convertFile
-	    (pname, fromcpage, toucallback, touctxt, tocpage,
-	     fromucallback, fromuctxt, fallback, bufsz, translit, 0, outfile,
-	     verbose)) {
-	    goto error_exit;
-	}
+        if (!convertFile
+            (pname, fromcpage, toucallback, touctxt, tocpage,
+            fromucallback, fromuctxt, fallback, bufsz, translit, 0, outfile,
+            verbose)) {
+            goto error_exit;
+        }
     }
 
     goto normal_exit;
- error_exit:
+error_exit:
     ret = 1;
- normal_exit:
+normal_exit:
 
     if (outfile != stdout)
-	fclose(outfile);
+        fclose(outfile);
 
     return ret;
 }
