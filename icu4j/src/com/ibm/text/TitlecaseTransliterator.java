@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/11/17 20:56:13 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/11/21 21:23:28 $ 
+ * $Revision: 1.7 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -24,7 +24,7 @@ class TitlecaseTransliterator extends Transliterator {
      * The set of characters we skip.  These are neither cased nor
      * non-cased, to us; we copy them verbatim.
      */
-    static final UnicodeSet SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:]]");
+    static final UnicodeSet SKIP = new UnicodeSet("[\u00AD \u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:]]");
 
     /**
      * The set of characters that cause the next non-SKIP character
@@ -66,14 +66,6 @@ class TitlecaseTransliterator extends Transliterator {
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
-
-        // The way a filter is supposed to work isn't precisely
-        // specified by Transliterator yet.  We interpret the filter
-        // as masking characters completely -- they do not get
-        // modified, and they are also _invisible for the purposes of
-        // context_.  We are a little inconsistent about this -- we
-        // don't filter characters in the range contextStart..start-1
-        // (the left context).
 
         // Our mode; we are either converting letter toTitle or
         // toLower.

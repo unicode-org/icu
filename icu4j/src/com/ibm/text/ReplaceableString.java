@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/ReplaceableString.java,v $ 
- * $Date: 2001/11/02 17:44:38 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/11/21 21:19:57 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ package com.ibm.text;
  *
  * @see Replaceable
  * @author Alan Liu
- * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.5 $ $Date: 2001/11/02 17:44:38 $
+ * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.6 $ $Date: 2001/11/21 21:19:57 $
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
@@ -124,20 +124,7 @@ public class ReplaceableString implements Replaceable {
      * <code>limit - 1</code>
      */
     public void replace(int start, int limit, String text) {
-        if (start == limit) {
-            buf.insert(start, text);
-        } else {
-            char[] tail = null;
-            if (limit < buf.length()) {
-                tail = new char[buf.length() - limit];
-                buf.getChars(limit, buf.length(), tail, 0);
-            }
-            buf.setLength(start);
-            buf.append(text);
-            if (tail != null) {
-                buf.append(tail);
-            }
-        }
+        buf.replace(start, limit, text);
     }
 
     /**
@@ -154,16 +141,8 @@ public class ReplaceableString implements Replaceable {
      */
     public void replace(int start, int limit, char[] chars,
                         int charsStart, int charsLen) {
-        char[] tail = null;
-        if (limit < buf.length()) {
-            tail = new char[buf.length() - limit];
-            buf.getChars(limit, buf.length(), tail, 0);
-        }
-        buf.setLength(start);
-        buf.append(chars, charsStart, charsLen);
-        if (tail != null) {
-            buf.append(tail);
-        }
+        buf.delete(start, limit);
+        buf.insert(start, chars, charsStart, charsLen);
     }
 
     /**
