@@ -435,9 +435,9 @@ ufile_fill_uchar_buffer(UFILE *f)
 }
 
 U_CAPI UChar* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_fgets(UFILE        *f,
-        int32_t        n,
-        UChar        *s)
+u_fgets(UChar        *s,
+        int32_t       n,
+        UFILE        *f)
 {
     int32_t dataSize;
     int32_t count;
@@ -536,78 +536,70 @@ u_fgetc(UFILE        *f)
     /* otherwise, fill the buffer and return the next character */
     else {
         ufile_fill_uchar_buffer(f);
-        if(f->fUCPos < f->fUCLimit)
+        if(f->fUCPos < f->fUCLimit) {
             return *(f->fUCPos)++;
-        else
-            return 0xFFFF;
+        }
+        else {
+            return U_EOF;
+        }
     }
-}
-
-/* u_unescapeAt() callback to return a UChar from a UFILE */
-static UChar U_CALLCONV
-_charAt(int32_t offset, void *context) {
-    return ((UFILE*) context)->fUCPos[offset];
 }
 
 /* Read a UChar from a UFILE and process escape sequences */
 U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetcx(UFILE        *f)
 {
-    int32_t length;
-    int32_t offset;
     UChar32 c32;
-    UChar c16;
 
     /* Fill the buffer if it is empty */
-    if (f->fUCPos >= f->fUCLimit) {
+    if (f->fUCPos + 1 >= f->fUCLimit) {
         ufile_fill_uchar_buffer(f);
     }
 
     /* Get the next character in the buffer */
     if (f->fUCPos < f->fUCLimit) {
-        c16 = *(f->fUCPos)++;
-    } else {
-        c16 = U_EOF;
+        c32 = *(f->fUCPos)++;
+    }
+    else {
+        c32 = U_EOF;
     }
 
-    /* If it isn't a backslash, return it */
-    if (c16 != 0x005C /*'\\'*/) {
-        return c16;
+    if (U_IS_LEAD(c32)) {
+        if (f->fUCPos < f->fUCLimit) {
+            UChar c16 = *(f->fUCPos)++;
+            c32 = U16_GET_SUPPLEMENTARY(c32, c16);
+        }
+        else {
+            c32 = U_EOF;
+        }
     }
-
-    /* Determine the amount of data in the buffer */
-    length = (int32_t)(f->fUCLimit - f->fUCPos);
-
-    /* The longest escape sequence is \Uhhhhhhhh; make sure
-    we have at least that many characters */
-    if (length < 10) {
-        /* fill the buffer */
-        ufile_fill_uchar_buffer(f);
-        length = (int32_t)(f->fUCLimit - f->fUCPos);
-    }
-
-    /* Process the escape */
-    offset = 0;
-    c32 = u_unescapeAt(_charAt, &offset, length, (void*)f);
-
-    /* Update the current buffer position */
-    f->fUCPos += offset;
 
     return c32;
 }
 
-U_CAPI UChar U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_fungetc(UChar        c,
+U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_fungetc(UChar32        ch,
     UFILE        *f)
 {
     /* if we're at the beginning of the buffer, sorry! */
-    if(f->fUCPos == f->fUCBuffer)
-        return 0xFFFF;
-    /* otherwise, put the character back */
-    else {
-        *--(f->fUCPos) = c;
-        return c;
+    if (f->fUCPos == f->fUCBuffer
+        || (U_IS_LEAD(ch) && (f->fUCPos - 1) == f->fUCBuffer))
+    {
+        ch = U_EOF;
     }
+    else {
+        /* otherwise, put the character back */
+        /* TODO: Maybe we shouldn't be writing to the buffer and just verify the contents */
+        if (U_IS_LEAD(ch)) {
+            /* Remember, put them back on in the reverse order. */
+            *--(f->fUCPos) = U16_TRAIL(ch);
+            *--(f->fUCPos) = U16_LEAD(ch);
+        }
+        else {
+            *--(f->fUCPos) = (UChar)ch;
+        }
+    }
+    return ch;
 }
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
