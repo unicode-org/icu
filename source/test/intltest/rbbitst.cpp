@@ -3273,7 +3273,9 @@ void RBBITest::TestSentBreaks(void)
     BreakIterator *bi = BreakIterator::createSentenceInstance(locale, status);
     UChar         str[100]; 
     char          *strlist[] = 
-    {"This\n",
+    {
+     "Now\ris\nthe\r\ntime\n\rfor\r\r",
+     "This\n",
      "Hello! how are you? I'am fine. Thankyou. How are you doing? This\n costs $20,00,000.",
      "\"Sentence ending with a quote.\" Bye.",
      "  (This is it).  Testing the sentence iterator. \"This isn't it.\"", 
@@ -3295,19 +3297,7 @@ void RBBITest::TestSentBreaks(void)
         for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
             forward[count ++] = i;
         }
-        int tempcount = count;
-        for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
-            tempcount --;
-            if (forward[tempcount] != i) {
-                printStringBreaks(ustr, forward, count);
-                errln("happy break test reverse failed: expected %d but got %d", 
-                      forward[tempcount], i);
-                break;
-            }
-        }
-        if (tempcount != 0) {
-            errln("happy break test failed: missed a match");
-        }
+        testBreakBoundPreceding(this, ustr, bi, forward, count);
     }
 }
 
