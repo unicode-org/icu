@@ -1129,8 +1129,8 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                  (UCharOffset - coll->contractionIndex)); 
           if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
             CE          = firstCE;
-            /* firstCE     = UCOL_NOT_FOUND;*/
-            source->pos = firstUChar; 
+            /* firstCE     = UCOL_NOT_FOUND;
+            source->pos = firstUChar; */
           }
 
           break;
@@ -1286,7 +1286,7 @@ U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
         int32_t *resultLen) {
     uint8_t *result = NULL;
     UErrorCode status = U_ZERO_ERROR;
-    *resultLen = ucol_calcSortKey(coll, source, sourceLength, &result, 0, TRUE, &status);
+    *resultLen = coll->sortKeyGen(coll, source, sourceLength, &result, 0, TRUE, &status);
     return result;
 }
 
@@ -1300,7 +1300,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint8_t compareQuad  = (uint8_t)((strength >= UCOL_QUATERNARY)?0:0xFF);
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
-    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED) && (compareQuad == 0);
+    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool  qShifted = shifted  && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
 
     uint8_t variableMax1 = coll->variableMax1;
@@ -1328,12 +1329,12 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           order = ucol_getNextCE(coll, s, &status);
           /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
           
-          if(isCEIgnorable(order)) {
-            continue;
-          }
-
           if(order == UCOL_NO_MORE_CES) {
               break;
+          }
+          /* fix me... we should check if we're in continuation first */
+          if(isCEIgnorable(order)) {
+            continue;
           }
 
           /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
@@ -1350,14 +1351,16 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
           if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0 
             && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2)) 
-            || (!notIsContinuation && wasShifted))) { 
-            if(c4 > 0) {
-              currentSize += (c2/UCOL_BOT_COUNT4)+1;
-              c4 = 0;
-            }
-            currentSize++;
-            if(primary2 != 0) {
+            || (!notIsContinuation && wasShifted))) {
+            if(compareQuad == 0) {
+              if(c4 > 0) {
+                currentSize += (c2/UCOL_BOT_COUNT4)+1;
+                c4 = 0;
+              }
               currentSize++;
+              if(primary2 != 0) {
+                currentSize++;
+              }
             }
             wasShifted = TRUE;
           } else {
@@ -1418,7 +1421,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
               }
             }
 
-            if(shifted  && notIsContinuation) {
+            if(qShifted  && notIsContinuation) {
               c4++;
             }
 
@@ -1433,7 +1436,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
       currentSize += (c3/UCOL_BOT_COUNT3)+1;
     }
 
-    if(c4 > 0) {
+    if(c4 > 0  && compareQuad == 0) {
       currentSize += (c4/UCOL_BOT_COUNT4)+1;
     }
 
@@ -1509,7 +1512,8 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     UBool  upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && (compareTer == 0);
-    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED) && (compareQuad == 0);
+    UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool  qShifted = shifted && (compareQuad == 0);
     const uint8_t *scriptOrder = coll->scriptOrder;
 
     /* support for special features like caselevel and funky secondaries */
@@ -1593,13 +1597,14 @@ ucol_calcSortKey(const    UCollator    *coll,
             /*order = ucol_getNextCE(coll, &s, status);*/
             UCOL_GETNEXTCE(order, coll, s, status);
 
-            if(isCEIgnorable(order)) {
-              continue;
-            }
-
             if(order == UCOL_NO_MORE_CES) {
                 finished = TRUE;
                 break;
+            }
+
+            /* fix me... we should check if we're in continuation first */
+            if(isCEIgnorable(order)) {
+              continue;
             }
 
             /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
@@ -1741,7 +1746,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 }
               }
 
-              if(shifted && notIsContinuation) {
+              if(qShifted && notIsContinuation) {
                 count4++;
               }
             }
@@ -2333,7 +2338,7 @@ void ucol_updateInternalState(UCollator *coll) {
         coll->tertiaryMask = UCOL_KEEP_CASE;
       }
       if(coll->caseLevel == UCOL_OFF && coll->strength == UCOL_TERTIARY 
-        && coll->frenchCollation == UCOL_OFF) {
+        && coll->frenchCollation == UCOL_OFF && coll->alternateHandling == UCOL_NON_IGNORABLE) {
         coll->sortKeyGen = ucol_calcSortKeySimpleTertiary;
       } else {
         coll->sortKeyGen = ucol_calcSortKey;
@@ -2823,7 +2828,8 @@ ucol_strcoll(    const    UCollator    *coll,
     UBool checkCase = (coll->caseLevel == UCOL_ON);
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
     UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
-    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
+    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool qShifted = shifted && checkQuad;
 
     UCollationResult result = UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
@@ -2947,7 +2953,7 @@ ucol_strcoll(    const    UCollator    *coll,
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
 
-    uint32_t LVT = shifted*((coll->variableMax1)<<24 | (coll->variableMax2)<<16);
+    uint32_t LVT = (shifted)?((coll->variableMax1)<<24 | (coll->variableMax2)<<16):0;
 
     uint32_t secS = 0, secT = 0;
 
@@ -3267,7 +3273,7 @@ ucol_strcoll(    const    UCollator    *coll,
     }
          
 
-    if(shifted) {
+    if(qShifted) {
       UBool sInShifted = TRUE;
       UBool tInShifted = TRUE;
       secS = 0; 
@@ -3485,7 +3491,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     UBool checkCase = (coll->caseLevel == UCOL_ON);
     UBool isFrenchSec = (coll->frenchCollation == UCOL_ON) && checkSecTer;
     UBool upperFirst = (coll->caseFirst == UCOL_UPPER_FIRST) && checkTertiary;
-    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED) && checkQuad;
+    UBool shifted = (coll->alternateHandling == UCOL_SHIFTED);
+    UBool qShifted = shifted && checkQuad;
 
     uint32_t sCEsArray[512], tCEsArray[512];
     uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
@@ -3493,7 +3500,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
 
-    uint32_t LVT = shifted*((coll->variableMax1)<<24 | (coll->variableMax2)<<16);
+    uint32_t LVT = (shifted)?((coll->variableMax1)<<24 | (coll->variableMax2)<<16):0;
 
     uint32_t secS = 0, secT = 0;
 
@@ -3809,7 +3816,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
     }
          
 
-    if(shifted) {
+    if(qShifted) {
       UBool sInShifted = TRUE;
       UBool tInShifted = TRUE;
       secS = 0; 
