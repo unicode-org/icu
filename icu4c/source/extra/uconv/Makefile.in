@@ -98,7 +98,7 @@ $(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
 
 resinst: $(RESFILES) $(RESDIR)/$(RESDIR).lst
 	$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION)
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m dll -v -c -d $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -v -c -d $(DESTDIR)$(libdir)/$(PACKAGE)/$(VERSION) -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
 $(RESDIR)/%.res: $(srcdir)/%.txt
 	@$(MKINSTALLDIRS) $(RESDIR)
