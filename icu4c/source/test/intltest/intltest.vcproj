@@ -397,6 +397,12 @@
 				RelativePath=".\dtfmttst.h">
 			</File>
 			<File
+				RelativePath=".\incaltst.cpp">
+			</File>
+			<File
+				RelativePath=".\incaltst.h">
+			</File>
+			<File
 				RelativePath=".\itformat.cpp">
 			</File>
 			<File
