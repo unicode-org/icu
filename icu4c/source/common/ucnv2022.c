@@ -53,8 +53,8 @@
 
 #define UCNV_SS2 "\x1B\x4E"
 #define UCNV_SS3 "\x1B\x4F"
-#define UCNV_SS2_LEN (sizeof(UCNV_SS2) - 1)
-#define UCNV_SS3_LEN (sizeof(UCNV_SS3) - 1)
+#define UCNV_SS2_LEN 2
+#define UCNV_SS3_LEN 2
 
 #define CR      0x0D
 #define LF      0x0A
@@ -99,7 +99,7 @@ typedef struct{
     StateEnum toUnicodeSaveState;
     Cnv2022Type currentType;
     int plane;
-    UConverter* myConverterArray[9];
+    UConverter* myConverterArray[10];
     UBool isEscapeAppended;
     UBool isShiftAppended;
     UBool isLocaleSpecified;
@@ -550,6 +550,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
         if(myLocale[0]=='j' && (myLocale[1]=='a'|| myLocale[1]=='p') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
             int len=0;
+            char* temp;
             /* open the required converters and cache them */
             myConverterData->myConverterArray[0]=   ucnv_open("ASCII", errorCode );
             myConverterData->myConverterArray[1]=   ucnv_open("ISO8859_1", errorCode);
@@ -571,8 +572,9 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             uprv_strcpy(myConverterData->locale,"ja");
                         
             myConverterData->version =options & UCNV_OPTIONS_VERSION_MASK;
-            uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
-            len=sizeof("ISO_2022,locale=ja,version=");
+            temp = "ISO_2022,locale=ja,version=";
+            uprv_strcpy(myConverterData->name,temp);
+            len=strlen(temp);
             myConverterData->name[len-1]=(char)(myConverterData->version+(int)'0');
             myConverterData->name[len]='\0';
            
@@ -1282,15 +1284,15 @@ static  const char* escSeqChars[MAX_VALID_CP_JP] ={
 
 };
 static  const int32_t escSeqCharsLen[MAX_VALID_CP_JP] ={
-    sizeof(escSeqChars[0]) - 1,
-    sizeof(escSeqChars[1]) - 1,
-    sizeof(escSeqChars[2]) - 1,
-    sizeof(escSeqChars[3]) - 1,
-    sizeof(escSeqChars[4]) - 1,
-    sizeof(escSeqChars[5]),
-    sizeof(escSeqChars[6]) - 1,
-    sizeof(escSeqChars[7]),
-    sizeof(escSeqChars[8]) - 1
+    3, /* length of  <ESC>(B  ASCII      */
+    3, /* length of <ESC>.A  ISO-8859-1  */
+    3, /* length of <ESC>.F  ISO-8859-7  */
+    3, /* length of <ESC>(J  JISX-201    */
+    3, /* length of <ESC>$B  JISX-208    */
+    4, /* length of <ESC>$(D JISX-212    */
+    3, /* length of <ESC>$A  GB2312      */
+    4, /* length of <ESC>$(C KSC5601     */
+    3  /* length of <ESC>(I  HWKANA_7BIT */
 };
 
 
@@ -1316,7 +1318,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     UConverterDataISO2022 *converterData = (UConverterDataISO2022*)args->converter->extraInfo;
     unsigned char* target = (unsigned char*) args->target;
     const unsigned char* targetLimit = (const unsigned char*) args->targetLimit;
-    UChar* source =(UChar*)args->source;
+    const UChar* source = args->source;
     const UChar* sourceLimit = args->sourceLimit;
     int32_t* offsets = args->offsets;
     uint32_t targetUniChar = missingCharMarker;
@@ -2321,40 +2323,40 @@ static const char* escSeqCharsCN[10] ={
         "\x1B\x24\x2B\x4D"  /* CNS 11643-1992 Plane 7 */
 };
 static int escSeqCharsLenCN[10] = {
-     sizeof(escSeqCharsCN[0])-3,
-     sizeof(escSeqCharsCN[1]),
-     sizeof(escSeqCharsCN[2]),
-     sizeof(escSeqCharsCN[3]),
-     sizeof(escSeqCharsCN[4]),
-     sizeof(escSeqCharsCN[5]),
-     sizeof(escSeqCharsCN[6]),
-     sizeof(escSeqCharsCN[7]),
-     sizeof(escSeqCharsCN[8]),
-     sizeof(escSeqCharsCN[9]),
+    1,      /* length of escSeq for ASCII */
+    4,      /* length of escSeq for GB 2312-80 */
+    4,      /* length of escSeq for ISO-IR-165 */
+    4,      /* length of escSeq for CNS 11643-1992 Plane 1 */
+    4,      /* length of escSeq for CNS 11643-1992 Plane 2 */
+    4,      /* length of escSeq for CNS 11643-1992 Plane 3 */
+    4,      /* length of escSeq for CNS 11643-1992 Plane 4 */
+    4,      /* length of escSeq for CNS 11643-1992 Plane 5 */
+    4,      /* length of escSeq for CNS 11643-1992 Plane 6 */
+    4       /* length of escSeq for CNS 11643-1992 Plane 7 */
 };
 static const char* shiftSeqCharsCN[10] ={
-        "",
-        (const char*) "\x0E",
-        (const char*) "\x0E",
-        (const char*) "\x0E",
-        UCNV_SS2,
-        UCNV_SS3,
-        UCNV_SS3,
-        UCNV_SS3,
-        UCNV_SS3,
-        UCNV_SS3
+        "",                     /* ASCII */
+        (const char*) "\x0E",   /* GB 2312-80 */
+        (const char*) "\x0E",   /* ISO-IR-165 */
+        (const char*) "\x0E",   /* CNS 11643-1992 Plane 1 */
+        UCNV_SS2,               /* CNS 11643-1992 Plane 2 */
+        UCNV_SS3,               /* CNS 11643-1992 Plane 3 */
+        UCNV_SS3,               /* CNS 11643-1992 Plane 4 */
+        UCNV_SS3,               /* CNS 11643-1992 Plane 5 */
+        UCNV_SS3,               /* CNS 11643-1992 Plane 6 */
+        UCNV_SS3                /* CNS 11643-1992 Plane 7 */
 };
 static int shiftSeqCharsLenCN[10] ={
-     sizeof(shiftSeqCharsCN[0])-4,
-     sizeof(shiftSeqCharsCN[1])-3,
-     sizeof(shiftSeqCharsCN[2])-3,
-     sizeof(shiftSeqCharsCN[3])-3,
-     sizeof(shiftSeqCharsCN[4])-2,
-     sizeof(shiftSeqCharsCN[5])-2,
-     sizeof(shiftSeqCharsCN[6])-2,
-     sizeof(shiftSeqCharsCN[7])-2,
-     sizeof(shiftSeqCharsCN[8])-2,
-     sizeof(shiftSeqCharsCN[9])-2,
+    0,      /* length of shiftSeq for ASCII */
+    1,      /* length of shiftSeq for GB 2312-80 */
+    1,      /* length of shiftSeq for ISO-IR-165 */
+    1,      /* length of shiftSeq for CNS 11643-1992 Plane 1 */
+    2,      /* length of shiftSeq for CNS 11643-1992 Plane 2 */
+    2,      /* length of shiftSeq for CNS 11643-1992 Plane 3 */
+    2,      /* length of shiftSeq for CNS 11643-1992 Plane 4 */
+    2,      /* length of shiftSeq for CNS 11643-1992 Plane 5 */
+    2,      /* length of shiftSeq for CNS 11643-1992 Plane 6 */
+    2       /* length of shiftSeq for CNS 11643-1992 Plane 7 */
 };
 
 typedef enum  {
@@ -2381,7 +2383,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
     UConverterDataISO2022 *converterData = (UConverterDataISO2022*)args->converter->extraInfo;
     unsigned char* target = (unsigned char*) args->target;
     const unsigned char* targetLimit = (const unsigned char*) args->targetLimit;
-    UChar* source =(UChar*)args->source;
+    const UChar* source = args->source;
     const UChar* sourceLimit = args->sourceLimit;
     int32_t* offsets = args->offsets;
     uint32_t targetUniChar = missingCharMarker;
