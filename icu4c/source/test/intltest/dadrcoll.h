@@ -31,8 +31,10 @@ protected:
     UResourceBundle* getTestBundle(const char* bundleName);
 
     void DataDrivenTest(char *par);
+    void processReadyCollator(UResourceBundle *test, Collator *col, UErrorCode &status);
+    void processCollatorTests(UResourceBundle *test, Collator *col, UErrorCode &status);
     void processTest(UResourceBundle *test, UErrorCode &status);
-    void processArguments(Collator *col, const UnicodeString &options, UErrorCode &status);
+    void processArguments(Collator *col, const UChar *start, int32_t optLen, UErrorCode &status);
     UBool setTestSequence(const UnicodeString &setSequence, UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status);
     UBool getNextInSequence(UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status);
     void processSequence(Collator* col, const UnicodeString &sequence, UErrorCode &status);
