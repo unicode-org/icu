@@ -33,9 +33,7 @@
 #include "gregoimp.h"
 #include "buddhcal.h"
 #include "japancal.h"
-#if defined(SRL_HAVE_ISLAMIC)
 #include "islamcal.h"
-#endif
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "iculserv.h"
@@ -127,6 +125,11 @@ protected:
   }
 
   virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const {
+#ifdef U_DEBUG_CALSVC
+    if(key.getDynamicClassID() != LocaleKey::getStaticClassID()) {
+      fprintf(stderr, "[%s]::create - not a LocaleKey!\n", fType);
+    }
+#endif
     const LocaleKey& lkey = (LocaleKey&)key;
     Locale curLoc;  // current locale
     Locale canLoc;  // Canonical locale
@@ -138,7 +141,7 @@ protected:
     key.currentID(str);
 
 #ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "BasicCalendarFactory[%s] - cur %s, can %s\n", fType, (const char*)curLoc.getName(), (const char*)canLoc.getName());
+    fprintf(stderr, "BasicCalendarFactory[%s]::create() - cur %s, can %s\n", fType, (const char*)curLoc.getName(), (const char*)canLoc.getName());
 #endif
 
     if(str != fID) {  // Do we handle this type?
@@ -154,19 +157,16 @@ protected:
     fflush(stderr);
 #endif
 
-  if(!fType || !*fType || !uprv_strcmp(fType,"gregorian")) {  // Gregorian (default)
+  if(!fType || !*fType || !uprv_strcmp(fType,"@calendar=gregorian")) {  // Gregorian (default)
     return new GregorianCalendar(canLoc, status);
-  } else if(!uprv_strcmp(fType, "japanese")) {
+  } else if(!uprv_strcmp(fType, "@calendar=japanese")) {
     return new JapaneseCalendar(canLoc, status);
-  } else if(!uprv_strcmp(fType, "buddhist")) {
+  } else if(!uprv_strcmp(fType, "@calendar=buddhist")) {
     return new BuddhistCalendar(canLoc, status);
-#if defined (SRL_HAVE_ISLAMIC)
-  } else if(!uprv_strcmp(fType, "islamic-civil")) {
-    return new IslamicCalendar(canLoc, status);
-  } else if(!uprv_strcmp(fType, "islamic")) {
-    IslamicCalendar *i = new IslamicCalendar(canLoc, status);
-    i->setCivil(FALSE, status);
-#endif
+  } else if(!uprv_strcmp(fType, "@calendar=islamic-civil")) {
+    return new IslamicCalendar(canLoc, status, IslamicCalendar::CIVIL);
+  } else if(!uprv_strcmp(fType, "@calendar=islamic")) {
+    return new IslamicCalendar(canLoc, status, IslamicCalendar::ASTRONOMICAL);
   } else { 
     status = U_UNSUPPORTED_ERROR;
     return NULL;
@@ -201,7 +201,9 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
       fprintf(stderr, "DefaultCalendar factory %p: looking up %s, keyword: %s\n", 
               this, (const char*)loc.getName(), keyword);
 #endif
-      return new UnicodeString(keyword,"");
+      UnicodeString *ret = new UnicodeString("@calendar=","");
+      (*ret) += UnicodeString(keyword, "");
+      return ret;
     } else {
 #ifdef U_DEBUG_CALSVC
       fprintf(stderr, "DefaultCalendar factory %p: looking up %s\n", 
@@ -228,6 +230,7 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
       }
       
       UnicodeString myString = ures_getUnicodeStringByKey(rb, Calendar::kDefaultCalendar, &status);
+      myString = UnicodeString("@calendar=") + myString;
       
 #ifdef U_DEBUG_CALSVC
       int32_t len = 0;
@@ -245,12 +248,13 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
       
 #ifdef U_DEBUG_CALSVC
       {
-        char defCalStr[200];
-        if(len > 199) {
-          len = 199;
+        char defCalStr[200] = "@calendar=";
+        int32_t prefixLen = uprv_strlen(defCalStr);
+        if(len > (199-prefixLen)) {
+          len = (199-prefixLen);
         }
-        u_UCharsToChars(defCal, defCalStr, len);
-        defCalStr[len]=0;
+        u_UCharsToChars(defCal, defCalStr+prefixLen, len);
+        defCalStr[len+prefixLen]=0;
         fprintf(stderr, "DefaultCalendarFactory: looked up %s, got DefaultCalendar= %s\n",  (const char*)loc.getName(), defCalStr);
       }
 #endif
@@ -329,13 +333,11 @@ getService(void)
 #endif
 
     // Register all basic instances. 
-    newservice->registerFactory(new BasicCalendarFactory("japanese"),status);
-    newservice->registerFactory(new BasicCalendarFactory("buddhist"),status);
-    newservice->registerFactory(new BasicCalendarFactory("gregorian"),status);
-#if defined (SRL_HAVE_ISLAMIC)
-    newservice->registerFactory(new BasicCalendarFactory("islamic"),status);
-    newservice->registerFactory(new BasicCalendarFactory("islamic-civil"),status);
-#endif
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=japanese"),status);
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=buddhist"),status);
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=gregorian"),status);
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=islamic"),status);
+    newservice->registerFactory(new BasicCalendarFactory("@calendar=islamic-civil"),status);
 
 #ifdef U_DEBUG_CALSVC
     fprintf(stderr, "Done..\n");
@@ -615,7 +617,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     tmp[len]=0;
     
 #ifdef U_DEBUG_CALSVC
-    // fprintf(stderr, "createInstance(%s) told to look at %s..\n", (const char*)aLocale.getName(), tmp);
+    fprintf(stderr, "Calendar::createInstance(%s), fetched string %s..\n", (const char*)aLocale.getName(), tmp);
 #endif
 
     // Create a Locale over this string
@@ -2971,6 +2973,7 @@ Calendar::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
 U_NAMESPACE_END
 
 U_CFUNC UBool calendar_cleanup(void) {
+  calendar_islamic_cleanup();
   if (gService) {
     delete gService;
     gService = NULL;
