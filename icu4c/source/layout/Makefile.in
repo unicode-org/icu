@@ -159,7 +159,9 @@ endif
 endif
 ifneq ($(IMPORT_LIB_EXT),)
 	$(INSTALL-L) $(FINAL_IMPORT_LIB) $(DESTDIR)$(libdir)
+ifneq ($(IMPORT_LIB),$(FINAL_IMPORT_LIB))
 	cd $(DESTDIR)$(libdir) && $(RM) $(notdir $(IMPORT_LIB)) && ln -s $(notdir $(FINAL_IMPORT_LIB)) $(notdir $(IMPORT_LIB))
+endif
 ifneq ($(MIDDLE_IMPORT_LIB),$(FINAL_IMPORT_LIB))
 	cd $(DESTDIR)$(libdir) && $(RM) $(notdir $(MIDDLE_IMPORT_LIB)) && ln -s $(notdir $(FINAL_IMPORT_LIB)) $(notdir $(MIDDLE_IMPORT_LIB))
 endif
