@@ -21,6 +21,7 @@
 #include "unicode/unistr.h"
 #include "unicode/resbund.h"
 #include "restest.h"
+#include <limits.h>
 
 //***************************************************************************************
 
@@ -144,7 +145,7 @@ randul()
 double
 randd()
 {
-    return (double)(randul() / UINT32_MAX);
+    return (double)(randul() / ULONG_MAX);
 }
 
 /**
