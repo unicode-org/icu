@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-* $Revision: 1.4 $
+* $Revision: 1.5 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -49,7 +49,7 @@ class UnicodeString;
  * }
  * </pre>
  * @author M. Davis
- * @draft
+ * @draft ICU 2.2
  */
 class U_COMMON_API UnicodeSetIterator : public UObject {
 
