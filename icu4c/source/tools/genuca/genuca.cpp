@@ -162,6 +162,8 @@ void addNewInverse(UCAElements *element, UErrorCode *status) {
   inverseTable[inversePos][0] = element->CEs[0];
   if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
     inverseTable[inversePos][1] = element->CEs[1];
+  } else {
+    inverseTable[inversePos][1] = 0;
   }
   if(element->cSize < 2) {
     inverseTable[inversePos][2] = element->cPoints[0];
@@ -173,13 +175,15 @@ void addNewInverse(UCAElements *element, UErrorCode *status) {
 }
 
 void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
+  uint8_t space[4096];
 
   if(VERBOSE && isContinuation(element->CEs[1])) {
     fprintf(stdout, "+");
   }
   if(position <= inversePos) {
     /*move stuff around */
-    uprv_memcpy(inverseTable[position+1], inverseTable[position], (inversePos - position+1)*sizeof(inverseTable[0]));
+    uprv_memcpy(space, inverseTable[position], (inversePos - position+1)*sizeof(inverseTable[0]));
+    uprv_memcpy(inverseTable[position+1], space, (inversePos - position+1)*sizeof(inverseTable[0]));
   }
   inverseTable[position][0] = element->CEs[0];
   if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
@@ -226,20 +230,44 @@ void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *s
 }
 
 uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
-
-  if(inverseTable[inversePos][0] > element->CEs[0]) {
-    uint32_t position = inversePos;
-    while(inverseTable[--position][0] > element->CEs[0]);
+  uint32_t comp = 0;
+  uint32_t position = inversePos;
+  if(element->noOfCEs == 1) {
+    element->CEs[1] = 0;
+  }
+  if(inversePos == 0) {
+    inverseTable[0][0] = inverseTable[0][1] = inverseTable[0][2] = 0;
+    addNewInverse(element, status);
+  } else if(inverseTable[inversePos][0] > element->CEs[0]) {
+    while(inverseTable[--position][0] > element->CEs[0]) {}
     if(inverseTable[position][0] == element->CEs[0]) {
-      addToExistingInverse(element, position, status);
+      if(isContinuation(element->CEs[1])) {
+        comp = element->CEs[1];
+      } else {
+        comp = 0;
+      }
+      if(inverseTable[position][1] > comp) {
+        while(inverseTable[--position][1] > comp) {}
+      }
+      if(inverseTable[position][1] == comp) {
+        addToExistingInverse(element, position, status);
+      } else {
+        insertInverse(element, position+1, status);
+      }
     } else {
       insertInverse(element, position+1, status);
     }
-  } else if(inverseTable[inversePos][0] == element->CEs[0] && inversePos != 0) {
-    if(element->noOfCEs > 1 && isContinuation(element->CEs[1]) 
-      && inverseTable[inversePos][1] != element->CEs[1]) {
-      /* also, we should do long primaries here */
-      addNewInverse(element, status);
+  } else if(inverseTable[inversePos][0] == element->CEs[0]) {
+    if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
+      comp = element->CEs[1];
+      if(inverseTable[position][1] > comp) {
+        while(inverseTable[--position][1] > comp) {}
+      }
+      if(inverseTable[position][1] == comp) {
+        addToExistingInverse(element, position, status);
+      } else {
+        insertInverse(element, position+1, status);
+      }
     } else {
       addToExistingInverse(element, inversePos, status);
     } 
@@ -255,6 +283,7 @@ InverseTableHeader *assembleInverseTable(UErrorCode *status)
   uint32_t headerByteSize = paddedsize(sizeof(InverseTableHeader));
   uint32_t inverseTableByteSize = (inversePos+2)*sizeof(uint32_t)*3;
   uint32_t contsByteSize = sContPos * sizeof(UChar);
+  uint32_t i = 0;
 
   result = (InverseTableHeader *)malloc(headerByteSize + inverseTableByteSize + contsByteSize);
   if(result != NULL) {
@@ -265,6 +294,14 @@ InverseTableHeader *assembleInverseTable(UErrorCode *status)
     inverseTable[inversePos][1] = 0xFFFFFFFF;
     inverseTable[inversePos][2] = 0x0000FFFF;
     inversePos++;
+
+    for(i = 2; i<inversePos; i++) {
+      if(inverseTable[i-1][0] > inverseTable[i][0]) {
+        fprintf(stderr, "Error at %i: %08X & %08X\n", i, inverseTable[i-1][0], inverseTable[i][0]);
+      } else if(inverseTable[i-1][0] == inverseTable[i][0] && !(inverseTable[i-1][1] < inverseTable[i][1])) {
+        fprintf(stderr, "Continuation error at %i: %08X %08X & %08X %08X\n", i, inverseTable[i-1][0], inverseTable[i-1][1], inverseTable[i][0], inverseTable[i][1]);
+      }
+    }
 
     result->tableSize = inversePos;
     result->contsSize = sContPos;
@@ -593,7 +630,7 @@ write_uca_table(const char *filename,
     memset(sizesSec, 0, 35*sizeof(int32_t));
     memset(sizesTer, 0, 35*sizeof(int32_t));
     memset(sizeBreakDown, 0, 35*35*35*sizeof(int32_t));
-    memset(inverseTable, 0, sizeof(int32_t)*3*0xFFFF);
+    memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
 
     myD->variableTopValue = variableTopValue;
     myD->strength = UCOL_TERTIARY;
