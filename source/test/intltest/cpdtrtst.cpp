@@ -322,9 +322,15 @@ void CompoundTransliteratorTest::TestTransliterate(){
 			 "Devanagari-Latin;Latin-Devanagari",        CharsToUnicodeString("\\u092D\\u0948'\\u0930'\\u0935"),  CharsToUnicodeString("\\u092D\\u0948\\u0930\\u0935"), // quotes lost
 	    	 "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "abkdefghijShchshchzhh",
 			 "Latin-Greek;Greek-Latin",                 "ABGabgAKLMN", "ABGabgAKLMN",
-			 "Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh"
-
-
+			 "Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh",
+             "Hiragana-Katakana",                       CharsToUnicodeString("\\u3041\\u308f\\u3099\\u306e\\u304b\\u3092\\u3099"), 
+                                                                 CharsToUnicodeString("\\u30A1\\u30f7\\u30ce\\u30ab\\u30fa"),  
+             "Hiragana-Katakana;Katakana-Hiragana",     CharsToUnicodeString("\\u3041\\u308f\\u3099\\u306e\\u304b\\u3051"), 
+                                                                 CharsToUnicodeString("\\u3041\\u308f\\u3099\\u306e\\u304b\\u3051"),
+             "Katakana-Hiragana;Hiragana-Katakana",     CharsToUnicodeString("\\u30A1\\u30f7\\u30ce\\u30f5\\u30f6"), 
+                                                                 CharsToUnicodeString("\\u30A1\\u30f7\\u30ce\\u30ab\\u30b1"),  
+             "Latin-Kana;Kana-Latin",                   CharsToUnicodeString("VAVIVUVEVOhuZIZUZONYINYUNYAsesuzezu"), 
+                                                                 CharsToUnicodeString("VAVIVUVEVOhuZIZUZONYINYUNYAsesuzezu"),  
   };
 	int i;
     for(i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
