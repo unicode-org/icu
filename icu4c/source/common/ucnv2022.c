@@ -449,7 +449,7 @@ static void concatEscape(UConverterFromUnicodeArgs* args, int32_t *targetIndex, 
 				  const char* strToAppend,UErrorCode* err,int len);
 
 static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-				  const UChar* strToAppend,UErrorCode* err,int32_t *sourceIndex);
+				  const UChar32* strToAppend,UErrorCode* err,int32_t *sourceIndex);
 
 /*
  * The iteration over various code pages works this way:
@@ -495,7 +495,7 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 	CompactShortArray *myFromUnicodeDBCSFallback = NULL;
 	CompactByteArray  *myFromUnicodeSBCS = NULL;
 	CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
-	UChar targetUniChar = missingCharMarker;
+	UChar32 targetUniChar = missingCharMarker;
 	
 	StateEnum currentState=0;
 	Cnv2022Type myType;
@@ -641,11 +641,11 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 						myFromUnicodeSBCS = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
 						myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
 
-						targetUniChar = (UChar) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
+						targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
 
 						if ((targetUniChar==0)&&(myConverterData->fromUnicodeConverter->useFallback == TRUE) &&
 							(myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-							 targetUniChar = (UChar) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+							 targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
 						}
 						/* ucmp8_getU returns 0 for missing char so explicitly set it missingCharMarker*/
 						targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
@@ -689,11 +689,11 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 							 */
 							switch(len){
 								case 4:
-									targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<24;
+									targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<24;
 								case 3:
-									targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<16;
+									targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<16;
 								case 2:
-									targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<8;
+									targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<8;
 								case 1:
 									targetUniChar+=(uint8_t)(*targetChar);
 								default:
@@ -892,7 +892,7 @@ CALLBACK:
 }
 
 static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-				  const UChar* strToAppend,UErrorCode* err, int32_t *sourceIndex){
+				  const UChar32* strToAppend,UErrorCode* err, int32_t *sourceIndex){
 
 	if(*strToAppend < 0x00FF){
 		if( (*targetIndex)+1 >= *targetLength){
@@ -1432,7 +1432,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     int32_t sourceLength = args->sourceLimit - args->source;
     UChar* mySourceLimit;
     CompactShortArray *myFromUnicode = NULL;
-    UChar targetUniChar = 0x0000;
+    UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -1524,11 +1524,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
                 targetUniChar=0;
                 switch(len){
 			        case 4:
-				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<24;
+				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<24;
 			        case 3:
-				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<16;
+				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<16;
 			        case 2:
-				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<8;
+				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<8;
 			        case 1:
 				        targetUniChar+=(uint8_t)(*targetChar);
 			        default:
@@ -1643,7 +1643,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     int32_t sourceLength = args->sourceLimit - args->source;
     UChar* mySourceLimit;
     CompactShortArray *myFromUnicode = NULL;
-    UChar targetUniChar = 0x0000;
+    UChar32 targetUniChar = 0x0000;
     UChar mySourceChar = 0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
@@ -1735,11 +1735,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                 targetUniChar=0;
                 switch(len){
 			        case 4:
-				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<24;
+				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<24;
 			        case 3:
-				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<16;
+				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<16;
 			        case 2:
-				        targetUniChar+=(UChar)((uint8_t)(*targetChar++))<<8;
+				        targetUniChar+=(UChar32)((uint8_t)(*targetChar++))<<8;
 			        case 1:
 				        targetUniChar+=(uint8_t)(*targetChar);
 			        default:
