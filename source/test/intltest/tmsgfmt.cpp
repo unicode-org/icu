@@ -244,7 +244,7 @@ void TestMessageFormat::PatternTest()
         "Quotes ', {, a 1 {0}",
         "Quotes ', {, a 1 {0}",
         "{1,number,#,##} #34,56",
-        "There are 3,456 files on Disk at 1/12/70 5:46 AM.",
+        "There are 3,456 files on Disk at 1/12/1970 5:46 AM.",
         "On Disk, there are 3,456 files, with $1.00.",
         "{1,number,percent}, 345,600%,",
         "{1,date,full}, Wednesday, December 31, 1969,",
@@ -259,7 +259,7 @@ void TestMessageFormat::PatternTest()
         MessageFormat *form = 0;
         UErrorCode success = U_ZERO_ERROR;
         UnicodeString buffer;
-        form = new MessageFormat(testCases[i], Locale::US, success);
+        form = new MessageFormat(testCases[i], Locale::getUS(), success);
         if (U_FAILURE(success)) {
             errln("MessageFormat creation failed.#1");
             logln(((UnicodeString)"MessageFormat for ") + testCases[i] + " creation failed.\n");
