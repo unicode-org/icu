@@ -160,7 +160,7 @@ LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBS
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_SUFFIX)
 
 # Invoke, set library path for all ICU libraries.
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/layout:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data/out:$(top_builddir)/data:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/layout:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data/out:$(top_builddir)/data:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 
 # Platform-specific setup
 include @platform_make_fragment@
