@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001 - 2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -22,8 +22,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 
-void test_current(UChar data[][5], uint32_t size, uint32_t maxLen, uint8_t keys[][32]);
-void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[][32]);
+extern "C" void test_current(UChar data[][5], uint32_t size, uint32_t maxLen, uint8_t keys[][32]);
+extern "C" void test_legacy(UChar data[][5], uint32_t size, uint32_t maxlen, uint8_t keys[][32]);
 
 void printZTUChar(const UChar *str) {
   while(*str != 0) {
