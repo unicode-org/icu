@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/Utility.java,v $
- * $Date: 2001/11/29 17:31:45 $
- * $Revision: 1.15 $
+ * $Date: 2001/11/29 21:32:28 $
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -1153,7 +1153,7 @@ public final class Utility {
      * @param setOfChars string with one or more distinct characters
      * @return Offset of the first character in <code>setOfChars</code>
      * found, or -1 if not found.
-     * @see #indexOf
+     * @see String#indexOf
      */
     public static int quotedIndexOf(String text, int start, int limit,
                                     String setOfChars) {
