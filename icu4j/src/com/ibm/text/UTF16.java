@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UTF16.java,v $ 
-* $Date: 2001/09/06 16:32:26 $ 
-* $Revision: 1.8 $
+* $Date: 2001/09/26 17:59:23 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -310,6 +310,63 @@ public final class UTF16
 	        return UCharacter.getRawSupplementary(lead, single);
       }
       return single; // return unmatched surrogate
+  }
+  
+  /**
+  * Extract a single UTF-32 value from a string.
+  * Used when iterating forwards or backwards (with
+  * <code>UTF16.getCharCount()</code>, as well as random access. If a validity 
+  * check is required, use 
+  * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+  * </a></code> on the return value.
+  * If the char retrieved is part of a surrogate pair, its supplementary
+  * character will be returned. If a complete supplementary character is not
+  * found the incomplete character will be returned
+  * @param source UTF-16 chars string buffer
+  * @param offset16 UTF-16 offset to the start of the character.
+  * @return UTF-32 value for the UTF-32 value that contains the char at
+  *         offset16. The boundaries of that codepoint are the same as in
+  *         <code>bounds32()</code>.
+  * @exception IndexOutOfBoundsException thrown if offset16 is out of bounds.
+  */
+  public static int charAt(Replaceable source, int offset16)
+  {
+      if (offset16 < 0 || offset16 >= source.length()) {
+        throw new StringIndexOutOfBoundsException(offset16);
+      }
+      
+      char single = source.charAt(offset16);
+      if (!isSurrogate(single)) {
+        return single;
+      }
+
+      // Convert the UTF-16 surrogate pair if necessary.
+      // For simplicity in usage, and because the frequency of pairs is low,
+      // look both directions.
+            
+	  if (isLeadSurrogate(single)) 
+	  {
+	    ++ offset16;
+	    if (source.length() != offset16)
+	    {
+	      char trail = source.charAt(offset16);
+	      if (isTrailSurrogate(trail))
+	        return UCharacter.getRawSupplementary(single, trail);
+	    }
+	  } 
+	  else 
+	  { 
+	    -- offset16;
+	    if (offset16 >= 0)
+	    {
+	      // single is a trail surrogate so
+	      char lead = source.charAt(offset16);
+	      if (isLeadSurrogate(lead)) {
+	          return UCharacter.getRawSupplementary(lead, single);
+	      }
+	    }
+	  } 
+	  return single; // return unmatched surrogate
   }
   
   /**
