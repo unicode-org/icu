@@ -64,18 +64,20 @@ static UBool isNewline(UChar c);
    string tokens will be merged into one, with no intervening
    space. */
 enum ETokenType getNextToken(UFILE *f,
-                 struct UString *token,
-                 UErrorCode *status)
+                             struct UString *token,
+                             UErrorCode *status)
 {
     UChar c;
 
     /*enum ETokenType tokenType;*/
 
-    if(U_FAILURE(*status)) return tok_error;
+    if(U_FAILURE(*status))
+      return tok_error;
 
     /* Skip whitespace */
     c = getNextChar(f, TRUE, status);
-    if(U_FAILURE(*status)) return tok_error;
+    if(U_FAILURE(*status))
+      return tok_error;
 
     switch(c) {
     case BADBOM:       return tok_error;
@@ -91,6 +93,7 @@ enum ETokenType getNextToken(UFILE *f,
 */
     default:           return getStringToken(f, c, token, status);
     }
+/*
     if(!didInit) {
         U_STRING_INIT(k_start_string, "string", 6);
         U_STRING_INIT(k_start_binary, "binary", 6);
@@ -118,6 +121,7 @@ enum ETokenType getNextToken(UFILE *f,
     } else {
         return tok_error;
     }
+*/
 }
 
 /* Copy a string token into the given UnicodeString.  Upon entry, we
@@ -132,9 +136,9 @@ enum ETokenType getNextToken(UFILE *f,
    intervening space.  Otherwise a single SPACE character is
    inserted. */
 static enum ETokenType getStringToken(UFILE *f,
-				      UChar initialChar,
-				      struct UString *token,
-				      UErrorCode *status)
+                                      UChar initialChar,
+                                      struct UString *token,
+                                      UErrorCode *status)
 {
   UBool lastStringWasQuoted;
   UChar c;
@@ -143,84 +147,92 @@ static enum ETokenType getStringToken(UFILE *f,
      character. If we are at the EOF, or have some other problem, it
      doesn't matter; we still want to validly return the initialChar
      (if nothing else) as a string token. */
- 
-  if(U_FAILURE(*status)) return tok_error;
-  
+
+  if(U_FAILURE(*status))
+    return tok_error;
+
   /* setup */
   lastStringWasQuoted = FALSE;
   c = initialChar;
   ustr_setlen(token, 0, status);
 
-  if(U_FAILURE(*status)) return tok_error;
-  
+  if(U_FAILURE(*status))
+    return tok_error;
+
   for(;;) {
     if(c == QUOTE) {
       if( ! lastStringWasQuoted && token->fLength > 0) {
-	ustr_ucat(token, SPACE, status);
-	if(U_FAILURE(*status)) return tok_error;
+        ustr_ucat(token, SPACE, status);
+        if(U_FAILURE(*status))
+          return tok_error;
       }
       lastStringWasQuoted = TRUE;
       
       for(;;) {
-    c = u_fgetc(f);
-    /*	c = u_fgetc(f, status);*/
+        c = u_fgetc(f);
+        /*  c = u_fgetc(f, status);*/
 
-	/* EOF reached */
-    if(c == (UChar)U_EOF) {
-        return tok_EOF;
-    }
-	/* Unterminated quoted strings */
-	if(U_FAILURE(*status))  return tok_error;
-	if(c == QUOTE) 
-	  break;
-	if(c == ESCAPE) 
-	  c = unescape(f, status);
-	ustr_ucat(token, c, status);
-	if(U_FAILURE(*status)) return tok_error;
+        /* EOF reached */
+        if(c == (UChar)U_EOF) {
+            return tok_EOF;
+        }
+        /* Unterminated quoted strings */
+        if(U_FAILURE(*status))
+          return tok_error;
+        if(c == QUOTE) 
+          break;
+        if(c == ESCAPE) 
+          c = unescape(f, status);
+        ustr_ucat(token, c, status);
+        if(U_FAILURE(*status))
+          return tok_error;
       }
     }
     else {
       if(token->fLength > 0) {
-	ustr_ucat(token, SPACE, status);
-	if(U_FAILURE(*status)) return tok_error;
+        ustr_ucat(token, SPACE, status);
+        if(U_FAILURE(*status))
+          return tok_error;
       }
       lastStringWasQuoted = FALSE;
       
       if(c == ESCAPE) 
-	c = unescape(f, status);
+        c = unescape(f, status);
       ustr_ucat(token, c, status);
-      if(U_FAILURE(*status)) return tok_error;
+      if(U_FAILURE(*status))
+        return tok_error;
 
       for(;;) {
-	/* DON'T skip whitespace */
-	c = getNextChar(f, FALSE, status);
-   	/* EOF reached */
-    if(c == (UChar)U_EOF) {
-        u_fungetc(c, f);
-        return tok_string;
-    }
+        /* DON'T skip whitespace */
+        c = getNextChar(f, FALSE, status);
+        /* EOF reached */
+        if(c == (UChar)U_EOF) {
+          u_fungetc(c, f);
+          return tok_string;
+        }
 
-	if(U_FAILURE(*status)) 
-	  return tok_string;
+        if(U_FAILURE(*status)) 
+          return tok_string;
 
-	if(c == QUOTE
-	   || c == OPENBRACE
-	   || c == CLOSEBRACE
-	   || c == COMMA
-       /*|| c == COLON*/)
-	  {
-	    u_fungetc(c, f);
-	    /*u_fungetc(c, f, status);*/
-	    break;
-	  }
+        if(c == QUOTE
+           || c == OPENBRACE
+           || c == CLOSEBRACE
+           || c == COMMA
+           /*|| c == COLON*/)
+          {
+            u_fungetc(c, f);
+            /*u_fungetc(c, f, status);*/
+            break;
+          }
 
-	if(isWhitespace(c)) 
-	  break;
-	
-	if(c == ESCAPE) 
-	  c = unescape(f, status);
-	ustr_ucat(token, c, status);
-	if(U_FAILURE(*status)) return tok_error;
+        if(isWhitespace(c)) 
+          break;
+
+        if(c == ESCAPE) 
+          c = unescape(f, status);
+        ustr_ucat(token, c, status);
+        if(U_FAILURE(*status))
+          return tok_error;
       }
     }
     
@@ -231,7 +243,7 @@ static enum ETokenType getStringToken(UFILE *f,
     
     if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA/* || c == COLON*/) {
        u_fungetc(c, f);
-	   /*u_fungetc(c, f, status);*/
+       /*u_fungetc(c, f, status);*/
       return tok_string;
     }
   }
@@ -240,18 +252,20 @@ static enum ETokenType getStringToken(UFILE *f,
 /* Retrieve the next character, ignoring comments.  If skipwhite is
    true, whitespace is skipped as well. */
 static UChar getNextChar(UFILE *f,
-			 UBool skipwhite, 
-			 UErrorCode *status)
+                         UBool skipwhite, 
+                         UErrorCode *status)
 {
   UChar c;
 
-  if(U_FAILURE(*status)) return U_EOF;
-  
+  if(U_FAILURE(*status))
+    return U_EOF;
+
   for(;;) {
     c = u_fgetc(f);
     /*c = u_fgetc(f, status);*/
-    if(c == (UChar)U_EOF) return U_EOF;
-    
+    if(c == (UChar)U_EOF)
+      return U_EOF;
+
     if(skipwhite && isWhitespace(c)) 
       continue;
     
@@ -260,9 +274,10 @@ static UChar getNextChar(UFILE *f,
       return c;
     
     c = u_fgetc(f);
-    /*	c = u_fgetc(f, status);*/
-    if(c == (UChar)U_EOF) return U_EOF;
-    
+    /*  c = u_fgetc(f, status);*/
+    if(c == (UChar)U_EOF)
+      return U_EOF;
+
     switch(c) {
     case SLASH:
       seekUntilNewline(f, status);
@@ -275,7 +290,7 @@ static UChar getNextChar(UFILE *f,
       
     default:
         u_fungetc(c, f);
-	    /*u_fungetc(c, f, status);*/
+        /*u_fungetc(c, f, status);*/
       /* If get() failed this is a NOP */
       return SLASH;
     }
@@ -283,15 +298,16 @@ static UChar getNextChar(UFILE *f,
 }
 
 void seekUntilNewline(UFILE *f,
-		      UErrorCode *status)
+                      UErrorCode *status)
 {
   UChar c;
 
-  if(U_FAILURE(*status)) return;
-  
+  if(U_FAILURE(*status))
+    return;
+
   do {
     c = u_fgetc(f);
-    /*	c = u_fgetc(f, status);*/
+    /*  c = u_fgetc(f, status);*/
   } while(! isNewline(c) && c != (UChar)U_EOF && *status == U_ZERO_ERROR);
   
   /*if(U_FAILURE(*status))
@@ -299,23 +315,24 @@ void seekUntilNewline(UFILE *f,
 }
 
 void seekUntilEndOfComment(UFILE *f,
-			   UErrorCode *status)
+                           UErrorCode *status)
 {
   UChar c, d;
 
-  if(U_FAILURE(*status)) return;
+  if(U_FAILURE(*status))
+    return;
 
   do {
     c = u_fgetc(f);
-    /*	c = u_fgetc(f, status);*/
+    /*  c = u_fgetc(f, status);*/
     if(c == ASTERISK) {
         d = u_fgetc(f);
-        /*	d = u_fgetc(f, status);*/
+        /*  d = u_fgetc(f, status);*/
       if(d != SLASH)
-	    u_fungetc(d, f);
-	    /*u_fungetc(d, f, status);*/
+        u_fungetc(d, f);
+        /*u_fungetc(d, f, status);*/
       else
-	break;
+        break;
     }
   } while(c != (UChar)U_EOF && *status == U_ZERO_ERROR);
 
@@ -326,9 +343,10 @@ void seekUntilEndOfComment(UFILE *f,
 }
 
 static UChar unescape(UFILE *f,
-		      UErrorCode *status)
+                      UErrorCode *status)
 {
-  if(U_FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status))
+    return U_EOF;
   /* We expect to be called after the ESCAPE has been seen, but
    * u_fgetcx needs an ESCAPE to do its magic. */
   u_fungetc(ESCAPE, f);
@@ -339,11 +357,15 @@ static UBool isWhitespace(UChar c)
 {
   switch (c) {
     /* ' ', '\t', '\n', '\r', 0x2029, 0xFEFF */
-  case 0x000A: case 0x2029: 
-      lineCount++;
-  case 0x000D: case 0x0020: case 0x0009: case 0xFEFF:
+  case 0x000A:
+  case 0x2029: 
+    lineCount++;
+  case 0x000D:
+  case 0x0020:
+  case 0x0009:
+  case 0xFEFF:
     return TRUE;
-    
+
   default:
     return FALSE;
   }
@@ -353,11 +375,12 @@ static UBool isNewline(UChar c)
 {
   switch (c) {
     /* '\n', '\r', 0x2029 */
-  case 0x000A: case 0x2029:
-  lineCount++;
+  case 0x000A:
+  case 0x2029:
+    lineCount++;
   case 0x000D: 
     return TRUE;
-    
+
   default:
     return FALSE;
   }
