@@ -41,7 +41,8 @@ ibm-1143.ucm ibm-1282.ucm ibm-5347.ucm ibm-902.ucm\
 ibm-1144-s390.ucm ibm-1283.ucm ibm-5349.ucm ibm-9027.ucm\
 ibm-1144.ucm ibm-5350.ucm ibm-9044.ucm\
 ibm-1145-s390.ucm ibm-1362.ucm ibm-5351.ucm ibm-9049.ucm\
-ibm-1145.ucm ibm-1363.ucm ibm-5352.ucm ibm-9061.ucm\
+ibm-1145.ucm ibm-1363_P100-2000.ucm ibm-1363_P11B-2000.ucm\
+ibm-5352.ucm ibm-9061.ucm\
 ibm-1146-s390.ucm ibm-5353.ucm ibm-912.ucm\
 ibm-1146.ucm ibm-1370.ucm ibm-5354.ucm ibm-913.ucm\
 ibm-1147-s390.ucm ibm-803.ucm ibm-914.ucm\
@@ -56,10 +57,13 @@ ibm-1154.ucm ibm-17248.ucm ibm-849.ucm\
 ibm-1155.ucm ibm-21427.ucm ibm-850.ucm ibm-933.ucm\
 ibm-1156.ucm ibm-273.ucm ibm-851.ucm\
 ibm-1157.ucm ibm-277.ucm ibm-852.ucm\
-ibm-1158.ucm ibm-278.ucm ibm-855.ucm ibm-942.ucm\
-ibm-1159.ucm ibm-280.ucm ibm-856.ucm ibm-943.ucm\
+ibm-1158.ucm ibm-278.ucm ibm-855.ucm ibm-942_P120-2000.ucm\
+ibm-942_P12A-2000.ucm\
+ibm-1159.ucm ibm-280.ucm ibm-856.ucm\
+ibm-943_P130-2000.ucm ibm-943_P14A-2000.ucm\
 ibm-1160.ucm ibm-284.ucm ibm-857.ucm ibm-944.ucm\
-ibm-1164.ucm ibm-285.ucm ibm-858.ucm ibm-949.ucm\
+ibm-1164.ucm ibm-285.ucm ibm-858.ucm\
+ibm-949_P110-2000.ucm ibm-949_P11A-2000.ucm\
 ibm-1250.ucm ibm-290.ucm ibm-859.ucm ibm-950.ucm\
 ibm-1251.ucm ibm-297.ucm ibm-860.ucm ibm-970.ucm\
 ibm-1162.ucm ibm-941.ucm ibm-5050.ucm\
