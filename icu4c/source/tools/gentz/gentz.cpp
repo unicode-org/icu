@@ -333,12 +333,17 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     // We don't know how big the whole thing will be yet, but we can use
     // the maxPerOffset number to compute an upper limit.
     //
-    // Structs MUST be 4-aligned.  We accomplish this by
-    //   (a) a padding byte before the zoneNumber field 
-    //       in the OffsetIndex structure and
-    // 
-    //   (b) rounding index->count to the least greatest
-    //       even number.
+    // The gmtOffset field within each OffsetIndex struct must be
+    // 4-aligned for some architectures.  To ensure this, we do two
+    // things: 1. The entire struct is 4-aligned.  2. The gmtOffset is
+    // placed at a 4-aligned position within the struct.  3. The size
+    // of the whole structure is padded out to 4n bytes.  We achieve
+    // this last condition by adding two bytes of padding after the
+    // last zoneNumber, if count is _even_.  That is, the struct size
+    // is 10+2count+padding, where padding is (count%2==0 ? 2:0).
+    //
+    // Note that we don't change the count itself, but rather adjust
+    // the nextEntryDelta and add 2 bytes of padding if necessary.
     //
     // Don't try to compute the exact size in advance
     // (unless we want to avoid the use of sizeof(), which may
@@ -354,7 +359,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
     // Read each line and construct the corresponding entry
     OffsetIndex* index = (OffsetIndex*)result;
     for (uint32_t i=0; i<n; ++i) {
-	uint16_t alignedCount;
+        uint16_t alignedCount;
         readLine(in);
         char* p = buffer;
         index->gmtOffset = 1000 * // Convert s -> ms
@@ -374,11 +379,12 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
         if (!sawOffset) {
             die("Error: bad offset index entry; default not in zone list");
         }
-	alignedCount = index->count;
-	if((alignedCount%2)==1) /* force count to be even (thus 32 bit aligned)*/
-	{
-		alignedCount++;
-	}
+        alignedCount = index->count;
+        if((alignedCount%2)==0) /* force count to be ODD - see above */
+        {
+            // Use invalid zoneNumber for 2 bytes of padding
+            zoneNumberArray[alignedCount++] = (uint16_t)0xFFFF;
+        }
         int8_t* nextIndex = (int8_t*)&(zoneNumberArray[alignedCount]);
 	
         index->nextEntryDelta = (i==(n-1)) ? 0 : (nextIndex - (int8_t*)index);
