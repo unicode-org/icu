@@ -140,6 +140,8 @@ main(int argc, char* argv[]) {
     int i;
     uint16_t tagOffset, stringOffset;
 
+    U_MAIN_INIT_ARGS(argc, argv);
+
     /* preset then read command line options */
     options[3].value=options[4].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
@@ -154,11 +156,11 @@ main(int argc, char* argv[]) {
         fprintf(stderr,
             "usage: %s [-options] [convrtrs.txt]\n"
             "\tread convrtrs.txt and create " DATA_NAME "." DATA_TYPE "\n"
-            "\toptions:\n"
-            "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-c or --copyright   include a copyright notice\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n"
-            "\t\t-s or --sourcedir   source directory, followed by the path\n",
+            "options:\n"
+            "\t-h or -? or --help  this usage text\n"
+            "\t-c or --copyright   include a copyright notice\n"
+            "\t-d or --destdir     destination directory, followed by the path\n"
+            "\t-s or --sourcedir   source directory, followed by the path\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }

@@ -69,6 +69,8 @@ main(int argc, char* argv[]) {
     char *basename=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
 
+    U_MAIN_INIT_ARGS(argc, argv);
+
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
     options[5].value="";

@@ -65,28 +65,25 @@ enum
 };
 
 UOption options[]={
-                      UOPTION_HELP_H,
-                      UOPTION_HELP_QUESTION_MARK,
-                      UOPTION_VERBOSE,
-                      UOPTION_QUIET,
-                      UOPTION_VERSION,
-                      UOPTION_SOURCEDIR,
-                      UOPTION_DESTDIR,
-                      UOPTION_ENCODING,
-                      UOPTION_ICUDATADIR,
-                      UOPTION_COPYRIGHT
-                  };
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_VERBOSE,
+    UOPTION_QUIET,
+    UOPTION_VERSION,
+    UOPTION_SOURCEDIR,
+    UOPTION_DESTDIR,
+    UOPTION_ENCODING,
+    UOPTION_ICUDATADIR,
+    UOPTION_COPYRIGHT
+};
 
-
-#ifdef XP_MAC_CONSOLE
-#include <console.h>
-#endif
 
 static     UBool       verbose = FALSE;
 
 int
 main(int argc,
-     char* argv[]) {
+     char* argv[])
+{
     UErrorCode  status    = U_ZERO_ERROR;
     const char *arg       = NULL;
     const char *outputDir = NULL; /* NULL = no output directory, use current */
@@ -94,10 +91,7 @@ main(int argc,
     const char *encoding  = "";
     int         i;
 
-#ifdef XP_MAC_CONSOLE
-
-    argc = ccommand((char***)&argv);
-#endif
+    U_MAIN_INIT_ARGS(argc, argv);
 
     argc = u_parseArgs(argc, argv, (int32_t)(sizeof(options)/sizeof(options[0])), options);
 
