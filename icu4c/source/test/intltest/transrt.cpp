@@ -26,6 +26,7 @@
 #include "unicode/locid.h"
 #include "unicode/ulocdata.h"
 #include "unicode/utf8.h"
+#include "putilimp.h"
 #include "cmemory.h"
 #include "transrt.h"
 #include "testutil.h"
@@ -37,9 +38,9 @@
                           if (exec) {                   \
                               logln(#test "---");       \
                               logln((UnicodeString)""); \
-                              UDate t = Calendar::getNow(); \
+                              UDate t = uprv_getUTCtime(); \
                               test();                   \
-                              t = Calendar::getNow() - t; \
+                              t = uprv_getUTCtime() - t; \
                               logln((UnicodeString)#test " took " + t/U_MILLIS_PER_DAY + " seconds"); \
                           }                             \
                           break
