@@ -171,22 +171,22 @@ NFSubstitution::NFSubstitution(int32_t _pos,
     // that pattern (then set it to use the DecimalFormatSymbols
     // belonging to our formatter)
     else if (workingDescription.charAt(0) == gPound || workingDescription.charAt(0) ==gZero) {
-		DecimalFormatSymbols* sym = formatter->getDecimalFormatSymbols();
-		if (!sym) {
-			status = U_MISSING_RESOURCE_ERROR;
-			return;
-		}
+        DecimalFormatSymbols* sym = formatter->getDecimalFormatSymbols();
+        if (!sym) {
+            status = U_MISSING_RESOURCE_ERROR;
+            return;
+        }
         this->numberFormat = new DecimalFormat(workingDescription, *sym, status);
         /* test for NULL */
         if (this->numberFormat == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
-		if (U_FAILURE(status)) {
-			delete (DecimalFormat*)this->numberFormat;
-			this->numberFormat = NULL;
-			return;
-		}
+        if (U_FAILURE(status)) {
+            delete (DecimalFormat*)this->numberFormat;
+            this->numberFormat = NULL;
+            return;
+        }
         // this->numberFormat->setDecimalFormatSymbols(formatter->getDecimalFormatSymbols());
     }
     // if the description is ">>>", this substitution bypasses the
@@ -221,7 +221,7 @@ NFSubstitution::~NFSubstitution()
  * @param exponent The exponent of the divisor
  */
 void
-NFSubstitution::setDivisor(int32_t /*radix*/, int32_t /*exponent*/, UErrorCode& status) {
+NFSubstitution::setDivisor(int32_t /*radix*/, int32_t /*exponent*/, UErrorCode& /*status*/) {
   // a no-op for all substitutions except multiplier and modulus substitutions
 }
 
@@ -858,7 +858,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
         int32_t digit;
 //          double p10 = 0.1;
 
-	DigitList dl;
+        DigitList dl;
         NumberFormat* fmt = NULL;
         while (workText.length() > 0 && workPos.getIndex() != 0) {
             workPos.setIndex(0);
@@ -886,7 +886,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             }
 
             if (workPos.getIndex() != 0) {
-		dl.append((char)('0' + digit));
+                dl.append((char)('0' + digit));
 //                  result += digit * p10;
 //                  p10 /= 10;
                 parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
@@ -898,7 +898,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             }
         }
         delete fmt;
-	result = dl.fCount == 0 ? 0 : dl.getDouble();
+        result = dl.fCount == 0 ? 0 : dl.getDouble();
 
         result = composeRuleValue(result, baseValue);
         resVal.setDouble(result);
