@@ -969,8 +969,57 @@ static uint32_t countCCSame=0, countCCTrail=0, countCCTwo=0;
 static uint32_t
 make32BitNorm(Norm *norm) {
     UChar extra[100];
+    const Norm *other;
     uint32_t word;
     int32_t i, length, beforeZero=0, count, start;
+
+    /*
+     * Check for assumptions:
+     *
+     * Test that if a "true starter" (cc==0 && NF*C_YES) decomposes,
+     * then the decomposition also begins with a true starter.
+     */
+    if(norm->udataCC==0) {
+        /* this is a starter */
+        if((norm->qcFlags&_NORM_QC_NFC)==0 && norm->lenNFD>0) {
+            /* a "true" NFC starter with a canonical decomposition */
+            if( norm->canonBothCCs>=0x100 || /* lead cc!=0 or */
+                (other=getNorm(norm->nfd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFC)!=0 /* nfd[0] not NFC_YES */
+            ) {
+                fprintf(stderr,
+                    "error: true NFC starter canonical decomposition[%u] does not begin\n"
+                    "    with a true NFC starter: U+%04lx U+%04lx%s\n",
+                    norm->lenNFD, norm->nfd[0], norm->nfd[1], norm->lenNFD<=2 ? "" : " ...");
+                exit(U_INVALID_TABLE_FILE);
+            }
+        }
+
+        if((norm->qcFlags&_NORM_QC_NFKC)==0 && norm->lenNFD>0) {
+            /* a "true" NFKC starter with a canonical decomposition */
+            if( norm->canonBothCCs>=0x100 || /* lead cc!=0 or */
+                (other=getNorm(norm->nfd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFKC)!=0 /* nfd[0] not NFC_YES */
+            ) {
+                fprintf(stderr,
+                    "error: true NFKC starter canonical decomposition[%u] does not begin\n"
+                    "    with a true NFKC starter: U+%04lx U+%04lx%s\n",
+                    norm->lenNFD, norm->nfd[0], norm->nfd[1], norm->lenNFD<=2 ? "" : " ...");
+                exit(U_INVALID_TABLE_FILE);
+            }
+        }
+
+        if((norm->qcFlags&_NORM_QC_NFKC)==0 && norm->lenNFKD>0) {
+            /* a "true" NFKC starter with a compatibility decomposition */
+            if( norm->compatBothCCs>=0x100 || /* lead cc!=0 or */
+                (other=getNorm(norm->nfkd[0]))!=NULL && (other->qcFlags&_NORM_QC_NFKC)!=0 /* nfkd[0] not NFC_YES */
+            ) {
+                fprintf(stderr,
+                    "error: true NFKC starter compatibility decomposition[%u] does not begin\n"
+                    "    with a true NFKC starter: U+%04lx U+%04lx%s\n",
+                    norm->lenNFKD, norm->nfkd[0], norm->nfkd[1], norm->lenNFKD<=2 ? "" : " ...");
+                exit(U_INVALID_TABLE_FILE);
+            }
+        }
+    }
 
     /* reset the 32-bit word and set the quick check flags */
     word=norm->qcFlags;
