@@ -286,7 +286,7 @@ void GlyphIterator::setCursiveEntryPoint(LEPoint &entryPoint)
         }
     }
 
-    glyphPositionAdjustments->setEntryPoint(position, entryPoint);
+    glyphPositionAdjustments->setEntryPoint(position, entryPoint, baselineIsLogicalEnd());
 }
 
 void GlyphIterator::setCursiveExitPoint(LEPoint &exitPoint)
@@ -301,7 +301,7 @@ void GlyphIterator::setCursiveExitPoint(LEPoint &exitPoint)
         }
     }
 
-    glyphPositionAdjustments->setExitPoint(position, exitPoint);
+    glyphPositionAdjustments->setExitPoint(position, exitPoint, baselineIsLogicalEnd());
 }
 
 void GlyphIterator::setCursiveGlyph()
@@ -316,7 +316,7 @@ void GlyphIterator::setCursiveGlyph()
         }
     }
 
-    glyphPositionAdjustments->setCursiveGlyph(position);
+    glyphPositionAdjustments->setCursiveGlyph(position, baselineIsLogicalEnd());
 }
 
 le_bool GlyphIterator::filterGlyph(le_uint32 index) const

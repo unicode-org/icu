@@ -46,25 +46,25 @@ const LEPoint *GlyphPositionAdjustments::getExitPoint(le_int32 index, LEPoint &e
     return fEntryExitPoints[index].getExitPoint(exitPoint);
 }
 
-void GlyphPositionAdjustments::setEntryPoint(le_int32 index, LEPoint &newEntryPoint)
+void GlyphPositionAdjustments::setEntryPoint(le_int32 index, LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd)
 {
     CHECK_ALLOCATE_ARRAY(fEntryExitPoints, EntryExitPoint, fGlyphCount);
 
-    fEntryExitPoints[index].setEntryPoint(newEntryPoint);
+    fEntryExitPoints[index].setEntryPoint(newEntryPoint, baselineIsLogicalEnd);
 }
 
-void GlyphPositionAdjustments::setExitPoint(le_int32 index, LEPoint &newExitPoint)
+void GlyphPositionAdjustments::setExitPoint(le_int32 index, LEPoint &newExitPoint, le_bool baselineIsLogicalEnd)
 {
     CHECK_ALLOCATE_ARRAY(fEntryExitPoints, EntryExitPoint, fGlyphCount);
 
-    fEntryExitPoints[index].setExitPoint(newExitPoint);
+    fEntryExitPoints[index].setExitPoint(newExitPoint, baselineIsLogicalEnd);
 }
 
-void GlyphPositionAdjustments::setCursiveGlyph(le_int32 index)
+void GlyphPositionAdjustments::setCursiveGlyph(le_int32 index, le_bool baselineIsLogicalEnd)
 {
     CHECK_ALLOCATE_ARRAY(fEntryExitPoints, EntryExitPoint, fGlyphCount);
 
-    fEntryExitPoints[index].setCursiveGlyph();
+    fEntryExitPoints[index].setCursiveGlyph(baselineIsLogicalEnd);
 }
 
 void GlyphPositionAdjustments::applyCursiveAdjustments(LEGlyphStorage &glyphStorage, le_bool rightToLeft, const LEFontInstance *fontInstance)
@@ -76,8 +76,12 @@ void GlyphPositionAdjustments::applyCursiveAdjustments(LEGlyphStorage &glyphStor
     le_int32 start = 0, end = fGlyphCount, dir = 1;
     le_int32 firstExitPoint = -1, lastExitPoint = -1;
     LEPoint entryAnchor, exitAnchor, pixels;
-    LEGlyphID lastExitGlyphID;
+    LEGlyphID lastExitGlyphID = 0;
     float baselineAdjustment = 0;
+
+    // This removes a possible warning about
+    // using exitAnchor before it's been initialized.
+    exitAnchor.fX = exitAnchor.fY = 0;
 
     if (rightToLeft) {
         start = fGlyphCount - 1;
@@ -122,7 +126,7 @@ void GlyphPositionAdjustments::applyCursiveAdjustments(LEGlyphStorage &glyphStor
 
                 lastExitGlyphID = glyphID;
             } else {
-                if (/*baselineIsLogicalEnd &&*/ firstExitPoint >= 0 && lastExitPoint >= 0) {
+                if (baselineIsLogicalEnd(i) && firstExitPoint >= 0 && lastExitPoint >= 0) {
                     le_int32 limit = lastExitPoint + dir;
 
                     for (le_int32 j = firstExitPoint; j != limit; j += dir) {

@@ -67,19 +67,21 @@ private:
         ~EntryExitPoint();
 
         le_bool isCursiveGlyph() const;
+        le_bool baselineIsLogicalEnd() const;
         LEPoint *getEntryPoint(LEPoint &entryPoint) const;
         LEPoint *getExitPoint(LEPoint &exitPoint) const;
 
-        void setEntryPoint(LEPoint &newEntryPoint);
-        void setExitPoint(LEPoint &newExitPoint);
-        void setCursiveGlyph();
+        void setEntryPoint(LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd);
+        void setExitPoint(LEPoint &newExitPoint, le_bool baselineIsLogicalEnd);
+        void setCursiveGlyph(le_bool baselineIsLogicalEnd);
 
     private:
         enum EntryExitFlags
         {
-            EEF_HAS_ENTRY_POINT    = 0x80000000L,
-            EEF_HAS_EXIT_POINT     = 0x40000000L,
-            EEF_IS_CURSIVE_GLYPH   = 0x20000000L
+            EEF_HAS_ENTRY_POINT         = 0x80000000L,
+            EEF_HAS_EXIT_POINT          = 0x40000000L,
+            EEF_IS_CURSIVE_GLYPH        = 0x20000000L,
+            EEF_BASELINE_IS_LOGICAL_END = 0x10000000L
         };
 
         le_uint32 fFlags;
@@ -99,6 +101,7 @@ public:
 
     le_bool hasCursiveGlyphs() const;
     le_bool isCursiveGlyph(le_int32 index) const;
+    le_bool baselineIsLogicalEnd(le_int32 index) const;
 
     const LEPoint *getEntryPoint(le_int32 index, LEPoint &entryPoint) const;
     const LEPoint *getExitPoint(le_int32 index, LEPoint &exitPoint) const;
@@ -122,9 +125,9 @@ public:
     void adjustXAdvance(le_int32 index, float xAdjustment);
     void adjustYAdvance(le_int32 index, float yAdjustment);
    
-    void setEntryPoint(le_int32 index, LEPoint &newEntryPoint);
-    void setExitPoint(le_int32 index, LEPoint &newExitPoint);
-    void setCursiveGlyph(le_int32 index);
+    void setEntryPoint(le_int32 index, LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd);
+    void setExitPoint(le_int32 index, LEPoint &newExitPoint, le_bool baselineIsLogicalEnd);
+    void setCursiveGlyph(le_int32 index, le_bool baselineIsLogicalEnd);
 
     void applyCursiveAdjustments(LEGlyphStorage &glyphStorage, le_bool rightToLeft, const LEFontInstance *fontInstance);
 };
@@ -132,6 +135,11 @@ public:
 inline le_bool GlyphPositionAdjustments::isCursiveGlyph(le_int32 index) const
 {
     return fEntryExitPoints != NULL && fEntryExitPoints[index].isCursiveGlyph();
+}
+
+inline le_bool GlyphPositionAdjustments::baselineIsLogicalEnd(le_int32 index) const
+{
+    return fEntryExitPoints != NULL && fEntryExitPoints[index].baselineIsLogicalEnd();
 }
 
 inline float GlyphPositionAdjustments::getXPlacement(le_int32 index) const
@@ -313,21 +321,40 @@ inline le_bool GlyphPositionAdjustments::EntryExitPoint::isCursiveGlyph() const
     return (fFlags & EEF_IS_CURSIVE_GLYPH) != 0;
 }
 
-inline void GlyphPositionAdjustments::EntryExitPoint::setEntryPoint(LEPoint &newEntryPoint)
+inline le_bool GlyphPositionAdjustments::EntryExitPoint::baselineIsLogicalEnd() const
 {
-    fFlags |= (EEF_HAS_ENTRY_POINT | EEF_IS_CURSIVE_GLYPH);
+    return (fFlags & EEF_BASELINE_IS_LOGICAL_END) != 0;
+}
+
+inline void GlyphPositionAdjustments::EntryExitPoint::setEntryPoint(LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd)
+{
+    if (baselineIsLogicalEnd) {
+        fFlags |= (EEF_HAS_ENTRY_POINT | EEF_IS_CURSIVE_GLYPH | EEF_BASELINE_IS_LOGICAL_END);
+    } else {
+        fFlags |= (EEF_HAS_ENTRY_POINT | EEF_IS_CURSIVE_GLYPH);
+    }
+
     fEntryPoint = newEntryPoint;
 }
 
-inline void GlyphPositionAdjustments::EntryExitPoint::setExitPoint(LEPoint &newExitPoint)
+inline void GlyphPositionAdjustments::EntryExitPoint::setExitPoint(LEPoint &newExitPoint, le_bool baselineIsLogicalEnd)
 {
-    fFlags |= (EEF_HAS_EXIT_POINT | EEF_IS_CURSIVE_GLYPH);
+    if (baselineIsLogicalEnd) {
+        fFlags |= (EEF_HAS_EXIT_POINT | EEF_IS_CURSIVE_GLYPH | EEF_BASELINE_IS_LOGICAL_END);
+    } else {
+        fFlags |= (EEF_HAS_EXIT_POINT | EEF_IS_CURSIVE_GLYPH);
+    }
+
     fExitPoint  = newExitPoint;
 }
 
-inline void GlyphPositionAdjustments::EntryExitPoint::setCursiveGlyph()
+inline void GlyphPositionAdjustments::EntryExitPoint::setCursiveGlyph(le_bool baselineIsLogicalEnd)
 {
-    fFlags |= EEF_IS_CURSIVE_GLYPH;
+    if (baselineIsLogicalEnd) {
+        fFlags |= (EEF_IS_CURSIVE_GLYPH | EEF_BASELINE_IS_LOGICAL_END);
+    } else {
+        fFlags |= EEF_IS_CURSIVE_GLYPH;
+    }
 }
 
 U_NAMESPACE_END
