@@ -31,7 +31,6 @@ import java.io.IOException;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.5 $ $Date: 2004/03/26 20:01:27 $
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 

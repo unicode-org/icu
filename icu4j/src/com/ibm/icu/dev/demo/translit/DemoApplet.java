@@ -18,7 +18,6 @@ import com.ibm.icu.dev.demo.impl.AppletFrame;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: DemoApplet.java,v $ $Revision: 1.7 $ $Date: 2004/03/26 20:01:58 $
  */
 public class DemoApplet extends Applet {
 

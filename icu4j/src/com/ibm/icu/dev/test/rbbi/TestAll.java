@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/TestAll.java,v $
- * $Date: 2004/02/25 01:32:34 $
- * $Revision: 1.5 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.rbbi;
 

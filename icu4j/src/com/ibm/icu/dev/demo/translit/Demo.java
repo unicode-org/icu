@@ -24,7 +24,6 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.28 $ $Date: 2004/03/26 20:01:58 $
  */
 public class Demo extends Frame {
 

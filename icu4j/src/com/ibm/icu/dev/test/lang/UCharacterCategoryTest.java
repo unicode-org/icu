@@ -3,9 +3,6 @@
 * Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: 
-*      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
 */
 package com.ibm.icu.dev.test.lang;
 import com.ibm.icu.dev.test.TestFmwk;
