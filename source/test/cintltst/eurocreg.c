@@ -69,7 +69,7 @@ char convertersToCheck[][15] = {
   "ibm1156",
   "ibm1157",
   "ibm1158",
-  "ibm-1159",
+  /*"ibm-1159",*/ /* removed 2003Apr17 */
   "ibm12712",
   "ibm16804",
   "ibm-1160",
