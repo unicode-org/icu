@@ -295,9 +295,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * status, a default value of 0 is returned.  If more than one rule applies,
      * the numerically largest of the possible status values is returned.
      * <p>
-     * Of the standard types of ICU break iterators, only the word break
-     * iterator provides status values.  The values are defined in
-     * <code>enum UWordBreak</code>, and allow distinguishing between words
+     * The values used by the standard ICU break rules are defined as
+     * constants in this class, and allow distinguishing between words
      * that contain alphabetic letters, "words" that appear to be numbers,
      * punctuation and spaces, words containing ideographic characters, and
      * more.  Call <code>getRuleStatus</code> after obtaining a boundary
@@ -320,7 +319,8 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * within brackets, {123}, for example.  The default status value for rules
      * that do not explicitly provide one is zero.
      * <p>
-     * For word break iterators, the possible values are defined in enum UWordBreak.
+     * The values used by the standard ICU rules are defined as contants in
+     * this class.
      * <p>
      * If the size  of the output array is insufficient to hold the data,
      *  the output will be truncated to the available length.  No exception
