@@ -15,7 +15,9 @@
 #include "unicode/datefmt.h"
 #include "unicode/simpletz.h"
 #include "unicode/strenum.h"
+#include "unicode/dtfmtsym.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "caltest.h"  // for fieldName
 // *****************************************************************************
 // class DateFormatTest
@@ -47,6 +49,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(19,TestExactCountFormat);
         TESTCASE(20,TestWhiteSpaceParsing);
         TESTCASE(21,TestInvalidPattern);
+        TESTCASE(22,TestGeneral);
         default: name = ""; break;
     }
 }
@@ -219,124 +222,144 @@ DateFormatTest::escape(UnicodeString& s)
  
 // -------------------------------------
 
-// Map Calendar field number to to DateFormat field number
-const DateFormat::EField
-DateFormatTest::fgCalendarToDateFormatField[] = {
-    DateFormat::kEraField, 
-    DateFormat::kYearField, 
-    DateFormat::kMonthField,
-    DateFormat::kWeekOfYearField, 
-    DateFormat::kWeekOfMonthField,
-    DateFormat::kDateField, 
-    DateFormat::kDayOfYearField, 
-    DateFormat::kDayOfWeekField,     
-    DateFormat::kDayOfWeekInMonthField, 
-    DateFormat::kAmPmField,
-    DateFormat::kHour1Field, 
-    DateFormat::kHourOfDay0Field, 
-    DateFormat::kMinuteField, 
-    DateFormat::kSecondField, 
-    DateFormat::kMillisecondField,
-    DateFormat::kTimezoneField, 
-    DateFormat::kYearWOYField,
-    DateFormat::kDOWLocalField,
-    DateFormat::kExtendedYearField,
-    DateFormat::kJulianDayField,
-    DateFormat::kMillisecondsInDayField,
-    (DateFormat::EField) -1
+/**
+ * This MUST be kept in sync with DateFormatSymbols.gPatternChars.
+ */
+static const char* PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZ";
+
+/**
+ * A list of the names of all the fields in DateFormat.
+ * This MUST be kept in sync with DateFormat.
+ */
+static const char* DATEFORMAT_FIELD_NAMES[] = {
+    "ERA_FIELD",
+    "YEAR_FIELD",
+    "MONTH_FIELD",
+    "DATE_FIELD",
+    "HOUR_OF_DAY1_FIELD",
+    "HOUR_OF_DAY0_FIELD",
+    "MINUTE_FIELD",
+    "SECOND_FIELD",
+    "MILLISECOND_FIELD",
+    "DAY_OF_WEEK_FIELD",
+    "DAY_OF_YEAR_FIELD",
+    "DAY_OF_WEEK_IN_MONTH_FIELD",
+    "WEEK_OF_YEAR_FIELD",
+    "WEEK_OF_MONTH_FIELD",
+    "AM_PM_FIELD",
+    "HOUR1_FIELD",
+    "HOUR0_FIELD",
+    "TIMEZONE_FIELD",
+    "YEAR_WOY_FIELD",
+    "DOW_LOCAL_FIELD",
+    "EXTENDED_YEAR_FIELD",
+    "JULIAN_DAY_FIELD",
+    "MILLISECONDS_IN_DAY_FIELD",
+    "TIMEZONE_RFC_FIELD"
 };
+
+static const int32_t DATEFORMAT_FIELD_NAMES_LENGTH =
+    sizeof(DATEFORMAT_FIELD_NAMES) / sizeof(DATEFORMAT_FIELD_NAMES[0]);
 
 /**
  * Verify that returned field position indices are correct.
  */
-void
-DateFormatTest::TestFieldPosition(void)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    DateFormat* dateFormats[4];
-    int32_t dateFormats_length = (int32_t)(sizeof(dateFormats) / sizeof(dateFormats[0]));
+void DateFormatTest::TestFieldPosition() {
+    UErrorCode ec = U_ZERO_ERROR;
+    int32_t i, j, exp;
+    UnicodeString buf;
 
-    /* {sfb} This test was coded incorrectly.
-    / FieldPosition uses the fields in the class you are formatting with
-    / So, for example, to get the DATE field from a DateFormat use
-    / DateFormat::DATE_FIELD, __not__ Calendar::DATE
-    / The ordering of the expected values used previously was wrong.
-    / instead of re-ordering this mess of strings, just transform the index values */
+    // Verify data
+    DateFormatSymbols rootSyms(Locale(""), ec);
+    assertSuccess("DateFormatSymbols", ec);
+    assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars(buf));
+    assertEquals("patternChars", PATTERN_CHARS, DateFormatSymbols::getPatternUChars());
+    assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES_LENGTH == UDAT_FIELD_COUNT);
+    assertTrue("Data", UDAT_FIELD_COUNT == uprv_strlen(PATTERN_CHARS));
 
-    /* field values, in Calendar order */
-
-    const char* expected[] = {
-    /* 0: US */
-        "", "1997", "August", "", "", "13", "", "Wednesday", "", "PM", "2", "", 
-        "34", "12", "", "PDT", "", 
-        /* Following two added by weiv for two new fields */ "", "", "","","",
-    /* 1: France */
-        "", "1997", "#",/* # is a marker for "ao\xfbt" == "aou^t" */  "", "", "13", "", "mercredi", 
-        "", "", "", "14", "34", "", "", "GMT-07:00", "", 
-        /* Following two added by weiv for two new fields */ "", "", "","","",
-    /* 2: (short fields) */
-        "AD", "97", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", 
-        "14", "34", "12", "5", "PDT", 
-        /* Following two added by weiv for two new fields */ "97", "4", "", "","","",
-    /* 3: (long fields) */
-        "AD", "1997", "August", "0033", 
-        "0003", "0013", "0225", "Wednesday", "0002", "PM", "0002", "0014", 
-        "0034", "0012", "513", "Pacific Daylight Time", 
-        /* Following two added by weiv for two new fields */ "1997", "0004", "","","", "",
-        NULL
-
-    };
-
-    UDate someDate = 871508052513.0;
-    int32_t j, exp;
-
-    dateFormats[0] = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, Locale::getUS());
-    dateFormats[1] = DateFormat::createDateTimeInstance(DateFormat::FULL, DateFormat::FULL, Locale::getFrance());
-    dateFormats[2] = new SimpleDateFormat((UnicodeString)"G, yy, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, YY, e", status);
-    dateFormats[3] = new SimpleDateFormat((UnicodeString)"GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz, YYYY, eeee", status);
-    for (j = 0, exp = 0; j < dateFormats_length;++j) {
-        UnicodeString str;
-        DateFormat* df = dateFormats[j];
-        logln((UnicodeString)" Pattern = " + ((SimpleDateFormat*)df)->toPattern(str));
-        str.truncate(0);
-        logln((UnicodeString)"  Result = " + df->format(someDate, str));
-        for (int32_t i = 0; i < UCAL_FIELD_COUNT;++i) {
-            UnicodeString field;
-            getFieldText(df, i, someDate, field);
-            UnicodeString expStr;
-
-            if(expected[exp] == NULL) {
-              errln("FAIL: ran out of 'expected' strings (pattern %d, field %d - item %d) .. perhaps number of calendar fields has changed?\n", j, i, exp);
-              return; /* leak? This is a Fatal err */
-            }
-
-            if(expected[exp][0]!='#') {
-                expStr=UnicodeString(expected[exp]);
-            } else {
-                /* we cannot have latin-1 characters in source code, therefore we fix up the string for "aou^t" */
-                expStr.append((UChar)0x61).append((UChar)0x6f).append((UChar32)0xfb).append((UChar)0x74);
-            }
-            
-            if (!(field == expStr)) errln(UnicodeString("FAIL: pattern #") + j + ", field #" + i + " " + 
-                                          CalendarTest::fieldName((UCalendarDateFields)i) + " = \"" + escape(field) + "\", expected \"" + escape(expStr) + "\"");
-            ++exp;
+    // Create test formatters
+    const int32_t COUNT = 4;
+    DateFormat* dateFormats[COUNT];
+    dateFormats[0] = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale::getUS());
+    dateFormats[1] = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull, Locale::getFrance());
+    // Make the pattern "G y M d..."
+    buf.remove().append(PATTERN_CHARS);
+    for (j=buf.length()-1; j>=0; --j) buf.insert(j, (UChar)32/*' '*/);
+    dateFormats[2] = new SimpleDateFormat(buf, Locale::getUS(), ec);
+    // Make the pattern "GGGG yyyy MMMM dddd..."
+    for (j=buf.length()-1; j>=0; j-=2) {
+        for (i=0; i<3; ++i) {
+            buf.insert(j, buf.charAt(j));
         }
     }
-    for (j=0; j<dateFormats_length; ++j) delete dateFormats[j];
-    if (U_FAILURE(status)) errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status); 
+    dateFormats[3] = new SimpleDateFormat(buf, Locale::getUS(), ec);
+
+    UDate aug13 = 871508052513.0;
+
+    // Expected output field values for above DateFormats on aug13
+    // Fields are given in order of DateFormat field number
+    const char* EXPECTED[] = {
+        "", "1997", "August", "13", "", "", "34", "12", "",
+        "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
+
+        "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
+        "mercredi", "", "", "", "", "", "", "", "GMT-07:00", "", "", "", "", "", "",
+
+        "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
+        "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700",
+
+        "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "5130",
+        "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
+    };
+
+    const int32_t EXPECTED_LENGTH = sizeof(EXPECTED)/sizeof(EXPECTED[0]);
+
+    assertTrue("data size", EXPECTED_LENGTH == COUNT * UDAT_FIELD_COUNT);
+
+    TimeZone* PT = TimeZone::createTimeZone("America/Los_Angeles");
+    for (j = 0, exp = 0; j < COUNT; ++j) {
+        //  String str;
+        DateFormat* df = dateFormats[j];
+        df->setTimeZone(*PT);
+        if (df->getDynamicClassID() == SimpleDateFormat::getStaticClassID()) {
+            logln(" Pattern = " + ((SimpleDateFormat*) df)->toPattern(buf.remove()));
+        } else {
+            logln(" Pattern = ? (not a SimpleDateFormat)");
+        }
+        logln((UnicodeString)"  Result = " + df->format(aug13, buf.remove()));
+
+        for (i = 0; i < UDAT_FIELD_COUNT; ++i, ++exp) {
+            FieldPosition pos(i);
+            df->format(aug13, buf.remove(), pos);    
+            UnicodeString field;
+            buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), field);
+            assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
+                         EXPECTED[exp], field);
+        }
+    }
+
+    for (i=0; i<COUNT; ++i) {
+        delete dateFormats[i];
+    }
+    delete PT;
 }
- 
+
 // -------------------------------------
- 
-void
-DateFormatTest::getFieldText(DateFormat* df, int32_t field, UDate date, UnicodeString& str)
-{
-    UnicodeString formatResult;
-    // {sfb} added to convert Calendar Fields to DateFormat fields
-    FieldPosition pos(fgCalendarToDateFormatField[field]);
-    df->format(date, formatResult, pos);
-    //formatResult.extract(pos.getBeginIndex(), pos.getEndIndex(), str);
-    formatResult.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), str);
+
+/**
+ * General parse/format tests.  Add test cases as needed.
+ */
+void DateFormatTest::TestGeneral() {
+    const char* DATA[] = {
+        "yyyy MM dd HH:mm:ss.SSS",
+
+        // Milliseconds are left-justified, since they format as fractions of a second
+        "y/M/d H:mm:ss.S", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.6", "2004 03 10 16:36:31.600",
+        "y/M/d H:mm:ss.SS", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.57", "2004 03 10 16:36:31.570",
+        "y/M/d H:mm:ss.SSS", "F", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567",
+        "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.568", "2004/3/10 16:36:31.5680",
+    };
+    expect(DATA, sizeof(DATA)/sizeof(DATA[0]), Locale("en", "", ""));
 }
  
 // -------------------------------------
@@ -1174,6 +1197,116 @@ void DateFormatTest::expectParse(const char** data, int32_t data_length,
                   expstr);
         }
     }    
+}
+
+/**
+ * Test formatting and parsing.  Input is an array that starts
+ * with the following header:
+ *
+ * [0]   = pattern string to parse [i+2] with
+ *
+ * followed by test cases, each of which is 3 array elements:
+ *
+ * [i]   = pattern, or null to reuse prior pattern
+ * [i+1] = control string, either "fp", "pf", or "F".
+ * [i+2..] = data strings
+ *
+ * The number of data strings depends on the control string.
+ * Examples:
+ * 1. "y/M/d H:mm:ss.SS", "fp", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.56", "2004 03 10 16:36:31.560",
+ * 'f': Format date [i+2] (as parsed using pattern [0]) and expect string [i+3].
+ * 'p': Parse string [i+3] and expect date [i+4].
+ *
+ * 2. "y/M/d H:mm:ss.SSS", "F", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.567"
+ * 'F': Format date [i+2] and expect string [i+3],
+ *      then parse string [i+3] and expect date [i+2].
+ *
+ * 3. "y/M/d H:mm:ss.SSSS", "pf", "2004/3/10 16:36:31.5679", "2004 03 10 16:36:31.567", "2004/3/10 16:36:31.5670",
+ * 'p': Parse string [i+2] and expect date [i+3].
+ * 'f': Format date [i+3] and expect string [i+4].
+ */
+void DateFormatTest::expect(const char** data, int32_t data_length,
+                            const Locale& loc) {
+    int32_t i = 0;
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeString str, str2;
+    SimpleDateFormat fmt("", loc, ec);
+    SimpleDateFormat ref(data[i++], loc, ec);
+    SimpleDateFormat univ("EE G yyyy MM dd HH:mm:ss.SSS z", loc, ec);
+    if (!assertSuccess("construct SimpleDateFormat", ec)) return;
+
+    UnicodeString currentPat;
+    while (i<data_length) {
+        const char* pattern  = data[i++];
+        if (pattern != NULL) {
+            fmt.applyPattern(pattern);
+            currentPat = pattern;
+        }
+
+        const char* control = data[i++];
+
+        if (uprv_strcmp(control, "fp") == 0) {
+            // 'f'
+            const char* datestr = data[i++];
+            const char* string = data[i++];
+            UDate date = ref.parse(datestr, ec);
+            if (!assertSuccess("parse", ec)) return;
+            assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+                         string,
+                         fmt.format(date, str.remove()));
+            // 'p'
+            datestr = data[i++];
+            date = ref.parse(datestr, ec);
+            if (!assertSuccess("parse", ec)) return;
+            UDate parsedate = fmt.parse(string, ec);
+            if (assertSuccess((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")", ec)) {
+                assertEquals((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")",
+                             univ.format(date, str.remove()),
+                             univ.format(parsedate, str2.remove()));
+            }
+        }
+
+        else if (uprv_strcmp(control, "pf") == 0) {
+            // 'p'
+            const char* string = data[i++];
+            const char* datestr = data[i++];
+            UDate date = ref.parse(datestr, ec);
+            if (!assertSuccess("parse", ec)) return;
+            UDate parsedate = fmt.parse(string, ec);
+            if (assertSuccess((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")", ec)) {
+                assertEquals((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")",
+                             univ.format(date, str.remove()),
+                             univ.format(parsedate, str2.remove()));
+            }
+            // 'f'
+            string = data[i++];
+            assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+                         string,
+                         fmt.format(date, str.remove()));
+        }
+
+        else if (uprv_strcmp(control, "F") == 0) {
+            const char* datestr  = data[i++];
+            const char* string   = data[i++];
+            UDate date = ref.parse(datestr, ec);
+            if (!assertSuccess("parse", ec)) return;
+            assertEquals((UnicodeString)"\"" + currentPat + "\".format(" + datestr + ")",
+                         string,
+                         fmt.format(date, str.remove()));
+
+            UDate parsedate = fmt.parse(string, ec);
+            if (assertSuccess((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")", ec)) {
+                assertEquals((UnicodeString)"\"" + currentPat + "\".parse(" + string + ")",
+                             univ.format(date, str.remove()),
+                             univ.format(parsedate, str2.remove()));
+            }
+        }
+
+        else {
+            errln((UnicodeString)"FAIL: Invalid control string " + control);
+            return;
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
