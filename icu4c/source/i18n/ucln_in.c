@@ -23,19 +23,20 @@ static UBool i18n_cleanup(void)
     transliterator_cleanup();
 #endif
 
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    regex_cleanup();
+#endif
+
 #if !UCONFIG_NO_FORMATTING
-    timeZone_cleanup();
     numfmt_cleanup();
     currency_cleanup();
+    timeZone_cleanup();
 #endif
 
 #if !UCONFIG_NO_COLLATION
+    collator_cleanup();
     ucol_cleanup();
     ucol_bld_cleanup();
-#endif
-
-#if !UCONFIG_NO_REGULAR_EXPRESSIONS
-    regex_cleanup();
 #endif
 
     return TRUE;
