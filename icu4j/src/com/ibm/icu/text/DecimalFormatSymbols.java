@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2002/12/05 01:21:42 $ 
- * $Revision: 1.8 $
+ * $Date: 2003/04/19 05:52:45 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
-
+import com.ibm.icu.util.Currency;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -473,17 +473,14 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         /* try the cache first */
         String[][] data = (String[][]) cachedLocaleData.get(locale);
         String[] numberElements;
-        String[] currencyElements;
         if (data == null) {  /* cache miss */
-            data = new String[2][];
+            data = new String[1][];
             ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
             data[0] = rb.getStringArray("NumberElements");
-            data[1] = rb.getStringArray("CurrencyElements");
             /* update cache */
             cachedLocaleData.put(locale, data);
         }
         numberElements = data[0];
-        currencyElements = data[1];
 
 	// {dlf} clean up below now that we have our own resource data
         decimalSeparator = numberElements[0].charAt(0);
@@ -511,16 +508,25 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         plusSign  = DecimalFormat.PATTERN_PLUS_SIGN;
         padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
 
-        currencySymbol = currencyElements[0];
-        intlCurrencySymbol = currencyElements[1];
-
-        // if the resource data specified the empty string as the monetary decimal
-        // separator, that means we should just use the regular separator as the
-        // monetary separator
-        if (currencyElements[2].length() == 0)
-            monetarySeparator = decimalSeparator;
-        else
-            monetarySeparator = currencyElements[2].charAt(0);
+        // Obtain currency data from the currency API.  This is strictly
+        // for backward compatibility; we don't use DecimalFormatSymbols
+        // for currency data anymore.
+        String currname = null;
+        Currency curr = Currency.getInstance(locale);
+        if (curr != null) {
+            boolean[] isChoiceFormat = new boolean[1];
+            currname = curr.getName(locale,
+                                     Currency.SYMBOL_NAME,
+                                     isChoiceFormat);
+            intlCurrencySymbol = curr.getCurrencyCode();
+            currencySymbol = isChoiceFormat[0] ? intlCurrencySymbol : currname;
+        } else {
+            intlCurrencySymbol = "XXX";
+            currencySymbol = "\u00A4"; // 'OX' currency symbol
+        }
+        // If there is a currency decimal, use it.
+        monetarySeparator =
+            numberElements[numberElements.length >= 12 ? 11 : 0].charAt(0);
     }
 
     /**
@@ -737,8 +743,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
     private int serialVersionOnStream = currentSerialVersion;
 
     /**
-     * cache to hold the NumberElements and the CurrencyElements
-     * of a Locale.
+     * cache to hold the NumberElements of a Locale.
      */
     private static final Hashtable cachedLocaleData = new Hashtable(3);
 }
