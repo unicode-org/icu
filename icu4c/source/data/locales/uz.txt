@@ -1,12 +1,12 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
+// *   Copyright (C) 2001-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 
 uz{
-    Version{ "x0.1" }
+    Version{ "x0.2" }
     LocaleID:int { 0x43 }
 //    ShortLanguage{
 //        "UZB"
@@ -66,7 +66,7 @@ uz{
         "\u00A0",
         ";",
         "%",
-        ";",
+        "0",
         "#",
         "-",
         "E",
@@ -75,7 +75,7 @@ uz{
         "\ufffd",
     }
     LocaleScript:array { "Cyrl" }
-    CollationElements {	    
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

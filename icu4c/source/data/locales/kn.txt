@@ -75,19 +75,19 @@ kn {
         "\u0CA1\u0CBF\u0CB8\u0CC6\u0C82\u0CAC\u0CB0\u0CCD",
     }
 
-    NumberElements{
-        ".",
-        ",",
-        ",",
-        "%",
-        ",",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221e",
-        "\ufffd",
-    }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221e",
+//        "\ufffd",
+//    }
     LocaleScript:array { "Knda" }
     CollationElements {	    
         Version { "1.0" }

@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 mn{
-    Version{ "x0.2" }
+    Version{ "x0.3" }
     LocaleID:int { 0x50 }
 // ShortLanguage{
 //  "MON"
@@ -66,7 +66,7 @@ mn{
         "\u00A0",
         ";",
         "%",
-        ";",
+        "0",
         "#",
         "-",
         "E",
@@ -74,8 +74,8 @@ mn{
         "\u221e",
         "\ufffd",
     }
-    LocaleScript{ "Cyrl" }
-    CollationElements {	    
+    LocaleScript:array{ "Cyrl" }
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
             "[normalization on]"

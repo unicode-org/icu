@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 tt{
-    Version{ "x0.2" }
+    Version{ "x0.3" }
     LocaleID:int { 0x44 }
 //    ShortLanguage{
 //        "TTT"
@@ -65,7 +65,7 @@ tt{
         "\u00A0",
         ";",
         "%",
-        ";",
+        "0",
         "#",
         "-",
         "E",
@@ -74,7 +74,7 @@ tt{
         "\ufffd",
     }
     LocaleScript:array { "Cyrl" }
-    CollationElements {	    
+    CollationElements {     
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
