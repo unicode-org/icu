@@ -39,8 +39,8 @@
 
 # Bidirectional rule files
 
-Fullwidth-Halfwidth:file:Transliterator_Fullwidth_Halfwidth.utf8.txt:UTF8:FORWARD
-Halfwidth-Fullwidth:file:Transliterator_Fullwidth_Halfwidth.utf8.txt:UTF8:REVERSE
+Fullwidth-Halfwidth:file:Transliterator_Fullwidth_Halfwidth.txt:UTF8:FORWARD
+Halfwidth-Fullwidth:file:Transliterator_Fullwidth_Halfwidth.txt:UTF8:REVERSE
 
 Latin-Cyrillic:file:Transliterator_Cyrillic_Latin.txt:UTF8:REVERSE
 Cyrillic-Latin:file:Transliterator_Cyrillic_Latin.txt:UTF8:FORWARD
