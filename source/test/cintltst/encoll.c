@@ -297,7 +297,7 @@ static void TestTertiary( )
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     log_verbose("Testing English Collation with Tertiary strength\n");
-    ucol_setNormalization(myCollation, UCOL_DECOMP_CAN_COMP_COMPAT);
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < 38 ; i++)
     {
@@ -337,7 +337,7 @@ static void TestPrimary()
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
-    ucol_setNormalization(myCollation, UCOL_DECOMP_CAN_COMP_COMPAT);
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     ucol_setStrength(myCollation, UCOL_PRIMARY);
     log_verbose("Testing English Collation with Primary strength\n");
     for (i = 38; i < 43 ; i++)
