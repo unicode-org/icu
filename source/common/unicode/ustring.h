@@ -778,8 +778,8 @@ u_strFromUTF8(UChar *dest,
  *                      which must not indicate a failure before the function call.
  * @retrun The pointer to destination buffer.
  */
-U_CAPI uint32_t* U_EXPORT2 
-u_strToUTF32(uint32_t *dest, 
+U_CAPI UChar32* U_EXPORT2 
+u_strToUTF32(UChar32 *dest, 
              int32_t  destCapacity,
              int32_t  *pDestLength,
              const UChar *src, 
@@ -808,7 +808,7 @@ U_CAPI UChar* U_EXPORT2
 u_strFromUTF32(UChar   *dest,
                int32_t destCapacity, 
                int32_t *pDestLength,
-               const uint32_t *src,
+               const UChar32 *src,
                int32_t srcLength,
                UErrorCode *pErrorCode);
 

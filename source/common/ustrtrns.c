@@ -35,6 +35,11 @@
 U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
 u_growAnyBufferFromStatic(void *context,
                        void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
+                       int32_t length, int32_t size);
+
+U_CAPI UBool /* U_CALLCONV U_EXPORT2 */
+u_growAnyBufferFromStatic(void *context,
+                       void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length, int32_t size) {
 
     void *newBuffer=uprv_malloc(reqCapacity*size);
@@ -62,15 +67,16 @@ U_CAPI UChar* U_EXPORT2
 u_strFromUTF32(UChar   *dest,
                int32_t destCapacity, 
                int32_t *pDestLength,
-               const uint32_t *pSrc,
+               const UChar32 *src,
                int32_t srcLength,
-               UErrorCode *pErrorCode){
-    
+               UErrorCode *pErrorCode)
+{
     int32_t reqLength = 0;
     uint32_t ch =0;
     UChar *pDestLimit =dest+destCapacity;
     UChar *pDest = dest;
-    
+    const uint32_t *pSrc = (const uint32_t *)src;
+
     /* args check */
     if(pErrorCode && U_FAILURE(*pErrorCode)){
         return NULL;
@@ -107,7 +113,7 @@ u_strFromUTF32(UChar   *dest,
             reqLength+=UTF_CHAR_LENGTH(ch);
         }
     }else{
-        const uint32_t* pSrcLimit = pSrc + srcLength;
+        const uint32_t* pSrcLimit = ((const uint32_t*)pSrc) + srcLength;
         while(pSrc<pSrcLimit){
             if(pDest < pDestLimit){
                 ch = *pSrc++;
@@ -148,20 +154,20 @@ u_strFromUTF32(UChar   *dest,
 }
 
 
-U_CAPI uint32_t* U_EXPORT2 
-u_strToUTF32(uint32_t *dest, 
+U_CAPI UChar32* U_EXPORT2 
+u_strToUTF32(UChar32 *dest, 
              int32_t  destCapacity,
              int32_t  *pDestLength,
              const UChar *src, 
              int32_t  srcLength,
-             UErrorCode *pErrorCode){
-
+             UErrorCode *pErrorCode)
+{
     const UChar* pSrc = src;
     int32_t reqLength=0;
     uint32_t ch=0;
     int32_t index=0;
-    uint32_t *pDest = dest;
-    uint32_t *pDestLimit = dest + destCapacity;
+    uint32_t *pDest = (uint32_t *)dest;
+    uint32_t *pDestLimit = pDest + destCapacity;
 
     /* args check */
     if(pErrorCode && U_FAILURE(*pErrorCode)){
@@ -202,7 +208,7 @@ u_strToUTF32(uint32_t *dest,
         }
     }
 
-    reqLength+=(pDest - dest);
+    reqLength+=(pDest - (uint32_t *)dest);
     if(pDestLength){
         *pDestLength = reqLength;
     }
@@ -401,16 +407,16 @@ _strToWCS(wchar_t *dest,
         
         /* This should rarely occur */
         if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR){
-            int32_t count = tempBuf - saveBuf;
+            int32_t bufCount = tempBuf - saveBuf;
             *pErrorCode=U_ZERO_ERROR;
             tempBuf = saveBuf;
             /* we dont have enough room on the stack grow the buffer */
             u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
-                    (tempBufCapacity+_STACK_BUFFER_CAPACITY), count,sizeof(char));
+                    (tempBufCapacity+_STACK_BUFFER_CAPACITY), bufCount,sizeof(char));
            
            saveBuf = tempBuf;
            tempBufLimit = tempBuf + tempBufCapacity;
-           tempBuf = tempBuf + count;
+           tempBuf = tempBuf + bufCount;
            /* to flush the converters internal state when pSrc<pSrcLimit */
            continue;
 
@@ -747,10 +753,8 @@ u_strFromWCS(UChar   *dest,
              int32_t *pDestLength,
              const wchar_t *src,
              int32_t srcLength,
-             UErrorCode *pErrorCode){
-    
-    const wchar_t* pSrc = src;
-
+             UErrorCode *pErrorCode)
+{
 
     /* args check */
     if(pErrorCode && U_FAILURE(*pErrorCode)){
