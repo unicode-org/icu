@@ -90,18 +90,6 @@ import java.lang.reflect.*;
 public abstract class PerfTest {
 
     /**
-     * The number of subclass-defined "events" within on call to
-     * Function.call().  Set by subclass using setEventsPerCall().
-     */
-    private int eventsPerCall;
-
-    /**
-     * The subclass-defined test function.  Set by subclass using
-     * setTestFunction().
-     */
-    private Function testFunction;
-
-    /**
      * A map of munged names to Method objects.  All available methods
      * in the current object beginning with "test" (case ignored).
      */
@@ -128,12 +116,19 @@ public abstract class PerfTest {
         public abstract void call();
 
         /**
+         * Subclasses must implement this method to return positive
+         * integer indicating the number of operations in a single
+         * call to this object's call() method.
+         */
+        public abstract  long getOperationsPerIteration();
+
+        /**
          * Call call() n times in a tight loop and return the elapsed
          * milliseconds.  If n is small and call() is fast the return
          * result may be zero.  Small return values have limited
          * meaningfulness, depending on the underlying VM and OS.
          */
-        public final long time(int n) {
+        public final long time(long n) {
             long start, stop;
             start = System.currentTimeMillis();
             while (n-- > 0) {
@@ -150,23 +145,6 @@ public abstract class PerfTest {
     protected PerfTest() {
         availableTests = null;
         doPriorGC = false;
-    }
-    
-    /**
-     * Subclasses must call this method with a positive integer to
-     * indicate the number of "events" in a sincle call to the current
-     * test functor's call() method.
-     */
-    protected void setEventsPerCall(int n) {
-        eventsPerCall = n;
-    }
-
-    /**
-     * Subclasses must call this method with a test functor, whose
-     * call() function will be timed.
-     */
-    protected void setTestFunction(PerfTest.Function f) {
-        testFunction = f;
     }
 
     /**
@@ -281,14 +259,13 @@ public abstract class PerfTest {
             int[] counts = (int[]) countList.get(i);
 
             // Call meth to set up the test
-            eventsPerCall = -1;
-            testFunction = null;
-            meth.invoke(this, NO_ARGS); // set up the test
-            if (eventsPerCall < 1) {
-                throw new RuntimeException(meth.getName() + " failed to call setEventsPerCall()");
-            }
+            long eventsPerCall = -1;
+            Function testFunction = (Function)meth.invoke(this, NO_ARGS);
             if (testFunction == null) {
-                throw new RuntimeException(meth.getName() + " failed to call setTestFunction()");
+                throw new RuntimeException(meth.getName() + " failed to return a test function");
+            }
+            if (testFunction.getOperationsPerIteration() < 1) {
+                throw new RuntimeException(meth.getName() + " returned an illegal operations/iteration()");
             }
 
             int n;
@@ -299,7 +276,7 @@ public abstract class PerfTest {
                     // Run specified number of iterations
                     System.out.println("= " + meth.getName() + " begin " + n);
                     t = testFunction.time(n);
-                    System.out.println("= " + meth.getName() + " end " + t + " " + eventsPerCall);
+                    System.out.println("= " + meth.getName() + " end " + t + " " + testFunction.getOperationsPerIteration());
                 } else {
                     // Run for specified duration in seconds
                     System.out.println("= " + meth.getName() + " begin " + n);
@@ -322,7 +299,7 @@ public abstract class PerfTest {
                         //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction.time(loops);
                     }
-                    System.out.println("= " + meth.getName() + " end " + t + " " + eventsPerCall +
+                    System.out.println("= " + meth.getName() + " end " + t + " " + testFunction.getOperationsPerIteration() +
                                        " " + loops);
                 }
             }

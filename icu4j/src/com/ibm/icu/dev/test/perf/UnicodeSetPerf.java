@@ -43,8 +43,8 @@ public class UnicodeSetPerf extends PerfTest {
         hs = new HashSet();
     }
 
-    void testUnicodeSetAdd() {
-        setTestFunction(new PerfTest.Function() {
+    PerfTest.Function testUnicodeSetAdd() {
+        return new PerfTest.Function() {
             public void call() {
                 us.clear();
                 it.reset();
@@ -56,13 +56,15 @@ public class UnicodeSetPerf extends PerfTest {
                     }
                 }
             }
-        });
 
-        setEventsPerCall(testChars.size());
+            public long getOperationsPerIteration() {
+                return testChars.size();
+            }
+        };
     }
 
-    void testHashSetAdd() {
-        setTestFunction(new PerfTest.Function() {
+    PerfTest.Function testHashSetAdd() {
+        return new PerfTest.Function() {
             public void call() {
                 hs.clear();
                 it.reset();
@@ -74,17 +76,18 @@ public class UnicodeSetPerf extends PerfTest {
                     }
                 }
             }
-        });
-        
-        setEventsPerCall(testChars.size());
+
+            public long getOperationsPerIteration() {
+                return testChars.size();
+            }
+        };
     }
 
-    void testUnicodeSetContains() {
-        setEventsPerCall(0x110000);
+    PerfTest.Function testUnicodeSetContains() {
         us.clear();
         us.set(testChars);
         
-        setTestFunction(new PerfTest.Function() {
+        return new PerfTest.Function() {
             public void call() {
                 int temp = 0;
                 for (int cp = 0; cp <= 0x10FFFF; ++cp) {
@@ -93,17 +96,20 @@ public class UnicodeSetPerf extends PerfTest {
                     }
                 }
             }
-        });
+
+            public long getOperationsPerIteration() {
+                return 0x110000;
+            }
+        };
     }
 
-    void testHashSetContains() {
-        setEventsPerCall(0x110000);
+    PerfTest.Function testHashSetContains() {
         hs.clear();
         it.reset();
         while (it.next()) {
             hs.add(new Integer(it.codepoint));
         }
-        setTestFunction(new PerfTest.Function() {
+        return new PerfTest.Function() {
             public void call() {
                 int temp = 0;
                 for (int cp = 0; cp <= 0x10FFFF; ++cp) {
@@ -112,12 +118,15 @@ public class UnicodeSetPerf extends PerfTest {
                     }
                 }
             }
-        });
+
+            public long getOperationsPerIteration() {
+                return 0x110000;
+            }
+        };
     }
 
-    void testUnicodeSetIterate() {
-        setEventsPerCall(testChars.size()); 
-        setTestFunction(new PerfTest.Function() {
+    PerfTest.Function testUnicodeSetIterate() {
+        return new PerfTest.Function() {
             public void call() {
                 int temp = 0;
                 UnicodeSetIterator uit = new UnicodeSetIterator(testChars);
@@ -125,17 +134,20 @@ public class UnicodeSetPerf extends PerfTest {
                     temp += uit.codepoint;
                 }
             }
-        });
+
+            public long getOperationsPerIteration() {
+                return testChars.size();
+            }
+        };
     }
 
-    void testHashSetIterate() {
-        setEventsPerCall(testChars.size());
+    PerfTest.Function testHashSetIterate() {
         hs.clear();
         it.reset();
         while (it.next()) {
             hs.add(new Integer(it.codepoint));
         }
-        setTestFunction(new PerfTest.Function() {
+        return new PerfTest.Function() {
             public void call() {
                 int temp = 0;
                 Iterator it = hs.iterator();
@@ -143,6 +155,10 @@ public class UnicodeSetPerf extends PerfTest {
                     temp += ((Integer)it.next()).intValue();
                 }
             }
-        });
+
+            public long getOperationsPerIteration() {
+                return testChars.size();
+            }
+        };
     }
 }
