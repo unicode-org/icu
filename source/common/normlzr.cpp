@@ -151,59 +151,33 @@ Normalizer::normalize(const UnicodeString& source,
                       EMode mode, 
                       int32_t options,
                       UnicodeString& result, 
-                      UErrorCode &status)
-{
-  if (quickCheck(source, mode, status) == UNORM_YES)
-  {
-    result = source;
-    return;
-  }
-
-    /* ### TODO: begin new implementation */
-    if(unorm_usesNewImplementation()) {
-        if(source.isBogus()) {
+                      UErrorCode &status) {
+    if(source.isBogus()) {
+        result.setToBogus();
+    } else {
+        /* make sure that we do not operate on the same buffer in source and result */
+        result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
+        result.fLength=unorm_internalNormalize(result.fArray, result.fCapacity,
+                                               source.fArray, source.fLength,
+                                               getUNormalizationMode(mode, status), (options&IGNORE_HANGUL)!=0,
+                                               UnicodeString::growBuffer, &result,
+                                               &status);
+        if(U_FAILURE(status)) {
             result.setToBogus();
-        } else {
-            /* make sure that we do not operate on the same buffer in source and result */
-            result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-            result.fLength=unorm_internalNormalize(result.fArray, result.fCapacity,
-                                                   source.fArray, source.fLength,
-                                                   getUNormalizationMode(mode, status), (options&IGNORE_HANGUL)!=0,
-                                                   UnicodeString::growBuffer, &result,
-                                                   &status);
-            if(U_FAILURE(status)) {
-                result.setToBogus();
-            }
         }
-        return;
     }
-    /* ### end new implementation */
-
-  switch (mode) {
-  case NO_OP:
-    result = source;
-    break;
-  case COMPOSE:
-  case COMPOSE_COMPAT:
-    compose(source, (mode & COMPAT_BIT) != 0, options, result, status);
-    break;
-  case DECOMP:
-  case DECOMP_COMPAT:
-    decompose(source, (mode & COMPAT_BIT) != 0, options, result, status);
-    break;
-  }
 }
 
 UNormalizationCheckResult
 Normalizer::quickCheck(const UnicodeString& source,
                        Normalizer::EMode mode, 
-                       UErrorCode &status)
-{
-  if (U_FAILURE(status))
-    return UNORM_MAYBE;
+                       UErrorCode &status) {
+    if(U_FAILURE(status)) {
+        return UNORM_MAYBE;
+    }
 
-  return unorm_quickCheck(source.fArray, source.length(), 
-                          getUNormalizationMode(mode, status), &status);
+    return unorm_quickCheck(source.fArray, source.length(), 
+                            getUNormalizationMode(mode, status), &status);
 }
 
 //-------------------------------------------------------------------------
@@ -239,165 +213,19 @@ Normalizer::compose(const UnicodeString& source,
                     UBool compat,
                     int32_t options,
                     UnicodeString& result, 
-                    UErrorCode &status)
-{
-    /* ### TODO: begin new implementation */
-    if(unorm_usesNewImplementation()) {
-        if(source.isBogus()) {
+                    UErrorCode &status) {
+    if(source.isBogus()) {
+        result.setToBogus();
+    } else {
+        /* make sure that we do not operate on the same buffer in source and result */
+        result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
+        result.fLength=unorm_compose(result.fArray, result.fCapacity,
+                                     source.fArray, source.fLength,
+                                     compat, (options&IGNORE_HANGUL)!=0,
+                                     UnicodeString::growBuffer, &result,
+                                     &status);
+        if(U_FAILURE(status)) {
             result.setToBogus();
-        } else {
-            /* make sure that we do not operate on the same buffer in source and result */
-            result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-            result.fLength=unorm_compose(result.fArray, result.fCapacity,
-                                         source.fArray, source.fLength,
-                                         compat, (options&IGNORE_HANGUL)!=0,
-                                         UnicodeString::growBuffer, &result,
-                                         &status);
-            if(U_FAILURE(status)) {
-                result.setToBogus();
-            }
-        }
-        return;
-    }
-    /* ### end new implementation */
-    if (U_FAILURE(status)) {
-        return;
-    }
-    result.truncate(0);
-    UnicodeString explodeBuf;
-  
-    UTextOffset explodePos = EMPTY;         // Position in input buffer
-    UTextOffset basePos = 0;                // Position of last base in output string
-    uint16_t    baseIndex = 0;              // Index of last base in "actions" array
-    uint32_t    classesSeen[2];             // Combining classes seen since last base
-    uint16_t    action;
-    
-    // Compatibility explosions have lower indices; skip them if necessary
-    uint16_t minExplode = (uint16_t)(compat ? 0 : ComposeData::MAX_COMPAT);
-    uint16_t minDecompLocal = (uint16_t)(compat ? 0 : DecompData::MAX_COMPAT);
-  
-    UTextOffset i = 0;
-
-    emptyBitmask64(classesSeen);
-    while (i < source.length() || explodePos != EMPTY) {
-        // Get the next char from either the buffer or the source
-        UChar ch;
-        if (explodePos == EMPTY) {
-            ch = source[i++];
-        } else {
-            ch = explodeBuf[explodePos++];
-            if (explodePos >= explodeBuf.length()) {
-                explodePos = EMPTY;
-                explodeBuf.truncate(0);
-            }
-        }
-      
-        // Get the basic info for the character
-        uint16_t charInfo = composeLookup(ch);
-        uint16_t type = (uint16_t)(charInfo & ComposeData::TYPE_MASK);
-        uint16_t index = (uint16_t)(charInfo >> ComposeData::INDEX_SHIFT);
-      
-        if (type == ComposeData::BASE ||
-            (type == ComposeData::NON_COMPOSING_COMBINING && index < minExplode)) {
-            emptyBitmask64(classesSeen);
-            baseIndex = index;
-            basePos = result.length();
-            result += ch;
-        }
-        else if (type == ComposeData::COMBINING)
-        {
-            uint32_t cclass = ComposeData::typeBit[index]; // 0..63
-      
-            // We can only combine a character with the base if we haven't
-            // already seen a combining character with the same canonical class.
-            // We also only combine characters with an index from
-            // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
-            // non-combining; these formerly had an index of zero.
-            if (index < ComposeData::COMBINING_COUNT
-                && !isSetBitmask64(classesSeen, cclass)
-                && (action = composeAction(baseIndex, index)) > 0)
-            {
-                if (action > ComposeData::MAX_COMPOSED) {
-                    // Pairwise explosion.  Actions above this value are really
-                    // indices into an array that in turn contains indices
-                    // into the exploding string table
-                    // TODO: What if there are unprocessed chars in the explode buffer?
-                    UChar newBase = pairExplode(explodeBuf, action);
-                    explodePos = 0;
-                    result[basePos] = newBase;
-        
-                    baseIndex = (uint16_t)(composeLookup(newBase) >> ComposeData::INDEX_SHIFT);
-                } else {
-                    // Normal pairwise combination.  Replace the base char
-                    UChar newBase = (UChar) action;
-                    result[basePos] = newBase;
-        
-                    baseIndex = (uint16_t)(composeLookup(newBase) >> ComposeData::INDEX_SHIFT);
-                }
-                //
-                // Since there are Unicode characters that cannot be combined in arbitrary
-                // order, we have to re-process any combining marks that go with this
-                // base character.  There are only four characters in Unicode that have
-                // this problem.  If they are fixed in Unicode 3.0, this code can go away.
-                //
-                UTextOffset len = result.length();
-                if (len - basePos > 1) {
-                    for (UTextOffset j = basePos+1; j < len; j++) {
-                        explodeBuf += result[j];
-                    }
-                    result.truncate(basePos+1);
-                    emptyBitmask64(classesSeen);
-                    if (explodePos == EMPTY) explodePos = 0;
-                }
-            } else {
-                // No combination with this character
-                bubbleAppend(result, ch, cclass);
-                setBitmask64(classesSeen, cclass);
-            }
-        }
-        else if (index > minExplode) {
-            // Single exploding character
-            explode(explodeBuf, index);
-            explodePos = 0;
-        }
-        else if (type == ComposeData::HANGUL && minExplode == 0) {
-            // If we're in compatibility mode we need to decompose Hangul to Jamo,
-            // because some of the Jamo might have compatibility decompositions.
-            hangulToJamo(ch, explodeBuf, minDecompLocal);
-            explodePos = 0;
-        }
-        else if (type == ComposeData::INITIAL_JAMO) {
-            emptyBitmask64(classesSeen);
-            baseIndex = ComposeData::INITIAL_JAMO_INDEX;
-            basePos = result.length();
-            result += ch;
-        }
-        else if (type == ComposeData::MEDIAL_JAMO
-                 && isEmptyBitmask64(classesSeen)
-                 && baseIndex == ComposeData::INITIAL_JAMO_INDEX) {
-            // If the last character was an initial jamo, we can combine it with this
-            // one to create a Hangul character.
-            uint16_t l = (uint16_t)(result[basePos] - (UChar)JAMO_LBASE);
-            uint16_t v = (uint16_t)(ch - JAMO_VBASE);
-            result[basePos] = (UChar)(HANGUL_BASE + (l*JAMO_VCOUNT + v) * JAMO_TCOUNT);
-    
-            baseIndex = ComposeData::MEDIAL_JAMO_INDEX;
-        }
-        else if (type == ComposeData::FINAL_JAMO
-                 && isEmptyBitmask64(classesSeen)
-                 && baseIndex == ComposeData::MEDIAL_JAMO_INDEX) {
-            // If the last character was a medial jamo that we turned into Hangul,
-            // we can add this character too.
-            result[basePos] = (UChar)(result[basePos] + (ch - JAMO_TBASE));
-    
-            baseIndex = 0;
-            basePos = -1;
-            emptyBitmask64(classesSeen);
-        } else {
-            baseIndex = 0;
-            basePos = -1;
-            emptyBitmask64(classesSeen);
-            result += ch;
         }
     }
 }
@@ -707,68 +535,21 @@ Normalizer::decompose(const UnicodeString& source,
                       UBool compat,
                       int32_t options,
                       UnicodeString& result, 
-                      UErrorCode &status)
-{
-    /* ### TODO: begin new implementation */
-    if(unorm_usesNewImplementation()) {
-        if(source.isBogus()) {
+                      UErrorCode &status) {
+    if(source.isBogus()) {
+        result.setToBogus();
+    } else {
+        /* make sure that we do not operate on the same buffer in source and result */
+        result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
+        result.fLength=unorm_decompose(result.fArray, result.fCapacity,
+                                       source.fArray, source.fLength,
+                                       compat, (options&IGNORE_HANGUL)!=0,
+                                       UnicodeString::growBuffer, &result,
+                                       &status);
+        if(U_FAILURE(status)) {
             result.setToBogus();
-        } else {
-            /* make sure that we do not operate on the same buffer in source and result */
-            result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
-            result.fLength=unorm_decompose(result.fArray, result.fCapacity,
-                                           source.fArray, source.fLength,
-                                           compat, (options&IGNORE_HANGUL)!=0,
-                                           UnicodeString::growBuffer, &result,
-                                           &status);
-            if(U_FAILURE(status)) {
-                result.setToBogus();
-            }
-        }
-        return;
-    }
-    /* ### end new implementation */
-    if (U_FAILURE(status)) {
-        return;
-    }
-    UBool     hangul = (options & IGNORE_HANGUL) == 0;
-    uint16_t  minDecompLocal = (uint16_t)(compat ? 0 : DecompData::MAX_COMPAT);
-    UnicodeString buffer;
-    int32_t i = 0, bufPtr = -1;
-
-    result.truncate(0);
-  
-    // Rewritten - Liu
-    while (i < source.length() || bufPtr >= 0) {
-        UChar ch;
-    
-        if (bufPtr >= 0) {
-            ch = buffer.charAt(bufPtr++);
-            if (bufPtr == buffer.length()) {
-                bufPtr = -1;
-            }
-        } else {
-            ch = source[i++];
-        }
-
-        uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
-        uint16_t index = (uint16_t)(offset & DecompData::DECOMP_MASK);
-    
-        if (index > minDecompLocal) {
-            if ((offset & DecompData::DECOMP_RECURSE) != 0) {
-                buffer.truncate(0);
-                doAppend((const UChar*)DecompData::contents, index, buffer);
-                bufPtr = 0;
-            } else {
-                doAppend((const UChar*)DecompData::contents, index, result);
-            }
-        } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
-            hangulToJamo(ch, result, minDecompLocal);
-        } else {
-            result += ch;
         }
     }
-    fixCanonical(result);
 }
 
 /**
