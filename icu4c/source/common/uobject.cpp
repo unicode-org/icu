@@ -60,14 +60,15 @@ void *UObject::operator new(size_t size) {
     return uprv_malloc(size);
 }
 
-void *UObject::operator new[](size_t size) {
-    return uprv_malloc(size);
-}
-
 void UObject::operator delete(void *p) {
     if(p!=NULL) {
         uprv_free(p);
     }
+}
+
+#if 0
+void *UObject::operator new[](size_t size) {
+    return uprv_malloc(size);
 }
 
 void UObject::operator delete[](void *p) {
@@ -87,6 +88,7 @@ void UObject::operator delete[](void *p, size_t /* size */) {
         uprv_free(p);
     }
 }
+#endif
 
 #endif
 
