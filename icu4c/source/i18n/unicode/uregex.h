@@ -563,8 +563,9 @@ uregex_appendTail(URegularExpression    *regexp,
    *                         set to NULL.
    *    @param   destCapacity The capacity of the destBuf.
    *    @param   requiredCapacity  The actual capacity required of the destBuf.
-   *                         If destCapacity is too small, requiredCapacity is the
-   *                         total capacity required to hold all of the output.
+   *                         If destCapacity is too small, requiredCapacity will return 
+   *                         the total capacity required to hold all of the output, and
+   *                         a U_BUFFER_OVERFLOW_ERROR will be returned.
    *    @param   destFields  An array to be filled with the position of each
    *                         of the extracted fields within destBuf.
    *    @param   destFieldsCapacity  The number of elements in the destFields array.
@@ -574,7 +575,9 @@ uregex_appendTail(URegularExpression    *regexp,
    *                input, including any field delimiters, is treated as if it
    *                were the last field - it is copied to the destBuf, and
    *                its position is in the destBuf is stored in the last element
-   *                of destFields.
+   *                of destFields.  This behavior mimics that of Perl.  It is not
+   *                an error condition, and no error status is returned when all destField
+   *                positions are used.
    * @param status  A reference to a UErrorCode to receive any errors.
    * @return        The number of fields into which the input string was split.
    * @draft ICU 3.0
