@@ -59,6 +59,7 @@ en {
         CN { "China" }
         CO { "Colombia" }
         CR { "Costa Rica" }
+        //CS { "Serbia and Montenegro" } // TODO: if we allow this, then SP must go away
         CU { "Cuba" }
         CV { "Cape Verde" }
         CX { "Christmas Island" }

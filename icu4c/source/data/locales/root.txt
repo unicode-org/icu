@@ -126,6 +126,7 @@ root {
         CN { "CN" }
         CO { "CO" }
         CR { "CR" }
+        //CS { "CS" } // TODO: if we allow this, then SP must go away
         CU { "CU" }
         CV { "CV" }
         CX { "CX" }
