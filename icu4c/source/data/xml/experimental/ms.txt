@@ -11,12 +11,12 @@ ms{
         Fallback{ "en" }
     }
     Currencies {
-        MYR { "R", "MYR" }
+        MYR { "RM", "MYR" }
     }
     DayAbbreviations { 
-        "Aha",
+        "Ahd",
         "Isn",
-        "Sei",
+        "Sel",
         "Rab",
         "Kha",
         "Jum",
@@ -36,7 +36,7 @@ ms{
         "Latn",  // ISO 15924 Name 
     }
     Languages {
-        ms { "bahasa Melayu" }
+        ms { "Bahasa Melayu" }
     }
     MonthAbbreviations { 
         "Jan",
