@@ -345,6 +345,10 @@ public:
      * the reference data is specified according to the Gregorian calendar, and the date
      * and time fields are local standard time.
      *
+     * <p>Note: Don't call this method. Instead, call the getOffset(UDate...) overload,
+     * which returns both the raw and the DST offset for a given time. This method
+     * is retained only for backward compatibility.
+     *
      * @param era        The reference date's era
      * @param year       The reference date's year
      * @param month      The reference date's month (0-based; 0 is January)
@@ -361,6 +365,11 @@ public:
     /**
      * Gets the time zone offset, for current date, modified in case of
      * daylight savings. This is the offset to add *to* UTC to get local time.
+     *
+     * <p>Note: Don't call this method. Instead, call the getOffset(UDate...) overload,
+     * which returns both the raw and the DST offset for a given time. This method
+     * is retained only for backward compatibility.
+     *
      * @param era the era of the given date.
      * @param year the year in the given date.
      * @param month the month in the given date.
