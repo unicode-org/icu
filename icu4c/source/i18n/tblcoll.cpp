@@ -66,6 +66,7 @@
 #include "unicode/resbund.h"
 #include "filestrm.h"
 #include "umemstrm.h"
+#include "umutex.h"
 
 #ifdef _DEBUG
 #include "unistrm.h"
@@ -141,6 +142,9 @@ const int32_t RuleBasedCollator::CONTRACTCHAROVERFLOW = 0x7FFFFFFF;  // Indicate
 const int16_t RuleBasedCollator::FILEID = 0x5443;                    // unique file id for parity check
 const char* RuleBasedCollator::kFilenameSuffix = ".col";             // binary collation file extension
 char  RuleBasedCollator::fgClassID = 0; // Value is irrelevant       // class id
+
+UMTX RuleBasedCollator::collMutex = NULL;
+UBool RuleBasedCollator::isMutexInited = RuleBasedCollator::initMutex();
 
 ////////////////////////////////////////////////////////////////////////
 // NormalizerIterator
@@ -494,6 +498,17 @@ RuleBasedCollator::getStrengthOrder(NormalizerIterator* cursor,
 
 
 //===============================================================================
+UBool RuleBasedCollator::initMutex() {
+    if(isMutexInited == FALSE) {
+        umtx_lock(NULL);
+        if(isMutexInited == FALSE) {
+          umtx_init(&collMutex);
+          isMutexInited = TRUE;
+        }
+        umtx_unlock(NULL);
+    }
+    return isMutexInited;
+}
 
 RuleBasedCollator::RuleBasedCollator()
     : Collator(),
@@ -854,7 +869,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
   if (U_FAILURE(status)) {
     return;
   }
-  
+
   // Try to load, in order:
   // 1. The desired locale's collation.
   // 2. A fallback of the desired locale.
@@ -2980,7 +2995,10 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCod
 }
 
 Collator* RuleBasedCollator::safeClone(void) {
-	return 0;
+    umtx_lock(&collMutex);
+    Collator *result = new RuleBasedCollator(*this);
+    umtx_unlock(&collMutex);
+	return result;
 }
 
 
