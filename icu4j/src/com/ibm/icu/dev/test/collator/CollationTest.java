@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/CollationTest.java,v $
- * $Date: 2003/09/22 06:24:25 $
- * $Revision: 1.14 $
+ * $Date: 2003/10/09 23:27:16 $
+ * $Revision: 1.15 $
  *
  *******************************************************************************
  */
@@ -117,18 +117,10 @@ public class CollationTest extends ModuleTest
     
         while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
             if (o != orders[--index]) {
-                if (o == 0) {
-                    index ++;
-                } else {
-                    while (index > 0 && orders[index] == 0) {
-                        index --;
-                    } 
-                    if (o != orders[index]) {
-                        test.errln("Mismatch at index " + index + ": 0x" 
-                            + Integer.toHexString(orders[index]) + " vs 0x" + Integer.toHexString(o));
-                        break;
-                    }
-                }
+                test.errln("Mismatch at index " + index + ": 0x" 
+                           + Integer.toHexString(orders[index]) + " vs 0x" 
+                           + Integer.toHexString(o));
+                break;
             }
         }
     

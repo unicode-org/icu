@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/09/15 18:43:18 $ 
-* $Revision: 1.25 $
+* $Date: 2003/10/09 23:27:18 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -544,16 +544,16 @@ final class CollationParsedRuleBuilder
         StringBuffer str = new StringBuffer();
         
 		// add latin-1 stuff
-      /* add latin-1 stuff */
-      copyRangeFromUCA(t, 0, 0xFF);
+        copyRangeFromUCA(t, 0, 0xFF);
     
-      /* add stuff for copying */
-      if(m_parser_.m_copySet_ != null) {
-        int i = 0;
-        for(i = 0; i < m_parser_.m_copySet_.getRangeCount(); i++) {
-          copyRangeFromUCA(t, m_parser_.m_copySet_.getRangeStart(i), m_parser_.m_copySet_.getRangeEnd(i));
+        // add stuff for copying 
+        if(m_parser_.m_copySet_ != null) {
+            int i = 0;
+            for(i = 0; i < m_parser_.m_copySet_.getRangeCount(); i++) {
+                copyRangeFromUCA(t, m_parser_.m_copySet_.getRangeStart(i), 
+                                 m_parser_.m_copySet_.getRangeEnd(i));
+            }
         }
-      }
         
         // copy contractions from the UCA - this is felt mostly for cyrillic
 		char conts[] = RuleBasedCollator.UCA_CONTRACTIONS_;
@@ -1873,6 +1873,7 @@ final class CollationParsedRuleBuilder
     {
   		Vector expansions = t.m_expansions_;
         element.m_mapCE_ = 0;
+        
         if (element.m_CELength_ == 1) {
 	    	if (element.m_isThai_ == false) {
 	            element.m_mapCE_ = element.m_CEs_[0];

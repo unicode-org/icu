@@ -1517,68 +1517,9 @@ public final class CollationElementIterator
                     else {
                         m_buffer_.insert(1, ch);
                     }
-                    /*
-                    m_utilStringBuffer_.replace(0, m_utilStringBuffer_.length(),
-                              Normalizer.decompose(UTF16.toString(cp), false));
-                    if (m_utilStringBuffer_.length() >= 2 
-                        && UTF16.isLeadSurrogate(m_utilStringBuffer_.charAt(0)) 
-                        && UTF16.isLeadSurrogate(m_utilStringBuffer_.charAt(1))) 
-                    {
-                        m_utilStringBuffer_.insert(2, ch);
-                    } 
-                    else {
-                        m_utilStringBuffer_.insert(1, ch);
-                    }
-                    // we will construct a new iterator and suck out CEs.
-                    // Here is the string initialization. We have decomposed 
-                    // character (decompLen) + 1 Thai + trailing zero
-                    String temp = m_utilStringBuffer_.toString();
-                    if (m_utilColEIter_ == null) {
-                        m_utilColEIter_ = new CollationElementIterator(
-                                                                temp, collator);
-                    }
-                    else {
-                        m_utilColEIter_.m_collator_ = collator;
-                        m_utilColEIter_.setText(temp);
-                    }
-                    
-                    // We need the trailing zero so that we can tell the 
-                    // iterate function that it is in the normalized and 
-                    // reordered buffer. This buffer is always zero terminated.
-                    m_utilColEIter_.m_buffer_.replace(0, 
-                                     m_utilColEIter_.m_buffer_.length(), temp); 
-                    m_utilColEIter_.m_bufferOffset_ = 0;
-                    // This is where to return after iteration is done. 
-                    // We point at the end of the string
-                    m_utilColEIter_.m_FCDStart_ = 0;
-                    m_utilColEIter_.m_FCDLimit_ = temp.length();
-    
-                    ce = m_utilColEIter_.next();
-                    m_CEBufferSize_ = 0;
-                    while (ce != NULLORDER) {
-                        if (m_CEBufferSize_ == m_CEBuffer_.length) {
-                            try {
-                                // increasing cebuffer size
-                                int tempbuffer[] = new int[m_CEBuffer_.length + 50];
-                                System.arraycopy(m_CEBuffer_, 0, tempbuffer, 0,
-                                                 m_CEBuffer_.length);
-                                m_CEBuffer_ = tempbuffer;
-                            }
-                            catch (Exception e) {
-                                e.printStackTrace();
-                                return NULLORDER;
-                            }
-                        }
-                        m_CEBuffer_[m_CEBufferSize_ ++] = ce;
-                        ce = m_utilColEIter_.next();
-                    }
-                    m_CEBufferOffset_ = 1;
-                    // return the first of CEs so that we save a call
-                    return m_CEBuffer_[0];
-                    */
                 }
                 m_bufferOffset_ = 0;
-                return IGNORABLE;
+                return next(); // IGNORABLE;
             } else {
                 return collator.m_expansion_[getExpansionOffset(collator, ce)];
             }
@@ -1874,6 +1815,7 @@ public final class CollationElementIterator
     {
         backupInternalState(m_utilSpecialBackUp_);
         int entryce = CE_NOT_FOUND_;
+        boolean wasIgnorable = false;
         while (true) {
             int entryoffset = getContractionOffset(collator, ce);
             int offset = entryoffset;
@@ -1884,6 +1826,11 @@ public final class CollationElementIterator
                     // back up the source over all the chars we scanned going
                     // into this contraction.
                     ce = entryce;
+                    updateInternalState(m_utilSpecialBackUp_);
+                }
+                else if (wasIgnorable) {
+                    // move back to last non-ignorable position
+                    // this is to synch with the reverse direction
                     updateInternalState(m_utilSpecialBackUp_);
                 }
                 break;
@@ -1899,18 +1846,20 @@ public final class CollationElementIterator
                 // contraction characters are ordered, skip all smaller
                 offset ++;
             }
-
+            
             if (ch == collator.m_contractionIndex_[offset]) {
                 // Found the source string char in the contraction table.
                 //  Pick up the corresponding CE from the table.
                 ce = collator.m_contractionCE_[offset];
+                wasIgnorable = false;
             }
             else {
                 // if there is a completely ignorable code point in the middle
                 // of contraction, we need to act as if it's not there
-                int isZeroCE = collator.m_trie_.getLeadValue(ch);
+                int nextCE = collator.m_trie_.getLeadValue(ch);
                 // it's easy for BMP code points
-                if (isZeroCE == 0) {
+                if (nextCE == 0) {
+                    wasIgnorable = true;
                     continue;
                 }
                 else if (UTF16.isLeadSurrogate(ch)) {
@@ -1919,10 +1868,10 @@ public final class CollationElementIterator
                         char trail = (char)nextChar();
                         if (UTF16.isTrailSurrogate(trail)) {
                             // do stuff with trail
-                            if (RuleBasedCollator.getTag(isZeroCE)
+                            if (RuleBasedCollator.getTag(nextCE)
                                 == RuleBasedCollator.CE_SURROGATE_TAG_) {
                                 int finalCE = collator.m_trie_.getTrailValue(
-                                                           isZeroCE, trail);
+                                                           nextCE, trail);
                                 if (finalCE == 0) {
                                     continue;
                                 }
@@ -1943,7 +1892,7 @@ public final class CollationElementIterator
                         // because of us
                         continue;
                     }
-               }
+               }    
 
                 // Source string char was not in contraction table.
                 // Unless it is a discontiguous contraction, we are done
@@ -1983,6 +1932,11 @@ public final class CollationElementIterator
 
             // source was a contraction
             if (!isContractionTag(ce)) {
+                if (wasIgnorable) {
+                    // move back to last non-ignorable position
+                    // this is to synch with the reverse direction
+                    updateInternalState(m_utilSpecialBackUp_);
+                }
                 break;
             }
 
@@ -2056,9 +2010,10 @@ public final class CollationElementIterator
         else {
             // ce are terminated
             m_CEBufferSize_ = 1;
+            offset ++;
             while (collator.m_expansion_[offset] != 0) {
                 m_CEBuffer_[m_CEBufferSize_ ++] =
-                    collator.m_expansion_[++ offset];
+                    collator.m_expansion_[offset ++];
             }
         }
         // in case of one element expansion, we 
@@ -2509,7 +2464,7 @@ public final class CollationElementIterator
         else {
             m_buffer_.insert(0, (char)prevch);
         }
-        return IGNORABLE;
+        return previous(); // IGNORABLE;
     }
 
     /**

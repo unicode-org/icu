@@ -454,11 +454,8 @@ public class CollationIteratorTest extends TestFmwk {
         CollationElementIterator iter;
         char codepoint;
         StringBuffer source = new StringBuffer();
-        for (codepoint = 0xe40; codepoint < 0xe42; codepoint ++) {
-            if (UCharacter.isDefined(codepoint)) {
-                source.append(codepoint);
-            }
-        }
+        source.append("\u0e4d\u0e4e\u0e4f");
+        // source.append("\u04e8\u04e9");
         iter = en_us.getCollationElementIterator(source.toString());
         // A basic test to see if it's working at all 
         CollationTest.backAndForth(this, iter);
@@ -478,6 +475,17 @@ public class CollationIteratorTest extends TestFmwk {
             if (codepoint != 0xFFFF) {
                 codepoint ++;
             }
+            /*if (codepoint >= 0x04fc) {
+                System.out.println("codepoint " + Integer.toHexString(codepoint));
+                String str = source.substring(230, 232);
+                System.out.println(com.ibm.icu.impl.Utility.escape(str));
+                System.out.println("codepoint " + Integer.toHexString(codepoint) 
+                                   + "length " + str.length());
+                iter = en_us.getCollationElementIterator(str);
+                CollationTest.backAndForth(this, iter);
+            }
+            */
+            System.out.println("codepoint " + Integer.toHexString(codepoint));
             iter = en_us.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all 
             CollationTest.backAndForth(this, iter);
@@ -499,15 +507,10 @@ public class CollationIteratorTest extends TestFmwk {
             errln("Error creating Thai collator");
         }
         StringBuffer source = new StringBuffer();
-        for (char codepoint = 0xf71; codepoint < 0xf76; codepoint ++) {
-            if (UCharacter.isDefined(codepoint)) {
-                source.append(codepoint);
-            }
-        }
-        CollationElementIterator temp 
+        source.append('\uFDFA');
+        CollationElementIterator iter 
                         = th_th.getCollationElementIterator(source.toString());
-        // A basic test to see if it's working at all 
-        CollationTest.backAndForth(this, temp);
+        CollationTest.backAndForth(this, iter);
         for (char codepoint = 0x1; codepoint < 0xfffe;) {
             source.delete(0, source.length());
             while (codepoint % 0xFF != 0) {
@@ -524,8 +527,17 @@ public class CollationIteratorTest extends TestFmwk {
             if (codepoint != 0xFFFF) {
                 codepoint ++;
             }
-            CollationElementIterator iter 
-                        = th_th.getCollationElementIterator(source.toString());
+            
+            /*if (((int)codepoint) >= 0xfe00) {
+                String str = source.substring(185, 190);
+                System.out.println(com.ibm.icu.impl.Utility.escape(str));
+                System.out.println("codepoint " 
+                                   + Integer.toHexString(codepoint) 
+                                   + "length " + str.length());
+                iter = th_th.getCollationElementIterator(str);
+                CollationTest.backAndForth(this, iter);
+            */
+            iter = th_th.getCollationElementIterator(source.toString());
             // A basic test to see if it's working at all 
             CollationTest.backAndForth(this, iter);
         }
