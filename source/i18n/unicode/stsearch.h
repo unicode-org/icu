@@ -283,7 +283,9 @@ public:
      * This method takes the argument index and sets the position in the text 
      * string accordingly without checking if the index is pointing to a 
      * valid starting point to begin searching. 
-     * @param position within the text to be set
+     * @param position within the text to be set. If position is less
+     * 			than or greater than the text range for searching, 
+     *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param status for errors if it occurs
      * @draft ICU 2.0
      */
