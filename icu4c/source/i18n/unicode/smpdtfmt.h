@@ -762,27 +762,6 @@ private:
      */
     void         parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& status);
 
-    /**
-     * Returns the beginning date of the 100-year window that dates with 2-digit years
-     * are considered to fall within.
-     * @return    the beginning date of the 100-year window that dates with 2-digit years
-     *            are considered to fall within.
-     */
-    UDate         internalGetDefaultCenturyStart(void) const;
-
-    /**
-     * Returns the first year of the 100-year window that dates with 2-digit years
-     * are considered to fall within.
-     * @return    the first year of the 100-year window that dates with 2-digit years
-     *            are considered to fall within.
-     */
-    int32_t          internalGetDefaultCenturyStartYear(void) const;
-
-    /**
-     * Initializes the 100-year window that dates with 2-digit years are considered
-     * to fall within so that its start date is 80 years before the current time.
-     */
-    static void  initializeSystemDefaultCentury(void);
 
     /**
      * Last-resort string to use for "GMT" when constructing time zone strings.
@@ -833,24 +812,8 @@ private:
      * See documentation for defaultCenturyStart.
      */
     /*transient*/ int32_t   fDefaultCenturyStartYear;
-
-    /**
-     * The system maintains a static default century start date.  This is initialized
-     * the first time it is used.  Before then, it is set to SYSTEM_DEFAULT_CENTURY to
-     * indicate an uninitialized state.  Once the system default century date and year
-     * are set, they do not change.
-     */
-    static UDate         fgSystemDefaultCenturyStart;
-
-    /**
-     * See documentation for systemDefaultCenturyStart.
-     */
-    static int32_t          fgSystemDefaultCenturyStartYear;
-
-    /**
-     * Default value that indicates the defaultCenturyStartYear is unitialized
-     */
-    static const int32_t    fgSystemDefaultCenturyYear;
+    
+    UBool fHaveDefaultCentury;
 
 public:
     /**
