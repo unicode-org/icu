@@ -318,6 +318,31 @@ ucol_openVersion(const char *loc,
   return collator;
 }
 
+int32_t ucol_getState(const UCollator *coll, UColStateEnum contents, 
+                      uint8_t *buffer, const int32_t buflen, 
+                      UErrorCode *status) {
+  if(U_FAILURE(*status) || coll == NULL) {
+    return -1;
+  }
+  *status = U_UNSUPPORTED_ERROR;
+  return 0;
+}
+
+void ucol_checkState (const uint8_t *state, UErrorCode *status) {
+  if(U_FAILURE(*status) || state == NULL) {
+    return;
+  }
+  *status = U_UNSUPPORTED_ERROR;
+}
+
+UCollator *ucol_openState(const uint8_t *state, UErrorCode *status) {
+  if(U_FAILURE(*status) || state == NULL) {
+    return NULL;
+  }
+  *status = U_UNSUPPORTED_ERROR;
+  return NULL;
+}
+
 U_CAPI void
 ucol_close(UCollator *coll)
 {
