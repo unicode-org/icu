@@ -53,7 +53,7 @@ int main(int argc, char **argv);
 #define GENRB_VERSION "2.0"
 
 
-static enum {
+enum {
     HELP1,
     HELP2,
     VERBOSE,
@@ -63,7 +63,7 @@ static enum {
     ENCODING
 };
 
-static UOption options[]={
+UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_VERBOSE,
@@ -91,7 +91,7 @@ main(int argc,
   const char *encoding = ""; 
   UBool verbose;
 
-  argc = u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+  argc = u_parseArgs(argc, (const char**)argv, sizeof(options)/sizeof(options[0]), options);
 
   /* error handling, printing usage message */
   if(argc<0) {
