@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CalendarCalc.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:48 $
+ * $RCSfile: CalendarCalc.java,v $ $Revision: 1.2 $ $Date: 2000/02/25 23:57:09 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -530,7 +530,7 @@ class CalendarCalcFrame extends Frame
         new CalendarRec("Islamic (true)",   makeIslamic(false)),
         new CalendarRec("Buddhist",         new BuddhistCalendar()),
         new CalendarRec("Japanese",         new JapaneseCalendar()),
-        new CalendarRec("Chinese",          new ChineseCalendar()),
+//        new CalendarRec("Chinese",          new ChineseCalendar()),
     };
 
     static private final Calendar makeIslamic(boolean civil) {

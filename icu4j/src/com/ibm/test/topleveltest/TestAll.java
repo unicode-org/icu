@@ -15,63 +15,55 @@ public class TestAll extends TestFmwk {
     }
 
     public void TestBigNumberFormat() throws Exception{
-        com.ibm.test.bnf.BigNumberFormatTest.main(getArgs());
+        run(new com.ibm.test.bnf.BigNumberFormatTest());
     }
     
     public void TestCompression1() throws Exception{
-        com.ibm.test.compression.Test.main(getArgs());
+        run(new com.ibm.test.compression.DecompressionTest());
     }
     
     public void TestCompression2() throws Exception{
-        com.ibm.test.compression.Main.main(getArgs());
+        run(new com.ibm.test.compression.ExhaustiveTest());
     }
 
 	public void TestNormalizer1() throws Exception{
-		com.ibm.test.normalizer.BasicTest.main(getArgs());
+		run(new com.ibm.test.normalizer.BasicTest());
 	}
 
 	public void TestNormalizer2() throws Exception {
-		com.ibm.test.normalizer.ExhaustiveTest.main(getArgs());
+		run(new com.ibm.test.normalizer.ExhaustiveTest());
 	}
 
 	public void TestNormalizer3() throws Exception {
-		com.ibm.test.normalizer.FooTest.main(getArgs());
+		run(new com.ibm.test.normalizer.FooTest());
 	}
 
 	public void TestRuleBasedNumberFormat1() throws Exception {
-		com.ibm.test.rbnf.RbnfTest.main(getArgs());
+		run(new com.ibm.test.rbnf.RbnfTest());
 	}
 
 	public void TestRulebasedNumberFormat2() throws Exception {
-		com.ibm.test.rbnf.RbnfRoundTripTest.main(getArgs());
+		run(new com.ibm.test.rbnf.RbnfRoundTripTest());
 	}
 
 	public void TestRuleBasedBreakIteartor1() throws Exception {
-		com.ibm.test.RuleBasedBreakIterator.SimpleBITest.main(getArgs());
+		run(new com.ibm.test.RuleBasedBreakIterator.SimpleBITest());
 	}
 
 	public void TestRuleBasedBreakIteartor2() throws Exception {
-		com.ibm.test.RuleBasedBreakIterator.BreakIteratorTest.main(getArgs());
+		run(new com.ibm.test.RuleBasedBreakIterator.BreakIteratorTest());
 	}
 
 	public void TestTranslit1() throws Exception {
-		com.ibm.test.translit.UnicodeSetTest.main(getArgs());
+		run(new com.ibm.test.translit.UnicodeSetTest());
 	}
 
 	public void TestTranslit2() throws Exception {
-		com.ibm.test.translit.TransliteratorTest.main(getArgs());
+		run(new com.ibm.test.translit.TransliteratorTest());
 	}
-    
-    private String[] getArgs() {
-        int size =
-            ((verbose) ? 1 : 0)
-            + ((prompt) ? 1 : 0)
-            + ((nothrow) ? 1 : 0);
-        String [] result = new String[size];
-        if (verbose) result[--size] = "-verbose";
-        if (prompt) result[--size] = "-prompt";
-        if (nothrow) result[--size] = "-nothrow";
-        return result;
-    }
-
+	
+	private void run(TestFmwk test) {
+		test.setParent(this);
+		test.run(new String[0]);
+	}
 }
