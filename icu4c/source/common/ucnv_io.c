@@ -87,7 +87,7 @@ static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
-    return
+    return (UBool)(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -95,7 +95,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x76 &&
         pInfo->dataFormat[2]==0x41 &&
         pInfo->dataFormat[3]==0x6c &&
-        pInfo->formatVersion[0]>1;
+        pInfo->formatVersion[0]>1);
 }
 
 static UBool
@@ -126,7 +126,7 @@ haveAliasData(UErrorCode *pErrorCode) {
             data=NULL;
             aliasTable=table;
             table=NULL;
-	    converterTable = aliasTable + 1 + 2 * *aliasTable;
+            converterTable = aliasTable + 1 + 2 * *aliasTable;
 
             if (info.formatVersion[0] > 2) {
                 tagTable = converterTable + 1 + 2 * *converterTable;
@@ -157,24 +157,24 @@ isAlias(const char *alias, UErrorCode *pErrorCode) {
 
 static int16_t getTagNumber(const char *tagname) {
     if (tagTable) {
-	int16_t tag, count = (int16_t) *tagTable;
-	const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
+        int16_t tag, count = (int16_t) *tagTable;
+        const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
 
-	char name[100];
-	int i;
+        char name[100];
+        int i;
 
-	/* convert the tag name to lowercase to do case-insensitive comparisons */
-	for(i = 0; i < sizeof(name) - 1 && *tagname; ++i) {
-	    name[i] = uprv_tolower(*tagname++);
-	}
-	name[i] = 0;
+        /* convert the tag name to lowercase to do case-insensitive comparisons */
+        for(i = 0; i < sizeof(name) - 1 && *tagname; ++i) {
+            name[i] = (char)uprv_tolower(*tagname++);
+        }
+        name[i] = 0;
 
-	for (tag = 0; count--; ++tag) {
-	    if (!charsetNameCmp(name, tags)) {
-		return tag;
-	    }
-	    tags += strlen(tags);
-	}
+        for (tag = 0; count--; ++tag) {
+            if (!charsetNameCmp(name, tags)) {
+                return tag;
+            }
+            tags += strlen(tags);
+        }
     }
 
     return -1;
@@ -243,14 +243,14 @@ findAlias(const char *alias) {
 
     /* convert the alias name to lowercase to do case-insensitive comparisons */
     for(i=0; i<sizeof(name)-1 && *alias!=0; ++i) {
-        name[i]=uprv_tolower(*alias++);
+        name[i]=(char)uprv_tolower(*alias++);
     }
     name[i]=0;
 
     /* do a binary search for the alias */
     start=0;
     while(start<limit-1) {
-        i=(start+limit)/2;
+        i=(uint16_t)((start+limit)/2);
         if(charsetNameCmp(name, (const char *)aliasTable+p[i])<0) {
             limit=i;
         } else {
@@ -318,12 +318,12 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
 U_CFUNC uint16_t
 ucnv_io_countStandards(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
-	if (!tagTable) {
-	    *pErrorCode = U_INVALID_FORMAT_ERROR;
-	    return 0;
-	}
+        if (!tagTable) {
+            *pErrorCode = U_INVALID_FORMAT_ERROR;
+            return 0;
+        }
 
-	return *tagTable;
+        return *tagTable;
     }
 
     return 0;
@@ -332,14 +332,14 @@ ucnv_io_countStandards(UErrorCode *pErrorCode) {
 U_CFUNC const char *
 ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && tagTable) {
-	const char *p = (const char *) tagTable + 1 + *tagTable * *converterTable;
-	int16_t count = (int16_t) *tagTable;
+        const char *p = (const char *) tagTable + 1 + *tagTable * *converterTable;
+        int16_t count = (int16_t) *tagTable;
 
-	while (n-- && count--) {
-	    p += strlen(p);
-	}
+        while (n-- && count--) {
+            p += strlen(p);
+        }
 
-	return count >= 0 ? p : NULL;
+        return count >= 0 ? p : NULL;
     }
 
     return NULL;
@@ -347,17 +347,17 @@ ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode) {
 
 U_CFUNC const char *
 ucnv_io_getStandardName(const char *alias, const char *standard, UErrorCode *pErrorCode) {
-   if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
+    if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         const uint16_t *p = findAlias(alias);
         if(p != NULL) {
-	    int16_t tag = getTagNumber(standard);
+            int16_t tag = getTagNumber(standard);
 
-	    if (tag > -1) {
-		uint16_t offset = tagTable[1 + tag * *converterTable + (p - converterTable) / 2];
-		return offset ? (const char *) aliasTable + offset : NULL;
-	    }
-	}
-   }
+            if (tag > -1) {
+                uint16_t offset = tagTable[1 + tag * *converterTable + (p - converterTable) / 2];
+                return offset ? (const char *) aliasTable + offset : NULL;
+            }
+        }
+    }
 
    return NULL;
 }
