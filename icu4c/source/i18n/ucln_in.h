@@ -28,4 +28,6 @@ U_CFUNC UBool ucol_bld_cleanup(void);
 
 U_CFUNC UBool timeZone_cleanup(void);
 
+U_CFUNC UBool transliterator_cleanup(void);
+
 #endif
