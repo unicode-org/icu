@@ -134,7 +134,7 @@ const char UnicodeSet::fgClassID = 0;
 static int32_t _dbgCount = 0;
 #endif
 
-static inline _dbgct(UnicodeSet* set) {
+static inline void _dbgct(UnicodeSet* set) {
 #ifdef DEBUG_MEM
     UnicodeString str;
     set->toPattern(str, TRUE);
@@ -144,7 +144,7 @@ static inline _dbgct(UnicodeSet* set) {
 #endif
 }
 
-static inline _dbgdt(UnicodeSet* set) {
+static inline void _dbgdt(UnicodeSet* set) {
 #ifdef DEBUG_MEM
     UnicodeString str;
     set->toPattern(str, TRUE);
