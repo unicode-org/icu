@@ -515,7 +515,6 @@ inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 }
 
 inline UBool ucol_contractionEndCP(UChar c, const UCollator *coll) {
-    return true;
     if (c < coll->minContrEndCP) {
         return FALSE;
     }
@@ -2030,7 +2029,6 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
                 ((source->origFlags & UCOL_ITER_HASLEN) == 0 && 
                 *source->fcdPosition == 0)))) {
             /* fcd does not point to a valid character*/     
-          {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); 
             // So we'll pick whatever we have at the point...
             if (CE == UCOL_NOT_FOUND) {
@@ -2040,7 +2038,6 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
               }
               loadState(source, &state, TRUE);
             }
-          }
           break;
         }
 
@@ -2052,18 +2049,20 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         }
         if (schar != tchar) { 
             UChar tempchar = 0;
-            if (source->pos != source->endp && 
+            if (u_getCombiningClass(schar) != 0 &&
+                source->pos != source->endp && 
                 (*source->pos != 0 || 
                     ((source->flags & UCOL_ITER_INNORMBUF) &&
                     source->fcdPosition != NULL &&
                     source->fcdPosition != source->endp &&
                     *source->fcdPosition != 0))) {
+                /* find the next character if schar is not a base character
+                and we are not yet at the end of the string */
                 tempchar = getNextNormalizedChar(source);
                 source->pos --;
             }
-            if (tempchar == 0 || u_getCombiningClass(schar) == 0 || 
-                u_getCombiningClass(tempchar) == 0) {
-                source->pos--; 
+            if (tempchar == 0 || u_getCombiningClass(tempchar) == 0) {
+                source->pos --; 
                 /* Spit out the last char of the string, wasn't tasty enough */
                 CE = *(coll->contractionCEs + 
                      (ContractionStart - coll->contractionIndex));
@@ -2412,8 +2411,8 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
             *(source->pos - 1) == 0 && source->fcdPosition == NULL) || 
             !ucol_contractionEndCP(schar, coll)) {
             /* start of string or this is not the end of any contraction */
-            return *(coll->contractionCEs + 
-                                        (constart - coll->contractionIndex));
+            CE = *(coll->contractionCEs + (constart - coll->contractionIndex));
+            break;
         }
         UChar buffer[UCOL_MAX_BUFFER];
         UCharOffset = buffer + (UCOL_MAX_BUFFER - 1);
