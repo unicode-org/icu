@@ -72,6 +72,8 @@ private:
         DATE,
         DATE_TIME
     };
+public:
+    virtual ~IntlTestDateFormat() {}
 };
 
 #endif

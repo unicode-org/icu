@@ -57,47 +57,51 @@ private:
 
 public:
 
-/*
- * Return a random double
- **/
-static double randDouble()
-{
-    // Assume 8-bit (or larger) rand values.  Also assume
-    // that the system rand() function is very poor, which it always is.
-    double d;
-    uint32_t i;
-    char* poke = (char*)&d;
-    for (i=0; i < sizeof(double); ++i)
-    {
-        poke[i] = (char)(rand() & 0xFF);
-    }
-    return d;
-}
+    virtual ~IntlTestNumberFormat() {}
 
-/*
- * Return a random uint32_t
- **/
-static uint32_t randLong()
-{
-    // Assume 8-bit (or larger) rand values.  Also assume
-    // that the system rand() function is very poor, which it always is.
-    uint32_t d;
-    uint32_t i;
-    char* poke = (char*)&d;
-    for (i=0; i < sizeof(uint32_t); ++i)
+    /*
+     * Return a random double
+     **/
+    static double randDouble()
     {
-        poke[i] = (char)(rand() & 0xFF);
+        // Assume 8-bit (or larger) rand values.  Also assume
+        // that the system rand() function is very poor, which it always is.
+        // Call srand(currentTime) in intltest to make it truly random.
+        double d;
+        uint32_t i;
+        char* poke = (char*)&d;
+        for (i=0; i < sizeof(double); ++i)
+        {
+            poke[i] = (char)(rand() & 0xFF);
+        }
+        return d;
     }
-    return d;
-}
 
-/**
- * Return a random double 0 <= x < 1.0
- **/
-static double randFraction()
-{
-    return (double)randLong() / (double)0xFFFFFFFF;
-}
+    /*
+     * Return a random uint32_t
+     **/
+    static uint32_t randLong()
+    {
+        // Assume 8-bit (or larger) rand values.  Also assume
+        // that the system rand() function is very poor, which it always is.
+        // Call srand(currentTime) in intltest to make it truly random.
+        uint32_t d;
+        uint32_t i;
+        char* poke = (char*)&d;
+        for (i=0; i < sizeof(uint32_t); ++i)
+        {
+            poke[i] = (char)(rand() & 0xFF);
+        }
+        return d;
+    }
+
+    /**
+     * Return a random double 0 <= x < 1.0
+     **/
+    static double randFraction()
+    {
+        return (double)randLong() / (double)0xFFFFFFFF;
+    }
 
 };
 
