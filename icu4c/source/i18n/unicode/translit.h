@@ -1197,7 +1197,7 @@ public:
      * different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
+    virtual UClassID getDynamicClassID(void) const = 0;
 
 private:
 
