@@ -632,7 +632,7 @@ import java.util.Set;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.32 $ $Date: 2002/10/04 19:41:03 $
+ * @version      $Revision: 1.33 $ $Date: 2002/10/04 19:49:10 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -1546,21 +1546,25 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Registers a default CalendarFactory for the provided locale.
-     * If covers is true, this factory is also used for all locales
-     * that are more specific than the provided locale. The returned
-     * object is a key that can be used to unregister this
-     * CalendarFactory.  If the factory has not already been
-     * registered with registerFactory, it will be.  
+     * Convenience override of register(CalendarFactory, Locale, boolean);
      */
-    public static Object register(CalendarFactory factory, Locale locale, boolean covers) {
+    public static Object register(CalendarFactory factory, Locale locale) {
+        return register(factory, locale, true);
+    }
+
+    /**
+     * Registers a default CalendarFactory for the provided locale.
+     * If the factory has not already been registered with
+     * registerFactory, it will be.  
+     */
+    public static Object register(CalendarFactory factory, Locale locale, boolean visible) {
         if (factory == null) {
             throw new IllegalArgumentException("calendar must not be null");
         }
         registerFactory(factory);
-        return getService().registerObject(factory, locale, covers 
-                                           ? LocaleKeyFactory.VISIBLE_COVERS 
-                                           : LocaleKeyFactory.VISIBLE);
+        return getService().registerObject(factory, locale, visible
+                                           ? LocaleKeyFactory.VISIBLE
+                                           : LocaleKeyFactory.INVISIBLE);
     }
 
     /**
