@@ -42,23 +42,23 @@
 #define U_COPYRIGHT_STRING_LENGTH  128
 
 /** The current ICU major version as an integer. */
-#define U_ICU_VERSION_MAJOR_NUM 1
+#define U_ICU_VERSION_MAJOR_NUM 2
 
 /** The current ICU minor version as an integer. */
-#define U_ICU_VERSION_MINOR_NUM 9
+#define U_ICU_VERSION_MINOR_NUM 0
 
 /** The current ICU patchlevel version as an integer. */
 #define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
 /** Glued version suffix for renamers */
-#define U_ICU_VERSION_SUFFIX _1_9
+#define U_ICU_VERSION_SUFFIX _2_0
 
 /** The current ICU library version as a dotted-decimal string. The patchlevel
     only appears in this string if it non-zero. */
-#define U_ICU_VERSION "1.9"
+#define U_ICU_VERSION "2.0"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. */
-#define U_ICU_VERSION_SHORT "19"
+#define U_ICU_VERSION_SHORT "20"
 
 /** An ICU version consists of up to 4 numbers from 0..255. */
 #define U_MAX_VERSION_LENGTH 4
@@ -73,7 +73,7 @@
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 #if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
-#define U_ICU_NAMESPACE icu_1_9
+#define U_ICU_NAMESPACE icu_2_0
 namespace U_ICU_NAMESPACE { }
 namespace icu = U_ICU_NAMESPACE;
 U_NAMESPACE_USE

@@ -755,7 +755,7 @@ unum_setSymbol(UNumberFormat *fmt,
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
 
-#if ((U_ICU_VERSION_MAJOR_NUM != 1) || (U_ICU_VERSION_MINOR_NUM !=9))
+#if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM !=0))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
 #else 
     static UNumberFormat* 
@@ -764,8 +764,8 @@ unum_setSymbol(UNumberFormat *fmt,
         return unum_open(0,pattern,patternLength,locale,NULL,status);
     }
 
-#   define unum_open_1_9(style,locale,status) unum_open(style, NULL, 0, locale, NULL, status)
-#   define unum_applyPattern_1_9(format,localized,pattern,patternLength) unum_applyPattern(format,localized,pattern,patternLength,NULL,NULL)
+#   define unum_open_2_0(style,locale,status) unum_open(style, NULL, 0, locale, NULL, status)
+#   define unum_applyPattern_2_0(format,localized,pattern,patternLength) unum_applyPattern(format,localized,pattern,patternLength,NULL,NULL)
 #endif
 
 #endif
