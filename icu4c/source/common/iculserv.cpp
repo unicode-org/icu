@@ -875,17 +875,6 @@ public:
         return cl;
     }
 
-    virtual int32_t count(UErrorCode& status) const {
-        return upToDate(status) ? _ids.size() : 0;
-    }
-
-    const UnicodeString* snext(UErrorCode& status) {
-        if (upToDate(status) && (_pos < _ids.size())) {
-            return (const UnicodeString*)_ids[_pos++];
-        }
-        return NULL;
-    }
-
     UBool upToDate(UErrorCode& status) const {
         if (U_SUCCESS(status)) {
             if (_timestamp == _service->getTimestamp()) {
@@ -896,7 +885,18 @@ public:
         return FALSE;
     }
 
-    void reset(UErrorCode& status) {
+    virtual int32_t count(UErrorCode& status) const {
+        return upToDate(status) ? _ids.size() : 0;
+    }
+
+    virtual const UnicodeString* snext(UErrorCode& status) {
+        if (upToDate(status) && (_pos < _ids.size())) {
+            return (const UnicodeString*)_ids[_pos++];
+        }
+        return NULL;
+    }
+
+    virtual void reset(UErrorCode& status) {
         if (status == U_ENUM_OUT_OF_SYNC_ERROR) {
             status = U_ZERO_ERROR;
         }
