@@ -344,7 +344,7 @@ typedef struct {
 
         pData->map=length;
         pData->pHeader=(const DataHeader *)data;
-		pData->mapAddr = data;
+        pData->mapAddr = data;
         return TRUE;
     }
 
@@ -358,7 +358,7 @@ typedef struct {
             }
             pData->pHeader=NULL;
             pData->map=0;
-			pData->mapAddr=NULL;
+            pData->mapAddr=NULL;
         }
     }
 
@@ -400,7 +400,7 @@ typedef struct {
         T_FileStream_close(file);
         pData->map=p;
         pData->pHeader=(const DataHeader *)p;
-		pData->mapAddr=p;
+        pData->mapAddr=p;
         return TRUE;
     }
 
@@ -409,8 +409,8 @@ typedef struct {
         if(pData!=NULL && pData->map!=NULL) {
             uprv_free(pData->map);
             pData->map     = NULL;
-			pData->mapAddr = NULL;
-			pData->pHeader = NULL;
+            pData->mapAddr = NULL;
+            pData->pHeader = NULL;
         }
     }
 
@@ -1132,7 +1132,9 @@ checkDataItem
         if (U_FAILURE(*fatalErr)) {
             return NULL;
         }
+/*      // rDataMem is already initialized
         UDataMemory_init(rDataMem);
+*/
         rDataMem->pHeader = pHeader;
     } else {
         /* the data is not acceptable, look further */
