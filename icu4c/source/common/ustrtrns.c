@@ -404,7 +404,7 @@ _strToWCS(wchar_t *dest,
             *pErrorCode=U_ZERO_ERROR;
             tempBuf = saveBuf;
             /* we dont have enough room on the stack grow the buffer */
-            u_growAnyBufferFromStatic(stackBuffer, &tempBuf, &tempBufCapacity, 
+            u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
                     (tempBufCapacity+_STACK_BUFFER_CAPACITY), count,sizeof(char));
            
            saveBuf = tempBuf;
@@ -497,7 +497,6 @@ u_strToWCS(wchar_t *dest,
            int32_t srcLength,
            UErrorCode *pErrorCode){
     
-    const UChar *pSrcLimit =NULL;
     const UChar *pSrc = src;
 
     /* args check */
@@ -559,7 +558,6 @@ _strFromWCS( UChar   *dest,
     UChar* pTargetLimit = NULL;
     
     UChar uStack [_STACK_BUFFER_CAPACITY];
-    int32_t uStackCap = _STACK_BUFFER_CAPACITY ;
 
     wchar_t wStack[_STACK_BUFFER_CAPACITY];
     wchar_t* pWStack = wStack;
@@ -588,7 +586,7 @@ _strFromWCS( UChar   *dest,
                 goto cleanup;
             }else if(retVal == cStackCap){
                 /* Should rarely occur */
-                u_growAnyBufferFromStatic(cStack,&pCSrc,&cStackCap,
+                u_growAnyBufferFromStatic(cStack,(void**)&pCSrc,&cStackCap,
                     cStackCap*2,0,sizeof(char));
                 pCSave = pCSrc;
             }else{
@@ -622,7 +620,7 @@ _strFromWCS( UChar   *dest,
                     int32_t len = (pCSrc-pCSave);
                     pCSrc = pCSave;
                     /* we do not have enough room so grow the buffer*/
-                    u_growAnyBufferFromStatic(cStack,&pCSrc,&cStackCap,
+                    u_growAnyBufferFromStatic(cStack,(void**)&pCSrc,&cStackCap,
                            2*cStackCap+(nulLen*MB_CUR_MAX),len,sizeof(char));
 
                     pCSave = pCSrc;
@@ -669,7 +667,7 @@ _strFromWCS( UChar   *dest,
                     int32_t len = (pCSrc-pCSave);
                     pCSrc = pCSave;
                     /* we do not have enough room so grow the buffer*/
-                    u_growAnyBufferFromStatic(cStack,&pCSrc,&cStackCap,
+                    u_growAnyBufferFromStatic(cStack,(void**)&pCSrc,&cStackCap,
                            cStackCap+(nulLen*MB_CUR_MAX),len,sizeof(char));
 
                     pCSave = pCSrc;
@@ -703,7 +701,7 @@ _strFromWCS( UChar   *dest,
     conv= u_getDefaultConverter(pErrorCode);
     
     /* convert and write to the target */
-    ucnv_toUnicode(conv,&pTarget,pTargetLimit,&pCSrc,pCSrcLimit,NULL,FALSE,pErrorCode);
+    ucnv_toUnicode(conv,&pTarget,pTargetLimit,(const char**)&pCSrc,pCSrcLimit,NULL,FALSE,pErrorCode);
     /* count the number converted */
     count=pTarget - dest;
 
@@ -715,7 +713,7 @@ _strFromWCS( UChar   *dest,
         pTargetLimit = uStack + _STACK_BUFFER_CAPACITY;
         
         /* convert to stack buffer*/
-        ucnv_toUnicode(conv,&pTarget,pTargetLimit,&pCSrc,pCSrcLimit,NULL,FALSE,pErrorCode);
+        ucnv_toUnicode(conv,&pTarget,pTargetLimit,(const char**)&pCSrc,pCSrcLimit,NULL,FALSE,pErrorCode);
         
         /* increment count to number written to stack */
         count+= pTarget - uStack;
