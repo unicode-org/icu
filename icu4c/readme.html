@@ -265,19 +265,6 @@
     versions of ICU will move the data into the proper locale resources, and
     the locale infrastructure will be improved.</p>
 
-    <h3><a name="News_Library_Names">Static Library Names and AIX
-    linking</a></h3>
-
-    <p>Previously static and shared library names had the same naming scheme,
-    except the file extension was different between the filenames. For example,
-    the shared common library was called libicuuc.so, and the static common
-    library was called libicuuc.a on many Unix type machines. It has come to
-    our attention, that Windows import library names and static library names
-    can have the same name, and when the -brtl linker option is removed the
-    static and shared libraries have the same filename extension, which is
-    ".a". The -brtl linker option on AIX has been removed at several people's
-    request.</p>
-
     <p>In order to differentiate between the two library names on all
     platforms, static libraries now use an "s" as a prefix to differentiate
     between the shared and static libraries. For example, "libicuuc.a" is now
@@ -2157,7 +2144,7 @@ del common/libicuuc.so
       <li>ctestfw, intltest and cintltst, if you want to run the test
       suite.</li>
 
-      <li>uconv, icuswap and ustdio can also be optionally built.</li>
+      <li>uconv, icuswap and icuio (ustdio) can also be optionally built.</li>
     </ol>
     <hr>
 
