@@ -952,7 +952,7 @@ void TimeZoneRegressionTest::TestJ449() {
     // Make sure we got valid zones
     if (zoneWith->getID(str) != UnicodeString(idWithLocaleData) ||
         zoneWithout->getID(str) != UnicodeString(idWithoutLocaleData)) {
-        errln("Fail: Unable to create zones");
+      errln(UnicodeString("Fail: Unable to create zones - wanted ") + idWithLocaleData + ", got " + zoneWith->getID(str) + ", and wanted " + idWithoutLocaleData + " but got " + zoneWithout->getID(str));
     } else {
         GregorianCalendar calWith(*zoneWith, status);
         GregorianCalendar calWithout(*zoneWithout, status);
