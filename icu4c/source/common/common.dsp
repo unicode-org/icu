@@ -1482,6 +1482,14 @@ SOURCE=.\udatamem.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\udataswp.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\udataswp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\umapfile.c
 # ADD CPP /Ze
 # End Source File
@@ -3315,14 +3323,6 @@ SOURCE=.\punycode.c
 # Begin Source File
 
 SOURCE=.\punycode.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\udataswp.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\udataswp.h
 # End Source File
 # Begin Source File
 
