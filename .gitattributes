@@ -88,6 +88,8 @@ icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
+icu4j/src/com/ibm/icu/text/unames.dat -text
+icu4j/src/com/ibm/icu/text/uprops.dat -text
 icu4j/src/com/ibm/text/resources/thai_dict -text
 icu4j/src/data/holidays_jp.ucs -text
 icu4j/src/data/thai6.ucs -text
