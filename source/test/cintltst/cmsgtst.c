@@ -142,6 +142,7 @@ static void MessageFormatTest( void )
             }
             if(U_FAILURE(status)){
                 log_err("ERROR: failure in message format on testcase %d:  %s\n", i, myErrorName(status) );
+                continue;
             }
             if(u_strcmp(result, testResultStrings[i])==0){
                 log_verbose("PASS: MessagFormat successful on testcase : %d\n", i);
@@ -169,9 +170,8 @@ static void MessageFormatTest( void )
             int32_t resultLength =0,count=0;
             int32_t one=0;
             int32_t two=0;
-            double three=0;
+            UDate d2=0;
     
-
             result=NULL;
             patternLength = u_strlen(testCasePatterns[i]);
             
@@ -199,14 +199,23 @@ static void MessageFormatTest( void )
                     log_err("FAIL: Error in MessageFormat on testcase : %d\n GOT %s EXPECTED %s\n", i, 
                         austrdup(result), austrdup(testResultStrings[i]) );
                 }
-                umsg_parse(formatter,result,resultLength,&count,&ec,one,two,three);
+
+ /* ###TODO: Fix this after ICU 2.1. */
+#if !defined(HPUX)
+
+                umsg_parse(formatter,result,resultLength,&count,&ec,one,two,d2);
                 if(ec!=U_ILLEGAL_ARGUMENT_ERROR){
                     log_err("FAIL: Did not get expected error for umsg_parse(). Expected: U_ILLEGAL_ARGUMENT_ERROR Got: %s \n",u_errorName(ec));
                 }else{
                     ec = U_ZERO_ERROR;
                 }
-            
-                umsg_parse(formatter,result,resultLength,&count,&ec,&one,&two,&three);
+
+#else
+#if !((U_ICU_VERSION_MAJOR_NUM == 2) && (U_ICU_VERSION_MINOR_NUM ==1))
+                log_err("FAIL: Fix umsg_parse on HP/UX\n");
+#endif
+#endif            
+                umsg_parse(formatter,result,resultLength,&count,&ec,&one,&two,&d2);
                 if(U_FAILURE(ec)){
                     log_err("umsg_parse could not parse the pattern. Error: %s.\n",u_errorName(ec));
                 }
