@@ -6,8 +6,6 @@
 #include "ucmp32.h"
 
 static UHashtable *uchars2tokens;
-static UColTokListHeader ListList[256];
-static uint32_t listPosition = 0;
 
 static const UChar *rulesToParse = 0;
 
@@ -87,32 +85,22 @@ UBool uhash_compareTokens(const void *key1, const void *key2) {
     }
 }
 
-/*
-void deleteElement(void *element) {
-    UCAElements *el = (UCAElements *)element;
-
-    int32_t i = 0;
-    for(i = 0; i < el->noOfCEs; i++) {
-        free(el->primary[i]);
-        free(el->secondary[i]);
-        free(el->tertiary[i]);
-    }
-    free(el);
+void deleteToken(void *token) {
+    UColToken *tok = (UColToken *)token;
+    uprv_free(tok);
 }
-*/
 
 void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
   }
   rulesToParse = src->source;
+  src->lh = (UColTokListHeader *)uprv_malloc(256*sizeof(UColTokListHeader));
+  src->resultLen = 0;
   uchars2tokens = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
-  /*uhash_setValueDeleter(uchars2tokens, deleteElement);*/
+  uhash_setValueDeleter(uchars2tokens, deleteToken);
 }
 
-void ucol_tok_closeTokenList(void) {
-    uhash_close(uchars2tokens);
-}
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
@@ -132,9 +120,13 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t expandNext = 0;
 
+  UColTokListHeader *ListList = NULL;
+
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
   ucol_tok_initTokenList(src, status);
+
+  ListList = src->lh;
 
   while(src->current < src->end) {
     { /* parsing part */
@@ -453,7 +445,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           sourceToken->strength = UCOL_TOK_RESET;
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
-          sourceToken->listHeader = &ListList[listPosition];
+          sourceToken->listHeader = &ListList[src->resultLen];
           /*
             3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
               First convert all expansions into normal form. Examples: 
@@ -476,22 +468,22 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           SecondCE = ucol_getNextCE(src->UCA, &s, status);
           /*UCOL_GETNEXTCE(SecondCE, src->UCA, s, &status);*/
     
-          ListList[listPosition].baseCE = CE;
+          ListList[src->resultLen].baseCE = CE;
           if(isContinuation(SecondCE)) {
-            ListList[listPosition].baseContCE = SecondCE;
+            ListList[src->resultLen].baseContCE = SecondCE;
           } else {
-            ListList[listPosition].baseContCE = 0;
+            ListList[src->resultLen].baseContCE = 0;
           }
 
 
-          ListList[listPosition].first[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
-          ListList[listPosition].last[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
-          ListList[listPosition].first[UCOL_TOK_POLARITY_POSITIVE] = NULL;
-          ListList[listPosition].last[UCOL_TOK_POLARITY_POSITIVE] = NULL;
+          ListList[src->resultLen].first[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
+          ListList[src->resultLen].last[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
+          ListList[src->resultLen].first[UCOL_TOK_POLARITY_POSITIVE] = NULL;
+          ListList[src->resultLen].last[UCOL_TOK_POLARITY_POSITIVE] = NULL;
 
-          ListList[listPosition].reset = sourceToken;
+          ListList[src->resultLen].reset = sourceToken;
 
-          listPosition++;
+          src->resultLen++;
           uhash_put(uchars2tokens, sourceToken, sourceToken, status);
         } else { /* reset to something already in rules */
         }
@@ -501,15 +493,16 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
     }  
   }
 
-  src->lh = ListList;
-  src->resultLen = listPosition;
-
-  return listPosition;
+  return src->resultLen;
 }
 
 uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   uint32_t res = ucol_uprv_tok_assembleTokenList(src, status);
-  ucol_tok_closeTokenList();
   return res;
 }
 
+void ucol_tok_closeTokenList(UColTokenParser *src) {
+  uhash_close(uchars2tokens);
+  uprv_free(src->lh);
+}
+  
