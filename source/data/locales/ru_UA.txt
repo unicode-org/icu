@@ -1,4 +1,4 @@
-﻿
+﻿ // -*- Coding: utf-8; -*-
 // *******************************************************************************
 // *
 // *   Copyright (C) 1997-2000, International Business Machines
@@ -8,9 +8,11 @@
 
 ru_UA {
 
+   Version { "x0.0" }
+
     CurrencyElements { 
             "гр",
-            "UAH ",
+            "UAH",
             ".",
     }
     DateTimePatterns { 

@@ -7,6 +7,8 @@
 // *******************************************************************************
 
 fo_FO {
+      Version { "x0.0" }
+
     /* Discarding duplicate data for tag: AmPmMarkers */
     CurrencyElements { 
             "kr",
