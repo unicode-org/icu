@@ -1166,7 +1166,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
               nextCE = UCOL_NEXT_TOP_VALUE;
               nextContCE = 0;
           } else {
-            result = ucol_inv_getNextCE(baseCE, baseContCE, &nextCE, &nextContCE, maxStrength);
+            result = ucol_inv_getNextCE(baseCE & 0xFFFFFF3F, baseContCE, &nextCE, &nextContCE, maxStrength);
           }
           if(result < 0) {
             if(isTailored(coll, *(rulesCopy+oldOffset), status)) {
