@@ -373,7 +373,7 @@ void UnicodeSetTest::TestAPI() {
     } else {
         errln((UnicodeString)"FAIL: c.complement() = " + c + ", expect " + exp);
     }
-    c = a; c.exclusiveOrAll(b);
+    c = a; c.complementAll(b);
     exp.set((UChar32)3,(UChar32)6);
     exp.add((UChar32)11,(UChar32) 15);
     if (c == exp) {
@@ -467,13 +467,13 @@ void UnicodeSetTest::_testXor(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y
     bitsToSet(a, x);
     bitsToSet(b, y);
     z = x;
-    z.exclusiveOrAll(y);
+    z.complementAll(y);
     int32_t c = setToBits(z);
     if (c != (a ^ b)) {
-        errln((UnicodeString)"FAILED: xor: " + x + " ^ " + y + " != " + z);
-        errln((UnicodeString)"FAILED: xor: " + a + " ^ " + b + " != " + c);
+        errln((UnicodeString)"FAILED: complement: " + x + " ^ " + y + " != " + z);
+        errln((UnicodeString)"FAILED: complement: " + a + " ^ " + b + " != " + c);
     }
-    checkCanonicalRep(z, (UnicodeString)"xor " + a + "," + b);
+    checkCanonicalRep(z, (UnicodeString)"complement " + a + "," + b);
 }
 
 /**

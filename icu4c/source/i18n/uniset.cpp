@@ -85,7 +85,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 
     list = new UChar32[capacity];
     list[0] = HIGH;
-    exclusiveOr(start, end);
+    complement(start, end);
 }
 
 /**
@@ -218,7 +218,7 @@ int32_t UnicodeSet::hashCode(void) const {
  */
 void UnicodeSet::set(UChar32 start, UChar32 end) {
     clear();
-    exclusiveOr(start, end);
+    complement(start, end);
 }
 
 /**
@@ -496,15 +496,15 @@ void UnicodeSet::remove(UChar32 c) {
  * @param end last character, inclusive, of range to be removed
  * from this set.
  */
-void UnicodeSet::exclusiveOr(UChar32 start, UChar32 end) {
+void UnicodeSet::complement(UChar32 start, UChar32 end) {
     if (start <= end) {
         UChar32 range[3] = { start, end+1, HIGH };
         exclusiveOr(range, 2, 0);
     }
 }
 
-void UnicodeSet::exclusiveOr(UChar32 c) {
-    exclusiveOr(c, c);
+void UnicodeSet::complement(UChar32 c) {
+    complement(c, c);
 }
 
 /**
@@ -576,7 +576,7 @@ void UnicodeSet::removeAll(const UnicodeSet& c) {
  * @param c set that defines which elements will be xor'ed from
  *          this set.
  */
-void UnicodeSet::exclusiveOrAll(const UnicodeSet& c) {
+void UnicodeSet::complementAll(const UnicodeSet& c) {
     exclusiveOr(c.list, c.len, 0);
 }
 
