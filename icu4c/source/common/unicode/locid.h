@@ -686,7 +686,7 @@ private:
 
     static const Locale &getLocale(int locid);
 
-    friend static void locale_set_default_internal(const char *);
+    friend void locale_set_default_internal(const char *);
 };
 
 inline UBool

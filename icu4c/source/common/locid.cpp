@@ -130,8 +130,8 @@ const Locale::LocaleProxy Locale::US       = {eUS};
 const Locale::LocaleProxy Locale::CANADA   = {eCANADA};
 const Locale::LocaleProxy Locale::CANADA_FRENCH={eCANADA_FRENCH};
 
-#define LOCALE_CACHE_SIZE (eMAX_LOCALES * sizeof(Locale))
-static uint8_t gByteLocaleCache[LOCALE_CACHE_SIZE];
+/* Use void * to make it properly aligned */
+static void *gByteLocaleCache[eMAX_LOCALES * sizeof(Locale) / sizeof(void*)];
 
 static Locale *gLocaleCache = NULL;
 
@@ -154,7 +154,7 @@ Locale::~Locale()
 
 Locale::Locale()
 {
-    *this = getLocale(eDEFAULT);
+    init(NULL);
 }
 
 Locale::Locale( const   char * newLanguage, 
@@ -279,18 +279,18 @@ Locale::Locale( const   char * newLanguage,
 Locale::Locale(const    Locale& other)
 
 {
-    int j;
     /*Copy the language and country fields*/
     uprv_strcpy(language, other.language);
     uprv_strcpy(country, other.country);
 
     /*make fullName point to the heap if necessary*/
-    if ((j=(int)uprv_strlen(other.fullName)) > ULOC_FULLNAME_CAPACITY)
+    if (other.fullName != other.fullNameBuffer)
     {
-        fullName = new char[j+1];
+        fullName = new char[uprv_strlen(other.fullName)+1];
     }
-    else
+    else {
         fullName = fullNameBuffer;
+    }
 
     uprv_strcpy(fullName, other.fullName);
 
@@ -416,7 +416,7 @@ Locale::getDefault()
 }
 
 
-static void locale_set_default_internal(const char *id)
+void locale_set_default_internal(const char *id)
 {
 #ifdef ICU_LOCID_USE_DEPRECATES
     Locale::fgDefaultLocale.init(id);
@@ -702,8 +702,10 @@ locale_cleanup(void)
         availableLocaleList = NULL;
     }
     availableLocaleListCount = 0;
-    gLocaleCache[eDEFAULT].~Locale();
-    gLocaleCache = NULL;
+    if (gLocaleCache) {
+        gLocaleCache[eDEFAULT].~Locale();
+        gLocaleCache = NULL;
+    }
     return TRUE;
 }
 
@@ -897,6 +899,7 @@ initialization and static destruction.
 void
 Locale::initLocaleCache(void)
 {
+    const char *defaultLocale = uprv_getDefaultLocaleID();
     Locale newLocales[] = {
         Locale("en"),
         Locale("fr"),
@@ -916,7 +919,7 @@ Locale::initLocaleCache(void)
         Locale("en", "US"),
         Locale("en", "CA"),
         Locale("fr", "CA"),
-        Locale(uprv_getDefaultLocaleID())    // This can use a mutex
+        Locale(defaultLocale)
     };
     Locale *localeCache = (Locale *)(gByteLocaleCache);
 
@@ -925,7 +928,7 @@ Locale::initLocaleCache(void)
         if (gLocaleCache != NULL) {
             return;
         }
-        uprv_memcpy(gByteLocaleCache, newLocales ,sizeof(newLocales));
+        uprv_memcpy(gByteLocaleCache, newLocales, sizeof(newLocales));
 
         for (int idx = 0; idx < eMAX_LOCALES; idx++)
         {
