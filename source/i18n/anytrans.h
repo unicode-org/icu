@@ -1,10 +1,10 @@
 /*
 *****************************************************************
-* Copyright (c) 2002, International Business Machines Corporation
+* Copyright (c) 2002-2003, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.h,v $ 
-* $Revision: 1.5 $
+* $Revision: 1.6 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
