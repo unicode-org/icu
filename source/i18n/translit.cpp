@@ -102,6 +102,18 @@ U_NAMESPACE_BEGIN
 const char Transliterator::fgClassID = 0; // Value is irrelevant
 
 /**
+ * Return TRUE if the given UTransPosition is valid for text of
+ * the given length.
+ */
+inline UBool positionIsValid(UTransPosition& index, int32_t len) {
+    return !(index.contextStart < 0 ||
+             index.start < index.contextStart ||
+             index.limit < index.start ||
+             index.contextLimit < index.limit ||
+             len < index.contextLimit);
+}
+
+/**
  * Default constructor.
  * @param theID the string identifier for this transliterator
  * @param theFilter the filter.  Any character for which
@@ -300,11 +312,7 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::finishTransliteration(Replaceable& text,
                                            UTransPosition& index) const {
-    if (index.contextStart < 0 ||
-        index.start < index.contextStart ||
-        index.limit < index.start ||
-        index.contextLimit < index.limit ||
-        text.length() < index.contextLimit) {
+    if (!positionIsValid(index, text.length())) {
         return;
     }
 
@@ -326,11 +334,7 @@ void Transliterator::_transliterate(Replaceable& text,
         return;
     }
 
-    if (index.contextStart < 0 ||
-        index.start < index.contextStart ||
-        index.limit < index.start ||
-        index.contextLimit < index.limit ||
-        text.length() < index.contextLimit) {
+    if (!positionIsValid(index, text.length())) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -354,6 +358,7 @@ void Transliterator::_transliterate(Replaceable& text,
     filteredTransliterate(text, index, TRUE);
 
 #if 0
+    // TODO
     // I CAN'T DO what I'm attempting below now that the Kleene star
     // operator is supported.  For example, in the rule
 
