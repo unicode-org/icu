@@ -21,9 +21,7 @@
 
 
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
@@ -88,7 +86,6 @@ void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
   return;
 }
 
-#include <stdio.h>
 
 int32_t
 T_CString_stringToInteger(const char *integerString, int32_t radix)

@@ -19,7 +19,6 @@
 */
 
 #include "uresimp.h"
-#include <stdio.h>
 
 /* this is just for internal purposes. DO NOT USE! */
 static void entryCloseInt(UResourceDataEntry *resB);
