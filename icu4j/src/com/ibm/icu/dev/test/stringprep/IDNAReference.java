@@ -76,7 +76,7 @@ public class IDNAReference {
         
             /* Case-insensitive comparison */
             if(c1!=c2) {
-                rc=(int)toASCIILower(c1)-(int)toASCIILower(c2);
+                rc=toASCIILower(c1)-toASCIILower(c2);
                 if(rc!=0) {
                     return rc;
                 }
@@ -131,7 +131,7 @@ public class IDNAReference {
         boolean srcIsLDH = true; 
 
         //get the options
-        boolean useSTD3ASCIIRules = (boolean)((options & USE_STD3_RULES) != 0);
+        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
     
         int failPos = -1;
         // step 2
@@ -144,11 +144,7 @@ public class IDNAReference {
             char ch=processOut.charAt(j);
             if(ch > 0x7F){
                 srcIsASCII = false;
-            }
-            // here we do not assemble surrogates
-            // since we know that LDH code points
-            // are in the ASCII range only
-            if(isLDHChar(ch)==false){
+            }else if(isLDHChar(ch)==false){
                 srcIsLDH = false;
                 failPos = j;
             }
@@ -252,7 +248,7 @@ public class IDNAReference {
         char[] caseFlags = null;
         
         //get the options
-        boolean useSTD3ASCIIRules = (boolean)((options & USE_STD3_RULES) != 0);
+        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
 
         // the source contains all ascii codepoints
         boolean srcIsASCII  = true;
@@ -266,9 +262,9 @@ public class IDNAReference {
         while((ch=iter.next())!= UCharacterIterator.DONE){
             if(ch>0x7F){
                 srcIsASCII = false;
-            }
-            if((srcIsLDH = isLDHChar(ch))==false){
+            }else if(isLDHChar(ch)==false){
                 failPos = iter.getIndex();
+                srcIsLDH = false;
             }
         }
         StringBuffer processOut;

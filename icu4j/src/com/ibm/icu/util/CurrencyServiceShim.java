@@ -8,8 +8,8 @@
 package com.ibm.icu.util;
 
 import java.util.Locale;
-import com.ibm.icu.impl.ICULocaleData;
 
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
@@ -24,7 +24,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
     
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
         }
         return service.getAvailableLocales();
     }

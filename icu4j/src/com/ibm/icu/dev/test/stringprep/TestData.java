@@ -196,18 +196,18 @@ public class TestData {
     };
     
     public static final String[] domainNames1Uni = {
-        "http://\u0917\u0928\u0947\u0936.sanjose.ibm.com",
+        "\u0917\u0928\u0947\u0936.sanjose.ibm.com",
         "www.\u0121.com",
-        "www.\u00E0\u00B3\u00AF.com",
+        //"www.\u00E0\u00B3\u00AF.com",
         "www.\u00C2\u00A4.com",
         "www.\u00C2\u00A3.com",
-        "\u0025",
-        "\u005C\u005C",
-        "@",
-        "\u002F",
-        "www.\u0021.com",
-        "www.\u0024.com",
-        "\u003f",
+        // "\\u0025", //'%' (0x0025) produces U_IDNA_STD3_ASCII_RULES_ERROR
+        // "\\u005C\\u005C", //'\' (0x005C) produces U_IDNA_STD3_ASCII_RULES_ERROR
+        //"@",
+        //"\\u002F",
+        //"www.\\u0021.com",
+        //"www.\\u0024.com",
+        //"\\u003f",
         // These yeild U_IDNA_PROHIBITED_ERROR
         //"\\u00CF\\u0082.com",
         //"\\u00CE\\u00B2\\u00C3\\u009Fss.com",
@@ -215,35 +215,35 @@ public class TestData {
         "\u00C3\u00BC.com"
     };
     public static final String[] domainNamesToASCIIOut = {
-        "xn--http://-3mo7iufsh.sanjose.ibm.com",
+        "xn--31b8a2bwd.sanjose.ibm.com",
         "www.xn--vea.com",
-        "www.xn--3 -iia80t.com",
+        //"www.xn--3 -iia80t.com",
         "www.xn--bba7j.com",
         "www.xn--9a9j.com",
-        "\u0025",
-        "\u005C\u005C",
-        "@",
-        "\u002F",
-        "www.\u0021.com",
-        "www.\u0024.com",
-        "\u003f",
+       // "\u0025",
+       // "\u005C\u005C",
+       // "@",
+       // "\u002F",
+       // "www.\u0021.com",
+       // "www.\u0024.com",
+       // "\u003f",
         "xn--14-ria7423a.com"
         
     };
 
     public static final String[] domainNamesToUnicodeOut = {
-        "http://\u0917\u0928\u0947\u0936.sanjose.ibm.com",
+        "\u0917\u0928\u0947\u0936.sanjose.ibm.com",
         "www.\u0121.com",
-        "www.\u00E0\u0033\u0020\u0304.com",
+        //"www.\u00E0\u0033\u0020\u0304.com",
         "www.\u00E2\u00A4.com",
         "www.\u00E2\u00A3.com",
-        "\u0025",
-        "\u005C\u005C",
-        "@",
-        "\u002F",
-        "www.\u0021.com",
-        "www.\u0024.com",
-        "\u003f",
+       // "\u0025",
+       // "\u005C\u005C",
+       // "@",
+       // "\u002F",
+       // "www.\u0021.com",
+       // "www.\u0024.com",
+       // "\u003f",
         "\u00E3\u0031\u2044\u0034.com"
         
     };

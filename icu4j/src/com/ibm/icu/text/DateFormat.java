@@ -5,9 +5,11 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UFormat;
 
 import java.text.FieldPosition;
@@ -694,7 +696,7 @@ public abstract class DateFormat extends UFormat {
      */
     public static Locale[] getAvailableLocales()
     {
-        return ICULocaleData.getAvailableLocales();
+        return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
     }
 
     /**

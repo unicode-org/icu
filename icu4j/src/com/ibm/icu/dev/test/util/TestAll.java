@@ -20,7 +20,10 @@ public class TestAll extends TestGroup {
         super(
               new String[] {
             "VersionInfoTest",
-            "ICUListResourceBundleTest",
+            // "ICUListResourceBundleTest",
+            // these tests fail since there is no ICULocaleData.jar to support it
+            // ICUResoureBundleTest supercedes the ICUListResourceBundleTest
+            "ICUResourceBundleTest",
             "CompactArrayTest",
             "StringTokenizerTest",
             "CurrencyTest",

@@ -10,14 +10,15 @@ package com.ibm.icu.text;
 import java.util.Locale;
 import java.util.Set;
 
-import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
 
@@ -81,7 +82,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
 
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return service.getAvailableLocales();
     }
@@ -101,7 +102,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
                 }
 
                 protected Set getSupportedIDs() {
-                    return ICULocaleData.getAvailableLocaleNameSet();
+                    return ICUResourceBundle.getAvailableLocaleNameSet();
                 }
             }
 

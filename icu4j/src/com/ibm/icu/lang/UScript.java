@@ -7,11 +7,12 @@
 
 package com.ibm.icu.lang;
 
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
-import java.util.ResourceBundle;
 import java.util.Locale;
 
 /**
@@ -331,30 +332,31 @@ public final class UScript {
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
 
-    private static final String INVALID_NAME = "Invalid";
+    //private static final String INVALID_NAME = "Invalid";
     /**
      * Helper function to find the code from locale.
      * @param Locale the locale.
      */
-    private static int[] findCodeFromLocale(Locale locale) {
-        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+    private static int[] findCodeFromLocale(ULocale locale) {
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
 
         // if rb is not a strict fallback of the requested locale, return null
-        if(rb==null || !LocaleUtility.isFallbackOf(rb.getLocale(), locale)){
+        if(rb==null || !LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){
             return null;
         }
-        String[] scripts = rb.getStringArray("LocaleScript");
-        int[] result = new int[scripts.length];
+        ICUResourceBundle sub = rb.get("LocaleScript");
+        
+        int[] result = new int[sub.getSize()];
         int w = 0;
-        for (int i = 0; i < scripts.length; ++i) {
+        for (int i = 0; i < result.length; ++i) {
               int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
-                                                           scripts[i]);
+                                                           sub.getString(i));
               result[w++] = code;
 
         }
 
         if (w < result.length) {
-            throw new InternalError("bad locale data, listed " + scripts.length + " scripts but found only " + w);
+            throw new InternalError("bad locale data, listed " + result.length + " scripts but found only " + w);
         }
 
         return result;
@@ -369,9 +371,19 @@ public final class UScript {
      * @stable ICU 2.4
      */
     public static final int[] getCode(Locale locale){
+        return findCodeFromLocale(new ULocale(locale));
+    }
+    /**
+     * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name.
+     * Returns MALAYAM given "Malayam" OR "Mlym".
+     * Returns LATIN given "en" OR "en_US"
+     * @param locale ULocale
+     * @return The script codes array. null if the the code cannot be found.
+     * @draft ICU 3.0
+     */
+    public static final int[] getCode(ULocale locale){
         return findCodeFromLocale(locale);
     }
-
     /**
      * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name.
      * Returns MALAYAM given "Malayam" OR "Mlym".
@@ -392,7 +404,7 @@ public final class UScript {
                                                 nameOrAbbrOrLocale)
             };
         } catch (IllegalArgumentException e) {
-            return findCodeFromLocale(LocaleUtility.getLocaleFromName(nameOrAbbrOrLocale));
+            return findCodeFromLocale(new ULocale(nameOrAbbrOrLocale));
         }
     }
 
@@ -405,7 +417,7 @@ public final class UScript {
      */
     public static final int getScript(int codepoint){
         if (codepoint >= UCharacter.MIN_VALUE & codepoint <= UCharacter.MAX_VALUE) {
-            return (int)(prop.getAdditional(codepoint,0) & SCRIPT_MASK);
+            return (prop.getAdditional(codepoint,0) & SCRIPT_MASK);
         }else{
             throw new IllegalArgumentException(Integer.toString(codepoint));
         }

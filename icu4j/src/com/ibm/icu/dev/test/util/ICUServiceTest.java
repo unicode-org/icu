@@ -9,13 +9,14 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUNotifier;
 import com.ibm.icu.impl.ICURWLock;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.ICUService.ServiceListener;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKey;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
@@ -617,7 +618,7 @@ public class ICUServiceTest extends TestFmwk
         public static Set supportedIDs;
         static {
             HashSet result = new HashSet();
-            result.addAll(ICULocaleData.getAvailableLocaleNameSet());
+            result.addAll(ICUResourceBundle.getAvailableLocaleNameSet());
 	    result.add(californio);
 	    result.add(valley);
 	    result.add(surfer);

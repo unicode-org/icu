@@ -23,7 +23,8 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 
@@ -952,15 +953,15 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         Locale[] locales = NumberFormat.getAvailableLocales();
         
         for (int i = 0; i < locales.length; i++) {
-            ResourceBundle rb = ICULocaleData.getResourceBundle("LocaleElements", locales[i]);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locales[i]);
 
             //
             // Get the currency pattern for this locale.  We have to fish it
             // out of the ResourceBundle directly, since DecimalFormat.toPattern
             // will return the localized symbol, not \00a4
             //
-            String[] numPatterns = (String[])rb.getObject("NumberPatterns");
-            String pattern = numPatterns[1];
+            ICUResourceBundle numPatterns = rb.get("NumberPatterns");
+            String pattern = numPatterns.getString(1);
             
             if (pattern.indexOf('\u00A4') == -1 ) { // 'x' not "x" -- workaround bug in IBM JDK 1.4.1
                 errln("Currency format for " + locales[i] +

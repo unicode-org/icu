@@ -6,11 +6,13 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.data.ResourceReader;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 
 import java.text.MessageFormat;
@@ -1216,7 +1218,7 @@ public abstract class Transliterator {
         //If we ever integrate this with the Sun JDK, the resource bundle
         // root will change to sun.text.resources.LocaleElements
 
-        ResourceBundle bundle = ICULocaleData.getLocaleElements(inLocale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,inLocale);
 
         // Normalize the ID
         String stv[] = TransliteratorIDParser.IDtoSTV(id);

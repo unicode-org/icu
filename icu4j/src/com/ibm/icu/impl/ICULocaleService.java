@@ -576,7 +576,7 @@ public class ICULocaleService extends ICUService {
          * Convenience constructor that uses the main ICU bundle name.
          */
         public ICUResourceBundleFactory() {
-            this(ICULocaleData.LOCALE_ELEMENTS);
+            this(ICUResourceBundle.ICU_BASE_NAME);
         }
 
 	/**
@@ -590,10 +590,10 @@ public class ICULocaleService extends ICUService {
         }
 
 	/**
-         * Return the supported IDs.  This is the set of all locale names in ICULocaleData.
+         * Return the supported IDs.  This is the set of all locale names in ICU_BASE_NAME.
 	 */
 	protected Set getSupportedIDs() {
-            return ICULocaleData.getAvailableLocaleNameSet(bundleName);
+            return ICUResourceBundle.getAvailableLocaleNameSet(bundleName);
 	}
 
         /**
@@ -601,7 +601,7 @@ public class ICULocaleService extends ICUService {
          * for the locale, ignoring kind, and service.
          */
         protected Object handleCreate(Locale loc, int kind, ICUService service) {
-            return ICULocaleData.getResourceBundle(bundleName, loc);
+            return ICUResourceBundle.getBundleInstance(bundleName, loc);
         }
 
         public String toString() {

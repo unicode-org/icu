@@ -10,7 +10,8 @@ package com.ibm.icu.text;
 import java.util.Locale;
 import java.util.Set;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.Key;
@@ -20,12 +21,13 @@ import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 class NumberFormatServiceShim extends NumberFormat.NumberFormatShim {
 
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
         }
         return service.getAvailableLocales();
     }

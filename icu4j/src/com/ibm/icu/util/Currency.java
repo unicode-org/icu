@@ -11,9 +11,8 @@ import java.text.ChoiceFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 
 /**
@@ -107,24 +106,30 @@ public class Currency extends MeasureUnit implements Serializable {
         if (variant.equals("PREEURO") || variant.equals("EURO")) {
             country = country + '_' + variant;
         }
-        ResourceBundle bundle = ICULocaleData.getLocaleElements(new Locale("", "", ""));
-        Object[][] cm = (Object[][]) bundle.getObject("CurrencyMap");
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"root");
+        ICUResourceBundle cm = bundle.get("CurrencyMap");
 
         // Do a linear search
         String curriso = null;
+        try{
+            curriso = cm.getString(country);
+        }catch(MissingResourceException ex){
+         //do nothing   
+        }
+        /*
         for (int i=0; i<cm.length; ++i) {
             if (country.equals((String) cm[i][0])) {
                 curriso = (String) cm[i][1];
                 break;
             }
         }
-        
+        */
         Currency curr = null;
         if (curriso != null) {
             curr = new Currency(curriso);
 
             // TODO: Determine valid and actual locale correctly.
-            ULocale uloc = new ULocale(bundle.getLocale());
+            ULocale uloc = bundle.getULocale();
             curr.setLocale(uloc, uloc);
         }
         return curr;
@@ -169,7 +174,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
         } else {
             return shim.getAvailableLocales();
         }
@@ -257,9 +262,12 @@ public class Currency extends MeasureUnit implements Serializable {
 
         // Multi-level resource inheritance fallback loop
         while (locale != null) {
-            ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
             // We can't cast this to String[][]; the cast has to happen later
             try {
+                ICUResourceBundle currencies = rb.get("Currencies");
+                s = currencies.get(isoCode).getString(0);
+                /*
                 Object[][] currencies = (Object[][]) rb.getObject("Currencies");
                 // Do a linear search
                 for (int i=0; i<currencies.length; ++i) {
@@ -267,7 +275,8 @@ public class Currency extends MeasureUnit implements Serializable {
                         s = ((String[]) currencies[i][1])[nameStyle];
                         break;
                     }
-                }                
+                } 
+                */               
             }
             catch (MissingResourceException e) {}
 
@@ -358,14 +367,18 @@ public class Currency extends MeasureUnit implements Serializable {
         // it manually.
 
         // Multi-level resource inheritance fallback loop
+        
         while (locale != null) {
-            ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
             // We can't cast this to String[][]; the cast has to happen later
+           
             try {
-                Object[][] currencies = (Object[][]) rb.getObject("Currencies");
+                ICUResourceBundle currencies = rb.get("Currencies");
                 // Do a linear search
-                for (int i=0; i<currencies.length; ++i) {
-                    String name = ((String[]) currencies[i][1])[0];
+                for (int i=0; i<currencies.getSize(); ++i) {
+                    //String name = ((String[]) currencies[i][1])[0];
+                    ICUResourceBundle item = currencies.get(i); 
+                    String name = item.getString(0);
                     if (name.length() < 1) {
                         // Ignore zero-length names -- later, change this
                         // when zero-length is used to mean something.
@@ -374,10 +387,11 @@ public class Currency extends MeasureUnit implements Serializable {
                         name = name.substring(1);
                         if (name.length() > 0 && name.charAt(0) != '=') {
                             ChoiceFormat choice = new ChoiceFormat(name);
-                            /* Number n = */choice.parse(text, pos);
+                            // Number n = 
+                            choice.parse(text, pos);
                             int len = pos.getIndex() - start;
                             if (len > max) {
-                                iso = (String) currencies[i][0];
+                                iso = item.getKey();
                                 max = len;
                             }
                             pos.setIndex(start);
@@ -385,7 +399,7 @@ public class Currency extends MeasureUnit implements Serializable {
                         }
                     }
                     if (name.length() > max && fragment.startsWith(name)) {
-                        iso = (String) currencies[i][0];
+                        iso = item.getKey();
                         max = name.length();
                     }
                 }
@@ -395,6 +409,18 @@ public class Currency extends MeasureUnit implements Serializable {
             locale = LocaleUtility.fallback(locale);
         }
         
+        /*  
+        1. Look at the Currencies array from the locale
+            1a. Iterate through it, and check each row to see if row[1] matches
+                1a1. If row[1] is a pattern, use ChoiceFormat to attempt a parse
+            1b. Upon a match, return the ISO code stored at row[0]
+        2. If there is no match, fall back to "en" and try again
+        3. If there is no match, fall back to root and try again
+        4. If still no match, parse 3-letter ISO {this code is probably unchanged}.
+        
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);        
+        ICUResourceBundle currencies = rb.get("Currencies");
+        */
         // If display name parse fails or if it matches fewer than 3
         // characters, try to parse 3-letter ISO.  Do this after the
         // display name processing so 3-letter display names are
@@ -427,7 +453,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 2.2
      */
     public int getDefaultFractionDigits() {
-        return (findData())[0].intValue();
+        return (findData())[0];
     }
 
     /**
@@ -437,9 +463,9 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 2.2
      */
     public double getRoundingIncrement() {
-        Integer[] data = findData();
+        int[] data = findData();
 
-        int data1 = data[1].intValue(); // rounding increment
+        int data1 = data[1]; // rounding increment
 
         // If there is no rounding return 0.0 to indicate no rounding.
         // This is the high-runner case, by far.
@@ -447,7 +473,7 @@ public class Currency extends MeasureUnit implements Serializable {
             return 0.0;
         }
 
-        int data0 = data[0].intValue(); // fraction digits
+        int data0 = data[0]; // fraction digits
 
         // If the meta data is invalid, return 0.0 to indicate no rounding.
         if (data0 < 0 || data0 >= POW10.length) {
@@ -481,23 +507,23 @@ public class Currency extends MeasureUnit implements Serializable {
      * rounding increment, or 0 if none.  The rounding increment is in
      * units of 10^(-fraction_digits).
      */
-    private Integer[] findData() {
+    private int[] findData() {
 
         try {
             // Get CurrencyMeta resource out of root locale file.  [This may
             // move out of the root locale file later; if it does, update this
             // code.]
-            ResourceBundle root = ICULocaleData.getLocaleElements("");
+            ICUResourceBundle root = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"root");
+            ICUResourceBundle currencyMeta = root.get("CurrencyMeta");
 
-            Object[][] currencyMeta = (Object[][]) root.getObject("CurrencyMeta");
-
-            Integer[] i = null;
-            int defaultPos = -1;
-
+            //Integer[] i = null;
+            //int defaultPos = -1;
+            int[] i = currencyMeta.get(isoCode).getIntVector();
+            
             // Do a linear search for isoCode.  At the same time,
             // record the position of the DEFAULT meta data.  If the
             // meta data becomes large, make this faster.
-            for (int j=0; j<currencyMeta.length; ++j) {
+            /*for (int j=0; j<currencyMeta.length; ++j) {
                 Object[] row = currencyMeta[j];
                 String s = (String) row[0];
                 int c = isoCode.compareToIgnoreCase(s);
@@ -512,9 +538,9 @@ public class Currency extends MeasureUnit implements Serializable {
                     break;
                 }
             }
-
-            if (i == null && defaultPos >= 0) {
-                i = (Integer[]) currencyMeta[defaultPos][1];
+            */
+            if (i == null) {
+                i = currencyMeta.get("DEFAULT").getIntVector();
             }
 
             if (i != null && i.length >= 2) {
@@ -531,8 +557,7 @@ public class Currency extends MeasureUnit implements Serializable {
     // defaults encoded in the meta data resource bundle.  If there is a
     // configuration/build error and these are not available, we use these
     // hard-coded defaults (which should be identical).
-    private static final Integer[] LAST_RESORT_DATA =
-        new Integer[] { new Integer(2), new Integer(0) };
+    private static final int[] LAST_RESORT_DATA = new int[] { 2, 0 };
 
     // POW10[i] = 10^i
     private static final int[] POW10 = { 1, 10, 100, 1000, 10000, 100000,

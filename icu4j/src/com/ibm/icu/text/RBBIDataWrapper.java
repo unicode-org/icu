@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.CharTrie;
 
@@ -450,9 +451,7 @@ public class RBBIDataWrapper {
         }
         System.out.println("RBBIDataWrapper.main(" + s + ") ");
         
-        String versionedName = 
-            "icudt" + VersionInfo.ICU_VERSION.getMajor() +
-            VersionInfo.ICU_VERSION.getMinor() + "b_" + s + ".brk";
+        String versionedName = ICUResourceBundle.ICU_BUNDLE+ s + ".brk";
         
         try {
             RBBIDataWrapper This = RBBIDataWrapper.get(versionedName);

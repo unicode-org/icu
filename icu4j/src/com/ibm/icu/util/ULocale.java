@@ -275,9 +275,9 @@ public final class ULocale implements Serializable {
         "wal", "war", "was", "wen", "wo",  "xal", "xh",  "yao", "yap",
         "yi",  "yo",  "ypk", "za",  "zap", "zen", "zh",  "znd",
         "zu",  "zun", 
-        null,
-        "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */    
-        
+    };
+    private static String[] obsoleteLanguages = new String[]{
+        "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */         
     };
     
     
@@ -399,10 +399,11 @@ public final class ULocale implements Serializable {
         "yid", "yor", "ypk", "zha", "zap", "zen", "zho", "znd",
     /*  "zu",  "zun",                                              */
         "zul", "zun",  
-        null,
+    };
+    private static String[] obsoleteLanguages3 = new String[]{
          "ind", "heb", "yid", "jaw", "srp", 
     };
-    
+        
     
     /* ZR(ZAR) is now CD(COD) and FX(FXX) is PS(PSE) as per
      http://www.evertype.com/standards/iso3166/iso3166-1-en.html 
@@ -647,7 +648,7 @@ public final class ULocale implements Serializable {
      */
     public Locale toLocale() {
         if (locale == null) {
-            locale = new Locale(localeID, "");
+            locale = new Locale(getLanguage(), getCountry(), getVariant());
         }
         return locale;
     }
@@ -746,6 +747,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static ULocale[] getAvailableLocales() {
+        /*
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"res_index");
         ICUResourceBundle index = rb.get("InstalledLocales");
         Enumeration enum = index.getKeys();
@@ -756,6 +758,8 @@ public final class ULocale implements Serializable {
            locales[i++] = new ULocale(id);
         }
         return locales;
+        */
+        return ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_BASE_NAME);
     }
 
     /**
@@ -971,7 +975,7 @@ public final class ULocale implements Serializable {
     /* linearly search the string array */
     private static int findIndex(String[] array, String target){
         for(int i=0; i<array.length;i++){
-            if(array[i]!=null && array[i].compareTo(target)==0){
+            if(array[i].compareTo(target)==0){
                 return i;   
             }
         }
@@ -1027,7 +1031,13 @@ public final class ULocale implements Serializable {
                 language.setLength(0);
                 language.append(languages[offset]);
             }
-            
+            if(offset==-1){
+                offset = findIndex(obsoleteLanguages3, lang.toString()); 
+                if(offset>=0) {
+                    language.setLength(0);
+                    language.append(obsoleteLanguages[offset]);
+                }
+            }
         }
         return language.toString();
     }
@@ -1058,11 +1068,12 @@ public final class ULocale implements Serializable {
             if(offset>=0) {
                 country.setLength(0);
                 country.append(countries[offset]);
-            }else{
-                offset = findIndex(obsoleteCountries3, cnty.toString());
-                if(offset>=0){
+            }
+            if(offset==-1){
+                offset = findIndex(obsoleteCountries3, cnty.toString()); 
+                if(offset>=0) {
                     country.setLength(0);
-                    country.append(obsoleteCountries[offset]);   
+                    country.append(obsoleteCountries[offset]);
                 }
             }
         }
@@ -1344,6 +1355,12 @@ public final class ULocale implements Serializable {
         if(offset>=0){
             return languages3[offset];
         }
+        if(offset==-1){
+            offset = findIndex(obsoleteLanguages, language.toString());  
+            if(offset>=0){
+                return obsoleteLanguages3[offset];
+            }
+        }
         return "";
     }
     
@@ -1371,10 +1388,11 @@ public final class ULocale implements Serializable {
         int offset = findIndex(countries, country);
         if(offset>=0){
             return countries3[offset];
-        }else{
-            offset = findIndex(obsoleteCountries, country);
+        }
+        if(offset==-1){
+            offset = findIndex(obsoleteCountries, country.toString());  
             if(offset>=0){
-                return obsoleteCountries3[offset];   
+                return obsoleteCountries3[offset];
             }
         }
         return "";

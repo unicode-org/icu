@@ -9,7 +9,6 @@ package com.ibm.icu.impl;
 
 import java.util.NoSuchElementException;
 
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 
 
@@ -17,9 +16,10 @@ import com.ibm.icu.util.UResourceTypeMismatchException;
  * <p>Class for enabling iteration over UResourceBundle objects.
  * Example of use:<br>
  * <pre>
- * UResourceBundleIterator iterator = resB.getIterator();
- * UResourceBundle temp;
- * while ((temp = iterator.next(result))!=null) {
+ * ICUResourceBundleIterator iterator = resB.getIterator();
+ * ICUResourceBundle temp;
+ * while (iterator.hasNext()) {
+ *    temp = iterartor.next();  
  *    int type = temp.getType();
  *    switch(type){
  *      case UResourceBundle.STRING:
@@ -58,9 +58,9 @@ public class ICUResourceBundleIterator{
      * @throws NoSuchElementException
      * @draft ICU 3.0
      */
-    public UResourceBundle next()throws NoSuchElementException{
+    public ICUResourceBundle next()throws NoSuchElementException{
         if(index<size){
-            return bundle.get(index);
+            return bundle.get(index++);
         }
         throw new NoSuchElementException();
     }
@@ -73,7 +73,7 @@ public class ICUResourceBundleIterator{
      */
     public String nextString()throws NoSuchElementException, UResourceTypeMismatchException{
         if(index<size){
-            return bundle.getString(index);
+            return bundle.getString(index++);
         }  
         throw new NoSuchElementException();
     }

@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
+import com.ibm.icu.impl.ResourceBundleWrapper;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -44,20 +45,20 @@ import com.ibm.icu.util.ULocale;
  */
 public abstract class UResourceBundle extends ResourceBundle{
     
-	protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/data";
+	protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
 
-	private static final String ICU_BUNDLE = "icudt"+VersionInfo.ICU_DATA_VERSION;
+	public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION+"/";
     
     
     /**
      * @draft ICU 3.0
      */
-    public static final String ICU_BASE_NAME= ICU_DATA_PATH+"/"+ICU_BUNDLE;
+    public static final String ICU_BASE_NAME= ICU_DATA_PATH+ICU_BUNDLE;
     
     /**
      * @draft ICU 3.0
      */
-    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/" + "coll";
+    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "coll";
     
     /**
      * @draft ICU 3.0
@@ -113,7 +114,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      * 
      */    
-    protected static final UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root, boolean disableFallback){
+    protected static UResourceBundle getBundleInstance(String baseName, String localeName, ClassLoader root, boolean disableFallback){
         return instantiateBundle(baseName, localeName, root, disableFallback);   
     }
     
@@ -178,9 +179,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return the locale of this resource bundle
      */
     public ULocale getULocale() {
-        return new ULocale(getLocale());
+        return new ULocale(localeID);
     }    
 
+    public Locale getLocale(){
+        return getULocale().toLocale();   
+    }
     protected void setParent(UResourceBundle parent){
         this.parent = parent;   
     }
@@ -296,26 +300,36 @@ public abstract class UResourceBundle extends ResourceBundle{
     private static final ResourceCacheKey cacheKey = new ResourceCacheKey();
     
     protected static synchronized UResourceBundle instantiateBundle(String baseName, String localeName, ClassLoader root, boolean disableFallback){
-        if(disableFallback){
-            ULocale defaultLocale = ULocale.getDefault();
-            String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
-            cacheKey.setKeyValues(root, fullName, defaultLocale);
-            UResourceBundle b = loadFromCache(cacheKey);
-            if(b==null){
-                b =  ICUResourceBundle.createBundle(baseName, localeName, root);
+        // first try to create an ICUResourceBundle
+        // the expectation is that most client using 
+        // this interface will open an *.res file
+        try{
+            if(disableFallback){
+                ULocale defaultLocale = ULocale.getDefault();
+                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
                 cacheKey.setKeyValues(root, fullName, defaultLocale);
-                addToCache(cacheKey, b);
+                UResourceBundle b = loadFromCache(cacheKey);
+                if(b==null){
+                    b =  ICUResourceBundle.createBundle(baseName, localeName, root);
+                    cacheKey.setKeyValues(root, fullName, defaultLocale);
+                    addToCache(cacheKey, b);
+                }
+                b.hasFallback = disableFallback;
+                return b;
+            }else{
+                return instantiateICUResource(baseName,localeName,root);
             }
-            b.hasFallback = disableFallback;
-            return b;
-        }else{
-            return instantiateICUResource(baseName,localeName,root);
+        }catch(MissingResourceException e){
+           // we can't find an *.res file .. so fallback to
+           // Java ResourceBundle loadeing 
+            return new ResourceBundleWrapper(baseName, localeName, root);
         }
     }
     //  recursively build bundle
-    protected static UResourceBundle instantiateICUResource(String baseName,String localeName, ClassLoader root){
+    protected static UResourceBundle instantiateICUResource(String baseName,String localeID, ClassLoader root){
         ULocale defaultLocale = ULocale.getDefault();
-        String fullName = ICUResourceBundleReader.getFullName(baseName, ULocale.getBaseName(localeName));
+        String localeName = ULocale.getBaseName(localeID);
+        String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         cacheKey.setKeyValues(root, fullName, defaultLocale);
         UResourceBundle b = loadFromCache(cacheKey);
         if (b == null) {

@@ -6,9 +6,10 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -491,17 +492,17 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         String[] numberElements;
         if (data == null) {  /* cache miss */
             data = new String[1][];
-            ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
             data[0] = rb.getStringArray("NumberElements");
             /* update cache */
             cachedLocaleData.put(locale, data);
         }
         numberElements = data[0];
         
-        ResourceBundle r = ICULocaleData.getLocaleElements(locale);
+        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
         
         // TODO: Determine actual and valid locale correctly.
-        ULocale uloc = new ULocale(r.getLocale());
+        ULocale uloc = r.getULocale();
         setLocale(uloc, uloc);
 
 	// {dlf} clean up below now that we have our own resource data

@@ -1,10 +1,25 @@
+/*
+******************************************************************************
+* Copyright (C) 2004, International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+*/
 
 package com.ibm.icu.impl;
 
+import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Set;
 import java.util.Vector;
 
 import com.ibm.icu.util.StringTokenizer;
@@ -102,10 +117,6 @@ public class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public String getString(){
-        ICUResourceBundle sub = (ICUResourceBundle)handleGetObject();
-        if(sub.getType()==STRING){
-            return sub.getString();   
-        }
         throw new UResourceTypeMismatchException("");
     }
     
@@ -241,11 +252,10 @@ public class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public ICUResourceBundle get(int index){
-       // return handleGetObject(index);
         ICUResourceBundle obj =  handleGet(index);
         if (obj == null) {
             if (parent != null) {
-                obj = ((ICUResourceBundle)parent).handleGet(index);
+                obj = ((ICUResourceBundle)parent).get(index);
             }
             if (obj == null)
                 throw new MissingResourceException("Can't find resource for bundle "
@@ -257,22 +267,22 @@ public class ICUResourceBundle extends UResourceBundle{
         return obj;
     }
     protected Object handleGetObject(String key){
+        if(getType()==STRING){
+            return getString();   
+        }
         ICUResourceBundle obj =  handleGet(key);
-        /*
-        if (obj == null) {
-            if (parent != null) {
-                obj = ((ICUResourceBundle)parent).handleObject(key);
+        if(obj!=null){
+            if(obj.getType()==STRING){
+                return obj.getString();   
             }
-            if (obj == null)
-                throw new MissingResourceException("Can't find resource for bundle "
-                                                   +this.getClass().getName()
-                                                   +", key "+key,
-                                                   this.getClass().getName(),
-                                                   key);
-        }*/
-//        if(obj.getType()==STRING){
-//            return obj.getString();   
-//        }
+            try{
+                if(obj.getType()==ARRAY){
+                    return obj.handleGetStringArray();   
+                }
+            }catch(UResourceTypeMismatchException ex){
+                return obj;   
+            }
+        }
         return obj;        
     }
     protected ICUResourceBundle handleGet(int index){
@@ -281,7 +291,9 @@ public class ICUResourceBundle extends UResourceBundle{
     protected ICUResourceBundle handleGet(String key){
         return null;   
     }
-    
+    protected String[] handleGetStringArray(){
+        return null;   
+    }
     // abstract UResourceBundle handleGetInt(int index);
     
     /**
@@ -293,9 +305,23 @@ public class ICUResourceBundle extends UResourceBundle{
      * @draft ICU 3.0
      */
     public ICUResourceBundle get(String key){
-        //throw new UResourceTypeMismatchException("");
-        return (ICUResourceBundle)handleGetObject(key);
-    }
+        ICUResourceBundle obj =  handleGet(key);
+        if (obj == null) {
+            if (parent != null) {
+                obj = ((ICUResourceBundle)parent).get(key);
+            }
+            if (obj == null){
+                String fullName = ICUResourceBundleReader.getFullName(baseName, localeID);
+                throw new MissingResourceException("Can't find resource for bundle "
+                                                   +fullName
+                                                   +", key "+key,
+                                                   this.getClass().getName(),
+                                                   key);
+            }
+        }
+        return obj;
+        
+   }
     
     /**
      * Returns the string in a given resource at the specified index.
@@ -323,35 +349,7 @@ public class ICUResourceBundle extends UResourceBundle{
         return (UResourceBundle)parent;   
     }
     
-    /**
-     * Get the set of Locales installed in the specified bundles.
-     * @return the list of available locales
-     * @draft ICU 3.0
-     */
-    public static final ULocale[] getAvailableLocales(String baseName){
-        return getAvailableLocales(baseName, ICU_DATA_CLASS_LOADER);
-    }
-    
-    
-    /**
-     * Get the set of Locales installed in the specified bundles.
-     * @return the list of available locales
-     * @draft ICU 3.0
-     */
-    public static final ULocale[] getAvailableLocales(String baseName, ClassLoader root){
-        ICUResourceBundle bundle = (ICUResourceBundle) instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
-        bundle = bundle.get(INSTALLED_LOCALES);
-        int length = bundle.getSize();
-        int i = 0;
-        ULocale[] locales = new ULocale[length];
-        ICUResourceBundleIterator iter = bundle.getIterator();
-        iter.reset();
-        while(iter.hasNext()){
-            locales[i++] = new ULocale(iter.nextString());   
-        } 
-        bundle = null;
-        return locales;
-    }
+
     
     /**
      * Returns a functionally equivalent locale, considering keywords as well, for the specified keyword.
@@ -392,21 +390,14 @@ public class ICUResourceBundle extends UResourceBundle{
     public static final String[] getKeywordValues(String baseName, String keyword){
         return null;
     }
-
-    protected int type = NONE;
-    protected String key;
-    protected int size = NONE;
-    protected String resPath;
-    protected boolean isTopLevel;
     
-    protected ICUResourceBundleReader reader;
-    //protected byte[] version;
-    protected ByteBuffer rawData;
-    protected long resource;
-    protected long rootResource;
-    
-    protected static final long UNSIGNED_INT_MASK = 0xffffffffL;
-
+    /**
+     * 
+     * @param baseName
+     * @param localeID
+     * @param root
+     * @return
+     */
     public static ICUResourceBundle createBundle(String baseName, String localeID, ClassLoader root){
 
         ICUResourceBundleReader reader = new ICUResourceBundleReader(baseName, localeID, root);
@@ -421,6 +412,295 @@ public class ICUResourceBundle extends UResourceBundle{
              throw new RuntimeException("Invalid format error"); 
         }   
         
+    }
+
+    /**
+     * This method performs multilevel fallback for fetching items from the bundle
+     * e.g:
+     * If resource is in the form
+     * de__PHONEBOOK{
+     *      collations{
+     *              default{ "phonebook"}
+     *      }
+     * }
+     * If the value of "default" key needs to be accessed, then do:
+     * <code>
+     *  ResourceBundle bundle = new ResourceBundle(getLocaleFromString("de__PHONEBOOK"));
+     *  Object result = null;
+     *  if(bundle instanceof ICUListResourceBundle){
+     *      result = ((ICUListResourceBundle) bundle).getObjectWithFallback("collations/default");
+     *  }
+     * </code>
+     * @param path  The path to the required resource key
+     * @return Object represented by the key
+     * @exception MissingResourceException
+     */
+    public Object getObjectWithFallback(String path) 
+                  throws MissingResourceException{
+        ICUResourceBundle result = null;      
+        ICUResourceBundle actualBundle = this;
+        
+        
+        // now recuse to pick up sub levels of the items
+        result = findResourceWithFallback(path, actualBundle);
+                    
+        if(result == null){
+            throw new MissingResourceException("Can't find resource for bundle "
+                    +this.getClass().getName()
+                    +", key "+key,
+                    path,
+                    key);
+        }
+        if(result.getType()==STRING){
+            return result.getString();   
+        }
+        return result;
+    }
+    private ICUResourceBundle findResourceWithFallback(String path, ICUResourceBundle actualBundle) {
+        ICUResourceBundle sub = null;
+        while (actualBundle != null) {
+            StringTokenizer st = new StringTokenizer(path, "/");
+            ICUResourceBundle current = actualBundle;
+            while (st.hasMoreTokens()) {
+                String subKey = st.nextToken();
+                sub = current.handleGet(subKey, null);
+                if(sub==null){
+                   break;   
+                }
+                current = sub;
+            }
+            if(sub!=null){
+                //we found it
+                break;
+            }
+            // if not try the parent bundle
+            actualBundle = (ICUResourceBundle) actualBundle.parent;
+        }
+        return sub;
+    }     
+
+    /**
+     * Gets a resource bundle using the specified base name, locale, and class root.
+     *
+     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param locale the locale for which a resource bundle is desired
+     * @param root the class object from which to load the resource bundle
+     * @param disableFallback Option to disable locale inheritence. 
+     *                          If true the fallback chain will not be built.
+     * @exception MissingResourceException
+     *     if no resource bundle for the specified base name can be found
+     * @return a resource bundle for the given base name and locale
+     * @draft ICU 3.0
+     * 
+     */    
+    public static UResourceBundle getBundleInstance(String baseName, String localeName, boolean disableFallback){
+        return instantiateBundle(baseName, localeName, ICU_DATA_CLASS_LOADER, disableFallback);   
+    }
+
+    
+    /**
+     * Return a set of the locale names supported by a collection of resource bundles.
+     * @param bundlePrefix the prefix of the resource bundles to use.
+     */
+    public static Set getAvailableLocaleNameSet(String bundlePrefix) {
+        return getAvailEntry(bundlePrefix).getLocaleNameSet();
+    }
+
+    /**
+     * Return a set of the locale names supported by a collection of resource bundles.
+     * @param bundlePrefix the prefix of the resource bundles to use.
+     */
+    public static Set getAvailableLocaleNameSet() {
+        return getAvailableLocaleNameSet(UResourceBundle.ICU_BASE_NAME);
+    }
+    
+
+    /**
+     * Get the set of Locales installed in the specified bundles.
+     * @return the list of available locales
+     * @draft ICU 3.0
+     */
+    public static final ULocale[] getAvailableULocales(String baseName){
+        return getAvailEntry(baseName).getULocaleList();
+    }
+    /**
+     * Get the set of ULocales installed the base bundle.
+     * @return the list of available locales
+     * @draft ICU 3.0
+     */
+    public static final ULocale[] getAvailableULocales(){
+        return getAvailableULocales(ICU_BASE_NAME);
+    }
+
+    /**
+     * Get the set of Locales installed in the specified bundles.
+     * @return the list of available locales
+     * @draft ICU 3.0
+     */
+    public static final Locale[] getAvailableLocales(String baseName){
+        return getAvailEntry(baseName).getLocaleList();
+    }
+    /**
+     * Get the set of Locales installed the base bundle.
+     * @return the list of available locales
+     * @draft ICU 3.0
+     */
+    public static final Locale[] getAvailableLocales(){
+        return getAvailEntry(ICU_BASE_NAME).getLocaleList();
+    }
+    
+    /**
+     * 
+     * @param ulocales
+     * @return
+     * @draft ICU 3.0
+     */
+    public static final Locale[] getLocaleList(ULocale[] ulocales){
+         ArrayList list = new ArrayList();
+         for(int i=0; i< ulocales.length; i++){
+            // if the ULocale does not contain a script code
+            // only then convert it to a Locale object
+            if(ulocales[i].getScript().length()==0){
+                list.add(new Locale(ulocales[i].getLanguage(), 
+                                    ulocales[i].getCountry(), 
+                                    ulocales[i].getVariant()));
+            }
+         }
+         Locale[] locales = new Locale[list.size()];
+         for(int i=0; i<locales.length; i++){
+            locales[i] = (Locale)list.get(i);  
+         }
+         return locales;
+    }
+        
+    protected int type = NONE;
+    protected String key;
+    protected int size = NONE;
+    protected String resPath;
+    protected boolean isTopLevel;
+    
+    protected ICUResourceBundleReader reader;
+    //protected byte[] version;
+    protected ByteBuffer rawData;
+    protected long resource;
+    protected long rootResource;
+    
+    protected static final long UNSIGNED_INT_MASK = 0xffffffffL;
+    // ========== privates ==========
+
+    // Flag for enabling/disabling debugging code
+    private static final boolean DEBUG = ICUDebug.enabled("localedata");
+
+    // Cache for getAvailableLocales
+    private static SoftReference GET_AVAILABLE_CACHE;
+    private static final ULocale[] createULocaleList(String baseName, ClassLoader root){
+        ICUResourceBundle bundle = (ICUResourceBundle) instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
+        bundle = bundle.get(INSTALLED_LOCALES);
+        int length = bundle.getSize();
+        int i = 0;
+        ULocale[] locales = new ULocale[length];
+        ICUResourceBundleIterator iter = bundle.getIterator();
+        iter.reset();
+        while(iter.hasNext()){
+            locales[i++] = new ULocale(iter.next().getKey());   
+        } 
+        bundle = null;
+        return locales;
+    }
+    
+    private static final Locale[] createLocaleList(String baseName){
+        ULocale[] ulocales = getAvailEntry(baseName).getULocaleList();
+        return getLocaleList(ulocales);
+    }
+    private static final String[] createLocaleNameArray(String baseName, ClassLoader root){
+        ICUResourceBundle bundle = (ICUResourceBundle) instantiateBundle(baseName, ICU_RESOURCE_INDEX, root, true);
+        bundle = bundle.get(INSTALLED_LOCALES);
+        int length = bundle.getSize();
+        int i = 0;
+        String[] locales = new String[length];
+        ICUResourceBundleIterator iter = bundle.getIterator();
+        iter.reset();
+        while(iter.hasNext()){
+            locales[i++] = iter.next().getKey();   
+        } 
+        bundle = null;
+        return locales;
+    }
+    private static Set createLocaleNameSet(String baseName) {
+        try {
+            String[] locales = createLocaleNameArray(baseName,ICU_DATA_CLASS_LOADER);
+
+            HashSet set = new HashSet();
+            set.addAll(Arrays.asList(locales));
+            return Collections.unmodifiableSet(set);
+        }
+        catch (MissingResourceException e) {
+            if (DEBUG) System.out.println("couldn't find index for bundleName: " + baseName);
+            Thread.dumpStack();
+        }
+        return Collections.EMPTY_SET;
+    }
+    
+    /**
+     * Holds the prefix, and lazily creates the Locale[] list or the locale name Set as needed.
+     */
+    private static final class AvailEntry {
+        private String prefix;
+        private ULocale[] ulocales;
+        private Locale[] locales;
+        private Set nameSet;
+
+        AvailEntry(String prefix) {
+            this.prefix = prefix;
+        }
+
+        ULocale[] getULocaleList() {
+            if (ulocales == null) {
+                ulocales = createULocaleList(prefix, ICU_DATA_CLASS_LOADER);
+            }
+            return ulocales;
+        }
+        Locale[] getLocaleList(){
+            if(locales == null){
+                locales = createLocaleList(prefix);
+            }
+            return locales;
+        }
+        Set getLocaleNameSet() {
+            if (nameSet == null) {
+                nameSet = createLocaleNameSet(prefix);
+            }
+            return nameSet;
+        }
+    }
+
+    /**
+     * Stores the locale information in a cache accessed by key (bundle prefix).  The
+     * cached objects are AvailEntries.  The cache is held by a SoftReference
+     * so it can be GC'd.
+     */
+    private static AvailEntry getAvailEntry(String key) {
+        AvailEntry ae = null;
+        Map lcache = null;
+        if (GET_AVAILABLE_CACHE != null) {
+            lcache = (Map)GET_AVAILABLE_CACHE.get();
+            if (lcache != null) {
+                ae = (AvailEntry)lcache.get(key);
+            }
+        }
+
+        if (ae == null) {
+            ae = new AvailEntry(key);
+            if (lcache == null) {
+                lcache = new HashMap();
+                lcache.put(key, ae);
+                GET_AVAILABLE_CACHE = new SoftReference(lcache);
+            } else {
+                lcache.put(key, ae);
+            }
+        }
+
+        return ae;
     }
     
     private  static final long RES_BOGUS = 0xffffffff;
@@ -468,9 +748,7 @@ public class ICUResourceBundle extends UResourceBundle{
         return 0;
     }
    
-    protected Object handleGetObject(){
-        return this;   
-    }
+ 
     public Enumeration getKeys(){
         Vector keys = new Vector();
         ICUResourceBundle item =null;
@@ -645,7 +923,7 @@ public class ICUResourceBundle extends UResourceBundle{
 
         private ResourceTable(ByteBuffer rawData, String baseName, String localeID, String key, 
                                 long resource, long rootResource, boolean isRootResource ){
-            super(rawData, baseName, localeID, key, resource, rootResource, STRING, isRootResource);
+            super(rawData, baseName, localeID, key, resource, rootResource, TABLE, isRootResource);
         }
         
         private static ResourceTable getTableInstance(ByteBuffer rawData, String baseName, String localeID, String key, 
@@ -672,9 +950,6 @@ public class ICUResourceBundle extends UResourceBundle{
 
     private static class ResourceTable32 extends ICUResourceBundle{
 
-        public Object handleGetObject(String key){
-            return get(key);   
-        }
         public ICUResourceBundle get(String key){
             return get(key, null);   
         }
@@ -747,13 +1022,22 @@ public class ICUResourceBundle extends UResourceBundle{
         }
     }
     private static class ResourceArray extends ICUResourceBundle{
+        protected String[] handleGetStringArray(){
+            String[] strings = new String[size];
+            ICUResourceBundleIterator iter = getIterator();
+            int i = 0;
+            while(iter.hasNext()){
+                strings[i++] = iter.next().getString();   
+            }
+            return strings;
+        }
         protected ICUResourceBundle handleGet(String index){
             return handleGet(index, null);
         }
         protected ICUResourceBundle handleGet(String index, Hashtable table){
             int val = getIndex(index);
             if(val>-1){
-                return handleGet(val);
+                return handleGet(val, table);
             }
             throw new UResourceTypeMismatchException("");
         }
@@ -788,7 +1072,7 @@ public class ICUResourceBundle extends UResourceBundle{
             for(int i=0; i<length; i++){
                 val.put(rawData.get(byteOffset+i));
             }
-            return val.asReadOnlyBuffer();
+            return val;
         }
 		public ResourceBinary(ByteBuffer rawData, String baseName, String localeID, String key, 
                               long resource, long rootResource ){
@@ -813,7 +1097,7 @@ public class ICUResourceBundle extends UResourceBundle{
         }
         public ResourceIntVector(ByteBuffer rawData, String baseName, String localeID, String key, 
                                 long resource, long rootResource){
-            super(rawData, baseName, localeID, key, resource, rootResource, ARRAY, false );
+            super(rawData, baseName, localeID, key, resource, rootResource,INT_VECTOR, false );
             value = getValue();
         }
     }
@@ -878,7 +1162,7 @@ public class ICUResourceBundle extends UResourceBundle{
                 locale = resPath.substring(0,i);
             }else{
                 locale=keyPath;
-                keyPath = keyPath.substring(i, keyPath.length());
+                keyPath = null;//keyPath.substring(i, keyPath.length());
             }
             bundleName = baseName;
 
@@ -886,9 +1170,9 @@ public class ICUResourceBundle extends UResourceBundle{
         
         ICUResourceBundle bundle = null;
         if(locale==null){
-            bundle = (ICUResourceBundle)getBundleInstance(bundleName, "", ICU_DATA_CLASS_LOADER, true);
+            bundle = (ICUResourceBundle)getBundleInstance(bundleName, "", ICU_DATA_CLASS_LOADER, false);
         }else{
-            bundle = (ICUResourceBundle)getBundleInstance(bundleName, locale, ICU_DATA_CLASS_LOADER, true);
+            bundle = (ICUResourceBundle)getBundleInstance(bundleName, locale, ICU_DATA_CLASS_LOADER, false);
         }
         
         
@@ -899,13 +1183,8 @@ public class ICUResourceBundle extends UResourceBundle{
             while (st.hasMoreTokens()) {
                 String subKey = st.nextToken();
                 sub = current.handleGet(subKey, table);
-                // cannot find bundle about the subKey
-                // so try the index
                 if(sub==null){
-                    int val = getIndex(subKey);
-                    if(val>-1){
-                        sub = current.get(val);
-                    }
+                    break;
                 }
                 current = sub;
             }

@@ -34,40 +34,6 @@ public class ICULocaleData {
     static final String LOCALE_ELEMENTS = "LocaleElements";
 
     /**
-     * Return a list of the locales supported by a collection of resource bundles.
-     * All ICULocaleData-based services that use a particular resource bundle support
-     * all the locales from that bundle.  If support for a particular service is spotty,
-     * a different bundle prefix should be used for that service.
-     * @param bundlePrefix the prefix of the resource bundles to use.
-     */
-    public static Locale[] getAvailableLocales(String bundlePrefix) {
-        return (Locale[])getAvailEntry(bundlePrefix).getLocaleList().clone();
-    }
-
-    /**
-     * Convenience method that returns a list of all the avilable LOCALE_ELEMENTS locales.
-     */
-    public static Locale[] getAvailableLocales() {
-        return getAvailableLocales(LOCALE_ELEMENTS);
-    }
-
-    /**
-     * Return a set of the locale names supported by a collection of resource bundles.
-     * @param bundlePrefix the prefix of the resource bundles to use.
-     */
-    public static Set getAvailableLocaleNameSet(String bundlePrefix) {
-        return getAvailEntry(bundlePrefix).getLocaleNameSet();
-    }
-
-    /**
-     * Return a set of the locale names supported by a collection of resource bundles.
-     * @param bundlePrefix the prefix of the resource bundles to use.
-     */
-    public static Set getAvailableLocaleNameSet() {
-        return getAvailableLocaleNameSet(LOCALE_ELEMENTS);
-    }
-
-    /**
      * Creates a LocaleElements resource bundle for the given locale
      * in the default ICU package.
      * @param locale the locale of the bundle to retrieve, or
@@ -225,62 +191,6 @@ public class ICULocaleData {
 
     // Cache for ResourceBundle instantiation
     private static SoftReference BUNDLE_CACHE;
-
-    /**
-     * Holds the prefix, and lazily creates the Locale[] list or the locale name Set as needed.
-     */
-    private static final class AvailEntry {
-        private String prefix;
-        private Locale[] locales;
-        private Set nameSet;
-
-        AvailEntry(String prefix) {
-            this.prefix = prefix;
-        }
-
-        Locale[] getLocaleList() {
-            if (locales == null) {
-                locales = createLocaleList(prefix);
-            }
-            return locales;
-        }
-
-        Set getLocaleNameSet() {
-            if (nameSet == null) {
-                nameSet = createLocaleNameSet(prefix);
-            }
-            return nameSet;
-        }
-    }
-
-    /**
-     * Stores the locale information in a cache accessed by key (bundle prefix).  The
-     * cached objects are AvailEntries.  The cache is held by a SoftReference
-     * so it can be GC'd.
-     */
-    private static AvailEntry getAvailEntry(String key) {
-        AvailEntry ae = null;
-        Map lcache = null;
-        if (GET_AVAILABLE_CACHE != null) {
-            lcache = (Map)GET_AVAILABLE_CACHE.get();
-            if (lcache != null) {
-                ae = (AvailEntry)lcache.get(key);
-            }
-        }
-
-        if (ae == null) {
-            ae = new AvailEntry(key);
-            if (lcache == null) {
-                lcache = new HashMap();
-                lcache.put(key, ae);
-                GET_AVAILABLE_CACHE = new SoftReference(lcache);
-            } else {
-                lcache.put(key, ae);
-            }
-        }
-
-        return ae;
-    }
 
     private static ResourceBundle loadFromCache(String key) {
         if (BUNDLE_CACHE != null) {

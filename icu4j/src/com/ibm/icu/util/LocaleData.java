@@ -6,10 +6,7 @@
 */
 package com.ibm.icu.util;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -33,10 +30,10 @@ public final class LocaleData {
      * @param locale    The locale for which the exemplar character set 
      *                  needs to be retrieved.
      * @return UnicodeSet The set representing the exemplar characters
-     * @draft ICU 2.8
+     * @draft ICU 3.0
      */
-    public static UnicodeSet getExemplarSet(Locale locale){
-        ResourceBundle bundle = ICULocaleData.getLocaleElements(locale);
+    public static UnicodeSet getExemplarSet(ULocale locale){
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
         String pattern = bundle.getString(EXEMPLAR_CHARS);
         return new UnicodeSet(pattern);
     }
@@ -73,20 +70,18 @@ public final class LocaleData {
      *
      * @param locale      The locale for which the measurement system to be retrieved.
      * @return MeasurementSystem the measurement system used in the locale.
-     * @draft ICU 2.8
+     * @draft ICU 3.0
      */
-    public static final MeasurementSystem getMeasurementSystem(Locale locale){
-        ResourceBundle bundle = ICULocaleData.getLocaleElements(locale);
-        Object obj = bundle.getObject(MEASUREMENT_SYSTEM);
+    public static final MeasurementSystem getMeasurementSystem(ULocale locale){
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle sysBundle = bundle.get(MEASUREMENT_SYSTEM);
         
-        if(obj != null && obj instanceof Integer){
-            int system = ((Integer)obj).intValue();
-            if(MeasurementSystem.US.equals(system)){
-                return MeasurementSystem.US;
-            }
-            if(MeasurementSystem.SI.equals(system)){
-                return MeasurementSystem.SI;
-            }
+        int system = sysBundle.getInt();
+        if(MeasurementSystem.US.equals(system)){
+            return MeasurementSystem.US;
+        }
+        if(MeasurementSystem.SI.equals(system)){
+            return MeasurementSystem.SI;
         }
         // return null if the object is null or is not an instance
         // of integer indicating an error
@@ -129,15 +124,12 @@ public final class LocaleData {
      * <em> milli-meters<em>.
      * @param locale The locale for which the measurement system to be retrieved. 
      * @return The paper size used in the locale
-     * @draft ICU 2.8
+     * @draft ICU 3.0
      */
-    public static final PaperSize getPaperSize(Locale locale){
-        ResourceBundle bundle = ICULocaleData.getLocaleElements(locale);
-        Object obj = bundle.getObject(PAPER_SIZE);
-        if(obj != null && obj instanceof Integer[]){
-            Integer[] size = (Integer[])obj;
-            return new PaperSize(size[0].intValue(), size[1].intValue());
-        }
-        return null;
+    public static final PaperSize getPaperSize(ULocale locale){
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle obj = bundle.get(PAPER_SIZE);
+        int[] size = obj.getIntVector();
+        return new PaperSize(size[0], size[1]);
     }
 }

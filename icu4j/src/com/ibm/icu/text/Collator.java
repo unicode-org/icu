@@ -10,9 +10,10 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.Set;
 
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -481,7 +482,7 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return shim.getAvailableLocales();
     }
