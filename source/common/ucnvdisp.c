@@ -38,6 +38,7 @@ ucnv_getDisplayName(const UConverter *cnv,
     UResourceBundle *rb;
     const UChar *name;
     int32_t length;
+    UErrorCode localStatus = U_ZERO_ERROR;
 
     /* check arguments */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -56,15 +57,17 @@ ucnv_getDisplayName(const UConverter *cnv,
     }
 
     /* use the internal name as the key */
-    name=ures_getStringByKey(rb, cnv->sharedData->staticData->name, &length, pErrorCode);
+    name=ures_getStringByKey(rb, cnv->sharedData->staticData->name, &length, &localStatus);
     ures_close(rb);
 
-    if(U_SUCCESS(*pErrorCode)) {
+    if(U_SUCCESS(localStatus)) {
         /* copy the string */
+        if (*pErrorCode == U_ZERO_ERROR) {
+            *pErrorCode = localStatus;
+        }
         u_memcpy(displayName, name, uprv_min(length, displayNameCapacity)*U_SIZEOF_UCHAR);
     } else {
         /* convert the internal name into a Unicode string */
-        *pErrorCode=U_ZERO_ERROR;
         length=(int32_t)uprv_strlen(cnv->sharedData->staticData->name);
         u_charsToUChars(cnv->sharedData->staticData->name, displayName, uprv_min(length, displayNameCapacity));
     }

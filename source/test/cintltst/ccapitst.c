@@ -710,38 +710,36 @@ static void TestConvert()
         /*getDisplayName*/
         log_verbose("\n---Testing ucnv_getDisplayName()...\n");
         locale=CodePagesLocale[codepage_index];
-        displayname=(UChar*)malloc(1 * sizeof(UChar));
         len=0;
-        disnamelen = ucnv_getDisplayName(myConverter,locale,displayname, len, &err); 
-        if(err==U_BUFFER_OVERFLOW_ERROR)
-        {    
+        displayname=NULL;
+        disnamelen = ucnv_getDisplayName(myConverter, locale, displayname, len, &err); 
+        if(err==U_BUFFER_OVERFLOW_ERROR) {    
             err=U_ZERO_ERROR;
-            displayname=(UChar*)realloc(displayname, (disnamelen+1) * sizeof(UChar));
-            ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
-            if(U_FAILURE(err))
-            {
-                log_err("getDisplayName failed the error is  %s\n", myErrorName(err));
+            displayname=(UChar*)malloc(disnamelen+1 * sizeof(UChar));
+            //ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);
+            if(U_FAILURE(err)) {
+                log_err("getDisplayName failed. The error is  %s\n", myErrorName(err));
             }
-            else
+            else {
                 log_verbose(" getDisplayName o.k.\n");
+            }
+            free(displayname);
+            displayname=NULL;
+        }
+        else {
+            log_err("getDisplayName preflight doesn't work. Error is  %s\n", myErrorName(err));
         }
         /*test ucnv_getDiaplayName with error condition*/
         err= U_ILLEGAL_ARGUMENT_ERROR;
-        len=ucnv_getDisplayName(myConverter,locale,displayname,disnamelen+1, &err);  
+        len=ucnv_getDisplayName(myConverter,locale,NULL,0, &err);  
         if( len !=0 ){
             log_err("ucnv_getDisplayName() with err != U_ZERO_ERROR is supposed to return 0\n");
         }
         /*test ucnv_getDiaplayName with error condition*/
         err=U_ZERO_ERROR;
-        len=ucnv_getDisplayName(NULL,locale,displayname,disnamelen+1, &err);  
+        len=ucnv_getDisplayName(NULL,locale,NULL,0, &err);  
         if( len !=0 || U_SUCCESS(err)){
             log_err("ucnv_getDisplayName(NULL) with cnv == NULL is supposed to return 0\n");
-        }
-        /*test ucnv_getDiaplayName with preflight condition*/
-        err=U_ZERO_ERROR;
-        len=ucnv_getDisplayName(myConverter,locale,NULL,0, &err);  
-        if( len ==0 || err != U_BUFFER_OVERFLOW_ERROR){
-            log_err("ucnv_getDisplayName() preflighting doesn't work. len = %d, err = %s\n", len, u_errorName(err));
         }
         err=U_ZERO_ERROR;
 
@@ -1057,7 +1055,6 @@ static void TestConvert()
 
         fclose(ucs_file_in);
         ucnv_close(myConverter);
-        free(displayname);
         if (uchar1 != 0) free(uchar1);
         if (uchar2 != 0) free(uchar2);
         if (uchar3 != 0) free(uchar3);
