@@ -786,7 +786,7 @@ RuleBasedCollator::constructFromBundle(const Locale & name,
     isOverIgnore = FALSE;
     setStrength(Collator::TERTIARY); // This is the default strength
 
-    ResourceBundle rb(0, name, status);
+    ResourceBundle rb((char *)0, name, status);
     if(U_SUCCESS(status)) {
       ResourceBundle binary = rb.get("%%Collation", status); //This is the bundle that actually contains the collation data
       realName = binary.getName();

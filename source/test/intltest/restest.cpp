@@ -250,7 +250,7 @@ ResourceBundleTest::TestConstruction()
         uprv_strcpy(testdatapath, directory);
         uprv_strcat(testdatapath, "testdata");
 
-        ResourceBundle  test1(testdatapath, err);
+        ResourceBundle  test1((UnicodeString)testdatapath, err);
         ResourceBundle  test2(testdatapath, locale, err);
         //ResourceBundle  test1("c:\\icu\\icu\\source\\test\\testdata\\testdata", err);
         //ResourceBundle  test2("c:\\icu\\icu\\source\\test\\testdata\\testdata", locale, err);

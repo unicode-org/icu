@@ -667,7 +667,7 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         Locale fakeLocale(ch);
         delete [] ch;
 
-        ResourceBundle bundle(NULL,
+        ResourceBundle bundle((char *)0,
                               fakeLocale, status);
         
         // Call RBT to parse the rules from the resource bundle
@@ -895,11 +895,8 @@ void Transliterator::initializeCache(void) {
      */
 
     Locale indexLoc("translit_index");
-/*
-    ResourceBundle bundle(Transliterator::getDataDirectory(),
-                          indexLoc, status);
-*/
-    ResourceBundle bundle(NULL,
+
+    ResourceBundle bundle((char *)0,
                           indexLoc, status);
 
     int32_t rows, cols;
