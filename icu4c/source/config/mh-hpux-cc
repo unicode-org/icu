@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-cc,v 1.30 2002/03/01 17:47:41 grhoten-oss Exp $
+## $Id: mh-hpux-cc,v 1.31 2003/08/08 23:53:43 grhoten-oss Exp $
 
 
 ## This causes source/tools/pkgdata generated makefiles  to create and link
@@ -57,8 +57,6 @@ STATIC_O = o
 %.o: $(srcdir)/%.cpp
 	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o: ../data/%.c
-	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 %.d : $(srcdir)/%.c
