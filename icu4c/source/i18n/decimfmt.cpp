@@ -922,7 +922,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
     result += (digits.fIsPositive ? fPositiveSuffix : fNegativeSuffix);
 
-    addPadding(result, TRUE, digits.fIsPositive);
+    addPadding(result, TRUE, !digits.fIsPositive);
     return result;
 }
 
