@@ -383,7 +383,7 @@ void UnicodeSetTest::TestAPI() {
     }
 
     exp = c;
-    c = bitsToSet(setToBits(c));
+    bitsToSet(setToBits(c), c);
     if (c == exp) {
         logln((UnicodeString)"bitsToSet(setToBits(c)): " + c);
     } else {
@@ -397,21 +397,24 @@ void UnicodeSetTest::TestExhaustive() {
 
     UChar32 limit = (UChar32)128;
 
+    UnicodeSet x, y, z;
+
     for (UChar32 i = 0; i < limit; ++i) {
-        logln((UnicodeString)"Testing " + i + ", " + bitsToSet(i));
-        _testComplement(i);
+        bitsToSet(i, x);
+        logln((UnicodeString)"Testing " + i + ", " + x);
+        _testComplement(i, x, y);
         for (UChar32 j = 0; j < limit; ++j) {
-            _testAdd(i,j);
-            _testXor(i,j);
-            _testRetain(i,j);
-            _testRemove(i,j);
+            _testAdd(i,j,  x,y,z);
+            _testXor(i,j,  x,y,z);
+            _testRetain(i,j,  x,y,z);
+            _testRemove(i,j,  x,y,z);
         }
     }
 }
 
-void UnicodeSetTest::_testComplement(int32_t a) {
-    UnicodeSet x = bitsToSet(a);
-    UnicodeSet z = bitsToSet(a);
+void UnicodeSetTest::_testComplement(int32_t a, UnicodeSet& x, UnicodeSet& z) {
+    bitsToSet(a, x);
+    z = x;
     z.complement();
     int32_t c = setToBits(z);
     if (c != (~a)) {
@@ -421,10 +424,10 @@ void UnicodeSetTest::_testComplement(int32_t a) {
     checkCanonicalRep(z, "complement " + a);
 }
 
-void UnicodeSetTest::_testAdd(int32_t a, int32_t b) {
-    UnicodeSet x = bitsToSet(a);
-    UnicodeSet y = bitsToSet(b);
-    UnicodeSet z = bitsToSet(a);
+void UnicodeSetTest::_testAdd(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y, UnicodeSet& z) {
+    bitsToSet(a, x);
+    bitsToSet(b, y);
+    z = x;
     z.addAll(y);
     int32_t c = setToBits(z);
     if (c != (a | b)) {
@@ -434,10 +437,10 @@ void UnicodeSetTest::_testAdd(int32_t a, int32_t b) {
     checkCanonicalRep(z, (UnicodeString)"add " + a + "," + b);
 }
 
-void UnicodeSetTest::_testRetain(int32_t a, int32_t b) {
-    UnicodeSet x = bitsToSet(a);
-    UnicodeSet y = bitsToSet(b);
-    UnicodeSet z = bitsToSet(a);
+void UnicodeSetTest::_testRetain(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y, UnicodeSet& z) {
+    bitsToSet(a, x);
+    bitsToSet(b, y);
+    z = x;
     z.retainAll(y);
     int32_t c = setToBits(z);
     if (c != (a & b)) {
@@ -447,10 +450,10 @@ void UnicodeSetTest::_testRetain(int32_t a, int32_t b) {
     checkCanonicalRep(z, (UnicodeString)"retain " + a + "," + b);
 }
 
-void UnicodeSetTest::_testRemove(int32_t a, int32_t b) {
-    UnicodeSet x = bitsToSet(a);
-    UnicodeSet y = bitsToSet(b);
-    UnicodeSet z = bitsToSet(a);
+void UnicodeSetTest::_testRemove(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y, UnicodeSet& z) {
+    bitsToSet(a, x);
+    bitsToSet(b, y);
+    z = x;
     z.removeAll(y);
     int32_t c = setToBits(z);
     if (c != (a &~ b)) {
@@ -460,10 +463,10 @@ void UnicodeSetTest::_testRemove(int32_t a, int32_t b) {
     checkCanonicalRep(z, (UnicodeString)"remove " + a + "," + b);
 }
 
-void UnicodeSetTest::_testXor(int32_t a, int32_t b) {
-    UnicodeSet x = bitsToSet(a);
-    UnicodeSet y = bitsToSet(b);
-    UnicodeSet z = bitsToSet(a);
+void UnicodeSetTest::_testXor(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y, UnicodeSet& z) {
+    bitsToSet(a, x);
+    bitsToSet(b, y);
+    z = x;
     z.xorAll(y);
     int32_t c = setToBits(z);
     if (c != (a ^ b)) {
@@ -508,14 +511,13 @@ void UnicodeSetTest::checkCanonicalRep(const UnicodeSet& set, const UnicodeStrin
 /**
  * Convert a bitmask to a UnicodeSet.
  */
-UnicodeSet UnicodeSetTest::bitsToSet(int32_t a) {
-    UnicodeSet result;
-    for (int32_t i = 0; i < 32; ++i) {
+void UnicodeSetTest::bitsToSet(int32_t a, UnicodeSet& result) {
+    result.clear();
+    for (UChar32 i = 0; i < 32; ++i) {
         if ((a & (1<<i)) != 0) {
-            result.add((UChar32)i,(UChar32)i);
+            result.add(i);
         }
     }
-    return result;
 }
 
 /**
