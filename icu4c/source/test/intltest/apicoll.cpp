@@ -332,17 +332,17 @@ CollationAPITest::TestDecomposition() {
   }
 
   /* there is no reason to have canonical decomposition in en_US OR default locale */
-  if (vi_VN->getDecomposition() != Normalizer::EMode::DECOMP)
+  if (vi_VN->getDecomposition() != Normalizer::DECOMP)
   {
     errln("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
   }
 
-  if (el_GR->getDecomposition() != Normalizer::EMode::DECOMP)
+  if (el_GR->getDecomposition() != Normalizer::DECOMP)
   {
     errln("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
   }
 
-  if (en_US->getDecomposition() != Normalizer::EMode::NO_OP)
+  if (en_US->getDecomposition() != Normalizer::NO_OP)
   {
     errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
   }
@@ -377,8 +377,8 @@ CollationAPITest::TestSafeClone() {
       errln("SafeClone of collator should not return null\n");
       break;
     }
-    col->setStrength(Collator::ECollationStrength::TERTIARY);
-    someCollators[index]->setStrength(Collator::ECollationStrength::PRIMARY);
+    col->setStrength(Collator::TERTIARY);
+    someCollators[index]->setStrength(Collator::PRIMARY);
     col->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
     someCollators[index]->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
         
@@ -455,7 +455,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     Collator *col = 0;
     UErrorCode success=U_ZERO_ERROR;
     col = Collator::createInstance(Locale::ENGLISH, success);
-    col->setStrength(Collator::ECollationStrength::TERTIARY);
+    col->setStrength(Collator::TERTIARY);
     if (U_FAILURE(success))
     {
         errln("Default collation creation failed.");
@@ -533,7 +533,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortk2 != sortk3, "sortk2 != sortk3 Failed.");
     logln("testing sortkey ends...");
 
-    col->setStrength(Collator::ECollationStrength::SECONDARY);
+    col->setStrength(Collator::SECONDARY);
     doAssert(col->getCollationKey(test1, sortk1, key1Status).compareTo(
                                   col->getCollationKey(test2, sortk2, key2Status)) 
                                   == Collator::EQUAL, 
