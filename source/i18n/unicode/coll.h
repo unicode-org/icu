@@ -613,7 +613,7 @@ public:
     static StringEnumeration* getAvailableLocales(void);
 
     /**
-     * Create a string enumerator of all keywords that are relevant to
+     * Create a string enumerator of all possible keywords that are relevant to
      * collation. At this point, the only recognized keyword for this
      * service is "collation".
      * @param status input-output error code
@@ -624,8 +624,8 @@ public:
     static StringEnumeration* getKeywords(UErrorCode& status);
 
     /**
-     * Given a keyword, create a string enumeration of all possible values
-     * for that keyword.
+     * Given a keyword, create a string enumeration of all values
+     * for that keyword that are currently in use.
      * @param keyword a particular keyword as enumerated by
      * ucol_getKeywords. If any other keyword is passed in, status is set
      * to U_ILLEGAL_ARGUMENT_ERROR.
@@ -637,8 +637,20 @@ public:
     static StringEnumeration* getKeywordValues(const char *keyword, UErrorCode& status);
     
     /**
-     * Return a functionally equivalent collation locale for the given
-     * requested locale.
+     * Return the functionally equivalent locale for the given
+     * requested locale, with respect to given keyword, for the
+     * collation service.  If two locales return the same result, then
+     * collators instantiated for these locales will behave
+     * equivalently.  The converse is not always true; two collators
+     * may in fact be equivalent, but return different results, due to
+     * internal details.  The return result has no other meaning than
+     * that stated above, and implies nothing as to the relationship
+     * between the two locales.  This is intended for use by
+     * applications who wish to cache collators, or otherwise reuse
+     * collators when possible.  The functional equivalent may change
+     * over time.  For more information, please see the <a
+     * href="http://oss.software.ibm.com/icu/userguide/locale.html#services">
+     * Locales and Services</a> section of the ICU User Guide.
      * @param keyword a particular keyword as enumerated by
      * ucol_getKeywords.
      * @param locale the requested locale
