@@ -1,2 +1,6 @@
 Makefile
-
+.links
+*.cnv
+*.dat
+*.res
+*.brk

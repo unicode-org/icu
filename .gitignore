@@ -23,6 +23,11 @@ icu4c/source/config.cache
 icu4c/source/config.log
 icu4c/source/config.status
 icu4c/source/config/Makefile.inc
+icu4c/source/data/*.brk
+icu4c/source/data/*.cnv
+icu4c/source/data/*.dat
+icu4c/source/data/*.res
+icu4c/source/data/.links
 icu4c/source/data/Makefile
 icu4c/source/extra/Makefile
 icu4c/source/extra/ustdio/*.d
