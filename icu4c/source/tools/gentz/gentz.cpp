@@ -140,19 +140,14 @@ int main(int argc, char *argv[]) {
 
 const int32_t gentz::MAX_GMT_OFFSET = (int32_t)24*60*60; // seconds
 const char    gentz::COMMENT        = '#';
-const char    gentz::CR             = ((char)13);
-// OS390 uses x'15' NL new line for LF               
-#ifdef OS390                                         
-const char    gentz::LF             = ((char)21);    
-#else
-const char    gentz::LF             = ((char)10);
-#endif
+const char    gentz::CR             = '\r';
+const char    gentz::LF             = '\n';
 const char    gentz::MINUS          = '-';
 const char    gentz::SPACE          = ' ';
-const char    gentz::TAB            = ((char)9);
+const char    gentz::TAB            = '\t';
 const char    gentz::ZERO           = '0';
 const char    gentz::SEP            = ',';
-const char    gentz::NUL            = ((char)0);
+const char    gentz::NUL            = '\0';
 const char*   gentz::END_KEYWORD    = "end";
 
 void gentz::usage(const char* argv0) {
