@@ -40,7 +40,8 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(3,TestCloneEqualHash);
         CASE(4,TestMinimalRep);
         CASE(5,TestAPI);
-        CASE(6,TestExhaustive);
+        CASE(6,TestScriptSet);
+        CASE(7,TestExhaustive);
         default: name = ""; break;
     }
 }
@@ -390,6 +391,20 @@ void UnicodeSetTest::TestAPI() {
     } else {
         errln((UnicodeString)"FAIL: bitsToSet(setToBits(c)) = " + c + ", expect " + exp);
     }
+}
+
+/**
+ * Test the [:Latin:] syntax.
+ */
+void UnicodeSetTest::TestScriptSet() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeSet set("[:Latin:]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    expectContainment(set, "[:Latin:]", "aA", CharsToUnicodeString("\\u0391\\u03B1"));
+
+    UnicodeSet set2("[:Greek:]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    expectContainment(set2, "[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
 }
 
 void UnicodeSetTest::TestExhaustive() {

@@ -11,6 +11,7 @@
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
 #include "unicode/unicode.h"
+#include "unicode/uscript.h"
 #include "symtable.h"
 #include "cmemory.h"
 #include "rbt_rule.h"
@@ -1364,6 +1365,34 @@ void UnicodeSet::applyCategory(const UnicodeString& catName,
     }
 
     if (!match) {
+        // TODO: Add caching of these, if desired
+        char buf[128];
+        catName.extract(buf, sizeof(buf), NULL, status);
+        UScriptCode script = uscript_getCode(buf, &status);
+        if (script != USCRIPT_INVALID_CODE) {
+            match = TRUE;
+            clear();
+            int32_t start = -1;
+            int32_t end = -2;
+            for (UChar32 i=MIN_VALUE; i<=MAX_VALUE; ++i) {
+                if (uscript_getScript(i, &status) == script) {
+                    if ((end+1) == (int32_t) i) {
+                        end = i;
+                    } else {
+                        if (start >= 0) {
+                            add((UChar32) start, (UChar32) end);
+                        }
+                        start = end = i;
+                    }
+                }
+            }
+            if (start >= 0) {
+                add((UChar32) start, (UChar32) end);
+            }
+        }
+    }
+
+    if (!match) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1399,9 +1428,10 @@ const UnicodeSet& UnicodeSet::getCategorySet(int8_t cat) {
         UnicodeSet& set = CATEGORY_CACHE[cat];
         int32_t start = -1;
         int32_t end = -2;
-        // N.B.: Change upper limit to 0x10FFFF when there is
-        // actually something up there.
-        for (int32_t i=0; i<=0xFFFF; ++i) {
+        // N.B.: There seems to be a bug that deadlocks if you
+		// call getType() with a supplemental character right now.
+		// TODO: Change 0xFFFF to MAX_VALUE later.
+        for (int32_t i=MIN_VALUE; i<=0xFFFF/*TEMPORARY*/; ++i) {
             if (Unicode::getType((UChar)i) == cat) {
                 if ((end+1) == i) {
                     end = i;
