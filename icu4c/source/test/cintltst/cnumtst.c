@@ -625,7 +625,7 @@ static void TestNumberFormatPadding()
 /*    u_uastrcpy(temp1, "*x#,###,###,##0.0#;(*x#,###,###,##0.0#)"); */
     u_uastrcpy(temp1, "*x#,###,###,##0.0#;*x(###,###,##0.0#)");
     status=U_ZERO_ERROR;
-    pattern=unum_openPattern(temp1, u_strlen(temp1), NULL, &status);
+    pattern=unum_openPattern(temp1, u_strlen(temp1), "en_US", &status);
     if(U_FAILURE(status))
     {
         log_err("error in padding unum_openPattern(%s): %s\n", temp1, myErrorName(status) );;
