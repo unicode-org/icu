@@ -914,6 +914,9 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
         /*
          * set a flag for whether the converter
          * successfully processed the end of the input
+         *
+         * need not check cnv->preFromULength==0 because that will cause
+         * s<sourceLimit before converterSawEndOfInput is checked
          */
         converterSawEndOfInput=
             (UBool)(U_SUCCESS(*err) &&
@@ -1302,6 +1305,9 @@ _toUnicodeWithCallback(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
             /*
              * set a flag for whether the converter
              * successfully processed the end of the input
+             *
+             * need not check cnv->preToULength==0 because that will cause
+             * s<sourceLimit before converterSawEndOfInput is checked
              */
             converterSawEndOfInput=
                 (UBool)(U_SUCCESS(*err) &&
@@ -1834,13 +1840,10 @@ ucnv_getNextUChar(UConverter *cnv,
             c=cnv->sharedData->impl->getNextUChar(&args, err);
             *source=s=args.source;
             if(*err==U_INDEX_OUTOFBOUNDS_ERROR) {
-                /* no input, nothing we can do */
-                return 0xffff;
+                /* reset the converter without calling the callback function */
+                _reset(cnv, UCNV_RESET_TO_UNICODE, FALSE);
+                return 0xffff; /* no output */
             } else if(U_SUCCESS(*err) && c>=0) {
-                if(s==sourceLimit) {
-                    /* reset the converter without calling the callback function */
-                    _reset(cnv, UCNV_RESET_TO_UNICODE, FALSE);
-                }
                 return c;
             /*
              * else fall through to use _toUnicode() because
@@ -1874,6 +1877,10 @@ ucnv_getNextUChar(UConverter *cnv,
     } else if(length==0) {
         /* no input or only state changes */
         *err=U_INDEX_OUTOFBOUNDS_ERROR;
+
+        /* reset the converter without calling the callback function */
+        _reset(cnv, UCNV_RESET_TO_UNICODE, FALSE);
+
         c=0xffff; /* no output */
     } else {
         c=buffer[0];
