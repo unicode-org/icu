@@ -86,10 +86,12 @@ option-scan1:
     
 option-scan2:
     name_char            n option-scan2
-    white_space            start                                    doOptionEnd
-    ';'                    start                                    doOptionEnd
-    default                errorDeath                               doRuleError
+    default                option-scan3                             doOptionEnd
     
+option-scan3:
+    ';'                  n start 
+    white_space          n option-scan3 
+    default                errorDeath 
     
 
 reverse-rule:
