@@ -1052,10 +1052,10 @@ root {
                 "Kentoku",                      // 1370
                 "Bunch\u0169",                  // 1372
                 "Tenju",                        // 1375
+                "K\u014Dryaku",                 // 1379
                 "K\u014Dwa",                    // 1381
                 "Gench\u0169",                  // 1384
                 "Meitoku",                      // 1384
-                "K\u014Dryaku",                 // 1379
                 "Kakei",                        // 1387
                 "K\u014D\u014D",                // 1389
                 "Meitoku",                      // 1390
