@@ -934,7 +934,7 @@ static void TestGetKeywordValues(void) {
 
   log_verbose("Testing getting collation keyword values:\n");
   
-  while(kw=uenum_next(kwVals, NULL, &status)) {
+  while((kw=uenum_next(kwVals, NULL, &status))) {
     log_verbose("  %s\n", kw);
     if(!strcmp(kw,"standard")) {
       if(foundStandard == FALSE) {
@@ -957,7 +957,7 @@ static void TestGetKeywordValues(void) {
 
   log_verbose("Testing getting calendar keyword values:\n");
   
-  while(kw=uenum_next(kwVals, NULL, &status)) {
+  while((kw=uenum_next(kwVals, NULL, &status))) {
     log_verbose("  %s\n", kw);
     if(!strcmp(kw,"standard")) {
       if(foundStandard == FALSE) {
