@@ -3,17 +3,11 @@
 * Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/currency.cpp,v $ 
-* $Date: 2002/05/15 18:51:39 $ 
-* $Revision: 1.4 $
-**********************************************************************
 */
 #include "unicode/currency.h"
 #include "cstring.h"
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
-
-U_NAMESPACE_BEGIN
 
 //------------------------------------------------------------
 // Constants
@@ -34,16 +28,16 @@ static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 // Resource tags
 
 // Tag for meta-data, in root.
-#define CURRENCY_META "CurrencyMeta"
+static const char CURRENCY_META[] = "CurrencyMeta";
 
 // Tag for default meta-data, in CURRENCY_META
-#define DEFAULT_META "DEFAULT"
+static const char DEFAULT_META[] = "DEFAULT";
 
 // Tag for legacy currency elements data
-#define CURRENCY_ELEMENTS "CurrencyElements"
+static const char CURRENCY_ELEMENTS[] = "CurrencyElements";
 
 // Tag for localized display names (symbols) of currencies
-#define CURRENCIES "Currencies"
+static const char CURRENCIES[] = "Currencies";
 
 //------------------------------------------------------------
 // Code
@@ -116,6 +110,7 @@ ucurr_forLocale(const char* locale,
     result[0] = 0;
 }
 
+U_NAMESPACE_BEGIN
 /**
  * Rather than convert a UnicodeString to a UChar array and then back
  * to a UnicodeString, possibly with allocation of UChar space on the
@@ -165,6 +160,7 @@ ucurr_getSymbolAsUnicodeString(const char* currency,
 
     return s;
 }
+U_NAMESPACE_END
 
 U_CAPI int32_t U_EXPORT2
 ucurr_getSymbol(const char* currency,
@@ -201,7 +197,5 @@ ucurr_getRoundingIncrement(const char* currency) {
     // as of this writing, is CHF { 2, 25 }.
     return double(data[1]) / POW10[data[0]];
 }
-
-U_NAMESPACE_END
 
 //eof
