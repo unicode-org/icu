@@ -90,7 +90,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
       TESTCLASS(19, CollationServiceTest);
 
       //TESTCLASS(n, CollationDanishTest); // removed by weiv - we have changed Danish collation
-      //TESTCLASS(n, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
+      TESTCLASS(20, CollationFinnishTest); // removed by weiv - we have changed Finnish collation
       //TESTCLASS(n, CollationCAPITest);
       
       default: name = ""; break;
