@@ -18,6 +18,7 @@
 
 #include "ieeetest.h"
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 
 //==============================
 
