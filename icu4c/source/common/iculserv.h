@@ -70,8 +70,6 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     UnicodeString _fallbackID;
     UnicodeString _currentID;
 
-    static const UChar UNDERSCORE_CHAR; // '_'
-
   public:
     static const int32_t KIND_ANY; //  = -1;
 
@@ -540,10 +538,6 @@ class U_COMMON_API ICULocaleService : public ICUService
 // in header so tests can also access them
 
 class U_COMMON_API LocaleUtility {
-  static Hashtable* cache;
-  static UMTX lock;
-  static const UChar UNDERSCORE_CHAR;
-
 public:
   static UnicodeString& canonicalLocaleString(const UnicodeString* id, UnicodeString& result);
   static Locale& initLocaleFromName(const UnicodeString& id, Locale& result);
