@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules_th.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.9 $
+ * $Date: 2003/07/03 17:48:12 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ import java.net.URL;
 public class BreakIteratorRules_th extends ListResourceBundle {
     public Object[][] getContents() {
 
-        URL url = getClass().getResource("thai_dict");
+        URL url = getClass().getResource("BreakDictionaryData_th.brk");
 
         // if dictionary wasn't found, then this resource bundle doesn't have
         // much to contribute...
