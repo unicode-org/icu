@@ -1266,45 +1266,45 @@ static void TestGetVersion(){
     int locCount = uloc_countAvailable();
     const char *locName = "root";
     log_verbose("The ures_getVersion tests begin : \n");
-  
+
     for(j = -1; j < locCount; j++) {
-      if(j >= 0) {
-        locName = uloc_getAvailable(j);
-      }
-      log_verbose("Testing version number for locale %s\n", locName);
-      resB = ures_open(NULL,locName, &status);
-      if (U_FAILURE(status)) {
-          log_err("Resource bundle creation for locale %s failed.: %s\n", locName, myErrorName(status));
-          ures_close(resB);
-          return;
-      }
-      ures_getVersion(resB, versionArray);
-      for (i=0; i<4; ++i) {
-          if (versionArray[i] < minVersionArray[i] ||
-              versionArray[i] > maxVersionArray[i])
-          {
-              log_err("Testing ures_getVersion() - unexpected result: %d.%d.%d.%d\n", 
-                  versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
-              break;
-          }
-      }
-      ures_close(resB);
+        if(j >= 0) {
+            locName = uloc_getAvailable(j);
+        }
+        log_verbose("Testing version number for locale %s\n", locName);
+        resB = ures_open(NULL,locName, &status);
+        if (U_FAILURE(status)) {
+            log_err("Resource bundle creation for locale %s failed.: %s\n", locName, myErrorName(status));
+            ures_close(resB);
+            return;
+        }
+        ures_getVersion(resB, versionArray);
+        for (i=0; i<4; ++i) {
+            if (versionArray[i] < minVersionArray[i] ||
+                versionArray[i] > maxVersionArray[i])
+            {
+                log_err("Testing ures_getVersion(%-5s) - unexpected result: %d.%d.%d.%d\n", 
+                    locName, versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+                break;
+            }
+        }
+        ures_close(resB);
     }
 }
 
 static void TestResourceBundles()
 {
 
-  testTag("only_in_Root", TRUE, FALSE, FALSE);
-  testTag("in_Root_te", TRUE, TRUE, FALSE);
-  testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
-  testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
-  testTag("only_in_te", FALSE, TRUE, FALSE);
-  testTag("only_in_te_IN", FALSE, FALSE, TRUE);
-  testTag("in_te_te_IN", FALSE, TRUE, TRUE);
-  testTag("nonexistent", FALSE, FALSE, FALSE);
+    testTag("only_in_Root", TRUE, FALSE, FALSE);
+    testTag("in_Root_te", TRUE, TRUE, FALSE);
+    testTag("in_Root_te_te_IN", TRUE, TRUE, TRUE);
+    testTag("in_Root_te_IN", TRUE, FALSE, TRUE);
+    testTag("only_in_te", FALSE, TRUE, FALSE);
+    testTag("only_in_te_IN", FALSE, FALSE, TRUE);
+    testTag("in_te_te_IN", FALSE, TRUE, TRUE);
+    testTag("nonexistent", FALSE, FALSE, FALSE);
 
-  log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
+    log_verbose("Passed:=  %d   Failed=   %d \n", pass, fail);
 
 }
 
