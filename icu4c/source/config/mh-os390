@@ -103,8 +103,6 @@ IMPORT_LIB = $(basename $(notdir $(SO_TARGET)))$(IMPORT_LIB_EXT)
 MIDDLE_IMPORT_LIB = $(basename $(notdir $(MIDDLE_SO_TARGET)))$(IMPORT_LIB_EXT)
 FINAL_IMPORT_LIB = $(basename $(notdir $(FINAL_SO_TARGET)))$(IMPORT_LIB_EXT)
 
-## Shared object suffix (switch to dll for shared library build)
-SO = dll
 ## Non-shared intermediate object suffix
 STATIC_O = o
 
@@ -145,6 +143,17 @@ LIBICULX=	$(top_builddir)/layoutex/$(LIBICU)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION
 LIBICUIO=	$(top_builddir)/io/$(LIBICU)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/$(LIBICU)test$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBICUTOOLUTIL=	$(top_builddir)/tools/toolutil/$(LIBICU)tu$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
+
+ifneq (${ICUDATA_CHAR},e)
+## We're in ASCII mode.
+CFLAGS		+= -Wc,"ascii"
+CXXFLAGS	+= -Wc,"ascii"
+SO = so
+else
+## We're in EBCDIC mode.
+## Shared object suffix
+SO = dll
+endif
 
 ## Special 390 rules
 
