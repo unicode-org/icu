@@ -8,8 +8,6 @@ top_srcdir = @top_srcdir@
 
 top_builddir = ..
 
-PKGDATA_MODE = $(MODE)
-
 include $(top_builddir)/icudefs.mk
 
 include @platform_make_fragment@
@@ -40,7 +38,7 @@ DATABUILDDIR=$(OBJDATADIR)
 # relative lib links from pkgdata are the same as for tmp
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
-PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -m $(PKGDATA_MODE) 
+PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) 
 
 ## Install program information
 MKINSTALLDIRS = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -206,15 +204,13 @@ build-local:
 
 install-pkgdata: $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/icupkg.inc
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
-	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION))
-ifeq ($(strip $(PKGDATA_MODE)),dll)
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m dll -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION))
 	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(ICUDATA_NAME).$(SO) icudata.$(SO))
-endif
 
 clean-pkgdata:
-	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m dll -p $(ICUDATA_NAME) ./$(ICUDATA_NAME).lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -m common -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-(cd $(TMPDATADIR)2; $(INVOKE) $(PKGDATA) -m common -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
 	-$(RMV) $(TMPDATADIR)/$(ICUDATA_NAME).lst $(TMPDATADIR)/testdata.lst $(TMPDATADIR)/icupkg.inc $(TMPDATADIR)2/testdata.lst
 
 check-local:
