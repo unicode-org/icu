@@ -166,7 +166,7 @@ IntlTestRBNF::TestEnglishSpellout()
 
         formatter->setLenient(TRUE);
         static const char* lpTestData[][2] = {
-            { "2 thousand six HUNDRED fifty-7", "2,657" },
+            { "2 thousand six    HUNDRED fifty-7", "2,657" },
             { "fifteen hundred and zero", "1,500" },
             { "FOurhundred     thiRTY six", "436" },
             { NULL, NULL}
