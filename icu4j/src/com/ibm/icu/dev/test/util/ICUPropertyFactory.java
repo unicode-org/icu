@@ -6,26 +6,34 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUPropertyFactory.java,v $
- * $Date: 2004/02/25 01:44:45 $
- * $Revision: 1.4 $
+ * $Date: 2004/03/28 00:23:30 $
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 import java.util.Locale;
 import java.util.Map;
+import java.util.List;
+import java.util.Arrays;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.VersionInfo;
 
 

@@ -3,13 +3,18 @@ package com.ibm.icu.dev.test.util;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
+
+import sun.io.UnknownCharacterException;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
@@ -18,7 +23,7 @@ import com.ibm.icu.text.UnicodeSetIterator;
 
 public abstract class UnicodeProperty extends UnicodeLabel {
     
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static String CHECK_NAME = "FC_NFKC_Closure";
     public static int CHECK_VALUE = 0x037A;
     
@@ -221,6 +226,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return getSet(propAndValue, null, null);
         }
     }
+    
 
     public static class FilteredProperty extends UnicodeProperty {
         private UnicodeProperty property;
@@ -458,6 +464,14 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             return version;
         }
     }
+    
+    public static class UnicodeMapProperty extends SimpleProperty {
+        private UnicodeMap unicodeMap;
+        protected String _getValue(int codepoint) {
+            return (String) unicodeMap.getValue(codepoint);
+        }
+    }
+
            
     public final String getValue(int codepoint, boolean getShortest) {
         String result = getValue(codepoint);
@@ -533,7 +547,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         if (isType(STRING_OR_MISC_MASK)) {
             for (int i = 0; i <= 0x10FFFF; ++i) {
                 String value = getValue(i);
-                if (matcher.matches(value)) {
+                if (value != null && matcher.matches(value)) {
                     result.add(i);
                 }
             }
@@ -655,7 +669,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         // we can do this with char, since no surrogates are involved
         for (int i = 0; i < source.length(); ++i) {
             char ch = source.charAt(i);
-            if (ch == '_' || ch == ' ' || ch == '-') {
+            if (i > 0 && (ch == '_' || ch == ' ' || ch == '-')) {
                 gotOne = true;
             } else {
                 char ch2 = Character.toLowerCase(ch);

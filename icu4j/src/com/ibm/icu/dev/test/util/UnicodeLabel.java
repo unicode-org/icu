@@ -4,7 +4,9 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.UTF16;
 
 public abstract class UnicodeLabel {
+    
     public abstract String getValue(int codepoint, boolean isShort);
+    
     public String getValue(String s, String separator, boolean withCodePoint) {
         if (s.length() == 1) { // optimize simple case
             return getValue(s.charAt(0), withCodePoint); 
@@ -18,6 +20,7 @@ public abstract class UnicodeLabel {
         }
         return sb.toString();
     }
+    
     public int getMaxWidth(boolean isShort) {
         return 0;
     }
