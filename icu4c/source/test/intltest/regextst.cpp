@@ -57,7 +57,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
             if (exec) API_Pattern(); 
             break;
         case 4: name = "Extended";
-            //if (exec) Extended(); 
+            if (exec) Extended(); 
             break;
         case 5: name = "Errors";
             if (exec) Errors(); 
@@ -1092,11 +1092,12 @@ void RegexTest::Extended() {
 
     RegexMatcher    quotedStuffMat("\\s*?([\\'\\\"/])(.+?)\\1", 0, status);
     RegexMatcher    commentMat    ("\\s*?(#.*)?$", 0, status); 
-    RegexMatcher    flagsMat      ("\\s*?([ixsmdt]*)(a?)", 0, status);
+    RegexMatcher    flagsMat      ("\\s*?([ixsmdt]*)([:letter:]*)", 0, status);
 
-    RegexMatcher    lineMat("(.+?)[\\r\\n]+", testString, 0, status);
+    RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.
     UnicodeString   testFlags;     // the flags   for a test.
+    UnicodeString   matchString;   // The marked up string to be used as input
 
 
 
@@ -1105,8 +1106,15 @@ void RegexTest::Extended() {
     //
     while (lineMat.find()) {
         lineNum++;
+        if (U_FAILURE(status)) {
+            errln("line %d: ICU Error \"%s\"", lineNum, u_errorName(status));
+        }
+
         status = U_ZERO_ERROR;
         UnicodeString testLine = lineMat.group(1, status);
+        if (testLine.length() == 0) {
+            continue;
+        }
 
         //
         // Parse the test line.  Skip blank and comment only lines.
@@ -1151,13 +1159,12 @@ void RegexTest::Extended() {
         //
         quotedStuffMat.reset(testLine);
         if (quotedStuffMat.lookingAt(status)) {
-            testString = quotedStuffMat.group(2, status);
+            matchString = quotedStuffMat.group(2, status);
             testLine.remove(0, quotedStuffMat.end(0, status));
         } else {
             errln("Bad match string at test file line %d", lineNum);
             continue;
         }
-        testLine.remove(0, quotedStuffMat.end(0, status));
 
         //
         //  The only thing left from the input line should be an optional trailing comment.
