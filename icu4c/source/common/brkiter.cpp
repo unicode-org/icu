@@ -351,13 +351,31 @@ public:
 static ICULocaleService* 
 getService(void)
 {
-  if (gService == NULL) {
-    Mutex mutex;
-    if (gService == NULL) {
-      gService = new ICUBreakIteratorService();
+    UBool needsInit;
+    umtx_lock(NULL);
+    needsInit = (UBool)(gService == NULL);
+    umtx_unlock(NULL);
+    
+    if (needsInit) {
+        ICULocaleService  *tService = new ICUBreakIteratorService();
+        umtx_lock(NULL);
+        if (gService == NULL) {
+            gService = tService;
+            tService = NULL;
+        }
+        umtx_unlock(NULL);
+        delete tService;
     }
-  }
-  return gService;
+    return gService;
+}
+
+// -------------------------------------
+
+static UBool
+hasService(void) 
+{
+  Mutex mutex;
+  return gService != NULL;
 }
 
 // -------------------------------------
@@ -365,11 +383,15 @@ getService(void)
 BreakIterator*
 BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UErrorCode& status)
 {
-  if (gService != NULL) {
-    return (BreakIterator*)gService->get(loc, kind, status);
-  } else {
-    return makeInstance(loc, kind, status);
-  }
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    
+    if (hasService()) {
+        return (BreakIterator*)gService->get(loc, kind, status);
+    } else {
+        return makeInstance(loc, kind, status);
+    }
 }
 
 // -------------------------------------
@@ -385,13 +407,13 @@ BreakIterator::registerInstance(BreakIterator* toAdopt, const Locale& locale, UB
 UBool 
 BreakIterator::unregister(URegistryKey key, UErrorCode& status) 
 {
-  if (U_SUCCESS(status)) {
-    if (gService != NULL) {
-      return gService->unregister(key, status);
+    if (U_SUCCESS(status)) {
+        if (hasService()) {
+            return gService->unregister(key, status);
+        }
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    status = U_ILLEGAL_ARGUMENT_ERROR;
-  }
-  return FALSE;
+    return FALSE;
 }
 
 // -------------------------------------
