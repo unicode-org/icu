@@ -243,7 +243,7 @@ RegexPattern  *RegexPattern::compile(
     }
 
     const uint32_t allFlags = UREGEX_CANON_EQ | UREGEX_CASE_INSENSITIVE | UREGEX_COMMENTS |
-                              UREGEX_DOTALL   | UREGEX_MULTILINE;
+                              UREGEX_DOTALL   | UREGEX_MULTILINE | UREGEX_UWORD;
 
     if ((flags & ~allFlags) != 0) {
         status = U_REGEX_INVALID_FLAG;

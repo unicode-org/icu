@@ -20,6 +20,9 @@
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
+#include "unicode/parseerr.h"
+
+
 struct URegularExpression;
 /**
   * Structure represeting a compiled regular rexpression, plus the results
@@ -132,9 +135,13 @@ U_CAPI void U_EXPORT2
 uregex_close(URegularExpression *regexp);
 
 /**
- * Make an exact copy of a compiled regular expression.  Cloning a regular
+ * Make a copy of a compiled regular expression.  Cloning a regular
  * expression is faster than opening a second instance from the source
  * form of the expression, and requires less memory.
+ * <p>
+ * Note that the current input string and the position of any matched text
+ *  within it are not cloned; only the pattern itself and and the
+ *  match mode flags are copied.
  * <p>
  * Cloning can be particularly useful to threaded applications that perform
  * multiple match operations in parallel.  Each concurrent RE
@@ -152,7 +159,10 @@ uregex_clone(const URegularExpression *regexp, UErrorCode *status);
  *
  * @param regexp     The compiled regular expression.
  * @param patLength  This output parameter will be set to the length of the
- *                   pattern string.
+ *                   pattern string.  A NULL pointer may be used here if the
+ *                   pattern length is not needed, as would be the case if
+ *                   the pattern is known in advance to be a NUL terminated
+ *                   string.
  * @param status     Receives errors detected by this function.
  * @return a pointer to the pattern string.  The storage for the string is
  *                   owned by the regular expression object, and must not be
@@ -160,19 +170,21 @@ uregex_clone(const URegularExpression *regexp, UErrorCode *status);
  *                   will remain valid until the regular expression is closed.
  */
 U_CAPI const UChar * U_EXPORT2 
-uregex_pattern(const    URegularExpression *regexp,
-                        int32_t           **patLength,
-                        UErrorCode         *status);
+uregex_pattern(const  URegularExpression   *regexp,
+                         int32_t           *patLength,
+                         UErrorCode        *status);
 
 
 /**
   * Get the match mode flags that were specified when compiling this regular expression.
   * @param status     Receives errors detected by this function.
+  * @param regexp     The compiled regular expression.
   * @param return     The match mode flags
   * @see URegexpFlag
   */
 U_CAPI int32_t U_EXPORT2 
-uregex_flags(UErrorCode *status);
+uregex_flags(const  URegularExpression   *regexp,
+                    UErrorCode           *status);
 
 
 /**
@@ -206,14 +218,18 @@ uregex_setText(URegularExpression *regexp,
   *   pointer was previously supplied via uregex_setText().
   *
   * @param regexp      The compiled regular expression.
-  * @param textLength  The length of the string is returned in this output parameter.
+  * @param textLength  The length of the string is returned in this output parameter. 
+  *                    A NULL pointer may be used here if the
+  *                    text length is not needed, as would be the case if
+  *                    the text is known in advance to be a NUL terminated
+  *                    string.
   * @param status      Receives errors detected by this function.
   * @return            Poiner to the subject text string currently associated with
   *                    this regular expression.
   */
 U_CAPI const UChar * U_EXPORT2 
 uregex_getText(URegularExpression *regexp,
-               int32_t            **textLength,
+               int32_t            *textLength,
                UErrorCode         *status);
 
 /**
@@ -449,6 +465,17 @@ uregex_replaceFirst(URegularExpression  *regexp,
   *   replacement string is appended to the output string,
   *   including handling any substitutions of captured text.</p>
   *
+  *   <p>A note on preflight computation of buffersize and error handling:
+  *   Calls to uregex_appendReplacement() and uregex_appendTail() are
+  *   designed to be chained, one after another, with the destination
+  *   buffer pointer and buffer capacity updated after each in preparation
+  *   to for the next.  If the destination buffer is exhausted partway through such a
+  *   sequence, a U_BUFFER_OVERFLOW_ERROR status will be returned.  Normal
+  *   ICU conventions are for a function to perform no action if it is
+  *   called with an error status, but for this one case, uregex_appendRepacement()
+  *   will operate normally so that buffer size computations will complete
+  *   correctly.
+  *
   *   <p>For simple, prepackaged, non-incremental find-and-replace
   *      operations, see replaceFirst() or replaceAll().</p>
   *
@@ -535,7 +562,7 @@ uregex_appendTail(URegularExpression    *regexp,
    *                         extra positions within the destFields array will be
    *                         set to NULL.
    *    @param   destCapacity The capacity of the destBuf.
-   *    @param   requiredCapacty  The actual capacity required of the destBuf.
+   *    @param   requiredCapacity  The actual capacity required of the destBuf.
    *                         If destCapacity is too small, requiredCapacity is the
    *                         total capacity required to hold all of the output.
    *    @param   destFields  An array to be filled with the position of each
@@ -572,7 +599,7 @@ U_CAPI int32_t U_EXPORT2
 uregex_split(   URegularExpression      *regexp,
                   UChar                 *destBuf,
                   int32_t                destCapacity,
-                  int32_t              **requiredCapacity,
+                  int32_t               *requiredCapacity,
                   UChar                 *destFields[],
                   int32_t                destFieldsCapacity,
                   UErrorCode            *status);
