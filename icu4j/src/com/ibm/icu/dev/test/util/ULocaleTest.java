@@ -502,37 +502,37 @@ public class ULocaleTest extends TestFmwk {
     }
 
   public void TestPrefixes() {
-    // POSIX ids are no longer handled by getName, so POSIX cases are removed
+    // POSIX ids are no longer handled by getName, so POSIX failures are ignored
     final String [][] testData = new String[][]{
-      {"sv", "", "FI", "AL", "sv-fi-al", "sv_FI_AL" },
-      {"en", "", "GB", "", "en-gb", "en_GB" },
-      {"i-hakka", "", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA"},
-      {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN"},
-      {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX"},
-      {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE"},
+        /* null canonicalize() column means "expect same as getName()" */
+        {"sv", "", "FI", "AL", "sv-fi-al", "sv_FI_AL", null},
+        {"en", "", "GB", "", "en-gb", "en_GB", null},
+        {"i-hakka", "", "MT", "XEMXIJA", "i-hakka_MT_XEMXIJA", "i-hakka_MT_XEMXIJA", null},
+        {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN", null},
+        {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", null},
+        {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", null},
         
-      //      {"mr", "", "", "", "mr.utf8", "mr"},
-      //      {"de", "", "TV", "", "de-tv.koi8r", "de_TV"},
-      //      {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
-      //      {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US"},
-      //      {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
-      //      {"no", "", "NO", "NY", "no-no-ny.utf32@B", "no_NO_NY"}, /* @ ignored unless variant is empty */
-      // ULocale handles POSIX, so this does have a variant
-      //      {"no", "", "NO", "",  "no-no.utf32@B", "no_NO_B" },
-      // no we don't handle POSIX by default anymore
-      //      {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO_B" },
-      {"no", "", "",   "NY", "no__ny", "no__NY" },
-      // ULocale handles POSIX, so this does have a variant
-      //      {"no", "", "",   "", "no@ny", "no__NY" },
-      // no we don't handle POSIX by default anymore
-      //      {"no", "", "",   "NY", "no@ny", "no__NY" },
-      {"el", "Latn", "", "", "el-latn", "el_Latn" },
-      {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU" },
-      {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE" },
-      {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ" },
-      {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ" },
-      {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90" }, /* total garbage */
-      { "","","","",""}
+        {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
+        {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
+        {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
+        {"i-cherokee", "","US", "", "i-Cherokee_US.utf7", "i-cherokee_US.utf7", "i-cherokee_US"},
+        {"x-filfli", "", "MT", "FILFLA", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA"},
+        {"no", "", "NO", "NY_B", "no-no-ny.utf32@B", "no_NO_NY.utf32@B", "no_NO_NY_B"},
+        {"no", "", "NO", "B",  "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B"},
+        {"no", "", "",   "NY", "no__ny", "no__NY", null},
+        {"no", "", "",   "NY", "no@ny", "no@ny", "no__NY"},
+        {"el", "Latn", "", "", "el-latn", "el_Latn", null},
+        {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU", null},
+        {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", null},
+        {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
+        {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
+        {"12", "3456", "78", "90", "12_3456_78_90", "12_3456_78_90", null}, /* total garbage */
+	
+	// odd cases
+	{"", "", "", "", "@FOO=bar", "@foo=bar", null},
+	{"", "", "", "", "_@FOO=bar", "@foo=bar", null},
+	{"", "", "", "", "__@FOO=bar", "@foo=bar", null},
+	{"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
     };
         
     String loc, buf,buf1;
@@ -543,17 +543,17 @@ public class ULocaleTest extends TestFmwk {
       "ULocale.getVariant()", 
       "name", 
       "ULocale.getName()", 
-      "country3" 
+      "canonicalize()",
     };
     ULocale uloc;
         
-    for(int row=0;testData[row][0].length()!= 0;row++) {
+    for(int row=0;row<testData.length;row++) {
       loc = testData[row][NAME];
       logln("Test #"+row+": "+loc);
-            
+
       uloc = new ULocale(loc);    
             
-      for(int n=0;n<=(NAME+1);n++) {
+      for(int n=0;n<=(NAME+2);n++) {
 	if(n==NAME) continue;
 
 	switch(n) {
@@ -581,7 +581,12 @@ public class ULocaleTest extends TestFmwk {
 	  buf  = ULocale.getName(loc);
 	  buf1 = uloc.getName();
 	  break;
-                    
+
+	case NAME+2:
+	    buf = ULocale.canonicalize(loc);
+	    buf1 = ULocale.createCanonical(loc).getName();
+	    break;
+
 	default:
 	  buf = "**??";
 	  buf1 = buf;
@@ -589,11 +594,23 @@ public class ULocaleTest extends TestFmwk {
                 
 	logln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"]");
                 
-	if(buf.compareTo(testData[row][n])!=0) {
-	  errln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"] (expected '"+testData[row][n]+"'!)");
+	String expected = testData[row][n];
+	if (expected == null && n == (NAME+2)) {
+	    expected = testData[row][NAME+1];
 	}
-	if(buf1.compareTo(testData[row][n])!=0) {
-	  errln("#"+row+": "+testTitles[n]+" on ULocale object "+loc+": -> ["+buf1+"] (expected '"+testData[row][n]+"'!)");
+
+	// ignore POSIX failures in getName, we don't spec behavior in this case
+	if (n == NAME+1 && 
+	    (expected.indexOf('.') != -1 || 
+	     expected.indexOf('@') != -1)) {
+	    continue;
+	}
+
+	if(buf.compareTo(expected)!=0) {
+	  errln("#"+row+": "+testTitles[n]+" on "+loc+": -> ["+buf+"] (expected '"+expected+"'!)");
+	}
+	if(buf1.compareTo(expected)!=0) {
+	  errln("#"+row+": "+testTitles[n]+" on ULocale object "+loc+": -> ["+buf1+"] (expected '"+expected+"'!)");
 	}
       }
     }
@@ -727,12 +744,9 @@ public class ULocaleTest extends TestFmwk {
         { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
         { "en_US_POSIX", "en_US_POSIX" }, 
         { "hy_AM_REVISED", "hy_AM_REVISED" }, 
-        { "no_NO_NY",   "nn_NO" },
-        { "no@ny",      "nn" }, //POSIX ID
-        { "no-no.utf32@B", "nb_NO_B" }, //POSIX ID
-//          { "no_NO_NY",   "no_NO_NY" },
-//          { "no@ny",      "no__NY" }, //POSIX ID
-//          { "no-no.utf32@B", "no_NO_B" }, //POSIX ID
+        { "no_NO_NY",   "no_NO_NY" },
+        { "no@ny",      "no__NY" }, //POSIX ID
+        { "no-no.utf32@B", "no_NO_B" }, //POSIX ID
         { "qz-qz@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
         { "en-BOONT",   "en__BOONT" }, /* registered name */
         { "de-1901",    "de__1901" }, /* registered name */
@@ -750,7 +764,7 @@ public class ULocaleTest extends TestFmwk {
 	{ "x-piglatin_ML.MBE", "x-piglatin_ML" },
 	{ "i-cherokee_US.utf7", "i-cherokee_US" },
 	{ "x-filfli_MT_FILFLA.gb-18030", "x-filfli_MT_FILFLA" },
-	{ "no-no-ny.utf8@B", "nn_NO" }, /* @ ignored unless variant is empty */
+	{ "no-no-ny.utf8@B", "no_NO_NY_B" }, /* variant parts before and after @ combined */
 
 	// fleshing out canonicalization
 	// trim space and sort keywords, ';' is separator so not present at end in canonical form
@@ -763,8 +777,6 @@ public class ULocaleTest extends TestFmwk {
 	// currency keyword overrides PRE_EURO and EURO currency
 	{ "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
 	{ "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
-	// norwegian is just too weird, if we handle things in their full generality
-	{ "no-Hant-GB_NY@currency=$$$", "nn_Hant_GB@currency=$$$" },
       };
 
         for(int i = 0; i< testCases.length;i++){
