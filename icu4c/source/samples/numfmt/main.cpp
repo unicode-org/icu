@@ -208,7 +208,9 @@ setNumberFormatCurrency_2_6(NumberFormat &nf, const char *currency, UErrorCode &
 
 static const char *const
 sampleLocaleIDs[]={
-    "en_US", "en_GB", "de", "ja", "fr", "hi"
+    // use locale IDs complete with country code to be sure to
+    // pick up number/currency format patterns
+    "en_US", "en_GB", "de_DE", "ja_JP", "fr_FR", "hi_IN"
 };
 
 static const char *const
