@@ -691,6 +691,32 @@ static void TestVargs(void) {
     Test_u_vfprintf("8 9 a B 8.9", "%d %u %x %X %.1f", 8, 9, 10, 11, 8.9);
 }
 
+static void TestCount(void) {
+    UChar testStr[16];
+    int16_t i16 = -1;
+    int32_t i32 = -1;
+    int64_t i64 = -1;
+    u_uastrcpy(testStr, "1233456789");
+    if (u_sscanf(testStr, "%*3[123]%n%*[1-9]", &i32) != 0) {
+        log_err("test 1: scanf did not return 0\n");
+    }
+    if (i32 != 3) {
+        log_err("test 1: scanf returned %hd instead of 3\n", i32);
+    }
+    if (u_sscanf(testStr, "%*4[123]%hn%*[1-9]", &i16) != 0) {
+        log_err("test 2: scanf did not return 0\n");
+    }
+    if (i16 != 4) {
+        log_err("test 2: scanf returned %d instead of 4\n", i16);
+    }
+    if (u_sscanf(testStr, "%*[123]%*[1-9]%lln", &i64) != 0) {
+        log_err("test 3: scanf did not return 0\n");
+    }
+    if (i64 != 10) {
+        log_err("test 3: scanf did not return 10\n", i64);
+    }
+}
+
 U_CFUNC void
 addStringTest(TestNode** root) {
     addTest(root, &TestString, "string/TestString");
@@ -701,6 +727,7 @@ addStringTest(TestNode** root) {
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
     addTest(root, &TestBadScanfFormat, "string/TestBadScanfFormat");
     addTest(root, &TestVargs, "string/TestVargs");
+    addTest(root, &TestCount, "string/TestCount");
 }
 
 
