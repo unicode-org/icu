@@ -25,15 +25,16 @@ Olson:  ftp://elsie.nci.nih.gov/pub/
 ----------------------------------------------------------------------
 ICU4C vs. ICU4J
 
-As of release 2.8, the ICU time zone implementations in C and Java
-have diverged for various reasons.  The C implementation is a full
-implementation, whereas ICU4J (as of 2.8) uses the underlying JDK
+For ICU releases >= 2.8, both ICU4C and ICU4J implement full
+historical time zones, based on Olson data.  The implementations in C
+and Java are somewhat different.  The C implementation is a
+self-contained implementation, whereas ICU4J uses the underlying JDK
 1.3 or 1.4 time zone implementation.
 
-The "present day snapshot" only reflects current time zone behavior,
-without historical variation.  Furthermore, it lacks the full set of
-Olson compatibility IDs.  The "present day snapshot" is implemented in
-ICU (C and Java) <= 2.6.
+Older versions of ICU (C and Java <= 2.6) implement a "present day
+snapshot".  This only reflects current time zone behavior, without
+historical variation.  Furthermore, it lacks the full set of Olson
+compatibility IDs.
 
 ----------------------------------------------------------------------
 BACKGROUND
@@ -73,6 +74,13 @@ HOWTO
    $ tar xzvf tzcode*.tar.gz
    $ tar xzvf tzdata*.tar.gz
 
+   *** Make sure you only have ONE FILE named tzdata*.tar.gz in the
+       directory.
+   *** Do NOT delete the tzdata*.tar.gz file.
+
+   The Makefile looks in the current directory to determine the
+   version of Olson data it is building by looking for tzdata*.tar.gz.
+
 3. Apply the ICU patch to zic.c:
 
    $ patch < patch-icu-tzcode
@@ -85,9 +93,11 @@ HOWTO
 
    $ make icu_data
 
-5. Copy the data file to the correct location in the ICU source tree:
+5. Copy the data files to the correct location in the ICU4C/ICU4J
+   source trees:
 
    $ cp zoneinfo.txt ../../../data/misc/
+   $ cp ZoneMetaData.java {path_to}/icu4j/src/com/ibm/icu/impl
 
 6. Rebuild ICU:
 
@@ -96,6 +106,41 @@ HOWTO
 
 7. Don't forget to check in the new zoneinfo.txt (from its location at
    {path_to}/icu/source/data/misc/zoneinfo.txt) into CVS.
+
+----------------------------------------------------------------------
+HOWTO regenerate patch-icu-tzcode
+
+If you need to edit any of the tzcode* files, you will need to
+regenerate the patch file as follows.
+
+1. Follow the above instructions to extract and patch the tzcode*
+   files in {path_to}/icu/source/tools/tzcode.  Modify any of the
+   tzcode files.
+
+2. Extract a clean set of the tzcode* files into a new directory,
+   ../tzcode.orig/:
+
+   $ mkdir ../tzcode.orig
+   $ cd ../tzcode.orig
+   $ tar xzf ../tzcode/tzcode*.tar.gz
+   $ cd ../tzcode
+
+3. Compute diffs, ignoring files that are in only one directory:
+
+   $ diff -ur ../tzcode.orig . | grep -vE -e "^Only in " > patch-icu-tzcode
+
+4. Test the patch-icu-tzcode file by regenerating and diffing the
+   files again in another directory.  The expected output from the
+   final diff command is *nothing*.
+
+   $ mkdir ../tzcode.new
+   $ cd ../tzcode.new
+   $ tar xzf ../tzcode/tzcode*.tar.gz
+   $ patch < ../tzcode/patch-icu-tzcode
+   $ cd ../tzcode
+   $ diff -ur ../tzcode.new . | grep -vE -e "^Only in "
+
+5. Check in the new patch-icu-tzcode file.
 
 ----------------------------------------------------------------------
 eof
