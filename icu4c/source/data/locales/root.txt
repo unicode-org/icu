@@ -16,25 +16,24 @@ root {
 
     Variants{
         Fallback{ "" }
-        PREEURO { "PREEURO" }   // PREEURO variant display name
-        EURO    { "EURO" }      // EURO variant display name
-        B       { "B"  }        // No longer valid variant. Here for backwards compatibility.
         NY      { "NY" }        // No longer valid variant. Here for backwards compatibility.
-        AL      { "AL" }
+        EURO    { "EURO" }      // EURO variant display name
+        PREEURO { "PREEURO" }   // PREEURO variant display name
         POSIX   { "POSIX" }
+        REVISED { "REVISED" }
     }
     Keys{
-    	Collation { "Collation" }
-	Calendar  { "Calendar" }
+        Collation { "Collation" }
+        Calendar  { "Calendar" }
     }
     Types{
         // keys for collation (traditional may also be used for traditional chinese)
         Fallback{ "" }
+        DIRECT      { "DIRECT"    }
         PHONEBOOK   { "PHONEBOOK" }
         PINYIN      { "PINYIN"    }
-        TRADITIONAL { "TRADITIONAL"     }
         STROKE      { "STROKE"    }
-        DIRECT      { "DIRECT"    }
+        TRADITIONAL { "TRADITIONAL" }
     }
 
     // TODO: Remove this
@@ -106,7 +105,7 @@ root {
         BM { "BM" }
         BN { "BN" }
         BO { "BO" }
-        BR{ "BR" }
+        BR { "BR" }
         BS { "BS" }
         BT { "BT" }
         BV { "BV" }
@@ -518,7 +517,6 @@ root {
         den { "den" }
         dgr { "dgr" }
         din { "din" }
-
         doi { "doi" }
         dra { "dra" }
         dua { "dua" }
@@ -585,6 +583,7 @@ root {
         hmn { "hmn" }
         ho  { "ho"  }
         hr  { "hr"  }
+        ht  { "ht"  }
         hu  { "hu"  }
         hup { "hup" }
         hy  { "hy"  }
@@ -598,7 +597,6 @@ root {
         ijo { "ijo" }
         ik  { "ik"  }
         ilo { "ilo" }
-
         inc { "inc" }
         ine { "ine" }
         inh { "inh" }
@@ -610,11 +608,9 @@ root {
         iu  { "iu"  }
         //iw  { "iw"  }
         ja  { "ja"  }
-
         jpr { "jpr" }
         jrb { "jrb" }
         jv  { "jv"  }
-
         ka  { "ka"  }
         kaa { "kaa" }
         kab { "kab" }
@@ -756,8 +752,8 @@ root {
         pro { "pro" }
         ps  { "ps"  }
         pt  { "pt"  }
+        // qaa-qtz is reserved for locale use
         qu  { "qu"  }
-
         raj { "raj" }
         rap { "rap" }
         rar { "rar" }
