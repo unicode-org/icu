@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.23 2002/05/29 16:45:06 grhoten-oss Exp $
+## $Id: mh-darwin,v 1.24 2002/12/10 01:43:05 srl Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -12,8 +12,8 @@ SHAREDLIBCXXFLAGS = -dynamic
 SHAREDLIBCPPFLAGS =
 
 ## Commands to generate dependency files
-GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
-GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.c=	$(CC) -E -MMD  $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -MMD  $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -fno-common -c
@@ -56,15 +56,20 @@ MIDDLE_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 ## Dependency rules
 %.d : $(srcdir)/%.c
 	@echo "generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
-		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
-		[ -s $@ ] || rm -f $@'
+	@$(GEN_DEPS.c) $< -o $@
+	@mv $@ $@~
+	@echo -n "$@ " > $@
+	@cat < $@~ >> $@
+	@-rm $@~
 
 %.d : $(srcdir)/%.cpp
 	@echo "generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
-		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
-		[ -s $@ ] || rm -f $@'
+	@$(GEN_DEPS.cc) $< -o $@
+	@mv $@ $@~
+	@( echo '/h$$' ; echo '+,$$d' ; echo "wq" ) | ed $@~ 2>/dev/null >/dev/null || exit 0
+	@echo -n "$@ " > $@
+	@cat < $@~ >> $@
+	@-rm $@~
 
 ## Versioned libraries rules
 
