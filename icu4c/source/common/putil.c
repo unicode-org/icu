@@ -2058,8 +2058,14 @@ static const uint32_t invariantChars[4]={
     0x87fffffe  /* 60..7f but not 60 7b..7e */
 };
 
-#define CHAR_IS_INVARIANT(c) ((0<=(c)) && ((c)<=0x7f) && (invariantChars[(c)>>5]&((uint32_t)1<<((c)&0x1f)))!=0)
+/*
+ * test unsigned types (or values known to be non-negative) for invariant characters,
+ * tests ASCII-family character values
+ */
+#define UCHAR_IS_INVARIANT(c) (((c)<=0x7f) && (invariantChars[(c)>>5]&((uint32_t)1<<((c)&0x1f)))!=0)
 
+/* test signed types for invariant characters, adds test for positive values */
+#define SCHAR_IS_INVARIANT(c) ((0<=(c)) && UCHAR_IS_INVARIANT(c))
 
 U_CAPI void U_EXPORT2
 u_charsToUChars(const char *cs, UChar *us, int32_t length) {
@@ -2099,7 +2105,7 @@ u_UCharsToChars(const UChar *us, char *cs, int32_t length) {
     onlyInvariantChars=TRUE;
     while(length>0) {
         u=*us++;
-        if(!CHAR_IS_INVARIANT(u)) {
+        if(!UCHAR_IS_INVARIANT(u)) {
             onlyInvariantChars=FALSE;
             u=0;
         }
@@ -2117,12 +2123,12 @@ u_UCharsToChars(const UChar *us, char *cs, int32_t length) {
 
 U_CAPI UBool U_EXPORT2
 uprv_isInvariantString(const char *s, int32_t length) {
-    char c;
+    uint8_t c;
 
     for(;;) {
         if(length<0) {
             /* NUL-terminated */
-            c=*s++;
+            c=(uint8_t)*s++;
             if(c==0) {
                 break;
             }
@@ -2132,7 +2138,7 @@ uprv_isInvariantString(const char *s, int32_t length) {
                 break;
             }
             --length;
-            c=*s++;
+            c=(uint8_t)*s++;
             if(c==0) {
                 continue; /* NUL is invariant */
             }
@@ -2144,12 +2150,12 @@ uprv_isInvariantString(const char *s, int32_t length) {
          * for strings with variant characters
          */
 #if U_CHARSET_FAMILY==U_ASCII_FAMILY
-        if(!CHAR_IS_INVARIANT(c)) {
+        if(!UCHAR_IS_INVARIANT(c)) {
             return FALSE; /* found a variant char */
         }
 #elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
-        c=(char)asciiFromEbcdic[(uint8_t)c];
-        if(c==0 || !CHAR_IS_INVARIANT(c)) {
+        c=asciiFromEbcdic[c];
+        if(c==0 || !UCHAR_IS_INVARIANT(c)) {
             return FALSE; /* found a variant char */
         }
 #else
@@ -2183,7 +2189,7 @@ uprv_isInvariantUString(const UChar *s, int32_t length) {
          * no assertions here because these functions are legitimately called
          * for strings with variant characters
          */
-        if(!CHAR_IS_INVARIANT(c)) {
+        if(!UCHAR_IS_INVARIANT(c)) {
             return FALSE; /* found a variant char */
         }
     }
@@ -2217,7 +2223,7 @@ uprv_ebcdicFromAscii(const UDataSwapper *ds,
     count=length;
     while(count>0) {
         c=*s++;
-        if(!CHAR_IS_INVARIANT(c)) {
+        if(!UCHAR_IS_INVARIANT(c)) {
             udata_printError(ds, "uprv_ebcdicFromAscii() string[%d] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2253,7 +2259,7 @@ uprv_copyAscii(const UDataSwapper *ds,
     count=length;
     while(count>0) {
         c=*s++;
-        if(!CHAR_IS_INVARIANT(c)) {
+        if(!UCHAR_IS_INVARIANT(c)) {
             udata_printError(ds, "uprv_copyFromAscii() string[%d] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2294,7 +2300,7 @@ uprv_asciiFromEbcdic(const UDataSwapper *ds,
     count=length;
     while(count>0) {
         c=*s++;
-        if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !CHAR_IS_INVARIANT(c))) {
+        if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !UCHAR_IS_INVARIANT(c))) {
             udata_printError(ds, "uprv_asciiFromEbcdic() string[%d] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2330,7 +2336,7 @@ uprv_copyEbcdic(const UDataSwapper *ds,
     count=length;
     while(count>0) {
         c=*s++;
-        if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !CHAR_IS_INVARIANT(c))) {
+        if(c!=0 && ((c=asciiFromEbcdic[c])==0 || !UCHAR_IS_INVARIANT(c))) {
             udata_printError(ds, "uprv_copyEbcdic() string[%] contains a variant character in position %d\n",
                              length, length-count);
             *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2349,35 +2355,35 @@ uprv_copyEbcdic(const UDataSwapper *ds,
 /* compare invariant strings; variant characters compare less than others and unlike each other */
 U_CFUNC int32_t
 uprv_compareInvAscii(const UDataSwapper *ds,
-                     const char *inString, int32_t inLength,
+                     const char *outString, int32_t outLength,
                      const UChar *localString, int32_t localLength) {
     int32_t minLength;
     UChar32 c1, c2;
-    char c;
+    uint8_t c;
 
-    if(inString==NULL || inLength<-1 || localString==NULL || localLength<-1) {
+    if(outString==NULL || outLength<-1 || localString==NULL || localLength<-1) {
         return 0;
     }
 
-    if(inLength<0) {
-        inLength=uprv_strlen(inString);
+    if(outLength<0) {
+        outLength=uprv_strlen(outString);
     }
     if(localLength<0) {
         localLength=u_strlen(localString);
     }
 
-    minLength= inLength<localLength ? inLength : localLength;
+    minLength= outLength<localLength ? outLength : localLength;
 
     while(minLength>0) {
-        c=*inString++;
-        if(CHAR_IS_INVARIANT(c)) {
+        c=(uint8_t)*outString++;
+        if(UCHAR_IS_INVARIANT(c)) {
             c1=c;
         } else {
             c1=-1;
         }
 
         c2=*localString++;
-        if(!CHAR_IS_INVARIANT(c2)) {
+        if(!UCHAR_IS_INVARIANT(c2)) {
             c1=-2;
         }
 
@@ -2389,42 +2395,42 @@ uprv_compareInvAscii(const UDataSwapper *ds,
     }
 
     /* strings start with same prefix, compare lengths */
-    return inLength-localLength;
+    return outLength-localLength;
 }
 
 U_CFUNC int32_t
 uprv_compareInvEbcdic(const UDataSwapper *ds,
-                      const char *inString, int32_t inLength,
+                      const char *outString, int32_t outLength,
                       const UChar *localString, int32_t localLength) {
     int32_t minLength;
     UChar32 c1, c2;
-    char c;
+    uint8_t c;
 
-    if(inString==NULL || inLength<-1 || localString==NULL || localLength<-1) {
+    if(outString==NULL || outLength<-1 || localString==NULL || localLength<-1) {
         return 0;
     }
 
-    if(inLength<0) {
-        inLength=uprv_strlen(inString);
+    if(outLength<0) {
+        outLength=uprv_strlen(outString);
     }
     if(localLength<0) {
         localLength=u_strlen(localString);
     }
 
-    minLength= inLength<localLength ? inLength : localLength;
+    minLength= outLength<localLength ? outLength : localLength;
 
     while(minLength>0) {
-        c=*inString++;
+        c=(uint8_t)*outString++;
         if(c==0) {
             c1=0;
-        } else if((c1=asciiFromEbcdic[(uint8_t)c])!=0 && CHAR_IS_INVARIANT(c1)) {
+        } else if((c1=asciiFromEbcdic[c])!=0 && UCHAR_IS_INVARIANT(c1)) {
             /* c1 is set */
         } else {
             c1=-1;
         }
 
         c2=*localString++;
-        if(!CHAR_IS_INVARIANT(c2)) {
+        if(!UCHAR_IS_INVARIANT(c2)) {
             c1=-2;
         }
 
@@ -2436,7 +2442,7 @@ uprv_compareInvEbcdic(const UDataSwapper *ds,
     }
 
     /* strings start with same prefix, compare lengths */
-    return inLength-localLength;
+    return outLength-localLength;
 }
 
 /* end of platform-specific implementation -------------- */
