@@ -124,11 +124,32 @@ int32_t StringReplacer::replace(Replaceable& text,
          * the integrity of indices into the key and surrounding context while
          * generating the output text.
          */
-        int32_t destStart = text.length(); // copy new text to here
-        int32_t destLimit = destStart;
         UnicodeString buf;
         int32_t oOutput; // offset into 'output'
         isComplex = FALSE;
+
+        // The temporary buffer starts at tempStart, and extends
+        // to destLimit.  The start of the buffer has a single
+        // character from before the key.  This provides style
+        // data when addition characters are filled into the
+        // temporary buffer.  If there is nothing to the left, use
+        // the non-character U+FFFF, which Replaceable subclasses
+        // should treat specially as a "no-style character."
+        // destStart points to the point after the style context
+        // character, so it is tempStart+1 or tempStart+2.
+        int32_t tempStart = text.length(); // start of temp buffer
+        int32_t destStart = tempStart; // copy new text to here
+        if (start > 0) {
+            int32_t len = UTF_CHAR_LENGTH(text.char32At(start-1));
+            text.copy(start-len, start, tempStart);
+            destStart += len;
+        } else {
+            UnicodeString str((UChar) 0xFFFF);
+            text.handleReplaceBetween(tempStart, tempStart, str);
+            destStart++;
+        }
+        int32_t destLimit = destStart;
+
         for (oOutput=0; oOutput<output.length(); ) {
             if (oOutput == cursorPos) {
                 // Record the position of the cursor
@@ -169,7 +190,7 @@ int32_t StringReplacer::replace(Replaceable& text,
 
         // Copy new text to start, and delete it
         text.copy(destStart, destLimit, start);
-        text.handleReplaceBetween(destStart + outLen, destLimit + outLen, EMPTY);
+        text.handleReplaceBetween(tempStart + outLen, destLimit + outLen, EMPTY);
 
         // Delete the old text (the key)
         text.handleReplaceBetween(start + outLen, limit + outLen, EMPTY);
