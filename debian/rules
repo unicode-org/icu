@@ -46,7 +46,12 @@ endif
 # Build flags
 
 CFLAGS = -O2 # -Wall
+ifeq ($(shell uname -m),s390)
+CXXFLAGS = -O1 # -Wall
+else
 CXXFLAGS = -O2 # -Wall
+else
+
 INSTALL_PROGRAM = /usr/bin/install
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
@@ -63,7 +68,7 @@ configure: $(builddir)/configure-stamp
 $(builddir)/configure-stamp:
 	# Add here commands to configure the package.
 	test -d $(builddir) || mkdir $(builddir)
-	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(SHELL) $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
+	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(SHELL) $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
 	touch $@
 
 build: $(builddir)/configure-stamp debian-files $(builddir)/build-stamp
