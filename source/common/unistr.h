@@ -2,6 +2,8 @@
 *******************************************************************************
 *                                                                             *
 * COPYRIGHT:                                                                  *
+*   Copyright (C) 1999, International Business Machines Corporation and       *
+*   others. All Rights Reserved.                                              *
 *   (C) Copyright International Business Machines Corporation, 1998-1999      *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure   *
@@ -17,6 +19,8 @@
 *   09/25/98    stephen     Creation.
 *   11/11/98    stephen     Changed per 11/9 code review.
 *   04/20/99    stephen     Overhauled per 4/16 code review.
+*   11/18/99    aliu        Made to inherit from Replaceable.  Added method
+*                           handleReplaceBetween(); other methods unchanged.
 *******************************************************************************
 */
 
@@ -28,6 +32,7 @@
 #include "utypes.h"
 #include "unicode.h"
 #include "ucnv.h"
+#include "rep.h"
 
 // Size of stack buffer for small strings
 #define US_STACKBUF_SIZE 10
@@ -40,7 +45,7 @@ class UCharReference;
  * UnicodeText.  UnicodeString performs codeset conversion from char*
  * data based on the type of data specified.
  */
-class U_COMMON_API UnicodeString
+class U_COMMON_API UnicodeString : public Replaceable
 {
 public:
 
@@ -1072,6 +1077,19 @@ public:
                 const UnicodeString& srcText, 
                 UTextOffset srcStart, 
                 UTextOffset srcLimit);
+
+  /**
+   * Replace a substring of this object with the given text.
+   * @param start the beginning index, inclusive; <code>0 <= start
+   * <= limit</code>.
+   * @param limit the ending index, exclusive; <code>start <= limit
+   * <= length()</code>.
+   * @param text the text to replace characters <code>start</code>
+   * to <code>limit - 1</code>
+   */
+  virtual void handleReplaceBetween(UTextOffset start,
+                                    UTextOffset limit,
+                                    const UnicodeString& text);
 
 
   /* Search and replace operations */

@@ -2,6 +2,8 @@
 *******************************************************************************
 *                                                                             *
 * COPYRIGHT:                                                                  *
+*   Copyright (C) 1999, International Business Machines Corporation and       *
+*   others. All Rights Reserved.                                              *
 *   (C) Copyright International Business Machines Corporation, 1998-1999      *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.        *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure   *
@@ -17,6 +19,8 @@
 *   09/25/98    stephen     Creation.
 *   04/20/99    stephen     Overhauled per 4/16 code review.
 *   07/09/99    stephen     Renamed {hi,lo},{byte,word} to icu_X for HP/UX
+*   11/18/99    aliu        Added handleReplaceBetween() to make inherit from
+*                           Replaceable.
 *******************************************************************************
 */
 
@@ -654,6 +658,16 @@ UnicodeString::doReplace(UTextOffset start,
     delete [] bufferToDelete;
 
   return *this;
+}
+
+/**
+ * Replaceable API
+ */
+void
+UnicodeString::handleReplaceBetween(UTextOffset start,
+                                    UTextOffset limit,
+                                    const UnicodeString& text) {
+    replaceBetween(start, limit, text);
 }
 
 UnicodeString&
