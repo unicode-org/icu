@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2002/02/25 22:43:58 $
-* $Revision: 1.19 $
+* $Date: 2002/03/06 00:37:52 $
+* $Revision: 1.20 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -152,7 +152,7 @@ class TransliteratorParser {
     private static final char ZERO_OR_ONE         = '?';
 
     private static final char DOT                 = '.';
-    private static final String DOT_SET           = "[^[:Zp:][:Zl:]\r\n$]";
+    private static final String DOT_SET           = "[^[:Zp:][:Zl:]\\r\\n$]";
 
     // By definition, the ANCHOR_END special character is a
     // trailing SymbolTable.SYMBOL_REF character.
