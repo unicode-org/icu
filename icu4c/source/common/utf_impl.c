@@ -41,7 +41,7 @@
  * -finish:
  * (BSR: Bit Scan Reverse, scans for a 1-bit, starting from the MSB)
  */
-U_EXPORT uint8_t U_EXPORT2
+U_EXPORT const uint8_t U_EXPORT2
 utf8_countTrailBytes[256]={
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -68,10 +68,10 @@ utf8_countTrailBytes[256]={
     0, 0    /* illegal bytes 0xfe and 0xff */
 };
 
-static UChar32
+static const UChar32
 utf8_minRegular[4]={ 0, 0x80, 0x800, 0x10000 };
 
-static UChar32
+static const UChar32
 utf8_errorValue[6]={
     UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_2, UTF_ERROR_VALUE, 0x10ffff,
     0x3ffffff, 0x7fffffff
