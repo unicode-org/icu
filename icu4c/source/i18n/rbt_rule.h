@@ -180,8 +180,7 @@ public:
     /**
      * Copy constructor.
      */
-    TransliterationRule(TransliterationRule& other,
-                        const TransliterationRuleData& data);
+    TransliterationRule(TransliterationRule& other);
 
     /**
      * Destructor.
@@ -352,8 +351,6 @@ private:
               int32_t cursorPos, int32_t cursorOffset,
               int32_t* adoptedSegs,
               UErrorCode& status);
-
-    int32_t getSegmentsLength(const TransliterationRuleData& data) const;
 
 };
 

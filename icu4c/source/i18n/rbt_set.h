@@ -65,8 +65,7 @@ public:
     /**
      * Copy constructor.
      */
-    TransliterationRuleSet(const TransliterationRuleSet&,
-                           const TransliterationRuleData& data);
+    TransliterationRuleSet(const TransliterationRuleSet&);
 
     /**
      * Destructor.
