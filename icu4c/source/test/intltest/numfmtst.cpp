@@ -1228,7 +1228,6 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
                               "x 1.0 => " +
                               escape(a));
                     }
-                    logln(locs[i].getName());
                 }
             }
         }
