@@ -79,6 +79,31 @@ ubrk_close(UBreakIterator *bi)
   delete (BreakIterator*) bi;
 }
 
+U_CAPI void
+ubrk_setText(UBreakIterator* bi,
+             const UChar*    text,
+             int32_t         textLength,
+             UErrorCode*     status)
+{
+  if (U_FAILURE(*status)) return;
+    
+  const CharacterIterator& biText = ((BreakIterator*)bi)->getText();
+
+  int32_t textLen = (textLength == -1 ? u_strlen(text) : textLength);
+  if (biText.getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) {
+      ((UCharCharacterIterator&)biText).setText(text, textLen);
+  }
+  else {    
+      UCharCharacterIterator *iter = 0;
+      iter = new UCharCharacterIterator(text, textLen);
+      if(iter == 0) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+      }
+      ((BreakIterator*)bi)->adoptText(iter);
+  }
+}
+
 U_CAPI UTextOffset
 ubrk_current(const UBreakIterator *bi)
 {

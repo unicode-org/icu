@@ -17,9 +17,10 @@
 // This file was generated from the java source file BreakIterator.java
 // *****************************************************************************
 
-#include "unicode/utypes.h"
+#include "dbbi.h"
 #include "unicode/brkiter.h"
-#include "simtxbd.h"
+#include "unicode/udata.h"
+#include "resbund.h"
 
 #include <string.h>
 
@@ -38,7 +39,41 @@ const UTextOffset BreakIterator::DONE = (int32_t)-1;
 BreakIterator*
 BreakIterator::createWordInstance(const Locale& key)
 {
-    return new SimpleTextBoundary(&TextBoundaryData::kWordBreakData);
+    // WARNING: This routine is currently written specifically to handle only the
+    // default rules files and the alternate rules files for Thai.  This function
+    // will have to be made fully general at some time in the future!
+    BreakIterator* result = NULL;
+    const char* filename = "word";
+
+    UnicodeString temp;
+    if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+        filename = "word_th";
+    }
+
+    UErrorCode err = U_ZERO_ERROR;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+
+    if (!U_FAILURE(err)) {
+        const void* image = udata_getMemory(file);
+
+        if (image != NULL) {
+            if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+                const char* dataDir = u_getDataDirectory();
+                filename = "thaidict.brk";
+                char* fullPath = new char[strlen(dataDir) + strlen(filename) + 1];
+                strcpy(fullPath, dataDir);
+                strcpy(fullPath, filename);
+                
+                result = new DictionaryBasedBreakIterator(image, fullPath);
+                delete [] fullPath;
+            }
+            else {
+                result = new RuleBasedBreakIterator(image);
+            }
+        }
+    }
+    
+    return result;
 }
 
 // -------------------------------------
@@ -47,7 +82,41 @@ BreakIterator::createWordInstance(const Locale& key)
 BreakIterator*
 BreakIterator::createLineInstance(const Locale& key)
 {
-    return new SimpleTextBoundary(&TextBoundaryData::kLineBreakData);
+    // WARNING: This routine is currently written specifically to handle only the
+    // default rules files and the alternate rules files for Thai.  This function
+    // will have to be made fully general at some time in the future!
+    BreakIterator* result = NULL;
+    const char* filename = "line";
+
+    UnicodeString temp;
+    if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+        filename = "line_th";
+    }
+
+    UErrorCode err = U_ZERO_ERROR;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+
+    if (!U_FAILURE(err)) {
+        const void* image = udata_getMemory(file);
+
+        if (image != NULL) {
+            if (key.getLanguage(temp) == UnicodeString("th", (char*)0)) {
+                const char* dataDir = u_getDataDirectory();
+                filename = "thaidict.brk";
+                char* fullPath = new char[strlen(dataDir) + strlen(filename) + 1];
+                strcpy(fullPath, dataDir);
+                strcat(fullPath, filename);
+                
+                result = new DictionaryBasedBreakIterator(image, fullPath);
+                delete [] fullPath;
+            }
+            else {
+                result = new RuleBasedBreakIterator(image);
+            }
+        }
+    }
+    
+    return result;
 }
 
 // -------------------------------------
@@ -56,7 +125,24 @@ BreakIterator::createLineInstance(const Locale& key)
 BreakIterator*
 BreakIterator::createCharacterInstance(const Locale& key)
 {
-    return new SimpleTextBoundary(&TextBoundaryData::kCharacterBreakData);
+    // WARNING: This routine is currently written specifically to handle only the
+    // default rules files and the alternate rules files for Thai.  This function
+    // will have to be made fully general at some time in the future!
+    BreakIterator* result = NULL;
+    const char* filename = "char";
+
+    UErrorCode err = U_ZERO_ERROR;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+
+    if (!U_FAILURE(err)) {
+        const void* image = udata_getMemory(file);
+
+        if (image != NULL) {
+            result = new RuleBasedBreakIterator(image);
+        }
+    }
+    
+    return result;
 }
 
 // -------------------------------------
@@ -65,7 +151,24 @@ BreakIterator::createCharacterInstance(const Locale& key)
 BreakIterator*
 BreakIterator::createSentenceInstance(const Locale& key)
 {
-    return new SimpleTextBoundary(&TextBoundaryData::kSentenceBreakData);
+    // WARNING: This routine is currently written specifically to handle only the
+    // default rules files and the alternate rules files for Thai.  This function
+    // will have to be made fully general at some time in the future!
+    BreakIterator* result = NULL;
+    const char* filename = "sent";
+
+    UErrorCode err = U_ZERO_ERROR;
+    UDataMemory* file = udata_open(NULL, "brk", filename, &err);
+
+    if (!U_FAILURE(err)) {
+        const void* image = udata_getMemory(file);
+
+        if (image != NULL) {
+            result = new RuleBasedBreakIterator(image);
+        }
+    }
+    
+    return result;
 }
 
 // -------------------------------------

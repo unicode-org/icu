@@ -49,7 +49,7 @@ UVector::~UVector() {
 }
 
 void UVector::addElement(void* obj) {
-    if (ensureCapacity(count+1)) {
+    if (ensureCapacity(count + 1)) {
         elements[count++] = obj;
     }
 }
@@ -66,7 +66,7 @@ void UVector::setElementAt(void* obj, int32_t index) {
 
 void UVector::insertElementAt(void* obj, int32_t index) {
     // must have 0 <= index <= count
-    if (0 <= index && index <= count && ensureCapacity(count)) {
+    if (0 <= index && index <= count && ensureCapacity(count + 1)) {
         for (int32_t i=count; i>index; --i) {
             elements[i] = elements[i-1];
         }

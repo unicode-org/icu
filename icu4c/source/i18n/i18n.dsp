@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\include" /I "..\..\source\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\include" /I "..\..\source\common" /D "_WINDOWS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "UDATA_MAP" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -92,15 +92,15 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\brkdict.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\brkiter.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\calendar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\chbkdat.cpp
 # End Source File
 # Begin Source File
 
@@ -129,6 +129,14 @@ SOURCE=.\cpdtrans.cpp
 # Begin Source File
 
 SOURCE=.\datefmt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi_tbl.cpp
 # End Source File
 # Begin Source File
 
@@ -161,10 +169,6 @@ SOURCE=.\hextouni.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\lnbkdat.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\mergecol.cpp
 # End Source File
 # Begin Source File
@@ -178,6 +182,14 @@ SOURCE=.\numfmt.cpp
 # Begin Source File
 
 SOURCE=.\ptnentry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\rbbi_tbl.cpp
 # End Source File
 # Begin Source File
 
@@ -205,15 +217,7 @@ SOURCE=.\simpletz.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\simtxbd.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\smpdtfmt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\snbkdat.cpp
 # End Source File
 # Begin Source File
 
@@ -241,10 +245,6 @@ SOURCE=.\translit.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\txtbdat.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\txtbdry.cpp
 # End Source File
 # Begin Source File
@@ -269,10 +269,6 @@ SOURCE=.\umsg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicdcm.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\unifltlg.cpp
 # End Source File
 # Begin Source File
@@ -291,18 +287,14 @@ SOURCE=.\unitohex.cpp
 
 SOURCE=.\unum.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=.\wdbkdat.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\wdbktbl.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\brkdict.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\unicode\brkiter.h
@@ -499,6 +491,14 @@ InputPath=.\unicode\datefmt.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\dbbi_tbl.h
 # End Source File
 # Begin Source File
 
@@ -811,7 +811,7 @@ SOURCE=.\rbbi.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\rbbi_bld.h
+SOURCE=.\rbbi_tbl.h
 # End Source File
 # Begin Source File
 
@@ -885,10 +885,6 @@ InputPath=.\unicode\simpletz.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\simtxbd.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\smpdtfmt.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -940,10 +936,6 @@ InputPath=.\unicode\sortkey.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\spclmap.h
 # End Source File
 # Begin Source File
 
@@ -1033,10 +1025,6 @@ InputPath=.\unicode\translit.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\txtbdat.h
 # End Source File
 # Begin Source File
 
@@ -1179,10 +1167,6 @@ InputPath=.\unicode\umsg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicdcm.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\unifilt.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1319,10 +1303,6 @@ InputPath=.\unicode\unum.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\wdbktbl.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

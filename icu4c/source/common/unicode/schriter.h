@@ -140,6 +140,11 @@ public:
   virtual UTextOffset      getIndex(void) const;
 
   /**
+   * Sets the iterator to iterate over the provided string.
+   */
+  virtual void             setText(const UnicodeString& newText);
+  
+  /**
    * Copies the UnicodeString under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.  @param

@@ -109,6 +109,12 @@ public:
   virtual UTextOffset      getIndex(void) const;
 
   /**
+   * Sets the iterator to iterate over a new range of text
+   */
+  virtual void             setText(const UChar* newText,
+                                   int32_t newTextLength);
+  
+  /**
    * Copies the UnicodeString under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.  @param
