@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/10/04 23:17:28 $ 
- * $Revision: 1.33 $
+ * $Date: 2002/10/08 18:29:16 $ 
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -801,6 +801,31 @@ public class UnicodeSetTest extends TestFmwk {
         }
     }
     
+    /**
+     * Make sure each script name and abbreviated name can be used
+     * to construct a UnicodeSet.
+     */
+    public void TestScriptNames() {
+        for (int i=0; i<UScript.CODE_LIMIT; ++i) {
+            for (int j=0; j<2; ++j) {
+                String pat = "";
+                try {
+                    String name =
+                        (j==0) ? UScript.getName(i) : UScript.getShortName(i);
+                    pat = "[:" + name + ":]";
+                    UnicodeSet set = new UnicodeSet(pat);
+                    logln("Ok: " + pat);
+                } catch (IllegalArgumentException e) {
+                    if (pat.length() == 0) {
+                        errln("FAIL (in UScript): No name for script " + i);
+                    } else {
+                        errln("FAIL: Couldn't create " + pat);
+                    }
+                }
+            }
+        }
+    }
+
     void _testComplement(int a) {
         UnicodeSet x = bitsToSet(a);
         UnicodeSet z = bitsToSet(a);
