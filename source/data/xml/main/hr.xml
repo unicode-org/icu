@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="hr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -33,7 +33,7 @@
 			<language type="lt">litvanski</language>
 			<language type="lv">latvijski</language>
 			<language type="nl">nizozemski</language>
-			<language type="no">norveškin</language>
+			<language type="no">norveški</language>
 			<language type="pl">poljski</language>
 			<language type="pt">portugalski</language>
 			<language type="ro">rumunjski</language>
@@ -287,141 +287,145 @@
 			<territory type="ZM">Zambija</territory>
 			<territory type="ZW">Zimbabve</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-p r-v z đ ć č ž š {lj} {nj} {dž}]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">siječanj</month>
-				<month type="2">veljača</month>
-				<month type="3">ožujak</month>
-				<month type="4">travanj</month>
-				<month type="5">svibanj</month>
-				<month type="6">lipanj</month>
-				<month type="7">srpanj</month>
-				<month type="8">kolovoz</month>
-				<month type="9">rujan</month>
-				<month type="10">listopad</month>
-				<month type="11">studeni</month>
-				<month type="12">prosinac</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">sij</month>
-				<month type="2">vel</month>
-				<month type="3">ožu</month>
-				<month type="4">tra</month>
-				<month type="5">svi</month>
-				<month type="6">lip</month>
-				<month type="7">srp</month>
-				<month type="8">kol</month>
-				<month type="9">ruj</month>
-				<month type="10">lis</month>
-				<month type="11">stu</month>
-				<month type="12">pro</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">nedjelja</day>
-				<day type="mon">ponedjeljak</day>
-				<day type="tue">utorak</day>
-				<day type="wed">srijeda</day>
-				<day type="thu">četvrtak</day>
-				<day type="fri">petak</day>
-				<day type="sat">subota</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">ned</day>
-				<day type="mon">pon</day>
-				<day type="tue">uto</day>
-				<day type="wed">sri</day>
-				<day type="thu">čet</day>
-				<day type="fri">pet</day>
-				<day type="sat">sub</day>
-			</dayAbbr>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>yyyy. MMMM dd</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>yyyy. MMMM dd</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>yyyy.MM.dd</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>yyyy.MM.dd</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="HRK">
-			<displayName>HRK</displayName>
-			<symbol>Kn</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-p r-v z đ ć č ž š {lj} {nj} {dž}]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">siječanj</month>
+					<month type="2">veljača</month>
+					<month type="3">ožujak</month>
+					<month type="4">travanj</month>
+					<month type="5">svibanj</month>
+					<month type="6">lipanj</month>
+					<month type="7">srpanj</month>
+					<month type="8">kolovoz</month>
+					<month type="9">rujan</month>
+					<month type="10">listopad</month>
+					<month type="11">studeni</month>
+					<month type="12">prosinac</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">sij</month>
+					<month type="2">vel</month>
+					<month type="3">ožu</month>
+					<month type="4">tra</month>
+					<month type="5">svi</month>
+					<month type="6">lip</month>
+					<month type="7">srp</month>
+					<month type="8">kol</month>
+					<month type="9">ruj</month>
+					<month type="10">lis</month>
+					<month type="11">stu</month>
+					<month type="12">pro</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">nedjelja</day>
+					<day type="mon">ponedjeljak</day>
+					<day type="tue">utorak</day>
+					<day type="wed">srijeda</day>
+					<day type="thu">četvrtak</day>
+					<day type="fri">petak</day>
+					<day type="sat">subota</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ned</day>
+					<day type="mon">pon</day>
+					<day type="tue">uto</day>
+					<day type="wed">sri</day>
+					<day type="thu">čet</day>
+					<day type="fri">pet</day>
+					<day type="sat">sub</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>yyyy. MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>yyyy. MMMM dd</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>yyyy.MM.dd</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>yyyy.MM.dd</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="HRK">
+				<displayName>HRK</displayName>
+				<symbol>Kn</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

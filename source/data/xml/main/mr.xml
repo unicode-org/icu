@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="mr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -158,75 +158,87 @@
 		<territories>
 			<territory type="IN">भारत</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[[:Deva:]-[क़-य़]‌‍]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Deva</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">जानेवारी</month>
-				<month type="2">फेबृवारी</month>
-				<month type="3">मार्च</month>
-				<month type="4">एप्रिल</month>
-				<month type="5">मे</month>
-				<month type="6">जून</month>
-				<month type="7">जुलै</month>
-				<month type="8">ओगस्ट</month>
-				<month type="9">सेप्टेंबर</month>
-				<month type="10">ओक्टोबर</month>
-				<month type="11">नोव्हेंबर</month>
-				<month type="12">डिसेंबर</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">जानेवारी</month>
-				<month type="2">फेबृवारी</month>
-				<month type="3">मार्च</month>
-				<month type="4">एप्रिल</month>
-				<month type="5">मे</month>
-				<month type="6">जून</month>
-				<month type="7">जुलै</month>
-				<month type="8">ओगस्ट</month>
-				<month type="9">सेप्टेंबर</month>
-				<month type="10">ओक्टोबर</month>
-				<month type="11">नोव्हेंबर</month>
-				<month type="12">डिसेंबर</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">रविवार</day>
-				<day type="mon">सोमवार</day>
-				<day type="tue">मंगळवार</day>
-				<day type="wed">बुधवार</day>
-				<day type="thu">गुरुवार</day>
-				<day type="fri">शुक्रवार</day>
-				<day type="sat">शनिवार</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">रवि</day>
-				<day type="mon">सोम</day>
-				<day type="tue">मंगळ</day>
-				<day type="wed">बुध</day>
-				<day type="thu">गुरु</day>
-				<day type="fri">शुक्र</day>
-				<day type="sat">शनि</day>
-			</dayAbbr>
-			<am>म.पू.</am>
-			<pm>म.नं.</pm>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<currencies>
-		<currency type="INR">
-			<displayName>INR</displayName>
-			<symbol>रु</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[[:Deva:]-[क़-य़]‌‍]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Deva</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">जानेवारी</month>
+					<month type="2">फेबृवारी</month>
+					<month type="3">मार्च</month>
+					<month type="4">एप्रिल</month>
+					<month type="5">मे</month>
+					<month type="6">जून</month>
+					<month type="7">जुलै</month>
+					<month type="8">ओगस्ट</month>
+					<month type="9">सेप्टेंबर</month>
+					<month type="10">ओक्टोबर</month>
+					<month type="11">नोव्हेंबर</month>
+					<month type="12">डिसेंबर</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">जानेवारी</month>
+					<month type="2">फेबृवारी</month>
+					<month type="3">मार्च</month>
+					<month type="4">एप्रिल</month>
+					<month type="5">मे</month>
+					<month type="6">जून</month>
+					<month type="7">जुलै</month>
+					<month type="8">ओगस्ट</month>
+					<month type="9">सेप्टेंबर</month>
+					<month type="10">ओक्टोबर</month>
+					<month type="11">नोव्हेंबर</month>
+					<month type="12">डिसेंबर</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">रविवार</day>
+					<day type="mon">सोमवार</day>
+					<day type="tue">मंगळवार</day>
+					<day type="wed">बुधवार</day>
+					<day type="thu">गुरुवार</day>
+					<day type="fri">शुक्रवार</day>
+					<day type="sat">शनिवार</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">रवि</day>
+					<day type="mon">सोम</day>
+					<day type="tue">मंगळ</day>
+					<day type="wed">बुध</day>
+					<day type="thu">गुरु</day>
+					<day type="fri">शुक्र</day>
+					<day type="sat">शनि</day>
+				</dayAbbr>
+				<am>म.पू.</am>
+				<pm>म.नं.</pm>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Asia/Calcutta">
+				<long>
+				<standard>भारतीय समय</standard>
+				<daylight>भारतीय समय</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IST</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -18,6 +18,7 @@
 			<language type="ace">Achinese</language>
 			<language type="ach">Acoli</language>
 			<language type="ada">Adangme</language>
+			<language type="ady">Adyghe</language>
 			<language type="ae">Avestan</language>
 			<language type="af">Afrikaans</language>
 			<language type="afa">Afro-Asiatic (Other)</language>
@@ -27,6 +28,7 @@
 			<language type="ale">Aleut</language>
 			<language type="alg">Algonquian Languages</language>
 			<language type="am">Amharic</language>
+			<language type="an">Aragonese</language>
 			<language type="ang">English, Old (ca.450-1100)</language>
 			<language type="apa">Apache Languages</language>
 			<language type="ar">Arabic</language>
@@ -98,8 +100,10 @@
 			<language type="cpf">Creoles and Pidgins, French-based (Other)</language>
 			<language type="cpp">Creoles and pidgins, Portuguese-based (Other)</language>
 			<language type="cr">Cree</language>
+			<language type="crh">Crimean Turkish; Crimean Tatar</language>
 			<language type="crp">Creoles and Pidgins (Other)</language>
 			<language type="cs">Czech</language>
+			<language type="csb">Kashubian</language>
 			<language type="cu">Church Slavic</language>
 			<language type="cus">Cushitic (Other)</language>
 			<language type="cv">Chuvash</language>
@@ -115,6 +119,7 @@
 			<language type="din">Dinka</language>
 			<language type="doi">Dogri</language>
 			<language type="dra">Dravidian (Other)</language>
+			<language type="dsb">Lower Sorbian</language>
 			<language type="dua">Duala</language>
 			<language type="dum">Dutch, Middle (ca. 1050-1350)</language>
 			<language type="dv">Divehi</language>
@@ -156,7 +161,6 @@
 			<language type="gez">Geez</language>
 			<language type="gil">Gilbertese</language>
 			<language type="gl">Gallegan</language>
-			<language type="gla">Gaelic (Scots)</language>
 			<language type="gmh">German, Middle High (ca.1050-1500)</language>
 			<language type="gn">Guarani</language>
 			<language type="goh">German, Old High (ca.750-1050)</language>
@@ -179,6 +183,7 @@
 			<language type="hmn">Hmong</language>
 			<language type="ho">Hiri Motu</language>
 			<language type="hr">Croatian</language>
+			<language type="hsb">Upper Sorbian</language>
 			<language type="ht">Haitian</language>
 			<language type="hu">Hungarian</language>
 			<language type="hup">Hupa</language>
@@ -203,6 +208,7 @@
 			<language type="it">Italian</language>
 			<language type="iu">Inuktitut</language>
 			<language type="ja">Japanese</language>
+			<language type="jbo">Lojban</language>
 			<language type="jpr">Judeo-Persian</language>
 			<language type="jrb">Judeo-Arabic</language>
 			<language type="jv">Javanese</language>
@@ -230,6 +236,7 @@
 			<language type="kos">Kosraean</language>
 			<language type="kpe">Kpelle</language>
 			<language type="kr">Kanuri</language>
+			<language type="krc">Karachay-Balkar</language>
 			<language type="kro">Kru</language>
 			<language type="kru">Kurukh</language>
 			<language type="ks">Kashmiri</language>
@@ -247,8 +254,6 @@
 			<language type="lez">Lezghian</language>
 			<language type="lg">Ganda</language>
 			<language type="li">Limburgish</language>
-			<language type="lin">Lingala</language>
-			<language type="lit">Lithuanian</language>
 			<language type="ln">Lingala</language>
 			<language type="lo">Lao</language>
 			<language type="lol">Mongo</language>
@@ -268,6 +273,7 @@
 			<language type="man">Mandingo</language>
 			<language type="map">Austronesian</language>
 			<language type="mas">Masai</language>
+			<language type="mdf">Moksha</language>
 			<language type="mdr">Mandar</language>
 			<language type="men">Mende</language>
 			<language type="mg">Malagasy</language>
@@ -296,6 +302,7 @@
 			<language type="mwr">Marwari</language>
 			<language type="my">Burmese</language>
 			<language type="myn">Mayan</language>
+			<language type="myv">Erzya</language>
 			<language type="na">Nauru</language>
 			<language type="nah">Nahuatl</language>
 			<language type="nai">North American Indian (Other)</language>
@@ -312,6 +319,7 @@
 			<language type="nl">Dutch</language>
 			<language type="nn">Norwegian Nynorsk</language>
 			<language type="no">Norwegian</language>
+			<language type="nog">Nogai</language>
 			<language type="non">Norse, Old</language>
 			<language type="nr">Ndebele, South</language>
 			<language type="nso">Sotho, Northern</language>
@@ -435,12 +443,12 @@
 			<language type="tt">Tatar</language>
 			<language type="tum">Tumbuka</language>
 			<language type="tup">Tupi languages</language>
-			<language type="tur">Turkish</language>
 			<language type="tut">Altaic (Other)</language>
 			<language type="tvl">Tuvalu</language>
 			<language type="tw">Twi</language>
 			<language type="ty">Tahitian</language>
 			<language type="tyv">Tuvinian</language>
+			<language type="udm">Udmurt</language>
 			<language type="ug">Uighur</language>
 			<language type="uga">Ugaritic</language>
 			<language type="uk">Ukrainian</language>
@@ -460,6 +468,7 @@
 			<language type="was">Washo</language>
 			<language type="wen">Sorbian Languages</language>
 			<language type="wo">Wolof</language>
+			<language type="xal">Kalmyk</language>
 			<language type="xh">Xhosa</language>
 			<language type="yao">Yao</language>
 			<language type="yap">Yapese</language>
@@ -774,15 +783,22 @@
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
 		<variants>
-			<variant type="EURO">Euro</variant>
-			<variant type="NY">Nynorsk</variant>
 			<variant type="POSIX">Posix</variant>
+			<variant type="REVISED">Revised Orthography</variant>
 		</variants>
 		<keys>
 			<key type="calendar">Calendar</key>
 			<key type="collation">Collation</key>
+			<key type="currency">Currency</key>
 		</keys>
 		<types>
+			<type type="buddhist" key="calendar">Buddhist Calendar</type>
+			<type type="chinese" key="calendar">Chinese Calendar</type>
+			<type type="gregorian" key="calendar">Gregorian Calendar</type>
+			<type type="hebrew" key="calendar">Hebrew Calendar</type>
+			<type type="islamic" key="calendar">Islamic Calendar</type>
+			<type type="islamic-civil" key="calendar">Islamic-Civil Calendar</type>
+			<type type="japanese" key="calendar">Japaneese Calendar</type>
 			<type type="traditional" key="calendar">Traditional Calendar</type>
 			<type type="direct" key="collation">Direct Order</type>
 			<type type="phonebook" key="collation">Phonebook Order</type>
@@ -910,378 +926,320 @@
 			</calendar>
 		</calendars>
 		<timeZoneNames>
-			<zone type="Los Angeles">
+			<zone type="PST">
 				<long>
-					<generic>Pacific Standard Time</generic>
-					<standard>Pacific Standard Time</standard>
-					<daylight>Pacific Daylight Time</daylight>
+				<standard>Pacific Standard Time</standard>
+				<daylight>Pacific Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>PST</generic>
 					<standard>PST</standard>
 					<daylight>PDT</daylight>
 				</short>
 				<exemplarCity>Los Angeles</exemplarCity>
 			</zone>
-			<zone type="Los Angeles">
+			<zone type="America/Los_Angeles">
 				<long>
-					<generic>Pacific Standard Time</generic>
-					<standard>Pacific Standard Time</standard>
-					<daylight>Pacific Daylight Time</daylight>
+				<standard>Pacific Standard Time</standard>
+				<daylight>Pacific Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/Los_Angeles</generic>
 					<standard>PST</standard>
 					<daylight>PDT</daylight>
 				</short>
 				<exemplarCity>Los Angeles</exemplarCity>
 			</zone>
-			<zone type="Denver">
+			<zone type="MST">
 				<long>
-					<generic>Mountain Standard Time</generic>
-					<standard>Mountain Standard Time</standard>
-					<daylight>Mountain Daylight Time</daylight>
+				<standard>Mountain Standard Time</standard>
+				<daylight>Mountain Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>MST</generic>
 					<standard>MST</standard>
 					<daylight>MDT</daylight>
 				</short>
 				<exemplarCity>Denver</exemplarCity>
 			</zone>
-			<zone type="Denver">
+			<zone type="America/Denver">
 				<long>
-					<generic>Mountain Standard Time</generic>
-					<standard>Mountain Standard Time</standard>
-					<daylight>Mountain Daylight Time</daylight>
+				<standard>Mountain Standard Time</standard>
+				<daylight>Mountain Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/Denver</generic>
 					<standard>MST</standard>
 					<daylight>MDT</daylight>
 				</short>
 				<exemplarCity>Denver</exemplarCity>
 			</zone>
-			<zone type="Phoenix">
+			<zone type="PNT">
 				<long>
-					<generic>Mountain Standard Time</generic>
-					<standard>Mountain Standard Time</standard>
-					<daylight>Mountain Standard Time</daylight>
+				<standard>Mountain Standard Time</standard>
+				<daylight>Mountain Standard Time</daylight>
 				</long>
 				<short>
-					<generic>PNT</generic>
 					<standard>MST</standard>
 					<daylight>MST</daylight>
 				</short>
 				<exemplarCity>Phoenix</exemplarCity>
 			</zone>
-			<zone type="Phoenix">
+			<zone type="America/Phoenix">
 				<long>
-					<generic>Mountain Standard Time</generic>
-					<standard>Mountain Standard Time</standard>
-					<daylight>Mountain Standard Time</daylight>
+				<standard>Mountain Standard Time</standard>
+				<daylight>Mountain Standard Time</daylight>
 				</long>
 				<short>
-					<generic>America/Phoenix</generic>
 					<standard>MST</standard>
 					<daylight>MST</daylight>
 				</short>
 				<exemplarCity>Phoenix</exemplarCity>
 			</zone>
-			<zone type="Chicago">
+			<zone type="CST">
 				<long>
-					<generic>Central Standard Time</generic>
-					<standard>Central Standard Time</standard>
-					<daylight>Central Daylight Time</daylight>
+				<standard>Central Standard Time</standard>
+				<daylight>Central Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>CST</generic>
 					<standard>CST</standard>
 					<daylight>CDT</daylight>
 				</short>
 				<exemplarCity>Chicago</exemplarCity>
 			</zone>
-			<zone type="Chicago">
+			<zone type="America/Chicago">
 				<long>
-					<generic>Central Standard Time</generic>
-					<standard>Central Standard Time</standard>
-					<daylight>Central Daylight Time</daylight>
+				<standard>Central Standard Time</standard>
+				<daylight>Central Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/Chicago</generic>
 					<standard>CST</standard>
 					<daylight>CDT</daylight>
 				</short>
 				<exemplarCity>Chicago</exemplarCity>
 			</zone>
-			<zone type="New York">
+			<zone type="EST">
 				<long>
-					<generic>Eastern Standard Time</generic>
-					<standard>Eastern Standard Time</standard>
-					<daylight>Eastern Daylight Time</daylight>
+				<standard>Eastern Standard Time</standard>
+				<daylight>Eastern Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>EST</generic>
 					<standard>EST</standard>
 					<daylight>EDT</daylight>
 				</short>
 				<exemplarCity>New York</exemplarCity>
 			</zone>
-			<zone type="New York">
+			<zone type="America/New_York">
 				<long>
-					<generic>Eastern Standard Time</generic>
-					<standard>Eastern Standard Time</standard>
-					<daylight>Eastern Daylight Time</daylight>
+				<standard>Eastern Standard Time</standard>
+				<daylight>Eastern Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/New_York</generic>
 					<standard>EST</standard>
 					<daylight>EDT</daylight>
 				</short>
 				<exemplarCity>New York</exemplarCity>
 			</zone>
-			<zone type="Indianapolis">
+			<zone type="IET">
 				<long>
-					<generic>Eastern Standard Time</generic>
-					<standard>Eastern Standard Time</standard>
-					<daylight>Eastern Standard Time</daylight>
+				<standard>Eastern Standard Time</standard>
+				<daylight>Eastern Standard Time</daylight>
 				</long>
 				<short>
-					<generic>IET</generic>
 					<standard>EST</standard>
 					<daylight>EST</daylight>
 				</short>
 				<exemplarCity>Indianapolis</exemplarCity>
 			</zone>
-			<zone type="Indianapolis">
+			<zone type="America/Indianapolis">
 				<long>
-					<generic>Eastern Standard Time</generic>
-					<standard>Eastern Standard Time</standard>
-					<daylight>Eastern Standard Time</daylight>
+				<standard>Eastern Standard Time</standard>
+				<daylight>Eastern Standard Time</daylight>
 				</long>
 				<short>
-					<generic>America/Indianapolis</generic>
 					<standard>EST</standard>
 					<daylight>EST</daylight>
 				</short>
 				<exemplarCity>Indianapolis</exemplarCity>
 			</zone>
-			<zone type="Honolulu">
+			<zone type="HST">
 				<long>
-					<generic>Hawaii Standard Time</generic>
-					<standard>Hawaii Standard Time</standard>
-					<daylight>Hawaii Standard Time</daylight>
+				<standard>Hawaii Standard Time</standard>
+				<daylight>Hawaii Standard Time</daylight>
 				</long>
 				<short>
-					<generic>HST</generic>
 					<standard>HST</standard>
 					<daylight>HST</daylight>
 				</short>
 				<exemplarCity>Honolulu</exemplarCity>
 			</zone>
-			<zone type="Honolulu">
+			<zone type="Pacific/Honolulu">
 				<long>
-					<generic>Hawaii Standard Time</generic>
-					<standard>Hawaii Standard Time</standard>
-					<daylight>Hawaii Standard Time</daylight>
+				<standard>Hawaii Standard Time</standard>
+				<daylight>Hawaii Standard Time</daylight>
 				</long>
 				<short>
-					<generic>Pacific/Honolulu</generic>
 					<standard>HST</standard>
 					<daylight>HST</daylight>
 				</short>
 				<exemplarCity>Honolulu</exemplarCity>
 			</zone>
-			<zone type="Anchorage">
+			<zone type="AST">
 				<long>
-					<generic>Alaska Standard Time</generic>
-					<standard>Alaska Standard Time</standard>
-					<daylight>Alaska Daylight Time</daylight>
+				<standard>Alaska Standard Time</standard>
+				<daylight>Alaska Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>AST</generic>
 					<standard>AST</standard>
 					<daylight>ADT</daylight>
 				</short>
 				<exemplarCity>Anchorage</exemplarCity>
 			</zone>
-			<zone type="Anchorage">
+			<zone type="America/Anchorage">
 				<long>
-					<generic>Alaska Standard Time</generic>
-					<standard>Alaska Standard Time</standard>
-					<daylight>Alaska Daylight Time</daylight>
+				<standard>Alaska Standard Time</standard>
+				<daylight>Alaska Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/Anchorage</generic>
 					<standard>AST</standard>
 					<daylight>ADT</daylight>
 				</short>
 				<exemplarCity>Anchorage</exemplarCity>
 			</zone>
-			<zone type="Halifax">
+			<zone type="America/Halifax">
 				<long>
-					<generic>Atlantic Standard Time</generic>
-					<standard>Atlantic Standard Time</standard>
-					<daylight>Atlantic Daylight Time</daylight>
+				<standard>Atlantic Standard Time</standard>
+				<daylight>Atlantic Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/Halifax</generic>
 					<standard>AST</standard>
 					<daylight>ADT</daylight>
 				</short>
 				<exemplarCity>Halifax</exemplarCity>
 			</zone>
-			<zone type="St. Johns">
+			<zone type="CNT">
 				<long>
-					<generic>Newfoundland Standard Time</generic>
-					<standard>Newfoundland Standard Time</standard>
-					<daylight>Newfoundland Daylight Time</daylight>
+				<standard>Newfoundland Standard Time</standard>
+				<daylight>Newfoundland Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>CNT</generic>
 					<standard>CNT</standard>
 					<daylight>CDT</daylight>
 				</short>
 				<exemplarCity>St. Johns</exemplarCity>
 			</zone>
-			<zone type="St. Johns">
+			<zone type="America/St_Johns">
 				<long>
-					<generic>Newfoundland Standard Time</generic>
-					<standard>Newfoundland Standard Time</standard>
-					<daylight>Newfoundland Daylight Time</daylight>
+				<standard>Newfoundland Standard Time</standard>
+				<daylight>Newfoundland Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>America/St_Johns</generic>
 					<standard>CNT</standard>
 					<daylight>CDT</daylight>
 				</short>
 				<exemplarCity>St. Johns</exemplarCity>
 			</zone>
-			<zone type="Paris">
+			<zone type="ECT">
 				<long>
-					<generic>Central European Standard Time</generic>
-					<standard>Central European Standard Time</standard>
-					<daylight>Central European Daylight Time</daylight>
+				<standard>Central European Standard Time</standard>
+				<daylight>Central European Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>ECT</generic>
 					<standard>CET</standard>
 					<daylight>CEST</daylight>
 				</short>
 				<exemplarCity>Paris</exemplarCity>
 			</zone>
-			<zone type="Paris">
+			<zone type="Europe/Paris">
 				<long>
-					<generic>Central European Standard Time</generic>
-					<standard>Central European Standard Time</standard>
-					<daylight>Central European Daylight Time</daylight>
+				<standard>Central European Standard Time</standard>
+				<daylight>Central European Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>Europe/Paris</generic>
 					<standard>CET</standard>
 					<daylight>CEST</daylight>
 				</short>
 				<exemplarCity>Paris</exemplarCity>
 			</zone>
-			<zone type="London">
+			<zone type="GMT">
 				<long>
-					<generic>Greenwich Mean Time</generic>
-					<standard>Greenwich Mean Time</standard>
-					<daylight>Greenwich Mean Time</daylight>
+				<standard>Greenwich Mean Time</standard>
+				<daylight>Greenwich Mean Time</daylight>
 				</long>
 				<short>
-					<generic>GMT</generic>
 					<standard>GMT</standard>
 					<daylight>GMT</daylight>
 				</short>
 				<exemplarCity>London</exemplarCity>
 			</zone>
-			<zone type="Casablanca">
+			<zone type="Africa/Casablanca">
 				<long>
-					<generic>Greenwich Mean Time</generic>
-					<standard>Greenwich Mean Time</standard>
-					<daylight>Greenwich Mean Time</daylight>
+				<standard>Greenwich Mean Time</standard>
+				<daylight>Greenwich Mean Time</daylight>
 				</long>
 				<short>
-					<generic>Africa/Casablanca</generic>
 					<standard>GMT</standard>
 					<daylight>GMT</daylight>
 				</short>
 				<exemplarCity>Casablanca</exemplarCity>
 			</zone>
-			<zone type="Jerusalem">
+			<zone type="Asia/Jerusalem">
 				<long>
-					<generic>Israel Standard Time</generic>
-					<standard>Israel Standard Time</standard>
-					<daylight>Israel Daylight Time</daylight>
+				<standard>Israel Standard Time</standard>
+				<daylight>Israel Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>Asia/Jerusalem</generic>
 					<standard>IST</standard>
 					<daylight>IDT</daylight>
 				</short>
 				<exemplarCity>Jerusalem</exemplarCity>
 			</zone>
-			<zone type="Tokyo">
+			<zone type="JST">
 				<long>
-					<generic>Japan Standard Time</generic>
-					<standard>Japan Standard Time</standard>
-					<daylight>Japan Standard Time</daylight>
+				<standard>Japan Standard Time</standard>
+				<daylight>Japan Standard Time</daylight>
 				</long>
 				<short>
-					<generic>JST</generic>
 					<standard>JST</standard>
 					<daylight>JST</daylight>
 				</short>
 				<exemplarCity>Tokyo</exemplarCity>
 			</zone>
-			<zone type="Tokyo">
+			<zone type="Asia/Tokyo">
 				<long>
-					<generic>Japan Standard Time</generic>
-					<standard>Japan Standard Time</standard>
-					<daylight>Japan Standard Time</daylight>
+				<standard>Japan Standard Time</standard>
+				<daylight>Japan Standard Time</daylight>
 				</long>
 				<short>
-					<generic>Asia/Tokyo</generic>
 					<standard>JST</standard>
 					<daylight>JST</daylight>
 				</short>
 				<exemplarCity>Tokyo</exemplarCity>
 			</zone>
-			<zone type="Bucharest">
+			<zone type="Europe/Bucharest">
 				<long>
-					<generic>Eastern European Standard Time</generic>
-					<standard>Eastern European Standard Time</standard>
-					<daylight>Eastern European Daylight Time</daylight>
+				<standard>Eastern European Standard Time</standard>
+				<daylight>Eastern European Daylight Time</daylight>
 				</long>
 				<short>
-					<generic>Europe/Bucharest</generic>
 					<standard>EET</standard>
 					<daylight>EEST</daylight>
 				</short>
 				<exemplarCity>Bucharest</exemplarCity>
 			</zone>
-			<zone type="Shanghai">
+			<zone type="CTT">
 				<long>
-					<generic>China Standard Time</generic>
-					<standard>China Standard Time</standard>
-					<daylight>China Standard Time</daylight>
+				<standard>China Standard Time</standard>
+				<daylight>China Standard Time</daylight>
 				</long>
 				<short>
-					<generic>CTT</generic>
 					<standard>CTT</standard>
 					<daylight>CDT</daylight>
 				</short>
 				<exemplarCity>Shanghai</exemplarCity>
 			</zone>
-			<zone type="Shanghai">
+			<zone type="Asia/Shanghai">
 				<long>
-					<generic>China Standard Time</generic>
-					<standard>China Standard Time</standard>
-					<daylight>China Standard Time</daylight>
+				<standard>China Standard Time</standard>
+				<daylight>China Standard Time</daylight>
 				</long>
 				<short>
-					<generic>Asia/Shanghai</generic>
 					<standard>CTT</standard>
 					<daylight>CDT</daylight>
 				</short>
@@ -2601,7 +2559,7 @@
 			</currency>
 			<currency type="USD">
 				<displayName>US Dollar</displayName>
-				<symbol>$</symbol>
+				<symbol>US$</symbol>
 			</currency>
 			<currency type="USN">
 				<displayName>US Dollar (Next day)</displayName>

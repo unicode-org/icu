@@ -8,51 +8,51 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="hy" /> 
 		<territory type="AM" /> 
 		<variant type="REVISED" /> 
 	</identity>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Հունվար</month>
-				<month type="2">Փետրվար</month>
-				<month type="3">Մարտ</month>
-				<month type="4">Ապրիլ</month>
-				<month type="5">Մայիս</month>
-				<month type="6">Հունիս</month>
-				<month type="7">Հուլիս</month>
-				<month type="8">Օգոստոս</month>
-				<month type="9">Սեպտեմբեր</month>
-				<month type="10">Հոկտեմբեր</month>
-				<month type="11">Նոյեմբեր</month>
-				<month type="12">Դեկտեմբեր</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Հնվ</month>
-				<month type="2">Փտվ</month>
-				<month type="3">Մրտ</month>
-				<month type="4">Ապր</month>
-				<month type="5">Մյս</month>
-				<month type="6">Հնս</month>
-				<month type="7">Հլս</month>
-				<month type="8">Օգս</month>
-				<month type="9">Սեպ</month>
-				<month type="10">Հոկ</month>
-				<month type="11">Նոյ</month>
-				<month type="12">Դեկ</month>
-			</monthAbbr>
-			<am>Առ․</am>
-			<pm>Կե․</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">Մ․Թ․Ա․</era>
-					<era type="2">Մ․Թ․</era>
-				</eraAbbr>
-			</eras>
-		</calendar>
-	</calendars>
-</dates>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Հունվար</month>
+					<month type="2">Փետրվար</month>
+					<month type="3">Մարտ</month>
+					<month type="4">Ապրիլ</month>
+					<month type="5">Մայիս</month>
+					<month type="6">Հունիս</month>
+					<month type="7">Հուլիս</month>
+					<month type="8">Օգոստոս</month>
+					<month type="9">Սեպտեմբեր</month>
+					<month type="10">Հոկտեմբեր</month>
+					<month type="11">Նոյեմբեր</month>
+					<month type="12">Դեկտեմբեր</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Հնվ</month>
+					<month type="2">Փտվ</month>
+					<month type="3">Մրտ</month>
+					<month type="4">Ապր</month>
+					<month type="5">Մյս</month>
+					<month type="6">Հնս</month>
+					<month type="7">Հլս</month>
+					<month type="8">Օգս</month>
+					<month type="9">Սեպ</month>
+					<month type="10">Հոկ</month>
+					<month type="11">Նոյ</month>
+					<month type="12">Դեկ</month>
+				</monthAbbr>
+				<am>Առ․</am>
+				<pm>Կե․</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">Մ․Թ․Ա․</era>
+						<era type="2">Մ․Թ․</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+	</dates>
 </ldml>

@@ -8,70 +8,70 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ar" /> 
 		<territory type="YE" /> 
 	</identity>
-<layout>
-	<orientation lines="top-to-bottom" characters="right-to-left" />
-</layout>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthAbbr>
-				<month type="1">يناير</month>
-				<month type="2">فبراير</month>
-				<month type="3">مارس</month>
-				<month type="4">أبريل</month>
-				<month type="5">مايو</month>
-				<month type="6">يونيو</month>
-				<month type="7">يوليو</month>
-				<month type="8">أغسطس</month>
-				<month type="9">سبتمبر</month>
-				<month type="10">أكتوبر</month>
-				<month type="11">نوفمبر</month>
-				<month type="12">ديسمبر</month>
-			</monthAbbr>
-			<dayAbbr>
-				<day type="sun">الأحد</day>
-				<day type="mon">الاثنين</day>
-				<day type="tue">الثلاثاء</day>
-				<day type="wed">الأربعاء</day>
-				<day type="thu">الخميس</day>
-				<day type="fri">الجمعة</day>
-				<day type="sat">السبت</day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<decimalFormats>
-		<decimalFormatLength >
-			<decimalFormat >
-				<pattern>###0.###;###0.###-</pattern>
-			</decimalFormat>
-		</decimalFormatLength >
-	</decimalFormats>
-	<scientificFormats>
-		<scientificFormatLength >
-			<scientificFormat >
-				<pattern>#E0</pattern>
-			</scientificFormat>
-		</scientificFormatLength >
-	</scientificFormats>
-	<percentFormats>
-		<percentFormatLength >
-			<percentFormat >
-				<pattern>#,##0%</pattern>
-			</percentFormat>
-		</percentFormatLength >
-	</percentFormats>
-	<currencyFormats>
-		<currencyFormatLength >
-			<currencyFormat >
-				<pattern>¤###0.00;-¤###0.00</pattern>
-			</currencyFormat>
-		</currencyFormatLength >
-	</currencyFormats>
-</numbers>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthAbbr>
+					<month type="1">يناير</month>
+					<month type="2">فبراير</month>
+					<month type="3">مارس</month>
+					<month type="4">أبريل</month>
+					<month type="5">مايو</month>
+					<month type="6">يونيو</month>
+					<month type="7">يوليو</month>
+					<month type="8">أغسطس</month>
+					<month type="9">سبتمبر</month>
+					<month type="10">أكتوبر</month>
+					<month type="11">نوفمبر</month>
+					<month type="12">ديسمبر</month>
+				</monthAbbr>
+				<dayAbbr>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>###0.###;###0.###-</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤###0.00;-¤###0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
 </ldml>

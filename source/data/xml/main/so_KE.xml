@@ -8,46 +8,46 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="so" /> 
 		<territory type="KE" /> 
 	</identity>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<am>sn</am>
-			<pm>gn</pm>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<decimalFormats>
-		<decimalFormatLength >
-			<decimalFormat >
-				<pattern>#,##0.###;-#,##0.###</pattern>
-			</decimalFormat>
-		</decimalFormatLength >
-	</decimalFormats>
-	<scientificFormats>
-		<scientificFormatLength >
-			<scientificFormat >
-				<pattern>#E0</pattern>
-			</scientificFormat>
-		</scientificFormatLength >
-	</scientificFormats>
-	<percentFormats>
-		<percentFormatLength >
-			<percentFormat >
-				<pattern>#,##0%</pattern>
-			</percentFormat>
-		</percentFormatLength >
-	</percentFormats>
-	<currencyFormats>
-		<currencyFormatLength >
-			<currencyFormat >
-				<pattern>¤#,##0.00;-¤#,##0.00</pattern>
-			</currencyFormat>
-		</currencyFormatLength >
-	</currencyFormats>
-</numbers>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<am>sn</am>
+				<pm>gn</pm>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
 </ldml>

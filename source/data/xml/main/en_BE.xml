@@ -8,115 +8,115 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="en" /> 
 		<territory type="BE" /> 
 	</identity>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>EEE d MMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd MMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd/MM/yy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH' h 'mm' min 'ss' s 'z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<decimalFormats>
-		<decimalFormatLength >
-			<decimalFormat >
-				<pattern>#,##0.###;-#,##0.###</pattern>
-			</decimalFormat>
-		</decimalFormatLength >
-	</decimalFormats>
-	<scientificFormats>
-		<scientificFormatLength >
-			<scientificFormat >
-				<pattern>#E0</pattern>
-			</scientificFormat>
-		</scientificFormatLength >
-	</scientificFormats>
-	<percentFormats>
-		<percentFormatLength >
-			<percentFormat >
-				<pattern>#,##0%</pattern>
-			</percentFormat>
-		</percentFormatLength >
-	</percentFormats>
-	<currencyFormats>
-		<currencyFormatLength >
-			<currencyFormat >
-				<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
-			</currencyFormat>
-		</currencyFormatLength >
-	</currencyFormats>
-</numbers>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>EEE d MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH' h 'mm' min 'ss' s 'z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
 </ldml>

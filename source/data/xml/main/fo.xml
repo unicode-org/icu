@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="fo" /> 
 	</identity>
 	<localeDisplayNames>
@@ -18,87 +18,140 @@
 		<territories>
 			<territory type="FO">Føroyar</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z á æ í ð ó ø ú ý]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">januar</month>
-				<month type="2">februar</month>
-				<month type="3">mars</month>
-				<month type="4">apríl</month>
-				<month type="5">mai</month>
-				<month type="6">juni</month>
-				<month type="7">juli</month>
-				<month type="8">august</month>
-				<month type="9">september</month>
-				<month type="10">oktober</month>
-				<month type="11">november</month>
-				<month type="12">desember</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">jan</month>
-				<month type="2">feb</month>
-				<month type="3">mar</month>
-				<month type="4">apr</month>
-				<month type="5">mai</month>
-				<month type="6">jun</month>
-				<month type="7">jul</month>
-				<month type="8">aug</month>
-				<month type="9">sep</month>
-				<month type="10">okt</month>
-				<month type="11">nov</month>
-				<month type="12">des</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">sunnudagur</day>
-				<day type="mon">mánadagur</day>
-				<day type="tue">týsdagur</day>
-				<day type="wed">mikudagur</day>
-				<day type="thu">hósdagur</day>
-				<day type="fri">fríggjadagur</day>
-				<day type="sat">leygardagur</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">sun</day>
-				<day type="mon">mán</day>
-				<day type="tue">týs</day>
-				<day type="wed">mik</day>
-				<day type="thu">hós</day>
-				<day type="fri">frí</day>
-				<day type="sat">ley</day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="DKK">
-			<displayName>DKK</displayName>
-			<symbol>kr</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z á æ í ð ó ø ú ý]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januar</month>
+					<month type="2">februar</month>
+					<month type="3">mars</month>
+					<month type="4">apríl</month>
+					<month type="5">mai</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">august</month>
+					<month type="9">september</month>
+					<month type="10">oktober</month>
+					<month type="11">november</month>
+					<month type="12">desember</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">mai</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">des</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">sunnudagur</day>
+					<day type="mon">mánadagur</day>
+					<day type="tue">týsdagur</day>
+					<day type="wed">mikudagur</day>
+					<day type="thu">hósdagur</day>
+					<day type="fri">fríggjadagur</day>
+					<day type="sat">leygardagur</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">sun</day>
+					<day type="mon">mán</day>
+					<day type="tue">týs</day>
+					<day type="wed">mik</day>
+					<day type="thu">hós</day>
+					<day type="fri">frí</day>
+					<day type="sat">ley</day>
+				</dayAbbr>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d. MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd-MM-yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd-MM-yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="DKK">
+				<displayName>DKK</displayName>
+				<symbol>kr</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

@@ -8,76 +8,88 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="en" /> 
 		<territory type="GB" /> 
 	</identity>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>d MMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd/MM/yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>d MMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Europe/London">
+				<long>
+				<standard>Greenwich Mean Time</standard>
+				<daylight>British Summer Time</daylight>
+				</long>
+				<short>
+					<standard>GMT</standard>
+					<daylight>BST</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
 %simplified:
 -x: minus &gt;&gt;;
 x.x: &lt;&lt; point &gt;&gt;;
@@ -117,7 +129,7 @@ and =%default=;
 1,000,000: , =%default=;%%lenient-parse:
 &amp; ' ' , ',' ;
 
-		</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
