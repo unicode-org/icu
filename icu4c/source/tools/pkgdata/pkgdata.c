@@ -562,7 +562,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
                   if(*lineNext) {
                     if(*lineNext != ' ') {
                       fprintf(stderr, "%s:%d - malformed quoted line at position %d, expected ' ' got '%c'\n",
-                              l->str, (int)ln,  lineNext-line, (*lineNext)?*lineNext:'0');
+                              l->str, (int)ln, (int)(lineNext-line), (*lineNext)?*lineNext:'0');
                       exit(1);
                     }
                     *lineNext = 0;
