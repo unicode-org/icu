@@ -223,36 +223,37 @@ U_NAMESPACE_END
 #endif
 
 /**
- * Description of the format of unorm.dat. ### TODO describe 2.0 with UTrie
+ * Description of the format of unorm.dat version 2.0.
+ *
+ * Main change from version 1 to version 2:
+ * Use of new, common UTrie instead of normalization-specific tries.
  *
  * For more details of how to use the data structures see the code
  * in unorm.cpp (runtime normalization code) and
  * in gennorm.c and gennorm/store.c (build-time data generation).
  *
+ * For the serialized format of UTrie see utrie.c/UTrieHeader.
  *
  * - Overall partition
  *
  * unorm.dat customarily begins with a UDataInfo structure, see udata.h and .c.
- * After that there are the following arrays:
+ * After that there are the following structures:
  *
- * uint16_t indexes[_NORM_INDEX_TOP];           -- _NORM_INDEX_TOP=indexes[0]=indexes[_NORM_INDEX_COUNT]
+ * uint16_t indexes[_NORM_INDEX_TOP];           -- _NORM_INDEX_TOP=32, see enum in this file
  *
- * uint16_t stage1[stage1Top];                  -- stage1Top=indexes[_NORM_INDEX_TRIE_INDEX_COUNT]
- * uint32_t norm32Table[norm32TableTop];        -- norm32TableTop=indexes[_NORM_INDEX_TRIE_DATA_COUNT]
- *
+ * UTrie normTrie;                              -- size in bytes=indexes[_NORM_INDEX_TRIE_SIZE]
+ * 
  * uint16_t extraData[extraDataTop];            -- extraDataTop=indexes[_NORM_INDEX_UCHAR_COUNT]
+ *
  * uint16_t combiningTable[combiningTableTop];  -- combiningTableTop=indexes[_NORM_INDEX_COMBINE_DATA_COUNT]
+ *                                                 combiningTableTop may include one 16-bit padding unit
+ *                                                 to make sure that fcdTrie is 32-bit-aligned
  *
- * uint16_t fcdStage1[fcdStage1Top];            -- fcdStage1Top=indexes[_NORM_INDEX_FCD_TRIE_INDEX_COUNT]
- * uint16_t fcdTable[fcdTableTop];              -- fcdTableTop=indexes[_NORM_INDEX_FCD_TRIE_DATA_COUNT]
+ * UTrie fcdTrie;                               -- size in bytes=indexes[_NORM_INDEX_FCD_TRIE_SIZE]
  *
  *
- * The indexes array contains lengths of the following arrays (and its own length)
+ * The indexes array contains lengths and sizes of the following arrays and structures
  * as well as the following values:
- *  indexes[_NORM_INDEX_COUNT]=_NORM_INDEX_TOP
- *      -- length of indexes[]
- *  indexes[_NORM_INDEX_TRIE_SHIFT]=_NORM_TRIE_SHIFT
- *      -- for trie indexes: shift UChars by this much
  *  indexes[_NORM_INDEX_COMBINE_FWD_COUNT]=combineFwdTop
  *      -- one more than the highest combining index computed for forward-only-combining characters
  *  indexes[_NORM_INDEX_COMBINE_BOTH_COUNT]=combineBothTop-combineFwdTop
@@ -260,53 +261,22 @@ U_NAMESPACE_END
  *  indexes[_NORM_INDEX_COMBINE_BACK_COUNT]=combineBackTop-combineBothTop
  *      -- number of combining indexes computed for backward-only-combining characters
  *
+ *  indexes[_NORM_INDEX_MIN_NF*_NO_MAYBE] (where *={ C, D, KC, KD })
+ *      -- first code point with a quick check NF* value of NO/MAYBE
+ *
  *
  * - Tries
  *
- * The main structures are two trie tables ("compact arrays"),
+ * The main structures are two UTrie tables ("compact arrays"),
  * each with one index array and one data array.
- * Generally, tries use the upper bits of an input value to access the index array,
- * which results in an index to the data array where a block of values is stored.
- * The lower bits of the same input value are then used to index inside that data
- * block to get to the specific data element for the input value.
- *
- * In order to use each trie with a single base pointer, the index values in
- * the index array are offset by the length of the index array.
- * With this, a base pointer to the trie index array is also directly used
- * with the index value to access the trie data array.
- * For example, if trieIndex[n] refers to offset m in trieData[] then
- * the actual value is q=trieIndex[n]=lengthof(trieIndex)+m
- * and you access trieIndex[q] instead of trieData[m].
- *
- *
- * - Folded tries
- *
- * The tries here are extended to work for lookups on UTF-16 strings with
- * supplementary characters encoded with surrogate pairs.
- * They are called "folded tries".
- *
- * Each 16-bit code unit (UChar, not code point UChar32) is looked up this way.
- * If there is relevant data for any given code unit, then the data or the code unit
- * must be checked for whether it is a leading surrogate.
- * If so, then the data contains an offset that is used together with the following
- * trailing surrogate code unit value for a second trie access.
- * This uses a portion of the index array beyond what is accessible with 16-bit units,
- * i.e., it uses the part of the trie index array starting at its index
- * 0x10000>>_NORM_TRIE_SHIFT.
- *
- * Such folded tries are useful when processing UTF-16 strings, especially if
- * many code points do not have relevant data, so that the check for
- * surrogates and the second trie lookup are rarely performed.
- * It avoids the overhead of a double-index trie that is necessary if the input
- * is always with 21-bit code points.
+ * See utrie.h and utrie.c.
  *
  *
  * - Tries in unorm.dat
  *
- * The first trie consists of the stage1 and the norm32Table arrays.
- * It provides data for the NF* quick checks and normalization.
- * The second trie consists of the fcdStage1 and the fcdTable arrays
- * and provides data just for FCD checks.
+ * The first trie (normTrie above)
+ * provides data for the NF* quick checks and normalization.
+ * The second trie (fcdTrie above) provides data just for FCD checks.
  *
  *
  * - norm32 data words from the first trie
