@@ -18,15 +18,7 @@ class UnicodeFilter;
 class UnicodeString;
 
 /**
- * A set of rules for a <code>RuleBasedTransliterator</code>.  This set encodes
- * the transliteration in one direction from one set of characters or short
- * strings to another.  A <code>RuleBasedTransliterator</code> consists of up to
- * two such sets, one for the forward direction, and one for the reverse.
- *
- * <p>A <code>TransliterationRuleSet</code> has one important operation, that of
- * finding a matching rule at a given point in the text.  This is accomplished
- * by the <code>findMatch()</code> method.
- *
+ * A set of rules for a <code>RuleBasedTransliterator</code>.
  * @author Alan Liu
  */
 class TransliterationRuleSet {
@@ -98,59 +90,24 @@ public:
      * That is, <code>freeze()</code> may be called multiple times,
      * although for optimal performance it shouldn't be.
      */
-    virtual void freeze(const TransliterationRuleData& data,
-                        UErrorCode& status);
-
+    virtual void freeze(UErrorCode& status);
+    
     /**
-     * Attempt to find a matching rule at the specified point in the text.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param data a dictionary mapping variables to the sets they
-     * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-     * <tt>null</tt> then no filtering is applied.
-     * @return the matching rule, or null if none found.
+     * Transliterate the given text with the given UTransPosition
+     * indices.  Return TRUE if the transliteration should continue
+     * or FALSE if it should halt (because of a U_PARTIAL_MATCH match).
+     * Note that FALSE is only ever returned if isIncremental is TRUE.
+     * @param text the text to be transliterated
+     * @param index the position indices, which will be updated
+     * @param isIncremental if TRUE, assume new text may be inserted
+     * at index.limit, and return FALSE if thre is a partial match.
+     * @return TRUE unless a U_PARTIAL_MATCH has been obtained,
+     * indicating that transliteration should stop until more text
+     * arrives.
      */
-    virtual TransliterationRule* findMatch(const Replaceable& text,
-                                           const UTransPosition& pos,
-                                           const TransliterationRuleData& data) const;
-
-    /**
-     * Attempt to find a matching rule at the specified point in the text.
-     * Unlike <code>findMatch()</code>, this method does an incremental match.
-     * An incremental match requires that there be no partial matches that might
-     * pre-empt the full match that is found.  If there are partial matches,
-     * then null is returned.  A non-null result indicates that a full match has
-     * been found, and that it cannot be pre-empted by a partial match
-     * regardless of what additional text is added to the translation buffer.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param data a dictionary mapping variables to the sets they
-     * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-     * @param partial output parameter.  <code>partial[0]</code> is set to
-     * true if a partial match is returned.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return the matching rule, or null if none found, or if the text buffer
-     * does not have enough text yet to unambiguously match a rule.
-     */
-    virtual TransliterationRule* findIncrementalMatch(const Replaceable& text,
-                                              const UTransPosition& pos,
-                                              const TransliterationRuleData& data,
-                                              UBool& isPartial) const;
+    UBool transliterate(Replaceable& text,
+                        UTransPosition& index,
+                        UBool isIncremental);
 
     /**
      * Create rule strings that represents this rule set.
@@ -158,7 +115,6 @@ public:
      * contents will be deleted.
      */
     virtual UnicodeString& toRules(UnicodeString& result,
-                                   const TransliterationRuleData& data,
                                    UBool escapeUnprintable) const;
 };
 #endif

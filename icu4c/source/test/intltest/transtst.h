@@ -11,6 +11,7 @@
 #define TRANSTST_H
 
 #include "unicode/utypes.h"
+#include "unicode/translit.h"
 #include "intltest.h"
 
 class Transliterator;
@@ -167,13 +168,18 @@ class TransliteratorTest : public IntlTest {
 
     void TestToRules(void);
 
+    void TestContext(void);
+
+    void TestSupplemental(void);
+
     //======================================================================
     // Support methods
     //======================================================================
  protected:
     void expect(const UnicodeString& rules,
                 const UnicodeString& source,
-                const UnicodeString& expectedResult);
+                const UnicodeString& expectedResult,
+                UTransPosition *pos=0);
 
     void expect(const Transliterator& t,
                 const UnicodeString& source,
@@ -182,7 +188,8 @@ class TransliteratorTest : public IntlTest {
     
     void expect(const Transliterator& t,
                 const UnicodeString& source,
-                const UnicodeString& expectedResult);
+                const UnicodeString& expectedResult,
+                UTransPosition *pos=0);
     
     void expectAux(const UnicodeString& tag,
                    const UnicodeString& source,
@@ -192,6 +199,10 @@ class TransliteratorTest : public IntlTest {
     virtual void expectAux(const UnicodeString& tag,
                    const UnicodeString& summary, UBool pass,
                    const UnicodeString& expectedResult);
+
+    static UnicodeString& formatInput(UnicodeString &appendTo,
+                                      const UnicodeString& input,
+                                      const UTransPosition& pos);
 };
 
 #endif

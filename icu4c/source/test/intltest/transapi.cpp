@@ -618,7 +618,7 @@ class TestFilter1 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter1(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
        if(c==0x63 || c==0x61 || c==0x43 || c==0x41)
           return FALSE;
        else
@@ -629,7 +629,7 @@ class TestFilter2 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter2(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
         if(c==0x65 || c==0x6c)
            return FALSE;
         else
@@ -640,7 +640,7 @@ class TestFilter3 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter3(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
         if(c==0x6f || c==0x77)
            return FALSE;
         else

@@ -64,13 +64,13 @@ TransliterationRuleData::~TransliterationRuleData() {
 }
 
 const UnicodeSet*
-TransliterationRuleData::lookupSet(UChar standIn) const {
+TransliterationRuleData::lookupSet(UChar32 standIn) const {
     int32_t i = standIn - setVariablesBase;
     return (i >= 0 && i < setVariablesLength) ? setVariables[i] : 0;
 }
 
 int32_t
-TransliterationRuleData::lookupSegmentReference(UChar c) const {
+TransliterationRuleData::lookupSegmentReference(UChar32 c) const {
     int32_t i = c - segmentBase;
     return (i >= 0 && i < 9) ? i : -1;
 }

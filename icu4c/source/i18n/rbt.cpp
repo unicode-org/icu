@@ -89,18 +89,18 @@ RuleBasedTransliterator::clone(void) const {
 void
 RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
                                              UBool isIncremental) const {
-    /* We keep start and limit fixed the entire time,
-     * relative to the text -- limit may move numerically if text is
-     * inserted or removed.  The cursor moves from start to limit, with
-     * replacements happening under it.
+    /* We keep contextStart and contextLimit fixed the entire time,
+     * relative to the text -- contextLimit may move numerically if
+     * text is inserted or removed.  The start offset moves toward
+     * limit, with replacements happening under it.
      *
      * Example: rules 1. ab>x|y
      *                2. yc>z
      *
-     * |eabcd   start - no match, advance cursor
-     * e|abcd   match rule 1 - change text & adjust cursor
-     * ex|ycd   match rule 2 - change text & adjust cursor
-     * exz|d    no match, advance cursor
+     * |eabcd   begin - no match, advance start
+     * e|abcd   match rule 1 - change text & adjust start
+     * ex|ycd   match rule 2 - change text & adjust start
+     * exz|d    no match, advance start
      * exzd|    done
      */
 
@@ -121,39 +121,14 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         loopLimit <<= 4;
     }
 
-    UBool isPartial = FALSE;
-
-    while (index.start < index.limit && loopCount <= loopLimit) {
-        TransliterationRule* r = isIncremental ?
-            data->ruleSet.findIncrementalMatch(text, index, *data, isPartial) :
-            data->ruleSet.findMatch(text, index, *data);
-
-        /* If we match a rule then apply it by replacing the key
-         * with the rule output and repositioning the cursor
-         * appropriately.  If we get a partial match, then we
-         * can't do anything without more text; return with the
-         * cursor at the current position.  If we get null, then
-         * there is no match at this position, and we can advance
-         * the cursor.
-         */
-        if (r == 0) {
-            if (isPartial) { // always FALSE unless isIncremental
-                break;
-            } else {
-                ++index.start;
-            }
-        } else {
-            // Delegate replacement to TransliterationRule object
-            int32_t lenDelta = r->replace(text, index.start, *data);
-            index.limit += lenDelta;
-            index.contextLimit += lenDelta;
-            index.start += r->getCursorPos();
-            ++loopCount;
-        }
+    while (index.start < index.limit &&
+           loopCount <= loopLimit &&
+           data->ruleSet.transliterate(text, index, isIncremental)) {
+        ++loopCount;
     }
 }
 
 UnicodeString& RuleBasedTransliterator::toRules(UnicodeString& rulesSource,
                                                 UBool escapeUnprintable) const {
-    return data->ruleSet.toRules(rulesSource, *data, escapeUnprintable);
+    return data->ruleSet.toRules(rulesSource, escapeUnprintable);
 }

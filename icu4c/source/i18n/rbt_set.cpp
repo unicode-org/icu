@@ -74,7 +74,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
     ruleVector->addElement(adoptedRule);
 
     int32_t len;
-    if ((len = adoptedRule->getAnteContextLength()) > maxContextLength) {
+    if ((len = adoptedRule->getContextLength()) > maxContextLength) {
         maxContextLength = len;
     }
 
@@ -92,8 +92,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
  * That is, <code>freeze()</code> may be called multiple times,
  * although for optimal performance it shouldn't be.
  */
-void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
-                                    UErrorCode& status) {
+void TransliterationRuleSet::freeze(UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -124,7 +123,7 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
     int16_t* indexValue = new int16_t[n];
     for (j=0; j<n; ++j) {
         TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
-        indexValue[j] = r->getIndexValue(data);
+        indexValue[j] = r->getIndexValue();
     }
     for (x=0; x<256; ++x) {
         index[x] = v.size();
@@ -139,7 +138,7 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
                 // matchesIndexValue check.  In practice this happens
                 // rarely, so we seldom tread this code path.
                 TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
-                if (r->matchesIndexValue((uint8_t)x, data)) {
+                if (r->matchesIndexValue((uint8_t)x)) {
                     v.addElement(r);
                 }
             }
@@ -192,87 +191,40 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
 }
 
 /**
- * Attempt to find a matching rule at the specified point in the text.
- * @param text the text, both translated and untranslated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param cursor position at which to translate next, representing offset
- * into text.  This value must be between <code>start</code> and
- * <code>limit</code>.
- * @param data a dictionary mapping variables to the sets they
- * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
- * @return the matching rule, or null if none found.
+ * Transliterate the given text with the given UTransPosition
+ * indices.  Return TRUE if the transliteration should continue
+ * or FALSE if it should halt (because of a U_PARTIAL_MATCH match).
+ * Note that FALSE is only ever returned if isIncremental is TRUE.
+ * @param text the text to be transliterated
+ * @param pos the position indices, which will be updated
+ * @param incremental if TRUE, assume new text may be inserted
+ * at index.limit, and return FALSE if thre is a partial match.
+ * @return TRUE unless a U_PARTIAL_MATCH has been obtained,
+ * indicating that transliteration should stop until more text
+ * arrives.
  */
-TransliterationRule*
-TransliterationRuleSet::findMatch(const Replaceable& text,
-                                  const UTransPosition& pos,
-                                  const TransliterationRuleData& data) const {
-    /* We only need to check our indexed bin of the rule table,
-     * based on the low byte of the first key character.
-     */
-    int16_t x = (int16_t) (text.charAt(pos.start) & 0xFF);
-    for (int32_t i=index[x]; i<index[x+1]; ++i) {
-        if (rules[i]->matches(text, pos, data)) {
-            return rules[i];
+UBool TransliterationRuleSet::transliterate(Replaceable& text,
+                                            UTransPosition& pos,
+                                            UBool incremental) {
+    int16_t indexByte = (int16_t) (text.char32At(pos.start) & 0xFF);
+    for (int32_t i=index[indexByte]; i<index[indexByte+1]; ++i) {
+        UMatchDegree m = rules[i]->matchAndReplace(text, pos, incremental);
+        switch (m) {
+        case U_MATCH:
+            return TRUE;
+        case U_PARTIAL_MATCH:
+            return FALSE;
         }
     }
-    return NULL;
-}
-
-/**
- * Attempt to find a matching rule at the specified point in the text.
- * Unlike <code>findMatch()</code>, this method does an incremental match.
- * An incremental match requires that there be no partial matches that might
- * pre-empt the full match that is found.  If there are partial matches,
- * then null is returned.  A non-null result indicates that a full match has
- * been found, and that it cannot be pre-empted by a partial match
- * regardless of what additional text is added to the translation buffer.
- * @param text the text, both translated and untranslated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param cursor position at which to translate next, representing offset
- * into text.  This value must be between <code>start</code> and
- * <code>limit</code>.
- * @param data a dictionary mapping variables to the sets they
- * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
- * @param partial output parameter.  <code>partial[0]</code> is set to
- * true if a partial match is returned.
- * @return the matching rule, or null if none found, or if the text buffer
- * does not have enough text yet to unambiguously match a rule.
- */
-TransliterationRule*
-TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
-                                             const UTransPosition& pos,
-                                             const TransliterationRuleData& data,
-                                             UBool& isPartial) const {
-
-    /* We only need to check our indexed bin of the rule table,
-     * based on the low byte of the first key character.
-     */
-    isPartial = FALSE;
-    int16_t x = (int16_t) (text.charAt(pos.start) & 0xFF);
-    for (int32_t i=index[x]; i<index[x+1]; ++i) {
-        int32_t match = rules[i]->getMatchDegree(text, pos, data);
-        switch (match) {
-        case TransliterationRule::FULL_MATCH:
-            return rules[i];
-        case TransliterationRule::PARTIAL_MATCH:
-            isPartial = TRUE;
-            return NULL;
-        }
-    }
-    return NULL;
+    // No match or partial match from any rule
+    ++pos.start;
+    return TRUE;
 }
 
 /**
  * Create rule strings that represents this rule set.
  */
 UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
-                                               const TransliterationRuleData& data,
                                                UBool escapeUnprintable) const {
     int32_t i;
     int32_t count = index[256];
@@ -281,7 +233,7 @@ UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
         if (i != 0) {
             ruleSource.append((UChar) 0x000A /*\n*/);
         }
-        rules[i]->toRule(ruleSource, data, escapeUnprintable);
+        rules[i]->toRule(ruleSource, escapeUnprintable);
     }
     return ruleSource;
 }

@@ -59,7 +59,7 @@ class TestHexFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestHexFilter(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
        if(c == 0x0061 || c == 0x0063 )
           return FALSE;
        else

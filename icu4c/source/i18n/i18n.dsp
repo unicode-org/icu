@@ -318,6 +318,10 @@ SOURCE=.\uni2name.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\unifilt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\unifltlg.cpp
 # End Source File
 # Begin Source File
@@ -1540,6 +1544,25 @@ InputPath=.\unicode\unifltlg.h
 
 "..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                unicode\unifltlg.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\unimatch.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\unimatch.h
+
+"..\..\include\unicode\unimatch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  unicode\unimatch.h  ..\..\include\unicode
 
 # End Custom Build
 
