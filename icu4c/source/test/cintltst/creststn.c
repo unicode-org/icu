@@ -32,7 +32,7 @@
 #include "uresimp.h"
 #include "creststn.h"
 #include "unicode/ctest.h"
-
+#include "ucbuf.h"
 static int32_t pass;
 static int32_t fail;
 
@@ -541,6 +541,86 @@ static void TestNewTypes() {
 		}
 		ures_close(resB);
 	}
+    {
+        UResourceBundle* resB = NULL;
+        const char *sourcePath = ctest_dataSrcDir();
+        int32_t srcPathLen = strlen(sourcePath);
+        const char *deltaPath = U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+        int32_t deltaPathLen = strlen(deltaPath);
+        char *testDataFileName = (char *) malloc( srcPathLen+ deltaPathLen + 50 );
+        char *path = testDataFileName;
+
+        strcpy(path, sourcePath);
+        path += srcPathLen;
+        strcpy(path, deltaPath);
+        path += deltaPathLen;
+        status = U_ZERO_ERROR;
+        {
+            int32_t strLen =0;
+            const UChar* str = ures_getStringByKey(theBundle, "testincludeUTF",&strLen,&status);
+            strcpy(path, "th18057.txt");
+            path[strlen("th18057.txt")]=0;
+            if(U_FAILURE(status)){
+                log_err("Could not get testincludeUTF resource from testtypes bundle. Error: %s\n",u_errorName(status));
+            }else{
+                /* open the file */
+                char* cp = NULL; 
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,(char**)&cp,FALSE,FALSE,&status);
+                if(U_SUCCESS(status)){
+                    int32_t len = 0;
+                    const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
+                    if(U_SUCCESS(status)){
+                        /* verify the contents */
+                        if(strLen != len ){
+                            log_err("Did not get the expected len for th18057. Expected: %i , Got: %i\n", len ,strLen);
+                        }
+                        if(u_strncmp(str, buffer,strLen)!=0){
+                            log_err("Did not get the expected string from th18057. Include functionality failed for genrb.\n");
+                        }
+                    }else{
+                        log_err("ucbuf failed to open %s. Error: %s\n", testDataFileName, u_errorName(status));
+                    }
+
+                }else{
+                    log_err("Could not get th18057.txt (path : %s). Error: %s\n",testDataFileName,u_errorName(status));
+                }
+            }
+        }
+        status = U_ZERO_ERROR;
+        {
+            int32_t strLen =0;
+            const UChar* str = ures_getStringByKey(theBundle, "testinclude",&strLen,&status);
+            strcpy(path, "translit_rules.txt");
+            path[strlen("translit_rules.txt")]=0;
+
+            if(U_FAILURE(status)){
+                log_err("Could not get testinclude resource from testtypes bundle. Error: %s\n",u_errorName(status));
+            }else{
+                /* open the file */
+                char* cp=NULL;
+                UCHARBUF* ucbuf = ucbuf_open(testDataFileName,(char**)&cp,FALSE,FALSE,&status);
+                if(U_SUCCESS(status)){
+                    int32_t len = 0;
+                    const UChar* buffer = ucbuf_getBuffer(ucbuf,&len,&status);
+                    if(U_SUCCESS(status)){
+                        /* verify the contents */
+                        if(strLen != len ){
+                            log_err("Did not get the expected len for translit_rules. Expected: %i , Got: %i\n", len ,strLen);
+                        }
+                        if(u_strncmp(str, buffer,strLen)!=0){
+                            log_err("Did not get the expected string from translit_rules. Include functionality failed for genrb.\n");
+                        }
+                    }else{
+                        log_err("ucbuf failed to open %s. Error: %s\n", testDataFileName, u_errorName(status));
+                    }
+
+                }else{
+                    log_err("Could not get translit_rules.txt (path : %s). Error: %s\n",testDataFileName,u_errorName(status));
+                }
+            }
+        }
+
+    }
     ures_close(res);
     ures_close(theBundle);
 

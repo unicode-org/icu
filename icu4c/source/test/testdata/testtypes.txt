@@ -31,6 +31,12 @@ testtypes
     }
     testescape{ "tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''" }
     
+    // genrb just includes the test as a string after converting to UTF-16
+        
+    testincludeUTF:include{ "th18057.txt" }
+    // No unescaping is done.
+    testinclude:include{ "translit_rules.txt" }
+
     // Genrb failed parsing \u0075 sequence this tests it 
     CollationElements{
 	Version{"x01"}
