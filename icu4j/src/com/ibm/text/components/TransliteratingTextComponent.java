@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/TransliteratingTextComponent.java,v $ 
- * $Date: 2001/11/21 00:53:39 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/11/25 23:18:03 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -25,7 +25,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.8 $ $Date: 2001/11/21 00:53:39 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.9 $ $Date: 2001/11/25 23:18:03 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -80,7 +80,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
     }
     
     public void flush() {
-        transliterate('\uFFFF', true);
+        if (translit != null) transliterate('\uFFFF', true);
     }
     
     
@@ -114,7 +114,8 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         // start and cursor.
         //int saveStart = start;
 
-        String sourceText = getText().substring(0,getSelectionStart());
+        int end = flush ? getSelectionEnd() : getSelectionStart();
+        String sourceText = getText().substring(0,end);
         ReplaceableString buf = new ReplaceableString(sourceText);
         /*buf.replace(0, 1, getText().substring(start,
                                               getSelectionStart()));*/
@@ -196,6 +197,10 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         }
         */
         translit = t;
+    }
+
+    public Transliterator getTransliterator() {
+        return translit;
     }
 
     /**

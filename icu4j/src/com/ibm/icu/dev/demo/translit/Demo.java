@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2001/11/21 00:53:05 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/11/25 23:18:02 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.6 $ $Date: 2001/11/21 00:53:05 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.7 $ $Date: 2001/11/25 23:18:02 $
  */
 public class Demo extends Frame {
 
@@ -87,8 +87,7 @@ public class Demo extends Frame {
         add(text);
 
         setSize(width, height);
-        setTransliterator("Any-Null");
-        
+        setTransliterator("Latin-Greek");
     }
 
     private void initMenus() {
@@ -183,9 +182,10 @@ public class Demo extends Frame {
         mbar.add(fontMenu);
         
         Menu sizeMenu = new Menu("Size");
-        for (double i = 9; i < 100; i = i * 4/3) {
-            MenuItem mItem = new MenuItem("" + (int)i);
-            mItem.addActionListener(new SizeActionListener((int)i));
+        int[] sizes = {9, 10, 12, 14, 18, 24, 36, 48, 72};
+        for (int i = 0; i < sizes.length; ++i) {
+            MenuItem mItem = new MenuItem("" + sizes[i]);
+            mItem.addActionListener(new SizeActionListener(sizes[i]));
             sizeMenu.add(mItem);
         }
         mbar.add(sizeMenu);
@@ -194,41 +194,114 @@ public class Demo extends Frame {
         
         mbar.add(translitMenu = new Menu("Transliterator"));
         
-        translitMenu.add(mitem = new MenuItem("Convert Selection"));
-        mitem.addActionListener(new ActionListener() {
+        translitMenu.add(convertSelectionItem = new MenuItem("Transliterate", 
+            new MenuShortcut(KeyEvent.VK_K)));
+        convertSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleBatchTransliterate(translit);
             }
         });
         
-        translitMenu.add(mitem = new MenuItem("Invert Selection"));
-        mitem.addActionListener(new ActionListener() {
+        translitMenu.add(invertSelectionItem = new MenuItem("Invert", 
+            new MenuShortcut(KeyEvent.VK_K, true)));
+        invertSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 handleBatchTransliterate(translit.getInverse());
             }
         });
         
-        translitMenu.add(mitem = new MenuItem("Flush"));
-        mitem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                text.flush();
-            }
-        });
-        
-        translitMenu.add(historyMenu = new Menu("History"));
-        
-        historyMenu.add(mitem = new MenuItem("Inverse"));
-        mitem.addActionListener(new ActionListener() {
+        translitMenu.add(swapSelectionItem = new MenuItem("Swap", 
+            new MenuShortcut(KeyEvent.VK_S)));
+        swapSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Transliterator inv = translit.getInverse();
-                if (inv == null) {
-                    getToolkit().beep(); // LIU: Add audio feedback of NOP
-                    return;
-                } 
                 setTransliterator(inv.getID());
             }
         });
         
+        translitMenu.add(convertTypingItem = new MenuItem("No Typing Conversion",
+            new MenuShortcut(KeyEvent.VK_T)));
+        convertTypingItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!transliterateTyping) {
+                    text.setTransliterator(translit);
+                    convertTypingItem.setLabel("No Typing Conversion");
+                } else {
+                    text.flush();
+                    text.setTransliterator(null);
+                    convertTypingItem.setLabel("Convert Typing");
+                }
+                transliterateTyping = !transliterateTyping;
+            }
+        });
+        
+        translitMenu.add(historyMenu = new Menu("Recent"));
+        
+        helpDialog = new InfoDialog(this, "Simple Demo", "Instructions",
+           "CTL A, X, C, V have customary meanings.\n"
+         + "Arrow keys, delete and backspace work.\n"
+         + "To get a character from its control point, type the hex, then hit CTL Q"
+        );
+        helpDialog.getArea().setEditable(false);
+        
+       
+        Menu helpMenu;
+        mbar.add(helpMenu = new Menu("Extras"));
+        helpMenu.add(mitem = new MenuItem("Help"));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                helpDialog.show();
+            }
+        });   
+        
+        hexDialog = new InfoDialog(this, "Hex Entry", "Use U+..., \\u..., \\p{...}, or &#x...;",
+           "U+00AD"
+        );
+        Button button = new Button("Insert");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String hexValue = hexDialog.getArea().getText();
+                text.insertText(fromHex.transliterate(hexValue));
+            }
+        });
+        hexDialog.getBottom().add(button);
+        
+        helpMenu.add(mitem = new MenuItem("Hex...", 
+            new MenuShortcut(KeyEvent.VK_H)));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                hexDialog.show();
+            }
+        });
+        
+        // Compound Transliterator
+        
+        compoundDialog = new InfoDialog(this, "Compound Transliterator", "",
+           "[^\u0000-\u00FF] hex"
+        );
+        button = new Button("Set");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String compound = "";
+                try {
+                    compound = compoundDialog.getArea().getText();
+                    setTransliterator(compound);
+                } catch (RuntimeException ex) {
+                    compoundDialog.getArea().setText(compound + "\n" + ex.getMessage());
+                }
+            }
+        });
+        compoundDialog.getBottom().add(button);
+        
+        translitMenu.add(mitem = new MenuItem("Multiple...", 
+            new MenuShortcut(KeyEvent.VK_M)));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                compoundDialog.show();
+            }
+        });
+        
+        // Flesh out the menu with the installed transliterators
         
         translitMenu.addSeparator();
         
@@ -258,38 +331,64 @@ public class Demo extends Frame {
             }
             translitMenu.add(targetMenu);
         }
+        
+        
     }
     
+    boolean transliterateTyping = true;
+    Transliterator fromHex = Transliterator.getInstance("Hex-Any");
+    InfoDialog helpDialog;
+    InfoDialog hexDialog;
+    InfoDialog compoundDialog;
+    MenuItem convertSelectionItem = null;
+    MenuItem invertSelectionItem = null;
+    MenuItem swapSelectionItem = null;
+    MenuItem convertTypingItem = null;
     Menu historyMenu;
     Map historyMap = new HashMap();
-    CheckboxMenuItem currentHistory = new CheckboxMenuItem();
+    Set historySet = new TreeSet(new Comparator() {
+            public int compare(Object a, Object b) {
+                MenuItem aa = (MenuItem)a;
+                MenuItem bb = (MenuItem)b;
+                return aa.getLabel().compareTo(bb.getLabel());
+            }
+        });
     
     void setTransliterator(String name) {
         System.out.println("Got: " + name);
         translit = Transliterator.getInstance(name);
+        text.flush();
         text.setTransliterator(translit);
+        convertSelectionItem.setLabel(Transliterator.getDisplayName(translit.getID()));
         
-        addHistory(translit, true);
+        addHistory(translit);
         
         Transliterator inv = translit.getInverse();
         if (inv != null) {
-            addHistory(inv, false);
+            addHistory(inv);
+            invertSelectionItem.setEnabled(true);
+            swapSelectionItem.setEnabled(true);
+            invertSelectionItem.setLabel(Transliterator.getDisplayName(inv.getID()));
+        } else {
+            invertSelectionItem.setEnabled(false);
+            swapSelectionItem.setEnabled(false);
+            invertSelectionItem.setLabel("No inverse");
         }
     }
     
-    void addHistory(Transliterator translit, boolean makeSelected) {
+    void addHistory(Transliterator translit) {
         String name = translit.getID();
-        CheckboxMenuItem cmi = (CheckboxMenuItem) historyMap.get(name);
-        if (!currentHistory.equals(cmi)) {
-            if (makeSelected) currentHistory.setState(false);
-            if (cmi == null) {
-                cmi = new CheckboxMenuItem(translit.getDisplayName(name));
-                cmi.addItemListener(new TransliterationListener(name));
-                historyMenu.add(cmi);
-                historyMap.put(name, cmi);
+        MenuItem cmi = (MenuItem) historyMap.get(name);
+        if (cmi == null) {
+            cmi = new CheckboxMenuItem(translit.getDisplayName(name));
+            cmi.addActionListener(new TransliterationListener(name));
+            historyMap.put(name, cmi);
+            historySet.add(cmi);
+            historyMenu.removeAll();
+            Iterator it = historySet.iterator();
+            while (it.hasNext()) {
+                historyMenu.add((CheckboxMenuItem)it.next());
             }
-            if (makeSelected) cmi.setState(true);
-            currentHistory = cmi;
         }
     }
     
@@ -440,6 +539,51 @@ public class Demo extends Frame {
     }
 
     private void handleClose() {
+        helpDialog.dispose();
         dispose();
+    }
+    
+    class InfoDialog extends Dialog {
+        protected Button button;
+        protected TextArea area;
+        protected Dialog me;
+        protected Panel bottom;
+        
+        public TextArea getArea() {
+            return area;
+        }
+        
+        public Panel getBottom() {
+            return bottom;
+        }
+        
+        InfoDialog(Frame parent, String title, String label, String message) {
+            super(parent, title, false);
+            me = this;
+            this.setLayout(new BorderLayout(15,15));
+            if (label.length() != 0) {
+                this.add("North", new Label(label));
+            }
+            
+            area = new TextArea(message, 10, 80, TextArea.SCROLLBARS_VERTICAL_ONLY);
+            this.add("Center", area);
+            
+            button = new Button("Hide");
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    me.hide();
+                }
+            });
+            bottom = new Panel();
+            bottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
+            bottom.add(button);
+            this.add("South", bottom);
+            this.pack();
+            addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    me.hide();
+                }
+            });
+        }
     }
 }
