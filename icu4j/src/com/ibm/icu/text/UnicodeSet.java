@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $ 
- * $Date: 2000/05/23 16:49:40 $ 
- * $Revision: 1.21 $
+ * $Date: 2000/05/24 18:25:51 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.21 $ $Date: 2000/05/23 16:49:40 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.22 $ $Date: 2000/05/24 18:25:51 $
  */
 public class UnicodeSet implements UnicodeFilter {
     
@@ -1073,6 +1073,12 @@ public class UnicodeSet implements UnicodeFilter {
             } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
                 lastOp = c;
             } else if (lastOp == '-') {
+                if (lastChar >= c) {
+                    // Don't allow redundant (a-a) or empty (b-a) ranges;
+                    // these are most likely typos.
+                    throw new IllegalArgumentException("Invalid range " + lastChar +
+                                                       '-' + c);
+                }
                 set.add(lastChar, c);
                 lastOp = 0;
                 lastChar = -1;
