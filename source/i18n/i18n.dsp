@@ -1917,25 +1917,6 @@ InputPath=.\unicode\unum.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\urep.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\urep.h
-
-"..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    unicode\urep.h    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\utrans.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
