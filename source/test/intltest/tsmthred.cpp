@@ -123,6 +123,8 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #include "unicode/choicfmt.h"
 #include "unicode/msgfmt.h"
 #include "unicode/locid.h"
+#include "unicode/ucol.h"
+#include "ucaconf.h"
 
 #ifdef WIN32
 #define HAVE_IMP
@@ -308,7 +310,11 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
             TestThreadedIntl();
 #endif
         break;
-
+    case 3:
+      name = "TestCollators";
+      if (exec)
+        TestCollators();
+      break;
     default:
         name = "";
         break; //needed to end loop
@@ -635,7 +641,6 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
     delete fmt;
 };
 
-
 class FormatThreadTest : public ThreadWithStatus
 {
 public:
@@ -841,6 +846,238 @@ void MultithreadTest::TestThreadedIntl()
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#define kCollatorThreadThreads   1000  // # of threads to spawn
+#define kCollatorThreadPatience kCollatorThreadThreads*100
+
+struct Line {
+  UChar *buff;
+  int32_t buflen;
+} ;
+
+class CollatorThreadTest : public ThreadWithStatus
+{
+private: 
+  const UCollator *coll;
+  const Line *lines;
+  int32_t noLines;
+public:
+  CollatorThreadTest()  : ThreadWithStatus(),
+  coll(NULL),
+  lines(NULL),
+  noLines(0)
+ {
+    UErrorCode status = U_ZERO_ERROR;
+  };
+  void setCollator(UCollator *c, Line *l, int32_t nl) 
+  {
+    coll = c;
+    lines = l;
+    noLines = nl;
+  }
+  virtual void run() {
+    UErrorCode status = U_ZERO_ERROR;
+  int32_t line = 0;
+
+  uint8_t sk1[1024], sk2[1024];
+  uint8_t *oldSk = NULL, *newSk = sk1;
+  int32_t resLen = 0, oldLen = 0;
+  int32_t i = 0;
+
+  for(i = 0; i < noLines; i++) {
+    resLen = ucol_getSortKey(coll, lines[i].buff, lines[i].buflen, newSk, 1024);
+
+    int32_t res = 0, cmpres = 0, cmpres2 = 0;
+
+    if(oldSk != NULL) {
+      res = strcmp((char *)oldSk, (char *)newSk);
+      cmpres = ucol_strcoll(coll, lines[i-1].buff, lines[i-1].buflen, lines[i].buff, lines[i].buflen);
+      cmpres2 = ucol_strcoll(coll, lines[i].buff, lines[i].buflen, lines[i-1].buff, lines[i-1].buflen);
+
+      if(cmpres != -cmpres2) {
+        error("Compare result not symmetrical on line "+ line);
+      }
+
+      if(((res&0x80000000) != (cmpres&0x80000000)) || (res == 0 && cmpres != 0) || (res != 0 && cmpres == 0)) {
+        error(UnicodeString("Difference between ucol_strcoll and sortkey compare on line ")+ UnicodeString(line));
+      }
+
+      if(res > 0) {
+        error(UnicodeString("Line %i is not greater or equal than previous line ")+ UnicodeString(i));
+        break;
+      } else if(res == 0) { /* equal */
+        res = u_strcmpCodePointOrder(lines[i-1].buff, lines[i].buff);
+        if (res == 0) {
+          error(UnicodeString("Probable error in test file on line %i (comparing identical strings)")+ UnicodeString(i));
+          break;
+        } else if (res > 0) {
+          error(UnicodeString("Sortkeys are identical, but code point comapare gives >0 on line ")+ UnicodeString(i));
+        }
+      }
+    }
+
+    oldSk = newSk;
+    oldLen = resLen;
+
+    newSk = (newSk == sk1)?sk2:sk1;
+  }
+
+    done();
+  }
+};
+
+void MultithreadTest::TestCollators()
+{
+
+  UErrorCode status = U_ZERO_ERROR;
+  FILE *testFile = NULL;
+  char testDataPath[1024];
+  uprv_strcpy(testDataPath, IntlTest::loadTestData(status));
+  char* index = 0;
+ 
+  index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);
+
+  if((unsigned int)(index-testDataPath) != (strlen(testDataPath)-1)){
+          *(index+1)=0;
+  }
+  uprv_strcat(testDataPath,".."U_FILE_SEP_STRING);
+  uprv_strcat(testDataPath, "CollationTest_");
+
+  const char* type = "NON_IGNORABLE";
+
+  const char *ext = ".txt";
+  if(testFile) {
+    fclose(testFile);
+  }
+  char buffer[1024];
+  uprv_strcpy(buffer, testDataPath);
+  uprv_strcat(buffer, type);
+  int32_t bufLen = uprv_strlen(buffer);
+
+  // we try to open 3 files:
+  // path/CollationTest_type.txt
+  // path/CollationTest_type_SHORT.txt
+  // path/CollationTest_type_STUB.txt
+  // we are going to test with the first one that we manage to open.
+
+  uprv_strcpy(buffer+bufLen, ext);
+
+  testFile = fopen(buffer, "rb");
+
+  if(testFile == 0) {
+    uprv_strcpy(buffer+bufLen, "_SHORT");
+    uprv_strcat(buffer, ext);
+    testFile = fopen(buffer, "rb");
+
+    if(testFile == 0) {
+      uprv_strcpy(buffer+bufLen, "_STUB");
+      uprv_strcat(buffer, ext);
+      testFile = fopen(buffer, "rb");
+
+      if (testFile == 0) {
+        *(buffer+bufLen) = 0;
+        errln("ERROR: could not open any of the conformance test files, tried opening base %s", buffer);
+        return;        
+      } else {
+        infoln(
+          "INFO: Working with the stub file.\n"
+          "If you need the full conformance test, please\n"
+          "download the appropriate data files from:\n"
+          "http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/");
+      }
+    }
+  }
+
+  Line *lines = new Line[65000];
+  int32_t lineNum = 0;
+
+  UChar bufferU[1024];
+  int32_t buflen = 0;
+  uint32_t first = 0;
+  uint32_t offset = 0;
+
+  while (fgets(buffer, 1024, testFile) != NULL) {
+    offset = 0;
+    if(*buffer == 0 || buffer[0] == '#') {
+      continue;
+    }
+    offset = u_parseString(buffer, bufferU, 1024, &first, &status);
+    buflen = offset;
+    bufferU[offset++] = 0;
+    lines[lineNum].buflen = buflen;
+    lines[lineNum].buff = new UChar[buflen+1];
+    u_memcpy(lines[lineNum].buff, bufferU, buflen);
+    lineNum++;
+  }
+
+
+  
+  UCollator *coll = ucol_open("root", &status);
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+  ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
+  ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
+  ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+
+    CollatorThreadTest *tests;
+    tests = new CollatorThreadTest[kCollatorThreadThreads];
+ 
+    logln(UnicodeString("Spawning: ") + kFormatThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
+    for(int32_t j = 0; j < kCollatorThreadThreads; j++) {
+      tests[j].setCollator(coll, lines, lineNum);
+        tests[j].start();
+    }
+
+    //for(int32_t patience = kCollatorThreadPatience;patience > 0; patience --)
+    for(;;)
+    {
+        logln("Waiting...");
+
+        int32_t i;
+        int32_t terrs = 0;
+        int32_t completed =0;
+
+        for(i=0;i<kCollatorThreadThreads;i++)
+        {
+            if(tests[i].getDone())
+            {
+                completed++;
+
+                logln(UnicodeString("Test #") + i + " is complete.. ");
+
+                UnicodeString theErr;
+                if(tests[i].getError(theErr))
+                {
+                    terrs++;
+                    errln(UnicodeString("#") + i + ": " + theErr);
+                }
+                // print out the error, too, if any.
+            }
+        }
+
+        if(completed == kCollatorThreadThreads)
+        {
+            logln("Done!");
+
+            if(terrs)
+            {
+                errln("There were errors.");
+            }
+            ucol_close(coll);
+            delete[] tests;
+            for(i = 0; i < lineNum; i++) {
+              delete[] lines[i].buff;
+            }
+            delete[] lines;
+
+            return;
+        }
+
+        SimpleThread::sleep(900);
+    }
+    errln("patience exceeded. ");
+            ucol_close(coll);
+}
 
 #endif // ICU_USE_THREADS
 

@@ -57,6 +57,8 @@ public:
      **/
     void TestThreadedIntl(void);
 #endif
+  void TestCollators(void);
+
 };
 
 #endif
