@@ -451,9 +451,9 @@ void TimeZoneTest::TestShortZoneIDs()
     // Create a small struct to hold the array
     struct
     {
-        char      id[4];
-        int32_t   offset;
-        UBool    daylight;
+        const char *id;
+        int32_t    offset;
+        UBool      daylight;
     }
     kReferenceList [] =
     {
@@ -654,14 +654,14 @@ void TimeZoneTest::TestCustomParse()
 
     struct
     {
-        char customId[20];
+        const char *customId;
         int32_t expectedOffset;
     }
     kData[] =
     {
         // ID        Expected offset in minutes
         //"GMT",       kUnparseable,   Isn't custom. Can't test it here. [returns normal GMT]
-        {"GMT-YOUR.AD.HERE",     kUnparseable},
+        {"GMT-YOUR.AD.HERE", kUnparseable},
         {"GMT0",      kUnparseable},
         {"GMT+0",     (0)},
         {"GMT+1",     (60)},
@@ -680,7 +680,7 @@ void TimeZoneTest::TestCustomParse()
         {0,           0}
     };
 
-    for (i=0; kData[i].customId[0] != '\0'; i++)
+    for (i=0; kData[i].customId != 0; i++)
     {
         UnicodeString id(kData[i].customId);
         int32_t exp = kData[i].expectedOffset;
@@ -770,7 +770,7 @@ TimeZoneTest::TestDisplayName()
     {
         UBool useDst;
         TimeZone::EDisplayType style;
-        char expect[100];
+        const char *expect;
     } kData[] = {
         {FALSE, TimeZone::SHORT, "PST"},
         {TRUE,  TimeZone::SHORT, "PDT"},
