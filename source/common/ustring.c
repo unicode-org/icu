@@ -1358,7 +1358,9 @@ u_growBufferFromStatic(void *context,
     if(pErrorCode!=NULL && U_SUCCESS(*pErrorCode)) {                    \
         /* not a public function, so no complete argument checking */   \
                                                                         \
-        if(length<destCapacity) {                                       \
+        if(length<0) {                                                  \
+            /* assume that the caller handles this */                   \
+        } else if(length<destCapacity) {                                \
             /* NUL-terminate the string, the NUL fits */                \
             dest[length]=0;                                             \
             /* unset the not-terminated warning but leave all others */ \
