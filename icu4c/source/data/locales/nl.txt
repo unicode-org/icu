@@ -288,6 +288,10 @@ nl {
         "vrijdag",
         "zaterdag",
     }
+    Eras { 
+        "v. Chr.",  // voor Christus
+        "n. Chr.",  // na Christus
+    }
     ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00e4\u00eb\u00ef\u00f6\u00fc\u0133]" }
     Languages { 
         //af  { "Afrikaans" }
@@ -408,6 +412,59 @@ nl {
         "+",
     }
 
+        // International Calendars Data.
+    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
+    // Islamic calendar
+    Eras_islamic:array { 
+        "Sa'na Hizjria"
+    }
+
+    MonthNames_islamic:array {
+        "Moeharram",            // Muharram
+        "Safar",                // Safar
+        "Rabi'a al awal",      // Rabi' al-awwal
+        "Rabi'a al thani",      // Rabi' al-thani
+        "Joemad'al awal",       // Jumada al-awwal
+        "Joemad'al thani",      // Jumada al-thani
+        "Rajab",                // Rajab
+        "Sja'aban",             // Sha'ban
+        "Ramadan",              // Ramadan
+        "Sjawal",               // Shawwal
+        "Doe al ka'aba",        // Dhu al-Qi'dah
+        "Doe al hizja",         // Dhu al-Hijjah
+    }
+    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
+        "nl/MonthNames_islamic"
+    }   
+    // Civil is identical other than in calculations
+    Eras_islamic-civil:alias {
+        "nl/Eras_islamic"
+    }
+    MonthNames_islamic-civil:alias {
+        "nl/MonthNames_islamic"
+    }
+    MonthAbbreviations_islamic-civil:alias {
+        "nl/MonthAbbreviations_islamic"
+    }
+    MonthNames_hebrew {
+        "Tisjrie",      // Tishri
+        "Chesjwan",     // Heshvan
+        "Kislev",       // Kislev
+        "Tevet",        // Tevet
+        "Sjevat",       // Shevat
+        "Adar",         // Adar I
+        "Adar B",       // Adar
+        "Nisan",        // Nisan
+        "Ijar",         // Iyar
+        "Sivan",        // Sivan
+        "Tammoez",      // Tamuz
+        "Av",           // Av
+        "Elloel",       // Elul
+    }
+    MonthAbbreviations_hebrew:alias {
+       "nl/MonthNames_hebrew" // no data
+    }
+
     //------------------------------------------------------------
     // Rule Based Number Format Support
     //------------------------------------------------------------
@@ -460,58 +517,4 @@ nl {
             "GMT",
         }
     }
-
-    // International Calendars Data.
-    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
-    // Islamic calendar
-    Eras_islamic:array { 
-            "Sa'na Hizjria"
-    }
-
-    MonthNames_islamic:array {
-            "Moeharram",            // Muharram
-            "Safar",                // Safar
-            "Rabi'a al awal",      // Rabi' al-awwal
-            "Rabi'a al thani",      // Rabi' al-thani
-            "Joemad'al awal",       // Jumada al-awwal
-            "Joemad'al thani",      // Jumada al-thani
-            "Rajab",                // Rajab
-            "Sja'aban",             // Sha'ban
-            "Ramadan",              // Ramadan
-            "Sjawal",               // Shawwal
-            "Doe al ka'aba",        // Dhu al-Qi'dah
-            "Doe al hizja",         // Dhu al-Hijjah
-     }   
-    MonthAbbreviations_islamic:alias {  // same as MonthNames (no data)
-        "nl/MonthNames_islamic"
-    }   
-    // Civil is identical other than in calculations
-    Eras_islamic-civil:alias {
-        "nl/Eras_islamic"
-    }
-    MonthNames_islamic-civil:alias {
-        "nl/MonthNames_islamic"
-    }
-    MonthAbbreviations_islamic-civil:alias {
-        "nl/MonthAbbreviations_islamic"
-    }
-    MonthNames_hebrew {
-                "Tisjrie",      // Tishri
-                "Chesjwan",     // Heshvan
-                "Kislev",       // Kislev
-                "Tevet",        // Tevet
-                "Sjevat",       // Shevat
-                "Adar",         // Adar I
-                "Adar B",       // Adar
-                "Nisan",        // Nisan
-                "Ijar",         // Iyar
-                "Sivan",        // Sivan
-                "Tammoez",      // Tamuz
-                "Av",           // Av
-                "Elloel",       // Elul
-    }
-    MonthAbbreviations_hebrew:alias {
-       "nl/MonthNames_hebrew" // no data
-    }
-
 }
