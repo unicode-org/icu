@@ -33,14 +33,14 @@ fr {
         BR { "Br\u00E9sil" }
         BT { "Bhoutan" }
         BV { "\u00CEle Bouvet" }
-        BY { "B\u00E9larus" }
+        BY { "Bi\u00E9larussie" }
         //BZ { "Belize" }
 
-        CC { "\u00CEles Cocos" }
+        CC { "\u00EEles Cocos" }
         CD { "R\u00E9publique d\u00E9mocratique du Congo" }
         CF { "R\u00E9publique centrafricaine" }
         CH { "Suisse" }
-        CK { "\u00CEles Sandwich du Sud" }
+        CK { "\u00EEles Sandwich du Sud" }
         CL { "Chili" }
         CM { "Cameroun" }
         CN { "Chine" }
@@ -621,7 +621,7 @@ fr {
     LocaleScript{  
         "Latn",  // ISO 15924 Name 
     }
-    ExemplarCharacters { "[a-z\u00e9\u00e8\u00f9\u00e7\u00e0\u00e2\u00ea\u00ee\u00f4\u00fb\u00e6\u0153\u00eb\u00ef\u00ff]" }
+    ExemplarCharacters { "[a-z\u00e9\u00e8\u00f9\u00e7\u00e0\u00e2\u00ea\u00ee\u00f4\u00fb\u00e6\u0153\u00eb\u00ef\u00ff\u00fc]" }
 
 // http://lcweb.loc.gov/standards/iso639-2/frenchlangn.html
     Languages { 
@@ -638,7 +638,7 @@ fr {
         ar { "arabe" }
         as { "assamais" }
         av { "avar" }
-        ay { "aymara" }
+        ay { "aymar\u00E0" }
         az { "az\u00E9ri" }
         ba { "bachkir" }
         be { "bi\u00E9lorusse" }
@@ -657,7 +657,7 @@ fr {
         co { "corse" }
         cr { "cree" }
         cs { "tch\u00E8que" }
-        cu  { "slavon d'\u00E9glise" }
+        cu  { "slavon" }
         cv { "tchouvache" }
         cy { "gallois" }
         da { "danois" }
@@ -699,7 +699,7 @@ fr {
         id { "indon\u00E9sien" }
         ie { "interlingue" }
         ig { "igbo" }
-        ii { "yi de Sichuan" }
+        ii { "yi du Sichuan" }
         ik { "inupiaq" }
         io { "ido" }
         is { "islandais" }
@@ -708,9 +708,9 @@ fr {
         ja { "japonais" }
         jv { "javanais" }
         ka { "g\u00E9orgien" }
-        kg { "kongo" }
-        ki { "kikuyu" }
-        kj { "kuanyama" }
+        kg { "kikongo" }
+        ki { "kikouyou" }
+        kj { "ochikouanyama" }
         kk { "kazakh" }
         kl { "groenlandais" }
         km { "khmer" }
@@ -729,11 +729,11 @@ fr {
         li { "limbourgeois" }
         ln { "lingala" }
         lo { "lao" }
-        lt { "lithuanien" }
+        lt { "lituanien" }
         lu { "luba-katanga" }
         lv { "letton" }
         mg { "malgache" }
-        mh { "marshall" }
+        mh { "marshallais" }
         mi { "maori" }
         mk { "mac\u00E9donien" }
         ml { "malayalam" }
@@ -743,7 +743,7 @@ fr {
         ms { "malais" }
         mt { "maltais" }
         my { "birman" }
-        na { "nauruan" }
+        na { "nauri" }
         nb { "bokm\u00E5l norv\u00E9gien" }
         nd { "nd\u00E9b\u00E9l\u00E9 du Nord" }
         ne { "n\u00E9palais" }
@@ -753,9 +753,9 @@ fr {
         no { "norv\u00E9gien" }
         nr { "nd\u00E9b\u00E9l\u00E9 du Sud" }
         nv { "navaho" }
-        ny { "nyanja" }
+        ny { "nyandja" }
         oc { "occitan" }
-        oj { "ojibwa" }
+        oj { "odjibw\u00E9" }
         om { "galla" }
         or { "oriya" }
         os { "oss\u00E8te" }
@@ -764,7 +764,7 @@ fr {
         pl { "polonais" }
         ps { "pachto" }
         pt { "portugais" }
-        qu { "quechua" }
+        qu { "qu\u00E9chua" }
         rm { "rh\u00E9to-roman" }
         rn { "roundi" }
         ro { "roumain" }
@@ -773,7 +773,7 @@ fr {
         sa { "sanskrit" }
         sc { "sarde" }
         sd { "sindhi" }
-        se { "sami du Nord" }
+        se { "lapon du Nord" }
         sg { "sango" }
         sh { "serbo-croate" }
         si { "singhalais" }
@@ -785,7 +785,7 @@ fr {
         so { "somali" }
         sq { "albanais" }
         sr { "serbe" }
-        ss { "swati" }
+        ss { "swazi" }
         st { "sotho du Sud" }
         su { "soundanais" }
         sv { "su\u00E9dois" }
@@ -800,10 +800,10 @@ fr {
         tk { "turkm\u00E8ne" }
         tl { "tagalog" }
         tn { "setswana" }
-        to { "tongan" }
+        to { "kitonga" }
         tr { "turc" }
         ts { "tsonga" }
-        tt { "tatare" }
+        tt { "tatar" }
         tw { "twi" }
         ty { "tahitien" }
         ug { "ou\u00EFgour" }
@@ -817,7 +817,7 @@ fr {
         wo { "wolof" }
         xh { "xhosa" }
         yi { "yiddish" }
-        yo { "yoruba" }
+        yo { "yorouba" }
         za { "zhuang" }
         zh { "chinois" }
         zu { "zoulou" }
@@ -885,7 +885,7 @@ fr {
         Cyrl { "cyrillique" }
         Deva { "d\u00E9van\u00E2gar\u00EE" }
         Dsrt { "d\u00E9s\u00E9ret" }
-        Ethi { "\u00E9thiopique" }
+        Ethi { "\u00E9thiopien" }
         Geor { "g\u00E9orgien" }
         Goth { "gotique" }
         Grek { "grec" }
