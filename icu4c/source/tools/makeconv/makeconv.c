@@ -454,7 +454,6 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
 
     staticData=(UConverterStaticData *)mySharedData->staticData;
     staticData->conversionType=UCNV_UNSUPPORTED_CONVERTER;
-    uprv_strcpy((char*)staticData->name, converterName);
     staticData->platform=UCNV_IBM;
     staticData->subCharLen=0;
 
@@ -831,8 +830,6 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
   mySharedData->staticData = myStaticData;
   myStaticData->structSize = sizeof(UConverterStaticData);
   mySharedData->staticDataOwned = TRUE;
-
-  uprv_strcpy(myStaticData->name, converterName);
 
   mySharedData->dataMemory = NULL; /* for init */
 
