@@ -7,7 +7,6 @@ SHELL = @SHELL@
 
 UNICODE_VERSION = @UNICODE_VERSION@
 
-
 ## Install directory information
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -50,7 +49,6 @@ CLEANFILES = *~ $(DEPS)
 ## Target information
 TARGET = testmap
 
-
 DEFS = @DEFS@
 
 CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common 
@@ -65,8 +63,9 @@ CPPFLAGS += @DATA_PACKAGING_CPPFLAGS@
 
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/../data@ld_rpath_suf@
+ENABLE_RPATH = @ENABLE_RPATH@
+LDFLAGS = @LDFLAGS@
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/data:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@ $(LIBICUDATA)
 
 OBJECTS = testmap.o
@@ -102,7 +101,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
-	ICU_DATA=NOTHING ./$(TARGET)
+	ICU_DATA=NOTHING $(INVOKE) ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
