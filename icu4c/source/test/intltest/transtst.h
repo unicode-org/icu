@@ -215,6 +215,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestPropertySet(void);
 
+    /**
+     * Test various failure points of the new 2.0 engine.
+     */
+    void TestNewEngine(void);
+
     /* Devanagari-Latin rules Test */
     void TestDevanagariLatinRT(void);
 
