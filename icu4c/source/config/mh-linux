@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-linux,v 1.25 2001/09/06 21:51:49 aheninger-oss Exp $
+## $Id: mh-linux,v 1.26 2001/09/21 03:41:20 yves-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -61,11 +61,11 @@ INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
 LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
-LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT) -Wl,-rpath-link $(top_builddir)/data
-LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
+LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(ICULIBSUFFIX) $(LIBICUDT) -Wl,-rpath-link $(top_builddir)/data
+LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(ICULIBSUFFIX)
 LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
-LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
+LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
