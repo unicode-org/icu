@@ -4389,6 +4389,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     abstract protected int handleGetExtendedYear();
 
+    // (The following method is not called because all existing subclasses
+    // override it.  2003-06-11 ICU 2.6 Alan)
+    ///CLOVER:OFF
     /**
      * Return the number of days in the given month of the given extended
      * year of this calendar system.  Subclasses should override this
@@ -4400,6 +4403,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         return handleComputeMonthStart(extendedYear, month+1, true) -
                handleComputeMonthStart(extendedYear, month, true);
     }
+    ///CLOVER:ON
 
     /**
      * Return the number of days in the given extended year of this
@@ -4575,6 +4579,9 @@ public abstract class Calendar implements Serializable, Cloneable {
     // For subclasses to override
     //----------------------------------------------------------------------
 
+    // (The following method is not called because all existing subclasses
+    // override it.  2003-06-11 ICU 2.6 Alan)
+    ///CLOVER:OFF
     /**
      * Subclasses may override this method to compute several fields
      * specific to each calendar system.  These are:
@@ -4613,6 +4620,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         internalSet(ERA, era);
         internalSet(YEAR, eyear);
     }
+    ///CLOVER:ON
 
     //----------------------------------------------------------------------
     // Subclass API
