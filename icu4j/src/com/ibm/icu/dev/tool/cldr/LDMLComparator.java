@@ -53,7 +53,8 @@ public class LDMLComparator {
     private static final int OPT_DIFF = 0x4000; /*2exp15*/   //PN
     private static final int OPT_DIFF_REF_COMMON = 0x8000; /*2exp16*/  //PN
     private static final int OPT_BULK = 0x00010000;   //PN
-    private static final int OPT_UNKNOWN = 0x00020000;   //2**17 PN
+    private static final int OPT_CASE_SENSITIVE = 0x00020000;   //PN
+    private static final int OPT_UNKNOWN = 0x00040000;   
     
     private static final String COMMON      = "common";     
     private static final String ICU         = "icu";    
@@ -72,6 +73,7 @@ public class LDMLComparator {
     private static final String DIFF        = "diff";
     private static final String DIFF_REF_COMMON = "diff_ref_common";
     private static final String BULK        = "bulk";
+    private static final String CASE_SENSITIVE = "case_sensitive";
     private static final String[] PLATFORM_PRINT_ORDER ={
         COMMON,     
         ICU,
@@ -105,6 +107,7 @@ public class LDMLComparator {
         "-" + DIFF,   //PN added, indicates that only differing elements/attributes to be written to html
         "-" + DIFF_REF_COMMON,  //PN added, same as diff only common is excluded from diff but gets printed to html for reference purposes
         "-" + BULK,  //do a bulk comparison of folder contents
+        "-" + CASE_SENSITIVE,  //do case sensitive matching (by default it's not case sensitive)
     };
    
 
@@ -137,7 +140,7 @@ public class LDMLComparator {
     private Vector m_PlatformVect = new Vector();  //holds names of platforms
     private Vector m_PlatformFolderVect = new Vector();  //holds names of folders containing locale data for each platform
     private int m_iOptions;
-    // key = element id, data = AccumulateDifferences instance
+    // m_AccumulatedResultsMap key = element id (node+parentNode+type+index string), data = AccumulateDifferences instance
     private TreeMap m_AccumulatedResultsMap = new TreeMap();
     private int m_iTotalConflictingElements = 0;
     private int m_iTotalNonConflictingElements = 0;
@@ -255,7 +258,8 @@ public class LDMLComparator {
                            " [-ibmtor] filename [-apple] filename"   +
                            " [-sunjdk]  filename [-open_office] filename" +
                            " [-aix] filename [-linux] filename" +
-						   " [-diff / -diff-ref-common] [-bulk]"
+                           " [-diff / -diff_ref_common] [-bulk]" +
+                           " [-case_sensitive (only active if -diff of -diff-ref-common option selected)]"
                            );
         System.err.println("\nExample 1: \n " +
         "LDMLComparator -solaris:gold foldername1 -sunjdk foldername2 -common foldername3 -diff-ref-common -bulk\n" +
@@ -311,6 +315,8 @@ public class LDMLComparator {
                         {
                             
                         }
+                        else if (USER_OPTIONS[i].equals("-" + CASE_SENSITIVE))
+                        {}
                         else
                         {
                             if(!isGold)
@@ -444,10 +450,18 @@ public class LDMLComparator {
                 {
                     isEqual = true;
                 }
-                //if case is different then the values are considered to be different
-                //       else if(Normalizer.compare(compareTo,value,Normalizer.COMPARE_IGNORE_CASE)==0)
-                //       {
-                //       }
+                else if(Normalizer.compare(compareTo,value,Normalizer.COMPARE_IGNORE_CASE)==0)
+                {
+                    if ((m_iOptions & OPT_CASE_SENSITIVE) == 0)
+                    {  //it's not a case sensitive search so this is a match
+                        isEqual = true;
+                    }
+                    else
+                    {
+                        isEqual = false;
+                        break;  //we have found a difference therefore break out of loop , we will print full row
+                    }
+                }
                 else
                 {
                     isEqual = false;
@@ -523,10 +537,27 @@ public class LDMLComparator {
                 {
                     isEqual = true;
                 }
-                //if case is different then the values are considered to be different
-                //       else if(Normalizer.compare(compareTo,value,Normalizer.COMPARE_IGNORE_CASE)==0)
-                //       {
-                //       }
+                else if(Normalizer.compare(compareTo,value,Normalizer.COMPARE_IGNORE_CASE)==0)
+                {
+                    //case difference on date and time format doesn't matter
+                    if ((element.parentNode.compareTo("timeFormat")==0)
+                    || (element.parentNode.compareTo("dateFormat")==0))
+                    {
+                        isEqual = true;
+                    }
+                    else
+                    {
+                        if ((m_iOptions & OPT_CASE_SENSITIVE) == 0)
+                        {  //it's not a case sensitive search so this is a match
+                            isEqual = true;
+                        }
+                        else
+                        {
+                            isEqual = false;
+                            break;  //we have found a difference therefore break out of loop , we will print full row
+                        }
+                    }
+                }
                 else
                 {
                     isEqual = false;
@@ -724,7 +755,7 @@ public class LDMLComparator {
          String locale = fileName.substring(index+1, fileName.lastIndexOf("."));
          System.out.println("INFO: Creating fully resolved tree for : " + fileName);
          
-         Document doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale, true, true);
+         Document doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale, true, true, true);
          /*
           * debugging code
           *
@@ -1302,7 +1333,8 @@ public class LDMLComparator {
     //PN added
     private void AddToAccumulatedResultsMap(String id, CompareElement element, String locale, boolean bIsEqual)
     {
-        
+        if (element == null)
+            return;
         
         Object obj = m_AccumulatedResultsMap.get(id);
         AccumulatedResults ad;
@@ -1329,8 +1361,8 @@ public class LDMLComparator {
                 ad = (AccumulatedResults) obj;
                 if((!ad.index.equals(element.index)) ||
                 (!ad.node.equals(element.node)) ||
-                (!ad.parentNode.equals(element.parentNode)) ||
-                (!ad.type.equals(element.type)))
+                (!ad.parentNode.equals(element.parentNode))) // ||
+          //      (!ad.type.equals(element.type)))  type can be null so don't ceck its value
                 {
                     throw new RuntimeException("The retrieved object is not the same as the one trying to be saved");
                 }
@@ -1360,12 +1392,11 @@ public class LDMLComparator {
         writer.print(  "            <tr>\n" +
         "                <th width=5%>N.</th>\n"+
         "                <th width=10%>ParentNode</th>\n"+
-        "                <th width=10%>Type</th>\n"+
         "                <th width=10%>Name</th>\n"+
         "                <th width=10%>ID</th>\n" +
         "                <th width=10%># of non-conflicting locales</th>" +
         "                <th width=10%># of conflicting locales</th>" +
-        "                <th width=35%>Locales where conflicts were found</th>" +
+        "                <th width=45%>Locales where conflicts were found</th>" +
         "            </tr>\n");
         
         // walk down the cm_AccumulateDifferenceMap and print the data
@@ -1395,7 +1426,6 @@ public class LDMLComparator {
                     writer.print("            <tr>\n");
                     writer.print("                <td>"+(iCounter++)+"</td>\n");
                     writer.print("                <td>"+ad.parentNode+"</td>\n");
-                    writer.print("                <td>"+ad.type+"</td>\n");
                     writer.print("                <td>"+ad.node+"</td>\n");
                     writer.print("                <td>"+ad.index+"</td>\n");
                     writer.print("                <td>"+ad.localeVectSame.size()+"</td>\n");

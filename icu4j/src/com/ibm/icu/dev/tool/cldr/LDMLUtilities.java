@@ -51,7 +51,9 @@ public class LDMLUtilities {
      * @param locale
      * @return
      */
-    public static Document getFullyResolvedLDML(String sourceDir, String locale, boolean ignoreRoot, boolean ignoreUnavailable){
+    public static Document getFullyResolvedLDML(String sourceDir, String locale, 
+                                                boolean ignoreRoot, boolean ignoreUnavailable, 
+                                                boolean ignoreIfNoneAvailable){
     	Document full =null;
         try{
         	full = parse(sourceDir+File.separator+ "root.xml");
@@ -74,6 +76,7 @@ public class LDMLUtilities {
         }
         String[] constituents = locale.split("_");
         String loc=null;
+        boolean isAvailable = false;
         for(int i=0; i<constituents.length; i++){
         	if(loc==null){
         		loc = constituents[i];
@@ -81,10 +84,11 @@ public class LDMLUtilities {
             	loc = loc +"_"+ constituents[i];
             }
             Document doc = null;
-
+            
             String fileName = sourceDir+File.separator+loc+".xml";
             File file = new File(fileName);
             if(file.exists()){
+                isAvailable = true;
                 doc = parse(fileName);
                 doc = resolveAliases(doc, sourceDir, loc);
                 if(full==null){
@@ -99,7 +103,10 @@ public class LDMLUtilities {
                 }
             }
         }
-        return full;
+       if(ignoreIfNoneAvailable==true && isAvailable==false){
+           return null ;
+       }
+       return full;
     }
     
     public static String convertXPath2ICU(Node alias, Node namespaceNode, StringBuffer fullPath)
