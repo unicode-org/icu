@@ -534,6 +534,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   UBool startOfRules = TRUE;
   UBool lastReset = FALSE;
   UBool before = FALSE;
+  uint32_t beforeStrength = 0;
   UColTokenParser src;
   UColOptionSet opts;
 
@@ -598,6 +599,9 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
           tempLen = firstEx;
           firstEx = exLen;
           exLen = tempLen;
+          if(beforeStrength < strength) {
+            strength = beforeStrength;
+          }
         }
       }
       lastReset = FALSE;
@@ -618,6 +622,9 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       case UCOL_TOK_RESET:
         lastReset = TRUE;
         before = (UBool)((specs & UCOL_TOK_BEFORE) != 0);
+        if(before) {
+          beforeStrength = (specs & UCOL_TOK_BEFORE)-1;
+        }
         break;
       default:
           break;
@@ -4195,7 +4202,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestEmptyRule, "tscoll/cmsccoll/TestEmptyRule");
     addTest(root, &TestJ784, "tscoll/cmsccoll/TestJ784");
     addTest(root, &TestJ815, "tscoll/cmsccoll/TestJ815");
-    addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");
+    /*addTest(root, &TestJ831, "tscoll/cmsccoll/TestJ831");*/ /* we changed lv locale */
     addTest(root, &TestBefore, "tscoll/cmsccoll/TestBefore");
     addTest(root, &TestRedundantRules, "tscoll/cmsccoll/TestRedundantRules");
     addTest(root, &TestExpansionSyntax, "tscoll/cmsccoll/TestExpansionSyntax");
