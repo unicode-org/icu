@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2002/06/26 18:12:39 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/06/28 00:13:23 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -223,10 +223,9 @@ class StringMatcher implements UnicodeMatcher, UnicodeReplacer {
      * @return a reference to toUnionTo
      */
     public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
-        for (int i=0; i<pattern.length(); ++i) {
-            // OK TO GET 16-BIT code point because stand-ins are always
-            // in the BMP
-            int ch = pattern.charAt(i);
+	int ch;
+        for (int i=0; i<pattern.length(); i+=UTF16.getCharCount(ch)) {
+            ch = UTF16.charAt(pattern, i);
             UnicodeMatcher matcher = data.lookupMatcher(ch);
             if (matcher == null) {
                 toUnionTo.add(ch);
