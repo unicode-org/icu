@@ -80,7 +80,7 @@ getText(const UChar* source, int32_t srcLen,
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
     RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
-    UnicodeString src = source;
+    UnicodeString src (source,srcLen);
     
     if (U_FAILURE(*status)) {
         return 0;
@@ -115,7 +115,7 @@ getDescription( const UChar* source, int32_t srcLen,
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
     RegexPattern      *pattern = RegexPattern::compile("@", UREGEX_MULTILINE, *status);
-    UnicodeString src = source;
+    UnicodeString src(source, srcLen);
     
     if (U_FAILURE(*status)) {
         return 0;
@@ -139,7 +139,7 @@ getCount(const UChar* source, int32_t srcLen,
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
     RegexPattern      *pattern = RegexPattern::compile("@", UREGEX_MULTILINE, *status);
-    UnicodeString src = source;
+    UnicodeString src (source, srcLen);
 
 
     if (U_FAILURE(*status)) {
@@ -152,7 +152,7 @@ getCount(const UChar* source, int32_t srcLen,
         return 0;
     } 
     int32_t count = 0;
-    for(int32_t i=0; i<MAX_SPLIT_STRINGS; i++){
+    for(int32_t i=0; i<retLen; i++){
         matcher.reset(stringArray[i]);
         if(matcher.lookingAt(*status)){
             count++;
@@ -178,7 +178,7 @@ getAt(const UChar* source, int32_t srcLen,
 
     UnicodeString     stringArray[MAX_SPLIT_STRINGS];
     RegexPattern      *pattern = RegexPattern::compile("@", UREGEX_MULTILINE, *status);
-    UnicodeString src = source;
+    UnicodeString src (source, srcLen);
 
 
     if (U_FAILURE(*status)) {
@@ -191,7 +191,7 @@ getAt(const UChar* source, int32_t srcLen,
         return 0;
     } 
     int32_t count = 0;
-    for(int32_t i=0; i<MAX_SPLIT_STRINGS; i++){
+    for(int32_t i=0; i<retLen; i++){
         matcher.reset(stringArray[i]);
         if(matcher.lookingAt(*status)){
             if(count == index){

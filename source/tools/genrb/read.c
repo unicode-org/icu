@@ -124,7 +124,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
     int      len=0;
     UBool    isFollowingCharEscaped=FALSE;
     UBool    isNLUnescaped = FALSE;
-    UChar32  prevC;
+    UChar32  prevC=0;
 
     /* We are guaranteed on entry that initialChar is not a whitespace
        character. If we are at the EOF, or have some other problem, it

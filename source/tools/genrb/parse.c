@@ -444,7 +444,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     {
         c = ucbuf_getc(ucbuf, status);
         if(c == QUOTE) {
-          quoted = !quoted;
+          quoted = (UBool)!quoted;
         }
         /* weiv (06/26/2002): adding the following:
          * - preserving spaces in commands [...]

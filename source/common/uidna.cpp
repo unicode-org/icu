@@ -145,10 +145,9 @@ static inline UBool isLabelSeparator(UChar ch){
 // if *limit == separator then the length returned does not include 
 // the separtor.
 static inline int32_t
-getNextSeparator(UChar *src,int32_t srcLength,UStringPrepProfile* nameprep,
+getNextSeparator(UChar *src,int32_t srcLength,
                  UChar **limit,
-                 UBool *done,
-                 UErrorCode *status){
+                 UBool *done){
     if(srcLength == -1){
         int32_t i;
         for(i=0 ; ;i++){
@@ -658,7 +657,7 @@ uidna_IDNToASCII(  const UChar *src, int32_t srcLength,
 
     for(;;){
 
-        labelLen = getNextSeparator(labelStart,remainingLen, nameprep, &delimiter,&done, status);
+        labelLen = getNextSeparator(labelStart,remainingLen, &delimiter,&done);
         
         labelReqLength = _internal_toASCII( labelStart, labelLen, 
                                             currentDest, remainingDestCapacity, 
@@ -743,7 +742,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
 
     for(;;){
 
-        labelLen = getNextSeparator(labelStart,remainingLen, nameprep, &delimiter,&done, status);
+        labelLen = getNextSeparator(labelStart,remainingLen, &delimiter,&done);
         
         labelReqLength = _internal_toUnicode(labelStart, labelLen, 
                                              currentDest, remainingDestCapacity, 
