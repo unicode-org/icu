@@ -2,7 +2,24 @@ icu (2.0-1) unstable; urgency=low
 
   * Update to ICU version 2.0.
 
- -- Yves Arrouye <yves@debian.org>  Wed, 24 Oct 2001 12:41:16 -0700
+ -- Yves Arrouye <yves@debian.org>  Sat, 10 Nov 2001 21:58:19 -0800
+
+icu (1.8.1-2) unstable; urgency=low
+
+  * Updated copyright file. Closes: 112488
+  * Updated icu-locales description. Closes: 75499
+
+ -- Yves Arrouye <yves@debian.org>  Sat, 10 Nov 2001 21:24:58 -0800
+
+icu (1.8.1-1.1) unstable; urgency=low
+
+  * NMU to resolve build failures on ia64 and (hopefully) hppa.
+  * config.{sub|guess} update
+  * source/tools/ctestfw/ctest.c: Add static declaration to global
+    variables local to that module to avoid @gprel relocation errors.
+    Closes: 104642
+
+ -- Yves Arrouye <yves@debian.org>  Sat, 10 Nov 2001 21:24:44 -0800
 
 icu (1.8.1-1) unstable; urgency=low
 
