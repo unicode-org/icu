@@ -251,7 +251,7 @@ NewResourceBundleTest::TestConstruction()
         uprv_strcpy(testdatapath, directory);
         uprv_strcat(testdatapath, "testdata");
 
-        ResourceBundle  test1(testdatapath, err);
+        ResourceBundle  test1((UnicodeString)testdatapath, err);
         ResourceBundle  test2(testdatapath, locale, err);
      
         UnicodeString   result1;

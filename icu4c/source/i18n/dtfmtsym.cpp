@@ -442,9 +442,8 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
      * We cast away const here, but that's okay; we won't delete any of
      * these.
      */
-    /*ResourceBundle resource(Locale::getDataDirectory(), locale, status);*/
-    ResourceBundle resource(NULL, locale, status);
-    /*resource.open(UnicodeString(""), locale, status);*/
+    ResourceBundle resource((char *)0, locale, status);
+
     if (U_FAILURE(status))
     {
         if (useLastResortData)

@@ -242,12 +242,9 @@ DateFormat::getAvailableLocales(int32_t& count)
         for (i=0; i<localesCount; ++i)
         {
             UErrorCode status = U_ZERO_ERROR;
-            /*ResourceBundle resource(Locale::getDataDirectory(), locales[i], status);*/
-            ResourceBundle resource(NULL, locales[i], status);
+            ResourceBundle resource((char *)0, locales[i], status);
 
-            //int32_t ignoredCount;
             resource.get(SimpleDateFormat::fgDateTimePatternsTag, status);
-            //resource.getStringArray(SimpleDateFormat::fgDateTimePatternsTag, ignoredCount, status);
             if (U_SUCCESS(status))
             {
                 temp[newLocalesCount++] = locales[i];

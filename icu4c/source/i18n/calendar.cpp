@@ -734,13 +734,9 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     //      "1"     // min days in week
     //   }
 
-    //const UnicodeString *dateTimeElements;
-    //int32_t count;
 
     if (U_FAILURE(status)) return;
-    ResourceBundle resource(NULL, desiredLocale, status);
-    //ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);
-    //resource.open(UnicodeString(""), desiredLocale, status);
+    ResourceBundle resource((char *)0, desiredLocale, status);
 
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
