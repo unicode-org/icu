@@ -304,14 +304,17 @@ u_strtok_r(UChar    *src,
     UChar *nextToken;
     uint32_t nonDelimIdx;
 
+    /* If saveState is NULL, the user messed up. */
     if (src != NULL) {
         tokSource = src;
         *saveState = src; /* Set to "src" in case there are no delimiters */
     }
-    else if (saveState && *saveState) {
+    else if (*saveState) {
         tokSource = *saveState;
     }
     else {
+        /* src == NULL && *saveState == NULL */
+        /* This shouldn't happen. We already finished tokenizing. */
         return NULL;
     }
 
@@ -327,7 +330,7 @@ u_strtok_r(UChar    *src,
             *saveState = nextToken;
             return tokSource;
         }
-        else if (saveState && *saveState) {
+        else if (*saveState) {
             /* Return the last token */
             *saveState = NULL;
             return tokSource;
