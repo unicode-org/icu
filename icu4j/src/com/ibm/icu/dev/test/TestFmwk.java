@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2002/08/31 04:55:10 $ 
- * $Revision: 1.31 $
+ * $Date: 2002/09/19 22:45:45 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -149,7 +149,7 @@ public class TestFmwk implements TestLog {
         // Parse the test arguments.  They can be either the flag
         // "-verbose" or names of test methods. Create a list of
         // tests to be run.
-	boolean printUsage = false;
+	boolean usageError = false;
         Set testNames = null;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-verbose") || args[i].equals("-v")) {
@@ -157,12 +157,16 @@ public class TestFmwk implements TestLog {
             }
             else if (args[i].equals("-prompt")) {
                 params.prompt = true;
-            } else if (args[i].equals("-nothrow")) {
+            } else if (args[i].equals("-nothrow") || args[i].equals("-n")) {
                 params.nothrow = true;
 	    } else if (args[i].equals("-describe")) {
 		params.describe = true;
             } else if (args[i].startsWith("-e")) {
+                // see above
                 params.inclusion = (args[i].length() == 2) ? 5 : Integer.parseInt(args[i].substring(2));
+                if (params.inclusion < 0 || params.inclusion > 10) {
+                    usageError = true;
+                }
             } else if (args[i].toLowerCase().startsWith("-filter:")) {
                 params.filter = args[i].substring(8);
             } else {
@@ -173,8 +177,12 @@ public class TestFmwk implements TestLog {
             }
         }
 
-        Map testsToRun = getTestsToRun(testNames);
-        if (testNames != null && testsToRun.size() != testNames.size()) {
+        Map testsToRun = null;
+        if (!usageError) {
+            testsToRun = getTestsToRun(testNames);
+        }
+        if (usageError ||
+            (testNames != null && testsToRun.size() != testNames.size())) {
 	    usage();
 	    return;
 	}
@@ -350,7 +358,14 @@ public class TestFmwk implements TestLog {
      */
     void usage() {
         System.out.println(getClass().getName() +
-                           ": [-verbose] [-nothrow] [-prompt] [-describe] [test names]");
+                           ": [-verbose] [-nothrow] [-prompt] [-describe]\n                              [-e<n>] [-filter:<str>] [test names]");
+        System.out.println("Options:");
+        System.out.println(" -v[erbose] Show all output");
+        System.out.println(" -n[othrow] Message on test failure rather than exception");
+        System.out.println(" -prompt Prompt before exiting");
+        System.out.println(" -describe ?");
+        System.out.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n       To run all tests, specify -e10.  Giving -e with no <n> is\n       the same as -e5.");
+        System.out.println(" -filter:<str> ?");
 
 	boolean valid = params.describe && validate();
 	if (valid) {
@@ -362,7 +377,7 @@ public class TestFmwk implements TestLog {
 
         Iterator testEntries = getTestEntryIterator(getAvailableTests());
 
-        System.out.println("test names:");
+        System.out.println("Test names:");
         while(testEntries.hasNext() ) {
             Map.Entry e = (Map.Entry)testEntries.next();
 	    String methodName = (String)e.getKey();
