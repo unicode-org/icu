@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/07/24 19:13:30 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/24 19:58:30 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -1072,8 +1072,12 @@ public final class StringSearch extends SearchIterator
 	            m_utilColEIter_.setExactOffset(start);
 	            for (int count = 0; count < m_pattern_.m_CELength_;
 	                 count ++) {
-	                if (getCE(m_utilColEIter_.next()) 
-	                	!= m_pattern_.m_CE_[count]) {
+                    int ce = getCE(m_utilColEIter_.next());
+                    if (ce == CollationElementIterator.IGNORABLE) {
+                        count --;
+                        continue;
+                    }
+	                if (ce != m_pattern_.m_CE_[count]) {
 	                    return false;
 	                }
 	            }
