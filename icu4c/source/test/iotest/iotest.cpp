@@ -410,7 +410,7 @@ static void DataDrivenScanf(void) {
                     }
                     break;
                 case 0x31:  // '1' int8_t
-                    expected8 = (int8_t)uto64(argument);
+                    expected8 = (int8_t)uto64(expectedResult);
                     uBufferLenReturned = u_sscanf_u(argument, format, &i8);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i8);
                     if (i8 != expected8) {
@@ -419,7 +419,7 @@ static void DataDrivenScanf(void) {
                     }
                     break;
                 case 0x32:  // '2' int16_t
-                    expected16 = (int16_t)uto64(argument);
+                    expected16 = (int16_t)uto64(expectedResult);
                     uBufferLenReturned = u_sscanf_u(argument, format, &i16);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i16);
                     if (i16 != expected16) {
@@ -428,7 +428,7 @@ static void DataDrivenScanf(void) {
                     }
                     break;
                 case 0x34:  // '4' int32_t
-                    expected32 = (int32_t)uto64(argument);
+                    expected32 = (int32_t)uto64(expectedResult);
                     uBufferLenReturned = u_sscanf_u(argument, format, &i32);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i32);
                     if (i32 != expected32) {
@@ -437,7 +437,7 @@ static void DataDrivenScanf(void) {
                     }
                     break;
                 case 0x38:  // '8' int64_t
-                    expected64 = uto64(argument);
+                    expected64 = uto64(expectedResult);
                     uBufferLenReturned = u_sscanf_u(argument, format, &i64);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, i64);
                     if (i64 != expected64) {
