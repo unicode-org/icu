@@ -51,17 +51,8 @@ void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
 # define UCNV_DEBUG_LOG(x,y,z)
 #endif
 
+/* size of intermediate and preflighting buffers in ucnv_convert() */
 #define CHUNK_SIZE 5*1024
-
-static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
-                                                 UConverter * inConverter,
-                                                 char **target,
-                                                 const char *targetLimit,
-                                                 const char **source,
-                                                 const char *sourceLimit,
-                                                 int32_t* offsets,
-                                                 UBool flush,
-                                                 UErrorCode * err);
 
 typedef struct UAmbiguousConverter {
     const char *name;
@@ -1090,184 +1081,146 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
   return ch;
 }
 
+int32_t
+ucnv_convert(const char *toConverterName, const char *fromConverterName,
+             char *target, int32_t targetSize,
+             const char *source, int32_t sourceSize,
+             UErrorCode *pErrorCode) {
+    UChar pivotBuffer[CHUNK_SIZE];
+    UChar *pivot, *pivot2;
 
+    UConverter *inConverter, *outConverter;
+    const char *mySource=source, *sourceLimit=source+sourceSize;
+    const char *targetLimit;
+    int32_t targetCapacity=0;
 
-/**************************
-* Will convert a sequence of bytes from one codepage to another.
-* @param toConverterName: The name of the converter that will be used to encode the output buffer
-* @param fromConverterName: The name of the converter that will be used to decode the input buffer
-* @param target: Pointer to the output buffer* written
-* @param targetLength: on input contains the capacity of target, on output the number of bytes copied to target
-* @param source: Pointer to the input buffer
-* @param sourceLength: on input contains the capacity of source, on output the number of bytes processed in "source"
-* @param internal: used internally to store store state data across calls
-* @param err: fills in an error status
-*/
-static void 
-T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
-                                     UConverter * inConverter,
-                                     char **target,
-                                     const char *targetLimit,
-                                     const char **source,
-                                     const char *sourceLimit,
-                                     int32_t* offsets,
-                                     UBool flush,
-                                     UErrorCode * err)
-{
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
 
-  UChar out_chunk[CHUNK_SIZE];
-  const UChar *out_chunk_limit = out_chunk + CHUNK_SIZE;
-  UChar *out_chunk_alias;
-  UChar const *out_chunk_alias2;
+    if(sourceSize<0 || targetSize<0 || source==NULL || targetSize>0 && target==NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
 
+    /* if there is no input data, we're done */
+    if(sourceSize==0) {
+        return 0;
+    }
 
-  if (U_FAILURE (*err))    return;
+    /* create the converters */
+    inConverter=ucnv_open(fromConverterName, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
 
+    outConverter=ucnv_open(toConverterName, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        ucnv_close(inConverter);
+        return 0;
+    }
 
-  /*loops until the input buffer is completely consumed
-   *or if an error has be encountered
-   *first we convert from inConverter codepage to Unicode
-   *then from Unicode to outConverter codepage
-   */
-  while ((*source != sourceLimit) && U_SUCCESS (*err))
-    {
-      out_chunk_alias = out_chunk;
-      ucnv_toUnicode (inConverter,
-                      &out_chunk_alias,
-                      out_chunk_limit,
-                      source,
-                      sourceLimit,
-                      NULL,
-                      flush,
-                      err);
+    /* set up the other variables */
+    sourceLimit=source+sourceSize;
+    pivot=pivot2=pivotBuffer;
+    targetCapacity=0;
 
-      /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
-       *we will require at least another loop (it's a recoverable error)
-       */
-      if (U_SUCCESS (*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
-        {
-          *err = U_ZERO_ERROR;
-          out_chunk_alias2 = out_chunk;
+    if(targetSize>0) {
+        /* perform real conversion */
+        char *myTarget=target;
 
-          while ((out_chunk_alias2 != out_chunk_alias) && U_SUCCESS (*err))
-            {
-              ucnv_fromUnicode (outConverter,
-                                target,
-                                targetLimit,
-                                &out_chunk_alias2,
-                                out_chunk_alias,
-                                NULL,
-                                TRUE,
-                                err);
+        /*
+         * loops until the input buffer is completely consumed
+         * or an error is encountered;
+         * first we convert from inConverter codepage to Unicode
+         * then from Unicode to outConverter codepage
+         */
+        targetLimit=target+targetSize;
+        do {
+            pivot=pivotBuffer;
+            ucnv_toUnicode(inConverter,
+                           &pivot, pivotBuffer+CHUNK_SIZE,
+                           &source, sourceLimit,
+                           NULL,
+                           TRUE,
+                           pErrorCode);
+
+            /* U_BUFFER_OVERFLOW_ERROR only means that the pivot buffer is full */
+            if(U_SUCCESS(*pErrorCode) || *pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                *pErrorCode=U_ZERO_ERROR;
+                pivot2=pivotBuffer;
+                ucnv_fromUnicode(outConverter,
+                                 &myTarget, targetLimit,
+                                 &pivot2, pivot,
+                                 NULL,
+                                 (UBool)(source==sourceLimit),
+                                 pErrorCode);
+                /*
+                 * If this overflows the real target, then we must stop
+                 * converting and preflight with the loop below.
+                 */
             }
-        }
-      else
-        break;
+        } while(U_SUCCESS(*pErrorCode) && source!=sourceLimit);
+
+        targetCapacity=myTarget-target;
     }
 
-  return;
-}
+    /*
+     * If the output buffer is exhausted (or we are only "preflighting"), we need to stop writing
+     * to it but continue the conversion in order to store in targetSize
+     * the number of bytes that was required.
+     */
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR || targetSize==0) {
+        char targetBuffer[CHUNK_SIZE];
 
-int32_t  ucnv_convert(const char *toConverterName,
-                      const char *fromConverterName,
-                      char *target,
-                      int32_t targetSize,
-                      const char *source,
-                      int32_t sourceSize,
-                      UErrorCode * err)
-{
-  const char *mySource = source;
-  const char *mySource_limit = source + sourceSize;
-  UConverter *inConverter;
-  UConverter *outConverter;
-  char *myTarget = target;
-  int32_t targetCapacity = 0;
+        targetLimit=targetBuffer+CHUNK_SIZE;
+        do {
+            /* since the pivot buffer may still contain some characters, start with emptying it */
+            *pErrorCode=U_ZERO_ERROR;
+            while(pivot2!=pivot && U_SUCCESS(*pErrorCode)) {
+                target=targetBuffer;
+                ucnv_fromUnicode(outConverter,
+                                 &target, targetLimit,
+                                 &pivot2, pivot,
+                                 NULL,
+                                 (UBool)(source==sourceLimit),
+                                 pErrorCode);
+                targetCapacity+=(target-targetBuffer);
+                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                    *pErrorCode=U_ZERO_ERROR;
+                }
+            }
 
-  if (U_FAILURE (*err))
-    return 0;
+            if(U_FAILURE(*pErrorCode)) {
+                /* an error occurred: done */
+                break;
+            }
 
-  if ((targetSize < 0) || (sourceSize < 0))
-    {
-      *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return 0;
+            if(source==sourceLimit) {
+                /*
+                 * source is consumed:
+                 * done, and set the buffer overflow error as
+                 * the result for the entire function
+                 */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            }
+
+            /* now convert from the source into the pivot buffer again */
+            pivot=pivot2=pivotBuffer;
+            ucnv_toUnicode(inConverter,
+                           &pivot, pivotBuffer+CHUNK_SIZE,
+                           &source, sourceLimit,
+                           NULL,
+                           TRUE,
+                           pErrorCode);
+        } while(U_SUCCESS(*pErrorCode) || *pErrorCode==U_BUFFER_OVERFLOW_ERROR);
     }
 
-  /*if there is no input data, we're done */
-  if (sourceSize == 0)
-    {
-      /*in case the caller passed an output ptr
-       *we update it
-       */
-      return 0;
-    }
+    ucnv_close (inConverter);
+    ucnv_close (outConverter);
 
-  /*create the converters */
-  inConverter = ucnv_open (fromConverterName, err);
-  if (U_FAILURE (*err)) return 0;
-  outConverter = ucnv_open (toConverterName, err);
-  if (U_FAILURE (*err))
-    {
-      ucnv_close (inConverter);
-      return 0;
-    }
-
-
-  if (targetSize > 0)
-    {
-      T_UConverter_fromCodepageToCodepage (outConverter,
-                                           inConverter,
-                                           &myTarget,
-                                           target + targetSize,
-                                           &mySource,
-                                           mySource_limit,
-                                           NULL,
-                                           TRUE,
-                                           err);
-      /*Updates targetCapacity to contain the number of bytes written to target */
-      targetCapacity = myTarget - target;
-    }
-
-  /* If the output buffer is exhausted (or we are "pre-flighting"), we need to stop writing
-   * to it but continue the conversion in order to store in targetSize
-   * the number of bytes that was required*/
-  if (*err == U_BUFFER_OVERFLOW_ERROR || targetSize == 0)
-    {
-      char target2[CHUNK_SIZE];
-      char *target2_alias = target2;
-      const char *target2_limit = target2 + CHUNK_SIZE;
-
-      /*We use a stack allocated buffer around which we loop
-       *(in case the output is greater than CHUNK_SIZE)
-       */
-
-      do
-        {
-          *err = U_ZERO_ERROR;
-          target2_alias = target2;
-          T_UConverter_fromCodepageToCodepage (outConverter,
-                                               inConverter,
-                                               &target2_alias,
-                                               target2_limit,
-                                               &mySource,
-                                               mySource_limit,
-                                               NULL,
-                                               TRUE,
-                                               err);
-
-          /*updates the output parameter to contain the number of char required */
-          targetCapacity += (target2_alias - target2);
-    } while (*err == U_BUFFER_OVERFLOW_ERROR);
-
-      /*We will set the error code to U_BUFFER_OVERFLOW_ERROR only if
-       *nothing graver happened in the previous loop*/
-      if (U_SUCCESS (*err))
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    }
-
-  ucnv_close (inConverter);
-  ucnv_close (outConverter);
-
-  return targetCapacity;
+    return targetCapacity;
 }
 
 UConverterType ucnv_getType(const UConverter* converter)
