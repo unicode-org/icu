@@ -796,6 +796,14 @@ InputPath=.\unicode\choicfmt.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\currfmt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\currfmt.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\datefmt.cpp
 # End Source File
 # Begin Source File
@@ -1237,6 +1245,57 @@ SOURCE=.\japancal.cpp
 # Begin Source File
 
 SOURCE=.\japancal.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\measfmt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\measfmt.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\measfmt.h
+
+"..\..\include\unicode\measfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\measfmt.h
+
+"..\..\include\unicode\measfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\measfmt.h
+
+"..\..\include\unicode\measfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\measfmt.h
+
+"..\..\include\unicode\measfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
