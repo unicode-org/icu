@@ -825,7 +825,7 @@ class TransliteratorRegistry {
                 aliasReturn.append(((AliasEntry) entry).alias);
                 return null;
             } else if (entry instanceof Transliterator.Factory) {
-                return ((Transliterator.Factory) entry).getInstance();
+                return ((Transliterator.Factory) entry).getInstance(ID);
             } else if (entry instanceof CompoundRBTEntry) {
                 return ((CompoundRBTEntry) entry).getInstance();
             }

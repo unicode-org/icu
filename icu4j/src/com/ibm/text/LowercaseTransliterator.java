@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/LowercaseTransliterator.java,v $ 
- * $Date: 2001/06/29 22:49:52 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/17 17:43:03 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,7 @@ public class LowercaseTransliterator extends TransformTransliterator {
      */
     static void register() {
         Transliterator.registerFactory(_ID, new Transliterator.Factory() {
-            public Transliterator getInstance() {
+            public Transliterator getInstance(String ID) {
                 return new LowercaseTransliterator();
             }
         });

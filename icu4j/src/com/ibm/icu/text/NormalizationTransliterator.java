@@ -13,7 +13,7 @@ import java.util.*;
 
 /*
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.4 $ $Date: 2001/10/04 20:10:30 $
+ * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.5 $ $Date: 2001/10/17 17:43:03 $
  */
 public class NormalizationTransliterator extends Transliterator {
 
@@ -32,25 +32,25 @@ public class NormalizationTransliterator extends Transliterator {
      */
     static void register() {
         Transliterator.registerFactory("Any-NFC", new Transliterator.Factory() {
-            public Transliterator getInstance() {
+            public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
                     getInstance(Normalizer.COMPOSE);
             }
         });
         Transliterator.registerFactory("Any-NFD", new Transliterator.Factory() {
-            public Transliterator getInstance() {
+            public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
                     getInstance(Normalizer.DECOMP);
             }
         });
         Transliterator.registerFactory("Any-NFKC", new Transliterator.Factory() {
-            public Transliterator getInstance() {
+            public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
                     getInstance(Normalizer.COMPOSE_COMPAT);
             }
         });
         Transliterator.registerFactory("Any-NFKD", new Transliterator.Factory() {
-            public Transliterator getInstance() {
+            public Transliterator getInstance(String ID) {
                 return NormalizationTransliterator.
                     getInstance(Normalizer.DECOMP_COMPAT);
             }
