@@ -323,7 +323,7 @@ ucmpe32_openFromData(      const uint8_t **source,
                                            UErrorCode *status)
 {
   uint32_t i;
-  const uint8_t *oldSource = *source;
+/*  const uint8_t *oldSource = *source;*/
 
   CompactEIntArray* this_obj = (CompactEIntArray*) uprv_malloc(sizeof(CompactEIntArray));
 

@@ -1168,7 +1168,6 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
 
 U_CAPI void ures_close(UResourceBundle*    resB)
 {
-    UErrorCode status = U_ZERO_ERROR;
     if(resB != NULL) {
         if(resB->fData != NULL) {
             entryClose(resB->fData);
