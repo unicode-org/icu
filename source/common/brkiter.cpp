@@ -426,12 +426,9 @@ U_NAMESPACE_END
  * Release all static memory held by breakiterator.  
  */
 U_CFUNC UBool breakiterator_cleanup(void) {
-  {
-    Mutex mutex(&gLock);
-    if (gService) {
-        delete gService;
-        gService = NULL;
-    }
+  if (gService) {
+    delete gService;
+    gService = NULL;
   }
   umtx_destroy(&gLock);
   return TRUE;
