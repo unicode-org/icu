@@ -306,6 +306,10 @@ SOURCE=.\MorphTables.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\MPreFixups.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MultipleSubstSubtables.cpp
 # End Source File
 # Begin Source File
@@ -896,6 +900,10 @@ SOURCE=.\MorphStateTables.h
 # Begin Source File
 
 SOURCE=.\MorphTables.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MPreFixups.h
 # End Source File
 # Begin Source File
 

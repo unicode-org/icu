@@ -1,7 +1,9 @@
 /*
- * @(#)IndicReordering.h	1.4 00/03/15
- *
  * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ *
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.h,v $
+ * $Date: 2003/01/04 02:52:23 $
+ * $Revision: 1.6 $
  *
  */
 
@@ -21,6 +23,8 @@ enum
 };
 
 typedef LEUnicode SplitMatra[3];
+
+class  MPreFixups;
 
 struct IndicClassTable
 {
@@ -130,10 +134,10 @@ public:
     static le_int32 getWorstCaseExpansion(le_int32 scriptCode);
 
     static le_int32 reorder(const LEUnicode *theChars, le_int32 charCount, le_int32 scriptCode,
-        LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags);
+        LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags,
+        MPreFixups **outMPreFixups);
 
-    static void adjustMPres(const LEUnicode *chars, le_int32 charCount, LEGlyphID *glyphs,
-        le_int32 *charIndices, le_int32 scriptCode);
+    static void adjustMPres(MPreFixups *mpreFixups, LEGlyphID *glyphs, le_int32 *charIndices);
 
     static const LETag *getFeatureOrder();
 
