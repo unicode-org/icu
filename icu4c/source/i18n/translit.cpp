@@ -870,7 +870,19 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
                                        UBool escapeUnprintable) const {
     // The base class implementation of toRules munges the ID into
     // the correct format.  That is: foo => ::foo
-    rulesSource = getID();
+    if (escapeUnprintable) {
+        rulesSource.truncate(0);
+        UnicodeString id = getID();
+        for (int32_t i=0; i<id.length();) {
+            UChar32 c = id.char32At(i);
+            if (!UnicodeSet::_escapeUnprintable(rulesSource, c)) {
+                rulesSource.append(c);
+            }
+            i += UTF_CHAR_LENGTH(c);
+        }
+    } else {
+        rulesSource = getID();
+    }
     // KEEP in sync with rbt_pars
     rulesSource.insert(0, UnicodeString("::", ""));
     rulesSource.append(ID_DELIM);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/16 00:57:51 $
- * $Revision: 1.54 $
+ * $Date: 2001/11/16 21:49:10 $
+ * $Revision: 1.55 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.54 $ $Date: 2001/11/16 00:57:51 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.55 $ $Date: 2001/11/16 21:49:10 $
  */
 public abstract class Transliterator {
     /**
@@ -1055,6 +1055,20 @@ public abstract class Transliterator {
         // The base class implementation of toRules munges the ID into
         // the correct format.  That is: foo => ::foo
         // KEEP in sync with rbt_pars
+        if (escapeUnprintable) {
+            StringBuffer rulesSource = new StringBuffer();
+            String id = getID();
+            for (int i=0; i<id.length();) {
+                int c = UTF16.charAt(id, i);
+                if (!UnicodeSet._escapeUnprintable(rulesSource, c)) {
+                    UTF16.append(rulesSource, c);
+                }
+                i += UTF16.getCharCount(c);
+            }
+            rulesSource.insert(0, "::");
+            rulesSource.append(ID_DELIM);
+            return rulesSource.toString();
+        }
         return "::" + getID() + ID_DELIM;
     }
 
