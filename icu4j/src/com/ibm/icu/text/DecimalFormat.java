@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/05/14 19:03:31 $ 
- * $Revision: 1.30 $
+ * $Date: 2003/05/19 21:09:14 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -1489,21 +1489,44 @@ public class DecimalFormat extends NumberFormat {
         for (int i=0; i<affix.length(); ) {
             int c = UTF16.charAt(affix, i);
             int len = UTF16.getCharCount(c);
-            i += len;
             if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                // We may have a pattern like: \u200F \u0020
+                //        and input text like: \u200F \u0020
+                // Note that U+200F and U+0020 are RuleWhiteSpace but only
+                // U+0020 is UWhiteSpace.  So we have to first do a direct
+                // match of the run of RULE whitespace in the pattern,
+                // then match any extra characters.
+                boolean literalMatch = false;
+                while (pos < input.length() &&
+                       UTF16.charAt(input, pos) == c) {
+                    literalMatch = true;
+                    i += len;
+                    pos += len;
+                    if (i == affix.length()) {
+                        break;
+                    }
+                    c = UTF16.charAt(affix, i);
+                    len = UTF16.getCharCount(c);
+                    if (!UCharacterProperty.isRuleWhiteSpace(c)) {
+                        break;
+                    }
+                }
+                
                 // Advance over run in affix
                 i = skipRuleWhiteSpace(affix, i);
                 
                 // Advance over run in input text
-                // Must see at least one white space char in input
+                // Must see at least one white space char in input,
+                // unless we've already matched some characters literally.
                 int s = pos;
                 pos = skipUWhiteSpace(input, pos);
-                if (pos == s) {
+                if (pos == s && !literalMatch) {
                     return -1;
                 }
             } else {
                 if (pos < input.length() &&
                     UTF16.charAt(input, pos) == c) {
+                    i += len;
                     pos += len;
                 } else {
                     return -1;
