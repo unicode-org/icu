@@ -16,10 +16,7 @@ tig{
     Currencies {
         ERN { "$", "ERN" }
     }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
+
     Languages { 
         Fallback { "am" }
         am { "\u12A0\u121D\u1210\u1228\u129B" }
@@ -32,6 +29,10 @@ tig{
             AmPmMarkers{
                 "\u1240\u12F0\u121D \u1230\u122D\u121D\u12D5\u120D",
                 "\u1213\u1246 \u1235\u122D\u121D\u12D5\u120D",
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
             }
             dayNames{
                 format{

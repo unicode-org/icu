@@ -7,12 +7,12 @@
 
 en_BZ{
     Version{ "x0.1" }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
     calendar{
         gregorian{
+            DateTimeElements:intvector { 
+                2,
+                1,
+            }
             DateTimePatterns{
                 "HH:mm:ss z",
                 "HH:mm:ss z",

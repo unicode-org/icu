@@ -7,9 +7,13 @@
  
 fr_MC{
     Version{ "x0.3" }
-    DateTimeElements:intvector {
-        2,
-        1,
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
+        }
     }
     NumberElements { 
         ",",

@@ -27,15 +27,15 @@ aa {
         ER { "Eretria" }
         ET { "Otobbia" }
     }
-    DateTimeElements:intvector { 
-        7,
-        1,
-    }
     calendar{
         gregorian{
             AmPmMarkers{
                 "saaku",
                 "carra",
+            }
+            DateTimeElements:intvector { 
+                7,
+                1,
             }
             DateTimePatterns{
                 "h:mm:ss a",

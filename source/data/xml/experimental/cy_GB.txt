@@ -8,10 +8,6 @@
 
 cy_GB {
     Version { "x0.1" }
-    DateTimeElements:intvector {
-        2,
-        1,
-    }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "\u00a4#,##0.00;-\u00a4#,##0.00",
@@ -20,6 +16,10 @@ cy_GB {
     }
     calendar{
         gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
             DateTimePatterns{
                 "HH:mm:ss z",
                 "HH:mm:ss z",
