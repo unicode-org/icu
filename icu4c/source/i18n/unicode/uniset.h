@@ -248,19 +248,17 @@ class TransliterationRule;
  */
 class U_I18N_API UnicodeSet : public UnicodeFilter {
 
-    /**
-     * The internal representation is a UnicodeString of even length.
-     * Each pair of characters represents a range that is included in
-     * the set.  A single character c is represented as cc.  Thus, the
-     * ranges in the set are (a,b), a and b inclusive, where a =
-     * pairs.charAt(i) and b = pairs.charAt(i+1) for all even i, 0 <=
-     * i <= pairs.length()-2.  Pairs are always stored in ascending
-     * Unicode order.  Pairs are always stored in shortest form.  For
-     * example, if the pair "hh", representing the single character
-     * 'h', is added to the pairs list "agik", representing the ranges
-     * 'a'-'g' and 'i'-'k', the result is "ak", not "aghhik".
-     */
-    UnicodeString pairs;
+    int32_t len; // length of list used; 0 <= len <= capacity
+    int32_t capacity; // capacity of list
+    int32_t bufferCapacity; // capacity of buffer
+    UChar32* list; // MUST be terminated with HIGH
+    UChar32* buffer; // internal buffer, may be NULL
+
+    static const UChar32 LOW; // LOW <= all valid values. ZERO for codepoints
+    static const UChar32 HIGH; // HIGH > all valid values. 110000 for codepoints
+
+    static const int32_t START_EXTRA; // initial storage. Must be >= 0
+    static const int32_t GROW_EXTRA; // extra amount for growth. Must be >= 0
 
     static const UnicodeString CATEGORY_NAMES;
 
@@ -269,7 +267,7 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      * Unicode::getType(), to pairs strings.  Entries are initially
      * zero length and are filled in on demand.
      */
-    static UnicodeString* CATEGORY_PAIRS_CACHE;
+    static UnicodeSet* CATEGORY_CACHE;
 
     /**
      * Delimiter string used in patterns to close a category reference:
@@ -285,19 +283,19 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
     static const UChar COLON;
     static const UChar BACKSLASH;
     static const UChar INTERSECTION;
+    static const UChar UPPER_U;
     
-    //----------------------------------------------------------------
-    // Debugging and testing
-    //----------------------------------------------------------------
-
 public:
 
     /**
-     * Return the representation of this set as a list of character
-     * ranges.  Ranges are listed in ascending Unicode order.  For
-     * example, the set [a-zA-M3] is represented as "33AMaz".
+     * Minimum value that can be stored in a UnicodeSet.
      */
-    const UnicodeString& getPairs(void) const;
+    static const UChar32 MIN_VALUE;
+
+    /**
+     * Maximum value that can be stored in a UnicodeSet.
+     */
+    static const UChar32 MAX_VALUE;
 
     //----------------------------------------------------------------
     // Constructors &c
@@ -310,6 +308,15 @@ public:
      * @draft
      */
     UnicodeSet();
+
+    /**
+     * Constructs a set containing the given range. If <code>end >
+     * start</code> then an empty set is created.
+     *
+     * @param start first character, inclusive, of range
+     * @param end last character, inclusive, of range
+     */
+    UnicodeSet(UChar32 start, UChar32 end);
 
     /**
      * Constructs a set from the given pattern.  See the class
@@ -392,6 +399,16 @@ public:
     //----------------------------------------------------------------
 
     /**
+     * Make this object represent the range <code>start - end</code>.
+     * If <code>end > start</code> then this object is set to an
+     * an empty range.
+     *
+     * @param start first character in the set, inclusive
+     * @rparam end last character in the set, inclusive
+     */
+    void set(UChar32 start, UChar32 end);
+
+    /**
      * Modifies this set to represent the set specified by the given
      * pattern, optionally ignoring white space.  See the class
      * description for the syntax of the pattern language.
@@ -436,9 +453,18 @@ public:
      * of chars.
      * @draft
      */
-    virtual UBool contains(UChar first, UChar last) const;
+    virtual UBool contains(UChar32 start, UChar32 end) const;
 
     /**
+     * Returns <tt>true</tt> if this set contains the specified char.
+     *
+     * @return <tt>true</tt> if this set contains the specified char.
+     * @draft
+     */
+    virtual UBool contains(UChar32 c) const;
+
+    /**
+     * Implement UnicodeFilter:
      * Returns <tt>true</tt> if this set contains the specified char.
      *
      * @return <tt>true</tt> if this set contains the specified char.
@@ -449,16 +475,16 @@ public:
     /**
      * Adds the specified range to this set if it is not already
      * present.  If this set already contains the specified range,
-     * the call leaves this set unchanged.  If <code>last > first</code>
+     * the call leaves this set unchanged.  If <code>end > start</code>
      * then an empty range is added, leaving the set unchanged.
      *
-     * @param first first character, inclusive, of range to be added
+     * @param start first character, inclusive, of range to be added
      * to this set.
-     * @param last last character, inclusive, of range to be added
+     * @param end last character, inclusive, of range to be added
      * to this set.
      * @draft
      */
-    virtual void add(UChar first, UChar last);
+    virtual void add(UChar32 start, UChar32 end);
 
     /**
      * Adds the specified character to this set if it is not already
@@ -466,21 +492,39 @@ public:
      * the call leaves this set unchanged.
      * @draft
      */
-    virtual void add(UChar c);
+    void add(UChar32 c);
+
+    /**
+     * Retain only the elements in this set that are contained in the
+     * specified range.  If <code>end > start</code> then an empty range is
+     * retained, leaving the set empty.
+     *
+     * @param start first character, inclusive, of range to be retained
+     * to this set.
+     * @param end last character, inclusive, of range to be retained
+     * to this set.
+     */
+    virtual void retain(UChar32 start, UChar32 end);
+
+
+    /**
+     * Retain the specified character from this set if it is present.
+     */
+    void retain(UChar32 c);
 
     /**
      * Removes the specified range from this set if it is present.
      * The set will not contain the specified range once the call
-     * returns.  If <code>last > first</code> then an empty range is
+     * returns.  If <code>end > start</code> then an empty range is
      * removed, leaving the set unchanged.
      * 
-     * @param first first character, inclusive, of range to be removed
+     * @param start first character, inclusive, of range to be removed
      * from this set.
-     * @param last last character, inclusive, of range to be removed
+     * @param end last character, inclusive, of range to be removed
      * from this set.
      * @draft
      */
-    virtual void remove(UChar first, UChar last);
+    virtual void remove(UChar32 start, UChar32 end);
 
     /**
      * Removes the specified character from this set if it is present.
@@ -488,7 +532,28 @@ public:
      * returns.
      * @draft
      */
-    virtual void remove(UChar c);
+    void remove(UChar32 c);
+
+    /**
+     * Complements the specified range in this set.  Any character in
+     * the range will be removed if it is in this set, or will be
+     * added if it is not in this set.  If <code>end > start</code>
+     * then an empty range is xor'ed, leaving the set unchanged.
+     *
+     * @param start first character, inclusive, of range to be removed
+     * from this set.
+     * @param end last character, inclusive, of range to be removed
+     * from this set.
+     */
+    virtual void xor(UChar32 start, UChar32 end);
+
+
+    /**
+     * Complements the specified character in this set.  The character
+     * will be removed if it is in this set, or will be added if it is
+     * not in this set.
+     */
+    void xor(UChar32 c);
 
     /**
      * Returns <tt>true</tt> if the specified set is a <i>subset</i>
@@ -539,6 +604,16 @@ public:
     virtual void removeAll(const UnicodeSet& c);
 
     /**
+     * Complements in this set all elements contained in the specified
+     * set.  Any character in the other set will be removed if it is
+     * in this set, or will be added if it is not in this set.
+     *
+     * @param c set that defines which elements will be xor'ed from
+     *          this set.
+     */
+    virtual void xorAll(const UnicodeSet& c);
+
+    /**
      * Inverts this set.  This operation modifies this set so that
      * its value is its complement.  This is equivalent to the pseudo code:
      * <code>this = new CharSet("[\u0000-\uFFFF]").removeAll(this)</code>.
@@ -552,6 +627,36 @@ public:
      * @draft
      */
     virtual void clear(void);
+
+    /**
+     * Iteration method that returns the number of ranges contained in
+     * this set.
+     * @see #getRangeStart
+     * @see #getRangeEnd
+     */
+    virtual int32_t getRangeCount(void) const;
+
+    /**
+     * Iteration method that returns the first character in the
+     * specified range of this set.
+     * @see #getRangeCount
+     * @see #getRangeEnd
+     */
+    virtual UChar32 getRangeStart(int32_t index) const;
+
+    /**
+     * Iteration method that returns the last character in the
+     * specified range of this set.
+     * @see #getRangeStart
+     * @see #getRangeEnd
+     */
+    virtual UChar32 getRangeEnd(int32_t index) const;
+
+    /**
+     * Reallocate this objects internal structures to take up the least
+     * possible space, without changing this object's value.
+     */
+    virtual void compact();
 
 private:
 
@@ -621,70 +726,17 @@ private:
      * substring of <code>pattern</code>
      * @exception IllegalArgumentException if the parse fails.
      */
-    static UnicodeString& parse(UnicodeString& pairsBuf /*result*/,
-                                const UnicodeString& pattern,
-                                ParsePosition& pos,
-                                const SymbolTable* symbols,
-                                UErrorCode& status);
-
-    //----------------------------------------------------------------
-    // Implementation: Efficient in-place union & difference
-    //----------------------------------------------------------------
-
-    /**
-     * Performs a union operation: adds the range 'c'-'d' to the given
-     * pairs list.  The pairs list is modified in place.  The result
-     * is normalized (in order and as short as possible).  For
-     * example, addPair("am", 'l', 'q') => "aq".  addPair("ampz", 'n',
-     * 'o') => "az".
-     */
-    static void addPair(UnicodeString& pairs, UChar c, UChar d);
-
-    /**
-     * Performs an asymmetric difference: removes the range 'c'-'d'
-     * from the pairs list.  The pairs list is modified in place.  The
-     * result is normalized (in order and as short as possible).  For
-     * example, removePair("am", 'l', 'q') => "ak".
-     * removePair("ampz", 'l', 'q') => "akrz".
-     */
-    static void removePair(UnicodeString& pairs, UChar c, UChar d);
-
-    //----------------------------------------------------------------
-    // Implementation: Fundamental operators
-    //----------------------------------------------------------------
-
-    /**
-     * Changes the pairs list to represent the complement of the set it
-     * currently represents.  The pairs list will be normalized (in
-     * order and in shortest possible form) if the original pairs list
-     * was normalized.
-     */
-    static void doComplement(UnicodeString& pairs);
-
-    /**
-     * Given two pairs lists, changes the first in place to represent
-     * the union of the two sets.
-     */
-    static void doUnion(UnicodeString& pairs, const UnicodeString& c2);
-
-    /**
-     * Given two pairs lists, changes the first in place to represent
-     * the asymmetric difference of the two sets.
-     */
-    static void doDifference(UnicodeString& pairs, const UnicodeString& pairs2);
-
-    /**
-     * Given two pairs lists, changes the first in place to represent
-     * the intersection of the two sets.
-     */
-    static void doIntersection(UnicodeString& pairs, const UnicodeString& c2);
+    void applyPattern(const UnicodeString& pattern,
+                      ParsePosition& pos,
+                      const SymbolTable* symbols,
+                      UErrorCode& status);
 
     //----------------------------------------------------------------
     // Implementation: Generation of pairs for Unicode categories
     //----------------------------------------------------------------
 
     /**
-     * Returns a pairs string for the given category, given its name.
+     * Sets this object to the given category, given its name.
      * The category name must be either a two-letter name, such as
      * "Lu", or a one letter name, such as "L".  One-letter names
      * indicate the logical union of all two-letter names that start
@@ -697,16 +749,15 @@ private:
      * complements such as "^Lu" or "^L".  It would be easy to cache
      * these as well in a hashtable should the need arise.
      */
-    static UnicodeString& getCategoryPairs(UnicodeString& result,
-                                           const UnicodeString& catName,
-                                           UErrorCode& status);
+    void applyCategory(const UnicodeString& catName,
+                       UErrorCode& status);
 
     /**
      * Returns a pairs string for the given category.  This string is
      * cached and returned again if this method is called again with
      * the same parameter.
      */
-    static const UnicodeString& getCategoryPairs(int8_t cat);
+    static const UnicodeSet& getCategorySet(int8_t cat);
 
     //----------------------------------------------------------------
     // Implementation: Utility methods
@@ -717,6 +768,26 @@ private:
      * there is none.
      */
     static UChar charAfter(const UnicodeString& str, int32_t i);
+
+    void ensureCapacity(int32_t newLen);
+    
+    void ensureBufferCapacity(int32_t newLen);
+    
+    void swapBuffers(void);
+
+    static const UChar HEX[16];
+    
+    static void _toPat(UnicodeString& buf, UChar32 c);
+
+    //----------------------------------------------------------------
+    // Implementation: Fundamental operators
+    //----------------------------------------------------------------
+
+    void xor(const UChar32* other, int32_t otherLen, int8_t polarity);
+        
+    void add(const UChar32* other, int32_t otherLen, int8_t polarity);
+            
+    void retain(const UChar32* other, int32_t otherLen, int8_t polarity);
 };
 
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
