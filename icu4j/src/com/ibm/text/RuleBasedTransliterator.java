@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/06/28 20:49:54 $ 
- * $Revision: 1.35 $
+ * $Date: 2000/06/29 21:59:23 $ 
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -252,13 +252,11 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.35 $ $Date: 2000/06/28 20:49:54 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.36 $ $Date: 2000/06/29 21:59:23 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
     private Data data;
-
-    static final boolean DEBUG = false;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -324,15 +322,6 @@ public class RuleBasedTransliterator extends Transliterator {
          * exz|d    no match, advance cursor
          * exzd|    done
          */
-        int start = index.contextStart;
-        int limit = index.limit;
-        int cursor = index.start;
-
-        if (DEBUG) {
-            System.out.print("\"" +
-                Utility.escape(rsubstring(text, start, cursor)) + '|' +
-                Utility.escape(rsubstring(text, cursor, limit)) + "\"");
-        }
 
         /* A rule like
          *   a>b|a
@@ -344,7 +333,7 @@ public class RuleBasedTransliterator extends Transliterator {
          * uint32_t.
          */
         int loopCount = 0;
-        int loopLimit = limit - cursor;
+        int loopLimit = index.limit - index.start;
         if (loopLimit >= 0x08000000) {
             loopLimit = 0x7FFFFFFF;
         } else {
@@ -354,12 +343,12 @@ public class RuleBasedTransliterator extends Transliterator {
         boolean partial[] = new boolean[1];
         partial[0] = false;
 
-        while (cursor < limit && loopCount <= loopLimit) {
+        while (index.start < index.limit && loopCount <= loopLimit) {
             TransliterationRule r = incremental ?
-                data.ruleSet.findIncrementalMatch(text, index.contextStart, limit, cursor,
+                data.ruleSet.findIncrementalMatch(text, index,
                                                   data, partial, getFilter()) :
-                data.ruleSet.findMatch(text, index.contextStart, limit,
-                                       cursor, data, getFilter());
+                data.ruleSet.findMatch(text, index,
+                                       data, getFilter());
             /* If we match a rule then apply it by replacing the key
              * with the rule output and repositioning the cursor
              * appropriately.  If we get a partial match, then we
@@ -372,44 +361,18 @@ public class RuleBasedTransliterator extends Transliterator {
                 if (partial[0]) {
                     break;
                 } else {
-                    ++cursor;
+                    ++index.start;
                 }
             } else {
                 // Delegate replacement to TransliterationRule object
-                limit += r.replace(text, cursor, data);
-                // text.replace(cursor, cursor + r.getKeyLength(), r.getOutput());
-                // limit += r.getOutput().length() - r.getKeyLength();
-                cursor += r.getCursorPos();
+                int lenDelta = r.replace(text, index.start, data);
+                index.limit += lenDelta;
+                index.contextLimit += lenDelta;
+                index.start += r.getCursorPos();
                 ++loopCount;
             }
         }
-
-        if (DEBUG) {
-            System.out.println(" -> \"" +
-                Utility.escape(rsubstring(text, start, cursor)) + '|' + 
-                Utility.escape(rsubstring(text, cursor, cursor)) + '|' + 
-                Utility.escape(rsubstring(text, cursor, limit)) + "\"");
-        }
-
-        index.contextLimit += limit - index.limit;
-        index.limit = limit;
-        index.start = cursor;
     }
-
-
-    /**
-     * FOR DEBUGGING: Return a substring of a Replaceable.
-     */
-    private static String rsubstring(Replaceable r, int start, int limit) {
-        StringBuffer buf = new StringBuffer();
-        while (start < limit) {
-            buf.append(r.charAt(start++));
-        }
-        return buf.toString();
-    }
-
-
-
 
 
     static class Data {
@@ -1329,6 +1292,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.36  2000/06/29 21:59:23  alan4j
+ * Fix handling of Transliterator.Position fields
+ *
  * Revision 1.35  2000/06/28 20:49:54  alan4j
  * Fix handling of Positions fields
  *
