@@ -91,7 +91,6 @@
 ##########################################################################################
 
 <word>
-
 #
 # Quick sanity test
 #
@@ -135,7 +134,7 @@
 <data>•abc<200>\N{HIRAGANA LETTER SMALL A}<300>\N{HIRAGANA LETTER VU}\N{COMBINING ACUTE ACCENT}<300>\N{HIRAGANA ITERATION MARK}<300>\N{KATAKANA LETTER SMALL A}\N{KATAKANA ITERATION MARK}\N{HALFWIDTH KATAKANA LETTER WO}\N{HALFWIDTH KATAKANA LETTER N}<300>def<200>#•</data>
 
 # Words with interior formatting characters
-<data>•def\N{COMBINING ACUTE ACCENT}\N{SYRIAC ABBREVIATION MARK}<200> •</data>
+<data>•def\N{COMBINING ACUTE ACCENT}\N{SYRIAC ABBREVIATION MARK}ghi<200> •</data>
     
 # to test for bug #4097779
 <data>•aa\N{COMBINING GRAVE ACCENT}a<200> •</data>
@@ -151,6 +150,8 @@
 
 <data>•abc<200>\u4e01<400>\u4e02<400>\u3005<200>\u4e03<400>\u4e03<400>abc<200> •</data>
 
+<data>•\u06c9\uc799<200>\ufffa•</data>
+
 #      
 #      Try some words from other scripts.
 #     
@@ -160,6 +161,7 @@
 #      
 <data>•ΑΒΓ<200> •БВГ<200> •אבג֓<200> •ابت<200> •١٢٣<100> •\u10A0\u10A1\u10A2<200> •ABC<200> •</data>
 
+<data>•\u0301•A<200></data>
 
 
 #
