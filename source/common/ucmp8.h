@@ -1,13 +1,8 @@
-
 /*
  ********************************************************************
  * COPYRIGHT: 
- * (C) Copyright Taligent, Inc., 1996
- * (C) Copyright International Business Machines Corporation, 1996 - 1998
- * Licensed Material - Program-Property of IBM - All Rights Reserved. 
- * US Government Users Restricted Rights - Use, duplication, or disclosure 
- * restricted by GSA ADP Schedule Contract with IBM Corp. 
- *
+ * Copyright (c) 1996-1999, International Business Machines Corporation and
+ * others. All Rights Reserved.
  ********************************************************************
  */
 
@@ -38,6 +33,14 @@ typedef struct CompactByteArray {
   bool_t fBogus;
 } CompactByteArray;
 
+#define UCMP8_kUnicodeCount 65536
+#define UCMP8_kBlockShift 7
+#define UCMP8_kBlockCount (1<<UCMP8_kBlockShift)
+#define UCMP8_kIndexShift (16-UCMP8_kBlockShift)
+#define UCMP8_kIndexCount (1<<UCMP8_kIndexShift)
+#define UCMP8_kBlockMask (UCMP8_kBlockCount-1)
+
+
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_open(int8_t defaultValue);
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray, 
                                int8_t* newValues,
@@ -45,9 +48,10 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray,
 U_CAPI  void U_EXPORT2 ucmp8_close(CompactByteArray* array);
 U_CAPI  bool_t U_EXPORT2 isBogus(const CompactByteArray* array);
 
+#define ucmp8_get(array, index)  (array->fArray[(array->fIndex[index >> UCMP8_kBlockShift] & 0xFFFF) + (index & UCMP8_kBlockMask)])
 
-U_CAPI int8_t U_EXPORT2 ucmp8_get(CompactByteArray* array, uint16_t index); 
-U_CAPI uint8_t U_EXPORT2 ucmp8_getu(CompactByteArray* array, uint16_t index);
+#define ucmp8_getu(array,index) (uint8_t)ucmp8_get(array,index)
+
 
 U_CAPI  void U_EXPORT2 ucmp8_set(CompactByteArray* array,
                  UChar index,
