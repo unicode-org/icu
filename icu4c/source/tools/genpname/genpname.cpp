@@ -645,7 +645,7 @@ void Builder::buildStringPool(const AliasName* propertyNames,
     // first string must be "" -- we skip it
     U_ASSERT(*propertyNames[0].str == 0);
     for (i=1 /*sic*/; i<propertyNameCount; ++i) {
-        stringPool_size += uprv_strlen(propertyNames[i].str) + 1;
+        stringPool_size += (int32_t)(uprv_strlen(propertyNames[i].str) + 1);
     }
     stringPool = MALLOC(char, stringPool_size);
     stringPool_offsetArray = MALLOC(Offset, stringPool_count);
@@ -654,7 +654,7 @@ void Builder::buildStringPool(const AliasName* propertyNames,
     stringPool_offsetArray[0] = -1; // we don't use this entry
     for (i=1 /*sic*/; i<propertyNameCount; ++i) {
         const char* str = propertyNames[i].str;
-        int32_t len = uprv_strlen(str);
+        int32_t len = (int32_t)uprv_strlen(str);
         uprv_strcpy(p, str);
         p += len;
         *p++ = 0;
