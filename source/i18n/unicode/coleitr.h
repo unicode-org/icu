@@ -332,6 +332,7 @@ protected:
                               operator=(const CollationElementIterator& other);
 
 private:
+  CollationElementIterator(); // default constructor not implemented
 
   // CollationElementIterator private data members ----------------------------
 

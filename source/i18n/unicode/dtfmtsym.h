@@ -373,6 +373,8 @@ private:
         kZoneLen = 4
     } LastResortSize;
 
+    DateFormatSymbols(); // default constructor not implemented
+
     void initField(UnicodeString **field, int32_t& length, const ResourceBundle data, UErrorCode &status);
     void initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status);
 

@@ -216,6 +216,8 @@ public:
     static inline UClassID getStaticClassID();
 
 private:
+    DecimalFormatSymbols(); // default constructor not implemented
+
     /**
      * Initializes the symbols from the LocaleElements resource bundle.
      * Note: The organization of LocaleElements badly needs to be
