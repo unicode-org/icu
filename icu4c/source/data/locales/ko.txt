@@ -15,7 +15,7 @@ ko {
     // UCA deals properly with Hangul and Jamo. These rules interleave proper CJK (Hanja)
     // between corresponding Hanguls.
     CollationElements { 
-        Version { "2" }
+        Version { "2.1" }
         Sequence{
             "&\uac00 << \u4f3d << \u4f73 << \u5047 << \u50f9 << \u52a0 << \u53ef << \u5475"
             "<< \u54e5 << \u5609 << \u5ac1 << \u5bb6 << \u6687 << \u67b6 << \u67b7 << \u67ef"
@@ -62,6 +62,7 @@ ko {
             "&\uac31 << \u5751 << \u7cb3 << \u7fb9"
             "<< \u785C << \u8CE1 << \u93D7"
 
+            "&\uac39 << \u91b5"
             "&\uac70 << \u5028 << \u53bb << \u5c45 << \u5de8 << \u62d2 << \u636e << \u64da"
             "<< \u64e7 << \u6e20 << \u70ac << \u795b << \u8ddd << \u8e1e << \u907d << \u9245 << \u92f8"
             "<< \u547F << \u661B << \u79EC << \u7B65 << \u7C67 << \u80E0 << \u8152 << \u82E3"
@@ -294,7 +295,7 @@ ko {
             " \u99d1 << " 
             " \u5476 << \u5B65 << \u5CF1 << \u7331 << \u7B2F << \u81D1"
 
-            "&\ub18d << \u81bf << \u8fb2"
+            "&\ub18d << \u6fc3 << \u81bf << \u8fb2"
             "<< \u5102 << \u5665 << \u7A60 << \u91B2"
 
             "&\ub1cc << \u60f1 << \u8166 << " 
@@ -682,6 +683,7 @@ ko {
             "<< \u99a5 << \u9c12"
             "<<  \u58A3 << \u5E5E << \u6251 << \u6FEE << \u7B99 << \u83D4 << \u8760 << \u876E << \u9D69"
 
+            "&\ubcf8 << \u672c"
             "&\ubcfc << \u4e76"
 
             "&\ubd09 << \u4ff8 << \u5949 << \u5c01 << \u5cef << \u5cf0 << \u6367 << \u68d2"
@@ -1327,7 +1329,7 @@ ko {
             "&\uc990 << \u6adb"
             "<<  \u9A2D"
 
-            "&\uc999 << \u696b << \u6c41 << \u847a"
+            "&\uc999 << \u696b << \u6c41 << \u847a << \u6a9d << \u857a"
 
             "&\uc99d << \u589e << \u618e << \u66fe << \u62ef << \u70dd << \u7511 << \u75c7"
             "<< \u7e52 << \u84b8 << \u8b49 << \u8d08"
@@ -1818,7 +1820,7 @@ ko {
             "<< \u71ba << \u72a7 << \u79a7 << \u7a00 << \u7fb2"
             "<<  \u54A5 << \u550F << \u563B << \u6095 << \u6232 << \u66BF << \u6B37 << \u71F9 << \u7214 << \u8C68 << \u993C"
 
-            "&\ud790 << \u8a70"
+            "&\ud790 << \u8a70 << \u72b5 << \u7e88 << \u896d << \u9821 << \u9ee0"
         }
     }
     Countries { 
