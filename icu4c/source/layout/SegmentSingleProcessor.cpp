@@ -42,7 +42,9 @@ void SegmentSingleProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, l
         const LookupSegment *lookupSegment = segmentSingleLookupTable->lookupSegment(segments, glyphs[glyph]);
 
         if (lookupSegment != NULL) {
-            glyphs[glyph] += SWAPW(lookupSegment->value);
+            TTGlyphID newGlyph = LE_GET_GLYPH(glyphs[glyph]) + SWAPW(lookupSegment->value);
+
+            glyphs[glyph] = LE_SET_GLYPH(glyphs[glyph], newGlyph);
         }
     }
 }

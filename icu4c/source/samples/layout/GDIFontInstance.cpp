@@ -42,15 +42,20 @@ void GDISurface::setFont(const RenderingFontInstance *font)
 {
     const GDIFontInstance *gFont = (const GDIFontInstance *) font;
 
+#if 0
     if (fCurrentFont != font) {
         fCurrentFont = font;
         SelectObject(fHdc, gFont->getFont());
     }
+#else
+    SelectObject(fHdc, gFont->getFont());
+#endif
 }
 
 void GDISurface::drawGlyphs(const RenderingFontInstance *font, const LEGlyphID *glyphs, le_int32 count, const le_int32 *dx,
     le_int32 x, le_int32 y, le_int32 width, le_int32 height)
 {
+    TTGlyphID *ttGlyphs = new TTGlyphID[count];
     RECT clip;
 
     clip.top    = 0;
@@ -58,10 +63,16 @@ void GDISurface::drawGlyphs(const RenderingFontInstance *font, const LEGlyphID *
     clip.bottom = height;
     clip.right  = width;
 
+    for (le_int32 g = 0; g < count; g += 1) {
+        ttGlyphs[g] = (TTGlyphID) LE_GET_GLYPH(glyphs[g]);
+    }
+
     setFont(font);
 
     ExtTextOut(fHdc, x, y - font->getAscent(), ETO_CLIPPED | ETO_GLYPH_INDEX, &clip,
-        glyphs, count, (INT *) dx);
+        ttGlyphs, count, (INT *) dx);
+
+    delete[] ttGlyphs;
 }
 
 GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 pointSize, RFIErrorCode &status)

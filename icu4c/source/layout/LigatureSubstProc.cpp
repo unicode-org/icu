@@ -78,16 +78,17 @@ ByteOffset LigatureSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, l
             if (offset != 0) {
                 const le_int16 *offsetTable = (const le_int16 *)((char *) &ligatureSubstitutionHeader->stHeader + 2 * SignExtend(offset, lafComponentOffsetMask));
 
-                i += SWAPW(offsetTable[glyphs[componentGlyph]]);
+                i += SWAPW(offsetTable[LE_GET_GLYPH(glyphs[componentGlyph])]);
 
                 if (action & (lafLast | lafStore))  {
-                    const le_int16 *ligatureOffset = (const le_int16 *) ((char *) &ligatureSubstitutionHeader->stHeader + i);
+                    const TTGlyphID *ligatureOffset = (const TTGlyphID *) ((char *) &ligatureSubstitutionHeader->stHeader + i);
+                    TTGlyphID ligatureGlyph = SWAPW(*ligatureOffset);
 
-                    glyphs[componentGlyph] = SWAPW(*ligatureOffset);
+                    glyphs[componentGlyph] = LE_SET_GLYPH(glyphs[componentGlyph], ligatureGlyph);
                     stack[++mm] = componentGlyph;
                     i = 0;
                 } else {
-                    glyphs[componentGlyph] = 0xFFFF;
+                    glyphs[componentGlyph] = LE_SET_GLYPH(glyphs[componentGlyph], 0xFFFF);
                 }
             }
         } while (!(action & lafLast));

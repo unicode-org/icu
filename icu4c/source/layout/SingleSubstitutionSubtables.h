@@ -36,7 +36,7 @@ struct SingleSubstitutionFormat1Subtable : SingleSubstitutionSubtable
 struct SingleSubstitutionFormat2Subtable : SingleSubstitutionSubtable
 {
     le_uint16  glyphCount;
-    LEGlyphID  substituteArray[ANY_NUMBER];
+    TTGlyphID  substituteArray[ANY_NUMBER];
 
     le_uint32  process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter = NULL) const;
 };

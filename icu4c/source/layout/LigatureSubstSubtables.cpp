@@ -17,7 +17,7 @@ U_NAMESPACE_BEGIN
 
 le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
-    LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
+    LEGlyphID glyph = glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
     if (coverageIndex >= 0) {
@@ -30,7 +30,7 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
             const LigatureTable *ligTable = (const LigatureTable *) ((char *)ligSetTable + ligTableOffset);
             le_uint16 compCount = SWAPW(ligTable->compCount) - 1;
             le_int32 startPosition = glyphIterator->getCurrStreamPosition();
-            LEGlyphID ligGlyph = SWAPW(ligTable->ligGlyph);
+            TTGlyphID ligGlyph = SWAPW(ligTable->ligGlyph);
             le_uint16 comp;
 
             if (filter != NULL && ! filter->accept(ligGlyph)) {
@@ -42,7 +42,7 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
                     break;
                 }
 
-                if ((LEGlyphID) glyphIterator->getCurrGlyphID() != SWAPW(ligTable->componentArray[comp])) {
+                if (LE_GET_GLYPH(glyphIterator->getCurrGlyphID()) != SWAPW(ligTable->componentArray[comp])) {
                     break;
                 }
             }

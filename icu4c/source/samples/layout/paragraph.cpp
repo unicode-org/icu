@@ -66,9 +66,10 @@ LineRun::LineRun(ParagraphLayout *paragraphLayout, le_int32 runIndex)
     paragraphLayout->getVisualRun(runIndex, glyphs, (float *) positions, NULL, (const LEFontInstance **) &fFont, &fDirection);
 
     for (i = 0; i < fGlyphCount; i += 1) {
+        TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyphs[i]);
         // filter out deleted glyphs
-        if (glyphs[i] == 0xFFFE || glyphs[i] == 0xFFFF) {
-            glyphs[i] = 0x0002;
+        if (ttGlyph == 0xFFFE || ttGlyph == 0xFFFF) {
+            glyphs[i] = LE_SET_GLYPH(glyphs[i], 0x0002);
         }
 
         fDX[i] = (le_int32) (positions[i * 2 + 2] - positions[i * 2]);

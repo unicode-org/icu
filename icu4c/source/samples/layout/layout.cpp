@@ -18,10 +18,10 @@
 //#include "LEFontInstance.h"
 //#include "LayoutEngine.h"
 //#include "unicode/loengine.h"
-#include "unicode/uscript.h"
+//#include "unicode/uscript.h"
 //#include "LEScripts.h"
 
-#include "GDIFontInstance.h"
+//#include "GDIFontInstance.h"
 
 #include "paragraph.h"
 

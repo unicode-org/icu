@@ -192,9 +192,9 @@ void GlyphIterator::getCursiveLastPositionAdjustment(GlyphPositionAdjustment &ad
     adjustment = glyphPositionAdjustments[cursiveLastPosition];
 }
 
-void GlyphIterator::setCurrGlyphID(LEGlyphID glyphID)
+void GlyphIterator::setCurrGlyphID(TTGlyphID glyphID)
 {
-    glyphs[position] = glyphID;
+    glyphs[position] = LE_SET_GLYPH(glyphs[position], glyphID);
 }
 
 void GlyphIterator::setCurrStreamPosition(le_int32 newPosition)
@@ -364,11 +364,11 @@ void GlyphIterator::adjustCursiveLastGlyphPositionAdjustment(float xPlacementAdj
 
 le_bool GlyphIterator::filterGlyph(le_uint32 index) const
 {
-    LEGlyphID glyphID = (LEGlyphID) glyphs[index];
+    LEGlyphID glyphID = glyphs[index];
     le_int32 glyphClass = gcdNoGlyphClass;
 
     // FIXME: is this test really safe?
-    if (glyphID >= 0xFFFE) {
+    if (LE_GET_GLYPH(glyphID) >= 0xFFFE) {
         return true;
     }
 

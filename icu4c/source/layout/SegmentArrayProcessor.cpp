@@ -42,14 +42,14 @@ void SegmentArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le
         const LookupSegment *lookupSegment = segmentArrayLookupTable->lookupSegment(segments, glyphs[glyph]);
 
         if (lookupSegment != NULL)  {
-            le_int16 firstGlyph = SWAPW(lookupSegment->firstGlyph);
-            le_int16 offset = SWAPW(lookupSegment->value);
+            TTGlyphID firstGlyph = SWAPW(lookupSegment->firstGlyph);
+            le_int16  offset = SWAPW(lookupSegment->value);
 
             if (offset != 0) {
-                le_int16 *glyphArray = (le_int16 *) ((char *) subtableHeader + offset);
-                le_int16 newGlyph = glyphArray[glyphs[glyph] - firstGlyph];
+                TTGlyphID *glyphArray = (TTGlyphID *) ((char *) subtableHeader + offset);
+                TTGlyphID  newGlyph   = SWAPW(glyphArray[LE_GET_GLYPH(glyphs[glyph]) - firstGlyph]);
                 
-                glyphs[glyph] = SWAPW(newGlyph);
+                glyphs[glyph] = LE_SET_GLYPH(glyphs[glyph], newGlyph);
             } 
         }
     }

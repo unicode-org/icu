@@ -33,8 +33,8 @@ struct TagAndOffsetRecord
 
 struct GlyphRangeRecord
 {
-    LEGlyphID firstGlyph;
-    LEGlyphID lastGlyph;
+    TTGlyphID firstGlyph;
+    TTGlyphID lastGlyph;
     le_int16  rangeValue;
 };
 

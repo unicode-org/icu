@@ -649,7 +649,7 @@ le_int32 ParagraphLayout::previousBreak(le_int32 charIndex)
 
     // Create the BreakIterator if we don't already have one
     if (fBreakIterator == NULL) {
-        Locale thai("th");
+        /*Locale thai("en_us"); //*/Locale thai("th");
         UCharCharacterIterator *iter = new UCharCharacterIterator(fChars, fCharCount);
         UErrorCode status = U_ZERO_ERROR;
 

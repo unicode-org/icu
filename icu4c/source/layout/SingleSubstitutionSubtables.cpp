@@ -43,11 +43,10 @@ le_uint32 SingleSubstitutionSubtable::process(GlyphIterator *glyphIterator, cons
 
 le_uint32 SingleSubstitutionFormat1Subtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
-    LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
+    LEGlyphID glyph = glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
+    if (coverageIndex >= 0) {
         LEGlyphID substitute = glyph + SWAPW(deltaGlyphID);
 
         if (filter == NULL || filter->accept(substitute)) {
@@ -62,11 +61,10 @@ le_uint32 SingleSubstitutionFormat1Subtable::process(GlyphIterator *glyphIterato
 
 le_uint32 SingleSubstitutionFormat2Subtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
-    LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
+    LEGlyphID glyph = glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
+    if (coverageIndex >= 0) {
         LEGlyphID substitute = SWAPW(substituteArray[coverageIndex]);
 
         if (filter == NULL || filter->accept(substitute)) {

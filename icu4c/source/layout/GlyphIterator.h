@@ -55,7 +55,7 @@ public:
     float getCursiveBaselineAdjustment() const;
     void getCursiveLastPositionAdjustment(GlyphPositionAdjustment &adjustment) const;
 
-    void setCurrGlyphID(LEGlyphID glyphID);
+    void setCurrGlyphID(TTGlyphID glyphID);
     void setCurrStreamPosition(le_int32 position);
     void setCurrGlyphPositionAdjustment(const GlyphPositionAdjustment *adjustment);
     void setCurrGlyphBaseOffset(le_int32 baseOffset);

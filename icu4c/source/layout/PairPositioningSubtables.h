@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
 // NOTE: ValueRecord has a variable size
 struct PairValueRecord
 {
-    LEGlyphID     secondGlyph;
+    TTGlyphID     secondGlyph;
     ValueRecord valueRecord1;
 //  ValueRecord valueRecord2;
 };
@@ -52,7 +52,7 @@ struct PairPositioningFormat1Subtable : PairPositioningSubtable
     le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;
 
 private:
-    const PairValueRecord *findPairValueRecord(LEGlyphID glyphID, const PairValueRecord *records,
+    const PairValueRecord *findPairValueRecord(TTGlyphID glyphID, const PairValueRecord *records,
         le_uint16 recordCount, le_uint16 recordSize) const;
 };
 
