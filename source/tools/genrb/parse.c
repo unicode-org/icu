@@ -20,8 +20,7 @@
 #include "uhash.h"
 #include "cmemory.h"
 #include "read.h"
-#include "ufile.h"
-#include "ustdio.h"
+#include "unicode/ustdio.h"
 #include "ustr.h"
 #include "list.h"
 #include "rblist.h"
@@ -162,9 +161,10 @@ parse(FileStream *f, const char *cp,
   current = 0;
   item = 0;
 
-  file = u_finit(f, cp, status);
+  file = u_finit((FILE *)f, 0, cp);
+/*  file = u_finit(f, cp, status); */
   list = rblist_open(status);
-  if(U_FAILURE(*status)) goto finish;
+  if(U_FAILURE(*status) || file == NULL) goto finish;
   
   /* iterate through the stream */
   for(;;) {

@@ -176,6 +176,7 @@ ufmt_unicodeToDefaultCP(const UChar *s,
   /* perform the conversion in one swoop */
   target = (char*) 
     malloc((len + 1) * ucnv_getMaxCharSize(defConverter) * sizeof(char));
+  size = (len) * ucnv_getMaxCharSize(defConverter) * sizeof(char);
   if(target == 0) {
     ucnv_close(defConverter);
     return 0;
