@@ -92,8 +92,7 @@ static char     gNuConvTestName[1024];
 static UConverter *my_ucnv_open(const char *cnv, UErrorCode *err)
 {
   if(cnv && cnv[0] == '@') {
-    loadTestData(err); /* set the data directory */
-    return ucnv_openPackage("testdata", cnv+1, err);
+    return ucnv_openPackage(loadTestData(err), cnv+1, err);
   } else {
     return ucnv_open(cnv, err);
   }
