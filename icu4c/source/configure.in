@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.127 2001/10/22 19:05:28 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.128 2001/10/23 02:13:19 rviswanadha Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -302,6 +302,12 @@ U_HAVE_INTTYPES_H=0
 else
 U_HAVE_INTTYPES_H=1
 fi
+if test CC=ccc; then
+ case "${host}" in
+        alpha*-*-*) U_HAVE_INTTYPES_H=0;
+ esac
+fi
+
 AC_SUBST(U_HAVE_INTTYPES_H)
 
 AC_ARG_WITH(iostream,

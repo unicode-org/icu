@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-alpha-linux-cc,v 1.4 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-alpha-linux-cc,v 1.5 2001/10/23 02:14:05 rviswanadha Exp $
 
 ## Commands to generate dependency files
 #GEN_DEPS.c=	$(CC) $(DEFS) $(CPPFLAGS) -MD -c -msg_quiet
@@ -19,20 +19,20 @@ LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
 
 ## Commands to compile
-COMPILE.c=	$(CC) -D_LP64 $(DEFS) $(CPPFLAGS) $(CFLAGS)  -c -ieee 
-COMPILE.cc=	$(CXX) -D_LP64 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -D__USE_STD_IOSTREAM -ieee 
+COMPILE.c=	$(CC) -D_LP64 $(DEFS) $(CPPFLAGS) $(CFLAGS)  -c -signed -accept nogccinline -ieee 
+COMPILE.cc=	$(CXX) -D_LP64 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c -signed -D__USE_STD_IOSTREAM -accept nogcc_inline -ieee  
 
 
 ## Commands to link
-LINK.c=		$(CC) -D_LP64 -call_shared $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) 
-LINK.cc=	$(CXX) -D_LP64 -call_shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) 
+LINK.c=		$(CC) -D_LP64 -call_shared $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)  -ieee
+LINK.cc=	$(CXX) -D_LP64 -call_shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -ieee 
 
 ## Commands to make a shared library
 SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared 
 SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared  
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH=	$(LD_RPATH)$(LD_RPATH_PRE)path1	
+LD_RPATH=
 LD_RPATH_PRE=	-Wl,-rpath,
 
 ## Compiler switch to embed a library name
