@@ -251,17 +251,18 @@ static void TestErrorCodes(void) {
   checkStatus(U_USING_DEFAULT_WARNING, status);
 
   /* we look up the resource which is aliased and at our level */
-  status = U_USING_DEFAULT_WARNING; 
-  r2 = ures_getByKey(r, "CollationElements", NULL, &status);
-  checkStatus(U_USING_DEFAULT_WARNING, status);
+  if(U_SUCCESS(status) && r != NULL) {
+    status = U_USING_DEFAULT_WARNING; 
+    r2 = ures_getByKey(r, "CollationElements", r2, &status);
+    checkStatus(U_USING_DEFAULT_WARNING, status);
+  }
   ures_close(r);
-
-  ures_close(r2);
 
   status = U_USING_FALLBACK_WARNING;
   r = ures_open(NULL, "nolocale", &status);
   checkStatus(U_USING_DEFAULT_WARNING, status);
   ures_close(r);
+  ures_close(r2);
 }
 
 static void TestAliasConflict(void) {
