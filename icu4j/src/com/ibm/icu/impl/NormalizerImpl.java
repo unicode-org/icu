@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/03/13 05:56:31 $
- * $Revision: 1.3 $
+ * $Date: 2002/03/28 01:50:59 $
+ * $Revision: 1.4 $
  *******************************************************************************
  */
  
@@ -105,23 +105,33 @@ public final class NormalizerImpl {
     static final int INDEX_CANON_SET_COUNT    = 12;    /* number of uint16_t in the array of serialized USet */
 
 	static final int INDEX_TOP                = 32;    /* changing this requires a new formatVersion */
-
+	
+	
 	/* AUX constants */
-	/* value constants for auxTrie */
+	/* value constants for auxTrie */	
+	static final int AUX_UNSAFE_SHIFT	= 11;
+	static final int AUX_COMP_EX_SHIFT	= 10;
 	
-	static final int AUX_UNSAFE_SHIFT	= 14;
-	static final int AUX_FNC_SHIFT		= 20;
-	static final int AUX_COMP_EX_SHIFT	= 30;
-	static final int AUX_IS_LEAD_SHIFT	= 31;
-	
-	static final int AUX_MAX_CANON_SET  =   (1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK;
-	static final int AUX_MAX_FNC        =   (1<<(AUX_COMP_EX_SHIFT-AUX_FNC_SHIFT));
-
-	static final int AUX_CANON_SET_MASK =   (AUX_MAX_CANON_SET-1);
+	static final int AUX_MAX_FNC        =   ((int)1<<AUX_COMP_EX_SHIFT);
 	static final int AUX_UNSAFE_MASK    =   (1<<AUX_UNSAFE_SHIFT) & UNSIGNED_INT_MASK;
-	static final int AUX_FNC_MASK       =   ((AUX_MAX_FNC-1)<<AUX_FNC_SHIFT) & UNSIGNED_INT_MASK;
+	static final int AUX_FNC_MASK       =   (AUX_MAX_FNC-1) & UNSIGNED_INT_MASK;
 	static final int AUX_COMP_EX_MASK   =   (1<<AUX_COMP_EX_SHIFT) & UNSIGNED_INT_MASK;
-	static final int AUX_IS_LEAD_MASK   =   (1<<AUX_IS_LEAD_SHIFT) & UNSIGNED_INT_MASK;
+	
+	/* canonStartSets[0..31] contains indexes for what is in the array */
+    static final int SET_INDEX_CANON_SETS_LENGTH		= 0; /* number of uint16_t in canonical starter sets */
+    static final int SET_INDEX_CANON_BMP_TABLE_LENGTH	= 1; /* number of uint16_t in the BMP search table (contains pairs) */
+    static final int SET_INDEX_CANON_SUPP_TABLE_LENGTH  = 2; /* number of uint16_t in the supplementary search table (contains triplets) */
+    static final int SET_INDEX_TOP						= 32;/* changing this requires a new formatVersion */
+	
+	static final int CANON_SET_INDICIES_INDEX  			= 0;
+	static final int CANON_SET_START_SETS_INDEX			= 1;
+	static final int CANON_SET_BMP_TABLE_INDEX			= 2;
+	static final int CANON_SET_SUPP_TABLE_INDEX			= 3;
+	
+	static final int CANON_SET_MAX_CANON_SETS     		= 0x0004; /* 14 bit indexes to canonical USerializedSets */
+	/* single-code point BMP sets are encoded directly in the search table except if result=0x4000..0x7fff */
+	static final int CANON_SET_BMP_MASK        			= 0xc000;
+	static final int CANON_SET_BMP_IS_INDEX    			= 0x4000;
 	
 	/*******************************/
 	
@@ -158,7 +168,7 @@ public final class NormalizerImpl {
 	}
 	
 	static final class AuxTrieImpl implements Trie.DataManipulate{
-		static IntTrie auxTrie = null;
+		static CharTrie auxTrie = null;
 	   /**
 	    * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
 	    * data the index array offset of the indexes for that lead surrogate.
@@ -167,11 +177,7 @@ public final class NormalizerImpl {
 	    * @return data offset or 0 if there is no data for the lead surrogate
 	    */
 	    public int getFoldingOffset(int value){
-		    if(value<0) {
-		        return (value & AUX_FNC_MASK)>>(AUX_FNC_SHIFT-5);
-		    } else {
-		        return 0;
-		    }
+	        return (value&AUX_FNC_MASK)<<5;
 	    }
 	}
 		 
@@ -184,7 +190,7 @@ public final class NormalizerImpl {
 	static int[] indexes;
 	static char[] combiningTable;
 	static char[] extraData;
-	static char[] canonStartSets;
+	static Object[] canonStartSets;
 	
 	static boolean isDataLoaded;
 	static boolean isFormatVersion_2_1;
@@ -441,8 +447,8 @@ public final class NormalizerImpl {
 	
 	public static boolean isFullCompositionExclusion(int c) {
 	    if(isFormatVersion_2_1) {
-	        int aux32=auxTrieImpl.auxTrie.getCodePointValue(c);
-	        return (boolean)((aux32&AUX_COMP_EX_MASK)!=0);
+	        int aux =auxTrieImpl.auxTrie.getCodePointValue(c);
+	        return (boolean)((aux & AUX_COMP_EX_MASK)!=0);
 	    } else {
 	        return false;
 	    }
@@ -450,8 +456,8 @@ public final class NormalizerImpl {
 	
 	public static boolean isCanonSafeStart(int c) {
 	    if(isFormatVersion_2_1) {
-	        int aux32 = auxTrieImpl.auxTrie.getValue(c);
-	        return (boolean)((aux32&AUX_UNSAFE_MASK)==0);
+	        int aux = auxTrieImpl.auxTrie.getCodePointValue(c);
+	        return (boolean)((aux & AUX_UNSAFE_MASK)==0);
 	    } else {
 	        return false;
 	    }
@@ -460,15 +466,88 @@ public final class NormalizerImpl {
 	public static boolean getCanonStartSet(int c, USerializedSet fillSet) {
 
 	    if(fillSet!=null && canonStartSets!=null) {
-	        int aux32=auxTrieImpl.auxTrie.getValue(c);
-	        aux32&=AUX_CANON_SET_MASK;
+	 		/*
+	         * binary search for c
+	         *
+	         * There are two search tables,
+	         * one for BMP code points and one for supplementary ones.
+	         * See unormimp.h for details.
+	         */
+	        char[] table;
+	        int i, start, limit;
 	        
-	        return aux32!=0 &&
-	            fillSet.getSet(canonStartSets,indexes[INDEX_CANON_SET_COUNT]-aux32);
-	    } else {
-	        return false;
+	        if(c<=0xffff) {
+	            table=(char[]) canonStartSets[CANON_SET_BMP_TABLE_INDEX];
+	            start=0;
+	            limit=table.length;
+	
+	            /* each entry is a pair { c, result } */
+	            while(start<limit) {
+	                i=(char)((start+limit)/2); 
+	                if(c<table[i]) {
+	                    limit=i;
+	                } else {
+	                    start=i;
+	                }
+	            }
+	
+	            /* found? */
+	            if(c==table[start]) {
+	                i=table[start+1];
+	                if((i&CANON_SET_BMP_MASK)==CANON_SET_BMP_IS_INDEX) {
+	                    /* result 01xxxxxx xxxxxx contains index x to a USerializedSet */
+	                    i&=(CANON_SET_MAX_CANON_SETS-1);
+	                    return fillSet.getSet(table,i);
+	                } else {
+	                    /* other result values are BMP code points for single-code point sets */
+	                    fillSet.setSerializedToOne(i);
+	                    return true;
+	                }
+	            }
+	        } else {
+	            char high, low, h;
+	
+	            table=(char[]) canonStartSets[CANON_SET_SUPP_TABLE_INDEX];
+	            start=0;
+	            limit=table.length;
+	
+	            high=(char)(c>>16);
+	            low=(char)c;
+	
+	            /* each entry is a triplet { high(c), low(c), result } */
+	            while(start<limit-3) {
+	                i=(char)(((start+limit)/6)*3); /* (start+limit)/2 and address triplets */
+	                h=(char)(table[i]&0x1f); /* high word */
+	                if(high<h || (high==h && low<table[i+1])) {
+	                    limit=i;
+	                } else {
+	                    start=i;
+	                }
+	            }
+	
+	            /* found? */
+	            h=table[start];
+	            if(high==(h&0x1f) && low==table[start+1]) {
+	                i=table[start+2];
+	                if((h&0x8000)==0) {
+	                    /* the result is an index to a USerializedSet */
+	                    return fillSet.getSet(table,i);
+	                } else {
+	                    /*
+	                     * single-code point set {x} in
+	                     * triplet { 100xxxxx 000hhhhh  llllllll llllllll  xxxxxxxx xxxxxxxx }
+	                     */
+	                    i|=((int)h&0x1f00)<<8; /* add high bits from high(c) */
+	                    fillSet.setSerializedToOne((int)i);
+	                    return true;
+	                }
+	            }
+	        }
 	    }
+	
+	    return false; /* not found */
 	}
+	
 	/**
 	 * Internal API, used by collation code.
 	 * Get access to the internal FCD trie table to be able to perform
