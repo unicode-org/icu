@@ -59,7 +59,8 @@ static const uint32_t     URX_DOTANY_ALL    = 21;   // ., in the . matches any m
 static const uint32_t     URX_ISWORD_SET  = 1;
 static const uint32_t     URX_ISALNUM_SET = 2;
 static const uint32_t     URX_ISALPHA_SET = 3;
-static const uint32_t     URX_LAST_SET    = 4;
+static const uint32_t     URX_ISSPACE_SET = 4;
+static const uint32_t     URX_LAST_SET    = 5;
 
 static const uint32_t     URX_NEG_SET     = 0x800000;  // Flag bit to reverse sense of set
                                                        //   membership test.
