@@ -15,6 +15,8 @@ package com.ibm.icu.impl;
 
 import java.text.CharacterIterator;
 
+import com.ibm.icu.text.*;
+
 /**
  * This class is a wrapper around UCharacterIterator and implements the 
  * CharacterIterator protocol

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/10/12 00:10:56 $ 
-* $Revision: 1.18 $
+* $Date: 2002/10/31 22:35:19 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -21,6 +21,7 @@ import java.util.Locale;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.*;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.BreakIterator;
 

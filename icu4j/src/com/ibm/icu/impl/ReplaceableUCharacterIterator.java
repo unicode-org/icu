@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ReplaceableUCharacterIterator.java,v $ 
- * $Date: 2002/10/11 23:43:20 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/10/31 22:35:20 $ 
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
+import com.ibm.icu.text.*;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.UTF16;    

@@ -5,13 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharArrayIterator.java,v $ 
-* $Date: 2002/07/31 03:04:28 $ 
-* $Revision: 1.2 $
+* $Date: 2002/10/31 22:35:20 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
 
 package com.ibm.icu.impl;
+
+import com.ibm.icu.text.*;
 
 
 /**

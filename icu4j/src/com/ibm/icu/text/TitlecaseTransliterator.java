@@ -3,13 +3,12 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2002/10/12 00:10:57 $ 
- * $Revision: 1.17 $
+ * $Date: 2002/10/31 22:36:48 $ 
+ * $Revision: 1.18 $
  */
 package com.ibm.icu.text;
 import java.util.*;
 
-import com.ibm.icu.impl.UCharacterIterator;
 import com.ibm.icu.impl.UCharacterProperty;
 
 /**
