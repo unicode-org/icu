@@ -454,7 +454,7 @@ static void TestCurrencyPreEuro(void)
   const char* result[]={
         "Pts 2",          "2 F",            "IR\\u00A31.50",              "1,50 mk",        "1,50 F",         "L. 2", 
         "2 Esc.",         "\\u00F6S 1,50",  "1,50 \\u0394\\u03C1\\u03C7", "2 Pts",          "1,50 FB",        "\\u00a31.50", 
-        "1,50 BF",        "1,50 DM",        "1,50 BF",                    "Pts 1,5",        "1,50 F",         "Pta 1,5", 
+        "1,50 BF",        "1,50 DM",        "1,50 BF",                    "Pts 2",          "1,50 F",         "Pta 2", 
         "fl 1,50"
   };
 
