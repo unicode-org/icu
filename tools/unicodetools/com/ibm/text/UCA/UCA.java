@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/06/24 15:25:10 $ 
-* $Revision: 1.15 $
+* $Date: 2002/06/28 01:59:58 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -75,7 +75,8 @@ final public class UCA implements Comparator, UCA_Types {
      * Version of the UCA tables to use
      */
     //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
-    public static final String VERSION = "-3.1.1d1"; // ""; // "-2.1.9d7"; 
+    public static final String UCA_BASE = "3.1.1"; // ""; // "-2.1.9d7"; 
+    public static final String VERSION = "-" + UCA_BASE + "d5"; // ""; // "-2.1.9d7"; 
     public static final String ALLFILES = "allkeys"; // null if not there
     
     /**
@@ -240,7 +241,9 @@ final public class UCA implements Comparator, UCA_Types {
             // add weights
             char w = getPrimary(ce);
             if (DEBUG) System.out.println("\tCE: " + Utility.hex(ce));
-            if (w != 0) primaries.append(w);
+            if (w != 0) {
+                primaries.append(w);
+            }
             
             w = getSecondary(ce);
             if (w != 0) {
@@ -252,9 +255,13 @@ final public class UCA implements Comparator, UCA_Types {
             }
             
             w = getTertiary(ce);
-            if (w != 0) tertiaries.append(w);
+            if (w != 0) {
+                tertiaries.append(w);
+            }
    
-            if (weight4 != 0) quaternaries.append(weight4);
+            if (weight4 != 0) {
+                quaternaries.append(weight4);
+            }
         }
         
         // Produce weight strings
@@ -263,13 +270,13 @@ final public class UCA implements Comparator, UCA_Types {
         
         StringBuffer result = primaries;
         if (strength >= 2) {
-            result.append('\u0000');    // separator
+            result.append(LEVEL_SEPARATOR);    // separator
             result.append(secondaries);
             if (strength >= 3) {
-                result.append('\u0000');    // separator
+                result.append(LEVEL_SEPARATOR);    // separator
                 result.append(tertiaries);
                 if (strength >= 4) {
-                    result.append('\u0000');    // separator
+                    result.append(LEVEL_SEPARATOR);    // separator
                     if (alternate == SHIFTED_TRIMMED) {
                         int q;
                         for (q = quaternaries.length()-1; q >= 0; --q) {
@@ -303,7 +310,7 @@ final public class UCA implements Comparator, UCA_Types {
             char c2 = sortKey2.charAt(i);
             if (c1 < c2) return -strength;
             if (c1 > c2) return strength;
-            if (c1 == '\u0000') --strength; // Separator!
+            if (c1 == LEVEL_SEPARATOR) --strength; // Separator!
         }
         if (len1 < len2) return -strength;
         if (len1 > len2) return strength;
@@ -399,15 +406,21 @@ final public class UCA implements Comparator, UCA_Types {
      * @param source Normal UTF-16 (Java) string
      * @return sort key (as string)
      * @author Markus Scherer (cast into Java by MD)
+     * NOTE: changed to be longer, but handle isolated surrogates
      */
     public static StringBuffer appendInCodePointOrder(String source, StringBuffer target) {
-        for (int i = 0; i < source.length(); ++i) {
-            int ch = source.charAt(i);
+        int cp;
+        for (int i = 0; i < source.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(source, i);
+            target.append((char)((cp >> 15) | 0x8000));
+            target.append((char)(cp | 0x8000));
+            /*
             if (ch <= 1) { // hack to avoid nulls
                 target.append('\u0001');
                 target.append((char)(ch+1));
             }
             target.append((char)(ch + utf16CodePointOrder[ch>>11]));
+            */
         }
         return target;
     }
@@ -659,9 +672,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
 */		
     
     /**
-     * Returns implicit value as pair, first part in high word; second part in low word
-     * So to get first part use (x >>> 16) -- remember the >>>!
-     * and to get the second part use (x & 0xFFFF)
+     * Returns implicit value
      */
     
     void CodepointToImplicit(int cp, int[] output) {
@@ -673,9 +684,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     }
     
     /**
-     * Takes implicit value as pair, first part in high word; second part in low word
-     * So to get first part use (x >>> 16) -- remember the >>>!
-     * and to get the second part use (x & 0xFFFF)
+     * Takes implicit value
      */
     
     static int ImplicitToCodePoint(int leadImplicit, int trailImplicit) {
@@ -997,7 +1006,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             
         // push BBBB
                         
-        expandingStack.push(makeKey(implicit[1], NEUTRAL_SECONDARY, NEUTRAL_TERTIARY));
+        expandingStack.push(makeKey(implicit[1], 0, 0));
         
         // return AAAA
             
@@ -1127,7 +1136,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             
             // normal case
             while (current++ < 0x10FFFF) {
-                if (current == 0x406) {
+                if (DEBUG && current == 0xdbff) {
                     System.out.println("DEBUG");
                 }
                 //char ch = (char)current;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/06/22 21:02:16 $ 
-* $Revision: 1.7 $
+* $Date: 2002/06/28 01:59:58 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ import com.ibm.text.utility.*;
 
 public class Main {
 	static final String UCDVersion = "";
-	static final String[] ICU_FILES = {"writeCollationValidityLog", "FractionalUCA",
+	static final String[] ICU_FILES = {"writeCollationValidityLog", "writeFractionalUCA",
 		"WriteRules", "WriteRulesWithNames", "WriteRulesXML",
 		"writeconformance", "writeconformanceshifted", 
 		"short", "writeconformance", "writeconformanceshifted", 
@@ -65,7 +65,7 @@ public class Main {
             else if (arg.equalsIgnoreCase("WriteRulesXML")) WriteCollationData.writeRules(WriteCollationData.IN_XML);
             else if (arg.equalsIgnoreCase("checkDisjointIgnorables")) WriteCollationData.checkDisjointIgnorables();
             else if (arg.equalsIgnoreCase("writeContractions")) WriteCollationData.writeContractions();
-            else if (arg.equalsIgnoreCase("FractionalUCA")) WriteCollationData.writeFractionalUCA("FractionalUCA");
+            else if (arg.equalsIgnoreCase("writeFractionalUCA")) WriteCollationData.writeFractionalUCA("FractionalUCA");
             else if (arg.equalsIgnoreCase("writeConformance")) WriteCollationData.writeConformance("CollationTest_NON_IGNORABLE", UCA.NON_IGNORABLE, shortPrint);
             else if (arg.equalsIgnoreCase("writeConformanceSHIFTED")) WriteCollationData.writeConformance("CollationTest_SHIFTED", UCA.SHIFTED, shortPrint);
             else if (arg.equalsIgnoreCase("testCompatibilityCharacters")) WriteCollationData.testCompatibilityCharacters();
@@ -80,7 +80,7 @@ public class Main {
                 System.out.println("UNKNOWN OPTION (" + arg + "): must be one of the following (case-insensitive)");
                 System.out.println("\tWriteRulesXML, WriteRulesWithNames, WriteRules,");
                 System.out.println("\tcheckDisjointIgnorables, writeContractions,");
-                System.out.println("\tFractionalUCA, writeConformance, writeConformanceSHIFTED, testCompatibilityCharacters,");
+                System.out.println("\twriteFractionalUCA, writeConformance, writeConformanceSHIFTED, testCompatibilityCharacters,");
                 System.out.println("\twriteCollationValidityLog, writeCaseExceptions, writeJavascriptInfo, writeCaseFolding");
                 System.out.println("\tjavatest, hex (used for conformance)");
             }
