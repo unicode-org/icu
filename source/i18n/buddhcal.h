@@ -60,7 +60,7 @@ public:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of BuddhistCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable ICU 2.0
+     * @internal
      */
     BuddhistCalendar(const Locale& aLocale, UErrorCode& success);
 
@@ -136,7 +136,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @draft ICU 2.6.
+     * @draft ICU 2.6
      */
     virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
@@ -146,7 +146,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The maximum value for the given time field.
-     * @draft ICU 2.6.
+     * @draft ICU 2.6
      */
     int32_t getMaximum(UCalendarDateFields field) const;
 
@@ -156,7 +156,7 @@ public:
      *
      * @param field  The given time field.
      * @return       The lowest maximum value for the given time field.
-     * @draft ICU 2.6.
+     * @draft ICU 2.6
      */
     int32_t getLeastMaximum(UCalendarDateFields field) const;
 
