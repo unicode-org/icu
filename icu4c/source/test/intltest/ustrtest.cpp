@@ -1257,32 +1257,38 @@ UnicodeStringTest::TestBogus() {
     }
 
     // verify that non-assignment modifications fail and do not revive a bogus string
+    test3.setToBogus();
     test3.append((UChar)0x61);
     if(!test3.isBogus() || test3.getBuffer()!=0) {
         errln("bogus.append('a') worked but must not");
     }
 
+    test3.setToBogus();
     test3.findAndReplace(UnicodeString((UChar)0x61), test2);
     if(!test3.isBogus() || test3.getBuffer()!=0) {
         errln("bogus.findAndReplace() worked but must not");
     }
 
+    test3.setToBogus();
     test3.trim();
     if(!test3.isBogus() || test3.getBuffer()!=0) {
         errln("bogus.trim() revived bogus but must not");
     }
 
-    test3.remove();
+    test3.setToBogus();
+    test3.remove(1);
     if(!test3.isBogus() || test3.getBuffer()!=0) {
-        errln("bogus.remove() revived bogus but must not");
+        errln("bogus.remove(1) revived bogus but must not");
     }
 
+    test3.setToBogus();
     if(!test3.setCharAt(0, 0x62).isBogus() || !test3.isEmpty()) {
         errln("bogus.setCharAt(0, 'b') worked but must not");
     }
 
-    if(test3.truncate(0) || !test3.isBogus() || !test3.isEmpty()) {
-        errln("bogus.truncate(0) revived bogus but must not");
+    test3.setToBogus();
+    if(test3.truncate(1) || !test3.isBogus() || !test3.isEmpty()) {
+        errln("bogus.truncate(1) revived bogus but must not");
     }
 
     // verify that assignments revive a bogus string
@@ -1337,7 +1343,7 @@ UnicodeStringTest::TestBogus() {
         errln("bogus.setTo(writable alias) failed");
     }
 
-    // same with simple, documented ways to turn a bogus string into an empty one
+    // verify simple, documented ways to turn a bogus string into an empty one
     test3.setToBogus();
     if(!test3.isBogus() || (test3=UnicodeString()).isBogus() || !test3.isEmpty()) {
         errln("bogus.operator=(UnicodeString()) failed");
@@ -1346,6 +1352,21 @@ UnicodeStringTest::TestBogus() {
     test3.setToBogus();
     if(!test3.isBogus() || test3.setTo(UnicodeString()).isBogus() || !test3.isEmpty()) {
         errln("bogus.setTo(UnicodeString()) failed");
+    }
+
+    test3.setToBogus();
+    if(test3.remove().isBogus() || test3.getBuffer()==0 || !test3.isEmpty()) {
+        errln("bogus.remove() failed");
+    }
+
+    test3.setToBogus();
+    if(test3.remove(0, INT32_MAX).isBogus() || test3.getBuffer()==0 || !test3.isEmpty()) {
+        errln("bogus.remove(0, INT32_MAX) failed");
+    }
+
+    test3.setToBogus();
+    if(test3.truncate(0) || test3.isBogus() || !test3.isEmpty()) {
+        errln("bogus.truncate(0) failed");
     }
 
     test3.setToBogus();
@@ -1365,6 +1386,7 @@ UnicodeStringTest::TestBogus() {
         errln("setToBogus() failed to make a string bogus");
     }
 
+    test3.setToBogus();
     if(test1.isBogus() || !(test1=test3).isBogus()) {
         errln("normal=bogus failed to make the left string bogus");
     }
