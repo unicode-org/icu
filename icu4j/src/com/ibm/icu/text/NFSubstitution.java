@@ -1216,10 +1216,10 @@ class FractionalPartSubstitution extends NFSubstitution {
                                RuleBasedNumberFormat formatter,
                                String description) {
         super(pos, ruleSet, formatter, description);
-// the idea is to allow a rule set name in the digits portion of a proper or improper fraction rule set
-	boolean chevron = description.charAt(0) == '>' && description.charAt(description.length()-1) == '>';
-//          if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {
-        if (chevron || ruleSet == this.ruleSet) {
+//	boolean chevron = description.startsWith(">>") || ruleSet == this.ruleSet;
+//      if (chevron || ruleSet == this.ruleSet) {
+
+        if (description.equals(">>") || description.equals(">>>") || ruleSet == this.ruleSet) {
             byDigits = true;
             if (description.equals(">>>")) {
               useSpaces = false;
