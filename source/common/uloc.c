@@ -159,7 +159,7 @@ static const char * const LANGUAGES[] = {
     "mus", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nap",
     "nb",  "nd",  "nds", "ne",  "new", "ng",  "nia", "nic",
     "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",
-    "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
+    "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",
     "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",
     "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",
     "pi",  "pl",  "pon", "pra", "pro", "ps",  "pt",  "qu",
@@ -172,7 +172,7 @@ static const char * const LANGUAGES[] = {
     "srr", "ss",  "ssa", "st",  "su",  "suk", "sus", "sux",
     "sv",  "sw",  "syr", "ta",  "tai", "te",  "tem", "ter",
     "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",
-    "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
+    "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",
     "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",
     "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",
     "uz",  "vai", "ve",  "vi",  "vo",  "vot", "wa",  "wak",
@@ -275,8 +275,8 @@ static const char * const LANGUAGES_3[] = {
     "nob", "nde", "nds", "nep", "new", "ndo", "nia", "nic",
 /*  "niu", "nl",  "nn",  "no",  "nog", "non", "nr",  "nso", "nub",    */
     "niu", "nld", "nno", "nor", "nog", "non", "nbl", "nso", "nub",
-/*  "nv",  "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
-    "nav", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
+/*  "nv",  "nwc", "ny",  "nym", "nyn", "nyo", "nzi", "oc",  "oj",     */
+    "nav", "nwc", "nya", "nym", "nyn", "nyo", "nzi", "oci", "oji",
 /*  "om",  "or",  "os",  "osa", "ota", "oto", "pa",  "paa",    */
     "orm", "ori", "oss", "osa", "ota", "oto", "pan", "paa",
 /*  "pag", "pal", "pam", "pap", "pau", "peo", "phi", "phn",    */
@@ -301,8 +301,8 @@ static const char * const LANGUAGES_3[] = {
     "swe", "swa", "syr", "tam", "tai", "tel", "tem", "ter",
 /*  "tet", "tg",  "th",  "ti",  "tig", "tiv", "tk",  "tkl",    */
     "tet", "tgk", "tha", "tir", "tig", "tiv", "tuk", "tkl",
-/*  "tl",  "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */
-    "tgl", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur",
+/*  "tl",  "tlh", "tli", "tmh", "tn",  "to",  "tog", "tpi", "tr",     */
+    "tgl", "tlh", "tli", "tmh", "tsn", "ton", "tog", "tpi", "tur",
 /*  "ts",  "tsi", "tt",  "tum", "tup", "tut", "tvl", "tw",     */
     "tso", "tsi", "tat", "tum", "tup", "tut", "tvl", "twi",
 /*  "ty",  "tyv", "udm", "ug",  "uga", "uk",  "umb", "und", "ur",     */
