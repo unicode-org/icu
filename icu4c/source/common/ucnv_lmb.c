@@ -235,7 +235,7 @@ static const char * OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
    /* 0x000E */ NULL,      /* Unused */
    /* 0x000F */ NULL,      /* Control chars: 0x0F20 + C0/C1 character: algorithmic */
    /* 0x0010 */ "ibm-943",
-   /* 0x0011 */ "ibm-1361",
+   /* 0x0011 */ "ibm-1363",
    /* 0x0012 */ "ibm-950",
    /* 0x0013 */ "ibm-1386"
 
