@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/03/10 19:40:16 $
- * $Revision: 1.76 $
+ * $Date: 2002/06/12 17:35:24 $
+ * $Revision: 1.77 $
  *
  *****************************************************************************************
  */
@@ -250,7 +250,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.76 $ $Date: 2002/03/10 19:40:16 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.77 $ $Date: 2002/06/12 17:35:24 $
  */
 public abstract class Transliterator {
     /**
@@ -1370,6 +1370,15 @@ public abstract class Transliterator {
     }
 
     /**
+     * Register a Transliterator object with the given ID.
+     * @param ID the ID of this transliterator
+     * @param trans the Transliterator object
+     */
+    public static void registerInstance(Transliterator trans) {
+        registry.put(trans.getID(), trans, true);
+    }
+
+    /**
      * Register two targets as being inverses of one another.  For
      * example, calling registerSpecialInverse("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
@@ -1556,6 +1565,7 @@ public abstract class Transliterator {
         UnicodeNameTransliterator.register();
         NameUnicodeTransliterator.register();
         NormalizationTransliterator.register();
+        AnyTransliterator.register(); // do this last!
     }
 
     /**
