@@ -6,7 +6,6 @@
 
 #include "intltest.h"
 #include "unicode/brkiter.h"
-#include "unicode/unicode.h"
 #include "unicode/uchar.h"
 #include <stdio.h>
 //#include "txbdapi.h"    // BreakIteratorAPIC

@@ -17,9 +17,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
-#include "unicode/bidi.h"
 #include "intltest.h"
 #ifdef ICU_UBIDI_USE_DEPRECATES
+#include "unicode/bidi.h"
 
 #define MAX_STRING_LENGTH 200
 
