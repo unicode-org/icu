@@ -84,6 +84,10 @@ static void TestAPI() {
     /* [a-c{ab}] */
     ec = U_ZERO_ERROR;
     set = uset_openPattern(PAT, PAT_LEN, &ec);
+    if(U_FAILURE(ec)) {
+        log_data_err("uset_openPattern([a-c{ab}]) failed - %s\n", u_errorName(ec));
+        return;
+    }
     expect(set, "abc{ab}", "def{bc}", &ec);
 
     /* [a-d{ab}] */
@@ -382,7 +386,7 @@ TestSerialized() {
     errorCode=U_ZERO_ERROR;
     set=uset_openPattern(pattern, -1, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("unable to uset_open([:Cf:]) - %s\n", u_errorName(errorCode));
+        log_data_err("uset_openPattern([:Cf:]) failed - %s\n", u_errorName(errorCode));
         return;
     }
 
