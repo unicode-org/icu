@@ -3,6 +3,7 @@
 # Unicode Character Database: Derived Property Data
 # This file shows when various code points were designated in Unicode
 # Generated: Sat Dec 08 16:42:48 PST 2001, MD
+# Corrected: Mon Mar 25 11:24 PST 2002, KW
 # Notes:
 # - The term 'designated' means that a previously reserved code point was specified
 #   to be a noncharacter or surrogate, or assigned as a character,
@@ -494,11 +495,10 @@ A4A4..A4B3    ; 3.0 #  [16] YI RADICAL DDUR..YI RADICAL JO
 A4B5..A4C0    ; 3.0 #  [12] YI RADICAL JJY..YI RADICAL SHAT
 A4C2..A4C4    ; 3.0 #   [3] YI RADICAL SHOP..YI RADICAL ZZIET
 A4C6          ; 3.0 #       YI RADICAL KE
-F901..FA2C    ; 3.0 # [300] CJK COMPATIBILITY IDEOGRAPH-F901..CJK COMPATIBILITY IDEOGRAPH-FA2C
 FB1D          ; 3.0 #       HEBREW LETTER YOD WITH HIRIQ
 FFF9..FFFB    ; 3.0 #   [3] INTERLINEAR ANNOTATION ANCHOR..INTERLINEAR ANNOTATION TERMINATOR
 
-# Total code points: 10607
+# Total code points: 10307
 
 # ================================================
 
