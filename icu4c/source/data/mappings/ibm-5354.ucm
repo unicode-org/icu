@@ -1,18 +1,18 @@
 #________________________________________________________________________
 #
-# (C) COPYRIGHT International Business Machines Corp. 1997
+# (C) COPYRIGHT International Business Machines Corp. 1998
 #     All Rights Reserved
 #
 #________________________________________________________________________
 #
-# File created on Fri Dec  5 16:10:57 1997
+# File created on Tue May 12 11:44:13 1998
 #
 # File created by dtcocm version 3.00
-# from source files ibm-1252.rpmap100 and ibm-1252.tpmap100
+# from source files IBM-5354.RPMAP100 and IBM-5354.TPMAP100
 #
 # Table Version : 1.00
 #
-<code_set_name>               "IBM-1252"
+<code_set_name>               "IBM-5354"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
@@ -22,7 +22,7 @@
 CHARMAP
 #
 #
-#ISO 10646      IBM-1252
+#ISO 10646      IBM-5354
 #_________      _________
 <U0000>         \x00
 <U0001>         \x01
@@ -247,10 +247,14 @@ CHARMAP
 <U007E>         \x7E                # SD190000
 <U007F>         \x7F
 <U0081>         \x81
+<U008A>         \x8A
 <U008D>         \x8D
+<U008E>         \x8E
 <U008F>         \x8F
 <U0090>         \x90
+<U009A>         \x9A
 <U009D>         \x9D
+<U009E>         \x9E
 <U00A0>         \xA0                # SP300000
 <U00A1>         \xA1                # SP030000
 <U00A2>         \xA2                # SC040000
@@ -286,7 +290,6 @@ CHARMAP
 <U00C0>         \xC0                # LA140000
 <U00C1>         \xC1                # LA120000
 <U00C2>         \xC2                # LA160000
-<U00C3>         \xC3                # LA200000
 <U00C4>         \xC4                # LA180000
 <U00C5>         \xC5                # LA280000
 <U00C6>         \xC6                # LA520000
@@ -295,16 +298,12 @@ CHARMAP
 <U00C9>         \xC9                # LE120000
 <U00CA>         \xCA                # LE160000
 <U00CB>         \xCB                # LE180000
-<U00CC>         \xCC                # LI140000
 <U00CD>         \xCD                # LI120000
 <U00CE>         \xCE                # LI160000
 <U00CF>         \xCF                # LI180000
-<U00D0>         \xD0                # LD640000
 <U00D1>         \xD1                # LN200000
-<U00D2>         \xD2                # LO140000
 <U00D3>         \xD3                # LO120000
 <U00D4>         \xD4                # LO160000
-<U00D5>         \xD5                # LO200000
 <U00D6>         \xD6                # LO180000
 <U00D7>         \xD7                # SA070000
 <U00D8>         \xD8                # LO620000
@@ -312,13 +311,10 @@ CHARMAP
 <U00DA>         \xDA                # LU120000
 <U00DB>         \xDB                # LU160000
 <U00DC>         \xDC                # LU180000
-<U00DD>         \xDD                # LY120000
-<U00DE>         \xDE                # LT640000
 <U00DF>         \xDF                # LS610000
 <U00E0>         \xE0                # LA130000
 <U00E1>         \xE1                # LA110000
 <U00E2>         \xE2                # LA150000
-<U00E3>         \xE3                # LA190000
 <U00E4>         \xE4                # LA170000
 <U00E5>         \xE5                # LA270000
 <U00E6>         \xE6                # LA510000
@@ -327,16 +323,12 @@ CHARMAP
 <U00E9>         \xE9                # LE110000
 <U00EA>         \xEA                # LE150000
 <U00EB>         \xEB                # LE170000
-<U00EC>         \xEC                # LI130000
 <U00ED>         \xED                # LI110000
 <U00EE>         \xEE                # LI150000
 <U00EF>         \xEF                # LI170000
-<U00F0>         \xF0                # LD630000
 <U00F1>         \xF1                # LN190000
-<U00F2>         \xF2                # LO130000
 <U00F3>         \xF3                # LO110000
 <U00F4>         \xF4                # LO150000
-<U00F5>         \xF5                # LO190000
 <U00F6>         \xF6                # LO170000
 <U00F7>         \xF7                # SA060000
 <U00F8>         \xF8                # LO610000
@@ -344,19 +336,26 @@ CHARMAP
 <U00FA>         \xFA                # LU110000
 <U00FB>         \xFB                # LU150000
 <U00FC>         \xFC                # LU170000
-<U00FD>         \xFD                # LY110000
-<U00FE>         \xFE                # LT630000
 <U00FF>         \xFF                # LY170000
+<U0102>         \xC3                # LA240000
+<U0103>         \xE3                # LA230000
+<U0110>         \xD0                # LD600000
+<U0111>         \xF0                # LD610000
 <U0152>         \x8C                # LO520000
 <U0153>         \x9C                # LO510000
-<U0160>         \x8A                # LS220000
-<U0161>         \x9A                # LS210000
 <U0178>         \x9F                # LY180000
-<U017D>         \x8E                # LZ220000
-<U017E>         \x9E                # LZ210000
 <U0192>         \x83                # SC070000
+<U01A0>         \xD5                # LO920000
+<U01A1>         \xF5                # LO910000
+<U01AF>         \xDD                # LU920000
+<U01B0>         \xFD                # LU910000
 <U02C6>         \x88                # SD150100
 <U02DC>         \x98                # SD190100
+<U0300>         \xCC                # SD138000
+<U0301>         \xEC                # SD118000
+<U0303>         \xDE                # SD198000
+<U0309>         \xD2                # SD918000
+<U0323>         \xF2                # SD458000
 <U2013>         \x96                # SS680000
 <U2014>         \x97                # SM900000
 <U2018>         \x91                # SP190000
@@ -372,6 +371,7 @@ CHARMAP
 <U2030>         \x89                # SM560000
 <U2039>         \x8B                # SP270000
 <U203A>         \x9B                # SP280000
+<U20AB>         \xFE                # SC180000
 <U20AC>         \x80                # SC200000
 <U2122>         \x99                # SM540000
 #

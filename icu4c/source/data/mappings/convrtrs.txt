@@ -21,55 +21,75 @@ ibm-913         iso-8859-3 iso_8859-3 latin3 cp913 ibm913 8859-3 csisolatin3 iso
 ibm-914         iso-8859-4 iso_8859-4 latin4 cp914 ibm914 8859-4 csisolatin4 iso-ir-110 iso_8859-4:1988  # Baltic
 ibm-915         iso-8859-5 iso_8859-5 cyrillic cp915 ibm915 8859-5 csisolatincyrillic iso-ir-144 iso_8859-5:1988  # Cyrillic
 ibm-1089        iso-8859-6 iso_8859-6 arabic cp1089 ibm1089 8859-6 csisolatinarabic iso-ir-127 iso_8859-6:1987 ecma-114 asmo-708   # Arabic
-ibm-813         iso-8859-7 iso_8859-7 ibm813 cp813 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # Greek
+ibm-4909 cp813         iso-8859-7 iso_8859-7 ibm813 cp813 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # ISO Greek (w/ euro update)
+ibm-813 # same as 4909 (w/o euro update)
 ibm-916         iso-8859-8 iso-8859-8i iso_8859-8 hebrew cp916 ibm916 8859-8 csisolatinhebrew iso-ir-138 iso_8859-8:1988   # hebrew 
 ibm-920         iso-8859-9 iso_8859-9 latin5 cp920 ibm920 8859-9 csisolatin5 iso-ir-148  # Turkish
 ibm-923         iso-8859-15 iso_8859-15 latin9 cp923 ibm923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
 ibm-1252        windows-1252  cp1252  ibm-1004 cp1004        # Windows Latin 1
 ibm-943         shift_jis sjis shiftjis shift-jis ibm943 cp943 ibm-932 ibm-932 ibm-932 cp932 ms_kanji csshiftjis windows-31j cswindows31j x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe
 ibm-949         ibm949 ksc-5601 ksc_5601 johab ks_x_1001:1992       # KSC-5601-1992, korean
-ibm-950         big-5 big5 x-big5 cp950 ibm950               # Taiwan Big-5
+ibm-1370	 big-5 big5 x-big5 cp950                # Taiwan Big-5 (w/ euro update)
+ibm-950         # Taiwan Big-5 
 ibm-1386        gbk chinese gb cp936 ibm1386 gb2312 gb2312-80 gb2312-1980 gb_2312-80  # Chinese GBK
 #ibm-954         euc-jp eucJP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese x-euc-jp x-eucjp  # Japan EUC
 ibm-970         euc-kr euckr ibm-eucKR                       # Korean EUC
 #ibm-964         euc-tw euctw ibm-eucTW cns11643              # Taiwan EUC
 ibm-1361        cp949 ksc korean                              # Korean KSC
 ibm-1383        euc-cn euccn ibm-eucCN                       # China EUC
-ibm-874         tis-620 ibm874 cp874 windows-874 ms874       # Thai
+#ibm-1162          tis-620  cp874 windows-874 ms874       # Thai (w/ euro support)
+ibm-874	 #same as 1162 (w/o euro update)
 
 # Platform codepages
 ibm-437         ibm437 cp437            # PC US
 # HSYS:
-#ibm-850         ibm850 cp850 ibm-858 ibm858 cp858    # PC latin1
-ibm-858		ibm858 cp858 ibm-850 ibm850 cp850     # PC latin1 with Euro
-ibm-852         ibm852 cp852            # PC latin2
-ibm-855         ibm855 cp855            # PC cyrillic
+ibm-850             # PC latin1
+ibm-858		ibm858 cp858  cp850     # PC latin1 with Euro
+ibm-9044	 cp852            # PC latin2 (w/ euro update)
+ibm-852			# PC latin2 (w/o euro update)
+ibm-872		cp855            # PC cyrillic (w/ euro update)
+ibm-855				 # PC cyrillic (w/o euro update)
 ibm-856         ibm856 cp856            # PC Hebrew (old)
-ibm-857         ibm857 cp857            # PC Latin 5 (Turkish)
+ibm-9049	cp857            # PC Latin 5 (Turkish) (w/ euro update)
+ibm-857		# PC Latin 5 (w/o euro update)
 ibm-859         ibm859 cp859            # PC Latin 9
 ibm-860         ibm860 cp860            # PC Portugal
 ibm-861         ibm861 cp861            # PC Iceland
-#ibm-862         ibm862 cp862 ibm-867 ibm867 cp867 cspc862latinhebrew  # PC Hebrew
-ibm-867		ibm867 cp867 ibm-862 ibm862 cp862 cspc862latinhebrew  # PC Hebrew
+ibm-867		ibm867 cp867 cp862 cspc862latinhebrew  # PC Hebrew (w/ euro update)
+ibm-862		# PC Hebrew (w/o euro update)
 ibm-863         ibm863 cp863            # PC Canadian French
-ibm-864         ibm864 cp864            # PC Arabic
+ibm-17248	cp864            # PC Arabic (w/ euro update)
+ibm-864		# PC Arabic (w/o euro update)
 ibm-865         ibm865 cp865            # PC Nordic
-ibm-866         ibm866 cp866            # PC Russian
+ibm-808		cp866            # PC Russian (w/ euro update)
+ibm-866		# PC Russian (w/o euro update)
 ibm-868         ibm868 cp868            # PC Urdu
-ibm-869         ibm869 cp869            # PC Greek
+ibm-9061	cp869            # PC Greek (w/ euro update)
+ibm-869		# PC Greek (w/o euro update)
 ibm-878         koi8-r ibm878 cp878 koi8 cskoi8r  # Russian internet
-ibm-921         ibm921 cp921            # PC Baltic
-ibm-922         ibm922 cp922            # PC Estonian
+ibm-901		 cp921            # PC Baltic (w/ euro update)
+ibm-921		# PC Baltic (w/o euro update)
+ibm-902		 cp922            # PC Estonian (w/ euro update)
+ibm-922		 # PC Estonian (w/o euro update)
 ibm-942         shift_jis78 sjis78      # Old s_jis
 ibm-1038        Adobe-Symbol-Encoding symbol
-ibm-1250        windows-1250  cp1250    # Windows Latin2
-ibm-1251        windows-1251  cp1251    # Windows Cyrillic
-ibm-1253        windows-1253  cp1253    # Windows Greek
-ibm-1254        windows-1254  cp1254    # Windows Turkish
-ibm-1255        windows-1255  cp1255    # Windows Hebrew
-ibm-1256        windows-1256  cp1256    # Windows Arabic
-ibm-1257        windows-1257  cp1257    # Windows Baltic
-ibm-1258	windows-1258  cp1258    # Windows Vietnamese
+ibm-5346        windows-1250  cp1250    # Windows Latin2 (w/ euro update)
+ibm-5347        windows-1251  cp1251    # Windows Cyrillic (w/ euro update)
+ibm-5349        windows-1253  cp1253    # Windows Greek (w/ euro update)
+ibm-5350        windows-1254  cp1254    # Windows Turkish (w/ euro update)
+ibm-5351        windows-1255  cp1255    # Windows Hebrew (w/ euro update)
+ibm-5352        windows-1256  cp1256    # Windows Arabic (w/ euro update)
+ibm-5353        windows-1257  cp1257    # Windows Baltic (w/ euro update)
+ibm-5354	windows-1258  cp1258    # Windows Vietnamese (w/ euro update)
+ibm-1250    # Windows Latin2 (w/ euro update)
+ibm-1251    # Windows Cyrillic (w/ euro update)
+ibm-1253    # Windows Greek (w/ euro update)
+ibm-1254    # Windows Turkish (w/ euro update)
+ibm-1255    # Windows Hebrew (w/ euro update)
+ibm-1256    # Windows Arabic (w/ euro update)
+ibm-1257    # Windows Baltic (w/ euro update)
+ibm-1258    # Windows Vietnamese (w/ euro u
+
 ibm-1275        macintosh mac           # Apple latin 1
 ibm-1276        Adobe-Standard-Encoding
 ibm-1277        Adobe-Latin1-Encoding
@@ -79,24 +99,75 @@ ibm-1282        macce                   # Apple Central Europe
 ibm-1283        maccy                   # Apple Cyrillic
 ibm-834         #Korean Host DBCS
 # EBCDIC codepages
-ibm-37          ibm-037    ebcdic-cp-us cp037
-ibm-420         ebcdic-ar  cp420        # EBCDIC Arabic
-ibm-424         ebcdic-he  cp424        # EBCDIC Hebrew
-ibm-930         ibm930 cp930            # Japan EBCDIC DBCS
+
+ibm-16804  ibm-420         ebcdic-ar  cp420        # EBCDIC Arabic (w/ euro update)
+ibm-12712       ebcdic-he  cp424 ibm-424        # EBCDIC Hebrew (w/ euro, new sheqel, control charaters update)
+ibm-1390  cp930            # Japan EBCDIC DBCS (w/ euro update)
+ibm-930  # Japan EBCDIC DBCS (w/o euro update)
 ibm-933         ibm933 cp933            # Korea EBCDIC DBCS
 ibm-935         ibm935 cp935            # China EBCDIC DBCS
-ibm-937         ibm937 cp937            # Taiwan EBCDIC DBCS
+ibm-1371	 cp937            # Taiwan EBCDIC DBCS (w/ euro update)
+ibm-937		  # Taiwan EBCDIC DBCS (w/o euro update)
 ibm-1047                                # EBCDIC Open systems Latin1
-ibm-1112                                # Baltic EBCDIC
 ibm-1123                                # Cyrillic Ukraine EBCDIC
-ibm-1140        ebcdic-us               # EBCDIC US...
-ibm-1141        ebcdic-de  cp273        # EBCDIC Germanay, Austria...
-ibm-1142        ebcdic-dk  cp277        # EBCDIC Denmark...
-ibm-1143        ebcdic-sv  cp278        # EBCDIC Sweden
-ibm-1144        ebcdic-it  cp280        # EBCDIC Italy
-ibm-1145        ebcdic-es  cp284        # EBCDIC Spain
-ibm-1146        ebcdic-gb  cp285        # EBCDIC UK Ireland
-ibm-1147        ebcdic-fr  cp297        # EBCDIC France
-ibm-1148        ebcdic-be  cp500        # EBCDIC International Latin1
+ibm-1140        ebcdic-us cp37  ebcdic-cp-us cp037              # EBCDIC US... (w/ euro update)
+ibm-37		ibm-037 #EBCDIC (w/o euro update) update
+ibm-1141        ebcdic-de  cp273        # EBCDIC Germanay, Austria... (w/ euro update)
+ibm-1142        ebcdic-dk  cp277        # EBCDIC Denmark... (w/ euro update)
+ibm-1143        ebcdic-sv  cp278        # EBCDIC Sweden (w/ euro update)
+ibm-1144        ebcdic-it   cp280        # EBCDIC Italy (w/ euro update)
+ibm-1145        ebcdic-es  cp284        # EBCDIC Spain (w/ euro update)
+ibm-1146        ebcdic-gb  cp285        # EBCDIC UK Ireland (w/ euro update)
+ibm-1147        ebcdic-fr  cp297        # EBCDIC France (w/ euro update)
+ibm-1148        ebcdic-be  cp500        # EBCDIC International Latin1 (w/ euro update)
+
+ibm-273        # EBCDIC Germanay, Austria... (w/o euro update)
+ibm-277        # EBCDIC Denmark... (w/o euro update)
+ibm-278        # EBCDIC Sweden (w/o euro update)
+ibm-280        # EBCDIC Italy (w/o euro update)
+ibm-284        # EBCDIC Spain (w/o euro update)
+ibm-285        # EBCDIC UK Ireland (w/o euro update)
+ibm-297        # EBCDIC France (w/o euro update)
+ibm-500        # EBCDIC International Latin1 (w/o euro update)
+
+ibm-871	       # EBCDIC Iceland (w/o euro update)
+# Added for more euro support
+ibm-1149        ebcdic-is  cp871        # EBCDIC Iceland (w/ euro update)
+ibm-1154	cp1025			# EBCDIC Cyrillic Multilingual (w/ euro update)
+ibm-1153	cp870				# EBCDIC latin 2 (w/ euro update)
+ibm-1155	cp1026			# EBCDIC Turkey (w/ euro update)
+ibm-1156	cp1112			# EBCDIC Baltic Multilingual (w/ euro update)
+ibm-1160	cp9030			# EBCDIC Thailand (w/ euro update)
+ibm-1164	cp1130			# EBCDIC Viet Nam (w/ euro update)
+ibm-849		cp1131			# PC Belarus (w/ euro update)
+ibm-1157	cp1122			# EBCDIC Estonia (w/ euro update)
+ibm-8482	cp290				# host SBCS (Katakana) (w/ euro update)
+ibm-1158	cp1123                # Cyrillic Ukraine EBCDIC (w/ euro update)
+ibm-4899	cp803			# Old EBCDIC Hebrew (w/ euro update)
+ibm-4971	cp875			# EBCDIC Greek (w/ euro update)
+ibm-848		cp1125		# PC Ukraine (w/ euro update)
+ibm-5104	cp1008		# 8-bit Arabic (w/ euro update)
+ibm-9238	cp1046		# PC Arabic Extended (w/ euro update)
+#ibm-1161	cp9066		# PC Thailand (IBM "version) (w/ euro update)
+ibm-1399	cp939			# Host MBCS (Latin-Kanji) (w/ euro update)
+ibm-4930	cp4930			# Korean DBCS Host (w/ euro update)
+ibm-1364	cp1364	       # Korean Host Mixed (w/ euro update)
+ibm-1362	cp1362	       # Korean Windows DBCS (w/ euro update)
+ibm-1363	cp1363	       # Korean Windows MBCS (w/ euro update)
+ibm-5210	cp1114	       # PC SBCS Big-5 (w/ euro update)
+ibm-21427	cp947	       # PC DBCS Big-5 (w/ euro update)
+ibm-1159	cp28709	       # SBCS T-Ch Host (w/ euro update)
+ibm-9027	cp835	       # DBCS T-Ch Host (w/ euro update)
+ibm-5123	cp1027	       # Host Roman Jis (w/ euro update)
+ibm-16684	cp300	       # Jis + Roman Jis Host (w/ euro update)
+
+
+
+
+
+
+
+
+
 
 
