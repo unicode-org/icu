@@ -182,25 +182,19 @@ public class UnicodeSetIterator {
      * Sets this iterator to visit the elements of the given set and
      * resets it to the start of that set.  The iterator is valid only
      * so long as <tt>set</tt> is valid.
-     * <b>Note:</b> as of ICU4J 3.2, this function returns this
-     * iterator as a convenience.
      * @param set the set to iterate over.
-     * @return this iterator
      * @stable ICU 2.0
      */
-    public UnicodeSetIterator reset(UnicodeSet set) {
+    public void reset(UnicodeSet set) {
         this.set = set;
-        return reset();
+        reset();
     }
         
     /**
      * Resets this iterator to the start of the set.
-     * <b>Note:</b> as of ICU4J 3.2, this function returns this
-     * iterator as a convenience.
-     * @return this iterator
      * @stable ICU 2.0
      */
-    public UnicodeSetIterator reset() {
+    public void reset() {
         endRange = set.getRangeCount() - 1;
         range = 0;
         endElement = -1;
@@ -213,7 +207,6 @@ public class UnicodeSetIterator {
             stringIterator = set.strings.iterator();
             if (!stringIterator.hasNext()) stringIterator = null;
         }
-        return this;
     }
     
     /**
