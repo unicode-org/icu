@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.86 2000/10/20 05:48:22 yves Exp $
+dnl $Id: configure.in,v 1.87 2000/10/20 06:17:23 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -679,7 +679,9 @@ dnl for build.
 
 if test $ICU_USE_THREADS -ne 0
 then
-    CFLAGS="$CFLAGS \$(THREADSCPPFLAGS)"
+    CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
+    CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
+    CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
 fi
 
 if test "$ac_cv_lib_dld_shl_load" = "yes"; then

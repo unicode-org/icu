@@ -3740,7 +3740,9 @@ fi
 
 if test $ICU_USE_THREADS -ne 0
 then
-    CFLAGS="$CFLAGS \$(THREADSCPPFLAGS)"
+    CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
+    CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
+    CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
 fi
 
 if test "$ac_cv_lib_dld_shl_load" = "yes"; then
