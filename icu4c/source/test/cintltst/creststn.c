@@ -8,8 +8,9 @@
 * File CRESTST.C
 *
 * Modification History:
-*        Name                    Date               Description
-*     Madhu Katragadda           05/09/2000         Ported Tests for New ResourceBundle API
+*        Name              Date               Description
+*   Madhu Katragadda    05/09/2000   Ported Tests for New ResourceBundle API
+*   Madhu Katragadda    05/24/2000   Added new tests to test RES_BINARY for collationElements
 *********************************************************************************
 */
 
@@ -185,6 +186,55 @@ void TestAliasConflict(void) {
         log_err("Failed to get resource with %s", myErrorName(status));
     }
     ures_close(he);
+}
+
+void TestBinaryCollationData(){
+	UErrorCode status=U_ZERO_ERROR;
+    const char*        directory=NULL;
+    const char*      locale="te";
+    char testdatapath[256];
+	UResourceBundle *teRes = NULL;
+	UResourceBundle *coll=NULL;
+	UResourceBundle *binColl = NULL;
+	uint8_t *binResult = NULL;
+	int32_t len=0;
+	char* action="testing the binary collaton data";
+
+    directory= ctest_getTestDirectory();
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
+
+    log_verbose("Testing binary collation data resource......\n");
+
+	teRes=ures_open(testdatapath, locale, &status);
+	if(U_FAILURE(status)){
+		log_err("ERROR: Failed to get resource for \"te\" with %s", myErrorName(status));
+		return;
+	}
+	status=U_ZERO_ERROR;
+    coll = ures_getByKey(teRes, "CollationElements", coll, &status);
+	if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(ures_getType(coll), RES_STRING);
+        binColl=ures_getByKey(teRes, "%%Collation", binColl, &status);  
+		if(U_SUCCESS(status)){
+			CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+			CONFIRM_INT_EQ(ures_getType(binColl), RES_BINARY);
+			binResult=(uint8_t*)ures_getBinary(binColl,  &len, &status);
+				if(U_SUCCESS(status)){
+					CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+					CONFIRM_INT_GE(len, 1);
+				}
+
+		}else{
+			log_err("ERROR: ures_getByKey(locale(te), %%Collation) failed");
+		}
+	}
+	else{
+		log_err("ERROR: ures_getByKey(locale(te), CollationElements) failed");
+		return;
+	}
+
 }
 
 
