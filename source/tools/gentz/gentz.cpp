@@ -53,9 +53,9 @@ static UDataInfo dataInfo = {
     sizeof(UChar),
     0,
 
-    TZ_SIG_0, TZ_SIG_1, TZ_SIG_2, TZ_SIG_3,
-    TZ_FORMAT_VERSION, 0, 0, 0,                 /* formatVersion */
-    0, 0, 0, 0 /* dataVersion - will be filled in with year.suffix */
+    {TZ_SIG_0, TZ_SIG_1, TZ_SIG_2, TZ_SIG_3},
+    {TZ_FORMAT_VERSION, 0, 0, 0},                 /* formatVersion */
+    {0, 0, 0, 0} /* dataVersion - will be filled in with year.suffix */
 };
 
 
