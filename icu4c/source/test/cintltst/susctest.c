@@ -155,6 +155,7 @@ printChars(const UChar *chars,
 }
 
 
+/*
 static void 
 printChars2(const UChar *chars, 
             int32_t len)
@@ -169,7 +170,7 @@ printChars2(const UChar *chars,
   }
   puts("");
 }
-
+*/
 
 static void 
 printBytes(const uint8_t *byteBuffer, 
@@ -720,7 +721,7 @@ segment_test(uint8_t *segment1,
 }
 
 
-void
+static void
 TestSCSU(void) 
 {
   UChar *chars = 0;

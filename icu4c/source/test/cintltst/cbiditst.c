@@ -54,7 +54,7 @@ doArabicShapingTest(void);
 
 /* helpers ------------------------------------------------------------------ */
 
-static char *levelString="...............................................................";
+static const char *levelString="...............................................................";
 
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, UTextOffset length);
