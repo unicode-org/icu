@@ -26,9 +26,21 @@ U_NAMESPACE_BEGIN
 
 const char OpenTypeLayoutEngine::fgClassID=0;
 
+const LETag emptyTag = 0x00000000;
+
+const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
+const LETag cligFeatureTag = LE_CLIG_FEATURE_TAG;
+const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
+const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
+const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
+
+const LETag defaultFeatures[] = {ccmpFeatureTag, ligaFeatureTag, cligFeatureTag, kernFeatureTag, markFeatureTag, mkmkFeatureTag, emptyTag};
+
+
 OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         const GlyphSubstitutionTableHeader *gsubTable)
-    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureOrder(NULL),
+    : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureList(defaultFeatures), fFeatureOrder(NULL),
       fGSUBTable(gsubTable), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
     static le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
@@ -89,8 +101,8 @@ void OpenTypeLayoutEngine::setScriptAndLanguageTags()
     fLangSysTag = getLangSysTag(fLanguageCode);
 }
 
-le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode /*chars*/[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/,
-				LEUnicode *&/*outChars*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
+le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
+				LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -101,7 +113,19 @@ le_int32 OpenTypeLayoutEngine::characterProcessing(const LEUnicode /*chars*/[], 
         return 0;
     }
 
-    return count;
+    le_int32 outCharCount = LayoutEngine::characterProcessing(chars, offset, count, max, rightToLeft, outChars, glyphStorage, success);
+
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
+
+    glyphStorage.allocateAuxData(success);
+
+    for (le_int32 i = 0; i < outCharCount; i += 1) {
+        glyphStorage.setAuxData(i, (void *) fFeatureList, success);
+    }
+
+    return outCharCount;
 }
 
 // Input: characters, tags
@@ -160,17 +184,18 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
         return 0;
     }
 
-    outCharCount   = characterProcessing(chars, offset, count, max, rightToLeft, outChars, fakeGlyphStorage, success);
+    outCharCount = characterProcessing(chars, offset, count, max, rightToLeft, outChars, fakeGlyphStorage, success);
 
     if (outChars != NULL) {
         fakeGlyphCount = glyphProcessing(outChars, 0, outCharCount, outCharCount, rightToLeft, fakeGlyphStorage, success);
+        LE_DELETE_ARRAY(outChars); // FIXME: a subclass may have allocated this, in which case this delete might not work...
         //adjustGlyphs(outChars, 0, outCharCount, rightToLeft, fakeGlyphs, fakeGlyphCount);
     } else {
         fakeGlyphCount = glyphProcessing(chars, offset, count, max, rightToLeft, fakeGlyphStorage, success);
         //adjustGlyphs(chars, offset, count, rightToLeft, fakeGlyphs, fakeGlyphCount);
     }
 
-    outGlyphCount  = glyphPostProcessing(fakeGlyphStorage, glyphStorage, success);
+    outGlyphCount = glyphPostProcessing(fakeGlyphStorage, glyphStorage, success);
 
     return outGlyphCount;
 }

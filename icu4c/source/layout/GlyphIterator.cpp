@@ -171,8 +171,6 @@ le_bool GlyphIterator::hasCursiveLastExitPoint() const
 
 LEGlyphID GlyphIterator::getCurrGlyphID() const
 {
-	LEErrorCode success = LE_NO_ERROR;
-
     if (direction < 0) {
         if (position <= nextLimit || position >= prevLimit) {
             return 0xFFFF;
@@ -188,8 +186,6 @@ LEGlyphID GlyphIterator::getCurrGlyphID() const
 
 LEGlyphID GlyphIterator::getCursiveLastGlyphID() const
 {
-	LEErrorCode success = LE_NO_ERROR;
-
     if (direction < 0) {
         if (cursiveLastPosition <= nextLimit || cursiveLastPosition >= prevLimit) {
             return 0xFFFF;

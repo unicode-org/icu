@@ -98,7 +98,7 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - TRUE if the characters are in a right to left directional run
+     * @param rightToLeft - <code>TRUE</code> if the characters are in a right to left directional run
      *
      * Output parameters:
      * @param outChars - the output character arrayt
@@ -122,7 +122,7 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
-     * @param reverse - TRUE if the glyphs in the glyph array have been reordered
+     * @param reverse - <code>TRUE</code> if the glyphs in the glyph array have been reordered
      * @param glyphs - the input glyph array
      * @param glyphCount - the number of glyphs
      * @param positions - the position array, will be updated as needed
@@ -132,7 +132,7 @@ protected:
      */
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
-	// static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool rightToLeft, LEGlyphStorage &glyphStorage, LEErrorCode &success);
+    // static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool rightToLeft, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
 private:
 
@@ -210,12 +210,10 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to be mapped
      * @param count - the number of characters to be mapped
-     * @param reverse - if TRUE, the output will be in reverse order
-     * @param mirror - if TRUE, do character mirroring
+     * @param reverse - if <code>TRUE</code>, the output will be in reverse order
+     * @param mirror - if <code>TRUE</code>, do character mirroring
+     * @param glyphStorage - the glyph storage object. Glyph and char index arrays will be updated.
      *
-     * Output parameters:
-     * @param glyphs - the glyph array
-     * @param charIndices - the character index array
      * @param success - set to an error code if the operation fails
      *
      * @internal
@@ -231,10 +229,8 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
-     * @param reverse - TRUE if the glyphs in the glyph array have been reordered
-     * @param glyphs - the input glyph array
-     * @param glyphCount - the number of glyphs
-     * @param positions - the position array, will be updated as needed
+     * @param reverse - <code>TRUE</code> if the glyphs in the glyph array have been reordered
+     * @param glyphStorage - the glyph storage object. The glyph positions will be updated as needed.
      * @param success - output parameter set to an error code if the operation fails
      *
      * @internal
