@@ -125,7 +125,7 @@ main(int argc, char* argv[]) {
          * required supported string length is 509 bytes.
          */
         fprintf(where,
-                "%csage: %s [ -h, -?, --help ] [ -v, --verbose ] [ -c, --copyright ] [ -C, --comment comment ] [ -d, --destdir dir ] [ -n, --name filename ] [ -t, --type filetype ] [ -C, --source tocfile ] [ -e, --entrypoint name ] [ maxsize ] [ [ -f ] filename ]\n", argc < 0 ? 'u' : 'U', *argv);
+                "%csage: %s [ -h, -?, --help ] [ -v, --verbose ] [ -c, --copyright ] [ -C, --comment comment ] [ -d, --destdir dir ] [ -n, --name filename ] [ -t, --type filetype ] [ -S, --source tocfile ] [ -e, --entrypoint name ] [ maxsize ] [ [ -f ] filename ]\n", argc < 0 ? 'u' : 'U', *argv);
         if (options[0].doesOccur || options[1].doesOccur) {
             fprintf(where, "\n"
             "Read the list file (default: standard input) and create a common data\n"
@@ -145,8 +145,7 @@ main(int argc, char* argv[]) {
             "\t-S, --source tocfile        write a .c source file with the table of\n"
             "\t                            contents\n"
             "\t-e, --entrypoint name       override the c entrypoint name\n"
-            "\t                            (default: \"<name>_<type>\")\n"
-            "\t-r, --revision x.x          Set a version (example: 20.1)\n");
+            "\t                            (default: \"<name>_<type>\")\n");
         }
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
