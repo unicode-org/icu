@@ -389,6 +389,7 @@ static uint32_t fbLow[3] = {0, /*0,*/UCOL_COMMON_BOT2, 0};
 U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, uint32_t strength, UErrorCode *status) {
 /* TODO: rename to enum names */
   uint32_t high, low, count=1;
+  uint32_t maxByte = (strength == UCOL_TERTIARY)?0x3F:0xFF;
 
   if(strength == UCOL_SECONDARY) {
     low = UCOL_COMMON_TOP2<<24;
@@ -404,7 +405,7 @@ U_CFUNC uint32_t ucol_getSimpleCEGenerator(ucolCEGenerator *g, UColToken *tok, u
     count = tok->next->toInsert;
   } 
 
-  g->noOfRanges = ucol_allocWeights(low, high, count, g->ranges);
+  g->noOfRanges = ucol_allocWeights(low, high, count, maxByte, g->ranges);
   g->current = UCOL_BYTE_COMMON<<24;
 
   if(g->noOfRanges == 0) {
@@ -417,8 +418,9 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   uint32_t strength = tok->strength;
   uint32_t low = lows[fStrength*3+strength];
   uint32_t high = highs[fStrength*3+strength];
+  uint32_t maxByte = (strength == UCOL_TERTIARY)?0x3F:0xFF;
 
-  uint32_t count = tok->toInsert+(fbHigh[strength]-fbLow[strength]);
+  uint32_t count = tok->toInsert/*+(fbHigh[strength]-fbLow[strength])*/;
 
   if(low == high && strength > UCOL_PRIMARY) {
     int32_t s = strength;
@@ -453,13 +455,13 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
       high = UCOL_COMMON_TOP2<<24;
     } 
     if(low < UCOL_COMMON_BOT2<<24) {
-      g->noOfRanges = ucol_allocWeights(UCOL_COMMON_TOP2<<24, high, count, g->ranges);
+      g->noOfRanges = ucol_allocWeights(UCOL_COMMON_TOP2<<24, high, count, maxByte, g->ranges);
       g->current = UCOL_COMMON_BOT2;
       return g->current;
     }
   } 
 
-  g->noOfRanges = ucol_allocWeights(low, high, count, g->ranges);
+  g->noOfRanges = ucol_allocWeights(low, high, count, maxByte, g->ranges);
   if(g->noOfRanges == 0) {
     *status = U_INTERNAL_PROGRAM_ERROR;
   }

@@ -39,12 +39,16 @@ typedef struct WeightRange {
  *                   weights less than this one.
  * @param n          The number of collation element weights w necessary such that
  *                   lowerLimit<w<upperLimit in lexical order.
+ * @param maxByte    The highest valid byte value.
  * @param ranges     An array that is filled in with one or more ranges to cover
  *                   n weights between the limits.
  * @return number of ranges, 0 if it is not possible to fit n elements between the limits
  */
 U_CFUNC int32_t
-ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit, uint32_t n, WeightRange ranges[7]);
+ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit,
+                  uint32_t n,
+                  uint32_t maxByte,
+                  WeightRange ranges[7]);
 
 /**
  * Given a set of ranges calculated by ucol_allocWeights(),
