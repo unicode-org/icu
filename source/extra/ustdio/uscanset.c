@@ -19,7 +19,7 @@
 #include "uscanset.h"
 
 
-UBool
+static UBool
 u_scanf_scanset_add(u_scanf_scanset     *scanset,
             UChar         c)
 {
@@ -32,7 +32,7 @@ u_scanf_scanset_add(u_scanf_scanset     *scanset,
   return TRUE;
 }
 
-UBool
+static UBool
 u_scanf_scanset_addrange(u_scanf_scanset     *scanset,
              UChar             start, 
              UChar             end)
