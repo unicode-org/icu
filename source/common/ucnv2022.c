@@ -85,7 +85,7 @@ typedef enum {
         LATIN1,
         SBCS,
         DBCS,
-        MBCS,
+        MBCS
         
 }Cnv2022Type;
 
@@ -2104,8 +2104,8 @@ DONE:
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                                               UErrorCode* err){
-    char tempBuf[2];
-    char* pBuf;
+    char tempBuf[2] ;
+    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[2]+1; 
@@ -2117,7 +2117,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
     UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
-    
+    pBuf = &tempBuf[0];
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
@@ -2255,7 +2255,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                         pBuf = &tempBuf[0];
                         tempLimit = &tempBuf[2]+1;
                         targetUniChar	= _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData,
-                            &pBuf,tempLimit,args->converter->useFallback);
+                             &pBuf,tempLimit,args->converter->useFallback);
                     }
                     break;
                     
@@ -2344,7 +2344,7 @@ SAVE_STATE:
 U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     char tempBuf[2];
-    char* pBuf;
+    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[2]+1; 
@@ -3214,7 +3214,6 @@ SAVE_STATE:
                 {
                     const char *saveSource = args->source;
                     UChar *saveTarget = args->target;
-                    UChar *saveMyTarget = myTarget;  
                     int32_t *saveOffsets = args->offsets;
                     
                     UConverterCallbackReason reason;
