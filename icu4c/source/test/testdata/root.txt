@@ -10,7 +10,7 @@
 
 root
 {
-    Version { 44 }
+    Version { 44.0 }
 
     ShortLanguage { xxx }
 
