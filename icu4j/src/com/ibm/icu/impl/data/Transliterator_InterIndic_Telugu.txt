@@ -111,6 +111,8 @@
 \ue061>\u0c61; # LETTER VOCALIC LL
 \ue062>\u0c3f; # REMAP (indicExceptions.txt): \u0c62>\u0c3f = VOWEL SIGN VOCALIC L>VOWEL SIGN I
 \ue063>\u0c40; # REMAP (indicExceptions.txt): \u0c63>\u0c40 = VOWEL SIGN VOCALIC LL>VOWEL SIGN II
+\ue064>'.'   ; # FALLBACK FOR DANDA
+\ue065>'.'   ; # FALLBACK FOR DOUBLE DANDA	
 \ue066>\u0c66; # DIGIT ZERO
 \ue067>\u0c67; # DIGIT ONE
 \ue068>\u0c68; # DIGIT TWO
