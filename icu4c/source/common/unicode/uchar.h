@@ -1310,6 +1310,73 @@ U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
 
 /**
+ * Returns the numeric value of the character <code>ch</code> in the 
+ * specified radix. 
+ * <p>
+ * If the radix is not in the range <code>2 <= radix <= 36</code> or if the 
+ * value of <code>ch</code> is not a valid digit in the specified 
+ * radix, <code>-1</code> is returned. A character is a valid digit 
+ * if at least one of the following is true:
+ * <ul>
+ * <li>The method <code>u_isdigit</code> is true of the character 
+ *     and the Unicode decimal digit value of the character (or its 
+ *     single-character decomposition) is less than the specified radix. 
+ *     In this case the decimal digit value is returned. 
+ * <li>The character is one of the uppercase Latin letters 
+ *     <code>'A'</code> through <code>'Z'</code> and its code is less than
+ *     <code>radix + 'A' - 10</code>. 
+ *     In this case, <code>ch - 'A' + 10</code> 
+ *     is returned. 
+ * <li>The character is one of the lowercase Latin letters 
+ *     <code>'a'</code> through <code>'z'</code> and its code is less than
+ *     <code>radix + 'a' - 10</code>. 
+ *     In this case, <code>ch - 'a' + 10</code> 
+ *     is returned. 
+ * </ul>
+ *
+ * @param   ch      the character to be converted.
+ * @param   radix   the radix.
+ * @return  the numeric value represented by the character in the
+ *          specified radix.
+ *
+ * @see     u_forDigit
+ * @see     u_charDigitValue
+ * @see     u_isdigit
+ * @draft
+ */
+U_CAPI int8_t U_EXPORT2
+u_digit(UChar32 ch, int8_t radix);
+
+/**
+ * Determines the character representation for a specific digit in 
+ * the specified radix. If the value of <code>radix</code> is not a 
+ * valid radix, or the value of <code>digit</code> is not a valid 
+ * digit in the specified radix, the null character
+ * (<code>U+0000</code>) is returned. 
+ * <p>
+ * The <code>radix</code> argument is valid if it is greater than or 
+ * equal to 2 and less than or equal to 36.
+ * The <code>digit</code> argument is valid if
+ * <code>0 <= digit < radix</code>. 
+ * <p>
+ * If the digit is less than 10, then 
+ * <code>'0' + digit</code> is returned. Otherwise, the value 
+ * <code>'a' + digit - 10</code> is returned. 
+ *
+ * @param   digit   the number to convert to a character.
+ * @param   radix   the radix.
+ * @return  the <code>char</code> representation of the specified digit
+ *          in the specified radix. 
+ *
+ * @see     u_digit
+ * @see     u_charDigitValue
+ * @see     u_isdigit
+ * @draft
+ */
+U_CAPI UChar32 U_EXPORT2
+u_forDigit(int32_t digit, int8_t radix);
+
+/**
  * Gets the Unicode version information.  The version array stores the version information
  * for the Unicode standard that is currently used by ICU.  For example, release "1.3.31.2" 
  * is then represented as 0x01031F02.
