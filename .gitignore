@@ -56,6 +56,7 @@ icu4c/source/config.cache
 icu4c/source/config.log
 icu4c/source/config.status
 icu4c/source/config/Makefile.inc
+icu4c/source/data/*.cnv
 icu4c/source/data/*.dat
 icu4c/source/data/*.dll
 icu4c/source/data/*.exp

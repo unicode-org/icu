@@ -6,5 +6,6 @@ Makefile
 *.obj
 *.lib
 *.plg
+*.cnv
 icupkg.inc
 out
