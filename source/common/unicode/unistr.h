@@ -75,11 +75,11 @@ class UnicodeConverter;     // unicode/convert.h
  * @stable ICU 2.0
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (const UChar *)L ## cs, length)
+#   define UNICODE_STRING(cs, _length) UnicodeString(TRUE, (const UChar *)L ## cs, _length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define UNICODE_STRING(cs, length) UnicodeString(TRUE, (const UChar *)cs, length)
+#   define UNICODE_STRING(cs, _length) UnicodeString(TRUE, (const UChar *)cs, _length)
 #else
-#   define UNICODE_STRING(cs, length) UnicodeString(cs, length, "")
+#   define UNICODE_STRING(cs, _length) UnicodeString(cs, _length, "")
 #endif
 
 /**
@@ -2875,14 +2875,14 @@ public:
    *
    * @draft ICU 2.2
    */
-  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+  virtual inline UClassID getDynamicClassID() const;
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    *
    * @draft ICU 2.2
    */
-  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+  static inline UClassID getStaticClassID();
 
   //========================================
   // Implementation methods
@@ -3158,13 +3158,107 @@ uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, int32_t srcStart,
 { uprv_arrayCopy(src+srcStart, dst+dstStart, count); }
 
 U_NAMESPACE_BEGIN
+
 //========================================
 // Inline members
 //========================================
 
 //========================================
+// Privates
+//========================================
+
+inline void
+UnicodeString::pinIndex(int32_t& start) const
+{
+  // pin index
+  if(start < 0) {
+    start = 0;
+  } else if(start > fLength) {
+    start = fLength;
+  }
+}
+
+inline void
+UnicodeString::pinIndices(int32_t& start,
+                          int32_t& _length) const
+{
+  // pin indices
+  if(start < 0) {
+    start = 0;
+  } else if(start > fLength) {
+    start = fLength;
+  }
+  if(_length < 0) {
+    _length = 0;
+  } else if(_length > (fLength - start)) {
+    _length = (fLength - start);
+  }
+}
+
+inline UChar* 
+UnicodeString::getArrayStart()
+{ return fArray; }
+
+inline const UChar* 
+UnicodeString::getArrayStart() const
+{ return fArray; }
+
+//========================================
+// Read-only implementation methods
+//========================================
+inline UClassID
+UnicodeString::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+UnicodeString::getDynamicClassID() const
+{ return UnicodeString::getStaticClassID(); }
+
+inline int32_t  
+UnicodeString::length() const
+{ return fLength; }
+
+inline int32_t 
+UnicodeString::getCapacity() const
+{ return fCapacity; }
+
+inline int32_t 
+UnicodeString::hashCode() const
+{ return doHashCode(); }
+
+inline UBool 
+UnicodeString::isBogus() const
+{ return (UBool)(fFlags & kIsBogus); }
+
+inline const UChar *
+UnicodeString::getBuffer() const {
+  if(!(fFlags&(kIsBogus|kOpenGetBuffer))) {
+    return fArray;
+  } else {
+    return 0;
+  }
+}
+
+//========================================
 // Read-only alias methods
 //========================================
+inline int8_t
+UnicodeString::doCompare(int32_t start,
+              int32_t _length,
+              const UnicodeString& srcText,
+              int32_t srcStart,
+              int32_t srcLength) const
+{
+  const UChar *srcChars;
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    srcChars=srcText.getArrayStart();
+  } else {
+    srcChars=0;
+  }
+  return doCompare(start, _length, srcChars, srcStart, srcLength);
+}
+
 inline UBool
 UnicodeString::operator== (const UnicodeString& text) const
 {
@@ -3204,9 +3298,9 @@ UnicodeString::compare(const UnicodeString& text) const
 
 inline int8_t 
 UnicodeString::compare(int32_t start,
-               int32_t length,
+               int32_t _length,
                const UnicodeString& srcText) const
-{ return doCompare(start, length, srcText, 0, srcText.fLength); }
+{ return doCompare(start, _length, srcText, 0, srcText.fLength); }
 
 inline int8_t 
 UnicodeString::compare(const UChar *srcChars,
@@ -3215,25 +3309,25 @@ UnicodeString::compare(const UChar *srcChars,
 
 inline int8_t 
 UnicodeString::compare(int32_t start,
-               int32_t length,
+               int32_t _length,
                const UnicodeString& srcText,
                int32_t srcStart,
                int32_t srcLength) const
-{ return doCompare(start, length, srcText, srcStart, srcLength); }
+{ return doCompare(start, _length, srcText, srcStart, srcLength); }
 
 inline int8_t
 UnicodeString::compare(int32_t start,
-               int32_t length,
+               int32_t _length,
                const UChar *srcChars) const
-{ return doCompare(start, length, srcChars, 0, length); }
+{ return doCompare(start, _length, srcChars, 0, _length); }
 
 inline int8_t 
 UnicodeString::compare(int32_t start,
-               int32_t length,
+               int32_t _length,
                const UChar *srcChars,
                int32_t srcStart,
                int32_t srcLength) const
-{ return doCompare(start, length, srcChars, srcStart, srcLength); }
+{ return doCompare(start, _length, srcChars, srcStart, srcLength); }
 
 inline int8_t
 UnicodeString::compareBetween(int32_t start,
@@ -3245,71 +3339,8 @@ UnicodeString::compareBetween(int32_t start,
            srcText, srcStart, srcLimit - srcStart); }
 
 inline int8_t
-UnicodeString::doCompare(int32_t start,
-              int32_t length,
-              const UnicodeString& srcText,
-              int32_t srcStart,
-              int32_t srcLength) const
-{
-  const UChar *srcChars;
-  if(!srcText.isBogus()) {
-    srcText.pinIndices(srcStart, srcLength);
-    srcChars=srcText.getArrayStart();
-  } else {
-    srcChars=0;
-  }
-  return doCompare(start, length, srcChars, srcStart, srcLength);
-}
-
-inline int8_t 
-UnicodeString::compareCodePointOrder(const UnicodeString& text) const
-{ return doCompareCodePointOrder(0, fLength, text, 0, text.fLength); }
-
-inline int8_t 
-UnicodeString::compareCodePointOrder(int32_t start,
-                                     int32_t length,
-                                     const UnicodeString& srcText) const
-{ return doCompareCodePointOrder(start, length, srcText, 0, srcText.fLength); }
-
-inline int8_t 
-UnicodeString::compareCodePointOrder(const UChar *srcChars,
-                                     int32_t srcLength) const
-{ return doCompareCodePointOrder(0, fLength, srcChars, 0, srcLength); }
-
-inline int8_t 
-UnicodeString::compareCodePointOrder(int32_t start,
-                                     int32_t length,
-                                     const UnicodeString& srcText,
-                                     int32_t srcStart,
-                                     int32_t srcLength) const
-{ return doCompareCodePointOrder(start, length, srcText, srcStart, srcLength); }
-
-inline int8_t
-UnicodeString::compareCodePointOrder(int32_t start,
-                                     int32_t length,
-                                     const UChar *srcChars) const
-{ return doCompareCodePointOrder(start, length, srcChars, 0, length); }
-
-inline int8_t 
-UnicodeString::compareCodePointOrder(int32_t start,
-                                     int32_t length,
-                                     const UChar *srcChars,
-                                     int32_t srcStart,
-                                     int32_t srcLength) const
-{ return doCompareCodePointOrder(start, length, srcChars, srcStart, srcLength); }
-
-inline int8_t
-UnicodeString::compareCodePointOrderBetween(int32_t start,
-                                            int32_t limit,
-                                            const UnicodeString& srcText,
-                                            int32_t srcStart,
-                                            int32_t srcLimit) const
-{ return doCompareCodePointOrder(start, limit - start, 
-           srcText, srcStart, srcLimit - srcStart); }
-
-inline int8_t
 UnicodeString::doCompareCodePointOrder(int32_t start,
-                                       int32_t length,
+                                       int32_t _length,
                                        const UnicodeString& srcText,
                                        int32_t srcStart,
                                        int32_t srcLength) const
@@ -3321,70 +3352,58 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
   } else {
     srcChars=0;
   }
-  return doCompareCodePointOrder(start, length, srcChars, srcStart, srcLength);
+  return doCompareCodePointOrder(start, _length, srcChars, srcStart, srcLength);
 }
 
 inline int8_t 
-UnicodeString::caseCompare(const UnicodeString &text, uint32_t options) const {
-  return doCaseCompare(0, fLength, text, 0, text.fLength, options);
-}
+UnicodeString::compareCodePointOrder(const UnicodeString& text) const
+{ return doCompareCodePointOrder(0, fLength, text, 0, text.fLength); }
 
 inline int8_t 
-UnicodeString::caseCompare(int32_t start,
-                           int32_t length,
-                           const UnicodeString &srcText,
-                           uint32_t options) const {
-  return doCaseCompare(start, length, srcText, 0, srcText.fLength, options);
-}
+UnicodeString::compareCodePointOrder(int32_t start,
+                                     int32_t _length,
+                                     const UnicodeString& srcText) const
+{ return doCompareCodePointOrder(start, _length, srcText, 0, srcText.fLength); }
 
 inline int8_t 
-UnicodeString::caseCompare(const UChar *srcChars,
-                           int32_t srcLength,
-                           uint32_t options) const {
-  return doCaseCompare(0, fLength, srcChars, 0, srcLength, options);
-}
+UnicodeString::compareCodePointOrder(const UChar *srcChars,
+                                     int32_t srcLength) const
+{ return doCompareCodePointOrder(0, fLength, srcChars, 0, srcLength); }
 
 inline int8_t 
-UnicodeString::caseCompare(int32_t start,
-                           int32_t length,
-                           const UnicodeString &srcText,
-                           int32_t srcStart,
-                           int32_t srcLength,
-                           uint32_t options) const {
-  return doCaseCompare(start, length, srcText, srcStart, srcLength, options);
-}
+UnicodeString::compareCodePointOrder(int32_t start,
+                                     int32_t _length,
+                                     const UnicodeString& srcText,
+                                     int32_t srcStart,
+                                     int32_t srcLength) const
+{ return doCompareCodePointOrder(start, _length, srcText, srcStart, srcLength); }
 
 inline int8_t
-UnicodeString::caseCompare(int32_t start,
-                           int32_t length,
-                           const UChar *srcChars,
-                           uint32_t options) const {
-  return doCaseCompare(start, length, srcChars, 0, length, options);
-}
+UnicodeString::compareCodePointOrder(int32_t start,
+                                     int32_t _length,
+                                     const UChar *srcChars) const
+{ return doCompareCodePointOrder(start, _length, srcChars, 0, _length); }
 
 inline int8_t 
-UnicodeString::caseCompare(int32_t start,
-                           int32_t length,
-                           const UChar *srcChars,
-                           int32_t srcStart,
-                           int32_t srcLength,
-                           uint32_t options) const {
-  return doCaseCompare(start, length, srcChars, srcStart, srcLength, options);
-}
+UnicodeString::compareCodePointOrder(int32_t start,
+                                     int32_t _length,
+                                     const UChar *srcChars,
+                                     int32_t srcStart,
+                                     int32_t srcLength) const
+{ return doCompareCodePointOrder(start, _length, srcChars, srcStart, srcLength); }
 
 inline int8_t
-UnicodeString::caseCompareBetween(int32_t start,
-                                  int32_t limit,
-                                  const UnicodeString &srcText,
-                                  int32_t srcStart,
-                                  int32_t srcLimit,
-                                  uint32_t options) const {
-  return doCaseCompare(start, limit - start, srcText, srcStart, srcLimit - srcStart, options);
-}
+UnicodeString::compareCodePointOrderBetween(int32_t start,
+                                            int32_t limit,
+                                            const UnicodeString& srcText,
+                                            int32_t srcStart,
+                                            int32_t srcLimit) const
+{ return doCompareCodePointOrder(start, limit - start, 
+           srcText, srcStart, srcLimit - srcStart); }
 
 inline int8_t
 UnicodeString::doCaseCompare(int32_t start,
-                             int32_t length,
+                             int32_t _length,
                              const UnicodeString &srcText,
                              int32_t srcStart,
                              int32_t srcLength,
@@ -3397,7 +3416,81 @@ UnicodeString::doCaseCompare(int32_t start,
   } else {
     srcChars=0;
   }
-  return doCaseCompare(start, length, srcChars, srcStart, srcLength, options);
+  return doCaseCompare(start, _length, srcChars, srcStart, srcLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(const UnicodeString &text, uint32_t options) const {
+  return doCaseCompare(0, fLength, text, 0, text.fLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(int32_t start,
+                           int32_t _length,
+                           const UnicodeString &srcText,
+                           uint32_t options) const {
+  return doCaseCompare(start, _length, srcText, 0, srcText.fLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(const UChar *srcChars,
+                           int32_t srcLength,
+                           uint32_t options) const {
+  return doCaseCompare(0, fLength, srcChars, 0, srcLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(int32_t start,
+                           int32_t _length,
+                           const UnicodeString &srcText,
+                           int32_t srcStart,
+                           int32_t srcLength,
+                           uint32_t options) const {
+  return doCaseCompare(start, _length, srcText, srcStart, srcLength, options);
+}
+
+inline int8_t
+UnicodeString::caseCompare(int32_t start,
+                           int32_t _length,
+                           const UChar *srcChars,
+                           uint32_t options) const {
+  return doCaseCompare(start, _length, srcChars, 0, _length, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(int32_t start,
+                           int32_t _length,
+                           const UChar *srcChars,
+                           int32_t srcStart,
+                           int32_t srcLength,
+                           uint32_t options) const {
+  return doCaseCompare(start, _length, srcChars, srcStart, srcLength, options);
+}
+
+inline int8_t
+UnicodeString::caseCompareBetween(int32_t start,
+                                  int32_t limit,
+                                  const UnicodeString &srcText,
+                                  int32_t srcStart,
+                                  int32_t srcLimit,
+                                  uint32_t options) const {
+  return doCaseCompare(start, limit - start, srcText, srcStart, srcLimit - srcStart, options);
+}
+
+inline int32_t 
+UnicodeString::indexOf(const UnicodeString& srcText,
+               int32_t srcStart,
+               int32_t srcLength,
+               int32_t start,
+               int32_t _length) const
+{
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    if(srcLength > 0) {
+      return indexOf(srcText.getArrayStart(), srcStart, srcLength, start, _length);
+    }
+  }
+  return -1;
 }
 
 inline int32_t 
@@ -3414,24 +3507,8 @@ UnicodeString::indexOf(const UnicodeString& text,
 inline int32_t 
 UnicodeString::indexOf(const UnicodeString& text,
                int32_t start,
-               int32_t length) const
-{ return indexOf(text, 0, text.fLength, start, length); }
-
-inline int32_t 
-UnicodeString::indexOf(const UnicodeString& srcText,
-               int32_t srcStart,
-               int32_t srcLength,
-               int32_t start,
-               int32_t length) const
-{
-  if(!srcText.isBogus()) {
-    srcText.pinIndices(srcStart, srcLength);
-    if(srcLength > 0) {
-      return indexOf(srcText.getArrayStart(), srcStart, srcLength, start, length);
-    }
-  }
-  return -1;
-}
+               int32_t _length) const
+{ return indexOf(text, 0, text.fLength, start, _length); }
 
 inline int32_t 
 UnicodeString::indexOf(const UChar *srcChars,
@@ -3445,17 +3522,28 @@ inline int32_t
 UnicodeString::indexOf(const UChar *srcChars,
                int32_t srcLength,
                int32_t start,
-               int32_t length) const
-{ return indexOf(srcChars, 0, srcLength, start, length); }
+               int32_t _length) const
+{ return indexOf(srcChars, 0, srcLength, start, _length); }
+
+inline int32_t 
+UnicodeString::indexOf(UChar c,
+               int32_t start,
+               int32_t _length) const
+{ return doIndexOf(c, start, _length); }
+
+inline int32_t 
+UnicodeString::indexOf(UChar32 c,
+               int32_t start,
+               int32_t _length) const
+{ return doIndexOf(c, start, _length); }
 
 inline int32_t 
 UnicodeString::indexOf(UChar c) const
 { return doIndexOf(c, 0, fLength); }
 
 inline int32_t 
-UnicodeString::indexOf(UChar32 c) const {
-  return indexOf(c, 0, fLength);
-}
+UnicodeString::indexOf(UChar32 c) const
+{ return indexOf(c, 0, fLength); }
 
 inline int32_t 
 UnicodeString::indexOf(UChar c,
@@ -3472,50 +3560,11 @@ UnicodeString::indexOf(UChar32 c,
 }
 
 inline int32_t 
-UnicodeString::indexOf(UChar c,
-               int32_t start,
-               int32_t length) const
-{ return doIndexOf(c, start, length); }
-
-inline int32_t 
-UnicodeString::indexOf(UChar32 c,
-               int32_t start,
-               int32_t length) const {
-  return doIndexOf(c, start, length);
-}
-
-inline int32_t 
-UnicodeString::lastIndexOf(const UnicodeString& text) const
-{ return lastIndexOf(text, 0, text.fLength, 0, fLength); }
-
-inline int32_t 
-UnicodeString::lastIndexOf(const UnicodeString& text,
-               int32_t start) const {
-  pinIndex(start);
-  return lastIndexOf(text, 0, text.fLength, start, fLength - start);
-}
-
-inline int32_t 
-UnicodeString::lastIndexOf(const UnicodeString& text,
-               int32_t start,
-               int32_t length) const
-{ return lastIndexOf(text, 0, text.fLength, start, length); }
-
-inline int32_t 
-UnicodeString::lastIndexOf(const UnicodeString& srcText,
-               int32_t srcStart,
+UnicodeString::lastIndexOf(const UChar *srcChars,
                int32_t srcLength,
                int32_t start,
-               int32_t length) const
-{
-  if(!srcText.isBogus()) {
-    srcText.pinIndices(srcStart, srcLength);
-    if(srcLength > 0) {
-      return lastIndexOf(srcText.getArrayStart(), srcStart, srcLength, start, length);
-    }
-  }
-  return -1;
-}
+               int32_t _length) const
+{ return lastIndexOf(srcChars, 0, srcLength, start, _length); }
 
 inline int32_t 
 UnicodeString::lastIndexOf(const UChar *srcChars,
@@ -3526,11 +3575,50 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
 }
 
 inline int32_t 
-UnicodeString::lastIndexOf(const UChar *srcChars,
+UnicodeString::lastIndexOf(const UnicodeString& srcText,
+               int32_t srcStart,
                int32_t srcLength,
                int32_t start,
-               int32_t length) const
-{ return lastIndexOf(srcChars, 0, srcLength, start, length); }
+               int32_t _length) const
+{
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    if(srcLength > 0) {
+      return lastIndexOf(srcText.getArrayStart(), srcStart, srcLength, start, _length);
+    }
+  }
+  return -1;
+}
+
+inline int32_t 
+UnicodeString::lastIndexOf(const UnicodeString& text,
+               int32_t start,
+               int32_t _length) const
+{ return lastIndexOf(text, 0, text.fLength, start, _length); }
+
+inline int32_t 
+UnicodeString::lastIndexOf(const UnicodeString& text,
+               int32_t start) const {
+  pinIndex(start);
+  return lastIndexOf(text, 0, text.fLength, start, fLength - start);
+}
+
+inline int32_t 
+UnicodeString::lastIndexOf(const UnicodeString& text) const
+{ return lastIndexOf(text, 0, text.fLength, 0, fLength); }
+
+inline int32_t 
+UnicodeString::lastIndexOf(UChar c,
+               int32_t start,
+               int32_t _length) const
+{ return doLastIndexOf(c, start, _length); }
+
+inline int32_t 
+UnicodeString::lastIndexOf(UChar32 c,
+               int32_t start,
+               int32_t _length) const {
+  return doLastIndexOf(c, start, _length);
+}
 
 inline int32_t 
 UnicodeString::lastIndexOf(UChar c) const
@@ -3553,19 +3641,6 @@ UnicodeString::lastIndexOf(UChar32 c,
                int32_t start) const {
   pinIndex(start);
   return lastIndexOf(c, start, fLength - start);
-}
-
-inline int32_t 
-UnicodeString::lastIndexOf(UChar c,
-               int32_t start,
-               int32_t length) const
-{ return doLastIndexOf(c, start, length); }
-
-inline int32_t 
-UnicodeString::lastIndexOf(UChar32 c,
-               int32_t start,
-               int32_t length) const {
-  return doLastIndexOf(c, start, length);
 }
 
 inline UBool 
@@ -3629,48 +3704,48 @@ UnicodeString::endsWith(const UChar *srcChars,
 //========================================
 inline UnicodeString& 
 UnicodeString::replace(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                const UnicodeString& srcText) 
-{ return doReplace(start, length, srcText, 0, srcText.fLength); }
+{ return doReplace(start, _length, srcText, 0, srcText.fLength); }
 
 inline UnicodeString& 
 UnicodeString::replace(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                const UnicodeString& srcText, 
                int32_t srcStart, 
                int32_t srcLength)
-{ return doReplace(start, length, srcText, srcStart, srcLength); }
+{ return doReplace(start, _length, srcText, srcStart, srcLength); }
 
 inline UnicodeString& 
 UnicodeString::replace(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                const UChar *srcChars,
                int32_t srcLength)
-{ return doReplace(start, length, srcChars, 0, srcLength); }
+{ return doReplace(start, _length, srcChars, 0, srcLength); }
 
 inline UnicodeString& 
 UnicodeString::replace(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                const UChar *srcChars, 
                int32_t srcStart, 
                int32_t srcLength)
-{ return doReplace(start, length, srcChars, srcStart, srcLength); }
+{ return doReplace(start, _length, srcChars, srcStart, srcLength); }
 
 inline UnicodeString& 
 UnicodeString::replace(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                UChar srcChar)
-{ return doReplace(start, length, &srcChar, 0, 1); }
+{ return doReplace(start, _length, &srcChar, 0, 1); }
 
 inline UnicodeString&
 UnicodeString::replace(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                UChar32 srcChar) {
   UChar buffer[U16_MAX_LENGTH];
   int32_t count = 0;
   UBool isError = FALSE;
   U16_APPEND(buffer, count, U16_MAX_LENGTH, srcChar, isError);
-  return doReplace(start, length, buffer, 0, count);
+  return doReplace(start, _length, buffer, 0, count);
 }
 
 inline UnicodeString& 
@@ -3695,10 +3770,10 @@ UnicodeString::findAndReplace(const UnicodeString& oldText,
 
 inline UnicodeString& 
 UnicodeString::findAndReplace(int32_t start,
-                  int32_t length,
+                  int32_t _length,
                   const UnicodeString& oldText,
                   const UnicodeString& newText)
-{ return findAndReplace(start, length, oldText, 0, oldText.fLength, 
+{ return findAndReplace(start, _length, oldText, 0, oldText.fLength, 
             newText, 0, newText.fLength); }
 
 // ============================
@@ -3706,32 +3781,32 @@ UnicodeString::findAndReplace(int32_t start,
 // ============================
 inline void
 UnicodeString::doExtract(int32_t start,
-             int32_t length,
+             int32_t _length,
              UnicodeString& target) const
-{ target.replace(0, target.fLength, *this, start, length); }
+{ target.replace(0, target.fLength, *this, start, _length); }
 
 inline void  
 UnicodeString::extract(int32_t start, 
-               int32_t length, 
+               int32_t _length, 
                UChar *target, 
                int32_t targetStart) const
-{ doExtract(start, length, target, targetStart); }
+{ doExtract(start, _length, target, targetStart); }
 
 inline void 
 UnicodeString::extract(int32_t start,
-               int32_t length,
+               int32_t _length,
                UnicodeString& target) const
-{ doExtract(start, length, target); }
+{ doExtract(start, _length, target); }
 
 inline int32_t
 UnicodeString::extract(int32_t start,
-               int32_t length,
+               int32_t _length,
                char *dst,
                const char *codepage) const
 
 {
   // This dstSize value will be checked explicitly
-  return extract(start, length, dst, dst!=0 ? 0xffffffff : 0, codepage);
+  return extract(start, _length, dst, dst!=0 ? 0xffffffff : 0, codepage);
 }
 
 inline void  
@@ -3814,34 +3889,6 @@ UnicodeString::empty() const {
 #endif
 
 //========================================
-// Read-only implementation methods
-//========================================
-inline int32_t  
-UnicodeString::length() const
-{ return fLength; }
-
-inline int32_t 
-UnicodeString::getCapacity() const
-{ return fCapacity; }
-
-inline int32_t 
-UnicodeString::hashCode() const
-{ return doHashCode(); }
-
-inline UBool 
-UnicodeString::isBogus() const
-{ return (UBool)(fFlags & kIsBogus); }
-
-inline const UChar *
-UnicodeString::getBuffer() const {
-  if(!(fFlags&(kIsBogus|kOpenGetBuffer))) {
-    return fArray;
-  } else {
-    return 0;
-  }
-}
-
-//========================================
 // Write implementation methods
 //========================================
 inline const UChar *
@@ -3920,10 +3967,10 @@ UnicodeString::operator+= (UChar ch)
 inline UnicodeString& 
 UnicodeString::operator+= (UChar32 ch) {
   UChar buffer[U16_MAX_LENGTH];
-  int32_t length = 0;
+  int32_t _length = 0;
   UBool isError = FALSE;
-  U16_APPEND(buffer, length, U16_MAX_LENGTH, ch, isError);
-  return doReplace(fLength, 0, buffer, 0, length);
+  U16_APPEND(buffer, _length, U16_MAX_LENGTH, ch, isError);
+  return doReplace(fLength, 0, buffer, 0, _length);
 }
 
 inline UnicodeString& 
@@ -3958,10 +4005,10 @@ UnicodeString::append(UChar srcChar)
 inline UnicodeString& 
 UnicodeString::append(UChar32 srcChar) {
   UChar buffer[U16_MAX_LENGTH];
-  int32_t length = 0;
+  int32_t _length = 0;
   UBool isError = FALSE;
-  U16_APPEND(buffer, length, U16_MAX_LENGTH, srcChar, isError);
-  return doReplace(fLength, 0, buffer, 0, length);
+  U16_APPEND(buffer, _length, U16_MAX_LENGTH, srcChar, isError);
+  return doReplace(fLength, 0, buffer, 0, _length);
 }
 
 inline UnicodeString& 
@@ -4002,13 +4049,13 @@ UnicodeString::insert(int32_t start,
 
 inline UnicodeString& 
 UnicodeString::remove(int32_t start, 
-             int32_t length)
+             int32_t _length)
 {
-  if(start <= 0 && length == INT32_MAX) {
+  if(start <= 0 && _length == INT32_MAX) {
     // remove(guaranteed everything) of a bogus string makes the string empty and non-bogus
     return remove();
   } else {
-    return doReplace(start, length, NULL, 0, 0);
+    return doReplace(start, _length, NULL, 0, 0);
   }
 }
 
@@ -4050,49 +4097,9 @@ UnicodeString::reverse()
 
 inline UnicodeString& 
 UnicodeString::reverse(int32_t start,
-               int32_t length)
-{ return doReverse(start, length); }
+               int32_t _length)
+{ return doReverse(start, _length); }
 
-
-//========================================
-// Privates
-//========================================
-
-inline void
-UnicodeString::pinIndex(int32_t& start) const
-{
-  // pin index
-  if(start < 0) {
-    start = 0;
-  } else if(start > fLength) {
-    start = fLength;
-  }
-}
-
-inline void
-UnicodeString::pinIndices(int32_t& start,
-                          int32_t& length) const
-{
-  // pin indices
-  if(start < 0) {
-    start = 0;
-  } else if(start > fLength) {
-    start = fLength;
-  }
-  if(length < 0) {
-    length = 0;
-  } else if(length > (fLength - start)) {
-    length = (fLength - start);
-  }
-}
-
-inline UChar* 
-UnicodeString::getArrayStart()
-{ return fArray; }
-
-inline const UChar* 
-UnicodeString::getArrayStart() const
-{ return fArray; }
 
 #ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
 

@@ -212,14 +212,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
 private:
     /**
@@ -285,6 +285,14 @@ private:
      */
     static const char fgClassID;
 };
+
+inline UClassID
+CollationKey::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+CollationKey::getDynamicClassID() const
+{ return CollationKey::getStaticClassID(); }
 
 inline UBool
 CollationKey::operator!=(const CollationKey& other) const

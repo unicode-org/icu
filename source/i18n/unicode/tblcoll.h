@@ -395,10 +395,7 @@ public:
    *         IDs.
    * @stable ICU 2.0
    */
-  virtual UClassID getDynamicClassID(void) const
-  {
-    return RuleBasedCollator::getStaticClassID();
-  }
+  virtual UClassID getDynamicClassID(void) const;
 
   /**
    * Returns the class ID for this class. This is useful only for comparing to
@@ -411,10 +408,7 @@ public:
    * @return The class ID for all objects of this class.
    * @stable ICU 2.0
    */
-  static UClassID getStaticClassID(void)
-  {
-    return (UClassID)&fgClassID;
-  }
+  static UClassID getStaticClassID(void);
 
   /**
    * Returns the binary format of the class's rules. The format is that of
@@ -780,6 +774,14 @@ private:
 };
 
 // inline method implementation ---------------------------------------------
+
+inline UClassID
+RuleBasedCollator::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+RuleBasedCollator::getDynamicClassID(void) const
+{ return RuleBasedCollator::getStaticClassID(); }
 
 inline UBool RuleBasedCollator::operator!=(const Collator& other) const
 {

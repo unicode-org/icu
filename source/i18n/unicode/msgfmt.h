@@ -596,7 +596,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
     
 private:
     static const char fgClassID;
@@ -751,10 +751,13 @@ private:
 };
 
 inline UClassID
+MessageFormat::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
 MessageFormat::getDynamicClassID() const
-{
-    return MessageFormat::getStaticClassID();
-}
+{ return MessageFormat::getStaticClassID(); }
+
 
 inline UnicodeString&
 MessageFormat::format(const Formattable& obj,
