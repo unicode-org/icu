@@ -331,6 +331,18 @@
 			Filter="">
 			<File
 				RelativePath=".\ucol_swp.c">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\i18n"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="..\i18n"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ucol_swp.h">
