@@ -6,10 +6,6 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/07/08 23:52:13 $ 
-* $Revision: 1.2 $
-*
-*******************************************************************************
 */
 package com.ibm.icu.dev.test.lang;
 import com.ibm.icu.dev.test.TestFmwk;

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TestAll.java,v $
- * $Date: 2003/10/02 20:50:59 $
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.timezone;
 

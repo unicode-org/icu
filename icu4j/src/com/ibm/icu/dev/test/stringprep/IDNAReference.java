@@ -3,12 +3,6 @@
  * Copyright (C) 2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/IDNAReference.java,v $
- * $Date: 2003/08/27 21:13:14 $
- * $Revision: 1.2 $
- *
- *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 2002, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/CompactArrayTest.java,v $
- * $Date: 2002/12/18 00:55:39 $
- * $Revision: 1.3 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 

@@ -3,12 +3,6 @@
 * Copyright (C) 2004, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckAPI.java,v $
-* $Date: 2004/02/24 21:46:38 $
-* $Revision: 1.3 $
-*
-*******************************************************************************
 */
 
 /**

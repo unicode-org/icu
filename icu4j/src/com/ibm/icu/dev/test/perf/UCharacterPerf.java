@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/perf/UCharacterPerf.java,v $
- * $Date: 2002/10/30 17:58:26 $
- * $Revision: 1.2 $
- *
- *******************************************************************************
  */
 
 package com.ibm.icu.dev.test.perf;

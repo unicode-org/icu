@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ErrorTest.java,v $
- * $Date: 2004/02/25 01:28:19 $
- * $Revision: 1.8 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.dev.test.*;

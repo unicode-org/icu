@@ -3,11 +3,6 @@
  * Copyright (C) 2001-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2004/03/24 18:39:47 $ 
- * $Revision: 1.24 $
- *
- *****************************************************************************************
  */
 
 /** 

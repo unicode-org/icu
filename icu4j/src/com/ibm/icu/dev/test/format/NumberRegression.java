@@ -2,12 +2,6 @@
  *
  * Copyright (C) 1996-2003, International Business Machines
  * Corporation and others.  All Rights Reserved.
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2004/03/22 23:58:57 $ 
- * $Revision: 1.19 $
- *
- *****************************************************************************************
  **/
 
 /** 

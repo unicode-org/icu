@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/compression/ExhaustiveTest.java,v $ 
- * $Date: 2002/02/16 03:05:07 $ 
- * $Revision: 1.5 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.compression;
 

@@ -8,12 +8,6 @@
  * technology is protected by multiple US and International patents. This notice and
  * attribution to Taligent may not be removed.
  *   Taligent is a registered trademark of Taligent, Inc.
- * 
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestSimpleDateFormatAPI.java,v $ 
- * $Date: 2003/12/20 03:06:51 $ 
- * $Revision: 1.6 $
- *
- *****************************************************************************************
  **/
 
 /** 

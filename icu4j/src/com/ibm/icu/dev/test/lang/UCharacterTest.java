@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2004/01/09 03:06:37 $
-* $Revision: 1.63 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.dev.test.lang;

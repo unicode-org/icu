@@ -3,12 +3,6 @@
  * Copyright (C) 2000-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/11/14 21:56:53 $
- * $Revision: 1.57 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.translit;
 

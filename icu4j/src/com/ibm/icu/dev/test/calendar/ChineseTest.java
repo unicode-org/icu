@@ -2,9 +2,6 @@
  * Copyright (C) 2000-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/ChineseTest.java,v $
- * $Date: 2004/02/25 00:01:56 $
- * $Revision: 1.14 $
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;

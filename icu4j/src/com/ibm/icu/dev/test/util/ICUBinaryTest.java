@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2002, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUBinaryTest.java,v $ 
-* $Date: 2002/10/10 05:16:13 $ 
-* $Revision: 1.1 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.dev.test.util;

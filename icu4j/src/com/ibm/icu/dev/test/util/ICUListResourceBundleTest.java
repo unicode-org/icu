@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2004/02/06 21:54:05 $
- * $Revision: 1.13 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
