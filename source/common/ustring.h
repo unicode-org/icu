@@ -190,7 +190,7 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
  * </pre>
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (const UChar *)L ## cs }
+#   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
 #   define U_STRING_INIT(var, cs, length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
 #   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (const UChar *)cs }
