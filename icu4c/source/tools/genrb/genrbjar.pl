@@ -133,7 +133,8 @@ cmd($cmd);
 # CollationElement_*.res files, leave those as they are.  Do a
 # "jar u" -- update the existing file.
 my $jarFile = "$ICU4J_ROOT/src/$pkg/ICULocaleData.jar";
-my $cmd = "jar uf $jarFile $pkg/*.class $pkg/*.bin $pkg/*.res $pkg/*.utf8";
+my $filesToBePackaged= "$pkg/*.class $pkg/*.col $pkg/*.brk $pkg/*.utf8";
+my $cmd = "jar uf $jarFile $fileToBePackaged";
 # Do jar command
 print "Directory: $javaRootDir\n";
 chdir($javaRootDir);
@@ -143,7 +144,7 @@ if(-e "$jarFile"){
    }
 }else{
    $jarFile ="$ICU_ROOT/source/data/locales/java/ICULocaleData.jar";
-   $cmd = "jar cvf $jarFile $pkg/*.class $pkg/*.bin $pkg/*.res $pkg/*.utf8";
+   $cmd = "jar cvf $jarFile $filesToBePackaged";
 }
 cmd($cmd); 
 
