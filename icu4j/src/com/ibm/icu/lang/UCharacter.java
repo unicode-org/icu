@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/11/13 20:19:43 $ 
-* $Revision: 1.51 $
+* $Date: 2002/11/14 19:30:45 $ 
+* $Revision: 1.52 $
 *
 *******************************************************************************
 */
@@ -3766,9 +3766,9 @@ public final class UCharacter
      * to allocate arrays of com.ibm.icu.text.UnicodeSet or similar.
      * Examples for min/max values (for Unicode 3.2):
      * <ul>
-     * <li> UProperty.BIDI_CLASS:    0/18 (U_LEFT_TO_RIGHT/U_BOUNDARY_NEUTRAL)
-     * <li> UProperty.SCRIPT:       -1/45 (USCRIPT_INVALID_CODE/USCRIPT_TAGBANWA)
-     * <li> UProperty.IDEOGRAPHIC:   0/1  (FALSE/TRUE)
+     * <li> UProperty.BIDI_CLASS:    0/18 (UCharacterDirection.LEFT_TO_RIGHT/UCharacterDirection.BOUNDARY_NEUTRAL)
+     * <li> UProperty.SCRIPT:        0/45 (UScript.COMMON/UScript.TAGBANWA)
+     * <li> UProperty.IDEOGRAPHIC:   0/1  (false/true)
      * </ul>
      * For undefined UProperty constant values, min/max values will be 0/-1.
      * @param which UProperty selector constant, identifies which binary 
