@@ -22,7 +22,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/dcfmtsym.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/choicfmt.h"

@@ -60,7 +60,7 @@
 
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "unicode/uset.h"
 #include "ucol_imp.h"
 #include "uresimp.h"
