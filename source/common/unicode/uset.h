@@ -369,6 +369,17 @@ U_STABLE void U_EXPORT2
 uset_addString(USet* set, const UChar* str, int32_t strLen);
 
 /**
+ * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
+ * If this set already any particular character, it has no effect on that character.
+ * @param set the object to which to add the character
+ * @param str the source string
+ * @param strLen the length of the string or -1 if null terminated.
+ * @draft ICU 3.4
+ */
+U_DRAFT void U_EXPORT2
+uset_addAllCodePoints(USet* set, const UChar *str, int32_t strLen);
+
+/**
  * Removes the given character from the given USet.  After this call,
  * uset_contains(set, c) will return FALSE.
  * @param set the object from which to remove the character
@@ -610,6 +621,19 @@ uset_getItem(const USet* set, int32_t itemIndex,
  */
 U_DRAFT UBool U_EXPORT2
 uset_containsAll(const USet* set1, const USet* set2);
+
+/**
+ * Returns true if this set contains all the characters
+ * of the given string. This is does not check containment of grapheme
+ * clusters, like uset_containsString.
+ * @param set set of characters to be checked for containment
+ * @param str string containing codepoints to be checked for containment
+ * @param strLen the length of the string or -1 if null terminated.
+ * @return true if the test condition is met
+ * @draft ICU 3.4
+ */
+U_DRAFT UBool U_EXPORT2
+uset_containsAllCodePoints(USet* set, const UChar *str, int32_t strLen);
 
 /**
  * Returns true if set1 contains none of the characters and strings
