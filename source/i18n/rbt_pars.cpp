@@ -262,7 +262,7 @@ void TransliterationRuleParser::applyVariableDef(const UnicodeString& name,
  * @param postContext the following context of the match pattern,
  * if there is one, is appended to this buffer
  * @param cursorPos if there is a cursor in the output pattern, its
- * offset is stored in <code>cursorPos</code>
+ * offset is stored in <code>cursorPos</code>, otherwise set to -1.
  * @return The operator character, one of the characters in OPERATORS.
  */
 UChar TransliterationRuleParser::parseRule(int32_t start, int32_t limit,
@@ -285,6 +285,7 @@ UChar TransliterationRuleParser::parseRule(int32_t start, int32_t limit,
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+    cursorPos = -1;
     UChar c = rules.charAt(i);
     switch (c) {
     case FORWARD_RULE_OP:
