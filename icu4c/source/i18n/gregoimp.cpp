@@ -47,8 +47,7 @@ double Grego::fieldsToDay(int32_t year, int32_t month, int32_t dom) {
 }
 
 void Grego::dayToFields(double day, int32_t& year, int32_t& month,
-                        int32_t& dom, int32_t& dow) {
-    int32_t doy;
+                        int32_t& dom, int32_t& dow, int32_t& doy) {
 
     // Convert from 1970 CE epoch to 1 CE epoch (Gregorian calendar)
     day += JULIAN_1970_CE - JULIAN_1_CE;
@@ -82,6 +81,7 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     }
     month = (12 * (doy + correction) + 6) / 367; // zero-based month
     dom = doy - DAYS_BEFORE[month + (isLeap ? 12 : 0)] + 1; // one-based DOM
+    doy++; // one-based doy
 }
 
 //eof

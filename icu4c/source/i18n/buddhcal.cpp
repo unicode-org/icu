@@ -99,7 +99,7 @@ BuddhistCalendar::monthLength(int32_t month) const
 
 int32_t BuddhistCalendar::internalGetEra() const
 {
-    return isSet(UCAL_ERA) ? internalGet(UCAL_ERA) : BE;  
+  return internalGet(UCAL_ERA, BE);
 }
 
 int32_t
@@ -117,9 +117,47 @@ BuddhistCalendar::getGregorianYear(UErrorCode &status)  const
   return year + kBuddhistEraStart;
 }
 
+int32_t BuddhistCalendar::handleGetExtendedYear()
+{
+  int32_t year;
+  if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR) {
+    year = internalGet(UCAL_EXTENDED_YEAR, 1);
+  } else {
+    // Ignore the era, as there is only one
+    year = internalGet(UCAL_YEAR, 1);
+  }
+  return year;
+}
+
+int32_t BuddhistCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
+
+                                                   UBool useMonth) const
+{
+  return GregorianCalendar::handleComputeMonthStart(eyear+kBuddhistEraStart, month, useMonth);
+}
+
+void BuddhistCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
+{
+  GregorianCalendar::handleComputeFields(julianDay, status);
+  int32_t y = internalGet(UCAL_EXTENDED_YEAR) - kBuddhistEraStart;
+  internalSet(UCAL_EXTENDED_YEAR, y);
+  internalSet(UCAL_ERA, 0);
+  internalSet(UCAL_YEAR, y);
+}
+
+int32_t BuddhistCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const
+{
+  if(field == UCAL_ERA) {
+    return BE;
+  } else {
+    return GregorianCalendar::handleGetLimit(field,limitType);
+  }
+}
+
+#if 0
 void BuddhistCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
 {
-  GregorianCalendar::timeToFields(theTime, quick, status);
+  //Calendar::timeToFields(theTime, quick, status);
 
   int32_t era = internalGet(UCAL_ERA);
   int32_t year = internalGet(UCAL_YEAR);
@@ -138,6 +176,7 @@ void BuddhistCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& stat
   internalSet(UCAL_ERA, era);
   internalSet(UCAL_YEAR, year);
 }
+#endif
 
 void BuddhistCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status)
 {

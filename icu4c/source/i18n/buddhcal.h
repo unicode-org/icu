@@ -153,19 +153,25 @@ public:
     inline virtual int32_t getLeastMaximum(EDateFields field) const { return getLeastMaximum((UCalendarDateFields)field); }
     inline virtual void add(EDateFields field, int32_t amount, UErrorCode& status) { add((UCalendarDateFields)field, amount, status); }
 
-
 private:
     BuddhistCalendar(); // default constructor not implemented
 
     static const char fgClassID;
 
  protected:
+    virtual int32_t handleGetExtendedYear();
+    virtual void handleComputeFields(int32_t julianDay, UErrorCode& status);
+    virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
+    virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
+                                            UBool useMonth) const;
+
+
+    // older internals below
     virtual int32_t monthLength(int32_t month) const; 
     virtual int32_t monthLength(int32_t month, int32_t year) const; 
     int32_t getGregorianYear(UErrorCode& status) const;
 
     virtual int32_t internalGetEra() const;
-    virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
     virtual UBool haveDefaultCentury() const;
     virtual UDate defaultCenturyStart() const;
     virtual int32_t defaultCenturyStartYear() const;

@@ -353,7 +353,7 @@ public:
      *                an error status.
      * @deprecated ICU 2.6. Use add(UCalendarDateFields field, int32_t amount, UErrorCode& status) instead.
      */
-    virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
+    //    virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * (Overrides Calendar) UDate Arithmetic function. Adds the specified (signed) amount
@@ -367,7 +367,7 @@ public:
      *                an error status.
      * @draft ICU 2.6.
      */
-    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
+    //    virtual void add(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
     /**
      * (Overrides Calendar) Rolls up or down by the given amount in the specified field.
@@ -395,81 +395,6 @@ public:
      */
     virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
-    /**
-     * (Overrides Calendar) Returns minimum value for the given field. e.g. for
-     * Gregorian DAY_OF_MONTH, 1.
-     * @param field    the time field.
-     * @return         minimum value for the given field
-     * @deprecated ICU 2.6. Use getMinimum(UCalendarDateFields field) instead.
-     */
-    virtual int32_t getMinimum(EDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns minimum value for the given field. e.g. for
-     * Gregorian DAY_OF_MONTH, 1.
-     * @param field    the time field.
-     * @return         minimum value for the given field
-     * @draft ICU 2.6.
-     */
-    virtual int32_t getMinimum(UCalendarDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns maximum value for the given field. e.g. for
-     * Gregorian DAY_OF_MONTH, 31.
-     * @param field    the time field.
-     * @return         maximum value for the given field
-     * @deprecated ICU 2.6. Use getMaximum(UCalendarDateFields field) instead.
-     */
-    virtual int32_t getMaximum(EDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns maximum value for the given field. e.g. for
-     * Gregorian DAY_OF_MONTH, 31.
-     * @param field    the time field.
-     * @return         maximum value for the given field
-     * @draft ICU 2.6.
-     */
-    virtual int32_t getMaximum(UCalendarDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns highest minimum value for the given field if varies.
-     * Otherwise same as getMinimum(). For Gregorian, no difference.
-     * @param field    the time field.
-     * @return         highest minimum value for the given field if varies.
-     *                 Otherwise same as getMinimum().
-     * @deprecated ICU 2.6. Use getGreatestMinimum(UCalendarDateFields field) instead.
-     */
-    virtual int32_t getGreatestMinimum(EDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns highest minimum value for the given field if varies.
-     * Otherwise same as getMinimum(). For Gregorian, no difference.
-     * @param field    the time field.
-     * @return         highest minimum value for the given field if varies.
-     *                 Otherwise same as getMinimum().
-     * @draft ICU 2.6.
-     */
-    virtual int32_t getGreatestMinimum(UCalendarDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns lowest maximum value for the given field if varies.
-     * Otherwise same as getMaximum(). For Gregorian DAY_OF_MONTH, 28.
-     * @param field    the time field.
-     * @return         lowest maximum value for the given field if varies.
-     *                 Otherwise same as getMaximum(). 
-     * @deprecated ICU 2.6. Use getLeastMaximum(UCalendarDateFields field) instead.
-     */
-    virtual int32_t getLeastMaximum(EDateFields field) const;
-
-    /**
-     * (Overrides Calendar) Returns lowest maximum value for the given field if varies.
-     * Otherwise same as getMaximum(). For Gregorian DAY_OF_MONTH, 28.
-     * @param field    the time field.
-     * @return         lowest maximum value for the given field if varies.
-     *                 Otherwise same as getMaximum(). 
-     * @draft ICU 2.6.
-     */
-    virtual int32_t getLeastMaximum(UCalendarDateFields field) const;
 
     /**
      * Return the minimum value that this field could have, given the current date.
@@ -507,9 +432,14 @@ public:
      * for some years the actual maximum for MONTH is 12, and for others 13.
      * @param field    the time field.
      * @return         the maximum value that this field could have, given the current date.
-     * @draft ICU 2.6.
+     * @internal.
      */
-    int32_t getActualMaximum(UCalendarDateFields field) const;
+    virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
+
+    /*
+     * @draft ICU 2.6
+     */
+    inline int32_t getActualMaximum(UCalendarDateFields field) const;
 
     /**
      * (Overrides Calendar) Return true if the current date for this Calendar is in
@@ -560,44 +490,10 @@ public:
 protected:
 
     /**
-     * Called by computeFields. Converts calendar's year into Gregorian Extended Year (where negative = BC)
-     * @return Current year in Gregorian years,  where  -3  means 4 BC (1-bcyear) 
-     * @internal
-     */
-    virtual int32_t getGregorianYear(UErrorCode &status) const;
-
-    /**
-     * Called by computeJulianDay.  Returns the default month (0-based) for the year,
-     * taking year and era into account.  Defaults to 0 for Gregorian, which doesn't care.
-     * @internal
-     */
-    virtual int32_t getDefaultMonthInYear() const;
-
-
-    /**
-     * Called by computeJulianDay.  Returns the default day (1-based) for the month,
-     * taking currently-set year and era into account.  Defaults to 1 for Gregorian, which doesn't care. 
-     * @internal
-     */
-    virtual int32_t getDefaultDayInMonth(int32_t /*month*/) const;
-
-    /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
      * @param status Fill-in parameter which receives the status of this operation.
      * @stable ICU 2.0
      */
-    virtual void computeFields(UErrorCode& status);
-
-    /**
-     * (Overrides Calendar) Converts Calendar's time field values to GMT as
-     * milliseconds.
-     *
-     * @param status  Output param set to success/failure code on exit. If any value
-     *                previously set in the time field is invalid, this will be set to
-     *                an error status.
-     * @stable ICU 2.0
-     */
-    virtual void computeTime(UErrorCode& status);
 
  private:
     GregorianCalendar(); // default constructor not implemented
@@ -610,6 +506,36 @@ protected:
      * @internal
      */
     virtual int32_t internalGetEra() const;
+
+    /**
+     * Return the Julian day number of day before the first day of the
+     * given month in the given extended year.  Subclasses should override
+     * this method to implement their calendar system.
+     * @param eyear the extended year
+     * @param month the zero-based month, or 0 if useMonth is false
+     * @param useMonth if false, compute the day before the first day of
+     * the given year, otherwise, compute the day before the first day of
+     * the given month
+     * @param return the Julian day number of the day before the first
+     * day of the given month and year
+     * @internal
+     */
+    virtual int32_t handleComputeMonthStart(int32_t eyear, int32_t month,
+                                                   UBool useMonth) const;
+
+    virtual int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)  ;
+
+
+    /**
+     * Return the number of days in the given month of the given extended
+     * year of this calendar system.  Subclasses should override this
+     * method if they can provide a more correct or more efficient
+     * implementation than the default implementation in Calendar.
+     * @internal
+     */
+    virtual int32_t handleGetMonthLength(int32_t extendedYear, int32_t month) const;
+
+    virtual int32_t handleGetYearLength(int32_t eyear) const;
 
     /**
      * return the length of the given month.
@@ -672,7 +598,44 @@ protected:
      * @param status Fill-in parameter which receives the status of this operation.
      * @internal
      */
-    virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
+    //    virtual void timeToFields(UDate theTime, UBool quick, UErrorCode& status);
+
+    /**
+     * Subclass API for defining limits of different types.
+     * Subclasses must implement this method to return limits for the
+     * following fields:
+     *
+     * <pre>UCAL_ERA
+     * UCAL_YEAR
+     * UCAL_MONTH
+     * UCAL_WEEK_OF_YEAR
+     * UCAL_WEEK_OF_MONTH
+     * UCAL_DATE (DAY_OF_MONTH on Java)
+     * UCAL_DAY_OF_YEAR
+     * UCAL_DAY_OF_WEEK_IN_MONTH
+     * UCAL_YEAR_WOY
+     * UCAL_EXTENDED_YEAR</pre>
+     *
+     * @param field one of the above field numbers
+     * @param limitType one of <code>MINIMUM</code>, <code>GREATEST_MINIMUM</code>,
+     * <code>LEAST_MAXIMUM</code>, or <code>MAXIMUM</code>
+     * @internal
+     */
+    virtual int32_t handleGetLimit(UCalendarDateFields field, ELimitType limitType) const;
+
+    virtual int32_t GregorianCalendar::handleGetExtendedYear();
+
+    /** 
+     * Subclasses may override this to convert from week fields 
+     * (YEAR_WOY and WEEK_OF_YEAR) to an extended year in the case
+     * where YEAR, EXTENDED_YEAR are not set.
+     * The Gregorian implementation assumes a yearWoy in gregorian format, according to the current era.
+     * @return the extended year, UCAL_EXTENDED_YEAR
+     */
+    virtual int32_t handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy);
+
+
+    virtual void handleComputeFields(int32_t julianDay, UErrorCode &status);
 
  private:
     /**
@@ -685,59 +648,6 @@ protected:
     static double computeJulianDayOfYear(UBool isGregorian, int32_t year,
                                          UBool& isLeap);
     
-    /**
-     * Compute the day of week, relative to the first day of week, from
-     * 0..6, of the current DOW_LOCAL or DAY_OF_WEEK fields.  This is
-     * equivalent to get(DOW_LOCAL) - 1.
-     * @return    the day of week, relative to the first day of week.
-     */
-    int32_t computeRelativeDOW() const;
-    
-    /**
-     * Compute the day of week, relative to the first day of week,
-     * from 0..6 of the given julian day.
-     * @param julianDay    the given julian day.
-     * @return             the day of week, relative to the first day of week.
-     */
-    int32_t computeRelativeDOW(double julianDay) const;
-
-    /**
-     * Compute the DOY using the WEEK_OF_YEAR field and the julian day
-     * of the day BEFORE January 1 of a year (a return value from
-     * computeJulianDayOfYear).
-     * @param julianDayOfYear  the given julian day of the day BEFORE 
-     *                         January 1 of a year.
-     * @return the DOY using the WEEK_OF_YEAR field.
-     */
-    int32_t computeDOYfromWOY(double julianDayOfYear) const;
-
-    /**
-     * Compute the Julian day number under either the Gregorian or the
-     * Julian calendar, using the given year and the remaining fields.
-     * @param isGregorian if true, use the Gregorian calendar
-     * @param year the adjusted year number, with 0 indicating the
-     * year 1 BC, -1 indicating 2 BC, etc.
-     * @return the Julian day number
-     */
-    double computeJulianDay(UBool isGregorian, int32_t year);
-
-
-    /**
-     * Return the week number of a day, within a period. This may be the week number in
-     * a year, or the week number in a month. Usually this will be a value >= 1, but if
-     * some initial days of the period are excluded from week 1, because
-     * minimalDaysInFirstWeek is > 1, then the week number will be zero for those
-     * initial days. Requires the day of week for the given date in order to determine
-     * the day of week of the first day of the period.
-     *
-     * @param date  Day-of-year or day-of-month. Should be 1 for first day of period.
-     * @param day   Day-of-week for given dayOfPeriod. 1-based with 1=Sunday.
-     * @return      Week number, one-based, or zero if the day falls in part of the
-     *              month before the first week, when there are days before the first
-     *              week because the minimum days in the first week is more than one.
-     */
-    int32_t weekNumber(int32_t date, int32_t day);
-
     /**
      * Validates the values of the set time fields.  True if they're all valid.
      * @return    True if the set time fields are all valid.
@@ -771,6 +681,11 @@ protected:
     UDate                fGregorianCutover;
 
     /**
+     * Julian day number of the Gregorian cutover
+     */
+    uint32_t             fCutoverJulianDay;
+
+    /**
      * Midnight, local time (using this Calendar's TimeZone) at or before the
      * gregorianCutover. This is a pure date value with no time of day or
      * timezone component.
@@ -782,6 +697,12 @@ protected:
      * 1 BC, -1 representing 2 BC, etc.
      */
     int32_t fGregorianCutoverYear;// = 1582;
+
+    /**
+     * The year of the gregorianCutover, with 0 representing
+     * 1 BC, -1 representing 2 BC, etc.
+     */
+    int32_t fGregorianCutoverJulianDay;// = 2299161;
 
     /**
      * Converts time as milliseconds to Julian date. The Julian date used here is not a
@@ -802,14 +723,16 @@ protected:
     static UDate julianDayToMillis(double julian);
 
     /**
-     * Convert a quasi Julian date to the day of the week. The Julian date used here is
-     * not a true Julian date, since it is measured from midnight, not noon. Return
-     * value is one-based.
-     *
-     * @param julian  The given Julian date number.
-     * @return   Day number from 1..7 (SUN..SAT).
+     * Used by handleComputeJulianDay() and handleComputeMonthStart().
      */
-    static uint8_t julianDayToDayOfWeek(double julian);
+    UBool fIsGregorian;
+
+    /**
+     * Used by handleComputeJulianDay() and handleComputeMonthStart().
+     */
+    UBool fInvertGregorian;
+
+
 
  public: // internal implementation
 
@@ -851,9 +774,9 @@ protected:
     static const int32_t    fgSystemDefaultCenturyYear;
 
     /**
-     * TODO: (ICU 2.8) use this value instead of SimpleDateFormat::fgSystemDefaultCentury
+     * Default value that indicates the UDate of the beginning of the system default century
      */
-    //static const UDate        fgSystemDefaultCentury;
+    static const UDate        fgSystemDefaultCentury;
 
     /**
      * Returns the beginning date of the 100-year window that dates with 2-digit years
@@ -879,15 +802,13 @@ protected:
 
 };
 
-inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
-{
-  // If julian is negative, then julian%7 will be negative, so we adjust
-  // accordingly.  We add 1 because Julian day 0 is Monday.
-  int8_t dayOfWeek = (int8_t) uprv_fmod(julian + 1, 7);
 
-  uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7 + UCAL_SUNDAY) : UCAL_SUNDAY));
-  return result;
+inline int32_t GregorianCalendar::getActualMaximum(UCalendarDateFields field) const
+{
+    UErrorCode status = U_ZERO_ERROR;
+    return getActualMaximum(field, status);
 }
+
 
 U_NAMESPACE_END
 

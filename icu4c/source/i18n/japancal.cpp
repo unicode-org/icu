@@ -17,6 +17,7 @@
 
 #include "japancal.h"
 #include "unicode/gregocal.h"
+#include "mutex.h"
 
 //#define U_DEBUG_JCAL
 
@@ -309,48 +310,12 @@ const char *JapaneseCalendar::getType() const
   return "japanese";
 }
 
-
-int32_t
-JapaneseCalendar::getMaximum(UCalendarDateFields field) const
-{
-  if(field == UCAL_ERA) {
-    return kCurrentEra;
-  } else {
-    return GregorianCalendar::getMaximum(field);
-  }
-}
-
-int32_t
-JapaneseCalendar::getLeastMaximum(UCalendarDateFields field) const
-{
-  if(field == UCAL_ERA) {
-    return kCurrentEra;
-  } else {
-    return GregorianCalendar::getLeastMaximum(field);
-  }
-}
-
-int32_t
-JapaneseCalendar::monthLength(int32_t month, int32_t year) const
-{
-  return GregorianCalendar::monthLength(month,year);
-}
-
-
-int32_t
-JapaneseCalendar::monthLength(int32_t month) const
-{
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t year = internalGet(UCAL_YEAR);
-  // ignore era
-  return GregorianCalendar::monthLength(month, getGregorianYear(status));
-}
-
-int32_t JapaneseCalendar::getDefaultMonthInYear() const
+int32_t JapaneseCalendar::getDefaultMonthInYear() 
 {
   UErrorCode status  = U_ZERO_ERROR;
   int32_t era = internalGetEra();
-  int32_t year = getGregorianYear(status);
+  computeFields(status); // slow
+  int32_t year = getGregorianYear();
   // TODO do we assume we can trust 'era'?  What if it is denormalized?
 
   int32_t month = GregorianCalendar::getDefaultMonthInYear();
@@ -370,11 +335,12 @@ int32_t JapaneseCalendar::getDefaultMonthInYear() const
   return month;
 }
 
-int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t month) const
+int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t month) 
 {
   UErrorCode status  = U_ZERO_ERROR;
   int32_t era = internalGetEra();
-  int32_t year = getGregorianYear(status);
+  computeFields(status); // slow
+  int32_t year = getGregorianYear();
   int32_t day = GregorianCalendar::getDefaultDayInMonth(month);
   
   if(year == kEraInfo[era].year) {
@@ -389,37 +355,32 @@ int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t month) const
 
 int32_t JapaneseCalendar::internalGetEra() const
 {
-    return isSet(UCAL_ERA) ? internalGet(UCAL_ERA) : kCurrentEra;  
+  // OLD
+  internalGet(UCAL_ERA, kCurrentEra);
 }
 
-int32_t
-JapaneseCalendar::getGregorianYear(UErrorCode &status)  const
+int32_t JapaneseCalendar::handleGetExtendedYear()
 {
-  int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : 1; // default year = 1
-  int32_t era = kCurrentEra;
-  if (fStamp[UCAL_ERA] != kUnset) {
-    era = internalGet(UCAL_ERA);
+  int32_t year;
+
+  if (newerField(UCAL_EXTENDED_YEAR, UCAL_YEAR) == UCAL_EXTENDED_YEAR &&
+      newerField(UCAL_EXTENDED_YEAR, UCAL_ERA) == UCAL_EXTENDED_YEAR) {
+    year = internalGet(UCAL_EXTENDED_YEAR, 1);
+  } else {
+    // Subtract one because year starts at 1
+    year = internalGet(UCAL_YEAR) + kEraInfo[internalGet(UCAL_ERA)].year - 1;
   }
+  return year;
   
-  if ((era<0)||(era>kCurrentEra)) {
-      status = U_ILLEGAL_ARGUMENT_ERROR;
-      return 0 ;
-  }
-  return year + kEraInfo[era].year - 1;
 }
 
-void JapaneseCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
-{
-  GregorianCalendar::timeToFields(theTime, quick, status);
-  
-  // these are the gregorian era and year
-  int32_t era = internalGet(UCAL_ERA);
-  int32_t year = internalGet(UCAL_YEAR);
-  if(era == GregorianCalendar::BC) {
-    year = 1 - year;
-  }
 
-  //  grego [e+y] -> e+y
+void JapaneseCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status)
+{
+  //Calendar::timeToFields(theTime, quick, status);
+  GregorianCalendar::handleComputeFields(julianDay, status);
+  int32_t year = internalGet(UCAL_EXTENDED_YEAR); // Gregorian year
+
   int32_t low = 0;
   
   // Short circuit for recent years.  Most modern computations will
@@ -512,6 +473,54 @@ int32_t JapaneseCalendar::defaultCenturyStartYear() const
   return 0;
 }
 
+static int32_t gJapanCalendarLimits[2][4] = {
+  //    Minimum  Greatest min      Least max   Greatest max
+  {        0,        0, JapaneseCalendar::kCurrentEra, JapaneseCalendar::kCurrentEra }, // ERA
+  {        1,        1,           0,           0 }, // YEAR
+};
+
+static UBool gJapanYearLimitsKnown = FALSE;
+
+int32_t JapaneseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const
+{
+  switch(field) {
+  case UCAL_YEAR:
+    {
+      UBool needCalc = FALSE;
+      { 
+        Mutex m;
+        needCalc = (gJapanYearLimitsKnown == FALSE);
+      }
+      if(needCalc) {
+        int32_t min = kEraInfo[1].year - kEraInfo[0].year;
+        int32_t max = min;
+        for (int32_t i=2; i<kEraCount; i++) { // counting by year, not field (3's)
+          int32_t d = kEraInfo[i].year - kEraInfo[i-1].year;
+          if (d < min) {
+            min = d;
+          } else if (d > max) {
+            max = d;
+          }
+        }
+        { 
+          Mutex m;
+          if(gJapanYearLimitsKnown==FALSE) {
+            gJapanCalendarLimits[field][UCAL_LEAST_MAXIMUM] = min;
+            gJapanCalendarLimits[field][UCAL_MAXIMUM] = max;
+            gJapanYearLimitsKnown = TRUE;
+          }
+        }
+      }
+      return gJapanCalendarLimits[field][limitType];
+    }
+
+  case UCAL_ERA:
+    return gJapanCalendarLimits[field][limitType];
+
+  default:
+    return GregorianCalendar::handleGetLimit(field,limitType);
+  }
+}
 
 
 U_NAMESPACE_END

@@ -42,6 +42,10 @@
 #include "uprops.h"
 #include <float.h>
 
+#if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
+#include <stdio.h>
+#endif
+
 // *****************************************************************************
 // class SimpleDateFormat
 // *****************************************************************************
@@ -77,12 +81,6 @@ static const UChar SUPPRESS_NEGATIVE_PREFIX[] = {0xAB00, 0};
 static const char gDateTimePatternsTag[]="DateTimePatterns";
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)
-
-/**
- * This value of defaultCenturyStart indicates that the system default is to be
- * used.  To be removed in 2.8
- */
-const UDate     SimpleDateFormat::fgSystemDefaultCentury        = DBL_MIN;
 
 static const UChar QUOTE = 0x27; // Single quote
 
@@ -534,7 +532,8 @@ SimpleDateFormat::fgPatternIndexToCalendarField[] =
     UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK_IN_MONTH, 
     UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, 
     UCAL_AM_PM, UCAL_HOUR, UCAL_HOUR, UCAL_ZONE_OFFSET,
-    UCAL_YEAR_WOY, UCAL_DOW_LOCAL
+    UCAL_YEAR_WOY, UCAL_DOW_LOCAL,UCAL_EXTENDED_YEAR,
+    UCAL_JULIAN_DAY,UCAL_MILLISECONDS_IN_DAY
 };
 
 // Map index into pattern character string to DateFormat field number
@@ -549,7 +548,8 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
     DateFormat::kWeekOfMonthField, DateFormat::kAmPmField,
     DateFormat::kHour1Field, DateFormat::kHour0Field,
     DateFormat::kTimezoneField, DateFormat::kYearWOYField, 
-    DateFormat::kDOWLocalField
+    DateFormat::kDOWLocalField, DateFormat::kExtendedYearField,
+    DateFormat::kJulianDayField, DateFormat::kMillisecondsInDayField
 };
 
 
@@ -1078,6 +1078,10 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     int32_t patternCharIndex;
     UnicodeString temp;
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
+
+#if defined (U_DEBUG_CAL)
+    //fprintf(stderr, "%s:%d - [%c]  st=%d \n", __FILE__, __LINE__, (char) ch, start);
+#endif
 
     if (patternCharPtr == NULL) {
         return -start;
