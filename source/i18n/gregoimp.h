@@ -262,66 +262,41 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
  * @internal ICU 3.0
  */
 class U_I18N_API CalendarData : public UObject {
- public: 
-  /**
-   * Construct a CalendarData from the given locale.
-   * @param loc locale to use - the 'calendar' keyword will be used, respecting the
-   * 'default' value in the resource bundle.
-   * @param status error code
-   */
-  //CalendarData(const Locale& loc, UErrorCode& status);
+public: 
+    /**
+     * Construct a CalendarData from the given locale.
+     * @param loc locale to use. The 'calendar' keyword will be ignored.
+     * @param type calendar type. NULL indicates the gregorian calendar. 
+     * No default lookup is done.
+     * @param status error code
+     */
+    CalendarData(const Locale& loc, const char *type, UErrorCode& status);
 
-  /**
-   * Construct a CalendarData from the given locale.
-   * @param loc locale to use. The 'calendar' keyword will be ignored.
-   * @param type calendar type. NULL indicates the gregorian calendar. 
-   * No default lookup is done.
-   * @param status error code
-   */
-  CalendarData(const Locale& loc, const char *type, UErrorCode& status);
-  
-  /**
-   * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
-   *
-   * @param key Resource key to data
-   * @param status Error Status
-   * @internal
-   */
-  UResourceBundle* getByKey(const char *key, UErrorCode& status);
+    /**
+     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
+     * The ResourceBundle C++ API should NOT be used because it is too slow for a low level API.
+     *
+     * @param key Resource key to data
+     * @param status Error Status
+     * @internal
+     */
+    UResourceBundle* getByKey(const char *key, UErrorCode& status);
 
-  /**
-   * Load data for calendar. returns a ResourceBundle object
-   *
-   * @param key Resource key to data
-   * @param status Error Status
-   * @internal
-   */
-  ResourceBundle getBundleByKey(const char *key, UErrorCode& status);
+    /**
+     * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
+     * There is an implicit key of 'format'
+     * data is located in:   "calendar/key/format/subKey"
+     * for example,  calendar/dayNames/format/abbreviated
+     * The ResourceBundle C++ API should NOT be used because it is too slow for a low level API.
+     *
+     * @param key Resource key to data
+     * @param subKey Resource key to data
+     * @param status Error Status
+     * @internal
+     */
+    UResourceBundle* getByKey2(const char *key, const char *subKey, UErrorCode& status);
 
-  /**
-   * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
-   * There is an implicit key of 'format'
-   * data is located in:   "calendar/key/format/subKey"
-   * for example,  calendar/dayNames/format/abbreviated
-   *
-   * @param key Resource key to data
-   * @param subKey Resource key to data
-   * @param status Error Status
-   * @internal
-   */
-  UResourceBundle* getByKey2(const char *key, const char *subKey, UErrorCode& status);
-
-  /**
-   * Load data for calendar. Returns a ResourceBundle object
-   *
-   * @param key Resource key to data
-   * @param subKey Resource key to data
-   * @param status Error Status
-   * @internal
-   */
-  ResourceBundle getBundleByKey2(const char *key, const char *subKey, UErrorCode& status);
-
-  ~CalendarData();
+    ~CalendarData();
 
     /**
      * Override Calendar Returns a unique class ID POLYMORPHICALLY. Pure virtual
@@ -348,14 +323,14 @@ class U_I18N_API CalendarData : public UObject {
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
- private:
-  void initData(const char *locale, const char *type, UErrorCode& status);
-   
-  UResourceBundle *fFillin;
-  UResourceBundle *fOtherFillin;
-  UResourceBundle *fBundle;
-  UResourceBundle *fFallback;
-  CalendarData(); // Not implemented.
+private:
+    void initData(const char *locale, const char *type, UErrorCode& status);
+
+    UResourceBundle *fFillin;
+    UResourceBundle *fOtherFillin;
+    UResourceBundle *fBundle;
+    UResourceBundle *fFallback;
+    CalendarData(); // Not implemented.
 };
 
 U_NAMESPACE_END
