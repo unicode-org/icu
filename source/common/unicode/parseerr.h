@@ -27,62 +27,58 @@ enum { U_PARSE_CONTEXT_LEN = 16 };
  * enough that more information than a UErrorCode is needed to
  * localize the error.
  *
- * <p>The code field is an integer error code specific to each parsing
- * engine, but globally unique.  See the engine header file for
- * possible values.  The line, offset, and context fields are
- * optional; parsing engines may choose not to use to use them.
+ * <p>The line, offset, and context fields are optional; parsing
+ * engines may choose not to use to use them.
+ *
+ * <p>The preContext and postContext strings include some part of the
+ * context surrounding the error.  If the source text is "let for=7"
+ * and "for" is the error (e.g., because it is a reserved word), then
+ * some examples of what a parser might produce are the following:
+ *
+ * <pre>
+ * preContext   postContext
+ * ""           ""            The parser does not support context
+ * "let "       "=7"          Pre- and post-context only
+ * "let "       "for=7"       Pre- and post-context and error text
+ * ""           "for"         Error text only
+ * </pre>
  *
  * <p>Examples of engines which use UParseError (or may use it in the
- * future) are RuleBasedTransliterator and RuleBasedBreakIterator.
+ * future) are Transliterator, RuleBasedBreakIterator, and
+ * RegexPattern.
  * 
  * @stable ICU 2.0
  */
 typedef struct UParseError {
 
     /**
-     * An integer indicating the type of error.  If no error was
-     * encountered, the parse engine sets this to zero, and the
-     * other fields' values should be ignored.
-     *
-     * <p>Each parse engine should use a range of codes from
-     * 0xNNNN0001 to 0xNNNNFFFF, where NNNN is a 16-bit integer
-     * between 0x0001 and 0xFFFF unique to each parse engine.
-     * Parse engines should define the enum PARSE_ERROR_BASE
-     * to be 0xNNNN0000.
-     */
-    /*int32_t        code; */
-
-    /**
-     * The line on which the error occured.  If the parse engine
-     * is not using this field, it should set it to zero.  Otherwise
-     * it should be a positive integer. The default value of this field
-     * is -1. It will be set to 0 if the code populating this struct is not
-     * using line numbers.
-     * @stable ICU 2.0    
+     * The line on which the error occured.  If the parser uses this
+     * field, it sets it to the line number of the source text line on
+     * which the error appears, which will be be a value >= 1.  If the
+     * parse does not support line numbers, the value will be <= 0.
+     * @stable ICU 2.0
      */
     int32_t        line;
 
     /**
-     * The character offset to the error.  If the line field is
-     * being used, then this offset is from the start of the line.
-     * If the line field is not being used, then this offset is from
-     * the start of the text.The default value of this field
-     * is -1. It will be set to appropriate value by the code that 
-     * populating the struct.
-     * @stable ICU 2.0   
+     * The character offset to the error.  If the line field is >= 1,
+     * then this is the offset from the start of the line.  Otherwise,
+     * this is the offset from the start of the text.  If the parser
+     * does not support this field, it will have a value < 0.
+     * @stable ICU 2.0
      */
-    int32_t    offset;
+    int32_t        offset;
 
     /**
-     * Textual context before the error.  Null-terminated.
-     * May be the empty string if not implemented by parser.
+     * Textual context before the error.  Null-terminated.  The empty
+     * string if not supported by parser.
      * @stable ICU 2.0   
      */
     UChar          preContext[U_PARSE_CONTEXT_LEN];
 
     /**
-     * Textual context after the error.  Null-terminated.
-     * May be the empty string if not implemented by parser.
+     * The error itself and/or textual context after the error.
+     * Null-terminated.  The empty string if not supported by parser.
      * @stable ICU 2.0   
      */
     UChar          postContext[U_PARSE_CONTEXT_LEN];
