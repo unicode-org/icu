@@ -953,7 +953,7 @@ static void TestGetKeywordValues(void) {
 static void TestGetFunctionalEquivalent(void) {
   int32_t i;
   static const char *testCases[] = {
-        //              avail   locale          equiv  
+        /*              avail   locale          equiv  */
         "f",    "de_US_CALIFORNIA",            "de",
         "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
         "f",    "de_CN@collation=pinyin",      "de",
