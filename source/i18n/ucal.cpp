@@ -80,8 +80,7 @@ ucal_open(    const    UChar*          zoneID,
   else {
     int32_t length = (len == -1 ? u_strlen(zoneID) : len);
 
-    zone = TimeZone::createTimeZone(UnicodeString((UChar*)zoneID,
-						  length, length));
+    zone = TimeZone::createTimeZone(UnicodeString((UChar*)zoneID));
   }
   if(zone == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
