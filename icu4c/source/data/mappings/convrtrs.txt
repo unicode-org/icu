@@ -94,6 +94,7 @@ ISO_2022,locale=ja,version=2     ISO-2022-JP-2 { IANA MIME } csISO2022JP2
 ISO_2022,locale=ja,version=3     JIS7
 ISO_2022,locale=ja,version=4     JIS8
 ISO_2022,locale=ko,version=0     ISO-2022-KR { IANA MIME } csISO2022KR
+ISO_2022,locale=ko,version=1     ibm-25546 ibm-25546_P100 25546
 ISO_2022,locale=zh,version=0     ISO-2022-CN { MIME } csISO2022CN
 ISO_2022,locale=zh,version=1     ISO-2022-CN-EXT
 HZ                               HZ-GB-2312 { MIME }
@@ -140,8 +141,6 @@ ibm-964                 EUC-TW { MIME } ibm-eucTW cns11643              # Taiwan
 ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } chinese gb iso-ir-58 csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383  # China EUC
 ibm-1162                tis-620 cp874 windows-874 { MIME } ms874 cp9066 874 # Thai (w/ euro update)
 ibm-874                 ibm-1161 # Same as 1162 (w/o euro update)
-
-lmb-excp                # Special exceptions list for LMBCS     algorithm
 
 # Platform codepages
 ibm-437                 cp437 csPC8CodePage437 437         # PC US
@@ -243,6 +242,34 @@ ibm-933                cp933 cpibm933  933         # Korea EBCDIC MIXED
 ibm-935                cp935 cpibm935  935         # China EBCDIC MIXED 
 ibm-937                cp937 cpibm937  937 # Taiwan EBCDIC MIXED
 ibm-939                cp939 939 # Host MBCS (Latin-Kanji)
+ibm-1006_P100-2000     ibm-1006 ibm-1006_VPUA
+ibm-1006_X100-2000     ibm-1006_STD
+ibm-1025_P100-2000     ibm-1025 ibm-1025_STD
+ibm-1026_P100-2000     ibm-1026 CP1026 IBM1026 { IANA } csIBM1026 ibm-1026_STD
+ibm-1097_P100-2000     ibm-1097 ibm-1097_VPUA
+ibm-1097_X100-2000     ibm-1097_STD 
+ibm-1098_P100-2000     ibm-1098 ibm-1098_VSUB_VPUA
+ibm-1098_X100-2000     ibm-1098_VSUB
+ibm-1112_P100-2000     ibm-1112 cp1112 1112  ibm-1112_STD
+ibm-1122_P100-2000     ibm-1122 cp1122 ibm-1122 1122 ibm-1122_STD
+ibm-1124_P100-2000     ibm-1124 ibm-1124_STD
+ibm-1125_P100-2000     ibm-1125 ibm-1125_VSUB
+ibm-1129_P100-2000     ibm-1129 ibm-1129_STD
+ibm-1130_P100-2000     ibm-1130 ibm-1130_STD
+ibm-1131_P100-2000     ibm-1131 ibm-1131_VSUB
+ibm-1132_P100-2000     ibm-1132 ibm-1132_STD
+ibm-1133_P100-2000     ibm-1133 ibm-1133_STD
+ibm-1137_P100-2000     ibm-1137 ibm-1137_STD
+ibm-1381_P110-2000     ibm-1381 ibm-1381_VSUB_VPUA
+ibm-1381_X110-2000     ibm-1381_VSUB_PUA
+ibm-806_P100-2000      ibm-806 ibm-806_VSUB
+ibm-870_P100-2000      ibm-870 CP870 IBM870 { IANA } ibm-870_STD  ebcdic-cp-roece ebcdic-cp-yu csIBM870
+ibm-875_P100-2000      ibm-875 cp875 ibm-875 875 ibm-875_STD 
+ibm-9030_P100-2000     ibm-9030 ibm-9030_STD
+ibm-9066_P100-2000     ibm-9066 ibm-9066_VSUB
+ibm-918_P100-2000      ibm-918 CP918 IBM918 { IANA } ibm-918_VPUA ebcdic-cp-ar2 csIBM918 
+ibm-918_X100-2000      ibm-918_STD
+
 #ibm-1046              # PC     Arabic without EURO
 # with Euro
 ibm-1390               cpibm1390 # Japan EBCDIC MIXED
@@ -261,9 +288,9 @@ ibm-1148               cpibm1148 # EBCDIC International Latin1
 ibm-1149               cpibm1149 ebcdic-is # EBCDIC     Iceland
 ibm-1153               cpibm1153 # EBCDIC latin 2
 ibm-1154               cp1025 cpibm1154                         # EBCDIC Cyrillic Multilingual
-ibm-1155               IBM1026 { IANA } csIBM1026 cp1026 cpibm1155 1026      # EBCDIC Turkey
-ibm-1156               cp1112 cpibm1156  ibm-1112 1112                       # EBCDIC Baltic Multilingual
-ibm-1157               cp1122 cpibm1157  ibm-1122 1122                       # EBCDIC Estonia
+ibm-1155               cpibm1155   # EBCDIC Turkey
+ibm-1156               cpibm1156                     # EBCDIC Baltic Multilingual
+ibm-1157               cpibm1157                     # EBCDIC Estonia
 ibm-1158               cp1123 cpibm1158 1123                        # Cyrillic Ukraine EBCDIC
 ibm-1159               cp28709         # SBCS T-Ch Host
 ibm-1160               cp9030 cpibm1160                         # EBCDIC Thailand
@@ -274,7 +301,7 @@ ibm-4930               cp4930 # Korean DBCS     Host
 ibm-1364               cp1364 # Korean Host     Mixed
 ibm-8482               # host SBCS (Katakana)
 ibm-4899               cpibm4899                          # Old EBCDIC Hebrew
-ibm-4971               cp875 cpibm4971 ibm-875 875                         # EBCDIC Greek
+ibm-4971               cpibm4971                       # EBCDIC Greek
 ibm-9027               # DBCS T-Ch Host
 ibm-5123               cp1027          # Host Roman Jis
 ibm-12712              cpibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)
@@ -307,15 +334,6 @@ ibm-1149-s390          # EBCDIC Iceland
 ibm-1153-s390          # EBCDIC latin 2
 ibm-12712-s390         # EBCDIC Hebrew
 ibm-16804-s390         # EBCDIC Arabic
-
-# Added for ISO-2022 support
-jisx-201               # Can be used by other converters
-jisx-208               # Can be used by other converters if pure DBCS conversion is needed
-jisx-212               # Can be used by other converters if pure DBCS conversion is needed
-gb_2312_80-1           # Can be used by other converters if pure DBCS conversion is needed
-iso-ir-165             # Can be used by other converters if pure DBCS conversion is needed
-ksc_5601_1             # Can be used by other converters if pure DBCS conversion is needed
-cns-11643-1992         # ISO-2022-CN specific.Cannot be used by other converters
 
 # GB 18030 is partly algorithmic, using the MBCS converter
 gb18030
