@@ -951,6 +951,7 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
     TransliteratorAlias* alias = 0;
     Transliterator* t = 0;
     
+    umtx_init(&registryMutex);
     umtx_lock(&registryMutex);
     if (HAVE_REGISTRY) {
         t = registry->get(id, alias, pe, ec);
@@ -1117,6 +1118,7 @@ UnicodeSet& Transliterator::getTargetSet(UnicodeSet& result) const {
 void Transliterator::registerFactory(const UnicodeString& id,
                                      Transliterator::Factory factory,
                                      Transliterator::Token context) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
         _registerFactory(id, factory, context);
@@ -1153,6 +1155,7 @@ void Transliterator::_registerSpecialInverse(const UnicodeString& target,
  * @see #unregister
  */
 void Transliterator::registerInstance(Transliterator* adoptedPrototype) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
         _registerInstance(adoptedPrototype);
@@ -1172,6 +1175,7 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype) {
 
  */
 void Transliterator::unregister(const UnicodeString& ID) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
         registry->remove(ID);
@@ -1184,6 +1188,7 @@ void Transliterator::unregister(const UnicodeString& ID) {
  * i from 0 to countAvailableIDs() - 1.
  */
 int32_t Transliterator::countAvailableIDs(void) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? registry->countAvailableIDs() : 0;
 }
@@ -1195,6 +1200,7 @@ int32_t Transliterator::countAvailableIDs(void) {
  */
 const UnicodeString& Transliterator::getAvailableID(int32_t index) {
     const UnicodeString* result = NULL;
+    umtx_init(&registryMutex);
     umtx_lock(&registryMutex);
     if (HAVE_REGISTRY) {
         result = &registry->getAvailableID(index);
@@ -1205,12 +1211,14 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
 }
 
 int32_t Transliterator::countAvailableSources(void) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? _countAvailableSources() : 0;
 }
 
 UnicodeString& Transliterator::getAvailableSource(int32_t index,
                                                   UnicodeString& result) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
         _getAvailableSource(index, result);
@@ -1219,6 +1227,7 @@ UnicodeString& Transliterator::getAvailableSource(int32_t index,
 }
 
 int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? _countAvailableTargets(source) : 0;
 }
@@ -1226,6 +1235,7 @@ int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
 UnicodeString& Transliterator::getAvailableTarget(int32_t index,
                                                   const UnicodeString& source,
                                                   UnicodeString& result) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
         _getAvailableTarget(index, source, result);
@@ -1235,6 +1245,7 @@ UnicodeString& Transliterator::getAvailableTarget(int32_t index,
 
 int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
                                                const UnicodeString& target) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     return HAVE_REGISTRY ? _countAvailableVariants(source, target) : 0;
 }
@@ -1243,6 +1254,7 @@ UnicodeString& Transliterator::getAvailableVariant(int32_t index,
                                                    const UnicodeString& source,
                                                    const UnicodeString& target,
                                                    UnicodeString& result) {
+    umtx_init(&registryMutex);
     Mutex lock(&registryMutex);
     if (HAVE_REGISTRY) {
         _getAvailableVariant(index, source, target, result);
