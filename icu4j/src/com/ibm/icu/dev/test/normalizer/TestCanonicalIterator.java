@@ -64,7 +64,10 @@ public class TestCanonicalIterator extends TestFmwk {
             
             String s = UTF16.valueOf(i);
             
-            characterTest(s, i, it);
+            if (! skipIfBeforeICU(3, 4)) {
+                characterTest(s, i, it);
+            }
+            
             characterTest(s + "\u0345", i, it);
         }
     }
