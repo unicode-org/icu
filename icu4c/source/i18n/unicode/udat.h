@@ -152,24 +152,23 @@ enum UDateFormatStyle {
 };
 typedef enum UDateFormatStyle UDateFormatStyle;
 
-    /**
-     * Open a new UDateFormat for formatting and parsing dates and times.
-     * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
-     * and to parse dates in calls to \Ref{udat_parse}.
-     * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
-     * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
-     * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
-     * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
-     * @param locale The locale specifying the formatting conventions
-     * @param tzID A timezone ID specifying the timezone to use.  If 0, use
-     * the default timezone.
-     * @param tzIDLength The length of tzID, or -1 if null-terminated.
-     * @param status A pointer to an UErrorCode to receive any errors
-     * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
-     * an error occurred.
-     * @see udat_openPattern
-     * @draft
-     * /
+/**
+ * Open a new UDateFormat for formatting and parsing dates and times.
+ * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
+ * and to parse dates in calls to \Ref{udat_parse}.
+ * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
+ * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
+ * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
+ * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
+ * @param locale The locale specifying the formatting conventions
+ * @param tzID A timezone ID specifying the timezone to use.  If 0, use
+ * the default timezone.
+ * @param tzIDLength The length of tzID, or -1 if null-terminated.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return A pointer to a UDateFormat to use for formatting dates and times, or 0 if
+ * an error occurred.
+ * @see udat_openPattern
+ * @draft
 U_CAPI UDateFormat*
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
@@ -177,6 +176,7 @@ udat_open(UDateFormatStyle  timeStyle,
           const UChar       *tzID,
           int32_t           tzIDLength,
           UErrorCode        *status);
+ */
 
 /**
 * Open a new UDateFormat for formatting dates and times.
@@ -190,12 +190,13 @@ udat_open(UDateFormatStyle  timeStyle,
 * an error occurred.
 * @see udat_open
 * @draft
-* /
 U_CAPI UDateFormat*
 udat_openPattern(    const   UChar           *pattern,
             int32_t         patternLength,
             const   char         *locale,
             UErrorCode      *status);
+*/
+
 /**
  * Open a new UDateFormat for formatting and parsing dates and times.
  * A UDateFormat may be used to format dates in calls to \Ref{udat_format},

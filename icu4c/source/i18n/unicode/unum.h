@@ -161,11 +161,11 @@ typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 * @see unum_openPattern
 * @stable
 * @deprecated
-* /
 U_CAPI UNumberFormat*
 unum_open(UNumberFormatStyle    style,
       const   char*        locale,
       UErrorCode*        status);
+*/
 
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
@@ -179,12 +179,12 @@ unum_open(UNumberFormatStyle    style,
 * an error occurred.
 * @see unum_open
 * @deprecated
-* /
 U_CAPI UNumberFormat*
 unum_openPattern(    const    UChar*        pattern,
             int32_t            patternLength,
             const    char*        locale,
             UErrorCode*        status);
+*/
 
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
@@ -338,13 +338,13 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see unum_toPattern
 * @draft
-* /
 U_CAPI void
 unum_applyPattern(          UNumberFormat  *format,
                             UBool          localized,
                     const   UChar          *pattern,
                             int32_t        patternLength
                             );
+*/
 
 
 /**
