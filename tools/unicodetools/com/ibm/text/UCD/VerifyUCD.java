@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2001/08/31 00:29:50 $
-* $Revision: 1.2 $
+* $Date: 2001/09/01 00:06:15 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -26,51 +26,6 @@ import com.ibm.text.utility.*;
 public class VerifyUCD implements UCD_Types {
 
     public static final String IDN_DIR = DATA_DIR + "\\IDN\\";
-    static String ucdVersion = "";
-
-    public static void main (String[] args) throws Exception {
-
-        for (int i = 0; i < args.length; ++i) {
-            String arg = args[i];
-            if (arg.charAt(0) == '#') return; // skip rest of line
-
-            Utility.fixDot();
-            System.out.println("Argument: " + args[i]);
-
-            if      (arg.equalsIgnoreCase("all")) {
-                //checkCase();
-                checkCanonicalProperties();
-                CheckCaseFold();
-                checkAgainstUInfo();
-
-            } else if (arg.equalsIgnoreCase("build")) {
-                ConvertUCD.main(new String[]{ucdVersion});
-            } else if (arg.equalsIgnoreCase("version")) ucdVersion = args[++i];
-            else if (arg.equalsIgnoreCase("generateXML")) generateXML();
-            else if (arg.equalsIgnoreCase("checkCase")) checkCase();
-            else if (arg.equalsIgnoreCase("checkCase2")) checkCase2();
-            else if (arg.equalsIgnoreCase("checkCanonicalProperties")) checkCanonicalProperties();
-            else if (arg.equalsIgnoreCase("CheckCaseFold")) CheckCaseFold();
-            else if (arg.equalsIgnoreCase("idn")) VerifyIDN();
-            else if (arg.equalsIgnoreCase("NFTest")) NFTest();
-            else if (arg.equalsIgnoreCase("test1")) test1();
-            //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
-            else if (arg.equalsIgnoreCase("checkScripts")) checkScripts();
-            else if (arg.equalsIgnoreCase("IdentifierTest")) IdentifierTest();
-            else if (arg.equalsIgnoreCase("GenerateData")) GenerateData.main(Utility.split(args[++i],','));
-            else if (arg.equalsIgnoreCase("BuildNames")) BuildNames.main(null);
-            else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
-                GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
-
-            else {
-                System.out.println("Unknown option -- must be one of the following (case-insensitive)");
-                System.out.println("generateXML, checkCase, checkCanonicalProperties, CheckCaseFold,");
-                System.out.println("VerifyIDN, NFTest, test1, ");
-                // System.out.println(checkAgainstUInfo,");
-                System.out.println("checkScripts, IdentifierTest, writeNormalizerTestSuite");
-            }
-        }
-    }
 
         /*
         System.out.println(ucd.toString(0x0387));
@@ -85,7 +40,7 @@ public class VerifyUCD implements UCD_Types {
         */
 
     static void checkAgainstOtherVersion(String otherVersion) {
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         UCD ucd2 = UCD.make(otherVersion);
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             UData curr = ucd.get(cp, true);
@@ -100,7 +55,7 @@ public class VerifyUCD implements UCD_Types {
     }
 
     static void generateXML() throws IOException {
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         String filename = "UCD.xml";
         PrintWriter log = Utility.openPrintWriter(filename);
 
@@ -125,7 +80,7 @@ public class VerifyUCD implements UCD_Types {
     public static void checkCase() throws IOException {
         Utility.fixDot();
         System.out.println("checkCase");
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         initNormalizers();
         System.out.println(ucd.getCase("ABC,DE'F G\u0308H", FULL, TITLE));
         String fileName = "CaseDifferences.txt";
@@ -178,7 +133,7 @@ public class VerifyUCD implements UCD_Types {
     public static void checkCase2() throws IOException {
         Utility.fixDot();
         System.out.println("checkCase");
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         initNormalizers();
         System.out.println(ucd.getCase("ABC,DE'F G\u0308H", FULL, TITLE));
         String fileName = "CaseNormalizationDifferences.txt";
@@ -326,7 +281,7 @@ public class VerifyUCD implements UCD_Types {
     static final String upperNames[] = {"", "Other_Upper"};
 
     public static void CheckCaseFold() {
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         System.out.println("Checking Case Fold");
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
@@ -358,7 +313,7 @@ public class VerifyUCD implements UCD_Types {
 
     public static void VerifyIDN() throws IOException {
         System.out.println("VerifyIDN");
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         initNormalizers();
 
         System.out.println();
@@ -725,7 +680,7 @@ E0020-E007F; [TAGGING CHARACTERS]
     }
 
 
-    private static void IdentifierTest() {
+    public static void IdentifierTest() {
         String x = normalize(UTF32.valueOf32(0x10300), 4) ;
         getCategoryID(x);
 
@@ -827,7 +782,7 @@ E0020-E007F; [TAGGING CHARACTERS]
     private static UCD ucd;
     private static final String[] NAMES = {"NFD", "NFC", "NFKD", "NFKC", "Fold"};
 
-    private static void NFTest() {
+    public static void NFTest() {
         initNormalizers();
         for (int j = 0; j < 4; ++j) {
             Normalizer nfx = nf[j];
@@ -852,7 +807,7 @@ E0020-E007F; [TAGGING CHARACTERS]
     }
 
     public static void checkScripts() {
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         for (int i = 0; i < 0x10FFFF; ++i) {
             //byte script = ucd.getScript(i);
             if (true) { // script != COMMON_SCRIPT) {
@@ -863,7 +818,7 @@ E0020-E007F; [TAGGING CHARACTERS]
 
     public static void checkAgainstUInfo() {
     /*
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         UData x = new UData();
         x.fleshOut();
 
@@ -982,7 +937,7 @@ E0020-E007F; [TAGGING CHARACTERS]
     }
 
     public static void test1() {
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
 
         for (int i = 0x19; i < 0x10FFFF; ++i) {
 
@@ -1019,7 +974,7 @@ E0020-E007F; [TAGGING CHARACTERS]
     }
 
     static void checkCanonicalProperties() {
-        ucd = UCD.make(ucdVersion);
+        ucd = UCD.make(Main.ucdVersion);
         System.out.println(ucd.toString(0x1E0A));
 
         System.out.println("Cross-checking canonical equivalence");

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/01 00:06:15 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -38,8 +38,8 @@ public class TestData implements UCD_Types {
             "DerivedBidiClass-3.1.1d1.txt");
 
 
-        mask = Utility.setBits(0, DerivedPropertyLister.FC_NFKC_Closure, DerivedPropertyLister.ExpandsOnNFKC);
-        mask = Utility.clearBit(mask, DerivedPropertyLister.FullCompInclusion);
+        mask = Utility.setBits(0, DerivedProperty.FC_NFKC_Closure, DerivedProperty.ExpandsOnNFKC);
+        mask = Utility.clearBit(mask, DerivedProperty.FullCompInclusion);
         generateDerived(mask, HEADER_DERIVED, "DerivedNormalizationProperties-3.1.0d1.txt");
 
         generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
@@ -64,7 +64,7 @@ public class TestData implements UCD_Types {
         generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
             "DerivedNumericValues-3.1.0d1.txt");
 
-        mask = Utility.setBits(0, DerivedPropertyLister.PropMath, DerivedPropertyLister.Mod_ID_Continue_NO_Cf);
+        mask = Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf);
         generateDerived(mask, HEADER_DERIVED, "DerivedCoreProperties-3.1.0d1.txt");
 
         generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
@@ -83,7 +83,7 @@ public class TestData implements UCD_Types {
 
 
 
-            //generateDerived(Utility.setBits(0, DerivedPropertyLister.PropMath, DerivedPropertyLister.Mod_ID_Continue_NO_Cf),
+            //generateDerived(Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf),
             //    HEADER_DERIVED, "DerivedPropData2-3.1.0d1.txt");
         //generateVerticalSlice(SCRIPT, SCRIPT+1, KEEP_SPECIAL, "ScriptCommon-3.1.0d1.txt");
         //listStrings("LowerCase-3.1.0d1.txt", 0,0);
@@ -172,7 +172,7 @@ public class TestData implements UCD_Types {
         doHeader(fileName, output, headerChoice);
         for (int i = 0; i < 32; ++i) {
             if ((bitMask & (1<<i)) == 0) continue;
-            if (i >= DerivedPropertyLister.LIMIT) break;
+            if (i >= DerivedProperty.LIMIT) break;
             System.out.print('.');
             output.println("# ================================================");
             output.println();

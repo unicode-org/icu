@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/08/31 00:29:50 $
-* $Revision: 1.2 $
+* $Date: 2001/09/01 00:06:15 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -94,7 +94,7 @@ final class UCD_Names implements UCD_Types {
         "IDS_TrinaryOperator",
         "Radical",
         "UnifiedIdeograph",
-        "Reserved_Cf_Code_Point",
+        "Other_Default_Ignorable_Code_Point",
         "Deprecated",
     };
 
