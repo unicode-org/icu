@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/03/17 17:14:48 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/04/04 17:15:13 $ 
+ * $Revision: 1.15 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -349,7 +349,7 @@ public class IBMCalendarTest extends CalendarTest {
      */
     public void TestWeekShift() {
         Calendar cal = new GregorianCalendar(
-                             TimeZone.getTimeZone("America/Los_Angelese"),
+                             TimeZone.getTimeZone("America/Los_Angeles"),
                              new Locale("en", "US"));
         cal.setTime(new Date(997257600000L)); // Wed Aug 08 01:00:00 PDT 2001
         // In pass one, change the first day of week so that the weeks
