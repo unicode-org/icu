@@ -1343,14 +1343,13 @@ lowsurogate:
     args->source = mySource;
 }
 
-/*
 UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
     *err = U_UNSUPPORTED_ERROR;
     return 0;
 }
-*/
+
 static const UConverterImpl _UTF32BEImpl = {
     UCNV_UTF32_BigEndian,
 
@@ -1367,8 +1366,7 @@ static const UConverterImpl _UTF32BEImpl = {
     T_UConverter_fromUnicode_UTF32_BE,
     NULL,
 //    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC,
-    NULL,
-//    T_UConverter_getNextUChar_UTF32_BE,
+    T_UConverter_getNextUChar_UTF32_BE,
 
     NULL
 };
@@ -1504,7 +1502,6 @@ donefornow:
 
     args->target = myTarget;
     args->source = (const char *) mySource;
-//    *err = U_UNSUPPORTED_ERROR;
 }
 
 void  T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
@@ -1578,17 +1575,14 @@ lowsurogate:
 
     args->target = (char *) myTarget;
     args->source = mySource;
-//    *err = U_UNSUPPORTED_ERROR;
 }
 
-/*
 UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
     *err = U_UNSUPPORTED_ERROR;
     return 0;
 }
-*/
 
 static const UConverterImpl _UTF32LEImpl = {
     UCNV_UTF32_LittleEndian,
@@ -1606,8 +1600,7 @@ static const UConverterImpl _UTF32LEImpl = {
     T_UConverter_fromUnicode_UTF32_LE,
     NULL,
 //    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC,
-    NULL,
-//    T_UConverter_getNextUChar_UTF32_LE,
+    T_UConverter_getNextUChar_UTF32_LE,
 
     NULL
 };
