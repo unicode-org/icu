@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 el {
-    Version { "2.0" }
+    Version { "3.0" }
     Countries { 
         AD { "\u0391\u03BD\u03B4\u03CC\u03C1\u03B1" }
         AE { "\u0397\u03BD\u03C9\u03BC\u03AD\u03BD\u03B1 \u0391\u03C1\u03B1\u03B2\u03B9\u03BA\u03AC \u0395\u03BC\u03B9\u03C1\u03AC\u03C4\u03B1" }
@@ -445,18 +445,32 @@ el {
             monthNames{
                 format{
                     abbreviated{
-                        "\u0399\u03B1\u03BD",
-                        "\u03A6\u03B5\u03B2",
-                        "\u039C\u03B1\u03C1",
-                        "\u0391\u03C0\u03C1",
-                        "\u039C\u03B1\u03CA",
-                        "\u0399\u03BF\u03C5\u03BD",
-                        "\u0399\u03BF\u03C5\u03BB",
-                        "\u0391\u03C5\u03B3",
-                        "\u03A3\u03B5\u03C0",
-                        "\u039F\u03BA\u03C4",
-                        "\u039D\u03BF\u03B5",
-                        "\u0394\u03B5\u03BA",
+                        "\u0399\u03b1\u03bd",
+                        "\u03a6\u03b5\u03b2",
+                        "\u039c\u03b1\u03c1",
+                        "\u0391\u03c0\u03c1",
+                        "\u039c\u03b1\u03ca",
+                        "\u0399\u03bf\u03c5\u03bd",
+                        "\u0399\u03bf\u03c5\u03bb",
+                        "\u0391\u03c5\u03b3",
+                        "\u03a3\u03b5\u03c0",
+                        "\u039f\u03ba\u03c4",
+                        "\u039d\u03bf\u03b5",
+                        "\u0394\u03b5\u03ba"
+                    }
+                    narrow {
+                        "\u0399",
+                        "\u03a6",
+                        "\u039c",
+                        "\u0391",
+                        "\u039c",
+                        "\u0399",
+                        "\u0399",
+                        "\u0391",
+                        "\u03a3",
+                        "\u039f",
+                        "\u039d",
+                        "\u0394"
                     }
                     wide{
                         "\u0399\u03B1\u03BD\u03BF\u03C5\u03AC\u03C1\u03B9\u03BF\u03C2",
@@ -470,7 +484,51 @@ el {
                         "\u03A3\u03B5\u03C0\u03C4\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
                         "\u039F\u03BA\u03C4\u03CE\u03B2\u03C1\u03B9\u03BF\u03C2",
                         "\u039D\u03BF\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
-                        "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2",
+                        "\u0394\u03B5\u03BA\u03AD\u03BC\u03B2\u03C1\u03B9\u03BF\u03C2"
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "\u0399\u03b1\u03bd",
+                        "\u03a6\u03b5\u03b2",
+                        "\u039c\u03b1\u03c1",
+                        "\u0391\u03c0\u03c1",
+                        "\u039c\u03b1\u03ca",
+                        "\u0399\u03bf\u03c5\u03bd",
+                        "\u0399\u03bf\u03c5\u03bb",
+                        "\u0391\u03c5\u03b3",
+                        "\u03a3\u03b5\u03c0",
+                        "\u039f\u03ba\u03c4",
+                        "\u039d\u03bf\u03b5",
+                        "\u0394\u03b5\u03ba"
+                    }
+                    narrow {
+                        "\u0399",
+                        "\u03a6",
+                        "\u039c",
+                        "\u0391",
+                        "\u039c",
+                        "\u0399",
+                        "\u0399",
+                        "\u0391",
+                        "\u03a3",
+                        "\u039f",
+                        "\u039d",
+                        "\u0394"
+                    }
+                    wide{
+                        "\u0399\u03b1\u03bd\u03bf\u03c5\u03ac\u03c1\u03b9\u03bf\u03c2",
+                        "\u03a6\u03b5\u03b2\u03c1\u03bf\u03c5\u03ac\u03c1\u03b9\u03bf\u03c2",
+                        "\u039c\u03ac\u03c1\u03c4\u03b9\u03bf\u03c2",
+                        "\u0391\u03c0\u03c1\u03af\u03bb\u03b9\u03bf\u03c2",
+                        "\u039c\u03ac\u03b9\u03bf\u03c2",
+                        "\u0399\u03bf\u03cd\u03bd\u03b9\u03bf\u03c2",
+                        "\u0399\u03bf\u03cd\u03bb\u03b9\u03bf\u03c2",
+                        "\u0391\u03cd\u03b3\u03bf\u03c5\u03c3\u03c4\u03bf\u03c2",
+                        "\u03a3\u03b5\u03c0\u03c4\u03ad\u03bc\u03b2\u03c1\u03b9\u03bf\u03c2",
+                        "\u039f\u03ba\u03c4\u03ce\u03b2\u03c1\u03b9\u03bf\u03c2",
+                        "\u039d\u03bf\u03ad\u03bc\u03b2\u03c1\u03b9\u03bf\u03c2",
+                        "\u0394\u03b5\u03ba\u03ad\u03bc\u03b2\u03c1\u03b9\u03bf\u03c2"
                     }
                 }
             }

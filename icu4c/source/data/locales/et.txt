@@ -40,7 +40,7 @@ et {
         BR { "Brasiilia" }
         BS { "Bahama saared" }
         //BT { "Bhutan" }
-        BV { "Bouvet' saar" }
+        BV { "Bouvet\u2019 saar" }
         //BW { "Botswana" }
         BY { "Valgevene" }
         //BZ { "Belize" }
@@ -50,7 +50,7 @@ et {
         CF { "Kesk-Aafrika Vabariik" }
         CG { "Kongo" }
         CH { "\u0128veits" }
-        CI { "Cote d'Ivoire" }
+        CI { "Cote d\u2019Ivoire" }
         CK { "Cooki saared" }
         CL { "Tiiili" }
         CM { "Kamerun" }
