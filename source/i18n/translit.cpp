@@ -24,6 +24,9 @@
 #include "unicode/rep.h"
 #include "unicode/remtrans.h"
 #include "unicode/resbund.h"
+#include "unicode/titletrn.h"
+#include "unicode/tolowtrn.h"
+#include "unicode/toupptrn.h"
 #include "unicode/translit.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
@@ -969,6 +972,9 @@ void Transliterator::initializeCache(void) {
     _registerInstance(new HangulJamoTransliterator(), status);
     _registerInstance(new NullTransliterator(), status);
     _registerInstance(new RemoveTransliterator(), status);
+    _registerInstance(new LowercaseTransliterator(), status);
+    _registerInstance(new UppercaseTransliterator(), status);
+    _registerInstance(new TitlecaseTransliterator(), status);
 
     cacheInitialized = TRUE;
 }
