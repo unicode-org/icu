@@ -175,20 +175,21 @@ static void caseClose(UnicodeSet *theSet) {
 //----------------------------------------------------------------------------------------
 RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(status)
 {
-    fStatus             = &status;
+    fStatus           = &status;
 
-    fRXPat          = rxp;
-    fScanIndex      = 0;
-    fNextIndex      = 0;
-    fPeekChar       = -1;
-    fLineNum        = 1;
-    fCharNum        = 0;
-    fQuoteMode      = FALSE;
-    fFreeForm       = FALSE;
-    fModeFlags      = fRXPat->fFlags;
+    fRXPat            = rxp;
+    fScanIndex        = 0;
+    fNextIndex        = 0;
+    fPeekChar         = -1;
+    fLineNum          = 1;
+    fCharNum          = 0;
+    fQuoteMode        = FALSE;
+    fInBackslashQuote = FALSE;
+    fModeFlags        = fRXPat->fFlags;
+    fEOLComments      = TRUE;
 
-    fMatchOpenParen  = -1;
-    fMatchCloseParen = -1;
+    fMatchOpenParen   = -1;
+    fMatchCloseParen  = -1;
 
     if (U_FAILURE(status)) {
         return;
@@ -304,7 +305,7 @@ void    RegexCompile::compile(
 
         U_ASSERT(state != 0);
 
-        // Find the state table element that matches the input char from the rule, or the
+        // Find the state table element that matches the input char from the pattern, or the
         //    class of the input character.  Start with the first table row for this
         //    state, then linearly scan forward until we find a row that matches the
         //    character.  The last row for each state always matches all characters, so
@@ -337,7 +338,7 @@ void    RegexCompile::compile(
             }
 
             if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 &&   // Table specs a char class &&
-                fC.fQuoted == FALSE &&                                      //   char is not escaped &&
+                fC.fQuoted == FALSE &&                                       //   char is not escaped &&
                 fC.fChar != (UChar32)-1) {                                   //   char is not EOF
                 UnicodeSet *uniset = gRuleSets[tableEl->fCharClass-128];
                 if (uniset->contains(fC.fChar)) {
@@ -373,6 +374,10 @@ void    RegexCompile::compile(
             fStack[fStackPtr] = tableEl->fPushState;
         }
 
+        //
+        //  NextChar.  This is where characters are actually fetched from the pattern.
+        //             Happens under control of the 'n' tag in the state table.
+        //
         if (tableEl->fNextChar) {
             nextChar(fC);
         }
@@ -1300,9 +1305,17 @@ UBool RegexCompile::doParseActions(EParseAction action)
         }
         break;
 
+    case doSuppressComments:
+        // We have just scanned a '(?'.  We now need to prevent the character scanner from
+        // treating a '#' as a to-the-end-of-line comment.
+        //   (This Perl compatibility just gets uglier and uglier to do...)
+        fEOLComments = FALSE;
+        break;
+
 
 
     default:
+        U_ASSERT(FALSE);
         error(U_REGEX_INTERNAL_ERROR);
         returnVal = FALSE;
         break;
@@ -1863,8 +1876,8 @@ static const UChar      chUpperP    = 0x50;
 //----------------------------------------------------------------------------------------
 //
 //  nextCharLL    Low Level Next Char from the regex pattern.
-//                Get a char from the string,
-//                keep track of input position for error reporting.
+//                Get a char from the string, keep track of input position
+//                     for error reporting.
 //
 //----------------------------------------------------------------------------------------
 UChar32  RegexCompile::nextCharLL() {
@@ -1929,9 +1942,6 @@ UChar32  RegexCompile::peekCharLL() {
 //---------------------------------------------------------------------------------
 void RegexCompile::nextChar(RegexPatternChar &c) {
 
-    // Unicode Character constants needed for the processing done by nextChar(),
-    //   in hex because literals wont work on EBCDIC machines.
-
     fScanIndex = fNextIndex;
     c.fChar    = nextCharLL();
     c.fQuoted  = FALSE;
@@ -1944,39 +1954,60 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
             nextChar(c);        // recurse to get the real next char
         }
     }
+    else if (fInBackslashQuote) {
+        // The current character immediately follows a '\'
+        // Don't check for any further escapes, just return it as-is.
+        // Don't set c.fQuoted, because that would prevent the state machine from
+        //    dispatching on the character.
+        fInBackslashQuote = FALSE;
+    }
     else
     {
-        // We are not in a 'quoted region' of the source.
+        // We are not in a \Q quoted region \E of the source.
         //
-        if (fFreeForm && c.fChar == chPound) {
-            // Start of a comment.  Consume the rest of it.
-            //  The new-line char that terminates the comment is always returned.
-            //  It will be treated as white-space, and serves to break up anything
-            //    that might otherwise incorrectly clump together with a comment in
-            //    the middle (a variable name, for example.)
+        if (fModeFlags & UREGEX_COMMENTS) {
+            //
+            // We are in free-spacing and comments mode.
+            //  Scan through any white space and comments, until we 
+            //  reach a significant character or the end of inut.
             for (;;) {
+                if (c.fChar == (UChar32)-1) {
+                    break;     // End of Input
+                }
+                if  (c.fChar == chPound && fEOLComments == TRUE) {
+                    // Start of a comment.  Consume the rest of it, until EOF or a new line
+                    for (;;) {
+                        c.fChar = nextCharLL();
+                        if (c.fChar == (UChar32)-1 ||  // EOF
+                            c.fChar == chCR        ||
+                            c.fChar == chLF        ||
+                            c.fChar == chNEL       ||
+                            c.fChar == chLS)       {
+                            break;
+                        }
+                    }
+                }
+                if (uprv_isRuleWhiteSpace(c.fChar) == FALSE) {
+                    //  TODO:  is RuleWhiteSpace the right thing to use here?
+                    break;
+                }
                 c.fChar = nextCharLL();
-                if (c.fChar == (UChar32)-1 ||  // EOF
-                    c.fChar == chCR     ||
-                    c.fChar == chLF     ||
-                    c.fChar == chNEL    ||
-                    c.fChar == chLS)       {break;}
             }
-        }
-        if (c.fChar == (UChar32)-1) {
-            return;
         }
 
         //
         //  check for backslash escaped characters.
-        //  Use UnicodeString::unescapeAt() to handle those that it can.
-        //  Otherwise just return the '\', and let the pattern parser deal with it.
         //
-        int32_t startX = fNextIndex;  // start and end positions of the
-        int32_t endX   = fNextIndex;  //   sequence following the '\'
+                int32_t startX = fNextIndex;  // start and end positions of the
+                int32_t endX   = fNextIndex;  //   sequence following the '\'
         if (c.fChar == chBackSlash) {
             if (gUnescapeCharSet->contains(peekCharLL())) {
-                nextCharLL();     // get & discard the peeked char.
+                //
+                // A '\' sequence that is handled by ICU's standard unescapeAt function.
+                //   Includes \uxxxx, \n, \r, many others.
+                //   Return the single equivalent character.
+                //
+                nextCharLL();                 // get & discard the peeked char.
                 c.fQuoted = TRUE;
                 c.fChar = fRXPat->fPattern.unescapeAt(endX);
                 if (startX == endX) {
@@ -1985,8 +2016,21 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
                 fCharNum += endX - startX;
                 fNextIndex = endX;
             }
+            else
+            {
+                // We are in a '\' escape that will be handled by the state table scanner.
+                // Just return the backslash, but remember that the following char is to
+                //  be taken literally.  TODO:  this is awkward
+                fInBackslashQuote = TRUE;
+            }
         }
     }
+
+    // re-enable # to end-of-line comments, in case they were disabled..
+    // They are disabled by the parser upon seeing '(?', but this lasts for
+    //  the fetching of the next character only.
+    fEOLComments = TRUE;
+
     // putc(c.fChar, stdout);
 }
 
