@@ -1,14 +1,10 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004, International Business Machines Corporation and    *
+ * Copyright (C) 2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
-
-//import com.ibm.text.UCD.UCD_Types;
-//import com.ibm.text.utility.Utility;
-import com.ibm.icu.impl.Utility;
+package com.ibm.icu.impl;
 
 /**
  * For generation of Implicit CEs
@@ -38,105 +34,18 @@ public class ImplicitCEGenerator {
     static final int MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
     public static final int 
-	CJK_BASE = 0x4E00,
-	CJK_LIMIT = 0x9FFF+1,
-	CJK_COMPAT_USED_BASE = 0xFA0E,
-	CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
-	CJK_A_BASE = 0x3400,
-	CJK_A_LIMIT = 0x4DBF+1,
-	CJK_B_BASE = 0x20000,
-	CJK_B_LIMIT = 0x2A6DF+1;
-    
-    /**
-     * Testing function
-     * @param args ignored
-     */
-    public static void main(String[] args) {
-        System.out.println("Start");
-        try {
-            ImplicitCEGenerator foo = new ImplicitCEGenerator(0xE0, 0xE4);
-            
-            //int x = foo.getRawImplicit(0xF810);
-            foo.getRawFromImplicit(0xE20303E7);
-
-            int gap4 = foo.getGap4();
-            System.out.println("Gap4: " + gap4); 
-            int gap3 = foo.getGap3();
-            int minTrail = foo.getMinTrail();
-            int maxTrail = foo.getMaxTrail();
-            long last = 0;
-            long current;
-            for (int i = 0; i <= MAX_INPUT; ++i) {
-                current = foo.getImplicitFromRaw(i) & fourBytes;
-                
-                // check that it round-trips AND that all intervening ones are illegal
-                int roundtrip = foo.getRawFromImplicit((int)current);
-                if (roundtrip != i) {
-                    foo.throwError("No roundtrip", i); 
-                }
-                if (last != 0) {
-                    for (long j = last + 1; j < current; ++j) {
-                        roundtrip = foo.getRawFromImplicit((int)j);
-                        // raise an error if it *doesn't* find an error
-                        if (roundtrip != -1) {
-                            foo.throwError("Fails to recognize illegal", j);
-                        }
-                    }
-                }
-                // now do other consistency checks
-                long lastBottom = last & bottomByte;
-                long currentBottom = current & bottomByte;
-                long lastTop = last & topByte;
-                long currentTop = current & topByte;
-                
-                // do some consistency checks
-                /*
-                long gap = current - last;               
-                if (currentBottom != 0) { // if we are a 4-byte
-                    // gap has to be at least gap4
-                    // and gap from minTrail, maxTrail has to be at least gap4
-                    if (gap <= gap4) foo.throwError("Failed gap4 between", i);
-                    if (currentBottom < minTrail + gap4) foo.throwError("Failed gap4 before", i);
-                    if (currentBottom > maxTrail - gap4) foo.throwError("Failed gap4 after", i);
-                } else { // we are a three-byte
-                    gap = gap >> 8; // move gap down for comparison.
-                    long current3Bottom = (current >> 8) & bottomByte;
-                    if (gap <= gap3) foo.throwError("Failed gap3 between ", i);
-                    if (current3Bottom < minTrail + gap3) foo.throwError("Failed gap3 before", i);
-                    if (current3Bottom > maxTrail - gap3) foo.throwError("Failed gap3 after", i);
-                }
-                */
-                // print out some values for spot-checking
-                if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
-                    foo.show(i-3);
-                    foo.show(i-2);
-                    foo.show(i-1);
-                    if (i == 0) {
-                        // do nothing
-                    } else if (lastBottom == 0 && currentBottom != 0) {
-                        System.out.println("+ primary boundary, 4-byte CE's below");
-                    } else if (lastTop != currentTop) {
-                        System.out.println("+ primary boundary");
-                    }
-                    foo.show(i);
-                    foo.show(i+1);
-                    foo.show(i+2);
-                    System.out.println("...");
-                }
-                last = current;
-            }
-            foo.show(MAX_INPUT-2);
-            foo.show(MAX_INPUT-1);
-            foo.show(MAX_INPUT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            System.out.println("End");
-        }
-    }
+        CJK_BASE = 0x4E00,
+        CJK_LIMIT = 0x9FFF+1,
+        CJK_COMPAT_USED_BASE = 0xFA0E,
+        CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
+        CJK_A_BASE = 0x3400,
+        CJK_A_LIMIT = 0x4DBF+1,
+        CJK_B_BASE = 0x20000,
+        CJK_B_LIMIT = 0x2A6DF+1;
     
     private void throwError(String title, int cp) {
-        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + Utility.hex(getImplicitFromRaw(cp) & fourBytes));
+        throw new IllegalArgumentException(title + "\t" + Utility.hex(cp, 6) + "\t" + 
+                                           Utility.hex(getImplicitFromRaw(cp) & fourBytes));
     }
 
     private void throwError(String title, long ce) {
@@ -199,9 +108,15 @@ public class ImplicitCEGenerator {
      */
     public ImplicitCEGenerator(int minPrimary, int maxPrimary, int minTrail, int maxTrail, int gap3, int primaries3count) {
         // some simple parameter checks
-        if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) throw new IllegalArgumentException("bad lead bytes");
-        if (minTrail < 0 || minTrail >= maxTrail || maxTrail > 0xFF) throw new IllegalArgumentException("bad trail bytes");
-        if (primaries3count < 1) throw new IllegalArgumentException("bad three-byte primaries");
+        if (minPrimary < 0 || minPrimary >= maxPrimary || maxPrimary > 0xFF) {
+            throw new IllegalArgumentException("bad lead bytes");
+        }
+        if (minTrail < 0 || minTrail >= maxTrail || maxTrail > 0xFF) {
+            throw new IllegalArgumentException("bad trail bytes");
+        }
+        if (primaries3count < 1) {
+            throw new IllegalArgumentException("bad three-byte primaries");
+        }
         
         this.minTrail = minTrail;
         this.maxTrail = maxTrail;
@@ -262,6 +177,7 @@ public class ImplicitCEGenerator {
     static public int divideAndRoundUp(int a, int b) {
         return 1 + (a-1)/b;
     }
+
     /**
      * Converts implicit CE into raw integer
      * @param implicit
@@ -279,7 +195,7 @@ public class ImplicitCEGenerator {
 
         // simple parameter checks
         if (b0 < min3Primary || b0 > max4Primary
-          || b1 < minTrail || b1 > maxTrail) return -1;
+            || b1 < minTrail || b1 > maxTrail) return -1;
         // normal offsets
         b1 -= minTrail;
 
@@ -293,8 +209,8 @@ public class ImplicitCEGenerator {
             b2 /= final3Multiplier;
             result = ((b0 * medialCount) + b1) * final3Count + b2;
         } else {
-             if (b2 < minTrail || b2 > maxTrail
-            || b3 < minTrail || b3 > max4Trail) return -1;
+            if (b2 < minTrail || b2 > maxTrail
+                || b3 < minTrail || b3 > max4Trail) return -1;
             b2 -= minTrail;
             b3 -= minTrail;
             int remainder = b3 % final4Multiplier;
@@ -331,7 +247,8 @@ public class ImplicitCEGenerator {
             last2 = min3Primary + last2; // offset
             
             if (last2 >= min4Primary) {
-                throw new IllegalArgumentException("4-byte out of range: " + Utility.hex(cp) + ", " + Utility.hex(last2));
+                throw new IllegalArgumentException("4-byte out of range: " + 
+                                                   Utility.hex(cp) + ", " + Utility.hex(last2));
             } 
             
             return (last2 << 24) + (last1 << 16) + (last0 << 8);
@@ -351,12 +268,14 @@ public class ImplicitCEGenerator {
             last3 = min4Primary + last3; // offset
             
             if (last3 > max4Primary) {
-                throw new IllegalArgumentException("4-byte out of range: " + Utility.hex(cp) + ", " + Utility.hex(last3));
+                throw new IllegalArgumentException("4-byte out of range: " + 
+                                                   Utility.hex(cp) + ", " + Utility.hex(last3));
             } 
             
             return (last3 << 24) + (last2 << 16) + (last1 << 8) + last0;
         }
     }
+
     /**
      * Gets an Implicit from a code point. Internally, 
      * swaps (which produces a raw value 0..220000, 
@@ -377,32 +296,31 @@ public class ImplicitCEGenerator {
         return getImplicitFromRaw(cp);
     }
 
-    
     /**
-        * Function used to: 
-        * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
-        * b) bump any non-CJK characters by 10FFFF.
-        * The relevant blocks are:
-        * A:    4E00..9FFF; CJK Unified Ideographs
-        *       F900..FAFF; CJK Compatibility Ideographs
-        * B:    3400..4DBF; CJK Unified Ideographs Extension A
-        *       20000..XX;  CJK Unified Ideographs Extension B (and others later on)
-        * As long as
-        *   no new B characters are allocated between 4E00 and FAFF, and
-        *   no new A characters are outside of this range,
-        * (very high probability) this simple code will work.
-        * The reordered blocks are:
-        * Block1 is CJK
-        * Block2 is CJK_COMPAT_USED
-        * Block3 is CJK_A
-        * (all contiguous)
-        * Any other CJK gets its normal code point
-        * Any non-CJK gets +10FFFF
-        * When we reorder Block1, we make sure that it is at the very start,
-        * so that it will use a 3-byte form.
-        * Warning: the we only pick up the compatibility characters that are
-        * NOT decomposed, so that block is smaller!
-        */
+     * Function used to: 
+     * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
+     * b) bump any non-CJK characters by 10FFFF.
+     * The relevant blocks are:
+     * A:    4E00..9FFF; CJK Unified Ideographs
+     *       F900..FAFF; CJK Compatibility Ideographs
+     * B:    3400..4DBF; CJK Unified Ideographs Extension A
+     *       20000..XX;  CJK Unified Ideographs Extension B (and others later on)
+     * As long as
+     *   no new B characters are allocated between 4E00 and FAFF, and
+     *   no new A characters are outside of this range,
+     * (very high probability) this simple code will work.
+     * The reordered blocks are:
+     * Block1 is CJK
+     * Block2 is CJK_COMPAT_USED
+     * Block3 is CJK_A
+     * (all contiguous)
+     * Any other CJK gets its normal code point
+     * Any non-CJK gets +10FFFF
+     * When we reorder Block1, we make sure that it is at the very start,
+     * so that it will use a 3-byte form.
+     * Warning: the we only pick up the compatibility characters that are
+     * NOT decomposed, so that block is smaller!
+     */
     
     static int NON_CJK_OFFSET = 0x110000;
         
@@ -414,7 +332,7 @@ public class ImplicitCEGenerator {
             if (i < CJK_COMPAT_USED_BASE)   return i + NON_CJK_OFFSET;
             
             if (i < CJK_COMPAT_USED_LIMIT)  return i - CJK_COMPAT_USED_BASE
-                                                    + (CJK_LIMIT - CJK_BASE);
+                                                + (CJK_LIMIT - CJK_BASE);
             if (i < CJK_B_BASE)             return i + NON_CJK_OFFSET;
             
             if (i < CJK_B_LIMIT)            return i; // non-BMP-CJK
@@ -424,8 +342,8 @@ public class ImplicitCEGenerator {
         if (i < CJK_A_BASE)                 return i + NON_CJK_OFFSET;
         
         if (i < CJK_A_LIMIT)                return i - CJK_A_BASE
-                                                    + (CJK_LIMIT - CJK_BASE) 
-                                                    + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
+                                                + (CJK_LIMIT - CJK_BASE) 
+                                                + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
         return i + NON_CJK_OFFSET; // non-CJK
     }
     
@@ -444,30 +362,29 @@ public class ImplicitCEGenerator {
         return maxTrail;
     }
     
-	public int getCodePointFromRaw(int i) {
-    	i--;
-    	int result = 0;
-    	if(i >= NON_CJK_OFFSET) {
-    		result = i - NON_CJK_OFFSET;
-    	} else if(i >= CJK_B_BASE) {
-    		result = i;
-    	} else if(i < CJK_A_LIMIT + (CJK_LIMIT - CJK_BASE) + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE)) { // rest of CJKs, compacted
-    		if(i < CJK_LIMIT - CJK_BASE) {
-    			result = i + CJK_BASE;
-    		} else if(i < (CJK_LIMIT - CJK_BASE) + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE)) {
-    			result = i + CJK_COMPAT_USED_BASE - (CJK_LIMIT - CJK_BASE);
-    		} else {
-    			result = i + CJK_A_BASE - (CJK_LIMIT - CJK_BASE) - (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
-    		}
-    	} else {
-    		result = -1;
-    	}
-    	return result;
+    public int getCodePointFromRaw(int i) {
+        i--;
+        int result = 0;
+        if(i >= NON_CJK_OFFSET) {
+            result = i - NON_CJK_OFFSET;
+        } else if(i >= CJK_B_BASE) {
+            result = i;
+        } else if(i < CJK_A_LIMIT + (CJK_LIMIT - CJK_BASE) + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE)) { 
+            // rest of CJKs, compacted
+            if(i < CJK_LIMIT - CJK_BASE) {
+                result = i + CJK_BASE;
+            } else if(i < (CJK_LIMIT - CJK_BASE) + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE)) {
+                result = i + CJK_COMPAT_USED_BASE - (CJK_LIMIT - CJK_BASE);
+            } else {
+                result = i + CJK_A_BASE - (CJK_LIMIT - CJK_BASE) - (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
+            }
+        } else {
+            result = -1;
+        }
+        return result;
     }
 
-	public int getRawFromCodePoint(int i) {
-		return swapCJK(i)+1;
-	}
-	
-   
+    public int getRawFromCodePoint(int i) {
+        return swapCJK(i)+1;
+    }
 }
