@@ -425,9 +425,9 @@ Compiled resource bundle containing localized messages printed
 by
 .BR uconv .
 .SH AUTHORS
-Jonas Utterstroem <jonas.utterstrom@vittran.norrnod.se>
+Jonas Utterstroem
 .br
-Yves Arrouye <yves@realnames.com>
+Yves Arrouye
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
