@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/IBMCalendarTest.java,v $ 
- * $Date: 2000/03/21 02:51:43 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/10/17 18:32:50 $ 
+ * $Revision: 1.3 $
  *******************************************************************************
  */
 package com.ibm.test.calendar;
@@ -70,16 +70,16 @@ public class IBMCalendarTest extends TestFmwk {
         // Test days of the week
         Object[] DATA2 = {
             Locale.US, new int[] {
-                Calendar.MONDAY,   IBMCalendar.WEEKDAY,
-                Calendar.FRIDAY,   IBMCalendar.WEEKDAY,
-                Calendar.SATURDAY, IBMCalendar.WEEKEND,
-                Calendar.SUNDAY,   IBMCalendar.WEEKEND,
+                Calendar.MONDAY,   Calendar.WEEKDAY,
+                Calendar.FRIDAY,   Calendar.WEEKDAY,
+                Calendar.SATURDAY, Calendar.WEEKEND,
+                Calendar.SUNDAY,   Calendar.WEEKEND,
             },
             new Locale("ar", "BH"), new int[] { // Thursday:Friday
-                Calendar.WEDNESDAY,IBMCalendar.WEEKDAY,
-                Calendar.SATURDAY, IBMCalendar.WEEKDAY,
-                Calendar.THURSDAY, IBMCalendar.WEEKEND,
-                Calendar.FRIDAY,   IBMCalendar.WEEKEND,
+                Calendar.WEDNESDAY,Calendar.WEEKDAY,
+                Calendar.SATURDAY, Calendar.WEEKDAY,
+                Calendar.THURSDAY, Calendar.WEEKEND,
+                Calendar.FRIDAY,   Calendar.WEEKEND,
             },
         };
 

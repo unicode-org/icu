@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/TestCase.java,v $ 
- * $Date: 2000/05/12 23:19:12 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/10/17 18:32:50 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -197,7 +197,6 @@ public class TestCase extends Calendar {
     // declares all of these abstract methods....
     protected void computeTime() {}
     protected void computeFields() {}
-    public void roll(int field, boolean up) {}
     public void add(int field, int amt) {}
     public int getMinimum(int field) { return 0; }
     public int getMaximum(int field) { return 0; }

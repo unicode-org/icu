@@ -1475,11 +1475,16 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         }
     }
 
+    /**
+     * WEEK_OF_YEAR computed incorrectly.  A failure of this test can indicate
+     * a problem in several different places in the 
+     */
     public void Test4288792() throws Exception 
     {
 	TimeZone savedTZ = TimeZone.getDefault();
 	TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
 	GregorianCalendar cal = new GregorianCalendar();
+        
 	for (int i = 1900; i < 2100; i++) {
 	    for (int j1 = 1; j1 <= 7; j1++) {
 		// Loop for MinimalDaysInFirstWeek: 1..7
@@ -1488,6 +1493,14 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 		    cal.clear();
 		    cal.setMinimalDaysInFirstWeek(j1);
 		    cal.setFirstDayOfWeek(j);
+                    // Set the calendar to the first day of the last week
+                    // of the year.  This may overlap some of the start of
+                    // the next year; that is, the last week of 1999 may
+                    // include some of January 2000.  Use the add() method
+                    // to advance through the week.  For each day, call
+                    // get(WEEK_OF_YEAR).  The result should be the same
+                    // for the whole week.  Note that a bug in
+                    // getActualMaximum() will break this test.
 		    cal.set(Calendar.YEAR, i);
 		    int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
 		    cal.set(Calendar.WEEK_OF_YEAR, maxWeek);
@@ -1501,6 +1514,8 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 				  + ",min=" + j1 + ",first=" + j);
 			}
 		    }
+                    // Now advance the calendar one more day.  This should
+                    // put it at the first day of week 1 of the next year.
 		    cal.add(Calendar.DATE, 1);
 		    int WOY = cal.get(Calendar.WEEK_OF_YEAR);
 		    if (WOY != 1) {
