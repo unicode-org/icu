@@ -1952,17 +1952,8 @@ int_getDefaultCodepage()
 #endif
     if (*codesetName == 0)
     {
-        /* look up in srl's table */
-        defaultTable = uprv_defaultCodePageForLocale(localeName);
-        if (defaultTable != NULL)
-        {
-            uprv_strcpy(codesetName, defaultTable);
-        }
-        else
-        {
-            /* if the table lookup failed, return US ASCII (ISO 646). */
-            uprv_strcpy(codesetName, "US-ASCII");
-        }
+        /* if the table lookup failed, return US ASCII (ISO 646). */
+        uprv_strcpy(codesetName, "US-ASCII");
     }
     return codesetName;
 #else

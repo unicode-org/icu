@@ -257,15 +257,6 @@ u_fsetcodepage(    const char    *codepage,
     int32_t retVal = -1;
 
     /* We use the normal default codepage for this system, and not the one for the locale. */
-#if 0 /* !UCONFIG_NO_FORMATTING */
-    /* if the codepage is 0, use the default for the locale */
-    if(codepage == 0) {
-        codepage = uprv_defaultCodePageForLocale(file->fBundle.fLocale);
-
-        /* if the codepage is still 0, fall back on the default codepage */
-    }
-#endif
-
     if ((file->str.fPos == file->str.fBuffer) && (file->str.fLimit == file->str.fBuffer)) {
         ucnv_close(file->fConverter);
         file->fConverter = ucnv_open(codepage, &status);
