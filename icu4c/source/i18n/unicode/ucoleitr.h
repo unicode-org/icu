@@ -236,6 +236,33 @@ ucol_setOffset(UCollationElements *elems,
                int32_t        offset,
                UErrorCode         *status);
 
+/**
+* Get the primary order of a collation order.
+* @param order the collation order
+* @return the primary order of a collation order.
+* @draft ICU 2.6
+*/
+U_CAPI int32_t U_EXPORT2
+ucol_primaryOrder (int32_t order); 
+
+/**
+* Get the secondary order of a collation order.
+* @param order the collation order
+* @return the secondary order of a collation order.
+* @draft ICU 2.6
+*/
+U_CAPI int32_t U_EXPORT2
+ucol_secondaryOrder (int32_t order); 
+
+/**
+* Get the tertiary order of a collation order.
+* @param order the collation order
+* @return the tertiary order of a collation order.
+* @draft ICU 2.6
+*/
+U_CAPI int32_t U_EXPORT2
+ucol_tertiaryOrder (int32_t order); 
+
 #endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
