@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/28 00:25:42 $ 
- * $Revision: 1.29 $
+ * $Date: 2000/05/18 22:49:51 $ 
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.29 $ $Date: 2000/04/28 00:25:42 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.30 $ $Date: 2000/05/18 22:49:51 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -604,7 +604,7 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char CURSOR_POS          = '|';
         private static final char CURSOR_OFFSET       = '@';
 
-        // Segments of the input string are delimited by "$(" and "$)".  In the
+        // Segments of the input string are delimited by "(" and ")".  In the
         // output string these segments are referenced as "$1" through "$9".
         private static final char SEGMENT_OPEN        = '(';
         private static final char SEGMENT_CLOSE       = ')';
@@ -1343,6 +1343,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.30  2000/05/18 22:49:51  alan
+ * Update docs
+ *
  * Revision 1.29  2000/04/28 00:25:42  alan
  * Improve error reporting
  *
