@@ -212,7 +212,7 @@ $(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADI
 	ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
-$(BUILDDIR)/$(ICUDT)ucadata.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
+$(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
 	$(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
 
 # unames.icu
