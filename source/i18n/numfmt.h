@@ -4,6 +4,7 @@
 * COPYRIGHT:                                                                   *
 *   (C) Copyright Taligent, Inc.,  1997                                        *
 *   (C) Copyright International Business Machines Corporation,  1997-1999           *
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.               *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
 *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
@@ -231,6 +232,13 @@ public:
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos) const = 0;
+
+    /**
+     * Redeclared Format method.
+     */
+    UnicodeString& format(const Formattable& obj,
+                          UnicodeString& result,
+                          UErrorCode& status) const;
 
    /**
     * Return a long if possible (e.g. within range LONG_MAX,
@@ -508,6 +516,13 @@ inline bool_t
 NumberFormat::isParseIntegerOnly() const
 {
     return fParseIntegerOnly;
+}
+
+inline UnicodeString&
+NumberFormat::format(const Formattable& obj,
+                     UnicodeString& result,
+                     UErrorCode& status) const {
+    return Format::format(obj, result, status);
 }
  
 #endif // _NUMFMT
