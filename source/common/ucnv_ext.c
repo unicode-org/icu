@@ -932,7 +932,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
 static void
 ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
                             const int32_t *cx,
-                            USet *set,
+                            USetAdder *sa,
                             UConverterUnicodeSet which,
                             int32_t minLength,
                             UChar32 c,
@@ -958,10 +958,10 @@ ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
     ) {
         if(c>=0) {
             /* add the initial code point */
-            uset_add(set, c);
+            sa->add(sa->set, c);
         } else {
             /* add the string so far */
-            uset_addString(set, s, length);
+            sa->addString(sa->set, s, length);
         }
     }
 
@@ -974,7 +974,7 @@ ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
             /* no mapping, do nothing */
         } else if(UCNV_EXT_FROM_U_IS_PARTIAL(value)) {
             ucnv_extGetUnicodeSetString(
-                sharedData, cx, set, which, minLength,
+                sharedData, cx, sa, which, minLength,
                 U_SENTINEL, s, length+1,
                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                 pErrorCode);
@@ -982,14 +982,14 @@ ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
                            UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
                   UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
         ) {
-            uset_addString(set, s, length+1);
+            sa->addString(sa->set, s, length+1);
         }
     }
 }
 
 U_CFUNC void
 ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
-                      USet *set,
+                      USetAdder *sa,
                       UConverterUnicodeSet which,
                       UErrorCode *pErrorCode) {
     const int32_t *cx;
@@ -1051,7 +1051,7 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                             length=0;
                             U16_APPEND_UNSAFE(s, length, c);
                             ucnv_extGetUnicodeSetString(
-                                sharedData, cx, set, which, minLength,
+                                sharedData, cx, sa, which, minLength,
                                 c, s, length,
                                 (int32_t)UCNV_EXT_FROM_U_GET_PARTIAL_INDEX(value),
                                 pErrorCode);
@@ -1059,7 +1059,7 @@ ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
                                            UCNV_EXT_FROM_U_ROUNDTRIP_FLAG) &&
                                   UCNV_EXT_FROM_U_GET_LENGTH(value)>=minLength
                         ) {
-                            uset_add(set, c);
+                            sa->add(sa->set, c);
                         }
                     } while((++c&0xf)!=0);
                 } else {

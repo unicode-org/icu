@@ -982,14 +982,15 @@ uprv_getMaxValues(int32_t column) {
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
     /* add the start code point to the USet */
-    uset_add((USet *)context, start);
+    USetAdder *sa=(USetAdder *)context;
+    sa->add(sa->set, start);
     return TRUE;
 }
 
-#define USET_ADD_CP_AND_NEXT(set, cp) uset_add(set, cp); uset_add(set, cp+1)
+#define USET_ADD_CP_AND_NEXT(sa, cp) sa->add(sa->set, cp); sa->add(sa->set, cp+1)
 
 U_CAPI void U_EXPORT2
-uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
+uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode) {
     UChar32 c;
     int32_t value, value2;
 
@@ -999,62 +1000,62 @@ uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
     }
 
     /* add the start code point of each same-value range of each trie */
-    utrie_enum(&propsTrie, NULL, _enumPropertyStartsRange, set);
-    utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, set);
+    utrie_enum(&propsTrie, NULL, _enumPropertyStartsRange, sa);
+    utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 
     /* add for IS_THAT_CONTROL_SPACE() */
-    uset_add(set, TAB); /* range TAB..CR */
-    uset_add(set, CR+1);
-    uset_add(set, 0x1c);
-    uset_add(set, 0x1f+1);
-    USET_ADD_CP_AND_NEXT(set, NL);
+    sa->add(sa->set, TAB); /* range TAB..CR */
+    sa->add(sa->set, CR+1);
+    sa->add(sa->set, 0x1c);
+    sa->add(sa->set, 0x1f+1);
+    USET_ADD_CP_AND_NEXT(sa, NL);
 
     /* add for u_isIDIgnorable() what was not added above */
-    uset_add(set, DEL); /* range DEL..NBSP-1, NBSP added below */
-    uset_add(set, HAIRSP);
-    uset_add(set, RLM+1);
-    uset_add(set, INHSWAP);
-    uset_add(set, NOMDIG+1);
-    USET_ADD_CP_AND_NEXT(set, ZWNBSP);
+    sa->add(sa->set, DEL); /* range DEL..NBSP-1, NBSP added below */
+    sa->add(sa->set, HAIRSP);
+    sa->add(sa->set, RLM+1);
+    sa->add(sa->set, INHSWAP);
+    sa->add(sa->set, NOMDIG+1);
+    USET_ADD_CP_AND_NEXT(sa, ZWNBSP);
 
     /* add no-break spaces for u_isWhitespace() what was not added above */
-    USET_ADD_CP_AND_NEXT(set, NBSP);
-    USET_ADD_CP_AND_NEXT(set, FIGURESP);
-    USET_ADD_CP_AND_NEXT(set, NNBSP);
+    USET_ADD_CP_AND_NEXT(sa, NBSP);
+    USET_ADD_CP_AND_NEXT(sa, FIGURESP);
+    USET_ADD_CP_AND_NEXT(sa, NNBSP);
 
     /* add for u_charDigitValue() */
-    USET_ADD_CP_AND_NEXT(set, 0x3007);
-    USET_ADD_CP_AND_NEXT(set, 0x4e00);
-    USET_ADD_CP_AND_NEXT(set, 0x4e8c);
-    USET_ADD_CP_AND_NEXT(set, 0x4e09);
-    USET_ADD_CP_AND_NEXT(set, 0x56db);
-    USET_ADD_CP_AND_NEXT(set, 0x4e94);
-    USET_ADD_CP_AND_NEXT(set, 0x516d);
-    USET_ADD_CP_AND_NEXT(set, 0x4e03);
-    USET_ADD_CP_AND_NEXT(set, 0x516b);
-    USET_ADD_CP_AND_NEXT(set, 0x4e5d);
+    USET_ADD_CP_AND_NEXT(sa, 0x3007);
+    USET_ADD_CP_AND_NEXT(sa, 0x4e00);
+    USET_ADD_CP_AND_NEXT(sa, 0x4e8c);
+    USET_ADD_CP_AND_NEXT(sa, 0x4e09);
+    USET_ADD_CP_AND_NEXT(sa, 0x56db);
+    USET_ADD_CP_AND_NEXT(sa, 0x4e94);
+    USET_ADD_CP_AND_NEXT(sa, 0x516d);
+    USET_ADD_CP_AND_NEXT(sa, 0x4e03);
+    USET_ADD_CP_AND_NEXT(sa, 0x516b);
+    USET_ADD_CP_AND_NEXT(sa, 0x4e5d);
 
     /* add for u_digit() */
-    uset_add(set, U_a);
-    uset_add(set, U_z+1);
-    uset_add(set, U_A);
-    uset_add(set, U_Z+1);
+    sa->add(sa->set, U_a);
+    sa->add(sa->set, U_z+1);
+    sa->add(sa->set, U_A);
+    sa->add(sa->set, U_Z+1);
 
     /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
-    uset_add(set, WJ); /* range WJ..NOMDIG */
-    uset_add(set, 0xfff0);
-    uset_add(set, 0xfffb+1);
-    uset_add(set, 0xe0000);
-    uset_add(set, 0xe0fff+1);
+    sa->add(sa->set, WJ); /* range WJ..NOMDIG */
+    sa->add(sa->set, 0xfff0);
+    sa->add(sa->set, 0xfffb+1);
+    sa->add(sa->set, 0xe0000);
+    sa->add(sa->set, 0xe0fff+1);
 
     /* add for UCHAR_GRAPHEME_BASE and others */
-    USET_ADD_CP_AND_NEXT(set, CGJ);
+    USET_ADD_CP_AND_NEXT(sa, CGJ);
 
     /* add for UCHAR_JOINING_TYPE */
-    uset_add(set, ZWNJ); /* range ZWNJ..ZWJ */
-    uset_add(set, ZWJ+1);
+    sa->add(sa->set, ZWNJ); /* range ZWNJ..ZWJ */
+    sa->add(sa->set, ZWJ+1);
 
     /*
      * Add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE.
@@ -1064,33 +1065,33 @@ uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
      * at the end of the per-Jamo-block assignments in Unicode 4 or earlier.
      * (These have not changed since Unicode 2.)
      */
-    uset_add(set, 0x1100);
+    sa->add(sa->set, 0x1100);
     value=U_HST_LEADING_JAMO;
     for(c=0x115a; c<=0x115f; ++c) {
         value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
         if(value!=value2) {
             value=value2;
-            uset_add(set, c);
+            sa->add(sa->set, c);
         }
     }
 
-    uset_add(set, 0x1160);
+    sa->add(sa->set, 0x1160);
     value=U_HST_VOWEL_JAMO;
     for(c=0x11a3; c<=0x11a7; ++c) {
         value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
         if(value!=value2) {
             value=value2;
-            uset_add(set, c);
+            sa->add(sa->set, c);
         }
     }
 
-    uset_add(set, 0x11a8);
+    sa->add(sa->set, 0x11a8);
     value=U_HST_TRAILING_JAMO;
     for(c=0x11fa; c<=0x11ff; ++c) {
         value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
         if(value!=value2) {
             value=value2;
-            uset_add(set, c);
+            sa->add(sa->set, c);
         }
     }
 }

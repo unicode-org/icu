@@ -395,7 +395,7 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode);
  * @internal
  */
 U_CAPI void U_EXPORT2
-unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
+unorm_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Swap unorm.icu. See udataswp.h.

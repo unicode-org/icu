@@ -22,6 +22,8 @@
 #include "unicode/uchar.h"
 #include "unicode/uscript.h"
 #include "unicode/symtable.h"
+#include "unicode/uset.h"
+#include "uset_imp.h"
 #include "ruleiter.h"
 #include "cmemory.h"
 #include "uhash.h"
@@ -1466,14 +1468,38 @@ void UnicodeSet::applyPropertyPattern(RuleCharacterIterator& chars,
 // Inclusions list
 //----------------------------------------------------------------
 
+// USetAdder implementation
+// Does not use uset.h to reduce code dependencies
+static void U_CALLCONV
+_set_add(USet *set, UChar32 c) {
+    ((UnicodeSet *)set)->add(c);
+}
+
+static void U_CALLCONV
+_set_addRange(USet *set, UChar32 start, UChar32 end) {
+    ((UnicodeSet *)set)->add(start, end);
+}
+
+static void U_CALLCONV
+_set_addString(USet *set, const UChar *str, int32_t length) {
+    ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
+}
+
 const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &status) {
     umtx_lock(NULL);
     UBool f = (INCLUSIONS == NULL);
     umtx_unlock(NULL);
     if (f) {
         UnicodeSet* incl = new UnicodeSet();
+        USetAdder sa = {
+            (USet *)incl,
+            _set_add,
+            _set_addRange,
+            _set_addString
+        };
+
         if (incl != NULL) {
-            uprv_getInclusions((USet*)incl, &status);
+            uprv_getInclusions(&sa, &status);
             if (U_SUCCESS(status)) {
                 umtx_lock(NULL);
                 if (INCLUSIONS == NULL) {

@@ -756,6 +756,9 @@
 				RelativePath=".\ucnv.c">
 			</File>
 			<File
+				RelativePath=".\ucnv_set.c">
+			</File>
+			<File
 				RelativePath=".\unicode\ucnv.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1519,6 +1522,9 @@
 				RelativePath=".\uset.cpp">
 			</File>
 			<File
+l				RelativePath=".\uset_imp.h">
+			</File>
+			<File
 				RelativePath=".\uset_props.cpp">
 			</File>
 			<File
@@ -1797,6 +1803,9 @@
 			</File>
 			<File
 				RelativePath=".\ustr_imp.h">
+			</File>
+			<File
+				RelativePath=".\ustr_wcs.c">
 			</File>
 			<File
 				RelativePath=".\ustrcase.c">

@@ -262,7 +262,8 @@ isAcceptable(void * /* context */,
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*limit*/, uint32_t /*value*/) {
     /* add the start code point to the USet */
-    uset_add((USet *)context, start);
+    USetAdder *sa=(USetAdder *)context;
+    sa->add(sa->set, start);
     return TRUE;
 }
 
@@ -1153,7 +1154,7 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
 }
 
 U_CAPI void U_EXPORT2
-unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
+unorm_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode) {
     UChar c;
 
     if(!_haveData(*pErrorCode)) {
@@ -1161,18 +1162,18 @@ unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
     }
 
     /* add the start code point of each same-value range of each trie */
-    utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
-    utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
+    utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, sa);
+    utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, sa);
     if(formatVersion_2_1) {
-        utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, set);
+        utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, sa);
     }
 
     /* add Hangul LV syllables and LV+1 because of skippables */
     for(c=HANGUL_BASE; c<HANGUL_BASE+HANGUL_COUNT; c+=JAMO_T_COUNT) {
-        uset_add(set, c);
-        uset_add(set, c+1);
+        sa->add(sa->set, c);
+        sa->add(sa->set, c+1);
     }
-    uset_add(set, HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
+    sa->add(sa->set, HANGUL_BASE+HANGUL_COUNT); /* add Hangul+1 to continue with other properties */
 }
 
 U_CAPI UNormalizationCheckResult U_EXPORT2

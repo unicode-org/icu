@@ -340,15 +340,15 @@ ucase_swap(const UDataSwapper *ds,
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
     /* add the start code point to the USet */
-    uset_add((USet *)context, start);
+    USetAdder *sa=(USetAdder *)context;
+    sa->add(sa->set, start);
     return TRUE;
 }
 
-/* TODO define/use USetAdder */
 U_CAPI void U_EXPORT2
-ucase_addPropertyStarts(const UCaseProps *csp, USet *set, UErrorCode *pErrorCode) {
+ucase_addPropertyStarts(const UCaseProps *csp, USetAdder *sa, UErrorCode *pErrorCode) {
     /* add the start code point of each same-value range of the trie */
-    utrie_enum(&csp->trie, NULL, _enumPropertyStartsRange, set);
+    utrie_enum(&csp->trie, NULL, _enumPropertyStartsRange, sa);
 
     /* add code points with hardcoded properties, plus the ones following them */
 
