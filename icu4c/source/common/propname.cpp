@@ -151,39 +151,9 @@ static UBool load() {
 // on it.  If it cannot obtain a pointer, because valid data is not
 // available, then it returns NULL or UCHAR_INVALID_CODE.
 
-// NOTE (ICU 2.4) For the 2.4 release it was decided late in the cycle
-// to add a new enum to UProperty, UCHAR_GENERAL_CATEGORY_MASK.  This
-// enum would specify UCharCategory mask values.  Because of time
-// constraints, the underlying binary data and genprop scripts were
-// not updated.  So the PNAME->... API takes UCHAR_GENERAL_CATEGORY
-// and associates it with a MASK value.  We munge things to make this
-// associate with a UCharCategory value, and we make
-// UCHAR_GENERAL_CATEGORY_MASK correspond to the mask value.
-
-// We add a synthetic (not in PropertyAliases.txt) pair of property
-// names corresponding to UCHAR_GENERAL_CATEGORY_MASK:
-// gcm       ; General_Category_Mask
-
-// TODO: Remove the munge code, marked "//TODO:munge" below, after the
-// script/binary data are updated (probably in ICU 2.6).
-
-static const char SHORT_GCM_NAME[] = "gcm";
-static const char LONG_GCM_NAME[]  = "General_Category_Mask";
-
 U_CAPI const char* U_EXPORT2
 u_getPropertyName(UProperty property,
                   UPropertyNameChoice nameChoice) {
-    //TODO:munge
-    if (property == UCHAR_GENERAL_CATEGORY_MASK) {
-        switch (nameChoice) {
-        case U_SHORT_PROPERTY_NAME:
-            return SHORT_GCM_NAME;
-        case U_LONG_PROPERTY_NAME:
-            return LONG_GCM_NAME;
-        default:
-            return NULL;
-        }
-    }
     return load() ? PNAME->getPropertyName(property, nameChoice)
                   : NULL;
 }
@@ -192,13 +162,6 @@ U_CAPI UProperty U_EXPORT2
 u_getPropertyEnum(const char* alias) {
     UProperty p = load() ? (UProperty) PNAME->getPropertyEnum(alias)
                          : UCHAR_INVALID_CODE;
-    //TODO:munge
-    if (p == UCHAR_INVALID_CODE) {
-        if (0 == uprv_comparePropertyNames(alias, SHORT_GCM_NAME) ||
-            0 == uprv_comparePropertyNames(alias, LONG_GCM_NAME)) {
-            p = UCHAR_GENERAL_CATEGORY_MASK;
-        }
-    }
     return p;
 }
 
@@ -206,15 +169,6 @@ U_CAPI const char* U_EXPORT2
 u_getPropertyValueName(UProperty property,
                        int32_t value,
                        UPropertyNameChoice nameChoice) {
-    //TODO:munge
-    switch (property) {
-    case UCHAR_GENERAL_CATEGORY:
-        value = (value < 32) ? U_MASK(value) : 0;
-        break;
-    case UCHAR_GENERAL_CATEGORY_MASK:
-        property = UCHAR_GENERAL_CATEGORY;
-        break;
-    }
     return load() ? PNAME->getPropertyValueName(property, value, nameChoice)
                   : NULL;
 }
@@ -222,28 +176,8 @@ u_getPropertyValueName(UProperty property,
 U_CAPI int32_t U_EXPORT2
 u_getPropertyValueEnum(UProperty property,
                        const char* alias) {
-    //TODO:munge
-    UProperty p = (property == UCHAR_GENERAL_CATEGORY_MASK) ?
-                  UCHAR_GENERAL_CATEGORY : property;
-    int32_t v = load() ? PNAME->getPropertyValueEnum(p, alias)
-                       : UCHAR_INVALID_CODE;
-    //TODO:munge
-    if (property == UCHAR_GENERAL_CATEGORY) {
-        int32_t gc = 0;
-        for (;;) {
-            if (v == 1) {
-                return gc;
-            }
-            if ((v & 1) != 0) {
-                // More than one bit is set; we can't map this mask to
-                // a UCharCategory.
-                return UCHAR_INVALID_CODE;
-            }
-            v >>= 1;
-            gc += 1;
-        }
-    }
-    return v;
+    return load() ? PNAME->getPropertyValueEnum(property, alias)
+                  : UCHAR_INVALID_CODE;
 }
 
 //eof
