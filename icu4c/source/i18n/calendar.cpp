@@ -342,6 +342,14 @@ public:
 
 // -------------------------------------
 
+static inline UBool
+isCalendarServiceUsed() {
+    Mutex mutex;
+    return (UBool)(gService != NULL);
+}
+
+// -------------------------------------
+
 static ICULocaleService* 
 getCalendarService(UErrorCode &status)
 {
@@ -620,7 +628,12 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 {
     Locale actualLoc;
     UObject* u;
-#if UCONFIG_NO_SERVICE
+#if !UCONFIG_NO_SERVICE
+    if (isCalendarServiceUsed()) {
+        u = getCalendarService(success)->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
+    }
+    else
+#endif
     {
         char calLocaleType[ULOC_FULLNAME_CAPACITY] = {"@calendar="};
         int32_t calLocaleTypeLen = uprv_strlen(calLocaleType);
@@ -648,9 +661,6 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 #endif
         u = createStandardCalendar(calLocaleType, aLocale, success);
     }
-#else
-    u = getCalendarService(success)->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
-#endif
     Calendar* c = NULL;
 
   if(U_FAILURE(success) || !u) {
