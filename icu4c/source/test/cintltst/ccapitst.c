@@ -1047,16 +1047,19 @@ void TestAlias() {
             const char *mapBack;
 
             if (alias == NULL) {
-                log_err("FAIL: Converter \"%s\" (i=%d) has no alias\n",
-                        name, i);
+                log_err("FAIL: Converter \"%s\" -> "
+                        "alias[%d]=NULL\n",
+                        name, j);
                 continue;
             }
 
             mapBack = ucnv_getAlias(alias, 0, &status);
 
             if (mapBack == NULL) {
-                log_err("FAIL: Converter \"%s\" (i=%d) has no mapBack\n",
-                        name, i);
+                log_err("FAIL: Converter \"%s\" -> "
+                        "alias[%d]=\"%s\" -> "
+                        "alias[0]=NULL, exp. \"%s\"\n",
+                        name, j, alias, alias0);
                 continue;
             }
 
