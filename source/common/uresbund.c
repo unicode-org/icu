@@ -546,7 +546,6 @@ U_CAPI const UChar* U_EXPORT2 ures_getString(const UResourceBundle* resB, int32_
 
 U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int32_t* len, 
                                                UErrorCode*               status) {
-  const uint8_t *p;
   if (status==NULL || U_FAILURE(*status)) {
     return NULL;
   }
@@ -556,11 +555,7 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
   }
   switch(RES_GET_TYPE(resB->fRes)) {
   case RES_BINARY:
-    p = res_getBinary(&(resB->fResData), resB->fRes, len);
-    if (*len == 0) {
-      *status = U_MISSING_RESOURCE_ERROR;
-    }
-    return p;
+    return res_getBinary(&(resB->fResData), resB->fRes, len);
   case RES_INT:
   case RES_STRING:
   case RES_INT_VECTOR:
@@ -575,7 +570,6 @@ U_CAPI const uint8_t* U_EXPORT2 ures_getBinary(const UResourceBundle* resB, int3
 
 U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resB, int32_t* len, 
                                                    UErrorCode*               status) {
-  const int32_t *p;
   if (status==NULL || U_FAILURE(*status)) {
     return NULL;
   }
@@ -585,11 +579,7 @@ U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resB, i
   }
   switch(RES_GET_TYPE(resB->fRes)) {
   case RES_INT_VECTOR:
-    p = res_getIntVector(&(resB->fResData), resB->fRes, len);
-    if (*len == 0) {
-      *status = U_MISSING_RESOURCE_ERROR;
-    }
-    return p;
+    return res_getIntVector(&(resB->fResData), resB->fRes, len);
   case RES_INT:
   case RES_STRING:
   case RES_ARRAY:
