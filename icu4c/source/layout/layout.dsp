@@ -218,6 +218,10 @@ SOURCE=.\GlyphLookupTables.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\GlyphPositionAdjustments.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GlyphPositioningTables.cpp
 # End Source File
 # Begin Source File
