@@ -645,7 +645,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     // we don't want any strange stuff after useful data!
     while(pointer < commentStart)  {
-        if(*pointer != ' ' && *pointer != 0x09)
+        if(*pointer != ' ' && *pointer != '\t')
         {
             *status=U_INVALID_FORMAT_ERROR;
             break;
