@@ -47,7 +47,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     
 	protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
 
-	public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION+"/";
+	public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION;
     
     
     /**
@@ -58,7 +58,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     /**
      * @draft ICU 3.0
      */
-    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "coll";
+    public static final String ICU_COLLATION_BASE_NAME = "/"+ICU_BASE_NAME + "coll";
     
     /**
      * @draft ICU 3.0
