@@ -118,7 +118,7 @@ void TestTertiary( )
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     log_verbose("Testing Kanna(Japan) Collation with Tertiary strength\n");
-    ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT_COMP_CAN);
+    ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < 11 ; i++)
     {

@@ -6,9 +6,13 @@
 // *******************************************************************************
 
 no {
-    CollationElements { "& Z < \u00E6, \u00C6  < a\u0308, A\u0308< \u00F8, \u00D8"
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& Z < \u00E6, \u00C6  < a\u0308, A\u0308< \u00F8, \u00D8"
         " < o\u0308, O\u0308< o\u030B, O\u030B < a\u030A, A\u030A, aa , aA , Aa , AA  & "
         "V, w, W " }
+	}
     Countries { 
         NO { "Norge" }
     }

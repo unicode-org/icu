@@ -246,7 +246,9 @@ mt {
 
    CollationElements
    {
-      "& B < c\u0307 , C\u0307 "                       // c.  C.
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& B < c\u0307 , C\u0307 "                       // c.  C.
          " < c,C"      
       "& F < g\u0307 , G\u0307 "                       // g.  G.
          " < g,G"
@@ -254,7 +256,7 @@ mt {
       "& H < \u0127  , \u0126 "                        // h/  H/
       "& I < ie, iE, Ie, IE   "                        // ie is a single letter
       "& Y < z\u0307 , Z\u0307"                        // z.  Z.
-         " < z,Z"
+         " < z,Z" }
    }
 
 // Time zone

@@ -10,7 +10,10 @@ ar {
             "\u0635",
             "\u0645",
     }
-    CollationElements { "& \u0361 = \u0640= \u064B= \u064C= \u064D= \u064E= \u064F"
+    CollationElements { 
+	    Version { "1.0" }
+            Override { "FALSE" }
+            Sequence { "& \u0361 = \u0640= \u064B= \u064C= \u064D= \u064E= \u064F"
         "= \u0650= \u0652= \u066D= \u06D6= \u06D7= \u06D8= \u06D9= \u06DA= \u06DB= \u06DC"
         "= \u06DD= \u06DE= \u06DF= \u06E0= \u06E1= \u06E2= \u06E3= \u06E4= \u06E5= \u06E6"
         "= \u06E7= \u06E8= \u06E9= \u06EA= \u06EB= \u06EC= \u06ED& 0 < \u0660 < \u06F0& "
@@ -30,7 +33,8 @@ ar {
         "< \u06AD< \u06AE< \u06B0< \u06B1< \u06B2< \u06B3< \u06B4< \u06B5< \u06B6< \u06B7"
         "< \u06BA< \u06BB< \u06BC< \u06BD< \u06BE< \u06C0< \u06C1< \u06C2< \u06C3< \u06C4"
         "< \u06C5< \u06C6< \u06C7< \u06C8< \u06C9< \u06CA< \u06CB< \u06CC< \u06CD< \u06CE"
-        "< \u06D0< \u06D1< \u06D2< \u06D3< \u06D5< \u0651" }
+        "< \u06D0< \u06D1< \u06D2< \u06D3< \u06D5< \u0651"}
+    }
     Countries { 
         EG { "\u0645\u0635\u0631" }
         DZ { "\u0627\u0644\u062C\u0632\u0627\u0626\u0631" }

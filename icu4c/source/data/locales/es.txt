@@ -6,7 +6,11 @@
 // *******************************************************************************
 
 es {
-    CollationElements { "& N < n\u0303, N\u0303 " }
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& N < n\u0303, N\u0303 " }
+	}
     Countries { 
         ES { "Espa\u00F1a" }
         AR { "Argentina" }

@@ -10,7 +10,11 @@ sq {
             "PD",
             "MD",
     }
-    CollationElements { "@" }
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "@" }
+	}
     Countries { 
         AL { "Shqip\u00EBria" }
     }
