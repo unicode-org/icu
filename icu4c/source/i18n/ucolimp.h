@@ -20,6 +20,7 @@
 #define UCOL_IMP_H
 
 #include "unicode/ucol.h"
+#include "ucmp32.h"
 
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/
@@ -221,4 +222,68 @@ ucol_calcSortKey(const    UCollator    *coll,
 U_CAPI uint8_t *
 ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 
+#define UCOL_SPECIAL_FLAG 0xF0000000
+#define UCOL_TAG_SHIFT 24
+#define UCOL_TAG_MASK 0x0F000000
+#define INIT_EXP_TABLE_SIZE 1024
+#define UCOL_NOT_FOUND 0xF0000000
+#define UCOL_EXPANSION 0xF1000000
+#define UCOL_CONTRACTION 0xF2000000
+#define UCOL_THAI 0xF3000000
+
+#define isSpecial(CE) ((((CE)&UCOL_SPECIAL_FLAG)>>28)==0xF)
+#define getCETag(CE) (((CE)&UCOL_TAG_MASK)>>UCOL_TAG_SHIFT)
+#define constructContractCE(CE) (UCOL_SPECIAL_FLAG | (CONTRACTION_TAG<<UCOL_TAG_SHIFT) | ((CE))&0xFFFFFF)
+#define getContractOffset(CE) ((CE)&0xFFFFFF)
+
+#define UCA_DATA_TYPE "dat"
+#define UCA_DATA_NAME "UCATable"
+
+typedef struct {
+      int32_t size;
+      /* all the offsets are in bytes */
+      /* to get the address add to the header address and cast properly */
+      uint32_t CEindex;          /* uint16_t *CEindex;              */
+      uint32_t CEvalues;         /* int32_t *CEvalues;              */
+      uint32_t mappingPosition;  /* const uint8_t *mappingPosition; */
+      uint32_t expansion;        /* uint32_t *expansion;            */
+      uint32_t contractionIndex; /* UChar *contractionIndex;        */
+      uint32_t contractionCEs;   /* uint32_t *contractionCEs;       */
+      uint32_t latinOneMapping;  /* fast track to latin1 chars      */
+      CompactIntArray *mapping;
+      int32_t CEcount;
+      UChar variableTopValue;
+      UVersionInfo version;
+      UColAttributeValue frenchCollation;
+      UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
+      UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
+      UColAttributeValue caseLevel;         /* do we have an extra case level */
+      UColAttributeValue normalizationMode; /* attribute for normalization */
+      UColAttributeValue strength;          /* attribute for strength */
+} UCATableHeader;
+
+struct UCollatorNew {
+    const UCATableHeader *image;
+    CompactIntArray *mapping; 
+    const uint32_t *latinOneMapping;
+    const uint32_t *expansion;            
+    const UChar *contractionIndex;        
+    const uint32_t *contractionCEs;       
+    UChar variableTopValue;
+    UColAttributeValue frenchCollation;
+    UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
+    UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
+    UColAttributeValue caseLevel;         /* do we have an extra case level */
+    UColAttributeValue normalizationMode; /* attribute for normalization */
+    UColAttributeValue strength;          /* attribute for strength */
+    UChar variableTopValueDefault;
+    UColAttributeValue frenchCollationDefault;
+    UColAttributeValue alternateHandlingDefault; /* attribute for handling variable elements*/
+    UColAttributeValue caseFirstDefault;         /* who goes first, lower case or uppercase */
+    UColAttributeValue caseLevelDefault;         /* do we have an extra case level */
+    UColAttributeValue normalizationModeDefault; /* attribute for normalization */
+    UColAttributeValue strengthDefault;          /* attribute for strength */
+};
+
 #endif
+
