@@ -1467,7 +1467,7 @@ u_foldCase(UChar32 c, uint32_t options) {
                 pe=oldPE;
             } else {
                 /* special case folding mappings, hardcoded */
-                if(options==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
+                if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
                     /* map dotted I and dotless i to U+0069 small i */
                     return 0x69;
                 }
@@ -1526,7 +1526,7 @@ u_internalFoldCase(UChar32 c,
                 return length;
             } else {
                 /* special case folding mappings, hardcoded */
-                if(options==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
+                if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
                     /* map dotted I and dotless i to U+0069 small i */
                     result =0x69;
                     /* goto single; */
