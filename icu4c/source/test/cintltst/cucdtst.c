@@ -29,6 +29,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
 /* prototypes --------------------------------------------------------------- */
 
 static void setUpDataTable(void);
@@ -162,9 +164,9 @@ Checks LetterLike Symbols which were previously a source of confusion
         if(i!=0x2126 && i!=0x212a && i!=0x212b)
         {
             if (i != (int)u_tolower(i)) /* itself */
-                log_err("Failed case conversion with itself: \\u%4X\n", i);
+                log_err("Failed case conversion with itself: U+%04x\n", i);
             if (i != (int)u_toupper(i))
-                log_err("Failed case conversion with itself: \\u%4X\n", i);
+                log_err("Failed case conversion with itself: U+%04x\n", i);
         }
     }
 
@@ -365,6 +367,11 @@ static void TestMisc()
         {
             log_err("Space char test error : %d or %d \n", (int32_t)sampleSpaces[i], (int32_t)sampleNonSpaces[i]);
         }
+        if (!(u_isJavaSpaceChar(sampleSpaces[i])) ||
+                (u_isJavaSpaceChar(sampleNonSpaces[i])))
+        {
+            log_err("u_isJavaSpaceChar() test error : %d or %d \n", (int32_t)sampleSpaces[i], (int32_t)sampleNonSpaces[i]);
+        }
     }
     for (i = 0; i < 5; i++) {
       log_verbose("Testing for isspace and nonspaces\n");
@@ -509,33 +516,36 @@ static void TestMisc()
 /* Tests for isControl(u_iscntrl()) and isPrintable(u_isprint()) */
 static void TestControlPrint()
 {
-    const UChar sampleControl[] = {0x001b, 0x0097, 0x0082};
+    const UChar sampleControl[] = {0x1b, 0x97, 0x82, 0x2028, 0x2029, 0x200c, 0x202b};
     const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
     const UChar samplePrintable[] = {0x0042, 0x005f, 0x2014};
     const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
     UChar32 c;
     int i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < LENGTHOF(sampleControl); i++) {
         log_verbose("Testing for iscontrol\n");
         if (!u_iscntrl(sampleControl[i]))
         {
-            log_err("Control char test error : %d should be control but is not\n", (int32_t)sampleControl[i]);
+            log_err("Control char test error : U+%04x should be control but is not\n", (int32_t)sampleControl[i]);
         }
+    }
+    for (i = 0; i < LENGTHOF(sampleNonControl); i++) {
+        log_verbose("Testing for !iscontrol\n");
         if (u_iscntrl(sampleNonControl[i]))
         {
-            log_err("Control char test error : %d should not be control but is\n", (int32_t)sampleNonControl[i]);
+            log_err("Control char test error : U+%04x should not be control but is\n", (int32_t)sampleNonControl[i]);
         }
     }
     for (i = 0; i < 3; i++) {
         log_verbose("testing for isprintable\n");
         if (!u_isprint(samplePrintable[i]))
         {
-            log_err("Printable char test error : %d should be printable but is not\n", (int32_t)samplePrintable[i]);
+            log_err("Printable char test error : U+%04x should be printable but is not\n", (int32_t)samplePrintable[i]);
         }
         if (u_isprint(sampleNonPrintable[i]))
         {
-            log_err("Printable char test error : %d should not be printable but is\n", (int32_t)sampleNonPrintable[i]);
+            log_err("Printable char test error : U+%04x should not be printable but is\n", (int32_t)sampleNonPrintable[i]);
         }
     }
 
@@ -547,6 +557,9 @@ static void TestControlPrint()
         }
         if(!u_iscntrl(c)) {
             log_err("error: u_iscntrl(ISO 8 control U+%04x)=FALSE\n", c);
+        }
+        if(!u_isISOControl(c)) {
+            log_err("error: u_isISOControl(ISO 8 control U+%04x)=FALSE\n", c);
         }
         if(u_isprint(c)) {
             log_err("error: u_isprint(ISO 8 control U+%04x)=TRUE\n", c);
@@ -618,7 +631,7 @@ static void TestIdentifier()
         if (!(u_isIDIgnorable(sampleIDIgnore[i])) ||
                 (u_isIDIgnorable(sampleNonIDIgnore[i])))
         {
-            log_verbose("ID ignorable char test error : %d  or  %d\n", sampleIDIgnore[i], sampleNonIDIgnore[i]);
+            log_verbose("ID ignorable char test error : U+%04x  or  U+%04x\n", sampleIDIgnore[i], sampleNonIDIgnore[i]);
         }
     }
 }
@@ -955,21 +968,21 @@ static void TestCodeUnit(){
 
     for(i=0; i<(int32_t)(sizeof(codeunit)/sizeof(codeunit[0])); i++){
         UChar c=codeunit[i];
-        log_verbose("Testing code unit value of \\u%4X\n", c);
+        log_verbose("Testing code unit value of U+%04x\n", c);
         if(i<4){
             if(!(UTF_IS_SINGLE(c)) || (UTF_IS_LEAD(c)) || (UTF_IS_TRAIL(c)) ||(UTF_IS_SURROGATE(c))){
-                log_err("ERROR: \\u%4X is a single", c);
+                log_err("ERROR: U+%04x is a single", c);
             }
 
         }
         if(i >= 4 && i< 8){
             if(!(UTF_IS_LEAD(c)) || UTF_IS_SINGLE(c) || UTF_IS_TRAIL(c) || !(UTF_IS_SURROGATE(c))){
-                log_err("ERROR: \\u%4X is a first surrogate", c);
+                log_err("ERROR: U+%04x is a first surrogate", c);
             }
         }
         if(i >= 8 && i< 12){
             if(!(UTF_IS_TRAIL(c)) || UTF_IS_SINGLE(c) || UTF_IS_LEAD(c) || !(UTF_IS_SURROGATE(c))){
-                log_err("ERROR: \\u%4X is a second surrogate", c);
+                log_err("ERROR: U+%04x is a second surrogate", c);
             }
         }
     }
@@ -1008,59 +1021,59 @@ static void TestCodePoint(){
     int32_t i;
     for(i=0; i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0])); i++){
         UChar32 c=codePoint[i];
-        log_verbose("Testing code unit value of \\u%4X\n", c);
+        log_verbose("Testing code unit value of U+%04x\n", c);
         if(i<6){
             if(!UTF_IS_SURROGATE(c) || !U_IS_SURROGATE(c) || !U16_IS_SURROGATE(c)){
-                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(UTF_IS_VALID(c)){
-                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+                log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
             if(UTF_IS_UNICODE_CHAR(c) || U_IS_UNICODE_CHAR(c)){
-                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(UTF_IS_ERROR(c)){
-                log_err("ERROR: isError() failed for \\u%4X\n", c);
+                log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }else if(i >=6 && i<18){
             if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
-                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(!UTF_IS_VALID(c)){
-                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+                log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
             if(!UTF_IS_UNICODE_CHAR(c) || !U_IS_UNICODE_CHAR(c)){
-                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(UTF_IS_ERROR(c)){
-                log_err("ERROR: isError() failed for \\u%4X\n", c);
+                log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }else if(i >=18 && i<20){
             if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
-                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(UTF_IS_VALID(c)){
-                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+                log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
             if(!UTF_IS_UNICODE_CHAR(c) || !U_IS_UNICODE_CHAR(c)){
-                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(!UTF_IS_ERROR(c)){
-                log_err("ERROR: isError() failed for \\u%4X\n", c);
+                log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }
         else if(i >=18 && i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0]))){
             if(UTF_IS_SURROGATE(c) || U_IS_SURROGATE(c) || U16_IS_SURROGATE(c)){
-                log_err("ERROR: isSurrogate() failed for \\u%4X\n", c);
+                log_err("ERROR: isSurrogate() failed for U+%04x\n", c);
             }
             if(UTF_IS_VALID(c)){
-                log_err("ERROR: isValid() failed for \\u%4X\n", c);
+                log_err("ERROR: isValid() failed for U+%04x\n", c);
             }
             if(UTF_IS_UNICODE_CHAR(c) || U_IS_UNICODE_CHAR(c)){
-                log_err("ERROR: isUnicodeChar() failed for \\u%4X\n", c);
+                log_err("ERROR: isUnicodeChar() failed for U+%04x\n", c);
             }
             if(!UTF_IS_ERROR(c)){
-                log_err("ERROR: isError() failed for \\u%4X\n", c);
+                log_err("ERROR: isError() failed for U+%04x\n", c);
             }
         }
     }
@@ -1087,13 +1100,13 @@ static void TestCharLength()
     for(i=0; i<(int32_t)(sizeof(codepoint)/sizeof(codepoint[0])); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         if(UTF_CHAR_LENGTH(c) != codepoint[i] || U16_LENGTH(c) != codepoint[i]){
-            log_err("The no: of code units for \\u%4X:- Expected: %d Got: %d", c, codepoint[i], UTF_CHAR_LENGTH(c));
+            log_err("The no: of code units for U+%04x:- Expected: %d Got: %d", c, codepoint[i], UTF_CHAR_LENGTH(c));
         }else{
-            log_verbose("The no: of code units for \\u%4X is %d", c, UTF_CHAR_LENGTH(c));
+            log_verbose("The no: of code units for U+%04x is %d", c, UTF_CHAR_LENGTH(c));
         }
         multiple=(UBool)(codepoint[i] == 1 ? FALSE : TRUE);
         if(UTF_NEED_MULTIPLE_UCHAR(c) != multiple){
-            log_err("ERROR: Unicode::needMultipleUChar() failed for \\u%4X\n", c);
+            log_err("ERROR: Unicode::needMultipleUChar() failed for U+%04x\n", c);
         }
     }
 }
