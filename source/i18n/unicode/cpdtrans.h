@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.8 $ $Date: 2000/05/18 22:08:27 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.9 $ $Date: 2000/05/20 04:34:20 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -74,8 +74,17 @@ public:
      * @draft
      */
     CompoundTransliterator(const UnicodeString& ID,
-                           Direction dir = FORWARD,
-                           UnicodeFilter* adoptedFilter = 0);
+                           Direction dir,
+                           UnicodeFilter* adoptedFilter,
+                           UErrorCode& status);
+
+    /**
+     * Constructs a new compound transliterator in the FORWARD
+     * direction with a NULL filter.
+     * @draft
+     */
+    CompoundTransliterator(const UnicodeString& ID,
+                           UErrorCode& status);
 
     /**
      * Destructor.
@@ -144,6 +153,11 @@ public:
                                      UBool incremental) const;
 
 private:
+
+    void init(const UnicodeString& ID,
+              Direction dir,
+              UnicodeFilter* adoptedFilter,
+              UErrorCode& status);
 
     /**
      * Return the IDs of the given list of transliterators, concatenated
