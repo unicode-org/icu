@@ -83,6 +83,8 @@
  * u_fflush() and u_fclose should return an int32_t like C99 functions.
    0 is returned if the operation was successful and EOF otherwise.
  * u_fsettransliterator does not support U_READ side of transliteration.
+ * The format specifier should limit the size of a format or honor it in
+   order to prevent buffer overruns.  (e.g. %1000.1000d).
  * More testing is needed.
 */
 
