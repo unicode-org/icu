@@ -58,7 +58,7 @@ static void TestUCMP8API(){
     CompactByteArray ucmp8Clone;
     int8_t *values;
     uint8_t *valuesSet;
-    uint8_t const TEST_DEFAULT_VALUE = (uint8_t)0xFF;
+    static const int8_t TEST_DEFAULT_VALUE = (int8_t)0xFF;
     
 
     /*ucmp8_open*/
