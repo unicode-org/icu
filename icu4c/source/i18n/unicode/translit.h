@@ -14,6 +14,7 @@
 
 class Replaceable;
 class UnicodeFilter;
+class UnicodeSet;
 class TransliterationRuleData;
 class Hashtable;
 class U_I18N_API UVector;
@@ -388,6 +389,7 @@ protected:
      * Internal parsing method.
      */
     static void parseCompoundID(const UnicodeString& ID,
+                                UnicodeString& regenID,
                                 UTransDirection dir,
                                 int32_t idSplitPoint,
                                 Transliterator *adoptedSplitTrans,
@@ -399,11 +401,27 @@ protected:
      * Internal parsing method for subclasses.
      */
     static Transliterator* parseID(const UnicodeString& ID,
+                                   UnicodeString& regenID,
                                    int32_t& pos,
                                    UBool& sawDelimiter,
                                    UTransDirection dir,
                                    UParseError* parseError,
                                    UBool create);
+
+    /**
+     * Internal parsing method for parseID.
+     */
+    static UBool parseIDBounds(const UnicodeString& ID,
+                               int32_t pos,
+                               UBool withinParens,
+                               int32_t& limit,
+                               int32_t& setStart,
+                               int32_t& setLimit,
+                               int32_t& revStart,
+                               UnicodeSet*& filter);
+
+    static void skipSpaces(const UnicodeString& str,
+                           int32_t& pos);
 
     friend class TransliteratorParser; // for parseID()
 
