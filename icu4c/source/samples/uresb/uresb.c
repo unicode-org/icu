@@ -78,6 +78,7 @@ main(int argc, char* argv[]) {
     UFILE *out = NULL;
     int32_t i = 0;
     const char* arg;
+    char resPathBuffer[1024];
 #ifdef WIN32
     currdir = _getcwd(NULL, 0);
 #else
@@ -118,7 +119,10 @@ main(int argc, char* argv[]) {
             resPath = NULL; /* we'll use ICU system resources for dumping */
         }
     } else {
-        resPath = currdir; /* we'll just dump uresb samples resources */
+        strcpy(resPathBuffer, currdir);
+        strcat(resPathBuffer, U_FILE_SEP_STRING);
+        strcat(resPathBuffer, "uresb");
+        resPath = resPathBuffer; /* we'll just dump uresb samples resources */
     }
 
     if(options[5].doesOccur) {
@@ -139,17 +143,11 @@ main(int argc, char* argv[]) {
     outerr = u_finit(stderr, locale, encoding);
     out = u_finit(stdout, locale, encoding); 
 
-/*
-    for(i = 0; i<20; i++) {
-        reportError(&i);
-    }
-*/
-
     for(i = 1; i < argc; ++i) {
         status = U_ZERO_ERROR;
         arg = getLongPathname(argv[i]);
 
-        printf("uresb: processing file \"%s\"\n", arg);
+        printf("uresb: processing file \"%s\" in path \"%s\"\n", arg, resPath);
         bundle = ures_open(resPath, arg, &status);
         if(U_SUCCESS(status)) {
             u_fprintf(out, "%s\n", arg);

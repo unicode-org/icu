@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.6 $
+# conversion sample code $Revision: 1.7 $
 # Usage:
 #  - configure, build, install ICU
 #  - ensure that 'icu-config' is in the PATH (PREFIX/bin/icu-config) 
@@ -16,11 +16,13 @@ ifeq ($(strip $(ICU_PATH)),)
   ICU_PATH=$(ICU_DEFAULT_PATH)
 endif
 
-GENRBOPT = -s. -d.
+GENRBOPT = -s. -d. --package-name $(PKG)
 
 # Name of your target
 TARGET=uresb
-RESOURCES = root.res en.res sr.res
+PKG=$(TARGET)
+RES_SRC=root.txt en.txt sr.txt
+RESOURCES=$(RES_SRC:%.txt=$(PKG)_%.res)
 
 # All object files (C or C++)
 OBJECTS=uresb.o
@@ -47,12 +49,12 @@ distclean clean:
 
 
 ## resources
-%.res: %.txt
+$(PKG)_%.res: %.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) $^
 
 ## Special for a special codepage
-sr.res : sr.txt
+$(PKG)_sr.res : sr.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) -e cp1251 $?
 
