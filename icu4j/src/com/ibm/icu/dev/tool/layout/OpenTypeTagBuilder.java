@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/OpenTypeTagBuilder.java,v $
- * $Date: 2003/05/21 16:32:09 $
- * $Revision: 1.1 $
+ * $Date: 2003/05/21 20:35:58 $
+ * $Revision: 1.2 $
  */
 package com.ibm.icu.dev.tool.layout;
 
@@ -224,7 +224,8 @@ public class OpenTypeTagBuilder
             String tag = tags[i];
             
             System.out.println("    LE_" + tagLabel(tag) + "_" + enumName.toUpperCase() +
-                "_TAG = " + TagUtilities.makeTag(tag) + "UL, /* '" + tag + "' */");
+                "_TAG = " + TagUtilities.makeTag(tag) + "UL" +
+                (i == tags.length - 1? " " : ",") + " /* '" + tag + "' */");
         }
         
         System.out.println("};");
