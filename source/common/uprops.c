@@ -100,7 +100,8 @@ ublock_getCode(UChar32 c) {
     }
 }
 
-UBool u_hasBinaryProperty(UChar32 c, UProperty which) {
+U_CAPI UBool U_EXPORT2
+u_hasBinaryProperty(UChar32 c, UProperty which) {
     /* c is range-checked in the functions that are called from here */
     switch(which) {
     case UCHAR_ALPHABETIC:
@@ -162,7 +163,7 @@ UBool u_hasBinaryProperty(UChar32 c, UProperty which) {
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_IDEOGRAPHIC))!=0;
     case UCHAR_IDS_BINARY_OPERATOR:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_IDS_BINARY_OPERATOR))!=0;
-    case UCHAR_IDS_TRIARY_OPERATOR:
+    case UCHAR_IDS_TRINARY_OPERATOR:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_IDS_TRINARY_OPERATOR))!=0;
     case UCHAR_JOIN_CONTROL:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_JOIN_CONTROL))!=0;

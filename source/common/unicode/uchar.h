@@ -142,7 +142,7 @@ enum UProperty {
         Characters that can start an identifier.
         Lu+Ll+Lt+Lm+Lo+Nl @draft ICU 2.1 */
     UCHAR_ID_START,
-    /** Binary property Ideographic (new in Unicode 3.2).
+    /** Binary property Ideographic.
         CJKV ideographs. @draft ICU 2.1 */
     UCHAR_IDEOGRAPHIC,
     /** Binary property IDS_Binary_Operator (new in Unicode 3.2).
@@ -152,7 +152,7 @@ enum UProperty {
     /** Binary property IDS_Trinary_Operator (new in Unicode 3.2).
         For programmatic determination of
         Ideographic Description Sequences. @draft ICU 2.1 */
-    UCHAR_IDS_TRIARY_OPERATOR,
+    UCHAR_IDS_TRINARY_OPERATOR,
     /** Binary property Join_Control.
         Format controls for cursive joining and ligation. @draft ICU 2.1 */
     UCHAR_JOIN_CONTROL,
@@ -882,7 +882,8 @@ typedef enum UCharNameChoice UCharNameChoice;
  * @see u_getUnicodeVersion
  * @draft ICU 2.1
  */
-UBool u_hasBinaryProperty(UChar32 c, UProperty which);
+U_CAPI UBool U_EXPORT2
+u_hasBinaryProperty(UChar32 c, UProperty which);
 
 /**
  * Check if a code point has the Alphabetic Unicode property.
@@ -894,7 +895,8 @@ UBool u_hasBinaryProperty(UChar32 c, UProperty which);
  * @see u_hasBinaryProperty
  * @draft ICU 2.1
  */
-UBool u_isUAlphabetic(UChar32 c);
+U_CAPI UBool U_EXPORT2
+u_isUAlphabetic(UChar32 c);
 
 /**
  * Check if a code point has the Lowercase Unicode property.
@@ -906,7 +908,8 @@ UBool u_isUAlphabetic(UChar32 c);
  * @see u_hasBinaryProperty
  * @draft ICU 2.1
  */
-UBool u_isULowercase(UChar32 c);
+U_CAPI UBool U_EXPORT2
+u_isULowercase(UChar32 c);
 
 /**
  * Check if a code point has the Uppercase Unicode property.
@@ -918,7 +921,8 @@ UBool u_isULowercase(UChar32 c);
  * @see u_hasBinaryProperty
  * @draft ICU 2.1
  */
-UBool u_isUUppercase(UChar32 c);
+U_CAPI UBool U_EXPORT2
+u_isUUppercase(UChar32 c);
 
 /**
  * Check if a code point has the White_Space Unicode property.
@@ -931,7 +935,8 @@ UBool u_isUUppercase(UChar32 c);
  * @see u_hasBinaryProperty
  * @draft ICU 2.1
  */
-UBool u_isUWhiteSpace(UChar32 c);
+U_CAPI UBool U_EXPORT2
+u_isUWhiteSpace(UChar32 c);
 
 /*
  * ### TODO Document all properties more precisely, how they are based (or not) on UCD files.
