@@ -211,8 +211,8 @@ struct UCollationElements
       if((collationSource).CEpos == (collationSource).toReturn) {                     \
         (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
       }                                                                               \
-    } else if((collationSource).pos < (collationSource).endp) {                        \
-      UChar ch = *(collationSource).pos++;                                              \
+    } else if((collationSource).pos < (collationSource).endp) {                       \
+      UChar ch = *(collationSource).pos++;                                            \
       if(ch <= 0xFF) {                                                                \
       (order) = (coll)->latinOneMapping[ch];                                          \
       } else {                                                                        \
@@ -655,6 +655,37 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
 U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
+
+
+
+/*
+ *  Test whether a character is potentially "unsafe" for use as a collation
+ *  starting point.  Unsafe chars are those with combining class != 0 plus
+ *  those that are the 2nd thru nth character in a contraction sequence.
+ *
+ *  Function is in header file because it's used in both collation and string search,
+ *  and needs to be inline for performance.
+ */
+ /* __inline */ static UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
+    int32_t  hash;
+    uint8_t  htbyte;
+
+    if (c < coll->minUnsafeCP) {
+        return FALSE;
+    }
+
+    hash = c;
+    if (hash >= UCOL_UNSAFECP_TABLE_SIZE*8) {
+        if (hash >= 0xd800 && hash <= 0xf8ff) {
+            /*  Part of a surrogate, or in private use area.            */
+            /*   These are always considered unsafe.                    */
+            return TRUE;
+        }
+        hash = (hash & UCOL_UNSAFECP_TABLE_MASK) + 256;
+    }
+    htbyte = coll->unsafeCP[hash>>3];
+    return (((htbyte >> (hash & 7)) & 1) == 1);
+}
 
 #endif
 
