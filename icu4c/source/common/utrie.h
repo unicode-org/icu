@@ -18,6 +18,7 @@
 #define __UTRIE_H__
 
 #include "unicode/utypes.h"
+#include "udataswp.h"
 
 U_CDECL_BEGIN
 
@@ -662,10 +663,6 @@ utrie_serialize(UNewTrie *trie, void *data, int32_t capacity,
                 UNewTrieGetFoldedValue *getFoldedValue,
                 UBool reduceTo16Bits,
                 UErrorCode *pErrorCode);
-
-/* forward declaration */
-struct UDataSwapper;
-typedef struct UDataSwapper UDataSwapper;
 
 /**
  * Swap a serialized UTrie.
