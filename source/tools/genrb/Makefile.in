@@ -53,7 +53,7 @@ CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
 $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/extra/ustdio
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL) -L$(top_builddir)/extra/ustdio -lustdio
+LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@ @LIB_M@  $(LIBICU-TOOLUTIL) $(LIBUSTDIO)
 
 OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
 rblist.o  util.o
