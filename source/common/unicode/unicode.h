@@ -1141,46 +1141,7 @@ Unicode::isSpaceChar(UChar32 ch) {
 // Determines if the specified character is white space according to ICU.
 inline bool_t
 Unicode::isWhitespace(UChar32 ch) {
-    // ### TODO Move this implementation to C, and make this call the C
-    //      implementation.
-    // TODO Optional -- reimplement in terms of modified category
-    //      code -- see Mark Davis's note (below).  If this is done,
-    //      the implementation still must conform to the specified
-    //      semantics.  That is, U+00A0 and U+FEFF must return false,
-    //      and the ranges U+0009 - U+000D and U+001C - U+001F must
-    //      return true.  Characters other than these in Zs, Zl, or Zp
-    //      must return true.
-
-    int8_t cat = Unicode::getType(ch);
-    return
-        (cat == SPACE_SEPARATOR && ch != 0x00A0 && ch != 0xFEFF) ||
-        (((((int32_t(1) << LINE_SEPARATOR) |
-            (int32_t(1) << PARAGRAPH_SEPARATOR)) >> cat) & int32_t(1)) != 0) ||
-        (ch <= 0x1F && ((((int32_t(1) << 0x0009) |
-                          (int32_t(1) << 0x000A) |
-                          (int32_t(1) << 0x000B) |
-                          (int32_t(1) << 0x000C) |
-                          (int32_t(1) << 0x000D) |
-                          (int32_t(1) << 0x001C) |
-                          (int32_t(1) << 0x001D) |
-                          (int32_t(1) << 0x001E) |
-                          (int32_t(1) << 0x001F)) >> ch) & int32_t(1)) != 0);
-
-    // From Mark Davis:
-    //| What we should do is to make sure that the special Cc characters like CR
-    //| have either Zs, Zl, or Zp in the property database. We can then just call
-    //| the equivalent of:
-    //| 
-    //|  public static boolean isWhileSpace(char ch) {
-    //|   return ((1 << Character.getType(c)) & WHITESPACE_MASK) != 0; }
-    //| 
-    //| where WHITESPACE_MASK = (1 << Zs) | (1 << Zl) | (1 << Zp);
-    //| 
-    //| This is much faster code, since it just looksup the property value and does
-    //| a couple of arithmetics to get the right answer.
-    //
-    // (We still have to make sure U+00A0 and U+FEFF are excluded, so the code
-    //  might not be as simple as this. - aliu)
+    return u_isWhitespace(ch);
 }
 
 // Gets if the Unicode character's character property.
