@@ -57,6 +57,7 @@ if "%ICU_DATA%"=="" set ICU_DATA=%2\icu\data\
 %1\genrb %2\icu\data\en_NZ.txt
 %1\genrb %2\icu\data\en_US.txt
 %1\genrb %2\icu\data\en_ZA.txt
+%1\genrb %2\icu\data\eo.txt
 %1\genrb %2\icu\data\es.txt
 %1\genrb %2\icu\data\es_AR.txt
 %1\genrb %2\icu\data\es_BO.txt
