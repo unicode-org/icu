@@ -603,7 +603,7 @@ u_getNumericValue(UChar32 c) {
             const uint32_t *pe;
             uint32_t firstExceptionValue;
 
-            int32_t numerator;
+            double numValue;
             uint32_t denominator;
 
             pe=GET_EXCEPTIONS(props);
@@ -613,10 +613,44 @@ u_getNumericValue(UChar32 c) {
                 uint32_t flags=firstExceptionValue;
                 int i=EXC_NUMERIC_VALUE;
                 const uint32_t *p=pe;
+                int32_t numerator;
+
                 ADD_EXCEPTION_OFFSET(flags, i, p);
                 numerator=(int32_t)*p;
+
+                /*
+                 * There are special values for huge numbers that are powers of ten.
+                 * genprops/store.c documents:
+                 *   if numericValue=0x7fffff00+x then numericValue=10^x
+                 */
+                if(numerator<0x7fffff00) {
+                    numValue=(double)numerator;
+                } else {
+                    numerator&=0xff;
+
+                    /* 10^x without math.h */
+                    numValue=1.;
+                    while(numerator>=4) {
+                        numValue*=10000.;
+                        numerator-=4;
+                    }
+                    switch(numerator) {
+                    case 3:
+                        numValue*=1000.;
+                        break;
+                    case 2:
+                        numValue*=100.;
+                        break;
+                    case 1:
+                        numValue*=10.;
+                        break;
+                    case 0:
+                    default:
+                        break;
+                    }
+                }
             } else {
-                numerator=0;
+                numValue=0.;
             }
             if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_DENOMINATOR_VALUE)) {
                 uint32_t flags=firstExceptionValue;
@@ -630,11 +664,11 @@ u_getNumericValue(UChar32 c) {
 
             switch(firstExceptionValue&((1UL<<EXC_NUMERIC_VALUE)|(1UL<<EXC_DENOMINATOR_VALUE))) {
             case 1UL<<EXC_NUMERIC_VALUE:
-                return numerator;
+                return numValue;
             case 1UL<<EXC_DENOMINATOR_VALUE:
                 return (double)1./(double)denominator;
             case (1UL<<EXC_NUMERIC_VALUE)|(1UL<<EXC_DENOMINATOR_VALUE):
-                return (double)numerator/(double)denominator;
+                return numValue/(double)denominator;
             case 0: /* none (should not occur with numericType>0) */
             default:
                 return U_NO_NUMERIC_VALUE;
