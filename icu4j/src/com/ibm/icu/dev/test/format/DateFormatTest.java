@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2004/02/25 01:38:03 $ 
- * $Revision: 1.23 $
+ * $Date: 2004/03/09 22:26:19 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -179,97 +179,118 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestFieldPosition() {
         DateFormat[] dateFormats = new DateFormat[4];
-        int dateFormats_length = dateFormats.length;
-        String fieldNames[] = {
-                "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH", "DAY_OF_MONTH",   "DAY_OF_YEAR",
-                "DAY_OF_WEEK",   "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR","HOUR_OF_DAY","MINUTE",
-                "SECOND", "MILLISECOND", "ZONE_OFFSET" };
-        /* {sfb} This test was coded incorrectly.
-        / FieldPosition uses the fields in the class you are formatting with
-        / So, for example, to get the DATE field from a DateFormat use
-        / DateFormat.DATE_FIELD, __not__ Calendar.DATE
-        / The ordering of the expected values used previously was wrong.
-        / instead of re-ordering this mess of strings, just transform the index values */
-    
-        /* field values, in Calendar order */
-        final String[] expected =
-            { "", "1997", "August", "", "", "13", "", "Wednesday", "", "PM", "2", "", "34", "12", "", "PDT",
-            /* Following two added by weiv for two new fields */"", "1997", "#", 
-            /* # is a marker for "ao\xfbt" == "aou^t" */
-            "", "", "13", "", "mercredi", "", "", "", "14", "34", "", "", "PDT",
-            /* Following two added by weiv for two new fields */
-            "AD", "1997", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", "14", "34", "12", "513", "PDT",
-            /* Following two added by weiv for two new fields */
-            "AD",  "1997",  "August",  "0033", "0003", "0013", "0225", "Wednesday", "0002",
-             "PM", "0002",  "0014", "0034", "0012",   "0513", "Pacific Daylight Time",
-            /* Following two added by weiv for two new fields */ "1997", "0004", "" };
-    
-        Date someDate = new Date((long) 871508052513.0);
-        int j, exp;
+        int COUNT = dateFormats.length;
+        int i, j, exp;
+        StringBuffer buf = new StringBuffer();
+
+        checkData();
     
         dateFormats[0] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.US);
         dateFormats[1] = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL, Locale.FRANCE);
-        dateFormats[2] = new SimpleDateFormat("G, y, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, y, E", Locale.US);
-        dateFormats[3] = new SimpleDateFormat("GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz, yyyy, EEEE", Locale.US);
-        //fix the jdk resources differences between jdk 1.2 and jdk 1.3
-        // String javaVersion = System.getProperty("java.version");
+        // Make the pattern "G y M d..."
+        buf.append(PATTERN_CHARS);
+        for (j=buf.length()-1; j>=0; --j) buf.insert(j, ' ');
+        dateFormats[2] = new SimpleDateFormat(buf.toString(), Locale.US);
+        // Make the pattern "GGGG yyyy MMMM dddd..."
+        for (j=buf.length()-1; j>=0; j-=2) {
+            for (i=0; i<3; ++i) {
+                buf.insert(j, buf.charAt(j));
+            }
+        }
+        dateFormats[3] = new SimpleDateFormat(buf.toString(), Locale.US);
+
+        Date aug13 = new Date((long) 871508052513.0);
+
+        // Expected output field values for above DateFormats on aug13
+        // Fields are given in order of DateFormat field number
+        final String expected[] = {
+            "", "1997", "August", "13", "", "", "34", "12", "",
+            "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
+
+            "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
+            "mercredi", "", "", "", "", "", "", "", "GMT-07:00", "", "", "", "", "", "",
+
+            "AD", "1997", "8", "13", "14", "14", "34", "12", "513",
+            "Wed", "225", "2", "33", "3", "PM", "2", "2", "PDT", "1997", "4", "1997", "2450674", "52452513", "-0700",
+
+            "AD", "1997", "August", "0013", "0014", "0014", "0034", "0012", "0513",
+            "Wednesday", "0225", "0002", "0033", "0003", "PM", "0002", "0002", "Pacific Daylight Time", "1997", "0004", "1997", "2450674", "52452513", "-0700",
+        };
+
+        assertTrue("data size", expected.length == COUNT * DateFormat.FIELD_COUNT);
+
+        int qbase = 0;
+        String qs[] = new String[100];
         
-        for (j = 0, exp = 0; j < dateFormats_length; ++j) {
+        for (j = 0, exp = 0; j < COUNT; ++j) {
           //  String str;
             DateFormat df = dateFormats[j];
             TimeZone tz = TimeZone.getTimeZone("PST");
             df.setTimeZone(tz);
             logln(" Pattern = " + ((SimpleDateFormat) df).toPattern());
-            // str = "";
             try {
-                logln("  Result = " + df.format(someDate));
+                logln("  Result = " + df.format(aug13));
             } catch (Exception e) {
-                System.out.println(e);
+                errln("FAIL: " + e);
+                e.printStackTrace();
+                continue;
             }
-            for (int i = 0; i < fieldNames.length; ++i) {
-                String field = getFieldText(df, i, someDate);
-                String expStr = "";
-                if (!expected[exp].substring(0).equals("#")) {
-                    expStr = expected[exp];
-                } else {
-                    // we cannot have latin-1 characters in source code, therefore we fix up the string for "aou^t" 
-                    expStr = expStr + "\u0061" + "\u006f" + "\u00fb" + "\u0074";
-                }
-                if (/*javaVersion.startsWith("1.2") &&*/ (exp==31)) {
-                    expStr = "GMT-07:00";
-                }
-                if (!field.equals(expStr))
-                    errln("FAIL: field #" + i + " " + fieldNames[i] + " = \"" + field + "\", expected \"" + expStr + "\"");
-                ++exp;
+
+            for (i = 0; i < DATEFORMAT_FIELD_NAMES.length; ++i, ++exp) {
+                FieldPosition pos = new FieldPosition(i);
+                buf.setLength(0);
+                df.format(aug13, buf, pos);    
+                String field = buf.substring(pos.getBeginIndex(), pos.getEndIndex());
+                String expStr = expected[exp];
+                assertEquals("field #" + i + " " + DATEFORMAT_FIELD_NAMES[i], expStr, field);
             }
         }
     }
-    
-    // internal utility function
-    public String getFieldText(DateFormat df, int field, Date date) {
-        final int[] fgCalendarToDateFormatField ={
-            DateFormat.ERA_FIELD, 
-            DateFormat.YEAR_FIELD, 
-            DateFormat.MONTH_FIELD,
-            DateFormat.WEEK_OF_YEAR_FIELD, 
-            DateFormat.WEEK_OF_MONTH_FIELD,
-            DateFormat.DATE_FIELD, 
-            DateFormat.DAY_OF_YEAR_FIELD, 
-            DateFormat.DAY_OF_WEEK_FIELD,     
-            DateFormat.DAY_OF_WEEK_IN_MONTH_FIELD, 
-            DateFormat.AM_PM_FIELD,
-            DateFormat.HOUR1_FIELD, 
-            DateFormat.HOUR_OF_DAY0_FIELD, 
-            DateFormat.MINUTE_FIELD, 
-            DateFormat.SECOND_FIELD, 
-            DateFormat.MILLISECOND_FIELD,
-            DateFormat.TIMEZONE_FIELD
-            };
-        StringBuffer formatResult = new StringBuffer("");
-        // {sfb} added to convert Calendar Fields to DateFormat fields
-        FieldPosition pos = new FieldPosition(fgCalendarToDateFormatField[field]);
-        formatResult = df.format(date, formatResult, pos);    
-        return formatResult.substring(pos.getBeginIndex(), pos.getEndIndex());
+
+    /**
+     * This MUST be kept in sync with DateFormatSymbols.patternChars.
+     */
+    static final String PATTERN_CHARS = "GyMdkHmsSEDFwWahKzYeugAZ";
+        
+    /**
+     * A list of the names of all the fields in DateFormat.
+     * This MUST be kept in sync with DateFormat.
+     */
+    static final String DATEFORMAT_FIELD_NAMES[] = {
+        "ERA_FIELD",
+        "YEAR_FIELD",
+        "MONTH_FIELD",
+        "DATE_FIELD",
+        "HOUR_OF_DAY1_FIELD",
+        "HOUR_OF_DAY0_FIELD",
+        "MINUTE_FIELD",
+        "SECOND_FIELD",
+        "MILLISECOND_FIELD",
+        "DAY_OF_WEEK_FIELD",
+        "DAY_OF_YEAR_FIELD",
+        "DAY_OF_WEEK_IN_MONTH_FIELD",
+        "WEEK_OF_YEAR_FIELD",
+        "WEEK_OF_MONTH_FIELD",
+        "AM_PM_FIELD",
+        "HOUR1_FIELD",
+        "HOUR0_FIELD",
+        "TIMEZONE_FIELD",
+        "YEAR_WOY_FIELD",
+        "DOW_LOCAL_FIELD",
+        "EXTENDED_YEAR_FIELD",
+        "JULIAN_DAY_FIELD",
+        "MILLISECONDS_IN_DAY_FIELD",
+        "TIMEZONE_RFC_FIELD"
+    };
+
+    /**
+     * Check the consistency of our data.
+     */
+    void checkData() {
+        DateFormatSymbols rootSyms = new DateFormatSymbols(new Locale("", "", ""));
+        assertEquals("patternChars", PATTERN_CHARS, rootSyms.getLocalPatternChars());
+        assertTrue("DATEFORMAT_FIELD_NAMES", DATEFORMAT_FIELD_NAMES.length == DateFormat.FIELD_COUNT);
+        assertTrue("Data", DATEFORMAT_FIELD_NAMES.length == PATTERN_CHARS.length());
     }
     
     /**
