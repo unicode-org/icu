@@ -102,7 +102,7 @@ static int    gTraceDataCount;
 static UBool  gFnNameError   = FALSE;
 static UBool  gFnFormatError = FALSE;
 
-static void testTraceEntry(const void *context, int32_t fnNumber) {
+static void U_CALLCONV testTraceEntry(const void *context, int32_t fnNumber) {
     const char *fnName;
     const char *bogusFnName;
 
@@ -118,7 +118,7 @@ static void testTraceEntry(const void *context, int32_t fnNumber) {
 
 }
 
-static void testTraceExit(const void *context, int32_t fnNumber,
+static void U_CALLCONV testTraceExit(const void *context, int32_t fnNumber,
                    const char *fmt, va_list args) {
     char        buf[1000];
     const char *fnName;
@@ -144,7 +144,7 @@ static void testTraceExit(const void *context, int32_t fnNumber,
 
 }
 
-static void testTraceData(const void *context, int32_t fnNumber, int32_t level,
+static void U_CALLCONV testTraceData(const void *context, int32_t fnNumber, int32_t level,
                    const char *fmt, va_list args) {
     char        buf[1000];
     const char *fnName;

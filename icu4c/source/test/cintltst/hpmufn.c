@@ -84,7 +84,7 @@ static char *safeGetICUDataDirectory() {
 int    gBlockCount = 0;
 const void  *gContext;
 
-static void   *myMemAlloc(const void *context, size_t size) {
+static void * U_CALLCONV myMemAlloc(const void *context, size_t size) {
     char *retPtr = (char *)malloc(size+sizeof(ctest_AlignedMemory));
     if (retPtr != NULL) {
         retPtr += sizeof(ctest_AlignedMemory);
@@ -93,7 +93,7 @@ static void   *myMemAlloc(const void *context, size_t size) {
     return retPtr;
 }
 
-static void  myMemFree(const void *context, void *mem) {
+static void U_CALLCONV myMemFree(const void *context, void *mem) {
     char *freePtr = (char *)mem;
     if (freePtr != NULL) {
         freePtr -= sizeof(ctest_AlignedMemory);
@@ -103,7 +103,7 @@ static void  myMemFree(const void *context, void *mem) {
 
 
 
-static void  *myMemRealloc(const void *context, void *mem, size_t size) {
+static void * U_CALLCONV myMemRealloc(const void *context, void *mem, size_t size) {
     char *p = (char *)mem;
     char *retPtr;
 
@@ -218,7 +218,7 @@ typedef struct DummyMutex {
 } DummyMutex;
 
 
-static void myMutexInit(const void *context, UMTX *mutex, UErrorCode *status) {
+static void U_CALLCONV myMutexInit(const void *context, UMTX *mutex, UErrorCode *status) {
     DummyMutex *theMutex;
 
     TEST_STATUS(*status, U_ZERO_ERROR);
@@ -232,7 +232,7 @@ static void myMutexInit(const void *context, UMTX *mutex, UErrorCode *status) {
 }
 
 
-static void myMutexDestroy(const void *context, UMTX  *mutex) {
+static void U_CALLCONV myMutexDestroy(const void *context, UMTX  *mutex) {
     DummyMutex *This = *(DummyMutex **)mutex;
 
     gTotalMutexesActive--;
@@ -243,7 +243,7 @@ static void myMutexDestroy(const void *context, UMTX  *mutex) {
     free(This);
 }
 
-static void  myMutexLock(const void *context, UMTX *mutex) {
+static void U_CALLCONV myMutexLock(const void *context, UMTX *mutex) {
     DummyMutex *This = *(DummyMutex **)mutex;
 
     TEST_ASSERT(This->fMagic == 123456);
@@ -251,7 +251,7 @@ static void  myMutexLock(const void *context, UMTX *mutex) {
     gAccumulatedLocks++;
 }
 
-static void  myMutexUnlock(const void *context, UMTX *mutex) {
+static void U_CALLCONV myMutexUnlock(const void *context, UMTX *mutex) {
     DummyMutex *This = *(DummyMutex **)mutex;
 
     TEST_ASSERT(This->fMagic == 123456);
@@ -373,7 +373,7 @@ int         gDecCount             = 0;
 const void *gIncDecContext;
 
 
-static int32_t myIncFunc(const void *context, int32_t *p) {
+static int32_t U_CALLCONV myIncFunc(const void *context, int32_t *p) {
     int32_t  retVal;
     TEST_ASSERT(context == gIncDecContext);
     gIncCount++;
@@ -381,7 +381,7 @@ static int32_t myIncFunc(const void *context, int32_t *p) {
     return retVal;
 }
 
-static int32_t myDecFunc(const void *context, int32_t *p) {
+static int32_t U_CALLCONV myDecFunc(const void *context, int32_t *p) {
     int32_t  retVal;
     TEST_ASSERT(context == gIncDecContext);
     gDecCount++;
