@@ -100,7 +100,7 @@ typedef UBool le_bool;
 typedef le_uint32 LETag;
 
 /**
- * Ued for 16-bit glyph indices as they're represented
+ * Used for 16-bit glyph indices as they're represented
  * in TrueType font tables.
  *
  * @draft ICU 2.6
@@ -128,7 +128,7 @@ typedef le_uint32 LEGlyphID;
 
 /**
  * Used to shift the glyph ID part of an LEGlyphID
- * intto the low-order bits.
+ * into the low-order bits.
  *
  * @see LEGlyphID
  * @draft ICU 2.6
@@ -146,7 +146,7 @@ typedef le_uint32 LEGlyphID;
 
 /**
  * Used to shift the sub-font ID part of an LEGlyphID
- * intto the low-order bits.
+ * into the low-order bits.
  *
  * @see LEGlyphID
  * @draft ICU 2.6
@@ -164,7 +164,7 @@ typedef le_uint32 LEGlyphID;
 
 /**
  * Used to shift the sub-font ID part of an LEGlyphID
- * intto the low-order bits.
+ * into the low-order bits.
  *
  * @see LEGlyphID
  * @draft ICU 2.6
