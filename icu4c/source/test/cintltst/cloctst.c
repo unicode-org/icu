@@ -1251,10 +1251,11 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                         || (strcmp(subBundleKey, "TransliterateLATIN") != 0 /* Ignore these special cases */
                         && strcmp(subBundleKey, "BreakDictionaryData") != 0))
                     {
-                        log_data_err("Can't open a resource with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
+                        log_data_err("Can't open a resource with key \"%s\" in \"%s\" from root for locale \"%s\" - %s\n",
                                 subBundleKey,
                                 ures_getKey(currentBundle),
-                                locale);
+                                locale,
+                                u_errorName(errorCode));
                     }
                     ures_close(subBundle);
                     continue;
@@ -1723,7 +1724,7 @@ compareConsistentCountryInfo(const char *fromLocale, const char *toLocale) {
     UResourceBundle *toLocaleBund = ures_open(NULL, toLocale, &errorCode);
 
     if(U_FAILURE(errorCode)) {
-        log_err("Can't open resource bundle %s or %s\n", fromLocale, toLocale);
+        log_err("Can't open resource bundle %s or %s - %s\n", fromLocale, toLocale, u_errorName(errorCode));
         return;
     }
 
