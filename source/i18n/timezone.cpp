@@ -162,7 +162,7 @@ static UBool loadZoneData() {
     // Construct the available IDs array. The ordering
     // of this array conforms to the ordering of the
     // index by name table.
-    UnicodeString* zone_ids = new UnicodeString[tzh->count];
+    UnicodeString* zone_ids = new UnicodeString[tzh->count ? tzh->count : 1];
     if (zone_ids == 0) {
         udata_close(udata);
         return FALSE;
