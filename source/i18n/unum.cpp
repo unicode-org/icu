@@ -748,6 +748,12 @@ unum_applyPattern(  UNumberFormat  *format,
   int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   const UnicodeString pat((UChar*)pattern, len, len);
 
+  // Verify if the object passed is a DecimalFormat object
+  if(((NumberFormat*)format)->getDynamicClassID()!= DecimalFormat::getStaticClassID()){
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+      return;
+  }
+  
   if(localized)
     ((DecimalFormat*)format)->applyLocalizedPattern(pat,*parseError, *status);
   else
