@@ -1165,18 +1165,19 @@ UnicodeString::caseMap(BreakIterator *titleIter,
   UBreakIterator *cTitleIter = 0;
 
   if(toWhichCase == TO_TITLE) {
+    errorCode = U_ZERO_ERROR;
     if(titleIter != 0) {
       cTitleIter = (UBreakIterator *)titleIter;
+      ubrk_setText(cTitleIter, oldArray, oldLength, &errorCode);
     } else {
-      errorCode = U_ZERO_ERROR;
       cTitleIter = ubrk_open(UBRK_WORD, locale.getName(),
                              oldArray, oldLength,
                              &errorCode);
-      if(U_FAILURE(errorCode)) {
-        uprv_free(bufferToDelete);
-        setToBogus();
-        return *this;
-      }
+    }
+    if(U_FAILURE(errorCode)) {
+      uprv_free(bufferToDelete);
+      setToBogus();
+      return *this;
     }
   }
 #endif
