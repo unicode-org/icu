@@ -102,6 +102,37 @@
 #   define UINT32_MAX      (4294967295U)...
 #endif
 
+#if defined(__64BIT__) || defined(_LONG_LONG) || defined(_LP64) || defined(WIN64) || defined(_WIN64)
+#   ifndef INT64_MIN
+#       define INT64_MIN       (-9223372036854775807-1)
+#   endif
+#   ifndef INT64_MAX
+#       define INT64_MAX       (9223372036854775807)
+#   endif
+#   ifndef UINT64_MAX
+#       define UINT64_MAX      (18446744073709551615)
+#   endif
+#   ifndef INTMAX_MIN
+#       define INTMAX_MIN      INT64_MIN
+#   endif
+#   ifndef INTMAX_MAX
+#       define INTMAX_MAX      INT64_MAX
+#   endif
+#   ifndef UINTMAX_MAX
+#       define UINTMAX_MAX     UINT64_MAX
+#   endif
+#else
+#   ifndef INTMAX_MIN
+#       define INTMAX_MIN      INT32_MIN
+#   endif
+#   ifndef INTMAX_MAX
+#       define INTMAX_MAX      INT32_MAX
+#   endif
+#   ifndef UINTMAX_MAX
+#       define UINTMAX_MAX     UINT32_MAX
+#   endif
+#endif
+
 /*===========================================================================*/
 /* Boolean data type                                                         */
 /*===========================================================================*/
