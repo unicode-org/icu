@@ -7,8 +7,8 @@
 >
 <ldml>
 	<identity>
-		<version number="3.0"/>
-		<generation date="2003-09-30" />
+		<version number="1.0-alpha"/>
+		<generation date="2003-10-02" />
 		<language type="en" /> 
 	</identity>
 	<localeDisplayNames>
@@ -178,6 +178,7 @@
 			<language type="hmn">Hmong</language>
 			<language type="ho">Hiri Motu</language>
 			<language type="hr">Croatian</language>
+			<language type="ht">Haitian</language>
 			<language type="hu">Hungarian</language>
 			<language type="hup">Hupa</language>
 			<language type="hy">Armenian</language>
@@ -771,8 +772,6 @@
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
 		<variants>
-			<variant type="AL">Åland</variant>
-			<variant type="B">Bokmål</variant>
 			<variant type="EURO">Euro</variant>
 			<variant type="NY">Nynorsk</variant>
 			<variant type="POSIX">Posix</variant>
@@ -918,32 +917,6 @@
 				</short>
 				<exemplarCity>Los Angeles</exemplarCity>
 			</zone>
-			<zone type="Los Angeles">
-				<long>
-					<generic>Pacific Standard Time</generic>
-					<standard>Pacific Standard Time</standard>
-					<daylight>Pacific Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>America/Los_Angeles</generic>
-					<standard>PST</standard>
-					<daylight>PDT</daylight>
-				</short>
-				<exemplarCity>Los Angeles</exemplarCity>
-			</zone>
-			<zone type="Denver">
-				<long>
-					<generic>Mountain Standard Time</generic>
-					<standard>Mountain Standard Time</standard>
-					<daylight>Mountain Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>MST</generic>
-					<standard>MST</standard>
-					<daylight>MDT</daylight>
-				</short>
-				<exemplarCity>Denver</exemplarCity>
-			</zone>
 			<zone type="Denver">
 				<long>
 					<generic>Mountain Standard Time</generic>
@@ -956,19 +929,6 @@
 					<daylight>MDT</daylight>
 				</short>
 				<exemplarCity>Denver</exemplarCity>
-			</zone>
-			<zone type="Phoenix">
-				<long>
-					<generic>Mountain Standard Time</generic>
-					<standard>Mountain Standard Time</standard>
-					<daylight>Mountain Standard Time</daylight>
-				</long>
-				<short>
-					<generic>PNT</generic>
-					<standard>MST</standard>
-					<daylight>MST</daylight>
-				</short>
-				<exemplarCity>Phoenix</exemplarCity>
 			</zone>
 			<zone type="Phoenix">
 				<long>
@@ -996,19 +956,6 @@
 				</short>
 				<exemplarCity>Chicago</exemplarCity>
 			</zone>
-			<zone type="Chicago">
-				<long>
-					<generic>Central Standard Time</generic>
-					<standard>Central Standard Time</standard>
-					<daylight>Central Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>America/Chicago</generic>
-					<standard>CST</standard>
-					<daylight>CDT</daylight>
-				</short>
-				<exemplarCity>Chicago</exemplarCity>
-			</zone>
 			<zone type="New York">
 				<long>
 					<generic>Eastern Standard Time</generic>
@@ -1017,19 +964,6 @@
 				</long>
 				<short>
 					<generic>EST</generic>
-					<standard>EST</standard>
-					<daylight>EDT</daylight>
-				</short>
-				<exemplarCity>New York</exemplarCity>
-			</zone>
-			<zone type="New York">
-				<long>
-					<generic>Eastern Standard Time</generic>
-					<standard>Eastern Standard Time</standard>
-					<daylight>Eastern Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>America/New_York</generic>
 					<standard>EST</standard>
 					<daylight>EDT</daylight>
 				</short>
@@ -1048,32 +982,6 @@
 				</short>
 				<exemplarCity>Indianapolis</exemplarCity>
 			</zone>
-			<zone type="Indianapolis">
-				<long>
-					<generic>Eastern Standard Time</generic>
-					<standard>Eastern Standard Time</standard>
-					<daylight>Eastern Standard Time</daylight>
-				</long>
-				<short>
-					<generic>America/Indianapolis</generic>
-					<standard>EST</standard>
-					<daylight>EST</daylight>
-				</short>
-				<exemplarCity>Indianapolis</exemplarCity>
-			</zone>
-			<zone type="Honolulu">
-				<long>
-					<generic>Hawaii Standard Time</generic>
-					<standard>Hawaii Standard Time</standard>
-					<daylight>Hawaii Standard Time</daylight>
-				</long>
-				<short>
-					<generic>HST</generic>
-					<standard>HST</standard>
-					<daylight>HST</daylight>
-				</short>
-				<exemplarCity>Honolulu</exemplarCity>
-			</zone>
 			<zone type="Honolulu">
 				<long>
 					<generic>Hawaii Standard Time</generic>
@@ -1086,32 +994,6 @@
 					<daylight>HST</daylight>
 				</short>
 				<exemplarCity>Honolulu</exemplarCity>
-			</zone>
-			<zone type="Anchorage">
-				<long>
-					<generic>Alaska Standard Time</generic>
-					<standard>Alaska Standard Time</standard>
-					<daylight>Alaska Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>AST</generic>
-					<standard>AST</standard>
-					<daylight>ADT</daylight>
-				</short>
-				<exemplarCity>Anchorage</exemplarCity>
-			</zone>
-			<zone type="Anchorage">
-				<long>
-					<generic>Alaska Standard Time</generic>
-					<standard>Alaska Standard Time</standard>
-					<daylight>Alaska Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>America/Anchorage</generic>
-					<standard>AST</standard>
-					<daylight>ADT</daylight>
-				</short>
-				<exemplarCity>Anchorage</exemplarCity>
 			</zone>
 			<zone type="Halifax">
 				<long>
@@ -1139,19 +1021,6 @@
 				</short>
 				<exemplarCity>St. Johns</exemplarCity>
 			</zone>
-			<zone type="St. Johns">
-				<long>
-					<generic>Newfoundland Standard Time</generic>
-					<standard>Newfoundland Standard Time</standard>
-					<daylight>Newfoundland Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>America/St_Johns</generic>
-					<standard>CNT</standard>
-					<daylight>CDT</daylight>
-				</short>
-				<exemplarCity>St. Johns</exemplarCity>
-			</zone>
 			<zone type="Paris">
 				<long>
 					<generic>Central European Standard Time</generic>
@@ -1160,19 +1029,6 @@
 				</long>
 				<short>
 					<generic>ECT</generic>
-					<standard>CET</standard>
-					<daylight>CEST</daylight>
-				</short>
-				<exemplarCity>Paris</exemplarCity>
-			</zone>
-			<zone type="Paris">
-				<long>
-					<generic>Central European Standard Time</generic>
-					<standard>Central European Standard Time</standard>
-					<daylight>Central European Daylight Time</daylight>
-				</long>
-				<short>
-					<generic>Europe/Paris</generic>
 					<standard>CET</standard>
 					<daylight>CEST</daylight>
 				</short>
@@ -1230,19 +1086,6 @@
 				</short>
 				<exemplarCity>Tokyo</exemplarCity>
 			</zone>
-			<zone type="Tokyo">
-				<long>
-					<generic>Japan Standard Time</generic>
-					<standard>Japan Standard Time</standard>
-					<daylight>Japan Standard Time</daylight>
-				</long>
-				<short>
-					<generic>Asia/Tokyo</generic>
-					<standard>JST</standard>
-					<daylight>JST</daylight>
-				</short>
-				<exemplarCity>Tokyo</exemplarCity>
-			</zone>
 			<zone type="Bucharest">
 				<long>
 					<generic>Eastern European Standard Time</generic>
@@ -1264,19 +1107,6 @@
 				</long>
 				<short>
 					<generic>CTT</generic>
-					<standard>CTT</standard>
-					<daylight>CDT</daylight>
-				</short>
-				<exemplarCity>Shanghai</exemplarCity>
-			</zone>
-			<zone type="Shanghai">
-				<long>
-					<generic>China Standard Time</generic>
-					<standard>China Standard Time</standard>
-					<daylight>China Standard Time</daylight>
-				</long>
-				<short>
-					<generic>Asia/Shanghai</generic>
 					<standard>CTT</standard>
 					<daylight>CDT</daylight>
 				</short>
@@ -2848,78 +2678,78 @@
 		<icu:ruleBasedNumberFormats>
 			<icu:ruleBasedNumberFormat type="spellout">
 %simplified:
-    -x: minus &gt;&gt;;
-    x.x: &lt;&lt; point &gt;&gt;;
-    zero; one; two; three; four; five; six; seven; eight; nine;
-    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
-        seventeen; eighteen; nineteen;
-    20: twenty[-&gt;&gt;];
-    30: thirty[-&gt;&gt;];
-    40: forty[-&gt;&gt;];
-    50: fifty[-&gt;&gt;];
-    60: sixty[-&gt;&gt;];
-    70: seventy[-&gt;&gt;];
-    80: eighty[-&gt;&gt;];
-    90: ninety[-&gt;&gt;];
-    100: &lt;&lt; hundred[ &gt;&gt;];
-    1000: &lt;&lt; thousand[ &gt;&gt;];
-    1,000,000: &lt;&lt; million[ &gt;&gt;];
-    1,000,000,000: &lt;&lt; billion[ &gt;&gt;];
-    1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];
-    1,000,000,000,000,000: =#,##0=;
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; point &gt;&gt;;
+zero; one; two; three; four; five; six; seven; eight; nine;
+ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;
+seventeen; eighteen; nineteen;
+20: twenty[-&gt;&gt;];
+30: thirty[-&gt;&gt;];
+40: forty[-&gt;&gt;];
+50: fifty[-&gt;&gt;];
+60: sixty[-&gt;&gt;];
+70: seventy[-&gt;&gt;];
+80: eighty[-&gt;&gt;];
+90: ninety[-&gt;&gt;];
+100: &lt;&lt; hundred[ &gt;&gt;];
+1000: &lt;&lt; thousand[ &gt;&gt;];
+1,000,000: &lt;&lt; million[ &gt;&gt;];
+1,000,000,000: &lt;&lt; billion[ &gt;&gt;];
+1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
 %default:
-    -x: minus &gt;&gt;;
-    x.x: &lt;&lt; point &gt;&gt;;
-    =%simplified=;
-    100: &lt;&lt; hundred[ &gt;%%and&gt;];
-    1000: &lt;&lt; thousand[ &gt;%%and&gt;];
-    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
-    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
-    1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
-    1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
-    1,000,000,000,000,000: =#,##0=;
+-x: minus &gt;&gt;;
+x.x: &lt;&lt; point &gt;&gt;;
+=%simplified=;
+100: &lt;&lt; hundred[ &gt;%%and&gt;];
+1000: &lt;&lt; thousand[ &gt;%%and&gt;];
+100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];
+1,000,000: &lt;&lt; million[&gt;%%commas&gt;];
+1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];
+1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];
+1,000,000,000,000,000: =#,##0=;
 %%and:
-    and =%default=;
-    100: =%default=;
+and =%default=;
+100: =%default=;
 %%commas:
-    ' and =%default=;
-    100: , =%default=;
-    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
-    1,000,000: , =%default=;%%lenient-parse:
+' and =%default=;
+100: , =%default=;
+1000: , &lt;%default&lt; thousand, &gt;%default&gt;;
+1,000,000: , =%default=;%%lenient-parse:
    &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; 
 
 			</icu:ruleBasedNumberFormat>
 			<icu:ruleBasedNumberFormat type="ordinal">
 %main:
-    =#,##0==%%abbrev=;
+=#,##0==%%abbrev=;
 %%abbrev:
-    th; st; nd; rd; th;
-    20: &gt;&gt;;
-    100: &gt;&gt;;
+th; st; nd; rd; th;
+20: &gt;&gt;;
+100: &gt;&gt;;
 
 			</icu:ruleBasedNumberFormat>
 			<icu:ruleBasedNumberFormat type="duration">
 %with-words:
-    0 seconds; 1 second; =0= seconds;
-    60/60: &lt;%%min&lt;[, &gt;&gt;];
-    3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
+0 seconds; 1 second; =0= seconds;
+60/60: &lt;%%min&lt;[, &gt;&gt;];
+3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
 %%min:
-    0 minutes; 1 minute; =0= minutes;
+0 minutes; 1 minute; =0= minutes;
 %%hr:
-    0 hours; 1 hour; =0= hours;
+0 hours; 1 hour; =0= hours;
 %in-numerals:
-    =0= sec.;
-    60: =%%min-sec=;
-    3600: =%%hr-min-sec=;
+=0= sec.;
+60: =%%min-sec=;
+3600: =%%hr-min-sec=;
 %%min-sec:
-    0: :=00=;
-    60/60: &lt;0&lt;&gt;&gt;;
+0: :=00=;
+60/60: &lt;0&lt;&gt;&gt;;
 %%hr-min-sec:
-    0: :=00=;
-    60/60: &lt;00&lt;&gt;&gt;;
-    3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
+0: :=00=;
+60/60: &lt;00&lt;&gt;&gt;;
+3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
 %%lenient-parse:
-    &amp; ':' = '.' = ' ' = '-';
+&amp; ':' = '.' = ' ' = '-';
 
 			</icu:ruleBasedNumberFormat>
 		</icu:ruleBasedNumberFormats>
