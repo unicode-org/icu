@@ -885,10 +885,10 @@ int main(int argc, char **argv)
 	return printTransliterators(pname, printCanon) ? 3 : 0;
     }
 
-    if (!fromcpage) {
+    if (!fromcpage || !uprv_strcmp(fromcpage, "-")) {
         fromcpage = ucnv_getDefaultName();
     }
-    if (!tocpage) {
+    if (!tocpage || !uprv_strcmp(tocpage, "-")) {
         tocpage = ucnv_getDefaultName();
     }
 
