@@ -293,6 +293,10 @@ ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\g
 
 invuca.dat: ucadata.dat
 
+genrb.exe : ucadata.dat
+
+ucadata.dat : uprops.dat
+
 # Dependencies on the tools
 convrtrs.txt : {"$(ICUTOOLS)\gencnval\$(CFG)"}gencnval.exe
 
@@ -300,7 +304,6 @@ tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 
 uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
-genrb.exe : ucadata.dat
 
 $(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 
