@@ -50,8 +50,8 @@ public class UnicodeDataFile {
     }
     
     public void close() throws IOException {
-        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName);
         out.close();           
+        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName);
     }
 
     public static String generateDateLine() {

@@ -110,6 +110,7 @@ Let $ZWJ = [\u200D]	# [\N{ZERO WIDTH JOINER}]
 Let $gcAllPunctuation = [$gc:Open_Punctuation $gc:Close_Punctuation $gc:Dash_Punctuation $gc:Connector_Punctuation $gc:Other_Punctuation $gc:Initial_Punctuation $gc:Final_Punctuation]
 Let $gcAllSymbols = [$gc:Currency_Symbol $gc:Modifier_Symbol $gc:Math_Symbol $gc:Other_Symbol]
 Let $gcAllMarks = [$gc:Nonspacing_Mark $gc:Enclosing_Mark $gc:Spacing_Mark]
+Let $strange = [\u24B6-\u24CF]
 
 # Unassigned, Control, Format, Private_Use, Surrogate, 
 # Uppercase_Letter, Lowercase_Letter, Titlecase_Letter, Modifier_Letter, Other_Letter,
@@ -121,9 +122,9 @@ Let $gcAllMarks = [$gc:Nonspacing_Mark $gc:Enclosing_Mark $gc:Spacing_Mark]
 
 # UTS Rules
 
-Let $alpha = [$Alphabetic $Lowercase $Uppercase $ZWNJ $ZWJ]
+Let $alpha = [$Alphabetic $Lowercase] # $Uppercase $ZWNJ $ZWJ]
 Let $lower = $Lowercase 
-Let $upper = $Uppercase 
+Let $upper = [$Uppercase - $strange]
 Let $punct = [$gcAllPunctuation $gcAllSymbols - $alpha]
 Let $digit = $gc:Decimal_Number 
 Let $xdigit = [$gc:Decimal_Number $Hex_Digit] # in both!
@@ -131,7 +132,7 @@ Let $alnum = [$alpha $digit]
 Let $space = $Whitespace 
 Let $blank = [$Whitespace - [$LF $VTAB $FF $CR $NEL $gc:Line_Separator $gc:Paragraph_Separator]]
 Let $cntrl = $gc:Control 
-Let $graph = [[^$space $gc:Control $gc:Format $gc:Surrogate $gc:Unassigned] $ZWNJ $ZWJ]
+Let $graph = [^$space $gc:Control $gc:Format $gc:Surrogate $gc:Unassigned] # $ZWNJ $ZWJ]
 Let $print = [$graph $blank - $cntrl]
 Let $word = [$alpha $gcAllMarks $digit $gc:Connector_Punctuation] 
 

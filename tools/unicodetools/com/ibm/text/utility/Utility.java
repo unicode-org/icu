@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/10/14 17:54:56 $
-* $Revision: 1.44 $
+* $Date: 2004/11/12 23:17:15 $
+* $Revision: 1.45 $
 *
 *******************************************************************************
 */
@@ -914,8 +914,23 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             System.out.println("Null file");
             return false;
         }
-        
-        boolean identical = false;
+        String lines[] = new String[2];
+        boolean identical = filesAreIdentical(file1, file2, lines);
+        if (identical) {
+            renameIdentical(file2);
+            if (batFile != null) renameIdentical(batFile);
+            return true;
+        } else {
+            fixDot();
+            System.out.println("Found difference in : " + file1 + ", " + file2);
+            int diff = compare(lines[0], lines[1]);
+            System.out.println(" File1: '" + lines[0].substring(0,diff) + "', '" + lines[0].substring(diff) + "'");
+            System.out.println(" File2: '" + lines[1].substring(0,diff) + "', '" + lines[1].substring(diff) + "'");
+            return false;
+        }
+    }
+    
+    public static boolean filesAreIdentical(String file1, String file2, String[] lines) throws IOException {
         BufferedReader br1 = new BufferedReader(new FileReader(file1), 32*1024);
         BufferedReader br2 = new BufferedReader(new FileReader(file2), 32*1024);
         String line1 = "";
@@ -925,30 +940,21 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
                 line1 = getLineWithoutFluff(br1, lineCount == 0);
                 line2 = getLineWithoutFluff(br2, lineCount == 0);
                 if (line1 == null) {
-                    if (line2 == null) identical = true;
+                    if (line2 == null) return true;
                     break;
                 }
                 if (!line1.equals(line2)) {
                     break;
                 }
             }
+            lines[0] = line1;
+            lines[1] = line2;
+            if (lines[0] == null) lines[0] = "<end of file>";
+            if (lines[1] == null) lines[1] = "<end of file>";
+            return false;
         } finally {
             br1.close();
             br2.close();
-        }
-        if (identical) {
-            renameIdentical(file2);
-            if (batFile != null) renameIdentical(batFile);
-            return true;
-        } else {
-            if (line1 == null) line1 = "<end of file>";
-            if (line2 == null) line2 = "<end of file>";
-            fixDot();
-            System.out.println("Found difference in : " + file1 + ", " + file2);
-            int diff = compare(line1, line2);
-            System.out.println(" Line1: '" + line1.substring(0,diff) + "', '" + line1.substring(diff));
-            System.out.println(" Line2: '" + line2.substring(0,diff) + "', '" + line2.substring(diff));
-            return false;
         }
     }
     
@@ -975,6 +981,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             if (line1.equals("#")) continue;
             if (line1.startsWith("# Generated")) continue;
             if (line1.startsWith("# Date")) continue;
+            if (line1.equals("# ================================================")) continue;
             if (first && line1.startsWith("#")) {
                 first = false;
                 continue;
