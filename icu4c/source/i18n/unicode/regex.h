@@ -802,6 +802,7 @@ public:
 private:
     // Constructors and other object boilerplate are private.
     // Instances of RegexMatcher can not be assigned, copied, cloned, etc.
+    RegexMatcher(); // default constructor not implemented
     RegexMatcher(const RegexPattern *pat);
     RegexMatcher(const RegexMatcher &other);
     RegexMatcher &operator =(const RegexMatcher &rhs);

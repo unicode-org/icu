@@ -567,6 +567,7 @@ protected:
     virtual void computeTime(UErrorCode& status);
 
 private:
+    GregorianCalendar(); // default constructor not implemented
 
     /**
      * Return the ERA.  We need a special method for this because the

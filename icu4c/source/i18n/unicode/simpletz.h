@@ -721,6 +721,8 @@ private:
 
     friend class TimeZone; // for access to these 2 constructors:
 
+    SimpleTimeZone(); // default constructor not implemented
+
     /**
      * Construct from memory-mapped data.
      */

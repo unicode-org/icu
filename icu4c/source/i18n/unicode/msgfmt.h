@@ -606,6 +606,8 @@ private:
     Format**            formatAliases; // see getFormats
     int32_t             formatAliasesCapacity;
 
+    MessageFormat(); // default constructor not implemented
+
     /**
      * A structure representing one subformat of this MessageFormat.
      * Each subformat has a Format object, an offset into the plain
