@@ -187,77 +187,6 @@ _res_findTable32Item(const Resource *pRoot, const Resource res, const char *key,
     }
 }
 
-
-static Resource
-_res_findTableItemN(const Resource *pRoot, const Resource res, const char *key, int32_t keyLen,
-                    const char **realKey) {
-    const uint16_t *p=(const uint16_t *)RES_GET_POINTER(pRoot, res);
-    int32_t i, start, limit;
-
-    limit=*p++; /* number of entries */
-
-    if(limit == 0) { /* this table is empty */
-        *realKey = NULL;
-        return RES_BOGUS;
-    }
-
-    /* do a binary search for the key */
-    start=0;
-    while(start<limit-1) {
-        i=(int32_t)((start+limit)/2);
-        if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[i]), keyLen)<0) { 
-            limit=i;
-        } else {
-            start=i;
-        }
-    }
-
-    /* did we really find it? */
-    if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[start]), keyLen)==0) {
-        *realKey = RES_GET_KEY(pRoot, p[start]);
-        limit=*(p-1);   /* itemCount */
-        return ((const Resource *)(p+limit+(~limit&1)))[start];
-    } else {
-        *realKey = NULL;
-        return RES_BOGUS;   /* not found */
-    }
-}
-
-static Resource
-_res_findTable32ItemN(const Resource *pRoot, const Resource res, const char *key, int32_t keyLen,
-                      const char **realKey) {
-    const int32_t *p=(const int32_t *)RES_GET_POINTER(pRoot, res);
-    int32_t i, start, limit;
-
-    limit=*p++; /* number of entries */
-
-    if(limit == 0) { /* this table is empty */
-        *realKey = NULL;
-        return RES_BOGUS;
-    }
-
-    /* do a binary search for the key */
-    start=0;
-    while(start<limit-1) {
-        i=(int32_t)((start+limit)/2);
-        if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[i]), keyLen)<0) { 
-            limit=i;
-        } else {
-            start=i;
-        }
-    }
-
-    /* did we really find it? */
-    if(uprv_strncmp(key, RES_GET_KEY(pRoot, p[start]), keyLen)==0) {
-        *realKey = RES_GET_KEY(pRoot, p[start]);
-        limit=*(p-1);   /* itemCount */
-        return ((const Resource *)(p+limit))[start];
-    } else {
-        *realKey = NULL;
-        return RES_BOGUS;   /* not found */
-    }
-}
-
 /* helper for res_load() ---------------------------------------------------- */
 
 static UBool U_CALLCONV
@@ -415,17 +344,17 @@ res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t ind
 }
 
 U_CFUNC Resource
-res_findResource(const ResourceData *pResData, Resource r, const char** path, const char** key) {
+res_findResource(const ResourceData *pResData, Resource r, char** path, const char** key) {
   /* we pass in a path. CollationElements/Sequence or zoneStrings/3/2 etc. 
    * iterates over a path and stops when a scalar resource is found. This  
    * CAN be an alias. Path gets set to the part that has not yet been processed. 
    */
 
-  const char *pathP = *path, *nextSepP = *path;
+  char *pathP = *path, *nextSepP = *path;
   char *closeIndex = NULL;
   Resource t1 = r;
   Resource t2;
-  int32_t indexR = 0, keyLen = 0;
+  int32_t indexR = 0;
   UResType type = RES_GET_TYPE(t1);
   
   while(nextSepP && *pathP && t1 != RES_BOGUS &&
@@ -439,17 +368,16 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
      * and set path to the remaining part of the string
      */
     if(nextSepP != NULL) {
-      keyLen = nextSepP-pathP;
+      *nextSepP = 0; /* overwrite the separator with a NUL to terminate the key */
       *path = nextSepP+1;
     } else {
-      keyLen = uprv_strlen(pathP);
-      *path += keyLen;
+      *path = uprv_strchr(pathP, 0);
     }
 
     /* if the resource is a table */
     /* try the key based access */
     if(type == URES_TABLE) {
-      t2 = _res_findTableItemN(pResData->pRoot, t1, pathP, keyLen, key);
+      t2 = _res_findTableItem(pResData->pRoot, t1, pathP, &indexR, key);
       if(t2 == RES_BOGUS) { 
         /* if we fail to get the resource by key, maybe we got an index */
         indexR = uprv_strtol(pathP, &closeIndex, 10);
@@ -459,7 +387,7 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
         }
       }
     } else if(type == URES_TABLE32) {
-      t2 = _res_findTable32ItemN(pResData->pRoot, t1, pathP, keyLen, key);
+      t2 = _res_findTable32Item(pResData->pRoot, t1, pathP, &indexR, key);
       if(t2 == RES_BOGUS) { 
         /* if we fail to get the resource by key, maybe we got an index */
         indexR = uprv_strtol(pathP, &closeIndex, 10);
@@ -482,7 +410,7 @@ res_findResource(const ResourceData *pResData, Resource r, const char** path, co
     t1 = t2;
     type = RES_GET_TYPE(t1);
     /* position pathP to next resource key/index */
-    pathP += keyLen+1;
+    pathP = *path;
   }
 
   return t1;

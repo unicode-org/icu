@@ -199,7 +199,12 @@ res_countArrayItems(const ResourceData *pResData, const Resource res);
 U_CFUNC Resource res_getArrayItem(const ResourceData *pResData, Resource array, const int32_t indexS);
 U_CFUNC Resource res_getTableItemByIndex(const ResourceData *pResData, Resource table, int32_t indexS, const char ** key);
 U_CFUNC Resource res_getTableItemByKey(const ResourceData *pResData, Resource table, int32_t *indexS, const char* * key);
-U_CFUNC Resource res_findResource(const ResourceData *pResData, Resource r, const char** path, const char** key);
+
+/*
+ * Modifies the contents of *path (replacing separators with NULs),
+ * and also moves *path forward while it finds items.
+ */
+U_CFUNC Resource res_findResource(const ResourceData *pResData, Resource r, char** path, const char** key);
 
 /**
  * Swap an ICU resource bundle. See udataswp.h.
