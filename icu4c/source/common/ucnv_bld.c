@@ -100,7 +100,7 @@ isCnvAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x76 &&
         pInfo->dataFormat[3]==0x74 &&
-        pInfo->formatVersion[0]==3;
+        pInfo->formatVersion[0]==4;
 }
 
 #define DATA_TYPE "cnv"

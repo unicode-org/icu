@@ -51,6 +51,7 @@ typedef struct CompactByteArray {
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_open(int8_t defaultValue);
 
 U_CAPI  void U_EXPORT2 ucmp8_init(CompactByteArray* array, int8_t defaultValue);
+U_CAPI  void U_EXPORT2 ucmp8_initBogus(CompactByteArray* array);
 
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray, 
                                int8_t* newValues,

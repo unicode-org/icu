@@ -15,6 +15,7 @@
 *
 *   Date        Name        Description
 *   04/04/99    helena      Fixed internal header inclusion.
+*   05/09/00    helena      Added implementation to handle fallback mappings.
 */
 #include "umutex.h"
 #include "unicode/ures.h"
@@ -1112,4 +1113,14 @@ void ucnv_fixFileSeparator(const UConverter *cnv,
 bool_t ucnv_isAmbiguous(const UConverter *cnv)
 {
     return (ucnv_getAmbiguousCCSID(cnv) == -1 ? FALSE : TRUE);
+}
+
+void ucnv_setFallback(UConverter *cnv, bool_t usesFallback)
+{
+    cnv->useFallback = usesFallback;
+}
+
+bool_t ucnv_usesFallback(const UConverter *cnv)
+{
+    return cnv->useFallback;
 }

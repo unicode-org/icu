@@ -130,6 +130,20 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   return this_obj;
 }
 
+void ucmp16_initBogus(CompactShortArray *this_obj)
+{
+  if (this_obj == NULL) return;
+  this_obj->fStructSize = sizeof(CompactShortArray);
+  this_obj->fCount = UCMP16_kUnicodeCount;
+  this_obj->fCompact = FALSE; 
+  this_obj->fBogus = TRUE;
+  this_obj->fArray = NULL;
+  this_obj->fAlias = FALSE;
+  this_obj->fIndex = NULL;
+  this_obj->fHashes = NULL; 
+  this_obj->fIAmOwned = TRUE;
+  this_obj->fDefaultValue = 0;
+}  
 
 void ucmp16_init(CompactShortArray *this_obj, int16_t defaultValue)
 {

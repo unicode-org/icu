@@ -153,8 +153,9 @@ typedef struct {
     int8_t subCharLen;
   
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; 
-
-    uint8_t reserved[3];  /* to round out the structure */
+    uint8_t hasToUnicodeFallback;              /* bool_t needs to be changed to UBool to be consistent across platform */
+    uint8_t hasFromUnicodeFallback;
+    uint8_t reserved[19];  /* to round out the structure */
 
 } UConverterStaticData;
 
@@ -173,8 +174,8 @@ typedef struct {
     bool_t                staticDataOwned; /* T if we own the staticData */
     const UConverterImpl *impl;     /* vtable-style struct of mostly function pointers */
 
-  /*initial values of some members of the mutable part of object */
-  uint32_t toUnicodeStatus;
+    /*initial values of some members of the mutable part of object */
+    uint32_t toUnicodeStatus;
 } UConverterSharedData;
 
 
@@ -184,6 +185,7 @@ struct UConverter {
     uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
     uint32_t fromUnicodeStatus;
     int32_t mode;
+    bool_t  useFallback;
 
     int8_t subCharLen;                  /* length of the codepage specific character sequence */
     int8_t invalidCharLength;

@@ -70,7 +70,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.9 $ 8/25/98
+ * @version            $Revision: 1.10 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -99,6 +99,7 @@ U_CAPI int32_t U_EXPORT2 ucmp16_getkBlockCount(void);
  */
 U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_open(int16_t defaultValue);
 U_CAPI void U_EXPORT2 ucmp16_init(CompactShortArray* array, int16_t defaultValue);
+U_CAPI void U_EXPORT2 ucmp16_initBogus(CompactShortArray* array);
 
  /**
   * Construct a CompactShortArray from a pre-computed index and values array. The values

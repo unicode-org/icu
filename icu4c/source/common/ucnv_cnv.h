@@ -3,11 +3,16 @@
 *   Copyright (C) 1999, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
-   *
-   *   uconv_cnv.h:
-   *   defines all the low level conversion functions
-   *   T_UnicodeConverter_{to,from}Unicode_$ConversionType
- */
+*
+*   uconv_cnv.h:
+*   defines all the low level conversion functions
+*   T_UnicodeConverter_{to,from}Unicode_$ConversionType
+*
+* Modification History:
+*
+*   Date        Name        Description
+*   05/09/00    helena      Added implementation to handle fallback mappings.
+*/
 
 #ifndef UCNV_CNV_H
 #define UCNV_CNV_H
@@ -23,6 +28,8 @@ typedef struct
   {
     UChar *toUnicode;  /* [256]; */
     CompactByteArray fromUnicode;
+    UChar *toUnicodeFallback;
+    CompactByteArray fromUnicodeFallback;
   }
 UConverterSBCSTable;
 
@@ -30,6 +37,8 @@ typedef struct
   {
     CompactShortArray toUnicode;
     CompactShortArray fromUnicode;
+    CompactShortArray toUnicodeFallback;
+    CompactShortArray fromUnicodeFallback;
   }
 UConverterDBCSTable;
 
@@ -38,6 +47,8 @@ typedef struct
     bool_t *starters; /* [256]; */
     CompactShortArray toUnicode;
     CompactShortArray fromUnicode;
+    CompactShortArray toUnicodeFallback;
+    CompactShortArray fromUnicodeFallback;
   }
 UConverterMBCSTable;
 
