@@ -13,11 +13,14 @@
 #include "unicode/ustring.h"
 #include "cpputils.h"
 
+U_NAMESPACE_USE
+
 U_CAPI const UChar*
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
                 int32_t         index,
                 UErrorCode*     status)
 {
+
   if(U_FAILURE(*status)) return 0;
   
   int32_t count = 0;
@@ -43,6 +46,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 U_CAPI int32_t
 ucal_countAvailableTZIDs(int32_t rawOffset)
 {  
+
   int32_t count = 0;
   
   const UnicodeString** const tzs  = TimeZone::createAvailableIDs(rawOffset, 
@@ -60,6 +64,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
 U_CAPI UDate 
 ucal_getNow()
 {
+
   return Calendar::getNow();
 }
 
@@ -71,6 +76,7 @@ ucal_open(    const    UChar*          zoneID,
             UCalendarType     /*type*/,
             UErrorCode*    status)
 {
+
   if(U_FAILURE(*status)) return 0;
   
   TimeZone *zone = 0;
@@ -93,6 +99,7 @@ ucal_open(    const    UChar*          zoneID,
 U_CAPI void
 ucal_close(UCalendar *cal)
 {
+
   delete (Calendar*) cal;
 }
 
@@ -102,6 +109,7 @@ ucal_setTimeZone(    UCalendar*      cal,
             int32_t        len,
             UErrorCode *status)
 {
+
   if(U_FAILURE(*status))
     return;
 
@@ -130,6 +138,7 @@ ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
                     int32_t                 resultLength,
                     UErrorCode*             status)
 {
+
   if(U_FAILURE(*status)) return -1;
 
   const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
@@ -160,6 +169,7 @@ U_CAPI UBool
 ucal_inDaylightTime(    const    UCalendar*      cal, 
             UErrorCode*     status )
 {
+
   if(U_FAILURE(*status)) return (UBool) -1;
   return ((Calendar*)cal)->inDaylightTime(*status);
 }
@@ -168,6 +178,7 @@ U_CAPI int32_t
 ucal_getAttribute(    const    UCalendar*              cal,
             UCalendarAttribute      attr)
 {
+
   switch(attr) {
   case UCAL_LENIENT:
     return ((Calendar*)cal)->isLenient();
@@ -189,6 +200,7 @@ ucal_setAttribute(      UCalendar*              cal,
             UCalendarAttribute      attr,
             int32_t                 newValue)
 {
+
   switch(attr) {
   case UCAL_LENIENT:
     ((Calendar*)cal)->setLenient((UBool)newValue);
@@ -207,12 +219,14 @@ ucal_setAttribute(      UCalendar*              cal,
 U_CAPI const char*
 ucal_getAvailable(int32_t index)
 {
+
   return uloc_getAvailable(index);
 }
 
 U_CAPI int32_t
 ucal_countAvailable()
 {
+
   return uloc_countAvailable();
 }
 
@@ -220,6 +234,7 @@ U_CAPI UDate
 ucal_getMillis(    const    UCalendar*      cal,
         UErrorCode*     status)
 {
+
   if(U_FAILURE(*status)) return (UDate) 0;
 
   return ((Calendar*)cal)->getTime(*status);
@@ -243,6 +258,7 @@ ucal_setDate(        UCalendar*        cal,
             int32_t            date,
             UErrorCode        *status)
 {
+
   if(U_FAILURE(*status)) return;
 
   ((Calendar*)cal)->set(year, month, date);
@@ -268,6 +284,7 @@ U_CAPI UBool
 ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2)
 {
+
   return ((Calendar*)cal1)->equivalentTo(*((Calendar*)cal2));
 }
 
@@ -277,6 +294,7 @@ ucal_add(    UCalendar*                cal,
         int32_t                    amount,
         UErrorCode*                status)
 {
+
   if(U_FAILURE(*status)) return;
 
   ((Calendar*)cal)->add((Calendar::EDateFields)field, amount, *status);
@@ -288,6 +306,7 @@ ucal_roll(        UCalendar*            cal,
             int32_t                amount,
             UErrorCode*            status)
 {
+
   if(U_FAILURE(*status)) return;
 
   ((Calendar*)cal)->roll((Calendar::EDateFields)field, amount, *status);
@@ -298,6 +317,7 @@ ucal_get(    const    UCalendar*                cal,
         UCalendarDateFields        field,
         UErrorCode*                status )
 {
+
   if(U_FAILURE(*status)) return -1;
 
   return ((Calendar*)cal)->get((Calendar::EDateFields)field, *status);
@@ -308,6 +328,7 @@ ucal_set(    UCalendar*                cal,
         UCalendarDateFields        field,
         int32_t                    value)
 {
+
   ((Calendar*)cal)->set((Calendar::EDateFields)field, value);
 }
 
@@ -315,6 +336,7 @@ U_CAPI UBool
 ucal_isSet(    const    UCalendar*                cal,
         UCalendarDateFields        field)
 {
+
   return ((Calendar*)cal)->isSet((Calendar::EDateFields)field);
 }
 
@@ -322,12 +344,14 @@ U_CAPI void
 ucal_clearField(    UCalendar*            cal,
             UCalendarDateFields field)
 {
+
   ((Calendar*)cal)->clear((Calendar::EDateFields)field);
 }
 
 U_CAPI void 
 ucal_clear(UCalendar* calendar)
 {
+
   ((Calendar*)calendar)->clear();
 }
 
@@ -337,6 +361,7 @@ ucal_getLimit(    const    UCalendar*              cal,
             UCalendarLimitType      type,
             UErrorCode        *status)
 {
+
   if(status==0 || U_FAILURE(*status)) {
     return -1;
   }

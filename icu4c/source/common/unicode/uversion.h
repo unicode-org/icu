@@ -72,6 +72,13 @@
 /** The binary form of a version on ICU APIs is an array of 4 uint8_t. */
 typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
+#if U_HAVE_NAMESPACE && defined(XP_CPLUSPLUS)
+#define U_ICU_NAMESPACE icu_1_9
+namespace U_ICU_NAMESPACE { }
+namespace icu = U_ICU_NAMESPACE;
+#endif
+
+
 /*===========================================================================*/
 /* General version helper functions. Definitions in putil.c                  */
 /*===========================================================================*/

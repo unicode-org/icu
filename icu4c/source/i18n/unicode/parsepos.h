@@ -18,6 +18,8 @@
 
 #include "unicode/utypes.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <code>ParsePosition</code> is a simple class used by <code>Format</code>
  * and its subclasses to keep track of the current position during parsing.
@@ -178,5 +180,6 @@ ParsePosition::setErrorIndex(UTextOffset ei)
 {
   this->errorIndex = ei;
 }
+U_NAMESPACE_END
 
 #endif

@@ -27,6 +27,9 @@
 
 struct StandardZone;
 struct DSTZone;
+
+U_NAMESPACE_BEGIN
+
 class TimeZone;
 
 /**
@@ -611,5 +614,7 @@ inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_
                                        int32_t time, UBool after, UErrorCode& status) {
     setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
 }
+
+U_NAMESPACE_END
 
 #endif // _SIMPLETZ

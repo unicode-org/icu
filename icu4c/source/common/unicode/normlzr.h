@@ -14,6 +14,7 @@
 #include "unicode/chariter.h"
 #include "unicode/unorm.h"
 
+U_NAMESPACE_BEGIN
 /**
  * \file
  * \brief C++ API: Unicode Normalization 
@@ -1013,4 +1014,5 @@ inline Normalizer::EMode Normalizer::getNormalizerEMode(
   return Normalizer::DECOMP_COMPAT;
 }
 
+U_NAMESPACE_END
 #endif // _NORMLZR

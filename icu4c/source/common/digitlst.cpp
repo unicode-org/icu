@@ -52,6 +52,8 @@ enum {
     LONG_MIN_REP_LENGTH = sizeof(LONG_MIN_REP) - 1 //Ignore the NULL at the end
 };
 
+U_NAMESPACE_BEGIN
+
 // -------------------------------------
 // default constructor
 
@@ -562,5 +564,7 @@ DigitList::initializeLONG_MIN_REP()
             LONG_MIN_REP[i-1] = buf[i];
     }
 }*/
+
+U_NAMESPACE_END
 
 //eof

@@ -24,6 +24,7 @@
 #   error This is a C++ header file.
 #endif
 
+U_NAMESPACE_BEGIN
 /**
  * This class is deprecated and will be removed.
  * Use the C API with the UBiDi type and ubidi_... functions.
@@ -382,5 +383,7 @@ BiDi::writeReverse(const UChar *src, int32_t srcLength,
                    UErrorCode &rErrorCode) {
     return ubidi_writeReverse(src, srcLength, dest, destSize, options, &rErrorCode);
 }
+
+U_NAMESPACE_END
 
 #endif

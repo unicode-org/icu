@@ -11,6 +11,8 @@
 #include "uvector.h"
 #include "cmemory.h"
 
+U_NAMESPACE_BEGIN
+
 UVector::UVector(UErrorCode &status, int32_t initialCapacity) :
     count(0),
     capacity(0),
@@ -222,3 +224,6 @@ int32_t UStack::search(void* obj) const {
     int32_t i = indexOf(obj);
     return (i >= 0) ? size() - i : i;
 }
+
+U_NAMESPACE_END
+

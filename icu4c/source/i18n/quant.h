@@ -10,6 +10,8 @@
 
 #include "unicode/unimatch.h"
 
+U_NAMESPACE_BEGIN
+
 class Quantifier : public UnicodeMatcher {
 
  public:
@@ -57,5 +59,7 @@ class Quantifier : public UnicodeMatcher {
 
     uint32_t maxCount;
 };
+
+U_NAMESPACE_END
 
 #endif

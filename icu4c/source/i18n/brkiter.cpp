@@ -32,6 +32,8 @@
 // returning the index of characters where boundaries occur.
 // *****************************************************************************
 
+U_NAMESPACE_BEGIN
+
 const UTextOffset BreakIterator::DONE = (int32_t)-1;
 
 // -------------------------------------
@@ -193,5 +195,7 @@ BreakIterator::BreakIterator()
 BreakIterator::~BreakIterator()
 {
 }
+
+U_NAMESPACE_END
 
 //eof

@@ -37,6 +37,8 @@
 #include "unicode/uchar.h"
 #include "unicode/unicode.h"
 
+U_NAMESPACE_BEGIN
+
 /*
  * Private (sort of) constructors etc., defined only to prevent
  * instantiation and subclassing. Therefore, empty.
@@ -48,3 +50,4 @@ const Unicode &
 Unicode::operator=(const Unicode &) {
     return *this;
 }
+U_NAMESPACE_END

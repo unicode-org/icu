@@ -26,6 +26,8 @@
 // class DateFormat
 // *****************************************************************************
 
+U_NAMESPACE_BEGIN
+
 DateFormat::DateFormat()
 :   fCalendar(0),
     fNumberFormat(0)
@@ -321,5 +323,7 @@ DateFormat::isLenient() const
 {
     return fCalendar->isLenient();
 }
+
+U_NAMESPACE_END
 
 //eof

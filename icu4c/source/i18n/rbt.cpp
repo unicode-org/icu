@@ -13,6 +13,8 @@
 #include "rbt_rule.h"
 #include "unicode/rep.h"
 
+U_NAMESPACE_BEGIN
+
 char RuleBasedTransliterator::fgClassID = 0; // Value is irrelevant
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
@@ -130,3 +132,6 @@ UnicodeString& RuleBasedTransliterator::toRules(UnicodeString& rulesSource,
                                                 UBool escapeUnprintable) const {
     return data->ruleSet.toRules(rulesSource, escapeUnprintable);
 }
+
+U_NAMESPACE_END
+

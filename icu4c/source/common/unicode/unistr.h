@@ -25,11 +25,18 @@
 #include "unicode/rep.h"
 #include "unicode/uchar.h"
 
+
 struct UConverter;          // unicode/ucnv.h
+
+U_NAMESPACE_BEGIN
 
 class Locale;               // unicode/locid.h
 class UCharReference;
 class UnicodeConverter;     // unicode/convert.h
+class Normalizer;
+class StringCharacterIterator;
+class SearchIterator;
+class StringSearch;
 
 /* The <iostream> include has been moved to unicode/ustream.h */
 
@@ -2753,20 +2760,22 @@ private:
   UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
 };
 
+U_NAMESPACE_END
+
 //========================================
 // Array copying
 //========================================
 // Copy an array of UnicodeString OBJECTS (not pointers).
 inline void 
-uprv_arrayCopy(const UnicodeString *src, UnicodeString *dst, int32_t count)
+uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t count)
 { while(count-- > 0) *dst++ = *src++; }
 
 inline void 
-uprv_arrayCopy(const UnicodeString *src, int32_t srcStart, 
-        UnicodeString *dst, int32_t dstStart, int32_t count)
+uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, int32_t srcStart, 
+        U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t dstStart, int32_t count)
 { uprv_arrayCopy(src+srcStart, dst+dstStart, count); }
 
-
+U_NAMESPACE_BEGIN
 //========================================
 // Inline members
 //========================================
@@ -3680,10 +3689,12 @@ inline int32_t
 UnicodeString::setRefCount(int32_t count)
 { return (*((int32_t *)fArray - 1) = count); }
 
+U_NAMESPACE_END
 
 //========================================
 // Static members
 //========================================
+U_NAMESPACE_BEGIN
 
 //========================================
 // class UCharReference
@@ -3736,5 +3747,7 @@ UCharReference::operator= (UChar c)
 inline
 UCharReference::operator UChar()
 { return fString->charAt(fPos); }
+
+U_NAMESPACE_END
 
 #endif

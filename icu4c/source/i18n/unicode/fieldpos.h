@@ -23,6 +23,8 @@
 
 #include "unicode/utypes.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <code>FieldPosition</code> is a simple class used by <code>Format</code>
  * and its subclasses to identify fields in formatted output. Fields are
@@ -234,6 +236,8 @@ FieldPosition::operator!=(const FieldPosition& copy) const
 {
     return !operator==(copy);
 }
+
+U_NAMESPACE_END
 
 #endif // _FIELDPOS
 //eof

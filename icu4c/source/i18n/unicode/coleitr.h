@@ -32,6 +32,8 @@
 
 typedef struct UCollationElements UCollationElements;
 
+U_NAMESPACE_BEGIN
+
 /**
 * The CollationElementIterator class is used as an iterator to walk through     
 * each character of an international string. Use the iterator to return the
@@ -337,5 +339,7 @@ inline UBool CollationElementIterator::isIgnorable(int32_t order)
 {
   return (primaryOrder(order) == RuleBasedCollator::PRIMIGNORABLE);
 }
+
+U_NAMESPACE_END
 
 #endif

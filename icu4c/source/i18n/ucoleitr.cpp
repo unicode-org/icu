@@ -20,6 +20,8 @@
 #include "ucol_imp.h"
 #include "cmemory.h"
 
+U_NAMESPACE_USE
+
 #define BUFFER_LENGTH             100
 
 typedef struct collIterate collIterator;
@@ -33,8 +35,9 @@ U_CAPI int32_t
 ucol_keyHashCode(const uint8_t *key, 
                        int32_t  length)
 {
-  CollationKey newKey(key, length);
-  return newKey.hashCode();
+
+    CollationKey newKey(key, length);
+    return newKey.hashCode();
 }
 
 

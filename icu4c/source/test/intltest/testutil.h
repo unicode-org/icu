@@ -11,6 +11,7 @@
 #define TESTUTIL_H
 
 #include "unicode/unistr.h"
+#include "intltest.h"
 
 /**
  * Utility methods.  Everything in this class is static -- do not

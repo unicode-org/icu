@@ -88,6 +88,8 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
   }
 }
 
+U_NAMESPACE_BEGIN
+
 //========================================
 // Constructors
 //========================================
@@ -1722,3 +1724,4 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   }
   return TRUE;
 }
+U_NAMESPACE_END

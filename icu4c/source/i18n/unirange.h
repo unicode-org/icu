@@ -11,6 +11,8 @@
 
 #include "unicode/utypes.h"
 
+U_NAMESPACE_BEGIN
+
 class UnicodeString;
 
 /**
@@ -74,5 +76,7 @@ private:
     static void U_CALLCONV deleter(void*);
 
 };
+
+U_NAMESPACE_END
 
 #endif

@@ -51,6 +51,7 @@
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 
+U_NAMESPACE_BEGIN
 /* forward declarations */
 class RuleBasedCollator;
 
@@ -431,4 +432,5 @@ private:
     Locale                      fRealLocale;
 };
 
+U_NAMESPACE_END
 #endif

@@ -10,6 +10,8 @@
 
 #include "unicode/unimatch.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <code>UnicodeFilter</code> defines a protocol for selecting a
  * subset of the full range (U+0000 to U+FFFF) of Unicode characters.
@@ -78,5 +80,7 @@ protected:
 
 inline UnicodeFilter::UnicodeFilter() {}
 inline UnicodeFilter::~UnicodeFilter() {}
+
+U_NAMESPACE_END
 
 #endif

@@ -11,6 +11,8 @@
 #include "unicode/unistr.h"
 #include "unicode/unimatch.h"
 
+U_NAMESPACE_BEGIN
+
 class TransliterationRuleData;
 
 /**
@@ -65,5 +67,7 @@ class StringMatcher : public UnicodeMatcher {
 
     UBool isSegment;
 };
+
+U_NAMESPACE_END
 
 #endif

@@ -41,6 +41,7 @@
 #include "unicode/tblcoll.h"
 #include "cmemory.h"
 
+U_NAMESPACE_BEGIN
 
 // Collator public methods -----------------------------------------------
 
@@ -192,3 +193,7 @@ Collator::Collator(const Collator& /* other */)
 // UCollator private data members ----------------------------------------
 
 const UVersionInfo Collator::fVersion = {1, 1, 0, 0};
+
+U_NAMESPACE_END
+
+/* eof */

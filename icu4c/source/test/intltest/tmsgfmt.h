@@ -8,10 +8,9 @@
 #ifndef _TESTMESSAGEFORMAT
 #define _TESTMESSAGEFORMAT
 
+#include "unicode/unistr.h"
+#include "unicode/fmtable.h"
 #include "intltest.h"
-
-class Formattable;
-class UnicodeString;
 
 /**
  * TestMessageFormat tests MessageFormat, and also a few unctions in ChoiceFormat

@@ -15,8 +15,6 @@
 #include "unicode/hextouni.h"
 #include "intltest.h"
 
-class HexToUnicodeTransliterator;
-
 /**
  * @test
  * @summary General test of HexadecimalToUnicodeTransliterator

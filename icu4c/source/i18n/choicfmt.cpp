@@ -33,6 +33,8 @@
 // class ChoiceFormat
 // *****************************************************************************
 
+U_NAMESPACE_BEGIN
+
 const char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
 
 //UMTX ChoiceFormat::fgMutex = NULL; // lock for fgNumberFormat
@@ -875,5 +877,7 @@ ChoiceFormat::nextDouble( double d, UBool positive )
 {
     return uprv_nextDouble( d, positive );
 }
+
+U_NAMESPACE_END
 
 //eof

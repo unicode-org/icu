@@ -41,6 +41,8 @@
 #include <stdio.h>
 #endif
 
+U_NAMESPACE_USE
+
 /* added by synwee for trie manipulation*/
 #define STAGE_1_SHIFT_            10
 #define STAGE_2_SHIFT_            4
@@ -1790,6 +1792,7 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t h
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by getNextCE */
 uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
+
   for (;;) {
     // This loop will repeat only in the case of contractions, and only when a contraction
     //   is found and the first CE resulting from that contraction is itself a special
@@ -4572,6 +4575,7 @@ ucol_getDisplayName(    const    char        *objLoc,
             int32_t         resultLength,
             UErrorCode        *status)
 {
+
   if(U_FAILURE(*status)) return -1;
   UnicodeString dst(result, resultLength, resultLength);
   Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);

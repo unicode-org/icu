@@ -24,6 +24,8 @@
 #include "unicode/locid.h"
 #include "unicode/parseerr.h"
 
+U_NAMESPACE_BEGIN
+
 class NumberFormat;
 
 /**
@@ -634,6 +636,7 @@ MessageFormat::format(const Formattable& obj,
                       UErrorCode& status) const {
     return Format::format(obj, result, status);
 }
+U_NAMESPACE_END
 
 #endif // _MSGFMT
 //eof

@@ -8,7 +8,7 @@
 #ifndef _INTLTESTDECIMALFORMATAPI
 #define _INTLTESTDECIMALFORMATAPI
 
-
+#include "unicode/unistr.h"
 #include "intltest.h"
 
 

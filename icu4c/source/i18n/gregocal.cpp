@@ -114,6 +114,9 @@ static const int32_t kMaxValues[] = {
     1,144683,11,53,6,31,366,7,6,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR, 144683,7
 };
 
+
+U_NAMESPACE_BEGIN
+
 const char GregorianCalendar::fgClassID = 0; // Value is irrelevant
 
 // 00:00:00 UTC, October 15, 1582, expressed in ms from the epoch.
@@ -2010,5 +2013,7 @@ int32_t
 GregorianCalendar::internalGetEra() const {
     return isSet(ERA) ? internalGet(ERA) : AD;
 }
+
+U_NAMESPACE_END
 
 //eof

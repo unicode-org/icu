@@ -12,6 +12,8 @@
 #include "dbbi_tbl.h"
 #include "unicode/dbbi.h"
 
+U_NAMESPACE_BEGIN
+
 //=======================================================================
 // constructor
 //=======================================================================
@@ -66,3 +68,7 @@ DictionaryBasedBreakIteratorTables::lookupCategory(UChar c,
     }
     return result;
 }
+
+U_NAMESPACE_END
+
+/* eof */

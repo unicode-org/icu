@@ -21,12 +21,14 @@
 
 U_CAPI int32_t
 uhash_hashUnicodeString(const UHashKey key) {
+    U_NAMESPACE_USE
     const UnicodeString *str = (const UnicodeString*) key.pointer;
     return (str == NULL) ? 0 : str->hashCode();
 }
 
 U_CAPI int32_t
 uhash_hashCaselessUnicodeString(const UHashKey key) {
+    U_NAMESPACE_USE
     const UnicodeString *str = (const UnicodeString*) key.pointer;
     if (str == NULL) {
         return 0;
@@ -39,11 +41,13 @@ uhash_hashCaselessUnicodeString(const UHashKey key) {
 
 U_CAPI void
 uhash_deleteUnicodeString(void *obj) {
+    U_NAMESPACE_USE
     delete (UnicodeString*) obj;
 }
 
 U_CAPI UBool
 uhash_compareUnicodeString(const UHashKey key1, const UHashKey key2) {
+    U_NAMESPACE_USE
     const UnicodeString *str1 = (const UnicodeString*) key1.pointer;
     const UnicodeString *str2 = (const UnicodeString*) key2.pointer;
     if (str1 == str2) {
@@ -57,6 +61,7 @@ uhash_compareUnicodeString(const UHashKey key1, const UHashKey key2) {
 
 U_CAPI UBool
 uhash_compareCaselessUnicodeString(const UHashKey key1, const UHashKey key2) {
+    U_NAMESPACE_USE
     const UnicodeString *str1 = (const UnicodeString*) key1.pointer;
     const UnicodeString *str2 = (const UnicodeString*) key2.pointer;
     if (str1 == str2) {
@@ -73,6 +78,7 @@ uhash_compareCaselessUnicodeString(const UHashKey key1, const UHashKey key2) {
  */
 U_CAPI void
 uhash_deleteHashtable(void *obj) {
+    U_NAMESPACE_USE
     delete (Hashtable*) obj;
 }
 
@@ -81,6 +87,7 @@ uhash_deleteHashtable(void *obj) {
  */
 U_CAPI void
 uhash_deleteUVector(void *obj) {
+    U_NAMESPACE_USE
     delete (UVector*) obj;
 }
 

@@ -14,6 +14,8 @@
 #include "unicode/utypes.h"
 #include "unicode/parseerr.h"
 
+U_NAMESPACE_BEGIN
+
 class TransliterationRuleData;
 
 /**
@@ -554,5 +556,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
     UParseError parseError;
     _construct(rules, UTRANS_FORWARD,parseError, status);
 }
+
+U_NAMESPACE_END
 
 #endif

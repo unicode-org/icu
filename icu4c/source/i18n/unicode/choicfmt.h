@@ -28,6 +28,11 @@
 #include "unicode/numfmt.h"
 #include "unicode/fieldpos.h"
 #include "unicode/format.h"
+
+U_NAMESPACE_BEGIN
+
+class MessageFormat;
+
 /**
  * <p><code>ChoiceFormat</code> converts between ranges of numeric values
  * and string names for those ranges. A <code>ChoiceFormat</code> splits
@@ -697,6 +702,7 @@ ChoiceFormat::format(int32_t number,
                      UnicodeString& output) const {
     return NumberFormat::format(number, output);
 }
+U_NAMESPACE_END
 
 #endif // _CHOICFMT
 //eof

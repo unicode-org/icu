@@ -25,6 +25,8 @@
 
 #include "unicode/calendar.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * Concrete class which provides the standard calendar used by most of the world.
  * <P>
@@ -681,6 +683,8 @@ inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
   uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7 + SUNDAY) : SUNDAY));
   return result;
 }
+
+U_NAMESPACE_END
 
 #endif // _GREGOCAL
 //eof

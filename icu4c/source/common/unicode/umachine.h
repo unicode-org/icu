@@ -23,7 +23,6 @@
 #ifndef __UMACHINE_H__
 #define __UMACHINE_H__
 
-#include "unicode/urename.h"
 
 /**
  * \file
@@ -82,8 +81,20 @@
 #   define U_CDECL_BEGIN
 #   define U_CDECL_END
 #endif
-#define U_CAPI U_CFUNC U_EXPORT
 
+/* Define namespace symbols if the compiler supports it. */
+#if U_HAVE_NAMESPACE
+#   define U_NAMESPACE_BEGIN namespace U_ICU_NAMESPACE {
+#   define U_NAMESPACE_END  }
+#   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
+#   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
+#else
+#   define U_NAMESPACE_BEGIN
+#   define U_NAMESPACE_END
+#   define U_NAMESPACE_USE
+#   define U_NAMESPACE_QUALIFIER
+#endif
+#define U_CAPI U_CFUNC U_EXPORT
 /*===========================================================================*/
 /* limits for int32_t etc., like in POSIX inttypes.h                         */
 /*===========================================================================*/
@@ -201,5 +212,6 @@ typedef int8_t UBool;
 #   endif
 #endif
 
+#include "unicode/urename.h"
 
 #endif

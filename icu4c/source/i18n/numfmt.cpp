@@ -29,19 +29,6 @@
 #include "unicode/decimfmt.h"
 #include <float.h>
 
-// *****************************************************************************
-// class NumberFormat
-// *****************************************************************************
- 
-const char NumberFormat::fgClassID = 0; // Value is irrelevant
-
-// If the maximum base 10 exponent were 4, then the largest number would 
-// be 99,999 which has 5 digits.
-const int32_t NumberFormat::fgMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl
-const int32_t NumberFormat::fgMinIntegerDigits = 127;
-
-const int32_t NumberFormat::fgNumberPatternsCount = 3;
-
 // If no number pattern can be located for a locale, this is the last
 // resort.
 static const UChar gLastResortDecimalPat[] = {
@@ -56,6 +43,21 @@ static const UChar gLastResortPercentPat[] = {
 static const UChar gLastResortScientificPat[] = {
     0x23, 0x45, 0x30, 0 /* "#E0" */
 };
+// *****************************************************************************
+// class NumberFormat
+// *****************************************************************************
+
+U_NAMESPACE_BEGIN
+
+const char NumberFormat::fgClassID = 0; // Value is irrelevant
+
+// If the maximum base 10 exponent were 4, then the largest number would 
+// be 99,999 which has 5 digits.
+const int32_t NumberFormat::fgMaxIntegerDigits = DBL_MAX_10_EXP + 1; // Should be ~40 ? --srl
+const int32_t NumberFormat::fgMinIntegerDigits = 127;
+
+const int32_t NumberFormat::fgNumberPatternsCount = 3;
+
 const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
 {
     gLastResortDecimalPat,
@@ -496,5 +498,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     }
     return f;
 }
+
+U_NAMESPACE_END
 
 //eof

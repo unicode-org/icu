@@ -42,6 +42,8 @@
 // class SimpleDateFormat
 // *****************************************************************************
 
+U_NAMESPACE_BEGIN
+
 // For time zones that have no names, use strings GMT+minutes and
 // GMT-minutes. For instance, in France the time zone is GMT+60.
 // Also accepted are GMT+H:MM or GMT-H:MM.
@@ -1589,5 +1591,7 @@ SimpleDateFormat::initializeSystemDefaultCentury()
         // out.
     }
 }
+
+U_NAMESPACE_END
 
 //eof

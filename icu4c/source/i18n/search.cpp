@@ -14,6 +14,7 @@
 #include "cmemory.h"
 
 // public constructors and destructors -----------------------------------
+U_NAMESPACE_BEGIN
 
 SearchIterator::SearchIterator(const SearchIterator &other)
 {   
@@ -355,3 +356,4 @@ void SearchIterator::setMatchNotFound()
 }
 
 
+U_NAMESPACE_END

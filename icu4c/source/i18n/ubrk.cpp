@@ -12,6 +12,8 @@
 #include "unicode/ustring.h"
 #include "unicode/uchriter.h"
 
+U_NAMESPACE_USE
+
 U_CAPI UBreakIterator*
 ubrk_open(UBreakIteratorType type,
       const char *locale,
@@ -19,6 +21,7 @@ ubrk_open(UBreakIteratorType type,
       int32_t textLength,
       UErrorCode *status)
 {
+
   if(U_FAILURE(*status)) return 0;
 
   BreakIterator *result = 0;
@@ -97,6 +100,7 @@ ubrk_safeClone(
 U_CAPI void
 ubrk_close(UBreakIterator *bi)
 {
+
     if (bi && !((BreakIterator*) bi)->isBufferClone())
     {
         delete (BreakIterator*) bi;
@@ -109,6 +113,7 @@ ubrk_setText(UBreakIterator* bi,
              int32_t         textLength,
              UErrorCode*     status)
 {
+
   if (U_FAILURE(*status)) return;
 
   const CharacterIterator& biText = ((BreakIterator*)bi)->getText();
@@ -131,30 +136,35 @@ ubrk_setText(UBreakIterator* bi,
 U_CAPI UTextOffset
 ubrk_current(const UBreakIterator *bi)
 {
+
   return ((BreakIterator*)bi)->current();
 }
 
 U_CAPI UTextOffset
 ubrk_next(UBreakIterator *bi)
 {
+
   return ((BreakIterator*)bi)->next();
 }
 
 U_CAPI UTextOffset
 ubrk_previous(UBreakIterator *bi)
 {
+
   return ((BreakIterator*)bi)->previous();
 }
 
 U_CAPI UTextOffset
 ubrk_first(UBreakIterator *bi)
 {
+
   return ((BreakIterator*)bi)->first();
 }
 
 U_CAPI UTextOffset
 ubrk_last(UBreakIterator *bi)
 {
+
   return ((BreakIterator*)bi)->last();
 }
 
@@ -162,6 +172,7 @@ U_CAPI UTextOffset
 ubrk_preceding(UBreakIterator *bi,
            UTextOffset offset)
 {
+
   return ((BreakIterator*)bi)->preceding(offset);
 }
 
@@ -169,17 +180,20 @@ U_CAPI UTextOffset
 ubrk_following(UBreakIterator *bi,
            UTextOffset offset)
 {
+
   return ((BreakIterator*)bi)->following(offset);
 }
 
 U_CAPI const char*
 ubrk_getAvailable(int32_t index)
 {
+
   return uloc_getAvailable(index);
 }
 
 U_CAPI int32_t
 ubrk_countAvailable()
 {
+
   return uloc_countAvailable();
 }

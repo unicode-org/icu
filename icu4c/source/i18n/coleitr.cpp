@@ -32,6 +32,8 @@
 
 /* Constants --------------------------------------------------------------- */
 
+U_NAMESPACE_BEGIN
+
 /* synwee : public can't remove */
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
 
@@ -406,4 +408,6 @@ const CollationElementIterator& CollationElementIterator::operator=(
   return *this;
 }
 
+U_NAMESPACE_END
 
+/* eof */

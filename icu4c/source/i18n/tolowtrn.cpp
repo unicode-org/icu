@@ -10,6 +10,8 @@
 
 #include "unicode/tolowtrn.h"
 
+U_NAMESPACE_BEGIN
+
 const char* LowercaseTransliterator::_ID = "Any-Lower";
 
 /**
@@ -63,3 +65,6 @@ UBool LowercaseTransliterator::hasTransform(UChar32 c) const {
 void LowercaseTransliterator::transform(UnicodeString& s) const {
     s.toLower(loc);
 }
+
+U_NAMESPACE_END
+

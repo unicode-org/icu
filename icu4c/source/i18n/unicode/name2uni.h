@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that performs name to character mapping.
  * @author Alan Liu
@@ -68,4 +70,7 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
     static const char _ID[];
 };
+
+U_NAMESPACE_END
+
 #endif

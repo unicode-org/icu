@@ -7,11 +7,10 @@
 #ifndef _NUMBERFORMATREGRESSIONTEST_
 #define _NUMBERFORMATREGRESSIONTEST_
  
-#include "intltest.h"
-
+#include "unicode/unistr.h"
 #include "unicode/numfmt.h"
-
-class DecimalFormat;
+#include "unicode/decimfmt.h"
+#include "intltest.h"
 
 /** 
  * Performs regression test for MessageFormat

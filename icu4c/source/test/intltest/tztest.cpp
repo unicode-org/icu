@@ -4,12 +4,12 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include "tztest.h"
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "unicode/resbund.h"
+#include "tztest.h"
 
 #define CHECK_HEAP 0
 

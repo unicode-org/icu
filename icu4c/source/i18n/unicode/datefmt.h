@@ -24,6 +24,9 @@
 #include "unicode/numfmt.h"
 #include "unicode/format.h"
 #include "unicode/locid.h"
+
+U_NAMESPACE_BEGIN
+
 class TimeZone;
 
 /**
@@ -576,6 +579,7 @@ DateFormat::format(const Formattable& obj,
                    UErrorCode& status) const {
     return Format::format(obj, result, status);
 }
+U_NAMESPACE_END
 
 #endif // _DATEFMT
 //eof

@@ -12,10 +12,13 @@
 #include "unicode/unifilt.h"
 #include "unicode/uchar.h"
 
-const char NameUnicodeTransliterator::_ID[] = "Name-Any";
 
 // As of Unicode 3.0.0, the longest name is 83 characters long.
 #define LONGEST_NAME 83
+
+U_NAMESPACE_BEGIN
+
+const char NameUnicodeTransliterator::_ID[] = "Name-Any";
 
 /**
  * Constructs a transliterator.
@@ -186,3 +189,6 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
     // open delimiter, if we are in mode 1.
     offsets.start = (mode == 1 && isIncremental) ? openPos : cursor;
 }
+
+U_NAMESPACE_END
+

@@ -18,6 +18,9 @@
 #include "unicode/numfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/ustring.h"
+
+U_NAMESPACE_USE
+
 /*
 U_CAPI UDateFormat*
 udat_open(            UDateFormatStyle        timeStyle, 
@@ -97,6 +100,7 @@ udat_open(UDateFormatStyle  timeStyle,
           int32_t           patternLength,
           UErrorCode        *status)
 {
+
   if(U_FAILURE(*status)) 
   {
       return 0;
@@ -159,6 +163,7 @@ udat_open(UDateFormatStyle  timeStyle,
 U_CAPI void
 udat_close(UDateFormat* format)
 {
+
   delete (DateFormat*)format;
 }
 
@@ -166,6 +171,7 @@ U_CAPI UDateFormat*
 udat_clone(const UDateFormat *fmt,
        UErrorCode *status)
 {
+
   if(U_FAILURE(*status)) return 0;
 
   Format *res = ((SimpleDateFormat*)fmt)->clone();
@@ -186,6 +192,7 @@ udat_format(    const    UDateFormat*    format,
         UFieldPosition* position,
         UErrorCode*     status)
 {
+
   if(U_FAILURE(*status)) return -1;
 
   UnicodeString res(result, 0, resultLength);
@@ -211,6 +218,7 @@ udat_parse(    const    UDateFormat*        format,
         int32_t         *parsePos,
         UErrorCode      *status)
 {
+
   if(U_FAILURE(*status)) return (UDate)0;
 
   int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
@@ -238,6 +246,7 @@ udat_parse(    const    UDateFormat*        format,
 U_CAPI UBool
 udat_isLenient(const UDateFormat* fmt)
 {
+
   return ((DateFormat*)fmt)->isLenient();
 }
 
@@ -245,12 +254,14 @@ U_CAPI void
 udat_setLenient(    UDateFormat*    fmt,
             UBool          isLenient)
 {
+
   ((DateFormat*)fmt)->setLenient(isLenient);
 }
 
 U_CAPI const UCalendar*
 udat_getCalendar(const UDateFormat* fmt)
 {
+
   return (const UCalendar*) ((DateFormat*)fmt)->getCalendar();
 }
 
@@ -258,12 +269,14 @@ U_CAPI void
 udat_setCalendar(            UDateFormat*    fmt,
                     const   UCalendar*      calendarToSet)
 {
+
   ((DateFormat*)fmt)->setCalendar(*((Calendar*)calendarToSet));
 }
 
 U_CAPI const UNumberFormat*
 udat_getNumberFormat(const UDateFormat* fmt)
 {
+
   return (const UNumberFormat*) ((DateFormat*)fmt)->getNumberFormat();
 }
 
@@ -271,6 +284,7 @@ U_CAPI void
 udat_setNumberFormat(            UDateFormat*    fmt,
                     const   UNumberFormat*  numberFormatToSet)
 {
+
   ((DateFormat*)fmt)->setNumberFormat(*((NumberFormat*)numberFormatToSet));
 }
 
@@ -283,6 +297,7 @@ udat_getAvailable(int32_t index)
 U_CAPI int32_t
 udat_countAvailable()
 {
+
   return uloc_countAvailable();
 }
 
@@ -290,6 +305,7 @@ U_CAPI UDate
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
                 UErrorCode      *status)
 {
+
   if(U_FAILURE(*status)) return (UDate)0;
   return ((SimpleDateFormat*)fmt)->get2DigitYearStart(*status);
 }
@@ -299,6 +315,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
                 UDate           d,
                 UErrorCode      *status)
 {
+
   if(U_FAILURE(*status)) return;
   ((SimpleDateFormat*)fmt)->set2DigitYearStart(d, *status);
 }
@@ -310,6 +327,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
         int32_t         resultLength,
         UErrorCode      *status)
 {
+
   if(U_FAILURE(*status)) return -1;
 
   UnicodeString res(result, 0, resultLength);
@@ -329,6 +347,7 @@ udat_applyPattern(            UDateFormat     *format,
                     const   UChar           *pattern,
                     int32_t         patternLength)
 {
+
   int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   const UnicodeString pat((UChar*)pattern, len, len);
   UErrorCode status = U_ZERO_ERROR;
@@ -347,6 +366,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
         int32_t                 resultLength,
         UErrorCode              *status)
 {
+
   if(U_FAILURE(*status)) return -1;
 
   const DateFormatSymbols *syms = 
@@ -412,6 +432,7 @@ U_CAPI int32_t
 udat_countSymbols(    const    UDateFormat                *fmt,
             UDateFormatSymbolType    type)
 {
+
   const DateFormatSymbols *syms = 
     ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
   int32_t count = 0;
@@ -457,6 +478,7 @@ udat_setSymbols(    UDateFormat             *format,
             int32_t                 valueLength,
             UErrorCode              *status)
 {
+
   if(U_FAILURE(*status)) return;
 
   int32_t count;

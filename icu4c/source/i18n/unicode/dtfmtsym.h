@@ -22,6 +22,8 @@
 #include "unicode/locid.h"
 #include "unicode/resbund.h"
 
+U_NAMESPACE_BEGIN
+
 /* forward declaration */
 class SimpleDateFormat;
 
@@ -395,6 +397,8 @@ private:
      */
     void disposeZoneStrings(void);
 };
+
+U_NAMESPACE_END
 
 #endif // _DTFMTSYM
 //eof

@@ -10,6 +10,7 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 
+U_NAMESPACE_USE
 void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestCalendarLimit");
@@ -32,9 +33,8 @@ void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &
 // *****************************************************************************
 
 // -------------------------------------
-
 void
-CalendarLimitTest::test(UDate millis, Calendar* cal, DateFormat* fmt)
+CalendarLimitTest::test(UDate millis, U_NAMESPACE_QUALIFIER Calendar* cal, U_NAMESPACE_QUALIFIER DateFormat* fmt)
 {
     UErrorCode exception = U_ZERO_ERROR;
     UnicodeString theDate;

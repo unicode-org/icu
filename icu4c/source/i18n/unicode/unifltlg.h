@@ -11,6 +11,8 @@
 
 #include "unicode/utypes.h"
 
+U_NAMESPACE_BEGIN
+
 class UnicodeFilter;
 
 /**
@@ -69,5 +71,7 @@ private:
 };
 
 inline UnicodeFilterLogic::UnicodeFilterLogic() {}
+
+U_NAMESPACE_END
 
 #endif

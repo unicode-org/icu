@@ -10,6 +10,8 @@
 #include "unicode/unifltlg.h"
 #include "unicode/unifilt.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A NullFilter always returns a fixed value, either TRUE or FALSE.
  * A filter value of 0 (that is, a UnicodeFilter* f, where f == 0)
@@ -129,3 +131,6 @@ UnicodeFilter* UnicodeFilterLogic::createOr(const UnicodeFilter* f,
     }
     return new UnicodeOrFilter((UnicodeFilter*)f->clone(), (UnicodeFilter*)g->clone());
 }
+
+U_NAMESPACE_END
+

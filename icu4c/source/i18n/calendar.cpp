@@ -29,6 +29,8 @@
 #include "unicode/gregocal.h"
 #include "unicode/calendar.h"
 
+U_NAMESPACE_BEGIN
+
 // Resource bundle tags read by this class
 const char Calendar::kDateTimeElements[] = "DateTimeElements";
 
@@ -782,5 +784,7 @@ Calendar::updateTime(UErrorCode& status)
     
     fIsTimeSet = TRUE;
 }
+
+U_NAMESPACE_END
 
 //eof

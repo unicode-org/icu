@@ -15,8 +15,6 @@
 #include "unicode/unitohex.h"
 #include "intltest.h"
 
-class UnicodeToHexTransliterator;
-
 /**
  * @test
  * @summary General test of UnicodeToHexadecimal Transliterator

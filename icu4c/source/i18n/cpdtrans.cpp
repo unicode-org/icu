@@ -17,6 +17,8 @@ static const UChar ID_SEP   = 0x002D; /*-*/
 static const UChar ID_DELIM = 0x003B; /*;*/
 static const UChar NEWLINE  = 10;
 
+U_NAMESPACE_BEGIN
+
 /**
  * Constructs a new compound transliterator given an array of
  * transliterators.  The array of transliterators may be of any
@@ -451,3 +453,7 @@ void CompoundTransliterator::computeMaximumContextLength(void) {
     }
     setMaximumContextLength(max);
 }
+
+U_NAMESPACE_END
+
+/* eof */

@@ -32,6 +32,7 @@
 
 #include "unicode/putil.h"
 
+
 #define ULOC_LANG_CAPACITY 12
 #define ULOC_COUNTRY_CAPACITY 4
 #define ULOC_FULLNAME_CAPACITY 50
@@ -172,6 +173,7 @@
  * </pre>
  * </blockquote>
  */
+U_NAMESPACE_BEGIN
 class U_COMMON_API Locale
 {
 public:
@@ -212,6 +214,7 @@ public:
      * @deprecated Remove after 2002-aug-31. Use one of the other Locale get functions.
      */
     typedef struct U_COMMON_API LocaleProxy {
+
         int32_t magicLocaleNumber;  /* Try not to access this. This is not meant for normal use. */
 
         /** Calls Locale's equivalent function */
@@ -805,6 +808,7 @@ inline int32_t         Locale::LocaleProxy::hashCode(void) const
     return ((const Locale)*this).hashCode();
 }
 #endif /* !ICU_LOCID_USE_DEPRECATES */
+U_NAMESPACE_END
 
 #endif  /* XP_CPLUSPLUS */
 #endif

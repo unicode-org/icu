@@ -16,6 +16,7 @@
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
 
+U_NAMESPACE_BEGIN
 
 const char StringCharacterIterator::fgClassID = 0;
 
@@ -111,3 +112,4 @@ void
 StringCharacterIterator::getText(UnicodeString& result) {
     result = text;
 }
+U_NAMESPACE_END

@@ -15,6 +15,8 @@
 #include "brkdict.h"
 #include "unicode/udata.h"
 
+U_NAMESPACE_BEGIN
+
 /* forward declaration */
 class DictionaryBasedBreakIterator;
 
@@ -81,5 +83,7 @@ protected:
 
     friend class DictionaryBasedBreakIterator;
 };
+
+U_NAMESPACE_END
 
 #endif

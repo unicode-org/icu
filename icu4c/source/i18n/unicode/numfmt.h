@@ -23,6 +23,9 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/format.h"
+
+U_NAMESPACE_BEGIN
+
 class Locale;
 
 /**
@@ -559,6 +562,8 @@ NumberFormat::format(const Formattable& obj,
                      UErrorCode& status) const {
     return Format::format(obj, result, status);
 }
+
+U_NAMESPACE_END
 
 #endif // _NUMFMT
 //eof
