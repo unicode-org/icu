@@ -16,11 +16,7 @@ case "${host}" in
 	if test "$ac_cv_prog_gcc" = yes; then	
 		icu_cv_host_frag=mh-solaris-gcc 
 	else
-		if test "$SOL64" = yes; then
-	                icu_cv_host_frag=mh-solaris-sparcv9  
-		else
-			icu_cv_host_frag=mh-solaris 
-		fi
+		icu_cv_host_frag=mh-solaris
 	fi ;;
 *-*-irix*)	icu_cv_host_frag=mh-irix ;;
 alpha*-*-linux-gnu)

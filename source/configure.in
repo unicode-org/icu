@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.139 2001/11/26 21:47:42 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.140 2001/11/28 04:10:53 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -80,26 +80,45 @@ AC_CHECK_STRICT_COMPILE
 dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
 
-SOL64=no
-case "${host}" in
-*-*-solaris*)
-	if test "$ac_cv_prog_gcc" = no; then
-		AC_MSG_CHECKING([if we can use a 64-bit (sparcv9) compiler])
-		SOL64=`$CXX -xarch=v9 && $CC -xarch=v9 2>&1 |grep -v usage:`
-		SPARCV9=`isainfo -n | grep sparcv9`
-		if test -z "$SOL64" && test -n "$SPARCV9"; then
-			AC_MSG_RESULT(yes)
-			SOL64=yes
-		else
-			AC_MSG_RESULT(no)
-			SOL64=no
-		fi
-	fi ;;
-#alpha*-*-linux-gnu)
-#	CFLAGS="${CFLAGS} -mieee -O2"
-#	CXXFLAGS="${CXXFLAGS} -mieee -O2"
-#	;;
-esac
+dnl Check if we can build and use 64-bit libraries
+OLD_CPPFLAGS="${CPPFLAGS}"
+AC_ARG_ENABLE(64bit-libs,
+    [  --enable-64bit-libs     build 64-bit libraries [default=yes]],
+    [ENABLE_64BIT_LIBS=${enableval}],
+    [ENABLE_64BIT_LIBS=yes]
+)
+AC_CACHE_CHECK([for 64-bit executable support], ac_cv_64bit_ok,
+    [ if test "$ENABLE_64BIT_LIBS" != no; then
+        case "${host}" in
+        *-*-solaris*)
+            SOL64=`$CXX -xarch=v9 && $CC -xarch=v9 2>&1 |grep -v usage:`
+            SPARCV9=`isainfo -n | grep sparcv9`
+            if test -z "$SOL64" && test -n "$SPARCV9"; then
+                CPPFLAGS="${CPPFLAGS} -xtarget=ultra -xarch=v9"
+                ENABLE_64BIT_LIBS=yes
+            else
+                ENABLE_64BIT_LIBS=no
+            fi
+            ;;
+#        *-*-aix*)
+#            CPPFLAGS="${CPPFLAGS} -q64"
+#            AC_TRY_RUN(int main(void) {return 0;},
+#                ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
+#            ;;
+        *)  
+            ENABLE_64BIT_LIBS=no
+            ;;
+        esac
+    fi
+    ac_cv_64bit_ok="${ENABLE_64BIT_LIBS}"
+    ]
+)
+if test "$ENABLE_64BIT_LIBS" = no; then
+    CPPFLAGS="${OLD_CPPFLAGS}"
+else
+    ENABLE_64BIT_LIBS="${ac_cv_64bit_ok}"
+fi
+AC_SUBST(ENABLE_64BIT_LIBS)
 
 ICU_CHECK_MH_FRAG
 
@@ -302,9 +321,30 @@ AC_SUBST(HAVE_DLOPEN)
 
 dnl Check for mmap()
 
+# This mmap macro doesn't work properly.  It seems to be too specific.
+#AC_FUNC_MMAP
+#if test $ac_cv_func_mmap_fixed_mapped = yes; then
+#    HAVE_MMAP=1
+#fi
 HAVE_MMAP=0
-AC_FUNC_MMAP
-if test $ac_cv_func_mmap_fixed_mapped = yes; then
+AC_MSG_CHECKING([for mmap])
+AC_CACHE_VAL(ac_cv_func_mmap_ok,
+    [AC_TRY_LINK(
+    changequote(<<, >>)dnl
+    <<
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+void uprv_mapFile(void) {
+    mmap((void *)0, 0, PROT_READ, 0, 0, 0);
+}
+    >>,
+    changequote([, ])dnl
+    [uprv_mapFile();], ac_cv_func_mmap_ok=yes, ac_cv_func_mmap_ok=no)] )
+AC_MSG_RESULT($ac_cv_func_mmap_ok)
+if test $ac_cv_func_mmap_ok = yes
+then
     HAVE_MMAP=1
 fi
 AC_SUBST(HAVE_MMAP)
@@ -427,7 +467,7 @@ dnl Namespace support checks
 AC_LANG_CPLUSPLUS
 U_HAVE_NAMESPACE=0
 AC_MSG_CHECKING([for namespace support])
-            AC_CACHE_VAL(ac_cv_namespace_ok,
+AC_CACHE_VAL(ac_cv_namespace_ok,
     [AC_TRY_LINK(
     changequote(<<, >>)dnl
     <<namespace x_version {void f(){}};
