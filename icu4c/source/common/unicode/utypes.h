@@ -353,7 +353,7 @@ typedef void* UClassID;
  * \par
  * Error codes should be tested using U_FAILURE() and U_SUCCESS().
  */
-enum UErrorCode {
+typedef enum UErrorCode {
     /* The ordering of U_ERROR_INFO_START Vs U_USING_FALLBACK_WARNING looks weird
      * and is that way because VC++ debugger displays first encountered constant, 
      * which is not the what the code is used for
@@ -496,11 +496,7 @@ enum UErrorCode {
     U_BRK_ERROR_LIMIT,
 
     U_ERROR_LIMIT=U_BRK_ERROR_LIMIT /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
-};
-
-#ifndef XP_CPLUSPLUS
-typedef enum UErrorCode UErrorCode;
-#endif
+} UErrorCode;
 
 /* Use the following to determine if an UErrorCode represents */
 /* operational success or failure. */
