@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2002/09/07 00:15:25 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/10/04 19:41:01 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -269,6 +269,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         // query US and get FR back
         Currency us1 = Currency.getInstance(Locale.US);
+        logln("got currency: " + us1);
         if (us1 != fr0) {
             errln("registry failed");
         }

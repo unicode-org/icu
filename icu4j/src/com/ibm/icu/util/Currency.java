@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/10/02 20:20:25 $
- * $Revision: 1.7 $
+ * $Date: 2002/10/04 19:41:02 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -59,7 +59,7 @@ public class Currency implements Serializable {
             ICULocaleService newService = new ICULocaleService("Currency");
 
             class CurrencyFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind) {
+                protected Object handleCreate(Locale loc, int kind, ICUService service) {
                     ResourceBundle bundle = ICULocaleData.getLocaleElements(loc);
                     String[] ce = bundle.getStringArray("CurrencyElements");
                     // System.out.println("currency factory loc: " + loc + " rb: " + bundle + "ce[1]" + ce[1]);

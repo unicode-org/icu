@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2002/10/02 20:20:21 $
- * $Revision: 1.9 $
+ * $Date: 2002/10/04 19:41:02 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
@@ -213,8 +213,16 @@ public class ICUService extends ICUNotifier {
         /**
          * Create a service object from the key, if this factory
          * supports the key.  Otherwise, return null.  
+         *
+         * <p>If the factory supports the key, then it can call
+         * the service's getKey(Key, String[], Factory) method
+         * passing itself as the factory to get the object that
+         * the service would have created prior to the factory's
+         * registration with the service.  This might change the
+         * key so any information required from the key should
+         * be extracted before making such a callback.
 	 */
-        public Object create(Key key);
+        public Object create(Key key, ICUService service);
 
 	/**
 	 * Update the result IDs (not descriptors) to reflect the IDs
@@ -279,9 +287,9 @@ public class ICUService extends ICUNotifier {
 
 	/**
 	 * Return the service instance if the factory's id is equal to
-         * the key's currentID.
+         * the key's currentID.  Service is ignored.
 	 */
-	public Object create(Key key) {
+	public Object create(Key key, ICUService service) {
 	    if (id.equals(key.currentID())) {
 		return instance;
 	    }
@@ -364,6 +372,11 @@ public class ICUService extends ICUNotifier {
      * <p>If key is null, just returns null.</p>
      */
     public Object getKey(Key key, String[] actualReturn) {
+        return getKey(key, actualReturn, null);
+    }
+
+    
+    /* package */ Object getKey(Key key, String[] actualReturn, Factory factory) {
 	if (factories.size() == 0) {
 	    return handleDefault(key, actualReturn);
 	}
@@ -396,7 +409,23 @@ public class ICUService extends ICUNotifier {
 		boolean putInCache = false;
 
                 int NDebug = 0;
-                
+
+                int startIndex = 0;
+                int limit = factories.size();
+                boolean cacheResult = true;
+                if (factory != null) {
+                    for (int i = 0; i < limit; ++i) {
+                        if (factory == factories.get(i)) {
+                            startIndex = i + 1;
+                            break;
+                        }
+                    }
+                    if (startIndex == 0) {
+                        throw new InternalError("Factory " + factory + "not registered with service: " + this);
+                    }
+                    cacheResult = false;
+                }
+
 	    outer:
 		do {
 		    currentDescriptor = key.currentDescriptor();
@@ -410,15 +439,16 @@ public class ICUService extends ICUNotifier {
                     }
 
 		    // first test of cache failed, so we'll have to update
-		    // the cache if we eventually succeed.
-		    putInCache = true;
+		    // the cache if we eventually succeed-- that is, if we're 
+                    // going to update the cache at all.
+		    putInCache = cacheResult;
 
                     int n = 0;
-		    Iterator fi = factories.iterator();
-		    while (fi.hasNext()) {
-                        Factory f = (Factory)fi.next();
-                        if (debug) System.out.println("trying factory: " + f.toString());
-			Object service = f.create(key);
+                    int index = startIndex;
+		    while (index < limit) {
+                        Factory f = (Factory)factories.get(index++);
+                        if (debug) System.out.println("trying factory[" + (index-1) + "] " + f.toString());
+			Object service = f.create(key, this);
 			if (service != null) {
 			    result = new CacheEntry(currentDescriptor, service);
                             if (debug) System.out.println(name + " factory supported: " + currentDescriptor + ", caching");

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/10/02 20:20:21 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/10/04 19:41:02 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -163,7 +163,7 @@ import com.ibm.icu.impl.LocaleUtility;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.15 $
+ * @version      $Revision: 1.16 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -533,7 +533,7 @@ public abstract class NumberFormat extends Format{
             this.delegate = delegate;
         }
 
-        protected Object handleCreate(Locale loc, int kind) {
+        protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return delegate.createFormat(loc, kind);
         }
 
@@ -582,7 +582,7 @@ public abstract class NumberFormat extends Format{
     private static ICULocaleService getService() {
         if (service == null) {
             class RBNumberFormatFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind) {
+                protected Object handleCreate(Locale loc, int kind, ICUService service) {
                     return createInstance(loc, kind);
                 }
             }
@@ -763,15 +763,12 @@ public abstract class NumberFormat extends Format{
 
     // Hook for service
     private static NumberFormat getInstance(Locale desiredLocale, int choice) {
-        ICULocaleService service = getService();
-        NumberFormat result = (NumberFormat)service.get(desiredLocale, choice);
-
-        //System.out.println("desired locale: " + desiredLocale + " service result:" + result);
-
-        //NumberFormat result2 = createInstance(desiredLocale, choice);
-        //System.out.println("defaultResult: " + result2);
-
-        return (NumberFormat)result.clone();
+        if (service == null) {
+            return createInstance(desiredLocale, choice);
+        } else {
+            NumberFormat result = (NumberFormat)service.get(desiredLocale, choice);
+            return (NumberFormat)result.clone();
+        }
     }
 
     // [NEW]

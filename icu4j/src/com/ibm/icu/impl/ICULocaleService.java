@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICULocaleService.java,v $
- * $Date: 2002/10/02 20:20:21 $
- * $Revision: 1.8 $
+ * $Date: 2002/10/04 19:41:02 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -280,36 +280,14 @@ public class ICULocaleService extends ICUService {
      * 'cover' more specific locales with more general locales that it
      * supports.  
      *
-     * <p>Covers may be any of the values VISIBLE,
-     * INVISIBLE, VISIBLE_COVERS, INVISIBLE_COVERS, or
-     * VISIBLE_COVERS_REMOVE.
+     * <p>Coverage may be either of the values VISIBLE or INVISIBLE.
      *
      * <p>'Visible' indicates that the specific locale(s) supported by
      * the factory are registered in getSupportedIDs, 'Invisible'
-     * indicates that they are not.  'Covers' indicates that the
-     * factory preempts previously-registered factories from handling
-     * more specific locales (for one or more kinds); if visible, these
-     * locales remain in visible ids, otherwise they are removed.
-     * 'Visible covers remove' leaves the 'original' locale visible,
-     * but makes the covered sublocales invisible, like
-     * invisible_covers.  
+     * indicates that they are not.
      *
-     * <p>Localization of visible ids (covered or primary) is handled
-     * by the covering factory, regardless of kind.
-     *
-     * <p><b>Example 1:</b> Factory A supports en_US with coverage
-     * VISIBLE_COVERS.  Previously-registered factory B supports
-     * en_US_CALIFORNIA.  getVisibleIDs will return both en_US and
-     * en_US_CALIFORNIA, Factory A will handle both of them and
-     * localize the ids for both of these.
-     *
-     * <p><b>Example 2:</b> Factory A supports word/en_US with
-     * coverage VISIBLE_COVERS_REMOVE.  Previously-registered factory
-     * B supports /en_US_CALIFORNIA (all kinds).  getVisibleIDs will
-     * return only en_US and not en_US_CALIFORNIA, Factory A will
-     * handle word/en_US and word/en_US_CALIFORNIA, and also localize
-     * the id en_US.  Factory B will handle other kinds of requests
-     * under en_US_CALIFORNIA.  
+     * <p>Localization of visible ids is handled
+     * by the handling factory, regardless of kind.
      */
     public static abstract class LocaleKeyFactory implements Factory {
         protected final String name;
@@ -329,12 +307,13 @@ public class ICULocaleService extends ICUService {
          */
         public static final int INVISIBLE = 1;
 
-        /**
+        // undefine these since hiding other factories opens a big bag of worms
+        /*
          * Coverage value indicating that the factory makes
          * its locales visible, covers more specific 
          * locales, and provides localization for the covered
          * locales.
-         */
+         *
         public static final int VISIBLE_COVERS = 2;
 
         /**
@@ -342,7 +321,7 @@ public class ICULocaleService extends ICUService {
          * make its locales visible, covers more specific
          * locales, and also does not allow the locales it
          * covers to be visible.
-         */
+         *
         public static final int INVISIBLE_COVERS = 3;
 
         /**
@@ -350,8 +329,9 @@ public class ICULocaleService extends ICUService {
          * its locales visible, covers more specific 
          * locales, but does not allow the locales it covers
          * to be visible.
-         */
+         *
         public static final int VISIBLE_COVERS_REMOVE = 6;
+        */
 
         
         /**
@@ -375,20 +355,40 @@ public class ICULocaleService extends ICUService {
          * the key against the supported IDs, and passes the canonicalLocale and
          * kind off to handleCreate (which subclasses must implement).
          */
-        public Object create(Key key) {
-            // System.out.println("factory: " + this + "create: " + key.currentID());
-
-            if (getSupportedIDs().contains(key.currentID())) {
+        public Object create(Key key, ICUService service) {
+            if (handlesKey(key)) {
                 LocaleKey lkey = (LocaleKey)key;
                 Locale loc = lkey.canonicalLocale();
                 int kind = lkey.kind();
 
-                return handleCreate(loc, kind);
+                return handleCreate(loc, kind, service);
             } else {
-                // System.out.println("IDs did not support: " + key.currentID());
-                // System.out.println(getSupportedIDs());
+                // System.out.println("factory: " + this + " did not support id: " + key.currentID());
+                // System.out.println("supported ids: " + getSupportedIDs());
             }
             return null;
+        }
+
+        protected boolean handlesKey(Key key) {
+            String id = key.currentID();
+            Set supported = getSupportedIDs();
+            if (supported.contains(id)) {
+                return true;
+            }
+            if ((coverage & 0x2) != 0) { 
+                // System.out.println("factory: " + this + " id: " + id);
+                Iterator iter = supported.iterator();
+                while (iter.hasNext()) {
+                    String s = (String)iter.next();
+                    //System.out.println("  testing: " + s);
+                    if (LocaleUtility.isFallbackOf(s, id)) {
+                        //System.out.println("  found!");
+                        return true;
+                    }
+                }
+            }
+            // System.out.println(" failed");
+            return false;
         }
 
         /**
@@ -446,10 +446,10 @@ public class ICULocaleService extends ICUService {
 	}
 
         /**
-         * Utility method used by create(Key).  Subclasses can implement
+         * Utility method used by create(Key, ICUService).  Subclasses can implement
          * this instead of create.
          */
-        protected Object handleCreate(Locale loc, int kind) {
+        protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return null;
         }
 
@@ -498,12 +498,14 @@ public class ICULocaleService extends ICUService {
             this.kind = kind;
         }
 
-        public Object create(Key key) {
+        /**
+         * Returns the service object if kind/locale match.  Service is not used.
+         */
+        public Object create(Key key, ICUService service) {
             LocaleKey lkey = (LocaleKey)key;
             if (kind == LocaleKey.KIND_ANY || kind == lkey.kind()) {
                 String keyID = lkey.currentID();
-                if (id.equals(keyID) ||
-                    ((coverage & 0x2) != 0 && LocaleUtility.isFallbackOf(id, keyID))) {
+                if (id.equals(keyID)) {
                     return obj;
                 }
             }
@@ -560,9 +562,9 @@ public class ICULocaleService extends ICUService {
 
         /**
          * Create the service.  The default implementation returns the resource bundle
-         * for the locale, ignoring kind.
+         * for the locale, ignoring kind, and service.
          */
-        protected Object handleCreate(Locale loc, int kind) {
+        protected Object handleCreate(Locale loc, int kind, ICUService service) {
             return ICULocaleData.getResourceBundle(bundleName, loc);
         }
 
