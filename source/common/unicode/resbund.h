@@ -253,6 +253,32 @@ public:
     const int32_t *getIntVector(int32_t& len, UErrorCode& status) const;
 
     /**
+     * returns an unsigned integer from a resource. 
+     * This integer is originally 28 bits.
+     *
+     * @param status: fills in the outgoing error code
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be a non-failing error 
+     *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+     * @return an unsigned integer value
+     * @draft
+     */
+    uint32_t getUInt(UErrorCode& status) const;
+
+    /**
+     * returns a signed integer from a resource. 
+     * This integer is originally 28 bit and the sign gets propagated.
+     *
+     * @param status: fills in the outgoing error code
+     *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+     *                could be a non-failing error 
+     *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+     * @return a signed integer value
+     * @draft
+     */
+    int32_t getInt(UErrorCode& status) const;
+
+    /**
      * Checks whether the resource has another element to iterate over.
      *
      * @return TRUE if there are more elements, FALSE if there is no more elements

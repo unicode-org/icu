@@ -362,7 +362,8 @@ U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resourc
                UErrorCode*               status);
 
 /**
- * returns an integer from a resource. 
+ * returns an unsigned integer from a resource. 
+ * This integer is originally 28 bits.
  *
  * @param resourceBundle: a string resource
  * @param status: fills in the outgoing error code
@@ -372,7 +373,21 @@ U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resourc
  * @return an integer value
  * @draft
  */
-U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resourceBundle, UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 ures_getUInt(const UResourceBundle* resourceBundle, UErrorCode *status);
+
+/**
+ * returns a signed integer from a resource. 
+ * This integer is originally 28 bit and the sign gets propagated.
+ *
+ * @param resourceBundle: a string resource
+ * @param status: fills in the outgoing error code
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be a non-failing error 
+ *                e.g.: <TT>U_USING_FALLBACK_ERROR</TT>,<TT>U_USING_DEFAULT_ERROR </TT>
+ * @return an integer value
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2 ures_getInt(const UResourceBundle* resourceBundle, UErrorCode *status);
 
 /**
  * Returns the size of a resource. Size for scalar types is always 1, and for vector/table types is
