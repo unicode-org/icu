@@ -50,8 +50,21 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(11,TestIndexOf);
         CASE(12,TestStrings);
         CASE(13,TestStringPatterns);
+        CASE(14,Testj2268);
         default: name = ""; break;
     }
+}
+
+/** 
+ * UVector was improperly copying contents
+ * This code will crash this is still true
+ */
+void UnicodeSetTest::Testj2268() {
+  UnicodeSet t;
+  t.add(UnicodeString("abc"));
+  UnicodeSet test(t);
+  UnicodeString ustrPat;
+  test.toPattern(ustrPat, TRUE);
 }
 
 /**
