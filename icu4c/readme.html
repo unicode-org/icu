@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 3.0
     ReadMe</h1>
 
-    <p>Version: 2004-Jun-14<br>
+    <p>Version: 2004-Jun-15<br>
      Copyright &copy; 1997-2004 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -234,21 +234,25 @@
     <h3><a name="News_Respath" id="News_Respath">Resource Path Issue</a></h3>
 
     <p>In 3.0, do not set the ICU data path to a short name consisting of only
-    a directory or package name. For example, if your resource package is
-      named 'mydata', and resides in a directory named 'mydata', the following 
-      will fail:</p>
-    <blockquote><pre>u_setDataDirectory("mydata");
-ures_open("mydata", NULL, &amp;status);</pre></blockquote>
+    a directory or package name. For example, if your resource package is named
+    'mydata', and resides in a directory named 'mydata', the following will
+    fail:</p>
+
+<pre>
+<samp>u_setDataDirectory("mydata");
+ures_open("mydata", NULL, &amp;status);
+</samp>
+</pre>
 
     <p>When the data directory and the path (first argument to ures_open) are
-      exactly the same string, ICU will load the ICU data rather than your
-      'mydata' package.  This is a known bug and is 
-     <a href="http://www.jtcsv.com/cgibin/icu-bugs?findid=3841">#3841</a>.
-        The solution is to make sure these strings are different.  For example,
-       setting a path of "mydata:/otherdir" would work, because there are
-     two path segments and the path is not identical to "mydata".  Another
-     solution would be to use a full or relative path 
-     such as "C:\\path\\to\\mydata",  "./mydata", "./mydata/" or "mydata/".</p>
+    exactly the same string, ICU will load the ICU data rather than your
+    'mydata' package. This is a known bug and is <a href=
+    "http://www.jtcsv.com/cgibin/icu-bugs?findid=3841">#3841</a>. The solution
+    is to make sure these strings are different. For example, setting a path of
+    "mydata:/otherdir" would work, because there are two path segments and the
+    path is not identical to "mydata". Another solution would be to use a full
+    or relative path such as "C:\\path\\to\\mydata", "./mydata", "./mydata/" or
+    "mydata/".</p>
 
     <h3><a name="News_Locale" id="News_Locale">Locale Identifier
     Changes</a></h3>
@@ -1188,11 +1192,16 @@ ures_open("mydata", NULL, &amp;status);</pre></blockquote>
     but manually editing the files is not recommended.</p>
 
     <ul>
-      <li><tt>--enable-static</tt> (partially works)</li>
+      <li><tt>--enable-static</tt> (Partially works)</li>
+
+      <li><tt>--disable-debug</tt> (Partially works. Assertion statements are
+      enabled, but built without debugging information)</li>
 
       <li><tt>--disable-renaming</tt></li>
 
       <li><tt>--disable-threading</tt></li>
+
+      <li><tt>--disable-tracing</tt></li>
 
       <li><tt>--enable-64bit-libs</tt></li>
 
@@ -1200,7 +1209,9 @@ ures_open("mydata", NULL, &amp;status);</pre></blockquote>
 
       <li><tt>--with-iostream</tt></li>
 
-      <li><tt>--with-data-packaging=files</tt></li>
+      <li><tt>--with-data-packaging=files</tt> (The pkgdata tool currently does
+      not work in this mode. Manual packaging is required to use this
+      mode)</li>
 
       <li>out of source builds</li>
     </ul>
@@ -1497,7 +1508,8 @@ Data set name type  : PDS</samp>
 
       <li>The latest GNU facilities (You can get the GNU facilities for OS/400
       from <a href=
-      "http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html">http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html</a>).
+      "http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html">
+      http://www.ibm.com/servers/enable/site/porting/iseries/overview/gnu_utilities.html</a>).
       Older versions may not work properly.</li>
     </ul>
 
