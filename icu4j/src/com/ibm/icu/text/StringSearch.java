@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/07/24 19:58:30 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/07/25 22:49:06 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -1671,7 +1671,12 @@ public final class StringSearch extends SearchIterator
 	{
 		StringBuffer result = new StringBuffer();	
 		if (source1 != null && source1.length() != 0) {
-			result.append(source1);
+            // jdk 1.3.1 does not have append(StringBuffer) yet
+            if(com.ibm.icu.impl.ICUDebug.isJDK14OrHigher){
+                result.append(source1);
+            }else{
+                result.append(source1.toString());
+            }
 		}
 		source2.setIndex(start2);
 		while (source2.getIndex() < end2) {
@@ -1679,7 +1684,12 @@ public final class StringSearch extends SearchIterator
 			source2.next();
 		}
 		if (source3 != null && source3.length() != 0) {
-			result.append(source3);
+			// jdk 1.3.1 does not have append(StringBuffer) yet
+            if(com.ibm.icu.impl.ICUDebug.isJDK14OrHigher){
+                result.append(source3);
+            }else{
+                result.append(source3.toString());
+            }
 		}
 	    return result;
 	}

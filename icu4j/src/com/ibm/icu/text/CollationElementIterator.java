@@ -13,6 +13,7 @@ import java.text.CharacterIterator;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.impl.ICUDebug;
 
 /**
  * <p><code>CollationElementIterator</code> is an iterator created by
@@ -862,7 +863,11 @@ public final class CollationElementIterator
         backup.m_bufferOffset_ = m_bufferOffset_;
         if (m_bufferOffset_ >= 0) {
             // jdk 1.3.1 does not have append(StringBuffer) yet
-            backup.m_buffer_.append(m_buffer_.toString());
+            if(ICUDebug.isJDK14OrHigher){
+                backup.m_buffer_.append(m_buffer_);
+            }else{
+                backup.m_buffer_.append(m_buffer_.toString());
+            }
         }
     }
                 
