@@ -18,12 +18,10 @@
 
 /**
  * \file
- * \brief Description of character convrersion C API
+ * \brief Description of character conversion C API
  *
  * <h2>Character Conversion C API </h2>
  *
- * Character Conversion C API documentation is still under construction. 
- * Please check for updates soon.
  */
 
 #ifndef UCNV_H
@@ -874,13 +872,12 @@ ucnv_convert (const char *toConverterName,
 
 
 /**
- * SYSTEM API
  * Frees up memory occupied by unused, cached converter shared data.
  *
  * @return the number of cached converters successfully deleted
  * @see ucnv_close
  * @stable
- * @system
+ * @system SYSTEM API
  */
 U_CAPI int32_t U_EXPORT2
 ucnv_flushCache (void);
@@ -998,7 +995,7 @@ ucnv_getDefaultName (void);
  * and preserve it indefinitely. 
  * @param name the converter name to be the default (must exist).
  * @see ucnv_getDefaultName
- * @system
+ * @system SYSTEM API
  */
 U_CAPI void U_EXPORT2
 ucnv_setDefaultName (const char *name);
