@@ -544,7 +544,7 @@ void UnicodeSetTest::TestStrings() {
     }        
 }
 
-static char* NOT = "%%%%";
+static const char NOT[] = "%%%%";
 
 /**
  * Test pattern behavior of multicharacter strings.
@@ -558,25 +558,25 @@ void UnicodeSetTest::TestStringPatterns() {
     // statements (except for the last) to goto's.
     for (;;) {
         if (U_FAILURE(ec)) break;
-        char* exp1[] = {"aa", "ab", NOT, "ac", NULL};
+        const char* exp1[] = {"aa", "ab", NOT, "ac", NULL};
         expectToPattern(*s, "[a-z{aa}{ab}]", exp1);
 
         s->add("ac");
-        char* exp2[] = {"aa", "ab", "ac", NOT, "xy", NULL};
+        const char* exp2[] = {"aa", "ab", "ac", NOT, "xy", NULL};
         expectToPattern(*s, "[a-z{aa}{ab}{ac}]", exp2);
 
         s->applyPattern("[a-z {\\{l} {r\\}}]", ec);
         if (U_FAILURE(ec)) break;
-        char* exp3[] = {"{l", "r}", NOT, "xy", NULL};
+        const char* exp3[] = {"{l", "r}", NOT, "xy", NULL};
         expectToPattern(*s, "[a-z{\\{l}{r\\}}]", exp3);
 
         s->add("[]");
-        char* exp4[] = {"{l", "r}", "[]", NOT, "xy", NULL};
+        const char* exp4[] = {"{l", "r}", "[]", NOT, "xy", NULL};
         expectToPattern(*s, "[a-z{\\[\\]}{r\\}}{\\{l}]", exp4);
 
         s->applyPattern("[a-z {\\u4E01\\u4E02}{\\n\\r}]", ec);
         if (U_FAILURE(ec)) break;
-        char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
+        const char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
         expectToPattern(*s, "[a-z{\\u4E01\\u4E02}{\\n\\r}]", exp5);
 
         break;
@@ -1005,7 +1005,7 @@ UnicodeSetTest::expectPairs(const UnicodeSet& set, const UnicodeString& expected
 
 void UnicodeSetTest::expectToPattern(const UnicodeSet& set,
                                      const UnicodeString& expPat,
-                                     char** expStrings) {
+                                     const char** expStrings) {
     UnicodeString pat;
     set.toPattern(pat, TRUE);
     if (pat == expPat) {

@@ -130,7 +130,7 @@ private:
                      const UnicodeString& expectedPairs);
     void expectToPattern(const UnicodeSet& set,
                          const UnicodeString& expPat,
-                         char** expStrings);
+                         const char** expStrings);
     void doAssert(UBool, const char*);
 public:
     static UnicodeString escape(const UnicodeString& s);
