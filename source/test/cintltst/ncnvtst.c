@@ -114,11 +114,11 @@ void addExtraTests(TestNode** root)
      addTest(root, &TestErrorBehaviour,             "tsconv/ncnvtst/TestErrorBehaviour");
      addTest(root, &TestToUnicodeErrorBehaviour,    "tsconv/ncnvtst/ToUnicodeErrorBehaviour");
      addTest(root, &TestGetNextErrorBehaviour,      "tsconv/ncnvtst/TestGetNextErrorBehaviour");
-     addTest(root, &TestRegressionUTF8,             "tsconv/ncnvtst/TestRegressionUTF8");
-     addTest(root, &TestRegressionUTF32,             "tsconv/ncnvtst/TestRegressionUTF32");
      addTest(root, &TestAvailableConverters,        "tsconv/ncnvtst/TestAvailableConverters");
      addTest(root, &TestFlushInternalBuffer,        "tsconv/ncnvtst/TestFlushInternalBuffer");
-     addTest(root, &TestResetBehaviour,              "tsconv/ncnvtst/TestResetBehaviour");
+     addTest(root, &TestResetBehaviour,             "tsconv/ncnvtst/TestResetBehaviour");
+     addTest(root, &TestRegressionUTF8,             "tsconv/ncnvtst/TestRegressionUTF8");
+     addTest(root, &TestRegressionUTF32,            "tsconv/ncnvtst/TestRegressionUTF32");
 
 }
 
@@ -711,7 +711,8 @@ static void TestToUnicodeErrorBehaviour()
 
 static void TestGetNextErrorBehaviour(){
    /*Test for unassigned character*/
-    static const char input1[]={ 0x70 };
+#define INPUT_SIZE 1
+    static const char input1[INPUT_SIZE]={ 0x70 };
     const char* source=(const char*)input1;
     UErrorCode err=U_ZERO_ERROR;
     UChar32 c=0;
@@ -720,14 +721,11 @@ static void TestGetNextErrorBehaviour(){
         log_err("Unable to open a SBCS(ibm-1159) converter: %s\n", u_errorName(err));
         return;
     }
-    c=ucnv_getNextUChar(cnv, &source, source+sizeof(source), &err);
+    c=ucnv_getNextUChar(cnv, &source, source + INPUT_SIZE, &err);
     if(err != U_INVALID_CHAR_FOUND && c!=0xfffd){
         log_err("FAIL in TestGetNextErrorBehaviour(unassigned): Expected: U_INVALID_CHAR_ERROR or 0xfffd ----Got:%s and 0x%lx\n",  myErrorName(err), c);
     }
     ucnv_close(cnv);
-
-
-
 }
 
 /*Regression test for utf8 converter*/
