@@ -427,7 +427,7 @@ struct SResource* array_open(struct SRBRoot *bundle, char *tag, UErrorCode *stat
     return res;
 }
 
-struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status) {
+struct SResource *string_open(struct SRBRoot *bundle, char *tag, const UChar *value, int32_t len, UErrorCode *status) {
     struct SResource *res;
 
     if (U_FAILURE(*status)) {
