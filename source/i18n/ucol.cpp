@@ -81,11 +81,12 @@ U_CAPI UCollator*
 ucol_open(    const    char         *loc,
         UErrorCode      *status)
 {
+  
+  ucol_initUCA(status);
+  
   /* New version */
   if(U_FAILURE(*status)) return 0;
-
-  ucol_initUCA(status);
-
+    
   UCollator *result = NULL;
   UResourceBundle *b = ures_open(NULL, loc, status);
   /* first take on tailoring version: */
@@ -100,16 +101,27 @@ ucol_open(    const    char         *loc,
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
+    if(U_FAILURE(*status)){
+      goto clean;
+    }  
     if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
       result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
+      if(U_FAILURE(*status)){
+        goto clean;
+      }
       result->hasRealData = TRUE;
     } else {
       result = ucol_initCollator(UCA->image, result, status); 
       ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
+      if(U_FAILURE(*status)){
+        goto clean;
+      }
       result->hasRealData = FALSE;
     }
   } else { /* There is another error, and we're just gonna clean up */
+clean:
     ures_close(b);
+    ures_close(binary);
     return NULL;
   }
 
@@ -434,18 +446,25 @@ void ucol_initUCA(UErrorCode *status) {
 
     if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
       newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
-      newUCA->rb = NULL;
-      umtx_lock(NULL);
-      if(UCA == NULL) {
-          UCA = newUCA;
-          newUCA = NULL;
-      }
-      umtx_unlock(NULL);
+      if(U_SUCCESS(*status)){
+        newUCA->rb = NULL;
+        umtx_lock(NULL);
+        if(UCA == NULL) {
+            UCA = newUCA;
+            newUCA = NULL;
+        }
+        umtx_unlock(NULL);
 
-      if(newUCA != NULL) {
-          udata_close(result);
-          uprv_free(newUCA);
+        if(newUCA != NULL) {
+            udata_close(result);
+            uprv_free(newUCA);
+        }
+      }else{
+        udata_close(result);
+        uprv_free(newUCA);
+        UCA= NULL;
       }
+      
     }
 
   }
