@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.17 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-hpux-acc,v 1.18 2000/10/17 02:01:33 srl Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -16,13 +16,13 @@ COMPILE.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 ## Commands to link
 ## For aCC, use the C++ linker so that __shlinit gets defined
 #LINK.c=		$(CC) +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.c=		$(CXX) +z $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) +z $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -Wl,+s
+LINK.cc=	$(CXX) +z $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -Wl,+s
 
 ## Commands to make a shared library
 #SHLIB.c=	$(LD) $(LDFLAGS) -b
-SHLIB.c=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
-SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
+SHLIB.c=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b -Wl,+s
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b -Wl,+s
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-Wl,+b,
