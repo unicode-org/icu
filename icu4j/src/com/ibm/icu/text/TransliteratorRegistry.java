@@ -833,24 +833,6 @@ class TransliteratorRegistry {
             try {
                
                 ResourceEntry re = (ResourceEntry) entry;
-                try {
-                    /*
-                    ResourceReader r = null;
-                    try {
-                        r = new ResourceReader(re.resourceName, re.encoding);
-                    } catch (UnsupportedEncodingException e) {
-                        // This should never happen; UTF8 is always supported
-                        throw new RuntimeException(e.getMessage());
-                    }
-                    */
-                    OutputStreamWriter writer = new OutputStreamWriter( new FileOutputStream("\\work\\temp\\out.txt"), "UTF-8");
-                    writer.write(re.resource);
-                    writer.flush(); 
-                    writer.close();
-                } catch (Exception e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
                 parser.parse(re.resource, re.direction);
                 
             } catch (ClassCastException e) {
