@@ -315,7 +315,7 @@ static void printStringBreaks(UnicodeString ustr, int expected[],
             j ++;
         }
         u_charName(c, U_UNICODE_CHAR_NAME, name, 100, &status);
-        printf("%7x %5d %6d %8d %4s %4s %s\n", c, 
+        printf("%7x %5d %6d %8d %4s %4s %s\n", (int)c, 
                            u_isUAlphabetic(c), 
                            u_hasBinaryProperty(c, UCHAR_GRAPHEME_EXTEND),
                            u_isalnum(c), 
