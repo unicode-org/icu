@@ -29,11 +29,12 @@ alpha*-*-linux-gnu)
 *-*-linux*) icu_cv_host_frag=mh-linux ;;
 *-*-cygwin)	icu_cv_host_frag=mh-cygwin ;;
 *-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
-*-*-aix*) 	
-	case "$CXX" in
-	*vacpp*)icu_cv_host_frag=mh-aix-va ;;
-	*)	icu_cv_host_frag=mh-aix ;;
-	esac;;
+*-*-aix*)
+	if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
+		icu_cv_host_frag=mh-aix
+	else
+		icu_cv_host_frag=mh-aix-va
+	fi ;;
 *-sequent-*) 	icu_cv_host_frag=mh-ptx ;;
 *-*-hpux*)
 	case "$CXX" in 
