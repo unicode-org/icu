@@ -42,7 +42,7 @@ final class BreakTransliterator extends Transliterator {
     public BreakIterator getBreakIterator() {
         // Defer initialization of BreakIterator because it is slow,
         // typically over 2000 ms.
-        if (bi == null) bi = (BreakIterator) BreakIterator.getWordInstance(new Locale("th", "TH"));
+        if (bi == null) bi = (BreakIterator) BreakIterator.getWordInstance(new ULocale("th_TH"));
         return bi;
     }
 

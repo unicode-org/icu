@@ -51,10 +51,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             CollatorFactory delegate;
 
             CFactory(CollatorFactory f) {
-                super(f.visible() 
-                      ? LocaleKeyFactory.VISIBLE 
-                      : LocaleKeyFactory.INVISIBLE, 
-                      "CFactory");
+                super(f.visible()); 
                 this.delegate = f;
             }
 
@@ -105,16 +102,12 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             super("Collator");
 
             class CollatorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(ULocale uloc, int kind, ICUService service) {
-                    return new RuleBasedCollator(uloc);
+                CollatorFactory() {
+                    super(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
                 }
 
-                protected boolean supportsULocale() {
-                    return true;   
-                }
-                
-                protected Set getSupportedIDs() {
-                    return ICUResourceBundle.getAvailableLocaleNameSet(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
+                protected Object handleCreate(ULocale uloc, int kind, ICUService service) {
+                    return new RuleBasedCollator(uloc);
                 }
             }
 

@@ -622,7 +622,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat() {
         // [NEW]
-        Locale def = Locale.getDefault();
+        Locale def = ULocale.getDefault();
         String pattern = getPattern(def, 0);
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
@@ -650,7 +650,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat(String pattern) {
         // Always applyPattern after the symbols are set
-        Locale def = Locale.getDefault();
+        Locale def = ULocale.getDefault();
         this.symbols = new DecimalFormatSymbols(def);
         setCurrency(Currency.getInstance(def));
         applyPattern( pattern, false );
@@ -2691,7 +2691,6 @@ public class DecimalFormat extends NumberFormat {
     }
 
 //      protected void handleToString(StringBuffer buf) {
-//          super.handleToString(buf);
 //          buf.append("\nposPrefixPattern: '" + posPrefixPattern + "'\n");
 //          buf.append("positivePrefix: '" + positivePrefix + "'\n");
 //          buf.append("posSuffixPattern: '" + posSuffixPattern + "'\n");
@@ -3849,8 +3848,8 @@ public class DecimalFormat extends NumberFormat {
             String s = theCurrency.getName(symbols.getULocale(),
                     Currency.SYMBOL_NAME,
                     isChoiceFormat);
-        	symbols.setCurrencySymbol(s);
-        	symbols.setInternationalCurrencySymbol(theCurrency.getCurrencyCode());
+                symbols.setCurrencySymbol(s);
+                symbols.setInternationalCurrencySymbol(theCurrency.getCurrencyCode());
         }
 
         if (isCurrencyFormat) {

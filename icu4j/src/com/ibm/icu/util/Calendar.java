@@ -1742,9 +1742,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             throw new IllegalArgumentException("calendar must not be null");
         }
         registerFactory(factory);
-        return getService().registerObject(factory, locale, visible
-                                           ? LocaleKeyFactory.VISIBLE
-                                           : LocaleKeyFactory.INVISIBLE);
+        return getService().registerObject(factory, locale, visible);
     }
 
     /**
@@ -2917,7 +2915,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
-	return handleGetDateFormat(pattern, ULocale.forLocale(locale));
+        return handleGetDateFormat(pattern, ULocale.forLocale(locale));
     }
 
     /**
