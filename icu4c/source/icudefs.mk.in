@@ -220,3 +220,9 @@ INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBDIR):$(top_builddir)/stubdata:$(top_buildd
 # Platform-specific setup
 include @platform_make_fragment@
 
+# When shared libraries are disabled and static libraries are enabled,
+# the C++ compiler must be used to link in the libraries for the tools.
+ifneq ($(ENABLE_SHARED),YES)
+LINK.c = $(LINK.cc)
+endif
+
