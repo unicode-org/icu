@@ -317,7 +317,7 @@ invertBuffer(UChar *buffer,int32_t size,uint32_t options,int32_t *spacesCountl,i
  *           later it'll be converted into the 0xFExx LamAlefs
  *           in the shaping function.
  */
-UChar
+static UChar
 changeLamAlef(UChar ch) {
 
     switch(ch) {
@@ -344,7 +344,7 @@ changeLamAlef(UChar ch) {
  *Function : Special Arabic characters need special handling in the shapeUnicode
  *           function, this function returns 1 or 2 for these special characters
  */
-int32_t
+static int32_t
 specialChar(UChar ch) {
 
     if( (ch>0x0621 && ch<0x0626)||(ch==0x0627)||(ch>0x062e && ch<0x0633)||
@@ -355,8 +355,8 @@ specialChar(UChar ch) {
     if( ch>=0x064B && ch<= 0x0652 )
         return (2);
     else
-    if( ch>=0x0653 && ch<= 0x0655 || ch == 0x0670 ||
-        ch>=0xFE70 && ch<= 0xFE7F )
+    if( (ch>=0x0653 && ch<= 0x0655) || ch == 0x0670 ||
+        (ch>=0xFE70 && ch<= 0xFE7F) )
         return (3);
     else
         return (0);
@@ -368,7 +368,7 @@ specialChar(UChar ch) {
  *           Arabic characters have four forms :
  *           Isolated, Initial, Middle and Final Form
  */
-UChar
+static UChar
 getLink(UChar ch) {
 
     if(ch >= 0x0622 && ch <= 0x06D3) {
@@ -389,7 +389,7 @@ getLink(UChar ch) {
  *Function : Counts the number of spaces
  *           at each end of the logical buffer
  */
-void
+static void
 countSpaces(UChar *dest,int32_t size,uint32_t options,int32_t *spacesCountl,int32_t *spacesCountr) {
 
     int32_t i = 0;
@@ -411,7 +411,7 @@ countSpaces(UChar *dest,int32_t size,uint32_t options,int32_t *spacesCountl,int3
  *Name     : isTashkeelChar
  *Function : Returns 1 for Tashkeel characters else return 0
  */
-int32_t
+static int32_t
 isTashkeelChar(UChar ch) {
 
     if( ch>=0x064B && ch<= 0x0652 )
@@ -424,7 +424,7 @@ isTashkeelChar(UChar ch) {
  *Name     : isAlefChar
  *Function : Returns 1 for Alef characters else return 0
  */
-int32_t
+static int32_t
 isAlefChar(UChar ch) {
 
     if( (ch==0x0622)||(ch==0x0623)||(ch==0x0625)||(ch==0x0627) )
@@ -437,7 +437,7 @@ isAlefChar(UChar ch) {
  *Name     : isLamAlefChar
  *Function : Returns 1 for LamAlef characters else return 0
  */
-int32_t
+static int32_t
 isLamAlefChar(UChar ch) {
 
     if( (ch>=0xFEF5)&&(ch<=0xFEFC) )
@@ -451,7 +451,7 @@ isLamAlefChar(UChar ch) {
  *Function : This function calculates the destSize to be used in preflighting
  *           when the destSize is equal to 0
  */
-int32_t
+static int32_t
 calculateSize(const UChar *source, int32_t sourceLength,
               int32_t destSize,uint32_t options) {
 
@@ -502,7 +502,7 @@ calculateSize(const UChar *source, int32_t sourceLength,
  *           of the buffer, or shrink the buffer ab=nd remove spaces for good
  *           or leave the buffer as it is LamAlef + space.
  */
-int32_t
+static int32_t
 removeLamAlefSpaces(UChar *dest, int32_t sourceLength,
                     int32_t destSize,
                     uint32_t options,
@@ -619,7 +619,7 @@ removeLamAlefSpaces(UChar *dest, int32_t sourceLength,
  *           If there are no spaces to expand the LamAlef, an error
  *           will be set to U_NO_SPACE_AVAILABLE as defined in utypes.h
  */
-int32_t
+static int32_t
 expandLamAlef(UChar *dest, int32_t sourceLength,
               int32_t destSize,uint32_t options,
               UErrorCode *pErrorCode) {
@@ -760,7 +760,7 @@ expandLamAlef(UChar *dest, int32_t sourceLength,
  *Function : Converts an Arabic Unicode buffer in 06xx Range into a shaped
  *           arabic Unicode buffer in FExx Range
  */
-int32_t
+static int32_t
 shapeUnicode(UChar *dest, int32_t sourceLength,
              int32_t destSize,uint32_t options,
              UErrorCode *pErrorCode,
@@ -901,7 +901,7 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
  *Function : Converts an Arabic Unicode buffer in FExx Range into unshaped
  *           arabic Unicode buffer in 06xx Range
  */
-int32_t
+static int32_t
 deShapeUnicode(UChar *dest, int32_t sourceLength,
                int32_t destSize,uint32_t options,
                UErrorCode *pErrorCode) {
@@ -1011,6 +1011,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             break;
         default :
             /* will never occur because of validity checks above */
+            outputSize = 0;
             break;
         }
 
