@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_InterIndic_Latin.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Latin.txt
+// Date: Sat Jul 27 10:31:07 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Latin
@@ -187,6 +187,7 @@ t_InterIndic_Latn {
     "$ena }$x            > n\u0331  ;"
     "$ena$virama         > n\u0331  ;"
     "$ena                > n\u0331a ;"
+    "$uka		> qa       ;"
     "$ka$nukta }$x       > q        ;"
     "$ka$nukta$virama    > q        ;"
     "$ka$nukta           > qa       ;"
@@ -195,9 +196,12 @@ t_InterIndic_Latn {
     "$kha$nukta          > k\u0331h\u0331a ;"
     "$ukha$virama        > k\u0331h\u0331;"
     "$ukha               > k\u0331h\u0331a;"
+    "$ugha		> g\u0307a ;"
     "$ga$nukta }$x       > g\u0307  ;"
     "$ga$nukta$virama    > g\u0307  ;"
     "$ga$nukta           > g\u0307a ;"
+    
+    "$ujha                > za       ;"	
     "$ja$nukta }$x       > z        ;"
     "$ja$nukta$virama    > z        ;"
     "$ja$nukta           > za       ;"
@@ -208,7 +212,8 @@ t_InterIndic_Latn {
     "$uddha}$x           > r\u0323  ;"
     "$uddha$virama       > r\u0323 ;"
     "$uddha              > r\u0323a;"
-
+    
+    "$udha               > r\u0323a ;"
     "$dda$nukta}$x       > r\u0323  ;"
     "$dda$nukta$virama   > r\u0323  ;"
     "$dda$nukta          > r\u0323a ;"

@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_Tamil_InterIndic.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_Tamil_InterIndic.txt
+// Date: Sat Jul 27 10:31:07 2002
 //--------------------------------------------------------------------
 
 // Tamil_InterIndic
@@ -38,6 +38,7 @@ t_Taml_InterIndic {
 "\u0B90>\uE010;"      // LETTER AI
 "\u0B92>\uE012;"      // LETTER O
 "\u0B93>\uE013;"      // LETTER OO
+"\u0B94>\uE014;"	    // LETTER AU
 "\u0B95>\uE015;"      // LETTER KA
 "\u0B99>\uE019;"      // LETTER NGA
 "\u0B9A>\uE01A;"      // LETTER CA

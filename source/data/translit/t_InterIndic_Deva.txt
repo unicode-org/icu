@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_InterIndic_Devanagari.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Devanagari.txt
+// Date: Sat Jul 27 10:31:07 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Devanagari
@@ -159,6 +159,12 @@ t_InterIndic_Deva {
  "\ue0f0 >  \u0930;"  // FALLBACK RA 
  "\ue0f1 >  \u0930;"  // FALLBACK RA
 
+"\ue075>;"
+"\ue076>;"
+"\ue077>;"
+"\ue078>;"
+"\ue079>;"
+"\ue07A>;"
  
 //         \u0970  # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
 //    :: NFC;

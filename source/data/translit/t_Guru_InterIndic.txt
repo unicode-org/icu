@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_Gurmukhi_InterIndic.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_Gurmukhi_InterIndic.txt
+// Date: Sat Jul 27 10:31:01 2002
 //--------------------------------------------------------------------
 
 // Gurmukhi_InterIndic
@@ -27,13 +27,14 @@ t_Guru_InterIndic {
 //\u0A32\u0A3C>\uE033; # LETTER LLA
 //\u0A2B\u0A3C>\uE05E; # LETTER FA
 
-"\u0A02>\uE001;"  // REMAP (indicExceptions.txt): \u0a01>\u0a02 = SIGN CANDRABINDU>SIGN BINDI
+"\u0A02>\uE002;"  // SIGN BINDI
 "\u0A05>\uE005;"  // LETTER A
 "\u0A06>\uE006;"  // LETTER AA
 "\u0A07>\uE007;"  // LETTER I
 "\u0A08>\uE008;"  // LETTER II
 "\u0A09>\uE009;"  // LETTER U
 "\u0A0A>\uE00A;"  // LETTER UU
+"\u0A0C>;"  // UNMAPPED 
 "\u0A0F>\uE00F;"  // LETTER EE
 "\u0A10>\uE010;"  // LETTER AI
 "\u0A13>\uE013;"  // LETTER OO
@@ -66,9 +67,11 @@ t_Guru_InterIndic {
 "\u0A2F>\uE02F;"  // LETTER YA
 "\u0A30>\uE030;"  // LETTER RA
 "\u0A32>\uE032;"  // LETTER LA
-
+"\u0a33>\uE033;" // FALLBACK
 "\u0A35>\uE035;"  // LETTER VA
-
+"\u0a36>\ue036;"
+"\u0A38\\\0a3c>\ue036;"
+"\u0A37>\uE036;"
 "\u0A38>\uE038;"  // LETTER SA
 "\u0A39>\uE039;"  // LETTER HA
 "\u0A3C>\uE03C;"  // SIGN NUKTA

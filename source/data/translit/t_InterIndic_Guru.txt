@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2004, International Business Machines
+// Copyright (c) 1999-2002, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
-// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_InterIndic_Gurmukhi.txt
-// Date: Fri Mar  1 16:15:45 2002
+// Tool: dumpicurules.bat
+// Source: ../../../impl/data/Transliterator_InterIndic_Gurmukhi.txt
+// Date: Sat Jul 27 10:31:07 2002
 //--------------------------------------------------------------------
 
 // InterIndic_Gurmukhi
@@ -19,8 +19,18 @@ t_InterIndic_Guru {
 
 // InterIndic-Gurmukhi
 //:: NFD (NFC) ;
-"\ue001>\u0a02;" // REMAP (indicExceptions.txt): \u0a01>\u0a02 = SIGN CANDRABINDU>SIGN BINDI
-"\ue002>;" // FALLBACK BLOW AWAY SIGN ANUSVARA (\u0a02 = SIGN BINDI)
+"$vowel = [\u0A05-\u0A14 \u0A3e-\u0A4D];"
+"$consonant = [\u0A15-\u0A39];"
+
+"\ue001>;"       // FALLBACK BLOW AWAY SIGN CHANDRABINDU
+//rules for BINDI
+
+// Anusvara is equivalent to BINDI when preceeded by a vowel
+"$vowel{\ue002>\u0a02;" // SIGN ANUSVARA (\u0a02 = SIGN BINDI)
+// else is equivalent to TIPPI
+"$consonant{\ue002>\u0a70;" // SIGN TIPPI
+"\ue002>\u0a02;"
+
 "\ue003>;" // FALLBACK BLOW AWAY SIGN VISARGA
 "\ue005>\u0a05;" // LETTER A
 "\ue006>\u0a06;" // LETTER AA
@@ -125,11 +135,17 @@ t_InterIndic_Guru {
 "\ue06d>\u0a6d;" // DIGIT SEVEN
 "\ue06e>\u0a6e;" // DIGIT EIGHT
 "\ue06f>\u0a6f;" // DIGIT NINE
-"\ue070>\u0a70;" //  TIPPI
-"\ue071>\u0a71;" //  ADDAK
-"\ue072>\u0a72;" //  IRI
-"\ue073>\u0a73;" //  URA
-"\ue074>\u0a74;" //  EK ONKAR
+"\ue070>;" //  TIPPI
+"\ue071>;" //  ADDAK
+"\ue072>;" //  IRI
+"\ue073>;" //  URA
+"\ue074>;" //  EK ONKAR
+"\ue075>;"
+"\ue076>;"
+"\ue077>;"
+"\ue078>;"
+"\ue079>;"
+"\ue07A>;"
 "\ue080>;" // FALLBACK BLOW AWAY ISSHAR
 "\ue081>;" // FALLBACK BLOW AWAY LETTER E
 "\ue082>;" // FALLBACK BLOW AWAY LETTER O (\u0a02 = SIGN BINDI)
