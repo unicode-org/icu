@@ -140,6 +140,9 @@ static void IncompleteCntTest( )
 
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
                                                 UCOL_DEFAULT_STRENGTH, &status);
+  /* problem in strcollinc for unfinshed contractions */
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+
   if(U_SUCCESS(status)) {
     size = sizeof(cnt1)/sizeof(cnt1[0]);
     for(i = 0; i < size-1; i++) {
@@ -157,6 +160,9 @@ static void IncompleteCntTest( )
   u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
                                                 UCOL_DEFAULT_STRENGTH, &status);
+  /* problem in strcollinc for unfinshed contractions */
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+
   if(U_SUCCESS(status)) {
     size = sizeof(cnt2)/sizeof(cnt2[0]);
     for(i = 0; i < size-1; i++) {
@@ -173,8 +179,96 @@ static void IncompleteCntTest( )
 
 }
 
+
+const static char shifted[][20] = {
+  "black bird",
+  "black-bird",
+  "blackbird",
+  "black Bird",
+  "black-Bird",
+  "blackBird",
+  "black birds",
+  "black-birds",
+  "blackbirds"
+};
+
+const static UCollationResult shiftedTert[] = {
+  0,
+  UCOL_EQUAL,
+  UCOL_EQUAL,
+  UCOL_LESS,
+  UCOL_EQUAL,
+  UCOL_EQUAL,
+  UCOL_LESS,
+  UCOL_EQUAL,
+  UCOL_EQUAL
+};
+
+const static char nonignorable[][20] = {
+  "black bird",
+  "black Bird",
+  "black birds",
+  "black-bird",
+  "black-Bird",
+  "black-birds",
+  "blackbird",
+  "blackBird",
+  "blackbirds"
+};
+
+void BlackBirdTest( ) {
+  UErrorCode status = U_ZERO_ERROR;
+  UChar *t1 =(UChar*)malloc(sizeof(UChar) * 90);
+  UChar *t2 =(UChar*)malloc(sizeof(UChar) * 90);
+
+  uint32_t i = 0, j = 0;
+  uint32_t size = 0;
+  UCollator *coll = ucol_open(NULL, &status);
+
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
+  ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+
+  if(U_SUCCESS(status)) {
+    size = sizeof(nonignorable)/sizeof(nonignorable[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_uastrcpy(t1, nonignorable[i]);
+        u_uastrcpy(t2, nonignorable[j]);
+        doTest(coll, t1, t2, UCOL_LESS);
+      }
+    }
+  } 
+
+  ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
+
+  if(U_SUCCESS(status)) {
+    size = sizeof(shifted)/sizeof(shifted[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_uastrcpy(t1, shifted[i]);
+        u_uastrcpy(t2, shifted[j]);
+        doTest(coll, t1, t2, UCOL_LESS);
+      }
+    }
+  } 
+
+  ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_TERTIARY, &status);
+  if(U_SUCCESS(status)) {
+    size = sizeof(shifted)/sizeof(shifted[0]);
+    for(i = 1; i < size; i++) {
+      u_uastrcpy(t1, shifted[i-1]);
+      u_uastrcpy(t2, shifted[i]);
+      doTest(coll, t1, t2, shiftedTert[i]);
+    }
+  } 
+
+  ucol_close(coll);
+}
+
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
+    addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
 }
