@@ -20,6 +20,99 @@
 *   It then tokenizes and compresses the names and builds
 *   compact binary tables for random-access lookup
 *   in a u_charName() API function.
+*
+* unames.dat file format (after UDataInfo header etc. - see udata.c)
+* (all data is static const)
+*
+* UDataInfo fields:
+*   dataFormat "unam"
+*   formatVersion 1.0
+*   dataVersion = Unicode version from -u or --unicode command line option, defaults to 3.0.0
+*
+* -- data-based names
+* uint32_t tokenStringOffset,
+*          groupsOffset,
+*          groupStringOffset,
+*          algNamesOffset;
+*
+* uint16_t tokenCount;
+* uint16_t tokenTable[tokenCount];
+*
+* char     tokenStrings[]; -- padded to even count
+*
+* -- strings (groupStrings) are tokenized as follows:
+*   for each character c
+*       if(c>=tokenCount) write that character c directly
+*   else
+*       token=tokenTable[c];
+*       if(token==0xfffe) -- lead byte of double-byte token
+*           token=tokenTable[c<<8|next character];
+*       if(token==-1)
+*           write c directly
+*       else
+*           tokenString=tokenStrings+token; (tokenStrings=start of names data + tokenStringOffset;)
+*           append zero-terminated tokenString;
+*
+* uint16_t groupCount;
+* struct {
+*   uint16_t groupMSB; -- for a group of 32 character names stored, this is code point>>5
+*   uint16_t offsetHigh; -- group strings are at start of names data + groupStringsOffset + this 32 bit-offset
+*   uint16_t offsetLow;
+* } groupTable[groupCount];
+*
+* char     groupStrings[]; -- padded to 4-count
+*
+* -- The actual, tokenized group strings are not zero-terminated because
+*   that would take up too much space.
+*   Instead, they are preceeded by their length, written in a variable-length sequence:
+*   For each of the 32 group strings, one or two nibbles are stored for its length.
+*   Nibbles (4-bit values, half-bytes) are read MSB first.
+*   A nibble with a value of 0..11 directly indicates the length of the name string.
+*   A nibble n with a value of 12..15 is a lead nibble and forms a value with the following nibble m
+*   by (((n-12)<<4)|m)+12, reaching values of 12..75.
+*   These lengths are sequentially for each tokenized string, not for the de-tokenized result.
+*   For the de-tokenizing, see token description above; the strings immediately follow the
+*   32 lengths.
+*
+* -- algorithmic names
+*
+* typedef struct AlgorithmicRange {
+*     uint32_t rangeStart, rangeEnd;
+*     uint8_t algorithmType, algorithmVariant;
+*     uint16_t rangeSize;
+* } AlgorithmicRange;
+*
+* uint32_t algRangesCount; -- number of data blocks for ranges of
+*               algorithmic names (Unicode 3.0.0: 3, hardcoded in gennames)
+*
+* struct {
+*     AlgorithmicRange algRange;
+*     uint8_t algRangeData[]; -- padded to 4-count except in last range
+* } algRanges[algNamesCount];
+* -- not a real array because each part has a different size
+*    of algRange.rangeSize (including AlgorithmicRange)
+*
+* -- algorithmic range types:
+*
+* 0 Names are formed from a string prefix that is stored in
+*   the algRangeData (zero-terminated), followed by the Unicode code point
+*   of the character in hexadecimal digits;
+*   algRange.algorithmVariant digits are written
+*
+* 1 Names are formed by calculating modulo-factors of the code point value as follows:
+*   algRange.algorithmVariant is the count of modulo factors
+*   algRangeData contains
+*       uint16_t factors[algRange.algorithmVariant];
+*       char strings[];
+*   the first zero-terminated string is written as the prefix; then:
+*
+*   The rangeStart is subtracted; with the difference, here "code":
+*   for(i=algRange.algorithmVariant-1 to 0 step -1)
+*       index[i]=code%factor[i];
+*       code/=factor[i];
+*
+*   The strings after the prefix are short pieces that are then appended to the result
+*   according to index[0..algRange.algorithmVariant-1].
 */
 
 #include <stdio.h>
@@ -166,31 +259,6 @@ allocWord(uint32_t length);
 
 /* -------------------------------------------------------------------------- */
 
-/* ### this must become public in putil.c */
-static void
-__versionFromString(UVersionInfo versionArray, const char *versionString) {
-    char *end;
-    uint16_t part=0;
-
-    if(versionArray==NULL) {
-        return;
-    }
-
-    if(versionString!=NULL) {
-        for(;;) {
-            versionArray[part]=(uint8_t)uprv_strtoul(versionString, &end, 10);
-            if(end==versionString || ++part==U_MAX_VERSION_LENGTH || *end!=U_VERSION_DELIMITER) {
-                break;
-            }
-            versionString=end+1;
-        }
-    }
-
-    while(part<U_MAX_VERSION_LENGTH) {
-        versionArray[part++]=0;
-    }
-}
-
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
@@ -249,7 +317,7 @@ main(int argc, char* argv[]) {
     store10Names=options[8].doesOccur;
 
     /* set the Unicode version */
-    __versionFromString(version, options[7].value);
+    u_versionFromString(version, options[7].value);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 
     init();
@@ -581,6 +649,27 @@ compressLines() {
 
         /* write characters and tokens for this line */
         appendLineLength(compressLine(line->s, line->length, &groupTop));
+    }
+
+    /* finish and store the last group */
+    if(groupMSB!=0xffff) {
+        /* finish the current group with empty lines */
+        while((++outLine&GROUP_MASK)!=0) {
+            appendLineLength(0);
+        }
+
+        /* store the group like a line */
+        if(groupTop>0) {
+            if(groupTop>GROUP_STORE_SIZE) {
+                fprintf(stderr, "gennames: group store overflow\n");
+                exit(U_BUFFER_OVERFLOW_ERROR);
+            }
+            addGroup(groupMSB, groupStore, groupTop);
+            if(lineTop>(uint32_t)(line->s-stringStore)) {
+                fprintf(stderr, "gennames: group store runs into string store\n");
+                exit(U_INTERNAL_PROGRAM_ERROR);
+            }
+        }
     }
 
     if(!beQuiet) {
