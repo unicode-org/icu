@@ -27,6 +27,7 @@
 #include "ucol_imp.h"
 #include "ucol_tok.h"
 #include "cmemory.h"
+#include "ucmp32.h"
 
 #ifdef WIN32
 #define UNICODE
@@ -1416,6 +1417,63 @@ static void TestChMove(void) {
   } 
 }
 
+const static char impTest[][20] = {
+  "\\u4e00",
+    "a",
+    "A",
+    "b",
+    "B",
+    "\\u4e01"
+};
+
+
+static void TestImplicitTailoring(void) {
+  UChar t1[256] = {0};
+  UChar t2[256] = {0};
+
+  char *rule = "&\\u4e00 < a <<< A < b <<< B";
+
+  uint32_t i = 0, j = 0;
+  uint32_t size = 0;
+  uint32_t ruleLen = 0;
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = NULL;
+  ruleLen = u_unescape(rule, t1, 256);
+
+  coll = ucol_openRules(t1, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+
+  if(U_SUCCESS(status)) {
+    size = sizeof(impTest)/sizeof(impTest[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_unescape(impTest[i], t1, 256);
+        u_unescape(impTest[j], t2, 256);
+        doTest(coll, t1, t2, UCOL_LESS);
+      }
+    }
+  } 
+}
+
+static void TestFCDProblem(void) {
+  UChar t1[256] = {0};
+  UChar t2[256] = {0};
+
+  char *s1 = "\\u0430\\u0306\\u0325";
+  char *s2 = "\\u04D1\\u0325";
+
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_open("", &status);
+  u_unescape(s1, t1, 256);
+  u_unescape(s2, t2, 256);
+
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_OFF, &status);
+  doTest(coll, t1, t2, UCOL_EQUAL);
+
+  ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+  doTest(coll, t1, t2, UCOL_EQUAL);
+
+}
+
 struct tester{
   UChar u;
   UChar NFC[64];
@@ -1478,6 +1536,25 @@ static void TestComposeDecompose(void) {
   }
 }
 
+static TestUnmappedSpaces(void) {
+  UChar u;
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *uca = ucol_open("", &status);
+  for(u = 0; u < 0xFFFF; u++) {
+    if(ucmp32_get(uca->mapping, u) == UCOL_NOT_FOUND) {
+      log_verbose("%04X ", u);
+    }
+  }
+  ucol_close(uca);
+}
+
+void TestEmptyRule() {
+  UErrorCode status = U_ZERO_ERROR;
+  UChar rulez[] = { 0 };
+  UCollator *coll = ucol_openRules(rulez, 0, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
+
+  ucol_close(coll);
+}
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
@@ -1490,6 +1567,10 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
     addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
+    addTest(root, &TestImplicitTailoring, "tscoll/cmsccoll/TestImplicitTailoring");
+    addTest(root, &TestFCDProblem, "tscoll/cmsccoll/TestFCDProblem");   
+    addTest(root, &TestEmptyRule, "tscoll/cmsccoll/TestEmptyRule");   
+    /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/   
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
     /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
 }
