@@ -28,8 +28,8 @@
  *  \code
  *    UErrorCode err = U_ZERO_ERROR;
  *    UConverter* myConverter = ucnv_open("ibm-949", &err);
- *  void *newContext = NULL;
- *  void *oldContext;
+ *  const void *newContext = NULL;
+ *  const void *oldContext;
  *  UConverterFromUCallback oldAction;
  *
  *
@@ -133,7 +133,7 @@ typedef struct {
  * @stable
  */
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -151,7 +151,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (
  * @stable
  */
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
-                  void *context,
+                  const void *context,
                   UConverterToUnicodeArgs *fromUArgs,
                   const char* codeUnits,
                   int32_t length,
@@ -171,7 +171,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (
  * @stable
  */
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -194,7 +194,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
  */
 
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -243,7 +243,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  */
 
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -265,7 +265,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (
  * @stable
  */
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
-                  void *context,
+                  const void *context,
                   UConverterToUnicodeArgs *fromUArgs,
                   const char* codeUnits,
                   int32_t length,
@@ -284,7 +284,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
  * @stable
  */
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
-                  void *context,
+                  const void *context,
                   UConverterToUnicodeArgs *fromUArgs,
                   const char* codeUnits,
                   int32_t length,
@@ -300,7 +300,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
  */
 
 U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
-                  void *context,
+                  const void *context,
                   UConverterToUnicodeArgs *fromUArgs,
                   const char* codeUnits,
                   int32_t length,

@@ -78,6 +78,7 @@ static void setNuConvTestName(const char *codepage, const char *direction)
 }
 
 
+void addTestConvertErrorCallBack(TestNode** root);
 
 void addTestConvertErrorCallBack(TestNode** root)
 {
@@ -178,15 +179,15 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
     if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expskipIBM_949, sizeof(expskipIBM_949), "ibm-949",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM949Offsskip, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_SKIP, toIBM949Offsskip, NULL, 0 ))
         log_err("u-> ibm-949 with skip did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expskipIBM_943, sizeof(expskipIBM_943), "ibm-943",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM943Offsskip, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_SKIP, toIBM943Offsskip, NULL, 0 ))
         log_err("u-> ibm-943 with skip did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expskipIBM_930, sizeof(expskipIBM_930), "ibm-930",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0))
+            UCNV_FROM_U_CALLBACK_SKIP, toIBM930Offsskip , NULL, 0))
         log_err("u-> ibm-930 with skip did not match.\n");
 
     {
@@ -404,72 +405,72 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, offset, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, offset, NULL, 0 ))
             log_err("u-> ibm-943 with skip did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
                 to_euc_jp, sizeof(to_euc_jp), "euc-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, fromEUC_JPOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with skip did not match.\n");
 
         if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
                 to_euc_tw, sizeof(to_euc_tw), "euc-tw",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_euc_twOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with skip did not match.\n");  
         
         /*iso_2022_jp*/
         if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
                 to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs, NULL, 0 ))
             log_err("u-> iso-2022-jp with skip did not match.\n"); 
         
         if(!testConvertFromUnicode(iso_2022_jp_inputText1, sizeof(iso_2022_jp_inputText1)/sizeof(iso_2022_jp_inputText1[0]),
                 to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs1, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs1, NULL, 0 ))
             log_err("u-> iso-2022-jp with skip did not match.\n"); 
         /* with context */
         if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                 to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs2, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs2, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
             log_err("u-> iso-2022-jp with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
     
         /*iso_2022_cn*/
         if(!testConvertFromUnicode(iso_2022_cn_inputText, sizeof(iso_2022_cn_inputText)/sizeof(iso_2022_cn_inputText[0]),
                 to_iso_2022_cn, sizeof(to_iso_2022_cn), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_cnOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_cnOffs, NULL, 0 ))
             log_err("u-> iso-2022-cn with skip did not match.\n"); 
         /*with context*/
         if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText1, sizeof(iso_2022_cn_inputText1)/sizeof(iso_2022_cn_inputText1[0]),
                 to_iso_2022_cn1, sizeof(to_iso_2022_cn1), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_cnOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_cnOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
             log_err("u-> iso-2022-cn with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
 
         /*iso_2022_kr*/
         if(!testConvertFromUnicode(iso_2022_kr_inputText, sizeof(iso_2022_kr_inputText)/sizeof(iso_2022_kr_inputText[0]),
                 to_iso_2022_kr, sizeof(to_iso_2022_kr), "iso-2022-kr",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_krOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_krOffs, NULL, 0 ))
             log_err("u-> iso-2022-kr with skip did not match.\n"); 
           /*with context*/
         if(!testConvertFromUnicodeWithContext(iso_2022_kr_inputText1, sizeof(iso_2022_kr_inputText1)/sizeof(iso_2022_kr_inputText1[0]),
                 to_iso_2022_kr1, sizeof(to_iso_2022_kr1), "iso-2022-kr",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_krOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_krOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
             log_err("u-> iso-2022-kr with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
 
         /*hz*/
         if(!testConvertFromUnicode(hz_inputText, sizeof(hz_inputText)/sizeof(hz_inputText[0]),
                 to_hz, sizeof(to_hz), "HZ",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs, NULL, 0 ))
             log_err("u-> HZ with skip did not match.\n"); 
           /*with context*/
         if(!testConvertFromUnicodeWithContext(hz_inputText1, sizeof(hz_inputText1)/sizeof(hz_inputText1[0]),
                 to_hz1, sizeof(to_hz1), "hz",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
             log_err("u-> hz with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
         
         /*SCSU*/
         if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
                 to_SCSU, sizeof(to_SCSU), "SCSU",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_SCSUOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SKIP, from_SCSUOffs, NULL, 0 ))
             log_err("u-> SCSU with skip did not match.\n");
 
 
@@ -481,16 +482,16 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
     if(!testConvertToUnicode(expskipIBM_949, sizeof(expskipIBM_949),
              IBM_949skiptoUnicode, sizeof(IBM_949skiptoUnicode)/sizeof(IBM_949skiptoUnicode),"ibm-949",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM949Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SKIP, fromIBM949Offs, NULL, 0 ))
         log_err("ibm-949->u with skip did not match.\n");
     if(!testConvertToUnicode(expskipIBM_943, sizeof(expskipIBM_943),
              IBM_943skiptoUnicode, sizeof(IBM_943skiptoUnicode)/sizeof(IBM_943skiptoUnicode[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offs, NULL, 0 ))
         log_err("ibm-943->u with skip did not match.\n");
 
     if(!testConvertToUnicode(expskipIBM_930, sizeof(expskipIBM_930),
              IBM_930skiptoUnicode, sizeof(IBM_930skiptoUnicode)/sizeof(IBM_930skiptoUnicode[0]),"ibm-930",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SKIP, fromIBM930Offs, NULL, 0 ))
         log_err("ibm-930->u with skip did not match.\n");
 
     {
@@ -631,47 +632,47 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
  
         if(!testConvertToUnicode(sampleTxtEBCIDIC_STATEFUL, sizeof(sampleTxtEBCIDIC_STATEFUL),
              EBCIDIC_STATEFUL_toUnicode, sizeof(EBCIDIC_STATEFUL_toUnicode)/sizeof(EBCIDIC_STATEFUL_toUnicode[0]),"ibm-930",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SKIP, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
         log_err("EBCIDIC_STATEFUL->u with skip did not match.\n");
 
 
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
                  euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_euc_jpOffs , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, from_euc_jpOffs , NULL, 0))
             log_err("euc-jp->u with skip did not match.\n");
 
 
 
         if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
                  euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_euc_twOffs , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, from_euc_twOffs , NULL, 0))
             log_err("euc-tw->u with skip did not match.\n");
 
         
         if(!testConvertToUnicode(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
                  iso_2022_jptoUnicode, sizeof(iso_2022_jptoUnicode)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_iso_2022_jpOffs , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, from_iso_2022_jpOffs , NULL, 0))
             log_err("iso-2022-jp->u with skip did not match.\n");
         
         if(!testConvertToUnicode(sampleTxt_iso_2022_cn, sizeof(sampleTxt_iso_2022_cn),
                  iso_2022_cntoUnicode, sizeof(iso_2022_cntoUnicode)/sizeof(iso_2022_cntoUnicode[0]),"iso-2022-cn",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_iso_2022_cnOffs , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, from_iso_2022_cnOffs , NULL, 0))
             log_err("iso-2022-cn->u with skip did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_iso_2022_kr, sizeof(sampleTxt_iso_2022_kr),
                  iso_2022_krtoUnicode, sizeof(iso_2022_krtoUnicode)/sizeof(iso_2022_krtoUnicode[0]),"iso-2022-kr",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_iso_2022_krOffs , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, from_iso_2022_krOffs , NULL, 0))
             log_err("iso-2022-kr->u with skip did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_hz, sizeof(sampleTxt_hz),
                  hztoUnicode, sizeof(hztoUnicode)/sizeof(hztoUnicode[0]),"HZ",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, from_hzOffs , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, from_hzOffs , NULL, 0))
             log_err("HZ->u with skip did not match.\n");
 
         if(/* broken for icu 1.6 and 1.6.0.1, do not test */uprv_strcmp("1.7", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS-1",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromLMBCS , NULL, 0))
+                UCNV_TO_U_CALLBACK_SKIP, fromLMBCS , NULL, 0))
             log_err("LMBCS->u with skip did not match.\n");
 
     }
@@ -684,7 +685,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
             log_err("utf8->u with skip did not match.\n");;
     }
 
@@ -696,7 +697,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_SKIP, offsets1, NULL, 0 ))
             log_err("scsu->u with stop did not match.\n");;
     }
 }
@@ -733,15 +734,15 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
     /*From Unicode*/
     if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expstopIBM_949, sizeof(expstopIBM_949), "ibm-949",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM949Offsstop, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_STOP, toIBM949Offsstop, NULL, 0 ))
         log_err("u-> ibm-949 with stop did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expstopIBM_943, sizeof(expstopIBM_943), "ibm-943",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM943Offsstop , NULL, 0))
+            UCNV_FROM_U_CALLBACK_STOP, toIBM943Offsstop , NULL, 0))
         log_err("u-> ibm-943 with stop did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expstopIBM_930, sizeof(expstopIBM_930), "ibm-930",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, toIBM930Offsstop, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_STOP, toIBM930Offsstop, NULL, 0 ))
         log_err("u-> ibm-930 with stop did not match.\n");
 
     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_STOP  \n");
@@ -809,42 +810,42 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, offset, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, offset, NULL, 0 ))
             log_err("u-> ibm-943 with stop did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
                 to_euc_jp, sizeof(to_euc_jp), "euc-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, fromEUC_JPOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with stop did not match.\n");
 
         if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
                 to_euc_tw, sizeof(to_euc_tw), "euc-tw",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_euc_twOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with stop did not match.\n");  
 
         if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
                 to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_jpOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_jpOffs, NULL, 0 ))
             log_err("u-> iso-2022-jp with stop did not match.\n");  
 
         if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
                 to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_jpOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_jpOffs, NULL, 0 ))
             log_err("u-> iso-2022-jp with stop did not match.\n");  
         
         if(!testConvertFromUnicode(iso_2022_cn_inputText, sizeof(iso_2022_cn_inputText)/sizeof(iso_2022_cn_inputText[0]),
                 to_iso_2022_cn, sizeof(to_iso_2022_cn), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_cnOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_cnOffs, NULL, 0 ))
             log_err("u-> iso-2022-cn with stop did not match.\n");  
 
         if(!testConvertFromUnicode(iso_2022_kr_inputText, sizeof(iso_2022_kr_inputText)/sizeof(iso_2022_kr_inputText[0]),
                 to_iso_2022_kr, sizeof(to_iso_2022_kr), "iso-2022-kr",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_krOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_iso_2022_krOffs, NULL, 0 ))
             log_err("u-> iso-2022-kr with stop did not match.\n");  
         
         if(!testConvertFromUnicode(hz_inputText, sizeof(hz_inputText)/sizeof(hz_inputText[0]),
                 to_hz, sizeof(to_hz), "HZ",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_hzOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_hzOffs, NULL, 0 ))
             log_err("u-> HZ with stop did not match.\n");  
 
 
@@ -861,7 +862,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6 };
         if(!testConvertFromUnicode(testinput, sizeof(testinput)/sizeof(testinput[0]),
                 expectedUTF8, sizeof(expectedUTF8), "utf8",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, offsets, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, offsets, NULL, 0 ))
             log_err("u-> utf8 with stop did not match.\n");
     }
     log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_STOP \n");
@@ -878,22 +879,22 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
         };
         if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
                 to_SCSU, sizeof(to_SCSU), "SCSU",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP, from_SCSUOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_STOP, from_SCSUOffs, NULL, 0 ))
             log_err("u-> SCSU with skip did not match.\n");
     
     }
     /*to Unicode*/
     if(!testConvertToUnicode(expstopIBM_949, sizeof(expstopIBM_949),
              IBM_949stoptoUnicode, sizeof(IBM_949stoptoUnicode)/sizeof(IBM_949stoptoUnicode[0]),"ibm-949",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM949Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_STOP, fromIBM949Offs, NULL, 0 ))
         log_err("ibm-949->u with stop did not match.\n");
     if(!testConvertToUnicode(expstopIBM_943, sizeof(expstopIBM_943),
              IBM_943stoptoUnicode, sizeof(IBM_943stoptoUnicode)/sizeof(IBM_943stoptoUnicode[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM943Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_STOP, fromIBM943Offs, NULL, 0 ))
         log_err("ibm-943->u with stop did not match.\n");
     if(!testConvertToUnicode(expstopIBM_930, sizeof(expstopIBM_930),
              IBM_930stoptoUnicode, sizeof(IBM_930stoptoUnicode)/sizeof(IBM_930stoptoUnicode[0]),"ibm-930",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM930Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_STOP, fromIBM930Offs, NULL, 0 ))
         log_err("ibm-930->u with stop did not match.\n");
 
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_STOP \n");
@@ -926,17 +927,17 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
          if(!testConvertToUnicode(sampleTxtEBCIDIC_STATEFUL, sizeof(sampleTxtEBCIDIC_STATEFUL),
              EBCIDIC_STATEFUL_toUnicode, sizeof(EBCIDIC_STATEFUL_toUnicode)/sizeof(EBCIDIC_STATEFUL_toUnicode[0]),"ibm-930",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_STOP, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
         log_err("EBCIDIC_STATEFUL->u with stop did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
              euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs , NULL, 0))
+            UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs , NULL, 0))
         log_err("euc-jp->u with stop did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
                  euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_twOffs, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_STOP, from_euc_twOffs, NULL, 0 ))
             log_err("euc-tw->u with stop did not match.\n");
     }
     log_verbose("Testing toUnicode for UTF-8 with UCNV_TO_U_CALLBACK_STOP \n");
@@ -948,7 +949,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
             log_err("utf8->u with stop did not match.\n");;
     }
     log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_STOP \n");
@@ -959,7 +960,7 @@ static void TestStop(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_STOP, offsets1, NULL, 0 ))
             log_err("scsu->u with stop did not match.\n");;
     }
 
@@ -997,15 +998,15 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
     /*from unicode*/
     if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expsubIBM_949, sizeof(expsubIBM_949), "ibm-949", 
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM949Offssub, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM949Offssub, NULL, 0 ))
         log_err("u-> ibm-949 with subst did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expsubIBM_943, sizeof(expsubIBM_943), "ibm-943",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM943Offssub , NULL, 0))
+            UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM943Offssub , NULL, 0))
         log_err("u-> ibm-943 with subst did not match.\n");
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expsubIBM_930, sizeof(expsubIBM_930), "ibm-930", 
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM930Offssub, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_SUBSTITUTE, toIBM930Offssub, NULL, 0 ))
         log_err("u-> ibm-930 with subst did not match.\n");
 
     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_SUBSTITUTE  \n");
@@ -1034,17 +1035,17 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset, NULL, 0 ))
             log_err("u-> ibm-943 with substitute did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
                 to_euc_jp, sizeof(to_euc_jp), "euc-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, fromEUC_JPOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with substitute did not match.\n");
 
         if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
                 to_euc_tw, sizeof(to_euc_tw), "euc-tw",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with substitute did not match.\n");  
 
     }
@@ -1067,7 +1068,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         };
         if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
                 to_SCSU, sizeof(to_SCSU), "SCSU",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs, NULL, 0 ))
             log_err("u-> SCSU with skip did not match.\n");
 
     
@@ -1076,15 +1077,15 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
     /*to unicode*/
     if(!testConvertToUnicode(expsubIBM_949, sizeof(expsubIBM_949),
              IBM_949subtoUnicode, sizeof(IBM_949subtoUnicode)/sizeof(IBM_949subtoUnicode[0]),"ibm-949",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM949Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM949Offs, NULL, 0 ))
         log_err("ibm-949->u with substitute did not match.\n");
     if(!testConvertToUnicode(expsubIBM_943, sizeof(expsubIBM_943),
              IBM_943subtoUnicode, sizeof(IBM_943subtoUnicode)/sizeof(IBM_943subtoUnicode[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offs, NULL, 0 ))
         log_err("ibm-943->u with substitute did not match.\n");
     if(!testConvertToUnicode(expsubIBM_930, sizeof(expsubIBM_930),
              IBM_930subtoUnicode, sizeof(IBM_930subtoUnicode)/sizeof(IBM_930subtoUnicode[0]),"ibm-930",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM930Offs, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM930Offs, NULL, 0 ))
         log_err("ibm-930->u with substitute did not match.\n");
  
     log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
@@ -1118,19 +1119,19 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
        
         if(!testConvertToUnicode(sampleTxtEBCIDIC_STATEFUL, sizeof(sampleTxtEBCIDIC_STATEFUL),
            EBCIDIC_STATEFUL_toUnicode, sizeof(EBCIDIC_STATEFUL_toUnicode)/sizeof(EBCIDIC_STATEFUL_toUnicode[0]),"ibm-930",
-          (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
+          UCNV_TO_U_CALLBACK_SUBSTITUTE, from_EBCIDIC_STATEFULOffsets, NULL, 0 ))
             log_err("EBCIDIC_STATEFUL->u with substitute did not match.\n");
 
 
         if(!testConvertToUnicode(sampleTxt_euc_jp, sizeof(sampleTxt_euc_jp),
            euc_jptoUnicode, sizeof(euc_jptoUnicode)/sizeof(euc_jptoUnicode[0]),"euc-jp",
-          (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_jpOffs, NULL, 0 ))
+          UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_jpOffs, NULL, 0 ))
             log_err("euc-jp->u with substitute did not match.\n");
 
         
         if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
            euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
-          (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
+          UCNV_TO_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
             log_err("euc-tw->u with substitute  did not match.\n");
 
 
@@ -1144,7 +1145,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"utf8",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
             log_err("utf8->u with substitute did not match.\n");;
     }
     log_verbose("Testing toUnicode for SCSU with UCNV_TO_U_CALLBACK_SUBSTITUTE \n");
@@ -1155,7 +1156,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleText1, sizeof(sampleText1),
                  expected1, sizeof(expected1)/sizeof(expected1[0]),"SCSU",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0 ))
             log_err("scsu->u with stop did not match.\n");;
     }
 
@@ -1170,13 +1171,13 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         static const int32_t offsets2[]={ 1,                3,          5,          7,          10 };
 
         if(!testConvertFromUnicode(u1, ARRAY_LENGTH(u1), s1, ARRAY_LENGTH(s1), "ibm-930", 
-                                   (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
+                                   UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
         ) {
             log_err("u->ibm-930 subchar/subchar1 did not match.\n");
         }
 
         if(!testConvertToUnicode(s2, ARRAY_LENGTH(s2), u2, ARRAY_LENGTH(u2), "ibm-930", 
-                                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
         ) {
             log_err("ibm-930->u subchar/subchar1 did not match.\n");
         }
@@ -1199,13 +1200,13 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             0, 1, 2, 6, 8, 10, 12, 16, 20, 20, 24, 28, 28 };
 
         if(!testConvertFromUnicode(u1, ARRAY_LENGTH(u1), gb1, ARRAY_LENGTH(gb1), "gb18030", 
-                                   (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
+                                   UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
         ) {
             log_err("u->gb18030 with substitute did not match.\n");
         }
 
         if(!testConvertToUnicode(gb2, ARRAY_LENGTH(gb2), u2, ARRAY_LENGTH(u2), "gb18030", 
-                                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
         ) {
             log_err("gb18030->u with substitute did not match.\n");
         }
@@ -1225,7 +1226,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         };
 
         if(!testConvertToUnicode(utf7, ARRAY_LENGTH(utf7), unicode, ARRAY_LENGTH(unicode), "UTF-7", 
-                                 (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0)
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0)
         ) {
             log_err("UTF-7->u with substitute did not match.\n");
         }
@@ -1258,17 +1259,17 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
     /*from Unicode*/
     if(!testConvertFromUnicode(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expsubwvalIBM_949, sizeof(expsubwvalIBM_949), "ibm-949", 
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM949Offs, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_ESCAPE, toIBM949Offs, NULL, 0 ))
         log_err("u-> ibm-949 with subst with value did not match.\n");
 
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expsubwvalIBM_943, sizeof(expsubwvalIBM_943), "ibm-943",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM943Offs, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_ESCAPE, toIBM943Offs, NULL, 0 ))
         log_err("u-> ibm-943 with sub with value did not match.\n");
 
     if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
             expsubwvalIBM_930, sizeof(expsubwvalIBM_930), "ibm-930", 
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM930Offs, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_ESCAPE, toIBM930Offs, NULL, 0 ))
         log_err("u-> ibm-930 with subst with value did not match.\n");
 
 
@@ -1528,37 +1529,37 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, offset, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, offset, NULL, 0 ))
             log_err("u-> ibm-943 with subst with value did not match.\n");
 
         if(!testConvertFromUnicode(euc_jp_inputText, sizeof(euc_jp_inputText)/sizeof(euc_jp_inputText[0]),
                 to_euc_jp, sizeof(to_euc_jp), "euc-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, fromEUC_JPOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, fromEUC_JPOffs, NULL, 0 ))
             log_err("u-> euc-jp with subst with value did not match.\n");
 
         if(!testConvertFromUnicode(euc_tw_inputText, sizeof(euc_tw_inputText)/sizeof(euc_tw_inputText[0]),
                 to_euc_tw, sizeof(to_euc_tw), "euc-tw",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_euc_twOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with subst with value did not match.\n");  
         
         if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
                 to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0 ))
             log_err("u-> iso_2022_jp with subst with value did not match.\n"); 
      
         if(!testConvertFromUnicode(iso_2022_jp_inputText1, sizeof(iso_2022_jp_inputText1)/sizeof(iso_2022_jp_inputText1[0]),
                 to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
             log_err("u-> iso_2022_jp with subst with value did not match.\n"); 
         
         if(!testConvertFromUnicode(iso_2022_jp_inputText1, sizeof(iso_2022_jp_inputText1)/sizeof(iso_2022_jp_inputText1[0]),
                 to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
             log_err("u-> iso_2022_jp with subst with value did not match.\n"); 
         
         if(!testConvertFromUnicode(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                 to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2, NULL, 0 ))
             log_err("u-> iso_2022_jp with subst with value did not match.\n");
         /*ESCAPE OPTIONS*/
         {
@@ -1584,7 +1585,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 
             if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                     to_iso_2022_jp2_v2, sizeof(to_iso_2022_jp2_v2), "iso-2022-jp",
-                    (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2_v2, NULL, 0,UCNV_ESCAPE_XML_DEC,U_ZERO_ERROR ))
+                    UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2_v2, NULL, 0,UCNV_ESCAPE_XML_DEC,U_ZERO_ERROR ))
                 log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_DEC did not match.\n"); 
         }
         {
@@ -1609,7 +1610,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                 to_iso_2022_jp2_v3, sizeof(to_iso_2022_jp2_v3), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2_v3, NULL, 0,UCNV_ESCAPE_XML_HEX,U_ZERO_ERROR ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2_v3, NULL, 0,UCNV_ESCAPE_XML_HEX,U_ZERO_ERROR ))
                 log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_HEX did not match.\n"); 
 
         }
@@ -1635,7 +1636,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
                 to_iso_2022_cn4_v2, sizeof(to_iso_2022_cn4_v2), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v2, NULL, 0,UCNV_ESCAPE_JAVA,U_ZERO_ERROR ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v2, NULL, 0,UCNV_ESCAPE_JAVA,U_ZERO_ERROR ))
                 log_err("u-> iso-2022-cn with skip & UCNV_ESCAPE_JAVA did not match.\n"); 
 
         }
@@ -1661,45 +1662,45 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             };
             if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
                 to_iso_2022_cn4_v3, sizeof(to_iso_2022_cn4_v3), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v3, NULL, 0,UCNV_ESCAPE_C,U_ZERO_ERROR ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4_v3, NULL, 0,UCNV_ESCAPE_C,U_ZERO_ERROR ))
                 log_err("u-> iso-2022-cn with skip & UCNV_ESCAPE_C did not match.\n"); 
         }
         if(!testConvertFromUnicode(iso_2022_cn_inputText, sizeof(iso_2022_cn_inputText)/sizeof(iso_2022_cn_inputText[0]),
                 to_iso_2022_cn, sizeof(to_iso_2022_cn), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
 
         if(!testConvertFromUnicode(iso_2022_cn_inputText1, sizeof(iso_2022_cn_inputText1)/sizeof(iso_2022_cn_inputText1[0]),
                 to_iso_2022_cn1, sizeof(to_iso_2022_cn1), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs1, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs1, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n"); 
         if(!testConvertFromUnicode(iso_2022_cn_inputText2, sizeof(iso_2022_cn_inputText2)/sizeof(iso_2022_cn_inputText2[0]),
                 to_iso_2022_cn2, sizeof(to_iso_2022_cn2), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs2, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs2, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
         if(!testConvertFromUnicode(iso_2022_cn_inputText3, sizeof(iso_2022_cn_inputText3)/sizeof(iso_2022_cn_inputText3[0]),
                 to_iso_2022_cn3, sizeof(to_iso_2022_cn3), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs3, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs3, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
         if(!testConvertFromUnicode(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
                 to_iso_2022_cn4, sizeof(to_iso_2022_cn4), "iso-2022-cn",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
         if(!testConvertFromUnicode(iso_2022_kr_inputText, sizeof(iso_2022_kr_inputText)/sizeof(iso_2022_kr_inputText[0]),
                 to_iso_2022_kr, sizeof(to_iso_2022_kr), "iso-2022-kr",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_krOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_krOffs, NULL, 0 ))
             log_err("u-> iso_2022_kr with subst with value did not match.\n");
         if(!testConvertFromUnicode(iso_2022_kr_inputText2, sizeof(iso_2022_kr_inputText2)/sizeof(iso_2022_kr_inputText2[0]),
                 to_iso_2022_kr2, sizeof(to_iso_2022_kr2), "iso-2022-kr",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_krOffs2, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_krOffs2, NULL, 0 ))
             log_err("u-> iso_2022_kr2 with subst with value did not match.\n");
         if(!testConvertFromUnicode(hz_inputText, sizeof(hz_inputText)/sizeof(hz_inputText[0]),
                 to_hz, sizeof(to_hz), "HZ",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs, NULL, 0 ))
             log_err("u-> hz with subst with value did not match.\n");
         if(!testConvertFromUnicode(hz_inputText2, sizeof(hz_inputText2)/sizeof(hz_inputText2[0]),
                 to_hz2, sizeof(to_hz2), "HZ",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs2, NULL, 0 ))
+                UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs2, NULL, 0 ))
             log_err("u-> hz with subst with value did not match.\n");
     }
 
@@ -1811,43 +1812,43 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         
         if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
                  IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode[0]),"ibm-943",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs, NULL, 0 ))
+                UCNV_TO_U_CALLBACK_ESCAPE, fromIBM943Offs, NULL, 0 ))
             log_err("ibm-943->u with substitute with value did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_EUC_JP, sizeof(sampleTxt_EUC_JP),
                  EUC_JPtoUnicode, sizeof(EUC_JPtoUnicode)/sizeof(EUC_JPtoUnicode[0]),"euc-jp",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromEUC_JPOffs, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, fromEUC_JPOffs, NULL, 0))
             log_err("euc-jp->u with substitute with value did not match.\n");
 
         if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
                  euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, from_euc_twOffs, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, from_euc_twOffs, NULL, 0))
             log_err("euc-tw->u with substitute with value did not match.\n");
             
         if(!testConvertToUnicode(sampleTxt_iso_2022_jp, sizeof(sampleTxt_iso_2022_jp),
                  iso_2022_jptoUnicode, sizeof(iso_2022_jptoUnicode)/sizeof(iso_2022_jptoUnicode[0]),"iso-2022-jp",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0))
             log_err("iso-2022-jp->u with substitute with value did not match.\n");
         
         if(!testConvertToUnicode(sampleTxt_iso_2022_cn, sizeof(sampleTxt_iso_2022_cn),
                  iso_2022_cntoUnicode, sizeof(iso_2022_cntoUnicode)/sizeof(iso_2022_cntoUnicode[0]),"iso-2022-cn",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0))
             log_err("iso-2022-cn->u with substitute with value did not match.\n");
         
         if(!testConvertToUnicode(sampleTxt_iso_2022_kr, sizeof(sampleTxt_iso_2022_kr),
                  iso_2022_krtoUnicode, sizeof(iso_2022_krtoUnicode)/sizeof(iso_2022_krtoUnicode[0]),"iso-2022-kr",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_krOffs, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, from_iso_2022_krOffs, NULL, 0))
             log_err("iso-2022-kr->u with substitute with value did not match.\n");
 
          if(!testConvertToUnicode(sampleTxt_hz, sizeof(sampleTxt_hz),
                  hztoUnicode, sizeof(hztoUnicode)/sizeof(hztoUnicode[0]),"HZ",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, from_hzOffs, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, from_hzOffs, NULL, 0))
             log_err("iso-2022-kr->u with substitute with value did not match.\n");
 
         /*got to confirm this*/
         if(/* broken for icu 1.6.0.1, do not test */uprv_strcmp("1.7", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_ESCAPE, fromLMBCS, NULL, 0))
+                UCNV_TO_U_CALLBACK_ESCAPE, fromLMBCS, NULL, 0))
             log_err("LMBCS->u with substitute with value did not match.\n"); 
     }
 }
@@ -1874,24 +1875,24 @@ static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
     /*checking with a legal value*/
     if(!testConvertFromUnicode(legalText, sizeof(legalText)/sizeof(legalText[0]),
             templegal949, sizeof(templegal949), "ibm-949",
-            (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, to949legal, NULL, 0 ))
+            UCNV_FROM_U_CALLBACK_SKIP, to949legal, NULL, 0 ))
         log_err("u-> ibm-949 with skip did not match.\n");
 
     /*checking illegal value for ibm-943 with substitute*/ 
     if(!testConvertToUnicode(text943, sizeof(text943),
              toUnicode943sub, sizeof(toUnicode943sub)/sizeof(toUnicode943sub[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub, NULL, 0 ))
         log_err("ibm-943->u with subst did not match.\n");
     /*checking illegal value for ibm-943 with skip */
     if(!testConvertToUnicode(text943, sizeof(text943),
              toUnicode943skip, sizeof(toUnicode943skip)/sizeof(toUnicode943skip[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offsskip, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SKIP, fromIBM943Offsskip, NULL, 0 ))
         log_err("ibm-943->u with skip did not match.\n");
 
     /*checking illegal value for ibm-943 with stop */
     if(!testConvertToUnicode(text943, sizeof(text943),
              toUnicode943stop, sizeof(toUnicode943stop)/sizeof(toUnicode943stop[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, fromIBM943Offsstop, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_STOP, fromIBM943Offsstop, NULL, 0 ))
         log_err("ibm-943->u with stop did not match.\n");
 
 }
@@ -1909,7 +1910,7 @@ static void TestSingleByte(int32_t inputsize, int32_t outputsize)
 
     if(!testConvertToUnicode(sampleText, sizeof(sampleText),
              toUnicode943sub, sizeof(toUnicode943sub)/sizeof(toUnicode943sub[0]),"ibm-943",
-            (UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub, NULL, 0 ))
+            UCNV_TO_U_CALLBACK_SUBSTITUTE, fromIBM943Offssub, NULL, 0 ))
         log_err("ibm-943->u with subst did not match.\n");
 }
 
@@ -1931,12 +1932,12 @@ static void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
 
     if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
         toIBM930, sizeof(toIBM930), "ibm-930",
-        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930, NULL, 0 ))
+        UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930, NULL, 0 ))
             log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst did not match.\n");
     
     if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
         toIBM930_subvaried, sizeof(toIBM930_subvaried), "ibm-930",
-        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried, mySubChar, 1 ))
+        UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried, mySubChar, 1 ))
             log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst(setSubChar=0x3f) did not match.\n");
 }
 
@@ -1967,7 +1968,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     char offset_str[9999];
     uint8_t *p;
     UConverterFromUCallback oldAction = NULL;
-    void* oldContext = NULL;
+    const void* oldContext = NULL;
 
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
@@ -2143,7 +2144,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
     char offset_str[9999];
     UChar *p;
     UConverterToUCallback oldAction = NULL;
-    void* oldContext = NULL;
+    const void* oldContext = NULL;
 
     int32_t   realBufferSize;
     UChar *realBufferEnd;
@@ -2303,7 +2304,7 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
 
 UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
                 const char *codepage, UConverterFromUCallback callback , const int32_t *expectOffsets, 
-                const char *mySubChar, int8_t len, void* context, UErrorCode expectedError)
+                const char *mySubChar, int8_t len, const void* context, UErrorCode expectedError)
 {
 
 
@@ -2326,7 +2327,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
     char offset_str[9999];
     uint8_t *p;
     UConverterFromUCallback oldAction = NULL;
-    void* oldContext = NULL;
+    const void* oldContext = NULL;
 
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
@@ -2483,7 +2484,7 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
 }
 UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
-               const char *mySubChar, int8_t len, void* context, UErrorCode expectedError)
+               const char *mySubChar, int8_t len, const void* context, UErrorCode expectedError)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -2501,7 +2502,7 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
     char offset_str[9999];
     UChar *p;
     UConverterToUCallback oldAction = NULL;
-    void* oldContext = NULL;
+    const void* oldContext = NULL;
 
     int32_t   realBufferSize;
     UChar *realBufferEnd;

@@ -212,7 +212,7 @@ char *aescstrdup(const UChar* unichars){
     int length;
     char *newString,*targetLimit,*target;
     UConverterFromUCallback cb;
-    void *p;
+    const void *p;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter* conv = ucnv_open("US-ASCII",&errorCode);
 

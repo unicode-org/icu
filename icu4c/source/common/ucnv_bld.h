@@ -116,7 +116,7 @@ struct UConverter {
      * Error function pointer called when conversion issues
      * occur during a ucnv_fromUnicode call
      */
-    void (*fromUCharErrorBehaviour) (void *context,
+    void (*fromUCharErrorBehaviour) (const void *context,
                                      UConverterFromUnicodeArgs *args,
                                      const UChar *codeUnits,
                                      int32_t length,
@@ -127,15 +127,15 @@ struct UConverter {
      * Error function pointer called when conversion issues
      * occur during a T_UConverter_toUnicode call
      */
-    void (*fromCharErrorBehaviour) (void *context,
+    void (*fromCharErrorBehaviour) (const void *context,
                                     UConverterToUnicodeArgs *args,
                                     const char *codeUnits,
                                     int32_t length,
                                     UConverterCallbackReason reason,
                                     UErrorCode *);
 
-    void *fromUContext;
-    void *toUContext;
+    const void *fromUContext;
+    const void *toUContext;
     UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation or ref count */
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
 

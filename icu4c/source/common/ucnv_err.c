@@ -78,7 +78,7 @@ itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
 void   UCNV_FROM_U_CALLBACK_STOP (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -93,7 +93,7 @@ void   UCNV_FROM_U_CALLBACK_STOP (
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
 void   UCNV_TO_U_CALLBACK_STOP (
-                   void *context,
+                   const void *context,
                    UConverterToUnicodeArgs *toUArgs,
                    const char* codePoints,
                    int32_t length,
@@ -105,7 +105,7 @@ void   UCNV_TO_U_CALLBACK_STOP (
 }
 
 void   UCNV_FROM_U_CALLBACK_SKIP (                  
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -140,7 +140,7 @@ void   UCNV_FROM_U_CALLBACK_SKIP (
 }
 
 void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromArgs,
                   const UChar* codeUnits,
                   int32_t length,
@@ -183,7 +183,7 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *we revert to substituting with subchar)
  */
 void   UCNV_FROM_U_CALLBACK_ESCAPE (
-                         void *context,
+                         const void *context,
                          UConverterFromUnicodeArgs *fromArgs,
                          const UChar *codeUnits,
                          int32_t length,
@@ -199,10 +199,10 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
   const UChar *myValueSource = NULL;
   UErrorCode err2 = U_ZERO_ERROR;
   UConverterFromUCallback original = NULL;
-  void *originalContext;
+  const void *originalContext;
 
   UConverterFromUCallback ignoredCallback = NULL;
-  void *ignoredContext;
+  const void *ignoredContext;
   
   if (reason > UCNV_IRREGULAR)
   {
@@ -324,7 +324,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
 
 void UCNV_TO_U_CALLBACK_SKIP (
-                 void *context,
+                 const void *context,
                  UConverterToUnicodeArgs *toArgs,
                  const char* codeUnits,
                  int32_t length,
@@ -358,7 +358,7 @@ void UCNV_TO_U_CALLBACK_SKIP (
 }
 
 void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
-                 void *context,
+                 const void *context,
                  UConverterToUnicodeArgs *toArgs,
                  const char* codeUnits,
                  int32_t length,
@@ -399,7 +399,7 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
  *and uses that as the substitution sequence
  */
 void  UCNV_TO_U_CALLBACK_ESCAPE (
-                 void *context,
+                 const void *context,
                  UConverterToUnicodeArgs *toArgs,
                  const char* codeUnits,
                  int32_t length,

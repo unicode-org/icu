@@ -112,7 +112,7 @@ typedef enum {
  */
 
 typedef void (*UConverterToUCallback) (
-                  void* context,
+                  const void* context,
                   UConverterToUnicodeArgs *args,
                   const char *codePoints,
                   int32_t length,
@@ -132,7 +132,7 @@ typedef void (*UConverterToUCallback) (
  */
 
 typedef void (*UConverterFromUCallback) (
-                    void* context,
+                    const void* context,
                     UConverterFromUnicodeArgs *args,
                     const UChar* codeUnits,
                     int32_t length,
@@ -609,7 +609,7 @@ U_CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter,
 U_CAPI void U_EXPORT2
 ucnv_getToUCallBack (const UConverter * converter,
                      UConverterToUCallback *action,
-                     void **context);
+                     const void **context);
 
 /**
  * Gets the current callback function used by the converter when illegal 
@@ -625,7 +625,7 @@ ucnv_getToUCallBack (const UConverter * converter,
 U_CAPI void U_EXPORT2
 ucnv_getFromUCallBack (const UConverter * converter,
                        UConverterFromUCallback *action,
-                       void **context);
+                       const void **context);
 
 /**
  * Changes the callback function used by the converter when
@@ -644,9 +644,9 @@ ucnv_getFromUCallBack (const UConverter * converter,
 U_CAPI void U_EXPORT2
 ucnv_setToUCallBack (UConverter * converter,
                      UConverterToUCallback newAction,
-                     void* newContext,
+                     const void* newContext,
                      UConverterToUCallback *oldAction,
-                     void** oldContext,
+                     const void** oldContext,
                      UErrorCode * err);
 
 /**
@@ -666,9 +666,9 @@ ucnv_setToUCallBack (UConverter * converter,
 U_CAPI void U_EXPORT2
 ucnv_setFromUCallBack (UConverter * converter,
                        UConverterFromUCallback newAction,
-                       void *newContext,
+                       const void *newContext,
                        UConverterFromUCallback *oldAction,
-                       void **oldContext,
+                       const void **oldContext,
                        UErrorCode * err);
 
 /**
