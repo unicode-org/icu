@@ -1341,13 +1341,21 @@ GregorianCalendar::floorDivide(int32_t numerator, int32_t denominator, int32_t r
 int32_t
 GregorianCalendar::floorDivide(double numerator, int32_t denominator, int32_t remainder[]) 
 {
+    double quotient;
     if (numerator >= 0) {
+        quotient = uprv_trunc(numerator / denominator);
         remainder[0] = (int32_t)uprv_fmod(numerator, denominator);
-        return (int32_t)uprv_trunc(numerator / denominator);
+    } else {
+        quotient = uprv_trunc((numerator + 1) / denominator) - 1;
+        remainder[0] = (int32_t)(numerator - (quotient * denominator));
     }
-    int32_t quotient = (int32_t)(uprv_trunc((numerator + 1) / denominator) - 1);
-    remainder[0] = (int32_t)(numerator - ((double)quotient * denominator));
-    return quotient;
+    if (quotient < INT32_MIN || quotient > INT32_MAX) {
+        // Normalize out of range values.  It doesn't matter what
+        // we return for these cases; the data is wrong anyway.  This
+        // only occurs for years near 2,000,000,000 CE/BCE.
+        quotient = 0.0; // Or whatever
+    }
+    return (int32_t)quotient;
 }
 
 
