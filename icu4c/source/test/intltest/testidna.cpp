@@ -537,7 +537,7 @@ static struct ConformanceTestCases
      },
      {
        "Bidi: RandALCat character U+FB38 and LCat characters",
-       "\x66\x6F\x6F\xEF\xB9\xB6\x62\x61\x72", "\x66\x6F\x6F \xd9\x8e\x62\x61\x72",
+       "\x66\x6F\x6F\xEF\xB9\xB6\x62\x61\x72", "\x66\x6F\x6F\x20\xd9\x8e\x62\x61\x72",
        "Nameprep", UIDNA_DEFAULT,
        U_ZERO_ERROR
      },
@@ -1606,7 +1606,7 @@ void TestIDNA::TestCompareReferenceImpl(){
         if(quick==TRUE && i> 0x1FFFF){
             return;
         }
-        if(i >= 0x30000){
+        if(i >= 0x30000 && i <= 0xF0000){
            i+=0xB0000;
         }
         if(i>0xFFFF){
