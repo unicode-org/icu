@@ -33,6 +33,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TEST_ASSERT(x) {if (!(x)) { \
+    errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
+
+#define TEST_ASSERT_SUCCESS(errcode) {if (U_FAILURE(errcode)) { \
+    errln("Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
 
 
 //---------------------------------------------------------------------------
@@ -2045,12 +2050,12 @@ private:
     UnicodeSet  *fKatakanaSet;
     UnicodeSet  *fALetterSet;
     UnicodeSet  *fMidLetterSet;
-    UnicodeSet  *fMidNumLetSet;
     UnicodeSet  *fMidNumSet;
     UnicodeSet  *fNumericSet;
     UnicodeSet  *fFormatSet;
     UnicodeSet  *fOtherSet;
     UnicodeSet  *fExtendSet;
+    UnicodeSet  *fExtendNumLetSet;
 
     RegexMatcher  *fMatcher;
 
@@ -2069,19 +2074,27 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
 
     fSets          = new UVector(status);
 
-    fKatakanaSet   = new UnicodeSet("[\\p{script=KATAKANA}\\u30fc\\uff70\\uff9e\\uff9f]", status);
+    fKatakanaSet   = new UnicodeSet("[\\p{script=KATAKANA}"
+        "\\u3031-\\u3035\\u309b\\u309c\\u30a0"
+        "\\u30fc\\uff70\\uff9e\\uff9f]", status);
 
-    const UnicodeString ALetterStr( "[[\\p{Alphabetic}\\u05f3]-[\\p{Ideographic}]-[\\p{Script=Thai}]"
-                                    "-[\\p{Script=Lao}]-[\\p{Script=Hiragana}]-"
-                                    "[\\p{script=KATAKANA}\\u30fc\\uff70\\uff9e\\uff9f]]");
-
+    const UnicodeString ALetterStr( "[[\\p{Alphabetic}"
+                                        "\\u00a0"         // NBSP
+                                        "\\u05f3]"        // Hebrew punct Geresh
+                                        "-[\\p{Ideographic}]"
+                                        "-[\\p{Script=Thai}]"
+                                        "-[\\p{Script=Lao}]"
+                                        "-[\\p{Script=Hiragana}]"
+                                        "-[\\p{Grapheme_Extend}]]");
     fALetterSet    = new UnicodeSet(ALetterStr, status);
-    fMidLetterSet  = new UnicodeSet("[\\u0027\\u00b7\\u05f4\\u2019\\u2027]", status);
-    fMidNumLetSet  = new UnicodeSet("[\\u002e\\u003a]", status);
-    fMidNumSet     = new UnicodeSet("[\\p{Line_Break=Infix_Numeric}]", status);
+    fALetterSet->removeAll(*fKatakanaSet);
+
+    fMidLetterSet  = new UnicodeSet("[\\u0027\\u00b7\\u05f4\\u2019\\u2027\\u003a]", status);
+    fMidNumSet     = new UnicodeSet("[[\\p{Line_Break=Infix_Numeric}]-[\\u003a]]", status);
     fNumericSet    = new UnicodeSet("[\\p{Line_Break=Numeric}]", status);
-    fFormatSet     = new UnicodeSet("[\\p{Format}-\\p{Grapheme_Extend}]", status);
+    fFormatSet     = new UnicodeSet("[\\p{Format}-[\\u200c\\u200d]]", status);
     fExtendSet     = new UnicodeSet("[\\p{Grapheme_Extend}]", status);
+    fExtendNumLetSet = new UnicodeSet("[\\p{Pc}-[\\u30fb\\uff65]]", status);
     fOtherSet      = new UnicodeSet();
     if(U_FAILURE(status)) {
       deferredStatus = status;
@@ -2092,17 +2105,18 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     fOtherSet->removeAll(*fKatakanaSet);
     fOtherSet->removeAll(*fALetterSet);
     fOtherSet->removeAll(*fMidLetterSet);
-    fOtherSet->removeAll(*fMidNumLetSet);
     fOtherSet->removeAll(*fMidNumSet);
     fOtherSet->removeAll(*fNumericSet);
+    fOtherSet->removeAll(*fExtendNumLetSet);
 
     fSets->addElement(fALetterSet,   status);
+    fSets->addElement(fKatakanaSet,  status);
     fSets->addElement(fMidLetterSet, status);
-    fSets->addElement(fMidNumLetSet, status);
     fSets->addElement(fMidNumSet,    status);
     fSets->addElement(fNumericSet,   status);
     fSets->addElement(fFormatSet,    status);
     fSets->addElement(fOtherSet,     status);
+    fSets->addElement(fExtendNumLetSet, status);
 
 
     fGCFMatcher = new RegexMatcher("\\X(?:[\\p{Format}-\\p{Grapheme_Extend}])*", 0, status);
@@ -2125,7 +2139,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
 
     int    p0, p1, p2, p3;    // Indices of the significant code points around the 
                               //   break position being tested.  The candidate break
-                              //   locatoin is before p2.
+                              //   location is before p2.
 
     int     breakPos = -1;
 
@@ -2184,8 +2198,8 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         //
         //    Also incorporates rule 7 by skipping pos ahead to position of the
         //    terminating ALetter.
-        if ( fALetterSet->contains(c1) &&
-            (fMidLetterSet->contains(c2) || fMidNumLetSet->contains(c2)) &&
+        if ( fALetterSet->contains(c1)   &&
+             fMidLetterSet->contains(c2) &&
              fALetterSet->contains(c3)) {
             continue;
         }
@@ -2193,7 +2207,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
 
         // Rule (7)  ALetter (MidLetter | MidNumLet)  x  ALetter
         if (fALetterSet->contains(c0) &&
-            (fMidLetterSet->contains(c1) || fMidNumLetSet->contains(c1) ) &&
+            (fMidLetterSet->contains(c1)  ) &&
             fALetterSet->contains(c2)) {
             continue;
         }
@@ -2218,14 +2232,14 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
 
         // Rule (11)   Numeric (MidNum | MidNumLet)  x  Numeric
         if ( fNumericSet->contains(c0) &&
-            (fMidNumSet->contains(c1) || fMidNumLetSet->contains(c1)) && 
+             fMidNumSet->contains(c1)  && 
             fNumericSet->contains(c2)) {
             continue;
         }
 
         // Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
         if (fNumericSet->contains(c1) &&
-            (fMidNumSet->contains(c2) || fMidNumLetSet->contains(c2)) &&
+            fMidNumSet->contains(c2)  &&
             fNumericSet->contains(c3)) {
             continue;
         }
@@ -2235,6 +2249,21 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             fKatakanaSet->contains(c2))  {
             continue;
         }
+
+        // Rule 13a
+        if ((fALetterSet->contains(c1) || fNumericSet->contains(c1) ||
+             fKatakanaSet->contains(c1) || fExtendNumLetSet->contains(c1)) &&
+             fExtendNumLetSet->contains(c2)) {
+                continue;
+             }
+
+        // Rule 13b
+        if (fExtendNumLetSet->contains(c1) && 
+                (fALetterSet->contains(c2) || fNumericSet->contains(c2) ||
+                fKatakanaSet->contains(c2)))  {
+                continue;
+             }
+
 
         // Rule 14.  Break found here.
         break;
@@ -2263,7 +2292,6 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fKatakanaSet;
     delete fALetterSet;
     delete fMidLetterSet;
-    delete fMidNumLetSet;
     delete fMidNumSet;
     delete fNumericSet;
     delete fFormatSet;
@@ -3137,6 +3165,7 @@ void RBBITest::TestWordBoundary(void)
 void RBBITest::TestLineBreaks(void)
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
+    TEST_ASSERT(FALSE); return;   // TODO:  debug the failure, which is going into an infinite loop in the monkey setup code.
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
@@ -3182,8 +3211,8 @@ void RBBITest::TestLineBreaks(void)
      "\\u2116\\u0ed2\\uff64\\u02cd\\u2001\\u2060",
     };
     int loop;
+    TEST_ASSERT_SUCCESS(status);
     if (U_FAILURE(status)) {
-        errln("Creation of break iterator failed %s", u_errorName(status));
         return;
     }
     for (loop = 0; loop < (int)(sizeof(strlist) / sizeof(char *)); loop ++) {
@@ -3192,12 +3221,17 @@ void RBBITest::TestLineBreaks(void)
         UnicodeString ustr(str);
         RBBILineMonkey monkey;
 
-        int expected[50];
+        const int EXPECTEDSIZE = 50;
+        int expected[EXPECTEDSIZE];
         int expectedcount = 0;
 
         monkey.setText(ustr);
         int i;
         for (i = 0; i != BreakIterator::DONE; i = monkey.next(i)) {
+            if (expectedcount >= EXPECTEDSIZE) {
+                TEST_ASSERT(expectedcount < EXPECTEDSIZE);
+                return;
+            }
             expected[expectedcount ++] = i;
         }
 
