@@ -73,7 +73,7 @@ public:
   virtual ~BasicCalendarFactory() {}
 
 protected:
-  virtual UBool isSupportedID( const UnicodeString& id, UErrorCode& status) const { return (id == fID); }
+  virtual UBool isSupportedID( const UnicodeString& id, UErrorCode& /* status */) const { return (id == fID); }
 
   virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const
   {
@@ -83,7 +83,7 @@ protected:
     }
   }
 
-  virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const {
+  virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const {
     const LocaleKey& lkey = (LocaleKey&)key;
     Locale curLoc;  // current locale
     Locale canLoc;  // Canonical locale
@@ -138,7 +138,7 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
 public:
   DefaultCalendarFactory():  ICUResourceBundleFactory() { } 
 protected:
-  virtual UObject* create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const  {
+  virtual UObject* create(const ICUServiceKey& key, const ICUService* /*service*/, UErrorCode& status) const  {
 
   LocaleKey &lkey = (LocaleKey&)key;
   Locale loc;
@@ -217,9 +217,9 @@ public:
     }
   }
 
-  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
+  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /*actualID*/, UErrorCode& status) const {
 	LocaleKey& lkey = (LocaleKey&)key;
-	int32_t kind = lkey.kind();
+	//int32_t kind = lkey.kind();
 
 	Locale loc;
 	lkey.canonicalLocale(loc);
@@ -970,7 +970,7 @@ Calendar::getFirstDayOfWeek() const
 }
 
 UCalendarDaysOfWeek
-Calendar::getFirstDayOfWeek(UErrorCode &status) const
+Calendar::getFirstDayOfWeek(UErrorCode & /*status*/) const
 {
     return fFirstDayOfWeek;
 }
