@@ -407,8 +407,8 @@ typedef struct UBiDi UBiDi;
  * <code>ubidi_setLine()</code>.<p>
  * This object can be reused for as long as it is not deallocated
  * by calling <code>ubidi_close()</code>.<p>
- * <code>ubidi_set()</code> will allocate additional memory for
- * internal structures as necessary.
+ * <code>ubidi_setPara()</code> and <code>ubidi_setLine()</code> will allocate
+ * additional memory for internal structures as necessary.
  *
  * @return An empty <code>UBiDi</code> object.
  * @stable ICU 2.0
@@ -445,8 +445,7 @@ ubidi_open(void);
  *        The number of runs depends on the actual text and maybe anywhere between
  *        1 and <code>maxLength</code>. It is typically small.<p>
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return An empty <code>UBiDi</code> object with preallocated memory.
  * @stable ICU 2.0
@@ -520,13 +519,51 @@ ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
  * Is this BiDi object set to perform the inverse BiDi algorithm?
  *
  * @param pBiDi is a <code>UBiDi</code> object.
- * @return TRUE if the BiDi object set to perform the inverse BiDi algorithm
+ * @return TRUE if the BiDi object is set to perform the inverse BiDi algorithm
  *
  * @see ubidi_setInverse
  * @stable ICU 2.0
  */
+
 U_STABLE UBool U_EXPORT2
 ubidi_isInverse(UBiDi *pBiDi);
+
+/**
+ * Specify whether block separators must be allocated level zero,
+ * so that successive paragraphs will progress from left to right.
+ * This function must be called before <code>ubidi_setPara()</code>.
+ * Paragraph separators (B) may appear in the text.  Setting them to level zero
+ * means that all paragraph separators (including one possibly appearing
+ * in the last text position) are kept in the reordered text after the text
+ * that they follow in the source text.
+ * When this feature is not enabled, a paragraph separator at the last
+ * position of the text before reordering will go to the first position
+ * of the reordered text when the paragraph level is odd.
+ *
+ * @param pBiDi is a <code>UBiDi</code> object.
+ *
+ * @param isOrderParagraphLTR specifies whether paragraph separators (B) must
+ * receive level 0, so that successive paragraphs progress from left to right.
+ *
+ * @see ubidi_setPara
+ * @stable ICU 3.4
+ */
+U_STABLE void U_EXPORT2
+ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool isOrderParagraphLTR);
+
+/**
+ * Is this BiDi object set to allocate level 0 to block separators so that
+ * successive paragraphs progress from left to right?
+ *
+ * @param pBiDi is a <code>UBiDi</code> object.
+ * @return TRUE if the BiDi object is set to allocate level 0 to block
+ *         separators.
+ *
+ * @see ubidi_setMultiPara
+ * @stable ICU 3.4
+ */
+U_STABLE UBool U_EXPORT2
+ubidi_isOrderParagraphsLTR(UBiDi *pBiDi);
 
 /**
  * Perform the Unicode BiDi algorithm. It is defined in the
@@ -547,16 +584,23 @@ ubidi_isInverse(UBiDi *pBiDi);
  * the algorithm. This implementation may set all resolved levels to
  * the same value in such a case.<p>
  *
- * The text must be externally split into separate paragraphs (rule P1).
- * Paragraph separators (B) should appear at most at the very end.
+ * The text can be composed of multiple paragraphs. Occurrence of a block
+ * separator in the text terminates a paragraph, and whatever comes next starts
+ * a new paragraph. The exception to this rule is when a Carriage Return (CR)
+ * is followed by a Line Feed (LF). Both CR and LF are block separators, but
+ * in that case, the pair of characters is considered as terminating the
+ * preceding paragraph, and a new paragraph will be started by a character
+ * coming after the LF.
  *
  * @param pBiDi A <code>UBiDi</code> object allocated with <code>ubidi_open()</code>
  *        which will be set to contain the reordering information,
  *        especially the resolved levels for all the characters in <code>text</code>.
  *
- * @param text is a pointer to the single-paragraph text that the
+ * @param text is a pointer to the text that the
  *        BiDi algorithm will be performed on
- *        (step (P1) of the algorithm is performed externally).
+ *        (step (P1) of the algorithm must be performed externally if paraLevel
+ *        is specified as <code>UBIDI_DEFAULT_LTR</code> or
+ *        <code>UBIDI_DEFAULT_RTL</code>).
  *        <strong>The text must be (at least) <code>length</code> long.</strong>
  *        This pointer is stored in the UBiDi object and can be retrieved
  *        with <code>ubidi_getText()</code>.
@@ -581,7 +625,10 @@ ubidi_isInverse(UBiDi *pBiDi);
  *        (same index) character if the level has the
  *        <code>UBIDI_LEVEL_OVERRIDE</code> bit set.<p>
  *        Except for that bit, it must be
- *        <code>paraLevel<=embeddingLevels[]<=UBIDI_MAX_EXPLICIT_LEVEL</code>.<p>
+ *        <code>paraLevel<=embeddingLevels[]<=UBIDI_MAX_EXPLICIT_LEVEL</code>,
+ *        with one exception: a level of zero may be specified for a paragraph
+ *        separator even if <code>paraLevel>0</code> when multiple paragraphs
+ *        are submitted in the same call to <code>ubidi_setPara()</code>.<p>
  *        <strong>Caution: </strong>A copy of this pointer, not of the levels,
  *        will be stored in the <code>UBiDi</code> object;
  *        the <code>embeddingLevels</code> array must not be
@@ -595,8 +642,7 @@ ubidi_isInverse(UBiDi *pBiDi);
  *        <strong>The <code>embeddingLevels</code> array must be
  *        at least <code>length</code> long.</strong>
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2
@@ -631,7 +677,8 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
  * and <code>start</code> is added to it so that it points to the beginning of the
  * line for this object.
  *
- * @param pParaBiDi is the parent paragraph object.
+ * @param pParaBiDi is the parent paragraph object. It must have been set
+ * by a successful call to ubidi_setPara.
  *
  * @param start is the line's first index into the paragraph text.
  *
@@ -641,8 +688,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
  *
  * @param pLineBiDi is the object that will now represent a line of the paragraph.
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @see ubidi_setPara
  * @stable ICU 2.0
@@ -698,13 +744,96 @@ ubidi_getLength(const UBiDi *pBiDi);
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
- * @return The paragraph level.
+ * @return The paragraph level. If there are multiple paragraphs, their
+ *         level may vary if the required paraLevel is UBIDI_DEFAULT_LTR or
+ *         UBIDI_DEFAULT_RTL.  In that case, the level of the first paragraph
+ *         is returned.
  *
  * @see UBiDiLevel
+ * @see ubidi_getParagraph
+ * @see ubidi_getParagraphByIndex
  * @stable ICU 2.0
  */
 U_STABLE UBiDiLevel U_EXPORT2
 ubidi_getParaLevel(const UBiDi *pBiDi);
+
+/**
+ * Get the number of paragraphs.
+ *
+ * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
+ *
+ * @return The number of paragraphs.
+ * @stable ICU 3.4
+ */
+U_STABLE int32_t U_EXPORT2
+ubidi_countParagraphs(UBiDi *pBiDi);
+
+/**
+ * Get a paragraph, given a position within the paragraph.
+ * This function returns information about a paragraph.<p>
+ *
+ * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
+ *
+ * @param charIndex is the index of a character within the text, in the
+ *        range <code>[0..ubidi_getLength(pBiDi)-1]</code>.
+ *
+ * @param pParaStart will receive the index of the first character in
+ *                   the paragraph.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
+ *
+ * @param pParaLimit will receive the limit of the paragraph.
+ *        The l-value that you point to here may be the
+ *        same expression (variable) as the one for
+ *        <code>charIndex</code>.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
+ *
+ * @param pParaLevel will receive the level of the paragraph.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
+ *
+ * @param pErrorCode must be a valid pointer to an error code value.
+ *
+ * @return The index of the paragraph containing the specified position.
+ * @stable ICU 3.4
+ */
+U_STABLE int32_t U_EXPORT2
+ubidi_getParagraph(const UBiDi *pBiDi, int32_t charIndex, int32_t *pParaStart,
+                   int32_t *pParaLimit, UBiDiLevel *pParaLevel,
+                   UErrorCode *pErrorCode);
+
+/**
+ * Get a paragraph, given the index of this paragraph.
+ *
+ * This function returns information about a paragraph.<p>
+ *
+ * @param pBiDi is the paragraph <code>UBiDi</code> object.
+ *
+ * @param paraIndex is the number of the paragraph, in the
+ *        range <code>[0..ubidi_countParagraphs(pBiDi)-1]</code>.
+ *
+ * @param pParaStart will receive the index of the first character in
+ *                   the paragraph.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
+ *
+ * @param pParaLimit will receive the limit of the paragraph.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
+ *
+ * @param pParaLevel will receive the level of the paragraph.
+ *        This pointer can be <code>NULL</code> if this
+ *        value is not necessary.
+ *
+ * @param pErrorCode must be a valid pointer to an error code value.
+ *
+ * @stable ICU 3.4
+ */
+U_STABLE void U_EXPORT2
+ubidi_getParagraphByIndex(const UBiDi *pBiDi, int32_t paraIndex,
+                          int32_t *pParaStart, int32_t *pParaLimit,
+                          UBiDiLevel *pParaLevel, UErrorCode *pErrorCode);
 
 /**
  * Get the level for one character.
@@ -727,10 +856,10 @@ ubidi_getLevelAt(const UBiDi *pBiDi, int32_t charIndex);
  * Note that this function may allocate memory under some
  * circumstances, unlike <code>ubidi_getLevelAt()</code>.
  *
- * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
+ * @param pBiDi is the paragraph or line <code>UBiDi</code> object, whose
+ *        text length must be strictly positive.
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return The levels array for the text,
  *         or <code>NULL</code> if an error occurs.
@@ -777,8 +906,7 @@ ubidi_getLogicalRun(const UBiDi *pBiDi, int32_t logicalStart,
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return The number of runs.
  * @stable ICU 2.0
@@ -855,8 +983,7 @@ ubidi_getVisualRun(UBiDi *pBiDi, int32_t runIndex,
  *
  * @param logicalIndex is the index of a character in the text.
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return The visual position of this character.
  *
@@ -879,8 +1006,7 @@ ubidi_getVisualIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode)
  *
  * @param visualIndex is the visual position of a character.
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return The index of this character in the text.
  *
@@ -902,8 +1028,7 @@ ubidi_getLogicalIndex(UBiDi *pBiDi, int32_t visualIndex, UErrorCode *pErrorCode)
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[logicalIndex]==visualIndex</code>.<p>
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @see ubidi_getVisualMap
  * @see ubidi_getVisualIndex
@@ -923,8 +1048,7 @@ ubidi_getLogicalMap(UBiDi *pBiDi, int32_t *indexMap, UErrorCode *pErrorCode);
  *        The array does not need to be initialized.<p>
  *        The index map will result in <code>indexMap[visualIndex]==logicalIndex</code>.<p>
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @see ubidi_getLogicalMap
  * @see ubidi_getLogicalIndex
@@ -1117,8 +1241,7 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
  *                <code>#UBIDI_OUTPUT_REVERSE</code>,
  *                <code>#UBIDI_REMOVE_BIDI_CONTROLS</code>
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return The length of the output string.
  * @stable ICU 2.0
@@ -1170,8 +1293,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
  *                how the reordered text is written.
  *                See the <code>options</code> parameter in <code>ubidi_writeReordered()</code>.
  *
- * @param pErrorCode must be a valid pointer to an error code value,
- *        which must not indicate a failure before the function call.
+ * @param pErrorCode must be a valid pointer to an error code value.
  *
  * @return The length of the output string.
  * @stable ICU 2.0
