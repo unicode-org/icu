@@ -32,7 +32,7 @@ const UChar *UnicodeReader::readFile(const char *fileName, GUISupport *guiSuppor
     char *byteBuffer;
     char startBytes[4] = {'\xA5', '\xA5', '\xA5', '\xA5'};
     char errorMessage[128];
-    char *cp = "";
+    const char *cp = "";
     int32_t signatureLength = 0;
     
     f = fopen(fileName, "rb");

@@ -18,7 +18,7 @@ class GUISupport
 {
 public:
     GUISupport() {};
-    ~GUISupport() {};
+    virtual ~GUISupport() {};
 
     virtual void postErrorMessage(const char *message, const char *title) = 0;
 };

@@ -63,7 +63,7 @@ le_int8 PortableFontInstance::highBit(le_int32 value)
     return bit;
 }
 
-PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEErrorCode &status)
+PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize, LEErrorCode &status)
     : fFile(NULL), fPointSize(pointSize), fUnitsPerEM(0), fFontChecksum(0), fAscent(0), fDescent(0), fLeading(0),
       fDirectory(NULL), fNAMETable(NULL), fNameCount(0), fNameStringOffset(0), fCMAPMapper(NULL), fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
 {
@@ -89,7 +89,7 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, LEEr
     const LETag hheaTag = LE_HHEA_TABLE_TAG;
     const HEADTable *headTable = NULL;
     const HHEATable *hheaTable = NULL;
-    const NAMETable *nameTable = NULL;
+//  const NAMETable *nameTable = NULL;
     le_uint16 numTables = 0;
 
     fDirectory = (const SFNTDirectory *) LE_NEW_ARRAY(char, dirSize);
@@ -329,7 +329,7 @@ void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) co
     advance.fY = 0;
 }
 
-le_bool PortableFontInstance::getGlyphPoint(LEGlyphID glyph, le_int32 pointNumber, LEPoint &point) const
+le_bool PortableFontInstance::getGlyphPoint(LEGlyphID /*glyph*/, le_int32 /*pointNumber*/, LEPoint &/*point*/) const
 {
     return FALSE;
 }

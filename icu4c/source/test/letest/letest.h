@@ -17,13 +17,13 @@
 
 struct TestInput
 {
-    char      *fontName;
-    char      *fontVersionString;
-    le_uint32  fontChecksum;
-    LEUnicode *text;
-    le_int32   textLength;
-    le_int32   scriptCode;
-    le_bool    rightToLeft;
+    const char *fontName;
+    const char *fontVersionString;
+    le_uint32   fontChecksum;
+    LEUnicode  *text;
+    le_int32    textLength;
+    le_int32    scriptCode;
+    le_bool     rightToLeft;
 };
 
 extern le_int32 testCount;

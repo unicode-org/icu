@@ -67,7 +67,7 @@ protected:
     const void *readFontTable(LETag tableTag) const;
 
 public:
-    PortableFontInstance(char *fileName, float pointSize, LEErrorCode &status);
+    PortableFontInstance(const char *fileName, float pointSize, LEErrorCode &status);
 
     virtual ~PortableFontInstance();
 
