@@ -88,12 +88,10 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     }
     if (cursorPosition < 0) {
         cursorPosition = outputStr.length();
-    } else {
-        if (cursorPosition > outputStr.length()) {
-            // throw new IllegalArgumentException("Invalid cursor position");
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
+    } else if (cursorPosition > outputStr.length()) {
+        // throw new IllegalArgumentException("Invalid cursor position");
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
     }
     this->cursorPos = cursorPosition + cursorOffset;
     this->output = outputStr;
@@ -112,14 +110,34 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
     if (anchorEnd) {
         flags |= ANCHOR_END;
     }
+
+    anteContext = NULL;
+    if (anteContextLength > 0) {
+        anteContext = new StringMatcher(pattern, 0, anteContextLength,
+                                        FALSE, *data);
+    }
+    
+    key = NULL;
+    if (keyLength > 0) {
+        key = new StringMatcher(pattern, anteContextLength, anteContextLength + keyLength,
+                                FALSE, *data);
+    }
+    
+    int32_t postContextLength = pattern.length() - keyLength - anteContextLength;
+    postContext = NULL;
+    if (postContextLength > 0) {
+        postContext = new StringMatcher(pattern, anteContextLength + keyLength, pattern.length(),
+                                        FALSE, *data);
+    }
 }
 
 /**
  * Copy constructor.
  */
-
-/* Ram: Reordered member initializers to match declaration order and make GCC happy */
 TransliterationRule::TransliterationRule(TransliterationRule& other) :
+    anteContext(NULL),
+    key(NULL),
+    postContext(NULL),
     pattern(other.pattern),
     output(other.output),
     anteContextLength(other.anteContextLength),
@@ -134,10 +152,23 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
         segments = new UnicodeMatcher*[other.segmentsCount];
         uprv_memcpy(segments, other.segments, other.segmentsCount*sizeof(segments[0]));
     }
+
+    if (other.anteContext != NULL) {
+        anteContext = (StringMatcher*) other.anteContext->clone();
+    }
+    if (other.key != NULL) {
+        key = (StringMatcher*) other.key->clone();
+    }
+    if (other.postContext != NULL) {
+        postContext = (StringMatcher*) other.postContext->clone();
+    }
 }
 
 TransliterationRule::~TransliterationRule() {
     delete[] segments;
+    delete anteContext;
+    delete key;
+    delete postContext;
 }
 
 /**
@@ -188,15 +219,10 @@ int16_t TransliterationRule::getIndexValue() const {
  * then it will match any key.
  */
 UBool TransliterationRule::matchesIndexValue(uint8_t v) const {
-    if (anteContextLength == pattern.length()) {
-        // A pattern with just ante context {such as foo)>bar} can
-        // match any key.
-        return TRUE;
-    }
-    UChar32 c = pattern.char32At(anteContextLength);
-    const UnicodeMatcher* matcher = data->lookup(c);
-    return matcher == NULL ? (uint8_t(c) == v) :
-        matcher->matchesIndexValue(v);
+    // Delegate to the key, or if there is none, to the postContext.
+    // If there is neither then we match any key; return true.
+    UnicodeMatcher *m = (key != NULL) ? key : postContext;
+    return (m != NULL) ? m->matchesIndexValue(v) : TRUE;
 }
 
 /**
@@ -320,7 +346,6 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         }
     }
 
-    UMatchDegree m;
     int32_t lenDelta, keyLimit;
 
     // ------------------------ Ante Context ------------------------
@@ -331,106 +356,65 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     int32_t oText; // offset into 'text'
     int32_t newStart = 0;
     int32_t minOText;
-    int32_t oPattern; // offset into 'pattern'
 
-    // Backup oText by one
+    // Note (1): We process text in 16-bit code units, rather than
+    // 32-bit code points.  This works because stand-ins are
+    // always in the BMP and because we are doing a literal match
+    // operation, which can be done 16-bits at a time.
+    
+    int32_t anteLimit = posBefore(text, pos.contextStart);
+
+    UMatchDegree match;
+
+    // Start reverse match at char before pos.start
     oText = posBefore(text, pos.start);
 
-    for (oPattern=anteContextLength-1; oPattern>=0; --oPattern) {
-        UChar keyChar = pattern.charAt(oPattern);
-        UnicodeMatcher* matcher = data->lookup(keyChar);
-        if (matcher == 0) {
-            if (oText >= pos.contextStart &&
-                keyChar == text.charAt(oText)) {
-                --oText;
-            } else {
-                return U_MISMATCH;
-            }
-        } else {
-            // Subtract 1 from contextStart to make it a reverse limit
-            if (matcher->matches(text, oText, pos.contextStart-1, FALSE)
-                != U_MATCH) {
-                return U_MISMATCH;
-            }
+    if (anteContext != NULL) {
+        match = anteContext->matches(text, oText, anteLimit, FALSE);
+        if (match != U_MATCH) {
+            return U_MISMATCH;
         }
     }
 
     minOText = posAfter(text, oText);
 
     // ------------------------ Start Anchor ------------------------
-
-    if ((flags & ANCHOR_START) && oText != posBefore(text, pos.contextStart)) {
+    
+    if (((flags & ANCHOR_START) != 0) && oText != anteLimit) {
         return U_MISMATCH;
     }
 
     // -------------------- Key and Post Context --------------------
-
-    oPattern = 0;
+    
     oText = pos.start;
-    keyLimit = 0;
-    while (oPattern < (pattern.length() - anteContextLength)) {
-        if (incremental && oText == pos.limit) {
-            // We've reached the limit without a mismatch and
-            // without completing our match.
+
+    if (key != NULL) {
+        match = key->matches(text, oText, pos.limit, incremental);
+        if (match != U_MATCH) {
+            return match;
+        }
+    }
+
+    keyLimit = oText;
+
+    if (postContext != NULL) {
+        if (incremental && keyLimit == pos.limit) {
+            // The key matches just before pos.limit, and there is
+            // a postContext.  Since we are in incremental mode,
+            // we must assume more characters may be inserted at
+            // pos.limit -- this is a partial match.
             return U_PARTIAL_MATCH;
         }
 
-        // It might seem that we could do a check like this here:
-        //!if (oText == pos.limit && oPattern < keyLength) {
-        //!    // We're still in the pattern key but we're entering the
-        //!    // post context.
-        // but this won't work if the end of the key is a
-        // zero-length matcher, followed by post context: {a b?} c
-        // Instead, what we do is proceed with matching as usual
-        // so zero-length matchers can work, but restrict the
-        // limit to either pos.limit or pos.contextLimit,
-        // depending on whether we're in the key or in the post
-        // context.
-
-        if (oPattern == keyLength) {
-            keyLimit = oText;
+        match = postContext->matches(text, oText, pos.contextLimit, incremental);
+        if (match != U_MATCH) {
+            return match;
         }
-
-        // Restrict the key to match up to pos.limit; the post-context
-        // can match up to pos.contextLimit.
-        int32_t matchLimit = (oPattern < keyLength) ? pos.limit : pos.contextLimit;
-        
-        UChar keyChar = pattern.charAt(anteContextLength + oPattern++);
-        UnicodeMatcher* matcher = data->lookup(keyChar);
-        if (matcher == 0) {
-            // Don't need the oText < pos.contextLimit check if
-            // incremental is TRUE (because it's done above); do need
-            // it otherwise.
-            if (oText < matchLimit &&
-                keyChar == text.charAt(oText)) {
-                ++oText;
-            } else {
-                return U_MISMATCH;
-            }
-        } else {
-            m = matcher->matches(text, oText, matchLimit, incremental);
-            if (m != U_MATCH) {
-                return m;
-            }
-        }
-
-        // This check rendered superfluous by above use of
-        // matchLimit, but kept around for documentation.
-        //!if (oText > pos.limit && oPattern < keyLength) {
-        //!    // We're still in the pattern key but we've entering the
-        //!    // post context.  We must do this check _after_ doing the
-        //!    // match in case we have zero-length matchers like /a?/
-        //!    // at the end of the key.
-        //!    return UnicodeMatcher.U_MISMATCH;
-        //!}
     }
-	if (oPattern == keyLength) {
-		keyLimit = oText;
-	}
-
+    
     // ------------------------- Stop Anchor ------------------------
-
-    if ((flags & ANCHOR_END) != 0) {
+    
+    if (((flags & ANCHOR_END)) != 0) {
         if (oText != pos.contextLimit) {
             return U_MISMATCH;
         }
@@ -438,7 +422,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
             return U_PARTIAL_MATCH;
         }
     }
-
+    
     // =========================== REPLACE ==========================
 
     // We have a full match.  The key is between pos.start and
@@ -655,8 +639,20 @@ void TransliterationRule::appendToRule(UnicodeString& rule,
     }
 }
 
-static const int32_t POW10[] = {1, 10, 100, 1000, 10000, 100000, 1000000,
-                                10000000, 100000000, 1000000000};
+/**
+ * Given a matcher reference, which may be null, append its
+ * pattern as a literal to the given rule.
+ */
+void TransliterationRule::appendToRule(UnicodeString& rule,
+                                       const UnicodeMatcher* matcher,
+                                       UBool escapeUnprintable,
+                                       UnicodeString& quoteBuf) {
+    if (matcher != NULL) {
+        UnicodeString pat;
+        appendToRule(rule, matcher->toPattern(pat, escapeUnprintable),
+                     TRUE, escapeUnprintable, quoteBuf);
+    }
+}
 
 /**
  * Create a source string that represents this rule.  Append it to the
@@ -674,7 +670,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     // Do not emit the braces '{' '}' around the pattern if there
     // is neither anteContext nor postContext.
     UBool emitBraces =
-        (anteContextLength != 0) || (keyLength != pattern.length());
+        (anteContext != NULL) || (postContext != NULL);
 
     // Emit start anchor
     if ((flags & ANCHOR_START) != 0) {
@@ -682,28 +678,19 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     }
 
     // Emit the input pattern
-    for (i=0; i<pattern.length(); ++i) {
-        if (emitBraces && i == anteContextLength) {
-            appendToRule(rule, (UChar) 0x007B /*{*/, TRUE, escapeUnprintable, quoteBuf);
-        }
+    appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
 
-        if (emitBraces && i == (anteContextLength + keyLength)) {
-            appendToRule(rule, (UChar) 0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-
-        UChar c = pattern.charAt(i);
-        const UnicodeMatcher *matcher = data->lookup(c);
-        if (matcher == 0) {
-            appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
-        } else {
-            appendToRule(rule, matcher->toPattern(str, escapeUnprintable),
-                          TRUE, escapeUnprintable, quoteBuf);
-        }
+    if (emitBraces) {
+        appendToRule(rule, (UChar) 0x007B /*{*/, TRUE, escapeUnprintable, quoteBuf);
     }
 
-    if (emitBraces && i == (anteContextLength + keyLength)) {
-        appendToRule(rule, (UChar)0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
+    appendToRule(rule, key, escapeUnprintable, quoteBuf);
+
+    if (emitBraces) {
+        appendToRule(rule, (UChar) 0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
     }
+
+    appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
 
     // Emit end anchor
     if ((flags & ANCHOR_END) != 0) {
@@ -735,17 +722,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             ++seg; // make 1-based
             appendToRule(rule, (UChar)0x20, TRUE, escapeUnprintable, quoteBuf);
             rule.append((UChar)0x24 /*$*/);
-            UBool show = FALSE; // TRUE if we should display digits
-            for (int32_t p=9; p>=0; --p) {
-                int32_t d = seg / POW10[p];
-                seg -= d * POW10[p];
-                if (d != 0 || p == 0) {
-                    show = TRUE;
-                }
-                if (show) {
-                    rule.append((UChar)(48+d));
-                }
-            }            
+            ICU_Utility::appendNumber(rule, seg, 10, 1);
             rule.append((UChar)0x20);
         }
     }
