@@ -107,7 +107,7 @@ struct AttributeConversion {
     UColAttributeValue value;
 };
 
-static AttributeConversion conversions[12] = {
+static const AttributeConversion conversions[12] = {
     { '1', UCOL_PRIMARY },
     { '2', UCOL_SECONDARY },
     { '3', UCOL_TERTIARY },
@@ -247,7 +247,7 @@ struct ShortStringOptions {
     uint32_t attr;
 };
 
-static ShortStringOptions options[UCOL_SIT_ITEMS_COUNT] =
+static const ShortStringOptions options[UCOL_SIT_ITEMS_COUNT] =
 {
 /* 10 ALTERNATE_HANDLING */   {alternateHArg,     _processCollatorOption, UCOL_ALTERNATE_HANDLING }, // alternate  N, S, D 
 /* 15 VARIABLE_TOP_VALUE */   {variableTopValArg, _processVariableTop,    1 },
@@ -565,7 +565,7 @@ struct bitPacking {
     UColAttributeValue values[5];
 };
 
-bitPacking attributesToBits[UCOL_ATTRIBUTE_COUNT] = {
+static const bitPacking attributesToBits[UCOL_ATTRIBUTE_COUNT] = {
     /* french */        { 30, 1, UCOL_FRENCH_COLLATION,         { UCOL_OFF, UCOL_ON }},
     /* alternate */     { 29, 1, UCOL_ALTERNATE_HANDLING,       { UCOL_NON_IGNORABLE, UCOL_SHIFTED }}, 
     /* case first */    { 27, 2, UCOL_CASE_FIRST,               { UCOL_OFF, UCOL_LOWER_FIRST, UCOL_UPPER_FIRST }},
