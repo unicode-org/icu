@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/08/01 19:50:26 $ 
-* $Revision: 1.6 $
+* $Date: 2002/10/03 23:42:02 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -79,6 +79,10 @@ final class UCharacterPropertyReader
     	count --;
         m_reservedOffset_          = m_dataInputStream_.readInt();
         count --;
+        m_dataInputStream_.skipBytes(3 << 2);
+        count -= 3;
+        ucharppty.m_maxBlockScriptValue_ = m_dataInputStream_.readInt();
+        count --; // 10
         m_dataInputStream_.skipBytes(count << 2);
         
         // read the trie index block
