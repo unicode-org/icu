@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2001/10/19 12:33:48 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/10/23 13:22:19 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -2858,8 +2858,6 @@ public class DecimalFormat extends NumberFormat {
      * stream version 2 restored from stream.
      *
      * @serial
-     * @see #positivePrefix
-     * @see #expandAffix
      */
     //[Richard/GCL]
     private String posPrefixPattern;
@@ -2871,8 +2869,6 @@ public class DecimalFormat extends NumberFormat {
      * documentation.
      *
      * @serial
-     * @see #positiveSuffix
-     * @see #posPrefixPattern
      */
     //[Richard/GCL]
     private String posSuffixPattern;
@@ -2884,8 +2880,6 @@ public class DecimalFormat extends NumberFormat {
      * documentation.
      *
      * @serial
-     * @see #negativePrefix
-     * @see #posPrefixPattern
      */
     //[Richard/GCL]
     private String negPrefixPattern;
@@ -2897,8 +2891,6 @@ public class DecimalFormat extends NumberFormat {
      * documentation.
      *
      * @serial
-     * @see #negativeSuffix
-     * @see #posPrefixPattern
      */
     //[Richard/GCL]
     private String negSuffixPattern;
