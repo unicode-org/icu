@@ -8,6 +8,8 @@
 package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
+import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
@@ -46,6 +48,22 @@ public class RuleBasedBreakIterator extends BreakIterator {
     protected RuleBasedBreakIterator() {
     	delegatedThis = this;
     }
+    
+    /**
+     * Get a break iterator based on a set of pre-compiled break rules.
+     * 
+     * @param is An input stream that supplies the compiled rule data.  The
+     * format of the rule data on the stream is that of a rule data file
+     * produced by the ICU4C tool "genbrk".
+     * @return A RuleBasedBreakIterator based on the supplied break rules.
+     * @throws IOException
+     */
+    public static RuleBasedBreakIterator getInstanceFromCompiledRules(InputStream is) throws IOException {
+     // TODO:
+        return null;      
+    }
+    
+    
     //=======================================================================
     // boilerplate
     //=======================================================================
@@ -91,6 +109,30 @@ public class RuleBasedBreakIterator extends BreakIterator {
     {
         return delegatedThis.hashCode();
     }
+
+    
+        /** Tag value for "words" that do not fit into any of other categories. 
+         *  Includes spaces and most punctuation. */
+        public static final int UBRK_WORD_NONE           = 0;
+        /** Upper bound for tags for uncategorized words. */
+        public static final int UBRK_WORD_NONE_LIMIT     = 100;
+        /** Tag value for words that appear to be numbers, lower limit. */
+        public static final int UBRK_WORD_NUMBER         = 100;
+        /** Tag value for words that appear to be numbers, upper limit. */
+        public static final int UBRK_WORD_NUMBER_LIMIT   = 200;
+        /** Tag value for words that contain letters, excluding
+         *  hiragana, katakana or ideographic characters, lower limit. */
+        public static final int UBRK_WORD_LETTER         = 200;
+        /** Tag value for words containing letters, upper limit  */
+        public static final int UBRK_WORD_LETTER_LIMIT   = 300;
+        /** Tag value for words containing kana characters, lower limit */
+        public static final int UBRK_WORD_KANA           = 300;
+        /** Tag value for words containing kana characters, upper limit */
+        public static final int UBRK_WORD_KANA_LIMIT     = 400;
+        /** Tag value for words containing ideographic characters, lower limit */
+        public static final int UBRK_WORD_IDEO           = 400;
+        /** Tag value for words containing ideographic characters, upper limit */
+        public static final int UBRK_WORD_IDEO_LIMIT     = 500;
 
     //=======================================================================
     // BreakIterator overrides
